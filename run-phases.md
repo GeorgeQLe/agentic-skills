@@ -40,8 +40,9 @@ This skill is meant to be used in a loop across fresh contexts:
 
 ```
 /run-phases plan.md   → executes phase N
-/ship-end             → commits and pushes
-/clear                → fresh context
+/ship-then-plan       → commits, pushes, writes next phase plan into CLAUDE.md
+                      → enters plan mode → select "clear context and implement"
+                      → fresh context picks up the plan from CLAUDE.md
 /run-phases plan.md   → executes phase N+1
 ...
 ```

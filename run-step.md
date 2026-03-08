@@ -33,13 +33,11 @@ Execute **only the next single incomplete step** from the current phase, then st
 ## Workflow
 
 ```
-/run-step         → executes one step
-/ship-then-plan   → commits, writes next step plan into CLAUDE.md
-/clear
-/run-step         → executes the next step from fresh context
-/ship-then-plan
-/clear
-...
+/run-step             → executes one step
+/ship-then-plan       → commits, pushes, writes next step plan into CLAUDE.md
+                      → enters plan mode → select "clear context and implement"
+                      → fresh context picks up the plan from CLAUDE.md
+/ship-then-plan       → rinse and repeat
 ```
 
 ## Constraints
