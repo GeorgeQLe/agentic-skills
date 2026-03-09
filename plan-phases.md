@@ -40,7 +40,9 @@ Each phase follows this structure:
 
 ### Implementation
 - Step N.2: [First implementation task]
+  - Files: create `path/to/new.ts`, modify `path/to/existing.ts`
 - Step N.3: [Next implementation task]
+  - Files: modify `path/to/file.ts`
 - ...
 
 ### Green
@@ -54,6 +56,11 @@ Each phase follows this structure:
 - [ ] [Specific, verifiable criterion 3]
 - [ ] All phase tests pass
 - [ ] No regressions in previous phase tests
+
+**On Completion** (fill in when phase is done):
+- Deviations from plan: [none, or describe]
+- Tech debt / follow-ups: [none, or list]
+- Ready for next phase: yes/no
 ```
 
 ### 4. TDD Requirements
@@ -63,7 +70,11 @@ Each phase follows this structure:
 - The milestone for each phase must include "All phase tests pass" and "No regressions in previous phase tests."
 - If the project doesn't have a test framework set up, Phase 1 Step 1 should be setting up the test infrastructure.
 
-### 5. Cross-Phase Concerns
+### 5. File-Level Granularity
+- Each implementation step should list the specific files to create, modify, or delete.
+- This gives the executing agent clear scope and prevents steps from becoming unbounded.
+
+### 6. Cross-Phase Concerns
 After all phases, add a section for:
 - **Integration tests**: Tests that span multiple phases / features, to be written after relevant phases complete.
 - **Non-functional requirements**: Performance, security, accessibility checks and when they should run.
