@@ -23,6 +23,9 @@ Process:
 
 3) **Plan the next step:**
    a) Read `tasks/todo.md` and any phased plan files in `docs/` to identify the next uncompleted step.
+      - If the current phase has no more incomplete steps, **check for the next phase** in the plan docs.
+      - If a next phase exists, the "next step" is the first step of that next phase. Mark the current phase as complete in the plan file and transition automatically — do NOT stop to ask for confirmation.
+      - Only stop and report "all done" if there are truly no more phases or steps remaining anywhere in the plan.
    b) Write a **self-contained** implementation plan for the next step into `tasks/todo.md`. This plan must be complete enough that a fresh context can execute it by reading only CLAUDE.md and `tasks/todo.md`. Include:
       - What needs to be built/changed
       - Which files will be affected (full paths)
