@@ -1,0 +1,7 @@
+interface:
+  display_name: "Commit By Feature"
+  short_description: "Commit and push by logical bucket"
+  default_prompt: "Use $commit-and-push-by-feature to group the current git changes into logical commits and push them safely."
+
+policy:
+  allow_implicit_invocation: true
