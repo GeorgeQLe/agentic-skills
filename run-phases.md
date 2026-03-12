@@ -1,6 +1,5 @@
 ---
 description: Execute the next incomplete phase from a phased plan
-argument-hint: [path-to-plan, defaults to docs/plan.md]
 ---
 
 # Single-Phase Executor
@@ -9,9 +8,8 @@ Execute **only the next incomplete phase** from a phased implementation plan, th
 
 ## Execution Protocol
 
-1. **Read `tasks/todo.md`** for the current active step/phase.
-2. **Read the plan** at `$ARGUMENTS` (default: `docs/plan.md`). Find the next incomplete phase by checking milestone checkboxes.
-3. **Read CLAUDE.md** for project conventions.
+1. **Read `tasks/todo.md`** — this is the single source of truth. It contains the full phased plan. Find the next incomplete phase by checking milestone checkboxes.
+2. **Read CLAUDE.md** for project conventions.
 4. **Execute that single phase**, step by step:
    - Start with the "Tests First" steps — write the failing tests.
    - Run the tests to confirm they fail (red).
@@ -21,8 +19,7 @@ Execute **only the next incomplete phase** from a phased implementation plan, th
 5. **Verify the milestone**:
    - Check each acceptance criterion.
    - Run the full test suite to confirm no regressions.
-   - Check off completed criteria in the plan file.
-6. **Update `tasks/todo.md`** with what was completed.
+   - Check off completed criteria in `tasks/todo.md`.
 7. **Report** what was done:
    - Phase completed
    - Steps executed

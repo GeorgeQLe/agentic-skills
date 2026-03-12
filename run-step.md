@@ -1,6 +1,5 @@
 ---
 description: Execute only the next single incomplete step from the current phase
-argument-hint: [path-to-plan, defaults to docs/plan.md]
 ---
 
 # Single-Step Executor
@@ -9,13 +8,13 @@ Execute **only the next single incomplete step** from the current phase, then st
 
 ## Execution Protocol
 
-1. **Read `tasks/todo.md`** for the self-contained plan written by /ship-then-plan. Use that as your primary instruction.
-2. **Read the plan** at `$ARGUMENTS` (default: `docs/plan.md`) only if `tasks/todo.md` doesn't have enough detail.
+1. **Read `tasks/todo.md`** — this is the single source of truth for what to execute. It contains the full phased plan with all steps.
+2. **Find the next incomplete step** (unchecked `- [ ]` item under the current phase).
 3. **Execute that single step only.**
    - If it's a "Tests First" step: write the failing tests, run them to confirm they fail (red). Stop.
    - If it's an implementation step: implement it, run existing tests to check for regressions. Stop.
    - If it's a "Green" step: run all tests, fix any failures. Stop.
-4. **Mark the step as done** in the plan file (check it off or annotate it).
+4. **Mark the step as done** in `tasks/todo.md` (check it off).
 5. **Report concisely:**
    - Step completed
    - Files modified

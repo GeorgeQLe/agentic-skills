@@ -81,7 +81,7 @@ After all phases, add a section for:
 
 ## Output
 
-Write the phased plan to `docs/plan.md` (create `docs/` if it doesn't exist) with this structure:
+Write the phased plan to **`tasks/todo.md`** (the single source of truth for execution) with this structure. Also write a copy to `docs/plan.md` as a historical artifact (create `docs/` if it doesn't exist).
 
 ```markdown
 # Implementation Plan: [Project Name]
@@ -125,13 +125,13 @@ Write the phased plan to `docs/plan.md` (create `docs/` if it doesn't exist) wit
 ...
 ```
 
-Also create/update `tasks/todo.md` with Phase 1's steps as the active work items, so the next session can pick it up immediately.
+`tasks/todo.md` contains the full plan — all phases and steps — not just Phase 1. `/run-step` reads directly from it to find the next incomplete step. `docs/plan.md` is a snapshot copy for reference and history.
 
 ## Constraints
 - Every phase MUST have a milestone with specific, checkable acceptance criteria — not vague statements like "works correctly" but concrete conditions like "POST /api/items returns 201 with valid payload and persists to database."
 - Every phase MUST start with writing failing tests.
 - Phases must be ordered so each builds on completed prior phases.
-- The plan must be compatible with `/run-phases` — use `## Phase N:` headers and `- Step N.X:` format.
+- The plan must be compatible with `/run-step` and `/run-phases` — use `## Phase N:` headers and `- Step N.X:` format.
 - Do not include implementation code in the plan — only describe what to build and what to test.
 - If the spec references existing code or infrastructure, note what already exists vs. what needs to be created.
-- Plans go in `docs/`, active work goes in `tasks/todo.md`. Do NOT put plans in CLAUDE.md.
+- `tasks/todo.md` is the source of truth for execution. `docs/plan.md` is a historical copy. Do NOT put plans in CLAUDE.md.

@@ -1,6 +1,6 @@
 ---
 name: plan-phases
-description: Convert a finalized spec into a phased implementation plan with milestones, TDD-first steps, file-level scope, and a matching tasks/todo.md handoff for the first phase.
+description: Convert a finalized spec into a phased implementation plan written to tasks/todo.md (the execution source of truth) with milestones, TDD-first steps, and file-level scope.
 ---
 
 # Plan Phases
@@ -20,11 +20,11 @@ Use this skill when the user has a completed spec and wants it broken into an im
 4. For each phase, define ordered steps.
 5. The first step of every phase must be writing failing tests.
 6. Include milestone acceptance criteria with concrete, verifiable checks.
-7. After the full plan is written, create or update `tasks/todo.md` with the active items for Phase 1.
+7. Write the full plan (all phases) to `tasks/todo.md`. Also write a copy to `docs/plan.md` as a historical artifact.
 
 ## Required Plan Shape
 
-Write the plan to `docs/plan.md` using this structure:
+Write the plan to `tasks/todo.md` (and a copy to `docs/plan.md`) using this structure:
 
 - Title and summary
 - Phase overview table

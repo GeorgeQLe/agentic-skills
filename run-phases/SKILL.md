@@ -1,6 +1,6 @@
 ---
 name: run-phases
-description: Execute only the next incomplete phase from a phased implementation plan, following the repo's tasks/todo.md and docs/plan.md workflow with tests-first discipline and end-of-phase verification.
+description: Execute only the next incomplete phase from a phased implementation plan, following the repo's tasks/todo.md workflow with tests-first discipline and end-of-phase verification.
 ---
 
 # Run Phases
@@ -9,14 +9,12 @@ Use this skill when the user wants the next incomplete implementation phase exec
 
 ## Inputs
 
-- Default plan path: `docs/plan.md`
-- If the user provides a different plan path, use that instead.
+- `tasks/todo.md` — the single source of truth for the full phased plan and active work.
 
 ## Workflow
 
-1. Read `tasks/todo.md` for the current active work.
-2. Read the plan file and locate the next incomplete phase by milestone or checklist state.
-3. Read `AGENTS.md` if it exists and is part of the repo's working conventions.
+1. Read `tasks/todo.md` and locate the next incomplete phase by milestone or checklist state.
+2. Read `CLAUDE.md` if it exists for project conventions.
 4. Execute exactly one phase:
    - Start with the tests-first step
    - Run the tests to confirm they fail where expected

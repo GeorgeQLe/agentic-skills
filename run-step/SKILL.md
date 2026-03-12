@@ -9,14 +9,12 @@ Use this skill when the user wants one bounded implementation step executed, not
 
 ## Inputs
 
-- Primary active-work file: `tasks/todo.md`
-- Default fallback plan path: `docs/plan.md`
+- `tasks/todo.md` — the single source of truth for the full phased plan and active work.
 
 ## Workflow
 
-1. Read `tasks/todo.md` first.
-2. Read the plan file only if `tasks/todo.md` is not self-contained enough.
-3. Execute exactly one incomplete step.
+1. Read `tasks/todo.md` — find the next incomplete step (unchecked `- [ ]` item).
+2. Execute exactly one incomplete step.
 4. If the step is tests-first:
    - Write the failing tests
    - Run them and confirm the expected failure
