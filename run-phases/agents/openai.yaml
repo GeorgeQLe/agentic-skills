@@ -1,0 +1,7 @@
+interface:
+  display_name: "Run Phases"
+  short_description: "Execute one incomplete phase only"
+  default_prompt: "Use $run-phases to execute the next incomplete phase from this implementation plan and stop after that phase."
+
+policy:
+  allow_implicit_invocation: true

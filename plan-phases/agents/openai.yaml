@@ -1,0 +1,7 @@
+interface:
+  display_name: "Plan Phases"
+  short_description: "Break a spec into phased steps"
+  default_prompt: "Use $plan-phases to turn this finalized spec into a phased implementation plan with tests-first milestones."
+
+policy:
+  allow_implicit_invocation: true

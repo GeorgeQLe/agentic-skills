@@ -1,0 +1,7 @@
+interface:
+  display_name: "Install Workflow Orchestration"
+  short_description: "Insert workflow rules into AGENTS.md"
+  default_prompt: "Use $install-workflow-orchestration to add the workflow orchestration block to this repo's AGENTS.md exactly once."
+
+policy:
+  allow_implicit_invocation: true

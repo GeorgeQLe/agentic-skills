@@ -1,0 +1,7 @@
+interface:
+  display_name: "Review"
+  short_description: "Run a prioritized code review"
+  default_prompt: "Use $review to review this repository and report the most important findings first."
+
+policy:
+  allow_implicit_invocation: true
