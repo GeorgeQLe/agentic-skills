@@ -1,0 +1,7 @@
+interface:
+  display_name: "Sync"
+  short_description: "Pull latest changes from remote"
+  default_prompt: "Use $sync to pull and sync with the remote repository."
+
+policy:
+  allow_implicit_invocation: true

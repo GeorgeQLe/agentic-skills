@@ -1,0 +1,7 @@
+interface:
+  display_name: "Decommission"
+  short_description: "Systematically remove a service or package"
+  default_prompt: "Use $decommission to plan and execute the decommission of the specified component."
+
+policy:
+  allow_implicit_invocation: true

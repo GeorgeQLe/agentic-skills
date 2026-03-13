@@ -1,0 +1,7 @@
+interface:
+  display_name: "Deploy"
+  short_description: "Deploy project to target environment"
+  default_prompt: "Use $deploy to deploy the project to the specified environment."
+
+policy:
+  allow_implicit_invocation: true

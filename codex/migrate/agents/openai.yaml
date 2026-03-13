@@ -1,0 +1,7 @@
+interface:
+  display_name: "Migrate"
+  short_description: "Guide a structural migration step-by-step"
+  default_prompt: "Use $migrate to plan and execute the described migration."
+
+policy:
+  allow_implicit_invocation: true

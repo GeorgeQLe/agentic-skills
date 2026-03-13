@@ -1,0 +1,7 @@
+interface:
+  display_name: "Ship"
+  short_description: "Commit, push, and plan next step"
+  default_prompt: "Use $ship to ship the current work and plan the next step."
+
+policy:
+  allow_implicit_invocation: true

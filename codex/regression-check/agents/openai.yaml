@@ -1,0 +1,7 @@
+interface:
+  display_name: "Regression Check"
+  short_description: "Run comprehensive post-change health check"
+  default_prompt: "Use $regression-check to run a full regression check across the project."
+
+policy:
+  allow_implicit_invocation: true

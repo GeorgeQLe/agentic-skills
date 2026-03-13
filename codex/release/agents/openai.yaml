@@ -1,0 +1,7 @@
+interface:
+  display_name: "Release"
+  short_description: "Version bump, changelog, and tag"
+  default_prompt: "Use $release to prepare a release with version bump and changelog."
+
+policy:
+  allow_implicit_invocation: true

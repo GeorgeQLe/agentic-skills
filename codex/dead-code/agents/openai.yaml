@@ -1,0 +1,7 @@
+interface:
+  display_name: "Dead Code Scanner"
+  short_description: "Find unused code and stale dependencies"
+  default_prompt: "Use $dead-code to scan for dead code, unused exports, and orphaned files."
+
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Trace"
+  short_description: "Map request flow through the stack"
+  default_prompt: "Use $trace to trace the specified route or feature through the stack."
+
+policy:
+  allow_implicit_invocation: true
