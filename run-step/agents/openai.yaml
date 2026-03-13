@@ -1,0 +1,7 @@
+interface:
+  display_name: "Run Step"
+  short_description: "Execute one incomplete step only"
+  default_prompt: "Use $run-step to execute the next incomplete step from tasks/todo.md and then stop."
+
+policy:
+  allow_implicit_invocation: true
