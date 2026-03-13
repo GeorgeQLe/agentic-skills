@@ -24,7 +24,7 @@ Use this skill when the user wants the current session wrapped up cleanly.
 
 ## Constraints
 
-- Do not modify `AGENTS.md` as part of progress tracking.
+- Do not modify `CLAUDE.md` as part of progress tracking.
 - Do not switch or create branches unless the current state requires it.
 - Do not amend or rewrite history.
 - Stop and report if secrets are detected.

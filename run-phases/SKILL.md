@@ -15,17 +15,17 @@ Use this skill when the user wants the next incomplete implementation phase exec
 
 1. Read `tasks/todo.md` and locate the next incomplete phase by milestone or checklist state.
 2. Read `CLAUDE.md` if it exists for project conventions.
-4. Execute exactly one phase:
+3. Execute exactly one phase:
    - Start with the tests-first step
    - Run the tests to confirm they fail where expected
    - Implement the phase steps in order
    - Run tests again to confirm green
    - Refactor only if tests remain green
-5. Verify the phase milestone:
+4. Verify the phase milestone:
    - Check each acceptance criterion
    - Run the full relevant test suite to catch regressions
    - Update progress tracking files if the user asked for execution rather than dry analysis
-6. Report:
+5. Report:
    - Phase completed
    - Steps executed
    - Files modified

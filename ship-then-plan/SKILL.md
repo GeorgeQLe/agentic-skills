@@ -13,12 +13,11 @@ Use this skill when the user wants to finish the current slice of work, push it,
    - Inspect `git status` and `git diff --stat`
    - If the tree is clean and there are no unpushed commits, skip shipping and move to next-step planning
 2. If there are changes to ship:
-   - Read `AGENTS.md` if it exists and is being used for project conventions
+   - Read `CLAUDE.md` if it exists and is being used for project conventions
    - Update `tasks/todo.md`
-   - Update any phased plan under `docs/` to reflect completed work
    - Commit and push using the `commit-and-push-by-feature` workflow
 3. Plan the next step:
-   - Read `tasks/todo.md` and any phased plan files needed to identify the next incomplete step
+   - Read `tasks/todo.md` to identify the next incomplete step
    - If the current phase is done, automatically move to the first step of the next incomplete phase
    - Only report `all done` when no remaining phase or step exists
 4. Write a self-contained next-step handoff into `tasks/todo.md` that includes:
@@ -38,7 +37,6 @@ Some source versions of this workflow refer to an explicit "enter plan mode" too
 
 ## Constraints
 
-- Do not write plans into `AGENTS.md`.
-- Keep active work in `tasks/todo.md` and phased plans in `docs/`.
+- Do not write plans into `CLAUDE.md`.
 - Do not amend or rewrite history.
 - Do not commit secrets.

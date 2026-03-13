@@ -1,22 +1,22 @@
 ---
 name: install-workflow-orchestration
-description: Create or update the current repository's AGENTS.md by inserting a specific workflow-orchestration block exactly once while preserving unrelated content.
+description: Create or update the current repository's CLAUDE.md by inserting a specific workflow-orchestration block exactly once while preserving unrelated content.
 ---
 
 # Install Workflow Orchestration
 
-Use this skill when the user wants the repository's `AGENTS.md` updated with the workflow orchestration policy block from this workflow.
+Use this skill when the user wants the repository's `CLAUDE.md` updated with the workflow orchestration policy block from this workflow.
 
 ## Target
 
-- Current repository file: `./AGENTS.md`
+- Current repository file: `./CLAUDE.md`
 
 ## Workflow
 
-1. Ensure `./AGENTS.md` exists.
+1. Ensure `./CLAUDE.md` exists.
 2. Insert the policy block below verbatim.
 3. If the same block already exists anywhere in the file, replace it so the block appears exactly once.
-4. Preserve any unrelated content already in `AGENTS.md`.
+4. Preserve any unrelated content already in `CLAUDE.md`.
 
 ## Required Block
 
@@ -78,6 +78,6 @@ Use this skill when the user wants the repository's `AGENTS.md` updated with the
 
 After updating the file, report:
 
-- Whether `./AGENTS.md` was created or modified
+- Whether `./CLAUDE.md` was created or modified
 - Where the block was inserted
 - Confirmation that the final block appears exactly once

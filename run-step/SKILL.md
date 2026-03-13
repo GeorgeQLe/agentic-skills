@@ -15,17 +15,17 @@ Use this skill when the user wants one bounded implementation step executed, not
 
 1. Read `tasks/todo.md` — find the next incomplete step (unchecked `- [ ]` item).
 2. Execute exactly one incomplete step.
-4. If the step is tests-first:
+3. If the step is tests-first:
    - Write the failing tests
    - Run them and confirm the expected failure
-5. If the step is implementation:
+4. If the step is implementation:
    - Implement the step
    - Run relevant existing tests for regression coverage
-6. If the step is a green/verification step:
+5. If the step is a green/verification step:
    - Run the required test suite
    - Fix failures that are within the intended scope of that step
-7. Mark the step done in the relevant tracking file when the user asked for actual execution.
-8. Report:
+6. Mark the step done in the relevant tracking file when the user asked for actual execution.
+7. Report:
    - Step completed
    - Files modified
    - Test results
@@ -36,4 +36,4 @@ Use this skill when the user wants one bounded implementation step executed, not
 - Do exactly one step and stop.
 - Avoid reading unrelated parts of the codebase.
 - Do not refactor unrelated code.
-- Do not update `AGENTS.md` unless the step explicitly requires it.
+- Do not update `CLAUDE.md` unless the step explicitly requires it.
