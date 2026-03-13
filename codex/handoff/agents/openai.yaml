@@ -1,0 +1,7 @@
+interface:
+  display_name: "Handoff"
+  short_description: "Generate session context snapshot"
+  default_prompt: "Use $handoff to create a handoff document for the next session."
+
+policy:
+  allow_implicit_invocation: true

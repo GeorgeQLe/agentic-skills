@@ -1,0 +1,7 @@
+interface:
+  display_name: "Affected Packages"
+  short_description: "Analyze monorepo blast radius of changes"
+  default_prompt: "Use $affected to analyze which packages are affected by current changes."
+
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Run"
+  short_description: "Execute next step from phased plan"
+  default_prompt: "Use $run to execute the next incomplete step from the plan."
+
+policy:
+  allow_implicit_invocation: true

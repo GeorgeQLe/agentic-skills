@@ -1,0 +1,7 @@
+interface:
+  display_name: "Scaffold"
+  short_description: "Generate new monorepo package or app"
+  default_prompt: "Use $scaffold to scaffold a new package or app following project conventions."
+
+policy:
+  allow_implicit_invocation: true

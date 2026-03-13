@@ -1,6 +1,28 @@
 # Skills Reference
 
-Complete reference for all custom Claude Code skills in this repository.
+Complete reference for all 24 custom skills in this repository, available for both Claude Code and Codex.
+
+## Installation
+
+```bash
+./install.sh            # Symlink skills into ~/.claude/skills/ and ~/.codex/skills/
+./install.sh --uninstall  # Remove only symlinks from this repo
+```
+
+## Repository Structure
+
+```
+claude-skills/
+├── claude/<name>/SKILL.md          # Claude Code skill definitions
+├── codex/<name>/SKILL.md           # Codex skill documentation
+├── codex/<name>/agents/openai.yaml # Codex agent manifests
+├── install.sh                      # Symlink installer
+└── docs/skills-reference.md        # This file
+```
+
+- **Claude Code** skills are symlinked to `~/.claude/skills/<name>/`
+- **Codex** skills are symlinked to `~/.codex/skills/<name>/`
+- Each tool only sees its own skills — no cross-contamination.
 
 ## Workflow Overview
 
