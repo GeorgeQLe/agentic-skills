@@ -1,11 +1,11 @@
 ---
 name: run-step
-description: Execute only the next single incomplete step from the active plan or tasks/todo.md, then stop and report what changed, what was verified, and what the next step is.
+description: Plan the next single incomplete step from tasks/todo.md, present it for approval, then execute and report what changed.
 ---
 
 # Run Step
 
-Use this skill when the user wants one bounded implementation step executed, not an entire phase or feature.
+Use this skill when the user wants one bounded implementation step planned and executed, not an entire phase or feature.
 
 ## Inputs
 
@@ -14,18 +14,19 @@ Use this skill when the user wants one bounded implementation step executed, not
 ## Workflow
 
 1. Read `tasks/todo.md` — find the next incomplete step (unchecked `- [ ]` item).
-2. Execute exactly one incomplete step.
-3. If the step is tests-first:
-   - Write the failing tests
-   - Run them and confirm the expected failure
-4. If the step is implementation:
-   - Implement the step
-   - Run relevant existing tests for regression coverage
-5. If the step is a green/verification step:
-   - Run the required test suite
-   - Fix failures that are within the intended scope of that step
-6. Mark the step done in the relevant tracking file when the user asked for actual execution.
-7. Report:
+2. Read `CLAUDE.md` if it exists for project conventions.
+3. Research what's needed — read only the files relevant to the step.
+4. Enter plan mode and present the execution plan:
+   - What the step requires
+   - Which files will be created or modified
+   - The approach and any trade-offs
+5. Wait for user approval. Do not write code until approved.
+6. After approval, exit plan mode and execute exactly one step:
+   - Tests-first: write failing tests, confirm expected failure
+   - Implementation: implement the step, run tests for regression coverage
+   - Green/verification: run the test suite, fix failures in scope
+7. Mark the step done in the relevant tracking file.
+8. Report:
    - Step completed
    - Files modified
    - Test results
@@ -33,6 +34,7 @@ Use this skill when the user wants one bounded implementation step executed, not
 
 ## Constraints
 
+- Always enter plan mode before executing.
 - Do exactly one step and stop.
 - Avoid reading unrelated parts of the codebase.
 - Do not refactor unrelated code.
