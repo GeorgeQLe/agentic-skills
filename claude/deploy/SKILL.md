@@ -14,13 +14,14 @@ Deploy the current project to the specified environment. Defaults to `staging` i
    - If `production` is specified, **ask for explicit confirmation** before proceeding.
 
 2. **Find the deploy configuration.** Check these locations in order:
-   - `CLAUDE.md` — look for a deploy section or deploy commands
+   - `spec.md` — look for a deployment section
+   - `CLAUDE.md` — look for deploy commands or instructions
    - `tasks/todo.md` — look for deploy instructions
    - `Makefile` / `Justfile` — look for deploy targets
    - `package.json` — look for deploy scripts
    - `deploy/`, `infra/`, `scripts/` — look for deploy scripts or IaC
-   - **Do NOT look in `.github/workflows/`** — this project does not use GitHub Actions.
    - `docker-compose*.yml`, `Dockerfile` — container-based deploys
+   - **Do NOT look in `.github/workflows/`** — this project does not use GitHub Actions.
    - If no deploy config is found, **stop and ask the user** how to deploy this project.
 
 3. **Pre-flight checks:**

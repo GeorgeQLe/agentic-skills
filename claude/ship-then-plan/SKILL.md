@@ -1,7 +1,6 @@
 ---
 name: ship-then-plan
 description: Ship current work, plan next step, then enter plan mode for clear-and-implement
-allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Agent, EnterPlanMode
 ---
 
 Wrap up current work, commit, push, write the next step into `tasks/todo.md`, then enter plan mode.
@@ -21,7 +20,15 @@ Process:
       - Use conventional commit messages.
       - Push to the current branch.
 
-3) **Plan the next step:**
+3) **Deploy:**
+   a) Find the deploy method by checking: `spec.md`, `CLAUDE.md`, `tasks/todo.md`, `Makefile`/`Justfile`, `package.json`, `deploy/`/`infra/`/`scripts/`, `docker-compose*.yml`.
+   b) Do NOT look in `.github/workflows/` — this project does not use GitHub Actions.
+   c) If no deploy method is found, ask the user how deployment works. Do not guess or skip.
+   d) Run the deploy and verify the output for errors.
+   e) If a health check URL or status command exists, run it.
+   f) If the deploy fails, report the error. Do not retry automatically.
+
+4) **Plan the next step:**
    a) Read `tasks/todo.md` to identify the next uncompleted step. `tasks/todo.md` contains the full phased plan — it is the single source of truth.
       - If the current phase has no more incomplete steps, **check for the next phase** in `tasks/todo.md`.
       - If a next phase exists, the "next step" is the first step of that next phase. Transition automatically — do NOT stop to ask for confirmation.
@@ -35,11 +42,12 @@ Process:
       - Acceptance criteria: how to verify the step is done
    c) Commit and push the updated `tasks/todo.md`.
 
-4) **Output a brief summary** (2-3 lines max to save context):
+5) **Output a brief summary** (2-3 lines max to save context):
    - What was shipped (if anything)
+   - Deploy status (if deployed)
    - What the next step is (1 sentence)
 
-5) **YOU MUST call the EnterPlanMode tool.** This is not optional. This gives the user the option to "clear context and implement" — which starts a fresh context that reads `tasks/todo.md` and implements the plan.
+6) **YOU MUST call the EnterPlanMode tool.** This is not optional. This gives the user the option to "clear context and implement" — which starts a fresh context that reads `tasks/todo.md` and implements the plan.
 
 Constraints:
 - Do NOT write plans into CLAUDE.md. CLAUDE.md is for project conventions and config only.
@@ -47,7 +55,9 @@ Constraints:
 - Create `tasks/todo.md` if it doesn't exist.
 - Do NOT re-read files you've already read this session. Use what's in context.
 - Do NOT explore the codebase extensively for planning. Keep context footprint minimal.
-- If the tree is clean and the next step plan already exists in `tasks/todo.md`, skip straight to step 5.
+- If the tree is clean and the next step plan already exists in `tasks/todo.md`, skip straight to step 6.
+- Never use GitHub Actions for deployment. Only use manual deploy scripts, Makefiles, or CLI commands.
+- Never deploy to production without explicit user confirmation.
 - Do not amend or rewrite history.
 - Do not commit secrets.
 - The plan must be actionable, not vague. Include specific file paths and technical details.
