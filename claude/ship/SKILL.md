@@ -2,7 +2,6 @@
 name: ship
 description: Ship current work (update docs, commit, push, deploy) and optionally plan the next step
 argument-hint: [--no-plan] [--no-deploy]
-allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Agent, EnterPlanMode
 ---
 
 Ship current work, commit, push, deploy, and plan the next step. If `$ARGUMENTS` contains `--no-plan`, skip planning. If `$ARGUMENTS` contains `--no-deploy`, skip deployment.
