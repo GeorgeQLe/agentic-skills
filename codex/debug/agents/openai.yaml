@@ -1,0 +1,7 @@
+interface:
+  display_name: "Debug"
+  short_description: "Investigate problem with changelog cross-check"
+  default_prompt: "Use $debug to investigate this problem, cross-check past issues, and suggest a fix."
+
+policy:
+  allow_implicit_invocation: true
