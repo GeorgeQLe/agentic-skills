@@ -89,12 +89,8 @@ for skill_dir in "$SCRIPT_DIR"/codex/*/; do
       continue
     fi
     rm "$target"
-  elif [ -d "$target" ]; then
-    # Replace old non-symlink copies with symlinks
-    echo "Replacing non-symlink copy: $name"
-    rm -rf "$target"
   elif [ -e "$target" ]; then
-    echo "WARNING: $target exists and is not a directory, skipping"
+    echo "WARNING: $target exists and is not a symlink, skipping"
     skipped=$((skipped + 1))
     continue
   fi
