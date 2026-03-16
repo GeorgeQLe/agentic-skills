@@ -1,6 +1,6 @@
 # Skills Reference
 
-Complete reference for all 24 custom skills in this repository, available for both Claude Code and Codex.
+Complete reference for all 25 custom skills in this repository, available for both Claude Code and Codex.
 
 ## Installation
 
@@ -139,6 +139,13 @@ Autonomously trace a bug from error message to root cause and proposed fix.
 - **Outputs**: Root cause analysis, fix, and prevention recommendation.
 - **Use when**: You have a bug report, error, or unexpected behavior.
 
+### `/debug`
+Investigate a problem, log it to the debug changelog, cross-check past issues, and suggest a non-duplicate fix.
+
+- **Arguments**: `<error message, bug description, or symptom>`
+- **Outputs**: Root cause analysis, fix, updated `docs/debug-changelog.md`.
+- **Use when**: Debugging a problem and want to build institutional memory — especially for recurring issues.
+
 ### `/trace`
 Follow a request end-to-end through the stack from route to database.
 
@@ -256,6 +263,7 @@ Create or update the current repository's `CLAUDE.md` with workflow conventions.
 | `/review` | Expert code review |
 | `/regression-check` | Full health check (types, lint, tests, build) |
 | `/dead-code` | Find unused code and dependencies |
+| `/debug` | Investigate + changelog + non-duplicate fix |
 | `/investigate` | Bug → root cause → fix |
 | `/trace` | Map request flow through the stack |
 | `/migrate` | Guided migration with verification |
