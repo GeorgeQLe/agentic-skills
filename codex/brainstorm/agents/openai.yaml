@@ -1,0 +1,7 @@
+interface:
+  display_name: "Brainstorm"
+  short_description: "Evaluate codebase and suggest improvement ideas"
+  default_prompt: "Use $brainstorm to evaluate the codebase and suggest actionable ideas."
+
+policy:
+  allow_implicit_invocation: true
