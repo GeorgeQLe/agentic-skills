@@ -1,11 +1,11 @@
 ---
 name: ship
-description: Ship current work (update docs, commit, push) and optionally plan the next step
-argument-hint: [--no-plan]
+description: Ship current work (update docs, commit, push, deploy) and optionally plan the next step
+argument-hint: [--no-plan] [--no-deploy]
 allowed-tools: Bash, Read, Write, Edit, Glob, Grep, Agent, EnterPlanMode
 ---
 
-Ship current work, commit, push, and plan the next step. If `$ARGUMENTS` contains `--no-plan`, skip planning and just wrap up the session.
+Ship current work, commit, push, deploy, and plan the next step. If `$ARGUMENTS` contains `--no-plan`, skip planning. If `$ARGUMENTS` contains `--no-deploy`, skip deployment.
 
 ## Process
 
@@ -23,7 +23,30 @@ d) Commit and push using the /commit-and-push-by-feature workflow:
    - Use conventional commit messages.
    - Push to the current branch.
 
-### 3. Plan the next step (skip if `--no-plan`)
+### 3. Deploy (skip if `--no-deploy`)
+After pushing, deploy the project using the project's own deployment mechanism.
+
+a) **Find the deploy method.** Check these locations in order:
+   - `spec.md` — look for a deployment section
+   - `CLAUDE.md` — look for deploy commands or instructions
+   - `tasks/todo.md` — look for deploy instructions
+   - `Makefile` / `Justfile` — look for deploy targets (e.g., `make deploy`, `just deploy`)
+   - `package.json` — look for deploy scripts (e.g., `npm run deploy`)
+   - `deploy/`, `infra/`, `scripts/` — look for deploy shell scripts
+   - `docker-compose*.yml` — container-based deploys
+   - **Do NOT look in `.github/workflows/`** — this project does not use GitHub Actions.
+   - If no deploy method is found, **ask the user** how deployment works for this project. Do not guess or skip.
+
+b) **Run the deploy** using the discovered mechanism.
+
+c) **Verify the deploy:**
+   - Check output for errors.
+   - If there's a health check URL or status command in the project config, run it.
+   - Report success or failure.
+
+d) If the deploy fails, report the error clearly. Do not retry automatically.
+
+### 4. Plan the next step (skip if `--no-plan`)
 a) Read `tasks/todo.md` to identify the next uncompleted step. `tasks/todo.md` contains the full phased plan — it is the single source of truth.
    - If the current phase has no more incomplete steps, **check for the next phase** in `tasks/todo.md`.
    - If a next phase exists, the "next step" is the first step of that next phase. Transition automatically — do NOT stop to ask for confirmation.
@@ -37,11 +60,12 @@ b) Write a **self-contained** implementation plan for the next step into `tasks/
    - Acceptance criteria: how to verify the step is done
 c) Commit and push the updated `tasks/todo.md`.
 
-### 4. Output a brief summary (2-3 lines max to save context)
+### 5. Output a brief summary (2-3 lines max to save context)
 - What was shipped (if anything)
+- Deploy status (if deployed)
 - What the next step is (1 sentence) — or "session wrapped up" if `--no-plan`
 
-### 5. Enter plan mode (skip if `--no-plan`)
+### 6. Enter plan mode (skip if `--no-plan`)
 **YOU MUST call the EnterPlanMode tool.** This is not optional. This gives the user the option to "clear context and implement" — which starts a fresh context that reads `tasks/todo.md` and implements the plan.
 
 ## Constraints
@@ -50,7 +74,10 @@ c) Commit and push the updated `tasks/todo.md`.
 - Create `tasks/todo.md` if it doesn't exist.
 - Do NOT re-read files you've already read this session. Use what's in context.
 - Do NOT explore the codebase extensively for planning. Keep context footprint minimal.
-- If the tree is clean and the next step plan already exists in `tasks/todo.md`, skip straight to step 5.
+- If the tree is clean and the next step plan already exists in `tasks/todo.md`, skip straight to step 6.
 - Do not amend or rewrite history.
 - Do not commit secrets.
 - The plan must be actionable, not vague. Include specific file paths and technical details.
+- Never use GitHub Actions for deployment. Only use manual deploy scripts, Makefiles, or CLI commands.
+- Never deploy to production without explicit user confirmation.
+- Do not modify code as part of the deploy process.

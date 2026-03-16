@@ -16,7 +16,8 @@ Deploy the current project to the specified environment. Defaults to staging if 
    - `tasks/todo.md` — deploy instructions
    - `Makefile` / `Justfile` — deploy targets
    - `package.json` — deploy scripts
-   - `deploy/`, `infra/`, `.github/workflows/` — deploy scripts or IaC
+   - `deploy/`, `infra/`, `scripts/` — deploy scripts or IaC
+   - Do NOT look in `.github/workflows/` — this project does not use GitHub Actions.
    - `docker-compose*.yml`, `Dockerfile` — container-based deploys
    - If no deploy config is found, stop and ask the user how to deploy.
 3. Pre-flight checks:
@@ -39,3 +40,4 @@ Deploy the current project to the specified environment. Defaults to staging if 
 - Never deploy to production without explicit user confirmation.
 - If deploy fails, report the error clearly — do not retry automatically.
 - Do not modify code as part of the deploy process.
+- Never use GitHub Actions for deployment. Only use manual deploy scripts, Makefiles, or CLI commands.
