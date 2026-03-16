@@ -1,6 +1,6 @@
 # Skills Reference
 
-Complete reference for all 25 custom skills in this repository, available for both Claude Code and Codex.
+Complete reference for all 26 custom skills in this repository, available for both Claude Code and Codex.
 
 ## Installation
 
@@ -37,11 +37,18 @@ Plan                    Execute                    Ship
                         /run-phases
 ```
 
-Supporting skills plug in at any point: `/review`, `/investigate`, `/affected`, `/regression-check`, etc.
+Supporting skills plug in at any point: `/expert-review`, `/investigate`, `/affected`, `/regression-check`, etc.
 
 ---
 
 ## Planning
+
+### `/brainstorm`
+Evaluate the codebase and suggest actionable ideas to explore with `/plan-interview`.
+
+- **Arguments**: `[optional: focus area e.g. "performance", "new features", "DX"]`
+- **Outputs**: Suggestions grouped by effort level (hours/days/weeks) with copy-paste `/plan-interview` prompts.
+- **Use when**: Looking for what to work on next, or evaluating improvement opportunities.
 
 ### `/plan-interview`
 Interview to validate and complete a specification.
@@ -107,8 +114,8 @@ Wrap up the current session — update docs, commit, and push.
 
 ## Code Quality
 
-### `/review`
-Conduct a thorough project-wide code review as an expert panel.
+### `/expert-review`
+Conduct a thorough project-wide code review as an expert panel, cross-referencing specs, changelogs, and design documents.
 
 - **Arguments**: `[optional: specific directory or file path]`
 - **Dimensions**: Correctness, security, performance, architecture, error handling, code quality, testing, dependencies.
@@ -251,6 +258,7 @@ Create or update the current repository's `CLAUDE.md` with workflow conventions.
 
 | Skill | One-liner |
 |-------|-----------|
+| `/brainstorm` | Evaluate codebase, suggest improvement ideas |
 | `/plan-interview` | Rough idea → validated spec |
 | `/plan-phases` | Spec → phased plan with TDD |
 | `/run` | Execute next step (plan mode first) |
@@ -260,7 +268,7 @@ Create or update the current repository's `CLAUDE.md` with workflow conventions.
 | `/ship` | Commit, push, optionally plan next |
 | `/ship-then-plan` | Commit, push, plan next in fresh context |
 | `/ship-end` | Wrap up session |
-| `/review` | Expert code review |
+| `/expert-review` | Expert code review |
 | `/regression-check` | Full health check (types, lint, tests, build) |
 | `/dead-code` | Find unused code and dependencies |
 | `/debug` | Investigate + changelog + non-duplicate fix |
