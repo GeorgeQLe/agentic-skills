@@ -57,7 +57,7 @@ Use this skill when the user wants the repository's `CLAUDE.md` updated with the
 - When given a bug report: just fix it. Don't ask for hand-holding
 - Point at logs, errors, failing tests - then resolve them
 - Zero context switching required from the user
-- Go fix failing CI tests without being told how
+- Go fix failing tests without being told how
 
 ## Task Management
 
