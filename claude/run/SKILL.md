@@ -10,21 +10,22 @@ Identify the next incomplete unit of work from the phased plan, build an executi
 
 ## Protocol
 
-1. **Read `tasks/todo.md`** — this contains the current phase's steps. Reference `tasks/roadmap.md` only if cross-phase context is needed.
-2. **Read CLAUDE.md** for project conventions.
-3. **Find the next incomplete item:**
+1. **Migration check:** If `tasks/roadmap.md` does not exist but `tasks/todo.md` contains multiple `## Phase` headers, migrate: copy `tasks/todo.md` → `tasks/roadmap.md`, then trim `tasks/todo.md` to just the current phase (first phase with unchecked steps). Commit with `chore: migrate to roadmap.md + todo.md split`.
+2. **Read `tasks/todo.md`** — this contains the current phase's steps. Reference `tasks/roadmap.md` only if cross-phase context is needed.
+3. **Read CLAUDE.md** for project conventions.
+4. **Find the next incomplete item:**
    - Look for the next phase with an unchecked milestone.
    - If `--phase` mode: scope the entire phase.
    - Otherwise (default): find only the next unchecked `- [ ]` step within that phase.
-4. **Research what's needed** — read only the files relevant to the step/phase to understand existing code, patterns, and dependencies.
-5. **Enter plan mode** using the EnterPlanMode tool.
-6. **Present the execution plan** to the user:
+5. **Research what's needed** — read only the files relevant to the step/phase to understand existing code, patterns, and dependencies.
+6. **Enter plan mode** using the EnterPlanMode tool.
+7. **Present the execution plan** to the user:
    - What the step/phase requires
    - Which files will be created or modified
    - The approach (e.g., what tests to write, what code to change)
    - Any decisions or trade-offs the user should weigh in on
-7. **Wait for user approval.** Do NOT write any code until the user approves.
-8. **After approval, exit plan mode** and execute the approved plan.
+8. **Wait for user approval.** Do NOT write any code until the user approves.
+9. **After approval, exit plan mode** and execute the approved plan.
 
 ### Single Step Mode (default)
 

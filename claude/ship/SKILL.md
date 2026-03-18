@@ -47,22 +47,23 @@ c) **Verify the deploy:**
 d) If the deploy fails, report the error clearly. Do not retry automatically.
 
 ### 4. Plan the next step (skip if `--no-plan`)
-a) Read `tasks/todo.md` to identify the next uncompleted step in the current phase.
-b) **Check if the current phase is complete** (all steps checked, milestone criteria met):
+a) **Migration check:** If `tasks/roadmap.md` does not exist but `tasks/todo.md` contains multiple `## Phase` headers, migrate: copy `tasks/todo.md` → `tasks/roadmap.md`, then trim `tasks/todo.md` to just the current phase (first phase with unchecked steps). Commit with `chore: migrate to roadmap.md + todo.md split`.
+b) Read `tasks/todo.md` to identify the next uncompleted step in the current phase.
+c) **Check if the current phase is complete** (all steps checked, milestone criteria met):
    - If **YES — Phase transition:**
      1. Archive the completed phase: copy `tasks/todo.md` → `docs/phases/phase-N.md` (create `docs/phases/` if needed). Fill in the "On Completion" section.
      2. Check off the phase milestone in `tasks/roadmap.md`.
      3. Copy the next phase from `tasks/roadmap.md` → overwrite `tasks/todo.md`.
      4. If no more phases remain, report "all done" and stop.
    - If **NO:** find the next uncompleted step within the current phase.
-c) Write a **self-contained** implementation plan for the next step into `tasks/todo.md`. This plan must be complete enough that a fresh context can execute it by reading only CLAUDE.md and `tasks/todo.md`. Include:
+d) Write a **self-contained** implementation plan for the next step into `tasks/todo.md`. This plan must be complete enough that a fresh context can execute it by reading only CLAUDE.md and `tasks/todo.md`. Include:
    - What needs to be built/changed
    - Which files will be affected (full paths)
    - Key technical decisions or risks
    - Relevant context from the current session (gotchas, patterns established, conventions used)
    - If TDD: which tests to write first and what they should assert
    - Acceptance criteria: how to verify the step is done
-d) Commit and push `tasks/todo.md`, `tasks/roadmap.md`, and `docs/phases/` (if created).
+e) Commit and push `tasks/todo.md`, `tasks/roadmap.md`, and `docs/phases/` (if created).
 
 ### 5. Output a brief summary (2-3 lines max to save context)
 - What was shipped (if anything)

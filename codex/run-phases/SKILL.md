@@ -14,26 +14,27 @@ Use this skill when the user wants the next incomplete implementation phase plan
 
 ## Workflow
 
-1. Read `tasks/todo.md` and locate the next incomplete phase by milestone or checklist state.
-2. Read `CLAUDE.md` if it exists for project conventions.
-3. Research what's needed — read only the files relevant to the phase.
-4. Enter plan mode and present the execution plan:
+1. **Migration check:** If `tasks/roadmap.md` does not exist but `tasks/todo.md` contains multiple `## Phase` headers, migrate: copy `tasks/todo.md` → `tasks/roadmap.md`, then trim `tasks/todo.md` to just the current phase (first phase with unchecked steps). Commit with `chore: migrate to roadmap.md + todo.md split`.
+2. Read `tasks/todo.md` and locate the next incomplete phase by milestone or checklist state.
+3. Read `CLAUDE.md` if it exists for project conventions.
+4. Research what's needed — read only the files relevant to the phase.
+5. Enter plan mode and present the execution plan:
    - What the phase requires
    - Which files will be created or modified
    - The approach for each step (tests, implementation, verification)
    - Any decisions or trade-offs the user should weigh in on
-5. Wait for user approval. Do not write code until approved.
-6. After approval, exit plan mode and execute exactly one phase:
+6. Wait for user approval. Do not write code until approved.
+7. After approval, exit plan mode and execute exactly one phase:
    - Start with the tests-first step
    - Run the tests to confirm they fail where expected
    - Implement the phase steps in order
    - Run tests again to confirm green
    - Refactor only if tests remain green
-7. Verify the phase milestone:
+8. Verify the phase milestone:
    - Check each acceptance criterion
    - Run the full relevant test suite to catch regressions
    - Update progress tracking files
-8. Report:
+9. Report:
    - Phase completed
    - Steps executed
    - Files modified
