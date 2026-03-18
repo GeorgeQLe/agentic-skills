@@ -9,7 +9,7 @@ Plan **only the next single incomplete step** from the current phase, get user a
 
 ## Execution Protocol
 
-1. **Read `tasks/todo.md`** — this is the single source of truth for what to execute. It contains the full phased plan with all steps.
+1. **Read `tasks/todo.md`** — this contains the current phase's steps. Reference `tasks/roadmap.md` only if cross-phase context is needed.
 2. **Read CLAUDE.md** for project conventions.
 3. **Find the next incomplete step** (unchecked `- [ ]` item under the current phase).
 4. **Research what's needed** — read only the files relevant to the step to understand existing code, patterns, and dependencies.

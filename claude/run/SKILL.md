@@ -10,7 +10,7 @@ Identify the next incomplete unit of work from the phased plan, build an executi
 
 ## Protocol
 
-1. **Read `tasks/todo.md`** — this is the single source of truth. It contains the full phased plan with all steps.
+1. **Read `tasks/todo.md`** — this contains the current phase's steps. Reference `tasks/roadmap.md` only if cross-phase context is needed.
 2. **Read CLAUDE.md** for project conventions.
 3. **Find the next incomplete item:**
    - Look for the next phase with an unchecked milestone.

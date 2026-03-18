@@ -9,7 +9,7 @@ Plan **only the next incomplete phase** from a phased implementation plan, get u
 
 ## Execution Protocol
 
-1. **Read `tasks/todo.md`** — this is the single source of truth. It contains the full phased plan. Find the next incomplete phase by checking milestone checkboxes.
+1. **Read `tasks/todo.md`** — this contains the current phase's steps. Also read `tasks/roadmap.md` to understand overall progress and find the next incomplete phase by checking milestone checkboxes.
 2. **Read CLAUDE.md** for project conventions.
 3. **Research what's needed** — read only the files relevant to the phase to understand existing code, patterns, and dependencies.
 4. **Enter plan mode** using the EnterPlanMode tool.
