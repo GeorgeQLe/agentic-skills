@@ -8,10 +8,10 @@ Wrap up the current session: mark progress, commit, and push.
 Process:
 1) Run `git status` and `git diff` to see all changes.
    - If the working tree is clean and no unpushed commits: report "nothing to ship" and stop.
-2) Update `tasks/todo.md` — mark completed items as done, note any outstanding items or blockers.
+2) Update `tasks/todo.md` — mark completed items as done, note any outstanding items or blockers. Also update milestone progress in `tasks/roadmap.md` if criteria were met.
 3) Update `tasks/history.md` — append a brief record of what was accomplished this session (phase/step completed, key changes). Create it if it doesn't exist.
 4) Deploy:
-   a) Find the deploy method by checking: `spec.md`, `CLAUDE.md`, `tasks/todo.md`, `Makefile`/`Justfile`, `package.json`, `deploy/`/`infra/`/`scripts/`, `docker-compose*.yml`.
+   a) Find the deploy method by checking: `spec.md`, `CLAUDE.md`, `tasks/roadmap.md`, `tasks/todo.md`, `Makefile`/`Justfile`, `package.json`, `deploy/`/`infra/`/`scripts/`, `docker-compose*.yml`.
    b) Do NOT look in `.github/workflows/` — this project does not use GitHub Actions.
    c) If no deploy method is found, ask the user how deployment works. Do not guess or skip.
    d) Run the deploy and verify the output for errors.

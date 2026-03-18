@@ -11,10 +11,10 @@ Use this skill when the user wants the current session wrapped up cleanly.
 
 1. Inspect `git status` and diffs.
 2. If the tree is clean and there are no unpushed commits, report that there is nothing to ship and stop.
-3. Update `tasks/todo.md` with completed items and blockers.
+3. Update `tasks/todo.md` with completed items and blockers. Also update milestone progress in `tasks/roadmap.md` if criteria were met.
 4. Update `tasks/history.md` with a brief record of the session. Create it if needed.
 5. Deploy:
-   - Find the deploy method by checking: `spec.md`, `CLAUDE.md`, `tasks/todo.md`, `Makefile`/`Justfile`, `package.json`, `deploy/`/`infra/`/`scripts/`, `docker-compose*.yml`.
+   - Find the deploy method by checking: `spec.md`, `CLAUDE.md`, `tasks/roadmap.md`, `tasks/todo.md`, `Makefile`/`Justfile`, `package.json`, `deploy/`/`infra/`/`scripts/`, `docker-compose*.yml`.
    - Do NOT look in `.github/workflows/` — this project does not use GitHub Actions.
    - If no deploy method is found, ask the user how deployment works. Do not guess or skip.
    - Run the deploy and verify the output for errors.
