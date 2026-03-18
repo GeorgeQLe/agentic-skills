@@ -23,7 +23,7 @@ Manage the release ceremony: version bump, changelog generation, git tag, and op
    - Ensure the working tree is clean.
    - Ensure the current branch is up to date with remote.
    - Run tests to verify everything passes.
-   - Check for any TODO or FIXME items in `tasks/todo.md` that should block the release.
+   - Check for any TODO or FIXME items in `tasks/roadmap.md` and `tasks/todo.md` that should block the release.
 
 3. **Generate the changelog:**
    - Find the last git tag (or first commit if no tags exist).

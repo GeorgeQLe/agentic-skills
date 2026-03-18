@@ -14,6 +14,7 @@ Deploy the current project to the specified environment. Defaults to staging if 
 2. Find the deploy configuration. Check these locations in order:
    - `spec.md` — deployment section
    - `CLAUDE.md` — deploy commands or instructions
+   - `tasks/roadmap.md` — deploy instructions
    - `tasks/todo.md` — deploy instructions
    - `Makefile` / `Justfile` — deploy targets
    - `package.json` — deploy scripts

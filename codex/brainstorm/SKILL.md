@@ -10,7 +10,7 @@ Evaluate the current codebase and generate actionable suggestions that the user 
 ## Workflow
 
 1. Read CLAUDE.md, README, package config, and key source files to understand the project.
-2. Check `tasks/todo.md` and `spec.md` if they exist — avoid suggesting things already planned.
+2. Check `tasks/roadmap.md` and `tasks/todo.md` and `spec.md` if they exist — avoid suggesting things already planned.
 3. Analyse the codebase across these dimensions:
    - Missing capabilities the architecture is set up for
    - Pain points, rough edges, or manual steps that could be automated
@@ -34,4 +34,4 @@ Group suggestions by effort level (hours / days / weeks). Each suggestion should
 - Be specific and actionable — no vague aspirations.
 - Limit to 3–5 suggestions per effort level.
 - Do not suggest changes that conflict with CLAUDE.md conventions.
-- Do not repeat work already in `tasks/todo.md` or `spec.md`.
+- Do not repeat work already in `tasks/roadmap.md`, `tasks/todo.md`, or `spec.md`.
