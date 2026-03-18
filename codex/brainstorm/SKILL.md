@@ -22,7 +22,9 @@ Evaluate the current codebase and generate actionable suggestions that the user 
    - Integration opportunities with external tools or APIs
 4. If the user provides a focus area, scope the analysis there. Otherwise cover all dimensions.
 
-## Output Format
+## Output
+
+Append the suggestions to `tasks/ideas.md` (do not overwrite existing content). Also display them to the user.
 
 Group suggestions by effort level (hours / days / weeks). Each suggestion should include:
 - A specific, actionable title
