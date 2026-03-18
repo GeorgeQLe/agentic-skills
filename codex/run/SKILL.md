@@ -9,22 +9,23 @@ Identify the next incomplete unit of work from the phased plan, build an executi
 
 ## Workflow
 
-1. Read `tasks/todo.md` — this contains the current phase's steps. Reference `tasks/roadmap.md` only if cross-phase context is needed.
-2. Read `CLAUDE.md` for project conventions.
-3. Find the next incomplete item:
+1. **Migration check:** If `tasks/roadmap.md` does not exist but `tasks/todo.md` contains multiple `## Phase` headers, migrate: copy `tasks/todo.md` → `tasks/roadmap.md`, then trim `tasks/todo.md` to just the current phase (first phase with unchecked steps). Commit with `chore: migrate to roadmap.md + todo.md split`.
+2. Read `tasks/todo.md` — this contains the current phase's steps. Reference `tasks/roadmap.md` only if cross-phase context is needed.
+3. Read `CLAUDE.md` for project conventions.
+4. Find the next incomplete item:
    - Look for the next phase with an unchecked milestone.
    - Find the next unchecked `- [ ]` step within that phase.
-4. Research what is needed — read only the files relevant to the step.
-5. Present the execution plan to the user:
+5. Research what is needed — read only the files relevant to the step.
+6. Present the execution plan to the user:
    - What the step requires
    - Which files will be created or modified
    - The approach and any trade-offs
-6. Wait for user approval before writing any code.
-7. After approval, execute the plan:
+7. Wait for user approval before writing any code.
+8. After approval, execute the plan:
    - If it is a tests-first step: write the failing tests, run them to confirm they fail.
    - If it is an implementation step: implement it, run existing tests for regressions.
    - If it is a verification step: run all tests, fix any failures.
-8. Mark the step as done in `tasks/todo.md`.
+9. Mark the step as done in `tasks/todo.md`.
 
 ## Output
 

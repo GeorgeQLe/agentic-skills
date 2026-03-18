@@ -26,6 +26,7 @@ Ship current work, commit, push, deploy, and plan the next step.
    - If a health check URL or status command exists, run it.
    - If the deploy fails, report the error. Do not retry automatically.
 4. Plan the next step:
+   - **Migration check:** If `tasks/roadmap.md` does not exist but `tasks/todo.md` contains multiple `## Phase` headers, migrate: copy `tasks/todo.md` → `tasks/roadmap.md`, then trim `tasks/todo.md` to just the current phase (first phase with unchecked steps). Commit with `chore: migrate to roadmap.md + todo.md split`.
    - Read `tasks/todo.md` to identify the next uncompleted step in the current phase.
    - **Check if the current phase is complete** (all steps checked, milestone criteria met):
      - If **YES — Phase transition:**

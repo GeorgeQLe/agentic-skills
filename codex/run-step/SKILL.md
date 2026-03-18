@@ -14,20 +14,21 @@ Use this skill when the user wants one bounded implementation step planned and e
 
 ## Workflow
 
-1. Read `tasks/todo.md` — find the next incomplete step (unchecked `- [ ]` item).
-2. Read `CLAUDE.md` if it exists for project conventions.
-3. Research what's needed — read only the files relevant to the step.
-4. Enter plan mode and present the execution plan:
+1. **Migration check:** If `tasks/roadmap.md` does not exist but `tasks/todo.md` contains multiple `## Phase` headers, migrate: copy `tasks/todo.md` → `tasks/roadmap.md`, then trim `tasks/todo.md` to just the current phase (first phase with unchecked steps). Commit with `chore: migrate to roadmap.md + todo.md split`.
+2. Read `tasks/todo.md` — find the next incomplete step (unchecked `- [ ]` item).
+3. Read `CLAUDE.md` if it exists for project conventions.
+4. Research what's needed — read only the files relevant to the step.
+5. Enter plan mode and present the execution plan:
    - What the step requires
    - Which files will be created or modified
    - The approach and any trade-offs
-5. Wait for user approval. Do not write code until approved.
-6. After approval, exit plan mode and execute exactly one step:
+6. Wait for user approval. Do not write code until approved.
+7. After approval, exit plan mode and execute exactly one step:
    - Tests-first: write failing tests, confirm expected failure
    - Implementation: implement the step, run tests for regression coverage
    - Green/verification: run the test suite, fix failures in scope
-7. Mark the step done in the relevant tracking file.
-8. Report:
+8. Mark the step done in the relevant tracking file.
+9. Report:
    - Step completed
    - Files modified
    - Test results
