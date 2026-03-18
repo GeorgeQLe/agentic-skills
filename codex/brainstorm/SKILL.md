@@ -12,14 +12,23 @@ Evaluate the current codebase and generate actionable suggestions that the user 
 1. Read CLAUDE.md, README, package config, and key source files to understand the project.
 2. Check `tasks/roadmap.md` and `tasks/todo.md` and `spec.md` if they exist — avoid suggesting things already planned.
 3. Analyse the codebase across these dimensions:
+
+   **Strategic / Product**
+   - New features that would make the project significantly more useful or valuable
+   - New workflows or end-to-end automation the project could enable
+   - Product line expansion — adjacent use cases, new audiences, or complementary products the core could serve
+   - Integration opportunities with external tools, platforms, or APIs that multiply value
+
+   **Improvement**
    - Missing capabilities the architecture is set up for
    - Pain points, rough edges, or manual steps that could be automated
+   - Performance bottlenecks or low-hanging optimisations
+   - Developer experience friction
+
+   **Hygiene**
    - Technical debt where code has outgrown its design
    - Testing gaps in critical paths
-   - Developer experience friction
-   - Performance bottlenecks or low-hanging optimisations
    - Security hardening opportunities
-   - Integration opportunities with external tools or APIs
 4. If the user provides a focus area, scope the analysis there. Otherwise cover all dimensions.
 
 ## Output

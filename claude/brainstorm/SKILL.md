@@ -13,14 +13,23 @@ Evaluate the current codebase and generate actionable suggestions that the user 
 1. **Understand the project**: Read CLAUDE.md, README, package config, and key source files to understand what the project does, its architecture, tech stack, and current state.
 2. **Check existing plans**: Read `tasks/roadmap.md` and `tasks/todo.md` and `spec.md` if they exist to understand work already planned or in progress — avoid suggesting things already covered.
 3. **Analyse the codebase** across these dimensions:
+
+   **Strategic / Product**
+   - **New features**: Capabilities that would make the project significantly more useful or valuable to its users — think beyond what exists today
+   - **New workflows**: End-to-end flows or automation that the project could enable but doesn't yet
+   - **Product line expansion**: If the project's core could serve adjacent use cases, new audiences, or spin off complementary products — suggest them
+   - **Integration opportunities**: External tools, services, platforms, or APIs that would multiply the project's value
+
+   **Improvement**
    - **Missing capabilities**: Features the project's architecture is set up for but doesn't yet offer
    - **Pain points**: Rough edges, inconsistencies, or manual steps that could be automated
+   - **Performance opportunities**: Obvious bottlenecks or low-hanging optimisations
+   - **Developer experience**: Build times, debugging ergonomics, onboarding friction
+
+   **Hygiene**
    - **Technical debt**: Areas where the code has outgrown its original design
    - **Testing gaps**: Untested critical paths or missing test infrastructure
-   - **Developer experience**: Build times, debugging ergonomics, onboarding friction
-   - **Performance opportunities**: Obvious bottlenecks or low-hanging optimisations
    - **Security hardening**: Areas where security posture could be improved
-   - **Integration opportunities**: External tools, services, or APIs that would complement the project
 4. **Scope**: If `$ARGUMENTS` is provided, focus the analysis on that area. Otherwise, cover all dimensions.
 
 ## Output

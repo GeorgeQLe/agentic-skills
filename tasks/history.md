@@ -18,3 +18,4 @@ Resolved all 10 findings from `/expert-review`:
 
 - Updated `/brainstorm` (Claude + Codex) to append suggestions to `tasks/ideas.md`
 - Created new `/plan-interview-ideas` skill (Claude + Codex) that reads `tasks/ideas.md` and runs a plan-interview for each idea sequentially
+- Expanded brainstorm dimensions: added Strategic/Product tier (new features, new workflows, product line expansion) and reorganized into Strategic → Improvement → Hygiene
