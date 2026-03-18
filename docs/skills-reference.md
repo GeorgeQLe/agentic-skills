@@ -61,7 +61,7 @@ Interview to validate and complete a specification.
 Break a finalized spec into phases, steps, milestones, and TDD test plans.
 
 - **Arguments**: `[path-to-spec]` (defaults to `spec.md`)
-- **Outputs**: `tasks/todo.md` (working), `docs/plan.md` (historical)
+- **Outputs**: `tasks/roadmap.md` (full plan), `tasks/todo.md` (current phase)
 - **Use when**: A spec is finalized and ready for implementation planning.
 
 ---
