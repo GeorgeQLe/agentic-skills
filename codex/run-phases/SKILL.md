@@ -9,7 +9,8 @@ Use this skill when the user wants the next incomplete implementation phase plan
 
 ## Inputs
 
-- `tasks/todo.md` — the single source of truth for the full phased plan and active work.
+- `tasks/todo.md` — the active working document containing the current phase's steps.
+- `tasks/roadmap.md` — the full phased plan. Read this to understand overall progress and locate the next phase.
 
 ## Workflow
 
