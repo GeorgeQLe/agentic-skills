@@ -1,6 +1,6 @@
 ---
 name: plan-phases
-description: Convert a finalized spec into a phased implementation plan written to tasks/todo.md (the execution source of truth) with milestones, TDD-first steps, and file-level scope.
+description: Convert a finalized spec into a phased implementation plan written to tasks/roadmap.md (full plan) and tasks/todo.md (current phase) with milestones, TDD-first steps, and file-level scope.
 ---
 
 # Plan Phases
@@ -20,11 +20,13 @@ Use this skill when the user has a completed spec and wants it broken into an im
 4. For each phase, define ordered steps.
 5. The first step of every phase must be writing failing tests.
 6. Include milestone acceptance criteria with concrete, verifiable checks.
-7. Write the full plan (all phases) to `tasks/todo.md`. Also write a copy to `docs/plan.md` as a historical artifact.
+7. Write the full plan (all phases) to `tasks/roadmap.md` — the single source of truth for the full phased plan.
+8. Extract Phase 1 only into `tasks/todo.md` — the active working document for the current phase.
+9. Do NOT write `docs/plan.md`.
 
 ## Required Plan Shape
 
-Write the plan to `tasks/todo.md` (and a copy to `docs/plan.md`) using this structure:
+Write the full plan to `tasks/roadmap.md` using this structure, and extract the current phase into `tasks/todo.md`:
 
 - Title and summary
 - Phase overview table
@@ -45,3 +47,4 @@ Write the plan to `tasks/todo.md` (and a copy to `docs/plan.md`) using this stru
 - Implementation steps should name the specific files or paths likely to change when that is knowable from the spec.
 - Do not include implementation code in the plan.
 - Keep the plan compatible with follow-on workflows that look for `## Phase N:` headers and `- Step N.X:` lines.
+- `tasks/roadmap.md` is the source of truth for the full plan. `tasks/todo.md` holds only the current phase. Do NOT put plans in `docs/plan.md`.
