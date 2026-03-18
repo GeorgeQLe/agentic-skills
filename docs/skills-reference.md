@@ -1,6 +1,6 @@
 # Skills Reference
 
-Complete reference for all 26 custom skills in this repository, available for both Claude Code and Codex.
+Complete reference for all 27 custom skills in this repository, available for both Claude Code and Codex.
 
 ## Installation
 
@@ -29,12 +29,12 @@ claude-skills/
 These skills form a structured development workflow:
 
 ```
-Plan                    Execute                    Ship
-────────────────────    ───────────────────────    ──────────────────────
-/plan-interview    →    /run (single step)    →    /ship
-/plan-phases       →    /run --phase (full)   →    /ship-then-plan
-                        /run-step             →    /ship-end
-                        /run-phases
+Ideate                       Plan                    Execute                    Ship
+─────────────────────────    ────────────────────    ───────────────────────    ──────────────────────
+/brainstorm              →   /plan-interview    →    /run (single step)    →    /ship
+  └→ /plan-interview-ideas   /plan-phases       →    /run --phase (full)   →    /ship-then-plan
+                                                     /run-step             →    /ship-end
+                                                     /run-phases
 ```
 
 Supporting skills plug in at any point: `/expert-review`, `/investigate`, `/affected`, `/regression-check`, etc.
@@ -56,6 +56,13 @@ Interview to validate and complete a specification.
 - **Arguments**: `[optional-topic-override]`
 - **Outputs**: `spec.md`, `interview-log.md`
 - **Use when**: Starting a new feature or initiative from a rough idea.
+
+### `/plan-interview-ideas`
+Run plan-interview sequentially for each idea in `tasks/ideas.md`.
+
+- **Arguments**: `[optional: filter keyword to limit which ideas to interview]`
+- **Outputs**: Appends specs to `spec.md`, writes per-idea `[topic]-interview.md` logs.
+- **Use when**: You've run `/brainstorm` and want to spec out multiple ideas in one session.
 
 ### `/plan-phases`
 Break a finalized spec into phases, steps, milestones, and TDD test plans.
@@ -260,6 +267,7 @@ Create or update the current repository's `CLAUDE.md` with workflow conventions.
 |-------|-----------|
 | `/brainstorm` | Evaluate codebase, suggest improvement ideas |
 | `/plan-interview` | Rough idea → validated spec |
+| `/plan-interview-ideas` | Spec each idea from ideas.md |
 | `/plan-phases` | Spec → phased plan with TDD |
 | `/run` | Execute next step (plan mode first) |
 | `/run --phase` | Execute next full phase (plan mode first) |
