@@ -82,7 +82,14 @@ After all phases, add a section for:
 
 ## Output
 
-Write the phased plan to **`tasks/todo.md`** (the single source of truth for execution) with this structure. Also write a copy to `docs/plan.md` as a historical artifact (create `docs/` if it doesn't exist).
+Write two files:
+
+1. **`tasks/roadmap.md`** — the single source of truth for the **full phased plan**. Contains all phases and steps. This is a living document — milestones get checked off as phases complete.
+2. **`tasks/todo.md`** — contains only the **current phase** (Phase 1 initially). This is the active working document that `/run-step` reads. It gets overwritten on phase transitions.
+
+Do NOT write `docs/plan.md`. The roadmap replaces it.
+
+### `tasks/roadmap.md` structure
 
 ```markdown
 # Implementation Plan: [Project Name]
@@ -126,7 +133,9 @@ Write the phased plan to **`tasks/todo.md`** (the single source of truth for exe
 ...
 ```
 
-`tasks/todo.md` contains the full plan — all phases and steps — not just Phase 1. `/run-step` reads directly from it to find the next incomplete step. `docs/plan.md` is a snapshot copy for reference and history.
+### `tasks/todo.md` structure
+
+Extract Phase 1 from the roadmap into `tasks/todo.md` as a standalone working document. Include enough context (project name, current phase number, total phases) so a fresh session can orient itself without reading `tasks/roadmap.md`.
 
 ## Constraints
 - Every phase MUST have a milestone with specific, checkable acceptance criteria — not vague statements like "works correctly" but concrete conditions like "POST /api/items returns 201 with valid payload and persists to database."
@@ -135,4 +144,4 @@ Write the phased plan to **`tasks/todo.md`** (the single source of truth for exe
 - The plan must be compatible with `/run-step` and `/run-phases` — use `## Phase N:` headers and `- Step N.X:` format.
 - Do not include implementation code in the plan — only describe what to build and what to test.
 - If the spec references existing code or infrastructure, note what already exists vs. what needs to be created.
-- `tasks/todo.md` is the source of truth for execution. `docs/plan.md` is a historical copy. Do NOT put plans in CLAUDE.md.
+- `tasks/roadmap.md` is the source of truth for the full plan. `tasks/todo.md` holds only the current phase. Do NOT put plans in CLAUDE.md or `docs/plan.md`.
