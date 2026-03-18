@@ -19,18 +19,23 @@ Ship current work, commit, push, deploy, and plan the next step.
    - Update `tasks/history.md` — append a brief record of what was accomplished. Create it if needed.
    - Commit and push using the commit-and-push-by-feature workflow.
 3. Deploy:
-   - Find the deploy method by checking: `spec.md`, `CLAUDE.md`, `tasks/todo.md`, `Makefile`/`Justfile`, `package.json`, `deploy/`/`infra/`/`scripts/`, `docker-compose*.yml`.
+   - Find the deploy method by checking: `spec.md`, `CLAUDE.md`, `tasks/roadmap.md`, `tasks/todo.md`, `Makefile`/`Justfile`, `package.json`, `deploy/`/`infra/`/`scripts/`, `docker-compose*.yml`.
    - Do NOT look in `.github/workflows/` — this project does not use GitHub Actions.
    - If no deploy method is found, ask the user how deployment works. Do not guess or skip.
    - Run the deploy and verify the output for errors.
    - If a health check URL or status command exists, run it.
    - If the deploy fails, report the error. Do not retry automatically.
 4. Plan the next step:
-   - Read `tasks/todo.md` to identify the next uncompleted step.
-   - If the current phase has no more incomplete steps, check for the next phase.
-   - Only report "all done" if there are truly no more phases or steps remaining.
+   - Read `tasks/todo.md` to identify the next uncompleted step in the current phase.
+   - **Check if the current phase is complete** (all steps checked, milestone criteria met):
+     - If **YES — Phase transition:**
+       1. Archive the completed phase: copy `tasks/todo.md` → `docs/phases/phase-N.md` (create `docs/phases/` if needed). Fill in the "On Completion" section.
+       2. Check off the phase milestone in `tasks/roadmap.md`.
+       3. Copy the next phase from `tasks/roadmap.md` → overwrite `tasks/todo.md`.
+       4. If no more phases remain, report "all done" and stop.
+     - If **NO:** find the next uncompleted step within the current phase.
 5. Write a self-contained implementation plan for the next step into `tasks/todo.md`, complete enough for a fresh session to execute from `tasks/todo.md` alone.
-6. Commit and push the updated `tasks/todo.md`.
+6. Commit and push `tasks/todo.md`, `tasks/roadmap.md`, and `docs/phases/` (if created).
 7. Output a brief summary:
    - What was shipped (if anything)
    - Deploy status (if deployed)
@@ -39,7 +44,7 @@ Ship current work, commit, push, deploy, and plan the next step.
 ## Constraints
 
 - Do not write plans into `CLAUDE.md`. It is for project conventions only.
-- `tasks/todo.md` is the single source of truth for the plan and active work.
+- `tasks/roadmap.md` is the source of truth for the full phased plan. `tasks/todo.md` holds only the current phase.
 - Create `tasks/todo.md` if it does not exist.
 - Do not amend or rewrite history.
 - Do not commit secrets.
