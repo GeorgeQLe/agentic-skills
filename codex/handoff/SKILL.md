@@ -9,7 +9,7 @@ Use this skill when the user is ending a session and wants to capture context fo
 
 ## Workflow
 
-1. Read tasks/todo.md, CLAUDE.md, git status, and recent git log.
+1. Read tasks/todo.md for current phase detail, tasks/roadmap.md for overall progress, CLAUDE.md, git status, and recent git log.
 2. Identify work in progress, technical decisions, and loose ends.
 3. Write a self-contained handoff document to tasks/handoff.md.
 4. Report the project state and whether there are uncommitted changes.

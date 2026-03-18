@@ -11,7 +11,8 @@ Generate a self-contained context document that captures exactly where you left 
 ## Process
 
 1. **Gather current state:**
-   - Read `tasks/todo.md` for the current phase and step.
+   - Read `tasks/todo.md` for the current phase detail and active step.
+   - Read `tasks/roadmap.md` for overall progress context (which phases are done, what's ahead).
    - Read `CLAUDE.md` for project conventions.
    - Run `git status` and `git log --oneline -10` for recent activity.
    - Run `git diff --stat` if there are uncommitted changes.
@@ -76,7 +77,7 @@ After writing the handoff, report:
 - Whether there are uncommitted changes that should be committed first
 
 ## Constraints
-- The handoff must be **self-contained** — a fresh session should be able to read only this file and `tasks/todo.md` to start working.
+- The handoff must be **self-contained** — a fresh session should be able to read only this file, `tasks/todo.md`, and optionally `tasks/roadmap.md` to start working.
 - Do not include full file contents — only paths and brief descriptions.
 - Keep it concise — the handoff should be under 100 lines.
 - Do not commit the handoff document automatically — let the user decide.
