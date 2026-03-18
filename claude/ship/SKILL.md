@@ -28,6 +28,7 @@ After pushing, deploy the project using the project's own deployment mechanism.
 a) **Find the deploy method.** Check these locations in order:
    - `spec.md` — look for a deployment section
    - `CLAUDE.md` — look for deploy commands or instructions
+   - `tasks/roadmap.md` — look for deploy instructions
    - `tasks/todo.md` — look for deploy instructions
    - `Makefile` / `Justfile` — look for deploy targets (e.g., `make deploy`, `just deploy`)
    - `package.json` — look for deploy scripts (e.g., `npm run deploy`)
@@ -46,18 +47,22 @@ c) **Verify the deploy:**
 d) If the deploy fails, report the error clearly. Do not retry automatically.
 
 ### 4. Plan the next step (skip if `--no-plan`)
-a) Read `tasks/todo.md` to identify the next uncompleted step. `tasks/todo.md` contains the full phased plan — it is the single source of truth.
-   - If the current phase has no more incomplete steps, **check for the next phase** in `tasks/todo.md`.
-   - If a next phase exists, the "next step" is the first step of that next phase. Transition automatically — do NOT stop to ask for confirmation.
-   - Only stop and report "all done" if there are truly no more phases or steps remaining.
-b) Write a **self-contained** implementation plan for the next step into `tasks/todo.md`. This plan must be complete enough that a fresh context can execute it by reading only CLAUDE.md and `tasks/todo.md`. Include:
+a) Read `tasks/todo.md` to identify the next uncompleted step in the current phase.
+b) **Check if the current phase is complete** (all steps checked, milestone criteria met):
+   - If **YES — Phase transition:**
+     1. Archive the completed phase: copy `tasks/todo.md` → `docs/phases/phase-N.md` (create `docs/phases/` if needed). Fill in the "On Completion" section.
+     2. Check off the phase milestone in `tasks/roadmap.md`.
+     3. Copy the next phase from `tasks/roadmap.md` → overwrite `tasks/todo.md`.
+     4. If no more phases remain, report "all done" and stop.
+   - If **NO:** find the next uncompleted step within the current phase.
+c) Write a **self-contained** implementation plan for the next step into `tasks/todo.md`. This plan must be complete enough that a fresh context can execute it by reading only CLAUDE.md and `tasks/todo.md`. Include:
    - What needs to be built/changed
    - Which files will be affected (full paths)
    - Key technical decisions or risks
    - Relevant context from the current session (gotchas, patterns established, conventions used)
    - If TDD: which tests to write first and what they should assert
    - Acceptance criteria: how to verify the step is done
-c) Commit and push the updated `tasks/todo.md`.
+d) Commit and push `tasks/todo.md`, `tasks/roadmap.md`, and `docs/phases/` (if created).
 
 ### 5. Output a brief summary (2-3 lines max to save context)
 - What was shipped (if anything)
@@ -69,7 +74,7 @@ c) Commit and push the updated `tasks/todo.md`.
 
 ## Constraints
 - Do NOT write plans into CLAUDE.md. CLAUDE.md is for project conventions and config only.
-- `tasks/todo.md` is the single source of truth for both the full phased plan and active work.
+- `tasks/roadmap.md` is the source of truth for the full phased plan. `tasks/todo.md` holds only the current phase.
 - Create `tasks/todo.md` if it doesn't exist.
 - Do NOT re-read files you've already read this session. Use what's in context.
 - Do NOT explore the codebase extensively for planning. Keep context footprint minimal.

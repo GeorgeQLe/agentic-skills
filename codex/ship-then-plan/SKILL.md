@@ -17,15 +17,20 @@ Use this skill when the user wants to finish the current slice of work, push it,
    - Update `tasks/todo.md`
    - Commit and push using the `commit-and-push-by-feature` workflow
 3. Deploy:
-   - Find the deploy method by checking: `spec.md`, `CLAUDE.md`, `tasks/todo.md`, `Makefile`/`Justfile`, `package.json`, `deploy/`/`infra/`/`scripts/`, `docker-compose*.yml`.
+   - Find the deploy method by checking: `spec.md`, `CLAUDE.md`, `tasks/roadmap.md`, `tasks/todo.md`, `Makefile`/`Justfile`, `package.json`, `deploy/`/`infra/`/`scripts/`, `docker-compose*.yml`.
    - Do NOT look in `.github/workflows/` — this project does not use GitHub Actions.
    - If no deploy method is found, ask the user how deployment works. Do not guess or skip.
    - Run the deploy and verify the output for errors.
    - If the deploy fails, report the error. Do not retry automatically.
 4. Plan the next step:
-   - Read `tasks/todo.md` to identify the next incomplete step
-   - If the current phase is done, automatically move to the first step of the next incomplete phase
-   - Only report `all done` when no remaining phase or step exists
+   - Read `tasks/todo.md` to identify the next incomplete step in the current phase.
+   - **Check if the current phase is complete** (all steps checked, milestone criteria met):
+     - If **YES — Phase transition:**
+       1. Archive the completed phase: copy `tasks/todo.md` → `docs/phases/phase-N.md` (create `docs/phases/` if needed). Fill in the "On Completion" section.
+       2. Check off the phase milestone in `tasks/roadmap.md`.
+       3. Copy the next phase from `tasks/roadmap.md` → overwrite `tasks/todo.md`.
+       4. If no more phases remain, report "all done" and stop.
+     - If **NO:** find the next uncompleted step within the current phase.
 5. Write a self-contained next-step handoff into `tasks/todo.md` that includes:
    - What needs to change
    - Full file paths expected to be touched
