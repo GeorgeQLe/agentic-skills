@@ -23,7 +23,9 @@ Evaluate the current codebase and generate actionable suggestions that the user 
    - **Integration opportunities**: External tools, services, or APIs that would complement the project
 4. **Scope**: If `$ARGUMENTS` is provided, focus the analysis on that area. Otherwise, cover all dimensions.
 
-## Output Format
+## Output
+
+Append the suggestions to `tasks/ideas.md` (do not overwrite existing content). Also display them to the user.
 
 Present suggestions grouped by effort level, with each suggestion framed as a topic ready to hand to `/plan-interview`:
 
