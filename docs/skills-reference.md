@@ -1,6 +1,6 @@
 # Skills Reference
 
-Complete reference for all 27 custom skills in this repository, available for both Claude Code and Codex.
+Complete reference for all 28 custom skills in this repository, available for both Claude Code and Codex.
 
 ## Installation
 
@@ -29,12 +29,12 @@ claude-skills/
 These skills form a structured development workflow:
 
 ```
-Ideate                       Plan                    Execute                    Ship
-─────────────────────────    ────────────────────    ───────────────────────    ──────────────────────
-/brainstorm              →   /plan-interview    →    /run (single step)    →    /ship
-  └→ /plan-interview-ideas   /plan-phases       →    /run --phase (full)   →    /ship-then-plan
-                                                     /run-step             →    /ship-end
-                                                     /run-phases
+Ideate                       Specify                 Strategize          Detail              Execute                    Ship
+─────────────────────────    ────────────────────    ──────────────      ──────────────      ───────────────────────    ──────────────────────
+/brainstorm              →   /plan-interview    →    /roadmap       →    /plan-phases   →    /run (single step)    →    /ship
+  └→ /plan-interview-ideas                                                                   /run --phase (full)   →    /ship-then-plan
+                                                                                             /run-step             →    /ship-end
+                                                                                             /run-phases
 ```
 
 Supporting skills plug in at any point: `/expert-review`, `/investigate`, `/affected`, `/regression-check`, etc.
@@ -64,12 +64,19 @@ Run plan-interview sequentially for each idea in `tasks/ideas.md`.
 - **Outputs**: Appends specs to `spec.md`, writes per-idea `[topic]-interview.md` logs.
 - **Use when**: You've run `/brainstorm` and want to spec out multiple ideas in one session.
 
-### `/plan-phases`
-Break a finalized spec into phases, steps, milestones, and TDD test plans.
+### `/roadmap`
+Build or update the project roadmap by interviewing across all specs, codebase state, and project history.
 
-- **Arguments**: `[path-to-spec]` (defaults to `spec.md`)
-- **Outputs**: `tasks/roadmap.md` (full plan), `tasks/todo.md` (current phase)
-- **Use when**: A spec is finalized and ready for implementation planning.
+- **Arguments**: `[--existing] [path-to-spec]`
+- **Outputs**: `tasks/roadmap.md` (phases, goals, scope, acceptance criteria), then invokes `/plan-phases` for phase 1 detail.
+- **Use when**: Specs are finalized and you need to decide priority, sequencing, and phase structure across one or more specs. Also use for existing projects to build or revise a roadmap from current state.
+
+### `/plan-phases`
+Fill in TDD steps and file-level implementation detail for a roadmap phase.
+
+- **Arguments**: `[phase-number]` or `[path-to-spec]` (if no roadmap exists)
+- **Outputs**: Updates `tasks/roadmap.md` with steps, writes `tasks/todo.md` (current phase)
+- **Use when**: A roadmap phase needs TDD step detail before execution. Called automatically by `/roadmap` for phase 1, or manually for subsequent phases.
 
 ---
 
@@ -268,7 +275,8 @@ Create or update the current repository's `CLAUDE.md` with workflow conventions.
 | `/brainstorm` | Evaluate codebase, suggest improvement ideas |
 | `/plan-interview` | Rough idea → validated spec |
 | `/plan-interview-ideas` | Spec each idea from ideas.md |
-| `/plan-phases` | Spec → phased plan with TDD |
+| `/roadmap` | Interview → phased roadmap across all specs |
+| `/plan-phases` | Roadmap phase → TDD steps with file detail |
 | `/run` | Execute next step (plan mode first) |
 | `/run --phase` | Execute next full phase (plan mode first) |
 | `/run-step` | Execute one step (no plan mode) |

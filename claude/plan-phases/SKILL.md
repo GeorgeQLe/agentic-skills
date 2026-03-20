@@ -1,32 +1,40 @@
 ---
 name: plan-phases
 description: Break a finalized spec into phases, steps, milestones, and TDD test plans
-argument-hint: [path-to-spec, defaults to spec.md]
+argument-hint: [phase-number | path-to-spec]
 ---
 
 # Phase Planner
 
-Take a finalized specification (output of /plan-interview) and decompose it into a phased implementation plan with TDD support.
+Decompose work into TDD implementation steps with file-level granularity. Operates in two modes depending on whether a roadmap already exists.
 
 ## Input
 
-Read the spec at `$ARGUMENTS` (default: `spec.md` in the current directory). This spec should already be validated and finalized from a /plan-interview session.
+Check for `tasks/roadmap.md` first, then read `$ARGUMENTS`.
 
-## Planning Process
+### Mode A: Roadmap exists (typical — called after `/roadmap`)
+The roadmap already defines phases, goals, scope, and acceptance criteria. Your job is to fill in the **TDD steps and file-level detail** for a specific phase.
 
-### 1. Analyze the Spec
-- Identify all features, components, and systems described in the spec.
-- Map dependencies between components (what must exist before other things can be built).
-- Identify the critical path.
+- If `$ARGUMENTS` is a number (e.g., `2`), plan that phase.
+- If `$ARGUMENTS` is empty, plan the **first phase that has acceptance criteria but no steps** (no `### Tests First` section yet).
+- Read `spec.md` for detailed requirements referenced by the phase's scope.
+- Read the codebase as needed to understand existing code, patterns, and what files to modify.
 
-### 2. Define Phases
-Split the spec into sequential phases ordered by dependency and priority. Each phase should:
-- Be a coherent, deployable/testable unit of work.
-- Build on the previous phase's output.
-- Be small enough to complete in a focused session (prefer more smaller phases over fewer large ones).
+### Mode B: No roadmap (standalone — called directly after `/plan-interview`)
+If `tasks/roadmap.md` does not exist, fall back to the original behavior: read the spec at `$ARGUMENTS` (default: `spec.md`), define phases, and produce the full plan.
 
-### 3. Break Each Phase into Steps
-For each phase, define ordered steps. **The first step of every phase must be writing tests.**
+1. Identify all features, components, and systems described in the spec.
+2. Map dependencies between components (what must exist before other things can be built).
+3. Identify the critical path.
+4. Split the spec into sequential phases ordered by dependency and priority. Each phase should:
+   - Be a coherent, deployable/testable unit of work.
+   - Build on the previous phase's output.
+   - Be small enough to complete in a focused session (prefer more smaller phases over fewer large ones).
+
+## Planning Process (both modes)
+
+### Break the Phase into Steps
+For the target phase, define ordered steps. **The first step of every phase must be writing tests.**
 
 Each phase follows this structure:
 
@@ -64,32 +72,35 @@ Each phase follows this structure:
 - Ready for next phase: yes/no
 ```
 
-### 4. TDD Requirements
+### TDD Requirements
 - Every phase starts with writing tests BEFORE implementation code.
 - Tests should be specific and tied to the phase's acceptance criteria.
 - Include the test file paths and describe what each test validates.
 - The milestone for each phase must include "All phase tests pass" and "No regressions in previous phase tests."
 - If the project doesn't have a test framework set up, Phase 1 Step 1 should be setting up the test infrastructure.
 
-### 5. File-Level Granularity
+### File-Level Granularity
 - Each implementation step should list the specific files to create, modify, or delete.
 - This gives the executing agent clear scope and prevents steps from becoming unbounded.
 
-### 6. Cross-Phase Concerns
+### Cross-Phase Concerns (Mode B only)
 After all phases, add a section for:
 - **Integration tests**: Tests that span multiple phases / features, to be written after relevant phases complete.
 - **Non-functional requirements**: Performance, security, accessibility checks and when they should run.
 
 ## Output
 
-Write two files:
+### Mode A (roadmap exists)
+1. **Update `tasks/roadmap.md`** — insert the TDD steps into the target phase. Preserve all other phases and content. Do not overwrite the phase's Goal, Scope, or Acceptance Criteria — only add the Tests First / Implementation / Green / Milestone structure beneath them.
+2. **Write `tasks/todo.md`** — extract the target phase as a standalone working document. Include enough context (project name, current phase number, total phases) so a fresh session can orient itself without reading `tasks/roadmap.md`. If `tasks/todo.md` already has in-progress work for a different phase, ask the user before overwriting.
 
+### Mode B (no roadmap)
 1. **`tasks/roadmap.md`** — the single source of truth for the **full phased plan**. Contains all phases and steps. This is a living document — milestones get checked off as phases complete.
 2. **`tasks/todo.md`** — contains only the **current phase** (Phase 1 initially). This is the active working document that `/run-step` reads. It gets overwritten on phase transitions.
 
 Do NOT write `docs/plan.md`. The roadmap replaces it.
 
-### `tasks/roadmap.md` structure
+### `tasks/roadmap.md` structure (Mode B)
 
 ```markdown
 # Implementation Plan: [Project Name]
@@ -135,7 +146,7 @@ Do NOT write `docs/plan.md`. The roadmap replaces it.
 
 ### `tasks/todo.md` structure
 
-Extract Phase 1 from the roadmap into `tasks/todo.md` as a standalone working document. Include enough context (project name, current phase number, total phases) so a fresh session can orient itself without reading `tasks/roadmap.md`.
+Extract the target phase from the roadmap into `tasks/todo.md` as a standalone working document. Include enough context (project name, current phase number, total phases) so a fresh session can orient itself without reading `tasks/roadmap.md`.
 
 ## Constraints
 - Every phase MUST have a milestone with specific, checkable acceptance criteria — not vague statements like "works correctly" but concrete conditions like "POST /api/items returns 201 with valid payload and persists to database."
@@ -145,3 +156,4 @@ Extract Phase 1 from the roadmap into `tasks/todo.md` as a standalone working do
 - Do not include implementation code in the plan — only describe what to build and what to test.
 - If the spec references existing code or infrastructure, note what already exists vs. what needs to be created.
 - `tasks/roadmap.md` is the source of truth for the full plan. `tasks/todo.md` holds only the current phase. Do NOT put plans in CLAUDE.md or `docs/plan.md`.
+- In Mode A, do NOT restructure phases, reorder them, or change acceptance criteria. Those decisions belong to `/roadmap`. Only add implementation detail.
