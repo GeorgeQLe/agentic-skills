@@ -28,9 +28,57 @@ Pull the latest changes from the remote repository and report status.
    - Any conflicts that need manual resolution
    - Current `git status`
    - **Outstanding work** — summary from step 3 (next step, current phase, remaining work) or "No active plan"
+5. Post-sync actions:
+   a) Check if `sync.md` exists at the project root.
+   b) **If `sync.md` exists** — parse and execute it:
+      - Read `sync.md` and identify sections by H2 headings.
+      - **Dependencies** (aliases: "Deps", "Dependency Management"): Execute shell commands in fenced code blocks. Report output briefly.
+      - **Conflict Resolution** (aliases: "Conflicts"): If the pull introduced merge conflicts (from step 2), apply the guidance in this section. If no conflicts, skip silently.
+      - **Custom** (aliases: "Project-Specific", "Scripts", "Setup"): Execute shell commands in fenced code blocks in order. Report output briefly.
+      - **Notifications** (aliases: "Awareness", "Alerts", "Watch"): For each bullet, check if the mentioned file/directory was modified in pulled commits (`git diff --name-only` against pre-pull HEAD). If any match, print a prominent alert.
+      - Unrecognised headings: skip with a note.
+      - Report a summary of all post-sync actions taken.
+   c) **If `sync.md` does not exist** — suggest creating one:
+      - Analyse the project to detect: package manager (look for lockfiles), common scripts (package.json, Makefile, Justfile), config templates (.env.example, docker-compose.yml).
+      - Present a suggested `sync.md` following the format below.
+      - Ask: "Would you like me to create this `sync.md`?"
+      - **Only create the file if the user approves.**
+
+## sync.md format
+
+The `sync.md` file lives at the project root. H2 sections are categories. Shell commands go in fenced code blocks; prose guidance goes in bullet points.
+
+```markdown
+# Post-Sync Actions
+
+## Dependencies
+
+```sh
+npm install
+```
+
+## Conflict Resolution
+
+- Always accept theirs for `package-lock.json`
+
+## Custom
+
+```sh
+npm run codegen
+```
+
+## Notifications
+
+- `.env.example` — check for new environment variables
+- `CLAUDE.md` — review if project conventions were updated
+```
 
 ## Constraints
 
 - Do not force-push or rewrite history.
-- Do not auto-resolve merge conflicts — report them and let the user decide.
+- Do not auto-resolve merge conflicts — report them and let the user decide. However, if `sync.md` has a Conflict Resolution section, follow its guidance for the specific files/patterns it covers.
 - If stash pop fails due to conflicts, leave the stash intact and report it.
+- Post-sync commands from `sync.md` run in the project root directory.
+- If any post-sync command fails, report the error and continue with remaining actions.
+- Never auto-create `sync.md` without explicit user approval.
+- Do not execute commented-out sections (`<!-- ... -->`).
