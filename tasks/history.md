@@ -20,6 +20,13 @@ Resolved all 10 findings from `/expert-review`:
 - Created new `/plan-interview-ideas` skill (Claude + Codex) that reads `tasks/ideas.md` and runs a plan-interview for each idea sequentially
 - Expanded brainstorm dimensions: added Strategic/Product tier (new features, new workflows, product line expansion) and reorganized into Strategic → Improvement → Hygiene
 
+## 2026-03-20 — Spec-per-file, ship error fixing, project sync.md
+
+- Moved spec output from single `spec.md` to individual `specs/[topic].md` files across `plan-interview` and `plan-interview-ideas` (Claude + Codex)
+- Updated all downstream spec consumers (`roadmap`, `plan-phases`, `brainstorm`, `expert-review`) to check `specs/` directory with `spec.md` fallback
+- Added "fix unrelated issues" constraint to all ship skills (`ship`, `ship-end`, `ship-then-plan` — Claude + Codex)
+- Created project-level `sync.md` to run `install.sh` after pulls for symlink updates
+
 ## 2026-03-20 — Sync skill: project-level sync.md support
 
 - Added Step 5 (post-sync actions) to `/sync` skill (Claude + Codex)
