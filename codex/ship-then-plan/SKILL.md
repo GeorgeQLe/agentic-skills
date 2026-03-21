@@ -50,6 +50,7 @@ Some source versions of this workflow refer to an explicit "enter plan mode" too
 
 ## Constraints
 
+- **Fix unrelated issues:** If any step surfaces errors, warnings, or lint issues — even ones unrelated to the current work — investigate and fix them before continuing. Commit these fixes separately with a descriptive message (e.g., `fix: resolve unused import warning in auth.ts`).
 - Do not write plans into `CLAUDE.md`.
 - Do not amend or rewrite history.
 - Do not commit secrets.
