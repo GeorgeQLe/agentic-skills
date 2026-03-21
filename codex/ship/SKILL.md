@@ -44,6 +44,7 @@ Ship current work, commit, push, deploy, and plan the next step.
 
 ## Constraints
 
+- **Fix unrelated issues:** If any step surfaces errors, warnings, or lint issues — even ones unrelated to the current work — investigate and fix them before continuing. Commit these fixes separately with a descriptive message (e.g., `fix: resolve unused import warning in auth.ts`).
 - Do not write plans into `CLAUDE.md`. It is for project conventions only.
 - `tasks/roadmap.md` is the source of truth for the full phased plan. `tasks/todo.md` holds only the current phase.
 - Create `tasks/todo.md` if it does not exist.

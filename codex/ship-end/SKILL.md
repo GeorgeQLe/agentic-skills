@@ -29,6 +29,7 @@ Use this skill when the user wants the current session wrapped up cleanly.
 
 ## Constraints
 
+- **Fix unrelated issues:** If any step surfaces errors, warnings, or lint issues — even ones unrelated to the current work — investigate and fix them before continuing. Commit these fixes separately with a descriptive message (e.g., `fix: resolve unused import warning in auth.ts`).
 - Do not modify `CLAUDE.md` as part of progress tracking.
 - Do not switch or create branches unless the current state requires it.
 - Do not amend or rewrite history.

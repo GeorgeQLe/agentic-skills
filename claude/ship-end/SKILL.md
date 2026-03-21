@@ -28,6 +28,7 @@ Process:
    - Confirm working tree is clean
 
 Constraints:
+- **Fix unrelated issues:** If any step surfaces errors, warnings, or lint issues — even ones unrelated to the current work — investigate and fix them before continuing. Commit these fixes separately with a descriptive message (e.g., `fix: resolve unused import warning in auth.ts`).
 - Do NOT modify CLAUDE.md. CLAUDE.md is for project conventions and config only — not progress tracking.
 - Progress and active work go in `tasks/todo.md`. Completed work history goes in `tasks/history.md`.
 - Do not switch branches or create new branches unless the current state requires it.
