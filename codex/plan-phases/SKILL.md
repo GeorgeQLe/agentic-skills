@@ -9,7 +9,7 @@ Use this skill when the user has a completed spec and wants it broken into an im
 
 ## Input
 
-- Default spec path: `spec.md`
+- Default spec location: `specs/` directory (or `spec.md` for backwards compatibility)
 - If the user provides a path, use that instead.
 
 ## Workflow

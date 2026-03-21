@@ -11,7 +11,7 @@ Use this skill when the user wants a code review of the whole project or a speci
 
 1. Gather project context:
    - Read CLAUDE.md, README, and project config to understand conventions.
-   - Search for and read specs (`spec.md`, `docs/`), changelogs (`CHANGELOG.md`, `tasks/history.md`), ADRs, interview logs (`*-__interview.md__`), and design docs.
+   - Search for and read specs (`specs/`, `spec.md`, `docs/`), changelogs (`CHANGELOG.md`, `tasks/history.md`), ADRs, interview logs (`*-__interview.md__`), and design docs.
    - Read `tasks/roadmap.md` if it exists to understand the full plan. Read `tasks/todo.md` for current phase and in-progress work.
    - Build a mental model of intentional decisions and documented trade-offs.
 2. If the user provides a file or directory, scope the review there. Otherwise review the repository broadly.

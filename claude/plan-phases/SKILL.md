@@ -17,11 +17,11 @@ The roadmap already defines phases, goals, scope, and acceptance criteria. Your 
 
 - If `$ARGUMENTS` is a number (e.g., `2`), plan that phase.
 - If `$ARGUMENTS` is empty, plan the **first phase that has acceptance criteria but no steps** (no `### Tests First` section yet).
-- Read `spec.md` for detailed requirements referenced by the phase's scope.
+- Read specs from `specs/` (or `spec.md`) for detailed requirements referenced by the phase's scope.
 - Read the codebase as needed to understand existing code, patterns, and what files to modify.
 
 ### Mode B: No roadmap (standalone — called directly after `/plan-interview`)
-If `tasks/roadmap.md` does not exist, fall back to the original behavior: read the spec at `$ARGUMENTS` (default: `spec.md`), define phases, and produce the full plan.
+If `tasks/roadmap.md` does not exist, fall back to the original behavior: read specs from `$ARGUMENTS` (default: `specs/` directory or `spec.md`), define phases, and produce the full plan.
 
 1. Identify all features, components, and systems described in the spec.
 2. Map dependencies between components (what must exist before other things can be built).
