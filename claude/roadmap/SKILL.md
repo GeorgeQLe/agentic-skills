@@ -22,7 +22,7 @@ Reviews the codebase, documented history, and current roadmap. Updates the roadm
 
 Read all available project documentation:
 
-- **`spec.md`** (or path from `$ARGUMENTS`) — may contain multiple spec sections from `/plan-interview-ideas`
+- **`specs/`** directory (individual spec files from `/plan-interview` and `/plan-interview-ideas`), or `spec.md` if it exists for backwards compatibility
 - **`tasks/roadmap.md`** — existing roadmap if any
 - **`tasks/todo.md`** — current work in progress
 - **`tasks/history.md`** — what's been accomplished
@@ -138,7 +138,7 @@ If updating an existing roadmap, append a brief entry to `tasks/history.md` noti
 ## Constraints
 
 - **Always interview.** Do not produce a roadmap without user input on priorities and sequencing. The whole point is interactive alignment.
-- **Respect existing specs.** Do not modify `spec.md` — the roadmap references specs, it doesn't rewrite them.
+- **Respect existing specs.** Do not modify files in `specs/` (or `spec.md`) — the roadmap references specs, it doesn't rewrite them.
 - **Phase headers must use `## Phase N: [Title]` format** for compatibility with `/run`, `/ship`, and phase transition logic.
 - **Acceptance criteria must be specific and checkable** — not vague statements like "works correctly."
 - **Do not include TDD steps or file-level implementation detail** in the roadmap. That belongs in `/plan-phases`.

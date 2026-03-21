@@ -23,8 +23,8 @@ Use this skill when the user has a draft spec, feature description, or rough ide
 
 ## Deliverables
 
-- Write the completed specification to `spec.md`
-- Write an interview log to `[topic]-interview.md`, where `topic` is a short kebab-case summary
+- Write the completed specification to `specs/[topic].md` (create the `specs/` directory if needed), where `topic` is a short kebab-case summary
+- Write an interview log to `[topic]-interview.md`
 
 The interview log should include:
 

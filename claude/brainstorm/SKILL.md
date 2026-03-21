@@ -11,7 +11,7 @@ Evaluate the current codebase and generate actionable suggestions that the user 
 ## Process
 
 1. **Understand the project**: Read CLAUDE.md, README, package config, and key source files to understand what the project does, its architecture, tech stack, and current state.
-2. **Check existing plans**: Read `tasks/roadmap.md` and `tasks/todo.md` and `spec.md` if they exist to understand work already planned or in progress — avoid suggesting things already covered.
+2. **Check existing plans**: Read `tasks/roadmap.md`, `tasks/todo.md`, and specs from `specs/` (or `spec.md`) if they exist to understand work already planned or in progress — avoid suggesting things already covered.
 3. **Analyse the codebase** across these dimensions:
 
    **Strategic / Product**
@@ -53,4 +53,4 @@ Present suggestions grouped by effort level, with each suggestion framed as a to
 - Provide the `/plan-interview <topic>` prompt the user can copy-paste to kick off planning.
 - Limit to 3–5 suggestions per effort level to avoid overwhelming the user.
 - Do not suggest changes that conflict with patterns established in CLAUDE.md.
-- Do not repeat work already tracked in `tasks/roadmap.md`, `tasks/todo.md`, or `spec.md`.
+- Do not repeat work already tracked in `tasks/roadmap.md`, `tasks/todo.md`, or `specs/`.

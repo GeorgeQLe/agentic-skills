@@ -20,8 +20,8 @@ Read `tasks/ideas.md` and run a plan-interview session for each idea listed ther
    - Continue until goals, user stories, architecture, edge cases, and scope boundaries are covered for that idea.
    - Confirm with the user before concluding each idea's interview.
 4. **Write deliverables for each idea**:
-   - Append the completed spec to `spec.md` under a heading for that idea (do not overwrite specs from prior ideas).
-   - Write an interview log to `[topic]-interview.md` where `topic` is a short kebab-case summary of the idea.
+   - Write the completed spec to `specs/[topic].md` where `topic` is a short kebab-case summary of the idea. Create the `specs/` directory if it doesn't exist.
+   - Write an interview log to `[topic]-interview.md`.
 5. **Transition**: After finishing one idea's interview, briefly summarize what was decided and move to the next idea. The user may say "skip" to move past any idea.
 
 ## Constraints
@@ -29,4 +29,4 @@ Read `tasks/ideas.md` and run a plan-interview session for each idea listed ther
 - Do not assume any idea's description is final — probe and refine during the interview.
 - Keep each idea's interview focused on that idea; do not blend concerns across ideas.
 - If the user wants to stop partway through, write deliverables for all completed ideas and note which remain unaddressed.
-- Do not repeat work already tracked in `tasks/roadmap.md`, `tasks/todo.md`, or `spec.md`.
+- Do not repeat work already tracked in `tasks/roadmap.md`, `tasks/todo.md`, or `specs/`.
