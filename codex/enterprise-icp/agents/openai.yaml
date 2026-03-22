@@ -1,0 +1,7 @@
+interface:
+  display_name: "Enterprise ICP"
+  short_description: "Enterprise multi-stakeholder discovery interview"
+  default_prompt: "Use $enterprise-icp to interview me and map the enterprise stakeholder landscape."
+
+policy:
+  allow_implicit_invocation: true

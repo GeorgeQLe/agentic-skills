@@ -1,0 +1,7 @@
+interface:
+  display_name: "Scale Audit"
+  short_description: "Enterprise production readiness evaluation"
+  default_prompt: "Use $scale-audit to evaluate the codebase for enterprise production readiness."
+
+policy:
+  allow_implicit_invocation: false

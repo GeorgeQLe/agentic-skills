@@ -30,6 +30,12 @@ Evaluate the current codebase and generate actionable suggestions that the user 
    - **Technical debt**: Areas where the code has outgrown its original design
    - **Testing gaps**: Untested critical paths or missing test infrastructure
    - **Security hardening**: Areas where security posture could be improved
+
+   **Market Fit** (only when `specs/icp.md` or `specs/mvp-gap.md` exist)
+   - **ICP alignment**: Features that directly address ICP pain points but are missing or incomplete
+   - **Journey gaps**: Steps in the user or customer journey where the product loses them
+   - **Unaddressed MVP gaps**: Gaps from `specs/mvp-gap.md` not yet tracked in roadmap or todo
+   - **Competitive positioning**: Weaknesses relative to the ICP's current alternatives
 4. **Scope**: If `$ARGUMENTS` is provided, focus the analysis on that area. Otherwise, cover all dimensions.
 
 ## Output

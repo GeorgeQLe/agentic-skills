@@ -1,0 +1,7 @@
+interface:
+  display_name: "MVP Gap"
+  short_description: "Evaluate codebase against ICP for MVP readiness"
+  default_prompt: "Use $mvp-gap to evaluate the codebase against the ICP and identify gaps blocking first sales."
+
+policy:
+  allow_implicit_invocation: false

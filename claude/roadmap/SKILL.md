@@ -23,6 +23,9 @@ Reviews the codebase, documented history, and current roadmap. Updates the roadm
 Read all available project documentation:
 
 - **`specs/`** directory (individual spec files from `/plan-interview` and `/plan-interview-ideas`), or `spec.md` if it exists for backwards compatibility
+- **`specs/icp.md`** — customer discovery from `/icp` (if it exists)
+- **`specs/mvp-gap.md`** — MVP gap analysis from `/mvp-gap` (if it exists)
+- **`specs/enterprise-icp.md`** and **`specs/scale-audit.md`** — enterprise discovery and audit (if they exist)
 - **`tasks/roadmap.md`** — existing roadmap if any
 - **`tasks/todo.md`** — current work in progress
 - **`tasks/history.md`** — what's been accomplished
@@ -60,6 +63,7 @@ Use the AskUserQuestion tool to align on roadmap decisions. Ask one to three foc
 - **Grouping**: Should any specs be combined into a single phase? Split apart?
 - **Sequencing**: What depends on what? What should ship first for user value or risk reduction?
 - **Scope**: Should anything be deferred, dropped, or marked as stretch?
+- **Market fit** (when ICP/gap specs exist): Which phases directly address customer pain points or deal-blockers from gap analysis? Prioritise these unless technically impossible. Surface tension between technical sequencing and market urgency.
 - **Phase sizing**: Preference for many small phases vs. fewer larger ones?
 - **Existing work**: (existing projects) Does completed work change priorities? Should anything be reworked?
 
