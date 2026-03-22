@@ -193,11 +193,11 @@ Scan for unused exports, orphaned files, stale dependencies, and unreachable cod
 ## Debugging
 
 ### `/investigate`
-Autonomously trace a bug from error message to root cause and proposed fix.
+Validate user claims against codebase and git history, trace to root cause, and propose a fix.
 
-- **Arguments**: `<error message, bug description, or issue URL>`
-- **Outputs**: Root cause analysis, fix, and prevention recommendation.
-- **Use when**: You have a bug report, error, or unexpected behavior.
+- **Arguments**: `<error, bug description, user observations, or issue URL>`
+- **Outputs**: Claim validation results, root cause analysis, fix, and prevention recommendation.
+- **Use when**: You have a bug report, error, unexpected behavior, or observations/hypotheses you want validated against the code and git history.
 
 ### `/debug`
 Investigate a problem, log it to the debug changelog, cross-check past issues, and suggest a non-duplicate fix.
@@ -331,7 +331,7 @@ Create or update the current repository's `CLAUDE.md` with workflow conventions.
 | `/regression-check` | Full health check (types, lint, tests, build) |
 | `/dead-code` | Find unused code and dependencies |
 | `/debug` | Investigate + changelog + non-duplicate fix |
-| `/investigate` | Bug → root cause → fix |
+| `/investigate` | Validate claims → root cause → fix |
 | `/trace` | Map request flow through the stack |
 | `/migrate` | Guided migration with verification |
 | `/decommission` | Systematic service/package removal |
