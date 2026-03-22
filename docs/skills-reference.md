@@ -1,6 +1,6 @@
 # Skills Reference
 
-Complete reference for all 28 custom skills in this repository, available for both Claude Code and Codex.
+Complete reference for all 33 custom skills in this repository, available for both Claude Code and Codex.
 
 ## Installation
 
@@ -29,15 +29,54 @@ claude-skills/
 These skills form a structured development workflow:
 
 ```
-Ideate                       Specify                 Strategize          Detail              Execute                    Ship
-─────────────────────────    ────────────────────    ──────────────      ──────────────      ───────────────────────    ──────────────────────
-/brainstorm              →   /plan-interview    →    /roadmap       →    /plan-phases   →    /run (single step)    →    /ship
-  └→ /plan-interview-ideas                                                                   /run --phase (full)   →    /ship-then-plan
-                                                                                             /run-step             →    /ship-end
-                                                                                             /run-phases
+Discover                 Ideate                       Specify                 Strategize          Detail              Execute                    Ship                    Evaluate
+───────────────────      ─────────────────────────    ────────────────────    ──────────────      ──────────────      ───────────────────────    ──────────────────────   ──────────────
+/icp                 →   /brainstorm              →   /plan-interview    →    /roadmap       →    /plan-phases   →    /run (single step)    →    /ship              →    /mvp-gap
+/enterprise-icp          └→ /plan-interview-ideas                                                                     /run --phase (full)   →    /ship-then-plan         /scale-audit
+                                                                                                                      /run-step             →    /ship-end
+                                                                                                                      /run-phases
 ```
 
+**Greenfield flow**: `/icp` → `/plan-interview` → `/roadmap` → `/plan-phases` → `/run` → `/ship` → `/mvp-gap`
+**Existing project flow**: `/icp` → `/mvp-gap` → `/brainstorm` → `/plan-interview` → `/roadmap` → ...
+**Enterprise expansion**: `/enterprise-icp` → (build cycle) → `/scale-audit`
+
 Supporting skills plug in at any point: `/expert-review`, `/investigate`, `/affected`, `/regression-check`, etc.
+
+---
+
+## Discovery & Market Fit
+
+### `/icp`
+Customer discovery interview — map the problem space, ICP, user journeys, and value prop before designing a solution.
+
+- **Arguments**: `[optional: rough idea or problem area]`
+- **Modes**: Auto-detects greenfield (no code) vs. existing project (code exists).
+- **Outputs**: `specs/icp.md` (structured discovery document), `specs/icp-interview.md` (interview log)
+- **Use when**: Starting a new product idea (before `/plan-interview`) or retrofitting ICP to an existing project.
+
+### `/mvp-gap`
+Evaluate codebase against ICP to identify gaps blocking first sales and retention.
+
+- **Arguments**: `[optional: path-to-icp-spec]`
+- **Prerequisites**: `specs/icp.md` must exist (run `/icp` first).
+- **Outputs**: `specs/mvp-gap.md` (gap analysis with priority tags and `/plan-interview` prompts)
+- **Use when**: After building, to check if the product meets the ICP's needs. Re-run as you build.
+
+### `/enterprise-icp`
+Enterprise multi-stakeholder discovery — map personas, deal-killers, and the evaluation-to-renewal lifecycle.
+
+- **Arguments**: `[optional: target industry or market segment]`
+- **Outputs**: `specs/enterprise-icp.md` (stakeholder map, journeys, deal-killers), `specs/enterprise-icp-interview.md`
+- **Use when**: Pivoting to or expanding into enterprise sales.
+
+### `/scale-audit`
+Evaluate codebase against enterprise ICP for production readiness, compliance, and multi-stakeholder journey coverage.
+
+- **Arguments**: `[optional: path-to-enterprise-icp-spec]`
+- **Prerequisites**: `specs/enterprise-icp.md` must exist (run `/enterprise-icp` first).
+- **Outputs**: `specs/scale-audit.md` (gap analysis with stakeholder/compliance matrices and `/plan-interview` prompts)
+- **Use when**: Before pursuing enterprise deals, to understand production readiness gaps.
 
 ---
 
@@ -272,6 +311,10 @@ Create or update the current repository's `CLAUDE.md` with workflow conventions.
 
 | Skill | One-liner |
 |-------|-----------|
+| `/icp` | Customer discovery — map ICP, journeys, value prop |
+| `/mvp-gap` | Evaluate codebase against ICP for MVP readiness |
+| `/enterprise-icp` | Enterprise multi-stakeholder discovery |
+| `/scale-audit` | Enterprise production readiness audit |
 | `/brainstorm` | Evaluate codebase, suggest improvement ideas |
 | `/plan-interview` | Rough idea → validated spec |
 | `/plan-interview-ideas` | Spec each idea from ideas.md |

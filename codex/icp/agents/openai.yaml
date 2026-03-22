@@ -1,0 +1,7 @@
+interface:
+  display_name: "ICP Discovery"
+  short_description: "Customer discovery interview — map ICP, journeys, and value prop"
+  default_prompt: "Use $icp to interview me and map the customer problem space before designing a solution."
+
+policy:
+  allow_implicit_invocation: true

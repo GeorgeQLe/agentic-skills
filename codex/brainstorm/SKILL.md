@@ -29,6 +29,12 @@ Evaluate the current codebase and generate actionable suggestions that the user 
    - Technical debt where code has outgrown its design
    - Testing gaps in critical paths
    - Security hardening opportunities
+
+   **Market Fit** (only when `specs/icp.md` or `specs/mvp-gap.md` exist)
+   - ICP alignment — features addressing ICP pain points that are missing or incomplete
+   - Journey gaps — steps where the product loses the user or customer
+   - Unaddressed MVP gaps from `specs/mvp-gap.md` not yet in roadmap
+   - Competitive positioning weaknesses vs. the ICP's current alternatives
 4. If the user provides a focus area, scope the analysis there. Otherwise cover all dimensions.
 
 ## Output
