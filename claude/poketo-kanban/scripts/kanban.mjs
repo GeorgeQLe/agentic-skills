@@ -325,6 +325,8 @@ async function cmdCreateBoard(db, session, args) {
     process.exit(1);
   }
 
+  const customLists = getArg(args, "--lists");
+
   const boardId = randomUUID();
   const [board] = await db.insert(boards).values({
     id: boardId,
@@ -332,15 +334,17 @@ async function cmdCreateBoard(db, session, args) {
     orgId: session.orgId,
   }).returning();
 
-  // Create default lists
-  const defaultLists = [
-    { name: "Backlog", order: 0, listType: "normal" },
-    { name: "In Progress", order: 1, listType: "normal" },
-    { name: "Done", order: 2, listType: "done" },
-  ];
+  // Use custom lists if provided, otherwise defaults
+  const listDefs = customLists
+    ? customLists.split(",").map((n, i) => ({ name: n.trim(), order: i, listType: "normal" }))
+    : [
+        { name: "Backlog", order: 0, listType: "normal" },
+        { name: "In Progress", order: 1, listType: "normal" },
+        { name: "Done", order: 2, listType: "done" },
+      ];
 
   const createdLists = [];
-  for (const l of defaultLists) {
+  for (const l of listDefs) {
     const [created] = await db.insert(lists).values({
       id: randomUUID(),
       boardId,
