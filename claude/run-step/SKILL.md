@@ -29,7 +29,7 @@ Plan **only the next single incomplete step** from the current phase, get user a
 11. **Report concisely:**
     - Step completed
     - Files modified
-    - Test results (if tests were run)
+    - Test results (if tests were run) — **explicitly state whether any failures are expected (red phase: tests written before implementation) or unexpected (regressions/bugs that need fixing)**
     - What the next step is (just its name, don't plan it — /ship-then-plan will do that)
 
 ## What NOT to do

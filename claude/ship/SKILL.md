@@ -68,6 +68,7 @@ e) Commit and push `tasks/todo.md`, `tasks/roadmap.md`, and `docs/phases/` (if c
 ### 5. Output a brief summary (2-3 lines max to save context)
 - What was shipped (if anything)
 - Deploy status (if deployed)
+- Test status — **explicitly state whether any failing tests are expected (red phase: tests written before implementation) or unexpected (regressions/bugs that need fixing)**
 - What the next step is (1 sentence) — or "session wrapped up" if `--no-plan`
 
 ### 6. Enter plan mode (skip if `--no-plan`)

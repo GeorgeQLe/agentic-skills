@@ -52,7 +52,7 @@ Identify the next incomplete unit of work from the phased plan, build an executi
 **Report concisely:**
 - Phase/step completed
 - Files modified
-- Test results (if tests were run)
+- Test results (if tests were run) — **explicitly state whether any failures are expected (red phase: tests written before implementation) or unexpected (regressions/bugs that need fixing)**
 - What's next (just its name — /ship will handle planning)
 
 ## What NOT to do

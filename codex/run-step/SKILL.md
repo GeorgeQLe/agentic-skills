@@ -31,7 +31,7 @@ Use this skill when the user wants one bounded implementation step planned and e
 9. Report:
    - Step completed
    - Files modified
-   - Test results
+   - Test results — explicitly state whether any failures are expected (red phase: tests before implementation) or unexpected (regressions/bugs)
    - Next step name only
 
 ## Constraints

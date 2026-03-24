@@ -40,6 +40,7 @@ Ship current work, commit, push, deploy, and plan the next step.
 7. Output a brief summary:
    - What was shipped (if anything)
    - Deploy status (if deployed)
+   - Test status — explicitly state whether any failing tests are expected (red phase: tests before implementation) or unexpected (regressions/bugs)
    - What the next step is
 
 ## Constraints
