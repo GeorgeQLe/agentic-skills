@@ -22,6 +22,7 @@ Use this skill when the user wants the current session wrapped up cleanly.
 6. Commit and push using the `commit-and-push-by-feature` workflow.
 7. Report:
    - What was accomplished
+   - Test status — explicitly state whether any failing tests are expected (red phase: tests before implementation) or unexpected (regressions/bugs)
    - What is still outstanding
    - Branch name
    - Commit list

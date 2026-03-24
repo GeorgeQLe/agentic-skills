@@ -23,6 +23,7 @@ Process:
 6) Output a brief session summary:
    - What was accomplished
    - Deploy status (if deployed)
+   - Test status — **explicitly state whether any failing tests are expected (red phase: tests written before implementation) or unexpected (regressions/bugs that need fixing)**
    - What's outstanding
    - Branch and commit list
    - Confirm working tree is clean

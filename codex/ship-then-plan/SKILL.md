@@ -42,6 +42,7 @@ Use this skill when the user wants to finish the current slice of work, push it,
 6. Report briefly:
    - What was shipped, if anything
    - Deploy status (if deployed)
+   - Test status — explicitly state whether any failing tests are expected (red phase: tests before implementation) or unexpected (regressions/bugs)
    - What the next step is
 
 ## Translation Note

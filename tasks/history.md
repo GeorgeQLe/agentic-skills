@@ -27,10 +27,10 @@ Resolved all 10 findings from `/expert-review`:
 - Added "fix unrelated issues" constraint to all ship skills (`ship`, `ship-end`, `ship-then-plan` — Claude + Codex)
 - Created project-level `sync.md` to run `install.sh` after pulls for symlink updates
 
-## 2026-03-23 — False-positive verification for review skills
+## 2026-03-23 — False-positive verification & TDD test status clarity
 
-- Added step 6 "Verify findings" to `/expert-review` (Claude + Codex) — re-reads source code for every finding before reporting
-- Added step 7 "Verify findings" to `/dead-code` (Claude + Codex) — tailored to dead-code risks: barrel files, dynamic imports, framework-consumed files, implicit dependencies
+- Added false-positive verification steps to `/expert-review` (step 6) and `/dead-code` (step 7) — both Claude + Codex
+- Added explicit TDD test status reporting to summaries of `/run`, `/run-step`, `/ship`, `/ship-end`, `/ship-then-plan` (all Claude + Codex) — must state whether failing tests are expected (red phase) or unexpected (regressions)
 
 ## 2026-03-23 — Expert-review false-positive filter (superseded by entry above)
 
