@@ -36,6 +36,14 @@ Conduct a thorough code review of this project serving as a panel of expert prog
    - If a finding contradicts a documented decision, **do not report it as an issue**. Instead, note it under "Documented decisions" in the output.
    - If a finding reveals a gap between the spec and the implementation where the spec appears to be the intended source of truth, flag it as a spec conformance issue.
 
+6. **Verify findings (false-positive filter)**:
+   - Before finalizing, re-read the actual source code for every finding. For each one, confirm:
+     - The code actually behaves the way you claimed — re-read the lines and surrounding context, don't rely on memory.
+     - The issue isn't handled elsewhere (e.g., a guard clause upstream, a middleware, a wrapper, or a caller that validates input before passing it in).
+     - The dependency/import you flagged actually exists (or doesn't) — check `package.json`, lock files, or import maps rather than assuming.
+     - The "missing" test coverage isn't already covered by a test under a different name or in a different test file.
+   - **Drop any finding you cannot re-confirm with a second read.** If uncertain, downgrade rather than drop — move it to Low with a note that it needs manual verification.
+
 ## Output Format
 
 Report findings as a prioritized list grouped by severity:
