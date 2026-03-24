@@ -27,6 +27,10 @@ Resolved all 10 findings from `/expert-review`:
 - Added "fix unrelated issues" constraint to all ship skills (`ship`, `ship-end`, `ship-then-plan` — Claude + Codex)
 - Created project-level `sync.md` to run `install.sh` after pulls for symlink updates
 
+## 2026-03-23 — Expert-review false-positive filter
+
+- Added step 6 "Verify findings" to `/expert-review` (Claude + Codex) — re-reads source code for every finding before reporting, drops unconfirmed findings, downgrades uncertain ones to Low
+
 ## 2026-03-20 — Sync skill: project-level sync.md support
 
 - Added Step 5 (post-sync actions) to `/sync` skill (Claude + Codex)

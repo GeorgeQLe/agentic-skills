@@ -29,6 +29,9 @@ Use this skill when the user wants a code review of the whole project or a speci
 5. Cross-reference each finding against documentation before reporting:
    - If a pattern is an intentional documented decision, do not report it as an issue — list it under "Documented decisions" instead.
    - If code diverges from a spec, flag it as a spec conformance issue.
+6. Verify findings (false-positive filter):
+   - Re-read the actual source code for every finding. Confirm: the code behaves as claimed, the issue isn't handled elsewhere (guard clause, middleware, caller), flagged dependencies actually exist/are missing, and "missing" test coverage isn't in a different test file.
+   - Drop any finding you cannot re-confirm on second read. If uncertain, downgrade to Low with a note that it needs manual verification.
 
 ## Output Format
 
