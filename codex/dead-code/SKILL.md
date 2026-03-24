@@ -15,6 +15,9 @@ Use this skill when the user wants to identify unused code, orphaned files, or s
 4. Scan for stale package.json dependencies.
 5. Scan for dead code patterns (unreachable code, commented-out blocks).
 6. Cross-reference with git history for staleness.
+7. Verify findings (false-positive filter):
+   - Re-read actual source code for every flagged item. Confirm: exports are genuinely unused (check barrel files, dynamic imports), orphaned files aren't consumed by tools/frameworks, stale dependencies aren't used implicitly (plugins, peer deps, CLI tools in scripts).
+   - Drop any finding you cannot re-confirm on second read. If uncertain, move to "Needs Investigation" instead of "Safe to Remove."
 
 ## Output Format
 

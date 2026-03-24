@@ -42,6 +42,14 @@ Scan the codebase for unused code, orphaned files, and stale dependencies. Outpu
    - For flagged items, check `git log` to see when they were last meaningfully modified.
    - Items untouched for 6+ months get higher priority.
 
+7. **Verify findings (false-positive filter):**
+   - Before finalizing, re-read the actual source code for every flagged item. For each one, confirm:
+     - The export/function is genuinely unused — re-check imports, re-exports through barrel files, and dynamic usage (`import()`, `require()`, string-based references).
+     - The "orphaned" file isn't consumed by a tool, framework convention, or config (e.g., Next.js pages, migration files, seed scripts).
+     - The "stale" dependency isn't used implicitly (PostCSS plugins, Babel presets, peer dependencies, CLI tools in npm scripts).
+     - Commented-out code isn't an intentional reference or example kept for documentation purposes.
+   - **Drop any finding you cannot re-confirm with a second read.** If uncertain, move it to "Needs Investigation" rather than "Safe to Remove."
+
 ## Output Format
 
 ### Unused Exports (high confidence)
