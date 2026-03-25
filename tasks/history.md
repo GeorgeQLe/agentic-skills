@@ -19,10 +19,10 @@
   - Flag triggers `/sync-roadmap-kanban` at session start; discrepancies shown but don't block
   - Phase 1 milestone complete: kanban-roadmap sync infrastructure in place
 - **Phase 1 archived** to `docs/phases/phase-1.md`, transitioned to Phase 2
-- Added session activity cards — Phase 2 Step 1 complete
-  - `/run` variants create/update "In Progress" kanban card with `[hostname] step-name` and branch info
-  - `/ship-end` moves the session card to "Done" with commit SHAs
-  - 8 SKILL.md files updated (run, run-step, run-phases × Claude + Codex, ship-end × Claude + Codex)
+- Added session activity cards — Phase 2 Step 1 (later reverted)
+- Reverted all kanban integration from workflow skills — decided to build separate `-kanban` skill suite instead
+- Redesigned roadmap: 6 standalone `-kanban` skills (brainstorm, plan-interview, roadmap, run, ship, ship-end) with board ops baked in
+- Fixed kanban.mjs `--lists` flag to support `name:type` annotations (e.g., `Done:done`, `Punt:punt`)
 
 ## 2026-03-24 — kanban-lite: local SQLite kanban skill
 

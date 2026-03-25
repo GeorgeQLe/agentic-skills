@@ -336,7 +336,10 @@ async function cmdCreateBoard(db, session, args) {
 
   // Use custom lists if provided, otherwise defaults
   const listDefs = customLists
-    ? customLists.split(",").map((n, i) => ({ name: n.trim(), order: i, listType: "normal" }))
+    ? customLists.split(",").map((n, i) => {
+        const parts = n.trim().split(":");
+        return { name: parts[0], order: i, listType: parts[1] || "normal" };
+      })
     : [
         { name: "Backlog", order: 0, listType: "normal" },
         { name: "In Progress", order: 1, listType: "normal" },
