@@ -33,6 +33,19 @@ After resolving the board, verify all 5 required lists exist (case-insensitive n
 
 If the poketo-kanban scripts are not found at `~/.claude/skills/poketo-kanban/scripts/kanban.mjs`, or if the first kanban command fails (DB connectivity, auth error), warn the user and continue with the base brainstorm behavior. Kanban operations are additive — never block the core workflow.
 
+### Board Overview
+
+After board validation, display a brief board status to provide context:
+
+1. Fetch the full board state: `board <id>`
+2. Scan all cards and report:
+   - **Overdue**: Cards with a due date in the past (highlight count and names)
+   - **High priority**: Starred cards not yet in Done/Punt
+   - **Blocked**: Cards whose description contains "blocked" or "blocker"
+   - **In Progress**: Count of cards currently being worked on
+   - **Backlog/Todo**: Counts for planning context
+3. Display as a brief summary before proceeding. Do not take action — this is informational only.
+
 ## Process
 
 1. **Understand the project**: Read CLAUDE.md, README, package config, and key source files to understand what the project does, its architecture, tech stack, and current state.
