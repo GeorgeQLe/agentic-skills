@@ -5,7 +5,7 @@
 ## Steps
 
 - [x] **Create `/sync-roadmap-kanban` skill (Claude + Codex)**
-- [ ] **Board-project auto-detection**
+- [x] **Board-project auto-detection**
 - [ ] **Add sync-roadmap-kanban trigger to workflow skills**
 
 ## Milestone

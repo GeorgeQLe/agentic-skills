@@ -11,7 +11,11 @@ Reconcile the kanban board, roadmap docs, and codebase state so all three reflec
 
 1. **Pull latest** — run the sync skill first. Stop on merge conflicts.
 
-2. **Read kanban state** — run `node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs boards`, then `board <id>` for the project board. If multiple boards exist, check `tasks/.kanban-board` for a stored board ID, or ask the user.
+2. **Read kanban state** — run `boards` to list all boards. Auto-detect the project board:
+   - If `tasks/.kanban-board` exists and contains a valid board ID, use it.
+   - Otherwise, match board names against `basename $(pwd)` (case-insensitive substring). If exactly one match, use it and save the ID to `tasks/.kanban-board`.
+   - If zero or multiple matches, list boards, ask the user to pick, and save their choice to `tasks/.kanban-board`.
+   - Run `board <id>` to get the full board state.
 
 3. **Read roadmap docs** — read `tasks/roadmap.md` and `tasks/todo.md`. List all items with checked/unchecked status.
 
