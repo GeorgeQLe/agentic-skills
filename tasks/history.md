@@ -49,6 +49,7 @@
 - Added progress tracking to run-kanban — Phase 2 Step 3
   - Post-execution card update now includes `Progress: X/Y (Z%)` based on todo.md step counts
 - **Phase 2 Proactive Board Intelligence complete** — board overview, next work suggestion, progress tracking all shipped
+- Roadmap updated: added Phase 3 (board templates) and Phase 4 (archive automation) from backlog. Kanban analytics and Neon UI sync remain in backlog.
 
 ## 2026-03-24 — kanban-lite: local SQLite kanban skill
 

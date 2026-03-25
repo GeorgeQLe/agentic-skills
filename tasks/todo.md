@@ -1,11 +1,11 @@
-# Roadmap Complete
+# Phase 3: Board Templates
 
-All phases delivered:
-- **Phase 1: Kanban Skill Suite** — 6 standalone -kanban skills (brainstorm, plan-interview, roadmap, run, ship, ship-end) + kanban.mjs fix
-- **Phase 2: Proactive Board Intelligence** — board overview, next work suggestion, progress tracking
+**Goal:** One-command board creation with the standard 5-list layout.
 
-Remaining work is in the **Backlog** section of `tasks/roadmap.md`:
-- Board templates
-- Kanban analytics
-- Two-way Neon ↔ poketowork UI sync
-- Archive/cleanup automation
+## Steps
+
+- [ ] **Add `--template standard` flag to kanban.mjs** — create board with Backlog/Todo/In Progress/Done:done/Punt:punt in one command
+- [ ] **Update -kanban skills' Board Resolution protocol** — use `--template standard` when creating new boards (12 SKILL.md files)
+
+## Milestone
+- [ ] `create-board --template standard` creates a board with all 5 required lists in correct types

@@ -69,9 +69,49 @@
 
 ---
 
+## Phase 3: Board Templates ← NEXT
+
+**Goal:** One-command board creation with the standard 5-list layout, reducing setup friction for new projects.
+
+### Steps
+
+1. **Add `--template standard` flag to kanban.mjs**
+   - When `create-board` is called with `--template standard`, create board with the 5 lists: Backlog, Todo, In Progress, Done:done, Punt:punt
+   - Keep existing `--lists` flag for custom layouts
+   - `--template` and `--lists` are mutually exclusive
+
+2. **Update -kanban skills' Board Resolution protocol**
+   - When no board exists and user confirms creation, use `--template standard` instead of the long `--lists "Backlog,Todo,In Progress,Done:done,Punt:punt"` string
+   - Update all 12 -kanban SKILL.md files (6 Claude + 6 Codex)
+
+### Milestone
+- [ ] `create-board --template standard` creates a board with all 5 required lists in correct types
+
+---
+
+## Phase 4: Archive Automation
+
+**Goal:** Keep boards clean by archiving old Done/Punt cards automatically.
+
+### Steps
+
+1. **Add `archive-card` command to kanban.mjs**
+   - New command: `archive-card --id <card-id>` — moves card to the board's archive
+   - Uses the existing `archiveListId` field in the board schema
+   - If no archive list exists, create one automatically
+
+2. **Create `/kanban-archive` skill (Claude + Codex)**
+   - Standalone skill that archives Done/Punt cards older than N days (default 30)
+   - Shows which cards will be archived, asks for confirmation before proceeding
+   - Supports `--days <N>` to override the default threshold
+   - Reports: how many cards archived, from which lists
+
+### Milestone
+- [ ] `/kanban-archive` cleans up Done/Punt cards older than 30 days with user confirmation
+
+---
+
 ## Backlog
 
-- **Board templates** — pre-built board layouts for common project types (Backlog/Todo/In Progress/Done/Punt)
 - **Kanban analytics** — cycle time, throughput, WIP limits surfaced via a `/kanban-stats` skill
 - **Two-way Neon ↔ poketowork UI sync** — webhook on git push to sync agent board changes to the web app
-- **Archive/cleanup automation** — auto-archive done cards older than N days
