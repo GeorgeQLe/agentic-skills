@@ -46,7 +46,7 @@
 
 ---
 
-## Phase 2: Proactive Board Intelligence ← NEXT
+## Phase 2: Proactive Board Intelligence ✓
 
 **Goal:** Agents use board state to make smarter decisions about what to work on.
 
@@ -65,7 +65,7 @@
    - `/run-kanban` updates progress percentage based on step completion within the phase
 
 ### Milestone
-- Agent recommends next task based on board state and project priorities
+- [x] Agent recommends next task based on board state and project priorities
 
 ---
 
