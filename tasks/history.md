@@ -1,11 +1,15 @@
 # Session History
 
-## 2026-03-25 — Kanban strategy & roadmap
+## 2026-03-25 — Kanban strategy, roadmap & sync-roadmap-kanban skill
 
 - Built and tested kanban-lite (SQLite) skill, then archived it after analysis showed Neon free tier costs ~$0 at our usage volume (~456 ops/month across all devices)
 - Decision: stick with poketo-kanban + Neon for kanban — SQLite advantage is latency/simplicity, not cost
 - Created `tasks/roadmap.md` with 3 phases: kanban-roadmap sync, cross-device agent awareness, proactive board intelligence
-- Phase 1 next: `/sync-roadmap-kanban` skill to reconcile kanban boards, roadmap docs, and codebase state
+- Created `/sync-roadmap-kanban` skill (Claude + Codex) — Phase 1 Step 1 complete
+  - Prompt-only skill that orchestrates poketo-kanban scripts, git commands, and file edits
+  - 7-step process: sync → read kanban → read roadmap → check codebase → reconcile → apply → report
+  - 5 reconciliation rules: done-on-kanban→roadmap, done-in-roadmap→kanban, new-items→cards, orphaned-cards→flag, false-done→flag
+  - Set up `tasks/todo.md` for Phase 1 tracking
 
 ## 2026-03-24 — kanban-lite: local SQLite kanban skill
 

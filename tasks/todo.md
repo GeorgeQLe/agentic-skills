@@ -1,20 +1,12 @@
-# Review Findings — TODO
+# Phase 1: Kanban-Roadmap Sync
 
-## High Priority
+**Goal:** Keep kanban boards, roadmap docs, and codebase state in agreement automatically.
 
-- [x] **Fix stale `/review` references in skills-reference.md** — Renamed to `/expert-review` on lines 40, 110, and 263
-- [x] **Add missing `agents/openai.yaml` for brainstorm and debug** — Added agent manifests for both
-- [x] **Fix asymmetric non-symlink handling in install.sh** — Codex now warns and skips like Claude side
+## Steps
 
-## Medium Priority
+- [x] **Create `/sync-roadmap-kanban` skill (Claude + Codex)**
+- [ ] **Board-project auto-detection**
+- [ ] **Add sync-roadmap-kanban trigger to workflow skills**
 
-- [x] **Delete orphaned root `brainstorm.md`** — Removed duplicate file
-- [x] **Align deploy step across ship variants** — Added deploy to `ship-then-plan` and `ship-end` (both Claude and Codex)
-- [x] **Fix deploy search order inconsistency** — `deploy` now matches `ship` order: spec.md first
-- [x] **Add `/brainstorm` entry to skills-reference.md** — Added entry and fixed skill count to 26
-
-## Low Priority
-
-- [x] **Standardize `allowed-tools` usage** — Removed from `ship` and `ship-then-plan` for consistency
-- [x] **Reword CI reference in install-workflow-orchestration** — Changed to "Go fix failing tests" (both Claude and Codex)
-- [x] **Remove stale `docs/` plan reference in ship-end** — Removed from both Claude and Codex versions
+## Milestone
+- [ ] Agent runs `/sync-roadmap-kanban` → kanban and roadmap reflect the same state, grounded in what the code actually shows
