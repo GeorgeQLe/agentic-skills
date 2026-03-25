@@ -18,6 +18,11 @@
   - 12 SKILL.md files updated (run, run-step, run-phases, ship, ship-end, ship-then-plan × Claude + Codex)
   - Flag triggers `/sync-roadmap-kanban` at session start; discrepancies shown but don't block
   - Phase 1 milestone complete: kanban-roadmap sync infrastructure in place
+- **Phase 1 archived** to `docs/phases/phase-1.md`, transitioned to Phase 2
+- Added session activity cards — Phase 2 Step 1 complete
+  - `/run` variants create/update "In Progress" kanban card with `[hostname] step-name` and branch info
+  - `/ship-end` moves the session card to "Done" with commit SHAs
+  - 8 SKILL.md files updated (run, run-step, run-phases × Claude + Codex, ship-end × Claude + Codex)
 
 ## 2026-03-24 — kanban-lite: local SQLite kanban skill
 

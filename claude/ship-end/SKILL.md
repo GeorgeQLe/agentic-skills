@@ -24,7 +24,11 @@ Process:
    - Group changes into logical feature/function buckets.
    - Use conventional commit messages.
    - Push to the current branch.
-6) Output a brief session summary:
+6) **Session card cleanup:** If `tasks/.kanban-board` exists:
+   - Get the device hostname via `hostname`
+   - Search the board for a card whose name starts with `[hostname]`
+   - If found, move it to the "Done" list and update the description with commit SHAs from this session
+7) Output a brief session summary:
    - What was accomplished
    - Deploy status (if deployed)
    - Test status — **explicitly state whether any failing tests are expected (red phase: tests written before implementation) or unexpected (regressions/bugs that need fixing)**
