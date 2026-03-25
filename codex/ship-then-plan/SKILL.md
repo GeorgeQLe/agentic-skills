@@ -9,6 +9,8 @@ Use this skill when the user wants to finish the current slice of work, push it,
 
 ## Workflow
 
+0. If `--sync-kanban` flag is present, run the sync-roadmap-kanban skill first. Show discrepancies but continue.
+
 1. Check whether there is anything to ship:
    - Inspect `git status` and `git diff --stat`
    - If the tree is clean and there are no unpushed commits, skip shipping and move to next-step planning

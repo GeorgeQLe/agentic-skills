@@ -14,6 +14,10 @@
   - Auto-matches board name to repo directory name (case-insensitive substring)
   - Persists board ID in `tasks/.kanban-board` (committed to git for cross-device sharing)
   - Falls back to user prompt only when no match or ambiguous
+- Added `--sync-kanban` opt-in flag to all workflow skills — Phase 1 Step 3 complete
+  - 12 SKILL.md files updated (run, run-step, run-phases, ship, ship-end, ship-then-plan × Claude + Codex)
+  - Flag triggers `/sync-roadmap-kanban` at session start; discrepancies shown but don't block
+  - Phase 1 milestone complete: kanban-roadmap sync infrastructure in place
 
 ## 2026-03-24 — kanban-lite: local SQLite kanban skill
 
