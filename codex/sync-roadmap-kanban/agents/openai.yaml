@@ -1,0 +1,7 @@
+interface:
+  display_name: "Sync Roadmap Kanban"
+  short_description: "Reconcile kanban board with roadmap docs and codebase"
+  default_prompt: "Use $sync-roadmap-kanban to reconcile the kanban board state with roadmap docs and codebase reality."
+
+policy:
+  allow_implicit_invocation: true
