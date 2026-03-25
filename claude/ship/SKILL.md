@@ -1,12 +1,14 @@
 ---
 name: ship
 description: Ship current work (update docs, commit, push, deploy) and optionally plan the next step
-argument-hint: [--no-plan] [--no-deploy]
+argument-hint: [--no-plan] [--no-deploy] [--sync-kanban]
 ---
 
 Ship current work, commit, push, deploy, and plan the next step. If `$ARGUMENTS` contains `--no-plan`, skip planning. If `$ARGUMENTS` contains `--no-deploy`, skip deployment.
 
 ## Process
+
+**Kanban sync (optional):** If `$ARGUMENTS` contains `--sync-kanban`, run `/sync-roadmap-kanban` first. If it reports discrepancies, show them but continue with the main process.
 
 ### 1. Check if there's anything to ship
 Run `git status` and `git diff --stat`.

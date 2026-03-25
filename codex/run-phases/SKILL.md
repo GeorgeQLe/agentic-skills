@@ -14,6 +14,8 @@ Use this skill when the user wants the next incomplete implementation phase plan
 
 ## Workflow
 
+0. If `--sync-kanban` flag is present, run the sync-roadmap-kanban skill first. Show discrepancies but continue.
+
 1. **Migration check:** If `tasks/roadmap.md` does not exist but `tasks/todo.md` contains multiple `## Phase` headers, migrate: copy `tasks/todo.md` → `tasks/roadmap.md`, then trim `tasks/todo.md` to just the current phase (first phase with unchecked steps). Commit with `chore: migrate to roadmap.md + todo.md split`.
 2. Read `tasks/todo.md` and locate the next incomplete phase by milestone or checklist state.
 3. Read `CLAUDE.md` if it exists for project conventions.

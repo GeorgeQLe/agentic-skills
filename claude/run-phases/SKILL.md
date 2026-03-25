@@ -1,6 +1,7 @@
 ---
 name: run-phases
 description: Plan the next incomplete phase, enter plan mode for approval, then execute
+argument-hint: [--sync-kanban]
 ---
 
 # Single-Phase Executor
@@ -8,6 +9,8 @@ description: Plan the next incomplete phase, enter plan mode for approval, then 
 Plan **only the next incomplete phase** from a phased implementation plan, get user approval, then execute. One phase per context window.
 
 ## Execution Protocol
+
+**Kanban sync (optional):** If `$ARGUMENTS` contains `--sync-kanban`, run `/sync-roadmap-kanban` first. If it reports discrepancies, show them but continue with the main process.
 
 1. **Migration check:** If `tasks/roadmap.md` does not exist but `tasks/todo.md` contains multiple `## Phase` headers, migrate: copy `tasks/todo.md` → `tasks/roadmap.md`, then trim `tasks/todo.md` to just the current phase (first phase with unchecked steps). Commit with `chore: migrate to roadmap.md + todo.md split`.
 2. **Read `tasks/todo.md`** — this contains the current phase's steps. Also read `tasks/roadmap.md` to understand overall progress and find the next incomplete phase by checking milestone checkboxes.
