@@ -43,6 +43,9 @@
 - Added Board Overview to 4 session-start kanban skills — Phase 2 Step 1
   - Surfaces overdue, starred, blocked cards + WIP/Backlog/Todo counts at session start
   - 8 SKILL.md files updated (run, brainstorm, roadmap, plan-interview × Claude + Codex)
+- Added Next Work Suggestion to ship-end-kanban and ship-kanban — Phase 2 Step 2
+  - After shipping, suggests top Todo card ranked by overdue > starred > list order
+  - Falls back to Backlog if Todo empty, or "Board is clear" if nothing pending
 
 ## 2026-03-24 — kanban-lite: local SQLite kanban skill
 
