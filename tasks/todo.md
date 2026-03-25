@@ -42,50 +42,46 @@
 
 ---
 
-## Next Step Plan: run-kanban
+## Next Step Plan: ship-kanban
 
 ### What
-Create `run-kanban` skill (Claude + Codex). Full copy of `/run` with kanban ops: move current step card to In Progress, cross-device conflict detection, stale session cleanup. Most complex -kanban skill.
+Create `ship-kanban` skill (Claude + Codex). Full copy of `/ship` with kanban ops: after shipping, move the step's card to Done or Punt based on todo.md state. When planning next step, ensure its card exists in Todo.
 
 ### Files to create
-- `claude/run-kanban/SKILL.md` — full copy of `claude/run/SKILL.md` + kanban ops + shared protocols
-- `codex/run-kanban/SKILL.md` — condensed Codex version
-- `codex/run-kanban/agents/openai.yaml` — agent manifest
+- `claude/ship-kanban/SKILL.md` — full copy of `claude/ship/SKILL.md` + kanban ops + shared protocols
+- `codex/ship-kanban/SKILL.md` — condensed Codex version
+- `codex/ship-kanban/agents/openai.yaml` — agent manifest
 
 ### Approach
-1. Copy the full content of the base run SKILL.md
-2. Add `allowed-tools: Bash(node *)` to frontmatter, keep `argument-hint: [--phase]`
+1. Copy the full content of the base ship SKILL.md
+2. Add `allowed-tools: Bash(node *)` to frontmatter, keep `argument-hint: [--no-plan] [--no-deploy]`
 3. Add the shared Kanban Setup section (Board Resolution + Validation + Graceful Degradation)
-4. Add kanban ops AFTER Kanban Setup, BEFORE the migration check (step 1):
+4. Add kanban ops at two points:
 
-   **Session card (move to In Progress):**
-   - Read current step name from `tasks/todo.md`
-   - Search board for card matching step name
-   - If in Todo → move to In Progress via `move-card`
-   - If already in In Progress → skip move, update description
-   - If not found → create in In Progress directly
-   - Add session info to description: `[hostname -s | lowercase] | Branch: <branch> | Started: <datetime>`
+   **After shipping (step 2) — move completed card:**
+   - Find the current step's card on the board (search by step name)
+   - Check todo.md: if step checkbox was checked off → move card to Done, set `done: true`
+   - If step has a blocker or was deferred → move to Punt, add reason to description
+   - If unclear (step not checked, no blocker) → ask user: Done or Punt?
 
-   **Cross-device conflict check:**
-   - Scan all In Progress cards on the board
-   - Cards with `[other-hostname]` in description → check if same branch or step → warn
-   - Cards with `[this-hostname]` for a DIFFERENT step → stale session → warn, offer cleanup (move to Done/Punt)
-   - Plain cards (no hostname) → report as "untracked work in progress"
-   - This is advisory only — never block
+   **After planning next step (step 4) — ensure next card in Todo:**
+   - Search for the next step's card on the board
+   - If in Backlog → move to Todo
+   - If not found → create in Todo
+   - If already in Todo or later → skip
 
-5. After step completion (mark done in todo.md): update card with completion notes
+5. Reference `/run-kanban` and `/ship-end-kanban` in the Workflow section
 
 ### Key context
-- Hostname format: `hostname -s | tr '[:upper:]' '[:lower:]'` — consistent across all -kanban skills
-- Session info goes in card description, not card name (unlike the reverted approach which used `[hostname] step-name`)
-- The base run skill has Single Step Mode and Full Phase Mode (`--phase`) — both need the kanban ops
-- Commands: `search`, `move-card`, `create-card`, `update-card`, `board <id>`
+- Ship has `--no-plan` flag — if present, skip the "ensure next card" step
+- Ship has `--no-deploy` flag — kanban ops happen regardless of deploy
+- The `done` command: `done --id <card-id>` sets card's done flag to true
+- Base ship already handles phase transitions (archive, roadmap update) — kanban ops layer on top
+- Commands: `search`, `move-card`, `done`, `create-card`, `update-card`
 
 ### Acceptance criteria
-- run-kanban moves current step card from Todo → In Progress at session start
-- Cross-device conflict detection warns about other hostname In Progress cards
-- Stale session cards from this hostname (different step) trigger cleanup prompt
-- Session info (hostname, branch, time) added to card description
-- After step completion, card updated with notes
+- ship-kanban moves completed step card to Done (with `done: true`) or Punt
+- Done vs Punt decision based on todo.md state (checked = Done, blocker = Punt, unclear = ask)
+- When planning next step, ensures the next card exists in Todo
 - Both Claude and Codex versions + openai.yaml
 - `bash install.sh` installs the new skill
