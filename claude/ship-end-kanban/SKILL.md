@@ -73,6 +73,19 @@ After committing and pushing, move the session's In Progress card to Done:
      ```
 5. If no matching card found → skip silently. The card may not exist if `/run-kanban` wasn't used for this session.
 
+### Next Work Suggestion
+
+After completing kanban operations, suggest the next highest-priority card:
+
+1. Read all cards in the Todo list from the board state.
+2. Rank by priority:
+   - First: cards with overdue due dates (past today)
+   - Second: starred cards
+   - Third: list position order (lower order = higher priority)
+3. Display the top suggestion: "**Suggested next:** `card-name`" with description summary and due date if set.
+4. If no Todo cards exist, check Backlog for starred or overdue items. If nothing: "Board is clear — no pending work."
+5. This is a suggestion only — the user decides what to do next.
+
 6) Output a brief session summary:
    - What was accomplished
    - Deploy status (if deployed)

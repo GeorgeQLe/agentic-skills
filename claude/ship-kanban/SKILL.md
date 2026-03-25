@@ -128,6 +128,19 @@ After planning the next step, ensure its kanban card exists in Todo:
      ```
    - **Already in Todo or later** → skip (already positioned correctly).
 
+### 4c. Next Work Suggestion
+
+After completing kanban operations, suggest the next highest-priority card:
+
+1. Read all cards in the Todo list from the board state.
+2. Rank by priority:
+   - First: cards with overdue due dates (past today)
+   - Second: starred cards
+   - Third: list position order (lower order = higher priority)
+3. Display the top suggestion: "**Suggested next:** `card-name`" with description summary and due date if set.
+4. If no Todo cards exist, check Backlog for starred or overdue items. If nothing: "Board is clear — no pending work."
+5. This is a suggestion only — the user decides what to do next.
+
 ### 5. Output a brief summary (2-3 lines max to save context)
 - What was shipped (if anything)
 - Deploy status (if deployed)

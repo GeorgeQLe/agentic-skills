@@ -46,6 +46,7 @@ All kanban commands use: `node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs
    - If in Backlog → move to Todo
    - If not found → create in Todo
    - If already in Todo or later → skip
+4c. **Next Work Suggestion:** Suggest the top Todo card by priority (overdue > starred > list order). If no Todo cards, check Backlog. If nothing: "Board is clear."
 5. Output brief summary: shipped, deploy status, test status, kanban status, next step.
 
 ## Constraints

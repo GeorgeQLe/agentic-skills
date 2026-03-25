@@ -32,6 +32,7 @@ All kanban commands use: `node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs
    - Find In Progress card matching `[this-hostname]` in description or current step name
    - If found → move to Done + `done --id` + update description with commit SHAs
    - If not found → skip silently
+7b. **Next Work Suggestion:** Suggest the top Todo card by priority (overdue > starred > list order). If no Todo cards, check Backlog. If nothing: "Board is clear."
 8. Report:
    - What was accomplished
    - Test status — explicitly state whether failures are expected or unexpected
