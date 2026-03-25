@@ -15,6 +15,7 @@ Use this skill when the user wants one bounded implementation step planned and e
 ## Workflow
 
 0. If `--sync-kanban` flag is present, run the sync-roadmap-kanban skill first. Show discrepancies but continue.
+0b. **Session card:** If `tasks/.kanban-board` exists, get `hostname` and branch, search the board for a card starting with `[hostname]`. Update it or create one in "In Progress" with name `[hostname] step-name` and description with branch and start time.
 
 1. **Migration check:** If `tasks/roadmap.md` does not exist but `tasks/todo.md` contains multiple `## Phase` headers, migrate: copy `tasks/todo.md` → `tasks/roadmap.md`, then trim `tasks/todo.md` to just the current phase (first phase with unchecked steps). Commit with `chore: migrate to roadmap.md + todo.md split`.
 2. Read `tasks/todo.md` — find the next incomplete step (unchecked `- [ ]` item).

@@ -22,7 +22,8 @@ Use this skill when the user wants the current session wrapped up cleanly.
    - Run the deploy and verify the output for errors.
    - If the deploy fails, report the error. Do not retry automatically.
 6. Commit and push using the `commit-and-push-by-feature` workflow.
-7. Report:
+7. **Session card cleanup:** If `tasks/.kanban-board` exists, get `hostname`, search the board for a card starting with `[hostname]`, move it to "Done", and update description with commit SHAs from this session.
+8. Report:
    - What was accomplished
    - Test status — explicitly state whether any failing tests are expected (red phase: tests before implementation) or unexpected (regressions/bugs)
    - What is still outstanding

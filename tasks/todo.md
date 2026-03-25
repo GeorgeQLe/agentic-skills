@@ -4,7 +4,7 @@
 
 ## Steps
 
-- [ ] **Session activity cards**
+- [x] **Session activity cards**
 - [ ] **Conflict detection**
 - [ ] **Device tagging on cards**
 
