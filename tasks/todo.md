@@ -39,3 +39,43 @@
 - **Done vs Punt:** Checkbox checked = Done, blocker = Punt, unclear = ask user
 - **Missing lists:** Auto-create via `create-list`
 - **No board:** Ask user to create with 5-list template
+
+---
+
+## Next Step Plan: brainstorm-kanban
+
+### What
+Create `brainstorm-kanban` skill (Claude + Codex). Full copy of `/brainstorm` with kanban board operations: after generating ideas, create one card per idea in the Backlog list.
+
+### Files to create
+- `claude/brainstorm-kanban/SKILL.md` — full copy of `claude/brainstorm/SKILL.md` + kanban ops + shared protocols
+- `codex/brainstorm-kanban/SKILL.md` — full copy of `codex/brainstorm/SKILL.md` + kanban ops (condensed)
+- `codex/brainstorm-kanban/agents/openai.yaml` — agent manifest
+
+### Approach
+1. Copy the full content of the base brainstorm SKILL.md
+2. Add `allowed-tools: Bash(node *)` to frontmatter
+3. Add the shared Board Resolution + Board Validation protocols as a new section before the main process
+4. Add a new step after the Output section: **Kanban Sync**
+   - For each idea in the output (each `- **Title** — description` bullet):
+     - Search the board for a card with the same name (exact match on title text)
+     - If found → skip (log "already exists")
+     - If not found → `create-card` in Backlog list
+     - Card name: idea title (text between `**...**`)
+     - Card description: idea description + effort category (e.g., "Quick win (hours)")
+5. Add Graceful Degradation to the constraints section
+6. Codex version: condense the kanban ops into the Codex style (shorter, same logic)
+
+### Key context
+- Brainstorm output format: `- **Title** — description. _Start with:_ /plan-interview <topic>` grouped under effort headings
+- Script path: `~/.claude/skills/poketo-kanban/scripts/kanban.mjs`
+- Commands needed: `boards`, `board <id>`, `search --query "title"`, `create-card --board <id> --list <list-id> --name "title" --description "details"`
+- Board auto-detection reads `tasks/.kanban-board` for stored board ID
+
+### Acceptance criteria
+- `brainstorm-kanban` SKILL.md contains full brainstorm process + kanban card creation
+- Board resolution and validation protocols are included
+- Idempotent: running twice doesn't create duplicate cards
+- Graceful degradation: works without kanban if scripts missing
+- Both Claude and Codex versions created with openai.yaml
+- `bash install.sh` installs the new skill
