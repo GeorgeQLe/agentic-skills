@@ -40,6 +40,9 @@
 - Created `ship-end-kanban` skill (Claude + Codex) — 6th of 6, phase complete
   - Full copy of ship-end + moves In Progress card to Done with commit refs
 - **Phase 1 Kanban Skill Suite complete** — all 6 skills built (18 files), kanban.mjs fixed, milestone verified
+- Added Board Overview to 4 session-start kanban skills — Phase 2 Step 1
+  - Surfaces overdue, starred, blocked cards + WIP/Backlog/Todo counts at session start
+  - 8 SKILL.md files updated (run, brainstorm, roadmap, plan-interview × Claude + Codex)
 
 ## 2026-03-24 — kanban-lite: local SQLite kanban skill
 

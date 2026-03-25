@@ -33,6 +33,19 @@ After resolving the board, verify all 5 required lists exist (case-insensitive n
 
 If the poketo-kanban scripts are not found at `~/.claude/skills/poketo-kanban/scripts/kanban.mjs`, or if the first kanban command fails (DB connectivity, auth error), warn the user and continue with the base plan-interview behavior. Kanban operations are additive — never block the core workflow.
 
+### Board Overview
+
+After board validation, display a brief board status to provide context:
+
+1. Fetch the full board state: `board <id>`
+2. Scan all cards and report:
+   - **Overdue**: Cards with a due date in the past (highlight count and names)
+   - **High priority**: Starred cards not yet in Done/Punt
+   - **Blocked**: Cards whose description contains "blocked" or "blocker"
+   - **In Progress**: Count of cards currently being worked on
+   - **Backlog/Todo**: Counts for planning context
+3. Display as a brief summary before proceeding. Do not take action — this is informational only.
+
 ## Process
 
 Before starting the interview, check if `specs/icp.md` exists. If it does, read it and treat it as foundational context for the specification. Ground solution decisions against the ICP: does this feature serve the user journey? Does this architecture match the user's technical sophistication? Does this UX match how the customer provisions and onboards? When the user proposes something that conflicts with the ICP, flag it — e.g., "Your ICP says users are non-technical ops managers — does this CLI-based workflow fit their profile?" Do not re-interview on ICP topics already covered — focus on solution design.
