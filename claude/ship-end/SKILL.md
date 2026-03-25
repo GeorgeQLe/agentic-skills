@@ -1,15 +1,11 @@
 ---
 name: ship-end
 description: Wrap up the current session — update docs, commit, and push
-argument-hint: [--sync-kanban]
 ---
 
 Wrap up the current session: mark progress, commit, and push.
 
 Process:
-
-**Kanban sync (optional):** If `$ARGUMENTS` contains `--sync-kanban`, run `/sync-roadmap-kanban` first. If it reports discrepancies, show them but continue with the main process.
-
 1) Run `git status` and `git diff` to see all changes.
    - If the working tree is clean and no unpushed commits: report "nothing to ship" and stop.
 2) Update `tasks/todo.md` — mark completed items as done, note any outstanding items or blockers. Also update milestone progress in `tasks/roadmap.md` if criteria were met.
@@ -24,11 +20,7 @@ Process:
    - Group changes into logical feature/function buckets.
    - Use conventional commit messages.
    - Push to the current branch.
-6) **Session card cleanup:** If `tasks/.kanban-board` exists:
-   - Get the device hostname via `hostname`
-   - Search the board for a card whose name starts with `[hostname]`
-   - If found, move it to the "Done" list and update the description with commit SHAs from this session
-7) Output a brief session summary:
+6) Output a brief session summary:
    - What was accomplished
    - Deploy status (if deployed)
    - Test status — **explicitly state whether any failing tests are expected (red phase: tests written before implementation) or unexpected (regressions/bugs that need fixing)**

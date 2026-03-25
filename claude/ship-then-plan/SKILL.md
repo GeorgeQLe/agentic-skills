@@ -1,14 +1,11 @@
 ---
 name: ship-then-plan
 description: Ship current work, plan next step, then enter plan mode for clear-and-implement
-argument-hint: [--sync-kanban]
 ---
 
 Wrap up current work, commit, push, write the next step into `tasks/todo.md`, then enter plan mode.
 
 Process:
-
-**Kanban sync (optional):** If `$ARGUMENTS` contains `--sync-kanban`, run `/sync-roadmap-kanban` first. If it reports discrepancies, show them but continue with the main process.
 
 1) **Check if there's anything to ship.**
    Run `git status` and `git diff --stat`.
