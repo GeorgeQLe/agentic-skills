@@ -1,16 +1,15 @@
-# Phase 1: Kanban-Roadmap Sync
+# Phase 1: Kanban Skill Suite
 
-**Goal:** Keep kanban boards, roadmap docs, and codebase state in agreement automatically.
+**Goal:** Create parallel `-kanban` workflow skills with board operations. Board: Backlog → Todo → In Progress → Done → Punt.
 
 ## Steps
 
-- [x] **Create `/sync-roadmap-kanban` skill (Claude + Codex)** — standalone skill created
-- [x] **Board-project auto-detection** — added to sync-roadmap-kanban skill
-- [ ] **Add sync-roadmap-kanban trigger to workflow skills** — reverted; kanban integration should be tested standalone first before embedding in run/ship skills
+- [ ] **`brainstorm-kanban`** — full copy of brainstorm + create Backlog cards per idea
+- [ ] **`plan-interview-kanban`** — full copy of plan-interview + update Backlog cards with spec
+- [ ] **`roadmap-kanban`** — full copy of roadmap + move Backlog → Todo
+- [ ] **`run-kanban`** — full copy of run + move Todo → In Progress + cross-device conflict warnings
+- [ ] **`ship-kanban`** — full copy of ship + move In Progress → Done/Punt
+- [ ] **`ship-end-kanban`** — full copy of ship-end + move In Progress → Done
 
 ## Milestone
-- [ ] Agent runs `/sync-roadmap-kanban` → kanban and roadmap reflect the same state, grounded in what the code actually shows
-
-## Status
-
-Kanban operations were embedded into run/ship/ship-end skills (session cards, conflict detection, --sync-kanban flag) but reverted to keep those skills kanban-free until the standalone `/sync-roadmap-kanban` skill is tested and debugged. The standalone skill and board auto-detection remain in place.
+- [ ] Full kanban lifecycle works: brainstorm → plan-interview → roadmap → run → ship/ship-end across board lists

@@ -1,19 +1,16 @@
-# Phase 1: Kanban-Roadmap Sync (Completed)
+# Phase 1 (Original): Kanban-Roadmap Sync — Superseded
 
-**Goal:** Keep kanban boards, roadmap docs, and codebase state in agreement automatically.
+Original Phase 1 focused on embedding kanban operations into existing workflow skills. This approach was reverted — workflow skills should remain kanban-free. Instead, a separate suite of `-kanban` skills was designed.
 
-## Steps
+## What survived from original Phase 1
+- `/sync-roadmap-kanban` skill (Claude + Codex) — standalone reconciliation
+- Board auto-detection via `tasks/.kanban-board`
 
-- [x] **Create `/sync-roadmap-kanban` skill (Claude + Codex)**
-- [x] **Board-project auto-detection**
-- [x] **Add sync-roadmap-kanban trigger to workflow skills**
+## What was reverted
+- `--sync-kanban` flag on all run/ship variants
+- Session activity cards in run variants
+- Conflict detection in run variants
+- Session card cleanup in ship-end
 
-## Milestone
-- [x] Agent runs `/sync-roadmap-kanban` → kanban and roadmap reflect the same state, grounded in what the code actually shows
-
-## On Completion
-
-Delivered:
-- `/sync-roadmap-kanban` skill (Claude + Codex) — 7-step reconciliation process with 5 rules
-- Board auto-detection via name matching, persisted in `tasks/.kanban-board`
-- `--sync-kanban` opt-in flag on all 6 workflow skills (run, run-step, run-phases, ship, ship-end, ship-then-plan) × 2 platforms
+## Why
+Kanban operations should be in separate skills so the base workflow skills stay simple and testable. Users opt into kanban by using `/run-kanban` instead of `/run`.
