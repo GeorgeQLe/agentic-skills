@@ -13,42 +13,37 @@
 
 ---
 
-## Next Step Plan: Session activity cards
+## Next Step Plan: Conflict detection
 
 ### What
-When an agent starts a session, create/update an "In Progress" card on the kanban board with device name, branch, and task summary. On `/ship-end`, move the card to Done with commit references.
+Before starting work, check the kanban board for in-progress cards from other devices that overlap with the current task's scope. Warn the user if another session is working on the same files/features.
 
 ### Files to modify
-- **`claude/ship-end/SKILL.md`** — Add step to move the session card to Done with commit refs after shipping
-- **`codex/ship-end/SKILL.md`** — Same for Codex
-- **`claude/run/SKILL.md`** — Add step at session start to create/update an "In Progress" card
-- **`codex/run/SKILL.md`** — Same for Codex
-- **`claude/run-step/SKILL.md`** and **`codex/run-step/SKILL.md`** — Same
-- **`claude/run-phases/SKILL.md`** and **`codex/run-phases/SKILL.md`** — Same
+- **`claude/run/SKILL.md`** — Add conflict check after session card creation, before migration check
+- **`claude/run-step/SKILL.md`** — Same
+- **`claude/run-phases/SKILL.md`** — Same
+- **`codex/run/SKILL.md`** — Same
+- **`codex/run-step/SKILL.md`** — Same
+- **`codex/run-phases/SKILL.md`** — Same
 
 ### Approach
-1. At the start of `/run` variants, after the optional kanban sync step:
-   - Get the device hostname via `hostname` command
-   - Get the current branch via `git branch --show-current`
-   - Read `tasks/todo.md` to get the current step/task description
-   - Check the kanban board for an existing "In Progress" card from this device
-   - If one exists, update it with current branch and task. If not, create one in the "In Progress" list
-   - Card name format: `[hostname] current-step-name`
-   - Card description: branch name, task summary, start time
-2. At the end of `/ship-end`:
-   - Find the session's "In Progress" card on the board (match by hostname in card name)
-   - Move it to the "Done" list
-   - Update description with commit references from this session
+1. After the session card step in each `/run` variant, add a conflict detection step:
+   - Read the board and find all cards in the "In Progress" list
+   - Filter to cards whose name starts with `[hostname]` where hostname is NOT the current device
+   - For each other-device card, check if the card's description references the same branch or the same step/phase as the current task
+   - If overlap is found, **warn the user** with details: which device, what branch, what task
+   - Do NOT block — just warn. The user decides whether to proceed.
+2. The check is lightweight: it reuses the board state already fetched in the session card step
 
 ### Key context
-- poketo-kanban scripts at `~/.claude/skills/poketo-kanban/scripts/kanban.mjs`
-- Available commands: `boards`, `board <id>`, `create-card`, `update-card`, `move-card`, `done`, `search`
-- Board auto-detection already handles finding the right board via `tasks/.kanban-board`
-- Device hostname is available via `hostname` shell command
-- Cards support `--name`, `--description`, `--done`, `--due`, `--starred` fields
+- Session cards use format `[hostname] step-name` with description `Branch: branch-name\nStarted: YYYY-MM-DD HH:MM`
+- The board is already fetched during the session card step — reuse that data
+- poketo-kanban `board <id>` returns all lists and cards, so we can filter in-progress cards
+- The `search` command can also be used: `search --query "In Progress"`
+- This is a warning-only feature — never block the user from working
 
 ### Acceptance criteria
-- Running `/run` on a project with a kanban board creates an "In Progress" card with device name and task info
-- Running `/ship-end` moves that card to Done with commit references
-- If a session card already exists from this device, it gets updated (not duplicated)
+- Running `/run` on a project where another device has an in-progress card on the same branch/step shows a warning
+- Cards from the current device are ignored (only other devices trigger warnings)
+- If no conflicts, the process continues silently
 - Both Claude and Codex skills are updated
