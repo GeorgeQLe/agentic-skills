@@ -35,6 +35,8 @@
 - Created `run-kanban` skill (Claude + Codex) — 4th of 6 (most complex)
   - Full copy of run + session card (Todo → In Progress), cross-device conflict detection, stale session cleanup
   - Hostname/branch/time stored in card description; post-execution card update
+- Created `ship-kanban` skill (Claude + Codex) — 5th of 6
+  - Full copy of ship + Done/Punt card movement after shipping, next card ensured in Todo when planning
 
 ## 2026-03-24 — kanban-lite: local SQLite kanban skill
 

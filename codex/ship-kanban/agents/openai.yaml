@@ -1,0 +1,7 @@
+interface:
+  display_name: "Ship Kanban"
+  short_description: "Ship work and move kanban card to Done/Punt"
+  default_prompt: "Use $ship-kanban to ship current work and update kanban board state."
+
+policy:
+  allow_implicit_invocation: true
