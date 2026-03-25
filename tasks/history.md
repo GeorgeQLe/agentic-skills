@@ -29,6 +29,9 @@
 - Created `plan-interview-kanban` skill (Claude + Codex) — 2nd of 6
   - Full copy of plan-interview + kanban sync: finds matching card by keyword search, updates with spec details
   - Searches all lists (not just Backlog), updates in place, never moves backward from Done/Punt
+- Created `roadmap-kanban` skill (Claude + Codex) — 3rd of 6
+  - Full copy of roadmap + kanban sync: current phase steps → Todo cards, future phases → Backlog summary cards
+  - Moves matching Backlog cards to Todo, idempotent (skips existing)
 
 ## 2026-03-24 — kanban-lite: local SQLite kanban skill
 

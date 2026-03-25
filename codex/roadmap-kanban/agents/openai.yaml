@@ -1,0 +1,7 @@
+interface:
+  display_name: "Roadmap Kanban"
+  short_description: "Build roadmap and sync phases to kanban board"
+  default_prompt: "Use $roadmap-kanban to build a project roadmap and sync phases to the kanban board."
+
+policy:
+  allow_implicit_invocation: true
