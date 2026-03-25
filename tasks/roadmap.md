@@ -1,6 +1,6 @@
 # Claude Skills — Roadmap
 
-## Phase 1: Kanban Skill Suite ← CURRENT
+## Phase 1: Kanban Skill Suite ✓
 
 **Goal:** Create a parallel set of `-kanban` workflow skills that manage kanban board state alongside their normal operations. Board lists: Backlog → Todo → In Progress → Done → Punt.
 
@@ -42,11 +42,11 @@
    - After wrapping up, move the session's In Progress card to Done with commit refs
 
 ### Milestone
-- [ ] Full kanban lifecycle works: brainstorm creates Backlog cards → plan-interview specs them → roadmap moves to Todo → run moves to In Progress (with conflict warnings) → ship/ship-end moves to Done or Punt
+- [x] Full kanban lifecycle works: brainstorm creates Backlog cards → plan-interview specs them → roadmap moves to Todo → run moves to In Progress (with conflict warnings) → ship/ship-end moves to Done or Punt
 
 ---
 
-## Phase 2: Proactive Board Intelligence
+## Phase 2: Proactive Board Intelligence ← NEXT
 
 **Goal:** Agents use board state to make smarter decisions about what to work on.
 
