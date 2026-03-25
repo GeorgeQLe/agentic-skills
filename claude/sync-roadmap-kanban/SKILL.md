@@ -20,9 +20,16 @@ Run `/sync` first. If there are merge conflicts, **stop** and report them — do
 node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs boards
 ```
 
-- If there is exactly one board, use it.
-- If there are multiple boards, check for a board mapping file at `tasks/.kanban-board` (contains a board ID). If no mapping exists, list the boards and ask the user to pick one. Do not guess.
-- Run `board <id>` to get the full board state (all lists and cards).
+**Board auto-detection:**
+
+1. Run `boards` to get the list of all boards (JSON with `id` and `name` fields).
+2. If `tasks/.kanban-board` exists, read it (single line containing a board ID). Check that the ID appears in the boards list. If valid, use it. If stale (ID not found), delete the file and continue to step 3.
+3. If no mapping file: compare each board name against `basename $(pwd)` — case-insensitive substring match.
+4. If exactly one board matches → use it. Save the board ID to `tasks/.kanban-board`.
+5. If zero or multiple matches → list the boards and ask the user to pick one. Save their choice to `tasks/.kanban-board`.
+6. Run `board <id>` to get the full board state (all lists and cards).
+
+`tasks/.kanban-board` should be committed to git so all devices share the mapping.
 
 ### 3. Read roadmap docs
 

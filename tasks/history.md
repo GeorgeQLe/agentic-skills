@@ -10,6 +10,10 @@
   - 7-step process: sync → read kanban → read roadmap → check codebase → reconcile → apply → report
   - 5 reconciliation rules: done-on-kanban→roadmap, done-in-roadmap→kanban, new-items→cards, orphaned-cards→flag, false-done→flag
   - Set up `tasks/todo.md` for Phase 1 tracking
+- Added board-project auto-detection — Phase 1 Step 2 complete
+  - Auto-matches board name to repo directory name (case-insensitive substring)
+  - Persists board ID in `tasks/.kanban-board` (committed to git for cross-device sharing)
+  - Falls back to user prompt only when no match or ambiguous
 
 ## 2026-03-24 — kanban-lite: local SQLite kanban skill
 
