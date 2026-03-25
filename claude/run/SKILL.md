@@ -1,7 +1,7 @@
 ---
 name: run
 description: Plan the next incomplete step (or full phase with --phase flag) from the plan, then enter plan mode for user approval before executing
-argument-hint: [--phase] [--sync-kanban]
+argument-hint: [--phase]
 ---
 
 # Plan Executor
@@ -9,15 +9,6 @@ argument-hint: [--phase] [--sync-kanban]
 Identify the next incomplete unit of work from the phased plan, build an execution plan, and enter plan mode for user approval before implementing. By default, plans **only the next single incomplete step**. If `$ARGUMENTS` contains `--phase`, plans the **entire next phase**.
 
 ## Protocol
-
-**Kanban sync (optional):** If `$ARGUMENTS` contains `--sync-kanban`, run `/sync-roadmap-kanban` first. If it reports discrepancies, show them but continue with the main process.
-
-**Session card:** If `tasks/.kanban-board` exists, create or update a session activity card:
-1. Get the device hostname via `hostname` and the branch via `git branch --show-current`
-2. Read `tasks/todo.md` to get the current step name
-3. Read the board ID from `tasks/.kanban-board` and search the board for a card whose name starts with `[hostname]`
-4. If found, update it with the current branch and step. If not, create a new card in the "In Progress" list
-5. Card name: `[hostname] step-name` — Card description: `Branch: branch-name\nStarted: YYYY-MM-DD HH:MM`
 
 1. **Migration check:** If `tasks/roadmap.md` does not exist but `tasks/todo.md` contains multiple `## Phase` headers, migrate: copy `tasks/todo.md` → `tasks/roadmap.md`, then trim `tasks/todo.md` to just the current phase (first phase with unchecked steps). Commit with `chore: migrate to roadmap.md + todo.md split`.
 2. **Read `tasks/todo.md`** — this contains the current phase's steps. Reference `tasks/roadmap.md` only if cross-phase context is needed.

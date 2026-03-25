@@ -9,8 +9,6 @@ Use this skill when the user wants the current session wrapped up cleanly.
 
 ## Workflow
 
-0. If `--sync-kanban` flag is present, run the sync-roadmap-kanban skill first. Show discrepancies but continue.
-
 1. Inspect `git status` and diffs.
 2. If the tree is clean and there are no unpushed commits, report that there is nothing to ship and stop.
 3. Update `tasks/todo.md` with completed items and blockers. Also update milestone progress in `tasks/roadmap.md` if criteria were met.
@@ -22,8 +20,7 @@ Use this skill when the user wants the current session wrapped up cleanly.
    - Run the deploy and verify the output for errors.
    - If the deploy fails, report the error. Do not retry automatically.
 6. Commit and push using the `commit-and-push-by-feature` workflow.
-7. **Session card cleanup:** If `tasks/.kanban-board` exists, get `hostname`, search the board for a card starting with `[hostname]`, move it to "Done", and update description with commit SHAs from this session.
-8. Report:
+7. Report:
    - What was accomplished
    - Test status — explicitly state whether any failing tests are expected (red phase: tests before implementation) or unexpected (regressions/bugs)
    - What is still outstanding

@@ -9,8 +9,6 @@ Ship current work, commit, push, deploy, and plan the next step.
 
 ## Workflow
 
-0. If `--sync-kanban` flag is present, run the sync-roadmap-kanban skill first. Show discrepancies but continue.
-
 1. Check if there is anything to ship:
    - Run `git status` and `git diff --stat`.
    - If the working tree is clean and there are no unpushed commits, skip to step 3.
