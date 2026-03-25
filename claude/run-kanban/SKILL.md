@@ -122,11 +122,14 @@ After setting up the session card, scan for cross-device conflicts. This is **ad
 
 ## Post-Execution Card Update
 
-After marking the step as done in `tasks/todo.md`, update the kanban card:
+After marking the step as done in `tasks/todo.md`, update the kanban card with progress and completion info:
 
-```bash
-node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs update-card --id <card-id> --description "<existing desc> | Completed: YYYY-MM-DD HH:MM"
-```
+1. Count steps in `tasks/todo.md`: total `- [x]` + `- [ ]` items, and how many are checked.
+2. Calculate progress percentage: `checked / total * 100`.
+3. Update the card:
+   ```bash
+   node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs update-card --id <card-id> --description "<existing desc> | Progress: X/Y (Z%) | Completed: YYYY-MM-DD HH:MM"
+   ```
 
 Do NOT move the card to Done here — that's `/ship-kanban`'s job.
 

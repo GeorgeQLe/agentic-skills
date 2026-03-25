@@ -53,7 +53,7 @@ Scan all In Progress cards (advisory only, never block):
 
 ## Post-Execution
 
-- Update the kanban card description with completion time. Do NOT move to Done — that's ship-kanban's job.
+- Count `- [x]` vs `- [ ]` in `tasks/todo.md` to calculate phase progress. Update the kanban card description with `Progress: X/Y (Z%) | Completed: datetime`. Do NOT move to Done — that's ship-kanban's job.
 - Report: step completed, files modified, test results (expected vs unexpected failures), kanban status, next step name.
 
 ## Constraints

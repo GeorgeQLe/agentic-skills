@@ -46,6 +46,9 @@
 - Added Next Work Suggestion to ship-end-kanban and ship-kanban — Phase 2 Step 2
   - After shipping, suggests top Todo card ranked by overdue > starred > list order
   - Falls back to Backlog if Todo empty, or "Board is clear" if nothing pending
+- Added progress tracking to run-kanban — Phase 2 Step 3
+  - Post-execution card update now includes `Progress: X/Y (Z%)` based on todo.md step counts
+- **Phase 2 Proactive Board Intelligence complete** — board overview, next work suggestion, progress tracking all shipped
 
 ## 2026-03-24 — kanban-lite: local SQLite kanban skill
 
