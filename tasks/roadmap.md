@@ -1,6 +1,6 @@
 # Claude Skills — Roadmap
 
-## Phase 1: Kanban-Roadmap Sync ← NEXT
+## Phase 1: Kanban-Roadmap Sync ✓
 
 **Goal:** Keep kanban boards, roadmap docs, and codebase state in agreement automatically.
 
@@ -30,11 +30,11 @@
    - Keep it opt-in (flag or config) to avoid slowing down quick tasks
 
 ### Milestone
-- Agent runs `/sync-roadmap-kanban` → kanban and roadmap reflect the same state, grounded in what the code actually shows
+- [x] Agent runs `/sync-roadmap-kanban` → kanban and roadmap reflect the same state, grounded in what the code actually shows
 
 ---
 
-## Phase 2: Cross-Device Agent Awareness
+## Phase 2: Cross-Device Agent Awareness ← NEXT
 
 **Goal:** Agents on different devices see each other's in-progress work and avoid conflicts.
 
