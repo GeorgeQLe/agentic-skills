@@ -1,0 +1,7 @@
+interface:
+  display_name: "Plan Interview Kanban"
+  short_description: "Validate spec and update kanban Backlog card"
+  default_prompt: "Use $plan-interview-kanban to validate a spec and update the matching kanban card."
+
+policy:
+  allow_implicit_invocation: true

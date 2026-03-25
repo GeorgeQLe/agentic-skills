@@ -26,6 +26,9 @@
 - Created `brainstorm-kanban` skill (Claude + Codex) — first of 6 kanban skill suite
   - Full copy of brainstorm + Board Resolution/Validation/Graceful Degradation protocols
   - Creates one Backlog card per idea (idempotent: skips existing cards)
+- Created `plan-interview-kanban` skill (Claude + Codex) — 2nd of 6
+  - Full copy of plan-interview + kanban sync: finds matching card by keyword search, updates with spec details
+  - Searches all lists (not just Backlog), updates in place, never moves backward from Done/Punt
 
 ## 2026-03-24 — kanban-lite: local SQLite kanban skill
 
