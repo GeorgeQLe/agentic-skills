@@ -1,0 +1,7 @@
+interface:
+  display_name: "Brainstorm Kanban"
+  short_description: "Evaluate codebase, suggest ideas, create Backlog cards"
+  default_prompt: "Use $brainstorm-kanban to evaluate the codebase, suggest ideas, and create kanban Backlog cards."
+
+policy:
+  allow_implicit_invocation: true
