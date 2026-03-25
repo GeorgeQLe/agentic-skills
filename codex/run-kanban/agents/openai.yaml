@@ -1,0 +1,7 @@
+interface:
+  display_name: "Run Kanban"
+  short_description: "Execute next step with kanban card tracking"
+  default_prompt: "Use $run-kanban to execute the next step and move the kanban card to In Progress."
+
+policy:
+  allow_implicit_invocation: true

@@ -32,6 +32,9 @@
 - Created `roadmap-kanban` skill (Claude + Codex) — 3rd of 6
   - Full copy of roadmap + kanban sync: current phase steps → Todo cards, future phases → Backlog summary cards
   - Moves matching Backlog cards to Todo, idempotent (skips existing)
+- Created `run-kanban` skill (Claude + Codex) — 4th of 6 (most complex)
+  - Full copy of run + session card (Todo → In Progress), cross-device conflict detection, stale session cleanup
+  - Hostname/branch/time stored in card description; post-execution card update
 
 ## 2026-03-24 — kanban-lite: local SQLite kanban skill
 
