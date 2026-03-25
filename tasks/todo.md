@@ -13,36 +13,37 @@
 
 ---
 
-## Next Step Plan: Board-project auto-detection
+## Next Step Plan: Add sync-roadmap-kanban trigger to workflow skills
 
 ### What
-Add automatic board-to-project matching so `/sync-roadmap-kanban` doesn't need to ask the user which board to use every time. Store the mapping in `tasks/.kanban-board`.
+Make `/run` and `/ship` variants optionally call `/sync-roadmap-kanban` at session start, so the kanban board stays in sync without the user having to remember to run it manually.
 
 ### Requirements (from roadmap)
-- Match board to project by board name vs repo/directory name
-- If no match, prompt user to select or create a board
-- Store board-project mapping in project's `tasks/` directory
+- `/run` and `/ship` variants optionally call sync at session start
+- Keep it opt-in (flag or config) to avoid slowing down quick tasks
 
-### Files to modify
-- **`claude/sync-roadmap-kanban/SKILL.md`** — Update Step 2 to use auto-detection logic before falling back to user prompt. Currently it checks `tasks/.kanban-board` but doesn't create it.
-- **`codex/sync-roadmap-kanban/SKILL.md`** — Same update for Codex version.
+### Files to modify (all Claude + Codex pairs)
+- **`claude/run/SKILL.md`** and **`codex/run/SKILL.md`** — Add optional `--sync-kanban` flag
+- **`claude/ship/SKILL.md`** and **`codex/ship/SKILL.md`** — Add optional `--sync-kanban` flag
+- **`claude/run-step/SKILL.md`** and **`codex/run-step/SKILL.md`** — Same
+- **`claude/ship-end/SKILL.md`** and **`codex/ship-end/SKILL.md`** — Same
+- **`claude/ship-then-plan/SKILL.md`** and **`codex/ship-then-plan/SKILL.md`** — Same
+- **`claude/run-phases/SKILL.md`** and **`codex/run-phases/SKILL.md`** — Same
 
 ### Approach
-1. In Step 2 of both SKILL.md files, add board auto-detection logic **before** the user prompt fallback:
-   - Run `boards` to list all boards
-   - Check `tasks/.kanban-board` — if it exists and contains a valid board ID, use it
-   - If no mapping file: compare board names against the repo directory name (`basename $(pwd)`) and parent directory name
-   - If exactly one board matches (case-insensitive, substring), use it and save the ID to `tasks/.kanban-board`
-   - If zero or multiple matches, list boards and ask the user to pick. Save their choice to `tasks/.kanban-board`
-2. Add `tasks/.kanban-board` to the `.gitignore` pattern note (it should be committed so all devices share the mapping)
+1. Add a `--sync-kanban` flag to the argument-hint frontmatter of each skill
+2. Add a new step at the top of each skill's process (before any existing steps):
+   - "**Step 0 (optional): Sync kanban** — If `$ARGUMENTS` contains `--sync-kanban`, run `/sync-roadmap-kanban` first. If it reports discrepancies, show them but continue."
+3. Keep it minimal — one sentence per skill, referencing the existing skill by name
 
-### Key context from this session
-- The poketo-kanban scripts are at `~/.claude/skills/poketo-kanban/scripts/kanban.mjs`
-- The `boards` command returns JSON with board objects containing `id` and `name` fields
-- The SKILL.md files are prompt-only (no scripts) — the auto-detection logic is described as instructions for the agent to follow, not code to execute
+### Key context
+- Skills reference `$ARGUMENTS` to check for flags (see `ship/SKILL.md` which uses `--no-plan` and `--no-deploy`)
+- The `argument-hint` frontmatter field documents available flags (e.g., `argument-hint: [--no-plan] [--no-deploy]`)
+- Codex versions are typically shorter/condensed versions of the Claude SKILL.md
+- The sync-roadmap-kanban skill handles all the heavy lifting — the trigger is just "run it if flag is present"
 
 ### Acceptance criteria
-- Running `/sync-roadmap-kanban` in a project with a matching board name auto-selects the board without asking
-- The board ID is persisted in `tasks/.kanban-board` for future runs
-- If no board matches, the user is prompted to select one
-- Both Claude and Codex SKILL.md files are updated
+- Each `/run`, `/run-step`, `/run-phases`, `/ship`, `/ship-end`, `/ship-then-plan` skill (Claude + Codex) accepts `--sync-kanban`
+- The flag is documented in `argument-hint` frontmatter
+- Without the flag, behavior is unchanged (opt-in only)
+- With the flag, `/sync-roadmap-kanban` runs before the skill's main process
