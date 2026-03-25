@@ -42,38 +42,50 @@
 
 ---
 
-## Next Step Plan: roadmap-kanban
+## Next Step Plan: run-kanban
 
 ### What
-Create `roadmap-kanban` skill (Claude + Codex). Full copy of `/roadmap` with kanban ops: after building the phased plan, move specced Backlog cards to Todo and create step cards for the current phase.
+Create `run-kanban` skill (Claude + Codex). Full copy of `/run` with kanban ops: move current step card to In Progress, cross-device conflict detection, stale session cleanup. Most complex -kanban skill.
 
 ### Files to create
-- `claude/roadmap-kanban/SKILL.md` — full copy of `claude/roadmap/SKILL.md` + kanban ops + shared protocols
-- `codex/roadmap-kanban/SKILL.md` — condensed Codex version
-- `codex/roadmap-kanban/agents/openai.yaml` — agent manifest
+- `claude/run-kanban/SKILL.md` — full copy of `claude/run/SKILL.md` + kanban ops + shared protocols
+- `codex/run-kanban/SKILL.md` — condensed Codex version
+- `codex/run-kanban/agents/openai.yaml` — agent manifest
 
 ### Approach
-1. Copy the full content of the base roadmap SKILL.md
-2. Add `allowed-tools: Bash(node *)` to frontmatter
-3. Add the shared Kanban Setup section (identical to brainstorm-kanban/plan-interview-kanban)
-4. Add a **Kanban Sync** section after the roadmap is written (after step 5):
-   - For the current phase (written to `tasks/todo.md`): create one card per `- [ ]` step in the Todo list
-   - For future phases: create one summary card per phase in Backlog
-   - Before creating any card, search for existing card by name — skip if found (idempotent)
-   - Move any matching Backlog cards to Todo if they correspond to current phase steps
-   - Only move cards FROM Backlog — never move backward from Todo/In Progress/Done/Punt
-5. Keep `argument-hint: [--existing] [path-to-spec]` from base skill
+1. Copy the full content of the base run SKILL.md
+2. Add `allowed-tools: Bash(node *)` to frontmatter, keep `argument-hint: [--phase]`
+3. Add the shared Kanban Setup section (Board Resolution + Validation + Graceful Degradation)
+4. Add kanban ops AFTER Kanban Setup, BEFORE the migration check (step 1):
 
-### Key context (established pattern)
-- Kanban Setup → main process → Kanban Sync (same structure as previous -kanban skills)
-- Script path: `~/.claude/skills/poketo-kanban/scripts/kanban.mjs`
-- Commands: `search --query`, `create-card`, `move-card --id <id> --list <todo-list-id>`
-- Card granularity: one card per `- [ ]` step (not per phase) for current phase; one summary card per future phase
+   **Session card (move to In Progress):**
+   - Read current step name from `tasks/todo.md`
+   - Search board for card matching step name
+   - If in Todo → move to In Progress via `move-card`
+   - If already in In Progress → skip move, update description
+   - If not found → create in In Progress directly
+   - Add session info to description: `[hostname -s | lowercase] | Branch: <branch> | Started: <datetime>`
+
+   **Cross-device conflict check:**
+   - Scan all In Progress cards on the board
+   - Cards with `[other-hostname]` in description → check if same branch or step → warn
+   - Cards with `[this-hostname]` for a DIFFERENT step → stale session → warn, offer cleanup (move to Done/Punt)
+   - Plain cards (no hostname) → report as "untracked work in progress"
+   - This is advisory only — never block
+
+5. After step completion (mark done in todo.md): update card with completion notes
+
+### Key context
+- Hostname format: `hostname -s | tr '[:upper:]' '[:lower:]'` — consistent across all -kanban skills
+- Session info goes in card description, not card name (unlike the reverted approach which used `[hostname] step-name`)
+- The base run skill has Single Step Mode and Full Phase Mode (`--phase`) — both need the kanban ops
+- Commands: `search`, `move-card`, `create-card`, `update-card`, `board <id>`
 
 ### Acceptance criteria
-- roadmap-kanban contains full roadmap process + kanban card creation/movement
-- Current phase steps → Todo cards, future phases → Backlog summary cards
-- Idempotent: search before create, skip duplicates
-- Only moves cards FROM Backlog → Todo, never backward
+- run-kanban moves current step card from Todo → In Progress at session start
+- Cross-device conflict detection warns about other hostname In Progress cards
+- Stale session cards from this hostname (different step) trigger cleanup prompt
+- Session info (hostname, branch, time) added to card description
+- After step completion, card updated with notes
 - Both Claude and Codex versions + openai.yaml
 - `bash install.sh` installs the new skill
