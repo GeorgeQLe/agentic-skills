@@ -42,43 +42,38 @@
 
 ---
 
-## Next Step Plan: plan-interview-kanban
+## Next Step Plan: roadmap-kanban
 
 ### What
-Create `plan-interview-kanban` skill (Claude + Codex). Full copy of `/plan-interview` with kanban ops: after writing the spec, find the matching Backlog card and update it with spec details.
+Create `roadmap-kanban` skill (Claude + Codex). Full copy of `/roadmap` with kanban ops: after building the phased plan, move specced Backlog cards to Todo and create step cards for the current phase.
 
 ### Files to create
-- `claude/plan-interview-kanban/SKILL.md` — full copy of `claude/plan-interview/SKILL.md` + kanban ops + shared protocols
-- `codex/plan-interview-kanban/SKILL.md` — condensed Codex version
-- `codex/plan-interview-kanban/agents/openai.yaml` — agent manifest
+- `claude/roadmap-kanban/SKILL.md` — full copy of `claude/roadmap/SKILL.md` + kanban ops + shared protocols
+- `codex/roadmap-kanban/SKILL.md` — condensed Codex version
+- `codex/roadmap-kanban/agents/openai.yaml` — agent manifest
 
 ### Approach
-1. Copy the full content of the base plan-interview SKILL.md
+1. Copy the full content of the base roadmap SKILL.md
 2. Add `allowed-tools: Bash(node *)` to frontmatter
-3. Add the shared Kanban Setup section (Board Resolution + Validation + Graceful Degradation) — same pattern as brainstorm-kanban
-4. Add a **Kanban Sync** section after the main interview process:
-   - Extract 2-3 keywords from the topic argument
-   - Search the board for matching cards: `search --query "keyword1 keyword2"`
-   - Search ALL lists, not just Backlog (card may have been moved by roadmap-kanban)
-   - If one match → update card description with spec summary and `specs/[topic].md` path
-   - If multiple matches → list cards with IDs, ask user to pick
-   - If zero matches → create new card in Backlog with spec details
-   - Never move cards backward from Done/Punt
-5. Update the spec output path reference from `/plan-interview` to `/plan-interview-kanban`
+3. Add the shared Kanban Setup section (identical to brainstorm-kanban/plan-interview-kanban)
+4. Add a **Kanban Sync** section after the roadmap is written (after step 5):
+   - For the current phase (written to `tasks/todo.md`): create one card per `- [ ]` step in the Todo list
+   - For future phases: create one summary card per phase in Backlog
+   - Before creating any card, search for existing card by name — skip if found (idempotent)
+   - Move any matching Backlog cards to Todo if they correspond to current phase steps
+   - Only move cards FROM Backlog — never move backward from Todo/In Progress/Done/Punt
+5. Keep `argument-hint: [--existing] [path-to-spec]` from base skill
 
-### Key context from brainstorm-kanban (established pattern)
-- Kanban Setup section goes before the main process
-- Kanban Sync section goes after the main process
-- Board Resolution, Validation, Graceful Degradation blocks are identical across all -kanban skills
+### Key context (established pattern)
+- Kanban Setup → main process → Kanban Sync (same structure as previous -kanban skills)
 - Script path: `~/.claude/skills/poketo-kanban/scripts/kanban.mjs`
-- Commands: `search --query`, `update-card --id <id> --description "new desc"`, `create-card`
-- Claude version has full code blocks; Codex version is condensed prose
+- Commands: `search --query`, `create-card`, `move-card --id <id> --list <todo-list-id>`
+- Card granularity: one card per `- [ ]` step (not per phase) for current phase; one summary card per future phase
 
 ### Acceptance criteria
-- plan-interview-kanban SKILL.md contains full plan-interview process + kanban card update
-- Fuzzy matching: searches by keywords, asks user when ambiguous
-- Searches all lists (not just Backlog) — updates card in place
-- Never moves cards backward from Done/Punt
-- Creates new Backlog card if no match found
+- roadmap-kanban contains full roadmap process + kanban card creation/movement
+- Current phase steps → Todo cards, future phases → Backlog summary cards
+- Idempotent: search before create, skip duplicates
+- Only moves cards FROM Backlog → Todo, never backward
 - Both Claude and Codex versions + openai.yaml
 - `bash install.sh` installs the new skill
