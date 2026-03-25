@@ -10,10 +10,10 @@
 - [x] **Step 3: `roadmap-kanban`** — full copy of roadmap + move specced Backlog cards → Todo, create step cards for current phase
 - [x] **Step 4: `run-kanban`** — full copy of run + move Todo → In Progress + cross-device conflict warnings + stale session cleanup
 - [x] **Step 5: `ship-kanban`** — full copy of ship + move In Progress → Done/Punt based on todo.md state
-- [ ] **Step 6: `ship-end-kanban`** — full copy of ship-end + move In Progress → Done with commit refs
+- [x] **Step 6: `ship-end-kanban`** — full copy of ship-end + move In Progress → Done with commit refs
 
 ## Milestone
-- [ ] Full kanban lifecycle works: brainstorm → plan-interview → roadmap → run → ship/ship-end across board lists
+- [x] Full kanban lifecycle works: brainstorm → plan-interview → roadmap → run → ship/ship-end across board lists
 
 ## Shared protocols (copied into each -kanban skill)
 

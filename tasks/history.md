@@ -37,6 +37,9 @@
   - Hostname/branch/time stored in card description; post-execution card update
 - Created `ship-kanban` skill (Claude + Codex) — 5th of 6
   - Full copy of ship + Done/Punt card movement after shipping, next card ensured in Todo when planning
+- Created `ship-end-kanban` skill (Claude + Codex) — 6th of 6, phase complete
+  - Full copy of ship-end + moves In Progress card to Done with commit refs
+- **Phase 1 Kanban Skill Suite complete** — all 6 skills built (18 files), kanban.mjs fixed, milestone verified
 
 ## 2026-03-24 — kanban-lite: local SQLite kanban skill
 
