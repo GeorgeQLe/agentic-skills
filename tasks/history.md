@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-03-24 — kanban-lite: local SQLite kanban skill
+
+- Created new `/kanban-lite` skill — lightweight kanban boards stored in a local SQLite file, synced across machines via git commits
+- Single dependency (`better-sqlite3`) with raw SQL — no ORM, no external DB, no auth
+- Same CLI interface as `/poketo-kanban`: boards, board, create-card, update-card, done, move-card, create-board, create-list, search
+- Added `sync` command for git pull/commit/push workflow to share board state across bismarck, desktop, and laptop
+- WAL checkpoint on exit prevents `-wal`/`-shm` files from leaking into git
+- Added `*.db-wal` and `*.db-shm` to `.gitignore`
+
 ## 2026-03-15 — Expert review fixes
 
 Resolved all 10 findings from `/expert-review`:
