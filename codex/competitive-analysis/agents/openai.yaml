@@ -1,0 +1,7 @@
+interface:
+  display_name: "Competitive Analysis"
+  short_description: "Research competitors via web search — map landscape, GTM, strengths, weaknesses, and gaps"
+  default_prompt: "Use $competitive-analysis to research the competitive landscape for this project."
+
+policy:
+  allow_implicit_invocation: true
