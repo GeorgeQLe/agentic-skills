@@ -42,40 +42,43 @@
 
 ---
 
-## Next Step Plan: brainstorm-kanban
+## Next Step Plan: plan-interview-kanban
 
 ### What
-Create `brainstorm-kanban` skill (Claude + Codex). Full copy of `/brainstorm` with kanban board operations: after generating ideas, create one card per idea in the Backlog list.
+Create `plan-interview-kanban` skill (Claude + Codex). Full copy of `/plan-interview` with kanban ops: after writing the spec, find the matching Backlog card and update it with spec details.
 
 ### Files to create
-- `claude/brainstorm-kanban/SKILL.md` — full copy of `claude/brainstorm/SKILL.md` + kanban ops + shared protocols
-- `codex/brainstorm-kanban/SKILL.md` — full copy of `codex/brainstorm/SKILL.md` + kanban ops (condensed)
-- `codex/brainstorm-kanban/agents/openai.yaml` — agent manifest
+- `claude/plan-interview-kanban/SKILL.md` — full copy of `claude/plan-interview/SKILL.md` + kanban ops + shared protocols
+- `codex/plan-interview-kanban/SKILL.md` — condensed Codex version
+- `codex/plan-interview-kanban/agents/openai.yaml` — agent manifest
 
 ### Approach
-1. Copy the full content of the base brainstorm SKILL.md
+1. Copy the full content of the base plan-interview SKILL.md
 2. Add `allowed-tools: Bash(node *)` to frontmatter
-3. Add the shared Board Resolution + Board Validation protocols as a new section before the main process
-4. Add a new step after the Output section: **Kanban Sync**
-   - For each idea in the output (each `- **Title** — description` bullet):
-     - Search the board for a card with the same name (exact match on title text)
-     - If found → skip (log "already exists")
-     - If not found → `create-card` in Backlog list
-     - Card name: idea title (text between `**...**`)
-     - Card description: idea description + effort category (e.g., "Quick win (hours)")
-5. Add Graceful Degradation to the constraints section
-6. Codex version: condense the kanban ops into the Codex style (shorter, same logic)
+3. Add the shared Kanban Setup section (Board Resolution + Validation + Graceful Degradation) — same pattern as brainstorm-kanban
+4. Add a **Kanban Sync** section after the main interview process:
+   - Extract 2-3 keywords from the topic argument
+   - Search the board for matching cards: `search --query "keyword1 keyword2"`
+   - Search ALL lists, not just Backlog (card may have been moved by roadmap-kanban)
+   - If one match → update card description with spec summary and `specs/[topic].md` path
+   - If multiple matches → list cards with IDs, ask user to pick
+   - If zero matches → create new card in Backlog with spec details
+   - Never move cards backward from Done/Punt
+5. Update the spec output path reference from `/plan-interview` to `/plan-interview-kanban`
 
-### Key context
-- Brainstorm output format: `- **Title** — description. _Start with:_ /plan-interview <topic>` grouped under effort headings
+### Key context from brainstorm-kanban (established pattern)
+- Kanban Setup section goes before the main process
+- Kanban Sync section goes after the main process
+- Board Resolution, Validation, Graceful Degradation blocks are identical across all -kanban skills
 - Script path: `~/.claude/skills/poketo-kanban/scripts/kanban.mjs`
-- Commands needed: `boards`, `board <id>`, `search --query "title"`, `create-card --board <id> --list <list-id> --name "title" --description "details"`
-- Board auto-detection reads `tasks/.kanban-board` for stored board ID
+- Commands: `search --query`, `update-card --id <id> --description "new desc"`, `create-card`
+- Claude version has full code blocks; Codex version is condensed prose
 
 ### Acceptance criteria
-- `brainstorm-kanban` SKILL.md contains full brainstorm process + kanban card creation
-- Board resolution and validation protocols are included
-- Idempotent: running twice doesn't create duplicate cards
-- Graceful degradation: works without kanban if scripts missing
-- Both Claude and Codex versions created with openai.yaml
+- plan-interview-kanban SKILL.md contains full plan-interview process + kanban card update
+- Fuzzy matching: searches by keywords, asks user when ambiguous
+- Searches all lists (not just Backlog) — updates card in place
+- Never moves cards backward from Done/Punt
+- Creates new Backlog card if no match found
+- Both Claude and Codex versions + openai.yaml
 - `bash install.sh` installs the new skill
