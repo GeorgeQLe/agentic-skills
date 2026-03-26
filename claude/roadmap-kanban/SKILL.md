@@ -23,7 +23,7 @@ node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs boards
 2. If no valid mapping: match board names against `basename $(pwd)` (case-insensitive). Prefer exact match over substring.
 3. If one match → use it, save ID to `tasks/.kanban-board`.
 4. If zero or multiple matches → list boards, ask the user to pick. Save their choice.
-5. If no boards exist → ask the user if they want to create one. If yes: `create-board --name "$(basename $(pwd))" --lists "Backlog,Todo,In Progress,Done:done,Punt:punt"`. Save the ID.
+5. If no boards exist → ask the user if they want to create one. If yes: `create-board --name "$(basename $(pwd))" --template standard`. Save the ID.
 
 ### Board Validation
 
