@@ -69,7 +69,7 @@
 
 ---
 
-## Phase 3: Board Templates ← NEXT
+## Phase 3: Board Templates ✓
 
 **Goal:** One-command board creation with the standard 5-list layout, reducing setup friction for new projects.
 
@@ -85,7 +85,7 @@
    - Update all 12 -kanban SKILL.md files (6 Claude + 6 Codex)
 
 ### Milestone
-- [ ] `create-board --template standard` creates a board with all 5 required lists in correct types
+- [x] `create-board --template standard` creates a board with all 5 required lists in correct types
 
 ---
 
