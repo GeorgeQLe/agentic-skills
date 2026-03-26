@@ -1,6 +1,22 @@
 # Session History
 
-## 2026-03-26 — Phase 4 Step 1: archive-card command
+## 2026-03-26 — Phase 4 complete + kanban integration tests
+
+- Phase 3 (Board Templates) archived from remote
+- Added `archive-card` command to kanban.mjs (Phase 4 Step 1)
+- Created `/kanban-archive` skill (Claude + Codex) — Phase 4 Step 2
+- Updated `docs/skills-reference.md` with all 9 kanban skills (33 → 42 skills)
+- **Phase 4 Archive Automation complete** — all roadmap phases (1-4) done
+- Ran `/analyze-sessions` on 5,332 messages across 1,912 sessions:
+  - `/ship` is dominant (537 invocations + 215 manual equivalents)
+  - Kanban skills never used yet — testing needed before adoption
+- Added `delete-board` command to kanban.mjs for test cleanup
+- Created `kanban.test.mjs` — 24 integration tests against real Neon DB, all passing
+  - Board lifecycle, card CRUD, card movement, search, error handling, cleanup
+- Set up `~/.poketo/config.json` on this machine for kanban DB access
+- Installed vitest as dev dependency for poketo-kanban scripts
+
+## 2026-03-26 — Phase 4 Step 1: archive-card command (superseded by entry above)
 
 - Phase 3 (Board Templates) completed on remote — archived to `docs/phases/phase-3.md`
 - Added `archive-card --id <card-id>` command to kanban.mjs
