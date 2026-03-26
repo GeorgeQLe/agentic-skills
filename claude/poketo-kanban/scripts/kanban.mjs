@@ -511,7 +511,15 @@ async function cmdArchiveCard(db, args) {
   }
 
   const [list] = await db.select().from(lists).where(eq(lists.id, card.listId)).limit(1);
+  if (!list) {
+    output({ error: `List not found for card: ${id}` });
+    process.exit(1);
+  }
   const [board] = await db.select().from(boards).where(eq(boards.id, list.boardId)).limit(1);
+  if (!board) {
+    output({ error: `Board not found for list: ${list.boardId}` });
+    process.exit(1);
+  }
 
   let archiveListId = board.archiveListId;
 
