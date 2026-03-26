@@ -7,6 +7,8 @@
   - Looks up card → list → board chain, moves card to board's archive list
   - Auto-creates "Archive" list and sets `archiveListId` on board if none exists
   - Follows existing patterns (cmdMoveCard, cmdCreateList)
+- Created `/kanban-archive` skill (Claude + Codex) — bulk-archives Done/Punt cards older than N days
+- Updated `docs/skills-reference.md` — added all 9 kanban skills section + quick reference entries (33 → 42 skills)
 
 ## 2026-03-25 — Kanban skill suite, board intelligence, board templates
 

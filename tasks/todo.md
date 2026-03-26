@@ -5,7 +5,7 @@
 ## Steps
 
 - [x] **Add `archive-card` command to kanban.mjs** — moves card to the board's archive list
-- [ ] **Create `/kanban-archive` skill (Claude + Codex)** — archives Done/Punt cards older than N days
+- [x] **Create `/kanban-archive` skill (Claude + Codex)** — archives Done/Punt cards older than N days
 
 ### Plan: Create `/kanban-archive` skill (Claude + Codex)
 
@@ -75,4 +75,4 @@ policy:
 - `bash install.sh` picks up the new skill
 
 ## Milestone
-- [ ] `/kanban-archive` cleans up Done/Punt cards older than 30 days with user confirmation
+- [x] `/kanban-archive` cleans up Done/Punt cards older than 30 days with user confirmation
