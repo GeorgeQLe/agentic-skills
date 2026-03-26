@@ -557,6 +557,44 @@ async function cmdArchiveCard(db, args) {
   });
 }
 
+async function cmdDeleteBoard(db, args) {
+  const id = getArg(args, "--id");
+  if (!id || !args.includes("--confirm")) {
+    output({ error: "Required: --id <board-id> --confirm" });
+    process.exit(1);
+  }
+
+  // Get all lists for this board
+  const boardLists = await db
+    .select({ id: lists.id })
+    .from(lists)
+    .where(eq(lists.boardId, id));
+  const listIds = boardLists.map((l) => l.id);
+
+  // Delete all cards in those lists
+  let deletedCards = 0;
+  if (listIds.length > 0) {
+    const result = await db.delete(cards).where(inArray(cards.listId, listIds));
+    deletedCards = result.rowCount || 0;
+  }
+
+  // Delete all lists
+  await db.delete(lists).where(eq(lists.boardId, id));
+
+  // Delete the board
+  const [deleted] = await db.delete(boards).where(eq(boards.id, id)).returning();
+  if (!deleted) {
+    output({ error: `Board not found: ${id}` });
+    process.exit(1);
+  }
+
+  output({
+    command: "delete-board",
+    board: { id, name: deleted.name },
+    deleted: { lists: listIds.length, cards: deletedCards },
+  });
+}
+
 // ─── Arg Parsing Helpers ─────────────────────────────────────────────────────
 
 function getArg(args, flag) {
@@ -584,6 +622,7 @@ async function main() {
         "create-list --board <id> --name \"...\"   — Add list to board",
         "search --query \"...\"                    — Search cards across boards",
         "archive-card --id <id>                  — Archive a card",
+        "delete-board --id <id> --confirm        — Delete board and all its data",
       ],
     });
     return;
@@ -634,6 +673,9 @@ async function main() {
       break;
     case "archive-card":
       await cmdArchiveCard(db, rest);
+      break;
+    case "delete-board":
+      await cmdDeleteBoard(db, rest);
       break;
     default:
       output({ error: `Unknown command: ${command}. Run with --help for usage.` });
