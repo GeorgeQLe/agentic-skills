@@ -5,7 +5,7 @@
 ## Steps
 
 - [x] **Add `--template standard` flag to kanban.mjs** — create board with Backlog/Todo/In Progress/Done:done/Punt:punt in one command
-- [ ] **Update -kanban skills' Board Resolution protocol** — use `--template standard` when creating new boards (12 SKILL.md files)
+- [x] **Update -kanban skills' Board Resolution protocol** — use `--template standard` when creating new boards (12 SKILL.md files)
 
 ### Plan: Update Board Resolution protocol
 
@@ -39,4 +39,4 @@ NEW: create-board --name "$(basename $(pwd))" --template standard
 - Milestone can be checked off: `create-board --template standard` creates a board with all 5 required lists
 
 ## Milestone
-- [ ] `create-board --template standard` creates a board with all 5 required lists in correct types
+- [x] `create-board --template standard` creates a board with all 5 required lists in correct types

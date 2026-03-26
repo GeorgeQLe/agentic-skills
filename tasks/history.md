@@ -6,6 +6,8 @@
 - Added `--template standard` flag to kanban.mjs — creates board with 5 lists (Backlog, Todo, In Progress, Done:done, Punt:punt) in one command
   - `--template` and `--lists` are mutually exclusive; unknown templates error with available list
   - Updated help text
+- Updated Board Resolution protocol in all 12 -kanban SKILL.md files to use `--template standard` instead of verbose `--lists` string
+- **Phase 3 Board Templates complete** — both steps done, milestone verified (0 old `--lists` matches, 12 `--template standard` matches)
 
 ### Earlier this session (pulled from remote)
 Phases 1-2 completed, roadmap expanded with Phases 3-4.
