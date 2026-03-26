@@ -455,13 +455,14 @@ async function cmdSearch(db, session, args) {
   }
 
   // Search cards
+  const escaped = query.replace(/%/g, '\\%').replace(/_/g, '\\_');
   const results = await db
     .select()
     .from(cards)
     .where(
       and(
         inArray(cards.listId, listIds),
-        ilike(cards.name, `%${query}%`),
+        ilike(cards.name, `%${escaped}%`),
       ),
     )
     .orderBy(desc(cards.updatedAt))
