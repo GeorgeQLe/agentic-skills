@@ -7,7 +7,7 @@
 - [x] **Remove leaked database credential from tracked file**
 - [x] **Fix null dereference in `cmdArchiveCard`**
 - [x] **Escape LIKE metacharacters in search**
-- [ ] **Batch list creation in `cmdCreateBoard`**
+- [x] **Batch list creation in `cmdCreateBoard`**
 - [ ] **Add missing `codex/plan-interview-ideas/agents/openai.yaml`**
 - [ ] **Fix stale output paths in `docs/skills-reference.md`**
 - [ ] **Add try/catch for malformed config JSON**

@@ -372,17 +372,14 @@ async function cmdCreateBoard(db, session, args) {
     orgId: session.orgId,
   }).returning();
 
-  const createdLists = [];
-  for (const l of listDefs) {
-    const [created] = await db.insert(lists).values({
-      id: randomUUID(),
-      boardId,
-      name: l.name,
-      order: l.order,
-      listType: l.listType,
-    }).returning();
-    createdLists.push(created);
-  }
+  const listValues = listDefs.map((l) => ({
+    id: randomUUID(),
+    boardId,
+    name: l.name,
+    order: l.order,
+    listType: l.listType,
+  }));
+  const createdLists = await db.insert(lists).values(listValues).returning();
 
   output({
     command: "create-board",
