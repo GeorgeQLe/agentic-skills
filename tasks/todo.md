@@ -12,6 +12,34 @@
 - [x] **Fix stale output paths in `docs/skills-reference.md`**
 - [ ] **Add try/catch for malformed config JSON**
 
+### Plan: Add try/catch for malformed config JSON
+
+**What:** `loadConfig()` in `claude/poketo-kanban/scripts/kanban.mjs:19` calls `JSON.parse()` with no error handling. If `~/.poketo/config.json` contains malformed JSON, it throws an unhelpful `SyntaxError`. Wrap in try/catch and return `null` with a stderr warning so callers degrade gracefully (same as missing file).
+
+**File to modify:**
+- `claude/poketo-kanban/scripts/kanban.mjs` — `loadConfig()` function (lines 14–20)
+
+**Change:**
+```js
+function loadConfig() {
+  const configPath = join(homedir(), ".poketo", "config.json");
+  if (!existsSync(configPath)) {
+    return null;
+  }
+  try {
+    return JSON.parse(readFileSync(configPath, "utf-8"));
+  } catch (e) {
+    console.error(`Warning: malformed JSON in ${configPath}, ignoring config`);
+    return null;
+  }
+}
+```
+
+**Acceptance criteria:**
+- `loadConfig()` returns `null` (not throws) on malformed JSON
+- A warning is printed to stderr
+- Existing tests still pass (`node --test kanban.test.mjs`)
+
 ### Plan: Add missing `codex/plan-interview-ideas/agents/openai.yaml`
 
 **What:** The `codex/plan-interview-ideas/` skill is the only codex skill (1 of 41) without an `agents/openai.yaml` manifest. All other codex skills have one. Create the file following the same pattern as `codex/plan-interview/agents/openai.yaml`.
