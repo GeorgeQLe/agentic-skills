@@ -1,5 +1,11 @@
 # Session History
 
+## 2026-03-26 — Phase 5 step 5: add missing codex agent manifest
+
+- Created `codex/plan-interview-ideas/agents/openai.yaml` — the only codex skill (1 of 41) missing an agent manifest
+- All 41 codex skills now have `agents/openai.yaml`
+- Phase 5 steps 1–5 complete, steps 6–7 remain (stale docs paths, config JSON try/catch)
+
 ## 2026-03-26 — Expert review + Phase 5 roadmap
 
 - Ran `/expert-review` on full project — 7 confirmed findings after false-positive verification

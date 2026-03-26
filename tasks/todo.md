@@ -8,7 +8,7 @@
 - [x] **Fix null dereference in `cmdArchiveCard`**
 - [x] **Escape LIKE metacharacters in search**
 - [x] **Batch list creation in `cmdCreateBoard`**
-- [ ] **Add missing `codex/plan-interview-ideas/agents/openai.yaml`**
+- [x] **Add missing `codex/plan-interview-ideas/agents/openai.yaml`**
 - [ ] **Fix stale output paths in `docs/skills-reference.md`**
 - [ ] **Add try/catch for malformed config JSON**
 
