@@ -1,5 +1,10 @@
 # Session History
 
+## 2026-03-26 — Phase transition: Phase 3 → Phase 4
+
+- Phase 3 (Board Templates) completed on remote — archived to `docs/phases/phase-3.md`
+- Transitioned to Phase 4: Archive Automation — planned Step 1 (archive-card command in kanban.mjs)
+
 ## 2026-03-25 — Kanban skill suite, board intelligence, board templates
 
 ### Phase 3: Board Templates (in progress)
