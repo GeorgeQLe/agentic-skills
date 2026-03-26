@@ -1,4 +1,42 @@
-# Kanban Skill Validation
+# Phase 5: Expert Review Fixes
+
+**Goal:** Resolve findings from `/expert-review` — credential leak, null dereference bug, stale docs, and missing codex manifest.
+
+## Steps
+
+- [ ] **Remove leaked database credential from tracked file**
+- [ ] **Fix null dereference in `cmdArchiveCard`**
+- [ ] **Escape LIKE metacharacters in search**
+- [ ] **Batch list creation in `cmdCreateBoard`**
+- [ ] **Add missing `codex/plan-interview-ideas/agents/openai.yaml`**
+- [ ] **Fix stale output paths in `docs/skills-reference.md`**
+- [ ] **Add try/catch for malformed config JSON**
+
+### Plan: Remove leaked database credential
+
+**What:** `docs/kanban-test-results.md:39` contains the full Neon connection string with password in plain text. This file is tracked in git. Replace with env var placeholder and rotate the Neon password.
+
+**Files to modify:**
+- `docs/kanban-test-results.md` — replace connection string on line 39 with `$POKETOWORK_DATABASE_URL`
+
+**Steps:**
+1. Edit `docs/kanban-test-results.md` line 39: replace `database URL placeholder with `$POKETOWORK_DATABASE_URL`
+2. Commit the fix
+3. Inform user they need to rotate the Neon password (since it's in git history) — this is a manual step outside Claude's scope
+
+**Acceptance criteria:**
+- No database credentials in any tracked file (`grep -r "NEON_TOKEN_PREFIX" --include="*.md"` returns nothing)
+- File still contains valid instructions for continuing testing
+
+## Milestone
+- [ ] No credentials in tracked files, Neon password rotated
+- [ ] `cmdArchiveCard` handles orphaned list/board references gracefully
+- [ ] All codex skills have `agents/openai.yaml`
+- [ ] `docs/skills-reference.md` output paths match actual skill behavior
+
+---
+
+# Kanban Skill Validation (paused)
 
 **Goal:** Manually walk through each kanban skill to verify it works correctly before adopting across active projects.
 
