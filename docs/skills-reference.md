@@ -1,6 +1,6 @@
 # Skills Reference
 
-Complete reference for all 33 custom skills in this repository, available for both Claude Code and Codex.
+Complete reference for all 42 custom skills in this repository, available for both Claude Code and Codex.
 
 ## Installation
 
@@ -307,6 +307,66 @@ Create or update the current repository's `CLAUDE.md` with workflow conventions.
 
 ---
 
+## Kanban Workflow
+
+Parallel set of `-kanban` skills that manage kanban board state (via Poketo/Neon) alongside their normal operations. Board lists: Backlog → Todo → In Progress → Done → Punt.
+
+### `/poketo-kanban`
+Low-level board CRUD — list boards, view board, create/update/move cards, search.
+
+- **Arguments**: Varies by subcommand (see `--help`)
+- **Use when**: Direct board manipulation outside of workflow skills.
+
+### `/brainstorm-kanban`
+Brainstorm ideas and create kanban Backlog cards for each.
+
+- **Arguments**: `[optional: focus area]`
+- **Use when**: `/brainstorm` but with automatic kanban card creation.
+
+### `/plan-interview-kanban`
+Interview to validate a spec, then update the matching kanban card.
+
+- **Arguments**: `[optional: topic]`
+- **Use when**: `/plan-interview` but with kanban card sync.
+
+### `/roadmap-kanban`
+Build roadmap and sync phases/steps to kanban Todo cards.
+
+- **Arguments**: `[--existing] [path-to-spec]`
+- **Use when**: `/roadmap` but with kanban board sync.
+
+### `/run-kanban`
+Execute next step with kanban card tracking (Todo → In Progress, conflict detection).
+
+- **Arguments**: `[--phase]`
+- **Use when**: `/run` but with cross-device conflict detection and progress tracking.
+
+### `/ship-kanban`
+Ship work and move kanban card to Done or Punt.
+
+- **Arguments**: `[--no-plan] [--no-deploy]`
+- **Use when**: `/ship` but with kanban card movement.
+
+### `/ship-end-kanban`
+Wrap up session and move In Progress card to Done with commit refs.
+
+- **Arguments**: None
+- **Use when**: `/ship-end` but with kanban card movement.
+
+### `/sync-roadmap-kanban`
+Reconcile kanban board state with roadmap docs and codebase reality.
+
+- **Arguments**: None
+- **Use when**: Board and roadmap have drifted out of sync.
+
+### `/kanban-archive`
+Archive old Done/Punt cards from the kanban board.
+
+- **Arguments**: `[--days <N>]` (default: 30)
+- **Use when**: Board cleanup — archive cards that haven't been updated in N days.
+
+---
+
 ## Quick Reference
 
 | Skill | One-liner |
@@ -344,3 +404,12 @@ Create or update the current repository's `CLAUDE.md` with workflow conventions.
 | `/commit-and-push-by-feature` | Group commits by feature |
 | `/analyze-sessions` | Usage analytics |
 | `/install-workflow-orchestration` | Bootstrap CLAUDE.md |
+| `/poketo-kanban` | Low-level board CRUD |
+| `/brainstorm-kanban` | Brainstorm + create kanban cards |
+| `/plan-interview-kanban` | Spec interview + kanban card sync |
+| `/roadmap-kanban` | Roadmap + kanban board sync |
+| `/run-kanban` | Execute step with kanban tracking |
+| `/ship-kanban` | Ship + move kanban card to Done/Punt |
+| `/ship-end-kanban` | Wrap up session + kanban card Done |
+| `/sync-roadmap-kanban` | Reconcile board with roadmap |
+| `/kanban-archive` | Archive old Done/Punt cards |
