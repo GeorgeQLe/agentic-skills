@@ -12,44 +12,28 @@
 - [ ] **Fix stale output paths in `docs/skills-reference.md`**
 - [ ] **Add try/catch for malformed config JSON**
 
-### Plan: Batch list creation in `cmdCreateBoard`
+### Plan: Add missing `codex/plan-interview-ideas/agents/openai.yaml`
 
-**What:** `cmdCreateBoard` in `claude/poketo-kanban/scripts/kanban.mjs` (~lines 376-385) creates lists one at a time in a for loop, making N separate HTTP round-trips to Neon (5 for the standard template). Drizzle's `.insert().values()` accepts an array, so all lists can be inserted in one query.
+**What:** The `codex/plan-interview-ideas/` skill is the only codex skill (1 of 41) without an `agents/openai.yaml` manifest. All other codex skills have one. Create the file following the same pattern as `codex/plan-interview/agents/openai.yaml`.
 
-**File to modify:**
-- `claude/poketo-kanban/scripts/kanban.mjs` — `cmdCreateBoard` function (~lines 375-385)
+**File to create:**
+- `codex/plan-interview-ideas/agents/openai.yaml`
 
-**Changes:**
-Replace the sequential loop:
-```js
-const createdLists = [];
-for (const l of listDefs) {
-  const [created] = await db.insert(lists).values({
-    id: randomUUID(),
-    boardId,
-    name: l.name,
-    order: l.order,
-    listType: l.listType,
-  }).returning();
-  createdLists.push(created);
-}
-```
-With a single batch insert:
-```js
-const listValues = listDefs.map((l) => ({
-  id: randomUUID(),
-  boardId,
-  name: l.name,
-  order: l.order,
-  listType: l.listType,
-}));
-const createdLists = await db.insert(lists).values(listValues).returning();
+**Content** (modeled on `codex/plan-interview/agents/openai.yaml`):
+```yaml
+interface:
+  display_name: "Plan Interview Ideas"
+  short_description: "Run plan-interview for each idea in ideas.md"
+  default_prompt: "Use $plan-interview-ideas to interview me for each idea in tasks/ideas.md."
+
+policy:
+  allow_implicit_invocation: true
 ```
 
 **Acceptance criteria:**
-- `create-board --template standard` still creates 5 lists with correct names and types
-- `create-board --lists "A,B:done"` still works
-- Existing tests pass (`npm test` in `claude/poketo-kanban/scripts/`)
+- File exists at `codex/plan-interview-ideas/agents/openai.yaml`
+- All 41 codex skills now have an `agents/openai.yaml`
+- `install.sh` runs without errors
 
 ## Milestone
 - [ ] No credentials in tracked files, Neon password rotated
