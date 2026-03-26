@@ -12,24 +12,44 @@
 - [ ] **Fix stale output paths in `docs/skills-reference.md`**
 - [ ] **Add try/catch for malformed config JSON**
 
-### Plan: Escape LIKE metacharacters in search
+### Plan: Batch list creation in `cmdCreateBoard`
 
-**What:** In `claude/poketo-kanban/scripts/kanban.mjs`, the `cmdSearch` function (~line 464) uses `ilike(cards.name, \`%${query}%\`)` which passes user input directly into the LIKE pattern. While drizzle-orm parameterizes the value (no SQL injection), LIKE metacharacters `%` and `_` are interpreted as wildcards — searching for `%` matches every card, and `_` matches any single character.
+**What:** `cmdCreateBoard` in `claude/poketo-kanban/scripts/kanban.mjs` (~lines 376-385) creates lists one at a time in a for loop, making N separate HTTP round-trips to Neon (5 for the standard template). Drizzle's `.insert().values()` accepts an array, so all lists can be inserted in one query.
 
 **File to modify:**
-- `claude/poketo-kanban/scripts/kanban.mjs` — `cmdSearch` function (~line 464)
+- `claude/poketo-kanban/scripts/kanban.mjs` — `cmdCreateBoard` function (~lines 375-385)
 
 **Changes:**
-Add a helper to escape LIKE metacharacters before the query, then use the escaped value:
+Replace the sequential loop:
 ```js
-const escaped = query.replace(/%/g, '\\%').replace(/_/g, '\\_');
+const createdLists = [];
+for (const l of listDefs) {
+  const [created] = await db.insert(lists).values({
+    id: randomUUID(),
+    boardId,
+    name: l.name,
+    order: l.order,
+    listType: l.listType,
+  }).returning();
+  createdLists.push(created);
+}
 ```
-Apply to both the name and description ilike calls in the search query.
+With a single batch insert:
+```js
+const listValues = listDefs.map((l) => ({
+  id: randomUUID(),
+  boardId,
+  name: l.name,
+  order: l.order,
+  listType: l.listType,
+}));
+const createdLists = await db.insert(lists).values(listValues).returning();
+```
 
 **Acceptance criteria:**
-- Searching for `%` or `_` no longer matches all cards
-- Normal text search still works as before
-- Existing tests still pass
+- `create-board --template standard` still creates 5 lists with correct names and types
+- `create-board --lists "A,B:done"` still works
+- Existing tests pass (`npm test` in `claude/poketo-kanban/scripts/`)
 
 ## Milestone
 - [ ] No credentials in tracked files, Neon password rotated
