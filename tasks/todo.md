@@ -1,42 +1,49 @@
-# Phase 3: Board Templates
+# Phase 4: Archive Automation
 
-**Goal:** One-command board creation with the standard 5-list layout.
+**Goal:** Keep boards clean by archiving old Done/Punt cards automatically.
 
 ## Steps
 
-- [x] **Add `--template standard` flag to kanban.mjs** — create board with Backlog/Todo/In Progress/Done:done/Punt:punt in one command
-- [x] **Update -kanban skills' Board Resolution protocol** — use `--template standard` when creating new boards (12 SKILL.md files)
+- [ ] **Add `archive-card` command to kanban.mjs** — moves card to the board's archive list
+- [ ] **Create `/kanban-archive` skill (Claude + Codex)** — archives Done/Punt cards older than N days
 
-### Plan: Update Board Resolution protocol
+### Plan: Add `archive-card` command to kanban.mjs
 
-**What:** In all 12 `-kanban` SKILL.md files, replace the verbose `--lists "Backlog,Todo,In Progress,Done:done,Punt:punt"` with `--template standard` in the Board Resolution section (step 5, board creation fallback).
+**What:** Add a new `archive-card` CLI command that moves a card to the board's archive list. If no archive list exists on the board, create one automatically and set `archiveListId` on the board.
 
-**Find-and-replace** in each file:
-```
-OLD: create-board --name "$(basename $(pwd))" --lists "Backlog,Todo,In Progress,Done:done,Punt:punt"
-NEW: create-board --name "$(basename $(pwd))" --template standard
-```
+**File:** `claude/poketo-kanban/scripts/kanban.mjs`
 
-**Files (12):**
-- `claude/brainstorm-kanban/SKILL.md`
-- `claude/plan-interview-kanban/SKILL.md`
-- `claude/roadmap-kanban/SKILL.md`
-- `claude/run-kanban/SKILL.md`
-- `claude/ship-kanban/SKILL.md`
-- `claude/ship-end-kanban/SKILL.md`
-- `codex/brainstorm-kanban/SKILL.md`
-- `codex/plan-interview-kanban/SKILL.md`
-- `codex/roadmap-kanban/SKILL.md`
-- `codex/run-kanban/SKILL.md`
-- `codex/ship-kanban/SKILL.md`
-- `codex/ship-end-kanban/SKILL.md`
+**Implementation:**
 
-**Also update** `tasks/roadmap.md` Phase 3 step 2 description if it references the old `--lists` syntax.
+1. Add a new `cmdArchiveCard(db, args)` function:
+   - Required args: `--id <card-id>`
+   - Look up the card to get its `listId`
+   - Look up the list to get its `boardId`
+   - Look up the board to get its `archiveListId`
+   - If `archiveListId` is null or the list doesn't exist:
+     - Create a new list named "Archive" with `listType: "normal"` and order = max + 1
+     - Update the board's `archiveListId` to the new list ID
+   - Move the card to the archive list (set `listId` = archive list, `order` = next in archive, `updatedAt` = now)
+   - Output: `{ command: "archive-card", card: { id, name, archivedTo: archiveListId } }`
+
+2. Add `"archive-card"` case to the `switch` in `main()`:
+   - Route to `cmdArchiveCard(db, rest)`
+
+3. Update the help text to include:
+   - `"archive-card --id <id>                    — Archive a card"`
+
+**Key decisions:**
+- The archive list is a regular list (not a special type) — it's just referenced by `archiveListId` on the board
+- The board schema already has `archiveListId` (line 60) — no schema changes needed
+- Auto-creating the archive list matches the roadmap spec: "If no archive list exists, create one automatically"
+- The card's `done` status is NOT changed — archiving is about visibility, not completion state
 
 **Acceptance criteria:**
-- `grep --lists` across all SKILL.md files returns zero matches for the old 5-list string
-- All 12 files use `--template standard` in their Board Resolution section
-- Milestone can be checked off: `create-board --template standard` creates a board with all 5 required lists
+- `node kanban.mjs archive-card --id <card-id>` moves the card to the archive list
+- If the board has no archive list, one is created and `archiveListId` is set
+- If the board already has an archive list, the card is moved there directly
+- Help text shows the new command
+- Existing commands are unaffected
 
 ## Milestone
-- [x] `create-board --template standard` creates a board with all 5 required lists in correct types
+- [ ] `/kanban-archive` cleans up Done/Punt cards older than 30 days with user confirmation
