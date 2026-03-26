@@ -325,7 +325,43 @@ async function cmdCreateBoard(db, session, args) {
     process.exit(1);
   }
 
+  const template = getArg(args, "--template");
   const customLists = getArg(args, "--lists");
+
+  if (template && customLists) {
+    output({ error: "--template and --lists are mutually exclusive" });
+    process.exit(1);
+  }
+
+  const TEMPLATES = {
+    standard: [
+      { name: "Backlog", order: 0, listType: "normal" },
+      { name: "Todo", order: 1, listType: "normal" },
+      { name: "In Progress", order: 2, listType: "normal" },
+      { name: "Done", order: 3, listType: "done" },
+      { name: "Punt", order: 4, listType: "punt" },
+    ],
+  };
+
+  let listDefs;
+  if (template) {
+    listDefs = TEMPLATES[template];
+    if (!listDefs) {
+      output({ error: `Unknown template: ${template}. Available: ${Object.keys(TEMPLATES).join(", ")}` });
+      process.exit(1);
+    }
+  } else if (customLists) {
+    listDefs = customLists.split(",").map((n, i) => {
+      const parts = n.trim().split(":");
+      return { name: parts[0], order: i, listType: parts[1] || "normal" };
+    });
+  } else {
+    listDefs = [
+      { name: "Backlog", order: 0, listType: "normal" },
+      { name: "In Progress", order: 1, listType: "normal" },
+      { name: "Done", order: 2, listType: "done" },
+    ];
+  }
 
   const boardId = randomUUID();
   const [board] = await db.insert(boards).values({
@@ -333,18 +369,6 @@ async function cmdCreateBoard(db, session, args) {
     name,
     orgId: session.orgId,
   }).returning();
-
-  // Use custom lists if provided, otherwise defaults
-  const listDefs = customLists
-    ? customLists.split(",").map((n, i) => {
-        const parts = n.trim().split(":");
-        return { name: parts[0], order: i, listType: parts[1] || "normal" };
-      })
-    : [
-        { name: "Backlog", order: 0, listType: "normal" },
-        { name: "In Progress", order: 1, listType: "normal" },
-        { name: "Done", order: 2, listType: "done" },
-      ];
 
   const createdLists = [];
   for (const l of listDefs) {
@@ -493,7 +517,7 @@ async function main() {
         "update-card --id <id> [--name] [--done] [--undone] [--starred] [--due] [--description]",
         "done --id <id>                          — Mark card as done",
         "move-card --id <id> --list <id>         — Move card to another list",
-        "create-board --name \"...\"               — Create board with default lists",
+        "create-board --name \"...\" [--template standard] [--lists \"...\"] — Create board",
         "create-list --board <id> --name \"...\"   — Add list to board",
         "search --query \"...\"                    — Search cards across boards",
       ],

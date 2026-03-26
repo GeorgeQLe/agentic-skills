@@ -1,6 +1,16 @@
 # Session History
 
-## 2026-03-25 — Kanban strategy, roadmap & sync-roadmap-kanban skill
+## 2026-03-25 — Kanban skill suite, board intelligence, board templates
+
+### Phase 3: Board Templates (in progress)
+- Added `--template standard` flag to kanban.mjs — creates board with 5 lists (Backlog, Todo, In Progress, Done:done, Punt:punt) in one command
+  - `--template` and `--lists` are mutually exclusive; unknown templates error with available list
+  - Updated help text
+
+### Earlier this session (pulled from remote)
+Phases 1-2 completed, roadmap expanded with Phases 3-4.
+
+### Original session
 
 - Built and tested kanban-lite (SQLite) skill, then archived it after analysis showed Neon free tier costs ~$0 at our usage volume (~456 ops/month across all devices)
 - Decision: stick with poketo-kanban + Neon for kanban — SQLite advantage is latency/simplicity, not cost
