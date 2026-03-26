@@ -1,5 +1,11 @@
 # Session History
 
+## 2026-03-26 — Phase 5 step 6: fix stale output paths in skills-reference
+
+- Fixed `/plan-interview` output paths: `spec.md` → `specs/[topic].md`, `interview-log.md` → `[topic]-interview.md`
+- Fixed `/plan-interview-ideas` output paths: "appends to spec.md" → "writes specs/[topic].md per idea"
+- Phase 5 steps 1–6 complete, step 7 remains (config JSON try/catch)
+
 ## 2026-03-26 — Phase 5 step 5: add missing codex agent manifest
 
 - Created `codex/plan-interview-ideas/agents/openai.yaml` — the only codex skill (1 of 41) missing an agent manifest
