@@ -494,6 +494,69 @@ async function cmdSearch(db, session, args) {
   });
 }
 
+async function cmdArchiveCard(db, args) {
+  const id = getArg(args, "--id");
+  if (!id) {
+    output({ error: "Required: --id <card-id>" });
+    process.exit(1);
+  }
+
+  // Look up card → list → board
+  const [card] = await db.select().from(cards).where(eq(cards.id, id)).limit(1);
+  if (!card) {
+    output({ error: `Card not found: ${id}` });
+    process.exit(1);
+  }
+
+  const [list] = await db.select().from(lists).where(eq(lists.id, card.listId)).limit(1);
+  const [board] = await db.select().from(boards).where(eq(boards.id, list.boardId)).limit(1);
+
+  let archiveListId = board.archiveListId;
+
+  // Auto-create archive list if needed
+  if (!archiveListId) {
+    const maxOrder = await db
+      .select({ order: lists.order })
+      .from(lists)
+      .where(eq(lists.boardId, board.id))
+      .orderBy(desc(lists.order))
+      .limit(1);
+    const nextOrder = maxOrder.length > 0 ? maxOrder[0].order + 1 : 0;
+    const newListId = randomUUID();
+    await db.insert(lists).values({
+      id: newListId,
+      boardId: board.id,
+      name: "Archive",
+      order: nextOrder,
+      listType: "normal",
+    });
+    await db
+      .update(boards)
+      .set({ archiveListId: newListId })
+      .where(eq(boards.id, board.id));
+    archiveListId = newListId;
+  }
+
+  // Move card to archive list
+  const maxCardOrder = await db
+    .select({ order: cards.order })
+    .from(cards)
+    .where(eq(cards.listId, archiveListId))
+    .orderBy(desc(cards.order))
+    .limit(1);
+  const nextOrder = maxCardOrder.length > 0 ? maxCardOrder[0].order + 1 : 0;
+
+  await db
+    .update(cards)
+    .set({ listId: archiveListId, order: nextOrder, updatedAt: new Date() })
+    .where(eq(cards.id, id));
+
+  output({
+    command: "archive-card",
+    card: { id, name: card.name, archivedTo: archiveListId },
+  });
+}
+
 // ─── Arg Parsing Helpers ─────────────────────────────────────────────────────
 
 function getArg(args, flag) {
@@ -520,6 +583,7 @@ async function main() {
         "create-board --name \"...\" [--template standard] [--lists \"...\"] — Create board",
         "create-list --board <id> --name \"...\"   — Add list to board",
         "search --query \"...\"                    — Search cards across boards",
+        "archive-card --id <id>                  — Archive a card",
       ],
     });
     return;
@@ -567,6 +631,9 @@ async function main() {
       break;
     case "search":
       await cmdSearch(db, session, rest);
+      break;
+    case "archive-card":
+      await cmdArchiveCard(db, rest);
       break;
     default:
       output({ error: `Unknown command: ${command}. Run with --help for usage.` });
