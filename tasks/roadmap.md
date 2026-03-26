@@ -89,7 +89,7 @@
 
 ---
 
-## Phase 4: Archive Automation
+## Phase 4: Archive Automation ✓
 
 **Goal:** Keep boards clean by archiving old Done/Punt cards automatically.
 
@@ -107,7 +107,7 @@
    - Reports: how many cards archived, from which lists
 
 ### Milestone
-- [ ] `/kanban-archive` cleans up Done/Punt cards older than 30 days with user confirmation
+- [x] `/kanban-archive` cleans up Done/Punt cards older than 30 days with user confirmation
 
 ---
 
