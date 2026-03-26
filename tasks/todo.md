@@ -4,7 +4,7 @@
 
 ## Steps
 
-- [ ] **Add `--template standard` flag to kanban.mjs** — create board with Backlog/Todo/In Progress/Done:done/Punt:punt in one command
+- [x] **Add `--template standard` flag to kanban.mjs** — create board with Backlog/Todo/In Progress/Done:done/Punt:punt in one command
 - [ ] **Update -kanban skills' Board Resolution protocol** — use `--template standard` when creating new boards (12 SKILL.md files)
 
 ## Milestone
