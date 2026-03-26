@@ -111,6 +111,49 @@
 
 ---
 
+## Phase 5: Expert Review Fixes (2026-03-26)
+
+**Goal:** Resolve findings from `/expert-review` — credential leak, null dereference bug, stale docs, and missing codex manifest.
+
+### Steps
+
+1. **Remove leaked database credential from tracked file**
+   - `docs/kanban-test-results.md:39` contains the full Neon connection string with password
+   - Replace with `$POKETOWORK_DATABASE_URL` placeholder
+   - Rotate the Neon password since it's in git history
+
+2. **Fix null dereference in `cmdArchiveCard`**
+   - `claude/poketo-kanban/scripts/kanban.mjs:513-514` — if card's `listId` references a deleted list, `list` is undefined and `list.boardId` throws
+   - Add null checks after list and board lookups with clear error messages
+
+3. **Escape LIKE metacharacters in search**
+   - `claude/poketo-kanban/scripts/kanban.mjs:464` — `%${query}%` passes user input directly into LIKE pattern
+   - Searching for `%` or `_` matches unintended cards
+   - Escape `%` → `\%` and `_` → `\_` before interpolation
+
+4. **Batch list creation in `cmdCreateBoard`**
+   - `claude/poketo-kanban/scripts/kanban.mjs:376-384` — sequential inserts make N round-trips to Neon
+   - Replace loop with single `db.insert(lists).values(allListDefs).returning()`
+
+5. **Add missing `codex/plan-interview-ideas/agents/openai.yaml`**
+   - Only codex skill without an agent manifest (40 of 41 have one)
+
+6. **Fix stale output paths in `docs/skills-reference.md`**
+   - Lines 96, 103 reference `spec.md` / `interview-log.md` but output was migrated to `specs/<topic>.md` in 2026-03-20
+   - Update `/plan-interview` and `/plan-interview-ideas` entries
+
+7. **Add try/catch for malformed config JSON**
+   - `claude/poketo-kanban/scripts/kanban.mjs:19` — `JSON.parse` with no error handling
+   - Wrap in try/catch, output clear error: "~/.poketo/config.json contains invalid JSON"
+
+### Milestone
+- [ ] No credentials in tracked files, Neon password rotated
+- [ ] `cmdArchiveCard` handles orphaned list/board references gracefully
+- [ ] All codex skills have `agents/openai.yaml`
+- [ ] `docs/skills-reference.md` output paths match actual skill behavior
+
+---
+
 ## Backlog
 
 - **Kanban analytics** — cycle time, throughput, WIP limits surfaced via a `/kanban-stats` skill

@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-03-26 — Expert review + Phase 5 roadmap
+
+- Ran `/expert-review` on full project — 7 confirmed findings after false-positive verification
+- Critical: database credential in tracked `docs/kanban-test-results.md`, null dereference in `cmdArchiveCard`
+- High: LIKE metachar injection in search, sequential list inserts in `cmdCreateBoard`
+- Medium: missing codex `plan-interview-ideas` agent manifest, stale output paths in skills-reference
+- Added Phase 5 to `tasks/roadmap.md` with 7 steps to resolve all findings
+
 ## 2026-03-26 — Phase 4 complete + kanban integration tests
 
 - Phase 3 (Board Templates) archived from remote
