@@ -1,9 +1,12 @@
 # Session History
 
-## 2026-03-26 — Phase transition: Phase 3 → Phase 4
+## 2026-03-26 — Phase 4 Step 1: archive-card command
 
 - Phase 3 (Board Templates) completed on remote — archived to `docs/phases/phase-3.md`
-- Transitioned to Phase 4: Archive Automation — planned Step 1 (archive-card command in kanban.mjs)
+- Added `archive-card --id <card-id>` command to kanban.mjs
+  - Looks up card → list → board chain, moves card to board's archive list
+  - Auto-creates "Archive" list and sets `archiveListId` on board if none exists
+  - Follows existing patterns (cmdMoveCard, cmdCreateList)
 
 ## 2026-03-25 — Kanban skill suite, board intelligence, board templates
 

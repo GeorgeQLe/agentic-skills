@@ -4,7 +4,7 @@
 
 ## Steps
 
-- [ ] **Add `archive-card` command to kanban.mjs** — moves card to the board's archive list
+- [x] **Add `archive-card` command to kanban.mjs** — moves card to the board's archive list
 - [ ] **Create `/kanban-archive` skill (Claude + Codex)** — archives Done/Punt cards older than N days
 
 ### Plan: Add `archive-card` command to kanban.mjs
