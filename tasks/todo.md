@@ -4,7 +4,7 @@
 
 ## Steps
 
-- [ ] **Remove leaked database credential from tracked file**
+- [x] **Remove leaked database credential from tracked file**
 - [ ] **Fix null dereference in `cmdArchiveCard`**
 - [ ] **Escape LIKE metacharacters in search**
 - [ ] **Batch list creation in `cmdCreateBoard`**

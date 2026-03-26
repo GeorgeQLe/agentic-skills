@@ -36,7 +36,7 @@ Each remaining skill is a prompt-based skill that must be invoked as a slash com
 
 ```
 # Ensure DB URL is set
-export POKETOWORK_DATABASE_URL="postgresql://neondb_owner:npg_Xhe1jozvOmq9@ep-withered-darkness-adjgyvq0-pooler.c-2.us-east-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
+export POKETOWORK_DATABASE_URL="$POKETOWORK_DATABASE_URL"
 
 # Then invoke each skill:
 /brainstorm-kanban testing
