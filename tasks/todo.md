@@ -12,33 +12,24 @@
 - [ ] **Fix stale output paths in `docs/skills-reference.md`**
 - [ ] **Add try/catch for malformed config JSON**
 
-### Plan: Fix null dereference in `cmdArchiveCard`
+### Plan: Escape LIKE metacharacters in search
 
-**What:** In `claude/poketo-kanban/scripts/kanban.mjs`, the `cmdArchiveCard` function (line ~513) looks up a card's list and then the list's board without null checks. If a card references a deleted/invalid list, `list` is `undefined` and `list.boardId` throws an unhelpful TypeError.
+**What:** In `claude/poketo-kanban/scripts/kanban.mjs`, the `cmdSearch` function (~line 464) uses `ilike(cards.name, \`%${query}%\`)` which passes user input directly into the LIKE pattern. While drizzle-orm parameterizes the value (no SQL injection), LIKE metacharacters `%` and `_` are interpreted as wildcards — searching for `%` matches every card, and `_` matches any single character.
 
 **File to modify:**
-- `claude/poketo-kanban/scripts/kanban.mjs` — `cmdArchiveCard` function (~lines 513-514)
+- `claude/poketo-kanban/scripts/kanban.mjs` — `cmdSearch` function (~line 464)
 
 **Changes:**
-1. After `const [list] = ...` (line 513), add null check:
-   ```js
-   if (!list) {
-     output({ error: `List not found for card: ${id}` });
-     process.exit(1);
-   }
-   ```
-2. After `const [board] = ...` (line 514), add null check:
-   ```js
-   if (!board) {
-     output({ error: `Board not found for list: ${list.boardId}` });
-     process.exit(1);
-   }
-   ```
-   This follows the same pattern used in `cmdBoard` (line 134) and `cmdDeleteBoard` (line 588).
+Add a helper to escape LIKE metacharacters before the query, then use the escaped value:
+```js
+const escaped = query.replace(/%/g, '\\%').replace(/_/g, '\\_');
+```
+Apply to both the name and description ilike calls in the search query.
 
 **Acceptance criteria:**
-- `cmdArchiveCard` returns a clear JSON error when list or board is missing (not a raw TypeError)
-- Existing tests still pass (`npm test` in `claude/poketo-kanban/scripts/`)
+- Searching for `%` or `_` no longer matches all cards
+- Normal text search still works as before
+- Existing tests still pass
 
 ## Milestone
 - [ ] No credentials in tracked files, Neon password rotated
