@@ -32,6 +32,8 @@ function getDbUrl() {
   }
   // Try common poke project locations
   const pokePaths = [
+    join(homedir(), "projects", "apps", "poke", "monorepo", ".env.local"),
+    join(homedir(), "projects", "apps", "poke", "monorepo", ".env"),
     join(homedir(), "projects", "poke", "dev", "poke-productivity-suite", ".env"),
     join(homedir(), "projects", "poke", "dev", "poke-productivity-suite", ".env.local"),
   ];
