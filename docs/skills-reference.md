@@ -93,14 +93,14 @@ Evaluate the codebase and suggest actionable ideas to explore with `/plan-interv
 Interview to validate and complete a specification.
 
 - **Arguments**: `[optional-topic-override]`
-- **Outputs**: `spec.md`, `interview-log.md`
+- **Outputs**: `specs/[topic].md`, `[topic]-interview.md`
 - **Use when**: Starting a new feature or initiative from a rough idea.
 
 ### `/plan-interview-ideas`
 Run plan-interview sequentially for each idea in `tasks/ideas.md`.
 
 - **Arguments**: `[optional: filter keyword to limit which ideas to interview]`
-- **Outputs**: Appends specs to `spec.md`, writes per-idea `[topic]-interview.md` logs.
+- **Outputs**: Writes `specs/[topic].md` per idea, plus `[topic]-interview.md` logs.
 - **Use when**: You've run `/brainstorm` and want to spec out multiple ideas in one session.
 
 ### `/roadmap`

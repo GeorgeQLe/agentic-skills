@@ -9,7 +9,7 @@
 - [x] **Escape LIKE metacharacters in search**
 - [x] **Batch list creation in `cmdCreateBoard`**
 - [x] **Add missing `codex/plan-interview-ideas/agents/openai.yaml`**
-- [ ] **Fix stale output paths in `docs/skills-reference.md`**
+- [x] **Fix stale output paths in `docs/skills-reference.md`**
 - [ ] **Add try/catch for malformed config JSON**
 
 ### Plan: Add missing `codex/plan-interview-ideas/agents/openai.yaml`
@@ -39,7 +39,7 @@ policy:
 - [ ] No credentials in tracked files, Neon password rotated
 - [ ] `cmdArchiveCard` handles orphaned list/board references gracefully
 - [ ] All codex skills have `agents/openai.yaml`
-- [ ] `docs/skills-reference.md` output paths match actual skill behavior
+- [x] `docs/skills-reference.md` output paths match actual skill behavior
 
 ---
 
