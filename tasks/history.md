@@ -1,5 +1,11 @@
 # Session History
 
+## 2026-03-27 — Phase 5 complete: try/catch for malformed config JSON
+
+- Wrapped `JSON.parse` in `loadConfig()` with try/catch, returns `null` with stderr warning
+- All 24 kanban tests pass, all Phase 5 milestone criteria met
+- Phase 5 complete — all 7 expert review fixes shipped
+
 ## 2026-03-26 — Phase 5 step 6: fix stale output paths in skills-reference
 
 - Fixed `/plan-interview` output paths: `spec.md` → `specs/[topic].md`, `interview-log.md` → `[topic]-interview.md`

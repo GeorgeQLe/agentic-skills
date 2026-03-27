@@ -16,7 +16,12 @@ function loadConfig() {
   if (!existsSync(configPath)) {
     return null;
   }
-  return JSON.parse(readFileSync(configPath, "utf-8"));
+  try {
+    return JSON.parse(readFileSync(configPath, "utf-8"));
+  } catch (e) {
+    console.error(`Warning: malformed JSON in ${configPath}, ignoring config`);
+    return null;
+  }
 }
 
 function getSession() {
