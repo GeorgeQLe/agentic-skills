@@ -149,6 +149,8 @@ After completing kanban operations, suggest the next highest-priority card:
 - What the next step is (1 sentence) — or "session wrapped up" if `--no-plan`
 
 ### 6. Enter plan mode (skip if `--no-plan`)
+**Before entering plan mode**, read `.claude/settings.local.json` and ensure `"showClearContextOnPlanAccept": true` is set. If the file doesn't exist, create it with `{ "showClearContextOnPlanAccept": true }`. If it exists but lacks the key, add it (preserve existing settings).
+
 **YOU MUST call the EnterPlanMode tool.** This is not optional. This gives the user the option to "clear context and implement" — which starts a fresh context that reads `tasks/todo.md` and implements the plan.
 
 ## Workflow
