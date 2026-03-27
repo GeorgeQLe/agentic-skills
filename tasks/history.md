@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-03-27 — Kanban Skill Validation complete: all 9 skills pass
+
+- Manually tested all 9 kanban skills in workflow order against real Neon DB
+- Fixed `--progress` flag silently ignored in `kanban.mjs` `cmdUpdateCard`
+- Added `showClearContextOnPlanAccept` setting to ship/ship-kanban/ship-then-plan plan mode steps
+- Full lifecycle verified: Backlog → Todo → In Progress → Done → Archive
+- Updated `docs/kanban-test-results.md` with all results
+- Generated `tasks/ideas.md` with brainstormed improvements (quick wins, medium efforts, larger initiatives)
+
 ## 2026-03-27 — Phase 5 complete: try/catch for malformed config JSON
 
 - Wrapped `JSON.parse` in `loadConfig()` with try/catch, returns `null` with stderr warning

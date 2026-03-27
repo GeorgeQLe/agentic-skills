@@ -1,6 +1,6 @@
 # Kanban Skill Test Results
 
-**Date:** 2026-03-26
+**Date:** 2026-03-27 (re-verified from 2026-03-26)
 **Board:** claude-skills (`5ab6bbdb-d06c-4e47-8a27-5e1de29b2df7`)
 **DB:** Neon (production)
 
@@ -20,15 +20,30 @@
 
 | # | Skill | Status | Notes |
 |---|-------|--------|-------|
-| 1 | `/poketo-kanban` (Board Resolution) | PASS | boards listed, create-board --template standard works, .kanban-board saved |
-| 2 | `/brainstorm-kanban` | TODO | |
-| 3 | `/plan-interview-kanban` | TODO | |
-| 4 | `/roadmap-kanban` | TODO | |
-| 5 | `/run-kanban` | TODO | |
-| 6 | `/ship-kanban` | TODO | |
-| 7 | `/ship-end-kanban` | TODO | |
-| 8 | `/sync-roadmap-kanban` | TODO | |
-| 9 | `/kanban-archive` | TODO | |
+| 1 | `/poketo-kanban` (Board Resolution) | PASS | `boards` lists 21 boards, claude-skills board has 5 lists (correct types), `tasks/.kanban-board` contains correct ID |
+| 2 | `/brainstorm-kanban` | PASS | 5 testing ideas generated, 5 Backlog cards created, no duplicates, idempotency search worked |
+| 3 | `/plan-interview-kanban` | PASS | update-card updated Backlog card description with spec details |
+| 4 | `/roadmap-kanban` | PASS | move-card moved specced card from Backlog → Todo |
+| 5 | `/run-kanban` | PASS | move-card Todo → In Progress works, hostname/branch metadata in description. `--progress` flag now works (was missing from arg parser — fixed) |
+| 6 | `/ship-kanban` | PASS | move-card In Progress → Done, `--done` flag works, commit ref in description |
+| 7 | `/ship-end-kanban` | PASS | In Progress → Done with session wrap-up note, `done: true` set |
+| 8 | `/sync-roadmap-kanban` | PASS | board state consistent: 3 Backlog, 0 Todo, 0 In Progress, 2 Done, 0 Punt |
+| 9 | `/kanban-archive` | PASS | 2 Done cards archived to auto-created Archive list, `--confirm` flag required |
+
+## Findings
+
+### Fixed: `--progress` flag was silently ignored
+- **Severity:** Low
+- **Root cause:** `cmdUpdateCard` in `kanban.mjs` never parsed the `--progress` argument despite the `progress` column existing in the schema
+- **Fix:** Added `getArg(args, "--progress")` parsing in `cmdUpdateCard` (1 line)
+- **Verified:** `update-card --id <id> --progress 50` now returns `progress: 50`, all 24 tests pass
+
+### All operations verified
+- Full lifecycle: Backlog → Todo → In Progress → Done → Archive works correctly
+- Card CRUD (create, update description, mark done, move, archive) all functional
+- Search deduplication works (brainstorm-kanban idempotency)
+- `--confirm` flag required for archive (safety gate works)
+- Board auto-creates Archive list on first archive operation
 
 ## How to continue testing
 
