@@ -29,6 +29,17 @@ Process:
    f) If the deploy fails, report the error. Do not retry automatically.
 
 4) **Plan the next step:**
+
+   **Prerequisite:** If neither `tasks/todo.md` nor `tasks/roadmap.md` exists, there is no plan to continue. Skip planning entirely and instead suggest ways to generate a next step:
+   > No active plan found. To define your next steps, try:
+   > - `/brainstorm` — evaluate the codebase and suggest ideas
+   > - `/expert-review` — thorough code review to surface improvements
+   > - `/competitive-analysis` — research the competitive landscape
+   > - `/roadmap` — build a phased project roadmap
+   > - `/plan-interview` — interview to validate and complete a spec
+
+   Then stop (do not enter plan mode).
+
    a) **Migration check:** If `tasks/roadmap.md` does not exist but `tasks/todo.md` contains multiple `## Phase` headers, migrate: copy `tasks/todo.md` → `tasks/roadmap.md`, then trim `tasks/todo.md` to just the current phase (first phase with unchecked steps). Commit with `chore: migrate to roadmap.md + todo.md split`.
    b) Read `tasks/todo.md` to identify the next uncompleted step in the current phase.
    c) **Check if the current phase is complete** (all steps checked, milestone criteria met):
@@ -61,7 +72,7 @@ Constraints:
 - **Fix unrelated issues:** If any step surfaces errors, warnings, or lint issues — even ones unrelated to the current work — investigate and fix them before continuing. Commit these fixes separately with a descriptive message (e.g., `fix: resolve unused import warning in auth.ts`).
 - Do NOT write plans into CLAUDE.md. CLAUDE.md is for project conventions and config only.
 - `tasks/roadmap.md` is the source of truth for the full phased plan. `tasks/todo.md` holds only the current phase.
-- Create `tasks/todo.md` if it doesn't exist.
+- Do NOT create `tasks/todo.md` from scratch — if it doesn't exist and there's no roadmap, suggest discovery skills instead.
 - Do NOT re-read files you've already read this session. Use what's in context.
 - Do NOT explore the codebase extensively for planning. Keep context footprint minimal.
 - If the tree is clean and the next step plan already exists in `tasks/todo.md`, skip straight to step 6.
