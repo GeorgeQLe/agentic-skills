@@ -246,6 +246,8 @@ async function cmdUpdateCard(db, args) {
   if (args.includes("--undone")) updates.done = false;
   if (args.includes("--starred")) updates.starred = true;
   if (args.includes("--unstarred")) updates.starred = false;
+  const progress = getArg(args, "--progress");
+  if (progress !== null) updates.progress = parseInt(progress, 10);
 
   updates.updatedAt = new Date();
 
