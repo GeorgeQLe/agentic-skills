@@ -4,7 +4,7 @@
 
 ## Steps
 
-- [ ] **Manual walkthrough of kanban skills** — run each skill against this repo with a real test board
+- [x] **Manual walkthrough of kanban skills** — run each skill against this repo with a real test board
 
 ### Plan: Manual Skill Walkthrough
 
@@ -69,4 +69,4 @@
 - Board state is clean after testing (test data archived or removed)
 
 ## Milestone
-- [ ] All kanban skills manually verified and documented
+- [x] All kanban skills manually verified and documented
