@@ -14,7 +14,7 @@ Build or update `tasks/roadmap.md` by synthesizing all project documentation, in
 
 ## Workflow
 
-1. **Gather context**: Read `specs/`, `tasks/roadmap.md`, `tasks/todo.md`, `tasks/history.md`, `tasks/ideas.md`, `specs/icp.md`, `specs/mvp-gap.md`, `specs/enterprise-icp.md`, `specs/scale-audit.md`, CLAUDE.md, README. For existing projects, also review source files and git log.
+1. **Gather context**: Read `specs/`, `tasks/roadmap.md`, `tasks/todo.md`, `tasks/history.md`, `tasks/ideas.md`, `research/icp.md`, `specs/mvp-gap.md`, `research/enterprise-icp.md`, `specs/scale-audit.md`, CLAUDE.md, README. For existing projects, also review source files and git log.
 2. **Synthesise**: Present a structured summary — features identified, dependencies, conflicts, and (for existing projects) what's built vs. remaining.
 3. **Interview on strategy** (1–3 questions per turn):
    - Priority — What's MVP vs. later?
@@ -24,13 +24,11 @@ Build or update `tasks/roadmap.md` by synthesizing all project documentation, in
    - Phase sizing — Many small vs. fewer large?
    - Market fit (when ICP/gap specs exist) — Which phases address deal-blockers? Prioritise by market impact.
 4. **Write roadmap**: Write `tasks/roadmap.md` with agreed phase structure (phases, goals, scope, acceptance criteria — NOT implementation steps).
-5. **Populate Phase 1**: Invoke `/plan-phases` for Phase 1 detail and `tasks/todo.md`.
-6. **Update history** (existing projects): Append entry to `tasks/history.md`.
+5. **Update history** (existing projects): Append entry to `tasks/history.md`.
 
 ## Deliverables
 
-- `tasks/roadmap.md` — Phased plan with goals, scope, and acceptance criteria per phase
-- `tasks/todo.md` — Current phase working document (via `/plan-phases`)
+- `tasks/roadmap.md` — Phased plan with goals, scope, and acceptance criteria per phase (no implementation steps — those are generated just-in-time by `/plan-phases` when a phase is started)
 
 ## Constraints
 

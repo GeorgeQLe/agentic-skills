@@ -24,9 +24,9 @@ Reviews the codebase, documented history, and current roadmap. Updates the roadm
 Read all available project documentation:
 
 - **`specs/`** directory (individual spec files from `/plan-interview` and `/plan-interview-ideas`), or `spec.md` if it exists for backwards compatibility
-- **`specs/icp.md`** — customer discovery from `/icp` (if it exists)
+- **`research/icp.md`** — customer discovery from `/icp` (if it exists)
 - **`specs/mvp-gap.md`** — MVP gap analysis from `/mvp-gap` (if it exists)
-- **`specs/enterprise-icp.md`** and **`specs/scale-audit.md`** — enterprise discovery and audit (if they exist)
+- **`research/enterprise-icp.md`** and **`specs/scale-audit.md`** — enterprise discovery and audit (if they exist)
 - **`tasks/roadmap.md`** — existing roadmap if any
 - **`tasks/todo.md`** — current work in progress
 - **`tasks/history.md`** — what's been accomplished
@@ -130,13 +130,7 @@ Write `tasks/roadmap.md` with the agreed phase structure. Use this format:
 
 **Important**: The roadmap defines phases, goals, scope, and acceptance criteria — but NOT implementation steps, TDD structure, or file-level detail. That's `/plan-phases`' job.
 
-### 5. Populate Phase 1 Detail
-
-After writing the roadmap, invoke `/plan-phases` scoped to Phase 1 only. This fills in the TDD steps and writes `tasks/todo.md`.
-
-If `tasks/todo.md` already exists with in-progress work, ask the user before overwriting.
-
-### 6. Update History (existing projects only)
+### 5. Update History (existing projects only)
 
 If updating an existing roadmap, append a brief entry to `tasks/history.md` noting the roadmap was revised and why.
 

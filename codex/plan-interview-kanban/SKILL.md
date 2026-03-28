@@ -18,7 +18,7 @@ All kanban commands use: `node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs
 
 ## Workflow
 
-1. Check if `specs/icp.md` exists. If so, read it and use it as foundational context — ground solution decisions against the ICP's user journey, technical sophistication, and customer provisioning model. Flag conflicts. Do not re-interview on ICP topics.
+1. Check if `research/icp.md` exists. If so, read it and use it as foundational context — ground solution decisions against the ICP's user journey, technical sophistication, and customer provisioning model. Flag conflicts. Do not re-interview on ICP topics.
 2. Treat the existing spec or prompt as a draft, not a final decision record.
 3. Interview the user in depth to validate assumptions, resolve ambiguities, and close gaps.
 4. Prefer Codex's structured user-input flow for material decisions when available; otherwise ask concise direct questions.

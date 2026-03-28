@@ -10,7 +10,7 @@ Evaluate the current codebase and generate actionable suggestions that the user 
 ## Workflow
 
 1. Read CLAUDE.md, README, package config, and key source files to understand the project.
-2. Check `tasks/roadmap.md`, `tasks/todo.md`, and specs from `specs/` (or `spec.md`) if they exist — avoid suggesting things already planned.
+2. Check `tasks/roadmap.md`, `tasks/todo.md`, and specs from `specs/` (or `spec.md`) if they exist — avoid suggesting things already planned. Read `research/competitive-analysis.md` if it exists — competitor gaps, market white space, and positioning weaknesses are high-signal inputs for ideation.
 3. Analyse the codebase across these dimensions:
 
    **Strategic / Product**
@@ -30,11 +30,13 @@ Evaluate the current codebase and generate actionable suggestions that the user 
    - Testing gaps in critical paths
    - Security hardening opportunities
 
-   **Market Fit** (only when `specs/icp.md` or `specs/mvp-gap.md` exist)
+   **Market Fit** (only when `research/icp.md`, `specs/mvp-gap.md`, or `research/competitive-analysis.md` exist)
    - ICP alignment — features addressing ICP pain points that are missing or incomplete
    - Journey gaps — steps where the product loses the user or customer
    - Unaddressed MVP gaps from `specs/mvp-gap.md` not yet in roadmap
-   - Competitive positioning weaknesses vs. the ICP's current alternatives
+   - Competitive white space — features or capabilities no competitor offers well, from `research/competitive-analysis.md` market gaps
+   - Competitor leapfrog — specific competitor weaknesses to exploit, or table-stakes features competitors have that you lack
+   - Positioning plays — ideas that sharpen differentiation against the competitive landscape
 4. If the user provides a focus area, scope the analysis there. Otherwise cover all dimensions.
 
 ## Output

@@ -1,7 +1,7 @@
 ---
 name: enterprise-icp
 description: Enterprise multi-stakeholder discovery — map personas, deal-killers, and the evaluation-to-renewal lifecycle
-version: 1.0.0
+version: 2.0.0
 argument-hint: [optional: target industry or market segment]
 ---
 
@@ -11,15 +11,15 @@ Interview the founder to map the enterprise problem space. Enterprise sales invo
 
 ## Context Loading
 
-Read `specs/icp.md` if it exists — the startup ICP is a starting point but does not constrain the enterprise analysis. Enterprise is not "startup but bigger." Explicitly explore what changes at enterprise scale.
+Read `research/icp.md` if it exists — the startup ICP is a starting point but does not constrain the enterprise analysis. Enterprise is not "startup but bigger." Explicitly explore what changes at enterprise scale.
 
-Also read the codebase, README, and existing specs if a product exists, to ground the interview.
+Also read the codebase, README, and existing specs/research if a product exists, to ground the interview.
 
 ## Process
 
 ### 1. Orient
 
-If `specs/icp.md` exists, summarise the startup ICP and ask: "How does the enterprise buyer and user differ from what we mapped here?" If it doesn't exist, start from scratch.
+If `research/icp.md` exists, summarise the startup ICP and ask: "How does the enterprise buyer and user differ from what we mapped here?" If it doesn't exist, start from scratch.
 
 If a codebase exists, summarise what's built and note it as context.
 
@@ -80,13 +80,28 @@ Determine which are mandatory for the target market:
 - What's the ROI story for the executive sponsor?
 - What makes this a "platform" vs. a "tool"?
 
-### 3. Conclude
+### 3. Present Findings & Validate
 
-Confirm all areas are covered. Summarise the stakeholder map, critical deal-killers, and the most important insight from the interview.
+After covering all areas, **present the complete findings to the user before writing**. Summarise:
+1. The stakeholder map and which personas matter most
+2. The critical deal-killers (the "must-haves" vs. "nice-to-haves")
+3. The enterprise lifecycle and where the biggest friction points are
+4. The enterprise value prop and how it differs from startup
+5. The most important insight from the interview
+
+Use the AskUserQuestion tool to ask:
+- "Does this capture everything? Any gaps or corrections before I write this up?"
+- If anything is ambiguous or under-specified, ask targeted follow-up questions to nail it down
+
+Continue until the user confirms the findings are complete and accurate. Only then proceed to writing.
+
+### 4. Write Output
+
+Only after the user has validated the findings, write the output files.
 
 ## Output
 
-### `specs/enterprise-icp.md`
+### `research/enterprise-icp.md`
 Structured enterprise discovery document:
 1. **Stakeholder Map** — which personas are involved, their role in buying/adoption
 2. **Per-Persona Journeys** — what each stakeholder needs, their deal-killer "no"
@@ -95,10 +110,10 @@ Structured enterprise discovery document:
 5. **Onboarding Matrix** — onboarding paths and their requirements
 6. **Enterprise Value Proposition** — shifted value prop, ROI story, platform positioning
 
-### `specs/enterprise-icp-interview.md`
+### `research/enterprise-icp-interview.md`
 Raw interview log — questions, options, responses, and a closing summary of key insights.
 
-Create the `specs/` directory if it doesn't exist.
+Create the `research/` directory if it doesn't exist.
 
 ## Constraints
 
@@ -106,4 +121,5 @@ Create the `specs/` directory if it doesn't exist.
 - **Do not assume enterprise ICP is startup ICP scaled up.** Explicitly challenge: "What changes when you sell to a 500-person company vs. a 10-person team?"
 - **Interview style matches `/plan-interview`** — 1–3 focused questions per turn, options with pros/cons, recommendations with reasoning.
 - **Continue until all 6 areas are covered.** Confirm with the user before concluding.
-- **Do not overwrite existing `specs/enterprise-icp.md`** without asking the user first.
+- **Do not overwrite existing `research/enterprise-icp.md`** without asking the user first.
+- **Present before writing.** Never write output files until findings have been presented to the user and validated. The user must see and approve the analysis before anything is written to disk.

@@ -7,18 +7,18 @@ argument-hint: [optional: path-to-enterprise-icp-spec]
 
 # Scale Audit — Enterprise Production Readiness
 
-Automated analysis that evaluates the current codebase against the enterprise discovery in `specs/enterprise-icp.md`. Identifies what's missing for enterprise deals — per-stakeholder journey coverage, compliance, infrastructure, and operational readiness. No interview — this is the agent doing the work.
+Automated analysis that evaluates the current codebase against the enterprise discovery in `research/enterprise-icp.md`. Identifies what's missing for enterprise deals — per-stakeholder journey coverage, compliance, infrastructure, and operational readiness. No interview — this is the agent doing the work.
 
 ## Prerequisites
 
-`specs/enterprise-icp.md` must exist. If it doesn't, tell the user to run `/enterprise-icp` first and stop.
+`research/enterprise-icp.md` must exist. If it doesn't, tell the user to run `/enterprise-icp` first and stop.
 
 ## Process
 
 ### 1. Load Context
 
-- Read `specs/enterprise-icp.md` — stakeholder map, per-persona journeys, deal-killers, lifecycle, onboarding matrix
-- Read `specs/icp.md` if it exists — carry forward startup context
+- Read `research/enterprise-icp.md` — stakeholder map, per-persona journeys, deal-killers, lifecycle, onboarding matrix
+- Read `research/icp.md` if it exists — carry forward startup context
 - Read `specs/mvp-gap.md` if it exists — note unresolved startup gaps that become more critical at enterprise scale
 - Read CLAUDE.md, README, package config, existing specs
 - Read `tasks/roadmap.md` and `tasks/todo.md` for work in progress
@@ -30,7 +30,7 @@ Read source files thoroughly — auth system, data layer, API design, infrastruc
 ### 3. Evaluate Against Enterprise ICP
 
 #### Per-Persona Journey Coverage
-For each stakeholder identified in `specs/enterprise-icp.md`:
+For each stakeholder identified in `research/enterprise-icp.md`:
 - **End users**: Can they complete their core workflows? Does the UX scale to enterprise complexity?
 - **Team admin**: Is there an admin panel? Seat management? Permission configuration? Usage analytics?
 - **IT / Security**: Can they complete a security review? Are audit logs available? Is SSO configurable? Can they answer a vendor security questionnaire?
@@ -38,7 +38,7 @@ For each stakeholder identified in `specs/enterprise-icp.md`:
 - **Executive sponsor**: Is there ROI reporting? Usage dashboards? Success metrics?
 
 #### Onboarding Gap Analysis
-For each onboarding path from `specs/enterprise-icp.md`:
+For each onboarding path from `research/enterprise-icp.md`:
 - Self-serve: Does it exist? Is it frictionless?
 - Team: Can an admin onboard a team? Bulk invite? Role assignment?
 - SSO-provisioned: Is SCIM supported? JIT provisioning? Auto-deprovisioning?
@@ -87,7 +87,7 @@ Estimate effort for each: S / M / L / XL.
 ```markdown
 # Enterprise Scale Audit
 
-> Evaluated against: specs/enterprise-icp.md
+> Evaluated against: research/enterprise-icp.md
 > Date: [current date]
 > Codebase state: [brief summary of what exists]
 

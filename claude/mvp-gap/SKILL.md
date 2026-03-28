@@ -7,18 +7,18 @@ argument-hint: [optional: path-to-icp-spec]
 
 # MVP Gap — Startup Readiness Audit
 
-Automated analysis that evaluates the current codebase against the customer discovery in `specs/icp.md`. Identifies what's missing, incomplete, or misaligned for winning the first paying customers. No interview — this is the agent doing the work.
+Automated analysis that evaluates the current codebase against the customer discovery in `research/icp.md`. Identifies what's missing, incomplete, or misaligned for winning the first paying customers. No interview — this is the agent doing the work.
 
 ## Prerequisites
 
-`specs/icp.md` must exist. If it doesn't, tell the user to run `/icp` first and stop.
+`research/icp.md` must exist. If it doesn't, tell the user to run `/icp` first and stop.
 
 ## Process
 
 ### 1. Load Context
 
-- Read `specs/icp.md` — customer profile, user profile(s), current-state journey, pain map, market landscape, value prop
-- Read `specs/enterprise-icp.md` if it exists (for awareness, not primary evaluation)
+- Read `research/icp.md` — customer profile, user profile(s), current-state journey, pain map, market landscape, value prop
+- Read `research/enterprise-icp.md` if it exists (for awareness, not primary evaluation)
 - Read CLAUDE.md, README, package config for project conventions
 - Read existing specs from `specs/` for planned but unbuilt features
 - Read `tasks/roadmap.md` and `tasks/todo.md` if they exist for work in progress
@@ -30,7 +30,7 @@ Read source files, routes, components, data models, auth setup, config, dependen
 ### 3. Evaluate Against ICP
 
 #### User Journey Coverage
-For each step in the current-state journey from `specs/icp.md`:
+For each step in the current-state journey from `research/icp.md`:
 - Can the product replace or improve this step?
 - Where does the UX break down, require workarounds, or not exist?
 - Does the interaction model match the user's technical sophistication?
@@ -56,7 +56,7 @@ For each step in the current-state journey from `specs/icp.md`:
 - Which integrations are required vs. nice-to-have for replacing the current workflow?
 
 #### Competitive Differentiation
-- Does the product deliver the value prop from `specs/icp.md`?
+- Does the product deliver the value prop from `research/icp.md`?
 - Where does it fall short of the claimed wedge?
 - Would the ICP actually switch from their current alternative to this?
 
@@ -76,7 +76,7 @@ Order gaps within each priority tier by estimated effort (S/M/L).
 ```markdown
 # MVP Gap Analysis
 
-> Evaluated against: specs/icp.md
+> Evaluated against: research/icp.md
 > Date: [current date]
 > Codebase state: [brief summary of what exists]
 
