@@ -30,9 +30,12 @@ Interview-driven skill that defines measurable success metrics tied to journey s
 - `research/metrics.md` — North Star metric, per-category metrics (definition, measurement, target, instrumentation, status), instrumentation gaps with `/plan-interview` prompts
 - `research/metrics-interview.md` — Raw interview log
 
+The output file must end with a `## Next Steps` section (3–5 contextual items, "Pick one:" framing) based on which files exist: conditionally suggest `/plan-interview [topic]`, `/roadmap`, `/gtm`, `/run`, `/customer-feedback` based on instrumentation gaps, `tasks/roadmap.md`, `research/gtm.md`, and whether the product is live.
+
 ## Constraints
 
 - Requires journey map — metrics must tie to actual journey stages.
 - Be precise — "user engagement" is not a metric; "weekly active users completing 3+ [action]" is.
 - Include instrumentation — every metric must specify how to measure it and whether that exists today.
 - Present before writing — never write until validated.
+- `## Next Steps` must be the final section in the output file, with 3–5 contextual items and "Pick one:" framing.

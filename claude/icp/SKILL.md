@@ -108,7 +108,17 @@ Analyze across all ICP candidates:
 
 Incorporate feedback before proceeding.
 
-### 7. Final Review & Write
+### 7. Populate Next Steps
+
+Before writing, check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with "Pick one:" framing:
+
+- ALWAYS: `/competitive-analysis` — Research competitors and market gaps for this ICP
+- IF no `specs/` directory or it's empty: `/plan-interview` — Design the solution for this ICP's pain points
+- IF `specs/` exist but no `research/journey-map.md`: `/journey-map` — Map how this ICP flows through the product
+- IF codebase exists: `/mvp-gap` — Evaluate what's built against this ICP
+- IF `research/competitive-analysis.md` exists: `/brainstorm` — Generate ideas from ICP needs + competitive gaps
+
+### 8. Final Review & Write
 
 Present the **complete findings summary** to the user — primary ICP, key sections, cross-ICP analysis, and build sequence. Ask:
 - "Ready to write this to `research/icp.md`? Anything to adjust first?"
@@ -202,6 +212,12 @@ Structure — the **Primary ICP** fills the canonical top-level sections:
 
 ### Recommended Build Sequence
 [Which ICP to target first → second → third, with reasoning]
+
+## Next Steps
+
+Pick one:
+- `/competitive-analysis` — Research competitors and market gaps for this ICP
+- [conditional items from step 7 — only include items whose conditions are met]
 ```
 
 ### `research/icp-search-log.md`

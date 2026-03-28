@@ -70,6 +70,16 @@ Tag each gap with one of:
 
 Order gaps within each priority tier by estimated effort (S/M/L).
 
+### 5. Populate Next Steps
+
+Before writing, check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with "Pick one:" framing:
+
+- ALWAYS: `/roadmap` — Turn the build sequence above into a phased roadmap
+- IF first-sale blockers need specs: `/plan-interview [top gap]` — Spec the most critical first-sale blocker
+- IF no `research/journey-map.md` and `specs/` exist: `/journey-map` — Map how the ICP experiences the product
+- IF no `research/competitive-analysis.md`: `/competitive-analysis` — Validate gap priorities against competitors
+- IF creative solutions could reduce effort for high-effort gaps: `/brainstorm` — Generate alternatives for high-effort gaps
+
 ## Output
 
 ### `specs/mvp-gap.md`
@@ -103,6 +113,11 @@ Order gaps within each priority tier by estimated effort (S/M/L).
 [Ordered list of gaps to address, combining priority and dependency logic.
  First sale blockers first, then retention blockers, then nice-to-haves.
  Within each tier, order by dependency — what must exist before other things can be built.]
+
+## Next Steps
+
+Pick one:
+- [conditional items from step 5 — only include items whose conditions are met]
 ```
 
 ## Constraints

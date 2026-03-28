@@ -30,6 +30,8 @@ Interview-driven skill that builds a go-to-market plan grounded in ICP research 
 - `research/gtm.md` — Channel strategy, messaging, pricing, launch plan, early traction tactics
 - `research/gtm-interview.md` — Raw interview log
 
+The output file must end with a `## Next Steps` section (3–5 contextual items, "Pick one:" framing) based on which files exist: conditionally suggest `/roadmap`, `/metrics`, `/plan-interview [top question]`, `/run`, `/journey-map` based on whether `specs/`, `tasks/roadmap.md`, `research/metrics.md`, `research/journey-map.md` exist and whether open questions need research.
+
 ## Constraints
 
 - Requires ICP — cannot plan GTM without knowing the target customer.
@@ -37,3 +39,4 @@ Interview-driven skill that builds a go-to-market plan grounded in ICP research 
 - Be specific — "use social media" is not a strategy.
 - Present before writing — never write until validated.
 - Don't prescribe product changes — GTM is about reaching the market with what exists.
+- `## Next Steps` must be the final section in the output file, with 3–5 contextual items and "Pick one:" framing.

@@ -27,9 +27,12 @@ Interview the founder to map the enterprise problem space. Enterprise sales invo
 - `research/enterprise-icp.md` — Stakeholder map, per-persona journeys, deal-killers, lifecycle, value prop
 - `research/enterprise-icp-interview.md` — Raw interview log
 
+The output file must end with a `## Next Steps` section (3–5 contextual items, "Pick one:" framing) based on which files exist: conditionally suggest `/scale-audit`, `/plan-interview enterprise [feature]`, `/journey-map enterprise`, `/journey-map`, `/competitive-analysis` based on codebase existence, enterprise specs, `research/journey-map.md`, `research/icp.md`, and `research/competitive-analysis.md`.
+
 ## Constraints
 
 - Stay in problem space — do not prescribe solutions.
 - Do not assume enterprise ICP is startup ICP scaled up — explicitly explore what changes.
 - Continue until all 6 areas are covered.
 - Present before writing — never write until findings are validated.
+- `## Next Steps` must be the final section in the output file, with 3–5 contextual items and "Pick one:" framing.

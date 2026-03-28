@@ -27,9 +27,12 @@ Automated analysis that evaluates the codebase against `research/enterprise-icp.
 
 - `specs/scale-audit.md` — Gap analysis with stakeholder coverage matrix, compliance matrix, priority tags, and `/plan-interview` prompts for each gap
 
+The output file must end with a `## Next Steps` section (3–5 contextual items, "Pick one:" framing) based on which files exist: always suggest `/roadmap`; conditionally suggest `/plan-interview [top blocker]`, `/journey-map enterprise`, `/mvp-gap`, `/metrics` based on hard-blockers needing specs, `research/journey-map.md`, `specs/mvp-gap.md` staleness, and `research/metrics.md`.
+
 ## Constraints
 
 - Analysis only — do not make code changes.
 - Every gap must cite specific evidence.
 - Distinguish "first enterprise deal" from "100th enterprise deal."
 - Include `/plan-interview <topic>` prompts for each gap.
+- `## Next Steps` must be the final section in the output file, with 3–5 contextual items and "Pick one:" framing.

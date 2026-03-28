@@ -80,6 +80,16 @@ Tag each gap with:
 
 Estimate effort for each: S / M / L / XL.
 
+### 5. Populate Next Steps
+
+Before writing, check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with "Pick one:" framing:
+
+- ALWAYS: `/roadmap` — Turn the enterprise build sequence into a phased roadmap
+- IF hard-blockers need specs: `/plan-interview [top blocker]` — Spec the top enterprise hard-blocker
+- IF no `research/journey-map.md` for enterprise: `/journey-map enterprise` — Map enterprise stakeholder journeys
+- IF startup gaps escalated and `specs/mvp-gap.md` stale: `/mvp-gap` — Re-evaluate startup readiness first
+- IF no `research/metrics.md`: `/metrics` — Define metrics covering enterprise SLAs
+
 ## Output
 
 ### `specs/scale-audit.md`
@@ -132,6 +142,11 @@ Estimate effort for each: S / M / L / XL.
 
 ## Unresolved Startup Gaps (Escalated)
 [Gaps from specs/mvp-gap.md that are now more critical at enterprise scale]
+
+## Next Steps
+
+Pick one:
+- [conditional items from step 5 — only include items whose conditions are met]
 ```
 
 ## Constraints
