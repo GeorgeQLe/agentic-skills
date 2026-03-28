@@ -14,47 +14,50 @@
 - [ ] At least one iteration of versioning scheme documented and applied to 3+ skills
 - [ ] No broken skill cross-references in the repo
 
-## Next Step Plan: Skill discovery command
+## Next Step Plan: Skill dependency graph
 
 ### Context
 
-There are 42+ skills across `claude/` and `codex/` directories. Currently the only way to find skills is by reading `docs/skills-reference.md` or browsing directories. A `/skills` command would let users search and browse skills interactively from the CLI.
+Skills reference each other via `/skill-name` mentions in their SKILL.md content (e.g., `/ship` mentions `/commit-and-push-by-feature`). These cross-references can become stale when skills are renamed or removed. A dependency graph script can parse all SKILL.md files, extract `/skill-name` references, build a graph, and report broken refs.
 
 ### Changes
 
-#### 1. Create `claude/skills/SKILL.md`
+#### 1. Create `scripts/skill-deps.sh` (or `.mjs`)
 
-A new Claude skill that:
-- Scans `claude/*/SKILL.md` and `codex/*/SKILL.md` to discover all skills
-- Groups skills by workflow stage (planning, building, shipping, maintenance, kanban)
-- Supports keyword search: `/skills search deploy` finds skills mentioning "deploy"
-- Outputs a formatted table with skill name, description, and workflow stage
+A script that:
+- Scans all `claude/*/SKILL.md` files
+- Extracts `/skill-name` references from each file's body (after frontmatter)
+- Builds a dependency map: `{ skill-name: [referenced-skills] }`
+- Validates each reference against discovered skills (from Step 1's Glob pattern)
+- Reports:
+  - **Broken references** — `/foo` mentioned but no `claude/foo/SKILL.md` exists
+  - **Dependency summary** — which skills reference which (optional, for info)
+- Exit code 0 if no broken refs, 1 if any found
 
-The workflow stage grouping should be derived from skill content or a lightweight mapping. Check `docs/skills-reference.md` for the existing grouping (it already categorizes skills by workflow stage).
+Regex for extracting refs: match `\/[a-z][a-z0-9-]+` patterns in SKILL.md body text. Filter out false positives:
+- Skip code blocks (lines starting with spaces/tabs or inside ``` fences)
+- Skip filesystem paths (e.g., `/home/`, `/usr/`, `/tmp/`, paths containing `.` like `/path/to/file.md`)
+- Skip patterns inside URLs
+- Only match known skill name patterns (lowercase, hyphens, no dots or slashes after)
 
-#### 2. Determine workflow stage mapping
+#### 2. Run the script and fix any broken references found
 
-Read `docs/skills-reference.md` to understand the existing categories. The skill should either:
-- Parse the reference doc for groupings, OR
-- Infer stage from SKILL.md content keywords (plan, ship, deploy, test, kanban, etc.)
+If the script finds broken refs, fix them in the relevant SKILL.md files.
 
-Pick the simpler approach. A static mapping in the skill itself is fine for v1.
+#### 3. Update `docs/skills-reference.md`
 
-#### 3. Add to `docs/skills-reference.md`
-
-Add the new `/skills` entry to the reference doc under the appropriate section.
+Document the script in the reference or in a "Development" section if appropriate.
 
 ### Files
 
-- `claude/skills/SKILL.md` — **new**, the skill discovery command
-- `docs/skills-reference.md` — add `/skills` entry
+- `scripts/skill-deps.sh` or `scripts/skill-deps.mjs` — **new**, dependency graph + validation script
+- Any SKILL.md files with broken refs — **fix**
 
 ### Verification
 
-- `/skills` lists all 42+ skills grouped by stage
-- `/skills search kanban` returns only kanban-related skills
-- `/skills search deploy` returns deploy/ship skills
-- No broken skill references in output
+- `node scripts/skill-deps.mjs` (or `bash scripts/skill-deps.sh`) exits 0 with clean output
+- Intentionally break a ref → script catches it and exits 1
+- No false positives on filesystem paths or URLs
 
 ## On Completion (fill in when phase is done)
 - Deviations from plan:
