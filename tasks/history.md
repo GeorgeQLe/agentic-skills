@@ -1,5 +1,21 @@
 # Session History
 
+## 2026-03-28 — Research skills revamp + journey-map skill
+
+- Revamped 3 research skills (icp, competitive-analysis, enterprise-icp) with present→validate→write pattern
+  - All now report findings and validate with user via AskUserQuestion checkpoints before writing output
+  - Output moved from `specs/` to `research/` directory (icp.md, competitive-analysis.md, enterprise-icp.md)
+  - ICP: 3 checkpoints (candidates, scoring, cross-ICP); Competitive: 2 checkpoints (competitor list, full analysis); Enterprise: explicit present-findings step
+- Added 2 new sections to /icp (v3.1.0): Trigger Events (ranked by frequency/urgency) and Market Sizing (TAM/SAM/SOM with confidence levels)
+- Canonical ICP format expanded from 7 to 9 sections
+- Created `/journey-map` skill (v1.0.0) — maps user journeys (per-use-case task flows) and customer journey (trigger→discovery→aha→conversion→retention)
+  - Prerequisites: research/icp.md + specs/*.md
+  - Outputs: research/journey-map.md + research/journey-map-interview.md
+  - Same present→validate→write pattern as other research skills
+- Updated ~20 downstream skills referencing old specs/ paths to use research/
+- Updated docs/skills-reference.md: 43→44 skills, workflow diagrams, quick reference table
+- Consolidated run-step, run-phases, ship-then-plan into run and ship (JIT /plan-phases invocation)
+
 ## 2026-03-27 — Kanban production hardening specs
 
 - Assessed kanban test results (61 tests, 3 layers all passing) for production readiness
@@ -15,7 +31,7 @@
 - Replaced 7-area founder interview with automated web search + codebase analysis
 - Now identifies 2-5 ICP candidates, scores on Value x Accessibility, selects primary
 - Output: primary ICP in canonical 7 `##` sections (downstream-compatible) + Additional ICPs + Cross-ICP Analysis
-- Research log in `specs/icp-research.md` replaces `specs/icp-interview.md`
+- Research log in `research/icp-search-log.md` replaces `specs/icp-interview.md`
 - Brief 1-2 question validation replaces full interview
 
 ## 2026-03-27 — Phase 9 Step 3: Skill versioning
