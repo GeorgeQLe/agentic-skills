@@ -742,9 +742,21 @@ describe("Edge cases", () => {
     expect(match).toBeDefined();
   });
 
-  it.todo(
-    "search with backslash in query — known bug, backslash not escaped, Phase 7 fix",
-  );
+  it("search with backslash in query", async () => {
+    await run(
+      "create-card",
+      "--board",
+      boardId,
+      "--list",
+      listIds["Backlog"],
+      "--name",
+      "path\\to\\file",
+    );
+    const result = await run("search", "--query", "path\\to");
+    expect(result.count).toBeGreaterThanOrEqual(1);
+    const match = result.results.find((r) => r.name === "path\\to\\file");
+    expect(match).toBeDefined();
+  });
 
   it("search with unicode/emoji", async () => {
     await run(
