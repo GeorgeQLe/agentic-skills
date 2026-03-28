@@ -1,6 +1,6 @@
 # Skills Reference
 
-Complete reference for all 42 custom skills in this repository, available for both Claude Code and Codex.
+Complete reference for all 43 custom skills in this repository, available for both Claude Code and Codex.
 
 ## Installation
 
@@ -305,6 +305,12 @@ Create or update the current repository's `CLAUDE.md` with workflow conventions.
 - **Arguments**: None
 - **Use when**: Setting up the workflow in a new repository.
 
+### `/skills`
+Browse and search all available skills, grouped by workflow stage.
+
+- **Arguments**: `[list | search <keyword>]`
+- **Use when**: Discovering available skills or finding a skill by keyword.
+
 ---
 
 ## Kanban Workflow
@@ -404,6 +410,7 @@ Archive old Done/Punt cards from the kanban board.
 | `/commit-and-push-by-feature` | Group commits by feature |
 | `/analyze-sessions` | Usage analytics |
 | `/install-workflow-orchestration` | Bootstrap CLAUDE.md |
+| `/skills` | Browse and search all skills |
 | `/poketo-kanban` | Low-level board CRUD |
 | `/brainstorm-kanban` | Brainstorm + create kanban cards |
 | `/plan-interview-kanban` | Spec interview + kanban card sync |
