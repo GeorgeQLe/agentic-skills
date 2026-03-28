@@ -207,6 +207,12 @@ async function cmdCreateCard(db, session, args) {
     .limit(1);
 
   const nextOrder = existing.length > 0 ? existing[0].order + 1 : 0;
+
+  if (hasBoolFlag(args, "--dry-run")) {
+    output({ dryRun: true, command: "create-card", wouldDo: { listId, name, description: description || null, dueDate: due || null, order: nextOrder } });
+    return;
+  }
+
   const id = randomUUID();
 
   const [created] = await db.insert(cards).values({
@@ -251,6 +257,11 @@ async function cmdUpdateCard(db, args) {
 
   updates.updatedAt = new Date();
 
+  if (hasBoolFlag(args, "--dry-run")) {
+    output({ dryRun: true, command: "update-card", wouldDo: { id, updates } });
+    return;
+  }
+
   const [updated] = await db
     .update(cards)
     .set(updates)
@@ -273,6 +284,11 @@ async function cmdDone(db, args) {
   if (!id) {
     output({ error: "Required: --id <card-id>" });
     process.exit(1);
+  }
+
+  if (hasBoolFlag(args, "--dry-run")) {
+    output({ dryRun: true, command: "done", wouldDo: { id, set: { done: true } } });
+    return;
   }
 
   const [updated] = await db
@@ -309,6 +325,11 @@ async function cmdMoveCard(db, args) {
     .limit(1);
 
   const nextOrder = existing.length > 0 ? existing[0].order + 1 : 0;
+
+  if (hasBoolFlag(args, "--dry-run")) {
+    output({ dryRun: true, command: "move-card", wouldDo: { id, listId, order: nextOrder } });
+    return;
+  }
 
   const [updated] = await db
     .update(cards)
@@ -372,6 +393,11 @@ async function cmdCreateBoard(db, session, args) {
     ];
   }
 
+  if (hasBoolFlag(args, "--dry-run")) {
+    output({ dryRun: true, command: "create-board", wouldDo: { name, lists: listDefs } });
+    return;
+  }
+
   const boardId = randomUUID();
   const [board] = await db.insert(boards).values({
     id: boardId,
@@ -412,6 +438,11 @@ async function cmdCreateList(db, args) {
     .limit(1);
 
   const nextOrder = existing.length > 0 ? existing[0].order + 1 : 0;
+
+  if (hasBoolFlag(args, "--dry-run")) {
+    output({ dryRun: true, command: "create-list", wouldDo: { boardId, name, order: nextOrder } });
+    return;
+  }
 
   const [created] = await db.insert(lists).values({
     id: randomUUID(),
@@ -541,6 +572,11 @@ async function cmdArchiveCard(db, args) {
     process.exit(1);
   }
 
+  if (hasBoolFlag(args, "--dry-run")) {
+    output({ dryRun: true, command: "archive-card", wouldDo: { cardId: id, archiveListExists: !!board.archiveListId } });
+    return;
+  }
+
   let archiveListId = board.archiveListId;
 
   // Auto-create archive list if needed
@@ -601,6 +637,11 @@ async function cmdDeleteBoard(db, args) {
     .where(eq(lists.boardId, id));
   const listIds = boardLists.map((l) => l.id);
 
+  if (hasBoolFlag(args, "--dry-run")) {
+    output({ dryRun: true, command: "delete-board", wouldDo: { boardId: id, listsToDelete: boardLists.length, cardsToDelete: "all cards in those lists" } });
+    return;
+  }
+
   // Delete all cards in those lists
   let deletedCards = 0;
   if (listIds.length > 0) {
@@ -643,6 +684,10 @@ function getAllArgs(args, flag) {
   return values;
 }
 
+function hasBoolFlag(args, flag) {
+  return args.includes(flag);
+}
+
 // ─── Main ────────────────────────────────────────────────────────────────────
 
 async function main() {
@@ -654,15 +699,15 @@ async function main() {
       commands: [
         "boards                                  — List all boards",
         "board <id>                              — View board with lists and cards",
-        "create-card --board <id> --list <id> --name \"...\" [--description \"...\"] [--due \"YYYY-MM-DD\"]",
-        "update-card --id <id> [--name] [--done] [--undone] [--starred] [--due] [--description]",
-        "done --id <id>                          — Mark card as done",
-        "move-card --id <id> --list <id>         — Move card to another list",
-        "create-board --name \"...\" [--template standard] [--lists \"...\"] — Create board",
-        "create-list --board <id> --name \"...\"   — Add list to board",
+        "create-card --board <id> --list <id> --name \"...\" [--description \"...\"] [--due \"YYYY-MM-DD\"] [--dry-run]",
+        "update-card --id <id> [--name] [--done] [--undone] [--starred] [--due] [--description] [--dry-run]",
+        "done --id <id> [--dry-run]              — Mark card as done",
+        "move-card --id <id> --list <id> [--dry-run] — Move card to another list",
+        "create-board --name \"...\" [--template standard] [--lists \"...\"] [--dry-run] — Create board",
+        "create-list --board <id> --name \"...\" [--dry-run] — Add list to board",
         "search --query \"...\" [--board <id>]     — Search cards across boards (or scoped to --board)",
-        "archive-card --id <id>                  — Archive a card",
-        "delete-board --id <id> --confirm        — Delete board and all its data",
+        "archive-card --id <id> [--dry-run]      — Archive a card",
+        "delete-board --id <id> --confirm [--dry-run] — Delete board and all its data",
       ],
     });
     return;

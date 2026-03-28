@@ -315,6 +315,81 @@ describe("Search", () => {
   });
 });
 
+// ─── Dry-run Mode ────────────────────────────────────────────────────────────
+
+describe("Dry-run mode", () => {
+  it("create-card --dry-run previews without creating", async () => {
+    const result = await run(
+      "create-card",
+      "--board",
+      boardId,
+      "--list",
+      listIds["Backlog"],
+      "--name",
+      "Dry-run ghost card",
+      "--dry-run",
+    );
+    expect(result.dryRun).toBe(true);
+    expect(result.command).toBe("create-card");
+    expect(result.wouldDo.name).toBe("Dry-run ghost card");
+
+    // Confirm card was NOT created
+    const search = await run("search", "--query", "Dry-run ghost card");
+    expect(search.results.find((r) => r.name === "Dry-run ghost card")).toBeUndefined();
+  });
+
+  it("move-card --dry-run previews without moving", async () => {
+    // Create a real card in Backlog
+    const card = await run(
+      "create-card",
+      "--board",
+      boardId,
+      "--list",
+      listIds["Backlog"],
+      "--name",
+      "Dry-run move test",
+    );
+    const id = card.card.id;
+
+    // Dry-run move to Todo
+    const result = await run(
+      "move-card",
+      "--id",
+      id,
+      "--list",
+      listIds["Todo"],
+      "--dry-run",
+    );
+    expect(result.dryRun).toBe(true);
+    expect(result.command).toBe("move-card");
+    expect(result.wouldDo.listId).toBe(listIds["Todo"]);
+
+    // Confirm card is still in Backlog
+    const board = await run("board", boardId);
+    const backlog = board.lists.find((l) => l.name === "Backlog");
+    const found = backlog.cards.find((c) => c.id === id);
+    expect(found).toBeDefined();
+  });
+
+  it("delete-board --dry-run --confirm previews without deleting", async () => {
+    const result = await run(
+      "delete-board",
+      "--id",
+      boardId,
+      "--confirm",
+      "--dry-run",
+    );
+    expect(result.dryRun).toBe(true);
+    expect(result.command).toBe("delete-board");
+    expect(result.wouldDo.boardId).toBe(boardId);
+
+    // Confirm board still exists
+    const boardResult = await run("board", boardId);
+    expect(boardResult.command).toBe("board");
+    expect(boardResult.board.id).toBe(boardId);
+  });
+});
+
 // ─── Error Handling ─────────────────────────────────────────────────────────
 
 describe("Error handling", () => {
