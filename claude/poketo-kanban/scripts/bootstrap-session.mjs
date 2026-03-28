@@ -17,8 +17,8 @@ import { join } from "node:path";
 import { homedir } from "node:os";
 import { neon } from "@neondatabase/serverless";
 
-function loadEnv() {
-  const envPaths = [
+export function loadEnv(searchPaths) {
+  const envPaths = searchPaths ?? [
     join(homedir(), "projects", "poke", "dev", "poke-productivity-suite", ".env.local"),
     join(homedir(), "projects", "poke", "dev", "poke-productivity-suite", ".env"),
   ];
@@ -35,7 +35,20 @@ function loadEnv() {
   return vars;
 }
 
-async function main() {
+export function buildConfig(user, org) {
+  return {
+    session: {
+      sessionToken: "bootstrap-direct-db",
+      userId: user.id,
+      userName: user.name,
+      userEmail: user.email,
+      orgId: org.org_id,
+      authenticatedAt: new Date().toISOString(),
+    },
+  };
+}
+
+export async function main() {
   const env = loadEnv();
 
   if (!env.AUTH_DATABASE_URL) {
@@ -88,23 +101,17 @@ async function main() {
     mkdirSync(configDir, { recursive: true });
   }
 
-  const config = {
-    session: {
-      sessionToken: "bootstrap-direct-db",
-      userId: selectedUser.id,
-      userName: selectedUser.name,
-      userEmail: selectedUser.email,
-      orgId: primaryOrg.org_id,
-      authenticatedAt: new Date().toISOString(),
-    },
-  };
+  const config = buildConfig(selectedUser, primaryOrg);
 
   writeFileSync(configFile, JSON.stringify(config, null, 2) + "\n");
   console.log(`\nSession saved to ${configFile}`);
   console.log("You can now run: node kanban.mjs boards");
 }
 
-main().catch((err) => {
-  console.error("Error:", err.message);
-  process.exit(1);
-});
+const isDirectRun = process.argv[1] && import.meta.url.endsWith(process.argv[1].replace(/.*\//, ''));
+if (isDirectRun) {
+  main().catch((err) => {
+    console.error("Error:", err.message);
+    process.exit(1);
+  });
+}
