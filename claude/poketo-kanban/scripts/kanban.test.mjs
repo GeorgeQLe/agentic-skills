@@ -334,6 +334,195 @@ describe("Error handling", () => {
   });
 });
 
+// ─── Edge Cases ─────────────────────────────────────────────────────────────
+
+describe("Edge cases", () => {
+  // -- Search edge cases --
+
+  it("search with % in query", async () => {
+    const card = await run(
+      "create-card",
+      "--board",
+      boardId,
+      "--list",
+      listIds["Backlog"],
+      "--name",
+      "100% complete",
+    );
+    const result = await run("search", "--query", "100%");
+    expect(result.count).toBeGreaterThanOrEqual(1);
+    const match = result.results.find((r) => r.name === "100% complete");
+    expect(match).toBeDefined();
+  });
+
+  it("search with _ in query", async () => {
+    const card = await run(
+      "create-card",
+      "--board",
+      boardId,
+      "--list",
+      listIds["Backlog"],
+      "--name",
+      "step_1_done",
+    );
+    const result = await run("search", "--query", "step_1");
+    expect(result.count).toBeGreaterThanOrEqual(1);
+    const match = result.results.find((r) => r.name === "step_1_done");
+    expect(match).toBeDefined();
+  });
+
+  it.todo(
+    "search with backslash in query — known bug, backslash not escaped, Phase 7 fix",
+  );
+
+  it("search with unicode/emoji", async () => {
+    await run(
+      "create-card",
+      "--board",
+      boardId,
+      "--list",
+      listIds["Backlog"],
+      "--name",
+      "🚀 Launch Feature",
+    );
+    const result = await run("search", "--query", "🚀");
+    expect(result.count).toBeGreaterThanOrEqual(1);
+    const match = result.results.find((r) => r.name === "🚀 Launch Feature");
+    expect(match).toBeDefined();
+  });
+
+  // -- Move edge cases --
+
+  it("move card to same list", async () => {
+    const card = await run(
+      "create-card",
+      "--board",
+      boardId,
+      "--list",
+      listIds["Backlog"],
+      "--name",
+      "Same-list move test",
+    );
+    const result = await run(
+      "move-card",
+      "--id",
+      card.card.id,
+      "--list",
+      listIds["Backlog"],
+    );
+    expect(result.command).toBe("move-card");
+    expect(result.card.listId).toBe(listIds["Backlog"]);
+  });
+
+  it("move card with invalid list ID", async () => {
+    const card = await run(
+      "create-card",
+      "--board",
+      boardId,
+      "--list",
+      listIds["Backlog"],
+      "--name",
+      "Invalid move test",
+    );
+    const result = await run(
+      "move-card",
+      "--id",
+      card.card.id,
+      "--list",
+      "00000000-0000-0000-0000-000000000000",
+    );
+    expect(result.error).toBeTruthy();
+  });
+
+  // -- Archive edge cases --
+
+  it("archive card", async () => {
+    const card = await run(
+      "create-card",
+      "--board",
+      boardId,
+      "--list",
+      listIds["Done"],
+      "--name",
+      "Archive edge test",
+    );
+    const result = await run("archive-card", "--id", card.card.id);
+    expect(result.command).toBe("archive-card");
+
+    const board = await run("board", boardId);
+    const archiveList = board.lists.find((l) => l.name === "Archive");
+    const found = archiveList.cards.find((c) => c.name === "Archive edge test");
+    expect(found).toBeDefined();
+  });
+
+  it("archive already-archived card", async () => {
+    // Create and archive a card
+    const card = await run(
+      "create-card",
+      "--board",
+      boardId,
+      "--list",
+      listIds["Done"],
+      "--name",
+      "Double archive test",
+    );
+    await run("archive-card", "--id", card.card.id);
+
+    // Archive again — should be idempotent
+    const result = await run("archive-card", "--id", card.card.id);
+    expect(result.error).toBeFalsy();
+    expect(result.command).toBe("archive-card");
+  });
+
+  // -- Create card edge cases --
+
+  it("create card with empty name", async () => {
+    const result = await run(
+      "create-card",
+      "--board",
+      boardId,
+      "--list",
+      listIds["Backlog"],
+      "--name",
+      "",
+    );
+    expect(result.error).toBeTruthy();
+  });
+
+  it("create card with very long name", async () => {
+    const longName = "A".repeat(500);
+    const result = await run(
+      "create-card",
+      "--board",
+      boardId,
+      "--list",
+      listIds["Backlog"],
+      "--name",
+      longName,
+    );
+    expect(result.command).toBe("create-card");
+    expect(result.card.name).toBe(longName);
+  });
+
+  // -- Done edge cases --
+
+  it("done on already-done card", async () => {
+    const card = await run(
+      "create-card",
+      "--board",
+      boardId,
+      "--list",
+      listIds["Backlog"],
+      "--name",
+      "Double done test",
+    );
+    await run("done", "--id", card.card.id);
+    const result = await run("done", "--id", card.card.id);
+    expect(result.command).toBe("done");
+    expect(result.card.done).toBe(true);
+  });
+});
+
 // ─── Cleanup: delete-board ──────────────────────────────────────────────────
 
 describe("Cleanup", () => {
