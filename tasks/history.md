@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-03-27 — Phase 9 Step 2: Skill dependency graph
+
+- Created `scripts/skill-deps.sh` — PCRE-based dependency graph and validation script
+- 4 output modes: default (graph), `--broken` (broken refs only), `--dot` (Graphviz), `--json` (programmatic)
+- Regex with negative lookbehind/lookahead prevents false positives on path fragments (`tasks/todo.md`, `/home/user`)
+- Scanned 43 skills, found 22 with dependencies, 0 broken refs
+- Exit code 0 if clean, 1 if broken refs found
+
 ## 2026-03-27 — Phase 9 Step 1: Skill discovery command
 
 - Created `claude/skills/SKILL.md` — prompt-only skill that discovers all skills via Glob + Read
