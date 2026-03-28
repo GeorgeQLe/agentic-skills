@@ -1,6 +1,6 @@
 ---
 name: trace
-description: Follow a request or feature flow end-to-end through the application stack (route → middleware → service → database → response), mapping every layer with file references.
+description: Follow a request end-to-end through the stack from route to database
 ---
 
 # Trace

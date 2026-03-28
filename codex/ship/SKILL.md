@@ -1,6 +1,6 @@
 ---
 name: ship
-description: Ship current work (update docs, commit, push, deploy) and optionally plan the next step.
+description: Ship current work (update docs, commit, push, deploy) and optionally plan the next step
 ---
 
 # Ship

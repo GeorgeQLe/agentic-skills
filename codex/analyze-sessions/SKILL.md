@@ -1,6 +1,6 @@
 ---
 name: analyze-sessions
-description: Analyze local Claude Code session history and produce a structured usage report with repeated workflow patterns, automation opportunities, and concrete recommendations for skills, agents, plugins, or standing instructions.
+description: Analyze all Claude Code session history and produce a comprehensive usage breakdown with automation recommendations
 ---
 
 # Analyze Sessions

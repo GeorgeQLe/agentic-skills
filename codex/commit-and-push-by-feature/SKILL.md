@@ -1,6 +1,6 @@
 ---
 name: commit-and-push-by-feature
-description: Inspect the current git worktree, group changes into logical feature buckets, create conventional commits for each bucket, and push the branch while keeping the tree clean and avoiding unsafe history edits.
+description: Commit and push all changes to GitHub grouped by logical feature/function buckets with conventional commit messages
 ---
 
 # Commit And Push By Feature

@@ -1,6 +1,6 @@
 ---
 name: scaffold
-description: Generate a new package or app in the monorepo following the project's established conventions, using an existing package as the template.
+description: Generate a new package or app in the monorepo following established project conventions
 ---
 
 # Scaffold

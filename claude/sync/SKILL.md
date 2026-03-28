@@ -2,6 +2,7 @@
 name: sync
 description: Pull latest changes from remote and report status
 version: 1.0.0
+argument-hint:
 ---
 
 # Sync

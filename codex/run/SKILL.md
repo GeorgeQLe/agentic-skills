@@ -1,6 +1,6 @@
 ---
 name: run
-description: Identify the next incomplete step from the phased plan and execute it.
+description: Plan the next incomplete step (or full phase with --phase flag) from the plan, then enter plan mode for user approval before executing
 ---
 
 # Run

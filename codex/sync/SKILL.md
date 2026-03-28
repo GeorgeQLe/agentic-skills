@@ -1,6 +1,6 @@
 ---
 name: sync
-description: Pull latest changes from remote and report status.
+description: Pull latest changes from remote and report status
 ---
 
 # Sync

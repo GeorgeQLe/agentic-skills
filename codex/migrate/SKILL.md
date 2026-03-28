@@ -1,6 +1,6 @@
 ---
 name: migrate
-description: Guide a structural migration or dependency upgrade with a step-by-step plan, batch execution, and verification at each step.
+description: Guide a structural migration or dependency upgrade with a step-by-step plan and verification
 ---
 
 # Migrate

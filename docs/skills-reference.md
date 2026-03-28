@@ -1,6 +1,6 @@
 # Skills Reference
 
-Complete reference for all 48 custom skills in this repository, available for both Claude Code and Codex.
+Complete reference for all 49 custom skills in this repository, available for both Claude Code and Codex.
 
 ## Installation
 
@@ -219,6 +219,13 @@ Scan for unused exports, orphaned files, stale dependencies, and unreachable cod
 - **Outputs**: Prioritized cleanup list (does not auto-delete).
 - **Use when**: Periodic codebase hygiene or before a major refactor.
 
+### `/hygiene`
+Audit project structure for convention violations, missing files, template drift, and cross-platform sync gaps.
+
+- **Arguments**: `[audit|fix] [skills|tasks|docs|codex|all]`
+- **Outputs**: Categorized report (Errors/Warnings/Info). In `fix` mode, applies mechanical fixes.
+- **Use when**: Periodic project structure check, after adding new skills, or before a release to ensure conventions are followed.
+
 ---
 
 ## Debugging
@@ -409,6 +416,7 @@ Archive old Done/Punt cards from the kanban board.
 | Skill | One-liner |
 |-------|-----------|
 | `/icp` | Customer discovery — map ICP, journeys, value prop |
+| `/competitive-analysis` | Research competitors, map landscape and gaps |
 | `/mvp-gap` | Evaluate codebase against ICP for MVP readiness |
 | `/enterprise-icp` | Enterprise multi-stakeholder discovery |
 | `/journey-map` | Map user task flows + customer journey funnel |
@@ -429,6 +437,7 @@ Archive old Done/Punt cards from the kanban board.
 | `/expert-review` | Expert code review |
 | `/regression-check` | Full health check (types, lint, tests, build) |
 | `/dead-code` | Find unused code and dependencies |
+| `/hygiene` | Audit project structure and conventions |
 | `/debug` | Investigate + changelog + non-duplicate fix |
 | `/investigate` | Validate claims → root cause → fix |
 | `/trace` | Map request flow through the stack |
