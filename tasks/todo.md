@@ -16,56 +16,86 @@
 - [ ] Backslash LIKE escape bug fixed with regression test
 - [ ] All tests pass across all suites
 
-## Plan: Bootstrap session tests (Step 1)
+## Plan: install.sh bats tests (Step 2)
 
 ### Context
-`claude/poketo-kanban/scripts/bootstrap-session.mjs` (110 lines, 2 functions) is a CLI script that:
-- `loadEnv()`: reads `.env.local` or `.env` from the poke-productivity-suite directory, parses `KEY=value` lines via regex
-- `main()`: queries Neon Postgres (auth DB for users, apps DB for org membership), builds config, writes `~/.poketo/config.json`
-
-Currently has zero exports — everything runs at module load via `main().catch(...)`. Uses `@neondatabase/serverless` for DB access.
+`install.sh` (107 lines) symlinks `claude/` and `codex/` skill directories into `~/.claude/skills/` and `~/.codex/skills/`. It supports `--uninstall` to remove symlinks. Currently has zero test coverage.
 
 ### What to build
 
-**1. Refactor bootstrap-session.mjs for testability** (minimal changes):
-- Export `loadEnv()` as a named export
-- Extract config-building logic into `buildConfig(user, orgId)` and export it
-- Guard the auto-run with `if (import.meta.url === ...)` so importing doesn't trigger execution
-- Keep `main()` unchanged otherwise
+**1. Install bats-core** as a dev dependency (or use npx):
+```bash
+npm install --save-dev bats
+```
+Alternatively, use the system bats if available, or run via npx.
 
-**2. Create `bootstrap-session.test.mjs`** (~10 tests):
+**2. Create `install.test.bats`** (~8 tests) in the project root (next to `install.sh`):
 
-**`describe("loadEnv")`** (~5 tests):
-1. Parses standard `KEY=value` pairs from a temp .env file
-2. Handles quoted values (`KEY="value"` and `KEY='value'`)
-3. Skips comment lines and blank lines
-4. Returns empty object when no .env file exists
-5. Handles `KEY=value with spaces` (only first word captured per current regex — document behavior)
+Uses temp directories for `CLAUDE_SKILLS_DIR`, `CODEX_SKILLS_DIR`, and `SCRIPT_DIR` to avoid touching real skill directories.
 
-**`describe("buildConfig")`** (~4 tests):
-6. Builds config with user and orgId fields
-7. Includes expected keys (userId, orgId, etc.)
-8. Handles missing org (null/undefined orgId)
-9. Config is valid JSON-serializable
+**Setup**: In `setup()`, create temp dirs and override the env vars. The script uses hardcoded `$HOME/.claude/skills` and `$HOME/.codex/skills`, so tests need to either:
+- Set `HOME` to a temp dir so the paths resolve there, OR
+- Create a wrapper that sources install.sh with overridden vars
 
-**`describe("main integration")`** (~1 test):
-10. Script runs without error when env vars are set (optional — may skip if DB not available)
+**Recommended approach**: Set `HOME` to a temp dir in each test, create minimal `claude/` and `codex/` subdirectories to simulate the repo structure.
 
-### Files to modify
-- `claude/poketo-kanban/scripts/bootstrap-session.mjs` — add exports, guard auto-run
-- `claude/poketo-kanban/scripts/bootstrap-session.test.mjs` — new file, ~10 tests
+**Tests**:
 
-### How to test loadEnv without touching real env
-- Create temp directory with test `.env` files using `fs.mkdtempSync`
-- Override the env search path or pass path as parameter to `loadEnv(dir?)`
-- Clean up temp dirs in `afterEach`
+**`@test "install creates symlinks for claude skills"`**
+- Create `$SCRIPT_DIR/claude/skill-a/SKILL.md`
+- Run install.sh
+- Verify `$HOME/.claude/skills/skill-a` is a symlink pointing to `$SCRIPT_DIR/claude/skill-a`
+
+**`@test "install creates symlinks for codex skills"`**
+- Create `$SCRIPT_DIR/codex/skill-b/agents/openai.yaml`
+- Run install.sh
+- Verify `$HOME/.codex/skills/skill-b` is a symlink
+
+**`@test "install skips existing correct symlinks (idempotent)"`**
+- Run install.sh twice
+- Second run should report 0 new installs (already linked)
+
+**`@test "install warns and skips non-symlink targets"`**
+- Create a real directory at `$HOME/.claude/skills/skill-a`
+- Run install.sh
+- Verify output contains "WARNING" and the directory is not replaced
+
+**`@test "install updates symlinks pointing elsewhere"`**
+- Create a symlink pointing to `/tmp/old-location`
+- Run install.sh
+- Verify symlink now points to the correct skill dir
+
+**`@test "uninstall removes only repo symlinks"`**
+- Install, then create an unrelated symlink in skills dir
+- Run `install.sh --uninstall`
+- Verify repo symlinks removed but unrelated symlink preserved
+
+**`@test "uninstall reports count"`**
+- Install 2 skills, uninstall
+- Verify output contains "Removed 2 symlinks"
+
+**`@test "install creates target directories if missing"`**
+- Ensure `$HOME/.claude/skills/` doesn't exist
+- Run install.sh
+- Verify directory was created and symlinks installed
+
+### Key technical decisions
+- Override `HOME` in tests to isolate from real skill directories
+- The script uses `SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"` — tests must run the script from a temp copy or symlink so `SCRIPT_DIR` resolves to the temp structure
+- Need to copy `install.sh` into the temp dir and create `claude/*/` and `codex/*/` subdirectories there
+- Clean up temp dirs in `teardown()`
+
+### Files to create/modify
+- `install.test.bats` — new file, ~8 tests (project root, next to install.sh)
+- May need to install bats: `npm install --save-dev bats` or check if available
 
 ### Verification
 ```bash
-cd claude/poketo-kanban/scripts && npx vitest run --testTimeout=30000
+npx bats install.test.bats
 ```
-- All new bootstrap tests pass
-- All 53 existing kanban tests still pass
+- All 8 bats tests pass
+- `./install.sh` still works normally from the repo root
+- Existing vitest tests unaffected
 
 ## On Completion (fill in when phase is done)
 - Deviations from plan:
