@@ -1,5 +1,11 @@
 # Session History
 
+## 2026-03-27 — Phase 7 Step 4: Fix backslash LIKE escape
+
+- Fixed `kanban.mjs` line 462: added `.replace(/\\/g, '\\\\')` before `%` and `_` escapes
+- Converted `it.todo` in `kanban.test.mjs` to real test — creates card with backslash in name, verifies search finds it
+- All 77 tests pass (76 existing + 1 new). Phase 7 complete.
+
 ## 2026-03-27 — Phase 7 Step 3: Database error path tests
 
 - Added 5 tests in new `describe("Database error paths")` block to `kanban.test.mjs`
