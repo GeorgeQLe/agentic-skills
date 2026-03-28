@@ -1,0 +1,144 @@
+import { describe, it, expect, afterEach } from "vitest";
+import { execSync } from "node:child_process";
+import {
+  mkdtempSync,
+  mkdirSync,
+  writeFileSync,
+  readlinkSync,
+  symlinkSync,
+  lstatSync,
+  existsSync,
+  rmSync,
+  copyFileSync,
+} from "node:fs";
+import { join } from "node:path";
+import { tmpdir } from "node:os";
+import { fileURLToPath } from "node:url";
+import { dirname } from "node:path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const REPO_ROOT = join(__dirname, "..", "..", "..");
+
+const tempDirs = [];
+
+function createTestEnv() {
+  const base = mkdtempSync(join(tmpdir(), "install-test-"));
+  tempDirs.push(base);
+  const fakeHome = join(base, "home");
+  const fakeRepo = join(base, "repo");
+  mkdirSync(fakeHome, { recursive: true });
+  mkdirSync(join(fakeRepo, "claude", "skill-a"), { recursive: true });
+  mkdirSync(join(fakeRepo, "codex", "skill-b"), { recursive: true });
+  writeFileSync(join(fakeRepo, "claude", "skill-a", "SKILL.md"), "test");
+  writeFileSync(join(fakeRepo, "codex", "skill-b", "SKILL.md"), "test");
+  copyFileSync(join(REPO_ROOT, "install.sh"), join(fakeRepo, "install.sh"));
+  return { base, fakeHome, fakeRepo };
+}
+
+function runInstall(fakeHome, fakeRepo, args = "") {
+  return execSync(`bash install.sh ${args}`, {
+    cwd: fakeRepo,
+    env: { ...process.env, HOME: fakeHome },
+    encoding: "utf-8",
+  });
+}
+
+describe("install.sh", () => {
+  afterEach(() => {
+    for (const dir of tempDirs) {
+      rmSync(dir, { recursive: true, force: true });
+    }
+    tempDirs.length = 0;
+  });
+
+  it("creates symlinks for claude skills", () => {
+    const { fakeHome, fakeRepo } = createTestEnv();
+    runInstall(fakeHome, fakeRepo);
+    const link = join(fakeHome, ".claude", "skills", "skill-a");
+    expect(lstatSync(link).isSymbolicLink()).toBe(true);
+    expect(readlinkSync(link)).toBe(join(fakeRepo, "claude", "skill-a"));
+  });
+
+  it("creates symlinks for codex skills", () => {
+    const { fakeHome, fakeRepo } = createTestEnv();
+    runInstall(fakeHome, fakeRepo);
+    const link = join(fakeHome, ".codex", "skills", "skill-b");
+    expect(lstatSync(link).isSymbolicLink()).toBe(true);
+    expect(readlinkSync(link)).toBe(join(fakeRepo, "codex", "skill-b"));
+  });
+
+  it("is idempotent on re-run", () => {
+    const { fakeHome, fakeRepo } = createTestEnv();
+    runInstall(fakeHome, fakeRepo);
+    const output = runInstall(fakeHome, fakeRepo);
+    expect(output).toContain("Installed 0 Claude Code skills");
+    expect(output).toContain("Installed 0 Codex skills");
+  });
+
+  it("warns and skips non-symlink targets", () => {
+    const { fakeHome, fakeRepo } = createTestEnv();
+    const target = join(fakeHome, ".claude", "skills", "skill-a");
+    mkdirSync(target, { recursive: true });
+    writeFileSync(join(target, "file.txt"), "real dir");
+    const output = runInstall(fakeHome, fakeRepo);
+    expect(output).toContain("WARNING");
+    expect(output).toContain("skill-a");
+    // The real dir should still exist, not replaced
+    expect(lstatSync(target).isSymbolicLink()).toBe(false);
+  });
+
+  it("updates symlinks pointing elsewhere", () => {
+    const { base, fakeHome, fakeRepo } = createTestEnv();
+    const wrongTarget = join(base, "wrong");
+    mkdirSync(wrongTarget, { recursive: true });
+    const skillsDir = join(fakeHome, ".claude", "skills");
+    mkdirSync(skillsDir, { recursive: true });
+    symlinkSync(wrongTarget, join(skillsDir, "skill-a"));
+    runInstall(fakeHome, fakeRepo);
+    expect(readlinkSync(join(skillsDir, "skill-a"))).toBe(
+      join(fakeRepo, "claude", "skill-a"),
+    );
+  });
+
+  it("uninstall removes only repo symlinks", () => {
+    const { base, fakeHome, fakeRepo } = createTestEnv();
+    runInstall(fakeHome, fakeRepo);
+    // Add an unrelated symlink
+    const unrelated = join(base, "unrelated");
+    mkdirSync(unrelated, { recursive: true });
+    symlinkSync(unrelated, join(fakeHome, ".claude", "skills", "other-skill"));
+    runInstall(fakeHome, fakeRepo, "--uninstall");
+    // Repo symlink removed
+    expect(existsSync(join(fakeHome, ".claude", "skills", "skill-a"))).toBe(
+      false,
+    );
+    // Unrelated symlink preserved
+    expect(
+      lstatSync(
+        join(fakeHome, ".claude", "skills", "other-skill"),
+      ).isSymbolicLink(),
+    ).toBe(true);
+  });
+
+  it("uninstall reports correct count", () => {
+    const { fakeHome, fakeRepo } = createTestEnv();
+    runInstall(fakeHome, fakeRepo);
+    const output = runInstall(fakeHome, fakeRepo, "--uninstall");
+    expect(output).toContain("Removed 2 symlinks");
+  });
+
+  it("creates target directories if missing", () => {
+    const { fakeHome, fakeRepo } = createTestEnv();
+    // Ensure skills dirs don't exist
+    expect(existsSync(join(fakeHome, ".claude", "skills"))).toBe(false);
+    expect(existsSync(join(fakeHome, ".codex", "skills"))).toBe(false);
+    runInstall(fakeHome, fakeRepo);
+    expect(existsSync(join(fakeHome, ".claude", "skills", "skill-a"))).toBe(
+      true,
+    );
+    expect(existsSync(join(fakeHome, ".codex", "skills", "skill-b"))).toBe(
+      true,
+    );
+  });
+});
