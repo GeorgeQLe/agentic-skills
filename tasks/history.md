@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-03-27 — Kanban production hardening specs
+
+- Assessed kanban test results (61 tests, 3 layers all passing) for production readiness
+- Identified 4 caveats: multi-user concurrency, load/stress testing, rollback/undo safety, Neon outage resilience
+- Ran 7-turn /plan-interview to spec out test plans and new features
+- Created `specs/kanban-production-test-plan.md` — 10 Claude-to-Claude race scenarios, 4 Claude + Web App races, progressive load profiling (50→500 cards, p50/p95/p99), 8 safety gate tests
+- Created `specs/kanban-offline-queue-soft-delete.md` — offline write queue (better-sqlite3, 100-op limit, FIFO sync with conflict detection), soft-delete with 30-day TTL, restore/purge commands, ~40 new test cases
+- Created `specs/kanban-production-hardening-interview.md` — full interview log with decisions and deviations
+
 ## 2026-03-27 — Revamp /icp skill: interview → research-driven
 
 - Rewrote `claude/icp/SKILL.md` and `codex/icp/SKILL.md` from v1.0.0 to v2.0.0
