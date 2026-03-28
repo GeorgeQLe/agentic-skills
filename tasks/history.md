@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-03-27 — Phase 6 Step 1: kanban edge case tests
+
+- Added 11 edge case tests (10 runnable + 1 `it.todo`) to `kanban.test.mjs`
+- Search: `%` escape, `_` escape, unicode/emoji search, backslash (todo — known bug deferred to Phase 7)
+- Move: same-list move, invalid list ID error
+- Archive: archive card, double-archive idempotency
+- Create: empty name validation, 500-char long name
+- Done: idempotent double-done
+- All 34 tests pass (24 existing + 10 new), 1 todo. Total: 35 test entries.
+
 ## 2026-03-27 — Layer 3 e2e testing: skills 7-8 (complete)
 
 - `/sync-roadmap-kanban` (skill 7) — PASS: board resolved from `.kanban-board`, all 9 roadmap phases compared with board, Phases 1-5 deliverables verified in codebase, 5 reconciliation rules applied (1 orphan flagged, 1 expected discrepancy flagged), sync report generated

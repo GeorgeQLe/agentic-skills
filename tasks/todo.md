@@ -4,45 +4,64 @@
 
 ## Steps
 
-- [ ] **Kanban edge case tests** — concurrent moves, unicode names, LIKE metacharacters (%, _, backslash in search), archiving already-archived card, moving card to same list
+- [x] **Kanban edge case tests** — unicode names, LIKE metacharacters (%, _, backslash as todo), archiving already-archived card, moving card to same list, empty/long names, done idempotency, invalid list ID
 - [ ] **Test create-list command** — dedicated test coverage for create-list plus untested flags (~20 new tests for --progress, --description, --due, search special chars, create-card edge cases, error paths)
 
 ## Acceptance Criteria
-- [ ] Edge case tests added: unicode card names, LIKE metacharacter queries (%, _, backslash), moving card to same list, archiving already-archived card
+- [x] Edge case tests added: unicode card names, LIKE metacharacter queries (%, _, backslash as todo), moving card to same list, archiving already-archived card
 - [ ] create-list command has dedicated test coverage
 - [ ] update-card --progress, --description, --due flags each have at least one test
-- [ ] search with special characters has regression tests
+- [x] search with special characters has regression tests
 - [ ] All new + existing tests pass (target: 40+ total, up from 24)
 
-## Plan: Kanban edge case tests
+## Plan: Test create-list command + untested flags
 
-**What:** Add edge case tests to `claude/poketo-kanban/scripts/kanban.test.mjs` (currently 24 tests, 351 lines). These tests run against real Neon DB via `vitest`.
+**What:** Add ~20 new tests to `claude/poketo-kanban/scripts/kanban.test.mjs` (currently 35 test entries, ~540 lines) covering: `create-list` command, `update-card` untested flags (`--progress`, `--description`, `--due`), and additional error paths.
 
 **Files to modify:**
-- `claude/poketo-kanban/scripts/kanban.test.mjs` — add new `describe` blocks after existing tests, before cleanup
+- `claude/poketo-kanban/scripts/kanban.test.mjs` — add new `describe` blocks before "Edge cases" block
 
-**Tests to add (~10-12 new tests):**
+**Pre-work:** Read `kanban.mjs` to understand:
+- `cmdCreateList` args and behavior (line ~380+)
+- `update-card` handling of `--progress`, `--description`, `--due` flags
+- Error paths for these commands
 
-1. **Unicode card names** — create a card with emoji/CJK/accented chars in name, verify it round-trips through create → board → search
-2. **LIKE metacharacter search: `%`** — create a card named "100% complete", search for "100%", verify it matches (not wildcard)
-3. **LIKE metacharacter search: `_`** — create a card named "step_1", search for "step_1", verify exact match (not single-char wildcard)
-4. **LIKE metacharacter search: backslash** — create a card named "path\\to", search for "path\\", verify match (known bug — this test should FAIL, documenting the backslash escape gap from Phase 7)
-5. **Move card to same list** — move a card to the list it's already in, verify no error and card stays put
-6. **Archive already-archived card** — archive a card, then archive it again, verify graceful handling (error or no-op)
-7. **Create card with empty name** — verify error response
-8. **Create card with very long name** — 500+ char name, verify it succeeds or errors gracefully
-9. **Move card with invalid list ID** — verify error response
-10. **Search with empty query** — verify behavior (empty results or all cards)
-11. **done on already-done card** — mark a card done that's already done, verify idempotent
+**Tests to add (~20 new tests):**
 
-**Pattern:** Follow existing test structure — use the shared `boardId` and `listIds` from the `beforeAll` setup. Add new cards in each test and clean up isn't needed (board gets deleted in `afterAll`).
+**`describe("create-list")`** (~5 tests):
+1. `create-list with name` — create a new list on the test board, verify JSON response
+2. `create-list with type done` — `--type done`, verify `type: "done"`
+3. `create-list with type punt` — `--type punt`, verify `type: "punt"`
+4. `create-list without required args` — missing `--board` or `--name`, expect error
+5. `create-list with duplicate name` — create a list with same name as existing, verify behavior
 
-**Run tests:** `cd claude/poketo-kanban/scripts && npx vitest run kanban.test.mjs`
+**`describe("update-card flags")`** (~6 tests):
+6. `update-card --progress sets progress` — set progress to 50, verify `progress: 50`
+7. `update-card --progress 0 resets progress` — set to 0, verify
+8. `update-card --description sets description` — verify round-trip
+9. `update-card --description empty string clears description` — `--description ""`, verify
+10. `update-card --due sets due date` — `--due 2026-12-31`, verify `dueDate`
+11. `update-card --due clear removes due date` — verify clearing mechanism (if supported)
+
+**`describe("Additional error paths")`** (~5 tests):
+12. `create-card with invalid board ID` — expect error
+13. `create-list with invalid board ID` — expect error
+14. `archive-card with invalid card ID` — expect error
+15. `board with invalid ID` — expect error (already partly tested, but explicit)
+16. `move-card with invalid card ID` — expect error
+
+**`describe("Card ordering")`** (~3 tests):
+17. `cards ordered by creation order` — create 3 cards, verify orders 0, 1, 2
+18. `moved card gets appended` — move card to list with existing cards, verify order is max+1
+19. `board shows cards sorted by order` — verify `board <id>` returns cards in order
+
+**Run tests:** `cd claude/poketo-kanban/scripts && npx vitest run kanban.test.mjs --testTimeout=30000`
 
 **Acceptance criteria:**
-- All new tests pass (except backslash test which documents a known bug — mark it `it.skip` or `it.todo` with a comment)
-- All 24 existing tests still pass
-- Total test count: 34+
+- All ~20 new tests pass
+- All 34 existing tests still pass
+- Total test count: 50+
+- Phase 6 acceptance criteria met: create-list has dedicated coverage, --progress/--description/--due each have tests
 
 ## On Completion (fill in when phase is done)
 - Deviations from plan:
