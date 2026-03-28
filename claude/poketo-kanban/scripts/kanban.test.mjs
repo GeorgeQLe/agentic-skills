@@ -284,6 +284,26 @@ describe("Search", () => {
     expect(match.boardName).toBe("test-kanban-integration");
   });
 
+  it("search with --board scopes to that board", async () => {
+    const result = await run("search", "--query", "beta", "--board", boardId);
+    expect(result.command).toBe("search");
+    expect(result.count).toBeGreaterThanOrEqual(1);
+    for (const r of result.results) {
+      expect(r.boardId).toBe(boardId);
+    }
+  });
+
+  it("search with --board invalid ID errors", async () => {
+    const result = await run(
+      "search",
+      "--query",
+      "beta",
+      "--board",
+      "00000000-0000-0000-0000-000000000000",
+    );
+    expect(result.error).toMatch(/Board not found/);
+  });
+
   it("search returns empty for non-matching query", async () => {
     const result = await run(
       "search",
