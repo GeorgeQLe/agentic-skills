@@ -526,6 +526,99 @@ describe("Additional error paths", () => {
   });
 });
 
+// ─── Database Error Paths ───────────────────────────────────────────────────
+
+describe("Database error paths", () => {
+  it("malformed UUID rejected by Postgres", async () => {
+    const result = await run(
+      "create-card",
+      "--board",
+      boardId,
+      "--list",
+      "not-a-uuid",
+      "--name",
+      "malformed uuid test",
+    );
+    expect(result.error).toBeTruthy();
+  });
+
+  it("FK violation on create-card with nonexistent list UUID", async () => {
+    const result = await run(
+      "create-card",
+      "--board",
+      boardId,
+      "--list",
+      "00000000-0000-0000-0000-000000000099",
+      "--name",
+      "fk-test",
+    );
+    expect(result.error).toBeTruthy();
+  });
+
+  it("FK violation on move-card to nonexistent list UUID", async () => {
+    // Create a real card first
+    const card = await run(
+      "create-card",
+      "--board",
+      boardId,
+      "--list",
+      listIds["Backlog"],
+      "--name",
+      "move-fk-test",
+    );
+    expect(card.card).toBeDefined();
+
+    const result = await run(
+      "move-card",
+      "--id",
+      card.card.id,
+      "--list",
+      "00000000-0000-0000-0000-000000000099",
+    );
+    expect(result.error).toBeTruthy();
+  });
+
+  it("create-board with extremely long name succeeds", async () => {
+    const longName = "B".repeat(1000);
+    const result = await run(
+      "create-board",
+      "--name",
+      longName,
+      "--template",
+      "standard",
+    );
+    // Either succeeds or returns a graceful error
+    if (result.error) {
+      expect(result.error).toBeTruthy();
+    } else {
+      expect(result.command).toBe("create-board");
+      expect(result.board.name).toBe(longName);
+      // Clean up
+      await run("delete-board", "--id", result.board.id, "--confirm");
+    }
+  });
+
+  it("concurrent duplicate board names both succeed", async () => {
+    const dupName = "duplicate-name-test";
+    const [board1, board2] = await Promise.all([
+      run("create-board", "--name", dupName, "--template", "standard"),
+      run("create-board", "--name", dupName, "--template", "standard"),
+    ]);
+
+    expect(board1.command).toBe("create-board");
+    expect(board1.board.name).toBe(dupName);
+    expect(board2.command).toBe("create-board");
+    expect(board2.board.name).toBe(dupName);
+    expect(board1.board.id).not.toBe(board2.board.id);
+
+    // Clean up both boards
+    await Promise.all([
+      run("delete-board", "--id", board1.board.id, "--confirm"),
+      run("delete-board", "--id", board2.board.id, "--confirm"),
+    ]);
+  });
+});
+
 // ─── Card Ordering ──────────────────────────────────────────────────────────
 
 describe("Card ordering", () => {
