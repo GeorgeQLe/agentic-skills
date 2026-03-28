@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-03-27 — Phase 7 Step 1: bootstrap session tests
+
+- Refactored `bootstrap-session.mjs` for testability: exported `loadEnv(searchPaths?)`, extracted `buildConfig(user, org)`, guarded auto-run with `import.meta.url` check
+- Created `bootstrap-session.test.mjs` with 10 tests across 2 describe blocks
+- `loadEnv` tests (6): KEY=value parsing, double/single quotes, comments/blanks, missing files, file merge order
+- `buildConfig` tests (4): all fields present, userId/orgId match, valid ISO timestamp
+- All 63 tests pass (53 existing + 10 new). CLI still works as direct-run script.
+
 ## 2026-03-27 — Phase 6 Step 2: create-list, update-card flags, error paths, card ordering
 
 - Added 19 new tests across 4 describe blocks to `kanban.test.mjs`

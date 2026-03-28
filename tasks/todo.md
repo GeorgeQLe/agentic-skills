@@ -4,13 +4,13 @@
 
 ## Steps
 
-- [ ] **Bootstrap session tests** — refactor bootstrap-session.mjs to export testable functions, then add unit tests for loadEnv() and config generation logic with mocked DB
+- [x] **Bootstrap session tests** — refactor bootstrap-session.mjs to export testable functions, then add unit tests for loadEnv() and config generation logic with mocked DB
 - [ ] **install.sh bats tests** — bats-core test suite for install.sh (symlink creation, permission errors, partial installs, --uninstall)
 - [ ] **Database error path tests** — at least 5 tests for DB error handling (insert failure, FK violation, connection error, returning() unchecked)
 - [ ] **Fix backslash LIKE escape** — fix search escape bug in kanban.mjs and add regression test (currently `it.todo`)
 
 ## Acceptance Criteria
-- [ ] bootstrap-session.mjs has unit tests with fixture SQLite DB or mocks
+- [x] bootstrap-session.mjs has unit tests (10 tests, temp file fixtures)
 - [ ] install.sh has bats-core test suite covering happy path + error cases
 - [ ] At least 5 database error path tests (insert failure, FK violation, connection error)
 - [ ] Backslash LIKE escape bug fixed with regression test
