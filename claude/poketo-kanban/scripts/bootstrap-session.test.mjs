@@ -3,6 +3,7 @@ import { mkdtempSync, writeFileSync, rmSync } from "node:fs";
 import { join } from "node:path";
 import { tmpdir } from "node:os";
 import { loadEnv, buildConfig } from "./bootstrap-session.mjs";
+import { ENV_SEARCH_PATHS } from "./env-paths.mjs";
 
 describe("loadEnv", () => {
   const tempDirs = [];
@@ -59,6 +60,16 @@ describe("loadEnv", () => {
     expect(vars.KEY).toBe("second");
     expect(vars.ONLY_FIRST).toBe("a");
     expect(vars.ONLY_SECOND).toBe("b");
+  });
+});
+
+describe("ENV_SEARCH_PATHS", () => {
+  it("exports absolute paths", () => {
+    expect(Array.isArray(ENV_SEARCH_PATHS)).toBe(true);
+    expect(ENV_SEARCH_PATHS.length).toBeGreaterThanOrEqual(4);
+    for (const p of ENV_SEARCH_PATHS) {
+      expect(p.startsWith("/")).toBe(true);
+    }
   });
 });
 

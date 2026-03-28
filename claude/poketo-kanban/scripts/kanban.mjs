@@ -4,6 +4,7 @@ import { readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { homedir } from "node:os";
 import { randomUUID } from "node:crypto";
+import { ENV_SEARCH_PATHS } from "./env-paths.mjs";
 import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
 import { pgTable, text, integer, boolean, timestamp, pgEnum } from "drizzle-orm/pg-core";
@@ -36,13 +37,7 @@ function getDbUrl() {
     return process.env.POKETOWORK_DATABASE_URL;
   }
   // Try common poke project locations
-  const pokePaths = [
-    join(homedir(), "projects", "apps", "poke", "monorepo", ".env.local"),
-    join(homedir(), "projects", "apps", "poke", "monorepo", ".env"),
-    join(homedir(), "projects", "poke", "dev", "poke-productivity-suite", ".env"),
-    join(homedir(), "projects", "poke", "dev", "poke-productivity-suite", ".env.local"),
-  ];
-  for (const envPath of pokePaths) {
+  for (const envPath of ENV_SEARCH_PATHS) {
     if (existsSync(envPath)) {
       const content = readFileSync(envPath, "utf-8");
       const match = content.match(/^POKETOWORK_DATABASE_URL=["']?([^\s"']+)["']?/m);

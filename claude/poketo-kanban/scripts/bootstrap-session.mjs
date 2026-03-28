@@ -16,12 +16,10 @@ import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { homedir } from "node:os";
 import { neon } from "@neondatabase/serverless";
+import { ENV_SEARCH_PATHS } from "./env-paths.mjs";
 
 export function loadEnv(searchPaths) {
-  const envPaths = searchPaths ?? [
-    join(homedir(), "projects", "poke", "dev", "poke-productivity-suite", ".env.local"),
-    join(homedir(), "projects", "poke", "dev", "poke-productivity-suite", ".env"),
-  ];
+  const envPaths = searchPaths ?? ENV_SEARCH_PATHS;
 
   const vars = {};
   for (const p of envPaths) {
