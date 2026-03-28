@@ -1,6 +1,7 @@
 ---
 name: scale-audit
 description: Evaluate codebase against enterprise ICP for production readiness, compliance, and multi-stakeholder journey coverage
+version: 1.0.0
 argument-hint: [optional: path-to-enterprise-icp-spec]
 ---
 

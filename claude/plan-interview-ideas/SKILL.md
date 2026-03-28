@@ -1,6 +1,7 @@
 ---
 name: plan-interview-ideas
 description: Run plan-interview sequentially for each idea in tasks/ideas.md
+version: 1.0.0
 argument-hint: [optional: filter keyword to limit which ideas to interview]
 ---
 

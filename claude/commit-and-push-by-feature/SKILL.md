@@ -1,6 +1,7 @@
 ---
 name: commit-and-push-by-feature
 description: Commit and push all changes to GitHub grouped by logical feature/function buckets with conventional commit messages
+version: 1.0.0
 ---
 
 Commit and push all changes to GitHub grouped by feature/function.

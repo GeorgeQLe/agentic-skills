@@ -1,6 +1,7 @@
 ---
 name: investigate
 description: Validate user claims against codebase and git history, trace to root cause, and propose a fix
+version: 1.0.0
 argument-hint: <error, bug description, user observations, or issue URL>
 ---
 

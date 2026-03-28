@@ -1,6 +1,7 @@
 ---
 name: ship-end-kanban
 description: Wrap up the current session — update docs, commit, push, and move the kanban In Progress card to Done
+version: 1.0.0
 allowed-tools: Bash(node *)
 ---
 

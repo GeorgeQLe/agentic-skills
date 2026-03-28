@@ -1,6 +1,7 @@
 ---
 name: ship-end
 description: Wrap up the current session — update docs, commit, and push
+version: 1.0.0
 ---
 
 Wrap up the current session: mark progress, commit, and push.

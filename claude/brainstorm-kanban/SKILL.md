@@ -1,6 +1,7 @@
 ---
 name: brainstorm-kanban
 description: Evaluate the codebase, suggest ideas, and create kanban Backlog cards for each idea
+version: 1.0.0
 argument-hint: [optional: focus area e.g. "performance", "new features", "DX"]
 allowed-tools: Bash(node *)
 ---
