@@ -2,11 +2,11 @@
 
 > Generated from: tasks/roadmap.md (existing), specs/board-flag-kanban-search.md, tasks/ideas.md, tasks/history.md
 > Date: 2026-03-27
-> Total Phases: 9 (6 complete, 3 planned)
+> Total Phases: 9 (7 complete, 2 planned)
 
 ## Summary
 
-Phases 1-5 built the kanban skill suite, board intelligence, templates, archive automation, and resolved expert review findings. The next wave focuses on testing hardening (Phases 6-7), kanban DX improvements (Phase 8), and skill infrastructure (Phase 9). Small phases (2-3 items each) to ship incrementally.
+Phases 1-7 built the kanban skill suite, board intelligence, templates, archive automation, resolved expert review findings, and hardened test coverage (77 tests). Next: kanban DX improvements (Phase 8) and skill infrastructure (Phase 9). Small phases (2-3 items each) to ship incrementally.
 
 ## Phase Overview
 
@@ -18,7 +18,7 @@ Phases 1-5 built the kanban skill suite, board intelligence, templates, archive 
 | 4 | Archive Automation | — | `archive-card` command + `/kanban-archive` skill | M |
 | 5 | Expert Review Fixes | — | 7 security/quality fixes | M |
 | 6 | Testing Hardening I | tasks/ideas.md | Edge case + command test expansion (~20 new tests) | M |
-| 7 | Testing Hardening II | tasks/ideas.md | Bootstrap tests, install.sh bats, DB error paths | M |
+| 7 | Testing Hardening II ✓ | tasks/ideas.md | Bootstrap tests, install.sh bats, DB error paths | M |
 | 8 | Kanban DX | specs/board-flag-kanban-search.md, tasks/ideas.md | `--board` flag, dry-run mode, env path unification | M |
 | 9 | Skill Infrastructure | tasks/ideas.md | Skill discovery, dependency graph, versioning | L |
 
@@ -175,27 +175,21 @@ Phases 1-5 built the kanban skill suite, board intelligence, templates, archive 
 
 ---
 
-## Phase 7: Testing Hardening II
+## Phase 7: Testing Hardening II ✓
 
 **Goal:** Cover the remaining untested code paths: bootstrap-session.mjs, install.sh, and database error handling.
 
-**Scope**:
-- Test bootstrap-session.mjs (env parsing, SQLite reads, session extraction)
-- install.sh test suite with bats-core (symlink creation, permission errors, partial installs, --uninstall)
-- Database error path test suite (insert failures, FK violations, returning() unchecked)
-- Fix search escape: backslash not handled (known bug)
-
 **Acceptance Criteria:**
-- [ ] bootstrap-session.mjs has unit tests with fixture SQLite DB or mocks
-- [ ] install.sh has bats-core test suite covering happy path + error cases
-- [ ] At least 5 database error path tests (insert failure, FK violation, connection error)
-- [ ] Backslash LIKE escape bug fixed with regression test
-- [ ] All tests pass across all suites
+- [x] bootstrap-session.mjs has unit tests (10 tests, temp file fixtures)
+- [x] install.sh has vitest test suite covering happy path + error cases (8 tests)
+- [x] At least 5 database error path tests (insert failure, FK violation, connection error)
+- [x] Backslash LIKE escape bug fixed with regression test
+- [x] All tests pass across all suites (77 tests)
 
-**On Completion** (fill in when phase is done):
-- Deviations from plan:
-- Tech debt / follow-ups:
-- Ready for next phase:
+**On Completion:**
+- Deviations from plan: install.sh tests used vitest instead of bats-core (no new deps needed)
+- Tech debt / follow-ups: empty description clearing (`--description ""`), expose card `order` in responses
+- Ready for next phase: yes
 
 ---
 
