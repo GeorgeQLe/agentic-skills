@@ -1,6 +1,6 @@
 ---
 name: roadmap-kanban
-description: Build or update the project roadmap, then sync phases and steps to kanban board
+description: Build or update the project roadmap, then sync phases and steps to kanban board — current phase steps go to Todo, future phases to Backlog
 ---
 
 # Roadmap Builder (Kanban)

@@ -1,6 +1,6 @@
 ---
 name: release
-description: Manage the release ceremony — version bump, changelog generation from conventional commits, git tag, and optional GitHub release and deploy trigger.
+description: Version bump, generate changelog, tag, and prepare a release
 ---
 
 # Release

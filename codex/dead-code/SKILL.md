@@ -1,6 +1,6 @@
 ---
 name: dead-code
-description: Scan the codebase for unused exports, orphaned files, stale dependencies, and unreachable code, outputting a prioritized cleanup list.
+description: Scan for unused exports, unreachable code, orphaned files, and stale dependencies
 ---
 
 # Dead Code

@@ -1,6 +1,6 @@
 ---
 name: expert-review
-description: Conduct a project-wide code review cross-referenced against specs, changelogs, and design documents to avoid contradicting intentional decisions.
+description: Conduct a thorough project-wide code review as an expert panel, cross-referencing specs, changelogs, and design documents
 ---
 
 # Expert Review

@@ -1,6 +1,6 @@
 ---
 name: ship-kanban
-description: Ship current work, move kanban card to Done or Punt, deploy, and plan next step with card in Todo
+description: Ship current work, move kanban card to Done or Punt, deploy, and plan the next step with card in Todo
 ---
 
 # Ship (Kanban)

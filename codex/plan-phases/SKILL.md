@@ -1,6 +1,6 @@
 ---
 name: plan-phases
-description: Convert a finalized spec into a phased implementation plan written to tasks/roadmap.md (full plan) and tasks/todo.md (current phase) with milestones, TDD-first steps, and file-level scope.
+description: Break a finalized spec into phases, steps, milestones, and TDD test plans
 ---
 
 # Plan Phases

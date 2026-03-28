@@ -1,6 +1,6 @@
 ---
 name: install-workflow-orchestration
-description: Create or update the current repository's CLAUDE.md by inserting a specific workflow-orchestration block exactly once while preserving unrelated content.
+description: Install workflow orchestration instructions into the current repository's CLAUDE.md
 ---
 
 # Install Workflow Orchestration

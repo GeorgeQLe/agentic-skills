@@ -1,6 +1,6 @@
 ---
 name: icp
-description: Research-driven ICP discovery — web search + codebase analysis to identify multiple ICPs with cross-ICP prioritization
+description: Research-driven ICP discovery — web search + codebase analysis to identify multiple ICPs, pain points, value props, and cross-ICP prioritization
 version: 3.1.0
 argument-hint: <spec file path or concept/idea>
 ---

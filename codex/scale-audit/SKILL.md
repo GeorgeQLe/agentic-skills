@@ -1,6 +1,6 @@
 ---
 name: scale-audit
-description: Evaluate codebase against enterprise ICP for production readiness and compliance
+description: Evaluate codebase against enterprise ICP for production readiness, compliance, and multi-stakeholder journey coverage
 ---
 
 # Scale Audit — Enterprise Production Readiness

@@ -1,6 +1,6 @@
 ---
 name: plan-interview
-description: Run a detailed requirements interview from an existing draft spec or project description, use Codex's user-input flow for material decisions, and finish by writing a completed spec plus an interview log.
+description: Interview to validate and complete a specification
 ---
 
 # Plan Interview

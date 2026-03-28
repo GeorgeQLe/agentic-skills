@@ -1,6 +1,6 @@
 ---
 name: regression-check
-description: Run a comprehensive health check (types, lint, tests, build, imports) across the project after a major change, distinguishing new regressions from pre-existing issues.
+description: Run a comprehensive health check across the monorepo after completing a phase or major change
 ---
 
 # Regression Check

@@ -1,6 +1,6 @@
 ---
 name: ship-end
-description: Wrap up the current working session by updating task-tracking docs, committing and pushing changes, and reporting what was accomplished and what remains.
+description: Wrap up the current session — update docs, commit, and push
 ---
 
 # Ship End

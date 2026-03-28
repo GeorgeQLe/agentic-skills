@@ -1,6 +1,6 @@
 ---
 name: affected
-description: Analyze which monorepo packages and apps are affected by current changes, including transitive dependents, and recommend what to test.
+description: Analyze which monorepo packages and apps are affected by current changes
 ---
 
 # Affected

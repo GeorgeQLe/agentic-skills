@@ -1,6 +1,6 @@
 ---
 name: decommission
-description: Systematically tear down a service, package, or infrastructure component by auditing dependencies, planning removal, and verifying nothing breaks.
+description: Systematically tear down and remove a service, package, or infrastructure component
 ---
 
 # Decommission

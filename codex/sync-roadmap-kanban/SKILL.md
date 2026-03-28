@@ -1,6 +1,6 @@
 ---
 name: sync-roadmap-kanban
-description: Reconcile kanban board state with roadmap docs and codebase reality.
+description: Reconcile kanban board state with roadmap docs and codebase reality — sync cards, steps, and git history so they agree.
 ---
 
 # Sync Roadmap ↔ Kanban

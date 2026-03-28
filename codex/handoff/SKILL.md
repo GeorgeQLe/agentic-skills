@@ -1,6 +1,6 @@
 ---
 name: handoff
-description: Generate a self-contained project context snapshot to tasks/handoff.md so a fresh Claude session can resume work immediately without re-reading the codebase.
+description: Generate a project-level context snapshot for resuming work in a fresh session
 ---
 
 # Handoff

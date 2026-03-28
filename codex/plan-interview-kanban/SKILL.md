@@ -1,6 +1,6 @@
 ---
 name: plan-interview-kanban
-description: Run a detailed requirements interview, write a spec, and update the matching kanban Backlog card with spec details.
+description: Interview to validate and complete a specification, then update the matching kanban Backlog card with spec details
 ---
 
 # Plan Interview (Kanban)
