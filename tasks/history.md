@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-03-27 — Phase 7 Step 3: Database error path tests
+
+- Added 5 tests in new `describe("Database error paths")` block to `kanban.test.mjs`
+- Malformed UUID rejection, FK violation on create-card, FK violation on move-card, extremely long board name, concurrent duplicate board names
+- All tests hit real Postgres errors (no mocks) — verifies `main().catch()` handler works
+- All 76 tests pass (71 existing + 5 new)
+
 ## 2026-03-27 — Phase 7 Step 2: install.sh tests
 
 - Created `claude/poketo-kanban/scripts/install.test.mjs` with 8 tests using vitest + child_process
