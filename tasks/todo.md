@@ -5,14 +5,14 @@
 ## Steps
 
 - [x] **Kanban edge case tests** — unicode names, LIKE metacharacters (%, _, backslash as todo), archiving already-archived card, moving card to same list, empty/long names, done idempotency, invalid list ID
-- [ ] **Test create-list command** — dedicated test coverage for create-list plus untested flags (~20 new tests for --progress, --description, --due, search special chars, create-card edge cases, error paths)
+- [x] **Test create-list command** — dedicated test coverage for create-list plus untested flags (19 new tests for --progress, --description, --due, error paths, card ordering)
 
 ## Acceptance Criteria
 - [x] Edge case tests added: unicode card names, LIKE metacharacter queries (%, _, backslash as todo), moving card to same list, archiving already-archived card
-- [ ] create-list command has dedicated test coverage
-- [ ] update-card --progress, --description, --due flags each have at least one test
+- [x] create-list command has dedicated test coverage
+- [x] update-card --progress, --description, --due flags each have at least one test
 - [x] search with special characters has regression tests
-- [ ] All new + existing tests pass (target: 40+ total, up from 24)
+- [x] All new + existing tests pass (53 passed, 1 todo — target was 40+)
 
 ## Plan: Test create-list command + untested flags
 
@@ -63,7 +63,7 @@
 - Total test count: 50+
 - Phase 6 acceptance criteria met: create-list has dedicated coverage, --progress/--description/--due each have tests
 
-## On Completion (fill in when phase is done)
-- Deviations from plan:
-- Tech debt / follow-ups:
-- Ready for next phase:
+## On Completion
+- Deviations from plan: `--description ""` can't clear description (falsy guard in kanban.mjs line 243); `--type` flag doesn't exist on create-list; move-card/board responses don't include card `order` field — tests adapted accordingly
+- Tech debt / follow-ups: backslash search escaping (todo test), empty description clearing, expose card `order` in board/move-card responses
+- Ready for next phase: yes

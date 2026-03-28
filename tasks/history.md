@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-03-27 — Phase 6 Step 2: create-list, update-card flags, error paths, card ordering
+
+- Added 19 new tests across 4 describe blocks to `kanban.test.mjs`
+- create-list: name, auto-increment order, missing --name error, missing --board error
+- update-card flags: --progress (set/reset), --description (set + falsy-guard on empty), --due, combined --due+--progress
+- Additional error paths: invalid board/card IDs for create-card/create-list/archive-card/move-card, missing --list
+- Card ordering: first card order 0, second card order 1, moved card appends, board insertion order
+- Discovered: `--description ""` is no-op (falsy guard line 243), move-card/board responses omit card `order`
+- All 53 tests pass (1 todo). Phase 6 complete.
+
 ## 2026-03-27 — Phase 6 Step 1: kanban edge case tests
 
 - Added 11 edge case tests (10 runnable + 1 `it.todo`) to `kanban.test.mjs`
