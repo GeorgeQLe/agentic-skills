@@ -1,6 +1,6 @@
 # Skills Reference
 
-Complete reference for all 43 custom skills in this repository, available for both Claude Code and Codex.
+Complete reference for all 44 custom skills in this repository, available for both Claude Code and Codex.
 
 ## Installation
 
@@ -29,16 +29,15 @@ claude-skills/
 These skills form a structured development workflow:
 
 ```
-Discover                 Ideate                       Specify                 Strategize          Detail              Execute                    Ship                    Evaluate
-───────────────────      ─────────────────────────    ────────────────────    ──────────────      ──────────────      ───────────────────────    ──────────────────────   ──────────────
-/icp                 →   /brainstorm              →   /plan-interview    →    /roadmap       →    /plan-phases   →    /run (single step)    →    /ship              →    /mvp-gap
-/enterprise-icp          └→ /plan-interview-ideas                                                                     /run --phase (full)   →    /ship-then-plan         /scale-audit
-                                                                                                                      /run-step             →    /ship-end
-                                                                                                                      /run-phases
+Discover                      Ideate                       Specify                 Map Journeys         Strategize          Execute                    Ship                    Evaluate
+────────────────────────      ─────────────────────────    ────────────────────    ──────────────      ──────────────      ───────────────────────    ──────────────────────   ──────────────
+/icp                      →   /brainstorm              →   /plan-interview    →    /journey-map   →    /roadmap       →    /run (single step)    →    /ship              →    /mvp-gap
+/competitive-analysis         └→ /plan-interview-ideas                                                                     /run --phase (full)        /ship-end               /scale-audit
+/enterprise-icp
 ```
 
-**Greenfield flow**: `/icp` → `/plan-interview` → `/roadmap` → `/plan-phases` → `/run` → `/ship` → `/mvp-gap`
-**Existing project flow**: `/icp` → `/mvp-gap` → `/brainstorm` → `/plan-interview` → `/roadmap` → ...
+**New project flow**: `/icp` → `/competitive-analysis` → `/brainstorm` → `/plan-interview` → `/journey-map` → `/roadmap` → `/plan-phases` → `/run` → `/ship` → `/mvp-gap`
+**Existing project flow**: `/icp` → `/competitive-analysis` → `/mvp-gap` → `/brainstorm` → `/plan-interview` → `/journey-map` → `/roadmap` → ...
 **Enterprise expansion**: `/enterprise-icp` → (build cycle) → `/scale-audit`
 
 Supporting skills plug in at any point: `/expert-review`, `/investigate`, `/affected`, `/regression-check`, etc.
@@ -48,18 +47,25 @@ Supporting skills plug in at any point: `/expert-review`, `/investigate`, `/affe
 ## Discovery & Market Fit
 
 ### `/icp`
-Customer discovery interview — map the problem space, ICP, user journeys, and value prop before designing a solution.
+Research-driven ICP discovery — web search + codebase analysis to identify multiple ICPs, pain points, value props, and cross-ICP prioritization.
 
-- **Arguments**: `[optional: rough idea or problem area]`
-- **Modes**: Auto-detects greenfield (no code) vs. existing project (code exists).
-- **Outputs**: `specs/icp.md` (structured discovery document), `specs/icp-interview.md` (interview log)
+- **Arguments**: `<spec file path or concept/idea>`
+- **Outputs**: `research/icp.md` (structured discovery document), `research/icp-search-log.md` (raw research log)
 - **Use when**: Starting a new product idea (before `/plan-interview`) or retrofitting ICP to an existing project.
+
+### `/competitive-analysis`
+Research competitors via web search — map the landscape, GTM strategies, strengths, weaknesses, and market gaps.
+
+- **Arguments**: `[optional: product category or specific competitors to investigate]`
+- **Prerequisites**: Best run after `/icp` so the competitive frame is grounded in your ICP.
+- **Outputs**: `research/competitive-analysis.md` (landscape map, competitor profiles, positioning gaps)
+- **Use when**: After `/icp`, before `/brainstorm` — understand the market before deciding what to build.
 
 ### `/mvp-gap`
 Evaluate codebase against ICP to identify gaps blocking first sales and retention.
 
 - **Arguments**: `[optional: path-to-icp-spec]`
-- **Prerequisites**: `specs/icp.md` must exist (run `/icp` first).
+- **Prerequisites**: `research/icp.md` must exist (run `/icp` first).
 - **Outputs**: `specs/mvp-gap.md` (gap analysis with priority tags and `/plan-interview` prompts)
 - **Use when**: After building, to check if the product meets the ICP's needs. Re-run as you build.
 
@@ -67,14 +73,22 @@ Evaluate codebase against ICP to identify gaps blocking first sales and retentio
 Enterprise multi-stakeholder discovery — map personas, deal-killers, and the evaluation-to-renewal lifecycle.
 
 - **Arguments**: `[optional: target industry or market segment]`
-- **Outputs**: `specs/enterprise-icp.md` (stakeholder map, journeys, deal-killers), `specs/enterprise-icp-interview.md`
+- **Outputs**: `research/enterprise-icp.md` (stakeholder map, journeys, deal-killers), `research/enterprise-icp-interview.md`
 - **Use when**: Pivoting to or expanding into enterprise sales.
+
+### `/journey-map`
+Map user journeys (per-use-case task flows) and customer journey (trigger→discovery→aha→conversion→retention) through the product.
+
+- **Arguments**: `[optional: specific use case or journey stage to focus on]`
+- **Prerequisites**: `research/icp.md` and at least one `specs/*.md` must exist (run `/icp` then `/plan-interview` first).
+- **Outputs**: `research/journey-map.md` (user task flows + customer funnel), `research/journey-map-interview.md` (interview log)
+- **Use when**: After speccing the solution, before roadmap — maps the with-product experience to inform prioritization and gap analysis.
 
 ### `/scale-audit`
 Evaluate codebase against enterprise ICP for production readiness, compliance, and multi-stakeholder journey coverage.
 
 - **Arguments**: `[optional: path-to-enterprise-icp-spec]`
-- **Prerequisites**: `specs/enterprise-icp.md` must exist (run `/enterprise-icp` first).
+- **Prerequisites**: `research/enterprise-icp.md` must exist (run `/enterprise-icp` first).
 - **Outputs**: `specs/scale-audit.md` (gap analysis with stakeholder/compliance matrices and `/plan-interview` prompts)
 - **Use when**: Before pursuing enterprise deals, to understand production readiness gaps.
 
@@ -128,33 +142,15 @@ Plan the next incomplete step (or full phase with `--phase`), enter plan mode fo
 - **Default**: Single-step execution with plan mode approval gate.
 - **Use when**: Ready to implement the next piece of work.
 
-### `/run-step`
-Execute only the next single incomplete step from the current phase.
-
-- **Arguments**: None
-- **Use when**: You want to execute one step without the plan mode ceremony.
-
-### `/run-phases`
-Execute the next incomplete phase from a phased plan.
-
-- **Arguments**: None
-- **Use when**: You want to execute an entire phase in one go.
-
 ---
 
 ## Shipping
 
 ### `/ship`
-Ship current work (update docs, commit, push) and optionally plan the next step.
+Ship current work (update docs, commit, push, deploy) and plan the next step.
 
-- **Arguments**: `[--no-plan]`
-- **Use when**: Work is done and ready to commit.
-
-### `/ship-then-plan`
-Ship current work, plan next step, then enter plan mode for clear-and-implement.
-
-- **Arguments**: None
-- **Use when**: Shipping and immediately setting up a fresh context for the next step.
+- **Arguments**: `[--no-plan] [--no-deploy]`
+- **Use when**: Work is done and ready to commit. Handles phase transitions with just-in-time `/plan-phases`.
 
 ### `/ship-end`
 Wrap up the current session — update docs, commit, and push.
@@ -380,6 +376,7 @@ Archive old Done/Punt cards from the kanban board.
 | `/icp` | Customer discovery — map ICP, journeys, value prop |
 | `/mvp-gap` | Evaluate codebase against ICP for MVP readiness |
 | `/enterprise-icp` | Enterprise multi-stakeholder discovery |
+| `/journey-map` | Map user task flows + customer journey funnel |
 | `/scale-audit` | Enterprise production readiness audit |
 | `/brainstorm` | Evaluate codebase, suggest improvement ideas |
 | `/plan-interview` | Rough idea → validated spec |
@@ -388,10 +385,7 @@ Archive old Done/Punt cards from the kanban board.
 | `/plan-phases` | Roadmap phase → TDD steps with file detail |
 | `/run` | Execute next step (plan mode first) |
 | `/run --phase` | Execute next full phase (plan mode first) |
-| `/run-step` | Execute one step (no plan mode) |
-| `/run-phases` | Execute one full phase |
-| `/ship` | Commit, push, optionally plan next |
-| `/ship-then-plan` | Commit, push, plan next in fresh context |
+| `/ship` | Commit, push, deploy, plan next step |
 | `/ship-end` | Wrap up session |
 | `/expert-review` | Expert code review |
 | `/regression-check` | Full health check (types, lint, tests, build) |

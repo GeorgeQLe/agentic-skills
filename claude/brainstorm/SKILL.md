@@ -12,7 +12,7 @@ Evaluate the current codebase and generate actionable suggestions that the user 
 ## Process
 
 1. **Understand the project**: Read CLAUDE.md, README, package config, and key source files to understand what the project does, its architecture, tech stack, and current state.
-2. **Check existing plans**: Read `tasks/roadmap.md`, `tasks/todo.md`, and specs from `specs/` (or `spec.md`) if they exist to understand work already planned or in progress — avoid suggesting things already covered.
+2. **Check existing plans and research**: Read `tasks/roadmap.md`, `tasks/todo.md`, and specs from `specs/` (or `spec.md`) if they exist to understand work already planned or in progress — avoid suggesting things already covered. Read `research/competitive-analysis.md` if it exists — competitor gaps, market white space, and positioning weaknesses are high-signal inputs for ideation.
 3. **Analyse the codebase** across these dimensions:
 
    **Strategic / Product**
@@ -32,11 +32,13 @@ Evaluate the current codebase and generate actionable suggestions that the user 
    - **Testing gaps**: Untested critical paths or missing test infrastructure
    - **Security hardening**: Areas where security posture could be improved
 
-   **Market Fit** (only when `specs/icp.md` or `specs/mvp-gap.md` exist)
+   **Market Fit** (only when `research/icp.md`, `specs/mvp-gap.md`, or `research/competitive-analysis.md` exist)
    - **ICP alignment**: Features that directly address ICP pain points but are missing or incomplete
    - **Journey gaps**: Steps in the user or customer journey where the product loses them
    - **Unaddressed MVP gaps**: Gaps from `specs/mvp-gap.md` not yet tracked in roadmap or todo
-   - **Competitive positioning**: Weaknesses relative to the ICP's current alternatives
+   - **Competitive white space**: Features or capabilities that no competitor offers well — opportunities from `research/competitive-analysis.md` market gaps
+   - **Competitor leapfrog**: Specific competitor weaknesses you could exploit, or table-stakes features competitors have that you lack
+   - **Positioning plays**: Ideas that would sharpen differentiation against the competitive landscape
 4. **Scope**: If `$ARGUMENTS` is provided, focus the analysis on that area. Otherwise, cover all dimensions.
 
 ## Output

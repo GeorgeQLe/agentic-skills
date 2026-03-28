@@ -1,7 +1,7 @@
 ---
 name: competitive-analysis
 description: Research competitors via web search — map the landscape, GTM strategies, strengths, weaknesses, and market gaps
-version: 1.0.0
+version: 2.0.0
 argument-hint: [optional: product category or specific competitors to investigate]
 ---
 
@@ -11,7 +11,7 @@ Conduct deep web-based research to compile a comprehensive competitive landscape
 
 ## Prerequisites
 
-Read the codebase, README, CLAUDE.md, and existing specs (`specs/icp.md`, `specs/enterprise-icp.md`, `specs/mvp-gap.md`) to understand what the product does, who it's for, and what value it claims to provide. This context is essential for identifying the right competitors and evaluating positioning.
+Read the codebase, README, CLAUDE.md, and existing research/specs (`research/icp.md`, `research/enterprise-icp.md`, `specs/mvp-gap.md`) to understand what the product does, who it's for, and what value it claims to provide. This context is essential for identifying the right competitors and evaluating positioning.
 
 If no codebase or specs exist, ask the user to describe the product and target market before proceeding.
 
@@ -20,8 +20,8 @@ If no codebase or specs exist, ask the user to describe the product and target m
 ### 1. Establish Product Context
 
 - Read CLAUDE.md, README, package config, and key source files to understand the product
-- Read `specs/icp.md` if it exists — the customer profile, pain map, and value prop define the competitive frame
-- Read `specs/enterprise-icp.md` and `specs/mvp-gap.md` if they exist for additional context
+- Read `research/icp.md` if it exists — the customer profile, pain map, and value prop define the competitive frame
+- Read `research/enterprise-icp.md` and `specs/mvp-gap.md` if they exist for additional context
 - If `$ARGUMENTS` names specific competitors, use those as a starting point but still search broadly
 
 Summarise what the product does, who it's for, and what problem it solves. Confirm this understanding with the user before researching.
@@ -44,6 +44,12 @@ Search strategies:
 - Check Product Hunt, G2, Capterra, and industry-specific directories
 - Search for recent funding rounds in the space: `"[product category] startup funding"`
 - Look for open-source alternatives on GitHub
+
+**Checkpoint 1 — Present the competitor list to the user.** Use the AskUserQuestion tool to show all identified competitors grouped by category (direct, indirect, incumbent, emerging, DIY), then ask:
+- "Are there competitors I missed?"
+- "Any of these incorrectly categorised or not actually relevant?"
+
+Incorporate feedback before proceeding to deep research.
 
 ### 3. Research Each Competitor
 
@@ -104,19 +110,30 @@ Based on all research:
 - What GTM strategy best fits our product and the market dynamics?
 - What are the 2-3 most compelling angles we could own?
 
-### 6. Validate with User
+### 6. Present Findings & Validate
 
-Present the draft findings and ask the user:
-- Are there competitors we missed?
-- Do the market gaps match their intuition?
-- Which positioning angles resonate most?
-- Any insider knowledge that changes the analysis?
+**Checkpoint 2 — Present the full analysis to the user before writing.** Use the AskUserQuestion tool to present:
 
-Incorporate feedback and finalise.
+1. **Landscape summary** — the competitive picture in 3-5 sentences
+2. **Key competitors** — top 3-5 with their strengths, weaknesses, and key takeaway
+3. **Market gaps** — the most significant unmet needs
+4. **Recommended positioning** — where we should play and why
+5. **GTM insights** — what works in this market
+
+Then ask:
+- "Do the market gaps match your intuition?"
+- "Which positioning angles resonate most?"
+- "Any insider knowledge that changes the analysis?"
+
+Continue the conversation until all non-trivial details are nailed down. If the user raises points that require additional research, go back and search before finalising.
+
+### 7. Write Output
+
+Only after the user has validated the findings, write the output files.
 
 ## Output
 
-### `specs/competitive-analysis.md`
+### `research/competitive-analysis.md`
 
 ```markdown
 # Competitive Analysis
@@ -180,10 +197,10 @@ For each:
 - Each with a _Start with:_ `/plan-interview [topic]` prompt where appropriate
 ```
 
-### `specs/competitive-analysis-interview.md`
-Raw log of the validation conversation with the user — initial context confirmation, draft findings review, user feedback, and final adjustments.
+### `research/competitive-analysis-search-log.md`
+Raw research log — every search query, key findings with source attribution, and the reasoning behind categorisation and positioning recommendations.
 
-Create the `specs/` directory if it doesn't exist.
+Create the `research/` directory if it doesn't exist.
 
 ## Constraints
 
@@ -192,6 +209,7 @@ Create the `specs/` directory if it doesn't exist.
 - **Be honest about uncertainty.** If information couldn't be verified, say so. Don't fabricate metrics.
 - **Stay in analysis mode.** Do not propose product changes, architecture, or features — that's for `/plan-interview` and `/mvp-gap`.
 - **Focus on actionable insights.** Raw competitor lists are easy; the value is in the synthesis — gaps, patterns, positioning angles.
-- **Do not overwrite existing `specs/competitive-analysis.md`** without asking the user first.
+- **Do not overwrite existing `research/competitive-analysis.md`** without asking the user first.
 - **Keep research current.** Prefer recent sources (last 12 months). Flag any information that may be outdated.
 - **Search breadth over depth initially.** Cast a wide net to find all competitors before going deep on each one. It's better to identify 15 competitors and research 8 deeply than to miss half the landscape.
+- **Present before writing.** Never write output files until findings have been presented to the user and validated through the checkpoint questions. The user must see and approve the analysis before anything is written to disk.

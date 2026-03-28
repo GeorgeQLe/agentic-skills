@@ -70,7 +70,7 @@ After board validation, display a brief board status to provide context:
    - **Testing gaps**: Untested critical paths or missing test infrastructure
    - **Security hardening**: Areas where security posture could be improved
 
-   **Market Fit** (only when `specs/icp.md` or `specs/mvp-gap.md` exist)
+   **Market Fit** (only when `research/icp.md` or `specs/mvp-gap.md` exist)
    - **ICP alignment**: Features that directly address ICP pain points but are missing or incomplete
    - **Journey gaps**: Steps in the user or customer journey where the product loses them
    - **Unaddressed MVP gaps**: Gaps from `specs/mvp-gap.md` not yet tracked in roadmap or todo

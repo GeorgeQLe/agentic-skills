@@ -1,15 +1,15 @@
 ---
 name: icp
 description: Research-driven ICP discovery — web search + codebase analysis to identify multiple ICPs, pain points, value props, and cross-ICP prioritization
-version: 2.0.0
+version: 3.1.0
 argument-hint: <spec file path or concept/idea>
 ---
 
 # ICP — Research-Driven Customer Discovery
 
-Automated research that identifies **multiple ICP candidates**, maps their pain points and value props, scores them, and selects a primary ICP. Replaces the interview-driven approach with web search + codebase analysis. Input is a spec file path or a concept/idea as `$ARGUMENTS`.
+Automated research that identifies **multiple ICP candidates**, maps their pain points and value props, scores them, and selects a primary ICP. Replaces interview-driven approaches with web search + codebase analysis. Input is a spec file path or a concept/idea as `$ARGUMENTS`.
 
-The output preserves the canonical 7-section format at the top level (for downstream compatibility with `/plan-interview`, `/mvp-gap`, `/roadmap`) while adding multi-ICP analysis and cross-ICP prioritization.
+The output preserves the canonical 9-section format at the top level (for downstream compatibility with `/plan-interview`, `/mvp-gap`, `/roadmap`, `/journey-map`) while adding multi-ICP analysis and cross-ICP prioritization.
 
 ## Process
 
@@ -23,7 +23,7 @@ The output preserves the canonical 7-section format at the top level (for downst
 **Read codebase (if it exists):**
 Read CLAUDE.md, README, package config, key source files, routes, and data models to understand what's been built. This grounds the research in reality rather than pure market abstraction.
 
-**Read existing specs** (`specs/icp.md`, `specs/mvp-gap.md`, etc.) if they exist — use as background context but do not treat as settled. This research may reshape direction.
+**Read existing research** (`research/icp.md`, `research/competitive-analysis.md`, etc.) and specs if they exist — use as background context but do not treat as settled. This research may reshape direction.
 
 ### 2. Broad Market Research
 
@@ -43,7 +43,7 @@ Query strategies (adapt to the specific domain):
 
 Use WebFetch to pull in particularly relevant pages for deeper analysis when search snippets aren't enough.
 
-### 3. Identify 2–5 ICP Candidates
+### 3. Identify ICP Candidates — Present & Validate
 
 From the research evidence, cluster findings into **2–5 distinct ICP candidates**. For each candidate, note:
 - Who they are (role, company type, size)
@@ -51,19 +51,27 @@ From the research evidence, cluster findings into **2–5 distinct ICP candidate
 - How accessible they are (can we reach them?)
 - How much value we could deliver
 
+**Checkpoint 1 — Present candidates to the user.** Use the AskUserQuestion tool to show the ICP candidates with a brief rationale for each, then ask:
+- "Do any of these surprise you? Is there a segment I'm missing?"
+- "Any of these clearly wrong for your situation?"
+
+Incorporate feedback before proceeding.
+
 ### 4. Deep Research Per ICP
 
-For each ICP candidate, run **targeted searches** to fill the 7-section framework:
+For each validated ICP candidate, run **targeted searches** to fill the 9-section framework:
 
-- **Customer Profile** — buyer persona, triggers, budget authority, discovery channels
+- **Customer Profile** — buyer persona, budget authority, discovery channels
 - **User Profile(s)** — daily users, technical sophistication, goals, frustrations
+- **Trigger Events** — what causes someone to start looking NOW? Job changes, growth milestones, compliance deadlines, tool sunsets, contract renewals, team scaling pain, funding events, new regulations. Search for "[category] buying triggers", "why companies switch [category]", "[incumbent] churn reasons". Rank by frequency and urgency.
 - **Current State Journey** — step-by-step workflow without our product
 - **Pain Map** — where the current state breaks down, severity, frequency
 - **Market Landscape** — alternatives they use, shortcomings, unaddressed gaps
+- **Market Sizing** — TAM (total addressable market), SAM (serviceable), SOM (obtainable). Search for "[category] market size", "[category] TAM", "[category] number of companies". Use company counts, average deal size signals, and segment data to build bottom-up estimates. Flag confidence level (strong data vs. rough extrapolation).
 - **Value Proposition** — our unique wedge for this specific ICP, the "aha moment"
 - **Customer ↔ User Dynamics** — buying process, provisioning, adoption path
 
-### 5. Score & Select Primary ICP
+### 5. Score & Select Primary ICP — Present & Validate
 
 Build a **Value x Accessibility** scoring matrix:
 
@@ -79,9 +87,13 @@ Build a **Value x Accessibility** scoring matrix:
 - How complex is the buying process?
 - Is there an existing community we can tap?
 
-The ICP with the best combined score becomes the **Primary ICP** (occupies top-level sections in the output). If the scores are close, briefly note the trade-off.
+**Checkpoint 2 — Present the scoring matrix and primary ICP selection to the user.** Use the AskUserQuestion tool to show the full matrix with scores and rationale, then ask:
+- "Does this ranking match your intuition? Any factors I'm not weighing correctly?"
+- If scores are close between candidates, ask which trade-offs the user prefers
 
-### 6. Cross-ICP Analysis
+Incorporate feedback before proceeding.
+
+### 6. Cross-ICP Analysis — Present & Validate
 
 Analyze across all ICP candidates:
 - **Shared pains** — what pain points appear across multiple ICPs?
@@ -90,19 +102,24 @@ Analyze across all ICP candidates:
 - **Build sequence** — which ICP to target first, second, third and why?
 - **Lowest-hanging fruit x most value** — the prioritization sweet spot
 
-### 7. Brief Validation
+**Checkpoint 3 — Present the cross-ICP analysis and recommended build sequence to the user.** Use the AskUserQuestion tool to show the analysis, then ask:
+- "Does this sequencing make sense for where you are right now?"
+- If conflicts exist between ICPs, ask the user to weigh in on the trade-offs
 
-Ask the user **1–2 focused questions** to validate the primary ICP selection and any surprising findings. This is not a full interview — just a quick sanity check:
-- "Based on research, [ICP X] looks like the strongest fit because [reasons]. Does this match your intuition, or is there a segment I'm missing?"
-- If the research surfaced something unexpected, ask about it
+Incorporate feedback before proceeding.
 
-Then finalize the output files.
+### 7. Final Review & Write
+
+Present the **complete findings summary** to the user — primary ICP, key sections, cross-ICP analysis, and build sequence. Ask:
+- "Ready to write this to `research/icp.md`? Anything to adjust first?"
+
+Only after the user confirms, write the output files.
 
 ## Output
 
 Write two files:
 
-### `specs/icp.md`
+### `research/icp.md`
 
 Structure — the **Primary ICP** fills the canonical top-level sections:
 
@@ -110,13 +127,17 @@ Structure — the **Primary ICP** fills the canonical top-level sections:
 # ICP: [Primary ICP Name]
 
 > Primary ICP selected from [N] candidates. See Additional ICPs and Cross-ICP Analysis below.
-> Research log: specs/icp-research.md
+> Search log: research/icp-search-log.md
 
 ## Customer Profile
-[Buyer persona, triggers, budget authority, discovery channels]
+[Buyer persona, budget authority, discovery channels]
 
 ## User Profile(s)
 [Daily user persona(s), technical sophistication, goals, frustrations]
+
+## Trigger Events
+[What causes them to start looking NOW — ranked by frequency and urgency.
+ Job changes, growth milestones, compliance deadlines, tool sunsets, contract renewals, etc.]
 
 ## Current State Journey
 [Step-by-step workflow without our product]
@@ -126,6 +147,11 @@ Structure — the **Primary ICP** fills the canonical top-level sections:
 
 ## Market Landscape
 [Alternatives, their shortcomings, the unaddressed gap]
+
+## Market Sizing
+[TAM / SAM / SOM with methodology and confidence level.
+ Bottom-up: number of target companies × estimated deal size.
+ Top-down: industry reports, competitor revenue signals.]
 
 ## Value Proposition
 [Our unique wedge for this ICP, the "aha moment"]
@@ -140,11 +166,15 @@ Structure — the **Primary ICP** fills the canonical top-level sections:
 ...
 #### User Profile(s)
 ...
+#### Trigger Events
+...
 #### Current State Journey
 ...
 #### Pain Map
 ...
 #### Market Landscape
+...
+#### Market Sizing
 ...
 #### Value Proposition
 ...
@@ -174,7 +204,7 @@ Structure — the **Primary ICP** fills the canonical top-level sections:
 [Which ICP to target first → second → third, with reasoning]
 ```
 
-### `specs/icp-research.md`
+### `research/icp-search-log.md`
 
 Raw research log containing:
 - Every WebSearch query executed and why
@@ -183,13 +213,14 @@ Raw research log containing:
 - The scoring rationale for primary ICP selection
 - Any data gaps or areas where research was inconclusive
 
-Create the `specs/` directory if it doesn't exist.
+Create the `research/` directory if it doesn't exist.
 
 ## Constraints
 
 - **Stay in problem space.** Do not propose features, architecture, UI, or technical solutions. That is `/plan-interview`'s job.
-- **Evidence-based.** Every claim in the ICP document must trace back to research evidence logged in `specs/icp-research.md`. Do not fabricate personas from assumptions.
+- **Evidence-based.** Every claim in the ICP document must trace back to research evidence logged in `research/icp-search-log.md`. Do not fabricate personas from assumptions.
 - **In existing-project mode**, note misalignments between what's built and what the ICP research suggests, but do not prescribe fixes — that's `/mvp-gap`'s job.
-- **Primary ICP must use the canonical 7 top-level `##` sections** — downstream skills (`/plan-interview`, `/mvp-gap`, `/roadmap`, `/competitive-analysis`) parse these exact headers.
-- **Do not overwrite existing `specs/icp.md`** without asking the user first.
+- **Primary ICP must use the canonical 9 top-level `##` sections** — downstream skills (`/plan-interview`, `/mvp-gap`, `/roadmap`, `/journey-map`, `/competitive-analysis`) parse these exact headers.
+- **Do not overwrite existing `research/icp.md`** without asking the user first.
 - **Minimum research depth**: at least 8 WebSearch queries before identifying ICP candidates, then at least 2–3 targeted queries per candidate.
+- **Present before writing.** Never write output files until findings have been presented to the user and validated through the checkpoint questions. The user must see and approve the analysis before anything is written to disk.

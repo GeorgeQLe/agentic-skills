@@ -5,15 +5,15 @@ description: Evaluate codebase against enterprise ICP for production readiness a
 
 # Scale Audit — Enterprise Production Readiness
 
-Automated analysis that evaluates the codebase against `specs/enterprise-icp.md`. Identifies gaps for enterprise deals — stakeholder journey coverage, compliance, infrastructure, and operations.
+Automated analysis that evaluates the codebase against `research/enterprise-icp.md`. Identifies gaps for enterprise deals — stakeholder journey coverage, compliance, infrastructure, and operations.
 
 ## Prerequisites
 
-`specs/enterprise-icp.md` must exist. If not, tell the user to run `/enterprise-icp` first.
+`research/enterprise-icp.md` must exist. If not, tell the user to run `/enterprise-icp` first.
 
 ## Workflow
 
-1. Read `specs/enterprise-icp.md`, `specs/icp.md`, `specs/mvp-gap.md` (if they exist), codebase, and in-progress work.
+1. Read `research/enterprise-icp.md`, `research/icp.md`, `specs/mvp-gap.md` (if they exist), codebase, and in-progress work.
 2. Evaluate the codebase across:
    - **Per-Persona Journey Coverage** — Can each stakeholder complete their workflow?
    - **Onboarding Gaps** — Self-serve, team, SSO-provisioned, migration, training

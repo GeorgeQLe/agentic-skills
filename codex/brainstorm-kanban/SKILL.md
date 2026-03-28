@@ -39,7 +39,7 @@ All kanban commands use: `node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs
    - Testing gaps in critical paths
    - Security hardening opportunities
 
-   **Market Fit** (only when `specs/icp.md` or `specs/mvp-gap.md` exist)
+   **Market Fit** (only when `research/icp.md` or `specs/mvp-gap.md` exist)
    - ICP alignment — features addressing ICP pain points that are missing or incomplete
    - Journey gaps — steps where the product loses the user or customer
    - Unaddressed MVP gaps from `specs/mvp-gap.md` not yet in roadmap
