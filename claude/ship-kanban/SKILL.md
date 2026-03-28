@@ -96,15 +96,7 @@ d) If the deploy fails, report the error clearly. Do not retry automatically.
 
 ### 4. Plan the next step (skip if `--no-plan`)
 
-**Prerequisite:** If neither `tasks/todo.md` nor `tasks/roadmap.md` exists, there is no plan to continue. Skip planning entirely (including steps 4b, 4c, 5, and 6) and instead suggest ways to generate a next step:
-> No active plan found. To define your next steps, try:
-> - `/brainstorm` or `/brainstorm-kanban` — evaluate the codebase and suggest ideas
-> - `/expert-review` — thorough code review to surface improvements
-> - `/competitive-analysis` — research the competitive landscape
-> - `/roadmap` or `/roadmap-kanban` — build a phased project roadmap
-> - `/plan-interview` — interview to validate and complete a spec
-
-Then stop (do not enter plan mode).
+**Prerequisite:** If neither `tasks/todo.md` nor `tasks/roadmap.md` exists, or if no uncompleted steps remain, there is no plan to continue. Run `/workflow` to scan project state and recommend the next context-aware action (stale research, missing steps, etc.). Then stop (do not enter plan mode, skip steps 4b, 4c, 5, and 6).
 
 a) **Migration check:** If `tasks/roadmap.md` does not exist but `tasks/todo.md` contains multiple `## Phase` headers, migrate: copy `tasks/todo.md` → `tasks/roadmap.md`, then trim `tasks/todo.md` to just the current phase (first phase with unchecked steps). Commit with `chore: migrate to roadmap.md + todo.md split`.
 b) Read `tasks/todo.md` to identify the next uncompleted step in the current phase.
@@ -113,7 +105,7 @@ c) **Check if the current phase is complete** (all steps checked, milestone crit
      1. Archive the completed phase: copy `tasks/todo.md` → `docs/phases/phase-N.md` (create `docs/phases/` if needed). Fill in the "On Completion" section.
      2. Check off the phase milestone in `tasks/roadmap.md`.
      3. Copy the next phase from `tasks/roadmap.md` → overwrite `tasks/todo.md`.
-     4. If no more phases remain, report "all done" and stop.
+     4. If no more phases remain, run `/workflow` to recommend the next action based on project state. Then stop (do not enter plan mode).
      5. **Just-in-time planning:** Invoke `/plan-phases` for the new phase. This generates TDD steps and file-level detail using the full context of what was learned during prior phases.
    - If **NO:** find the next uncompleted step within the current phase.
 d) Write a **self-contained** implementation plan for the next step into `tasks/todo.md`. This plan must be complete enough that a fresh context can execute it by reading only CLAUDE.md and `tasks/todo.md`. Include:

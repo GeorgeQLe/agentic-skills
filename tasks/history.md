@@ -1,5 +1,11 @@
 # Session History
 
+## 2026-03-28 — Ship/ship-kanban: delegate to /workflow when no plan exists
+
+- Replaced static suggestion list in `/ship` and `/ship-kanban` with `/workflow` delegation
+- Both "no active plan" and "all phases complete" cases now run `/workflow` for context-aware next-step recommendation
+- Updated claude/ship, claude/ship-kanban, codex/ship (3 files)
+
 ## 2026-03-28 — Add /hygiene skill and fix project-wide conventions (48→49)
 
 - Created `/hygiene` skill (claude + codex) — audits project structure for convention violations with optional auto-fix mode
