@@ -43,3 +43,27 @@
 - **Kanban edge case test expansion** — Current 24 tests cover happy paths but miss: concurrent card moves, cards with unicode/emoji names, very long descriptions, moving to same list, archiving already-archived cards, search with LIKE metacharacters (now escaped). Signal: Phase 5 fixed a LIKE injection bug and null dereference that existing tests didn't catch. _Start with:_ `/plan-interview-kanban kanban.mjs edge case and regression tests`
 
 - **SKILL.md lint and frontmatter validation** — 84 SKILL.md files have frontmatter (`name`, `description`, `argument-hint`) but no validation. A script could verify: all required fields present, no broken skill cross-references, codex/claude parity, agents/openai.yaml exists for every codex skill. Signal: Phase 5 found a missing `agents/openai.yaml` only via manual `/expert-review`. _Start with:_ `/plan-interview-kanban skill frontmatter lint and validation script`
+
+---
+
+## Kanban & DX improvements (2026-03-27)
+
+### Quick wins (hours)
+
+- **Add `--board` flag to kanban search** — `cmdSearch` scans all 21 org boards, returning noise from unrelated projects. A `--board <id>` flag would scope results to the current project's board, making idempotency checks in brainstorm-kanban and plan-interview-kanban faster and more precise. Signal: `kanban.mjs:430-501` — no board filter option; search hits 21 boards × all lists. _Start with:_ `/plan-interview-kanban scoped board search for kanban.mjs`
+
+- **Add Codex `poketo-kanban` skill** — `poketo-kanban` is the only skill (1 of 42) without a Codex counterpart. All other skills have parity. Signal: `diff` of `claude/` vs `codex/` shows only `poketo-kanban` missing. _Start with:_ `/plan-interview-kanban codex poketo-kanban parity`
+
+- **Unify env path lists in kanban scripts** — `bootstrap-session.mjs` searches `projects/poke/dev/poke-productivity-suite/` while `kanban.mjs` searches `projects/apps/poke/monorepo/`. Neither shares the other's paths, so setup works on one machine but silently fails on another. Signal: `bootstrap-session.mjs:22-24` vs `kanban.mjs:39-44` — disjoint path arrays. _Start with:_ `/plan-interview-kanban unify env path discovery across kanban scripts`
+
+### Medium efforts (days)
+
+- **Dry-run mode for kanban skills** — All 8 kanban skills write directly to Neon with no preview. A `--dry-run` flag showing intended kanban operations (cards to create/move/update) without executing them would make testing safer and help users verify before modifying board state. Signal: Layer 3 testing requires manual board-state verification after each skill; the ship/run skills can move cards to wrong lists on misconfigured boards. _Start with:_ `/plan-interview-kanban dry-run mode for kanban board operations`
+
+- **Skill discovery command** — With 42 skills, users must consult the 416-line `docs/skills-reference.md` to find the right one. A `/skills` command that lists available skills grouped by workflow stage with keyword search and "did you mean?" suggestions would reduce friction. Signal: `/analyze-sessions` showed 5,332 messages — skill discovery is manual. _Start with:_ `/plan-interview-kanban skill discovery and search command`
+
+- **Kanban card labels** — Cards lack categorization beyond name/description. A tags or labels field would enable filtering by type (bug, feature, test, debt) and improve Board Overview reporting. Brainstorm-kanban currently embeds effort level as a string suffix in descriptions. Signal: `kanban.mjs` card schema has no label/tag column; board overview has no category-based filtering. _Start with:_ `/plan-interview-kanban card labels and tag-based filtering for kanban boards`
+
+### Larger initiatives (weeks)
+
+- **Multi-project kanban dashboard** — With 21 boards, there's no cross-project view. A `/kanban-dashboard` skill showing cards in progress across all boards, overdue items, stale boards with no recent activity, and WIP distribution would help manage a portfolio of projects. Signal: `boards` command returns 21 boards with zero card-level detail; switching between projects requires remembering board IDs. _Start with:_ `/plan-interview-kanban multi-project kanban dashboard`
