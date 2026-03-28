@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-03-27 — Phase 7 Step 2: install.sh tests
+
+- Created `claude/poketo-kanban/scripts/install.test.mjs` with 8 tests using vitest + child_process
+- Used vitest (existing) instead of bats-core (plan suggested) — no new dependencies needed
+- Tests isolate via temp dirs with `HOME` override: symlink creation (claude/codex), idempotency, warning on non-symlink targets, symlink update, uninstall (selective removal + count), directory creation
+- All 71 tests pass (53 kanban + 10 bootstrap + 8 install)
+
 ## 2026-03-27 — Phase 7 Step 1: bootstrap session tests
 
 - Refactored `bootstrap-session.mjs` for testability: exported `loadEnv(searchPaths?)`, extracted `buildConfig(user, org)`, guarded auto-run with `import.meta.url` check
