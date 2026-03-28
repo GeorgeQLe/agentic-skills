@@ -1,6 +1,6 @@
 # Skills Reference
 
-Complete reference for all 44 custom skills in this repository, available for both Claude Code and Codex.
+Complete reference for all 48 custom skills in this repository, available for both Claude Code and Codex.
 
 ## Installation
 
@@ -29,16 +29,19 @@ claude-skills/
 These skills form a structured development workflow:
 
 ```
-Discover                      Ideate                       Specify                 Map Journeys         Strategize          Execute                    Ship                    Evaluate
-────────────────────────      ─────────────────────────    ────────────────────    ──────────────      ──────────────      ───────────────────────    ──────────────────────   ──────────────
-/icp                      →   /brainstorm              →   /plan-interview    →    /journey-map   →    /roadmap       →    /run (single step)    →    /ship              →    /mvp-gap
-/competitive-analysis         └→ /plan-interview-ideas                                                                     /run --phase (full)        /ship-end               /scale-audit
-/enterprise-icp
+Discover                      Ideate                       Specify                 Map              Strategize          Execute                    Ship                    Evaluate             Learn
+─────────��──────────────      ─────────────────────────    ────────────────────    ──────────────   ──────────────      ───────────────────────    ──────────────────────   ──────────────       ──────────────
+/icp                      →   /brainstorm              →   /plan-interview    →    /journey-map →   /roadmap       →    /run (single step)    →    /ship              →    /mvp-gap         →   /customer-feedback
+/competitive-analysis         └→ /plan-interview-ideas                             /metrics         /gtm                /run --phase (full)        /ship-end               /scale-audit              ↓
+/enterprise-icp                                                                                                                                                                            (back to Discover)
+
+/workflow — runs at any point to check status and recommend next step
 ```
 
-**New project flow**: `/icp` → `/competitive-analysis` → `/brainstorm` → `/plan-interview` → `/journey-map` → `/roadmap` → `/plan-phases` → `/run` → `/ship` → `/mvp-gap`
-**Existing project flow**: `/icp` → `/competitive-analysis` → `/mvp-gap` → `/brainstorm` → `/plan-interview` → `/journey-map` → `/roadmap` → ...
+**New project flow**: `/icp` → `/competitive-analysis` → `/brainstorm` → `/plan-interview` → `/journey-map` → `/metrics` → `/roadmap` → `/gtm` → `/plan-phases` → `/run` → `/ship` → `/mvp-gap` → `/customer-feedback` → (iterate)
+**Existing project flow**: `/icp` → `/competitive-analysis` → `/mvp-gap` → `/brainstorm` → `/plan-interview` → `/journey-map` → `/metrics` → `/roadmap` → ...
 **Enterprise expansion**: `/enterprise-icp` → (build cycle) → `/scale-audit`
+**At any point**: `/workflow` to check status, stale items, and recommended next step
 
 Supporting skills plug in at any point: `/expert-review`, `/investigate`, `/affected`, `/regression-check`, etc.
 
@@ -91,6 +94,38 @@ Evaluate codebase against enterprise ICP for production readiness, compliance, a
 - **Prerequisites**: `research/enterprise-icp.md` must exist (run `/enterprise-icp` first).
 - **Outputs**: `specs/scale-audit.md` (gap analysis with stakeholder/compliance matrices and `/plan-interview` prompts)
 - **Use when**: Before pursuing enterprise deals, to understand production readiness gaps.
+
+### `/customer-feedback`
+Ingest and synthesize customer feedback — categorize findings against ICP and journey map, maintain a running log.
+
+- **Arguments**: `[file path, pasted text, or empty to be prompted]`
+- **Soft prerequisites**: `research/icp.md` and `research/journey-map.md` improve categorization but aren't required.
+- **Outputs**: `research/customer-feedback.md` (running log with synthesis section, append-only per session)
+- **Use when**: After getting customer feedback (interviews, support tickets, surveys, reviews). Each run appends a session. Triggers staleness alerts when 3+ findings contradict ICP or journey assumptions.
+
+### `/metrics`
+Define success metrics framework — activation, engagement, retention, growth, and business metrics tied to journey stages.
+
+- **Arguments**: `[optional: focus area e.g. "activation", "retention"]`
+- **Prerequisites**: `research/journey-map.md` must exist (run `/journey-map` first).
+- **Outputs**: `research/metrics.md` (North Star metric, per-category metrics with instrumentation gaps), `research/metrics-interview.md`
+- **Use when**: After mapping journeys, to define what success looks like and what needs instrumentation.
+
+### `/gtm`
+Go-to-market planning — channel strategy, messaging, pricing, launch plan, and early traction tactics.
+
+- **Arguments**: `[optional: focus area e.g. "pricing", "launch plan"]`
+- **Prerequisites**: `research/icp.md` must exist (run `/icp` first).
+- **Outputs**: `research/gtm.md` (channels, messaging, pricing, launch plan, 30/60/90 tactics), `research/gtm-interview.md`
+- **Use when**: After ICP discovery, to plan how to reach and convert customers.
+
+### `/workflow`
+Read-only workflow status — shows completed steps, stale items, missing steps, and recommends the next action.
+
+- **Arguments**: None
+- **No prerequisites.** Runs at any point.
+- **Outputs**: None (display only — no files written)
+- **Use when**: At any point, to check what's been done, what's stale, and what to do next.
 
 ---
 
@@ -378,6 +413,10 @@ Archive old Done/Punt cards from the kanban board.
 | `/enterprise-icp` | Enterprise multi-stakeholder discovery |
 | `/journey-map` | Map user task flows + customer journey funnel |
 | `/scale-audit` | Enterprise production readiness audit |
+| `/customer-feedback` | Ingest + synthesize customer feedback |
+| `/metrics` | Success metrics tied to journey stages |
+| `/gtm` | Go-to-market planning |
+| `/workflow` | Check status, stale items, next action |
 | `/brainstorm` | Evaluate codebase, suggest improvement ideas |
 | `/plan-interview` | Rough idea → validated spec |
 | `/plan-interview-ideas` | Spec each idea from ideas.md |

@@ -13,7 +13,7 @@ Automated analysis that evaluates the codebase against `research/icp.md`. Identi
 
 ## Workflow
 
-1. Read `research/icp.md`, codebase, README, existing specs, and any in-progress work from `tasks/`.
+1. Read `research/icp.md`, `research/metrics.md` (if it exists — check if defined metrics can actually be measured), codebase, README, existing specs, and any in-progress work from `tasks/`.
 2. Evaluate the codebase against the ICP across these dimensions:
    - **User Journey Coverage** — Can the product replace each step in the current-state journey?
    - **Customer Journey Coverage** — Discovery, evaluation, trial, purchase, provisioning, onboarding

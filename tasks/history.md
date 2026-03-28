@@ -1,5 +1,20 @@
 # Session History
 
+## 2026-03-28 — Add 4 new skills: workflow, customer-feedback, gtm, metrics (44→48)
+
+- Created `/workflow` skill — read-only diagnostic that scans project state, detects phase, checks staleness via timestamp comparison, and recommends next action
+- Created `/customer-feedback` skill — append-only feedback ingestion with Confirmed/Wrong/New categorization against ICP and journey map, cumulative synthesis, staleness triggers at 3+ invalidated findings
+- Created `/gtm` skill — interview-driven go-to-market planning (channel strategy, messaging, pricing, launch plan, 30/60/90 early traction tactics)
+- Created `/metrics` skill — interview-driven success metrics framework (activation, engagement, retention, growth, business) tied to journey map stages with instrumentation gap tracking
+- All 4 skills: Claude SKILL.md + Codex SKILL.md + Codex agents/openai.yaml (12 new files)
+- Updated downstream skills to read new research outputs:
+  - `/brainstorm` now reads customer-feedback.md (Wrong/New findings) and metrics.md (instrumentation gaps)
+  - `/roadmap` now reads gtm.md (launch milestones) and metrics.md (instrumentation phases)
+  - `/mvp-gap` now reads metrics.md (check if metrics are measurable)
+- Updated `/skills` stage mapping: added Mapping, Evaluate, Workflow groups
+- Updated docs/skills-reference.md: count 44→48, workflow diagram with Learn stage + feedback loop, 5 new entries, quick reference table
+- install.sh: 4 new Claude + 4 new Codex symlinks installed
+
 ## 2026-03-28 — Research skills revamp + journey-map skill
 
 - Revamped 3 research skills (icp, competitive-analysis, enterprise-icp) with present→validate→write pattern

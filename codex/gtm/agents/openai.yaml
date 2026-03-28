@@ -1,0 +1,7 @@
+interface:
+  display_name: "GTM Planning"
+  short_description: "Build a go-to-market plan"
+  default_prompt: "Use $gtm to build a go-to-market plan covering channels, messaging, pricing, and launch."
+
+policy:
+  allow_implicit_invocation: true

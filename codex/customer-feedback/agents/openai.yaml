@@ -1,0 +1,7 @@
+interface:
+  display_name: "Customer Feedback"
+  short_description: "Ingest and synthesize customer feedback"
+  default_prompt: "Use $customer-feedback to ingest customer feedback and categorize findings against ICP and journey map."
+
+policy:
+  allow_implicit_invocation: true
