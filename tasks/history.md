@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-03-27 — Revamp /icp skill: interview → research-driven
+
+- Rewrote `claude/icp/SKILL.md` and `codex/icp/SKILL.md` from v1.0.0 to v2.0.0
+- Replaced 7-area founder interview with automated web search + codebase analysis
+- Now identifies 2-5 ICP candidates, scores on Value x Accessibility, selects primary
+- Output: primary ICP in canonical 7 `##` sections (downstream-compatible) + Additional ICPs + Cross-ICP Analysis
+- Research log in `specs/icp-research.md` replaces `specs/icp-interview.md`
+- Brief 1-2 question validation replaces full interview
+
 ## 2026-03-27 — Phase 9 Step 3: Skill versioning
 
 - Added `version: 1.0.0` to all 43 `claude/*/SKILL.md` frontmatter files

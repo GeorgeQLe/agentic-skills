@@ -1,105 +1,195 @@
 ---
 name: icp
-description: Customer discovery interview — map the problem space, ICP, user journeys, and value prop before designing a solution
-version: 1.0.0
-argument-hint: [optional: rough idea or problem area]
+description: Research-driven ICP discovery — web search + codebase analysis to identify multiple ICPs, pain points, value props, and cross-ICP prioritization
+version: 2.0.0
+argument-hint: <spec file path or concept/idea>
 ---
 
-# ICP — Customer Discovery Interview
+# ICP — Research-Driven Customer Discovery
 
-Interview the founder to map the complete problem space before any solution design begins. This skill owns the **problem space** — who the customer is, who the user is, what their current experience looks like, where it breaks down, and what value we can uniquely provide. The output feeds directly into `/plan-interview` for solution design.
+Automated research that identifies **multiple ICP candidates**, maps their pain points and value props, scores them, and selects a primary ICP. Replaces the interview-driven approach with web search + codebase analysis. Input is a spec file path or a concept/idea as `$ARGUMENTS`.
 
-## Modes (auto-detected)
-
-### Greenfield (no meaningful source code)
-No codebase exists yet. Start from the founder's idea or problem area. The interview builds the customer and market picture from scratch.
-
-### Existing Project (source code exists)
-A product already exists. Read the codebase, README, package config, and existing specs to understand what's been built, then interview to determine who it's actually for and whether it serves them. Acknowledge upfront: "We're working backwards from a solution — let's find the right problem and customer fit for what you've built, and identify where there might be misalignment."
+The output preserves the canonical 7-section format at the top level (for downstream compatibility with `/plan-interview`, `/mvp-gap`, `/roadmap`) while adding multi-ICP analysis and cross-ICP prioritization.
 
 ## Process
 
-### 1. Gather Context
+### 1. Parse Input & Gather Context
 
-**Greenfield:** Read `$ARGUMENTS` if provided. Check if `specs/` or `spec.md` exist from a prior `/plan-interview` session. If so, use them as background context but do not treat them as settled — the ICP interview may reshape the product direction.
+**Read `$ARGUMENTS`:**
+- If it's a file path, read the file for product/concept context
+- If it's text, treat it as the concept or idea description
+- If empty, check for `specs/spec.md`, `specs/plan.md`, or README for context — if nothing exists, ask the user what product or idea to research
 
-**Existing project:** Read CLAUDE.md, README, package config, key source files, routes, data models, and existing specs to understand what the product does today. Summarise your understanding back to the user before beginning the interview.
+**Read codebase (if it exists):**
+Read CLAUDE.md, README, package config, key source files, routes, and data models to understand what's been built. This grounds the research in reality rather than pure market abstraction.
 
-### 2. Interview
+**Read existing specs** (`specs/icp.md`, `specs/mvp-gap.md`, etc.) if they exist — use as background context but do not treat as settled. This research may reshape direction.
 
-Use the AskUserQuestion tool. Ask 1–3 focused questions per turn. When genuine alternatives exist, present options with pros/cons and a recommendation — same style as `/plan-interview`.
+### 2. Broad Market Research
 
-Cover these areas in order:
+Use WebSearch with **8–12 diverse query strategies** to cast a wide net. Log every search query and key findings to the research log.
 
-#### A. Customer Profile
-- Who pays for this? Role, title, company size/type, industry
-- What's their budget authority? Who else is involved in buying decisions?
-- What triggers them to look for a solution? What pain becomes unbearable?
-- How do they discover new tools? (Search, word of mouth, conferences, vendor outreach)
+Query strategies (adapt to the specific domain):
+1. **Direct persona searches** — "who buys [category]", "[category] buyer persona"
+2. **Pain point searches** — "[domain] biggest challenges", "[workflow] frustrations"
+3. **Market segment searches** — "[category] market segments", "[category] by company size"
+4. **Trend searches** — "[category] trends 2025 2026", "future of [domain]"
+5. **Competitor user searches** — "[competitor] customers", "[competitor] case studies", "[competitor] reviews"
+6. **Forum/community searches** — "[domain] reddit complaints", "[domain] community pain points"
+7. **Job posting searches** — "[related role] job description responsibilities" (reveals workflows)
+8. **Industry report searches** — "[category] market report", "[category] TAM"
+9. **Switching trigger searches** — "why switch from [incumbent]", "[category] migration"
+10. **Adjacent market searches** — "[related category] users", "[upstream/downstream] tools"
 
-#### B. User Profile(s)
-- Who uses this daily? (May be same as customer or different)
-- What's their role, technical sophistication, and daily goals?
-- What frustrates them most about their current workflow?
-- Are there multiple user tiers? (Power user vs. casual, admin vs. end-user)
+Use WebFetch to pull in particularly relevant pages for deeper analysis when search snippets aren't enough.
 
-#### C. Current State Journey
-- Walk through the user's workflow step by step — how do they handle this problem today?
-- What tools, spreadsheets, manual processes, or workarounds do they use?
-- Where do handoffs happen? Where does information get lost?
-- What does "done well" look like for them today?
+### 3. Identify 2–5 ICP Candidates
 
-#### D. Pain Map
-- For each step in the current journey: what breaks down?
-- What's costly, slow, error-prone, or simply missing?
-- How severe is each pain? (Annoyance vs. revenue loss vs. compliance risk)
-- How frequently does each pain occur?
+From the research evidence, cluster findings into **2–5 distinct ICP candidates**. For each candidate, note:
+- Who they are (role, company type, size)
+- What pain evidence exists
+- How accessible they are (can we reach them?)
+- How much value we could deliver
 
-#### E. Market Landscape
-- What alternatives exist? (Competitors, internal tools, manual processes, "do nothing")
-- Where do alternatives fall short?
-- What has the user/customer already tried and abandoned? Why?
-- What gap does no one fill?
+### 4. Deep Research Per ICP
 
-#### F. Value Proposition
-- Given everything above, what unique value do we provide?
-- Why would the customer choose us over the alternatives?
-- What's the wedge — the single most compelling reason to switch?
-- What's the "aha moment" where the user sees the value?
+For each ICP candidate, run **targeted searches** to fill the 7-section framework:
 
-#### G. Customer ↔ User Relationship
-- How does the customer discover, evaluate, and decide to buy?
-- How is the product provisioned to users? (Self-serve, admin invite, IT deployment)
-- Where do the customer journey and user journey overlap or diverge?
-- Who champions adoption internally?
+- **Customer Profile** — buyer persona, triggers, budget authority, discovery channels
+- **User Profile(s)** — daily users, technical sophistication, goals, frustrations
+- **Current State Journey** — step-by-step workflow without our product
+- **Pain Map** — where the current state breaks down, severity, frequency
+- **Market Landscape** — alternatives they use, shortcomings, unaddressed gaps
+- **Value Proposition** — our unique wedge for this specific ICP, the "aha moment"
+- **Customer ↔ User Dynamics** — buying process, provisioning, adoption path
 
-### 3. Conclude
+### 5. Score & Select Primary ICP
 
-Confirm with the user that all areas have been covered. Summarise the key findings and any surprising insights or tensions discovered during the interview.
+Build a **Value x Accessibility** scoring matrix:
+
+**Value score** (how much we can help):
+- Pain severity and frequency
+- Willingness to pay (budget signals)
+- Size of the segment
+- Alignment with what we've built (if codebase exists)
+
+**Accessibility score** (how easy to reach and convert):
+- Can we reach them through available channels?
+- How long is the sales cycle?
+- How complex is the buying process?
+- Is there an existing community we can tap?
+
+The ICP with the best combined score becomes the **Primary ICP** (occupies top-level sections in the output). If the scores are close, briefly note the trade-off.
+
+### 6. Cross-ICP Analysis
+
+Analyze across all ICP candidates:
+- **Shared pains** — what pain points appear across multiple ICPs?
+- **Conflicts** — where would serving one ICP hurt another?
+- **Product line recommendations** — could different ICPs be served by different tiers/plans?
+- **Build sequence** — which ICP to target first, second, third and why?
+- **Lowest-hanging fruit x most value** — the prioritization sweet spot
+
+### 7. Brief Validation
+
+Ask the user **1–2 focused questions** to validate the primary ICP selection and any surprising findings. This is not a full interview — just a quick sanity check:
+- "Based on research, [ICP X] looks like the strongest fit because [reasons]. Does this match your intuition, or is there a segment I'm missing?"
+- If the research surfaced something unexpected, ask about it
+
+Then finalize the output files.
 
 ## Output
 
 Write two files:
 
 ### `specs/icp.md`
-Structured discovery document with these sections:
-1. **Customer Profile** — buyer persona, triggers, discovery channels
-2. **User Profile(s)** — daily user persona(s), technical sophistication, goals
-3. **Current State Journey** — step-by-step workflow without our product
-4. **Pain Map** — where the current state breaks down, severity, frequency
-5. **Market Landscape** — alternatives, their shortcomings, the unaddressed gap
-6. **Value Proposition** — our unique wedge, the "aha moment"
-7. **Customer ↔ User Dynamics** — buying process, provisioning, adoption path
 
-### `specs/icp-interview.md`
-Raw interview log — every question asked, options presented, user responses, and a closing summary of key insights and any surprises.
+Structure — the **Primary ICP** fills the canonical top-level sections:
+
+```markdown
+# ICP: [Primary ICP Name]
+
+> Primary ICP selected from [N] candidates. See Additional ICPs and Cross-ICP Analysis below.
+> Research log: specs/icp-research.md
+
+## Customer Profile
+[Buyer persona, triggers, budget authority, discovery channels]
+
+## User Profile(s)
+[Daily user persona(s), technical sophistication, goals, frustrations]
+
+## Current State Journey
+[Step-by-step workflow without our product]
+
+## Pain Map
+[Where the current state breaks down — severity, frequency]
+
+## Market Landscape
+[Alternatives, their shortcomings, the unaddressed gap]
+
+## Value Proposition
+[Our unique wedge for this ICP, the "aha moment"]
+
+## Customer ↔ User Dynamics
+[Buying process, provisioning, adoption path]
+
+## Additional ICPs
+
+### [ICP 2 Name]
+#### Customer Profile
+...
+#### User Profile(s)
+...
+#### Current State Journey
+...
+#### Pain Map
+...
+#### Market Landscape
+...
+#### Value Proposition
+...
+#### Customer ↔ User Dynamics
+...
+
+### [ICP 3 Name]
+...
+
+## Cross-ICP Analysis
+
+### Prioritization Matrix
+| ICP | Value Score | Accessibility Score | Combined | Rationale |
+|-----|------------|-------------------|----------|-----------|
+| ... | | | | |
+
+### Shared Pain Points
+[Pains that appear across multiple ICPs]
+
+### Conflicts & Trade-offs
+[Where serving one ICP would hurt another]
+
+### Product Line Recommendations
+[How different ICPs could map to tiers, plans, or product variants]
+
+### Recommended Build Sequence
+[Which ICP to target first → second → third, with reasoning]
+```
+
+### `specs/icp-research.md`
+
+Raw research log containing:
+- Every WebSearch query executed and why
+- Key findings from each search (with source attribution)
+- Evidence that supported or contradicted each ICP candidate
+- The scoring rationale for primary ICP selection
+- Any data gaps or areas where research was inconclusive
 
 Create the `specs/` directory if it doesn't exist.
 
 ## Constraints
 
 - **Stay in problem space.** Do not propose features, architecture, UI, or technical solutions. That is `/plan-interview`'s job.
-- **In existing-project mode**, note misalignments between what's built and what the ICP actually needs, but do not prescribe fixes — that's `/mvp-gap`'s job.
-- **Challenge assumptions.** If the founder says "everyone needs this," push back: who specifically? If they say "our users are developers," ask what kind — frontend, backend, DevOps, data?
-- **Continue until all 7 areas are covered.** Do not conclude early. Confirm with the user before wrapping up.
+- **Evidence-based.** Every claim in the ICP document must trace back to research evidence logged in `specs/icp-research.md`. Do not fabricate personas from assumptions.
+- **In existing-project mode**, note misalignments between what's built and what the ICP research suggests, but do not prescribe fixes — that's `/mvp-gap`'s job.
+- **Primary ICP must use the canonical 7 top-level `##` sections** — downstream skills (`/plan-interview`, `/mvp-gap`, `/roadmap`, `/competitive-analysis`) parse these exact headers.
 - **Do not overwrite existing `specs/icp.md`** without asking the user first.
+- **Minimum research depth**: at least 8 WebSearch queries before identifying ICP candidates, then at least 2–3 targeted queries per candidate.
