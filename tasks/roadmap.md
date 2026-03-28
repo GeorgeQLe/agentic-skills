@@ -2,11 +2,11 @@
 
 > Generated from: tasks/roadmap.md (existing), specs/board-flag-kanban-search.md, tasks/ideas.md, tasks/history.md
 > Date: 2026-03-27
-> Total Phases: 9 (8 complete, 1 planned)
+> Total Phases: 9 (9 complete)
 
 ## Summary
 
-Phases 1-8 built the kanban skill suite, board intelligence, templates, archive automation, resolved expert review findings, hardened test coverage (83 tests), and improved kanban DX. Next: skill infrastructure (Phase 9).
+Phases 1-9 complete: kanban skill suite, board intelligence, templates, archive automation, expert review fixes, test hardening (83 tests), kanban DX, and skill infrastructure (discovery, dependency graph, versioning).
 
 ## Phase Overview
 
@@ -20,7 +20,7 @@ Phases 1-8 built the kanban skill suite, board intelligence, templates, archive 
 | 6 | Testing Hardening I | tasks/ideas.md | Edge case + command test expansion (~20 new tests) | M |
 | 7 | Testing Hardening II ✓ | tasks/ideas.md | Bootstrap tests, install.sh bats, DB error paths | M |
 | 8 | Kanban DX ✓ | specs/board-flag-kanban-search.md, tasks/ideas.md | `--board` flag, dry-run mode, env path unification | M |
-| 9 | Skill Infrastructure | tasks/ideas.md | Skill discovery, dependency graph, versioning | L |
+| 9 | Skill Infrastructure ✓ | tasks/ideas.md | Skill discovery, dependency graph, versioning | L |
 
 ---
 
@@ -216,7 +216,7 @@ Phases 1-8 built the kanban skill suite, board intelligence, templates, archive 
 
 ---
 
-## Phase 9: Skill Infrastructure
+## Phase 9: Skill Infrastructure ✓
 
 **Goal:** Improve skill discoverability, validate cross-references, and track changes.
 
@@ -228,13 +228,13 @@ Phases 1-8 built the kanban skill suite, board intelligence, templates, archive 
 **Acceptance Criteria:**
 - [x] `/skills` command lists skills grouped by workflow stage with keyword search
 - [x] Dependency graph script detects broken cross-references between skills
-- [ ] At least one iteration of versioning scheme documented and applied to 3+ skills
+- [x] At least one iteration of versioning scheme documented and applied to 3+ skills
 - [x] No broken skill cross-references in the repo
 
-**On Completion** (fill in when phase is done):
-- Deviations from plan:
-- Tech debt / follow-ups:
-- Ready for next phase:
+**On Completion**:
+- Deviations from plan: Versioning applied to all 43 skills (not just 3+). Skipped per-skill changelogs — git history suffices.
+- Tech debt / follow-ups: Codex skill versioning deferred.
+- Ready for next phase: Yes
 
 ---
 
