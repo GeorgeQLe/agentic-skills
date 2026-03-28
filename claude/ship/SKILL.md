@@ -87,6 +87,15 @@ e) Commit and push `tasks/todo.md`, `tasks/roadmap.md`, and `docs/phases/` (if c
 
 **YOU MUST call the EnterPlanMode tool.** This is not optional. This gives the user the option to "clear context and implement" — which starts a fresh context that reads `tasks/todo.md` and implements the plan.
 
+### 7. Present the plan (skip if `--no-plan`)
+After entering plan mode, **present the execution plan** to the user. Summarize the plan that was written to `tasks/todo.md` in step 4d:
+- What needs to be built/changed
+- Which files will be created or modified (full paths)
+- The approach (e.g., TDD order, key technical decisions)
+- Any decisions or trade-offs the user should weigh in on
+
+This gives the user something concrete to review before selecting "clear context and implement".
+
 ## Constraints
 - **Fix unrelated issues:** If any step surfaces errors, warnings, or lint issues — even ones unrelated to the current work — investigate and fix them before continuing. Commit these fixes separately with a descriptive message (e.g., `fix: resolve unused import warning in auth.ts`).
 - Do NOT write plans into CLAUDE.md. CLAUDE.md is for project conventions and config only.

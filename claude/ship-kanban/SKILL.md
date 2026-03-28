@@ -164,6 +164,15 @@ After completing kanban operations, suggest the next highest-priority card:
 
 **YOU MUST call the EnterPlanMode tool.** This is not optional. This gives the user the option to "clear context and implement" — which starts a fresh context that reads `tasks/todo.md` and implements the plan.
 
+### 7. Present the plan (skip if `--no-plan`)
+After entering plan mode, **present the execution plan** to the user. Summarize the plan that was written to `tasks/todo.md` in step 4d:
+- What needs to be built/changed
+- Which files will be created or modified (full paths)
+- The approach (e.g., TDD order, key technical decisions)
+- Any decisions or trade-offs the user should weigh in on
+
+This gives the user something concrete to review before selecting "clear context and implement".
+
 ## Workflow
 
 ```
