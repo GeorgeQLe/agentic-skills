@@ -334,6 +334,284 @@ describe("Error handling", () => {
   });
 });
 
+// ─── Create List ────────────────────────────────────────────────────────────
+
+describe("create-list", () => {
+  let firstListId;
+  let firstListOrder;
+
+  it("create-list with name", async () => {
+    const result = await run(
+      "create-list",
+      "--board",
+      boardId,
+      "--name",
+      "Custom List A",
+    );
+    expect(result.command).toBe("create-list");
+    expect(result.list.name).toBe("Custom List A");
+    expect(result.list.listType).toBe("normal");
+    firstListId = result.list.id;
+    firstListOrder = result.list.order;
+  });
+
+  it("create-list auto-increments order", async () => {
+    const result = await run(
+      "create-list",
+      "--board",
+      boardId,
+      "--name",
+      "Custom List B",
+    );
+    expect(result.list.order).toBeGreaterThan(firstListOrder);
+  });
+
+  it("create-list without --name returns error", async () => {
+    const result = await run("create-list", "--board", boardId);
+    expect(result.error).toBeTruthy();
+  });
+
+  it("create-list without --board returns error", async () => {
+    const result = await run("create-list", "--name", "orphan list");
+    expect(result.error).toBeTruthy();
+  });
+});
+
+// ─── Update Card Flags ──────────────────────────────────────────────────────
+
+describe("update-card flags", () => {
+  let flagTestCardId;
+
+  beforeAll(async () => {
+    const card = await run(
+      "create-card",
+      "--board",
+      boardId,
+      "--list",
+      listIds["Backlog"],
+      "--name",
+      "Flag test card",
+    );
+    flagTestCardId = card.card.id;
+  });
+
+  it("update-card --progress sets progress", async () => {
+    const result = await run(
+      "update-card",
+      "--id",
+      flagTestCardId,
+      "--progress",
+      "50",
+    );
+    expect(result.command).toBe("update-card");
+    expect(result.card.progress).toBe(50);
+  });
+
+  it("update-card --progress 0 resets progress", async () => {
+    const result = await run(
+      "update-card",
+      "--id",
+      flagTestCardId,
+      "--progress",
+      "0",
+    );
+    expect(result.card.progress).toBe(0);
+  });
+
+  it("update-card --description sets description", async () => {
+    const result = await run(
+      "update-card",
+      "--id",
+      flagTestCardId,
+      "--description",
+      "A test description",
+    );
+    expect(result.card.description).toBe("A test description");
+  });
+
+  it("update-card --description ignores empty string (falsy guard)", async () => {
+    // The script uses `if (description)` so empty string is a no-op
+    const result = await run(
+      "update-card",
+      "--id",
+      flagTestCardId,
+      "--description",
+      "",
+    );
+    // Description stays as previously set
+    expect(result.card.description).toBe("A test description");
+  });
+
+  it("update-card --due sets due date", async () => {
+    const result = await run(
+      "update-card",
+      "--id",
+      flagTestCardId,
+      "--due",
+      "2026-12-31",
+    );
+    expect(result.card.dueDate).toBeTruthy();
+    expect(result.card.dueDate).toContain("2026-12-31");
+  });
+
+  it("update-card --due and --progress together", async () => {
+    const result = await run(
+      "update-card",
+      "--id",
+      flagTestCardId,
+      "--due",
+      "2027-01-15",
+      "--progress",
+      "75",
+    );
+    expect(result.card.dueDate).toContain("2027-01-15");
+    expect(result.card.progress).toBe(75);
+  });
+});
+
+// ─── Additional Error Paths ─────────────────────────────────────────────────
+
+describe("Additional error paths", () => {
+  const fakeUUID = "00000000-0000-0000-0000-000000000000";
+
+  it("create-card with invalid board ID", async () => {
+    const result = await run(
+      "create-card",
+      "--board",
+      fakeUUID,
+      "--list",
+      fakeUUID,
+      "--name",
+      "ghost card",
+    );
+    expect(result.error).toBeTruthy();
+  });
+
+  it("create-list with invalid board ID", async () => {
+    const result = await run(
+      "create-list",
+      "--board",
+      fakeUUID,
+      "--name",
+      "ghost list",
+    );
+    expect(result.error).toBeTruthy();
+  });
+
+  it("archive-card with invalid card ID", async () => {
+    const result = await run("archive-card", "--id", fakeUUID);
+    expect(result.error).toBeTruthy();
+  });
+
+  it("move-card with invalid card ID", async () => {
+    const result = await run(
+      "move-card",
+      "--id",
+      fakeUUID,
+      "--list",
+      fakeUUID,
+    );
+    expect(result.error).toBeTruthy();
+  });
+
+  it("create-card without --list returns error", async () => {
+    const result = await run(
+      "create-card",
+      "--board",
+      boardId,
+      "--name",
+      "no list card",
+    );
+    expect(result.error).toBeTruthy();
+  });
+});
+
+// ─── Card Ordering ──────────────────────────────────────────────────────────
+
+describe("Card ordering", () => {
+  let orderListId;
+  let firstCardId;
+
+  beforeAll(async () => {
+    const list = await run(
+      "create-list",
+      "--board",
+      boardId,
+      "--name",
+      "Order Test List",
+    );
+    orderListId = list.list.id;
+  });
+
+  it("first card in list gets order 0", async () => {
+    const result = await run(
+      "create-card",
+      "--board",
+      boardId,
+      "--list",
+      orderListId,
+      "--name",
+      "Order card 1",
+    );
+    expect(result.card.order).toBe(0);
+    firstCardId = result.card.id;
+  });
+
+  it("second card gets order 1", async () => {
+    const result = await run(
+      "create-card",
+      "--board",
+      boardId,
+      "--list",
+      orderListId,
+      "--name",
+      "Order card 2",
+    );
+    expect(result.card.order).toBe(1);
+  });
+
+  it("moved card appends to target list", async () => {
+    // Create a card in Backlog, then move it to our order test list
+    const card = await run(
+      "create-card",
+      "--board",
+      boardId,
+      "--list",
+      listIds["Backlog"],
+      "--name",
+      "Move-to-order test",
+    );
+    const result = await run(
+      "move-card",
+      "--id",
+      card.card.id,
+      "--list",
+      orderListId,
+    );
+    expect(result.command).toBe("move-card");
+    expect(result.card.listId).toBe(orderListId);
+    // Verify via board that moved card is last (board returns cards ordered by `order`)
+    const board = await run("board", boardId);
+    const orderList = board.lists.find((l) => l.id === orderListId);
+    expect(orderList.cards).toHaveLength(3);
+    expect(orderList.cards[2].name).toBe("Move-to-order test");
+  });
+
+  it("board shows cards in insertion order", async () => {
+    const board = await run("board", boardId);
+    const orderList = board.lists.find((l) => l.id === orderListId);
+    expect(orderList).toBeDefined();
+    expect(orderList.cards.length).toBeGreaterThanOrEqual(3);
+    // Cards should appear in creation/move order
+    const names = orderList.cards.map((c) => c.name);
+    expect(names).toEqual([
+      "Order card 1",
+      "Order card 2",
+      "Move-to-order test",
+    ]);
+  });
+});
+
 // ─── Edge Cases ─────────────────────────────────────────────────────────────
 
 describe("Edge cases", () => {
