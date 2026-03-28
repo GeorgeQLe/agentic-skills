@@ -1,6 +1,6 @@
 # Skills Reference
 
-Complete reference for all 49 custom skills in this repository, available for both Claude Code and Codex.
+Complete reference for all 50 custom skills in this repository, available for both Claude Code and Codex.
 
 ## Installation
 
@@ -118,6 +118,14 @@ Go-to-market planning — channel strategy, messaging, pricing, launch plan, and
 - **Prerequisites**: `research/icp.md` must exist (run `/icp` first).
 - **Outputs**: `research/gtm.md` (channels, messaging, pricing, launch plan, 30/60/90 tactics), `research/gtm-interview.md`
 - **Use when**: After ICP discovery, to plan how to reach and convert customers.
+
+### `/monetization`
+Research-driven monetization strategy — revenue models, pricing architecture, unit economics, and packaging grounded in ICP and competitive data.
+
+- **Arguments**: `[optional: focus area e.g. "pricing tiers", "usage-based", "freemium"]`
+- **Prerequisites**: `research/icp.md` must exist (run `/icp` first).
+- **Outputs**: `research/monetization.md` (revenue model, pricing tiers, unit economics, timing), `research/monetization-interview.md`
+- **Use when**: After ICP discovery, to design how to make money — pricing model, tier structure, unit economics, and monetization timing.
 
 ### `/workflow`
 Read-only workflow status — shows completed steps, stale items, missing steps, and recommends the next action.
@@ -423,6 +431,7 @@ Archive old Done/Punt cards from the kanban board.
 | `/scale-audit` | Enterprise production readiness audit |
 | `/customer-feedback` | Ingest + synthesize customer feedback |
 | `/metrics` | Success metrics tied to journey stages |
+| `/monetization` | Revenue models, pricing, unit economics |
 | `/gtm` | Go-to-market planning |
 | `/workflow` | Check status, stale items, next action |
 | `/brainstorm` | Evaluate codebase, suggest improvement ideas |

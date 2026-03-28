@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-03-28 — Add /monetization skill (49→50)
+
+- Created `/monetization` skill (claude + codex) — research-driven monetization strategy with 3 validation checkpoints
+- Covers: revenue model selection, value metric design, tier structure, price point anchoring, unit economics (CAC/LTV/payback), monetization timing, revenue diversification
+- Reads upstream: icp, competitive-analysis, journey-map, metrics, gtm, customer-feedback, specs
+- Outputs: research/monetization.md + research/monetization-interview.md
+- Integrated into `/workflow`: staleness rules (stale when ICP or competitive data changes) + dependency graph
+- Added to `/skills` stage mapping under Strategize
+- Updated docs/skills-reference.md: count 49→50, new entry + quick reference row
+
 ## 2026-03-28 — Ship/ship-kanban: delegate to /workflow when no plan exists
 
 - Replaced static suggestion list in `/ship` and `/ship-kanban` with `/workflow` delegation

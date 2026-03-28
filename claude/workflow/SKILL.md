@@ -22,6 +22,7 @@ Use Glob and Bash (`stat` / `ls -la`) to check for existence and modification da
 - `research/customer-feedback.md`
 - `research/gtm.md`
 - `research/metrics.md`
+- `research/monetization.md`
 - `specs/*.md` (all spec files)
 - `specs/mvp-gap.md`
 - `specs/scale-audit.md`
@@ -57,6 +58,8 @@ Compare modification timestamps. Flag items as stale when newer upstream data ex
 | `research/icp.md` | `research/competitive-analysis.md` | **May be stale** — ICP changes may shift competitive frame |
 | `research/journey-map.md` | `research/metrics.md` | **Stale** — metrics should track current journey stages |
 | `research/icp.md` + `research/competitive-analysis.md` + `research/journey-map.md` | `research/gtm.md` | **Stale** — upstream research changed since GTM was written |
+| `research/icp.md` + `research/competitive-analysis.md` | `research/monetization.md` | **Stale** — ICP or competitive pricing data changed since monetization was written |
+| `research/customer-feedback.md` | `research/monetization.md` | **May be stale** — customer feedback may contain new willingness-to-pay signals |
 
 ### 4. Identify Missing Steps
 
@@ -69,6 +72,7 @@ Using the dependency graph, identify what's available but not yet done:
   -> /journey-map (requires icp + specs)
     -> /metrics (requires journey-map)
   -> /gtm (requires icp, optionally competitive-analysis + journey-map)
+  -> /monetization (requires icp, optionally competitive-analysis + journey-map + metrics + gtm)
 /enterprise-icp -> /scale-audit
 /plan-interview -> specs/*.md
 /roadmap (reads all research + specs)

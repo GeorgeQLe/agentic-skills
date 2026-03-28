@@ -26,7 +26,7 @@ Discover and search all available skills in this repository, grouped by workflow
    | Discovery & Market Fit | `icp`, `enterprise-icp` |
    | Planning | `brainstorm`, `brainstorm-kanban`, `plan-interview`, `plan-interview-ideas`, `plan-interview-kanban` |
    | Mapping | `journey-map`, `metrics` |
-   | Strategize | `roadmap`, `roadmap-kanban`, `competitive-analysis`, `gtm` |
+   | Strategize | `roadmap`, `roadmap-kanban`, `competitive-analysis`, `gtm`, `monetization` |
    | Evaluate | `mvp-gap`, `scale-audit`, `customer-feedback` |
    | Workflow | `workflow` |
    | Detail | `plan-phases` |
