@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-03-27 — Phase 8 Step 1: Add `--board` flag to kanban search
+
+- Added `getAllArgs` utility to `kanban.mjs` for collecting repeated flag values
+- Modified `cmdSearch` to accept `--board <id>` (repeatable) — validates board belongs to org, scopes search to specified boards; falls back to all-org-boards when omitted
+- Updated help text for search command
+- Added 2 new tests: scoped search returns only matching board's cards, invalid board ID returns error
+- All 79 tests pass (77 existing + 2 new)
+
 ## 2026-03-27 — Phase 7 Step 4: Fix backslash LIKE escape
 
 - Fixed `kanban.mjs` line 462: added `.replace(/\\/g, '\\\\')` before `%` and `_` escapes
