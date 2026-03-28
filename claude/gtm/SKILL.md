@@ -79,7 +79,17 @@ Use AskUserQuestion to ask:
 
 Continue until the user confirms. Only then proceed to writing.
 
-### 4. Write Output
+### 4. Populate Next Steps
+
+Before writing, check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with "Pick one:" framing:
+
+- IF `specs/` exist and no `tasks/roadmap.md`: `/roadmap` — Plan the build with launch milestones from above
+- IF no `research/metrics.md`: `/metrics` — Define success metrics for the launch goals
+- IF open questions need research: `/plan-interview [top question]` — Validate the most critical open question
+- IF `tasks/roadmap.md` exists: `/run` — Start executing — the GTM plan is set
+- IF no `research/journey-map.md`: `/journey-map` — Map the customer journey to validate funnel assumptions
+
+### 5. Write Output
 
 Only after the user has validated the findings, write the output files.
 
@@ -173,6 +183,11 @@ Only after the user has validated the findings, write the output files.
 
 ## Open Questions
 [Decisions deferred, experiments to run, things that need real-world data]
+
+## Next Steps
+
+Pick one:
+- [conditional items from step 4 — only include items whose conditions are met]
 ```
 
 ### `research/gtm-interview.md`

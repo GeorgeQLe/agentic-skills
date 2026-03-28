@@ -105,7 +105,17 @@ Use the AskUserQuestion tool to ask:
 
 Continue until the user confirms the journeys are complete. Only then proceed to writing.
 
-### 5. Write Output
+### 5. Populate Next Steps
+
+Before writing, check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with "Pick one:" framing:
+
+- ALWAYS: `/metrics` — Define success metrics tied to the journey stages and critical moments
+- IF `specs/` exist and no `tasks/roadmap.md`: `/roadmap` — Plan the build with journey coverage in mind
+- IF no `research/gtm.md`: `/gtm` — Build a GTM plan grounded in the customer journey
+- IF journey gaps identified above: `/plan-interview [top gap]` — Spec the most critical journey gap
+- IF `tasks/roadmap.md` exists: `/run` — Continue building with journey context
+
+### 6. Write Output
 
 Only after the user has validated the findings, write the output files.
 
@@ -175,6 +185,11 @@ Only after the user has validated the findings, write the output files.
 
 ## Journey Gaps
 [Stages where the product, specs, or business model have no clear answer yet. Each gap should include a _Start with:_ `/plan-interview [topic]` prompt.]
+
+## Next Steps
+
+Pick one:
+- [conditional items from step 5 — only include items whose conditions are met]
 ```
 
 ### `research/journey-map-interview.md`

@@ -55,6 +55,8 @@ Only after user validates, write the output files.
 - `research/competitive-analysis.md` — Full competitive landscape: summary, competitor profiles, GTM analysis, market gaps, positioning recommendations, next steps
 - `research/competitive-analysis-search-log.md` — Raw research log: every query, findings, source attribution, reasoning
 
+The output file must end with a `## Next Steps` section (3–5 contextual items, "Pick one:" framing) based on which files exist: always suggest `/brainstorm`; conditionally suggest `/plan-interview`, `/journey-map`, `/gtm`, `/mvp-gap` based on whether `specs/`, `research/journey-map.md`, `research/gtm.md`, codebase, and `specs/mvp-gap.md` exist.
+
 ## Constraints
 
 - Use web search extensively — every competitor must come from a search result.
@@ -66,3 +68,4 @@ Only after user validates, write the output files.
 - Prefer recent sources (last 12 months).
 - Search breadth over depth initially.
 - Present before writing — never write until findings are validated.
+- `## Next Steps` must be the final section in the output file, with 3–5 contextual items and "Pick one:" framing.

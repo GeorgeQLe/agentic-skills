@@ -31,8 +31,11 @@ Append-only skill that ingests customer feedback, categorizes findings against I
 
 - `research/customer-feedback.md` — Running log with synthesis section (regenerated each run) and per-session findings (append-only)
 
+The Synthesis section must include a `### Next Steps` subsection (3–5 contextual items, "Pick one:" framing, regenerated each run) based on staleness alerts and finding counts: conditionally suggest `/icp`, `/journey-map`, `/brainstorm`, `/plan-interview [topic]`, `/workflow` based on staleness triggers and New finding counts.
+
 ## Constraints
 
 - Append-only — never delete previous sessions. Only regenerate the Synthesis section.
 - Present before writing — validate categorization with user first.
 - Staleness triggers are cumulative across all sessions.
+- `### Next Steps` must appear in the Synthesis section (after Staleness Alerts, before session dividers), with 3–5 contextual items and "Pick one:" framing.

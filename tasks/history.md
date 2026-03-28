@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-03-28 — Add contextual Next Steps to all 9 research skills
+
+- Added `## Next Steps` section to all 9 research skill output templates (icp, competitive-analysis, enterprise-icp, journey-map, customer-feedback, gtm, metrics, mvp-gap, scale-audit)
+- Claude skills (9): added "Populate Next Steps" process step with conditional logic (file existence checks) + `## Next Steps` in output template
+- Codex skills (9): added Next Steps requirements to Deliverables + constraint enforcing format
+- Each skill's suggestions are context-aware (3–5 items, "Pick one:" framing) — only includes commands whose prerequisites are met
+- Replaced competitive-analysis's old `## Recommended Next Steps` (only suggested `/plan-interview`) with expanded contextual version
+- 18 files modified, 165 lines added
+
 ## 2026-03-28 — Add 4 new skills: workflow, customer-feedback, gtm, metrics (44→48)
 
 - Created `/workflow` skill — read-only diagnostic that scans project state, detects phase, checks staleness via timestamp comparison, and recommends next action

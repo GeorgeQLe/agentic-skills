@@ -36,6 +36,8 @@ Interview the user to map how people flow through the product (user journey) and
 - `research/journey-map.md` — User journeys (use case overview + task flows per profile), customer journey (full funnel), critical moments, journey gaps with `/plan-interview` prompts
 - `research/journey-map-interview.md` — Raw interview log
 
+The output file must end with a `## Next Steps` section (3–5 contextual items, "Pick one:" framing) based on which files exist: always suggest `/metrics`; conditionally suggest `/roadmap`, `/gtm`, `/plan-interview [top gap]`, `/run` based on whether `specs/`, `tasks/roadmap.md`, `research/gtm.md` exist and whether journey gaps were identified.
+
 ## Constraints
 
 - Requires both ICP and specs — cannot work without knowing the user AND the solution.
@@ -44,3 +46,4 @@ Interview the user to map how people flow through the product (user journey) and
 - Cross-reference specs — flag functionality gaps with `/plan-interview` prompts.
 - Do not prescribe UI or architecture.
 - Present before writing — never write until validated.
+- `## Next Steps` must be the final section in the output file, with 3–5 contextual items and "Pick one:" framing.

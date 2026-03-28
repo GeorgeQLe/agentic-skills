@@ -35,6 +35,8 @@ Automated research that identifies **multiple ICP candidates**, maps pain points
 - `research/icp.md` — Primary ICP in canonical 9 top-level `##` sections (Customer Profile, User Profile(s), Trigger Events, Current State Journey, Pain Map, Market Landscape, Market Sizing, Value Proposition, Customer ↔ User Dynamics), then `## Additional ICPs` (condensed 9-section per ICP), then `## Cross-ICP Analysis` (prioritization matrix, shared pains, conflicts, product line recs, build sequence)
 - `research/icp-search-log.md` — Raw research log: every query, findings, evidence, scoring rationale
 
+The output file must end with a `## Next Steps` section (3–5 contextual items, "Pick one:" framing) based on which files exist: always suggest `/competitive-analysis`; conditionally suggest `/plan-interview`, `/journey-map`, `/mvp-gap`, `/brainstorm` based on whether `specs/`, `research/journey-map.md`, codebase, and `research/competitive-analysis.md` exist.
+
 ## Constraints
 
 - Stay in problem space — do not propose features, architecture, or solutions.
@@ -43,3 +45,4 @@ Automated research that identifies **multiple ICP candidates**, maps pain points
 - Minimum 8 WebSearch queries before identifying candidates, 2–3 per candidate after.
 - Do not overwrite existing `research/icp.md` without asking.
 - Present before writing — never write output until findings are validated through checkpoints.
+- `## Next Steps` must be the final section in the output file, with 3–5 contextual items and "Pick one:" framing.

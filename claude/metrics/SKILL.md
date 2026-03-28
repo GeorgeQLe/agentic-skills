@@ -79,7 +79,17 @@ Use AskUserQuestion to ask:
 
 Continue until the user confirms. Only then proceed to writing.
 
-### 4. Write Output
+### 4. Populate Next Steps
+
+Before writing, check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with "Pick one:" framing:
+
+- IF instrumentation gaps and no specs for them: `/plan-interview [topic]` — Spec instrumentation for the top metric gap
+- IF no `tasks/roadmap.md`: `/roadmap` — Plan the build with instrumentation phases
+- IF no `research/gtm.md`: `/gtm` — Build a GTM plan — metrics define what launch success looks like
+- IF `tasks/roadmap.md` exists: `/run` — Start building and instrumenting
+- IF product is live and no `research/customer-feedback.md`: `/customer-feedback` — Collect data to validate metric targets
+
+### 5. Write Output
 
 Only after the user has validated the findings, write the output files.
 
@@ -169,6 +179,11 @@ _Start with:_ `/plan-interview [instrumentation topic]` for high-priority gaps.
 
 ## Metric Dependencies
 [How metrics relate to each other — e.g., activation drives retention, retention drives LTV. Identify which metrics are leading vs. lagging indicators.]
+
+## Next Steps
+
+Pick one:
+- [conditional items from step 4 — only include items whose conditions are met]
 ```
 
 ### `research/metrics-interview.md`

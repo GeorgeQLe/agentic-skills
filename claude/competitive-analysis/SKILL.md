@@ -127,7 +127,17 @@ Then ask:
 
 Continue the conversation until all non-trivial details are nailed down. If the user raises points that require additional research, go back and search before finalising.
 
-### 7. Write Output
+### 7. Populate Next Steps
+
+Before writing, check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with "Pick one:" framing:
+
+- IF no `specs/` directory or it's empty: `/plan-interview` — Spec features that exploit the market gaps above
+- IF `specs/` exist but no `research/journey-map.md`: `/journey-map` — Map how the ICP experiences the product vs. competitors
+- ALWAYS: `/brainstorm` — Generate ideas from the white space and competitive weaknesses
+- IF no `research/gtm.md`: `/gtm` — Build a GTM plan using the channel and positioning insights
+- IF codebase exists and no `specs/mvp-gap.md`: `/mvp-gap` — Evaluate codebase against ICP and competitive landscape
+
+### 8. Write Output
 
 Only after the user has validated the findings, write the output files.
 
@@ -192,9 +202,10 @@ For each:
 - **Avoid this** (learned from [competitor]): [what they did poorly that we should avoid]
 - ...
 
-## Recommended Next Steps
-- Prioritised list of actions based on the analysis
-- Each with a _Start with:_ `/plan-interview [topic]` prompt where appropriate
+## Next Steps
+
+Pick one:
+- [conditional items from step 7 — only include items whose conditions are met]
 ```
 
 ### `research/competitive-analysis-search-log.md`

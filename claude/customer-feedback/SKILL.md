@@ -68,7 +68,17 @@ Count the number of **Wrong** and **New** findings across ALL sessions (includin
 
 Display these recommendations after the categorized findings.
 
-### 6. Write Output
+### 6. Populate Next Steps
+
+Before writing, check which files exist and synthesis results to populate the `## Next Steps` section contextually. Include 3–5 applicable items with "Pick one:" framing:
+
+- IF staleness alert for ICP: `/icp` — Re-run discovery — feedback has invalidated key assumptions
+- IF staleness alert for journey map: `/journey-map` — Re-map journeys — real behavior differs from mapped experience
+- IF 3+ New findings: `/brainstorm` — Generate ideas for newly revealed customer needs
+- IF New findings relate to a gap: `/plan-interview [topic]` — Spec a solution for the most impactful new finding
+- IF no staleness alerts: `/workflow` — Check overall project status
+
+### 7. Write Output
 
 Only after the user validates, write to `research/customer-feedback.md`:
 
@@ -100,6 +110,11 @@ Only after the user validates, write to `research/customer-feedback.md`:
 
 ### Staleness Alerts
 [If 3+ Wrong/New findings accumulated, list which research docs should be re-run and why]
+
+### Next Steps
+
+Pick one:
+- [conditional items from step 6 — only include items whose conditions are met]
 
 ---
 
