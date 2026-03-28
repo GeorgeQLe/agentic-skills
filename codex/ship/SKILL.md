@@ -34,6 +34,7 @@ Ship current work, commit, push, deploy, and plan the next step.
        2. Check off the phase milestone in `tasks/roadmap.md`.
        3. Copy the next phase from `tasks/roadmap.md` → overwrite `tasks/todo.md`.
        4. If no more phases remain, report "all done" and stop.
+       5. **Just-in-time planning:** Invoke `/plan-phases` for the new phase. This generates TDD steps and file-level detail using the full context of what was learned during prior phases.
      - If **NO:** find the next uncompleted step within the current phase.
 5. Write a self-contained implementation plan for the next step into `tasks/todo.md`, complete enough for a fresh session to execute from `tasks/todo.md` alone.
 6. Commit and push `tasks/todo.md`, `tasks/roadmap.md`, and `docs/phases/` (if created).

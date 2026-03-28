@@ -15,6 +15,7 @@ Identify the next incomplete unit of work from the phased plan, build an executi
 4. Find the next incomplete item:
    - Look for the next phase with an unchecked milestone.
    - Find the next unchecked `- [ ]` step within that phase.
+   - **If the phase has acceptance criteria but no implementation steps** (no `### Tests First` section): invoke `/plan-phases` for this phase to generate TDD steps and file-level detail before proceeding.
 5. Research what is needed — read only the files relevant to the step.
 6. Present the execution plan to the user:
    - What the step requires

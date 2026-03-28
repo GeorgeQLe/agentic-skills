@@ -18,6 +18,7 @@ Identify the next incomplete unit of work from the phased plan, build an executi
    - Look for the next phase with an unchecked milestone.
    - If `--phase` mode: scope the entire phase.
    - Otherwise (default): find only the next unchecked `- [ ]` step within that phase.
+   - **If the phase has acceptance criteria but no implementation steps** (no `### Tests First` section): invoke `/plan-phases` for this phase to generate TDD steps and file-level detail before proceeding. This handles cases where a phase was transitioned to manually or the roadmap only contains strategic outlines.
 5. **Research what's needed** — read only the files relevant to the step/phase to understand existing code, patterns, and dependencies.
 6. **Enter plan mode** using the EnterPlanMode tool.
 7. **Present the execution plan** to the user:
