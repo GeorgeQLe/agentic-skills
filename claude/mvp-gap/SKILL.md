@@ -19,6 +19,7 @@ Automated analysis that evaluates the current codebase against the customer disc
 
 - Read `research/icp.md` — customer profile, user profile(s), current-state journey, pain map, market landscape, value prop
 - Read `research/enterprise-icp.md` if it exists (for awareness, not primary evaluation)
+- Read `research/metrics.md` if it exists — check if defined metrics can actually be measured (instrumentation gaps are MVP gaps)
 - Read CLAUDE.md, README, package config for project conventions
 - Read existing specs from `specs/` for planned but unbuilt features
 - Read `tasks/roadmap.md` and `tasks/todo.md` if they exist for work in progress

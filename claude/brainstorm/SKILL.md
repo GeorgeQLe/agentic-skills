@@ -12,7 +12,7 @@ Evaluate the current codebase and generate actionable suggestions that the user 
 ## Process
 
 1. **Understand the project**: Read CLAUDE.md, README, package config, and key source files to understand what the project does, its architecture, tech stack, and current state.
-2. **Check existing plans and research**: Read `tasks/roadmap.md`, `tasks/todo.md`, and specs from `specs/` (or `spec.md`) if they exist to understand work already planned or in progress — avoid suggesting things already covered. Read `research/competitive-analysis.md` if it exists — competitor gaps, market white space, and positioning weaknesses are high-signal inputs for ideation.
+2. **Check existing plans and research**: Read `tasks/roadmap.md`, `tasks/todo.md`, and specs from `specs/` (or `spec.md`) if they exist to understand work already planned or in progress — avoid suggesting things already covered. Read `research/competitive-analysis.md` if it exists — competitor gaps, market white space, and positioning weaknesses are high-signal inputs for ideation. Read `research/customer-feedback.md` if it exists — "Wrong" and "New" findings are highest-signal ideation input (real user feedback that contradicts assumptions or reveals unmet needs). Read `research/metrics.md` if it exists — instrumentation gaps can generate ideas for tooling or observability improvements.
 3. **Analyse the codebase** across these dimensions:
 
    **Strategic / Product**

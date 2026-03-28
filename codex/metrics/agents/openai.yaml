@@ -1,0 +1,7 @@
+interface:
+  display_name: "Success Metrics"
+  short_description: "Define success metrics tied to journey stages"
+  default_prompt: "Use $metrics to define activation, engagement, retention, growth, and business metrics."
+
+policy:
+  allow_implicit_invocation: true

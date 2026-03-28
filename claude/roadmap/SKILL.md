@@ -27,6 +27,8 @@ Read all available project documentation:
 - **`research/icp.md`** — customer discovery from `/icp` (if it exists)
 - **`specs/mvp-gap.md`** — MVP gap analysis from `/mvp-gap` (if it exists)
 - **`research/enterprise-icp.md`** and **`specs/scale-audit.md`** — enterprise discovery and audit (if they exist)
+- **`research/gtm.md`** — go-to-market plan (if it exists) — launch milestones affect phase sequencing
+- **`research/metrics.md`** — success metrics framework (if it exists) — instrumentation may need its own phase
 - **`tasks/roadmap.md`** — existing roadmap if any
 - **`tasks/todo.md`** — current work in progress
 - **`tasks/history.md`** — what's been accomplished
