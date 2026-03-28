@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-03-27 — Phase 8 Step 3: Env path unification
+
+- Created `claude/poketo-kanban/scripts/env-paths.mjs` — shared `ENV_SEARCH_PATHS` array (4 paths)
+- Updated `kanban.mjs` to import and use `ENV_SEARCH_PATHS` instead of inline `pokePaths` array
+- Updated `bootstrap-session.mjs` to import and use `ENV_SEARCH_PATHS` instead of inline 2-path fallback (was missing monorepo variants)
+- Added test in `bootstrap-session.test.mjs` verifying array length and absolute paths
+- All 83 tests pass (82 existing + 1 new). Phase 8 complete.
+
 ## 2026-03-27 — Phase 8 Step 2: Dry-run mode for kanban write commands
 
 - Added `hasBoolFlag` utility and `--dry-run` checks to all 8 write commands in `kanban.mjs`

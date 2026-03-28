@@ -2,11 +2,11 @@
 
 > Generated from: tasks/roadmap.md (existing), specs/board-flag-kanban-search.md, tasks/ideas.md, tasks/history.md
 > Date: 2026-03-27
-> Total Phases: 9 (7 complete, 2 planned)
+> Total Phases: 9 (8 complete, 1 planned)
 
 ## Summary
 
-Phases 1-7 built the kanban skill suite, board intelligence, templates, archive automation, resolved expert review findings, and hardened test coverage (77 tests). Next: kanban DX improvements (Phase 8) and skill infrastructure (Phase 9). Small phases (2-3 items each) to ship incrementally.
+Phases 1-8 built the kanban skill suite, board intelligence, templates, archive automation, resolved expert review findings, hardened test coverage (83 tests), and improved kanban DX. Next: skill infrastructure (Phase 9).
 
 ## Phase Overview
 
@@ -19,7 +19,7 @@ Phases 1-7 built the kanban skill suite, board intelligence, templates, archive 
 | 5 | Expert Review Fixes | — | 7 security/quality fixes | M |
 | 6 | Testing Hardening I | tasks/ideas.md | Edge case + command test expansion (~20 new tests) | M |
 | 7 | Testing Hardening II ✓ | tasks/ideas.md | Bootstrap tests, install.sh bats, DB error paths | M |
-| 8 | Kanban DX | specs/board-flag-kanban-search.md, tasks/ideas.md | `--board` flag, dry-run mode, env path unification | M |
+| 8 | Kanban DX ✓ | specs/board-flag-kanban-search.md, tasks/ideas.md | `--board` flag, dry-run mode, env path unification | M |
 | 9 | Skill Infrastructure | tasks/ideas.md | Skill discovery, dependency graph, versioning | L |
 
 ---
@@ -193,7 +193,7 @@ Phases 1-7 built the kanban skill suite, board intelligence, templates, archive 
 
 ---
 
-## Phase 8: Kanban DX
+## Phase 8: Kanban DX ✓
 
 **Goal:** Improve kanban CLI ergonomics — scoped search, safer testing, and consistent env resolution.
 
@@ -203,16 +203,16 @@ Phases 1-7 built the kanban skill suite, board intelligence, templates, archive 
 - Unify env path lists in bootstrap-session.mjs and kanban.mjs
 
 **Acceptance Criteria:**
-- [ ] `search --board <id>` scopes results to specified board(s); repeatable flag works
-- [ ] Invalid `--board` ID exits with error (not silent empty results)
-- [ ] `--dry-run` flag on kanban skills shows intended card operations without DB writes
-- [ ] bootstrap-session.mjs and kanban.mjs share a single env path list
-- [ ] Existing tests still pass; new tests for --board flag
+- [x] `search --board <id>` scopes results to specified board(s); repeatable flag works
+- [x] Invalid `--board` ID exits with error (not silent empty results)
+- [x] `--dry-run` flag on kanban skills shows intended card operations without DB writes
+- [x] bootstrap-session.mjs and kanban.mjs share a single env path list
+- [x] Existing tests still pass; new tests added (83 total)
 
-**On Completion** (fill in when phase is done):
-- Deviations from plan:
-- Tech debt / follow-ups:
-- Ready for next phase:
+**On Completion:**
+- Deviations from plan: none
+- Tech debt / follow-ups: empty description clearing (`--description ""`), expose card `order` in responses
+- Ready for next phase: yes
 
 ---
 
