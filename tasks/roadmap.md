@@ -2,7 +2,7 @@
 
 > Generated from: tasks/roadmap.md (existing), specs/board-flag-kanban-search.md, tasks/ideas.md, tasks/history.md
 > Date: 2026-03-27
-> Total Phases: 9 (5 complete, 4 planned)
+> Total Phases: 9 (6 complete, 3 planned)
 
 ## Summary
 
@@ -157,25 +157,21 @@ Phases 1-5 built the kanban skill suite, board intelligence, templates, archive 
 
 ---
 
-## Phase 6: Testing Hardening I
+## Phase 6: Testing Hardening I ✓
 
 **Goal:** Expand kanban.mjs test coverage with edge case and command-level tests to catch regressions like the Phase 5 LIKE injection and null dereference bugs.
 
-**Scope**:
-- Kanban edge case test expansion (concurrent moves, unicode names, LIKE metacharacters, archive edge cases)
-- Test create-list command + untested flags (~20 new tests for --progress, --description, --due, search special chars, create-card edge cases, error paths)
-
 **Acceptance Criteria:**
-- [ ] Edge case tests added: unicode card names, LIKE metacharacter queries (%, _, backslash), moving card to same list, archiving already-archived card
-- [ ] create-list command has dedicated test coverage
-- [ ] update-card --progress, --description, --due flags each have at least one test
-- [ ] search with special characters has regression tests
-- [ ] All new + existing tests pass (target: 40+ total, up from 24)
+- [x] Edge case tests added: unicode card names, LIKE metacharacter queries (%, _, backslash as todo), moving card to same list, archiving already-archived card
+- [x] create-list command has dedicated test coverage
+- [x] update-card --progress, --description, --due flags each have at least one test
+- [x] search with special characters has regression tests
+- [x] All new + existing tests pass (53 passed, 1 todo — target was 40+)
 
-**On Completion** (fill in when phase is done):
-- Deviations from plan:
-- Tech debt / follow-ups:
-- Ready for next phase:
+**On Completion:**
+- Deviations: `--description ""` no-op (falsy guard), no `--type` flag on create-list, move-card/board omit card `order`
+- Tech debt: backslash search escape, empty description clearing, expose card `order` in responses
+- Ready for next phase: yes
 
 ---
 
