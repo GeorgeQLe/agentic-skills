@@ -1,5 +1,17 @@
 # Session History
 
+## 2026-03-28 — Add /hygiene skill and fix project-wide conventions (48→49)
+
+- Created `/hygiene` skill (claude + codex) — audits project structure for convention violations with optional auto-fix mode
+- Scopes: skills (frontmatter, sections), tasks (expected files), docs (reference sync), codex (mirror parity)
+- Ran initial audit and fixed all errors/warnings:
+  - Added missing `argument-hint` fields to 6 skills
+  - Restructured 5 flat-format skills to use `## Process`/`## Output Format`/`## Constraints` headings (analyze-sessions, commit-and-push-by-feature, install-workflow-orchestration, plan-interview, ship-end)
+  - Created 2 missing codex mirrors (poketo-kanban, skills)
+  - Added `/competitive-analysis` to Quick Reference table
+  - Synced 29 codex skill descriptions to match claude source of truth
+- Updated docs/skills-reference.md: count 48→49, new `/hygiene` entry
+
 ## 2026-03-28 — Add contextual Next Steps to all 9 research skills
 
 - Added `## Next Steps` section to all 9 research skill output templates (icp, competitive-analysis, enterprise-icp, journey-map, customer-feedback, gtm, metrics, mvp-gap, scale-audit)
