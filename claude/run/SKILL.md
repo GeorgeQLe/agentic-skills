@@ -1,6 +1,7 @@
 ---
 name: run
 description: Plan the next incomplete step (or full phase with --phase flag) from the plan, then enter plan mode for user approval before executing
+version: 1.0.0
 argument-hint: [--phase]
 ---
 

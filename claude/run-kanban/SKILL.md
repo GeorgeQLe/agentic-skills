@@ -1,6 +1,7 @@
 ---
 name: run-kanban
 description: Plan and execute the next step from the phased plan, moving the kanban card to In Progress with cross-device conflict detection
+version: 1.0.0
 argument-hint: [--phase]
 allowed-tools: Bash(node *)
 ---

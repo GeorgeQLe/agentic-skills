@@ -1,6 +1,7 @@
 ---
 name: brainstorm
 description: Evaluate the codebase and suggest ideas to explore with /plan-interview
+version: 1.0.0
 argument-hint: [optional: focus area e.g. "performance", "new features", "DX"]
 ---
 

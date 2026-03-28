@@ -1,6 +1,7 @@
 ---
 name: skills
 description: Browse and search all available skills, grouped by workflow stage
+version: 1.0.0
 argument-hint: [list | search <keyword>]
 ---
 

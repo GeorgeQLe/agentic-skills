@@ -1,6 +1,7 @@
 ---
 name: scaffold
 description: Generate a new package or app in the monorepo following established project conventions
+version: 1.0.0
 argument-hint: <type> <name> (e.g. "package utils" or "app admin-dashboard")
 ---
 

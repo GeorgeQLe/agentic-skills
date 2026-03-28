@@ -1,6 +1,7 @@
 ---
 name: plan-interview
 description: Interview to validate and complete a specification
+version: 1.0.0
 argument-hint: [optional-topic-override]
 ---
 

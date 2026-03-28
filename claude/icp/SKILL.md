@@ -1,6 +1,7 @@
 ---
 name: icp
 description: Customer discovery interview — map the problem space, ICP, user journeys, and value prop before designing a solution
+version: 1.0.0
 argument-hint: [optional: rough idea or problem area]
 ---
 

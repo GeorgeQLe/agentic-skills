@@ -1,6 +1,7 @@
 ---
 name: run-step
 description: Plan the next single incomplete step, enter plan mode for approval, then execute
+version: 1.0.0
 ---
 
 # Single-Step Executor

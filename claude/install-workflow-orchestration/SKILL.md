@@ -1,6 +1,7 @@
 ---
 name: install-workflow-orchestration
 description: Install workflow orchestration instructions into the current repository's CLAUDE.md
+version: 1.0.0
 ---
 
 Create or update the *current repository's* CLAUDE.md at: ./CLAUDE.md

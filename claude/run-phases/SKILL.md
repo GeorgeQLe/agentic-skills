@@ -1,6 +1,7 @@
 ---
 name: run-phases
 description: Plan the next incomplete phase, enter plan mode for approval, then execute
+version: 1.0.0
 ---
 
 # Single-Phase Executor

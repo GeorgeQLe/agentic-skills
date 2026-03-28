@@ -1,6 +1,7 @@
 ---
 name: ship-then-plan
 description: Ship current work, plan next step, then enter plan mode for clear-and-implement
+version: 1.0.0
 ---
 
 Wrap up current work, commit, push, write the next step into `tasks/todo.md`, then enter plan mode.
