@@ -434,13 +434,28 @@ async function cmdSearch(db, session, args) {
     process.exit(1);
   }
 
-  // Get all board IDs for this org
-  const orgBoards = await db
-    .select({ id: boards.id })
-    .from(boards)
-    .where(eq(boards.orgId, session.orgId));
+  const boardFilterIds = getAllArgs(args, "--board");
 
-  const boardIds = orgBoards.map((b) => b.id);
+  let boardIds;
+  if (boardFilterIds.length > 0) {
+    // Validate each board belongs to this org
+    for (const id of boardFilterIds) {
+      const [board] = await db.select({ id: boards.id }).from(boards)
+        .where(and(eq(boards.id, id), eq(boards.orgId, session.orgId))).limit(1);
+      if (!board) {
+        output({ error: `Board not found: ${id}` });
+        process.exit(1);
+      }
+    }
+    boardIds = boardFilterIds;
+  } else {
+    // Current behavior: all org boards
+    const orgBoards = await db
+      .select({ id: boards.id })
+      .from(boards)
+      .where(eq(boards.orgId, session.orgId));
+    boardIds = orgBoards.map((b) => b.id);
+  }
   if (boardIds.length === 0) {
     output({ command: "search", query, results: [] });
     return;
@@ -618,6 +633,16 @@ function getArg(args, flag) {
   return args[idx + 1];
 }
 
+function getAllArgs(args, flag) {
+  const values = [];
+  for (let i = 0; i < args.length; i++) {
+    if (args[i] === flag && i + 1 < args.length) {
+      values.push(args[++i]);
+    }
+  }
+  return values;
+}
+
 // ─── Main ────────────────────────────────────────────────────────────────────
 
 async function main() {
@@ -635,7 +660,7 @@ async function main() {
         "move-card --id <id> --list <id>         — Move card to another list",
         "create-board --name \"...\" [--template standard] [--lists \"...\"] — Create board",
         "create-list --board <id> --name \"...\"   — Add list to board",
-        "search --query \"...\"                    — Search cards across boards",
+        "search --query \"...\" [--board <id>]     — Search cards across boards (or scoped to --board)",
         "archive-card --id <id>                  — Archive a card",
         "delete-board --id <id> --confirm        — Delete board and all its data",
       ],
