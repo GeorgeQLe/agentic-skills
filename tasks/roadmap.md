@@ -226,10 +226,10 @@ Phases 1-8 built the kanban skill suite, board intelligence, templates, archive 
 - Skill versioning and changelog (semver in frontmatter, changelog tracking)
 
 **Acceptance Criteria:**
-- [ ] `/skills` command lists skills grouped by workflow stage with keyword search
-- [ ] Dependency graph script detects broken cross-references between skills
+- [x] `/skills` command lists skills grouped by workflow stage with keyword search
+- [x] Dependency graph script detects broken cross-references between skills
 - [ ] At least one iteration of versioning scheme documented and applied to 3+ skills
-- [ ] No broken skill cross-references in the repo
+- [x] No broken skill cross-references in the repo
 
 **On Completion** (fill in when phase is done):
 - Deviations from plan:
