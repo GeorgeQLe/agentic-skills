@@ -45,6 +45,19 @@
 - `--confirm` flag required for archive (safety gate works)
 - Board auto-creates Archive list on first archive operation
 
+## Layer 3: End-to-End Skill Invocation
+
+| # | Skill | Status | Notes |
+|---|-------|--------|-------|
+| 1 | `/brainstorm-kanban` | PASS | Board resolved from `tasks/.kanban-board`, 7 new ideas generated, 7 Backlog cards created (14 total), idempotency search worked, `tasks/ideas.md` appended correctly |
+| 2 | `/plan-interview-kanban` | PASS | Board resolved from `tasks/.kanban-board` (no prompt), overview displayed (Backlog: 14), 3-turn interview via AskUserQuestion, `specs/board-flag-kanban-search.md` + interview log written, card `b0b9800e` updated with spec summary + path, card stayed in Backlog |
+| 3 | `/roadmap-kanban` | | |
+| 4 | `/run-kanban` | | |
+| 5 | `/ship-kanban` | | |
+| 6 | `/ship-end-kanban` | | |
+| 7 | `/sync-roadmap-kanban` | | |
+| 8 | `/kanban-archive` | | |
+
 ## How to continue testing
 
 Each remaining skill is a prompt-based skill that must be invoked as a slash command in a Claude Code session. Run them in order:
