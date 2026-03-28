@@ -1,5 +1,21 @@
 # Session History
 
+## 2026-03-27 — Layer 3 e2e testing: skills 3-5
+
+- `/roadmap-kanban` (skill 3) — PASS: existing roadmap detected, 4 new phases added, 2 cards moved Backlog→Todo, 3 future phase cards created in Backlog
+- `/run-kanban` (skill 4) — PASS: card created In Progress with hostname/branch metadata, conflict check passed, plan mode entered, progress set to 0%
+- `/ship-kanban` (skill 5) — testing in progress: shipping intermediate work, card stays In Progress (step not complete)
+
+## 2026-03-27 — Roadmap updated: Phases 6-9 added
+
+- Roadmap revised from 5 completed phases to 9 total (4 new planned)
+- Phase 6: Testing Hardening I (edge cases + command test expansion)
+- Phase 7: Testing Hardening II (bootstrap, install.sh, DB error paths, backslash fix)
+- Phase 8: Kanban DX (--board flag, dry-run mode, env unification)
+- Phase 9: Skill Infrastructure (discovery, dependency graph, versioning)
+- Small phases (2-3 items each) for incremental shipping
+- todo.md preserved for ongoing Layer 3 validation work
+
 ## 2026-03-27 — Kanban Skill Validation complete: all 9 skills pass
 
 - Manually tested all 9 kanban skills in workflow order against real Neon DB

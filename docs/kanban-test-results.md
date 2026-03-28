@@ -51,8 +51,8 @@
 |---|-------|--------|-------|
 | 1 | `/brainstorm-kanban` | PASS | Board resolved from `tasks/.kanban-board`, 7 new ideas generated, 7 Backlog cards created (14 total), idempotency search worked, `tasks/ideas.md` appended correctly |
 | 2 | `/plan-interview-kanban` | PASS | Board resolved from `tasks/.kanban-board` (no prompt), overview displayed (Backlog: 14), 3-turn interview via AskUserQuestion, `specs/board-flag-kanban-search.md` + interview log written, card `b0b9800e` updated with spec summary + path, card stayed in Backlog |
-| 3 | `/roadmap-kanban` | | |
-| 4 | `/run-kanban` | | |
+| 3 | `/roadmap-kanban` | PASS | Board resolved from `tasks/.kanban-board` (no prompt), overview displayed (Backlog: 14, Todo: 0), existing mode detected (Phases 1-5 complete), 2-turn interview via AskUserQuestion, `tasks/roadmap.md` updated (Phases 6-9 added), `tasks/history.md` updated, 2 cards moved Backlog→Todo (edge cases + create-list), 3 future phase cards created in Backlog, todo.md preserved (user chose to keep validation work) |
+| 4 | `/run-kanban` | PASS | Board resolved from `tasks/.kanban-board` (no prompt), overview displayed (Backlog: 15, Todo: 2, In Progress: 0), todo.md read → next step "Manual walkthrough of kanban skills", card `31e37110` created in In Progress with `[hb-a]` hostname + `Branch: master` + timestamp, conflict check passed (0 conflicts), plan mode entered, card progress set to 0% (step in progress) |
 | 5 | `/ship-kanban` | | |
 | 6 | `/ship-end-kanban` | | |
 | 7 | `/sync-roadmap-kanban` | | |
