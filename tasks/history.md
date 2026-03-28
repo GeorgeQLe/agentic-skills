@@ -1,10 +1,11 @@
 # Session History
 
-## 2026-03-27 — Layer 3 e2e testing: skills 3-5
+## 2026-03-27 — Layer 3 e2e testing: skills 3-6
 
 - `/roadmap-kanban` (skill 3) — PASS: existing roadmap detected, 4 new phases added, 2 cards moved Backlog→Todo, 3 future phase cards created in Backlog
 - `/run-kanban` (skill 4) — PASS: card created In Progress with hostname/branch metadata, conflict check passed, plan mode entered, progress set to 0%
-- `/ship-kanban` (skill 5) — testing in progress: shipping intermediate work, card stays In Progress (step not complete)
+- `/ship-kanban` (skill 5) — PASS: 2 logical commits shipped, card stays In Progress (step not complete), commit SHAs added to description
+- `/ship-end-kanban` (skill 6) — session wrap-up: uncommitted test results shipped, card `31e37110` moved In Progress → Done, commit refs added
 
 ## 2026-03-27 — Roadmap updated: Phases 6-9 added
 
