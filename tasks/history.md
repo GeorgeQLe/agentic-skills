@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-03-27 — Phase 9 Step 3: Skill versioning
+
+- Added `version: 1.0.0` to all 43 `claude/*/SKILL.md` frontmatter files
+- Created `scripts/skill-versions.sh` — version audit script with `--json` and `--missing` modes
+- Created `docs/skill-versioning.md` — semver rules, bump guidelines, audit usage
+- Phase 9 complete: skill discovery, dependency graph, and versioning all shipped
+
 ## 2026-03-27 — Phase 9 Step 2: Skill dependency graph
 
 - Created `scripts/skill-deps.sh` — PCRE-based dependency graph and validation script
