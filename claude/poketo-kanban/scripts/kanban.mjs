@@ -459,7 +459,7 @@ async function cmdSearch(db, session, args) {
   }
 
   // Search cards
-  const escaped = query.replace(/%/g, '\\%').replace(/_/g, '\\_');
+  const escaped = query.replace(/\\/g, '\\\\').replace(/%/g, '\\%').replace(/_/g, '\\_');
   const results = await db
     .select()
     .from(cards)
