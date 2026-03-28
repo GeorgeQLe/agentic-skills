@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-03-27 — Phase 8 Step 2: Dry-run mode for kanban write commands
+
+- Added `hasBoolFlag` utility and `--dry-run` checks to all 8 write commands in `kanban.mjs`
+- Each dry-run outputs `{ dryRun: true, command, wouldDo }` with planned operation details, returns before any DB write
+- Updated help text with `[--dry-run]` on all write commands
+- Added 3 tests: create-card, move-card, delete-board — verify preview output and no DB side effects
+- All 82 tests pass (79 existing + 3 new)
+
 ## 2026-03-27 — Phase 8 Step 1: Add `--board` flag to kanban search
 
 - Added `getAllArgs` utility to `kanban.mjs` for collecting repeated flag values
