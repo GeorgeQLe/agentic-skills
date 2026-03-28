@@ -1,4 +1,28 @@
-# Claude Skills — Roadmap
+# Roadmap: Claude Skills
+
+> Generated from: tasks/roadmap.md (existing), specs/board-flag-kanban-search.md, tasks/ideas.md, tasks/history.md
+> Date: 2026-03-27
+> Total Phases: 9 (5 complete, 4 planned)
+
+## Summary
+
+Phases 1-5 built the kanban skill suite, board intelligence, templates, archive automation, and resolved expert review findings. The next wave focuses on testing hardening (Phases 6-7), kanban DX improvements (Phase 8), and skill infrastructure (Phase 9). Small phases (2-3 items each) to ship incrementally.
+
+## Phase Overview
+
+| Phase | Title | Source Spec(s) | Key Deliverable | Est. Complexity |
+|-------|-------|----------------|-----------------|-----------------|
+| 1 | Kanban Skill Suite | — | 6 kanban workflow skills | L |
+| 2 | Proactive Board Intelligence | — | Board overview, next work suggestion, progress tracking | M |
+| 3 | Board Templates | — | `--template standard` flag | S |
+| 4 | Archive Automation | — | `archive-card` command + `/kanban-archive` skill | M |
+| 5 | Expert Review Fixes | — | 7 security/quality fixes | M |
+| 6 | Testing Hardening I | tasks/ideas.md | Edge case + command test expansion (~20 new tests) | M |
+| 7 | Testing Hardening II | tasks/ideas.md | Bootstrap tests, install.sh bats, DB error paths | M |
+| 8 | Kanban DX | specs/board-flag-kanban-search.md, tasks/ideas.md | `--board` flag, dry-run mode, env path unification | M |
+| 9 | Skill Infrastructure | tasks/ideas.md | Skill discovery, dependency graph, versioning | L |
+
+---
 
 ## Phase 1: Kanban Skill Suite ✓
 
@@ -133,7 +157,111 @@
 
 ---
 
-## Backlog
+## Phase 6: Testing Hardening I
 
-- **Kanban analytics** — cycle time, throughput, WIP limits surfaced via a `/kanban-stats` skill
-- **Two-way Neon ↔ poketowork UI sync** — webhook on git push to sync agent board changes to the web app
+**Goal:** Expand kanban.mjs test coverage with edge case and command-level tests to catch regressions like the Phase 5 LIKE injection and null dereference bugs.
+
+**Scope**:
+- Kanban edge case test expansion (concurrent moves, unicode names, LIKE metacharacters, archive edge cases)
+- Test create-list command + untested flags (~20 new tests for --progress, --description, --due, search special chars, create-card edge cases, error paths)
+
+**Acceptance Criteria:**
+- [ ] Edge case tests added: unicode card names, LIKE metacharacter queries (%, _, backslash), moving card to same list, archiving already-archived card
+- [ ] create-list command has dedicated test coverage
+- [ ] update-card --progress, --description, --due flags each have at least one test
+- [ ] search with special characters has regression tests
+- [ ] All new + existing tests pass (target: 40+ total, up from 24)
+
+**On Completion** (fill in when phase is done):
+- Deviations from plan:
+- Tech debt / follow-ups:
+- Ready for next phase:
+
+---
+
+## Phase 7: Testing Hardening II
+
+**Goal:** Cover the remaining untested code paths: bootstrap-session.mjs, install.sh, and database error handling.
+
+**Scope**:
+- Test bootstrap-session.mjs (env parsing, SQLite reads, session extraction)
+- install.sh test suite with bats-core (symlink creation, permission errors, partial installs, --uninstall)
+- Database error path test suite (insert failures, FK violations, returning() unchecked)
+- Fix search escape: backslash not handled (known bug)
+
+**Acceptance Criteria:**
+- [ ] bootstrap-session.mjs has unit tests with fixture SQLite DB or mocks
+- [ ] install.sh has bats-core test suite covering happy path + error cases
+- [ ] At least 5 database error path tests (insert failure, FK violation, connection error)
+- [ ] Backslash LIKE escape bug fixed with regression test
+- [ ] All tests pass across all suites
+
+**On Completion** (fill in when phase is done):
+- Deviations from plan:
+- Tech debt / follow-ups:
+- Ready for next phase:
+
+---
+
+## Phase 8: Kanban DX
+
+**Goal:** Improve kanban CLI ergonomics — scoped search, safer testing, and consistent env resolution.
+
+**Scope**:
+- Add `--board` flag to kanban search (spec: `specs/board-flag-kanban-search.md`)
+- Dry-run mode for kanban skills (`--dry-run` shows intended ops without executing)
+- Unify env path lists in bootstrap-session.mjs and kanban.mjs
+
+**Acceptance Criteria:**
+- [ ] `search --board <id>` scopes results to specified board(s); repeatable flag works
+- [ ] Invalid `--board` ID exits with error (not silent empty results)
+- [ ] `--dry-run` flag on kanban skills shows intended card operations without DB writes
+- [ ] bootstrap-session.mjs and kanban.mjs share a single env path list
+- [ ] Existing tests still pass; new tests for --board flag
+
+**On Completion** (fill in when phase is done):
+- Deviations from plan:
+- Tech debt / follow-ups:
+- Ready for next phase:
+
+---
+
+## Phase 9: Skill Infrastructure
+
+**Goal:** Improve skill discoverability, validate cross-references, and track changes.
+
+**Scope**:
+- Skill discovery command (`/skills` with search and workflow-stage grouping)
+- Skill dependency graph and validation (parse SKILL.md cross-references, detect broken refs)
+- Skill versioning and changelog (semver in frontmatter, changelog tracking)
+
+**Acceptance Criteria:**
+- [ ] `/skills` command lists skills grouped by workflow stage with keyword search
+- [ ] Dependency graph script detects broken cross-references between skills
+- [ ] At least one iteration of versioning scheme documented and applied to 3+ skills
+- [ ] No broken skill cross-references in the repo
+
+**On Completion** (fill in when phase is done):
+- Deviations from plan:
+- Tech debt / follow-ups:
+- Ready for next phase:
+
+---
+
+## Deferred / Future Work
+- **Kanban analytics** — cycle time, throughput, WIP limits via `/kanban-stats` skill (from original backlog)
+- **Two-way Neon ↔ poketowork UI sync** — webhook on git push (from original backlog)
+- **Kanban card labels** — tags/labels field for filtering by type (deferred to after Phase 8)
+- **Multi-project kanban dashboard** — cross-board view (larger initiative, deferred)
+- **Add Codex poketo-kanban skill** — parity item, low priority
+- **Cross-tool portability layer** — single-source skill generation (larger initiative)
+- **Workflow orchestrator / meta-skill** — guided pipeline execution (larger initiative)
+- **Session continuity automation** — `/resume` skill for cold-start (medium effort)
+
+## Cross-Phase Concerns
+### Integration Tests
+- All new tests must pass alongside existing 24 kanban.mjs tests
+- Phase 6-7 tests should be runnable via `vitest` with existing config
+### Non-Functional Requirements
+- No credentials in test fixtures or tracked files
+- Test suites must clean up after themselves (delete test boards/cards)
