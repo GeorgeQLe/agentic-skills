@@ -13,8 +13,8 @@ Decompose work into TDD implementation steps with file-level granularity. Operat
 
 Check for `tasks/roadmap.md` first, then read `$ARGUMENTS`.
 
-### Mode A: Roadmap exists (typical — called after `/roadmap`)
-The roadmap already defines phases, goals, scope, and acceptance criteria. Your job is to fill in the **TDD steps and file-level detail** for a specific phase.
+### Mode A: Roadmap exists (typical — called just-in-time by `/ship`, `/run`, or manually)
+The roadmap already defines phases, goals, scope, and acceptance criteria. Your job is to fill in the **TDD steps and file-level detail** for a specific phase. This is typically invoked just-in-time when a phase is about to start, so implementation detail benefits from context gained during prior phases.
 
 - If `$ARGUMENTS` is a number (e.g., `2`), plan that phase.
 - If `$ARGUMENTS` is empty, plan the **first phase that has acceptance criteria but no steps** (no `### Tests First` section yet).
@@ -97,7 +97,7 @@ After all phases, add a section for:
 
 ### Mode B (no roadmap)
 1. **`tasks/roadmap.md`** — the single source of truth for the **full phased plan**. Contains all phases and steps. This is a living document — milestones get checked off as phases complete.
-2. **`tasks/todo.md`** — contains only the **current phase** (Phase 1 initially). This is the active working document that `/run-step` reads. It gets overwritten on phase transitions.
+2. **`tasks/todo.md`** — contains only the **current phase** (Phase 1 initially). This is the active working document that `/run` reads. It gets overwritten on phase transitions.
 
 Do NOT write `docs/plan.md`. The roadmap replaces it.
 
@@ -153,7 +153,7 @@ Extract the target phase from the roadmap into `tasks/todo.md` as a standalone w
 - Every phase MUST have a milestone with specific, checkable acceptance criteria — not vague statements like "works correctly" but concrete conditions like "POST /api/items returns 201 with valid payload and persists to database."
 - Every phase MUST start with writing failing tests.
 - Phases must be ordered so each builds on completed prior phases.
-- The plan must be compatible with `/run-step` and `/run-phases` — use `## Phase N:` headers and `- Step N.X:` format.
+- The plan must be compatible with `/run` and `/ship` — use `## Phase N:` headers and `- Step N.X:` format.
 - Do not include implementation code in the plan — only describe what to build and what to test.
 - If the spec references existing code or infrastructure, note what already exists vs. what needs to be created.
 - `tasks/roadmap.md` is the source of truth for the full plan. `tasks/todo.md` holds only the current phase. Do NOT put plans in CLAUDE.md or `docs/plan.md`.

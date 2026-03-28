@@ -1,7 +1,0 @@
-interface:
-  display_name: "Ship Then Plan"
-  short_description: "Ship work and leave next-step handoff"
-  default_prompt: "Use $ship-then-plan to ship the current work and write a precise next-step handoff into tasks/todo.md."
-
-policy:
-  allow_implicit_invocation: true

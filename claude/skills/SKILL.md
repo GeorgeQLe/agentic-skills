@@ -27,8 +27,8 @@ Discover and search all available skills in this repository, grouped by workflow
    | Planning | `brainstorm`, `brainstorm-kanban`, `plan-interview`, `plan-interview-ideas`, `plan-interview-kanban` |
    | Strategize | `roadmap`, `roadmap-kanban`, `competitive-analysis` |
    | Detail | `plan-phases` |
-   | Execution | `run`, `run-step`, `run-phases`, `run-kanban` |
-   | Shipping | `ship`, `ship-then-plan`, `ship-end`, `ship-kanban`, `ship-end-kanban` |
+   | Execution | `run`, `run-kanban` |
+   | Shipping | `ship`, `ship-end`, `ship-kanban`, `ship-end-kanban` |
    | Code Quality | `expert-review`, `regression-check`, `dead-code` |
    | Debugging | `investigate`, `debug`, `trace` |
    | Refactoring & Migration | `migrate`, `decommission`, `scaffold` |

@@ -114,6 +114,7 @@ c) **Check if the current phase is complete** (all steps checked, milestone crit
      2. Check off the phase milestone in `tasks/roadmap.md`.
      3. Copy the next phase from `tasks/roadmap.md` → overwrite `tasks/todo.md`.
      4. If no more phases remain, report "all done" and stop.
+     5. **Just-in-time planning:** Invoke `/plan-phases` for the new phase. This generates TDD steps and file-level detail using the full context of what was learned during prior phases.
    - If **NO:** find the next uncompleted step within the current phase.
 d) Write a **self-contained** implementation plan for the next step into `tasks/todo.md`. This plan must be complete enough that a fresh context can execute it by reading only CLAUDE.md and `tasks/todo.md`. Include:
    - What needs to be built/changed
