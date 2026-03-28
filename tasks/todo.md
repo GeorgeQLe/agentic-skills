@@ -4,7 +4,7 @@
 
 ## Steps
 
-- [ ] **Manual walkthrough of kanban skills** — run each skill against this repo with a real test board
+- [x] **Manual walkthrough of kanban skills** — run each skill against this repo with a real test board
 
 ### Plan: Manual Skill Walkthrough
 
