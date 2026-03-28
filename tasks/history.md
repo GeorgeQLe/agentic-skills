@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-03-27 — Phase 9 Step 1: Skill discovery command
+
+- Created `claude/skills/SKILL.md` — prompt-only skill that discovers all skills via Glob + Read
+- Groups skills into 13 workflow stages using static mapping matching `docs/skills-reference.md` sections
+- Supports two modes: `list` (default, all skills) and `search <keyword>` (filter by name/description)
+- Updated `docs/skills-reference.md` — added `/skills` entry to Utility section and quick reference table, bumped count 42→43
+
 ## 2026-03-27 — Phase 8 Step 3: Env path unification
 
 - Created `claude/poketo-kanban/scripts/env-paths.mjs` — shared `ENV_SEARCH_PATHS` array (4 paths)

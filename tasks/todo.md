@@ -4,12 +4,12 @@
 
 ## Steps
 
-- [ ] **Skill discovery command** — create a `/skills` command that lists all skills grouped by workflow stage with keyword search
+- [x] **Skill discovery command** — create a `/skills` command that lists all skills grouped by workflow stage with keyword search
 - [ ] **Skill dependency graph** — parse SKILL.md cross-references, detect broken refs
 - [ ] **Skill versioning** — semver in frontmatter, changelog tracking
 
 ## Acceptance Criteria
-- [ ] `/skills` command lists skills grouped by workflow stage with keyword search
+- [x] `/skills` command lists skills grouped by workflow stage with keyword search
 - [ ] Dependency graph script detects broken cross-references between skills
 - [ ] At least one iteration of versioning scheme documented and applied to 3+ skills
 - [ ] No broken skill cross-references in the repo
