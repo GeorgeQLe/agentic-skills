@@ -1,6 +1,6 @@
 # Skills Reference
 
-Complete reference for all 50 custom skills in this repository, available for both Claude Code and Codex.
+Complete reference for all 51 custom skills in this repository, available for both Claude Code and Codex.
 
 ## Installation
 
@@ -126,6 +126,14 @@ Research-driven monetization strategy — revenue models, pricing architecture, 
 - **Prerequisites**: `research/icp.md` must exist (run `/icp` first).
 - **Outputs**: `research/monetization.md` (revenue model, pricing tiers, unit economics, timing), `research/monetization-interview.md`
 - **Use when**: After ICP discovery, to design how to make money — pricing model, tier structure, unit economics, and monetization timing.
+
+### `/research-reconcile`
+Cross-document consistency audit across research outputs — find contradictions, stale assumptions, and gaps.
+
+- **Arguments**: `[audit|fix] [all|icp|pricing|journey|enterprise|feedback]`
+- **Prerequisites**: At least 2 research documents must exist in `research/`.
+- **Outputs**: Categorized findings (Errors/Warnings/Info). In `fix` mode, edits research docs and writes `research/reconciliation-report.md`.
+- **Use when**: After running multiple research skills, to check that documents tell a consistent story. Especially useful after `/customer-feedback` invalidates earlier assumptions.
 
 ### `/workflow`
 Read-only workflow status — shows completed steps, stale items, missing steps, and recommends the next action.
@@ -432,6 +440,7 @@ Archive old Done/Punt cards from the kanban board.
 | `/customer-feedback` | Ingest + synthesize customer feedback |
 | `/metrics` | Success metrics tied to journey stages |
 | `/monetization` | Revenue models, pricing, unit economics |
+| `/research-reconcile` | Cross-document consistency audit for research outputs |
 | `/gtm` | Go-to-market planning |
 | `/workflow` | Check status, stale items, next action |
 | `/brainstorm` | Evaluate codebase, suggest improvement ideas |
