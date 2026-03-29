@@ -14,6 +14,26 @@ Run `git status` and `git diff --stat`.
 - If the working tree is clean AND there are no unpushed commits: skip to step 3 (or stop if `--no-plan`).
 - If there are changes: continue to step 2.
 
+### 1b. Pre-ship error check
+Before shipping, check for pre-existing errors so they get fixed and included in this step's commit.
+
+a) **Check conversation context first.** If lint, typecheck, or test output already exists in the current session (e.g., from a TDD run step or plan-mode execution), use that output. Do NOT re-run commands whose results are already available.
+
+b) **Run only what's missing.** For any validation category (lint, typecheck, tests) that was NOT already run this session, find and run the project's commands. Check these sources:
+   - `CLAUDE.md` — look for lint, typecheck, or test commands
+   - `Makefile` / `Justfile` — look for `check`, `lint`, `typecheck`, `test` targets
+   - `package.json` — look for `lint`, `typecheck`, `check`, `test` scripts
+   - `pyproject.toml` / `setup.cfg` — look for tool configs (ruff, mypy, pytest)
+   - `Cargo.toml` — `cargo check`, `cargo clippy`
+   - If no validation commands are found and no prior output exists, skip this step.
+
+c) **Fix errors.** If any pre-existing errors are found (from prior session output or fresh runs):
+   - Fix them.
+   - Re-run only the previously-failing commands to confirm the fixes.
+   - These fixes will be committed alongside the current work in step 2d (or as a separate commit if the fixes are unrelated to the current feature).
+
+d) **If errors can't be auto-fixed** (e.g., requires user decision, third-party dependency issue), document them clearly in the step 5 summary and continue.
+
 ### 2. Ship the work
 a) Read the project's CLAUDE.md to understand current progress.
 b) Update `tasks/todo.md` — mark completed items as done (check off steps and milestone criteria).
