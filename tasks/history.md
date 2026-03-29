@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-03-28 — Enhance /icp skill: monorepo, geography, named accounts (v3.1→v3.2)
+
+- Added monorepo detection to Step 1 — checks for turbo.json, pnpm-workspace.yaml, lerna.json, nx.json, package.json workspaces; produces per-app `research/icp-{app-name}.md` when multiple distinct user-facing products exist
+- Added 2 new search strategies (#11 geographic/regulatory, #12 named account searches) to Step 2
+- Expanded Customer Profile in Step 4 with two conditional sub-sections: Geographic Focus (regulatory/language/market constraints) and Named Accounts (B2B: 5-10 real companies)
+- Updated output template with `### Geographic Focus` and `### Named Accounts` under `## Customer Profile`
+- Added Monorepo Output Convention section to output spec
+- Canonical 9 `##` sections preserved for downstream compatibility
+- Applied to both claude/icp and codex/icp SKILL.md files
+
 ## 2026-03-28 — Add /monetization skill (49→50)
 
 - Created `/monetization` skill (claude + codex) — research-driven monetization strategy with 3 validation checkpoints
