@@ -1,7 +1,7 @@
 ---
 name: icp
 description: Research-driven ICP discovery — web search + codebase analysis to identify multiple ICPs, pain points, value props, and cross-ICP prioritization
-version: 3.1.0
+version: 3.2.0
 argument-hint: <spec file path or concept/idea>
 ---
 
@@ -25,6 +25,9 @@ Read CLAUDE.md, README, package config, key source files, routes, and data model
 
 **Read existing research** (`research/icp.md`, `research/competitive-analysis.md`, etc.) and specs if they exist — use as background context but do not treat as settled. This research may reshape direction.
 
+**Detect monorepo structure:**
+Check for monorepo indicators (`turbo.json`, `pnpm-workspace.yaml`, `lerna.json`, `nx.json`, or `package.json` workspaces). If found, identify sub-apps or packages that serve **distinct user-facing products** (ignore shared libraries, configs, and internal tooling). When multiple distinct products exist, run the full ICP process separately for each — produce `research/icp-{app-name}.md` per app, plus a unified `research/icp.md` that cross-references all app-level ICPs with a top-level prioritization of which app/ICP to pursue first. If the monorepo contains only one user-facing product, proceed as normal with a single `research/icp.md`.
+
 ### 2. Broad Market Research
 
 Use WebSearch with **8–12 diverse query strategies** to cast a wide net. Log every search query and key findings to the research log.
@@ -40,6 +43,8 @@ Query strategies (adapt to the specific domain):
 8. **Industry report searches** — "[category] market report", "[category] TAM"
 9. **Switching trigger searches** — "why switch from [incumbent]", "[category] migration"
 10. **Adjacent market searches** — "[related category] users", "[upstream/downstream] tools"
+11. **Geographic/regulatory searches** (if the domain has regional constraints) — "[category] by region", "[domain] regulations by country", "[category] adoption [region]"
+12. **Named account searches** (B2B) — "[competitor] customer list", "companies using [incumbent]", "[industry] companies that [trigger event]", "[category] case studies"
 
 Use WebFetch to pull in particularly relevant pages for deeper analysis when search snippets aren't enough.
 
@@ -61,7 +66,9 @@ Incorporate feedback before proceeding.
 
 For each validated ICP candidate, run **targeted searches** to fill the 9-section framework:
 
-- **Customer Profile** — buyer persona, budget authority, discovery channels
+- **Customer Profile** — buyer persona, budget authority, discovery channels. Include two conditional sub-sections:
+  - **Geographic Focus** (include only if the product has regulatory, language, compliance, or market-specific constraints) — initial target geography/region, why that region first, and expansion sequence. Search for "[category] by region", "[domain] regulations by country".
+  - **Named Accounts** (include for B2B ICPs) — 5–10 real companies that fit this ICP. For each, note company name, approximate size, industry, and why they fit (e.g., uses the incumbent, recently hit a trigger event, posted a relevant job listing). Search for "[competitor] customer list", "companies using [incumbent]", "[industry] companies that [trigger event]".
 - **User Profile(s)** — daily users, technical sophistication, goals, frustrations
 - **Trigger Events** — what causes someone to start looking NOW? Job changes, growth milestones, compliance deadlines, tool sunsets, contract renewals, team scaling pain, funding events, new regulations. Search for "[category] buying triggers", "why companies switch [category]", "[incumbent] churn reasons". Rank by frequency and urgency.
 - **Current State Journey** — step-by-step workflow without our product
@@ -142,6 +149,14 @@ Structure — the **Primary ICP** fills the canonical top-level sections:
 ## Customer Profile
 [Buyer persona, budget authority, discovery channels]
 
+### Geographic Focus
+[Include only if the product has regulatory, language, or market-specific constraints.
+ Initial target geography/region, why that region first, expansion sequence.]
+
+### Named Accounts
+[Include for B2B ICPs. 5–10 real companies that fit this profile.
+ For each: company name, approximate size, industry, and why they fit.]
+
 ## User Profile(s)
 [Daily user persona(s), technical sophistication, goals, frustrations]
 
@@ -173,6 +188,7 @@ Structure — the **Primary ICP** fills the canonical top-level sections:
 
 ### [ICP 2 Name]
 #### Customer Profile
+[Include Geographic Focus and Named Accounts sub-sections where applicable]
 ...
 #### User Profile(s)
 ...
@@ -230,6 +246,13 @@ Raw research log containing:
 - Any data gaps or areas where research was inconclusive
 
 Create the `research/` directory if it doesn't exist.
+
+### Monorepo Output Convention
+
+When a monorepo has multiple distinct user-facing products, write:
+- `research/icp-{app-name}.md` — full 9-section ICP per app (same structure as above)
+- `research/icp-{app-name}-search-log.md` — search log per app
+- `research/icp.md` — unified cross-app summary that references each app-level ICP, with a top-level prioritization of which app/ICP combination to pursue first
 
 ## Constraints
 

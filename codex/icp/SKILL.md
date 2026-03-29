@@ -1,7 +1,7 @@
 ---
 name: icp
 description: Research-driven ICP discovery — web search + codebase analysis to identify multiple ICPs, pain points, value props, and cross-ICP prioritization
-version: 3.1.0
+version: 3.2.0
 argument-hint: <spec file path or concept/idea>
 ---
 
@@ -11,12 +11,12 @@ Automated research that identifies **multiple ICP candidates**, maps pain points
 
 ## Workflow
 
-1. **Parse input**: Read `$ARGUMENTS` as spec file path or concept text. Read codebase if it exists. Read existing research for background.
+1. **Parse input**: Read `$ARGUMENTS` as spec file path or concept text. Read codebase if it exists. Read existing research for background. **Detect monorepo** (`turbo.json`, `pnpm-workspace.yaml`, `lerna.json`, `nx.json`, or `package.json` workspaces) — if multiple distinct user-facing products exist, run the full ICP process per app and produce `research/icp-{app-name}.md` per app plus a unified `research/icp.md`.
 2. **Broad market research**: WebSearch with 8–12 query strategies (personas, pain points, segments, trends, competitors, forums, job postings, industry reports). Log all queries and findings.
 3. **Identify 2–5 ICP candidates** from research evidence — note who they are, pain evidence, accessibility, and value potential.
 4. **Checkpoint 1 — Present candidates to user.** Show ICP candidates with rationale. Ask: "Do any surprise you? Any segment I'm missing?" Incorporate feedback before proceeding.
 5. **Deep research per ICP**: Targeted WebSearch to fill the 9-section framework for each candidate:
-   - **Customer Profile** — buyer persona, budget, discovery channels
+   - **Customer Profile** — buyer persona, budget, discovery channels. Include **Geographic Focus** (only if the product has regulatory, language, or market-specific constraints — initial target region, why, expansion sequence) and **Named Accounts** (B2B: 5–10 real companies that fit, with name, size, industry, and why they fit)
    - **User Profile(s)** — daily users, sophistication, goals, frustrations
    - **Trigger Events** — what causes them to look NOW? Job changes, growth milestones, compliance deadlines, tool sunsets, contract renewals, funding events, new regulations. Rank by frequency and urgency.
    - **Current State Journey** — step-by-step current workflow
@@ -34,6 +34,7 @@ Automated research that identifies **multiple ICP candidates**, maps pain points
 
 - `research/icp.md` — Primary ICP in canonical 9 top-level `##` sections (Customer Profile, User Profile(s), Trigger Events, Current State Journey, Pain Map, Market Landscape, Market Sizing, Value Proposition, Customer ↔ User Dynamics), then `## Additional ICPs` (condensed 9-section per ICP), then `## Cross-ICP Analysis` (prioritization matrix, shared pains, conflicts, product line recs, build sequence)
 - `research/icp-search-log.md` — Raw research log: every query, findings, evidence, scoring rationale
+- **Monorepo**: `research/icp-{app-name}.md` + `research/icp-{app-name}-search-log.md` per app, plus unified `research/icp.md` cross-referencing all app-level ICPs with top-level prioritization
 
 The output file must end with a `## Next Steps` section (3–5 contextual items, "Pick one:" framing) based on which files exist: always suggest `/competitive-analysis`; conditionally suggest `/plan-interview`, `/journey-map`, `/mvp-gap`, `/brainstorm` based on whether `specs/`, `research/journey-map.md`, codebase, and `research/competitive-analysis.md` exist.
 
