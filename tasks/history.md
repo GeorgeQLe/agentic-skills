@@ -1,5 +1,18 @@
 # Session History
 
+## 2026-03-29 — Add /research-reconcile skill + fix phase archive paths (50→51)
+
+- Created `/research-reconcile` skill (claude + codex) — cross-document consistency audit for research outputs
+- 5 scope groups (icp, pricing, journey, enterprise, feedback) with 39 pairwise checks + 3 monorepo checks
+- Audit mode (read-only, default) and fix mode (user-approved edits + reconciliation-report.md)
+- Severity classification: Error (active contradiction), Warning (stale/gap), Info (suggestion)
+- Dependency direction informs recommendations; customer feedback treated as ground truth
+- Updated docs/skills-reference.md: count 50→51, new entry in Discovery & Market Fit, quick reference row
+- Pre-existing fixes also included:
+  - Fixed `docs/phases/` → `tasks/phases/` path in ship, ship-kanban, codex/ship (3 files)
+  - Added phase archive check to hygiene + codex/hygiene (2 files)
+  - Removed stale `docs/skills-reference.md` and `docs/skill-versioning.md` required-doc checks from hygiene
+
 ## 2026-03-28 — Enhance /icp skill: monorepo, geography, named accounts (v3.1→v3.2)
 
 - Added monorepo detection to Step 1 — checks for turbo.json, pnpm-workspace.yaml, lerna.json, nx.json, package.json workspaces; produces per-app `research/icp-{app-name}.md` when multiple distinct user-facing products exist
