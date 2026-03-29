@@ -102,7 +102,7 @@ a) **Migration check:** If `tasks/roadmap.md` does not exist but `tasks/todo.md`
 b) Read `tasks/todo.md` to identify the next uncompleted step in the current phase.
 c) **Check if the current phase is complete** (all steps checked, milestone criteria met):
    - If **YES — Phase transition:**
-     1. Archive the completed phase: copy `tasks/todo.md` → `docs/phases/phase-N.md` (create `docs/phases/` if needed). Fill in the "On Completion" section.
+     1. Archive the completed phase: copy `tasks/todo.md` → `tasks/phases/phase-N.md` (create `tasks/phases/` if needed). Fill in the "On Completion" section.
      2. Check off the phase milestone in `tasks/roadmap.md`.
      3. Copy the next phase from `tasks/roadmap.md` → overwrite `tasks/todo.md`.
      4. If no more phases remain, run `/workflow` to recommend the next action based on project state. Then stop (do not enter plan mode).
@@ -115,7 +115,7 @@ d) Write a **self-contained** implementation plan for the next step into `tasks/
    - Relevant context from the current session (gotchas, patterns established, conventions used)
    - If TDD: which tests to write first and what they should assert
    - Acceptance criteria: how to verify the step is done
-e) Commit and push `tasks/todo.md`, `tasks/roadmap.md`, and `docs/phases/` (if created).
+e) Commit and push `tasks/todo.md`, `tasks/roadmap.md`, and `tasks/phases/` (if created).
 
 ### 4b. Kanban: Ensure next card in Todo (skip if `--no-plan`)
 
