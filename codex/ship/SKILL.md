@@ -30,14 +30,14 @@ Ship current work, commit, push, deploy, and plan the next step.
    - Read `tasks/todo.md` to identify the next uncompleted step in the current phase.
    - **Check if the current phase is complete** (all steps checked, milestone criteria met):
      - If **YES — Phase transition:**
-       1. Archive the completed phase: copy `tasks/todo.md` → `docs/phases/phase-N.md` (create `docs/phases/` if needed). Fill in the "On Completion" section.
+       1. Archive the completed phase: copy `tasks/todo.md` → `tasks/phases/phase-N.md` (create `tasks/phases/` if needed). Fill in the "On Completion" section.
        2. Check off the phase milestone in `tasks/roadmap.md`.
        3. Copy the next phase from `tasks/roadmap.md` → overwrite `tasks/todo.md`.
        4. If no more phases remain, run `/workflow` to recommend the next action based on project state. Then stop.
        5. **Just-in-time planning:** Invoke `/plan-phases` for the new phase. This generates TDD steps and file-level detail using the full context of what was learned during prior phases.
      - If **NO:** find the next uncompleted step within the current phase.
 5. Write a self-contained implementation plan for the next step into `tasks/todo.md`, complete enough for a fresh session to execute from `tasks/todo.md` alone.
-6. Commit and push `tasks/todo.md`, `tasks/roadmap.md`, and `docs/phases/` (if created).
+6. Commit and push `tasks/todo.md`, `tasks/roadmap.md`, and `tasks/phases/` (if created).
 7. Output a brief summary:
    - What was shipped (if anything)
    - Deploy status (if deployed)

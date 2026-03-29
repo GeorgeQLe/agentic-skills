@@ -54,6 +54,9 @@ Check expected project files exist based on project phase:
 **Expected if specs exist:**
 - `tasks/ideas.md` — exists if `specs/*.md` has 2+ files
 
+**Phase archives:**
+- If `tasks/roadmap.md` has completed phases (checked-off milestones), `tasks/phases/` should exist with corresponding `phase-N.md` files
+
 **Staleness (informational, not violations):**
 - `tasks/todo.md` has all items checked but phase isn't marked complete in `tasks/roadmap.md`
 - `tasks/roadmap.md` references phases that have no corresponding detail
@@ -66,8 +69,6 @@ Check expected project files exist based on project phase:
 - The Quick Reference table at the bottom is complete (no missing, no extras)
 
 **Required docs:**
-- `docs/skills-reference.md` exists
-- `docs/skill-versioning.md` exists
 - `CLAUDE.md` exists at project root
 
 ### 5. Audit Codex Mirror (`codex` scope)
