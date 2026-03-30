@@ -67,3 +67,19 @@
 ### Larger initiatives (weeks)
 
 - **Multi-project kanban dashboard** — With 21 boards, there's no cross-project view. A `/kanban-dashboard` skill showing cards in progress across all boards, overdue items, stale boards with no recent activity, and WIP distribution would help manage a portfolio of projects. Signal: `boards` command returns 21 boards with zero card-level detail; switching between projects requires remembering board IDs. _Start with:_ `/plan-interview-kanban multi-project kanban dashboard`
+
+---
+
+## Testing-focused ideas (2026-03-27, round 2)
+
+### Quick wins (hours)
+
+- **Test create-list command** — The only kanban.mjs command (1 of 11) with zero test coverage. Order calculation, board validation, and duplicate name handling are all untested. Signal: `kanban.mjs:398-428` has no corresponding describe block in `kanban.test.mjs`. _Start with:_ `/plan-interview-kanban create-list command test coverage`
+
+- **Fix search escape: backslash not handled** — The LIKE escape in `cmdSearch` handles `%` and `_` but not backslash (`\`), which is the escape character itself in SQL LIKE. A query containing `\` could produce unexpected results. Signal: `kanban.mjs:462` — only two replacements, missing `\` → `\\`. _Start with:_ `/plan-interview-kanban search escape completeness`
+
+### Medium efforts (days)
+
+- **Input validation layer for kanban.mjs** — `--progress` accepts NaN/negative/float via bare `parseInt`, `--due` accepts invalid date strings that silently become `Invalid Date` objects, and the argument parser drops flags at EOF or with duplicate keys. No validation between user input and DB writes. Signal: `kanban.mjs:249` (no `isNaN` check), `kanban.mjs:218` (no date validation). _Start with:_ `/plan-interview-kanban input validation layer for kanban CLI`
+
+- **Database error path test suite** — No tests verify behavior when DB operations fail: insert returning empty, FK constraint violations, connection timeouts. `returning()` results are unchecked on lines 222, 254, 389. Real DB errors propagate as unhandled rejections. Signal: all 24 tests are happy-path only against live Neon DB. _Start with:_ `/plan-interview-kanban database error path testing`
