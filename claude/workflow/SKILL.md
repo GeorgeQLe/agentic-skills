@@ -1,7 +1,7 @@
 ---
 name: workflow
 description: Read-only workflow status — shows completed steps, stale items, missing steps, and recommends the next action
-version: 1.0.0
+version: 1.1.0
 argument-hint:
 ---
 
@@ -10,6 +10,14 @@ argument-hint:
 Read-only skill that scans project state and recommends what to do next. No interview, no output files — purely diagnostic.
 
 ## Process
+
+### 0. App Scope Resolution (Monorepo Support)
+
+Before scanning, detect the app structure:
+
+1. Check if `research/` contains subdirectories (excluding files).
+2. If subdirectories exist, this is a monorepo — scan each `research/{app}/` independently and produce per-app status.
+3. If no subdirectories exist, proceed with flat structure (single-product mode).
 
 ### 1. Scan Project Files
 
@@ -30,6 +38,10 @@ Use Glob and Bash (`stat` / `ls -la`) to check for existence and modification da
 - `tasks/todo.md`
 - `tasks/history.md`
 - `tasks/ideas.md`
+
+When monorepo detected, also scan per-app:
+- `research/{app}/icp.md`, `research/{app}/competitive-analysis.md`, etc. for each app subdirectory
+- `specs/{app}/*.md` for each app subdirectory
 
 Record each file's existence and last-modified timestamp.
 
@@ -123,6 +135,25 @@ Display directly to the user (no files written):
 ## Recommended Next Action
 > `/journey-map` — your journey map is stale because customer feedback was updated after it was written. Re-running will incorporate real user behavior into the mapped journeys.
 ```
+
+**Monorepo output** — when `research/` contains app subdirectories, show a per-app status table:
+
+```
+## Per-App Status
+
+| App | ICP | Competitive | Journey | Metrics | GTM | Monetization | Feedback | Enterprise |
+|-----|-----|-------------|---------|---------|-----|--------------|----------|------------|
+| web | ✓   | ✓           | ✓       | -       | -   | -            | -        | -          |
+| api | ✓   | -           | -       | -       | -   | -            | -        | -          |
+
+## Stale Items (per app)
+...
+
+## Recommended Next Action
+> `/journey-map api` — the api app has an ICP but no journey map yet.
+```
+
+Note: recommendations should specify which app needs attention (e.g., `/journey-map api`).
 
 If everything is complete and fresh:
 

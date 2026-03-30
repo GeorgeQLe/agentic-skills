@@ -1,7 +1,7 @@
 ---
 name: scale-audit
 description: Evaluate codebase against enterprise ICP for production readiness, compliance, and multi-stakeholder journey coverage
-version: 1.0.0
+version: 1.1.0
 argument-hint: [optional: path-to-enterprise-icp-spec]
 ---
 
@@ -11,15 +11,28 @@ Automated analysis that evaluates the current codebase against the enterprise di
 
 ## Prerequisites
 
-`research/enterprise-icp.md` must exist. If it doesn't, tell the user to run `/enterprise-icp` first and stop.
+`research/enterprise-icp.md` (or `research/{app}/enterprise-icp.md`) must exist. If it doesn't, tell the user to run `/enterprise-icp` first and stop.
 
 ## Process
 
+### 0. App Scope Resolution (Monorepo Support)
+
+Before checking prerequisites, determine the app scope:
+
+1. If `$ARGUMENTS` specifies an app name matching a subdirectory of `research/`, use it.
+2. If `research/` contains subdirectories (excluding files), list them and ask the user which app to target. If only one subdirectory exists, use it automatically.
+3. If no subdirectories exist, proceed with flat structure (single-product mode).
+
+When app scope `{app}` is active:
+- Read/write research from `research/{app}/` instead of `research/`
+- Read/write specs from `specs/{app}/` instead of `specs/`
+- Also read `research/icp.md` (cross-app overview) for broader context
+
 ### 1. Load Context
 
-- Read `research/enterprise-icp.md` — stakeholder map, per-persona journeys, deal-killers, lifecycle, onboarding matrix
-- Read `research/icp.md` if it exists — carry forward startup context
-- Read `specs/mvp-gap.md` if it exists — note unresolved startup gaps that become more critical at enterprise scale
+- Read `research/enterprise-icp.md` (or `research/{app}/enterprise-icp.md`) — stakeholder map, per-persona journeys, deal-killers, lifecycle, onboarding matrix
+- Read `research/icp.md` (or `research/{app}/icp.md`) if it exists — carry forward startup context
+- Read `specs/mvp-gap.md` (or `specs/{app}/mvp-gap.md`) if it exists — note unresolved startup gaps that become more critical at enterprise scale
 - Read CLAUDE.md, README, package config, existing specs
 - Read `tasks/roadmap.md` and `tasks/todo.md` for work in progress
 
@@ -92,12 +105,12 @@ Before writing, check which files exist to populate the `## Next Steps` section 
 
 ## Output
 
-### `specs/scale-audit.md`
+### `specs/scale-audit.md` (or `specs/{app}/scale-audit.md`)
 
 ```markdown
 # Enterprise Scale Audit
 
-> Evaluated against: research/enterprise-icp.md
+> Evaluated against: research/enterprise-icp.md (or research/{app}/enterprise-icp.md)
 > Date: [current date]
 > Codebase state: [brief summary of what exists]
 

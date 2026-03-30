@@ -1,7 +1,7 @@
 ---
 name: enterprise-icp
 description: Enterprise multi-stakeholder discovery — map personas, deal-killers, and the evaluation-to-renewal lifecycle
-version: 2.0.0
+version: 2.1.0
 argument-hint: [optional: target industry or market segment]
 ---
 
@@ -11,15 +11,28 @@ Interview the founder to map the enterprise problem space. Enterprise sales invo
 
 ## Context Loading
 
-Read `research/icp.md` if it exists — the startup ICP is a starting point but does not constrain the enterprise analysis. Enterprise is not "startup but bigger." Explicitly explore what changes at enterprise scale.
+Read `research/icp.md` (or `research/{app}/icp.md` in monorepo mode) if it exists — the startup ICP is a starting point but does not constrain the enterprise analysis. Enterprise is not "startup but bigger." Explicitly explore what changes at enterprise scale.
 
 Also read the codebase, README, and existing specs/research if a product exists, to ground the interview.
 
 ## Process
 
+### 0. App Scope Resolution (Monorepo Support)
+
+Before checking prerequisites, determine the app scope:
+
+1. If `$ARGUMENTS` specifies an app name matching a subdirectory of `research/`, use it.
+2. If `research/` contains subdirectories (excluding files), list them and ask the user which app to target. If only one subdirectory exists, use it automatically.
+3. If no subdirectories exist, proceed with flat structure (single-product mode).
+
+When app scope `{app}` is active:
+- Read/write research from `research/{app}/` instead of `research/`
+- Read/write specs from `specs/{app}/` instead of `specs/`
+- Also read `research/icp.md` (cross-app overview) for broader context
+
 ### 1. Orient
 
-If `research/icp.md` exists, summarise the startup ICP and ask: "How does the enterprise buyer and user differ from what we mapped here?" If it doesn't exist, start from scratch.
+If `research/icp.md` (or `research/{app}/icp.md`) exists, summarise the startup ICP and ask: "How does the enterprise buyer and user differ from what we mapped here?" If it doesn't exist, start from scratch.
 
 If a codebase exists, summarise what's built and note it as context.
 
@@ -113,7 +126,7 @@ Only after the user has validated the findings, write the output files.
 
 ## Output
 
-### `research/enterprise-icp.md`
+### `research/enterprise-icp.md` (or `research/{app}/enterprise-icp.md`)
 Structured enterprise discovery document:
 1. **Stakeholder Map** — which personas are involved, their role in buying/adoption
 2. **Per-Persona Journeys** — what each stakeholder needs, their deal-killer "no"
@@ -123,7 +136,7 @@ Structured enterprise discovery document:
 6. **Enterprise Value Proposition** — shifted value prop, ROI story, platform positioning
 7. **Next Steps** — contextual next actions (populated from step 4)
 
-### `research/enterprise-icp-interview.md`
+### `research/enterprise-icp-interview.md` (or `research/{app}/enterprise-icp-interview.md`)
 Raw interview log — questions, options, responses, and a closing summary of key insights.
 
 Create the `research/` directory if it doesn't exist.
@@ -134,5 +147,5 @@ Create the `research/` directory if it doesn't exist.
 - **Do not assume enterprise ICP is startup ICP scaled up.** Explicitly challenge: "What changes when you sell to a 500-person company vs. a 10-person team?"
 - **Interview style matches `/plan-interview`** — 1–3 focused questions per turn, options with pros/cons, recommendations with reasoning.
 - **Continue until all 6 areas are covered.** Confirm with the user before concluding.
-- **Do not overwrite existing `research/enterprise-icp.md`** without asking the user first.
+- **Do not overwrite existing `research/enterprise-icp.md`** (or `research/{app}/enterprise-icp.md`) without asking the user first.
 - **Present before writing.** Never write output files until findings have been presented to the user and validated. The user must see and approve the analysis before anything is written to disk.

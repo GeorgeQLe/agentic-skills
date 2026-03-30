@@ -1,7 +1,7 @@
 ---
 name: icp
 description: Research-driven ICP discovery — web search + codebase analysis to identify multiple ICPs, pain points, value props, and cross-ICP prioritization
-version: 3.2.0
+version: 3.3.0
 argument-hint: <spec file path or concept/idea>
 ---
 
@@ -12,6 +12,19 @@ Automated research that identifies **multiple ICP candidates**, maps their pain 
 The output preserves the canonical 9-section format at the top level (for downstream compatibility with `/plan-interview`, `/mvp-gap`, `/roadmap`, `/journey-map`) while adding multi-ICP analysis and cross-ICP prioritization.
 
 ## Process
+
+### 0. App Scope Resolution (Monorepo Support)
+
+Before parsing input, determine the app scope:
+
+1. If `$ARGUMENTS` specifies an app name matching a subdirectory of `research/`, use it.
+2. If `research/` contains subdirectories (excluding files), list them and ask the user which app to target. If only one subdirectory exists, use it automatically.
+3. If no subdirectories exist, proceed with flat structure (single-product mode).
+
+When app scope `{app}` is active:
+- Read/write research from `research/{app}/` instead of `research/`
+- Read/write specs from `specs/{app}/` instead of `specs/`
+- Also read `research/icp.md` (cross-app overview) for broader context
 
 ### 1. Parse Input & Gather Context
 
@@ -26,7 +39,9 @@ Read CLAUDE.md, README, package config, key source files, routes, and data model
 **Read existing research** (`research/icp.md`, `research/competitive-analysis.md`, etc.) and specs if they exist — use as background context but do not treat as settled. This research may reshape direction.
 
 **Detect monorepo structure:**
-Check for monorepo indicators (`turbo.json`, `pnpm-workspace.yaml`, `lerna.json`, `nx.json`, or `package.json` workspaces). If found, identify sub-apps or packages that serve **distinct user-facing products** (ignore shared libraries, configs, and internal tooling). When multiple distinct products exist, run the full ICP process separately for each — produce `research/icp-{app-name}.md` per app, plus a unified `research/icp.md` that cross-references all app-level ICPs with a top-level prioritization of which app/ICP to pursue first. If the monorepo contains only one user-facing product, proceed as normal with a single `research/icp.md`.
+Check for monorepo indicators (`turbo.json`, `pnpm-workspace.yaml`, `lerna.json`, `nx.json`, or `package.json` workspaces). If found, identify sub-apps or packages that serve **distinct user-facing products** (ignore shared libraries, configs, and internal tooling). When multiple distinct products exist, run the full ICP process separately for each — produce `research/{app-name}/icp.md` per app, plus a unified `research/icp.md` that cross-references all app-level ICPs with a top-level prioritization of which app/ICP to pursue first. If the monorepo contains only one user-facing product, proceed as normal with a single `research/icp.md`.
+
+**Migrate old convention:** If `research/icp-{app}.md` files exist (old naming), offer to move them to `research/{app}/icp.md` (and corresponding search logs to `research/{app}/icp-search-log.md`). Create the subdirectories as needed.
 
 ### 2. Broad Market Research
 
@@ -250,8 +265,8 @@ Create the `research/` directory if it doesn't exist.
 ### Monorepo Output Convention
 
 When a monorepo has multiple distinct user-facing products, write:
-- `research/icp-{app-name}.md` — full 9-section ICP per app (same structure as above)
-- `research/icp-{app-name}-search-log.md` — search log per app
+- `research/{app-name}/icp.md` — full 9-section ICP per app (same structure as above)
+- `research/{app-name}/icp-search-log.md` — search log per app
 - `research/icp.md` — unified cross-app summary that references each app-level ICP, with a top-level prioritization of which app/ICP combination to pursue first
 
 ## Constraints

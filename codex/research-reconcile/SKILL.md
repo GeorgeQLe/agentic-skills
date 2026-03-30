@@ -1,7 +1,7 @@
 ---
 name: research-reconcile
 description: Cross-document consistency audit across research outputs — find contradictions, stale assumptions, and gaps
-version: 1.0.0
+version: 1.1.0
 argument-hint: [audit|fix] [all|icp|pricing|journey|enterprise|feedback]
 ---
 
@@ -10,6 +10,19 @@ argument-hint: [audit|fix] [all|icp|pricing|journey|enterprise|feedback]
 Checks that research documents tell a consistent story. Finds contradictions between ICP and pricing, stale assumptions that customer feedback has invalidated, journey stages that metrics don't cover, and other cross-document gaps. Think of it as a linter for research coherence rather than structure.
 
 ## Process
+
+### 0. App Scope Resolution (Monorepo Support)
+
+Before determining mode and scope, detect the app structure:
+
+1. If `$ARGUMENTS` specifies an app name matching a subdirectory of `research/`, scope the audit to that app.
+2. If `research/` contains subdirectories (excluding files), list them. If the user hasn't specified a scope, reconcile per-app (each app's docs independently) plus cross-app checks.
+3. If no subdirectories exist, proceed with flat structure (single-product mode).
+
+When app scope `{app}` is active:
+- Scan `research/{app}/` for documents instead of `research/`
+- Also check `research/icp.md` (cross-app overview) for cross-references
+- Specs are in `specs/{app}/` instead of `specs/`
 
 ### 1. Determine Mode and Scope
 
@@ -23,14 +36,16 @@ Parse `$ARGUMENTS`:
 Scan `research/` for main documents. Skip files matching `*-search-log.md` and `*-interview.md` — these are raw logs, not assertion-bearing documents.
 
 **Expected documents** (not all need to exist):
-- `research/icp.md` (or `research/icp-*.md` for monorepos)
-- `research/competitive-analysis.md`
-- `research/journey-map.md`
-- `research/metrics.md`
-- `research/gtm.md`
-- `research/monetization.md`
-- `research/enterprise-icp.md`
-- `research/customer-feedback.md`
+- `research/icp.md` (cross-app overview), `research/{app}/icp.md` (per-app)
+- `research/competitive-analysis.md` (or `research/{app}/competitive-analysis.md`)
+- `research/journey-map.md` (or `research/{app}/journey-map.md`)
+- `research/metrics.md` (or `research/{app}/metrics.md`)
+- `research/gtm.md` (or `research/{app}/gtm.md`)
+- `research/monetization.md` (or `research/{app}/monetization.md`)
+- `research/enterprise-icp.md` (or `research/{app}/enterprise-icp.md`)
+- `research/customer-feedback.md` (or `research/{app}/customer-feedback.md`)
+
+When `research/` contains subdirectories, scan each `research/{app}/` for per-app documents.
 
 **Stop condition**: If fewer than 2 research documents exist, display a message and exit — there's nothing to reconcile.
 
@@ -131,11 +146,11 @@ Requires: `research/customer-feedback.md` + at least one other document.
 
 #### Monorepo checks (3 checks)
 
-Triggered when `research/icp-*.md` files exist (multiple ICPs for different apps).
+Triggered when `research/` contains app subdirectories (e.g., `research/{app}/icp.md`).
 
 | # | Check | What to flag |
 |---|-------|--------------|
-| 1 | Cross-ICP consistency | App-specific ICPs contradict each other on shared market assumptions |
+| 1 | Cross-ICP consistency | App-specific ICPs (`research/{app}/icp.md`) contradict each other on shared market assumptions |
 | 2 | Shared pain point divergence | Same pain point described differently across app ICPs |
 | 3 | Channel overlap conflicts | App ICPs target the same channel with conflicting messaging |
 

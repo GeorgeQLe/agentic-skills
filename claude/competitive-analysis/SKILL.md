@@ -1,7 +1,7 @@
 ---
 name: competitive-analysis
 description: Research competitors via web search — map the landscape, GTM strategies, strengths, weaknesses, and market gaps
-version: 2.1.0
+version: 2.2.0
 argument-hint: [concept | optional: product category or specific competitors to investigate]
 ---
 
@@ -14,16 +14,29 @@ Conduct deep web-based research to compile a comprehensive competitive landscape
 **Detect mode before proceeding:**
 
 - **Concept-validation mode** activates when: no `research/icp.md` exists AND (no meaningful codebase — i.e. no README, no source files, no package config — OR `$ARGUMENTS` contains "concept" or "validate"). In this mode, announce to the user: "Running in concept-validation mode — no ICP or product detected. I'll evaluate the market gap for your concept." Then ask the user to describe the concept, the problem it addresses, and the intended audience.
-- **Standard mode** (default): Read the codebase, README, CLAUDE.md, and existing research/specs (`research/icp.md`, `research/enterprise-icp.md`, `specs/mvp-gap.md`) to understand what the product does, who it's for, and what value it claims to provide. This context is essential for identifying the right competitors and evaluating positioning. If no codebase or specs exist but `research/icp.md` is present, proceed in standard mode using the ICP as context.
+- **Standard mode** (default): Read the codebase, README, CLAUDE.md, and existing research/specs (`research/icp.md` or `research/{app}/icp.md`, `research/enterprise-icp.md` or `research/{app}/enterprise-icp.md`, `specs/mvp-gap.md` or `specs/{app}/mvp-gap.md`) to understand what the product does, who it's for, and what value it claims to provide. This context is essential for identifying the right competitors and evaluating positioning. If no codebase or specs exist but `research/icp.md` is present, proceed in standard mode using the ICP as context.
 
 ## Process
+
+### 0. App Scope Resolution (Monorepo Support)
+
+Before checking prerequisites, determine the app scope:
+
+1. If `$ARGUMENTS` specifies an app name matching a subdirectory of `research/`, use it.
+2. If `research/` contains subdirectories (excluding files), list them and ask the user which app to target. If only one subdirectory exists, use it automatically.
+3. If no subdirectories exist, proceed with flat structure (single-product mode).
+
+When app scope `{app}` is active:
+- Read/write research from `research/{app}/` instead of `research/`
+- Read/write specs from `specs/{app}/` instead of `specs/`
+- Also read `research/icp.md` (cross-app overview) for broader context
 
 ### 1. Establish Product Context
 
 **Standard mode:**
 - Read CLAUDE.md, README, package config, and key source files to understand the product
-- Read `research/icp.md` if it exists — the customer profile, pain map, and value prop define the competitive frame
-- Read `research/enterprise-icp.md` and `specs/mvp-gap.md` if they exist for additional context
+- Read `research/icp.md` (or `research/{app}/icp.md`) if it exists — the customer profile, pain map, and value prop define the competitive frame
+- Read `research/enterprise-icp.md` (or `research/{app}/enterprise-icp.md`) and `specs/mvp-gap.md` (or `specs/{app}/mvp-gap.md`) if they exist for additional context
 - If `$ARGUMENTS` names specific competitors, use those as a starting point but still search broadly
 - Summarise what the product does, who it's for, and what problem it solves. Confirm this understanding with the user before researching.
 
@@ -174,7 +187,7 @@ Only after the user has validated the findings, write the output files.
 
 ## Output
 
-### `research/competitive-analysis.md`
+### `research/competitive-analysis.md` (or `research/{app}/competitive-analysis.md`)
 
 ```markdown
 # Competitive Analysis
@@ -253,10 +266,10 @@ Pick one:
 - [conditional items from step 7 — only include items whose conditions are met]
 ```
 
-### `research/competitive-analysis-search-log.md`
+### `research/competitive-analysis-search-log.md` (or `research/{app}/competitive-analysis-search-log.md`)
 Raw research log — every search query, key findings with source attribution, and the reasoning behind categorisation and positioning recommendations.
 
-Create the `research/` directory if it doesn't exist.
+Create the `research/` (or `research/{app}/`) directory if it doesn't exist.
 
 ## Constraints
 
@@ -265,7 +278,7 @@ Create the `research/` directory if it doesn't exist.
 - **Be honest about uncertainty.** If information couldn't be verified, say so. Don't fabricate metrics.
 - **Stay in analysis mode.** Do not propose product changes, architecture, or features — that's for `/plan-interview` and `/mvp-gap`.
 - **Focus on actionable insights.** Raw competitor lists are easy; the value is in the synthesis — gaps, patterns, positioning angles.
-- **Do not overwrite existing `research/competitive-analysis.md`** without asking the user first.
+- **Do not overwrite existing `research/competitive-analysis.md`** (or `research/{app}/competitive-analysis.md`) without asking the user first.
 - **Keep research current.** Prefer recent sources (last 12 months). Flag any information that may be outdated.
 - **Search breadth over depth initially.** Cast a wide net to find all competitors before going deep on each one. It's better to identify 15 competitors and research 8 deeply than to miss half the landscape.
 - **Present before writing.** Never write output files until findings have been presented to the user and validated through the checkpoint questions. The user must see and approve the analysis before anything is written to disk.

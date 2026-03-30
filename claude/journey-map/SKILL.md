@@ -1,7 +1,7 @@
 ---
 name: journey-map
 description: Map user journeys (per-use-case task flows) and customer journey (trigger→discovery→aha→conversion→retention) through the product
-version: 1.0.0
+version: 1.1.0
 argument-hint: [optional: specific use case or journey stage to focus on]
 ---
 
@@ -11,18 +11,31 @@ Interview the user to map how people will flow through the product (user journey
 
 ## Prerequisites
 
-- `research/icp.md` must exist. If not, tell the user to run `/icp` first and stop.
-- At least one spec file must exist in `specs/`. If not, tell the user to run `/plan-interview` first and stop.
+- `research/icp.md` (or `research/{app}/icp.md` in monorepo mode) must exist. If not, tell the user to run `/icp` first and stop.
+- At least one spec file must exist in `specs/*.md` (or `specs/{app}/*.md`). If not, tell the user to run `/plan-interview` first and stop.
 
 ## Process
 
+### 0. App Scope Resolution (Monorepo Support)
+
+Before checking prerequisites, determine the app scope:
+
+1. If `$ARGUMENTS` specifies an app name matching a subdirectory of `research/`, use it.
+2. If `research/` contains subdirectories (excluding files), list them and ask the user which app to target. If only one subdirectory exists, use it automatically.
+3. If no subdirectories exist, proceed with flat structure (single-product mode).
+
+When app scope `{app}` is active:
+- Read/write research from `research/{app}/` instead of `research/`
+- Read/write specs from `specs/{app}/` instead of `specs/`
+- Also read `research/icp.md` (cross-app overview) for broader context
+
 ### 1. Load Context
 
-- Read `research/icp.md` — customer profile, user profiles, trigger events, current-state journey, pain map, value prop
-- Read `research/competitive-analysis.md` if it exists — competitor UX patterns and gaps
-- Read all spec files in `specs/` — the solution design that the journeys will map through
+- Read `research/icp.md` (or `research/{app}/icp.md`) — customer profile, user profiles, trigger events, current-state journey, pain map, value prop
+- Read `research/competitive-analysis.md` (or `research/{app}/competitive-analysis.md`) if it exists — competitor UX patterns and gaps
+- Read all spec files in `specs/` (or `specs/{app}/`) — the solution design that the journeys will map through
 - Read CLAUDE.md, README, and key source files if a codebase exists — ground journeys in what's actually built
-- Read `research/enterprise-icp.md` if it exists — enterprise stakeholder journeys may differ significantly
+- Read `research/enterprise-icp.md` (or `research/{app}/enterprise-icp.md`) if it exists — enterprise stakeholder journeys may differ significantly
 
 ### 2. Interview — User Journeys
 
@@ -123,12 +136,12 @@ Only after the user has validated the findings, write the output files.
 
 ## Output
 
-### `research/journey-map.md`
+### `research/journey-map.md` (or `research/{app}/journey-map.md`)
 
 ```markdown
 # Journey Map
 
-> Based on: research/icp.md, specs/[topic].md
+> Based on: research/icp.md (or research/{app}/icp.md), specs/[topic].md
 > Date: [current date]
 
 ## Summary
@@ -194,7 +207,7 @@ Pick one:
 - [conditional items from step 5 — only include items whose conditions are met]
 ```
 
-### `research/journey-map-interview.md`
+### `research/journey-map-interview.md` (or `research/{app}/journey-map-interview.md`)
 Raw interview log — questions, options, responses, and a closing summary of key insights.
 
 Create the `research/` directory if it doesn't exist.
@@ -207,4 +220,4 @@ Create the `research/` directory if it doesn't exist.
 - **Cross-reference specs.** If a journey step requires functionality not in any spec, flag it as a journey gap with a `/plan-interview` prompt.
 - **Do not prescribe UI or architecture.** Describe what the user experiences, not how to implement it. That's `/plan-interview`'s job.
 - **Present before writing.** Never write output files until findings have been presented to the user and validated. The user must see and approve the journeys before anything is written to disk.
-- **Do not overwrite existing `research/journey-map.md`** without asking the user first.
+- **Do not overwrite existing `research/journey-map.md`** (or `research/{app}/journey-map.md`) without asking the user first.
