@@ -1,7 +1,7 @@
 ---
 name: journey-map
 description: Map user journeys (per-use-case task flows) and customer journey (trigger→discovery→aha→conversion→retention) through the product
-version: 1.0.0
+version: 1.1.0
 argument-hint: [optional: specific use case or journey stage to focus on]
 ---
 
@@ -11,12 +11,13 @@ Interview the user to map how people flow through the product (user journey) and
 
 ## Prerequisites
 
-- `research/icp.md` must exist — run `/icp` first.
-- At least one spec in `specs/` must exist — run `/plan-interview` first.
+- `research/icp.md` (or `research/{app}/icp.md` in monorepo mode) must exist — run `/icp` first.
+- At least one spec in `specs/*.md` (or `specs/{app}/*.md`) must exist — run `/plan-interview` first.
 
 ## Workflow
 
-1. **Load context**: Read `research/icp.md`, `research/competitive-analysis.md`, `research/enterprise-icp.md`, all spec files, codebase if it exists.
+0. **App Scope Resolution (Monorepo Support)**: Before checking prerequisites, determine the app scope: (1) If `$ARGUMENTS` specifies an app name matching a subdirectory of `research/`, use it. (2) If `research/` contains subdirectories (excluding files), list them and ask the user which app to target; if only one subdirectory exists, use it automatically. (3) If no subdirectories exist, proceed with flat structure (single-product mode). When app scope `{app}` is active: read/write research from `research/{app}/` instead of `research/`, read/write specs from `specs/{app}/` instead of `specs/`, also read `research/icp.md` (cross-app overview) for broader context.
+1. **Load context**: Read `research/icp.md` (or `research/{app}/icp.md`), `research/competitive-analysis.md` (or `research/{app}/competitive-analysis.md`), `research/enterprise-icp.md` (or `research/{app}/enterprise-icp.md`), all spec files in `specs/` (or `specs/{app}/`), codebase if it exists.
 2. **Interview — User Journeys** (1–3 questions per turn, research and recommend by default — present findings with data, state recommendation, user approves/adjusts/overrides; only ask without recommendation when insider knowledge is required):
    - **Identify use cases** per user profile — 3–5 core tasks, entry point, highest-value use case, frequency patterns
    - **Map task flows** per use case — entry point, steps, decision points, happy path, failure modes, output
@@ -33,8 +34,8 @@ Interview the user to map how people flow through the product (user journey) and
 
 ## Deliverables
 
-- `research/journey-map.md` — User journeys (use case overview + task flows per profile), customer journey (full funnel), critical moments, journey gaps with `/plan-interview` prompts
-- `research/journey-map-interview.md` — Raw interview log
+- `research/journey-map.md` (or `research/{app}/journey-map.md`) — User journeys (use case overview + task flows per profile), customer journey (full funnel), critical moments, journey gaps with `/plan-interview` prompts
+- `research/journey-map-interview.md` (or `research/{app}/journey-map-interview.md`) — Raw interview log
 
 The output file must end with a `## Next Steps` section (3–5 contextual items, "Pick one:" framing) based on which files exist: always suggest `/metrics`; conditionally suggest `/roadmap`, `/gtm`, `/plan-interview [top gap]`, `/run` based on whether `specs/`, `tasks/roadmap.md`, `research/gtm.md` exist and whether journey gaps were identified.
 

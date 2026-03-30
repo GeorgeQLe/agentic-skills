@@ -1,7 +1,7 @@
 ---
 name: monetization
 description: Research-driven monetization strategy — revenue models, pricing architecture, unit economics, and packaging grounded in ICP and competitive data
-version: 1.0.0
+version: 1.1.0
 argument-hint: [optional: focus area e.g. "pricing tiers", "usage-based", "freemium"]
 ---
 
@@ -11,16 +11,29 @@ Deep-research skill that analyzes how to monetize the product. Combines web rese
 
 ## Prerequisites
 
-- **Hard**: `research/icp.md` must exist. If not, tell the user to run `/icp` first and stop.
+- **Hard**: `research/icp.md` (or `research/{app}/icp.md`) must exist. If not, tell the user to run `/icp` first and stop.
 - **Soft**: Read these if they exist — each adds specificity:
-  - `research/competitive-analysis.md` — competitor pricing, tiers, freemium models
-  - `research/journey-map.md` — where value is delivered, conversion triggers
-  - `research/metrics.md` — activation, engagement, retention signals
-  - `research/gtm.md` — existing pricing strategy and channel economics
-  - `research/customer-feedback.md` — willingness-to-pay signals, pricing complaints
-  - `specs/*.md` — what's being built, feature scope
+  - `research/competitive-analysis.md` (or `research/{app}/competitive-analysis.md`) — competitor pricing, tiers, freemium models
+  - `research/journey-map.md` (or `research/{app}/journey-map.md`) — where value is delivered, conversion triggers
+  - `research/metrics.md` (or `research/{app}/metrics.md`) — activation, engagement, retention signals
+  - `research/gtm.md` (or `research/{app}/gtm.md`) — existing pricing strategy and channel economics
+  - `research/customer-feedback.md` (or `research/{app}/customer-feedback.md`) — willingness-to-pay signals, pricing complaints
+  - `specs/*.md` (or `specs/{app}/*.md`) — what's being built, feature scope
 
 ## Process
+
+### 0. App Scope Resolution (Monorepo Support)
+
+Before checking prerequisites, determine the app scope:
+
+1. If `$ARGUMENTS` specifies an app name matching a subdirectory of `research/`, use it.
+2. If `research/` contains subdirectories (excluding files), list them and ask the user which app to target. If only one subdirectory exists, use it automatically.
+3. If no subdirectories exist, proceed with flat structure (single-product mode).
+
+When app scope `{app}` is active:
+- Read/write research from `research/{app}/` instead of `research/`
+- Read/write specs from `specs/{app}/` instead of `specs/`
+- Also read `research/icp.md` (cross-app overview) for broader context
 
 ### 1. Load Context
 
@@ -56,8 +69,8 @@ Present complete strategy, get user confirmation, write output files.
 
 ## Deliverables
 
-- `research/monetization.md` — Complete monetization strategy: revenue model, pricing tiers, unit economics, timing, open questions, next steps
-- `research/monetization-interview.md` — Raw interview log with checkpoint validations
+- `research/monetization.md` (or `research/{app}/monetization.md`) — Complete monetization strategy: revenue model, pricing tiers, unit economics, timing, open questions, next steps
+- `research/monetization-interview.md` (or `research/{app}/monetization-interview.md`) — Raw interview log with checkpoint validations
 
 ## Constraints
 

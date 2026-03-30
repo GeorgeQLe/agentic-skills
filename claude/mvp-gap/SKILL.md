@@ -1,7 +1,7 @@
 ---
 name: mvp-gap
 description: Evaluate codebase against ICP to identify gaps blocking first sales and retention
-version: 1.0.0
+version: 1.1.0
 argument-hint: [optional: path-to-icp-spec]
 ---
 
@@ -11,17 +11,30 @@ Automated analysis that evaluates the current codebase against the customer disc
 
 ## Prerequisites
 
-`research/icp.md` must exist. If it doesn't, tell the user to run `/icp` first and stop.
+`research/icp.md` (or `research/{app}/icp.md`) must exist. If it doesn't, tell the user to run `/icp` first and stop.
 
 ## Process
 
+### 0. App Scope Resolution (Monorepo Support)
+
+Before checking prerequisites, determine the app scope:
+
+1. If `$ARGUMENTS` specifies an app name matching a subdirectory of `research/`, use it.
+2. If `research/` contains subdirectories (excluding files), list them and ask the user which app to target. If only one subdirectory exists, use it automatically.
+3. If no subdirectories exist, proceed with flat structure (single-product mode).
+
+When app scope `{app}` is active:
+- Read/write research from `research/{app}/` instead of `research/`
+- Read/write specs from `specs/{app}/` instead of `specs/`
+- Also read `research/icp.md` (cross-app overview) for broader context
+
 ### 1. Load Context
 
-- Read `research/icp.md` — customer profile, user profile(s), current-state journey, pain map, market landscape, value prop
-- Read `research/enterprise-icp.md` if it exists (for awareness, not primary evaluation)
-- Read `research/metrics.md` if it exists — check if defined metrics can actually be measured (instrumentation gaps are MVP gaps)
+- Read `research/icp.md` (or `research/{app}/icp.md`) — customer profile, user profile(s), current-state journey, pain map, market landscape, value prop
+- Read `research/enterprise-icp.md` (or `research/{app}/enterprise-icp.md`) if it exists (for awareness, not primary evaluation)
+- Read `research/metrics.md` (or `research/{app}/metrics.md`) if it exists — check if defined metrics can actually be measured (instrumentation gaps are MVP gaps)
 - Read CLAUDE.md, README, package config for project conventions
-- Read existing specs from `specs/` for planned but unbuilt features
+- Read existing specs from `specs/` (or `specs/{app}/`) for planned but unbuilt features
 - Read `tasks/roadmap.md` and `tasks/todo.md` if they exist for work in progress
 
 ### 2. Analyse the Codebase
@@ -82,12 +95,12 @@ Before writing, check which files exist to populate the `## Next Steps` section 
 
 ## Output
 
-### `specs/mvp-gap.md`
+### `specs/mvp-gap.md` (or `specs/{app}/mvp-gap.md`)
 
 ```markdown
 # MVP Gap Analysis
 
-> Evaluated against: research/icp.md
+> Evaluated against: research/icp.md (or research/{app}/icp.md)
 > Date: [current date]
 > Codebase state: [brief summary of what exists]
 

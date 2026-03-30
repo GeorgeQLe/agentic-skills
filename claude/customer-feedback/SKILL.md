@@ -1,7 +1,7 @@
 ---
 name: customer-feedback
 description: Ingest and synthesize customer feedback — categorize findings against ICP and journey map, maintain a running log
-version: 1.0.0
+version: 1.1.0
 argument-hint: [file path, pasted text, or empty to be prompted]
 ---
 
@@ -11,18 +11,31 @@ Append-only skill that ingests customer feedback, categorizes findings against I
 
 ## Soft Prerequisites
 
-- Read `research/icp.md` if it exists — grounds categorization in ICP segments and pain points.
-- Read `research/journey-map.md` if it exists — tags findings to journey stages.
+- Read `research/icp.md` (or `research/{app}/icp.md` in monorepo mode) if it exists — grounds categorization in ICP segments and pain points.
+- Read `research/journey-map.md` (or `research/{app}/journey-map.md` in monorepo mode) if it exists — tags findings to journey stages.
 
 These are not required. The skill works without them but categorization will be less precise.
 
 ## Process
 
+### 0. App Scope Resolution (Monorepo Support)
+
+Before checking prerequisites, determine the app scope:
+
+1. If `$ARGUMENTS` specifies an app name matching a subdirectory of `research/`, use it.
+2. If `research/` contains subdirectories (excluding files), list them and ask the user which app to target. If only one subdirectory exists, use it automatically.
+3. If no subdirectories exist, proceed with flat structure (single-product mode).
+
+When app scope `{app}` is active:
+- Read/write research from `research/{app}/` instead of `research/`
+- Read/write specs from `specs/{app}/` instead of `specs/`
+- Also read `research/icp.md` (cross-app overview) for broader context
+
 ### 1. Load Context
 
-- Read `research/icp.md` if it exists — extract ICP segments, user profiles, pain points, value props
-- Read `research/journey-map.md` if it exists — extract journey stages, use cases, critical moments
-- Read `research/customer-feedback.md` if it exists — load all previous sessions for synthesis context
+- Read `research/icp.md` (or `research/{app}/icp.md`) if it exists — extract ICP segments, user profiles, pain points, value props
+- Read `research/journey-map.md` (or `research/{app}/journey-map.md`) if it exists — extract journey stages, use cases, critical moments
+- Read `research/customer-feedback.md` (or `research/{app}/customer-feedback.md`) if it exists — load all previous sessions for synthesis context
 
 ### 2. Ingest Feedback
 
@@ -87,7 +100,7 @@ Only after the user validates, write to `research/customer-feedback.md`:
 
 ## Output
 
-### `research/customer-feedback.md`
+### `research/customer-feedback.md` (or `research/{app}/customer-feedback.md`)
 
 ```markdown
 # Customer Feedback
@@ -151,7 +164,7 @@ Create the `research/` directory if it doesn't exist.
 
 ## Constraints
 
-- **Append-only.** Never delete or overwrite previous sessions. Only the `## Synthesis` section at the top is regenerated.
+- **Append-only.** Never delete or overwrite previous sessions in `research/customer-feedback.md` (or `research/{app}/customer-feedback.md`). Only the `## Synthesis` section at the top is regenerated.
 - **Present before writing.** Never write until the user validates the categorization.
 - **Tag to existing research.** When ICP and journey map exist, every finding must be tagged. When they don't exist, skip tagging but note "no ICP/journey context" in the session header.
 - **Count across sessions.** Staleness triggers are based on cumulative findings, not just the current session.

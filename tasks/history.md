@@ -1,5 +1,16 @@
 # Session History
 
+## 2026-03-30 — Add multi-app monorepo & multi-ICP support to 13 skills
+
+- Added directory-based namespacing: `research/{app}/` and `specs/{app}/` instead of flat files with app suffixes
+- Updated /icp: monorepo output changed from `icp-{app}.md` to `{app}/icp.md`, added migration for old convention
+- Added Step 0 (App Scope Resolution) to all 13 research/strategy skills — auto-detects monorepo via subdirectories
+- Updated /research-reconcile: per-app reconciliation + cross-app checks, scans `research/{app}/` subdirectories
+- Updated /workflow: per-app status table, app-specific recommendations
+- Zero impact on single-product repos — step 0 only activates when `research/` contains subdirectories
+- All changes applied to both claude/ and codex/ (26 files total)
+- Version bumps: icp 3.3.0, competitive-analysis 2.2.0, enterprise-icp 2.1.0, all others 1.1.0
+
 ## 2026-03-30 — Add "research and recommend" default to interview-driven skills
 
 - Updated 6 interview-driven skills to default to "research and recommend" pattern instead of "pick from options"

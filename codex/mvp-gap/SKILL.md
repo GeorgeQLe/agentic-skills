@@ -1,6 +1,7 @@
 ---
 name: mvp-gap
 description: Evaluate codebase against ICP to identify gaps blocking first sales and retention
+version: 1.1.0
 ---
 
 # MVP Gap — Startup Readiness Audit
@@ -9,11 +10,26 @@ Automated analysis that evaluates the codebase against `research/icp.md`. Identi
 
 ## Prerequisites
 
-`research/icp.md` must exist. If not, tell the user to run `/icp` first.
+`research/icp.md` (or `research/{app}/icp.md`) must exist. If not, tell the user to run `/icp` first.
 
 ## Workflow
 
-1. Read `research/icp.md`, `research/metrics.md` (if it exists — check if defined metrics can actually be measured), codebase, README, existing specs, and any in-progress work from `tasks/`.
+### 0. App Scope Resolution (Monorepo Support)
+
+Before checking prerequisites, determine the app scope:
+
+1. If `$ARGUMENTS` specifies an app name matching a subdirectory of `research/`, use it.
+2. If `research/` contains subdirectories (excluding files), list them and ask the user which app to target. If only one subdirectory exists, use it automatically.
+3. If no subdirectories exist, proceed with flat structure (single-product mode).
+
+When app scope `{app}` is active:
+- Read/write research from `research/{app}/` instead of `research/`
+- Read/write specs from `specs/{app}/` instead of `specs/`
+- Also read `research/icp.md` (cross-app overview) for broader context
+
+### 1. Load Context & Evaluate
+
+1. Read `research/icp.md` (or `research/{app}/icp.md`), `research/metrics.md` (or `research/{app}/metrics.md`) (if it exists — check if defined metrics can actually be measured), codebase, README, existing specs (from `specs/` or `specs/{app}/`), and any in-progress work from `tasks/`.
 2. Evaluate the codebase against the ICP across these dimensions:
    - **User Journey Coverage** — Can the product replace each step in the current-state journey?
    - **Customer Journey Coverage** — Discovery, evaluation, trial, purchase, provisioning, onboarding
@@ -25,7 +41,7 @@ Automated analysis that evaluates the codebase against `research/icp.md`. Identi
 
 ## Deliverables
 
-- `specs/mvp-gap.md` — Gap analysis with priority tags, evidence, effort estimates, and `/plan-interview` prompts for each gap
+- `specs/mvp-gap.md` (or `specs/{app}/mvp-gap.md`) — Gap analysis with priority tags, evidence, effort estimates, and `/plan-interview` prompts for each gap
 
 The output file must end with a `## Next Steps` section (3–5 contextual items, "Pick one:" framing) based on which files exist: always suggest `/roadmap`; conditionally suggest `/plan-interview [top gap]`, `/journey-map`, `/competitive-analysis`, `/brainstorm` based on first-sale blockers needing specs, `research/journey-map.md`, `research/competitive-analysis.md`, and high-effort gaps.
 

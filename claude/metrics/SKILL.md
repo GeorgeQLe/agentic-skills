@@ -1,7 +1,7 @@
 ---
 name: metrics
 description: Define success metrics framework — activation, engagement, retention, growth, and business metrics tied to journey stages
-version: 1.0.0
+version: 1.1.0
 argument-hint: [optional: focus area e.g. "activation", "retention"]
 ---
 
@@ -11,16 +11,29 @@ Interview-driven skill that defines measurable success metrics tied to journey s
 
 ## Prerequisites
 
-- **Hard**: `research/journey-map.md` must exist. If not, tell the user to run `/journey-map` first and stop.
-- **Soft**: Read `research/icp.md` and `research/customer-feedback.md` if they exist — these improve target-setting and relevance.
+- **Hard**: `research/journey-map.md` (or `research/{app}/journey-map.md` in monorepo mode) must exist. If not, tell the user to run `/journey-map` first and stop.
+- **Soft**: Read `research/icp.md` (or `research/{app}/icp.md`) and `research/customer-feedback.md` (or `research/{app}/customer-feedback.md`) if they exist — these improve target-setting and relevance.
 
 ## Process
 
+### 0. App Scope Resolution (Monorepo Support)
+
+Before checking prerequisites, determine the app scope:
+
+1. If `$ARGUMENTS` specifies an app name matching a subdirectory of `research/`, use it.
+2. If `research/` contains subdirectories (excluding files), list them and ask the user which app to target. If only one subdirectory exists, use it automatically.
+3. If no subdirectories exist, proceed with flat structure (single-product mode).
+
+When app scope `{app}` is active:
+- Read/write research from `research/{app}/` instead of `research/`
+- Read/write specs from `specs/{app}/` instead of `specs/`
+- Also read `research/icp.md` (cross-app overview) for broader context
+
 ### 1. Load Context
 
-- Read `research/journey-map.md` — customer journey stages, aha moment, habit loop, churn triggers, critical moments
-- Read `research/icp.md` if it exists — ICP segments, pain points, value props
-- Read `research/customer-feedback.md` if it exists — real user behavior patterns, validated/invalidated assumptions
+- Read `research/journey-map.md` (or `research/{app}/journey-map.md`) — customer journey stages, aha moment, habit loop, churn triggers, critical moments
+- Read `research/icp.md` (or `research/{app}/icp.md`) if it exists — ICP segments, pain points, value props
+- Read `research/customer-feedback.md` (or `research/{app}/customer-feedback.md`) if it exists — real user behavior patterns, validated/invalidated assumptions
 - Read CLAUDE.md and README if they exist — product context and tech stack (affects instrumentation)
 - Read key source files if a codebase exists — understand what can actually be measured today
 
@@ -97,12 +110,12 @@ Only after the user has validated the findings, write the output files.
 
 ## Output
 
-### `research/metrics.md`
+### `research/metrics.md` (or `research/{app}/metrics.md`)
 
 ```markdown
 # Success Metrics Framework
 
-> Based on: research/journey-map.md[, research/icp.md, research/customer-feedback.md]
+> Based on: research/journey-map.md (or research/{app}/journey-map.md)[, research/icp.md, research/customer-feedback.md]
 > Date: [current date]
 
 ## Summary
@@ -188,7 +201,7 @@ Pick one:
 - [conditional items from step 4 — only include items whose conditions are met]
 ```
 
-### `research/metrics-interview.md`
+### `research/metrics-interview.md` (or `research/{app}/metrics-interview.md`)
 Raw interview log — questions, options presented, user responses, and a closing summary of key decisions.
 
 Create the `research/` directory if it doesn't exist.
@@ -200,4 +213,4 @@ Create the `research/` directory if it doesn't exist.
 - **Include instrumentation.** Every metric must specify how to measure it and whether that measurement exists today.
 - **Present before writing.** Never write output files until the framework has been presented and validated.
 - **Tie to journey stages.** Every non-business metric must reference a specific stage or moment from the journey map.
-- **Do not overwrite existing `research/metrics.md`** without asking the user first.
+- **Do not overwrite existing `research/metrics.md`** (or `research/{app}/metrics.md`) without asking the user first.

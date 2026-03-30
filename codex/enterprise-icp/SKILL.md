@@ -1,7 +1,7 @@
 ---
 name: enterprise-icp
 description: Enterprise multi-stakeholder discovery — map personas, deal-killers, and the evaluation-to-renewal lifecycle
-version: 2.0.0
+version: 2.1.0
 argument-hint: [optional: target industry or market segment]
 ---
 
@@ -11,7 +11,20 @@ Interview the founder to map the enterprise problem space. Enterprise sales invo
 
 ## Workflow
 
-1. Read `research/icp.md` if it exists as a starting point. Read the codebase if one exists.
+### 0. App Scope Resolution (Monorepo Support)
+
+Before checking prerequisites, determine the app scope:
+
+1. If `$ARGUMENTS` specifies an app name matching a subdirectory of `research/`, use it.
+2. If `research/` contains subdirectories (excluding files), list them and ask the user which app to target. If only one subdirectory exists, use it automatically.
+3. If no subdirectories exist, proceed with flat structure (single-product mode).
+
+When app scope `{app}` is active:
+- Read/write research from `research/{app}/` instead of `research/`
+- Read/write specs from `specs/{app}/` instead of `specs/`
+- Also read `research/icp.md` (cross-app overview) for broader context
+
+1. Read `research/icp.md` (or `research/{app}/icp.md`) if it exists as a starting point. Read the codebase if one exists.
 2. Interview the user (1–3 questions per turn, research and recommend by default — present findings with data, state recommendation, user approves/adjusts/overrides; only ask without recommendation when insider knowledge is required) covering:
    - **Stakeholder Map** — Which personas matter? End users, team admin, IT/Security, procurement, champion, exec sponsor
    - **Per-Persona Journeys** — What each stakeholder needs to see/do/approve; their deal-killing "no"
@@ -24,8 +37,8 @@ Interview the founder to map the enterprise problem space. Enterprise sales invo
 
 ## Deliverables
 
-- `research/enterprise-icp.md` — Stakeholder map, per-persona journeys, deal-killers, lifecycle, value prop
-- `research/enterprise-icp-interview.md` — Raw interview log
+- `research/enterprise-icp.md` (or `research/{app}/enterprise-icp.md`) — Stakeholder map, per-persona journeys, deal-killers, lifecycle, value prop
+- `research/enterprise-icp-interview.md` (or `research/{app}/enterprise-icp-interview.md`) — Raw interview log
 
 The output file must end with a `## Next Steps` section (3–5 contextual items, "Pick one:" framing) based on which files exist: conditionally suggest `/scale-audit`, `/plan-interview enterprise [feature]`, `/journey-map enterprise`, `/journey-map`, `/competitive-analysis` based on codebase existence, enterprise specs, `research/journey-map.md`, `research/icp.md`, and `research/competitive-analysis.md`.
 
@@ -34,5 +47,6 @@ The output file must end with a `## Next Steps` section (3–5 contextual items,
 - Stay in problem space — do not prescribe solutions.
 - Do not assume enterprise ICP is startup ICP scaled up — explicitly explore what changes.
 - Continue until all 6 areas are covered.
+- Do not overwrite existing `research/enterprise-icp.md` (or `research/{app}/enterprise-icp.md`) without asking the user first.
 - Present before writing — never write until findings are validated.
 - `## Next Steps` must be the final section in the output file, with 3–5 contextual items and "Pick one:" framing.
