@@ -39,6 +39,7 @@ Based on which files exist, classify the project:
 
 | Phase | Condition |
 |-------|-----------|
+| **Concept** | No `research/icp.md` AND no meaningful codebase (no README, no source files, no package config) |
 | **Pre-launch** | No `research/customer-feedback.md` |
 | **Building** | Has `tasks/roadmap.md` but no customer feedback |
 | **Post-launch** | Has `research/customer-feedback.md` |
@@ -66,6 +67,11 @@ Compare modification timestamps. Flag items as stale when newer upstream data ex
 Using the dependency graph, identify what's available but not yet done:
 
 ```
+/competitive-analysis concept (no ICP, no codebase)
+  -> /icp (if gap validated)
+    -> /competitive-analysis (re-run with ICP, standard mode)
+    -> ... (standard graph below)
+
 /icp (foundational)
   -> /competitive-analysis
   -> /mvp-gap (requires icp)
@@ -81,12 +87,16 @@ Using the dependency graph, identify what's available but not yet done:
 
 A step is "available" when its prerequisites exist. A step is "missing" when it's available but its output doesn't exist.
 
+**Concept-phase logic:**
+- If no `research/icp.md` AND no meaningful codebase AND no `research/competitive-analysis.md`: recommend `/competitive-analysis concept`
+- If `research/competitive-analysis.md` exists with a `## Gap Assessment` section whose Verdict is "Proceed to ICP" and no `research/icp.md`: recommend `/icp`
+
 ### 5. Recommend Next Action
 
 Pick the single highest-priority action:
 
 1. **Fix stale items first** — if something is stale, recommend re-running it (highest priority: items marked **Stale** over **May be stale**)
-2. **Fill missing foundational steps** — `/icp` if no ICP, `/plan-interview` if no specs
+2. **Fill missing foundational steps** — no ICP + no codebase → `/competitive-analysis concept`; no ICP + codebase → `/icp`; concept-validated competitive analysis with "Proceed" verdict → `/icp`; no specs → `/plan-interview`
 3. **Fill missing downstream steps** — in dependency order
 4. **Advance the build** — if everything is fresh, recommend `/run` or `/ship` based on `tasks/todo.md` state
 

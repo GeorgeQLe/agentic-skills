@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-03-30 — Add concept-validation mode to /competitive-analysis (v2.0.0→v2.1.0)
+
+- Added concept-validation mode: activates when no ICP and no meaningful codebase (or `concept` argument)
+- New Step 4a: Gap Assessment with Market State, Incumbent Quality, Gap Quality, Verdict + user checkpoint
+- Concept mode frames positioning as hypothetical, always recommends `/icp` as first next step
+- Updated `/workflow` skill: added "Concept" phase, concept-validation fork in dependency graph, updated recommendation rules
+- Updated `docs/skills-reference.md`: new gap-first flow, updated `/competitive-analysis` entry and quick reference
+- Applied to both claude and codex SKILL.md files
+
 ## 2026-03-29 — Add /research-reconcile skill + fix phase archive paths (50→51)
 
 - Created `/research-reconcile` skill (claude + codex) — cross-document consistency audit for research outputs
