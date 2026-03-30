@@ -14,8 +14,8 @@ Use this skill when the user has a draft spec, feature description, or rough ide
 2. Interview the user in depth to validate assumptions, resolve ambiguities, and close gaps.
 3. Prefer Codex's structured user-input flow for material decisions when available; otherwise ask concise direct questions.
 4. Ask 1 to 3 focused questions per turn.
-5. Only present options when there are genuinely distinct choices. For each real choice:
-   - Explain the options
+5. **Research and recommend by default.** Use web search, upstream research docs, and codebase analysis to gather evidence before asking the user. Present findings with data, state recommendation with reasoning, user approves/adjusts/overrides. Only present options without a recommendation when insider knowledge is required. For each real choice:
+   - Explain the options with evidence
    - Give a brief pros and cons comparison
    - State a recommendation and why
    - Explain how to mitigate the recommended option's downside when useful

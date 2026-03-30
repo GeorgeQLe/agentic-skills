@@ -17,7 +17,7 @@ Interview the user to map how people flow through the product (user journey) and
 ## Workflow
 
 1. **Load context**: Read `research/icp.md`, `research/competitive-analysis.md`, `research/enterprise-icp.md`, all spec files, codebase if it exists.
-2. **Interview — User Journeys** (1–3 questions per turn):
+2. **Interview — User Journeys** (1–3 questions per turn, research and recommend by default — present findings with data, state recommendation, user approves/adjusts/overrides; only ask without recommendation when insider knowledge is required):
    - **Identify use cases** per user profile — 3–5 core tasks, entry point, highest-value use case, frequency patterns
    - **Map task flows** per use case — entry point, steps, decision points, happy path, failure modes, output
    - **Cross-reference current state** — which ICP current-state steps does each flow replace? Where is the delta greatest/smallest?
