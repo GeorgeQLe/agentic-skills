@@ -16,7 +16,7 @@
 | Cleanup | 1 | PASS |
 | **Total** | **24** | **ALL PASS** |
 
-## Layer 2: Manual Skill Walkthrough
+## Layer 2: Manual Command Verification
 
 | # | Skill | Status | Notes |
 |---|-------|--------|-------|
