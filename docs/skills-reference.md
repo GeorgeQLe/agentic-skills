@@ -38,6 +38,7 @@ Discover                      Ideate                       Specify              
 /workflow — runs at any point to check status and recommend next step
 ```
 
+**Gap-first flow (concept, no product)**: `/competitive-analysis concept` → (if gap validated) → `/icp` → `/competitive-analysis` → `/brainstorm` → ...
 **New project flow**: `/icp` → `/competitive-analysis` → `/brainstorm` → `/plan-interview` → `/journey-map` → `/metrics` → `/roadmap` → `/gtm` → `/plan-phases` → `/run` → `/ship` → `/mvp-gap` → `/customer-feedback` → (iterate)
 **Existing project flow**: `/icp` → `/competitive-analysis` → `/mvp-gap` → `/brainstorm` → `/plan-interview` → `/journey-map` → `/metrics` → `/roadmap` → ...
 **Enterprise expansion**: `/enterprise-icp` → (build cycle) → `/scale-audit`
@@ -57,12 +58,12 @@ Research-driven ICP discovery — web search + codebase analysis to identify mul
 - **Use when**: Starting a new product idea (before `/plan-interview`) or retrofitting ICP to an existing project.
 
 ### `/competitive-analysis`
-Research competitors via web search — map the landscape, GTM strategies, strengths, weaknesses, and market gaps.
+Research competitors via web search — map the landscape, GTM strategies, strengths, weaknesses, and market gaps. Supports concept-validation mode for pre-ICP market gap analysis.
 
-- **Arguments**: `[optional: product category or specific competitors to investigate]`
-- **Prerequisites**: Best run after `/icp` so the competitive frame is grounded in your ICP.
-- **Outputs**: `research/competitive-analysis.md` (landscape map, competitor profiles, positioning gaps)
-- **Use when**: After `/icp`, before `/brainstorm` — understand the market before deciding what to build.
+- **Arguments**: `[concept | optional: product category or specific competitors to investigate]`
+- **Prerequisites**: Best run after `/icp` so the competitive frame is grounded in your ICP. In concept-validation mode (no ICP, no codebase, or `concept` argument), no prerequisites — asks user to describe the concept instead.
+- **Outputs**: `research/competitive-analysis.md` (landscape map, competitor profiles, positioning gaps). In concept-validation mode, includes Gap Assessment (Market State, Incumbent Quality, Gap Quality, Verdict).
+- **Use when**: After `/icp`, before `/brainstorm` — understand the market before deciding what to build. OR before `/icp` when you have a concept but no product and want to validate the market gap first.
 
 ### `/mvp-gap`
 Evaluate codebase against ICP to identify gaps blocking first sales and retention.
@@ -432,7 +433,7 @@ Archive old Done/Punt cards from the kanban board.
 | Skill | One-liner |
 |-------|-----------|
 | `/icp` | Customer discovery — map ICP, journeys, value prop |
-| `/competitive-analysis` | Research competitors, map landscape and gaps |
+| `/competitive-analysis` | Research competitors, map landscape and gaps (supports concept-validation mode) |
 | `/mvp-gap` | Evaluate codebase against ICP for MVP readiness |
 | `/enterprise-icp` | Enterprise multi-stakeholder discovery |
 | `/journey-map` | Map user task flows + customer journey funnel |

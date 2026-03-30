@@ -1,8 +1,8 @@
 ---
 name: competitive-analysis
 description: Research competitors via web search — map the landscape, GTM strategies, strengths, weaknesses, and market gaps
-version: 2.0.0
-argument-hint: [optional: product category or specific competitors to investigate]
+version: 2.1.0
+argument-hint: [concept | optional: product category or specific competitors to investigate]
 ---
 
 # Competitive Analysis — Market Landscape Research
@@ -11,18 +11,18 @@ Conduct deep web-based research to compile a comprehensive competitive landscape
 
 ## Prerequisites
 
-Read the codebase, README, CLAUDE.md, and existing research/specs (`research/icp.md`, `research/enterprise-icp.md`, `specs/mvp-gap.md`) to understand the product. If nothing exists, ask the user to describe the product and target market.
+**Detect mode before proceeding:**
+
+- **Concept-validation mode** activates when: no `research/icp.md` AND (no meaningful codebase OR `$ARGUMENTS` contains "concept"/"validate"). Announce mode to user, then ask for concept description (problem, audience, approach).
+- **Standard mode** (default): Read the codebase, README, CLAUDE.md, and existing research/specs (`research/icp.md`, `research/enterprise-icp.md`, `specs/mvp-gap.md`) to understand the product.
 
 ## Process
 
 ### 1. Establish Product Context
 
-- Read CLAUDE.md, README, package config, key source files
-- Read `research/icp.md` if it exists — the ICP defines the competitive frame
-- Read `research/enterprise-icp.md` and `specs/mvp-gap.md` if they exist
-- If `$ARGUMENTS` names specific competitors, use as starting point but still search broadly
+**Standard mode:** Read CLAUDE.md, README, package config, key source files. Read `research/icp.md` if it exists — the ICP defines the competitive frame. Read `research/enterprise-icp.md` and `specs/mvp-gap.md` if they exist. Summarise what the product does, who it's for, and what problem it solves.
 
-Summarise what the product does, who it's for, and what problem it solves. Confirm with the user before researching.
+**Concept-validation mode:** Use the concept description from Prerequisites. Summarise what the concept proposes (problem, audience, approach). Confirm with the user before researching.
 
 ### 2. Identify Competitors
 
@@ -38,9 +38,15 @@ For each: Company & Product (features, funding, pricing), Maturity & Traction (s
 
 Synthesise: underserved segments, feature gaps, pricing gaps, UX gaps, integration gaps, geographic/vertical gaps, technology gaps.
 
+### 4a. Gap Assessment (concept-validation mode only)
+
+Synthesise market gaps into: **Market State** (Virgin/Sparse/Crowded), **Incumbent Quality** (Dominant-and-loved / Dominant-but-resented / Fragmented-and-mediocre / Emerging-and-unproven), **Gap Quality** (Clear unmet need / Underserved segment / UX/approach gap / Minor improvement / No meaningful gap), **Verdict** (Proceed to ICP / Pivot concept / Abandon). Present to user via AskUserQuestion before continuing.
+
 ### 5. Analyse Positioning Opportunities
 
-Where we fit, differentiation angles, competitor lessons, GTM strategy fit, 2-3 angles we could own.
+**Standard mode:** Where we fit, differentiation angles, competitor lessons, GTM strategy fit, 2-3 angles we could own.
+
+**Concept-validation mode:** Frame as hypothetical — "if you built this": where it would fit, differentiation angles, competitor lessons, GTM fit.
 
 ### 6. Present Findings & Validate
 
@@ -52,10 +58,12 @@ Only after user validates, write the output files.
 
 ## Deliverables
 
-- `research/competitive-analysis.md` — Full competitive landscape: summary, competitor profiles, GTM analysis, market gaps, positioning recommendations, next steps
+- `research/competitive-analysis.md` — Full competitive landscape: summary, competitor profiles, GTM analysis, market gaps, positioning recommendations, next steps. In concept-validation mode, includes `## Gap Assessment` section (Market State, Incumbent Quality, Gap Quality, Verdict).
 - `research/competitive-analysis-search-log.md` — Raw research log: every query, findings, source attribution, reasoning
 
-The output file must end with a `## Next Steps` section (3–5 contextual items, "Pick one:" framing) based on which files exist: always suggest `/brainstorm`; conditionally suggest `/plan-interview`, `/journey-map`, `/gtm`, `/mvp-gap` based on whether `specs/`, `research/journey-map.md`, `research/gtm.md`, codebase, and `specs/mvp-gap.md` exist.
+**Standard mode next steps:** `## Next Steps` section (3–5 contextual items, "Pick one:" framing) based on which files exist: always suggest `/brainstorm`; conditionally suggest `/plan-interview`, `/journey-map`, `/gtm`, `/mvp-gap`.
+
+**Concept-validation mode next steps:** `/icp` is always the first next step (gap validated). Also suggest `/brainstorm` if pivot verdict, and `/competitive-analysis` to re-run in standard mode after ICP.
 
 ## Constraints
 

@@ -1,8 +1,8 @@
 ---
 name: competitive-analysis
 description: Research competitors via web search — map the landscape, GTM strategies, strengths, weaknesses, and market gaps
-version: 2.0.0
-argument-hint: [optional: product category or specific competitors to investigate]
+version: 2.1.0
+argument-hint: [concept | optional: product category or specific competitors to investigate]
 ---
 
 # Competitive Analysis — Market Landscape Research
@@ -11,20 +11,26 @@ Conduct deep web-based research to compile a comprehensive competitive landscape
 
 ## Prerequisites
 
-Read the codebase, README, CLAUDE.md, and existing research/specs (`research/icp.md`, `research/enterprise-icp.md`, `specs/mvp-gap.md`) to understand what the product does, who it's for, and what value it claims to provide. This context is essential for identifying the right competitors and evaluating positioning.
+**Detect mode before proceeding:**
 
-If no codebase or specs exist, ask the user to describe the product and target market before proceeding.
+- **Concept-validation mode** activates when: no `research/icp.md` exists AND (no meaningful codebase — i.e. no README, no source files, no package config — OR `$ARGUMENTS` contains "concept" or "validate"). In this mode, announce to the user: "Running in concept-validation mode — no ICP or product detected. I'll evaluate the market gap for your concept." Then ask the user to describe the concept, the problem it addresses, and the intended audience.
+- **Standard mode** (default): Read the codebase, README, CLAUDE.md, and existing research/specs (`research/icp.md`, `research/enterprise-icp.md`, `specs/mvp-gap.md`) to understand what the product does, who it's for, and what value it claims to provide. This context is essential for identifying the right competitors and evaluating positioning. If no codebase or specs exist but `research/icp.md` is present, proceed in standard mode using the ICP as context.
 
 ## Process
 
 ### 1. Establish Product Context
 
+**Standard mode:**
 - Read CLAUDE.md, README, package config, and key source files to understand the product
 - Read `research/icp.md` if it exists — the customer profile, pain map, and value prop define the competitive frame
 - Read `research/enterprise-icp.md` and `specs/mvp-gap.md` if they exist for additional context
 - If `$ARGUMENTS` names specific competitors, use those as a starting point but still search broadly
+- Summarise what the product does, who it's for, and what problem it solves. Confirm this understanding with the user before researching.
 
-Summarise what the product does, who it's for, and what problem it solves. Confirm this understanding with the user before researching.
+**Concept-validation mode:**
+- Use the concept description from Prerequisites to establish the problem space
+- Summarise what the concept proposes (problem it addresses, intended audience, hypothesised approach)
+- Confirm this understanding with the user before researching
 
 ### 2. Identify Competitors
 
@@ -100,15 +106,34 @@ Synthesise the research to find:
 - **Geographic or vertical gaps**: Markets or industries that competitors haven't entered
 - **Technology gaps**: Emerging tech (AI, automation, APIs) that competitors haven't leveraged
 
+### 4a. Gap Assessment (concept-validation mode only)
+
+If running in concept-validation mode, synthesise the market gaps into a structured gap assessment:
+
+- **Market State**: Virgin (no one does this) / Sparse (few players, early) / Crowded (many established players)
+- **Incumbent Quality**: Dominant-and-loved / Dominant-but-resented (the Jira pattern — widely used, widely disliked) / Fragmented-and-mediocre / Emerging-and-unproven
+- **Gap Quality**: Clear unmet need / Underserved segment / UX/approach gap / Minor improvement / No meaningful gap
+- **Verdict**: Proceed to ICP (gap validated) / Pivot concept (gap exists but concept doesn't address it well) / Abandon (no meaningful gap)
+
+**Checkpoint — Present gap assessment to user.** Use the AskUserQuestion tool to present the Market State, Incumbent Quality, Gap Quality, and Verdict with supporting evidence from the research. Ask: "Does this assessment match your read of the market? Should we adjust the verdict?" Incorporate feedback before continuing.
+
 ### 5. Analyse Positioning Opportunities
 
 Based on all research:
 
+**Standard mode:**
 - Where does our product fit in the competitive landscape?
 - What positioning would differentiate us most effectively?
 - What can we learn from competitors' successes and failures?
 - What GTM strategy best fits our product and the market dynamics?
 - What are the 2-3 most compelling angles we could own?
+
+**Concept-validation mode:**
+- If you built this, where would it fit in the competitive landscape?
+- What positioning would differentiate the concept most effectively?
+- What can you learn from competitors' successes and failures?
+- What GTM strategy would best fit the concept and the market dynamics?
+- What are the 2-3 most compelling angles you could own?
 
 ### 6. Present Findings & Validate
 
@@ -131,6 +156,12 @@ Continue the conversation until all non-trivial details are nailed down. If the 
 
 Before writing, check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with "Pick one:" framing:
 
+**Concept-validation mode:**
+- ALWAYS first: `/icp` — Define your ideal customer profile now that the market gap is validated
+- IF gap verdict is "Pivot concept": `/brainstorm` — Generate alternative concepts that better address the gap
+- ALWAYS: `/competitive-analysis` — Re-run in standard mode after ICP is defined to get full competitive positioning
+
+**Standard mode:**
 - IF no `specs/` directory or it's empty: `/plan-interview` — Spec features that exploit the market gaps above
 - IF `specs/` exist but no `research/journey-map.md`: `/journey-map` — Map how the ICP experiences the product vs. competitors
 - ALWAYS: `/brainstorm` — Generate ideas from the white space and competitive weaknesses
@@ -184,6 +215,20 @@ For each:
 - **Dominant acquisition model**: [PLG / sales-led / community-led / etc.]
 - **Pricing expectations**: [what the market is used to paying]
 - **Key channels**: [where competitors acquire users]
+
+## Gap Assessment (concept-validation mode only)
+
+### Market State
+[Virgin / Sparse / Crowded — with evidence]
+
+### Incumbent Quality
+[Dominant-and-loved / Dominant-but-resented / Fragmented-and-mediocre / Emerging-and-unproven — with evidence]
+
+### Gap Quality
+[Clear unmet need / Underserved segment / UX/approach gap / Minor improvement / No meaningful gap — with evidence]
+
+### Verdict
+[Proceed to ICP / Pivot concept / Abandon — with reasoning]
 
 ## Market Gaps
 - **[Gap title]** — [Description of the unmet need, who it affects, and why it exists]
