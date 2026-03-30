@@ -12,7 +12,7 @@ Interview the founder to map the enterprise problem space. Enterprise sales invo
 ## Workflow
 
 1. Read `research/icp.md` if it exists as a starting point. Read the codebase if one exists.
-2. Interview the user (1–3 questions per turn) covering:
+2. Interview the user (1–3 questions per turn, research and recommend by default — present findings with data, state recommendation, user approves/adjusts/overrides; only ask without recommendation when insider knowledge is required) covering:
    - **Stakeholder Map** — Which personas matter? End users, team admin, IT/Security, procurement, champion, exec sponsor
    - **Per-Persona Journeys** — What each stakeholder needs to see/do/approve; their deal-killing "no"
    - **Enterprise Lifecycle** — Evaluation → pilot → rollout → renewal requirements

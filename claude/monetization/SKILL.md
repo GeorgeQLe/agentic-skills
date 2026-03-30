@@ -61,9 +61,9 @@ From research evidence and product context, identify **2–4 viable revenue mode
 - **Fit with product**: does the value delivery pattern match? (e.g., usage-based works when value scales with consumption)
 - **Risks**: what could go wrong? (e.g., usage-based creates unpredictable costs that enterprise procurement hates)
 
-**Checkpoint 1 — Present models to the user.** Use AskUserQuestion to show the options with evidence and fit analysis, then ask:
-- "Which of these feels closest to right? Any models I should have considered?"
-- "Any hard constraints? (e.g., must have a free tier, can't do per-seat)"
+**Checkpoint 1 — Present models with a recommendation.** Use AskUserQuestion to show all options with evidence and fit analysis. State which model you recommend and why (grounded in ICP fit, product fit, and market evidence). Then ask:
+- "I recommend [model] based on [key evidence]. Does this feel right, or should we explore a different model?"
+- "Any hard constraints I should know? (e.g., must have a free tier, can't do per-seat)"
 
 Incorporate feedback before proceeding.
 

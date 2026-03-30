@@ -16,7 +16,7 @@ Interview-driven skill that builds a go-to-market plan grounded in ICP research 
 ## Workflow
 
 1. **Load context**: Read `research/icp.md`, competitive analysis, journey map, customer feedback, CLAUDE.md, README.
-2. **Interview** (1–3 questions per turn):
+2. **Interview** (1–3 questions per turn, research and recommend by default — present findings with data, state recommendation, user approves/adjusts/overrides; only ask without recommendation when insider knowledge is required):
    - **Channel Strategy** — where ICP hangs out, primary/secondary acquisition channels, budget constraints
    - **Messaging Framework** — one-liner, value prop framing, pain point headline, proof points, competitive positioning
    - **Pricing Strategy** — model (freemium/trial/paid), entry price, tiers, upgrade triggers, competitor comparison

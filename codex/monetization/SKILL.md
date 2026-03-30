@@ -32,7 +32,7 @@ Use WebSearch with 6–10 targeted queries: category pricing models, competitor 
 
 ### 3. Identify Revenue Model Options — Present & Validate
 
-Identify 2–4 viable revenue model options from research. For each: model type, evidence, ICP fit, product fit, risks. Present to user and validate before proceeding.
+Identify 2–4 viable revenue model options from research. For each: model type, evidence, ICP fit, product fit, risks. **Recommend one model** with reasoning grounded in evidence. Present all options plus recommendation to user — ask them to approve, adjust, or override before proceeding.
 
 ### 4. Deep-Dive: Pricing Architecture
 

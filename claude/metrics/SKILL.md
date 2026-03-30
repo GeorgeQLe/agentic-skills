@@ -26,7 +26,9 @@ Interview-driven skill that defines measurable success metrics tied to journey s
 
 ### 2. Interview
 
-Use the AskUserQuestion tool. Ask 1–3 focused questions per turn. Present options with pros/cons when genuine alternatives exist.
+Use the AskUserQuestion tool. Ask 1–3 focused questions per turn.
+
+**Research and recommend by default.** For each decision point, use web search, upstream research docs (`research/*.md`), and codebase analysis to gather evidence before asking the user. Present your findings with data, state your recommendation with reasoning, and ask the user to approve, adjust, or override. Only ask the user to choose without a recommendation when the decision genuinely requires insider knowledge they haven't shared (internal constraints, personal preferences, strategic bets).
 
 Cover these metric categories (skip or abbreviate areas the user has already addressed in `$ARGUMENTS`):
 

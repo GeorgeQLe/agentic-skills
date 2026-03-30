@@ -16,7 +16,7 @@ Interview-driven skill that defines measurable success metrics tied to journey s
 ## Workflow
 
 1. **Load context**: Read `research/journey-map.md`, `research/icp.md`, `research/customer-feedback.md`, codebase if it exists.
-2. **Interview** (1–3 questions per turn):
+2. **Interview** (1–3 questions per turn, research and recommend by default — present findings with data, state recommendation, user approves/adjusts/overrides; only ask without recommendation when insider knowledge is required):
    - **Activation** — tied to aha moment: what action signals "gets it", time-to-value target, activation rate
    - **Engagement** — tied to habit loop: healthy usage pattern, core repeated action, frequency thresholds
    - **Retention** — tied to churn triggers: retention definition, leading churn indicators, target rate

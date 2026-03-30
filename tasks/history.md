@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-03-30 — Add "research and recommend" default to interview-driven skills
+
+- Updated 6 interview-driven skills to default to "research and recommend" pattern instead of "pick from options"
+- Skills updated: /gtm, /metrics, /journey-map, /enterprise-icp, /monetization (checkpoint 1), /plan-interview
+- New default: research first (web search, upstream docs, codebase), present findings with data, state recommendation, user approves/adjusts/overrides
+- Only asks user to choose without recommendation when insider knowledge is genuinely required
+- Applied to both claude and codex SKILL.md files (12 files total)
+
 ## 2026-03-30 — Add concept-validation mode to /competitive-analysis (v2.0.0→v2.1.0)
 
 - Added concept-validation mode: activates when no ICP and no meaningful codebase (or `concept` argument)
