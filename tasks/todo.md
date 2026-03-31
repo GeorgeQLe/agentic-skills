@@ -4,9 +4,15 @@ TDD tests are written (28 tests, 22 red). Now implement the features to turn the
 
 ## Phase 1: updatedAt in responses (3 failing tests)
 
-- [ ] `move-card` — return full card row (includes `updatedAt`) instead of hand-picked fields
-- [ ] `done` — same fix
-- [ ] `archive-card` — same fix
+**Files:** `claude/poketo-kanban/scripts/kanban.mjs`
+
+Three commands return hand-picked fields instead of the full card row. Fix each to return the full `updated` object from `.returning()`:
+
+- [ ] `cmdDone` (line ~302): change `card: { id: updated.id, name: updated.name, done: true }` → `card: updated`
+- [ ] `cmdMoveCard` (line ~342): change `card: { id: updated.id, name: updated.name, listId: updated.listId }` → `card: updated`
+- [ ] `cmdArchiveCard` (line ~617): currently does `.update().set()` without `.returning()`. Add `.returning()`, capture result, use it in output: `card: { ...archived, archivedTo: archiveListId }`
+
+**Verification:** Run `npx vitest run kanban.test.mjs -t "updatedAt"` — all 5 tests pass. Existing 64 tests still pass.
 
 ## Phase 2: Audit logging (10 failing tests)
 
