@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-03-31 — Implement multi-user kanban (all 4 phases)
+
+- Implemented all 4 phases in `kanban.mjs`: updatedAt responses, audit logging, optimistic locking, activity command
+- Phase 1: cmdDone/cmdMoveCard/cmdArchiveCard now return full card objects with updatedAt
+- Phase 2: Added board_actions schema, logAction helper, agentSessionId; wired into 8 commands
+- Phase 3: --expect-updated-at flag with conflict detection on update/move/done/archive
+- Phase 4: New `activity` command with --card/--board/--limit flags
+- Fixed timestamp precision issue (Postgres NOW() microseconds vs JS Date milliseconds) by using explicit `new Date()` in create-card
+- All 92 tests green (22 previously red tests now passing)
+
 ## 2026-03-31 — TDD tests for multi-user kanban features
 
 - Added 28 tests across 4 new describe blocks to `kanban.test.mjs` (64→92 total)
