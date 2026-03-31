@@ -12,40 +12,7 @@ Interview the user to validate, refine, and complete a specification. After writ
 
 ## Kanban Setup
 
-Run these steps before the main process. If any step fails, warn the user and continue without kanban — the spec output must always succeed.
-
-### Board Resolution
-
-```bash
-node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs boards
-```
-
-1. If `tasks/.kanban-board` exists, read the board ID. Verify it via `board <id>`. If stale (error), delete the file and continue to step 2.
-2. If no valid mapping: match board names against `basename $(pwd)` (case-insensitive). Prefer exact match over substring.
-3. If one match → use it, save ID to `tasks/.kanban-board`.
-4. If zero or multiple matches → list boards, ask the user to pick. Save their choice.
-5. If no boards exist → ask the user if they want to create one. If yes: `create-board --name "$(basename $(pwd))" --template standard`. Save the ID.
-
-### Board Validation
-
-After resolving the board, verify all 5 required lists exist (case-insensitive name match): **Backlog, Todo, In Progress, Done, Punt**. If any are missing, create them via `create-list --board <id> --name "<name>"`. Store list IDs for use in subsequent operations.
-
-### Graceful Degradation
-
-If the poketo-kanban scripts are not found at `~/.claude/skills/poketo-kanban/scripts/kanban.mjs`, or if the first kanban command fails (DB connectivity, auth error), warn the user and continue with the base plan-interview behavior. Kanban operations are additive — never block the core workflow.
-
-### Board Overview
-
-After board validation, display a brief board status to provide context:
-
-1. Fetch the full board state: `board <id>`
-2. Scan all cards and report:
-   - **Overdue**: Cards with a due date in the past (highlight count and names)
-   - **High priority**: Starred cards not yet in Done/Punt
-   - **Blocked**: Cards whose description contains "blocked" or "blocker"
-   - **In Progress**: Count of cards currently being worked on
-   - **Backlog/Todo**: Counts for planning context
-3. Display as a brief summary before proceeding. Do not take action — this is informational only.
+Read and follow the Kanban Setup protocol in `~/.claude/skills/poketo-kanban/KANBAN-SETUP.md` (all sections including Board Overview).
 
 ## Process
 
@@ -64,7 +31,7 @@ When finished, write the completed specification to `specs/[topic].md` (create t
 After writing the spec, sync the result to the kanban board:
 
 1. Extract 2-3 distinctive keywords from the topic argument (e.g., "kanban board sync" → search for "kanban board").
-2. Search the board across ALL lists (not just Backlog): `search --query "<keywords>"`
+2. Search the board across ALL lists (not just Backlog): `search --board <board-id> --query "<keywords>"`
 3. Filter results:
    - If exactly one card matches → update its description with:
      - Spec summary (2-3 sentence overview of what was specced)

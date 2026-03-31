@@ -12,40 +12,7 @@ Identify the next incomplete unit of work from the phased plan, build an executi
 
 ## Kanban Setup
 
-Run these steps before the main protocol. If any step fails, warn the user and continue without kanban — the core run workflow must always succeed.
-
-### Board Resolution
-
-```bash
-node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs boards
-```
-
-1. If `tasks/.kanban-board` exists, read the board ID. Verify it via `board <id>`. If stale (error), delete the file and continue to step 2.
-2. If no valid mapping: match board names against `basename $(pwd)` (case-insensitive). Prefer exact match over substring.
-3. If one match → use it, save ID to `tasks/.kanban-board`.
-4. If zero or multiple matches → list boards, ask the user to pick. Save their choice.
-5. If no boards exist → ask the user if they want to create one. If yes: `create-board --name "$(basename $(pwd))" --template standard`. Save the ID.
-
-### Board Validation
-
-After resolving the board, verify all 5 required lists exist (case-insensitive name match): **Backlog, Todo, In Progress, Done, Punt**. If any are missing, create them via `create-list --board <id> --name "<name>"`. Store list IDs for use in subsequent operations.
-
-### Graceful Degradation
-
-If the poketo-kanban scripts are not found at `~/.claude/skills/poketo-kanban/scripts/kanban.mjs`, or if the first kanban command fails (DB connectivity, auth error), warn the user and continue with the base run behavior. Kanban operations are additive — never block the core workflow.
-
-### Board Overview
-
-After board validation, display a brief board status to provide context:
-
-1. Fetch the full board state: `board <id>`
-2. Scan all cards and report:
-   - **Overdue**: Cards with a due date in the past (highlight count and names)
-   - **High priority**: Starred cards not yet in Done/Punt
-   - **Blocked**: Cards whose description contains "blocked" or "blocker"
-   - **In Progress**: Count of cards currently being worked on
-   - **Backlog/Todo**: Counts for planning context
-3. Display as a brief summary before proceeding. Do not take action — this is informational only.
+Read and follow the Kanban Setup protocol in `~/.claude/skills/poketo-kanban/KANBAN-SETUP.md` (all sections including Board Overview).
 
 ## Session Card
 
@@ -54,7 +21,7 @@ After board setup, move the current step's card to In Progress:
 1. Get the device hostname: `hostname -s | tr '[:upper:]' '[:lower:]'`
 2. Get the current branch: `git branch --show-current`
 3. Read `tasks/todo.md` to identify the current step name (next unchecked `- [ ]` item).
-4. Search the board for a card matching the step name: `search --query "<step name>"`
+4. Search the board for a card matching the step name: `search --board <board-id> --query "<step name>"`
 5. Based on where the card is found:
    - **In Todo** → move to In Progress:
      ```bash
