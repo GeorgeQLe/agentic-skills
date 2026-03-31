@@ -12,27 +12,7 @@ Ship current work, commit, push, deploy, and plan the next step. Moves the compl
 
 ## Kanban Setup
 
-Run these steps before the main process. If any step fails, warn the user and continue without kanban — the core ship workflow must always succeed.
-
-### Board Resolution
-
-```bash
-node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs boards
-```
-
-1. If `tasks/.kanban-board` exists, read the board ID. Verify it via `board <id>`. If stale (error), delete the file and continue to step 2.
-2. If no valid mapping: match board names against `basename $(pwd)` (case-insensitive). Prefer exact match over substring.
-3. If one match → use it, save ID to `tasks/.kanban-board`.
-4. If zero or multiple matches → list boards, ask the user to pick. Save their choice.
-5. If no boards exist → ask the user if they want to create one. If yes: `create-board --name "$(basename $(pwd))" --template standard`. Save the ID.
-
-### Board Validation
-
-After resolving the board, verify all 5 required lists exist (case-insensitive name match): **Backlog, Todo, In Progress, Done, Punt**. If any are missing, create them via `create-list --board <id> --name "<name>"`. Store list IDs for use in subsequent operations.
-
-### Graceful Degradation
-
-If the poketo-kanban scripts are not found at `~/.claude/skills/poketo-kanban/scripts/kanban.mjs`, or if the first kanban command fails (DB connectivity, auth error), warn the user and continue with the base ship behavior. Kanban operations are additive — never block the core workflow.
+Read and follow the Kanban Setup protocol in `~/.claude/skills/poketo-kanban/KANBAN-SETUP.md` (Board Resolution, Board Validation, and Graceful Degradation — skip Board Overview).
 
 ## Process
 
@@ -75,7 +55,7 @@ d) Commit and push using the /commit-and-push-by-feature workflow:
 After shipping, move the completed step's kanban card:
 
 1. Identify the step(s) that were just checked off in `tasks/todo.md`.
-2. For each completed step, search the board: `search --query "<step name>"`
+2. For each completed step, search the board: `search --board <board-id> --query "<step name>"`
 3. Determine Done vs. Punt:
    - **Step checkbox checked off** (normal completion) → move card to Done list + mark done:
      ```bash
@@ -141,7 +121,7 @@ e) Commit and push `tasks/todo.md`, `tasks/roadmap.md`, and `tasks/phases/` (if 
 
 After planning the next step, ensure its kanban card exists in Todo:
 
-1. Search the board for the next step's card: `search --query "<next step name>"`
+1. Search the board for the next step's card: `search --board <board-id> --query "<next step name>"`
 2. Based on where it's found:
    - **In Backlog** → move to Todo:
      ```bash

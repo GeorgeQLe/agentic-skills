@@ -12,27 +12,7 @@ Archive old Done and Punt cards from the kanban board. By default, archives card
 
 ## Kanban Setup
 
-Run these steps before the main process. If any step fails, report the error and stop — this skill cannot operate without a board.
-
-### Board Resolution
-
-```bash
-node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs boards
-```
-
-1. If `tasks/.kanban-board` exists, read the board ID. Verify it via `board <id>`. If stale (error), delete the file and continue to step 2.
-2. If no valid mapping: match board names against `basename $(pwd)` (case-insensitive). Prefer exact match over substring.
-3. If one match → use it, save ID to `tasks/.kanban-board`.
-4. If zero or multiple matches → list boards, ask the user to pick. Save their choice.
-5. If no boards exist → ask the user if they want to create one. If yes: `create-board --name "$(basename $(pwd))" --template standard`. Save the ID.
-
-### Board Validation
-
-After resolving the board, verify all 5 required lists exist (case-insensitive name match): **Backlog, Todo, In Progress, Done, Punt**. If any are missing, create them via `create-list --board <id> --name "<name>"`. Store list IDs for use in subsequent operations.
-
-### Graceful Degradation
-
-If the poketo-kanban scripts are not found at `~/.claude/skills/poketo-kanban/scripts/kanban.mjs`, or if the first kanban command fails (DB connectivity, auth error), report the error and stop. This skill requires a working kanban connection.
+Read and follow the Kanban Setup protocol in `~/.claude/skills/poketo-kanban/KANBAN-SETUP.md` (Board Resolution and Board Validation — skip Board Overview). **Override Graceful Degradation**: if any setup step fails, report the error and stop. This skill requires a working kanban connection.
 
 ## Process
 

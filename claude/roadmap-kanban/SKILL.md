@@ -12,40 +12,7 @@ Build or update `tasks/roadmap.md` by synthesizing all project documentation, in
 
 ## Kanban Setup
 
-Run these steps before the main process. If any step fails, warn the user and continue without kanban — the roadmap output must always succeed.
-
-### Board Resolution
-
-```bash
-node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs boards
-```
-
-1. If `tasks/.kanban-board` exists, read the board ID. Verify it via `board <id>`. If stale (error), delete the file and continue to step 2.
-2. If no valid mapping: match board names against `basename $(pwd)` (case-insensitive). Prefer exact match over substring.
-3. If one match → use it, save ID to `tasks/.kanban-board`.
-4. If zero or multiple matches → list boards, ask the user to pick. Save their choice.
-5. If no boards exist → ask the user if they want to create one. If yes: `create-board --name "$(basename $(pwd))" --template standard`. Save the ID.
-
-### Board Validation
-
-After resolving the board, verify all 5 required lists exist (case-insensitive name match): **Backlog, Todo, In Progress, Done, Punt**. If any are missing, create them via `create-list --board <id> --name "<name>"`. Store list IDs for use in subsequent operations.
-
-### Graceful Degradation
-
-If the poketo-kanban scripts are not found at `~/.claude/skills/poketo-kanban/scripts/kanban.mjs`, or if the first kanban command fails (DB connectivity, auth error), warn the user and continue with the base roadmap behavior. Kanban operations are additive — never block the core workflow.
-
-### Board Overview
-
-After board validation, display a brief board status to provide context:
-
-1. Fetch the full board state: `board <id>`
-2. Scan all cards and report:
-   - **Overdue**: Cards with a due date in the past (highlight count and names)
-   - **High priority**: Starred cards not yet in Done/Punt
-   - **Blocked**: Cards whose description contains "blocked" or "blocker"
-   - **In Progress**: Count of cards currently being worked on
-   - **Backlog/Todo**: Counts for planning context
-3. Display as a brief summary before proceeding. Do not take action — this is informational only.
+Read and follow the Kanban Setup protocol in `~/.claude/skills/poketo-kanban/KANBAN-SETUP.md` (all sections including Board Overview).
 
 ## Modes
 
@@ -178,7 +145,7 @@ After writing the roadmap, sync to the kanban board:
 
 1. Read `tasks/todo.md` to get all `- [ ]` step names for the current phase.
 2. For each step:
-   a. Search the board for a card with that step name: `search --query "<step name>"`
+   a. Search the board for a card with that step name: `search --board <board-id> --query "<step name>"`
    b. If found in Backlog → move to Todo: `move-card --id <card-id> --list <todo-list-id>`
    c. If found in Todo or later list → skip (already positioned correctly)
    d. If not found → create in Todo:
@@ -189,7 +156,7 @@ After writing the roadmap, sync to the kanban board:
 ### Future phases → Backlog
 
 3. For each future phase in `tasks/roadmap.md` (phases after the current one):
-   a. Search the board for a card with the phase title: `search --query "<Phase N: Title>"`
+   a. Search the board for a card with the phase title: `search --board <board-id> --query "<Phase N: Title>"`
    b. If not found → create a summary card in Backlog:
       ```bash
       node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs create-card --board <id> --list <backlog-list-id> --name "Phase N: <Title>" --description "<Phase goal>"
