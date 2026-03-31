@@ -1,6 +1,7 @@
 ---
 name: deploy
 description: Deploy the project to a target environment (defaults to staging)
+type: shipping
 version: 1.0.0
 argument-hint: [staging|production]
 ---

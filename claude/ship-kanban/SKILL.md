@@ -1,6 +1,7 @@
 ---
 name: ship-kanban
 description: Ship current work, move kanban card to Done or Punt, deploy, and plan the next step with card in Todo
+type: shipping
 version: 1.0.0
 argument-hint: [--no-plan] [--no-deploy]
 allowed-tools: Bash(node *)

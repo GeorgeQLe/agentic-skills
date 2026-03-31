@@ -1,6 +1,7 @@
 ---
 name: roadmap-kanban
 description: Build or update the project roadmap, then sync phases and steps to kanban board — current phase steps go to Todo, future phases to Backlog
+type: planning
 version: 1.0.0
 argument-hint: [--existing] [path-to-spec]
 allowed-tools: Bash(node *)
