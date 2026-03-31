@@ -106,7 +106,7 @@ For the selected model (or top 2 if the user is undecided), research and design:
 - Are there usage limits, and where do they kick in?
 - Enterprise tier: what justifies the custom pricing? (SSO, SLA, dedicated support, compliance)
 
-**Checkpoint 2 — Present pricing architecture to the user.** Use AskUserQuestion to show tier design, price points, and packaging, then ask:
+**Checkpoint 2 — Present pricing architecture to the user.** Use AskUserQuestion to show tier design, price points, and packaging — cite competitor pricing benchmarks that anchor each price point, ICP willingness-to-pay signals that validate the range, and journey-stage alignment that justifies feature gates. Then ask:
 - "Does this pricing feel right for your market? Too high, too low?"
 - "Any features that absolutely must be free? Any that must be gated?"
 

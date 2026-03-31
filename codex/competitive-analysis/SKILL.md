@@ -41,7 +41,7 @@ When app scope `{app}` is active:
 
 Use web search extensively across: direct competitors, indirect competitors, incumbents, emerging players, DIY alternatives.
 
-**Checkpoint 1 — Present competitor list to user.** Show all identified competitors grouped by category. Ask: "Are there competitors I missed? Any incorrectly categorised?" Incorporate feedback.
+**Checkpoint 1 — Present competitor list to user.** Show all identified competitors grouped by category. For each competitor, include a one-line description and why it's in that category, citing the search source. Ask: "Are there competitors I missed? Any incorrectly categorised?" Incorporate feedback.
 
 ### 3. Research Each Competitor
 

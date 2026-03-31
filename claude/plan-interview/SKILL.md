@@ -26,7 +26,7 @@ Interview the user to validate, refine, and complete a specification from a roug
 
 3. **Cover all areas:**
    - Continue until you have thoroughly covered: goals, user stories, technical architecture, data models, APIs, UI flows, edge cases, security, performance, and scope boundaries.
-   - Confirm with the user before concluding that all areas have been addressed.
+   - **Coverage checkpoint** — Before concluding, use AskUserQuestion to present a structured summary: list each area covered with the key decisions made and the evidence or reasoning that supported each decision. Then ask: "Does this cover everything? Any areas we should revisit or that I missed?"
 
 4. **Write outputs:**
    - Write the completed specification to `specs/[topic].md` (create the `specs/` directory if it doesn't exist) where `topic` is a short kebab-case summary.

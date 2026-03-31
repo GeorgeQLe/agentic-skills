@@ -17,7 +17,7 @@ Read `tasks/ideas.md` and run a plan-interview session for each idea listed ther
    - Ask 1–3 focused questions per turn.
    - Only present options when genuinely distinct choices exist — include pros/cons, recommendation, and mitigation.
    - Continue until goals, user stories, architecture, edge cases, and scope are covered.
-   - Confirm with the user before concluding each idea.
+   - **Coverage checkpoint** — Before concluding each idea, present a structured summary: list each area covered with key decisions made and the evidence/reasoning that supported each. Ask: "Does this cover everything for this idea? Any areas to revisit?"
 4. Write deliverables for each completed idea:
    - Write the spec to `specs/[topic].md` (create `specs/` if needed).
    - Write an interview log to `[topic]-interview.md`.

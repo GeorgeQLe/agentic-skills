@@ -192,7 +192,7 @@ Display findings grouped by scope, then severity. For each finding:
 
 If mode is `fix`:
 
-1. **Present all Errors** to the user. For each Error, ask which side is correct — never auto-resolve contradictions.
+1. **Present all Errors** to the user. For each Error, show the conflicting claims side-by-side with direct quotes from each source document and the section where each claim appears. Then ask which side is correct — never auto-resolve contradictions.
 2. **Auto-fix mechanical Warnings** where the resolution is unambiguous (e.g., updating a stage name reference to match the canonical name in Journey Map).
 3. **Skip Info items** — these are suggestions only.
 4. Apply approved changes to the research documents.

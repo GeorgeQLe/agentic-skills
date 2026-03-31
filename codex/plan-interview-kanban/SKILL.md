@@ -25,7 +25,7 @@ All kanban commands use: `node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs
 5. Ask 1 to 3 focused questions per turn.
 6. Only present options when there are genuinely distinct choices. For each real choice: explain options, give pros/cons, state recommendation.
 7. Continue until goals, user stories, architecture, data models, APIs, UX flows, edge cases, security, performance, and scope boundaries are all covered.
-8. Confirm with the user before concluding.
+8. **Coverage checkpoint** — Before concluding, present a structured summary: list each area covered with key decisions made and the evidence/reasoning that supported each. Ask: "Does this cover everything? Any areas to revisit?"
 
 ## Deliverables
 

@@ -82,12 +82,12 @@ Cover these areas (skip or abbreviate areas the user has already addressed in `$
 
 ### 3. Present Findings & Validate
 
-**Present the complete GTM plan to the user before writing.** Summarise:
-1. Channel strategy — primary and secondary channels, rationale
-2. Messaging framework — one-liner, value prop framing, proof points
-3. Pricing strategy — model, entry point, tiers, competitive positioning
-4. Launch plan — timeline, channels, goals, assets needed
-5. Early traction tactics — 30/60/90 day plan, the one metric that matters
+**Present the complete GTM plan to the user before writing.** Summarise with evidence:
+1. Channel strategy — primary and secondary channels, with ICP behavior data supporting each choice
+2. Messaging framework — one-liner, value prop framing, proof points, citing specific ICP pain points addressed
+3. Pricing strategy — model, entry point, tiers, with competitor pricing benchmarks as anchors
+4. Launch plan — timeline, channels, goals, assets needed, citing trigger events that inform timing
+5. Early traction tactics — 30/60/90 day plan, the one metric that matters, with journey data supporting the traction approach
 
 Use AskUserQuestion to ask:
 - "Does this capture your go-to-market strategy? Anything missing or off?"

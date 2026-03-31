@@ -15,7 +15,7 @@ Automated research that identifies **multiple ICP candidates**, maps pain points
 1. **Parse input**: Read `$ARGUMENTS` as spec file path or concept text. Read codebase if it exists. Read existing research for background. **Detect monorepo** (`turbo.json`, `pnpm-workspace.yaml`, `lerna.json`, `nx.json`, or `package.json` workspaces) — if multiple distinct user-facing products exist, run the full ICP process per app and produce `research/{app-name}/icp.md` per app plus a unified `research/icp.md`. **Migrate old convention:** If `research/icp-{app}.md` files exist (old naming), offer to move them to `research/{app}/icp.md` (and corresponding search logs to `research/{app}/icp-search-log.md`). Create the subdirectories as needed.
 2. **Broad market research**: WebSearch with 8–12 query strategies (personas, pain points, segments, trends, competitors, forums, job postings, industry reports). Log all queries and findings.
 3. **Identify 2–5 ICP candidates** from research evidence — note who they are, pain evidence, accessibility, and value potential.
-4. **Checkpoint 1 — Present candidates to user.** Show ICP candidates with rationale. Ask: "Do any surprise you? Any segment I'm missing?" Incorporate feedback before proceeding.
+4. **Checkpoint 1 — Present candidates to user.** Show ICP candidates with rationale — cite pain evidence found, accessibility signals, and value delivery reasoning from search findings for each candidate. Ask: "Do any surprise you? Any segment I'm missing?" Incorporate feedback before proceeding.
 5. **Deep research per ICP**: Targeted WebSearch to fill the 9-section framework for each candidate:
    - **Customer Profile** — buyer persona, budget, discovery channels. Include **Geographic Focus** (only if the product has regulatory, language, or market-specific constraints — initial target region, why, expansion sequence) and **Named Accounts** (B2B: 5–10 real companies that fit, with name, size, industry, and why they fit)
    - **User Profile(s)** — daily users, sophistication, goals, frustrations
@@ -28,7 +28,7 @@ Automated research that identifies **multiple ICP candidates**, maps pain points
    - **Customer ↔ User Dynamics** — buying process, provisioning, adoption
 6. **Checkpoint 2 — Present scoring matrix and primary ICP selection.** Show Value x Accessibility scores. Ask: "Does this ranking match your intuition?" Incorporate feedback.
 7. **Cross-ICP analysis**: Shared pains, conflicts, product line recs, build sequence, lowest-hanging-fruit x most-value prioritization.
-8. **Checkpoint 3 — Present cross-ICP analysis and build sequence.** Ask: "Does this sequencing make sense?" Incorporate feedback.
+8. **Checkpoint 3 — Present cross-ICP analysis and build sequence.** Show shared pains with source data, conflicts with specific examples, and build sequence rationale grounded in the scoring matrix. Ask: "Does this sequencing make sense?" Incorporate feedback.
 9. **Final review**: Present complete findings summary. Ask: "Ready to write? Anything to adjust?" Only write after user confirms.
 
 ## Deliverables

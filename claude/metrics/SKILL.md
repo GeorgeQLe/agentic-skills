@@ -85,9 +85,9 @@ Revenue, unit economics, sustainability.
 
 **Present the complete metrics framework to the user before writing.** Summarise:
 1. Overview — the 5-8 key metrics and how they connect to journey stages
-2. Each metric with definition, target, and measurement method
+2. Each metric with definition, target (citing rationale: benchmarks, journey data, or ICP signals that informed the target), and measurement method
 3. Instrumentation gaps — what can't be measured today
-4. The "North Star" metric — the single metric that best captures overall health
+4. The "North Star" metric — the single metric that best captures overall health, with evidence for why this metric was chosen over alternatives
 
 Use AskUserQuestion to ask:
 - "Does this metrics framework capture what success looks like? Any metrics missing or targets off?"
