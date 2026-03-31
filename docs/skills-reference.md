@@ -1,6 +1,6 @@
 # Skills Reference
 
-Complete reference for all 51 custom skills in this repository, available for both Claude Code and Codex.
+Complete reference for all 52 custom skills in this repository, available for both Claude Code and Codex.
 
 ## Installation
 
@@ -250,9 +250,9 @@ Audit project structure for convention violations, missing files, template drift
 ### `/investigate`
 Validate user claims against codebase and git history, trace to root cause, and propose a fix.
 
-- **Arguments**: `<error, bug description, user observations, or issue URL>`
-- **Outputs**: Claim validation results, root cause analysis, fix, and prevention recommendation.
-- **Use when**: You have a bug report, error, unexpected behavior, or observations/hypotheses you want validated against the code and git history.
+- **Arguments**: `<error, bug description, user observations, or issue URL> [--plan]`
+- **Outputs**: Claim validation results, root cause analysis, fix, and prevention recommendation. With `--plan` or 3+ fix steps, writes fix plan to `tasks/todo.md` instead of applying inline.
+- **Use when**: You have a bug report, error, unexpected behavior, or observations/hypotheses you want validated against the code and git history. Use `--plan` when you want a step-by-step fix plan instead of immediate changes.
 
 ### `/debug`
 Investigate a problem, log it to the debug changelog, cross-check past issues, and suggest a non-duplicate fix.
@@ -320,6 +320,22 @@ Deploy the project to a target environment.
 
 - **Arguments**: `[staging|production]` (defaults to staging)
 - **Use when**: Deploying after a release or for testing.
+
+---
+
+## Git Workflow
+
+### `/branch-lifecycle`
+Inventory, create PRs for, review, merge, and clean up Git branches.
+
+- **Arguments**: `[list | pr | review <branch-or-PR> | merge <PR> | cleanup]`
+- **Actions**:
+  - `list` (default) — inventory unmerged branches with PR status, age, ahead/behind
+  - `pr` — create PRs for branches that don't have one
+  - `review` — evaluate a PR for correctness, tests, conflicts, scope
+  - `merge` — merge an approved PR (squash by default)
+  - `cleanup` — delete merged branches, prompt for stale ones
+- **Use when**: Managing feature branches, creating PRs in bulk, reviewing before merge, or cleaning up after merges.
 
 ---
 
@@ -458,7 +474,7 @@ Archive old Done/Punt cards from the kanban board.
 | `/dead-code` | Find unused code and dependencies |
 | `/hygiene` | Audit project structure and conventions |
 | `/debug` | Investigate + changelog + non-duplicate fix |
-| `/investigate` | Validate claims → root cause → fix |
+| `/investigate` | Validate claims → root cause → fix (supports `--plan`) |
 | `/trace` | Map request flow through the stack |
 | `/migrate` | Guided migration with verification |
 | `/decommission` | Systematic service/package removal |
@@ -466,6 +482,7 @@ Archive old Done/Punt cards from the kanban board.
 | `/affected` | Monorepo blast radius analysis |
 | `/release` | Version bump + changelog + tag |
 | `/deploy` | Deploy to staging/production |
+| `/branch-lifecycle` | Inventory, PR, review, merge, cleanup branches |
 | `/handoff` | Context snapshot for session continuity |
 | `/sync` | Pull latest from remote |
 | `/commit-and-push-by-feature` | Group commits by feature |

@@ -1,5 +1,22 @@
 # Session History
 
+## 2026-03-30 — Add --plan flag to /investigate + new /branch-lifecycle skill (51→52)
+
+- Enhanced `/investigate` (v1.0.0→v1.1.0): added `--plan` flag for multi-step fix planning
+  - Step 6 split: inline mode (single fix, default) vs plan mode (`--plan` or 3+ discrete steps)
+  - New step 7: writes `## Investigation Fix: [title]` with checkable items to `tasks/todo.md` (appends, never overwrites)
+  - Added "Fix Steps Written" output section (shown instead of "Fix Applied" in plan mode)
+  - New constraints: no `docs/debug-changelog.md` writes, no todo.md for single-step fixes unless `--plan` explicit
+- Created `/branch-lifecycle` skill (v1.0.0) with 5 actions: list, pr, review, merge, cleanup
+  - `list`: inventory unmerged branches with PR status, age, ahead/behind
+  - `pr`: create PRs for branches without one
+  - `review`: evaluate PR for correctness, tests, conflicts, scope
+  - `merge`: squash merge approved PRs (respects CLAUDE.md overrides)
+  - `cleanup`: delete merged branches, prompt for stale ones (never auto-deletes)
+- Updated `/skills` stage mapping: added "Git Workflow" stage with `branch-lifecycle`
+- Updated `docs/skills-reference.md`: count 51→52, new Git Workflow section, updated `/investigate` entry, quick reference rows
+- Symlink installed via `install.sh`
+
 ## 2026-03-30 — Strengthen evidence requirements at checkpoint instructions
 
 - Audited all AskUserQuestion checkpoints across 9 research/strategy skills — found 10 of 22 presenting bare conclusions without evidence

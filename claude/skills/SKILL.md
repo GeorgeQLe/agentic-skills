@@ -38,6 +38,7 @@ Discover and search all available skills in this repository, grouped by workflow
    | Monorepo | `affected` |
    | Release & Deploy | `release`, `deploy` |
    | Context & Session | `handoff`, `sync` |
+   | Git Workflow | `branch-lifecycle` |
    | Utility | `commit-and-push-by-feature`, `analyze-sessions`, `install-workflow-orchestration`, `poketo-kanban`, `kanban-archive`, `sync-roadmap-kanban`, `skills` |
 
    Skills not found in the mapping go into an **Other** group at the end.
