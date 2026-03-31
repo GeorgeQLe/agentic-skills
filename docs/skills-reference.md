@@ -46,6 +46,21 @@ Discover                      Ideate                       Specify              
 
 Supporting skills plug in at any point: `/expert-review`, `/investigate`, `/affected`, `/regression-check`, etc.
 
+## Activity Types
+
+Each skill has a `type` field in its frontmatter that describes *what kind of work* it does (orthogonal to workflow stage, which describes *when* you'd use it). Use `/skills types` to browse skills grouped by type.
+
+| Type | What it does | Output | Skills |
+|------|-------------|--------|--------|
+| **research** | Web search + analysis | Documents, market insights | `icp`, `enterprise-icp`, `competitive-analysis`, `gtm`, `monetization`, `customer-feedback`, `research-reconcile` |
+| **analysis** | Reads codebase/docs | Assessments, gap reports | `mvp-gap`, `scale-audit`, `journey-map`, `metrics`, `workflow`, `affected`, `dead-code`, `hygiene`, `analyze-sessions` |
+| **planning** | Interactive interviews | Specs, roadmaps, phases | `brainstorm`, `plan-interview`, `plan-interview-ideas`, `roadmap`, `plan-phases`, `brainstorm-kanban`, `plan-interview-kanban`, `roadmap-kanban` |
+| **execution** | Writes/modifies code | Code changes | `run`, `scaffold`, `migrate`, `decommission`, `run-kanban` |
+| **review** | Reads code, reports issues | Review reports (no changes) | `expert-review`, `regression-check`, `trace` |
+| **debugging** | Investigates + fixes | Root cause + fix | `investigate`, `debug` |
+| **shipping** | Commits, deploys, wraps up | Commits, releases, handoffs | `ship`, `ship-end`, `release`, `deploy`, `commit-and-push-by-feature`, `handoff`, `sync`, `ship-kanban`, `ship-end-kanban` |
+| **ops** | Manages boards, branches, tooling | Board/branch state changes | `poketo-kanban`, `kanban-archive`, `branch-lifecycle`, `sync-roadmap-kanban`, `skills`, `install-workflow-orchestration` |
+
 ---
 
 ## Discovery & Market Fit
@@ -446,55 +461,55 @@ Archive old Done/Punt cards from the kanban board.
 
 ## Quick Reference
 
-| Skill | One-liner |
-|-------|-----------|
-| `/icp` | Customer discovery — map ICP, journeys, value prop |
-| `/competitive-analysis` | Research competitors, map landscape and gaps (supports concept-validation mode) |
-| `/mvp-gap` | Evaluate codebase against ICP for MVP readiness |
-| `/enterprise-icp` | Enterprise multi-stakeholder discovery |
-| `/journey-map` | Map user task flows + customer journey funnel |
-| `/scale-audit` | Enterprise production readiness audit |
-| `/customer-feedback` | Ingest + synthesize customer feedback |
-| `/metrics` | Success metrics tied to journey stages |
-| `/monetization` | Revenue models, pricing, unit economics |
-| `/research-reconcile` | Cross-document consistency audit for research outputs |
-| `/gtm` | Go-to-market planning |
-| `/workflow` | Check status, stale items, next action |
-| `/brainstorm` | Evaluate codebase, suggest improvement ideas |
-| `/plan-interview` | Rough idea → validated spec |
-| `/plan-interview-ideas` | Spec each idea from ideas.md |
-| `/roadmap` | Interview → phased roadmap across all specs |
-| `/plan-phases` | Roadmap phase → TDD steps with file detail |
-| `/run` | Execute next step (plan mode first) |
-| `/run --phase` | Execute next full phase (plan mode first) |
-| `/ship` | Commit, push, deploy, plan next step |
-| `/ship-end` | Wrap up session |
-| `/expert-review` | Expert code review |
-| `/regression-check` | Full health check (types, lint, tests, build) |
-| `/dead-code` | Find unused code and dependencies |
-| `/hygiene` | Audit project structure and conventions |
-| `/debug` | Investigate + changelog + non-duplicate fix |
-| `/investigate` | Validate claims → root cause → fix (supports `--plan`) |
-| `/trace` | Map request flow through the stack |
-| `/migrate` | Guided migration with verification |
-| `/decommission` | Systematic service/package removal |
-| `/scaffold` | Generate new monorepo package/app |
-| `/affected` | Monorepo blast radius analysis |
-| `/release` | Version bump + changelog + tag |
-| `/deploy` | Deploy to staging/production |
-| `/branch-lifecycle` | Inventory, PR, review, merge, cleanup branches |
-| `/handoff` | Context snapshot for session continuity |
-| `/sync` | Pull latest from remote |
-| `/commit-and-push-by-feature` | Group commits by feature |
-| `/analyze-sessions` | Usage analytics |
-| `/install-workflow-orchestration` | Bootstrap CLAUDE.md |
-| `/skills` | Browse and search all skills |
-| `/poketo-kanban` | Low-level board CRUD |
-| `/brainstorm-kanban` | Brainstorm + create kanban cards |
-| `/plan-interview-kanban` | Spec interview + kanban card sync |
-| `/roadmap-kanban` | Roadmap + kanban board sync |
-| `/run-kanban` | Execute step with kanban tracking |
-| `/ship-kanban` | Ship + move kanban card to Done/Punt |
-| `/ship-end-kanban` | Wrap up session + kanban card Done |
-| `/sync-roadmap-kanban` | Reconcile board with roadmap |
-| `/kanban-archive` | Archive old Done/Punt cards |
+| Skill | One-liner | Type |
+|-------|-----------|------|
+| `/icp` | Customer discovery — map ICP, journeys, value prop | research |
+| `/competitive-analysis` | Research competitors, map landscape and gaps (supports concept-validation mode) | research |
+| `/enterprise-icp` | Enterprise multi-stakeholder discovery | research |
+| `/gtm` | Go-to-market planning | research |
+| `/monetization` | Revenue models, pricing, unit economics | research |
+| `/customer-feedback` | Ingest + synthesize customer feedback | research |
+| `/research-reconcile` | Cross-document consistency audit for research outputs | research |
+| `/mvp-gap` | Evaluate codebase against ICP for MVP readiness | analysis |
+| `/scale-audit` | Enterprise production readiness audit | analysis |
+| `/journey-map` | Map user task flows + customer journey funnel | analysis |
+| `/metrics` | Success metrics tied to journey stages | analysis |
+| `/workflow` | Check status, stale items, next action | analysis |
+| `/affected` | Monorepo blast radius analysis | analysis |
+| `/dead-code` | Find unused code and dependencies | analysis |
+| `/hygiene` | Audit project structure and conventions | analysis |
+| `/analyze-sessions` | Usage analytics | analysis |
+| `/brainstorm` | Evaluate codebase, suggest improvement ideas | planning |
+| `/plan-interview` | Rough idea → validated spec | planning |
+| `/plan-interview-ideas` | Spec each idea from ideas.md | planning |
+| `/roadmap` | Interview → phased roadmap across all specs | planning |
+| `/plan-phases` | Roadmap phase → TDD steps with file detail | planning |
+| `/run` | Execute next step (plan mode first) | execution |
+| `/run --phase` | Execute next full phase (plan mode first) | execution |
+| `/scaffold` | Generate new monorepo package/app | execution |
+| `/migrate` | Guided migration with verification | execution |
+| `/decommission` | Systematic service/package removal | execution |
+| `/expert-review` | Expert code review | review |
+| `/regression-check` | Full health check (types, lint, tests, build) | review |
+| `/trace` | Map request flow through the stack | review |
+| `/investigate` | Validate claims → root cause → fix (supports `--plan`) | debugging |
+| `/debug` | Investigate + changelog + non-duplicate fix | debugging |
+| `/ship` | Commit, push, deploy, plan next step | shipping |
+| `/ship-end` | Wrap up session | shipping |
+| `/release` | Version bump + changelog + tag | shipping |
+| `/deploy` | Deploy to staging/production | shipping |
+| `/commit-and-push-by-feature` | Group commits by feature | shipping |
+| `/handoff` | Context snapshot for session continuity | shipping |
+| `/sync` | Pull latest from remote | shipping |
+| `/poketo-kanban` | Low-level board CRUD | ops |
+| `/branch-lifecycle` | Inventory, PR, review, merge, cleanup branches | ops |
+| `/skills` | Browse and search all skills | ops |
+| `/install-workflow-orchestration` | Bootstrap CLAUDE.md | ops |
+| `/brainstorm-kanban` | Brainstorm + create kanban cards | planning |
+| `/plan-interview-kanban` | Spec interview + kanban card sync | planning |
+| `/roadmap-kanban` | Roadmap + kanban board sync | planning |
+| `/run-kanban` | Execute step with kanban tracking | execution |
+| `/ship-kanban` | Ship + move kanban card to Done/Punt | shipping |
+| `/ship-end-kanban` | Wrap up session + kanban card Done | shipping |
+| `/sync-roadmap-kanban` | Reconcile board with roadmap | ops |
+| `/kanban-archive` | Archive old Done/Punt cards | ops |
