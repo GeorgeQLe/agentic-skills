@@ -1,5 +1,16 @@
 # Session History
 
+## 2026-03-31 — TDD tests for multi-user kanban features
+
+- Added 28 tests across 4 new describe blocks to `kanban.test.mjs` (64→92 total)
+- Test DB helper: direct Drizzle/Neon connection to query `board_actions` table for audit log verification
+- Card updatedAt block (5 tests): 2 pass (create/update), 3 red (move/done/archive omit updatedAt)
+- Audit logging block (10 tests): all red — kanban.mjs doesn't write to board_actions yet
+- Optimistic locking block (8 tests): 2 pass (correct timestamp/omitted flag), 6 red (conflict detection not implemented)
+- Activity command block (5 tests): 1 pass (missing args error), 4 red (command doesn't exist)
+- Created `tasks/todo.md` with 4-phase implementation plan for turning tests green
+- All 64 existing tests still pass; 22 new tests in expected TDD red state
+
 ## 2026-03-30 — Add --plan flag to /investigate + new /branch-lifecycle skill (51→52)
 
 - Enhanced `/investigate` (v1.0.0→v1.1.0): added `--plan` flag for multi-step fix planning

@@ -3,10 +3,88 @@ import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
+import { readFileSync, existsSync } from "node:fs";
+import { homedir } from "node:os";
+import { neon } from "@neondatabase/serverless";
+import { drizzle } from "drizzle-orm/neon-http";
+import { pgTable, text, timestamp, jsonb, pgEnum } from "drizzle-orm/pg-core";
+import { eq, desc } from "drizzle-orm";
 
 const execFileAsync = promisify(execFile);
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const SCRIPT = join(__dirname, "kanban.mjs");
+
+// ─── Test DB Helper (direct DB access for audit log verification) ───────────
+
+// Re-use the same env resolution as kanban.mjs
+import { ENV_SEARCH_PATHS } from "./env-paths.mjs";
+
+function getTestDbUrl() {
+  if (process.env.POKETOWORK_DATABASE_URL) return process.env.POKETOWORK_DATABASE_URL;
+  for (const p of ENV_SEARCH_PATHS) {
+    if (existsSync(p)) {
+      const content = readFileSync(p, "utf-8");
+      const match = content.match(/^POKETOWORK_DATABASE_URL=["']?([^\s"']+)["']?/m);
+      if (match) return match[1];
+    }
+  }
+  return null;
+}
+
+// Inline board_actions schema (matches poketo-db BoardActionSchema)
+const boardActionEnum = pgEnum("board_action", [
+  "CREATE", "UPDATE", "DELETE", "MOVE", "REORDER", "RENAME",
+  "UPDATE_DESCRIPTION", "SET_DUE_DATE", "CLEAR_DUE_DATE",
+  "SET_PROGRESS", "CLEAR_PROGRESS", "ADD_CATEGORY", "REMOVE_CATEGORY",
+  "STAR", "UNSTAR", "ASSIGN_USER", "UNASSIGN_USER", "ASSIGN_AGENT",
+  "UNASSIGN_AGENT", "SET_TEAM", "REMOVE_TEAM", "ARCHIVE", "RESTORE",
+  "MARK_DONE", "MARK_UNDONE", "ADD_CHECKLIST", "DELETE_CHECKLIST",
+  "TOGGLE_CHECKLIST_ITEM",
+]);
+
+const actorTypeEnum = pgEnum("actor_type", ["user", "agent"]);
+const entityTypeEnum = pgEnum("entity_type", ["board", "list", "card"]);
+
+const boardActions = pgTable("board_actions", {
+  id: text("id").primaryKey(),
+  action: boardActionEnum("action").notNull(),
+  boardComponent: entityTypeEnum("entity").notNull(),
+  boardComponentId: text("entity_id").notNull(),
+  boardComponentName: text("entity_name").notNull(),
+  boardId: text("board_id").notNull(),
+  changes: jsonb("changes"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  userId: text("user_id").notNull(),
+  actorType: actorTypeEnum("actor_type").notNull(),
+  agentSessionId: text("agent_session_id"),
+  agentTemplateId: text("agent_template_id"),
+});
+
+let testDb;
+async function getTestDb() {
+  if (testDb) return testDb;
+  const url = getTestDbUrl();
+  if (!url) throw new Error("POKETOWORK_DATABASE_URL not available for test DB helper");
+  const sql = neon(url);
+  testDb = drizzle(sql);
+  return testDb;
+}
+
+/** Query board_actions for a specific entity (card/board/list) */
+async function queryActions(entityId) {
+  const db = await getTestDb();
+  return db.select().from(boardActions)
+    .where(eq(boardActions.boardComponentId, entityId))
+    .orderBy(desc(boardActions.createdAt));
+}
+
+/** Query board_actions for a board */
+async function queryBoardActions(boardIdVal) {
+  const db = await getTestDb();
+  return db.select().from(boardActions)
+    .where(eq(boardActions.boardId, boardIdVal))
+    .orderBy(desc(boardActions.createdAt));
+}
 
 // ─── Helper ─────────────────────────────────────────────────────────────────
 
@@ -997,6 +1075,478 @@ describe("Edge cases", () => {
     const result = await run("done", "--id", card.card.id);
     expect(result.command).toBe("done");
     expect(result.card.done).toBe(true);
+  });
+});
+
+// ─── Card response includes updatedAt ───────────────────────────────────────
+
+describe("Card response includes updatedAt", () => {
+  let updatedAtCardId;
+
+  it("create-card response includes updatedAt", async () => {
+    const result = await run(
+      "create-card",
+      "--board",
+      boardId,
+      "--list",
+      listIds["Backlog"],
+      "--name",
+      "updatedAt test card",
+    );
+    expect(result.card.updatedAt).toBeTruthy();
+    expect(new Date(result.card.updatedAt).getTime()).toBeGreaterThan(0);
+    updatedAtCardId = result.card.id;
+  });
+
+  it("update-card response includes updatedAt", async () => {
+    const result = await run(
+      "update-card",
+      "--id",
+      updatedAtCardId,
+      "--name",
+      "updatedAt renamed",
+    );
+    expect(result.card.updatedAt).toBeTruthy();
+    expect(new Date(result.card.updatedAt).getTime()).toBeGreaterThan(0);
+  });
+
+  it("move-card response includes updatedAt", async () => {
+    const result = await run(
+      "move-card",
+      "--id",
+      updatedAtCardId,
+      "--list",
+      listIds["Todo"],
+    );
+    expect(result.card.updatedAt).toBeTruthy();
+    expect(new Date(result.card.updatedAt).getTime()).toBeGreaterThan(0);
+  });
+
+  it("done response includes updatedAt", async () => {
+    const result = await run("done", "--id", updatedAtCardId);
+    expect(result.card.updatedAt).toBeTruthy();
+    expect(new Date(result.card.updatedAt).getTime()).toBeGreaterThan(0);
+  });
+
+  it("archive-card response includes updatedAt", async () => {
+    const result = await run("archive-card", "--id", updatedAtCardId);
+    expect(result.card.updatedAt).toBeTruthy();
+    expect(new Date(result.card.updatedAt).getTime()).toBeGreaterThan(0);
+  });
+});
+
+// ─── Audit Logging ──────────────────────────────────────────────────────────
+
+describe("Audit logging", () => {
+  let auditCardId;
+  let auditCardName;
+
+  it("create-card inserts a CREATE board_action", async () => {
+    const result = await run(
+      "create-card",
+      "--board",
+      boardId,
+      "--list",
+      listIds["Backlog"],
+      "--name",
+      "Audit test card",
+    );
+    auditCardId = result.card.id;
+    auditCardName = result.card.name;
+
+    const actions = await queryActions(auditCardId);
+    expect(actions.length).toBeGreaterThanOrEqual(1);
+    const createAction = actions.find((a) => a.action === "CREATE");
+    expect(createAction).toBeDefined();
+    expect(createAction.boardComponent).toBe("card");
+    expect(createAction.boardId).toBe(boardId);
+    expect(createAction.actorType).toBe("agent");
+    expect(createAction.agentTemplateId).toBe("claude-code-kanban");
+  });
+
+  it("update-card --name inserts a RENAME action with before/after", async () => {
+    const oldName = auditCardName;
+    const result = await run(
+      "update-card",
+      "--id",
+      auditCardId,
+      "--name",
+      "Audit renamed",
+    );
+    auditCardName = result.card.name;
+
+    const actions = await queryActions(auditCardId);
+    const renameAction = actions.find((a) => a.action === "RENAME");
+    expect(renameAction).toBeDefined();
+    expect(renameAction.changes).toBeDefined();
+    expect(renameAction.changes.field).toBe("name");
+    expect(renameAction.changes.from).toBe(oldName);
+    expect(renameAction.changes.to).toBe("Audit renamed");
+  });
+
+  it("update-card --description inserts an UPDATE_DESCRIPTION action", async () => {
+    await run(
+      "update-card",
+      "--id",
+      auditCardId,
+      "--description",
+      "Audit description",
+    );
+
+    const actions = await queryActions(auditCardId);
+    const descAction = actions.find((a) => a.action === "UPDATE_DESCRIPTION");
+    expect(descAction).toBeDefined();
+    expect(descAction.changes).toBeDefined();
+    expect(descAction.changes.field).toBe("description");
+    expect(descAction.changes.to).toBe("Audit description");
+  });
+
+  it("move-card inserts a MOVE action with fromList/toList", async () => {
+    await run(
+      "move-card",
+      "--id",
+      auditCardId,
+      "--list",
+      listIds["In Progress"],
+    );
+
+    const actions = await queryActions(auditCardId);
+    const moveAction = actions.find((a) => a.action === "MOVE");
+    expect(moveAction).toBeDefined();
+    expect(moveAction.changes).toBeDefined();
+    expect(moveAction.changes.toListId).toBe(listIds["In Progress"]);
+    expect(moveAction.changes.fromListId).toBeTruthy();
+    expect(moveAction.changes.toListName).toBe("In Progress");
+  });
+
+  it("done inserts a MARK_DONE action", async () => {
+    await run("done", "--id", auditCardId);
+
+    const actions = await queryActions(auditCardId);
+    const doneAction = actions.find((a) => a.action === "MARK_DONE");
+    expect(doneAction).toBeDefined();
+    expect(doneAction.boardComponent).toBe("card");
+  });
+
+  it("archive-card inserts an ARCHIVE action", async () => {
+    await run("archive-card", "--id", auditCardId);
+
+    const actions = await queryActions(auditCardId);
+    const archiveAction = actions.find((a) => a.action === "ARCHIVE");
+    expect(archiveAction).toBeDefined();
+    expect(archiveAction.changes).toBeDefined();
+    expect(archiveAction.changes.toListName).toBe("Archive");
+  });
+
+  it("create-board inserts a CREATE action for board entity", async () => {
+    const result = await run(
+      "create-board",
+      "--name",
+      "audit-board-test",
+      "--template",
+      "standard",
+    );
+    const newBoardId = result.board.id;
+
+    const actions = await queryActions(newBoardId);
+    const createAction = actions.find(
+      (a) => a.action === "CREATE" && a.boardComponent === "board",
+    );
+    expect(createAction).toBeDefined();
+    expect(createAction.boardId).toBe(newBoardId);
+
+    // Clean up
+    await run("delete-board", "--id", newBoardId, "--confirm");
+  });
+
+  it("delete-board inserts a DELETE action for board entity", async () => {
+    const result = await run(
+      "create-board",
+      "--name",
+      "audit-delete-test",
+      "--template",
+      "standard",
+    );
+    const delBoardId = result.board.id;
+    await run("delete-board", "--id", delBoardId, "--confirm");
+
+    const actions = await queryActions(delBoardId);
+    const deleteAction = actions.find(
+      (a) => a.action === "DELETE" && a.boardComponent === "board",
+    );
+    expect(deleteAction).toBeDefined();
+  });
+
+  it("dry-run does NOT insert any board_action", async () => {
+    const beforeActions = await queryBoardActions(boardId);
+    const beforeCount = beforeActions.length;
+
+    await run(
+      "create-card",
+      "--board",
+      boardId,
+      "--list",
+      listIds["Backlog"],
+      "--name",
+      "Dry-run audit test",
+      "--dry-run",
+    );
+
+    const afterActions = await queryBoardActions(boardId);
+    expect(afterActions.length).toBe(beforeCount);
+  });
+
+  it("agentSessionId differs across invocations", async () => {
+    const card1 = await run(
+      "create-card",
+      "--board",
+      boardId,
+      "--list",
+      listIds["Backlog"],
+      "--name",
+      "Session ID test 1",
+    );
+    const card2 = await run(
+      "create-card",
+      "--board",
+      boardId,
+      "--list",
+      listIds["Backlog"],
+      "--name",
+      "Session ID test 2",
+    );
+
+    const actions1 = await queryActions(card1.card.id);
+    const actions2 = await queryActions(card2.card.id);
+
+    const session1 = actions1.find((a) => a.action === "CREATE")?.agentSessionId;
+    const session2 = actions2.find((a) => a.action === "CREATE")?.agentSessionId;
+
+    expect(session1).toBeTruthy();
+    expect(session2).toBeTruthy();
+    expect(session1).not.toBe(session2);
+  });
+});
+
+// ─── Optimistic Locking ─────────────────────────────────────────────────────
+
+describe("Optimistic locking", () => {
+  let lockCardId;
+  let lockCardUpdatedAt;
+
+  beforeAll(async () => {
+    const result = await run(
+      "create-card",
+      "--board",
+      boardId,
+      "--list",
+      listIds["Backlog"],
+      "--name",
+      "Lock test card",
+    );
+    lockCardId = result.card.id;
+    lockCardUpdatedAt = result.card.updatedAt;
+  });
+
+  it("update-card with correct --expect-updated-at succeeds", async () => {
+    const result = await run(
+      "update-card",
+      "--id",
+      lockCardId,
+      "--name",
+      "Lock success",
+      "--expect-updated-at",
+      lockCardUpdatedAt,
+    );
+    expect(result.command).toBe("update-card");
+    expect(result.card.name).toBe("Lock success");
+    lockCardUpdatedAt = result.card.updatedAt;
+  });
+
+  it("update-card with stale --expect-updated-at returns conflict", async () => {
+    const staleTimestamp = "2020-01-01T00:00:00.000Z";
+    const result = await run(
+      "update-card",
+      "--id",
+      lockCardId,
+      "--name",
+      "Should fail",
+      "--expect-updated-at",
+      staleTimestamp,
+    );
+    expect(result.error).toMatch(/conflict/i);
+    expect(result.cardId).toBe(lockCardId);
+    expect(result.expectedUpdatedAt).toBe(staleTimestamp);
+  });
+
+  it("update-card without --expect-updated-at is backwards-compatible", async () => {
+    const result = await run(
+      "update-card",
+      "--id",
+      lockCardId,
+      "--name",
+      "Lock compat",
+    );
+    expect(result.command).toBe("update-card");
+    expect(result.card.name).toBe("Lock compat");
+    lockCardUpdatedAt = result.card.updatedAt;
+  });
+
+  it("move-card with stale --expect-updated-at returns conflict", async () => {
+    const result = await run(
+      "move-card",
+      "--id",
+      lockCardId,
+      "--list",
+      listIds["Todo"],
+      "--expect-updated-at",
+      "2020-01-01T00:00:00.000Z",
+    );
+    expect(result.error).toMatch(/conflict/i);
+  });
+
+  it("done with stale --expect-updated-at returns conflict", async () => {
+    const result = await run(
+      "done",
+      "--id",
+      lockCardId,
+      "--expect-updated-at",
+      "2020-01-01T00:00:00.000Z",
+    );
+    expect(result.error).toMatch(/conflict/i);
+  });
+
+  it("archive-card with stale --expect-updated-at returns conflict", async () => {
+    const result = await run(
+      "archive-card",
+      "--id",
+      lockCardId,
+      "--expect-updated-at",
+      "2020-01-01T00:00:00.000Z",
+    );
+    expect(result.error).toMatch(/conflict/i);
+  });
+
+  it("concurrent updates — exactly one wins with optimistic lock", async () => {
+    // Create a fresh card for concurrency test
+    const fresh = await run(
+      "create-card",
+      "--board",
+      boardId,
+      "--list",
+      listIds["Backlog"],
+      "--name",
+      "Concurrency card",
+    );
+    const ts = fresh.card.updatedAt;
+
+    // Both use the same timestamp — one should succeed, one should conflict
+    const [result1, result2] = await Promise.all([
+      run(
+        "update-card",
+        "--id",
+        fresh.card.id,
+        "--name",
+        "Winner",
+        "--expect-updated-at",
+        ts,
+      ),
+      run(
+        "update-card",
+        "--id",
+        fresh.card.id,
+        "--name",
+        "Loser",
+        "--expect-updated-at",
+        ts,
+      ),
+    ]);
+
+    const successes = [result1, result2].filter((r) => r.command === "update-card");
+    const conflicts = [result1, result2].filter((r) => r.error && /conflict/i.test(r.error));
+    expect(successes).toHaveLength(1);
+    expect(conflicts).toHaveLength(1);
+  });
+
+  it("conflict error includes expected shape", async () => {
+    const result = await run(
+      "update-card",
+      "--id",
+      lockCardId,
+      "--name",
+      "Shape test",
+      "--expect-updated-at",
+      "2020-01-01T00:00:00.000Z",
+    );
+    expect(result.error).toMatch(/conflict/i);
+    expect(result.cardId).toBe(lockCardId);
+    expect(result.expectedUpdatedAt).toBe("2020-01-01T00:00:00.000Z");
+    expect(result.hint).toBeTruthy();
+  });
+});
+
+// ─── Activity Command ───────────────────────────────────────────────────────
+
+describe("Activity command", () => {
+  let activityCardId;
+
+  beforeAll(async () => {
+    // Create and mutate a card so there's activity to read
+    const result = await run(
+      "create-card",
+      "--board",
+      boardId,
+      "--list",
+      listIds["Backlog"],
+      "--name",
+      "Activity test card",
+    );
+    activityCardId = result.card.id;
+    await run("update-card", "--id", activityCardId, "--name", "Activity renamed");
+    await run("move-card", "--id", activityCardId, "--list", listIds["Todo"]);
+  });
+
+  it("activity --card returns recent actions", async () => {
+    const result = await run("activity", "--card", activityCardId);
+    expect(result.command).toBe("activity");
+    expect(result.entityId).toBe(activityCardId);
+    expect(result.actions).toBeInstanceOf(Array);
+    expect(result.actions.length).toBeGreaterThanOrEqual(2);
+  });
+
+  it("activity --card --limit limits results", async () => {
+    const result = await run(
+      "activity",
+      "--card",
+      activityCardId,
+      "--limit",
+      "1",
+    );
+    expect(result.command).toBe("activity");
+    expect(result.actions).toHaveLength(1);
+  });
+
+  it("activity --board returns board-wide actions", async () => {
+    const result = await run("activity", "--board", boardId);
+    expect(result.command).toBe("activity");
+    expect(result.entityId).toBe(boardId);
+    expect(result.actions).toBeInstanceOf(Array);
+    expect(result.actions.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it("activity without --card or --board returns error", async () => {
+    const result = await run("activity");
+    expect(result.error).toBeTruthy();
+  });
+
+  it("activity action shape includes expected fields", async () => {
+    const result = await run("activity", "--card", activityCardId);
+    const action = result.actions[0];
+    expect(action.action).toBeTruthy();
+    expect(action.actorType).toBeTruthy();
+    expect(action.createdAt).toBeTruthy();
+    // userId may or may not be present depending on actor
+    expect(typeof action.action).toBe("string");
   });
 });
 
