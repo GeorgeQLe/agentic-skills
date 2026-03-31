@@ -1,6 +1,7 @@
 ---
 name: trace
 description: Follow a request end-to-end through the stack from route to database
+type: review
 version: 1.0.0
 argument-hint: <route, endpoint, or feature to trace, e.g. "/api/products" or "user login flow">
 ---

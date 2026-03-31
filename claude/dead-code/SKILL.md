@@ -1,6 +1,7 @@
 ---
 name: dead-code
 description: Scan for unused exports, unreachable code, orphaned files, and stale dependencies
+type: analysis
 version: 1.0.0
 argument-hint: [optional: specific package or directory to scope the scan]
 ---
