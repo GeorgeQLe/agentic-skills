@@ -4,11 +4,14 @@ import { readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";
 import { homedir } from "node:os";
 import { randomUUID } from "node:crypto";
+import { hostname } from "node:os";
 import { ENV_SEARCH_PATHS } from "./env-paths.mjs";
 import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
-import { pgTable, text, integer, boolean, timestamp, pgEnum } from "drizzle-orm/pg-core";
+import { pgTable, text, integer, boolean, timestamp, pgEnum, jsonb } from "drizzle-orm/pg-core";
 import { eq, and, or, ilike, asc, desc, inArray } from "drizzle-orm";
+
+const agentSessionId = `${hostname()}-${new Date().toISOString()}`;
 
 // ─── Config ──────────────────────────────────────────────────────────────────
 
@@ -89,6 +92,61 @@ const cards = pgTable("card", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
+
+const boardActionEnum = pgEnum("board_action", [
+  "CREATE", "UPDATE", "DELETE", "MOVE", "REORDER", "RENAME",
+  "UPDATE_DESCRIPTION", "SET_DUE_DATE", "CLEAR_DUE_DATE",
+  "SET_PROGRESS", "CLEAR_PROGRESS", "ADD_CATEGORY", "REMOVE_CATEGORY",
+  "STAR", "UNSTAR", "ASSIGN_USER", "UNASSIGN_USER", "ASSIGN_AGENT",
+  "UNASSIGN_AGENT", "SET_TEAM", "REMOVE_TEAM", "ARCHIVE", "RESTORE",
+  "MARK_DONE", "MARK_UNDONE", "ADD_CHECKLIST", "DELETE_CHECKLIST",
+  "TOGGLE_CHECKLIST_ITEM",
+]);
+
+const actorTypeEnum = pgEnum("actor_type", ["user", "agent"]);
+const entityTypeEnum = pgEnum("entity_type", ["board", "list", "card"]);
+
+const boardActions = pgTable("board_actions", {
+  id: text("id").primaryKey(),
+  action: boardActionEnum("action").notNull(),
+  boardComponent: entityTypeEnum("entity").notNull(),
+  boardComponentId: text("entity_id").notNull(),
+  boardComponentName: text("entity_name").notNull(),
+  boardId: text("board_id").notNull(),
+  changes: jsonb("changes"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  userId: text("user_id").notNull(),
+  actorType: actorTypeEnum("actor_type").notNull(),
+  agentSessionId: text("agent_session_id"),
+  agentTemplateId: text("agent_template_id"),
+});
+
+// ─── Audit Logging ──────────────────────────────────────────────────────────
+
+async function logAction(db, session, { action, entity, entityId, entityName, boardId, changes }) {
+  try {
+    await db.insert(boardActions).values({
+      id: randomUUID(),
+      action,
+      boardComponent: entity,
+      boardComponentId: entityId,
+      boardComponentName: entityName,
+      boardId,
+      userId: session?.userId || "unknown",
+      actorType: "agent",
+      agentSessionId,
+      agentTemplateId: "claude-code-kanban",
+      changes: changes || null,
+    });
+  } catch (e) {
+    console.error(`Warning: audit log failed: ${e.message}`);
+  }
+}
+
+async function getBoardIdForCard(db, card) {
+  const [list] = await db.select({ boardId: lists.boardId }).from(lists).where(eq(lists.id, card.listId)).limit(1);
+  return list?.boardId || "unknown";
+}
 
 // ─── DB Connection ───────────────────────────────────────────────────────────
 
@@ -220,7 +278,11 @@ async function cmdCreateCard(db, session, args) {
     done: false,
     starred: false,
     cardType: "task",
+    updatedAt: new Date(),
+    createdAt: new Date(),
   }).returning();
+
+  await logAction(db, session, { action: "CREATE", entity: "card", entityId: id, entityName: name, boardId });
 
   output({
     command: "create-card",
@@ -228,7 +290,7 @@ async function cmdCreateCard(db, session, args) {
   });
 }
 
-async function cmdUpdateCard(db, args) {
+async function cmdUpdateCard(db, session, args) {
   const id = getArg(args, "--id");
   if (!id) {
     output({ error: "Required: --id <card-id>" });
@@ -257,15 +319,63 @@ async function cmdUpdateCard(db, args) {
     return;
   }
 
+  // Read card before update for audit log
+  const [cardBefore] = await db.select().from(cards).where(eq(cards.id, id)).limit(1);
+
+  const expectUpdatedAt = getArg(args, "--expect-updated-at");
+  const whereClause = expectUpdatedAt
+    ? and(eq(cards.id, id), eq(cards.updatedAt, new Date(expectUpdatedAt)))
+    : eq(cards.id, id);
+
   const [updated] = await db
     .update(cards)
     .set(updates)
-    .where(eq(cards.id, id))
+    .where(whereClause)
     .returning();
+
+  if (!updated && expectUpdatedAt) {
+    output({
+      error: "conflict",
+      message: "Card was modified since last read",
+      cardId: id,
+      expectedUpdatedAt: expectUpdatedAt,
+      hint: "Re-read the card and retry",
+    });
+    process.exit(1);
+  }
 
   if (!updated) {
     output({ error: `Card not found: ${id}` });
     process.exit(1);
+  }
+
+  // Audit logging — determine which action(s) to log
+  if (cardBefore) {
+    const boardId = await getBoardIdForCard(db, updated);
+    if (name && name !== cardBefore.name) {
+      await logAction(db, session, { action: "RENAME", entity: "card", entityId: id, entityName: updated.name, boardId, changes: { field: "name", from: cardBefore.name, to: name } });
+    }
+    if (description !== null && description !== undefined) {
+      await logAction(db, session, { action: "UPDATE_DESCRIPTION", entity: "card", entityId: id, entityName: updated.name, boardId, changes: { field: "description", from: cardBefore.description, to: description } });
+    }
+    if (updates.done === true) {
+      await logAction(db, session, { action: "MARK_DONE", entity: "card", entityId: id, entityName: updated.name, boardId });
+    }
+    if (updates.done === false) {
+      await logAction(db, session, { action: "MARK_UNDONE", entity: "card", entityId: id, entityName: updated.name, boardId });
+    }
+    if (updates.starred === true) {
+      await logAction(db, session, { action: "STAR", entity: "card", entityId: id, entityName: updated.name, boardId });
+    }
+    if (updates.starred === false) {
+      await logAction(db, session, { action: "UNSTAR", entity: "card", entityId: id, entityName: updated.name, boardId });
+    }
+    if (due) {
+      await logAction(db, session, { action: "SET_DUE_DATE", entity: "card", entityId: id, entityName: updated.name, boardId, changes: { field: "dueDate", from: cardBefore.dueDate, to: due } });
+    }
+    if (progress !== null) {
+      await logAction(db, session, { action: "SET_PROGRESS", entity: "card", entityId: id, entityName: updated.name, boardId, changes: { field: "progress", from: cardBefore.progress, to: parseInt(progress, 10) } });
+    }
   }
 
   output({
@@ -274,7 +384,7 @@ async function cmdUpdateCard(db, args) {
   });
 }
 
-async function cmdDone(db, args) {
+async function cmdDone(db, session, args) {
   const id = getArg(args, "--id");
   if (!id) {
     output({ error: "Required: --id <card-id>" });
@@ -286,24 +396,42 @@ async function cmdDone(db, args) {
     return;
   }
 
+  const expectUpdatedAt = getArg(args, "--expect-updated-at");
+  const whereClause = expectUpdatedAt
+    ? and(eq(cards.id, id), eq(cards.updatedAt, new Date(expectUpdatedAt)))
+    : eq(cards.id, id);
+
   const [updated] = await db
     .update(cards)
     .set({ done: true, updatedAt: new Date() })
-    .where(eq(cards.id, id))
+    .where(whereClause)
     .returning();
+
+  if (!updated && expectUpdatedAt) {
+    output({
+      error: "conflict",
+      message: "Card was modified since last read",
+      cardId: id,
+      expectedUpdatedAt: expectUpdatedAt,
+      hint: "Re-read the card and retry",
+    });
+    process.exit(1);
+  }
 
   if (!updated) {
     output({ error: `Card not found: ${id}` });
     process.exit(1);
   }
 
+  await logAction(db, session, { action: "MARK_DONE", entity: "card", entityId: id, entityName: updated.name, boardId: await getBoardIdForCard(db, updated) });
+
   output({
     command: "done",
-    card: { id: updated.id, name: updated.name, done: true },
+    card: updated,
   });
 }
 
-async function cmdMoveCard(db, args) {
+async function cmdMoveCard(db, session, args) {
   const id = getArg(args, "--id");
   const listId = getArg(args, "--list");
   if (!id || !listId) {
@@ -326,20 +454,49 @@ async function cmdMoveCard(db, args) {
     return;
   }
 
+  // Read card before move for audit log
+  const [cardBefore] = await db.select().from(cards).where(eq(cards.id, id)).limit(1);
+
+  const expectUpdatedAt = getArg(args, "--expect-updated-at");
+  const whereClause = expectUpdatedAt
+    ? and(eq(cards.id, id), eq(cards.updatedAt, new Date(expectUpdatedAt)))
+    : eq(cards.id, id);
+
   const [updated] = await db
     .update(cards)
     .set({ listId, order: nextOrder, updatedAt: new Date() })
-    .where(eq(cards.id, id))
+    .where(whereClause)
     .returning();
+
+  if (!updated && expectUpdatedAt) {
+    output({
+      error: "conflict",
+      message: "Card was modified since last read",
+      cardId: id,
+      expectedUpdatedAt: expectUpdatedAt,
+      hint: "Re-read the card and retry",
+    });
+    process.exit(1);
+  }
 
   if (!updated) {
     output({ error: `Card not found: ${id}` });
     process.exit(1);
   }
 
+  // Audit log
+  const fromListId = cardBefore?.listId;
+  const [fromList] = fromListId ? await db.select({ name: lists.name }).from(lists).where(eq(lists.id, fromListId)).limit(1) : [null];
+  const [toList] = await db.select({ name: lists.name }).from(lists).where(eq(lists.id, listId)).limit(1);
+  const boardId = await getBoardIdForCard(db, updated);
+  await logAction(db, session, {
+    action: "MOVE", entity: "card", entityId: id, entityName: updated.name, boardId,
+    changes: { fromListId, fromListName: fromList?.name, toListId: listId, toListName: toList?.name },
+  });
+
   output({
     command: "move-card",
-    card: { id: updated.id, name: updated.name, listId: updated.listId },
+    card: updated,
   });
 }
 
@@ -408,6 +565,8 @@ async function cmdCreateBoard(db, session, args) {
     listType: l.listType,
   }));
   const createdLists = await db.insert(lists).values(listValues).returning();
+
+  await logAction(db, session, { action: "CREATE", entity: "board", entityId: boardId, entityName: name, boardId });
 
   output({
     command: "create-board",
@@ -542,7 +701,7 @@ async function cmdSearch(db, session, args) {
   });
 }
 
-async function cmdArchiveCard(db, args) {
+async function cmdArchiveCard(db, session, args) {
   const id = getArg(args, "--id");
   if (!id) {
     output({ error: "Required: --id <card-id>" });
@@ -607,18 +766,43 @@ async function cmdArchiveCard(db, args) {
     .limit(1);
   const nextOrder = maxCardOrder.length > 0 ? maxCardOrder[0].order + 1 : 0;
 
-  await db
+  const expectUpdatedAt = getArg(args, "--expect-updated-at");
+  const whereClause = expectUpdatedAt
+    ? and(eq(cards.id, id), eq(cards.updatedAt, new Date(expectUpdatedAt)))
+    : eq(cards.id, id);
+
+  const [archived] = await db
     .update(cards)
     .set({ listId: archiveListId, order: nextOrder, updatedAt: new Date() })
-    .where(eq(cards.id, id));
+    .where(whereClause)
+    .returning();
+
+  if (!archived && expectUpdatedAt) {
+    output({
+      error: "conflict",
+      message: "Card was modified since last read",
+      cardId: id,
+      expectedUpdatedAt: expectUpdatedAt,
+      hint: "Re-read the card and retry",
+    });
+    process.exit(1);
+  }
+
+  // Audit log
+  const fromListName = list.name;
+  const [archiveListRow] = await db.select({ name: lists.name }).from(lists).where(eq(lists.id, archiveListId)).limit(1);
+  await logAction(db, session, {
+    action: "ARCHIVE", entity: "card", entityId: id, entityName: card.name, boardId: board.id,
+    changes: { fromListId: card.listId, fromListName, toListId: archiveListId, toListName: archiveListRow?.name || "Archive" },
+  });
 
   output({
     command: "archive-card",
-    card: { id, name: card.name, archivedTo: archiveListId },
+    card: { ...archived, archivedTo: archiveListId },
   });
 }
 
-async function cmdDeleteBoard(db, args) {
+async function cmdDeleteBoard(db, session, args) {
   const id = getArg(args, "--id");
   if (!id || !args.includes("--confirm")) {
     output({ error: "Required: --id <board-id> --confirm" });
@@ -635,6 +819,12 @@ async function cmdDeleteBoard(db, args) {
   if (hasBoolFlag(args, "--dry-run")) {
     output({ dryRun: true, command: "delete-board", wouldDo: { boardId: id, listsToDelete: boardLists.length, cardsToDelete: "all cards in those lists" } });
     return;
+  }
+
+  // Audit log before deletion
+  const [boardForAudit] = await db.select().from(boards).where(eq(boards.id, id)).limit(1);
+  if (boardForAudit) {
+    await logAction(db, session, { action: "DELETE", entity: "board", entityId: id, entityName: boardForAudit.name, boardId: id });
   }
 
   // Delete all cards in those lists
@@ -658,6 +848,30 @@ async function cmdDeleteBoard(db, args) {
     command: "delete-board",
     board: { id, name: deleted.name },
     deleted: { lists: listIds.length, cards: deletedCards },
+  });
+}
+
+async function cmdActivity(db, args) {
+  const cardId = getArg(args, "--card");
+  const boardIdArg = getArg(args, "--board");
+  if (!cardId && !boardIdArg) {
+    output({ error: "Required: --card <id> or --board <id>" });
+    process.exit(1);
+  }
+  const limit = parseInt(getArg(args, "--limit") || "10", 10);
+  const entityId = cardId || boardIdArg;
+  const where = cardId
+    ? eq(boardActions.boardComponentId, cardId)
+    : eq(boardActions.boardId, boardIdArg);
+  const actions = await db.select().from(boardActions)
+    .where(where).orderBy(desc(boardActions.createdAt)).limit(limit);
+  output({
+    command: "activity",
+    entityId,
+    actions: actions.map(a => ({
+      action: a.action, actorType: a.actorType, userId: a.userId,
+      changes: a.changes, createdAt: a.createdAt,
+    })),
   });
 }
 
@@ -734,13 +948,13 @@ async function main() {
       await cmdCreateCard(db, session, rest);
       break;
     case "update-card":
-      await cmdUpdateCard(db, rest);
+      await cmdUpdateCard(db, session, rest);
       break;
     case "done":
-      await cmdDone(db, rest);
+      await cmdDone(db, session, rest);
       break;
     case "move-card":
-      await cmdMoveCard(db, rest);
+      await cmdMoveCard(db, session, rest);
       break;
     case "create-board":
       await cmdCreateBoard(db, session, rest);
@@ -752,10 +966,13 @@ async function main() {
       await cmdSearch(db, session, rest);
       break;
     case "archive-card":
-      await cmdArchiveCard(db, rest);
+      await cmdArchiveCard(db, session, rest);
       break;
     case "delete-board":
-      await cmdDeleteBoard(db, rest);
+      await cmdDeleteBoard(db, session, rest);
+      break;
+    case "activity":
+      await cmdActivity(db, rest);
       break;
     default:
       output({ error: `Unknown command: ${command}. Run with --help for usage.` });
