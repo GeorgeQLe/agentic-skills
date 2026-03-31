@@ -524,8 +524,7 @@ describe("update-card flags", () => {
     expect(result.card.description).toBe("A test description");
   });
 
-  it("update-card --description ignores empty string (falsy guard)", async () => {
-    // The script uses `if (description)` so empty string is a no-op
+  it("update-card --description empty string clears description", async () => {
     const result = await run(
       "update-card",
       "--id",
@@ -533,8 +532,8 @@ describe("update-card flags", () => {
       "--description",
       "",
     );
-    // Description stays as previously set
-    expect(result.card.description).toBe("A test description");
+    // Empty string clears the description
+    expect(result.card.description).toBe("");
   });
 
   it("update-card --due sets due date", async () => {

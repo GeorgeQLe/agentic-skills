@@ -8,7 +8,7 @@ import { ENV_SEARCH_PATHS } from "./env-paths.mjs";
 import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
 import { pgTable, text, integer, boolean, timestamp, pgEnum } from "drizzle-orm/pg-core";
-import { eq, and, ilike, asc, desc, inArray } from "drizzle-orm";
+import { eq, and, or, ilike, asc, desc, inArray } from "drizzle-orm";
 
 // ─── Config ──────────────────────────────────────────────────────────────────
 
@@ -241,7 +241,7 @@ async function cmdUpdateCard(db, args) {
   const due = getArg(args, "--due");
 
   if (name) updates.name = name;
-  if (description) updates.description = description;
+  if (description !== null) updates.description = description;
   if (due) updates.dueDate = new Date(due);
   if (args.includes("--done")) updates.done = true;
   if (args.includes("--undone")) updates.done = false;
@@ -507,7 +507,7 @@ async function cmdSearch(db, session, args) {
     .where(
       and(
         inArray(cards.listId, listIds),
-        ilike(cards.name, `%${escaped}%`),
+        or(ilike(cards.name, `%${escaped}%`), ilike(cards.description, `%${escaped}%`)),
       ),
     )
     .orderBy(desc(cards.updatedAt))
