@@ -1,8 +1,8 @@
 ---
 name: investigate
 description: Validate user claims against codebase and git history, trace to root cause, and propose a fix
-version: 1.0.0
-argument-hint: <error, bug description, user observations, or issue URL>
+version: 1.1.0
+argument-hint: <error, bug description, user observations, or issue URL> [--plan]
 ---
 
 # Investigate
@@ -16,6 +16,7 @@ Given a bug report, error message, unexpected behavior, or user observations abo
    - Bug description → identify the expected vs. actual behavior
    - User claims/observations → extract each specific claim to validate (e.g., "I think the auth middleware is stripping the header," "this worked before the last deploy," "the database query is returning stale data")
    - Issue URL → fetch the issue details via `gh`
+   - Check for `--plan` flag → if present, force plan output mode (write fix steps to `tasks/todo.md` instead of applying inline)
    - If no arguments provided, ask the user what to investigate.
 
 2. **Gather context:**
@@ -46,10 +47,32 @@ Given a bug report, error message, unexpected behavior, or user observations abo
    - Check if the bug is reproducible from the code alone (no need to run the app unless necessary).
    - If there are related tests, run them to confirm the current state.
 
-6. **Propose the fix:**
-   - Write the minimal code change that fixes the root cause.
-   - If tests exist, update them. If not, write a test that would have caught this.
-   - Run the relevant tests to confirm the fix works and no regressions.
+6. **Apply or plan the fix:**
+   - **Determine fix mode:**
+     - If `--plan` flag is set → **plan mode** (always write to `tasks/todo.md`)
+     - If fix requires 3+ discrete steps across multiple files → **plan mode**
+     - Otherwise → **inline mode** (apply fix directly)
+   - **Inline mode** (default for single contained fixes):
+     - Write the minimal code change that fixes the root cause.
+     - If tests exist, update them. If not, write a test that would have caught this.
+     - Run the relevant tests to confirm the fix works and no regressions.
+   - **Plan mode** (multi-step fixes or `--plan` flag):
+     - Do NOT apply code changes. Proceed to step 7.
+
+7. **Write fix steps to `tasks/todo.md`** (plan mode only):
+   - Read existing `tasks/todo.md` if present — do NOT overwrite existing content.
+   - Append a new section:
+     ```
+     ## Investigation Fix: [concise title of the issue]
+
+     - [ ] Step description — `file/path.ext` — why this change is needed
+     - [ ] Step description — `file/path.ext` — why this change is needed
+     ...
+     - [ ] Verify: run [specific test command or acceptance criterion]
+     ```
+   - Each item must specify: what to change, which file, and why.
+   - Final item must be an acceptance criterion (run tests, verify behavior).
+   - Order steps by dependency — changes that other steps depend on come first.
 
 ## Output Format
 
@@ -68,8 +91,15 @@ _(Skip this section if the input was a plain error message or stack trace with n
 - **Relationship to user's theory**: How this connects to (or diverges from) what the user suspected
 
 ### Fix Applied
+_(Shown in inline mode)_
 - Files modified and what changed
 - Test results
+
+### Fix Steps Written
+_(Shown in plan mode — replaces "Fix Applied")_
+- Written to `tasks/todo.md` under `## Investigation Fix: [title]`
+- Number of steps and summary
+- Run `/run` to execute the fix steps sequentially
 
 ### Prevention
 - What test or check would have caught this earlier
@@ -78,5 +108,7 @@ _(Skip this section if the input was a plain error message or stack trace with n
 - Do not refactor unrelated code while fixing the bug.
 - Do not guess — if you can't trace the root cause, say so and list what you've ruled out.
 - Always validate user claims before assuming they're correct — the user's observations are a starting point, not ground truth.
-- Always run tests after applying the fix.
+- Always run tests after applying the fix (inline mode).
 - If the fix requires changes outside the current project (infra, env vars, external service), document what's needed instead of attempting it.
+- Do not write to `docs/debug-changelog.md` — that is `/debug`'s domain.
+- Do not write to `tasks/todo.md` for single-step fixes unless `--plan` is explicitly set.
