@@ -1,6 +1,7 @@
 ---
 name: plan-phases
 description: Break a finalized spec into phases, steps, milestones, and TDD test plans
+type: planning
 version: 1.0.0
 argument-hint: [phase-number | path-to-spec]
 ---

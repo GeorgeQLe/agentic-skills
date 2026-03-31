@@ -1,6 +1,7 @@
 ---
 name: workflow
 description: Read-only workflow status — shows completed steps, stale items, missing steps, and recommends the next action
+type: analysis
 version: 1.1.0
 argument-hint:
 ---

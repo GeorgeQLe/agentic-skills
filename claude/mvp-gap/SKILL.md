@@ -1,6 +1,7 @@
 ---
 name: mvp-gap
 description: Evaluate codebase against ICP to identify gaps blocking first sales and retention
+type: analysis
 version: 1.1.0
 argument-hint: [optional: path-to-icp-spec]
 ---
