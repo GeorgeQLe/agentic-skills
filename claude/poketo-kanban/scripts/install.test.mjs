@@ -5,6 +5,7 @@ import {
   mkdirSync,
   writeFileSync,
   readlinkSync,
+  realpathSync,
   symlinkSync,
   lstatSync,
   existsSync,
@@ -23,7 +24,7 @@ const REPO_ROOT = join(__dirname, "..", "..", "..");
 const tempDirs = [];
 
 function createTestEnv() {
-  const base = mkdtempSync(join(tmpdir(), "install-test-"));
+  const base = realpathSync(mkdtempSync(join(tmpdir(), "install-test-")));
   tempDirs.push(base);
   const fakeHome = join(base, "home");
   const fakeRepo = join(base, "repo");
