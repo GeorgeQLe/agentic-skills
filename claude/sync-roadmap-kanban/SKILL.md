@@ -1,6 +1,7 @@
 ---
 name: sync-roadmap-kanban
 description: Reconcile kanban board state with roadmap docs and codebase reality — sync cards, steps, and git history so they agree.
+type: ops
 version: 1.0.0
 allowed-tools: Bash(node *), Bash(git *)
 ---

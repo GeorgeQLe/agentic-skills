@@ -1,6 +1,7 @@
 ---
 name: branch-lifecycle
 description: Inventory, create PRs for, review, merge, and clean up Git branches
+type: ops
 version: 1.0.0
 argument-hint: [list | pr | review <branch-or-PR> | merge <PR> | cleanup]
 ---

@@ -1,6 +1,7 @@
 ---
 name: kanban-archive
 description: Archive old Done/Punt cards from kanban board
+type: ops
 version: 1.0.0
 argument-hint: [optional: --days <N> to override 30-day default]
 allowed-tools: Bash(node *)

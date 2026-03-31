@@ -1,6 +1,7 @@
 ---
 name: plan-interview-kanban
 description: Interview to validate and complete a specification, then update the matching kanban Backlog card with spec details
+type: planning
 version: 1.0.0
 argument-hint: [optional-topic-override]
 allowed-tools: Bash(node *)
