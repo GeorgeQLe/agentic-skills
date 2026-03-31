@@ -20,7 +20,7 @@ Use this skill when the user has a draft spec, feature description, or rough ide
    - State a recommendation and why
    - Explain how to mitigate the recommended option's downside when useful
 6. Continue until goals, user stories, architecture, data models, APIs, UX flows, edge cases, security, performance, and scope boundaries are all covered.
-7. Confirm with the user before concluding that all major areas have been addressed.
+7. **Coverage checkpoint** — Before concluding, present a structured summary: list each area covered with key decisions made and the evidence/reasoning that supported each. Ask: "Does this cover everything? Any areas to revisit?"
 
 ## Deliverables
 

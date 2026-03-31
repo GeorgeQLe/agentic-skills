@@ -49,7 +49,7 @@ Identify 2–4 viable revenue model options from research. For each: model type,
 
 ### 4. Deep-Dive: Pricing Architecture
 
-For the selected model, design: value metric (what unit the customer pays for), tier design (free/trial structure, feature gates, good-better-best), price points (anchored against competitors and ICP budget), packaging (bundled vs add-on, usage limits, enterprise justification). Present and validate.
+For the selected model, design: value metric (what unit the customer pays for), tier design (free/trial structure, feature gates, good-better-best), price points (anchored against competitors and ICP budget), packaging (bundled vs add-on, usage limits, enterprise justification). Present with evidence — cite competitor pricing benchmarks, ICP willingness-to-pay signals, and journey-stage alignment for feature gates. Validate with user.
 
 ### 5. Unit Economics & Viability
 

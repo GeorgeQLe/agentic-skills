@@ -23,7 +23,7 @@ Interview-driven skill that defines measurable success metrics tied to journey s
    - **Retention** — tied to churn triggers: retention definition, leading churn indicators, target rate
    - **Growth** — tied to expansion/advocacy: discovery channels, viral coefficient, expansion metrics
    - **Business** — revenue model, CAC, LTV, LTV:CAC ratio, payback period
-3. **Present findings before writing.** Summarise the metrics framework, North Star metric, and instrumentation gaps. Ask: "Does this capture what success looks like?" Continue until validated.
+3. **Present findings before writing.** Summarise the metrics framework (each metric's target citing rationale: benchmarks, journey data, or ICP signals), North Star metric (with evidence for why this metric over alternatives), and instrumentation gaps. Ask: "Does this capture what success looks like?" Continue until validated.
 4. Only after user confirms, write the output files.
 
 ## Deliverables

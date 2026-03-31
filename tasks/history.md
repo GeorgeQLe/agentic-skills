@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-03-30 — Strengthen evidence requirements at checkpoint instructions
+
+- Audited all AskUserQuestion checkpoints across 9 research/strategy skills — found 10 of 22 presenting bare conclusions without evidence
+- Added evidence-citing requirements to 11 checkpoints across 9 skills (x2 for codex copies = 22 file edits)
+- Skills updated: icp (CP1, CP3), competitive-analysis (CP1), gtm (validation), monetization (CP2), journey-map (validation), metrics (validation), enterprise-icp (orient + validation), plan-interview/kanban/ideas (coverage checkpoint), research-reconcile (fix mode)
+- Key patterns added: cite pain evidence + search sources (icp), cite ICP behavior data + competitor benchmarks (gtm), cite competitor pricing + willingness-to-pay signals (monetization), cite ICP/competitive/spec evidence (journey-map), structured coverage summary with decisions and reasoning (plan-interview variants), side-by-side conflicting claims with direct quotes (research-reconcile)
+- Enterprise-icp orient step now includes WebSearch for enterprise buying patterns before asking user
+
 ## 2026-03-30 — Add multi-app monorepo & multi-ICP support to 13 skills
 
 - Added directory-based namespacing: `research/{app}/` and `specs/{app}/` instead of flat files with app suffixes

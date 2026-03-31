@@ -71,7 +71,7 @@ From the research evidence, cluster findings into **2–5 distinct ICP candidate
 - How accessible they are (can we reach them?)
 - How much value we could deliver
 
-**Checkpoint 1 — Present candidates to the user.** Use the AskUserQuestion tool to show the ICP candidates with a brief rationale for each, then ask:
+**Checkpoint 1 — Present candidates to the user.** Use the AskUserQuestion tool to show the ICP candidates with a brief rationale for each — cite the pain evidence found, accessibility signals, and value delivery reasoning from your search findings for each candidate. Then ask:
 - "Do any of these surprise you? Is there a segment I'm missing?"
 - "Any of these clearly wrong for your situation?"
 
@@ -124,7 +124,7 @@ Analyze across all ICP candidates:
 - **Build sequence** — which ICP to target first, second, third and why?
 - **Lowest-hanging fruit x most value** — the prioritization sweet spot
 
-**Checkpoint 3 — Present the cross-ICP analysis and recommended build sequence to the user.** Use the AskUserQuestion tool to show the analysis, then ask:
+**Checkpoint 3 — Present the cross-ICP analysis and recommended build sequence to the user.** Use the AskUserQuestion tool to show the analysis with evidence: shared pains with source data from each ICP, conflicts with specific examples, and build sequence rationale grounded in the scoring matrix. Then ask:
 - "Does this sequencing make sense for where you are right now?"
 - If conflicts exist between ICPs, ask the user to weigh in on the trade-offs
 

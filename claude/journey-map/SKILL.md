@@ -111,8 +111,8 @@ Map the full business lifecycle from trigger to retention:
 **Present the complete journey maps to the user before writing.** Summarise:
 1. User journey overview — use cases per profile, key task flows, biggest deltas from current state
 2. Customer journey overview — full funnel from trigger to advocacy
-3. Critical moments — the aha moment, top drop-off points, churn triggers
-4. Journey gaps — stages where the product or business model has no clear answer
+3. Critical moments — the aha moment, top drop-off points, churn triggers, citing the ICP data, competitive analysis, or spec evidence that supports each critical moment
+4. Journey gaps — stages where the product or business model has no clear answer, citing the ICP data, competitive analysis, or spec evidence that reveals each gap
 
 Use the AskUserQuestion tool to ask:
 - "Does this capture the experience you want to build? Any missing use cases or stages?"

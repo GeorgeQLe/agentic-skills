@@ -32,7 +32,7 @@ When app scope `{app}` is active:
 
 ### 1. Orient
 
-If `research/icp.md` (or `research/{app}/icp.md`) exists, summarise the startup ICP and ask: "How does the enterprise buyer and user differ from what we mapped here?" If it doesn't exist, start from scratch.
+If `research/icp.md` (or `research/{app}/icp.md`) exists, summarise the startup ICP. Before asking the user, use WebSearch to research enterprise buying patterns in this product category (e.g., "[category] enterprise buying process", "[category] enterprise vs SMB", "[category] enterprise procurement requirements"). Present the startup ICP summary alongside your enterprise research findings, then ask: "How does the enterprise buyer and user differ from what we mapped here? Here's what I found about enterprise buying patterns in this space — does this match your experience?" If no ICP exists, start from scratch but still run the enterprise buying pattern research first.
 
 If a codebase exists, summarise what's built and note it as context.
 
@@ -97,10 +97,10 @@ Determine which are mandatory for the target market:
 
 ### 3. Present Findings & Validate
 
-After covering all areas, **present the complete findings to the user before writing**. Summarise:
-1. The stakeholder map and which personas matter most
-2. The critical deal-killers (the "must-haves" vs. "nice-to-haves")
-3. The enterprise lifecycle and where the biggest friction points are
+After covering all areas, **present the complete findings to the user before writing**. Summarise with evidence:
+1. The stakeholder map and which personas matter most — cite interview responses and research data that identified each persona
+2. The critical deal-killers (the "must-haves" vs. "nice-to-haves") — cite competitor requirements, industry standards, or research findings that validate each
+3. The enterprise lifecycle and where the biggest friction points are — cite specific examples or research findings for each friction point
 4. The enterprise value prop and how it differs from startup
 5. The most important insight from the interview
 

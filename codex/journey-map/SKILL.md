@@ -29,7 +29,7 @@ Interview the user to map how people flow through the product (user journey) and
    - **Conversion** — what triggers payment, who decides, objections, timeline
    - **Retention & Expansion** — core habit loop, churn triggers, expansion paths, leading indicators
    - **Advocacy** — what drives recommendations, sharing channels, viral loops
-4. **Present findings before writing.** Summarise user journey overview, customer journey overview, critical moments, and journey gaps. Ask: "Does this capture the experience? Any missing use cases or stages?" Continue until validated.
+4. **Present findings before writing.** Summarise user journey overview, customer journey overview, critical moments (citing ICP data, competitive analysis, or spec evidence for each), and journey gaps (citing the evidence that reveals each gap). Ask: "Does this capture the experience? Any missing use cases or stages?" Continue until validated.
 5. Only after user confirms, write the output files.
 
 ## Deliverables

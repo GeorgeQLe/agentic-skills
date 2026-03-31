@@ -23,7 +23,7 @@ Interview-driven skill that builds a go-to-market plan grounded in ICP research 
    - **Pricing Strategy** — model (freemium/trial/paid), entry price, tiers, upgrade triggers, competitor comparison
    - **Launch Plan** — timeline, launch channel, goals, assets needed, first 10 customers
    - **Early Traction Tactics** — 30/60/90 day plan, manual tactics, feedback loop, the one metric that matters
-3. **Present findings before writing.** Summarise the full GTM plan. Ask: "Does this capture your go-to-market strategy?" Continue until validated.
+3. **Present findings before writing.** Summarise the full GTM plan with evidence: channel strategy with ICP behavior data, messaging citing specific pain points, pricing with competitor benchmarks, launch timing citing trigger events, and traction approach with journey data. Ask: "Does this capture your go-to-market strategy?" Continue until validated.
 4. Only after user confirms, write the output files.
 
 ## Deliverables

@@ -64,7 +64,7 @@ Search strategies:
 - Search for recent funding rounds in the space: `"[product category] startup funding"`
 - Look for open-source alternatives on GitHub
 
-**Checkpoint 1 — Present the competitor list to the user.** Use the AskUserQuestion tool to show all identified competitors grouped by category (direct, indirect, incumbent, emerging, DIY), then ask:
+**Checkpoint 1 — Present the competitor list to the user.** Use the AskUserQuestion tool to show all identified competitors grouped by category (direct, indirect, incumbent, emerging, DIY). For each competitor, include a one-line description of what they do and why they belong in that category, citing the search source. Then ask:
 - "Are there competitors I missed?"
 - "Any of these incorrectly categorised or not actually relevant?"
 
