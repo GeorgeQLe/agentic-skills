@@ -2,7 +2,7 @@
 name: customer-feedback
 description: Ingest and synthesize customer feedback — categorize findings against ICP and journey map, maintain a running log
 type: research
-version: 1.1.0
+version: 1.2.0
 argument-hint: [file path, pasted text, or empty to be prompted]
 ---
 
@@ -92,12 +92,39 @@ Before writing, check which files exist and synthesis results to populate the `#
 - IF New findings relate to a gap: `/plan-interview [topic]` — Spec a solution for the most impactful new finding
 - IF no staleness alerts: `/workflow` — Check overall project status
 
+**Impact-aware adjustments:**
+- IF downstream impact is **Major**: prepend `/research-reconcile — [N] conflicts found in downstream docs` as the first item
+- IF downstream impact is **Minor**: annotate relevant skill suggestions with "(stale — [brief description])"
+
 ### 7. Write Output
 
 Only after the user validates, write to `research/customer-feedback.md`:
 
 **If the file doesn't exist**: Create it with the structure below.
 **If the file exists**: Append the new session section, then regenerate the `## Synthesis` section at the top.
+
+### 8. Downstream Impact Check
+
+After writing, check for downstream research documents that may be affected by what was just decided. Only check documents that exist on disk.
+
+**Downstream documents to check** (use `{app}/` prefix when app scope is active):
+- `research/gtm.md`
+- `research/monetization.md`
+
+For each existing downstream document:
+1. Read it — focus on `> Based on:` header, `## Summary`, and sections that reference concepts this skill just defined or changed
+2. Identify **specific conflicts**: claims, assumptions, or references that contradict what was just decided. Examples:
+   - Customer language or pain point framing in GTM messaging that feedback has invalidated
+   - Pricing assumptions in monetization anchored to customer willingness-to-pay signals that have shifted
+   - Channel strategy built on customer behavior patterns that new feedback contradicts
+3. Note each conflict: downstream file, section, the stale claim (quote it), and what it should now say
+
+**Classify the impact**:
+- **None**: No downstream documents exist, or no conflicts found. Skip display entirely.
+- **Minor** (1–2 small conflicts): Display conflicts to user inline.
+- **Major** (3+ conflicts OR a foundational assumption changed — e.g., primary pain point invalidated, willingness-to-pay signals contradicted, key customer behavior pattern disproved): Display conflicts and strongly recommend `/research-reconcile`.
+
+Display to the user after showing the written file confirmation. This should be quick — one read per downstream doc, scan for conflicts against key decisions. Not a deep reconciliation.
 
 ## Output
 
@@ -124,6 +151,21 @@ Only after the user validates, write to `research/customer-feedback.md`:
 
 ### Staleness Alerts
 [If 3+ Wrong/New findings accumulated, list which research docs should be re-run and why]
+
+<!-- Only include the Downstream Impact section when impact is Minor or Major. Omit entirely for None. -->
+### Downstream Impact
+
+> Checked: [list of downstream docs checked]
+> Impact: Minor | Major
+
+#### Conflicts Found
+
+1. **research/[file].md** — [Section Name]
+   - **Stale**: "[exact quote from downstream doc]"
+   - **Now**: [what this skill's output says instead]
+
+[For Major only:]
+> **Recommended action**: Run `/research-reconcile` to audit and fix all affected downstream documents.
 
 ### Next Steps
 

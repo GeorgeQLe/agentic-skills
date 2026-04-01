@@ -2,7 +2,7 @@
 name: journey-map
 description: Map user journeys (per-use-case task flows) and customer journey (trigger→discovery→aha→conversion→retention) through the product
 type: analysis
-version: 1.1.0
+version: 1.2.0
 argument-hint: [optional: specific use case or journey stage to focus on]
 ---
 
@@ -131,9 +131,39 @@ Before writing, check which files exist to populate the `## Next Steps` section 
 - IF journey gaps identified above: `/plan-interview [top gap]` — Spec the most critical journey gap
 - IF `tasks/roadmap.md` exists: `/run` — Continue building with journey context
 
+**Impact-aware adjustments:**
+- IF downstream impact is **Major**: prepend `/research-reconcile — [N] conflicts found in downstream docs` as the first item
+- IF downstream impact is **Minor**: annotate relevant skill suggestions with "(stale — [brief description])"
+
 ### 6. Write Output
 
 Only after the user has validated the findings, write the output files.
+
+### 7. Downstream Impact Check
+
+After writing, check for downstream research documents that may be affected by what was just decided. Only check documents that exist on disk.
+
+**Downstream documents to check** (use `{app}/` prefix when app scope is active):
+- `research/metrics.md`
+- `research/gtm.md`
+- `research/monetization.md`
+- `research/customer-feedback.md`
+
+For each existing downstream document:
+1. Read it — focus on `> Based on:` header, `## Summary`, and sections that reference concepts this skill just defined or changed
+2. Identify **specific conflicts**: claims, assumptions, or references that contradict what was just decided. Examples:
+   - Metric definitions tied to journey stages or aha moments that have shifted
+   - GTM funnel assumptions built on journey stages that changed
+   - Monetization conversion triggers referencing journey moments that were redefined
+   - Customer feedback categorization against journey stages that no longer exist
+3. Note each conflict: downstream file, section, the stale claim (quote it), and what it should now say
+
+**Classify the impact**:
+- **None**: No downstream documents exist, or no conflicts found. Skip display entirely.
+- **Minor** (1–2 small conflicts): Display conflicts to user inline.
+- **Major** (3+ conflicts OR a foundational assumption changed — e.g., aha moment redefined, journey stages restructured, churn triggers changed significantly): Display conflicts and strongly recommend `/research-reconcile`.
+
+Display to the user after showing the written file confirmation. This should be quick — one read per downstream doc, scan for conflicts against key decisions. Not a deep reconciliation.
 
 ## Output
 
@@ -201,6 +231,21 @@ Only after the user has validated the findings, write the output files.
 
 ## Journey Gaps
 [Stages where the product, specs, or business model have no clear answer yet. Each gap should include a _Start with:_ `/plan-interview [topic]` prompt.]
+
+<!-- Include this section only when downstream impact is Minor or Major. Omit entirely for None. -->
+## Downstream Impact
+
+> Checked: [list of downstream docs checked]
+> Impact: Minor | Major
+
+### Conflicts Found
+
+1. **research/[file].md** — [Section Name]
+   - **Stale**: "[exact quote from downstream doc]"
+   - **Now**: [what this skill's output says instead]
+
+[For Major only:]
+> **Recommended action**: Run `/research-reconcile` to audit and fix all affected downstream documents.
 
 ## Next Steps
 

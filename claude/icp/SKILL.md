@@ -2,7 +2,7 @@
 name: icp
 description: Research-driven ICP discovery — web search + codebase analysis to identify multiple ICPs, pain points, value props, and cross-ICP prioritization
 type: research
-version: 3.3.0
+version: 3.4.0
 argument-hint: <spec file path or concept/idea>
 ---
 
@@ -141,12 +141,49 @@ Before writing, check which files exist to populate the `## Next Steps` section 
 - IF codebase exists: `/mvp-gap` — Evaluate what's built against this ICP
 - IF `research/competitive-analysis.md` exists: `/brainstorm` — Generate ideas from ICP needs + competitive gaps
 
+**Impact-aware adjustments:**
+- IF downstream impact is **Major**: prepend `/research-reconcile — [N] conflicts found in downstream docs` as the first item
+- IF downstream impact is **Minor**: annotate relevant skill suggestions with "(stale — [brief description])"
+
 ### 8. Final Review & Write
 
 Present the **complete findings summary** to the user — primary ICP, key sections, cross-ICP analysis, and build sequence. Ask:
 - "Ready to write this to `research/icp.md`? Anything to adjust first?"
 
 Only after the user confirms, write the output files.
+
+### 9. Downstream Impact Check
+
+After writing, check for downstream research documents that may be affected by what was just decided. Only check documents that exist on disk.
+
+**Downstream documents to check** (use `{app}/` prefix when app scope is active):
+- `research/competitive-analysis.md`
+- `research/journey-map.md`
+- `research/metrics.md`
+- `research/gtm.md`
+- `research/monetization.md`
+- `research/enterprise-icp.md`
+- `research/customer-feedback.md`
+
+For each existing downstream document:
+1. Read it — focus on `> Based on:` header, `## Summary`, and sections that reference concepts this skill just defined or changed
+2. Identify **specific conflicts**: claims, assumptions, or references that contradict what was just decided. Examples:
+   - A persona name or description that no longer matches the ICP
+   - Competitive analysis positioning built on a different primary ICP
+   - Journey stages mapped for a different user profile
+   - Metric targets anchored to assumptions about a different ICP segment
+   - GTM messaging addressing pain points that shifted
+   - Monetization pricing tied to willingness-to-pay signals from a different ICP
+   - Enterprise ICP referencing a primary ICP that changed
+   - Customer feedback categorized against ICP segments that were restructured
+3. Note each conflict: downstream file, section, the stale claim (quote it), and what it should now say
+
+**Classify the impact**:
+- **None**: No downstream documents exist, or no conflicts found. Skip display entirely.
+- **Minor** (1–2 small conflicts): Display conflicts to user inline.
+- **Major** (3+ conflicts OR a foundational assumption changed — e.g., primary ICP shifted, key pain points redefined, user profiles restructured, value proposition changed): Display conflicts and strongly recommend `/research-reconcile`.
+
+Display to the user after showing the written file confirmation. This should be quick — one read per downstream doc, scan for conflicts against key decisions. Not a deep reconciliation.
 
 ## Output
 
@@ -244,6 +281,21 @@ Structure — the **Primary ICP** fills the canonical top-level sections:
 
 ### Recommended Build Sequence
 [Which ICP to target first → second → third, with reasoning]
+
+<!-- Include this section only when downstream impact is Minor or Major. Omit entirely for None. -->
+## Downstream Impact
+
+> Checked: [list of downstream docs checked]
+> Impact: Minor | Major
+
+### Conflicts Found
+
+1. **research/[file].md** — [Section Name]
+   - **Stale**: "[exact quote from downstream doc]"
+   - **Now**: [what this skill's output says instead]
+
+[For Major only:]
+> **Recommended action**: Run `/research-reconcile` to audit and fix all affected downstream documents.
 
 ## Next Steps
 
