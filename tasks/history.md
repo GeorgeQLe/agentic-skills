@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-04-01 — Add /spec-drift skill + workflow integration
+
+- Created `claude/spec-drift/SKILL.md` — new analysis skill that extracts verifiable claims from specs and checks them against the codebase
+- Supports audit (read-only) and fix (interactive resolution) modes with monorepo support
+- 8 claim types: routes, data models, feature behaviors, config/env, UI flows, CLI, pricing/limits, integration points
+- Claims classified as Verified/Diverged/Unimplemented/Removed; also detects undocumented code
+- Fix mode includes downstream impact check (journey-map, metrics, roadmap)
+- Updated `claude/workflow/SKILL.md`: added git-log-vs-spec staleness rule + dependency graph entry
+- Updated `docs/skills-reference.md`: added entry in Evaluate section, Quick Reference table, activity types, skill count 52→53
+
 ## 2026-04-01 — Add downstream impact check to 6 research skills
 
 - Added post-write "Downstream Impact Check" step to icp, competitive-analysis, journey-map, metrics, gtm, and customer-feedback skills

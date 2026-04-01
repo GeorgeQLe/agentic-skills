@@ -75,6 +75,9 @@ Compare modification timestamps. Flag items as stale when newer upstream data ex
 | `research/icp.md` + `research/competitive-analysis.md` + `research/journey-map.md` | `research/gtm.md` | **Stale** — upstream research changed since GTM was written |
 | `research/icp.md` + `research/competitive-analysis.md` | `research/monetization.md` | **Stale** — ICP or competitive pricing data changed since monetization was written |
 | `research/customer-feedback.md` | `research/monetization.md` | **May be stale** — customer feedback may contain new willingness-to-pay signals |
+| Recent `src/` commits (`git log`) | `specs/*.md` that describe the changed areas | **May be stale** — code may have evolved past spec. _Fix:_ `/spec-drift` |
+
+Note: The last rule compares git commit timestamps against spec file timestamps. Use `git log --since="<spec last-modified date>" -- <source directories>` to find commits touching source code after the spec was last modified. If relevant source files changed after the spec, flag the spec as potentially stale.
 
 ### 4. Identify Missing Steps
 
@@ -95,6 +98,7 @@ Using the dependency graph, identify what's available but not yet done:
   -> /monetization (requires icp, optionally competitive-analysis + journey-map + metrics + gtm)
 /enterprise-icp -> /scale-audit
 /plan-interview -> specs/*.md
+/spec-drift (requires specs/*.md + codebase)
 /roadmap (reads all research + specs)
 /customer-feedback -> can make icp, journey-map stale
 ```
