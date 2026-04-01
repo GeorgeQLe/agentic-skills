@@ -2,7 +2,7 @@
 name: gtm
 description: Go-to-market planning — channel strategy, messaging, pricing, launch plan, and early traction tactics
 type: research
-version: 1.1.0
+version: 1.2.0
 argument-hint: [optional: focus area e.g. "pricing", "launch plan"]
 ---
 
@@ -105,9 +105,35 @@ Before writing, check which files exist to populate the `## Next Steps` section 
 - IF `tasks/roadmap.md` exists: `/run` — Start executing — the GTM plan is set
 - IF no `research/journey-map.md`: `/journey-map` — Map the customer journey to validate funnel assumptions
 
+**Impact-aware adjustments:**
+- IF downstream impact is **Major**: prepend `/research-reconcile — [N] conflicts found in downstream docs` as the first item
+- IF downstream impact is **Minor**: annotate relevant skill suggestions with "(stale — [brief description])"
+
 ### 5. Write Output
 
 Only after the user has validated the findings, write the output files.
+
+### 6. Downstream Impact Check
+
+After writing, check for downstream research documents that may be affected by what was just decided. Only check documents that exist on disk.
+
+**Downstream documents to check** (use `{app}/` prefix when app scope is active):
+- `research/monetization.md`
+
+For each existing downstream document:
+1. Read it — focus on `> Based on:` header, `## Summary`, and sections that reference concepts this skill just defined or changed
+2. Identify **specific conflicts**: claims, assumptions, or references that contradict what was just decided. Examples:
+   - A pricing model reference that contradicts the pricing strategy just defined
+   - Channel strategy assumptions that have shifted
+   - Launch timeline or traction targets that no longer align
+3. Note each conflict: downstream file, section, the stale claim (quote it), and what it should now say
+
+**Classify the impact**:
+- **None**: No downstream documents exist, or no conflicts found. Skip display entirely.
+- **Minor** (1–2 small conflicts): Display conflicts to user inline.
+- **Major** (3+ conflicts OR a foundational assumption changed — e.g., pricing model changed, primary channel shifted, launch timeline moved significantly): Display conflicts and strongly recommend `/research-reconcile`.
+
+Display to the user after showing the written file confirmation. This should be quick — one read per downstream doc, scan for conflicts against key decisions. Not a deep reconciliation.
 
 ## Output
 
@@ -199,6 +225,21 @@ Only after the user has validated the findings, write the output files.
 
 ## Open Questions
 [Decisions deferred, experiments to run, things that need real-world data]
+
+<!-- Only include this section when downstream impact is Minor or Major. Omit entirely for None. -->
+## Downstream Impact
+
+> Checked: [list of downstream docs checked]
+> Impact: Minor | Major
+
+### Conflicts Found
+
+1. **research/[file].md** — [Section Name]
+   - **Stale**: "[exact quote from downstream doc]"
+   - **Now**: [what this skill's output says instead]
+
+[For Major only:]
+> **Recommended action**: Run `/research-reconcile` to audit and fix all affected downstream documents.
 
 ## Next Steps
 

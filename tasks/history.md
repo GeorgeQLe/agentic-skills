@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-04-01 — Add downstream impact check to 6 research skills
+
+- Added post-write "Downstream Impact Check" step to icp, competitive-analysis, journey-map, metrics, gtm, and customer-feedback skills
+- Each skill now scans its downstream dependents for conflicts after writing, classifies impact (None/Minor/Major), and recommends `/research-reconcile` for Major
+- Added `## Downstream Impact` section to each skill's output template (before `## Next Steps`)
+- Added impact-aware Next Steps logic (Major prepends reconcile, Minor annotates stale items)
+- Leaf nodes (monetization, enterprise-icp) left unmodified — nothing reads their output downstream
+- Version bumps: icp 3.3.0→3.4.0, competitive-analysis 2.2.0→2.3.0, journey-map/metrics/gtm/customer-feedback 1.1.0→1.2.0
+
 ## 2026-03-31 — Add `tasks/manual-todo.md` support across 13 skills
 
 - Added manual task classification and `manual-todo.md` output to `plan-phases` (claude + codex)

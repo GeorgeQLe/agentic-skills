@@ -1,43 +1,64 @@
-# Multi-User Kanban Implementation (kanban.mjs)
+# Downstream Impact Check — Research Skills
 
-TDD tests are written (28 tests, 22 red). Now implement the features to turn them green.
+Add a post-write "Downstream Impact Check" phase to each non-leaf research skill. After writing output, the skill scans downstream docs for conflicts, classifies impact (None/Minor/Major), and recommends `/research-reconcile` when blast radius is significant.
 
-## Phase 1: updatedAt in responses (3 failing tests)
+## Phase 1: Template & First Skill (gtm)
 
-**Files:** `claude/poketo-kanban/scripts/kanban.mjs`
+- [x] Add step 6 "Downstream Impact Check" to `claude/gtm/SKILL.md` after step 5 (Write Output)
+- [x] Add `## Downstream Impact` section to gtm output template before `## Next Steps`
+- [x] Add impact-aware logic to step 4 (Populate Next Steps) — prepend reconcile for Major, annotate for Minor
+- [x] Downstream docs: `research/monetization.md`
+- [x] Bump version 1.1.0 → 1.2.0
+- [x] Verify: read full file, confirm step numbering and output template consistency
 
-Three commands return hand-picked fields instead of the full card row. Fix each to return the full `updated` object from `.returning()`:
+## Phase 2: metrics
 
-- [x] `cmdDone` (line ~302): change `card: { id: updated.id, name: updated.name, done: true }` → `card: updated`
-- [x] `cmdMoveCard` (line ~342): change `card: { id: updated.id, name: updated.name, listId: updated.listId }` → `card: updated`
-- [x] `cmdArchiveCard` (line ~617): currently does `.update().set()` without `.returning()`. Add `.returning()`, capture result, use it in output: `card: { ...archived, archivedTo: archiveListId }`
+- [x] Add step 6 "Downstream Impact Check" to `claude/metrics/SKILL.md` after step 5 (Write Output)
+- [x] Add `## Downstream Impact` section to metrics output template before `## Next Steps`
+- [x] Add impact-aware logic to step 4 (Populate Next Steps)
+- [x] Downstream docs: `research/monetization.md`
+- [x] Bump version 1.1.0 → 1.2.0
+- [x] Verify: read full file, confirm consistency
 
-**Verification:** Run `npx vitest run kanban.test.mjs -t "updatedAt"` — all 5 tests pass. Existing 64 tests still pass.
+## Phase 3: competitive-analysis
 
-## Phase 2: Audit logging (10 failing tests)
+- [x] Add step 9 "Downstream Impact Check" to `claude/competitive-analysis/SKILL.md` after step 8 (Write Output)
+- [x] Add `## Downstream Impact` section to competitive-analysis output template before `## Next Steps`
+- [x] Add impact-aware logic to step 7 (Populate Next Steps)
+- [x] Downstream docs: `research/gtm.md`, `research/monetization.md`
+- [x] Bump version 2.2.0 → 2.3.0
+- [x] Verify: read full file, confirm consistency
 
-- [x] Add `board_actions` Drizzle schema inline in kanban.mjs (reuse enum + table from tests)
-- [x] Add `logAction(db, session, params)` helper — best-effort INSERT (try/catch, warn on failure)
-- [x] Generate `agentSessionId` as `<hostname>-<ISO timestamp>` at process start
-- [x] Wire `logAction()` into: `create-card` (CREATE), `update-card --name` (RENAME w/ before/after), `update-card --description` (UPDATE_DESCRIPTION w/ before/after), `move-card` (MOVE w/ fromList/toList), `done` (MARK_DONE), `archive-card` (ARCHIVE), `create-board` (CREATE), `delete-board` (DELETE)
-- [x] Skip audit log when `--dry-run` is set
-- [x] Read card state before update to capture `from` values in changes JSONB
+## Phase 4: customer-feedback
 
-## Phase 3: Optimistic locking (6 failing tests)
+- [x] Add step 8 "Downstream Impact Check" to `claude/customer-feedback/SKILL.md` after step 7 (Write Output)
+- [x] Add `## Downstream Impact` inside Synthesis output section (after `### Staleness Alerts`, before `### Next Steps`)
+- [x] Add impact-aware logic to step 6 (Populate Next Steps)
+- [x] Downstream docs: `research/gtm.md`, `research/monetization.md`
+- [x] Note: existing staleness (step 5) looks upstream; this looks downstream — keep both
+- [x] Bump version 1.1.0 → 1.2.0
+- [x] Verify: read full file, confirm append-only format preserved
 
-- [x] Parse `--expect-updated-at` flag in arg handling
-- [x] Add `AND updated_at = $timestamp` WHERE clause when flag is present
-- [x] Return conflict error shape: `{ error: "conflict", message, cardId, expectedUpdatedAt, hint }`
-- [x] Apply to: `update-card`, `move-card`, `done`, `archive-card`
+## Phase 5: journey-map
 
-## Phase 4: Activity command (4 failing tests)
+- [x] Add step 7 "Downstream Impact Check" to `claude/journey-map/SKILL.md` after step 6 (Write Output)
+- [x] Add `## Downstream Impact` section to journey-map output template before `## Next Steps`
+- [x] Add impact-aware logic to step 5 (Populate Next Steps)
+- [x] Downstream docs: `research/metrics.md`, `research/gtm.md`, `research/monetization.md`, `research/customer-feedback.md`
+- [x] Bump version 1.1.0 → 1.2.0
+- [x] Verify: read full file, confirm consistency
 
-- [x] Add `activity` command handler in kanban.mjs
-- [x] Support `--card <id>` and `--board <id>` flags
-- [x] Support `--limit <n>` (default 10)
-- [x] Return `{ command: "activity", entityId, actions: [...] }` with expected shape
-- [x] Error when neither `--card` nor `--board` provided
+## Phase 6: icp
 
-## Verification
+- [x] Add step 9 "Downstream Impact Check" to `claude/icp/SKILL.md` after step 8 (Final Review & Write)
+- [x] Add `## Downstream Impact` section to icp output template before `## Next Steps`
+- [x] Add impact-aware logic to step 7 (Populate Next Steps)
+- [x] Downstream docs: `research/competitive-analysis.md`, `research/journey-map.md`, `research/metrics.md`, `research/gtm.md`, `research/monetization.md`, `research/enterprise-icp.md`, `research/customer-feedback.md`
+- [x] Bump version 3.3.0 → 3.4.0
+- [x] Verify: read full file, confirm consistency
 
-- [x] `npx vitest run kanban.test.mjs` — all 92 tests green
+## Final Verification
+
+- [x] Read each modified skill end-to-end — step numbers sequential, no gaps
+- [x] Confirm downstream doc lists match reverse dependency map
+- [x] Confirm no changes to monetization or enterprise-icp (leaf nodes)

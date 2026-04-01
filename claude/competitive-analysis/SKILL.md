@@ -2,7 +2,7 @@
 name: competitive-analysis
 description: Research competitors via web search — map the landscape, GTM strategies, strengths, weaknesses, and market gaps
 type: research
-version: 2.2.0
+version: 2.3.0
 argument-hint: [concept | optional: product category or specific competitors to investigate]
 ---
 
@@ -175,6 +175,10 @@ Before writing, check which files exist to populate the `## Next Steps` section 
 - IF gap verdict is "Pivot concept": `/brainstorm` — Generate alternative concepts that better address the gap
 - ALWAYS: `/competitive-analysis` — Re-run in standard mode after ICP is defined to get full competitive positioning
 
+**Impact-aware adjustments:**
+- IF downstream impact is **Major**: prepend `/research-reconcile — [N] conflicts found in downstream docs` as the first item
+- IF downstream impact is **Minor**: annotate relevant skill suggestions with "(stale — [brief description])"
+
 **Standard mode:**
 - IF no `specs/` directory or it's empty: `/plan-interview` — Spec features that exploit the market gaps above
 - IF `specs/` exist but no `research/journey-map.md`: `/journey-map` — Map how the ICP experiences the product vs. competitors
@@ -182,9 +186,36 @@ Before writing, check which files exist to populate the `## Next Steps` section 
 - IF no `research/gtm.md`: `/gtm` — Build a GTM plan using the channel and positioning insights
 - IF codebase exists and no `specs/mvp-gap.md`: `/mvp-gap` — Evaluate codebase against ICP and competitive landscape
 
+**Impact-aware adjustments:**
+- IF downstream impact is **Major**: prepend `/research-reconcile — [N] conflicts found in downstream docs` as the first item
+- IF downstream impact is **Minor**: annotate relevant skill suggestions with "(stale — [brief description])"
+
 ### 8. Write Output
 
 Only after the user has validated the findings, write the output files.
+
+### 9. Downstream Impact Check
+
+After writing, check for downstream research documents that may be affected by what was just decided. Only check documents that exist on disk.
+
+**Downstream documents to check** (use `{app}/` prefix when app scope is active):
+- `research/gtm.md`
+- `research/monetization.md`
+
+For each existing downstream document:
+1. Read it — focus on `> Based on:` header, `## Summary`, and sections that reference concepts this skill just defined or changed
+2. Identify **specific conflicts**: claims, assumptions, or references that contradict what was just decided. Examples:
+   - Competitor positioning or market gaps that GTM strategy was built on that have changed
+   - Pricing benchmarks referenced in monetization that no longer match the competitive landscape
+   - Channel strategy assumptions based on competitor behavior that has shifted
+3. Note each conflict: downstream file, section, the stale claim (quote it), and what it should now say
+
+**Classify the impact**:
+- **None**: No downstream documents exist, or no conflicts found. Skip display entirely.
+- **Minor** (1–2 small conflicts): Display conflicts to user inline.
+- **Major** (3+ conflicts OR a foundational assumption changed — e.g., market positioning shifted, new dominant competitor identified, pricing landscape changed significantly): Display conflicts and strongly recommend `/research-reconcile`.
+
+Display to the user after showing the written file confirmation. This should be quick — one read per downstream doc, scan for conflicts against key decisions. Not a deep reconciliation.
 
 ## Output
 
@@ -260,6 +291,21 @@ For each:
 - **Do this** (learned from [competitor]): [what they did well that we should emulate]
 - **Avoid this** (learned from [competitor]): [what they did poorly that we should avoid]
 - ...
+
+<!-- Include this section only when downstream impact is Minor or Major. Omit entirely for None. -->
+## Downstream Impact
+
+> Checked: [list of downstream docs checked]
+> Impact: Minor | Major
+
+### Conflicts Found
+
+1. **research/[file].md** — [Section Name]
+   - **Stale**: "[exact quote from downstream doc]"
+   - **Now**: [what this skill's output says instead]
+
+[For Major only:]
+> **Recommended action**: Run `/research-reconcile` to audit and fix all affected downstream documents.
 
 ## Next Steps
 
