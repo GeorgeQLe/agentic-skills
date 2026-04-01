@@ -1,6 +1,6 @@
 # Skills Reference
 
-Complete reference for all 52 custom skills in this repository, available for both Claude Code and Codex.
+Complete reference for all 53 custom skills in this repository, available for both Claude Code and Codex.
 
 ## Installation
 
@@ -44,7 +44,7 @@ Discover                      Ideate                       Specify              
 **Enterprise expansion**: `/enterprise-icp` → (build cycle) → `/scale-audit`
 **At any point**: `/workflow` to check status, stale items, and recommended next step
 
-Supporting skills plug in at any point: `/expert-review`, `/investigate`, `/affected`, `/regression-check`, etc.
+Supporting skills plug in at any point: `/expert-review`, `/spec-drift`, `/investigate`, `/affected`, `/regression-check`, etc.
 
 ## Activity Types
 
@@ -53,7 +53,7 @@ Each skill has a `type` field in its frontmatter that describes *what kind of wo
 | Type | What it does | Output | Skills |
 |------|-------------|--------|--------|
 | **research** | Web search + analysis | Documents, market insights | `icp`, `enterprise-icp`, `competitive-analysis`, `gtm`, `monetization`, `customer-feedback`, `research-reconcile` |
-| **analysis** | Reads codebase/docs | Assessments, gap reports | `mvp-gap`, `scale-audit`, `journey-map`, `metrics`, `workflow`, `affected`, `dead-code`, `hygiene`, `analyze-sessions` |
+| **analysis** | Reads codebase/docs | Assessments, gap reports | `mvp-gap`, `scale-audit`, `journey-map`, `metrics`, `workflow`, `spec-drift`, `affected`, `dead-code`, `hygiene`, `analyze-sessions` |
 | **planning** | Interactive interviews | Specs, roadmaps, phases | `brainstorm`, `plan-interview`, `plan-interview-ideas`, `roadmap`, `plan-phases`, `brainstorm-kanban`, `plan-interview-kanban`, `roadmap-kanban` |
 | **execution** | Writes/modifies code | Code changes | `run`, `scaffold`, `migrate`, `decommission`, `run-kanban` |
 | **review** | Reads code, reports issues | Review reports (no changes) | `expert-review`, `regression-check`, `trace` |
@@ -158,6 +158,14 @@ Read-only workflow status — shows completed steps, stale items, missing steps,
 - **No prerequisites.** Runs at any point.
 - **Outputs**: None (display only — no files written)
 - **Use when**: At any point, to check what's been done, what's stale, and what to do next.
+
+### `/spec-drift`
+Audit specs against codebase — find unimplemented features, diverged implementations, and undocumented code.
+
+- **Arguments**: `[audit|fix] [spec-file|all]`
+- **Prerequisites**: At least one spec file in `specs/` (or `specs/{app}/`, `docs/specifications/`).
+- **Outputs**: Categorized findings (Errors/Warnings/Info). In `fix` mode, updates specs and writes `specs/drift-report.md`.
+- **Use when**: After building or shipping, to verify specs still match the implementation. Especially useful after `/run` or `/ship` to catch drift before it accumulates.
 
 ---
 
@@ -478,6 +486,7 @@ Archive old Done/Punt cards from the kanban board.
 | `/affected` | Monorepo blast radius analysis | analysis |
 | `/dead-code` | Find unused code and dependencies | analysis |
 | `/hygiene` | Audit project structure and conventions | analysis |
+| `/spec-drift` | Audit specs against codebase for drift | analysis |
 | `/analyze-sessions` | Usage analytics | analysis |
 | `/brainstorm` | Evaluate codebase, suggest improvement ideas | planning |
 | `/plan-interview` | Rough idea → validated spec | planning |
