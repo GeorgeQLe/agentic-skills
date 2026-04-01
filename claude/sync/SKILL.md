@@ -24,6 +24,7 @@ Pull the latest changes from the remote repository and report status.
    - Check if `tasks/roadmap.md` exists for the full plan, and `tasks/todo.md` for the current phase.
    - If `tasks/todo.md` exists, read it and look for unchecked items (`- [ ]`).
    - If there are incomplete items, summarise: which phase is current, what the next step is, and how many steps/phases remain.
+   - If `tasks/manual-todo.md` exists, count unchecked manual tasks and include in the summary.
    - If all items are checked, report that the plan is complete.
    - If neither file exists, note that there is no active plan.
 
@@ -33,7 +34,7 @@ Pull the latest changes from the remote repository and report status.
    - Whether stashed changes were re-applied
    - Any conflicts that need manual resolution
    - Current `git status`
-   - **Outstanding work** — summary from step 3 (next step, current phase, remaining work) or "No active plan"
+   - **Outstanding work** — summary from step 3 (next step, current phase, remaining work, pending manual tasks) or "No active plan"
 
 5. **Post-sync actions:**
 

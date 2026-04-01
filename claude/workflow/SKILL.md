@@ -39,6 +39,7 @@ Use Glob and Bash (`stat` / `ls -la`) to check for existence and modification da
 - `tasks/todo.md`
 - `tasks/history.md`
 - `tasks/ideas.md`
+- `tasks/manual-todo.md`
 
 When monorepo detected, also scan per-app:
 - `research/{app}/icp.md`, `research/{app}/competitive-analysis.md`, etc. for each app subdirectory
@@ -159,6 +160,10 @@ Note: recommendations should specify which app needs attention (e.g., `/journey-
 If everything is complete and fresh:
 
 ```
+## Pending Manual Tasks
+- [X unchecked manual tasks in `tasks/manual-todo.md`]
+- [List any that block upcoming automated steps]
+
 ## Recommended Next Action
 > All research and strategy steps are current. Continue building with `/run` or ship with `/ship`.
 ```

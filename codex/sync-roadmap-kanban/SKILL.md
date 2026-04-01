@@ -17,7 +17,7 @@ Reconcile the kanban board, roadmap docs, and codebase state so all three reflec
    - If zero or multiple matches, list boards, ask the user to pick, and save their choice to `tasks/.kanban-board`.
    - Run `board <id>` to get the full board state.
 
-3. **Read roadmap docs** — read `tasks/roadmap.md` and `tasks/todo.md`. List all items with checked/unchecked status.
+3. **Read roadmap docs** — read `tasks/roadmap.md`, `tasks/todo.md`, and `tasks/manual-todo.md` (if it exists). List all items with checked/unchecked status.
 
 4. **Read codebase reality** — `git log --oneline -30`. For items claimed done, verify deliverables exist (file checks, grep for key identifiers). Flag ambiguous cases.
 
@@ -30,7 +30,7 @@ Reconcile the kanban board, roadmap docs, and codebase state so all three reflec
 
 6. **Apply changes** — create/move cards via kanban.mjs, edit roadmap docs. Re-fetch board to confirm.
 
-7. **Report** — synced items, discrepancies needing human judgment, updated board state, roadmap progress.
+7. **Report** — synced items, discrepancies needing human judgment, updated board state, roadmap progress, manual task status (from `tasks/manual-todo.md` if it exists).
 
 ## Constraints
 

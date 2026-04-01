@@ -37,6 +37,7 @@ node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs boards
 
 - Read `tasks/roadmap.md` (full phased plan).
 - Read `tasks/todo.md` (current phase steps).
+- Read `tasks/manual-todo.md` (if it exists — manual tasks for the current phase).
 - Build a list of all roadmap items with their status (checked/unchecked).
 
 ### 4. Read codebase reality
@@ -94,7 +95,7 @@ Output a summary with these sections:
 
 **Board state:** Show the updated board (lists and cards).
 
-**Roadmap state:** Show current phase progress (e.g., "Phase 1: 2/3 steps complete").
+**Roadmap state:** Show current phase progress (e.g., "Phase 1: 2/3 steps complete"). If `tasks/manual-todo.md` exists, include manual task status (e.g., "Manual tasks: 1/3 complete").
 
 ## Constraints
 

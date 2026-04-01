@@ -104,8 +104,10 @@ b) Read `tasks/todo.md` to identify the next uncompleted step in the current pha
 c) **Check if the current phase is complete** (all steps checked, milestone criteria met):
    - If **YES — Phase transition:**
      1. Archive the completed phase: copy `tasks/todo.md` → `tasks/phases/phase-N.md` (create `tasks/phases/` if needed). Fill in the "On Completion" section.
+     1b. If `tasks/manual-todo.md` exists, archive it: copy to `tasks/phases/phase-N-manual.md`. Warn (but do not block) if unchecked manual tasks remain.
      2. Check off the phase milestone in `tasks/roadmap.md`.
      3. Copy the next phase from `tasks/roadmap.md` → overwrite `tasks/todo.md`.
+     3b. Extract the next phase's manual tasks (from `**Manual Tasks:**` in `tasks/roadmap.md`) into a fresh `tasks/manual-todo.md`. If the next phase has no manual tasks, delete `tasks/manual-todo.md` if it exists.
      4. If no more phases remain, run `/workflow` to recommend the next action based on project state. Then stop (do not enter plan mode).
      5. **Just-in-time planning:** Invoke `/plan-phases` for the new phase. This generates TDD steps and file-level detail using the full context of what was learned during prior phases.
    - If **NO:** find the next uncompleted step within the current phase.
@@ -116,7 +118,7 @@ d) Write a **self-contained** implementation plan for the next step into `tasks/
    - Relevant context from the current session (gotchas, patterns established, conventions used)
    - If TDD: which tests to write first and what they should assert
    - Acceptance criteria: how to verify the step is done
-e) Commit and push `tasks/todo.md`, `tasks/roadmap.md`, and `tasks/phases/` (if created).
+e) Commit and push `tasks/todo.md`, `tasks/roadmap.md`, `tasks/manual-todo.md` (if it exists), and `tasks/phases/` (if created).
 
 ### 4b. Kanban: Ensure next card in Todo (skip if `--no-plan`)
 
@@ -151,6 +153,7 @@ After completing kanban operations, suggest the next highest-priority card:
 - What was shipped (if anything)
 - Deploy status (if deployed)
 - Test status — **explicitly state whether any failing tests are expected (red phase: tests written before implementation) or unexpected (regressions/bugs that need fixing)**
+- Manual tasks — pending count from `tasks/manual-todo.md` (if it exists), note any that block upcoming steps
 - Kanban status (card moved to Done/Punt, next card in Todo)
 - What the next step is (1 sentence) — or "session wrapped up" if `--no-plan`
 

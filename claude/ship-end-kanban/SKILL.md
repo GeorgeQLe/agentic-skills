@@ -20,6 +20,7 @@ Read and follow the Kanban Setup protocol in `~/.claude/skills/poketo-kanban/KAN
 1) Run `git status` and `git diff` to see all changes.
    - If the working tree is clean and no unpushed commits: report "nothing to ship" and stop.
 2) Update `tasks/todo.md` — mark completed items as done, note any outstanding items or blockers. Also update milestone progress in `tasks/roadmap.md` if criteria were met.
+2b) Check `tasks/manual-todo.md` (if it exists) — note the status of manual tasks (how many checked vs unchecked). Do NOT modify checked items.
 3) Update `tasks/history.md` — append a brief record of what was accomplished this session (phase/step completed, key changes). Create it if it doesn't exist.
 4) Deploy:
    a) Find the deploy method by checking: `spec.md`, `CLAUDE.md`, `tasks/roadmap.md`, `tasks/todo.md`, `Makefile`/`Justfile`, `package.json`, `deploy/`/`infra/`/`scripts/`, `docker-compose*.yml`.
@@ -73,6 +74,7 @@ After completing kanban operations, suggest the next highest-priority card:
    - What was accomplished
    - Deploy status (if deployed)
    - Test status — **explicitly state whether any failing tests are expected (red phase: tests written before implementation) or unexpected (regressions/bugs that need fixing)**
+   - Manual tasks — X/Y complete (from `tasks/manual-todo.md`, if it exists)
    - Kanban status (card moved to Done, or no card found)
    - What's outstanding
    - Branch and commit list

@@ -39,22 +39,23 @@ Scan all In Progress cards (advisory only, never block):
 4. Find the next incomplete item:
    - Look for the next phase with an unchecked milestone.
    - Find the next unchecked `- [ ]` step within that phase.
-5. Research what is needed — read only the files relevant to the step.
-6. Present the execution plan to the user:
+5. **Check `tasks/manual-todo.md`** (if it exists) for unchecked items with `_(blocks: Step N.X)_` matching the current step. If found, warn the user — do NOT skip the step, let the user decide.
+6. Research what is needed — read only the files relevant to the step.
+7. Present the execution plan to the user:
    - What the step requires
    - Which files will be created or modified
    - The approach and any trade-offs
-7. Wait for user approval before writing any code.
-8. After approval, execute the plan:
+8. Wait for user approval before writing any code.
+9. After approval, execute the plan:
    - If it is a tests-first step: write the failing tests, run them to confirm they fail.
    - If it is an implementation step: implement it, run existing tests for regressions.
    - If it is a verification step: run all tests, fix any failures.
-9. Mark the step as done in `tasks/todo.md`.
+10. Mark the step as done in `tasks/todo.md`.
 
 ## Post-Execution
 
 - Count `- [x]` vs `- [ ]` in `tasks/todo.md` to calculate phase progress. Update the kanban card description with `Progress: X/Y (Z%) | Completed: datetime`. Do NOT move to Done — that's ship-kanban's job.
-- Report: step completed, files modified, test results (expected vs unexpected failures), kanban status, next step name.
+- Report: step completed, files modified, test results (expected vs unexpected failures), pending manual task count (from `tasks/manual-todo.md` if it exists), kanban status, next step name.
 
 ## Constraints
 
@@ -63,5 +64,6 @@ Scan all In Progress cards (advisory only, never block):
 - Keep context footprint minimal — only read files relevant to the current step.
 - If a blocker prevents completion, document it in `tasks/todo.md` and stop.
 - Do not skip TDD steps.
+- Do NOT execute items from `tasks/manual-todo.md` — those require human action.
 - Kanban operations are additive — if any fail, warn and continue. Core workflow must succeed.
 - Conflict warnings are advisory only — never block.
