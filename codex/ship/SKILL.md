@@ -36,17 +36,20 @@ Ship current work, commit, push, deploy, and plan the next step.
    - **Check if the current phase is complete** (all steps checked, milestone criteria met):
      - If **YES — Phase transition:**
        1. Archive the completed phase: copy `tasks/todo.md` → `tasks/phases/phase-N.md` (create `tasks/phases/` if needed). Fill in the "On Completion" section.
+       1b. If `tasks/manual-todo.md` exists, archive it to `tasks/phases/phase-N-manual.md`. Warn (but do not block) if unchecked manual tasks remain.
        2. Check off the phase milestone in `tasks/roadmap.md`.
        3. Copy the next phase from `tasks/roadmap.md` → overwrite `tasks/todo.md`.
+       3b. Extract the next phase's manual tasks (from `**Manual Tasks:**` in roadmap) into a fresh `tasks/manual-todo.md`. If the next phase has no manual tasks, delete the file.
        4. If no more phases remain, run `/workflow` to recommend the next action based on project state. Then stop.
        5. **Just-in-time planning:** Invoke `/plan-phases` for the new phase. This generates TDD steps and file-level detail using the full context of what was learned during prior phases.
      - If **NO:** find the next uncompleted step within the current phase.
 5. Write a self-contained implementation plan for the next step into `tasks/todo.md`, complete enough for a fresh session to execute from `tasks/todo.md` alone.
-6. Commit and push `tasks/todo.md`, `tasks/roadmap.md`, and `tasks/phases/` (if created).
+6. Commit and push `tasks/todo.md`, `tasks/roadmap.md`, `tasks/manual-todo.md` (if it exists), and `tasks/phases/` (if created).
 7. Output a brief summary:
    - What was shipped (if anything)
    - Deploy status (if deployed)
    - Test status — explicitly state whether any failing tests are expected (red phase: tests before implementation) or unexpected (regressions/bugs)
+   - Manual tasks — pending count from `tasks/manual-todo.md` (if it exists), note any blocking upcoming steps
    - What the next step is
 
 ## Constraints

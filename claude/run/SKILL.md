@@ -20,15 +20,18 @@ Identify the next incomplete unit of work from the phased plan, build an executi
    - If `--phase` mode: scope the entire phase.
    - Otherwise (default): find only the next unchecked `- [ ]` step within that phase.
    - **If the phase has acceptance criteria but no implementation steps** (no `### Tests First` section): invoke `/plan-phases` for this phase to generate TDD steps and file-level detail before proceeding. This handles cases where a phase was transitioned to manually or the roadmap only contains strategic outlines.
-5. **Research what's needed** — read only the files relevant to the step/phase to understand existing code, patterns, and dependencies.
-6. **Enter plan mode** using the EnterPlanMode tool.
-7. **Present the execution plan** to the user:
+5. **Check `tasks/manual-todo.md`** (if it exists) for blocking manual tasks:
+   - Look for unchecked items with `_(blocks: Step N.X)_` annotations matching the step about to be executed.
+   - If a blocking manual task is found, warn the user: "**Manual task blocking this step:** [task]. Complete it before proceeding." Do NOT skip the step — let the user decide.
+6. **Research what's needed** — read only the files relevant to the step/phase to understand existing code, patterns, and dependencies.
+7. **Enter plan mode** using the EnterPlanMode tool.
+8. **Present the execution plan** to the user:
    - What the step/phase requires
    - Which files will be created or modified
    - The approach (e.g., what tests to write, what code to change)
    - Any decisions or trade-offs the user should weigh in on
-8. **Wait for user approval.** Do NOT write any code until the user approves.
-9. **After approval, exit plan mode** and execute the approved plan.
+9. **Wait for user approval.** Do NOT write any code until the user approves.
+10. **After approval, exit plan mode** and execute the approved plan.
 
 ### Single Step Mode (default)
 
@@ -56,6 +59,7 @@ Identify the next incomplete unit of work from the phased plan, build an executi
 - Phase/step completed
 - Files modified
 - Test results (if tests were run) — **explicitly state whether any failures are expected (red phase: tests written before implementation) or unexpected (regressions/bugs that need fixing)**
+- Manual tasks — if `tasks/manual-todo.md` exists, report count of pending manual tasks for this phase
 - What's next (just its name — /ship will handle planning)
 
 ## What NOT to do
@@ -66,6 +70,7 @@ Identify the next incomplete unit of work from the phased plan, build an executi
 - Do NOT plan ahead or analyze future phases/steps.
 - Do NOT refactor unrelated code.
 - Do NOT update CLAUDE.md.
+- Do NOT execute items from `tasks/manual-todo.md` — those require human action.
 
 ## Workflow
 

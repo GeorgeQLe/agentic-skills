@@ -19,6 +19,7 @@ Wrap up the current session: mark progress, commit, and push.
 2. **Update task tracking:**
    - Update `tasks/todo.md` — mark completed items as done, note any outstanding items or blockers.
    - Update milestone progress in `tasks/roadmap.md` if criteria were met.
+   - Check `tasks/manual-todo.md` (if it exists) — note the status of manual tasks (how many checked vs unchecked). Do NOT modify checked items.
    - Update `tasks/history.md` — append a brief record of what was accomplished this session (phase/step completed, key changes). Create it if it doesn't exist.
 
 3. **Deploy:**
@@ -46,6 +47,7 @@ Wrap up the current session: mark progress, commit, and push.
 - **Accomplished**: [what was done]
 - **Deploy**: [status]
 - **Tests**: [pass/fail — expected or unexpected]
+- **Manual tasks**: [X/Y complete, or "none"]
 - **Outstanding**: [remaining work]
 - **Branch**: [branch name]
 - **Commits**: [list]

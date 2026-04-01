@@ -85,6 +85,17 @@ Each phase follows this structure:
 - Each implementation step should list the specific files to create, modify, or delete.
 - This gives the executing agent clear scope and prevents steps from becoming unbounded.
 
+### Manual Task Classification
+Classify each step as **automated** (Claude can execute) or **manual** (requires human action). Manual tasks include:
+- DNS configuration, domain setup, SSL certificates
+- Browser/device testing, visual QA
+- OAuth/API credential setup with third-party services
+- Deployment approvals, environment provisioning
+- Signing up for services, billing setup
+- Any step requiring a GUI, physical device, or human judgment that cannot be scripted
+
+Manual tasks MUST NOT appear in `tasks/todo.md`. They go in `tasks/manual-todo.md` instead.
+
 ### Cross-Phase Concerns (Mode B only)
 After all phases, add a section for:
 - **Integration tests**: Tests that span multiple phases / features, to be written after relevant phases complete.
@@ -95,10 +106,31 @@ After all phases, add a section for:
 ### Mode A (roadmap exists)
 1. **Update `tasks/roadmap.md`** — insert the TDD steps into the target phase. Preserve all other phases and content. Do not overwrite the phase's Goal, Scope, or Acceptance Criteria — only add the Tests First / Implementation / Green / Milestone structure beneath them.
 2. **Write `tasks/todo.md`** — extract the target phase as a standalone working document. Include enough context (project name, current phase number, total phases) so a fresh session can orient itself without reading `tasks/roadmap.md`. If `tasks/todo.md` already has in-progress work for a different phase, ask the user before overwriting.
+3. **Write `tasks/manual-todo.md`** (if the phase has manual tasks) — extract manual tasks for the target phase. Use this format:
+   ```markdown
+   # Manual Tasks — [Project Name]
+
+   > Phase: N — [Phase Title]
+   > These tasks require human action. Check them off as you complete them.
+
+   ## Pre-Phase / Setup
+   - [ ] [task] _(blocks: Step N.X)_
+
+   ## During Phase
+   - [ ] [task] _(after: Step N.X)_
+
+   ## Post-Phase / Verification
+   - [ ] [task]
+   ```
+   - `_(blocks: Step N.X)_` = must be done before that automated step
+   - `_(after: Step N.X)_` = should be done after that automated step
+   - No annotation = do anytime during the phase
+   - Only create this file when manual tasks exist — no empty files.
 
 ### Mode B (no roadmap)
 1. **`tasks/roadmap.md`** — the single source of truth for the **full phased plan**. Contains all phases and steps. This is a living document — milestones get checked off as phases complete.
 2. **`tasks/todo.md`** — contains only the **current phase** (Phase 1 initially). This is the active working document that `/run` reads. It gets overwritten on phase transitions.
+3. **`tasks/manual-todo.md`** — contains manual tasks for the current phase (if any). Same format as Mode A step 3 above. Only created when manual tasks exist.
 
 Do NOT write `docs/plan.md`. The roadmap replaces it.
 
@@ -158,4 +190,5 @@ Extract the target phase from the roadmap into `tasks/todo.md` as a standalone w
 - Do not include implementation code in the plan — only describe what to build and what to test.
 - If the spec references existing code or infrastructure, note what already exists vs. what needs to be created.
 - `tasks/roadmap.md` is the source of truth for the full plan. `tasks/todo.md` holds only the current phase. Do NOT put plans in CLAUDE.md or `docs/plan.md`.
+- Manual tasks MUST NOT appear in `tasks/todo.md` — they belong in `tasks/manual-todo.md` only.
 - In Mode A, do NOT restructure phases, reorder them, or change acceptance criteria. Those decisions belong to `/roadmap`. Only add implementation detail.

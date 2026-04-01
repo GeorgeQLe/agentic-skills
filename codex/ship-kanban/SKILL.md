@@ -44,15 +44,16 @@ All kanban commands use: `node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs
    - Run the deploy and verify output.
 4. Plan the next step:
    - Migration check, read todo.md, check phase completion, handle transitions.
+   - On phase transition: archive `tasks/manual-todo.md` to `tasks/phases/phase-N-manual.md` (if it exists, warn on unchecked items). Extract next phase's manual tasks into fresh `tasks/manual-todo.md`.
    - Write self-contained next-step plan into `tasks/todo.md`.
-   - Commit and push.
+   - Commit and push (include `tasks/manual-todo.md` if it exists).
 4b. **Kanban: Ensure next card in Todo**
    - Search for next step's card
    - If in Backlog → move to Todo
    - If not found → create in Todo
    - If already in Todo or later → skip
 4c. **Next Work Suggestion:** Suggest the top Todo card by priority (overdue > starred > list order). If no Todo cards, check Backlog. If nothing: "Board is clear."
-5. Output brief summary: shipped, deploy status, test status, kanban status, next step.
+5. Output brief summary: shipped, deploy status, test status, manual tasks (pending count, any blocking), kanban status, next step.
 
 ## Constraints
 

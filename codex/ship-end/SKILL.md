@@ -12,6 +12,7 @@ Use this skill when the user wants the current session wrapped up cleanly.
 1. Inspect `git status` and diffs.
 2. If the tree is clean and there are no unpushed commits, report that there is nothing to ship and stop.
 3. Update `tasks/todo.md` with completed items and blockers. Also update milestone progress in `tasks/roadmap.md` if criteria were met.
+3b. Check `tasks/manual-todo.md` (if it exists) — note the status of manual tasks (checked vs unchecked). Do NOT modify checked items.
 4. Update `tasks/history.md` with a brief record of the session. Create it if needed.
 5. Deploy:
    - Find the deploy method by checking: `spec.md`, `CLAUDE.md`, `tasks/roadmap.md`, `tasks/todo.md`, `Makefile`/`Justfile`, `package.json`, `deploy/`/`infra/`/`scripts/`, `docker-compose*.yml`.
@@ -23,6 +24,7 @@ Use this skill when the user wants the current session wrapped up cleanly.
 7. Report:
    - What was accomplished
    - Test status — explicitly state whether any failing tests are expected (red phase: tests before implementation) or unexpected (regressions/bugs)
+   - Manual tasks — X/Y complete (from `tasks/manual-todo.md`, if it exists)
    - What is still outstanding
    - Branch name
    - Commit list

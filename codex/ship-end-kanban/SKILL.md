@@ -20,6 +20,7 @@ All kanban commands use: `node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs
 1. Inspect `git status` and diffs.
 2. If the tree is clean and there are no unpushed commits, report that there is nothing to ship and stop.
 3. Update `tasks/todo.md` with completed items and blockers. Also update milestone progress in `tasks/roadmap.md` if criteria were met.
+3b. Check `tasks/manual-todo.md` (if it exists) — note the status of manual tasks (checked vs unchecked). Do NOT modify checked items.
 4. Update `tasks/history.md` with a brief record of the session. Create it if needed.
 5. Deploy:
    - Find the deploy method by checking: `spec.md`, `CLAUDE.md`, `tasks/roadmap.md`, `tasks/todo.md`, `Makefile`/`Justfile`, `package.json`, `deploy/`/`infra/`/`scripts/`, `docker-compose*.yml`.
@@ -36,6 +37,7 @@ All kanban commands use: `node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs
 8. Report:
    - What was accomplished
    - Test status — explicitly state whether failures are expected or unexpected
+   - Manual tasks — X/Y complete (from `tasks/manual-todo.md`, if it exists)
    - Kanban status (card moved or no card found)
    - What is still outstanding
    - Branch name, commit list, final working-tree state

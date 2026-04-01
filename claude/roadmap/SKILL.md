@@ -69,6 +69,7 @@ Use the AskUserQuestion tool to align on roadmap decisions. Ask one to three foc
 - **Scope**: Should anything be deferred, dropped, or marked as stretch?
 - **Market fit** (when ICP/gap specs exist): Which phases directly address customer pain points or deal-blockers from gap analysis? Prioritise these unless technically impossible. Surface tension between technical sequencing and market urgency.
 - **Phase sizing**: Preference for many small phases vs. fewer larger ones?
+- **Manual tasks**: Are there tasks that require human action (DNS setup, OAuth credentials, browser testing, deployment approvals, etc.)? Which phases do they belong to, and do they block or follow specific automated steps?
 - **Existing work**: (existing projects) Does completed work change priorities? Should anything be reworked?
 
 When options exist, present pros/cons with a recommendation — same style as `/plan-interview`. Do not manufacture artificial choices.
@@ -109,6 +110,9 @@ Write `tasks/roadmap.md` with the agreed phase structure. Use this format:
 - [ ] [Specific, verifiable criterion 1]
 - [ ] [Specific, verifiable criterion 2]
 - [ ] [Specific, verifiable criterion 3]
+
+**Manual Tasks** (if any):
+- [Task requiring human action] _(blocks: Step N.X)_ or _(after: Step N.X)_
 
 **On Completion** (fill in when phase is done):
 - Deviations from plan: [none, or describe]

@@ -31,6 +31,7 @@ All kanban commands use: `node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs
    - Sequencing — Dependencies, risk reduction, user value order
    - Scope — Defer, drop, or stretch?
    - Phase sizing — Many small vs. fewer large?
+   - Manual tasks — Any steps requiring human action (DNS, OAuth, browser testing, deploy approvals)? Which phases?
    - Market fit (when ICP/gap specs exist) — Which phases address deal-blockers? Prioritise by market impact.
 4. **Write roadmap**: Write `tasks/roadmap.md` with agreed phase structure (phases, goals, scope, acceptance criteria — NOT implementation steps).
 5. **Update history** (existing projects): Append entry to `tasks/history.md`.
@@ -54,7 +55,7 @@ After writing the roadmap:
 
 ## Deliverables
 
-- `tasks/roadmap.md` — Phased plan with goals, scope, and acceptance criteria per phase (no implementation steps — those are generated just-in-time by `/plan-phases` when a phase is started)
+- `tasks/roadmap.md` — Phased plan with goals, scope, acceptance criteria, and optional `**Manual Tasks:**` per phase (no implementation steps — those are generated just-in-time by `/plan-phases` when a phase is started)
 
 ## Constraints
 

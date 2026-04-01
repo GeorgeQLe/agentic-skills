@@ -1,5 +1,16 @@
 # Session History
 
+## 2026-03-31 — Add `tasks/manual-todo.md` support across 13 skills
+
+- Added manual task classification and `manual-todo.md` output to `plan-phases` (claude + codex)
+- Added "Manual tasks" interview topic and `**Manual Tasks:**` phase format to `roadmap` and `roadmap-kanban` (claude + codex)
+- Added blocking task check (step 5), manual task reporting, and "Do NOT execute" constraint to `run` and `run-kanban` (claude + codex)
+- Added phase transition archival (`phase-N-manual.md`), next-phase extraction, commit inclusion, and status reporting to `ship` and `ship-kanban` (claude + codex)
+- Added manual task status checking and output line to `ship-end` and `ship-end-kanban` (claude + codex)
+- Added `manual-todo.md` to scan/read lists and output for `workflow`, `handoff`, `sync`, `sync-roadmap-kanban` (claude + codex)
+- Resolved pre-existing merge conflict in `claude/research-reconcile/SKILL.md`
+- 26 SKILL.md files modified (13 skills × 2 platforms)
+
 ## 2026-03-31 — Implement multi-user kanban (all 4 phases)
 
 - Implemented all 4 phases in `kanban.mjs`: updatedAt responses, audit logging, optimistic locking, activity command
