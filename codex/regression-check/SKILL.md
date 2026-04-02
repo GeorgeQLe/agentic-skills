@@ -24,7 +24,7 @@ Use this skill after completing a phase or major change to verify nothing is bro
 
 ## Follow-Through
 
-If the verdict is "Issues found", write **new** failures (not pre-existing) to `tasks/todo.md` under a `## Regression Fixes` heading (append or replace existing section). One checkbox per failure with file path and error. If verdict is "All clear", do not write to todo. Suggest `/investigate` or `/run` to start fixing.
+If the verdict is "Issues found", write **new** failures (not pre-existing) to `tasks/todo.md` under a `## Regression Fixes` heading (append or replace existing section). One checkbox per failure with file path and error. If verdict is "All clear", do not write to todo. Suggest `$investigate` or `$run` to start fixing.
 
 ## Constraints
 

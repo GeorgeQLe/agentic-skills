@@ -64,7 +64,9 @@ That is the manual replacement for Claude Code's plan-mode-first workflow with a
 
 ## Skill Translation
 
-### `/plan-interview`
+In this document, Codex skill invocations use the native `$skill` form.
+
+### `$plan-interview`
 
 **Claude Code**
 - interview the user
@@ -79,7 +81,7 @@ That is the manual replacement for Claude Code's plan-mode-first workflow with a
 **Manual gap**
 - no guaranteed structured multiple-choice flow from the skill
 
-### `/roadmap`
+### `$roadmap`
 
 **Claude Code**
 - interview on sequencing and scope
@@ -93,7 +95,7 @@ That is the manual replacement for Claude Code's plan-mode-first workflow with a
 **Manual gap**
 - no skill-controlled transition into a richer approval mode
 
-### `/plan-phases`
+### `$plan-phases`
 
 **Claude Code**
 - turn roadmap into executable phase detail
@@ -106,7 +108,7 @@ That is the manual replacement for Claude Code's plan-mode-first workflow with a
 - none in the writing step itself
 - the user should usually stop after this and start a fresh implementation thread
 
-### `/run`
+### `$run`
 
 **Claude Code**
 - identify next step
@@ -127,10 +129,10 @@ That is the manual replacement for Claude Code's plan-mode-first workflow with a
 - no automatic clear-context transition
 
 **Recommended Codex usage**
-- use `/run` as a planning/compression step for non-trivial work
+- use `$run` as a planning/compression step for non-trivial work
 - after approval, stop and start a fresh Codex thread to implement from `tasks/todo.md`
 
-### Fresh implementation after `/run`
+### Fresh implementation after `$run`
 
 **Claude Code**
 - handled by the tool after plan approval
@@ -143,7 +145,7 @@ That is the manual replacement for Claude Code's plan-mode-first workflow with a
 
 This manual fresh-thread start is the closest replacement for Claude Code's clear-context implementation handoff.
 
-### `/ship`
+### `$ship`
 
 **Claude Code**
 - ship current work
@@ -160,10 +162,10 @@ This manual fresh-thread start is the closest replacement for Claude Code's clea
 - no true "ship then continue through plan mode" loop
 
 **Recommended Codex usage**
-- treat `/ship` as a state-compression step
+- treat `$ship` as a state-compression step
 - if next-step planning is substantial, stop and begin a new planning thread
 
-### `/ship-end`
+### `$ship-end`
 
 **Claude Code**
 - wrap session
@@ -176,7 +178,7 @@ This manual fresh-thread start is the closest replacement for Claude Code's clea
 
 This skill ports well because it already depends on repo state more than tool state.
 
-### `/migrate`, `/decommission`, `/scaffold`
+### `$migrate`, `$decommission`, `$scaffold`
 
 **Claude Code**
 - audit
@@ -200,7 +202,7 @@ This skill ports well because it already depends on repo state more than tool st
   1. planning/compression
   2. fresh-thread execution
 
-### `/run-kanban`
+### `$run-kanban`
 
 **Claude Code**
 - move card into progress
@@ -221,7 +223,7 @@ This skill ports well because it already depends on repo state more than tool st
 **Recommended Codex usage**
 - use kanban to track state, not to imply workflow enforcement that the tool does not provide
 
-### `/ship-kanban` and `/ship-end-kanban`
+### `$ship-kanban` and `$ship-end-kanban`
 
 **Claude Code**
 - ship work
@@ -296,22 +298,22 @@ After execution, leave behind clean repo state:
 
 If you are used to this Claude Code rhythm:
 
-1. `/plan-interview`
-2. `/roadmap`
-3. `/plan-phases`
-4. `/run`
-5. `/ship`
+1. `$plan-interview`
+2. `$roadmap`
+3. `$plan-phases`
+4. `$run`
+5. `$ship`
 
 The closest Codex translation is:
 
-1. `/plan-interview`
-2. `/roadmap`
-3. `/plan-phases`
-4. `/run` to prepare and compress the next step into `tasks/todo.md`
+1. `$plan-interview`
+2. `$roadmap`
+3. `$plan-phases`
+4. `$run` to prepare and compress the next step into `tasks/todo.md`
 5. approve in normal chat
 6. stop
 7. start a fresh Codex thread to execute from `tasks/todo.md`
-8. `/ship` to close and compress state
+8. `$ship` to close and compress state
 
 That explicit stop-and-restart is the main manual addition.
 

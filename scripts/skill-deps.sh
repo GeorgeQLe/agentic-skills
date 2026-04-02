@@ -6,40 +6,43 @@ set -euo pipefail
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 CLAUDE_DIR="$REPO_ROOT/claude"
+CODEX_DIR="$REPO_ROOT/codex"
 
 MODE="${1:-default}"
 
-# 1. Discover valid skill names from claude/*/
+# 1. Discover valid skill names from claude/*/ and codex/*/
 declare -A VALID_SKILLS
-for dir in "$CLAUDE_DIR"/*/; do
+for dir in "$CLAUDE_DIR"/*/ "$CODEX_DIR"/*/; do
   name="$(basename "$dir")"
   if [[ -f "$dir/SKILL.md" ]]; then
     VALID_SKILLS["$name"]=1
   fi
 done
 
-# 2. For each SKILL.md, extract /skill-name refs using PCRE regex
+# 2. For each SKILL.md, extract /skill-name and $skill-name refs using PCRE regex
 declare -A DEPS       # skill -> "dep1 dep2 dep3"
 declare -A BROKEN     # skill -> "bad1 bad2"
 TOTAL_SKILLS=0
 SKILLS_WITH_DEPS=0
 BROKEN_COUNT=0
 
-for dir in "$CLAUDE_DIR"/*/; do
+for dir in "$CLAUDE_DIR"/*/ "$CODEX_DIR"/*/; do
   name="$(basename "$dir")"
   skill_file="$dir/SKILL.md"
   [[ -f "$skill_file" ]] || continue
   TOTAL_SKILLS=$((TOTAL_SKILLS + 1))
 
-  # Extract refs with PCRE negative lookbehind/lookahead
-  refs=$(grep -oPh '(?<![a-zA-Z0-9_/.])/[a-z][a-z0-9-]+(?![a-zA-Z0-9_/.])' "$skill_file" 2>/dev/null || true)
+  # Extract refs with PCRE negative lookbehind/lookahead.
+  # Match Claude `/skill-name` and Codex `$skill-name` references.
+  refs=$(grep -oPh '(?<![a-zA-Z0-9_/.:$-])(?:/[a-z][a-z0-9-]+|\$[a-z][a-z0-9-]+)(?![a-zA-Z0-9_/.:-])' "$skill_file" 2>/dev/null || true)
 
   # Deduplicate and process
   seen_deps=""
   seen_broken=""
   while IFS= read -r ref; do
     [[ -z "$ref" ]] && continue
-    dep="${ref#/}"  # strip leading /
+    dep="${ref#/}"  # strip leading / if present
+    dep="${dep#\$}" # strip leading $ if present
 
     # Skip self-references
     [[ "$dep" == "$name" ]] && continue
@@ -82,7 +85,7 @@ case "$MODE" in
     else
       for skill in $(echo "${!BROKEN[@]}" | tr ' ' '\n' | sort); do
         for dep in ${BROKEN[$skill]}; do
-          echo "$skill -> /$dep (not found)"
+          echo "$skill -> $dep (not found)"
         done
       done
     fi
@@ -151,7 +154,7 @@ case "$MODE" in
       echo "BROKEN REFERENCES:"
       for skill in $(echo "${!BROKEN[@]}" | tr ' ' '\n' | sort); do
         for dep in ${BROKEN[$skill]}; do
-          echo "  $skill -> /$dep (not found)"
+          echo "  $skill -> $dep (not found)"
         done
       done
     fi

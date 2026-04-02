@@ -74,9 +74,9 @@ Only after user validates, write the output files.
 - `research/competitive-analysis.md` (or `research/{app}/competitive-analysis.md`) — Full competitive landscape: summary, competitor profiles, GTM analysis, market gaps, positioning recommendations, next steps. In concept-validation mode, includes `## Gap Assessment` section (Market State, Incumbent Quality, Gap Quality, Verdict).
 - `research/competitive-analysis-search-log.md` (or `research/{app}/competitive-analysis-search-log.md`) — Raw research log: every query, findings, source attribution, reasoning
 
-**Standard mode next steps:** `## Next Steps` section (3–5 contextual items, "Pick one:" framing) based on which files exist: always suggest `/brainstorm`; conditionally suggest `/plan-interview`, `/journey-map`, `/gtm`, `/mvp-gap`.
+**Standard mode next steps:** `## Next Steps` section (3–5 contextual items, "Pick one:" framing) based on which files exist: always suggest `$brainstorm`; conditionally suggest `$plan-interview`, `$journey-map`, `$gtm`, `$mvp-gap`.
 
-**Concept-validation mode next steps:** `/icp` is always the first next step (gap validated). Also suggest `/brainstorm` if pivot verdict, and `/competitive-analysis` to re-run in standard mode after ICP.
+**Concept-validation mode next steps:** `$icp` is always the first next step (gap validated). Also suggest `$brainstorm` if pivot verdict, and `$competitive-analysis` to re-run in standard mode after ICP.
 
 ## Constraints
 

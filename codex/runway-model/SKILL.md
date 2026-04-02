@@ -123,11 +123,11 @@ Incorporate feedback before proceeding.
 
 Include 3–5 applicable items with "Pick one:" framing:
 
-- IF runway < 6 months: Prioritize revenue — `/experiment` to validate fastest path to revenue, or cut costs
-- IF unit economics unhealthy (LTV:CAC < 3): `/monetization` — Revisit pricing or acquisition strategy
-- IF no `research/cohort-review-*.md`: `/cohort-review` — Get real performance data to improve projections
-- IF actuals diverge from monetization estimates: `/monetization` — Update strategy with real data
-- ALWAYS: `/roadmap` — Ensure build plan accounts for runway constraints
+- IF runway < 6 months: Prioritize revenue — `$experiment` to validate fastest path to revenue, or cut costs
+- IF unit economics unhealthy (LTV:CAC < 3): `$monetization` — Revisit pricing or acquisition strategy
+- IF no `research/cohort-review-*.md`: `$cohort-review` — Get real performance data to improve projections
+- IF actuals diverge from monetization estimates: `$monetization` — Update strategy with real data
+- ALWAYS: `$roadmap` — Ensure build plan accounts for runway constraints
 
 ### 7. Write Output
 

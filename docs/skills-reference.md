@@ -7,15 +7,21 @@ Complete reference for all 55 custom skills in this repository, available for bo
 The repository contains both Claude Code and Codex skill variants, but the full workflow is not currently equivalent across the two tools.
 
 - **Claude Code**: supports the plan-mode-first workflow described in `CLAUDE.md`, including skill flows that rely on entering plan mode before execution.
-- **Codex**: supports the skill documents and slash-command structure, but does **not** currently provide a skill-level equivalent of Claude Code's "enter plan mode, then clear context and implement" loop. In Codex, `request_user_input` is only available when the session is already in Plan mode, and Codex skills cannot force that mode from a normal session.
+- **Codex**: supports the skill documents and `$skill` invocation structure, but does **not** currently provide a skill-level equivalent of Claude Code's "enter plan mode, then clear context and implement" loop. In Codex, `request_user_input` is only available when the session is already in Plan mode, and Codex skills cannot force that mode from a normal session.
 
 Practical consequence:
 
 - The research and documentation skills port well to Codex.
-- The execution workflow as documented here (`/run` → approval gate → implementation, plus ship/kanban variants) is fully usable in Claude Code.
+- The execution workflow as documented here (`/run` in Claude Code, `$run` in Codex, plus ship/kanban variants) is fully usable in Claude Code.
 - Codex currently needs a different workflow design for execution and approval handling. The existing Codex skill docs now describe the current fallback behavior, but that is not true parity with Claude Code.
 
 See [Codex Workflow](./codex-workflow.md) for the current skill-to-skill translation and the manual gaps that still need to be handled operationally.
+
+## Invocation Syntax
+
+- **Claude Code** examples use `/skill-name`
+- **Codex** examples use `$skill-name`
+- When a section below names a skill without spelling out both forms, translate the prefix for the tool you are using
 
 ## Installation
 
@@ -59,13 +65,13 @@ Discover                      Ideate                       Specify              
 **Enterprise expansion**: `/enterprise-icp` → (build cycle) → `/scale-audit`
 **At any point**: `/workflow` to check status, stale items, and recommended next step
 
-For **Codex**, treat this as an approximate map of the intended workflow, not a guarantee that every approval or plan-mode transition works the same way.
+For **Codex**, the same flow is invoked with `$skill-name` rather than `/skill-name`, and it remains an approximate map of the intended workflow rather than a guarantee that every approval or plan-mode transition works the same way.
 
 Supporting skills plug in at any point: `/expert-review`, `/spec-drift`, `/investigate`, `/affected`, `/regression-check`, etc.
 
 ## Activity Types
 
-Each skill has a `type` field in its frontmatter that describes *what kind of work* it does (orthogonal to workflow stage, which describes *when* you'd use it). Use `/skills types` to browse skills grouped by type.
+Each skill has a `type` field in its frontmatter that describes *what kind of work* it does (orthogonal to workflow stage, which describes *when* you'd use it). Use `/skills types` in Claude Code or `$skills types` in Codex to browse skills grouped by type.
 
 | Type | What it does | Output | Skills |
 |------|-------------|--------|--------|

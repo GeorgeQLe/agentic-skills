@@ -67,9 +67,9 @@ Discover and search all available skills in this repository, grouped by workflow
 
 6. **Output results:**
    - Print each non-empty group as a `## Group Name` heading.
-   - Under each heading, list skills as `/<name> — <description>`.
-   - In type mode, append the type tag: `/<name> — <description>  [type]`.
-   - In list mode (stage grouping), append the type tag: `/<name> — <description>  [type]`.
+   - Under each heading, list skills as `$<name> — <description>`.
+   - In type mode, append the type tag: `$<name> — <description>  [type]`.
+   - In list mode (stage grouping), append the type tag: `$<name> — <description>  [type]`.
    - Omit groups that have no skills (after filtering in search mode).
    - At the bottom, print a total count: `**N skills** found` (or `**N skills** matching "<keyword>"`).
 
@@ -78,26 +78,26 @@ Discover and search all available skills in this repository, grouped by workflow
 ### List mode (default — grouped by workflow stage)
 ```
 ## Discovery & Market Fit
-/icp — Customer discovery interview...  [research]
-/enterprise-icp — Enterprise multi-stakeholder discovery...  [research]
+$icp — Customer discovery interview...  [research]
+$enterprise-icp — Enterprise multi-stakeholder discovery...  [research]
 
 ## Planning
-/brainstorm — Evaluate the codebase and suggest ideas...  [planning]
-/brainstorm-kanban — Brainstorm ideas and create kanban cards...  [planning]
+$brainstorm — Evaluate the codebase and suggest ideas...  [planning]
+$brainstorm-kanban — Brainstorm ideas and create kanban cards...  [planning]
 ...
 
 **49 skills** found
 ```
 
-### Type mode (`/skills types`)
+### Type mode (`$skills types`)
 ```
 ## Research
-/icp — Customer discovery interview...
-/competitive-analysis — Research competitors...
+$icp — Customer discovery interview...
+$competitive-analysis — Research competitors...
 ...
 
 ## Analysis
-/mvp-gap — Evaluate codebase against ICP...
+$mvp-gap — Evaluate codebase against ICP...
 ...
 
 **49 skills** found

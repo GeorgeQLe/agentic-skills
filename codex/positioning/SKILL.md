@@ -12,8 +12,8 @@ Develops rigorous product positioning using the "Obviously Awesome" methodology 
 
 ## Prerequisites
 
-- **Hard**: `research/icp.md` (or `research/{app}/icp.md`) must exist. If not, tell the user to run `/icp` first and stop.
-- **Hard**: `research/competitive-analysis.md` (or `research/{app}/competitive-analysis.md`) must exist. If not, tell the user to run `/competitive-analysis` first and stop.
+- **Hard**: `research/icp.md` (or `research/{app}/icp.md`) must exist. If not, tell the user to run `$icp` first and stop.
+- **Hard**: `research/competitive-analysis.md` (or `research/{app}/competitive-analysis.md`) must exist. If not, tell the user to run `$competitive-analysis` first and stop.
 - **Soft**: Read these if they exist:
   - `research/journey-map.md` — where value is delivered, the aha moment
   - `research/customer-feedback.md` — real customer language about what makes the product different
@@ -139,11 +139,11 @@ Present the full positioning framework and statement to the user. Ask:
 
 Include 3–5 applicable items with "Pick one:" framing:
 
-- ALWAYS: `/gtm` — Update go-to-market plan with this positioning (messaging should flow from positioning)
-- IF no `research/gtm.md`: `/gtm` — Build go-to-market plan grounded in this positioning
-- IF `research/gtm.md` exists: `/gtm` — Refresh messaging framework to align with positioning
-- IF no `research/monetization.md`: `/monetization` — Positioning informs pricing — "premium" vs "value" positioning changes price expectations
-- IF codebase exists: `/mvp-gap` — Check if the product delivers on the positioning promise
+- ALWAYS: `$gtm` — Update go-to-market plan with this positioning (messaging should flow from positioning)
+- IF no `research/gtm.md`: `$gtm` — Build go-to-market plan grounded in this positioning
+- IF `research/gtm.md` exists: `$gtm` — Refresh messaging framework to align with positioning
+- IF no `research/monetization.md`: `$monetization` — Positioning informs pricing — "premium" vs "value" positioning changes price expectations
+- IF codebase exists: `$mvp-gap` — Check if the product delivers on the positioning promise
 
 ### 10. Write Output
 
@@ -164,7 +164,7 @@ For each existing downstream document:
 **Classify the impact**:
 - **None**: No downstream docs exist, or no conflicts. Skip display.
 - **Minor** (1–2 small conflicts): Display inline.
-- **Major** (3+ conflicts OR market category changed, primary alternative shifted, value framing changed): Display and recommend `/research-reconcile`.
+- **Major** (3+ conflicts OR market category changed, primary alternative shifted, value framing changed): Display and recommend `$research-reconcile`.
 
 ## Output
 
@@ -275,7 +275,7 @@ What this product has that alternatives genuinely don't:
    - **Now**: [what positioning says instead]
 
 [For Major only:]
-> **Recommended action**: Run `/research-reconcile` to audit and fix all affected downstream documents.
+> **Recommended action**: Run `$research-reconcile` to audit and fix all affected downstream documents.
 
 ## Next Steps
 
@@ -294,6 +294,6 @@ Create the `research/` directory if it doesn't exist.
 - **Customer-grounded.** Every positioning decision must connect to real customer behavior or research evidence, not aspirational branding.
 - **Be honest about uniqueness.** If nothing is truly unique, say so — that's a critical finding. Don't manufacture differentiation.
 - **Present before writing.** Never write output files until the positioning has been presented and validated.
-- **Positioning ≠ messaging.** This skill produces the strategic foundation. Messaging (the actual copy and taglines) is `/gtm`'s job.
+- **Positioning ≠ messaging.** This skill produces the strategic foundation. Messaging (the actual copy and taglines) is `$gtm`'s job.
 - **Do not overwrite existing `research/positioning.md`** without asking the user first.
 - **One positioning per product.** Don't try to position differently for different segments — pick the best-fit segment and position for them.

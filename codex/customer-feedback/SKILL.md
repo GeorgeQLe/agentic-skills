@@ -76,9 +76,9 @@ Present the categorized findings to the user. If the session is already in Plan 
 
 Count the number of **Wrong** and **New** findings across ALL sessions (including previous ones):
 
-- If 3+ **Wrong** findings relate to ICP assumptions: recommend re-running `/icp`
-- If 3+ **Wrong** findings relate to journey stages: recommend re-running `/journey-map`
-- If 3+ **New** findings suggest an unserved segment: recommend re-running `/icp`
+- If 3+ **Wrong** findings relate to ICP assumptions: recommend re-running `$icp`
+- If 3+ **Wrong** findings relate to journey stages: recommend re-running `$journey-map`
+- If 3+ **New** findings suggest an unserved segment: recommend re-running `$icp`
 
 Display these recommendations after the categorized findings.
 
@@ -86,16 +86,16 @@ Display these recommendations after the categorized findings.
 
 Before writing, check which files exist and synthesis results to populate the `## Next Steps` section contextually. Include 3–5 applicable items with "Pick one:" framing:
 
-- IF staleness alert for ICP: `/icp` — Re-run discovery — feedback has invalidated key assumptions
-- IF staleness alert for journey map: `/journey-map` — Re-map journeys — real behavior differs from mapped experience
-- IF 3+ New findings: `/brainstorm` — Generate ideas for newly revealed customer needs
-- IF New findings relate to a gap: `/plan-interview [topic]` — Spec a solution for the most impactful new finding
-- IF no staleness alerts: `/workflow` — Check overall project status
-- IF feedback came from experiment results: `/assumption-tracker` — Update assumption validation status with experiment findings
-- IF 3+ research docs exist and no `research/assumption-tracker.md`: `/assumption-tracker` — Build the assumptions register to track what feedback is validating
+- IF staleness alert for ICP: `$icp` — Re-run discovery — feedback has invalidated key assumptions
+- IF staleness alert for journey map: `$journey-map` — Re-map journeys — real behavior differs from mapped experience
+- IF 3+ New findings: `$brainstorm` — Generate ideas for newly revealed customer needs
+- IF New findings relate to a gap: `$plan-interview [topic]` — Spec a solution for the most impactful new finding
+- IF no staleness alerts: `$workflow` — Check overall project status
+- IF feedback came from experiment results: `$assumption-tracker` — Update assumption validation status with experiment findings
+- IF 3+ research docs exist and no `research/assumption-tracker.md`: `$assumption-tracker` — Build the assumptions register to track what feedback is validating
 
 **Impact-aware adjustments:**
-- IF downstream impact is **Major**: prepend `/research-reconcile — [N] conflicts found in downstream docs` as the first item
+- IF downstream impact is **Major**: prepend `$research-reconcile — [N] conflicts found in downstream docs` as the first item
 - IF downstream impact is **Minor**: annotate relevant skill suggestions with "(stale — [brief description])"
 
 ### 7. Write Output
@@ -124,7 +124,7 @@ For each existing downstream document:
 **Classify the impact**:
 - **None**: No downstream documents exist, or no conflicts found. Skip display entirely.
 - **Minor** (1–2 small conflicts): Display conflicts to user inline.
-- **Major** (3+ conflicts OR a foundational assumption changed — e.g., primary pain point invalidated, willingness-to-pay signals contradicted, key customer behavior pattern disproved): Display conflicts and strongly recommend `/research-reconcile`.
+- **Major** (3+ conflicts OR a foundational assumption changed — e.g., primary pain point invalidated, willingness-to-pay signals contradicted, key customer behavior pattern disproved): Display conflicts and strongly recommend `$research-reconcile`.
 
 Display to the user after showing the written file confirmation. This should be quick — one read per downstream doc, scan for conflicts against key decisions. Not a deep reconciliation.
 
@@ -167,7 +167,7 @@ Display to the user after showing the written file confirmation. This should be 
    - **Now**: [what this skill's output says instead]
 
 [For Major only:]
-> **Recommended action**: Run `/research-reconcile` to audit and fix all affected downstream documents.
+> **Recommended action**: Run `$research-reconcile` to audit and fix all affected downstream documents.
 
 ### Next Steps
 
