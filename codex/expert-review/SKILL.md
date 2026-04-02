@@ -45,6 +45,10 @@ Report findings grouped by severity:
 - Documented decisions (no action needed): patterns that look like issues but are intentional
 - Positive observations: strong patterns worth preserving
 
+## Follow-Through
+
+After presenting findings, write Critical and High items to `tasks/todo.md` under a `## Code Review Fixes` heading (append or replace existing section). One checkbox per finding with file:line and recommended fix. Do not add Medium/Low items. Suggest `/run` or `/investigate` to start fixing.
+
 ## Constraints
 
 - Include concrete file and line references for each finding when possible.

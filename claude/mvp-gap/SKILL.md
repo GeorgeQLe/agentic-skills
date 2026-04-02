@@ -2,7 +2,7 @@
 name: mvp-gap
 description: Evaluate codebase against ICP to identify gaps blocking first sales and retention
 type: analysis
-version: 1.1.0
+version: 1.2.0
 argument-hint: [optional: path-to-icp-spec]
 ---
 
@@ -50,6 +50,8 @@ For each step in the current-state journey from `research/icp.md`:
 - Where does the UX break down, require workarounds, or not exist?
 - Does the interaction model match the user's technical sophistication?
 
+If `research/journey-map.md` (or `research/{app}/journey-map.md`) exists, map each gap to its **journey stage** (e.g., Discovery, Onboarding, Aha Moment, Habit Loop, Expansion). This enables downstream skills to understand *where* in the experience each gap bites.
+
 #### Customer Journey Coverage
 - **Discovery**: Is there a landing page, marketing site, or clear product description?
 - **Evaluation**: Can someone try the product? Free tier, trial, demo?
@@ -75,6 +77,17 @@ For each step in the current-state journey from `research/icp.md`:
 - Where does it fall short of the claimed wedge?
 - Would the ICP actually switch from their current alternative to this?
 
+#### Spec Validation
+For each gap identified above, check if a spec already exists in `specs/` (or `specs/{app}/`):
+- If a spec covers the gap **fully**, mark the gap as "Spec exists — ready to build" and link the spec file instead of suggesting `/plan-interview`.
+- If a spec covers the gap **partially**, mark it as "Spec exists — needs expansion" and suggest `/plan-interview [topic]` to fill the remaining holes.
+- If no spec exists, suggest `/plan-interview [topic]` as before.
+
+#### Metrics Tie-In
+If `research/metrics.md` (or `research/{app}/metrics.md`) exists, identify for each gap:
+- Which metric(s) will indicate this gap is closed (e.g., activation rate, retention at day-7)
+- If no metric exists to measure gap closure, flag it as an **instrumentation gap** — this becomes an additional item under the gap.
+
 ### 4. Prioritise
 
 Tag each gap with one of:
@@ -84,15 +97,50 @@ Tag each gap with one of:
 
 Order gaps within each priority tier by estimated effort (S/M/L).
 
+#### GTM Alignment
+If `research/gtm.md` (or `research/{app}/gtm.md`) exists:
+- Cross-reference the build sequence against GTM launch gates and timeline
+- Flag conflicts where a high-effort gap blocks a near-term GTM milestone
+- Surface gaps that can be deferred to post-launch without losing the GTM window
+
 ### 5. Populate Next Steps
 
 Before writing, check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with "Pick one:" framing:
 
 - ALWAYS: `/roadmap` — Turn the build sequence above into a phased roadmap
-- IF first-sale blockers need specs: `/plan-interview [top gap]` — Spec the most critical first-sale blocker
+- IF first-sale blockers need specs (and no spec exists per step 3 Spec Validation): `/plan-interview [top gap]` — Spec the most critical first-sale blocker
 - IF no `research/journey-map.md` and `specs/` exist: `/journey-map` — Map how the ICP experiences the product
 - IF no `research/competitive-analysis.md`: `/competitive-analysis` — Validate gap priorities against competitors
 - IF creative solutions could reduce effort for high-effort gaps: `/brainstorm` — Generate alternatives for high-effort gaps
+- IF gaps lack closure metrics (see step 3 Metrics Tie-In): `/metrics` — Define how to measure when gaps are closed
+
+### 6. Downstream Impact Check
+
+After writing, check for downstream research documents that may be affected by what was just decided. Only check documents that exist on disk.
+
+**Downstream documents to check** (use `{app}/` prefix when app scope is active):
+- `research/journey-map.md`
+- `research/metrics.md`
+- `research/gtm.md`
+- `research/monetization.md`
+- `tasks/roadmap.md`
+
+For each existing downstream document:
+1. Read it — focus on `> Based on:` header, `## Summary`, and sections that reference concepts this skill just defined or changed
+2. Identify **specific conflicts**: claims, assumptions, or references that contradict what was just decided. Examples:
+   - Journey stages that assume features exist which are now identified as gaps
+   - Metric targets anchored to capabilities the product doesn't have yet
+   - GTM launch plan that depends on features flagged as missing
+   - Monetization pricing tied to features identified as gaps
+   - Roadmap phases that don't account for newly identified first-sale blockers
+3. Note each conflict: downstream file, section, the stale claim (quote it), and what it should now say
+
+**Classify the impact**:
+- **None**: No downstream documents exist, or no conflicts found. Skip display entirely.
+- **Minor** (1–2 small conflicts): Display conflicts to user inline.
+- **Major** (3+ conflicts OR a foundational gap was identified that changes the build sequence — e.g., a new first-sale blocker, a key assumption invalidated): Display conflicts and strongly recommend `/research-reconcile`.
+
+Display to the user after showing the written file confirmation.
 
 ## Output
 
@@ -110,23 +158,33 @@ Before writing, check which files exist to populate the `## Next Steps` section 
 
 ## Blocks First Sale
 - **[Gap title]** — [What's missing and why it matters to the ICP]. Effort: S/M/L
-  _Start with:_ `/plan-interview [topic]`
+  _Journey stage:_ [stage from journey-map, or "N/A" if no journey-map exists]
+  _Closure metric:_ [metric from metrics.md, or "⚠ No metric defined" if none]
+  _Spec:_ [link to spec if exists + status, or `/plan-interview [topic]` if no spec]
 - ...
 
 ## Blocks Retention
 - **[Gap title]** — [What's missing and why it matters]. Effort: S/M/L
-  _Start with:_ `/plan-interview [topic]`
+  _Journey stage:_ [stage]
+  _Closure metric:_ [metric or "⚠ No metric defined"]
+  _Spec:_ [spec link/status or `/plan-interview [topic]`]
 - ...
 
 ## Nice to Have
 - **[Gap title]** — [What's missing and why it matters]. Effort: S/M/L
-  _Start with:_ `/plan-interview [topic]`
+  _Journey stage:_ [stage]
+  _Closure metric:_ [metric or "⚠ No metric defined"]
+  _Spec:_ [spec link/status or `/plan-interview [topic]`]
 - ...
 
 ## Recommended Build Sequence
 [Ordered list of gaps to address, combining priority and dependency logic.
  First sale blockers first, then retention blockers, then nice-to-haves.
- Within each tier, order by dependency — what must exist before other things can be built.]
+ Within each tier, order by dependency — what must exist before other things can be built.
+ If GTM exists: note conflicts between build order and GTM launch gates.]
+
+## Downstream Impact
+[Only if conflicts found in step 6 — list each conflict with file, section, stale claim, and correction needed. If Major, recommend `/research-reconcile`.]
 
 ## Next Steps
 
