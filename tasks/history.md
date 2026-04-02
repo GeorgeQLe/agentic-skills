@@ -540,3 +540,10 @@ Resolved all 10 findings from `/expert-review`:
 - If `sync.md` exists at project root: parses and executes Dependencies, Conflict Resolution, Custom, and Notifications sections
 - If `sync.md` doesn't exist: analyzes project, suggests a pre-filled `sync.md`, creates only with user approval
 - Updated constraints for command failure handling, commented-out section skipping, and conflict resolution guidance
+
+## 2026-04-02 — Roadmap: add Headless API Migration phase
+
+- Audited Codex kanban skills against the local skill repo and Poketo monorepo headless surfaces
+- Identified the main architectural gap: kanban skills still rely on direct Neon DB writes via `kanban.mjs`, and Codex variants depend on Claude-side install paths
+- Added Phase 10 to `tasks/roadmap.md` to migrate Claude and Codex kanban workflows onto a shared Poketo headless API path
+- Captured the concrete migration scope in the roadmap: agent-friendly auth, real Work tool wiring, shared gateway/API operations, Claude migration, Codex migration, and deprecation of the standalone DB-write path
