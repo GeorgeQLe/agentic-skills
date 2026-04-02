@@ -1,6 +1,8 @@
-# /deploy Skill Update — Complete
+# Skill Follow-Through Enhancements — Complete
 
 All deliverables shipped:
-- [x] Update `claude/deploy/SKILL.md` — add deployment ledger, staleness detection, `--status` flag (v1.0.0→v2.0.0)
-- [x] Update `codex/deploy/SKILL.md` — matching condensed update
-- [x] Update `docs/skills-reference.md` — updated entry and quick reference
+- [x] Enhance mvp-gap: downstream impact check, spec validation, journey/metrics tie-in, GTM alignment
+- [x] Add follow-through to dead-code: writes "Safe to Remove" items to tasks/todo.md
+- [x] Add follow-through to expert-review: writes Critical/High findings to tasks/todo.md
+- [x] Add follow-through to regression-check: writes new failures to tasks/todo.md
+- [x] Sync all changes to codex/ variants

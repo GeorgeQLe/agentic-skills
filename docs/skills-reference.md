@@ -2,6 +2,21 @@
 
 Complete reference for all 55 custom skills in this repository, available for both Claude Code and Codex.
 
+## Tool Compatibility
+
+The repository contains both Claude Code and Codex skill variants, but the full workflow is not currently equivalent across the two tools.
+
+- **Claude Code**: supports the plan-mode-first workflow described in `CLAUDE.md`, including skill flows that rely on entering plan mode before execution.
+- **Codex**: supports the skill documents and slash-command structure, but does **not** currently provide a skill-level equivalent of Claude Code's "enter plan mode, then clear context and implement" loop. In Codex, `request_user_input` is only available when the session is already in Plan mode, and Codex skills cannot force that mode from a normal session.
+
+Practical consequence:
+
+- The research and documentation skills port well to Codex.
+- The execution workflow as documented here (`/run` → approval gate → implementation, plus ship/kanban variants) is fully usable in Claude Code.
+- Codex currently needs a different workflow design for execution and approval handling. The existing Codex skill docs now describe the current fallback behavior, but that is not true parity with Claude Code.
+
+See [Codex Workflow](./codex-workflow.md) for the current skill-to-skill translation and the manual gaps that still need to be handled operationally.
+
 ## Installation
 
 ```bash
@@ -26,7 +41,7 @@ claude-skills/
 
 ## Workflow Overview
 
-These skills form a structured development workflow:
+These skills form a structured development workflow in **Claude Code**:
 
 ```
 Discover                      Ideate                       Specify                 Map              Strategize          Execute                    Ship                    Evaluate             Learn
@@ -43,6 +58,8 @@ Discover                      Ideate                       Specify              
 **Existing project flow**: `/icp` → `/competitive-analysis` → `/mvp-gap` → `/brainstorm` → `/plan-interview` → `/journey-map` → `/metrics` → `/roadmap` → ...
 **Enterprise expansion**: `/enterprise-icp` → (build cycle) → `/scale-audit`
 **At any point**: `/workflow` to check status, stale items, and recommended next step
+
+For **Codex**, treat this as an approximate map of the intended workflow, not a guarantee that every approval or plan-mode transition works the same way.
 
 Supporting skills plug in at any point: `/expert-review`, `/spec-drift`, `/investigate`, `/affected`, `/regression-check`, etc.
 
@@ -219,10 +236,11 @@ Fill in TDD steps and file-level implementation detail for a roadmap phase.
 ## Execution
 
 ### `/run`
-Plan the next incomplete step (or full phase with `--phase`), enter plan mode for approval, then execute.
+Plan the next incomplete step (or full phase with `--phase`), present it for approval, then execute.
 
 - **Arguments**: `[--phase]`
-- **Default**: Single-step execution with plan mode approval gate.
+- **Claude Code**: Single-step execution with a plan-mode approval gate.
+- **Codex**: Presents the plan, tracks work with `update_plan`, and can only use structured multiple-choice input when the session is already in Plan mode.
 - **Use when**: Ready to implement the next piece of work.
 
 ---
@@ -233,6 +251,8 @@ Plan the next incomplete step (or full phase with `--phase`), enter plan mode fo
 Ship current work (update docs, commit, push, deploy) and plan the next step.
 
 - **Arguments**: `[--no-plan] [--no-deploy]`
+- **Claude Code**: Supports the repository's intended "ship, then plan next step" workflow directly.
+- **Codex**: The documentation exists, but the Claude-style plan-mode continuation flow does not currently have a true equivalent.
 - **Use when**: Work is done and ready to commit. Handles phase transitions with just-in-time `/plan-phases`.
 
 ### `/ship-end`
@@ -314,21 +334,24 @@ Follow a request end-to-end through the stack from route to database.
 Guide a structural migration or dependency upgrade with step-by-step plan and verification.
 
 - **Arguments**: `<description>` (e.g., `move components into subdirectories`, `upgrade Next.js to 15`)
-- **Process**: Audit → plan mode → batch execution → verification.
+- **Claude Code process**: Audit → plan mode → batch execution → verification.
+- **Codex process**: Audit → present plan → approval via normal chat unless already in Plan mode → batch execution → verification.
 - **Use when**: Dependency upgrades, file restructuring, API pattern changes.
 
 ### `/decommission`
 Systematically tear down and remove a service, package, or infrastructure component.
 
 - **Arguments**: `<what to decommission>` (e.g., `bismarck-v0.3`, `packages/old-auth`)
-- **Process**: Dependency audit → plan mode → removal → verification.
+- **Claude Code process**: Dependency audit → plan mode → removal → verification.
+- **Codex process**: Dependency audit → present plan → approval via normal chat unless already in Plan mode → removal → verification.
 - **Use when**: Removing old services, deprecated packages, or dead infrastructure.
 
 ### `/scaffold`
 Generate a new package or app in the monorepo following established project conventions.
 
 - **Arguments**: `<type> <name>` (e.g., `package utils`, `app admin-dashboard`)
-- **Process**: Learn conventions → find template → plan mode → generate → verify.
+- **Claude Code process**: Learn conventions → find template → plan mode → generate → verify.
+- **Codex process**: Learn conventions → find template → present plan → approval via normal chat unless already in Plan mode → generate → verify.
 - **Use when**: Adding a new package or app to a monorepo.
 
 ---
@@ -511,8 +534,8 @@ Archive old Done/Punt cards from the kanban board.
 | `/plan-interview-ideas` | Spec each idea from ideas.md | planning |
 | `/roadmap` | Interview → phased roadmap across all specs | planning |
 | `/plan-phases` | Roadmap phase → TDD steps with file detail | planning |
-| `/run` | Execute next step (plan mode first) | execution |
-| `/run --phase` | Execute next full phase (plan mode first) | execution |
+| `/run` | Execute next step (Claude: plan mode first; Codex: present plan first) | execution |
+| `/run --phase` | Execute next full phase (Claude: plan mode first; Codex: present plan first) | execution |
 | `/scaffold` | Generate new monorepo package/app | execution |
 | `/migrate` | Guided migration with verification | execution |
 | `/decommission` | Systematic service/package removal | execution |
