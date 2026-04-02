@@ -1,7 +1,7 @@
 interface:
   display_name: "Ship End Kanban"
-  short_description: "Wrap up session and move kanban card to Done"
-  default_prompt: "Use $ship-end-kanban to wrap up the session and move the kanban card to Done."
+  short_description: "Wrap up session, optionally deploy, and move card"
+  default_prompt: "Use $ship-end-kanban to wrap up the session, optionally deploy when a manual deploy contract exists, and move the kanban card to Done."
 
 policy:
   allow_implicit_invocation: true

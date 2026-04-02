@@ -1,11 +1,12 @@
 ---
 name: ship
-description: Ship current work (update docs, commit, push, deploy) and optionally plan the next step
+description: "Ship current work (update docs, commit, push, deploy) and optionally plan the next step"
+argument-hint: "[--no-plan] [--no-deploy]"
 ---
 
 # Ship
 
-Ship current work, commit, push, deploy, and plan the next step.
+Ship current work, commit, push, deploy, and plan the next step. If `$ARGUMENTS` contains `--no-plan`, skip planning. If `$ARGUMENTS` contains `--no-deploy`, skip deployment.
 
 ## Workflow
 
@@ -23,10 +24,13 @@ Ship current work, commit, push, deploy, and plan the next step.
    - Update `tasks/todo.md` — mark completed items as done.
    - Update `tasks/history.md` — append a brief record of what was accomplished. Create it if needed.
    - Commit and push using the commit-and-push-by-feature workflow.
-3. Deploy:
-   - Find the deploy method by checking: `spec.md`, `CLAUDE.md`, `tasks/roadmap.md`, `tasks/todo.md`, `Makefile`/`Justfile`, `package.json`, `deploy/`/`infra/`/`scripts/`, `docker-compose*.yml`.
+3. Deploy (skip if `--no-deploy`):
+   - Check for an explicit manual deploy contract in `deploy.md` or `tasks/deploy.md`.
+   - If neither file exists, skip deploy and report `Deploy skipped: no explicit manual deploy contract (deploy.md or tasks/deploy.md)`.
+   - If a deploy contract exists, read it first and use it to determine the deploy method.
+   - Supplement the contract by checking: `spec.md`, `CLAUDE.md`, `tasks/roadmap.md`, `tasks/todo.md`, `Makefile`/`Justfile`, `package.json`, `deploy/`/`infra/`/`scripts/`, `docker-compose*.yml`.
    - Do NOT look in `.github/workflows/` — this project does not use GitHub Actions.
-   - If no deploy method is found, ask the user how deployment works. Do not guess or skip.
+   - If a deploy contract exists but no deploy method is found, ask the user how deployment works. Do not guess.
    - Run the deploy and verify the output for errors.
    - If a health check URL or status command exists, run it.
    - If the deploy fails, report the error. Do not retry automatically.
@@ -61,6 +65,7 @@ Ship current work, commit, push, deploy, and plan the next step.
 - Do not amend or rewrite history.
 - Do not commit secrets.
 - The plan must be actionable with specific file paths and technical details.
+- `ship` only runs a deploy when `deploy.md` or `tasks/deploy.md` explicitly documents a manual deployment workflow. Repos without one are assumed to auto-deploy or require no manual deploy step.
 - Never use GitHub Actions for deployment. Only use manual deploy scripts, Makefiles, or CLI commands.
 - Never deploy to production without explicit user confirmation.
 - Do not modify code as part of the deploy process.

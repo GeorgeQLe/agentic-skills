@@ -257,6 +257,7 @@ Plan the next incomplete step (or full phase with `--phase`), present it for app
 Ship current work (update docs, commit, push, deploy) and plan the next step.
 
 - **Arguments**: `[--no-plan] [--no-deploy]`
+- **Deploy behavior**: Runs a manual deploy only when `deploy.md` or `tasks/deploy.md` exists; otherwise skips deploy by design.
 - **Claude Code**: Supports the repository's intended "ship, then plan next step" workflow directly.
 - **Codex**: The documentation exists, but the Claude-style plan-mode continuation flow does not currently have a true equivalent.
 - **Use when**: Work is done and ready to commit. Handles phase transitions with just-in-time `/plan-phases`.
@@ -264,7 +265,8 @@ Ship current work (update docs, commit, push, deploy) and plan the next step.
 ### `/ship-end`
 Wrap up the current session — update docs, commit, and push.
 
-- **Arguments**: None
+- **Arguments**: `[--no-deploy]`
+- **Deploy behavior**: Runs a manual deploy only when `deploy.md` or `tasks/deploy.md` exists; otherwise skips deploy by design.
 - **Outputs**: Updates `tasks/todo.md`, `tasks/history.md`
 - **Use when**: Ending a work session.
 
@@ -490,12 +492,14 @@ Execute next step with kanban card tracking (Todo → In Progress, conflict dete
 Ship work and move kanban card to Done or Punt.
 
 - **Arguments**: `[--no-plan] [--no-deploy]`
+- **Deploy behavior**: Runs a manual deploy only when `deploy.md` or `tasks/deploy.md` exists; otherwise skips deploy by design.
 - **Use when**: `/ship` but with kanban card movement.
 
 ### `/ship-end-kanban`
 Wrap up session and move In Progress card to Done with commit refs.
 
-- **Arguments**: None
+- **Arguments**: `[--no-deploy]`
+- **Deploy behavior**: Runs a manual deploy only when `deploy.md` or `tasks/deploy.md` exists; otherwise skips deploy by design.
 - **Use when**: `/ship-end` but with kanban card movement.
 
 ### `/sync-roadmap-kanban`

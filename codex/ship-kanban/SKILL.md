@@ -1,11 +1,12 @@
 ---
 name: ship-kanban
-description: Ship current work, move kanban card to Done or Punt, deploy, and plan the next step with card in Todo
+description: "Ship current work, move kanban card to Done or Punt, deploy, and plan the next step with card in Todo"
+argument-hint: "[--no-plan] [--no-deploy]"
 ---
 
 # Ship (Kanban)
 
-Ship current work, commit, push, deploy, and plan the next step. Moves completed kanban cards to Done or Punt, ensures next step's card is in Todo.
+Ship current work, commit, push, deploy, and plan the next step. Moves completed kanban cards to Done or Punt, ensures next step's card is in Todo. If `$ARGUMENTS` contains `--no-plan`, skip planning. If `$ARGUMENTS` contains `--no-deploy`, skip deployment.
 
 ## Kanban Setup
 
@@ -37,10 +38,13 @@ All kanban commands use: `node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs
    - Step has blocker/deferred → move to Punt + add reason
    - Unclear → ask the user: Done or Punt? If the session is already in Plan mode, prefer `request_user_input` with those choices.
    - Update card description with commit SHAs
-3. Deploy:
-   - Find the deploy method by checking: `spec.md`, `CLAUDE.md`, `tasks/roadmap.md`, `tasks/todo.md`, `Makefile`/`Justfile`, `package.json`, `deploy/`/`infra/`/`scripts/`, `docker-compose*.yml`.
+3. Deploy (skip if `--no-deploy`):
+   - Check for an explicit manual deploy contract in `deploy.md` or `tasks/deploy.md`.
+   - If neither file exists, skip deploy and report `Deploy skipped: no explicit manual deploy contract (deploy.md or tasks/deploy.md)`.
+   - If a deploy contract exists, read it first and use it to determine the deploy method.
+   - Supplement the contract by checking: `spec.md`, `CLAUDE.md`, `tasks/roadmap.md`, `tasks/todo.md`, `Makefile`/`Justfile`, `package.json`, `deploy/`/`infra/`/`scripts/`, `docker-compose*.yml`.
    - Do NOT look in `.github/workflows/`.
-   - If no deploy method is found, ask the user. Do not guess or skip.
+   - If a deploy contract exists but no deploy method is found, ask the user. Do not guess.
    - Run the deploy and verify output.
 4. Plan the next step:
    - Migration check, read todo.md, check phase completion, handle transitions.
@@ -62,6 +66,7 @@ All kanban commands use: `node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs
 - `tasks/roadmap.md` is the source of truth. `tasks/todo.md` holds only the current phase.
 - Do not amend or rewrite history.
 - Do not commit secrets.
+- `ship-kanban` only runs a deploy when `deploy.md` or `tasks/deploy.md` explicitly documents a manual deployment workflow. Repos without one are assumed to auto-deploy or require no manual deploy step.
 - Never use GitHub Actions for deployment.
 - Never deploy to production without explicit user confirmation.
 - Kanban operations are additive — if any fail, warn and continue. Core workflow must succeed.

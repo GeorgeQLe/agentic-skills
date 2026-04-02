@@ -1,7 +1,7 @@
 interface:
   display_name: "Ship End"
-  short_description: "Wrap up work and push it"
-  default_prompt: "Use $ship-end to update task tracking, commit the current work, push it, and summarize what remains."
+  short_description: "Wrap up work, optionally deploy, and push it"
+  default_prompt: "Use $ship-end to update task tracking, optionally deploy when a manual deploy contract exists, commit the current work, push it, and summarize what remains."
 
 policy:
   allow_implicit_invocation: true
