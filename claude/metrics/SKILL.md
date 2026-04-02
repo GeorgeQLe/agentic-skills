@@ -104,6 +104,7 @@ Before writing, check which files exist to populate the `## Next Steps` section 
 - IF no `research/gtm.md`: `/gtm` — Build a GTM plan — metrics define what launch success looks like
 - IF `tasks/roadmap.md` exists: `/run` — Start building and instrumenting
 - IF product is live and no `research/customer-feedback.md`: `/customer-feedback` — Collect data to validate metric targets
+- IF product is live and real data exists: `/cohort-review` — Analyze actual performance against these targets
 
 **Impact-aware adjustments:**
 - IF downstream impact is **Major**: prepend `/research-reconcile — [N] conflicts found in downstream docs` as the first item

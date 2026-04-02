@@ -26,10 +26,10 @@ Discover and search all available skills in this repository, grouped by workflow
    | Stage | Skills |
    |-------|--------|
    | Discovery & Market Fit | `icp`, `enterprise-icp` |
-   | Planning | `brainstorm`, `brainstorm-kanban`, `plan-interview`, `plan-interview-ideas`, `plan-interview-kanban` |
+   | Planning | `brainstorm`, `brainstorm-kanban`, `plan-interview`, `plan-interview-ideas`, `plan-interview-kanban`, `experiment` |
    | Mapping | `journey-map`, `metrics` |
-   | Strategize | `roadmap`, `roadmap-kanban`, `competitive-analysis`, `gtm`, `monetization` |
-   | Evaluate | `mvp-gap`, `scale-audit`, `customer-feedback` |
+   | Strategize | `roadmap`, `roadmap-kanban`, `competitive-analysis`, `gtm`, `monetization`, `positioning`, `runway-model` |
+   | Evaluate | `mvp-gap`, `scale-audit`, `customer-feedback`, `assumption-tracker`, `cohort-review`, `retro` |
    | Workflow | `workflow` |
    | Detail | `plan-phases` |
    | Execution | `run`, `run-kanban` |
@@ -39,9 +39,9 @@ Discover and search all available skills in this repository, grouped by workflow
    | Refactoring & Migration | `migrate`, `decommission`, `scaffold` |
    | Monorepo | `affected` |
    | Release & Deploy | `release`, `deploy` |
-   | Context & Session | `handoff`, `sync` |
+   | Context & Session | `handoff`, `sync`, `investor-update` |
    | Git Workflow | `branch-lifecycle` |
-   | Utility | `commit-and-push-by-feature`, `analyze-sessions`, `install-workflow-orchestration`, `poketo-kanban`, `kanban-archive`, `sync-roadmap-kanban`, `skills` |
+   | Utility | `commit-and-push-by-feature`, `analyze-sessions`, `install-workflow-orchestration`, `poketo-kanban`, `kanban-archive`, `sync-roadmap-kanban`, `skills`, `risk-register` |
 
    Skills not found in the mapping go into an **Other** group at the end.
 

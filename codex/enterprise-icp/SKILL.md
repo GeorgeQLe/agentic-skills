@@ -16,7 +16,7 @@ Interview the founder to map the enterprise problem space. Enterprise sales invo
 Before checking prerequisites, determine the app scope:
 
 1. If `$ARGUMENTS` specifies an app name matching a subdirectory of `research/`, use it.
-2. If `research/` contains subdirectories (excluding files), list them and ask the user which app to target. If only one subdirectory exists, use it automatically.
+2. If `research/` contains subdirectories (excluding files), list them and ask the user which app to target. If the session is already in Plan mode and there are 2-3 concrete choices, prefer `request_user_input`; otherwise ask in plain text. If only one subdirectory exists, use it automatically.
 3. If no subdirectories exist, proceed with flat structure (single-product mode).
 
 When app scope `{app}` is active:

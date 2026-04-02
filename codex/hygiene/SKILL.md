@@ -2,7 +2,7 @@
 name: hygiene
 description: Audit project structure for convention violations, missing files, template drift, and cross-platform sync gaps — optionally auto-fix
 version: 1.0.0
-argument-hint: [audit|fix] [skills|tasks|docs|codex|all]
+argument-hint: "[audit|fix] [skills|tasks|docs|codex|all]"
 ---
 
 # Hygiene — Project Structure Audit

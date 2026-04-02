@@ -14,7 +14,7 @@ Reconcile the kanban board, roadmap docs, and codebase state so all three reflec
 2. **Read kanban state** — run `boards` to list all boards. Auto-detect the project board:
    - If `tasks/.kanban-board` exists and contains a valid board ID, use it.
    - Otherwise, match board names against `basename $(pwd)` (case-insensitive substring). If exactly one match, use it and save the ID to `tasks/.kanban-board`.
-   - If zero or multiple matches, list boards, ask the user to pick, and save their choice to `tasks/.kanban-board`.
+   - If zero or multiple matches, list boards, ask the user to pick, and save their choice to `tasks/.kanban-board`. If the session is already in Plan mode and there are 2-3 concrete choices, prefer `request_user_input`.
    - Run `board <id>` to get the full board state.
 
 3. **Read roadmap docs** — read `tasks/roadmap.md`, `tasks/todo.md`, and `tasks/manual-todo.md` (if it exists). List all items with checked/unchecked status.

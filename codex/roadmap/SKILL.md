@@ -16,7 +16,7 @@ Build or update `tasks/roadmap.md` by synthesizing all project documentation, in
 
 1. **Gather context**: Read `specs/`, `tasks/roadmap.md`, `tasks/todo.md`, `tasks/history.md`, `tasks/ideas.md`, `research/icp.md`, `specs/mvp-gap.md`, `research/enterprise-icp.md`, `specs/scale-audit.md`, `research/gtm.md` (launch milestones affect sequencing), `research/metrics.md` (instrumentation may need its own phase), CLAUDE.md, README. For existing projects, also review source files and git log.
 2. **Synthesise**: Present a structured summary — features identified, dependencies, conflicts, and (for existing projects) what's built vs. remaining.
-3. **Interview on strategy** (1–3 questions per turn):
+3. **Interview on strategy** (1–3 questions per turn). If the session is already in Plan mode and there are 2-3 concrete choices, prefer `request_user_input`; otherwise ask concise plain-text questions:
    - Priority — What's MVP vs. later?
    - Grouping — Combine or split specs?
    - Sequencing — Dependencies, risk reduction, user value order

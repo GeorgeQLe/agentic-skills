@@ -9,7 +9,7 @@ Identify the next incomplete unit of work from the phased plan, build an executi
 
 ## Kanban Setup
 
-1. Resolve the board: check `tasks/.kanban-board` for stored ID, validate via `board <id>`. If missing, match board names against `basename $(pwd)`. If no match, ask user. If no boards, offer to create one with `create-board --name "$(basename $(pwd))" --template standard`.
+1. Resolve the board: check `tasks/.kanban-board` for stored ID, validate via `board <id>`. If missing, match board names against `basename $(pwd)`. If no match, ask the user. If the session is already in Plan mode and there are 2-3 concrete board choices, prefer `request_user_input`; otherwise ask a concise plain-text question. If no boards exist, offer to create one with `create-board --name "$(basename $(pwd))" --template standard`.
 2. Validate all 5 lists exist (Backlog, Todo, In Progress, Done, Punt). Create missing ones via `create-list`.
 3. If poketo-kanban scripts are missing or DB is unreachable, warn and continue without kanban.
 4. **Board Overview:** Fetch board state and display a brief summary — overdue cards, starred/high-priority items, blocked cards, In Progress/Backlog/Todo counts. Informational only, no actions taken.
@@ -45,7 +45,7 @@ Scan all In Progress cards (advisory only, never block):
    - What the step requires
    - Which files will be created or modified
    - The approach and any trade-offs
-8. Wait for user approval before writing any code.
+8. Use `update_plan` to track the proposed work. If the session is already in Plan mode and a structured choice would help, use `request_user_input`. Otherwise ask for approval with a concise plain-text question. Wait for approval before writing any code.
 9. After approval, execute the plan:
    - If it is a tests-first step: write the failing tests, run them to confirm they fail.
    - If it is an implementation step: implement it, run existing tests for regressions.
@@ -60,7 +60,7 @@ Scan all In Progress cards (advisory only, never block):
 ## Constraints
 
 - One step at a time. Then stop and let the user decide what is next.
-- Always present the plan and get approval before executing.
+- Always present the plan and get approval before executing. Do not assume a Claude-style `EnterPlanMode` or clear-context accept flow exists.
 - Keep context footprint minimal — only read files relevant to the current step.
 - If a blocker prevents completion, document it in `tasks/todo.md` and stop.
 - Do not skip TDD steps.

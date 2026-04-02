@@ -1,5 +1,7 @@
 ## Workflow Orchestration
 
+> Compatibility note: this workflow block describes the intended Claude Code operating model. It assumes a plan-mode-first workflow that Codex does not currently support end-to-end from skills alone. In Codex, `request_user_input` is only available when the session is already in Plan mode, and Codex skills cannot force a Claude-style "enter plan mode / clear context and implement" flow. Treat this file as the canonical policy for Claude Code, not as proof of Codex parity.
+
 ### 1. Plan Mode Default
 - Enter plan mode for ANY non-trivial task (3+ steps or architectural decisions)
 - If something goes sideways, STOP and re-plan immediately — don't keep pushing

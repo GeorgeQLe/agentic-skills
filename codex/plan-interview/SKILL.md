@@ -12,7 +12,7 @@ Use this skill when the user has a draft spec, feature description, or rough ide
 1. Check if `research/icp.md` exists. If so, read it and use it as foundational context — ground solution decisions against the ICP's user journey, technical sophistication, and customer provisioning model. Flag conflicts (e.g., "ICP says users are non-technical — does this CLI workflow fit?"). Do not re-interview on ICP topics.
 2. Treat the existing spec or prompt as a draft, not a final decision record.
 2. Interview the user in depth to validate assumptions, resolve ambiguities, and close gaps.
-3. Prefer Codex's structured user-input flow for material decisions when available; otherwise ask concise direct questions.
+3. If the session is already in Plan mode, prefer `request_user_input` for material decisions with 2-3 real options. Otherwise ask concise direct questions in plain text.
 4. Ask 1 to 3 focused questions per turn.
 5. **Research and recommend by default.** Use web search, upstream research docs, and codebase analysis to gather evidence before asking the user. Present findings with data, state recommendation with reasoning, user approves/adjusts/overrides. Only present options without a recommendation when insider knowledge is required. For each real choice:
    - Explain the options with evidence

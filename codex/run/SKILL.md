@@ -1,6 +1,6 @@
 ---
 name: run
-description: Plan the next incomplete step (or full phase with --phase flag) from the plan, then enter plan mode for user approval before executing
+description: Plan the next incomplete step (or full phase with --phase flag) from the plan, present it for approval, then execute
 ---
 
 # Run
@@ -22,7 +22,7 @@ Identify the next incomplete unit of work from the phased plan, build an executi
    - What the step requires
    - Which files will be created or modified
    - The approach and any trade-offs
-8. Wait for user approval before writing any code.
+8. Use `update_plan` to track the proposed work. If the session is already in Plan mode and a structured choice would help, use `request_user_input`. Otherwise ask for approval with a concise plain-text question. Wait for approval before writing any code.
 9. After approval, execute the plan:
    - If it is a tests-first step: write the failing tests, run them to confirm they fail.
    - If it is an implementation step: implement it, run existing tests for regressions.
@@ -40,7 +40,7 @@ Identify the next incomplete unit of work from the phased plan, build an executi
 ## Constraints
 
 - One step at a time. Then stop and let the user decide what is next.
-- Always present the plan and get approval before executing.
+- Always present the plan and get approval before executing. Do not assume a Claude-style `EnterPlanMode` or clear-context accept flow exists.
 - Keep context footprint minimal — only read files relevant to the current step.
 - If a blocker prevents completion, document it in `tasks/todo.md` and stop.
 - Do not skip TDD steps.

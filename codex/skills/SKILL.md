@@ -1,52 +1,112 @@
 ---
 name: skills
-description: Browse and search all available skills, grouped by workflow stage
-version: 1.0.0
-argument-hint: [list | search <keyword>]
+description: Browse and search all available skills, grouped by workflow stage or activity type
+type: ops
+version: 1.1.0
+argument-hint: [list | types | search <keyword>]
 ---
 
 # Skills
 
-Discover and search all available skills in this repository, grouped by workflow stage.
+Discover and search all available skills in this repository, grouped by workflow stage or activity type.
 
 ## Process
 
 1. **Parse arguments:**
-   - If `$ARGUMENTS` is empty or `list` → **list mode** (show all skills).
-   - If `$ARGUMENTS` starts with `search ` → **search mode** (filter by keyword).
+   - If `$ARGUMENTS` is empty or `list` → **list mode** (show all skills grouped by workflow stage).
+   - If `$ARGUMENTS` is `types` → **type mode** (show all skills grouped by activity type).
+   - If `$ARGUMENTS` starts with `search ` → **search mode** (filter by keyword after `search`).
 
 2. **Discover skills:**
-   - Find all `claude/*/SKILL.md` files.
-   - Read frontmatter from each to extract `name` and `description`.
+   - Use Glob to find all `claude/*/SKILL.md` files.
+   - Read the first 6 lines of each file to extract YAML frontmatter fields: `name`, `description`, `type`.
 
-3. **Group by workflow stage** using the static mapping:
-   - Discovery & Market Fit, Planning, Mapping, Strategize, Evaluate, Workflow, Detail, Execution, Shipping, Code Quality, Debugging, Refactoring & Migration, Monorepo, Release & Deploy, Context & Session, Utility.
-   - Skills not in the mapping go into **Other**.
+3. **Group skills by workflow stage** using this static mapping:
 
-4. **Apply filter (search mode only):**
-   - Match keyword case-insensitively against `name` and `description`.
+   | Stage | Skills |
+   |-------|--------|
+   | Discovery & Market Fit | `icp`, `enterprise-icp` |
+   | Planning | `brainstorm`, `brainstorm-kanban`, `plan-interview`, `plan-interview-ideas`, `plan-interview-kanban`, `experiment` |
+   | Mapping | `journey-map`, `metrics` |
+   | Strategize | `roadmap`, `roadmap-kanban`, `competitive-analysis`, `gtm`, `monetization`, `positioning`, `runway-model` |
+   | Evaluate | `mvp-gap`, `scale-audit`, `customer-feedback`, `assumption-tracker`, `cohort-review`, `retro` |
+   | Workflow | `workflow` |
+   | Detail | `plan-phases` |
+   | Execution | `run`, `run-kanban` |
+   | Shipping | `ship`, `ship-end`, `ship-kanban`, `ship-end-kanban` |
+   | Code Quality | `expert-review`, `regression-check`, `dead-code` |
+   | Debugging | `investigate`, `debug`, `trace` |
+   | Refactoring & Migration | `migrate`, `decommission`, `scaffold` |
+   | Monorepo | `affected` |
+   | Release & Deploy | `release`, `deploy` |
+   | Context & Session | `handoff`, `sync`, `investor-update` |
+   | Git Workflow | `branch-lifecycle` |
+   | Utility | `commit-and-push-by-feature`, `analyze-sessions`, `install-workflow-orchestration`, `poketo-kanban`, `kanban-archive`, `sync-roadmap-kanban`, `skills`, `risk-register` |
 
-5. **Output results:**
-   - Print each non-empty stage as a heading with skills listed as `/<name> — <description>`.
-   - Print total count at the bottom.
+   Skills not found in the mapping go into an **Other** group at the end.
+
+4. **Group skills by activity type** (type mode only) using the `type` field from frontmatter:
+
+   | Type | Description |
+   |------|-------------|
+   | `research` | Web search + analysis → produces documents |
+   | `analysis` | Reads codebase/docs → produces assessments |
+   | `planning` | Interactive → produces specs/plans |
+   | `execution` | Writes/modifies code |
+   | `review` | Reads code → reports issues (no changes) |
+   | `debugging` | Investigates + fixes problems |
+   | `shipping` | Commits, deploys, session management |
+   | `ops` | Manages boards, branches, meta-tooling |
+
+   Display order: research → analysis → planning → execution → review → debugging → shipping → ops.
+   Skills with no `type` field go into an **Other** group at the end.
+
+5. **Apply filter (search mode only):**
+   - Match the keyword case-insensitively against each skill's `name`, `description`, and `type`.
+   - Keep only matching skills. Remove empty groups.
+
+6. **Output results:**
+   - Print each non-empty group as a `## Group Name` heading.
+   - Under each heading, list skills as `/<name> — <description>`.
+   - In type mode, append the type tag: `/<name> — <description>  [type]`.
+   - In list mode (stage grouping), append the type tag: `/<name> — <description>  [type]`.
+   - Omit groups that have no skills (after filtering in search mode).
+   - At the bottom, print a total count: `**N skills** found` (or `**N skills** matching "<keyword>"`).
 
 ## Output Format
 
+### List mode (default — grouped by workflow stage)
 ```
 ## Discovery & Market Fit
-/icp — Customer discovery interview...
-/enterprise-icp — Enterprise multi-stakeholder discovery...
+/icp — Customer discovery interview...  [research]
+/enterprise-icp — Enterprise multi-stakeholder discovery...  [research]
 
 ## Planning
-/brainstorm — Evaluate the codebase and suggest ideas...
+/brainstorm — Evaluate the codebase and suggest ideas...  [planning]
+/brainstorm-kanban — Brainstorm ideas and create kanban cards...  [planning]
+...
 
-**N skills** found
+**49 skills** found
+```
+
+### Type mode (`/skills types`)
+```
+## Research
+/icp — Customer discovery interview...
+/competitive-analysis — Research competitors...
+...
+
+## Analysis
+/mvp-gap — Evaluate codebase against ICP...
+...
+
+**49 skills** found
 ```
 
 ## Constraints
 
-- Read-only — never modify any files.
-- Always read live frontmatter from SKILL.md files; do not hardcode descriptions.
-- Use the static stage mapping for grouping; do not infer categories from file paths.
-- Keep output compact — one line per skill.
-- In search mode, if no skills match: `No skills matching "<keyword>"`.
+- This is a read-only scan — never modify any files.
+- Always read the live frontmatter from SKILL.md files; do not hardcode descriptions.
+- Use the static stage mapping for stage grouping; use the `type` frontmatter field for type grouping.
+- Keep output compact — one line per skill, no extra detail beyond name, description, and type tag.
+- In search mode, if no skills match the keyword, print: `No skills matching "<keyword>"`.
