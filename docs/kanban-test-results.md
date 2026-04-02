@@ -1,5 +1,7 @@
 # Kanban Skill Test Results
 
+> Scope note: the end-to-end invocation results below are Claude Code results. They include Claude-specific behaviors such as AskUserQuestion checkpoints and entering plan mode. They should not be read as proof that the Codex variants currently support the same workflow semantics.
+
 **Date:** 2026-03-27 (re-verified from 2026-03-26)
 **Board:** claude-skills (`5ab6bbdb-d06c-4e47-8a27-5e1de29b2df7`)
 **DB:** Neon (production)

@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-04-02 — Enhance skill follow-through and close dead-end workflows
+
+- Enhanced `mvp-gap` (v1.1.0→v1.2.0): added downstream impact check (scans journey-map, metrics, gtm, monetization, roadmap for conflicts), spec validation (checks existing specs before suggesting /plan-interview), journey stage mapping per gap, metrics tie-in (closure metrics + instrumentation gap flagging), GTM alignment (cross-references build sequence against launch gates), enriched output format with _Journey stage:_, _Closure metric:_, _Spec:_ per gap
+- Enhanced `dead-code` (v1.0.0→v1.1.0): added Follow-Through section — writes "Safe to Remove" items as checkboxes to `tasks/todo.md` under `## Dead Code Cleanup`, suggests `/run` to execute
+- Enhanced `expert-review` (v1.0.0→v1.1.0): added Follow-Through section — writes Critical/High findings as checkboxes to `tasks/todo.md` under `## Code Review Fixes`, suggests `/run` or `/investigate`
+- Enhanced `regression-check` (v1.0.0→v1.1.0): added Follow-Through section — writes new failures (not pre-existing) as checkboxes to `tasks/todo.md` under `## Regression Fixes`, only when verdict is "Issues found"
+- Synced all changes to codex/ variants (mvp-gap, dead-code, expert-review, regression-check)
+
 ## 2026-04-01 — Update /deploy skill with deployment history tracking
 
 - Updated `claude/deploy/SKILL.md` v1.0.0→v2.0.0 — added deployment ledger (`tasks/deploys.md`), pre-deploy diff, staleness detection, `--status` flag

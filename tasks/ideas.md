@@ -2,6 +2,8 @@
 
 ## Quick wins (hours)
 
+- **Redesign execution workflow for Codex** — The current repository workflow assumes Claude Code can enter plan mode and, after approval, continue through a clear-context implementation loop. Codex cannot do that from skills alone: `request_user_input` only works when already in Plan mode, and there is no Claude-style plan-mode entrypoint/settings flow. We need a Codex-native execution pattern for `/run`, `/ship`, `/migrate`, `/decommission`, and kanban variants instead of pretending parity. _Start with:_ `/plan-interview codex-native workflow redesign for execution and approval handling`
+
 - **Add Codex equivalent for `/roadmap` skill** — The new `/roadmap` skill exists only in `claude/roadmap/` with no `codex/roadmap/` counterpart. Every other skill (27/28) has both. _Start with:_ `/plan-interview codex roadmap skill parity`
 
 - **Consolidate duplicate deploy logic across ship variants** — `/ship`, `/ship-then-plan`, and `/ship-end` each inline the full deploy search+execute logic (spec.md → CLAUDE.md → Makefile → ...). Extract a shared deploy protocol reference or use `/deploy` internally to avoid drift. Signal: `ship.md:26-38`, `ship-then-plan.md:23-29`, `ship-end.md` all repeat the same search order. _Start with:_ `/plan-interview extracting shared deploy protocol across ship skills`
