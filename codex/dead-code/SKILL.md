@@ -27,8 +27,12 @@ Use this skill when the user wants to identify unused code, orphaned files, or s
 - **Dead Code Patterns**: unreachable code, commented blocks
 - **Safe to Remove**: prioritized cleanup list
 
+## Follow-Through
+
+After presenting findings, write "Safe to Remove" items to `tasks/todo.md` under a `## Dead Code Cleanup` heading (append or replace existing section). One checkbox per item. Do not add "Needs Investigation" items. Suggest `/run` to execute cleanup.
+
 ## Constraints
 
-- Never automatically delete anything — only report.
+- Never automatically delete anything — only report and write todo items.
 - Be conservative with false positives.
 - Exclude entry points, config files, and tool-consumed files.

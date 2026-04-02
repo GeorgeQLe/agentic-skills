@@ -1,7 +1,7 @@
 ---
 name: mvp-gap
 description: Evaluate codebase against ICP to identify gaps blocking first sales and retention
-version: 1.1.0
+version: 1.2.0
 ---
 
 # MVP Gap — Startup Readiness Audit
@@ -31,24 +31,36 @@ When app scope `{app}` is active:
 
 1. Read `research/icp.md` (or `research/{app}/icp.md`), `research/metrics.md` (or `research/{app}/metrics.md`) (if it exists — check if defined metrics can actually be measured), codebase, README, existing specs (from `specs/` or `specs/{app}/`), and any in-progress work from `tasks/`.
 2. Evaluate the codebase against the ICP across these dimensions:
-   - **User Journey Coverage** — Can the product replace each step in the current-state journey?
+   - **User Journey Coverage** — Can the product replace each step in the current-state journey? If `research/journey-map.md` exists, map each gap to its journey stage.
    - **Customer Journey Coverage** — Discovery, evaluation, trial, purchase, provisioning, onboarding
    - **Table-Stakes Gaps** — Auth, error handling, data export, accessibility, docs, notifications
    - **Integration Gaps** — Required integrations from the ICP's current workflow
    - **Competitive Differentiation** — Does it deliver the claimed value prop?
+   - **Spec Validation** — For each gap, check `specs/` for existing coverage: "Spec exists — ready to build", "Spec exists — needs expansion", or no spec (suggest `/plan-interview`).
+   - **Metrics Tie-In** — If `research/metrics.md` exists, identify which metric(s) indicate each gap is closed. Flag gaps with no closure metric as instrumentation gaps.
 3. Tag each gap: `blocks-first-sale`, `blocks-retention`, or `nice-to-have`. Estimate effort (S/M/L).
-4. Provide a prioritised build sequence.
+4. If `research/gtm.md` exists, cross-reference build sequence against GTM launch gates. Flag conflicts and gaps deferrable to post-launch.
+5. Provide a prioritised build sequence.
 
 ## Deliverables
 
-- `specs/mvp-gap.md` (or `specs/{app}/mvp-gap.md`) — Gap analysis with priority tags, evidence, effort estimates, and `/plan-interview` prompts for each gap
+- `specs/mvp-gap.md` (or `specs/{app}/mvp-gap.md`) — Gap analysis with priority tags, evidence, effort estimates, journey stage, closure metric, and spec status for each gap
 
-The output file must end with a `## Next Steps` section (3–5 contextual items, "Pick one:" framing) based on which files exist: always suggest `/roadmap`; conditionally suggest `/plan-interview [top gap]`, `/journey-map`, `/competitive-analysis`, `/brainstorm` based on first-sale blockers needing specs, `research/journey-map.md`, `research/competitive-analysis.md`, and high-effort gaps.
+Each gap in the output should include:
+- _Journey stage:_ [stage from journey-map, or "N/A"]
+- _Closure metric:_ [metric from metrics.md, or "⚠ No metric defined"]
+- _Spec:_ [link to spec + status, or `/plan-interview [topic]`]
+
+The output file must include a `## Downstream Impact` section (only if conflicts found) and end with a `## Next Steps` section (3–5 contextual items, "Pick one:" framing) based on which files exist: always suggest `/roadmap`; conditionally suggest `/plan-interview [top gap]` (only if no spec exists), `/journey-map`, `/competitive-analysis`, `/brainstorm`, `/metrics` (if gaps lack closure metrics).
+
+### Downstream Impact Check
+
+After writing, scan existing downstream docs (`research/journey-map.md`, `research/metrics.md`, `research/gtm.md`, `research/monetization.md`, `tasks/roadmap.md`) for conflicts with what was just decided. Classify as None/Minor/Major. If Major (3+ conflicts or foundational gap changes build sequence), recommend `/research-reconcile`.
 
 ## Constraints
 
 - Analysis only — do not make code changes.
 - Every gap must cite specific evidence from the codebase.
 - Prioritise by market impact, not technical interest.
-- Include `/plan-interview <topic>` prompts for each gap.
+- Include `/plan-interview <topic>` prompts only for gaps lacking specs.
 - `## Next Steps` must be the final section in the output file, with 3–5 contextual items and "Pick one:" framing.
