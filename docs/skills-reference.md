@@ -354,10 +354,11 @@ Version bump, generate changelog, tag, and prepare a release.
 - **Use when**: Cutting a release.
 
 ### `/deploy`
-Deploy the project to a target environment.
+Deploy the project to a target environment with deployment history tracking and staleness detection.
 
-- **Arguments**: `[staging|production]` (defaults to staging)
-- **Use when**: Deploying after a release or for testing.
+- **Arguments**: `[staging|production] [--status]` (defaults to staging; `--status` shows staleness without deploying)
+- **Outputs**: Deploy result + staleness report. Maintains `tasks/deploys.md` ledger with commit ranges per deploy.
+- **Use when**: Deploying after a release or for testing. Use `--status` to check which environments are stale.
 
 ---
 
@@ -523,7 +524,7 @@ Archive old Done/Punt cards from the kanban board.
 | `/ship` | Commit, push, deploy, plan next step | shipping |
 | `/ship-end` | Wrap up session | shipping |
 | `/release` | Version bump + changelog + tag | shipping |
-| `/deploy` | Deploy to staging/production | shipping |
+| `/deploy` | Deploy to staging/production with history tracking | shipping |
 | `/commit-and-push-by-feature` | Group commits by feature | shipping |
 | `/handoff` | Context snapshot for session continuity | shipping |
 | `/sync` | Pull latest from remote | shipping |

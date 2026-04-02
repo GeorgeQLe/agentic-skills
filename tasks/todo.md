@@ -1,8 +1,6 @@
-# /slim-audit Skill — Complete
+# /deploy Skill Update — Complete
 
 All deliverables shipped:
-- [x] Create `claude/slim-audit/SKILL.md` — full 7-step analysis skill
-- [x] Create `codex/slim-audit/SKILL.md` — condensed Codex version
-- [x] Create `codex/slim-audit/agents/openai.yaml` — agent manifest
-- [x] Update `docs/skills-reference.md` — Code Quality section, activity types, quick reference, count 54→55
-- [x] Run install.sh to symlink new skill
+- [x] Update `claude/deploy/SKILL.md` — add deployment ledger, staleness detection, `--status` flag (v1.0.0→v2.0.0)
+- [x] Update `codex/deploy/SKILL.md` — matching condensed update
+- [x] Update `docs/skills-reference.md` — updated entry and quick reference
