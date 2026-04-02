@@ -59,7 +59,7 @@ After setting up the session card, scan for cross-device conflicts. This is **ad
    - Look for the next phase with an unchecked milestone.
    - If `--phase` mode: scope the entire phase.
    - Otherwise (default): find only the next unchecked `- [ ]` step within that phase.
-   - **If the phase has acceptance criteria but no implementation steps** (no `### Tests First` section): invoke `/plan-phases` for this phase to generate TDD steps and file-level detail before proceeding.
+   - **If the phase has acceptance criteria but no implementation steps** (no `### Tests First` section): this phase needs just-in-time planning. **You MUST invoke `/plan-phases` for this phase** to generate TDD steps and file-level detail before proceeding. Do NOT tell the user the phase is "deferred" or that they need to run `/plan-phases` manually — this auto-invocation is the designed workflow. A phase without TDD steps is NOT deferred; it simply hasn't been decomposed yet. Only items under the `## Deferred / Future Work` heading in the roadmap are actually deferred.
 5. **Check `tasks/manual-todo.md`** (if it exists) for blocking manual tasks:
    - Look for unchecked items with `_(blocks: Step N.X)_` annotations matching the step about to be executed.
    - If a blocking manual task is found, warn the user: "**Manual task blocking this step:** [task]. Complete it before proceeding." Do NOT skip the step — let the user decide.
