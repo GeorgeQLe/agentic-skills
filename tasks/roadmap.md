@@ -2,11 +2,11 @@
 
 > Generated from: tasks/roadmap.md (existing), specs/board-flag-kanban-search.md, tasks/ideas.md, tasks/history.md
 > Date: 2026-03-27
-> Total Phases: 9 (9 complete)
+> Total Phases: 10 (9 complete, 1 planned)
 
 ## Summary
 
-Phases 1-9 complete: kanban skill suite, board intelligence, templates, archive automation, expert review fixes, test hardening (83 tests), kanban DX, and skill infrastructure (discovery, dependency graph, versioning).
+Phases 1-9 complete: kanban skill suite, board intelligence, templates, archive automation, expert review fixes, test hardening (83 tests), kanban DX, and skill infrastructure (discovery, dependency graph, versioning). Phase 10 is planned to migrate kanban operations off direct DB writes and onto the canonical Poketo headless API path for both Claude and Codex.
 
 ## Phase Overview
 
@@ -21,6 +21,7 @@ Phases 1-9 complete: kanban skill suite, board intelligence, templates, archive 
 | 7 | Testing Hardening II ✓ | tasks/ideas.md | Bootstrap tests, install.sh bats, DB error paths | M |
 | 8 | Kanban DX ✓ | specs/board-flag-kanban-search.md, tasks/ideas.md | `--board` flag, dry-run mode, env path unification | M |
 | 9 | Skill Infrastructure ✓ | tasks/ideas.md | Skill discovery, dependency graph, versioning | L |
+| 10 | Headless API Migration | — | Shared Poketo app-layer kanban integration for Claude + Codex | L |
 
 ---
 
@@ -235,6 +236,65 @@ Phases 1-9 complete: kanban skill suite, board intelligence, templates, archive 
 - Deviations from plan: Versioning applied to all 43 skills (not just 3+). Skipped per-skill changelogs — git history suffices.
 - Tech debt / follow-ups: Codex skill versioning deferred.
 - Ready for next phase: Yes
+
+---
+
+## Phase 10: Headless API Migration
+
+**Goal:** Replace direct database kanban writes with a shared, authenticated Poketo headless API path so Claude and Codex both use the same app-layer permissions, validation, and audit logging.
+
+**Why this phase exists:**
+- Current kanban skills write through `kanban.mjs`, which talks directly to Neon using local DB credentials
+- Codex skill variants currently depend on Claude install paths such as `~/.claude/skills/poketo-kanban/scripts/kanban.mjs`
+- The canonical Poketo business logic already lives in app-layer tRPC routers and gateway-adjacent adapters, but the headless work-tool surface is only partially wired
+- Keeping separate write paths for Claude and Codex will continue to drift on auth, permissions, and board action semantics
+
+### Steps
+
+1. **Establish agent-friendly headless auth**
+   - Define the supported auth path for automation agents (API key or equivalent durable headless auth)
+   - Ensure local agent workflows do not require raw DB credentials for normal board operations
+   - Document the migration and fallback expectations for existing `~/.poketo/config.json` session-based setups
+
+2. **Finish wiring the Poketo Work headless tool layer**
+   - Replace stubbed Work primitives/adapters with real tRPC-backed implementations for board/card/list operations
+   - Ensure the shared surface exposes the kanban operations the skills need: board discovery, board details, board activity, board creation, list creation/update, card create/update/move/search, archive/restore
+   - Reuse the app-layer routers so permission checks and `board_actions` logging come from the canonical Poketo boundary
+
+3. **Expose the shared API/gateway path for agent use**
+   - Make the headless Work operations available through the existing gateway/CLI surface used by agents
+   - Verify tool discovery and execution work without depending on direct DB access
+   - Ensure the response shapes are good enough to support existing kanban skill workflows without fragile parsing
+
+4. **Migrate Claude kanban skills**
+   - Update Claude kanban skills to use the shared headless path instead of direct DB writes through `kanban.mjs`
+   - Preserve current workflow behavior where possible: board resolution, list validation, conflict checks, progress updates, archive flow
+   - Keep `kanban.mjs` only as a temporary fallback/admin tool during rollout
+
+5. **Migrate Codex kanban skills**
+   - Remove Codex dependence on Claude-specific install paths
+   - Point Codex kanban skills at the same shared headless path Claude uses
+   - Update docs and assumptions so Codex is no longer described as operating through the Claude-side kanban script
+
+6. **Deprecate the standalone DB-write path**
+   - Mark `kanban.mjs` direct-write mode as fallback-only once both toolchains are migrated
+   - Remove it from the default documented workflow after shared headless usage is verified
+   - Keep only the minimum rescue/admin functionality if there is still an operational need
+
+### Acceptance Criteria
+
+- [ ] Claude and Codex kanban skills use the same app-layer write path for normal board operations
+- [ ] No kanban skill requires `POKETOWORK_DATABASE_URL` for standard usage
+- [ ] Codex kanban skills no longer reference `~/.claude/skills/...` paths
+- [ ] Shared headless operations cover the current kanban workflow needs: board discovery/details/activity, create board/list/card, update card, move card, search, archive/restore
+- [ ] Board permissions and `board_actions` logging come from the canonical Poketo app layer rather than the standalone script
+- [ ] `kanban.mjs` is documented as fallback/admin-only or removed from the default workflow
+
+### Notes / Risks
+
+- Auth is the main dependency. If the gateway/API-key flow is not usable for agents, the migration will stall.
+- The Work tool layer and gateway surface must be completed before migrating the skill docs, otherwise the skills will lose functionality.
+- Claude and Codex should migrate to the same target surface in close succession to avoid long-lived behavioral drift.
 
 ---
 
