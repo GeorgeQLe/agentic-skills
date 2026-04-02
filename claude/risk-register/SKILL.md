@@ -1,0 +1,178 @@
+---
+name: risk-register
+description: Broad risk assessment — key-person, technical, regulatory, competitive, financial, and execution risks beyond product/market
+type: analysis
+version: 1.0.0
+argument-hint: [optional: focus area e.g. "technical", "regulatory", "financial"]
+---
+
+# Risk Register — Systematic Risk Assessment
+
+Identifies and tracks risks beyond product/market: key-person, technical, regulatory, competitive, financial, and execution risks. Complements `/assumption-tracker` (which focuses on product/market assumptions) with broader organizational and environmental risks.
+
+## Soft Prerequisites
+
+- Read all that exist: `research/icp.md`, `research/competitive-analysis.md`, `research/gtm.md`, `research/monetization.md`, `research/runway-model.md`, `research/assumption-tracker.md`, CLAUDE.md, README
+- The more context exists, the more thorough the risk identification.
+
+## Process
+
+### 0. App Scope Resolution (Monorepo Support)
+
+Before loading, determine the app scope:
+
+1. If `$ARGUMENTS` specifies an app name matching a subdirectory of `research/`, use it.
+2. If `research/` contains subdirectories (excluding files), list them and ask the user which app to target. If only one subdirectory exists, use it automatically.
+3. If no subdirectories exist, proceed with flat structure (single-product mode).
+
+When app scope `{app}` is active:
+- Read research from `research/{app}/` instead of `research/`
+
+### 1. Load Context
+
+Read all available research docs and codebase files. Extract signals relevant to risk:
+- **Financial**: runway, burn rate, revenue concentration
+- **Technical**: tech debt, single points of failure, scaling concerns
+- **Market**: competitive threats, market shifts, regulatory changes
+- **Team**: key-person dependencies, skill gaps, hiring needs
+- **Execution**: timeline risks, scope creep, dependency chains
+
+### 2. Identify Risks
+
+Use WebSearch with **3-5 targeted queries** for domain-specific risks:
+1. "[industry/category] startup risks"
+2. "[category] regulatory requirements"
+3. "[technology stack] scaling risks"
+4. "[category] common failure modes"
+
+Systematically identify risks in each category:
+
+#### A. Key-Person Risk
+- Single points of failure in the team
+- Critical knowledge held by one person
+- Founder dependency
+
+#### B. Technical Risk
+- Architecture limitations, scaling bottlenecks
+- Security vulnerabilities, data privacy
+- Dependency on third-party services
+- Technical debt accumulation
+
+#### C. Regulatory & Legal Risk
+- Compliance requirements (GDPR, SOC2, industry-specific)
+- IP risks, patent exposure
+- Terms of service dependencies on platforms
+
+#### D. Competitive Risk
+- Well-funded competitor entering the space
+- Platform risk (building on someone else's platform)
+- Open-source alternatives emerging
+
+#### E. Financial Risk
+- Revenue concentration (one big customer)
+- Runway constraints
+- Pricing pressure from competitors
+- Cost structure changes (API pricing, infrastructure)
+
+#### F. Execution Risk
+- Scope creep, feature bloat
+- Hiring challenges
+- Timeline slippage
+- Integration complexity
+
+### 3. Score Each Risk
+
+| Dimension | Scale |
+|-----------|-------|
+| **Likelihood** | 1 (unlikely) → 5 (near certain) |
+| **Impact** | 1 (minor setback) → 5 (existential threat) |
+| **Priority** | Likelihood × Impact (max 25) |
+
+### 4. Define Mitigations
+
+For each high-priority risk (score ≥ 12):
+- **Accept**: Acknowledge and monitor
+- **Mitigate**: Actions to reduce likelihood or impact
+- **Transfer**: Insurance, contracts, or partnerships
+- **Avoid**: Change plans to eliminate the risk
+
+### 5. Present & Validate
+
+Use AskUserQuestion to present the top risks:
+- "Here are the highest-priority risks I've identified. Any I'm missing or scoring wrong?"
+- "Are there any risks you're already mitigating that I should note?"
+
+Incorporate feedback before proceeding.
+
+### 6. Write Output
+
+Only after confirmation, write the output file.
+
+## Output
+
+### `research/risk-register.md` (or `research/{app}/risk-register.md`)
+
+```markdown
+# Risk Register
+
+> Last updated: [current date]
+> Sources: [research docs reviewed]
+> Total risks: [count] | High priority: [count]
+
+## Summary
+[2-3 sentences: the top risks and overall risk posture]
+
+## Top Risks
+
+| # | Risk | Category | Likelihood | Impact | Priority | Mitigation |
+|---|------|----------|-----------|--------|----------|------------|
+| 1 | [risk] | [category] | [1-5] | [1-5] | [L×I] | [strategy] |
+| ... | | | | | | |
+
+## Key-Person Risks
+| Risk | Likelihood | Impact | Priority | Mitigation |
+|------|-----------|--------|----------|------------|
+| [risk] | [1-5] | [1-5] | [L×I] | [action] |
+
+## Technical Risks
+[Same table format]
+
+## Regulatory & Legal Risks
+[Same table format]
+
+## Competitive Risks
+[Same table format]
+
+## Financial Risks
+[Same table format]
+
+## Execution Risks
+[Same table format]
+
+## Mitigation Plan
+
+### Immediate Actions (This Month)
+1. [Action] — mitigates [risk #]
+2. ...
+
+### Ongoing Monitoring
+| Risk | Trigger Signal | Check Frequency |
+|------|---------------|-----------------|
+| [risk] | [what to watch for] | [weekly/monthly/quarterly] |
+
+## Next Steps
+
+Pick one:
+- `/assumption-tracker` — Cross-reference product/market assumptions with these broader risks
+- `/workflow` — Check overall project status
+```
+
+Create the `research/` directory if it doesn't exist.
+
+## Constraints
+
+- **Complement, don't duplicate.** Product/market assumptions belong in `/assumption-tracker`. This skill covers organizational, technical, regulatory, competitive, financial, and execution risks.
+- **Be specific.** "Competition" is not a risk. "Well-funded competitor X launching a free tier in Q3" is.
+- **Present before writing.** Never write until the user validates the assessment.
+- **Score honestly.** Don't inflate risks to seem thorough. Low-probability risks should be scored low.
+- **Update, don't duplicate.** If `research/risk-register.md` exists, ask whether to update or overwrite.
