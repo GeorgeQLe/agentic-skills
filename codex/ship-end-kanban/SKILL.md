@@ -1,6 +1,7 @@
 ---
 name: ship-end-kanban
-description: Wrap up the current session — update docs, commit, push, and move the kanban In Progress card to Done
+description: "Wrap up the current session — update docs, commit, push, and move the kanban In Progress card to Done"
+argument-hint: "[--no-deploy]"
 ---
 
 # Ship End (Kanban)
@@ -22,10 +23,13 @@ All kanban commands use: `node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs
 3. Update `tasks/todo.md` with completed items and blockers. Also update milestone progress in `tasks/roadmap.md` if criteria were met.
 3b. Check `tasks/manual-todo.md` (if it exists) — note the status of manual tasks (checked vs unchecked). Do NOT modify checked items.
 4. Update `tasks/history.md` with a brief record of the session. Create it if needed.
-5. Deploy:
-   - Find the deploy method by checking: `spec.md`, `CLAUDE.md`, `tasks/roadmap.md`, `tasks/todo.md`, `Makefile`/`Justfile`, `package.json`, `deploy/`/`infra/`/`scripts/`, `docker-compose*.yml`.
+5. Deploy (skip if `--no-deploy`):
+   - Check for an explicit manual deploy contract in `deploy.md` or `tasks/deploy.md`.
+   - If neither file exists, skip deploy and report `Deploy skipped: no explicit manual deploy contract (deploy.md or tasks/deploy.md)`.
+   - If a deploy contract exists, read it first and use it to determine the deploy method.
+   - Supplement the contract by checking: `spec.md`, `CLAUDE.md`, `tasks/roadmap.md`, `tasks/todo.md`, `Makefile`/`Justfile`, `package.json`, `deploy/`/`infra/`/`scripts/`, `docker-compose*.yml`.
    - Do NOT look in `.github/workflows/`.
-   - If no deploy method is found, ask the user. Do not guess or skip.
+   - If a deploy contract exists but no deploy method is found, ask the user. Do not guess.
    - Run the deploy and verify output.
 6. Commit and push using the `commit-and-push-by-feature` workflow.
 7. **Kanban: Move session card to Done**
@@ -49,6 +53,7 @@ All kanban commands use: `node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs
 - Do not switch or create branches unless required.
 - Do not amend or rewrite history.
 - Stop and report if secrets are detected.
+- `ship-end-kanban` only runs a deploy when `deploy.md` or `tasks/deploy.md` explicitly documents a manual deployment workflow. Repos without one are assumed to auto-deploy or require no manual deploy step.
 - Never use GitHub Actions for deployment.
 - Never deploy to production without explicit user confirmation.
 - Kanban operations are additive — if any fail, warn and continue. Core workflow must succeed.
