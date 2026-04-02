@@ -91,6 +91,8 @@ Before writing, check which files exist and synthesis results to populate the `#
 - IF 3+ New findings: `/brainstorm` — Generate ideas for newly revealed customer needs
 - IF New findings relate to a gap: `/plan-interview [topic]` — Spec a solution for the most impactful new finding
 - IF no staleness alerts: `/workflow` — Check overall project status
+- IF feedback came from experiment results: `/assumption-tracker` — Update assumption validation status with experiment findings
+- IF 3+ research docs exist and no `research/assumption-tracker.md`: `/assumption-tracker` — Build the assumptions register to track what feedback is validating
 
 **Impact-aware adjustments:**
 - IF downstream impact is **Major**: prepend `/research-reconcile — [N] conflicts found in downstream docs` as the first item

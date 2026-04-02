@@ -32,6 +32,14 @@ Use Glob and Bash (`stat` / `ls -la`) to check for existence and modification da
 - `research/gtm.md`
 - `research/metrics.md`
 - `research/monetization.md`
+- `research/positioning.md`
+- `research/assumption-tracker.md`
+- `research/runway-model.md`
+- `research/cohort-review-*.md` (all dated cohort reviews)
+- `research/experiments/*.md` (all experiment plans)
+- `research/retro-*.md` (all dated retros)
+- `research/investor-update-*.md` (all dated updates)
+- `research/risk-register.md`
 - `specs/*.md` (all spec files)
 - `specs/mvp-gap.md`
 - `specs/scale-audit.md`
@@ -75,6 +83,11 @@ Compare modification timestamps. Flag items as stale when newer upstream data ex
 | `research/icp.md` + `research/competitive-analysis.md` + `research/journey-map.md` | `research/gtm.md` | **Stale** — upstream research changed since GTM was written |
 | `research/icp.md` + `research/competitive-analysis.md` | `research/monetization.md` | **Stale** — ICP or competitive pricing data changed since monetization was written |
 | `research/customer-feedback.md` | `research/monetization.md` | **May be stale** — customer feedback may contain new willingness-to-pay signals |
+| `research/cohort-review-*.md` (latest) | `research/metrics.md` | **May be stale** — real performance data may require target adjustments. _Fix:_ `/metrics` |
+| `research/cohort-review-*.md` (latest) | `research/gtm.md` | **May be stale** — actual channel performance may invalidate GTM strategy. _Fix:_ `/gtm` |
+| `research/experiments/*.md` (any with Results) | `research/assumption-tracker.md` | **Stale** — experiment results should update assumption validation status. _Fix:_ `/assumption-tracker` |
+| `research/positioning.md` | `research/gtm.md` | **Stale** — GTM messaging should flow from positioning. _Fix:_ `/gtm` |
+| `research/runway-model.md` | `tasks/roadmap.md` | **May be stale** — runway constraints may affect roadmap ambition. _Fix:_ `/roadmap` |
 | Recent `src/` commits (`git log`) | `specs/*.md` that describe the changed areas | **May be stale** — code may have evolved past spec. _Fix:_ `/spec-drift` |
 
 Note: The last rule compares git commit timestamps against spec file timestamps. Use `git log --since="<spec last-modified date>" -- <source directories>` to find commits touching source code after the spec was last modified. If relevant source files changed after the spec, flag the spec as potentially stale.
@@ -94,8 +107,13 @@ Using the dependency graph, identify what's available but not yet done:
   -> /mvp-gap (requires icp)
   -> /journey-map (requires icp + specs)
     -> /metrics (requires journey-map)
-  -> /gtm (requires icp, optionally competitive-analysis + journey-map)
+  -> /icp + /competitive-analysis -> /positioning -> /gtm (positioning is upstream of messaging)
+  -> /gtm (requires icp, optionally competitive-analysis + journey-map + positioning)
   -> /monetization (requires icp, optionally competitive-analysis + journey-map + metrics + gtm)
+3+ research docs -> /assumption-tracker -> /experiment -> /customer-feedback (results)
+/monetization + launch -> /runway-model -> /roadmap (runway constraints)
+/metrics + launch data -> /cohort-review -> triggers updates to /gtm, /monetization, /assumption-tracker
+Quarterly -> /retro -> triggers re-runs of stale research
 /enterprise-icp -> /scale-audit
 /plan-interview -> specs/*.md
 /spec-drift (requires specs/*.md + codebase)

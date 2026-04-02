@@ -149,6 +149,7 @@ Check which files exist to populate the `## Next Steps` section contextually. In
 - IF no `research/journey-map.md`: `/journey-map` — Map the journey to validate where pricing gates belong
 - IF `specs/` exist and no `tasks/roadmap.md`: `/roadmap` — Plan the build with monetization milestones
 - IF codebase exists: `/mvp-gap` — Check if the product delivers enough value to charge
+- IF product is live and revenue exists: `/runway-model` — Track actual financial performance against these estimates
 
 ### 8. Final Review & Write
 

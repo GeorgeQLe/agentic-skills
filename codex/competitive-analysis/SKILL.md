@@ -23,7 +23,7 @@ Conduct deep web-based research to compile a comprehensive competitive landscape
 Before checking prerequisites, determine the app scope:
 
 1. If `$ARGUMENTS` specifies an app name matching a subdirectory of `research/`, use it.
-2. If `research/` contains subdirectories (excluding files), list them and ask the user which app to target. If only one subdirectory exists, use it automatically.
+2. If `research/` contains subdirectories (excluding files), list them and ask the user which app to target. If the session is already in Plan mode and there are 2-3 concrete choices, prefer `request_user_input`; otherwise ask in plain text. If only one subdirectory exists, use it automatically.
 3. If no subdirectories exist, proceed with flat structure (single-product mode).
 
 When app scope `{app}` is active:
@@ -53,7 +53,7 @@ Synthesise: underserved segments, feature gaps, pricing gaps, UX gaps, integrati
 
 ### 4a. Gap Assessment (concept-validation mode only)
 
-Synthesise market gaps into: **Market State** (Virgin/Sparse/Crowded), **Incumbent Quality** (Dominant-and-loved / Dominant-but-resented / Fragmented-and-mediocre / Emerging-and-unproven), **Gap Quality** (Clear unmet need / Underserved segment / UX/approach gap / Minor improvement / No meaningful gap), **Verdict** (Proceed to ICP / Pivot concept / Abandon). Present to user via AskUserQuestion before continuing.
+Synthesise market gaps into: **Market State** (Virgin/Sparse/Crowded), **Incumbent Quality** (Dominant-and-loved / Dominant-but-resented / Fragmented-and-mediocre / Emerging-and-unproven), **Gap Quality** (Clear unmet need / Underserved segment / UX/approach gap / Minor improvement / No meaningful gap), **Verdict** (Proceed to ICP / Pivot concept / Abandon). If the session is already in Plan mode, prefer `request_user_input`; otherwise ask in plain text before continuing.
 
 ### 5. Analyse Positioning Opportunities
 

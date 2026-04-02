@@ -36,6 +36,7 @@ When app scope `{app}` is active:
 - Read `research/competitive-analysis.md` (or `research/{app}/competitive-analysis.md`) if it exists — competitor positioning, pricing, channels, market gaps
 - Read `research/journey-map.md` (or `research/{app}/journey-map.md`) if it exists — customer journey stages, discovery channels, conversion triggers
 - Read `research/customer-feedback.md` (or `research/{app}/customer-feedback.md`) if it exists — real customer language, validated/invalidated assumptions
+- Read `research/positioning.md` (or `research/{app}/positioning.md`) if it exists — positioning framework that messaging should flow from
 - Read CLAUDE.md and README if they exist — product context
 
 ### 2. Interview
@@ -54,11 +55,12 @@ Cover these areas (skip or abbreviate areas the user has already addressed in `$
 - What's the budget and resource constraint? (bootstrapped, funded, team size)
 
 #### B. Messaging Framework
-- What's the one-liner? (the sentence that makes the ICP lean in)
-- What's the primary value prop framing? (save time, save money, reduce risk, unlock capability)
+- IF `research/positioning.md` exists: use positioning statement, market category, unique attributes, and value mapping as the foundation for messaging — do not contradict positioning decisions
+- What's the one-liner? (the sentence that makes the ICP lean in — should flow from positioning statement)
+- What's the primary value prop framing? (save time, save money, reduce risk, unlock capability — should align with positioning value mapping)
 - What pain point does the headline address? (from ICP pain map)
 - What proof points exist? (metrics, testimonials, case studies, demos)
-- How does positioning differ from competitors? (from competitive analysis)
+- How does positioning differ from competitors? (from positioning.md if it exists, otherwise from competitive analysis)
 
 #### C. Pricing Strategy
 - What's the pricing model? (freemium, free trial, paid-only, usage-based, seat-based)
@@ -104,6 +106,7 @@ Before writing, check which files exist to populate the `## Next Steps` section 
 - IF open questions need research: `/plan-interview [top question]` — Validate the most critical open question
 - IF `tasks/roadmap.md` exists: `/run` — Start executing — the GTM plan is set
 - IF no `research/journey-map.md`: `/journey-map` — Map the customer journey to validate funnel assumptions
+- IF no `research/positioning.md`: `/positioning` — Define strategic positioning — messaging should flow from positioning
 
 **Impact-aware adjustments:**
 - IF downstream impact is **Major**: prepend `/research-reconcile — [N] conflicts found in downstream docs` as the first item

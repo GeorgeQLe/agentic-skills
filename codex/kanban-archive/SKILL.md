@@ -22,8 +22,8 @@ node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs boards
 1. If `tasks/.kanban-board` exists, read the board ID. Verify it via `board <id>`. If stale (error), delete the file and continue to step 2.
 2. If no valid mapping: match board names against `basename $(pwd)` (case-insensitive). Prefer exact match over substring.
 3. If one match → use it, save ID to `tasks/.kanban-board`.
-4. If zero or multiple matches → list boards, ask the user to pick. Save their choice.
-5. If no boards exist → ask the user if they want to create one. If yes: `create-board --name "$(basename $(pwd))" --template standard`. Save the ID.
+4. If zero or multiple matches → list boards and ask the user to pick. If the session is already in Plan mode and there are 2-3 concrete choices, prefer `request_user_input`. Save their choice.
+5. If no boards exist → ask the user if they want to create one. If the session is already in Plan mode and there are 2 concrete choices, prefer `request_user_input`. If yes: `create-board --name "$(basename $(pwd))" --template standard`. Save the ID.
 
 ### Board Validation
 

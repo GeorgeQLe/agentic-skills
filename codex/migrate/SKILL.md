@@ -11,7 +11,7 @@ Use this skill when the user needs to perform a large-scale codebase reorganizat
 
 1. Understand the migration target from the user's description.
 2. Audit the current state — find all instances of the old pattern.
-3. Enter plan mode with the migration plan and wait for approval.
+3. Present the migration plan and wait for approval. Use `update_plan` to track the work; use `request_user_input` only if the session is already in Plan mode and a structured choice would help.
 4. Execute in verifiable batches, running type-checks and tests after each.
 5. Final verification: full test suite, build, and grep for remaining old patterns.
 
@@ -24,6 +24,6 @@ Use this skill when the user needs to perform a large-scale codebase reorganizat
 
 ## Constraints
 
-- Always enter plan mode before making changes.
+- Always present the plan and get approval before making changes. Do not assume a Claude-style `EnterPlanMode` or clear-context accept flow exists.
 - Process one package at a time in monorepos.
 - Do not change behavior — migrations should be structural only.

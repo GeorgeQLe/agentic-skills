@@ -2,7 +2,7 @@
 name: research-reconcile
 description: Cross-document consistency audit across research outputs — find contradictions, stale assumptions, and gaps
 version: 1.1.0
-argument-hint: [audit|fix] [all|icp|pricing|journey|enterprise|feedback]
+argument-hint: "[audit|fix] [all|icp|pricing|journey|enterprise|feedback]"
 ---
 
 # Research Reconcile — Cross-Document Consistency Audit
@@ -186,7 +186,7 @@ Display findings grouped by scope, then severity. For each finding:
 **Dependency direction** informs recommendations:
 - Upstream contradiction (e.g., ICP vs Journey Map) → recommend updating the downstream document
 - Customer feedback contradictions → recommend updating upstream (feedback is ground truth)
-- Peer contradictions (e.g., GTM vs Monetization) → ask user which is authoritative
+- Peer contradictions (e.g., GTM vs Monetization) → ask the user which document is authoritative. If the session is already in Plan mode and there are 2-3 concrete choices, prefer `request_user_input`; otherwise ask a concise plain-text question.
 
 ### 7. Fix Mode (if `fix` was specified)
 

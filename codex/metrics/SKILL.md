@@ -1,42 +1,259 @@
 ---
 name: metrics
 description: Define success metrics framework — activation, engagement, retention, growth, and business metrics tied to journey stages
-version: 1.1.0
+type: analysis
+version: 1.2.0
+argument-hint: [optional: focus area e.g. "activation", "retention"]
 ---
 
 # Metrics — Success Metrics Framework
 
-Interview-driven skill that defines measurable success metrics tied to journey stages, with instrumentation requirements.
+Interview-driven skill that defines measurable success metrics tied to journey stages. Each metric gets a definition, measurement method, target with rationale, and instrumentation requirements.
 
 ## Prerequisites
 
-- **Hard**: `research/journey-map.md` (or `research/{app}/journey-map.md` in monorepo mode) must exist — run `/journey-map` first.
-- **Soft**: Reads `research/icp.md` (or `research/{app}/icp.md`) and `research/customer-feedback.md` (or `research/{app}/customer-feedback.md`) if they exist.
+- **Hard**: `research/journey-map.md` (or `research/{app}/journey-map.md` in monorepo mode) must exist. If not, tell the user to run `/journey-map` first and stop.
+- **Soft**: Read `research/icp.md` (or `research/{app}/icp.md`) and `research/customer-feedback.md` (or `research/{app}/customer-feedback.md`) if they exist — these improve target-setting and relevance.
 
-## Workflow
+## Process
 
-0. **App Scope Resolution (Monorepo Support)**: Before checking prerequisites, determine the app scope: (1) If `$ARGUMENTS` specifies an app name matching a subdirectory of `research/`, use it. (2) If `research/` contains subdirectories (excluding files), list them and ask the user which app to target; if only one subdirectory exists, use it automatically. (3) If no subdirectories exist, proceed with flat structure (single-product mode). When app scope `{app}` is active: read/write research from `research/{app}/` instead of `research/`, read/write specs from `specs/{app}/` instead of `specs/`, also read `research/icp.md` (cross-app overview) for broader context.
-1. **Load context**: Read `research/journey-map.md` (or `research/{app}/journey-map.md`), `research/icp.md` (or `research/{app}/icp.md`), `research/customer-feedback.md` (or `research/{app}/customer-feedback.md`), codebase if it exists.
-2. **Interview** (1–3 questions per turn, research and recommend by default — present findings with data, state recommendation, user approves/adjusts/overrides; only ask without recommendation when insider knowledge is required):
-   - **Activation** — tied to aha moment: what action signals "gets it", time-to-value target, activation rate
-   - **Engagement** — tied to habit loop: healthy usage pattern, core repeated action, frequency thresholds
-   - **Retention** — tied to churn triggers: retention definition, leading churn indicators, target rate
-   - **Growth** — tied to expansion/advocacy: discovery channels, viral coefficient, expansion metrics
-   - **Business** — revenue model, CAC, LTV, LTV:CAC ratio, payback period
-3. **Present findings before writing.** Summarise the metrics framework (each metric's target citing rationale: benchmarks, journey data, or ICP signals), North Star metric (with evidence for why this metric over alternatives), and instrumentation gaps. Ask: "Does this capture what success looks like?" Continue until validated.
-4. Only after user confirms, write the output files.
+### 0. App Scope Resolution (Monorepo Support)
 
-## Deliverables
+Before checking prerequisites, determine the app scope:
 
-- `research/metrics.md` (or `research/{app}/metrics.md`) — North Star metric, per-category metrics (definition, measurement, target, instrumentation, status), instrumentation gaps with `/plan-interview` prompts
-- `research/metrics-interview.md` (or `research/{app}/metrics-interview.md`) — Raw interview log
+1. If `$ARGUMENTS` specifies an app name matching a subdirectory of `research/`, use it.
+2. If `research/` contains subdirectories (excluding files), list them and ask the user which app to target. If the session is already in Plan mode and there are 2-3 concrete choices, prefer `request_user_input`; otherwise ask in plain text. If only one subdirectory exists, use it automatically.
+3. If no subdirectories exist, proceed with flat structure (single-product mode).
 
-The output file must end with a `## Next Steps` section (3–5 contextual items, "Pick one:" framing) based on which files exist: conditionally suggest `/plan-interview [topic]`, `/roadmap`, `/gtm`, `/run`, `/customer-feedback` based on instrumentation gaps, `tasks/roadmap.md`, `research/gtm.md`, and whether the product is live.
+When app scope `{app}` is active:
+- Read/write research from `research/{app}/` instead of `research/`
+- Read/write specs from `specs/{app}/` instead of `specs/`
+- Also read `research/icp.md` (cross-app overview) for broader context
+
+### 1. Load Context
+
+- Read `research/journey-map.md` (or `research/{app}/journey-map.md`) — customer journey stages, aha moment, habit loop, churn triggers, critical moments
+- Read `research/icp.md` (or `research/{app}/icp.md`) if it exists — ICP segments, pain points, value props
+- Read `research/customer-feedback.md` (or `research/{app}/customer-feedback.md`) if it exists — real user behavior patterns, validated/invalidated assumptions
+- Read CLAUDE.md and README if they exist — product context and tech stack (affects instrumentation)
+- Read key source files if a codebase exists — understand what can actually be measured today
+
+### 2. Interview
+
+If the session is already in Plan mode, prefer `request_user_input` for 1-3 focused questions with concrete choices. Otherwise ask concise plain-text questions.
+
+**Research and recommend by default.** For each decision point, use web search, upstream research docs (`research/*.md`), and codebase analysis to gather evidence before asking the user. Present your findings with data, state your recommendation with reasoning, and ask the user to approve, adjust, or override. Only ask the user to choose without a recommendation when the decision genuinely requires insider knowledge they haven't shared (internal constraints, personal preferences, strategic bets).
+
+Cover these metric categories (skip or abbreviate areas the user has already addressed in `$ARGUMENTS`):
+
+#### A. Activation Metrics
+Tied to the **aha moment** from the journey map.
+- What specific action signals that a user "gets it"? (the aha moment)
+- How quickly should this happen after signup? (time-to-value target)
+- What's the activation rate target? (% of signups who reach aha)
+- Can this be measured today, or does instrumentation need to be built?
+
+#### B. Engagement Metrics
+Tied to the **habit loop** from the journey map.
+- What does a "healthy" usage pattern look like? (daily/weekly/monthly, duration, depth)
+- What's the core action that engaged users do repeatedly?
+- What frequency indicates strong engagement vs. at-risk?
+- Are there different engagement patterns by user profile?
+
+#### C. Retention Metrics
+Tied to **churn triggers** from the journey map.
+- What defines retention? (still active after 7/30/90 days? Still paying?)
+- What are the leading indicators of churn? (from journey map churn triggers)
+- What's the target retention rate? By what timeframe?
+- What's the current retention baseline (if any data exists)?
+
+#### D. Growth Metrics
+Tied to **expansion and advocacy** from the journey map.
+- How do new users discover the product? (from journey map discovery channels)
+- Is there a viral loop? What's the viral coefficient target?
+- What expansion metrics matter? (seats added, usage increased, tier upgraded)
+- What's the target growth rate? (week-over-week, month-over-month)
+
+#### E. Business Metrics
+Revenue, unit economics, sustainability.
+- What's the revenue model? (from GTM if it exists, otherwise ask)
+- What's the CAC target? (customer acquisition cost)
+- What's the LTV target? (lifetime value)
+- What's the LTV:CAC ratio target?
+- What's the payback period target?
+
+### 3. Present Findings & Validate
+
+**Present the complete metrics framework to the user before writing.** Summarise:
+1. Overview — the 5-8 key metrics and how they connect to journey stages
+2. Each metric with definition, target (citing rationale: benchmarks, journey data, or ICP signals that informed the target), and measurement method
+3. Instrumentation gaps — what can't be measured today
+4. The "North Star" metric — the single metric that best captures overall health, with evidence for why this metric was chosen over alternatives
+
+If the session is already in Plan mode, prefer `request_user_input`; otherwise ask in plain text:
+- "Does this metrics framework capture what success looks like? Any metrics missing or targets off?"
+
+Continue until the user confirms. Only then proceed to writing.
+
+### 4. Populate Next Steps
+
+Before writing, check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with "Pick one:" framing:
+
+- IF instrumentation gaps and no specs for them: `/plan-interview [topic]` — Spec instrumentation for the top metric gap
+- IF no `tasks/roadmap.md`: `/roadmap` — Plan the build with instrumentation phases
+- IF no `research/gtm.md`: `/gtm` — Build a GTM plan — metrics define what launch success looks like
+- IF `tasks/roadmap.md` exists: `/run` — Start building and instrumenting
+- IF product is live and no `research/customer-feedback.md`: `/customer-feedback` — Collect data to validate metric targets
+- IF product is live and real data exists: `/cohort-review` — Analyze actual performance against these targets
+
+**Impact-aware adjustments:**
+- IF downstream impact is **Major**: prepend `/research-reconcile — [N] conflicts found in downstream docs` as the first item
+- IF downstream impact is **Minor**: annotate relevant skill suggestions with "(stale — [brief description])"
+
+### 5. Write Output
+
+Only after the user has validated the findings, write the output files.
+
+### 6. Downstream Impact Check
+
+After writing, check for downstream research documents that may be affected by what was just decided. Only check documents that exist on disk.
+
+**Downstream documents to check** (use `{app}/` prefix when app scope is active):
+- `research/monetization.md`
+
+For each existing downstream document:
+1. Read it — focus on `> Based on:` header, `## Summary`, and sections that reference concepts this skill just defined or changed
+2. Identify **specific conflicts**: claims, assumptions, or references that contradict what was just decided. Examples:
+   - Metric targets or definitions referenced in monetization that no longer match
+   - Revenue model assumptions anchored to metrics that changed
+   - Conversion or retention targets that have shifted
+3. Note each conflict: downstream file, section, the stale claim (quote it), and what it should now say
+
+**Classify the impact**:
+- **None**: No downstream documents exist, or no conflicts found. Skip display entirely.
+- **Minor** (1–2 small conflicts): Display conflicts to user inline.
+- **Major** (3+ conflicts OR a foundational assumption changed — e.g., North Star metric changed, activation definition redefined, retention targets shifted significantly): Display conflicts and strongly recommend `/research-reconcile`.
+
+Display to the user after showing the written file confirmation. This should be quick — one read per downstream doc, scan for conflicts against key decisions. Not a deep reconciliation.
+
+## Output
+
+### `research/metrics.md` (or `research/{app}/metrics.md`)
+
+```markdown
+# Success Metrics Framework
+
+> Based on: research/journey-map.md (or research/{app}/journey-map.md)[, research/icp.md, research/customer-feedback.md]
+> Date: [current date]
+
+## Summary
+[2-3 sentences: the North Star metric, key health indicators, and biggest instrumentation gap]
+
+## North Star Metric
+**Metric**: [name]
+**Definition**: [precise definition]
+**Why this metric**: [how it captures overall product health]
+**Target**: [specific number with timeframe]
+**Current**: [baseline if known, or "not yet measured"]
+
+## Activation
+
+### [Metric Name]
+**Definition**: [precise, unambiguous definition]
+**Journey tie-in**: [which journey stage/moment this measures — reference journey-map.md]
+**Measurement**: [how to measure — event, query, or manual process]
+**Target**: [specific number] — [rationale for this target]
+**Instrumentation**: [what needs to exist to measure this]
+**Status**: [measurable today / needs instrumentation / needs design]
+
+[Repeat for each activation metric]
+
+## Engagement
+
+### [Metric Name]
+**Definition**: [precise definition]
+**Journey tie-in**: [which habit loop or core action this tracks]
+**Measurement**: [how to measure]
+**Target**: [specific number] — [rationale]
+**Instrumentation**: [what's needed]
+**Status**: [measurable / needs work]
+
+[Repeat for each engagement metric]
+
+## Retention
+
+### [Metric Name]
+**Definition**: [precise definition]
+**Journey tie-in**: [which churn trigger this monitors]
+**Measurement**: [how to measure]
+**Target**: [specific number] — [rationale]
+**Instrumentation**: [what's needed]
+**Status**: [measurable / needs work]
+
+[Repeat for each retention metric]
+
+## Growth
+
+### [Metric Name]
+**Definition**: [precise definition]
+**Journey tie-in**: [which expansion/advocacy path this tracks]
+**Measurement**: [how to measure]
+**Target**: [specific number] — [rationale]
+**Instrumentation**: [what's needed]
+**Status**: [measurable / needs work]
+
+## Business
+
+### [Metric Name]
+**Definition**: [precise definition]
+**Measurement**: [how to measure]
+**Target**: [specific number] — [rationale]
+**Status**: [measurable / needs work]
+
+[Repeat for each business metric]
+
+## Instrumentation Gaps
+
+| Metric | What's Missing | Effort | Priority |
+|--------|---------------|--------|----------|
+| [metric] | [what needs to be built] | S/M/L | [High/Med/Low] |
+
+_Start with:_ `/plan-interview [instrumentation topic]` for high-priority gaps.
+
+## Metric Dependencies
+[How metrics relate to each other — e.g., activation drives retention, retention drives LTV. Identify which metrics are leading vs. lagging indicators.]
+
+<!-- Only include this section when downstream impact is Minor or Major. Omit entirely for None. -->
+## Downstream Impact
+
+> Checked: [list of downstream docs checked]
+> Impact: Minor | Major
+
+### Conflicts Found
+
+1. **research/[file].md** — [Section Name]
+   - **Stale**: "[exact quote from downstream doc]"
+   - **Now**: [what this skill's output says instead]
+
+[For Major only:]
+> **Recommended action**: Run `/research-reconcile` to audit and fix all affected downstream documents.
+
+## Next Steps
+
+Pick one:
+- [conditional items from step 4 — only include items whose conditions are met]
+```
+
+### `research/metrics-interview.md` (or `research/{app}/metrics-interview.md`)
+Raw interview log — questions, options presented, user responses, and a closing summary of key decisions.
+
+Create the `research/` directory if it doesn't exist.
 
 ## Constraints
 
-- Requires journey map — metrics must tie to actual journey stages.
-- Be precise — "user engagement" is not a metric; "weekly active users completing 3+ [action]" is.
-- Include instrumentation — every metric must specify how to measure it and whether that exists today.
-- Present before writing — never write until validated.
-- `## Next Steps` must be the final section in the output file, with 3–5 contextual items and "Pick one:" framing.
+- **Requires journey map.** Metrics must be tied to actual journey stages, not abstract business goals.
+- **Be precise.** "User engagement" is not a metric. "Weekly active users who complete at least 3 [core action] per week" is.
+- **Include instrumentation.** Every metric must specify how to measure it and whether that measurement exists today.
+- **Present before writing.** Never write output files until the framework has been presented and validated.
+- **Tie to journey stages.** Every non-business metric must reference a specific stage or moment from the journey map.
+- **Do not overwrite existing `research/metrics.md`** (or `research/{app}/metrics.md`) without asking the user first.

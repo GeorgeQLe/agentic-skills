@@ -12,7 +12,7 @@ Use this skill when the user wants to remove a service, package, module, or infr
 1. Identify the target to decommission.
 2. Audit all references: imports, configs, infrastructure, documentation.
 3. Categorize as active dependencies, dead references, or infrastructure.
-4. Enter plan mode with removal plan and wait for approval.
+4. Present the removal plan and wait for approval. Use `update_plan` to track the work; use `request_user_input` only if the session is already in Plan mode and a structured choice would help.
 5. Execute removal: migrate consumers, delete target, clean up references.
 6. Verify: tests, build, grep for remaining references.
 
@@ -26,4 +26,4 @@ Use this skill when the user wants to remove a service, package, module, or infr
 
 - Always audit dependencies before removing anything.
 - Never delete cloud resources automatically — only IaC definitions.
-- Enter plan mode and get approval before making changes.
+- Present the plan and get approval before making changes. Do not assume a Claude-style `EnterPlanMode` or clear-context accept flow exists.

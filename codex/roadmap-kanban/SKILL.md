@@ -9,7 +9,7 @@ Build or update `tasks/roadmap.md` by synthesizing all project documentation, in
 
 ## Kanban Setup
 
-1. Resolve the board: check `tasks/.kanban-board` for stored ID, validate via `board <id>`. If missing, match board names against `basename $(pwd)`. If no match, ask user. If no boards, offer to create one with `create-board --name "$(basename $(pwd))" --template standard`.
+1. Resolve the board: check `tasks/.kanban-board` for stored ID, validate via `board <id>`. If missing, match board names against `basename $(pwd)`. If no match, ask the user. If the session is already in Plan mode and there are 2-3 concrete board choices, prefer `request_user_input`; otherwise ask a concise plain-text question. If no boards exist, offer to create one with `create-board --name "$(basename $(pwd))" --template standard`.
 2. Validate all 5 lists exist (Backlog, Todo, In Progress, Done, Punt). Create missing ones via `create-list`.
 3. If poketo-kanban scripts are missing or DB is unreachable, warn and continue without kanban.
 4. **Board Overview:** Fetch board state and display a brief summary — overdue cards, starred/high-priority items, blocked cards, In Progress/Backlog/Todo counts. Informational only, no actions taken.
@@ -25,7 +25,7 @@ All kanban commands use: `node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs
 
 1. **Gather context**: Read `specs/`, `tasks/roadmap.md`, `tasks/todo.md`, `tasks/history.md`, `tasks/ideas.md`, `research/icp.md`, `specs/mvp-gap.md`, `research/enterprise-icp.md`, `specs/scale-audit.md`, CLAUDE.md, README. For existing projects, also review source files and git log.
 2. **Synthesise**: Present a structured summary — features identified, dependencies, conflicts, and (for existing projects) what's built vs. remaining.
-3. **Interview on strategy** (1–3 questions per turn):
+3. **Interview on strategy** (1–3 questions per turn). If the session is already in Plan mode and there are 2-3 concrete choices, prefer `request_user_input`; otherwise ask concise plain-text questions:
    - Priority — What's MVP vs. later?
    - Grouping — Combine or split specs?
    - Sequencing — Dependencies, risk reduction, user value order

@@ -28,6 +28,8 @@ Use this skill when the user wants the repository's `CLAUDE.md` updated with the
 - If something goes sideways, STOP and re-plan immediately - don't keep pushing
 - Use plan mode for verification steps, not just building
 - Write detailed specs upfront to reduce ambiguity
+- In Codex: use `update_plan` in Default mode and `request_user_input` only when already in Plan mode
+- Do not assume a Claude-style clear-context-on-accept flow or related JSON setting exists
 
 ### 2. Subagent Strategy
 - Use subagents liberally to keep main context window clean
