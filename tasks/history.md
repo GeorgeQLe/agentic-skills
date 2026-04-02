@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-04-01 — Add /slim-audit skill
+
+- Created `claude/slim-audit/SKILL.md` — analysis skill to audit codebases for LOC reduction opportunities
+- 6 audit categories: duplication, over-abstraction, verbose patterns, redundant logic, hand-rolled replacements, structural bloat
+- Preserves functionality as top priority — behavior changes get separate risk classification
+- Cross-references specs/docs to respect intentional design decisions; false-positive filter on all findings
+- Created `codex/slim-audit/SKILL.md` and `codex/slim-audit/agents/openai.yaml`
+- Updated `docs/skills-reference.md`: Code Quality section entry, activity types, quick reference, count 54→55
+
 ## 2026-04-01 — Add /spec-drift skill + workflow integration
 
 - Created `claude/spec-drift/SKILL.md` — new analysis skill that extracts verifiable claims from specs and checks them against the codebase
