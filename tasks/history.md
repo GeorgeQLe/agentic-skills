@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-04-01 — Update /deploy skill with deployment history tracking
+
+- Updated `claude/deploy/SKILL.md` v1.0.0→v2.0.0 — added deployment ledger (`tasks/deploys.md`), pre-deploy diff, staleness detection, `--status` flag
+- New step 4: compare against last deployment — shows commits about to ship and time since last deploy
+- New step 7: record each deploy (success/failed) to ledger with UTC timestamp, branch, commit range, commit count
+- New step 8: staleness report across all tracked environments — flags 7+ days old or 20+ commits behind
+- Failed deploys recorded but don't reset staleness clock
+- Added Ledger Format section documenting `tasks/deploys.md` structure
+- Updated `codex/deploy/SKILL.md` and `docs/skills-reference.md` to match
+
 ## 2026-04-01 — Add /slim-audit skill
 
 - Created `claude/slim-audit/SKILL.md` — analysis skill to audit codebases for LOC reduction opportunities

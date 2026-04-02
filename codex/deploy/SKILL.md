@@ -1,15 +1,15 @@
 ---
 name: deploy
-description: Deploy the project to a target environment (defaults to staging).
+description: Deploy the project to a target environment (defaults to staging) with deployment history tracking.
 ---
 
 # Deploy
 
-Deploy the current project to the specified environment. Defaults to staging if no environment is provided.
+Deploy the current project to the specified environment. Defaults to staging if no environment is provided. Maintains a deployment ledger (`tasks/deploys.md`) to track what was deployed when, enabling staleness detection. Use `--status` to view staleness without deploying.
 
 ## Workflow
 
-1. Determine the target environment from the user's request (default: staging).
+1. Determine the target environment from the user's request (default: staging). If `--status`, skip to step 7.
    - If production is specified, ask for explicit confirmation before proceeding.
 2. Find the deploy configuration. Check these locations in order:
    - `spec.md` — deployment section
@@ -26,20 +26,28 @@ Deploy the current project to the specified environment. Defaults to staging if 
    - Ensure the working tree is clean. If dirty, warn and ask whether to proceed or commit first.
    - Ensure the current branch is pushed to remote.
    - Note the current commit hash for reference.
-4. Run the deploy using the project's deploy mechanism.
-5. Post-deploy verification (if applicable):
+4. Compare against last deployment:
+   - Read `tasks/deploys.md` (if it exists) and find the most recent successful entry for the target environment.
+   - If a previous deploy exists, run `git log --oneline <last-deployed-commit>..HEAD` to show what's changed.
+   - Report commit count and time since last deploy.
+5. Run the deploy using the project's deploy mechanism.
+6. Post-deploy verification (if applicable):
    - Check deploy output for errors.
    - If there is a health check URL or status command, run it.
    - Report success or failure.
-6. Output a concise summary:
-   - Environment deployed to
-   - Branch and commit hash
-   - Success/failure status
-   - Any warnings or follow-up actions
+7. Record to ledger (`tasks/deploys.md`):
+   - Prepend a new entry under the environment heading with: date (UTC), branch, commit range, commit count, status (success/failed).
+   - Include a collapsed details block with the commit list.
+   - Failed deploys are recorded but do not reset the staleness clock.
+8. Report staleness across all environments:
+   - For each environment with a successful deploy: last deploy date, commits behind HEAD, days since deploy.
+   - Flag environments 7+ days old or 20+ commits behind as stale.
+9. Output summary: environment, branch, commit range, status, staleness across environments.
 
 ## Constraints
 
 - Never deploy to production without explicit user confirmation.
-- If deploy fails, report the error clearly — do not retry automatically.
+- If deploy fails, report the error clearly — do not retry automatically. Still record the failed attempt.
 - Do not modify code as part of the deploy process.
 - Never use GitHub Actions for deployment. Only use manual deploy scripts, Makefiles, or CLI commands.
+- The ledger (`tasks/deploys.md`) is the only file this skill writes. Only count `success` entries for staleness.
