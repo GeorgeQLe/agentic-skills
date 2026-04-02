@@ -164,9 +164,9 @@ Collect all findings from the cross-reference subagents. Classify each by severi
 | **Warning** | Stale or gap — may be intentional but should be reviewed | Journey Map defines 5 stages but Metrics only covers 3 |
 | **Info** | Suggestion — not wrong, but could be improved | GTM mentions a channel not discussed in ICP (may be a valid expansion) |
 
-### 6. Report Findings
+### 6. Walk Through Findings Interactively
 
-Display findings grouped by scope, then severity. For each finding:
+Present findings **one at a time** using `request_user_input` (in Plan mode) or a plain-text question (otherwise), ordered by severity (Errors first, then Warnings, then Info). For each finding, present:
 
 ```
 ### [Scope] — [Check Name]
@@ -181,69 +181,45 @@ Display findings grouped by scope, then severity. For each finding:
 
 **Contradiction**: [one-sentence description of the conflict]
 **Recommended resolution**: [which document to update and why, based on dependency direction]
+
+How would you like to resolve this? (Options: accept recommendation, update the other document instead, skip/defer, or provide custom instructions)
 ```
 
-**Dependency direction** informs recommendations:
+**Dependency direction** informs the recommended resolution:
 - Upstream contradiction (e.g., ICP vs Journey Map) → recommend updating the downstream document
 - Customer feedback contradictions → recommend updating upstream (feedback is ground truth)
-- Peer contradictions (e.g., GTM vs Monetization) → ask the user which document is authoritative. If the session is already in Plan mode and there are 2-3 concrete choices, prefer `request_user_input`; otherwise ask a concise plain-text question.
+- Peer contradictions (e.g., GTM vs Monetization) → note both are peers and ask which is authoritative
 
-### 7. Fix Mode (if `fix` was specified)
+Wait for the user's response before proceeding to the next finding. Collect all decisions into a resolution list.
 
-If mode is `fix`:
+### 7. Apply Resolutions
 
-1. **Present all Errors** to the user. For each Error, show the conflicting claims side-by-side with direct quotes from each source document and the section where each claim appears. Then ask which side is correct — never auto-resolve contradictions.
-2. **Auto-fix mechanical Warnings** where the resolution is unambiguous (e.g., updating a stage name reference to match the canonical name in Journey Map).
-3. **Skip Info items** — these are suggestions only.
-4. Apply approved changes to the research documents.
-5. Write `research/reconciliation-report.md` as an audit trail:
+After walking through all findings:
+
+- **Audit mode** (default): Compile a summary of all findings and user decisions. Do not modify any files. Display the summary with the user's stated resolution for each item.
+- **Fix mode** (if `fix` was specified):
+  1. Apply all user-approved changes to the research documents.
+  2. Write `research/reconciliation-report.md` as an audit trail:
 
 ```markdown
 # Reconciliation Report — [date]
 
 ## Resolved
-- [Error description] — resolved by updating [file] per user decision
-- [Warning description] — auto-fixed: updated [reference] to match [source]
+- [Error/Warning description] — resolved by updating [file] per user decision: "[user's stated resolution]"
 
 ## Deferred
-- [Info description] — no action taken
+- [Description] — user chose to skip
 
-## Remaining
-- [Any Errors the user chose to defer]
+## Info (no action)
+- [Info items the user chose not to act on]
 ```
 
-6. Re-run the audit to confirm fixes resolved the flagged issues.
-
-## Output Format
-
-**Audit mode** (default): Display directly to the user. No files written.
-
-```
-## Research Reconciliation — [scope]
-
-### Errors (X)
-- **ICP ↔ Monetization** — Budget signal contradiction: ICP says "$50/mo ceiling" but cheapest tier is $200/mo
-- **Journey Map ↔ Metrics** — Aha moment mismatch: Journey says "first shared board" but Metrics tracks "first 3 cards created"
-
-### Warnings (X)
-- **Journey Map ↔ Metrics** — Retention stages (3 of 5) have no corresponding metric
-- **Customer Feedback ↔ ICP** — Feedback session 2024-12-15 invalidated "mobile-first" assumption; ICP still lists it
-
-### Info (X)
-- **GTM ↔ ICP** — GTM mentions Reddit as acquisition channel; not discussed in ICP (may be valid expansion)
-
-### Summary
-- Documents scanned: 6
-- Checks run: 28
-- Errors: 2, Warnings: 3, Info: 1
-```
-
-**Fix mode**: Same report format, with a `### Fixed` section prepended and `research/reconciliation-report.md` written as audit trail.
+  3. Re-run the audit to confirm fixes resolved the flagged issues.
 
 ## Constraints
 
 - **Read-only by default.** Only modify files when explicitly invoked with `fix` mode.
-- **Never auto-resolve contradictions.** Errors always require user input on which side is correct.
+- **Never auto-resolve contradictions.** Errors always require user input on which side is correct. Use `request_user_input` (or plain-text question) for each finding individually.
 - **Show evidence.** Every finding must include direct quotes from both documents.
 - **Respect dependency direction.** Upstream documents are presumed authoritative over downstream, except customer feedback which is ground truth.
 - **No false positives.** If uncertain whether something is a real contradiction, classify it as Info, not Error.
