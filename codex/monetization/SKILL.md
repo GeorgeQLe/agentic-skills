@@ -12,7 +12,7 @@ Deep-research skill that analyzes how to monetize the product. Combines web rese
 
 ## Prerequisites
 
-- **Hard**: `research/icp.md` (or `research/{app}/icp.md`) must exist. If not, tell the user to run `/icp` first and stop.
+- **Hard**: `research/icp.md` (or `research/{app}/icp.md`) must exist. If not, tell the user to run `$icp` first and stop.
 - **Soft**: Read these if they exist — each adds specificity:
   - `research/competitive-analysis.md` (or `research/{app}/competitive-analysis.md`) — competitor pricing, tiers, freemium models
   - `research/journey-map.md` (or `research/{app}/journey-map.md`) — where value is delivered, conversion triggers
@@ -143,13 +143,13 @@ Based on product stage and ICP:
 
 Check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with "Pick one:" framing:
 
-- IF no `research/gtm.md`: `/gtm` — Build go-to-market plan with pricing from this strategy
-- IF `research/gtm.md` exists but predates this analysis: `/gtm` — Update GTM with refined pricing strategy
-- IF no `research/metrics.md`: `/metrics` — Define metrics to track monetization health (conversion, expansion, churn)
-- IF no `research/journey-map.md`: `/journey-map` — Map the journey to validate where pricing gates belong
-- IF `specs/` exist and no `tasks/roadmap.md`: `/roadmap` — Plan the build with monetization milestones
-- IF codebase exists: `/mvp-gap` — Check if the product delivers enough value to charge
-- IF product is live and revenue exists: `/runway-model` — Track actual financial performance against these estimates
+- IF no `research/gtm.md`: `$gtm` — Build go-to-market plan with pricing from this strategy
+- IF `research/gtm.md` exists but predates this analysis: `$gtm` — Update GTM with refined pricing strategy
+- IF no `research/metrics.md`: `$metrics` — Define metrics to track monetization health (conversion, expansion, churn)
+- IF no `research/journey-map.md`: `$journey-map` — Map the journey to validate where pricing gates belong
+- IF `specs/` exist and no `tasks/roadmap.md`: `$roadmap` — Plan the build with monetization milestones
+- IF codebase exists: `$mvp-gap` — Check if the product delivers enough value to charge
+- IF product is live and revenue exists: `$runway-model` — Track actual financial performance against these estimates
 
 ### 8. Final Review & Write
 

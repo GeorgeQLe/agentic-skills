@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-04-02 — Normalize Codex skill references to `$skill`
+
+- Updated Codex-facing docs to use native `$skill` invocation syntax in [docs/codex-workflow.md] and clarified dual syntax guidance in [docs/skills-reference.md]
+- Updated Codex skill docs so next-step recommendations, prerequisite guidance, and example output use `$skill` instead of Claude-style `/skill`
+- Updated `scripts/skill-deps.sh` to scan both `claude/` and `codex/` skills and recognize both `/skill-name` and `$skill-name` references
+- Verified no remaining slash-prefixed skill references across `codex/*/SKILL.md`
+- No deploy step for this repository; repo treated as a tools directory rather than a production product
+
 ## 2026-04-02 — Enhance skill follow-through and close dead-end workflows
 
 - Enhanced `mvp-gap` (v1.1.0→v1.2.0): added downstream impact check (scans journey-map, metrics, gtm, monetization, roadmap for conflicts), spec validation (checks existing specs before suggesting /plan-interview), journey stage mapping per gap, metrics tie-in (closure metrics + instrumentation gap flagging), GTM alignment (cross-references build sequence against launch gates), enriched output format with _Journey stage:_, _Closure metric:_, _Spec:_ per gap

@@ -10,7 +10,7 @@ Automated analysis that evaluates the codebase against `research/icp.md`. Identi
 
 ## Prerequisites
 
-`research/icp.md` (or `research/{app}/icp.md`) must exist. If not, tell the user to run `/icp` first.
+`research/icp.md` (or `research/{app}/icp.md`) must exist. If not, tell the user to run `$icp` first.
 
 ## Workflow
 
@@ -36,7 +36,7 @@ When app scope `{app}` is active:
    - **Table-Stakes Gaps** — Auth, error handling, data export, accessibility, docs, notifications
    - **Integration Gaps** — Required integrations from the ICP's current workflow
    - **Competitive Differentiation** — Does it deliver the claimed value prop?
-   - **Spec Validation** — For each gap, check `specs/` for existing coverage: "Spec exists — ready to build", "Spec exists — needs expansion", or no spec (suggest `/plan-interview`).
+   - **Spec Validation** — For each gap, check `specs/` for existing coverage: "Spec exists — ready to build", "Spec exists — needs expansion", or no spec (suggest `$plan-interview`).
    - **Metrics Tie-In** — If `research/metrics.md` exists, identify which metric(s) indicate each gap is closed. Flag gaps with no closure metric as instrumentation gaps.
 3. Tag each gap: `blocks-first-sale`, `blocks-retention`, or `nice-to-have`. Estimate effort (S/M/L).
 4. If `research/gtm.md` exists, cross-reference build sequence against GTM launch gates. Flag conflicts and gaps deferrable to post-launch.
@@ -49,18 +49,18 @@ When app scope `{app}` is active:
 Each gap in the output should include:
 - _Journey stage:_ [stage from journey-map, or "N/A"]
 - _Closure metric:_ [metric from metrics.md, or "⚠ No metric defined"]
-- _Spec:_ [link to spec + status, or `/plan-interview [topic]`]
+- _Spec:_ [link to spec + status, or `$plan-interview [topic]`]
 
-The output file must include a `## Downstream Impact` section (only if conflicts found) and end with a `## Next Steps` section (3–5 contextual items, "Pick one:" framing) based on which files exist: always suggest `/roadmap`; conditionally suggest `/plan-interview [top gap]` (only if no spec exists), `/journey-map`, `/competitive-analysis`, `/brainstorm`, `/metrics` (if gaps lack closure metrics).
+The output file must include a `## Downstream Impact` section (only if conflicts found) and end with a `## Next Steps` section (3–5 contextual items, "Pick one:" framing) based on which files exist: always suggest `$roadmap`; conditionally suggest `$plan-interview [top gap]` (only if no spec exists), `$journey-map`, `$competitive-analysis`, `$brainstorm`, `$metrics` (if gaps lack closure metrics).
 
 ### Downstream Impact Check
 
-After writing, scan existing downstream docs (`research/journey-map.md`, `research/metrics.md`, `research/gtm.md`, `research/monetization.md`, `tasks/roadmap.md`) for conflicts with what was just decided. Classify as None/Minor/Major. If Major (3+ conflicts or foundational gap changes build sequence), recommend `/research-reconcile`.
+After writing, scan existing downstream docs (`research/journey-map.md`, `research/metrics.md`, `research/gtm.md`, `research/monetization.md`, `tasks/roadmap.md`) for conflicts with what was just decided. Classify as None/Minor/Major. If Major (3+ conflicts or foundational gap changes build sequence), recommend `$research-reconcile`.
 
 ## Constraints
 
 - Analysis only — do not make code changes.
 - Every gap must cite specific evidence from the codebase.
 - Prioritise by market impact, not technical interest.
-- Include `/plan-interview <topic>` prompts only for gaps lacking specs.
+- Include `$plan-interview <topic>` prompts only for gaps lacking specs.
 - `## Next Steps` must be the final section in the output file, with 3–5 contextual items and "Pick one:" framing.

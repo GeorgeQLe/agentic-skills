@@ -37,13 +37,13 @@ Automated research that identifies **multiple ICP candidates**, maps pain points
 - `research/icp-search-log.md` — Raw research log: every query, findings, evidence, scoring rationale
 - **Monorepo**: `research/{app-name}/icp.md` + `research/{app-name}/icp-search-log.md` per app, plus unified `research/icp.md` cross-referencing all app-level ICPs with top-level prioritization
 
-The output file must end with a `## Next Steps` section (3–5 contextual items, "Pick one:" framing) based on which files exist: always suggest `/competitive-analysis`; conditionally suggest `/plan-interview`, `/journey-map`, `/mvp-gap`, `/brainstorm` based on whether `specs/`, `research/journey-map.md`, codebase, and `research/competitive-analysis.md` exist.
+The output file must end with a `## Next Steps` section (3–5 contextual items, "Pick one:" framing) based on which files exist: always suggest `$competitive-analysis`; conditionally suggest `$plan-interview`, `$journey-map`, `$mvp-gap`, `$brainstorm` based on whether `specs/`, `research/journey-map.md`, codebase, and `research/competitive-analysis.md` exist.
 
 ## Constraints
 
 - Stay in problem space — do not propose features, architecture, or solutions.
 - Evidence-based — every claim must trace to research logged in `research/icp-search-log.md`.
-- Primary ICP must use canonical 9 `##` headers for downstream compatibility (`/plan-interview`, `/mvp-gap`, `/roadmap`, `/journey-map`).
+- Primary ICP must use canonical 9 `##` headers for downstream compatibility (`$plan-interview`, `$mvp-gap`, `$roadmap`, `$journey-map`).
 - Minimum 8 WebSearch queries before identifying candidates, 2–3 per candidate after.
 - Do not overwrite existing `research/icp.md` without asking.
 - Present before writing — never write output until findings are validated through checkpoints.

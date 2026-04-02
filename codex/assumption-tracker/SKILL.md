@@ -98,12 +98,12 @@ For each unvalidated high-priority assumption (combined score ≥ 12), recommend
 
 | Validation Method | Best For |
 |-------------------|----------|
-| `/experiment` — landing page test | Demand validation, messaging tests |
-| `/experiment` — fake-door test | Feature demand, willingness to explore |
-| `/experiment` — pricing test | Willingness to pay, price sensitivity |
-| `/experiment` — survey | Broad sentiment, preference ranking |
-| `/customer-feedback` — user interview | Deep understanding, "why" questions |
-| `/cohort-review` — analyze real data | Post-launch metrics, funnel performance |
+| `$experiment` — landing page test | Demand validation, messaging tests |
+| `$experiment` — fake-door test | Feature demand, willingness to explore |
+| `$experiment` — pricing test | Willingness to pay, price sensitivity |
+| `$experiment` — survey | Broad sentiment, preference ranking |
+| `$customer-feedback` — user interview | Deep understanding, "why" questions |
+| `$cohort-review` — analyze real data | Post-launch metrics, funnel performance |
 | Direct observation | UX assumptions, activation flow |
 | Competitor analysis | Market timing, differentiation durability |
 
@@ -111,11 +111,11 @@ For each unvalidated high-priority assumption (combined score ≥ 12), recommend
 
 Include 3–5 applicable items with "Pick one:" framing:
 
-- IF unvalidated assumptions with score ≥ 15: `/experiment [top assumption]` — Design a cheap test for the riskiest assumption
-- IF customer feedback exists but assumptions remain unvalidated: `/customer-feedback` — Gather targeted feedback on top assumptions
-- IF product is live: `/cohort-review` — Check if real data validates or invalidates key assumptions
-- IF assumptions cross multiple docs: `/research-reconcile` — Ensure research docs are internally consistent
-- ALWAYS: `/workflow` — Check overall project status
+- IF unvalidated assumptions with score ≥ 15: `$experiment [top assumption]` — Design a cheap test for the riskiest assumption
+- IF customer feedback exists but assumptions remain unvalidated: `$customer-feedback` — Gather targeted feedback on top assumptions
+- IF product is live: `$cohort-review` — Check if real data validates or invalidates key assumptions
+- IF assumptions cross multiple docs: `$research-reconcile` — Ensure research docs are internally consistent
+- ALWAYS: `$workflow` — Check overall project status
 
 ### 8. Write Output
 

@@ -108,13 +108,13 @@ Incorporate feedback before proceeding.
 
 Include 3–5 applicable items with "Pick one:" framing:
 
-- IF ICP decisions were wrong: `/icp` — Re-run ICP discovery with what you now know
-- IF pricing was wrong: `/monetization` — Revisit pricing with real revenue data
-- IF channels underperformed: `/gtm` — Update GTM with actual channel performance
-- IF assumptions tracker exists: `/assumption-tracker` — Bulk-update validation status from retro findings
-- IF metrics targets were off: `/metrics` — Recalibrate targets based on baseline reality
-- IF multiple docs need updating: `/research-reconcile` — Audit all research for consistency after retro findings
-- ALWAYS: `/workflow` — Check overall project status
+- IF ICP decisions were wrong: `$icp` — Re-run ICP discovery with what you now know
+- IF pricing was wrong: `$monetization` — Revisit pricing with real revenue data
+- IF channels underperformed: `$gtm` — Update GTM with actual channel performance
+- IF assumptions tracker exists: `$assumption-tracker` — Bulk-update validation status from retro findings
+- IF metrics targets were off: `$metrics` — Recalibrate targets based on baseline reality
+- IF multiple docs need updating: `$research-reconcile` — Audit all research for consistency after retro findings
+- ALWAYS: `$workflow` — Check overall project status
 
 ### 6. Write Output
 

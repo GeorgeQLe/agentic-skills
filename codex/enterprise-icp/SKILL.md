@@ -40,7 +40,7 @@ When app scope `{app}` is active:
 - `research/enterprise-icp.md` (or `research/{app}/enterprise-icp.md`) — Stakeholder map, per-persona journeys, deal-killers, lifecycle, value prop
 - `research/enterprise-icp-interview.md` (or `research/{app}/enterprise-icp-interview.md`) — Raw interview log
 
-The output file must end with a `## Next Steps` section (3–5 contextual items, "Pick one:" framing) based on which files exist: conditionally suggest `/scale-audit`, `/plan-interview enterprise [feature]`, `/journey-map enterprise`, `/journey-map`, `/competitive-analysis` based on codebase existence, enterprise specs, `research/journey-map.md`, `research/icp.md`, and `research/competitive-analysis.md`.
+The output file must end with a `## Next Steps` section (3–5 contextual items, "Pick one:" framing) based on which files exist: conditionally suggest `$scale-audit`, `$plan-interview enterprise [feature]`, `$journey-map enterprise`, `$journey-map`, `$competitive-analysis` based on codebase existence, enterprise specs, `research/journey-map.md`, `research/icp.md`, and `research/competitive-analysis.md`.
 
 ## Constraints
 
