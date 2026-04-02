@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-04-02 — Make Codex ship deploy opt-in via explicit contract
+
+- Updated `codex/ship`, `codex/ship-kanban`, `codex/ship-end`, and `codex/ship-end-kanban` so manual deploy only runs when `deploy.md` or `tasks/deploy.md` exists; added `--no-deploy` support across the Codex ship family
+- Updated Codex ship agent metadata and `docs/skills-reference.md` to describe the deploy-contract behavior and new ship-end arguments
+- Fixed YAML frontmatter quoting in the edited Codex ship-family skill files so skill loading works again
+- Transitioned `tasks/todo.md` from a completed snapshot to Phase 10: Headless API Migration, with a concrete Step 1 plan for establishing agent-friendly headless auth
+- Pre-ship validation: `npm test` in `claude/poketo-kanban/scripts` failed with pre-existing kanban regressions and Neon connectivity errors; not fixed in this shipping step
+
 ## 2026-04-02 — Normalize Codex skill references to `$skill`
 
 - Updated Codex-facing docs to use native `$skill` invocation syntax in [docs/codex-workflow.md] and clarified dual syntax guidance in [docs/skills-reference.md]
