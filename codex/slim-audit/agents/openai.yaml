@@ -1,0 +1,7 @@
+interface:
+  display_name: "Slim Audit"
+  short_description: "Find opportunities to reduce lines of code while preserving functionality"
+  default_prompt: "Use $slim-audit to audit the codebase for code reduction opportunities."
+
+policy:
+  allow_implicit_invocation: true

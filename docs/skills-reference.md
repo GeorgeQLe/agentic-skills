@@ -1,6 +1,6 @@
 # Skills Reference
 
-Complete reference for all 53 custom skills in this repository, available for both Claude Code and Codex.
+Complete reference for all 55 custom skills in this repository, available for both Claude Code and Codex.
 
 ## Installation
 
@@ -53,7 +53,7 @@ Each skill has a `type` field in its frontmatter that describes *what kind of wo
 | Type | What it does | Output | Skills |
 |------|-------------|--------|--------|
 | **research** | Web search + analysis | Documents, market insights | `icp`, `enterprise-icp`, `competitive-analysis`, `gtm`, `monetization`, `customer-feedback`, `research-reconcile` |
-| **analysis** | Reads codebase/docs | Assessments, gap reports | `mvp-gap`, `scale-audit`, `journey-map`, `metrics`, `workflow`, `spec-drift`, `affected`, `dead-code`, `hygiene`, `analyze-sessions` |
+| **analysis** | Reads codebase/docs | Assessments, gap reports | `mvp-gap`, `scale-audit`, `journey-map`, `metrics`, `burn-rate`, `workflow`, `spec-drift`, `affected`, `dead-code`, `hygiene`, `slim-audit`, `analyze-sessions` |
 | **planning** | Interactive interviews | Specs, roadmaps, phases | `brainstorm`, `plan-interview`, `plan-interview-ideas`, `roadmap`, `plan-phases`, `brainstorm-kanban`, `plan-interview-kanban`, `roadmap-kanban` |
 | **execution** | Writes/modifies code | Code changes | `run`, `scaffold`, `migrate`, `decommission`, `run-kanban` |
 | **review** | Reads code, reports issues | Review reports (no changes) | `expert-review`, `regression-check`, `trace` |
@@ -142,6 +142,14 @@ Research-driven monetization strategy — revenue models, pricing architecture, 
 - **Prerequisites**: `research/icp.md` must exist (run `/icp` first).
 - **Outputs**: `research/monetization.md` (revenue model, pricing tiers, unit economics, timing), `research/monetization-interview.md`
 - **Use when**: After ICP discovery, to design how to make money — pricing model, tier structure, unit economics, and monetization timing.
+
+### `/burn-rate`
+Estimate monthly burn rate from infrastructure signals and calculate payback period against revenue projections.
+
+- **Arguments**: `[optional: focus area e.g. "infrastructure only", "team costs", "runway"]`
+- **Prerequisites**: None (soft: `research/monetization.md`, `research/metrics.md`, `research/gtm.md` for revenue context).
+- **Outputs**: `research/burn-rate.md` (infrastructure costs, team costs, total burn, payback period, runway, optimization opportunities), `research/burn-rate-interview.md`
+- **Use when**: After building infrastructure, to get a concrete dollar estimate of monthly costs and calculate when you'll break even.
 
 ### `/research-reconcile`
 Cross-document consistency audit across research outputs — find contradictions, stale assumptions, and gaps.
@@ -265,6 +273,13 @@ Audit project structure for convention violations, missing files, template drift
 - **Arguments**: `[audit|fix] [skills|tasks|docs|codex|all]`
 - **Outputs**: Categorized report (Errors/Warnings/Info). In `fix` mode, applies mechanical fixes.
 - **Use when**: Periodic project structure check, after adding new skills, or before a release to ensure conventions are followed.
+
+### `/slim-audit`
+Audit codebase for opportunities to reduce lines of code while preserving functionality, performance, and quality.
+
+- **Arguments**: `[optional: specific package, directory, or file]`
+- **Outputs**: Prioritized reduction plan with estimated LOC savings, risk levels, and concrete proposed approaches (does not auto-modify).
+- **Use when**: Codebase feels bloated, before a major refactor, or periodic complexity audit. Complements `/dead-code` (which finds unused code) by finding *used but reducible* code.
 
 ---
 
@@ -476,6 +491,7 @@ Archive old Done/Punt cards from the kanban board.
 | `/enterprise-icp` | Enterprise multi-stakeholder discovery | research |
 | `/gtm` | Go-to-market planning | research |
 | `/monetization` | Revenue models, pricing, unit economics | research |
+| `/burn-rate` | Monthly burn rate, payback period, runway from infra signals | analysis |
 | `/customer-feedback` | Ingest + synthesize customer feedback | research |
 | `/research-reconcile` | Cross-document consistency audit for research outputs | research |
 | `/mvp-gap` | Evaluate codebase against ICP for MVP readiness | analysis |
@@ -486,6 +502,7 @@ Archive old Done/Punt cards from the kanban board.
 | `/affected` | Monorepo blast radius analysis | analysis |
 | `/dead-code` | Find unused code and dependencies | analysis |
 | `/hygiene` | Audit project structure and conventions | analysis |
+| `/slim-audit` | Find code reduction opportunities | analysis |
 | `/spec-drift` | Audit specs against codebase for drift | analysis |
 | `/analyze-sessions` | Usage analytics | analysis |
 | `/brainstorm` | Evaluate codebase, suggest improvement ideas | planning |
