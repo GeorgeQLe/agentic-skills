@@ -2,13 +2,13 @@
 
 **Goal:** Replace direct database kanban writes with a shared, authenticated Poketo headless API path so Claude and Codex both use the same app-layer permissions, validation, and audit logging.
 
-**Current Step:** 1. Establish agent-friendly headless auth
+**Current Step:** 2. Finish wiring the Poketo Work headless tool layer
 
-**Why this step is next:** The current skill repo still documents direct DB access and Claude-specific script paths. Before any skill migration work starts, we need a concrete auth contract for automation agents and a clear mapping from today's local-script assumptions to the intended Poketo headless surface.
+**Why this step is next:** Step 1 established the target contract: scoped `pk_...` API keys through the agent gateway, with `kanban.mjs` retained only as transitional fallback while the shared Work surface is incomplete. The next blocker is the Work tool layer itself: board discovery, create-board, search, and archive/restore are still missing or stubbed, so Claude and Codex cannot migrate yet.
 
 ### Steps
 
-- [ ] 1. Establish agent-friendly headless auth
+- [x] 1. Establish agent-friendly headless auth
   - Inventory the current local assumptions in:
     - `/Users/georgele/projects/tools/claude-skills/claude/poketo-kanban/SKILL.md`
     - `/Users/georgele/projects/tools/claude-skills/codex/poketo-kanban/SKILL.md`
@@ -50,41 +50,53 @@
 ### Next Step Implementation Plan
 
 **Objective**
-- Produce a concrete auth contract and migration brief that unblocks the Phase 10 implementation work.
+- Replace the incomplete Work headless tool layer with a real tRPC-backed surface that covers the current kanban migration requirements.
 
-**Files to inspect in this repo first**
-- `/Users/georgele/projects/tools/claude-skills/tasks/roadmap.md`
-- `/Users/georgele/projects/tools/claude-skills/claude/poketo-kanban/SKILL.md`
-- `/Users/georgele/projects/tools/claude-skills/codex/poketo-kanban/SKILL.md`
-- `/Users/georgele/projects/tools/claude-skills/claude/poketo-kanban/KANBAN-SETUP.md`
-- `/Users/georgele/projects/tools/claude-skills/claude/poketo-kanban/scripts/bootstrap-session.mjs`
-- `/Users/georgele/projects/tools/claude-skills/claude/poketo-kanban/scripts/kanban.mjs`
-- `/Users/georgele/projects/tools/claude-skills/codex/brainstorm-kanban/SKILL.md`
-- `/Users/georgele/projects/tools/claude-skills/codex/plan-interview-kanban/SKILL.md`
-- `/Users/georgele/projects/tools/claude-skills/codex/roadmap-kanban/SKILL.md`
-- `/Users/georgele/projects/tools/claude-skills/codex/run-kanban/SKILL.md`
-- `/Users/georgele/projects/tools/claude-skills/codex/ship-kanban/SKILL.md`
-- `/Users/georgele/projects/tools/claude-skills/codex/ship-end-kanban/SKILL.md`
-- `/Users/georgele/projects/tools/claude-skills/codex/kanban-archive/SKILL.md`
-- `/Users/georgele/projects/tools/claude-skills/codex/sync-roadmap-kanban/SKILL.md`
+**Phase 10 Step 1 output**
+- `/Users/georgele/projects/tools/claude-skills/specs/poketo-headless-auth-migration.md`
 
-**External dependency to resolve**
-- Open the Poketo Work repo that owns the canonical headless gateway/tool surface and identify the exact files/modules that implement agent auth and headless board/card/list operations. Capture those absolute paths in the migration brief once located.
+**Files to inspect in the Poketo monorepo first**
+- `/Users/georgele/projects/apps/poke/monorepo/apps/work/src/tools/get-my-boards.ts`
+- `/Users/georgele/projects/apps/poke/monorepo/apps/work/src/tools/index.ts`
+- `/Users/georgele/projects/apps/poke/monorepo/apps/work/src/tools/work-adapter.ts`
+- `/Users/georgele/projects/apps/poke/monorepo/apps/work/src/tools/adapted-tools.ts`
+- `/Users/georgele/projects/apps/poke/monorepo/apps/work/src/tools/primitives/index.ts`
+- `/Users/georgele/projects/apps/poke/monorepo/apps/work/src/tools/primitives/create-card.ts`
+- `/Users/georgele/projects/apps/poke/monorepo/apps/work/src/tools/primitives/update-card.ts`
+- `/Users/georgele/projects/apps/poke/monorepo/apps/work/src/tools/primitives/move-card.ts`
+- `/Users/georgele/projects/apps/poke/monorepo/apps/work/src/tools/primitives/delete-card.ts`
+- `/Users/georgele/projects/apps/poke/monorepo/apps/work/src/tools/primitives/create-list.ts`
+- `/Users/georgele/projects/apps/poke/monorepo/apps/work/src/tools/primitives/update-list.ts`
+- `/Users/georgele/projects/apps/poke/monorepo/apps/work/src/tools/primitives/delete-list.ts`
+- `/Users/georgele/projects/apps/poke/monorepo/packages/agents/src/caller/create-agent-caller.ts`
+- `/Users/georgele/projects/apps/poke/monorepo/packages/agents/src/gateway/auth.ts`
+- `/Users/georgele/projects/apps/poke/monorepo/packages/agents/src/gateway/index.ts`
+- `/Users/georgele/projects/apps/poke/monorepo/packages/trpc/src/server/routers/board/index.ts`
+- `/Users/georgele/projects/apps/poke/monorepo/packages/trpc/src/server/routers/card/index.tsx`
+- `/Users/georgele/projects/apps/poke/monorepo/packages/trpc/src/server/routers/list/index.tsx`
+
+**Concrete gaps to close**
+- `get-my-boards.ts` is still a stub.
+- Primitive tool files are still placeholder definitions.
+- `adapted-tools.ts` only covers 11 operations and does not yet expose board listing, create-board, search, or explicit archive/restore.
+- The current delete/archive semantics need to be normalized before skills depend on them.
 
 **Technical decisions to make**
-- Whether agent auth should be API-key based, session-bridged, or another durable non-DB-credential flow.
-- Whether `~/.poketo/config.json` remains a fallback bridge or should be removed from the normal workflow.
-- Which response fields the shared headless API must guarantee so current kanban skill flows can migrate without lossy parsing.
+- Whether board discovery should be exposed as `get_my_boards` backed by `board.getBoardsForPrimaryOrg`, or by a slightly different shared contract.
+- Whether archive should be a first-class `archive_card` tool or documented `delete_card` archive semantics plus `restore_card`.
+- Which exact response shapes should be stabilized for board resolution, skill card matching, and post-mutation refetch flows.
+- How the session-backed caller should be threaded through the gateway/tool stack once Step 3 exposes the external entrypoint.
 
-**Acceptance criteria for Step 1**
-- A brief exists at `/Users/georgele/projects/tools/claude-skills/specs/poketo-headless-auth-migration.md`.
-- The brief enumerates every current direct DB / Claude-path dependency in this repo.
-- The brief names one recommended agent auth path and one fallback policy.
-- The brief defines the minimum shared operation surface required for Step 2.
+**Acceptance criteria for Step 2**
+- Work tool stubs are replaced with real tRPC-backed implementations where required for kanban migration.
+- The shared surface covers board discovery/details/activity, create board/list/card, update card, move card, search, and archive/restore.
+- Mutations flow through the canonical board/card/list routers rather than direct DB writes in skill code.
+- Response shapes are stable enough that Claude and Codex skills can consume them without fragile free-text parsing.
 
 **Known risks**
-- The external Poketo repo may not yet expose a fully usable headless auth path.
-- If the gateway/tool surface lacks one or more required kanban operations, the migration will stall until Step 2 completes.
+- The gateway already models API-key validation, but the external gateway surface still has to expose the finished Work operations in Step 3.
+- Router capabilities and tool definitions do not line up 1:1 today, so Step 2 may require widening the Work tool contract rather than only wiring existing stubs.
+- Archive semantics are currently split across docs and tool naming; careless wiring could preserve ambiguous behavior.
 
 ### Acceptance Criteria
 
