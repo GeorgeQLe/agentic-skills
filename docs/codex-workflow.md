@@ -119,9 +119,12 @@ In this document, Codex skill invocations use the native `$skill` form.
 **Codex**
 - identify next step
 - summarize the plan
-- update `tasks/todo.md`
 - ask for approval in plain chat
-- either stop or execute in-thread
+- execute in-thread
+- update `tasks/todo.md` and `tasks/history.md`
+- commit/push the result
+- optionally deploy when a manual deploy contract exists
+- prepare the next step in `tasks/todo.md`
 
 **Manual gap**
 - no `EnterPlanMode`
@@ -129,21 +132,8 @@ In this document, Codex skill invocations use the native `$skill` form.
 - no automatic clear-context transition
 
 **Recommended Codex usage**
-- use `$run` as a planning/compression step for non-trivial work
-- after approval, stop and start a fresh Codex thread to implement from `tasks/todo.md`
-
-### Fresh implementation after `$run`
-
-**Claude Code**
-- handled by the tool after plan approval
-
-**Codex**
-- manual step
-
-**Recommended prompt**
-- `Execute the next unchecked step from tasks/todo.md. Read only the files you need.`
-
-This manual fresh-thread start is the closest replacement for Claude Code's clear-context implementation handoff.
+- use `$run` as the default execute-and-ship loop in Codex
+- use a fresh thread only when the work is intentionally being split across sessions
 
 ### `$ship`
 
@@ -153,17 +143,17 @@ This manual fresh-thread start is the closest replacement for Claude Code's clea
 - sometimes continue naturally into the next execution loop
 
 **Codex**
-- ship current work
-- refresh `tasks/todo.md`
-- refresh `tasks/history.md`
-- optionally summarize the next step
+- package already-finished work that is already in the tree
+- refresh `tasks/todo.md` and `tasks/history.md`
+- optionally deploy when a manual deploy contract exists
+- summarize the next step
 
 **Manual gap**
-- no true "ship then continue through plan mode" loop
+- not the normal execution path anymore
 
 **Recommended Codex usage**
-- treat `$ship` as a state-compression step
-- if next-step planning is substantial, stop and begin a new planning thread
+- treat `$ship` as a compatibility/manual cleanup wrapper
+- use it when execution already happened and the remaining work is packaging or planning
 
 ### `$ship-end`
 
@@ -215,13 +205,16 @@ This skill ports well because it already depends on repo state more than tool st
 - warn on conflicts
 - summarize the plan
 - ask for approval in plain chat
-- stop for a fresh execution thread if non-trivial
+- execute in-thread
+- commit/push the result
+- move the completed card to Done
+- prepare the next card in Todo
 
 **Manual gap**
 - no skill-controlled plan-mode boundary
 
 **Recommended Codex usage**
-- use kanban to track state, not to imply workflow enforcement that the tool does not provide
+- use `$run-kanban` as the default kanban execution loop in Codex
 
 ### `$ship-kanban` and `$ship-end-kanban`
 
@@ -231,8 +224,8 @@ This skill ports well because it already depends on repo state more than tool st
 - optionally suggest next work
 
 **Codex**
-- mostly the same for board state changes
-- next-step suggestions should be treated as advisory
+- use `$ship-kanban` only when finished work or board state needs manual cleanup
+- use `$ship-end-kanban` to wrap a session that is not the normal completed-step path
 
 **Manual gap**
 - no automatic continuation into the next approved execution phase
@@ -249,15 +242,14 @@ These are the main workflow features that Claude Code has and Codex currently do
 The manual replacements are:
 
 - plain-text approval questions
-- stopping after planning
-- starting a fresh thread for implementation
+- executing in-thread after approval
 - treating `tasks/todo.md` as the execution handoff artifact
 
 ## Recommended Operating Rules
 
-### 1. Non-trivial tasks default to planning-only threads
+### 1. Non-trivial tasks still require explicit approval
 
-If a task needs meaningful exploration, do not implement in the same thread by default.
+Codex should still present the plan and get approval before implementation. The refactor changes when shipping happens, not the approval bar.
 
 ### 2. `tasks/todo.md` must be execution-ready
 
@@ -272,9 +264,9 @@ Each active step should include:
 
 If a fresh thread cannot execute from the file, the plan is not finished.
 
-### 3. Implementation should usually happen in a fresh thread
+### 3. Fresh threads are optional, not required
 
-This is the Codex replacement for Claude Code's clear-context implementation step.
+Use a fresh thread when the work is intentionally being split across sessions or the context has become noisy. Otherwise, `$run` can execute and ship in-thread.
 
 ### 4. Execution threads should read minimal context
 
@@ -286,12 +278,13 @@ Start with:
 
 Avoid re-reading the whole roadmap or spec set unless blocked.
 
-### 5. Ship steps should compress state for the next thread
+### 5. `run` should usually leave behind clean shipped state
 
 After execution, leave behind clean repo state:
 
 - updated `tasks/todo.md`
 - updated `tasks/history.md`
+- pushed commits
 - optional `tasks/handoff.md`
 
 ## Claude Code to Codex Translation
@@ -303,29 +296,28 @@ If you are used to this Claude Code rhythm:
 3. `$plan-phases`
 4. `$run`
 5. `$ship`
+6. `$ship-end` when wrapping an off-script or partial session
 
 The closest Codex translation is:
 
 1. `$plan-interview`
 2. `$roadmap`
 3. `$plan-phases`
-4. `$run` to prepare and compress the next step into `tasks/todo.md`
-5. approve in normal chat
-6. stop
-7. start a fresh Codex thread to execute from `tasks/todo.md`
-8. `$ship` to close and compress state
+4. `$run` to present the plan, execute the work, ship it, and refresh `tasks/todo.md`
+5. repeat `$run` for the next planned step
+6. use `$ship` only if finished work needs manual packaging
+7. use `$ship-end` to wrap an interrupted or partial session
 
-That explicit stop-and-restart is the main manual addition.
+The main manual additions are still plain-chat approval and the lack of a skill-controlled plan-mode boundary.
 
 ## Bottom Line
 
 Claude Code keeps part of the workflow state in the tool.
 
-Codex should keep the workflow state in repo files and use fresh threads aggressively to minimize context growth.
+Codex should keep the workflow state in repo files and prefer in-thread execution for the normal `$run` loop, using fresh threads when sessions are intentionally split or context has become noisy.
 
 Do not aim for fake parity. The Codex workflow should be optimized for:
 
-- explicit handoff artifacts
-- frequent context shedding
-- small execution threads
-- strong separation between planning and implementation
+- explicit handoff artifacts when work crosses sessions
+- compact execution context
+- clear approval before implementation

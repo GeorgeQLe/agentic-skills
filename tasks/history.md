@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-04-03 — Refactor Codex workflow so run ships by default
+
+- Updated `codex/run` and `codex/run-kanban` to make the Codex execution loop explicit: plan, approve, implement, validate, commit/push, optional deploy, and next-step preparation all happen inside `run`
+- Repositioned `codex/ship` and `codex/ship-kanban` as compatibility/manual cleanup workflows for already-finished work instead of the default next step after `run`
+- Updated Codex-facing docs and metadata (`docs/codex-workflow.md`, `docs/skills-reference.md`, run/ship agent prompts, `codex/workflow`) to describe the new execute-and-ship-by-default model
+- Pre-ship validation: `npm test` in `claude/poketo-kanban/scripts` still fails with pre-existing kanban regressions and Neon connectivity errors; not fixed in this shipping step
+
 ## 2026-04-02 — Make Codex ship deploy opt-in via explicit contract
 
 - Updated `codex/ship`, `codex/ship-kanban`, `codex/ship-end`, and `codex/ship-end-kanban` so manual deploy only runs when `deploy.md` or `tasks/deploy.md` exists; added `--no-deploy` support across the Codex ship family
