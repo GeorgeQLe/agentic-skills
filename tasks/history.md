@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-04-03 — Headless auth migration brief for Phase 10
+
+- Audited the current Claude and Codex kanban assumptions around `POKETOWORK_DATABASE_URL`, `~/.poketo/config.json`, and Codex's hardcoded `~/.claude/skills/.../kanban.mjs` path
+- Wrote `/Users/georgele/projects/tools/claude-skills/specs/poketo-headless-auth-migration.md` to define the recommended target auth path: scoped `pk_...` API keys through the agent gateway, with the standalone DB script retained only as transitional fallback
+- Captured the canonical Poketo monorepo files for the intended headless path: gateway auth, session-backed agent caller, Work adapter, and board/card/list tRPC routers
+- Documented the current migration blockers in the Work tool layer: `get-my-boards` stubbed, primitive tools still placeholders, and missing board discovery/create-board/search/archive-restore coverage
+- Advanced `tasks/todo.md` to Phase 10 Step 2 and replaced the next-step implementation plan with a concrete Work tool wiring plan
+
 ## 2026-04-03 — Refactor Codex workflow so run ships by default
 
 - Updated `codex/run` and `codex/run-kanban` to make the Codex execution loop explicit: plan, approve, implement, validate, commit/push, optional deploy, and next-step preparation all happen inside `run`
