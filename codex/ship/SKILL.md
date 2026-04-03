@@ -1,12 +1,12 @@
 ---
 name: ship
-description: "Ship current work (update docs, commit, push, deploy) and optionally plan the next step"
+description: "Ship already-finished work, optionally deploy it, and prepare the next step"
 argument-hint: "[--no-plan] [--no-deploy]"
 ---
 
 # Ship
 
-Ship current work, commit, push, deploy, and plan the next step. If `$ARGUMENTS` contains `--no-plan`, skip planning. If `$ARGUMENTS` contains `--no-deploy`, skip deployment.
+Ship already-finished work, commit it, optionally deploy it, and plan the next step. In Codex, `$run` usually handles execution plus shipping; use `$ship` when finished work is already present in the tree or there are unpushed commits to package. If `$ARGUMENTS` contains `--no-plan`, skip planning. If `$ARGUMENTS` contains `--no-deploy`, skip deployment.
 
 ## Workflow
 
@@ -23,7 +23,7 @@ Ship current work, commit, push, deploy, and plan the next step. If `$ARGUMENTS`
    - Read `CLAUDE.md` to understand current progress.
    - Update `tasks/todo.md` — mark completed items as done.
    - Update `tasks/history.md` — append a brief record of what was accomplished. Create it if needed.
-   - Commit and push using the commit-and-push-by-feature workflow.
+   - Commit and push using the `$commit-and-push-by-feature` workflow.
 3. Deploy (skip if `--no-deploy`):
    - Check for an explicit manual deploy contract in `deploy.md` or `tasks/deploy.md`.
    - If neither file exists, skip deploy and report `Deploy skipped: no explicit manual deploy contract (deploy.md or tasks/deploy.md)`.
@@ -44,8 +44,8 @@ Ship current work, commit, push, deploy, and plan the next step. If `$ARGUMENTS`
        2. Check off the phase milestone in `tasks/roadmap.md`.
        3. Copy the next phase from `tasks/roadmap.md` → overwrite `tasks/todo.md`.
        3b. Extract the next phase's manual tasks (from `**Manual Tasks:**` in roadmap) into a fresh `tasks/manual-todo.md`. If the next phase has no manual tasks, delete the file.
-       4. If no more phases remain, run `/workflow` to recommend the next action based on project state. Then stop.
-       5. **Just-in-time planning:** Invoke `/plan-phases` for the new phase. This generates TDD steps and file-level detail using the full context of what was learned during prior phases.
+       4. If no more phases remain, run `$workflow` to recommend the next action based on project state. Then stop.
+       5. **Just-in-time planning:** Invoke `$plan-phases` for the new phase. This generates TDD steps and file-level detail using the full context of what was learned during prior phases.
      - If **NO:** find the next uncompleted step within the current phase.
 5. Write a self-contained implementation plan for the next step into `tasks/todo.md`, complete enough for a fresh session to execute from `tasks/todo.md` alone.
 6. Commit and push `tasks/todo.md`, `tasks/roadmap.md`, `tasks/manual-todo.md` (if it exists), and `tasks/phases/` (if created).
@@ -65,6 +65,7 @@ Ship current work, commit, push, deploy, and plan the next step. If `$ARGUMENTS`
 - Do not amend or rewrite history.
 - Do not commit secrets.
 - The plan must be actionable with specific file paths and technical details.
+- In Codex, `$ship` is a compatibility/manual cleanup workflow. Prefer `$run` for the normal execute-and-ship loop.
 - `ship` only runs a deploy when `deploy.md` or `tasks/deploy.md` explicitly documents a manual deployment workflow. Repos without one are assumed to auto-deploy or require no manual deploy step.
 - Never use GitHub Actions for deployment. Only use manual deploy scripts, Makefiles, or CLI commands.
 - Never deploy to production without explicit user confirmation.

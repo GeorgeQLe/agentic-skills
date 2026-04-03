@@ -1,12 +1,12 @@
 ---
 name: ship-kanban
-description: "Ship current work, move kanban card to Done or Punt, deploy, and plan the next step with card in Todo"
+description: "Ship already-finished work, reconcile kanban card state, and prepare the next step"
 argument-hint: "[--no-plan] [--no-deploy]"
 ---
 
 # Ship (Kanban)
 
-Ship current work, commit, push, deploy, and plan the next step. Moves completed kanban cards to Done or Punt, ensures next step's card is in Todo. If `$ARGUMENTS` contains `--no-plan`, skip planning. If `$ARGUMENTS` contains `--no-deploy`, skip deployment.
+Ship already-finished work, commit it, optionally deploy it, and reconcile kanban card state. In Codex, `$run-kanban` usually handles execution plus shipping; use `$ship-kanban` when finished work is already present in the tree or board state needs cleanup without running a new step. If `$ARGUMENTS` contains `--no-plan`, skip planning. If `$ARGUMENTS` contains `--no-deploy`, skip deployment.
 
 ## Kanban Setup
 
@@ -31,7 +31,7 @@ All kanban commands use: `node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs
    - Read `CLAUDE.md` to understand current progress.
    - Update `tasks/todo.md` — mark completed items as done.
    - Update `tasks/history.md` — append a brief record of what was accomplished. Create it if needed.
-   - Commit and push using the commit-and-push-by-feature workflow.
+   - Commit and push using the `$commit-and-push-by-feature` workflow.
 2b. **Kanban: Move completed card**
    - Find the completed step's card on the board
    - Step checked off → move to Done + `done --id`
@@ -66,6 +66,7 @@ All kanban commands use: `node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs
 - `tasks/roadmap.md` is the source of truth. `tasks/todo.md` holds only the current phase.
 - Do not amend or rewrite history.
 - Do not commit secrets.
+- In Codex, `$ship-kanban` is a compatibility/manual cleanup workflow. Prefer `$run-kanban` for the normal execute-and-ship loop.
 - `ship-kanban` only runs a deploy when `deploy.md` or `tasks/deploy.md` explicitly documents a manual deployment workflow. Repos without one are assumed to auto-deploy or require no manual deploy step.
 - Never use GitHub Actions for deployment.
 - Never deploy to production without explicit user confirmation.

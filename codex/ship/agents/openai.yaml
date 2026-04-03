@@ -1,7 +1,7 @@
 interface:
   display_name: "Ship"
-  short_description: "Commit, optionally deploy, and plan next step"
-  default_prompt: "Use $ship to ship the current work, optionally deploy when a manual deploy contract exists, and plan the next step."
+  short_description: "Package finished work and plan next step"
+  default_prompt: "Use $ship to package already-finished work, optionally deploy when a manual deploy contract exists, and plan the next step."
 
 policy:
   allow_implicit_invocation: true
