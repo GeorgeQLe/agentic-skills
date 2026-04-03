@@ -134,7 +134,7 @@ Pick the single highest-priority action:
 1. **Fix stale items first** — if something is stale, recommend re-running it (highest priority: items marked **Stale** over **May be stale**)
 2. **Fill missing foundational steps** — no ICP + no codebase → `/competitive-analysis concept`; no ICP + codebase → `/icp`; concept-validated competitive analysis with "Proceed" verdict → `/icp`; no specs → `/plan-interview`
 3. **Fill missing downstream steps** — in dependency order
-4. **Advance the build** — if everything is fresh, recommend `/run` or `/ship` based on `tasks/todo.md` state
+4. **Advance the build** — if everything is fresh, recommend `/run` by default, and only recommend `/ship` when work is already finished in the tree but not yet packaged
 
 ## Output Format
 
@@ -187,7 +187,7 @@ If everything is complete and fresh:
 - [List any that block upcoming automated steps]
 
 ## Recommended Next Action
-> All research and strategy steps are current. Continue building with `/run` or ship with `/ship`.
+> All research and strategy steps are current. Continue building with `/run` by default, or use `/ship` only if work is already finished and needs packaging.
 ```
 
 ## Constraints

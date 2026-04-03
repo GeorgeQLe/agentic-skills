@@ -1,7 +1,7 @@
 interface:
   display_name: "Ship Kanban"
-  short_description: "Ship work, optionally deploy, and move kanban card"
-  default_prompt: "Use $ship-kanban to ship current work, optionally deploy when a manual deploy contract exists, and update kanban board state."
+  short_description: "Package finished work and reconcile kanban"
+  default_prompt: "Use $ship-kanban to package already-finished work, optionally deploy when a manual deploy contract exists, and reconcile kanban board state."
 
 policy:
   allow_implicit_invocation: true
