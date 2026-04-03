@@ -242,25 +242,25 @@ Fill in TDD steps and file-level implementation detail for a roadmap phase.
 ## Execution
 
 ### `/run`
-Plan the next incomplete step (or full phase with `--phase`), present it for approval, then execute.
+Plan the next incomplete step (or full phase with `--phase`), execute it, ship it, and prepare the next step.
 
 - **Arguments**: `[--phase]`
 - **Claude Code**: Single-step execution with a plan-mode approval gate.
-- **Codex**: Presents the plan, tracks work with `update_plan`, and can only use structured multiple-choice input when the session is already in Plan mode.
-- **Use when**: Ready to implement the next piece of work.
+- **Codex**: Presents the plan, asks for approval in plain chat, executes the work, commits/pushes it, applies the deploy contract if present, and refreshes `tasks/todo.md` for the next step.
+- **Use when**: Ready to implement and ship the next piece of work.
 
 ---
 
 ## Shipping
 
 ### `/ship`
-Ship current work (update docs, commit, push, deploy) and plan the next step.
+Ship already-finished work (update docs, commit, push, deploy) and plan the next step.
 
 - **Arguments**: `[--no-plan] [--no-deploy]`
 - **Deploy behavior**: Runs a manual deploy only when `deploy.md` or `tasks/deploy.md` exists; otherwise skips deploy by design.
 - **Claude Code**: Supports the repository's intended "ship, then plan next step" workflow directly.
-- **Codex**: The documentation exists, but the Claude-style plan-mode continuation flow does not currently have a true equivalent.
-- **Use when**: Work is done and ready to commit. Handles phase transitions with just-in-time `/plan-phases`.
+- **Codex**: Compatibility/manual cleanup wrapper. Use it when finished work is already present in the tree or there are unpushed commits to package without running a new step.
+- **Use when**: Codex work is already complete and only needs packaging, deploy handling, or next-step planning.
 
 ### `/ship-end`
 Wrap up the current session — update docs, commit, and push.
@@ -483,17 +483,17 @@ Build roadmap and sync phases/steps to kanban Todo cards.
 - **Use when**: `/roadmap` but with kanban board sync.
 
 ### `/run-kanban`
-Execute next step with kanban card tracking (Todo → In Progress, conflict detection).
+Execute next step with kanban card tracking and ship it (Todo → In Progress → Done, next card to Todo).
 
 - **Arguments**: `[--phase]`
-- **Use when**: `/run` but with cross-device conflict detection and progress tracking.
+- **Use when**: `/run` but with cross-device conflict detection, card finalization, and next-card placement.
 
 ### `/ship-kanban`
-Ship work and move kanban card to Done or Punt.
+Ship already-finished work and reconcile kanban card state.
 
 - **Arguments**: `[--no-plan] [--no-deploy]`
 - **Deploy behavior**: Runs a manual deploy only when `deploy.md` or `tasks/deploy.md` exists; otherwise skips deploy by design.
-- **Use when**: `/ship` but with kanban card movement.
+- **Use when**: `/ship` but with kanban cleanup for already-finished work.
 
 ### `/ship-end-kanban`
 Wrap up session and move In Progress card to Done with commit refs.
@@ -544,8 +544,8 @@ Archive old Done/Punt cards from the kanban board.
 | `/plan-interview-ideas` | Spec each idea from ideas.md | planning |
 | `/roadmap` | Interview → phased roadmap across all specs | planning |
 | `/plan-phases` | Roadmap phase → TDD steps with file detail | planning |
-| `/run` | Execute next step (Claude: plan mode first; Codex: present plan first) | execution |
-| `/run --phase` | Execute next full phase (Claude: plan mode first; Codex: present plan first) | execution |
+| `/run` | Execute next step and ship it (Claude: plan mode first; Codex: present plan first) | execution |
+| `/run --phase` | Execute next full phase and ship it (Claude: plan mode first; Codex: present plan first) | execution |
 | `/scaffold` | Generate new monorepo package/app | execution |
 | `/migrate` | Guided migration with verification | execution |
 | `/decommission` | Systematic service/package removal | execution |
@@ -554,7 +554,7 @@ Archive old Done/Punt cards from the kanban board.
 | `/trace` | Map request flow through the stack | review |
 | `/investigate` | Validate claims → root cause → fix (supports `--plan`) | debugging |
 | `/debug` | Investigate + changelog + non-duplicate fix | debugging |
-| `/ship` | Commit, push, deploy, plan next step | shipping |
+| `/ship` | Package already-finished work, deploy, plan next step | shipping |
 | `/ship-end` | Wrap up session | shipping |
 | `/release` | Version bump + changelog + tag | shipping |
 | `/deploy` | Deploy to staging/production with history tracking | shipping |
@@ -568,8 +568,8 @@ Archive old Done/Punt cards from the kanban board.
 | `/brainstorm-kanban` | Brainstorm + create kanban cards | planning |
 | `/plan-interview-kanban` | Spec interview + kanban card sync | planning |
 | `/roadmap-kanban` | Roadmap + kanban board sync | planning |
-| `/run-kanban` | Execute step with kanban tracking | execution |
-| `/ship-kanban` | Ship + move kanban card to Done/Punt | shipping |
+| `/run-kanban` | Execute step, ship it, and advance kanban state | execution |
+| `/ship-kanban` | Package finished work + reconcile kanban card state | shipping |
 | `/ship-end-kanban` | Wrap up session + kanban card Done | shipping |
 | `/sync-roadmap-kanban` | Reconcile board with roadmap | ops |
 | `/kanban-archive` | Archive old Done/Punt cards | ops |
