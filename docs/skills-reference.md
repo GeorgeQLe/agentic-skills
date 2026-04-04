@@ -1,6 +1,6 @@
 # Skills Reference
 
-Complete reference for all 55 custom skills in this repository, available for both Claude Code and Codex.
+Complete reference for all 56 custom skills in this repository, available for both Claude Code and Codex.
 
 ## Tool Compatibility
 
@@ -63,6 +63,7 @@ Discover                      Ideate                       Specify              
 **New project flow**: `/icp` → `/competitive-analysis` → `/brainstorm` → `/plan-interview` → `/journey-map` → `/metrics` → `/roadmap` → `/gtm` → `/plan-phases` → `/run` → `/ship` → `/mvp-gap` → `/customer-feedback` → (iterate)
 **Existing project flow**: `/icp` → `/competitive-analysis` → `/mvp-gap` → `/brainstorm` → `/plan-interview` → `/journey-map` → `/metrics` → `/roadmap` → ...
 **Enterprise expansion**: `/enterprise-icp` → (build cycle) → `/scale-audit`
+**Platform expansion**: `/icp` → `/competitive-analysis` → `/platform-strategy` → `/experiment` → `/plan-interview` → `/roadmap` → ...
 **At any point**: `/workflow` to check status, stale items, and recommended next step
 
 For **Codex**, the same flow is invoked with `$skill-name` rather than `/skill-name`, and it remains an approximate map of the intended workflow rather than a guarantee that every approval or plan-mode transition works the same way.
@@ -75,7 +76,7 @@ Each skill has a `type` field in its frontmatter that describes *what kind of wo
 
 | Type | What it does | Output | Skills |
 |------|-------------|--------|--------|
-| **research** | Web search + analysis | Documents, market insights | `icp`, `enterprise-icp`, `competitive-analysis`, `gtm`, `monetization`, `customer-feedback`, `research-reconcile` |
+| **research** | Web search + analysis | Documents, market insights | `icp`, `enterprise-icp`, `competitive-analysis`, `platform-strategy`, `gtm`, `monetization`, `customer-feedback`, `research-reconcile` |
 | **analysis** | Reads codebase/docs | Assessments, gap reports | `mvp-gap`, `scale-audit`, `journey-map`, `metrics`, `burn-rate`, `workflow`, `spec-drift`, `affected`, `dead-code`, `hygiene`, `slim-audit`, `analyze-sessions` |
 | **planning** | Interactive interviews | Specs, roadmaps, phases | `brainstorm`, `plan-interview`, `plan-interview --ideas`, `roadmap`, `plan-phases`, `brainstorm --kanban`, `plan-interview --kanban`, `roadmap --kanban` |
 | **execution** | Writes/modifies code | Code changes | `run`, `scaffold`, `migrate`, `decommission`, `run --kanban` |
@@ -117,6 +118,14 @@ Enterprise multi-stakeholder discovery — map personas, deal-killers, and the e
 - **Arguments**: `[optional: target industry or market segment]`
 - **Outputs**: `research/enterprise-icp.md` (stakeholder map, journeys, deal-killers), `research/enterprise-icp-interview.md`
 - **Use when**: Pivoting to or expanding into enterprise sales.
+
+### `/platform-strategy`
+Expand from a single product into a multi-product platform — map vertical and horizontal growth vectors, score candidates, design validation experiments, and sequence the portfolio.
+
+- **Arguments**: `[optional: expansion direction e.g. "vertical", "horizontal", or specific adjacent market]`
+- **Prerequisites**: `research/icp.md` must exist or a working codebase (run `/icp` first). Enriched by `/competitive-analysis`, `/journey-map`, `/metrics`, `/monetization`, `/positioning`, `/customer-feedback`, `/enterprise-icp`.
+- **Outputs**: `research/platform-strategy.md` (core health, expansion vector map, scoring matrix, validation experiments, portfolio sequence, shared platform considerations), `research/platform-strategy-search-log.md`
+- **Use when**: Your core product has PMF and you're ready to expand — either deeper into the same customer base (vertical) or into adjacent products for new audiences (horizontal).
 
 ### `/journey-map`
 Map user journeys (per-use-case task flows) and customer journey (trigger→discovery→aha→conversion→retention) through the product.
@@ -523,6 +532,7 @@ Archive old Done/Punt cards from the kanban board.
 | `/icp` | Customer discovery — map ICP, journeys, value prop | research |
 | `/competitive-analysis` | Research competitors, map landscape and gaps (supports concept-validation mode) | research |
 | `/enterprise-icp` | Enterprise multi-stakeholder discovery | research |
+| `/platform-strategy` | Multi-product expansion — vertical/horizontal vectors, scoring, portfolio sequencing | research |
 | `/gtm` | Go-to-market planning | research |
 | `/monetization` | Revenue models, pricing, unit economics | research |
 | `/burn-rate` | Monthly burn rate, payback period, runway from infra signals | analysis |

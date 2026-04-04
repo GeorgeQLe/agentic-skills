@@ -35,6 +35,16 @@
 - Removed 24 stale legacy symlinks that still pointed at deleted `claude-skills` skill paths after the installer run
 - Updated `tasks/todo.md` references so the active Phase 10 plan points at `agentic-skills`
 
+## 2026-04-04 — Add /platform-strategy skill
+
+- Created `claude/platform-strategy/SKILL.md` v1.0.0 — research-driven multi-product expansion planning skill
+- Covers: core product health assessment, vertical/horizontal expansion vector mapping, 5-dimension scoring matrix, lightweight validation experiment design, portfolio sequencing (Now/Next/Later/Watch), shared platform considerations
+- Prerequisites: `research/icp.md` or working codebase; enriched by competitive-analysis, journey-map, metrics, monetization, positioning, customer-feedback, enterprise-icp
+- Output: `research/platform-strategy.md` + `research/platform-strategy-search-log.md`
+- Created `codex/platform-strategy/SKILL.md` v1.0.0 — condensed Codex variant
+- Updated `docs/skills-reference.md` with the new skill and platform-expansion workflow note
+- No deploy step — repo is a tools directory
+
 ## 2026-04-04 — Add comprehensive README
 
 - Created `README.md` documenting the full skill library for both Claude Code and Codex
