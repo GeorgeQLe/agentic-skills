@@ -1,0 +1,7 @@
+interface:
+  display_name: "Landing Copy"
+  short_description: "Generate or audit landing page copy grounded in upstream research"
+  default_prompt: "Use $landing-copy to generate landing page copy from my research artifacts, or audit existing copy against codebase reality."
+
+policy:
+  allow_implicit_invocation: true
