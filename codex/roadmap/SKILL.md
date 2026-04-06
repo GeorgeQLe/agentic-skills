@@ -1,6 +1,7 @@
 ---
 name: roadmap
 description: Build or update the project roadmap by interviewing across all specs, codebase state, and project history
+argument-hint: "[--existing] [--kanban]"
 ---
 
 # Roadmap Builder
@@ -38,3 +39,35 @@ Build or update `tasks/roadmap.md` by synthesizing all project documentation, in
 - Phase headers must use `## Phase N: [Title]` format for `/run` compatibility.
 - Do not include TDD steps or file-level detail — that's `/plan-phases`' job.
 - `tasks/roadmap.md` is the source of truth. Do not put roadmap content in CLAUDE.md.
+
+## Kanban Mode (`--kanban`)
+
+When `$ARGUMENTS` contains `--kanban`, sync phases and steps to the kanban board after writing the roadmap.
+
+### Kanban Setup
+
+1. Resolve the board: check `tasks/.kanban-board` for stored ID, validate via `board <id>`. If missing, match board names against `basename $(pwd)`. If no match, ask the user. If the session is already in Plan mode and there are 2-3 concrete board choices, prefer `request_user_input`; otherwise ask a concise plain-text question. If no boards exist, offer to create one with `create-board --name "$(basename $(pwd))" --template standard`.
+2. Validate all 5 lists exist (Backlog, Todo, In Progress, Done, Punt). Create missing ones via `create-list`.
+3. If poketo-kanban scripts are missing or DB is unreachable, warn and continue without kanban.
+4. **Board Overview:** Fetch board state and display a brief summary.
+
+All kanban commands use: `node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs <command>`
+
+### Kanban Sync
+
+After writing the roadmap:
+
+1. **Current phase steps → Todo**: For each `- [ ]` step in `tasks/todo.md`:
+   - Search board for card with that name
+   - If in Backlog → move to Todo
+   - If in Todo or later → skip
+   - If not found → create in Todo with phase context in description
+
+2. **Future phases → Backlog**: For each future phase in the roadmap:
+   - Search for card with phase title
+   - If not found → create summary card in Backlog with phase goal
+   - If found → skip
+
+3. Report: cards created, moved, and skipped.
+
+Kanban operations are additive — if any kanban command fails, warn and continue. Roadmap output must always succeed. Only move cards FROM Backlog → Todo. Never move backward.

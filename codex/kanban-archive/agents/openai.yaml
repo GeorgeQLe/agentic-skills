@@ -1,7 +1,0 @@
-interface:
-  display_name: "Kanban Archive"
-  short_description: "Archive old Done/Punt cards from kanban board"
-  default_prompt: "Use $kanban-archive to archive old Done/Punt cards."
-
-policy:
-  allow_implicit_invocation: true

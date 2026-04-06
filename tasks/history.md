@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-04-06 — Skills audit: consolidate kanban variants into base skills
+
+- Merged 7 `-kanban` variant skills into their base skills with a `--kanban` flag: plan-interview, roadmap, ship, ship-end, run, brainstorm, poketo-kanban
+- Merged `plan-interview-ideas` into `plan-interview` with `--ideas` flag
+- Merged `kanban-archive` into `poketo-kanban` with `--archive` flag
+- Removed 16 variant directories (8 from claude/, 8 from codex/)
+- Updated cross-references in skills/SKILL.md, docs/codex-workflow.md, docs/skills-reference.md, docs/kanban-test-results.md
+- Result: 52 claude skills (was 60), 49 codex skills (was 57)
+
 ## 2026-04-03 — Headless auth migration brief for Phase 10
 
 - Audited the current Claude and Codex kanban assumptions around `POKETOWORK_DATABASE_URL`, `~/.poketo/config.json`, and Codex's hardcoded `~/.claude/skills/.../kanban.mjs` path

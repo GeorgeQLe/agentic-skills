@@ -1,7 +1,7 @@
 ---
 name: ship
 description: "Ship already-finished work, optionally deploy it, and prepare the next step"
-argument-hint: "[--no-plan] [--no-deploy]"
+argument-hint: "[--no-plan] [--no-deploy] [--kanban]"
 ---
 
 # Ship
@@ -70,3 +70,32 @@ Ship already-finished work, commit it, optionally deploy it, and plan the next s
 - Never use GitHub Actions for deployment. Only use manual deploy scripts, Makefiles, or CLI commands.
 - Never deploy to production without explicit user confirmation.
 - Do not modify code as part of the deploy process.
+
+## Kanban Mode (`--kanban`)
+
+When `$ARGUMENTS` contains `--kanban`, perform kanban operations during the ship workflow.
+
+### Kanban Setup
+
+1. Resolve the board: check `tasks/.kanban-board` for stored ID, validate via `board <id>`. If missing, match board names against `basename $(pwd)`. If no match, ask the user.
+2. Validate all 5 lists exist (Backlog, Todo, In Progress, Done, Punt). Create missing ones via `create-list`.
+3. If poketo-kanban scripts are missing or DB is unreachable, warn and continue without kanban.
+
+All kanban commands use: `node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs <command>`
+
+### After Shipping — Move Completed Card
+
+1. Find the completed step's card on the board.
+2. Step checked off → move to Done + `done --id`. Step has blocker/deferred → move to Punt + add reason. Unclear → ask the user. If in Plan mode, prefer `request_user_input`.
+3. Update card description with commit SHAs.
+
+### After Planning — Ensure Next Card in Todo
+
+1. Search for next step's card.
+2. If in Backlog → move to Todo. If not found → create in Todo. If already in Todo or later → skip.
+
+### Next Work Suggestion
+
+Suggest the top Todo card by priority (overdue > starred > list order). If no Todo cards, check Backlog. If nothing: "Board is clear."
+
+Kanban operations are additive — if any kanban command fails, warn and continue. Core workflow must succeed.

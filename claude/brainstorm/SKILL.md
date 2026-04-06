@@ -3,7 +3,8 @@ name: brainstorm
 description: Evaluate the codebase and suggest ideas to explore with /plan-interview
 type: planning
 version: 1.1.0
-argument-hint: [optional: focus area e.g. "performance", "new features", "DX"]
+argument-hint: [optional: focus area] [--kanban]
+allowed-tools: Bash(node *)
 ---
 
 # Brainstorm
@@ -77,3 +78,23 @@ Present suggestions grouped by effort level, with each suggestion framed as a to
 - Limit to 3–5 suggestions per effort level to avoid overwhelming the user.
 - Do not suggest changes that conflict with patterns established in CLAUDE.md.
 - Do not repeat work already tracked in `tasks/roadmap.md`, `tasks/todo.md`, or `specs/` (or `specs/{app}/`).
+
+## Kanban Mode (`--kanban`)
+
+When `$ARGUMENTS` contains `--kanban`, create kanban Backlog cards for each new idea after generating suggestions.
+
+### Kanban Setup
+
+Read and follow the Kanban Setup protocol in `~/.claude/skills/poketo-kanban/KANBAN-SETUP.md` (all sections including Board Overview).
+
+### Kanban Sync
+
+After generating and displaying the ideas:
+
+1. For each idea in the output:
+   - Search the board for a card with the same title
+   - If found → skip
+   - If not found → create in Backlog with title, description, and effort category
+2. Report: "Created X new cards in Backlog, skipped Y existing."
+
+Kanban operations are additive — if any kanban command fails, warn and continue. Brainstorm output to `tasks/ideas.md` must always succeed.

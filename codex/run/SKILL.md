@@ -1,7 +1,7 @@
 ---
 name: run
 description: "Execute the next incomplete step (or full phase with --phase), ship the result, and prepare the next step"
-argument-hint: "[--phase]"
+argument-hint: "[--phase] [--kanban]"
 ---
 
 # Run
@@ -86,3 +86,48 @@ Identify the next incomplete unit of work from the phased plan, build an executi
 - Never use GitHub Actions for deployment. Only use manual deploy scripts, Makefiles, or CLI commands.
 - Never deploy to production without explicit user confirmation.
 - Do not modify code as part of the deploy process.
+
+## Kanban Mode (`--kanban`)
+
+When `$ARGUMENTS` contains `--kanban`, perform kanban operations during the run workflow.
+
+### Kanban Setup
+
+1. Resolve the board: check `tasks/.kanban-board` for stored ID, validate via `board <id>`. If missing, match board names against `basename $(pwd)`. If no match, ask the user. If the session is already in Plan mode and there are 2-3 concrete board choices, prefer `request_user_input`; otherwise ask a concise plain-text question. If no boards exist, offer to create one with `create-board --name "$(basename $(pwd))" --template standard`.
+2. Validate all 5 lists exist (Backlog, Todo, In Progress, Done, Punt). Create missing ones via `create-list`.
+3. If poketo-kanban scripts are missing or DB is unreachable, warn and continue without kanban.
+4. **Board Overview:** Fetch board state and display a brief summary.
+
+All kanban commands use: `node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs <command>`
+
+### Session Card (before main workflow)
+
+1. Get hostname (`hostname -s | lowercase`) and branch (`git branch --show-current`).
+2. Read `tasks/todo.md` for the current step name.
+3. Search board for card matching step name.
+4. If in Todo → move to In Progress. If already in In Progress → skip. If not found → create in In Progress.
+5. Update card description with: `[hostname] | Branch: branch | Started: datetime`
+
+### Conflict Check (advisory only, never block)
+
+Scan all In Progress cards:
+- `[other-hostname]` with same branch/step → warn about overlap
+- `[this-hostname]` with different step → stale session, offer to move to Done/Punt
+- No hostname → report as "untracked"
+
+### After Execution — Finalize Card
+
+1. Find the completed step's card. Move to Done + `done --id`.
+2. Update description with commit SHAs and `Progress: X/Y (Z%) | Completed: datetime`.
+3. If card not found, warn and continue.
+
+### After Planning — Ensure Next Card in Todo
+
+1. Search for next step's card.
+2. If in Backlog → move to Todo. If not found → create in Todo. If already in Todo or later → skip.
+
+### Next Work Suggestion
+
+Suggest the top Todo card by priority (overdue > starred > list order). If no Todo cards, check Backlog. If nothing: "Board is clear."
+
+Kanban operations are additive — if any kanban command fails, warn and continue. Core workflow must succeed. Conflict warnings are advisory only — never block.

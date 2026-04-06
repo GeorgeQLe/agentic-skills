@@ -1,7 +1,0 @@
-interface:
-  display_name: "Run Kanban"
-  short_description: "Execute, ship, and advance kanban state"
-  default_prompt: "Use $run-kanban to execute the next step, ship it, and move the kanban card through the workflow."
-
-policy:
-  allow_implicit_invocation: true

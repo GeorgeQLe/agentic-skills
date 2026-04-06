@@ -1,6 +1,7 @@
 ---
 name: plan-interview
 description: Interview to validate and complete a specification
+argument-hint: "[--kanban] [--ideas]"
 ---
 
 # Plan Interview
@@ -38,3 +39,42 @@ The interview log should include:
 
 - Do not assume draft text is final.
 - Keep probing until the spec is decision-complete enough to implement.
+
+## Kanban Mode (`--kanban`)
+
+When `$ARGUMENTS` contains `--kanban`, perform kanban operations after writing the spec.
+
+### Kanban Setup
+
+1. Resolve the board: check `tasks/.kanban-board` for stored ID, validate via `board <id>`. If missing, match board names against `basename $(pwd)`. If no match, ask the user. If the session is already in Plan mode and there are 2-3 concrete board choices, prefer `request_user_input`; otherwise ask a concise plain-text question. If no boards exist, offer to create one with `create-board --name "$(basename $(pwd))" --template standard`.
+2. Validate all 5 lists exist (Backlog, Todo, In Progress, Done, Punt). Create missing ones via `create-list`.
+3. If poketo-kanban scripts are missing or DB is unreachable, warn and continue without kanban.
+4. **Board Overview:** Fetch board state and display a brief summary.
+
+All kanban commands use: `node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs <command>`
+
+### Kanban Sync
+
+After writing the spec:
+
+1. Extract 2-3 keywords from the topic argument.
+2. Search the board across ALL lists: `search --query "<keywords>"`
+3. If 1 match → update card description with spec summary and file path. Do not move the card — update in place. Never move backward from Done/Punt.
+4. If multiple → list cards and ask the user to pick. If in Plan mode with 2-3 choices, prefer `request_user_input`.
+5. If 0 → create new card in Backlog with spec details.
+6. Report which card was updated or created.
+
+Kanban operations are additive — if any kanban command fails, warn and continue. Spec output must always succeed. Never move cards backward from Done or Punt.
+
+## Ideas Mode (`--ideas`)
+
+When `$ARGUMENTS` contains `--ideas`, read `tasks/ideas.md` and run the interview process for each idea sequentially.
+
+1. Read `tasks/ideas.md` and extract every distinct idea entry. If a filter keyword is provided, limit to matching ideas.
+2. Show the user the list and ask them to confirm, skip any, or reorder.
+3. For each idea, run the standard interview process using the idea's title and description as the initial draft.
+4. Write deliverables (`specs/[topic].md` and `[topic]-interview.md`) for each completed idea.
+5. After each idea, summarize decisions and move to the next. The user may say "skip".
+6. If the user stops partway through, write deliverables for completed ideas and note which remain.
+
+Do not repeat work already in `tasks/roadmap.md`, `tasks/todo.md`, or `specs/`.
