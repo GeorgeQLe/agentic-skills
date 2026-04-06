@@ -49,54 +49,97 @@
 
 ### Next Step Implementation Plan
 
-**Objective**
-- Replace the incomplete Work headless tool layer with a real tRPC-backed surface that covers the current kanban migration requirements.
+**Objective:** Wire the gateway action route to dispatch tool calls through the Work adapter, so agents with `pk_...` API keys can invoke all 15 Work tools via HTTP.
 
-**Phase 10 Step 1 output**
-- `/Users/georgele/projects/tools/claude-skills/specs/poketo-headless-auth-migration.md`
+**Target repo:** `/Users/georgele/projects/apps/poke/monorepo` (not claude-skills)
 
-**Files to inspect in the Poketo monorepo first**
-- `/Users/georgele/projects/apps/poke/monorepo/apps/work/src/tools/get-my-boards.ts`
-- `/Users/georgele/projects/apps/poke/monorepo/apps/work/src/tools/index.ts`
-- `/Users/georgele/projects/apps/poke/monorepo/apps/work/src/tools/work-adapter.ts`
-- `/Users/georgele/projects/apps/poke/monorepo/apps/work/src/tools/adapted-tools.ts`
-- `/Users/georgele/projects/apps/poke/monorepo/apps/work/src/tools/primitives/index.ts`
-- `/Users/georgele/projects/apps/poke/monorepo/apps/work/src/tools/primitives/create-card.ts`
-- `/Users/georgele/projects/apps/poke/monorepo/apps/work/src/tools/primitives/update-card.ts`
-- `/Users/georgele/projects/apps/poke/monorepo/apps/work/src/tools/primitives/move-card.ts`
-- `/Users/georgele/projects/apps/poke/monorepo/apps/work/src/tools/primitives/delete-card.ts`
-- `/Users/georgele/projects/apps/poke/monorepo/apps/work/src/tools/primitives/create-list.ts`
-- `/Users/georgele/projects/apps/poke/monorepo/apps/work/src/tools/primitives/update-list.ts`
-- `/Users/georgele/projects/apps/poke/monorepo/apps/work/src/tools/primitives/delete-list.ts`
-- `/Users/georgele/projects/apps/poke/monorepo/packages/agents/src/caller/create-agent-caller.ts`
-- `/Users/georgele/projects/apps/poke/monorepo/packages/agents/src/gateway/auth.ts`
-- `/Users/georgele/projects/apps/poke/monorepo/packages/agents/src/gateway/index.ts`
-- `/Users/georgele/projects/apps/poke/monorepo/packages/trpc/src/server/routers/board/index.ts`
-- `/Users/georgele/projects/apps/poke/monorepo/packages/trpc/src/server/routers/card/index.tsx`
-- `/Users/georgele/projects/apps/poke/monorepo/packages/trpc/src/server/routers/list/index.tsx`
+**Current state:**
+- The gateway action route (`apps/flow/src/app/api/v1/actions/[app]/[action]/route.ts`) handles auth, rate limiting, and scope gating — but returns a stub `{ ok: true }` instead of dispatching to tool adapters.
+- `createWorkAdapter({ caller })` in `apps/work/src/tools/work-adapter.ts` returns a fully functional adapter with 15 tools, `executeToolCall()`, and `undoToolCall()`.
+- `createAgentCaller(session)` in `packages/agents/src/caller/create-agent-caller.ts` creates a session-backed tRPC caller.
+- `createGateway(deps)` in `packages/agents/src/gateway/index.ts` expects an `executeTool(app, action, params)` dependency but nothing provides it yet.
+- The gateway test file already has rate-limit tests (committed in a prior session) — there may be uncommitted route changes from that work. Check `git stash list` and `git diff` before starting.
 
-**Concrete gaps to close**
-- `get-my-boards.ts` is still a stub.
-- Primitive tool files are still placeholder definitions.
-- `adapted-tools.ts` only covers 11 operations and does not yet expose board listing, create-board, search, or explicit archive/restore.
-- The current delete/archive semantics need to be normalized before skills depend on them.
+**Changes:**
 
-**Technical decisions to make**
-- Whether board discovery should be exposed as `get_my_boards` backed by `board.getBoardsForPrimaryOrg`, or by a slightly different shared contract.
-- Whether archive should be a first-class `archive_card` tool or documented `delete_card` archive semantics plus `restore_card`.
-- Which exact response shapes should be stabilized for board resolution, skill card matching, and post-mutation refetch flows.
-- How the session-backed caller should be threaded through the gateway/tool stack once Step 3 exposes the external entrypoint.
+### 1. Create app adapter registry
 
-**Acceptance criteria for Step 2**
-- Work tool stubs are replaced with real tRPC-backed implementations where required for kanban migration.
-- The shared surface covers board discovery/details/activity, create board/list/card, update card, move card, search, and archive/restore.
-- Mutations flow through the canonical board/card/list routers rather than direct DB writes in skill code.
-- Response shapes are stable enough that Claude and Codex skills can consume them without fragile free-text parsing.
+Create `apps/flow/src/lib/app-registry.ts`:
+- Export a `createAppRegistry()` factory that maps app names to adapter factories.
+- Register the Work adapter: `work` → `(caller) => createWorkAdapter({ caller })`.
+- Provide `getAdapter(app, caller)` that lazily creates and caches adapters per-caller.
+- Keep it simple — no dynamic plugin loading, just a Map.
 
-**Known risks**
-- The gateway already models API-key validation, but the external gateway surface still has to expose the finished Work operations in Step 3.
-- Router capabilities and tool definitions do not line up 1:1 today, so Step 2 may require widening the Work tool contract rather than only wiring existing stubs.
-- Archive semantics are currently split across docs and tool naming; careless wiring could preserve ambiguous behavior.
+### 2. Create tool dispatcher
+
+Create `apps/flow/src/lib/tool-dispatcher.ts`:
+- Export `createToolDispatcher(deps: { getAdapter })`.
+- Implement `executeTool(app, action, params, session)`:
+  - Create agent caller from session via `createAgentCaller(session)`.
+  - Get adapter from registry.
+  - Call `adapter.executeToolCall({ toolName: action, params })`.
+  - Return `{ success, result }` or `{ success: false, error }`.
+
+### 3. Wire the action route
+
+Modify `apps/flow/src/app/api/v1/actions/[app]/[action]/route.ts`:
+- Replace the `{ ok: true }` stub with real dispatch logic.
+- Parse `action` from route params, JSON body as `params`.
+- Create session from the resolved identity.
+- Call `dispatcher.executeTool(app, action, params, session)`.
+- Return the result as JSON with appropriate status codes (200, 400, 404, 500).
+
+### 4. Write integration tests
+
+Add to or update `apps/flow/src/__tests__/gateway-routes.test.ts`:
+- Test that POST `/api/v1/actions/work/get_board_details` with valid auth dispatches to the work adapter.
+- Test that unknown app returns 404.
+- Test that unknown action for a known app returns 404.
+- Test that tool execution errors return 500 with error message.
+- Mock the tRPC caller at the adapter boundary.
+
+### 5. Verify response shape stability
+
+Invoke a few representative tools through the gateway test harness and document the response shapes:
+- `get_my_boards` → `{ boards: [...] }`
+- `create_card` → `{ card: { id: "..." } }`
+- `delete_card` → `{ success: true }`
+- Ensure these match what skills will consume.
+
+**Files to create (Poketo monorepo):**
+| File | Action |
+|------|--------|
+| `apps/flow/src/lib/app-registry.ts` | **Create** |
+| `apps/flow/src/lib/tool-dispatcher.ts` | **Create** |
+
+**Files to modify (Poketo monorepo):**
+| File | Action |
+|------|--------|
+| `apps/flow/src/app/api/v1/actions/[app]/[action]/route.ts` | Replace stub with dispatcher |
+| `apps/flow/src/__tests__/gateway-routes.test.ts` | Add tool dispatch tests |
+
+**Files to inspect first:**
+- `apps/flow/src/app/api/v1/actions/[app]/[action]/route.ts` — check for uncommitted rate-limit wiring
+- `packages/agents/src/gateway/index.ts` — understand `handleActionRequest()` shape
+- `packages/agents/src/caller/create-agent-caller.ts` — session → caller threading
+- `apps/work/src/tools/work-adapter.ts` — adapter interface
+
+**Technical decisions:**
+- Whether to route through `createGateway().handleActionRequest()` or directly through the dispatcher. The gateway module already has the `executeTool` dependency slot — using it keeps the architecture consistent.
+- Whether to create the tRPC caller per-request (clean but potentially slow) or cache per API key session. Start with per-request; optimize later if needed.
+
+**Known risks:**
+- There are uncommitted changes in the flow routes from a rate-limit wiring task. Those need to be committed or stashed before starting Step 3.
+- The `createAgentCaller` requires a `Session` object — need to verify how `resolveIdentity()` output maps to a session.
+- Response shapes from tRPC callers may include internal fields (timestamps, IDs) that should be filtered before exposing to agents.
+
+**Acceptance criteria:**
+- POST `/api/v1/actions/work/{tool_name}` with a valid `pk_...` API key dispatches to the Work adapter and returns tool results as JSON.
+- Unknown apps or actions return 404.
+- Auth failures return 401, scope failures return 403 (already implemented).
+- All 15 Work tools are callable through the gateway.
+- Response shapes are consistent JSON (not free-text).
+- Tests pass for the dispatch path.
 
 ### Acceptance Criteria
 
