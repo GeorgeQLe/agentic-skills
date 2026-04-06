@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-04-06 — Phase 10 Step 2: Wire Poketo Work headless tool layer
+
+- Created 3 new primitive tools in Poketo monorepo: `create-board.ts`, `search-cards.ts`, `restore-card.ts`
+- Fixed `delete-card.ts` description from "permanently" to archive semantics
+- Extended `adapted-tools.ts` with 4 new adapt functions (getMyBoards, createBoard, searchCards, restoreCard) — 15 total adapted tools
+- Removed `getMyBoardsTool` from `tools/index.ts` barrel (now in adapted pipeline only)
+- Updated all 3 test files for new tool counts and mock callers — 116 tests pass
+- Advanced `tasks/todo.md` to Phase 10 Step 3
+
 ## 2026-04-06 — Skills audit: consolidate kanban variants into base skills
 
 - Merged 7 `-kanban` variant skills into their base skills with a `--kanban` flag: plan-interview, roadmap, ship, ship-end, run, brainstorm, poketo-kanban
