@@ -2,7 +2,7 @@
 
 **Goal:** Replace direct database kanban writes with a shared, authenticated Poketo headless API path so Claude and Codex both use the same app-layer permissions, validation, and audit logging.
 
-**Current Step:** 2. Finish wiring the Poketo Work headless tool layer
+**Current Step:** 3. Expose the shared API/gateway path for agent use
 
 **Why this step is next:** Step 1 established the target contract: scoped `pk_...` API keys through the agent gateway, with `kanban.mjs` retained only as transitional fallback while the shared Work surface is incomplete. The next blocker is the Work tool layer itself: board discovery, create-board, search, and archive/restore are still missing or stubbed, so Claude and Codex cannot migrate yet.
 
@@ -27,7 +27,7 @@
     - which operations must be available before the skill migration can start.
   - Prefer writing the brief to `/Users/georgele/projects/tools/claude-skills/specs/poketo-headless-auth-migration.md`.
 
-- [ ] 2. Finish wiring the Poketo Work headless tool layer
+- [x] 2. Finish wiring the Poketo Work headless tool layer
   - Replace stubbed Work primitives/adapters with real app-layer-backed implementations.
   - Ensure the shared surface covers board discovery/details/activity, create board/list/card, update card, move card, search, archive/restore.
 
