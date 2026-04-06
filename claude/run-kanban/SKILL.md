@@ -59,7 +59,7 @@ After setting up the session card, scan for cross-device conflicts. This is **ad
    - Look for the next phase with an unchecked milestone.
    - If `--phase` mode: scope the entire phase.
    - Otherwise (default): find only the next unchecked `- [ ]` step within that phase.
-   - **If the phase has acceptance criteria but no implementation steps** (no `### Tests First` section): this phase needs just-in-time planning. **You MUST invoke `/plan-phases` for this phase** to generate TDD steps and file-level detail before proceeding. Do NOT tell the user the phase is "deferred" or that they need to run `/plan-phases` manually — this auto-invocation is the designed workflow. A phase without TDD steps is NOT deferred; it simply hasn't been decomposed yet. Only items under the `## Deferred / Future Work` heading in the roadmap are actually deferred.
+   - **If the phase has acceptance criteria but no implementation steps** (no `### Tests First` or `### Implementation` section): this phase needs just-in-time planning. **You MUST invoke `/plan-phases` for this phase** to generate implementation steps and file-level detail before proceeding. Do NOT tell the user the phase is "deferred" or that they need to run `/plan-phases` manually — this auto-invocation is the designed workflow. A phase without implementation steps is NOT deferred; it simply hasn't been decomposed yet. Only items under the `## Deferred / Future Work` heading in the roadmap are actually deferred.
 5. **Check `tasks/manual-todo.md`** (if it exists) for blocking manual tasks:
    - Look for unchecked items with `_(blocks: Step N.X)_` annotations matching the step about to be executed.
    - If a blocking manual task is found, warn the user: "**Manual task blocking this step:** [task]. Complete it before proceeding." Do NOT skip the step — let the user decide.
@@ -77,7 +77,7 @@ After setting up the session card, scan for cross-device conflicts. This is **ad
 
 - If it's a "Tests First" step: write the failing tests, run them to confirm they fail (red). Stop.
 - If it's an implementation step: implement it, run existing tests to check for regressions. Stop.
-- If it's a "Green" step: run all tests, fix any failures. Stop.
+- If it's a "Green" step: run all tests. For `tests-after` phases, also write regression tests covering acceptance criteria. Fix any failures. Stop.
 - **Mark the step as done** in `tasks/todo.md` (check it off).
 
 ### Full Phase Mode (`--phase`)
@@ -139,7 +139,7 @@ Do NOT move the card to Done here — that's `/ship-kanban`'s job.
 - **Always enter plan mode before executing.** The user must approve the approach first.
 - Keep context footprint minimal — don't read the entire codebase, only files relevant to this work.
 - If the work can't be completed due to a blocker, document the blocker in `tasks/todo.md` and stop.
-- Do not skip the TDD steps.
+- Follow the test strategy annotated on each phase (`tdd`, `tests-after`, or `none`). Do not skip test steps for `tdd` phases.
 - Each execution must be self-contained — read the plan fresh, don't rely on prior context.
 - Kanban operations are additive — if any kanban command fails, warn and continue. The core run workflow must always succeed regardless of kanban state.
 - Cross-device conflict warnings are advisory only — never block the user from working.

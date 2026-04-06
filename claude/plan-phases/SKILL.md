@@ -1,24 +1,24 @@
 ---
 name: plan-phases
-description: Break a finalized spec into phases, steps, milestones, and TDD test plans
+description: Break a finalized spec into phases, steps, milestones, and test plans
 type: planning
 version: 1.0.0
-argument-hint: [phase-number | path-to-spec]
+argument-hint: [phase-number | path-to-spec] [--no-tdd]
 ---
 
 # Phase Planner
 
-Decompose work into TDD implementation steps with file-level granularity. Operates in two modes depending on whether a roadmap already exists.
+Decompose work into implementation steps with file-level granularity. Operates in two modes depending on whether a roadmap already exists.
 
 ## Input
 
 Check for `tasks/roadmap.md` first, then read `$ARGUMENTS`.
 
 ### Mode A: Roadmap exists (typical — called just-in-time by `/ship`, `/run`, or manually)
-The roadmap already defines phases, goals, scope, and acceptance criteria. Your job is to fill in the **TDD steps and file-level detail** for a specific phase. This is typically invoked just-in-time when a phase is about to start, so implementation detail benefits from context gained during prior phases.
+The roadmap already defines phases, goals, scope, and acceptance criteria. Your job is to fill in the **implementation steps and file-level detail** for a specific phase. This is typically invoked just-in-time when a phase is about to start, so implementation detail benefits from context gained during prior phases.
 
 - If `$ARGUMENTS` is a number (e.g., `2`), plan that phase.
-- If `$ARGUMENTS` is empty, plan the **first phase that has acceptance criteria but no steps** (no `### Tests First` section yet).
+- If `$ARGUMENTS` is empty, plan the **first phase that has acceptance criteria but no steps** (no `### Tests First` or `### Implementation` section yet).
 - Read specs from `specs/` (or `spec.md`) for detailed requirements referenced by the phase's scope.
 - Read the codebase as needed to understand existing code, patterns, and what files to modify.
 
@@ -36,12 +36,27 @@ If `tasks/roadmap.md` does not exist, fall back to the original behavior: read s
 ## Planning Process (both modes)
 
 ### Break the Phase into Steps
-For the target phase, define ordered steps. **The first step of every phase must be writing tests.**
+For the target phase, define ordered steps.
 
-Each phase follows this structure:
+### Determine Test Strategy
 
+For each phase, classify its test strategy. Check in order:
+
+1. If `$ARGUMENTS` contains `--no-tdd`, use `tests-after` for all phases.
+2. If CLAUDE.md has a `## Test Strategy` section, read the project default.
+3. Otherwise, classify each phase individually:
+   - **`tdd`**: Stable interfaces, APIs, data models, business logic with known contracts, payment/auth flows
+   - **`tests-after`**: UI components, prototyping, exploratory features, design-in-flux work
+   - **`none`**: Pure config, docs, scaffolding, infra setup, CI/CD changes
+
+Annotate each phase header with: `> Test strategy: tdd|tests-after|none`
+
+Each phase follows a structure based on its test strategy:
+
+**For `tdd` phases:**
 ```
 ## Phase N: [Title]
+> Test strategy: tdd
 
 ### Tests First
 - Step N.1: Write failing tests for this phase's acceptance criteria
@@ -63,22 +78,59 @@ Each phase follows this structure:
 ### Milestone: [Phase N Milestone Name]
 **Acceptance Criteria:**
 - [ ] [Specific, verifiable criterion 1]
-- [ ] [Specific, verifiable criterion 2]
-- [ ] [Specific, verifiable criterion 3]
 - [ ] All phase tests pass
 - [ ] No regressions in previous phase tests
+```
 
-**On Completion** (fill in when phase is done):
+**For `tests-after` phases:**
+```
+## Phase N: [Title]
+> Test strategy: tests-after
+
+### Implementation
+- Step N.1: [First implementation task]
+  - Files: create `path/to/new.ts`, modify `path/to/existing.ts`
+- Step N.2: [Next implementation task]
+  - Files: modify `path/to/file.ts`
+- ...
+
+### Green
+- Step N.X: Write regression tests covering acceptance criteria
+- Step N.Y: Run all tests and verify they pass
+- Step N.Z: Refactor if needed while keeping tests green
+
+### Milestone: [Phase N Milestone Name]
+**Acceptance Criteria:**
+- [ ] [Specific, verifiable criterion 1]
+- [ ] All phase tests pass
+- [ ] No regressions in previous phase tests
+```
+
+**For `none` phases:**
+```
+## Phase N: [Title]
+> Test strategy: none
+
+### Implementation
+- Step N.1: [First implementation task]
+  - Files: create `path/to/new.ts`, modify `path/to/existing.ts`
+- ...
+
+### Milestone: [Phase N Milestone Name]
+**Acceptance Criteria:**
+- [ ] [Specific, verifiable criterion 1]
+```
+
+**On Completion** (fill in when phase is done — all strategies):
 - Deviations from plan: [none, or describe]
 - Tech debt / follow-ups: [none, or list]
 - Ready for next phase: yes/no
-```
 
-### TDD Requirements
-- Every phase starts with writing tests BEFORE implementation code.
-- Tests should be specific and tied to the phase's acceptance criteria.
-- Include the test file paths and describe what each test validates.
-- The milestone for each phase must include "All phase tests pass" and "No regressions in previous phase tests."
+### Test Requirements
+- **`tdd` phases**: Start with writing tests BEFORE implementation. Tests tied to acceptance criteria. Include test file paths.
+- **`tests-after` phases**: Implementation comes first. The Green step writes regression tests covering the acceptance criteria.
+- **`none` phases**: No test steps. Milestone omits "All phase tests pass" criterion.
+- All `tdd` and `tests-after` milestones must include "All phase tests pass" and "No regressions in previous phase tests."
 - If the project doesn't have a test framework set up, Phase 1 Step 1 should be setting up the test infrastructure.
 
 ### File-Level Granularity
@@ -104,7 +156,7 @@ After all phases, add a section for:
 ## Output
 
 ### Mode A (roadmap exists)
-1. **Update `tasks/roadmap.md`** — insert the TDD steps into the target phase. Preserve all other phases and content. Do not overwrite the phase's Goal, Scope, or Acceptance Criteria — only add the Tests First / Implementation / Green / Milestone structure beneath them.
+1. **Update `tasks/roadmap.md`** — insert the implementation steps into the target phase. Preserve all other phases and content. Do not overwrite the phase's Goal, Scope, or Acceptance Criteria — only add the appropriate structure (Tests First / Implementation / Green / Milestone for `tdd`; Implementation / Green / Milestone for `tests-after`; Implementation / Milestone for `none`) beneath them.
 2. **Write `tasks/todo.md`** — extract the target phase as a standalone working document. Include enough context (project name, current phase number, total phases) so a fresh session can orient itself without reading `tasks/roadmap.md`. If `tasks/todo.md` already has in-progress work for a different phase, ask the user before overwriting.
 3. **Write `tasks/manual-todo.md`** (if the phase has manual tasks) — extract manual tasks for the target phase. Use this format:
    ```markdown
@@ -147,19 +199,21 @@ Do NOT write `docs/plan.md`. The roadmap replaces it.
 [1-2 sentence overview of the implementation approach]
 
 ## Phase Overview
-| Phase | Title | Key Deliverable | Est. Complexity |
-|-------|-------|-----------------|-----------------|
-| 1     | ...   | ...             | S / M / L       |
-| 2     | ...   | ...             | S / M / L       |
+| Phase | Title | Key Deliverable | Test Strategy | Est. Complexity |
+|-------|-------|-----------------|---------------|-----------------|
+| 1     | ...   | ...             | tdd           | S / M / L       |
+| 2     | ...   | ...             | tests-after   | S / M / L       |
 
 ---
 
 ## Phase 1: [Title]
-### Tests First
+> Test strategy: tdd|tests-after|none
+
+### Tests First (tdd only)
 ...
 ### Implementation
 ...
-### Green
+### Green (tdd and tests-after only)
 ...
 ### Milestone: [Name]
 **Acceptance Criteria:**
@@ -184,7 +238,7 @@ Extract the target phase from the roadmap into `tasks/todo.md` as a standalone w
 
 ## Constraints
 - Every phase MUST have a milestone with specific, checkable acceptance criteria — not vague statements like "works correctly" but concrete conditions like "POST /api/items returns 201 with valid payload and persists to database."
-- Every phase MUST start with writing failing tests.
+- Every `tdd` phase must start with writing failing tests. `tests-after` phases write tests in the Green step.
 - Phases must be ordered so each builds on completed prior phases.
 - The plan must be compatible with `/run` and `/ship` — use `## Phase N:` headers and `- Step N.X:` format.
 - Do not include implementation code in the plan — only describe what to build and what to test.

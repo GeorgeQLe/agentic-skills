@@ -41,7 +41,7 @@ Scan all In Progress cards (advisory only, never block):
    - Look for the next phase with an unchecked milestone.
    - If `$ARGUMENTS` contains `--phase`, scope the full next incomplete phase.
    - Otherwise, find the next unchecked `- [ ]` step within that phase.
-   - **If the phase has acceptance criteria but no implementation steps** (no `### Tests First` section): invoke `$plan-phases` for this phase to generate TDD steps and file-level detail before proceeding.
+   - **If the phase has acceptance criteria but no implementation steps** (no `### Tests First` or `### Implementation` section): invoke `$plan-phases` for this phase to generate implementation steps and file-level detail before proceeding.
 5. **Check `tasks/manual-todo.md`** (if it exists) for unchecked items with `_(blocks: Step N.X)_` matching the current step. If found, warn the user — do NOT skip the step, let the user decide.
 6. Research what is needed — read only the files relevant to the step.
 7. Present the execution plan to the user:
@@ -87,7 +87,7 @@ Scan all In Progress cards (advisory only, never block):
        3. Copy the next phase from `tasks/roadmap.md` → overwrite `tasks/todo.md`.
        3b. Extract the next phase's manual tasks (from `**Manual Tasks:**` in roadmap) into a fresh `tasks/manual-todo.md`. If the next phase has no manual tasks, delete the file.
        4. If no more phases remain, commit and push the planning/task updates from this step, then suggest the top Todo or Backlog card if one exists. Otherwise report `Board is clear.` Then stop.
-       5. **Just-in-time planning:** Invoke `$plan-phases` for the new phase. This generates TDD steps and file-level detail using the full context of what was learned during prior phases.
+       5. **Just-in-time planning:** Invoke `$plan-phases` for the new phase. This generates implementation steps and file-level detail using the full context of what was learned during prior phases.
      - If **NO:** find the next uncompleted step within the current phase.
 16. Write a self-contained next-step plan into `tasks/todo.md`.
 17. Commit and push `tasks/todo.md`, `tasks/roadmap.md`, `tasks/manual-todo.md` (if it exists), and `tasks/phases/` (if created).
@@ -114,7 +114,7 @@ Scan all In Progress cards (advisory only, never block):
 - Always present the plan and get approval before executing. Do not assume a Claude-style `EnterPlanMode` or clear-context accept flow exists.
 - Keep context footprint minimal — only read files relevant to the current step.
 - If a blocker prevents completion, document it in `tasks/todo.md` and stop.
-- Do not skip TDD steps.
+- Follow the test strategy annotated on each phase. Do not skip test steps for `tdd` phases.
 - Do NOT execute items from `tasks/manual-todo.md` — those require human action.
 - `run-kanban` ships by default in Codex. Use `$ship-kanban` only when there is already finished work in the tree or board state that needs packaging without running a new step.
 - Kanban operations are additive — if any fail, warn and continue. Core workflow must succeed.
