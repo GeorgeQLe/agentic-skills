@@ -3,7 +3,8 @@ name: ship
 description: Ship current work (update docs, commit, push, deploy) and optionally plan the next step
 type: shipping
 version: 1.0.0
-argument-hint: [--no-plan] [--no-deploy]
+argument-hint: [--no-plan] [--no-deploy] [--kanban]
+allowed-tools: Bash(node *)
 ---
 
 Ship current work, commit, push, deploy, and plan the next step. If `$ARGUMENTS` contains `--no-plan`, skip planning. If `$ARGUMENTS` contains `--no-deploy`, skip deployment.
@@ -129,3 +130,36 @@ This gives the user something concrete to review before selecting "clear context
 - Never use GitHub Actions for deployment. Only use manual deploy scripts, Makefiles, or CLI commands.
 - Never deploy to production without explicit user confirmation.
 - Do not modify code as part of the deploy process.
+
+## Kanban Mode (`--kanban`)
+
+When `$ARGUMENTS` contains `--kanban`, perform kanban operations during the ship workflow.
+
+### Kanban Setup
+
+Read and follow the Kanban Setup protocol in `~/.claude/skills/poketo-kanban/KANBAN-SETUP.md` (Board Resolution, Board Validation, and Graceful Degradation — skip Board Overview).
+
+### After Step 2 — Move Completed Card
+
+1. Identify the step(s) just checked off in `tasks/todo.md`.
+2. Search the board for each completed step's card.
+3. Determine Done vs. Punt:
+   - Step checkbox checked off → move card to Done + `done --id`
+   - Step has blocker/deferred → move card to Punt + add reason
+   - Unclear → ask the user: Done or Punt?
+4. Update card description with commit SHAs.
+
+### After Step 4 — Ensure Next Card in Todo
+
+1. Search the board for the next step's card.
+2. If in Backlog → move to Todo. If not found → create in Todo. If already in Todo or later → skip.
+
+### Next Work Suggestion
+
+After kanban operations, suggest the top Todo card by priority (overdue > starred > list order). If no Todo cards, check Backlog. If nothing: "Board is clear."
+
+### Summary Addition
+
+Include kanban status (card moved to Done/Punt, next card in Todo) in the step 5 summary.
+
+Kanban operations are additive — if any kanban command fails, warn and continue. Core ship workflow must always succeed.

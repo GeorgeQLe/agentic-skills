@@ -3,7 +3,8 @@ name: roadmap
 description: Build or update the project roadmap by interviewing across all specs, codebase state, and project history
 type: planning
 version: 1.0.0
-argument-hint: [--existing] [path-to-spec]
+argument-hint: [--existing] [--kanban] [path-to-spec]
+allowed-tools: Bash(node *)
 ---
 
 # Roadmap Builder
@@ -24,7 +25,7 @@ Reviews the codebase, documented history, and current roadmap. Updates the roadm
 
 Read all available project documentation:
 
-- **`specs/`** directory (individual spec files from `/plan-interview` and `/plan-interview-ideas`), or `spec.md` if it exists for backwards compatibility
+- **`specs/`** directory (individual spec files from `/plan-interview` and `/plan-interview --ideas`), or `spec.md` if it exists for backwards compatibility
 - **`research/icp.md`** — customer discovery from `/icp` (if it exists)
 - **`specs/mvp-gap.md`** — MVP gap analysis from `/mvp-gap` (if it exists)
 - **`research/enterprise-icp.md`** and **`specs/scale-audit.md`** — enterprise discovery and audit (if they exist)
@@ -151,3 +152,30 @@ If updating an existing roadmap, append a brief entry to `tasks/history.md` noti
 - **`tasks/roadmap.md` is the source of truth** for the full phased plan. `tasks/todo.md` holds only the current phase.
 - **Do not put roadmap content in CLAUDE.md** — CLAUDE.md is for project conventions only.
 - **Keep the interview focused.** This is about sequencing and priority, not re-litigating spec decisions. If a spec question comes up, note it and suggest running `/plan-interview` again for that topic.
+
+## Kanban Mode (`--kanban`)
+
+When `$ARGUMENTS` contains `--kanban`, sync phases and steps to the kanban board after writing the roadmap.
+
+### Kanban Setup
+
+Read and follow the Kanban Setup protocol in `~/.claude/skills/poketo-kanban/KANBAN-SETUP.md` (all sections including Board Overview).
+
+### Kanban Sync
+
+After writing the roadmap:
+
+1. **Current phase steps → Todo**: For each `- [ ]` step in `tasks/todo.md`:
+   - Search the board for a card with that step name
+   - If found in Backlog → move to Todo
+   - If found in Todo or later → skip
+   - If not found → create in Todo with phase context in description
+
+2. **Future phases → Backlog**: For each future phase in the roadmap:
+   - Search for a card with the phase title
+   - If not found → create summary card in Backlog with phase goal
+   - If found → skip
+
+3. Report: cards created, moved, and skipped.
+
+Kanban operations are additive — if any kanban command fails, warn and continue. Roadmap output must always succeed. Only move cards FROM Backlog → Todo. Never move cards backward.

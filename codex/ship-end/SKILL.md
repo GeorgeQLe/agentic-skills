@@ -1,7 +1,7 @@
 ---
 name: ship-end
 description: "Wrap up the current session — update docs, commit, and push"
-argument-hint: "[--no-deploy]"
+argument-hint: "[--no-deploy] [--kanban]"
 ---
 
 # Ship End
@@ -44,3 +44,28 @@ Use this skill when the user wants the current session wrapped up cleanly.
 - `ship-end` only runs a deploy when `deploy.md` or `tasks/deploy.md` explicitly documents a manual deployment workflow. Repos without one are assumed to auto-deploy or require no manual deploy step.
 - Never use GitHub Actions for deployment. Only use manual deploy scripts, Makefiles, or CLI commands.
 - Never deploy to production without explicit user confirmation.
+
+## Kanban Mode (`--kanban`)
+
+When `$ARGUMENTS` contains `--kanban`, move the session's kanban card to Done after committing.
+
+### Kanban Setup
+
+1. Resolve the board: check `tasks/.kanban-board` for stored ID, validate via `board <id>`. If missing, match board names against `basename $(pwd)`. If no match, ask the user.
+2. Validate all 5 lists exist (Backlog, Todo, In Progress, Done, Punt). Create missing ones via `create-list`.
+3. If poketo-kanban scripts are missing or DB is unreachable, warn and continue without kanban.
+
+All kanban commands use: `node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs <command>`
+
+### Move Session Card to Done
+
+1. Get hostname (`hostname -s | lowercase`), fetch board state.
+2. Find In Progress card matching `[this-hostname]` in description or current step name.
+3. If found → move to Done + `done --id` + update description with commit SHAs.
+4. If not found → skip silently.
+
+### Next Work Suggestion
+
+Suggest the top Todo card by priority (overdue > starred > list order). If no Todo cards, check Backlog. If nothing: "Board is clear."
+
+Kanban operations are additive — if any kanban command fails, warn and continue. Core workflow must succeed.

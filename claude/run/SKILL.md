@@ -3,7 +3,8 @@ name: run
 description: Plan the next incomplete step (or full phase with --phase flag) from the plan, then enter plan mode for user approval before executing
 type: execution
 version: 1.0.0
-argument-hint: [--phase]
+argument-hint: [--phase] [--kanban]
+allowed-tools: Bash(node *)
 ---
 
 # Plan Executor
@@ -89,3 +90,39 @@ Identify the next incomplete unit of work from the phased plan, build an executi
 - If the work can't be completed due to a blocker, document the blocker in `tasks/todo.md` and stop.
 - Follow the test strategy annotated on each phase (`tdd`, `tests-after`, or `none`). Do not skip test steps for `tdd` phases.
 - Each execution must be self-contained — read the plan fresh, don't rely on prior context.
+
+## Kanban Mode (`--kanban`)
+
+When `$ARGUMENTS` contains `--kanban`, perform kanban operations during the run workflow.
+
+### Kanban Setup
+
+Read and follow the Kanban Setup protocol in `~/.claude/skills/poketo-kanban/KANBAN-SETUP.md` (all sections including Board Overview).
+
+### Session Card (before Protocol step 1)
+
+1. Get hostname (`hostname -s | tr '[:upper:]' '[:lower:]'`) and branch (`git branch --show-current`).
+2. Read `tasks/todo.md` for the current step name.
+3. Search board for card matching step name.
+4. If in Todo → move to In Progress. If already in In Progress → skip. If not found → create in In Progress.
+5. Update card description with: `[hostname] | Branch: <branch> | Started: YYYY-MM-DD HH:MM`
+
+### Conflict Check (advisory only, never block)
+
+Scan all In Progress cards:
+- `[other-hostname]` with same branch/step → warn about overlap
+- `[this-hostname]` with different step → stale session, offer to move to Done/Punt
+- No hostname → report as "untracked"
+
+### Post-Execution Card Update
+
+After marking the step done in `tasks/todo.md`:
+1. Count total and checked steps, calculate progress percentage.
+2. Update the card description with progress info.
+Do NOT move the card to Done — that's `/ship --kanban`'s job.
+
+### Report Addition
+
+Include kanban status (card moved, conflicts detected) in the after-execution report.
+
+Kanban operations are additive — if any kanban command fails, warn and continue. Core run workflow must always succeed. Conflict warnings are advisory only — never block.

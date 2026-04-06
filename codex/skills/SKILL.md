@@ -26,14 +26,14 @@ Discover and search all available skills in this repository, grouped by workflow
    | Stage | Skills |
    |-------|--------|
    | Discovery & Market Fit | `icp`, `enterprise-icp` |
-   | Planning | `brainstorm`, `brainstorm-kanban`, `plan-interview`, `plan-interview-ideas`, `plan-interview-kanban`, `experiment` |
+   | Planning | `brainstorm`, `brainstorm --kanban`, `plan-interview`, `plan-interview --ideas`, `plan-interview --kanban`, `experiment` |
    | Mapping | `journey-map`, `metrics` |
-   | Strategize | `roadmap`, `roadmap-kanban`, `competitive-analysis`, `gtm`, `monetization`, `positioning`, `runway-model` |
+   | Strategize | `roadmap`, `roadmap --kanban`, `competitive-analysis`, `gtm`, `monetization`, `positioning`, `runway-model` |
    | Evaluate | `mvp-gap`, `scale-audit`, `customer-feedback`, `assumption-tracker`, `cohort-review`, `retro` |
    | Workflow | `workflow` |
    | Detail | `plan-phases` |
-   | Execution | `run`, `run-kanban` |
-   | Shipping | `ship`, `ship-end`, `ship-kanban`, `ship-end-kanban` |
+   | Execution | `run`, `run --kanban` |
+   | Shipping | `ship`, `ship-end`, `ship --kanban`, `ship-end --kanban` |
    | Code Quality | `expert-review`, `regression-check`, `dead-code` |
    | Debugging | `investigate`, `debug`, `trace` |
    | Refactoring & Migration | `migrate`, `decommission`, `scaffold` |
@@ -41,7 +41,7 @@ Discover and search all available skills in this repository, grouped by workflow
    | Release & Deploy | `release`, `deploy` |
    | Context & Session | `handoff`, `sync`, `investor-update` |
    | Git Workflow | `branch-lifecycle` |
-   | Utility | `commit-and-push-by-feature`, `analyze-sessions`, `install-workflow-orchestration`, `poketo-kanban`, `kanban-archive`, `sync-roadmap-kanban`, `skills`, `risk-register` |
+   | Utility | `commit-and-push-by-feature`, `analyze-sessions`, `install-workflow-orchestration`, `poketo-kanban`, `poketo-kanban --archive`, `sync-roadmap-kanban`, `skills`, `risk-register` |
 
    Skills not found in the mapping go into an **Other** group at the end.
 
@@ -83,7 +83,7 @@ $enterprise-icp — Enterprise multi-stakeholder discovery...  [research]
 
 ## Planning
 $brainstorm — Evaluate the codebase and suggest ideas...  [planning]
-$brainstorm-kanban — Brainstorm ideas and create kanban cards...  [planning]
+$brainstorm --kanban — Brainstorm ideas and create kanban cards...  [planning]
 ...
 
 **49 skills** found

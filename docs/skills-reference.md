@@ -53,7 +53,7 @@ These skills form a structured development workflow in **Claude Code**:
 Discover                      Ideate                       Specify                 Map              Strategize          Execute                    Ship                    Evaluate             Learn
 ─────────��──────────────      ─────────────────────────    ────────────────────    ──────────────   ──────────────      ───────────────────────    ──────────────────────   ──────────────       ──────────────
 /icp                      →   /brainstorm              →   /plan-interview    →    /journey-map →   /roadmap       →    /run (single step)    →    /ship              →    /mvp-gap         →   /customer-feedback
-/competitive-analysis         └→ /plan-interview-ideas                             /metrics         /gtm                /run --phase (full)        /ship-end               /scale-audit              ↓
+/competitive-analysis         └→ /plan-interview --ideas                             /metrics         /gtm                /run --phase (full)        /ship-end               /scale-audit              ↓
 /enterprise-icp                                                                                                                                                                            (back to Discover)
 
 /workflow — runs at any point to check status and recommend next step
@@ -77,12 +77,12 @@ Each skill has a `type` field in its frontmatter that describes *what kind of wo
 |------|-------------|--------|--------|
 | **research** | Web search + analysis | Documents, market insights | `icp`, `enterprise-icp`, `competitive-analysis`, `gtm`, `monetization`, `customer-feedback`, `research-reconcile` |
 | **analysis** | Reads codebase/docs | Assessments, gap reports | `mvp-gap`, `scale-audit`, `journey-map`, `metrics`, `burn-rate`, `workflow`, `spec-drift`, `affected`, `dead-code`, `hygiene`, `slim-audit`, `analyze-sessions` |
-| **planning** | Interactive interviews | Specs, roadmaps, phases | `brainstorm`, `plan-interview`, `plan-interview-ideas`, `roadmap`, `plan-phases`, `brainstorm-kanban`, `plan-interview-kanban`, `roadmap-kanban` |
-| **execution** | Writes/modifies code | Code changes | `run`, `scaffold`, `migrate`, `decommission`, `run-kanban` |
+| **planning** | Interactive interviews | Specs, roadmaps, phases | `brainstorm`, `plan-interview`, `plan-interview --ideas`, `roadmap`, `plan-phases`, `brainstorm --kanban`, `plan-interview --kanban`, `roadmap --kanban` |
+| **execution** | Writes/modifies code | Code changes | `run`, `scaffold`, `migrate`, `decommission`, `run --kanban` |
 | **review** | Reads code, reports issues | Review reports (no changes) | `expert-review`, `regression-check`, `trace` |
 | **debugging** | Investigates + fixes | Root cause + fix | `investigate`, `debug` |
-| **shipping** | Commits, deploys, wraps up | Commits, releases, handoffs | `ship`, `ship-end`, `release`, `deploy`, `commit-and-push-by-feature`, `handoff`, `sync`, `ship-kanban`, `ship-end-kanban` |
-| **ops** | Manages boards, branches, tooling | Board/branch state changes | `poketo-kanban`, `kanban-archive`, `branch-lifecycle`, `sync-roadmap-kanban`, `skills`, `install-workflow-orchestration` |
+| **shipping** | Commits, deploys, wraps up | Commits, releases, handoffs | `ship`, `ship-end`, `release`, `deploy`, `commit-and-push-by-feature`, `handoff`, `sync`, `ship --kanban`, `ship-end --kanban` |
+| **ops** | Manages boards, branches, tooling | Board/branch state changes | `poketo-kanban`, `poketo-kanban --archive`, `branch-lifecycle`, `sync-roadmap-kanban`, `skills`, `install-workflow-orchestration` |
 
 ---
 
@@ -216,7 +216,7 @@ Interview to validate and complete a specification.
 - **Outputs**: `specs/[topic].md`, `[topic]-interview.md`
 - **Use when**: Starting a new feature or initiative from a rough idea.
 
-### `/plan-interview-ideas`
+### `/plan-interview --ideas`
 Run plan-interview sequentially for each idea in `tasks/ideas.md`.
 
 - **Arguments**: `[optional: filter keyword to limit which ideas to interview]`
@@ -464,38 +464,38 @@ Low-level board CRUD — list boards, view board, create/update/move cards, sear
 - **Arguments**: Varies by subcommand (see `--help`)
 - **Use when**: Direct board manipulation outside of workflow skills.
 
-### `/brainstorm-kanban`
+### `/brainstorm --kanban`
 Brainstorm ideas and create kanban Backlog cards for each.
 
 - **Arguments**: `[optional: focus area]`
 - **Use when**: `/brainstorm` but with automatic kanban card creation.
 
-### `/plan-interview-kanban`
+### `/plan-interview --kanban`
 Interview to validate a spec, then update the matching kanban card.
 
 - **Arguments**: `[optional: topic]`
 - **Use when**: `/plan-interview` but with kanban card sync.
 
-### `/roadmap-kanban`
+### `/roadmap --kanban`
 Build roadmap and sync phases/steps to kanban Todo cards.
 
 - **Arguments**: `[--existing] [path-to-spec]`
 - **Use when**: `/roadmap` but with kanban board sync.
 
-### `/run-kanban`
+### `/run --kanban`
 Execute next step with kanban card tracking and ship it (Todo → In Progress → Done, next card to Todo).
 
 - **Arguments**: `[--phase]`
 - **Use when**: `/run` but with cross-device conflict detection, card finalization, and next-card placement.
 
-### `/ship-kanban`
+### `/ship --kanban`
 Ship already-finished work and reconcile kanban card state.
 
 - **Arguments**: `[--no-plan] [--no-deploy]`
 - **Deploy behavior**: Runs a manual deploy only when `deploy.md` or `tasks/deploy.md` exists; otherwise skips deploy by design.
 - **Use when**: `/ship` but with kanban cleanup for already-finished work.
 
-### `/ship-end-kanban`
+### `/ship-end --kanban`
 Wrap up session and move In Progress card to Done with commit refs.
 
 - **Arguments**: `[--no-deploy]`
@@ -508,7 +508,7 @@ Reconcile kanban board state with roadmap docs and codebase reality.
 - **Arguments**: None
 - **Use when**: Board and roadmap have drifted out of sync.
 
-### `/kanban-archive`
+### `/poketo-kanban --archive`
 Archive old Done/Punt cards from the kanban board.
 
 - **Arguments**: `[--days <N>]` (default: 30)
@@ -541,7 +541,7 @@ Archive old Done/Punt cards from the kanban board.
 | `/analyze-sessions` | Usage analytics | analysis |
 | `/brainstorm` | Evaluate codebase, suggest improvement ideas | planning |
 | `/plan-interview` | Rough idea → validated spec | planning |
-| `/plan-interview-ideas` | Spec each idea from ideas.md | planning |
+| `/plan-interview --ideas` | Spec each idea from ideas.md | planning |
 | `/roadmap` | Interview → phased roadmap across all specs | planning |
 | `/plan-phases` | Roadmap phase → TDD steps with file detail | planning |
 | `/run` | Execute next step and ship it (Claude: plan mode first; Codex: present plan first) | execution |
@@ -565,11 +565,11 @@ Archive old Done/Punt cards from the kanban board.
 | `/branch-lifecycle` | Inventory, PR, review, merge, cleanup branches | ops |
 | `/skills` | Browse and search all skills | ops |
 | `/install-workflow-orchestration` | Bootstrap CLAUDE.md | ops |
-| `/brainstorm-kanban` | Brainstorm + create kanban cards | planning |
-| `/plan-interview-kanban` | Spec interview + kanban card sync | planning |
-| `/roadmap-kanban` | Roadmap + kanban board sync | planning |
-| `/run-kanban` | Execute step, ship it, and advance kanban state | execution |
-| `/ship-kanban` | Package finished work + reconcile kanban card state | shipping |
-| `/ship-end-kanban` | Wrap up session + kanban card Done | shipping |
+| `/brainstorm --kanban` | Brainstorm + create kanban cards | planning |
+| `/plan-interview --kanban` | Spec interview + kanban card sync | planning |
+| `/roadmap --kanban` | Roadmap + kanban board sync | planning |
+| `/run --kanban` | Execute step, ship it, and advance kanban state | execution |
+| `/ship --kanban` | Package finished work + reconcile kanban card state | shipping |
+| `/ship-end --kanban` | Wrap up session + kanban card Done | shipping |
 | `/sync-roadmap-kanban` | Reconcile board with roadmap | ops |
-| `/kanban-archive` | Archive old Done/Punt cards | ops |
+| `/poketo-kanban --archive` | Archive old Done/Punt cards | ops |

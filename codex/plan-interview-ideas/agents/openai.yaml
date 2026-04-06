@@ -1,7 +1,0 @@
-interface:
-  display_name: "Plan Interview Ideas"
-  short_description: "Run plan-interview for each idea in ideas.md"
-  default_prompt: "Use $plan-interview-ideas to interview me for each idea in tasks/ideas.md."
-
-policy:
-  allow_implicit_invocation: true

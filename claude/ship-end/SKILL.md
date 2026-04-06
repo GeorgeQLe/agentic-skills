@@ -3,7 +3,8 @@ name: ship-end
 description: Wrap up the current session — update docs, commit, and push
 type: shipping
 version: 1.0.0
-argument-hint:
+argument-hint: [--kanban] [--no-deploy]
+allowed-tools: Bash(node *)
 ---
 
 # Ship End
@@ -65,3 +66,29 @@ Wrap up the current session: mark progress, commit, and push.
 - If pre-commit hooks fail, fix and retry.
 - Never use GitHub Actions for deployment. Only use manual deploy scripts, Makefiles, or CLI commands.
 - Never deploy to production without explicit user confirmation.
+
+## Kanban Mode (`--kanban`)
+
+When `$ARGUMENTS` contains `--kanban`, move the session's kanban card to Done after committing.
+
+### Kanban Setup
+
+Read and follow the Kanban Setup protocol in `~/.claude/skills/poketo-kanban/KANBAN-SETUP.md` (Board Resolution, Board Validation, and Graceful Degradation — skip Board Overview).
+
+### After Step 4 — Move Session Card to Done
+
+1. Get the device hostname: `hostname -s | tr '[:upper:]' '[:lower:]'`
+2. Fetch the board state.
+3. Find the session's card in the In Progress list — match by `[this-hostname]` in description or current step name from `tasks/todo.md`.
+4. If found → move to Done + `done --id` + update description with commit SHAs.
+5. If no matching card found → skip silently.
+
+### Next Work Suggestion
+
+After kanban operations, suggest the top Todo card by priority (overdue > starred > list order). If no Todo cards, check Backlog. If nothing: "Board is clear."
+
+### Summary Addition
+
+Include kanban status (card moved to Done, or no card found) in the session summary.
+
+Kanban operations are additive — if any kanban command fails, warn and continue. Core ship-end workflow must always succeed.

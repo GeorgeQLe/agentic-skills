@@ -2,6 +2,7 @@
 name: brainstorm
 description: Evaluate the codebase and suggest ideas to explore with /plan-interview
 version: 1.1.0
+argument-hint: "[--kanban]"
 ---
 
 # Brainstorm
@@ -68,3 +69,26 @@ Group suggestions by effort level (hours / days / weeks). Each suggestion should
 - Limit to 3–5 suggestions per effort level.
 - Do not suggest changes that conflict with CLAUDE.md conventions.
 - Do not repeat work already in `tasks/roadmap.md`, `tasks/todo.md`, or `specs/` (or `specs/{app}/`).
+
+## Kanban Mode (`--kanban`)
+
+When `$ARGUMENTS` contains `--kanban`, create kanban Backlog cards for each new idea.
+
+### Kanban Setup
+
+1. Resolve the board: check `tasks/.kanban-board` for stored ID, validate via `board <id>`. If missing, match board names against `basename $(pwd)`. If no match, ask the user. If the session is already in Plan mode and there are 2-3 concrete board choices, prefer `request_user_input`; otherwise ask a concise plain-text question. If no boards exist, offer to create one with `create-board --name "$(basename $(pwd))" --template standard`.
+2. Validate all 5 lists exist (Backlog, Todo, In Progress, Done, Punt). Create missing ones via `create-list`.
+3. If poketo-kanban scripts are missing or DB is unreachable, warn and continue without kanban.
+4. **Board Overview:** Fetch board state and display a brief summary.
+
+All kanban commands use: `node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs <command>`
+
+### Kanban Sync
+
+After generating ideas, for each idea:
+1. Search the board for a card with the same title.
+2. If found → skip.
+3. If not found → create in Backlog with name=title, description=details + effort category.
+4. Report how many cards created vs skipped.
+
+Kanban operations are additive — if any kanban command fails, warn and continue. Brainstorm output to `tasks/ideas.md` must always succeed.

@@ -192,7 +192,7 @@ This skill ports well because it already depends on repo state more than tool st
   1. planning/compression
   2. fresh-thread execution
 
-### `$run-kanban`
+### `$run --kanban`
 
 **Claude Code**
 - move card into progress
@@ -214,9 +214,9 @@ This skill ports well because it already depends on repo state more than tool st
 - no skill-controlled plan-mode boundary
 
 **Recommended Codex usage**
-- use `$run-kanban` as the default kanban execution loop in Codex
+- use `$run --kanban` as the default kanban execution loop in Codex
 
-### `$ship-kanban` and `$ship-end-kanban`
+### `$ship --kanban` and `$ship-end --kanban`
 
 **Claude Code**
 - ship work
@@ -224,8 +224,8 @@ This skill ports well because it already depends on repo state more than tool st
 - optionally suggest next work
 
 **Codex**
-- use `$ship-kanban` only when finished work or board state needs manual cleanup
-- use `$ship-end-kanban` to wrap a session that is not the normal completed-step path
+- use `$ship --kanban` only when finished work or board state needs manual cleanup
+- use `$ship-end --kanban` to wrap a session that is not the normal completed-step path
 
 **Manual gap**
 - no automatic continuation into the next approved execution phase
