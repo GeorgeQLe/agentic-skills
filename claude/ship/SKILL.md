@@ -82,14 +82,15 @@ c) **Check if the current phase is complete** (all steps checked, milestone crit
      3. Copy the next phase from `tasks/roadmap.md` → overwrite `tasks/todo.md`.
      3b. Extract the next phase's manual tasks (from `**Manual Tasks:**` in `tasks/roadmap.md`) into a fresh `tasks/manual-todo.md`. If the next phase has no manual tasks, delete `tasks/manual-todo.md` if it exists.
      4. If no more phases remain, run `/workflow` to recommend the next action based on project state. Then stop (do not enter plan mode).
-     5. **Just-in-time planning:** **You MUST invoke `/plan-phases` for the new phase** — do NOT tell the user the phase is "deferred" or ask them to run `/plan-phases` manually. A phase without TDD steps is NOT deferred; it simply hasn't been decomposed yet (only items under the `## Deferred / Future Work` heading in the roadmap are actually deferred). This auto-invocation generates TDD steps and file-level detail using the full context of what was learned during prior phases. The roadmap only stores strategic outlines — implementation detail is generated when a phase is started, not upfront.
+     5. **Just-in-time planning:** **You MUST invoke `/plan-phases` for the new phase** — do NOT tell the user the phase is "deferred" or ask them to run `/plan-phases` manually. A phase without implementation steps is NOT deferred; it simply hasn't been decomposed yet (only items under the `## Deferred / Future Work` heading in the roadmap are actually deferred). This auto-invocation generates implementation steps and file-level detail using the full context of what was learned during prior phases. The roadmap only stores strategic outlines — implementation detail is generated when a phase is started, not upfront.
    - If **NO:** find the next uncompleted step within the current phase.
 d) Write a **self-contained** implementation plan for the next step into `tasks/todo.md`. This plan must be complete enough that a fresh context can execute it by reading only CLAUDE.md and `tasks/todo.md`. Include:
    - What needs to be built/changed
    - Which files will be affected (full paths)
    - Key technical decisions or risks
    - Relevant context from the current session (gotchas, patterns established, conventions used)
-   - If TDD: which tests to write first and what they should assert
+   - If test strategy is `tdd`: which tests to write first and what they should assert
+   - If test strategy is `tests-after`: note that tests will be written in the Green step
    - Acceptance criteria: how to verify the step is done
 e) Commit and push `tasks/todo.md`, `tasks/roadmap.md`, `tasks/manual-todo.md` (if it exists), and `tasks/phases/` (if created).
 
@@ -109,7 +110,7 @@ e) Commit and push `tasks/todo.md`, `tasks/roadmap.md`, `tasks/manual-todo.md` (
 After entering plan mode, **present the execution plan** to the user. Summarize the plan that was written to `tasks/todo.md` in step 4d:
 - What needs to be built/changed
 - Which files will be created or modified (full paths)
-- The approach (e.g., TDD order, key technical decisions)
+- The approach (e.g., test strategy, key technical decisions)
 - Any decisions or trade-offs the user should weigh in on
 
 This gives the user something concrete to review before selecting "clear context and implement".
