@@ -2,11 +2,11 @@
 
 > Generated from: tasks/roadmap.md (existing), specs/board-flag-kanban-search.md, tasks/ideas.md, tasks/history.md
 > Date: 2026-03-27
-> Total Phases: 10 (9 complete, 1 planned)
+> Total Phases: 10 (10 complete, 0 planned)
 
 ## Summary
 
-Phases 1-9 complete: kanban skill suite, board intelligence, templates, archive automation, expert review fixes, test hardening (83 tests), kanban DX, and skill infrastructure (discovery, dependency graph, versioning). Phase 10 is planned to migrate kanban operations off direct DB writes and onto the canonical Poketo headless API path for both Claude and Codex.
+Phases 1-10 complete: kanban skill suite, board intelligence, templates, archive automation, expert review fixes, test hardening (83 tests), kanban DX, skill infrastructure, and the shared Poketo headless API migration for both Claude and Codex.
 
 ## Phase Overview
 
@@ -21,7 +21,7 @@ Phases 1-9 complete: kanban skill suite, board intelligence, templates, archive 
 | 7 | Testing Hardening II ✓ | tasks/ideas.md | Bootstrap tests, install.sh bats, DB error paths | M |
 | 8 | Kanban DX ✓ | specs/board-flag-kanban-search.md, tasks/ideas.md | `--board` flag, dry-run mode, env path unification | M |
 | 9 | Skill Infrastructure ✓ | tasks/ideas.md | Skill discovery, dependency graph, versioning | L |
-| 10 | Headless API Migration | — | Shared Poketo app-layer kanban integration for Claude + Codex | L |
+| 10 | Headless API Migration ✓ | — | Shared Poketo app-layer kanban integration for Claude + Codex | L |
 
 ---
 
@@ -239,7 +239,7 @@ Phases 1-9 complete: kanban skill suite, board intelligence, templates, archive 
 
 ---
 
-## Phase 10: Headless API Migration
+## Phase 10: Headless API Migration ✓
 
 **Goal:** Replace direct database kanban writes with a shared, authenticated Poketo headless API path so Claude and Codex both use the same app-layer permissions, validation, and audit logging.
 
@@ -271,24 +271,24 @@ Phases 1-9 complete: kanban skill suite, board intelligence, templates, archive 
    - Preserve current workflow behavior where possible: board resolution, list validation, conflict checks, progress updates, archive flow
    - Keep `kanban.mjs` only as a temporary fallback/admin tool during rollout
 
-5. **Migrate Codex kanban skills**
+5. **Migrate Codex kanban skills** ✅
    - Remove Codex dependence on Claude-specific install paths
    - Point Codex kanban skills at the same shared headless path Claude uses
    - Update docs and assumptions so Codex is no longer described as operating through the Claude-side kanban script
 
-6. **Deprecate the standalone DB-write path**
+6. **Deprecate the standalone DB-write path** ✅
    - Mark `kanban.mjs` direct-write mode as fallback-only once both toolchains are migrated
    - Remove it from the default documented workflow after shared headless usage is verified
    - Keep only the minimum rescue/admin functionality if there is still an operational need
 
 ### Acceptance Criteria
 
-- [ ] Claude and Codex kanban skills use the same app-layer write path for normal board operations
-- [ ] No kanban skill requires `POKETOWORK_DATABASE_URL` for standard usage
-- [ ] Codex kanban skills no longer reference `~/.claude/skills/...` paths
-- [ ] Shared headless operations cover the current kanban workflow needs: board discovery/details/activity, create board/list/card, update card, move card, search, archive/restore
-- [ ] Board permissions and `board_actions` logging come from the canonical Poketo app layer rather than the standalone script
-- [ ] `kanban.mjs` is documented as fallback/admin-only or removed from the default workflow
+- [x] Claude and Codex kanban skills use the same app-layer write path for normal board operations
+- [x] No kanban skill requires `POKETOWORK_DATABASE_URL` for standard usage
+- [x] Codex kanban skills no longer reference `~/.claude/skills/...` paths
+- [x] Shared headless operations cover the current kanban workflow needs: board discovery/details/activity, create board/list/card, update card, move card, search, archive/restore
+- [x] Board permissions and `board_actions` logging come from the canonical Poketo app layer rather than the standalone script
+- [x] `kanban.mjs` is documented as fallback/admin-only or removed from the default workflow
 
 ### Notes / Risks
 

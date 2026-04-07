@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-04-07 — Phase 10 Step 6: Deprecate standalone kanban DB-write path (complete)
+
+- Updated `claude/poketo-kanban/scripts/kanban.mjs` help output so the default workflow is explicitly `poketo kanban`, with the direct-DB script labeled fallback/admin-only
+- Updated `claude/poketo-kanban/scripts/bootstrap-session.mjs` and `claude/poketo-kanban/scripts/setup.sh` so adjacent helper messaging no longer presents `node kanban.mjs ...` as the standard verification path
+- Verified active Claude and Codex skill/docs paths still contain no standard-use dependency on `POKETOWORK_DATABASE_URL` or `~/.claude/skills/poketo-kanban/scripts/kanban.mjs`
+- Archived the completed final phase to `tasks/phases/phase-10.md`, marked Phase 10 complete in `tasks/roadmap.md`, and converted `tasks/todo.md` into a roadmap-complete status file
+- Targeted validation: `npx vitest run bootstrap-session.test.mjs install.test.mjs` and `node kanban.mjs --help`
+
 ## 2026-04-06 — Phase 10 Step 5: Migrate Codex kanban skills to poketo CLI (complete)
 
 - Updated `codex/poketo-kanban/SKILL.md` — standard usage now runs through `poketo kanban`, version bumped to 1.1.0, and `POKETOWORK_DATABASE_URL` was removed from the default prerequisites

@@ -456,7 +456,7 @@ Browse and search all available skills, grouped by workflow stage.
 
 ## Kanban Workflow
 
-Parallel set of `-kanban` skills that manage kanban board state (via Poketo/Neon) alongside their normal operations. Board lists: Backlog → Todo → In Progress → Done → Punt.
+Parallel set of `-kanban` skills that manage kanban board state through the shared `poketo kanban` CLI gateway alongside their normal operations. Board lists: Backlog → Todo → In Progress → Done → Punt. The legacy `claude/poketo-kanban/scripts/kanban.mjs` script is fallback/admin-only during rollout.
 
 ### `/poketo-kanban`
 Low-level board CRUD — list boards, view board, create/update/move cards, search.
