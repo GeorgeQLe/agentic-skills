@@ -1,13 +1,15 @@
 # Session History
 
-## 2026-04-06 — Phase 10 Step 4: start Claude poketo-kanban CLI migration
+## 2026-04-06 — Phase 10 Step 4: Migrate Claude kanban skills to poketo CLI (complete)
 
-- Updated `claude/poketo-kanban/SKILL.md` to switch core commands and prerequisites from `kanban.mjs` + direct DB access to `poketo kanban`
-- Updated `claude/poketo-kanban/KANBAN-SETUP.md` so board resolution and board validation use `poketo kanban` commands
-- Updated dependent Claude skills (`brainstorm`, `plan-interview`, `roadmap`, `run`, `ship`, `ship-end`) so kanban-capable variants allow `Bash(poketo *)`
-- Updated `claude/sync-roadmap-kanban/SKILL.md` to use `poketo kanban` commands instead of the standalone script path
-- Added a deprecation header to `claude/poketo-kanban/scripts/kanban.mjs`; the script remains as fallback/admin tooling
-- Left the broader Step 4 migration in progress: remaining Claude skill command references and the Codex skill variants still need the same path migration
+- Added `--description` flag to `poketo kanban create-card` and `--template standard` flag to `poketo kanban create-board` in poke CLI (`packages/cli/src/commands/kanban.ts`)
+- Updated `claude/poketo-kanban/SKILL.md` — all commands now use `poketo kanban`, prerequisites updated (no more `POKETOWORK_DATABASE_URL`), version bumped to 1.1.0
+- Updated `claude/poketo-kanban/KANBAN-SETUP.md` — board resolution and graceful degradation now check for `poketo` CLI on PATH
+- Updated `claude/sync-roadmap-kanban/SKILL.md` — all 4 `kanban.mjs` invocations replaced with `poketo kanban`, version bumped to 1.1.0
+- Updated 6 consumer skills (`run`, `ship`, `ship-end`, `brainstorm`, `roadmap`, `plan-interview`) — `allowed-tools: Bash(node *)` → `Bash(poketo *)`
+- Added deprecation header to `claude/poketo-kanban/scripts/kanban.mjs`
+- Verified: no remaining `kanban.mjs` references in any Claude skill file, no remaining `Bash(node *)` in allowed-tools
+- CLI compiles and builds cleanly with the new flags
 
 ## 2026-04-06 — Rename repo to agentic-skills and refresh installed skills
 
