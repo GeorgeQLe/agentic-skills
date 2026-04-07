@@ -64,6 +64,7 @@ Ship already-finished work, commit it, optionally deploy it, and plan the next s
 - Create `tasks/todo.md` if it does not exist.
 - Do not amend or rewrite history.
 - Do not commit secrets.
+- **Do not push to an existing feature branch.** If already on a feature branch, commit locally only. The `$commit-and-push-by-feature` workflow enforces this — do not bypass it.
 - The plan must be actionable with specific file paths and technical details.
 - In Codex, `$ship` is a compatibility/manual cleanup workflow. Prefer `$run` for the normal execute-and-ship loop.
 - `ship` only runs a deploy when `deploy.md` or `tasks/deploy.md` explicitly documents a manual deployment workflow. Repos without one are assumed to auto-deploy or require no manual deploy step.

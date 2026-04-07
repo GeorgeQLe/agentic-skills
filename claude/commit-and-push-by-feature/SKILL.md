@@ -32,12 +32,13 @@ Commit and push all changes to GitHub grouped by feature/function.
      - Verify `git diff --cached` matches the bucket before committing.
    - If there are uncommitted leftover changes at the end, bucket them; do not leave a dirty working tree.
 
-4. **Ensure correct branch:**
+4. **Branch guard:**
    - If on `main`/`master`, create a new feature branch named `feature/<short-slug>` derived from the primary bucket.
+   - If already on a feature branch (anything other than `main`/`master`), **do NOT push**. Commit locally only and report that push was skipped because you are on an existing feature branch. The user manages pushes to their own branches.
 
 5. **Push and report:**
-   - Push with `git push -u origin <branch>`.
-   - Output a concise summary: branch name, list of commits (hash + subject), confirmation that working tree is clean.
+   - Push with `git push -u origin <branch>` **only** if you created the branch in step 4.
+   - Output a concise summary: branch name, list of commits (hash + subject), confirmation that working tree is clean, and whether push was performed or skipped.
 
 ## Output Format
 

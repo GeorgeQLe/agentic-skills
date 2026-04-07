@@ -41,6 +41,7 @@ Use this skill when the user wants the current session wrapped up cleanly.
 - Do not switch or create branches unless the current state requires it.
 - Do not amend or rewrite history.
 - Stop and report if secrets are detected.
+- **Do not push to an existing feature branch.** If already on a feature branch, commit locally only. The `commit-and-push-by-feature` workflow enforces this — do not bypass it.
 - `ship-end` only runs a deploy when `deploy.md` or `tasks/deploy.md` explicitly documents a manual deployment workflow. Repos without one are assumed to auto-deploy or require no manual deploy step.
 - Never use GitHub Actions for deployment. Only use manual deploy scripts, Makefiles, or CLI commands.
 - Never deploy to production without explicit user confirmation.

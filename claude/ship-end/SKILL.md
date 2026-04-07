@@ -63,6 +63,7 @@ Wrap up the current session: mark progress, commit, and push.
 - Do not switch branches or create new branches unless the current state requires it.
 - Do not amend or rewrite history.
 - Do not commit secrets.
+- **Do not push to an existing feature branch.** If already on a feature branch, commit locally only. The `/commit-and-push-by-feature` workflow enforces this — do not bypass it.
 - If pre-commit hooks fail, fix and retry.
 - Never use GitHub Actions for deployment. Only use manual deploy scripts, Makefiles, or CLI commands.
 - Never deploy to production without explicit user confirmation.
