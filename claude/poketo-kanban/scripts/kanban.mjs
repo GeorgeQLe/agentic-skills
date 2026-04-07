@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+// DEPRECATED: Use `poketo kanban` CLI instead. Kept as fallback/admin tooling.
 
 import { readFileSync, existsSync } from "node:fs";
 import { join } from "node:path";

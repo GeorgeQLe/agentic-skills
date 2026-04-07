@@ -4,7 +4,7 @@ description: Build or update the project roadmap by interviewing across all spec
 type: planning
 version: 1.0.0
 argument-hint: [--existing] [--kanban] [path-to-spec]
-allowed-tools: Bash(node *)
+allowed-tools: Bash(poketo *)
 ---
 
 # Roadmap Builder

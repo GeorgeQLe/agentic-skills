@@ -4,7 +4,7 @@ description: Evaluate the codebase and suggest ideas to explore with /plan-inter
 type: planning
 version: 1.1.0
 argument-hint: [optional: focus area] [--kanban]
-allowed-tools: Bash(node *)
+allowed-tools: Bash(poketo *)
 ---
 
 # Brainstorm

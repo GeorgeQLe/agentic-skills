@@ -2,8 +2,8 @@
 name: sync-roadmap-kanban
 description: Reconcile kanban board state with roadmap docs and codebase reality — sync cards, steps, and git history so they agree.
 type: ops
-version: 1.0.0
-allowed-tools: Bash(node *), Bash(git *)
+version: 1.1.0
+allowed-tools: Bash(poketo *), Bash(git *)
 ---
 
 # Sync Roadmap ↔ Kanban
@@ -19,7 +19,7 @@ Run `/sync` first. If there are merge conflicts, **stop** and report them — do
 ### 2. Read kanban state
 
 ```bash
-node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs boards
+poketo kanban boards
 ```
 
 **Board auto-detection:**
@@ -29,7 +29,7 @@ node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs boards
 3. If no mapping file: compare each board name against `basename $(pwd)` — case-insensitive substring match.
 4. If exactly one board matches → use it. Save the board ID to `tasks/.kanban-board`.
 5. If zero or multiple matches → list the boards and ask the user to pick one. Save their choice to `tasks/.kanban-board`.
-6. Run `board <id>` to get the full board state (all lists and cards).
+6. Run `poketo kanban board <id>` to get the full board state (all lists and cards).
 
 `tasks/.kanban-board` should be committed to git so all devices share the mapping.
 
@@ -71,11 +71,11 @@ Items marked done (in roadmap or kanban) but whose deliverables cannot be verifi
 
 ### 6. Apply changes
 
-- **Kanban mutations:** Use the poketo-kanban scripts to create cards, move cards, or mark cards done.
+- **Kanban mutations:** Use the poketo CLI to create cards, move cards, or mark cards done.
   ```bash
-  node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs create-card --board <id> --list <list-id> --name "Step name" --description "Details"
-  node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs move-card --id <card-id> --list <done-list-id>
-  node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs done --id <card-id>
+  poketo kanban create-card --board <id> --list <list-id> --name "Step name" --description "Details"
+  poketo kanban move-card --id <card-id> --list <done-list-id>
+  poketo kanban done --id <card-id>
   ```
 - **Roadmap doc edits:** Use Edit to check off completed items in `tasks/roadmap.md` and `tasks/todo.md`.
 - After all mutations, re-fetch the board to confirm the final state.
@@ -105,4 +105,4 @@ Output a summary with these sections:
 - Do NOT modify code — this skill only syncs metadata (docs and board state).
 - Do NOT proceed if the working tree has merge conflicts from the sync step.
 - Card-to-roadmap matching is by name similarity. Use fuzzy matching (the card name should contain key words from the roadmap step). When ambiguous, ask rather than guess.
-- If poketo-kanban scripts are not installed or fail, report the error and stop.
+- If the poketo CLI is not available or fails, report the error and stop.

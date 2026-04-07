@@ -4,7 +4,7 @@ description: Plan the next incomplete step (or full phase with --phase flag) fro
 type: execution
 version: 1.0.0
 argument-hint: [--phase] [--kanban]
-allowed-tools: Bash(node *)
+allowed-tools: Bash(poketo *)
 ---
 
 # Plan Executor
