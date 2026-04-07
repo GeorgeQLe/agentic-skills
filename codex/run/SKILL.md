@@ -39,7 +39,7 @@ Identify the next incomplete unit of work from the phased plan, build an executi
    - If errors cannot be auto-fixed, document them in the summary and continue.
 12. Ship the completed work:
    - Update `tasks/history.md` with a brief record of what was accomplished. Create it if needed.
-   - Commit and push using the `$commit-and-push-by-feature` workflow.
+   - Commit using the `$commit-and-push-by-feature` workflow. That workflow only pushes if it creates a new branch from `main`/`master`; on an existing feature branch it must commit locally and report that push was skipped.
 13. Deploy:
    - Check for an explicit manual deploy contract in `deploy.md` or `tasks/deploy.md`.
    - If neither file exists, skip deploy and report `Deploy skipped: no explicit manual deploy contract (deploy.md or tasks/deploy.md)`.
@@ -59,11 +59,11 @@ Identify the next incomplete unit of work from the phased plan, build an executi
        2. Check off the phase milestone in `tasks/roadmap.md`.
        3. Copy the next phase from `tasks/roadmap.md` → overwrite `tasks/todo.md`.
        3b. Extract the next phase's manual tasks (from `**Manual Tasks:**` in roadmap) into a fresh `tasks/manual-todo.md`. If the next phase has no manual tasks, delete the file.
-       4. If no more phases remain, commit and push the planning/task updates from this step, then run `$workflow` to recommend the next action based on project state. Then stop.
+       4. If no more phases remain, ship the planning/task updates via `$commit-and-push-by-feature`, honoring the branch guard, then run `$workflow` to recommend the next action based on project state. Then stop.
        5. **Just-in-time planning:** Invoke `$plan-phases` for the new phase. This generates implementation steps and file-level detail using the full context of what was learned during prior phases.
      - If **NO:** find the next uncompleted step within the current phase.
 15. Write a self-contained implementation plan for the next step into `tasks/todo.md`, complete enough for a fresh session to execute from `tasks/todo.md` alone.
-16. Commit and push `tasks/todo.md`, `tasks/roadmap.md`, `tasks/manual-todo.md` (if it exists), and `tasks/phases/` (if created).
+16. Ship `tasks/todo.md`, `tasks/roadmap.md`, `tasks/manual-todo.md` (if it exists), and `tasks/phases/` (if created) via `$commit-and-push-by-feature`, honoring the branch guard.
 
 ## Output
 

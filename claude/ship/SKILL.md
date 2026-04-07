@@ -40,13 +40,13 @@ d) **If errors can't be auto-fixed** (e.g., requires user decision, third-party 
 a) Read the project's CLAUDE.md to understand current progress.
 b) Update `tasks/todo.md` — mark completed items as done (check off steps and milestone criteria).
 c) Update `tasks/history.md` — append a brief record of what was accomplished this session (phase/step completed, key changes). Create it if it doesn't exist.
-d) Commit and push using the /commit-and-push-by-feature workflow:
+d) Ship the changes using the /commit-and-push-by-feature workflow:
    - Group changes into logical feature/function buckets.
    - Use conventional commit messages.
-   - Push to the current branch.
+   - Only push if that workflow created a new branch from `main`/`master`. If already on an existing feature branch, commit locally and report that push was skipped.
 
 ### 3. Deploy (skip if `--no-deploy`)
-After pushing, deploy the project using the project's own deployment mechanism.
+After shipping, deploy the project using the project's own deployment mechanism.
 
 a) **Find the deploy method.** Check these locations in order:
    - `spec.md` — look for a deployment section
@@ -93,7 +93,7 @@ d) Write a **self-contained** implementation plan for the next step into `tasks/
    - If test strategy is `tdd`: which tests to write first and what they should assert
    - If test strategy is `tests-after`: note that tests will be written in the Green step
    - Acceptance criteria: how to verify the step is done
-e) Commit and push `tasks/todo.md`, `tasks/roadmap.md`, `tasks/manual-todo.md` (if it exists), and `tasks/phases/` (if created).
+e) Ship `tasks/todo.md`, `tasks/roadmap.md`, `tasks/manual-todo.md` (if it exists), and `tasks/phases/` (if created) via `/commit-and-push-by-feature`, honoring the branch guard.
 
 ### 5. Output a brief summary (2-3 lines max to save context)
 - What was shipped (if anything)

@@ -632,3 +632,9 @@ Resolved all 10 findings from `/expert-review`:
 - Fixed pre-existing tsconfig type errors by adding `types: ["node"]`
 - All 37/37 CLI tests pass, typecheck clean
 - Gateway Phase 5 milestone complete in Poketo monorepo
+
+## 2026-04-07 — Skill shipping docs: align feature-branch push guard wording
+
+- Verified that all repo-managed Claude and Codex skills are correctly symlinked into `~/.claude/skills` and `~/.codex/skills`
+- Updated Codex shipping docs (`run`, `ship`, `ship-end`) to explicitly defer push behavior to `commit-and-push-by-feature`
+- Updated Claude shipping docs (`ship`, `ship-end`) to remove unconditional "push current branch" wording and clarify that existing feature branches are commit-only
