@@ -154,7 +154,9 @@ async function getBoardIdForCard(db, card) {
 function getDb() {
   const url = getDbUrl();
   if (!url) {
-    output({ error: "POKETOWORK_DATABASE_URL not set. Set it as an environment variable or ensure poke-productivity-suite has a .env file." });
+    output({
+      error: "POKETOWORK_DATABASE_URL not set for the legacy fallback script. Prefer `poketo kanban` for standard workflows, or set the DB URL / local poke .env only when you intentionally need direct DB access.",
+    });
     process.exit(1);
   }
   const sql = neon(url);
@@ -906,6 +908,8 @@ async function main() {
 
   if (!command || command === "--help") {
     output({
+      deprecated: true,
+      message: "Use `poketo kanban` for the default workflow. This script is kept only for fallback/admin direct-DB operations.",
       commands: [
         "boards                                  — List all boards",
         "board <id>                              — View board with lists and cards",
@@ -917,6 +921,8 @@ async function main() {
         "create-list --board <id> --name \"...\" [--dry-run] — Add list to board",
         "search --query \"...\" [--board <id>]     — Search cards across boards (or scoped to --board)",
         "archive-card --id <id> [--dry-run]      — Archive a card",
+        "activity --card <id> [--limit <n>]      — Show recent activity for a card",
+        "activity --board <id> [--limit <n>]     — Show recent activity for a board",
         "delete-board --id <id> --confirm [--dry-run] — Delete board and all its data",
       ],
     });
@@ -976,7 +982,7 @@ async function main() {
       await cmdActivity(db, rest);
       break;
     default:
-      output({ error: `Unknown command: ${command}. Run with --help for usage.` });
+      output({ error: `Unknown command: ${command}. Run with --help for legacy fallback usage.` });
       process.exit(1);
   }
 }

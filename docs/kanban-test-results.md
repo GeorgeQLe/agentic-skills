@@ -65,8 +65,10 @@
 Each remaining skill is a prompt-based skill that must be invoked as a slash command in a Claude Code session. Run them in order:
 
 ```
-# Ensure DB URL is set
-export POKETOWORK_DATABASE_URL=""
+# Ensure headless auth is available
+poketo auth login
+# Or export a durable key for non-interactive use:
+export POKETO_API_KEY="pk_..."
 
 # Then invoke each skill:
 /brainstorm --kanban testing
@@ -74,7 +76,7 @@ export POKETOWORK_DATABASE_URL=""
 # ... etc
 
 # After each skill, verify board state:
-node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs board 5ab6bbdb-d06c-4e47-8a27-5e1de29b2df7
+poketo kanban board 5ab6bbdb-d06c-4e47-8a27-5e1de29b2df7
 ```
 
-Update this file with results as each skill is tested.
+Use the legacy `kanban.mjs` script only for fallback/admin debugging during rollout. Update this file with results as each skill is tested.

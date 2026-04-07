@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 
 /**
- * Bootstrap a poketo session by querying the auth and pokeapps databases directly.
- * Run this once to create ~/.poketo/config.json without needing the Flow app running.
+ * Bootstrap a legacy Poketo session by querying the auth and pokeapps databases directly.
+ * Run this only when you need the deprecated direct-DB fallback path to create
+ * ~/.poketo/config.json without needing the Flow app running.
  *
  * Usage: node bootstrap-session.mjs
  *
  * Requires these env vars (reads from poke-productivity-suite/.env.local):
  *   - AUTH_DATABASE_URL
  *   - POKEAPPS_DATABASE_URL
- *   - POKETOWORK_DATABASE_URL
  */
 
 import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
@@ -102,8 +102,9 @@ export async function main() {
   const config = buildConfig(selectedUser, primaryOrg);
 
   writeFileSync(configFile, JSON.stringify(config, null, 2) + "\n");
-  console.log(`\nSession saved to ${configFile}`);
-  console.log("You can now run: node kanban.mjs boards");
+  console.log(`\nLegacy fallback session saved to ${configFile}`);
+  console.log("Default workflow: use `poketo kanban boards`.");
+  console.log("Legacy fallback only: `node kanban.mjs boards`.");
 }
 
 const isDirectRun = process.argv[1] && import.meta.url.endsWith(process.argv[1].replace(/.*\//, ''));

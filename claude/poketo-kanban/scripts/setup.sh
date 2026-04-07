@@ -6,4 +6,5 @@ cd "$SCRIPT_DIR"
 
 echo "Installing poketo-kanban skill dependencies..."
 npm install --production
-echo "Done. Run 'node kanban.mjs --help' to verify."
+echo "Done. Verify the default workflow with 'poketo kanban boards'."
+echo "Use 'node kanban.mjs --help' only for legacy fallback/admin usage."
