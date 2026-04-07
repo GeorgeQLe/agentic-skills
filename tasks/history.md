@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-04-06 — Phase 10 Step 5: Migrate Codex kanban skills to poketo CLI (complete)
+
+- Updated `codex/poketo-kanban/SKILL.md` — standard usage now runs through `poketo kanban`, version bumped to 1.1.0, and `POKETOWORK_DATABASE_URL` was removed from the default prerequisites
+- Updated `codex/sync-roadmap-kanban/SKILL.md` — board resolution and active kanban mutations now use `poketo kanban`, with `allowed-tools` documenting `Bash(poketo *), Bash(git *)`
+- Updated 6 Codex consumer skills (`run`, `ship`, `ship-end`, `brainstorm`, `roadmap`, `plan-interview`) — kanban setup now uses `poketo kanban` and no longer references `~/.claude/skills/.../kanban.mjs`
+- Verified: no remaining `POKETOWORK_DATABASE_URL` or `~/.claude/skills/poketo-kanban/scripts/kanban.mjs` references in active Codex skill files
+- Advanced `tasks/todo.md` to Phase 10 Step 6 with a focused deprecation plan for the remaining fallback-only `kanban.mjs` path
+
 ## 2026-04-06 — Phase 10 Step 4: Migrate Claude kanban skills to poketo CLI (complete)
 
 - Added `--description` flag to `poketo kanban create-card` and `--template standard` flag to `poketo kanban create-board` in poke CLI (`packages/cli/src/commands/kanban.ts`)

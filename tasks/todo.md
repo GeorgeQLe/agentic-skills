@@ -2,9 +2,9 @@
 
 **Goal:** Replace direct database kanban writes with a shared, authenticated Poketo headless API path so Claude and Codex both use the same app-layer permissions, validation, and audit logging.
 
-**Current Step:** 5. Migrate Codex kanban skills
+**Current Step:** 6. Deprecate the standalone DB-write path
 
-**Why this step is next:** Steps 1–3 are complete. The gateway action route dispatches through real adapters (auth → rate limit → scope check → adapter dispatch → response mapping). The CLI ships 12 kanban subcommands and 4 key management commands. 40+ gateway route tests and 37 CLI tests pass. The shared headless path is ready for skill consumption.
+**Why this step is next:** Steps 1–5 are complete. Both Claude and Codex skill docs now point at the shared `poketo kanban` gateway path for normal board operations, and Codex no longer depends on `~/.claude/...` install paths. The remaining work is to make the legacy DB-write script explicitly fallback-only everywhere it still appears in default documentation.
 
 ### Steps
 
@@ -41,7 +41,7 @@
   - Update Claude kanban skills to use the shared headless path instead of direct DB writes through `kanban.mjs`.
   - Keep `kanban.mjs` only as fallback/admin tooling during rollout.
 
-- [ ] 5. Migrate Codex kanban skills
+- [x] 5. Migrate Codex kanban skills
   - Remove Codex dependence on `~/.claude/...` install paths.
   - Point Codex kanban skills at the same shared headless path Claude uses.
 
@@ -51,88 +51,70 @@
 
 ### Next Step Implementation Plan
 
-**Objective:** Replace `kanban.mjs` direct-DB references in all Claude kanban skills with `poketo kanban` CLI commands that go through the authenticated gateway.
+**Objective:** Deprecate the standalone `kanban.mjs` DB-write path so the default documented workflow is the shared `poketo kanban` gateway path, while keeping the legacy script available only as fallback/admin tooling during rollout.
 
-**Target repo:** `/Users/georgele/projects/tools/agentic-skills` (skills) + `/Users/georgele/projects/apps/poke/monorepo` (CLI parity verification)
+**Target repo:** `/Users/georgele/projects/tools/agentic-skills` (skills/docs) + `/Users/georgele/projects/apps/poke/monorepo` (CLI parity verification only if command coverage needs reconfirmation)
 
 **Current state:**
 - The `poketo kanban` CLI ships 12 subcommands that call `executeAction("work", ...)` through the gateway.
-- All skills currently invoke `node ${CLAUDE_SKILL_DIR}/scripts/kanban.mjs <command>` for board operations.
-- After consolidation (commit `88ead90`), the 8 kanban variant skills were merged into base skills with `--kanban` flags. Kanban references now live in these files:
-  - `claude/poketo-kanban/SKILL.md` — core kanban skill (primary target)
-  - `claude/poketo-kanban/KANBAN-SETUP.md` — board resolution protocol
-  - `claude/run/SKILL.md` — run skill with kanban integration
-  - `claude/ship/SKILL.md` — ship skill with kanban integration
-  - `claude/ship-end/SKILL.md` — ship-end skill with kanban integration
-  - `claude/brainstorm/SKILL.md` — brainstorm skill with kanban integration
-  - `claude/roadmap/SKILL.md` — roadmap skill with kanban integration
-  - `claude/sync-roadmap-kanban/SKILL.md` — sync roadmap-kanban skill
-  - `claude/plan-interview/SKILL.md` — plan-interview skill with kanban integration
-  - `codex/poketo-kanban/SKILL.md` — codex core kanban skill
-  - `codex/sync-roadmap-kanban/SKILL.md` — codex sync roadmap-kanban skill
+- Claude and Codex skill docs now use `poketo kanban` for normal board operations.
+- `claude/poketo-kanban/scripts/kanban.mjs` still exists, with a deprecation header, for fallback/admin use.
+- Remaining risk is documentation drift: docs, skill references, or residual prose may still present `kanban.mjs` as a standard path even though the intended default is now the gateway-backed CLI.
 
 **Changes:**
 
-### 1. Map kanban.mjs commands → poketo kanban equivalents
+### 1. Audit remaining default-workflow references
 
-Build a command mapping table from `kanban.mjs` subcommands to `poketo kanban` CLI equivalents. Verify each CLI command produces compatible output shapes by running them against the test harness.
+Search the repo for:
+- `kanban.mjs`
+- `POKETOWORK_DATABASE_URL`
+- `~/.claude/skills/poketo-kanban/scripts/kanban.mjs`
 
-### 2. Update poketo-kanban core skill (Claude)
+Classify each match as one of:
+- intended fallback/admin tooling
+- historical/archive content
+- stale default-workflow documentation that still needs to change
 
-Modify `claude/poketo-kanban/SKILL.md`:
-- Replace all `node ${CLAUDE_SKILL_DIR}/scripts/kanban.mjs` invocations with `poketo kanban` equivalents
-- Update prerequisites: require `poketo auth login` or API key, remove `POKETOWORK_DATABASE_URL`
-- Update `allowed-tools` from `Bash(node *)` to `Bash(poketo *)`
+### 2. Update active documentation to make the fallback role explicit
 
-Modify `claude/poketo-kanban/KANBAN-SETUP.md`:
-- Update board resolution protocol to use `poketo kanban boards` and `poketo kanban board <id>`
-- Remove references to direct DB connection
+For active docs and skills outside archive/history files:
+- Remove `kanban.mjs` from default instructions where the gateway CLI is the intended path
+- Replace direct DB prerequisites with `poketo auth login` / `POKETO_API_KEY` where needed
+- Keep one explicit note that `kanban.mjs` remains fallback/admin-only during rollout
 
-### 3. Update dependent Claude skills
+### 3. Tighten the legacy script messaging
 
-For each of `run`, `ship`, `ship-end`, `brainstorm`, `roadmap`, `sync-roadmap-kanban`, `plan-interview`:
-- Replace `kanban.mjs` invocations with `poketo kanban` equivalents
-- Update `allowed-tools` if present
+Review `claude/poketo-kanban/scripts/kanban.mjs` and any nearby README/help text:
+- Ensure the deprecation header is present and clear
+- If built-in usage/help text still presents the script as the primary path, update it to mark the script as fallback/admin-only
 
-### 4. Update Codex kanban skills
+### 4. Verify the default path is now consistent
 
-Modify `codex/poketo-kanban/SKILL.md` and `codex/sync-roadmap-kanban/SKILL.md`:
-- Same command replacements as Claude variants
-- Remove `~/.claude/skills/...` path references
-- Update `allowed-tools`
-
-### 5. Deprecate kanban.mjs scripts
-
-- Keep `kanban.mjs` in place but add deprecation header comment
-- Do NOT delete yet — Step 6 handles full removal after both toolchains are verified
+Run targeted searches to confirm:
+- active Claude and Codex skill docs no longer require `POKETOWORK_DATABASE_URL`
+- active Codex skill docs no longer reference `~/.claude/...`
+- remaining `kanban.mjs` references are only fallback/admin or archive/history content
 
 **Files to modify (agentic-skills):**
 | File | Action |
 |------|--------|
-| `claude/poketo-kanban/SKILL.md` | Replace kanban.mjs → poketo kanban |
-| `claude/poketo-kanban/KANBAN-SETUP.md` | Update board resolution protocol |
-| `claude/run/SKILL.md` | Replace kanban.mjs references |
-| `claude/ship/SKILL.md` | Replace kanban.mjs references |
-| `claude/ship-end/SKILL.md` | Replace kanban.mjs references |
-| `claude/brainstorm/SKILL.md` | Replace kanban.mjs references |
-| `claude/roadmap/SKILL.md` | Replace kanban.mjs references |
-| `claude/sync-roadmap-kanban/SKILL.md` | Replace kanban.mjs references |
-| `claude/plan-interview/SKILL.md` | Replace kanban.mjs references |
-| `codex/poketo-kanban/SKILL.md` | Replace kanban.mjs + remove ~/.claude paths |
-| `codex/sync-roadmap-kanban/SKILL.md` | Replace kanban.mjs + remove ~/.claude paths |
+| `docs/skills-reference.md` | Remove any default-workflow `kanban.mjs` references if present |
+| `docs/codex-workflow.md` | Confirm Codex examples use the shared CLI path if kanban is mentioned |
+| `claude/poketo-kanban/scripts/kanban.mjs` | Keep deprecation/fallback-only messaging accurate |
+| `claude/poketo-kanban/SKILL.md` | Verify fallback wording stays aligned with Step 6 |
+| `codex/poketo-kanban/SKILL.md` | Verify fallback wording stays aligned with Step 6 |
 
 **Acceptance criteria:**
-- All Claude kanban skills use `poketo kanban` instead of `kanban.mjs`
-- No skill references `POKETOWORK_DATABASE_URL` for standard usage
-- `allowed-tools` updated from `Bash(node *)` to `Bash(poketo *)`
-- `kanban.mjs` still exists but is marked as deprecated fallback
-- Skills fail with clear error if gateway is unreachable (no silent fallback)
+- The default documented workflow uses `poketo kanban`, not `kanban.mjs`
+- `kanban.mjs` is documented as fallback/admin-only wherever it still appears in active docs
+- No active skill doc requires `POKETOWORK_DATABASE_URL` for standard usage
+- No active Codex skill doc references `~/.claude/...` install paths
 
 ### Acceptance Criteria
 
-- [ ] Claude and Codex kanban skills use the same app-layer write path for normal board operations
-- [ ] No kanban skill requires `POKETOWORK_DATABASE_URL` for standard usage
-- [ ] Codex kanban skills no longer reference `~/.claude/skills/...` paths
+- [x] Claude and Codex kanban skills use the same app-layer write path for normal board operations
+- [x] No kanban skill requires `POKETOWORK_DATABASE_URL` for standard usage
+- [x] Codex kanban skills no longer reference `~/.claude/...` paths
 - [ ] Shared headless operations cover the current kanban workflow needs: board discovery/details/activity, create board/list/card, update card, move card, search, archive/restore
 - [ ] Board permissions and `board_actions` logging come from the canonical Poketo app layer rather than the standalone script
 - [ ] `kanban.mjs` is documented as fallback/admin-only or removed from the default workflow
