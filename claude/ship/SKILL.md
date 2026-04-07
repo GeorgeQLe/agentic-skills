@@ -126,6 +126,7 @@ This gives the user something concrete to review before selecting "clear context
 - If the tree is clean and the next step plan already exists in `tasks/todo.md`, skip straight to step 6.
 - Do not amend or rewrite history.
 - Do not commit secrets.
+- **Do not push to an existing feature branch.** If already on a feature branch, commit locally only. The `/commit-and-push-by-feature` workflow enforces this — do not bypass it.
 - The plan must be actionable, not vague. Include specific file paths and technical details.
 - Never use GitHub Actions for deployment. Only use manual deploy scripts, Makefiles, or CLI commands.
 - Never deploy to production without explicit user confirmation.

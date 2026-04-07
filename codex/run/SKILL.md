@@ -81,6 +81,7 @@ Identify the next incomplete unit of work from the phased plan, build an executi
 - Keep context footprint minimal — only read files relevant to the current step.
 - If a blocker prevents completion, document it in `tasks/todo.md` and stop.
 - Follow the test strategy annotated on each phase. Do not skip test steps for `tdd` phases.
+- **Do not push to an existing feature branch.** If already on a feature branch, commit locally only. The `$commit-and-push-by-feature` workflow enforces this — do not bypass it.
 - Do NOT execute items from `tasks/manual-todo.md` — those require human action.
 - `run` ships by default in Codex. Use `$ship` only when there is already finished work in the tree or unpushed commits that need packaging without running a new step.
 - Never use GitHub Actions for deployment. Only use manual deploy scripts, Makefiles, or CLI commands.

@@ -27,4 +27,5 @@ Use this skill when the user wants to cut a release for the project.
 
 - Always confirm version with user before changes.
 - Never push or create GitHub releases without explicit confirmation.
+- **Do not push to an existing feature branch.** Releases should only be cut from `main`/`master`. If on a feature branch, stop and ask the user.
 - Stop if tests fail — do not release broken code.

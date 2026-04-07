@@ -78,6 +78,7 @@ Manage the release ceremony: version bump, changelog generation, git tag, and op
 ## Constraints
 - Always confirm the version with the user before making changes.
 - Never push or create a GitHub release without explicit user confirmation.
+- **Do not push to an existing feature branch.** Releases should only be cut from `main`/`master`. If on a feature branch, stop and ask the user.
 - If tests fail during pre-release checks, stop and report — do not release broken code.
 - For monorepos, ask the user whether this is a root release or a package-specific release.
 - Do not modify code as part of the release — only version files, changelogs, and tags.
