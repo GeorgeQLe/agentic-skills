@@ -2,7 +2,7 @@
 
 **Goal:** Replace direct database kanban writes with a shared, authenticated Poketo headless API path so Claude and Codex both use the same app-layer permissions, validation, and audit logging.
 
-**Current Step:** 4. Migrate Claude kanban skills
+**Current Step:** 5. Migrate Codex kanban skills
 
 **Why this step is next:** Steps 1–3 are complete. The gateway action route dispatches through real adapters (auth → rate limit → scope check → adapter dispatch → response mapping). The CLI ships 12 kanban subcommands and 4 key management commands. 40+ gateway route tests and 37 CLI tests pass. The shared headless path is ready for skill consumption.
 
@@ -37,7 +37,7 @@
   - 40+ gateway route tests + 37 CLI tests pass
   - Response shapes are stable JSON (not free-text)
 
-- [ ] 4. Migrate Claude kanban skills
+- [x] 4. Migrate Claude kanban skills
   - Update Claude kanban skills to use the shared headless path instead of direct DB writes through `kanban.mjs`.
   - Keep `kanban.mjs` only as fallback/admin tooling during rollout.
 

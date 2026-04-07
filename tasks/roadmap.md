@@ -266,7 +266,7 @@ Phases 1-9 complete: kanban skill suite, board intelligence, templates, archive 
    - Verify tool discovery and execution work without depending on direct DB access
    - Ensure the response shapes are good enough to support existing kanban skill workflows without fragile parsing
 
-4. **Migrate Claude kanban skills**
+4. **Migrate Claude kanban skills** ✅
    - Update Claude kanban skills to use the shared headless path instead of direct DB writes through `kanban.mjs`
    - Preserve current workflow behavior where possible: board resolution, list validation, conflict checks, progress updates, archive flow
    - Keep `kanban.mjs` only as a temporary fallback/admin tool during rollout
