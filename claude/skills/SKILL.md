@@ -28,7 +28,7 @@ Discover and search all available skills in this repository, grouped by workflow
    | Discovery & Market Fit | `icp`, `enterprise-icp` |
    | Planning | `brainstorm`, `brainstorm --kanban`, `plan-interview`, `plan-interview --ideas`, `plan-interview --kanban`, `experiment` |
    | Mapping | `journey-map`, `metrics` |
-   | Strategize | `roadmap`, `roadmap --kanban`, `competitive-analysis`, `gtm`, `monetization`, `positioning`, `runway-model` |
+   | Strategize | `roadmap`, `roadmap --kanban`, `competitive-analysis`, `platform-strategy`, `gtm`, `landing-copy`, `monetization`, `positioning`, `runway-model` |
    | Evaluate | `mvp-gap`, `scale-audit`, `customer-feedback`, `assumption-tracker`, `cohort-review`, `retro` |
    | Workflow | `workflow` |
    | Detail | `plan-phases` |
@@ -86,7 +86,7 @@ Discover and search all available skills in this repository, grouped by workflow
 /brainstorm --kanban — Brainstorm ideas and create kanban cards...  [planning]
 ...
 
-**49 skills** found
+**N skills** found
 ```
 
 ### Type mode (`/skills types`)
@@ -100,7 +100,7 @@ Discover and search all available skills in this repository, grouped by workflow
 /mvp-gap — Evaluate codebase against ICP...
 ...
 
-**49 skills** found
+**N skills** found
 ```
 
 ## Constraints

@@ -76,7 +76,7 @@ Evaluate feature branches after review and drive one of four outcomes: `merge`, 
    - branches already marked `delete`
 3. For each eligible branch:
    - summarize commits unique to the branch
-   - confirm with AskUserQuestion unless `--force`
+   - confirm with the user unless `--force`
    - create the PR with `gh pr create`
 4. If a branch is a better `salvage` candidate than a PR candidate, say so and do not open the PR automatically.
 
@@ -102,7 +102,7 @@ Evaluate feature branches after review and drive one of four outcomes: `merge`, 
 1. Resolve the target to an open PR. If the branch has no PR, stop and recommend `pr` or `salvage`.
 2. Re-check the strict merge gate.
 3. If any merge gate fails, stop and explain which requirement failed.
-4. Confirm with AskUserQuestion unless `--force`.
+4. Confirm with the user unless `--force`.
 5. Merge with squash by default: `gh pr merge <number> --squash`
    - Respect `CLAUDE.md` if it specifies a different merge strategy.
 6. Report the merged PR and resulting commit hash.
