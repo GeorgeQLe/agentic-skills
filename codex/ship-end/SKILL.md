@@ -24,7 +24,7 @@ Use this skill when the user wants the current session wrapped up cleanly.
    - If a deploy contract exists but no deploy method is found, ask the user how deployment works. Do not guess.
    - Run the deploy and verify the output for errors.
    - If the deploy fails, report the error. Do not retry automatically.
-6. Commit and push using the `commit-and-push-by-feature` workflow.
+6. Commit using the `commit-and-push-by-feature` workflow. That workflow only pushes if it creates a new branch from `main`/`master`; on an existing feature branch it must commit locally and report that push was skipped.
 7. Report:
    - What was accomplished
    - Test status — explicitly state whether any failing tests are expected (red phase: tests before implementation) or unexpected (regressions/bugs)

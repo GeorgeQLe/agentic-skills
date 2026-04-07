@@ -23,7 +23,7 @@ Ship already-finished work, commit it, optionally deploy it, and plan the next s
    - Read `CLAUDE.md` to understand current progress.
    - Update `tasks/todo.md` — mark completed items as done.
    - Update `tasks/history.md` — append a brief record of what was accomplished. Create it if needed.
-   - Commit and push using the `$commit-and-push-by-feature` workflow.
+   - Commit using the `$commit-and-push-by-feature` workflow. That workflow only pushes if it creates a new branch from `main`/`master`; on an existing feature branch it must commit locally and report that push was skipped.
 3. Deploy (skip if `--no-deploy`):
    - Check for an explicit manual deploy contract in `deploy.md` or `tasks/deploy.md`.
    - If neither file exists, skip deploy and report `Deploy skipped: no explicit manual deploy contract (deploy.md or tasks/deploy.md)`.
@@ -48,7 +48,7 @@ Ship already-finished work, commit it, optionally deploy it, and plan the next s
        5. **Just-in-time planning:** Invoke `$plan-phases` for the new phase. This generates implementation steps and file-level detail using the full context of what was learned during prior phases.
      - If **NO:** find the next uncompleted step within the current phase.
 5. Write a self-contained implementation plan for the next step into `tasks/todo.md`, complete enough for a fresh session to execute from `tasks/todo.md` alone.
-6. Commit and push `tasks/todo.md`, `tasks/roadmap.md`, `tasks/manual-todo.md` (if it exists), and `tasks/phases/` (if created).
+6. Ship `tasks/todo.md`, `tasks/roadmap.md`, `tasks/manual-todo.md` (if it exists), and `tasks/phases/` (if created) via `$commit-and-push-by-feature`, honoring the branch guard.
 7. Output a brief summary:
    - What was shipped (if anything)
    - Deploy status (if deployed)

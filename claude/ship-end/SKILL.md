@@ -30,8 +30,8 @@ Wrap up the current session: mark progress, commit, and push.
    - Run the deploy and verify the output for errors.
    - If the deploy fails, report the error. Do not retry automatically.
 
-4. **Commit and push:**
-   - Use the `/commit-and-push-by-feature` workflow: group changes into logical feature/function buckets, use conventional commit messages, push to the current branch.
+4. **Ship the session changes:**
+   - Use the `/commit-and-push-by-feature` workflow: group changes into logical feature/function buckets, use conventional commit messages, and only push if that workflow created a new branch from `main`/`master`. If already on an existing feature branch, commit locally and report that push was skipped.
 
 5. **Report session summary:**
    - What was accomplished
