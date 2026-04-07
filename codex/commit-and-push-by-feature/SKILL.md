@@ -17,10 +17,8 @@ Use this skill when the user wants current changes committed and pushed in sensi
    - Verify the staged diff matches the intended scope
    - Commit with a conventional message such as `feat(scope): summary`, `fix(scope): summary`, `refactor(scope): summary`, `test(scope): summary`, `docs(scope): summary`, or `chore(scope): summary`
 5. Do not leave unrelated tracked changes behind. Either bucket them too or stop and explain the blocker.
-6. **Branch guard:**
-   - If the current branch is `main` or `master`, create a feature branch derived from the primary bucket before pushing.
-   - If the current branch is already a feature branch (anything other than `main`/`master`), **do NOT push**. Commit locally only and report that push was skipped because you are on an existing feature branch. The user manages pushes to their own branches.
-7. Push with upstream tracking **only** if you created the branch in step 6.
+6. Do not create or switch branches as part of this workflow unless the user explicitly asks.
+7. Push only if the user explicitly asked for a push in the current task; otherwise commit locally and report that push was skipped.
 
 ## Safety
 
