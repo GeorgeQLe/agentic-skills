@@ -588,3 +588,12 @@ Resolved all 10 findings from `/expert-review`:
 - Identified the main architectural gap: kanban skills still rely on direct Neon DB writes via `kanban.mjs`, and Codex variants depend on Claude-side install paths
 - Added Phase 10 to `tasks/roadmap.md` to migrate Claude and Codex kanban workflows onto a shared Poketo headless API path
 - Captured the concrete migration scope in the roadmap: agent-friendly auth, real Work tool wiring, shared gateway/API operations, Claude migration, Codex migration, and deprecation of the standalone DB-write path
+
+## 2026-04-06 — Phase 10 Step 3: CLI kanban subcommand + key management (Gateway Phase 5)
+
+- Implemented `poketo kanban` command with 12 subcommands mapping to gateway actions (board.getAll, board.getById, board.create, board.delete, list.create, card.create, card.update, card.move, card.markDone, card.archive, card.search, boardAction.list)
+- Added `poketo auth create-key/list-keys/revoke-key/rotate-key` subcommands using session token auth
+- Created table formatter (`format.ts`) for `--format table` output
+- Fixed pre-existing tsconfig type errors by adding `types: ["node"]`
+- All 37/37 CLI tests pass, typecheck clean
+- Gateway Phase 5 milestone complete in Poketo monorepo
