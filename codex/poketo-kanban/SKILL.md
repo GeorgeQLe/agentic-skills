@@ -1,18 +1,19 @@
 ---
 name: poketo-kanban
 description: Manage Poketo kanban boards — list boards, view board state, create/update/move cards, manage lists. Use when the user wants to track tasks, view project status, or manage work items.
-version: 1.0.0
+version: 1.1.0
 argument-hint: "<subcommand> [options] [--archive]"
+allowed-tools: Bash(poketo *)
 ---
 
 # Poketo Kanban — Board & Task Management
 
-Manage Poketo Work kanban boards directly from any session. All operations go straight to the Neon Postgres database — no gateway server needed.
+Manage Poketo Work kanban boards directly from any session. All operations go through the poketo CLI gateway.
 
 ## Prerequisites
 
-- `~/.poketo/config.json` must contain a valid session (run `poketo auth login` first)
-- `POKETOWORK_DATABASE_URL` environment variable must be set
+- `poketo` CLI installed and on PATH
+- Authenticated: `poketo auth login` or `POKETO_API_KEY` env var set
 
 ## Process
 
@@ -24,7 +25,7 @@ Manage Poketo Work kanban boards directly from any session. All operations go st
    - `create-board`, `create-list` — board/list mutations
 
 2. **Execute via CLI:**
-   - Run the appropriate command via `node ${CLAUDE_SKILL_DIR}/scripts/kanban.mjs <command> [options]`
+   - Run the appropriate command via `poketo kanban <command> [options]`
 
 3. **Present results:**
    - Parse JSON output and display in human-readable format.
@@ -39,6 +40,8 @@ Manage Poketo Work kanban boards directly from any session. All operations go st
 ## Constraints
 
 - If output contains `{ "error": "..." }`, report the error to the user with remediation steps.
+- `"Not authenticated"` → tell user to run `poketo auth login`
+- `"Could not reach the gateway"` → tell user to check that the gateway is running and reachable
 - After any mutation, re-fetch and display the updated board state.
 
 ## Archive Mode (`--archive`)
@@ -47,20 +50,20 @@ When `$ARGUMENTS` contains `--archive` (or starts with `archive`), archive old D
 
 ### Setup
 
-Run board resolution: check `tasks/.kanban-board` for stored ID, validate via `board <id>`. If missing, match board names against `basename $(pwd)`. If no match, ask the user. If setup fails, report the error and stop — this operation requires a working kanban connection.
+Run board resolution: check `tasks/.kanban-board` for stored ID, validate via `poketo kanban board <id>`. If missing, match board names against `basename $(pwd)`. If no match, ask the user. If setup fails, report the error and stop — this operation requires a working kanban connection.
 
 ### Process
 
 1. **Parse arguments**: Extract `--days <N>` from `$ARGUMENTS`. Default to 30.
-2. **Fetch board state**: Run `board <id>` to get all lists and cards.
+2. **Fetch board state**: Run `poketo kanban board <id>` to get all lists and cards.
 3. **Find archivable cards**: Cards in Done/Punt lists where age (from `updatedAt` or `createdAt`) exceeds the threshold. If none qualify, report and stop.
 4. **Display candidates**: Show each card with list name, last update date, and age.
 5. **Confirm with user**: Ask "Archive these N cards? (y/n)". If declined, stop.
-6. **Archive cards**: Run `archive-card --id <card-id>` for each. Continue on individual failures.
+6. **Archive cards**: Run `poketo kanban archive-card --id <card-id>` for each. Continue on individual failures.
 7. **Report**: "Archived N cards (X from Done, Y from Punt)."
 
 ### Constraints
 - Never archive without explicit user confirmation.
 - Process Done cards first, then Punt — oldest first within each list.
 - Only archive from Done and Punt lists.
-- The `archive-card` command handles auto-creating the Archive list.
+- The `poketo kanban archive-card` command handles auto-creating the Archive list.

@@ -77,11 +77,11 @@ When `$ARGUMENTS` contains `--kanban`, perform kanban operations during the ship
 
 ### Kanban Setup
 
-1. Resolve the board: check `tasks/.kanban-board` for stored ID, validate via `board <id>`. If missing, match board names against `basename $(pwd)`. If no match, ask the user.
-2. Validate all 5 lists exist (Backlog, Todo, In Progress, Done, Punt). Create missing ones via `create-list`.
-3. If poketo-kanban scripts are missing or DB is unreachable, warn and continue without kanban.
+1. Resolve the board: check `tasks/.kanban-board` for stored ID, validate via `poketo kanban board <id>`. If missing, match board names against `basename $(pwd)`. If no match, ask the user.
+2. Validate all 5 lists exist (Backlog, Todo, In Progress, Done, Punt). Create missing ones via `poketo kanban create-list`.
+3. If the poketo CLI is missing or the gateway is unreachable, warn and continue without kanban.
 
-All kanban commands use: `node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs <command>`
+All kanban commands use: `poketo kanban <command>`
 
 ### After Shipping — Move Completed Card
 
