@@ -4,7 +4,7 @@ description: Ship current work (update docs, commit, push, deploy) and optionall
 type: shipping
 version: 1.0.0
 argument-hint: [--no-plan] [--no-deploy] [--kanban]
-allowed-tools: Bash(node *)
+allowed-tools: Bash(poketo *)
 ---
 
 Ship current work, commit, push, deploy, and plan the next step. If `$ARGUMENTS` contains `--no-plan`, skip planning. If `$ARGUMENTS` contains `--no-deploy`, skip deployment.

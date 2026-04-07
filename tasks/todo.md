@@ -2,22 +2,22 @@
 
 **Goal:** Replace direct database kanban writes with a shared, authenticated Poketo headless API path so Claude and Codex both use the same app-layer permissions, validation, and audit logging.
 
-**Current Step:** 3. Expose the shared API/gateway path for agent use
+**Current Step:** 4. Migrate Claude kanban skills
 
-**Why this step is next:** Step 1 established the target contract: scoped `pk_...` API keys through the agent gateway, with `kanban.mjs` retained only as transitional fallback while the shared Work surface is incomplete. The next blocker is the Work tool layer itself: board discovery, create-board, search, and archive/restore are still missing or stubbed, so Claude and Codex cannot migrate yet.
+**Why this step is next:** Steps 1–3 are complete. The gateway action route dispatches through real adapters (auth → rate limit → scope check → adapter dispatch → response mapping). The CLI ships 12 kanban subcommands and 4 key management commands. 40+ gateway route tests and 37 CLI tests pass. The shared headless path is ready for skill consumption.
 
 ### Steps
 
 - [x] 1. Establish agent-friendly headless auth
   - Inventory the current local assumptions in:
-    - `/Users/georgele/projects/tools/claude-skills/claude/poketo-kanban/SKILL.md`
-    - `/Users/georgele/projects/tools/claude-skills/codex/poketo-kanban/SKILL.md`
-    - `/Users/georgele/projects/tools/claude-skills/claude/poketo-kanban/KANBAN-SETUP.md`
-    - `/Users/georgele/projects/tools/claude-skills/claude/poketo-kanban/scripts/bootstrap-session.mjs`
-    - `/Users/georgele/projects/tools/claude-skills/claude/poketo-kanban/scripts/kanban.mjs`
-    - `/Users/georgele/projects/tools/claude-skills/codex/run-kanban/SKILL.md`
-    - `/Users/georgele/projects/tools/claude-skills/codex/ship-kanban/SKILL.md`
-    - `/Users/georgele/projects/tools/claude-skills/codex/ship-end-kanban/SKILL.md`
+    - `/Users/georgele/projects/tools/agentic-skills/claude/poketo-kanban/SKILL.md`
+    - `/Users/georgele/projects/tools/agentic-skills/codex/poketo-kanban/SKILL.md`
+    - `/Users/georgele/projects/tools/agentic-skills/claude/poketo-kanban/KANBAN-SETUP.md`
+    - `/Users/georgele/projects/tools/agentic-skills/claude/poketo-kanban/scripts/bootstrap-session.mjs`
+    - `/Users/georgele/projects/tools/agentic-skills/claude/poketo-kanban/scripts/kanban.mjs`
+    - `/Users/georgele/projects/tools/agentic-skills/codex/run/SKILL.md`
+    - `/Users/georgele/projects/tools/agentic-skills/codex/ship/SKILL.md`
+    - `/Users/georgele/projects/tools/agentic-skills/codex/ship-end/SKILL.md`
   - Record every place that assumes `POKETOWORK_DATABASE_URL`, `~/.claude/skills/poketo-kanban/scripts/kanban.mjs`, or session-only local auth.
   - Inspect the Poketo Work repo and identify the real headless auth entry point for agents: API key, durable token, CLI login/session bridge, or another supported mechanism.
   - Write a migration brief that defines:
@@ -25,15 +25,17 @@
     - required env/config inputs,
     - fallback behavior for existing `~/.poketo/config.json` session-based setups,
     - which operations must be available before the skill migration can start.
-  - Prefer writing the brief to `/Users/georgele/projects/tools/claude-skills/specs/poketo-headless-auth-migration.md`.
+  - Prefer writing the brief to `/Users/georgele/projects/tools/agentic-skills/specs/poketo-headless-auth-migration.md`.
 
 - [x] 2. Finish wiring the Poketo Work headless tool layer
   - Replace stubbed Work primitives/adapters with real app-layer-backed implementations.
   - Ensure the shared surface covers board discovery/details/activity, create board/list/card, update card, move card, search, archive/restore.
 
-- [ ] 3. Expose the shared API/gateway path for agent use
-  - Make the headless operations available through the actual agent-facing gateway/CLI surface.
-  - Verify the response shapes are stable enough for skill consumption without fragile text parsing.
+- [x] 3. Expose the shared API/gateway path for agent use
+  - Gateway action route fully wired: auth → rate limit → scope check → adapter dispatch → response mapping
+  - CLI: 12 kanban subcommands + 4 key management commands (`create-key/list-keys/revoke-key/rotate-key`)
+  - 40+ gateway route tests + 37 CLI tests pass
+  - Response shapes are stable JSON (not free-text)
 
 - [ ] 4. Migrate Claude kanban skills
   - Update Claude kanban skills to use the shared headless path instead of direct DB writes through `kanban.mjs`.
@@ -49,97 +51,82 @@
 
 ### Next Step Implementation Plan
 
-**Objective:** Wire the gateway action route to dispatch tool calls through the Work adapter, so agents with `pk_...` API keys can invoke all 15 Work tools via HTTP.
+**Objective:** Replace `kanban.mjs` direct-DB references in all Claude kanban skills with `poketo kanban` CLI commands that go through the authenticated gateway.
 
-**Target repo:** `/Users/georgele/projects/apps/poke/monorepo` (not claude-skills)
+**Target repo:** `/Users/georgele/projects/tools/agentic-skills` (skills) + `/Users/georgele/projects/apps/poke/monorepo` (CLI parity verification)
 
 **Current state:**
-- The gateway action route (`apps/flow/src/app/api/v1/actions/[app]/[action]/route.ts`) handles auth, rate limiting, and scope gating — but returns a stub `{ ok: true }` instead of dispatching to tool adapters.
-- `createWorkAdapter({ caller })` in `apps/work/src/tools/work-adapter.ts` returns a fully functional adapter with 15 tools, `executeToolCall()`, and `undoToolCall()`.
-- `createAgentCaller(session)` in `packages/agents/src/caller/create-agent-caller.ts` creates a session-backed tRPC caller.
-- `createGateway(deps)` in `packages/agents/src/gateway/index.ts` expects an `executeTool(app, action, params)` dependency but nothing provides it yet.
-- The gateway test file already has rate-limit tests (committed in a prior session) — there may be uncommitted route changes from that work. Check `git stash list` and `git diff` before starting.
+- The `poketo kanban` CLI ships 12 subcommands that call `executeAction("work", ...)` through the gateway.
+- All skills currently invoke `node ${CLAUDE_SKILL_DIR}/scripts/kanban.mjs <command>` for board operations.
+- After consolidation (commit `88ead90`), the 8 kanban variant skills were merged into base skills with `--kanban` flags. Kanban references now live in these files:
+  - `claude/poketo-kanban/SKILL.md` — core kanban skill (primary target)
+  - `claude/poketo-kanban/KANBAN-SETUP.md` — board resolution protocol
+  - `claude/run/SKILL.md` — run skill with kanban integration
+  - `claude/ship/SKILL.md` — ship skill with kanban integration
+  - `claude/ship-end/SKILL.md` — ship-end skill with kanban integration
+  - `claude/brainstorm/SKILL.md` — brainstorm skill with kanban integration
+  - `claude/roadmap/SKILL.md` — roadmap skill with kanban integration
+  - `claude/sync-roadmap-kanban/SKILL.md` — sync roadmap-kanban skill
+  - `claude/plan-interview/SKILL.md` — plan-interview skill with kanban integration
+  - `codex/poketo-kanban/SKILL.md` — codex core kanban skill
+  - `codex/sync-roadmap-kanban/SKILL.md` — codex sync roadmap-kanban skill
 
 **Changes:**
 
-### 1. Create app adapter registry
+### 1. Map kanban.mjs commands → poketo kanban equivalents
 
-Create `apps/flow/src/lib/app-registry.ts`:
-- Export a `createAppRegistry()` factory that maps app names to adapter factories.
-- Register the Work adapter: `work` → `(caller) => createWorkAdapter({ caller })`.
-- Provide `getAdapter(app, caller)` that lazily creates and caches adapters per-caller.
-- Keep it simple — no dynamic plugin loading, just a Map.
+Build a command mapping table from `kanban.mjs` subcommands to `poketo kanban` CLI equivalents. Verify each CLI command produces compatible output shapes by running them against the test harness.
 
-### 2. Create tool dispatcher
+### 2. Update poketo-kanban core skill (Claude)
 
-Create `apps/flow/src/lib/tool-dispatcher.ts`:
-- Export `createToolDispatcher(deps: { getAdapter })`.
-- Implement `executeTool(app, action, params, session)`:
-  - Create agent caller from session via `createAgentCaller(session)`.
-  - Get adapter from registry.
-  - Call `adapter.executeToolCall({ toolName: action, params })`.
-  - Return `{ success, result }` or `{ success: false, error }`.
+Modify `claude/poketo-kanban/SKILL.md`:
+- Replace all `node ${CLAUDE_SKILL_DIR}/scripts/kanban.mjs` invocations with `poketo kanban` equivalents
+- Update prerequisites: require `poketo auth login` or API key, remove `POKETOWORK_DATABASE_URL`
+- Update `allowed-tools` from `Bash(node *)` to `Bash(poketo *)`
 
-### 3. Wire the action route
+Modify `claude/poketo-kanban/KANBAN-SETUP.md`:
+- Update board resolution protocol to use `poketo kanban boards` and `poketo kanban board <id>`
+- Remove references to direct DB connection
 
-Modify `apps/flow/src/app/api/v1/actions/[app]/[action]/route.ts`:
-- Replace the `{ ok: true }` stub with real dispatch logic.
-- Parse `action` from route params, JSON body as `params`.
-- Create session from the resolved identity.
-- Call `dispatcher.executeTool(app, action, params, session)`.
-- Return the result as JSON with appropriate status codes (200, 400, 404, 500).
+### 3. Update dependent Claude skills
 
-### 4. Write integration tests
+For each of `run`, `ship`, `ship-end`, `brainstorm`, `roadmap`, `sync-roadmap-kanban`, `plan-interview`:
+- Replace `kanban.mjs` invocations with `poketo kanban` equivalents
+- Update `allowed-tools` if present
 
-Add to or update `apps/flow/src/__tests__/gateway-routes.test.ts`:
-- Test that POST `/api/v1/actions/work/get_board_details` with valid auth dispatches to the work adapter.
-- Test that unknown app returns 404.
-- Test that unknown action for a known app returns 404.
-- Test that tool execution errors return 500 with error message.
-- Mock the tRPC caller at the adapter boundary.
+### 4. Update Codex kanban skills
 
-### 5. Verify response shape stability
+Modify `codex/poketo-kanban/SKILL.md` and `codex/sync-roadmap-kanban/SKILL.md`:
+- Same command replacements as Claude variants
+- Remove `~/.claude/skills/...` path references
+- Update `allowed-tools`
 
-Invoke a few representative tools through the gateway test harness and document the response shapes:
-- `get_my_boards` → `{ boards: [...] }`
-- `create_card` → `{ card: { id: "..." } }`
-- `delete_card` → `{ success: true }`
-- Ensure these match what skills will consume.
+### 5. Deprecate kanban.mjs scripts
 
-**Files to create (Poketo monorepo):**
+- Keep `kanban.mjs` in place but add deprecation header comment
+- Do NOT delete yet — Step 6 handles full removal after both toolchains are verified
+
+**Files to modify (agentic-skills):**
 | File | Action |
 |------|--------|
-| `apps/flow/src/lib/app-registry.ts` | **Create** |
-| `apps/flow/src/lib/tool-dispatcher.ts` | **Create** |
-
-**Files to modify (Poketo monorepo):**
-| File | Action |
-|------|--------|
-| `apps/flow/src/app/api/v1/actions/[app]/[action]/route.ts` | Replace stub with dispatcher |
-| `apps/flow/src/__tests__/gateway-routes.test.ts` | Add tool dispatch tests |
-
-**Files to inspect first:**
-- `apps/flow/src/app/api/v1/actions/[app]/[action]/route.ts` — check for uncommitted rate-limit wiring
-- `packages/agents/src/gateway/index.ts` — understand `handleActionRequest()` shape
-- `packages/agents/src/caller/create-agent-caller.ts` — session → caller threading
-- `apps/work/src/tools/work-adapter.ts` — adapter interface
-
-**Technical decisions:**
-- Whether to route through `createGateway().handleActionRequest()` or directly through the dispatcher. The gateway module already has the `executeTool` dependency slot — using it keeps the architecture consistent.
-- Whether to create the tRPC caller per-request (clean but potentially slow) or cache per API key session. Start with per-request; optimize later if needed.
-
-**Known risks:**
-- There are uncommitted changes in the flow routes from a rate-limit wiring task. Those need to be committed or stashed before starting Step 3.
-- The `createAgentCaller` requires a `Session` object — need to verify how `resolveIdentity()` output maps to a session.
-- Response shapes from tRPC callers may include internal fields (timestamps, IDs) that should be filtered before exposing to agents.
+| `claude/poketo-kanban/SKILL.md` | Replace kanban.mjs → poketo kanban |
+| `claude/poketo-kanban/KANBAN-SETUP.md` | Update board resolution protocol |
+| `claude/run/SKILL.md` | Replace kanban.mjs references |
+| `claude/ship/SKILL.md` | Replace kanban.mjs references |
+| `claude/ship-end/SKILL.md` | Replace kanban.mjs references |
+| `claude/brainstorm/SKILL.md` | Replace kanban.mjs references |
+| `claude/roadmap/SKILL.md` | Replace kanban.mjs references |
+| `claude/sync-roadmap-kanban/SKILL.md` | Replace kanban.mjs references |
+| `claude/plan-interview/SKILL.md` | Replace kanban.mjs references |
+| `codex/poketo-kanban/SKILL.md` | Replace kanban.mjs + remove ~/.claude paths |
+| `codex/sync-roadmap-kanban/SKILL.md` | Replace kanban.mjs + remove ~/.claude paths |
 
 **Acceptance criteria:**
-- POST `/api/v1/actions/work/{tool_name}` with a valid `pk_...` API key dispatches to the Work adapter and returns tool results as JSON.
-- Unknown apps or actions return 404.
-- Auth failures return 401, scope failures return 403 (already implemented).
-- All 15 Work tools are callable through the gateway.
-- Response shapes are consistent JSON (not free-text).
-- Tests pass for the dispatch path.
+- All Claude kanban skills use `poketo kanban` instead of `kanban.mjs`
+- No skill references `POKETOWORK_DATABASE_URL` for standard usage
+- `allowed-tools` updated from `Bash(node *)` to `Bash(poketo *)`
+- `kanban.mjs` still exists but is marked as deprecated fallback
+- Skills fail with clear error if gateway is unreachable (no silent fallback)
 
 ### Acceptance Criteria
 
@@ -155,3 +142,4 @@ Invoke a few representative tools through the gateway test harness and document 
 - Auth is the main dependency. If the gateway/API-key flow is not usable for agents, the migration will stall.
 - The Work tool layer and gateway surface must be completed before migrating the skill docs, otherwise the skills will lose functionality.
 - Claude and Codex should migrate to the same target surface in close succession to avoid long-lived behavioral drift.
+- Repo path updated to `agentic-skills`; `install.sh` was re-run after the rename to refresh global Claude and Codex skill symlinks.

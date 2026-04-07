@@ -1,5 +1,22 @@
 # Session History
 
+## 2026-04-06 — Phase 10 Step 4: start Claude poketo-kanban CLI migration
+
+- Updated `claude/poketo-kanban/SKILL.md` to switch core commands and prerequisites from `kanban.mjs` + direct DB access to `poketo kanban`
+- Updated `claude/poketo-kanban/KANBAN-SETUP.md` so board resolution and board validation use `poketo kanban` commands
+- Updated dependent Claude skills (`brainstorm`, `plan-interview`, `roadmap`, `run`, `ship`, `ship-end`) so kanban-capable variants allow `Bash(poketo *)`
+- Updated `claude/sync-roadmap-kanban/SKILL.md` to use `poketo kanban` commands instead of the standalone script path
+- Added a deprecation header to `claude/poketo-kanban/scripts/kanban.mjs`; the script remains as fallback/admin tooling
+- Left the broader Step 4 migration in progress: remaining Claude skill command references and the Codex skill variants still need the same path migration
+
+## 2026-04-06 — Rename repo to agentic-skills and refresh installed skills
+
+- Renamed the local checkout from `/Users/georgele/projects/tools/claude-skills` to `/Users/georgele/projects/tools/agentic-skills`
+- Renamed the GitHub repo from `GeorgeQLe/claude-skills` to `GeorgeQLe/agentic-skills` and updated `origin`
+- Re-ran `bash install.sh` to refresh global Claude and Codex skill symlinks for the new repo path
+- Removed 24 stale legacy symlinks that still pointed at deleted `claude-skills` skill paths after the installer run
+- Updated `tasks/todo.md` references so the active Phase 10 plan points at `agentic-skills`
+
 ## 2026-04-06 — Phase 10 Step 2: Wire Poketo Work headless tool layer
 
 - Created 3 new primitive tools in Poketo monorepo: `create-board.ts`, `search-cards.ts`, `restore-card.ts`
