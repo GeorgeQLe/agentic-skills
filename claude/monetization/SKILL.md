@@ -3,7 +3,7 @@ name: monetization
 description: Research-driven monetization strategy — revenue models, pricing architecture, unit economics, and packaging grounded in ICP and competitive data
 type: research
 version: 1.1.0
-argument-hint: [optional: focus area e.g. "pricing tiers", "usage-based", "freemium"]
+argument-hint: "[optional: focus area e.g. \"pricing tiers\", \"usage-based\", \"freemium\"]"
 ---
 
 # Monetization — Revenue & Pricing Strategy

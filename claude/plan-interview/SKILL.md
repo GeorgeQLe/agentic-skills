@@ -3,7 +3,7 @@ name: plan-interview
 description: Interview to validate and complete a specification
 type: planning
 version: 1.0.0
-argument-hint: [optional-topic-override] [--kanban] [--ideas]
+argument-hint: "[optional-topic-override] [--kanban] [--ideas]"
 allowed-tools: Bash(poketo *)
 ---
 

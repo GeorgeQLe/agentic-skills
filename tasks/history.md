@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-04-07 — Fix skill frontmatter YAML parsing
+
+- Normalized `argument-hint` frontmatter across 55 Claude/Codex skill files from unquoted bracket syntax to quoted YAML scalars
+- Fixed the immediate loader failure in `codex/landing-copy/SKILL.md` and proactively cleaned the same pattern in related skills
+- Verified no remaining `argument-hint: [...]` frontmatter values via ripgrep
+- Parsed representative edited frontmatters with Ruby `YAML.safe_load` to confirm the loader-facing syntax is valid
+
 ## 2026-04-07 — Phase 10 Step 6: Deprecate standalone kanban DB-write path (complete)
 
 - Updated `claude/poketo-kanban/scripts/kanban.mjs` help output so the default workflow is explicitly `poketo kanban`, with the direct-DB script labeled fallback/admin-only

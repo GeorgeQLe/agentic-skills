@@ -3,7 +3,7 @@ name: investor-update
 description: Generate structured monthly stakeholder update from current research state, metrics, roadmap, and feedback
 type: analysis
 version: 1.0.0
-argument-hint: [optional: month e.g. "March 2026"]
+argument-hint: "[optional: month e.g. \"March 2026\"]"
 ---
 
 # Investor Update — Stakeholder Communication

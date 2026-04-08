@@ -3,7 +3,7 @@ name: brainstorm
 description: Evaluate the codebase and suggest ideas to explore with /plan-interview
 type: planning
 version: 1.1.0
-argument-hint: [optional: focus area] [--kanban]
+argument-hint: "[optional: focus area] [--kanban]"
 allowed-tools: Bash(poketo *)
 ---
 

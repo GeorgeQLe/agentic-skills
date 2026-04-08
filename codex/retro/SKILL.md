@@ -3,7 +3,7 @@ name: retro
 description: Strategic decision retrospective — review research decisions against actual outcomes, update confidence levels
 type: analysis
 version: 1.0.0
-argument-hint: [optional: focus area e.g. "ICP", "pricing", "channels"]
+argument-hint: "[optional: focus area e.g. \"ICP\", \"pricing\", \"channels\"]"
 ---
 
 # Retro — Strategic Decision Retrospective

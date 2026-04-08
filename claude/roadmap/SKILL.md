@@ -3,7 +3,7 @@ name: roadmap
 description: Build or update the project roadmap by interviewing across all specs, codebase state, and project history
 type: planning
 version: 1.0.0
-argument-hint: [--existing] [--kanban] [path-to-spec]
+argument-hint: "[--existing] [--kanban] [path-to-spec]"
 allowed-tools: Bash(poketo *)
 ---
 

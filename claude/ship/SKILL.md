@@ -3,7 +3,7 @@ name: ship
 description: Ship current work (update docs, commit, push, deploy) and optionally plan the next step
 type: shipping
 version: 1.0.0
-argument-hint: [--no-plan] [--no-deploy] [--kanban]
+argument-hint: "[--no-plan] [--no-deploy] [--kanban]"
 allowed-tools: Bash(poketo *)
 ---
 

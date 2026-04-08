@@ -3,7 +3,7 @@ name: affected
 description: Analyze which monorepo packages and apps are affected by current changes
 type: analysis
 version: 1.0.0
-argument-hint: [optional: specific commit range or branch to analyze]
+argument-hint: "[optional: specific commit range or branch to analyze]"
 ---
 
 # Affected
