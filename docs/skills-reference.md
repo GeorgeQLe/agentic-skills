@@ -431,6 +431,8 @@ Pull latest changes from remote and report status.
 ### `/branch-lifecycle`
 Evaluate feature branches after review and drive one of four outcomes: merge, salvage by cherry-picking selected commits, keep open, or delete.
 
+This is an exception workflow. The default solo-dev path in this library is to land work directly on the repository primary branch (`main` when present, otherwise `master`) and push there.
+
 - **Arguments**: `[--force] [list | pr [branch...] | review <branch-or-pr> | merge <branch-or-pr> | salvage <branch-or-pr> [--onto <base>] [--commits <sha,...>] | cleanup]`
 - **Strict merge gate**: focused scope, passing CI/tests, no conflicts, approval requirements satisfied, no unresolved high-severity review findings.
 - **Stale default**: no open PR and last commit older than 30 days.

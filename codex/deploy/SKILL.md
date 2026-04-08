@@ -24,7 +24,9 @@ Deploy the current project to the specified environment. Defaults to staging if 
    - If no deploy config is found, stop and ask the user how to deploy.
 3. Pre-flight checks:
    - Ensure the working tree is clean. If dirty, warn and ask whether to proceed or commit first.
-   - Ensure the current branch is pushed to remote.
+   - Resolve the primary branch: prefer `main`; if it does not exist, use `master`. If neither exists, stop and explain the blocker.
+   - Ensure the current branch is the primary branch. If not, stop and tell the user to land the work on `main`/`master` first rather than deploying from a feature branch.
+   - Ensure the primary branch is pushed to remote.
    - Note the current commit hash for reference.
 4. Compare against last deployment:
    - Read `tasks/deploys.md` (if it exists) and find the most recent successful entry for the target environment.

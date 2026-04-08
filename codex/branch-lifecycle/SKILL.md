@@ -10,6 +10,8 @@ argument-hint: "[--force] [list | pr [branch...] | review <branch-or-pr> | merge
 
 Evaluate feature branches after review and drive one of four outcomes: `merge`, `salvage`, `keep-open`, or `delete`.
 
+This is an exception workflow. The default repository policy is direct-to-primary development on `main`/`master`; use this skill for legacy branches, externally introduced branches, or explicit user requests for branch/PR work.
+
 ## Arguments
 
 - **No args** or **`list`**: inventory candidate branches and recommend an action for each.
@@ -26,6 +28,7 @@ Evaluate feature branches after review and drive one of four outcomes: `merge`, 
    - Detect the base branch in this order: repository default branch, `main`, then `master`.
    - Run `git status` and report uncommitted changes before any mutating action.
    - Use `gh` for PR metadata and merge operations when available. If `gh` is unavailable or unauthenticated, report that limitation and continue with local-only facts where possible.
+   - State clearly that normal solo-dev work should land directly on the base branch, not stay on a feature branch.
 
 2. **Build branch inventory:**
    - Enumerate local branches except the current branch and base branch.

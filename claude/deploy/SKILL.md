@@ -31,7 +31,9 @@ If `$ARGUMENTS` contains `--status`, skip deployment and jump to step 7 (stalene
 
 3. **Pre-flight checks:**
    - Ensure the working tree is clean (`git status`). If dirty, warn and ask whether to proceed or commit first.
-   - Ensure the current branch is pushed to remote.
+   - Resolve the primary branch: prefer `main`; if it does not exist, use `master`. If neither exists, stop and explain the blocker.
+   - Ensure the current branch is the primary branch. If not, stop and tell the user to land the work on `main`/`master` first rather than deploying from a feature branch.
+   - Ensure the primary branch is pushed to remote.
    - Note the current commit hash for reference.
 
 4. **Compare against last deployment:**
@@ -60,7 +62,7 @@ If `$ARGUMENTS` contains `--status`, skip deployment and jump to step 7 (stalene
    ```
 
    - **Date**: UTC timestamp of the deployment.
-   - **Branch**: The branch that was deployed.
+   - **Branch**: The primary branch that was deployed.
    - **Commit Range**: `<last-deployed>..<current>` (or just the commit hash if first deploy).
    - **Commits**: Number of commits in the range.
    - **Status**: `success` or `failed`.
