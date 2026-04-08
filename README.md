@@ -114,6 +114,8 @@ Three skills currently exist only in the Claude Code variant:
 | `/burn-rate` | Not yet ported |
 | `/spec-drift` | Not yet ported |
 
+Default git policy for this library: solo-dev work should land directly on the repository primary branch (`main` when present, otherwise `master`). Shipping, release, and deploy skills should move work onto the primary branch and push there; feature-branch workflows are exception-only.
+
 ---
 
 ## Workflow Overview
@@ -274,7 +276,7 @@ Discover          Ideate              Specify             Map            Strateg
 
 | Skill | Description | Arguments | Key Outputs |
 |-------|-------------|-----------|-------------|
-| `/branch-lifecycle` | Inventory, create PRs for, review, merge, and clean up Git branches | `[list\|pr\|review\|merge\|cleanup]` | Branch/PR operations |
+| `/branch-lifecycle` | Exception workflow for legacy/imported branches: inventory, review, merge, salvage, or clean them up | `[list\|pr\|review\|merge\|cleanup]` | Branch/PR operations |
 | `/sync` | Pull latest changes from remote, report status, run post-sync actions from `sync.md` | none | Updated repo + status report |
 
 ### Context & Session Management
