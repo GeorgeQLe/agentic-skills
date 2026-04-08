@@ -661,3 +661,9 @@ Resolved all 10 findings from `/expert-review`:
 - Verified that all repo-managed Claude and Codex skills are correctly symlinked into `~/.claude/skills` and `~/.codex/skills`
 - Updated Codex shipping docs (`run`, `ship`, `ship-end`) to explicitly defer push behavior to `commit-and-push-by-feature`
 - Updated Claude shipping docs (`ship`, `ship-end`) to remove unconditional "push current branch" wording and clarify that existing feature branches are commit-only
+
+## 2026-04-08 — Shipping skills: require main/master landing + push
+
+- Updated `commit-and-push-by-feature` in both Codex and Claude to resolve a primary branch (`main`, fallback `master`), move work there safely, and push there on success
+- Updated `run`, `ship`, and `ship-end` in both Codex and Claude to treat `commit-and-push-by-feature` as an actual commit-and-push workflow targeting `main`/`master`
+- Reflected the new shipping policy in `tasks/todo.md` current-state notes now that roadmap execution is complete

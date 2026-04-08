@@ -43,7 +43,8 @@ c) Update `tasks/history.md` — append a brief record of what was accomplished 
 d) Ship the changes using the /commit-and-push-by-feature workflow:
    - Group changes into logical feature/function buckets.
    - Use conventional commit messages.
-   - Only push if that workflow created a new branch from `main`/`master`. If already on an existing feature branch, commit locally and report that push was skipped.
+   - Land the resulting commits on `main` or `master`, not on an existing feature branch.
+   - `commit-and-push-by-feature` means commit and push when the workflow succeeds.
 
 ### 3. Deploy (skip if `--no-deploy`)
 After shipping, deploy the project using the project's own deployment mechanism.
@@ -93,7 +94,7 @@ d) Write a **self-contained** implementation plan for the next step into `tasks/
    - If test strategy is `tdd`: which tests to write first and what they should assert
    - If test strategy is `tests-after`: note that tests will be written in the Green step
    - Acceptance criteria: how to verify the step is done
-e) Ship `tasks/todo.md`, `tasks/roadmap.md`, `tasks/manual-todo.md` (if it exists), and `tasks/phases/` (if created) via `/commit-and-push-by-feature`, honoring the branch guard.
+e) Ship `tasks/todo.md`, `tasks/roadmap.md`, `tasks/manual-todo.md` (if it exists), and `tasks/phases/` (if created) via `/commit-and-push-by-feature`, landing them on `main` or `master`.
 
 ### 5. Output a brief summary (2-3 lines max to save context)
 - What was shipped (if anything)
@@ -126,7 +127,7 @@ This gives the user something concrete to review before selecting "clear context
 - If the tree is clean and the next step plan already exists in `tasks/todo.md`, skip straight to step 6.
 - Do not amend or rewrite history.
 - Do not commit secrets.
-- **Do not push to an existing feature branch.** If already on a feature branch, commit locally only. The `/commit-and-push-by-feature` workflow enforces this — do not bypass it.
+- Do not push shipping commits to an existing feature branch. Use `/commit-and-push-by-feature` to move the work onto `main` or `master` and push it there, or stop and report a blocker if that cannot be done safely.
 - The plan must be actionable, not vague. Include specific file paths and technical details.
 - Never use GitHub Actions for deployment. Only use manual deploy scripts, Makefiles, or CLI commands.
 - Never deploy to production without explicit user confirmation.

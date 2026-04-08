@@ -33,11 +33,15 @@ Commit and push all changes to GitHub grouped by feature/function.
    - If there are uncommitted leftover changes at the end, bucket them; do not leave a dirty working tree.
 
 4. **Branch handling:**
-   - Do not create or switch branches as part of this workflow unless the user explicitly asks.
+   - Determine the primary branch: prefer `main`; if it does not exist, use `master`. If neither exists, stop and explain the blocker.
+   - Ensure the commits land on the primary branch.
+   - If already on `main` or `master`, stay there.
+   - If on any other branch, switch to the primary branch before committing and pushing. Carry the working tree across only if it can be done safely.
+   - If switching would discard work, introduce conflicts you cannot resolve confidently, or otherwise prevent a safe move onto the primary branch, stop and explain the blocker. Do not push the feature branch instead.
 
 5. **Push and report:**
-   - Push only if the user explicitly asked for a push in the current task; otherwise commit locally and report that push was skipped.
-   - Output a concise summary: branch name, list of commits (hash + subject), confirmation that working tree is clean, and whether push was performed or skipped.
+   - Push the resulting commits to the primary branch. `commit-and-push-by-feature` means commit and push when the workflow succeeds.
+   - Output a concise summary: branch name, list of commits (hash + subject), confirmation that working tree is clean, and whether push was performed or blocked.
 
 ## Output Format
 
