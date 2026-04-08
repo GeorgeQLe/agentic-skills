@@ -1,6 +1,6 @@
 # Skills Reference
 
-Complete reference for all 55 custom skills in this repository, available for both Claude Code and Codex.
+Complete reference for all 54 custom skills in this repository, available for both Claude Code and Codex.
 
 ## Tool Compatibility
 
@@ -63,11 +63,12 @@ Discover                      Ideate                       Specify              
 **New project flow**: `/icp` → `/competitive-analysis` → `/brainstorm` → `/plan-interview` → `/journey-map` → `/metrics` → `/roadmap` → `/gtm` → `/plan-phases` → `/run` → `/ship` → `/mvp-gap` → `/customer-feedback` → (iterate)
 **Existing project flow**: `/icp` → `/competitive-analysis` → `/mvp-gap` → `/brainstorm` → `/plan-interview` → `/journey-map` → `/metrics` → `/roadmap` → ...
 **Enterprise expansion**: `/enterprise-icp` → (build cycle) → `/scale-audit`
+**Platform expansion**: `/icp` → `/competitive-analysis` → `/platform-strategy` → `/experiment` → `/plan-interview` → `/roadmap` → ...
 **At any point**: `/workflow` to check status, stale items, and recommended next step
 
 For **Codex**, the same flow is invoked with `$skill-name` rather than `/skill-name`, and it remains an approximate map of the intended workflow rather than a guarantee that every approval or plan-mode transition works the same way.
 
-Supporting skills plug in at any point: `/expert-review`, `/spec-drift`, `/investigate`, `/affected`, `/regression-check`, etc.
+Supporting skills plug in at any point: `/expert-review`, `/spec-drift`, `/branch-lifecycle`, `/investigate`, `/affected`, `/regression-check`, etc.
 
 ## Activity Types
 
@@ -75,7 +76,7 @@ Each skill has a `type` field in its frontmatter that describes *what kind of wo
 
 | Type | What it does | Output | Skills |
 |------|-------------|--------|--------|
-| **research** | Web search + analysis | Documents, market insights | `icp`, `enterprise-icp`, `competitive-analysis`, `gtm`, `monetization`, `customer-feedback`, `research-reconcile` |
+| **research** | Web search + analysis | Documents, market insights | `icp`, `enterprise-icp`, `competitive-analysis`, `platform-strategy`, `gtm`, `landing-copy`, `monetization`, `customer-feedback`, `research-reconcile` |
 | **analysis** | Reads codebase/docs | Assessments, gap reports | `mvp-gap`, `scale-audit`, `journey-map`, `metrics`, `burn-rate`, `workflow`, `spec-drift`, `affected`, `dead-code`, `hygiene`, `slim-audit`, `analyze-sessions` |
 | **planning** | Interactive interviews | Specs, roadmaps, phases | `brainstorm`, `plan-interview`, `plan-interview --ideas`, `roadmap`, `plan-phases`, `brainstorm --kanban`, `plan-interview --kanban`, `roadmap --kanban` |
 | **execution** | Writes/modifies code | Code changes | `run`, `scaffold`, `migrate`, `decommission`, `run --kanban` |
@@ -118,6 +119,14 @@ Enterprise multi-stakeholder discovery — map personas, deal-killers, and the e
 - **Outputs**: `research/enterprise-icp.md` (stakeholder map, journeys, deal-killers), `research/enterprise-icp-interview.md`
 - **Use when**: Pivoting to or expanding into enterprise sales.
 
+### `/platform-strategy`
+Expand from a single product into a multi-product platform — map vertical and horizontal growth vectors, score candidates, design validation experiments, and sequence the portfolio.
+
+- **Arguments**: `[optional: expansion direction e.g. "vertical", "horizontal", or specific adjacent market]`
+- **Prerequisites**: `research/icp.md` must exist or a working codebase (run `/icp` first). Enriched by `/competitive-analysis`, `/journey-map`, `/metrics`, `/monetization`, `/positioning`, `/customer-feedback`, `/enterprise-icp`.
+- **Outputs**: `research/platform-strategy.md` (core health, expansion vector map, scoring matrix, validation experiments, portfolio sequence, shared platform considerations), `research/platform-strategy-search-log.md`
+- **Use when**: Your core product has PMF and you're ready to expand — either deeper into the same customer base (vertical) or into adjacent products for new audiences (horizontal).
+
 ### `/journey-map`
 Map user journeys (per-use-case task flows) and customer journey (trigger→discovery→aha→conversion→retention) through the product.
 
@@ -157,6 +166,13 @@ Go-to-market planning — channel strategy, messaging, pricing, launch plan, and
 - **Prerequisites**: `research/icp.md` must exist (run `/icp` first).
 - **Outputs**: `research/gtm.md` (channels, messaging, pricing, launch plan, 30/60/90 tactics), `research/gtm-interview.md`
 - **Use when**: After ICP discovery, to plan how to reach and convert customers.
+
+### `/landing-copy`
+Generate or audit landing page copy grounded in upstream research, including hero, benefits, social proof, pricing, FAQ, and CTAs.
+
+- **Arguments**: `[generate|audit] [optional: focus section e.g. "hero", "pricing", "FAQ"]`
+- **Outputs**: Generated or audited landing page copy with source-grounded claims and suggested follow-up fixes where needed.
+- **Use when**: After ICP and market research, when you need messaging and conversion copy that stays aligned with the actual product and research.
 
 ### `/monetization`
 Research-driven monetization strategy — revenue models, pricing architecture, unit economics, and packaging grounded in ICP and competitive data.
@@ -393,22 +409,6 @@ Deploy the project to a target environment with deployment history tracking and 
 
 ---
 
-## Git Workflow
-
-### `/branch-lifecycle`
-Inventory, create PRs for, review, merge, and clean up Git branches.
-
-- **Arguments**: `[list | pr | review <branch-or-PR> | merge <PR> | cleanup]`
-- **Actions**:
-  - `list` (default) — inventory unmerged branches with PR status, age, ahead/behind
-  - `pr` — create PRs for branches that don't have one
-  - `review` — evaluate a PR for correctness, tests, conflicts, scope
-  - `merge` — merge an approved PR (squash by default)
-  - `cleanup` — delete merged branches, prompt for stale ones
-- **Use when**: Managing feature branches, creating PRs in bulk, reviewing before merge, or cleaning up after merges.
-
----
-
 ## Context & Session Management
 
 ### `/handoff`
@@ -423,6 +423,20 @@ Pull latest changes from remote and report status.
 
 - **Arguments**: None
 - **Use when**: Starting a session or before beginning new work.
+
+---
+
+## Git Workflow
+
+### `/branch-lifecycle`
+Evaluate feature branches after review and drive one of four outcomes: merge, salvage by cherry-picking selected commits, keep open, or delete.
+
+- **Arguments**: `[--force] [list | pr [branch...] | review <branch-or-pr> | merge <branch-or-pr> | salvage <branch-or-pr> [--onto <base>] [--commits <sha,...>] | cleanup]`
+- **Strict merge gate**: focused scope, passing CI/tests, no conflicts, approval requirements satisfied, no unresolved high-severity review findings.
+- **Stale default**: no open PR and last commit older than 30 days.
+- **Salvage behavior**: shows branch-only commits, preserves only explicitly selected commits, creates a fresh target branch, stops on conflicts, never deletes the source branch automatically.
+- **Delete behavior**: merged branches can be removed after confirmation; unmerged branches always require explicit confirmation, even when stale.
+- **Use when**: After analysis or review, when you need an explicit branch decision workflow instead of the lighter-weight `/sync` status and PR management flow.
 
 ---
 
@@ -523,7 +537,9 @@ Archive old Done/Punt cards from the kanban board.
 | `/icp` | Customer discovery — map ICP, journeys, value prop | research |
 | `/competitive-analysis` | Research competitors, map landscape and gaps (supports concept-validation mode) | research |
 | `/enterprise-icp` | Enterprise multi-stakeholder discovery | research |
+| `/platform-strategy` | Multi-product expansion — vertical/horizontal vectors, scoring, portfolio sequencing | research |
 | `/gtm` | Go-to-market planning | research |
+| `/landing-copy` | Generate or audit research-grounded landing page copy | research |
 | `/monetization` | Revenue models, pricing, unit economics | research |
 | `/burn-rate` | Monthly burn rate, payback period, runway from infra signals | analysis |
 | `/customer-feedback` | Ingest + synthesize customer feedback | research |
@@ -561,8 +577,8 @@ Archive old Done/Punt cards from the kanban board.
 | `/commit-and-push-by-feature` | Group commits by feature | shipping |
 | `/handoff` | Context snapshot for session continuity | shipping |
 | `/sync` | Pull latest from remote | shipping |
+| `/branch-lifecycle` | Triage branches into merge, salvage, keep-open, or delete | ops |
 | `/poketo-kanban` | Low-level board CRUD | ops |
-| `/branch-lifecycle` | Inventory, PR, review, merge, cleanup branches | ops |
 | `/skills` | Browse and search all skills | ops |
 | `/install-workflow-orchestration` | Bootstrap CLAUDE.md | ops |
 | `/brainstorm --kanban` | Brainstorm + create kanban cards | planning |
