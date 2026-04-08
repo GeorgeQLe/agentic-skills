@@ -3,7 +3,7 @@ name: journey-map
 description: Map user journeys (per-use-case task flows) and customer journey (trigger→discovery→aha→conversion→retention) through the product
 type: analysis
 version: 1.2.0
-argument-hint: [optional: specific use case or journey stage to focus on]
+argument-hint: "[optional: specific use case or journey stage to focus on]"
 ---
 
 # Journey Map — User & Customer Journey Mapping

@@ -3,7 +3,7 @@ name: mvp-gap
 description: Evaluate codebase against ICP to identify gaps blocking first sales and retention
 type: analysis
 version: 1.2.0
-argument-hint: [optional: path-to-icp-spec]
+argument-hint: "[optional: path-to-icp-spec]"
 ---
 
 # MVP Gap — Startup Readiness Audit

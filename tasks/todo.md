@@ -16,6 +16,7 @@
 - Archived final phase snapshot to `tasks/phases/phase-10.md`
 - No unchecked phases remain in `tasks/roadmap.md`
 - No active `tasks/manual-todo.md` file is present
+- Skill frontmatter `argument-hint` values were normalized to quoted YAML scalars so Codex skill loading no longer trips on inline bracket syntax
 
 ## Next Action
 

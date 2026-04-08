@@ -3,7 +3,7 @@ name: ship-end
 description: Wrap up the current session — update docs, commit, and push
 type: shipping
 version: 1.0.0
-argument-hint: [--kanban] [--no-deploy]
+argument-hint: "[--kanban] [--no-deploy]"
 allowed-tools: Bash(poketo *)
 ---
 

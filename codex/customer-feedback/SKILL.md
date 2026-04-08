@@ -3,7 +3,7 @@ name: customer-feedback
 description: Ingest and synthesize customer feedback — categorize findings against ICP and journey map, maintain a running log
 type: research
 version: 1.2.0
-argument-hint: [file path, pasted text, or empty to be prompted]
+argument-hint: "[file path, pasted text, or empty to be prompted]"
 ---
 
 # Customer Feedback — Ingest & Synthesize

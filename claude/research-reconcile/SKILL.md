@@ -3,7 +3,7 @@ name: research-reconcile
 description: Cross-document consistency audit across research outputs — find contradictions, stale assumptions, and gaps
 type: research
 version: 1.2.0
-argument-hint: [audit|fix] [all|icp|pricing|journey|enterprise|feedback|specs]
+argument-hint: "[audit|fix] [all|icp|pricing|journey|enterprise|feedback|specs]"
 ---
 
 # Research Reconcile — Cross-Document Consistency Audit

@@ -3,7 +3,7 @@ name: runway-model
 description: Financial runway & unit economics tracker — burn rate, revenue trajectory, runway in months, scenario modeling
 type: analysis
 version: 1.0.0
-argument-hint: [file path to financials, pasted data, or empty to be prompted]
+argument-hint: "[file path to financials, pasted data, or empty to be prompted]"
 ---
 
 # Runway Model — Financial Runway & Unit Economics
