@@ -31,7 +31,7 @@ Wrap up the current session: mark progress, commit, and push.
    - If the deploy fails, report the error. Do not retry automatically.
 
 4. **Ship the session changes:**
-   - Use the `/commit-and-push-by-feature` workflow: group changes into logical feature/function buckets, use conventional commit messages, and only push if that workflow created a new branch from `main`/`master`. If already on an existing feature branch, commit locally and report that push was skipped.
+   - Use the `/commit-and-push-by-feature` workflow: group changes into logical feature/function buckets, use conventional commit messages, land the resulting commits on `main` or `master`, and push them there when the workflow succeeds.
 
 5. **Report session summary:**
    - What was accomplished
@@ -63,7 +63,7 @@ Wrap up the current session: mark progress, commit, and push.
 - Do not switch branches or create new branches unless the current state requires it.
 - Do not amend or rewrite history.
 - Do not commit secrets.
-- **Do not push to an existing feature branch.** If already on a feature branch, commit locally only. The `/commit-and-push-by-feature` workflow enforces this — do not bypass it.
+- Do not push session-wrap-up commits to an existing feature branch. Use `/commit-and-push-by-feature` to move the work onto `main` or `master` and push it there, or stop and report a blocker if that cannot be done safely.
 - If pre-commit hooks fail, fix and retry.
 - Never use GitHub Actions for deployment. Only use manual deploy scripts, Makefiles, or CLI commands.
 - Never deploy to production without explicit user confirmation.

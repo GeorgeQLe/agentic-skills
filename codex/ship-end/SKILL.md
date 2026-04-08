@@ -24,7 +24,7 @@ Use this skill when the user wants the current session wrapped up cleanly.
    - If a deploy contract exists but no deploy method is found, ask the user how deployment works. Do not guess.
    - Run the deploy and verify the output for errors.
    - If the deploy fails, report the error. Do not retry automatically.
-6. Commit using the `commit-and-push-by-feature` workflow. That workflow only pushes if it creates a new branch from `main`/`master`; on an existing feature branch it must commit locally and report that push was skipped.
+6. Commit and push using the `commit-and-push-by-feature` workflow. That workflow must land the resulting commits on `main` or `master`, not on an existing feature branch.
 7. Report:
    - What was accomplished
    - Test status — explicitly state whether any failing tests are expected (red phase: tests before implementation) or unexpected (regressions/bugs)
@@ -41,7 +41,7 @@ Use this skill when the user wants the current session wrapped up cleanly.
 - Do not switch or create branches unless the current state requires it.
 - Do not amend or rewrite history.
 - Stop and report if secrets are detected.
-- **Do not push to an existing feature branch.** If already on a feature branch, commit locally only. The `commit-and-push-by-feature` workflow enforces this — do not bypass it.
+- Do not push session-wrap-up commits to an existing feature branch. Use `commit-and-push-by-feature` to move the work onto `main` or `master` and push it there, or stop and report a blocker if that cannot be done safely.
 - `ship-end` only runs a deploy when `deploy.md` or `tasks/deploy.md` explicitly documents a manual deployment workflow. Repos without one are assumed to auto-deploy or require no manual deploy step.
 - Never use GitHub Actions for deployment. Only use manual deploy scripts, Makefiles, or CLI commands.
 - Never deploy to production without explicit user confirmation.

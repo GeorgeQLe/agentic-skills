@@ -23,7 +23,7 @@ Ship already-finished work, commit it, optionally deploy it, and plan the next s
    - Read `CLAUDE.md` to understand current progress.
    - Update `tasks/todo.md` — mark completed items as done.
    - Update `tasks/history.md` — append a brief record of what was accomplished. Create it if needed.
-   - Commit using the `$commit-and-push-by-feature` workflow. That workflow only pushes if it creates a new branch from `main`/`master`; on an existing feature branch it must commit locally and report that push was skipped.
+   - Commit and push using the `$commit-and-push-by-feature` workflow. That workflow must land the resulting commits on `main` or `master`, not on an existing feature branch.
 3. Deploy (skip if `--no-deploy`):
    - Check for an explicit manual deploy contract in `deploy.md` or `tasks/deploy.md`.
    - If neither file exists, skip deploy and report `Deploy skipped: no explicit manual deploy contract (deploy.md or tasks/deploy.md)`.
@@ -48,7 +48,7 @@ Ship already-finished work, commit it, optionally deploy it, and plan the next s
        5. **Just-in-time planning:** Invoke `$plan-phases` for the new phase. This generates implementation steps and file-level detail using the full context of what was learned during prior phases.
      - If **NO:** find the next uncompleted step within the current phase.
 5. Write a self-contained implementation plan for the next step into `tasks/todo.md`, complete enough for a fresh session to execute from `tasks/todo.md` alone.
-6. Ship `tasks/todo.md`, `tasks/roadmap.md`, `tasks/manual-todo.md` (if it exists), and `tasks/phases/` (if created) via `$commit-and-push-by-feature`, honoring the branch guard.
+6. Ship `tasks/todo.md`, `tasks/roadmap.md`, `tasks/manual-todo.md` (if it exists), and `tasks/phases/` (if created) via `$commit-and-push-by-feature`, landing them on `main` or `master`.
 7. Output a brief summary:
    - What was shipped (if anything)
    - Deploy status (if deployed)
@@ -64,7 +64,7 @@ Ship already-finished work, commit it, optionally deploy it, and plan the next s
 - Create `tasks/todo.md` if it does not exist.
 - Do not amend or rewrite history.
 - Do not commit secrets.
-- **Do not push to an existing feature branch.** If already on a feature branch, commit locally only. The `$commit-and-push-by-feature` workflow enforces this — do not bypass it.
+- Do not push shipping commits to an existing feature branch. Use `$commit-and-push-by-feature` to move the work onto `main` or `master` and push it there, or stop and report a blocker if that cannot be done safely.
 - The plan must be actionable with specific file paths and technical details.
 - In Codex, `$ship` is a compatibility/manual cleanup workflow. Prefer `$run` for the normal execute-and-ship loop.
 - `ship` only runs a deploy when `deploy.md` or `tasks/deploy.md` explicitly documents a manual deployment workflow. Repos without one are assumed to auto-deploy or require no manual deploy step.

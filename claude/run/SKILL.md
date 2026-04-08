@@ -89,7 +89,7 @@ Identify the next incomplete unit of work from the phased plan, build an executi
 - Keep context footprint minimal — don't read the entire codebase, only files relevant to this work.
 - If the work can't be completed due to a blocker, document the blocker in `tasks/todo.md` and stop.
 - Follow the test strategy annotated on each phase (`tdd`, `tests-after`, or `none`). Do not skip test steps for `tdd` phases.
-- **Do not push to an existing feature branch.** If already on a feature branch, commit locally only. The `/commit-and-push-by-feature` workflow enforces this — do not bypass it.
+- Do not push shipping commits to an existing feature branch. Use `/commit-and-push-by-feature` to move the work onto `main` or `master` and push it there, or stop and report a blocker if that cannot be done safely.
 - Each execution must be self-contained — read the plan fresh, don't rely on prior context.
 
 ## Kanban Mode (`--kanban`)
