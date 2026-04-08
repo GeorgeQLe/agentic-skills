@@ -18,7 +18,7 @@ Discover and search all available skills in this repository, grouped by workflow
    - If `$ARGUMENTS` starts with `search ` → **search mode** (filter by keyword after `search`).
 
 2. **Discover skills:**
-   - Use Glob to find all `claude/*/SKILL.md` files.
+   - Use Glob to find all `codex/*/SKILL.md` files.
    - Read the first 6 lines of each file to extract YAML frontmatter fields: `name`, `description`, `type`.
 
 3. **Group skills by workflow stage** using this static mapping:
@@ -28,7 +28,7 @@ Discover and search all available skills in this repository, grouped by workflow
    | Discovery & Market Fit | `icp`, `enterprise-icp` |
    | Planning | `brainstorm`, `brainstorm --kanban`, `plan-interview`, `plan-interview --ideas`, `plan-interview --kanban`, `experiment` |
    | Mapping | `journey-map`, `metrics` |
-   | Strategize | `roadmap`, `roadmap --kanban`, `competitive-analysis`, `gtm`, `monetization`, `positioning`, `runway-model` |
+   | Strategize | `roadmap`, `roadmap --kanban`, `competitive-analysis`, `platform-strategy`, `gtm`, `landing-copy`, `monetization`, `positioning`, `runway-model` |
    | Evaluate | `mvp-gap`, `scale-audit`, `customer-feedback`, `assumption-tracker`, `cohort-review`, `retro` |
    | Workflow | `workflow` |
    | Detail | `plan-phases` |
@@ -86,7 +86,7 @@ $brainstorm — Evaluate the codebase and suggest ideas...  [planning]
 $brainstorm --kanban — Brainstorm ideas and create kanban cards...  [planning]
 ...
 
-**49 skills** found
+**N skills** found
 ```
 
 ### Type mode (`$skills types`)
@@ -100,7 +100,7 @@ $competitive-analysis — Research competitors...
 $mvp-gap — Evaluate codebase against ICP...
 ...
 
-**49 skills** found
+**N skills** found
 ```
 
 ## Constraints
