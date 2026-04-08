@@ -18,7 +18,7 @@ Ship already-finished work, commit it, optionally deploy it, and plan the next s
    - First check conversation context for lint/typecheck/test output already produced this session (e.g., from a TDD run step). Do NOT re-run commands whose results are already available.
    - For any validation category not already run, find commands from: `CLAUDE.md`, `Makefile`/`Justfile` (check/lint/typecheck/test targets), `package.json` (lint/typecheck/check/test scripts), `pyproject.toml`/`setup.cfg`, `Cargo.toml`. If none found and no prior output exists, skip.
    - If pre-existing errors are found (from prior output or fresh runs), fix them and re-run only the failing commands to confirm. Include fixes in the step's commit (or as a separate commit if unrelated).
-   - If errors can't be auto-fixed, document them in the summary and continue.
+   - If errors can't be auto-fixed, **STOP. Do not ship.** Report the errors to the user and ask how to proceed. Never commit or push code with known build/lint/type/test failures.
 2. Ship the work:
    - Read `CLAUDE.md` to understand current progress.
    - Update `tasks/todo.md` — mark completed items as done.

@@ -32,9 +32,10 @@ for dir in "$CLAUDE_DIR"/*/ "$CODEX_DIR"/*/; do
   [[ -f "$skill_file" ]] || continue
   TOTAL_SKILLS=$((TOTAL_SKILLS + 1))
 
-  # Extract refs with PCRE negative lookbehind/lookahead.
-  # Match Claude `/skill-name` and Codex `$skill-name` references.
-  refs=$(grep -oPh '(?<![a-zA-Z0-9_/.:$-])(?:/[a-z][a-z0-9-]+|\$[a-z][a-z0-9-]+)(?![a-zA-Z0-9_/.:-])' "$skill_file" 2>/dev/null || true)
+  # Extract refs with PCRE lookarounds.
+  # Match Claude `/skill-name` and Codex `$skill-name` references only when they
+  # appear in command-like contexts, not inside file paths, HTML tags, or units.
+  refs=$(grep -oPh '(?:(?<=^)|(?<=[[:space:]`"'\''(|>:,]))(?:/[a-z][a-z0-9-]+|\$[a-z][a-z0-9-]+)(?![a-zA-Z0-9_/.:\-*]|\])' "$skill_file" 2>/dev/null || true)
 
   # Deduplicate and process
   seen_deps=""
@@ -46,6 +47,7 @@ for dir in "$CLAUDE_DIR"/*/ "$CODEX_DIR"/*/; do
 
     # Skip self-references
     [[ "$dep" == "$name" ]] && continue
+    [[ "$dep" == "skill" ]] && continue
 
     # Deduplicate
     if [[ " $seen_deps $seen_broken " == *" $dep "* ]]; then

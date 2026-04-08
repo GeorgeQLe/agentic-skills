@@ -29,7 +29,7 @@ When app scope `{app}` is active:
 
 ### 1. Load Context & Evaluate
 
-1. Read `research/enterprise-icp.md` (or `research/{app}/enterprise-icp.md`), `research/icp.md` (or `research/{app}/icp.md`), `specs/mvp-gap.md` (or `specs/{app}/mvp-gap.md`) (if they exist), codebase, and in-progress work.
+1. Read `research/enterprise-icp.md` (or `research/{app}/enterprise-icp.md`), `research/icp.md` (or `research/{app}/icp.md`), `specs/mvp-gap.md` (or `specs/{app}/mvp-gap.md`) (if they exist), codebase, and in-progress work from `tasks/roadmap.md`, `tasks/todo.md`, and `tasks/manual-todo.md` (if it exists).
 2. Evaluate the codebase across:
    - **Per-Persona Journey Coverage** — Can each stakeholder complete their workflow?
    - **Onboarding Gaps** — Self-serve, team, SSO-provisioned, migration, training

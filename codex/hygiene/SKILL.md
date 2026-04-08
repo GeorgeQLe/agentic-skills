@@ -49,6 +49,7 @@ Check expected project files exist based on project phase:
 **Always expected:**
 - `tasks/roadmap.md` — has content, not just a placeholder
 - `tasks/todo.md` — has content with checkable items (`- [ ]` or `- [x]`)
+- `tasks/manual-todo.md` — if it exists, has content with checkable items (`- [ ]` or `- [x]`) and `_(blocks: ...)_` or `_(after: ...)_` annotations
 - `tasks/history.md` — exists
 
 **Expected if specs exist:**
@@ -59,6 +60,7 @@ Check expected project files exist based on project phase:
 
 **Staleness (informational, not violations):**
 - `tasks/todo.md` has all items checked but phase isn't marked complete in `tasks/roadmap.md`
+- `tasks/manual-todo.md` has unchecked items that block completed steps in `tasks/todo.md`
 - `tasks/roadmap.md` references phases that have no corresponding detail
 
 ### 4. Audit Docs (`docs` scope)

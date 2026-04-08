@@ -27,7 +27,7 @@ When app scope `{app}` is active:
 - Also read `research/icp.md` (cross-app overview) for broader context
 
 1. **Understand the project**: Read CLAUDE.md, README, package config, and key source files to understand what the project does, its architecture, tech stack, and current state.
-2. **Check existing plans and research**: Read `tasks/roadmap.md`, `tasks/todo.md`, and specs from `specs/` (or `spec.md`) if they exist to understand work already planned or in progress — avoid suggesting things already covered. Read `research/competitive-analysis.md` (or `research/{app}/competitive-analysis.md`) if it exists — competitor gaps, market white space, and positioning weaknesses are high-signal inputs for ideation. Read `research/customer-feedback.md` (or `research/{app}/customer-feedback.md`) if it exists — "Wrong" and "New" findings are highest-signal ideation input (real user feedback that contradicts assumptions or reveals unmet needs). Read `research/metrics.md` (or `research/{app}/metrics.md`) if it exists — instrumentation gaps can generate ideas for tooling or observability improvements.
+2. **Check existing plans and research**: Read `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md` (if it exists), and specs from `specs/` (or `spec.md`) if they exist to understand work already planned or in progress — avoid suggesting things already covered. Read `research/competitive-analysis.md` (or `research/{app}/competitive-analysis.md`) if it exists — competitor gaps, market white space, and positioning weaknesses are high-signal inputs for ideation. Read `research/customer-feedback.md` (or `research/{app}/customer-feedback.md`) if it exists — "Wrong" and "New" findings are highest-signal ideation input (real user feedback that contradicts assumptions or reveals unmet needs). Read `research/metrics.md` (or `research/{app}/metrics.md`) if it exists — instrumentation gaps can generate ideas for tooling or observability improvements.
 3. **Analyse the codebase** across these dimensions:
 
    **Strategic / Product**
@@ -77,7 +77,7 @@ Present suggestions grouped by effort level, with each suggestion framed as a to
 - Provide the `/plan-interview <topic>` prompt the user can copy-paste to kick off planning.
 - Limit to 3–5 suggestions per effort level to avoid overwhelming the user.
 - Do not suggest changes that conflict with patterns established in CLAUDE.md.
-- Do not repeat work already tracked in `tasks/roadmap.md`, `tasks/todo.md`, or `specs/` (or `specs/{app}/`).
+- Do not repeat work already tracked in `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, or `specs/` (or `specs/{app}/`).
 
 ## Kanban Mode (`--kanban`)
 

@@ -34,7 +34,7 @@ c) **Fix errors.** If any pre-existing errors are found (from prior session outp
    - Re-run only the previously-failing commands to confirm the fixes.
    - These fixes will be committed alongside the current work in step 2d (or as a separate commit if the fixes are unrelated to the current feature).
 
-d) **If errors can't be auto-fixed** (e.g., requires user decision, third-party dependency issue), document them clearly in the step 5 summary and continue.
+d) **If errors can't be auto-fixed** (e.g., requires user decision, third-party dependency issue), **STOP. Do not ship.** Report the errors clearly to the user and ask how they want to proceed. Never commit or push code with known build/lint/type/test failures.
 
 ### 2. Ship the work
 a) Read the project's CLAUDE.md to understand current progress.

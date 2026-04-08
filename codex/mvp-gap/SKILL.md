@@ -29,7 +29,7 @@ When app scope `{app}` is active:
 
 ### 1. Load Context & Evaluate
 
-1. Read `research/icp.md` (or `research/{app}/icp.md`), `research/metrics.md` (or `research/{app}/metrics.md`) (if it exists — check if defined metrics can actually be measured), codebase, README, existing specs (from `specs/` or `specs/{app}/`), and any in-progress work from `tasks/`.
+1. Read `research/icp.md` (or `research/{app}/icp.md`), `research/metrics.md` (or `research/{app}/metrics.md`) (if it exists — check if defined metrics can actually be measured), codebase, README, existing specs (from `specs/` or `specs/{app}/`), and any in-progress work from `tasks/` (`tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md` if they exist).
 2. Evaluate the codebase against the ICP across these dimensions:
    - **User Journey Coverage** — Can the product replace each step in the current-state journey? If `research/journey-map.md` exists, map each gap to its journey stage.
    - **Customer Journey Coverage** — Discovery, evaluation, trial, purchase, provisioning, onboarding
