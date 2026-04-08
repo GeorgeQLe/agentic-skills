@@ -36,7 +36,7 @@ When app scope `{app}` is active:
 - Read `research/metrics.md` (or `research/{app}/metrics.md`) if it exists — check if defined metrics can actually be measured (instrumentation gaps are MVP gaps)
 - Read CLAUDE.md, README, package config for project conventions
 - Read existing specs from `specs/` (or `specs/{app}/`) for planned but unbuilt features
-- Read `tasks/roadmap.md` and `tasks/todo.md` if they exist for work in progress
+- Read `tasks/roadmap.md`, `tasks/todo.md`, and `tasks/manual-todo.md` if they exist for work in progress
 
 ### 2. Analyse the Codebase
 
@@ -199,4 +199,4 @@ Pick one:
 - **Prioritise by market impact**, not technical interest. Things that block the first sale come before things that block the 10th.
 - **If no code exists yet**, report that clearly and suggest running `/plan-interview` to design the solution first. Do not fabricate gaps for a nonexistent codebase.
 - **Include `/plan-interview` prompts** for each gap so the user can immediately start speccing a fix.
-- **Do not duplicate work already tracked** in `tasks/roadmap.md` or `tasks/todo.md` — note it as "in progress" instead.
+- **Do not duplicate work already tracked** in `tasks/roadmap.md`, `tasks/todo.md`, or `tasks/manual-todo.md` — note it as "in progress" instead.

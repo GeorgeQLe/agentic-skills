@@ -12,7 +12,7 @@ Generates a structured monthly update from current research state, metrics, road
 
 ## Soft Prerequisites
 
-- Read all that exist: `research/metrics.md`, `research/cohort-review-*.md`, `research/runway-model.md`, `research/customer-feedback.md`, `research/gtm.md`, `tasks/roadmap.md`, `tasks/todo.md`, `tasks/history.md`
+- Read all that exist: `research/metrics.md`, `research/cohort-review-*.md`, `research/runway-model.md`, `research/customer-feedback.md`, `research/gtm.md`, `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/history.md`
 - The more data exists, the richer the update. Works with as little as a roadmap + basic metrics.
 
 ## Process
@@ -34,7 +34,7 @@ Read all available data sources:
 - **Metrics**: `research/metrics.md` for targets, `research/cohort-review-*.md` (most recent) for actuals
 - **Financial**: `research/runway-model.md` for runway, burn, revenue
 - **Customer**: `research/customer-feedback.md` for qualitative signal
-- **Progress**: `tasks/roadmap.md`, `tasks/todo.md`, `tasks/history.md` for what was built
+- **Progress**: `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md` (if it exists), `tasks/history.md` for what was built
 - **GTM**: `research/gtm.md` for go-to-market context
 
 Also check git log for the month to see what was shipped.

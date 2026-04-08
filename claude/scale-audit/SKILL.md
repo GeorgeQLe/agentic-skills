@@ -35,7 +35,7 @@ When app scope `{app}` is active:
 - Read `research/icp.md` (or `research/{app}/icp.md`) if it exists — carry forward startup context
 - Read `specs/mvp-gap.md` (or `specs/{app}/mvp-gap.md`) if it exists — note unresolved startup gaps that become more critical at enterprise scale
 - Read CLAUDE.md, README, package config, existing specs
-- Read `tasks/roadmap.md` and `tasks/todo.md` for work in progress
+- Read `tasks/roadmap.md`, `tasks/todo.md`, and `tasks/manual-todo.md` (if it exists) for work in progress
 
 ### 2. Analyse the Codebase
 
@@ -169,5 +169,5 @@ Pick one:
 - **Every gap must cite evidence** — missing middleware, absent SCIM endpoint, no audit log table, etc.
 - **Distinguish "first enterprise deal" from "100th enterprise deal."** Early enterprise sales can tolerate workarounds; at scale they can't. Be clear about which gaps matter when.
 - **Include `/plan-interview` prompts** for each gap for immediate action.
-- **Do not duplicate work already tracked** in `tasks/roadmap.md` or `tasks/todo.md`.
+- **Do not duplicate work already tracked** in `tasks/roadmap.md`, `tasks/todo.md`, or `tasks/manual-todo.md`.
 - **If the codebase is minimal**, be honest about it — don't fabricate detailed infrastructure gaps for a prototype.

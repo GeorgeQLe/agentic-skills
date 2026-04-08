@@ -33,6 +33,7 @@ Read all available project documentation:
 - **`research/metrics.md`** — success metrics framework (if it exists) — instrumentation may need its own phase
 - **`tasks/roadmap.md`** — existing roadmap if any
 - **`tasks/todo.md`** — current work in progress
+- **`tasks/manual-todo.md`** — pending manual tasks (if it exists)
 - **`tasks/history.md`** — what's been accomplished
 - **`tasks/ideas.md`** — brainstorm output not yet specced
 - **`CLAUDE.md`** — project conventions

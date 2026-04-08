@@ -25,7 +25,7 @@ When app scope `{app}` is active:
 - Also read `research/icp.md` (cross-app overview) for broader context
 
 1. Read CLAUDE.md, README, package config, and key source files to understand the project.
-2. Check `tasks/roadmap.md`, `tasks/todo.md`, and specs from `specs/` (or `spec.md`) if they exist — avoid suggesting things already planned. Read `research/competitive-analysis.md` (or `research/{app}/competitive-analysis.md`) if it exists — competitor gaps, market white space, and positioning weaknesses are high-signal inputs for ideation. Read `research/customer-feedback.md` (or `research/{app}/customer-feedback.md`) if it exists — "Wrong" and "New" findings are highest-signal ideation input. Read `research/metrics.md` (or `research/{app}/metrics.md`) if it exists — instrumentation gaps can generate ideas.
+2. Check `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md` (if it exists), and specs from `specs/` (or `spec.md`) if they exist — avoid suggesting things already planned. Read `research/competitive-analysis.md` (or `research/{app}/competitive-analysis.md`) if it exists — competitor gaps, market white space, and positioning weaknesses are high-signal inputs for ideation. Read `research/customer-feedback.md` (or `research/{app}/customer-feedback.md`) if it exists — "Wrong" and "New" findings are highest-signal ideation input. Read `research/metrics.md` (or `research/{app}/metrics.md`) if it exists — instrumentation gaps can generate ideas.
 3. Analyse the codebase across these dimensions:
 
    **Strategic / Product**
@@ -68,7 +68,7 @@ Group suggestions by effort level (hours / days / weeks). Each suggestion should
 - Be specific and actionable — no vague aspirations.
 - Limit to 3–5 suggestions per effort level.
 - Do not suggest changes that conflict with CLAUDE.md conventions.
-- Do not repeat work already in `tasks/roadmap.md`, `tasks/todo.md`, or `specs/` (or `specs/{app}/`).
+- Do not repeat work already in `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, or `specs/` (or `specs/{app}/`).
 
 ## Kanban Mode (`--kanban`)
 

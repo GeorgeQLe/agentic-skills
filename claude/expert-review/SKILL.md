@@ -15,7 +15,7 @@ Conduct a thorough code review of this project serving as a panel of expert prog
 1. **Gather project context**:
    - Read `CLAUDE.md`, `README.md`, and any project config files to understand conventions and architecture.
    - Search for and read project documentation: specs (`specs/`, `spec.md`, `docs/`), changelogs (`CHANGELOG.md`, `CHANGES.md`, `tasks/history.md`), ADRs (`adr/`, `docs/adr/`, `docs/decisions/`), interview logs (`*-__interview.md__`), and design docs.
-   - Read `tasks/roadmap.md` if it exists to understand the full plan. Read `tasks/todo.md` for current phase and in-progress work.
+   - Read `tasks/roadmap.md` if it exists to understand the full plan. Read `tasks/todo.md` for current phase and in-progress work. Read `tasks/manual-todo.md` (if it exists) for pending manual tasks.
    - Build a mental model of **intentional decisions** — patterns, trade-offs, and constraints the team has deliberately chosen.
 
 2. **Scope**: If `$ARGUMENTS` is provided, focus the review on that path. Otherwise, review the entire project.
