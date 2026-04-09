@@ -8,7 +8,7 @@ argument-hint: <hypothesis or assumption to test>
 
 # Experiment — Lean Validation Design
 
-Takes a hypothesis (from `/assumption-tracker` or user) and designs a cheap, fast validation experiment. Covers landing page tests, fake-door tests, concierge MVPs, surveys, A/B tests, pricing tests, and smoke tests. Outputs a structured plan with hypothesis, method, success criteria, sample size, timeline, and decision rules.
+Takes a hypothesis (from `$assumption-tracker` or user) and designs a cheap, fast validation experiment. Covers landing page tests, fake-door tests, concierge MVPs, surveys, A/B tests, pricing tests, and smoke tests. Outputs a structured plan with hypothesis, method, success criteria, sample size, timeline, and decision rules.
 
 ## Soft Prerequisites
 

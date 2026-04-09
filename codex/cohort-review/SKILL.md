@@ -1,6 +1,6 @@
 ---
 name: cohort-review
-description: Post-launch metrics & funnel analysis — cohort retention, channel performance, and progress against targets from /metrics
+description: Post-launch metrics & funnel analysis — cohort retention, channel performance, and progress against targets from $metrics
 type: analysis
 version: 1.0.0
 argument-hint: "[file path to data, pasted data, or empty to be prompted]"
@@ -8,11 +8,11 @@ argument-hint: "[file path to data, pasted data, or empty to be prompted]"
 
 # Cohort Review — Post-Launch Metrics & Funnel Analysis
 
-Takes real usage/revenue data and analyzes against targets from `/metrics`. Performs cohort analysis, funnel analysis, and channel performance review. Identifies where the funnel leaks, which cohorts retain, and whether activation targets are being hit. Append-style output for tracking performance over time.
+Takes real usage/revenue data and analyzes against targets from `$metrics`. Performs cohort analysis, funnel analysis, and channel performance review. Identifies where the funnel leaks, which cohorts retain, and whether activation targets are being hit. Append-style output for tracking performance over time.
 
 ## Prerequisites
 
-- **Hard**: `research/metrics.md` (or `research/{app}/metrics.md`) must exist. If not, tell the user to run `/metrics` first and stop.
+- **Hard**: `research/metrics.md` (or `research/{app}/metrics.md`) must exist. If not, tell the user to run `$metrics` first and stop.
 - **Soft**: Read these if they exist for richer analysis:
   - `research/icp.md` — segment analysis against ICP profiles
   - `research/gtm.md` — channel strategy to compare against actual channel performance
@@ -105,7 +105,7 @@ Synthesize findings into:
 2. **Top 3 wins** — what's working better than expected
 3. **Top 3 concerns** — what's underperforming, where the funnel leaks
 4. **Biggest lever** — the single change that would most improve metrics
-5. **Assumption updates** — which assumptions from `/assumption-tracker` are validated or invalidated by this data
+5. **Assumption updates** — which assumptions from `$assumption-tracker` are validated or invalidated by this data
 
 **Present to the user.** If the session is already in Plan mode, prefer `request_user_input`; otherwise ask in plain text:
 - "Here's what the data shows. Does this match your intuition? Any context I'm missing?"
@@ -117,12 +117,12 @@ Incorporate feedback before proceeding.
 
 Include 3–5 applicable items with "Pick one:" framing:
 
-- IF activation below target: `/experiment` — Design an experiment to improve the activation funnel
-- IF channel performing poorly: `/gtm` — Revisit channel strategy with real performance data
-- IF pricing/revenue below target: `/monetization` — Update monetization strategy with real unit economics
-- IF assumptions invalidated: `/assumption-tracker` — Update register with real-data validations
-- IF metrics targets need adjustment: `/metrics` — Revisit targets based on baseline reality
-- IF overall on track: `/workflow` — Check what's next in the project lifecycle
+- IF activation below target: `$experiment` — Design an experiment to improve the activation funnel
+- IF channel performing poorly: `$gtm` — Revisit channel strategy with real performance data
+- IF pricing/revenue below target: `$monetization` — Update monetization strategy with real unit economics
+- IF assumptions invalidated: `$assumption-tracker` — Update register with real-data validations
+- IF metrics targets need adjustment: `$metrics` — Revisit targets based on baseline reality
+- IF overall on track: `$workflow` — Check what's next in the project lifecycle
 
 ### 7. Write Output
 

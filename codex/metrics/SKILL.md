@@ -12,7 +12,7 @@ Interview-driven skill that defines measurable success metrics tied to journey s
 
 ## Prerequisites
 
-- **Hard**: `research/journey-map.md` (or `research/{app}/journey-map.md` in monorepo mode) must exist. If not, tell the user to run `/journey-map` first and stop.
+- **Hard**: `research/journey-map.md` (or `research/{app}/journey-map.md` in monorepo mode) must exist. If not, tell the user to run `$journey-map` first and stop.
 - **Soft**: Read `research/icp.md` (or `research/{app}/icp.md`) and `research/customer-feedback.md` (or `research/{app}/customer-feedback.md`) if they exist — these improve target-setting and relevance.
 
 ## Process
@@ -99,15 +99,15 @@ Continue until the user confirms. Only then proceed to writing.
 
 Before writing, check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with "Pick one:" framing:
 
-- IF instrumentation gaps and no specs for them: `/plan-interview [topic]` — Spec instrumentation for the top metric gap
-- IF no `tasks/roadmap.md`: `/roadmap` — Plan the build with instrumentation phases
-- IF no `research/gtm.md`: `/gtm` — Build a GTM plan — metrics define what launch success looks like
-- IF `tasks/roadmap.md` exists: `/run` — Start building and instrumenting
-- IF product is live and no `research/customer-feedback.md`: `/customer-feedback` — Collect data to validate metric targets
-- IF product is live and real data exists: `/cohort-review` — Analyze actual performance against these targets
+- IF instrumentation gaps and no specs for them: `$plan-interview [topic]` — Spec instrumentation for the top metric gap
+- IF no `tasks/roadmap.md`: `$roadmap` — Plan the build with instrumentation phases
+- IF no `research/gtm.md`: `$gtm` — Build a GTM plan — metrics define what launch success looks like
+- IF `tasks/roadmap.md` exists: `$run` — Start building and instrumenting
+- IF product is live and no `research/customer-feedback.md`: `$customer-feedback` — Collect data to validate metric targets
+- IF product is live and real data exists: `$cohort-review` — Analyze actual performance against these targets
 
 **Impact-aware adjustments:**
-- IF downstream impact is **Major**: prepend `/research-reconcile — [N] conflicts found in downstream docs` as the first item
+- IF downstream impact is **Major**: prepend `$research-reconcile — [N] conflicts found in downstream docs` as the first item
 - IF downstream impact is **Minor**: annotate relevant skill suggestions with "(stale — [brief description])"
 
 ### 5. Write Output
@@ -132,7 +132,7 @@ For each existing downstream document:
 **Classify the impact**:
 - **None**: No downstream documents exist, or no conflicts found. Skip display entirely.
 - **Minor** (1–2 small conflicts): Display conflicts to user inline.
-- **Major** (3+ conflicts OR a foundational assumption changed — e.g., North Star metric changed, activation definition redefined, retention targets shifted significantly): Display conflicts and strongly recommend `/research-reconcile`.
+- **Major** (3+ conflicts OR a foundational assumption changed — e.g., North Star metric changed, activation definition redefined, retention targets shifted significantly): Display conflicts and strongly recommend `$research-reconcile`.
 
 Display to the user after showing the written file confirmation. This should be quick — one read per downstream doc, scan for conflicts against key decisions. Not a deep reconciliation.
 
@@ -218,7 +218,7 @@ Display to the user after showing the written file confirmation. This should be 
 |--------|---------------|--------|----------|
 | [metric] | [what needs to be built] | S/M/L | [High/Med/Low] |
 
-_Start with:_ `/plan-interview [instrumentation topic]` for high-priority gaps.
+_Start with:_ `$plan-interview [instrumentation topic]` for high-priority gaps.
 
 ## Metric Dependencies
 [How metrics relate to each other — e.g., activation drives retention, retention drives LTV. Identify which metrics are leading vs. lagging indicators.]
@@ -236,7 +236,7 @@ _Start with:_ `/plan-interview [instrumentation topic]` for high-priority gaps.
    - **Now**: [what this skill's output says instead]
 
 [For Major only:]
-> **Recommended action**: Run `/research-reconcile` to audit and fix all affected downstream documents.
+> **Recommended action**: Run `$research-reconcile` to audit and fix all affected downstream documents.
 
 ## Next Steps
 

@@ -47,7 +47,7 @@ Report findings grouped by severity:
 
 ## Follow-Through
 
-After presenting findings, write Critical and High items to `tasks/todo.md` under a `## Code Review Fixes` heading (append or replace existing section). One checkbox per finding with file:line and recommended fix. Do not add Medium/Low items. Suggest `/run` or `/investigate` to start fixing.
+After presenting findings, write Critical and High items to `tasks/todo.md` under a `## Code Review Fixes` heading (append or replace existing section). One checkbox per finding with file:line and recommended fix. Do not add Medium/Low items. Suggest `$run` or `$investigate` to start fixing.
 
 ## Constraints
 

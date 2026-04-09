@@ -12,7 +12,7 @@ Interview-driven skill that builds a go-to-market plan grounded in ICP research 
 
 ## Prerequisites
 
-- **Hard**: `research/icp.md` (or `research/{app}/icp.md` in monorepo mode) must exist. If not, tell the user to run `/icp` first and stop.
+- **Hard**: `research/icp.md` (or `research/{app}/icp.md` in monorepo mode) must exist. If not, tell the user to run `$icp` first and stop.
 - **Soft**: Read `research/competitive-analysis.md` (or `research/{app}/competitive-analysis.md`), `research/journey-map.md` (or `research/{app}/journey-map.md`), `research/customer-feedback.md` (or `research/{app}/customer-feedback.md`) if they exist — these improve specificity but aren't required.
 
 ## Process
@@ -101,15 +101,15 @@ Continue until the user confirms. Only then proceed to writing.
 
 Before writing, check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with "Pick one:" framing:
 
-- IF `specs/` exist and no `tasks/roadmap.md`: `/roadmap` — Plan the build with launch milestones from above
-- IF no `research/metrics.md`: `/metrics` — Define success metrics for the launch goals
-- IF open questions need research: `/plan-interview [top question]` — Validate the most critical open question
-- IF `tasks/roadmap.md` exists: `/run` — Start executing — the GTM plan is set
-- IF no `research/journey-map.md`: `/journey-map` — Map the customer journey to validate funnel assumptions
-- IF no `research/positioning.md`: `/positioning` — Define strategic positioning — messaging should flow from positioning
+- IF `specs/` exist and no `tasks/roadmap.md`: `$roadmap` — Plan the build with launch milestones from above
+- IF no `research/metrics.md`: `$metrics` — Define success metrics for the launch goals
+- IF open questions need research: `$plan-interview [top question]` — Validate the most critical open question
+- IF `tasks/roadmap.md` exists: `$run` — Start executing — the GTM plan is set
+- IF no `research/journey-map.md`: `$journey-map` — Map the customer journey to validate funnel assumptions
+- IF no `research/positioning.md`: `$positioning` — Define strategic positioning — messaging should flow from positioning
 
 **Impact-aware adjustments:**
-- IF downstream impact is **Major**: prepend `/research-reconcile — [N] conflicts found in downstream docs` as the first item
+- IF downstream impact is **Major**: prepend `$research-reconcile — [N] conflicts found in downstream docs` as the first item
 - IF downstream impact is **Minor**: annotate relevant skill suggestions with "(stale — [brief description])"
 
 ### 5. Write Output
@@ -134,7 +134,7 @@ For each existing downstream document:
 **Classify the impact**:
 - **None**: No downstream documents exist, or no conflicts found. Skip display entirely.
 - **Minor** (1–2 small conflicts): Display conflicts to user inline.
-- **Major** (3+ conflicts OR a foundational assumption changed — e.g., pricing model changed, primary channel shifted, launch timeline moved significantly): Display conflicts and strongly recommend `/research-reconcile`.
+- **Major** (3+ conflicts OR a foundational assumption changed — e.g., pricing model changed, primary channel shifted, launch timeline moved significantly): Display conflicts and strongly recommend `$research-reconcile`.
 
 Display to the user after showing the written file confirmation. This should be quick — one read per downstream doc, scan for conflicts against key decisions. Not a deep reconciliation.
 
@@ -242,7 +242,7 @@ Display to the user after showing the written file confirmation. This should be 
    - **Now**: [what this skill's output says instead]
 
 [For Major only:]
-> **Recommended action**: Run `/research-reconcile` to audit and fix all affected downstream documents.
+> **Recommended action**: Run `$research-reconcile` to audit and fix all affected downstream documents.
 
 ## Next Steps
 
@@ -261,5 +261,5 @@ Create the `research/` directory if it doesn't exist.
 - **Ground in research.** Every channel, message, and pricing decision should trace back to ICP insights, competitive gaps, or customer feedback.
 - **Be specific.** "Use social media" is not a channel strategy. "Post weekly technical deep-dives on Twitter targeting DevOps engineers who follow [competitor]" is.
 - **Present before writing.** Never write output files until findings have been presented and validated.
-- **Don't prescribe product changes.** GTM is about reaching and converting the market with what exists. Product gaps belong in `/mvp-gap` or `/brainstorm`.
+- **Don't prescribe product changes.** GTM is about reaching and converting the market with what exists. Product gaps belong in `$mvp-gap` or `$brainstorm`.
 - **Do not overwrite existing `research/gtm.md`** (or `research/{app}/gtm.md`) without asking the user first.

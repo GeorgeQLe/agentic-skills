@@ -262,7 +262,7 @@ Create the `research/` (or `research/{app}/`) directory if it doesn't exist.
 - **Evidence-based.** Every pricing decision must trace back to research evidence (competitor data, market benchmarks, ICP signals). Do not invent price points from intuition.
 - **Present before writing.** Never write output files until findings have been presented and validated through all three checkpoints.
 - **Don't duplicate GTM.** If `research/gtm.md` already has a pricing section, deepen it rather than contradict it. Note any conflicts and ask the user to resolve. If the session is already in Plan mode and there are 2-3 concrete choices, prefer `request_user_input`.
-- **Don't prescribe product changes.** If the product doesn't deliver enough value to support the pricing, note it as a gap — that's `/mvp-gap`'s job.
+- **Don't prescribe product changes.** If the product doesn't deliver enough value to support the pricing, note it as a gap — that's `$mvp-gap`'s job.
 - **Do not overwrite existing `research/monetization.md`** (or `research/{app}/monetization.md`) without asking the user first.
 - **Minimum research depth**: at least 6 WebSearch queries before presenting revenue model options, then targeted queries per model option.
 - **State assumptions.** Every unit economics estimate must include the assumption behind it and a confidence level. Never present estimates as facts.
