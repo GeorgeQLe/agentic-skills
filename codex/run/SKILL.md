@@ -24,7 +24,7 @@ Identify the next incomplete unit of work from the phased plan, build an executi
    - What the step requires
    - Which files will be created or modified
    - The approach and any trade-offs
-8. Use `update_plan` to track the proposed work. If the session is already in Plan mode and a structured choice would help, use `request_user_input`. Otherwise ask for approval with a concise plain-text question. Wait for approval before writing any code.
+8. Use `update_plan` to track the proposed work. If the session is already in Plan mode and a structured choice would help, use `request_user_input`. Otherwise ask for approval with a single concise plain-text question. Do not repeat or restate the approval ask in a second sentence. Wait for approval before writing any code.
 9. After approval, execute the plan:
    - If it is a tests-first step: write the failing tests, run them to confirm they fail.
    - If it is an implementation step: implement it, run existing tests for regressions.
@@ -78,6 +78,7 @@ Identify the next incomplete unit of work from the phased plan, build an executi
 
 - One step at a time by default, or one phase with `--phase`. Then stop and let the user decide what is next.
 - Always present the plan and get approval before executing. Do not assume a Claude-style `EnterPlanMode` or clear-context accept flow exists.
+- The approval gate should be one question only. Avoid back-to-back variants like "Approve and I'll run..." followed by a second restatement of the same action.
 - Keep context footprint minimal — only read files relevant to the current step.
 - If a blocker prevents completion, document it in `tasks/todo.md` and stop.
 - Follow the test strategy annotated on each phase. Do not skip test steps for `tdd` phases.
