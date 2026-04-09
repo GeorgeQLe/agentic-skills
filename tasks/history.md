@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-04-08 — Tighten research skills to assume no insider knowledge
+
+- Updated 11 Codex skill prompts so research-oriented workflows default to deep, self-sufficient analysis instead of asking whether findings match the user's intuition
+- Added explicit "default stance" guidance in core research skills (`competitive-analysis`, `icp`, `positioning`, `burn-rate`) to explain terms from first principles and ask for constraints or factual corrections only when needed
+- Reworded validation checkpoints across GTM, metrics, monetization, journey-map, enterprise-icp, cohort-review, and plan-interview to request missing facts, weak assumptions, or product constraints rather than insider confirmation
+- Verified with ripgrep that the edited Codex skill set no longer contains the prior "match your intuition" / "does this feel right" checkpoint language
+- No deploy step — repo has no explicit manual deploy contract (`deploy.md` or `tasks/deploy.md`)
+
 ## 2026-04-07 — Fix skill frontmatter YAML parsing
 
 - Normalized `argument-hint` frontmatter across 55 Claude/Codex skill files from unquoted bracket syntax to quoted YAML scalars
