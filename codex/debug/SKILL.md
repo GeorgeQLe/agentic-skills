@@ -35,3 +35,10 @@ Investigate a reported problem, maintain a persistent debug changelog (`docs/deb
 - Never duplicate a previously failed fix without justification.
 - If the root cause can't be determined, report what was ruled out.
 - Always run tests after applying the fix.
+
+
+## Default Shipping Contract
+
+- If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
+- Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
+- This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.

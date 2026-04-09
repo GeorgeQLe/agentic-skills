@@ -74,6 +74,7 @@ Create or update the current repository's `CLAUDE.md` with workflow orchestratio
    - **No Laziness**: Find root causes. No temporary fixes. Senior developer standards.
    - **Minimal Impact**: Changes should only touch what's necessary. Avoid introducing bugs.
    - **Direct-To-Primary Git Flow**: Default to committing and pushing on the repository primary branch (`main` when present, otherwise `master`). Do not introduce or continue feature-branch workflows unless the user explicitly asks for them.
+   - **Always Ship Mutations**: If a task creates or modifies tracked files, finish by committing and pushing all intended changes before stopping unless the user explicitly says not to. Do not leave a dirty tracked tree or unpushed commits behind.
    - **No GitHub Actions**: Do not create, modify, or suggest GitHub Actions workflows. This project does not use GitHub Actions for CI/CD.
    ```
 
@@ -96,3 +97,10 @@ Installed workflow orchestration into ./CLAUDE.md
 - Insert the block exactly once — if it already exists, replace rather than duplicate.
 - Preserve all other existing content in `./CLAUDE.md`.
 - Do not modify any file other than `./CLAUDE.md`.
+
+
+## Default Shipping Contract
+
+- If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
+- Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
+- This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.

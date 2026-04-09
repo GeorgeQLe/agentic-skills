@@ -98,3 +98,10 @@ After generating and displaying the ideas:
 2. Report: "Created X new cards in Backlog, skipped Y existing."
 
 Kanban operations are additive — if any kanban command fails, warn and continue. Brainstorm output to `tasks/ideas.md` must always succeed.
+
+
+## Default Shipping Contract
+
+- If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
+- Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
+- This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.

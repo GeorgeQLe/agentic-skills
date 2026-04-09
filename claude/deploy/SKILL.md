@@ -139,3 +139,10 @@ If `$ARGUMENTS` contains `--status`, skip deployment and jump to step 7 (stalene
 - The ledger (`tasks/deploys.md`) is the only file this skill writes to. Do not modify other task files.
 - When computing staleness, only count `success` entries — `failed` deploys do not reset the staleness clock.
 - Keep the ledger concise: the table is the primary record, the details block is supplementary. Do not duplicate commit lists in both places.
+
+
+## Default Shipping Contract
+
+- If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
+- Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
+- This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.

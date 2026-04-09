@@ -227,3 +227,10 @@ Create the `research/experiments/` directory if it doesn't exist.
 - **Include decision rules.** Every experiment must specify what happens for each possible outcome. No experiment should end with "we'll figure it out."
 - **Reference benchmarks.** Success thresholds should be grounded in industry benchmarks or competitor data, not arbitrary numbers.
 - **Don't overdesign.** A simple survey can validate an assumption just as well as an elaborate A/B test. Recommend the simplest method that produces a clear signal.
+
+
+## Default Shipping Contract
+
+- If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
+- Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
+- This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.

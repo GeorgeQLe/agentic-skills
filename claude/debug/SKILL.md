@@ -105,3 +105,10 @@ Investigate a reported problem, maintain a persistent debug changelog (`docs/deb
 - Never duplicate a previously failed fix without a clear reason why it will work this time.
 - If the fix requires changes outside the current project (infra, env vars, external service), document what's needed in the changelog entry instead of attempting it.
 - Keep changelog entries concise but complete — they are the institutional memory for debugging.
+
+
+## Default Shipping Contract
+
+- If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
+- Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
+- This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.

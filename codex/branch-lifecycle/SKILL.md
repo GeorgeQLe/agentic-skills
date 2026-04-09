@@ -147,3 +147,10 @@ This is an exception workflow. The default repository policy is direct-to-primar
 - Never cherry-pick the full branch implicitly; salvage is commit-selective by default.
 - If the working tree is dirty and the requested action is mutating, warn first and stop unless the user explicitly wants to continue.
 - Prefer reporting and stopping over making branch-history decisions silently.
+
+
+## Default Shipping Contract
+
+- If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
+- Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
+- This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.

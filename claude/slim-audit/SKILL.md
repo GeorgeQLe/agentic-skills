@@ -131,3 +131,10 @@ Items that look reducible but have ambiguous usage patterns or unclear intent. E
 - Every recommendation must include a concrete "proposed approach," not just "simplify this."
 - Prefer many small, independent reductions over large sweeping refactors — smaller changes are safer and easier to review.
 - If the codebase has no specs or documentation, proceed with the audit but note the absence and increase the confidence threshold for recommendations.
+
+
+## Default Shipping Contract
+
+- If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
+- Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
+- This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.

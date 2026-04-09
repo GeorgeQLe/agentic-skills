@@ -257,3 +257,10 @@ Create the `research/` directory if it doesn't exist.
 - **Present before writing.** Never write output files until the framework has been presented and validated.
 - **Tie to journey stages.** Every non-business metric must reference a specific stage or moment from the journey map.
 - **Do not overwrite existing `research/metrics.md`** (or `research/{app}/metrics.md`) without asking the user first.
+
+
+## Default Shipping Contract
+
+- If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
+- Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
+- This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.

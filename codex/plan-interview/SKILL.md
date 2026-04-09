@@ -78,3 +78,10 @@ When `$ARGUMENTS` contains `--ideas`, read `tasks/ideas.md` and run the intervie
 6. If the user stops partway through, write deliverables for completed ideas and note which remain.
 
 Do not repeat work already in `tasks/roadmap.md`, `tasks/todo.md`, or `specs/`.
+
+
+## Default Shipping Contract
+
+- If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
+- Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
+- This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.
