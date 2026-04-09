@@ -110,3 +110,10 @@ Discover and search all available skills in this repository, grouped by workflow
 - Use the static stage mapping for stage grouping; use the `type` frontmatter field for type grouping.
 - Keep output compact — one line per skill, no extra detail beyond name, description, and type tag.
 - In search mode, if no skills match the keyword, print: `No skills matching "<keyword>"`.
+
+
+## Default Shipping Contract
+
+- If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
+- Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
+- This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.

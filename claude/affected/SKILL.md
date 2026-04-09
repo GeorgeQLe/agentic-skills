@@ -60,3 +60,10 @@ Determine which packages and apps in the monorepo are affected by current change
 - Do not run tests — only analyze and recommend.
 - If the monorepo tool is Turborepo, prefer Turbo-native filtering where possible.
 - Keep the output concise — list packages, not individual files (unless scoped to a single package).
+
+
+## Default Shipping Contract
+
+- If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
+- Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
+- This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.

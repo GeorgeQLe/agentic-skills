@@ -392,3 +392,10 @@ Create the `research/` (or `research/{app}/`) directory if it doesn't exist.
 - **Present before writing.** Never write output files until findings have been presented to the user and validated through the checkpoint questions. The user must see and approve the analysis before anything is written to disk.
 - **Do not overwrite existing `research/platform-strategy.md`** (or `research/{app}/platform-strategy.md`) without asking the user first.
 - **Keep validation experiments lightweight.** Full experiment design belongs in `/experiment`. Here, provide just enough to estimate validation cost and timeline.
+
+
+## Default Shipping Contract
+
+- If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
+- Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
+- This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.

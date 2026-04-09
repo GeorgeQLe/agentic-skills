@@ -36,3 +36,10 @@ After presenting findings, write "Safe to Remove" items to `tasks/todo.md` under
 - Never automatically delete anything — only report and write todo items.
 - Be conservative with false positives.
 - Exclude entry points, config files, and tool-consumed files.
+
+
+## Default Shipping Contract
+
+- If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
+- Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
+- This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.

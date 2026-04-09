@@ -97,3 +97,10 @@ After presenting findings, write Critical and High items to `tasks/todo.md`:
 - Focus on substance over quantity — 5 critical findings are more valuable than 50 nitpicks.
 - **Never flag an intentional design decision as an issue.** If documentation explains why something is done a certain way, respect it. If you disagree with the decision, note it under "Documented decisions" with your reasoning, but do not classify it as a finding.
 - If no project documentation exists, proceed with the review but note the absence and recommend establishing specs or ADRs.
+
+
+## Default Shipping Contract
+
+- If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
+- Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
+- This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.

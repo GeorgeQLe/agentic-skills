@@ -246,3 +246,10 @@ Extract the target phase from the roadmap into `tasks/todo.md` as a standalone w
 - `tasks/roadmap.md` is the source of truth for the full plan. `tasks/todo.md` holds only the current phase. Do NOT put plans in CLAUDE.md or `docs/plan.md`.
 - Manual tasks MUST NOT appear in `tasks/todo.md` — they belong in `tasks/manual-todo.md` only.
 - In Mode A, do NOT restructure phases, reorder them, or change acceptance criteria. Those decisions belong to `/roadmap`. Only add implementation detail.
+
+
+## Default Shipping Contract
+
+- If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
+- Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
+- This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.

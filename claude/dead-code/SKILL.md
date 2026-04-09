@@ -99,3 +99,10 @@ After presenting findings, write actionable cleanup items to `tasks/todo.md`:
 - Be conservative with false positives — it's better to miss a dead export than to flag a used one.
 - Exclude files matching common non-import patterns: `.config.`, `.d.ts`, migration files, seed files, scripts in `bin/`.
 - If the codebase has a barrel file pattern (`index.ts` re-exports), trace through barrel files.
+
+
+## Default Shipping Contract
+
+- If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
+- Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
+- This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.

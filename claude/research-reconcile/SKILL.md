@@ -242,3 +242,10 @@ Findings are presented **interactively one at a time** via `AskUserQuestion`, no
 - **Skip absent documents.** Only run checks where both documents in a pair exist. Never flag a missing document as an error — that's `/workflow`'s job.
 - **Use subagents** for claim extraction (one per document) and cross-reference checks (one per scope group) to parallelize work.
 - **Idempotent.** Running audit twice with no changes between should produce identical output.
+
+
+## Default Shipping Contract
+
+- If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
+- Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
+- This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.

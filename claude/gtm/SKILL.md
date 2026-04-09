@@ -263,3 +263,10 @@ Create the `research/` directory if it doesn't exist.
 - **Present before writing.** Never write output files until findings have been presented and validated.
 - **Don't prescribe product changes.** GTM is about reaching and converting the market with what exists. Product gaps belong in `/mvp-gap` or `/brainstorm`.
 - **Do not overwrite existing `research/gtm.md`** (or `research/{app}/gtm.md`) without asking the user first.
+
+
+## Default Shipping Contract
+
+- If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
+- Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
+- This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.

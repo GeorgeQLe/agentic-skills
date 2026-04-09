@@ -77,3 +77,10 @@ Create the `research/` (or `research/{app}/`) directory if it doesn't exist.
 - Minimum 4 web search queries for pricing data before presenting estimates.
 - Do not prescribe architecture changes — note optimization opportunities only.
 - Do not contradict existing `research/monetization.md` — reconcile differences.
+
+
+## Default Shipping Contract
+
+- If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
+- Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
+- This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.

@@ -267,3 +267,10 @@ Create the `research/` directory if it doesn't exist.
 - **Do not prescribe UI or architecture.** Describe what the user experiences, not how to implement it. That's `/plan-interview`'s job.
 - **Present before writing.** Never write output files until findings have been presented to the user and validated. The user must see and approve the journeys before anything is written to disk.
 - **Do not overwrite existing `research/journey-map.md`** (or `research/{app}/journey-map.md`) without asking the user first.
+
+
+## Default Shipping Contract
+
+- If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
+- Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
+- This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.

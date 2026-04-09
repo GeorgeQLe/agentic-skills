@@ -191,3 +191,10 @@ Classify impact as **None**, **Minor** (cosmetic references), or **Major** (core
 - **Use subagents** for claim extraction (one per spec) and verification (one per claim group) to parallelize work.
 - **Idempotent.** Running audit twice with no changes between should produce identical output.
 - **Do not make code changes.** In fix mode, only update spec documents and `tasks/todo.md` — never modify source code.
+
+
+## Default Shipping Contract
+
+- If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
+- Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
+- This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.

@@ -49,3 +49,10 @@ Write the full plan to `tasks/roadmap.md` using this structure, and extract the 
 - Classify each step as **automated** (Claude can execute) or **manual** (requires human action — DNS config, browser testing, OAuth setup, deployment approvals, etc.). Manual tasks go in `tasks/manual-todo.md`, NOT in `tasks/todo.md`.
 - Keep the plan compatible with follow-on workflows that look for `## Phase N:` headers and `- Step N.X:` lines.
 - `tasks/roadmap.md` is the source of truth for the full plan. `tasks/todo.md` holds only the current phase. Do NOT put plans in `docs/plan.md`.
+
+
+## Default Shipping Contract
+
+- If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
+- Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
+- This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.

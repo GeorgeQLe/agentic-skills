@@ -124,3 +124,10 @@ Create the `research/` directory if it doesn't exist.
 - **Separate dated files.** Each update is a new file. Don't modify previous updates.
 - **No fabrication.** Only include metrics that have real data behind them. If a metric isn't tracked yet, omit it rather than estimate.
 - **Standard format.** Stick to the YC/First Round format — investors expect this structure.
+
+
+## Default Shipping Contract
+
+- If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
+- Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
+- This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.

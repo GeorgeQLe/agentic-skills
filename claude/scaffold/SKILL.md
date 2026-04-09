@@ -75,3 +75,10 @@ Generate a new package or app in the monorepo that follows the project's establi
 - Do not add unnecessary boilerplate — keep the scaffold minimal and consistent with existing packages.
 - If the project does not appear to be a monorepo, inform the user and ask how to proceed.
 - Do not install external dependencies beyond what the template uses.
+
+
+## Default Shipping Contract
+
+- If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
+- Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
+- This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.
