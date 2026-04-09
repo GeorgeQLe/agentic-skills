@@ -2,13 +2,13 @@
 name: monetization
 description: Research-driven monetization strategy — revenue models, pricing architecture, unit economics, and packaging grounded in ICP and competitive data
 type: research
-version: 1.1.0
+version: 1.2.0
 argument-hint: "[optional: focus area e.g. \"pricing tiers\", \"usage-based\", \"freemium\"]"
 ---
 
 # Monetization — Revenue & Pricing Strategy
 
-Deep-research skill that analyzes how to monetize the product. Combines web research on revenue models in the category with codebase analysis, ICP data, and competitive pricing to produce a monetization strategy validated through user interview checkpoints.
+Deep-research skill that analyzes how to monetize the product. Combines web research on revenue models in the category with codebase analysis, ICP data, and competitive pricing to produce a monetization strategy that stands on research before asking the user for hard constraints or proprietary data.
 
 ## Prerequisites
 
@@ -76,8 +76,8 @@ From research evidence and product context, identify **2–4 viable revenue mode
 - **Risks**: what could go wrong? (e.g., usage-based creates unpredictable costs that enterprise procurement hates)
 
 **Checkpoint 1 — Present models with a recommendation.** If the session is already in Plan mode, prefer `request_user_input`; otherwise ask in plain text. Show all options with evidence and fit analysis. State which model you recommend and why (grounded in ICP fit, product fit, and market evidence). Then ask:
-- "I recommend [model] based on [key evidence]. Does this feel right, or should we explore a different model?"
-- "Any hard constraints I should know? (e.g., must have a free tier, can't do per-seat)"
+- "I recommend [model] based on [key evidence]. Which constraints, missing facts, or weak assumptions should change this recommendation?"
+- "Any non-negotiable pricing constraints or product realities I need to incorporate? (e.g., must have a free tier, can't do per-seat)"
 
 Incorporate feedback before proceeding.
 
@@ -108,7 +108,7 @@ For the selected model (or top 2 if the user is undecided), research and design:
 - Enterprise tier: what justifies the custom pricing? (SSO, SLA, dedicated support, compliance)
 
 **Checkpoint 2 — Present pricing architecture to the user.** If the session is already in Plan mode, prefer `request_user_input`; otherwise ask in plain text. Show tier design, price points, and packaging — cite competitor pricing benchmarks that anchor each price point, ICP willingness-to-pay signals that validate the range, and journey-stage alignment that justifies feature gates. Then ask:
-- "Does this pricing feel right for your market? Too high, too low?"
+- "Which price points, gates, or packaging assumptions need stronger evidence or should change based on hard constraints?"
 - "Any features that absolutely must be free? Any that must be gated?"
 
 Incorporate feedback before proceeding.
@@ -127,7 +127,7 @@ Estimate (with stated assumptions and confidence levels):
 If data is insufficient for estimates, state what data is needed and recommend how to gather it (e.g., "run a pricing survey", "track activation-to-conversion for 30 days").
 
 **Checkpoint 3 — Present unit economics to the user.** If the session is already in Plan mode, prefer `request_user_input`; otherwise ask in plain text. Show the estimates with assumptions, then ask:
-- "Do these assumptions feel reasonable? Any I should adjust?"
+- "Which internal numbers, targets, or assumptions should I adjust with better evidence?"
 - "What's your target margin or payback period?"
 
 ### 6. Monetization Timing & Sequencing
@@ -154,7 +154,7 @@ Check which files exist to populate the `## Next Steps` section contextually. In
 ### 8. Final Review & Write
 
 Present the **complete monetization strategy** to the user — revenue model, pricing architecture, unit economics, timing. Ask:
-- "Ready to write this to `research/monetization.md`? Anything to adjust first?"
+- "Ready to write this to `research/monetization.md`? Any constraints, missing facts, or weak assumptions to adjust first?"
 
 Only after the user confirms, write the output files.
 

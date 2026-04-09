@@ -1,13 +1,15 @@
 ---
 name: competitive-analysis
 description: Research competitors via web search — map the landscape, GTM strategies, strengths, weaknesses, and market gaps
-version: 2.2.0
+version: 2.3.0
 argument-hint: "[concept | optional: product category or specific competitors to investigate]"
 ---
 
 # Competitive Analysis — Market Landscape Research
 
 Conduct deep web-based research to compile a comprehensive competitive landscape for the project. Uses web search to identify competitors, evaluate their maturity, analyse their go-to-market strategies, and surface market gaps.
+
+Default stance: assume the user has no insider knowledge of the market. Present the landscape, category terms, and recommendations from first principles so the analysis stands on its own. Ask for corrections, hard constraints, or proprietary facts, not intuition.
 
 ## Prerequisites
 
@@ -63,7 +65,7 @@ Synthesise market gaps into: **Market State** (Virgin/Sparse/Crowded), **Incumbe
 
 ### 6. Present Findings & Validate
 
-**Checkpoint 2 — Present full analysis before writing.** Show: landscape summary, key competitors, market gaps, recommended positioning, GTM insights. Ask: "Do gaps match your intuition? Which positioning resonates? Any insider knowledge?" Continue until all details are nailed down.
+**Checkpoint 2 — Present full analysis before writing.** Show: landscape summary, key competitors, market gaps, recommended positioning, GTM insights. Ask: "Which gaps, positioning claims, or assumptions need stronger evidence? Any product-specific constraints or facts I should factor in?" Continue until all details are nailed down.
 
 ### 7. Write Output
 

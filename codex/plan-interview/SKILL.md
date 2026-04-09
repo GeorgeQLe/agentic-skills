@@ -15,13 +15,13 @@ Use this skill when the user has a draft spec, feature description, or rough ide
 2. Interview the user in depth to validate assumptions, resolve ambiguities, and close gaps.
 3. If the session is already in Plan mode, prefer `request_user_input` for material decisions with 2-3 real options. Otherwise ask concise direct questions in plain text.
 4. Ask 1 to 3 focused questions per turn.
-5. **Research and recommend by default.** Use web search, upstream research docs, and codebase analysis to gather evidence before asking the user. Present findings with data, state recommendation with reasoning, user approves/adjusts/overrides. Only present options without a recommendation when insider knowledge is required. For each real choice:
+5. **Research and recommend by default.** Use web search, upstream research docs, and codebase analysis to gather evidence before asking the user. Assume the user has no insider knowledge unless they explicitly provide it. Present findings with data, define relevant terms, state a recommendation with reasoning, and ask the user to approve, adjust, or override based on hard constraints, proprietary facts, or corrections. Only present options without a recommendation when internal constraints, preferences, or missing facts make evidence insufficient. For each real choice:
    - Explain the options with evidence
    - Give a brief pros and cons comparison
    - State a recommendation and why
    - Explain how to mitigate the recommended option's downside when useful
 6. Continue until goals, user stories, architecture, data models, APIs, UX flows, edge cases, security, performance, and scope boundaries are all covered.
-7. **Coverage checkpoint** — Before concluding, present a structured summary: list each area covered with key decisions made and the evidence/reasoning that supported each. Ask: "Does this cover everything? Any areas to revisit?"
+7. **Coverage checkpoint** — Before concluding, present a structured summary: list each area covered with key decisions made and the evidence/reasoning that supported each. Ask: "Does this cover everything? Any constraints, missing facts, or areas to revisit?"
 
 ## Deliverables
 

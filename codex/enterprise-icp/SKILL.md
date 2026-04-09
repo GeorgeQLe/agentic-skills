@@ -1,13 +1,13 @@
 ---
 name: enterprise-icp
 description: Enterprise multi-stakeholder discovery — map personas, deal-killers, and the evaluation-to-renewal lifecycle
-version: 2.1.0
+version: 2.2.0
 argument-hint: "[optional: target industry or market segment]"
 ---
 
 # Enterprise ICP — Multi-Stakeholder Discovery Interview
 
-Interview the founder to map the enterprise problem space. Enterprise sales involve multiple stakeholders, each with their own journey and deal-killing "no."
+Research-first mapping of the enterprise problem space. Enterprise sales involve multiple stakeholders, each with their own journey and deal-killing "no."
 
 ## Workflow
 
@@ -25,14 +25,14 @@ When app scope `{app}` is active:
 - Also read `research/icp.md` (cross-app overview) for broader context
 
 1. Read `research/icp.md` (or `research/{app}/icp.md`) if it exists as a starting point. Read the codebase if one exists. Before asking the user how enterprise differs, use WebSearch to research enterprise buying patterns in this product category (e.g., "[category] enterprise buying process", "[category] enterprise vs SMB"). Present the startup ICP summary alongside enterprise research findings, then ask how enterprise differs.
-2. Interview the user (1–3 questions per turn, research and recommend by default — present findings with data, state recommendation, user approves/adjusts/overrides; only ask without recommendation when insider knowledge is required) covering:
+2. Interview the user (1–3 questions per turn, research and recommend by default — assume the user has no insider knowledge unless they explicitly provide it; present findings with data, define relevant terms, state a recommendation, and ask for hard constraints, proprietary facts, or corrections; only ask without a recommendation when evidence cannot resolve the choice) covering:
    - **Stakeholder Map** — Which personas matter? End users, team admin, IT/Security, procurement, champion, exec sponsor
    - **Per-Persona Journeys** — What each stakeholder needs to see/do/approve; their deal-killing "no"
    - **Enterprise Lifecycle** — Evaluation → pilot → rollout → renewal requirements
    - **Deal-Killer Requirements** — SSO/SAML, SOC 2, GDPR, HIPAA, audit logs, data residency, RBAC, SLAs
    - **Onboarding Complexity** — Self-serve, team, SSO-provisioned, migration, training needs
    - **Enterprise Value Prop** — How value shifts from startup, ROI story, platform positioning
-3. **Present findings before writing.** Summarise with evidence: stakeholder map (citing interview responses and research data), critical deal-killers (citing competitor requirements, industry standards, or research findings), lifecycle friction points (citing specific examples or research findings), and key insights. Ask: "Does this capture everything? Any gaps or corrections?" Continue with follow-up questions until all non-trivial details are nailed down.
+3. **Present findings before writing.** Summarise with evidence: stakeholder map (citing interview responses and research data), critical deal-killers (citing competitor requirements, industry standards, or research findings), lifecycle friction points (citing specific examples or research findings), and key insights. Ask: "Which enterprise constraints, missing stakeholders, or weak assumptions should change this analysis?" Continue with follow-up questions until all non-trivial details are nailed down.
 4. Only after user confirms, write the output files.
 
 ## Deliverables

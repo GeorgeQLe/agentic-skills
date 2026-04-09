@@ -2,13 +2,13 @@
 name: metrics
 description: Define success metrics framework — activation, engagement, retention, growth, and business metrics tied to journey stages
 type: analysis
-version: 1.2.0
+version: 1.3.0
 argument-hint: "[optional: focus area e.g. \"activation\", \"retention\"]"
 ---
 
 # Metrics — Success Metrics Framework
 
-Interview-driven skill that defines measurable success metrics tied to journey stages. Each metric gets a definition, measurement method, target with rationale, and instrumentation requirements.
+Research-first skill that defines measurable success metrics tied to journey stages. Each metric gets a definition, measurement method, target with rationale, and instrumentation requirements.
 
 ## Prerequisites
 
@@ -42,7 +42,7 @@ When app scope `{app}` is active:
 
 If the session is already in Plan mode, prefer `request_user_input` for 1-3 focused questions with concrete choices. Otherwise ask concise plain-text questions.
 
-**Research and recommend by default.** For each decision point, use web search, upstream research docs (`research/*.md`), and codebase analysis to gather evidence before asking the user. Present your findings with data, state your recommendation with reasoning, and ask the user to approve, adjust, or override. Only ask the user to choose without a recommendation when the decision genuinely requires insider knowledge they haven't shared (internal constraints, personal preferences, strategic bets).
+**Research and recommend by default.** For each decision point, use web search, upstream research docs (`research/*.md`), and codebase analysis to gather evidence before asking the user. Assume the user has no insider knowledge unless they explicitly provide it. Present findings with data, define any relevant terms, state a recommendation with reasoning, and ask the user to approve, adjust, or override based on hard constraints, proprietary facts, or corrections. Only ask the user to choose without a recommendation when the decision genuinely depends on internal constraints, personal preferences, or strategic bets that cannot be inferred from evidence.
 
 Cover these metric categories (skip or abbreviate areas the user has already addressed in `$ARGUMENTS`):
 
@@ -91,7 +91,7 @@ Revenue, unit economics, sustainability.
 4. The "North Star" metric — the single metric that best captures overall health, with evidence for why this metric was chosen over alternatives
 
 If the session is already in Plan mode, prefer `request_user_input`; otherwise ask in plain text:
-- "Does this metrics framework capture what success looks like? Any metrics missing or targets off?"
+- "Does this metrics framework capture success clearly? Which targets, assumptions, or instrumentation gaps should I revise?"
 
 Continue until the user confirms. Only then proceed to writing.
 

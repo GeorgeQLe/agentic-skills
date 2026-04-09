@@ -2,13 +2,15 @@
 name: positioning
 description: Strategic positioning (April Dunford style) — competitive alternatives, unique attributes, value, target segment, market category
 type: research
-version: 1.0.0
+version: 1.1.0
 argument-hint: "[optional: focus area e.g. \"category\", \"vs competitor X\"]"
 ---
 
 # Positioning — Strategic Product Positioning
 
 Develops rigorous product positioning using the "Obviously Awesome" methodology (April Dunford). Determines competitive alternatives, unique attributes, customer value, target segment, and market category. Positioning is upstream of messaging — it determines *how you frame the product category itself*.
+
+Default stance: assume the user has no insider knowledge of the market. The positioning recommendation must stand on research, customer evidence, and codebase reality before asking for user input. Ask for corrections, proprietary differentiators, and hard constraints, not intuition.
 
 ## Prerequisites
 
@@ -58,7 +60,7 @@ NOT just direct competitors. Include:
 - **Do nothing** — the status quo (this is often the real competitor)
 
 Present and validate with the user. If the session is already in Plan mode and there are 2-3 concrete choices, prefer `request_user_input`; otherwise ask in plain text:
-- "Here are the competitive alternatives I see. What would your best customers actually use if your product disappeared tomorrow?"
+- "Here are the competitive alternatives the evidence suggests. Which, if any, are factually wrong, missing, or mis-prioritized for this product?"
 
 ### 4. Step 2 — Unique Attributes (What Do You Have That Alternatives Don't?)
 
@@ -72,7 +74,7 @@ For each competitive alternative, identify what's genuinely different about this
 **Be ruthless.** Only include attributes that are truly unique, not "we also do X." If competitors also have it, it's table stakes, not positioning.
 
 If the session is already in Plan mode, prefer `request_user_input`; otherwise ask in plain text:
-- "Are these genuinely unique? Would your most discerning customer agree these are different?"
+- "Which of these attributes are unsupported, overstated, or missing a proprietary differentiator I should include?"
 
 ### 5. Step 3 — Value (What Does Uniqueness Enable for Customers?)
 
@@ -90,7 +92,7 @@ Value categories:
 - **Improves quality** — better outcomes than alternatives
 
 If the session is already in Plan mode, prefer `request_user_input`; otherwise ask in plain text:
-- "Is this the value your customers actually experience, or the value you hope they'll experience?"
+- "Which value claims are strongest, and which need better evidence or should be removed?"
 
 ### 6. Step 4 — Target Segment (Who Cares Most About This Value?)
 
@@ -101,7 +103,7 @@ From the ICP analysis, identify the segment that values these unique attributes 
 - Who gets the most value from what makes you different (not just from the category)?
 
 If the session is already in Plan mode, prefer `request_user_input`; otherwise ask in plain text:
-- "This is the segment I'd position for. Does this feel right, or is there a segment that values your uniqueness even more?"
+- "This is the segment the evidence supports. Which commercial constraints, missing segments, or product realities should change this recommendation?"
 
 ### 7. Step 5 — Market Category (What Context Makes Your Value Obvious?)
 
@@ -131,7 +133,7 @@ Combine all five steps into a positioning statement:
 **[product name]** [key differentiator]
 
 Present the full positioning framework and statement to the user. Ask:
-- "Does this positioning feel true to what your best customers experience?"
+- "Which parts of this positioning need stronger evidence, better wording, or adjustment for product realities?"
 - "Would this change how you describe the product on your homepage?"
 - "Ready to write this to `research/positioning.md`?"
 

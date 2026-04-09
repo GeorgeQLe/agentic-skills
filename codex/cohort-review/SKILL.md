@@ -2,7 +2,7 @@
 name: cohort-review
 description: Post-launch metrics & funnel analysis — cohort retention, channel performance, and progress against targets from $metrics
 type: analysis
-version: 1.0.0
+version: 1.1.0
 argument-hint: "[file path to data, pasted data, or empty to be prompted]"
 ---
 
@@ -108,7 +108,7 @@ Synthesize findings into:
 5. **Assumption updates** — which assumptions from `$assumption-tracker` are validated or invalidated by this data
 
 **Present to the user.** If the session is already in Plan mode, prefer `request_user_input`; otherwise ask in plain text:
-- "Here's what the data shows. Does this match your intuition? Any context I'm missing?"
+- "Here's what the data shows. Which conclusions need adjustment based on data quality limits, missing fields, or known operational context?"
 - "Any data quality issues that would change these conclusions?"
 
 Incorporate feedback before proceeding.

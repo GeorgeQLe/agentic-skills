@@ -1,13 +1,15 @@
 ---
 name: icp
 description: Research-driven ICP discovery — web search + codebase analysis to identify multiple ICPs, pain points, value props, and cross-ICP prioritization
-version: 3.3.0
+version: 3.4.0
 argument-hint: <spec file path or concept/idea>
 ---
 
 # ICP — Research-Driven Customer Discovery
 
 Automated research that identifies **multiple ICP candidates**, maps pain points and value props, and selects a primary ICP. Uses web search + codebase analysis instead of interviews.
+
+Default stance: assume the user has no insider knowledge of the market. Explain segments, pain signals, and tradeoffs from first principles so the recommendation is defensible without founder intuition. Ask for corrections, hard constraints, or proprietary facts only when needed.
 
 ## Workflow
 
@@ -26,7 +28,7 @@ Automated research that identifies **multiple ICP candidates**, maps pain points
    - **Market Sizing** — TAM/SAM/SOM via bottom-up (company counts × deal size) and top-down (industry reports, competitor revenue). Flag confidence level.
    - **Value Proposition** — unique wedge, "aha moment"
    - **Customer ↔ User Dynamics** — buying process, provisioning, adoption
-6. **Checkpoint 2 — Present scoring matrix and primary ICP selection.** Show Value x Accessibility scores. Ask: "Does this ranking match your intuition?" Incorporate feedback.
+6. **Checkpoint 2 — Present scoring matrix and primary ICP selection.** Show Value x Accessibility scores. Ask: "Which constraints, missing segments, or weak evidence should change this ranking?" Incorporate feedback.
 7. **Cross-ICP analysis**: Shared pains, conflicts, product line recs, build sequence, lowest-hanging-fruit x most-value prioritization.
 8. **Checkpoint 3 — Present cross-ICP analysis and build sequence.** Show shared pains with source data, conflicts with specific examples, and build sequence rationale grounded in the scoring matrix. Ask: "Does this sequencing make sense?" Incorporate feedback.
 9. **Final review**: Present complete findings summary. Ask: "Ready to write? Anything to adjust?" Only write after user confirms.
