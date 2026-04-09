@@ -125,7 +125,7 @@ Display directly to the user (no files written in audit mode):
 
 ### Warnings (X)
 - **codex/poketo-kanban/** — missing codex mirror (exists in claude/ only)
-- **docs/skills-reference.md** — `/hygiene` not listed in Quick Reference table
+- **docs/skills-reference.md** — `$hygiene` not listed in Quick Reference table
 
 ### Info (X)
 - **claude/ship/SKILL.md** — no `## Constraints` section (consider adding)

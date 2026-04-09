@@ -8,7 +8,7 @@ argument-hint: "[optional: focus area e.g. \"technical\", \"regulatory\", \"fina
 
 # Risk Register — Systematic Risk Assessment
 
-Identifies and tracks risks beyond product/market: key-person, technical, regulatory, competitive, financial, and execution risks. Complements `/assumption-tracker` (which focuses on product/market assumptions) with broader organizational and environmental risks.
+Identifies and tracks risks beyond product/market: key-person, technical, regulatory, competitive, financial, and execution risks. Complements `$assumption-tracker` (which focuses on product/market assumptions) with broader organizational and environmental risks.
 
 ## Soft Prerequisites
 
@@ -163,15 +163,15 @@ Only after confirmation, write the output file.
 ## Next Steps
 
 Pick one:
-- `/assumption-tracker` — Cross-reference product/market assumptions with these broader risks
-- `/workflow` — Check overall project status
+- `$assumption-tracker` — Cross-reference product/market assumptions with these broader risks
+- `$workflow` — Check overall project status
 ```
 
 Create the `research/` directory if it doesn't exist.
 
 ## Constraints
 
-- **Complement, don't duplicate.** Product/market assumptions belong in `/assumption-tracker`. This skill covers organizational, technical, regulatory, competitive, financial, and execution risks.
+- **Complement, don't duplicate.** Product/market assumptions belong in `$assumption-tracker`. This skill covers organizational, technical, regulatory, competitive, financial, and execution risks.
 - **Be specific.** "Competition" is not a risk. "Well-funded competitor X launching a free tier in Q3" is.
 - **Present before writing.** Never write until the user validates the assessment.
 - **Score honestly.** Don't inflate risks to seem thorough. Low-probability risks should be scored low.

@@ -1,13 +1,13 @@
 ---
 name: brainstorm
-description: Evaluate the codebase and suggest ideas to explore with /plan-interview
+description: Evaluate the codebase and suggest ideas to explore with $plan-interview
 version: 1.1.0
 argument-hint: "[--kanban]"
 ---
 
 # Brainstorm
 
-Evaluate the current codebase and generate actionable suggestions that the user can take into `/plan-interview` for deeper exploration and specification.
+Evaluate the current codebase and generate actionable suggestions that the user can take into `$plan-interview` for deeper exploration and specification.
 
 ## Workflow
 
@@ -61,7 +61,7 @@ Append the suggestions to `tasks/ideas.md` (do not overwrite existing content). 
 Group suggestions by effort level (hours / days / weeks). Each suggestion should include:
 - A specific, actionable title
 - A one-line description with the concrete codebase signal that motivates it
-- A `/plan-interview <topic>` prompt the user can copy-paste
+- A `$plan-interview <topic>` prompt the user can copy-paste
 
 ## Constraints
 

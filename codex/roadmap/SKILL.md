@@ -30,14 +30,14 @@ Build or update `tasks/roadmap.md` by synthesizing all project documentation, in
 
 ## Deliverables
 
-- `tasks/roadmap.md` — Phased plan with goals, scope, acceptance criteria, and optional `**Manual Tasks:**` per phase (no implementation steps — those are generated just-in-time by `/plan-phases` when a phase is started)
+- `tasks/roadmap.md` — Phased plan with goals, scope, acceptance criteria, and optional `**Manual Tasks:**` per phase (no implementation steps — those are generated just-in-time by `$plan-phases` when a phase is started)
 
 ## Constraints
 
 - Always interview — do not produce a roadmap without user input.
 - Do not modify files in `specs/`.
-- Phase headers must use `## Phase N: [Title]` format for `/run` compatibility.
-- Do not include TDD steps or file-level detail — that's `/plan-phases`' job.
+- Phase headers must use `## Phase N: [Title]` format for `$run` compatibility.
+- Do not include TDD steps or file-level detail — that's `$plan-phases`' job.
 - `tasks/roadmap.md` is the source of truth. Do not put roadmap content in CLAUDE.md.
 
 ## Kanban Mode (`--kanban`)
