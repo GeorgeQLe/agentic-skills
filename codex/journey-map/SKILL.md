@@ -1,13 +1,13 @@
 ---
 name: journey-map
 description: Map user journeys (per-use-case task flows) and customer journey (trigger→discovery→aha→conversion→retention) through the product
-version: 1.1.0
+version: 1.2.0
 argument-hint: "[optional: specific use case or journey stage to focus on]"
 ---
 
 # Journey Map — User & Customer Journey Mapping
 
-Interview the user to map how people flow through the product (user journey) and through the business relationship (customer journey). Requires both `research/icp.md` and at least one `specs/*.md`.
+Research-first journey mapping for how people flow through the product (user journey) and through the business relationship (customer journey). Requires both `research/icp.md` and at least one `specs/*.md`.
 
 ## Prerequisites
 
@@ -18,7 +18,7 @@ Interview the user to map how people flow through the product (user journey) and
 
 0. **App Scope Resolution (Monorepo Support)**: Before checking prerequisites, determine the app scope: (1) If `$ARGUMENTS` specifies an app name matching a subdirectory of `research/`, use it. (2) If `research/` contains subdirectories (excluding files), list them and ask the user which app to target; if the session is already in Plan mode and there are 2-3 concrete choices, prefer `request_user_input`, otherwise ask in plain text; if only one subdirectory exists, use it automatically. (3) If no subdirectories exist, proceed with flat structure (single-product mode). When app scope `{app}` is active: read/write research from `research/{app}/` instead of `research/`, read/write specs from `specs/{app}/` instead of `specs/`, also read `research/icp.md` (cross-app overview) for broader context.
 1. **Load context**: Read `research/icp.md` (or `research/{app}/icp.md`), `research/competitive-analysis.md` (or `research/{app}/competitive-analysis.md`), `research/enterprise-icp.md` (or `research/{app}/enterprise-icp.md`), all spec files in `specs/` (or `specs/{app}/`), codebase if it exists.
-2. **Interview — User Journeys** (1–3 questions per turn, research and recommend by default — present findings with data, state recommendation, user approves/adjusts/overrides; only ask without recommendation when insider knowledge is required):
+2. **Interview — User Journeys** (1–3 questions per turn, research and recommend by default — assume the user has no insider knowledge unless they explicitly provide it; present findings with data, define relevant terms, state a recommendation, and ask for hard constraints, proprietary facts, or corrections; only ask without a recommendation when evidence cannot resolve the choice):
    - **Identify use cases** per user profile — 3–5 core tasks, entry point, highest-value use case, frequency patterns
    - **Map task flows** per use case — entry point, steps, decision points, happy path, failure modes, output
    - **Cross-reference current state** — which ICP current-state steps does each flow replace? Where is the delta greatest/smallest?
@@ -29,7 +29,7 @@ Interview the user to map how people flow through the product (user journey) and
    - **Conversion** — what triggers payment, who decides, objections, timeline
    - **Retention & Expansion** — core habit loop, churn triggers, expansion paths, leading indicators
    - **Advocacy** — what drives recommendations, sharing channels, viral loops
-4. **Present findings before writing.** Summarise user journey overview, customer journey overview, critical moments (citing ICP data, competitive analysis, or spec evidence for each), and journey gaps (citing the evidence that reveals each gap). Ask: "Does this capture the experience? Any missing use cases or stages?" Continue until validated.
+4. **Present findings before writing.** Summarise user journey overview, customer journey overview, critical moments (citing ICP data, competitive analysis, or spec evidence for each), and journey gaps (citing the evidence that reveals each gap). Ask: "Which stages, use cases, or assumptions need correction, stronger evidence, or product-specific context?" Continue until validated.
 5. Only after user confirms, write the output files.
 
 ## Deliverables

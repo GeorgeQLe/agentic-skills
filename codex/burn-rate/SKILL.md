@@ -7,6 +7,8 @@ description: "Estimate monthly burn rate from infrastructure signals and calcula
 
 Analyzes infrastructure, third-party services, and team costs to estimate monthly burn rate, then calculates payback period and break-even against revenue projections. Bridges `$monetization` (unit economics) and `$scale-audit` (infrastructure readiness) with dollar-denominated cost projections.
 
+Default stance: assume the user does not know infrastructure pricing or SaaS cost structure in detail. Cost estimates must stand on detected services, cited pricing research, and explicit assumptions before asking the user for missing internal numbers.
+
 ## Prerequisites
 
 - **Hard**: None — can run on any codebase.
@@ -38,7 +40,7 @@ When app scope `{app}` is active:
 ### 2. Interview — Fill Gaps
 
 Ask 2-3 focused questions:
-- Present detected infrastructure with estimated costs. Ask user to confirm or correct.
+- Present detected infrastructure with estimated costs and cited pricing assumptions. Ask the user to correct factual inaccuracies or add missing internal costs, not to estimate from intuition.
 - Ask about team size, fully-loaded cost per person, and non-infra costs (marketing, tools, legal).
 - If revenue data not found in research docs, ask for current or projected MRR and cash on hand.
 
@@ -52,7 +54,7 @@ Compute with all assumptions visible:
 - **Cost per Customer** — infrastructure and total cost per customer (only if count known).
 - **Cost Optimization Opportunities** — over-provisioned resources, cheaper alternatives, free tier headroom, reserved discounts.
 
-Present analysis and confirm with user before writing.
+Present analysis and ask for factual corrections, missing internal figures, or hard constraints before writing.
 
 ### 4. Downstream Impact & Next Steps
 
