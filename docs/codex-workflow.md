@@ -43,7 +43,7 @@ These files are the shared workflow surface:
 
 - `tasks/roadmap.md`: long-range phased plan
 - `tasks/todo.md`: current execution contract
-- `tasks/manual-todo.md`: human-only tasks and blockers
+- `tasks/manual-todo.md`: human-only tasks linked to automated steps via `_(blocks: ...)_` and `_(after: ...)_` annotations
 - `tasks/history.md`: append-only execution log
 - `tasks/handoff.md`: optional session summary
 

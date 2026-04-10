@@ -23,7 +23,7 @@ Identify the next incomplete unit of work from the phased plan, build an executi
    - **If the phase has acceptance criteria but no implementation steps** (no `### Tests First` or `### Implementation` section): this phase needs just-in-time planning. **You MUST invoke `/plan-phases` for this phase** to generate implementation steps and file-level detail before proceeding. Do NOT tell the user the phase is "deferred" or that they need to run `/plan-phases` manually — this auto-invocation is the designed workflow. A phase without implementation steps is NOT deferred; it simply hasn't been decomposed yet. Only items under the `## Deferred / Future Work` heading in the roadmap are actually deferred.
 5. **Check `tasks/manual-todo.md`** (if it exists) for blocking manual tasks:
    - Look for unchecked items with `_(blocks: Step N.X)_` annotations matching the step about to be executed.
-   - If a blocking manual task is found, warn the user: "**Manual task blocking this step:** [task]. Complete it before proceeding." Do NOT skip the step — let the user decide.
+   - If a blocking manual task is found, stop and ask the user how to proceed: "**Manual task blocking this step:** [task]. Complete it before proceeding." Do NOT execute the step unless the manual task is completed or the user explicitly overrides the blocker.
 6. **Research what's needed** — read only the files relevant to the step/phase to understand existing code, patterns, and dependencies.
 7. **Enter plan mode** using the EnterPlanMode tool.
 8. **Present the execution plan** to the user:
