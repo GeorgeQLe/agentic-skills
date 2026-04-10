@@ -18,7 +18,7 @@ Identify the next incomplete unit of work from the phased plan, build an executi
    - If `$ARGUMENTS` contains `--phase`, scope the full next incomplete phase.
    - Otherwise, find the next unchecked `- [ ]` step within that phase.
    - **If the phase has acceptance criteria but no implementation steps** (no `### Tests First` or `### Implementation` section): invoke `$plan-phases` for this phase to generate implementation steps and file-level detail before proceeding.
-5. **Check `tasks/manual-todo.md`** (if it exists) for unchecked items with `_(blocks: Step N.X)_` matching the current step. If found, warn the user — do NOT skip the step, let the user decide.
+5. **Check `tasks/manual-todo.md`** (if it exists) for unchecked items with `_(blocks: Step N.X)_` matching the current step. If found, stop and ask the user how to proceed. Do NOT execute the step unless the manual task is completed or the user explicitly overrides the blocker.
 6. Research what is needed — read only the files relevant to the step.
 7. Present the execution plan to the user:
    - What the step requires
@@ -55,7 +55,9 @@ Identify the next incomplete unit of work from the phased plan, build an executi
    - **Check if the current phase is complete** (all steps checked, milestone criteria met):
      - If **YES — Phase transition:**
        1. Archive the completed phase: copy `tasks/todo.md` → `tasks/phases/phase-N.md` (create `tasks/phases/` if needed). Fill in the "On Completion" section.
-       1b. If `tasks/manual-todo.md` exists, archive it to `tasks/phases/phase-N-manual.md`. Warn (but do not block) if unchecked manual tasks remain.
+       1b. If `tasks/manual-todo.md` exists, inspect unchecked items before advancing phases:
+           - If any unchecked `_(blocks: Step N.X)_` items still apply to the completed phase, stop. Do NOT archive the manual task file, mark the phase complete, or advance to the next phase unless the user explicitly overrides the blocker.
+           - Unchecked `_(after: Step N.X)_` items are non-blocking follow-up tasks. Archive them with the phase and warn the user that they remain incomplete.
        2. Check off the phase milestone in `tasks/roadmap.md`.
        3. Copy the next phase from `tasks/roadmap.md` → overwrite `tasks/todo.md`.
        3b. Extract the next phase's manual tasks (from `**Manual Tasks:**` in roadmap) into a fresh `tasks/manual-todo.md`. If the next phase has no manual tasks, delete the file.

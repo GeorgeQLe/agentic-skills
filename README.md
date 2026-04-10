@@ -361,7 +361,7 @@ These repo files are the shared workflow surface, especially important for Codex
 |------|---------|-----------|
 | `tasks/roadmap.md` | Long-range phased plan with acceptance criteria | Created by `/roadmap`, updated by `/plan-phases` and `/ship` |
 | `tasks/todo.md` | Current phase execution contract (the primary handoff artifact) | Created by `/plan-phases`, marked up by `/run` and `/ship` |
-| `tasks/manual-todo.md` | Human-only tasks that block execution | Created by `/plan-phases`, blocks `/ship` if unchecked |
+| `tasks/manual-todo.md` | Human-only tasks linked to automated steps via `_(blocks: ...)_` and `_(after: ...)_` annotations | Created by `/plan-phases`; checked by `/run`; unchecked `_(blocks: ...)_` items can block phase transition in `/ship` |
 | `tasks/history.md` | Append-only execution log | Updated by `/ship` and `/ship-end` |
 | `tasks/handoff.md` | Optional session summary for cold starts | Created by `/handoff` |
 | `tasks/deploys.md` | Deployment history ledger with commit ranges | Created/updated by `/deploy` |
