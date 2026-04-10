@@ -2,8 +2,8 @@
 name: workflow
 description: Read-only workflow status — shows completed steps, stale items, missing steps, and recommends the next action
 type: analysis
-version: 1.2.0
-argument-hint:
+version: 1.3.0
+argument-hint: "[--catchup]"
 ---
 
 # Workflow — Status & Next Step
@@ -167,6 +167,103 @@ Pick the single highest-priority action:
 3. **Fill missing downstream steps** — in dependency order
 4. **Advance the build** — if everything is fresh, recommend `$run` by default, and only recommend `$ship` when work is already finished in the tree but not yet packaged
 
+### 6. Catchup Mode (when `--catchup` is passed)
+
+When `$ARGUMENTS` contains `--catchup`, switch from read-only diagnostics to an interactive research generation loop. Steps 0–5 still run first to produce the normal status output, then the catchup loop begins.
+
+#### 6a. Build the Catchup Queue
+
+Combine **stale items** and **missing steps** into a single ordered queue:
+
+1. **Stale items first**, ordered by severity (**Stale** before **May be stale**), then by dependency depth (upstream before downstream).
+2. **Missing steps second**, in dependency order (foundational before downstream).
+
+**Only include research-generating skills** — skills whose output is a `research/*.md` file. Specifically these skills and their outputs:
+
+| Skill | Output file |
+|-------|-------------|
+| `$icp` | `research/icp.md` |
+| `$competitive-analysis` | `research/competitive-analysis.md` |
+| `$positioning` | `research/positioning.md` |
+| `$journey-map` | `research/journey-map.md` |
+| `$metrics` | `research/metrics.md` |
+| `$gtm` | `research/gtm.md` |
+| `$monetization` | `research/monetization.md` |
+| `$assumption-tracker` | `research/assumption-tracker.md` |
+| `$enterprise-icp` | `research/enterprise-icp.md` |
+| `$customer-feedback` | `research/customer-feedback.md` |
+| `$runway-model` | `research/runway-model.md` |
+
+Exclude non-research skills (`$run`, `$ship`, `$plan-interview`, `$spec-drift`, `$roadmap`, `$cohort-review`, `$retro`, `$experiment`, `$scale-audit`, `$mvp-gap`, `$investor-update`, `$risk-register`, `$burn-rate`).
+
+If the queue is empty, display: "All research documents are present and fresh. Nothing to catch up on." and stop.
+
+#### 6b. Present the Queue
+
+Before starting, show the user the full queue:
+
+```
+## Catchup Plan
+
+Will run the following skills in order, with reconciliation after each:
+
+1. `$icp` — **missing** (foundational, no prerequisites)
+2. `$competitive-analysis` — **missing** (requires icp)
+3. `$positioning` — **missing** (requires icp + competitive-analysis)
+4. `$journey-map` — **stale** (customer-feedback.md is newer)
+5. ...
+
+Run all? (yes / skip to specific number / cancel)
+```
+
+Use `request_user_input` to let the user confirm, skip ahead, or cancel.
+
+#### 6c. Execute the Loop
+
+For each skill in the queue:
+
+1. **Announce**: Display which skill is about to run, its position in the queue (e.g., "Step 2/5"), and why it's in the queue (stale or missing).
+
+2. **Run the skill**: Invoke the skill (e.g., `$icp`, `$journey-map`). Let it run its full process including any interviews or web searches it performs.
+
+3. **Reconcile**: After the skill completes and its output file exists, run a scoped `$research-reconcile audit` to check for conflicts between the newly generated document and all existing research documents. Use the appropriate scope:
+   - After `$icp` → `$research-reconcile audit icp`
+   - After `$competitive-analysis` or `$positioning` → `$research-reconcile audit icp`
+   - After `$journey-map` or `$metrics` → `$research-reconcile audit journey`
+   - After `$gtm` or `$monetization` → `$research-reconcile audit pricing`
+   - After `$enterprise-icp` → `$research-reconcile audit enterprise`
+   - After `$customer-feedback` → `$research-reconcile audit feedback`
+   - After `$assumption-tracker` or `$runway-model` → `$research-reconcile audit all`
+
+4. **Walk through conflicts**: The reconcile skill will present findings one at a time via `request_user_input`. The user resolves each conflict before moving on.
+
+5. **Checkpoint**: After reconciliation, use `request_user_input` to ask:
+   ```
+   Step N/M complete. Continue to next (`$skill-name`), skip to a specific step, or stop here?
+   ```
+
+6. **Repeat** for the next item in the queue.
+
+#### 6d. Catchup Summary
+
+After the loop finishes (or the user stops early), display a summary:
+
+```
+## Catchup Summary
+
+| # | Skill | Status | Reconcile Findings |
+|---|-------|--------|--------------------|
+| 1 | $icp | Completed | 0 errors, 1 warning |
+| 2 | $competitive-analysis | Completed | 0 errors, 0 warnings |
+| 3 | $positioning | Skipped | — |
+| 4 | $journey-map | Completed | 1 error, 2 warnings |
+| 5 | $gtm | Not reached | — |
+
+Completed: 3/5 | Skipped: 1 | Remaining: 1
+```
+
+If there are remaining items, note what's left so the user can resume with `--catchup` later.
+
 ## Output Format
 
 Display directly to the user (no files written). If any resolved root came from fallback discovery, add a short note before the phase line:
@@ -229,13 +326,15 @@ If everything is complete and fresh:
 
 ## Constraints
 
-- **Read-only.** Do not create, modify, or delete any files.
-- **No interview.** Do not use `request_user_input`. This is a diagnostic tool.
+- **Read-only (default mode).** Do not create, modify, or delete any files — unless `--catchup` is active.
+- **No interview (default mode).** Do not use `request_user_input` — unless `--catchup` is active, where it is used for queue confirmation, reconciliation, and checkpoints.
 - **Show evidence.** Every staleness claim must include the actual timestamps.
-- **One recommendation.** The "Recommended Next Action" section must contain exactly one action, not a list.
+- **One recommendation (default mode).** The "Recommended Next Action" section must contain exactly one action, not a list. In `--catchup` mode, the queue replaces the single recommendation.
 - **Be specific.** Include the exact `$skill` command to run, not vague advice.
 - **Prefer the contract.** Canonical top-level `research/`, `specs/`, and `tasks/` win over any alias or inferred location.
 - **Be explicit about fallbacks.** If fallback discovery was used, say so plainly so the user can normalize the repo structure later.
+- **Catchup respects dependencies.** In `--catchup` mode, never run a skill before its prerequisites have been generated earlier in the queue or already exist on disk.
+- **Catchup is interruptible.** The user can stop at any checkpoint. Progress is naturally persisted because each skill writes its output file before the next one starts.
 
 
 ## Default Shipping Contract
