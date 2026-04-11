@@ -18,7 +18,7 @@ Identify the next incomplete unit of work from the phased plan, build an executi
    - If `$ARGUMENTS` contains `--phase`, scope the full next incomplete phase.
    - Otherwise, find the next unchecked `- [ ]` step within that phase.
    - **If the phase has acceptance criteria but no implementation steps** (no `### Tests First` or `### Implementation` section): invoke `$plan-phases` for this phase to generate implementation steps and file-level detail before proceeding.
-5. **Check `tasks/manual-todo.md`** (if it exists) for unchecked items with `_(blocks: Step N.X)_` matching the current step. If found, stop and ask the user how to proceed. Do NOT execute the step unless the manual task is completed or the user explicitly overrides the blocker.
+5. **Check `tasks/manual-todo.md`** (if it exists) for unchecked items with `_(blocks: Step N.X)_` matching the current step. If found, stop and tell the user: "**Manual task blocking this step:** [task]. Complete it before proceeding, or run `$guide` for step-by-step instructions." Do NOT execute the step unless the manual task is completed or the user explicitly overrides the blocker.
 6. Research what is needed — read only the files relevant to the step.
 7. Present the execution plan to the user:
    - What the step requires
