@@ -32,7 +32,7 @@ Discover and search all available skills in this repository, grouped by workflow
    | Evaluate | `mvp-gap`, `scale-audit`, `customer-feedback`, `assumption-tracker`, `cohort-review`, `retro` |
    | Workflow | `workflow` |
    | Detail | `plan-phases` |
-   | Execution | `run`, `run --kanban` |
+   | Execution | `run`, `run --kanban`, `guide` |
    | Shipping | `ship`, `ship-end`, `ship --kanban`, `ship-end --kanban` |
    | Code Quality | `expert-review`, `regression-check`, `dead-code` |
    | Debugging | `investigate`, `debug`, `trace` |

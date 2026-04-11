@@ -1,6 +1,6 @@
 # Skills Reference
 
-Complete reference for all 54 custom skills in this repository, available for both Claude Code and Codex.
+Complete reference for all 55 custom skills in this repository, available for both Claude Code and Codex.
 
 ## Tool Compatibility
 
@@ -264,6 +264,13 @@ Plan the next incomplete step (or full phase with `--phase`), execute it, ship i
 - **Claude Code**: Single-step execution with a plan-mode approval gate.
 - **Codex**: Presents the plan, asks for approval in plain chat, executes the work, commits/pushes it, applies the deploy contract if present, and refreshes `tasks/todo.md` for the next step.
 - **Use when**: Ready to implement and ship the next piece of work.
+
+### `/guide`
+Click-by-click instructions for manual blockers — DNS, OAuth, signups, and other GUI-dependent tasks.
+
+- **Arguments**: `[optional: task description or manual-todo item text]`
+- **Use when**: A manual task blocks progress and you need step-by-step instructions for a third-party dashboard or service portal.
+- **Behavior**: Reads `tasks/manual-todo.md` to auto-detect the blocker (or accepts freeform text), web-searches for current instructions, and produces project-tailored click-by-click steps with exact values and output destinations.
 
 ---
 
@@ -564,6 +571,7 @@ Archive old Done/Punt cards from the kanban board.
 | `/plan-phases` | Roadmap phase → TDD steps with file detail | planning |
 | `/run` | Execute next step and ship it (Claude: plan mode first; Codex: present plan first) | execution |
 | `/run --phase` | Execute next full phase and ship it (Claude: plan mode first; Codex: present plan first) | execution |
+| `/guide` | Click-by-click instructions for manual blockers | analysis |
 | `/scaffold` | Generate new monorepo package/app | execution |
 | `/migrate` | Guided migration with verification | execution |
 | `/decommission` | Systematic service/package removal | execution |
