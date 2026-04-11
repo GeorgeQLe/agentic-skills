@@ -1,0 +1,7 @@
+interface:
+  display_name: "Guide"
+  short_description: "Click-by-click instructions for manual blockers"
+  default_prompt: "Use $guide to get step-by-step instructions for the next manual blocker."
+
+policy:
+  allow_implicit_invocation: true
