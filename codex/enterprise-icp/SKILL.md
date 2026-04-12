@@ -1,7 +1,7 @@
 ---
 name: enterprise-icp
 description: Enterprise multi-stakeholder discovery — map personas, deal-killers, and the evaluation-to-renewal lifecycle
-version: 2.2.0
+version: 2.3.0
 argument-hint: "[optional: target industry or market segment]"
 ---
 
@@ -26,18 +26,23 @@ When app scope `{app}` is active:
 
 1. Read `research/icp.md` (or `research/{app}/icp.md`) if it exists as a starting point. Read the codebase if one exists. Before asking the user how enterprise differs, use WebSearch to research enterprise buying patterns in this product category (e.g., "[category] enterprise buying process", "[category] enterprise vs SMB"). Present the startup ICP summary alongside enterprise research findings, then ask how enterprise differs.
 2. Interview the user (1–3 questions per turn, research and recommend by default — assume the user has no insider knowledge unless they explicitly provide it; present findings with data, define relevant terms, state a recommendation, and ask for hard constraints, proprietary facts, or corrections; only ask without a recommendation when evidence cannot resolve the choice) covering:
-   - **Stakeholder Map** — Which personas matter? End users, team admin, IT/Security, procurement, champion, exec sponsor
+   - **Stakeholder Map** — Which personas matter? End users, team admin, IT/Security, procurement, champion (see Champion Enablement & Risk for deep analysis), exec sponsor
    - **Per-Persona Journeys** — What each stakeholder needs to see/do/approve; their deal-killing "no"
-   - **Enterprise Lifecycle** — Evaluation → pilot → rollout → renewal requirements
+   - **Enterprise Lifecycle** — Evaluation → pilot → rollout → expansion → renewal requirements
    - **Deal-Killer Requirements** — SSO/SAML, SOC 2, GDPR, HIPAA, audit logs, data residency, RBAC, SLAs
    - **Onboarding Complexity** — Self-serve, team, SSO-provisioned, migration, training needs
    - **Enterprise Value Prop** — How value shifts from startup, ROI story, platform positioning
+   - **Champion Enablement & Risk** — Champion identification (role, motivations), enablement toolkit (ROI calculator, case studies, exec summary deck), risk assessment (single-champion dependency, mitigation), multi-champion strategy, champion-to-executive bridge, post-sale champion role
+   - **Budget Cycle & Procurement** — Budget cycle timing, budget source (IT/departmental/innovation/exec), procurement path (vendor registration, RFP, security questionnaire, legal, MSA), pricing expectations, competitive displacement
+   - **Land-and-Expand Strategy** — Initial landing zone (smallest deployable unit), expansion triggers, expansion mechanics, expansion blockers, account growth trajectory (Year 1 → Year 2 → Year 3)
+   - **Enterprise Segmentation** — Segment definitions (mid-market, large enterprise, strategic/Global 2000), segment differences (buying process, stakeholders, deal size), target segment priority, segment-specific deal-killers. Conditional — include only if product serves multiple enterprise tiers.
+   > Areas G–J (Champion, Budget, Land-and-Expand, Segmentation) often surface together in conversation. Group related questions across areas when answers naturally span them.
 3. **Present findings before writing.** Summarise with evidence: stakeholder map (citing interview responses and research data), critical deal-killers (citing competitor requirements, industry standards, or research findings), lifecycle friction points (citing specific examples or research findings), and key insights. Ask: "Which enterprise constraints, missing stakeholders, or weak assumptions should change this analysis?" Continue with follow-up questions until all non-trivial details are nailed down.
 4. Only after user confirms, write the output files.
 
 ## Deliverables
 
-- `research/enterprise-icp.md` (or `research/{app}/enterprise-icp.md`) — Stakeholder map, per-persona journeys, deal-killers, lifecycle, value prop
+- `research/enterprise-icp.md` (or `research/{app}/enterprise-icp.md`) — Stakeholder map, per-persona journeys, enterprise lifecycle (with expansion stage), deal-killers, onboarding matrix, enterprise value prop, champion enablement & risk, budget cycle & procurement, land-and-expand strategy, enterprise segmentation (conditional), next steps
 - `research/enterprise-icp-interview.md` (or `research/{app}/enterprise-icp-interview.md`) — Raw interview log
 
 The output file must end with a `## Next Steps` section (3–5 contextual items, "Pick one:" framing) based on which files exist: conditionally suggest `$scale-audit`, `$plan-interview enterprise [feature]`, `$journey-map enterprise`, `$journey-map`, `$competitive-analysis` based on codebase existence, enterprise specs, `research/journey-map.md`, `research/icp.md`, and `research/competitive-analysis.md`.
@@ -46,7 +51,7 @@ The output file must end with a `## Next Steps` section (3–5 contextual items,
 
 - Stay in problem space — do not prescribe solutions.
 - Do not assume enterprise ICP is startup ICP scaled up — explicitly explore what changes.
-- Continue until all 6 areas are covered.
+- Continue until all 10 areas are covered.
 - Do not overwrite existing `research/enterprise-icp.md` (or `research/{app}/enterprise-icp.md`) without asking the user first.
 - Present before writing — never write until findings are validated.
 - `## Next Steps` must be the final section in the output file, with 3–5 contextual items and "Pick one:" framing.
