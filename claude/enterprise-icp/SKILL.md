@@ -2,7 +2,7 @@
 name: enterprise-icp
 description: Enterprise multi-stakeholder discovery — map personas, deal-killers, and the evaluation-to-renewal lifecycle
 type: research
-version: 2.1.0
+version: 2.3.0
 argument-hint: "[optional: target industry or market segment]"
 ---
 
@@ -52,7 +52,7 @@ Determine which personas are relevant for this product's enterprise market. For 
 - **Team/workspace admin** — Configures the product, manages seats, sets permissions, handles team onboarding.
 - **IT / Security** — Evaluates compliance posture, SSO/SAML requirements, data residency, audit logging, network security.
 - **Procurement / Legal** — Contract terms, volume pricing, legal review, DPA/BAA requirements.
-- **Internal champion** — The person inside the customer org who advocates for adoption and drives the deal forward.
+- **Internal champion** — The person inside the customer org who advocates for adoption and drives the deal forward. See section 7 (Champion Enablement & Risk) for deep analysis of identification, enablement, risk, and multi-champion strategy.
 - **Executive sponsor** — Budget authority, signs off on spend, cares about ROI and strategic alignment.
 
 Not all personas apply to every product. Identify which are relevant and which can be skipped.
@@ -64,10 +64,11 @@ For each relevant stakeholder:
 - What's their "no" — the thing that kills the deal if missing?
 - What does success look like for them specifically?
 
-#### C. Evaluation → Pilot → Rollout → Renewal Lifecycle
+#### C. Evaluation → Pilot → Rollout → Expansion → Renewal Lifecycle
 - **Evaluation**: How do enterprises discover and assess this product? RFP? POC? Free trial? Vendor demo?
 - **Pilot**: What does a pilot look like? Team size, duration, success criteria?
 - **Rollout**: How does adoption expand from pilot to org-wide? What's needed for IT to deploy at scale?
+- **Expansion**: How does the account grow after initial rollout? New departments, use cases, or products? What triggers expansion vs. plateau?
 - **Renewal**: What drives renewal vs. churn? Usage metrics, ROI proof, executive review?
 
 #### D. Enterprise Deal-Killers
@@ -95,6 +96,36 @@ Determine which are mandatory for the target market:
 - What additional value justifies enterprise pricing?
 - What's the ROI story for the executive sponsor?
 - What makes this a "platform" vs. a "tool"?
+
+#### G. Champion Enablement & Risk
+- **Champion identification** — how to find/recognize, typical role, motivations (career, productivity, innovation mandate)
+- **Champion enablement toolkit** — ROI calculator, case studies, exec summary deck, security whitepaper, competitive comparison; format preferences
+- **Champion risk assessment** — single-champion dependency, role change, political capital loss, mitigation
+- **Multi-champion strategy** — second/third champions across departments and levels
+- **Champion-to-executive bridge** — how champion gets exec sponsor buy-in, what they need from you
+- **Post-sale champion** — do they become admin, evangelist, renewal driver?
+
+#### H. Budget Cycle & Procurement Mechanics
+- **Budget cycle timing** — annual planning, quarterly review, deal timing impact
+- **Budget source** — IT, departmental, innovation, executive discretionary
+- **Procurement path** — vendor registration, RFP, security questionnaire, legal review, MSA; duration per step
+- **Pricing expectations** — annual contracts, volume discounts, custom pricing
+- **Competitive displacement** — existing budget for incumbent or need new allocation?
+
+#### I. Land-and-Expand Strategy
+- **Initial landing zone** — smallest deployable unit (team, department, use case)
+- **Expansion triggers** — usage metrics, user requests, exec visibility
+- **Expansion mechanics** — admin adds seats, new department requests, top-down mandate
+- **Expansion blockers** — budget, IT resistance, competing priorities, integration requirements
+- **Account growth trajectory** — initial deal → Year 2 → Year 3
+
+#### J. Enterprise Segmentation
+- **Segment definitions** — mid-market (100–1000), large enterprise (1000–10000), strategic/Global 2000
+- **Segment differences** — buying process, stakeholders, deal size, requirements
+- **Target segment** — which to target first and why
+- **Segment-specific deal-killers** — what's mandatory at each tier
+
+> Areas G–J often surface together in conversation. Group related questions across areas when the user's answers naturally span them.
 
 ### 3. Present Findings & Validate
 
@@ -131,11 +162,15 @@ Only after the user has validated the findings, write the output files.
 Structured enterprise discovery document:
 1. **Stakeholder Map** — which personas are involved, their role in buying/adoption
 2. **Per-Persona Journeys** — what each stakeholder needs, their deal-killer "no"
-3. **Enterprise Lifecycle** — evaluation → pilot → rollout → renewal, with requirements at each stage
+3. **Enterprise Lifecycle** — evaluation → pilot → rollout → expansion → renewal, with requirements at each stage
 4. **Deal-Killer Requirements** — mandatory compliance, security, and infrastructure requirements
 5. **Onboarding Matrix** — onboarding paths and their requirements
 6. **Enterprise Value Proposition** — shifted value prop, ROI story, platform positioning
-7. **Next Steps** — contextual next actions (populated from step 4)
+7. **Champion Enablement & Risk** — identification, enablement toolkit, risk assessment, multi-champion strategy, champion-to-executive bridge, post-sale champion role
+8. **Budget Cycle & Procurement** — budget cycle timing, budget source, procurement path, pricing expectations, competitive displacement
+9. **Land-and-Expand Strategy** — initial landing zone, expansion triggers, expansion mechanics, expansion blockers, account growth trajectory
+10. **Enterprise Segmentation** — (conditional — include only if product serves multiple enterprise tiers) segment definitions, segment differences, target segment, segment-specific deal-killers
+11. **Next Steps** — contextual next actions (populated from step 4)
 
 ### `research/enterprise-icp-interview.md` (or `research/{app}/enterprise-icp-interview.md`)
 Raw interview log — questions, options, responses, and a closing summary of key insights.
@@ -147,7 +182,7 @@ Create the `research/` directory if it doesn't exist.
 - **Stay in problem space.** Do not prescribe architecture, features, or solutions — that's for `/plan-interview` and `/scale-audit`.
 - **Do not assume enterprise ICP is startup ICP scaled up.** Explicitly challenge: "What changes when you sell to a 500-person company vs. a 10-person team?"
 - **Interview style matches `/plan-interview`** — 1–3 focused questions per turn, options with pros/cons, recommendations with reasoning.
-- **Continue until all 6 areas are covered.** Confirm with the user before concluding.
+- **Continue until all 10 areas are covered.** Confirm with the user before concluding.
 - **Do not overwrite existing `research/enterprise-icp.md`** (or `research/{app}/enterprise-icp.md`) without asking the user first.
 - **Present before writing.** Never write output files until findings have been presented to the user and validated. The user must see and approve the analysis before anything is written to disk.
 

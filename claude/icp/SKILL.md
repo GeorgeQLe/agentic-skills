@@ -2,7 +2,7 @@
 name: icp
 description: Research-driven ICP discovery — web search + codebase analysis to identify multiple ICPs, pain points, value props, and cross-ICP prioritization
 type: research
-version: 3.4.0
+version: 3.5.0
 argument-hint: <spec file path or concept/idea>
 ---
 
@@ -10,7 +10,7 @@ argument-hint: <spec file path or concept/idea>
 
 Automated research that identifies **multiple ICP candidates**, maps their pain points and value props, scores them, and selects a primary ICP. Replaces interview-driven approaches with web search + codebase analysis. Input is a spec file path or a concept/idea as `$ARGUMENTS`.
 
-The output preserves the canonical 9-section format at the top level (for downstream compatibility with `/plan-interview`, `/mvp-gap`, `/roadmap`, `/journey-map`) while adding multi-ICP analysis and cross-ICP prioritization.
+The output preserves the canonical 9-section format at the top level (for downstream compatibility with `/plan-interview`, `/mvp-gap`, `/roadmap`, `/journey-map`) while adding multi-ICP analysis, cross-ICP prioritization, and a supplementary section 10 (`## Acquisition & Conversion Model`) that covers business model, funnel, champions, and expansion dynamics.
 
 ## Process
 
@@ -61,8 +61,11 @@ Query strategies (adapt to the specific domain):
 10. **Adjacent market searches** — "[related category] users", "[upstream/downstream] tools"
 11. **Geographic/regulatory searches** (if the domain has regional constraints) — "[category] by region", "[domain] regulations by country", "[category] adoption [region]"
 12. **Named account searches** (B2B) — "[competitor] customer list", "companies using [incumbent]", "[industry] companies that [trigger event]", "[category] case studies"
+13. **Business model searches** — "[category] business model", "[product] PLG vs sales-led", "[category] B2B vs B2C", "[category] marketplace", "[category] go-to-market motion"
 
 Use WebFetch to pull in particularly relevant pages for deeper analysis when search snippets aren't enough.
+
+**Classify the business model** into one or more of: B2B SaaS (PLG), B2B SaaS (SLG), B2C, B2C subscription, marketplace/platform, B2B2C, D2C, open-source/open-core, API/developer-first. Document the classification with evidence in the search log. This classification gates which sub-sections appear in the `## Acquisition & Conversion Model`.
 
 ### 3. Identify ICP Candidates — Present & Validate
 
@@ -82,9 +85,10 @@ Incorporate feedback before proceeding.
 
 For each validated ICP candidate, run **targeted searches** to fill the 9-section framework:
 
-- **Customer Profile** — buyer persona, budget authority, discovery channels. Include two conditional sub-sections:
+- **Customer Profile** — buyer persona, budget authority, discovery channels. Include conditional sub-sections:
   - **Geographic Focus** (include only if the product has regulatory, language, compliance, or market-specific constraints) — initial target geography/region, why that region first, and expansion sequence. Search for "[category] by region", "[domain] regulations by country".
   - **Named Accounts** (include for B2B ICPs) — 5–10 real companies that fit this ICP. For each, note company name, approximate size, industry, and why they fit (e.g., uses the incumbent, recently hit a trigger event, posted a relevant job listing). Search for "[competitor] customer list", "companies using [incumbent]", "[industry] companies that [trigger event]".
+  - **Business Model & Go-to-Market Motion** — model type (B2B/B2C/marketplace/B2B2C/D2C/hybrid) with evidence; primary motion (PLG, sales-led, community-led, partner-led, or hybrid); buyer-user relationship (same person, different people, or multi-sided).
 - **User Profile(s)** — daily users, technical sophistication, goals, frustrations
 - **Trigger Events** — what causes someone to start looking NOW? Job changes, growth milestones, compliance deadlines, tool sunsets, contract renewals, team scaling pain, funding events, new regulations. Search for "[category] buying triggers", "why companies switch [category]", "[incumbent] churn reasons". Rank by frequency and urgency.
 - **Current State Journey** — step-by-step workflow without our product
@@ -92,7 +96,8 @@ For each validated ICP candidate, run **targeted searches** to fill the 9-sectio
 - **Market Landscape** — alternatives they use, shortcomings, unaddressed gaps
 - **Market Sizing** — TAM (total addressable market), SAM (serviceable), SOM (obtainable). Search for "[category] market size", "[category] TAM", "[category] number of companies". Use company counts, average deal size signals, and segment data to build bottom-up estimates. Flag confidence level (strong data vs. rough extrapolation).
 - **Value Proposition** — our unique wedge for this specific ICP, the "aha moment"
-- **Customer ↔ User Dynamics** — buying process, provisioning, adoption path
+- **Customer ↔ User Dynamics** — post-purchase buyer-user relationship: provisioning, onboarding, admin vs end-user dynamics. For B2B, the detailed buying process and decision-making unit live in `## Acquisition & Conversion Model`; this section focuses on the post-purchase relationship.
+- **Acquisition & Conversion Model** — targeted queries: "[category] sales cycle length", "[category] conversion funnel", "[category] land and expand", "[category] champion program", "[category] procurement process", "[competitor] customer expansion". Use findings to populate section 10.
 
 ### 5. Score & Select Primary ICP — Present & Validate
 
@@ -109,6 +114,10 @@ Build a **Value x Accessibility** scoring matrix:
 - How long is the sales cycle?
 - How complex is the buying process?
 - Is there an existing community we can tap?
+- Sales cycle length (shorter = higher score)
+- DMU complexity (how many people must say yes)
+- Champion availability (obvious internal advocate?)
+- Budget alignment (budget cycle favors near-term purchase?)
 
 **Checkpoint 2 — Present the scoring matrix and primary ICP selection to the user.** Use the AskUserQuestion tool to show the full matrix with scores and rationale, then ask:
 - "Does this ranking match your intuition? Any factors I'm not weighing correctly?"
@@ -124,6 +133,7 @@ Analyze across all ICP candidates:
 - **Product line recommendations** — could different ICPs be served by different tiers/plans?
 - **Build sequence** — which ICP to target first, second, third and why?
 - **Lowest-hanging fruit x most value** — the prioritization sweet spot
+- **Acquisition model comparison** — how the conversion motion differs across ICPs (PLG vs SLG vs hybrid); does the company need different GTM muscles for different ICPs?
 
 **Checkpoint 3 — Present the cross-ICP analysis and recommended build sequence to the user.** Use the AskUserQuestion tool to show the analysis with evidence: shared pains with source data from each ICP, conflicts with specific examples, and build sequence rationale grounded in the scoring matrix. Then ask:
 - "Does this sequencing make sense for where you are right now?"
@@ -235,13 +245,56 @@ Structure — the **Primary ICP** fills the canonical top-level sections:
 [Our unique wedge for this ICP, the "aha moment"]
 
 ## Customer ↔ User Dynamics
-[Buying process, provisioning, adoption path]
+[Post-purchase buyer-user relationship: provisioning, onboarding, admin vs end-user dynamics.
+ For B2B, the detailed buying process and DMU live in Acquisition & Conversion Model below;
+ this section focuses on the post-purchase relationship.]
+
+## Acquisition & Conversion Model
+
+### Funnel Shape
+[Awareness → Interest → Evaluation → Decision → Purchase → Onboarding → Activation]
+[Per stage: what happens, who is involved, typical duration, drop-off risks]
+[Marketplace: separate supply-side and demand-side funnels]
+
+### Motion Type & Cycle Length
+[PLG: self-serve → free/trial → conversion trigger → paid. Cycle: days-weeks]
+[SLG: lead gen → qualify → demo → proposal → procurement → close. Cycle: weeks-months]
+[Hybrid: PLG entry → usage-triggered sales outreach → enterprise upsell]
+[Evidence: competitor timelines, industry benchmarks]
+
+### Decision-Making Unit (DMU)
+[B2B only — skip for pure B2C]
+- Initiator, Influencer, Decision maker, Approver/Gatekeeper, End user
+- Handoff sequence between roles
+
+### Champion & Advocate Dynamics
+[B2B and B2B2C — skip for pure B2C]
+- Champion profile — role, motivations, what they need to succeed
+- Champion enablement — materials/proof points to sell internally
+- Champion risk — single point of failure? What if they leave?
+- Multi-champion strategy — creating redundant advocates
+- External advocates — power users, community, referral sources
+- Forward reference: "For enterprise champion enablement strategy, see /enterprise-icp"
+
+### Expansion & Retention Dynamics
+[All models]
+- Land-and-expand pattern — initial wedge → expansion triggers
+- Viral/network effects — does usage create pull for others?
+- Retention signals — leading indicators of retention vs churn
+- Expansion revenue signals — seat growth, tier upgrade, additional product triggers
+
+### Budget & Procurement
+[B2B only — skip for B2C]
+- Budget cycle — annual/quarterly/project-based? Fiscal year timing?
+- Budget owner — IT, departmental, innovation, executive discretionary?
+- Procurement process — RFP, vendor comparison, security/legal review?
+- Typical deal size range — from market research and competitor signals
 
 ## Additional ICPs
 
 ### [ICP 2 Name]
 #### Customer Profile
-[Include Geographic Focus and Named Accounts sub-sections where applicable]
+[Include Geographic Focus, Named Accounts, and Business Model & Go-to-Market Motion sub-sections where applicable]
 ...
 #### User Profile(s)
 ...
@@ -259,6 +312,8 @@ Structure — the **Primary ICP** fills the canonical top-level sections:
 ...
 #### Customer ↔ User Dynamics
 ...
+#### Acquisition & Conversion Model
+[Condensed: funnel shape, motion type & cycle, DMU, champion dynamics, expansion, budget — include only sub-sections relevant to this ICP's business model]
 
 ### [ICP 3 Name]
 ...
@@ -281,6 +336,10 @@ Structure — the **Primary ICP** fills the canonical top-level sections:
 
 ### Recommended Build Sequence
 [Which ICP to target first → second → third, with reasoning]
+
+### Acquisition Model Comparison
+[How conversion motion differs across ICPs — PLG vs SLG vs hybrid]
+[Does the company need different GTM muscles for different ICPs?]
 
 <!-- Include this section only when downstream impact is Minor or Major. Omit entirely for None. -->
 ## Downstream Impact
@@ -327,7 +386,8 @@ When a monorepo has multiple distinct user-facing products, write:
 - **Stay in problem space.** Do not propose features, architecture, UI, or technical solutions. That is `/plan-interview`'s job.
 - **Evidence-based.** Every claim in the ICP document must trace back to research evidence logged in `research/icp-search-log.md`. Do not fabricate personas from assumptions.
 - **In existing-project mode**, note misalignments between what's built and what the ICP research suggests, but do not prescribe fixes — that's `/mvp-gap`'s job.
-- **Primary ICP must use the canonical 9 top-level `##` sections** — downstream skills (`/plan-interview`, `/mvp-gap`, `/roadmap`, `/journey-map`, `/competitive-analysis`) parse these exact headers.
+- **Primary ICP must use the canonical 9 top-level `##` sections** — downstream skills (`/plan-interview`, `/mvp-gap`, `/roadmap`, `/journey-map`, `/competitive-analysis`) parse these exact headers. Section 10 (`## Acquisition & Conversion Model`) is supplementary and does not affect downstream parsing.
+- **Section 10 uses conditional sub-sections** — include only those relevant to the classified business model. Do not include B2B-specific sub-sections (DMU, Champion & Advocate Dynamics, Budget & Procurement) for pure B2C products, but do include Funnel Shape, Motion Type & Cycle Length, and Expansion & Retention Dynamics for all models.
 - **Do not overwrite existing `research/icp.md`** without asking the user first.
 - **Minimum research depth**: at least 8 WebSearch queries before identifying ICP candidates, then at least 2–3 targeted queries per candidate.
 - **Present before writing.** Never write output files until findings have been presented to the user and validated through the checkpoint questions. The user must see and approve the analysis before anything is written to disk.
