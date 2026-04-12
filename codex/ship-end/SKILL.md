@@ -15,7 +15,13 @@ Use this skill when the user wants the current session wrapped up cleanly.
 3. Update `tasks/todo.md` with completed items and blockers. Also update milestone progress in `tasks/roadmap.md` if criteria were met.
 3b. Check `tasks/manual-todo.md` (if it exists) — note the status of manual tasks (checked vs unchecked). Do NOT modify checked items.
 4. Update `tasks/history.md` with a brief record of the session. Create it if needed.
-5. Deploy (skip if `--no-deploy`):
+5. **Pre-ship validation:**
+   - First check conversation context for lint/typecheck/test/build output already produced this session (e.g., from a TDD run step). Do NOT re-run commands whose results are already available.
+   - For any validation category not already run, find commands from: `CLAUDE.md`, `Makefile`/`Justfile` (check/lint/typecheck/test/build targets), `package.json` (lint/typecheck/check/test/build scripts), `pyproject.toml`/`setup.cfg`, `Cargo.toml`. If none found and no prior output exists, skip.
+   - Inspect validation output even when commands exit zero. If warnings are emitted, either fix them, record them as explicitly accepted with rationale, or report them clearly as unresolved.
+   - If errors are found (from prior output or fresh runs), fix them and re-run only the failing commands to confirm. Include fixes in the session-wrap-up commit, or a separate commit if unrelated.
+   - If errors can't be auto-fixed, **STOP. Do not ship.** Report the errors to the user and ask how to proceed. Never commit or push code with known build/lint/type/test failures.
+6. Deploy (skip if `--no-deploy`):
    - Check for an explicit manual deploy contract in `deploy.md` or `tasks/deploy.md`.
    - If neither file exists, skip deploy and report `Deploy skipped: no explicit manual deploy contract (deploy.md or tasks/deploy.md)`.
    - If a deploy contract exists, read it first and use it to determine the deploy method.
@@ -24,10 +30,10 @@ Use this skill when the user wants the current session wrapped up cleanly.
    - If a deploy contract exists but no deploy method is found, ask the user how deployment works. Do not guess.
    - Run the deploy and verify the output for errors.
    - If the deploy fails, report the error. Do not retry automatically.
-6. Commit and push using the `commit-and-push-by-feature` workflow. That workflow must land the resulting commits on `main` or `master`, not on an existing feature branch.
-7. Report:
+7. Commit and push using the `commit-and-push-by-feature` workflow. That workflow must land the resulting commits on `main` or `master`, not on an existing feature branch.
+8. Report:
    - What was accomplished
-   - Test status — explicitly state whether any failing tests are expected (red phase: tests before implementation) or unexpected (regressions/bugs)
+   - Validation status — explicitly state whether any failing tests are expected (red phase: tests before implementation) or unexpected (regressions/bugs), and call out any warnings as fixed, accepted, or unresolved
    - Manual tasks — X/Y complete (from `tasks/manual-todo.md`, if it exists)
    - What is still outstanding
    - Branch name
