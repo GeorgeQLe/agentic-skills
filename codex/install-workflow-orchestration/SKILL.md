@@ -1,22 +1,22 @@
 ---
 name: install-workflow-orchestration
-description: Install workflow orchestration instructions into the current repository's CLAUDE.md
+description: Install workflow orchestration instructions into the current repository's CLAUDE.md and AGENTS.md
 ---
 
 # Install Workflow Orchestration
 
-Use this skill when the user wants the repository's `CLAUDE.md` updated with the workflow orchestration policy block from this workflow.
+Use this skill when the user wants the repository's `CLAUDE.md` and `AGENTS.md` updated with the workflow orchestration policy block from this workflow.
 
 ## Target
 
-- Current repository file: `./CLAUDE.md`
+- Current repository files: `./CLAUDE.md` and `./AGENTS.md`
 
 ## Workflow
 
-1. Ensure `./CLAUDE.md` exists.
-2. Insert the policy block below verbatim.
-3. If the same block already exists anywhere in the file, replace it so the block appears exactly once.
-4. Preserve any unrelated content already in `CLAUDE.md`.
+1. Ensure `./CLAUDE.md` and `./AGENTS.md` exist.
+2. Insert the policy block below verbatim into both files.
+3. If the same block already exists anywhere in either file, replace it so the block appears exactly once per file.
+4. Preserve any unrelated content already in `CLAUDE.md` and `AGENTS.md`.
 
 ## Required Block
 
@@ -81,11 +81,11 @@ Use this skill when the user wants the repository's `CLAUDE.md` updated with the
 
 ## Output
 
-After updating the file, report:
+After updating the files, report:
 
-- Whether `./CLAUDE.md` was created or modified
-- Where the block was inserted
-- Confirmation that the final block appears exactly once
+- Whether `./CLAUDE.md` and `./AGENTS.md` were created or modified
+- Where the block was inserted in each file
+- Confirmation that the final block appears exactly once in each file
 
 
 ## Default Shipping Contract

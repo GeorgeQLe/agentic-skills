@@ -464,7 +464,7 @@ Analyze all Claude Code session history and produce a usage breakdown.
 - **Use when**: Understanding your Claude Code usage patterns.
 
 ### `/install-workflow-orchestration`
-Create or update the current repository's `CLAUDE.md` with workflow conventions.
+Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workflow conventions.
 
 - **Arguments**: None
 - **Use when**: Setting up the workflow in a new repository.
@@ -590,7 +590,7 @@ Archive old Done/Punt cards from the kanban board.
 | `/branch-lifecycle` | Triage branches into merge, salvage, keep-open, or delete | ops |
 | `/poketo-kanban` | Low-level board CRUD | ops |
 | `/skills` | Browse and search all skills | ops |
-| `/install-workflow-orchestration` | Bootstrap CLAUDE.md | ops |
+| `/install-workflow-orchestration` | Bootstrap CLAUDE.md and AGENTS.md | ops |
 | `/brainstorm --kanban` | Brainstorm + create kanban cards | planning |
 | `/plan-interview --kanban` | Spec interview + kanban card sync | planning |
 | `/roadmap --kanban` | Roadmap + kanban board sync | planning |

@@ -285,7 +285,7 @@ Discover          Ideate              Specify             Map            Strateg
 |-------|-------------|-----------|-------------|
 | `/handoff` | Self-contained context snapshot for cold-starting a new session | `[focus area]` | `tasks/handoff.md` |
 | `/workflow` | Read-only status check — what's done, what's stale, what to do next | none | Display only |
-| `/install-workflow-orchestration` | Bootstrap the workflow conventions into a repository's `CLAUDE.md` | none | Updated `CLAUDE.md` |
+| `/install-workflow-orchestration` | Bootstrap the workflow conventions into a repository's `CLAUDE.md` and `AGENTS.md` | none | Updated `CLAUDE.md` and `AGENTS.md` |
 
 ### Kanban Workflow
 
@@ -308,7 +308,7 @@ A parallel set of `-kanban` skills that manage board state (via Poketo/Neon Post
 | Skill | Description | Arguments |
 |-------|-------------|-----------|
 | `/skills` | Browse and search all available skills grouped by workflow stage or activity type | `[list\|types\|search <keyword>]` |
-| `/install-workflow-orchestration` | Install workflow orchestration instructions into a repository's `CLAUDE.md` | none |
+| `/install-workflow-orchestration` | Install workflow orchestration instructions into a repository's `CLAUDE.md` and `AGENTS.md` | none |
 
 ---
 
