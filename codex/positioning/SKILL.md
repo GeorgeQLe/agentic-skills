@@ -139,13 +139,19 @@ Present the full positioning framework and statement to the user. Ask:
 
 ### 9. Populate Next Steps
 
-Include 3–5 applicable items with "Pick one:" framing:
+Include a **Recommended** item (the single highest-impact next step given current project state) with a one-line reason, followed by **Other options** (2–4 alternatives). Use this format in the output:
 
-- ALWAYS: `$gtm` — Update go-to-market plan with this positioning (messaging should flow from positioning)
+## Next Steps
+
+**Recommended:** `$gtm` — messaging should flow directly from positioning; this is the natural next step
+
+Other options:
 - IF no `research/gtm.md`: `$gtm` — Build go-to-market plan grounded in this positioning
 - IF `research/gtm.md` exists: `$gtm` — Refresh messaging framework to align with positioning
 - IF no `research/monetization.md`: `$monetization` — Positioning informs pricing — "premium" vs "value" positioning changes price expectations
 - IF codebase exists: `$mvp-gap` — Check if the product delivers on the positioning promise
+
+The recommendation (`$gtm`) is always applicable — positioning without a GTM plan to execute it is incomplete.
 
 ### 10. Write Output
 
@@ -281,8 +287,10 @@ What this product has that alternatives genuinely don't:
 
 ## Next Steps
 
-Pick one:
-- [conditional items from step 9]
+**Recommended:** `$gtm` — [one-line reason based on whether gtm.md exists or needs refresh]
+
+Other options:
+- [conditional items from step 9 — only include items whose conditions are met]
 ```
 
 ### `research/positioning-search-log.md` (or `research/{app}/positioning-search-log.md`)

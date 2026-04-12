@@ -84,8 +84,24 @@ Display these recommendations after the categorized findings.
 
 ### 6. Populate Next Steps
 
-Before writing, check which files exist and synthesis results to populate the `## Next Steps` section contextually. Include 3–5 applicable items with "Pick one:" framing:
+Before writing, check which files exist and synthesis results to populate the `## Next Steps` section contextually. Include a **Recommended** item (the single highest-impact next step given current project state) with a one-line reason, followed by **Other options** (2–4 alternatives). Use this format in the output:
 
+### Next Steps
+
+**Recommended:** `$recommended-skill` — [one-line reason why this is the highest-impact next action given current state]
+
+Other options:
+- `$skill` — [description]
+- ...
+
+**Recommendation priority** (first applicable becomes the recommendation):
+1. IF downstream impact is **Major**: recommend `$research-reconcile` — [N] conflicts found in downstream docs need resolution before other work
+2. IF staleness alert for ICP: recommend `$icp` — feedback has invalidated key ICP assumptions that other research depends on
+3. IF staleness alert for journey map: recommend `$journey-map` — real user behavior differs from mapped experience
+4. IF 3+ New findings: recommend `$brainstorm` — newly revealed customer needs deserve solution exploration
+5. IF no staleness alerts and no major findings: recommend `$workflow` — check overall project status for the next priority
+
+**Other options** (include all applicable items not chosen as recommended):
 - IF staleness alert for ICP: `$icp` — Re-run discovery — feedback has invalidated key assumptions
 - IF staleness alert for journey map: `$journey-map` — Re-map journeys — real behavior differs from mapped experience
 - IF 3+ New findings: `$brainstorm` — Generate ideas for newly revealed customer needs
@@ -95,7 +111,6 @@ Before writing, check which files exist and synthesis results to populate the `#
 - IF 3+ research docs exist and no `research/assumption-tracker.md`: `$assumption-tracker` — Build the assumptions register to track what feedback is validating
 
 **Impact-aware adjustments:**
-- IF downstream impact is **Major**: prepend `$research-reconcile — [N] conflicts found in downstream docs` as the first item
 - IF downstream impact is **Minor**: annotate relevant skill suggestions with "(stale — [brief description])"
 
 ### 7. Write Output
@@ -171,7 +186,9 @@ Display to the user after showing the written file confirmation. This should be 
 
 ### Next Steps
 
-Pick one:
+**Recommended:** `$skill` — [one-line reason]
+
+Other options:
 - [conditional items from step 6 — only include items whose conditions are met]
 
 ---

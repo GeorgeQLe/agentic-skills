@@ -45,7 +45,26 @@ When app scope `{app}` is active:
 - `research/enterprise-icp.md` (or `research/{app}/enterprise-icp.md`) — Stakeholder map, per-persona journeys, enterprise lifecycle (with expansion stage), deal-killers, onboarding matrix, enterprise value prop, champion enablement & risk, budget cycle & procurement, land-and-expand strategy, enterprise segmentation (conditional), next steps
 - `research/enterprise-icp-interview.md` (or `research/{app}/enterprise-icp-interview.md`) — Raw interview log
 
-The output file must end with a `## Next Steps` section (3–5 contextual items, "Pick one:" framing) based on which files exist: conditionally suggest `$scale-audit`, `$plan-interview enterprise [feature]`, `$journey-map enterprise`, `$journey-map`, `$competitive-analysis` based on codebase existence, enterprise specs, `research/journey-map.md`, `research/icp.md`, and `research/competitive-analysis.md`.
+The output file must end with a `## Next Steps` section with a **Recommended** item and **Other options** (2–4 alternatives). Use this format in the output:
+
+## Next Steps
+
+**Recommended:** `$recommended-skill` — [one-line reason why this is the highest-impact next action given current state]
+
+Other options:
+- `$skill` — [description]
+- ...
+
+**Recommendation priority** (first applicable becomes the recommendation):
+1. IF codebase exists: recommend `$scale-audit` — evaluate whether the codebase meets enterprise deal-killer requirements
+2. Otherwise: recommend `$journey-map enterprise` — map the multi-stakeholder journey before building
+
+**Other options** (include all applicable items not chosen as recommended, based on which files exist):
+- IF codebase exists: `$scale-audit` — Evaluate codebase against enterprise requirements
+- `$plan-interview enterprise [feature]` — Validate the riskiest enterprise assumption (if enterprise specs exist)
+- `$journey-map enterprise` — Map enterprise stakeholder journeys (if no `research/journey-map.md`)
+- `$journey-map` — Map general user journeys (if no `research/journey-map.md` and `research/icp.md` exists)
+- `$competitive-analysis` — Research enterprise competitive landscape (if no `research/competitive-analysis.md`)
 
 ## Constraints
 
@@ -54,7 +73,7 @@ The output file must end with a `## Next Steps` section (3–5 contextual items,
 - Continue until all 10 areas are covered.
 - Do not overwrite existing `research/enterprise-icp.md` (or `research/{app}/enterprise-icp.md`) without asking the user first.
 - Present before writing — never write until findings are validated.
-- `## Next Steps` must be the final section in the output file, with 3–5 contextual items and "Pick one:" framing.
+- `## Next Steps` must be the final section in the output file, with a recommended next step and 2–4 other options.
 
 
 ## Default Shipping Contract

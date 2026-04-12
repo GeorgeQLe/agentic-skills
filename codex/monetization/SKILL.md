@@ -141,8 +141,23 @@ Based on product stage and ICP:
 
 ### 7. Populate Next Steps
 
-Check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with "Pick one:" framing:
+Check which files exist to populate the `## Next Steps` section contextually. Include a **Recommended** item (the single highest-impact next step given current project state) with a one-line reason, followed by **Other options** (2–4 alternatives). Use this format in the output:
 
+## Next Steps
+
+**Recommended:** `$recommended-skill` — [one-line reason why this is the highest-impact next action given current state]
+
+Other options:
+- `$skill` — [description]
+- ...
+
+**Recommendation priority** (first applicable becomes the recommendation):
+1. IF no `research/gtm.md`: recommend `$gtm` — pricing needs a go-to-market plan to reach the customers who'll pay
+2. IF `research/gtm.md` exists but predates this analysis: recommend `$gtm` — GTM pricing references are now stale and need updating
+3. IF no `research/metrics.md`: recommend `$metrics` — define metrics to track whether the monetization strategy is working
+4. IF `specs/` exist and no `tasks/roadmap.md`: recommend `$roadmap` — plan the build with monetization milestones
+
+**Other options** (include all applicable items not chosen as recommended):
 - IF no `research/gtm.md`: `$gtm` — Build go-to-market plan with pricing from this strategy
 - IF `research/gtm.md` exists but predates this analysis: `$gtm` — Update GTM with refined pricing strategy
 - IF no `research/metrics.md`: `$metrics` — Define metrics to track monetization health (conversion, expansion, churn)
@@ -247,7 +262,9 @@ Only after the user confirms, write the output files.
 
 ## Next Steps
 
-Pick one:
+**Recommended:** `$skill` — [one-line reason]
+
+Other options:
 - [conditional items from step 7 — only include items whose conditions are met]
 ```
 

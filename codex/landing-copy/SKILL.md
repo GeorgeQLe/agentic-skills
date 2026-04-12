@@ -191,8 +191,22 @@ Landing copy is a terminal artifact — it doesn't feed into other research skil
 
 ### 9. Next Steps
 
-Include 3–5 applicable items with "Pick one:" framing:
+Include a **Recommended** item (the single highest-impact next step given current project state) with a one-line reason, followed by **Other options** (2–4 alternatives). Use this format in the output:
 
+## Next Steps
+
+**Recommended:** `$recommended-skill` — [one-line reason why this is the highest-impact next action given current state]
+
+Other options:
+- `$skill` — [description]
+- ...
+
+**Recommendation priority** (first applicable becomes the recommendation):
+1. IF no `research/positioning.md`: recommend `$positioning` — positioning drives hero copy; the headline is guesswork without it
+2. IF no `research/customer-feedback.md`: recommend `$customer-feedback` — real customer quotes would replace placeholder social proof
+3. Otherwise: recommend "Implement the copy in your codebase — the source attribution comments show where each claim comes from"
+
+**Other options** (include all applicable items not chosen as recommended):
 - IF no `research/positioning.md`: `$positioning` — Positioning drives hero copy; running it would significantly strengthen the headline
 - IF no `research/customer-feedback.md`: `$customer-feedback` — Real customer quotes would replace placeholder social proof
 - IF no `research/monetization.md`: `$monetization` — Pricing section is thin without a monetization strategy
@@ -401,8 +415,10 @@ A: [Answer]
 
 ## Next Steps
 
-Pick one:
-- [conditional items from step 9]
+**Recommended:** `$skill` — [one-line reason]
+
+Other options:
+- [conditional items from step 9 — only include items whose conditions are met]
 ```
 
 ### `research/landing-copy-interview.md` (or `research/{app}/landing-copy-interview.md`)

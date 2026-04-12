@@ -76,9 +76,29 @@ Only after user validates, write the output files.
 - `research/competitive-analysis.md` (or `research/{app}/competitive-analysis.md`) — Full competitive landscape: summary, competitor profiles, GTM analysis, market gaps, positioning recommendations, next steps. In concept-validation mode, includes `## Gap Assessment` section (Market State, Incumbent Quality, Gap Quality, Verdict).
 - `research/competitive-analysis-search-log.md` (or `research/{app}/competitive-analysis-search-log.md`) — Raw research log: every query, findings, source attribution, reasoning
 
-**Standard mode next steps:** `## Next Steps` section (3–5 contextual items, "Pick one:" framing) based on which files exist: always suggest `$brainstorm`; conditionally suggest `$plan-interview`, `$journey-map`, `$gtm`, `$mvp-gap`.
+**Standard mode next steps:** `## Next Steps` section with a **Recommended** item and **Other options** (2–4 alternatives). Use this format in the output:
 
-**Concept-validation mode next steps:** `$icp` is always the first next step (gap validated). Also suggest `$brainstorm` if pivot verdict, and `$competitive-analysis` to re-run in standard mode after ICP.
+## Next Steps
+
+**Recommended:** `$brainstorm` — generate solution ideas while competitive gaps and market positioning are fresh
+
+Other options:
+- `$plan-interview` — validate the riskiest competitive assumption with a targeted interview
+- `$journey-map` — map the customer journey to find where competitors fall short (if no `research/journey-map.md`)
+- `$gtm` — build go-to-market plan leveraging competitive gaps (if no `research/gtm.md`)
+- `$mvp-gap` — check if the codebase exploits the gaps found (if codebase exists)
+
+Only include items whose conditions are met. The recommendation (`$brainstorm`) is always applicable.
+
+**Concept-validation mode next steps:** Use the same Recommended + Other options format:
+
+## Next Steps
+
+**Recommended:** `$icp` — the competitive gap is validated; define who to build for
+
+Other options:
+- `$brainstorm` — pivot the concept based on market gaps found (if pivot verdict)
+- `$competitive-analysis` — re-run in standard mode after ICP is defined (always)
 
 ## Constraints
 
@@ -91,7 +111,7 @@ Only after user validates, write the output files.
 - Prefer recent sources (last 12 months).
 - Search breadth over depth initially.
 - Present before writing — never write until findings are validated.
-- `## Next Steps` must be the final section in the output file, with 3–5 contextual items and "Pick one:" framing.
+- `## Next Steps` must be the final section in the output file, with a recommended next step and 2–4 other options.
 
 
 ## Default Shipping Contract

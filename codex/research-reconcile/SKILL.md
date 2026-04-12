@@ -216,6 +216,20 @@ After walking through all findings:
 
   3. Re-run the audit to confirm fixes resolved the flagged issues.
 
+### 8. Populate Next Steps
+
+After presenting findings (audit mode) or applying resolutions (fix mode), display a `## Next Steps` section with a **Recommended** item and **Other options**. Use this format:
+
+## Next Steps
+
+**Recommended:** `$skill-with-most-conflicts` — [N] conflicts traced to this document; re-running it will resolve the most inconsistencies at once
+
+Other options:
+- `$skill` — [N] conflicts in [scope] (re-run to fix)
+- ...
+
+**Recommendation logic:** Identify the skill that produced the document with the most Error/Warning-severity conflicts. That skill is the recommendation — re-running it with current upstream context will resolve the most issues. List other conflict-bearing skills as alternatives, ordered by conflict count descending. If audit mode found only deferred items and no actionable conflicts remain, recommend `$workflow` — check overall project status.
+
 ## Constraints
 
 - **Read-only by default.** Only modify files when explicitly invoked with `fix` mode.
