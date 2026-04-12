@@ -14,10 +14,11 @@ Ship already-finished work, commit it, optionally deploy it, and plan the next s
    - Run `git status` and `git diff --stat`.
    - If the working tree is clean and there are no unpushed commits, skip to step 3.
    - If there are changes, continue to step 2.
-1b. **Pre-ship error check:**
-   - First check conversation context for lint/typecheck/test output already produced this session (e.g., from a TDD run step). Do NOT re-run commands whose results are already available.
-   - For any validation category not already run, find commands from: `CLAUDE.md`, `Makefile`/`Justfile` (check/lint/typecheck/test targets), `package.json` (lint/typecheck/check/test scripts), `pyproject.toml`/`setup.cfg`, `Cargo.toml`. If none found and no prior output exists, skip.
-   - If pre-existing errors are found (from prior output or fresh runs), fix them and re-run only the failing commands to confirm. Include fixes in the step's commit (or as a separate commit if unrelated).
+1b. **Pre-ship validation:**
+   - First check conversation context for lint/typecheck/test/build output already produced this session (e.g., from a TDD run step). Do NOT re-run commands whose results are already available.
+   - For any validation category not already run, find commands from: `CLAUDE.md`, `Makefile`/`Justfile` (check/lint/typecheck/test/build targets), `package.json` (lint/typecheck/check/test/build scripts), `pyproject.toml`/`setup.cfg`, `Cargo.toml`. If none found and no prior output exists, skip.
+   - Inspect validation output even when commands exit zero. If warnings are emitted, either fix them, record them as explicitly accepted with rationale, or report them clearly as unresolved.
+   - If errors are found (from prior output or fresh runs), fix them and re-run only the failing commands to confirm. Include fixes in the step's commit (or as a separate commit if unrelated).
    - If errors can't be auto-fixed, **STOP. Do not ship.** Report the errors to the user and ask how to proceed. Never commit or push code with known build/lint/type/test failures.
 2. Ship the work:
    - Read `CLAUDE.md` to understand current progress.
@@ -54,7 +55,7 @@ Ship already-finished work, commit it, optionally deploy it, and plan the next s
 7. Output a brief summary:
    - What was shipped (if anything)
    - Deploy status (if deployed)
-   - Test status — explicitly state whether any failing tests are expected (red phase: tests before implementation) or unexpected (regressions/bugs)
+   - Validation status — explicitly state whether any failing tests are expected (red phase: tests before implementation) or unexpected (regressions/bugs), and call out any warnings as fixed, accepted, or unresolved
    - Manual tasks — pending count from `tasks/manual-todo.md` (if it exists), note any blocking upcoming steps
    - What the next step is
 

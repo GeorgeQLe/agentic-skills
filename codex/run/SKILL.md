@@ -32,11 +32,12 @@ Identify the next incomplete unit of work from the phased plan, build an executi
 10. Mark the completed work in `tasks/todo.md`:
    - Default mode: check off the completed step.
    - `--phase` mode: check off the completed steps and any acceptance criteria satisfied by the phase work.
-11. **Pre-ship error check:**
-   - First check conversation context for lint/typecheck/test output already produced this session. Do NOT re-run commands whose results are already available.
-   - For any validation category not already run, find commands from: `CLAUDE.md`, `Makefile`/`Justfile`, `package.json`, `pyproject.toml`/`setup.cfg`, `Cargo.toml`. If none found and no prior output exists, skip.
-   - If pre-existing errors are found (from prior output or fresh runs), fix them and re-run only the failing commands to confirm. Include fixes in the shipping commit, or a separate commit if unrelated.
-   - If errors cannot be auto-fixed, document them in the summary and continue.
+11. **Pre-ship validation:**
+   - First check conversation context for lint/typecheck/test/build output already produced this session. Do NOT re-run commands whose results are already available.
+   - For any validation category not already run, find commands from: `CLAUDE.md`, `Makefile`/`Justfile` (check/lint/typecheck/test/build targets), `package.json` (lint/typecheck/check/test/build scripts), `pyproject.toml`/`setup.cfg`, `Cargo.toml`. If none found and no prior output exists, skip.
+   - Inspect validation output even when commands exit zero. If warnings are emitted, either fix them, record them as explicitly accepted with rationale, or report them clearly as unresolved.
+   - If errors are found (from prior output or fresh runs), fix them and re-run only the failing commands to confirm. Include fixes in the shipping commit, or a separate commit if unrelated.
+   - If errors cannot be auto-fixed, **STOP. Do not ship.** Report the errors to the user and ask how to proceed. Never commit or push code with known build/lint/type/test failures.
 12. Ship the completed work:
    - Update `tasks/history.md` with a brief record of what was accomplished. Create it if needed.
    - Commit and push using the `$commit-and-push-by-feature` workflow. That workflow must land the resulting commits on `main` or `master`, not on an existing feature branch.
@@ -72,7 +73,7 @@ Identify the next incomplete unit of work from the phased plan, build an executi
 - Step or phase completed
 - Files modified
 - Deploy status (if deployed)
-- Test results (if tests were run) — explicitly state whether any failures are expected (red phase: tests before implementation) or unexpected (regressions/bugs)
+- Validation results (if lint/typecheck/test/build commands were run) — explicitly state whether failures are expected (red phase: tests before implementation) or unexpected (regressions/bugs), and call out any warnings as fixed, accepted, or unresolved
 - Manual tasks — pending count from `tasks/manual-todo.md` (if it exists)
 - What is next (just its name)
 
