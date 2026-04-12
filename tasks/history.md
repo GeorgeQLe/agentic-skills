@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-04-11 — Extend ICP skills with business model, champions, funnel, and expansion
+
+- Extended `/icp` (v3.4.0 → v3.5.0) with business model classification, new section 10 (`## Acquisition & Conversion Model`) covering funnel shape, motion type & cycle length, DMU, champion & advocate dynamics, expansion & retention dynamics, and budget & procurement. Canonical 9-section structure preserved for downstream compatibility.
+- Extended `/enterprise-icp` (v2.1.0/v2.2.0 → v2.3.0) with four new interview areas: champion enablement & risk, budget cycle & procurement, land-and-expand strategy, and enterprise segmentation. Output sections grew from 7 to 11. Lifecycle gained an Expansion stage.
+- Updated both Claude and Codex mirrors for each skill (4 files total)
+- Ran `install.sh` to update symlinks
+
 ## 2026-04-08 — Tighten research skills to assume no insider knowledge
 
 - Updated 11 Codex skill prompts so research-oriented workflows default to deep, self-sufficient analysis instead of asking whether findings match the user's intuition
