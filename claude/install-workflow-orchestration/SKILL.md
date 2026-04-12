@@ -1,6 +1,6 @@
 ---
 name: install-workflow-orchestration
-description: Install workflow orchestration instructions into the current repository's CLAUDE.md
+description: Install workflow orchestration instructions into the current repository's CLAUDE.md and AGENTS.md
 type: ops
 version: 1.0.0
 argument-hint:
@@ -8,17 +8,18 @@ argument-hint:
 
 # Install Workflow Orchestration
 
-Create or update the current repository's `CLAUDE.md` with workflow orchestration conventions.
+Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workflow orchestration conventions.
 
 ## Process
 
-1. **Check target file:**
+1. **Check target files:**
    - Ensure `./CLAUDE.md` exists. If not, create it.
+   - Ensure `./AGENTS.md` exists. If not, create it.
 
-2. **Insert the orchestration block:**
+2. **Insert the orchestration block into both files:**
    - Insert the block below verbatim.
-   - If the same block already exists anywhere in `./CLAUDE.md`, replace it so it appears exactly once.
-   - Preserve any other existing content in `./CLAUDE.md`.
+   - If the same block already exists anywhere in either target file, replace it so it appears exactly once per file.
+   - Preserve any other existing content in `./CLAUDE.md` and `./AGENTS.md`.
 
    The block to insert:
 
@@ -30,10 +31,13 @@ Create or update the current repository's `CLAUDE.md` with workflow orchestratio
    - If something goes sideways, STOP and re-plan immediately — don't keep pushing
    - Use plan mode for verification steps, not just building
    - Write detailed specs upfront to reduce ambiguity
+   - In Codex: use `update_plan` in Default mode and `request_user_input` only when already in Plan mode
+   - Do not assume a Claude-style clear-context-on-accept flow or related JSON setting exists
 
    ### 2. Subagent Strategy
    - Use subagents liberally to keep main context window clean
    - Offload research, exploration, and parallel analysis to subagents
+   - For complex problems, throw more compute at it via subagents
    - One task per subagent for focused execution
 
    ### 3. Self-Improvement Loop
@@ -79,24 +83,25 @@ Create or update the current repository's `CLAUDE.md` with workflow orchestratio
    ```
 
 3. **Report result:**
-   - Print whether `./CLAUDE.md` was created or modified.
-   - Print where the block was inserted (top/bottom/after which heading).
+   - Print whether each target file was created or modified.
+   - Print where the block was inserted in each file (top/bottom/after which heading).
+   - Confirm that the final block appears exactly once in each target file.
 
 ## Output Format
 
-Display confirmation directly to the user (the block itself is written to `./CLAUDE.md`):
+Display confirmation directly to the user (the block itself is written to `./CLAUDE.md` and `./AGENTS.md`):
 
 ```
-Installed workflow orchestration into ./CLAUDE.md
-- Action: [created | updated]
-- Location: [top | bottom | after "<heading>"]
+Installed workflow orchestration into ./CLAUDE.md and ./AGENTS.md
+- ./CLAUDE.md: [created | updated], [top | bottom | after "<heading>"], block appears once
+- ./AGENTS.md: [created | updated], [top | bottom | after "<heading>"], block appears once
 ```
 
 ## Constraints
 
-- Insert the block exactly once — if it already exists, replace rather than duplicate.
-- Preserve all other existing content in `./CLAUDE.md`.
-- Do not modify any file other than `./CLAUDE.md`.
+- Insert the block exactly once per target file — if it already exists, replace rather than duplicate.
+- Preserve all other existing content in `./CLAUDE.md` and `./AGENTS.md`.
+- Do not modify any file other than `./CLAUDE.md` and `./AGENTS.md`.
 
 
 ## Default Shipping Contract
