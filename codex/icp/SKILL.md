@@ -40,7 +40,19 @@ Default stance: assume the user has no insider knowledge of the market. Explain 
 - `research/icp-search-log.md` — Raw research log: every query, findings, evidence, scoring rationale
 - **Monorepo**: `research/{app-name}/icp.md` + `research/{app-name}/icp-search-log.md` per app, plus unified `research/icp.md` cross-referencing all app-level ICPs with top-level prioritization
 
-The output file must end with a `## Next Steps` section (3–5 contextual items, "Pick one:" framing) based on which files exist: always suggest `$competitive-analysis`; conditionally suggest `$plan-interview`, `$journey-map`, `$mvp-gap`, `$brainstorm` based on whether `specs/`, `research/journey-map.md`, codebase, and `research/competitive-analysis.md` exist.
+The output file must end with a `## Next Steps` section based on which files exist. Include a **Recommended** item (the single highest-impact next step given current project state) with a one-line reason, followed by **Other options** (2–4 alternatives). Use this format in the output:
+
+## Next Steps
+
+**Recommended:** `$competitive-analysis` — maps the landscape your ICP operates in so positioning and GTM have competitive grounding
+
+Other options:
+- `$plan-interview` — validate the riskiest ICP assumption with a targeted interview (if `specs/` exist)
+- `$journey-map` — map the current-state journey to find intervention points (if no `research/journey-map.md`)
+- `$mvp-gap` — check if the codebase delivers on the ICP's top pain point (if codebase exists)
+- `$brainstorm` — generate solution ideas grounded in the ICP research (if `research/competitive-analysis.md` exists)
+
+Only include items whose conditions are met. The recommendation (`$competitive-analysis`) is always applicable.
 
 ## Constraints
 
@@ -51,7 +63,7 @@ The output file must end with a `## Next Steps` section (3–5 contextual items,
 - Minimum 8 WebSearch queries before identifying candidates, 2–3 per candidate after.
 - Do not overwrite existing `research/icp.md` without asking.
 - Present before writing — never write output until findings are validated through checkpoints.
-- `## Next Steps` must be the final section in the output file, with 3–5 contextual items and "Pick one:" framing.
+- `## Next Steps` must be the final section in the output file, with a recommended next step and 2–4 other options.
 
 
 ## Default Shipping Contract

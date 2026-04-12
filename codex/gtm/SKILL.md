@@ -99,8 +99,25 @@ Continue until the user confirms. Only then proceed to writing.
 
 ### 4. Populate Next Steps
 
-Before writing, check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with "Pick one:" framing:
+Before writing, check which files exist to populate the `## Next Steps` section contextually. Include a **Recommended** item (the single highest-impact next step given current project state) with a one-line reason, followed by **Other options** (2–4 alternatives). Use this format in the output:
 
+## Next Steps
+
+**Recommended:** `$recommended-skill` — [one-line reason why this is the highest-impact next action given current state]
+
+Other options:
+- `$skill` — [description]
+- ...
+
+**Recommendation priority:**
+1. IF downstream impact is **Major**: recommend `$research-reconcile` — [N] conflicts found in downstream docs need resolution before other work
+2. Otherwise, recommend the first applicable from this list:
+   - IF `specs/` exist and no `tasks/roadmap.md`: `$roadmap` — plan the build with launch milestones from above
+   - IF no `research/metrics.md`: `$metrics` — define success metrics for the launch goals
+   - IF open questions need research: `$plan-interview [top question]` — validate the most critical open question
+   - IF `tasks/roadmap.md` exists: `$run` — start executing — the GTM plan is set
+
+**Other options** (include all applicable items not chosen as recommended):
 - IF `specs/` exist and no `tasks/roadmap.md`: `$roadmap` — Plan the build with launch milestones from above
 - IF no `research/metrics.md`: `$metrics` — Define success metrics for the launch goals
 - IF open questions need research: `$plan-interview [top question]` — Validate the most critical open question
@@ -109,7 +126,6 @@ Before writing, check which files exist to populate the `## Next Steps` section 
 - IF no `research/positioning.md`: `$positioning` — Define strategic positioning — messaging should flow from positioning
 
 **Impact-aware adjustments:**
-- IF downstream impact is **Major**: prepend `$research-reconcile — [N] conflicts found in downstream docs` as the first item
 - IF downstream impact is **Minor**: annotate relevant skill suggestions with "(stale — [brief description])"
 
 ### 5. Write Output
@@ -246,7 +262,9 @@ Display to the user after showing the written file confirmation. This should be 
 
 ## Next Steps
 
-Pick one:
+**Recommended:** `$skill` — [one-line reason]
+
+Other options:
 - [conditional items from step 4 — only include items whose conditions are met]
 ```
 

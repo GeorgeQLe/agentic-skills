@@ -94,7 +94,21 @@ Only after user validates, write the output files.
 - `research/platform-strategy.md` (or `research/{app}/platform-strategy.md`) — Full platform strategy: summary, core health, expansion vector map, scoring matrix, validation experiments, portfolio sequence, shared platform considerations, next steps.
 - `research/platform-strategy-search-log.md` (or `research/{app}/platform-strategy-search-log.md`) — Raw research log: every query, findings, source attribution, scoring rationale.
 
-`## Next Steps` section (3-5 contextual items, "Pick one:" framing): always suggest `$experiment [top candidate]`; conditionally suggest `$assumption-tracker`, `$competitive-analysis [adjacent category]`, `$icp [new audience]`, `$enterprise-icp`, `$plan-interview [top candidate]`, `$roadmap`.
+`## Next Steps` section with a **Recommended** item and **Other options** (2–4 alternatives). Use this format in the output:
+
+## Next Steps
+
+**Recommended:** `$experiment [top candidate]` — validate demand for the highest-scored expansion candidate before committing resources
+
+Other options:
+- `$assumption-tracker` — track which platform assumptions need validation (if no `research/assumption-tracker.md`)
+- `$competitive-analysis [adjacent category]` — research the competitive landscape for the top expansion candidate
+- `$icp [new audience]` — define the ICP for the new audience the top candidate targets
+- `$enterprise-icp` — map enterprise requirements if the expansion targets enterprise (if no `research/enterprise-icp.md`)
+- `$plan-interview [top candidate]` — spec the top candidate in detail
+- `$roadmap` — sequence the expansion into the build plan (if `specs/` exist)
+
+The recommendation (`$experiment [top candidate]`) is always applicable — platform expansion should be validated before built.
 
 ## Constraints
 
@@ -107,7 +121,7 @@ Only after user validates, write the output files.
 - Present before writing — never write until findings are validated.
 - Do not overwrite existing `research/platform-strategy.md` (or `research/{app}/platform-strategy.md`) without asking.
 - Keep validation experiments lightweight — full design belongs in `$experiment`.
-- `## Next Steps` must be the final section in the output file.
+- `## Next Steps` must be the final section in the output file, with a recommended next step and 2–4 other options.
 
 
 ## Default Shipping Contract
