@@ -1,11 +1,11 @@
 ---
-name: research-reconcile
+name: reconcile-research
 description: Cross-document consistency audit across research outputs — find contradictions, stale assumptions, and gaps
 version: 1.2.0
 argument-hint: "[audit|fix] [all|icp|pricing|journey|enterprise|feedback|specs]"
 ---
 
-# Research Reconcile — Cross-Document Consistency Audit
+# Reconcile Research — Cross-Document Consistency Audit
 
 Checks that research documents tell a consistent story. Finds contradictions between ICP and pricing, stale assumptions that customer feedback has invalidated, journey stages that metrics don't cover, and other cross-document gaps. Think of it as a linter for research coherence rather than structure.
 
@@ -222,7 +222,7 @@ After presenting findings (audit mode) or applying resolutions (fix mode), displ
 
 ## Next Steps
 
-**Recommended:** `$skill-with-most-conflicts` — [N] conflicts traced to this document; re-running it will resolve the most inconsistencies at once
+**Recommended:** [skill with most conflicts] — [N] conflicts traced to this document; re-running it will resolve the most inconsistencies at once
 
 Other options:
 - `$skill` — [N] conflicts in [scope] (re-run to fix)

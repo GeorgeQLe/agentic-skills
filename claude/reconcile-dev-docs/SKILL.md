@@ -1,0 +1,136 @@
+---
+name: reconcile-dev-docs
+description: Reconcile development docs by auditing roadmap, todo, history, phase archives, specs, git history, and code reality
+type: analysis
+version: 1.0.0
+argument-hint: "[audit|fix] [tasks|specs|all]"
+---
+
+# Reconcile Dev Docs
+
+Audit or repair development documentation so the roadmap, current work, history, specs, and evidence from git/code all tell the same story.
+
+## Process
+
+### 1. Determine Mode and Scope
+
+Parse `$ARGUMENTS`:
+
+- **Mode**: `audit` (default, read-only) or `fix` (update development docs only)
+- **Scope**: `all` (default), `tasks`, or `specs`
+
+Resolve the canonical development docs:
+
+- `tasks/roadmap.md`
+- `tasks/todo.md`
+- `tasks/manual-todo.md` (if it exists)
+- `tasks/history.md`
+- `tasks/phases/*.md`
+- `tasks/ideas.md` (if it exists)
+- `specs/*.md` and `specs/*/*.md`
+- `docs/specifications/*.md` (fallback specs location)
+
+If no task docs exist, report that there is nothing to reconcile and recommend `/roadmap` or `/plan-phases` based on available specs.
+
+### 2. Gather Evidence
+
+Read the development docs and collect:
+
+- Roadmap phases, milestone checkboxes, acceptance criteria, manual tasks, and deferred items
+- Current todo phase, checked/unchecked steps, blockers, and review/results sections
+- Manual task blockers and `_(blocks: ...)_` / `_(after: ...)_` annotations
+- History entries with dates, completed phases/steps, commit SHAs, and claimed outcomes
+- Phase archives and their completion summaries
+- Spec titles, statuses, acceptance criteria, and major implementation claims
+
+Read git/code evidence:
+
+- `git status --short`
+- `git log --oneline -50`
+- `git log --name-only --since=<latest relevant doc date>` when timestamps suggest docs may be stale
+- Targeted file existence and `rg` checks for claims marked complete
+
+### 3. Reconcile Rules
+
+Classify findings:
+
+| Severity | Examples |
+|----------|----------|
+| **Error** | Docs contradict each other: roadmap marks a phase done while todo has unchecked required steps; history claims completion but no matching roadmap/todo/archive/git evidence exists |
+| **Warning** | Likely drift: recent commits changed areas covered by specs but history/todo were not updated; completed phase has no archive; manual blockers remain for completed steps |
+| **Info** | Cleanup opportunities: stale handoff notes, missing links between history entries and commits, specs that should be checked by `/spec-drift` |
+
+Use these specific checks:
+
+- `tasks/todo.md` checked steps should be reflected in `tasks/history.md` after shipping.
+- Completed roadmap phases should have corresponding `tasks/phases/phase-N.md` archives.
+- The active `tasks/todo.md` phase should match the first incomplete roadmap phase.
+- `tasks/manual-todo.md` should not contain unchecked blockers for completed todo steps unless the user explicitly overrode them.
+- Recent commits that complete user-facing work should have a matching history entry.
+- Specs whose described areas changed after their last modification date should be flagged for `/spec-drift`.
+- Claimed completed work should have either git evidence, file evidence, test evidence, or an explicit note explaining why evidence is unavailable.
+
+### 4. Fix Mode
+
+In `fix` mode, apply only unambiguous development-doc changes:
+
+- Append missing factual entries to `tasks/history.md`.
+- Check roadmap milestones only when todo/archive/git evidence all support completion.
+- Create missing `tasks/phases/phase-N.md` archives from completed `tasks/todo.md` content.
+- Move the next roadmap phase into `tasks/todo.md` only when the current phase is clearly complete.
+- Add unresolved contradictions to `tasks/todo.md` under `## Development Docs Reconciliation`.
+- Write `tasks/reconciliation-report.md` with resolved, deferred, and remaining findings.
+
+Ask before applying any ambiguous change. If already in Plan mode and there are 2-3 concrete choices, prefer `request_user_input`; otherwise ask plainly in chat.
+
+## Output Format
+
+### Audit Mode
+
+```
+## Dev Docs Reconciliation
+
+### Errors (N)
+- **tasks/todo.md** - [problem]. Evidence: [roadmap/history/git reference].
+
+### Warnings (N)
+- **specs/foo.md** - [problem]. Recommended action: /spec-drift.
+
+### Info (N)
+- **tasks/history.md** - [cleanup opportunity].
+
+### Summary
+- Roadmap/todo alignment: [ok|issues]
+- History coverage: [ok|issues]
+- Phase archives: [ok|issues]
+- Spec freshness: [ok|issues]
+- Recommended next action: [specific skill or fix plan]
+```
+
+### Fix Mode
+
+Report the same sections plus:
+
+```
+### Fixed
+- [x] [file] - [change made]
+
+### Deferred
+- [ ] [finding requiring user judgment]
+```
+
+## Constraints
+
+- Read-only by default.
+- In `fix` mode, modify only development docs under `tasks/`, `specs/`, or `docs/specifications/`.
+- Do not modify code, research docs, kanban cards, git history, or deployment state.
+- Do not rewrite or delete old `tasks/history.md` entries; append corrections or superseding notes.
+- Do not uncheck completed work automatically. Report unsupported completion claims unless the user approves the correction.
+- Treat `tasks/roadmap.md` as the strategic source of truth, `tasks/todo.md` as the active execution contract, and `tasks/history.md` as append-only evidence.
+
+
+## Default Shipping Contract
+
+- If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
+- Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
+- This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.

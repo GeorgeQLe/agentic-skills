@@ -187,7 +187,7 @@ Landing copy is a terminal artifact — it doesn't feed into other research skil
 **Classify impact**:
 - **None**: No conflicts. Skip display.
 - **Minor**: 1–2 messaging inconsistencies. Display inline.
-- **Major**: Hero/positioning fundamentally misaligned. Recommend `$research-reconcile`.
+- **Major**: Hero/positioning fundamentally misaligned. Recommend `$reconcile-research`.
 
 ### 9. Next Steps
 
@@ -195,7 +195,7 @@ Include a **Recommended** item (the single highest-impact next step given curren
 
 ## Next Steps
 
-**Recommended:** `$recommended-skill` — [one-line reason why this is the highest-impact next action given current state]
+**Recommended:** [recommended skill] — [one-line reason why this is the highest-impact next action given current state]
 
 Other options:
 - `$skill` — [description]

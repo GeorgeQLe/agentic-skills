@@ -186,7 +186,7 @@ Landing copy is a terminal artifact — it doesn't feed into other research skil
 **Classify impact**:
 - **None**: No conflicts. Skip display.
 - **Minor**: 1–2 messaging inconsistencies. Display inline.
-- **Major**: Hero/positioning fundamentally misaligned. Recommend `/research-reconcile`.
+- **Major**: Hero/positioning fundamentally misaligned. Recommend `/reconcile-research`.
 
 ### 9. Next Steps
 

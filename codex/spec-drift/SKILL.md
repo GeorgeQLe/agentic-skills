@@ -5,7 +5,7 @@ description: "Audit specs against codebase — find unimplemented features, dive
 
 # Spec Drift — Spec-to-Code Conformance Audit
 
-Checks that specs and codebase tell the same story. Extracts verifiable claims from spec documents, checks each against the actual implementation, and flags divergence. Complementary to `$research-reconcile` (doc-to-doc) and `$expert-review` (broad code review).
+Checks that specs and codebase tell the same story. Extracts verifiable claims from spec documents, checks each against the actual implementation, and flags divergence. Complementary to `$reconcile-research` (doc-to-doc) and `$expert-review` (broad code review).
 
 ## Prerequisites
 
@@ -52,7 +52,7 @@ Group by severity:
    - Code right → update spec. Spec right → add to `tasks/todo.md`.
 2. Present Warnings — update spec or add to todo.
 3. Write `specs/drift-report.md` (or `specs/{app}/drift-report.md`) as audit trail.
-4. Check downstream impact on `research/journey-map.md`, `research/metrics.md`, `tasks/roadmap.md`. If major, recommend `$research-reconcile`.
+4. Check downstream impact on `research/journey-map.md`, `research/metrics.md`, `tasks/roadmap.md`. If major, recommend `$reconcile-research`.
 
 ## Deliverables
 

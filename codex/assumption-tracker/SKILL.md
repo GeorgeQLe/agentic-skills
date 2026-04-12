@@ -114,7 +114,7 @@ Include 3–5 applicable items with "Pick one:" framing:
 - IF unvalidated assumptions with score ≥ 15: `$experiment [top assumption]` — Design a cheap test for the riskiest assumption
 - IF customer feedback exists but assumptions remain unvalidated: `$customer-feedback` — Gather targeted feedback on top assumptions
 - IF product is live: `$cohort-review` — Check if real data validates or invalidates key assumptions
-- IF assumptions cross multiple docs: `$research-reconcile` — Ensure research docs are internally consistent
+- IF assumptions cross multiple docs: `$reconcile-research` — Ensure research docs are internally consistent
 - ALWAYS: `$workflow` — Check overall project status
 
 ### 8. Write Output

@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-04-12 — Clarify reconciliation skill names
+
+- Renamed `/research-reconcile` to `/reconcile-research` across Claude and Codex skill directories and active references
+- Added `/reconcile-dev-docs` for auditing or fixing drift across `tasks/roadmap.md`, `tasks/todo.md`, `tasks/history.md`, phase archives, specs, git history, and code reality
+- Added Codex `agents/openai.yaml` manifests for `/reconcile-research` and `/reconcile-dev-docs`
+- Updated README, skills reference, and `/skills` stage mapping to distinguish research reconciliation from development-doc reconciliation
+
 ## 2026-04-11 — Extend ICP skills with business model, champions, funnel, and expansion
 
 - Extended `/icp` (v3.4.0 → v3.5.0) with business model classification, new section 10 (`## Acquisition & Conversion Model`) covering funnel shape, motion type & cycle length, DMU, champion & advocate dynamics, expansion & retention dynamics, and budget & procurement. Canonical 9-section structure preserved for downstream compatibility.

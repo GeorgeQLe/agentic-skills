@@ -138,7 +138,7 @@ For each existing downstream document:
 **Classify the impact**:
 - **None**: No downstream documents exist, or no conflicts found. Skip display entirely.
 - **Minor** (1–2 small conflicts): Display conflicts to user inline.
-- **Major** (3+ conflicts OR a foundational gap was identified that changes the build sequence — e.g., a new first-sale blocker, a key assumption invalidated): Display conflicts and strongly recommend `/research-reconcile`.
+- **Major** (3+ conflicts OR a foundational gap was identified that changes the build sequence — e.g., a new first-sale blocker, a key assumption invalidated): Display conflicts and strongly recommend `/reconcile-research`.
 
 Display to the user after showing the written file confirmation.
 
@@ -184,7 +184,7 @@ Display to the user after showing the written file confirmation.
  If GTM exists: note conflicts between build order and GTM launch gates.]
 
 ## Downstream Impact
-[Only if conflicts found in step 6 — list each conflict with file, section, stale claim, and correction needed. If Major, recommend `/research-reconcile`.]
+[Only if conflicts found in step 6 — list each conflict with file, section, stale claim, and correction needed. If Major, recommend `/reconcile-research`.]
 
 ## Next Steps
 

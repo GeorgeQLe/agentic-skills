@@ -1,6 +1,6 @@
 # Claude Skills
 
-A shared skill library for **Claude Code** and **OpenAI Codex** that provides 60 structured workflows spanning the full product lifecycle — from customer discovery through shipping, deployment, and post-launch analysis.
+A shared skill library for **Claude Code** and **OpenAI Codex** that provides 56 structured workflows spanning the full product lifecycle — from customer discovery through shipping, deployment, and post-launch analysis.
 
 Skills are markdown-defined prompts that extend AI coding assistants with opinionated, multi-step workflows. Each skill lives in its own directory as a `SKILL.md` file and is installed via symlinks into each tool's global skills directory.
 
@@ -53,8 +53,8 @@ Each tool only sees its own skills. Existing symlinks that point elsewhere are u
 
 ```
 claude-skills/
-├── claude/<name>/SKILL.md              # Claude Code skill definitions (60 skills)
-├── codex/<name>/SKILL.md               # Codex skill definitions (57 skills)
+├── claude/<name>/SKILL.md              # Claude Code skill definitions (56 skills)
+├── codex/<name>/SKILL.md               # Codex skill definitions (56 skills)
 │         └── agents/openai.yaml        # Codex agent manifests
 ├── install.sh                          # Symlink installer for both platforms
 ├── sync.md                             # Post-sync actions (run by /sync skill)
@@ -134,7 +134,7 @@ Discover          Ideate              Specify             Map            Strateg
 
 **At any point**: `/workflow` checks status, stale items, and recommends the next step.
 
-**Supporting skills** plug in wherever needed: `/expert-review`, `/investigate`, `/debug`, `/trace`, `/affected`, `/dead-code`, `/slim-audit`, `/hygiene`, `/research-reconcile`.
+**Supporting skills** plug in wherever needed: `/expert-review`, `/investigate`, `/debug`, `/trace`, `/affected`, `/dead-code`, `/slim-audit`, `/hygiene`, `/reconcile-research`, `/reconcile-dev-docs`.
 
 ## Workflow Flows
 
@@ -205,7 +205,7 @@ Discover          Ideate              Specify             Map            Strateg
 | `/cohort-review` | Post-launch metrics and funnel analysis — cohort retention, channel performance, progress against targets | none | `research/cohort-review-<date>.md` |
 | `/retro` | Strategic decision retrospective — review research decisions against outcomes, update confidence levels, extract patterns | none | `research/retro-<date>.md` |
 | `/investor-update` | Generate structured monthly stakeholder update from research state, metrics, roadmap, and feedback | none | `research/investor-update-<YYYY-MM>.md` |
-| `/research-reconcile` | Cross-document consistency audit — find contradictions, stale assumptions, and gaps across research outputs | `[audit\|fix] [all\|icp\|pricing\|journey\|enterprise\|feedback]` | Findings report; in fix mode: `research/reconciliation-report.md` |
+| `/reconcile-research` | Cross-document consistency audit — find contradictions, stale assumptions, and gaps across research outputs | `[audit\|fix] [all\|icp\|pricing\|journey\|enterprise\|feedback\|specs]` | Findings report; in fix mode: `research/reconciliation-report.md` |
 
 ### Planning & Specification
 
@@ -222,6 +222,7 @@ Discover          Ideate              Specify             Map            Strateg
 | Skill | Description | Arguments | Key Outputs |
 |-------|-------------|-----------|-------------|
 | `/workflow` | Read-only status — completed steps, stale items, missing steps, single recommended next action | none | Display only (no files written) |
+| `/reconcile-dev-docs` | Reconcile roadmap, todo, history, phase archives, specs, git history, and code reality | `[audit\|fix] [tasks\|specs\|all]` | Findings report; in fix mode: updated dev docs + `tasks/reconciliation-report.md` |
 | `/spec-drift` | Audit specs against codebase — unimplemented features, diverged implementations, undocumented code | `[audit\|fix] [spec-file\|all]` | Findings; in fix mode: `specs/drift-report.md` |
 | `/affected` | Analyze which monorepo packages/apps are affected by current changes — blast radius analysis | `[commit range or branch]` | Display only |
 | `/analyze-sessions` | Analyze Claude Code session history — usage breakdown with automation recommendations | none | Structured report |
@@ -318,8 +319,8 @@ Each skill has a `type` in its frontmatter describing the kind of work it does (
 
 | Type | What it does | Output | Skills |
 |------|-------------|--------|--------|
-| **research** | Web search + analysis | Documents, market insights | `icp`, `enterprise-icp`, `competitive-analysis`, `gtm`, `monetization`, `positioning`, `customer-feedback`, `research-reconcile` |
-| **analysis** | Reads codebase/docs | Assessments, gap reports | `mvp-gap`, `scale-audit`, `journey-map`, `metrics`, `burn-rate`, `runway-model`, `workflow`, `spec-drift`, `affected`, `dead-code`, `hygiene`, `slim-audit`, `analyze-sessions`, `assumption-tracker`, `cohort-review`, `retro`, `risk-register`, `investor-update`, `experiment` |
+| **research** | Web search + analysis | Documents, market insights | `icp`, `enterprise-icp`, `competitive-analysis`, `gtm`, `monetization`, `positioning`, `customer-feedback`, `reconcile-research` |
+| **analysis** | Reads codebase/docs | Assessments, gap reports | `mvp-gap`, `scale-audit`, `journey-map`, `metrics`, `burn-rate`, `runway-model`, `workflow`, `reconcile-dev-docs`, `spec-drift`, `affected`, `dead-code`, `hygiene`, `slim-audit`, `analyze-sessions`, `assumption-tracker`, `cohort-review`, `retro`, `risk-register`, `investor-update`, `experiment` |
 | **planning** | Interactive interviews | Specs, roadmaps, phases | `brainstorm`, `plan-interview`, `plan-interview-ideas`, `roadmap`, `plan-phases`, and their `-kanban` variants |
 | **execution** | Writes/modifies code | Code changes | `run`, `scaffold`, `migrate`, `decommission`, and `run-kanban` |
 | **review** | Reads code, reports issues | Review reports (no changes) | `expert-review`, `regression-check`, `trace` |
@@ -396,10 +397,11 @@ Skills communicate through repo state files, not through tool-specific messaging
 ```
 
 ### Cross-Cutting
-- `/research-reconcile` audits consistency across all research docs
+- `/reconcile-research` audits consistency across all research docs
+- `/reconcile-dev-docs` audits consistency across roadmap, todo, history, phase archives, specs, git history, and code reality
 - `/workflow` detects staleness by comparing git history with research doc dates
 - `/spec-drift` verifies specs match implementation after any execution
-- Research skills now include **downstream impact checking** — after writing their document, they scan dependent docs for conflicts and recommend `/research-reconcile` if major impacts are found
+- Research skills now include **downstream impact checking** — after writing their document, they scan dependent docs for conflicts and recommend `/reconcile-research` if major impacts are found
 
 ### Validation Script
 

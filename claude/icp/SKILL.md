@@ -152,7 +152,7 @@ Before writing, check which files exist to populate the `## Next Steps` section 
 - IF `research/competitive-analysis.md` exists: `/brainstorm` — Generate ideas from ICP needs + competitive gaps
 
 **Impact-aware adjustments:**
-- IF downstream impact is **Major**: prepend `/research-reconcile — [N] conflicts found in downstream docs` as the first item
+- IF downstream impact is **Major**: prepend `/reconcile-research — [N] conflicts found in downstream docs` as the first item
 - IF downstream impact is **Minor**: annotate relevant skill suggestions with "(stale — [brief description])"
 
 ### 8. Final Review & Write
@@ -191,7 +191,7 @@ For each existing downstream document:
 **Classify the impact**:
 - **None**: No downstream documents exist, or no conflicts found. Skip display entirely.
 - **Minor** (1–2 small conflicts): Display conflicts to user inline.
-- **Major** (3+ conflicts OR a foundational assumption changed — e.g., primary ICP shifted, key pain points redefined, user profiles restructured, value proposition changed): Display conflicts and strongly recommend `/research-reconcile`.
+- **Major** (3+ conflicts OR a foundational assumption changed — e.g., primary ICP shifted, key pain points redefined, user profiles restructured, value proposition changed): Display conflicts and strongly recommend `/reconcile-research`.
 
 Display to the user after showing the written file confirmation. This should be quick — one read per downstream doc, scan for conflicts against key decisions. Not a deep reconciliation.
 
@@ -354,7 +354,7 @@ Structure — the **Primary ICP** fills the canonical top-level sections:
    - **Now**: [what this skill's output says instead]
 
 [For Major only:]
-> **Recommended action**: Run `/research-reconcile` to audit and fix all affected downstream documents.
+> **Recommended action**: Run `/reconcile-research` to audit and fix all affected downstream documents.
 
 ## Next Steps
 

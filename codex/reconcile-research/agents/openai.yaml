@@ -1,0 +1,7 @@
+interface:
+  display_name: "Reconcile Research"
+  short_description: "Reconcile consistency across research docs"
+  default_prompt: "Use $reconcile-research audit to check whether the research documents tell a consistent story."
+
+policy:
+  allow_implicit_invocation: true

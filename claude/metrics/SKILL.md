@@ -107,7 +107,7 @@ Before writing, check which files exist to populate the `## Next Steps` section 
 - IF product is live and real data exists: `/cohort-review` — Analyze actual performance against these targets
 
 **Impact-aware adjustments:**
-- IF downstream impact is **Major**: prepend `/research-reconcile — [N] conflicts found in downstream docs` as the first item
+- IF downstream impact is **Major**: prepend `/reconcile-research — [N] conflicts found in downstream docs` as the first item
 - IF downstream impact is **Minor**: annotate relevant skill suggestions with "(stale — [brief description])"
 
 ### 5. Write Output
@@ -132,7 +132,7 @@ For each existing downstream document:
 **Classify the impact**:
 - **None**: No downstream documents exist, or no conflicts found. Skip display entirely.
 - **Minor** (1–2 small conflicts): Display conflicts to user inline.
-- **Major** (3+ conflicts OR a foundational assumption changed — e.g., North Star metric changed, activation definition redefined, retention targets shifted significantly): Display conflicts and strongly recommend `/research-reconcile`.
+- **Major** (3+ conflicts OR a foundational assumption changed — e.g., North Star metric changed, activation definition redefined, retention targets shifted significantly): Display conflicts and strongly recommend `/reconcile-research`.
 
 Display to the user after showing the written file confirmation. This should be quick — one read per downstream doc, scan for conflicts against key decisions. Not a deep reconciliation.
 
@@ -236,7 +236,7 @@ _Start with:_ `/plan-interview [instrumentation topic]` for high-priority gaps.
    - **Now**: [what this skill's output says instead]
 
 [For Major only:]
-> **Recommended action**: Run `/research-reconcile` to audit and fix all affected downstream documents.
+> **Recommended action**: Run `/reconcile-research` to audit and fix all affected downstream documents.
 
 ## Next Steps
 

@@ -49,7 +49,7 @@ The output file must end with a `## Next Steps` section with a **Recommended** i
 
 ## Next Steps
 
-**Recommended:** `$recommended-skill` — [one-line reason why this is the highest-impact next action given current state]
+**Recommended:** [recommended skill] — [one-line reason why this is the highest-impact next action given current state]
 
 Other options:
 - `$skill` — [description]
