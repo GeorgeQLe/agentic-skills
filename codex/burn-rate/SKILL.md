@@ -59,7 +59,7 @@ Present analysis and ask for factual corrections, missing internal figures, or h
 ### 4. Downstream Impact & Next Steps
 
 1. Check if `research/monetization.md` exists and conflicts with burn rate findings (stale margins, divergent unit economics). Classify as None/Minor/Major.
-2. Populate `## Next Steps` (3-5 items, "Pick one:" framing) — conditionally suggest `$monetization`, `$gtm`, `$metrics`, `$scale-audit`, `$brainstorm`, `$research-reconcile` based on what exists and what conflicts were found.
+2. Populate `## Next Steps` (3-5 items, "Pick one:" framing) — conditionally suggest `$monetization`, `$gtm`, `$metrics`, `$scale-audit`, `$brainstorm`, `$reconcile-research` based on what exists and what conflicts were found.
 
 ## Deliverables
 

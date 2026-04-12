@@ -172,7 +172,7 @@ For each existing downstream document:
 **Classify the impact**:
 - **None**: No downstream docs exist, or no conflicts. Skip display.
 - **Minor** (1–2 small conflicts): Display inline.
-- **Major** (3+ conflicts OR market category changed, primary alternative shifted, value framing changed): Display and recommend `$research-reconcile`.
+- **Major** (3+ conflicts OR market category changed, primary alternative shifted, value framing changed): Display and recommend `$reconcile-research`.
 
 ## Output
 
@@ -283,7 +283,7 @@ What this product has that alternatives genuinely don't:
    - **Now**: [what positioning says instead]
 
 [For Major only:]
-> **Recommended action**: Run `$research-reconcile` to audit and fix all affected downstream documents.
+> **Recommended action**: Run `$reconcile-research` to audit and fix all affected downstream documents.
 
 ## Next Steps
 

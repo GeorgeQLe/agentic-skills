@@ -88,14 +88,14 @@ Before writing, check which files exist and synthesis results to populate the `#
 
 ### Next Steps
 
-**Recommended:** `$recommended-skill` — [one-line reason why this is the highest-impact next action given current state]
+**Recommended:** [recommended skill] — [one-line reason why this is the highest-impact next action given current state]
 
 Other options:
 - `$skill` — [description]
 - ...
 
 **Recommendation priority** (first applicable becomes the recommendation):
-1. IF downstream impact is **Major**: recommend `$research-reconcile` — [N] conflicts found in downstream docs need resolution before other work
+1. IF downstream impact is **Major**: recommend `$reconcile-research` — [N] conflicts found in downstream docs need resolution before other work
 2. IF staleness alert for ICP: recommend `$icp` — feedback has invalidated key ICP assumptions that other research depends on
 3. IF staleness alert for journey map: recommend `$journey-map` — real user behavior differs from mapped experience
 4. IF 3+ New findings: recommend `$brainstorm` — newly revealed customer needs deserve solution exploration
@@ -139,7 +139,7 @@ For each existing downstream document:
 **Classify the impact**:
 - **None**: No downstream documents exist, or no conflicts found. Skip display entirely.
 - **Minor** (1–2 small conflicts): Display conflicts to user inline.
-- **Major** (3+ conflicts OR a foundational assumption changed — e.g., primary pain point invalidated, willingness-to-pay signals contradicted, key customer behavior pattern disproved): Display conflicts and strongly recommend `$research-reconcile`.
+- **Major** (3+ conflicts OR a foundational assumption changed — e.g., primary pain point invalidated, willingness-to-pay signals contradicted, key customer behavior pattern disproved): Display conflicts and strongly recommend `$reconcile-research`.
 
 Display to the user after showing the written file confirmation. This should be quick — one read per downstream doc, scan for conflicts against key decisions. Not a deep reconciliation.
 
@@ -182,7 +182,7 @@ Display to the user after showing the written file confirmation. This should be 
    - **Now**: [what this skill's output says instead]
 
 [For Major only:]
-> **Recommended action**: Run `$research-reconcile` to audit and fix all affected downstream documents.
+> **Recommended action**: Run `$reconcile-research` to audit and fix all affected downstream documents.
 
 ### Next Steps
 

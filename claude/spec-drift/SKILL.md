@@ -8,7 +8,7 @@ argument-hint: "[audit|fix] [spec-file|all]"
 
 # Spec Drift — Spec-to-Code Conformance Audit
 
-Checks that specs and codebase tell the same story. Extracts verifiable claims from spec documents, checks each against the actual implementation, and flags divergence. Think of it as a linter for spec-to-code fidelity — complementary to `/research-reconcile` (doc-to-doc) and `/expert-review` (broad code review).
+Checks that specs and codebase tell the same story. Extracts verifiable claims from spec documents, checks each against the actual implementation, and flags divergence. Think of it as a linter for spec-to-code fidelity — complementary to `/reconcile-research` (doc-to-doc) and `/expert-review` (broad code review).
 
 ## Prerequisites
 
@@ -149,7 +149,7 @@ If mode is `fix`:
 | `research/metrics.md` | Metrics tied to features that drifted | Metrics may track behaviors that changed |
 | `tasks/roadmap.md` | Roadmap items that reference changed specs | Roadmap priorities may need re-evaluation |
 
-Classify impact as **None**, **Minor** (cosmetic references), or **Major** (core assumptions affected). If any impact is Major, recommend running `/research-reconcile` to propagate changes.
+Classify impact as **None**, **Minor** (cosmetic references), or **Major** (core assumptions affected). If any impact is Major, recommend running `/reconcile-research` to propagate changes.
 
 ## Output Format
 

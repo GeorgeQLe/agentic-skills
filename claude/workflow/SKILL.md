@@ -226,20 +226,20 @@ For each skill in the queue:
 
 2. **Run the skill**: Invoke the skill (e.g., `/icp`, `/journey-map`). Let it run its full process including any interviews or web searches it performs.
 
-3. **Reconcile**: After the skill completes and its output file exists, run a scoped `/research-reconcile audit` to check for conflicts between the newly generated document and all existing research documents. Use the appropriate scope:
-   - After `/icp` → `/research-reconcile audit icp`
-   - After `/competitive-analysis` or `/positioning` → `/research-reconcile audit icp`
-   - After `/journey-map` or `/metrics` → `/research-reconcile audit journey`
-   - After `/gtm` or `/monetization` → `/research-reconcile audit pricing`
-   - After `/enterprise-icp` → `/research-reconcile audit enterprise`
-   - After `/customer-feedback` → `/research-reconcile audit feedback`
-   - After `/assumption-tracker` or `/runway-model` → `/research-reconcile audit all`
+3. **Reconcile**: After the skill completes and its output file exists, run a scoped `/reconcile-research audit` to check for conflicts between the newly generated document and all existing research documents. Use the appropriate scope:
+   - After `/icp` → `/reconcile-research audit icp`
+   - After `/competitive-analysis` or `/positioning` → `/reconcile-research audit icp`
+   - After `/journey-map` or `/metrics` → `/reconcile-research audit journey`
+   - After `/gtm` or `/monetization` → `/reconcile-research audit pricing`
+   - After `/enterprise-icp` → `/reconcile-research audit enterprise`
+   - After `/customer-feedback` → `/reconcile-research audit feedback`
+   - After `/assumption-tracker` or `/runway-model` → `/reconcile-research audit all`
 
 4. **Walk through conflicts**: The reconcile skill will present findings one at a time via `AskUserQuestion`. The user resolves each conflict before moving on.
 
 5. **Checkpoint**: After reconciliation, use `AskUserQuestion` to ask:
    ```
-   Step N/M complete. Continue to next (`/skill-name`), skip to a specific step, or stop here?
+   Step N/M complete. Continue to next ([skill name]), skip to a specific step, or stop here?
    ```
 
 6. **Repeat** for the next item in the queue.

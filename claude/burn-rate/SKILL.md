@@ -157,14 +157,14 @@ For each existing downstream document:
 **Classify the impact**:
 - **None**: No downstream documents exist, or no conflicts found. Skip display entirely.
 - **Minor** (1-2 small conflicts): Display conflicts to user inline.
-- **Major** (3+ conflicts OR a foundational assumption changed — e.g., burn rate is 2x+ what monetization assumed): Display conflicts and strongly recommend `/research-reconcile`.
+- **Major** (3+ conflicts OR a foundational assumption changed — e.g., burn rate is 2x+ what monetization assumed): Display conflicts and strongly recommend `/reconcile-research`.
 
 ### 7. Populate Next Steps
 
 Check which files exist to populate the `## Next Steps` section contextually. Include 3-5 applicable items with "Pick one:" framing:
 
 **Impact-aware adjustments:**
-- IF downstream impact is **Major**: prepend `/research-reconcile — [N] conflicts found in downstream docs` as the first item
+- IF downstream impact is **Major**: prepend `/reconcile-research — [N] conflicts found in downstream docs` as the first item
 - IF downstream impact is **Minor**: annotate relevant skill suggestions with "(stale — [brief description])"
 
 Conditional items:
@@ -285,7 +285,7 @@ Only after the user has validated the findings, write the output file.
    - **Now**: [what this skill's output says instead]
 
 [For Major only:]
-> **Recommended action**: Run `/research-reconcile` to audit and fix all affected downstream documents.
+> **Recommended action**: Run `/reconcile-research` to audit and fix all affected downstream documents.
 
 ## Next Steps
 

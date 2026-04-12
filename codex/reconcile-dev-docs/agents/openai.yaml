@@ -1,0 +1,7 @@
+interface:
+  display_name: "Reconcile Dev Docs"
+  short_description: "Reconcile roadmap, todo, history, and specs"
+  default_prompt: "Use $reconcile-dev-docs audit to check whether roadmap, todo, history, phase archives, specs, and code reality agree."
+
+policy:
+  allow_implicit_invocation: true

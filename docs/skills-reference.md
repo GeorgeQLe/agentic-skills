@@ -1,6 +1,6 @@
 # Skills Reference
 
-Complete reference for all 55 custom skills in this repository, available for both Claude Code and Codex.
+Complete reference for all 56 custom skills in this repository, available for both Claude Code and Codex.
 
 ## Tool Compatibility
 
@@ -68,7 +68,7 @@ Discover                      Ideate                       Specify              
 
 For **Codex**, the same flow is invoked with `$skill-name` rather than `/skill-name`, and it remains an approximate map of the intended workflow rather than a guarantee that every approval or plan-mode transition works the same way.
 
-Supporting skills plug in at any point: `/expert-review`, `/spec-drift`, `/branch-lifecycle`, `/investigate`, `/affected`, `/regression-check`, etc.
+Supporting skills plug in at any point: `/expert-review`, `/spec-drift`, `/reconcile-dev-docs`, `/branch-lifecycle`, `/investigate`, `/affected`, `/regression-check`, etc.
 
 ## Activity Types
 
@@ -76,8 +76,8 @@ Each skill has a `type` field in its frontmatter that describes *what kind of wo
 
 | Type | What it does | Output | Skills |
 |------|-------------|--------|--------|
-| **research** | Web search + analysis | Documents, market insights | `icp`, `enterprise-icp`, `competitive-analysis`, `platform-strategy`, `gtm`, `landing-copy`, `monetization`, `customer-feedback`, `research-reconcile` |
-| **analysis** | Reads codebase/docs | Assessments, gap reports | `mvp-gap`, `scale-audit`, `journey-map`, `metrics`, `burn-rate`, `workflow`, `spec-drift`, `affected`, `dead-code`, `hygiene`, `slim-audit`, `analyze-sessions` |
+| **research** | Web search + analysis | Documents, market insights | `icp`, `enterprise-icp`, `competitive-analysis`, `platform-strategy`, `gtm`, `landing-copy`, `monetization`, `customer-feedback`, `reconcile-research` |
+| **analysis** | Reads codebase/docs | Assessments, gap reports | `mvp-gap`, `scale-audit`, `journey-map`, `metrics`, `burn-rate`, `workflow`, `reconcile-dev-docs`, `spec-drift`, `affected`, `dead-code`, `hygiene`, `slim-audit`, `analyze-sessions` |
 | **planning** | Interactive interviews | Specs, roadmaps, phases | `brainstorm`, `plan-interview`, `plan-interview --ideas`, `roadmap`, `plan-phases`, `brainstorm --kanban`, `plan-interview --kanban`, `roadmap --kanban` |
 | **execution** | Writes/modifies code | Code changes | `run`, `scaffold`, `migrate`, `decommission`, `run --kanban` |
 | **review** | Reads code, reports issues | Review reports (no changes) | `expert-review`, `regression-check`, `trace` |
@@ -190,10 +190,10 @@ Estimate monthly burn rate from infrastructure signals and calculate payback per
 - **Outputs**: `research/burn-rate.md` (infrastructure costs, team costs, total burn, payback period, runway, optimization opportunities), `research/burn-rate-interview.md`
 - **Use when**: After building infrastructure, to get a concrete dollar estimate of monthly costs and calculate when you'll break even.
 
-### `/research-reconcile`
+### `/reconcile-research`
 Cross-document consistency audit across research outputs — find contradictions, stale assumptions, and gaps.
 
-- **Arguments**: `[audit|fix] [all|icp|pricing|journey|enterprise|feedback]`
+- **Arguments**: `[audit|fix] [all|icp|pricing|journey|enterprise|feedback|specs]`
 - **Prerequisites**: At least 2 research documents must exist in `research/`.
 - **Outputs**: Categorized findings (Errors/Warnings/Info). In `fix` mode, edits research docs and writes `research/reconciliation-report.md`.
 - **Use when**: After running multiple research skills, to check that documents tell a consistent story. Especially useful after `/customer-feedback` invalidates earlier assumptions.
@@ -205,6 +205,14 @@ Read-only workflow status — shows completed steps, stale items, missing steps,
 - **No prerequisites.** Runs at any point.
 - **Outputs**: None (display only — no files written)
 - **Use when**: At any point, to check what's been done, what's stale, and what to do next.
+
+### `/reconcile-dev-docs`
+Reconcile development docs by auditing roadmap, todo, history, phase archives, specs, git history, and code reality.
+
+- **Arguments**: `[audit|fix] [tasks|specs|all]`
+- **Prerequisites**: Development docs under `tasks/` or specs under `specs/`.
+- **Outputs**: Categorized findings. In `fix` mode, updates development docs and writes `tasks/reconciliation-report.md`.
+- **Use when**: Roadmap, todo, history, phase archives, or specs may have drifted after execution, shipping, manual edits, or recent commits.
 
 ### `/spec-drift`
 Audit specs against codebase — find unimplemented features, diverged implementations, and undocumented code.
@@ -552,7 +560,8 @@ Archive old Done/Punt cards from the kanban board.
 | `/monetization` | Revenue models, pricing, unit economics | research |
 | `/burn-rate` | Monthly burn rate, payback period, runway from infra signals | analysis |
 | `/customer-feedback` | Ingest + synthesize customer feedback | research |
-| `/research-reconcile` | Cross-document consistency audit for research outputs | research |
+| `/reconcile-research` | Cross-document consistency audit for research outputs | research |
+| `/reconcile-dev-docs` | Reconcile roadmap, todo, history, specs, and code reality | analysis |
 | `/mvp-gap` | Evaluate codebase against ICP for MVP readiness | analysis |
 | `/scale-audit` | Enterprise production readiness audit | analysis |
 | `/journey-map` | Map user task flows + customer journey funnel | analysis |

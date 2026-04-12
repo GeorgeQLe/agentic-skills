@@ -145,7 +145,7 @@ Check which files exist to populate the `## Next Steps` section contextually. In
 
 ## Next Steps
 
-**Recommended:** `$recommended-skill` — [one-line reason why this is the highest-impact next action given current state]
+**Recommended:** [recommended skill] — [one-line reason why this is the highest-impact next action given current state]
 
 Other options:
 - `$skill` — [description]
