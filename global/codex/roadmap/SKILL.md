@@ -1,45 +1,254 @@
 ---
 name: roadmap
-description: Build or update the project roadmap by interviewing across all specs, codebase state, and project history
-version: 1.0.0
-argument-hint: "[--existing]"
+description: Scan task pipeline health, build or update the project roadmap, and maintain a priority task queue
+version: 2.0.0
+argument-hint: "[--existing] [path-to-spec]"
 ---
 
-# Roadmap Builder
+# Roadmap - Task Pipeline Manager
 
-Build or update `tasks/roadmap.md` by synthesizing all project documentation, interviewing the user on priorities and sequencing, and producing a phased roadmap.
+Use this skill to keep the task execution pipeline healthy and moving. It scans roadmap, todo, manual tasks, history, ideas, specs, and git state, then either builds a roadmap (when none exists) or updates `tasks/todo.md` with a priority task queue.
 
-## Modes
+Do not run the queued skills from this workflow. The job here is to maintain the task queue so the user can resolve all pipeline issues in the right order.
 
-- **New Project**: `tasks/roadmap.md` does not exist. Read specs and interview to create the roadmap from scratch.
-- **Existing Project** (`--existing`, or when `tasks/roadmap.md` has content): Review codebase, history, and current roadmap. Update with new work, completed phases, or changed priorities.
+## Process
 
-## Workflow
+### 1. Resolve Project Context
 
-1. **Gather context**: Read `.agents/project.json`, `specs/`, `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md` (if it exists), `tasks/history.md`, `tasks/ideas.md`, CLAUDE.md, AGENTS.md, README. For `business-app`, also read `research/icp.md`, `specs/mvp-gap.md`, `research/enterprise-icp.md`, `specs/scale-audit.md`, `research/gtm.md`, and `research/metrics.md`. For `game`, read `research/game-*.md`. For `devtool`, read `research/devtool-*.md`. For existing projects, also review source files and git log.
-2. **Synthesise**: Present a structured summary — features identified, dependencies, conflicts, and (for existing projects) what's built vs. remaining.
-3. **Interview on strategy** (1–3 questions per turn). If the session is already in Plan mode and there are 2-3 concrete choices, prefer `request_user_input`; otherwise ask concise plain-text questions:
-   - Priority — What's MVP vs. later?
-   - Grouping — Combine or split specs?
-   - Sequencing — Dependencies, risk reduction, user value order
-   - Scope — Defer, drop, or stretch?
-   - Phase sizing — Many small vs. fewer large?
-   - Manual tasks — Any steps requiring human action (DNS, OAuth, browser testing, deploy approvals)? Which phases?
-   - Market fit (when ICP/gap specs exist) — Which phases address deal-blockers? Prioritise by market impact.
-4. **Write roadmap**: Write `tasks/roadmap.md` with agreed phase structure (phases, goals, scope, acceptance criteria — NOT implementation steps).
-5. **Update history** (existing projects): Append entry to `tasks/history.md`.
+1. Read `.agents/project.json` if it exists.
+2. Use `project_type` and `enabled_packs` to decide which project-pack skills apply.
+3. If `.agents/project.json` is missing, infer the project type from repository signals:
+   - game: game engine files, Steam/store assets, playable prototypes, or game-specific README/spec language
+   - devtool: SDK, CLI, API, library, infra, docs, examples, or package-first developer workflow
+   - business-app: SaaS, marketplace, productivity, workflow, enterprise, or user-facing app
+4. If the project type cannot be inferred, default to `business-app`.
+5. Read `CLAUDE.md` for project conventions, or `AGENTS.md` for Codex conventions.
+6. Read `README.md` or equivalent for project overview.
 
-## Deliverables
+### 2. Scan Pipeline State
 
-- `tasks/roadmap.md` — Phased plan with goals, scope, acceptance criteria, and optional `**Manual Tasks:**` per phase (no implementation steps — those are generated just-in-time by `$plan-phases` when a phase is started)
+Record existence, content summary, and last-modified timestamps for:
+
+- `tasks/roadmap.md` — full phased plan
+- `tasks/todo.md` — current phase working document
+- `tasks/manual-todo.md` — pending manual tasks
+- `tasks/history.md` — completed work log
+- `tasks/ideas.md` — unspecced ideas
+- `tasks/phases/` — archived phase files
+- `tasks/lessons.md` — accumulated lessons
+- `specs/` or `spec.md` — specifications
+
+Also gather:
+
+- Git log (last 20 commits) for recent activity
+- Working tree status (uncommitted changes, unpushed commits)
+
+### 3. Determine Project State
+
+Route behavior based on the current pipeline state:
+
+| State | Condition | Behavior |
+|-------|-----------|----------|
+| A — No specs | No `specs/` files, no `spec.md` | Queue `$plan-interview`. Done (skip to step 7). |
+| B — Specs, no roadmap | Specs exist, `tasks/roadmap.md` missing or empty | Go to step 4 (build roadmap), then continue to step 5. |
+| C — Work in progress | `tasks/roadmap.md` exists, unchecked phases remain | Skip to step 5 (classify issues). |
+| D — All complete | All phases in `tasks/roadmap.md` are checked | Queue `$workflow` for documentation scan. Done (skip to step 7). |
+
+### 4. Build Roadmap (State B Only)
+
+When specs exist but no roadmap does, interview the user to build one.
+
+#### 4a. Synthesize and Present
+
+Present the user with a structured summary:
+
+- List each spec section / feature area identified
+- Note dependencies between them
+- Highlight any conflicts or overlaps between specs
+- Flag specs that seem incomplete or ambiguous
+
+#### 4b. Interview on Strategy
+
+Ask focused questions to align on roadmap decisions (1–3 questions per turn). If the session is already in Plan mode and there are 2–3 concrete choices, prefer `request_user_input`; otherwise ask concise plain-text questions. Cover:
+
+- **Priority**: Which features/specs are most important? What's MVP vs. later?
+- **Grouping**: Should any specs be combined into a single phase? Split apart?
+- **Sequencing**: What depends on what? What should ship first for user value or risk reduction?
+- **Scope**: Should anything be deferred, dropped, or marked as stretch?
+- **Market fit** (when ICP/gap specs exist): Which phases directly address customer pain points or deal-blockers from gap analysis? Prioritise these unless technically impossible.
+- **Phase sizing**: Preference for many small phases vs. fewer larger ones?
+- **Manual tasks**: Any steps requiring human action (DNS, OAuth, browser testing, deploy approvals)? Which phases?
+
+When options exist, present pros/cons with a recommendation. Do not manufacture artificial choices.
+
+Continue until the user confirms the phase structure is complete.
+
+#### 4c. Write the Roadmap
+
+Write `tasks/roadmap.md` with the agreed phase structure (phases, goals, scope, acceptance criteria — NOT implementation steps). Implementation detail is generated just-in-time by `$plan-phases` when a phase is started, not upfront.
+
+After writing the roadmap, continue to step 5 to scan the freshly-created roadmap for any pipeline issues.
+
+### 5. Classify Issues (States B-after and C)
+
+Check for each issue type in order. Include timestamps or evidence for every finding.
+
+#### 1. Dirty Working Tree
+Uncommitted changes or unpushed commits exist. These must be resolved before task pipeline work.
+
+#### 2. Phase Completion Not Advanced
+`tasks/todo.md` has all steps checked and milestone criteria met, but the phase has not been archived or the next phase loaded. Evidence: all `- [x]` in todo, no `- [ ]` remaining under implementation steps.
+
+#### 3. Blocking Manual Tasks
+`tasks/manual-todo.md` contains unchecked items with `_(blocks: Step N.X)_` annotations for steps that are next in the execution queue. These block automated progress.
+
+#### 4. Stale Todo
+`tasks/roadmap.md` was modified more recently than `tasks/todo.md`, suggesting the roadmap was updated but the current working document was not refreshed. Evidence: roadmap mtime vs todo mtime.
+
+#### 5. Missing Implementation Steps
+A roadmap phase has acceptance criteria but no implementation steps (no `### Tests First`, `### Implementation`, or `### Green` section). This phase needs `$plan-phases` before `$run` can execute it.
+
+#### 6. Orphaned Manual Tasks
+`tasks/manual-todo.md` references a phase that has already been completed or archived, but unchecked items remain. These need resolution or explicit deferral.
+
+#### 7. History Gap
+Work has been completed (checked-off steps in todo, archived phases) but `tasks/history.md` is missing, empty, or its last entry predates the most recent phase archive. Evidence: phase archive timestamps vs history mtime.
+
+#### 8. Spec-Task Drift
+Specs have been modified more recently than the roadmap, suggesting the plan may not reflect the current specifications. Evidence: spec mtime vs roadmap mtime. Only flag when the spec modification is substantive (not just formatting).
+
+#### 9. Missing Roadmap (defensive)
+Specs exist in `specs/` (or `spec.md`) but `tasks/roadmap.md` does not exist. This should not occur after step 4 but is included as a safety net.
+
+#### 10. Lessons Not Reviewed
+`tasks/lessons.md` was updated more recently than the current phase's implementation steps were written, suggesting new lessons may apply to in-progress work.
+
+#### 11. Unspecced Ideas
+`tasks/ideas.md` contains ideas that have no corresponding spec in `specs/`. These are candidates for `$plan-interview --ideas` or individual `$plan-interview` runs.
+
+### 6. Order the Priority Queue
+
+Order action items so the user can resolve pipeline issues without guessing:
+
+1. Dirty working tree (uncommitted/unpushed work).
+2. Phase completion not advanced (work is done but pipeline is stuck).
+3. Blocking manual tasks (human action needed before automation can continue).
+4. Stale todo (working document out of sync with roadmap).
+5. Missing implementation steps (phase needs decomposition before execution).
+6. Orphaned manual tasks (leftover from completed phases).
+7. History gap (completed work not recorded).
+8. Spec-task drift (plan may be outdated).
+9. Missing roadmap (specs exist but no plan).
+10. Lessons not reviewed (new lessons may apply).
+11. Unspecced ideas (ideas waiting for interview).
+
+Within each category, prefer items that unblock the most downstream work.
+
+### 7. Update `tasks/todo.md`
+
+Write a single top-level section named exactly:
+
+```md
+## Priority Task Queue
+```
+
+Rules:
+
+1. If `tasks/todo.md` does not exist, create it with only this section.
+2. If a previous `## Priority Task Queue` section exists, replace only that section.
+3. Put the section before existing implementation work. If the file starts with a title or status block, keep that orientation text at the top and insert the priority section immediately after it.
+4. Preserve all other todo content exactly unless it is inside the old priority section.
+5. Do not mark existing implementation steps complete.
+6. Do not remove unrelated todo sections.
+7. Use unchecked boxes for unresolved issues.
+8. Use checked boxes only when an issue is already resolved.
+
+Action item format:
+
+```md
+- [ ] `$skill [args]` - [action description] because [reason with evidence].
+```
+
+For manual tasks that block progress:
+
+```md
+- [ ] Complete manual task: "[task description]" _(blocks: Step N.X)_ — resolve before `$run` can continue.
+```
+
+For dirty tree:
+
+```md
+- [ ] `$ship-end --no-deploy` - commit and push uncommitted changes before continuing task work.
+```
+
+If all pipeline checks pass:
+
+```md
+- [x] Task pipeline is healthy; no issues found. Ready for `$run`.
+```
+
+### 8. Output to User
+
+After editing, summarize:
+
+```
+## Roadmap Updated
+
+- Wrote/updated `tasks/todo.md`
+- Priority task items: N
+- Blocking issues: N (must resolve before `$run`)
+- Advisory issues: N (should resolve soon)
+
+Next: start at the first unchecked item in `tasks/todo.md`.
+```
+
+For State A (no specs):
+
+```
+## No Specs Found
+
+- No specifications found in `specs/` or `spec.md`
+- Queued `$plan-interview` to create project specifications
+
+Next: `$plan-interview` to define what to build.
+```
+
+For State D (all complete):
+
+```
+## All Phases Complete
+
+- All roadmap phases are checked off
+- Queued `$workflow` for documentation scan
+
+Next: `$workflow` to check documentation health.
+```
+
+If the pipeline is fully healthy:
+
+```
+## Roadmap Updated
+
+- Task pipeline is healthy
+- No blocking or advisory issues found
+
+Next: `$run` to continue execution.
+```
 
 ## Constraints
 
-- Always interview — do not produce a roadmap without user input.
-- Do not modify files in `specs/`.
-- Phase headers must use `## Phase N: [Title]` format for `$run` compatibility.
-- Do not include TDD steps or file-level detail — that's `$plan-phases`' job.
-- `tasks/roadmap.md` is the source of truth. Do not put roadmap content in CLAUDE.md.
+- **Always interview for new roadmaps.** Do not produce a roadmap without user input on priorities and sequencing when building one from scratch (State B).
+- **Respect existing specs.** Do not modify files in `specs/` (or `spec.md`).
+- **Phase headers must use `## Phase N: [Title]` format** for `$run` compatibility.
+- **Do not include TDD steps or file-level implementation detail** — that's `$plan-phases`' job.
+- **`tasks/roadmap.md` is the source of truth.** Do not put roadmap content in CLAUDE.md or AGENTS.md.
+- This skill updates `tasks/todo.md` and `tasks/roadmap.md`; it must not run the queued skills.
+- Preserve user-authored todo content outside `## Priority Task Queue`.
+- Every issue must include evidence (timestamps, checked-item counts, file existence).
+- Do not modify `tasks/manual-todo.md`, `tasks/history.md`, or any specs (except to create `tasks/roadmap.md` in State B).
+- Do not create or modify source code.
+- Do not archive phases, advance the pipeline, or execute implementation steps.
+- Prefer actionable skill invocations (`$ship`, `$run`, `$plan-phases N`, `$workflow`) over vague guidance.
 
 ## Default Shipping Contract
 

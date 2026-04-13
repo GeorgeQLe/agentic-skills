@@ -39,7 +39,7 @@ Discover and search installed global skills plus enabled project-local pack skil
    | Mapping | `journey-map`, `metrics` |
    | Strategize | `roadmap`, `roadmap-kanban`, `competitive-analysis`, `platform-strategy`, `gtm`, `landing-copy`, `monetization`, `positioning`, `runway-model` |
    | Evaluate | `mvp-gap`, `scale-audit`, `customer-feedback`, `assumption-tracker`, `cohort-review`, `retro` |
-   | Workflow | `workflow`, `triage`, `reconcile-research`, `reconcile-dev-docs` |
+   | Workflow | `workflow`, `reconcile-research`, `reconcile-dev-docs` |
    | Detail | `plan-phases` |
    | Execution | `run`, `run-kanban`, `guide` |
    | Shipping | `ship`, `ship-end`, `ship-kanban`, `ship-end-kanban` |

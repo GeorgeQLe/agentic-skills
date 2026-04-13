@@ -57,7 +57,7 @@ Global skills are safe across business apps, games, devtools, libraries, service
 | `reconcile-dev-docs` | Reconcile roadmap, todo, history, phase archives, specs, and git evidence |
 | `regression-check` | Run a comprehensive health check after a phase or major change |
 | `release` | Version bump, changelog, tag, and prepare a release |
-| `roadmap` | Build or update phased roadmaps from specs, docs, and project history |
+| `roadmap` | Scan task pipeline health, build or update the project roadmap, and maintain a priority task queue |
 | `run` | Execute the next incomplete step or phase, then ship the result |
 | `scaffold` | Generate a new package or app using repo conventions |
 | `ship` | Ship already-finished work, optionally deploy it, and prepare the next step |
@@ -67,7 +67,6 @@ Global skills are safe across business apps, games, devtools, libraries, service
 | `spec-drift` | Audit specs against codebase reality |
 | `sync` | Pull latest remote changes and report status |
 | `trace` | Follow a request end-to-end through the stack |
-| `triage` | Scan task pipeline health and maintain a priority action queue in `tasks/todo.md` |
 | `workflow` | Front-load missing and stale documentation work into `tasks/todo.md` |
 
 ## Business App Pack
