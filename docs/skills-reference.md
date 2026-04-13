@@ -67,7 +67,7 @@ Global skills are safe across business apps, games, devtools, libraries, service
 | `spec-drift` | Audit specs against codebase reality |
 | `sync` | Pull latest remote changes and report status |
 | `trace` | Follow a request end-to-end through the stack |
-| `workflow` | Read-only workflow status and next-action recommendation |
+| `workflow` | Front-load missing and stale documentation work into `tasks/todo.md` |
 
 ## Business App Pack
 
@@ -140,6 +140,26 @@ Default flow:
 devtool-user-map -> devtool-integration-map -> devtool-dx-journey
 -> devtool-adoption -> devtool-positioning -> devtool-monetization
 -> devtool-docs-audit
+```
+
+## Code Quality Pack
+
+Install alongside a domain pack when a project needs behavior-preserving code health refactors:
+
+```bash
+scripts/pack.sh install code-quality
+```
+
+Skills:
+
+```text
+extract-shared-types
+```
+
+Default flow:
+
+```text
+extract-shared-types -> regression-check
 ```
 
 ## Kanban Variant Packs
