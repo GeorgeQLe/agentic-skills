@@ -1,7 +1,7 @@
 interface:
   display_name: "Roadmap"
-  short_description: "Build or update the project roadmap from specs and interview"
-  default_prompt: "Use $roadmap to build or update the project roadmap by interviewing on priorities and sequencing."
+  short_description: "Scan task pipeline health, build or update the project roadmap, and maintain a priority task queue"
+  default_prompt: "Use $roadmap to scan task pipeline state, build or update the roadmap, and maintain the priority task queue in tasks/todo.md."
 
 policy:
   allow_implicit_invocation: true
