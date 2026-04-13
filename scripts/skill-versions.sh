@@ -24,7 +24,20 @@ for skill_file in "${SKILL_FILES[@]}"; do
   key="${rel%/SKILL.md}"
   TOTAL=$((TOTAL + 1))
 
-  version=$(sed -n '/^---$/,/^---$/{ /^version:/{ s/^version:[[:space:]]*//; p; q; } }' "$skill_file")
+  version=$(awk '
+    /^---$/ {
+      frontmatter += 1
+      if (frontmatter == 2) {
+        exit
+      }
+      next
+    }
+    frontmatter == 1 && /^version:[[:space:]]*/ {
+      sub(/^version:[[:space:]]*/, "")
+      print
+      exit
+    }
+  ' "$skill_file")
 
   if [[ -n "$version" ]]; then
     VERSIONS["$key"]="$version"

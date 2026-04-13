@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-04-13 — Add code-quality pack and documentation-first workflow
+
+- Added guided no-argument setup to `/pack` and `$pack`, with committed project-designation refresh when `.agents/project.json` exists and recommendation/confirmation flow when it is missing
+- Extended `scripts/pack.sh` with multi-pack install/remove, pack-name aliases, lock protection, portable pack listing, and skill-local launcher scripts under both pack skill mirrors
+- Added the project-local `code-quality` pack with mirrored `extract-shared-types` skills and Codex agent metadata
+- Updated README and pack docs for `code-quality`, guided setup, and committed `.agents/project.json` expectations
+- Refactored `/workflow` and `$workflow` from read-only `--catchup` status reporters into documentation front-loaders that maintain `## Priority Documentation Todo` in `tasks/todo.md`
+
 ## 2026-04-12 — Clarify reconciliation skill names
 
 - Renamed `/research-reconcile` to `/reconcile-research` across Claude and Codex skill directories and active references

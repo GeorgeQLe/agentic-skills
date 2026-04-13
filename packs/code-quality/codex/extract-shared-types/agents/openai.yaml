@@ -1,0 +1,7 @@
+interface:
+  display_name: "Extract Shared Types"
+  short_description: "Move shared types into dedicated files safely"
+  default_prompt: "Use $extract-shared-types to move shared type definitions into a dedicated types directory without runtime behavior changes."
+
+policy:
+  allow_implicit_invocation: true

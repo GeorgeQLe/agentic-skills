@@ -5,17 +5,19 @@ REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 PACKS_DIR="$REPO_ROOT/packs"
 PROJECT_ROOT="$(pwd)"
 PROJECT_FILE="$PROJECT_ROOT/.agents/project.json"
+PROJECT_LOCK_DIR="$PROJECT_ROOT/.agents/.pack.lock"
+PROJECT_LOCKED=false
 
 usage() {
   cat <<'EOF'
-Usage: pack.sh <command> [pack]
+Usage: pack.sh <command> [pack...]
 
 Commands:
   list              List available packs
   status            Show project designation and installed local pack links
   recommend         Recommend a pack from repository signals
-  install <pack>    Enable a pack in the current project via local skill symlinks
-  remove <pack>     Remove a pack's local skill symlinks from the current project
+  install <pack...> Enable one or more packs in the current project via local skill symlinks
+  remove <pack...>  Remove one or more pack's local skill symlinks from the current project
   refresh           Recreate local symlinks for packs in .agents/project.json
 
 Project state is stored in .agents/project.json.
@@ -27,17 +29,72 @@ die() {
   exit 1
 }
 
+release_project_lock() {
+  if [[ "$PROJECT_LOCKED" == true ]]; then
+    rmdir "$PROJECT_LOCK_DIR" 2>/dev/null || true
+    PROJECT_LOCKED=false
+  fi
+}
+
+acquire_project_lock() {
+  mkdir -p "$(dirname "$PROJECT_LOCK_DIR")"
+
+  local attempts=0
+  until mkdir "$PROJECT_LOCK_DIR" 2>/dev/null; do
+    attempts=$((attempts + 1))
+    if [[ "$attempts" -gt 300 ]]; then
+      die "Timed out waiting for project pack lock at $PROJECT_LOCK_DIR"
+    fi
+    sleep 0.1
+  done
+
+  PROJECT_LOCKED=true
+  trap release_project_lock EXIT INT TERM
+}
+
 pack_exists() {
   [[ -d "$PACKS_DIR/$1" ]]
 }
 
 list_packs() {
-  find "$PACKS_DIR" -mindepth 1 -maxdepth 1 -type d -printf '%f\n' | sort
+  find "$PACKS_DIR" -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | sort
+}
+
+available_packs_inline() {
+  list_packs | paste -sd ', ' -
+}
+
+normalize_pack() {
+  local pack="$1"
+  pack="${pack%,}"
+  pack="${pack#pack:}"
+  case "$pack" in
+    business|business_app|businessapp|product|saas) echo "business-app" ;;
+    business-kanban|business_app_kanban|businessapp-kanban|saas-kanban) echo "business-app-kanban" ;;
+    quality|codequality|code_quality|code-quality) echo "code-quality" ;;
+    games) echo "game" ;;
+    dev|dev-tool|dev-tools|developer-tool|developer-tools) echo "devtool" ;;
+    dev-kanban|dev-tool-kanban|dev-tools-kanban|developer-tool-kanban|developer-tools-kanban) echo "devtool-kanban" ;;
+    pack|packs|"") return 1 ;;
+    *) echo "$pack" ;;
+  esac
+}
+
+collect_pack_args() {
+  local raw token normalized
+  for raw in "$@"; do
+    raw="${raw//,/ }"
+    for token in $raw; do
+      normalized="$(normalize_pack "$token")" || continue
+      echo "$normalized"
+    done
+  done
 }
 
 pack_project_type() {
   case "$1" in
     business-app|business-app-kanban) echo "business-app" ;;
+    code-quality) echo "unknown" ;;
     game|game-kanban) echo "game" ;;
     devtool|devtool-kanban) echo "devtool" ;;
     poketowork-kanban) echo "unknown" ;;
@@ -95,6 +152,14 @@ unique_packs_with() {
   } | awk '!seen[$0]++'
 }
 
+read_lines_into_packs() {
+  packs=()
+  local line
+  while IFS= read -r line; do
+    packs+=("$line")
+  done
+}
+
 remove_pack_from_list() {
   local remove_pack="$1"
   read_enabled_packs | awk -v pack="$remove_pack" '$0 != pack'
@@ -128,12 +193,12 @@ link_one_tool() {
 
 install_pack() {
   local pack="$1"
-  pack_exists "$pack" || die "Unknown pack '$pack'. Available packs: $(list_packs | paste -sd ', ' -)"
+  pack_exists "$pack" || die "Unknown pack '$pack'. Available packs: $(available_packs_inline)"
 
   link_one_tool "$pack" "claude"
   link_one_tool "$pack" "codex"
 
-  mapfile -t packs < <(unique_packs_with "$pack")
+  read_lines_into_packs < <(unique_packs_with "$pack")
   local project_type
   project_type="$(current_project_type)"
   [[ -n "$project_type" ]] || project_type="$(pack_project_type "$pack")"
@@ -143,7 +208,7 @@ install_pack() {
 
 remove_pack() {
   local pack="$1"
-  pack_exists "$pack" || die "Unknown pack '$pack'. Available packs: $(list_packs | paste -sd ', ' -)"
+  pack_exists "$pack" || die "Unknown pack '$pack'. Available packs: $(available_packs_inline)"
 
   for tool in claude codex; do
     local source_dir="$PACKS_DIR/$pack/$tool"
@@ -162,7 +227,7 @@ remove_pack() {
     done
   done
 
-  mapfile -t packs < <(remove_pack_from_list "$pack")
+  read_lines_into_packs < <(remove_pack_from_list "$pack")
   local project_type
   project_type="$(current_project_type)"
   [[ -n "$project_type" ]] || project_type="unknown"
@@ -195,14 +260,16 @@ recommend() {
     echo "Recommended pack: devtool or business-app"
     echo "Use devtool for developer-facing tools/libraries; use business-app for SaaS or business applications."
     echo "If this project intentionally uses PoketoWork boards, install the matching explicit kanban pack: devtool-kanban or business-app-kanban."
+    echo "For behavior-preserving refactors and code-health workflows, also install code-quality."
   else
     echo "Recommended pack: business-app"
     echo "If this project intentionally uses PoketoWork boards, also install business-app-kanban."
+    echo "For behavior-preserving refactors and code-health workflows, also install code-quality."
   fi
 }
 
 refresh() {
-  mapfile -t packs < <(read_enabled_packs)
+  read_lines_into_packs < <(read_enabled_packs)
   [[ "${#packs[@]}" -gt 0 ]] || die "No enabled packs in .agents/project.json"
   for pack in "${packs[@]}"; do
     install_pack "$pack"
@@ -215,14 +282,27 @@ case "$cmd" in
   status) status ;;
   recommend) recommend ;;
   install)
-    [[ -n "${2:-}" ]] || die "install requires a pack name"
-    install_pack "$2"
+    acquire_project_lock
+    shift
+    read_lines_into_packs < <(collect_pack_args "$@")
+    [[ "${#packs[@]}" -gt 0 ]] || die "install requires a pack name"
+    for pack in "${packs[@]}"; do
+      install_pack "$pack"
+    done
     ;;
   remove)
-    [[ -n "${2:-}" ]] || die "remove requires a pack name"
-    remove_pack "$2"
+    acquire_project_lock
+    shift
+    read_lines_into_packs < <(collect_pack_args "$@")
+    [[ "${#packs[@]}" -gt 0 ]] || die "remove requires a pack name"
+    for pack in "${packs[@]}"; do
+      remove_pack "$pack"
+    done
     ;;
-  refresh) refresh ;;
+  refresh)
+    acquire_project_lock
+    refresh
+    ;;
   --help|-h|"") usage ;;
   *) usage; exit 2 ;;
 esac

@@ -40,10 +40,13 @@ scripts/pack.sh recommend
 scripts/pack.sh install business-app
 scripts/pack.sh install game
 scripts/pack.sh install devtool
+scripts/pack.sh install code-quality
 scripts/pack.sh install business-app-kanban
 scripts/pack.sh status
 scripts/pack.sh remove game
 ```
+
+Claude users can run `/pack` with no arguments, and Codex users can run `$pack` with no arguments. If `.agents/project.json` exists, the skill refreshes local links from that committed project designation. If it is missing, the assistant inspects the repository, recommends a pack, and asks before installing.
 
 Pack installation creates local symlinks in the current project:
 
@@ -75,6 +78,7 @@ agentic-skills/
 │   └── codex/<name>/SKILL.md
 ├── packs/
 │   ├── business-app/{claude,codex}/<name>/SKILL.md
+│   ├── code-quality/{claude,codex}/<name>/SKILL.md
 │   ├── game/{claude,codex}/<name>/SKILL.md
 │   ├── devtool/{claude,codex}/<name>/SKILL.md
 │   └── *-kanban/{claude,codex}/<name>/SKILL.md
@@ -139,6 +143,16 @@ devtool-monetization, devtool-docs-audit
 ```
 
 The devtool workflow validates developer adoption, integration fit, documentation clarity, trust, and team conversion.
+
+### Code Quality
+
+For behavior-preserving refactors, type hygiene, import honesty, dependency-boundary cleanup, and module organization.
+
+```text
+extract-shared-types
+```
+
+The first code-quality workflow extracts shared type definitions into dedicated `types/` files without runtime behavior changes.
 
 ### Kanban Variants
 
