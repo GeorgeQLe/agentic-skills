@@ -5,14 +5,19 @@ set -euo pipefail
 # Usage: skill-deps.sh [--broken|--dot|--json]
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-CLAUDE_DIR="$REPO_ROOT/claude"
-CODEX_DIR="$REPO_ROOT/codex"
 
 MODE="${1:-default}"
 
-# 1. Discover valid skill names from claude/*/ and codex/*/
+# 1. Discover valid skill names from global skills and pack skills.
 declare -A VALID_SKILLS
-for dir in "$CLAUDE_DIR"/*/ "$CODEX_DIR"/*/; do
+mapfile -t SKILL_DIRS < <(
+  find "$REPO_ROOT/global" "$REPO_ROOT/packs" \
+    -mindepth 2 -maxdepth 5 -type f -name SKILL.md 2>/dev/null \
+    | sed 's#/SKILL.md$##' \
+    | sort
+)
+
+for dir in "${SKILL_DIRS[@]}"; do
   name="$(basename "$dir")"
   if [[ -f "$dir/SKILL.md" ]]; then
     VALID_SKILLS["$name"]=1
@@ -26,7 +31,7 @@ TOTAL_SKILLS=0
 SKILLS_WITH_DEPS=0
 BROKEN_COUNT=0
 
-for dir in "$CLAUDE_DIR"/*/ "$CODEX_DIR"/*/; do
+for dir in "${SKILL_DIRS[@]}"; do
   name="$(basename "$dir")"
   skill_file="$dir/SKILL.md"
   [[ -f "$skill_file" ]] || continue

@@ -1,0 +1,16 @@
+{
+  "name": "poketo-kanban-skill",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@neondatabase/serverless": "^0.10.4",
+    "drizzle-orm": "^0.39.3"
+  },
+  "scripts": {
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "vitest": "^3.2.4"
+  }
+}

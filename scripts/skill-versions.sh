@@ -1,12 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Skill version audit — lists versions from claude/*/SKILL.md frontmatter
+# Skill version audit — lists versions from global skills and pack skills.
 # Usage: skill-versions.sh [--json|--missing]
 
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-CLAUDE_DIR="$REPO_ROOT/claude"
-
 MODE="${1:-default}"
 
 declare -A VERSIONS
@@ -15,22 +13,26 @@ VERSIONED=0
 MISSING=0
 MISSING_NAMES=()
 
-for dir in "$CLAUDE_DIR"/*/; do
-  name="$(basename "$dir")"
-  skill_file="$dir/SKILL.md"
-  [[ -f "$skill_file" ]] || continue
+mapfile -t SKILL_FILES < <(
+  find "$REPO_ROOT/global" "$REPO_ROOT/packs" \
+    -mindepth 2 -maxdepth 5 -type f -name SKILL.md 2>/dev/null \
+    | sort
+)
+
+for skill_file in "${SKILL_FILES[@]}"; do
+  rel="${skill_file#$REPO_ROOT/}"
+  key="${rel%/SKILL.md}"
   TOTAL=$((TOTAL + 1))
 
-  # Extract version from frontmatter (between first --- pair)
   version=$(sed -n '/^---$/,/^---$/{ /^version:/{ s/^version:[[:space:]]*//; p; q; } }' "$skill_file")
 
   if [[ -n "$version" ]]; then
-    VERSIONS["$name"]="$version"
+    VERSIONS["$key"]="$version"
     VERSIONED=$((VERSIONED + 1))
   else
-    VERSIONS["$name"]=""
+    VERSIONS["$key"]=""
     MISSING=$((MISSING + 1))
-    MISSING_NAMES+=("$name")
+    MISSING_NAMES+=("$key")
   fi
 done
 
@@ -39,7 +41,7 @@ case "$MODE" in
     echo "{"
     echo "  \"skills\": {"
     first=true
-    for skill in $(echo "${!VERSIONS[@]}" | tr ' ' '\n' | sort); do
+    for skill in $(printf '%s\n' "${!VERSIONS[@]}" | sort); do
       if [[ "$first" == true ]]; then
         first=false
       else
@@ -66,19 +68,17 @@ case "$MODE" in
     if [[ $MISSING -eq 0 ]]; then
       echo "All $TOTAL skills have a version field."
     else
-      for name in $(printf '%s\n' "${MISSING_NAMES[@]}" | sort); do
-        echo "$name"
-      done
+      printf '%s\n' "${MISSING_NAMES[@]}" | sort
     fi
     ;;
 
   default|"")
-    for skill in $(echo "${!VERSIONS[@]}" | tr ' ' '\n' | sort); do
+    for skill in $(printf '%s\n' "${!VERSIONS[@]}" | sort); do
       ver="${VERSIONS[$skill]}"
       if [[ -n "$ver" ]]; then
-        printf "%-30s v%s\n" "$skill" "$ver"
+        printf "%-60s v%s\n" "$skill" "$ver"
       else
-        printf "%-30s (missing)\n" "$skill"
+        printf "%-60s (missing)\n" "$skill"
       fi
     done
     echo ""
