@@ -35,18 +35,39 @@ Global skills are safe across business apps, games, devtools, libraries, service
 
 | Skill | Purpose |
 | --- | --- |
+| `affected` | Analyze which monorepo packages and apps are affected by current changes |
+| `analyze-sessions` | Analyze Claude Code session history and recommend automation |
+| `brainstorm` | Evaluate the codebase and suggest ideas to explore with planning |
+| `branch-lifecycle` | Evaluate feature branches for merge, salvage, keep-open, or delete decisions |
+| `commit-and-push-by-feature` | Commit and push changes grouped by logical feature buckets |
+| `dead-code` | Scan for unused exports, unreachable code, orphaned files, and stale dependencies |
+| `debug` | Investigate a problem, log findings, and suggest a non-duplicate fix |
+| `decommission` | Tear down and remove a service, package, or infrastructure component |
+| `deploy` | Deploy the project to a target environment with deployment history tracking |
+| `expert-review` | Conduct a project-wide code review against specs, docs, and implementation |
+| `guide` | Produce click-by-click instructions for manual blockers |
+| `handoff` | Generate a project-level context snapshot for a fresh session |
+| `hygiene` | Audit project structure, conventions, mirrors, and documentation references |
+| `install-workflow-orchestration` | Install workflow orchestration instructions into project agent docs |
+| `investigate` | Validate claims against codebase and git history, then trace root cause |
+| `migrate` | Guide a structural migration or dependency upgrade |
 | `pack` | Manage project-local packs and `.agents/project.json` |
+| `plan-interview` | Interview to validate and complete an implementation specification |
+| `plan-phases` | Break a finalized spec into phases, steps, milestones, and tests |
+| `reconcile-dev-docs` | Reconcile roadmap, todo, history, phase archives, specs, and git evidence |
+| `regression-check` | Run a comprehensive health check after a phase or major change |
+| `release` | Version bump, changelog, tag, and prepare a release |
+| `roadmap` | Build or update phased roadmaps from specs, docs, and project history |
+| `run` | Execute the next incomplete step or phase, then ship the result |
+| `scaffold` | Generate a new package or app using repo conventions |
+| `ship` | Ship already-finished work, optionally deploy it, and prepare the next step |
+| `ship-end` | Wrap up the current session, update docs, commit, and push |
 | `skills` | Browse global and enabled project-local skills |
-| `workflow` | Read-only status and next-action recommendation |
-| `plan-interview` | Turn rough ideas into implementation specs |
-| `roadmap` | Build or update phased roadmaps |
-| `plan-phases` | Convert roadmap phases into executable steps |
-| `run` | Execute the next planned step |
-| `ship` / `ship-end` | Package completed work and prepare handoff |
-| `debug`, `investigate`, `trace` | Diagnose and fix problems |
-| `expert-review`, `regression-check`, `dead-code`, `slim-audit`, `spec-drift` | Review, health checks, and quality analysis |
-| `scaffold`, `migrate`, `decommission` | Structural project work |
-| `deploy`, `release`, `sync`, `handoff` | Shipping and session operations |
+| `slim-audit` | Audit for opportunities to reduce lines of code while preserving behavior |
+| `spec-drift` | Audit specs against codebase reality |
+| `sync` | Pull latest remote changes and report status |
+| `trace` | Follow a request end-to-end through the stack |
+| `workflow` | Read-only workflow status and next-action recommendation |
 
 ## Business App Pack
 

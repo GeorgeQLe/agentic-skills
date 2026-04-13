@@ -69,7 +69,7 @@ Check expected project files exist based on project phase:
 **Skills reference sync:**
 - Every global core directory has a corresponding entry in `docs/skills-reference.md`
 - Every pack directory is listed under its pack in `docs/skills-reference.md`
-- The Quick Reference table at the bottom is complete (no missing, no extras)
+- The global core table and pack skill lists are complete (no missing, no extras)
 
 **Required docs:**
 - `CLAUDE.md` exists at project root
@@ -105,7 +105,7 @@ Only fix mechanical, unambiguous issues:
 - Add missing `argument-hint:` field (empty) to frontmatter
 - Fix `name` field to match directory name
 - Create missing Codex mirror in the matching root from the Claude version (copy frontmatter + intro, add TODO for Codex-specific content)
-- Add missing skill entries to the Quick Reference table in `docs/skills-reference.md`
+- Add missing skill entries to the appropriate global core table or pack list in `docs/skills-reference.md`
 
 **Never auto-fix:**
 - Missing Process/Output/Constraints sections (these need human judgment)
@@ -126,8 +126,8 @@ Display directly to the user (no files written in audit mode):
 - **packs/business-app/claude/bar/SKILL.md** — directory name `bar` doesn't match frontmatter name `baz`
 
 ### Warnings (X)
-- **packs/poketowork-kanban/codex/poketo-kanban/** — missing Codex mirror (exists in Claude only)
-- **docs/skills-reference.md** — `/hygiene` not listed in Quick Reference table
+- **packs/example-pack/codex/example-skill/** — missing Codex mirror (exists in Claude only)
+- **docs/skills-reference.md** — `/hygiene` not listed in the global core table
 
 ### Info (X)
 - **global/claude/ship/SKILL.md** — no `## Constraints` section (consider adding)
