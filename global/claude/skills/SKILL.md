@@ -25,6 +25,10 @@ Discover and search installed global skills plus enabled project-local pack skil
 
 3. **Group skills by workflow stage** using this static mapping:
 
+   The mapping includes global skills and pack-provided skills. Only skills
+   discovered in step 2 should be printed, so domain and kanban entries appear
+   only when the corresponding project-local pack is enabled or linked.
+
    | Stage | Skills |
    |-------|--------|
    | Pack Management | `pack`, `pack list`, `pack status`, `pack recommend`, `pack install <pack>`, `pack remove <pack>` |
@@ -88,6 +92,9 @@ Discover and search installed global skills plus enabled project-local pack skil
 
 ## Planning
 /brainstorm — Evaluate the codebase and suggest ideas...  [planning]
+...
+
+## Planning (when a kanban pack is enabled)
 /brainstorm-kanban — Brainstorm ideas and create kanban cards...  [planning]
 ...
 
