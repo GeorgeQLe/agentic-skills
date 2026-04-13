@@ -1,4 +1,5 @@
 node_modules/
+packs/poketowork-kanban/claude/poketo-kanban/scripts/node_modules/
 *.db-wal
 *.db-shm
 .codex

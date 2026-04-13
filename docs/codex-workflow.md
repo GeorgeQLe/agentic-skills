@@ -41,6 +41,7 @@ The key artifact is `tasks/todo.md`. It replaces much of the workflow glue that 
 
 These files are the shared workflow surface:
 
+- `.agents/project.json`: project type and enabled project-local skill packs
 - `tasks/roadmap.md`: long-range phased plan
 - `tasks/todo.md`: current execution contract
 - `tasks/manual-todo.md`: human-only tasks linked to automated steps via `_(blocks: ...)_` and `_(after: ...)_` annotations
@@ -48,6 +49,16 @@ These files are the shared workflow surface:
 - `tasks/handoff.md`: optional session summary
 
 Do not rely on chat history as the source of truth when these files can carry the state.
+
+## Project Packs
+
+Codex global skills are intentionally domain-neutral. Business-app, game, and devtool workflows are enabled per project with:
+
+```bash
+scripts/pack.sh install <pack>
+```
+
+The installer writes `.agents/project.json` and local `.codex/skills/*` symlinks. If local skill discovery is unavailable in a Codex session, use `$pack` or `$workflow` as the launcher and read the enabled pack files from `packs/<pack>/codex`.
 
 ## Default Codex Cycle
 
@@ -192,7 +203,7 @@ This skill ports well because it already depends on repo state more than tool st
   1. planning/compression
   2. fresh-thread execution
 
-### `$run --kanban`
+### `$run-kanban`
 
 **Claude Code**
 - move card into progress
@@ -214,9 +225,9 @@ This skill ports well because it already depends on repo state more than tool st
 - no skill-controlled plan-mode boundary
 
 **Recommended Codex usage**
-- use `$run --kanban` as the default kanban execution loop in Codex
+- use `$run-kanban` as the default kanban execution loop in Codex when a kanban variant pack is explicitly installed
 
-### `$ship --kanban` and `$ship-end --kanban`
+### `$ship-kanban` and `$ship-end-kanban`
 
 **Claude Code**
 - ship work
@@ -224,8 +235,8 @@ This skill ports well because it already depends on repo state more than tool st
 - optionally suggest next work
 
 **Codex**
-- use `$ship --kanban` only when finished work or board state needs manual cleanup
-- use `$ship-end --kanban` to wrap a session that is not the normal completed-step path
+- use `$ship-kanban` only when finished work or board state needs manual cleanup
+- use `$ship-end-kanban` to wrap a session that is not the normal completed-step path
 
 **Manual gap**
 - no automatic continuation into the next approved execution phase

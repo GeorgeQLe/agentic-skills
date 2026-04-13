@@ -10,6 +10,6 @@ bash install.sh
 
 ## Notifications
 
-- `claude/` — new or changed Claude Code skills may need symlink updates
-- `codex/` — new or changed Codex skills may need symlink updates
+- `global/` — new or changed global skills may need symlink updates
+- `packs/` — project-local packs may need `scripts/pack.sh refresh` inside affected projects
 - `install.sh` — installer script was modified

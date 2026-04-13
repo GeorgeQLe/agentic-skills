@@ -23,7 +23,8 @@ version: 1.2.0
 1. All new skills start at `1.0.0`.
 2. Bump the version in the same commit that changes the skill.
 3. Only bump once per commit, even if multiple things change — use the highest applicable level.
-4. Codex skill mirrors (`codex/*/SKILL.md`) are versioned separately if needed.
+4. Codex skill mirrors are versioned separately if needed.
+5. Version audits scan `global/` and `packs/`.
 
 ## Auditing versions
 

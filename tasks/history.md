@@ -689,3 +689,18 @@ Resolved all 10 findings from `/expert-review`:
 - Updated `commit-and-push-by-feature` in both Codex and Claude to resolve a primary branch (`main`, fallback `master`), move work there safely, and push there on success
 - Updated `run`, `ship`, and `ship-end` in both Codex and Claude to treat `commit-and-push-by-feature` as an actual commit-and-push workflow targeting `main`/`master`
 - Reflected the new shipping policy in `tasks/todo.md` current-state notes now that roadmap execution is complete
+# 2026-04-13 — Refactor skills into global core and project-local packs
+
+- Reorganized skill sources from flat `claude/` and `codex/` roots into `global/` and `packs/`.
+- Added project-local pack management with `scripts/pack.sh` and global `/pack` / `$pack` skills.
+- Moved business/product research workflows into the `business-app` pack; added initial `game` and `devtool` packs.
+- Updated `install.sh` so global install includes only neutral core skills and cleans up old flat-root/stub links.
+- Updated skill audit/version scripts, installer tests, pack tests, and docs for the new layout.
+
+# 2026-04-13 — Split PoketoWork kanban into explicit opt-in packs
+
+- Removed PoketoWork-specific `--kanban` modes and `poketo` tool permissions from global workflow skills.
+- Added explicit `business-app-kanban`, `game-kanban`, and `devtool-kanban` packs containing only the six kanban workflow variants.
+- Moved direct PoketoWork board utilities into the separate `poketowork-kanban` pack.
+- Updated pack documentation and `scripts/pack.sh` so kanban variants are never installed implicitly by base domain packs.
+- Verified skill dependency/version audits, pack install smoke tests, and the moved Poketo kanban test suite.
