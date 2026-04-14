@@ -712,3 +712,9 @@ Resolved all 10 findings from `/expert-review`:
 - Moved direct PoketoWork board utilities into the separate `poketowork-kanban` pack.
 - Updated pack documentation and `scripts/pack.sh` so kanban variants are never installed implicitly by base domain packs.
 - Verified skill dependency/version audits, pack install smoke tests, and the moved Poketo kanban test suite.
+
+## 2026-04-14 — install.sh macOS Bash compatibility
+
+- Fixed `install.sh` to avoid Bash nameref variables (`local -n`), which are unavailable in the macOS default Bash 3.2.
+- Replaced nameref return values with a validated `printf -v` helper while preserving existing installer behavior and output.
+- Verified `bash install.sh` succeeds on macOS Bash 3.2 and the Poketo kanban script test suite passes.
