@@ -717,4 +717,5 @@ Resolved all 10 findings from `/expert-review`:
 
 - Fixed `install.sh` to avoid Bash nameref variables (`local -n`), which are unavailable in the macOS default Bash 3.2.
 - Replaced nameref return values with a validated `printf -v` helper while preserving existing installer behavior and output.
+- Fixed `scripts/pack.sh` empty-array writes under `set -u`, which surfaced as stderr during the pack removal test.
 - Verified `bash install.sh` succeeds on macOS Bash 3.2 and the Poketo kanban script test suite passes.
