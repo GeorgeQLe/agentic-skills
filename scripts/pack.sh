@@ -116,7 +116,6 @@ read_enabled_packs() {
 write_project_file() {
   local project_type="$1"
   shift
-  local packs=("$@")
 
   mkdir -p "$(dirname "$PROJECT_FILE")"
   {
@@ -124,18 +123,31 @@ write_project_file() {
     printf '  "project_type": "%s",\n' "$project_type"
     printf '  "enabled_packs": ['
     local first=true
-    for pack in "${packs[@]}"; do
-      if [[ "$first" == true ]]; then
-        first=false
-      else
-        printf ', '
-      fi
-      printf '"%s"' "$pack"
-    done
+    if [[ "$#" -gt 0 ]]; then
+      local pack
+      for pack in "$@"; do
+        if [[ "$first" == true ]]; then
+          first=false
+        else
+          printf ', '
+        fi
+        printf '"%s"' "$pack"
+      done
+    fi
     echo "],"
     echo '  "skill_pack_version": 1'
     echo "}"
   } > "$PROJECT_FILE"
+}
+
+write_project_file_from_packs() {
+  local project_type="$1"
+
+  if [[ "${#packs[@]}" -gt 0 ]]; then
+    write_project_file "$project_type" "${packs[@]}"
+  else
+    write_project_file "$project_type"
+  fi
 }
 
 current_project_type() {
@@ -202,7 +214,7 @@ install_pack() {
   local project_type
   project_type="$(current_project_type)"
   [[ -n "$project_type" ]] || project_type="$(pack_project_type "$pack")"
-  write_project_file "$project_type" "${packs[@]}"
+  write_project_file_from_packs "$project_type"
   echo "Updated .agents/project.json"
 }
 
@@ -231,7 +243,7 @@ remove_pack() {
   local project_type
   project_type="$(current_project_type)"
   [[ -n "$project_type" ]] || project_type="unknown"
-  write_project_file "$project_type" "${packs[@]}"
+  write_project_file_from_packs "$project_type"
   echo "Updated .agents/project.json"
 }
 
