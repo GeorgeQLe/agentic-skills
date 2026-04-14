@@ -5,7 +5,7 @@
   "type": "module",
   "dependencies": {
     "@neondatabase/serverless": "^0.10.4",
-    "drizzle-orm": "^0.39.3"
+    "drizzle-orm": "^0.45.2"
   },
   "scripts": {
     "test": "vitest run"
