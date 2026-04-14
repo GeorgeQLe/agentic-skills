@@ -61,13 +61,25 @@ remove_legacy_link() {
   return 1
 }
 
+set_output_var() {
+  local var_name="$1"
+  local value="$2"
+
+  if [[ ! "$var_name" =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]]; then
+    echo "ERROR: invalid output variable name: $var_name" >&2
+    return 1
+  fi
+
+  printf -v "$var_name" "%s" "$value"
+}
+
 cleanup_legacy_links() {
   local root="$1"
-  local -n out_count="$2"
+  local out_count_var="$2"
   local removed=0
 
   [[ -d "$root" ]] || {
-    out_count=0
+    set_output_var "$out_count_var" 0
     return 0
   }
 
@@ -78,22 +90,22 @@ cleanup_legacy_links() {
     fi
   done
 
-  out_count="$removed"
+  set_output_var "$out_count_var" "$removed"
 }
 
 install_tree() {
   local source_root="$1"
   local target_root="$2"
   local label="$3"
-  local -n out_count="$4"
-  local -n out_skipped="$5"
+  local out_count_var="$4"
+  local out_skipped_var="$5"
   local count=0
   local skipped=0
   local skill_dir name target existing
 
   [[ -d "$source_root" ]] || {
-    out_count=0
-    out_skipped=0
+    set_output_var "$out_count_var" 0
+    set_output_var "$out_skipped_var" 0
     return 0
   }
 
@@ -122,8 +134,8 @@ install_tree() {
     count=$((count + 1))
   done
 
-  out_count="$count"
-  out_skipped="$skipped"
+  set_output_var "$out_count_var" "$count"
+  set_output_var "$out_skipped_var" "$skipped"
 }
 
 if $UNINSTALL; then
