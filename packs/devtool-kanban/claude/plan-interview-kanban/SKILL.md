@@ -29,3 +29,12 @@ Use this skill only in projects that have opted into a PoketoWork kanban pack.
 5. Report the card updated or created.
 
 Never move cards backward from Done or Punt. If kanban fails, warn and keep the completed spec as the source of truth.
+
+## Archive-First Replacement Policy
+
+- Before replacing or substantively rewriting an existing canonical research/spec document (`research/**/*.md`, `specs/**/*.md`, or `docs/specifications/**/*.md`), copy the current file to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-relative-path>`.
+- Preserve the archived snapshot exactly as it existed before the change; do not edit the archived copy after creating it.
+- After the archive snapshot exists, write the updated document to the original canonical path.
+- Report both the archive path and the updated canonical path in the final output.
+- New files do not need archive snapshots. Append-only updates do not need archive snapshots unless an existing section is regenerated or rewritten.
+- Keep any existing user approval requirement before overwriting or replacing a document; archiving does not replace asking when the skill already requires approval.

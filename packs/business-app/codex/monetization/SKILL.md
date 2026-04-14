@@ -284,6 +284,14 @@ Create the `research/` (or `research/{app}/`) directory if it doesn't exist.
 - **Minimum research depth**: at least 6 WebSearch queries before presenting revenue model options, then targeted queries per model option.
 - **State assumptions.** Every unit economics estimate must include the assumption behind it and a confidence level. Never present estimates as facts.
 
+## Archive-First Replacement Policy
+
+- Before replacing or substantively rewriting an existing canonical research/spec document (`research/**/*.md`, `specs/**/*.md`, or `docs/specifications/**/*.md`), copy the current file to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-relative-path>`.
+- Preserve the archived snapshot exactly as it existed before the change; do not edit the archived copy after creating it.
+- After the archive snapshot exists, write the updated document to the original canonical path.
+- Report both the archive path and the updated canonical path in the final output.
+- New files do not need archive snapshots. Append-only updates do not need archive snapshots unless an existing section is regenerated or rewritten.
+- Keep any existing user approval requirement before overwriting or replacing a document; archiving does not replace asking when the skill already requires approval.
 
 ## Default Shipping Contract
 

@@ -198,14 +198,14 @@ After walking through all findings:
 
 - **Audit mode** (default): Compile a summary of all findings and user decisions. Do not modify any files. Display the summary with the user's stated resolution for each item.
 - **Fix mode** (if `fix` was specified):
-  1. Apply all user-approved changes to the research documents.
+  1. For each existing research document that will be replaced or substantively rewritten, archive the current file first, then apply the user-approved change to the canonical research document.
   2. Write `research/reconciliation-report.md` as an audit trail:
 
 ```markdown
 # Reconciliation Report — [date]
 
 ## Resolved
-- [Error/Warning description] — resolved by updating [file] per user decision: "[user's stated resolution]"
+- [Error/Warning description] — resolved by archiving and updating [file] per user decision: "[user's stated resolution]"
 
 ## Deferred
 - [Description] — user chose to skip
@@ -241,6 +241,14 @@ Other options:
 - **Use subagents** for claim extraction (one per document) and cross-reference checks (one per scope group) to parallelize work.
 - **Idempotent.** Running audit twice with no changes between should produce identical output.
 
+## Archive-First Replacement Policy
+
+- Before replacing or substantively rewriting an existing canonical research/spec document (`research/**/*.md`, `specs/**/*.md`, or `docs/specifications/**/*.md`), copy the current file to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-relative-path>`.
+- Preserve the archived snapshot exactly as it existed before the change; do not edit the archived copy after creating it.
+- After the archive snapshot exists, write the updated document to the original canonical path.
+- Report both the archive path and the updated canonical path in the final output.
+- New files do not need archive snapshots. Append-only updates do not need archive snapshots unless an existing section is regenerated or rewritten.
+- Keep any existing user approval requirement before overwriting or replacing a document; archiving does not replace asking when the skill already requires approval.
 
 ## Default Shipping Contract
 

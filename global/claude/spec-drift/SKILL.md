@@ -118,18 +118,18 @@ Classification rules:
 If mode is `fix`:
 
 1. **Present all Errors** to the user. For each Error, show the spec claim and code reality side-by-side with direct quotes. Ask: **is the code right or the spec right?**
-   - **Code is right** → update the spec section to match the implementation
+   - **Code is right** → archive the existing spec, then update the canonical spec section to match the implementation
    - **Spec is right** → add item to `tasks/todo.md` as an implementation bug with the spec reference
-2. **Present Warnings** — ask user whether to update spec (remove unimplemented/removed claims) or add to `tasks/todo.md` as work to be done.
+2. **Present Warnings** — ask user whether to archive then update spec (remove unimplemented/removed claims) or add to `tasks/todo.md` as work to be done.
 3. **Skip Info items** — these are suggestions only.
-4. Apply approved changes.
+4. Apply approved archive-first changes.
 5. Write `specs/drift-report.md` (or `specs/{app}/drift-report.md`) as audit trail:
 
 ```markdown
 # Spec Drift Report — [date]
 
 ## Resolved
-- [Error description] — resolved by updating [spec file] to match code
+- [Error description] — resolved by archiving and updating [spec file] to match code
 - [Error description] — resolved by adding implementation task to tasks/todo.md
 
 ## Deferred
@@ -190,8 +190,16 @@ Classify impact as **None**, **Minor** (cosmetic references), or **Major** (core
 - **Respect monorepo structure.** Use app-scoped paths when monorepo is detected.
 - **Use subagents** for claim extraction (one per spec) and verification (one per claim group) to parallelize work.
 - **Idempotent.** Running audit twice with no changes between should produce identical output.
-- **Do not make code changes.** In fix mode, only update spec documents and `tasks/todo.md` — never modify source code.
+- **Do not make code changes.** In fix mode, only update spec documents and `tasks/todo.md` — never modify source code. Archive existing specs before replacement per the Archive-First Replacement Policy.
 
+## Archive-First Replacement Policy
+
+- Before replacing or substantively rewriting an existing canonical research/spec document (`research/**/*.md`, `specs/**/*.md`, or `docs/specifications/**/*.md`), copy the current file to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-relative-path>`.
+- Preserve the archived snapshot exactly as it existed before the change; do not edit the archived copy after creating it.
+- After the archive snapshot exists, write the updated document to the original canonical path.
+- Report both the archive path and the updated canonical path in the final output.
+- New files do not need archive snapshots. Append-only updates do not need archive snapshots unless an existing section is regenerated or rewritten.
+- Keep any existing user approval requirement before overwriting or replacing a document; archiving does not replace asking when the skill already requires approval.
 
 ## Default Shipping Contract
 

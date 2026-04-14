@@ -50,8 +50,8 @@ Group by severity:
 ### 5. Fix Mode (if specified)
 
 1. Present Errors with side-by-side spec vs code quotes. Ask: code right or spec right?
-   - Code right → update spec. Spec right → add to `tasks/todo.md`.
-2. Present Warnings — update spec or add to todo.
+   - Code right → archive the existing spec, then update the canonical spec to match the implementation. Spec right → add to `tasks/todo.md`.
+2. Present Warnings — either archive then update the spec, or add to todo.
 3. Write `specs/drift-report.md` (or `specs/{app}/drift-report.md`) as audit trail.
 4. Check downstream impact on `research/journey-map.md`, `research/metrics.md`, `tasks/roadmap.md`. If major, recommend `$reconcile-research`.
 
@@ -67,8 +67,16 @@ Group by severity:
 - Every finding must cite spec quote + code reference.
 - If uncertain, classify as Info, not Error.
 - Respect monorepo structure with app-scoped paths.
-- Do not make code changes — only update specs and `tasks/todo.md`.
+- Do not make code changes — only update specs and `tasks/todo.md`; archive existing specs before replacement per the Archive-First Replacement Policy.
 
+## Archive-First Replacement Policy
+
+- Before replacing or substantively rewriting an existing canonical research/spec document (`research/**/*.md`, `specs/**/*.md`, or `docs/specifications/**/*.md`), copy the current file to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-relative-path>`.
+- Preserve the archived snapshot exactly as it existed before the change; do not edit the archived copy after creating it.
+- After the archive snapshot exists, write the updated document to the original canonical path.
+- Report both the archive path and the updated canonical path in the final output.
+- New files do not need archive snapshots. Append-only updates do not need archive snapshots unless an existing section is regenerated or rewritten.
+- Keep any existing user approval requirement before overwriting or replacing a document; archiving does not replace asking when the skill already requires approval.
 
 ## Default Shipping Contract
 

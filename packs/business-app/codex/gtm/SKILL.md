@@ -282,6 +282,14 @@ Create the `research/` directory if it doesn't exist.
 - **Don't prescribe product changes.** GTM is about reaching and converting the market with what exists. Product gaps belong in `$mvp-gap` or `$brainstorm`.
 - **Do not overwrite existing `research/gtm.md`** (or `research/{app}/gtm.md`) without asking the user first.
 
+## Archive-First Replacement Policy
+
+- Before replacing or substantively rewriting an existing canonical research/spec document (`research/**/*.md`, `specs/**/*.md`, or `docs/specifications/**/*.md`), copy the current file to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-relative-path>`.
+- Preserve the archived snapshot exactly as it existed before the change; do not edit the archived copy after creating it.
+- After the archive snapshot exists, write the updated document to the original canonical path.
+- Report both the archive path and the updated canonical path in the final output.
+- New files do not need archive snapshots. Append-only updates do not need archive snapshots unless an existing section is regenerated or rewritten.
+- Keep any existing user approval requirement before overwriting or replacing a document; archiving does not replace asking when the skill already requires approval.
 
 ## Default Shipping Contract
 

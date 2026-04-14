@@ -79,6 +79,7 @@ In `fix` mode, apply only unambiguous development-doc changes:
 - Create missing `tasks/phases/phase-N.md` archives from completed `tasks/todo.md` content.
 - Move the next roadmap phase into `tasks/todo.md` only when the current phase is clearly complete.
 - Add unresolved contradictions to `tasks/todo.md` under `## Development Docs Reconciliation`.
+- Archive existing `specs/` or `docs/specifications/` files before replacing or substantively rewriting them.
 - Write `tasks/reconciliation-report.md` with resolved, deferred, and remaining findings.
 
 Ask before applying any ambiguous change. If already in Plan mode and there are 2-3 concrete choices, prefer `request_user_input`; otherwise ask plainly in chat.
@@ -122,12 +123,20 @@ Report the same sections plus:
 ## Constraints
 
 - Read-only by default.
-- In `fix` mode, modify only development docs under `tasks/`, `specs/`, or `docs/specifications/`.
+- In `fix` mode, modify only development docs under `tasks/`, `specs/`, or `docs/specifications/`; archive existing spec documents before replacement per the Archive-First Replacement Policy.
 - Do not modify code, research docs, kanban cards, git history, or deployment state.
 - Do not rewrite or delete old `tasks/history.md` entries; append corrections or superseding notes.
 - Do not uncheck completed work automatically. Report unsupported completion claims unless the user approves the correction.
 - Treat `tasks/roadmap.md` as the strategic source of truth, `tasks/todo.md` as the active execution contract, and `tasks/history.md` as append-only evidence.
 
+## Archive-First Replacement Policy
+
+- Before replacing or substantively rewriting an existing canonical research/spec document (`research/**/*.md`, `specs/**/*.md`, or `docs/specifications/**/*.md`), copy the current file to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-relative-path>`.
+- Preserve the archived snapshot exactly as it existed before the change; do not edit the archived copy after creating it.
+- After the archive snapshot exists, write the updated document to the original canonical path.
+- Report both the archive path and the updated canonical path in the final output.
+- New files do not need archive snapshots. Append-only updates do not need archive snapshots unless an existing section is regenerated or rewritten.
+- Keep any existing user approval requirement before overwriting or replacing a document; archiving does not replace asking when the skill already requires approval.
 
 ## Default Shipping Contract
 
