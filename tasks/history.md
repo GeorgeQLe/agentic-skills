@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-04-14 — Require archive-first research/spec doc replacements
+
+- Added a shared Archive-First Replacement Policy to 92 Claude/Codex skill docs that write or wrap canonical research/spec documentation
+- Updated `$spec-drift` so code-right resolutions archive the existing spec before updating the canonical spec
+- Updated `$reconcile-research` so fix-mode research resolutions archive existing documents before applying approved canonical changes
+- Updated `$reconcile-dev-docs` so spec and `docs/specifications/` replacements archive first while task/history append behavior remains unchanged
+- Extended the policy to kanban plan-interview wrappers so spec-writing entrypoints preserve prior versions before replacement
+- Validation: `git diff --check`
+- Deploy skipped: no explicit manual deploy contract (`deploy.md` or `tasks/deploy.md`)
+
 ## 2026-04-13 — Add code-quality pack and documentation-first workflow
 
 - Added guided no-argument setup to `/pack` and `$pack`, with committed project-designation refresh when `.agents/project.json` exists and recommendation/confirmation flow when it is missing

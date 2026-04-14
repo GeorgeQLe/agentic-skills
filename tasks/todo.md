@@ -24,6 +24,7 @@
 - Pack management now supports guided no-argument setup, multi-pack install/remove, aliases, project lock protection, and skill-local launcher scripts
 - Added the `code-quality` pack with the first `extract-shared-types` skill for behavior-preserving type extraction refactors
 - Workflow skills now front-load missing and stale documentation work into `tasks/todo.md` instead of only reporting read-only status
+- Research/spec-writing skills now require archive-first replacement: before substantively rewriting existing canonical docs, snapshot the old file under `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-relative-path>` and then update the canonical path
 
 ## Next Action
 
