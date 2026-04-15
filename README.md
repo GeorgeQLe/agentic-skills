@@ -48,6 +48,8 @@ scripts/pack.sh remove game
 
 Claude users can run `/pack` with no arguments, and Codex users can run `$pack` with no arguments. If `.agents/project.json` exists, the skill refreshes local links from that committed project designation. If it is missing, the assistant inspects the repository, recommends a pack, and asks before installing.
 
+`scripts/pack.sh refresh` recreates local symlinks; it does not reload an already-running Claude Code or Codex session. After installing, removing, or refreshing packs, start a fresh CLI session if the changed skills are not visible.
+
 Pack installation creates local symlinks in the current project:
 
 ```text

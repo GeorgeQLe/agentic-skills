@@ -40,6 +40,8 @@ Assistant-native usage also supports guided setup:
 
 If `.agents/project.json` already exists, bare `pack` refreshes local links from the committed project designation. If it is missing, the assistant inspects the repository, recommends a pack, and asks before installing. Claude uses AskUserQuestion for that checkpoint; Codex uses a text-based Pack Decision Checkpoint that waits for an explicit reply before writing `.agents/project.json`.
 
+The `refresh` command recreates `.claude/skills` and `.codex/skills` symlinks from `.agents/project.json`; it is not an in-session Claude Code or Codex skill reload. After `install`, `remove`, or `refresh`, start a fresh CLI session if the changed skills are not visible.
+
 ## Local Symlinks
 
 Pack install creates symlinks in the current project:

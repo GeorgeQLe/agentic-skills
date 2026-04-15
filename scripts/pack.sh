@@ -259,6 +259,14 @@ status() {
   find "$PROJECT_ROOT/.claude/skills" "$PROJECT_ROOT/.codex/skills" -mindepth 1 -maxdepth 1 -type l -print 2>/dev/null | sort || true
 }
 
+print_session_reload_notice() {
+  cat <<'EOF'
+
+Skill links changed. Claude Code and Codex may keep the skill list loaded when the current session started.
+This pack installer does not have a supported in-session CLI skill refresh command; start a fresh CLI session to use newly installed or removed project-local skills.
+EOF
+}
+
 recommend() {
   if [[ -f "$PROJECT_FILE" ]]; then
     echo "Project already declares: $(current_project_type)"
@@ -301,6 +309,7 @@ case "$cmd" in
     for pack in "${packs[@]}"; do
       install_pack "$pack"
     done
+    print_session_reload_notice
     ;;
   remove)
     acquire_project_lock
@@ -310,10 +319,12 @@ case "$cmd" in
     for pack in "${packs[@]}"; do
       remove_pack "$pack"
     done
+    print_session_reload_notice
     ;;
   refresh)
     acquire_project_lock
     refresh
+    print_session_reload_notice
     ;;
   --help|-h|"") usage ;;
   *) usage; exit 2 ;;

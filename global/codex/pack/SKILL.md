@@ -2,7 +2,7 @@
 name: pack
 description: Manage project-local skill packs and project designation without installing domain skills globally
 type: ops
-version: 1.1.0
+version: 1.1.1
 argument-hint: "[list|status|recommend|install <pack>|remove <pack>|refresh] or no args for guided setup"
 ---
 
@@ -39,6 +39,7 @@ Use this skill when the user wants to inspect, recommend, install, remove, or re
    - `.agents/project.json` project type and enabled packs
    - local skill links created or removed under `.claude/skills` and `.codex/skills`
    - any skipped links caused by non-symlink targets
+   - that the user should start a fresh Claude Code or Codex CLI session if the active session does not show the changed skills
 
 ## Pack Model
 
@@ -46,6 +47,8 @@ Use this skill when the user wants to inspect, recommend, install, remove, or re
 - Domain workflows live in project-local packs.
 - Project designation is stored in `.agents/project.json`.
 - Pack installs use symlinks back to this skill-library repository by default.
+- `scripts/pack.sh refresh` recreates project-local symlinks from `.agents/project.json`; it does not refresh the active Claude Code or Codex process.
+- Claude Code and Codex may load available skills at session startup. If newly installed or removed skills are not visible, start a fresh CLI session. No supported in-session CLI skill refresh command is configured in this pack workflow.
 
 ## Pack Selection
 
