@@ -1,6 +1,7 @@
 ---
 name: install-workflow-orchestration
 description: Install workflow orchestration instructions into the current repository's CLAUDE.md and AGENTS.md
+type: ops
 version: 1.0.0
 ---
 

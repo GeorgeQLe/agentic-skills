@@ -1,6 +1,7 @@
 ---
 name: spec-drift
 description: "Audit specs against codebase — find unimplemented features, diverged implementations, and undocumented code"
+type: analysis
 version: 1.0.0
 ---
 

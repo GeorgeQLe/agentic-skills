@@ -1,6 +1,7 @@
 ---
 name: slim-audit
 description: Audit codebase for opportunities to reduce lines of code while preserving functionality, performance, and quality
+type: analysis
 version: 1.0.0
 ---
 

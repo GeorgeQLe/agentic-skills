@@ -1,6 +1,7 @@
 ---
 name: handoff
 description: Generate a project-level context snapshot for resuming work in a fresh session
+type: shipping
 version: 1.0.0
 ---
 

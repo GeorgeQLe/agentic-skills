@@ -1,6 +1,7 @@
 ---
 name: analyze-sessions
 description: Analyze all Claude Code session history and produce a comprehensive usage breakdown with automation recommendations
+type: analysis
 version: 1.0.0
 ---
 

@@ -1,6 +1,7 @@
 ---
 name: deploy
 description: Deploy the project to a target environment (defaults to staging) with deployment history tracking.
+type: shipping
 version: 1.0.0
 ---
 
