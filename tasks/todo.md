@@ -4,6 +4,10 @@
 
 **Last completed step:** Phase 10 Step 6 — Deprecate the standalone DB-write path
 
+## Priority Task Queue
+
+- [ ] `$research-roadmap` - refresh `tasks/todo.md` with priority documentation items because all roadmap phases are complete and the next useful project action is a research/documentation health scan.
+
 ## Final Step Outcome
 
 - [x] Legacy helper messaging now points standard usage at `poketo kanban`
