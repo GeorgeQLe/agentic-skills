@@ -1,6 +1,7 @@
 ---
 name: migrate
 description: Guide a structural migration or dependency upgrade with a step-by-step plan and verification
+type: execution
 version: 1.0.0
 ---
 

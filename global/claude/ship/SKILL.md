@@ -6,6 +6,8 @@ version: 1.0.0
 argument-hint: "[--no-plan] [--no-deploy]"
 ---
 
+# Ship
+
 Ship current work, commit, push, deploy, and plan the next step. If `$ARGUMENTS` contains `--no-plan`, skip planning. If `$ARGUMENTS` contains `--no-deploy`, skip deployment.
 
 ## Process

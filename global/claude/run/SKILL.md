@@ -6,7 +6,7 @@ version: 1.0.0
 argument-hint: "[--phase]"
 ---
 
-# Plan Executor
+# Run
 
 Identify the next incomplete unit of work from the phased plan, build an execution plan, and enter plan mode for user approval before implementing. By default, plans **only the next single incomplete step**. If `$ARGUMENTS` contains `--phase`, plans the **entire next phase**.
 

@@ -1,6 +1,7 @@
 ---
 name: regression-check
 description: Run a comprehensive health check across the monorepo after completing a phase or major change
+type: review
 version: 1.0.0
 ---
 

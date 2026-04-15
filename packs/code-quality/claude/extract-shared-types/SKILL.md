@@ -1,7 +1,7 @@
 ---
 name: extract-shared-types
 description: Extract shared type definitions into a dedicated types directory without runtime behavior changes
-type: refactor
+type: execution
 version: 1.0.0
 argument-hint: "[optional: package, app, directory, or domain to refactor]"
 ---

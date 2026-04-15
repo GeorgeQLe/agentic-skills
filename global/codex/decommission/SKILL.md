@@ -1,6 +1,7 @@
 ---
 name: decommission
 description: Systematically tear down and remove a service, package, or infrastructure component
+type: execution
 version: 1.0.0
 ---
 
