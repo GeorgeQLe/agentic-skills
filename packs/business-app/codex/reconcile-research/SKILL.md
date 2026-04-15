@@ -228,7 +228,7 @@ Other options:
 - `$skill` — [N] conflicts in [scope] (re-run to fix)
 - ...
 
-**Recommendation logic:** Identify the skill that produced the document with the most Error/Warning-severity conflicts. That skill is the recommendation — re-running it with current upstream context will resolve the most issues. List other conflict-bearing skills as alternatives, ordered by conflict count descending. If audit mode found only deferred items and no actionable conflicts remain, recommend `$workflow` — check overall project status.
+**Recommendation logic:** Identify the skill that produced the document with the most Error/Warning-severity conflicts. That skill is the recommendation — re-running it with current upstream context will resolve the most issues. List other conflict-bearing skills as alternatives, ordered by conflict count descending. If audit mode found only deferred items and no actionable conflicts remain, recommend `$research-roadmap` — check overall project status.
 
 ## Constraints
 
@@ -237,7 +237,7 @@ Other options:
 - **Show evidence.** Every finding must include direct quotes from both documents.
 - **Respect dependency direction.** Upstream documents are presumed authoritative over downstream, except customer feedback which is ground truth.
 - **No false positives.** If uncertain whether something is a real contradiction, classify it as Info, not Error.
-- **Skip absent documents.** Only run checks where both documents in a pair exist. Never flag a missing document as an error — that's `$workflow`'s job.
+- **Skip absent documents.** Only run checks where both documents in a pair exist. Never flag a missing document as an error — that's `$research-roadmap`'s job.
 - **Use subagents** for claim extraction (one per document) and cross-reference checks (one per scope group) to parallelize work.
 - **Idempotent.** Running audit twice with no changes between should produce identical output.
 

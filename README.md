@@ -67,7 +67,7 @@ It also writes:
 
 to `.agents/project.json`.
 
-If an assistant does not discover project-local skills, use the global `pack` or `workflow` skill as the launcher. The pack files still stay project-local.
+If an assistant does not discover project-local skills, use the global `pack` or `research-roadmap` skill as the launcher. The pack files still stay project-local.
 
 ## Repository Structure
 
@@ -101,7 +101,7 @@ expert-review, guide, handoff, hygiene, install-workflow-orchestration,
 investigate, migrate, pack, plan-interview, plan-phases,
 reconcile-dev-docs, regression-check, release, roadmap, run, scaffold,
 ship, ship-end, skills, slim-audit, spec-drift, sync,
-trace, workflow
+trace, research-roadmap
 ```
 
 ## Packs

@@ -99,14 +99,14 @@ Other options:
 2. IF staleness alert for ICP: recommend `$icp` — feedback has invalidated key ICP assumptions that other research depends on
 3. IF staleness alert for journey map: recommend `$journey-map` — real user behavior differs from mapped experience
 4. IF 3+ New findings: recommend `$brainstorm` — newly revealed customer needs deserve solution exploration
-5. IF no staleness alerts and no major findings: recommend `$workflow` — check overall project status for the next priority
+5. IF no staleness alerts and no major findings: recommend `$research-roadmap` — check overall project status for the next priority
 
 **Other options** (include all applicable items not chosen as recommended):
 - IF staleness alert for ICP: `$icp` — Re-run discovery — feedback has invalidated key assumptions
 - IF staleness alert for journey map: `$journey-map` — Re-map journeys — real behavior differs from mapped experience
 - IF 3+ New findings: `$brainstorm` — Generate ideas for newly revealed customer needs
 - IF New findings relate to a gap: `$plan-interview [topic]` — Spec a solution for the most impactful new finding
-- IF no staleness alerts: `$workflow` — Check overall project status
+- IF no staleness alerts: `$research-roadmap` — Check overall project status
 - IF feedback came from experiment results: `$assumption-tracker` — Update assumption validation status with experiment findings
 - IF 3+ research docs exist and no `research/assumption-tracker.md`: `$assumption-tracker` — Build the assumptions register to track what feedback is validating
 

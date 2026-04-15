@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-04-15 — Rename workflow to research-roadmap
+
+- Renamed the global Claude and Codex `workflow` skill directories to `research-roadmap`
+- Updated the skill metadata, title, Codex agent manifest, roadmap handoff, skills grouping, README, packs docs, and business-app research recommendations to use `/research-roadmap` or `$research-roadmap`
+- Reframed the skill as the research/documentation counterpart to `roadmap`, while leaving the future workflow-orchestrator idea available as a distinct follow-up
+- Validation: active-reference search for old `/workflow`, `$workflow`, and `name: workflow`
+
 ## 2026-04-14 — Require archive-first research/spec doc replacements
 
 - Added a shared Archive-First Replacement Policy to 92 Claude/Codex skill docs that write or wrap canonical research/spec documentation

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Research Roadmap"
+  short_description: "Check research and documentation health"
+  default_prompt: "Use $research-roadmap to check research, documentation, stale items, and recommended next action."
+
+policy:
+  allow_implicit_invocation: true

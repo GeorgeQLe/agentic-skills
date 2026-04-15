@@ -70,7 +70,7 @@ The generic `poketowork-kanban` pack contains direct board-management utilities,
 
 ## Compatibility
 
-If a tool does not discover project-local `.claude/skills` or `.codex/skills`, use the global `pack` and `workflow` skills as launchers. They should read `.agents/project.json` and the local pack files directly.
+If a tool does not discover project-local `.claude/skills` or `.codex/skills`, use the global `pack` and `research-roadmap` skills as launchers. They should read `.agents/project.json` and the local pack files directly.
 
 Do not install `packs/*` globally as a fallback; that recreates the context pollution this design avoids.
 

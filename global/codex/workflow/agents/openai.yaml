@@ -1,7 +1,0 @@
-interface:
-  display_name: "Workflow Status"
-  short_description: "Check workflow status and get next-step recommendation"
-  default_prompt: "Use $workflow to check project status, stale items, and recommended next action."
-
-policy:
-  allow_implicit_invocation: true

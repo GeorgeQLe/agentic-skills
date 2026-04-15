@@ -63,7 +63,7 @@ Identify the next incomplete unit of work from the phased plan, build an executi
        2. Check off the phase milestone in `tasks/roadmap.md`.
        3. Copy the next phase from `tasks/roadmap.md` → overwrite `tasks/todo.md`.
        3b. Extract the next phase's manual tasks (from `**Manual Tasks:**` in roadmap) into a fresh `tasks/manual-todo.md`. If the next phase has no manual tasks, delete the file.
-       4. If no more phases remain, ship the planning/task updates via `$commit-and-push-by-feature`, landing them on `main` or `master`, then run `$workflow` to recommend the next action based on project state. Then stop.
+       4. If no more phases remain, ship the planning/task updates via `$commit-and-push-by-feature`, landing them on `main` or `master`, then run `$research-roadmap` to recommend the next action based on project state. Then stop.
        5. **Just-in-time planning:** Invoke `$plan-phases` for the new phase. This generates implementation steps and file-level detail using the full context of what was learned during prior phases.
      - If **NO:** find the next uncompleted step within the current phase.
 15. Write a self-contained implementation plan for the next step into `tasks/todo.md`, complete enough for a fresh session to execute from `tasks/todo.md` alone.
