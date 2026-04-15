@@ -53,7 +53,7 @@ Route behavior based on the current pipeline state:
 | A — No specs | No `specs/` files, no `spec.md` | Queue `/plan-interview`. Done (skip to step 7). |
 | B — Specs, no roadmap | Specs exist, `tasks/roadmap.md` missing or empty | Go to step 4 (build roadmap), then continue to step 5. |
 | C — Work in progress | `tasks/roadmap.md` exists, unchecked phases remain | Skip to step 5 (classify issues). |
-| D — All complete | All phases in `tasks/roadmap.md` are checked | Queue `/workflow` for documentation scan. Done (skip to step 7). |
+| D — All complete | All phases in `tasks/roadmap.md` are checked | Queue `/research-roadmap` for documentation scan. Done (skip to step 7). |
 
 ### 4. Build Roadmap (State B Only)
 
@@ -277,9 +277,9 @@ For State D (all complete):
 ## All Phases Complete
 
 - All roadmap phases are checked off
-- Queued `/workflow` for documentation scan
+- Queued `/research-roadmap` for documentation scan
 
-Next: `/workflow` to check documentation health.
+Next: `/research-roadmap` to check documentation health.
 ```
 
 If the pipeline is fully healthy:
@@ -309,7 +309,7 @@ Next: `/run` to continue execution.
 - Do not modify `tasks/manual-todo.md`, `tasks/history.md`, or any specs (except to create `tasks/roadmap.md` in State B).
 - Do not create or modify source code.
 - Do not archive phases, advance the pipeline, or execute implementation steps.
-- Prefer actionable skill invocations (`/ship`, `/run`, `/plan-phases N`, `/workflow`) over vague guidance.
+- Prefer actionable skill invocations (`/ship`, `/run`, `/plan-phases N`, `/research-roadmap`) over vague guidance.
 
 ## Archive-First Replacement Policy
 

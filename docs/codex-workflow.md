@@ -58,7 +58,7 @@ Codex global skills are intentionally domain-neutral. Business-app, game, and de
 scripts/pack.sh install <pack>
 ```
 
-The installer writes `.agents/project.json` and local `.codex/skills/*` symlinks. If local skill discovery is unavailable in a Codex session, use `$pack` or `$workflow` as the launcher and read the enabled pack files from `packs/<pack>/codex`.
+The installer writes `.agents/project.json` and local `.codex/skills/*` symlinks. If local skill discovery is unavailable in a Codex session, use `$pack` or `$research-roadmap` as the launcher and read the enabled pack files from `packs/<pack>/codex`.
 
 Running `$pack` with no arguments is the Codex bootstrap path. If `.agents/project.json` exists, it refreshes local links from that committed project designation. If the file is missing, Codex inspects the codebase, recommends a pack, and presents a text-based Pack Decision Checkpoint. The checkpoint is the Codex stand-in for Claude's AskUserQuestion flow: Codex shows numbered choices and waits for an explicit reply before running `scripts/pack.sh install <pack...>`.
 

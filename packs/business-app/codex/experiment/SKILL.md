@@ -104,7 +104,7 @@ Include 3–5 applicable items with "Pick one:" framing:
 - IF experiment validates: `$customer-feedback [results]` — Log the validation as customer feedback
 - IF experiment invalidates: `$assumption-tracker` — Re-run to update assumption status and re-prioritize
 - IF more assumptions to test: `$experiment [next assumption]` — Design the next experiment
-- IF enough validated: `$workflow` — Check if research docs need updating based on learnings
+- IF enough validated: `$research-roadmap` — Check if research docs need updating based on learnings
 
 ### 7. Write Output
 

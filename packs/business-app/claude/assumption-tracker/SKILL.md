@@ -115,7 +115,7 @@ Include 3–5 applicable items with "Pick one:" framing:
 - IF customer feedback exists but assumptions remain unvalidated: `/customer-feedback` — Gather targeted feedback on top assumptions
 - IF product is live: `/cohort-review` — Check if real data validates or invalidates key assumptions
 - IF assumptions cross multiple docs: `/reconcile-research` — Ensure research docs are internally consistent
-- ALWAYS: `/workflow` — Check overall project status
+- ALWAYS: `/research-roadmap` — Check overall project status
 
 ### 8. Write Output
 

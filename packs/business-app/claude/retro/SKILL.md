@@ -114,7 +114,7 @@ Include 3–5 applicable items with "Pick one:" framing:
 - IF assumptions tracker exists: `/assumption-tracker` — Bulk-update validation status from retro findings
 - IF metrics targets were off: `/metrics` — Recalibrate targets based on baseline reality
 - IF multiple docs need updating: `/reconcile-research` — Audit all research for consistency after retro findings
-- ALWAYS: `/workflow` — Check overall project status
+- ALWAYS: `/research-roadmap` — Check overall project status
 
 ### 6. Write Output
 

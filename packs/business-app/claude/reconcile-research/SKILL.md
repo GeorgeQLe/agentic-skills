@@ -239,7 +239,7 @@ Findings are presented **interactively one at a time** via `AskUserQuestion`, no
 - **Show evidence.** Every finding must include direct quotes from both documents.
 - **Respect dependency direction.** Upstream documents are presumed authoritative over downstream, except customer feedback which is ground truth.
 - **No false positives.** If uncertain whether something is a real contradiction, classify it as Info, not Error.
-- **Skip absent documents.** Only run checks where both documents in a pair exist. Never flag a missing document as an error — that's `/workflow`'s job.
+- **Skip absent documents.** Only run checks where both documents in a pair exist. Never flag a missing document as an error — that's `/research-roadmap`'s job.
 - **Use subagents** for claim extraction (one per document) and cross-reference checks (one per scope group) to parallelize work.
 - **Idempotent.** Running audit twice with no changes between should produce identical output.
 

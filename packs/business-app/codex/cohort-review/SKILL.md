@@ -122,7 +122,7 @@ Include 3–5 applicable items with "Pick one:" framing:
 - IF pricing/revenue below target: `$monetization` — Update monetization strategy with real unit economics
 - IF assumptions invalidated: `$assumption-tracker` — Update register with real-data validations
 - IF metrics targets need adjustment: `$metrics` — Revisit targets based on baseline reality
-- IF overall on track: `$workflow` — Check what's next in the project lifecycle
+- IF overall on track: `$research-roadmap` — Check what's next in the project lifecycle
 
 ### 7. Write Output
 

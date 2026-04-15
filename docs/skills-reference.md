@@ -67,7 +67,7 @@ Global skills are safe across business apps, games, devtools, libraries, service
 | `spec-drift` | Audit specs against codebase reality |
 | `sync` | Pull latest remote changes and report status |
 | `trace` | Follow a request end-to-end through the stack |
-| `workflow` | Front-load missing and stale documentation work into `tasks/todo.md` |
+| `research-roadmap` | Scan research and documentation health, then maintain a priority documentation queue |
 
 ## Business App Pack
 

@@ -1,15 +1,15 @@
 ---
-name: workflow
-description: Front-load documentation and research work into tasks/todo.md before execution
+name: research-roadmap
+description: Scan research and documentation health, then maintain a priority documentation queue
 type: planning
-version: 1.4.0
+version: 2.0.0
 ---
 
-# Workflow - Documentation Front-Loader
+# Research Roadmap - Documentation Queue Manager
 
 Use this skill to make the project documentation contract complete before build work continues. It scans research, specs, and task docs, then updates `tasks/todo.md` by putting a priority documentation queue at the front of the file.
 
-Do not run the research skills from this workflow. The job here is to maintain the execution queue so the user can complete all documentation in the right order.
+Do not run the queued research skills from this skill. The job here is to maintain the documentation queue so the user can complete research and planning artifacts in the right order.
 
 ## Process
 
@@ -22,15 +22,15 @@ Do not run the research skills from this workflow. The job here is to maintain t
    - devtool: SDK, CLI, API, library, infra, docs, examples, or package-first developer workflow
    - business-app: SaaS, marketplace, productivity, workflow, enterprise, or user-facing app
 4. If the project type cannot be inferred, default to `business-app`.
-5. If an expected pack is not installed, add a priority todo for `$pack install <pack>` before pack-specific research todos.
+5. If an expected pack is not installed, add a priority todo for `/pack install <pack>` before pack-specific research todos.
 
-### 2. Resolve Workflow Roots
+### 2. Resolve Documentation Roots
 
 Treat top-level `research/`, `specs/`, and `tasks/` as canonical.
 
 1. If a canonical root exists, use it directly.
 2. If a canonical root is missing, search shallowly near the repo root for likely aliases such as `docs/`, `planning/`, `notes/`, or `work/`.
-3. Prefer roots that contain multiple expected workflow files over isolated matches.
+3. Prefer roots that contain multiple expected documentation files over isolated matches.
 4. If no credible task root exists, create/update top-level `tasks/todo.md`.
 5. If a fallback root is used for research or specs, mention it in the generated todo item reasons.
 
@@ -42,7 +42,7 @@ Build the research queue from enabled project packs. Include every enabled resea
 
 Prefer dynamic discovery when skill files are available:
 
-1. Inspect enabled pack skill files under `.codex/skills/*/SKILL.md` or `packs/<pack>/codex/*/SKILL.md`.
+1. Inspect enabled pack skill files under `.claude/skills/*/SKILL.md` or `packs/<pack>/claude/*/SKILL.md`.
 2. Include skills with `type: research`.
 3. Also include skills whose `## Output` section writes `research/*.md`, `research/{app}/*.md`, `research/experiments/*.md`, or dated research files.
 
@@ -52,62 +52,62 @@ Business-app research outputs:
 
 | Skill | Output |
 | --- | --- |
-| `$icp` | `research/icp.md` |
-| `$competitive-analysis` | `research/competitive-analysis.md` |
-| `$positioning` | `research/positioning.md` |
-| `$journey-map` | `research/journey-map.md` |
-| `$metrics` | `research/metrics.md` |
-| `$gtm` | `research/gtm.md` |
-| `$monetization` | `research/monetization.md` |
-| `$landing-copy` | `research/landing-copy.md` |
-| `$customer-feedback` | `research/customer-feedback.md` |
-| `$assumption-tracker` | `research/assumption-tracker.md` |
-| `$experiment` | `research/experiments/<experiment>.md` |
-| `$enterprise-icp` | `research/enterprise-icp.md` |
-| `$risk-register` | `research/risk-register.md` |
-| `$burn-rate` | `research/burn-rate.md` |
-| `$runway-model` | `research/runway-model.md` |
-| `$cohort-review` | `research/cohort-review-YYYY-MM-DD.md` |
-| `$retro` | `research/retro-YYYY-MM-DD.md` |
-| `$investor-update` | `research/investor-update-YYYY-MM.md` |
-| `$platform-strategy` | `research/platform-strategy.md` |
+| `/icp` | `research/icp.md` |
+| `/competitive-analysis` | `research/competitive-analysis.md` |
+| `/positioning` | `research/positioning.md` |
+| `/journey-map` | `research/journey-map.md` |
+| `/metrics` | `research/metrics.md` |
+| `/gtm` | `research/gtm.md` |
+| `/monetization` | `research/monetization.md` |
+| `/landing-copy` | `research/landing-copy.md` |
+| `/customer-feedback` | `research/customer-feedback.md` |
+| `/assumption-tracker` | `research/assumption-tracker.md` |
+| `/experiment` | `research/experiments/<experiment>.md` |
+| `/enterprise-icp` | `research/enterprise-icp.md` |
+| `/risk-register` | `research/risk-register.md` |
+| `/burn-rate` | `research/burn-rate.md` |
+| `/runway-model` | `research/runway-model.md` |
+| `/cohort-review` | `research/cohort-review-YYYY-MM-DD.md` |
+| `/retro` | `research/retro-YYYY-MM-DD.md` |
+| `/investor-update` | `research/investor-update-YYYY-MM.md` |
+| `/platform-strategy` | `research/platform-strategy.md` |
 
 Game research outputs:
 
 | Skill | Output |
 | --- | --- |
-| `$game-audience` | `research/game-audience.md` |
-| `$game-fantasy` | `research/game-fantasy.md` |
-| `$game-genre-map` | `research/game-genre-map.md` |
-| `$game-comparables` | `research/game-comparables.md` |
-| `$game-core-loop` | `research/game-core-loop.md` |
-| `$game-prototype-test` | `research/game-prototype-test.md` |
-| `$game-playtest-metrics` | `research/game-playtest-metrics.md` |
-| `$game-store-page-test` | `research/game-store-page-test.md` |
-| `$game-launch` | `research/game-launch.md` |
+| `/game-audience` | `research/game-audience.md` |
+| `/game-fantasy` | `research/game-fantasy.md` |
+| `/game-genre-map` | `research/game-genre-map.md` |
+| `/game-comparables` | `research/game-comparables.md` |
+| `/game-core-loop` | `research/game-core-loop.md` |
+| `/game-prototype-test` | `research/game-prototype-test.md` |
+| `/game-playtest-metrics` | `research/game-playtest-metrics.md` |
+| `/game-store-page-test` | `research/game-store-page-test.md` |
+| `/game-launch` | `research/game-launch.md` |
 
 Devtool research outputs:
 
 | Skill | Output |
 | --- | --- |
-| `$devtool-user-map` | `research/devtool-user-map.md` |
-| `$devtool-integration-map` | `research/devtool-integration-map.md` |
-| `$devtool-dx-journey` | `research/devtool-dx-journey.md` |
-| `$devtool-adoption` | `research/devtool-adoption.md` |
-| `$devtool-positioning` | `research/devtool-positioning.md` |
-| `$devtool-monetization` | `research/devtool-monetization.md` |
+| `/devtool-user-map` | `research/devtool-user-map.md` |
+| `/devtool-integration-map` | `research/devtool-integration-map.md` |
+| `/devtool-dx-journey` | `research/devtool-dx-journey.md` |
+| `/devtool-adoption` | `research/devtool-adoption.md` |
+| `/devtool-positioning` | `research/devtool-positioning.md` |
+| `/devtool-monetization` | `research/devtool-monetization.md` |
 
 Also include documentation-producing non-research skills when their outputs are missing or stale:
 
 | Skill | Output |
 | --- | --- |
-| `$plan-interview` | `specs/*.md` |
-| `$mvp-gap` | `specs/mvp-gap.md` |
-| `$scale-audit` | `specs/scale-audit.md` |
-| `$roadmap` | `tasks/roadmap.md`, `tasks/todo.md` |
-| `$game-roadmap` | `tasks/roadmap.md`, `tasks/todo.md` |
-| `$reconcile-research fix all` | `research/reconciliation-report.md` |
-| `$reconcile-dev-docs fix all` | reconciled `tasks/`, `specs/`, and phase archives |
+| `/plan-interview` | `specs/*.md` |
+| `/mvp-gap` | `specs/mvp-gap.md` |
+| `/scale-audit` | `specs/scale-audit.md` |
+| `/roadmap` | `tasks/roadmap.md`, `tasks/todo.md` |
+| `/game-roadmap` | `tasks/roadmap.md`, `tasks/todo.md` |
+| `/reconcile-research fix all` | `research/reconciliation-report.md` |
+| `/reconcile-dev-docs fix all` | reconciled `tasks/`, `specs/`, and phase archives |
 
 ### 4. Scan Documentation State
 
@@ -122,7 +122,7 @@ Record existence and last-modified timestamps for:
 - `tasks/ideas.md`
 - `tasks/manual-todo.md`
 
-When `research/` contains app subdirectories, treat it as monorepo mode. Build a separate documentation queue per app and include app arguments in commands, such as `$icp web`.
+When `research/` contains app subdirectories, treat it as monorepo mode. Build a separate documentation queue per app and include app arguments in commands, such as `/icp web`.
 
 ### 5. Classify Missing And Stale Items
 
@@ -146,7 +146,7 @@ An item is stale when a newer upstream document should invalidate or refresh it.
 | any `specs/*.md` | `research/journey-map.md`, `tasks/roadmap.md` |
 | `research/runway-model.md` | `tasks/roadmap.md` |
 
-Also flag potentially stale specs when source code has commits newer than the spec files. Add `$spec-drift fix all` as a priority documentation item when specs are probably behind implementation.
+Also flag potentially stale specs when source code has commits newer than the spec files. Add `/spec-drift fix all` as a priority documentation item when specs are probably behind implementation.
 
 ### 6. Order The Priority Queue
 
@@ -164,24 +164,24 @@ Order todo items so the user can complete documentation without guessing:
 Within research items, use this dependency order when relevant:
 
 ```
-$icp
-  -> $competitive-analysis
-  -> $positioning
-  -> $journey-map
-    -> $metrics
-  -> $gtm
-  -> $monetization
-  -> $landing-copy
-3+ research docs -> $assumption-tracker -> $experiment -> $customer-feedback
-$enterprise-icp -> $scale-audit
-$metrics + launch data -> $cohort-review
-$monetization -> $burn-rate -> $runway-model
-quarterly/outcome data -> $retro
-stakeholder reporting -> $investor-update
-multi-product expansion -> $platform-strategy
+/icp
+  -> /competitive-analysis
+  -> /positioning
+  -> /journey-map
+    -> /metrics
+  -> /gtm
+  -> /monetization
+  -> /landing-copy
+3+ research docs -> /assumption-tracker -> /experiment -> /customer-feedback
+/enterprise-icp -> /scale-audit
+/metrics + launch data -> /cohort-review
+/monetization -> /burn-rate -> /runway-model
+quarterly/outcome data -> /retro
+stakeholder reporting -> /investor-update
+multi-product expansion -> /platform-strategy
 ```
 
-For game and devtool projects, follow the default pack flow from `docs/skills-reference.md` when available. Add review or planning skills such as `$devtool-docs-audit` and `$game-roadmap` only when their documented output is missing from the documentation contract.
+For game and devtool projects, follow the default pack flow from `docs/skills-reference.md` when available. Add review or planning skills such as `/devtool-docs-audit` and `/game-roadmap` only when their documented output is missing from the documentation contract.
 
 ### 7. Update `tasks/todo.md`
 
@@ -205,13 +205,13 @@ Rules:
 Todo item format:
 
 ```md
-- [ ] `$skill [optional-app-or-argument]` - create/update `path/to/output.md` because [missing/stale reason with evidence].
+- [ ] `/skill [optional-app-or-argument]` - create/update `path/to/output.md` because [missing/stale reason with evidence].
 ```
 
 If prerequisites are missing:
 
 ```md
-- [ ] `$metrics` - create/update `research/metrics.md` after `$journey-map`; currently blocked because `research/journey-map.md` is missing.
+- [ ] `/metrics` - create/update `research/metrics.md` after `/journey-map`; currently blocked because `research/journey-map.md` is missing.
 ```
 
 If all documentation is current:
@@ -225,7 +225,7 @@ If all documentation is current:
 After editing, summarize:
 
 ```
-## Workflow Todo Updated
+## Research Roadmap Updated
 
 - Wrote/updated `tasks/todo.md`
 - Priority documentation items: N

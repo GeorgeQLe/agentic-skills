@@ -164,7 +164,7 @@ Only after confirmation, write the output file.
 
 Pick one:
 - `/assumption-tracker` — Cross-reference product/market assumptions with these broader risks
-- `/workflow` — Check overall project status
+- `/research-roadmap` — Check overall project status
 ```
 
 Create the `research/` directory if it doesn't exist.
