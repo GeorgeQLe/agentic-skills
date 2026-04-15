@@ -18,7 +18,7 @@ Parse `$ARGUMENTS`:
 - **Mode**: `audit` (default, read-only) or `fix` (apply mechanical fixes)
 - **Scope**: `skills`, `tasks`, `docs`, `codex`, or `all` (default)
 
-Read `CLAUDE.md` for project conventions. Read `docs/skills-reference.md` for the canonical skill list.
+Read `CLAUDE.md` for project conventions. Read `docs/skills-reference.md` for the canonical skill list. For `docs` scope, also read `references/documentation-templates.md` from this skill directory.
 
 ### 2. Audit Skills (`skills` scope)
 
@@ -72,6 +72,40 @@ Check expected project files exist based on project phase:
 
 **Required docs:**
 - `CLAUDE.md` exists at project root
+- If `AGENTS.md` exists, it should not contradict the workflow/pipeline conventions in `CLAUDE.md`
+
+**Documentation template audit:**
+- Classify generated Markdown files by path pattern and validate them against `references/documentation-templates.md`
+- Check canonical roots:
+  - `tasks/` for roadmap, todo, history, manual tasks, phase archives, handoff, deployment ledgers, and lessons
+  - `specs/` for implementation specifications and interview logs
+  - `research/` for research docs, interview logs, search logs, experiments, and reconciliation reports
+  - `docs/specifications/` only as a fallback spec location
+- Flag legacy or drifted planning locations such as new `docs/plan.md` or new `docs/phases/` phase archives; current workflows write plans under `tasks/`
+- Exempt archived snapshots under `docs/history/archive/**` from template checks
+- Treat unknown hand-written docs as Info unless they are clearly generated workflow artifacts
+
+**Universal generated-doc checks:**
+- First non-empty Markdown heading is exactly one `#` H1
+- Required sections for the file family are present once and in the expected order
+- Non-ledger research/spec/task artifacts include a metadata quote block when the template requires it
+- Checkable workflow docs use `- [ ]` / `- [x]` items where later skills need task state
+- Main research/spec docs end with `## Next Steps`, or explicitly state why no next step exists
+
+**Family-specific checks:**
+- `tasks/roadmap.md` has a summary, phase overview, repeated `## Phase N:` sections, phase milestones or acceptance criteria, and cross-phase concerns when multi-phase
+- `tasks/todo.md` has checkable work or a priority queue, and does not contain the full multi-phase roadmap except during legacy migration
+- `tasks/manual-todo.md` has checkable items and every unchecked item includes `_(blocks: Step N.X)_` or `_(after: Step N.X)_`
+- `tasks/history.md` is append-only with dated entries
+- `tasks/phases/phase-N.md` has completed steps, milestone or acceptance criteria, and an `## On Completion` or equivalent completion summary
+- `specs/*.md`, `specs/{app}/*.md`, and fallback `docs/specifications/*.md` have spec sections for overview, goals, non-goals, detailed design, edge cases, test plan, acceptance criteria, and open questions or explicit `None`
+- `*-interview.md` logs include questions, options when presented, responses or decisions, and final deviations or coverage summary
+- `research/*.md` and `research/{app}/*.md` have metadata, summary, source/evidence orientation, assumptions or risks when relevant, and next steps
+- `research/*-search-log.md` files are clearly marked as supporting context and include queries, findings, and source attribution
+- `research/experiments/*.md` has hypothesis, method, success criteria, timeline, budget, decision rules, results, and next steps
+- `sync.md` uses `## Dependencies`, `## Conflict Resolution`, `## Custom`, and `## Notifications`
+- `tasks/deploys.md` has environment headings with dated deployment ledger entries including branch, commit range, commit count, and status
+- `.agents/project.json`, when present, is valid JSON and includes project designation fields used by pack-aware skills
 
 ### 5. Audit Codex Mirror (`codex` scope)
 
@@ -97,6 +131,12 @@ Categorize all findings:
 | **Warning** | Drift or gap that may be intentional (missing codex mirror, incomplete sections) |
 | **Info** | Suggestions for improvement (long descriptions, missing optional sections) |
 
+For documentation templates, use:
+
+- **Error** for automation-breaking structure: missing checkboxes in `tasks/todo.md`, missing manual blocker annotations, malformed phase numbering, multiple H1 headings, invalid `.agents/project.json`, or missing required task/spec sections that downstream skills parse.
+- **Warning** for template drift: missing metadata, missing `## Next Steps`, missing spec acceptance criteria, research docs without source/evidence orientation, or legacy roots that should move to canonical locations.
+- **Info** for uncertain classifications, old hand-written docs, optional sections, or cleanup suggestions that do not block automation.
+
 ### 7. Auto-Fix (if `fix` mode)
 
 Only fix mechanical, unambiguous issues:
@@ -105,11 +145,15 @@ Only fix mechanical, unambiguous issues:
 - Fix `name` field to match directory name
 - Create missing Codex mirror in the matching root from the Claude version (copy frontmatter + intro, add TODO for Codex-specific content)
 - Add missing skill entries to the appropriate global core table or pack list in `docs/skills-reference.md`
+- Add missing empty metadata scaffold only when the target generated-doc template explicitly requires metadata and the values can be left blank
+- Normalize duplicate blank lines around headings in generated docs when it is purely mechanical
 
 **Never auto-fix:**
 - Missing Process/Output/Constraints sections (these need human judgment)
 - Content mismatches between claude and codex versions
 - Roadmap or todo content
+- Summaries, sources, acceptance criteria, research claims, history entries, task status, or next-step recommendations
+- Spec/research document rewrites that should use the archive-first replacement policy from the generating skill
 
 After fixing, re-run the audit to show remaining issues.
 
@@ -127,9 +171,11 @@ Display directly to the user (no files written in audit mode):
 ### Warnings (X)
 - **packs/example-pack/codex/example-skill/** — missing Codex mirror (exists in Claude only)
 - **docs/skills-reference.md** — `$hygiene` not listed in the global core table
+- **research/icp.md** — missing `## Next Steps` section required by the research doc template
 
 ### Info (X)
 - **global/claude/ship/SKILL.md** — no `## Constraints` section (consider adding)
+- **docs/architecture.md** — unknown hand-written doc; skipped strict generated-doc template checks
 
 ### Summary
 - Skills: 48 checked, 2 errors, 1 warning
@@ -153,6 +199,7 @@ In `fix` mode, prepend each fixed item with a checkmark:
 
 - **Read-only by default.** Only modify files when explicitly invoked with `fix` mode.
 - **No content generation.** Auto-fix only adds structural scaffolding, never writes substantive content.
+- **Structural docs only.** Template checks validate shape, parseability, and canonical placement; use `$reconcile-dev-docs`, `$reconcile-research`, `$research-roadmap`, or `$spec-drift` for truth, freshness, and contradictions.
 - **Show evidence.** Every finding must include the specific file path and what's wrong.
 - **No false positives.** If uncertain whether something is a violation, classify it as Info, not Error.
 - **Respect exceptions.** Check for `# codex-skip` and similar markers before flagging intentional gaps.
