@@ -69,7 +69,7 @@ describe("pack.sh", () => {
 
   it("installs project-local claude and codex skill symlinks", () => {
     const { fakeLibrary, fakeProject } = createTestEnv();
-    runPack(fakeLibrary, fakeProject, "install game");
+    const output = runPack(fakeLibrary, fakeProject, "install game");
     expect(
       lstatSync(join(fakeProject, ".claude", "skills", "game-a")).isSymbolicLink(),
     ).toBe(true);
@@ -79,6 +79,7 @@ describe("pack.sh", () => {
     expect(readlinkSync(join(fakeProject, ".codex", "skills", "game-a"))).toBe(
       join(fakeLibrary, "packs", "game", "codex", "game-a"),
     );
+    expect(output).toContain("start a fresh CLI session");
   });
 
   it("writes project designation", () => {
@@ -94,12 +95,30 @@ describe("pack.sh", () => {
   it("removes only links for the selected pack", () => {
     const { fakeLibrary, fakeProject } = createTestEnv();
     runPack(fakeLibrary, fakeProject, "install game");
-    runPack(fakeLibrary, fakeProject, "remove game");
+    const output = runPack(fakeLibrary, fakeProject, "remove game");
     expect(existsSync(join(fakeProject, ".claude", "skills", "game-a"))).toBe(
       false,
     );
     expect(existsSync(join(fakeProject, ".codex", "skills", "game-a"))).toBe(
       false,
     );
+    expect(output).toContain("start a fresh CLI session");
+  });
+
+  it("prints a fresh session notice after refresh", () => {
+    const { fakeLibrary, fakeProject } = createTestEnv();
+    mkdirSync(join(fakeProject, ".agents"), { recursive: true });
+    writeFileSync(
+      join(fakeProject, ".agents", "project.json"),
+      JSON.stringify({
+        project_type: "game",
+        enabled_packs: ["game"],
+        skill_pack_version: 1,
+      }),
+    );
+
+    const output = runPack(fakeLibrary, fakeProject, "refresh");
+
+    expect(output).toContain("start a fresh CLI session");
   });
 });

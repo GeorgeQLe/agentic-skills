@@ -29,6 +29,8 @@ scripts/pack.sh status
 
 Project designation is stored in `.agents/project.json`.
 
+`refresh` recreates project-local symlinks from `.agents/project.json`; it does not reload an active Claude Code or Codex process. Start a fresh CLI session after pack changes if the changed skills are not visible.
+
 ## Global Core Skills
 
 Global skills are safe across business apps, games, devtools, libraries, services, and infrastructure:

@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-04-15 — Clarify pack skill reload behavior
+
+- Updated `scripts/pack.sh` so `install`, `remove`, and `refresh` print a fresh-session notice after changing project-local skill links
+- Documented that pack `refresh` recreates `.claude/skills` and `.codex/skills` symlinks but does not reload an already-running Claude Code or Codex process
+- Bumped `/pack` and `$pack` skill versions to 1.1.1
+- Added regression coverage for install/remove/refresh fresh-session notices
+- Validation: `npm test -- pack.test.mjs`, `scripts/skill-versions.sh --missing`, and `git diff --check`
+- Deploy skipped: no explicit manual deploy contract (`deploy.md` or `tasks/deploy.md`)
+
 ## 2026-04-15 — Rename workflow to research-roadmap
 
 - Renamed the global Claude and Codex `workflow` skill directories to `research-roadmap`
