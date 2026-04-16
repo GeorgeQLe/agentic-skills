@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-04-16 — Add code-quality cleanup orchestrator
+
+- Added mirrored Claude and Codex `quality-sweep` skills to the `code-quality` pack
+- Defined audit-only default behavior plus explicit `fix` and `full` modes for behavior-preserving cleanup campaigns
+- Documented the eight audit lanes: duplication, shared types, unused code, circular dependencies, weak types, error handling, legacy paths, and comments/stubs
+- Added Codex agent metadata and updated the Code Quality Pack docs/reference flow to include `quality-sweep audit -> extract-shared-types / quality-sweep fix -> regression-check`
+- Validation: YAML/frontmatter parsing for new skill files, `scripts/pack.sh list`, Claude/Codex skill mirror diff, and `git diff --check`
+- Deploy skipped: no explicit manual deploy contract (`deploy.md` or `tasks/deploy.md`)
+
 ## 2026-04-15 — Clarify pack skill reload behavior
 
 - Updated `scripts/pack.sh` so `install`, `remove`, and `refresh` print a fresh-session notice after changing project-local skill links

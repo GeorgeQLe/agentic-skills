@@ -154,13 +154,13 @@ scripts/pack.sh install code-quality
 Skills:
 
 ```text
-extract-shared-types
+quality-sweep, extract-shared-types
 ```
 
 Default flow:
 
 ```text
-extract-shared-types -> regression-check
+quality-sweep audit -> extract-shared-types / quality-sweep fix -> regression-check
 ```
 
 ## Kanban Variant Packs
