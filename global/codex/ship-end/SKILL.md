@@ -8,6 +8,8 @@ argument-hint: "[--no-deploy]"
 
 # Ship End
 
+Invoke as `$ship-end`.
+
 Use this skill when the user wants the current session wrapped up cleanly.
 
 ## Workflow
@@ -31,6 +33,10 @@ Use this skill when the user wants the current session wrapped up cleanly.
    - Do NOT look in `.github/workflows/` — this project does not use GitHub Actions.
    - If a deploy contract exists but no deploy method is found, ask the user how deployment works. Do not guess.
    - Run the deploy and verify the output for errors.
+   - If the deploy command fails because AWS SSO credentials are missing or expired, do not skip deployment. Run the matching `aws sso login --profile <profile>` command, using the profile from the deploy contract, deploy command, or error output.
+   - When `aws sso login` prints a browser URL, device code, or verification instructions, relay them to the user and tell them to navigate to the provided URL and complete the login in their browser. Keep the login command running until it succeeds, fails, or times out.
+   - After a successful SSO login, rerun the original deploy command once. This auth recovery is part of the same deploy attempt, not an automatic retry of a failed deploy.
+   - If the user cannot complete SSO login or the login command fails, report the deploy as blocked by authentication. Do not report it as skipped.
    - If the deploy fails, report the error. Do not retry automatically.
 7. Commit and push using the `commit-and-push-by-feature` workflow. That workflow must land the resulting commits on `main` or `master`, not on an existing feature branch.
 8. Report:

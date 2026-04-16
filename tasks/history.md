@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-04-16 — Clarify skill invocation and AWS SSO deploy recovery
+
+- Added explicit `Invoke as $...` guidance across Codex global and pack skill docs so each skill documents its Codex invocation form
+- Updated Codex and Claude deploy/ship workflows so expired or missing AWS SSO credentials trigger `aws sso login --profile <profile>` and user browser-login instructions instead of a skipped deploy
+- Defined failed SSO completion as an authentication blocker, not a skipped deploy, and reruns the original deploy command once after successful login
+- Validation: `git diff --check`, `scripts/skill-versions.sh --missing`, `scripts/detect-secrets.sh`, and `scripts/pack.sh list`
+- Deploy skipped: no explicit manual deploy contract (`deploy.md` or `tasks/deploy.md`)
+
 ## 2026-04-16 — Add code-quality cleanup orchestrator
 
 - Added mirrored Claude and Codex `quality-sweep` skills to the `code-quality` pack
