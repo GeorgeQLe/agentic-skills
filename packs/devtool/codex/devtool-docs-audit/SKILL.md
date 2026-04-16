@@ -7,6 +7,8 @@ version: 1.0.0
 
 # Devtool Docs Audit
 
+Invoke as `$devtool-docs-audit`.
+
 Review developer documentation for adoption blockers.
 
 ## Output

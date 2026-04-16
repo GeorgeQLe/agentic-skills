@@ -7,6 +7,8 @@ version: 1.0.0
 
 # Release
 
+Invoke as `$release`.
+
 Use this skill when the user wants to cut a release for the project.
 
 ## Workflow

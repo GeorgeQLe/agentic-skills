@@ -7,6 +7,8 @@ version: 1.0.0
 
 # Regression Check
 
+Invoke as `$regression-check`.
+
 Use this skill after completing a phase or major change to verify nothing is broken.
 
 ## Workflow

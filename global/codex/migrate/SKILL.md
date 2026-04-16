@@ -7,6 +7,8 @@ version: 1.0.0
 
 # Migrate
 
+Invoke as `$migrate`.
+
 Use this skill when the user needs to perform a large-scale codebase reorganization, dependency upgrade, or pattern migration.
 
 ## Workflow

@@ -8,6 +8,8 @@ argument-hint: "[optional: focus area e.g. \"pricing tiers\", \"usage-based\", \
 
 # Monetization — Revenue & Pricing Strategy
 
+Invoke as `$monetization`.
+
 Deep-research skill that analyzes how to monetize the product. Combines web research on revenue models in the category with codebase analysis, ICP data, and competitive pricing to produce a monetization strategy that stands on research before asking the user for hard constraints or proprietary data.
 
 ## Prerequisites

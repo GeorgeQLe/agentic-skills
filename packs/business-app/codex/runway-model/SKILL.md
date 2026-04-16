@@ -8,6 +8,8 @@ argument-hint: "[file path to financials, pasted data, or empty to be prompted]"
 
 # Runway Model — Financial Runway & Unit Economics
 
+Invoke as `$runway-model`.
+
 Simple financial model: burn rate, revenue trajectory, runway in months, and scenario modeling. Takes real numbers, projects forward with optimistic/realistic/pessimistic scenarios. Append-only updates for tracking over time.
 
 ## Soft Prerequisites

@@ -7,6 +7,8 @@ version: 1.0.0
 
 # Devtool User Map
 
+Invoke as `$devtool-user-map`.
+
 Map the developer-facing audience and buying context.
 
 ## Output

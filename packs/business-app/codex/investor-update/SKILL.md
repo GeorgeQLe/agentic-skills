@@ -8,6 +8,8 @@ argument-hint: "[optional: month e.g. \"March 2026\"]"
 
 # Investor Update — Stakeholder Communication
 
+Invoke as `$investor-update`.
+
 Generates a structured monthly update from current research state, metrics, roadmap progress, and customer feedback. Uses standard YC/First Round format suitable for investors, accelerator mentors, or advisory boards.
 
 ## Soft Prerequisites

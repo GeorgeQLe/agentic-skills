@@ -7,6 +7,8 @@ version: 1.0.0
 
 # Game Launch
 
+Invoke as `$game-launch`.
+
 Plan launch around game-market signals and channels.
 
 ## Output

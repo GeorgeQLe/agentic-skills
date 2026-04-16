@@ -7,6 +7,8 @@ version: 1.0.0
 
 # Game Audience
 
+Invoke as `$game-audience`.
+
 Identify the target player audience for a video game.
 
 ## Output

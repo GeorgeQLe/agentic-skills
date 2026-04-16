@@ -8,6 +8,8 @@ argument-hint: "[optional: focus area e.g. \"pricing\", \"ICP\", \"channel\"]"
 
 # Assumption Tracker — Riskiest Assumptions Register
 
+Invoke as `$assumption-tracker`.
+
 Scans all `research/*.md` files, extracts implicit and explicit assumptions, ranks by risk (catastrophic if wrong) × uncertainty (how little evidence), and produces a living register prioritizing what to validate first.
 
 ## Prerequisites

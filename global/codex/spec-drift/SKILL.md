@@ -7,6 +7,8 @@ version: 1.0.0
 
 # Spec Drift — Spec-to-Code Conformance Audit
 
+Invoke as `$spec-drift`.
+
 Checks that specs and codebase tell the same story. Extracts verifiable claims from spec documents, checks each against the actual implementation, and flags divergence. Complementary to `$reconcile-research` (doc-to-doc) and `$expert-review` (broad code review).
 
 ## Prerequisites

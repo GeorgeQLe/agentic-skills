@@ -8,6 +8,8 @@ argument-hint: "[--ideas]"
 
 # Plan Interview
 
+Invoke as `$plan-interview`.
+
 Use this skill when the user has a draft spec, feature description, or rough idea that needs to be validated and turned into a complete implementation specification.
 
 ## Workflow

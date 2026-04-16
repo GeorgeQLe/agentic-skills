@@ -7,6 +7,8 @@ version: 1.0.0
 
 # Sync
 
+Invoke as `$sync`.
+
 Pull the latest changes from the remote repository and report status.
 
 ## Workflow

@@ -8,6 +8,8 @@ argument-hint: "[audit|fix] [all|icp|pricing|journey|enterprise|feedback|specs]"
 
 # Reconcile Research — Cross-Document Consistency Audit
 
+Invoke as `$reconcile-research`.
+
 Checks that research documents tell a consistent story. Finds contradictions between ICP and pricing, stale assumptions that customer feedback has invalidated, journey stages that metrics don't cover, and other cross-document gaps. Think of it as a linter for research coherence rather than structure.
 
 ## Process

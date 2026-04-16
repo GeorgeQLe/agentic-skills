@@ -7,6 +7,8 @@ version: 1.0.0
 
 # Devtool Adoption
 
+Invoke as `$devtool-adoption`.
+
 Plan how developers find, try, trust, and keep using the tool.
 
 ## Output

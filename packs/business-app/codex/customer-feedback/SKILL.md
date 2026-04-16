@@ -8,6 +8,8 @@ argument-hint: "[file path, pasted text, or empty to be prompted]"
 
 # Customer Feedback — Ingest & Synthesize
 
+Invoke as `$customer-feedback`.
+
 Append-only skill that ingests customer feedback, categorizes findings against ICP and journey map, and maintains a running synthesis. Each run adds a session; the synthesis section regenerates across all sessions.
 
 ## Soft Prerequisites

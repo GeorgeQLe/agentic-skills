@@ -8,6 +8,8 @@ argument-hint: "[--existing] [path-to-spec]"
 
 # Roadmap - Task Pipeline Manager
 
+Invoke as `$roadmap`.
+
 Use this skill to keep the task execution pipeline healthy and moving. It scans roadmap, todo, manual tasks, history, ideas, specs, and git state, then either builds a roadmap (when none exists) or updates `tasks/todo.md` with a priority task queue.
 
 Do not run the queued skills from this workflow. The job here is to maintain the task queue so the user can resolve all pipeline issues in the right order.

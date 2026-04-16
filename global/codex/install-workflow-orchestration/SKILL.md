@@ -7,6 +7,8 @@ version: 1.0.0
 
 # Install Workflow Orchestration
 
+Invoke as `$install-workflow-orchestration`.
+
 Use this skill when the user wants the repository's `CLAUDE.md` and `AGENTS.md` updated with the workflow orchestration policy block from this workflow.
 
 ## Target

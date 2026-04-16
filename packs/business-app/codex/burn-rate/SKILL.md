@@ -7,6 +7,8 @@ version: 1.0.0
 
 # Burn Rate — Infrastructure-Grounded Cost & Runway Analysis
 
+Invoke as `$burn-rate`.
+
 Analyzes infrastructure, third-party services, and team costs to estimate monthly burn rate, then calculates payback period and break-even against revenue projections. Bridges `$monetization` (unit economics) and `$scale-audit` (infrastructure readiness) with dollar-denominated cost projections.
 
 Default stance: assume the user does not know infrastructure pricing or SaaS cost structure in detail. Cost estimates must stand on detected services, cited pricing research, and explicit assumptions before asking the user for missing internal numbers.

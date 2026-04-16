@@ -8,6 +8,8 @@ argument-hint: "[optional: focus area e.g. \"technical\", \"regulatory\", \"fina
 
 # Risk Register — Systematic Risk Assessment
 
+Invoke as `$risk-register`.
+
 Identifies and tracks risks beyond product/market: key-person, technical, regulatory, competitive, financial, and execution risks. Complements `$assumption-tracker` (which focuses on product/market assumptions) with broader organizational and environmental risks.
 
 ## Soft Prerequisites

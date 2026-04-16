@@ -8,6 +8,8 @@ argument-hint: "[optional: focus area e.g. \"pricing\", \"launch plan\"]"
 
 # GTM — Go-to-Market Planning
 
+Invoke as `$gtm`.
+
 Research-first skill that builds a go-to-market plan grounded in ICP research and competitive landscape. Covers channel strategy, messaging framework, pricing, launch plan, and early traction tactics.
 
 ## Prerequisites

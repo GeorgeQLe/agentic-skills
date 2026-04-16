@@ -7,6 +7,8 @@ version: 1.0.0
 
 # Game Prototype Test
 
+Invoke as `$game-prototype-test`.
+
 Design the smallest playable test that can prove or disprove the game's core fun.
 
 ## Output

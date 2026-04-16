@@ -7,6 +7,8 @@ version: 1.0.0
 
 # Devtool DX Journey
 
+Invoke as `$devtool-dx-journey`.
+
 Map the developer experience from discovery to production use.
 
 ## Output

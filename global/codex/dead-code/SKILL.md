@@ -7,6 +7,8 @@ version: 1.0.0
 
 # Dead Code
 
+Invoke as `$dead-code`.
+
 Use this skill when the user wants to identify unused code, orphaned files, or stale dependencies for cleanup.
 
 ## Workflow

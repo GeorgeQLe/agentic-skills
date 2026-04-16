@@ -8,6 +8,8 @@ allowed-tools: Bash(poketo *), Bash(git *)
 
 # Sync Roadmap ↔ Kanban
 
+Invoke as `$sync-roadmap-kanban`.
+
 Reconcile the kanban board, roadmap docs, and codebase state so all three reflect the same reality.
 
 ## Workflow

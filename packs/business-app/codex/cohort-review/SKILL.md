@@ -8,6 +8,8 @@ argument-hint: "[file path to data, pasted data, or empty to be prompted]"
 
 # Cohort Review — Post-Launch Metrics & Funnel Analysis
 
+Invoke as `$cohort-review`.
+
 Takes real usage/revenue data and analyzes against targets from `$metrics`. Performs cohort analysis, funnel analysis, and channel performance review. Identifies where the funnel leaks, which cohorts retain, and whether activation targets are being hit. Append-style output for tracking performance over time.
 
 ## Prerequisites

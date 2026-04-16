@@ -7,6 +7,8 @@ version: 1.0.0
 
 # Expert Review
 
+Invoke as `$expert-review`.
+
 Use this skill when the user wants a code review of the whole project or a specific path, with findings validated against project documentation.
 
 ## Workflow

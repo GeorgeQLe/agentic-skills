@@ -7,6 +7,8 @@ version: 1.0.0
 
 # Slim Audit
 
+Invoke as `$slim-audit`.
+
 Use this skill when the user wants to identify opportunities to reduce lines of code while maintaining or improving functionality, performance, and code quality.
 
 ## Workflow

@@ -7,6 +7,8 @@ version: 1.0.0
 
 # Devtool Workflow
 
+Invoke as `$devtool-workflow`.
+
 Use this skill when the project is primarily developer-facing.
 
 ## Workflow

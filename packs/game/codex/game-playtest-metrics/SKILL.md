@@ -7,6 +7,8 @@ version: 1.0.0
 
 # Game Playtest Metrics
 
+Invoke as `$game-playtest-metrics`.
+
 Define what evidence will prove the game is legible, compelling, replayable, and shareable.
 
 ## Output

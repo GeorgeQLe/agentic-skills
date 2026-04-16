@@ -7,6 +7,8 @@ version: 1.0.0
 
 # Affected
 
+Invoke as `$affected`.
+
 Use this skill when the user wants to understand the blast radius of their current changes in a monorepo.
 
 ## Workflow

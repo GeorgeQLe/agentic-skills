@@ -8,6 +8,8 @@ argument-hint: "[audit|fix|full] [optional: package, app, directory, or domain]"
 
 # Quality Sweep
 
+Invoke as `$quality-sweep`.
+
 Use this skill when a project needs a behavior-preserving code quality cleanup campaign across duplication, type hygiene, dead code, dependency boundaries, defensive error handling, legacy paths, and comments. This skill orchestrates cleanup work; use narrower skills like `extract-shared-types`, `dead-code`, `slim-audit`, `hygiene`, `spec-drift`, and `regression-check` when the user asks for only one of those concerns.
 
 ## Process
