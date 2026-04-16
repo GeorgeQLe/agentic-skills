@@ -7,6 +7,8 @@ version: 1.0.0
 
 # Devtool Positioning
 
+Invoke as `$devtool-positioning`.
+
 Position the developer tool in a way developers can understand quickly.
 
 ## Output

@@ -9,6 +9,8 @@ allowed-tools: Bash(poketo *)
 
 # Plan Interview Kanban
 
+Invoke as `$plan-interview-kanban`.
+
 Use this skill only in projects that have opted into a PoketoWork kanban pack.
 
 ## Process

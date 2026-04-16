@@ -7,6 +7,8 @@ version: 1.0.0
 
 # Game Workflow
 
+Invoke as `$game-workflow`.
+
 Use this skill when a project is a video game or playable entertainment product.
 
 ## Workflow

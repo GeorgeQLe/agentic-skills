@@ -8,6 +8,8 @@ argument-hint: <spec file path or concept/idea>
 
 # ICP — Research-Driven Customer Discovery
 
+Invoke as `$icp`.
+
 Automated research that identifies **multiple ICP candidates**, maps pain points and value props, and selects a primary ICP. Uses web search + codebase analysis instead of interviews.
 
 Default stance: assume the user has no insider knowledge of the market. Explain segments, pain signals, and tradeoffs from first principles so the recommendation is defensible without founder intuition. Ask for corrections, hard constraints, or proprietary facts only when needed.

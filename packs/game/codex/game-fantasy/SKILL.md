@@ -7,6 +7,8 @@ version: 1.0.0
 
 # Game Fantasy
 
+Invoke as `$game-fantasy`.
+
 Define what the game lets players feel, become, master, discover, build, survive, or show off.
 
 ## Output

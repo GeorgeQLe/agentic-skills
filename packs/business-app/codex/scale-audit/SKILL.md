@@ -7,6 +7,8 @@ version: 1.1.0
 
 # Scale Audit — Enterprise Production Readiness
 
+Invoke as `$scale-audit`.
+
 Automated analysis that evaluates the codebase against `research/enterprise-icp.md`. Identifies gaps for enterprise deals — stakeholder journey coverage, compliance, infrastructure, and operations.
 
 ## Prerequisites

@@ -7,6 +7,8 @@ version: 1.0.0
 
 # Devtool Monetization
 
+Invoke as `$devtool-monetization`.
+
 Design monetization for developer adoption and team expansion.
 
 ## Output

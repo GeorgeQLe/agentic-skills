@@ -8,6 +8,8 @@ argument-hint: "[optional: specific use case or journey stage to focus on]"
 
 # Journey Map — User & Customer Journey Mapping
 
+Invoke as `$journey-map`.
+
 Research-first journey mapping for how people flow through the product (user journey) and through the business relationship (customer journey). Requires both `research/icp.md` and at least one `specs/*.md`.
 
 ## Prerequisites

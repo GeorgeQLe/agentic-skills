@@ -7,6 +7,8 @@ version: 1.0.0
 
 # Devtool Integration Map
 
+Invoke as `$devtool-integration-map`.
+
 Map where the tool fits into a developer's stack.
 
 ## Output

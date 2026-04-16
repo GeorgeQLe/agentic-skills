@@ -7,6 +7,8 @@ version: 1.0.0
 
 # Decommission
 
+Invoke as `$decommission`.
+
 Use this skill when the user wants to remove a service, package, module, or infrastructure component from the project.
 
 ## Workflow

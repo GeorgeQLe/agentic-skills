@@ -7,6 +7,8 @@ version: 1.0.0
 
 # Guide
 
+Invoke as `$guide`.
+
 Produce detailed, click-by-click instructions for manual tasks that block automated progress — service signups, DNS configuration, OAuth credential creation, dashboard settings, and anything else that requires a GUI or third-party portal.
 
 ## Workflow

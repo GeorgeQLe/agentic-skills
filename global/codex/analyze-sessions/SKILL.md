@@ -7,6 +7,8 @@ version: 1.0.0
 
 # Analyze Sessions
 
+Invoke as `$analyze-sessions`.
+
 Use this skill when the user wants a data-driven breakdown of their local Claude Code usage history, repeated prompts, or workflow automation opportunities.
 
 ## Inputs

@@ -8,6 +8,8 @@ argument-hint: "[optional: focus area e.g. \"category\", \"vs competitor X\"]"
 
 # Positioning — Strategic Product Positioning
 
+Invoke as `$positioning`.
+
 Develops rigorous product positioning using the "Obviously Awesome" methodology (April Dunford). Determines competitive alternatives, unique attributes, customer value, target segment, and market category. Positioning is upstream of messaging — it determines *how you frame the product category itself*.
 
 Default stance: assume the user has no insider knowledge of the market. The positioning recommendation must stand on research, customer evidence, and codebase reality before asking for user input. Ask for corrections, proprietary differentiators, and hard constraints, not intuition.

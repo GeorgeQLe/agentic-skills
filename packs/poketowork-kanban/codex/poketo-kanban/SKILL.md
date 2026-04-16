@@ -9,6 +9,8 @@ allowed-tools: Bash(poketo *)
 
 # Poketo Kanban — Board & Task Management
 
+Invoke as `$poketo-kanban`.
+
 Manage Poketo Work kanban boards directly from any session. All operations go through the poketo CLI gateway.
 
 ## Prerequisites

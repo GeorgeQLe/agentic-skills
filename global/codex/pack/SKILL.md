@@ -8,6 +8,8 @@ argument-hint: "[list|status|recommend|install <pack>|remove <pack>|refresh] or 
 
 # Pack
 
+Invoke as `$pack`.
+
 Use this skill when the user wants to inspect, recommend, install, remove, or refresh project-local skill packs.
 
 ## Workflow

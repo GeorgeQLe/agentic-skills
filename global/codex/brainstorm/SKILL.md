@@ -8,6 +8,8 @@ argument-hint: "[optional focus area]"
 
 # Brainstorm
 
+Invoke as `$brainstorm`.
+
 Evaluate the current codebase and generate actionable suggestions that the user can take into `$plan-interview` for deeper exploration and specification.
 
 ## Workflow

@@ -7,6 +7,8 @@ version: 1.0.0
 
 # Trace
 
+Invoke as `$trace`.
+
 Use this skill when the user wants to understand how a specific route, endpoint, or feature flows through the application stack.
 
 ## Workflow

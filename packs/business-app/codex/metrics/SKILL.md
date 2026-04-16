@@ -8,6 +8,8 @@ argument-hint: "[optional: focus area e.g. \"activation\", \"retention\"]"
 
 # Metrics — Success Metrics Framework
 
+Invoke as `$metrics`.
+
 Research-first skill that defines measurable success metrics tied to journey stages. Each metric gets a definition, measurement method, target with rationale, and instrumentation requirements.
 
 ## Prerequisites

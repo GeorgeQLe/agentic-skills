@@ -8,6 +8,8 @@ argument-hint: "[optional: focus area e.g. \"ICP\", \"pricing\", \"channels\"]"
 
 # Retro — Strategic Decision Retrospective
 
+Invoke as `$retro`.
+
 Reviews decisions made in research docs against actual outcomes. Was the primary ICP right? Did pricing work? Did the launch channel deliver? Captures lessons and updates confidence levels across all research documents.
 
 ## Prerequisites

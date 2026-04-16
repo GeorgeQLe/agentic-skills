@@ -7,6 +7,8 @@ version: 1.0.0
 
 # Game Genre Map
 
+Invoke as `$game-genre-map`.
+
 Map the genre contract for the game.
 
 ## Output

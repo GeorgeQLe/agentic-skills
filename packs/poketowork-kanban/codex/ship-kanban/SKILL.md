@@ -9,6 +9,8 @@ allowed-tools: Bash(poketo *)
 
 # Ship Kanban
 
+Invoke as `$ship-kanban`.
+
 Use this skill only in projects that have opted into a PoketoWork kanban pack.
 
 ## Process

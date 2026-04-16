@@ -8,6 +8,8 @@ argument-hint: "[audit|fix] [tasks|specs|all]"
 
 # Reconcile Dev Docs
 
+Invoke as `$reconcile-dev-docs`.
+
 Audit or repair development documentation so the roadmap, current work, history, specs, and evidence from git/code all tell the same story.
 
 ## Workflow

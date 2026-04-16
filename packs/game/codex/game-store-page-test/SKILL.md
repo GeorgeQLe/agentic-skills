@@ -7,6 +7,8 @@ version: 1.0.0
 
 # Game Store Page Test
 
+Invoke as `$game-store-page-test`.
+
 Validate market pull before overbuilding.
 
 ## Output

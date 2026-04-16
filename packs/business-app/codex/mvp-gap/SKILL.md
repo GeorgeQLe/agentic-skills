@@ -7,6 +7,8 @@ version: 1.2.0
 
 # MVP Gap — Startup Readiness Audit
 
+Invoke as `$mvp-gap`.
+
 Automated analysis that evaluates the codebase against `research/icp.md`. Identifies what's missing for winning first paying customers.
 
 ## Prerequisites

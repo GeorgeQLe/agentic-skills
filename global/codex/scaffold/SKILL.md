@@ -7,6 +7,8 @@ version: 1.0.0
 
 # Scaffold
 
+Invoke as `$scaffold`.
+
 Use this skill when the user wants to create a new package or app in their monorepo.
 
 ## Workflow

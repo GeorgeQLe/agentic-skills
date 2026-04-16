@@ -7,6 +7,8 @@ version: 1.0.0
 
 # Plan Phases
 
+Invoke as `$plan-phases`.
+
 Use this skill when the user has a completed spec and wants it broken into an implementation plan that can be executed phase by phase.
 
 ## Input

@@ -7,6 +7,8 @@ version: 1.0.0
 
 # Game Comparables
 
+Invoke as `$game-comparables`.
+
 Research comparable games as market teachers, not just competitors.
 
 ## Output

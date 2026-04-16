@@ -7,6 +7,8 @@ version: 2.0.0
 
 # Research Roadmap - Documentation Queue Manager
 
+Invoke as `$research-roadmap`.
+
 Use this skill to make the project documentation contract complete before build work continues. It scans research, specs, and task docs, then updates `tasks/todo.md` by putting a priority documentation queue at the front of the file.
 
 Do not run the queued research skills from this skill. The job here is to maintain the documentation queue so the user can complete research and planning artifacts in the right order.

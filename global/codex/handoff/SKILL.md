@@ -7,6 +7,8 @@ version: 1.0.0
 
 # Handoff
 
+Invoke as `$handoff`.
+
 Use this skill when the user is ending a session and wants to capture context for a future session to pick up from.
 
 ## Workflow

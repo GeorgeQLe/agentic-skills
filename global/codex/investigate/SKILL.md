@@ -7,6 +7,8 @@ version: 1.0.0
 
 # Investigate
 
+Invoke as `$investigate`.
+
 Use this skill when the user reports a bug, error, unexpected behavior, or provides observations/hypotheses about what they think is wrong. Validates claims against the codebase and git history before tracing to root cause.
 
 ## Workflow

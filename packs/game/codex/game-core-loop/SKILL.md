@@ -7,6 +7,8 @@ version: 1.0.0
 
 # Game Core Loop
 
+Invoke as `$game-core-loop`.
+
 Break the game into repeatable loops.
 
 ## Output

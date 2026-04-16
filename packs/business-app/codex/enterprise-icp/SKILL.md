@@ -8,6 +8,8 @@ argument-hint: "[optional: target industry or market segment]"
 
 # Enterprise ICP — Multi-Stakeholder Discovery Interview
 
+Invoke as `$enterprise-icp`.
+
 Research-first mapping of the enterprise problem space. Enterprise sales involve multiple stakeholders, each with their own journey and deal-killing "no."
 
 ## Workflow

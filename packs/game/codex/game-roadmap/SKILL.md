@@ -7,6 +7,8 @@ version: 1.0.0
 
 # Game Roadmap
 
+Invoke as `$game-roadmap`.
+
 Turn validated game research into production milestones.
 
 ## Output

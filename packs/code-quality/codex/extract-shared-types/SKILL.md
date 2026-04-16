@@ -8,6 +8,8 @@ argument-hint: "[optional: package, app, directory, or domain to refactor]"
 
 # Extract Shared Types
 
+Invoke as `$extract-shared-types`.
+
 Use this skill for type hoisting, type barreling, shared `types/` directories, import honesty, and circular-dependency prevention when the requested change is explicitly structural and behavior-preserving.
 
 ## Process

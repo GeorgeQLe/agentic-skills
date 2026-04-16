@@ -7,6 +7,8 @@ version: 1.0.0
 
 # Commit And Push By Feature
 
+Invoke as `$commit-and-push-by-feature`.
+
 Use this skill when the user wants current changes committed and pushed in sensible feature-oriented buckets rather than one undifferentiated commit.
 
 ## Workflow

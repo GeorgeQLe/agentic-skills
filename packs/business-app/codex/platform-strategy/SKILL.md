@@ -8,6 +8,8 @@ argument-hint: "[optional: expansion direction e.g. \"vertical\", \"horizontal\"
 
 # Platform Strategy — Multi-Product Expansion Planning
 
+Invoke as `$platform-strategy`.
+
 Takes a single-product company and maps the path to a multi-product platform. Identifies vertical (deeper into same customer base) and horizontal (new related product for new customer base) expansion vectors, scores them, designs cheap validation experiments, and produces a sequenced portfolio plan.
 
 ## Prerequisites

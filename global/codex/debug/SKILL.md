@@ -7,6 +7,8 @@ version: 1.0.0
 
 # Debug
 
+Invoke as `$debug`.
+
 Investigate a reported problem, maintain a persistent debug changelog (`docs/debug-changelog.md`), and propose a fix that avoids repeating past solutions.
 
 ## Workflow
