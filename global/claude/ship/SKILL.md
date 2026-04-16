@@ -63,6 +63,10 @@ a) **Find the deploy method.** Check these locations in order:
    - If no deploy method is found, **ask the user** how deployment works for this project. Do not guess or skip.
 
 b) **Run the deploy** using the discovered mechanism.
+   - If the deploy command fails because AWS SSO credentials are missing or expired, do not skip deployment. Run the matching `aws sso login --profile <profile>` command, using the profile from the deploy contract, deploy command, or error output.
+   - When `aws sso login` prints a browser URL, device code, or verification instructions, relay them to the user and tell them to navigate to the provided URL and complete the login in their browser. Keep the login command running until it succeeds, fails, or times out.
+   - After a successful SSO login, rerun the original deploy command once. This auth recovery is part of the same deploy attempt, not an automatic retry of a failed deploy.
+   - If the user cannot complete SSO login or the login command fails, report the deploy as blocked by authentication. Do not report it as skipped.
 
 c) **Verify the deploy:**
    - Check output for errors.
