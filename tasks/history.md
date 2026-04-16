@@ -756,3 +756,10 @@ Resolved all 10 findings from `/expert-review`:
 - Fixed `scripts/pack.sh` empty-array writes under `set -u`, which surfaced as stderr during the pack removal test.
 - Upgraded the Poketo kanban script package to `drizzle-orm` 0.45.2 to resolve the high-severity SQL identifier escaping advisory reported by `npm audit`.
 - Verified `bash install.sh` succeeds on macOS Bash 3.2 and the Poketo kanban script test suite passes.
+
+## 2026-04-16 — Research roadmap documentation queue
+
+- Ran the queued `$research-roadmap` step after all implementation roadmap phases were complete.
+- Inferred this repository as a devtool project from its skill-pack and CLI/documentation structure.
+- Added a priority documentation queue to `tasks/todo.md` covering missing devtool research artifacts, missing docs-audit output, spec drift, and the follow-up roadmap refresh.
+- Marked the prior `$research-roadmap` priority task complete and set the next action to `$devtool-user-map`.
