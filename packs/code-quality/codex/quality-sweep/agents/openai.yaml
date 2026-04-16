@@ -1,0 +1,7 @@
+interface:
+  display_name: "Quality Sweep"
+  short_description: "Audit and safely clean up code quality issues"
+  default_prompt: "Use $quality-sweep audit to identify behavior-preserving code quality cleanup opportunities before making changes."
+
+policy:
+  allow_implicit_invocation: true
