@@ -14,7 +14,6 @@ Installs only:
 - `global/codex/*`
 
 It does not install domain packs globally.
-It also removes repo-managed legacy links for retired flat-root skills and former migration stubs.
 
 ## Project Pack Commands
 

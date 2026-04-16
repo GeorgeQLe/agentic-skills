@@ -29,12 +29,11 @@ function createTestEnv() {
   const fakeHome = join(base, "home");
   const fakeRepo = join(base, "repo");
   mkdirSync(fakeHome, { recursive: true });
+  mkdirSync(join(fakeRepo, "scripts"), { recursive: true });
   mkdirSync(join(fakeRepo, "global", "claude", "skill-a"), {
     recursive: true,
   });
   mkdirSync(join(fakeRepo, "global", "codex", "skill-b"), { recursive: true });
-  mkdirSync(join(fakeRepo, "stubs", "claude", "moved-a"), { recursive: true });
-  mkdirSync(join(fakeRepo, "stubs", "codex", "moved-b"), { recursive: true });
   mkdirSync(join(fakeRepo, "packs", "game", "claude", "game-a"), {
     recursive: true,
   });
@@ -47,18 +46,14 @@ function createTestEnv() {
     "test",
   );
   writeFileSync(
-    join(fakeRepo, "stubs", "claude", "moved-a", "SKILL.md"),
-    "test",
-  );
-  writeFileSync(
-    join(fakeRepo, "stubs", "codex", "moved-b", "SKILL.md"),
-    "test",
-  );
-  writeFileSync(
     join(fakeRepo, "packs", "game", "claude", "game-a", "SKILL.md"),
     "test",
   );
   copyFileSync(join(REPO_ROOT, "install.sh"), join(fakeRepo, "install.sh"));
+  copyFileSync(
+    join(REPO_ROOT, "scripts", "skill-links.sh"),
+    join(fakeRepo, "scripts", "skill-links.sh"),
+  );
   return { base, fakeHome, fakeRepo };
 }
 
@@ -96,17 +91,6 @@ describe("install.sh", () => {
     expect(readlinkSync(link)).toBe(
       join(fakeRepo, "global", "codex", "skill-b"),
     );
-  });
-
-  it("does not install migration stubs globally", () => {
-    const { fakeHome, fakeRepo } = createTestEnv();
-    runInstall(fakeHome, fakeRepo);
-    expect(
-      existsSync(join(fakeHome, ".claude", "skills", "moved-a")),
-    ).toBe(false);
-    expect(
-      existsSync(join(fakeHome, ".codex", "skills", "moved-b")),
-    ).toBe(false);
   });
 
   it("does not install domain packs globally", () => {
@@ -150,24 +134,19 @@ describe("install.sh", () => {
     );
   });
 
-  it("removes legacy stub symlinks during install", () => {
+  it("removes stale repo-managed symlinks for removed skills", () => {
     const { fakeHome, fakeRepo } = createTestEnv();
-    const claudeSkillsDir = join(fakeHome, ".claude", "skills");
-    const codexSkillsDir = join(fakeHome, ".codex", "skills");
-    mkdirSync(claudeSkillsDir, { recursive: true });
-    mkdirSync(codexSkillsDir, { recursive: true });
+    const skillsDir = join(fakeHome, ".claude", "skills");
+    mkdirSync(skillsDir, { recursive: true });
     symlinkSync(
-      join(fakeRepo, "stubs", "claude", "moved-a"),
-      join(claudeSkillsDir, "moved-a"),
+      join(fakeRepo, "global", "claude", "removed-skill"),
+      join(skillsDir, "removed-skill"),
     );
-    symlinkSync(
-      join(fakeRepo, "stubs", "codex", "moved-b"),
-      join(codexSkillsDir, "moved-b"),
-    );
+
     const output = runInstall(fakeHome, fakeRepo);
-    expect(existsSync(join(claudeSkillsDir, "moved-a"))).toBe(false);
-    expect(existsSync(join(codexSkillsDir, "moved-b"))).toBe(false);
-    expect(output).toContain("Removed 2 legacy global skill links.");
+
+    expect(output).toContain("Removed stale removed-skill");
+    expect(existsSync(join(skillsDir, "removed-skill"))).toBe(false);
   });
 
   it("uninstall removes only repo symlinks", () => {

@@ -3,33 +3,20 @@ import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
-import { readFileSync, existsSync } from "node:fs";
-import { homedir } from "node:os";
 import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
 import { pgTable, text, timestamp, jsonb, pgEnum } from "drizzle-orm/pg-core";
 import { eq, desc } from "drizzle-orm";
+import { getDbUrl } from "./kanban.mjs";
+
+/** @typedef {import("./types/kanban").BoardActionActivityEntry} BoardActionActivityEntry */
+/** @typedef {import("./types/kanban").BoardActionRecord} BoardActionRecord */
 
 const execFileAsync = promisify(execFile);
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const SCRIPT = join(__dirname, "kanban.mjs");
 
 // ─── Test DB Helper (direct DB access for audit log verification) ───────────
-
-// Re-use the same env resolution as kanban.mjs
-import { ENV_SEARCH_PATHS } from "./env-paths.mjs";
-
-function getTestDbUrl() {
-  if (process.env.POKETOWORK_DATABASE_URL) return process.env.POKETOWORK_DATABASE_URL;
-  for (const p of ENV_SEARCH_PATHS) {
-    if (existsSync(p)) {
-      const content = readFileSync(p, "utf-8");
-      const match = content.match(/^POKETOWORK_DATABASE_URL=["']?([^\s"']+)["']?/m);
-      if (match) return match[1];
-    }
-  }
-  return null;
-}
 
 // Inline board_actions schema (matches poketo-db BoardActionSchema)
 const boardActionEnum = pgEnum("board_action", [
@@ -63,14 +50,17 @@ const boardActions = pgTable("board_actions", {
 let testDb;
 async function getTestDb() {
   if (testDb) return testDb;
-  const url = getTestDbUrl();
+  const url = getDbUrl();
   if (!url) throw new Error("POKETOWORK_DATABASE_URL not available for test DB helper");
   const sql = neon(url);
   testDb = drizzle(sql);
   return testDb;
 }
 
-/** Query board_actions for a specific entity (card/board/list) */
+/**
+ * Query board_actions for a specific entity (card/board/list)
+ * @returns {Promise<BoardActionRecord[]>}
+ */
 async function queryActions(entityId) {
   const db = await getTestDb();
   return db.select().from(boardActions)
@@ -78,7 +68,10 @@ async function queryActions(entityId) {
     .orderBy(desc(boardActions.createdAt));
 }
 
-/** Query board_actions for a board */
+/**
+ * Query board_actions for a board
+ * @returns {Promise<BoardActionRecord[]>}
+ */
 async function queryBoardActions(boardIdVal) {
   const db = await getTestDb();
   return db.select().from(boardActions)
@@ -88,27 +81,41 @@ async function queryBoardActions(boardIdVal) {
 
 // ─── Helper ─────────────────────────────────────────────────────────────────
 
+function getErrorMessage(error) {
+  if (error instanceof Error) return error.message;
+  if (typeof error === "string") return error;
+  if (error === null || error === undefined) return "No error detail provided";
+  if (typeof error !== "object") return String(error);
+  return "Non-Error thrown value";
+}
+
 async function run(...args) {
   try {
     const { stdout } = await execFileAsync("node", [SCRIPT, ...args], {
       timeout: 15000,
     });
     return JSON.parse(stdout);
-  } catch (err) {
+  } catch (error) {
     // Command exited non-zero — try to parse JSON from stderr or stdout
-    const output = err.stdout || err.stderr || "";
+    const output = error.stdout || error.stderr || "";
     try {
       return JSON.parse(output);
     } catch {
-      throw new Error(`kanban.mjs failed: ${output || err.message}`);
+      throw new Error(`kanban.mjs failed: ${output || getErrorMessage(error)}`);
     }
   }
 }
 
 // ─── Test State ─────────────────────────────────────────────────────────────
 
-let boardId;
-let listIds = {}; // { Backlog, Todo, "In Progress", Done, Punt }
+let boardId = null;
+const listIds = {
+  Backlog: null,
+  Todo: null,
+  "In Progress": null,
+  Done: null,
+  Punt: null,
+};
 
 // ─── Board Lifecycle ────────────────────────────────────────────────────────
 
@@ -128,7 +135,7 @@ describe("Board lifecycle", () => {
     boardId = result.board.id;
 
     // Verify list names and types
-    const listMap = {};
+    const listMap = Object.create(null);
     for (const l of result.lists) {
       listMap[l.name] = l;
       listIds[l.name] = l.id;
@@ -193,7 +200,7 @@ describe("Board lifecycle", () => {
 
 // ─── Card CRUD ──────────────────────────────────────────────────────────────
 
-let cardId;
+let cardId = null;
 
 describe("Card CRUD", () => {
   it("create-card in Backlog with name only", async () => {
@@ -1510,8 +1517,10 @@ describe("Activity command", () => {
     const result = await run("activity", "--card", activityCardId);
     expect(result.command).toBe("activity");
     expect(result.entityId).toBe(activityCardId);
+    /** @type {BoardActionActivityEntry[]} */
+    const actions = result.actions;
     expect(result.actions).toBeInstanceOf(Array);
-    expect(result.actions.length).toBeGreaterThanOrEqual(2);
+    expect(actions.length).toBeGreaterThanOrEqual(2);
   });
 
   it("activity --card --limit limits results", async () => {
@@ -1523,15 +1532,19 @@ describe("Activity command", () => {
       "1",
     );
     expect(result.command).toBe("activity");
-    expect(result.actions).toHaveLength(1);
+    /** @type {BoardActionActivityEntry[]} */
+    const actions = result.actions;
+    expect(actions).toHaveLength(1);
   });
 
   it("activity --board returns board-wide actions", async () => {
     const result = await run("activity", "--board", boardId);
     expect(result.command).toBe("activity");
     expect(result.entityId).toBe(boardId);
+    /** @type {BoardActionActivityEntry[]} */
+    const actions = result.actions;
     expect(result.actions).toBeInstanceOf(Array);
-    expect(result.actions.length).toBeGreaterThanOrEqual(1);
+    expect(actions.length).toBeGreaterThanOrEqual(1);
   });
 
   it("activity without --card or --board returns error", async () => {
@@ -1541,6 +1554,7 @@ describe("Activity command", () => {
 
   it("activity action shape includes expected fields", async () => {
     const result = await run("activity", "--card", activityCardId);
+    /** @type {BoardActionActivityEntry} */
     const action = result.actions[0];
     expect(action.action).toBeTruthy();
     expect(action.actorType).toBeTruthy();

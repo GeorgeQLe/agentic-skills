@@ -22,8 +22,6 @@ This keeps game research out of B2B SaaS sessions, and keeps business-product as
 
 It does **not** install `packs/*` globally.
 
-During install it also removes repo-managed links for the retired flat `claude/` and `codex/` roots and the former migration `stubs/` tree, so moved domain skills do not linger globally.
-
 To remove repo-managed global links:
 
 ```bash

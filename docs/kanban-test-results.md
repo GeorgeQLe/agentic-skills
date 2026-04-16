@@ -78,5 +78,3 @@ export POKETO_API_KEY="pk_..."
 # After each skill, verify board state:
 poketo kanban board 5ab6bbdb-d06c-4e47-8a27-5e1de29b2df7
 ```
-
-Use the legacy `kanban.mjs` script only for fallback/admin debugging during rollout. Update this file with results as each skill is tested.

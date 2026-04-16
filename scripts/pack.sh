@@ -7,6 +7,7 @@ PROJECT_ROOT="$(pwd)"
 PROJECT_FILE="$PROJECT_ROOT/.agents/project.json"
 PROJECT_LOCK_DIR="$PROJECT_ROOT/.agents/.pack.lock"
 PROJECT_LOCKED=false
+source "$REPO_ROOT/scripts/skill-links.sh"
 
 usage() {
   cat <<'EOF'
@@ -91,15 +92,23 @@ collect_pack_args() {
   done
 }
 
-pack_project_type() {
+project_type_for_pack() {
   case "$1" in
     business-app|business-app-kanban) echo "business-app" ;;
-    code-quality) echo "unknown" ;;
     game|game-kanban) echo "game" ;;
     devtool|devtool-kanban) echo "devtool" ;;
-    poketowork-kanban) echo "unknown" ;;
-    *) echo "$1" ;;
+    *) return 1 ;;
   esac
+}
+
+infer_project_type() {
+  if [[ "$PROJECT_ROOT" == *"/games/"* ]] || find "$PROJECT_ROOT" -maxdepth 2 \( -iname '*godot*' -o -iname '*unity*' -o -iname '*unreal*' \) -print -quit | grep -q .; then
+    echo "game"
+  elif find "$PROJECT_ROOT" -maxdepth 2 \( -name 'package.json' -o -name 'pyproject.toml' -o -name 'Cargo.toml' \) -print -quit | grep -q .; then
+    echo "devtool"
+  else
+    echo "business-app"
+  fi
 }
 
 read_enabled_packs() {
@@ -192,14 +201,9 @@ link_one_tool() {
     local name
     name="$(basename "$skill_dir")"
     local target="$target_root/$name"
-    if [[ -L "$target" ]]; then
-      rm "$target"
-    elif [[ -e "$target" ]]; then
-      echo "WARNING: $target exists and is not a symlink, skipping"
-      continue
+    if sync_skill_link "$skill_dir" "$target"; then
+      echo "Linked .$tool/skills/$name -> $skill_dir"
     fi
-    ln -sfn "$skill_dir" "$target"
-    echo "Linked .$tool/skills/$name -> $skill_dir"
   done
 }
 
@@ -213,7 +217,10 @@ install_pack() {
   read_lines_into_packs < <(unique_packs_with "$pack")
   local project_type
   project_type="$(current_project_type)"
-  [[ -n "$project_type" ]] || project_type="$(pack_project_type "$pack")"
+  if [[ -z "$project_type" ]]; then
+    project_type="$(project_type_for_pack "$pack" 2>/dev/null || true)"
+    [[ -n "$project_type" ]] || project_type="$(infer_project_type)"
+  fi
   write_project_file_from_packs "$project_type"
   echo "Updated .agents/project.json"
 }
@@ -242,7 +249,7 @@ remove_pack() {
   read_lines_into_packs < <(remove_pack_from_list "$pack")
   local project_type
   project_type="$(current_project_type)"
-  [[ -n "$project_type" ]] || project_type="unknown"
+  [[ -n "$project_type" ]] || project_type="$(infer_project_type)"
   write_project_file_from_packs "$project_type"
   echo "Updated .agents/project.json"
 }
@@ -268,15 +275,23 @@ EOF
 }
 
 recommend() {
+  local inferred_project_type
+  inferred_project_type="$(infer_project_type)"
   if [[ -f "$PROJECT_FILE" ]]; then
-    echo "Project already declares: $(current_project_type)"
+    local project_type
+    project_type="$(current_project_type)"
+    if [[ -n "$project_type" ]]; then
+      echo "Project already declares: $project_type"
+    else
+      echo "Project already declares: (none)"
+    fi
     echo "Enabled packs: $(read_enabled_packs | paste -sd ', ' -)"
     return 0
   fi
-  if [[ "$PROJECT_ROOT" == *"/games/"* ]] || find "$PROJECT_ROOT" -maxdepth 2 \( -iname '*godot*' -o -iname '*unity*' -o -iname '*unreal*' \) -print | grep -q .; then
+  if [[ "$inferred_project_type" == "game" ]]; then
     echo "Recommended pack: game"
     echo "If this project intentionally uses PoketoWork boards, also install game-kanban."
-  elif find "$PROJECT_ROOT" -maxdepth 2 \( -name 'package.json' -o -name 'pyproject.toml' -o -name 'Cargo.toml' \) -print | grep -q .; then
+  elif [[ "$inferred_project_type" == "devtool" ]]; then
     echo "Recommended pack: devtool or business-app"
     echo "Use devtool for developer-facing tools/libraries; use business-app for SaaS or business applications."
     echo "If this project intentionally uses PoketoWork boards, install the matching explicit kanban pack: devtool-kanban or business-app-kanban."
