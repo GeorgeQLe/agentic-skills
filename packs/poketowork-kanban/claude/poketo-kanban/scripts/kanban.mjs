@@ -2,7 +2,8 @@
 // DEPRECATED: Use `poketo kanban` CLI instead. Kept as fallback/admin tooling.
 
 import { readFileSync, existsSync } from "node:fs";
-import { join } from "node:path";
+import { join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { homedir } from "node:os";
 import { randomUUID } from "node:crypto";
 import { hostname } from "node:os";
@@ -12,35 +13,70 @@ import { drizzle } from "drizzle-orm/neon-http";
 import { pgTable, text, integer, boolean, timestamp, pgEnum, jsonb } from "drizzle-orm/pg-core";
 import { eq, and, or, ilike, asc, desc, inArray } from "drizzle-orm";
 
+/** @typedef {import("./types/kanban").BoardActionActivityEntry} BoardActionActivityEntry */
+/** @typedef {import("./types/kanban").BoardActionInput} BoardActionInput */
+/** @typedef {import("./types/kanban").BoardCardView} BoardCardView */
+/** @typedef {import("./types/kanban").BoardListSummary} BoardListSummary */
+/** @typedef {import("./types/kanban").BoardSearchResult} BoardSearchResult */
+/** @typedef {import("./types/kanban").BoardView} BoardView */
+/** @typedef {import("./types/kanban").ListDefinition} ListDefinition */
+
 const agentSessionId = `${hostname()}-${new Date().toISOString()}`;
 
-// ─── Config ──────────────────────────────────────────────────────────────────
+function isRecord(value) {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
 
+function getErrorMessage(error) {
+  if (error instanceof Error) return error.message;
+  if (typeof error === "string") return error;
+  if (error === null || error === undefined) return "No error detail provided";
+  if (typeof error !== "object") return String(error);
+  return "Non-Error thrown value";
+}
+
+function normalizeSessionConfig(session) {
+  if (!isRecord(session) || typeof session.orgId !== "string") {
+    return null;
+  }
+
+  return {
+    orgId: session.orgId,
+    actorId: typeof session.userId === "string" ? session.userId : session.orgId,
+  };
+}
+
+/** @returns {{ session: { orgId: string, actorId: string } } | null} */
 function loadConfig() {
   const configPath = join(homedir(), ".poketo", "config.json");
   if (!existsSync(configPath)) {
     return null;
   }
   try {
-    return JSON.parse(readFileSync(configPath, "utf-8"));
-  } catch (e) {
-    console.error(`Warning: malformed JSON in ${configPath}, ignoring config`);
+    const config = JSON.parse(readFileSync(configPath, "utf-8"));
+    const session = normalizeSessionConfig(config.session);
+    if (!session) {
+      console.error(`Warning: invalid session config in ${configPath}, ignoring config`);
+      return null;
+    }
+    return { session };
+  } catch (error) {
+    console.error(`Warning: malformed JSON in ${configPath}, ignoring config (${getErrorMessage(error)})`);
     return null;
   }
 }
 
+/** @returns {{ orgId: string, actorId: string } | null} */
 function getSession() {
   const config = loadConfig();
   if (!config?.session) return null;
   return config.session;
 }
 
-function getDbUrl() {
-  // Check env first, then try reading from poke .env
+export function getDbUrl() {
   if (process.env.POKETOWORK_DATABASE_URL) {
     return process.env.POKETOWORK_DATABASE_URL;
   }
-  // Try common poke project locations
   for (const envPath of ENV_SEARCH_PATHS) {
     if (existsSync(envPath)) {
       const content = readFileSync(envPath, "utf-8");
@@ -50,8 +86,6 @@ function getDbUrl() {
   }
   return null;
 }
-
-// ─── Inline Schema (minimal subset for standalone use) ───────────────────────
 
 const listTypeEnum = pgEnum("list_type", ["normal", "done", "punt"]);
 const cardSortPrefEnum = pgEnum("card_sort_preference", ["manual", "dueDate", "starred", "createdAt"]);
@@ -122,34 +156,34 @@ const boardActions = pgTable("board_actions", {
   agentTemplateId: text("agent_template_id"),
 });
 
-// ─── Audit Logging ──────────────────────────────────────────────────────────
-
-async function logAction(db, session, { action, entity, entityId, entityName, boardId, changes }) {
-  try {
-    await db.insert(boardActions).values({
-      id: randomUUID(),
-      action,
-      boardComponent: entity,
-      boardComponentId: entityId,
-      boardComponentName: entityName,
-      boardId,
-      userId: session?.userId || "unknown",
-      actorType: "agent",
-      agentSessionId,
-      agentTemplateId: "claude-code-kanban",
-      changes: changes || null,
-    });
-  } catch (e) {
-    console.error(`Warning: audit log failed: ${e.message}`);
-  }
+/**
+ * @param {BoardActionInput} input
+ * @param {{ orgId: string, actorId: string }} session
+ */
+async function logAction(db, session, input) {
+  const { action, entity, entityId, entityName, boardId, changes } = input;
+  await db.insert(boardActions).values({
+    id: randomUUID(),
+    action,
+    boardComponent: entity,
+    boardComponentId: entityId,
+    boardComponentName: entityName,
+    boardId,
+    userId: session.actorId,
+    actorType: "agent",
+    agentSessionId,
+    agentTemplateId: "claude-code-kanban",
+    changes: changes ?? null,
+  });
 }
 
 async function getBoardIdForCard(db, card) {
   const [list] = await db.select({ boardId: lists.boardId }).from(lists).where(eq(lists.id, card.listId)).limit(1);
-  return list?.boardId || "unknown";
+  if (!list?.boardId) {
+    throw new Error(`Cannot determine board for card ${card.id}: list ${card.listId} not found`);
+  }
+  return list.boardId;
 }
-
-// ─── DB Connection ───────────────────────────────────────────────────────────
 
 function getDb() {
   const url = getDbUrl();
@@ -163,13 +197,20 @@ function getDb() {
   return drizzle(sql);
 }
 
-// ─── Output ──────────────────────────────────────────────────────────────────
-
 function output(data) {
   console.log(JSON.stringify(data, null, 2));
 }
 
-// ─── Commands ────────────────────────────────────────────────────────────────
+function parseIntegerArg(value, flag) {
+  if (typeof value !== "string" || !/^-?\d+$/.test(value)) {
+    throw new Error(`Invalid ${flag}: expected an integer`);
+  }
+  const parsed = Number(value);
+  if (!Number.isSafeInteger(parsed)) {
+    throw new Error(`Invalid ${flag}: integer is out of range`);
+  }
+  return parsed;
+}
 
 async function cmdBoards(db, session) {
   const results = await db
@@ -190,14 +231,11 @@ async function cmdBoards(db, session) {
 }
 
 async function cmdBoard(db, boardId) {
-  // Get board
   const [board] = await db.select().from(boards).where(eq(boards.id, boardId)).limit(1);
   if (!board) {
     output({ error: `Board not found: ${boardId}` });
     process.exit(1);
   }
-
-  // Get lists with cards
   const boardLists = await db
     .select()
     .from(lists)
@@ -213,9 +251,8 @@ async function cmdBoard(db, boardId) {
       .where(inArray(cards.listId, listIds))
       .orderBy(asc(cards.order));
   }
-
-  // Group cards by list
-  const cardsByList = {};
+  /** @type {Record<string, BoardCardView[]>} */
+  const cardsByList = Object.create(null);
   for (const card of allCards) {
     if (!cardsByList[card.listId]) cardsByList[card.listId] = [];
     cardsByList[card.listId].push({
@@ -229,16 +266,22 @@ async function cmdBoard(db, boardId) {
     });
   }
 
+  /** @type {BoardListSummary[]} */
+  const boardListsView = boardLists.map((l) => ({
+    id: l.id,
+    name: l.name,
+    type: l.listType,
+    order: l.order,
+    cards: cardsByList[l.id] || [],
+  }));
+
+  /** @type {BoardView} */
+  const boardView = { id: board.id, name: board.name };
+
   output({
     command: "board",
-    board: { id: board.id, name: board.name },
-    lists: boardLists.map((l) => ({
-      id: l.id,
-      name: l.name,
-      type: l.listType,
-      order: l.order,
-      cards: cardsByList[l.id] || [],
-    })),
+    board: boardView,
+    lists: boardListsView,
   });
 }
 
@@ -253,8 +296,6 @@ async function cmdCreateCard(db, session, args) {
     output({ error: "Required: --board <id> --list <id> --name \"title\"" });
     process.exit(1);
   }
-
-  // Get max order in list
   const existing = await db
     .select({ order: cards.order })
     .from(cards)
@@ -265,7 +306,7 @@ async function cmdCreateCard(db, session, args) {
   const nextOrder = existing.length > 0 ? existing[0].order + 1 : 0;
 
   if (hasBoolFlag(args, "--dry-run")) {
-    output({ dryRun: true, command: "create-card", wouldDo: { listId, name, description: description || null, dueDate: due || null, order: nextOrder } });
+    output({ dryRun: true, command: "create-card", wouldDo: { listId, name, description: description ?? null, dueDate: due ?? null, order: nextOrder } });
     return;
   }
 
@@ -275,7 +316,7 @@ async function cmdCreateCard(db, session, args) {
     id,
     listId,
     name,
-    description: description || null,
+    description: description ?? null,
     order: nextOrder,
     dueDate: due ? new Date(due) : null,
     done: false,
@@ -300,7 +341,7 @@ async function cmdUpdateCard(db, session, args) {
     process.exit(1);
   }
 
-  const updates = {};
+  const updates = Object.create(null);
   const name = getArg(args, "--name");
   const description = getArg(args, "--description");
   const due = getArg(args, "--due");
@@ -313,7 +354,7 @@ async function cmdUpdateCard(db, session, args) {
   if (args.includes("--starred")) updates.starred = true;
   if (args.includes("--unstarred")) updates.starred = false;
   const progress = getArg(args, "--progress");
-  if (progress !== null) updates.progress = parseInt(progress, 10);
+  if (progress !== null) updates.progress = parseIntegerArg(progress, "--progress");
 
   updates.updatedAt = new Date();
 
@@ -321,8 +362,6 @@ async function cmdUpdateCard(db, session, args) {
     output({ dryRun: true, command: "update-card", wouldDo: { id, updates } });
     return;
   }
-
-  // Read card before update for audit log
   const [cardBefore] = await db.select().from(cards).where(eq(cards.id, id)).limit(1);
 
   const expectUpdatedAt = getArg(args, "--expect-updated-at");
@@ -351,8 +390,6 @@ async function cmdUpdateCard(db, session, args) {
     output({ error: `Card not found: ${id}` });
     process.exit(1);
   }
-
-  // Audit logging — determine which action(s) to log
   if (cardBefore) {
     const boardId = await getBoardIdForCard(db, updated);
     if (name && name !== cardBefore.name) {
@@ -377,7 +414,7 @@ async function cmdUpdateCard(db, session, args) {
       await logAction(db, session, { action: "SET_DUE_DATE", entity: "card", entityId: id, entityName: updated.name, boardId, changes: { field: "dueDate", from: cardBefore.dueDate, to: due } });
     }
     if (progress !== null) {
-      await logAction(db, session, { action: "SET_PROGRESS", entity: "card", entityId: id, entityName: updated.name, boardId, changes: { field: "progress", from: cardBefore.progress, to: parseInt(progress, 10) } });
+      await logAction(db, session, { action: "SET_PROGRESS", entity: "card", entityId: id, entityName: updated.name, boardId, changes: { field: "progress", from: cardBefore.progress, to: parseIntegerArg(progress, "--progress") } });
     }
   }
 
@@ -441,8 +478,6 @@ async function cmdMoveCard(db, session, args) {
     output({ error: "Required: --id <card-id> --list <target-list-id>" });
     process.exit(1);
   }
-
-  // Get max order in target list
   const existing = await db
     .select({ order: cards.order })
     .from(cards)
@@ -456,8 +491,6 @@ async function cmdMoveCard(db, session, args) {
     output({ dryRun: true, command: "move-card", wouldDo: { id, listId, order: nextOrder } });
     return;
   }
-
-  // Read card before move for audit log
   const [cardBefore] = await db.select().from(cards).where(eq(cards.id, id)).limit(1);
 
   const expectUpdatedAt = getArg(args, "--expect-updated-at");
@@ -486,8 +519,6 @@ async function cmdMoveCard(db, session, args) {
     output({ error: `Card not found: ${id}` });
     process.exit(1);
   }
-
-  // Audit log
   const fromListId = cardBefore?.listId;
   const [fromList] = fromListId ? await db.select({ name: lists.name }).from(lists).where(eq(lists.id, fromListId)).limit(1) : [null];
   const [toList] = await db.select({ name: lists.name }).from(lists).where(eq(lists.id, listId)).limit(1);
@@ -528,6 +559,7 @@ async function cmdCreateBoard(db, session, args) {
     ],
   };
 
+  /** @type {ListDefinition[]} */
   let listDefs;
   if (template) {
     listDefs = TEMPLATES[template];
@@ -571,10 +603,17 @@ async function cmdCreateBoard(db, session, args) {
 
   await logAction(db, session, { action: "CREATE", entity: "board", entityId: boardId, entityName: name, boardId });
 
+  /** @type {BoardListSummary[]} */
+  const createdListSummaries = createdLists.map((l) => ({
+    id: l.id,
+    name: l.name,
+    type: l.listType,
+  }));
+
   output({
     command: "create-board",
     board: { id: board.id, name: board.name },
-    lists: createdLists.map((l) => ({ id: l.id, name: l.name, type: l.listType })),
+    lists: createdListSummaries,
   });
 }
 
@@ -585,8 +624,6 @@ async function cmdCreateList(db, args) {
     output({ error: "Required: --board <id> --name \"List Name\"" });
     process.exit(1);
   }
-
-  // Get max order
   const existing = await db
     .select({ order: lists.order })
     .from(lists)
@@ -626,7 +663,6 @@ async function cmdSearch(db, session, args) {
 
   let boardIds;
   if (boardFilterIds.length > 0) {
-    // Validate each board belongs to this org
     for (const id of boardFilterIds) {
       const [board] = await db.select({ id: boards.id }).from(boards)
         .where(and(eq(boards.id, id), eq(boards.orgId, session.orgId))).limit(1);
@@ -637,7 +673,6 @@ async function cmdSearch(db, session, args) {
     }
     boardIds = boardFilterIds;
   } else {
-    // Current behavior: all org boards
     const orgBoards = await db
       .select({ id: boards.id })
       .from(boards)
@@ -648,8 +683,6 @@ async function cmdSearch(db, session, args) {
     output({ command: "search", query, results: [] });
     return;
   }
-
-  // Get all list IDs for these boards
   const orgLists = await db
     .select({ id: lists.id, boardId: lists.boardId, name: lists.name })
     .from(lists)
@@ -660,8 +693,6 @@ async function cmdSearch(db, session, args) {
     output({ command: "search", query, results: [] });
     return;
   }
-
-  // Search cards
   const escaped = query.replace(/\\/g, '\\\\').replace(/%/g, '\\%').replace(/_/g, '\\_');
   const results = await db
     .select()
@@ -674,33 +705,34 @@ async function cmdSearch(db, session, args) {
     )
     .orderBy(desc(cards.updatedAt))
     .limit(50);
-
-  // Enrich with list/board info
-  const listMap = {};
+  const listMap = Object.create(null);
   for (const l of orgLists) listMap[l.id] = l;
 
-  const boardMap = {};
+  const boardMap = Object.create(null);
   const boardResults = await db.select().from(boards).where(inArray(boards.id, boardIds));
   for (const b of boardResults) boardMap[b.id] = b;
+
+  /** @type {BoardSearchResult[]} */
+  const searchResults = results.map((c) => {
+    const list = listMap[c.listId];
+    const board = list ? boardMap[list.boardId] : null;
+    return {
+      id: c.id,
+      name: c.name,
+      done: c.done,
+      starred: c.starred,
+      dueDate: c.dueDate,
+      listName: list?.name,
+      boardName: board?.name,
+      boardId: board?.id,
+    };
+  });
 
   output({
     command: "search",
     query,
     count: results.length,
-    results: results.map((c) => {
-      const list = listMap[c.listId];
-      const board = list ? boardMap[list.boardId] : null;
-      return {
-        id: c.id,
-        name: c.name,
-        done: c.done,
-        starred: c.starred,
-        dueDate: c.dueDate,
-        listName: list?.name,
-        boardName: board?.name,
-        boardId: board?.id,
-      };
-    }),
+    results: searchResults,
   });
 }
 
@@ -710,8 +742,6 @@ async function cmdArchiveCard(db, session, args) {
     output({ error: "Required: --id <card-id>" });
     process.exit(1);
   }
-
-  // Look up card → list → board
   const [card] = await db.select().from(cards).where(eq(cards.id, id)).limit(1);
   if (!card) {
     output({ error: `Card not found: ${id}` });
@@ -735,8 +765,6 @@ async function cmdArchiveCard(db, session, args) {
   }
 
   let archiveListId = board.archiveListId;
-
-  // Auto-create archive list if needed
   if (!archiveListId) {
     const maxOrder = await db
       .select({ order: lists.order })
@@ -759,8 +787,6 @@ async function cmdArchiveCard(db, session, args) {
       .where(eq(boards.id, board.id));
     archiveListId = newListId;
   }
-
-  // Move card to archive list
   const maxCardOrder = await db
     .select({ order: cards.order })
     .from(cards)
@@ -790,13 +816,11 @@ async function cmdArchiveCard(db, session, args) {
     });
     process.exit(1);
   }
-
-  // Audit log
   const fromListName = list.name;
   const [archiveListRow] = await db.select({ name: lists.name }).from(lists).where(eq(lists.id, archiveListId)).limit(1);
   await logAction(db, session, {
     action: "ARCHIVE", entity: "card", entityId: id, entityName: card.name, boardId: board.id,
-    changes: { fromListId: card.listId, fromListName, toListId: archiveListId, toListName: archiveListRow?.name || "Archive" },
+    changes: { fromListId: card.listId, fromListName, toListId: archiveListId, toListName: archiveListRow?.name ?? "Archive" },
   });
 
   output({
@@ -811,8 +835,6 @@ async function cmdDeleteBoard(db, session, args) {
     output({ error: "Required: --id <board-id> --confirm" });
     process.exit(1);
   }
-
-  // Get all lists for this board
   const boardLists = await db
     .select({ id: lists.id })
     .from(lists)
@@ -823,24 +845,16 @@ async function cmdDeleteBoard(db, session, args) {
     output({ dryRun: true, command: "delete-board", wouldDo: { boardId: id, listsToDelete: boardLists.length, cardsToDelete: "all cards in those lists" } });
     return;
   }
-
-  // Audit log before deletion
   const [boardForAudit] = await db.select().from(boards).where(eq(boards.id, id)).limit(1);
   if (boardForAudit) {
     await logAction(db, session, { action: "DELETE", entity: "board", entityId: id, entityName: boardForAudit.name, boardId: id });
   }
-
-  // Delete all cards in those lists
   let deletedCards = 0;
   if (listIds.length > 0) {
     const result = await db.delete(cards).where(inArray(cards.listId, listIds));
     deletedCards = result.rowCount || 0;
   }
-
-  // Delete all lists
   await db.delete(lists).where(eq(lists.boardId, id));
-
-  // Delete the board
   const [deleted] = await db.delete(boards).where(eq(boards.id, id)).returning();
   if (!deleted) {
     output({ error: `Board not found: ${id}` });
@@ -861,24 +875,27 @@ async function cmdActivity(db, args) {
     output({ error: "Required: --card <id> or --board <id>" });
     process.exit(1);
   }
-  const limit = parseInt(getArg(args, "--limit") || "10", 10);
+  const limit = parseIntegerArg(getArg(args, "--limit") || "10", "--limit");
   const entityId = cardId || boardIdArg;
   const where = cardId
     ? eq(boardActions.boardComponentId, cardId)
     : eq(boardActions.boardId, boardIdArg);
   const actions = await db.select().from(boardActions)
     .where(where).orderBy(desc(boardActions.createdAt)).limit(limit);
+  /** @type {BoardActionActivityEntry[]} */
+  const activity = actions.map((a) => ({
+    action: a.action,
+    actorType: a.actorType,
+    userId: a.userId,
+    changes: a.changes,
+    createdAt: a.createdAt,
+  }));
   output({
     command: "activity",
     entityId,
-    actions: actions.map(a => ({
-      action: a.action, actorType: a.actorType, userId: a.userId,
-      changes: a.changes, createdAt: a.createdAt,
-    })),
+    actions: activity,
   });
 }
-
-// ─── Arg Parsing Helpers ─────────────────────────────────────────────────────
 
 function getArg(args, flag) {
   const idx = args.indexOf(flag);
@@ -899,8 +916,6 @@ function getAllArgs(args, flag) {
 function hasBoolFlag(args, flag) {
   return args.includes(flag);
 }
-
-// ─── Main ────────────────────────────────────────────────────────────────────
 
 async function main() {
   const args = process.argv.slice(2);
@@ -928,8 +943,6 @@ async function main() {
     });
     return;
   }
-
-  // Check auth
   const session = getSession();
   if (!session) {
     output({ error: "Not authenticated. Run `poketo auth login` first." });
@@ -987,7 +1000,11 @@ async function main() {
   }
 }
 
-main().catch((err) => {
-  output({ error: err.message });
-  process.exit(1);
-});
+const isDirectRun = process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1]);
+
+if (isDirectRun) {
+  main().catch((error) => {
+    output({ error: getErrorMessage(error) });
+    process.exit(1);
+  });
+}

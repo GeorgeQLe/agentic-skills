@@ -4,6 +4,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 CLAUDE_SKILLS_DIR="$HOME/.claude/skills"
 CODEX_SKILLS_DIR="$HOME/.codex/skills"
+source "$SCRIPT_DIR/scripts/skill-links.sh"
 
 usage() {
   echo "Usage: $0 [--uninstall]"
@@ -30,7 +31,7 @@ remove_repo_link() {
   [[ -L "$link" ]] || return 0
   target="$(readlink "$link")"
   case "$target" in
-    "$SCRIPT_DIR/global/claude/"*|"$SCRIPT_DIR/global/codex/"*|"$SCRIPT_DIR/stubs/claude/"*|"$SCRIPT_DIR/stubs/codex/"*|"$SCRIPT_DIR/claude/"*|"$SCRIPT_DIR/codex/"*)
+    "$SCRIPT_DIR/global/claude/"*|"$SCRIPT_DIR/global/codex/"*)
       rm "$link"
       echo "Removed $(basename "$link")"
       return 0
@@ -39,26 +40,23 @@ remove_repo_link() {
   return 1
 }
 
-remove_legacy_link() {
-  local link="$1"
-  local target
-  [[ -L "$link" ]] || return 1
-  target="$(readlink "$link")"
-  case "$target" in
-    "$SCRIPT_DIR/stubs/claude/"*|"$SCRIPT_DIR/stubs/codex/"*|"$SCRIPT_DIR/claude/"*|"$SCRIPT_DIR/codex/"*)
-      rm "$link"
-      echo "Removed legacy global skill: $(basename "$link")"
-      return 0
-      ;;
-    "$SCRIPT_DIR/global/claude/"*|"$SCRIPT_DIR/global/codex/"*)
-      if [[ ! -e "$target" ]]; then
-        rm "$link"
-        echo "Removed stale global skill: $(basename "$link")"
-        return 0
-      fi
-      ;;
-  esac
-  return 1
+remove_stale_repo_links() {
+  local root="$1"
+  local link target
+  [[ -d "$root" ]] || return 0
+
+  for link in "$root"/*; do
+    [[ -L "$link" ]] || continue
+    target="$(readlink "$link")"
+    case "$target" in
+      "$SCRIPT_DIR/global/claude/"*|"$SCRIPT_DIR/global/codex/"*)
+        if [[ ! -e "$target" ]]; then
+          rm "$link"
+          echo "Removed stale $(basename "$link")"
+        fi
+        ;;
+    esac
+  done
 }
 
 set_output_var() {
@@ -73,26 +71,6 @@ set_output_var() {
   printf -v "$var_name" "%s" "$value"
 }
 
-cleanup_legacy_links() {
-  local root="$1"
-  local out_count_var="$2"
-  local removed=0
-
-  [[ -d "$root" ]] || {
-    set_output_var "$out_count_var" 0
-    return 0
-  }
-
-  for link in "$root"/*; do
-    [[ -e "$link" || -L "$link" ]] || continue
-    if remove_legacy_link "$link"; then
-      removed=$((removed + 1))
-    fi
-  done
-
-  set_output_var "$out_count_var" "$removed"
-}
-
 install_tree() {
   local source_root="$1"
   local target_root="$2"
@@ -101,7 +79,7 @@ install_tree() {
   local out_skipped_var="$5"
   local count=0
   local skipped=0
-  local skill_dir name target existing
+  local skill_dir name target
 
   [[ -d "$source_root" ]] || {
     set_output_var "$out_count_var" 0
@@ -117,21 +95,17 @@ install_tree() {
     name="$(basename "$skill_dir")"
     target="$target_root/$name"
 
-    if [[ -L "$target" ]]; then
-      existing="$(readlink "$target")"
-      if [[ "$existing" == "$skill_dir" ]]; then
+    if sync_skill_link "$skill_dir" "$target"; then
+      echo "Installed $label: $name"
+      count=$((count + 1))
+    else
+      local status=$?
+      if [[ "$status" -eq 1 ]]; then
         continue
       fi
-      rm "$target"
-    elif [[ -e "$target" ]]; then
-      echo "WARNING: $target exists and is not a symlink, skipping"
       skipped=$((skipped + 1))
       continue
     fi
-
-    ln -sfn "$skill_dir" "$target"
-    echo "Installed $label: $name"
-    count=$((count + 1))
   done
 
   set_output_var "$out_count_var" "$count"
@@ -154,21 +128,17 @@ if $UNINSTALL; then
 fi
 
 mkdir -p "$CLAUDE_SKILLS_DIR" "$CODEX_SKILLS_DIR"
-
-cleanup_legacy_links "$CLAUDE_SKILLS_DIR" removed_claude_legacy
-cleanup_legacy_links "$CODEX_SKILLS_DIR" removed_codex_legacy
+remove_stale_repo_links "$CLAUDE_SKILLS_DIR"
+remove_stale_repo_links "$CODEX_SKILLS_DIR"
 
 install_tree "$SCRIPT_DIR/global/claude" "$CLAUDE_SKILLS_DIR" "Claude core" count_claude_core skipped_claude_core
 install_tree "$SCRIPT_DIR/global/codex" "$CODEX_SKILLS_DIR" "Codex core" count_codex_core skipped_codex_core
 
 skipped=$((skipped_claude_core + skipped_codex_core))
-removed_legacy=$((removed_claude_legacy + removed_codex_legacy))
 
 echo ""
 echo "Installed $count_claude_core Claude core skills -> $CLAUDE_SKILLS_DIR"
 echo "Installed $count_codex_core Codex core skills -> $CODEX_SKILLS_DIR"
-if [[ "$removed_legacy" -gt 0 ]]; then echo "Removed $removed_legacy legacy global skill links."; fi
 echo "Domain packs were not installed globally. Use scripts/pack.sh install <pack> from a project."
-echo "Former business/product skills are available with: scripts/pack.sh install business-app"
 if [[ "$skipped" -gt 0 ]]; then echo "Skipped $skipped (see warnings above)"; fi
 echo "Done."

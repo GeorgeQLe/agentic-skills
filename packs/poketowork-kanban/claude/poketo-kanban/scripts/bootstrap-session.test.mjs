@@ -5,6 +5,10 @@ import { tmpdir } from "node:os";
 import { loadEnv, buildConfig } from "./bootstrap-session.mjs";
 import { ENV_SEARCH_PATHS } from "./env-paths.mjs";
 
+/** @typedef {import("./types/bootstrap-session").BootstrapOrgRow} BootstrapOrgRow */
+/** @typedef {import("./types/bootstrap-session").BootstrapUserRow} BootstrapUserRow */
+/** @typedef {import("./types/bootstrap-session").LegacyConfig} LegacyConfig */
+
 describe("loadEnv", () => {
   const tempDirs = [];
 
@@ -74,10 +78,13 @@ describe("ENV_SEARCH_PATHS", () => {
 });
 
 describe("buildConfig", () => {
+  /** @type {BootstrapUserRow} */
   const user = { id: "user-123", name: "Alice", email: "alice@example.com" };
-  const org = { org_id: "org-456" };
+  /** @type {BootstrapOrgRow} */
+  const org = { org_id: "org-456", is_primary: true };
 
   it("builds config with all fields", () => {
+    /** @type {LegacyConfig} */
     const config = buildConfig(user, org);
     expect(config.session).toBeDefined();
     expect(config.session).toHaveProperty("sessionToken");

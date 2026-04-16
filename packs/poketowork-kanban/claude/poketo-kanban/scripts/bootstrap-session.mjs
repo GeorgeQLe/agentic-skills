@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 /**
- * Bootstrap a legacy Poketo session by querying the auth and pokeapps databases directly.
- * Run this only when you need the deprecated direct-DB fallback path to create
- * ~/.poketo/config.json without needing the Flow app running.
+ * Bootstrap ~/.poketo/config.json from the auth and pokeapps databases.
+ * Use this only when you need direct DB access and the normal `poketo kanban`
+ * flow is unavailable.
  *
  * Usage: node bootstrap-session.mjs
  *
@@ -18,6 +18,12 @@ import { homedir } from "node:os";
 import { neon } from "@neondatabase/serverless";
 import { ENV_SEARCH_PATHS } from "./env-paths.mjs";
 
+/** @typedef {import("./types/bootstrap-session").BootstrapOrgRow} BootstrapOrgRow */
+/** @typedef {import("./types/bootstrap-session").BootstrapUserRow} BootstrapUserRow */
+/** @typedef {import("./types/bootstrap-session").EnvVars} EnvVars */
+/** @typedef {import("./types/bootstrap-session").LegacyConfig} LegacyConfig */
+
+/** @returns {EnvVars} */
 export function loadEnv(searchPaths) {
   const envPaths = searchPaths ?? ENV_SEARCH_PATHS;
 
@@ -33,6 +39,11 @@ export function loadEnv(searchPaths) {
   return vars;
 }
 
+/**
+ * @param {BootstrapUserRow} user
+ * @param {BootstrapOrgRow} org
+ * @returns {LegacyConfig}
+ */
 export function buildConfig(user, org) {
   return {
     session: {
@@ -67,17 +78,14 @@ export async function main() {
     process.exit(1);
   }
 
-  // Show users and let the user pick
   console.log("\nAvailable users:");
   users.forEach((u, i) => {
     console.log(`  [${i}] ${u.name} (${u.email}) — id: ${u.id.slice(0, 8)}...`);
   });
 
-  // Default to first user
   const selectedUser = users[0];
   console.log(`\nUsing: ${selectedUser.name} (${selectedUser.email})`);
 
-  // Get org
   console.log("Querying for organization...");
   const appsSql = neon(env.POKEAPPS_DATABASE_URL);
   const orgs = await appsSql`SELECT org_id, is_primary FROM user_orgs WHERE user_id = ${selectedUser.id}`;
@@ -91,7 +99,6 @@ export async function main() {
 
   console.log(`Organization: ${primaryOrg.org_id}`);
 
-  // Write config
   const configDir = join(homedir(), ".poketo");
   const configFile = join(configDir, "config.json");
 
@@ -102,9 +109,9 @@ export async function main() {
   const config = buildConfig(selectedUser, primaryOrg);
 
   writeFileSync(configFile, JSON.stringify(config, null, 2) + "\n");
-  console.log(`\nLegacy fallback session saved to ${configFile}`);
+  console.log(`\nSession config saved to ${configFile}`);
   console.log("Default workflow: use `poketo kanban boards`.");
-  console.log("Legacy fallback only: `node kanban.mjs boards`.");
+  console.log("Direct DB path: `node kanban.mjs boards`.");
 }
 
 const isDirectRun = process.argv[1] && import.meta.url.endsWith(process.argv[1].replace(/.*\//, ''));

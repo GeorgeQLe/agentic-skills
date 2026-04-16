@@ -34,6 +34,12 @@ function createTestEnv() {
   mkdirSync(join(fakeLibrary, "packs", "game", "codex", "game-a"), {
     recursive: true,
   });
+  mkdirSync(join(fakeLibrary, "packs", "code-quality", "claude", "quality-a"), {
+    recursive: true,
+  });
+  mkdirSync(join(fakeLibrary, "packs", "code-quality", "codex", "quality-a"), {
+    recursive: true,
+  });
   writeFileSync(
     join(fakeLibrary, "packs", "game", "claude", "game-a", "SKILL.md"),
     "test",
@@ -42,8 +48,20 @@ function createTestEnv() {
     join(fakeLibrary, "packs", "game", "codex", "game-a", "SKILL.md"),
     "test",
   );
+  writeFileSync(
+    join(fakeLibrary, "packs", "code-quality", "claude", "quality-a", "SKILL.md"),
+    "test",
+  );
+  writeFileSync(
+    join(fakeLibrary, "packs", "code-quality", "codex", "quality-a", "SKILL.md"),
+    "test",
+  );
   mkdirSync(fakeProject, { recursive: true });
   copyFileSync(join(REPO_ROOT, "scripts", "pack.sh"), join(fakeLibrary, "scripts", "pack.sh"));
+  copyFileSync(
+    join(REPO_ROOT, "scripts", "skill-links.sh"),
+    join(fakeLibrary, "scripts", "skill-links.sh"),
+  );
   return { fakeLibrary, fakeProject };
 }
 
@@ -89,6 +107,16 @@ describe("pack.sh", () => {
     expect(existsSync(projectJson)).toBe(true);
     expect(runPack(fakeLibrary, fakeProject, "status")).toContain(
       '"project_type": "game"',
+    );
+  });
+
+  it("infers a concrete project type for additive packs without a base designation", () => {
+    const { fakeLibrary, fakeProject } = createTestEnv();
+    runPack(fakeLibrary, fakeProject, "install code-quality");
+    const projectJson = join(fakeProject, ".agents", "project.json");
+    expect(existsSync(projectJson)).toBe(true);
+    expect(runPack(fakeLibrary, fakeProject, "status")).toContain(
+      '"project_type": "business-app"',
     );
   });
 
