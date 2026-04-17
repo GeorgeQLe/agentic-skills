@@ -24,15 +24,28 @@ Identify the next incomplete unit of work from the phased plan, build an executi
    - **If the phase has acceptance criteria but no implementation steps** (no `### Tests First` or `### Implementation` section): invoke `$plan-phase` for this phase to generate implementation steps and file-level detail before proceeding.
 5. **Check `tasks/manual-todo.md`** (if it exists) for unchecked items with `_(blocks: Step N.X)_` matching the current step. If found, stop and tell the user: "**Manual task blocking this step:** [task]. Complete it before proceeding, or run `$guide` for step-by-step instructions." Do NOT execute the step unless the manual task is completed or the user explicitly overrides the blocker.
 6. Research what is needed — read only the files relevant to the step.
+6b. Read the current phase's `### Execution Profile` from `tasks/todo.md` if present:
+   - If missing, treat the phase as `serial`.
+   - Use the profile only for the current step or scoped phase; do not plan ahead.
+   - If the profile's `Parallel mode` is `agent-team`, stop before implementation and recommend running the work in Codex app worktrees or a Claude agent team rather than one shared local tree.
 7. Present the execution plan to the user:
    - What the step requires
    - Which files will be created or modified
    - The approach and any trade-offs
+   - Whether the execution profile will run serially, use read-only research lanes, use review lanes, or use disjoint write lanes
 8. Use `update_plan` to track the proposed work. If the session is already in Plan mode and a structured choice would help, use `request_user_input`. Otherwise ask for approval with a single concise plain-text question. Do not repeat or restate the approval ask in a second sentence. Wait for approval before writing any code.
 9. After approval, execute the plan:
+   - Apply the execution profile:
+     - `serial`: execute normally.
+     - `research-only`: launch read-only subagent lanes first when the active environment permits subagents, synthesize their findings, then implement in the main agent.
+     - `review-only`: implement in the main agent, then launch review subagent lanes before final validation.
+     - `implementation-safe`: launch write subagent lanes only when every write lane has disjoint `Owns` paths and explicit `Must not edit` boundaries; otherwise downgrade to `research-only` or `serial` and report the downgrade.
+     - `agent-team`: do not execute locally; report that the phase requires isolated worktrees or a dedicated agent team.
    - If it is a tests-first step: write the failing tests, run them to confirm they fail.
    - If it is an implementation step: implement it, run existing tests for regressions.
    - If it is a verification step: run all tests, fix any failures.
+   - The main agent owns integration, conflict resolution, task doc updates, history updates, shipping, and deployment.
+   - If a subagent touches files outside its owned paths or returns conflicting changes, stop and reconcile before validation.
 10. Mark the completed work in `tasks/todo.md`:
    - Default mode: check off the completed step.
    - `--phase` mode: check off the completed steps and any acceptance criteria satisfied by the phase work.
@@ -95,6 +108,9 @@ Identify the next incomplete unit of work from the phased plan, build an executi
 - Keep context footprint minimal — only read files relevant to the current step.
 - If a blocker prevents completion, document it in `tasks/todo.md` and stop.
 - Follow the test strategy annotated on each phase. Do not skip test steps for `tdd` phases.
+- Follow the `### Execution Profile` annotated on each phase. If subagents are unavailable in the active environment, execute serially and report the downgrade.
+- Do not let subagents update `tasks/todo.md`, `tasks/roadmap.md`, `tasks/history.md`, shipping commits, or deploy steps. Those remain main-agent responsibilities.
+- Do not run parallel write lanes unless their `Owns` paths are disjoint. When in doubt, downgrade to `research-only` or `serial`.
 - Do not push shipping commits to an existing feature branch. Use `$commit-and-push-by-feature` to move the work onto `main` or `master` and push it there, or stop and report a blocker if that cannot be done safely.
 - Do NOT execute items from `tasks/manual-todo.md` — those require human action.
 - `run` ships by default in Codex. Use `$ship` only when there is already finished work in the tree or unpushed commits that need packaging without running a new step.

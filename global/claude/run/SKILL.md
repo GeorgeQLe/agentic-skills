@@ -24,14 +24,31 @@ Identify the next incomplete unit of work from the phased plan, build an executi
    - Look for unchecked items with `_(blocks: Step N.X)_` annotations matching the step about to be executed.
    - If a blocking manual task is found, stop and ask the user how to proceed: "**Manual task blocking this step:** [task]. Complete it before proceeding, or run `/guide` for step-by-step instructions." Do NOT execute the step unless the manual task is completed or the user explicitly overrides the blocker.
 6. **Research what's needed** — read only the files relevant to the step/phase to understand existing code, patterns, and dependencies.
+6b. **Read the execution profile** — read the current phase's `### Execution Profile` from `tasks/todo.md` if present:
+   - If missing, treat the phase as `serial`.
+   - Use the profile only for the current step or scoped phase; do not plan ahead.
+   - If the profile's `Parallel mode` is `agent-team`, stop before implementation and recommend worktree isolation or Claude agent teams rather than one shared local tree.
 7. **Enter plan mode** using the EnterPlanMode tool.
 8. **Present the execution plan** to the user:
    - What the step/phase requires
    - Which files will be created or modified
    - The approach (e.g., what tests to write, what code to change)
+   - Whether the execution profile will run serially, use read-only research lanes, use review lanes, or use disjoint write lanes
    - Any decisions or trade-offs the user should weigh in on
 9. **Wait for user approval.** Do NOT write any code until the user approves.
-10. **After approval, exit plan mode** and execute the approved plan.
+10. **After approval, execute the approved plan.** If Claude Code already returned to normal mode after approval, do not call ExitPlanMode again; continue directly with implementation. Only use the plan-mode exit tool when the session is still visibly in plan mode.
+
+### Execution Profile Handling
+
+After approval, apply the current phase's `### Execution Profile`:
+
+- `serial`: execute normally.
+- `research-only`: launch read-only subagent lanes first when the active environment permits subagents, synthesize their findings, then implement in the main agent.
+- `review-only`: implement in the main agent, then launch review subagent lanes before final validation.
+- `implementation-safe`: launch write subagent lanes only when every write lane has disjoint `Owns` paths and explicit `Must not edit` boundaries; otherwise downgrade to `research-only` or `serial` and report the downgrade.
+- `agent-team`: do not execute locally; report that the phase requires isolated worktrees or a dedicated agent team.
+
+The main agent owns integration, conflict resolution, task doc updates, history updates, shipping handoff, and deploy handoff. If a subagent touches files outside its owned paths or returns conflicting changes, stop and reconcile before validation.
 
 ### Single Step Mode (default)
 
@@ -65,6 +82,7 @@ Identify the next incomplete unit of work from the phased plan, build an executi
 ## What NOT to do
 
 - Do NOT write code before entering plan mode and getting user approval.
+- Do NOT call ExitPlanMode from normal mode. If Claude Code reports "You are not in plan mode" after approval, treat approval as complete and continue implementation.
 - Do NOT execute more than one step (or more than one phase in `--phase` mode).
 - Do NOT read unnecessary files — only what's needed for the current work.
 - Do NOT plan ahead or analyze future phases/steps.
@@ -88,6 +106,9 @@ Identify the next incomplete unit of work from the phased plan, build an executi
 - Keep context footprint minimal — don't read the entire codebase, only files relevant to this work.
 - If the work can't be completed due to a blocker, document the blocker in `tasks/todo.md` and stop.
 - Follow the test strategy annotated on each phase (`tdd`, `tests-after`, or `none`). Do not skip test steps for `tdd` phases.
+- Follow the `### Execution Profile` annotated on each phase. If subagents are unavailable in the active environment, execute serially and report the downgrade.
+- Do not let subagents update `tasks/todo.md`, `tasks/roadmap.md`, `tasks/history.md`, shipping commits, or deploy steps. Those remain main-agent responsibilities.
+- Do not run parallel write lanes unless their `Owns` paths are disjoint. When in doubt, downgrade to `research-only` or `serial`.
 - Do not push shipping commits to an existing feature branch. Use `/commit-and-push-by-feature` to move the work onto `main` or `master` and push it there, or stop and report a blocker if that cannot be done safely.
 - Each execution must be self-contained — read the plan fresh, don't rely on prior context.
 

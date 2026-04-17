@@ -40,7 +40,7 @@ Systematically remove a service, package, module, or infrastructure component wi
    - Wait for user approval.
 
 4. **Execute the removal after approval:**
-   - Exit plan mode.
+   - If Claude Code already returned to normal mode after approval, do not call ExitPlanMode again; continue directly with removal. Only use the plan-mode exit tool when the session is still visibly in plan mode.
    - Step through the removal plan:
      - For each active dependency: migrate or remove the consumer code.
      - Delete the target files/directories.
@@ -75,6 +75,7 @@ Systematically remove a service, package, module, or infrastructure component wi
 ## Constraints
 - Always audit dependencies before removing anything.
 - Always enter plan mode and get approval before making changes.
+- Do not call ExitPlanMode from normal mode. If Claude Code reports "You are not in plan mode" after approval, treat approval as complete and continue implementation.
 - Never delete infrastructure resources (cloud, DNS) automatically — only remove IaC definitions and flag manual cleanup.
 - If active dependencies exist that can't be trivially resolved, stop and discuss with the user.
 - Do not remove git history — just delete files and let git track the removal.

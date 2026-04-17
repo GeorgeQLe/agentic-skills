@@ -37,7 +37,7 @@ Execute a structural migration, dependency upgrade, or large-scale codebase reor
    - Wait for user approval.
 
 5. **Execute in batches after approval:**
-   - Exit plan mode.
+   - If Claude Code already returned to normal mode after approval, do not call ExitPlanMode again; continue directly with migration. Only use the plan-mode exit tool when the session is still visibly in plan mode.
    - Process files in logical groups (by package, by directory, by pattern).
    - After each batch:
      - Run type-checking (`tsc --noEmit` or equivalent) to catch breakage early.
@@ -72,6 +72,7 @@ Execute a structural migration, dependency upgrade, or large-scale codebase reor
 
 ## Constraints
 - Always enter plan mode and get approval before making changes.
+- Do not call ExitPlanMode from normal mode. If Claude Code reports "You are not in plan mode" after approval, treat approval as complete and continue implementation.
 - Process in verifiable batches — never change everything at once without checking.
 - If the migration affects multiple monorepo packages, process one package at a time.
 - Do not change behavior — migrations should be purely structural unless the upgrade requires API changes.

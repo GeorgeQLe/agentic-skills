@@ -29,6 +29,7 @@ Read:
 - `tasks/roadmap.md` for the target phase's Goal, Scope, and Acceptance Criteria.
 - `specs/` (or `spec.md`) for the detailed requirements referenced by the phase's scope.
 - The codebase as needed to understand existing code, patterns, and which files to modify.
+- The roadmap phase's `Parallelization` and `Coordination Notes` fields, if present.
 
 ## Planning Process
 
@@ -45,6 +46,43 @@ Check in order:
 
 Annotate the phase with `> Test strategy: tdd|tests-after|none`.
 
+### Determine Execution Profile
+
+Expand the roadmap's strategic parallelization mode into a concrete execution profile for this phase. If the roadmap has no `Parallelization` field, default to `serial`.
+
+Use these modes:
+
+- **`serial`**: one main agent does the work; use when ownership is coupled or unclear.
+- **`research-only`**: read-only subagents may gather context before implementation; main agent implements.
+- **`review-only`**: main agent implements; subagents review before final validation.
+- **`implementation-safe`**: write subagents may work only on disjoint owned paths; main agent integrates.
+- **`agent-team`**: work is too broad or cross-cutting for one shared local tree; recommend Codex app worktrees or Claude agent teams instead of local subagent writes.
+
+Downgrade `implementation-safe` to `research-only` or `serial` if path ownership overlaps, shared chokepoints dominate, or the likely integration surface is unclear.
+
+Add this section before implementation steps:
+
+```markdown
+### Execution Profile
+**Parallel mode:** serial | research-only | review-only | implementation-safe | agent-team
+**Integration owner:** main agent
+**Conflict risk:** low | medium | high
+**Review gates:** correctness, tests, security, performance, docs/API conformance, UX, or none
+
+**Subagent lanes:**
+- Lane: [lane-name]
+  - Agent: explorer | worker | default
+  - Role: explorer | implementer | reviewer | docs-researcher | test-reviewer
+  - Mode: read-only | write | review
+  - Scope: [bounded task]
+  - Owns: `path/or/glob` (write lanes only)
+  - Must not edit: `path/or/glob` (write lanes only)
+  - Depends on: [lane, step, or none]
+  - Deliverable: [findings, patch summary, changed paths, tests, or review report]
+```
+
+For `serial`, use `**Subagent lanes:** none`. For `research-only` and `review-only`, lanes must not have write mode. For `implementation-safe`, every write lane must have non-overlapping `Owns` paths and explicit `Must not edit` boundaries.
+
 ### Break the Phase into Steps
 
 Define ordered steps beneath the existing Goal/Scope/Acceptance Criteria. The structure depends on the test strategy:
@@ -53,6 +91,23 @@ Define ordered steps beneath the existing Goal/Scope/Acceptance Criteria. The st
 ```
 ## Phase N: [Title]
 > Test strategy: tdd
+
+### Execution Profile
+**Parallel mode:** serial | research-only | review-only | implementation-safe | agent-team
+**Integration owner:** main agent
+**Conflict risk:** low | medium | high
+**Review gates:** correctness, tests, security, performance, docs/API conformance, UX, or none
+
+**Subagent lanes:**
+- Lane: [lane-name or none]
+  - Agent: explorer | worker | default
+  - Role: explorer | implementer | reviewer | docs-researcher | test-reviewer
+  - Mode: read-only | write | review
+  - Scope: [bounded task]
+  - Owns: `path/or/glob` (write lanes only)
+  - Must not edit: `path/or/glob` (write lanes only)
+  - Depends on: [lane, step, or none]
+  - Deliverable: [expected output]
 
 ### Tests First
 - Step N.1: Write failing tests for this phase's acceptance criteria
@@ -83,6 +138,23 @@ Define ordered steps beneath the existing Goal/Scope/Acceptance Criteria. The st
 ## Phase N: [Title]
 > Test strategy: tests-after
 
+### Execution Profile
+**Parallel mode:** serial | research-only | review-only | implementation-safe | agent-team
+**Integration owner:** main agent
+**Conflict risk:** low | medium | high
+**Review gates:** correctness, tests, security, performance, docs/API conformance, UX, or none
+
+**Subagent lanes:**
+- Lane: [lane-name or none]
+  - Agent: explorer | worker | default
+  - Role: explorer | implementer | reviewer | docs-researcher | test-reviewer
+  - Mode: read-only | write | review
+  - Scope: [bounded task]
+  - Owns: `path/or/glob` (write lanes only)
+  - Must not edit: `path/or/glob` (write lanes only)
+  - Depends on: [lane, step, or none]
+  - Deliverable: [expected output]
+
 ### Implementation
 - Step N.1: [First implementation task]
   - Files: create `path/to/new.ts`, modify `path/to/existing.ts`
@@ -104,6 +176,23 @@ Define ordered steps beneath the existing Goal/Scope/Acceptance Criteria. The st
 ```
 ## Phase N: [Title]
 > Test strategy: none
+
+### Execution Profile
+**Parallel mode:** serial | research-only | review-only | implementation-safe | agent-team
+**Integration owner:** main agent
+**Conflict risk:** low | medium | high
+**Review gates:** correctness, tests, security, performance, docs/API conformance, UX, or none
+
+**Subagent lanes:**
+- Lane: [lane-name or none]
+  - Agent: explorer | worker | default
+  - Role: explorer | implementer | reviewer | docs-researcher | test-reviewer
+  - Mode: read-only | write | review
+  - Scope: [bounded task]
+  - Owns: `path/or/glob` (write lanes only)
+  - Must not edit: `path/or/glob` (write lanes only)
+  - Depends on: [lane, step, or none]
+  - Deliverable: [expected output]
 
 ### Implementation
 - Step N.1: [First implementation task]
@@ -132,6 +221,7 @@ Define ordered steps beneath the existing Goal/Scope/Acceptance Criteria. The st
 
 - Every implementation step lists the specific files to create, modify, or delete.
 - This gives the executing agent clear scope and prevents steps from becoming unbounded.
+- Write-capable subagent lanes must have disjoint owned paths. If they do not, keep implementation serial and use research or review lanes only.
 
 ### Manual Task Classification
 
@@ -150,7 +240,7 @@ Manual tasks MUST NOT appear in `tasks/todo.md`. They go in `tasks/manual-todo.m
 
 1. **Update `tasks/roadmap.md`** — insert the implementation structure (Tests First / Implementation / Green / Milestone, per strategy) into the target phase, beneath the existing Goal/Scope/Acceptance Criteria. Do NOT modify other phases. Do NOT rewrite the Goal, Scope, or Acceptance Criteria.
 
-2. **Write `tasks/todo.md`** — extract the target phase as a standalone working document. Include enough context (project name, current phase number, total phases) so a fresh session can orient itself without reading `tasks/roadmap.md`. If `tasks/todo.md` already has in-progress work for a different phase, ask the user before overwriting.
+2. **Write `tasks/todo.md`** — extract the target phase as a standalone working document, including the `### Execution Profile`. Include enough context (project name, current phase number, total phases) so a fresh session can orient itself without reading `tasks/roadmap.md`. If `tasks/todo.md` already has in-progress work for a different phase, ask the user before overwriting.
 
 3. **Write `tasks/manual-todo.md`** (only if this phase has manual tasks):
    ```markdown
@@ -183,6 +273,8 @@ Manual tasks MUST NOT appear in `tasks/todo.md`. They go in `tasks/manual-todo.m
 - Every `tdd` phase must start with writing failing tests. `tests-after` phases write tests in the Green step.
 - Do not include implementation code — describe what to build and what to test.
 - Note what already exists in the codebase vs. what needs to be created.
+- The `### Execution Profile` must be decision-complete enough for `$run` to decide whether to use serial execution, read-only subagents, review subagents, or disjoint write subagents after the normal approval gate.
+- Subagents must not own task docs, roadmap/history updates, shipping, or deploy steps. Those stay with the main agent.
 - Manual tasks MUST NOT appear in `tasks/todo.md` — they go in `tasks/manual-todo.md` only.
 - Do NOT put plans in `AGENTS.md`, `CLAUDE.md`, or `docs/plan.md`.
 
