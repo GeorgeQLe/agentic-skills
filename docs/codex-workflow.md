@@ -108,7 +108,7 @@ In this document, Codex skill invocations use the native `$skill` form.
 **Manual gap**
 - no skill-controlled transition into a richer approval mode
 
-### `$plan-phases`
+### `$plan-phase`
 
 **Claude Code**
 - turn roadmap into executable phase detail
@@ -306,7 +306,7 @@ If you are used to this Claude Code rhythm:
 
 1. `$plan-interview`
 2. `$roadmap`
-3. `$plan-phases`
+3. `$plan-phase` (seeded by `$roadmap`; rerun only for later phases)
 4. `$run`
 5. `$ship`
 6. `$ship-end` when wrapping an off-script or partial session
@@ -315,7 +315,7 @@ The closest Codex translation is:
 
 1. `$plan-interview`
 2. `$roadmap`
-3. `$plan-phases`
+3. `$plan-phase` (seeded by `$roadmap`; rerun only for later phases)
 4. `$run` to present the plan, execute the work, ship it, and refresh `tasks/todo.md`
 5. repeat `$run` for the next planned step
 6. use `$ship` only if finished work needs manual packaging

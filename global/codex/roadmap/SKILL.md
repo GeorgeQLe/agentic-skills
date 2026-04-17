@@ -88,9 +88,15 @@ Continue until the user confirms the phase structure is complete.
 
 #### 4c. Write the Roadmap
 
-Write `tasks/roadmap.md` with the agreed phase structure (phases, goals, scope, acceptance criteria — NOT implementation steps). Implementation detail is generated just-in-time by `$plan-phases` when a phase is started, not upfront.
+Write `tasks/roadmap.md` with the agreed phase structure (phases, goals, scope, acceptance criteria — NOT implementation steps). Implementation detail is generated just-in-time by `$plan-phase` when a phase is started, not upfront.
 
-After writing the roadmap, continue to step 5 to scan the freshly-created roadmap for any pipeline issues.
+#### 4d. Seed Phase 1
+
+After writing `tasks/roadmap.md`, immediately invoke `$plan-phase 1` to generate the implementation detail for the first phase. This produces `tasks/todo.md` (and `tasks/manual-todo.md` if applicable) so the user lands on an actionable starting point rather than an undecomposed roadmap.
+
+Do not decompose later phases — those are generated just-in-time when each phase begins (via `$ship` or `$run`).
+
+After `$plan-phase 1` completes, continue to step 5 to scan the freshly-created roadmap for any pipeline issues.
 
 ### 5. Classify Issues (States B-after and C)
 
@@ -109,7 +115,7 @@ Uncommitted changes or unpushed commits exist. These must be resolved before tas
 `tasks/roadmap.md` was modified more recently than `tasks/todo.md`, suggesting the roadmap was updated but the current working document was not refreshed. Evidence: roadmap mtime vs todo mtime.
 
 #### 5. Missing Implementation Steps
-A roadmap phase has acceptance criteria but no implementation steps (no `### Tests First`, `### Implementation`, or `### Green` section). This phase needs `$plan-phases` before `$run` can execute it.
+A roadmap phase has acceptance criteria but no implementation steps (no `### Tests First`, `### Implementation`, or `### Green` section). This phase needs `$plan-phase` before `$run` can execute it.
 
 #### 6. Orphaned Manual Tasks
 `tasks/manual-todo.md` references a phase that has already been completed or archived, but unchecked items remain. These need resolution or explicit deferral.
@@ -243,7 +249,7 @@ Next: `$run` to continue execution.
 - **Always interview for new roadmaps.** Do not produce a roadmap without user input on priorities and sequencing when building one from scratch (State B).
 - **Respect existing specs.** Do not modify files in `specs/` (or `spec.md`).
 - **Phase headers must use `## Phase N: [Title]` format** for `$run` compatibility.
-- **Do not include TDD steps or file-level implementation detail** — that's `$plan-phases`' job.
+- **Do not include TDD steps or file-level implementation detail** — that's `$plan-phase`' job.
 - **`tasks/roadmap.md` is the source of truth.** Do not put roadmap content in CLAUDE.md or AGENTS.md.
 - This skill updates `tasks/todo.md` and `tasks/roadmap.md`; it must not run the queued skills.
 - Preserve user-authored todo content outside `## Priority Task Queue`.
@@ -251,7 +257,7 @@ Next: `$run` to continue execution.
 - Do not modify `tasks/manual-todo.md`, `tasks/history.md`, or any specs (except to create `tasks/roadmap.md` in State B).
 - Do not create or modify source code.
 - Do not archive phases, advance the pipeline, or execute implementation steps.
-- Prefer actionable skill invocations (`$ship`, `$run`, `$plan-phases N`, `$research-roadmap`) over vague guidance.
+- Prefer actionable skill invocations (`$ship`, `$run`, `$plan-phase N`, `$research-roadmap`) over vague guidance.
 
 ## Archive-First Replacement Policy
 

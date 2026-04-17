@@ -45,6 +45,8 @@ Two files written:
 - `specs/[topic].md` — the completed specification
 - `[topic]-interview.md` — full interview log with deviation summary
 
+After writing the files, tell the user the next step: run `/roadmap` to sequence specs into phases and seed Phase 1 implementation. Do not invoke `/roadmap` automatically — the user may want to run multiple `/plan-interview` sessions first.
+
 ## Constraints
 
 - Use AskUserQuestion for all interview turns — do not assume answers.

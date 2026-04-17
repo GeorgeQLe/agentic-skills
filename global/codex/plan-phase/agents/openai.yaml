@@ -1,0 +1,7 @@
+interface:
+  display_name: "Plan Phase"
+  short_description: "Decompose a single roadmap phase into implementation steps"
+  default_prompt: "Use $plan-phase to fill in implementation steps, tests, and file-level detail for the next phase of tasks/roadmap.md."
+
+policy:
+  allow_implicit_invocation: true

@@ -40,7 +40,7 @@ Discover and search installed global skills plus enabled project-local pack skil
    | Strategize | `roadmap`, `roadmap-kanban`, `competitive-analysis`, `platform-strategy`, `gtm`, `landing-copy`, `monetization`, `positioning`, `runway-model` |
    | Evaluate | `mvp-gap`, `scale-audit`, `customer-feedback`, `assumption-tracker`, `cohort-review`, `retro` |
    | Research Health | `research-roadmap`, `reconcile-research`, `reconcile-dev-docs` |
-   | Detail | `plan-phases` |
+   | Detail | `plan-phase` |
    | Execution | `run`, `run-kanban`, `guide` |
    | Shipping | `ship`, `ship-end`, `ship-kanban`, `ship-end-kanban` |
    | Code Quality | `expert-review`, `regression-check`, `dead-code` |
