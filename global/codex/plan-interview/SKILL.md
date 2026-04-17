@@ -44,6 +44,8 @@ The interview log should include:
 - The user's responses and chosen direction
 - A closing summary of significant deviations from the initial draft and why they changed
 
+After writing the files, tell the user the next step: run `$roadmap` to sequence specs into phases and seed Phase 1 implementation. Do not invoke `$roadmap` automatically — the user may want to run multiple `$plan-interview` sessions first.
+
 ## Constraints
 
 - Do not assume draft text is final.

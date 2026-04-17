@@ -32,7 +32,7 @@ Resolve the canonical development docs:
 - `specs/*.md` and `specs/*/*.md`
 - `docs/specifications/*.md` (fallback specs location)
 
-If no task docs exist, report that there is nothing to reconcile and recommend `$roadmap` or `$plan-phases` based on available specs.
+If no task docs exist, report that there is nothing to reconcile and recommend `$roadmap` or `$plan-phase` based on available specs.
 
 ### 2. Gather Evidence
 

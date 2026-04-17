@@ -56,7 +56,7 @@ Ship already-finished work, commit it, optionally deploy it, and plan the next s
        3. Copy the next phase from `tasks/roadmap.md` → overwrite `tasks/todo.md`.
        3b. Extract the next phase's manual tasks (from `**Manual Tasks:**` in roadmap) into a fresh `tasks/manual-todo.md`. If the next phase has no manual tasks, delete the file.
        4. If no more phases remain, run `$roadmap` to recommend the next action based on project state. Then stop.
-       5. **Just-in-time planning:** Invoke `$plan-phases` for the new phase. This generates implementation steps and file-level detail using the full context of what was learned during prior phases.
+       5. **Just-in-time planning:** Invoke `$plan-phase` for the new phase. This generates implementation steps and file-level detail using the full context of what was learned during prior phases.
      - If **NO:** find the next uncompleted step within the current phase.
 5. Write a self-contained implementation plan for the next step into `tasks/todo.md`, complete enough for a fresh session to execute from `tasks/todo.md` alone.
 6. Ship `tasks/todo.md`, `tasks/roadmap.md`, `tasks/manual-todo.md` (if it exists), and `tasks/phases/` (if created) via `$commit-and-push-by-feature`, landing them on `main` or `master`.

@@ -54,7 +54,7 @@ Global skills are safe across business apps, games, devtools, libraries, service
 | `migrate` | Guide a structural migration or dependency upgrade |
 | `pack` | Manage project-local packs and `.agents/project.json` |
 | `plan-interview` | Interview to validate and complete an implementation specification |
-| `plan-phases` | Break a finalized spec into phases, steps, milestones, and tests |
+| `plan-phase` | Decompose a single roadmap phase into implementation steps, tests, and file-level detail |
 | `reconcile-dev-docs` | Reconcile roadmap, todo, history, phase archives, specs, and git evidence |
 | `regression-check` | Run a comprehensive health check after a phase or major change |
 | `release` | Version bump, changelog, tag, and prepare a release |
@@ -92,7 +92,7 @@ Default flow:
 
 ```text
 icp -> competitive-analysis -> positioning -> journey-map -> metrics
--> gtm / monetization -> roadmap -> plan-phases -> run
+-> gtm / monetization -> roadmap -> run (roadmap seeds plan-phase 1; later phases decomposed just-in-time by /ship and /run)
 ```
 
 ## Game Pack
