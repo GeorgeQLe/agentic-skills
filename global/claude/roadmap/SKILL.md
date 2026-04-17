@@ -79,6 +79,9 @@ Use the AskUserQuestion tool to align on roadmap decisions. Ask one to three foc
 - **Market fit** (when ICP/gap specs exist): Which phases directly address customer pain points or deal-blockers from gap analysis? Prioritise these unless technically impossible. Surface tension between technical sequencing and market urgency.
 - **Phase sizing**: Preference for many small phases vs. fewer larger ones?
 - **Manual tasks**: Are there tasks that require human action (DNS setup, OAuth credentials, browser testing, deployment approvals, etc.)? Which phases do they belong to, and do they block or follow specific automated steps?
+- **Parallelization**: Which phase work can run independently, which modules or files are shared chokepoints, and where should work stay serial?
+- **Review needs**: Which phases need specialized review gates (correctness, tests, security, performance, docs/API conformance, UX)?
+- **Agent-team fit**: Which phases are too broad or cross-cutting for local in-session subagents and should instead use worktree isolation or Claude agent teams?
 
 When options exist, present pros/cons with a recommendation — same style as `/plan-interview`. Do not manufacture artificial choices.
 
@@ -122,6 +125,10 @@ Write `tasks/roadmap.md` with the agreed phase structure. Use this format:
 **Manual Tasks** (if any):
 - [Task requiring human action] _(blocks: Step N.X)_ or _(after: Step N.X)_
 
+**Parallelization:** serial | research-only | review-only | implementation-safe | agent-team
+
+**Coordination Notes:** [dependencies, shared chokepoints, and why this mode was chosen]
+
 **On Completion** (fill in when phase is done):
 - Deviations from plan: [none, or describe]
 - Tech debt / follow-ups: [none, or list]
@@ -143,7 +150,9 @@ Write `tasks/roadmap.md` with the agreed phase structure. Use this format:
 - [Performance, security, accessibility — and which phase addresses each]
 ```
 
-**Important**: The roadmap defines phases, goals, scope, and acceptance criteria — but NOT implementation steps, TDD structure, or file-level detail. That's `/plan-phase`'s job.
+**Important**: The roadmap defines phases, goals, scope, acceptance criteria, and strategic parallelization mode — but NOT implementation steps, TDD structure, subagent lanes, write ownership, or file-level detail. That's `/plan-phase`'s job.
+
+Use `serial` when work is tightly coupled or file ownership cannot be separated. Use `research-only` when parallel exploration helps but implementation should remain integrated. Use `review-only` when the build should be serial but post-implementation review benefits from multiple lenses. Use `implementation-safe` only when likely write ownership can be cleanly separated. Use `agent-team` for broad cross-cutting phases that should run in isolated worktrees or a dedicated multi-agent team rather than one shared local tree.
 
 #### 4d. Seed Phase 1
 
@@ -309,10 +318,10 @@ Next: `/run` to continue execution.
 - **`tasks/roadmap.md` is the source of truth** for the full phased plan. `tasks/todo.md` holds only the current phase.
 - **Do not put roadmap content in CLAUDE.md** — CLAUDE.md is for project conventions only.
 - **Keep the interview focused.** This is about sequencing and priority, not re-litigating spec decisions. If a spec question comes up, note it and suggest running `/plan-interview` again for that topic.
-- This skill updates `tasks/todo.md` and `tasks/roadmap.md`; it must not run the queued skills.
+- This skill updates `tasks/todo.md` and `tasks/roadmap.md`; it must not run queued priority items. It may invoke `/plan-phase 1` only as the explicit Phase 1 seed described above.
 - Preserve user-authored todo content outside `## Priority Task Queue`.
 - Every issue must include evidence (timestamps, checked-item counts, file existence).
-- Do not modify `tasks/manual-todo.md`, `tasks/history.md`, or any specs (except to create `tasks/roadmap.md` in State B).
+- Do not directly modify `tasks/manual-todo.md`, `tasks/history.md`, or any specs (except to create `tasks/roadmap.md` in State B). `/plan-phase 1` may create or update `tasks/manual-todo.md` during the explicit Phase 1 seed.
 - Do not create or modify source code.
 - Do not archive phases, advance the pipeline, or execute implementation steps.
 - Prefer actionable skill invocations (`/ship`, `/run`, `/plan-phase N`, `/research-roadmap`) over vague guidance.

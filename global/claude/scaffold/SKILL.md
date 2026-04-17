@@ -45,7 +45,7 @@ Generate a new package or app in the monorepo that follows the project's establi
    - Wait for user approval.
 
 5. **Generate the scaffold after approval:**
-   - Exit plan mode.
+   - If Claude Code already returned to normal mode after approval, do not call ExitPlanMode again; continue directly with generation. Only use the plan-mode exit tool when the session is still visibly in plan mode.
    - Create the directory structure.
    - Generate each file, adapting the template:
      - Update `name` in `package.json` to match the new package name.
@@ -75,6 +75,7 @@ Generate a new package or app in the monorepo that follows the project's establi
 - Always use an existing package/app as the reference template — do not invent conventions.
 - Do not install domain packs globally; use project-local pack symlinks.
 - Always enter plan mode before creating files.
+- Do not call ExitPlanMode from normal mode. If Claude Code reports "You are not in plan mode" after approval, treat approval as complete and continue implementation.
 - Do not add unnecessary boilerplate — keep the scaffold minimal and consistent with existing packages.
 - If the project does not appear to be a monorepo, inform the user and ask how to proceed.
 - Do not install external dependencies beyond what the template uses.

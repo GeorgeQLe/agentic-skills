@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-04-17 — Add execution profiles and guard Claude plan-mode exits
+
+- Added strategic `Parallelization` and `Coordination Notes` fields to roadmap generation for Claude and Codex skills
+- Added `### Execution Profile` planning guidance to `plan-phase`, including serial, research-only, review-only, implementation-safe, and agent-team modes with subagent lane ownership rules
+- Updated `run` and `ship` skills to preserve and apply the current phase execution profile while keeping task docs, history, shipping, and deploy ownership with the main agent
+- Guarded Claude `ExitPlanMode` usage in `run`, `scaffold`, `migrate`, and `decommission` so an already-normal post-approval session continues instead of failing with "You are not in plan mode"
+- Deploy skipped: no explicit manual deploy contract (`deploy.md` or `tasks/deploy.md`)
+
 ## 2026-04-17 — Unify plan-interview → roadmap → plan-phase flow
 
 - Renamed `plan-phases` → `plan-phase` (singular) across Claude and Codex global skill trees, including the Codex `agents/openai.yaml` side-file

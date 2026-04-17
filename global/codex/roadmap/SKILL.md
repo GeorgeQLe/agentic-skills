@@ -81,6 +81,9 @@ Ask focused questions to align on roadmap decisions (1–3 questions per turn). 
 - **Market fit** (when ICP/gap specs exist): Which phases directly address customer pain points or deal-blockers from gap analysis? Prioritise these unless technically impossible.
 - **Phase sizing**: Preference for many small phases vs. fewer larger ones?
 - **Manual tasks**: Any steps requiring human action (DNS, OAuth, browser testing, deploy approvals)? Which phases?
+- **Parallelization**: Which phase work can run independently, which modules or files are shared chokepoints, and where should work stay serial?
+- **Review needs**: Which phases need specialized review gates (correctness, tests, security, performance, docs/API conformance, UX)?
+- **Agent-team fit**: Which phases are too broad or cross-cutting for local in-session subagents and should instead use Codex app worktrees or Claude agent teams?
 
 When options exist, present pros/cons with a recommendation. Do not manufacture artificial choices.
 
@@ -88,7 +91,16 @@ Continue until the user confirms the phase structure is complete.
 
 #### 4c. Write the Roadmap
 
-Write `tasks/roadmap.md` with the agreed phase structure (phases, goals, scope, acceptance criteria — NOT implementation steps). Implementation detail is generated just-in-time by `$plan-phase` when a phase is started, not upfront.
+Write `tasks/roadmap.md` with the agreed phase structure (phases, goals, scope, acceptance criteria, parallelization strategy — NOT implementation steps). Implementation detail is generated just-in-time by `$plan-phase` when a phase is started, not upfront.
+
+For each phase, include these strategic fields:
+
+```markdown
+**Parallelization:** serial | research-only | review-only | implementation-safe | agent-team
+**Coordination Notes:** [dependencies, shared chokepoints, and why this mode was chosen]
+```
+
+Use `serial` when work is tightly coupled or file ownership cannot be separated. Use `research-only` when parallel exploration helps but implementation should remain integrated. Use `review-only` when the build should be serial but post-implementation review benefits from multiple lenses. Use `implementation-safe` only when likely write ownership can be cleanly separated. Use `agent-team` for broad cross-cutting phases that should run in isolated worktrees or a dedicated multi-agent team rather than one shared local tree.
 
 #### 4d. Seed Phase 1
 
@@ -251,10 +263,10 @@ Next: `$run` to continue execution.
 - **Phase headers must use `## Phase N: [Title]` format** for `$run` compatibility.
 - **Do not include TDD steps or file-level implementation detail** — that's `$plan-phase`' job.
 - **`tasks/roadmap.md` is the source of truth.** Do not put roadmap content in CLAUDE.md or AGENTS.md.
-- This skill updates `tasks/todo.md` and `tasks/roadmap.md`; it must not run the queued skills.
+- This skill updates `tasks/todo.md` and `tasks/roadmap.md`; it must not run queued priority items. It may invoke `$plan-phase 1` only as the explicit Phase 1 seed described above.
 - Preserve user-authored todo content outside `## Priority Task Queue`.
 - Every issue must include evidence (timestamps, checked-item counts, file existence).
-- Do not modify `tasks/manual-todo.md`, `tasks/history.md`, or any specs (except to create `tasks/roadmap.md` in State B).
+- Do not directly modify `tasks/manual-todo.md`, `tasks/history.md`, or any specs (except to create `tasks/roadmap.md` in State B). `$plan-phase 1` may create or update `tasks/manual-todo.md` during the explicit Phase 1 seed.
 - Do not create or modify source code.
 - Do not archive phases, advance the pipeline, or execute implementation steps.
 - Prefer actionable skill invocations (`$ship`, `$run`, `$plan-phase N`, `$research-roadmap`) over vague guidance.

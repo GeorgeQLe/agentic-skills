@@ -93,7 +93,7 @@ c) **Check if the current phase is complete** (all steps checked, milestone crit
      3. Copy the next phase from `tasks/roadmap.md` → overwrite `tasks/todo.md`.
      3b. Extract the next phase's manual tasks (from `**Manual Tasks:**` in `tasks/roadmap.md`) into a fresh `tasks/manual-todo.md`. If the next phase has no manual tasks, delete `tasks/manual-todo.md` if it exists.
      4. If no more phases remain, run `/roadmap` to recommend the next action based on project state. Then stop (do not enter plan mode).
-     5. **Just-in-time planning:** **You MUST invoke `/plan-phase` for the new phase** — do NOT tell the user the phase is "deferred" or ask them to run `/plan-phase` manually. A phase without implementation steps is NOT deferred; it simply hasn't been decomposed yet (only items under the `## Deferred / Future Work` heading in the roadmap are actually deferred). This auto-invocation generates implementation steps and file-level detail using the full context of what was learned during prior phases. The roadmap only stores strategic outlines — implementation detail is generated when a phase is started, not upfront.
+     5. **Just-in-time planning:** **You MUST invoke `/plan-phase` for the new phase** — do NOT tell the user the phase is "deferred" or ask them to run `/plan-phase` manually. A phase without implementation steps is NOT deferred; it simply hasn't been decomposed yet (only items under the `## Deferred / Future Work` heading in the roadmap are actually deferred). This auto-invocation generates implementation steps, the phase `### Execution Profile`, and file-level detail using the full context of what was learned during prior phases. The roadmap only stores strategic outlines — implementation detail is generated when a phase is started, not upfront.
    - If **NO:** find the next uncompleted step within the current phase.
 d) Write a **self-contained** implementation plan for the next step into `tasks/todo.md`. This plan must be complete enough that a fresh context can execute it by reading only CLAUDE.md and `tasks/todo.md`. Include:
    - What needs to be built/changed
@@ -102,6 +102,7 @@ d) Write a **self-contained** implementation plan for the next step into `tasks/
    - Relevant context from the current session (gotchas, patterns established, conventions used)
    - If test strategy is `tdd`: which tests to write first and what they should assert
    - If test strategy is `tests-after`: note that tests will be written in the Green step
+   - The current phase's `### Execution Profile`, including whether the next execution is serial, research-only, review-only, implementation-safe, or agent-team
    - Acceptance criteria: how to verify the step is done
 e) Ship `tasks/todo.md`, `tasks/roadmap.md`, `tasks/manual-todo.md` (if it exists), and `tasks/phases/` (if created) via `/commit-and-push-by-feature`, landing them on `main` or `master`.
 
@@ -137,7 +138,7 @@ This gives the user something concrete to review before selecting "clear context
 - Do not amend or rewrite history.
 - Do not commit secrets.
 - Do not push shipping commits to an existing feature branch. Use `/commit-and-push-by-feature` to move the work onto `main` or `master` and push it there, or stop and report a blocker if that cannot be done safely.
-- The plan must be actionable, not vague. Include specific file paths and technical details.
+- The plan must be actionable, not vague. Include specific file paths, technical details, and the current phase's `### Execution Profile`.
 - Never use GitHub Actions for deployment. Only use manual deploy scripts, Makefiles, or CLI commands.
 - Never deploy to production without explicit user confirmation.
 - Do not modify code as part of the deploy process.
