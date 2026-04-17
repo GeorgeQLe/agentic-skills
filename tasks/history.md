@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-04-17 — Unify plan-interview → roadmap → plan-phase flow
+
+- Renamed `plan-phases` → `plan-phase` (singular) across Claude and Codex global skill trees, including the Codex `agents/openai.yaml` side-file
+- Dropped Mode B from the skill: `plan-phase` now requires `tasks/roadmap.md` and only decomposes one phase per invocation, preserving Goal/Scope/Acceptance Criteria from the roadmap
+- `/roadmap` State B now auto-invokes `/plan-phase 1` (section 4d) so users land on an actionable `tasks/todo.md` after roadmap creation instead of an undecomposed plan
+- `/plan-interview` now tells the user to run `/roadmap` next rather than leaving the handoff ambiguous
+- Updated all callers (`ship`, `run`, `reconcile-dev-docs`, `skills`) and docs (`README.md`, `docs/skills-reference.md`, `docs/codex-workflow.md`) to reference `plan-phase`
+- Refreshed symlinks via `./install.sh`; stale `plan-phases` links removed, new `plan-phase` links in both `~/.claude/skills` and `~/.codex/skills`
+- Deploy skipped: no manual deploy contract for this repo
+
 ## 2026-04-17 — Require live AWS auth check before SSO login
 
 - Tightened Codex and Claude deploy/ship instructions so agents must not run `aws sso login` from stale context, old logs, or assumptions
