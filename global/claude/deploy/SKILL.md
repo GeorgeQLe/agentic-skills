@@ -43,7 +43,9 @@ If `$ARGUMENTS` contains `--status`, skip deployment and jump to step 7 (stalene
    - If no previous deployment exists, note this is the first tracked deploy for this environment.
 
 5. **Run the deploy** using the project's deploy mechanism.
-   - If the deploy command fails because AWS SSO credentials are missing or expired, do not skip deployment. Run the matching `aws sso login --profile <profile>` command, using the profile from the deploy contract, deploy command, or error output.
+   - Do not run `aws sso login` preemptively from stale context, old logs, or assumptions. If the deploy method uses an AWS profile and auth status is uncertain, first run `aws sts get-caller-identity --profile <profile>` using the profile from the deploy contract or deploy command.
+   - If the AWS identity check succeeds, proceed directly with the deploy and do not run `aws sso login`.
+   - If the AWS identity check or the deploy command fails because AWS SSO credentials are missing or expired, do not skip deployment. Run the matching `aws sso login --profile <profile>` command, using the profile from the deploy contract, deploy command, or error output.
    - When `aws sso login` prints a browser URL, device code, or verification instructions, relay them to the user and tell them to navigate to the provided URL and complete the login in their browser. Keep the login command running until it succeeds, fails, or times out.
    - After a successful SSO login, rerun the original deploy command once. This auth recovery is part of the same deploy attempt, not an automatic retry of a failed deploy.
    - If the user cannot complete SSO login or the login command fails, report the deploy as blocked by authentication. Do not report it as skipped.
@@ -137,7 +139,7 @@ If `$ARGUMENTS` contains `--status`, skip deployment and jump to step 7 (stalene
 
 ## Constraints
 - Never deploy to production without explicit user confirmation.
-- If deploy fails, report the error clearly — do not retry automatically. Still record the failed attempt in the ledger. AWS SSO credential refresh is the only exception: prompt the user through `aws sso login --profile <profile>` once, then rerun the original deploy command once.
+- If deploy fails, report the error clearly — do not retry automatically. Still record the failed attempt in the ledger. AWS SSO credential refresh is the only exception: after a live identity check or deploy command proves credentials are missing or expired, prompt the user through `aws sso login --profile <profile>` once, then rerun the original deploy command once.
 - Do not modify code as part of the deploy process.
 - Never use GitHub Actions for deployment. Only use manual deploy scripts, Makefiles, or CLI commands.
 - The ledger (`tasks/deploys.md`) is the only file this skill writes to. Do not modify other task files.

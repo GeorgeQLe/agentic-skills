@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-04-17 — Require live AWS auth check before SSO login
+
+- Tightened Codex and Claude deploy/ship instructions so agents must not run `aws sso login` from stale context, old logs, or assumptions
+- Required `aws sts get-caller-identity --profile <profile>` when AWS auth status is uncertain, and explicitly skips SSO login when that identity check succeeds
+- Preserved the SSO recovery path for actual missing or expired credentials after a live identity check or deploy-command failure
+- Added `tasks/lessons.md` entry for checking live AWS auth before prompting for SSO login
+- Validation: `git diff --check`, `scripts/skill-versions.sh --missing`, `scripts/detect-secrets.sh`
+- Deploy skipped: no explicit manual deploy contract (`deploy.md` or `tasks/deploy.md`)
+
 ## 2026-04-16 — Clarify skill invocation and AWS SSO deploy recovery
 
 - Added explicit `Invoke as $...` guidance across Codex global and pack skill docs so each skill documents its Codex invocation form
