@@ -46,6 +46,8 @@ The interview log should include:
 
 After writing the files, tell the user the next step: run `$roadmap` to sequence specs into phases and seed Phase 1 implementation. Do not invoke `$roadmap` automatically — the user may want to run multiple `$plan-interview` sessions first.
 
+If the interview identifies follow-up work that is itself a named skill, recommend invoking that skill directly instead of phrasing it as another `$plan-interview` run. For example: say "run `$icp` and `$monetization`, then `$roadmap`" rather than "run `$plan-interview` for `$icp` and `$monetization`." This applies to research and planning skills such as `$icp`, `$monetization`, `$metrics`, `$positioning`, and `$competitive-analysis`.
+
 ## Mode-aware next-step recommendation
 
 Before handing back to the user, resolve the effective agent mode via `./scripts/agent-mode.sh` and emit exactly one recommendation line matching the resolved agent mode via scripts/agent-mode.sh:
