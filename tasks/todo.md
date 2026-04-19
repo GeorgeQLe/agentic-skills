@@ -57,7 +57,7 @@ Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env va
   - Explicit field-level safety classification (which fields are safe for `.md` vs JSON-only)
   - Fields: step identity (Phase N / Step N.X / normalized title), approval timestamp, git HEAD, `tasks/todo.md` hash, allowed dirty paths, blocking manual-task snapshot, approval age TTL
   - Lifecycle states: `draft` → `approved` → `consumed` | `stale` | `superseded` | `uncertain`
-- [ ] **Step 4** — `$run --execute-approved` (Codex) — consumes packet, skips approval if `approved` + all freshness checks pass. Freshness: same git HEAD, unchanged `todo.md` hash, clean tree or dirty only on allowed paths, no new `_(blocks: Step N.X)_` entries, age under TTL. On failure, re-prompt with diff. Transitions `approved → consumed` or `approved → stale`.
+- [x] **Step 4** — `$run --execute-approved` (Codex) — consumes packet, skips approval if `approved` + all freshness checks pass. Freshness: same git HEAD, unchanged `todo.md` hash, clean tree or dirty only on allowed paths, no new `_(blocks: Step N.X)_` entries, age under TTL. On failure, re-prompt with diff. Transitions `approved → consumed` or `approved → stale`.
 - [ ] **Step 5** — `/handoff --target=codex` (Claude) — extend existing `/handoff` to produce the approval packet as async task brief. Covers "Codex cloud delegation coming soon" case and claude-only users who plan to execute in Codex later.
 - [ ] **Step 6** — `/delegate` (Claude) — live in-session delegation to Codex, consumes same packet format. Safe-fallback semantics:
   - Failure before Codex starts → offer inline execution or emit packet
@@ -85,7 +85,22 @@ Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env va
   - Migration guide from parity-mirror model
 - [ ] **Verify:** Run through all three modes on a sample workflow; confirm each mode completes plan → execute → ship without hitting the unavailable CLI
 
-### Active Step Plan — Step 4: `$run --execute-approved` (Codex)
+### Active Step Plan — Step 5: `/handoff --target=codex` (Claude)
+
+**Sketch only** — a detailed plan lands when Step 5 starts. Step 5 extends Claude's existing `/handoff` skill to emit an approval packet conforming to the Step 3 contract (`specs/approved-plan.schema.json`), so a Claude-side planner can stage work that executes later in Codex. Packet lifecycle starts at `draft`; the human approval action transitions `draft → approved`. Packet shape and freshness-check semantics are frozen by the contract — Step 5 is the first producer, and must not redefine any schema/lifecycle surface.
+
+Out of scope for Step 5: live `/delegate` (Step 6) and `uncertain` transitions. Do not introduce them here.
+
+### Step 4 Summary (completed 2026-04-19)
+
+- Shipped `scripts/approved-plan.sh` (Bash 3.2, mirrors `scripts/agent-mode.sh` style) with `check`, `consume`, and `mark-stale` subcommands. `check` runs the six freshness checks from the contract in cheapest-first order and emits a single-line reason per failure. `consume` atomically transitions `approved → consumed` and projects the sanitized mirror to `tasks/approved-plan.md`; `mark-stale` atomically transitions `approved → stale`. Writes go through `<file>.tmp` + `mv` so a crashed transition leaves either prior or new state, never corruption. `jq` is required for writes; reads may fall back to `sed`. Hidden `--packet <path>` flag on every subcommand for fixture-based testing.
+- `todo_hash` pipeline: `perl -pe 's/^\xEF\xBB\xBF//; s/\r$//' | shasum -a 256` per the contract normalization. `iso_to_epoch` supports both BSD (`date -j -f`) and GNU (`date -d`) so TTL math works across macOS and Linux without extra deps.
+- Mode-mismatch guard: when `SKILLS_AGENT_MODE` or `.agents/project.json.agent_mode` resolves to `claude-only`, `check` exits non-zero with a `mode-mismatch:` reason before touching the packet. Codex-only affordance by design.
+- `global/codex/run/SKILL.md` wires the `--execute-approved` branch as step 6c (after the execution-profile read): on `check=ok` it calls `consume`, logs the one-line consumption message, and jumps to step 9 (execute), skipping plan present + approval gate (steps 7–8). On failure it relays the single-line reason, calls `mark-stale`, and falls through to the normal plan/approval flow — never an auto-retry. `--execute-approved --phase` is rejected. Flag documented in the header `argument-hint` and a new Constraints bullet.
+- Verification with fixtures under `/tmp/apktest/`: happy path → `ok` exit 0; each of the six freshness failure modes (lifecycle=draft, expired TTL, mismatched git_head, mismatched todo_hash, unexpected dirty path, mode-mismatch) → matching single-line reason + non-zero exit; `consume` flips lifecycle to `consumed` and writes the `.md` mirror that omits `allowed_dirty_paths`/`notes`; re-`consume` on an already-consumed packet is an idempotent no-op; pre-consume and post-consume packets both validate against `specs/approved-plan.schema.json` via `jsonschema` in a venv.
+- Contract untouched: no edits to `docs/operating-modes.md` or `specs/approved-plan.schema.json`. Step 4 is the first legitimate consumer, exactly as Step 3 intended.
+
+### Active Step Plan — Step 4: `$run --execute-approved` (Codex) [archived for reference]
 
 **Goal:** Wire the Codex `$run` skill to consume the approval packet shipped in Step 3. When `.agents/approved-plan.json` contains a valid `approved` packet AND all six freshness checks pass, `$run --execute-approved` skips the usual plan-approval prompt and goes straight to implementation. On any failure, it transitions the packet to `stale`, re-prompts the user with a clear diff of what changed, and falls through to the standard `$run` approval path. Target: eliminate the ~385 bare-`y` Codex approvals surfaced in the Phase 11 context without ever letting a stale plan execute.
 

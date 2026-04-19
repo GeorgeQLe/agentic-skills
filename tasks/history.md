@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-04-19 — Phase 11 Step 4 — `$run --execute-approved` (Codex)
+
+- Added `scripts/approved-plan.sh` (Bash 3.2, style-matched to `scripts/agent-mode.sh`) with `check`, `consume`, `mark-stale` subcommands. `check` runs the six freshness checks from the Step 3 contract in cheapest-first order (lifecycle → TTL → git HEAD → `todo_hash` → dirty-path scan → manual-todo scan); each failure emits a single-line reason. `consume` transitions `approved → consumed` atomically (`<file>.tmp` + `mv`) and writes the sanitized `tasks/approved-plan.md` mirror projecting only `.md`-safe fields (omits `allowed_dirty_paths`, `notes`). `mark-stale` does the same atomic move to `stale`. Hidden `--packet <path>` override on every subcommand for fixture tests.
+- Wired the `--execute-approved` branch into `global/codex/run/SKILL.md` as step 6c: on `check=ok` it runs `consume`, logs `Approved packet consumed: …`, and skips directly to the execute step, bypassing the plan-present + approval gate; on failure it relays the reason, runs `mark-stale`, and falls through to the normal approval flow (never auto-retry). `--execute-approved --phase` is rejected. Flag documented in the header `argument-hint` and a new Constraints bullet. Mode-mismatch guard: `claude-only` makes the flag a user error; helper exits non-zero with `mode-mismatch:` before touching the packet.
+- Verified with `/tmp/apktest/` fixtures: happy path returns `ok` exit 0; each failure mode (lifecycle=draft, expired TTL, mismatched git_head, mismatched todo_hash, unexpected dirty path, mode-mismatch) prints its specific reason and exits non-zero; `consume` flips lifecycle and writes the mirror; re-`consume` on an already-consumed packet is idempotent; pre- and post-consume packets both validate against `specs/approved-plan.schema.json` via `jsonschema` in a venv.
+- Contract untouched — no edits to `docs/operating-modes.md` or `specs/approved-plan.schema.json`, matching the Step 3 intent that the schema stay frozen for the first consumer.
+- Checked off Step 4 in `tasks/todo.md`, appended a Step 4 Summary, rolled the Active Step Plan to Step 5 (sketch).
+
 ## 2026-04-19 — Phase 11 Step 3 — Shared approval/delegation packet contract
 
 - Expanded `docs/operating-modes.md` § "Approval / Delegation Packet" (now 108 lines, kept in place — no extraction needed) with the full field schema, the `draft → approved → (consumed | stale | superseded | uncertain)` lifecycle state machine, the `.md`-safe vs JSON-only safety classification, and the six freshness checks (named here, implementation owned by Step 4).
