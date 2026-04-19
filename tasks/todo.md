@@ -123,21 +123,72 @@ Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env va
 
 ### Active Step Plan — Step 10: Pack-aware `$run` routing on Codex
 
-**Goal:** Teach `$run` on Codex to read `.agents/project.json.enabled_packs` and, when the next planned step matches a pack skill, recommend or route to that pack's skill (prefixed with the correct CLI syntax) rather than the global-default skill. Pack emphasis from Step 9 is the classification input; Step 10 is the routing logic that consumes it.
+**Goal:** Teach `$run` on Codex to read `.agents/project.json.enabled_packs` and, when an enabled pack ships a skill whose surface matches the current recommendation target (`$run`, `$ship`, `$ship-end` and their kanban variants), recommend the pack skill invocation instead of the global-default skill. Step 9's pack emphasis table is the classification input; Step 10 is the routing logic that consumes it — strictly on the Codex `$run` side, strictly recommendation-only (no forced execution).
 
-**Contract reminder:** Mode resolution (`scripts/agent-mode.sh`), approval-packet schema (`specs/approved-plan.schema.json`), Step 8 degraded-path audit, and Step 9 pack emphasis tables are all frozen. Step 10 adds routing behavior inside `global/codex/run/SKILL.md` only — no new modes, lifecycle states, or transport. Sketch only; full plan lands when Step 10 is picked up.
+**Contract reminder:** Mode resolution (`scripts/agent-mode.sh`), approval-packet schema (`specs/approved-plan.schema.json`), Step 8 degraded-path audit, and Step 9 pack emphasis tables are all frozen. Step 10 touches `global/codex/run/SKILL.md` (recommendation block) and optionally adds a small doc pointer in `docs/operating-modes.md`. No new modes, lifecycle states, env vars, or transport behavior.
 
-**Scope (sketch):**
+**Scope:**
 
-1. Extend `global/codex/run/SKILL.md` § "Process" to read `.agents/project.json.enabled_packs` early, before the next-step recommendation block.
-2. When the resolved step title matches a pack skill's surface (kanban run/ship/ship-end variants are the primary matchers), recommend the pack skill invocation instead of the global `$run`/`$ship`/`$ship-end`.
-3. No-match fallback: behave exactly as today.
-4. Degraded path: missing or malformed `.agents/project.json` → silently fall back to global skills, log a single-line warning.
-5. Document the routing rule in `docs/operating-modes.md` under `## Pack emphasis` as a subsection, or as a pointer from `## Degraded-path audit` to Step 10's behavior.
+1. **Reader location.** `scripts/pack.sh` already ships `read_enabled_packs` (lines 117–130-ish) — a library function that greps `"enabled_packs": [ ... ]` out of `.agents/project.json` and emits one pack name per line. Reuse, do not reimplement. `$run` will shell out to `scripts/pack.sh list` (or a new `list-packs` subcommand if the current `list` output is not machine-parseable) to get the enabled set.
 
-**Out of scope (hard line):** Adding the same routing to `/run` on the Claude side (parity-mirror debate is Step 11+); reading `enabled_packs` from any non-`.agents/project.json` location; pack skill *registration* (pack skills already ship via the pack loader). Keep Step 10 narrowly about Codex-side recommendation routing.
+2. **Matching rule.** The pack skills that are candidates for recommendation routing today are the kanban variants: `run-kanban`, `ship-kanban`, `ship-end-kanban` (present in `business-app-kanban`, `devtool-kanban`, `game-kanban`, `poketowork-kanban`). When the mode-aware recommendation block in `global/codex/run/SKILL.md` is about to emit `$run`, `$ship`, or `$ship-end`, it first checks whether any enabled pack ships a matching `-kanban` variant. If yes, recommend the kanban variant invocation instead (e.g., `$run-kanban` under the kanban pack).
 
-**Execution Profile:** `serial` (inherited from Phase 11).
+3. **No-match fallback.** When no enabled pack matches, behave exactly as today — emit the global `$run` / `$ship` / `$ship-end` recommendation. This is the common case; it must stay silent (no "I checked enabled_packs and found nothing" noise).
+
+4. **Degraded path.** Missing or malformed `.agents/project.json` → fall back to global skills silently. If `scripts/pack.sh list` exits non-zero, treat it as "no enabled packs" and continue. Log a single-line `pack-lookup: skipped (no project.json)` comment inline with the recommendation block, not a separate error line. Matches the Step 8 pattern of "degraded path documented, not silently swallowed."
+
+5. **Ambiguity rule.** If two enabled packs both ship a `-kanban` variant (e.g., `business-app-kanban` + `devtool-kanban` both enabled simultaneously — unusual but legal), recommend the first in `enabled_packs` order and note the tie in the recommendation line. Do not prompt the user or fail.
+
+6. **Scope limiter.** Only the recommendation emission is pack-aware. The actual next-step execution remains the user's call — `$run --execute-approved` still consumes `.agents/approved-plan.json` exactly as today, regardless of pack routing. Step 10 is pure text-routing in the recommendation block.
+
+**Files to modify (full paths):**
+
+- `/Users/georgele/projects/tools/agentic-skills/global/codex/run/SKILL.md` — extend the `## Mode-aware next-step recommendation` section with a "Pack-aware routing" subsection (or inline paragraph — match existing structure). Add the 3-step resolver: (a) mode resolve via `scripts/agent-mode.sh`, (b) enabled-pack resolve via `scripts/pack.sh list`, (c) emit recommendation with pack-specific variant if matched.
+- `/Users/georgele/projects/tools/agentic-skills/docs/operating-modes.md` — optional: add a short subsection under `## Pack emphasis` called "Codex `$run` routing" pointing at the new SKILL.md behavior. Keep to 3–5 lines.
+- `/Users/georgele/projects/tools/agentic-skills/tasks/todo.md` — check off Step 10, roll Active Step Plan to Step 11 (docs/operating-modes.md authoritative expansion).
+- `/Users/georgele/projects/tools/agentic-skills/tasks/history.md` — append Step 10 entry.
+- **Do NOT modify:** `specs/approved-plan.schema.json`, `scripts/agent-mode.sh`, `scripts/approved-plan.sh`, `scripts/pack.sh` (reuse, do not extend — if `list` is not machine-parseable, add a minimal subcommand with one PR-local change only), `global/claude/run/SKILL.md` (Claude-side routing is a parity-mirror debate deferred to Step 11+), any other skill's workflow, any pack skill, or the Step 8/9 doc sections.
+
+**Key technical decisions / risks:**
+
+- **Recommendation-only, not execution routing.** `$run --execute-approved` still runs what the packet says; pack-aware routing only changes what the next-step recommendation line prints. This keeps the approval-packet contract frozen.
+- **Reuse, don't reimplement.** `scripts/pack.sh` owns `.agents/project.json` parsing. `$run` must not grep project.json directly. If `scripts/pack.sh list` output is not parseable, add a minimal `list-packs` subcommand (plain newline-separated pack names, no decoration) — one tight PR-local change, documented inline.
+- **Silent fallback is the default.** The common case is no enabled packs or no matching pack; in that case the recommendation block looks identical to today. Avoid adding noise.
+- **Degraded-path honesty.** Document the "malformed project.json → global fallback" behavior in the SKILL.md recommendation block, not just inline code. Step 8 set the standard: every cross-tool assumption has a declared degraded path.
+- **Codex-only scope.** Claude-side `/run` stays untouched. Users in hybrid mode calling `/delegate $run` already land in Codex `$run`, which will then apply pack routing — so the hybrid path picks up pack awareness for free without touching Claude.
+
+**Conventions from prior work:**
+
+- `docs/operating-modes.md` is the canonical reference doc; Steps 8 and 9 both appended sibling sections under the status line. If adding a subsection under `## Pack emphasis`, do so above the closing `---` status line.
+- `global/codex/run/SKILL.md` already has the Step 7 "Mode-aware next-step recommendation" block with the distinctive phrase `resolved agent mode via scripts/agent-mode.sh`. Pack routing nests inside that block, not parallel to it.
+- Commit split: one `feat(codex-run)` for the SKILL.md change (+ optional `scripts/pack.sh list-packs` if needed), one `docs(operating-modes)` for the subsection (if added), one `chore(tasks)` for todo/history.
+
+**Test strategy (tests-after, per Execution Profile `serial`):**
+
+1. **No-pack case:** with no `.agents/project.json` present, `$run` recommendation block emits the same text as today (the Step 7 recommendation, byte-compatible). Spot-check by reading a dry-run recommendation.
+2. **Enabled-pack match:** set `.agents/project.json` with `enabled_packs: ["business-app-kanban"]`; the `$run` recommendation for a next-step should emit `$run-kanban` (or whatever the documented variant name is) instead of `$run`.
+3. **No-match:** set `enabled_packs: ["code-quality"]` (which has no run/ship variants); recommendation block emits the global `$run` and does not log any pack-routing comment.
+4. **Malformed project.json:** mangle the JSON; recommendation block falls back to global silently, with a single-line `pack-lookup: skipped` comment.
+5. **Contract unchanged:** `git diff` shows no edits to `specs/approved-plan.schema.json`, `scripts/agent-mode.sh`, `scripts/approved-plan.sh`, Claude-side SKILL.md files, or `## Degraded-path audit` / `## Pack emphasis` tables (except the optional new subsection).
+6. **Evidence:** one row of the Step 9 Packs table should become load-bearing for this routing — cite it from the new SKILL.md subsection so the connection is explicit.
+
+**Acceptance criteria:**
+
+- [ ] `global/codex/run/SKILL.md` recommendation block reads `enabled_packs` via `scripts/pack.sh` and emits a pack-variant invocation when a match exists.
+- [ ] No-pack and no-match cases emit unchanged recommendations.
+- [ ] Malformed project.json falls back to global with a single documented degraded-path line.
+- [ ] `tasks/todo.md` Step 10 checked off; Active Step Plan rolled to Step 11.
+- [ ] No edits to Claude-side `run/SKILL.md`, scripts/agent-mode.sh, approval-packet schema, or Step 8/9 doc sections.
+
+**Out of scope (do not drift):**
+
+- Claude-side `/run` pack-aware routing — Step 11+ debate.
+- Pack-aware routing for skills other than `$run`/`$ship`/`$ship-end` (e.g., `$plan-phase-kanban` doesn't exist today; don't invent it).
+- Forcing the user onto a pack skill — routing is recommendation text only.
+- Reading enabled packs from any source other than `.agents/project.json` via `scripts/pack.sh`.
+- Docs expansion into the authoritative reference — Step 11.
+
+**Execution Profile:** `serial` (inherited from Phase 11). Main agent owns the SKILL.md edit, optional `scripts/pack.sh list-packs` tightening, doc subsection, and task/history updates. No subagent lanes — single-file edit + reuse of existing infra.
 
 ### Active Step Plan — Step 9: Pack emphasis split by CLI role [archived for reference]
 
