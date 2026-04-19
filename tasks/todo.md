@@ -59,7 +59,7 @@ Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env va
   - Lifecycle states: `draft` → `approved` → `consumed` | `stale` | `superseded` | `uncertain`
 - [x] **Step 4** — `$run --execute-approved` (Codex) — consumes packet, skips approval if `approved` + all freshness checks pass. Freshness: same git HEAD, unchanged `todo.md` hash, clean tree or dirty only on allowed paths, no new `_(blocks: Step N.X)_` entries, age under TTL. On failure, re-prompt with diff. Transitions `approved → consumed` or `approved → stale`.
 - [x] **Step 5** — `/handoff --target=codex` (Claude) — extend existing `/handoff` to produce the approval packet as async task brief. Covers "Codex cloud delegation coming soon" case and claude-only users who plan to execute in Codex later.
-- [ ] **Step 6** — `/delegate` (Claude) — live in-session delegation to Codex, consumes same packet format. Safe-fallback semantics:
+- [x] **Step 6** — `/delegate` (Claude) — live in-session delegation to Codex, consumes same packet format. Safe-fallback semantics:
   - Failure before Codex starts → offer inline execution or emit packet
   - Codex may have started → set packet to `uncertain`, prompt inspect/discard/continue (never blind retry)
   - `agent-team` profile → inline fallback is a downgrade user must accept
@@ -85,7 +85,47 @@ Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env va
   - Migration guide from parity-mirror model
 - [ ] **Verify:** Run through all three modes on a sample workflow; confirm each mode completes plan → execute → ship without hitting the unavailable CLI
 
-### Active Step Plan — Step 6: `/delegate` (Claude)
+### Step 6 Summary (completed 2026-04-19)
+
+- Added `scripts/approved-plan.sh mark-uncertain`: atomic `approved → uncertain` transition (`<file>.tmp` + `mv`), mirroring `mark-stale`. Rejects every non-`approved` source state (`draft`, `consumed`, `stale`, `superseded`, `uncertain`) with a clear single-line reason + non-zero exit. Usage help and dispatch case updated.
+- Shipped `global/claude/delegate/SKILL.md`. Argument-hint `"[target-skill] [--allow-dirty <glob>] [--inline-fallback]"`. Workflow: mode-resolve via `scripts/agent-mode.sh` (hybrid-only; `claude-only` and `codex-only` exit with `mode-mismatch:`) → derive `phase`/`step`/`title` from the first unchecked `- [ ]` under `### Active Step Plan` (fallback: first unchecked under the current `## Phase N`) → `approved-plan.sh draft …` with any `--allow-dirty` flags → pretty-print packet → one concise approval question → `approve` → synchronous `codex exec "<target-skill> --execute-approved"` with start-marker timestamp captured before the call.
+- Three-branch safe-fallback matrix documented explicitly — **never blind-retry cross-CLI**:
+  - **Pre-start failure** (no `codex` binary, auth failure, start marker never printed) → packet stays `approved`; prompt inline-in-Claude vs keep-for-later; `--inline-fallback` auto-selects inline; `agent-team` profile requires explicit confirmation for the inline downgrade.
+  - **Success** (exit 0 + `Approved packet consumed: …` + `tasks/approved-plan.md` shows `lifecycle: consumed`) → report success; Step 4's `consume` already flipped the lifecycle.
+  - **Ambiguous** (non-zero exit or timeout after start marker) → `mark-uncertain`, then prompt inspect / discard (`supersede`) / continue inline. Never auto-retries.
+- Contract untouched: no edits to `docs/operating-modes.md` or `specs/approved-plan.schema.json`. `uncertain` already existed in the schema enum; Step 6 is just its first writer. Codex side remains consumer-only.
+- Verified `mark-uncertain` with fixture packets: happy path flips `approved → uncertain` atomically; each non-`approved` source state (`draft`, `consumed`, `stale`, `superseded`, `uncertain`) exits non-zero with a matching reason.
+
+### Active Step Plan — Step 7: Mode-aware terminal recommendations
+
+**Goal:** Wire mode-aware terminal recommendations across the planning and execution skills so that after presenting a plan or finishing a phase, they point users at the appropriate next-step invocation based on the resolved agent mode. The mechanism (`/delegate`, `$run --execute-approved`, `/run`) already exists from Steps 4–6; Step 7 is the final discoverability layer.
+
+**Scope:**
+
+- Claude skills to touch: `global/claude/plan-interview/SKILL.md`, `global/claude/roadmap/SKILL.md`, `global/claude/plan-phase/SKILL.md`, `global/claude/run/SKILL.md`, `global/claude/ship/SKILL.md`, `global/claude/ship-end/SKILL.md`.
+- Codex equivalents where they exist: `global/codex/run/SKILL.md`, `global/codex/ship/SKILL.md`, `global/codex/ship-end/SKILL.md`, plus any plan/roadmap Codex variants.
+- Each touched skill emits a recommendation block after presenting the plan / completing its run, sourced from the resolved mode (`./scripts/agent-mode.sh`):
+  - `hybrid` → "delegate with `/delegate $run`" (or the matching target skill).
+  - `claude-only` → "run `/run`" (Claude-side).
+  - `codex-only` → "run `$run` in Codex".
+  - unset → present all three options and point at `docs/operating-modes.md` for the mode-signal rules.
+
+**Out of scope:**
+
+- New transport or lifecycle behavior — Step 6 shipped the last mechanism.
+- Degraded-path audit table — that is Step 8.
+- Pack emphasis split — Step 9.
+
+**Files to modify (paths sketched here, detailed plan when Step 7 starts):**
+
+- `/Users/georgele/projects/tools/agentic-skills/global/claude/{plan-interview,roadmap,plan-phase,run,ship,ship-end}/SKILL.md`
+- `/Users/georgele/projects/tools/agentic-skills/global/codex/{run,ship,ship-end}/SKILL.md` (as applicable)
+- `/Users/georgele/projects/tools/agentic-skills/tasks/todo.md` — check off Step 7, roll Active Step Plan to Step 8.
+- `/Users/georgele/projects/tools/agentic-skills/tasks/history.md` — append Step 7 entry.
+
+**Execution Profile:** `serial` (inherited from Phase 11). Recommendation copy is a shared surface; parallel lanes would drift.
+
+### Active Step Plan — Step 6: `/delegate` (Claude) [archived for reference]
 
 **Goal:** Ship a Claude-side `/delegate` skill that delegates the next step's execution to Codex **live, inside the current Claude session**, by producing an `approved` packet (reusing the Step 5 producer path) and then invoking Codex with `$run --execute-approved`. Unlike `/handoff --target=codex` (async, user resumes later), `/delegate` is synchronous transport: Claude remains the orchestrator, Codex executes, and Claude picks up once Codex returns. Step 6 also wires the **first writer of the `uncertain` lifecycle state** — when Codex may have started but we don't know its outcome, the packet must land in `uncertain`, not blind-retry.
 
