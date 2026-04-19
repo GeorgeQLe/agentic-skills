@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-04-19 — Phase 11 Step 8 — Degraded-path audit
+
+- Appended `## Degraded-path audit` to `docs/operating-modes.md` with a 19-row Markdown table covering every cross-tool touchpoint that ships today: `global/claude/delegate/SKILL.md` (3 rows — hybrid-only requirement, `codex` binary on PATH, ambiguous transport outcome), `global/claude/handoff/SKILL.md` (2 rows — `--target=codex` mode rejection + `jq` pretty-print dependency), `global/codex/run/SKILL.md --execute-approved` (2 rows — non-`claude-only` constraint + `jq` write path), and the 12 Step-7 planning/execution skills' unset-mode recommendation branches. Every row names one of `claude-only`/`codex-only`/`hybrid`/`any` in **Assumes** and cites a specific SKILL.md section in **Degraded path** — no empty cells.
+- Surfaced two concrete gaps under `### Gaps surfaced by Step 8`: (a) `handoff --target=codex` uses `jq` at step 5.5 for pretty-print but ships no degraded path when `jq` is absent; (b) `codex/run --execute-approved` declares `jq` as a hard dependency in § "Constraints" but documents no user-facing failure path. Both are logged for a follow-up step — Step 8 did not fix them, per plan.
+- Pack wrappers are explicitly out-of-audit in a trailing paragraph: exploration confirmed they contain no cross-CLI branching, only intra-pack syntax (`$skill` vs `/skill`) routed by the pack loader. Pack emphasis by CLI role lands in Step 9.
+- Contract untouched: no edits to `specs/approved-plan.schema.json`, `scripts/agent-mode.sh`, `scripts/approved-plan.sh`, or any `SKILL.md` workflow. Documentation-only step, per plan.
+- Verification: `grep -c "^| \`global/" docs/operating-modes.md` = 19 (≥14 required); `grep "| *|$"` returned zero empty cells; three rows spot-checked against source (`delegate` § "Mode requirement" line 17; `handoff` § "Process" step 5.1 line 40; `codex/run` § "Process" step 6c line 37).
+- Checked off Step 8 in `tasks/todo.md`, appended a Step 8 Summary, and rolled the Active Step Plan to Step 9 (pack emphasis split by CLI role — sketch).
+
 ## 2026-04-19 — Phase 11 Step 7 — Mode-aware terminal recommendations
 
 - Added a shared **Mode-aware next-step recommendation** section to the six Claude planning/execution skills (`plan-interview`, `roadmap`, `plan-phase`, `run`, `ship`, `ship-end`) and the six Codex equivalents (`plan-interview`, `roadmap`, `plan-phase`, `run`, `ship`, `ship-end`). Each block resolves the effective agent mode via `./scripts/agent-mode.sh` and emits exactly one recommendation line matching the resolved mode, with a distinctive phrase ("resolved agent mode via scripts/agent-mode.sh") that makes the block grep-auditable.
