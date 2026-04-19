@@ -490,6 +490,36 @@ cmd_mark_stale() {
   echo "ok"
 }
 
+cmd_mark_uncertain() {
+  local packet="$DEFAULT_PACKET"
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --packet) packet="$2"; shift 2 ;;
+      *) die "Unknown arg to mark-uncertain: $1" ;;
+    esac
+  done
+
+  [[ -f "$packet" ]] || die "no packet at $packet"
+  require_jq_write
+
+  local lifecycle
+  lifecycle="$(jq -r '.lifecycle' "$packet")"
+  case "$lifecycle" in
+    approved) ;;
+    draft|consumed|stale|superseded|uncertain)
+      fail "cannot mark-uncertain: lifecycle=$lifecycle (only 'approved' may transition to 'uncertain')"
+      ;;
+    *)
+      fail "cannot mark-uncertain: lifecycle=${lifecycle:-<missing>}"
+      ;;
+  esac
+
+  local tmp="$packet.tmp"
+  jq '.lifecycle = "uncertain"' "$packet" >"$tmp"
+  mv "$tmp" "$packet"
+  echo "ok"
+}
+
 usage() {
   cat >&2 <<'EOF'
 Usage: approved-plan.sh <sub> [args...] [--packet <path>]
@@ -501,6 +531,11 @@ Consumer (Codex-side):
   consume      Atomically transition approved -> consumed and
                write tasks/approved-plan.md mirror. Idempotent.
   mark-stale   Atomically transition approved -> stale.
+  mark-uncertain
+               Atomically transition approved -> uncertain. Used by
+               /delegate when Codex may have started mutating state
+               but the outcome is ambiguous. Rejects non-approved
+               source states.
 
 Producer (Claude-side):
   draft        Assemble a candidate packet from current repo state
@@ -526,6 +561,7 @@ case "$sub" in
   check) cmd_check "$@" ;;
   consume) cmd_consume "$@" ;;
   mark-stale) cmd_mark_stale "$@" ;;
+  mark-uncertain) cmd_mark_uncertain "$@" ;;
   draft) cmd_draft "$@" ;;
   approve) cmd_approve "$@" ;;
   supersede) cmd_supersede "$@" ;;
