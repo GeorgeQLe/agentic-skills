@@ -68,7 +68,7 @@ Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env va
   - `claude-only` → "run `/run`"
   - `codex-only` → "run `$run` in Codex"
   - unset → present all options
-- [ ] **Step 8** — Degraded-path audit with concrete output: populate a table in `docs/operating-modes.md`:
+- [x] **Step 8** — Degraded-path audit with concrete output: populate a table in `docs/operating-modes.md`:
 
   | Skill | Assumes | Fails how if unavailable | Degraded path |
 
@@ -104,7 +104,36 @@ Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env va
 - No-recurse invariant preserved: `global/claude/delegate/SKILL.md` and `global/claude/handoff/SKILL.md` do NOT carry the block. Grep of the distinctive phrase returns exactly the expected 12 files.
 - Contract untouched: no edits to `docs/operating-modes.md`, `specs/approved-plan.schema.json`, or `scripts/agent-mode.sh`. Pure consumer of the mode resolver.
 
-### Active Step Plan — Step 8: Degraded-path audit
+### Step 8 Summary (completed 2026-04-19)
+
+- Appended `## Degraded-path audit` to `docs/operating-modes.md` — 19 rows covering `delegate` (3), `handoff` (2), `codex/run --execute-approved` (2), and the 12 Step-7 planning/execution skills' unset-mode recommendation branches. Every row names one of `claude-only` / `codex-only` / `hybrid` / `any` in **Assumes** and cites a specific SKILL.md section in **Degraded path** — no empty cells.
+- Flagged two concrete gaps under `### Gaps surfaced by Step 8`: (a) `handoff --target=codex` uses `jq` at step 5.5 with no degraded path; (b) `codex/run --execute-approved` declares `jq` as a hard dependency but documents no user-facing failure path. Both are deferred to a follow-up step.
+- Pack wrappers: explicitly noted as out-of-audit because exploration confirmed they contain no cross-CLI branching, only intra-pack syntax routed by the pack loader. Absence documented inline so Step 9 can pick up pack emphasis cleanly.
+- Contract untouched: no edits to `specs/approved-plan.schema.json`, `scripts/agent-mode.sh`, `scripts/approved-plan.sh`, or any `SKILL.md` workflow. Step 8 was documentation-only per plan.
+- Verification: `grep -c "^| \`global/" docs/operating-modes.md` = 19 (≥14 required); `grep "| *|$"` = 0 empty cells; three rows spot-checked against source SKILL.md sections (`delegate` § "Mode requirement", `handoff` step 5.1, `codex/run` step 6c).
+
+### Active Step Plan — Step 9: Pack emphasis split by CLI role
+
+**Goal:** Document which packs skew toward Claude-orchestration work (framing, interviews, strategy, requirements, research synthesis, tradeoffs) versus Codex-execution work (implementation, reconciliation, validation, task promotion, repo mutation, shipping). Not every skill needs both CLI versions; Step 9 surfaces the intended split so pack authors and users can reason about where a given skill belongs.
+
+**Contract reminder:** Mode resolution (`scripts/agent-mode.sh`), approval packet (`specs/approved-plan.schema.json`), and the degraded-path table (Step 8 output) are all frozen. Step 9 adds guidance prose; it does not add new modes, new lifecycle states, or new transport behavior.
+
+**Scope sketch:**
+
+1. Survey existing packs under `packs/**/` and `global/claude/**` vs `global/codex/**` to identify natural CLI-role leanings.
+2. Draft a "Pack emphasis" section (location TBD — likely `docs/operating-modes.md` or a sibling doc) that lists each pack with a primary CLI role (Claude-orchestration / Codex-execution / both) and a one-line rationale.
+3. Update pack-level docs where the intended role was previously ambiguous.
+4. Do NOT delete or rename existing skills as part of Step 9. Role tagging is additive; removing parity mirrors is out of scope until Step 11+.
+
+**Out of scope:**
+
+- Pack-aware `$run` routing — Step 10.
+- Expanding `docs/operating-modes.md` into the authoritative reference — Step 11.
+- Fixing Step 8's surfaced gaps (jq dependencies on `handoff` and `codex/run`).
+
+**Execution Profile:** `serial` (inherited from Phase 11).
+
+### Active Step Plan — Step 8: Degraded-path audit [archived for reference]
 
 **Goal:** Populate the degraded-path audit table in `docs/operating-modes.md`. For every cross-tool touchpoint (`/run`, `/ship`, `/ship-end`, `$run`, `$ship`, `$ship-end`, kanban variants, pack wrappers that recommend the other CLI), produce one row with columns: Skill | Assumes | Fails how if unavailable | Degraded path. Every row must have either a filled degraded path or an explicit "requires mode X" constraint — no empty cells.
 
