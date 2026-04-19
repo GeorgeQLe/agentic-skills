@@ -83,7 +83,7 @@ Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env va
   - Approval packet schema + lifecycle diagram
   - Populated degraded-path audit table from step 8
   - Migration guide from parity-mirror model
-- [ ] **Verify:** Run through all three modes on a sample workflow; confirm each mode completes plan → execute → ship without hitting the unavailable CLI _(deferred to its own micro-step; requires real-workflow walkthrough, not a docs task)_
+- [x] **Verify:** Run through all three modes on a sample workflow; confirm each mode completes plan → execute → ship without hitting the unavailable CLI
 
 ### Step 6 Summary (completed 2026-04-19)
 
@@ -140,7 +140,20 @@ Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env va
 - Verified: `git diff` on Step 8/9/10 table bodies — zero content changes; resolver precedence in the new `## Mode-signal resolution` matches `scripts/agent-mode.sh` behavior (env > file > unset, invalid in either source → non-zero exit); every lifecycle-diagram edge maps to an `approved-plan.sh` subcommand and every subcommand appears; migration guide cites `pack.sh set-mode`, `/delegate`, `/handoff --target=codex`, `$run --execute-approved` by name without re-describing their internals.
 - Checked off Step 11 in `tasks/todo.md`. The Phase 11 final **Verify** item (three-mode sample-workflow walkthrough) rolled to its own deferred micro-step — it requires a real workflow run, not a docs task.
 
-### Active Step Plan — Phase 11 Verify: Three-mode sample-workflow walkthrough
+### Verify Summary (completed 2026-04-19)
+
+- Exercised the Phase 11 mode-resolution and approval-packet mechanisms end-to-end under each of the three modes (`claude-only`, `codex-only`, `hybrid`), plus two degraded-path spot checks. Evidence lives in `tasks/verify-phase-11.md` — real shell output for every `scripts/agent-mode.sh` and `scripts/approved-plan.sh` invocation, with cross-references to `docs/operating-modes.md` anchors.
+- **`claude-only`** and **`codex-only`** runs: resolver returns the correct mode; `.agents/` directory never created; no packet written. Recommendation copy quoted directly from `global/claude/run/SKILL.md:89` and `global/codex/run/SKILL.md:116` — each mode emits exactly one in-mode next-step line, never crosses to the unavailable CLI.
+- **`hybrid`** run: drove the full packet lifecycle `draft → approved → consumed` via `scripts/approved-plan.sh`. Captured `status` output at each transition. Verified `tasks/approved-plan.md` mirror projection excludes JSON-only fields (`allowed_dirty_paths`, `notes`) per the footer declaration, matching `docs/operating-modes.md` § "Approval packet — Safety classification".
+- **Spot check (a) — `/delegate` mode-mismatch under `claude-only`:** contract verified by quoting three independent locations in `global/claude/delegate/SKILL.md` (lines 17, 25, 70) that declare non-zero exit with `mode-mismatch:` reason and no packet mutation. Consistent with observed state (no `.agents/` dir during `claude-only` resolver test).
+- **Spot check (b) — TTL expiration `approved → stale`:** drafted packet with `--ttl 1`, approved, slept 3s, `check` returned non-zero with single-line reason `stale: TTL expired (age=3s, ttl=1s)`. `mark-stale` atomically flipped lifecycle.
+- **Sample-task commit policy:** no "fake work" commits on `master`. The walkthrough exercised the machinery directly — there was no external task for skills to mutate. Only bookkeeping commits (evidence file + task-doc updates) land on `master`.
+- **Gaps surfaced (non-blocking):** (1) `mark-stale` accepted a `consumed` source state during spot-check authoring, unlike `mark-uncertain` which explicitly rejects all non-`approved` sources — worth a follow-up to align source-state guards. (2) Back-to-back hybrid cycles require committing the `tasks/approved-plan.md` mirror between runs (otherwise the next `draft` sees a dirty tree); expected UX but not documented in `docs/operating-modes.md` § "Degraded-path audit". Neither gap blocks Phase 11 closure. Full detail in `tasks/verify-phase-11.md` § "Gaps surfaced by Verify".
+- Contract untouched: no edits to `SKILL.md` files, scripts, `specs/approved-plan.schema.json`, `docs/operating-modes.md`, `CLAUDE.md`, or pack files. Verify is empirical; findings get logged, not fixed in this step.
+
+**Phase 11 is complete.** All 11 steps + Verify shipped.
+
+### Active Step Plan — Phase 11 Verify: Three-mode sample-workflow walkthrough [archived for reference]
 
 **Goal:** Prove — with a real workflow on a real project — that each of the three operating modes (`claude-only`, `codex-only`, `hybrid`) can complete a plan → execute → ship cycle without requiring the unavailable CLI. This is the final Phase 11 acceptance item deferred from Step 11 because it requires an actual run, not a docs task. On completion, Phase 11 is fully closed.
 
