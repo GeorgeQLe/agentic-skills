@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-04-19 — Clarify Claude run/ship boundaries from session history
+
+- Parsed recent Claude history/transcripts for `/run`, `/ship`, commits, pushes, and plan-mode entries.
+- Found `/run` push behavior only in older sessions (2026-03-26, 2026-03-31, 2026-04-02); since 2026-04-10, `/run` entered plan mode but did not push. The remaining risk was an instruction conflict between `/run` and the default shipping contract.
+- Updated Claude `/run` to be explicitly execution-only: no `/commit-and-push-by-feature`, no `git commit`, no `git push`; successful runs hand off to `/ship`.
+- Updated Claude `/ship` so no explicit deploy contract means deploy skipped, and so writing/finding a next-step plan is not complete until EnterPlanMode succeeds.
+
 ## 2026-04-19 — Phase 11 Step 1 — thin `docs/operating-modes.md`
 
 - Added `docs/operating-modes.md` naming the three-mode (`claude-only`, `codex-only`, `hybrid`) operating model with a per-mode paragraph, a forward-reference to the mode signal and approval packet, and an explicit "expansions coming in later steps" framing.
