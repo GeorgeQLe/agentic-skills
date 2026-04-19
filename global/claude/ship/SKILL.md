@@ -48,19 +48,15 @@ d) Ship the changes using the /commit-and-push-by-feature workflow:
    - `commit-and-push-by-feature` means commit and push when the workflow succeeds.
 
 ### 3. Deploy (skip if `--no-deploy`)
-After shipping, deploy the project using the project's own deployment mechanism.
+After shipping, deploy only when the project has an explicit manual deploy contract.
 
-a) **Find the deploy method.** Check these locations in order:
-   - `spec.md` — look for a deployment section
-   - `CLAUDE.md` — look for deploy commands or instructions
-   - `tasks/roadmap.md` — look for deploy instructions
-   - `tasks/todo.md` — look for deploy instructions
-   - `Makefile` / `Justfile` — look for deploy targets (e.g., `make deploy`, `just deploy`)
-   - `package.json` — look for deploy scripts (e.g., `npm run deploy`)
-   - `deploy/`, `infra/`, `scripts/` — look for deploy shell scripts
-   - `docker-compose*.yml` — container-based deploys
+a) **Find the deploy contract.**
+   - First check for `deploy.md` or `tasks/deploy.md`.
+   - If neither file exists, skip deploy and report `Deploy skipped: no explicit manual deploy contract (deploy.md or tasks/deploy.md)`.
+   - If a deploy contract exists, read it first and use it to determine the deploy method.
+   - Supplement the contract by checking: `spec.md`, `CLAUDE.md`, `tasks/roadmap.md`, `tasks/todo.md`, `Makefile` / `Justfile`, `package.json`, `deploy/`, `infra/`, `scripts/`, and `docker-compose*.yml`.
    - **Do NOT look in `.github/workflows/`** — this project does not use GitHub Actions.
-   - If no deploy method is found, **ask the user** how deployment works for this project. Do not guess or skip.
+   - If a deploy contract exists but no deploy method is found, **ask the user** how deployment works for this project. Do not guess.
 
 b) **Run the deploy** using the discovered mechanism.
    - Do not run `aws sso login` preemptively from stale context, old logs, or assumptions. If the deploy method uses an AWS profile and auth status is uncertain, first run `aws sts get-caller-identity --profile <profile>` using the profile from the deploy contract or deploy command.
@@ -107,21 +103,20 @@ d) Write a **self-contained** implementation plan for the next step into `tasks/
    - Acceptance criteria: how to verify the step is done
 e) Ship `tasks/todo.md`, `tasks/roadmap.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, `tasks/recurring-todo.md` (when they exist), and `tasks/phases/` (if created) via `/commit-and-push-by-feature`, landing them on `main` or `master`.
 
-### 5. Output a brief summary (2-3 lines max to save context)
+### 5. Enter plan mode (skip if `--no-plan`)
+**Before entering plan mode**, read `.claude/settings.local.json` and ensure `"showClearContextOnPlanAccept": true` is set. If the file doesn't exist, create it with `{ "showClearContextOnPlanAccept": true }`. If it exists but lacks the key, add it (preserve existing settings).
+
+**YOU MUST call the EnterPlanMode tool.** This is not optional. This gives the user the option to "clear context and implement" — which starts a fresh context that reads `tasks/todo.md` and implements the plan. A next-step plan being written or already present is not a completed `/ship` unless `--no-plan` is set or this tool call succeeds.
+
+There is no normal final-answer checkpoint between writing/finding the next plan and entering plan mode. If the prior tool call was interrupted after the plan was written, resume by calling EnterPlanMode rather than summarizing and stopping.
+
+### 6. Present the ship summary and plan (skip if `--no-plan`)
+After entering plan mode, present a brief ship summary (2-3 lines max) and **present the execution plan** to the user. Summarize the plan that was written to `tasks/todo.md` in step 4d:
 - What was shipped (if anything)
-- Deploy status (if deployed)
+- Deploy status (if deployed or skipped)
 - Test status — **explicitly state whether any failing tests are expected (red phase: tests written before implementation) or unexpected (regressions/bugs that need fixing)**
 - Manual tasks — pending count from `tasks/manual-todo.md` (if it exists), note any that block upcoming steps
 - Advisory tasks — pending record/recurring counts from `tasks/record-todo.md` and `tasks/recurring-todo.md` if they exist
-- What the next step is (1 sentence) — or "session wrapped up" if `--no-plan`
-
-### 6. Enter plan mode (skip if `--no-plan`)
-**Before entering plan mode**, read `.claude/settings.local.json` and ensure `"showClearContextOnPlanAccept": true` is set. If the file doesn't exist, create it with `{ "showClearContextOnPlanAccept": true }`. If it exists but lacks the key, add it (preserve existing settings).
-
-**YOU MUST call the EnterPlanMode tool.** This is not optional. This gives the user the option to "clear context and implement" — which starts a fresh context that reads `tasks/todo.md` and implements the plan.
-
-### 7. Present the plan (skip if `--no-plan`)
-After entering plan mode, **present the execution plan** to the user. Summarize the plan that was written to `tasks/todo.md` in step 4d:
 - What needs to be built/changed
 - Which files will be created or modified (full paths)
 - The approach (e.g., test strategy, key technical decisions)
@@ -136,7 +131,8 @@ This gives the user something concrete to review before selecting "clear context
 - Do NOT create `tasks/todo.md` from scratch — if it doesn't exist and there's no roadmap, suggest discovery skills instead.
 - Do NOT re-read files you've already read this session. Use what's in context.
 - Do NOT explore the codebase extensively for planning. Keep context footprint minimal.
-- If the tree is clean and the next step plan already exists in `tasks/todo.md`, skip straight to step 6.
+- If the tree is clean and the next step plan already exists in `tasks/todo.md`, skip straight to step 5.
+- Unless `--no-plan` is set or a documented blocker stops planning, do not end the turn after writing, finding, or shipping the next-step plan; call EnterPlanMode first.
 - Do not amend or rewrite history.
 - Do not commit secrets.
 - Do not push shipping commits to an existing feature branch. Use `/commit-and-push-by-feature` to move the work onto `main` or `master` and push it there, or stop and report a blocker if that cannot be done safely.

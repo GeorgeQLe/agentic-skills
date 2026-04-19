@@ -12,7 +12,7 @@ Identify the next incomplete unit of work from the phased plan, build an executi
 
 ## Protocol
 
-1. **Migration check:** If `tasks/roadmap.md` does not exist but `tasks/todo.md` contains multiple `## Phase` headers, migrate: copy `tasks/todo.md` → `tasks/roadmap.md`, then trim `tasks/todo.md` to just the current phase (first phase with unchecked steps). Commit with `chore: migrate to roadmap.md + todo.md split`.
+1. **Migration check:** If `tasks/roadmap.md` does not exist but `tasks/todo.md` contains multiple `## Phase` headers, migrate: copy `tasks/todo.md` -> `tasks/roadmap.md`, then trim `tasks/todo.md` to just the current phase (first phase with unchecked steps). Stop after the migration and tell the user to run `/ship` to package and push the task-doc split. Do **not** commit or push from `/run`.
 2. **Read `tasks/todo.md`** — this contains the current phase's steps. Reference `tasks/roadmap.md` only if cross-phase context is needed.
 3. **Read CLAUDE.md** for project conventions.
 3b. If `tasks/record-todo.md` or `tasks/recurring-todo.md` exists, count unchecked advisory items for status only. Do not select them as next work.
@@ -90,6 +90,7 @@ The main agent owns integration, conflict resolution, task doc updates, history 
 - Do NOT plan ahead or analyze future phases/steps.
 - Do NOT refactor unrelated code.
 - Do NOT update CLAUDE.md.
+- Do NOT commit or push. `/run` is the Claude execution step; `/ship` owns packaging, task-history updates, commits, pushes, deploys, and next-step planning.
 - Do NOT execute items from `tasks/manual-todo.md` — those require human action.
 - Do NOT execute items from `tasks/record-todo.md` or `tasks/recurring-todo.md` unless the item has first been promoted into `tasks/todo.md`.
 
@@ -112,11 +113,11 @@ The main agent owns integration, conflict resolution, task doc updates, history 
 - Follow the `### Execution Profile` annotated on each phase. If subagents are unavailable in the active environment, execute serially and report the downgrade.
 - Do not let subagents update `tasks/todo.md`, `tasks/roadmap.md`, `tasks/history.md`, shipping commits, or deploy steps. Those remain main-agent responsibilities.
 - Do not run parallel write lanes unless their `Owns` paths are disjoint. When in doubt, downgrade to `research-only` or `serial`.
-- Do not push shipping commits to an existing feature branch. Use `/commit-and-push-by-feature` to move the work onto `main` or `master` and push it there, or stop and report a blocker if that cannot be done safely.
+- Do not invoke `/commit-and-push-by-feature`, `git commit`, or `git push`. A dirty tracked tree after successful `/run` is expected and is the handoff to `/ship`.
 - Each execution must be self-contained — read the plan fresh, don't rely on prior context.
 
-## Default Shipping Contract
+## Execution Handoff Contract
 
-- If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
-- Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
-- This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.
+- `/run` deliberately leaves completed tracked changes uncommitted so `/ship` can validate, update `tasks/history.md`, commit, push, deploy, plan the next step, and enter plan mode in one coherent shipping pass.
+- If the user explicitly asks `/run` to commit or push, stop and redirect them to `/ship` or `/commit-and-push-by-feature`; do not reinterpret `/run` as a shipping command.
+- Report the exact next command as `/ship` unless a blocker prevents shipping.
