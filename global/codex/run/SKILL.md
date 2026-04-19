@@ -108,6 +108,17 @@ Identify the next incomplete unit of work from the phased plan, build an executi
 - Advisory tasks — pending record/recurring counts from `tasks/record-todo.md` and `tasks/recurring-todo.md` if they exist
 - What is next (just its name)
 
+## Mode-aware next-step recommendation
+
+Before handing back to the user, resolve the effective agent mode via `./scripts/agent-mode.sh` and emit exactly one recommendation line matching the resolved agent mode via scripts/agent-mode.sh:
+
+- `hybrid` → **Next:** return to Claude for the next orchestration step — Claude orchestrates in hybrid; do not delegate further from Codex.
+- `codex-only` → **Next:** run `$run` for the next step — stay in Codex.
+- `claude-only` → **Next:** switch to Claude and run `/run` for the next step — Codex is not the executor in this mode.
+- unset → present all three options and point the user at `docs/operating-modes.md` for mode-signal resolution rules.
+
+Keep it to one line beyond the normal report; do not restate mode-signal precedence in skill copy.
+
 ## Constraints
 
 - One step at a time by default, or one phase with `--phase`. Then stop and let the user decide what is next.

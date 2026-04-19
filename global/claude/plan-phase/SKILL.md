@@ -309,6 +309,17 @@ Recurring tasks MUST NOT appear in `tasks/todo.md` unless the current run is exp
      - Escalation conditions: [when it becomes executable or blocking work]
    ```
 
+## Mode-aware next-step recommendation
+
+Before handing back to the user, resolve the effective agent mode via `./scripts/agent-mode.sh` and emit exactly one recommendation line matching the resolved agent mode via scripts/agent-mode.sh:
+
+- `hybrid` → **Next:** delegate with `/delegate $run` — Claude orchestrates, Codex executes.
+- `claude-only` → **Next:** run `/run` — Codex is unavailable; stay in Claude.
+- `codex-only` → **Next:** run `$run` in Codex — Claude is not the executor in this mode.
+- unset → present all three options and point the user at `docs/operating-modes.md` for mode-signal resolution rules.
+
+Keep it to one line beyond the normal report; do not restate mode-signal precedence in skill copy.
+
 ## Constraints
 
 - **One phase per invocation.** Do not decompose multiple phases ahead of time.

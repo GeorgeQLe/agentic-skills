@@ -81,6 +81,17 @@ The main agent owns integration, conflict resolution, task doc updates, history 
 - Advisory tasks — pending record/recurring counts from `tasks/record-todo.md` and `tasks/recurring-todo.md` if they exist
 - What's next (just its name — /ship will handle planning)
 
+## Mode-aware next-step recommendation
+
+Before handing back to the user, resolve the effective agent mode via `./scripts/agent-mode.sh` and emit exactly one recommendation line matching the resolved agent mode via scripts/agent-mode.sh:
+
+- `hybrid` → **Next:** delegate with `/delegate $ship` — Claude orchestrates, Codex executes.
+- `claude-only` → **Next:** run `/ship` — Codex is unavailable; stay in Claude.
+- `codex-only` → **Next:** run `$ship` in Codex — Claude is not the executor in this mode.
+- unset → present all three options and point the user at `docs/operating-modes.md` for mode-signal resolution rules.
+
+Keep it to one line beyond the normal report; do not restate mode-signal precedence in skill copy.
+
 ## What NOT to do
 
 - Do NOT write code before entering plan mode and getting user approval.

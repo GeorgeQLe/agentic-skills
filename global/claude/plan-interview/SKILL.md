@@ -47,6 +47,17 @@ Two files written:
 
 After writing the files, tell the user the next step: run `/roadmap` to sequence specs into phases and seed Phase 1 implementation. Do not invoke `/roadmap` automatically — the user may want to run multiple `/plan-interview` sessions first.
 
+## Mode-aware next-step recommendation
+
+Before handing back to the user, resolve the effective agent mode via `./scripts/agent-mode.sh` and emit exactly one recommendation line matching the resolved agent mode via scripts/agent-mode.sh:
+
+- `hybrid` → **Next:** run `/roadmap` — planning stays with the orchestrator (Claude) even in hybrid.
+- `claude-only` → **Next:** run `/roadmap` — Codex is unavailable; stay in Claude.
+- `codex-only` → **Next:** run `$roadmap` in Codex — Claude is not the planner in this mode.
+- unset → present all three options and point the user at `docs/operating-modes.md` for mode-signal resolution rules.
+
+Keep it to one line beyond the normal report; do not restate mode-signal precedence in skill copy.
+
 ## Constraints
 
 - Use AskUserQuestion for all interview turns — do not assume answers.

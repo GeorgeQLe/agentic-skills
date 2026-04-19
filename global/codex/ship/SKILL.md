@@ -69,6 +69,17 @@ Ship already-finished work, commit it, optionally deploy it, and plan the next s
    - Advisory tasks — pending record/recurring counts from `tasks/record-todo.md` and `tasks/recurring-todo.md` if they exist
    - What the next step is
 
+## Mode-aware next-step recommendation
+
+Before handing back to the user, resolve the effective agent mode via `./scripts/agent-mode.sh` and emit exactly one recommendation line matching the resolved agent mode via scripts/agent-mode.sh:
+
+- `hybrid` → **Next:** return to Claude for the next orchestration step — Claude orchestrates in hybrid; do not delegate further from Codex.
+- `codex-only` → **Next:** run `$run` — stay in Codex.
+- `claude-only` → **Next:** switch to Claude and run `/run` — Codex is not the executor in this mode.
+- unset → present all three options and point the user at `docs/operating-modes.md` for mode-signal resolution rules.
+
+Keep it to one line beyond the normal report; do not restate mode-signal precedence in skill copy.
+
 ## Constraints
 
 - **Fix unrelated issues:** If any step surfaces errors, warnings, or lint issues — even ones unrelated to the current work — investigate and fix them before continuing. Commit these fixes separately with a descriptive message (e.g., `fix: resolve unused import warning in auth.ts`).

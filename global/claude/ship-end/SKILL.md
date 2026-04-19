@@ -62,6 +62,17 @@ Wrap up the current session: mark progress, commit, and push.
 - **Working tree**: clean
 ```
 
+## Mode-aware next-step recommendation
+
+Before closing out the session, resolve the effective agent mode via `./scripts/agent-mode.sh` and emit exactly one recommendation line matching the resolved agent mode via scripts/agent-mode.sh:
+
+- `hybrid` → **Next session:** delegate with `/delegate $run` — Claude orchestrates, Codex executes.
+- `claude-only` → **Next session:** run `/run` — Codex is unavailable; stay in Claude.
+- `codex-only` → **Next session:** run `$run` in Codex — Claude is not the executor in this mode.
+- unset → present all three options and point the user at `docs/operating-modes.md` for mode-signal resolution rules.
+
+Keep it to one line beyond the normal session summary; do not restate mode-signal precedence in skill copy.
+
 ## Constraints
 
 - **Fix unrelated issues:** If any step surfaces errors, warnings, or lint issues — even ones unrelated to the current work — investigate and fix them before continuing. Commit these fixes separately with a descriptive message.

@@ -52,6 +52,17 @@ Use this skill when the user wants the current session wrapped up cleanly.
    - Commit list
    - Final working-tree state
 
+## Mode-aware next-step recommendation
+
+Before closing out the session, resolve the effective agent mode via `./scripts/agent-mode.sh` and emit exactly one recommendation line matching the resolved agent mode via scripts/agent-mode.sh:
+
+- `hybrid` → **Next session:** return to Claude for the next orchestration step — Claude orchestrates in hybrid; do not delegate further from Codex.
+- `codex-only` → **Next session:** run `$run` — stay in Codex.
+- `claude-only` → **Next session:** switch to Claude and run `/run` — Codex is not the executor in this mode.
+- unset → present all three options and point the user at `docs/operating-modes.md` for mode-signal resolution rules.
+
+Keep it to one line beyond the normal report; do not restate mode-signal precedence in skill copy.
+
 ## Constraints
 
 - **Fix unrelated issues:** If any step surfaces errors, warnings, or lint issues — even ones unrelated to the current work — investigate and fix them before continuing. Commit these fixes separately with a descriptive message (e.g., `fix: resolve unused import warning in auth.ts`).
