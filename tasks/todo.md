@@ -87,9 +87,83 @@ Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env va
 
 ### Active Step Plan — Step 5: `/handoff --target=codex` (Claude)
 
-**Sketch only** — a detailed plan lands when Step 5 starts. Step 5 extends Claude's existing `/handoff` skill to emit an approval packet conforming to the Step 3 contract (`specs/approved-plan.schema.json`), so a Claude-side planner can stage work that executes later in Codex. Packet lifecycle starts at `draft`; the human approval action transitions `draft → approved`. Packet shape and freshness-check semantics are frozen by the contract — Step 5 is the first producer, and must not redefine any schema/lifecycle surface.
+**Goal:** Extend Claude's existing `/handoff` skill with a `--target=codex` mode that, in addition to writing the `tasks/handoff.md` context document, **produces the first `draft → approved` approval packet** — the mirror image of Step 4's consumer. This gives claude-only and hybrid users a way to stage work inside Claude and then execute it later (or in another session/CLI) via `$run --execute-approved`. The packet produced here conforms to the Step 3 contract exactly; the schema and lifecycle FSM stay frozen.
 
-Out of scope for Step 5: live `/delegate` (Step 6) and `uncertain` transitions. Do not introduce them here.
+**Contract reminder:** Schema, lifecycle, `todo_hash` normalization, and `.md`/JSON safety classification live in `docs/operating-modes.md` § "Approval / Delegation Packet". JSON Schema at `specs/approved-plan.schema.json`. Step 4 defined `consume` and `mark-stale`; Step 5 adds the producer side. **Do not redefine any schema or FSM surface.** If a real gap surfaces, amend the contract in a separate commit first.
+
+**Scope:**
+
+1. **New helper subcommands on `scripts/approved-plan.sh`** (extend, don't fork):
+   - `draft` — assembles a candidate packet from current repo state and writes it to `.agents/approved-plan.json` with `lifecycle=draft`. Inputs are flags: `--phase "Phase N"`, `--step "Step N.X"`, `--title "<string>"`, optional `--approved-by`, optional `--ttl <seconds>` (default 3600), optional repeatable `--allow-dirty <glob>`, optional repeatable `--note <text>` (joined with newlines). Auto-fills `git_head` (`git rev-parse HEAD`), `todo_hash` (BOM-strip + CRLF→LF + sha256 on `tasks/todo.md`), `approved_at=<now UTC Z>`, and `blocking_manual_tasks` by scanning `tasks/manual-todo.md` for unchecked `_(blocks: Step N.X)_` lines and snapshotting the content of each. Refuses to overwrite an existing `approved` packet (that would clobber live approval state) — caller must explicitly call the new `supersede` subcommand first.
+   - `approve` — atomic `draft → approved` transition (temp file + `mv`), same pattern as `consume`/`mark-stale`. Only valid from `draft`. Refreshes `approved_at` to "now" at the moment of approval so the TTL clock starts at approval, not drafting. Also re-runs the safety check that the current `git_head`/`todo_hash` still match what the draft captured — if they drifted between draft and approve, the transition fails loudly and the user must re-draft.
+   - `supersede` — atomic `* → superseded` for any non-terminal prior packet, so a new draft can replace an older approved packet without violating the no-`consumed → approved` rule.
+   - `status` — read-only: prints the current packet's `lifecycle` + one-line summary, exits 0. Useful as a preflight for `/handoff`.
+   - All new writes go through `jq` and the same `<file>.tmp` + `mv` atomic pattern used in Step 4. Reads may still fall back to `sed`.
+
+2. **Edit `global/claude/handoff/SKILL.md`** to add the `--target=codex` branch:
+   - New `argument-hint` entry: `"[focus area] [--target=codex]"` (keep existing focus-area arg optional).
+   - After step 4 (focus-area check) and before step 5 (write handoff), if `$ARGUMENTS` contains `--target=codex`:
+     1. Resolve agent mode via `scripts/agent-mode.sh`. If mode is `codex-only`, relay a mode-mismatch error (Claude is not the planner in that mode) and stop.
+     2. Require a clean tracked tree for packet production, OR require the user to pass `--allow-dirty <glob>` (repeatable) entries that cover any dirty paths. Mirror the Step 4 dirty-path semantics exactly — globs, not regex.
+     3. Derive `phase` / `step` / `title` from the current `tasks/todo.md` active step (first unchecked `- [ ]` under the Active Step Plan section, or the first unchecked `- [ ]` under the current phase header if no Active Step Plan block exists).
+     4. Call `scripts/approved-plan.sh draft …` with the derived values plus any `--allow-dirty` flags the user supplied.
+     5. Present the drafted packet (pretty-printed JSON via `jq`) to the user and ask: "Approve this packet for Codex execution?" — exactly one concise approval question. On yes, call `scripts/approved-plan.sh approve`; on no, leave the packet at `draft` and note that it can be approved later with `./scripts/approved-plan.sh approve` or discarded with `./scripts/approved-plan.sh supersede`.
+     6. Write the `tasks/handoff.md` document as usual, but add a "Cross-CLI handoff" section pointing at `.agents/approved-plan.json` (JSON, gitignored) and `tasks/approved-plan.md` (mirror, committed), and spelling out the Codex resume command: `$run --execute-approved`.
+   - Keep the default (no `--target`) flow untouched so existing `/handoff` invocations don't change behavior.
+
+3. **Update `tasks/approved-plan.md` and `docs/operating-modes.md` pointers:** no contract edits. Step 5 only needs to ensure the mirror/doc correctly name `/handoff --target=codex` as the first `draft → approved` producer (the Step 3 doc already forward-references this — verify it reads correctly and leave it if so).
+
+**Files to modify / create (full paths):**
+
+- **Modify:** `/Users/georgele/projects/tools/agentic-skills/scripts/approved-plan.sh` — add `draft`, `approve`, `supersede`, `status` subcommands; reuse existing `die`, `fail`, `require_jq_write`, `todo_hash_of`, `iso_to_epoch`, atomic-write pattern. Do not duplicate freshness-check logic — the producer side doesn't need the six checks; it just assembles a fresh snapshot.
+- **Modify:** `/Users/georgele/projects/tools/agentic-skills/global/claude/handoff/SKILL.md` — add the `--target=codex` branch and update `argument-hint`. Keep the numbered-step structure; insert the new branch as a step after the current step 4 (focus-area check).
+- **Modify:** `/Users/georgele/projects/tools/agentic-skills/tasks/todo.md` — check off Step 5, roll Active Step Plan to Step 6.
+- **Modify:** `/Users/georgele/projects/tools/agentic-skills/tasks/history.md` — append Step 5 session entry.
+- **Do NOT modify:** `docs/operating-modes.md` or `specs/approved-plan.schema.json` (contract frozen). `tasks/approved-plan.md` is written by the helper on `consume` only — do not hand-edit.
+
+**Key technical decisions / risks:**
+
+- **Producer-only, no consumer drift.** The new subcommands are `draft` / `approve` / `supersede` / `status`; they never run the six freshness checks. Those belong exclusively to the consumer (`check`). Mixing producer-side validation into consumer checks is how Step 3's "consumer cannot redefine" rule gets eroded. The producer snapshots state at draft time; the consumer verifies freshness at execute time. Two different jobs.
+- **Approval refreshes `approved_at`.** Drafting may happen minutes before approval (user reviews the packet). If we carry the draft timestamp forward, the effective TTL window is already partly burned. Reset at approval time.
+- **Re-verify `git_head` / `todo_hash` at approve time.** If the user edits `tasks/todo.md` between draft and approve, the resulting packet would be born stale. The approve transition must fail loudly in that case — the user is expected to re-draft.
+- **No overwrite of live `approved` packets.** `draft` refuses to clobber an existing `approved` packet. The explicit `supersede` path exists so replacement is intentional.
+- **Manual-todo snapshot is content, not path.** Per the contract: snapshot the full text of each `_(blocks: Step N.X)_` line, not just file refs. A path-based snapshot silently drifts when the file is edited post-approval.
+- **Mode-mismatch is a user error.** `codex-only` projects don't plan in Claude. Helper exits non-zero with a `mode-mismatch:` reason.
+- **Bash 3.2 portability** still applies. No associative arrays, no `${var,,}`, no `readarray`. Repeatable flags (`--allow-dirty`, `--note`) land in plain indexed arrays.
+
+**Conventions from prior work:**
+
+- Shell style: match `scripts/agent-mode.sh` / the existing `scripts/approved-plan.sh` — `#!/usr/bin/env bash`, `set -euo pipefail`, `die`, `fail`, `$PROJECT_ROOT`, `case` validation, atomic `<file>.tmp` + `mv`.
+- SKILL.md edits preserve the numbered-step structure; add the new branch inline, not as a sibling section.
+- `.gitignore` already covers `.agents/approved-plan.json`. No gitignore change needed.
+
+**Test strategy (tests-after, per Execution Profile `serial`):**
+
+1. `draft` happy path: run on a clean tree with `--phase "Phase 11" --step "Step 5" --title "…" --ttl 3600`, assert the resulting `.agents/approved-plan.json` has `lifecycle=draft`, correct `git_head`, correct `todo_hash`, `approved_at` within the last few seconds, and `blocking_manual_tasks=[]` when no manual-todo file exists.
+2. `draft` with dirty tree and matching `--allow-dirty` glob → succeeds; without matching glob → fails with a clear reason. Must mirror the Step 4 `check` semantics.
+3. `draft` refuses to overwrite an existing `approved` packet; `supersede` first, then `draft`, succeeds.
+4. `approve` happy path: after `draft`, run `approve`, assert lifecycle=`approved` and `approved_at` got refreshed.
+5. `approve` drift detection: after `draft`, modify `tasks/todo.md` (append whitespace), then `approve` must fail because the `todo_hash` drifted; user must re-draft.
+6. Full round-trip: `draft → approve → check (from Step 4)` returns `ok`; `consume` flips to `consumed`; `.md` mirror updates; packet validates against `specs/approved-plan.schema.json` at every lifecycle state.
+7. `/handoff --target=codex` in `codex-only` mode: exits non-zero with mode-mismatch; does not touch `.agents/approved-plan.json`.
+8. SKILL.md documentation: grep confirms `--target=codex` appears in the `handoff` SKILL.md workflow + `argument-hint`.
+
+**Acceptance criteria:**
+
+- [ ] `scripts/approved-plan.sh {draft,approve,supersede,status}` exist, are executable, and pass tests 1–6 above.
+- [ ] `global/claude/handoff/SKILL.md` documents `--target=codex`, derives step identity from `tasks/todo.md`, and presents the packet for a single approval question before writing the handoff doc.
+- [ ] Full Claude-side produce → Codex-side consume loop works end-to-end on a local fixture: `/handoff --target=codex` produces an `approved` packet, `$run --execute-approved` consumes it, the `.md` mirror ends up `lifecycle: consumed`.
+- [ ] No change to `docs/operating-modes.md` § "Approval / Delegation Packet" or `specs/approved-plan.schema.json` (schema and lifecycle stay stable).
+- [ ] `tasks/todo.md` Step 5 is checked off and Active Step Plan rolls to Step 6.
+
+**Out of scope (do not drift):**
+
+- `/delegate` (Step 6) and `uncertain` transitions — those are transport-layer concerns for live in-session delegation, not async packet production.
+- Codex-side producer — Codex does not yet plan for another session; `$run --execute-approved` stays consumer-only.
+- Schema, lifecycle FSM, or freshness-check semantics. The contract is frozen.
+- Reverse delegation (Codex → Claude). Still YAGNI per the Phase 11 roadmap.
+
+**Execution Profile:** `serial` (inherited from Phase 11). Main agent owns all helper-script extensions, SKILL.md edits, and task/history updates. No subagent lanes — the lifecycle FSM is shared-contract work where parallel lanes drift.
 
 ### Step 4 Summary (completed 2026-04-19)
 
