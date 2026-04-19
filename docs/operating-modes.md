@@ -24,7 +24,16 @@ Claude orchestrates — interviews, planning, framing, tradeoff surfacing — an
 
 ## Mode Signal
 
-The intended mode-signal surface is `.agents/project.json.agent_mode` (project-scoped) plus a `SKILLS_AGENT_MODE` environment variable override. Resolution precedence will be env > project.json > unset (where "unset" means skills recommend all paths and let the user pick). This signal is **not yet wired into any skill** — adding the field, the env-var read, and the precedence logic is Step 2 of Phase 11.
+The mode-signal surface is `.agents/project.json.agent_mode` (project-scoped, optional) plus a `SKILLS_AGENT_MODE` environment variable override. Resolution precedence is env > project.json > unset, where "unset" means skills recommend all paths and let the user pick.
+
+Usage:
+
+- Field: `agent_mode` in `.agents/project.json`, values `"claude-only" | "codex-only" | "hybrid"`, absent = unset.
+- Env var: `SKILLS_AGENT_MODE=<mode>` overrides the project.json value for the current shell.
+- Writer: `scripts/pack.sh set-mode <claude-only|codex-only|hybrid|unset>` sets or clears the field. `install`, `remove`, and `refresh` preserve an existing value.
+- Resolver: `scripts/agent-mode.sh` prints the effective mode on stdout (empty when unset), exits non-zero on invalid values from either source.
+
+No skill consumes the signal yet — mode-aware recommendations land in Step 7 of Phase 11.
 
 ## Approval / Delegation Packet
 
