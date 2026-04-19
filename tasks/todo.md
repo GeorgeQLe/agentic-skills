@@ -87,22 +87,82 @@ Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env va
 
 ### Active Step Plan — Step 6: `/delegate` (Claude)
 
-**Sketch only — detailed plan lands when Step 6 starts.**
+**Goal:** Ship a Claude-side `/delegate` skill that delegates the next step's execution to Codex **live, inside the current Claude session**, by producing an `approved` packet (reusing the Step 5 producer path) and then invoking Codex with `$run --execute-approved`. Unlike `/handoff --target=codex` (async, user resumes later), `/delegate` is synchronous transport: Claude remains the orchestrator, Codex executes, and Claude picks up once Codex returns. Step 6 also wires the **first writer of the `uncertain` lifecycle state** — when Codex may have started but we don't know its outcome, the packet must land in `uncertain`, not blind-retry.
 
-**Goal:** Live in-session delegation from Claude to Codex, consuming the same approval-packet format Steps 3–5 established. The packet produced inline matches the `draft → approved` transition shipped in Step 5; the transport layer is what's new. Safe-fallback semantics around Codex start-up, in-flight failure, and the `uncertain` lifecycle state are the meat of the step.
+**Contract reminder:** Schema, lifecycle FSM, `todo_hash` normalization, safety classification, and the six freshness checks are **frozen** at `docs/operating-modes.md` § "Approval / Delegation Packet" + `specs/approved-plan.schema.json`. Step 6 is pure transport + failure-mode wiring; it consumes the Step 5 producer (`draft`/`approve`/`supersede`) and the Step 4 consumer (`$run --execute-approved`). If a real contract gap surfaces, amend in a separate commit first.
 
-**Scope (to refine):**
+**Scope:**
 
-- Claude-side `/delegate` skill that wraps a target skill invocation (typically `$run`) as a Codex sub-session from inside the current Claude session. Packet production reuses the Step 5 producer path — no new FSM surface.
-- Safe-fallback matrix:
-  - Failure before Codex starts → offer inline Claude execution or emit the packet for later `$run --execute-approved`.
-  - Codex may have started (ambiguous) → transition packet to `uncertain`, prompt user to inspect / discard / continue. Never blind-retry.
-  - `agent-team` execution profile → inline fallback is a downgrade the user must explicitly accept.
-- Mode gating: only meaningful in `hybrid`. `claude-only` has no Codex to delegate to; `codex-only` plans in Codex directly. Surface the mismatch with the same `mode-mismatch:` convention.
+1. **New skill `/delegate` at `global/claude/delegate/SKILL.md`:**
+   - `argument-hint`: `"[target-skill] [--allow-dirty <glob>] [--inline-fallback]"`. Target skill defaults to `$run`; other skills (e.g., `$ship`) are accepted but `$run` is the primary use case.
+   - Workflow steps:
+     1. Resolve agent mode via `./scripts/agent-mode.sh`. If not `hybrid`, stop with `mode-mismatch:` — `claude-only` has no Codex to delegate to, and `codex-only` plans in Codex directly.
+     2. Derive `phase` / `step` / `title` from `tasks/todo.md` using the same rules `/handoff --target=codex` uses (first unchecked `- [ ]` under `### Active Step Plan`, fallback to current phase header).
+     3. Produce the packet: `./scripts/approved-plan.sh draft …` then `./scripts/approved-plan.sh approve` — same one-question approval prompt as `/handoff --target=codex`. On rejection, leave at `draft` and stop.
+     4. **Invoke Codex synchronously** from the Claude session: shell out to `codex exec` (or the equivalent Codex CLI entry) with the target skill invocation (e.g., `codex exec "$run --execute-approved"`). Capture stdout/stderr + exit code + a start-marker timestamp so the fallback matrix can reason about what happened.
+     5. Safe-fallback matrix — select from the three states **before auto-retrying anything**:
+        - **Failure before Codex starts** (exec command not found, auth failure, start marker never printed) → packet is still `approved`. Offer the user two options: (a) run inline in Claude (same session, no CLI boundary), or (b) keep the packet at `approved` for manual `$run --execute-approved` later. Never blind-retry the Codex invocation.
+        - **Codex succeeded** (exit 0, `$run --execute-approved` logged `Approved packet consumed: …`) → the Step 4 consumer already flipped `approved → consumed`. Claude validates by reading `tasks/approved-plan.md`: if `lifecycle: consumed`, report success and hand back to the user. If not, treat as the ambiguous case below.
+        - **Codex may have started** (non-zero exit, timeout, crash mid-execution) → call `./scripts/approved-plan.sh supersede` is WRONG — we need `uncertain`, not `superseded`. Add a new helper subcommand `mark-uncertain` (see §2). Then prompt: *inspect repo state / discard packet via `supersede` / continue inline in Claude*. Never blind-retry.
+     6. Inline-fallback semantics: if `--inline-fallback` is passed, the "failure before Codex starts" branch auto-selects option (a) without prompting. Under an `agent-team` execution profile, inline fallback is a **downgrade** the user must explicitly opt into each time — the skill warns and requires interactive confirmation unless `--inline-fallback` is already on the command line.
 
-**Contract:** schema, lifecycle FSM, and freshness-check semantics stay frozen. `uncertain` is already enumerated in the lifecycle — Step 6 wires the first writer.
+2. **Extend `scripts/approved-plan.sh` with `mark-uncertain`:**
+   - Atomic `approved → uncertain` transition, mirroring `mark-stale` (`<file>.tmp` + `mv`). Only valid from `approved` (not `draft` — an unapproved packet cannot go uncertain; it just stays draft).
+   - Rationale: `uncertain` is already in the schema enum but Step 4 and Step 5 didn't need a writer. Step 6 is the first legitimate writer.
 
-**Out of scope:** reverse delegation (Codex → Claude) remains YAGNI per the Phase 11 roadmap.
+3. **Do NOT add new freshness checks, schema fields, or lifecycle states.** `uncertain` already exists. The FSM already covers it. Step 6 only wires the transition.
+
+**Files to modify / create (full paths):**
+
+- **Create:** `/Users/georgele/projects/tools/agentic-skills/global/claude/delegate/SKILL.md` — the new Claude `/delegate` skill per §1.
+- **Modify:** `/Users/georgele/projects/tools/agentic-skills/scripts/approved-plan.sh` — add `mark-uncertain` subcommand, update usage help, extend the top-level dispatch case.
+- **Modify:** `/Users/georgele/projects/tools/agentic-skills/tasks/todo.md` — check off Step 6, roll Active Step Plan to Step 7.
+- **Modify:** `/Users/georgele/projects/tools/agentic-skills/tasks/history.md` — append Step 6 session entry.
+- **Do NOT modify:** `docs/operating-modes.md`, `specs/approved-plan.schema.json` (contract frozen). `tasks/approved-plan.md` is helper-written, never hand-edited.
+
+**Key technical decisions / risks:**
+
+- **Transport-layer only, no new FSM surface.** Step 6 composes Step 4 (`check` + `consume`) and Step 5 (`draft` + `approve`). The only new writer is `mark-uncertain`, and that transition is already in the schema.
+- **`uncertain` is ambiguity, not failure.** A clean Codex failure with no side effects belongs in `superseded` (user discards) or stays `approved` (user retries deliberately). `uncertain` is specifically for "we don't know whether Codex started mutating state." Reserve it for that case — overusing it makes the lifecycle noise.
+- **Never blind-retry cross-CLI.** This is the single most important invariant. If Codex may have started, re-running `$run --execute-approved` against the same packet risks double-execution. The skill must always prompt between "inspect / discard / continue inline" and never auto-retry on its own.
+- **`codex exec` availability.** The Codex CLI invocation is the transport dependency. If the user's system has no `codex` binary, the skill falls back cleanly to the "failure before Codex starts" branch rather than crashing. Document the dependency in the SKILL.md header.
+- **Hybrid-only by design.** `/delegate` is meaningless in `claude-only` (no executor) and `codex-only` (no orchestrator). Surface the mismatch with the same convention as `scripts/approved-plan.sh check` in claude-only: non-zero exit + `mode-mismatch:` reason.
+- **Bash 3.2 portability** continues to apply to `mark-uncertain`. Same style as the rest of `approved-plan.sh`.
+
+**Conventions from prior work:**
+
+- Shell style: match `scripts/approved-plan.sh` — `die`, `fail`, `require_jq_write`, atomic `<file>.tmp` + `mv`. Add `cmd_mark_uncertain` next to `cmd_mark_stale` so the pairing is obvious.
+- SKILL.md structure: follow `global/claude/handoff/SKILL.md` as the closest reference; numbered workflow steps, explicit `Process` + `Constraints` + `Default Shipping Contract` sections.
+- `.gitignore` already covers `.agents/approved-plan.json`. No gitignore change needed.
+
+**Test strategy (tests-after, per Execution Profile `serial`):**
+
+1. `mark-uncertain` happy path: craft a fixture `approved` packet, run `mark-uncertain`, assert `lifecycle=uncertain` + atomic write (temp file gone, packet intact).
+2. `mark-uncertain` rejects non-`approved` states: `draft`, `consumed`, `stale`, `superseded`, `uncertain` itself → each exits non-zero with a clear reason.
+3. Mode gating: `SKILLS_AGENT_MODE=claude-only ./global/claude/delegate/SKILL.md` (or equivalent skill invocation) exits non-zero with `mode-mismatch:`. Same for `codex-only`. Only `hybrid` proceeds.
+4. End-to-end happy path on a local fixture: stub `codex` with a shell wrapper that runs `./scripts/approved-plan.sh check && ./scripts/approved-plan.sh consume`; invoke `/delegate`, assert the packet ends at `lifecycle: consumed` and `tasks/approved-plan.md` mirror is updated.
+5. Ambiguous-failure path: stub `codex` to exit 1 after printing a partial start marker; assert the skill calls `mark-uncertain` and presents the three-option prompt (do not auto-continue).
+6. Pre-start-failure path: stub `codex` to not exist on `PATH`; assert the skill leaves the packet at `approved` and offers inline fallback without touching the lifecycle.
+7. Packet schema validation: every lifecycle transition in tests 1–6 validates against `specs/approved-plan.schema.json` via `jsonschema` in a venv.
+8. SKILL.md doc grep: confirms `/delegate`, `--allow-dirty`, `--inline-fallback`, `mark-uncertain`, and the `hybrid`-only constraint all appear in the skill.
+
+**Acceptance criteria:**
+
+- [ ] `global/claude/delegate/SKILL.md` exists, is hybrid-only gated, produces the packet via Step 5 helpers, invokes Codex via `codex exec`, and handles the three fallback branches without blind retry.
+- [ ] `scripts/approved-plan.sh mark-uncertain` exists, transitions `approved → uncertain` atomically, and rejects all non-`approved` source states.
+- [ ] End-to-end fixture: `/delegate` invoking a stubbed Codex that runs `$run --execute-approved` drives a packet through `draft → approved → consumed` without Claude restarting the session.
+- [ ] Ambiguous-failure fixture lands the packet in `uncertain` and surfaces the inspect/discard/continue prompt.
+- [ ] Schema and lifecycle FSM unchanged (`docs/operating-modes.md` and `specs/approved-plan.schema.json` untouched).
+- [ ] `tasks/todo.md` Step 6 checked off and Active Step Plan rolled to Step 7.
+
+**Out of scope (do not drift):**
+
+- Step 7 (mode-aware terminal recommendations). `/delegate` is the mechanism; the skill-level recommendations that point users to it land in Step 7.
+- Reverse delegation (Codex → Claude). Still YAGNI per the Phase 11 roadmap.
+- New schema fields, new lifecycle states, or changes to the six freshness checks. Contract is frozen.
+- Codex-side producer. Still consumer-only on the Codex side.
+
+**Execution Profile:** `serial` (inherited from Phase 11). Main agent owns the new skill, helper extension, and tasks/history updates. No subagent lanes — cross-CLI transport is exactly the shared-contract surface where parallel lanes drift.
 
 ### Step 5 Summary (completed 2026-04-19)
 
