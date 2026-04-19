@@ -103,6 +103,41 @@ On any failure the consumer transitions the packet to `stale` and re-prompts wit
 
 These are deliberately excluded from the Phase 11 scope, not deferred to a later step of it.
 
+## Degraded-path audit
+
+This section enumerates every cross-tool touchpoint that ships today. One row per (skill, assumption) pair. **Assumes** names one of `claude-only` / `codex-only` / `hybrid` / `any`. **Degraded path** either cites the SKILL.md section that implements the escape hatch, or an explicit `requires mode X` constraint, or flags `⚠ gap — follow-up` when neither ships. Gaps are logged under `### Gaps surfaced by Step 8`; closing them is not in Step 8's scope.
+
+| Skill | Assumes | Fails how if unavailable | Degraded path |
+| --- | --- | --- | --- |
+| `global/claude/delegate/SKILL.md` | `hybrid` mode | Exits non-zero with `mode-mismatch:` naming resolved mode; packet untouched | § "Mode requirement" + § "Process" step 1 — `requires mode hybrid` by design |
+| `global/claude/delegate/SKILL.md` | `hybrid`; `codex` binary on PATH | Start marker never prints; enters pre-start-failure branch | § "Process" step 6 pre-start-failure branch: offer inline Claude execution or keep packet `approved`; `--inline-fallback` auto-selects inline |
+| `global/claude/delegate/SKILL.md` | `hybrid`; Codex exec completes cleanly | Non-zero exit or timeout after start marker → transport ambiguous | § "Process" step 6 ambiguous branch: `mark-uncertain` + inspect/discard/continue prompt; never blind-retries |
+| `global/claude/handoff/SKILL.md` | `--target=codex`: mode ≠ `codex-only` | Step 5.1 aborts with `mode-mismatch:` — Claude is not the planner in `codex-only` | § "Process" step 5.1 — `requires mode claude-only or hybrid` |
+| `global/claude/handoff/SKILL.md` | `--target=codex`: `jq` on PATH for pretty-print (step 5.5) | Pretty-print call fails; no documented fallback | ⚠ gap — follow-up |
+| `global/codex/run/SKILL.md` | `--execute-approved`: mode ≠ `claude-only` | `scripts/approved-plan.sh check` prints `mode-mismatch` reason; skill stops with user error | § "Process" step 6c + § "Constraints" — `requires mode codex-only or hybrid` |
+| `global/codex/run/SKILL.md` | `--execute-approved`: `jq` on PATH for consume write path | Consume write fails; no documented fallback | ⚠ gap — follow-up (dependency declared in § "Constraints"; no degraded path) |
+| `global/claude/plan-interview/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Unset mode leaves next-step recommendation ambiguous | § "Mode-aware next-step recommendation" unset branch presents all three options + `docs/operating-modes.md` pointer |
+| `global/claude/roadmap/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Unset mode leaves next-step recommendation ambiguous | § "Mode-aware next-step recommendation" unset branch presents all three options + docs pointer |
+| `global/claude/plan-phase/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Unset mode leaves `/delegate $run` vs `/run` vs `$run` ambiguous | § "Mode-aware next-step recommendation" unset branch presents all three options + docs pointer |
+| `global/claude/run/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Unset mode leaves ship-variant recommendation ambiguous | § "Mode-aware next-step recommendation" unset branch presents all three options + docs pointer |
+| `global/claude/ship/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Unset mode leaves next-step invocation ambiguous | § "Mode-aware next-step recommendation" unset branch presents all three options + docs pointer |
+| `global/claude/ship-end/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Unset mode leaves next-session resume ambiguous | § "Mode-aware next-step recommendation" unset branch presents all three options + docs pointer |
+| `global/codex/plan-interview/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Unset mode leaves return-to-Claude vs stay-in-Codex ambiguous | § "Mode-aware next-step recommendation" unset branch presents all three options + docs pointer |
+| `global/codex/roadmap/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Unset mode leaves next-step recommendation ambiguous | § "Mode-aware next-step recommendation" unset branch presents all three options + docs pointer |
+| `global/codex/plan-phase/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Unset mode leaves return-to-Claude vs `$run` ambiguous | § "Mode-aware next-step recommendation" unset branch presents all three options + docs pointer |
+| `global/codex/run/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` (recommendation block, distinct from `--execute-approved` rows above) | Unset mode leaves next-step recommendation ambiguous | § "Mode-aware next-step recommendation" unset branch presents all three options + docs pointer |
+| `global/codex/ship/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Unset mode leaves return-to-Claude vs stay-in-Codex ambiguous | § "Mode-aware next-step recommendation" unset branch presents all three options + docs pointer |
+| `global/codex/ship-end/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Unset mode leaves next-session resume ambiguous | § "Mode-aware next-step recommendation" unset branch presents all three options + docs pointer |
+
+Pack wrappers under `packs/**/SKILL.md` are intentionally absent from this audit: exploration confirmed they contain no cross-CLI branching — only intra-pack syntax references (`$skill` vs `/skill`) routed by the pack loader. Pack emphasis by CLI role lands in Step 9.
+
+### Gaps surfaced by Step 8
+
+Each gap below is logged for a follow-up step to close; Step 8 does not fix them.
+
+- `global/claude/handoff/SKILL.md` `--target=codex` — `jq` is used for pretty-printing the drafted packet at step 5.5, but the skill does not document a degraded path when `jq` is absent. Missing: either declare `jq` as a hard dependency in § "Process" or fall back to a `jq`-free pretty-printer / raw JSON dump.
+- `global/codex/run/SKILL.md` `--execute-approved` — `jq` is declared as a hard dependency for the consume write path in § "Constraints", but no degraded path is documented when it is missing. Missing: either a clean user-facing failure reason in § "Process" step 6c, or a `jq`-free consume fallback.
+
 ---
 
-Status: Phase 11 Step 1 — thin doc; expansions tracked in `tasks/todo.md`.
+Status: Phase 11 Step 1 — thin doc; expansions tracked in `tasks/todo.md`. Degraded-path audit filled in Step 8.
