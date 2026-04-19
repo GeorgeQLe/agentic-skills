@@ -484,6 +484,18 @@ cmd_mark_stale() {
   [[ -f "$packet" ]] || die "no packet at $packet"
   require_jq_write
 
+  local lifecycle
+  lifecycle="$(jq -r '.lifecycle' "$packet")"
+  case "$lifecycle" in
+    approved) ;;
+    draft|consumed|stale|superseded|uncertain)
+      fail "cannot mark-stale: lifecycle=$lifecycle (only 'approved' may transition to 'stale')"
+      ;;
+    *)
+      fail "cannot mark-stale: lifecycle=${lifecycle:-<missing>}"
+      ;;
+  esac
+
   local tmp="$packet.tmp"
   jq '.lifecycle = "stale"' "$packet" >"$tmp"
   mv "$tmp" "$packet"
