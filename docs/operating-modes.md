@@ -194,6 +194,10 @@ This section tags every global skill and every pack with a **primary CLI role** 
 | `game-kanban` | Both | Inherits `game` (orchestration) + kanban `run`/`ship`/`ship-end` variants (execution) |
 | `poketowork-kanban` | Both | Kanban orchestration skills + `run`/`ship`/`ship-end` execution variants; no base pack to inherit from |
 
+### Codex `$run` routing
+
+Codex `$run` consumes this table at runtime. The "Mode-aware next-step recommendation" block in `global/codex/run/SKILL.md` resolves enabled packs via `scripts/pack.sh list-packs` and, when an enabled pack (e.g., `business-app-kanban`) ships a matching `-kanban` variant, emits the kanban invocation in place of the global `$run` / `$ship` / `$ship-end`. Recommendation text only — the approval-packet contract and `$run --execute-approved` execution path are unchanged. Missing or malformed `.agents/project.json` falls back silently to the global default with a single-line inline comment. See `global/codex/run/SKILL.md` § "Pack-aware routing" for the full resolver.
+
 ---
 
-Status: Phase 11 Step 1 — thin doc; expansions tracked in `tasks/todo.md`. Degraded-path audit filled in Step 8. Pack emphasis table filled in Step 9.
+Status: Phase 11 Step 1 — thin doc; expansions tracked in `tasks/todo.md`. Degraded-path audit filled in Step 8. Pack emphasis table filled in Step 9. Codex `$run` pack-aware routing wired in Step 10.
