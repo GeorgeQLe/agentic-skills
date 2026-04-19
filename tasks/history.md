@@ -4,8 +4,9 @@
 
 - Parsed recent Claude history/transcripts for `/run`, `/ship`, commits, pushes, and plan-mode entries.
 - Found `/run` push behavior only in older sessions (2026-03-26, 2026-03-31, 2026-04-02); since 2026-04-10, `/run` entered plan mode but did not push. The remaining risk was an instruction conflict between `/run` and the default shipping contract.
+- Follow-up analysis found the main no-op `/ship` source: accepted `/ship` plans launch as plain "Implement the following plan" sessions. Since 2026-04-10, 219 of 236 such sessions committed and 218 pushed before the next `/ship`.
 - Updated Claude `/run` to be explicitly execution-only: no `/commit-and-push-by-feature`, no `git commit`, no `git push`; successful runs hand off to `/ship`.
-- Updated Claude `/ship` so no explicit deploy contract means deploy skipped, and so writing/finding a next-step plan is not complete until EnterPlanMode succeeds.
+- Updated Claude `/ship` so no explicit deploy contract means deploy skipped, writing/finding a next-step plan is not complete until EnterPlanMode succeeds, and the clear-context implementation plan explicitly says not to commit, push, deploy, update history, or plan the following step.
 
 ## 2026-04-19 — Phase 11 Step 1 — thin `docs/operating-modes.md`
 

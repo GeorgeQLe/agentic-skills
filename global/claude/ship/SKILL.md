@@ -101,6 +101,7 @@ d) Write a **self-contained** implementation plan for the next step into `tasks/
    - If test strategy is `tests-after`: note that tests will be written in the Green step
    - The current phase's `### Execution Profile`, including whether the next execution is serial, research-only, review-only, implementation-safe, or agent-team
    - Acceptance criteria: how to verify the step is done
+   - **Execution handoff contract:** the next clear-context implementation session must implement only this step, mark the step done in `tasks/todo.md`, and stop without committing, pushing, deploying, updating `tasks/history.md`, or planning the following step. The follow-up `/ship` owns those actions.
 e) Ship `tasks/todo.md`, `tasks/roadmap.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, `tasks/recurring-todo.md` (when they exist), and `tasks/phases/` (if created) via `/commit-and-push-by-feature`, landing them on `main` or `master`.
 
 ### 5. Enter plan mode (skip if `--no-plan`)
@@ -120,6 +121,7 @@ After entering plan mode, present a brief ship summary (2-3 lines max) and **pre
 - What needs to be built/changed
 - Which files will be created or modified (full paths)
 - The approach (e.g., test strategy, key technical decisions)
+- **Execution handoff contract:** implement only this step, mark it done in `tasks/todo.md`, and stop without committing, pushing, deploying, updating `tasks/history.md`, or planning the next step. The next command after implementation is `/ship`.
 - Any decisions or trade-offs the user should weigh in on
 
 This gives the user something concrete to review before selecting "clear context and implement".
@@ -133,6 +135,7 @@ This gives the user something concrete to review before selecting "clear context
 - Do NOT explore the codebase extensively for planning. Keep context footprint minimal.
 - If the tree is clean and the next step plan already exists in `tasks/todo.md`, skip straight to step 5.
 - Unless `--no-plan` is set or a documented blocker stops planning, do not end the turn after writing, finding, or shipping the next-step plan; call EnterPlanMode first.
+- The plan shown to the clear-context implementation session must explicitly say not to commit, push, deploy, update `tasks/history.md`, or plan the following step. Without that sentence, Claude's default shipping contract will cause the accepted-plan session to commit and push before the next `/ship`, making `/ship` a no-op.
 - Do not amend or rewrite history.
 - Do not commit secrets.
 - Do not push shipping commits to an existing feature branch. Use `/commit-and-push-by-feature` to move the work onto `main` or `master` and push it there, or stop and report a blocker if that cannot be done safely.

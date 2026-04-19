@@ -78,7 +78,7 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
    - **No Laziness**: Find root causes. No temporary fixes. Senior developer standards.
    - **Minimal Impact**: Changes should only touch what's necessary. Avoid introducing bugs.
    - **Direct-To-Primary Git Flow**: Default to committing and pushing on the repository primary branch (`main` when present, otherwise `master`). Do not introduce or continue feature-branch workflows unless the user explicitly asks for them.
-   - **Always Ship Mutations**: If a task creates or modifies tracked files, finish by committing and pushing all intended changes before stopping unless the user explicitly says not to. Exception: Claude `/run` is execution-only and hands a dirty tracked tree to `/ship`; the follow-up `/ship` satisfies this rule by validating, committing, pushing, deploying when applicable, planning the next step, and entering plan mode.
+   - **Always Ship Mutations**: If a task creates or modifies tracked files, finish by committing and pushing all intended changes before stopping unless the user explicitly says not to. Exceptions: Claude `/run` and Claude clear-context sessions launched from `/ship` plan mode are execution-only; they hand a dirty tracked tree to `/ship`, and the follow-up `/ship` satisfies this rule by validating, committing, pushing, deploying when applicable, planning the next step, and entering plan mode.
    - **No GitHub Actions**: Do not create, modify, or suggest GitHub Actions workflows. This project does not use GitHub Actions for CI/CD.
    ```
 
