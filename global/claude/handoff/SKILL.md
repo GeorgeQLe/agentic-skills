@@ -3,7 +3,7 @@ name: handoff
 description: Generate a project-level context snapshot for resuming work in a fresh session
 type: shipping
 version: 1.0.0
-argument-hint: "[optional: specific focus area to emphasize in the handoff]"
+argument-hint: "[focus area] [--target=codex]"
 ---
 
 # Handoff
@@ -36,7 +36,15 @@ Generate a self-contained context document that captures exactly where you left 
 
 4. **If `$ARGUMENTS` specifies a focus area**, emphasize that in the handoff context.
 
-5. **Write the handoff to `tasks/handoff.md`:**
+5. **If `$ARGUMENTS` contains `--target=codex`, produce a cross-CLI approval packet** before writing the handoff doc:
+   1. Resolve the effective agent mode via `./scripts/agent-mode.sh`. If the resolved mode is `codex-only`, stop immediately with a `mode-mismatch:` error — Claude is not the planner in that mode.
+   2. Require a clean tracked tree. If `git status --porcelain` reports dirty paths, the user must pass repeatable `--allow-dirty <glob>` flags covering every dirty path. Glob semantics match the Step 4 consumer (`scripts/approved-plan.sh check`) — `case "$path" in $glob)` shell globbing, not regex.
+   3. Derive `phase` / `step` / `title` from `tasks/todo.md`. Read the **first unchecked** `- [ ]` under the `### Active Step Plan` block; if no such block exists, fall back to the first unchecked `- [ ]` under the current `## Phase N` header. Parse the `Phase N` and `Step N.X` tokens out of the surrounding context; use the checkbox line's text (stripped of `- [ ] **Step N.X** — `) as `title`.
+   4. Call `./scripts/approved-plan.sh draft --phase "Phase N" --step "Step N.X" --title "<title>"` plus any `--allow-dirty <glob>` flags the user supplied. Surface the helper's single-line failure reason verbatim if it fails.
+   5. Pretty-print the drafted packet with `jq . .agents/approved-plan.json`, then ask exactly one concise question: *"Approve this packet for Codex execution?"*. On yes → `./scripts/approved-plan.sh approve`. On no → leave the packet at `draft` and tell the user they can approve it later with `./scripts/approved-plan.sh approve` or discard it with `./scripts/approved-plan.sh supersede`.
+   6. When writing `tasks/handoff.md` in the next step, add a **Cross-CLI handoff** section naming `.agents/approved-plan.json` (JSON, gitignored), `tasks/approved-plan.md` (committable mirror), and the resume command: `$run --execute-approved` (Codex).
+
+6. **Write the handoff to `tasks/handoff.md`:**
 
 ## Handoff Document Format
 
