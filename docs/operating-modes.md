@@ -155,6 +155,7 @@ This section enumerates every cross-tool touchpoint that ships today. One row pe
 | `global/codex/run/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` (recommendation block, distinct from `--execute-approved` rows above) | Unset mode leaves next-step recommendation ambiguous | § "Mode-aware next-step recommendation" unset branch presents all three options + docs pointer |
 | `global/codex/ship/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Unset mode leaves return-to-Claude vs stay-in-Codex ambiguous | § "Mode-aware next-step recommendation" unset branch presents all three options + docs pointer |
 | `global/codex/ship-end/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Unset mode leaves next-session resume ambiguous | § "Mode-aware next-step recommendation" unset branch presents all three options + docs pointer |
+| `scripts/approved-plan.sh draft` | `hybrid` back-to-back cycles (prior `consume` rewrote `tasks/approved-plan.md`) | Next `draft` fails with `dirty path outside allowlist: tasks/approved-plan.md` | Commit the mirror between cycles (evidence of the prior consumed packet), or pass `--allow-dirty tasks/approved-plan.md` to the next `draft` |
 
 Pack wrappers under `packs/**/SKILL.md` are intentionally absent from this audit: exploration confirmed they contain no cross-CLI branching — only intra-pack syntax references (`$skill` vs `/skill`) routed by the pack loader. Pack emphasis by CLI role lands in Step 9.
 

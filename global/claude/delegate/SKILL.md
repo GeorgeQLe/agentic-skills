@@ -26,7 +26,7 @@ Unlike `/handoff --target=codex` (async — user resumes later), `/delegate` is 
 
 2. **Parse arguments** from `$ARGUMENTS`:
    - First positional token (if any) is the target skill; defaults to `$run`.
-   - Collect repeatable `--allow-dirty <glob>` flags (shell-glob semantics, same as `scripts/approved-plan.sh check`).
+   - Collect repeatable `--allow-dirty <glob>` flags (shell-glob semantics, same as `scripts/approved-plan.sh check`). Note: back-to-back hybrid cycles rewrite the `tasks/approved-plan.md` mirror on each `consume`; commit it between cycles, or pass `--allow-dirty tasks/approved-plan.md` so the next `draft` tolerates the uncommitted mirror.
    - `--inline-fallback` auto-selects inline Claude execution in the pre-start-failure branch without prompting.
 
 3. **Derive `phase` / `step` / `title` from `tasks/todo.md`**, using the same rules as `/handoff --target=codex`:
