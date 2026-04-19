@@ -63,7 +63,7 @@ Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env va
   - Failure before Codex starts → offer inline execution or emit packet
   - Codex may have started → set packet to `uncertain`, prompt inspect/discard/continue (never blind retry)
   - `agent-team` profile → inline fallback is a downgrade user must accept
-- [ ] **Step 7** — Mode-aware terminal recommendations across `/plan-interview`, `/roadmap`, `/plan-phase`, `/run`, `/ship`, `/ship-end` (and Codex equivalents):
+- [x] **Step 7** — Mode-aware terminal recommendations across `/plan-interview`, `/roadmap`, `/plan-phase`, `/run`, `/ship`, `/ship-end` (and Codex equivalents):
   - `hybrid` → "delegate with `/delegate $run`"
   - `claude-only` → "run `/run`"
   - `codex-only` → "run `$run` in Codex"
@@ -96,7 +96,81 @@ Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env va
 - Contract untouched: no edits to `docs/operating-modes.md` or `specs/approved-plan.schema.json`. `uncertain` already existed in the schema enum; Step 6 is just its first writer. Codex side remains consumer-only.
 - Verified `mark-uncertain` with fixture packets: happy path flips `approved → uncertain` atomically; each non-`approved` source state (`draft`, `consumed`, `stale`, `superseded`, `uncertain`) exits non-zero with a matching reason.
 
-### Active Step Plan — Step 7: Mode-aware terminal recommendations
+### Step 7 Summary (completed 2026-04-19)
+
+- Added a shared **Mode-aware next-step recommendation** section to 12 planning/execution skills — Claude: `plan-interview`, `roadmap`, `plan-phase`, `run`, `ship`, `ship-end`; Codex: same six. Each block resolves the effective agent mode via `./scripts/agent-mode.sh` and emits exactly one recommendation line per resolved mode, with a distinctive phrase ("resolved agent mode via scripts/agent-mode.sh") for grep-auditability.
+- Claude-side branches (hybrid→`/delegate <target>`, claude-only→Claude skill, codex-only→Codex `$skill`, unset→present all three + point at `docs/operating-modes.md`). Targets vary per skill context: `/roadmap` after plan-interview; `/plan-phase`/`/run` after roadmap; `/delegate $run` after plan-phase; `/delegate $ship` after `/run`; `/delegate $run` after `/ship` and `/ship-end`.
+- Codex-side inversion for `hybrid`: "return to Claude for the next orchestration step" rather than "delegate further." `codex-only` stays in Codex; `claude-only` tells the user to switch to Claude.
+- No-recurse invariant preserved: `global/claude/delegate/SKILL.md` and `global/claude/handoff/SKILL.md` do NOT carry the block. Grep of the distinctive phrase returns exactly the expected 12 files.
+- Contract untouched: no edits to `docs/operating-modes.md`, `specs/approved-plan.schema.json`, or `scripts/agent-mode.sh`. Pure consumer of the mode resolver.
+
+### Active Step Plan — Step 8: Degraded-path audit
+
+**Goal:** Populate the degraded-path audit table in `docs/operating-modes.md`. For every cross-tool touchpoint (`/run`, `/ship`, `/ship-end`, `$run`, `$ship`, `$ship-end`, kanban variants, pack wrappers that recommend the other CLI), produce one row with columns: Skill | Assumes | Fails how if unavailable | Degraded path. Every row must have either a filled degraded path or an explicit "requires mode X" constraint — no empty cells.
+
+**Contract reminder:** Mode resolution is frozen at `scripts/agent-mode.sh`; the approval-packet schema and FSM are frozen at `specs/approved-plan.schema.json` and `docs/operating-modes.md` § "Approval / Delegation Packet". Step 8 only *documents* existing behavior — it does not add new lifecycle states, env vars, or transport behavior. If the audit surfaces a genuine gap, note it in the row and defer the fix to a follow-up step (do not silently widen scope).
+
+**Scope:**
+
+1. **Audit targets** — enumerate every skill or wrapper whose workflow contains a cross-tool assumption (e.g., "recommend `/delegate`", "invoke `codex exec`", "recommend `$run`"). Start from:
+   - `global/claude/run/SKILL.md`, `global/claude/ship/SKILL.md`, `global/claude/ship-end/SKILL.md`.
+   - `global/codex/run/SKILL.md`, `global/codex/ship/SKILL.md`, `global/codex/ship-end/SKILL.md`.
+   - `global/claude/delegate/SKILL.md` and `global/claude/handoff/SKILL.md` (the transport mechanisms themselves — their cross-tool assumptions need auditing).
+   - Any kanban pack variants under `packs/*-kanban/` that differ from the base kanban skill.
+   - Pack wrappers that explicitly recommend the other CLI (grep for `codex exec`, `/delegate`, `$run`, `/run` inside `packs/**/SKILL.md`).
+2. **Table format** — insert the table into `docs/operating-modes.md` under a new heading `## Degraded-path audit`. Columns:
+   - **Skill** — skill name + which CLI (e.g., `global/claude/run/SKILL.md`).
+   - **Assumes** — the concrete cross-tool assumption (e.g., "Codex binary on PATH", "hybrid mode", "a Claude session is available for plan mode").
+   - **Fails how if unavailable** — observable symptom (e.g., "exits non-zero with `codex: command not found`", "falls back to inline execution and prompts user").
+   - **Degraded path** — the specific escape hatch the skill already ships (e.g., "`--inline-fallback` flag", "pre-start-failure branch keeps packet at `approved`"), OR an explicit "requires mode X" constraint if no degraded path exists.
+3. **Evidence per row** — cite the SKILL.md line range or section header that implements the degraded path. Do not invent behavior; only document what ships.
+4. **Gap flagging** — when a touchpoint has no degraded path and no explicit mode requirement, flag it with `⚠ gap — follow-up` in the Degraded path column and log the gap under a `### Gaps surfaced by Step 8` subheading for a later step to close. Do not fix gaps inside Step 8.
+
+**Files to modify (full paths):**
+
+- `/Users/georgele/projects/tools/agentic-skills/docs/operating-modes.md` — append the `## Degraded-path audit` section with the filled table and (if any surface) a `### Gaps surfaced by Step 8` follow-up list.
+- `/Users/georgele/projects/tools/agentic-skills/tasks/todo.md` — check off Step 8, roll Active Step Plan to Step 9 (pack emphasis split by CLI role).
+- `/Users/georgele/projects/tools/agentic-skills/tasks/history.md` — append Step 8 entry.
+- **Do NOT modify:** `specs/approved-plan.schema.json`, `scripts/agent-mode.sh`, or any SKILL.md workflow. Step 8 is documentation-only; it consumes shipped behavior and records it.
+
+**Key technical decisions / risks:**
+
+- **Audit what ships, not what's aspirational.** Rows must cite a specific behavior in a specific SKILL.md. If a skill's "degraded path" exists only as a TODO comment, flag it as a gap.
+- **Uniform row granularity.** One row per (skill, assumption) pair. A single skill with two independent cross-tool assumptions gets two rows — do not collapse them, because the degraded paths likely differ.
+- **Do not widen scope to packs until base skills are audited.** Finish the global Claude/Codex skills first, then sweep pack wrappers. Pack rows land at the bottom of the table grouped by pack.
+- **Markdown table width.** Keep cells compact (one short phrase per cell, not multi-sentence paragraphs). Link out to specific SKILL.md locations for deeper detail instead of inlining.
+
+**Conventions from prior work:**
+
+- `docs/operating-modes.md` is the canonical reference for mode semantics. Append the audit table in the same prose style — not ASCII-tables in skill copy, but a proper Markdown table with evidence links is fine here.
+- `tasks/todo.md` bookkeeping follows the same pattern as Steps 4–7 (check off the step, append a Summary section, roll the Active Step Plan sketch forward).
+
+**Test strategy (tests-after, per Execution Profile `serial`):**
+
+1. Grep verification: every skill enumerated in the audit scope has at least one row in the table. A `grep -c "^| global/" docs/operating-modes.md` returns at least the count of targeted skills.
+2. Column completeness: no row has an empty **Degraded path** cell. Empty cells signal an unchecked gap — either fill or flag as `⚠ gap — follow-up`.
+3. Evidence spot-check: for at least three rows, the cited SKILL.md section exists and matches the claim (open each cited file and confirm the referenced language is present).
+4. Contract unchanged: `git diff` on `specs/approved-plan.schema.json`, `scripts/agent-mode.sh`, and the 12 Step-7 SKILL.md files shows no unintended edits.
+5. Mode-branch coverage: every row names one of `claude-only`, `codex-only`, `hybrid`, or "any" in the **Assumes** column — no ambiguous rows.
+
+**Acceptance criteria:**
+
+- [ ] `docs/operating-modes.md` contains a `## Degraded-path audit` section with a filled table for every scope target.
+- [ ] Every row has either a concrete degraded path (with SKILL.md evidence) or an explicit `requires mode X` constraint, or is flagged with `⚠ gap — follow-up`.
+- [ ] All surfaced gaps are listed under `### Gaps surfaced by Step 8` for a follow-up step to close — Step 8 does not close them.
+- [ ] `tasks/todo.md` Step 8 checked off and Active Step Plan rolled to Step 9 (pack emphasis split).
+- [ ] No edits to `specs/approved-plan.schema.json`, `scripts/agent-mode.sh`, or any SKILL.md workflow.
+
+**Out of scope (do not drift):**
+
+- Fixing gaps surfaced by the audit. Those belong in a follow-up step or a scoped fix commit, not in Step 8 itself.
+- Pack emphasis split by CLI role — Step 9.
+- Pack-aware `$run` routing — Step 10.
+- Docs expansion of `docs/operating-modes.md` beyond the audit table — Step 11.
+
+**Execution Profile:** `serial` (inherited from Phase 11). Main agent owns the audit, the table, and the task/history updates. No subagent lanes — documentation of shared-contract behavior is where parallel lanes drift.
+
+### Active Step Plan — Step 7: Mode-aware terminal recommendations [archived for reference]
 
 **Goal:** Wire mode-aware terminal recommendations across the planning and execution skills so that after presenting a plan or completing its workflow, each skill points the user at the appropriate next-step invocation based on the resolved agent mode. Steps 4–6 shipped the mechanisms (`$run --execute-approved`, `/handoff --target=codex`, `/delegate`); Step 7 is the discoverability layer that makes users actually reach for them instead of falling back to the pre-Phase-11 "run it manually" habit.
 
