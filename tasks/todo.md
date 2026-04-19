@@ -58,7 +58,7 @@ Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env va
   - Fields: step identity (Phase N / Step N.X / normalized title), approval timestamp, git HEAD, `tasks/todo.md` hash, allowed dirty paths, blocking manual-task snapshot, approval age TTL
   - Lifecycle states: `draft` → `approved` → `consumed` | `stale` | `superseded` | `uncertain`
 - [x] **Step 4** — `$run --execute-approved` (Codex) — consumes packet, skips approval if `approved` + all freshness checks pass. Freshness: same git HEAD, unchanged `todo.md` hash, clean tree or dirty only on allowed paths, no new `_(blocks: Step N.X)_` entries, age under TTL. On failure, re-prompt with diff. Transitions `approved → consumed` or `approved → stale`.
-- [ ] **Step 5** — `/handoff --target=codex` (Claude) — extend existing `/handoff` to produce the approval packet as async task brief. Covers "Codex cloud delegation coming soon" case and claude-only users who plan to execute in Codex later.
+- [x] **Step 5** — `/handoff --target=codex` (Claude) — extend existing `/handoff` to produce the approval packet as async task brief. Covers "Codex cloud delegation coming soon" case and claude-only users who plan to execute in Codex later.
 - [ ] **Step 6** — `/delegate` (Claude) — live in-session delegation to Codex, consumes same packet format. Safe-fallback semantics:
   - Failure before Codex starts → offer inline execution or emit packet
   - Codex may have started → set packet to `uncertain`, prompt inspect/discard/continue (never blind retry)
@@ -85,7 +85,34 @@ Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env va
   - Migration guide from parity-mirror model
 - [ ] **Verify:** Run through all three modes on a sample workflow; confirm each mode completes plan → execute → ship without hitting the unavailable CLI
 
-### Active Step Plan — Step 5: `/handoff --target=codex` (Claude)
+### Active Step Plan — Step 6: `/delegate` (Claude)
+
+**Sketch only — detailed plan lands when Step 6 starts.**
+
+**Goal:** Live in-session delegation from Claude to Codex, consuming the same approval-packet format Steps 3–5 established. The packet produced inline matches the `draft → approved` transition shipped in Step 5; the transport layer is what's new. Safe-fallback semantics around Codex start-up, in-flight failure, and the `uncertain` lifecycle state are the meat of the step.
+
+**Scope (to refine):**
+
+- Claude-side `/delegate` skill that wraps a target skill invocation (typically `$run`) as a Codex sub-session from inside the current Claude session. Packet production reuses the Step 5 producer path — no new FSM surface.
+- Safe-fallback matrix:
+  - Failure before Codex starts → offer inline Claude execution or emit the packet for later `$run --execute-approved`.
+  - Codex may have started (ambiguous) → transition packet to `uncertain`, prompt user to inspect / discard / continue. Never blind-retry.
+  - `agent-team` execution profile → inline fallback is a downgrade the user must explicitly accept.
+- Mode gating: only meaningful in `hybrid`. `claude-only` has no Codex to delegate to; `codex-only` plans in Codex directly. Surface the mismatch with the same `mode-mismatch:` convention.
+
+**Contract:** schema, lifecycle FSM, and freshness-check semantics stay frozen. `uncertain` is already enumerated in the lifecycle — Step 6 wires the first writer.
+
+**Out of scope:** reverse delegation (Codex → Claude) remains YAGNI per the Phase 11 roadmap.
+
+### Step 5 Summary (completed 2026-04-19)
+
+- Extended `scripts/approved-plan.sh` with producer subcommands (`draft`, `approve`, `supersede`, `status`) that reuse the Step 4 helpers (`die`, `fail`, `require_jq_write`, `todo_hash_of`, atomic `<file>.tmp` + `mv`). Producer never runs the six consumer freshness checks — the producer snapshots state at draft time; the consumer verifies freshness at execute time.
+- `draft` refuses to overwrite a live `approved` packet (explicit `supersede` required). `approve` is atomic `draft → approved`, re-verifies `git_head` + `todo_hash` still match the draft snapshot (drift → fail loudly, user must re-draft), and refreshes `approved_at` so TTL starts at approval, not drafting. `supersede` flips any non-terminal packet to `superseded`. `status` prints a one-line lifecycle summary for preflight use. `blocking_manual_tasks` snapshots the **content** of unchecked `_(blocks: Step N.X)_` lines from `tasks/manual-todo.md`, not the path.
+- `global/claude/handoff/SKILL.md` now documents `--target=codex` in `argument-hint` and adds a numbered step that mode-resolves via `scripts/agent-mode.sh` (abort on `codex-only`), validates a clean tree or matching `--allow-dirty <glob>` flags (same semantics as Step 4's `check`), derives `phase` / `step` / `title` from the first unchecked `- [ ]` under `### Active Step Plan` (fallback: first unchecked under the current `## Phase N`), calls `approved-plan.sh draft …`, pretty-prints the packet, asks one concise approval question, and on yes calls `approve`. The handoff doc gains a "Cross-CLI handoff" section naming `.agents/approved-plan.json`, `tasks/approved-plan.md`, and the resume command `$run --execute-approved`. Default (no `--target`) flow untouched.
+- Verified with `/tmp/apktest5` fixtures: draft happy path, draft-with-dirty-allowlist positive + negative, draft-refuses-to-clobber-approved, approve happy path (timestamp refreshed), approve drift detection on `todo_hash` change, full `draft → approve → check → consume` round-trip ending at `lifecycle: consumed` in the `.md` mirror. Every lifecycle state validates against `specs/approved-plan.schema.json` via `jsonschema` in a venv.
+- Contract untouched — no edits to `docs/operating-modes.md` or `specs/approved-plan.schema.json`. The producer side ships without modifying the frozen schema or FSM.
+
+### Active Step Plan — Step 5: `/handoff --target=codex` (Claude) [archived for reference]
 
 **Goal:** Extend Claude's existing `/handoff` skill with a `--target=codex` mode that, in addition to writing the `tasks/handoff.md` context document, **produces the first `draft → approved` approval packet** — the mirror image of Step 4's consumer. This gives claude-only and hybrid users a way to stage work inside Claude and then execute it later (or in another session/CLI) via `$run --execute-approved`. The packet produced here conforms to the Step 3 contract exactly; the schema and lifecycle FSM stay frozen.
 
