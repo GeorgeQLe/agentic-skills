@@ -47,7 +47,7 @@ Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env va
 ### Steps
 
 - [x] **Step 1** — Thin `docs/operating-modes.md` — one page, three-mode table, paragraph per mode, pointer to approval packet. Do not pre-specify unshipped behavior.
-- [ ] **Step 2** — Mode resolution:
+- [x] **Step 2** — Mode resolution:
   - Add `agent_mode: "claude-only" | "codex-only" | "hybrid"` to `.agents/project.json` schema
   - Add `SKILLS_AGENT_MODE` env var override (not `AGENT_MODE` — collision risk)
   - Resolution precedence: env > project.json > unset (skills recommend all paths)
@@ -118,11 +118,11 @@ Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env va
 - Invalid value verification: `pack.sh set-mode bogus` exits non-zero; `SKILLS_AGENT_MODE=bogus bash scripts/agent-mode.sh` exits non-zero.
 
 **Acceptance criteria:**
-- [ ] `.agents/project.json` can carry an `agent_mode` field that survives `pack.sh install`, `remove`, and `refresh`.
-- [ ] `pack.sh set-mode <claude-only|codex-only|hybrid|unset>` writes or clears the field.
-- [ ] `scripts/agent-mode.sh` resolves env > project.json > empty and rejects invalid values from both sources.
-- [ ] `docs/operating-modes.md` "Mode Signal" section describes the shipped surface in present tense and drops the "not yet wired" marker.
-- [ ] No SKILL.md files read the signal yet — consumption is Step 7. This keeps the blast radius small.
+- [x] `.agents/project.json` can carry an `agent_mode` field that survives `pack.sh install`, `remove`, and `refresh`.
+- [x] `pack.sh set-mode <claude-only|codex-only|hybrid|unset>` writes or clears the field.
+- [x] `scripts/agent-mode.sh` resolves env > project.json > empty and rejects invalid values from both sources.
+- [x] `docs/operating-modes.md` "Mode Signal" section describes the shipped surface in present tense and drops the "not yet wired" marker.
+- [x] No SKILL.md files read the signal yet — consumption is Step 7. This keeps the blast radius small.
 
 **Execution Profile:** `serial` (inherited from Phase 11). Main agent owns schema edits, helper script, pack.sh changes, doc edits, and verification.
 

@@ -67,6 +67,8 @@ It also writes:
 
 to `.agents/project.json`.
 
+`.agents/project.json` also accepts an optional `agent_mode` field (`"claude-only" | "codex-only" | "hybrid"`) that names the Phase 11 operating mode for the project. Set or clear it with `scripts/pack.sh set-mode <claude-only|codex-only|hybrid|unset>`; the value is preserved across `install`, `remove`, and `refresh`. `SKILLS_AGENT_MODE` overrides the file for the current shell, and `scripts/agent-mode.sh` resolves the effective mode (env > project.json > empty). See `docs/operating-modes.md`.
+
 If an assistant does not discover project-local skills, use the global `pack` or `research-roadmap` skill as the launcher. The pack files still stay project-local.
 
 ## Repository Structure

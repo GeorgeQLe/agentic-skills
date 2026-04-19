@@ -7,6 +7,7 @@ PROJECT_ROOT="$(pwd)"
 PROJECT_FILE="$PROJECT_ROOT/.agents/project.json"
 PROJECT_LOCK_DIR="$PROJECT_ROOT/.agents/.pack.lock"
 PROJECT_LOCKED=false
+PROJECT_AGENT_MODE=""
 source "$REPO_ROOT/scripts/skill-links.sh"
 
 usage() {
@@ -20,6 +21,8 @@ Commands:
   install <pack...> Enable one or more packs in the current project via local skill symlinks
   remove <pack...>  Remove one or more pack's local skill symlinks from the current project
   refresh           Recreate local symlinks for packs in .agents/project.json
+  set-mode <mode>   Set .agents/project.json.agent_mode to claude-only, codex-only,
+                    hybrid, or unset (clears the field)
 
 Project state is stored in .agents/project.json.
 EOF
@@ -144,7 +147,12 @@ write_project_file() {
       done
     fi
     echo "],"
-    echo '  "skill_pack_version": 1'
+    if [[ -n "$PROJECT_AGENT_MODE" ]]; then
+      echo '  "skill_pack_version": 1,'
+      printf '  "agent_mode": "%s"\n' "$PROJECT_AGENT_MODE"
+    else
+      echo '  "skill_pack_version": 1'
+    fi
     echo "}"
   } > "$PROJECT_FILE"
 }
@@ -163,6 +171,19 @@ current_project_type() {
   if [[ -f "$PROJECT_FILE" ]]; then
     sed -n 's/.*"project_type"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' "$PROJECT_FILE" | head -1
   fi
+}
+
+current_agent_mode() {
+  if [[ -f "$PROJECT_FILE" ]]; then
+    sed -n 's/.*"agent_mode"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' "$PROJECT_FILE" | head -1
+  fi
+}
+
+validate_agent_mode() {
+  case "$1" in
+    claude-only|codex-only|hybrid) return 0 ;;
+    *) return 1 ;;
+  esac
 }
 
 unique_packs_with() {
@@ -221,6 +242,7 @@ install_pack() {
     project_type="$(project_type_for_pack "$pack" 2>/dev/null || true)"
     [[ -n "$project_type" ]] || project_type="$(infer_project_type)"
   fi
+  PROJECT_AGENT_MODE="$(current_agent_mode)"
   write_project_file_from_packs "$project_type"
   echo "Updated .agents/project.json"
 }
@@ -250,6 +272,24 @@ remove_pack() {
   local project_type
   project_type="$(current_project_type)"
   [[ -n "$project_type" ]] || project_type="$(infer_project_type)"
+  PROJECT_AGENT_MODE="$(current_agent_mode)"
+  write_project_file_from_packs "$project_type"
+  echo "Updated .agents/project.json"
+}
+
+set_mode() {
+  local mode="${1:-}"
+  [[ -n "$mode" ]] || die "set-mode requires a mode: claude-only, codex-only, hybrid, or unset"
+  if [[ "$mode" == "unset" ]]; then
+    PROJECT_AGENT_MODE=""
+  else
+    validate_agent_mode "$mode" || die "Invalid mode '$mode'. Must be claude-only, codex-only, hybrid, or unset"
+    PROJECT_AGENT_MODE="$mode"
+  fi
+  local project_type
+  project_type="$(current_project_type)"
+  [[ -n "$project_type" ]] || project_type="$(infer_project_type)"
+  read_lines_into_packs < <(read_enabled_packs)
   write_project_file_from_packs "$project_type"
   echo "Updated .agents/project.json"
 }
@@ -340,6 +380,11 @@ case "$cmd" in
     acquire_project_lock
     refresh
     print_session_reload_notice
+    ;;
+  set-mode)
+    acquire_project_lock
+    shift
+    set_mode "${1:-}"
     ;;
   --help|-h|"") usage ;;
   *) usage; exit 2 ;;
