@@ -132,28 +132,88 @@ Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env va
 
 ### Active Step Plan — Step 11: Expand `docs/operating-modes.md` to authoritative reference
 
-**Goal:** Turn `docs/operating-modes.md` from a thin reference + audit tables into the authoritative operating-model doc. Fold in complete mode-signal resolution rules, the approval-packet schema + lifecycle diagram, the Step 8 degraded-path audit (already populated), the Step 9 pack emphasis tables (already populated), the Step 10 Codex `$run` routing pointer (already populated), and a migration guide from the legacy parity-mirror model.
+**Goal:** Turn `docs/operating-modes.md` from a thin reference + appended audit tables into the authoritative operating-model doc. By the end of Step 11, a newcomer should be able to read `docs/operating-modes.md` top-to-bottom and understand: what each of the three modes means, how the resolver decides which mode is active, the full approval/delegation packet schema and lifecycle, every declared cross-tool degraded path (Step 8), the pack emphasis split (Step 9), the Codex `$run` pack-aware routing behavior (Step 10), and how to migrate a pre-Phase-11 project onto the new model.
 
-**Contract reminder:** Mode resolution (`scripts/agent-mode.sh`), approval-packet schema (`specs/approved-plan.schema.json`), Step 8 degraded-path audit, Step 9 pack emphasis, and Step 10 `$run` routing behavior are all frozen. Step 11 is a documentation expansion — no new modes, lifecycle states, schema fields, env vars, or skill workflow edits. Reorganization and prose are in scope.
+**Contract reminder:** Mode resolution (`scripts/agent-mode.sh`), approval-packet schema (`specs/approved-plan.schema.json`), Step 4 consumer (`scripts/approved-plan.sh`), Step 8 degraded-path audit rows, Step 9 pack emphasis tables, and Step 10 `$run` routing behavior are all frozen. Step 11 is pure documentation expansion — no new modes, lifecycle states, schema fields, env vars, or skill workflow edits. Reorganization, prose expansion, and cross-references are in scope. If Step 11 surfaces a genuine spec gap that's not a docs issue, log it under a new `### Gaps surfaced by Step 11` subsection and defer the fix.
 
-**Scope (sketch — expand when Step 11 starts):**
+**Starting context (from Steps 1–10, already shipped):**
 
-1. **Mode-signal resolution.** Fully document the precedence `scripts/agent-mode.sh` applies today (CLI env, `.agents/project.json.agent_mode`, heuristics, `unset`). Cite the script by line range; do not restate precedence in skill copy.
-2. **Approval packet.** Expand the existing "Approval / Delegation Packet" section with the full field reference from `specs/approved-plan.schema.json`, a lifecycle diagram (`draft → approved → (consumed | stale | superseded | uncertain)`), and the `.md`-safe vs JSON-only classification already enforced by Step 4's `consume`.
-3. **Degraded-path audit.** Already populated in Step 8. Keep byte-identical; optionally re-order for flow.
-4. **Pack emphasis + `$run` routing.** Already populated in Steps 9–10. Keep byte-identical; optionally re-order for flow.
-5. **Migration guide.** Short section for projects coming from the parity-mirror model: how to designate mode, which packs to enable, how `/delegate` and `/handoff --target=codex` replace previous workflows.
+- `docs/operating-modes.md` (200 lines currently) contains: three-mode table, paragraph per mode, forward pointer to approval packet, the approval packet contract (Step 3, ~108 lines with fields + lifecycle + freshness checks + `todo_hash` normalization), `## Degraded-path audit` (Step 8, 19 rows + Gaps subsection), `## Pack emphasis` (Step 9, Global skills 34 rows + Packs 8 rows), and `### Codex $run routing` (Step 10, short subsection). Status line at the bottom mentions Steps 8–10.
+- The resolver `scripts/agent-mode.sh` (Step 2) implements env-var → `.agents/project.json.agent_mode` → unset precedence; this doc currently only gestures at it.
+- `specs/approved-plan.schema.json` (Step 3) is the authoritative field spec; the current doc restates most of it but not with schema-level precision.
+- `scripts/approved-plan.sh` (Step 4) implements all lifecycle transitions (`check`, `consume`, `mark-stale`, `draft`, `approve`, `supersede`, `mark-uncertain`, `status`) with atomic `.tmp` + `mv` writes.
+- Newcomers land on this doc via CLAUDE.md workflow orchestration and via skill copy that says "point at `docs/operating-modes.md` for mode-signal resolution rules."
 
-**Files to modify (sketch):**
+**Scope:**
 
-- `/Users/georgele/projects/tools/agentic-skills/docs/operating-modes.md` — expand to authoritative reference.
-- `/Users/georgele/projects/tools/agentic-skills/tasks/todo.md` — check off Step 11, roll Active Step Plan to the final Verify phase item.
-- `/Users/georgele/projects/tools/agentic-skills/tasks/history.md` — append Step 11 entry.
-- **Do NOT modify:** `specs/approved-plan.schema.json`, `scripts/agent-mode.sh`, `scripts/approved-plan.sh`, `scripts/pack.sh`, any `SKILL.md` workflow.
+1. **Mode-signal resolution (expand).** Add a dedicated `## Mode-signal resolution` section (or promote the existing paragraph-level treatment) citing the exact precedence `scripts/agent-mode.sh` applies: `SKILLS_AGENT_MODE` env var > `.agents/project.json.agent_mode` > unset. Name the valid values (`claude-only`, `codex-only`, `hybrid`). Cite the script by file path + symbol name, not line range (line ranges rot). Include a truth table mapping `(env, project.json)` → resolved mode.
 
-**Out of scope:** any change to mechanisms (packet schema, mode resolver, pack router, `/delegate`, `/handoff`). Step 11 is docs-only.
+2. **Approval packet (reorganize + expand).** Keep the existing "Approval / Delegation Packet" section, but split into clearer subsections: **Fields** (reference `specs/approved-plan.schema.json` authoritatively; don't duplicate field-by-field prose), **Lifecycle** (ASCII or mermaid-ish lifecycle diagram showing `draft → approved → (consumed | stale | superseded | uncertain)` plus the writers of each transition: `draft` ← `approved-plan.sh draft`; `approved` ← `approve`; `consumed` ← `consume` (in Step 4 `$run --execute-approved`); `stale` ← `mark-stale`; `superseded` ← `supersede`; `uncertain` ← `mark-uncertain`), **Safety classification** (`.md`-safe vs JSON-only — projection already enforced by `consume`), **Freshness checks** (the six checks applied by `check`, in cheapest-first order — already documented but group them here).
 
-**Execution Profile:** `serial`.
+3. **Degraded-path audit (keep byte-identical).** Already populated in Step 8. Re-read once during Step 11 to confirm no row has drifted; keep byte-identical otherwise. Optionally re-order sections so `## Degraded-path audit` appears after `## Mode-signal resolution` and `## Approval packet` for better flow.
+
+4. **Pack emphasis + Codex `$run` routing (keep byte-identical).** Already populated in Steps 9 and 10. Keep byte-identical. Confirm the Step 10 subsection's pointer to `global/codex/run/SKILL.md` § "Pack-aware routing" is still accurate.
+
+5. **Migration guide (new).** Short new section `## Migrating from the parity-mirror model`. Covers: (a) how to designate a project's mode (`pack.sh set-mode`), (b) which packs to enable and how role emphasis differs from parity mirrors, (c) how `/delegate` replaces the old "switch CLI manually" flow in hybrid mode, (d) how `/handoff --target=codex` covers the async case, (e) what happens if `.agents/project.json` is absent (all-three-options recommendation). Keep to under ~40 lines; this is a pointer doc, not a tutorial.
+
+6. **Status line refresh.** Replace the trailing `Status: Phase 11 Step 1 — thin doc; expansions tracked in …` line with a summary reflecting the now-authoritative state: "Phase 11 Steps 1–11 complete: authoritative operating-model reference."
+
+**Files to modify (full paths):**
+
+- `/Users/georgele/projects/tools/agentic-skills/docs/operating-modes.md` — expand to authoritative reference per Scope above. Target length: ~300–400 lines total (up from 200). Keep every Step 8/9/10 row byte-identical in content; section ordering may change.
+- `/Users/georgele/projects/tools/agentic-skills/tasks/todo.md` — check off Step 11, check off the final Verify item if the expanded doc makes the three-mode walk-through self-evident; otherwise roll Active Step Plan to the Verify item as its own micro-step.
+- `/Users/georgele/projects/tools/agentic-skills/tasks/history.md` — append Step 11 entry following the existing section pattern.
+- **Do NOT modify:** `specs/approved-plan.schema.json`, `scripts/agent-mode.sh`, `scripts/approved-plan.sh`, `scripts/pack.sh`, any `SKILL.md` (Claude or Codex, global or pack), any pack wrapper, `CLAUDE.md`, `tasks/roadmap.md`.
+
+**Key technical decisions / risks:**
+
+- **Don't duplicate the schema.** `specs/approved-plan.schema.json` is the authoritative field reference. The doc should cite it by path and summarize categories (required vs optional, `.md`-safe vs JSON-only), not re-enumerate every field's type and constraints — that creates drift risk. If readers need field-level detail, they open the schema.
+- **Don't restate the resolver's precedence in skill copy.** Step 7 already enforces this — skills say "resolved agent mode via scripts/agent-mode.sh" and defer precedence to the doc. Keep that invariant: precedence lives in the doc + script only.
+- **Preserve byte-identity of audit tables.** Steps 8/9/10 tables are load-bearing and cross-referenced. Reorganization may move them within the file but must not change their content. Run a diff of the table bodies before/after to confirm.
+- **Migration guide scope discipline.** Easy to expand into a how-to tutorial — don't. Keep it to orientation + pointers to the relevant skill/script entry points.
+- **Status line.** Current line mentions Steps 8/9/10 incrementally. Step 11 should replace it with a single summary line; don't keep appending.
+
+**Reusable existing code / sources:**
+
+- `docs/operating-modes.md` — the canvas. All Step 11 edits live here.
+- `scripts/agent-mode.sh` — cite for resolver precedence. Read once to confirm current behavior; do not edit.
+- `specs/approved-plan.schema.json` — cite for field reference. Do not duplicate.
+- `scripts/approved-plan.sh` — cite for lifecycle transition writers. Do not edit.
+- Step 8/9/10 content already in `docs/operating-modes.md` — preserve byte-identically.
+
+**Test strategy (tests-after, per Execution Profile `serial`):**
+
+1. **Doc renders and scans correctly.** Preview `docs/operating-modes.md` after edits; confirm TOC-style flow top-to-bottom makes sense for a newcomer. No broken internal anchors.
+2. **Byte-identity of Step 8/9/10 tables.** `diff` the table bodies against the pre-edit version; confirm zero content changes (whitespace is acceptable, row content is not).
+3. **No cross-file edits.** `git diff --stat` on commit shows only `docs/operating-modes.md`, `tasks/todo.md`, `tasks/history.md`. No `SKILL.md`, script, schema, or pack files touched.
+4. **Resolver citation correctness.** The resolver precedence described in the doc matches what `scripts/agent-mode.sh` actually does today. Spot-check by reading the script.
+5. **Lifecycle diagram correctness.** Every transition named in the lifecycle diagram has a matching `approved-plan.sh` subcommand, and every subcommand is represented. Spot-check.
+6. **Migration guide links out, not in.** The guide should point at `pack.sh set-mode`, `/delegate`, `/handoff --target=codex`, `$run --execute-approved` — not re-describe their workflows.
+
+**Acceptance criteria:**
+
+- [ ] `docs/operating-modes.md` has dedicated sections for: three-mode table, per-mode paragraphs, `## Mode-signal resolution`, `## Approval packet` (with Fields / Lifecycle / Safety / Freshness subsections), `## Degraded-path audit`, `## Pack emphasis` (with Codex `$run` routing subsection), `## Migrating from the parity-mirror model`.
+- [ ] Step 8/9/10 tables are byte-identical in content; section ordering may have changed.
+- [ ] Status line replaced with a single Phase-11-complete summary line.
+- [ ] `tasks/todo.md` Step 11 checked off; final Verify item either checked or rolled to its own micro-step plan.
+- [ ] `tasks/history.md` has a Step 11 entry.
+- [ ] No edits to `specs/approved-plan.schema.json`, `scripts/agent-mode.sh`, `scripts/approved-plan.sh`, `scripts/pack.sh`, or any `SKILL.md` / pack file.
+
+**Out of scope (do not drift):**
+
+- Any change to mechanisms (packet schema, mode resolver, pack router, `/delegate`, `/handoff`, `$run` routing). Step 11 is docs-only.
+- Adding a new mode, lifecycle state, env var, or schema field.
+- Rewriting skill copy to match the expanded doc. Skills already point at the doc; that's the contract.
+- Creating a separate `MIGRATION.md` or `ARCHITECTURE.md` — everything lands in `docs/operating-modes.md`.
+- Deep tutorials in the migration guide — pointer-level only.
+- The Phase 11 Verify acceptance item (running all three modes through a real workflow) — if needed, track as its own micro-step after Step 11 ships.
+
+**Execution Profile:** `serial` (inherited from Phase 11). Main agent owns the single-file doc edit and task/history bookkeeping. No subagent lanes.
+
+**Commit plan:**
+
+- `docs(operating-modes)` — the expansion itself.
+- `chore(tasks)` — todo.md + history.md bookkeeping.
 
 ### Active Step Plan — Step 10: Pack-aware `$run` routing on Codex [archived for reference]
 
