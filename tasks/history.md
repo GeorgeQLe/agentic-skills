@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-04-19 — Phase 11 Step 3 — Shared approval/delegation packet contract
+
+- Expanded `docs/operating-modes.md` § "Approval / Delegation Packet" (now 108 lines, kept in place — no extraction needed) with the full field schema, the `draft → approved → (consumed | stale | superseded | uncertain)` lifecycle state machine, the `.md`-safe vs JSON-only safety classification, and the six freshness checks (named here, implementation owned by Step 4).
+- Defined `todo_hash` normalization once and for all: strip UTF-8 BOM, normalize CRLF → LF, sha256 the bytes.
+- Shipped `specs/approved-plan.schema.json` (draft-07). Validated a well-formed example via `jsonschema` in a venv; confirmed it rejects bad-lifecycle (`frozen`) and missing-`git_head` packets.
+- Seeded `tasks/approved-plan.md` with an empty-state notice ("no packet currently approved") and a worked example of the sanitized mirror format. Only projects `.md`-safe fields.
+- Added `.agents/approved-plan.json` to `.gitignore` (path-prefixed). `git check-ignore .agents/approved-plan.json` returns the path, exit 0.
+- No executable code introduced — deliberately contract-only to prevent schema/consumer drift. Step 4 (`$run --execute-approved`) is the first legitimate consumer; grep confirms no SKILL.md or script references the packet yet.
+- Checked off Step 3 in `tasks/todo.md`; rolled the Active Step Plan block to Step 4 (sketch only — detailed plan will land when Step 4 starts).
+
 ## 2026-04-19 — Clarify Claude run/ship boundaries from session history
 
 - Parsed recent Claude history/transcripts for `/run`, `/ship`, commits, pushes, and plan-mode entries.

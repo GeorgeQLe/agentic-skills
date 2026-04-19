@@ -51,7 +51,7 @@ Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env va
   - Add `agent_mode: "claude-only" | "codex-only" | "hybrid"` to `.agents/project.json` schema
   - Add `SKILLS_AGENT_MODE` env var override (not `AGENT_MODE` — collision risk)
   - Resolution precedence: env > project.json > unset (skills recommend all paths)
-- [ ] **Step 3** — Shared approval/delegation packet schema:
+- [x] **Step 3** — Shared approval/delegation packet schema:
   - `.agents/approved-plan.json` — gitignored, machine-readable source of truth
   - `tasks/approved-plan.md` — sanitized human-readable mirror
   - Explicit field-level safety classification (which fields are safe for `.md` vs JSON-only)
@@ -85,72 +85,28 @@ Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env va
   - Migration guide from parity-mirror model
 - [ ] **Verify:** Run through all three modes on a sample workflow; confirm each mode completes plan → execute → ship without hitting the unavailable CLI
 
-### Active Step Plan — Step 3: Shared Approval / Delegation Packet
+### Active Step Plan — Step 4: `$run --execute-approved` (Codex)
 
-**Goal:** Land the shared approval packet contract — schema, lifecycle, and safety classification — so Steps 4 (`$run --execute-approved`), 5 (`/handoff --target=codex`), and 6 (`/delegate`) consume one definition of "approved work" instead of inventing their own. This step is contract-only: no consumer skill is modified yet.
+**Goal:** Wire the Codex `$run` skill to consume the approval packet shipped in Step 3. When an `approved` packet exists in `.agents/approved-plan.json` and all freshness checks pass, `$run --execute-approved` skips the approval prompt and proceeds to implementation. On any failure, it re-prompts with a diff and transitions the packet to `stale`.
 
-**Scope:**
-1. Define `.agents/approved-plan.json` as the machine-readable source of truth. Gitignored (developer-local approval state, not a repo artifact).
-2. Define `tasks/approved-plan.md` as the sanitized human-readable mirror, committable, no secrets or dirty-path globs that could leak internal layout assumptions.
-3. Publish the field-level schema in `docs/operating-modes.md` (or a linked `docs/approved-plan.md` if the operating-modes doc would balloon past ~150 lines). Fields:
-   - `step_identity` — `{ phase: "Phase N", step: "Step N.X", title: "<normalized>" }`
-   - `approved_at` — ISO-8601 UTC timestamp
-   - `approved_by` — free-form identity string (user@host, agent name, etc.)
-   - `git_head` — full commit SHA at approval time
-   - `todo_hash` — SHA-256 of `tasks/todo.md` at approval time
-   - `allowed_dirty_paths` — array of globs; paths outside the set invalidate freshness
-   - `blocking_manual_tasks` — snapshot of `_(blocks: Step N.X)_` lines from `tasks/manual-todo.md` at approval time (empty array if the file is absent)
-   - `ttl_seconds` — integer; freshness expires after this window
-   - `lifecycle` — one of `draft | approved | consumed | stale | superseded | uncertain`
-   - `notes` — optional free-form (sanitized in `.md` mirror)
-4. Publish the lifecycle state machine: `draft → approved → (consumed | stale | superseded | uncertain)`. Document transition triggers (user approval, successful consume, freshness-check failure, replacement packet, transport ambiguity during `/delegate`).
-5. Publish the `.md` vs JSON-only safety classification — which fields are safe for the committed markdown mirror, which stay JSON-only. Default-secret fields: `allowed_dirty_paths` (path layout), `notes` (free-form). Default-safe: `step_identity`, `approved_at`, `approved_by`, `lifecycle`, `ttl_seconds`. Borderline-safe: `git_head`, `todo_hash` (hashes/SHAs are usually fine in a public repo but flag explicitly).
-6. Add `.agents/approved-plan.json` to `.gitignore`. Also add it to any repo-managed ignore list (`global/claude/*`, install template, etc.) if one exists — verify `scripts/skill-links.sh` and `install.sh` handling during implementation.
-7. Ship a seed `tasks/approved-plan.md` that documents "no packet currently approved" so readers know the mirror exists and what it looks like when empty. Optional: a JSON Schema file at `specs/approved-plan.schema.json` for validation by Step 4 / Step 6.
+**Contract:** See `docs/operating-modes.md` § "Approval / Delegation Packet" for schema, lifecycle, freshness-check list, and the `todo_hash` normalization rule. JSON Schema at `specs/approved-plan.schema.json`. Do not redefine any of these in Step 4.
 
-**Out of scope for Step 3:**
-- Any skill that reads or writes the packet (Step 4 is the first consumer).
-- Freshness-check *implementation* — only the checks are defined here, not the code that runs them.
-- `/delegate` transport semantics beyond naming the `uncertain` state.
-- Auto-generating the `.md` mirror from the `.json` — Step 4 or 6 will own the writer.
+**Scope (sketch, plan in detail when Step 4 starts):**
+1. Extend Codex `$run` SKILL.md with `--execute-approved` flag semantics.
+2. Add a helper that reads `.agents/approved-plan.json`, validates against the schema, and runs the six freshness checks.
+3. On success: transition `approved → consumed`, write the sanitized mirror to `tasks/approved-plan.md`, skip the approval prompt.
+4. On failure: transition `approved → stale`, re-prompt with a diff (git HEAD moved / todo.md changed / TTL expired / etc.), fall through to the standard approval path.
+5. Bash 3.2 compatibility for any helper script.
 
-**Files affected (full paths):**
-- **Create or modify:** `/Users/georgele/projects/tools/agentic-skills/docs/operating-modes.md` — expand the "Approval / Delegation Packet" section with schema, lifecycle, safety table. If length pushes past ~150 lines, extract to `/Users/georgele/projects/tools/agentic-skills/docs/approved-plan.md` and link.
-- **Create:** `/Users/georgele/projects/tools/agentic-skills/specs/approved-plan.schema.json` — JSON Schema for validators (optional but preferred — cheap to add now, saves Step 4 from re-deriving it).
-- **Create:** `/Users/georgele/projects/tools/agentic-skills/tasks/approved-plan.md` — seed mirror, documents empty state.
-- **Modify:** `/Users/georgele/projects/tools/agentic-skills/.gitignore` — add `.agents/approved-plan.json`. Verify the file exists first; create it if not.
-- **Modify:** `/Users/georgele/projects/tools/agentic-skills/tasks/todo.md` — check off Step 3 on completion.
+**Out of scope:** `/handoff --target=codex` (Step 5), `/delegate` (Step 6), mirror-writer ownership for `/delegate` flows.
 
-**Key technical decisions / risks:**
-- `.agents/approved-plan.json` is developer-local, not repo state. Committing it would leak per-user approval timestamps and dirty-path globs. Keep gitignored. Do not mirror packet contents into `.agents/project.json` — that file is shared.
-- `tasks/approved-plan.md` is the shared artifact. Treat it as a redacted mirror, not a full JSON dump. When Step 4 writes it, it will only project the safe fields plus a human summary. Step 3 only defines the contract.
-- Lifecycle is a strict finite state machine. `approved` is the only state from which work may execute. `consumed` is terminal success; `stale`/`superseded`/`uncertain` are terminal and require a fresh draft to restart. Do not allow `consumed → approved` (that would mask re-execution bugs).
-- `todo_hash` is sha256 of the raw file bytes (after trailing-newline normalization — pick a rule in this step so Step 4 doesn't invent its own). Recommend: normalize line endings to LF, strip UTF-8 BOM if present, hash the result. State this explicitly.
-- `blocking_manual_tasks` should snapshot *content*, not file path references. A path-only snapshot would silently drift when the file is edited post-approval.
-- JSON-schema authoring: prefer draft-07 for maximum tool compatibility (both Python `jsonschema` and JS `ajv` default to it cleanly). No need for `$dynamicRef` or 2020-12 features.
-- Bash 3.2 compatibility still applies to any helper — but this step introduces no executable code, only docs + schema + ignored file. That's deliberate: it prevents schema/consumer drift.
+### Step 3 Summary (completed 2026-04-19)
 
-**Conventions from prior work:**
-- Docs live under `docs/`. Schemas / specs under `specs/`. Don't mix. (See existing `specs/code-quality-skill-pack.md`.)
-- `.gitignore` entries should be path-prefixed (`.agents/approved-plan.json`, not bare `approved-plan.json`) to avoid matching identically-named files elsewhere.
-- When a doc section crosses ~150 lines it gets extracted — see how `docs/codex-workflow.md` split out from earlier operating docs.
-
-**Test strategy (tests-after, per Execution Profile `serial`):**
-- Contract-level verification only (no executable code to unit-test):
-  1. Schema self-check: validate the seed `tasks/approved-plan.md` front-matter or a minimal example packet against `specs/approved-plan.schema.json` using a one-liner (`ajv validate` or Python `jsonschema.validate`) if available on the host. Skip if no validator is installed; document the expected-valid example inline.
-  2. `.gitignore` check: `git check-ignore .agents/approved-plan.json` should return the path, exit 0.
-  3. Doc-reference check: grep that `docs/operating-modes.md` Step-3 references are no longer marked "schema lands in Step 3" — confirm present-tense.
-  4. No consumer drift: grep that no SKILL.md or script yet references `approved-plan.json` — Step 4 is the first legitimate consumer, so a match here would indicate premature wiring.
-
-**Acceptance criteria:**
-- [ ] `docs/operating-modes.md` (or `docs/approved-plan.md` if extracted) describes the full field schema, the lifecycle state machine, and the `.md` vs JSON-only safety classification.
-- [ ] `specs/approved-plan.schema.json` validates a minimal well-formed example packet and rejects a malformed one (bad lifecycle value or missing required field).
-- [ ] `tasks/approved-plan.md` exists as a seed with an empty-state notice and a worked example (or a link to one).
-- [ ] `.agents/approved-plan.json` is gitignored; `git check-ignore` confirms.
-- [ ] `tasks/todo.md` Step 3 row is checked off and the "Active Step Plan" section rolls to Step 4.
-- [ ] No SKILL.md or script reads or writes the packet yet — consumption is Steps 4–6.
-
-**Execution Profile:** `serial` (inherited from Phase 11). Main agent writes all schema, doc, and `.gitignore` edits. No subagent lanes — semantic drift on the packet contract is the exact risk serial mode exists to prevent.
+- Published schema + lifecycle + safety classification in `docs/operating-modes.md` (108 lines, kept in place — no extraction).
+- Shipped `specs/approved-plan.schema.json` (draft-07). Validated a well-formed example, rejected a bad-lifecycle packet and a missing-`git_head` packet via `jsonschema`.
+- Seeded `tasks/approved-plan.md` with an empty-state notice and a worked example of the mirror format.
+- Added `.agents/approved-plan.json` to `.gitignore`; `git check-ignore` confirms.
+- Grep confirms no SKILL.md or script consumes the packet yet — Step 4 is the first legitimate consumer.
 
 ### Sequencing Rationale
 

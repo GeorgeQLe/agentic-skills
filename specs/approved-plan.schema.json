@@ -1,0 +1,79 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/legeorge4/agentic-skills/specs/approved-plan.schema.json",
+  "title": "ApprovedPlanPacket",
+  "description": "Shared approval / delegation packet consumed by $run --execute-approved, /handoff --target=codex, and /delegate. Stored at .agents/approved-plan.json (gitignored, developer-local).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "step_identity",
+    "approved_at",
+    "git_head",
+    "todo_hash",
+    "ttl_seconds",
+    "lifecycle"
+  ],
+  "properties": {
+    "step_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["phase", "step", "title"],
+      "properties": {
+        "phase": {
+          "type": "string",
+          "pattern": "^Phase [0-9]+$"
+        },
+        "step": {
+          "type": "string",
+          "pattern": "^Step [0-9]+(\\.[0-9]+)?$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "approved_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO-8601 UTC timestamp, must end in Z.",
+      "pattern": "Z$"
+    },
+    "approved_by": {
+      "type": "string",
+      "minLength": 1
+    },
+    "git_head": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$",
+      "description": "Full 40-char SHA of HEAD at approval time."
+    },
+    "todo_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "sha256 of tasks/todo.md after BOM strip + CRLF->LF normalization."
+    },
+    "allowed_dirty_paths": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "description": "Globs of paths allowed to be dirty without invalidating freshness. JSON-only (path layout not safe to mirror)."
+    },
+    "blocking_manual_tasks": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Snapshot (content, not file refs) of _(blocks: Step N.X)_ lines from tasks/manual-todo.md at approval time."
+    },
+    "ttl_seconds": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "lifecycle": {
+      "type": "string",
+      "enum": ["draft", "approved", "consumed", "stale", "superseded", "uncertain"]
+    },
+    "notes": {
+      "type": "string",
+      "description": "Free-form. JSON-only (not mirrored into tasks/approved-plan.md)."
+    }
+  }
+}
