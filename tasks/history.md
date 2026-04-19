@@ -1,5 +1,11 @@
 # Session History
 
+## 2026-04-19 — Phase 11 Step 1 — thin `docs/operating-modes.md`
+
+- Added `docs/operating-modes.md` naming the three-mode (`claude-only`, `codex-only`, `hybrid`) operating model with a per-mode paragraph, a forward-reference to the mode signal and approval packet, and an explicit "expansions coming in later steps" framing.
+- Checked off Phase 11 Step 1 in `tasks/todo.md` and wrote the self-contained plan for Step 2 (mode resolution: `.agents/project.json.agent_mode`, `SKILLS_AGENT_MODE`, `scripts/agent-mode.sh`).
+- No skill, schema, or code behavior changed yet; Step 2 wires the signal without consumers.
+
 ## 2026-04-17 — Add execution profiles and guard Claude plan-mode exits
 
 - Added strategic `Parallelization` and `Coordination Notes` fields to roadmap generation for Claude and Codex skills

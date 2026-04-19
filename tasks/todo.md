@@ -85,6 +85,47 @@ Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env va
   - Migration guide from parity-mirror model
 - [ ] **Verify:** Run through all three modes on a sample workflow; confirm each mode completes plan → execute → ship without hitting the unavailable CLI
 
+### Active Step Plan — Step 2: Mode Resolution
+
+**Goal:** Land the mode-signal surface named in `docs/operating-modes.md` so later steps (`/delegate`, `$run --execute-approved`, audit table) can resolve a concrete mode. This step wires the signal; it does not yet change skill behavior based on the signal — that is Step 7.
+
+**Scope:**
+1. Extend the `.agents/project.json` schema with an `agent_mode` field (values: `"claude-only" | "codex-only" | "hybrid"`, or absent = unset).
+2. Teach `scripts/pack.sh` to preserve an existing `agent_mode` value across `install`, `remove`, and `refresh` rewrites, and to accept a new `set-mode <mode>` subcommand to write/clear it (`set-mode unset` clears the field).
+3. Add a new `scripts/agent-mode.sh` resolution helper that prints the effective mode on stdout and exits non-zero with a clear message on invalid values. Precedence: `SKILLS_AGENT_MODE` env > `.agents/project.json.agent_mode` > empty string (meaning unset).
+4. Document the signal — one paragraph each in `docs/operating-modes.md` "Mode Signal" section (replace the current "not yet wired" marker with a short usage block) and `README.md`'s pack section. No SKILL.md edits in this step.
+
+**Files affected (full paths):**
+- `scripts/pack.sh` — preserve `agent_mode` in `write_project_file*`; add `current_agent_mode`, a `set_mode` command in the main case switch, and `usage()` help text.
+- `scripts/agent-mode.sh` — new file, executable, POSIX-bash (macOS Bash 3.2 compatible — no namerefs, no `mapfile`).
+- `docs/operating-modes.md` — expand the "Mode Signal" section in place.
+- `README.md` — one-paragraph mention under the existing pack/project.json section.
+- `tasks/todo.md` — check off Step 2 on completion.
+
+**Key technical decisions / risks:**
+- Env var name is `SKILLS_AGENT_MODE`, **not** `AGENT_MODE` (collision risk with unrelated tools — called out in the Phase 11 plan).
+- `agent_mode` is optional. Missing field ≠ error; helper prints empty and exits 0 so callers can branch on `[[ -z "$mode" ]]`.
+- Invalid values (not in the three-mode set) are a hard error from both `pack.sh set-mode` and `agent-mode.sh`. Do not silently fall through to `unset`.
+- Preserve the existing pack.sh JSON-writing style (printf-based, not `jq`) to avoid adding a dependency. That means parsing `agent_mode` with `sed` the same way `current_project_type` does.
+- Bash 3.2 compatibility applies (see `tasks/history.md` 2026-04-14 entry — install.sh was fixed for exactly this).
+
+**Conventions from prior work:**
+- `scripts/pack.sh` uses `set -euo pipefail`, a project-lock via `mkdir` sentinel, `die()` for errors. Mirror that in `agent-mode.sh` where it makes sense.
+- No `jq` dependency — pack.sh has been careful to avoid it.
+
+**Test strategy (tests-after, per Execution Profile `serial`):**
+- Add a small smoke test in the pack.sh test harness (if one exists under `scripts/` or `archive/`) or an ad-hoc verification sequence: fresh tmpdir → `pack.sh install <pack>` → inspect `.agents/project.json` (no `agent_mode` field) → `pack.sh set-mode hybrid` → re-inspect (field present) → `pack.sh refresh` (field preserved) → `SKILLS_AGENT_MODE=codex-only bash scripts/agent-mode.sh` prints `codex-only` → unset env, script prints `hybrid` → `pack.sh set-mode unset` → script prints empty.
+- Invalid value verification: `pack.sh set-mode bogus` exits non-zero; `SKILLS_AGENT_MODE=bogus bash scripts/agent-mode.sh` exits non-zero.
+
+**Acceptance criteria:**
+- [ ] `.agents/project.json` can carry an `agent_mode` field that survives `pack.sh install`, `remove`, and `refresh`.
+- [ ] `pack.sh set-mode <claude-only|codex-only|hybrid|unset>` writes or clears the field.
+- [ ] `scripts/agent-mode.sh` resolves env > project.json > empty and rejects invalid values from both sources.
+- [ ] `docs/operating-modes.md` "Mode Signal" section describes the shipped surface in present tense and drops the "not yet wired" marker.
+- [ ] No SKILL.md files read the signal yet — consumption is Step 7. This keeps the blast radius small.
+
+**Execution Profile:** `serial` (inherited from Phase 11). Main agent owns schema edits, helper script, pack.sh changes, doc edits, and verification.
+
 ### Sequencing Rationale
 
 - Doc-thin-first names the model without pre-specifying unshipped behavior
