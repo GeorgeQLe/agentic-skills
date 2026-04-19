@@ -8,7 +8,7 @@ Classify files by path before checking headings:
 
 | Family | Paths | Strictness |
 | --- | --- | --- |
-| Task pipeline | `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/history.md`, `tasks/phases/phase-N.md`, `tasks/ideas.md`, `tasks/handoff.md`, `tasks/lessons.md` | Strict for workflow-owned files |
+| Task pipeline | `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, `tasks/recurring-todo.md`, `tasks/history.md`, `tasks/phases/phase-N.md`, `tasks/ideas.md`, `tasks/handoff.md`, `tasks/lessons.md` | Strict for workflow-owned files |
 | Specs | `specs/*.md`, `specs/{app}/*.md`, `docs/specifications/*.md` | Strict, except `*-interview.md` |
 | Interview logs | `*-interview.md`, `research/*-interview.md`, `research/{app}/*-interview.md` | Moderate |
 | Research docs | `research/*.md`, `research/{app}/*.md` | Strict for known skill outputs |
@@ -51,7 +51,7 @@ Flag as Error when phase numbering is malformed or downstream skills cannot iden
 
 Required:
 - H1 title or current phase heading.
-- Checkable work items or `## Priority Task Queue`.
+- Checkable work items, `## Priority Task Queue`, or `## Priority Documentation Todo`.
 - Current-phase scope only, unless the file is visibly in legacy migration state.
 
 Flag as Error when there are no checkboxes and no priority queue. Flag as Warning when it appears to contain the full roadmap instead of the active phase.
@@ -63,6 +63,38 @@ Required:
 - Every unchecked item includes `_(blocks: Step N.X)_` or `_(after: Step N.X)_`.
 
 Missing blocker/after annotations are Errors because `$run` and `$ship` use them to avoid executing blocked work.
+
+### `tasks/record-todo.md`
+
+Required for each unchecked item:
+- Checkable one-time record or measurement task.
+- Source.
+- Condition that makes the record eligible.
+- Non-blocking reason.
+- Required data or access.
+- Measurement/query or exact evidence to collect.
+- Target or acceptance note.
+- Revisit cadence/date.
+- Completion evidence.
+- Promotion rule for when the item should move into `tasks/todo.md`.
+
+Flag as Error when the file contains executable implementation work that belongs in `tasks/todo.md`, or manual blockers that belong in `tasks/manual-todo.md`. Flag missing required fields as Warning unless downstream automation depends on them.
+
+### `tasks/recurring-todo.md`
+
+Required for each unchecked or active item:
+- Recurring task.
+- Cadence.
+- Owner/agent.
+- Scope.
+- Trigger.
+- Last run.
+- Next due.
+- Command/skill to run.
+- Evidence/output path.
+- Escalation conditions.
+
+Flag as Error when recurring items are written as current execution steps without an explicit promotion rule. Flag missing cadence, next due, or evidence path as Warning.
 
 ### `tasks/history.md`
 

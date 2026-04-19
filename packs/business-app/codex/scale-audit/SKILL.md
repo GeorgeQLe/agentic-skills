@@ -32,7 +32,7 @@ When app scope `{app}` is active:
 
 ### 1. Load Context & Evaluate
 
-1. Read `research/enterprise-icp.md` (or `research/{app}/enterprise-icp.md`), `research/icp.md` (or `research/{app}/icp.md`), `specs/mvp-gap.md` (or `specs/{app}/mvp-gap.md`) (if they exist), codebase, and in-progress work from `tasks/roadmap.md`, `tasks/todo.md`, and `tasks/manual-todo.md` (if it exists).
+1. Read `research/enterprise-icp.md` (or `research/{app}/enterprise-icp.md`), `research/icp.md` (or `research/{app}/icp.md`), `specs/mvp-gap.md` (or `specs/{app}/mvp-gap.md`) (if they exist), codebase, and in-progress/advisory work from `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, and `tasks/recurring-todo.md` (if they exist).
 2. Evaluate the codebase across:
    - **Per-Persona Journey Coverage** — Can each stakeholder complete their workflow?
    - **Onboarding Gaps** — Self-serve, team, SSO-provisioned, migration, training
@@ -47,6 +47,16 @@ When app scope `{app}` is active:
 - `specs/scale-audit.md` (or `specs/{app}/scale-audit.md`) — Gap analysis with stakeholder coverage matrix, compliance matrix, priority tags, and `$plan-interview` prompts for each gap
 
 The output file must end with a `## Next Steps` section (3–5 contextual items, "Pick one:" framing) based on which files exist: always suggest `$roadmap`; conditionally suggest `$plan-interview [top blocker]`, `$journey-map enterprise`, `$mvp-gap`, `$metrics` based on hard-blockers needing specs, `research/journey-map.md`, `specs/mvp-gap.md` staleness, and `research/metrics.md`.
+
+## Task Classification
+
+When this skill produces follow-up work, file it by execution semantics:
+
+- Immediately actionable implementation or documentation work goes in `tasks/todo.md`.
+- Human actions tied to automated steps go in `tasks/manual-todo.md` with `_(blocks: Step N.X)_` or `_(after: Step N.X)_`.
+- One-time condition-gated records, baselines, or future measurements go in `tasks/record-todo.md` with source, condition, non-blocking reason, evidence, and promotion rule.
+- Cadence-based reviews, playtests, adoption checks, investor updates, retros, or docs-health checks go in `tasks/recurring-todo.md` with cadence, owner/agent, next due, evidence path, and escalation conditions.
+- Do not put non-blocking records or recurring obligations in `tasks/todo.md` unless they have been explicitly promoted into current execution work.
 
 ## Constraints
 

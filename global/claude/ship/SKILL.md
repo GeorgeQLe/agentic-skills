@@ -83,6 +83,7 @@ d) If the deploy fails, report the error clearly. Do not retry automatically.
 
 a) **Migration check:** If `tasks/roadmap.md` does not exist but `tasks/todo.md` contains multiple `## Phase` headers, migrate: copy `tasks/todo.md` → `tasks/roadmap.md`, then trim `tasks/todo.md` to just the current phase (first phase with unchecked steps). Commit with `chore: migrate to roadmap.md + todo.md split`.
 b) Read `tasks/todo.md` to identify the next uncompleted step in the current phase.
+b2) If `tasks/record-todo.md` or `tasks/recurring-todo.md` exists, count unchecked advisory items for status only. Do not select them as next work.
 c) **Check if the current phase is complete** (all steps checked, milestone criteria met):
    - If **YES — Phase transition:**
      1. Archive the completed phase: copy `tasks/todo.md` → `tasks/phases/phase-N.md` (create `tasks/phases/` if needed). Fill in the "On Completion" section.
@@ -104,13 +105,14 @@ d) Write a **self-contained** implementation plan for the next step into `tasks/
    - If test strategy is `tests-after`: note that tests will be written in the Green step
    - The current phase's `### Execution Profile`, including whether the next execution is serial, research-only, review-only, implementation-safe, or agent-team
    - Acceptance criteria: how to verify the step is done
-e) Ship `tasks/todo.md`, `tasks/roadmap.md`, `tasks/manual-todo.md` (if it exists), and `tasks/phases/` (if created) via `/commit-and-push-by-feature`, landing them on `main` or `master`.
+e) Ship `tasks/todo.md`, `tasks/roadmap.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, `tasks/recurring-todo.md` (when they exist), and `tasks/phases/` (if created) via `/commit-and-push-by-feature`, landing them on `main` or `master`.
 
 ### 5. Output a brief summary (2-3 lines max to save context)
 - What was shipped (if anything)
 - Deploy status (if deployed)
 - Test status — **explicitly state whether any failing tests are expected (red phase: tests written before implementation) or unexpected (regressions/bugs that need fixing)**
 - Manual tasks — pending count from `tasks/manual-todo.md` (if it exists), note any that block upcoming steps
+- Advisory tasks — pending record/recurring counts from `tasks/record-todo.md` and `tasks/recurring-todo.md` if they exist
 - What the next step is (1 sentence) — or "session wrapped up" if `--no-plan`
 
 ### 6. Enter plan mode (skip if `--no-plan`)
@@ -139,6 +141,7 @@ This gives the user something concrete to review before selecting "clear context
 - Do not commit secrets.
 - Do not push shipping commits to an existing feature branch. Use `/commit-and-push-by-feature` to move the work onto `main` or `master` and push it there, or stop and report a blocker if that cannot be done safely.
 - The plan must be actionable, not vague. Include specific file paths, technical details, and the current phase's `### Execution Profile`.
+- Do not execute or plan from `tasks/record-todo.md` or `tasks/recurring-todo.md`; report their counts only unless an item has been promoted into `tasks/todo.md`.
 - Never use GitHub Actions for deployment. Only use manual deploy scripts, Makefiles, or CLI commands.
 - Never deploy to production without explicit user confirmation.
 - Do not modify code as part of the deploy process.

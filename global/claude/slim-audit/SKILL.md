@@ -15,7 +15,7 @@ Audit the codebase, documentation, and specs to identify concrete opportunities 
 1. **Gather project context:**
    - Read `CLAUDE.md`, `README.md`, and project config files to understand conventions, architecture, and constraints.
    - Search for and read project documentation: specs (`specs/`, `spec.md`, `docs/`), changelogs (`CHANGELOG.md`, `tasks/history.md`), ADRs, and design docs.
-   - Read `tasks/roadmap.md`, `tasks/todo.md`, and `tasks/manual-todo.md` if they exist to understand in-progress work.
+   - Read `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, and `tasks/recurring-todo.md` if they exist to understand in-progress and advisory work.
    - Build a mental model of **intentional decisions** — patterns, trade-offs, and constraints the team has deliberately chosen.
 
 2. **Determine scope:**

@@ -8,7 +8,7 @@ argument-hint: "[--existing] [path-to-spec]"
 
 # Roadmap - Task Pipeline Manager
 
-Use this skill to keep the task execution pipeline healthy and moving. It scans roadmap, todo, manual tasks, history, ideas, specs, and git state, then either builds a roadmap (when none exists) or updates `tasks/todo.md` with a priority task queue.
+Use this skill to keep the task execution pipeline healthy and moving. It scans roadmap, todo, manual tasks, record tasks, recurring tasks, history, ideas, specs, and git state, then either builds a roadmap (when none exists) or updates `tasks/todo.md` with a priority task queue.
 
 Do not run the queued skills from this workflow. The job here is to maintain the task queue so the user can resolve all pipeline issues in the right order.
 
@@ -33,6 +33,8 @@ Record existence, content summary, and last-modified timestamps for:
 - `tasks/roadmap.md` — full phased plan
 - `tasks/todo.md` — current phase working document
 - `tasks/manual-todo.md` — pending manual tasks
+- `tasks/record-todo.md` — non-blocking condition-gated records and measurements
+- `tasks/recurring-todo.md` — cadence-based operational, research, or maintenance tasks
 - `tasks/history.md` — completed work log
 - `tasks/ideas.md` — unspecced ideas
 - `tasks/phases/` — archived phase files
@@ -156,7 +158,7 @@ Use `serial` when work is tightly coupled or file ownership cannot be separated.
 
 #### 4d. Seed Phase 1
 
-After writing `tasks/roadmap.md`, immediately invoke `/plan-phase 1` to generate the implementation detail for the first phase. This produces `tasks/todo.md` (and `tasks/manual-todo.md` if applicable) so the user lands on an actionable starting point rather than an undecomposed roadmap.
+After writing `tasks/roadmap.md`, immediately invoke `/plan-phase 1` to generate the implementation detail for the first phase. This produces `tasks/todo.md` and, when applicable, `tasks/manual-todo.md`, `tasks/record-todo.md`, or `tasks/recurring-todo.md`, so the user lands on an actionable starting point rather than an undecomposed roadmap.
 
 Do not decompose later phases — those are generated just-in-time when each phase begins (via `/ship` or `/run`).
 
@@ -184,19 +186,25 @@ A roadmap phase has acceptance criteria but no implementation steps (no `### Tes
 #### 6. Orphaned Manual Tasks
 `tasks/manual-todo.md` references a phase that has already been completed or archived, but unchecked items remain. These need resolution or explicit deferral.
 
-#### 7. History Gap
+#### 7. Eligible Record Tasks
+`tasks/record-todo.md` contains unchecked items whose condition appears to be true. These are advisory by default. Queue promotion to `tasks/todo.md` only when the item is now concrete execution work; otherwise leave it in `tasks/record-todo.md` with updated evidence or revisit timing.
+
+#### 8. Due Recurring Tasks
+`tasks/recurring-todo.md` contains unchecked or active items whose `Next due` is today or earlier. These are advisory by default. Queue promotion to `tasks/todo.md` only when the due item requires real execution work; otherwise leave it in `tasks/recurring-todo.md` with updated run/evidence state.
+
+#### 9. History Gap
 Work has been completed (checked-off steps in todo, archived phases) but `tasks/history.md` is missing, empty, or its last entry predates the most recent phase archive. Evidence: phase archive timestamps vs history mtime.
 
-#### 8. Spec-Task Drift
+#### 10. Spec-Task Drift
 Specs have been modified more recently than the roadmap, suggesting the plan may not reflect the current specifications. Evidence: spec mtime vs roadmap mtime. Only flag when the spec modification is substantive (not just formatting).
 
-#### 9. Missing Roadmap (defensive)
+#### 11. Missing Roadmap (defensive)
 Specs exist in `specs/` (or `spec.md`) but `tasks/roadmap.md` does not exist. This should not occur after step 4 but is included as a safety net.
 
-#### 10. Lessons Not Reviewed
+#### 12. Lessons Not Reviewed
 `tasks/lessons.md` was updated more recently than the current phase's implementation steps were written, suggesting new lessons may apply to in-progress work.
 
-#### 11. Unspecced Ideas
+#### 13. Unspecced Ideas
 `tasks/ideas.md` contains ideas that have no corresponding spec in `specs/`. These are candidates for `/plan-interview --ideas` or individual `/plan-interview` runs.
 
 ### 6. Order the Priority Queue
@@ -209,11 +217,13 @@ Order action items so the user can resolve pipeline issues without guessing:
 4. Stale todo (working document out of sync with roadmap).
 5. Missing implementation steps (phase needs decomposition before execution).
 6. Orphaned manual tasks (leftover from completed phases).
-7. History gap (completed work not recorded).
-8. Spec-task drift (plan may be outdated).
-9. Missing roadmap (specs exist but no plan).
-10. Lessons not reviewed (new lessons may apply).
-11. Unspecced ideas (ideas waiting for interview).
+7. Eligible record tasks (advisory unless promoted to execution work).
+8. Due recurring tasks (advisory unless promoted to execution work).
+9. History gap (completed work not recorded).
+10. Spec-task drift (plan may be outdated).
+11. Missing roadmap (specs exist but no plan).
+12. Lessons not reviewed (new lessons may apply).
+13. Unspecced ideas (ideas waiting for interview).
 
 Within each category, prefer items that unblock the most downstream work.
 
@@ -246,6 +256,13 @@ For manual tasks that block progress:
 
 ```md
 - [ ] Complete manual task: "[task description]" _(blocks: Step N.X)_ — resolve before `/run` can continue.
+```
+
+For advisory record or recurring tasks:
+
+```md
+- [ ] Review `tasks/record-todo.md`: "[task description]" — condition appears eligible; promote to `tasks/todo.md` only if this is now concrete execution work.
+- [ ] Review `tasks/recurring-todo.md`: "[task description]" — next due is today or earlier; promote to `tasks/todo.md` only if this requires execution work.
 ```
 
 For dirty tree:
@@ -321,7 +338,8 @@ Next: `/run` to continue execution.
 - This skill updates `tasks/todo.md` and `tasks/roadmap.md`; it must not run queued priority items. It may invoke `/plan-phase 1` only as the explicit Phase 1 seed described above.
 - Preserve user-authored todo content outside `## Priority Task Queue`.
 - Every issue must include evidence (timestamps, checked-item counts, file existence).
-- Do not directly modify `tasks/manual-todo.md`, `tasks/history.md`, or any specs (except to create `tasks/roadmap.md` in State B). `/plan-phase 1` may create or update `tasks/manual-todo.md` during the explicit Phase 1 seed.
+- Do not directly modify `tasks/manual-todo.md`, `tasks/record-todo.md`, `tasks/recurring-todo.md`, `tasks/history.md`, or any specs (except to create `tasks/roadmap.md` in State B). `/plan-phase 1` may create or update task files during the explicit Phase 1 seed.
+- Do not treat `tasks/record-todo.md` or `tasks/recurring-todo.md` as execution queues. They are advisory surfaces unless an item is explicitly promoted into `tasks/todo.md`.
 - Do not create or modify source code.
 - Do not archive phases, advance the pipeline, or execute implementation steps.
 - Prefer actionable skill invocations (`/ship`, `/run`, `/plan-phase N`, `/research-roadmap`) over vague guidance.

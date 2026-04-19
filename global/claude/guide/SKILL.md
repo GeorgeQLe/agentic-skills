@@ -14,6 +14,7 @@ Produce detailed, click-by-click instructions for manual tasks that block automa
 
 1. **Find the blocker:**
    - If `$ARGUMENTS` is non-empty, use the provided text as the task description.
+   - If `$ARGUMENTS` explicitly references `tasks/record-todo.md`, use that record item as the task description and produce instructions for satisfying its condition or collecting its evidence. Do not use record items by default.
    - If `$ARGUMENTS` is empty, read `tasks/manual-todo.md`:
      - Find the first unchecked item (`- [ ]`) that contains a `_(blocks: ...)_` annotation.
      - If no blocking item exists, find the first unchecked item.
@@ -85,6 +86,7 @@ When you've completed these steps, let me know and I'll mark the item done in `t
 - **Always web search** — never produce instructions from memory alone. Service UIs change; stale steps are worse than none.
 - **Project-specific values** — never give generic placeholders when the codebase contains the actual values to use.
 - **Read-only by default** — this skill does not modify code. The only file it may edit is `tasks/manual-todo.md` (to check off a completed item), and only after the user confirms completion.
+- Do not check off or modify `tasks/record-todo.md`; record items are advisory unless a separate workflow updates them.
 - **No shipping contract** — checking off a manual-todo item is a minor bookkeeping edit, not a code change. Do not auto-commit just for that. If other tracked changes are present, leave them for a proper shipping skill.
 - **One task at a time** — if multiple blockers exist, guide the user through the first one. They can run `/guide` again for the next.
 - **Don't execute the task** — produce instructions for the user to follow. Do not attempt to call external APIs, create accounts, or configure services on the user's behalf.

@@ -81,7 +81,7 @@ Run a comprehensive health check across the project or monorepo to catch regress
 
 After presenting the health check results, if the verdict is "Issues found":
 
-1. Read `tasks/todo.md` if it exists — append to the end under a `## Regression Fixes` heading (create the file if it doesn't exist).
+1. Read `tasks/todo.md` if it exists — append actionable failures to the end under a `## Regression Fixes` heading (create the file if it doesn't exist). Write non-blocking future validations or unavailable-data checks to `tasks/record-todo.md` instead.
 2. Add one checkbox item per **new** failure (not pre-existing), grouped by check type:
    ```markdown
    ## Regression Fixes

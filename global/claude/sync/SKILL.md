@@ -25,6 +25,7 @@ Pull the latest changes from the remote repository and report status.
    - If `tasks/todo.md` exists, read it and look for unchecked items (`- [ ]`).
    - If there are incomplete items, summarise: which phase is current, what the next step is, and how many steps/phases remain.
    - If `tasks/manual-todo.md` exists, count unchecked manual tasks and include in the summary.
+   - If `tasks/record-todo.md` or `tasks/recurring-todo.md` exists, count unchecked advisory items and include those counts separately. Do not treat them as active plan steps.
    - If all items are checked, report that the plan is complete.
    - If neither file exists, note that there is no active plan.
 
@@ -35,6 +36,7 @@ Pull the latest changes from the remote repository and report status.
    - Any conflicts that need manual resolution
    - Current `git status`
    - **Outstanding work** — summary from step 3 (next step, current phase, remaining work, pending manual tasks) or "No active plan"
+   - **Advisory tasks** — pending record/recurring counts, if those files exist
 
 5. **Post-sync actions:**
 

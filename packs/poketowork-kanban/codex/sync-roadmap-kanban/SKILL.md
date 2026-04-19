@@ -22,7 +22,7 @@ Reconcile the kanban board, roadmap docs, and codebase state so all three reflec
    - If zero or multiple matches, list boards, ask the user to pick, and save their choice to `tasks/.kanban-board`. If the session is already in Plan mode and there are 2-3 concrete choices, prefer `request_user_input`.
    - Run `poketo kanban board <id>` to get the full board state.
 
-3. **Read roadmap docs** — read `tasks/roadmap.md`, `tasks/todo.md`, and `tasks/manual-todo.md` (if it exists). List all items with checked/unchecked status.
+3. **Read roadmap docs** — read `tasks/roadmap.md`, `tasks/todo.md`, and `tasks/manual-todo.md` (if it exists). Read `tasks/record-todo.md` and `tasks/recurring-todo.md` only for advisory counts. List execution/manual items with checked/unchecked status.
 
 4. **Read codebase reality** — `git log --oneline -30`. For items claimed done, verify deliverables exist (file checks, grep for key identifiers). Flag ambiguous cases.
 
@@ -30,12 +30,13 @@ Reconcile the kanban board, roadmap docs, and codebase state so all three reflec
    - **Done on kanban + code confirms** → check off in roadmap
    - **Done in roadmap + code confirms** → move kanban card to Done
    - **New roadmap items, no card** → create kanban cards (backlog or in-progress)
+   - **Record/recurring task items** → report counts only; do not create ordinary Todo cards unless the item has already been promoted into `tasks/todo.md`
    - **Orphaned cards** → flag (do NOT delete)
    - **Claimed done, code doesn't support** → flag as discrepancy (do NOT uncheck)
 
 6. **Apply changes** — create/move cards via `poketo kanban`, edit roadmap docs. Re-fetch board to confirm.
 
-7. **Report** — synced items, discrepancies needing human judgment, updated board state, roadmap progress, manual task status (from `tasks/manual-todo.md` if it exists).
+7. **Report** — synced items, discrepancies needing human judgment, updated board state, roadmap progress, manual task status (from `tasks/manual-todo.md` if it exists), and advisory record/recurring counts if those files exist.
 
 ## Constraints
 

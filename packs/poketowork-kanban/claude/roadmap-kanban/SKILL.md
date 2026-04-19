@@ -19,6 +19,7 @@ Use this skill only in projects that have opted into a PoketoWork kanban pack.
 4. After the base roadmap writes or updates `tasks/roadmap.md` and `tasks/todo.md`, sync cards:
    - For each unchecked current step in `tasks/todo.md`, search for a matching card. Move it from Backlog to Todo, leave it alone if already Todo or later, or create it in Todo with phase context.
    - For each future roadmap phase, search for a matching phase card. Create a Backlog summary card when missing.
+   - Do not create ordinary Todo cards from `tasks/record-todo.md` or `tasks/recurring-todo.md`. Report advisory counts separately unless an item has been promoted into `tasks/todo.md`.
 5. Report cards created, moved, skipped, and any failures.
 
 Only move cards from Backlog to Todo. Never move cards backward. If kanban fails, warn and keep the roadmap output.

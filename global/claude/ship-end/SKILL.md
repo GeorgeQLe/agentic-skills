@@ -20,6 +20,7 @@ Wrap up the current session: mark progress, commit, and push.
    - Update `tasks/todo.md` — mark completed items as done, note any outstanding items or blockers.
    - Update milestone progress in `tasks/roadmap.md` if criteria were met.
    - Check `tasks/manual-todo.md` (if it exists) — note the status of manual tasks (how many checked vs unchecked). Do NOT modify checked items.
+   - Check `tasks/record-todo.md` and `tasks/recurring-todo.md` if they exist — note unchecked advisory counts only. Do NOT treat them as blockers unless an item has been promoted into `tasks/todo.md`.
    - Update `tasks/history.md` — append a brief record of what was accomplished this session (phase/step completed, key changes). Create it if it doesn't exist.
 
 3. **Deploy:**
@@ -54,6 +55,7 @@ Wrap up the current session: mark progress, commit, and push.
 - **Deploy**: [status]
 - **Tests**: [pass/fail — expected or unexpected]
 - **Manual tasks**: [X/Y complete, or "none"]
+- **Advisory tasks**: [record/recurring counts, or "none"]
 - **Outstanding**: [remaining work]
 - **Branch**: [branch name]
 - **Commits**: [list]
@@ -65,6 +67,7 @@ Wrap up the current session: mark progress, commit, and push.
 - **Fix unrelated issues:** If any step surfaces errors, warnings, or lint issues — even ones unrelated to the current work — investigate and fix them before continuing. Commit these fixes separately with a descriptive message.
 - Do NOT modify CLAUDE.md. CLAUDE.md is for project conventions and config only — not progress tracking.
 - Progress and active work go in `tasks/todo.md`. Completed work history goes in `tasks/history.md`.
+- Do not execute or block wrap-up on `tasks/record-todo.md` or `tasks/recurring-todo.md` items unless they were explicitly promoted into `tasks/todo.md`.
 - Do not switch branches or create new branches unless the current state requires it.
 - Do not amend or rewrite history.
 - Do not commit secrets.

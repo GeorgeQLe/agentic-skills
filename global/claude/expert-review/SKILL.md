@@ -15,7 +15,7 @@ Conduct a thorough code review of this project serving as a panel of expert prog
 1. **Gather project context**:
    - Read `CLAUDE.md`, `README.md`, and any project config files to understand conventions and architecture.
    - Search for and read project documentation: specs (`specs/`, `spec.md`, `docs/`), changelogs (`CHANGELOG.md`, `CHANGES.md`, `tasks/history.md`), ADRs (`adr/`, `docs/adr/`, `docs/decisions/`), interview logs (`*-__interview.md__`), and design docs.
-   - Read `tasks/roadmap.md` if it exists to understand the full plan. Read `tasks/todo.md` for current phase and in-progress work. Read `tasks/manual-todo.md` (if it exists) for pending manual tasks.
+   - Read `tasks/roadmap.md` if it exists to understand the full plan. Read `tasks/todo.md` for current phase and in-progress work. Read `tasks/manual-todo.md` (if it exists) for pending manual tasks. Read `tasks/record-todo.md` and `tasks/recurring-todo.md` (if they exist) for advisory context only.
    - Build a mental model of **intentional decisions** — patterns, trade-offs, and constraints the team has deliberately chosen.
 
 2. **Scope**: If `$ARGUMENTS` is provided, focus the review on that path. Otherwise, review the entire project.
@@ -73,7 +73,7 @@ Report findings as a prioritized list grouped by severity:
 
 ## Follow-Through
 
-After presenting findings, write Critical and High items to `tasks/todo.md`:
+After presenting findings, write Critical and High implementation fixes to `tasks/todo.md`. If a Critical/High observation is a non-blocking future validation or condition-gated measurement rather than a fix, write it to `tasks/record-todo.md` with source, condition, non-blocking reason, evidence, and promotion rule:
 
 1. Read `tasks/todo.md` if it exists — append to the end under a `## Code Review Fixes` heading (create the file if it doesn't exist).
 2. Add one checkbox item per Critical or High finding:

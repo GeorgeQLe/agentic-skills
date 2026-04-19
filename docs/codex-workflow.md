@@ -45,10 +45,14 @@ These files are the shared workflow surface:
 - `tasks/roadmap.md`: long-range phased plan
 - `tasks/todo.md`: current execution contract
 - `tasks/manual-todo.md`: human-only tasks linked to automated steps via `_(blocks: ...)_` and `_(after: ...)_` annotations
+- `tasks/record-todo.md`: non-blocking, condition-gated one-time records or baseline measurements
+- `tasks/recurring-todo.md`: cadence-based operational, research, or maintenance work
 - `tasks/history.md`: append-only execution log
 - `tasks/handoff.md`: optional session summary
 
 Do not rely on chat history as the source of truth when these files can carry the state.
+
+`tasks/todo.md` is the only default execution queue. `tasks/manual-todo.md` is only for human action tied to automated work. Non-blocking future measurements, condition-gated records, and recurring operational checks should stay out of the execution queue unless they are explicitly promoted into concrete build work.
 
 ## Project Packs
 
@@ -276,6 +280,12 @@ Each active step should include:
 - blockers or open questions
 
 If a fresh thread cannot execute from the file, the plan is not finished.
+
+Deferred task surfaces are advisory by default:
+
+- `tasks/record-todo.md` holds one-time records that should happen when a condition becomes true, such as baseline measurements after production aggregate access exists.
+- `tasks/recurring-todo.md` holds repeated operational, research, or maintenance checks with a cadence and evidence path.
+- `$run`, `$ship`, and kanban sync wrappers must not select these files as next executable work unless an item has first been promoted into `tasks/todo.md`.
 
 ### 3. Fresh threads are optional, not required
 

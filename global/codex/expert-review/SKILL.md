@@ -16,7 +16,7 @@ Use this skill when the user wants a code review of the whole project or a speci
 1. Gather project context:
    - Read CLAUDE.md, README, and project config to understand conventions.
    - Search for and read specs (`specs/`, `spec.md`, `docs/`), changelogs (`CHANGELOG.md`, `tasks/history.md`), ADRs, interview logs (`*-__interview.md__`), and design docs.
-   - Read `tasks/roadmap.md` if it exists to understand the full plan. Read `tasks/todo.md` for current phase and in-progress work. Read `tasks/manual-todo.md` (if it exists) for pending manual tasks.
+   - Read `tasks/roadmap.md` if it exists to understand the full plan. Read `tasks/todo.md` for current phase and in-progress work. Read `tasks/manual-todo.md` (if it exists) for pending manual tasks. Read `tasks/record-todo.md` and `tasks/recurring-todo.md` (if they exist) for advisory context only.
    - Build a mental model of intentional decisions and documented trade-offs.
 2. If the user provides a file or directory, scope the review there. Otherwise review the repository broadly.
 3. Read enough of the codebase to understand the architecture before critiquing it.
@@ -51,7 +51,7 @@ Report findings grouped by severity:
 
 ## Follow-Through
 
-After presenting findings, write Critical and High items to `tasks/todo.md` under a `## Code Review Fixes` heading (append or replace existing section). One checkbox per finding with file:line and recommended fix. Do not add Medium/Low items. Suggest `$run` or `$investigate` to start fixing.
+After presenting findings, write Critical and High implementation fixes to `tasks/todo.md` under a `## Code Review Fixes` heading (append or replace existing section). One checkbox per finding with file:line and recommended fix. Do not add Medium/Low items. If a Critical/High observation is a non-blocking future validation or condition-gated measurement rather than a fix, write it to `tasks/record-todo.md` with source, condition, non-blocking reason, evidence, and promotion rule. Suggest `$run` or `$investigate` to start fixing concrete work.
 
 ## Constraints
 

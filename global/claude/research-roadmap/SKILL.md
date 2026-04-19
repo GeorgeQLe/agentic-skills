@@ -7,7 +7,7 @@ version: 2.0.0
 
 # Research Roadmap - Documentation Queue Manager
 
-Use this skill to make the project documentation contract complete before build work continues. It scans research, specs, and task docs, then updates `tasks/todo.md` by putting a priority documentation queue at the front of the file.
+Use this skill to make the project documentation contract complete before build work continues. It scans research, specs, and task docs, then updates `tasks/todo.md` with immediately actionable documentation work and uses `tasks/record-todo.md` or `tasks/recurring-todo.md` for non-blocking future documentation records.
 
 Do not run the queued research skills from this skill. The job here is to maintain the documentation queue so the user can complete research and planning artifacts in the right order.
 
@@ -31,10 +31,10 @@ Treat top-level `research/`, `specs/`, and `tasks/` as canonical.
 1. If a canonical root exists, use it directly.
 2. If a canonical root is missing, search shallowly near the repo root for likely aliases such as `docs/`, `planning/`, `notes/`, or `work/`.
 3. Prefer roots that contain multiple expected documentation files over isolated matches.
-4. If no credible task root exists, create/update top-level `tasks/todo.md`.
+4. If no credible task root exists, create/update top-level `tasks/todo.md`; create `tasks/record-todo.md` or `tasks/recurring-todo.md` only when advisory items exist.
 5. If a fallback root is used for research or specs, mention it in the generated todo item reasons.
 
-For writing the priority queue, prefer `tasks/todo.md`. Use a fallback task root only when the project already has a clear existing task contract and no top-level `tasks/` directory.
+For writing the priority queue, prefer `tasks/todo.md`. Use a fallback task root only when the project already has a clear existing task contract and no top-level `tasks/` directory. Do not put condition-gated records or recurring obligations into `tasks/todo.md` unless they are immediately actionable execution work.
 
 ### 3. Discover Research-Producing Skills
 
@@ -121,6 +121,8 @@ Record existence and last-modified timestamps for:
 - `tasks/history.md`
 - `tasks/ideas.md`
 - `tasks/manual-todo.md`
+- `tasks/record-todo.md`
+- `tasks/recurring-todo.md`
 
 When `research/` contains app subdirectories, treat it as monorepo mode. Build a separate documentation queue per app and include app arguments in commands, such as `/icp web`.
 
@@ -150,7 +152,7 @@ Also flag potentially stale specs when source code has commits newer than the sp
 
 ### 6. Order The Priority Queue
 
-Order todo items so the user can complete documentation without guessing:
+Order immediately actionable todo items so the user can complete documentation without guessing:
 
 1. Pack installation needed for the selected project type.
 2. Stale foundational research.
@@ -183,6 +185,16 @@ multi-product expansion -> /platform-strategy
 
 For game and devtool projects, follow the default pack flow from `docs/skills-reference.md` when available. Add review or planning skills such as `/devtool-docs-audit` and `/game-roadmap` only when their documented output is missing from the documentation contract.
 
+### 6b. Classify Advisory Documentation Work
+
+Before writing any queue, choose the correct task surface:
+
+- `tasks/todo.md`: missing/stale documentation work that can be performed now with available repo context and normal skill inputs.
+- `tasks/record-todo.md`: one-time documentation records or measurements that are blocked on future conditions, production aggregate access, external reports, user-provided data, or launch data, and are not launch gates.
+- `tasks/recurring-todo.md`: cohort reviews, retros, investor updates, playtest/adoption checks, docs-health checks, or other documentation jobs that recur on a cadence.
+
+Record items must include task, source, condition, non-blocking reason, required data/access, measurement/query, target/acceptance note, revisit cadence/date, completion evidence, and promotion rule. Recurring items must include task, cadence, owner/agent, scope, trigger, last run, next due, command/skill, evidence/output path, and escalation conditions.
+
 ### 7. Update `tasks/todo.md`
 
 Write a single top-level section named exactly:
@@ -199,7 +211,7 @@ Rules:
 4. Preserve all other todo content exactly unless it is inside the old priority section.
 5. Do not mark existing implementation tasks complete.
 6. Do not remove unrelated todo sections.
-7. Use unchecked boxes for missing/stale documentation work.
+7. Use unchecked boxes only for missing/stale documentation work that is immediately actionable.
 8. Use checked boxes only when an item is already current.
 
 Todo item format:
@@ -212,6 +224,46 @@ If prerequisites are missing:
 
 ```md
 - [ ] `/metrics` - create/update `research/metrics.md` after `/journey-map`; currently blocked because `research/journey-map.md` is missing.
+```
+
+Do not write unavailable-data or cadence-gated items here. Write those to `tasks/record-todo.md` or `tasks/recurring-todo.md` instead.
+
+### 7b. Update `tasks/record-todo.md`
+
+When non-blocking condition-gated documentation records exist, append or replace a `## Documentation Records` section in `tasks/record-todo.md`. Preserve all other sections exactly.
+
+Use this item format:
+
+```md
+- [ ] [record task]
+  - Source: [skill/spec/phase/criterion]
+  - Condition: [future condition or required access]
+  - Non-blocking reason: [why this does not block launch or current execution]
+  - Required data/access: [data, aggregate, portal, credential, or user-provided output]
+  - Measurement/query: [how to produce the record]
+  - Target/acceptance note: [threshold or expected note]
+  - Revisit: [date or cadence]
+  - Completion evidence: [research path, history entry, or report path]
+  - Promotion rule: [when to move into `tasks/todo.md`]
+```
+
+### 7c. Update `tasks/recurring-todo.md`
+
+When recurring documentation work exists, append or replace a `## Documentation Recurring Work` section in `tasks/recurring-todo.md`. Preserve all other sections exactly.
+
+Use this item format:
+
+```md
+- [ ] [recurring task]
+  - Cadence: [daily/weekly/monthly/quarterly/on release/etc.]
+  - Owner/agent: [/skill or responsible role]
+  - Scope: [project/app/area]
+  - Trigger: [time, release, data threshold, user request]
+  - Last run: [date or never]
+  - Next due: [date or rule]
+  - Command/skill: [/skill args]
+  - Evidence/output path: [research/report path]
+  - Escalation conditions: [when this becomes executable or blocking]
 ```
 
 If all documentation is current:
@@ -227,25 +279,29 @@ After editing, summarize:
 ```
 ## Research Roadmap Updated
 
-- Wrote/updated `tasks/todo.md`
+- Wrote/updated `tasks/todo.md` and any needed advisory task files
 - Priority documentation items: N
 - Stale items: N
 - Missing items: N
 - Blocked-by-prerequisite items: N
+- Record items: N
+- Recurring items: N
 
-Next: start at the first unchecked item in `tasks/todo.md`.
+Next: start at the first unchecked item in `tasks/todo.md`; review advisory task files separately.
 ```
 
 If fallback discovery was used, include a short note naming the inferred roots.
 
 ## Constraints
 
-- This skill updates `tasks/todo.md`; it must not run the queued skills.
+- This skill updates `tasks/todo.md`, `tasks/record-todo.md`, and `tasks/recurring-todo.md`; it must not run the queued skills.
 - Preserve user-authored todo content outside `## Priority Documentation Todo`.
+- Preserve user-authored record/recurring content outside `## Documentation Records` and `## Documentation Recurring Work`.
 - Every stale item must include timestamp evidence.
 - Every enabled research-producing skill must be represented unless its output is present and fresh.
 - Prefer canonical `research/`, `specs/`, and `tasks/` paths over aliases.
 - In monorepo mode, include app-scoped commands and output paths.
+- Do not put condition-gated measurements, future validation records, or cadence-based research jobs into `tasks/todo.md` unless they are immediately executable.
 - Do not create or modify source code.
 
 ## Archive-First Replacement Policy

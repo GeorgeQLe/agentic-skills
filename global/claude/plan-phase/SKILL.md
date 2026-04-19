@@ -222,9 +222,16 @@ Define ordered steps beneath the existing Goal/Scope/Acceptance Criteria. The st
 - This gives the executing agent clear scope and prevents steps from becoming unbounded.
 - Write-capable subagent lanes must have disjoint owned paths. If they do not, keep implementation serial and use research or review lanes only.
 
-### Manual Task Classification
+### Task Classification
 
-Classify each step as **automated** (Claude executes) or **manual** (requires human action). Manual tasks include:
+Classify each step or follow-up as exactly one of:
+
+- **automated** — Claude executes it as implementation or verification work in `tasks/todo.md`.
+- **manual** — a human action tied to an automated step in `tasks/manual-todo.md`.
+- **record** — a one-time, non-blocking record or measurement that should happen only after a condition becomes true in `tasks/record-todo.md`.
+- **recurring** — cadence-based operational, research, or maintenance work in `tasks/recurring-todo.md`.
+
+Manual tasks include:
 
 - DNS configuration, domain setup, SSL certificates
 - Browser/device testing, visual QA
@@ -234,6 +241,10 @@ Classify each step as **automated** (Claude executes) or **manual** (requires hu
 - Any step requiring a GUI, physical device, or human judgment that cannot be scripted
 
 Manual tasks MUST NOT appear in `tasks/todo.md`. They go in `tasks/manual-todo.md`.
+
+Record tasks MUST NOT appear in `tasks/todo.md` unless they are launch gates or current execution work. They go in `tasks/record-todo.md` with source, condition, non-blocking reason, required data/access, measurement/query, target note, revisit cadence/date, completion evidence, and promotion rule.
+
+Recurring tasks MUST NOT appear in `tasks/todo.md` unless the current run is explicitly in scope for this phase. They go in `tasks/recurring-todo.md` with task, cadence, owner/agent, scope, trigger, last run, next due, command/skill, evidence/output path, and escalation conditions.
 
 ## Output
 
@@ -262,6 +273,42 @@ Manual tasks MUST NOT appear in `tasks/todo.md`. They go in `tasks/manual-todo.m
    - No annotation = do anytime during the phase
    - Only create this file when manual tasks exist — no empty files.
 
+4. **Write `tasks/record-todo.md`** (only if this phase identifies non-blocking condition-gated records):
+   ```markdown
+   # Record Tasks — [Project Name]
+
+   > These tasks are non-blocking records or measurements. Do not execute them through `/run` unless promoted to `tasks/todo.md`.
+
+   - [ ] [task]
+     - Source: [phase/spec/criterion]
+     - Condition: [when this becomes eligible]
+     - Non-blocking reason: [why this is not a launch gate or current step]
+     - Required data/access: [data, portal, aggregate, credential, or user-provided output]
+     - Measurement/query: [how to collect evidence]
+     - Target/acceptance note: [threshold or expected record]
+     - Revisit: [date or cadence]
+     - Completion evidence: [where to record the result]
+     - Promotion rule: [when to move this into `tasks/todo.md`]
+   ```
+
+5. **Write `tasks/recurring-todo.md`** (only if this phase identifies recurring obligations):
+   ```markdown
+   # Recurring Tasks — [Project Name]
+
+   > These tasks recur on a cadence. Do not execute them through `/run` unless a due run is promoted to `tasks/todo.md`.
+
+   - [ ] [task]
+     - Cadence: [daily/weekly/monthly/quarterly/on release/etc.]
+     - Owner/agent: [human, `/skill`, or agent role]
+     - Scope: [project/app/area]
+     - Trigger: [time, release, data threshold, user request]
+     - Last run: [date or never]
+     - Next due: [date or rule]
+     - Command/skill: [command or skill to run]
+     - Evidence/output path: [where results are recorded]
+     - Escalation conditions: [when it becomes executable or blocking work]
+   ```
+
 ## Constraints
 
 - **One phase per invocation.** Do not decompose multiple phases ahead of time.
@@ -275,6 +322,8 @@ Manual tasks MUST NOT appear in `tasks/todo.md`. They go in `tasks/manual-todo.m
 - The `### Execution Profile` must be decision-complete enough for `/run` to decide whether to use serial execution, read-only subagents, review subagents, or disjoint write subagents after the normal approval gate.
 - Subagents must not own task docs, roadmap/history updates, shipping, or deploy steps. Those stay with the main agent.
 - Manual tasks MUST NOT appear in `tasks/todo.md` — they go in `tasks/manual-todo.md` only.
+- Non-blocking record tasks MUST NOT appear in `tasks/todo.md` — they go in `tasks/record-todo.md` unless explicitly promoted.
+- Recurring obligations MUST NOT appear in `tasks/todo.md` by default — they go in `tasks/recurring-todo.md` unless a due run is current execution work.
 - Do NOT put plans in `CLAUDE.md` or `docs/plan.md`.
 
 ## Default Shipping Contract
