@@ -1,6 +1,6 @@
 # Operating Modes
 
-This document names the three-mode operating model for the agentic-skills workflow: `claude-only`, `codex-only`, and `hybrid`. It is the forward-reference placeholder for the model, not yet an authoritative reference — that expansion is tracked as Step 11 in `tasks/todo.md`. The stance is plural by default: each mode must be end-to-end complete, and no mode is privileged over the others until the user declares one.
+This document is the authoritative reference for the three-mode operating model that drives the agentic-skills workflow: `claude-only`, `codex-only`, and `hybrid`. The stance is plural by default: each mode must be end-to-end complete, and no mode is privileged over the others until the user declares one. A newcomer can read this document top-to-bottom to understand how modes are signalled, how cross-CLI work is approved and executed, where each shipped skill degrades, how packs emphasize CLI roles, and how to migrate a pre-Phase-11 project onto the new model.
 
 ## Three Modes
 
@@ -22,26 +22,37 @@ Codex both plans and executes. Used when Claude is unavailable for the same clas
 
 Claude orchestrates — interviews, planning, framing, tradeoff surfacing — and Codex executes — implementation, reconciliation, shipping — via in-session delegation. The execution loop is `/plan-interview` → `/run` plans → `/delegate $run` → `$ship`. The delegation boundary is handled inside the Claude session; the user does not manually switch CLIs.
 
-## Mode Signal
+## Mode-signal resolution
 
-The mode-signal surface is `.agents/project.json.agent_mode` (project-scoped, optional) plus a `SKILLS_AGENT_MODE` environment variable override. Resolution precedence is env > project.json > unset, where "unset" means skills recommend all paths and let the user pick.
+Two sources combine to resolve the effective mode: the `SKILLS_AGENT_MODE` environment variable (shell-scoped override) and the `agent_mode` field in `.agents/project.json` (project-scoped, committed optionally, usually developer-local). The resolver `scripts/agent-mode.sh` (function `validate_agent_mode` + top-level env/file check) is the single source of truth for precedence and validation; skills and pack wrappers defer to it rather than reimplementing the lookup.
 
-Usage:
+**Precedence.** `SKILLS_AGENT_MODE` env > `.agents/project.json.agent_mode` > unset. The resolver prints the effective mode on stdout (empty string when unset) and exits non-zero if either source holds an invalid value.
 
-- Field: `agent_mode` in `.agents/project.json`, values `"claude-only" | "codex-only" | "hybrid"`, absent = unset.
-- Env var: `SKILLS_AGENT_MODE=<mode>` overrides the project.json value for the current shell.
-- Writer: `scripts/pack.sh set-mode <claude-only|codex-only|hybrid|unset>` sets or clears the field. `install`, `remove`, and `refresh` preserve an existing value.
-- Resolver: `scripts/agent-mode.sh` prints the effective mode on stdout (empty when unset), exits non-zero on invalid values from either source.
+**Valid values.** `claude-only`, `codex-only`, `hybrid`. Any other non-empty value is a hard error — the resolver refuses to fall through to the next source.
 
-No skill consumes the signal yet — mode-aware recommendations land in Step 7 of Phase 11.
+**Truth table.**
 
-## Approval / Delegation Packet
+| `SKILLS_AGENT_MODE` | `.agents/project.json.agent_mode` | Resolved |
+| --- | --- | --- |
+| (unset) | (absent or `null`) | unset (empty stdout, exit 0) |
+| (unset) | `claude-only` \| `codex-only` \| `hybrid` | that value |
+| (unset) | invalid | non-zero exit, error on stderr |
+| `claude-only` \| `codex-only` \| `hybrid` | (any) | env value wins |
+| invalid | (any) | non-zero exit, error on stderr |
 
-Cross-CLI execution in `hybrid` and cross-session handoff in `claude-only` or `codex-only` is mediated by a shared approval packet: `.agents/approved-plan.json` is the machine-readable source of truth (gitignored, developer-local), and `tasks/approved-plan.md` is a sanitized human-readable mirror (committed). `$run --execute-approved`, `/handoff --target=codex`, and `/delegate` all consume this one contract rather than each inventing their own "approved work" definition.
+**Writer.** `scripts/pack.sh set-mode <claude-only|codex-only|hybrid|unset>` is the only supported writer for `.agents/project.json.agent_mode`. `pack.sh install`, `remove`, and `refresh` preserve an existing value. No other script writes the field.
 
-No skill reads or writes the packet yet — Step 4 (`$run --execute-approved`) is the first legitimate consumer. The JSON Schema lives at `specs/approved-plan.schema.json` (draft-07).
+**Unset semantics.** "Unset" is a deliberate mode: skills that consume the resolver (Step 7 — the twelve planning/execution skills in `global/claude/` and `global/codex/`) present *all three* next-step options and point the user at this document, rather than guessing. Unset is the default for a fresh project.
 
-### Schema
+**Invariant — do not restate precedence in skill copy.** Skills say "resolved agent mode via scripts/agent-mode.sh" and link here. Precedence lives in one place: the resolver and this document.
+
+## Approval packet
+
+Cross-CLI execution in `hybrid`, and cross-session handoff in `claude-only` or `codex-only`, is mediated by a shared approval packet. `.agents/approved-plan.json` is the machine-readable source of truth (gitignored, developer-local). `tasks/approved-plan.md` is the sanitized human-readable mirror (committed). `$run --execute-approved`, `/handoff --target=codex`, and `/delegate` all consume this one contract rather than inventing their own "approved work" definition.
+
+### Fields
+
+The authoritative field reference is `specs/approved-plan.schema.json` (JSON Schema draft-07). Rather than duplicate the schema here (drift risk), the table below summarizes by category:
 
 | Field | Type | Required | `.md`-safe |
 | --- | --- | --- | --- |
@@ -53,37 +64,53 @@ No skill reads or writes the packet yet — Step 4 (`$run --execute-approved`) i
 | `allowed_dirty_paths` | array of globs | no | **no** (path layout) |
 | `blocking_manual_tasks` | array of snapshot strings | no | yes (content snapshot, not file refs) |
 | `ttl_seconds` | positive integer | yes | yes |
-| `lifecycle` | enum (see below) | yes | yes |
+| `lifecycle` | enum (see § Lifecycle) | yes | yes |
 | `notes` | free-form string | no | **no** (free-form) |
 
-`todo_hash` normalization (defined once here so consumers cannot redefine it): strip a leading UTF-8 BOM if present, normalize CRLF → LF, then sha256 the resulting bytes.
+For exact types, regex patterns, and validator rules, read the schema file directly — it is the contract.
 
-`blocking_manual_tasks` snapshots the **content** of each `_(blocks: Step N.X)_` line from `tasks/manual-todo.md` at approval time, not path references — a path-only snapshot would silently drift when the file is edited post-approval.
+**`todo_hash` normalization** (defined once here so consumers cannot redefine it): strip a leading UTF-8 BOM if present, normalize CRLF → LF, then sha256 the resulting bytes.
+
+**`blocking_manual_tasks` snapshot rule.** Snapshots the **content** of each `_(blocks: Step N.X)_` line from `tasks/manual-todo.md` at approval time, not path references — a path-only snapshot would silently drift when the file is edited post-approval.
 
 ### Lifecycle
 
-`draft → approved → (consumed | stale | superseded | uncertain)`
+```
+            draft ──approve──▶ approved ──consume───▶ consumed  (terminal)
+              │                   │
+              │                   ├─mark-stale──────▶ stale      (terminal)
+              │                   │
+              │                   ├─supersede───────▶ superseded (terminal)
+              │                   │
+              │                   └─mark-uncertain──▶ uncertain  (terminal)
+              │
+              └──supersede────────────────────────────▶ superseded
+```
 
-- `draft` — packet assembled but not yet approved.
-- `approved` — the **only** executable state. A consumer may act on the packet iff lifecycle is `approved` and all freshness checks pass.
-- `consumed` — terminal success. A consumer executed against this packet.
-- `stale` — terminal. A freshness check failed (git HEAD moved, `todo_hash` changed, unexpected dirty paths, new blocking manual task, TTL expired).
-- `superseded` — terminal. A newer packet replaced this one before consumption.
-- `uncertain` — terminal. Transport ambiguity during `/delegate` (Codex may or may not have started). Requires inspect / discard / continue — never blind retry.
+| Transition | Writer (`scripts/approved-plan.sh`) | Actor |
+| --- | --- | --- |
+| `* → draft` (initial write) | `draft` | Producer (Claude-side `/handoff --target=codex`, `/delegate`) |
+| `draft → approved` | `approve` | Producer, after user approval |
+| `approved → consumed` | `consume` | Consumer (`$run --execute-approved`) on success |
+| `approved → stale` | `mark-stale` (via `check` on failed freshness) | Consumer |
+| `approved → uncertain` | `mark-uncertain` | Consumer (`/delegate` transport ambiguity) |
+| `draft → superseded` / `approved → superseded` | `supersede` | Producer, discarding a prior packet |
 
-`approved` is the only state from which work may execute. `consumed`, `stale`, `superseded`, and `uncertain` are all terminal and require a fresh `draft → approved` cycle to restart. There is no `consumed → approved` transition — allowing it would mask re-execution bugs.
-
-Consumers only transition away from `approved` (→ `consumed` on success, → `stale` on failed freshness check, → `uncertain` on `/delegate` transport ambiguity). Producers own `draft → approved` and `* → superseded`.
+Only `approved` is executable; a consumer may act on the packet iff lifecycle is `approved` and all freshness checks pass. `consumed`, `stale`, `superseded`, and `uncertain` are terminal — restarting requires a fresh `draft → approved` cycle. There is no `consumed → approved` transition — allowing it would mask re-execution bugs. `uncertain` exists specifically for `/delegate` transport ambiguity (Codex may or may not have started); it requires explicit inspect / discard (`supersede`) / continue-inline resolution, never blind retry.
 
 ### Safety classification
 
-The `.md` mirror (`tasks/approved-plan.md`) projects only fields marked `.md`-safe in the schema table. Default-safe: `step_identity`, `approved_at`, `approved_by`, `ttl_seconds`, `lifecycle`, `blocking_manual_tasks`. Borderline-safe but mirrored here (hashes and public-repo SHAs are low-risk): `git_head`, `todo_hash`. JSON-only: `allowed_dirty_paths` (leaks repo path layout), `notes` (free-form, may contain context not intended for the committed mirror).
+The `.md` mirror (`tasks/approved-plan.md`) projects only fields marked `.md`-safe in the Fields table. Projection is enforced by `consume`, which rewrites the mirror on every lifecycle transition — developers cannot accidentally widen the projection by hand-editing.
+
+- **Default-safe** (always mirrored): `step_identity`, `approved_at`, `approved_by`, `ttl_seconds`, `lifecycle`, `blocking_manual_tasks`.
+- **Borderline-safe but mirrored** (hashes and public-repo SHAs are low-risk): `git_head`, `todo_hash`.
+- **JSON-only** (never mirrored): `allowed_dirty_paths` (leaks repo path layout), `notes` (free-form, may contain context not intended for the committed mirror).
 
 Never mirror packet fields into `.agents/project.json` — that file is shared across collaborators, while the packet is per-developer approval state.
 
-### Freshness checks (named here, implemented in Step 4)
+### Freshness checks
 
-A consumer may act on the packet iff all of the following hold:
+`scripts/approved-plan.sh check` applies the following six checks, cheapest-first. A consumer may act on the packet iff all pass.
 
 1. `lifecycle == "approved"`.
 2. Current `git rev-parse HEAD` equals `git_head`.
@@ -92,7 +119,7 @@ A consumer may act on the packet iff all of the following hold:
 5. No new `_(blocks: Step N.X)_` entries in `tasks/manual-todo.md` beyond `blocking_manual_tasks`.
 6. `now - approved_at < ttl_seconds`.
 
-On any failure the consumer transitions the packet to `stale` and re-prompts with a diff. Implementation lands in Step 4.
+On any failure the consumer transitions the packet to `stale` and re-prompts with a diff.
 
 ## Out of Scope for This Document Today
 
@@ -198,6 +225,20 @@ This section tags every global skill and every pack with a **primary CLI role** 
 
 Codex `$run` consumes this table at runtime. The "Mode-aware next-step recommendation" block in `global/codex/run/SKILL.md` resolves enabled packs via `scripts/pack.sh list-packs` and, when an enabled pack (e.g., `business-app-kanban`) ships a matching `-kanban` variant, emits the kanban invocation in place of the global `$run` / `$ship` / `$ship-end`. Recommendation text only — the approval-packet contract and `$run --execute-approved` execution path are unchanged. Missing or malformed `.agents/project.json` falls back silently to the global default with a single-line inline comment. See `global/codex/run/SKILL.md` § "Pack-aware routing" for the full resolver.
 
+## Migrating from the parity-mirror model
+
+Before Phase 11, every skill existed in parallel under `global/claude/` and `global/codex/`, and users chose a CLI by opening the corresponding terminal. The three-mode model replaces "pick a terminal" with "declare a mode, then let skills route." The migration is pointer-level — there is no automated converter, and there is no breaking change to any skill surface.
+
+- **Designate a mode.** Run `scripts/pack.sh set-mode <claude-only|codex-only|hybrid>` once per project. This writes `.agents/project.json.agent_mode`, which the resolver (`scripts/agent-mode.sh`) reads on every skill invocation. `scripts/pack.sh set-mode unset` clears the field — skills then recommend all three next-step options. For a shell-scoped override (e.g., demoing a different mode), export `SKILLS_AGENT_MODE` instead of editing the file.
+- **Pick packs by role, not by CLI.** The `## Pack emphasis` tables above tag each pack as `Claude-orchestration`, `Codex-execution`, or `Both`. Enable packs via `pack.sh install` based on the work the project does (strategy framing vs refactor mutation vs kanban flow), not based on which CLI the developer happens to prefer. Parity-mirror skills in `global/` still work everywhere; pack emphasis just records intent.
+- **Use `/delegate` in hybrid.** The old workflow — "plan in Claude, switch terminals, paste the plan into Codex, run it" — collapses into `/delegate <target-skill>` inside the Claude session. `/delegate` produces an approval packet, prompts once, then synchronously invokes `codex exec`. No manual CLI switching.
+- **Use `/handoff --target=codex` for async handoffs.** When a human needs to resume work later in a separate Codex session (e.g., end of day, or cross-developer), `/handoff --target=codex` produces the same approval packet plus a `tasks/handoff.md` note. Codex resumes with `$run --execute-approved`. Used in both `claude-only` (planning in Claude, executing later in Codex) and `hybrid` (async variant of `/delegate`).
+- **Leave mode unset if you are unsure.** An absent `agent_mode` field is not a bug — the twelve Step-7 planning/execution skills detect the unset state and present all three next-step options with a pointer back to this doc. Declare a mode only once the project's steady-state workflow is clear.
+
+## Gaps surfaced by Step 11
+
+None. Step 11 surfaced no spec-level gap beyond those already logged under `### Gaps surfaced by Step 8`.
+
 ---
 
-Status: Phase 11 Step 1 — thin doc; expansions tracked in `tasks/todo.md`. Degraded-path audit filled in Step 8. Pack emphasis table filled in Step 9. Codex `$run` pack-aware routing wired in Step 10.
+Status: Phase 11 Steps 1–11 complete: authoritative operating-model reference.
