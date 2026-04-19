@@ -151,7 +151,59 @@ Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env va
 - **Gaps surfaced (non-blocking):** (1) `mark-stale` accepted a `consumed` source state during spot-check authoring, unlike `mark-uncertain` which explicitly rejects all non-`approved` sources — worth a follow-up to align source-state guards. (2) Back-to-back hybrid cycles require committing the `tasks/approved-plan.md` mirror between runs (otherwise the next `draft` sees a dirty tree); expected UX but not documented in `docs/operating-modes.md` § "Degraded-path audit". Neither gap blocks Phase 11 closure. Full detail in `tasks/verify-phase-11.md` § "Gaps surfaced by Verify".
 - Contract untouched: no edits to `SKILL.md` files, scripts, `specs/approved-plan.schema.json`, `docs/operating-modes.md`, `CLAUDE.md`, or pack files. Verify is empirical; findings get logged, not fixed in this step.
 
-**Phase 11 is complete.** All 11 steps + Verify shipped.
+**Phase 11 is complete.** All 11 steps + Verify shipped. Step 12 (tail) closes the two non-blocking gaps Verify surfaced.
+
+- [x] **Step 12** — Gap fixes from Verify: source-state guard on `mark-stale`; document hybrid back-to-back mirror-commit prerequisite in the degraded-path audit + `/delegate` SKILL.md.
+
+### Step 12 Summary (completed 2026-04-19)
+
+- Added a source-state guard to `scripts/approved-plan.sh cmd_mark_stale`, mirroring the proven `cmd_mark_uncertain` pattern. Only `approved` now transitions to `stale`; `draft`, `consumed`, `stale`, `superseded`, and `uncertain` each exit non-zero with the single-line reason `cannot mark-stale: lifecycle=<state> (only 'approved' may transition to 'stale')`. Closes Verify gap (1) — retroactive `consumed → stale` rewrites of terminal history are no longer possible.
+- Added one row to `docs/operating-modes.md` § "Degraded-path audit" documenting the hybrid back-to-back mirror-commit prerequisite: after a `consume` rewrites `tasks/approved-plan.md`, the next `draft` will fail with `dirty path outside allowlist: tasks/approved-plan.md` unless the mirror is committed or `--allow-dirty tasks/approved-plan.md` is passed. Added a one-line in-context note to `global/claude/delegate/SKILL.md` step 2's `--allow-dirty` discussion so `/delegate` invokers see it without opening the audit. Closes Verify gap (2).
+- Contract untouched: no edits to `specs/approved-plan.schema.json` (lifecycle enum already had all five states — this is a pure runtime guard), `scripts/agent-mode.sh`, `scripts/pack.sh`, `CLAUDE.md`, any other `SKILL.md`, or any pack file. Codex side (`global/codex/**`) untouched — `mark-stale` is Claude-side tooling per Step 6 design.
+- Verified with fixture packets under `/tmp/apkstale12/`: happy path `approved → stale` flips atomically with `ok` exit 0; each of the five non-`approved` source states (`draft`, `consumed`, `stale`, `superseded`, `uncertain`) rejects non-zero with the expected reason and leaves the packet unchanged. Six cases in total, mirroring the Step 6 `mark-uncertain` verification (`tasks/history.md:73`, `/tmp/apktest6/`). Doc edits verified by grep of the new audit row + the new `--allow-dirty` sentence.
+
+### Active Step Plan — Step 12: Gap fixes from Verify [archived for reference]
+
+**Goal:** Close the two non-blocking gaps Phase 11 Verify surfaced (logged in `tasks/verify-phase-11.md` § "Gaps surfaced by Verify"): (1) add a source-state guard to `cmd_mark_stale` so only `approved` can transition to `stale`; (2) document the hybrid back-to-back mirror-commit prerequisite in the degraded-path audit + `/delegate` SKILL.md. Tail step of Phase 11 — no mechanism redesign.
+
+**Contract reminder:** No schema, resolver, or lifecycle-FSM changes. Runtime guard parity + doc clarification only. `specs/approved-plan.schema.json` untouched (enum already covers all five states).
+
+**Scope:**
+
+1. **Gap 1 — Source-state guard on `cmd_mark_stale`.** Copy the guard block from `cmd_mark_uncertain` (lines 505–515) into `cmd_mark_stale` between `require_jq_write` and the `jq '.lifecycle = "stale"'` write. Only `approved` accepted; rejection reason `cannot mark-stale: lifecycle=$lifecycle (only 'approved' may transition to 'stale')` for consistency with the `mark-uncertain` wording.
+2. **Gap 2 — Doc clarification.** One new row under `docs/operating-modes.md` § "Degraded-path audit" (targeting `scripts/approved-plan.sh draft`'s clean-tree check, not a skill). One-line note near `global/claude/delegate/SKILL.md` step 2's `--allow-dirty` collection.
+
+**Files to modify:**
+
+- `scripts/approved-plan.sh` — guard block in `cmd_mark_stale`.
+- `docs/operating-modes.md` — new audit row.
+- `global/claude/delegate/SKILL.md` — one-line note.
+- `tasks/todo.md`, `tasks/history.md`, `tasks/roadmap.md` — bookkeeping.
+
+**Do NOT modify:** `specs/approved-plan.schema.json`, `scripts/agent-mode.sh`, `scripts/pack.sh`, `CLAUDE.md`, any other `SKILL.md`, any pack file, `global/codex/` skills.
+
+**Test strategy:** Fixture packets under `/tmp/apkstale12/`, mirroring Step 6's approach. Six guard cases (happy path + rejection for each of `draft`, `consumed`, `stale`, `superseded`, `uncertain`); two doc greps.
+
+**Acceptance criteria:**
+
+- [x] `mark-stale` rejects all non-`approved` source states with a consistent reason; happy path still returns `ok` exit 0 and flips lifecycle atomically.
+- [x] `docs/operating-modes.md` § "Degraded-path audit" has a new row for the hybrid back-to-back mirror-commit prerequisite.
+- [x] `global/claude/delegate/SKILL.md` mentions the same prerequisite in-context near the existing `--allow-dirty` discussion.
+- [x] No edits to schema, other scripts, `CLAUDE.md`, other skills, or pack files.
+
+**Out of scope:**
+
+- Changing `draft`'s default allowlist to auto-include `tasks/approved-plan.md` (contract change — separate decision).
+- Building a proper `tests/` suite (not in this step; fixture-packet precedent stands).
+- Reviewing the other four lifecycle transitions (all already guarded per `scripts/approved-plan.sh:253`, `:396`, `:433`).
+
+**Execution Profile:** `serial`. Main agent owns everything.
+
+**Commit plan:**
+
+- `fix(approved-plan): guard mark-stale source state to 'approved' only`.
+- `docs(operating-modes): document hybrid mirror-commit prerequisite`.
+- `chore(tasks)`: task-doc updates.
 
 ### Active Step Plan — Phase 11 Verify: Three-mode sample-workflow walkthrough [archived for reference]
 
