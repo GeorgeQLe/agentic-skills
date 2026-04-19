@@ -46,7 +46,7 @@ Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env va
 
 ### Steps
 
-- [ ] **Step 1** — Thin `docs/operating-modes.md` — one page, three-mode table, paragraph per mode, pointer to approval packet. Do not pre-specify unshipped behavior.
+- [x] **Step 1** — Thin `docs/operating-modes.md` — one page, three-mode table, paragraph per mode, pointer to approval packet. Do not pre-specify unshipped behavior.
 - [ ] **Step 2** — Mode resolution:
   - Add `agent_mode: "claude-only" | "codex-only" | "hybrid"` to `.agents/project.json` schema
   - Add `SKILLS_AGENT_MODE` env var override (not `AGENT_MODE` — collision risk)
