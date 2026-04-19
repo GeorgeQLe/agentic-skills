@@ -811,3 +811,11 @@ Resolved all 10 findings from `/expert-review`:
 - Inferred this repository as a devtool project from its skill-pack and CLI/documentation structure.
 - Added a priority documentation queue to `tasks/todo.md` covering missing devtool research artifacts, missing docs-audit output, spec drift, and the follow-up roadmap refresh.
 - Marked the prior `$research-roadmap` priority task complete and set the next action to `$devtool-user-map`.
+
+## 2026-04-19 — Phase 11 Step 2: mode resolution
+
+- Added optional `agent_mode` field to `.agents/project.json` schema (`claude-only | codex-only | hybrid`).
+- Extended `scripts/pack.sh` with a `set-mode <mode|unset>` subcommand and made `install`/`remove`/`refresh` preserve an existing `agent_mode` value across rewrites.
+- Added `scripts/agent-mode.sh` resolver: precedence `SKILLS_AGENT_MODE` env > `.agents/project.json` > empty string; invalid values hard-fail from both the setter and the resolver.
+- Updated `docs/operating-modes.md` "Mode Signal" section to present-tense usage and mentioned the surface in `README.md`.
+- Verified end-to-end on stock macOS Bash 3.2 in a scratch tmpdir: write/preserve across install/refresh, env override, `unset` clearing, and hard-fail on bogus values. No SKILL.md files consume the signal yet — that is Phase 11 Step 7.
