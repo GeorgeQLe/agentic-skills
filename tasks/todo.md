@@ -98,32 +98,95 @@ Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env va
 
 ### Active Step Plan — Step 7: Mode-aware terminal recommendations
 
-**Goal:** Wire mode-aware terminal recommendations across the planning and execution skills so that after presenting a plan or finishing a phase, they point users at the appropriate next-step invocation based on the resolved agent mode. The mechanism (`/delegate`, `$run --execute-approved`, `/run`) already exists from Steps 4–6; Step 7 is the final discoverability layer.
+**Goal:** Wire mode-aware terminal recommendations across the planning and execution skills so that after presenting a plan or completing its workflow, each skill points the user at the appropriate next-step invocation based on the resolved agent mode. Steps 4–6 shipped the mechanisms (`$run --execute-approved`, `/handoff --target=codex`, `/delegate`); Step 7 is the discoverability layer that makes users actually reach for them instead of falling back to the pre-Phase-11 "run it manually" habit.
+
+**Contract reminder:** Mode resolution is frozen at `scripts/agent-mode.sh` with precedence `SKILLS_AGENT_MODE` env > `.agents/project.json.agent_mode` > unset. Valid values: `claude-only`, `codex-only`, `hybrid`, or empty. Step 7 only *reads* the resolved mode; it does not add new mode values, new env vars, or change precedence.
 
 **Scope:**
 
-- Claude skills to touch: `global/claude/plan-interview/SKILL.md`, `global/claude/roadmap/SKILL.md`, `global/claude/plan-phase/SKILL.md`, `global/claude/run/SKILL.md`, `global/claude/ship/SKILL.md`, `global/claude/ship-end/SKILL.md`.
-- Codex equivalents where they exist: `global/codex/run/SKILL.md`, `global/codex/ship/SKILL.md`, `global/codex/ship-end/SKILL.md`, plus any plan/roadmap Codex variants.
-- Each touched skill emits a recommendation block after presenting the plan / completing its run, sourced from the resolved mode (`./scripts/agent-mode.sh`):
-  - `hybrid` → "delegate with `/delegate $run`" (or the matching target skill).
-  - `claude-only` → "run `/run`" (Claude-side).
-  - `codex-only` → "run `$run` in Codex".
-  - unset → present all three options and point at `docs/operating-modes.md` for the mode-signal rules.
+1. **Add a shared "Mode-aware next-step recommendation" block** to each planning/execution skill. The block appears after the skill's primary work completes (plan written, run finished, ship done) and before the skill hands back to the user. Source the mode via `./scripts/agent-mode.sh` (no inline logic duplication). Output copy by resolved mode:
+   - `hybrid` → "**Next:** delegate with `/delegate <target>`" (target matches the skill's natural next move: `$run` after plan skills, `$ship` after `/run`, etc.).
+   - `claude-only` → "**Next:** run `/run`" (or `/ship` / `/ship-end` where contextually right).
+   - `codex-only` → "**Next:** run `$run` in Codex" (match Codex skill name to the context).
+   - unset → present all three options and point at `docs/operating-modes.md` for the mode-signal resolution rules.
+
+2. **Claude skills to modify** (paths relative to repo root; touch each):
+   - `global/claude/plan-interview/SKILL.md` — after writing the spec, recommend the next step (typically `/roadmap` or `/plan-phase`, but the cross-CLI recommendation applies once execution begins).
+   - `global/claude/roadmap/SKILL.md` — after writing/updating the roadmap, recommend the appropriate next action.
+   - `global/claude/plan-phase/SKILL.md` — after writing the phase plan, recommend `/delegate $run` (hybrid) / `/run` (claude-only) / `$run` (codex-only).
+   - `global/claude/run/SKILL.md` — at the end of execution (handoff to ship), recommend the ship variant by mode.
+   - `global/claude/ship/SKILL.md` — at the end of shipping (before plan mode), recommend how the next step will be executed.
+   - `global/claude/ship-end/SKILL.md` — at session wrap-up, recommend the appropriate resume command for next session.
+
+3. **Codex equivalents** (same treatment, matching Codex-side skills):
+   - `global/codex/run/SKILL.md`.
+   - `global/codex/ship/SKILL.md` (if present — verify).
+   - `global/codex/ship-end/SKILL.md` (if present — verify).
+   - Codex-side plan/roadmap skills (if present — verify via `ls global/codex/`). Recommendations on Codex skills invert the default: `hybrid` on Codex recommends returning to Claude for orchestration (since Claude is the orchestrator in hybrid); `codex-only` stays in Codex.
+
+4. **Do not add the recommendation block to transport skills themselves.** `/delegate` and `/handoff --target=codex` are *how you get there*, not steps that recommend other mechanisms. `scripts/agent-mode.sh` stays untouched — Step 7 is a pure consumer.
 
 **Out of scope:**
 
-- New transport or lifecycle behavior — Step 6 shipped the last mechanism.
-- Degraded-path audit table — that is Step 8.
-- Pack emphasis split — Step 9.
+- Any new transport/lifecycle behavior — Step 6 shipped the last mechanism.
+- Degraded-path audit table — Step 8.
+- Pack emphasis split by CLI role — Step 9.
+- Pack-aware `$run` routing — Step 10.
+- Changes to `scripts/agent-mode.sh`, `docs/operating-modes.md`, or the approval-packet contract.
 
-**Files to modify (paths sketched here, detailed plan when Step 7 starts):**
+**Files to modify (full paths):**
 
-- `/Users/georgele/projects/tools/agentic-skills/global/claude/{plan-interview,roadmap,plan-phase,run,ship,ship-end}/SKILL.md`
-- `/Users/georgele/projects/tools/agentic-skills/global/codex/{run,ship,ship-end}/SKILL.md` (as applicable)
+- `/Users/georgele/projects/tools/agentic-skills/global/claude/plan-interview/SKILL.md`
+- `/Users/georgele/projects/tools/agentic-skills/global/claude/roadmap/SKILL.md`
+- `/Users/georgele/projects/tools/agentic-skills/global/claude/plan-phase/SKILL.md`
+- `/Users/georgele/projects/tools/agentic-skills/global/claude/run/SKILL.md`
+- `/Users/georgele/projects/tools/agentic-skills/global/claude/ship/SKILL.md`
+- `/Users/georgele/projects/tools/agentic-skills/global/claude/ship-end/SKILL.md`
+- `/Users/georgele/projects/tools/agentic-skills/global/codex/run/SKILL.md`
+- `/Users/georgele/projects/tools/agentic-skills/global/codex/ship/SKILL.md` *(verify existence; skip if absent)*
+- `/Users/georgele/projects/tools/agentic-skills/global/codex/ship-end/SKILL.md` *(verify existence; skip if absent)*
+- Any Codex plan/roadmap skills discovered under `global/codex/` *(verify and include if present)*
 - `/Users/georgele/projects/tools/agentic-skills/tasks/todo.md` — check off Step 7, roll Active Step Plan to Step 8.
 - `/Users/georgele/projects/tools/agentic-skills/tasks/history.md` — append Step 7 entry.
 
-**Execution Profile:** `serial` (inherited from Phase 11). Recommendation copy is a shared surface; parallel lanes would drift.
+**Key technical decisions / risks:**
+
+- **One shared block, not six bespoke ones.** Copy the exact same recommendation-block text into each touched skill (minor target-skill substitution is OK). Skills-level wording drift is how modes become inconsistent. If future edits need to change the copy, a grep for a distinctive phrase ("resolved agent mode via `scripts/agent-mode.sh`") should find every copy.
+- **Unset is not a failure.** A project that hasn't picked a mode yet should still see useful guidance. The unset branch lists all three options; it does not force a mode.
+- **Codex-side inversion.** In `hybrid`, Claude orchestrates and Codex executes. A Codex skill in `hybrid` mode should therefore recommend *returning to Claude* for the next orchestration step, not delegating further. Spell this out in the Codex-side copy.
+- **Don't recurse into `/delegate` infinitely.** `/delegate` is itself one of the mechanisms. Its own SKILL.md should NOT add a "next: delegate" recommendation block — that would be tautological.
+- **Keep the block compact.** 3–5 lines max, matching the existing terse skill conventions. No ASCII tables.
+
+**Conventions from prior work:**
+
+- Skill edits follow the existing numbered-step structure. Insert the recommendation block as a new numbered step (or an explicit sub-section) at the natural end of the workflow, not as a sibling top-level section.
+- Read the resolved mode via `./scripts/agent-mode.sh` (relative to project root) — same invocation pattern that `/handoff --target=codex` and `/delegate` use.
+- No Bash 3.2 portability concerns here — the recommendation is instruction text in SKILL.md, not shell code.
+
+**Test strategy (tests-after, per Execution Profile `serial`):**
+
+1. Grep verification: every skill listed in the Files-to-modify section contains the distinctive phrase from the recommendation block. A single `grep -l` run with the phrase returns exactly the expected file list.
+2. Mode-branch coverage: each touched skill's recommendation section names all three modes plus the unset case explicitly.
+3. No-recurse verification: `global/claude/delegate/SKILL.md` and `global/claude/handoff/SKILL.md` do NOT contain the recommendation block.
+4. Codex-side inversion: Codex-skill recommendation blocks for `hybrid` reference returning to Claude (e.g. "return to Claude"), not "delegate with `/delegate`".
+5. Dry-run sanity: set `SKILLS_AGENT_MODE=hybrid`, `=claude-only`, `=codex-only`, and unset in a fixture; confirm the resolved mode shows up in the recommendation text the skill would render (manual walk-through, since skills are prose).
+6. Schema/contract unchanged: `docs/operating-modes.md` and `specs/approved-plan.schema.json` untouched; `scripts/agent-mode.sh` untouched.
+
+**Acceptance criteria:**
+
+- [ ] Every Claude skill in scope (plan-interview, roadmap, plan-phase, run, ship, ship-end) emits the mode-aware recommendation block.
+- [ ] Every present Codex equivalent (run, plus ship/ship-end if they exist) emits the inverted mode-aware recommendation block.
+- [ ] `/delegate` and `/handoff` do NOT emit the block (no recursion).
+- [ ] `tasks/todo.md` Step 7 checked off and Active Step Plan rolled to Step 8 (degraded-path audit).
+- [ ] Contract files (`docs/operating-modes.md`, `specs/approved-plan.schema.json`, `scripts/agent-mode.sh`) untouched.
+
+**Out of scope (do not drift):**
+
+- New modes, new env vars, or changes to mode precedence.
+- Rewriting any skill's primary workflow. The recommendation block is additive at the natural terminus; the rest of the skill is out-of-bounds for Step 7.
+- Step 8's degraded-path audit. A skill missing a "failure" recommendation row is noted for Step 8, not fixed here.
+
+**Execution Profile:** `serial` (inherited from Phase 11). Recommendation copy is a shared surface across ~9 skills; parallel lanes drift on shared copy. Main agent owns every SKILL.md edit and the task/history updates.
 
 ### Active Step Plan — Step 6: `/delegate` (Claude) [archived for reference]
 
