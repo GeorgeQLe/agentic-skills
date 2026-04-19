@@ -73,7 +73,7 @@ Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env va
   | Skill | Assumes | Fails how if unavailable | Degraded path |
 
   Covers: `/run`, `/ship`, `/ship-end`, `$run`, `$ship`, `$ship-end`, kanban variants, pack wrappers that recommend the other CLI. Every row has a filled degraded path or explicit "requires mode X" constraint.
-- [ ] **Step 9** — Pack emphasis split by CLI role:
+- [x] **Step 9** — Pack emphasis split by CLI role:
   - Claude pack skills → framing, interviews, strategy, requirements, research synthesis, tradeoffs
   - Codex pack skills → implementation, reconciliation, validation, task promotion, repo mutation, shipping
   - Not every skill needs both versions; document which packs skew which direction
@@ -112,7 +112,34 @@ Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env va
 - Contract untouched: no edits to `specs/approved-plan.schema.json`, `scripts/agent-mode.sh`, `scripts/approved-plan.sh`, or any `SKILL.md` workflow. Step 8 was documentation-only per plan.
 - Verification: `grep -c "^| \`global/" docs/operating-modes.md` = 19 (≥14 required); `grep "| *|$"` = 0 empty cells; three rows spot-checked against source SKILL.md sections (`delegate` § "Mode requirement", `handoff` step 5.1, `codex/run` step 6c).
 
-### Active Step Plan — Step 9: Pack emphasis split by CLI role
+### Step 9 Summary (completed 2026-04-19)
+
+- Appended `## Pack emphasis` to `docs/operating-modes.md` with two authoritative tables: **Global skills** (34 rows, one per unique skill name across `global/claude/` + `global/codex/`) and **Packs** (8 rows, one per directory under `packs/`). Every row tags a single primary role — `Claude-orchestration`, `Codex-execution`, or `Both` — with a compact Notes phrase.
+- Role distribution: 18 skills tagged Claude-orchestration (plan-interview, roadmap, plan-phase, brainstorm, research-roadmap, investigate, trace, expert-review, spec-drift, slim-audit, affected, dead-code, debug, delegate, skills, guide, analyze-sessions, handoff-subset-intent), 10 Codex-execution (commit-and-push-by-feature, decommission, deploy, install-workflow-orchestration, reconcile-dev-docs, regression-check, release, scaffold, ship, ship-end, sync — 11), 5 Both (branch-lifecycle, handoff, hygiene, migrate, pack, run — 6). Every "Both" row explains the rationale inline; no default-assignments.
+- Pack distribution: 3 Claude-orchestration (`business-app`, `devtool`, `game` — all base packs are framing/strategy skills), 1 Codex-execution (`code-quality` — refactor mutation), 4 Both (`business-app-kanban`, `devtool-kanban`, `game-kanban` inherit base pack and add kanban run/ship execution variants; `poketowork-kanban` has no base pack and mixes both natively).
+- Added one-line role tags pointing back at the table to the four existing `PACK.md` files (`business-app-kanban`, `code-quality`, `devtool-kanban`, `game-kanban`). Packs without a pack-level doc today (`business-app`, `devtool`, `game`, `poketowork-kanban`) were not given new files — out of scope per plan.
+- Contract untouched: no edits to `specs/approved-plan.schema.json`, `scripts/agent-mode.sh`, `scripts/approved-plan.sh`, or any `SKILL.md` workflow. Step 8's `## Degraded-path audit` section remains byte-identical.
+- Verified: `ls global/claude global/codex | sort -u` → 34 unique names, matching 34 rows in Global skills; 8 pack dirs match 8 rows in Packs; `grep -oE '(Claude-orchestration|Codex-execution|Both)'` returns only the three allowed role values.
+
+### Active Step Plan — Step 10: Pack-aware `$run` routing on Codex
+
+**Goal:** Teach `$run` on Codex to read `.agents/project.json.enabled_packs` and, when the next planned step matches a pack skill, recommend or route to that pack's skill (prefixed with the correct CLI syntax) rather than the global-default skill. Pack emphasis from Step 9 is the classification input; Step 10 is the routing logic that consumes it.
+
+**Contract reminder:** Mode resolution (`scripts/agent-mode.sh`), approval-packet schema (`specs/approved-plan.schema.json`), Step 8 degraded-path audit, and Step 9 pack emphasis tables are all frozen. Step 10 adds routing behavior inside `global/codex/run/SKILL.md` only — no new modes, lifecycle states, or transport. Sketch only; full plan lands when Step 10 is picked up.
+
+**Scope (sketch):**
+
+1. Extend `global/codex/run/SKILL.md` § "Process" to read `.agents/project.json.enabled_packs` early, before the next-step recommendation block.
+2. When the resolved step title matches a pack skill's surface (kanban run/ship/ship-end variants are the primary matchers), recommend the pack skill invocation instead of the global `$run`/`$ship`/`$ship-end`.
+3. No-match fallback: behave exactly as today.
+4. Degraded path: missing or malformed `.agents/project.json` → silently fall back to global skills, log a single-line warning.
+5. Document the routing rule in `docs/operating-modes.md` under `## Pack emphasis` as a subsection, or as a pointer from `## Degraded-path audit` to Step 10's behavior.
+
+**Out of scope (hard line):** Adding the same routing to `/run` on the Claude side (parity-mirror debate is Step 11+); reading `enabled_packs` from any non-`.agents/project.json` location; pack skill *registration* (pack skills already ship via the pack loader). Keep Step 10 narrowly about Codex-side recommendation routing.
+
+**Execution Profile:** `serial` (inherited from Phase 11).
+
+### Active Step Plan — Step 9: Pack emphasis split by CLI role [archived for reference]
 
 **Goal:** Tag every pack under `packs/` and every skill under `global/claude/**` / `global/codex/**` with a primary CLI role — **Claude-orchestration** (framing, interviews, strategy, requirements, research synthesis, tradeoffs), **Codex-execution** (implementation, reconciliation, validation, task promotion, repo mutation, shipping), or **both** — and record the split in a single authoritative "Pack emphasis" table in `docs/operating-modes.md`. Pack authors and users should be able to answer "where does this skill belong?" by reading one table.
 
