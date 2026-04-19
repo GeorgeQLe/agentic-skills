@@ -78,7 +78,7 @@ Items that might be unused but have ambiguous usage patterns (dynamic imports, r
 
 ## Follow-Through
 
-After presenting findings, write actionable cleanup items to `tasks/todo.md`:
+After presenting findings, write actionable cleanup items to `tasks/todo.md`. If a finding is only a non-blocking future validation or condition-gated cleanup record, write it to `tasks/record-todo.md` instead with source, condition, non-blocking reason, evidence, and promotion rule:
 
 1. Read `tasks/todo.md` if it exists — append to the end under a `## Dead Code Cleanup` heading (create the file if it doesn't exist).
 2. Add one checkbox item per "Safe to Remove" finding, grouped by package/directory:

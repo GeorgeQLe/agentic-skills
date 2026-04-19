@@ -35,7 +35,7 @@ When app scope `{app}` is active:
 - Read `research/icp.md` (or `research/{app}/icp.md`) if it exists — carry forward startup context
 - Read `specs/mvp-gap.md` (or `specs/{app}/mvp-gap.md`) if it exists — note unresolved startup gaps that become more critical at enterprise scale
 - Read CLAUDE.md, README, package config, existing specs
-- Read `tasks/roadmap.md`, `tasks/todo.md`, and `tasks/manual-todo.md` (if it exists) for work in progress
+- Read `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, and `tasks/recurring-todo.md` (if they exist) for work in progress or advisory records
 
 ### 2. Analyse the Codebase
 
@@ -163,13 +163,23 @@ Pick one:
 - [conditional items from step 5 — only include items whose conditions are met]
 ```
 
+## Task Classification
+
+When this skill produces follow-up work, file it by execution semantics:
+
+- Immediately actionable implementation or documentation work goes in `tasks/todo.md`.
+- Human actions tied to automated steps go in `tasks/manual-todo.md` with `_(blocks: Step N.X)_` or `_(after: Step N.X)_`.
+- One-time condition-gated records, baselines, or future measurements go in `tasks/record-todo.md` with source, condition, non-blocking reason, evidence, and promotion rule.
+- Cadence-based reviews, playtests, adoption checks, investor updates, retros, or docs-health checks go in `tasks/recurring-todo.md` with cadence, owner/agent, next due, evidence path, and escalation conditions.
+- Do not put non-blocking records or recurring obligations in `tasks/todo.md` unless they have been explicitly promoted into current execution work.
+
 ## Constraints
 
 - **Do not make code changes.** Analysis only.
 - **Every gap must cite evidence** — missing middleware, absent SCIM endpoint, no audit log table, etc.
 - **Distinguish "first enterprise deal" from "100th enterprise deal."** Early enterprise sales can tolerate workarounds; at scale they can't. Be clear about which gaps matter when.
 - **Include `/plan-interview` prompts** for each gap for immediate action.
-- **Do not duplicate work already tracked** in `tasks/roadmap.md`, `tasks/todo.md`, or `tasks/manual-todo.md`.
+- **Do not duplicate work already tracked** in `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, or `tasks/recurring-todo.md`.
 - **If the codebase is minimal**, be honest about it — don't fabricate detailed infrastructure gaps for a prototype.
 
 ## Archive-First Replacement Policy

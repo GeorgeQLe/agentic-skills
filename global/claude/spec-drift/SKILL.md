@@ -119,8 +119,8 @@ If mode is `fix`:
 
 1. **Present all Errors** to the user. For each Error, show the spec claim and code reality side-by-side with direct quotes. Ask: **is the code right or the spec right?**
    - **Code is right** → archive the existing spec, then update the canonical spec section to match the implementation
-   - **Spec is right** → add item to `tasks/todo.md` as an implementation bug with the spec reference
-2. **Present Warnings** — ask user whether to archive then update spec (remove unimplemented/removed claims) or add to `tasks/todo.md` as work to be done.
+   - **Spec is right** → add concrete implementation bugs to `tasks/todo.md` with the spec reference
+2. **Present Warnings** — ask user whether to archive then update spec (remove unimplemented/removed claims), add concrete work to `tasks/todo.md`, or add non-blocking condition-gated validation to `tasks/record-todo.md`.
 3. **Skip Info items** — these are suggestions only.
 4. Apply approved archive-first changes.
 5. Write `specs/drift-report.md` (or `specs/{app}/drift-report.md`) as audit trail:
@@ -190,7 +190,7 @@ Classify impact as **None**, **Minor** (cosmetic references), or **Major** (core
 - **Respect monorepo structure.** Use app-scoped paths when monorepo is detected.
 - **Use subagents** for claim extraction (one per spec) and verification (one per claim group) to parallelize work.
 - **Idempotent.** Running audit twice with no changes between should produce identical output.
-- **Do not make code changes.** In fix mode, only update spec documents and `tasks/todo.md` — never modify source code. Archive existing specs before replacement per the Archive-First Replacement Policy.
+- **Do not make code changes.** In fix mode, only update spec documents, `tasks/todo.md`, and `tasks/record-todo.md` — never modify source code. Archive existing specs before replacement per the Archive-First Replacement Policy.
 
 ## Archive-First Replacement Policy
 

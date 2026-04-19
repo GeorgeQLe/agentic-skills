@@ -53,8 +53,8 @@ Group by severity:
 ### 5. Fix Mode (if specified)
 
 1. Present Errors with side-by-side spec vs code quotes. Ask: code right or spec right?
-   - Code right → archive the existing spec, then update the canonical spec to match the implementation. Spec right → add to `tasks/todo.md`.
-2. Present Warnings — either archive then update the spec, or add to todo.
+   - Code right → archive the existing spec, then update the canonical spec to match the implementation. Spec right → add concrete implementation fixes to `tasks/todo.md`.
+2. Present Warnings — either archive then update the spec, add concrete work to `tasks/todo.md`, or add non-blocking condition-gated validation to `tasks/record-todo.md`.
 3. Write `specs/drift-report.md` (or `specs/{app}/drift-report.md`) as audit trail.
 4. Check downstream impact on `research/journey-map.md`, `research/metrics.md`, `tasks/roadmap.md`. If major, recommend `$reconcile-research`.
 
@@ -70,7 +70,7 @@ Group by severity:
 - Every finding must cite spec quote + code reference.
 - If uncertain, classify as Info, not Error.
 - Respect monorepo structure with app-scoped paths.
-- Do not make code changes — only update specs and `tasks/todo.md`; archive existing specs before replacement per the Archive-First Replacement Policy.
+- Do not make code changes — only update specs, `tasks/todo.md`, and `tasks/record-todo.md`; archive existing specs before replacement per the Archive-First Replacement Policy.
 
 ## Archive-First Replacement Policy
 

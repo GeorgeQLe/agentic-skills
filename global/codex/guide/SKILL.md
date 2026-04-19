@@ -16,6 +16,7 @@ Produce detailed, click-by-click instructions for manual tasks that block automa
 1. **Find the blocker:**
    - If `$ARGUMENTS` is non-empty, use the provided text as the task description.
    - If `$ARGUMENTS` is empty, read `tasks/manual-todo.md` and find the first unchecked item (prefer items with `_(blocks: ...)_` annotations).
+   - If `$ARGUMENTS` explicitly references `tasks/record-todo.md`, use that record item as the task description and produce instructions for satisfying its condition or collecting its evidence. Do not use record items by default.
    - If no task is found, ask the user what they need help with.
 
 2. **Gather project context:**
@@ -41,5 +42,6 @@ Produce detailed, click-by-click instructions for manual tasks that block automa
 - Always web search — never produce instructions from memory alone.
 - Use project-specific values, not generic placeholders.
 - Read-only except for checking off items in `tasks/manual-todo.md`.
+- Do not check off or modify `tasks/record-todo.md`; record items are advisory unless a separate workflow updates them.
 - One task at a time.
 - Don't execute the task — produce instructions for the user to follow.

@@ -46,6 +46,7 @@ Ship already-finished work, commit it, optionally deploy it, and plan the next s
 4. Plan the next step:
    - **Migration check:** If `tasks/roadmap.md` does not exist but `tasks/todo.md` contains multiple `## Phase` headers, migrate: copy `tasks/todo.md` → `tasks/roadmap.md`, then trim `tasks/todo.md` to just the current phase (first phase with unchecked steps). Commit with `chore: migrate to roadmap.md + todo.md split`.
    - Read `tasks/todo.md` to identify the next uncompleted step in the current phase.
+   - If `tasks/record-todo.md` or `tasks/recurring-todo.md` exists, count unchecked advisory items for status only. Do not select them as next work.
    - **Check if the current phase is complete** (all steps checked, milestone criteria met):
      - If **YES — Phase transition:**
        1. Archive the completed phase: copy `tasks/todo.md` → `tasks/phases/phase-N.md` (create `tasks/phases/` if needed). Fill in the "On Completion" section.
@@ -59,12 +60,13 @@ Ship already-finished work, commit it, optionally deploy it, and plan the next s
        5. **Just-in-time planning:** Invoke `$plan-phase` for the new phase. This generates implementation steps, the phase `### Execution Profile`, and file-level detail using the full context of what was learned during prior phases.
      - If **NO:** find the next uncompleted step within the current phase.
 5. Write a self-contained implementation plan for the next step into `tasks/todo.md`, complete enough for a fresh session to execute from `tasks/todo.md` alone. Preserve the current phase's `### Execution Profile` so `$run` can decide whether to execute serially, use read-only subagents, use review subagents, or use disjoint write subagents after the normal approval gate.
-6. Ship `tasks/todo.md`, `tasks/roadmap.md`, `tasks/manual-todo.md` (if it exists), and `tasks/phases/` (if created) via `$commit-and-push-by-feature`, landing them on `main` or `master`.
+6. Ship `tasks/todo.md`, `tasks/roadmap.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, `tasks/recurring-todo.md` (when they exist), and `tasks/phases/` (if created) via `$commit-and-push-by-feature`, landing them on `main` or `master`.
 7. Output a brief summary:
    - What was shipped (if anything)
    - Deploy status (if deployed)
    - Validation status — explicitly state whether any failing tests are expected (red phase: tests before implementation) or unexpected (regressions/bugs), and call out any warnings as fixed, accepted, or unresolved
    - Manual tasks — pending count from `tasks/manual-todo.md` (if it exists), note any blocking upcoming steps
+   - Advisory tasks — pending record/recurring counts from `tasks/record-todo.md` and `tasks/recurring-todo.md` if they exist
    - What the next step is
 
 ## Constraints
@@ -78,6 +80,7 @@ Ship already-finished work, commit it, optionally deploy it, and plan the next s
 - Do not push shipping commits to an existing feature branch. Use `$commit-and-push-by-feature` to move the work onto `main` or `master` and push it there, or stop and report a blocker if that cannot be done safely.
 - The plan must be actionable with specific file paths, technical details, and the current phase's `### Execution Profile`.
 - In Codex, `$ship` is a compatibility/manual cleanup workflow. Prefer `$run` for the normal execute-and-ship loop.
+- Do not execute or plan from `tasks/record-todo.md` or `tasks/recurring-todo.md`; report their counts only unless an item has been promoted into `tasks/todo.md`.
 - `ship` only runs a deploy when `deploy.md` or `tasks/deploy.md` explicitly documents a manual deployment workflow. Repos without one are assumed to auto-deploy or require no manual deploy step.
 - Never use GitHub Actions for deployment. Only use manual deploy scripts, Makefiles, or CLI commands.
 - Never deploy to production without explicit user confirmation.

@@ -33,7 +33,7 @@ Use this skill when the user wants to identify unused code, orphaned files, or s
 
 ## Follow-Through
 
-After presenting findings, write "Safe to Remove" items to `tasks/todo.md` under a `## Dead Code Cleanup` heading (append or replace existing section). One checkbox per item. Do not add "Needs Investigation" items. Suggest `$run` to execute cleanup.
+After presenting findings, write "Safe to Remove" items to `tasks/todo.md` under a `## Dead Code Cleanup` heading (append or replace existing section). One checkbox per item. Do not add "Needs Investigation" items. If a finding is only a non-blocking future validation or condition-gated cleanup record, write it to `tasks/record-todo.md` instead with source, condition, non-blocking reason, evidence, and promotion rule. Suggest `$run` to execute concrete cleanup.
 
 ## Constraints
 

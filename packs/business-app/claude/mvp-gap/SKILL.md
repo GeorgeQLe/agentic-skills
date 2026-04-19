@@ -36,7 +36,7 @@ When app scope `{app}` is active:
 - Read `research/metrics.md` (or `research/{app}/metrics.md`) if it exists — check if defined metrics can actually be measured (instrumentation gaps are MVP gaps)
 - Read CLAUDE.md, README, package config for project conventions
 - Read existing specs from `specs/` (or `specs/{app}/`) for planned but unbuilt features
-- Read `tasks/roadmap.md`, `tasks/todo.md`, and `tasks/manual-todo.md` if they exist for work in progress
+- Read `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, and `tasks/recurring-todo.md` if they exist for work in progress or advisory records
 
 ### 2. Analyse the Codebase
 
@@ -192,6 +192,16 @@ Pick one:
 - [conditional items from step 5 — only include items whose conditions are met]
 ```
 
+## Task Classification
+
+When this skill produces follow-up work, file it by execution semantics:
+
+- Immediately actionable implementation or documentation work goes in `tasks/todo.md`.
+- Human actions tied to automated steps go in `tasks/manual-todo.md` with `_(blocks: Step N.X)_` or `_(after: Step N.X)_`.
+- One-time condition-gated records, baselines, or future measurements go in `tasks/record-todo.md` with source, condition, non-blocking reason, evidence, and promotion rule.
+- Cadence-based reviews, playtests, adoption checks, investor updates, retros, or docs-health checks go in `tasks/recurring-todo.md` with cadence, owner/agent, next due, evidence path, and escalation conditions.
+- Do not put non-blocking records or recurring obligations in `tasks/todo.md` unless they have been explicitly promoted into current execution work.
+
 ## Constraints
 
 - **Do not make code changes.** Analysis only.
@@ -199,7 +209,7 @@ Pick one:
 - **Prioritise by market impact**, not technical interest. Things that block the first sale come before things that block the 10th.
 - **If no code exists yet**, report that clearly and suggest running `/plan-interview` to design the solution first. Do not fabricate gaps for a nonexistent codebase.
 - **Include `/plan-interview` prompts** for each gap so the user can immediately start speccing a fix.
-- **Do not duplicate work already tracked** in `tasks/roadmap.md`, `tasks/todo.md`, or `tasks/manual-todo.md` — note it as "in progress" instead.
+- **Do not duplicate work already tracked** in `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, or `tasks/recurring-todo.md` — note it as "in progress" or "advisory" instead.
 
 ## Archive-First Replacement Policy
 

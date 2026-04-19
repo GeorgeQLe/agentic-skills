@@ -51,6 +51,8 @@ Check expected project files exist based on project phase:
 - `tasks/roadmap.md` — has content, not just a placeholder
 - `tasks/todo.md` — has content with checkable items (`- [ ]` or `- [x]`)
 - `tasks/manual-todo.md` — if it exists, has content with checkable items (`- [ ]` or `- [x]`) and `_(blocks: ...)_` or `_(after: ...)_` annotations
+- `tasks/record-todo.md` — if it exists, contains non-blocking condition-gated records with source, condition, non-blocking reason, evidence, and promotion rule fields
+- `tasks/recurring-todo.md` — if it exists, contains cadence-based tasks with cadence, owner/agent, last run, next due, evidence/output path, and escalation fields
 - `tasks/history.md` — exists
 
 **Expected if specs exist:**
@@ -62,6 +64,8 @@ Check expected project files exist based on project phase:
 **Staleness (informational, not violations):**
 - `tasks/todo.md` has all items checked but phase isn't marked complete in `tasks/roadmap.md`
 - `tasks/manual-todo.md` has unchecked items that block completed steps in `tasks/todo.md`
+- `tasks/record-todo.md` has eligible items that may need promotion into `tasks/todo.md`
+- `tasks/recurring-todo.md` has due items that may need promotion into `tasks/todo.md`
 - `tasks/roadmap.md` references phases that have no corresponding detail
 
 ### 4. Audit Docs (`docs` scope)
@@ -78,7 +82,7 @@ Check expected project files exist based on project phase:
 **Documentation template audit:**
 - Classify generated Markdown files by path pattern and validate them against `references/documentation-templates.md`
 - Check canonical roots:
-  - `tasks/` for roadmap, todo, history, manual tasks, phase archives, handoff, deployment ledgers, and lessons
+  - `tasks/` for roadmap, todo, history, manual tasks, record tasks, recurring tasks, phase archives, handoff, deployment ledgers, and lessons
   - `specs/` for implementation specifications and interview logs
   - `research/` for research docs, interview logs, search logs, experiments, and reconciliation reports
   - `docs/specifications/` only as a fallback spec location
@@ -95,8 +99,10 @@ Check expected project files exist based on project phase:
 
 **Family-specific checks:**
 - `tasks/roadmap.md` has a summary, phase overview, repeated `## Phase N:` sections, phase milestones or acceptance criteria, and cross-phase concerns when multi-phase
-- `tasks/todo.md` has checkable work or a priority queue, and does not contain the full multi-phase roadmap except during legacy migration
+- `tasks/todo.md` has checkable work, a priority task queue, or a priority documentation todo, and does not contain the full multi-phase roadmap except during legacy migration
 - `tasks/manual-todo.md` has checkable items and every unchecked item includes `_(blocks: Step N.X)_` or `_(after: Step N.X)_`
+- `tasks/record-todo.md` has checkable non-blocking record items with source, condition, non-blocking reason, required data/access, measurement/query, target note, revisit cadence/date, completion evidence, and promotion rule
+- `tasks/recurring-todo.md` has cadence-based items with task, cadence, owner/agent, scope, trigger, last run, next due, command/skill, evidence/output path, and escalation conditions
 - `tasks/history.md` is append-only with dated entries
 - `tasks/phases/phase-N.md` has completed steps, milestone or acceptance criteria, and an `## On Completion` or equivalent completion summary
 - `specs/*.md`, `specs/{app}/*.md`, and fallback `docs/specifications/*.md` have spec sections for overview, goals, non-goals, detailed design, edge cases, test plan, acceptance criteria, and open questions or explicit `None`
@@ -134,7 +140,7 @@ Categorize all findings:
 
 For documentation templates, use:
 
-- **Error** for automation-breaking structure: missing checkboxes in `tasks/todo.md`, missing manual blocker annotations, malformed phase numbering, multiple H1 headings, invalid `.agents/project.json`, or missing required task/spec sections that downstream skills parse.
+- **Error** for automation-breaking structure: missing checkboxes in `tasks/todo.md`, missing manual blocker annotations, executable work misfiled in `tasks/record-todo.md` or `tasks/recurring-todo.md`, malformed phase numbering, multiple H1 headings, invalid `.agents/project.json`, or missing required task/spec sections that downstream skills parse.
 - **Warning** for template drift: missing metadata, missing `## Next Steps`, missing spec acceptance criteria, research docs without source/evidence orientation, or legacy roots that should move to canonical locations.
 - **Info** for uncertain classifications, old hand-written docs, optional sections, or cleanup suggestions that do not block automation.
 

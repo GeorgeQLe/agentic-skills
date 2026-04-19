@@ -27,7 +27,7 @@ Manage the release ceremony: version bump, changelog generation, git tag, and op
    - Ensure the current branch is the primary branch. If not, stop and tell the user to cut releases only from `main`/`master`.
    - Ensure the primary branch is up to date with remote.
    - Run tests to verify everything passes.
-   - Check for any TODO or FIXME items in `tasks/roadmap.md`, `tasks/todo.md`, and `tasks/manual-todo.md` (if it exists) that should block the release.
+   - Check for any TODO or FIXME items in `tasks/roadmap.md`, `tasks/todo.md`, and `tasks/manual-todo.md` (if it exists) that should block the release. Count `tasks/record-todo.md` and `tasks/recurring-todo.md` as advisory only unless an item explicitly says it blocks release.
 
 3. **Generate the changelog:**
    - Find the last git tag (or first commit if no tags exist).

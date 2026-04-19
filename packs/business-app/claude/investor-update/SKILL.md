@@ -12,7 +12,7 @@ Generates a structured monthly update from current research state, metrics, road
 
 ## Soft Prerequisites
 
-- Read all that exist: `research/metrics.md`, `research/cohort-review-*.md`, `research/runway-model.md`, `research/customer-feedback.md`, `research/gtm.md`, `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/history.md`
+- Read all that exist: `research/metrics.md`, `research/cohort-review-*.md`, `research/runway-model.md`, `research/customer-feedback.md`, `research/gtm.md`, `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, `tasks/recurring-todo.md`, `tasks/history.md`
 - The more data exists, the richer the update. Works with as little as a roadmap + basic metrics.
 
 ## Process
@@ -34,7 +34,7 @@ Read all available data sources:
 - **Metrics**: `research/metrics.md` for targets, `research/cohort-review-*.md` (most recent) for actuals
 - **Financial**: `research/runway-model.md` for runway, burn, revenue
 - **Customer**: `research/customer-feedback.md` for qualitative signal
-- **Progress**: `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md` (if it exists), `tasks/history.md` for what was built
+- **Progress**: `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md` (if it exists), `tasks/history.md` for what was built; `tasks/record-todo.md` and `tasks/recurring-todo.md` for advisory measurements or cadence work that may affect asks/risks
 - **GTM**: `research/gtm.md` for go-to-market context
 
 Also check git log for the month to see what was shipped.
@@ -116,6 +116,16 @@ Only after confirmation, write the output file.
 ```
 
 Create the `research/` directory if it doesn't exist.
+
+## Task Classification
+
+When this skill produces follow-up work, file it by execution semantics:
+
+- Immediately actionable implementation or documentation work goes in `tasks/todo.md`.
+- Human actions tied to automated steps go in `tasks/manual-todo.md` with `_(blocks: Step N.X)_` or `_(after: Step N.X)_`.
+- One-time condition-gated records, baselines, or future measurements go in `tasks/record-todo.md` with source, condition, non-blocking reason, evidence, and promotion rule.
+- Cadence-based reviews, playtests, adoption checks, investor updates, retros, or docs-health checks go in `tasks/recurring-todo.md` with cadence, owner/agent, next due, evidence path, and escalation conditions.
+- Do not put non-blocking records or recurring obligations in `tasks/todo.md` unless they have been explicitly promoted into current execution work.
 
 ## Constraints
 

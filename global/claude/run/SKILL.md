@@ -15,6 +15,7 @@ Identify the next incomplete unit of work from the phased plan, build an executi
 1. **Migration check:** If `tasks/roadmap.md` does not exist but `tasks/todo.md` contains multiple `## Phase` headers, migrate: copy `tasks/todo.md` → `tasks/roadmap.md`, then trim `tasks/todo.md` to just the current phase (first phase with unchecked steps). Commit with `chore: migrate to roadmap.md + todo.md split`.
 2. **Read `tasks/todo.md`** — this contains the current phase's steps. Reference `tasks/roadmap.md` only if cross-phase context is needed.
 3. **Read CLAUDE.md** for project conventions.
+3b. If `tasks/record-todo.md` or `tasks/recurring-todo.md` exists, count unchecked advisory items for status only. Do not select them as next work.
 4. **Find the next incomplete item:**
    - Look for the next phase with an unchecked milestone.
    - If `--phase` mode: scope the entire phase.
@@ -77,6 +78,7 @@ The main agent owns integration, conflict resolution, task doc updates, history 
 - Files modified
 - Test results (if tests were run) — **explicitly state whether any failures are expected (red phase: tests written before implementation) or unexpected (regressions/bugs that need fixing)**
 - Manual tasks — if `tasks/manual-todo.md` exists, report count of pending manual tasks for this phase
+- Advisory tasks — pending record/recurring counts from `tasks/record-todo.md` and `tasks/recurring-todo.md` if they exist
 - What's next (just its name — /ship will handle planning)
 
 ## What NOT to do
@@ -89,6 +91,7 @@ The main agent owns integration, conflict resolution, task doc updates, history 
 - Do NOT refactor unrelated code.
 - Do NOT update CLAUDE.md.
 - Do NOT execute items from `tasks/manual-todo.md` — those require human action.
+- Do NOT execute items from `tasks/record-todo.md` or `tasks/recurring-todo.md` unless the item has first been promoted into `tasks/todo.md`.
 
 ## Workflow
 

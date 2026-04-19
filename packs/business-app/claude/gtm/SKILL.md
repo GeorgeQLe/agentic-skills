@@ -255,6 +255,16 @@ Raw interview log — questions, options presented, user responses, and a closin
 
 Create the `research/` directory if it doesn't exist.
 
+## Task Classification
+
+When this skill produces follow-up work, file it by execution semantics:
+
+- Immediately actionable implementation or documentation work goes in `tasks/todo.md`.
+- Human actions tied to automated steps go in `tasks/manual-todo.md` with `_(blocks: Step N.X)_` or `_(after: Step N.X)_`.
+- One-time condition-gated records, baselines, or future measurements go in `tasks/record-todo.md` with source, condition, non-blocking reason, evidence, and promotion rule.
+- Cadence-based reviews, playtests, adoption checks, investor updates, retros, or docs-health checks go in `tasks/recurring-todo.md` with cadence, owner/agent, next due, evidence path, and escalation conditions.
+- Do not put non-blocking records or recurring obligations in `tasks/todo.md` unless they have been explicitly promoted into current execution work.
+
 ## Constraints
 
 - **Requires ICP.** Cannot build a GTM plan without knowing who you're selling to.

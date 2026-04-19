@@ -16,6 +16,7 @@ Generate a self-contained context document that captures exactly where you left 
    - Read `tasks/todo.md` for the current phase detail and active step.
    - Read `tasks/roadmap.md` for overall progress context (which phases are done, what's ahead).
    - Read `tasks/manual-todo.md` (if it exists) for pending manual tasks.
+   - Read `tasks/record-todo.md` and `tasks/recurring-todo.md` (if they exist) for advisory task counts.
    - Read `CLAUDE.md` for project conventions.
    - Run `git status` and `git log --oneline -10` for recent activity.
    - Run `git diff --stat` if there are uncommitted changes.
@@ -66,6 +67,10 @@ Generate a self-contained context document that captures exactly where you left 
 ## Pending Manual Tasks
 - [Unchecked items from `tasks/manual-todo.md`, or "none"]
 - [Note any that block upcoming automated steps]
+
+## Pending Advisory Tasks
+- [Record/recurring task counts from `tasks/record-todo.md` and `tasks/recurring-todo.md`, or "none"]
+- [Note that these are not execution blockers unless promoted to `tasks/todo.md`]
 
 ## Next Steps
 - [Exactly what to do next, specific enough to execute without re-reading context]

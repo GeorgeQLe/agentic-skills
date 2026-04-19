@@ -18,6 +18,7 @@ Use this skill when the user wants the current session wrapped up cleanly.
 2. If the tree is clean and there are no unpushed commits, report that there is nothing to ship and stop.
 3. Update `tasks/todo.md` with completed items and blockers. Also update milestone progress in `tasks/roadmap.md` if criteria were met.
 3b. Check `tasks/manual-todo.md` (if it exists) — note the status of manual tasks (checked vs unchecked). Do NOT modify checked items.
+3c. Check `tasks/record-todo.md` and `tasks/recurring-todo.md` if they exist — note unchecked advisory counts only. Do NOT treat them as blockers unless an item has been promoted into `tasks/todo.md`.
 4. Update `tasks/history.md` with a brief record of the session. Create it if needed.
 5. **Pre-ship validation:**
    - First check conversation context for lint/typecheck/test/build output already produced this session (e.g., from a TDD run step). Do NOT re-run commands whose results are already available.
@@ -45,6 +46,7 @@ Use this skill when the user wants the current session wrapped up cleanly.
    - What was accomplished
    - Validation status — explicitly state whether any failing tests are expected (red phase: tests before implementation) or unexpected (regressions/bugs), and call out any warnings as fixed, accepted, or unresolved
    - Manual tasks — X/Y complete (from `tasks/manual-todo.md`, if it exists)
+   - Advisory tasks — pending record/recurring counts from `tasks/record-todo.md` and `tasks/recurring-todo.md` if they exist
    - What is still outstanding
    - Branch name
    - Commit list
@@ -54,6 +56,7 @@ Use this skill when the user wants the current session wrapped up cleanly.
 
 - **Fix unrelated issues:** If any step surfaces errors, warnings, or lint issues — even ones unrelated to the current work — investigate and fix them before continuing. Commit these fixes separately with a descriptive message (e.g., `fix: resolve unused import warning in auth.ts`).
 - Do not modify `CLAUDE.md` as part of progress tracking.
+- Do not execute or block wrap-up on `tasks/record-todo.md` or `tasks/recurring-todo.md` items unless they were explicitly promoted into `tasks/todo.md`.
 - Do not switch or create branches unless the current state requires it.
 - Do not amend or rewrite history.
 - Stop and report if secrets are detected.
