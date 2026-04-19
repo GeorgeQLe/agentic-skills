@@ -140,6 +140,90 @@ Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env va
 - Verified: `git diff` on Step 8/9/10 table bodies — zero content changes; resolver precedence in the new `## Mode-signal resolution` matches `scripts/agent-mode.sh` behavior (env > file > unset, invalid in either source → non-zero exit); every lifecycle-diagram edge maps to an `approved-plan.sh` subcommand and every subcommand appears; migration guide cites `pack.sh set-mode`, `/delegate`, `/handoff --target=codex`, `$run --execute-approved` by name without re-describing their internals.
 - Checked off Step 11 in `tasks/todo.md`. The Phase 11 final **Verify** item (three-mode sample-workflow walkthrough) rolled to its own deferred micro-step — it requires a real workflow run, not a docs task.
 
+### Active Step Plan — Phase 11 Verify: Three-mode sample-workflow walkthrough
+
+**Goal:** Prove — with a real workflow on a real project — that each of the three operating modes (`claude-only`, `codex-only`, `hybrid`) can complete a plan → execute → ship cycle without requiring the unavailable CLI. This is the final Phase 11 acceptance item deferred from Step 11 because it requires an actual run, not a docs task. On completion, Phase 11 is fully closed.
+
+**Contract reminder:** All Phase 11 mechanisms are frozen: `scripts/agent-mode.sh` (Step 2), `specs/approved-plan.schema.json` (Step 3), `scripts/approved-plan.sh` (Steps 3–6), `/handoff --target=codex` (Step 5), `/delegate` (Step 6), Step 7 mode-aware recommendations, Step 8 degraded-path audit, Step 9 pack emphasis, Step 10 `$run` pack-aware routing, Step 11 authoritative doc. Verify is purely an empirical acceptance test — no mechanism edits. If Verify surfaces a real defect, log it under a new `### Gaps surfaced by Verify` subsection and defer the fix to a follow-up step.
+
+**Starting context (from Steps 1–11, all shipped):**
+
+- `docs/operating-modes.md` is the authoritative reference (~280 lines). Precedence: env `SKILLS_AGENT_MODE` > `.agents/project.json.agent_mode` > unset. Writer: `scripts/pack.sh set-mode <mode|unset>`.
+- Approval packet lifecycle: `draft → approved → (consumed | stale | superseded | uncertain)`. All transitions live in `scripts/approved-plan.sh`.
+- Six Claude + six Codex planning/execution skills carry the Step 7 "Mode-aware next-step recommendation" block. `/delegate` is hybrid-only; `/handoff --target=codex` requires `claude-only` or `hybrid`.
+- No project currently sits in all three modes end-to-end for a single step — prior shipping has exercised pieces but not a full loop per mode.
+
+**Scope:**
+
+Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch repo, or a no-op README tweak in this repo on a throwaway branch) and run it through each mode. One task, three runs. For each run, capture: the starting mode signal, every skill invoked, every packet lifecycle transition, and the final commit SHA. Record evidence inline in `tasks/verify-phase-11.md` (new, gitignored-or-committed per evidence contract below).
+
+1. **`claude-only` run.** `SKILLS_AGENT_MODE=claude-only` in the shell. `/plan-interview` or `/run --plan-only` (whichever fits the task) → Claude plans → `/run` executes → `/ship`. Expected: no packet written (claude-only does not need cross-CLI approval). Expected recommendation at each terminal skill: the Claude next-step (never `/delegate`, never `$…`).
+2. **`codex-only` run.** `SKILLS_AGENT_MODE=codex-only`. `$run` plans → `$run` executes → `$ship`. Expected: no packet written. Recommendation line resolves to stay-in-Codex at each terminal.
+3. **`hybrid` run.** `SKILLS_AGENT_MODE=hybrid`. Claude `/run` plans → `/delegate $run` produces packet → Codex consumes via `$run --execute-approved` → `$ship`. Expected packet trajectory: `draft → approved → consumed`. Capture the exact `scripts/approved-plan.sh status` output at each transition.
+
+4. **Degraded-path spot check (bonus, optional).** Attempt `/delegate` under `claude-only` mode — expect `mode-mismatch:` exit. Attempt `$run --execute-approved` under `hybrid` with an expired `ttl_seconds` — expect `stale` transition. Two one-shot checks, not a full matrix.
+
+5. **Evidence write-up.** New file `tasks/verify-phase-11.md` with one section per mode: commands run, skill outputs (quoted or summarized), packet lifecycle snapshots, final commit SHAs. Cross-reference the relevant `docs/operating-modes.md` sections (Mode-signal resolution, Approval packet lifecycle, Degraded-path audit).
+
+**Files to modify (full paths):**
+
+- `/Users/georgele/projects/tools/agentic-skills/tasks/verify-phase-11.md` — **new.** Evidence for all three runs + the optional degraded-path spot checks. Committed (not gitignored) so future readers can see the Phase 11 acceptance record.
+- `/Users/georgele/projects/tools/agentic-skills/tasks/todo.md` — check off the final **Verify** item; append a Verify Summary; archive this Active Step Plan in place; decide whether to mark Phase 11 complete and advance, or close the phase if no next phase exists.
+- `/Users/georgele/projects/tools/agentic-skills/tasks/history.md` — append a Verify entry.
+- `/Users/georgele/projects/tools/agentic-skills/tasks/roadmap.md` — add a Phase 11 section marked ✓ once Verify passes (Phase 11 is currently absent from roadmap.md; todo.md is the only place it lives).
+- **Do NOT modify:** any `SKILL.md`, any script under `scripts/`, `specs/approved-plan.schema.json`, `docs/operating-modes.md`, `CLAUDE.md`, or any pack file. Verify is empirical — if it finds a bug, log it, do not fix it in this step.
+
+**Key technical decisions / risks:**
+
+- **Pick a safe sample task.** The walkthrough is about exercising the mode machinery, not about the task itself. A one-line `README.md` typo fix or a no-op whitespace edit on a throwaway branch is ideal. Do not use Verify to slip in unrelated work — that confuses the evidence record.
+- **Use `SKILLS_AGENT_MODE`, not `pack.sh set-mode`, for the three runs.** Shell env override is reversible per-invocation; writing to `.agents/project.json` pollutes the repo state. Only use `set-mode` if explicitly testing the file-sourced path.
+- **`hybrid` needs both CLIs.** This run requires an active Codex session (`codex exec` reachable from PATH) and an active Claude Code session. If Codex is unavailable at Verify time, stop and report blocked — do not skip the `hybrid` run or substitute `claude-only` for it. The whole point is exercising all three.
+- **Don't commit the sample task to `master`.** If the walkthrough produces real commits on `master` as part of `/ship`, each run will leave a trace. Either run the walkthrough in a scratch worktree / throwaway branch that gets deleted, or use a no-op task and allow three tiny commits on `master` (tagged clearly in commit message: `verify(phase-11): claude-only walkthrough`, etc.). Decide before starting.
+- **Packet evidence must be real.** Capture `tasks/approved-plan.md` content at `draft`, `approved`, and `consumed` — screenshots of the mirror file, not narrative. `scripts/approved-plan.sh status` output at each transition.
+- **If a run fails, that's a finding.** Do not patch-fix on the spot. Log under `### Gaps surfaced by Verify`, roll back to a clean state, and report — then decide with the user whether to close Phase 11 with a known gap or open a follow-up step.
+
+**Reusable existing code / sources:**
+
+- `scripts/agent-mode.sh` — resolver, cite for precedence in the evidence file.
+- `scripts/approved-plan.sh` — `draft`, `approve`, `consume`, `mark-stale`, `supersede`, `mark-uncertain`, `status` — all lifecycle writers + the `status` reader for evidence capture.
+- `docs/operating-modes.md` — cross-reference for each evidence section (mode signal, packet lifecycle, degraded-path audit).
+- `tasks/history.md` — pattern-match recent phase-closure entries for the Verify history entry format.
+
+**Test strategy (tests-after, per Execution Profile `serial`):**
+
+1. Each of the three runs completes its full plan → execute → ship cycle.
+2. `claude-only` and `codex-only` runs write no packet (`.agents/approved-plan.json` absent or unchanged across the run).
+3. `hybrid` run writes exactly one packet with lifecycle trajectory `draft → approved → consumed` — verified by `scripts/approved-plan.sh status` captures.
+4. Each terminal skill's "Mode-aware next-step recommendation" block emits the correct branch for the resolved mode — verified by reading the actual recommendation text from each run.
+5. Optional degraded-path spot checks: `/delegate` under `claude-only` exits non-zero with `mode-mismatch:`; `$run --execute-approved` with `ttl_seconds=1` and a >1s delay transitions the packet to `stale`.
+6. `tasks/verify-phase-11.md` exists, cites `docs/operating-modes.md` sections by anchor, and covers all three modes.
+
+**Acceptance criteria:**
+
+- [ ] Three sample-workflow runs complete — one per mode — without hitting the unavailable CLI.
+- [ ] `hybrid` run shows the full `draft → approved → consumed` packet lifecycle; `claude-only` and `codex-only` runs show no packet written.
+- [ ] Every terminal skill's recommendation line matches the resolved mode.
+- [ ] `tasks/verify-phase-11.md` captures evidence for all three runs with command logs + packet snapshots + commit SHAs.
+- [ ] Phase 11 final **Verify** checkbox in `tasks/todo.md` ticked.
+- [ ] `tasks/roadmap.md` gets a Phase 11 section marked ✓.
+- [ ] No edits to `SKILL.md`, scripts, schema, `docs/operating-modes.md`, `CLAUDE.md`, or pack files.
+
+**Out of scope (do not drift):**
+
+- Any mechanism change. Verify is empirical; findings get logged, not fixed.
+- Re-running Steps 1–11's internal test strategies — those already passed at their shipping time.
+- Exercising every degraded path from the Step 8 audit. Two optional spot checks are sufficient.
+- Writing new skills, scripts, or schema extensions to "help Verify" — use what's shipped.
+- Running the walkthrough on a real production project. Scratch repo or throwaway branch only.
+
+**Execution Profile:** `serial` (inherited from Phase 11). Main agent drives all three runs and writes the evidence file. No subagent lanes — evidence capture is sequential and the three modes share the sample task.
+
+**Commit plan:**
+
+- `verify(phase-11): claude-only walkthrough` / `codex-only walkthrough` / `hybrid walkthrough` — one commit per run if using no-op task on `master`. Zero commits if using throwaway branch.
+- `docs(verify): phase-11 three-mode walkthrough evidence` — the `tasks/verify-phase-11.md` write-up.
+- `chore(tasks)` — `todo.md` checkoff, Verify Summary, history entry, `roadmap.md` Phase 11 ✓.
+
 ### Active Step Plan — Step 11: Expand `docs/operating-modes.md` to authoritative reference [archived for reference]
 
 **Goal:** Turn `docs/operating-modes.md` from a thin reference + appended audit tables into the authoritative operating-model doc. By the end of Step 11, a newcomer should be able to read `docs/operating-modes.md` top-to-bottom and understand: what each of the three modes means, how the resolver decides which mode is active, the full approval/delegation packet schema and lifecycle, every declared cross-tool degraded path (Step 8), the pack emphasis split (Step 9), the Codex `$run` pack-aware routing behavior (Step 10), and how to migrate a pre-Phase-11 project onto the new model.
