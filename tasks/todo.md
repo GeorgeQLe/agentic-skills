@@ -87,18 +87,82 @@ Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env va
 
 ### Active Step Plan — Step 4: `$run --execute-approved` (Codex)
 
-**Goal:** Wire the Codex `$run` skill to consume the approval packet shipped in Step 3. When an `approved` packet exists in `.agents/approved-plan.json` and all freshness checks pass, `$run --execute-approved` skips the approval prompt and proceeds to implementation. On any failure, it re-prompts with a diff and transitions the packet to `stale`.
+**Goal:** Wire the Codex `$run` skill to consume the approval packet shipped in Step 3. When `.agents/approved-plan.json` contains a valid `approved` packet AND all six freshness checks pass, `$run --execute-approved` skips the usual plan-approval prompt and goes straight to implementation. On any failure, it transitions the packet to `stale`, re-prompts the user with a clear diff of what changed, and falls through to the standard `$run` approval path. Target: eliminate the ~385 bare-`y` Codex approvals surfaced in the Phase 11 context without ever letting a stale plan execute.
 
-**Contract:** See `docs/operating-modes.md` § "Approval / Delegation Packet" for schema, lifecycle, freshness-check list, and the `todo_hash` normalization rule. JSON Schema at `specs/approved-plan.schema.json`. Do not redefine any of these in Step 4.
+**Contract reminder:** Schema, lifecycle, freshness-check list, `todo_hash` normalization, and the `.md`/JSON safety classification all live in `docs/operating-modes.md` § "Approval / Delegation Packet". JSON Schema at `specs/approved-plan.schema.json`. **Do not redefine any of these in Step 4** — if the consumer needs a nuance the contract doesn't cover, amend the contract in a separate commit first.
 
-**Scope (sketch, plan in detail when Step 4 starts):**
-1. Extend Codex `$run` SKILL.md with `--execute-approved` flag semantics.
-2. Add a helper that reads `.agents/approved-plan.json`, validates against the schema, and runs the six freshness checks.
-3. On success: transition `approved → consumed`, write the sanitized mirror to `tasks/approved-plan.md`, skip the approval prompt.
-4. On failure: transition `approved → stale`, re-prompt with a diff (git HEAD moved / todo.md changed / TTL expired / etc.), fall through to the standard approval path.
-5. Bash 3.2 compatibility for any helper script.
+**Scope:**
 
-**Out of scope:** `/handoff --target=codex` (Step 5), `/delegate` (Step 6), mirror-writer ownership for `/delegate` flows.
+1. **New helper:** `scripts/approved-plan.sh` (Bash 3.2 compatible, like `scripts/agent-mode.sh`). Subcommands:
+   - `check` — reads `.agents/approved-plan.json`, runs the six freshness checks from the contract, prints `ok` on stdout + exits 0 when fresh, or prints a single-line human-readable failure reason (`stale: git HEAD moved from X to Y`, `stale: todo.md hash changed`, `stale: TTL expired (approved_at=…, now=…, ttl=…)`, `stale: dirty path outside allowlist: <path>`, `stale: new blocking manual task: <snapshot>`, `invalid: lifecycle=<value>`, `missing: <reason>`) + exits non-zero.
+   - `consume` — atomically transitions an `approved` packet to `consumed` (write to a temp file, `mv` into place) and emits the sanitized `.md` mirror by projecting `.md`-safe fields. Idempotent: second call on a `consumed` packet is a no-op success.
+   - `mark-stale` — transitions `approved → stale` with the same atomic write pattern. Called when `check` fails.
+   - Uses `jq` when available for JSON read/write; falls back to `sed`/`grep` only if `jq` is missing (document the dependency in the SKILL.md). Do not depend on Python or Node.
+   - For `todo_hash`: implement the BOM-strip + CRLF→LF + sha256 pipeline in Bash using `perl -pe 's/^\xEF\xBB\xBF//; s/\r$//'` → `shasum -a 256` (both BSD on macOS and GNU Linux).
+   - Validation: if `jq` is available, also run `jq -e` checks mirroring the JSON Schema `required` list.
+
+2. **SKILL.md edit:** `global/codex/run/SKILL.md` — add an `--execute-approved` flag path that runs before step 8 (the normal approval gate):
+   - After step 6b (execution-profile read), if `$ARGUMENTS` contains `--execute-approved`, invoke `scripts/approved-plan.sh check`.
+   - On `ok`: call `scripts/approved-plan.sh consume`, skip steps 7 and 8 (plan present + approval gate), jump directly to step 9 (execute). Log one line: `Approved packet consumed: Phase X / Step Y (approved_at=…).`
+   - On failure: relay the single-line failure reason to the user, call `scripts/approved-plan.sh mark-stale`, then fall through to the normal steps 7–8 (present plan and ask for approval). Do **not** auto-retry.
+   - Unknown flag combinations (`--execute-approved --phase`) are rejected with an error — approved packets target one step, not a full phase. Document this in SKILL.md constraints.
+   - The flag only has an effect in `codex-only` and `hybrid` modes; in `claude-only` it is a user error (Codex is not the executor). Read the effective mode via `scripts/agent-mode.sh`.
+
+3. **Sanitized mirror writer** (inside `approved-plan.sh consume`): projects `step_identity`, `approved_at`, `approved_by`, `git_head`, `todo_hash`, `ttl_seconds`, `lifecycle`, `blocking_manual_tasks` into `tasks/approved-plan.md` using the worked-example format already seeded there. Explicitly omit `allowed_dirty_paths` and `notes` (JSON-only per contract).
+
+4. **No writer for `draft → approved`:** that transition is a human approval action. Step 4 does not introduce a "create packet" flow — Step 5 (`/handoff --target=codex`) and Step 6 (`/delegate`) will. For Step 4 testing, a packet will be hand-written or fixture-generated.
+
+**Out of scope (do not drift):**
+- `/handoff --target=codex` packet emission — Step 5.
+- `/delegate` packet emission + `uncertain` transitions — Step 6.
+- Claude `$run` equivalent — in `claude-only` mode Claude still uses the normal plan-approval flow.
+- Any change to the schema or lifecycle FSM. If a real need surfaces, amend `docs/operating-modes.md` + `specs/approved-plan.schema.json` in a separate commit first.
+
+**Files to modify / create (full paths):**
+
+- **Create:** `/Users/georgele/projects/tools/agentic-skills/scripts/approved-plan.sh` — Bash 3.2 helper with `check` / `consume` / `mark-stale` subcommands.
+- **Modify:** `/Users/georgele/projects/tools/agentic-skills/global/codex/run/SKILL.md` — insert the `--execute-approved` branch, document the flag in the header and constraints.
+- **Modify:** `/Users/georgele/projects/tools/agentic-skills/docs/operating-modes.md` — if the freshness-check section needs any clarification the Step 4 implementer discovers, amend it; otherwise leave untouched.
+- **Modify:** `/Users/georgele/projects/tools/agentic-skills/tasks/todo.md` — check off Step 4, roll Active Step Plan to Step 5.
+- **Modify:** `/Users/georgele/projects/tools/agentic-skills/tasks/history.md` — append Step 4 session entry.
+- **Do NOT modify:** `tasks/approved-plan.md` (written by the helper, not hand-edited), `.agents/approved-plan.json` (gitignored developer-local state).
+
+**Key technical decisions / risks:**
+
+- **Bash 3.2 (macOS default).** No associative arrays, no `${var,,}`, no `readarray`. Follow the style of `scripts/agent-mode.sh`: `set -euo pipefail`, `die()` helper, `case` statements for validation, `sed -n 's/…/\1/p'` for single-field JSON extraction when `jq` is absent.
+- **Atomic state transitions.** `consume` and `mark-stale` must write to `.agents/approved-plan.json.tmp` then `mv`. A crashed transition should leave either the previous state or the new state — never a corrupted file. A lifecycle FSM with half-written state masks re-execution bugs (the exact failure Step 3 called out).
+- **Freshness-check ordering.** Cheapest checks first so a stale packet fails fast: lifecycle enum → TTL → git HEAD → todo_hash → dirty-path scan → manual-todo scan. Each check reports one specific reason; don't bundle multiple reasons into one error string.
+- **No `consumed → approved` path.** The FSM is strict. A user wanting to re-run the same step must produce a new `draft → approved` transition (via the Step 5 or Step 6 flows, once those exist, or by hand).
+- **jq dependency.** If `jq` is not installed, print a one-line install hint (`brew install jq` / `apt install jq`) and exit non-zero rather than fall back to fragile `sed` JSON editing for the write path. Reads can fall back; writes must be jq-backed.
+- **Testing a stale packet without clobbering real state.** Use a fixture packet under `/tmp/approved-plan-test-*.json` and invoke `approved-plan.sh check --packet <path>` (add an override flag for test harness use only). Document the flag but do not advertise it in the happy-path SKILL.md workflow.
+- **Mode interaction.** The flag is a Codex-only affordance. A `claude-only` project invoking `$run --execute-approved` in Codex is a user misconfiguration, not something the helper should silently paper over — report the mode mismatch and exit non-zero.
+
+**Conventions from prior work:**
+
+- Shell style: match `scripts/agent-mode.sh` exactly (`#!/usr/bin/env bash`, `set -euo pipefail`, `die` helper, `$PROJECT_ROOT` from `$(pwd)`).
+- `.gitignore` already covers `.agents/approved-plan.json`. No gitignore changes needed.
+- SKILL.md edits should preserve the numbered-step structure of `global/codex/run/SKILL.md`; add the `--execute-approved` branch as an inline clause on existing steps, not a sibling section.
+
+**Test strategy (tests-after, per Execution Profile `serial`):**
+
+1. Fixture test: hand-build a valid `approved` packet at `/tmp/approved-plan-ok.json`, run `scripts/approved-plan.sh check --packet /tmp/approved-plan-ok.json`, assert `ok` + exit 0.
+2. Negative fixtures for each freshness-check failure mode: (a) lifecycle=`draft`, (b) `ttl_seconds=1` with backdated `approved_at`, (c) mismatched `git_head`, (d) mismatched `todo_hash`, (e) unexpected dirty path. Each must print a reason matching its failure and exit non-zero.
+3. FSM test: after `consume`, re-read the JSON and assert `lifecycle == "consumed"`. Assert `tasks/approved-plan.md` mirror contains `lifecycle: consumed` and omits `allowed_dirty_paths` / `notes`.
+4. JSON Schema round-trip: validate both the pre-consume and post-consume packet against `specs/approved-plan.schema.json` using `jsonschema` (Python venv) — both must remain schema-valid.
+5. Idempotency: second `consume` on a `consumed` packet is a no-op success; does not corrupt the file.
+6. SKILL.md grep: confirm the new flag is documented in both the header `argument-hint` (`"[--phase] [--execute-approved]"`) and the Workflow section.
+7. Mode-mismatch: set `SKILLS_AGENT_MODE=claude-only` and run the check; expect a mode-mismatch error.
+
+**Acceptance criteria:**
+
+- [ ] `scripts/approved-plan.sh {check,consume,mark-stale}` exist, are executable, and pass all seven test cases above.
+- [ ] `global/codex/run/SKILL.md` documents `--execute-approved`, and inspecting its flow on a valid approved packet skips the plan-approval gate and logs the one-line consumption message.
+- [ ] On any freshness failure, the packet is transitioned to `stale` and the user is re-prompted with the standard approval flow — never a blind retry.
+- [ ] No change to `docs/operating-modes.md` § "Approval / Delegation Packet" beyond optional clarifying edits (schema and lifecycle stay stable).
+- [ ] `jq` dependency is documented in SKILL.md; absence produces a clear install hint rather than a fragile fallback.
+- [ ] `tasks/todo.md` Step 4 is checked off and the Active Step Plan rolls to Step 5.
+
+**Execution Profile:** `serial` (inherited from Phase 11). Main agent writes the helper, SKILL.md edit, and task/history updates. No subagent lanes — the lifecycle FSM is the exact kind of shared-contract work where parallel lanes drift.
 
 ### Step 3 Summary (completed 2026-04-19)
 
