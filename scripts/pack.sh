@@ -16,6 +16,7 @@ Usage: pack.sh <command> [pack...]
 
 Commands:
   list              List available packs
+  list-packs        List enabled packs from .agents/project.json (one per line, no decoration)
   status            Show project designation and installed local pack links
   recommend         Recommend a pack from repository signals
   install <pack...> Enable one or more packs in the current project via local skill symlinks
@@ -354,6 +355,7 @@ refresh() {
 cmd="${1:-}"
 case "$cmd" in
   list) list_packs ;;
+  list-packs) read_enabled_packs ;;
   status) status ;;
   recommend) recommend ;;
   install)

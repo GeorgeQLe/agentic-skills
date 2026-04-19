@@ -119,6 +119,15 @@ Before handing back to the user, resolve the effective agent mode via `./scripts
 
 Keep it to one line beyond the normal report; do not restate mode-signal precedence in skill copy.
 
+### Pack-aware routing
+
+After resolving the mode, resolve enabled packs via `./scripts/pack.sh list-packs` (newline-separated enabled pack names from `.agents/project.json.enabled_packs`; reuses the `read_enabled_packs` reader — do not grep `.agents/project.json` directly). When the recommendation would emit `$run`, `$ship`, or `$ship-end`, check whether any enabled pack ships the matching `-kanban` variant (`run-kanban`, `ship-kanban`, `ship-end-kanban`) under `packs/<pack>/codex/`. If one does, emit the kanban invocation (e.g., `$run-kanban`) in place of the global default. Candidates today are `business-app-kanban`, `devtool-kanban`, `game-kanban`, and `poketowork-kanban` — each tagged `Both` in `docs/operating-modes.md` § "Pack emphasis" with kanban `run`/`ship`/`ship-end` execution variants.
+
+- **No-match / no-pack:** emit the global-default recommendation exactly as today. No "I checked enabled_packs" noise.
+- **Degraded path:** missing or malformed `.agents/project.json` (or non-zero exit from `list-packs`) → silent fallback to the global-default recommendation with a single inline comment `pack-lookup: skipped (no project.json)` appended to the recommendation line.
+- **Ambiguity:** if two enabled packs both ship the same `-kanban` variant, recommend the first in `enabled_packs` order and note the tie inline. Do not prompt.
+- **Scope:** recommendation-text routing only. `$run --execute-approved` still consumes `.agents/approved-plan.json` verbatim regardless of pack routing — the approval-packet contract is unchanged.
+
 ## Constraints
 
 - One step at a time by default, or one phase with `--phase`. Then stop and let the user decide what is next.
