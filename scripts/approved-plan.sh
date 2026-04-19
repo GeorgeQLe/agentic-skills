@@ -261,6 +261,217 @@ cmd_consume() {
   echo "ok"
 }
 
+cmd_draft() {
+  local packet="$DEFAULT_PACKET"
+  local phase="" step="" title="" approved_by="" ttl=3600
+  local -a allow_dirty=()
+  local -a notes=()
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --phase) phase="$2"; shift 2 ;;
+      --step) step="$2"; shift 2 ;;
+      --title) title="$2"; shift 2 ;;
+      --approved-by) approved_by="$2"; shift 2 ;;
+      --ttl) ttl="$2"; shift 2 ;;
+      --allow-dirty) allow_dirty+=("$2"); shift 2 ;;
+      --note) notes+=("$2"); shift 2 ;;
+      --packet) packet="$2"; shift 2 ;;
+      *) die "Unknown arg to draft: $1" ;;
+    esac
+  done
+
+  [[ -n "$phase" ]] || die "--phase required (e.g. --phase \"Phase 11\")"
+  [[ -n "$step" ]] || die "--step required (e.g. --step \"Step 5\")"
+  [[ -n "$title" ]] || die "--title required"
+
+  require_jq_write
+
+  if [[ -f "$packet" ]]; then
+    local existing
+    existing="$(jq -r '.lifecycle // empty' "$packet")"
+    if [[ "$existing" == "approved" ]]; then
+      fail "refuse: existing packet at $packet is approved (run supersede first)"
+    fi
+  fi
+
+  local dirty
+  dirty="$(git -C "$PROJECT_ROOT" status --porcelain 2>/dev/null | awk '{print $2}')"
+  if [[ -n "$dirty" ]]; then
+    local path matched glob
+    while IFS= read -r path; do
+      [[ -z "$path" ]] && continue
+      matched=0
+      for glob in "${allow_dirty[@]+"${allow_dirty[@]}"}"; do
+        # shellcheck disable=SC2053
+        case "$path" in
+          $glob) matched=1; break ;;
+        esac
+      done
+      if (( matched == 0 )); then
+        fail "dirty path outside allowlist: $path (pass --allow-dirty <glob> if expected)"
+      fi
+    done <<<"$dirty"
+  fi
+
+  local git_head todo_hash approved_at
+  git_head="$(git -C "$PROJECT_ROOT" rev-parse HEAD 2>/dev/null)" || die "not a git repo at $PROJECT_ROOT"
+  todo_hash="$(todo_hash_of "$TODO_FILE")"
+  [[ -n "$todo_hash" ]] || die "tasks/todo.md missing or empty"
+  approved_at="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+
+  local manual_json="[]"
+  if [[ -f "$MANUAL_TODO_FILE" ]]; then
+    local -a snaps=()
+    local line trimmed
+    while IFS= read -r line; do
+      [[ "$line" == *"_(blocks: Step "*")_"* ]] || continue
+      [[ "$line" =~ ^[[:space:]]*-[[:space:]]*\[x\] ]] && continue
+      trimmed="${line#"${line%%[![:space:]]*}"}"
+      snaps+=("$trimmed")
+    done <"$MANUAL_TODO_FILE"
+    if (( ${#snaps[@]} > 0 )); then
+      manual_json="$(printf '%s\n' "${snaps[@]}" | jq -R . | jq -s .)"
+    fi
+  fi
+
+  local allow_json="[]"
+  if (( ${#allow_dirty[@]} > 0 )); then
+    allow_json="$(printf '%s\n' "${allow_dirty[@]}" | jq -R . | jq -s .)"
+  fi
+
+  local notes_joined="" i
+  if (( ${#notes[@]} > 0 )); then
+    for ((i=0; i<${#notes[@]}; i++)); do
+      if (( i == 0 )); then
+        notes_joined="${notes[$i]}"
+      else
+        notes_joined="${notes_joined}"$'\n'"${notes[$i]}"
+      fi
+    done
+  fi
+
+  mkdir -p "$(dirname "$packet")"
+  local tmp="$packet.tmp"
+  jq -n \
+    --arg phase "$phase" \
+    --arg step "$step" \
+    --arg title "$title" \
+    --arg approved_at "$approved_at" \
+    --arg approved_by "$approved_by" \
+    --arg git_head "$git_head" \
+    --arg todo_hash "$todo_hash" \
+    --argjson ttl "$ttl" \
+    --argjson allow "$allow_json" \
+    --argjson manual "$manual_json" \
+    --arg notes "$notes_joined" \
+    '{
+      step_identity: { phase: $phase, step: $step, title: $title },
+      approved_at: $approved_at,
+      git_head: $git_head,
+      todo_hash: $todo_hash,
+      ttl_seconds: $ttl,
+      lifecycle: "draft",
+      allowed_dirty_paths: $allow,
+      blocking_manual_tasks: $manual
+    }
+    + (if $approved_by == "" then {} else {approved_by: $approved_by} end)
+    + (if $notes == "" then {} else {notes: $notes} end)' >"$tmp"
+  mv "$tmp" "$packet"
+  echo "ok: draft written to $packet"
+}
+
+cmd_approve() {
+  local packet="$DEFAULT_PACKET"
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --packet) packet="$2"; shift 2 ;;
+      *) die "Unknown arg to approve: $1" ;;
+    esac
+  done
+  [[ -f "$packet" ]] || die "no packet at $packet"
+  require_jq_write
+
+  local lifecycle
+  lifecycle="$(jq -r '.lifecycle' "$packet")"
+  [[ "$lifecycle" == "draft" ]] || die "cannot approve: lifecycle=$lifecycle (must be 'draft')"
+
+  local expected_head actual_head expected_hash actual_hash
+  expected_head="$(jq -r '.git_head' "$packet")"
+  actual_head="$(git -C "$PROJECT_ROOT" rev-parse HEAD 2>/dev/null)" || die "not a git repo at $PROJECT_ROOT"
+  if [[ "$expected_head" != "$actual_head" ]]; then
+    fail "drift: git HEAD moved since draft ($expected_head -> $actual_head). Re-draft required."
+  fi
+  expected_hash="$(jq -r '.todo_hash' "$packet")"
+  actual_hash="$(todo_hash_of "$TODO_FILE")"
+  if [[ "$expected_hash" != "$actual_hash" ]]; then
+    fail "drift: tasks/todo.md hash changed since draft. Re-draft required."
+  fi
+
+  local approved_at tmp
+  approved_at="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+  tmp="$packet.tmp"
+  jq --arg ts "$approved_at" '.lifecycle = "approved" | .approved_at = $ts' "$packet" >"$tmp"
+  mv "$tmp" "$packet"
+  echo "ok: approved at $approved_at"
+}
+
+cmd_supersede() {
+  local packet="$DEFAULT_PACKET"
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --packet) packet="$2"; shift 2 ;;
+      *) die "Unknown arg to supersede: $1" ;;
+    esac
+  done
+  [[ -f "$packet" ]] || die "no packet at $packet"
+  require_jq_write
+
+  local lifecycle
+  lifecycle="$(jq -r '.lifecycle' "$packet")"
+  case "$lifecycle" in
+    consumed|stale|superseded)
+      die "cannot supersede: lifecycle=$lifecycle (already terminal)"
+      ;;
+    draft|approved|uncertain) ;;
+    *)
+      die "cannot supersede: lifecycle=${lifecycle:-<missing>}"
+      ;;
+  esac
+
+  local tmp="$packet.tmp"
+  jq '.lifecycle = "superseded"' "$packet" >"$tmp"
+  mv "$tmp" "$packet"
+  echo "ok: superseded"
+}
+
+cmd_status() {
+  local packet="$DEFAULT_PACKET"
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --packet) packet="$2"; shift 2 ;;
+      *) die "Unknown arg to status: $1" ;;
+    esac
+  done
+  if [[ ! -f "$packet" ]]; then
+    echo "absent: no packet at $packet"
+    return 0
+  fi
+
+  if command -v jq >/dev/null 2>&1; then
+    local lifecycle phase step title approved_at
+    lifecycle="$(jq -r '.lifecycle // "?"' "$packet")"
+    phase="$(jq -r '.step_identity.phase // "?"' "$packet")"
+    step="$(jq -r '.step_identity.step // "?"' "$packet")"
+    title="$(jq -r '.step_identity.title // "?"' "$packet")"
+    approved_at="$(jq -r '.approved_at // "?"' "$packet")"
+    echo "$lifecycle: $phase / $step — $title (approved_at=$approved_at)"
+  else
+    local lifecycle
+    lifecycle="$(json_read "$packet" '.lifecycle')"
+    echo "${lifecycle:-unknown}"
+  fi
+}
+
 cmd_mark_stale() {
   local packet="$DEFAULT_PACKET"
   while [[ $# -gt 0 ]]; do
@@ -281,14 +492,28 @@ cmd_mark_stale() {
 
 usage() {
   cat >&2 <<'EOF'
-Usage: approved-plan.sh <check|consume|mark-stale> [--packet <path>]
+Usage: approved-plan.sh <sub> [args...] [--packet <path>]
 
+Consumer (Codex-side):
   check        Run all six freshness checks on the packet.
                Prints 'ok' + exit 0 when fresh, or a single-line
                failure reason + non-zero exit.
   consume      Atomically transition approved -> consumed and
                write tasks/approved-plan.md mirror. Idempotent.
   mark-stale   Atomically transition approved -> stale.
+
+Producer (Claude-side):
+  draft        Assemble a candidate packet from current repo state
+               with lifecycle=draft. Required flags:
+                 --phase "Phase N" --step "Step N.X" --title "…"
+               Optional: --approved-by <id>, --ttl <seconds> (3600),
+               repeatable --allow-dirty <glob>, repeatable --note <text>.
+               Refuses to overwrite an existing approved packet.
+  approve      Atomic draft -> approved. Re-verifies git_head and
+               todo_hash still match the draft; refreshes approved_at.
+  supersede    Atomic non-terminal -> superseded so a new draft can
+               intentionally replace an older approved packet.
+  status       Print lifecycle + one-line summary of the current packet.
 
 Default packet path: .agents/approved-plan.json
 EOF
@@ -301,6 +526,10 @@ case "$sub" in
   check) cmd_check "$@" ;;
   consume) cmd_consume "$@" ;;
   mark-stale) cmd_mark_stale "$@" ;;
+  draft) cmd_draft "$@" ;;
+  approve) cmd_approve "$@" ;;
+  supersede) cmd_supersede "$@" ;;
+  status) cmd_status "$@" ;;
   -h|--help|help) usage ;;
   *) usage ;;
 esac
