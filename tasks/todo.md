@@ -1,4 +1,112 @@
-# All Planned Phases Complete
+# Three-Mode Operating Model for Agentic Skills
+
+**Status:** Planning complete 2026-04-19. New workstream kicking off; prior roadmap phases archived.
+
+## Phase 11 — Three-Mode Operating Model
+
+**Goal:** Evolve the agentic-skills system from parity-mirrored Claude/Codex skills into a plural-by-default operating model with three first-class modes (claude-only, codex-only, hybrid), a shared approval/delegation packet contract, and enforceable mode-completeness.
+
+### Context
+
+Session-history analysis (2025-12-10 → 2026-04-19):
+- Claude: 7,247 prompts / 2,658 sessions. `/ship` dominates at 1,034 uses.
+- Codex: 1,861 prompts / 621 sessions. `$run` dominates; last 7 days show 909 vs Claude 427 (2.1× flip).
+- ~470 bare-approval prompts across both CLIs (`y` = 385 on Codex) — major friction signal.
+- Pack skills differ only in invocation syntax, not substance.
+
+External expert consensus (OpenAI `codex-plugin-cc`, Claude best practices, practitioner writeups) favors **Claude orchestrates, Codex executes, in-session delegation** — but ignores real availability constraints (subs, rate limits, outages). Hence the three-mode model.
+
+### Design Summary
+
+Plural by default. Each mode must be end-to-end complete:
+
+| Mode | When | Orchestrator | Executor |
+|---|---|---|---|
+| `claude-only` | Codex unavailable | Claude | Claude |
+| `codex-only` | Claude unavailable | Codex | Codex |
+| `hybrid` | Both available | Claude | Codex via `/delegate` |
+
+Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env var), not enforcement. Every cross-tool touchpoint has a degraded path. Cross-CLI execution is mediated by a shared approval packet with an explicit lifecycle.
+
+### Acceptance Criteria
+
+- [ ] Any mode can complete the full plan → execute → ship → deploy loop without requiring the unavailable CLI
+- [ ] A user switching modes mid-project can continue with a degraded path, not a dead end
+- [ ] `$run --execute-approved` would have eliminated the ~385 bare-`y` Codex approvals without allowing stale-plan execution
+- [ ] Every cross-tool touchpoint in `docs/operating-modes.md` has a declared degraded path or hard mode requirement
+- [ ] Pack content differs between CLIs by role (framing/research vs execution/reconciliation), not just invocation syntax
+- [ ] Expert delegation pattern (Claude → Codex in-session) works via `/delegate` without leaving the Claude session
+
+### Out of Scope
+
+- `$continue` / `$resume-work` router on Codex (no data support)
+- Additional `$run` flags (`--plan-only`, `--docs-only`, `--no-ship`) — duplicate existing skills
+- Removing shipping skills from Claude (both CLIs stay end-to-end capable)
+- Reverse delegation (Codex → Claude) — YAGNI
+
+### Steps
+
+- [ ] **Step 1** — Thin `docs/operating-modes.md` — one page, three-mode table, paragraph per mode, pointer to approval packet. Do not pre-specify unshipped behavior.
+- [ ] **Step 2** — Mode resolution:
+  - Add `agent_mode: "claude-only" | "codex-only" | "hybrid"` to `.agents/project.json` schema
+  - Add `SKILLS_AGENT_MODE` env var override (not `AGENT_MODE` — collision risk)
+  - Resolution precedence: env > project.json > unset (skills recommend all paths)
+- [ ] **Step 3** — Shared approval/delegation packet schema:
+  - `.agents/approved-plan.json` — gitignored, machine-readable source of truth
+  - `tasks/approved-plan.md` — sanitized human-readable mirror
+  - Explicit field-level safety classification (which fields are safe for `.md` vs JSON-only)
+  - Fields: step identity (Phase N / Step N.X / normalized title), approval timestamp, git HEAD, `tasks/todo.md` hash, allowed dirty paths, blocking manual-task snapshot, approval age TTL
+  - Lifecycle states: `draft` → `approved` → `consumed` | `stale` | `superseded` | `uncertain`
+- [ ] **Step 4** — `$run --execute-approved` (Codex) — consumes packet, skips approval if `approved` + all freshness checks pass. Freshness: same git HEAD, unchanged `todo.md` hash, clean tree or dirty only on allowed paths, no new `_(blocks: Step N.X)_` entries, age under TTL. On failure, re-prompt with diff. Transitions `approved → consumed` or `approved → stale`.
+- [ ] **Step 5** — `/handoff --target=codex` (Claude) — extend existing `/handoff` to produce the approval packet as async task brief. Covers "Codex cloud delegation coming soon" case and claude-only users who plan to execute in Codex later.
+- [ ] **Step 6** — `/delegate` (Claude) — live in-session delegation to Codex, consumes same packet format. Safe-fallback semantics:
+  - Failure before Codex starts → offer inline execution or emit packet
+  - Codex may have started → set packet to `uncertain`, prompt inspect/discard/continue (never blind retry)
+  - `agent-team` profile → inline fallback is a downgrade user must accept
+- [ ] **Step 7** — Mode-aware terminal recommendations across `/plan-interview`, `/roadmap`, `/plan-phase`, `/run`, `/ship`, `/ship-end` (and Codex equivalents):
+  - `hybrid` → "delegate with `/delegate $run`"
+  - `claude-only` → "run `/run`"
+  - `codex-only` → "run `$run` in Codex"
+  - unset → present all options
+- [ ] **Step 8** — Degraded-path audit with concrete output: populate a table in `docs/operating-modes.md`:
+
+  | Skill | Assumes | Fails how if unavailable | Degraded path |
+
+  Covers: `/run`, `/ship`, `/ship-end`, `$run`, `$ship`, `$ship-end`, kanban variants, pack wrappers that recommend the other CLI. Every row has a filled degraded path or explicit "requires mode X" constraint.
+- [ ] **Step 9** — Pack emphasis split by CLI role:
+  - Claude pack skills → framing, interviews, strategy, requirements, research synthesis, tradeoffs
+  - Codex pack skills → implementation, reconciliation, validation, task promotion, repo mutation, shipping
+  - Not every skill needs both versions; document which packs skew which direction
+- [ ] **Step 10** — Pack-aware `$run` on Codex — read `.agents/project.json.enabled_packs`, recommend/route to relevant pack skill when work matches
+- [ ] **Step 11** — Expand `docs/operating-modes.md` to authoritative reference:
+  - Complete mode-signal resolution rules
+  - Approval packet schema + lifecycle diagram
+  - Populated degraded-path audit table from step 8
+  - Migration guide from parity-mirror model
+- [ ] **Verify:** Run through all three modes on a sample workflow; confirm each mode completes plan → execute → ship without hitting the unavailable CLI
+
+### Sequencing Rationale
+
+- Doc-thin-first names the model without pre-specifying unshipped behavior
+- Mode resolution before primitives gives `/delegate` a stable "hybrid" definition
+- Shared packet schema before execution primitives prevents `$run --execute-approved` and `/delegate` from drifting on "approved work" semantics
+- Approval primitive before delegation (step 4 before 5–6) — delegation is transport + fallback on top of approval-state machinery, not a second approval model
+- Async handoff before live delegate (5 before 6) — packet output is subset of live delegation; shipping first validates format
+- Recommendations after primitives exist so they point to working skills
+- Audit after behavior is implemented — auditing unshipped code produces aspirational rows
+- Pack work after core model stabilizes — pack differentiation assumes mode-awareness
+- Doc-expand last — docs follow shipped behavior, per the pattern of current `docs/codex-workflow.md`
+
+### Execution Profile
+
+- Profile: `serial`
+- Rationale: each step builds on prior step's contract (packet schema → approval consumer → delegation consumer → recommendations → audit). Subagent lanes would risk semantic drift on the shared packet definition.
+- Parallel mode: none
+- Main agent owns: all schema definitions, skill edits, doc writes, audit table population, mode-resolution helper logic
+
+---
+
+## Archived: All Prior Planned Phases Complete
 
 **Status:** Roadmap complete as of 2026-04-07.
 
