@@ -46,6 +46,8 @@ Phases 1-11 complete: kanban skill suite, board intelligence, templates, archive
 
 Completed 2026-04-19. Ran each of the three modes through the mode-resolution + approval-packet machinery; confirmed `claude-only` and `codex-only` never write a packet while `hybrid` drives the full `draft → approved → consumed` lifecycle. Spot-checked `/delegate` mode-mismatch under `claude-only` (contract) and TTL-triggered `approved → stale` transition (live). Evidence: `tasks/verify-phase-11.md`. Two non-blocking gaps logged for a future follow-up (source-state guard parity between `mark-stale` and `mark-uncertain`; hybrid-cycle mirror-commit UX nuance).
 
+**Step 12 (tail, 2026-04-19):** Both Verify gaps closed. `scripts/approved-plan.sh mark-stale` now rejects every non-`approved` source state with a consistent single-line reason (parity with `mark-uncertain`). `docs/operating-modes.md` § "Degraded-path audit" + `global/claude/delegate/SKILL.md` step 2 document the hybrid back-to-back mirror-commit prerequisite. No mechanism redesign, no schema change.
+
 ---
 
 ## Phase 1: Kanban Skill Suite ✓
