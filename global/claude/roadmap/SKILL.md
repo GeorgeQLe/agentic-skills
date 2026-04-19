@@ -325,6 +325,17 @@ If the pipeline is fully healthy:
 Next: `/run` to continue execution.
 ```
 
+## Mode-aware next-step recommendation
+
+Before handing back to the user, resolve the effective agent mode via `./scripts/agent-mode.sh` and emit exactly one recommendation line matching the resolved agent mode via scripts/agent-mode.sh:
+
+- `hybrid` → **Next:** run `/plan-phase <N>` or start the first unchecked priority-queue item — planning stays with the orchestrator (Claude) in hybrid.
+- `claude-only` → **Next:** run `/plan-phase <N>` or the first unchecked priority-queue item — Codex is unavailable; stay in Claude.
+- `codex-only` → **Next:** run `$plan-phase <N>` or the first unchecked priority-queue item in Codex — Claude is not the planner in this mode.
+- unset → present all three options and point the user at `docs/operating-modes.md` for mode-signal resolution rules.
+
+Keep it to one line beyond the normal report; do not restate mode-signal precedence in skill copy.
+
 ## Constraints
 
 - **Always interview for new roadmaps.** Do not produce a roadmap without user input on priorities and sequencing when building one from scratch (State B).

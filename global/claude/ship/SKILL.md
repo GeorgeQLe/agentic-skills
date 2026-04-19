@@ -126,6 +126,17 @@ After entering plan mode, present a brief ship summary (2-3 lines max) and **pre
 
 This gives the user something concrete to review before selecting "clear context and implement".
 
+## Mode-aware next-step recommendation
+
+After writing the next-step plan and before entering plan mode (or before stopping when `--no-plan` is set), resolve the effective agent mode via `./scripts/agent-mode.sh` and emit exactly one recommendation line matching the resolved agent mode via scripts/agent-mode.sh:
+
+- `hybrid` → **Next:** delegate with `/delegate $run` — Claude orchestrates, Codex executes the approved step.
+- `claude-only` → **Next:** run `/run` — Codex is unavailable; stay in Claude.
+- `codex-only` → **Next:** run `$run` in Codex — Claude is not the executor in this mode.
+- unset → present all three options and point the user at `docs/operating-modes.md` for mode-signal resolution rules.
+
+Keep it to one line beyond the normal ship summary; do not restate mode-signal precedence in skill copy.
+
 ## Constraints
 - **Fix unrelated issues:** If any step surfaces errors, warnings, or lint issues — even ones unrelated to the current work — investigate and fix them before continuing. Commit these fixes separately with a descriptive message (e.g., `fix: resolve unused import warning in auth.ts`).
 - Do NOT write plans into CLAUDE.md. CLAUDE.md is for project conventions and config only.
