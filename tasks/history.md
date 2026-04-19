@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-04-19 — Phase 11 Step 7 — Mode-aware terminal recommendations
+
+- Added a shared **Mode-aware next-step recommendation** section to the six Claude planning/execution skills (`plan-interview`, `roadmap`, `plan-phase`, `run`, `ship`, `ship-end`) and the six Codex equivalents (`plan-interview`, `roadmap`, `plan-phase`, `run`, `ship`, `ship-end`). Each block resolves the effective agent mode via `./scripts/agent-mode.sh` and emits exactly one recommendation line matching the resolved mode, with a distinctive phrase ("resolved agent mode via scripts/agent-mode.sh") that makes the block grep-auditable.
+- Claude-side branches: `hybrid` → delegate with `/delegate <target>` (Claude orchestrates, Codex executes); `claude-only` → run the Claude skill directly; `codex-only` → run the Codex `$skill` equivalent; unset → present all three options and point at `docs/operating-modes.md` for mode-signal resolution rules. Targets vary per skill context (`/roadmap` after plan-interview, `/plan-phase`/`/run` after roadmap, `/delegate $run` after plan-phase, `/delegate $ship` after `/run`, `/delegate $run` after `/ship` and `/ship-end`).
+- Codex-side inversion for `hybrid`: recommendation says "return to Claude for the next orchestration step" rather than "delegate further" — because in hybrid Claude is the orchestrator and Codex only executes. `codex-only` stays in Codex; `claude-only` tells the user to switch to Claude.
+- No-recurse invariant preserved: `global/claude/delegate/SKILL.md` and `global/claude/handoff/SKILL.md` do NOT carry the block (they are themselves the mechanisms). Grep of the distinctive phrase across `global/**/SKILL.md` returns exactly 12 files — the expected Claude+Codex targeted set.
+- Contract untouched: no edits to `docs/operating-modes.md`, `specs/approved-plan.schema.json`, or `scripts/agent-mode.sh`. Pure consumer of the mode resolver; no new lifecycle states, env vars, or precedence rules.
+- Checked off Step 7 in `tasks/todo.md` and rolled the Active Step Plan to Step 8 (degraded-path audit in `docs/operating-modes.md`).
+
 ## 2026-04-19 — Phase 11 Step 6 — `/delegate` (Claude)
 
 - Extended `scripts/approved-plan.sh` with `mark-uncertain`: atomic `approved → uncertain` transition (`<file>.tmp` + `mv`, same pattern as `mark-stale`). Rejects `draft`, `consumed`, `stale`, `superseded`, and `uncertain` as source states with a single-line reason + non-zero exit. Usage help + top-level dispatch case updated. `uncertain` was already in the schema enum from Step 3; Step 6 is the first legitimate writer — no schema or FSM edits.
