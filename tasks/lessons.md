@@ -10,4 +10,5 @@
 
 - Claude `/run` should execute exactly one approved step and then hand the dirty tree to `/ship`; it should not commit or push.
 - Claude `/ship` is not complete after writing the next-step plan. Unless `--no-plan` is set or a blocker is documented, it must enter plan mode so the user can clear context and implement.
+- Clear-context sessions launched by `/ship` plan mode are also execution-only. The plan handed to them must explicitly say not to commit, push, deploy, update `tasks/history.md`, or plan the next step; otherwise they satisfy the default shipping contract themselves and the next `/ship` becomes a no-op.
 - Deploy discovery should not stall shipping in repos with no explicit manual deploy contract; skip deploy unless `deploy.md` or `tasks/deploy.md` exists.
