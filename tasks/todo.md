@@ -114,24 +114,103 @@ Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env va
 
 ### Active Step Plan — Step 9: Pack emphasis split by CLI role
 
-**Goal:** Document which packs skew toward Claude-orchestration work (framing, interviews, strategy, requirements, research synthesis, tradeoffs) versus Codex-execution work (implementation, reconciliation, validation, task promotion, repo mutation, shipping). Not every skill needs both CLI versions; Step 9 surfaces the intended split so pack authors and users can reason about where a given skill belongs.
+**Goal:** Tag every pack under `packs/` and every skill under `global/claude/**` / `global/codex/**` with a primary CLI role — **Claude-orchestration** (framing, interviews, strategy, requirements, research synthesis, tradeoffs), **Codex-execution** (implementation, reconciliation, validation, task promotion, repo mutation, shipping), or **both** — and record the split in a single authoritative "Pack emphasis" table in `docs/operating-modes.md`. Pack authors and users should be able to answer "where does this skill belong?" by reading one table.
 
-**Contract reminder:** Mode resolution (`scripts/agent-mode.sh`), approval packet (`specs/approved-plan.schema.json`), and the degraded-path table (Step 8 output) are all frozen. Step 9 adds guidance prose; it does not add new modes, new lifecycle states, or new transport behavior.
+**Contract reminder:** Mode resolution (`scripts/agent-mode.sh`), approval packet (`specs/approved-plan.schema.json`), and the Step 8 degraded-path table are all frozen. Step 9 adds guidance prose only — no new modes, lifecycle states, transport behavior, or skill deletions/renames. Role tagging is additive.
 
-**Scope sketch:**
+**Starting context (from session just shipped):**
 
-1. Survey existing packs under `packs/**/` and `global/claude/**` vs `global/codex/**` to identify natural CLI-role leanings.
-2. Draft a "Pack emphasis" section (location TBD — likely `docs/operating-modes.md` or a sibling doc) that lists each pack with a primary CLI role (Claude-orchestration / Codex-execution / both) and a one-line rationale.
-3. Update pack-level docs where the intended role was previously ambiguous.
-4. Do NOT delete or rename existing skills as part of Step 9. Role tagging is additive; removing parity mirrors is out of scope until Step 11+.
+- `global/claude/` has 34 skills; `global/codex/` has 33. The only asymmetry is `global/claude/delegate/` (no Codex counterpart by design — delegation is Claude-only orchestration). Every other name is parity-mirrored today.
+- Packs present under `packs/`: `business-app`, `business-app-kanban`, `code-quality`, `devtool`, `devtool-kanban`, `game`, `game-kanban`, `poketowork-kanban`. Several `*-kanban` pack wrappers exist alongside base packs.
+- Step 8 documented that pack wrappers contain no cross-CLI branching — only intra-pack syntax (`$skill` vs `/skill`) routed by the pack loader. That frees Step 9 to tag roles without touching transport.
+- The 12 Step-7 planning/execution skills already encode an implicit split: Claude skills recommend `/delegate <target>` in hybrid; Codex equivalents recommend "return to Claude for the next orchestration step." Step 9 makes that split explicit across the whole skill set, not just the Step-7 twelve.
 
-**Out of scope:**
+**Scope:**
+
+1. **Survey skills (both CLIs).** For each skill name that appears under `global/claude/` and/or `global/codex/`, classify by primary role:
+   - **Claude-orchestration:** `plan-interview`, `roadmap`, `plan-phase`, `brainstorm`, `research-roadmap`, `investigate`, `trace`, `expert-review`, `review`, `security-review`, `spec-drift`, `affected`, `handoff`, `delegate` (Claude-only), `skills`, `guide`, `debug` (framing side), …
+   - **Codex-execution:** `run`, `ship`, `ship-end`, `commit-and-push-by-feature`, `deploy`, `release`, `regression-check`, `hygiene`, `dead-code`, `slim-audit`, `reconcile-dev-docs`, `scaffold`, `migrate`, `decommission`, `branch-lifecycle`, `sync`, `pack`, `install-workflow-orchestration`, …
+   - **Both:** skills whose work genuinely spans orchestration and execution (rare — document the rationale when used).
+   - The lists above are the audit's *starting hypothesis*, not its answer. Verify each by skimming the skill's frontmatter `description` and primary workflow. Re-classify where the description contradicts the hypothesis.
+
+2. **Survey packs.** For each directory under `packs/`, identify the pack's primary role by inspecting its skill list + manifest (`packs/<pack>/SKILL.md` if present, plus the directory contents). Kanban variants inherit from their base pack unless their skill set diverges materially.
+
+3. **Add a "Pack emphasis" section to `docs/operating-modes.md`.** Sibling of `## Degraded-path audit`, placed immediately before the closing `---` / status line. Structure:
+
+   ```markdown
+   ## Pack emphasis
+
+   [1–2 sentence preamble stating the split and that role tagging is additive, not exclusive.]
+
+   ### Global skills
+
+   | Skill | Primary role | Notes |
+   | --- | --- | --- |
+   | `plan-interview` | Claude-orchestration | Interview-first planning — no repo mutation |
+   | `run` | Codex-execution | Executes an approved step |
+   | `delegate` | Claude-orchestration | Claude-only; the transport mechanism itself |
+   | … | … | … |
+
+   ### Packs
+
+   | Pack | Primary role | Notes |
+   | --- | --- | --- |
+   | `business-app` | Both | Full planning + execution lifecycle for product work |
+   | `code-quality` | Codex-execution | Reconciliation, validation, repo mutation |
+   | `business-app-kanban` | Both | Inherits `business-app` split; adds kanban ceremony |
+   | … | … | … |
+   ```
+
+4. **Update pack-level documentation** when a pack's README/manifest doesn't already state its role. Do *not* rewrite pack workflows — only add a role tag and one-line rationale. If a pack has no SKILL.md or README, mention this finding in the history entry but do not create one (out of scope).
+
+5. **No deletions, no renames.** Parity-mirror skills (same name in both Claude and Codex dirs) stay as-is. The audit tags their intended primary role; removing genuine parity mirrors is a Step 11+ conversation.
+
+**Files to modify (full paths):**
+
+- `/Users/georgele/projects/tools/agentic-skills/docs/operating-modes.md` — append the `## Pack emphasis` section with the two role tables (Global skills, Packs).
+- `/Users/georgele/projects/tools/agentic-skills/packs/*/README.md` or `packs/*/SKILL.md` — only where a pack-level doc exists and currently has no role tag. List exact paths during the audit.
+- `/Users/georgele/projects/tools/agentic-skills/tasks/todo.md` — check off Step 9, roll Active Step Plan to Step 10 (pack-aware `$run` routing).
+- `/Users/georgele/projects/tools/agentic-skills/tasks/history.md` — append Step 9 entry.
+- **Do NOT modify:** any `SKILL.md` workflow (frontmatter + body), `scripts/agent-mode.sh`, `scripts/approved-plan.sh`, `specs/approved-plan.schema.json`. Step 9 is documentation-only, same as Step 8.
+
+**Key technical decisions / risks:**
+
+- **One authoritative table, not sprinkled tags.** The role split must live in `docs/operating-modes.md` so there's a single place to look. Pack-level docs reference it; they do not duplicate it.
+- **"Both" is a real role, not a cop-out.** Some skills (e.g., `handoff` when called without `--target=codex`; `pack`) genuinely serve both orchestration and execution. Flag these explicitly with rationale in the Notes column — don't default-assign "Claude-orchestration" out of laziness.
+- **Starting hypothesis is not the answer.** Every skill needs its description skimmed. The hypothesis lists above may over-assign Codex-execution to anything that touches files.
+- **Kanban packs inherit.** `business-app-kanban` inherits from `business-app`; document the inheritance rather than re-enumerating skills.
+- **Uniform row granularity.** One row per (skill, role) in the Global skills table — same convention as Step 8. A skill classified as "Both" is still one row.
+- **Compact cells.** Same as Step 8 — one short phrase in Notes; link out to the skill's SKILL.md for deeper context.
+
+**Conventions from prior work:**
+
+- `docs/operating-modes.md` is the canonical reference doc; Step 8 already uses Markdown tables there. Stay consistent.
+- `tasks/todo.md` bookkeeping follows Steps 4–8: check off step, append Summary section, roll Active Step Plan forward.
+- Commit split: one `docs(operating-modes)` for the tables + pack doc tweaks, one `chore(tasks)` for todo/history.
+
+**Test strategy (tests-after, per Execution Profile `serial`):**
+
+1. **Coverage:** every skill under `global/claude/**` and `global/codex/**` has at least one row in the Global skills table. `ls global/claude/ global/codex/ | sort -u | wc -l` compared against table row count.
+2. **Pack coverage:** every directory under `packs/` has one row in the Packs table.
+3. **Role values:** every row's **Primary role** cell contains exactly one of `Claude-orchestration`, `Codex-execution`, or `Both` — no free-form role strings.
+4. **Contract unchanged:** `git diff` shows no edits to `specs/approved-plan.schema.json`, `scripts/agent-mode.sh`, `scripts/approved-plan.sh`, or any `SKILL.md` workflow (only `docs/operating-modes.md`, `tasks/todo.md`, `tasks/history.md`, and optionally pack-level READMEs).
+5. **No drift from Step 8:** `## Degraded-path audit` section still present and unmodified.
+
+**Acceptance criteria:**
+
+- [ ] `docs/operating-modes.md` has a `## Pack emphasis` section with Global skills + Packs tables.
+- [ ] Every global skill (both CLIs) and every pack is tagged with one of `Claude-orchestration` / `Codex-execution` / `Both`.
+- [ ] `tasks/todo.md` Step 9 checked off; Active Step Plan rolled to Step 10 (pack-aware `$run` routing).
+- [ ] No edits to SKILL.md workflows, scripts, or schema.
+
+**Out of scope (do not drift):**
 
 - Pack-aware `$run` routing — Step 10.
 - Expanding `docs/operating-modes.md` into the authoritative reference — Step 11.
 - Fixing Step 8's surfaced gaps (jq dependencies on `handoff` and `codex/run`).
+- Removing or renaming parity-mirror skills. That's a Step 11+ conversation if it ever happens.
 
-**Execution Profile:** `serial` (inherited from Phase 11).
+**Execution Profile:** `serial` (inherited from Phase 11). Main agent owns the survey, the tables, and the task/history updates. No subagent lanes — documentation of shared-contract behavior is where parallel lanes drift.
 
 ### Active Step Plan — Step 8: Degraded-path audit [archived for reference]
 
