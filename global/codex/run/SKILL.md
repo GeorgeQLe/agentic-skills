@@ -3,7 +3,7 @@ name: run
 description: "Execute the next incomplete step (or full phase with --phase), ship the result, and prepare the next step"
 type: execution
 version: 1.0.0
-argument-hint: "[--phase]"
+argument-hint: "[--phase] [--execute-approved]"
 ---
 
 # Run
@@ -29,6 +29,12 @@ Identify the next incomplete unit of work from the phased plan, build an executi
    - If missing, treat the phase as `serial`.
    - Use the profile only for the current step or scoped phase; do not plan ahead.
    - If the profile's `Parallel mode` is `agent-team`, stop before implementation and recommend running the work in Codex app worktrees or a Claude agent team rather than one shared local tree.
+6c. **`--execute-approved` branch** (if `$ARGUMENTS` contains `--execute-approved`):
+   - Reject `--execute-approved --phase` — approved packets target one step, not a full phase.
+   - Run `scripts/approved-plan.sh check`.
+   - On `ok`: run `scripts/approved-plan.sh consume`, log `Approved packet consumed: Phase X / Step Y (approved_at=…).`, then skip steps 7 and 8 and jump to step 9 (execute).
+   - On non-zero exit: relay the single-line reason to the user, run `scripts/approved-plan.sh mark-stale`, then fall through to steps 7–8 (standard plan + approval gate). Never auto-retry.
+   - Requires `jq` for the write path. If the check prints a `mode-mismatch` reason (resolved mode is `claude-only`), treat it as a user error and stop.
 7. Present the execution plan to the user:
    - What the step requires
    - Which files will be created or modified
@@ -105,6 +111,7 @@ Identify the next incomplete unit of work from the phased plan, build an executi
 ## Constraints
 
 - One step at a time by default, or one phase with `--phase`. Then stop and let the user decide what is next.
+- `--execute-approved` consumes an `approved` packet at `.agents/approved-plan.json` (contract in `docs/operating-modes.md` § "Approval / Delegation Packet"). `--execute-approved --phase` is rejected — packets target one step. In `claude-only` mode the flag is a user error; Codex is not the executor. Requires `jq` on PATH.
 - Always present the plan and get approval before executing. Do not assume a Claude-style `EnterPlanMode` or clear-context accept flow exists.
 - The approval gate should be one question only. Avoid back-to-back variants like "Approve and I'll run..." followed by a second restatement of the same action.
 - Keep context footprint minimal — only read files relevant to the current step.
