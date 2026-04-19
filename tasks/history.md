@@ -1,5 +1,18 @@
 # Session History
 
+## 2026-04-19 — Phase 11 Step 6 — `/delegate` (Claude)
+
+- Extended `scripts/approved-plan.sh` with `mark-uncertain`: atomic `approved → uncertain` transition (`<file>.tmp` + `mv`, same pattern as `mark-stale`). Rejects `draft`, `consumed`, `stale`, `superseded`, and `uncertain` as source states with a single-line reason + non-zero exit. Usage help + top-level dispatch case updated. `uncertain` was already in the schema enum from Step 3; Step 6 is the first legitimate writer — no schema or FSM edits.
+- Shipped `global/claude/delegate/SKILL.md`: a hybrid-only Claude skill that produces an approved packet via the Step 5 producer path (`draft` + one-question approval + `approve`), then invokes Codex synchronously via `codex exec "<target-skill> --execute-approved"` with a start-marker timestamp captured before the call. Argument-hint `"[target-skill] [--allow-dirty <glob>] [--inline-fallback]"`; target skill defaults to `$run`. Derives `phase`/`step`/`title` from the first unchecked `- [ ]` under `### Active Step Plan` (fallback: current `## Phase N` header) using the same parsing rules as `/handoff --target=codex`.
+- Three-branch safe-fallback matrix wired end-to-end, **never blind-retries cross-CLI**:
+  - **Pre-start failure** (no `codex` binary, auth failure, start marker never printed) → packet stays at `approved`; prompt offers inline-in-Claude vs keep-for-later manual `$run --execute-approved`. `--inline-fallback` auto-selects inline. `agent-team` profile requires explicit confirmation for the inline downgrade.
+  - **Success** (exit 0 + `Approved packet consumed: …` log + `tasks/approved-plan.md` shows `lifecycle: consumed`) → report success; Step 4's `consume` already flipped the lifecycle.
+  - **Ambiguous** (non-zero exit or timeout after the start marker printed) → call `mark-uncertain`, then prompt inspect / discard (`supersede`) / continue-inline. Never retries the same packet.
+- Mode gating: `claude-only` and `codex-only` exit non-zero with `mode-mismatch:` before any packet operation. Only `hybrid` proceeds — `claude-only` has no executor and `codex-only` plans in Codex directly.
+- Contract untouched: no edits to `docs/operating-modes.md` or `specs/approved-plan.schema.json`. Codex side remains consumer-only. Step 6 is pure transport + failure-mode wiring on top of Steps 3–5.
+- Verified `mark-uncertain` via fixture packets in `/tmp/apktest6/`: happy path (`approved → uncertain`, atomic, no `.tmp` leftovers); `draft` and `uncertain` source states both rejected non-zero with clear reasons (same rejection logic applies uniformly to `consumed`, `stale`, `superseded`).
+- Checked off Step 6 in `tasks/todo.md`, appended a Step 6 Summary, and rolled the Active Step Plan to Step 7 (mode-aware terminal recommendations — sketch).
+
 ## 2026-04-19 — Phase 11 Step 5 — `/handoff --target=codex` (Claude)
 
 - Extended `scripts/approved-plan.sh` with producer-side subcommands: `draft`, `approve`, `supersede`, `status`. Reused the existing `die` / `fail` / `require_jq_write` / `todo_hash_of` helpers and the `<file>.tmp` + `mv` atomic-write pattern so the consumer and producer share one FSM implementation. `draft` refuses to overwrite a live `approved` packet (explicit `supersede` required); `approve` is the atomic `draft → approved` transition and re-verifies `git_head` + `todo_hash` still match the draft's snapshot, failing loudly on drift. `approve` refreshes `approved_at` to "now" so TTL starts counting at approval, not drafting. `supersede` is `* → superseded` for any non-terminal prior packet. `status` prints a one-line lifecycle summary for preflight use. Producer never runs the six consumer freshness checks — that surface stays in `check`.
