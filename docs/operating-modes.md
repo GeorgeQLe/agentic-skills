@@ -138,6 +138,62 @@ Each gap below is logged for a follow-up step to close; Step 8 does not fix them
 - `global/claude/handoff/SKILL.md` `--target=codex` — `jq` is used for pretty-printing the drafted packet at step 5.5, but the skill does not document a degraded path when `jq` is absent. Missing: either declare `jq` as a hard dependency in § "Process" or fall back to a `jq`-free pretty-printer / raw JSON dump.
 - `global/codex/run/SKILL.md` `--execute-approved` — `jq` is declared as a hard dependency for the consume write path in § "Constraints", but no degraded path is documented when it is missing. Missing: either a clean user-facing failure reason in § "Process" step 6c, or a `jq`-free consume fallback.
 
+## Pack emphasis
+
+This section tags every global skill and every pack with a **primary CLI role** — `Claude-orchestration` (framing, interviews, strategy, research synthesis, tradeoff surfacing), `Codex-execution` (implementation, reconciliation, validation, repo mutation, shipping), or `Both` (genuinely spans). Role tagging is additive and advisory: parity-mirror skills still exist under both `global/claude/` and `global/codex/`, and the tag names the *intended* emphasis, not a restriction. Kanban pack variants inherit from their base pack unless noted. This is the one authoritative table — pack-level docs reference it rather than duplicate.
+
+### Global skills
+
+| Skill | Primary role | Notes |
+| --- | --- | --- |
+| `affected` | Claude-orchestration | Monorepo scope framing for planning; read-only |
+| `analyze-sessions` | Claude-orchestration | Usage analysis + automation recommendations |
+| `brainstorm` | Claude-orchestration | Idea surfacing into `/plan-interview` |
+| `branch-lifecycle` | Both | Evaluation is orchestration; merge/delete acts execute |
+| `commit-and-push-by-feature` | Codex-execution | Grouped commits + push |
+| `dead-code` | Claude-orchestration | Scan + report; no mutation |
+| `debug` | Claude-orchestration | Investigate, log to changelog, propose fix |
+| `decommission` | Codex-execution | Tear down services/packages |
+| `delegate` | Claude-orchestration | Claude-only transport; the delegation mechanism itself |
+| `deploy` | Codex-execution | Target-environment deploy + history |
+| `expert-review` | Claude-orchestration | Panel-style review, read-only synthesis |
+| `guide` | Claude-orchestration | GUI-blocker walk-throughs |
+| `handoff` | Both | Context snapshot (orchestration); `--target=codex` produces approval packet (cross-CLI) |
+| `hygiene` | Both | Audit (orchestration) + optional auto-fix (execution) |
+| `install-workflow-orchestration` | Codex-execution | Writes CLAUDE.md / AGENTS.md |
+| `investigate` | Claude-orchestration | Validate claims, trace to root cause, propose fix |
+| `migrate` | Both | Plan + step-by-step verified mutation |
+| `pack` | Both | Manages pack state; orchestrates which skills live per project |
+| `plan-interview` | Claude-orchestration | Spec completion via interview |
+| `plan-phase` | Claude-orchestration | Decompose roadmap phase into steps |
+| `reconcile-dev-docs` | Codex-execution | Rewrites task docs to match reality |
+| `regression-check` | Codex-execution | Monorepo health check after changes |
+| `release` | Codex-execution | Version bump, tag, changelog |
+| `research-roadmap` | Claude-orchestration | Documentation queue maintenance |
+| `roadmap` | Claude-orchestration | Task pipeline + priority queue |
+| `run` | Both | Plans next step (orchestration) and executes on approval (execution) |
+| `scaffold` | Codex-execution | Generate package/app |
+| `ship` | Codex-execution | Update docs, commit, push, deploy |
+| `ship-end` | Codex-execution | End-of-session wrap: docs, commit, push |
+| `skills` | Claude-orchestration | Browse/search the skill catalog |
+| `slim-audit` | Claude-orchestration | LOC-reduction audit; read-only |
+| `spec-drift` | Claude-orchestration | Specs ↔ code audit; read-only |
+| `sync` | Codex-execution | `git pull` + status |
+| `trace` | Claude-orchestration | Request end-to-end trace through stack |
+
+### Packs
+
+| Pack | Primary role | Notes |
+| --- | --- | --- |
+| `business-app` | Claude-orchestration | Strategy, ICP, GTM, positioning, metrics, retro — framing/research skills |
+| `business-app-kanban` | Both | Inherits `business-app` (orchestration) + adds kanban `run`/`ship`/`ship-end` variants (execution) |
+| `code-quality` | Codex-execution | `extract-shared-types`, `quality-sweep` — behavior-preserving refactor mutation |
+| `devtool` | Claude-orchestration | Adoption, docs audit, DX journey, positioning, workflow — framing skills |
+| `devtool-kanban` | Both | Inherits `devtool` (orchestration) + kanban `run`/`ship`/`ship-end` variants (execution) |
+| `game` | Claude-orchestration | Audience, core loop, fantasy, launch, playtest metrics — framing/research skills |
+| `game-kanban` | Both | Inherits `game` (orchestration) + kanban `run`/`ship`/`ship-end` variants (execution) |
+| `poketowork-kanban` | Both | Kanban orchestration skills + `run`/`ship`/`ship-end` execution variants; no base pack to inherit from |
+
 ---
 
-Status: Phase 11 Step 1 — thin doc; expansions tracked in `tasks/todo.md`. Degraded-path audit filled in Step 8.
+Status: Phase 11 Step 1 — thin doc; expansions tracked in `tasks/todo.md`. Degraded-path audit filled in Step 8. Pack emphasis table filled in Step 9.
