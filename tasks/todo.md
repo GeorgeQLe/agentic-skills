@@ -78,12 +78,12 @@ Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env va
   - Codex pack skills → implementation, reconciliation, validation, task promotion, repo mutation, shipping
   - Not every skill needs both versions; document which packs skew which direction
 - [x] **Step 10** — Pack-aware `$run` on Codex — read `.agents/project.json.enabled_packs`, recommend/route to relevant pack skill when work matches
-- [ ] **Step 11** — Expand `docs/operating-modes.md` to authoritative reference:
+- [x] **Step 11** — Expand `docs/operating-modes.md` to authoritative reference:
   - Complete mode-signal resolution rules
   - Approval packet schema + lifecycle diagram
   - Populated degraded-path audit table from step 8
   - Migration guide from parity-mirror model
-- [ ] **Verify:** Run through all three modes on a sample workflow; confirm each mode completes plan → execute → ship without hitting the unavailable CLI
+- [ ] **Verify:** Run through all three modes on a sample workflow; confirm each mode completes plan → execute → ship without hitting the unavailable CLI _(deferred to its own micro-step; requires real-workflow walkthrough, not a docs task)_
 
 ### Step 6 Summary (completed 2026-04-19)
 
@@ -130,7 +130,17 @@ Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env va
 - Contract untouched: no edits to `specs/approved-plan.schema.json`, `scripts/agent-mode.sh`, `scripts/approved-plan.sh`, `global/claude/run/SKILL.md`, any other skill, any pack skill, or the Step 8/9 doc sections.
 - Verified `list-packs`: no project.json → empty output, exit 0; `enabled_packs: ["business-app-kanban"]` → emits `business-app-kanban`; malformed JSON → empty output, exit 0 (silent degraded path).
 
-### Active Step Plan — Step 11: Expand `docs/operating-modes.md` to authoritative reference
+### Step 11 Summary (completed 2026-04-19)
+
+- Expanded `docs/operating-modes.md` from a 200-line thin doc + appended audit tables into a ~280-line authoritative reference. New and reorganized sections: `## Mode-signal resolution` (precedence truth table + writer + unset semantics + invariant), `## Approval packet` split into Fields / Lifecycle / Safety classification / Freshness checks, a Lifecycle ASCII diagram plus a transitions-to-writers table mapping every `scripts/approved-plan.sh` subcommand (`draft`, `approve`, `consume`, `mark-stale`, `supersede`, `mark-uncertain`) to its lifecycle edge. Cites `specs/approved-plan.schema.json` for field-level truth rather than duplicating.
+- Step 8 (`## Degraded-path audit`, 19 rows + Gaps), Step 9 (`## Pack emphasis`, 34 global skills + 8 packs), and Step 10 (`### Codex $run routing`) tables preserved byte-identically — diffed against `HEAD:docs/operating-modes.md`, only the trailing status line differs. Section ordering retained: three-mode intro → mode-signal resolution → approval packet → out of scope → degraded-path audit → pack emphasis → migration guide → status line.
+- New `## Migrating from the parity-mirror model` section (~25 lines) orients newcomers at the right entry points without re-describing workflows: `pack.sh set-mode` for declaring mode, pack emphasis tables for role-based pack selection, `/delegate` for in-session hybrid execution, `/handoff --target=codex` for async handoff, and the deliberate "unset is a mode too" semantics. Pointer-only — no tutorial depth.
+- Status line replaced: single `Phase 11 Steps 1–11 complete: authoritative operating-model reference.` — no more incremental per-step append. `### Gaps surfaced by Step 11` opened and explicitly closed with "None" — no new spec gaps found during the docs pass.
+- Contract untouched: no edits to `specs/approved-plan.schema.json`, `scripts/agent-mode.sh`, `scripts/approved-plan.sh`, `scripts/pack.sh`, any `SKILL.md` (global or pack), any pack wrapper, `CLAUDE.md`, or `tasks/roadmap.md`. Only `docs/operating-modes.md`, `tasks/todo.md`, and `tasks/history.md` touched.
+- Verified: `git diff` on Step 8/9/10 table bodies — zero content changes; resolver precedence in the new `## Mode-signal resolution` matches `scripts/agent-mode.sh` behavior (env > file > unset, invalid in either source → non-zero exit); every lifecycle-diagram edge maps to an `approved-plan.sh` subcommand and every subcommand appears; migration guide cites `pack.sh set-mode`, `/delegate`, `/handoff --target=codex`, `$run --execute-approved` by name without re-describing their internals.
+- Checked off Step 11 in `tasks/todo.md`. The Phase 11 final **Verify** item (three-mode sample-workflow walkthrough) rolled to its own deferred micro-step — it requires a real workflow run, not a docs task.
+
+### Active Step Plan — Step 11: Expand `docs/operating-modes.md` to authoritative reference [archived for reference]
 
 **Goal:** Turn `docs/operating-modes.md` from a thin reference + appended audit tables into the authoritative operating-model doc. By the end of Step 11, a newcomer should be able to read `docs/operating-modes.md` top-to-bottom and understand: what each of the three modes means, how the resolver decides which mode is active, the full approval/delegation packet schema and lifecycle, every declared cross-tool degraded path (Step 8), the pack emphasis split (Step 9), the Codex `$run` pack-aware routing behavior (Step 10), and how to migrate a pre-Phase-11 project onto the new model.
 
