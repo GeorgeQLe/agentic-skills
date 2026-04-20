@@ -1,5 +1,17 @@
 # Session History
 
+## 2026-04-20 - Reconcile Phase 11 task docs
+
+- Resolved the Phase 11 task-doc contradiction where `tasks/todo.md` still contained unchecked archived acceptance criteria even though `tasks/roadmap.md`, `tasks/history.md`, and `tasks/verify-phase-11.md` all recorded Phase 11 as complete.
+- Checked the Phase 11 top-level acceptance criteria and archived Step 4 through Step 11 / Verify acceptance checklists in `tasks/todo.md`, leaving the active Priority Documentation Todo queue as the only unchecked task surface.
+- Added `tasks/reconciliation-report.md` with resolved, deferred, and remaining findings, and marked `$reconcile-dev-docs fix tasks` complete in the queue.
+
+## 2026-04-20 — Move `mvp-gap` to research outputs
+
+- Reclassified Claude and Codex `mvp-gap` as a research skill and changed its canonical output from `specs/mvp-gap.md` to `research/mvp-gap.md` (app-scoped: `research/{app}/mvp-gap.md`).
+- Updated `mvp-gap` next-step guidance so the primary follow-up is `spec-interview [top gap]` whenever the audit finds an unspecced priority gap; `roadmap` is primary only after priority gaps already have specs.
+- Updated dependent readers (`brainstorm`, `competitive-analysis`, `scale-audit`, and `research-roadmap`) to look for `research/mvp-gap.md` instead of treating the audit as an implementation spec.
+
 ## 2026-04-20 — Audit skill next-step contracts
 
 - Audited all 205 `SKILL.md` files under `global/` and `packs/` for command-style next-step references and semantic next-step validity across expected end states.
