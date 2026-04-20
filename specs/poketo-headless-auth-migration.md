@@ -58,7 +58,7 @@ These files still hardcode Claude install paths for Codex behavior:
 | File | Current assumption |
 | --- | --- |
 | `/Users/georgele/projects/tools/claude-skills/codex/brainstorm-kanban/SKILL.md` | Runs `node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs ...` |
-| `/Users/georgele/projects/tools/claude-skills/codex/plan-interview-kanban/SKILL.md` | Same hardcoded Claude path. |
+| `/Users/georgele/projects/tools/claude-skills/codex/spec-interview-kanban/SKILL.md` | Same hardcoded Claude path. |
 | `/Users/georgele/projects/tools/claude-skills/codex/roadmap-kanban/SKILL.md` | Same hardcoded Claude path. |
 | `/Users/georgele/projects/tools/claude-skills/codex/run-kanban/SKILL.md` | Same hardcoded Claude path. |
 | `/Users/georgele/projects/tools/claude-skills/codex/ship-kanban/SKILL.md` | Same hardcoded Claude path. |

@@ -53,7 +53,7 @@ Global skills are safe across business apps, games, devtools, libraries, service
 | `investigate` | Validate claims against codebase and git history, then trace root cause |
 | `migrate` | Guide a structural migration or dependency upgrade |
 | `pack` | Manage project-local packs and `.agents/project.json` |
-| `plan-interview` | Interview to validate and complete an implementation specification |
+| `spec-interview` | Interview to validate and complete an implementation specification |
 | `plan-phase` | Decompose a single roadmap phase into implementation steps, tests, and file-level detail |
 | `reconcile-dev-docs` | Reconcile roadmap, todo, history, phase archives, specs, and git evidence |
 | `regression-check` | Run a comprehensive health check after a phase or major change |
@@ -176,7 +176,7 @@ scripts/pack.sh install devtool-kanban
 Skills:
 
 ```text
-brainstorm-kanban, plan-interview-kanban, roadmap-kanban,
+brainstorm-kanban, spec-interview-kanban, roadmap-kanban,
 run-kanban, ship-kanban, ship-end-kanban
 ```
 

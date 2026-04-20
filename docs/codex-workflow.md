@@ -83,7 +83,7 @@ That is the manual replacement for Claude Code's plan-mode-first workflow with a
 
 In this document, Codex skill invocations use the native `$skill` form.
 
-### `$plan-interview`
+### `$spec-interview`
 
 **Claude Code**
 - interview the user
@@ -314,7 +314,7 @@ After execution, leave behind clean repo state:
 
 If you are used to this Claude Code rhythm:
 
-1. `$plan-interview`
+1. `$spec-interview`
 2. `$roadmap`
 3. `$plan-phase` (seeded by `$roadmap`; rerun only for later phases)
 4. `$run`
@@ -323,7 +323,7 @@ If you are used to this Claude Code rhythm:
 
 The closest Codex translation is:
 
-1. `$plan-interview`
+1. `$spec-interview`
 2. `$roadmap`
 3. `$plan-phase` (seeded by `$roadmap`; rerun only for later phases)
 4. `$run` to present the plan, execute the work, ship it, and refresh `tasks/todo.md`
