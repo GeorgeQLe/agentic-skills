@@ -73,6 +73,7 @@ Business-app research outputs:
 | `$retro` | `research/retro-YYYY-MM-DD.md` |
 | `$investor-update` | `research/investor-update-YYYY-MM.md` |
 | `$platform-strategy` | `research/platform-strategy.md` |
+| `$mvp-gap` | `research/mvp-gap.md` |
 
 Game research outputs:
 
@@ -104,7 +105,6 @@ Also include documentation-producing non-research skills when their outputs are 
 | Skill | Output |
 | --- | --- |
 | `$spec-interview` | `specs/*.md` |
-| `$mvp-gap` | `specs/mvp-gap.md` |
 | `$scale-audit` | `specs/scale-audit.md` |
 | `$roadmap` | `tasks/roadmap.md`, `tasks/todo.md` |
 | `$game-roadmap` | `tasks/roadmap.md`, `tasks/todo.md` |

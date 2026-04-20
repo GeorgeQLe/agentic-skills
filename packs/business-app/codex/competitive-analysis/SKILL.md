@@ -17,7 +17,7 @@ Default stance: assume the user has no insider knowledge of the market. Present 
 **Detect mode before proceeding:**
 
 - **Concept-validation mode** activates when: no `research/icp.md` AND (no meaningful codebase OR `$ARGUMENTS` contains "concept"/"validate"). Announce mode to user, then ask for concept description (problem, audience, approach).
-- **Standard mode** (default): Read the codebase, README, CLAUDE.md, and existing research/specs (`research/icp.md` or `research/{app}/icp.md`, `research/enterprise-icp.md` or `research/{app}/enterprise-icp.md`, `specs/mvp-gap.md` or `specs/{app}/mvp-gap.md`) to understand the product.
+- **Standard mode** (default): Read the codebase, README, CLAUDE.md, and existing research/specs (`research/icp.md` or `research/{app}/icp.md`, `research/enterprise-icp.md` or `research/{app}/enterprise-icp.md`, `research/mvp-gap.md` or `research/{app}/mvp-gap.md`) to understand the product.
 
 ## Process
 
@@ -36,7 +36,7 @@ When app scope `{app}` is active:
 
 ### 1. Establish Product Context
 
-**Standard mode:** Read CLAUDE.md, README, package config, key source files. Read `research/icp.md` (or `research/{app}/icp.md`) if it exists — the ICP defines the competitive frame. Read `research/enterprise-icp.md` (or `research/{app}/enterprise-icp.md`) and `specs/mvp-gap.md` (or `specs/{app}/mvp-gap.md`) if they exist. Summarise what the product does, who it's for, and what problem it solves.
+**Standard mode:** Read CLAUDE.md, README, package config, key source files. Read `research/icp.md` (or `research/{app}/icp.md`) if it exists — the ICP defines the competitive frame. Read `research/enterprise-icp.md` (or `research/{app}/enterprise-icp.md`) and `research/mvp-gap.md` (or `research/{app}/mvp-gap.md`) if they exist. Summarise what the product does, who it's for, and what problem it solves.
 
 **Concept-validation mode:** Use the concept description from Prerequisites. Summarise what the concept proposes (problem, audience, approach). Confirm with the user before researching.
 
@@ -82,7 +82,7 @@ Only after user validates, write the output files.
 1. IF no `specs/` directory or it's empty: `$spec-interview [top market gap or positioning opportunity]` — spec the strongest opportunity from the analysis
 2. IF `specs/` exist but no `research/journey-map.md`: `$journey-map` — map the customer journey to find where competitors fall short
 3. IF no `research/gtm.md`: `$gtm` — build go-to-market plan leveraging competitive gaps
-4. IF codebase exists: `$mvp-gap` — check if the codebase exploits the gaps found
+4. IF codebase exists and no `research/mvp-gap.md`: `$mvp-gap` — check if the codebase exploits the gaps found
 
 Use this format in the output:
 
@@ -94,7 +94,7 @@ Other options:
 - `$spec-interview [riskiest competitive assumption or top market gap]` — validate the most important unresolved competitive assumption with a targeted interview (if not recommended)
 - `$journey-map` — map the customer journey to find where competitors fall short (if no `research/journey-map.md` and not recommended)
 - `$gtm` — build go-to-market plan leveraging competitive gaps (if no `research/gtm.md` and not recommended)
-- `$mvp-gap` — check if the codebase exploits the gaps found (if codebase exists and not recommended)
+- `$mvp-gap` — check if the codebase exploits the gaps found (if codebase exists, no `research/mvp-gap.md` exists, and not recommended)
 - `$brainstorm` — generate alternative solution ideas (only if the analysis found multiple plausible market gaps and product direction is still unclear)
 
 Only include items whose conditions are met. Do not recommend brainstorm just because competitive whitespace exists.

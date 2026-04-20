@@ -48,10 +48,10 @@ When app scope `{app}` is active:
    - Testing gaps in critical paths
    - Security hardening opportunities
 
-   **Market Fit** (only when `research/icp.md` (or `research/{app}/icp.md`), `specs/mvp-gap.md` (or `specs/{app}/mvp-gap.md`), or `research/competitive-analysis.md` (or `research/{app}/competitive-analysis.md`) exist)
+   **Market Fit** (only when `research/icp.md` (or `research/{app}/icp.md`), `research/mvp-gap.md` (or `research/{app}/mvp-gap.md`), or `research/competitive-analysis.md` (or `research/{app}/competitive-analysis.md`) exist)
    - ICP alignment — features addressing ICP pain points that are missing or incomplete
    - Journey gaps — steps where the product loses the user or customer
-   - Unaddressed MVP gaps from `specs/mvp-gap.md` (or `specs/{app}/mvp-gap.md`) not yet in roadmap
+   - Unaddressed MVP gaps from `research/mvp-gap.md` (or `research/{app}/mvp-gap.md`) not yet in roadmap
    - Competitive white space — features or capabilities no competitor offers well, from `research/competitive-analysis.md` (or `research/{app}/competitive-analysis.md`) market gaps
    - Competitor leapfrog — specific competitor weaknesses to exploit, or table-stakes features competitors have that you lack
    - Positioning plays — ideas that sharpen differentiation against the competitive landscape

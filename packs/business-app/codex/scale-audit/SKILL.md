@@ -32,7 +32,7 @@ When app scope `{app}` is active:
 
 ### 1. Load Context & Evaluate
 
-1. Read `research/enterprise-icp.md` (or `research/{app}/enterprise-icp.md`), `research/icp.md` (or `research/{app}/icp.md`), `specs/mvp-gap.md` (or `specs/{app}/mvp-gap.md`) (if they exist), codebase, and in-progress/advisory work from `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, and `tasks/recurring-todo.md` (if they exist).
+1. Read `research/enterprise-icp.md` (or `research/{app}/enterprise-icp.md`), `research/icp.md` (or `research/{app}/icp.md`), `research/mvp-gap.md` (or `research/{app}/mvp-gap.md`) (if they exist), codebase, and in-progress/advisory work from `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, and `tasks/recurring-todo.md` (if they exist).
 2. Evaluate the codebase across:
    - **Per-Persona Journey Coverage** — Can each stakeholder complete their workflow?
    - **Onboarding Gaps** — Self-serve, team, SSO-provisioned, migration, training
@@ -46,7 +46,7 @@ When app scope `{app}` is active:
 
 - `specs/scale-audit.md` (or `specs/{app}/scale-audit.md`) — Gap analysis with stakeholder coverage matrix, compliance matrix, priority tags, and `$spec-interview` prompts for each gap
 
-The output file must end with a `## Next Steps` section (3–5 contextual items, "Pick one:" framing) based on which files exist: always suggest `$roadmap`; conditionally suggest `$spec-interview [top blocker]`, `$journey-map enterprise`, `$mvp-gap`, `$metrics` based on hard-blockers needing specs, `research/journey-map.md`, `specs/mvp-gap.md` staleness, and `research/metrics.md`.
+The output file must end with a `## Next Steps` section (3–5 contextual items, "Pick one:" framing) based on which files exist: always suggest `$roadmap`; conditionally suggest `$spec-interview [top blocker]`, `$journey-map enterprise`, `$mvp-gap`, `$metrics` based on hard-blockers needing specs, `research/journey-map.md`, `research/mvp-gap.md` staleness, and `research/metrics.md`.
 
 ## Task Classification
 
