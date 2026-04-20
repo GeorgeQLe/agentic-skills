@@ -64,7 +64,7 @@ Other options:
 
 **Other options** (include all applicable items not chosen as recommended, based on which files exist):
 - IF codebase exists: `$scale-audit` — Evaluate codebase against enterprise requirements
-- `$plan-interview enterprise [feature]` — Validate the riskiest enterprise assumption (if enterprise specs exist)
+- `$spec-interview enterprise [feature]` — Validate the riskiest enterprise assumption (if enterprise specs exist)
 - `$journey-map enterprise` — Map enterprise stakeholder journeys (if no `research/journey-map.md`)
 - `$journey-map` — Map general user journeys (if no `research/journey-map.md` and `research/icp.md` exists)
 - `$competitive-analysis` — Research enterprise competitive landscape (if no `research/competitive-analysis.md`)

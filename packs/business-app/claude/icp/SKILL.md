@@ -10,7 +10,7 @@ argument-hint: <spec file path or concept/idea>
 
 Automated research that identifies **multiple ICP candidates**, maps their pain points and value props, scores them, and selects a primary ICP. Replaces interview-driven approaches with web search + codebase analysis. Input is a spec file path or a concept/idea as `$ARGUMENTS`.
 
-The output preserves the canonical 9-section format at the top level (for downstream compatibility with `/plan-interview`, `/mvp-gap`, `/roadmap`, `/journey-map`) while adding multi-ICP analysis, cross-ICP prioritization, and a supplementary section 10 (`## Acquisition & Conversion Model`) that covers business model, funnel, champions, and expansion dynamics.
+The output preserves the canonical 9-section format at the top level (for downstream compatibility with `/spec-interview`, `/mvp-gap`, `/roadmap`, `/journey-map`) while adding multi-ICP analysis, cross-ICP prioritization, and a supplementary section 10 (`## Acquisition & Conversion Model`) that covers business model, funnel, champions, and expansion dynamics.
 
 ## Process
 
@@ -146,7 +146,7 @@ Incorporate feedback before proceeding.
 Before writing, check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with "Pick one:" framing:
 
 - ALWAYS: `/competitive-analysis` — Research competitors and market gaps for this ICP
-- IF no `specs/` directory or it's empty: `/plan-interview` — Design the solution for this ICP's pain points
+- IF no `specs/` directory or it's empty: `/spec-interview` — Design the solution for this ICP's pain points
 - IF `specs/` exist but no `research/journey-map.md`: `/journey-map` — Map how this ICP flows through the product
 - IF codebase exists: `/mvp-gap` — Evaluate what's built against this ICP
 - IF `research/competitive-analysis.md` exists: `/brainstorm` — Generate ideas from ICP needs + competitive gaps
@@ -393,10 +393,10 @@ When this skill produces follow-up work, file it by execution semantics:
 
 ## Constraints
 
-- **Stay in problem space.** Do not propose features, architecture, UI, or technical solutions. That is `/plan-interview`'s job.
+- **Stay in problem space.** Do not propose features, architecture, UI, or technical solutions. That is `/spec-interview`'s job.
 - **Evidence-based.** Every claim in the ICP document must trace back to research evidence logged in `research/icp-search-log.md`. Do not fabricate personas from assumptions.
 - **In existing-project mode**, note misalignments between what's built and what the ICP research suggests, but do not prescribe fixes — that's `/mvp-gap`'s job.
-- **Primary ICP must use the canonical 9 top-level `##` sections** — downstream skills (`/plan-interview`, `/mvp-gap`, `/roadmap`, `/journey-map`, `/competitive-analysis`) parse these exact headers. Section 10 (`## Acquisition & Conversion Model`) is supplementary and does not affect downstream parsing.
+- **Primary ICP must use the canonical 9 top-level `##` sections** — downstream skills (`/spec-interview`, `/mvp-gap`, `/roadmap`, `/journey-map`, `/competitive-analysis`) parse these exact headers. Section 10 (`## Acquisition & Conversion Model`) is supplementary and does not affect downstream parsing.
 - **Section 10 uses conditional sub-sections** — include only those relevant to the classified business model. Do not include B2B-specific sub-sections (DMU, Champion & Advocate Dynamics, Budget & Procurement) for pure B2C products, but do include Funnel Shape, Motion Type & Cycle Length, and Expansion & Retention Dynamics for all models.
 - **Do not overwrite existing `research/icp.md`** without asking the user first.
 - **Minimum research depth**: at least 8 WebSearch queries before identifying ICP candidates, then at least 2–3 targeted queries per candidate.

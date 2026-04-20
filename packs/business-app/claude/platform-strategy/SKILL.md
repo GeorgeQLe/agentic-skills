@@ -199,7 +199,7 @@ Before writing, check which files exist to populate the `## Next Steps` section 
 - IF `research/competitive-analysis.md` is stale or doesn't cover adjacent markets: `/competitive-analysis [adjacent category]` — Research competitors in the expansion space
 - IF top candidate targets a new audience: `/icp [new audience]` — Define the ICP for the new product
 - IF top candidate is vertical (enterprise): `/enterprise-icp` — Map enterprise stakeholders for the deeper play
-- IF specs exist for core but not expansion: `/plan-interview [top candidate]` — Spec the expansion product
+- IF specs exist for core but not expansion: `/spec-interview [top candidate]` — Spec the expansion product
 - ALWAYS: `/roadmap` — Integrate expansion phases into the project roadmap
 
 **Impact-aware adjustments:**
@@ -396,7 +396,7 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Use web search extensively.** This skill's value comes from real market data about adjacent opportunities — not assumptions. Every market signal must trace to research evidence.
 - **Cite sources.** When stating market signals, competitor product lines, or trend data, note where the information came from.
 - **Be honest about uncertainty.** If market size or demand can't be verified, say so. Don't fabricate metrics.
-- **Stay in strategy mode.** Do not propose architecture, features, or technical solutions — that's for `/plan-interview`. Do not design full experiments — that's for `/experiment`. Provide enough to decide direction, not enough to build.
+- **Stay in strategy mode.** Do not propose architecture, features, or technical solutions — that's for `/spec-interview`. Do not design full experiments — that's for `/experiment`. Provide enough to decide direction, not enough to build.
 - **Core health is gating.** If the core product shows clear PMF problems (poor retention, no activation), say so directly. Expanding from a weak foundation is a common startup mistake — flag it.
 - **Score honestly.** Low-synergy, high-effort candidates should score low even if the market is exciting. The whole point is to find expansion that leverages the existing product.
 - **Present before writing.** Never write output files until findings have been presented to the user and validated through the checkpoint questions. The user must see and approve the analysis before anything is written to disk.
