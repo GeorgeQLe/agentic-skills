@@ -63,11 +63,11 @@ Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env va
   - Failure before Codex starts → offer inline execution or emit packet
   - Codex may have started → set packet to `uncertain`, prompt inspect/discard/continue (never blind retry)
   - `agent-team` profile → inline fallback is a downgrade user must accept
-- [x] **Step 7** — Mode-aware terminal recommendations across `/spec-interview`, `/roadmap`, `/plan-phase`, `/run`, `/ship`, `/ship-end` (and Codex equivalents):
+- [x] **Step 7** — Next-step routing across `/spec-interview`, `/roadmap`, `/plan-phase`, `/run`, `/ship`, `/ship-end` (and Codex equivalents):
   - `hybrid` → "delegate with `/delegate $run`"
   - `claude-only` → "run `/run`"
   - `codex-only` → "run `$run` in Codex"
-  - unset → present all options
+  - unset → infer from invocation and task type
 - [x] **Step 8** — Degraded-path audit with concrete output: populate a table in `docs/operating-modes.md`:
 
   | Skill | Assumes | Fails how if unavailable | Degraded path |
@@ -98,8 +98,8 @@ Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env va
 
 ### Step 7 Summary (completed 2026-04-19)
 
-- Added a shared **Mode-aware next-step recommendation** section to 12 planning/execution skills — Claude: `spec-interview`, `roadmap`, `plan-phase`, `run`, `ship`, `ship-end`; Codex: same six. Each block resolves the effective agent mode via `./scripts/agent-mode.sh` and emits exactly one recommendation line per resolved mode, with a distinctive phrase ("resolved agent mode via scripts/agent-mode.sh") for grep-auditability.
-- Claude-side branches (hybrid→`/delegate <target>`, claude-only→Claude skill, codex-only→Codex `$skill`, unset→present all three + point at `docs/operating-modes.md`). Targets vary per skill context: `/roadmap` after spec-interview; `/plan-phase`/`/run` after roadmap; `/delegate $run` after plan-phase; `/delegate $ship` after `/run`; `/delegate $run` after `/ship` and `/ship-end`.
+- Added a shared **Next-Step Routing** section to 12 planning/execution skills — Claude: `spec-interview`, `roadmap`, `plan-phase`, `run`, `ship`, `ship-end`; Codex: same six. Each block resolves the effective agent mode via `./scripts/agent-mode.sh` and emits Next work plus Recommended next command, with a distinctive phrase ("Next-Step Routing") for grep-auditability.
+- Claude-side branches (hybrid→`/delegate <target>`, claude-only→Claude skill, codex-only→Codex `$skill`, unset→infer from invocation and task type). Targets vary per skill context: `/roadmap` after spec-interview; `/plan-phase`/`/run` after roadmap; `/delegate $run` after plan-phase; `/delegate $ship` after `/run`; `/delegate $run` after `/ship` and `/ship-end`.
 - Codex-side inversion for `hybrid`: "return to Claude for the next orchestration step" rather than "delegate further." `codex-only` stays in Codex; `claude-only` tells the user to switch to Claude.
 - No-recurse invariant preserved: `global/claude/delegate/SKILL.md` and `global/claude/handoff/SKILL.md` do NOT carry the block. Grep of the distinctive phrase returns exactly the expected 12 files.
 - Contract untouched: no edits to `docs/operating-modes.md`, `specs/approved-plan.schema.json`, or `scripts/agent-mode.sh`. Pure consumer of the mode resolver.
@@ -123,7 +123,7 @@ Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env va
 
 ### Step 10 Summary (completed 2026-04-19)
 
-- Extended `global/codex/run/SKILL.md` § "Mode-aware next-step recommendation" with a new `### Pack-aware routing` subsection. Resolver order: (a) mode via `./scripts/agent-mode.sh` (Step 7, unchanged), (b) enabled packs via `./scripts/pack.sh list-packs`, (c) emit recommendation substituting the `-kanban` variant when an enabled pack ships it, otherwise emit the global default. Candidate packs named inline: `business-app-kanban`, `devtool-kanban`, `game-kanban`, `poketowork-kanban` — all tagged `Both` in Step 9's Packs table, load-bearing citation.
+- Extended `global/codex/run/SKILL.md` § "Next-Step Routing" with a new `### Pack-Aware Command Text` subsection. Resolver order: (a) mode via `./scripts/agent-mode.sh` (Step 7, unchanged), (b) enabled packs via `./scripts/pack.sh list-packs`, (c) emit recommendation substituting the `-kanban` variant when an enabled pack ships it, otherwise emit the global default. Candidate packs named inline: `business-app-kanban`, `devtool-kanban`, `game-kanban`, `poketowork-kanban` — all tagged `Both` in Step 9's Packs table, load-bearing citation.
 - Added `list-packs` subcommand to `scripts/pack.sh` — one newline-separated enabled-pack name per line, no decoration. Reuses the existing `read_enabled_packs` reader (no duplicated JSON parsing). Silent on missing/malformed `.agents/project.json` (exit 0, empty output), matching the plan's degraded-path contract.
 - Documented the degraded path in the SKILL.md subsection: missing/malformed project.json → global fallback with a single-line inline `pack-lookup: skipped (no project.json)` comment; ambiguity (two packs ship the same variant) → first in `enabled_packs` order + inline tie note, no prompt. Scope explicitly fenced: recommendation-text routing only — `$run --execute-approved` still consumes `.agents/approved-plan.json` verbatim.
 - Added a short `### Codex `$run` routing` subsection under `## Pack emphasis` in `docs/operating-modes.md` (above the closing `---` status line) pointing at the SKILL.md resolver. Status line updated to mention Step 10.
@@ -220,13 +220,13 @@ Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env va
 
 **Goal:** Prove — with a real workflow on a real project — that each of the three operating modes (`claude-only`, `codex-only`, `hybrid`) can complete a plan → execute → ship cycle without requiring the unavailable CLI. This is the final Phase 11 acceptance item deferred from Step 11 because it requires an actual run, not a docs task. On completion, Phase 11 is fully closed.
 
-**Contract reminder:** All Phase 11 mechanisms are frozen: `scripts/agent-mode.sh` (Step 2), `specs/approved-plan.schema.json` (Step 3), `scripts/approved-plan.sh` (Steps 3–6), `/handoff --target=codex` (Step 5), `/delegate` (Step 6), Step 7 mode-aware recommendations, Step 8 degraded-path audit, Step 9 pack emphasis, Step 10 `$run` pack-aware routing, Step 11 authoritative doc. Verify is purely an empirical acceptance test — no mechanism edits. If Verify surfaces a real defect, log it under a new `### Gaps surfaced by Verify` subsection and defer the fix to a follow-up step.
+**Contract reminder:** All Phase 11 mechanisms are frozen: `scripts/agent-mode.sh` (Step 2), `specs/approved-plan.schema.json` (Step 3), `scripts/approved-plan.sh` (Steps 3–6), `/handoff --target=codex` (Step 5), `/delegate` (Step 6), Step 7 next-step routing, Step 8 degraded-path audit, Step 9 pack emphasis, Step 10 `$run` pack-aware routing, Step 11 authoritative doc. Verify is purely an empirical acceptance test — no mechanism edits. If Verify surfaces a real defect, log it under a new `### Gaps surfaced by Verify` subsection and defer the fix to a follow-up step.
 
 **Starting context (from Steps 1–11, all shipped):**
 
 - `docs/operating-modes.md` is the authoritative reference (~280 lines). Precedence: env `SKILLS_AGENT_MODE` > `.agents/project.json.agent_mode` > unset. Writer: `scripts/pack.sh set-mode <mode|unset>`.
 - Approval packet lifecycle: `draft → approved → (consumed | stale | superseded | uncertain)`. All transitions live in `scripts/approved-plan.sh`.
-- Six Claude + six Codex planning/execution skills carry the Step 7 "Mode-aware next-step recommendation" block. `/delegate` is hybrid-only; `/handoff --target=codex` requires `claude-only` or `hybrid`.
+- Six Claude + six Codex planning/execution skills carry the Step 7 "Next-Step Routing" block. `/delegate` is hybrid-only; `/handoff --target=codex` requires `claude-only` or `hybrid`.
 - No project currently sits in all three modes end-to-end for a single step — prior shipping has exercised pieces but not a full loop per mode.
 
 **Scope:**
@@ -270,7 +270,7 @@ Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch r
 1. Each of the three runs completes its full plan → execute → ship cycle.
 2. `claude-only` and `codex-only` runs write no packet (`.agents/approved-plan.json` absent or unchanged across the run).
 3. `hybrid` run writes exactly one packet with lifecycle trajectory `draft → approved → consumed` — verified by `scripts/approved-plan.sh status` captures.
-4. Each terminal skill's "Mode-aware next-step recommendation" block emits the correct branch for the resolved mode — verified by reading the actual recommendation text from each run.
+4. Each terminal skill's "Next-Step Routing" block emits the correct branch for the resolved mode — verified by reading the actual recommendation text from each run.
 5. Optional degraded-path spot checks: `/delegate` under `claude-only` exits non-zero with `mode-mismatch:`; `$run --execute-approved` with `ttl_seconds=1` and a >1s delay transitions the packet to `stale`.
 6. `tasks/verify-phase-11.md` exists, cites `docs/operating-modes.md` sections by anchor, and covers all three modes.
 
@@ -322,9 +322,9 @@ Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch r
 
 3. **Degraded-path audit (keep byte-identical).** Already populated in Step 8. Re-read once during Step 11 to confirm no row has drifted; keep byte-identical otherwise. Optionally re-order sections so `## Degraded-path audit` appears after `## Mode-signal resolution` and `## Approval packet` for better flow.
 
-4. **Pack emphasis + Codex `$run` routing (keep byte-identical).** Already populated in Steps 9 and 10. Keep byte-identical. Confirm the Step 10 subsection's pointer to `global/codex/run/SKILL.md` § "Pack-aware routing" is still accurate.
+4. **Pack emphasis + Codex `$run` routing (keep byte-identical).** Already populated in Steps 9 and 10. Keep byte-identical. Confirm the Step 10 subsection's pointer to `global/codex/run/SKILL.md` § "Pack-Aware Command Text" is still accurate.
 
-5. **Migration guide (new).** Short new section `## Migrating from the parity-mirror model`. Covers: (a) how to designate a project's mode (`pack.sh set-mode`), (b) which packs to enable and how role emphasis differs from parity mirrors, (c) how `/delegate` replaces the old "switch CLI manually" flow in hybrid mode, (d) how `/handoff --target=codex` covers the async case, (e) what happens if `.agents/project.json` is absent (all-three-options recommendation). Keep to under ~40 lines; this is a pointer doc, not a tutorial.
+5. **Migration guide (new).** Short new section `## Migrating from the parity-mirror model`. Covers: (a) how to designate a project's mode (`pack.sh set-mode`), (b) which packs to enable and how role emphasis differs from parity mirrors, (c) how `/delegate` replaces the old "switch CLI manually" flow in hybrid mode, (d) how `/handoff --target=codex` covers the async case, (e) what happens if `.agents/project.json` is absent (infer route from invocation and task type). Keep to under ~40 lines; this is a pointer doc, not a tutorial.
 
 6. **Status line refresh.** Replace the trailing `Status: Phase 11 Step 1 — thin doc; expansions tracked in …` line with a summary reflecting the now-authoritative state: "Phase 11 Steps 1–11 complete: authoritative operating-model reference."
 
@@ -338,7 +338,7 @@ Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch r
 **Key technical decisions / risks:**
 
 - **Don't duplicate the schema.** `specs/approved-plan.schema.json` is the authoritative field reference. The doc should cite it by path and summarize categories (required vs optional, `.md`-safe vs JSON-only), not re-enumerate every field's type and constraints — that creates drift risk. If readers need field-level detail, they open the schema.
-- **Don't restate the resolver's precedence in skill copy.** Step 7 already enforces this — skills say "resolved agent mode via scripts/agent-mode.sh" and defer precedence to the doc. Keep that invariant: precedence lives in the doc + script only.
+- **Don't restate the resolver's precedence in skill copy.** Step 7 already enforces this — skills say "Next-Step Routing" and defer precedence to the doc. Keep that invariant: precedence lives in the doc + script only.
 - **Preserve byte-identity of audit tables.** Steps 8/9/10 tables are load-bearing and cross-referenced. Reorganization may move them within the file but must not change their content. Run a diff of the table bodies before/after to confirm.
 - **Migration guide scope discipline.** Easy to expand into a how-to tutorial — don't. Keep it to orientation + pointers to the relevant skill/script entry points.
 - **Status line.** Current line mentions Steps 8/9/10 incrementally. Step 11 should replace it with a single summary line; don't keep appending.
@@ -395,7 +395,7 @@ Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch r
 
 1. **Reader location.** `scripts/pack.sh` already ships `read_enabled_packs` (lines 117–130-ish) — a library function that greps `"enabled_packs": [ ... ]` out of `.agents/project.json` and emits one pack name per line. Reuse, do not reimplement. `$run` will shell out to `scripts/pack.sh list` (or a new `list-packs` subcommand if the current `list` output is not machine-parseable) to get the enabled set.
 
-2. **Matching rule.** The pack skills that are candidates for recommendation routing today are the kanban variants: `run-kanban`, `ship-kanban`, `ship-end-kanban` (present in `business-app-kanban`, `devtool-kanban`, `game-kanban`, `poketowork-kanban`). When the mode-aware recommendation block in `global/codex/run/SKILL.md` is about to emit `$run`, `$ship`, or `$ship-end`, it first checks whether any enabled pack ships a matching `-kanban` variant. If yes, recommend the kanban variant invocation instead (e.g., `$run-kanban` under the kanban pack).
+2. **Matching rule.** The pack skills that are candidates for recommendation routing today are the kanban variants: `run-kanban`, `ship-kanban`, `ship-end-kanban` (present in `business-app-kanban`, `devtool-kanban`, `game-kanban`, `poketowork-kanban`). When the next-step routing block in `global/codex/run/SKILL.md` is about to emit `$run`, `$ship`, or `$ship-end`, it first checks whether any enabled pack ships a matching `-kanban` variant. If yes, recommend the kanban variant invocation instead (e.g., `$run-kanban` under the kanban pack).
 
 3. **No-match fallback.** When no enabled pack matches, behave exactly as today — emit the global `$run` / `$ship` / `$ship-end` recommendation. This is the common case; it must stay silent (no "I checked enabled_packs and found nothing" noise).
 
@@ -407,7 +407,7 @@ Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch r
 
 **Files to modify (full paths):**
 
-- `/Users/georgele/projects/tools/agentic-skills/global/codex/run/SKILL.md` — extend the `## Mode-aware next-step recommendation` section with a "Pack-aware routing" subsection (or inline paragraph — match existing structure). Add the 3-step resolver: (a) mode resolve via `scripts/agent-mode.sh`, (b) enabled-pack resolve via `scripts/pack.sh list`, (c) emit recommendation with pack-specific variant if matched.
+- `/Users/georgele/projects/tools/agentic-skills/global/codex/run/SKILL.md` — extend the `## Next-Step Routing` section with a "Pack-Aware Command Text" subsection (or inline paragraph — match existing structure). Add the 3-step resolver: (a) mode resolve via `scripts/agent-mode.sh`, (b) enabled-pack resolve via `scripts/pack.sh list`, (c) emit recommendation with pack-specific variant if matched.
 - `/Users/georgele/projects/tools/agentic-skills/docs/operating-modes.md` — optional: add a short subsection under `## Pack emphasis` called "Codex `$run` routing" pointing at the new SKILL.md behavior. Keep to 3–5 lines.
 - `/Users/georgele/projects/tools/agentic-skills/tasks/todo.md` — check off Step 10, roll Active Step Plan to Step 11 (docs/operating-modes.md authoritative expansion).
 - `/Users/georgele/projects/tools/agentic-skills/tasks/history.md` — append Step 10 entry.
@@ -424,7 +424,7 @@ Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch r
 **Conventions from prior work:**
 
 - `docs/operating-modes.md` is the canonical reference doc; Steps 8 and 9 both appended sibling sections under the status line. If adding a subsection under `## Pack emphasis`, do so above the closing `---` status line.
-- `global/codex/run/SKILL.md` already has the Step 7 "Mode-aware next-step recommendation" block with the distinctive phrase `resolved agent mode via scripts/agent-mode.sh`. Pack routing nests inside that block, not parallel to it.
+- `global/codex/run/SKILL.md` already has the Step 7 "Next-Step Routing" block with the distinctive phrase `Next-Step Routing`. Pack routing is command-text routing under Next-Step Routing.
 - Commit split: one `feat(codex-run)` for the SKILL.md change (+ optional `scripts/pack.sh list-packs` if needed), one `docs(operating-modes)` for the subsection (if added), one `chore(tasks)` for todo/history.
 
 **Test strategy (tests-after, per Execution Profile `serial`):**
@@ -447,7 +447,7 @@ Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch r
 **Out of scope (do not drift):**
 
 - Claude-side `/run` pack-aware routing — Step 11+ debate.
-- Pack-aware routing for skills other than `$run`/`$ship`/`$ship-end` (e.g., `$plan-phase-kanban` doesn't exist today; don't invent it).
+- Pack-Aware Command Text for skills other than `$run`/`$ship`/`$ship-end` (e.g., `$plan-phase-kanban` doesn't exist today; don't invent it).
 - Forcing the user onto a pack skill — routing is recommendation text only.
 - Reading enabled packs from any source other than `.agents/project.json` via `scripts/pack.sh`.
 - Docs expansion into the authoritative reference — Step 11.
@@ -620,19 +620,19 @@ Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch r
 
 **Execution Profile:** `serial` (inherited from Phase 11). Main agent owns the audit, the table, and the task/history updates. No subagent lanes — documentation of shared-contract behavior is where parallel lanes drift.
 
-### Active Step Plan — Step 7: Mode-aware terminal recommendations [archived for reference]
+### Active Step Plan — Step 7: Next-step routing [archived for reference]
 
-**Goal:** Wire mode-aware terminal recommendations across the planning and execution skills so that after presenting a plan or completing its workflow, each skill points the user at the appropriate next-step invocation based on the resolved agent mode. Steps 4–6 shipped the mechanisms (`$run --execute-approved`, `/handoff --target=codex`, `/delegate`); Step 7 is the discoverability layer that makes users actually reach for them instead of falling back to the pre-Phase-11 "run it manually" habit.
+**Goal:** Wire next-step routing across the planning and execution skills so that after presenting a plan or completing its workflow, each skill points the user at the appropriate next-step invocation based on mode lookup, invocation style, and task type. Steps 4–6 shipped the mechanisms (`$run --execute-approved`, `/handoff --target=codex`, `/delegate`); Step 7 is the discoverability layer that makes users actually reach for them instead of falling back to the pre-Phase-11 "run it manually" habit.
 
 **Contract reminder:** Mode resolution is frozen at `scripts/agent-mode.sh` with precedence `SKILLS_AGENT_MODE` env > `.agents/project.json.agent_mode` > unset. Valid values: `claude-only`, `codex-only`, `hybrid`, or empty. Step 7 only *reads* the resolved mode; it does not add new mode values, new env vars, or change precedence.
 
 **Scope:**
 
-1. **Add a shared "Mode-aware next-step recommendation" block** to each planning/execution skill. The block appears after the skill's primary work completes (plan written, run finished, ship done) and before the skill hands back to the user. Source the mode via `./scripts/agent-mode.sh` (no inline logic duplication). Output copy by resolved mode:
+1. **Add a shared "Next-Step Routing" block** to each planning/execution skill. The block appears after the skill's primary work completes (plan written, run finished, ship done) and before the skill hands back to the user. Source the mode via `./scripts/agent-mode.sh` (no inline logic duplication). Output copy by resolved mode:
    - `hybrid` → "**Next:** delegate with `/delegate <target>`" (target matches the skill's natural next move: `$run` after plan skills, `$ship` after `/run`, etc.).
    - `claude-only` → "**Next:** run `/run`" (or `/ship` / `/ship-end` where contextually right).
    - `codex-only` → "**Next:** run `$run` in Codex" (match Codex skill name to the context).
-   - unset → present all three options and point at `docs/operating-modes.md` for the mode-signal resolution rules.
+   - unset → infer from invocation and task type when mode lookup is unavailable.
 
 2. **Claude skills to modify** (paths relative to repo root; touch each):
    - `global/claude/spec-interview/SKILL.md` — after writing the spec, recommend the next step (typically `/roadmap` or `/plan-phase`, but the cross-CLI recommendation applies once execution begins).
@@ -675,31 +675,31 @@ Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch r
 
 **Key technical decisions / risks:**
 
-- **One shared block, not six bespoke ones.** Copy the exact same recommendation-block text into each touched skill (minor target-skill substitution is OK). Skills-level wording drift is how modes become inconsistent. If future edits need to change the copy, a grep for a distinctive phrase ("resolved agent mode via `scripts/agent-mode.sh`") should find every copy.
-- **Unset is not a failure.** A project that hasn't picked a mode yet should still see useful guidance. The unset branch lists all three options; it does not force a mode.
+- **One shared block, not six bespoke ones.** Copy the exact same routing-block text into each touched skill (minor target-skill substitution is OK). Skills-level wording drift is how modes become inconsistent. If future edits need to change the copy, a grep for a distinctive phrase ("Next-Step Routing") should find every copy.
+- **Unset is not a failure.** A project that hasn't picked a mode yet should still see useful guidance. The unset branch infers the route from invocation and task type; it does not force a mode.
 - **Codex-side inversion.** In `hybrid`, Claude orchestrates and Codex executes. A Codex skill in `hybrid` mode should therefore recommend *returning to Claude* for the next orchestration step, not delegating further. Spell this out in the Codex-side copy.
 - **Don't recurse into `/delegate` infinitely.** `/delegate` is itself one of the mechanisms. Its own SKILL.md should NOT add a "next: delegate" recommendation block — that would be tautological.
-- **Keep the block compact.** 3–5 lines max, matching the existing terse skill conventions. No ASCII tables.
+- **Keep the rendered output compact.** Emit the two-line Next work / Recommended next command result, matching the existing terse skill conventions. No ASCII tables.
 
 **Conventions from prior work:**
 
-- Skill edits follow the existing numbered-step structure. Insert the recommendation block as a new numbered step (or an explicit sub-section) at the natural end of the workflow, not as a sibling top-level section.
+- Skill edits follow the existing numbered-step structure. Insert the routing block as a new numbered step (or an explicit sub-section) at the natural end of the workflow, not as a sibling top-level section.
 - Read the resolved mode via `./scripts/agent-mode.sh` (relative to project root) — same invocation pattern that `/handoff --target=codex` and `/delegate` use.
 - No Bash 3.2 portability concerns here — the recommendation is instruction text in SKILL.md, not shell code.
 
 **Test strategy (tests-after, per Execution Profile `serial`):**
 
-1. Grep verification: every skill listed in the Files-to-modify section contains the distinctive phrase from the recommendation block. A single `grep -l` run with the phrase returns exactly the expected file list.
-2. Mode-branch coverage: each touched skill's recommendation section names all three modes plus the unset case explicitly.
-3. No-recurse verification: `global/claude/delegate/SKILL.md` and `global/claude/handoff/SKILL.md` do NOT contain the recommendation block.
-4. Codex-side inversion: Codex-skill recommendation blocks for `hybrid` reference returning to Claude (e.g. "return to Claude"), not "delegate with `/delegate`".
-5. Dry-run sanity: set `SKILLS_AGENT_MODE=hybrid`, `=claude-only`, `=codex-only`, and unset in a fixture; confirm the resolved mode shows up in the recommendation text the skill would render (manual walk-through, since skills are prose).
-6. Schema/contract unchanged: `docs/operating-modes.md` and `specs/approved-plan.schema.json` untouched; `scripts/agent-mode.sh` untouched.
+1. Grep verification: every skill listed in the Files-to-modify section contains the distinctive phrase from the routing block. A single `grep -l` run with the phrase returns exactly the expected file list.
+2. Routing coverage: each touched skill names the concrete next work and one recommended command, with missing/unset lookup falling back to invocation and task-type inference.
+3. No-recurse verification: `global/claude/delegate/SKILL.md` and `global/claude/handoff/SKILL.md` do NOT contain the routing block.
+4. Codex-side inversion: Codex-skill routing for `hybrid` references returning to Claude (e.g. "return to Claude"), not "delegate with `/delegate`".
+5. Dry-run sanity: set `SKILLS_AGENT_MODE=hybrid`, `=claude-only`, `=codex-only`, and unset in a fixture; confirm the rendered command follows the resolved mode or inference fallback (manual walk-through, since skills are prose).
+6. Schema/script unchanged: `specs/approved-plan.schema.json` and `scripts/agent-mode.sh` untouched.
 
 **Acceptance criteria:**
 
-- [ ] Every Claude skill in scope (spec-interview, roadmap, plan-phase, run, ship, ship-end) emits the mode-aware recommendation block.
-- [ ] Every present Codex equivalent (run, plus ship/ship-end if they exist) emits the inverted mode-aware recommendation block.
+- [ ] Every Claude skill in scope (spec-interview, roadmap, plan-phase, run, ship, ship-end) emits the next-step routing block.
+- [ ] Every present Codex equivalent (run, plus ship/ship-end if they exist) emits the inverted next-step routing block.
 - [ ] `/delegate` and `/handoff` do NOT emit the block (no recursion).
 - [ ] `tasks/todo.md` Step 7 checked off and Active Step Plan rolled to Step 8 (degraded-path audit).
 - [ ] Contract files (`docs/operating-modes.md`, `specs/approved-plan.schema.json`, `scripts/agent-mode.sh`) untouched.
@@ -784,7 +784,7 @@ Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch r
 
 **Out of scope (do not drift):**
 
-- Step 7 (mode-aware terminal recommendations). `/delegate` is the mechanism; the skill-level recommendations that point users to it land in Step 7.
+- Step 7 (next-step routing). `/delegate` is the mechanism; the skill-level recommendations that point users to it land in Step 7.
 - Reverse delegation (Codex → Claude). Still YAGNI per the Phase 11 roadmap.
 - New schema fields, new lifecycle states, or changes to the six freshness checks. Contract is frozen.
 - Codex-side producer. Still consumer-only on the Codex side.
@@ -982,9 +982,9 @@ Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch r
 - Shared packet schema before execution primitives prevents `$run --execute-approved` and `/delegate` from drifting on "approved work" semantics
 - Approval primitive before delegation (step 4 before 5–6) — delegation is transport + fallback on top of approval-state machinery, not a second approval model
 - Async handoff before live delegate (5 before 6) — packet output is subset of live delegation; shipping first validates format
-- Recommendations after primitives exist so they point to working skills
+- Next-step routing after primitives exist so recommendations point to working skills
 - Audit after behavior is implemented — auditing unshipped code produces aspirational rows
-- Pack work after core model stabilizes — pack differentiation assumes mode-awareness
+- Pack work after core model stabilizes — pack differentiation assumes next-step routing
 - Doc-expand last — docs follow shipped behavior, per the pattern of current `docs/codex-workflow.md`
 
 ### Execution Profile
