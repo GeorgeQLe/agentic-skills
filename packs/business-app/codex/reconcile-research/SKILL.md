@@ -231,7 +231,7 @@ Other options:
 - `$skill` — [N] conflicts in [scope] (re-run to fix)
 - ...
 
-**Recommendation logic:** Identify the skill that produced the document with the most Error/Warning-severity conflicts. That skill is the recommendation — re-running it with current upstream context will resolve the most issues. List other conflict-bearing skills as alternatives, ordered by conflict count descending. If audit mode found only deferred items and no actionable conflicts remain, recommend `$research-roadmap` — check overall project status.
+**Recommendation logic:** Identify the skill that produced the document with the most Error/Warning-severity conflicts. That skill is the recommendation — re-running it with current upstream context will resolve the most issues. List other conflict-bearing skills as alternatives, ordered by conflict count descending. If audit mode found only deferred items, or fix mode resolved every actionable conflict, recommend `$research-roadmap` — check overall project status. If no conflicts, deferred items, or follow-up work remain, explicitly state "No follow-up skill recommended" instead of inventing work.
 
 ## Task Classification
 

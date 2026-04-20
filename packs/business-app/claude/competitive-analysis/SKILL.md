@@ -171,13 +171,15 @@ Continue the conversation until all non-trivial details are nailed down. If the 
 Before writing, check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with "Pick one:" framing:
 
 **Concept-validation mode:**
-- ALWAYS first: `/icp` — Define your ideal customer profile now that the market gap is validated
-- IF gap verdict is "Pivot concept": `/brainstorm` — Generate alternative concepts that better address the gap
-- ALWAYS: `/competitive-analysis` — Re-run in standard mode after ICP is defined to get full competitive positioning
+- IF verdict is **Proceed to ICP**: recommend `/icp` — Define your ideal customer profile now that the market gap is validated
+- IF verdict is **Pivot concept**: recommend `/brainstorm` — Generate alternative concepts that better address the gap before ICP work
+- IF verdict is **Abandon**: recommend `No follow-up skill recommended` — Stop this concept because the analysis did not find a meaningful gap worth pursuing; include `/brainstorm` only if the user wants to explore a new concept
+- IF verdict is **Proceed to ICP** and `/icp` creates `research/icp.md`: include `/competitive-analysis` as a later option to re-run in standard mode for full competitive positioning
 
 **Impact-aware adjustments:**
 - IF downstream impact is **Major**: prepend `/reconcile-research — [N] conflicts found in downstream docs` as the first item
 - IF downstream impact is **Minor**: annotate relevant skill suggestions with "(stale — [brief description])"
+- If downstream impact has not been classified yet, run the downstream impact check against the proposed output before selecting the final recommendation. Do not emit a Minor/Major impact recommendation speculatively.
 
 **Standard mode:**
 - RECOMMEND the first matching item:
@@ -192,6 +194,7 @@ Any `/spec-interview` recommendation must include a concrete target from the ana
 **Impact-aware adjustments:**
 - IF downstream impact is **Major**: prepend `/reconcile-research — [N] conflicts found in downstream docs` as the first item
 - IF downstream impact is **Minor**: annotate relevant skill suggestions with "(stale — [brief description])"
+- If downstream impact has not been classified yet, run the downstream impact check against the proposed output before selecting the final recommendation. Do not emit a Minor/Major impact recommendation speculatively.
 
 ### 8. Write Output
 

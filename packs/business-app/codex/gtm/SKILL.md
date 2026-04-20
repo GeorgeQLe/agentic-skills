@@ -129,6 +129,7 @@ Other options:
 
 **Impact-aware adjustments:**
 - IF downstream impact is **Minor**: annotate relevant skill suggestions with "(stale — [brief description])"
+- If downstream impact has not been classified yet, run the downstream impact check against the proposed output before selecting the final recommendation. Do not emit a Minor/Major impact recommendation speculatively.
 
 ### 5. Write Output
 

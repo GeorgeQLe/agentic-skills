@@ -100,15 +100,17 @@ Other options:
 Only include items whose conditions are met. Do not recommend brainstorm just because competitive whitespace exists.
 Any `$spec-interview` recommendation must include a concrete target from the analysis, not a bare command. Use the top market gap, riskiest competitive assumption, or strongest positioning opportunity as the bracketed topic.
 
-**Concept-validation mode next steps:** Use the same Recommended + Other options format:
+**Concept-validation mode next steps:** Use the same Recommended + Other options format, but choose the recommendation from the validated `## Gap Assessment` verdict:
 
 ## Next Steps
 
-**Recommended:** `$icp` — the competitive gap is validated; define who to build for
+**Recommended:** [verdict-based next step] — [reason grounded in the gap assessment]
 
 Other options:
-- `$brainstorm` — pivot the concept based on market gaps found (if pivot verdict)
-- `$competitive-analysis` — re-run in standard mode after ICP is defined (always)
+- IF verdict is **Proceed to ICP**: recommend `$icp` — the competitive gap is validated; define who to build for
+- IF verdict is **Pivot concept**: recommend `$brainstorm` — the market has a gap, but this concept needs a different angle before ICP work is useful
+- IF verdict is **Abandon**: recommend `No follow-up skill recommended` — the analysis did not find a meaningful gap worth pursuing; include `$brainstorm` only if the user wants to explore a new concept
+- `$competitive-analysis` — re-run in standard mode after ICP is defined (only after a proceed verdict and after `$icp` creates `research/icp.md`)
 
 ## Task Classification
 
