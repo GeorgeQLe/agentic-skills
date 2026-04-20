@@ -1,12 +1,12 @@
 ---
-name: plan-interview
+name: spec-interview
 description: Interview to validate and complete a specification
 type: planning
 version: 1.0.0
 argument-hint: "[optional-topic-override] [--ideas]"
 ---
 
-# Plan Interview
+# Spec Interview
 
 Interview the user to validate, refine, and complete a specification from a rough idea.
 
@@ -45,9 +45,9 @@ Two files written:
 - `specs/[topic].md` — the completed specification
 - `[topic]-interview.md` — full interview log with deviation summary
 
-After writing the files, tell the user the next step: run `/roadmap` to sequence specs into phases and seed Phase 1 implementation. Do not invoke `/roadmap` automatically — the user may want to run multiple `/plan-interview` sessions first.
+After writing the files, tell the user the next step: run `/roadmap` to sequence specs into phases and seed Phase 1 implementation. Do not invoke `/roadmap` automatically — the user may want to run multiple `/spec-interview` sessions first.
 
-If the interview identifies follow-up work that is itself a named skill, recommend invoking that skill directly instead of phrasing it as another `/plan-interview` run. For example: say "run `/icp` and `/monetization`, then `/roadmap`" rather than "run `/plan-interview` for `/icp` and `/monetization`." This applies to research and planning skills such as `/icp`, `/monetization`, `/metrics`, `/positioning`, and `/competitive-analysis`.
+If the interview identifies follow-up work that is itself a named skill, recommend invoking that skill directly instead of phrasing it as another `/spec-interview` run. For example: say "run `/icp` and `/monetization`, then `/roadmap`" rather than "run `/spec-interview` for `/icp` and `/monetization`." This applies to research and planning skills such as `/icp`, `/monetization`, `/metrics`, `/positioning`, and `/competitive-analysis`.
 
 ## Mode-aware next-step recommendation
 

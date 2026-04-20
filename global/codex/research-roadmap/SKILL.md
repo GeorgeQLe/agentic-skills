@@ -103,7 +103,7 @@ Also include documentation-producing non-research skills when their outputs are 
 
 | Skill | Output |
 | --- | --- |
-| `$plan-interview` | `specs/*.md` |
+| `$spec-interview` | `specs/*.md` |
 | `$mvp-gap` | `specs/mvp-gap.md` |
 | `$scale-audit` | `specs/scale-audit.md` |
 | `$roadmap` | `tasks/roadmap.md`, `tasks/todo.md` |

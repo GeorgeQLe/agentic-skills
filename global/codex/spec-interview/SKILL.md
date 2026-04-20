@@ -1,14 +1,14 @@
 ---
-name: plan-interview
+name: spec-interview
 description: Interview to validate and complete a specification
 type: planning
 version: 1.0.0
 argument-hint: "[--ideas]"
 ---
 
-# Plan Interview
+# Spec Interview
 
-Invoke as `$plan-interview`.
+Invoke as `$spec-interview`.
 
 Use this skill when the user has a draft spec, feature description, or rough idea that needs to be validated and turned into a complete implementation specification.
 
@@ -44,9 +44,9 @@ The interview log should include:
 - The user's responses and chosen direction
 - A closing summary of significant deviations from the initial draft and why they changed
 
-After writing the files, tell the user the next step: run `$roadmap` to sequence specs into phases and seed Phase 1 implementation. Do not invoke `$roadmap` automatically — the user may want to run multiple `$plan-interview` sessions first.
+After writing the files, tell the user the next step: run `$roadmap` to sequence specs into phases and seed Phase 1 implementation. Do not invoke `$roadmap` automatically — the user may want to run multiple `$spec-interview` sessions first.
 
-If the interview identifies follow-up work that is itself a named skill, recommend invoking that skill directly instead of phrasing it as another `$plan-interview` run. For example: say "run `$icp` and `$monetization`, then `$roadmap`" rather than "run `$plan-interview` for `$icp` and `$monetization`." This applies to research and planning skills such as `$icp`, `$monetization`, `$metrics`, `$positioning`, and `$competitive-analysis`.
+If the interview identifies follow-up work that is itself a named skill, recommend invoking that skill directly instead of phrasing it as another `$spec-interview` run. For example: say "run `$icp` and `$monetization`, then `$roadmap`" rather than "run `$spec-interview` for `$icp` and `$monetization`." This applies to research and planning skills such as `$icp`, `$monetization`, `$metrics`, `$positioning`, and `$competitive-analysis`.
 
 ## Mode-aware next-step recommendation
 
