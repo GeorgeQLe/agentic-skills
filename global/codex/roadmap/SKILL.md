@@ -273,16 +273,24 @@ If the pipeline is fully healthy:
 Next: `$run` to continue execution.
 ```
 
-## Mode-aware next-step recommendation
+## Next-Step Routing
 
-Before handing back to the user, resolve the effective agent mode via `./scripts/agent-mode.sh` and emit exactly one recommendation line matching the resolved agent mode via scripts/agent-mode.sh:
+Before handing back, identify the next concrete work item from project state, then recommend the executor and invocation.
 
-- `hybrid` → **Next:** return to Claude for the next orchestration step (run `/plan-phase <N>` or the first unchecked priority-queue item there) — Claude orchestrates in hybrid; do not delegate further from Codex.
-- `codex-only` → **Next:** run `$plan-phase <N>` or the first unchecked priority-queue item — stay in Codex.
-- `claude-only` → **Next:** switch to Claude and run `/plan-phase <N>` or the first unchecked priority-queue item — Codex is not the planner in this mode.
-- unset → present all three options and point the user at `docs/operating-modes.md` for mode-signal resolution rules.
+Output exactly two lines beyond the normal report:
 
-Keep it to one line beyond the normal report; do not restate mode-signal precedence in skill copy.
+- **Next work:** <specific planning, priority-queue, research, or execution task>
+- **Recommended next command:** <one command or route>
+
+Rules:
+
+- Make the next work item primary. Derive it from the roadmap state, the first unchecked priority-queue item, the next unplanned phase, advisory queues, or the absence of remaining work. Do not use agent mode itself as the next work item.
+- Use `./scripts/agent-mode.sh` only to choose command text. If it is missing, unset, or non-zero, infer routing from the current invocation and task type instead of asking the user to select a mode by default.
+- Inference defaults:
+  - Codex skill invocation (`$roadmap`, `$plan-phase`, `$run`, `$research-roadmap`) → recommend the matching `$...` command.
+  - Claude slash invocation (`/roadmap`, `/plan-phase`, `/run`, `/delegate`) or orchestration-heavy work → recommend the matching `/...` route.
+  - Manual or browser-gathered evidence → recommend `$guide` or a Claude-guided manual step.
+- Only present multiple commands when the ambiguity materially changes execution safety or there are equally valid next work items. Otherwise choose the best route and mention degraded mode lookup inline.
 
 ## Constraints
 
