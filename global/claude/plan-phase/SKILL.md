@@ -309,16 +309,25 @@ Recurring tasks MUST NOT appear in `tasks/todo.md` unless the current run is exp
      - Escalation conditions: [when it becomes executable or blocking work]
    ```
 
-## Mode-aware next-step recommendation
+## Next-Step Routing
 
-Before handing back to the user, resolve the effective agent mode via `./scripts/agent-mode.sh` and emit exactly one recommendation line matching the resolved agent mode via scripts/agent-mode.sh:
+Before handing back, identify the next concrete work item from project state, then recommend the executor and invocation.
 
-- `hybrid` → **Next:** delegate with `/delegate $run` — Claude orchestrates, Codex executes.
-- `claude-only` → **Next:** run `/run` — Codex is unavailable; stay in Claude.
-- `codex-only` → **Next:** run `$run` in Codex — Claude is not the executor in this mode.
-- unset → present all three options and point the user at `docs/operating-modes.md` for mode-signal resolution rules.
+Output exactly two lines beyond the normal report:
 
-Keep it to one line beyond the normal report; do not restate mode-signal precedence in skill copy.
+- **Next work:** <specific first step, manual blocker, or verification gap for the planned phase>
+- **Recommended next command:** <one command or route>
+
+Rules:
+
+- Make the next work item primary. Derive it from the first executable step in `tasks/todo.md`, any matching blocker in `tasks/manual-todo.md`, or the phase's verification/setup gap. Do not use agent mode itself as the next work item.
+- Use `./scripts/agent-mode.sh` only to choose command text. If it is missing, unset, or non-zero, infer routing from the current invocation and task type instead of asking the user to select a mode by default.
+- Inference defaults:
+  - Hybrid execution handoff → recommend `/delegate $run`.
+  - Claude-only or orchestration-heavy work → recommend `/run`.
+  - Codex-only execution → recommend `$run`.
+  - Manual, browser, auth, DNS, console, or production smoke-test work → recommend `/guide` or a Claude-guided manual step rather than `/run`.
+- Only present multiple commands when the ambiguity materially changes execution safety or there are equally valid next work items. Otherwise choose the best route and mention degraded mode lookup inline.
 
 ## Constraints
 

@@ -48,16 +48,24 @@ After writing the files, tell the user the next step: run `$roadmap` to sequence
 
 If the interview identifies follow-up work that is itself a named skill, recommend invoking that skill directly instead of phrasing it as another `$spec-interview` run. For example: say "run `$icp` and `$monetization`, then `$roadmap`" rather than "run `$spec-interview` for `$icp` and `$monetization`." This applies to research and planning skills such as `$icp`, `$monetization`, `$metrics`, `$positioning`, and `$competitive-analysis`.
 
-## Mode-aware next-step recommendation
+## Next-Step Routing
 
-Before handing back to the user, resolve the effective agent mode via `./scripts/agent-mode.sh` and emit exactly one recommendation line matching the resolved agent mode via scripts/agent-mode.sh:
+Before handing back, identify the next concrete work item from project state, then recommend the executor and invocation.
 
-- `hybrid` → **Next:** return to Claude for the next orchestration step (run `/roadmap` there) — Claude orchestrates in hybrid; do not delegate further from Codex.
-- `codex-only` → **Next:** run `$roadmap` — stay in Codex.
-- `claude-only` → **Next:** switch to Claude and run `/roadmap` — Codex is not the planner in this mode.
-- unset → present all three options and point the user at `docs/operating-modes.md` for mode-signal resolution rules.
+Output exactly two lines beyond the normal report:
 
-Keep it to one line beyond the normal report; do not restate mode-signal precedence in skill copy.
+- **Next work:** <specific planning, research, or execution task>
+- **Recommended next command:** <one command or route>
+
+Rules:
+
+- Make the next work item primary. For the normal completed-interview path, the next work is sequencing the spec into phases. If follow-up research skills were identified, name those first.
+- Use `./scripts/agent-mode.sh` only to choose command text. If it is missing, unset, or non-zero, infer routing from the current invocation and task type instead of asking the user to select a mode by default.
+- Inference defaults:
+  - Codex skill invocation (`$spec-interview`, `$roadmap`) → recommend the matching `$...` command.
+  - Claude slash invocation (`/spec-interview`, `/roadmap`, `/delegate`) or orchestration-heavy work → recommend the matching `/...` route.
+  - Manual or evidence-gathering work that needs browser access → recommend `$guide` or a Claude-guided manual step.
+- Only present multiple commands when the ambiguity materially changes execution safety or there are equally valid next work items. Otherwise choose the best route and mention degraded mode lookup inline.
 
 ## Constraints
 
