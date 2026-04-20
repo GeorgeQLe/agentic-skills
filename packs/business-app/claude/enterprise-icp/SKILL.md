@@ -147,7 +147,7 @@ Continue until the user confirms the findings are complete and accurate. Only th
 Before writing, check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with "Pick one:" framing:
 
 - IF codebase exists: `/scale-audit` — Evaluate enterprise readiness against stakeholder map and deal-killers
-- IF no enterprise feature specs in `specs/`: `/plan-interview enterprise [feature]` — Spec the top deal-killer that needs a spec
+- IF no enterprise feature specs in `specs/`: `/spec-interview enterprise [feature]` — Spec the top deal-killer that needs a spec
 - IF `research/journey-map.md` exists but doesn't cover enterprise: `/journey-map enterprise` — Map enterprise stakeholder journeys
 - IF no `research/journey-map.md`: `/journey-map` — Map user and customer journeys first
 - IF `research/icp.md` exists but no `research/competitive-analysis.md`: `/competitive-analysis` — Research how competitors serve enterprise
@@ -189,9 +189,9 @@ When this skill produces follow-up work, file it by execution semantics:
 
 ## Constraints
 
-- **Stay in problem space.** Do not prescribe architecture, features, or solutions — that's for `/plan-interview` and `/scale-audit`.
+- **Stay in problem space.** Do not prescribe architecture, features, or solutions — that's for `/spec-interview` and `/scale-audit`.
 - **Do not assume enterprise ICP is startup ICP scaled up.** Explicitly challenge: "What changes when you sell to a 500-person company vs. a 10-person team?"
-- **Interview style matches `/plan-interview`** — 1–3 focused questions per turn, options with pros/cons, recommendations with reasoning.
+- **Interview style matches `/spec-interview`** — 1–3 focused questions per turn, options with pros/cons, recommendations with reasoning.
 - **Continue until all 10 areas are covered.** Confirm with the user before concluding.
 - **Do not overwrite existing `research/enterprise-icp.md`** (or `research/{app}/enterprise-icp.md`) without asking the user first.
 - **Present before writing.** Never write output files until findings have been presented to the user and validated. The user must see and approve the analysis before anything is written to disk.

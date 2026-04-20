@@ -180,11 +180,14 @@ Before writing, check which files exist to populate the `## Next Steps` section 
 - IF downstream impact is **Minor**: annotate relevant skill suggestions with "(stale — [brief description])"
 
 **Standard mode:**
-- IF no `specs/` directory or it's empty: `/plan-interview` — Spec features that exploit the market gaps above
-- IF `specs/` exist but no `research/journey-map.md`: `/journey-map` — Map how the ICP experiences the product vs. competitors
-- ALWAYS: `/brainstorm` — Generate ideas from the white space and competitive weaknesses
-- IF no `research/gtm.md`: `/gtm` — Build a GTM plan using the channel and positioning insights
-- IF codebase exists and no `specs/mvp-gap.md`: `/mvp-gap` — Evaluate codebase against ICP and competitive landscape
+- RECOMMEND the first matching item:
+  1. IF no `specs/` directory or it's empty: `/spec-interview [top market gap or positioning opportunity]` — Spec features that exploit the most important market gap above
+  2. IF `specs/` exist but no `research/journey-map.md`: `/journey-map` — Map how the ICP experiences the product vs. competitors
+  3. IF no `research/gtm.md`: `/gtm` — Build a GTM plan using the channel and positioning insights
+  4. IF codebase exists and no `specs/mvp-gap.md`: `/mvp-gap` — Evaluate codebase against ICP and competitive landscape
+- Include `/brainstorm` only as an "Other option" when the analysis found multiple plausible market gaps and the product direction is still unclear. Do not recommend brainstorm just because competitive whitespace exists.
+
+Any `/spec-interview` recommendation must include a concrete target from the analysis, not a bare command. Use the top market gap, riskiest competitive assumption, or strongest positioning opportunity as the bracketed topic.
 
 **Impact-aware adjustments:**
 - IF downstream impact is **Major**: prepend `/reconcile-research — [N] conflicts found in downstream docs` as the first item
@@ -333,7 +336,7 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Use web search extensively.** This skill's value comes from real, current market data — not assumptions or hallucinated competitor names. Every competitor cited must come from a web search result.
 - **Cite sources.** When stating facts about competitors (funding, features, pricing), note where the information came from.
 - **Be honest about uncertainty.** If information couldn't be verified, say so. Don't fabricate metrics.
-- **Stay in analysis mode.** Do not propose product changes, architecture, or features — that's for `/plan-interview` and `/mvp-gap`.
+- **Stay in analysis mode.** Do not propose product changes, architecture, or features — that's for `/spec-interview` and `/mvp-gap`.
 - **Focus on actionable insights.** Raw competitor lists are easy; the value is in the synthesis — gaps, patterns, positioning angles.
 - **Do not overwrite existing `research/competitive-analysis.md`** (or `research/{app}/competitive-analysis.md`) without asking the user first.
 - **Keep research current.** Prefer recent sources (last 12 months). Flag any information that may be outdated.

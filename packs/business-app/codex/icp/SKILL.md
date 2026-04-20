@@ -50,7 +50,7 @@ The output file must end with a `## Next Steps` section based on which files exi
 **Recommended:** `$competitive-analysis` — maps the landscape your ICP operates in so positioning and GTM have competitive grounding
 
 Other options:
-- `$plan-interview` — validate the riskiest ICP assumption with a targeted interview (if `specs/` exist)
+- `$spec-interview` — validate the riskiest ICP assumption with a targeted interview (if `specs/` exist)
 - `$journey-map` — map the current-state journey to find intervention points (if no `research/journey-map.md`)
 - `$mvp-gap` — check if the codebase delivers on the ICP's top pain point (if codebase exists)
 - `$brainstorm` — generate solution ideas grounded in the ICP research (if `research/competitive-analysis.md` exists)
@@ -71,7 +71,7 @@ When this skill produces follow-up work, file it by execution semantics:
 
 - Stay in problem space — do not propose features, architecture, or solutions.
 - Evidence-based — every claim must trace to research logged in `research/icp-search-log.md`.
-- Primary ICP must use canonical 9 `##` headers for downstream compatibility (`$plan-interview`, `$mvp-gap`, `$roadmap`, `$journey-map`). Section 10 (`## Acquisition & Conversion Model`) is supplementary and does not affect downstream parsing.
+- Primary ICP must use canonical 9 `##` headers for downstream compatibility (`$spec-interview`, `$mvp-gap`, `$roadmap`, `$journey-map`). Section 10 (`## Acquisition & Conversion Model`) is supplementary and does not affect downstream parsing.
 - Section 10 uses conditional sub-sections — include only those relevant to the classified business model. Do not include B2B-specific sub-sections (DMU, Champion & Advocate Dynamics, Budget & Procurement) for pure B2C products, but do include Funnel Shape, Motion Type & Cycle Length, and Expansion & Retention Dynamics for all models.
 - Minimum 8 WebSearch queries before identifying candidates, 2–3 per candidate after.
 - Do not overwrite existing `research/icp.md` without asking.

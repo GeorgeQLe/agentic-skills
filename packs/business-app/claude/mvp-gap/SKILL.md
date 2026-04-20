@@ -79,9 +79,9 @@ If `research/journey-map.md` (or `research/{app}/journey-map.md`) exists, map ea
 
 #### Spec Validation
 For each gap identified above, check if a spec already exists in `specs/` (or `specs/{app}/`):
-- If a spec covers the gap **fully**, mark the gap as "Spec exists — ready to build" and link the spec file instead of suggesting `/plan-interview`.
-- If a spec covers the gap **partially**, mark it as "Spec exists — needs expansion" and suggest `/plan-interview [topic]` to fill the remaining holes.
-- If no spec exists, suggest `/plan-interview [topic]` as before.
+- If a spec covers the gap **fully**, mark the gap as "Spec exists — ready to build" and link the spec file instead of suggesting `/spec-interview`.
+- If a spec covers the gap **partially**, mark it as "Spec exists — needs expansion" and suggest `/spec-interview [topic]` to fill the remaining holes.
+- If no spec exists, suggest `/spec-interview [topic]` as before.
 
 #### Metrics Tie-In
 If `research/metrics.md` (or `research/{app}/metrics.md`) exists, identify for each gap:
@@ -108,7 +108,7 @@ If `research/gtm.md` (or `research/{app}/gtm.md`) exists:
 Before writing, check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with "Pick one:" framing:
 
 - ALWAYS: `/roadmap` — Turn the build sequence above into a phased roadmap
-- IF first-sale blockers need specs (and no spec exists per step 3 Spec Validation): `/plan-interview [top gap]` — Spec the most critical first-sale blocker
+- IF first-sale blockers need specs (and no spec exists per step 3 Spec Validation): `/spec-interview [top gap]` — Spec the most critical first-sale blocker
 - IF no `research/journey-map.md` and `specs/` exist: `/journey-map` — Map how the ICP experiences the product
 - IF no `research/competitive-analysis.md`: `/competitive-analysis` — Validate gap priorities against competitors
 - IF creative solutions could reduce effort for high-effort gaps: `/brainstorm` — Generate alternatives for high-effort gaps
@@ -160,21 +160,21 @@ Display to the user after showing the written file confirmation.
 - **[Gap title]** — [What's missing and why it matters to the ICP]. Effort: S/M/L
   _Journey stage:_ [stage from journey-map, or "N/A" if no journey-map exists]
   _Closure metric:_ [metric from metrics.md, or "⚠ No metric defined" if none]
-  _Spec:_ [link to spec if exists + status, or `/plan-interview [topic]` if no spec]
+  _Spec:_ [link to spec if exists + status, or `/spec-interview [topic]` if no spec]
 - ...
 
 ## Blocks Retention
 - **[Gap title]** — [What's missing and why it matters]. Effort: S/M/L
   _Journey stage:_ [stage]
   _Closure metric:_ [metric or "⚠ No metric defined"]
-  _Spec:_ [spec link/status or `/plan-interview [topic]`]
+  _Spec:_ [spec link/status or `/spec-interview [topic]`]
 - ...
 
 ## Nice to Have
 - **[Gap title]** — [What's missing and why it matters]. Effort: S/M/L
   _Journey stage:_ [stage]
   _Closure metric:_ [metric or "⚠ No metric defined"]
-  _Spec:_ [spec link/status or `/plan-interview [topic]`]
+  _Spec:_ [spec link/status or `/spec-interview [topic]`]
 - ...
 
 ## Recommended Build Sequence
@@ -207,8 +207,8 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Do not make code changes.** Analysis only.
 - **Every gap must cite evidence** — a missing route, missing component, absent dependency, no billing integration, etc. No vague claims.
 - **Prioritise by market impact**, not technical interest. Things that block the first sale come before things that block the 10th.
-- **If no code exists yet**, report that clearly and suggest running `/plan-interview` to design the solution first. Do not fabricate gaps for a nonexistent codebase.
-- **Include `/plan-interview` prompts** for each gap so the user can immediately start speccing a fix.
+- **If no code exists yet**, report that clearly and suggest running `/spec-interview` to design the solution first. Do not fabricate gaps for a nonexistent codebase.
+- **Include `/spec-interview` prompts** for each gap so the user can immediately start speccing a fix.
 - **Do not duplicate work already tracked** in `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, or `tasks/recurring-todo.md` — note it as "in progress" or "advisory" instead.
 
 ## Archive-First Replacement Policy

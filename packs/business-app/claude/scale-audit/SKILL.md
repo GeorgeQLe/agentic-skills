@@ -99,7 +99,7 @@ Estimate effort for each: S / M / L / XL.
 Before writing, check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with "Pick one:" framing:
 
 - ALWAYS: `/roadmap` — Turn the enterprise build sequence into a phased roadmap
-- IF hard-blockers need specs: `/plan-interview [top blocker]` — Spec the top enterprise hard-blocker
+- IF hard-blockers need specs: `/spec-interview [top blocker]` — Spec the top enterprise hard-blocker
 - IF no `research/journey-map.md` for enterprise: `/journey-map enterprise` — Map enterprise stakeholder journeys
 - IF startup gaps escalated and `specs/mvp-gap.md` stale: `/mvp-gap` — Re-evaluate startup readiness first
 - IF no `research/metrics.md`: `/metrics` — Define metrics covering enterprise SLAs
@@ -120,17 +120,17 @@ Before writing, check which files exist to populate the `## Next Steps` section 
 
 ## Hard Blockers
 - **[Gap title]** — [What's missing, which stakeholder it blocks, and why]. Effort: S/M/L/XL
-  _Start with:_ `/plan-interview [topic]`
+  _Start with:_ `/spec-interview [topic]`
 - ...
 
 ## Soft Blockers
 - **[Gap title]** — [What's missing and impact]. Effort: S/M/L/XL
-  _Start with:_ `/plan-interview [topic]`
+  _Start with:_ `/spec-interview [topic]`
 - ...
 
 ## Differentiators
 - **[Gap title]** — [What's missing and competitive advantage]. Effort: S/M/L/XL
-  _Start with:_ `/plan-interview [topic]`
+  _Start with:_ `/spec-interview [topic]`
 - ...
 
 ## Stakeholder Coverage Matrix
@@ -178,7 +178,7 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Do not make code changes.** Analysis only.
 - **Every gap must cite evidence** — missing middleware, absent SCIM endpoint, no audit log table, etc.
 - **Distinguish "first enterprise deal" from "100th enterprise deal."** Early enterprise sales can tolerate workarounds; at scale they can't. Be clear about which gaps matter when.
-- **Include `/plan-interview` prompts** for each gap for immediate action.
+- **Include `/spec-interview` prompts** for each gap for immediate action.
 - **Do not duplicate work already tracked** in `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, or `tasks/recurring-todo.md`.
 - **If the codebase is minimal**, be honest about it — don't fabricate detailed infrastructure gaps for a prototype.
 

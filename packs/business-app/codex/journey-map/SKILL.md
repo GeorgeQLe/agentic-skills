@@ -15,7 +15,7 @@ Research-first journey mapping for how people flow through the product (user jou
 ## Prerequisites
 
 - `research/icp.md` (or `research/{app}/icp.md` in monorepo mode) must exist — run `$icp` first.
-- At least one spec in `specs/*.md` (or `specs/{app}/*.md`) must exist — run `$plan-interview` first.
+- At least one spec in `specs/*.md` (or `specs/{app}/*.md`) must exist — run `$spec-interview` first.
 
 ## Workflow
 
@@ -37,10 +37,10 @@ Research-first journey mapping for how people flow through the product (user jou
 
 ## Deliverables
 
-- `research/journey-map.md` (or `research/{app}/journey-map.md`) — User journeys (use case overview + task flows per profile), customer journey (full funnel), critical moments, journey gaps with `$plan-interview` prompts
+- `research/journey-map.md` (or `research/{app}/journey-map.md`) — User journeys (use case overview + task flows per profile), customer journey (full funnel), critical moments, journey gaps with `$spec-interview` prompts
 - `research/journey-map-interview.md` (or `research/{app}/journey-map-interview.md`) — Raw interview log
 
-The output file must end with a `## Next Steps` section (3–5 contextual items, "Pick one:" framing) based on which files exist: always suggest `$metrics`; conditionally suggest `$roadmap`, `$gtm`, `$plan-interview [top gap]`, `$run` based on whether `specs/`, `tasks/roadmap.md`, `research/gtm.md` exist and whether journey gaps were identified.
+The output file must end with a `## Next Steps` section (3–5 contextual items, "Pick one:" framing) based on which files exist: always suggest `$metrics`; conditionally suggest `$roadmap`, `$gtm`, `$spec-interview [top gap]`, `$run` based on whether `specs/`, `tasks/roadmap.md`, `research/gtm.md` exist and whether journey gaps were identified.
 
 ## Task Classification
 
@@ -57,7 +57,7 @@ When this skill produces follow-up work, file it by execution semantics:
 - Requires both ICP and specs — cannot work without knowing the user AND the solution.
 - Stay concrete — specific actions, screens, decisions, not abstract concepts.
 - Ground in ICP — every journey step should connect to a real user need.
-- Cross-reference specs — flag functionality gaps with `$plan-interview` prompts.
+- Cross-reference specs — flag functionality gaps with `$spec-interview` prompts.
 - Do not prescribe UI or architecture.
 - Present before writing — never write until validated.
 - `## Next Steps` must be the final section in the output file, with 3–5 contextual items and "Pick one:" framing.

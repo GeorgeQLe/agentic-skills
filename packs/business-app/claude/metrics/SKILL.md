@@ -99,7 +99,7 @@ Continue until the user confirms. Only then proceed to writing.
 
 Before writing, check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with "Pick one:" framing:
 
-- IF instrumentation gaps and no specs for them: `/plan-interview [topic]` — Spec instrumentation for the top metric gap
+- IF instrumentation gaps and no specs for them: `/spec-interview [topic]` — Spec instrumentation for the top metric gap
 - IF no `tasks/roadmap.md`: `/roadmap` — Plan the build with instrumentation phases
 - IF no `research/gtm.md`: `/gtm` — Build a GTM plan — metrics define what launch success looks like
 - IF `tasks/roadmap.md` exists: `/run` — Start building and instrumenting
@@ -219,7 +219,7 @@ Display to the user after showing the written file confirmation. This should be 
 |--------|---------------|--------|----------|
 | [metric] | [what needs to be built] | S/M/L | [High/Med/Low] |
 
-_Start with:_ `/plan-interview [instrumentation topic]` for high-priority gaps.
+_Start with:_ `/spec-interview [instrumentation topic]` for high-priority gaps.
 
 ## Metric Dependencies
 [How metrics relate to each other — e.g., activation drives retention, retention drives LTV. Identify which metrics are leading vs. lagging indicators.]

@@ -107,7 +107,7 @@ Other options:
 - IF staleness alert for ICP: `$icp` — Re-run discovery — feedback has invalidated key assumptions
 - IF staleness alert for journey map: `$journey-map` — Re-map journeys — real behavior differs from mapped experience
 - IF 3+ New findings: `$brainstorm` — Generate ideas for newly revealed customer needs
-- IF New findings relate to a gap: `$plan-interview [topic]` — Spec a solution for the most impactful new finding
+- IF New findings relate to a gap: `$spec-interview [topic]` — Spec a solution for the most impactful new finding
 - IF no staleness alerts: `$research-roadmap` — Check overall project status
 - IF feedback came from experiment results: `$assumption-tracker` — Update assumption validation status with experiment findings
 - IF 3+ research docs exist and no `research/assumption-tracker.md`: `$assumption-tracker` — Build the assumptions register to track what feedback is validating

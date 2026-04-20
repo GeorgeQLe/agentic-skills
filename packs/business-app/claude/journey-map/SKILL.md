@@ -13,7 +13,7 @@ Interview the user to map how people will flow through the product (user journey
 ## Prerequisites
 
 - `research/icp.md` (or `research/{app}/icp.md` in monorepo mode) must exist. If not, tell the user to run `/icp` first and stop.
-- At least one spec file must exist in `specs/*.md` (or `specs/{app}/*.md`). If not, tell the user to run `/plan-interview` first and stop.
+- At least one spec file must exist in `specs/*.md` (or `specs/{app}/*.md`). If not, tell the user to run `/spec-interview` first and stop.
 
 ## Process
 
@@ -128,7 +128,7 @@ Before writing, check which files exist to populate the `## Next Steps` section 
 - ALWAYS: `/metrics` — Define success metrics tied to the journey stages and critical moments
 - IF `specs/` exist and no `tasks/roadmap.md`: `/roadmap` — Plan the build with journey coverage in mind
 - IF no `research/gtm.md`: `/gtm` — Build a GTM plan grounded in the customer journey
-- IF journey gaps identified above: `/plan-interview [top gap]` — Spec the most critical journey gap
+- IF journey gaps identified above: `/spec-interview [top gap]` — Spec the most critical journey gap
 - IF `tasks/roadmap.md` exists: `/run` — Continue building with journey context
 
 **Impact-aware adjustments:**
@@ -230,7 +230,7 @@ Display to the user after showing the written file confirmation. This should be 
 [The 3-5 make-or-break moments in the combined journey — the points where you win or lose the customer. Each with: what it is, why it matters, and what success looks like.]
 
 ## Journey Gaps
-[Stages where the product, specs, or business model have no clear answer yet. Each gap should include a _Start with:_ `/plan-interview [topic]` prompt.]
+[Stages where the product, specs, or business model have no clear answer yet. Each gap should include a _Start with:_ `/spec-interview [topic]` prompt.]
 
 <!-- Include this section only when downstream impact is Minor or Major. Omit entirely for None. -->
 ## Downstream Impact
@@ -273,8 +273,8 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Requires both ICP and specs.** This skill maps the WITH-product experience — it cannot work without knowing both who the user is and what the product does.
 - **Stay concrete.** Every journey step should describe a specific action, screen, or decision — not abstract concepts like "user engages with product."
 - **Ground in the ICP.** The user profiles, trigger events, and pain map from the ICP should directly inform journey mapping. If a journey step doesn't connect to a real user need, flag it.
-- **Cross-reference specs.** If a journey step requires functionality not in any spec, flag it as a journey gap with a `/plan-interview` prompt.
-- **Do not prescribe UI or architecture.** Describe what the user experiences, not how to implement it. That's `/plan-interview`'s job.
+- **Cross-reference specs.** If a journey step requires functionality not in any spec, flag it as a journey gap with a `/spec-interview` prompt.
+- **Do not prescribe UI or architecture.** Describe what the user experiences, not how to implement it. That's `/spec-interview`'s job.
 - **Present before writing.** Never write output files until findings have been presented to the user and validated. The user must see and approve the journeys before anything is written to disk.
 - **Do not overwrite existing `research/journey-map.md`** (or `research/{app}/journey-map.md`) without asking the user first.
 

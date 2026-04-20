@@ -77,19 +77,28 @@ Only after user validates, write the output files.
 - `research/competitive-analysis.md` (or `research/{app}/competitive-analysis.md`) — Full competitive landscape: summary, competitor profiles, GTM analysis, market gaps, positioning recommendations, next steps. In concept-validation mode, includes `## Gap Assessment` section (Market State, Incumbent Quality, Gap Quality, Verdict).
 - `research/competitive-analysis-search-log.md` (or `research/{app}/competitive-analysis-search-log.md`) — Raw research log: every query, findings, source attribution, reasoning
 
-**Standard mode next steps:** `## Next Steps` section with a **Recommended** item and **Other options** (2–4 alternatives). Use this format in the output:
+**Standard mode next steps:** `## Next Steps` section with a **Recommended** item and **Other options** (2–4 alternatives). Choose the recommended item by the first matching condition:
+
+1. IF no `specs/` directory or it's empty: `$spec-interview [top market gap or positioning opportunity]` — spec the strongest opportunity from the analysis
+2. IF `specs/` exist but no `research/journey-map.md`: `$journey-map` — map the customer journey to find where competitors fall short
+3. IF no `research/gtm.md`: `$gtm` — build go-to-market plan leveraging competitive gaps
+4. IF codebase exists: `$mvp-gap` — check if the codebase exploits the gaps found
+
+Use this format in the output:
 
 ## Next Steps
 
-**Recommended:** `$brainstorm` — generate solution ideas while competitive gaps and market positioning are fresh
+**Recommended:** `[first matching command above]` — [reason grounded in this analysis]
 
 Other options:
-- `$plan-interview` — validate the riskiest competitive assumption with a targeted interview
-- `$journey-map` — map the customer journey to find where competitors fall short (if no `research/journey-map.md`)
-- `$gtm` — build go-to-market plan leveraging competitive gaps (if no `research/gtm.md`)
-- `$mvp-gap` — check if the codebase exploits the gaps found (if codebase exists)
+- `$spec-interview [riskiest competitive assumption or top market gap]` — validate the most important unresolved competitive assumption with a targeted interview (if not recommended)
+- `$journey-map` — map the customer journey to find where competitors fall short (if no `research/journey-map.md` and not recommended)
+- `$gtm` — build go-to-market plan leveraging competitive gaps (if no `research/gtm.md` and not recommended)
+- `$mvp-gap` — check if the codebase exploits the gaps found (if codebase exists and not recommended)
+- `$brainstorm` — generate alternative solution ideas (only if the analysis found multiple plausible market gaps and product direction is still unclear)
 
-Only include items whose conditions are met. The recommendation (`$brainstorm`) is always applicable.
+Only include items whose conditions are met. Do not recommend brainstorm just because competitive whitespace exists.
+Any `$spec-interview` recommendation must include a concrete target from the analysis, not a bare command. Use the top market gap, riskiest competitive assumption, or strongest positioning opportunity as the bracketed topic.
 
 **Concept-validation mode next steps:** Use the same Recommended + Other options format:
 
