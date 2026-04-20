@@ -34,7 +34,7 @@ Identify the next incomplete unit of work from the phased plan, build an executi
    - Run `scripts/approved-plan.sh check`.
    - On `ok`: run `scripts/approved-plan.sh consume`, log `Approved packet consumed: Phase X / Step Y (approved_at=…).`, then skip steps 7 and 8 and jump to step 9 (execute).
    - On non-zero exit: relay the single-line reason to the user, run `scripts/approved-plan.sh mark-stale`, then fall through to steps 7–8 (standard plan + approval gate). Never auto-retry.
-   - Requires `jq` for the write path. If the check prints a `mode-mismatch` reason (resolved mode is `claude-only`), treat it as a user error and stop.
+   - Requires `jq` for the write path. If `jq` is absent, `scripts/approved-plan.sh consume` dies with `ERROR: jq required for write operations. Install with: brew install jq (macOS) or apt install jq (Debian/Ubuntu).` (see `require_jq_write` at `scripts/approved-plan.sh:21`); `check` may surface the same message via its write-path preflight. Relay the message verbatim and stop — no `jq`-free fallback exists. If the check prints a `mode-mismatch` reason (resolved mode is `claude-only`), treat it as a user error and stop.
 7. Present the execution plan to the user:
    - What the step requires
    - Which files will be created or modified
