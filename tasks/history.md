@@ -1,5 +1,11 @@
 # Session History
 
+## 2026-04-20 - Fix scale-audit next-step drift
+
+- Aligned Claude and Codex `packs/business-app/*/scale-audit` guidance with `docs/skill-next-step-contracts.md`.
+- Replaced unconditional roadmap-first next steps with state-based recommendations: `spec-interview [top blocker]` when enterprise hard blockers lack full specs, missing context skills when required inputs are absent, and `roadmap` only when blockers are already specced or tracked.
+- Added `specs/drift-report.md` for the fix-mode audit trail and marked the `$spec-drift fix packs/business-app/*/scale-audit` priority item complete in `tasks/todo.md`.
+
 ## 2026-04-20 - Reconcile Phase 11 task docs
 
 - Resolved the Phase 11 task-doc contradiction where `tasks/todo.md` still contained unchecked archived acceptance criteria even though `tasks/roadmap.md`, `tasks/history.md`, and `tasks/verify-phase-11.md` all recorded Phase 11 as complete.

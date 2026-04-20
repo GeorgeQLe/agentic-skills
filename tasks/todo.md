@@ -1005,7 +1005,7 @@ Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch r
 ## Priority Documentation Todo
 
 - [x] `$reconcile-dev-docs fix tasks` - resolve the Phase 11 task-doc contradiction: `tasks/todo.md` still contains unchecked archived Phase 11 acceptance criteria even though `tasks/roadmap.md` and `tasks/history.md` report Phase 11 complete.
-- [ ] `$spec-drift fix packs/business-app/*/scale-audit` - align Claude and Codex `scale-audit` next-step guidance with `docs/skill-next-step-contracts.md`: recommend `spec-interview [top blocker]` when hard blockers lack specs, and make `roadmap` primary only when blockers are already specced.
+- [x] `$spec-drift fix packs/business-app/*/scale-audit` - align Claude and Codex `scale-audit` next-step guidance with `docs/skill-next-step-contracts.md`: recommend `spec-interview [top blocker]` when hard blockers lack specs, and make `roadmap` primary only when blockers are already specced.
 - [ ] `$spec-drift fix docs/operating-modes.md global/*/handoff` - clarify approval-packet handoff support: Claude `/handoff --target=codex` produces packets, but Codex `$handoff` only writes `tasks/handoff.md`; update wording that currently implies `codex-only` cross-session handoff uses the shared packet.
 - [ ] `$spec-drift fix approval-packet references` - update stale section anchors from `docs/operating-modes.md` § "Approval / Delegation Packet" to the current `## Approval packet` heading in `tasks/approved-plan.md`, `scripts/approved-plan.sh`, and `global/codex/run/SKILL.md`.
 - [ ] `$spec-drift fix code-quality docs` - reconcile `README.md` and `specs/code-quality-skill-pack.md` with the implemented `code-quality` pack, which now includes both `extract-shared-types` and `quality-sweep`.
