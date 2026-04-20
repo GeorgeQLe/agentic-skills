@@ -30,12 +30,12 @@ Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env va
 
 ### Acceptance Criteria
 
-- [ ] Any mode can complete the full plan → execute → ship → deploy loop without requiring the unavailable CLI
-- [ ] A user switching modes mid-project can continue with a degraded path, not a dead end
-- [ ] `$run --execute-approved` would have eliminated the ~385 bare-`y` Codex approvals without allowing stale-plan execution
-- [ ] Every cross-tool touchpoint in `docs/operating-modes.md` has a declared degraded path or hard mode requirement
-- [ ] Pack content differs between CLIs by role (framing/research vs execution/reconciliation), not just invocation syntax
-- [ ] Expert delegation pattern (Claude → Codex in-session) works via `/delegate` without leaving the Claude session
+- [x] Any mode can complete the full plan → execute → ship → deploy loop without requiring the unavailable CLI
+- [x] A user switching modes mid-project can continue with a degraded path, not a dead end
+- [x] `$run --execute-approved` would have eliminated the ~385 bare-`y` Codex approvals without allowing stale-plan execution
+- [x] Every cross-tool touchpoint in `docs/operating-modes.md` has a declared degraded path or hard mode requirement
+- [x] Pack content differs between CLIs by role (framing/research vs execution/reconciliation), not just invocation syntax
+- [x] Expert delegation pattern (Claude → Codex in-session) works via `/delegate` without leaving the Claude session
 
 ### Out of Scope
 
@@ -276,13 +276,13 @@ Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch r
 
 **Acceptance criteria:**
 
-- [ ] Three sample-workflow runs complete — one per mode — without hitting the unavailable CLI.
-- [ ] `hybrid` run shows the full `draft → approved → consumed` packet lifecycle; `claude-only` and `codex-only` runs show no packet written.
-- [ ] Every terminal skill's recommendation line matches the resolved mode.
-- [ ] `tasks/verify-phase-11.md` captures evidence for all three runs with command logs + packet snapshots + commit SHAs.
-- [ ] Phase 11 final **Verify** checkbox in `tasks/todo.md` ticked.
-- [ ] `tasks/roadmap.md` gets a Phase 11 section marked ✓.
-- [ ] No edits to `SKILL.md`, scripts, schema, `docs/operating-modes.md`, `CLAUDE.md`, or pack files.
+- [x] Three sample-workflow runs complete — one per mode — without hitting the unavailable CLI.
+- [x] `hybrid` run shows the full `draft → approved → consumed` packet lifecycle; `claude-only` and `codex-only` runs show no packet written.
+- [x] Every terminal skill's recommendation line matches the resolved mode.
+- [x] `tasks/verify-phase-11.md` captures evidence for all three runs with command logs + packet snapshots + commit SHAs.
+- [x] Phase 11 final **Verify** checkbox in `tasks/todo.md` ticked.
+- [x] `tasks/roadmap.md` gets a Phase 11 section marked ✓.
+- [x] No edits to `SKILL.md`, scripts, schema, `docs/operating-modes.md`, `CLAUDE.md`, or pack files.
 
 **Out of scope (do not drift):**
 
@@ -362,12 +362,12 @@ Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch r
 
 **Acceptance criteria:**
 
-- [ ] `docs/operating-modes.md` has dedicated sections for: three-mode table, per-mode paragraphs, `## Mode-signal resolution`, `## Approval packet` (with Fields / Lifecycle / Safety / Freshness subsections), `## Degraded-path audit`, `## Pack emphasis` (with Codex `$run` routing subsection), `## Migrating from the parity-mirror model`.
-- [ ] Step 8/9/10 tables are byte-identical in content; section ordering may have changed.
-- [ ] Status line replaced with a single Phase-11-complete summary line.
-- [ ] `tasks/todo.md` Step 11 checked off; final Verify item either checked or rolled to its own micro-step plan.
-- [ ] `tasks/history.md` has a Step 11 entry.
-- [ ] No edits to `specs/approved-plan.schema.json`, `scripts/agent-mode.sh`, `scripts/approved-plan.sh`, `scripts/pack.sh`, or any `SKILL.md` / pack file.
+- [x] `docs/operating-modes.md` has dedicated sections for: three-mode table, per-mode paragraphs, `## Mode-signal resolution`, `## Approval packet` (with Fields / Lifecycle / Safety / Freshness subsections), `## Degraded-path audit`, `## Pack emphasis` (with Codex `$run` routing subsection), `## Migrating from the parity-mirror model`.
+- [x] Step 8/9/10 tables are byte-identical in content; section ordering may have changed.
+- [x] Status line replaced with a single Phase-11-complete summary line.
+- [x] `tasks/todo.md` Step 11 checked off; final Verify item either checked or rolled to its own micro-step plan.
+- [x] `tasks/history.md` has a Step 11 entry.
+- [x] No edits to `specs/approved-plan.schema.json`, `scripts/agent-mode.sh`, `scripts/approved-plan.sh`, `scripts/pack.sh`, or any `SKILL.md` / pack file.
 
 **Out of scope (do not drift):**
 
@@ -438,11 +438,11 @@ Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch r
 
 **Acceptance criteria:**
 
-- [ ] `global/codex/run/SKILL.md` recommendation block reads `enabled_packs` via `scripts/pack.sh` and emits a pack-variant invocation when a match exists.
-- [ ] No-pack and no-match cases emit unchanged recommendations.
-- [ ] Malformed project.json falls back to global with a single documented degraded-path line.
-- [ ] `tasks/todo.md` Step 10 checked off; Active Step Plan rolled to Step 11.
-- [ ] No edits to Claude-side `run/SKILL.md`, scripts/agent-mode.sh, approval-packet schema, or Step 8/9 doc sections.
+- [x] `global/codex/run/SKILL.md` recommendation block reads `enabled_packs` via `scripts/pack.sh` and emits a pack-variant invocation when a match exists.
+- [x] No-pack and no-match cases emit unchanged recommendations.
+- [x] Malformed project.json falls back to global with a single documented degraded-path line.
+- [x] `tasks/todo.md` Step 10 checked off; Active Step Plan rolled to Step 11.
+- [x] No edits to Claude-side `run/SKILL.md`, scripts/agent-mode.sh, approval-packet schema, or Step 8/9 doc sections.
 
 **Out of scope (do not drift):**
 
@@ -540,10 +540,10 @@ Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch r
 
 **Acceptance criteria:**
 
-- [ ] `docs/operating-modes.md` has a `## Pack emphasis` section with Global skills + Packs tables.
-- [ ] Every global skill (both CLIs) and every pack is tagged with one of `Claude-orchestration` / `Codex-execution` / `Both`.
-- [ ] `tasks/todo.md` Step 9 checked off; Active Step Plan rolled to Step 10 (pack-aware `$run` routing).
-- [ ] No edits to SKILL.md workflows, scripts, or schema.
+- [x] `docs/operating-modes.md` has a `## Pack emphasis` section with Global skills + Packs tables.
+- [x] Every global skill (both CLIs) and every pack is tagged with one of `Claude-orchestration` / `Codex-execution` / `Both`.
+- [x] `tasks/todo.md` Step 9 checked off; Active Step Plan rolled to Step 10 (pack-aware `$run` routing).
+- [x] No edits to SKILL.md workflows, scripts, or schema.
 
 **Out of scope (do not drift):**
 
@@ -605,11 +605,11 @@ Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch r
 
 **Acceptance criteria:**
 
-- [ ] `docs/operating-modes.md` contains a `## Degraded-path audit` section with a filled table for every scope target.
-- [ ] Every row has either a concrete degraded path (with SKILL.md evidence) or an explicit `requires mode X` constraint, or is flagged with `⚠ gap — follow-up`.
-- [ ] All surfaced gaps are listed under `### Gaps surfaced by Step 8` for a follow-up step to close — Step 8 does not close them.
-- [ ] `tasks/todo.md` Step 8 checked off and Active Step Plan rolled to Step 9 (pack emphasis split).
-- [ ] No edits to `specs/approved-plan.schema.json`, `scripts/agent-mode.sh`, or any SKILL.md workflow.
+- [x] `docs/operating-modes.md` contains a `## Degraded-path audit` section with a filled table for every scope target.
+- [x] Every row has either a concrete degraded path (with SKILL.md evidence) or an explicit `requires mode X` constraint, or is flagged with `⚠ gap — follow-up`.
+- [x] All surfaced gaps are listed under `### Gaps surfaced by Step 8` for a follow-up step to close — Step 8 does not close them.
+- [x] `tasks/todo.md` Step 8 checked off and Active Step Plan rolled to Step 9 (pack emphasis split).
+- [x] No edits to `specs/approved-plan.schema.json`, `scripts/agent-mode.sh`, or any SKILL.md workflow.
 
 **Out of scope (do not drift):**
 
@@ -698,11 +698,11 @@ Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch r
 
 **Acceptance criteria:**
 
-- [ ] Every Claude skill in scope (spec-interview, roadmap, plan-phase, run, ship, ship-end) emits the next-step routing block.
-- [ ] Every present Codex equivalent (run, plus ship/ship-end if they exist) emits the inverted next-step routing block.
-- [ ] `/delegate` and `/handoff` do NOT emit the block (no recursion).
-- [ ] `tasks/todo.md` Step 7 checked off and Active Step Plan rolled to Step 8 (degraded-path audit).
-- [ ] Contract files (`docs/operating-modes.md`, `specs/approved-plan.schema.json`, `scripts/agent-mode.sh`) untouched.
+- [x] Every Claude skill in scope (spec-interview, roadmap, plan-phase, run, ship, ship-end) emits the next-step routing block.
+- [x] Every present Codex equivalent (run, plus ship/ship-end if they exist) emits the inverted next-step routing block.
+- [x] `/delegate` and `/handoff` do NOT emit the block (no recursion).
+- [x] `tasks/todo.md` Step 7 checked off and Active Step Plan rolled to Step 8 (degraded-path audit).
+- [x] Contract files (`docs/operating-modes.md`, `specs/approved-plan.schema.json`, `scripts/agent-mode.sh`) untouched.
 
 **Out of scope (do not drift):**
 
@@ -775,12 +775,12 @@ Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch r
 
 **Acceptance criteria:**
 
-- [ ] `global/claude/delegate/SKILL.md` exists, is hybrid-only gated, produces the packet via Step 5 helpers, invokes Codex via `codex exec`, and handles the three fallback branches without blind retry.
-- [ ] `scripts/approved-plan.sh mark-uncertain` exists, transitions `approved → uncertain` atomically, and rejects all non-`approved` source states.
-- [ ] End-to-end fixture: `/delegate` invoking a stubbed Codex that runs `$run --execute-approved` drives a packet through `draft → approved → consumed` without Claude restarting the session.
-- [ ] Ambiguous-failure fixture lands the packet in `uncertain` and surfaces the inspect/discard/continue prompt.
-- [ ] Schema and lifecycle FSM unchanged (`docs/operating-modes.md` and `specs/approved-plan.schema.json` untouched).
-- [ ] `tasks/todo.md` Step 6 checked off and Active Step Plan rolled to Step 7.
+- [x] `global/claude/delegate/SKILL.md` exists, is hybrid-only gated, produces the packet via Step 5 helpers, invokes Codex via `codex exec`, and handles the three fallback branches without blind retry.
+- [x] `scripts/approved-plan.sh mark-uncertain` exists, transitions `approved → uncertain` atomically, and rejects all non-`approved` source states.
+- [x] End-to-end fixture: `/delegate` invoking a stubbed Codex that runs `$run --execute-approved` drives a packet through `draft → approved → consumed` without Claude restarting the session.
+- [x] Ambiguous-failure fixture lands the packet in `uncertain` and surfaces the inspect/discard/continue prompt.
+- [x] Schema and lifecycle FSM unchanged (`docs/operating-modes.md` and `specs/approved-plan.schema.json` untouched).
+- [x] `tasks/todo.md` Step 6 checked off and Active Step Plan rolled to Step 7.
 
 **Out of scope (do not drift):**
 
@@ -864,11 +864,11 @@ Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch r
 
 **Acceptance criteria:**
 
-- [ ] `scripts/approved-plan.sh {draft,approve,supersede,status}` exist, are executable, and pass tests 1–6 above.
-- [ ] `global/claude/handoff/SKILL.md` documents `--target=codex`, derives step identity from `tasks/todo.md`, and presents the packet for a single approval question before writing the handoff doc.
-- [ ] Full Claude-side produce → Codex-side consume loop works end-to-end on a local fixture: `/handoff --target=codex` produces an `approved` packet, `$run --execute-approved` consumes it, the `.md` mirror ends up `lifecycle: consumed`.
-- [ ] No change to `docs/operating-modes.md` § "Approval / Delegation Packet" or `specs/approved-plan.schema.json` (schema and lifecycle stay stable).
-- [ ] `tasks/todo.md` Step 5 is checked off and Active Step Plan rolls to Step 6.
+- [x] `scripts/approved-plan.sh {draft,approve,supersede,status}` exist, are executable, and pass tests 1–6 above.
+- [x] `global/claude/handoff/SKILL.md` documents `--target=codex`, derives step identity from `tasks/todo.md`, and presents the packet for a single approval question before writing the handoff doc.
+- [x] Full Claude-side produce → Codex-side consume loop works end-to-end on a local fixture: `/handoff --target=codex` produces an `approved` packet, `$run --execute-approved` consumes it, the `.md` mirror ends up `lifecycle: consumed`.
+- [x] No change to `docs/operating-modes.md` § "Approval / Delegation Packet" or `specs/approved-plan.schema.json` (schema and lifecycle stay stable).
+- [x] `tasks/todo.md` Step 5 is checked off and Active Step Plan rolls to Step 6.
 
 **Out of scope (do not drift):**
 
@@ -958,12 +958,12 @@ Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch r
 
 **Acceptance criteria:**
 
-- [ ] `scripts/approved-plan.sh {check,consume,mark-stale}` exist, are executable, and pass all seven test cases above.
-- [ ] `global/codex/run/SKILL.md` documents `--execute-approved`, and inspecting its flow on a valid approved packet skips the plan-approval gate and logs the one-line consumption message.
-- [ ] On any freshness failure, the packet is transitioned to `stale` and the user is re-prompted with the standard approval flow — never a blind retry.
-- [ ] No change to `docs/operating-modes.md` § "Approval / Delegation Packet" beyond optional clarifying edits (schema and lifecycle stay stable).
-- [ ] `jq` dependency is documented in SKILL.md; absence produces a clear install hint rather than a fragile fallback.
-- [ ] `tasks/todo.md` Step 4 is checked off and the Active Step Plan rolls to Step 5.
+- [x] `scripts/approved-plan.sh {check,consume,mark-stale}` exist, are executable, and pass all seven test cases above.
+- [x] `global/codex/run/SKILL.md` documents `--execute-approved`, and inspecting its flow on a valid approved packet skips the plan-approval gate and logs the one-line consumption message.
+- [x] On any freshness failure, the packet is transitioned to `stale` and the user is re-prompted with the standard approval flow — never a blind retry.
+- [x] No change to `docs/operating-modes.md` § "Approval / Delegation Packet" beyond optional clarifying edits (schema and lifecycle stay stable).
+- [x] `jq` dependency is documented in SKILL.md; absence produces a clear install hint rather than a fragile fallback.
+- [x] `tasks/todo.md` Step 4 is checked off and the Active Step Plan rolls to Step 5.
 
 **Execution Profile:** `serial` (inherited from Phase 11). Main agent writes the helper, SKILL.md edit, and task/history updates. No subagent lanes — the lifecycle FSM is the exact kind of shared-contract work where parallel lanes drift.
 
@@ -1004,6 +1004,16 @@ Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch r
 
 ## Priority Documentation Todo
 
+- [x] `$reconcile-dev-docs fix tasks` - resolve the Phase 11 task-doc contradiction: `tasks/todo.md` still contains unchecked archived Phase 11 acceptance criteria even though `tasks/roadmap.md` and `tasks/history.md` report Phase 11 complete.
+- [ ] `$spec-drift fix packs/business-app/*/scale-audit` - align Claude and Codex `scale-audit` next-step guidance with `docs/skill-next-step-contracts.md`: recommend `spec-interview [top blocker]` when hard blockers lack specs, and make `roadmap` primary only when blockers are already specced.
+- [ ] `$spec-drift fix docs/operating-modes.md global/*/handoff` - clarify approval-packet handoff support: Claude `/handoff --target=codex` produces packets, but Codex `$handoff` only writes `tasks/handoff.md`; update wording that currently implies `codex-only` cross-session handoff uses the shared packet.
+- [ ] `$spec-drift fix approval-packet references` - update stale section anchors from `docs/operating-modes.md` § "Approval / Delegation Packet" to the current `## Approval packet` heading in `tasks/approved-plan.md`, `scripts/approved-plan.sh`, and `global/codex/run/SKILL.md`.
+- [ ] `$spec-drift fix code-quality docs` - reconcile `README.md` and `specs/code-quality-skill-pack.md` with the implemented `code-quality` pack, which now includes both `extract-shared-types` and `quality-sweep`.
+- [ ] `$spec-drift fix kanban archive docs` - update roadmap/archive references that still describe `/kanban-archive` as a standalone skill; current implementation exposes archive mode through `poketo-kanban --archive`.
+- [ ] `$spec-drift fix docs/canonical-workflow-report.md` - refresh or demote the stale canonical workflow report, which still says Phase 11 Steps 7-11 are not fully wired even though Phase 11 is complete.
+- [ ] `$spec-drift fix kanban legacy specs` - classify or update specs that still target the legacy `kanban.mjs`/direct-Neon path now that active kanban skills use `poketo kanban` and `kanban.mjs` is fallback/admin-only.
+- [ ] `$reconcile-dev-docs fix skills-reference` - decide how to document Claude-only `delegate` in `README.md` and `docs/skills-reference.md`, since it exists under `global/claude/delegate` and is central to hybrid mode but has no Codex mirror.
+- [ ] `$reconcile-dev-docs fix pack-command docs` - document `scripts/pack.sh list-packs` where appropriate, or explicitly mark it as an internal subcommand used by Codex `$run` routing.
 - [ ] `$devtool-user-map` - create/update `research/devtool-user-map.md` because the repo infers as a devtool project and the canonical research output is missing.
 - [ ] `$devtool-integration-map` - create/update `research/devtool-integration-map.md` after `$devtool-user-map`; currently blocked because `research/devtool-user-map.md` is missing.
 - [ ] `$devtool-dx-journey` - create/update `research/devtool-dx-journey.md` after `$devtool-integration-map`; currently blocked because `research/devtool-integration-map.md` is missing.
