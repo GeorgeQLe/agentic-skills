@@ -19,13 +19,13 @@ NEW: create-board --name "$(basename $(pwd))" --template standard
 
 **Files (12):**
 - `claude/brainstorm-kanban/SKILL.md`
-- `claude/plan-interview-kanban/SKILL.md`
+- `claude/spec-interview-kanban/SKILL.md` (originally `plan-interview-kanban`)
 - `claude/roadmap-kanban/SKILL.md`
 - `claude/run-kanban/SKILL.md`
 - `claude/ship-kanban/SKILL.md`
 - `claude/ship-end-kanban/SKILL.md`
 - `codex/brainstorm-kanban/SKILL.md`
-- `codex/plan-interview-kanban/SKILL.md`
+- `codex/spec-interview-kanban/SKILL.md` (originally `plan-interview-kanban`)
 - `codex/roadmap-kanban/SKILL.md`
 - `codex/run-kanban/SKILL.md`
 - `codex/ship-kanban/SKILL.md`
