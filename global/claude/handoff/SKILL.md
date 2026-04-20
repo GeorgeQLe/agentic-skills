@@ -36,7 +36,7 @@ Generate a self-contained context document that captures exactly where you left 
 
 4. **If `$ARGUMENTS` specifies a focus area**, emphasize that in the handoff context.
 
-5. **If `$ARGUMENTS` contains `--target=codex`, produce a cross-CLI approval packet** before writing the handoff doc:
+5. **If `$ARGUMENTS` contains `--target=codex`, produce a cross-CLI approval packet** before writing the handoff doc. **Requires `jq` on PATH:** `scripts/approved-plan.sh draft` (step 5.4) and the pretty-print in step 5.5 both invoke `jq`; if absent, `scripts/approved-plan.sh`'s `require_jq_write` (at `scripts/approved-plan.sh:21`) dies with `ERROR: jq required for write operations. Install with: brew install jq (macOS) or apt install jq (Debian/Ubuntu).` before any packet is drafted. No degraded path — install `jq` and retry.
    1. Resolve the effective agent mode via `./scripts/agent-mode.sh`. If the resolved mode is `codex-only`, stop immediately with a `mode-mismatch:` error — Claude is not the planner in that mode.
    2. Require a clean tracked tree. If `git status --porcelain` reports dirty paths, the user must pass repeatable `--allow-dirty <glob>` flags covering every dirty path. Glob semantics match the Step 4 consumer (`scripts/approved-plan.sh check`) — `case "$path" in $glob)` shell globbing, not regex.
    3. Derive `phase` / `step` / `title` from `tasks/todo.md`. Read the **first unchecked** `- [ ]` under the `### Active Step Plan` block; if no such block exists, fall back to the first unchecked `- [ ]` under the current `## Phase N` header. Parse the `Phase N` and `Step N.X` tokens out of the surrounding context; use the checkbox line's text (stripped of `- [ ] **Step N.X** — `) as `title`.
