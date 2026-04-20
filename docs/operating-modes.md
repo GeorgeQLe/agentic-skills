@@ -20,7 +20,7 @@ Codex both plans and executes. Used when Claude is unavailable for the same clas
 
 ### `hybrid`
 
-Claude orchestrates — interviews, planning, framing, tradeoff surfacing — and Codex executes — implementation, reconciliation, shipping — via in-session delegation. The execution loop is `/plan-interview` → `/run` plans → `/delegate $run` → `$ship`. The delegation boundary is handled inside the Claude session; the user does not manually switch CLIs.
+Claude orchestrates — interviews, planning, framing, tradeoff surfacing — and Codex executes — implementation, reconciliation, shipping — via in-session delegation. The execution loop is `/spec-interview` → `/run` plans → `/delegate $run` → `$ship`. The delegation boundary is handled inside the Claude session; the user does not manually switch CLIs.
 
 ## Mode-signal resolution
 
@@ -42,9 +42,9 @@ Two sources combine to resolve the effective mode: the `SKILLS_AGENT_MODE` envir
 
 **Writer.** `scripts/pack.sh set-mode <claude-only|codex-only|hybrid|unset>` is the only supported writer for `.agents/project.json.agent_mode`. `pack.sh install`, `remove`, and `refresh` preserve an existing value. No other script writes the field.
 
-**Unset semantics.** "Unset" is a deliberate mode: skills that consume the resolver (Step 7 — the twelve planning/execution skills in `global/claude/` and `global/codex/`) present *all three* next-step options and point the user at this document, rather than guessing. Unset is the default for a fresh project.
+**Unset semantics.** "Unset" is a deliberate mode: skills that consume the resolver (Step 7 — the twelve planning/execution skills in `global/claude/` and `global/codex/`) keep the concrete next work item primary and infer the command route from invocation and task type when mode lookup is missing, unset, or non-zero. Unset is the default for a fresh project.
 
-**Invariant — do not restate precedence in skill copy.** Skills say "resolved agent mode via scripts/agent-mode.sh" and link here. Precedence lives in one place: the resolver and this document.
+**Invariant — do not restate precedence in skill copy.** Skills say "Next-Step Routing" and link here. Precedence lives in one place: the resolver and this document.
 
 ## Approval packet
 
@@ -143,18 +143,18 @@ This section enumerates every cross-tool touchpoint that ships today. One row pe
 | `global/claude/handoff/SKILL.md` | `--target=codex`: `jq` on PATH for pretty-print (step 5.5) | `scripts/approved-plan.sh draft` dies first via `require_jq_write` with the install-hint error; packet is never drafted | § "Process" step 5 preamble — `jq` declared a hard dependency; failure text cited |
 | `global/codex/run/SKILL.md` | `--execute-approved`: mode ≠ `claude-only` | `scripts/approved-plan.sh check` prints `mode-mismatch` reason; skill stops with user error | § "Process" step 6c + § "Constraints" — `requires mode codex-only or hybrid` |
 | `global/codex/run/SKILL.md` | `--execute-approved`: `jq` on PATH for consume write path | `scripts/approved-plan.sh consume` dies via `require_jq_write` with `ERROR: jq required for write operations. Install with: brew install jq …` | § "Process" step 6c + § "Constraints" — `jq` declared a hard dependency; failure text cited |
-| `global/claude/plan-interview/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Unset mode leaves next-step recommendation ambiguous | § "Mode-aware next-step recommendation" unset branch presents all three options + `docs/operating-modes.md` pointer |
-| `global/claude/roadmap/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Unset mode leaves next-step recommendation ambiguous | § "Mode-aware next-step recommendation" unset branch presents all three options + docs pointer |
-| `global/claude/plan-phase/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Unset mode leaves `/delegate $run` vs `/run` vs `$run` ambiguous | § "Mode-aware next-step recommendation" unset branch presents all three options + docs pointer |
-| `global/claude/run/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Unset mode leaves ship-variant recommendation ambiguous | § "Mode-aware next-step recommendation" unset branch presents all three options + docs pointer |
-| `global/claude/ship/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Unset mode leaves next-step invocation ambiguous | § "Mode-aware next-step recommendation" unset branch presents all three options + docs pointer |
-| `global/claude/ship-end/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Unset mode leaves next-session resume ambiguous | § "Mode-aware next-step recommendation" unset branch presents all three options + docs pointer |
-| `global/codex/plan-interview/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Unset mode leaves return-to-Claude vs stay-in-Codex ambiguous | § "Mode-aware next-step recommendation" unset branch presents all three options + docs pointer |
-| `global/codex/roadmap/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Unset mode leaves next-step recommendation ambiguous | § "Mode-aware next-step recommendation" unset branch presents all three options + docs pointer |
-| `global/codex/plan-phase/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Unset mode leaves return-to-Claude vs `$run` ambiguous | § "Mode-aware next-step recommendation" unset branch presents all three options + docs pointer |
-| `global/codex/run/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` (recommendation block, distinct from `--execute-approved` rows above) | Unset mode leaves next-step recommendation ambiguous | § "Mode-aware next-step recommendation" unset branch presents all three options + docs pointer |
-| `global/codex/ship/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Unset mode leaves return-to-Claude vs stay-in-Codex ambiguous | § "Mode-aware next-step recommendation" unset branch presents all three options + docs pointer |
-| `global/codex/ship-end/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Unset mode leaves next-session resume ambiguous | § "Mode-aware next-step recommendation" unset branch presents all three options + docs pointer |
+| `global/claude/spec-interview/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Mode lookup missing, unset, or non-zero degrades to inferred command text | § "Next-Step Routing" infers from invocation and task type |
+| `global/claude/roadmap/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Mode lookup missing, unset, or non-zero degrades to inferred command text | § "Next-Step Routing" infers from invocation and task type |
+| `global/claude/plan-phase/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Mode lookup missing, unset, or non-zero degrades to inferred command text | § "Next-Step Routing" infers from invocation and task type |
+| `global/claude/run/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Mode lookup missing, unset, or non-zero degrades to inferred command text | § "Next-Step Routing" infers from invocation and task type |
+| `global/claude/ship/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Mode lookup missing, unset, or non-zero degrades to inferred command text | § "Next-Step Routing" infers from invocation and task type |
+| `global/claude/ship-end/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Mode lookup missing, unset, or non-zero degrades to inferred command text | § "Next-Step Routing" infers from invocation and task type |
+| `global/codex/spec-interview/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Mode lookup missing, unset, or non-zero degrades to inferred command text | § "Next-Step Routing" infers from invocation and task type |
+| `global/codex/roadmap/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Mode lookup missing, unset, or non-zero degrades to inferred command text | § "Next-Step Routing" infers from invocation and task type |
+| `global/codex/plan-phase/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Mode lookup missing, unset, or non-zero degrades to inferred command text | § "Next-Step Routing" infers from invocation and task type |
+| `global/codex/run/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` (recommendation block, distinct from `--execute-approved` rows above) | Mode lookup missing, unset, or non-zero degrades to inferred command text | § "Next-Step Routing" infers from invocation and task type |
+| `global/codex/ship/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Mode lookup missing, unset, or non-zero degrades to inferred command text | § "Next-Step Routing" infers from invocation and task type |
+| `global/codex/ship-end/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Mode lookup missing, unset, or non-zero degrades to inferred command text | § "Next-Step Routing" infers from invocation and task type |
 | `scripts/approved-plan.sh draft` | `hybrid` back-to-back cycles (prior `consume` rewrote `tasks/approved-plan.md`) | Next `draft` fails with `dirty path outside allowlist: tasks/approved-plan.md` | Commit the mirror between cycles (evidence of the prior consumed packet), or pass `--allow-dirty tasks/approved-plan.md` to the next `draft` |
 
 Pack wrappers under `packs/**/SKILL.md` are intentionally absent from this audit: exploration confirmed they contain no cross-CLI branching — only intra-pack syntax references (`$skill` vs `/skill`) routed by the pack loader. Pack emphasis by CLI role lands in Step 9.
@@ -178,7 +178,7 @@ This section tags every global skill and every pack with a **primary CLI role** 
 | --- | --- | --- |
 | `affected` | Claude-orchestration | Monorepo scope framing for planning; read-only |
 | `analyze-sessions` | Claude-orchestration | Usage analysis + automation recommendations |
-| `brainstorm` | Claude-orchestration | Idea surfacing into `/plan-interview` |
+| `brainstorm` | Claude-orchestration | Idea surfacing into `/spec-interview` |
 | `branch-lifecycle` | Both | Evaluation is orchestration; merge/delete acts execute |
 | `commit-and-push-by-feature` | Codex-execution | Grouped commits + push |
 | `dead-code` | Claude-orchestration | Scan + report; no mutation |
@@ -194,7 +194,7 @@ This section tags every global skill and every pack with a **primary CLI role** 
 | `investigate` | Claude-orchestration | Validate claims, trace to root cause, propose fix |
 | `migrate` | Both | Plan + step-by-step verified mutation |
 | `pack` | Both | Manages pack state; orchestrates which skills live per project |
-| `plan-interview` | Claude-orchestration | Spec completion via interview |
+| `spec-interview` | Claude-orchestration | Spec completion via interview |
 | `plan-phase` | Claude-orchestration | Decompose roadmap phase into steps |
 | `reconcile-dev-docs` | Codex-execution | Rewrites task docs to match reality |
 | `regression-check` | Codex-execution | Monorepo health check after changes |
@@ -226,7 +226,7 @@ This section tags every global skill and every pack with a **primary CLI role** 
 
 ### Codex `$run` routing
 
-Codex `$run` consumes this table at runtime. The "Mode-aware next-step recommendation" block in `global/codex/run/SKILL.md` resolves enabled packs via `scripts/pack.sh list-packs` and, when an enabled pack (e.g., `business-app-kanban`) ships a matching `-kanban` variant, emits the kanban invocation in place of the global `$run` / `$ship` / `$ship-end`. Recommendation text only — the approval-packet contract and `$run --execute-approved` execution path are unchanged. Missing or malformed `.agents/project.json` falls back silently to the global default with a single-line inline comment. See `global/codex/run/SKILL.md` § "Pack-aware routing" for the full resolver.
+Codex `$run` consumes this table at runtime. The "Next-Step Routing" block in `global/codex/run/SKILL.md` resolves enabled packs via `scripts/pack.sh list-packs` for command-text routing and, when an enabled pack (e.g., `business-app-kanban`) ships a matching `-kanban` variant, emits the kanban invocation in place of the global `$run` / `$ship` / `$ship-end`. Recommendation text only — the approval-packet contract and `$run --execute-approved` execution path are unchanged. Missing or malformed `.agents/project.json` falls back silently to the global default with a single-line inline comment. See `global/codex/run/SKILL.md` § "Pack-Aware Command Text" for the full resolver.
 
 ## Migrating from the parity-mirror model
 

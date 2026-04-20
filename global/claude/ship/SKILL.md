@@ -126,16 +126,25 @@ After entering plan mode, present a brief ship summary (2-3 lines max) and **pre
 
 This gives the user something concrete to review before selecting "clear context and implement".
 
-## Mode-aware next-step recommendation
+## Next-Step Routing
 
-After writing the next-step plan and before entering plan mode (or before stopping when `--no-plan` is set), resolve the effective agent mode via `./scripts/agent-mode.sh` and emit exactly one recommendation line matching the resolved agent mode via scripts/agent-mode.sh:
+After writing the next-step plan and before entering plan mode (or before stopping when `--no-plan` is set), identify the next concrete work item from project state, then recommend the executor and invocation.
 
-- `hybrid` → **Next:** delegate with `/delegate $run` — Claude orchestrates, Codex executes the approved step.
-- `claude-only` → **Next:** run `/run` — Codex is unavailable; stay in Claude.
-- `codex-only` → **Next:** run `$run` in Codex — Claude is not the executor in this mode.
-- unset → present all three options and point the user at `docs/operating-modes.md` for mode-signal resolution rules.
+Output exactly two lines beyond the normal ship summary:
 
-Keep it to one line beyond the normal ship summary; do not restate mode-signal precedence in skill copy.
+- **Next work:** <specific task name, manual blocker, verification gap, or "none">
+- **Recommended next command:** <one command or route>
+
+Rules:
+
+- Make the next work item primary. Derive it from the next-step plan, `tasks/todo.md`, `tasks/manual-todo.md`, deploy status, validation gaps, smoke-test gaps, or the absence of remaining work. Do not use agent mode itself as the next work item.
+- Use `./scripts/agent-mode.sh` only to choose command text. If it is missing, unset, or non-zero, infer routing from the current invocation and task type instead of asking the user to select a mode by default.
+- Inference defaults:
+  - Hybrid execution handoff → recommend `/delegate $run`.
+  - Claude-only or orchestration-heavy work → recommend `/run`.
+  - Codex-only execution → recommend `$run`.
+  - Manual, browser, auth, DNS, console, or production smoke-test work → recommend `/guide` or a Claude-guided manual step rather than `/run`.
+- Only present multiple commands when the ambiguity materially changes execution safety or there are equally valid next work items. Otherwise choose the best route and mention degraded mode lookup inline.
 
 ## Constraints
 - **Fix unrelated issues:** If any step surfaces errors, warnings, or lint issues — even ones unrelated to the current work — investigate and fix them before continuing. Commit these fixes separately with a descriptive message (e.g., `fix: resolve unused import warning in auth.ts`).

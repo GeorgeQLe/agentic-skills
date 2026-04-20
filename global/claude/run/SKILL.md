@@ -79,18 +79,27 @@ The main agent owns integration, conflict resolution, task doc updates, history 
 - Test results (if tests were run) — **explicitly state whether any failures are expected (red phase: tests written before implementation) or unexpected (regressions/bugs that need fixing)**
 - Manual tasks — if `tasks/manual-todo.md` exists, report count of pending manual tasks for this phase
 - Advisory tasks — pending record/recurring counts from `tasks/record-todo.md` and `tasks/recurring-todo.md` if they exist
-- What's next (just its name — /ship will handle planning)
+- **Next work:** the next concrete shipping, validation, blocker, or follow-up task
+- **Recommended next command:** one command or route for that work
 
-## Mode-aware next-step recommendation
+## Next-Step Routing
 
-Before handing back to the user, resolve the effective agent mode via `./scripts/agent-mode.sh` and emit exactly one recommendation line matching the resolved agent mode via scripts/agent-mode.sh:
+Before handing back, identify the next concrete work item from project state, then recommend the executor and invocation.
 
-- `hybrid` → **Next:** delegate with `/delegate $ship` — Claude orchestrates, Codex executes.
-- `claude-only` → **Next:** run `/ship` — Codex is unavailable; stay in Claude.
-- `codex-only` → **Next:** run `$ship` in Codex — Claude is not the executor in this mode.
-- unset → present all three options and point the user at `docs/operating-modes.md` for mode-signal resolution rules.
+Output exactly two lines beyond the normal report:
 
-Keep it to one line beyond the normal report; do not restate mode-signal precedence in skill copy.
+- **Next work:** <specific shipping, validation, blocker, or follow-up task>
+- **Recommended next command:** <one command or route>
+
+Rules:
+
+- Make the next work item primary. Derive it from `tasks/todo.md`, validation results, manual blockers, deploy/smoke-test gaps, or the absence of remaining work. Do not use agent mode itself as the next work item.
+- Use `./scripts/agent-mode.sh` only to choose command text. If it is missing, unset, or non-zero, infer routing from the current invocation and task type instead of asking the user to select a mode by default.
+- Inference defaults:
+  - Hybrid execution handoff after Claude `/run` → recommend `/delegate $ship`.
+  - Claude-only or manual/orchestration-heavy work → recommend `/ship` or `/guide`.
+  - Codex-only execution → recommend `$ship`.
+- Only present multiple commands when the ambiguity materially changes execution safety or there are equally valid next work items. Otherwise choose the best route and mention degraded mode lookup inline.
 
 ## What NOT to do
 

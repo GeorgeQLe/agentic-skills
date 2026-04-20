@@ -54,7 +54,7 @@ Route behavior based on the current pipeline state:
 
 | State | Condition | Behavior |
 |-------|-----------|----------|
-| A — No specs | No `specs/` files, no `spec.md` | Queue `$plan-interview`. Done (skip to step 7). |
+| A — No specs | No `specs/` files, no `spec.md` | Queue `$spec-interview`. Done (skip to step 7). |
 | B — Specs, no roadmap | Specs exist, `tasks/roadmap.md` missing or empty | Go to step 4 (build roadmap), then continue to step 5. |
 | C — Work in progress | `tasks/roadmap.md` exists, unchecked phases remain | Skip to step 5 (classify issues). |
 | D — All complete | All phases in `tasks/roadmap.md` are checked | Queue `$research-roadmap` for documentation scan. Done (skip to step 7). |
@@ -153,7 +153,7 @@ Specs exist in `specs/` (or `spec.md`) but `tasks/roadmap.md` does not exist. Th
 `tasks/lessons.md` was updated more recently than the current phase's implementation steps were written, suggesting new lessons may apply to in-progress work.
 
 #### 13. Unspecced Ideas
-`tasks/ideas.md` contains ideas that have no corresponding spec in `specs/`. These are candidates for `$plan-interview --ideas` or individual `$plan-interview` runs.
+`tasks/ideas.md` contains ideas that have no corresponding spec in `specs/`. These are candidates for `$spec-interview --ideas` or individual `$spec-interview` runs.
 
 ### 6. Order the Priority Queue
 
@@ -246,9 +246,9 @@ For State A (no specs):
 ## No Specs Found
 
 - No specifications found in `specs/` or `spec.md`
-- Queued `$plan-interview` to create project specifications
+- Queued `$spec-interview` to create project specifications
 
-Next: `$plan-interview` to define what to build.
+Next: `$spec-interview` to define what to build.
 ```
 
 For State D (all complete):

@@ -52,7 +52,7 @@ Route behavior based on the current pipeline state:
 
 | State | Condition | Behavior |
 |-------|-----------|----------|
-| A — No specs | No `specs/` files, no `spec.md` | Queue `/plan-interview`. Done (skip to step 7). |
+| A — No specs | No `specs/` files, no `spec.md` | Queue `/spec-interview`. Done (skip to step 7). |
 | B — Specs, no roadmap | Specs exist, `tasks/roadmap.md` missing or empty | Go to step 4 (build roadmap), then continue to step 5. |
 | C — Work in progress | `tasks/roadmap.md` exists, unchecked phases remain | Skip to step 5 (classify issues). |
 | D — All complete | All phases in `tasks/roadmap.md` are checked | Queue `/research-roadmap` for documentation scan. Done (skip to step 7). |
@@ -85,7 +85,7 @@ Use the AskUserQuestion tool to align on roadmap decisions. Ask one to three foc
 - **Review needs**: Which phases need specialized review gates (correctness, tests, security, performance, docs/API conformance, UX)?
 - **Agent-team fit**: Which phases are too broad or cross-cutting for local in-session subagents and should instead use worktree isolation or Claude agent teams?
 
-When options exist, present pros/cons with a recommendation — same style as `/plan-interview`. Do not manufacture artificial choices.
+When options exist, present pros/cons with a recommendation — same style as `/spec-interview`. Do not manufacture artificial choices.
 
 Continue until the user confirms the phase structure is complete.
 
@@ -205,7 +205,7 @@ Specs exist in `specs/` (or `spec.md`) but `tasks/roadmap.md` does not exist. Th
 `tasks/lessons.md` was updated more recently than the current phase's implementation steps were written, suggesting new lessons may apply to in-progress work.
 
 #### 13. Unspecced Ideas
-`tasks/ideas.md` contains ideas that have no corresponding spec in `specs/`. These are candidates for `/plan-interview --ideas` or individual `/plan-interview` runs.
+`tasks/ideas.md` contains ideas that have no corresponding spec in `specs/`. These are candidates for `/spec-interview --ideas` or individual `/spec-interview` runs.
 
 ### 6. Order the Priority Queue
 
@@ -298,9 +298,9 @@ For State A (no specs):
 ## No Specs Found
 
 - No specifications found in `specs/` or `spec.md`
-- Queued `/plan-interview` to create project specifications
+- Queued `/spec-interview` to create project specifications
 
-Next: `/plan-interview` to define what to build.
+Next: `/spec-interview` to define what to build.
 ```
 
 For State D (all complete):
@@ -345,7 +345,7 @@ Keep it to one line beyond the normal report; do not restate mode-signal precede
 - **Do not include TDD steps or file-level implementation detail** in the roadmap. That belongs in `/plan-phase`.
 - **`tasks/roadmap.md` is the source of truth** for the full phased plan. `tasks/todo.md` holds only the current phase.
 - **Do not put roadmap content in CLAUDE.md** — CLAUDE.md is for project conventions only.
-- **Keep the interview focused.** This is about sequencing and priority, not re-litigating spec decisions. If a spec question comes up, note it and suggest running `/plan-interview` again for that topic.
+- **Keep the interview focused.** This is about sequencing and priority, not re-litigating spec decisions. If a spec question comes up, note it and suggest running `/spec-interview` again for that topic.
 - This skill updates `tasks/todo.md` and `tasks/roadmap.md`; it must not run queued priority items. It may invoke `/plan-phase 1` only as the explicit Phase 1 seed described above.
 - Preserve user-authored todo content outside `## Priority Task Queue`.
 - Every issue must include evidence (timestamps, checked-item counts, file existence).
