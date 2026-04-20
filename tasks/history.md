@@ -1,5 +1,16 @@
 # Session History
 
+## 2026-04-19 — Phase 11 Step 13 — Close the two `jq`-dependency gaps
+
+- Closed the two non-blocking `jq`-dependency gaps logged in `docs/operating-modes.md` § "Gaps surfaced by Step 8". Both were documentary — runtime behavior already clean via `scripts/approved-plan.sh:21` `require_jq_write`, which dies with `ERROR: jq required for write operations. Install with: brew install jq (macOS) or apt install jq (Debian/Ubuntu).` on every write subcommand.
+- **Gap 1 — `handoff --target=codex`.** Added a `jq`-required note to step 5's preamble in `global/claude/handoff/SKILL.md`. Covers 5.4 (`draft`) and 5.5 (pretty-print) — `draft` dies first via `require_jq_write`, so users never reach 5.5 when `jq` is absent.
+- **Gap 2 — `codex/run --execute-approved`.** Strengthened step 6c of `global/codex/run/SKILL.md` to spell out the exact `require_jq_write` error text users see. § "Constraints" byte-preserved.
+- **Audit cleanup.** Both `⚠ gap — follow-up` cells in `docs/operating-modes.md`'s audit table updated to cite the new skill-side declarations (zero cells remain). Open gap bullets replaced with a dated resolution line + strikethrough of the originals, preserving the audit trail.
+- Decision: declare, don't fallback. `jq` is trivially installable; a `jq`-free parser would duplicate 30+ lines of JSON handling for no benefit.
+- Contract untouched: no edits to `scripts/approved-plan.sh`, `specs/approved-plan.schema.json`, `scripts/agent-mode.sh`, `scripts/pack.sh`, `CLAUDE.md`, any other `SKILL.md`, or any pack file.
+- Verified: zero `⚠ gap — follow-up` cells in the audit table; new `jq`-required sentences present in both SKILL.md files; `bash -n scripts/approved-plan.sh` still parses.
+- Checked off Step 13 in `tasks/todo.md`, appended a Step 13 Summary, and updated `tasks/roadmap.md` Phase 11 section with a Step 13 tail addendum (phase retains ✓).
+
 ## 2026-04-19 — Phase 11 Step 12 — Gap fixes from Verify
 
 - Closed the two non-blocking gaps Phase 11 Verify surfaced (`tasks/verify-phase-11.md` § "Gaps surfaced by Verify"). Tail micro-step of Phase 11; no mechanism redesign, just guard parity + doc clarification.

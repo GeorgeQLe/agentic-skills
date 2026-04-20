@@ -48,6 +48,8 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 
 **Step 12 (tail, 2026-04-19):** Both Verify gaps closed. `scripts/approved-plan.sh mark-stale` now rejects every non-`approved` source state with a consistent single-line reason (parity with `mark-uncertain`). `docs/operating-modes.md` § "Degraded-path audit" + `global/claude/delegate/SKILL.md` step 2 document the hybrid back-to-back mirror-commit prerequisite. No mechanism redesign, no schema change.
 
+**Step 13 (tail, 2026-04-19):** Both Step 8 `jq`-dependency gaps closed. `global/claude/handoff/SKILL.md` step 5 preamble and `global/codex/run/SKILL.md` step 6c both now declare `jq` a hard dependency and cite the exact `require_jq_write` failure text from `scripts/approved-plan.sh:21`. `docs/operating-modes.md` audit table's two `⚠ gap — follow-up` cells updated to cite the new declarations; § "Gaps surfaced by Step 8" preserved as audit trail with a dated resolution line. Doc-only.
+
 ---
 
 ## Phase 1: Kanban Skill Suite ✓
