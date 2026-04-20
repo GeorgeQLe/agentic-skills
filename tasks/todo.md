@@ -63,7 +63,7 @@ Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env va
   - Failure before Codex starts → offer inline execution or emit packet
   - Codex may have started → set packet to `uncertain`, prompt inspect/discard/continue (never blind retry)
   - `agent-team` profile → inline fallback is a downgrade user must accept
-- [x] **Step 7** — Mode-aware terminal recommendations across `/plan-interview`, `/roadmap`, `/plan-phase`, `/run`, `/ship`, `/ship-end` (and Codex equivalents):
+- [x] **Step 7** — Mode-aware terminal recommendations across `/spec-interview`, `/roadmap`, `/plan-phase`, `/run`, `/ship`, `/ship-end` (and Codex equivalents):
   - `hybrid` → "delegate with `/delegate $run`"
   - `claude-only` → "run `/run`"
   - `codex-only` → "run `$run` in Codex"
@@ -98,8 +98,8 @@ Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env va
 
 ### Step 7 Summary (completed 2026-04-19)
 
-- Added a shared **Mode-aware next-step recommendation** section to 12 planning/execution skills — Claude: `plan-interview`, `roadmap`, `plan-phase`, `run`, `ship`, `ship-end`; Codex: same six. Each block resolves the effective agent mode via `./scripts/agent-mode.sh` and emits exactly one recommendation line per resolved mode, with a distinctive phrase ("resolved agent mode via scripts/agent-mode.sh") for grep-auditability.
-- Claude-side branches (hybrid→`/delegate <target>`, claude-only→Claude skill, codex-only→Codex `$skill`, unset→present all three + point at `docs/operating-modes.md`). Targets vary per skill context: `/roadmap` after plan-interview; `/plan-phase`/`/run` after roadmap; `/delegate $run` after plan-phase; `/delegate $ship` after `/run`; `/delegate $run` after `/ship` and `/ship-end`.
+- Added a shared **Mode-aware next-step recommendation** section to 12 planning/execution skills — Claude: `spec-interview`, `roadmap`, `plan-phase`, `run`, `ship`, `ship-end`; Codex: same six. Each block resolves the effective agent mode via `./scripts/agent-mode.sh` and emits exactly one recommendation line per resolved mode, with a distinctive phrase ("resolved agent mode via scripts/agent-mode.sh") for grep-auditability.
+- Claude-side branches (hybrid→`/delegate <target>`, claude-only→Claude skill, codex-only→Codex `$skill`, unset→present all three + point at `docs/operating-modes.md`). Targets vary per skill context: `/roadmap` after spec-interview; `/plan-phase`/`/run` after roadmap; `/delegate $run` after plan-phase; `/delegate $ship` after `/run`; `/delegate $run` after `/ship` and `/ship-end`.
 - Codex-side inversion for `hybrid`: "return to Claude for the next orchestration step" rather than "delegate further." `codex-only` stays in Codex; `claude-only` tells the user to switch to Claude.
 - No-recurse invariant preserved: `global/claude/delegate/SKILL.md` and `global/claude/handoff/SKILL.md` do NOT carry the block. Grep of the distinctive phrase returns exactly the expected 12 files.
 - Contract untouched: no edits to `docs/operating-modes.md`, `specs/approved-plan.schema.json`, or `scripts/agent-mode.sh`. Pure consumer of the mode resolver.
@@ -115,7 +115,7 @@ Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env va
 ### Step 9 Summary (completed 2026-04-19)
 
 - Appended `## Pack emphasis` to `docs/operating-modes.md` with two authoritative tables: **Global skills** (34 rows, one per unique skill name across `global/claude/` + `global/codex/`) and **Packs** (8 rows, one per directory under `packs/`). Every row tags a single primary role — `Claude-orchestration`, `Codex-execution`, or `Both` — with a compact Notes phrase.
-- Role distribution: 18 skills tagged Claude-orchestration (plan-interview, roadmap, plan-phase, brainstorm, research-roadmap, investigate, trace, expert-review, spec-drift, slim-audit, affected, dead-code, debug, delegate, skills, guide, analyze-sessions, handoff-subset-intent), 10 Codex-execution (commit-and-push-by-feature, decommission, deploy, install-workflow-orchestration, reconcile-dev-docs, regression-check, release, scaffold, ship, ship-end, sync — 11), 5 Both (branch-lifecycle, handoff, hygiene, migrate, pack, run — 6). Every "Both" row explains the rationale inline; no default-assignments.
+- Role distribution: 18 skills tagged Claude-orchestration (spec-interview, roadmap, plan-phase, brainstorm, research-roadmap, investigate, trace, expert-review, spec-drift, slim-audit, affected, dead-code, debug, delegate, skills, guide, analyze-sessions, handoff-subset-intent), 10 Codex-execution (commit-and-push-by-feature, decommission, deploy, install-workflow-orchestration, reconcile-dev-docs, regression-check, release, scaffold, ship, ship-end, sync — 11), 5 Both (branch-lifecycle, handoff, hygiene, migrate, pack, run — 6). Every "Both" row explains the rationale inline; no default-assignments.
 - Pack distribution: 3 Claude-orchestration (`business-app`, `devtool`, `game` — all base packs are framing/strategy skills), 1 Codex-execution (`code-quality` — refactor mutation), 4 Both (`business-app-kanban`, `devtool-kanban`, `game-kanban` inherit base pack and add kanban run/ship execution variants; `poketowork-kanban` has no base pack and mixes both natively).
 - Added one-line role tags pointing back at the table to the four existing `PACK.md` files (`business-app-kanban`, `code-quality`, `devtool-kanban`, `game-kanban`). Packs without a pack-level doc today (`business-app`, `devtool`, `game`, `poketowork-kanban`) were not given new files — out of scope per plan.
 - Contract untouched: no edits to `specs/approved-plan.schema.json`, `scripts/agent-mode.sh`, `scripts/approved-plan.sh`, or any `SKILL.md` workflow. Step 8's `## Degraded-path audit` section remains byte-identical.
@@ -233,7 +233,7 @@ Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env va
 
 Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch repo, or a no-op README tweak in this repo on a throwaway branch) and run it through each mode. One task, three runs. For each run, capture: the starting mode signal, every skill invoked, every packet lifecycle transition, and the final commit SHA. Record evidence inline in `tasks/verify-phase-11.md` (new, gitignored-or-committed per evidence contract below).
 
-1. **`claude-only` run.** `SKILLS_AGENT_MODE=claude-only` in the shell. `/plan-interview` or `/run --plan-only` (whichever fits the task) → Claude plans → `/run` executes → `/ship`. Expected: no packet written (claude-only does not need cross-CLI approval). Expected recommendation at each terminal skill: the Claude next-step (never `/delegate`, never `$…`).
+1. **`claude-only` run.** `SKILLS_AGENT_MODE=claude-only` in the shell. `/spec-interview` or `/run --plan-only` (whichever fits the task) → Claude plans → `/run` executes → `/ship`. Expected: no packet written (claude-only does not need cross-CLI approval). Expected recommendation at each terminal skill: the Claude next-step (never `/delegate`, never `$…`).
 2. **`codex-only` run.** `SKILLS_AGENT_MODE=codex-only`. `$run` plans → `$run` executes → `$ship`. Expected: no packet written. Recommendation line resolves to stay-in-Codex at each terminal.
 3. **`hybrid` run.** `SKILLS_AGENT_MODE=hybrid`. Claude `/run` plans → `/delegate $run` produces packet → Codex consumes via `$run --execute-approved` → `$ship`. Expected packet trajectory: `draft → approved → consumed`. Capture the exact `scripts/approved-plan.sh status` output at each transition.
 
@@ -470,7 +470,7 @@ Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch r
 **Scope:**
 
 1. **Survey skills (both CLIs).** For each skill name that appears under `global/claude/` and/or `global/codex/`, classify by primary role:
-   - **Claude-orchestration:** `plan-interview`, `roadmap`, `plan-phase`, `brainstorm`, `research-roadmap`, `investigate`, `trace`, `expert-review`, `review`, `security-review`, `spec-drift`, `affected`, `handoff`, `delegate` (Claude-only), `skills`, `guide`, `debug` (framing side), …
+   - **Claude-orchestration:** `spec-interview`, `roadmap`, `plan-phase`, `brainstorm`, `research-roadmap`, `investigate`, `trace`, `expert-review`, `review`, `security-review`, `spec-drift`, `affected`, `handoff`, `delegate` (Claude-only), `skills`, `guide`, `debug` (framing side), …
    - **Codex-execution:** `run`, `ship`, `ship-end`, `commit-and-push-by-feature`, `deploy`, `release`, `regression-check`, `hygiene`, `dead-code`, `slim-audit`, `reconcile-dev-docs`, `scaffold`, `migrate`, `decommission`, `branch-lifecycle`, `sync`, `pack`, `install-workflow-orchestration`, …
    - **Both:** skills whose work genuinely spans orchestration and execution (rare — document the rationale when used).
    - The lists above are the audit's *starting hypothesis*, not its answer. Verify each by skimming the skill's frontmatter `description` and primary workflow. Re-classify where the description contradicts the hypothesis.
@@ -488,7 +488,7 @@ Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch r
 
    | Skill | Primary role | Notes |
    | --- | --- | --- |
-   | `plan-interview` | Claude-orchestration | Interview-first planning — no repo mutation |
+   | `spec-interview` | Claude-orchestration | Interview-first planning — no repo mutation |
    | `run` | Codex-execution | Executes an approved step |
    | `delegate` | Claude-orchestration | Claude-only; the transport mechanism itself |
    | … | … | … |
@@ -635,7 +635,7 @@ Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch r
    - unset → present all three options and point at `docs/operating-modes.md` for the mode-signal resolution rules.
 
 2. **Claude skills to modify** (paths relative to repo root; touch each):
-   - `global/claude/plan-interview/SKILL.md` — after writing the spec, recommend the next step (typically `/roadmap` or `/plan-phase`, but the cross-CLI recommendation applies once execution begins).
+   - `global/claude/spec-interview/SKILL.md` — after writing the spec, recommend the next step (typically `/roadmap` or `/plan-phase`, but the cross-CLI recommendation applies once execution begins).
    - `global/claude/roadmap/SKILL.md` — after writing/updating the roadmap, recommend the appropriate next action.
    - `global/claude/plan-phase/SKILL.md` — after writing the phase plan, recommend `/delegate $run` (hybrid) / `/run` (claude-only) / `$run` (codex-only).
    - `global/claude/run/SKILL.md` — at the end of execution (handoff to ship), recommend the ship variant by mode.
@@ -660,7 +660,7 @@ Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch r
 
 **Files to modify (full paths):**
 
-- `/Users/georgele/projects/tools/agentic-skills/global/claude/plan-interview/SKILL.md`
+- `/Users/georgele/projects/tools/agentic-skills/global/claude/spec-interview/SKILL.md`
 - `/Users/georgele/projects/tools/agentic-skills/global/claude/roadmap/SKILL.md`
 - `/Users/georgele/projects/tools/agentic-skills/global/claude/plan-phase/SKILL.md`
 - `/Users/georgele/projects/tools/agentic-skills/global/claude/run/SKILL.md`
@@ -698,7 +698,7 @@ Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch r
 
 **Acceptance criteria:**
 
-- [ ] Every Claude skill in scope (plan-interview, roadmap, plan-phase, run, ship, ship-end) emits the mode-aware recommendation block.
+- [ ] Every Claude skill in scope (spec-interview, roadmap, plan-phase, run, ship, ship-end) emits the mode-aware recommendation block.
 - [ ] Every present Codex equivalent (run, plus ship/ship-end if they exist) emits the inverted mode-aware recommendation block.
 - [ ] `/delegate` and `/handoff` do NOT emit the block (no recursion).
 - [ ] `tasks/todo.md` Step 7 checked off and Active Step Plan rolled to Step 8 (degraded-path audit).

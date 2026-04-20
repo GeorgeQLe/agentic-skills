@@ -67,8 +67,8 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
    - After generating ideas, create one card per idea in the Backlog list
    - Card name: idea title. Card description: idea details, effort estimate, category
 
-2. **`plan-interview-kanban`** (Claude + Codex)
-   - Full copy of `/plan-interview` with kanban ops added
+2. **`spec-interview-kanban`** (Claude + Codex)
+   - Full copy of `/spec-interview` with kanban ops added
    - After validating/speccing an idea, find the matching Backlog card and update it with spec details
    - If no matching card exists, create one in Backlog with the spec summary
 
@@ -94,7 +94,7 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
    - After wrapping up, move the session's In Progress card to Done with commit refs
 
 ### Milestone
-- [x] Full kanban lifecycle works: brainstorm creates Backlog cards → plan-interview specs them → roadmap moves to Todo → run moves to In Progress (with conflict warnings) → ship/ship-end moves to Done or Punt
+- [x] Full kanban lifecycle works: brainstorm creates Backlog cards → spec-interview specs them → roadmap moves to Todo → run moves to In Progress (with conflict warnings) → ship/ship-end moves to Done or Punt
 
 ---
 
@@ -173,7 +173,7 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 2. **Fix null dereference in `cmdArchiveCard`**
 3. **Escape LIKE metacharacters in search**
 4. **Batch list creation in `cmdCreateBoard`**
-5. **Add missing `codex/plan-interview-ideas/agents/openai.yaml`**
+5. **Add missing `codex/spec-interview-ideas/agents/openai.yaml`**
 6. **Fix stale output paths in `docs/skills-reference.md`**
 7. **Add try/catch for malformed config JSON**
 

@@ -6,7 +6,7 @@
 
 ## Executive Summary
 
-The canonical workflow is now a file-backed, mode-aware planning and execution system shared by Claude Code and Codex. The source of truth is no longer chat history or a single monolithic todo. It is the task pipeline:
+The canonical workflow is now a file-backed, mode-routed planning and execution system shared by Claude Code and Codex. The source of truth is no longer chat history or a single monolithic todo. It is the task pipeline:
 
 - `specs/*.md` captures decision-complete feature intent.
 - `tasks/roadmap.md` captures strategic phased sequencing.
@@ -21,7 +21,7 @@ The canonical entry path depends on what exists in the directory:
 
 | Starting point | Canonical first move | Next move |
 | --- | --- | --- |
-| Fresh directory + rough idea | `/pack` or `$pack`, then `/plan-interview` or `$plan-interview` | `/roadmap` or `$roadmap` |
+| Fresh directory + rough idea | `/pack` or `$pack`, then `/spec-interview` or `$spec-interview` | `/roadmap` or `$roadmap` |
 | Existing spec | `/roadmap` or `$roadmap` | auto-seed Phase 1 with `/plan-phase 1` or `$plan-phase 1` |
 | Existing codebase | `/pack` or `$pack`, then `/roadmap` or `$roadmap` | resolve queued pipeline issues or create specs |
 | Existing active session | read `tasks/todo.md`, `tasks/roadmap.md`, `tasks/history.md`, git status | `/run`, `$run`, `/delegate $run`, or `/ship` depending on mode and state |
@@ -86,7 +86,7 @@ specs/*.md
 
 Not every project has every file. Missing files route the workflow:
 
-- No specs: run `plan-interview`.
+- No specs: run `spec-interview`.
 - Specs but no roadmap: run `roadmap`.
 - Roadmap but no executable current phase: run `plan-phase`.
 - Current phase with unchecked steps: run `run`.
@@ -125,7 +125,7 @@ The state machine is:
 
 | State | Condition | Canonical behavior |
 | --- | --- | --- |
-| No specs | no `specs/` and no `spec.md` | queue `plan-interview` |
+| No specs | no `specs/` and no `spec.md` | queue `spec-interview` |
 | Specs, no roadmap | specs exist, no usable `tasks/roadmap.md` | interview and write roadmap |
 | Work in progress | roadmap exists with unchecked phases | classify pipeline issues |
 | All complete | all phases checked | queue `research-roadmap` |
@@ -164,7 +164,7 @@ Claude:
 
 ```bash
 /pack
-/plan-interview
+/spec-interview
 /roadmap
 /run
 /ship
@@ -175,7 +175,7 @@ Codex:
 
 ```bash
 $pack
-$plan-interview
+$spec-interview
 $roadmap
 $run
 $ship-end
@@ -186,7 +186,7 @@ Hybrid:
 ```bash
 /pack
 scripts/pack.sh set-mode hybrid
-/plan-interview
+/spec-interview
 /roadmap
 /delegate $run
 /ship-end
@@ -195,11 +195,11 @@ scripts/pack.sh set-mode hybrid
 Canonical behavior:
 
 1. `pack` designates the project type and installs local pack skills.
-2. `plan-interview` turns the rough idea into a decision-complete spec under `specs/`.
+2. `spec-interview` turns the rough idea into a decision-complete spec under `specs/`.
 3. `roadmap` sequences specs into phases and seeds Phase 1 with `plan-phase`.
 4. Execution proceeds through the mode-specific loop.
 
-Do not skip `plan-interview` for non-trivial ideas. The current workflow assumes specs are the boundary between ideation and implementation planning.
+Do not skip `spec-interview` for non-trivial ideas. The current workflow assumes specs are the boundary between ideation and implementation planning.
 
 ### Fresh Directory With An Existing Spec
 
@@ -263,7 +263,7 @@ Canonical behavior:
 
 1. `pack` infers project type from repository signals.
 2. `roadmap` scans README, existing specs, ideas, tasks, git history, and code shape.
-3. If no specs exist, `roadmap` queues `plan-interview`.
+3. If no specs exist, `roadmap` queues `spec-interview`.
 4. If specs exist, `roadmap` builds or updates the phase plan.
 5. If old-style task docs exist, `run` or `ship` migrates split roadmap/todo shape before proceeding.
 
@@ -272,7 +272,7 @@ If the codebase is mature but undocumented, a common sequence is:
 ```bash
 /hygiene
 /research-roadmap
-/plan-interview
+/spec-interview
 /roadmap
 ```
 
@@ -312,7 +312,7 @@ Use this when Codex is unavailable.
 Canonical loop:
 
 ```bash
-/plan-interview
+/spec-interview
 /roadmap
 /run
 /ship
@@ -336,7 +336,7 @@ Use this when Claude is unavailable.
 Canonical loop:
 
 ```bash
-$plan-interview
+$spec-interview
 $roadmap
 $run
 $ship-end
@@ -364,7 +364,7 @@ Use this when both Claude and Codex are available.
 Canonical loop as implemented today:
 
 ```bash
-/plan-interview
+/spec-interview
 /roadmap
 /delegate $run
 ```
@@ -485,7 +485,7 @@ Codex:
 
 The following are planned but not fully wired as of this report:
 
-1. Phase 11 Step 7: mode-aware terminal recommendations across planning/execution skills.
+1. Phase 11 Step 7: next-step routing across planning/execution skills.
 2. Phase 11 Step 8: degraded-path audit table in `docs/operating-modes.md`.
 3. Phase 11 Step 9: pack emphasis split by CLI role.
 4. Phase 11 Step 10: pack-aware `$run` routing on Codex.
@@ -503,7 +503,7 @@ Do I have a project designation?
   yes -> continue
 
 Do I have a decision-complete spec?
-  no  -> /plan-interview or $plan-interview
+  no  -> /spec-interview or $spec-interview
   yes -> continue
 
 Do I have tasks/roadmap.md?
@@ -534,7 +534,7 @@ Am I switching sessions or CLIs?
 The canonical workflow is now:
 
 ```text
-pack -> plan-interview -> roadmap -> plan-phase -> run/delegate -> ship -> ship-end
+pack -> spec-interview -> roadmap -> plan-phase -> run/delegate -> ship -> ship-end
 ```
 
 with three valid execution modes:
