@@ -8,7 +8,7 @@
 - [x] **Fix null dereference in `cmdArchiveCard`**
 - [x] **Escape LIKE metacharacters in search**
 - [x] **Batch list creation in `cmdCreateBoard`**
-- [x] **Add missing `codex/plan-interview-ideas/agents/openai.yaml`**
+- [x] **Add missing `codex/spec-interview/agents/openai.yaml`** (originally `plan-interview-ideas`, skill later renamed to `spec-interview`)
 - [x] **Fix stale output paths in `docs/skills-reference.md`**
 - [x] **Add try/catch for malformed config JSON**
 
@@ -23,6 +23,6 @@
 All 7 expert review findings resolved across 2026-03-25 to 2026-03-27. Key changes:
 - Credential scrubbed from `docs/kanban-test-results.md`, Neon password rotated
 - Null dereference fix + LIKE metacharacter escaping + batch list creation in `kanban.mjs`
-- Missing codex agent manifest added for `plan-interview-ideas`
+- Missing codex agent manifest added for `plan-interview-ideas` (skill later renamed to `spec-interview`)
 - Stale output paths fixed in `docs/skills-reference.md`
 - Try/catch added for malformed config JSON in `loadConfig()`
