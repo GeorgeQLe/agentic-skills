@@ -32,7 +32,7 @@ The operating model is plural by default:
 - `codex-only`: Codex plans, executes, ships, and wraps.
 - `hybrid`: Claude orchestrates; Codex executes via `/delegate` and the shared approval packet.
 
-The mode signal exists today: `.agents/project.json.agent_mode`, overridden by `SKILLS_AGENT_MODE`, resolved by `scripts/agent-mode.sh`. Mode-aware terminal recommendations are not fully wired yet; that is the active Phase 11 Step 7.
+The mode signal exists today: `.agents/project.json.agent_mode`, overridden by `SKILLS_AGENT_MODE`, resolved by `scripts/agent-mode.sh`. Next-step routing is wired across the planning and execution skills.
 
 ## What Is Canonical Now
 
@@ -64,7 +64,7 @@ scripts/pack.sh install business-app-kanban
 scripts/pack.sh set-mode hybrid
 ```
 
-Use `scripts/pack.sh set-mode <claude-only|codex-only|hybrid|unset>` when you know the desired operating mode. If the mode is unset, skills should present all viable paths.
+Use `scripts/pack.sh set-mode <claude-only|codex-only|hybrid|unset>` when you know the desired operating mode. If the mode is unset, skills should keep the concrete next work item primary and infer the command route from invocation and task type.
 
 ### 2. Keep project state in files
 

@@ -6,7 +6,7 @@
 
 ## Summary
 
-Phases 1-11 complete: kanban skill suite, board intelligence, templates, archive automation, expert review fixes, test hardening (83 tests), kanban DX, skill infrastructure, the shared Poketo headless API migration for both Claude and Codex, and the three-mode operating model (`claude-only` / `codex-only` / `hybrid`) with shared approval-packet contract and mode-aware terminal recommendations.
+Phases 1-11 complete: kanban skill suite, board intelligence, templates, archive automation, expert review fixes, test hardening (83 tests), kanban DX, skill infrastructure, the shared Poketo headless API migration for both Claude and Codex, and the three-mode operating model (`claude-only` / `codex-only` / `hybrid`) with shared approval-packet contract and next-step routing.
 
 ## Phase Overview
 
@@ -22,13 +22,13 @@ Phases 1-11 complete: kanban skill suite, board intelligence, templates, archive
 | 8 | Kanban DX ✓ | specs/board-flag-kanban-search.md, tasks/ideas.md | `--board` flag, dry-run mode, env path unification | M |
 | 9 | Skill Infrastructure ✓ | tasks/ideas.md | Skill discovery, dependency graph, versioning | L |
 | 10 | Headless API Migration ✓ | — | Shared Poketo app-layer kanban integration for Claude + Codex | L |
-| 11 | Three-Mode Operating Model ✓ | tasks/todo.md | `claude-only`/`codex-only`/`hybrid` modes, approval packet, `/delegate`, mode-aware recommendations | XL |
+| 11 | Three-Mode Operating Model ✓ | tasks/todo.md | `claude-only`/`codex-only`/`hybrid` modes, approval packet, `/delegate`, next-step routing | XL |
 
 ---
 
 ## Phase 11: Three-Mode Operating Model ✓
 
-**Goal:** Evolve `agentic-skills` from parity-mirrored Claude/Codex skills into a plural-by-default operating model with three first-class modes (`claude-only`, `codex-only`, `hybrid`), a shared approval/delegation packet contract, and mode-aware terminal recommendations across every planning/execution skill.
+**Goal:** Evolve `agentic-skills` from parity-mirrored Claude/Codex skills into a plural-by-default operating model with three first-class modes (`claude-only`, `codex-only`, `hybrid`), a shared approval/delegation packet contract, and next-step routing across every planning/execution skill.
 
 **Completed:** 2026-04-19. Shipped across 11 implementation steps + an empirical Verify micro-step. Full per-step detail lives in `tasks/todo.md` § "Phase 11" and `tasks/history.md`. Authoritative operating-model reference: `docs/operating-modes.md`.
 
@@ -37,7 +37,7 @@ Phases 1-11 complete: kanban skill suite, board intelligence, templates, archive
 - **Mode signal + resolver.** `scripts/agent-mode.sh` resolves the effective mode via precedence `SKILLS_AGENT_MODE` env > `.agents/project.json.agent_mode` > unset. Writer: `scripts/pack.sh set-mode`.
 - **Approval packet.** `specs/approved-plan.schema.json` defines the shared cross-CLI contract. `scripts/approved-plan.sh` implements the full lifecycle (`draft → approved → consumed | stale | superseded | uncertain`) with atomic transitions and six freshness checks (`consume` at the Codex boundary via `$run --execute-approved`).
 - **In-session delegation.** `/delegate` (Claude) provides the hybrid-only bridge: drafts + approves a packet and invokes `codex exec "<target> --execute-approved"` with explicit pre-start / success / ambiguous safe-fallback branches and a `mark-uncertain` escape hatch. Never blind-retries cross-CLI. `/handoff --target=codex` covers the async case.
-- **Mode-aware recommendations.** 12 planning/execution skills (6 Claude + 6 Codex) carry a shared "Mode-aware next-step recommendation" block that emits exactly one recommendation line per resolved mode. `hybrid` on Claude recommends `/delegate`; `hybrid` on Codex recommends returning to Claude (Claude orchestrates).
+- **Next-step routing.** 12 planning/execution skills (6 Claude + 6 Codex) carry a shared "Next-Step Routing" block that emits Next work plus Recommended next command. `hybrid` on Claude recommends `/delegate`; `hybrid` on Codex recommends returning to Claude (Claude orchestrates).
 - **Pack emphasis.** `docs/operating-modes.md` § "Pack emphasis" tags every global skill and pack with a primary role (`Claude-orchestration` / `Codex-execution` / `Both`). Codex `$run` uses pack-aware routing to substitute `-kanban` variants when an enabled pack ships them.
 - **Degraded-path audit.** 19-row table in `docs/operating-modes.md` § "Degraded-path audit" covers every cross-CLI touchpoint with an explicit fallback or mode constraint.
 - **Authoritative reference.** `docs/operating-modes.md` (~280 lines) is the single source of truth: mode-signal resolution, approval packet (fields / lifecycle / safety / freshness), degraded-path audit, pack emphasis, and a migration guide from the parity-mirror model.
