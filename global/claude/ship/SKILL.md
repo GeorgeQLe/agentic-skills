@@ -101,18 +101,24 @@ d) Write a **self-contained** implementation plan for the next step into `tasks/
    - If test strategy is `tests-after`: note that tests will be written in the Green step
    - The current phase's `### Execution Profile`, including whether the next execution is serial, research-only, review-only, implementation-safe, or agent-team
    - Acceptance criteria: how to verify the step is done
-   - **Ship-one-step handoff contract:** the next clear-context implementation session must implement only this step, validate it, mark the step done in `tasks/todo.md`, update `tasks/history.md`, commit and push the completed work, deploy only when an explicit manual deploy contract exists, write the following step's plan, enter plan mode for that following step, and stop before implementing it.
+   - **Ship-one-step handoff contract:** the next clear-context implementation session must implement only this step, validate it, mark the step done in `tasks/todo.md`, update `tasks/history.md`, commit and push the completed work, deploy only when an explicit manual deploy contract exists, write the following step's plan, start the approval UI for that following step by calling `EnterPlanMode` first, write a brief pass-through plan in plan mode, call `ExitPlanMode`, and stop before implementing it. Do not call `ExitPlanMode` from normal mode.
 e) Ship `tasks/todo.md`, `tasks/roadmap.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, `tasks/recurring-todo.md` (when they exist), and `tasks/phases/` (if created) via `/commit-and-push-by-feature`, landing them on `main` or `master`.
 
 ### 5. Enter plan mode (skip if `--no-plan`)
 **Before entering plan mode**, read `.claude/settings.local.json` and ensure `"showClearContextOnPlanAccept": true` is set. If the file doesn't exist, create it with `{ "showClearContextOnPlanAccept": true }`. If it exists but lacks the key, add it (preserve existing settings).
 
-**YOU MUST call the EnterPlanMode tool.** This is not optional. This gives the user the option to "clear context and implement" — which starts a fresh context that reads `tasks/todo.md` and implements the plan. A next-step plan being written or already present is not a completed `/ship` unless `--no-plan` is set or this tool call succeeds.
+**YOU MUST run the full plan-mode approval sequence.** This is not optional. A next-step plan being written or already present is not a completed `/ship` unless `--no-plan` is set or the approval UI is presented successfully.
 
-There is no normal final-answer checkpoint between writing/finding the next plan and entering plan mode. If the prior tool call was interrupted after the plan was written, resume by calling EnterPlanMode rather than summarizing and stopping.
+1. Call `EnterPlanMode`. This enters plan mode.
+2. In plan mode, write the plan file to the path specified by the plan-mode system prompt. Keep it brief: name the next step, state that the full implementation plan is in `tasks/todo.md`, and include the ship-one-step handoff contract. Do not explore the codebase or perform multi-phase planning; this is a pass-through to present the approval UI.
+3. Call `ExitPlanMode`. This presents the approval UI where the user can choose "clear context and implement" to start a fresh context that reads `tasks/todo.md` and implements the plan.
 
-### 6. Present the ship summary and plan (skip if `--no-plan`)
-After entering plan mode, present a brief ship summary (2-3 lines max) and **present the execution plan** to the user. Summarize the plan that was written to `tasks/todo.md` in step 4d:
+`EnterPlanMode` alone does not present the approval UI. `ExitPlanMode` must only be called after `EnterPlanMode` has succeeded and the session is visibly in plan mode. If Claude Code reports "You are not in plan mode", do not retry `ExitPlanMode`; call `EnterPlanMode` first, then write the brief pass-through plan and call `ExitPlanMode`.
+
+There is no normal final-answer checkpoint between writing/finding the next plan and presenting the approval UI. If the prior tool call was interrupted after the plan was written, resume by calling `EnterPlanMode` rather than summarizing and stopping, unless the session is already visibly in plan mode.
+
+### 6. Plan-mode approval content (skip if `--no-plan`)
+When writing the brief pass-through plan in step 5, include a short ship summary (2-3 lines max) and **present the execution plan** to the user. Summarize the plan that was written to `tasks/todo.md` in step 4d:
 - What was shipped (if anything)
 - Deploy status (if deployed or skipped)
 - Test status — **explicitly state whether any failing tests are expected (red phase: tests written before implementation) or unexpected (regressions/bugs that need fixing)**
@@ -121,7 +127,7 @@ After entering plan mode, present a brief ship summary (2-3 lines max) and **pre
 - What needs to be built/changed
 - Which files will be created or modified (full paths)
 - The approach (e.g., test strategy, key technical decisions)
-- **Ship-one-step handoff contract:** after approval, implement only this step; validate it; mark it done in `tasks/todo.md`; update `tasks/history.md`; commit and push the completed work; deploy only when an explicit manual deploy contract exists; write the following step's plan; enter plan mode for that following step; and stop before implementing it.
+- **Ship-one-step handoff contract:** after approval, implement only this step; validate it; mark it done in `tasks/todo.md`; update `tasks/history.md`; commit and push the completed work; deploy only when an explicit manual deploy contract exists; write the following step's plan; start the approval UI for that following step by calling `EnterPlanMode` first, write a brief pass-through plan in plan mode, call `ExitPlanMode`, and stop before implementing it. Do not call `ExitPlanMode` from normal mode.
 - Any decisions or trade-offs the user should weigh in on
 
 This gives the user something concrete to review before selecting "clear context and implement".
@@ -154,8 +160,8 @@ Rules:
 - Do NOT re-read files you've already read this session. Use what's in context.
 - Do NOT explore the codebase extensively for planning. Keep context footprint minimal.
 - If the tree is clean and the next step plan already exists in `tasks/todo.md`, skip straight to step 5.
-- Unless `--no-plan` is set or a documented blocker stops planning, do not end the turn after writing, finding, or shipping the next-step plan; call EnterPlanMode first.
-- The plan shown to the clear-context implementation session must explicitly say this is a ship-one-step handoff: ship the approved step, enter plan mode for the following step, and stop. The plan-mode prompt is the human approval boundary that prevents a runaway loop.
+- Unless `--no-plan` is set or a documented blocker stops planning, do not end the turn after writing, finding, or shipping the next-step plan; run the full `EnterPlanMode` -> pass-through plan -> `ExitPlanMode` approval sequence.
+- The plan shown to the clear-context implementation session must explicitly say this is a ship-one-step handoff: ship the approved step, start the following step's approval UI with `EnterPlanMode` before `ExitPlanMode`, and stop. The plan-mode prompt is the human approval boundary that prevents a runaway loop.
 - Do not amend or rewrite history.
 - Do not commit secrets.
 - Do not push shipping commits to an existing feature branch. Use `/commit-and-push-by-feature` to move the work onto `main` or `master` and push it there, or stop and report a blocker if that cannot be done safely.

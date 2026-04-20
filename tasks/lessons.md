@@ -10,5 +10,5 @@
 
 - Claude `/run` should execute exactly one approved step and then hand the dirty tree to `/ship`; it should not commit or push.
 - Claude `/ship` is not complete after writing the next-step plan. Unless `--no-plan` is set or a blocker is documented, it must enter plan mode so the user can clear context and implement.
-- Clear-context sessions launched by `/ship` plan mode are ship-one-step sessions. The plan handed to them must explicitly say to implement the approved step, validate, commit/push, deploy only with an explicit manual deploy contract, write the following step's plan, enter plan mode, and stop before implementing it.
+- Clear-context sessions launched by `/ship` plan mode are ship-one-step sessions. The plan handed to them must explicitly say to implement the approved step, validate, commit/push, deploy only with an explicit manual deploy contract, write the following step's plan, start the next approval UI with `EnterPlanMode` before `ExitPlanMode`, and stop before implementing it.
 - Deploy discovery should not stall shipping in repos with no explicit manual deploy contract; skip deploy unless `deploy.md` or `tasks/deploy.md` exists.
