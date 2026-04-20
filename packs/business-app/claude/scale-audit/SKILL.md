@@ -96,13 +96,15 @@ Estimate effort for each: S / M / L / XL.
 
 ### 5. Populate Next Steps
 
-Before writing, check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with "Pick one:" framing:
+Before writing, check which files exist to populate the `## Next Steps` section contextually. Include a **Recommended** item and 2–4 other applicable options. Choose the recommendation by the first matching condition:
 
-- ALWAYS: `/roadmap` — Turn the enterprise build sequence into a phased roadmap
-- IF hard-blockers need specs: `/spec-interview [top blocker]` — Spec the top enterprise hard-blocker
-- IF no `research/journey-map.md` for enterprise: `/journey-map enterprise` — Map enterprise stakeholder journeys
-- IF startup gaps escalated and `research/mvp-gap.md` stale: `/mvp-gap` — Re-evaluate startup readiness first
-- IF no `research/metrics.md`: `/metrics` — Define metrics covering enterprise SLAs
+1. IF any `hard-blocker` lacks a full implementation spec: `/spec-interview [top blocker]` — spec the highest-priority enterprise hard-blocker from `specs/scale-audit.md`.
+2. IF enterprise stakeholder journey context is missing: `/journey-map enterprise` — map enterprise stakeholder journeys before sequencing build work.
+3. IF startup gaps escalated and `research/mvp-gap.md` is missing or stale: `/mvp-gap` — re-evaluate startup readiness first.
+4. IF enterprise SLA or compliance gaps lack closure metrics: `/metrics` — define metrics covering enterprise SLAs.
+5. OTHERWISE: `/roadmap` — sequence the already-specced enterprise work into implementation phases.
+
+Only recommend `/roadmap` as the primary next step when every hard-blocker already has a full spec or is already tracked in `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, or `tasks/recurring-todo.md`.
 
 ## Output
 
@@ -159,7 +161,9 @@ Before writing, check which files exist to populate the `## Next Steps` section 
 
 ## Next Steps
 
-Pick one:
+**Recommended:** [first matching command from step 5] — [reason grounded in this audit]
+
+Other options:
 - [conditional items from step 5 — only include items whose conditions are met]
 ```
 
@@ -178,7 +182,7 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Do not make code changes.** Analysis only.
 - **Every gap must cite evidence** — missing middleware, absent SCIM endpoint, no audit log table, etc.
 - **Distinguish "first enterprise deal" from "100th enterprise deal."** Early enterprise sales can tolerate workarounds; at scale they can't. Be clear about which gaps matter when.
-- **Include `/spec-interview` prompts** for each gap for immediate action.
+- **Include `/spec-interview` prompts** for each gap that lacks a full spec so the user can immediately spec the blocker.
 - **Do not duplicate work already tracked** in `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, or `tasks/recurring-todo.md`.
 - **If the codebase is minimal**, be honest about it — don't fabricate detailed infrastructure gaps for a prototype.
 
