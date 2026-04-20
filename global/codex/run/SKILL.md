@@ -106,22 +106,32 @@ Identify the next incomplete unit of work from the phased plan, build an executi
 - Validation results (if lint/typecheck/test/build commands were run) — explicitly state whether failures are expected (red phase: tests before implementation) or unexpected (regressions/bugs), and call out any warnings as fixed, accepted, or unresolved
 - Manual tasks — pending count from `tasks/manual-todo.md` (if it exists)
 - Advisory tasks — pending record/recurring counts from `tasks/record-todo.md` and `tasks/recurring-todo.md` if they exist
-- What is next (just its name)
+- **Next work:** the next concrete project task, blocker, smoke test, or follow-up
+- **Recommended next command:** one command or route for that work
 
-## Mode-aware next-step recommendation
+## Next-Step Routing
 
-Before handing back to the user, resolve the effective agent mode via `./scripts/agent-mode.sh` and emit exactly one recommendation line matching the resolved agent mode via scripts/agent-mode.sh:
+Before handing back, identify the next concrete work item from project state, then recommend the executor and invocation.
 
-- `hybrid` → **Next:** return to Claude for the next orchestration step — Claude orchestrates in hybrid; do not delegate further from Codex.
-- `codex-only` → **Next:** run `$run` for the next step — stay in Codex.
-- `claude-only` → **Next:** switch to Claude and run `/run` for the next step — Codex is not the executor in this mode.
-- unset → present all three options and point the user at `docs/operating-modes.md` for mode-signal resolution rules.
+Output exactly two lines beyond the normal report:
 
-Keep it to one line beyond the normal report; do not restate mode-signal precedence in skill copy.
+- **Next work:** <specific task name, manual blocker, verification gap, or "none">
+- **Recommended next command:** <one command or route>
 
-### Pack-aware routing
+Rules:
 
-After resolving the mode, resolve enabled packs via `./scripts/pack.sh list-packs` (newline-separated enabled pack names from `.agents/project.json.enabled_packs`; reuses the `read_enabled_packs` reader — do not grep `.agents/project.json` directly). When the recommendation would emit `$run`, `$ship`, or `$ship-end`, check whether any enabled pack ships the matching `-kanban` variant (`run-kanban`, `ship-kanban`, `ship-end-kanban`) under `packs/<pack>/codex/`. If one does, emit the kanban invocation (e.g., `$run-kanban`) in place of the global default. Candidates today are `business-app-kanban`, `devtool-kanban`, `game-kanban`, and `poketowork-kanban` — each tagged `Both` in `docs/operating-modes.md` § "Pack emphasis" with kanban `run`/`ship`/`ship-end` execution variants.
+- Make the next work item primary. Derive it from `tasks/todo.md`, `tasks/manual-todo.md`, deploy status, validation gaps, smoke-test gaps, phase-transition output, or the absence of any remaining work. Do not use agent mode itself as the next work item.
+- Use `./scripts/agent-mode.sh` only to choose command text. If it is missing, unset, or non-zero, infer routing from the current invocation and task type instead of asking the user to select a mode by default.
+- Inference defaults:
+  - Codex skill invocation (`$run`, `$ship`, `$ship-end`, or `$run --execute-approved`) → recommend the matching `$...` command.
+  - Claude slash invocation (`/run`, `/ship`, `/delegate`) or orchestration-heavy work → recommend the matching `/...` route.
+  - Manual, browser, auth, DNS, console, or production smoke-test work → recommend `$guide` or a Claude-guided manual step rather than `$run`.
+  - Approved packet present → recommend `$run --execute-approved` unless the resolved mode is explicitly `claude-only`.
+- Only present multiple commands when the ambiguity materially changes execution safety or there are equally valid next work items. Otherwise choose the best route and mention degraded mode lookup inline.
+
+### Pack-Aware Command Text
+
+After resolving or inferring the command route, resolve enabled packs via `./scripts/pack.sh list-packs` (newline-separated enabled pack names from `.agents/project.json.enabled_packs`; reuses the `read_enabled_packs` reader — do not grep `.agents/project.json` directly). When the recommendation would emit `$run`, `$ship`, or `$ship-end`, check whether any enabled pack ships the matching `-kanban` variant (`run-kanban`, `ship-kanban`, `ship-end-kanban`) under `packs/<pack>/codex/`. If one does, emit the kanban invocation (e.g., `$run-kanban`) in place of the global default. Candidates today are `business-app-kanban`, `devtool-kanban`, `game-kanban`, and `poketowork-kanban` — each tagged `Both` in `docs/operating-modes.md` § "Pack emphasis" with kanban `run`/`ship`/`ship-end` execution variants.
 
 - **No-match / no-pack:** emit the global-default recommendation exactly as today. No "I checked enabled_packs" noise.
 - **Degraded path:** missing or malformed `.agents/project.json` (or non-zero exit from `list-packs`) → silent fallback to the global-default recommendation with a single inline comment `pack-lookup: skipped (no project.json)` appended to the recommendation line.

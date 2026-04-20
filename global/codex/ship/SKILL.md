@@ -67,18 +67,27 @@ Ship already-finished work, commit it, optionally deploy it, and plan the next s
    - Validation status — explicitly state whether any failing tests are expected (red phase: tests before implementation) or unexpected (regressions/bugs), and call out any warnings as fixed, accepted, or unresolved
    - Manual tasks — pending count from `tasks/manual-todo.md` (if it exists), note any blocking upcoming steps
    - Advisory tasks — pending record/recurring counts from `tasks/record-todo.md` and `tasks/recurring-todo.md` if they exist
-   - What the next step is
+   - **Next work:** the next concrete project task, blocker, smoke test, or follow-up
+   - **Recommended next command:** one command or route for that work
 
-## Mode-aware next-step recommendation
+## Next-Step Routing
 
-Before handing back to the user, resolve the effective agent mode via `./scripts/agent-mode.sh` and emit exactly one recommendation line matching the resolved agent mode via scripts/agent-mode.sh:
+Before handing back, identify the next concrete work item from project state, then recommend the executor and invocation.
 
-- `hybrid` → **Next:** return to Claude for the next orchestration step — Claude orchestrates in hybrid; do not delegate further from Codex.
-- `codex-only` → **Next:** run `$run` — stay in Codex.
-- `claude-only` → **Next:** switch to Claude and run `/run` — Codex is not the executor in this mode.
-- unset → present all three options and point the user at `docs/operating-modes.md` for mode-signal resolution rules.
+Output exactly two lines beyond the normal report:
 
-Keep it to one line beyond the normal report; do not restate mode-signal precedence in skill copy.
+- **Next work:** <specific task name, manual blocker, verification gap, or "none">
+- **Recommended next command:** <one command or route>
+
+Rules:
+
+- Make the next work item primary. Derive it from `tasks/todo.md`, `tasks/manual-todo.md`, deploy status, validation gaps, smoke-test gaps, phase-transition output, or the absence of any remaining work. Do not use agent mode itself as the next work item.
+- Use `./scripts/agent-mode.sh` only to choose command text. If it is missing, unset, or non-zero, infer routing from the current invocation and task type instead of asking the user to select a mode by default.
+- Inference defaults:
+  - Codex skill invocation (`$run`, `$ship`, `$ship-end`) → recommend the matching `$...` command.
+  - Claude slash invocation (`/run`, `/ship`, `/delegate`) or orchestration-heavy work → recommend the matching `/...` route.
+  - Manual, browser, auth, DNS, console, or production smoke-test work → recommend `$guide` or a Claude-guided manual step rather than `$run`.
+- Only present multiple commands when the ambiguity materially changes execution safety or there are equally valid next work items. Otherwise choose the best route and mention degraded mode lookup inline.
 
 ## Constraints
 

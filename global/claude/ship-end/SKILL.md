@@ -60,18 +60,29 @@ Wrap up the current session: mark progress, commit, and push.
 - **Branch**: [branch name]
 - **Commits**: [list]
 - **Working tree**: clean
+- **Next work:** [specific task, blocker, verification gap, or "none"]
+- **Recommended next command:** [one command or route]
 ```
 
-## Mode-aware next-step recommendation
+## Next-Step Routing
 
-Before closing out the session, resolve the effective agent mode via `./scripts/agent-mode.sh` and emit exactly one recommendation line matching the resolved agent mode via scripts/agent-mode.sh:
+Before closing out the session, identify the next concrete work item from project state, then recommend the executor and invocation.
 
-- `hybrid` → **Next session:** delegate with `/delegate $run` — Claude orchestrates, Codex executes.
-- `claude-only` → **Next session:** run `/run` — Codex is unavailable; stay in Claude.
-- `codex-only` → **Next session:** run `$run` in Codex — Claude is not the executor in this mode.
-- unset → present all three options and point the user at `docs/operating-modes.md` for mode-signal resolution rules.
+Output exactly two lines beyond the normal session summary:
 
-Keep it to one line beyond the normal session summary; do not restate mode-signal precedence in skill copy.
+- **Next work:** <specific task name, manual blocker, verification gap, or "none">
+- **Recommended next command:** <one command or route>
+
+Rules:
+
+- Make the next work item primary. Derive it from `tasks/todo.md`, `tasks/manual-todo.md`, deploy status, validation gaps, smoke-test gaps, outstanding session work, or the absence of any remaining work. Do not use agent mode itself as the next work item.
+- Use `./scripts/agent-mode.sh` only to choose command text. If it is missing, unset, or non-zero, infer routing from the current invocation and task type instead of asking the user to select a mode by default.
+- Inference defaults:
+  - Hybrid execution handoff → recommend `/delegate $run`.
+  - Claude-only or orchestration-heavy work → recommend `/run`.
+  - Codex-only execution → recommend `$run`.
+  - Manual, browser, auth, DNS, console, or production smoke-test work → recommend `/guide` or a Claude-guided manual step rather than `/run`.
+- Only present multiple commands when the ambiguity materially changes execution safety or there are equally valid next work items. Otherwise choose the best route and mention degraded mode lookup inline.
 
 ## Constraints
 
