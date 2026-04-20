@@ -140,9 +140,9 @@ This section enumerates every cross-tool touchpoint that ships today. One row pe
 | `global/claude/delegate/SKILL.md` | `hybrid`; `codex` binary on PATH | Start marker never prints; enters pre-start-failure branch | § "Process" step 6 pre-start-failure branch: offer inline Claude execution or keep packet `approved`; `--inline-fallback` auto-selects inline |
 | `global/claude/delegate/SKILL.md` | `hybrid`; Codex exec completes cleanly | Non-zero exit or timeout after start marker → transport ambiguous | § "Process" step 6 ambiguous branch: `mark-uncertain` + inspect/discard/continue prompt; never blind-retries |
 | `global/claude/handoff/SKILL.md` | `--target=codex`: mode ≠ `codex-only` | Step 5.1 aborts with `mode-mismatch:` — Claude is not the planner in `codex-only` | § "Process" step 5.1 — `requires mode claude-only or hybrid` |
-| `global/claude/handoff/SKILL.md` | `--target=codex`: `jq` on PATH for pretty-print (step 5.5) | Pretty-print call fails; no documented fallback | ⚠ gap — follow-up |
+| `global/claude/handoff/SKILL.md` | `--target=codex`: `jq` on PATH for pretty-print (step 5.5) | `scripts/approved-plan.sh draft` dies first via `require_jq_write` with the install-hint error; packet is never drafted | § "Process" step 5 preamble — `jq` declared a hard dependency; failure text cited |
 | `global/codex/run/SKILL.md` | `--execute-approved`: mode ≠ `claude-only` | `scripts/approved-plan.sh check` prints `mode-mismatch` reason; skill stops with user error | § "Process" step 6c + § "Constraints" — `requires mode codex-only or hybrid` |
-| `global/codex/run/SKILL.md` | `--execute-approved`: `jq` on PATH for consume write path | Consume write fails; no documented fallback | ⚠ gap — follow-up (dependency declared in § "Constraints"; no degraded path) |
+| `global/codex/run/SKILL.md` | `--execute-approved`: `jq` on PATH for consume write path | `scripts/approved-plan.sh consume` dies via `require_jq_write` with `ERROR: jq required for write operations. Install with: brew install jq …` | § "Process" step 6c + § "Constraints" — `jq` declared a hard dependency; failure text cited |
 | `global/claude/plan-interview/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Unset mode leaves next-step recommendation ambiguous | § "Mode-aware next-step recommendation" unset branch presents all three options + `docs/operating-modes.md` pointer |
 | `global/claude/roadmap/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Unset mode leaves next-step recommendation ambiguous | § "Mode-aware next-step recommendation" unset branch presents all three options + docs pointer |
 | `global/claude/plan-phase/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Unset mode leaves `/delegate $run` vs `/run` vs `$run` ambiguous | § "Mode-aware next-step recommendation" unset branch presents all three options + docs pointer |
@@ -163,8 +163,10 @@ Pack wrappers under `packs/**/SKILL.md` are intentionally absent from this audit
 
 Each gap below is logged for a follow-up step to close; Step 8 does not fix them.
 
-- `global/claude/handoff/SKILL.md` `--target=codex` — `jq` is used for pretty-printing the drafted packet at step 5.5, but the skill does not document a degraded path when `jq` is absent. Missing: either declare `jq` as a hard dependency in § "Process" or fall back to a `jq`-free pretty-printer / raw JSON dump.
-- `global/codex/run/SKILL.md` `--execute-approved` — `jq` is declared as a hard dependency for the consume write path in § "Constraints", but no degraded path is documented when it is missing. Missing: either a clean user-facing failure reason in § "Process" step 6c, or a `jq`-free consume fallback.
+**Closed in Step 13 (2026-04-19):** both `jq` gaps resolved by declaring `jq` a hard dependency in the two skills and naming the exact failure text users see (sourced verbatim from `scripts/approved-plan.sh:21` `require_jq_write`). No `jq`-free fallback was added — `jq` is trivially installable on every supported dev environment, and a second code path would duplicate JSON handling for no benefit. Original gap descriptions preserved below for audit.
+
+- ~~`global/claude/handoff/SKILL.md` `--target=codex`~~ — Resolved: step 5 preamble now declares `jq` required and cites the `require_jq_write` error that fires at draft time (before the 5.5 pretty-print is reached).
+- ~~`global/codex/run/SKILL.md` `--execute-approved`~~ — Resolved: step 6c now names the exact user-facing failure reason when `jq` is missing; § "Constraints" unchanged.
 
 ## Pack emphasis
 
