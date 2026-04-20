@@ -1,7 +1,0 @@
-interface:
-  display_name: "Plan Interview"
-  short_description: "Interview to complete a specification"
-  default_prompt: "Use $plan-interview to interview me and turn this draft idea into a complete implementation spec."
-
-policy:
-  allow_implicit_invocation: true

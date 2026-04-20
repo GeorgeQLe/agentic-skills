@@ -1,6 +1,6 @@
 ---
 name: brainstorm
-description: Evaluate the codebase and suggest ideas to explore with /plan-interview
+description: Evaluate the codebase and suggest ideas to explore with /spec-interview
 type: planning
 version: 1.1.0
 argument-hint: "[optional: focus area]"
@@ -8,7 +8,7 @@ argument-hint: "[optional: focus area]"
 
 # Brainstorm
 
-Evaluate the current codebase and generate actionable suggestions that the user can take into `/plan-interview` for deeper exploration and specification.
+Evaluate the current codebase and generate actionable suggestions that the user can take into `/spec-interview` for deeper exploration and specification.
 
 ## Process
 
@@ -59,21 +59,21 @@ When app scope `{app}` is active:
 
 Append the suggestions to `tasks/ideas.md` (do not overwrite existing content). Also display them to the user. When app scope is active, prefix each suggestion with the app name.
 
-Present suggestions grouped by effort level, with each suggestion framed as a topic ready to hand to `/plan-interview`:
+Present suggestions grouped by effort level, with each suggestion framed as a topic ready to hand to `/spec-interview`:
 
 ### Quick wins (hours)
-- **Suggestion title** — One-line description of what and why. _Start with:_ `/plan-interview <topic>`
+- **Suggestion title** — One-line description of what and why. _Start with:_ `/spec-interview <topic>`
 
 ### Medium efforts (days)
-- **Suggestion title** — One-line description of what and why. _Start with:_ `/plan-interview <topic>`
+- **Suggestion title** — One-line description of what and why. _Start with:_ `/spec-interview <topic>`
 
 ### Larger initiatives (weeks)
-- **Suggestion title** — One-line description of what and why. _Start with:_ `/plan-interview <topic>`
+- **Suggestion title** — One-line description of what and why. _Start with:_ `/spec-interview <topic>`
 
 ## Constraints
 - Each suggestion must be specific and actionable — not vague aspirations like "improve testing."
 - Include the concrete signal from the codebase that motivates each suggestion (file, pattern, or metric).
-- Provide the `/plan-interview <topic>` prompt the user can copy-paste to kick off planning.
+- Provide the `/spec-interview <topic>` prompt the user can copy-paste to kick off planning.
 - Limit to 3–5 suggestions per effort level to avoid overwhelming the user.
 - Do not suggest changes that conflict with patterns established in CLAUDE.md.
 - Do not repeat work already tracked in `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, `tasks/recurring-todo.md`, or `specs/` (or `specs/{app}/`).

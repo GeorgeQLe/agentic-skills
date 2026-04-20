@@ -1,19 +1,21 @@
 ---
-name: plan-interview-kanban
-description: PoketoWork kanban variant of plan-interview — write a spec and update or create the matching card
+name: spec-interview-kanban
+description: PoketoWork kanban variant of spec-interview — write a spec and update or create the matching card
 type: planning
 version: 1.0.0
 argument-hint: "[topic or draft spec]"
 allowed-tools: Bash(poketo *)
 ---
 
-# Plan Interview Kanban
+# Spec Interview Kanban
+
+Invoke as `$spec-interview-kanban`.
 
 Use this skill only in projects that have opted into a PoketoWork kanban pack.
 
 ## Process
 
-1. Follow the base `/plan-interview` workflow exactly, passing through `$ARGUMENTS` as the topic, draft, or spec path.
+1. Follow the base `$spec-interview` workflow exactly, passing through `$ARGUMENTS` as the topic, draft, or spec path.
 2. Resolve and validate the project board:
    - Check `tasks/.kanban-board`, then validate with `poketo kanban board <id>`.
    - If missing or stale, match `poketo kanban boards` against `basename $(pwd)`.
