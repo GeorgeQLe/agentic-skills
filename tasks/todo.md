@@ -151,9 +151,20 @@ Mode is a signal (`.agents/project.json.agent_mode` + `SKILLS_AGENT_MODE` env va
 - **Gaps surfaced (non-blocking):** (1) `mark-stale` accepted a `consumed` source state during spot-check authoring, unlike `mark-uncertain` which explicitly rejects all non-`approved` sources — worth a follow-up to align source-state guards. (2) Back-to-back hybrid cycles require committing the `tasks/approved-plan.md` mirror between runs (otherwise the next `draft` sees a dirty tree); expected UX but not documented in `docs/operating-modes.md` § "Degraded-path audit". Neither gap blocks Phase 11 closure. Full detail in `tasks/verify-phase-11.md` § "Gaps surfaced by Verify".
 - Contract untouched: no edits to `SKILL.md` files, scripts, `specs/approved-plan.schema.json`, `docs/operating-modes.md`, `CLAUDE.md`, or pack files. Verify is empirical; findings get logged, not fixed in this step.
 
-**Phase 11 is complete.** All 11 steps + Verify shipped. Step 12 (tail) closes the two non-blocking gaps Verify surfaced.
+**Phase 11 is complete.** All 11 steps + Verify shipped. Step 12 (tail) closes the two non-blocking gaps Verify surfaced. Step 13 (tail) closes the two non-blocking `jq`-dependency gaps the Step 8 audit surfaced.
 
 - [x] **Step 12** — Gap fixes from Verify: source-state guard on `mark-stale`; document hybrid back-to-back mirror-commit prerequisite in the degraded-path audit + `/delegate` SKILL.md.
+- [x] **Step 13** — Close the two `jq`-dependency gaps from Step 8's degraded-path audit: declare `jq` a hard dependency in `global/claude/handoff/SKILL.md` (`--target=codex`) and `global/codex/run/SKILL.md` (`--execute-approved`), naming the exact `require_jq_write` failure text. Doc-only; audit gap bullets marked resolved.
+
+### Step 13 Summary (completed 2026-04-19)
+
+- Closed the two non-blocking `jq` gaps surfaced by Phase 11 Step 8's degraded-path audit. Both were purely documentary — `scripts/approved-plan.sh:21` `require_jq_write` already dies on every write subcommand with `ERROR: jq required for write operations. Install with: brew install jq (macOS) or apt install jq (Debian/Ubuntu).`
+- **Gap 1 — `handoff --target=codex`.** Added a `jq`-required note to step 5's preamble in `global/claude/handoff/SKILL.md` covering both 5.4 (`draft`) and 5.5 (pretty-print).
+- **Gap 2 — `codex/run --execute-approved`.** Strengthened step 6c in `global/codex/run/SKILL.md` to name the exact failure text users see when `jq` is missing.
+- **Audit cleanup.** Both `⚠ gap — follow-up` cells in `docs/operating-modes.md`'s audit table updated to cite the new declarations. § "Gaps surfaced by Step 8" preserved with a dated resolution line + strikethroughs of the original bullets.
+- Decision: declare, don't fallback. `jq` is trivially installable; a `jq`-free parser would duplicate 30+ lines of JSON handling for no benefit.
+- Contract untouched: no edits to `scripts/approved-plan.sh`, `specs/approved-plan.schema.json`, `scripts/agent-mode.sh`, `scripts/pack.sh`, `CLAUDE.md`, any other `SKILL.md`, or any pack file.
+- Verified: zero `⚠ gap — follow-up` cells in the audit table; `bash -n scripts/approved-plan.sh` still parses.
 
 ### Step 12 Summary (completed 2026-04-19)
 
