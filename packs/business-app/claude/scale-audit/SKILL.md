@@ -33,7 +33,7 @@ When app scope `{app}` is active:
 
 - Read `research/enterprise-icp.md` (or `research/{app}/enterprise-icp.md`) — stakeholder map, per-persona journeys, deal-killers, lifecycle, onboarding matrix
 - Read `research/icp.md` (or `research/{app}/icp.md`) if it exists — carry forward startup context
-- Read `specs/mvp-gap.md` (or `specs/{app}/mvp-gap.md`) if it exists — note unresolved startup gaps that become more critical at enterprise scale
+- Read `research/mvp-gap.md` (or `research/{app}/mvp-gap.md`) if it exists — note unresolved startup gaps that become more critical at enterprise scale
 - Read CLAUDE.md, README, package config, existing specs
 - Read `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, and `tasks/recurring-todo.md` (if they exist) for work in progress or advisory records
 
@@ -80,7 +80,7 @@ For each onboarding path from `research/enterprise-icp.md`:
 - **Customer success**: Health scoring, usage analytics, renewal tracking
 
 #### Unresolved Startup Gaps
-If `specs/mvp-gap.md` exists, check each unresolved gap:
+If `research/mvp-gap.md` exists, check each unresolved gap:
 - Is it still unresolved?
 - Does it become more critical at enterprise scale?
 - Flag any startup gaps that are now enterprise deal-killers.
@@ -101,7 +101,7 @@ Before writing, check which files exist to populate the `## Next Steps` section 
 - ALWAYS: `/roadmap` — Turn the enterprise build sequence into a phased roadmap
 - IF hard-blockers need specs: `/spec-interview [top blocker]` — Spec the top enterprise hard-blocker
 - IF no `research/journey-map.md` for enterprise: `/journey-map enterprise` — Map enterprise stakeholder journeys
-- IF startup gaps escalated and `specs/mvp-gap.md` stale: `/mvp-gap` — Re-evaluate startup readiness first
+- IF startup gaps escalated and `research/mvp-gap.md` stale: `/mvp-gap` — Re-evaluate startup readiness first
 - IF no `research/metrics.md`: `/metrics` — Define metrics covering enterprise SLAs
 
 ## Output
@@ -155,7 +155,7 @@ Before writing, check which files exist to populate the `## Next Steps` section 
  Note dependencies — what must exist before other things can be built.]
 
 ## Unresolved Startup Gaps (Escalated)
-[Gaps from specs/mvp-gap.md that are now more critical at enterprise scale]
+[Gaps from research/mvp-gap.md that are now more critical at enterprise scale]
 
 ## Next Steps
 

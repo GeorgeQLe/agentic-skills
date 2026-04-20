@@ -1,8 +1,8 @@
 ---
 name: mvp-gap
 description: Evaluate codebase against ICP to identify gaps blocking first sales and retention
-type: analysis
-version: 1.2.0
+type: research
+version: 1.3.0
 argument-hint: "[optional: path-to-icp-spec]"
 ---
 
@@ -26,7 +26,7 @@ Before checking prerequisites, determine the app scope:
 
 When app scope `{app}` is active:
 - Read/write research from `research/{app}/` instead of `research/`
-- Read/write specs from `specs/{app}/` instead of `specs/`
+- Read existing specs from `specs/{app}/` instead of `specs/`
 - Also read `research/icp.md` (cross-app overview) for broader context
 
 ### 1. Load Context
@@ -105,18 +105,20 @@ If `research/gtm.md` (or `research/{app}/gtm.md`) exists:
 
 ### 5. Populate Next Steps
 
-Before writing, check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with "Pick one:" framing:
+Before writing, check which files exist to populate the `## Next Steps` section contextually. Include a **Recommended** item and 2–4 other applicable options. Choose the recommendation by the first matching condition:
 
-- ALWAYS: `/roadmap` — Turn the build sequence above into a phased roadmap
-- IF first-sale blockers need specs (and no spec exists per step 3 Spec Validation): `/spec-interview [top gap]` — Spec the most critical first-sale blocker
-- IF no `research/journey-map.md` and `specs/` exist: `/journey-map` — Map how the ICP experiences the product
-- IF no `research/competitive-analysis.md`: `/competitive-analysis` — Validate gap priorities against competitors
-- IF creative solutions could reduce effort for high-effort gaps: `/brainstorm` — Generate alternatives for high-effort gaps
-- IF gaps lack closure metrics (see step 3 Metrics Tie-In): `/metrics` — Define how to measure when gaps are closed
+- IF downstream impact is **Major**: `/reconcile-research` — audit and fix affected downstream research documents.
+- IF a `blocks-first-sale` gap lacks a full spec: `/spec-interview [top gap]` — turn the highest-priority gap from `research/mvp-gap.md` into an implementation spec.
+- IF any other gap lacks a full spec: `/spec-interview [top gap]` — turn the highest-priority unspecced gap from `research/mvp-gap.md` into an implementation spec.
+- IF required context is missing: the corresponding research skill (`/journey-map`, `/competitive-analysis`, `/metrics`, or `/brainstorm` when creative alternatives could reduce high-effort gaps).
+- OTHERWISE: `/roadmap` — sequence the existing specs into implementation phases.
+
+Only recommend `/roadmap` as the primary next step when the MVP gap analysis found no unspecced priority gaps.
+If downstream impact has not been classified yet, run the downstream impact check before finalizing `## Next Steps`.
 
 ### 6. Downstream Impact Check
 
-After writing, check for downstream research documents that may be affected by what was just decided. Only check documents that exist on disk.
+Before finalizing the output, check for downstream research documents that may be affected by what was just decided. Only check documents that exist on disk.
 
 **Downstream documents to check** (use `{app}/` prefix when app scope is active):
 - `research/journey-map.md`
@@ -140,11 +142,11 @@ For each existing downstream document:
 - **Minor** (1–2 small conflicts): Display conflicts to user inline.
 - **Major** (3+ conflicts OR a foundational gap was identified that changes the build sequence — e.g., a new first-sale blocker, a key assumption invalidated): Display conflicts and strongly recommend `/reconcile-research`.
 
-Display to the user after showing the written file confirmation.
+Display to the user with the written file confirmation.
 
 ## Output
 
-### `specs/mvp-gap.md` (or `specs/{app}/mvp-gap.md`)
+### `research/mvp-gap.md` (or `research/{app}/mvp-gap.md`)
 
 ```markdown
 # MVP Gap Analysis
@@ -188,7 +190,9 @@ Display to the user after showing the written file confirmation.
 
 ## Next Steps
 
-Pick one:
+**Recommended:** [first matching command from step 5] — [reason grounded in this analysis]
+
+Other options:
 - [conditional items from step 5 — only include items whose conditions are met]
 ```
 
@@ -208,7 +212,7 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Every gap must cite evidence** — a missing route, missing component, absent dependency, no billing integration, etc. No vague claims.
 - **Prioritise by market impact**, not technical interest. Things that block the first sale come before things that block the 10th.
 - **If no code exists yet**, report that clearly and suggest running `/spec-interview` to design the solution first. Do not fabricate gaps for a nonexistent codebase.
-- **Include `/spec-interview` prompts** for each gap so the user can immediately start speccing a fix.
+- **Include `/spec-interview` prompts** only for gaps lacking full specs so the user can immediately start speccing a fix.
 - **Do not duplicate work already tracked** in `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, or `tasks/recurring-todo.md` — note it as "in progress" or "advisory" instead.
 
 ## Archive-First Replacement Policy

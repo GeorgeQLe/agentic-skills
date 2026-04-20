@@ -1,8 +1,8 @@
 ---
 name: mvp-gap
 description: Evaluate codebase against ICP to identify gaps blocking first sales and retention
-type: analysis
-version: 1.2.0
+type: research
+version: 1.3.0
 ---
 
 # MVP Gap — Startup Readiness Audit
@@ -27,7 +27,7 @@ Before checking prerequisites, determine the app scope:
 
 When app scope `{app}` is active:
 - Read/write research from `research/{app}/` instead of `research/`
-- Read/write specs from `specs/{app}/` instead of `specs/`
+- Read existing specs from `specs/{app}/` instead of `specs/`
 - Also read `research/icp.md` (cross-app overview) for broader context
 
 ### 1. Load Context & Evaluate
@@ -47,18 +47,27 @@ When app scope `{app}` is active:
 
 ## Deliverables
 
-- `specs/mvp-gap.md` (or `specs/{app}/mvp-gap.md`) — Gap analysis with priority tags, evidence, effort estimates, journey stage, closure metric, and spec status for each gap
+- `research/mvp-gap.md` (or `research/{app}/mvp-gap.md`) — Gap analysis with priority tags, evidence, effort estimates, journey stage, closure metric, and spec status for each gap
 
 Each gap in the output should include:
 - _Journey stage:_ [stage from journey-map, or "N/A"]
 - _Closure metric:_ [metric from metrics.md, or "⚠ No metric defined"]
 - _Spec:_ [link to spec + status, or `$spec-interview [topic]`]
 
-The output file must include a `## Downstream Impact` section (only if conflicts found) and end with a `## Next Steps` section (3–5 contextual items, "Pick one:" framing) based on which files exist: always suggest `$roadmap`; conditionally suggest `$spec-interview [top gap]` (only if no spec exists), `$journey-map`, `$competitive-analysis`, `$brainstorm`, `$metrics` (if gaps lack closure metrics).
+The output file must include a `## Downstream Impact` section (only if conflicts found) and end with a `## Next Steps` section with a **Recommended** item and 2–4 other contextual options. Choose the recommendation by the first matching condition:
+
+1. IF downstream impact is **Major**: `$reconcile-research` — audit and fix affected downstream research documents.
+2. IF a `blocks-first-sale` gap lacks a full spec: `$spec-interview [top gap]` — turn the highest-priority gap from `research/mvp-gap.md` into an implementation spec.
+3. IF any other gap lacks a full spec: `$spec-interview [top gap]` — turn the highest-priority unspecced gap from `research/mvp-gap.md` into an implementation spec.
+4. IF required context is missing: the corresponding research skill (`$journey-map`, `$competitive-analysis`, `$metrics`, or `$brainstorm` when creative alternatives could reduce high-effort gaps).
+5. OTHERWISE: `$roadmap` — sequence the existing specs into implementation phases.
+
+Only recommend `$roadmap` as the primary next step when the MVP gap analysis found no unspecced priority gaps.
+If downstream impact has not been classified yet, run the downstream impact check before finalizing `## Next Steps`.
 
 ### Downstream Impact Check
 
-After writing, scan existing downstream docs (`research/journey-map.md`, `research/metrics.md`, `research/gtm.md`, `research/monetization.md`, `tasks/roadmap.md`) for conflicts with what was just decided. Classify as None/Minor/Major. If Major (3+ conflicts or foundational gap changes build sequence), recommend `$reconcile-research`.
+Before finalizing the output, scan existing downstream docs (`research/journey-map.md`, `research/metrics.md`, `research/gtm.md`, `research/monetization.md`, `tasks/roadmap.md`) for conflicts with what was just decided. Classify as None/Minor/Major. If Major (3+ conflicts or foundational gap changes build sequence), recommend `$reconcile-research`.
 
 ## Task Classification
 
@@ -76,7 +85,7 @@ When this skill produces follow-up work, file it by execution semantics:
 - Every gap must cite specific evidence from the codebase.
 - Prioritise by market impact, not technical interest.
 - Include `$spec-interview <topic>` prompts only for gaps lacking specs.
-- `## Next Steps` must be the final section in the output file, with 3–5 contextual items and "Pick one:" framing.
+- `## Next Steps` must be the final section in the output file, with a recommended next step and 2–4 other contextual options.
 
 ## Archive-First Replacement Policy
 

@@ -15,7 +15,7 @@ Conduct deep web-based research to compile a comprehensive competitive landscape
 **Detect mode before proceeding:**
 
 - **Concept-validation mode** activates when: no `research/icp.md` exists AND (no meaningful codebase — i.e. no README, no source files, no package config — OR `$ARGUMENTS` contains "concept" or "validate"). In this mode, announce to the user: "Running in concept-validation mode — no ICP or product detected. I'll evaluate the market gap for your concept." Then ask the user to describe the concept, the problem it addresses, and the intended audience.
-- **Standard mode** (default): Read the codebase, README, CLAUDE.md, and existing research/specs (`research/icp.md` or `research/{app}/icp.md`, `research/enterprise-icp.md` or `research/{app}/enterprise-icp.md`, `specs/mvp-gap.md` or `specs/{app}/mvp-gap.md`) to understand what the product does, who it's for, and what value it claims to provide. This context is essential for identifying the right competitors and evaluating positioning. If no codebase or specs exist but `research/icp.md` is present, proceed in standard mode using the ICP as context.
+- **Standard mode** (default): Read the codebase, README, CLAUDE.md, and existing research/specs (`research/icp.md` or `research/{app}/icp.md`, `research/enterprise-icp.md` or `research/{app}/enterprise-icp.md`, `research/mvp-gap.md` or `research/{app}/mvp-gap.md`) to understand what the product does, who it's for, and what value it claims to provide. This context is essential for identifying the right competitors and evaluating positioning. If no codebase or specs exist but `research/icp.md` is present, proceed in standard mode using the ICP as context.
 
 ## Process
 
@@ -37,7 +37,7 @@ When app scope `{app}` is active:
 **Standard mode:**
 - Read CLAUDE.md, README, package config, and key source files to understand the product
 - Read `research/icp.md` (or `research/{app}/icp.md`) if it exists — the customer profile, pain map, and value prop define the competitive frame
-- Read `research/enterprise-icp.md` (or `research/{app}/enterprise-icp.md`) and `specs/mvp-gap.md` (or `specs/{app}/mvp-gap.md`) if they exist for additional context
+- Read `research/enterprise-icp.md` (or `research/{app}/enterprise-icp.md`) and `research/mvp-gap.md` (or `research/{app}/mvp-gap.md`) if they exist for additional context
 - If `$ARGUMENTS` names specific competitors, use those as a starting point but still search broadly
 - Summarise what the product does, who it's for, and what problem it solves. Confirm this understanding with the user before researching.
 
@@ -186,7 +186,7 @@ Before writing, check which files exist to populate the `## Next Steps` section 
   1. IF no `specs/` directory or it's empty: `/spec-interview [top market gap or positioning opportunity]` — Spec features that exploit the most important market gap above
   2. IF `specs/` exist but no `research/journey-map.md`: `/journey-map` — Map how the ICP experiences the product vs. competitors
   3. IF no `research/gtm.md`: `/gtm` — Build a GTM plan using the channel and positioning insights
-  4. IF codebase exists and no `specs/mvp-gap.md`: `/mvp-gap` — Evaluate codebase against ICP and competitive landscape
+  4. IF codebase exists and no `research/mvp-gap.md`: `/mvp-gap` — Evaluate codebase against ICP and competitive landscape
 - Include `/brainstorm` only as an "Other option" when the analysis found multiple plausible market gaps and the product direction is still unclear. Do not recommend brainstorm just because competitive whitespace exists.
 
 Any `/spec-interview` recommendation must include a concrete target from the analysis, not a bare command. Use the top market gap, riskiest competitive assumption, or strongest positioning opportunity as the bracketed topic.
