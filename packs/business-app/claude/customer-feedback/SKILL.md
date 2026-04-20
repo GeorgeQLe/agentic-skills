@@ -97,6 +97,7 @@ Before writing, check which files exist and synthesis results to populate the `#
 **Impact-aware adjustments:**
 - IF downstream impact is **Major**: prepend `/reconcile-research — [N] conflicts found in downstream docs` as the first item
 - IF downstream impact is **Minor**: annotate relevant skill suggestions with "(stale — [brief description])"
+- If downstream impact has not been classified yet, run the downstream impact check against the proposed output before selecting the final recommendation. Do not emit a Minor/Major impact recommendation speculatively.
 
 ### 7. Write Output
 

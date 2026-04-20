@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-04-20 — Audit skill next-step contracts
+
+- Audited all 205 `SKILL.md` files under `global/` and `packs/` for command-style next-step references and semantic next-step validity across expected end states.
+- Added `docs/skill-next-step-contracts.md` as the canonical contract for valid recommendations, covering universal rules, expected end-state families, and multi-state rules for research and planning skills.
+- Fixed concept-validation `competitive-analysis` next steps so `Proceed to ICP`, `Pivot concept`, and `Abandon` each have a valid recommendation path.
+- Fixed `experiment` next-step guidance so a newly designed experiment recommends running the experiment, while validated/invalidated/inconclusive outcomes live under `## Decision Rules`.
+- Fixed `reconcile-research` next-step logic for fully resolved and no-work end states.
+- Added guardrail wording to downstream-impact-aware skills so `reconcile-research` and stale annotations are selected only after the proposed output has an actual `None`/`Minor`/`Major` impact classification.
+- Updated `docs/skills-reference.md` to point readers to the next-step contract.
+
 ## 2026-04-19 — Phase 11 Step 13 — Close the two `jq`-dependency gaps
 
 - Closed the two non-blocking `jq`-dependency gaps logged in `docs/operating-modes.md` § "Gaps surfaced by Step 8". Both were documentary — runtime behavior already clean via `scripts/approved-plan.sh:21` `require_jq_write`, which dies with `ERROR: jq required for write operations. Install with: brew install jq (macOS) or apt install jq (Debian/Ubuntu).` on every write subcommand.

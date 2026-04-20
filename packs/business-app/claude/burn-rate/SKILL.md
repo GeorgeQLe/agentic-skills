@@ -166,6 +166,7 @@ Check which files exist to populate the `## Next Steps` section contextually. In
 **Impact-aware adjustments:**
 - IF downstream impact is **Major**: prepend `/reconcile-research — [N] conflicts found in downstream docs` as the first item
 - IF downstream impact is **Minor**: annotate relevant skill suggestions with "(stale — [brief description])"
+- If downstream impact has not been classified yet, run the downstream impact check against the proposed output before selecting the final recommendation. Do not emit a Minor/Major impact recommendation speculatively.
 
 Conditional items:
 - IF no `research/monetization.md`: `/monetization` — Build pricing strategy informed by actual infrastructure costs
