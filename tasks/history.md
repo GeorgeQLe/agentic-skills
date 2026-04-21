@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-04-20 — Add `create-skill` global skill
+
+- Added `create-skill` to `global/claude` and `global/codex` as a meta-skill that scaffolds new **user-local** skills directly into `~/.claude/skills/<name>/` and `~/.codex/skills/<name>/` as real directories (never inside the agentic-skills repo).
+- The skill refuses to shadow repo-managed symlinks, mirrors to both assistants on request, and closes by offering to **promote** the scaffolded skill into a user's personal fork of agentic-skills (copy only — commit/push left to the user).
+- Documented the upstream-safety model: plain clones cannot push to the shared repo, forks push only to the user's own remote, and the skill never writes into this repo's `global/` or `packs/` trees.
+- Registered `create-skill` in the README global-core list and installed symlinks via `install.sh`.
+
 ## 2026-04-20 - Fix scale-audit next-step drift
 
 - Aligned Claude and Codex `packs/business-app/*/scale-audit` guidance with `docs/skill-next-step-contracts.md`.
