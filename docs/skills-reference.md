@@ -28,6 +28,8 @@ scripts/pack.sh status
 
 Project designation is stored in `.agents/project.json`.
 
+`scripts/pack.sh list-packs` is an internal subcommand used by Codex `$run` routing (see `global/codex/run/SKILL.md`). It prints enabled packs from `.agents/project.json` one per line with no decoration, distinct from the human-facing `list` which enumerates all available packs. Prefer `list` or `status` for interactive use.
+
 `refresh` recreates project-local symlinks from `.agents/project.json`; it does not reload an active Claude Code or Codex process. Start a fresh CLI session after pack changes if the changed skills are not visible.
 
 ## Next-Step Validity
