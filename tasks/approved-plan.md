@@ -1,6 +1,6 @@
 # Approved Plan (Sanitized Mirror)
 
-This file is the committable, human-readable mirror of `.agents/approved-plan.json` (the machine-readable source of truth, which is gitignored developer-local state). Only `.md`-safe fields are projected here. See `docs/operating-modes.md` § "Approval / Delegation Packet" for the full schema, lifecycle, and safety classification.
+This file is the committable, human-readable mirror of `.agents/approved-plan.json` (the machine-readable source of truth, which is gitignored developer-local state). Only `.md`-safe fields are projected here. See `docs/operating-modes.md` § "Approval packet" for the full schema, lifecycle, and safety classification.
 
 ## Status
 
