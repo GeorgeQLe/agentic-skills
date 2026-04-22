@@ -1057,15 +1057,15 @@ Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch r
 
 Start with `$devtool-user-map` from the priority documentation todo, or start a new spec and roadmap cycle if new work is being introduced.
 
-## Next Step Plan: `$spec-drift fix docs/canonical-workflow-report.md`
+## Next Step Plan: `$spec-drift fix kanban legacy specs`
 
 ### Goal
 
-Refresh or demote the stale canonical workflow report. `docs/canonical-workflow-report.md` (dated 2026-04-19) still lists Phase 11 Steps 7–11 as "planned but not fully wired", but Phase 11 completed 2026-04-19 per `tasks/roadmap.md:25` and `tasks/history.md`. Reconcile the report with shipped reality — either by updating scope + "Current Gaps And Active Work" + the operating-modes freshness note, or by demoting the file to an archival snapshot and pointing readers at `docs/operating-modes.md` as the live reference.
+Classify or update specs under `specs/` that still target the legacy `kanban.mjs` / direct-Neon path, now that active kanban skills use `poketo kanban` (headless HTTP) and `kanban.mjs` is explicitly fallback/admin-only (per `specs/poketo-headless-auth-migration.md:164,306` and `tasks/history.md` Phase 4 migration). Without rewriting real implementation plans, mark or annotate the specs so a reader can tell at a glance which describe the current path vs. the legacy path.
 
 ### Scope
 
-Doc-only drift fix. No skill code changes. Same shape as the just-completed `$spec-drift fix kanban archive docs` step.
+Doc-only drift fix across `specs/*.md`. No skill code, no `kanban.mjs` changes. Same shape as prior `$spec-drift fix …` steps.
 
 ### Execution Profile
 
@@ -1073,39 +1073,59 @@ Serial, implementation-safe. Single-agent, doc-only edits. No tests, no migratio
 
 ### Ground truth
 
-- Phase 11 complete: `tasks/roadmap.md:25` ("Three-Mode Operating Model ✓") and `tasks/roadmap.md:33` ("Completed: 2026-04-19. Shipped across 11 implementation steps…").
-- Authoritative live reference: `docs/operating-modes.md` (per `tasks/roadmap.md:33` and Phase 11 Step 11 scope).
-- Specific stale claims to reconcile: `docs/canonical-workflow-report.md:4` (scope line — "through Phase 11 Step 6, with Phase 11 Step 7 still active planning work"), `:488–:492` (Current Gaps list of Steps 7–11 as not wired), `:494` (says `docs/operating-modes.md` still claims no skill consumes mode signal or packet — this freshness note is itself now stale).
-- The ship-one-step archive-first rule (see `tasks/history.md` pattern) applies if you choose to demote the file: snapshot the old canonical report under `docs/history/archive/YYYY-MM-DD/HHMMSS/docs/canonical-workflow-report.md` before substantively rewriting it.
+- Active path: `poketo kanban` (headless). Reference: `packs/poketowork-kanban/{claude,codex}/poketo-kanban/SKILL.md` and `tasks/history.md` Phase 4/Phase 10 entries.
+- `kanban.mjs` current role: fallback/admin-only (per `specs/poketo-headless-auth-migration.md:164,306`).
+- Specs that reference `kanban.mjs` (from `grep -rn "kanban\.mjs" specs/`):
+  - `specs/board-flag-kanban-search.md` — `--board` flag on `kanban.mjs search`.
+  - `specs/kanban-multi-user.md` — multi-user activity log in `kanban.mjs`.
+  - `specs/kanban-production-test-plan.md` — test plan against `kanban.mjs` subprocess vs. web app Drizzle.
+  - `specs/kanban-command-test-coverage.md` — test coverage for all 11 `kanban.mjs` commands.
+  - `specs/kanban-offline-queue-soft-delete.md` — offline queue + soft-delete in `kanban.mjs`.
+  - `specs/poketo-headless-auth-migration.md` — already declares the legacy status; do not re-rewrite, just verify.
+- `tasks/todo.md:1014` is the queue item to tick.
 
 ### Files to inspect / modify
 
-- `docs/canonical-workflow-report.md:4` — scope line; update to reflect Phase 11 complete, or explicitly mark the file as a dated archival snapshot.
-- `docs/canonical-workflow-report.md:484–494` — "Current Gaps And Active Work" section; remove or rewrite the Steps 7–11 bullet list and the operating-modes freshness caveat.
-- (Optional, if rewriting) any other lines in the report that assume Phase 11 is mid-flight — scan for "active planning work", "planned but not fully wired", "Step 7", etc.
-- **Leave as-is** (archival if demoting): a dated archived copy under `docs/history/archive/YYYY-MM-DD/HHMMSS/` if the chosen approach is demote-and-snapshot rather than in-place update.
-- Tick off `tasks/todo.md:1013` when done.
+- For each `specs/kanban-*.md` (except `poketo-headless-auth-migration.md`): add a short **Status** or **Scope** banner at the top describing whether the spec targets the legacy `kanban.mjs` fallback path or the active `poketo kanban` path. Do **not** rewrite the technical body.
+- `specs/board-flag-kanban-search.md`, `specs/kanban-command-test-coverage.md`, `specs/kanban-offline-queue-soft-delete.md`, `specs/kanban-multi-user.md`, `specs/kanban-production-test-plan.md` — add "Legacy (kanban.mjs fallback path)" banner pointing at `specs/poketo-headless-auth-migration.md` for the active path.
+- `specs/poketo-headless-auth-migration.md` — verify current legacy/active wording still reads correctly; only edit if a new banner on sibling specs creates a mismatch.
+- Tick `tasks/todo.md:1014`.
+- `tasks/history.md` — add a dated 2026-04-22 entry.
 
 ### Key context
 
-- Pattern from prior three `spec-drift fix` steps: update active docs only; don't touch finished-phase archives unnecessarily. `docs/canonical-workflow-report.md` is interesting because it is a **snapshot document** not a phase archive, so in-place update is acceptable — but archive-first is mandatory if the rewrite is substantive (per `tasks/todo.md:1052`).
-- Prefer the lightest viable fix: if the file still has real reference value as a canonical-workflow overview, update the stale sections and re-date it. If most of the document is superseded by `docs/operating-modes.md`, demote it to an archival snapshot with a short pointer at the top.
-- Do not let the rewrite sprawl — this is a drift fix, not a fresh canonical-workflow re-derivation. Reuse prose from `docs/operating-modes.md` and `tasks/roadmap.md` Phase 11 highlights where possible rather than re-authoring.
+- Do not delete or rewrite the specs' technical content. They remain valid for the fallback path and for historical reference. The drift is that a reader hitting `specs/kanban-multi-user.md` first would assume `kanban.mjs` is still the active kanban entry point.
+- Archive-first is **not** required because we are adding banners, not substantively rewriting. If any banner grows into a substantive rewrite, snapshot the pre-edit file under `docs/history/archive/YYYY-MM-DD/HHMMSS/specs/…` first.
+- Keep the banner short (2–4 lines). Format suggestion: a `> Status:` blockquote directly after the `#` heading.
 
 ### Acceptance criteria
 
-- `docs/canonical-workflow-report.md` no longer claims Phase 11 Steps 7–11 are "planned but not fully wired" or that Phase 11 Step 7 is "active planning work".
-- If updated in place: scope line reflects current state as of the edit date; "Current Gaps" section accurately reflects actual remaining work (or is removed if none applies).
-- If demoted: a dated archival copy exists under `docs/history/archive/YYYY-MM-DD/HHMMSS/docs/canonical-workflow-report.md` and the live file carries a short header pointing to `docs/operating-modes.md` as the canonical reference.
-- `grep -n "Phase 11 Step 7\|not fully wired\|active planning work" docs/canonical-workflow-report.md` returns no stale claims.
-- `tasks/todo.md:1013` ticked.
+- Each of the five legacy-path kanban specs above carries a top-of-file status banner identifying it as targeting the legacy `kanban.mjs` fallback path, with a pointer to `specs/poketo-headless-auth-migration.md` for the active path.
+- `specs/poketo-headless-auth-migration.md` still declares `kanban.mjs` as fallback/admin-only (no regression).
+- `tasks/todo.md:1014` ticked.
+- `tasks/history.md` has a dated entry summarizing the banners added.
 - Ship via `/commit-and-push-by-feature` on `master`. No deploy contract → deploy skipped.
 
 ### Ship-one-step handoff contract
 
-After approval, implement **only** this step: make the doc edits (archive-first if substantive rewrite), tick off `tasks/todo.md:1013`, update `tasks/history.md` with a dated entry, commit and push the completed work to `master` via `/commit-and-push-by-feature`. Deploy is skipped (no `deploy.md` / `tasks/deploy.md`). Then write the following step's plan (next unchecked queue item — likely `$spec-drift fix kanban legacy specs` at `tasks/todo.md:1014`), ensure `.claude/settings.local.json` has `"showClearContextOnPlanAccept": true` and `permissions.defaultMode: "acceptEdits"`, start the approval UI for that following step by calling `EnterPlanMode` first, write a brief pass-through plan in plan mode, call `ExitPlanMode`, and stop before implementing it. Do not call `ExitPlanMode` from normal mode. If `EnterPlanMode` is denied because an explicit user request is required, stop and ask for `/plan <next step>`.
+After approval, implement **only** this step: add the status banners to the five kanban-legacy specs, tick `tasks/todo.md:1014`, add a dated entry to `tasks/history.md`, commit and push to `master` via `/commit-and-push-by-feature`. Deploy skipped (no `deploy.md` / `tasks/deploy.md`). Then write the following step's plan (next unchecked queue item — likely `$reconcile-dev-docs fix skills-reference` at `tasks/todo.md:1015`), ensure `.claude/settings.local.json` has `"showClearContextOnPlanAccept": true` and `permissions.defaultMode: "acceptEdits"`, start the approval UI for that following step by calling `EnterPlanMode` first, write a brief pass-through plan in plan mode, call `ExitPlanMode`, and stop before implementing it. Do not call `ExitPlanMode` from normal mode. If `EnterPlanMode` is denied because an explicit user request is required, stop and ask for `/plan <next step>`.
 
-## Previous Step Plan (shipped): `$spec-drift fix kanban archive docs`
+## Previous Step Plan (shipped): `$spec-drift fix docs/canonical-workflow-report.md`
+
+### Goal
+
+Refresh or demote the stale canonical workflow report, which still listed Phase 11 Steps 7–11 as unfinished even though Phase 11 completed 2026-04-19.
+
+### Outcome
+
+- In-place refresh chosen over demote-and-snapshot: drift was localized to the scope line and "Current Gaps And Active Work" section; body otherwise accurate.
+- `docs/canonical-workflow-report.md:3–4` now reads "refreshed 2026-04-22" with Phase 11 marked complete and pointing at `docs/operating-modes.md` as the authoritative reference.
+- `docs/canonical-workflow-report.md:484–494` rewritten: Steps 7–11 listed as done; stale operating-modes freshness caveat removed.
+- `tasks/todo.md:1013` ticked. `tasks/history.md` updated with a 2026-04-22 entry.
+- Shipped to `master` as commit `c61809b`. Deploy skipped.
+- `grep -n "Phase 11 Step 7\|not fully wired\|active planning work" docs/canonical-workflow-report.md` returns no output.
+
+## Previous Previous Step Plan (shipped): `$spec-drift fix kanban archive docs`
 
 ### Goal
 
@@ -1119,42 +1139,3 @@ Update active roadmap references that still described `/kanban-archive` as a sta
 - `tasks/history.md` updated with a 2026-04-22 entry.
 - `tasks/todo.md:1012` ticked.
 - Shipped to `master` as commit `bd0f207`. Deploy skipped (no deploy contract).
-
-## Previous Previous Step Plan (shipped): `$spec-drift fix code-quality docs`
-
-### Goal
-
-Reconcile `README.md` and `specs/code-quality-skill-pack.md` with the implemented `code-quality` pack, which now includes **both** `extract-shared-types` and `quality-sweep` skills. Docs currently under-describe the pack (only `extract-shared-types` was shipped when they were written).
-
-### Scope
-
-Doc-only drift fix. No skill code changes. Same shape as the just-completed `$spec-drift fix approval-packet references` step.
-
-### Execution Profile
-
-Serial, implementation-safe. Single-agent, doc-only edits. No tests, no migrations, no cross-skill coordination.
-
-### Files to inspect / modify
-
-- `README.md` — find the pack listing / `code-quality` mention. Add `quality-sweep` alongside `extract-shared-types`.
-- `specs/code-quality-skill-pack.md` — update the pack's skill inventory and any per-skill sections to cover `quality-sweep` (purpose, inputs/outputs, invocation, any contract differences from `extract-shared-types`).
-- Cross-check `packs/code-quality/claude/quality-sweep/SKILL.md` and `packs/code-quality/codex/quality-sweep/SKILL.md` as the source of truth for what `quality-sweep` actually does; don't invent behavior, mirror what the implementation declares.
-- Grep for other references: `grep -rn "code-quality\|extract-shared-types\|quality-sweep" docs/ specs/ README.md` — patch any that still imply a single-skill pack.
-- Tick off `tasks/todo.md:1011` when done.
-
-### Key context
-
-- Pattern from the prior step: the scoped doc fix should update active docs only. Archival files (`tasks/history.md`, `tasks/todo.md` historical notes, `specs/drift-report.md` trail entries) are intentionally left as-is.
-- Implementation reference: `packs/code-quality/` directory. Both skills already symlinked into `~/.claude/skills/` and `~/.codex/skills/` via `install.sh`.
-- Source-of-truth trigger for this drift item: commit `975c823` (`feat(code-quality): add quality sweep skill`, 2026-04-16) postdates the last spec mtime (2026-04-13).
-
-### Acceptance criteria
-
-- `README.md` and `specs/code-quality-skill-pack.md` both describe the pack as containing `extract-shared-types` **and** `quality-sweep`, with accurate per-skill summaries.
-- `grep -rn "code-quality" README.md specs/code-quality-skill-pack.md` shows no prose implying a single-skill pack.
-- `tasks/todo.md:1011` ticked.
-- Ship via `/commit-and-push-by-feature` on `master`. No deploy contract → deploy skipped.
-
-### Ship-one-step handoff contract
-
-After approval, implement **only** this step: make the doc edits, tick off `tasks/todo.md:1011`, update `tasks/history.md` with a dated entry, commit and push the completed work to `master` via `/commit-and-push-by-feature`. Deploy is skipped (no `deploy.md` / `tasks/deploy.md`). Then write the following step's plan (next unchecked queue item — likely `$spec-drift fix kanban archive docs` at `tasks/todo.md:1012`), ensure `.claude/settings.local.json` has `"showClearContextOnPlanAccept": true` and `permissions.defaultMode: "acceptEdits"`, start the approval UI for that following step by calling `EnterPlanMode` first, write a brief pass-through plan in plan mode, call `ExitPlanMode`, and stop before implementing it. Do not call `ExitPlanMode` from normal mode. If `EnterPlanMode` is denied because an explicit user request is required, stop and ask for `/plan <next step>`.
