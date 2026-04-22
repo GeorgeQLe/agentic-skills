@@ -15,7 +15,7 @@ Phases 1-11 complete: kanban skill suite, board intelligence, templates, archive
 | 1 | Kanban Skill Suite | — | 6 kanban workflow skills | L |
 | 2 | Proactive Board Intelligence | — | Board overview, next work suggestion, progress tracking | M |
 | 3 | Board Templates | — | `--template standard` flag | S |
-| 4 | Archive Automation | — | `archive-card` command + `/kanban-archive` skill | M |
+| 4 | Archive Automation | — | `archive-card` command + `poketo-kanban --archive` mode | M |
 | 5 | Expert Review Fixes | — | 7 security/quality fixes | M |
 | 6 | Testing Hardening I | tasks/ideas.md | Edge case + command test expansion (~20 new tests) | M |
 | 7 | Testing Hardening II ✓ | tasks/ideas.md | Bootstrap tests, install.sh bats, DB error paths | M |
@@ -152,14 +152,15 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
    - Uses the existing `archiveListId` field in the board schema
    - If no archive list exists, create one automatically
 
-2. **Create `/kanban-archive` skill (Claude + Codex)**
-   - Standalone skill that archives Done/Punt cards older than N days (default 30)
+2. **Add `--archive` mode to `poketo-kanban` (Claude + Codex)**
+   - Archive mode on the `poketo-kanban` skill archives Done/Punt cards older than N days (default 30)
    - Shows which cards will be archived, asks for confirmation before proceeding
    - Supports `--days <N>` to override the default threshold
    - Reports: how many cards archived, from which lists
+   - (Originally shipped as a standalone `/kanban-archive` skill; later merged into `poketo-kanban --archive` — see `tasks/history.md`.)
 
 ### Milestone
-- [x] `/kanban-archive` cleans up Done/Punt cards older than 30 days with user confirmation
+- [x] `poketo-kanban --archive` cleans up Done/Punt cards older than 30 days with user confirmation
 
 ---
 
