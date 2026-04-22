@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-04-22 — Document `pack.sh list-packs` as internal Codex `$run` subcommand
+
+- `scripts/pack.sh list-packs` is advertised in the script's own `--help` (`scripts/pack.sh:19`) and dispatched at `scripts/pack.sh:358`, but neither `README.md` nor `docs/skills-reference.md` mentioned it. The only external consumer is `global/codex/run/SKILL.md`. Users reading the reference docs could not distinguish it from the human-facing `list`.
+- Added a short annotation paragraph after the pack-commands block in `docs/skills-reference.md` § "Project Pack Commands" describing `list-packs` as an internal subcommand used by Codex `$run` routing: prints enabled packs from `.agents/project.json` one per line with no decoration, distinct from `list`. Points interactive users to `list` or `status`.
+- Mirrored the annotation in `README.md` § "Project Packs" directly below the pack-commands block, pointing `$run`-internal readers at `global/codex/run/SKILL.md`.
+- Did not add `list-packs` to the bash code blocks themselves; those continue to advertise only the human-facing subcommands.
+- Marked `$reconcile-dev-docs fix pack-command docs` complete in `tasks/todo.md:1016`.
+
 ## 2026-04-22 — Document Claude-only `delegate` in skills reference
 
 - `global/claude/delegate/SKILL.md` exists and is central to live Claude→Codex hybrid-mode delegation, but neither `README.md` nor `docs/skills-reference.md` mentioned it. `grep -in delegate` on both files returned nothing, so a Codex user scanning the reference docs could reasonably expect a symmetric `$delegate` that does not exist (no `global/codex/delegate/` directory).
