@@ -8,13 +8,18 @@ argument-hint: "[optional: task description or manual-todo item text]"
 
 # Guide
 
-Produce detailed, click-by-click instructions for manual tasks that block automated progress — service signups, DNS configuration, OAuth credential creation, dashboard settings, production smoke checks, and anything else that requires a GUI or third-party portal.
+Produce detailed, click-by-click instructions for human-only manual tasks that block automated progress — service signups, DNS configuration, OAuth credential creation with no authenticated CLI/API path, dashboard settings that cannot be scripted, production smoke checks needing a real account/device or human sign-off, and anything else that requires a third-party portal or subjective human judgment.
 
 This skill is not for development-document bookkeeping. If the requested task is
 auditing, reconciling, checking off, moving, or classifying entries in
 `tasks/manual-todo.md`, `tasks/todo.md`, `tasks/record-todo.md`, or history
 against repo reality, stop and route to `/reconcile-dev-docs fix tasks` or a
 direct dev-doc audit instead.
+
+This skill is also not for agent-executable work. If the task is repo edits,
+SDK wiring, generated assets, local commands, tests, audits, or CLI/API work
+with available authentication, stop and route it to `/run`, `/ship`, or the
+specific implementation skill instead of producing click instructions.
 
 ## Process
 
@@ -96,4 +101,5 @@ When you've completed these steps, let me know and I'll mark the item done in `t
 - **No shipping contract** — checking off a manual-todo item is a minor bookkeeping edit, not a code change. Do not auto-commit just for that. If other tracked changes are present, leave them for a proper shipping skill.
 - **One task at a time** — if multiple blockers exist, guide the user through the first one. They can run `/guide` again for the next.
 - **No task-ledger reconciliation** — do not produce a guide for requests such as "reconcile manual-todo", "audit stale manual tasks", or "check off completed todo items". Route those to `/reconcile-dev-docs fix tasks` or a direct dev-doc audit.
+- **No agent-executable work** — do not produce a guide for repo edits, local commands, SDK adoption, generated assets, test runs, Lighthouse/Playwright checks, or authenticated CLI/API operations.
 - **Don't execute the task** — produce instructions for the user to follow. Do not attempt to call external APIs, create accounts, or configure services on the user's behalf.

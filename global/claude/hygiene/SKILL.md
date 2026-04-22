@@ -50,7 +50,7 @@ Check expected project files exist based on project phase:
 **Always expected:**
 - `tasks/roadmap.md` — has content, not just a placeholder
 - `tasks/todo.md` — has content with checkable items (`- [ ]` or `- [x]`)
-- `tasks/manual-todo.md` — if it exists, has content with checkable items (`- [ ]` or `- [x]`) and `_(blocks: ...)_` or `_(after: ...)_` annotations
+- `tasks/manual-todo.md` — if it exists, has content with checkable human-only external items (`- [ ]` or `- [x]`) and `_(blocks: ...)_` or `_(after: ...)_` annotations
 - `tasks/record-todo.md` — if it exists, contains non-blocking condition-gated records with source, condition, non-blocking reason, evidence, and promotion rule fields
 - `tasks/recurring-todo.md` — if it exists, contains cadence-based tasks with cadence, owner/agent, last run, next due, evidence/output path, and escalation fields
 - `tasks/history.md` — exists
@@ -100,7 +100,7 @@ Check expected project files exist based on project phase:
 **Family-specific checks:**
 - `tasks/roadmap.md` has a summary, phase overview, repeated `## Phase N:` sections, phase milestones or acceptance criteria, and cross-phase concerns when multi-phase
 - `tasks/todo.md` has checkable work, a priority task queue, or a priority documentation todo, and does not contain the full multi-phase roadmap except during legacy migration
-- `tasks/manual-todo.md` has checkable items and every unchecked item includes `_(blocks: Step N.X)_` or `_(after: Step N.X)_`
+- `tasks/manual-todo.md` has checkable human-only external items, every unchecked item includes `_(blocks: Step N.X)_` or `_(after: Step N.X)_`, and no item is repo/code/config/test/audit/CLI/API work the agent can execute
 - `tasks/record-todo.md` has checkable non-blocking record items with source, condition, non-blocking reason, required data/access, measurement/query, target note, revisit cadence/date, completion evidence, and promotion rule
 - `tasks/recurring-todo.md` has cadence-based items with task, cadence, owner/agent, scope, trigger, last run, next due, command/skill, evidence/output path, and escalation conditions
 - `tasks/history.md` is append-only with dated entries
@@ -140,7 +140,7 @@ Categorize all findings:
 
 For documentation templates, use:
 
-- **Error** for automation-breaking structure: missing checkboxes in `tasks/todo.md`, missing manual blocker annotations, executable work misfiled in `tasks/record-todo.md` or `tasks/recurring-todo.md`, malformed phase numbering, multiple H1 headings, invalid `.agents/project.json`, or missing required task/spec sections that downstream skills parse.
+- **Error** for automation-breaking structure: missing checkboxes in `tasks/todo.md`, missing manual blocker annotations, executable work misfiled in `tasks/manual-todo.md`, `tasks/record-todo.md`, or `tasks/recurring-todo.md`, malformed phase numbering, multiple H1 headings, invalid `.agents/project.json`, or missing required task/spec sections that downstream skills parse.
 - **Warning** for template drift: missing metadata, missing `## Next Steps`, missing spec acceptance criteria, research docs without source/evidence orientation, or legacy roots that should move to canonical locations.
 - **Info** for uncertain classifications, old hand-written docs, optional sections, or cleanup suggestions that do not block automation.
 

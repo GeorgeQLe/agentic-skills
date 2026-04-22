@@ -23,8 +23,8 @@ Identify the next incomplete unit of work from the phased plan, build an executi
    - **If the phase has acceptance criteria but no implementation steps** (no `### Tests First` or `### Implementation` section): this phase needs just-in-time planning. **You MUST invoke `/plan-phase` for this phase** to generate implementation steps and file-level detail before proceeding. Do NOT tell the user the phase is "deferred" or that they need to run `/plan-phase` manually — this auto-invocation is the designed workflow. A phase without implementation steps is NOT deferred; it simply hasn't been decomposed yet. Only items under the `## Deferred / Future Work` heading in the roadmap are actually deferred.
 5. **Check `tasks/manual-todo.md`** (if it exists) for blocking manual tasks:
    - Look for unchecked items with `_(blocks: Step N.X)_` annotations matching the step about to be executed.
-   - If a blocking external manual task is found, stop and ask the user how to proceed: "**Manual task blocking this step:** [task]. Complete it before proceeding, or run `/guide` for step-by-step instructions." Do NOT execute the step unless the manual task is completed or the user explicitly overrides the blocker.
-   - If the unchecked item is task-doc bookkeeping or reconciliation (for example auditing `tasks/manual-todo.md` against repo/history reality), do not route it to `/guide`; route it to `/reconcile-dev-docs fix tasks` or handle it as a direct dev-doc audit.
+   - If a blocking external human-only manual task is found, stop and ask the user how to proceed: "**Manual task blocking this step:** [task]. Complete it before proceeding, or run `/guide` for step-by-step instructions." Do NOT execute the step unless the manual task is completed or the user explicitly overrides the blocker.
+   - If the unchecked item is task-doc bookkeeping, reconciliation, or agent-executable work (repo edits, SDK wiring, local commands, tests, audits, generated assets, or authenticated CLI/API work), do not route it to `/guide`; route it to `/reconcile-dev-docs fix tasks`, promote it to `tasks/todo.md`, or handle it as a direct dev-doc audit.
 6. **Research what's needed** — read only the files relevant to the step/phase to understand existing code, patterns, and dependencies.
 6b. **Read the execution profile** — read the current phase's `### Execution Profile` from `tasks/todo.md` if present:
    - If missing, treat the phase as `serial`.
@@ -135,7 +135,7 @@ Rules:
 - Do NOT refactor unrelated code.
 - Do NOT update CLAUDE.md.
 - Do NOT commit or push. `/run` is the Claude execution step; `/ship` owns packaging, task-history updates, commits, pushes, deploys, and next-step planning.
-- Do NOT execute external human-action items from `tasks/manual-todo.md`. Bookkeeping items that were misfiled there should be reconciled through `/reconcile-dev-docs`, not `/guide`.
+- Do NOT execute external human-action items from `tasks/manual-todo.md`. Bookkeeping or agent-executable items that were misfiled there should be reconciled through `/reconcile-dev-docs` or promoted into `tasks/todo.md`, not routed to `/guide`.
 - Do NOT execute items from `tasks/record-todo.md` or `tasks/recurring-todo.md` unless the item has first been promoted into `tasks/todo.md`.
 
 ## Workflow
