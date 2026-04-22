@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-04-22 — Create `research/devtool-integration-map.md`
+
+- The devtool research chain's integration-map step (`tasks/todo.md:1018`) was the next unchecked item after `$devtool-user-map` shipped earlier today. `research/devtool-integration-map.md` did not exist.
+- Created `research/devtool-integration-map.md` grounded in this repo's observable integration surface rather than generic devtool boilerplate: required integrations from `install.sh`, `scripts/pack.sh`, and `scripts/agent-mode.sh` (bash, git, symlinks, Claude Code and/or Codex CLI, writable `$HOME`, `.agents/project.json`); ecosystem assumptions from the two-CLI-only install path, local-first execution, `main`/`master` default, and the explicit `No GitHub Actions` rule in `CLAUDE.md`; setup path as clone → `./install.sh` → `scripts/pack.sh install <pack>` → optional `set-mode` → CLI restart; compatibility constraints naming WSL requirement, synced-filesystem fragility, checkout-path coupling, dual-CLI parity by convention only, and Claude-only `/delegate`; migration risks covering vendor concentration, 2x mirror maintenance tax, no rollback tooling, manual archive-first discipline, approval-packet schema drift, and absent skill-behavior test harness.
+- All five required sections present per `packs/devtool/claude/devtool-integration-map/SKILL.md`: Required integrations, Ecosystem assumptions, Setup path, Compatibility constraints, Migration risks.
+- Cross-linked continuity with `research/devtool-user-map.md` for audience framing and reused its "Adoption blockers" entries as migration-risk evidence rather than re-deriving them.
+- Archive-first not required — new file, no existing canonical doc replaced.
+- Marked `$devtool-integration-map` complete in `tasks/todo.md:1018`. Unblocks `$devtool-dx-journey` at `tasks/todo.md:1019`.
+
 ## 2026-04-22 — Create `research/devtool-user-map.md`
 
 - The devtool research chain (`tasks/todo.md:1017–1023`) was blocked because the canonical `research/devtool-user-map.md` did not exist. `research/` directory was also absent on disk.
