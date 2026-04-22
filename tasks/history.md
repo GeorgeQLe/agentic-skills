@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-04-22 — Create `research/devtool-dx-journey.md`
+
+- The devtool research chain's dx-journey step (`tasks/todo.md:1019`) was the next unchecked item after `$devtool-integration-map` shipped earlier today. `research/devtool-dx-journey.md` did not exist.
+- Created `research/devtool-dx-journey.md` grounded in this repo's actual developer experience rather than generic DX boilerplate: install from `install.sh` (two-layer global + project, intentional no-pack-global decision, symmetrical `--uninstall`, absent CLI-presence check); quickstart from `/pack` / `$pack` guided setup plus the explicit CLI-restart round-trip called out in `README.md:51` and `docs/packs.md:43`; first success as a `/run` or `$run` cycle that exercises plan-mode-first, ship-one-step, and `commit-and-push-by-feature` together; error recovery via `scripts/skill-deps.sh --broken`, `scripts/skill-versions.sh --missing`, `pack.sh refresh` + CLI restart, `$spec-drift`, `$reconcile-dev-docs`, plus the honest gaps (no rollback, no skill-behavior harness, no hot reload); production adoption as the ship-one-step loop on `master` with dated `tasks/history.md` entries as the live changelog and archive-first as manual discipline; team rollout covering the commit-`.agents/project.json`-and-regenerate contract, shared checkout-path standardization, per-developer mode override, 2x mirror tax, restart chore compounding, and the fork-as-registry pattern; retention via plan-mode-first muscle memory, ship-one-step as the unit of progress, tasks-as-docs, the `tasks/lessons.md` self-improvement loop, gradual hybrid adoption, and `create-skill` + `pack promote` turning the library into a personal dotfile — plus honest anti-retention signals (restart chore, silent mirror rot, terminology cliff, long operating-modes doc, no version pin).
+- All seven required sections present per `packs/devtool/claude/devtool-dx-journey/SKILL.md`: Install, Quickstart, First success, Error recovery, Production adoption, Team rollout, Retention.
+- Cross-linked continuity with `research/devtool-user-map.md` (audience) and `research/devtool-integration-map.md` (setup mechanics and migration risks), reusing their anchors instead of re-deriving friction points.
+- Archive-first not required — new file, no existing canonical doc replaced.
+- Marked `$devtool-dx-journey` complete in `tasks/todo.md:1019`. Unblocks `$devtool-adoption` at `tasks/todo.md:1020`.
+
 ## 2026-04-22 — Create `research/devtool-integration-map.md`
 
 - The devtool research chain's integration-map step (`tasks/todo.md:1018`) was the next unchecked item after `$devtool-user-map` shipped earlier today. `research/devtool-integration-map.md` did not exist.

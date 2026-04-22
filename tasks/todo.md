@@ -1016,7 +1016,7 @@ Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch r
 - [x] `$reconcile-dev-docs fix pack-command docs` - document `scripts/pack.sh list-packs` where appropriate, or explicitly mark it as an internal subcommand used by Codex `$run` routing.
 - [x] `$devtool-user-map` - create/update `research/devtool-user-map.md` because the repo infers as a devtool project and the canonical research output is missing.
 - [x] `$devtool-integration-map` - create/update `research/devtool-integration-map.md` after `$devtool-user-map`; currently blocked because `research/devtool-user-map.md` is missing.
-- [ ] `$devtool-dx-journey` - create/update `research/devtool-dx-journey.md` after `$devtool-integration-map`; currently blocked because `research/devtool-integration-map.md` is missing.
+- [x] `$devtool-dx-journey` - create/update `research/devtool-dx-journey.md` after `$devtool-integration-map`; currently blocked because `research/devtool-integration-map.md` is missing.
 - [ ] `$devtool-adoption` - create/update `research/devtool-adoption.md` after `$devtool-dx-journey`; currently blocked because `research/devtool-dx-journey.md` is missing.
 - [ ] `$devtool-positioning` - create/update `research/devtool-positioning.md` after `$devtool-adoption`; currently blocked because `research/devtool-adoption.md` is missing.
 - [ ] `$devtool-monetization` - create/update `research/devtool-monetization.md` after `$devtool-positioning`; currently blocked because `research/devtool-positioning.md` is missing.
@@ -1057,7 +1057,46 @@ Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch r
 
 Start with `$devtool-user-map` from the priority documentation todo, or start a new spec and roadmap cycle if new work is being introduced.
 
-## Next Step Plan: `$devtool-dx-journey`
+## Next Step Plan: `$devtool-adoption`
+
+### Goal
+
+Create `research/devtool-adoption.md` per `packs/devtool/claude/devtool-adoption/SKILL.md`. With `research/devtool-user-map.md`, `research/devtool-integration-map.md`, and `research/devtool-dx-journey.md` now in place, this is the next unchecked item in the devtool research chain (`tasks/todo.md:1020`) and unblocks `$devtool-positioning` at `tasks/todo.md:1021`.
+
+### Scope
+
+Research-only. Create a new file `research/devtool-adoption.md`. No code, scripts, or spec edits. Archive-first not required (new file).
+
+### Execution Profile
+
+Serial, implementation-safe. Single-agent. Documentation/research artifact.
+
+### Ground truth
+
+- Skill contract: `packs/devtool/claude/devtool-adoption/SKILL.md` (mirror at `packs/devtool/codex/devtool-adoption/SKILL.md`). Read the contract at implementation time for the exact required section list.
+- Cross-read `research/devtool-user-map.md`, `research/devtool-integration-map.md`, and `research/devtool-dx-journey.md` for continuity — audience framing, setup mechanics, and the lived journey are already grounded and should not be re-derived.
+- Repo-grounded adoption anchors: zero-cost OSS library sitting on paid upstream CLIs; adoption friction concentrated in dual Claude/Codex maintenance tax, CLI-restart chore, terminology cliff, and absent `CONTRIBUTING.md`; retention drivers being plan-mode-first, ship-one-step, tasks-as-docs, `tasks/lessons.md`, and `create-skill`-to-pack promotion; honest gaps named in `research/devtool-integration-map.md` § "Migration risks" (vendor concentration, no rollback, no test harness, checkout-path coupling, approval-packet schema drift).
+
+### Files to inspect / modify
+
+- Read `packs/devtool/claude/devtool-adoption/SKILL.md`, the three prior research docs under `research/`, `README.md`, `docs/operating-modes.md`, `docs/packs.md`, `CLAUDE.md`.
+- Create `research/devtool-adoption.md` with the sections required by the skill contract.
+- Tick `tasks/todo.md:1020`.
+- Add a dated entry to `tasks/history.md`.
+
+### Acceptance criteria
+
+- `research/devtool-adoption.md` exists and covers every section required by `packs/devtool/claude/devtool-adoption/SKILL.md`, grounded in this repo's actual adoption surface (not generic devtool boilerplate).
+- Each claim is anchored to specific repo signals (script names, file paths, doc sections) where they exist.
+- `tasks/todo.md:1020` ticked.
+- `tasks/history.md` has a dated entry.
+- Shipped to `master` via `/commit-and-push-by-feature`. Deploy skipped (no deploy contract — confirm no `deploy.md` / `tasks/deploy.md` at ship time).
+
+### Ship-one-step handoff contract
+
+After approval, implement **only** this step. Then write the following step's plan (next unchecked queue item — `$devtool-positioning` at `tasks/todo.md:1021`), ensure `.claude/settings.local.json` retains `"showClearContextOnPlanAccept": true` and `permissions.defaultMode: "acceptEdits"`, start the approval UI for that following step by calling `EnterPlanMode` first, write a brief pass-through plan, call `ExitPlanMode`, and stop before implementing it. Do not call `ExitPlanMode` from normal mode. If `EnterPlanMode` is denied because an explicit user request is required, stop and ask for `/plan <next step>`.
+
+## Previous Step Plan (shipped): `$devtool-dx-journey`
 
 ### Goal
 
@@ -1096,7 +1135,7 @@ Serial, implementation-safe. Single-agent. Documentation/research artifact.
 
 After approval, implement **only** this step. Then write the following step's plan (next unchecked queue item — `$devtool-adoption` at `tasks/todo.md:1020`), ensure `.claude/settings.local.json` retains `"showClearContextOnPlanAccept": true` and `permissions.defaultMode: "acceptEdits"` (currently satisfied per `settings.local.json:144,146`), start the approval UI for that following step by calling `EnterPlanMode` first, write a brief pass-through plan, call `ExitPlanMode`, and stop before implementing it. Do not call `ExitPlanMode` from normal mode. If `EnterPlanMode` is denied because an explicit user request is required, stop and ask for `/plan <next step>`.
 
-## Previous Step Plan (shipped): `$devtool-integration-map`
+## Previous Previous Step Plan (shipped): `$devtool-integration-map`
 
 ### Goal
 
@@ -1110,7 +1149,7 @@ Create `research/devtool-integration-map.md` because the devtool research chain'
 - `tasks/todo.md:1018` ticked. `tasks/history.md` has a 2026-04-22 entry.
 - Shipped to `master` as commits `87e7316` (research) and `35f8ff5` (tasks bookkeeping). Deploy skipped.
 
-## Previous Previous Step Plan (shipped): `$devtool-user-map`
+## Previous Previous Previous Step Plan (shipped): `$devtool-user-map`
 
 ### Goal
 
