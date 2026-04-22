@@ -229,20 +229,35 @@ Define ordered steps beneath the existing Goal/Scope/Acceptance Criteria. The st
 Classify each step or follow-up as exactly one of:
 
 - **automated** — Claude executes it as implementation or verification work in `tasks/todo.md`.
-- **manual** — a human action tied to an automated step in `tasks/manual-todo.md`.
+- **manual** — a human-only external action tied to an automated step in `tasks/manual-todo.md`.
 - **record** — a one-time, non-blocking record or measurement that should happen only after a condition becomes true in `tasks/record-todo.md`.
 - **recurring** — cadence-based operational, research, or maintenance work in `tasks/recurring-todo.md`.
 
-Manual tasks include:
+Use the narrowest classification that can execute without losing context:
+
+- If Claude can do it by editing repo files, running local commands, using an approved CLI/MCP/API integration, or writing a script with already-available credentials, classify it as **automated**.
+- If the work is blocked only because a secret, account, payment method, approval, hardware device, or human judgment/evidence is missing, classify only that missing prerequisite as **manual**.
+- If one item mixes human and automatable work, split it: the human-gated prerequisite goes to `tasks/manual-todo.md`; the repo/code/config/test follow-up stays in `tasks/todo.md`.
+
+Manual tasks include only human-gated work such as:
 
 - DNS configuration, domain setup, SSL certificates
-- Browser/device testing, visual QA
-- OAuth/API credential setup with third-party services
-- Deployment approvals, environment provisioning
+- Browser/device testing or visual QA that requires a real account, real device, production environment, or subjective human sign-off
+- OAuth/API credential setup with third-party services when no authenticated CLI/API path is available
+- Deployment approvals, paid environment provisioning, quota/billing approval, or account ownership decisions
 - Signing up for services, billing setup
 - Any step requiring a GUI, physical device, or human judgment that cannot be scripted
 
+Do not classify these as manual:
+
+- Editing source, docs, `.env.example`, config templates, or task docs
+- Installing or wiring SDKs/packages, creating adapters, writing scripts, or updating metadata contracts
+- Running builds, unit tests, local smoke tests, Lighthouse, Playwright, linters, or repo audits
+- Setting local environment variables when the required non-secret values are known or the user has already provided the secret values
+- Running provider CLIs or API calls when authentication is already present or can be requested through the normal approval flow
+
 Manual tasks MUST NOT appear in `tasks/todo.md`. They go in `tasks/manual-todo.md`.
+Agent-executable tasks MUST NOT appear in `tasks/manual-todo.md`. If found there, promote them to `tasks/todo.md` or route a reconciliation fix.
 
 Record tasks MUST NOT appear in `tasks/todo.md` unless they are launch gates or current execution work. They go in `tasks/record-todo.md` with source, condition, non-blocking reason, required data/access, measurement/query, target note, revisit cadence/date, completion evidence, and promotion rule.
 
@@ -259,7 +274,8 @@ Recurring tasks MUST NOT appear in `tasks/todo.md` unless the current run is exp
    # Manual Tasks — [Project Name]
 
    > Phase: N — [Phase Title]
-   > These tasks require human action. Check them off as you complete them.
+   > These tasks require human-only external action. Do not put repo edits, local commands, CLI/API work, tests, audits, or implementation follow-ups here.
+   > Check them off as you complete them.
 
    ## Pre-Phase / Setup
    - [ ] [task] _(blocks: Step N.X)_
@@ -328,8 +344,8 @@ Rules:
   - Hybrid execution handoff → recommend `/delegate $run`.
   - Claude-only or orchestration-heavy work → recommend `/run`.
   - Codex-only execution → recommend `$run`.
-  - External manual work (browser, auth, DNS, service console/dashboard, or production smoke-test work) → recommend `/guide` or a Claude-guided manual step rather than `/run`.
-  - Task-doc bookkeeping, stale `tasks/manual-todo.md` cleanup, or reconciliation against repo/history reality → recommend `/reconcile-dev-docs fix tasks` or a direct dev-doc audit, not `/guide`.
+  - External human-only manual work (browser/auth/DNS/service dashboard work with no reliable authenticated CLI/API path, paid account setup, real-device checks, or production smoke-test work needing human sign-off) → recommend `/guide` or a Claude-guided manual step rather than `/run`.
+  - Agent-executable work misfiled in `tasks/manual-todo.md`, task-doc bookkeeping, stale `tasks/manual-todo.md` cleanup, or reconciliation against repo/history reality → recommend `/reconcile-dev-docs fix tasks`, promotion to `tasks/todo.md`, or a direct dev-doc audit, not `/guide`.
 - Only present multiple commands when the ambiguity materially changes execution safety or there are equally valid next work items. Otherwise choose the best route and mention degraded mode lookup inline.
 
 ## Constraints
@@ -345,6 +361,7 @@ Rules:
 - The `### Execution Profile` must be decision-complete enough for `/run` to decide whether to use serial execution, read-only subagents, review subagents, or disjoint write subagents after the normal approval gate.
 - Subagents must not own task docs, roadmap/history updates, shipping, or deploy steps. Those stay with the main agent.
 - Manual tasks MUST NOT appear in `tasks/todo.md` — they go in `tasks/manual-todo.md` only.
+- Agent-executable work MUST NOT appear in `tasks/manual-todo.md` — it goes in `tasks/todo.md` or an implementation skill.
 - Non-blocking record tasks MUST NOT appear in `tasks/todo.md` — they go in `tasks/record-todo.md` unless explicitly promoted.
 - Recurring obligations MUST NOT appear in `tasks/todo.md` by default — they go in `tasks/recurring-todo.md` unless a due run is current execution work.
 - Do NOT put plans in `CLAUDE.md` or `docs/plan.md`.

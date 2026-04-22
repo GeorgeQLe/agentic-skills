@@ -235,7 +235,7 @@ Failed deploys may be recorded but should not reset staleness.
 
 ## Severity Guide
 
-- Error: automation-breaking structure, invalid JSON in machine-read files, missing task state in workflow-owned docs, malformed phase numbering, or missing blocker annotations.
+- Error: automation-breaking structure, invalid JSON in machine-read files, missing task state in workflow-owned docs, malformed phase numbering, missing blocker annotations, or agent-executable work misfiled in `tasks/manual-todo.md`.
 - Warning: template drift, missing metadata, missing `Next Steps`, missing acceptance criteria, missing source orientation, legacy roots, or older equivalent headings.
 - Info: unknown hand-written docs, optional cleanup, uncertain classification, or style improvements.
 

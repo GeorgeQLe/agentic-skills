@@ -82,7 +82,7 @@ Ask focused questions to align on roadmap decisions (1–3 questions per turn). 
 - **Scope**: Should anything be deferred, dropped, or marked as stretch?
 - **Market fit** (when ICP/gap specs exist): Which phases directly address customer pain points or deal-blockers from gap analysis? Prioritise these unless technically impossible.
 - **Phase sizing**: Preference for many small phases vs. fewer larger ones?
-- **Manual tasks**: Any steps requiring human action (DNS, OAuth, browser testing, deploy approvals)? Which phases?
+- **Manual tasks**: Any human-only external prerequisites (DNS/account setup, OAuth app creation, billing/approval, real-device or production browser verification with subjective sign-off)? Which phases do they block or follow? Do not classify repo edits, SDK wiring, CLI/API work, local tests, or audits as manual.
 - **Parallelization**: Which phase work can run independently, which modules or files are shared chokepoints, and where should work stay serial?
 - **Review needs**: Which phases need specialized review gates (correctness, tests, security, performance, docs/API conformance, UX)?
 - **Agent-team fit**: Which phases are too broad or cross-cutting for local in-session subagents and should instead use Codex app worktrees or Claude agent teams?
@@ -94,6 +94,8 @@ Continue until the user confirms the phase structure is complete.
 #### 4c. Write the Roadmap
 
 Write `tasks/roadmap.md` with the agreed phase structure (phases, goals, scope, acceptance criteria, parallelization strategy — NOT implementation steps). Implementation detail is generated just-in-time by `$plan-phase` when a phase is started, not upfront.
+
+If a phase has human-gated prerequisites, include a concise `**Manual Tasks:**` block with only those external prerequisites and `_(blocks: Step N.X)_` or `_(after: Step N.X)_` annotations when known. Split mixed work: human account/approval/credential steps belong in `**Manual Tasks:**`; code changes, repo configuration, CLI/API calls with available auth, tests, audits, and generated assets stay in Scope/Acceptance Criteria for `$plan-phase` to turn into `tasks/todo.md`.
 
 For each phase, include these strategic fields:
 
@@ -200,19 +202,22 @@ Action item format:
 - [ ] `$skill [args]` - [action description] because [reason with evidence].
 ```
 
-For external manual tasks that block progress (browser/service-console work such as
-DNS, OAuth, Stripe/Vercel/GitHub dashboard setup, signups, production smoke
-checks):
+For external manual tasks that block progress (browser/service-console work with
+no reliable authenticated CLI/API path, such as DNS, OAuth, Stripe/Vercel/GitHub
+dashboard setup, signups, paid account approval, or production smoke checks that
+need a real account/device or human sign-off):
 
 ```md
 - [ ] Complete manual task: "[task description]" _(blocks: Step N.X)_ — resolve before `$run` can continue.
 ```
 
-Do not use this format for bookkeeping or documentation reconciliation just
-because the finding mentions `tasks/manual-todo.md`. If the work is auditing,
-classifying, checking off, moving, or reconciling task-doc entries against repo
-reality, route it to `$reconcile-dev-docs fix tasks` or describe it as a direct
-dev-doc audit task.
+Do not use this format for agent-executable work or for bookkeeping/documentation
+reconciliation just because the finding mentions `tasks/manual-todo.md`. If the
+work is repo edits, SDK wiring, generated assets, local commands, tests, audits,
+or CLI/API work with available auth, put it in `tasks/todo.md`. If the work is
+auditing, classifying, checking off, moving, or reconciling task-doc entries
+against repo reality, route it to `$reconcile-dev-docs fix tasks` or describe it
+as a direct dev-doc audit task.
 
 For advisory record or recurring tasks:
 
@@ -297,7 +302,7 @@ Rules:
 - Inference defaults:
   - Codex skill invocation (`$roadmap`, `$plan-phase`, `$run`, `$research-roadmap`) → recommend the matching `$...` command.
   - Claude slash invocation (`/roadmap`, `/plan-phase`, `/run`, `/delegate`) or orchestration-heavy work → recommend the matching `/...` route.
-  - External manual work or browser-gathered evidence (DNS/OAuth/service dashboards, auth setup, production smoke checks) → recommend `$guide` or a Claude-guided manual step.
+  - External manual work or browser-gathered evidence with no reliable authenticated CLI/API path (DNS/OAuth/service dashboards, auth setup, production smoke checks that need real account/device or human sign-off) → recommend `$guide` or a Claude-guided manual step.
   - Task-doc bookkeeping, stale `tasks/manual-todo.md` cleanup, or reconciliation against repo/history reality → recommend `$reconcile-dev-docs fix tasks` or a direct dev-doc audit, not `$guide`.
 - Only present multiple commands when the ambiguity materially changes execution safety or there are equally valid next work items. Otherwise choose the best route and mention degraded mode lookup inline.
 
@@ -312,6 +317,7 @@ Rules:
 - Preserve user-authored todo content outside `## Priority Task Queue`.
 - Every issue must include evidence (timestamps, checked-item counts, file existence).
 - Do not directly modify `tasks/manual-todo.md`, `tasks/record-todo.md`, `tasks/recurring-todo.md`, `tasks/history.md`, or any specs (except to create `tasks/roadmap.md` in State B). `$plan-phase 1` may create or update task files during the explicit Phase 1 seed.
+- Do not put agent-executable work in `**Manual Tasks:**` or `tasks/manual-todo.md`. Manual means human-only external prerequisite; automatable repo, CLI, API, test, audit, or asset work belongs in `tasks/todo.md`.
 - Do not treat `tasks/record-todo.md` or `tasks/recurring-todo.md` as execution queues. They are advisory surfaces unless an item is explicitly promoted into `tasks/todo.md`.
 - Do not create or modify source code.
 - Do not archive phases, advance the pipeline, or execute implementation steps.

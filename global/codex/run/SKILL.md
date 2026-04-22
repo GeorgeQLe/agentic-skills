@@ -23,7 +23,7 @@ Identify the next incomplete unit of work from the phased plan, build an executi
    - If `$ARGUMENTS` contains `--phase`, scope the full next incomplete phase.
    - Otherwise, find the next unchecked `- [ ]` step within that phase.
    - **If the phase has acceptance criteria but no implementation steps** (no `### Tests First` or `### Implementation` section): invoke `$plan-phase` for this phase to generate implementation steps and file-level detail before proceeding.
-5. **Check `tasks/manual-todo.md`** (if it exists) for unchecked items with `_(blocks: Step N.X)_` matching the current step. If a blocking external manual task is found, stop and tell the user: "**Manual task blocking this step:** [task]. Complete it before proceeding, or run `$guide` for step-by-step instructions." Do NOT execute the step unless the manual task is completed or the user explicitly overrides the blocker. If the unchecked item is task-doc bookkeeping or reconciliation (for example auditing `tasks/manual-todo.md` against repo/history reality), do not route it to `$guide`; route it to `$reconcile-dev-docs fix tasks` or handle it as a direct dev-doc audit.
+5. **Check `tasks/manual-todo.md`** (if it exists) for unchecked items with `_(blocks: Step N.X)_` matching the current step. If a blocking external human-only manual task is found, stop and tell the user: "**Manual task blocking this step:** [task]. Complete it before proceeding, or run `$guide` for step-by-step instructions." Do NOT execute the step unless the manual task is completed or the user explicitly overrides the blocker. If the unchecked item is task-doc bookkeeping, reconciliation, or agent-executable work (repo edits, SDK wiring, local commands, tests, audits, generated assets, or authenticated CLI/API work), do not route it to `$guide`; route it to `$reconcile-dev-docs fix tasks`, promote it to `tasks/todo.md`, or handle it as a direct dev-doc audit.
 6. Research what is needed — read only the files relevant to the step.
 6b. Read the current phase's `### Execution Profile` from `tasks/todo.md` if present:
    - If missing, treat the phase as `serial`.
@@ -125,8 +125,8 @@ Rules:
 - Inference defaults:
   - Codex skill invocation (`$run`, `$ship`, `$ship-end`, or `$run --execute-approved`) → recommend the matching `$...` command.
   - Claude slash invocation (`/run`, `/ship`, `/delegate`) or orchestration-heavy work → recommend the matching `/...` route.
-  - External manual work (browser, auth, DNS, service console/dashboard, or production smoke-test work) → recommend `$guide` or a Claude-guided manual step rather than `$run`.
-  - Task-doc bookkeeping, stale `tasks/manual-todo.md` cleanup, or reconciliation against repo/history reality → recommend `$reconcile-dev-docs fix tasks` or a direct dev-doc audit, not `$guide`.
+  - External human-only manual work (browser/auth/DNS/service dashboard work with no reliable authenticated CLI/API path, paid account setup, real-device checks, or production smoke-test work needing human sign-off) → recommend `$guide` or a Claude-guided manual step rather than `$run`.
+  - Agent-executable work misfiled in `tasks/manual-todo.md`, task-doc bookkeeping, stale `tasks/manual-todo.md` cleanup, or reconciliation against repo/history reality → recommend `$reconcile-dev-docs fix tasks`, promotion to `tasks/todo.md`, or a direct dev-doc audit, not `$guide`.
   - Approved packet present → recommend `$run --execute-approved` unless the resolved mode is explicitly `claude-only`.
 - Only present multiple commands when the ambiguity materially changes execution safety or there are equally valid next work items. Otherwise choose the best route and mention degraded mode lookup inline.
 
@@ -152,7 +152,7 @@ After resolving or inferring the command route, resolve enabled packs via `./scr
 - Do not let subagents update `tasks/todo.md`, `tasks/roadmap.md`, `tasks/history.md`, shipping commits, or deploy steps. Those remain main-agent responsibilities.
 - Do not run parallel write lanes unless their `Owns` paths are disjoint. When in doubt, downgrade to `research-only` or `serial`.
 - Do not push shipping commits to an existing feature branch. Use `$commit-and-push-by-feature` to move the work onto `main` or `master` and push it there, or stop and report a blocker if that cannot be done safely.
-- Do NOT execute external human-action items from `tasks/manual-todo.md`. Bookkeeping items that were misfiled there should be reconciled through `$reconcile-dev-docs`, not `$guide`.
+- Do NOT execute external human-action items from `tasks/manual-todo.md`. Bookkeeping or agent-executable items that were misfiled there should be reconciled through `$reconcile-dev-docs` or promoted into `tasks/todo.md`, not routed to `$guide`.
 - Do NOT execute items from `tasks/record-todo.md` or `tasks/recurring-todo.md` unless the item has first been promoted into `tasks/todo.md`.
 - `run` ships by default in Codex. Use `$ship` only when there is already finished work in the tree or unpushed commits that need packaging without running a new step.
 - Never use GitHub Actions for deployment. Only use manual deploy scripts, Makefiles, or CLI commands.
