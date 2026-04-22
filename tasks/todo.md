@@ -1057,15 +1057,15 @@ Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch r
 
 Start with `$devtool-user-map` from the priority documentation todo, or start a new spec and roadmap cycle if new work is being introduced.
 
-## Next Step Plan: `$spec-drift fix kanban archive docs`
+## Next Step Plan: `$spec-drift fix docs/canonical-workflow-report.md`
 
 ### Goal
 
-Update active roadmap references that still describe `/kanban-archive` as a standalone skill. The current implementation exposes archive mode through `poketo-kanban --archive` (the standalone skill was merged in — see `tasks/history.md:362`). Bring `tasks/roadmap.md` in line with that reality without rewriting archived phase docs.
+Refresh or demote the stale canonical workflow report. `docs/canonical-workflow-report.md` (dated 2026-04-19) still lists Phase 11 Steps 7–11 as "planned but not fully wired", but Phase 11 completed 2026-04-19 per `tasks/roadmap.md:25` and `tasks/history.md`. Reconcile the report with shipped reality — either by updating scope + "Current Gaps And Active Work" + the operating-modes freshness note, or by demoting the file to an archival snapshot and pointing readers at `docs/operating-modes.md` as the live reference.
 
 ### Scope
 
-Doc-only drift fix. No skill code changes. Same shape as the just-completed `$spec-drift fix code-quality docs` step.
+Doc-only drift fix. No skill code changes. Same shape as the just-completed `$spec-drift fix kanban archive docs` step.
 
 ### Execution Profile
 
@@ -1073,38 +1073,54 @@ Serial, implementation-safe. Single-agent, doc-only edits. No tests, no migratio
 
 ### Ground truth
 
-- Active implementation: `packs/poketowork-kanban/{claude,codex}/poketo-kanban/SKILL.md` exposes `--archive` mode. There is no `kanban-archive` skill directory in `global/` or any pack.
-- Merge record: `tasks/history.md:362` ("Merged `kanban-archive` into `poketo-kanban` with `--archive` flag").
-- Test evidence: `docs/kanban-test-results.md:33` and `:61` already refer to `/poketo-kanban --archive`.
+- Phase 11 complete: `tasks/roadmap.md:25` ("Three-Mode Operating Model ✓") and `tasks/roadmap.md:33` ("Completed: 2026-04-19. Shipped across 11 implementation steps…").
+- Authoritative live reference: `docs/operating-modes.md` (per `tasks/roadmap.md:33` and Phase 11 Step 11 scope).
+- Specific stale claims to reconcile: `docs/canonical-workflow-report.md:4` (scope line — "through Phase 11 Step 6, with Phase 11 Step 7 still active planning work"), `:488–:492` (Current Gaps list of Steps 7–11 as not wired), `:494` (says `docs/operating-modes.md` still claims no skill consumes mode signal or packet — this freshness note is itself now stale).
+- The ship-one-step archive-first rule (see `tasks/history.md` pattern) applies if you choose to demote the file: snapshot the old canonical report under `docs/history/archive/YYYY-MM-DD/HHMMSS/docs/canonical-workflow-report.md` before substantively rewriting it.
 
 ### Files to inspect / modify
 
-- `tasks/roadmap.md:18` — Phase 4 table row "`archive-card` command + `/kanban-archive` skill". Rewrite to describe archive mode on `poketo-kanban` (match how the row is actually delivered today).
-- `tasks/roadmap.md:155` — Phase 4 step 2 heading "Create `/kanban-archive` skill (Claude + Codex)". Reword to reflect the `poketo-kanban --archive` reality, preserving the `[x]` complete state.
-- `tasks/roadmap.md:162` — acceptance bullet "`/kanban-archive` cleans up Done/Punt cards…". Update the skill reference to `poketo-kanban --archive`.
-- `specs/poketo-headless-auth-migration.md:66` — references a `codex/kanban-archive/SKILL.md` path that no longer exists. Either drop the row or mark the path as historical (this spec is an archival migration record; prefer minimal edit — annotate as "(merged into `poketo-kanban --archive`; path no longer present)").
-- **Leave as-is** (archival): `tasks/history.md`, `docs/phases/phase-4.md`, `docs/phases/kanban-validation.md`. These are phase archives / session history and must stay frozen.
-- Tick off `tasks/todo.md:1012` when done.
+- `docs/canonical-workflow-report.md:4` — scope line; update to reflect Phase 11 complete, or explicitly mark the file as a dated archival snapshot.
+- `docs/canonical-workflow-report.md:484–494` — "Current Gaps And Active Work" section; remove or rewrite the Steps 7–11 bullet list and the operating-modes freshness caveat.
+- (Optional, if rewriting) any other lines in the report that assume Phase 11 is mid-flight — scan for "active planning work", "planned but not fully wired", "Step 7", etc.
+- **Leave as-is** (archival if demoting): a dated archived copy under `docs/history/archive/YYYY-MM-DD/HHMMSS/` if the chosen approach is demote-and-snapshot rather than in-place update.
+- Tick off `tasks/todo.md:1013` when done.
 
 ### Key context
 
-- Pattern from prior two `spec-drift fix` steps: update active docs only; archives stay frozen. Same principle here — phase archive files capture the state of the project at phase-close time and should not be rewritten to reflect later merges.
-- Implementation reference: `packs/poketowork-kanban/{claude,codex}/poketo-kanban/SKILL.md`.
-- Drift root cause: Phase 4 originally shipped `/kanban-archive` as its own skill; a later consolidation merged archive behavior into `poketo-kanban --archive` (`tasks/history.md:362`). `tasks/roadmap.md` was not re-rolled after the merge.
+- Pattern from prior three `spec-drift fix` steps: update active docs only; don't touch finished-phase archives unnecessarily. `docs/canonical-workflow-report.md` is interesting because it is a **snapshot document** not a phase archive, so in-place update is acceptable — but archive-first is mandatory if the rewrite is substantive (per `tasks/todo.md:1052`).
+- Prefer the lightest viable fix: if the file still has real reference value as a canonical-workflow overview, update the stale sections and re-date it. If most of the document is superseded by `docs/operating-modes.md`, demote it to an archival snapshot with a short pointer at the top.
+- Do not let the rewrite sprawl — this is a drift fix, not a fresh canonical-workflow re-derivation. Reuse prose from `docs/operating-modes.md` and `tasks/roadmap.md` Phase 11 highlights where possible rather than re-authoring.
 
 ### Acceptance criteria
 
-- `tasks/roadmap.md` describes archive behavior as `poketo-kanban --archive`, not as a standalone `/kanban-archive` skill, in all three active spots (lines 18, 155, 162).
-- `specs/poketo-headless-auth-migration.md` no longer points at a nonexistent `codex/kanban-archive/SKILL.md` path without annotation.
-- `grep -rn "kanban-archive" tasks/roadmap.md specs/poketo-headless-auth-migration.md` shows no prose implying a standalone skill.
-- `tasks/todo.md:1012` ticked.
+- `docs/canonical-workflow-report.md` no longer claims Phase 11 Steps 7–11 are "planned but not fully wired" or that Phase 11 Step 7 is "active planning work".
+- If updated in place: scope line reflects current state as of the edit date; "Current Gaps" section accurately reflects actual remaining work (or is removed if none applies).
+- If demoted: a dated archival copy exists under `docs/history/archive/YYYY-MM-DD/HHMMSS/docs/canonical-workflow-report.md` and the live file carries a short header pointing to `docs/operating-modes.md` as the canonical reference.
+- `grep -n "Phase 11 Step 7\|not fully wired\|active planning work" docs/canonical-workflow-report.md` returns no stale claims.
+- `tasks/todo.md:1013` ticked.
 - Ship via `/commit-and-push-by-feature` on `master`. No deploy contract → deploy skipped.
 
 ### Ship-one-step handoff contract
 
-After approval, implement **only** this step: make the doc edits, tick off `tasks/todo.md:1012`, update `tasks/history.md` with a dated entry, commit and push the completed work to `master` via `/commit-and-push-by-feature`. Deploy is skipped (no `deploy.md` / `tasks/deploy.md`). Then write the following step's plan (next unchecked queue item — likely `$spec-drift fix docs/canonical-workflow-report.md` at `tasks/todo.md:1013`), ensure `.claude/settings.local.json` has `"showClearContextOnPlanAccept": true` and `permissions.defaultMode: "acceptEdits"`, start the approval UI for that following step by calling `EnterPlanMode` first, write a brief pass-through plan in plan mode, call `ExitPlanMode`, and stop before implementing it. Do not call `ExitPlanMode` from normal mode. If `EnterPlanMode` is denied because an explicit user request is required, stop and ask for `/plan <next step>`.
+After approval, implement **only** this step: make the doc edits (archive-first if substantive rewrite), tick off `tasks/todo.md:1013`, update `tasks/history.md` with a dated entry, commit and push the completed work to `master` via `/commit-and-push-by-feature`. Deploy is skipped (no `deploy.md` / `tasks/deploy.md`). Then write the following step's plan (next unchecked queue item — likely `$spec-drift fix kanban legacy specs` at `tasks/todo.md:1014`), ensure `.claude/settings.local.json` has `"showClearContextOnPlanAccept": true` and `permissions.defaultMode: "acceptEdits"`, start the approval UI for that following step by calling `EnterPlanMode` first, write a brief pass-through plan in plan mode, call `ExitPlanMode`, and stop before implementing it. Do not call `ExitPlanMode` from normal mode. If `EnterPlanMode` is denied because an explicit user request is required, stop and ask for `/plan <next step>`.
 
-## Previous Step Plan (shipped): `$spec-drift fix code-quality docs`
+## Previous Step Plan (shipped): `$spec-drift fix kanban archive docs`
+
+### Goal
+
+Update active roadmap references that still described `/kanban-archive` as a standalone skill. Implementation exposes archive mode through `poketo-kanban --archive` (the standalone skill was merged in — see `tasks/history.md`). Brought `tasks/roadmap.md` and `specs/poketo-headless-auth-migration.md` in line with that reality without rewriting archived phase docs.
+
+### Outcome
+
+- `tasks/roadmap.md:18` (Phase 4 overview row) now reads `archive-card` command + `poketo-kanban --archive` mode.
+- `tasks/roadmap.md:155–162` (Phase 4 step 2 heading + milestone) rewritten to describe archive mode on `poketo-kanban`, preserving the `[x]` complete state, with a short pointer to the merge history.
+- `specs/poketo-headless-auth-migration.md:66` annotated `(merged into `poketo-kanban --archive`; path no longer present)`; the archival migration row itself was preserved.
+- `tasks/history.md` updated with a 2026-04-22 entry.
+- `tasks/todo.md:1012` ticked.
+- Shipped to `master` as commit `bd0f207`. Deploy skipped (no deploy contract).
+
+## Previous Previous Step Plan (shipped): `$spec-drift fix code-quality docs`
 
 ### Goal
 
