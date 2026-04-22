@@ -141,7 +141,7 @@ After resolving or inferring the command route, resolve enabled packs via `./scr
 ## Constraints
 
 - One step at a time by default, or one phase with `--phase`. Then stop and let the user decide what is next.
-- `--execute-approved` consumes an `approved` packet at `.agents/approved-plan.json` (contract in `docs/operating-modes.md` § "Approval / Delegation Packet"). `--execute-approved --phase` is rejected — packets target one step. In `claude-only` mode the flag is a user error; Codex is not the executor. Requires `jq` on PATH.
+- `--execute-approved` consumes an `approved` packet at `.agents/approved-plan.json` (contract in `docs/operating-modes.md` § "Approval packet"). `--execute-approved --phase` is rejected — packets target one step. In `claude-only` mode the flag is a user error; Codex is not the executor. Requires `jq` on PATH.
 - Always present the plan and get approval before executing. Do not assume a Claude-style `EnterPlanMode` or clear-context accept flow exists.
 - The approval gate should be one question only. Avoid back-to-back variants like "Approve and I'll run..." followed by a second restatement of the same action.
 - Keep context footprint minimal — only read files relevant to the current step.

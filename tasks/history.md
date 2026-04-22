@@ -1,5 +1,11 @@
 # Session History
 
+## 2026-04-22 — Fix approval-packet section anchors
+
+- Phase 11 renamed the operating-modes doc heading from `## Approval / Delegation Packet` to `## Approval packet`; three in-repo references still pointed at the old anchor.
+- Updated `tasks/approved-plan.md:3`, `scripts/approved-plan.sh:213` (heredoc template for generated mirrors), and `global/codex/run/SKILL.md:144` to the new anchor.
+- Marked `$spec-drift fix approval-packet references` complete in `tasks/todo.md`. Remaining `Approval / Delegation Packet` hits in `tasks/todo.md`, `tasks/history.md`, and `specs/drift-report.md` are archival/historical and intentionally preserved.
+
 ## 2026-04-22 — Harden `/run` agent-team dispatch against stale step prose
 
 - Fixed a real blocker hit in a downstream repo (Pitwall) where `/run` correctly identified an `agent-team` profile but stopped because the Step 5.1 body still contained legacy advisory text (*"do not implement… through a single /run"*, *"use /delegate"*) from before the auto-dispatch feature (commit `de3d506`) shipped.
