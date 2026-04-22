@@ -1015,7 +1015,7 @@ Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch r
 - [x] `$reconcile-dev-docs fix skills-reference` - decide how to document Claude-only `delegate` in `README.md` and `docs/skills-reference.md`, since it exists under `global/claude/delegate` and is central to hybrid mode but has no Codex mirror.
 - [x] `$reconcile-dev-docs fix pack-command docs` - document `scripts/pack.sh list-packs` where appropriate, or explicitly mark it as an internal subcommand used by Codex `$run` routing.
 - [x] `$devtool-user-map` - create/update `research/devtool-user-map.md` because the repo infers as a devtool project and the canonical research output is missing.
-- [ ] `$devtool-integration-map` - create/update `research/devtool-integration-map.md` after `$devtool-user-map`; currently blocked because `research/devtool-user-map.md` is missing.
+- [x] `$devtool-integration-map` - create/update `research/devtool-integration-map.md` after `$devtool-user-map`; currently blocked because `research/devtool-user-map.md` is missing.
 - [ ] `$devtool-dx-journey` - create/update `research/devtool-dx-journey.md` after `$devtool-integration-map`; currently blocked because `research/devtool-integration-map.md` is missing.
 - [ ] `$devtool-adoption` - create/update `research/devtool-adoption.md` after `$devtool-dx-journey`; currently blocked because `research/devtool-dx-journey.md` is missing.
 - [ ] `$devtool-positioning` - create/update `research/devtool-positioning.md` after `$devtool-adoption`; currently blocked because `research/devtool-adoption.md` is missing.
