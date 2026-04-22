@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-04-22 — Create `research/devtool-adoption.md`
+
+- The devtool research chain's adoption step (`tasks/todo.md:1020`) was the next unchecked item after `$devtool-dx-journey` shipped earlier today. `research/devtool-adoption.md` did not exist.
+- Ran `$devtool-adoption` per `packs/devtool/claude/devtool-adoption/SKILL.md`. Produced `research/devtool-adoption.md` with the six required sections — adoption loops, examples, templates, community channels, proof artifacts, activation metrics — each anchored to concrete repo paths and cross-linked to the prior three research docs for continuity.
+- Grounded honest-state findings: absence of `.github/`, `CONTRIBUTING.md`, and `CHANGELOG.md` confirmed by filesystem check; `tasks/history.md` functions as the de facto changelog (1,083 lines, near-daily cadence); no telemetry or community channels instrumented. Proposed three free/local activation signals (ship-cycles/week, user-authored-skill ratio, `tasks/lessons.md` growth) as honest metrics a maintainer could extract without adding network telemetry.
+- Ticked `tasks/todo.md:1020` (`$devtool-adoption`). No code, script, or spec edits. Archive-first not required (new file). Next unblocked chain step: `$devtool-positioning` at `tasks/todo.md:1021`.
+
 ## 2026-04-22 — Create `research/devtool-dx-journey.md`
 
 - The devtool research chain's dx-journey step (`tasks/todo.md:1019`) was the next unchecked item after `$devtool-integration-map` shipped earlier today. `research/devtool-dx-journey.md` did not exist.
