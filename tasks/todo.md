@@ -1057,7 +1057,54 @@ Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch r
 
 Start with `$devtool-user-map` from the priority documentation todo, or start a new spec and roadmap cycle if new work is being introduced.
 
-## Next Step Plan: `$spec-drift fix code-quality docs`
+## Next Step Plan: `$spec-drift fix kanban archive docs`
+
+### Goal
+
+Update active roadmap references that still describe `/kanban-archive` as a standalone skill. The current implementation exposes archive mode through `poketo-kanban --archive` (the standalone skill was merged in — see `tasks/history.md:362`). Bring `tasks/roadmap.md` in line with that reality without rewriting archived phase docs.
+
+### Scope
+
+Doc-only drift fix. No skill code changes. Same shape as the just-completed `$spec-drift fix code-quality docs` step.
+
+### Execution Profile
+
+Serial, implementation-safe. Single-agent, doc-only edits. No tests, no migrations, no cross-skill coordination.
+
+### Ground truth
+
+- Active implementation: `packs/poketowork-kanban/{claude,codex}/poketo-kanban/SKILL.md` exposes `--archive` mode. There is no `kanban-archive` skill directory in `global/` or any pack.
+- Merge record: `tasks/history.md:362` ("Merged `kanban-archive` into `poketo-kanban` with `--archive` flag").
+- Test evidence: `docs/kanban-test-results.md:33` and `:61` already refer to `/poketo-kanban --archive`.
+
+### Files to inspect / modify
+
+- `tasks/roadmap.md:18` — Phase 4 table row "`archive-card` command + `/kanban-archive` skill". Rewrite to describe archive mode on `poketo-kanban` (match how the row is actually delivered today).
+- `tasks/roadmap.md:155` — Phase 4 step 2 heading "Create `/kanban-archive` skill (Claude + Codex)". Reword to reflect the `poketo-kanban --archive` reality, preserving the `[x]` complete state.
+- `tasks/roadmap.md:162` — acceptance bullet "`/kanban-archive` cleans up Done/Punt cards…". Update the skill reference to `poketo-kanban --archive`.
+- `specs/poketo-headless-auth-migration.md:66` — references a `codex/kanban-archive/SKILL.md` path that no longer exists. Either drop the row or mark the path as historical (this spec is an archival migration record; prefer minimal edit — annotate as "(merged into `poketo-kanban --archive`; path no longer present)").
+- **Leave as-is** (archival): `tasks/history.md`, `docs/phases/phase-4.md`, `docs/phases/kanban-validation.md`. These are phase archives / session history and must stay frozen.
+- Tick off `tasks/todo.md:1012` when done.
+
+### Key context
+
+- Pattern from prior two `spec-drift fix` steps: update active docs only; archives stay frozen. Same principle here — phase archive files capture the state of the project at phase-close time and should not be rewritten to reflect later merges.
+- Implementation reference: `packs/poketowork-kanban/{claude,codex}/poketo-kanban/SKILL.md`.
+- Drift root cause: Phase 4 originally shipped `/kanban-archive` as its own skill; a later consolidation merged archive behavior into `poketo-kanban --archive` (`tasks/history.md:362`). `tasks/roadmap.md` was not re-rolled after the merge.
+
+### Acceptance criteria
+
+- `tasks/roadmap.md` describes archive behavior as `poketo-kanban --archive`, not as a standalone `/kanban-archive` skill, in all three active spots (lines 18, 155, 162).
+- `specs/poketo-headless-auth-migration.md` no longer points at a nonexistent `codex/kanban-archive/SKILL.md` path without annotation.
+- `grep -rn "kanban-archive" tasks/roadmap.md specs/poketo-headless-auth-migration.md` shows no prose implying a standalone skill.
+- `tasks/todo.md:1012` ticked.
+- Ship via `/commit-and-push-by-feature` on `master`. No deploy contract → deploy skipped.
+
+### Ship-one-step handoff contract
+
+After approval, implement **only** this step: make the doc edits, tick off `tasks/todo.md:1012`, update `tasks/history.md` with a dated entry, commit and push the completed work to `master` via `/commit-and-push-by-feature`. Deploy is skipped (no `deploy.md` / `tasks/deploy.md`). Then write the following step's plan (next unchecked queue item — likely `$spec-drift fix docs/canonical-workflow-report.md` at `tasks/todo.md:1013`), ensure `.claude/settings.local.json` has `"showClearContextOnPlanAccept": true` and `permissions.defaultMode: "acceptEdits"`, start the approval UI for that following step by calling `EnterPlanMode` first, write a brief pass-through plan in plan mode, call `ExitPlanMode`, and stop before implementing it. Do not call `ExitPlanMode` from normal mode. If `EnterPlanMode` is denied because an explicit user request is required, stop and ask for `/plan <next step>`.
+
+## Previous Step Plan (shipped): `$spec-drift fix code-quality docs`
 
 ### Goal
 
