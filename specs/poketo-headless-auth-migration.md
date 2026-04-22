@@ -63,7 +63,7 @@ These files still hardcode Claude install paths for Codex behavior:
 | `/Users/georgele/projects/tools/claude-skills/codex/run-kanban/SKILL.md` | Same hardcoded Claude path. |
 | `/Users/georgele/projects/tools/claude-skills/codex/ship-kanban/SKILL.md` | Same hardcoded Claude path. |
 | `/Users/georgele/projects/tools/claude-skills/codex/ship-end-kanban/SKILL.md` | Same hardcoded Claude path. |
-| `/Users/georgele/projects/tools/claude-skills/codex/kanban-archive/SKILL.md` | Same hardcoded Claude path and treats script presence as required runtime contract. |
+| `/Users/georgele/projects/tools/claude-skills/codex/kanban-archive/SKILL.md` (merged into `poketo-kanban --archive`; path no longer present) | Same hardcoded Claude path and treats script presence as required runtime contract. |
 | `/Users/georgele/projects/tools/claude-skills/codex/sync-roadmap-kanban/SKILL.md` | Still describes applying changes through `kanban.mjs`. |
 
 ### Shared setup docs tied to the standalone script

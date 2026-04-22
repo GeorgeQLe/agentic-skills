@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-04-22 — Reconcile kanban-archive docs with `poketo-kanban --archive`
+
+- `tasks/roadmap.md` (Phase 4 overview row, step 2 heading, milestone bullet) and `specs/poketo-headless-auth-migration.md:66` still described `/kanban-archive` as a standalone skill; the standalone skill was merged into `poketo-kanban --archive` (see `tasks/history.md` Phase 4 entry; ground truth in `packs/poketowork-kanban/{claude,codex}/poketo-kanban/SKILL.md:103`).
+- Rewrote `tasks/roadmap.md:18` (overview row) and `tasks/roadmap.md:155–162` (step 2 heading + milestone) to describe archive mode on `poketo-kanban`, preserving the `[x]` complete state and adding a brief note about the standalone→merged history.
+- Annotated `specs/poketo-headless-auth-migration.md:66` with `(merged into `poketo-kanban --archive`; path no longer present)` rather than removing the archival migration row.
+- Left archival files (`tasks/history.md` prior entries, `docs/phases/phase-4.md`, `docs/phases/kanban-validation.md`) frozen per the same archive-first principle used in the previous two drift fixes.
+- Marked `$spec-drift fix kanban archive docs` complete in `tasks/todo.md`. `grep -rn "kanban-archive" tasks/roadmap.md specs/poketo-headless-auth-migration.md` now shows only annotated historical references, no prose implying a standalone skill.
+
 ## 2026-04-22 — Reconcile `code-quality` pack docs with shipped skills
 
 - `README.md` and `specs/code-quality-skill-pack.md` still described `code-quality` as a single-skill pack (only `extract-shared-types`); the pack has also shipped `quality-sweep` since commit `975c823` (2026-04-16).
