@@ -974,3 +974,11 @@ Resolved all 10 findings from `/expert-review`:
 - Added `scripts/agent-mode.sh` resolver: precedence `SKILLS_AGENT_MODE` env > `.agents/project.json` > empty string; invalid values hard-fail from both the setter and the resolver.
 - Updated `docs/operating-modes.md` "Mode Signal" section to present-tense usage and mentioned the surface in `README.md`.
 - Verified end-to-end on stock macOS Bash 3.2 in a scratch tmpdir: write/preserve across install/refresh, env override, `unset` clearing, and hard-fail on bogus values. No SKILL.md files consume the signal yet — that is Phase 11 Step 7.
+
+## 2026-04-22 — Agent-team auto-dispatch for `/run` + `patch-exec-profile`
+
+- Added `global/claude/patch-exec-profile/SKILL.md`: audits `agent-team` / `implementation-safe` execution profiles in `tasks/todo.md`, infers obvious `Mode` / `Depends on` values, flags ambiguous write lanes via `AskUserQuestion`, and validates disjoint `Owns` and acyclic lane DAGs.
+- Updated `global/claude/run/SKILL.md` step 6b to auto-invoke `/patch-exec-profile` when an `agent-team` profile has missing or placeholder lane metadata, then build a lane DAG and topological waves for the plan-mode presentation. Added an `#### Agent-Team Dispatch` section specifying worktree-isolated `Agent` dispatch per write lane, write-boundary validation via `git diff --name-only`, integration via `git restore --source` (captures deletions, unlike `git checkout -- <paths>`), worktree/branch cleanup, and a blocker/advisory review-findings contract.
+- Strengthened `global/claude/plan-phase/SKILL.md` guidance: `agent-team` profiles must fill concrete `Mode` / `Depends on` / `Owns` / `Must not edit` on every lane, with downgrade paths to `implementation-safe`, `research-only`, or `serial` otherwise.
+- Registered `patch-exec-profile` in `README.md` global-core list and `docs/skills-reference.md` skills table. Ran `./install.sh` to symlink the new skill.
+- Codex `/run` left unchanged — agent-team auto-dispatch is a Claude-side capability (requires `Agent` tool with `isolation: "worktree"`).

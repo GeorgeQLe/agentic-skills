@@ -44,6 +44,7 @@ Global skills are safe across business apps, games, devtools, libraries, service
 | `analyze-sessions` | Analyze Claude Code session history and recommend automation |
 | `brainstorm` | Evaluate the codebase and suggest ideas to explore with planning |
 | `branch-lifecycle` | Evaluate feature branches for merge, salvage, keep-open, or delete decisions |
+| `clone-spec-store` | Build lawful functional-parity spec stores and private downstream clone repos |
 | `commit-and-push-by-feature` | Commit and push changes grouped by logical feature buckets |
 | `dead-code` | Scan for unused exports, unreachable code, orphaned files, and stale dependencies |
 | `debug` | Investigate a problem, log findings, and suggest a non-duplicate fix |
@@ -57,6 +58,7 @@ Global skills are safe across business apps, games, devtools, libraries, service
 | `investigate` | Validate claims against codebase and git history, then trace root cause |
 | `migrate` | Guide a structural migration or dependency upgrade |
 | `pack` | Manage project-local packs and `.agents/project.json` |
+| `patch-exec-profile` | Audit and fill missing lane metadata in agent-team/implementation-safe execution profiles |
 | `spec-interview` | Interview to validate and complete an implementation specification |
 | `plan-phase` | Decompose a single roadmap phase into implementation steps, tests, and file-level detail |
 | `reconcile-dev-docs` | Reconcile roadmap, todo, history, phase archives, specs, and git evidence |
