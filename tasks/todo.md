@@ -1056,3 +1056,42 @@ Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch r
 ## Next Action
 
 Start with `$devtool-user-map` from the priority documentation todo, or start a new spec and roadmap cycle if new work is being introduced.
+
+## Next Step Plan: `$spec-drift fix code-quality docs`
+
+### Goal
+
+Reconcile `README.md` and `specs/code-quality-skill-pack.md` with the implemented `code-quality` pack, which now includes **both** `extract-shared-types` and `quality-sweep` skills. Docs currently under-describe the pack (only `extract-shared-types` was shipped when they were written).
+
+### Scope
+
+Doc-only drift fix. No skill code changes. Same shape as the just-completed `$spec-drift fix approval-packet references` step.
+
+### Execution Profile
+
+Serial, implementation-safe. Single-agent, doc-only edits. No tests, no migrations, no cross-skill coordination.
+
+### Files to inspect / modify
+
+- `README.md` — find the pack listing / `code-quality` mention. Add `quality-sweep` alongside `extract-shared-types`.
+- `specs/code-quality-skill-pack.md` — update the pack's skill inventory and any per-skill sections to cover `quality-sweep` (purpose, inputs/outputs, invocation, any contract differences from `extract-shared-types`).
+- Cross-check `packs/code-quality/claude/quality-sweep/SKILL.md` and `packs/code-quality/codex/quality-sweep/SKILL.md` as the source of truth for what `quality-sweep` actually does; don't invent behavior, mirror what the implementation declares.
+- Grep for other references: `grep -rn "code-quality\|extract-shared-types\|quality-sweep" docs/ specs/ README.md` — patch any that still imply a single-skill pack.
+- Tick off `tasks/todo.md:1011` when done.
+
+### Key context
+
+- Pattern from the prior step: the scoped doc fix should update active docs only. Archival files (`tasks/history.md`, `tasks/todo.md` historical notes, `specs/drift-report.md` trail entries) are intentionally left as-is.
+- Implementation reference: `packs/code-quality/` directory. Both skills already symlinked into `~/.claude/skills/` and `~/.codex/skills/` via `install.sh`.
+- Source-of-truth trigger for this drift item: commit `975c823` (`feat(code-quality): add quality sweep skill`, 2026-04-16) postdates the last spec mtime (2026-04-13).
+
+### Acceptance criteria
+
+- `README.md` and `specs/code-quality-skill-pack.md` both describe the pack as containing `extract-shared-types` **and** `quality-sweep`, with accurate per-skill summaries.
+- `grep -rn "code-quality" README.md specs/code-quality-skill-pack.md` shows no prose implying a single-skill pack.
+- `tasks/todo.md:1011` ticked.
+- Ship via `/commit-and-push-by-feature` on `master`. No deploy contract → deploy skipped.
+
+### Ship-one-step handoff contract
+
+After approval, implement **only** this step: make the doc edits, tick off `tasks/todo.md:1011`, update `tasks/history.md` with a dated entry, commit and push the completed work to `master` via `/commit-and-push-by-feature`. Deploy is skipped (no `deploy.md` / `tasks/deploy.md`). Then write the following step's plan (next unchecked queue item — likely `$spec-drift fix kanban archive docs` at `tasks/todo.md:1012`), ensure `.claude/settings.local.json` has `"showClearContextOnPlanAccept": true` and `permissions.defaultMode: "acceptEdits"`, start the approval UI for that following step by calling `EnterPlanMode` first, write a brief pass-through plan in plan mode, call `ExitPlanMode`, and stop before implementing it. Do not call `ExitPlanMode` from normal mode. If `EnterPlanMode` is denied because an explicit user request is required, stop and ask for `/plan <next step>`.
