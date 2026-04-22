@@ -1057,51 +1057,52 @@ Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch r
 
 Start with `$devtool-user-map` from the priority documentation todo, or start a new spec and roadmap cycle if new work is being introduced.
 
-## Next Step Plan: `$reconcile-dev-docs fix pack-command docs`
+## Next Step Plan: `$devtool-user-map`
 
 ### Goal
 
-Document `scripts/pack.sh list-packs` appropriately, or explicitly mark it as an internal subcommand used by Codex `$run` routing, so the reference docs do not silently omit a real subcommand while users scanning the pack CLI see only the public subset.
+Create `research/devtool-user-map.md` because the repo infers as a devtool project (see `.agents/project.json`) and the canonical research output required by the devtool research chain is missing. This unblocks downstream research steps (`$devtool-integration-map`, `$devtool-dx-journey`, `$devtool-adoption`, `$devtool-positioning`, `$devtool-monetization`, `$devtool-docs-audit`).
 
 ### Scope
 
-Doc-only reconciliation. No script or skill changes. Same shape as prior `$reconcile-dev-docs fix …` and `$spec-drift fix …` doc-only steps.
+Research-only. Create a new file `research/devtool-user-map.md` per the contract in `packs/devtool/claude/devtool-user-map/SKILL.md`. No code changes, no scripts, no spec edits. Archive-first not required — this is a new file, not a replacement.
 
 ### Execution Profile
 
-Serial, implementation-safe. Single-agent, doc-only edits. No tests, no migrations.
+Serial, implementation-safe. Single-agent. Documentation/research artifact.
 
 ### Ground truth
 
-- `scripts/pack.sh:19` advertises `list-packs` in its own `--help` header as "List enabled packs from `.agents/project.json` (one per line, no decoration)."
-- `scripts/pack.sh:358` is the dispatcher entry that calls `read_enabled_packs`.
-- Only caller outside `scripts/pack.sh` today is `global/codex/run/SKILL.md`, which uses `scripts/pack.sh list-packs` to discover enabled packs during Codex `$run` routing.
-- Neither `README.md` nor `docs/skills-reference.md` lists `list-packs` in their pack-command blocks. Both show only `list`, `recommend`, `install`, `remove`, `refresh`, `status`.
-- `tasks/todo.md:1016` is the queue item to tick.
+- The research skill lives at `packs/devtool/claude/devtool-user-map/SKILL.md` and its Codex mirror `packs/devtool/codex/devtool-user-map/SKILL.md`. It requires the output at `research/devtool-user-map.md` covering: developer users, economic buyers, champions, maintainers, operators, use cases, and adoption blockers.
+- `research/` directory does not yet exist.
+- The devtool research chain at `tasks/todo.md:1017–1023` is blocked on this file.
+- `tasks/todo.md:1017` is the queue item to tick.
 
 ### Files to inspect / modify
 
-- `docs/skills-reference.md` § "Project Pack Commands" — add `list-packs` to the fenced command list with a one-line annotation noting that it is an internal subcommand used by Codex `$run` (machine-readable, one-per-line output, not the human-facing `list`).
-- `README.md` — if a similar pack-command block exists, mirror the annotation; otherwise leave untouched and rely on the skills-reference update. Confirm by grepping `README.md` for `pack.sh` / `list-packs` first.
-- Tick `tasks/todo.md:1016`.
-- `tasks/history.md` — add a dated 2026-04-22 entry summarizing the addition.
+- Read `packs/devtool/claude/devtool-user-map/SKILL.md` and any sibling skills under `packs/devtool/**` for subject framing.
+- Read `README.md`, `docs/skills-reference.md`, `docs/operating-modes.md`, `CLAUDE.md` to characterize this repo's own developer audience (it is itself a devtool project — an agentic-skills distribution).
+- Create `research/devtool-user-map.md` with sections: Developer users, Economic buyers, Champions, Maintainers, Operators, Use cases, Adoption blockers.
+- Tick `tasks/todo.md:1017`.
+- Add a dated 2026-04-22 entry to `tasks/history.md`.
 
 ### Key context
 
-- `list-packs` and `list` are distinct: `list` is the decorated human-facing view, `list-packs` is the machine-readable feed consumed by Codex `$run`. Document that distinction explicitly — do not conflate them.
-- Archive-first is **not** required for additive doc entries. If either edit grows into a substantive rewrite of an existing section, snapshot the pre-edit file under `docs/history/archive/YYYY-MM-DD/HHMMSS/<path>` first.
+- This repo is the subject of the research, not a generic devtool template. Ground claims in observable repo signals (README positioning, skill catalog, install flow, operating modes, pack model) rather than fabricating market personas.
+- Keep the output grounded and specific. Do not pad with generic SaaS persona language.
+- Adoption blockers should reference the actual friction points surfaced in `docs/` (e.g., dual Claude/Codex maintenance, hybrid-mode prerequisites, pack install requiring symlinks).
 
 ### Acceptance criteria
 
-- `docs/skills-reference.md` § "Project Pack Commands" lists `list-packs` with a short annotation marking it as an internal/Codex-routing subcommand.
-- `README.md` either lists `list-packs` with the same annotation, or — if the README does not expose pack commands — is verified to have no stale pack-command block that should be updated.
-- `tasks/todo.md:1016` ticked.
+- `research/devtool-user-map.md` exists and covers all seven required sections.
+- Content is grounded in the actual repo, not generic devtool boilerplate.
+- `tasks/todo.md:1017` ticked.
 - `tasks/history.md` has a dated 2026-04-22 entry.
-- Shipped to `master` via `/commit-and-push-by-feature`. No deploy contract → deploy skipped.
+- Shipped to `master` via `/commit-and-push-by-feature`. Deploy skipped (no deploy contract).
 
 ### Ship-one-step handoff contract
 
-After approval, implement **only** this step: add `list-packs` documentation to `docs/skills-reference.md` (and `README.md` if a pack-command block exists there), tick `tasks/todo.md:1016`, add a dated entry to `tasks/history.md`, commit and push to `master` via `/commit-and-push-by-feature`. Deploy skipped (no `deploy.md` / `tasks/deploy.md`). Then write the following step's plan (next unchecked queue item — likely `$devtool-user-map` at `tasks/todo.md:1017`), ensure `.claude/settings.local.json` has `"showClearContextOnPlanAccept": true` and `permissions.defaultMode: "acceptEdits"` (already satisfied), start the approval UI for that following step by calling `EnterPlanMode` first, write a brief pass-through plan in plan mode, call `ExitPlanMode`, and stop before implementing it. Do not call `ExitPlanMode` from normal mode. If `EnterPlanMode` is denied because an explicit user request is required, stop and ask for `/plan <next step>`.
+After approval, implement **only** this step: create `research/devtool-user-map.md`, tick `tasks/todo.md:1017`, add a dated entry to `tasks/history.md`, commit and push to `master` via `/commit-and-push-by-feature`. Deploy skipped. Then write the following step's plan (next unchecked queue item — `$devtool-integration-map` at `tasks/todo.md:1018`), ensure `.claude/settings.local.json` retains `"showClearContextOnPlanAccept": true` and `permissions.defaultMode: "acceptEdits"` (currently satisfied), start the approval UI for that following step by calling `EnterPlanMode` first, write a brief pass-through plan, call `ExitPlanMode`, and stop before implementing it. Do not call `ExitPlanMode` from normal mode. If `EnterPlanMode` is denied, stop and ask for `/plan <next step>`.
 
 ## Previous Step Plan (shipped): `$reconcile-dev-docs fix skills-reference`
 
