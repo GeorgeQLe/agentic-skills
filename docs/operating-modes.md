@@ -48,7 +48,7 @@ Two sources combine to resolve the effective mode: the `SKILLS_AGENT_MODE` envir
 
 ## Approval packet
 
-Cross-CLI execution in `hybrid`, and cross-session handoff in `claude-only` or `codex-only`, is mediated by a shared approval packet. `.agents/approved-plan.json` is the machine-readable source of truth (gitignored, developer-local). `tasks/approved-plan.md` is the sanitized human-readable mirror (committed). `$run --execute-approved`, `/handoff --target=codex`, and `/delegate` all consume this one contract rather than inventing their own "approved work" definition.
+Cross-CLI execution in `hybrid`, and cross-session handoff from `claude-only` or `hybrid` into a later Codex session, is mediated by a shared approval packet. `.agents/approved-plan.json` is the machine-readable source of truth (gitignored, developer-local). `tasks/approved-plan.md` is the sanitized human-readable mirror (committed). `$run --execute-approved`, `/handoff --target=codex`, and `/delegate` all consume this one contract rather than inventing their own "approved work" definition.
 
 ### Fields
 
@@ -189,7 +189,7 @@ This section tags every global skill and every pack with a **primary CLI role** 
 | `deploy` | Codex-execution | Target-environment deploy + history |
 | `expert-review` | Claude-orchestration | Panel-style review, read-only synthesis |
 | `guide` | Claude-orchestration | GUI-blocker walk-throughs |
-| `handoff` | Both | Context snapshot (orchestration); `--target=codex` produces approval packet (cross-CLI) |
+| `handoff` | Both | Context snapshot (orchestration); `/handoff --target=codex` (Claude) produces an approval packet; Codex `$handoff` writes only `tasks/handoff.md` prose (no packet) |
 | `hygiene` | Both | Audit (orchestration) + optional auto-fix (execution) |
 | `install-workflow-orchestration` | Codex-execution | Writes CLAUDE.md / AGENTS.md |
 | `investigate` | Claude-orchestration | Validate claims, trace to root cause, propose fix |

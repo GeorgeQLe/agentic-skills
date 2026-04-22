@@ -988,3 +988,10 @@ Resolved all 10 findings from `/expert-review`:
 - Strengthened `global/claude/plan-phase/SKILL.md` guidance: `agent-team` profiles must fill concrete `Mode` / `Depends on` / `Owns` / `Must not edit` on every lane, with downgrade paths to `implementation-safe`, `research-only`, or `serial` otherwise.
 - Registered `patch-exec-profile` in `README.md` global-core list and `docs/skills-reference.md` skills table. Ran `./install.sh` to symlink the new skill.
 - Codex `/run` left unchanged — agent-team auto-dispatch is a Claude-side capability (requires `Agent` tool with `isolation: "worktree"`).
+
+## 2026-04-22 — `$spec-drift` fix: approval-packet handoff wording
+
+- Corrected `docs/operating-modes.md` § "Approval packet" (line 51) to stop claiming that `codex-only` cross-session handoff uses the shared approval packet. Packet-producing handoff is Claude-side only (`/handoff --target=codex`).
+- Expanded the handoff row in the skills matrix (line 192) to disambiguate Claude `/handoff --target=codex` (produces packet) from Codex `$handoff` (writes prose only to `tasks/handoff.md`, no packet).
+- Added a disambiguation note under `global/codex/handoff/SKILL.md` § "Constraints": `$handoff` does not write `.agents/approved-plan.json` or `tasks/approved-plan.md`; for packet-gated resume, use Claude-side `/handoff --target=codex` + `$run --execute-approved`.
+- Recorded the fix in `specs/drift-report.md` and checked off the queue item in `tasks/todo.md` § "Priority Documentation Todo". Doc-only change; no skill, schema, or script behavior touched.
