@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-04-22 — Tighten guide routing for task-doc reconciliation
+
+- Root cause: roadmap and ship next-step routing treated any "manual" or `tasks/manual-todo.md` cleanup as `/guide`-eligible. That introduced a bad downstream handoff in `lexcorp-war-room` (`$guide reconcile manual-todo`) even though the guide skill correctly targets GUI/service-console work.
+- Updated Claude and Codex `roadmap`, `ship`, `ship-end`, `plan-phase`, and `run` skills to distinguish external manual work (DNS/OAuth/service dashboards/auth/production smoke checks) from task-doc bookkeeping.
+- Added explicit routing for stale `tasks/manual-todo.md` cleanup and task ledger reconciliation to `/reconcile-dev-docs fix tasks` / `$reconcile-dev-docs fix tasks` or a direct dev-doc audit.
+- Hardened Claude and Codex `guide` skills to reject requests like "reconcile manual-todo", "audit stale manual tasks", and "check off completed todo items" instead of producing a guide.
+- Decision: no new skill needed; `reconcile-dev-docs` already owns the gap. The fix was routing language and a clearer guide non-goal.
+
 ## 2026-04-22 — Reconcile kanban-archive docs with `poketo-kanban --archive`
 
 - `tasks/roadmap.md` (Phase 4 overview row, step 2 heading, milestone bullet) and `specs/poketo-headless-auth-migration.md:66` still described `/kanban-archive` as a standalone skill; the standalone skill was merged into `poketo-kanban --archive` (see `tasks/history.md` Phase 4 entry; ground truth in `packs/poketowork-kanban/{claude,codex}/poketo-kanban/SKILL.md:103`).

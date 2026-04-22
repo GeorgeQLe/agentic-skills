@@ -9,7 +9,13 @@ version: 1.0.0
 
 Invoke as `$guide`.
 
-Produce detailed, click-by-click instructions for manual tasks that block automated progress — service signups, DNS configuration, OAuth credential creation, dashboard settings, and anything else that requires a GUI or third-party portal.
+Produce detailed, click-by-click instructions for manual tasks that block automated progress — service signups, DNS configuration, OAuth credential creation, dashboard settings, production smoke checks, and anything else that requires a GUI or third-party portal.
+
+This skill is not for development-document bookkeeping. If the requested task is
+auditing, reconciling, checking off, moving, or classifying entries in
+`tasks/manual-todo.md`, `tasks/todo.md`, `tasks/record-todo.md`, or history
+against repo reality, stop and route to `$reconcile-dev-docs fix tasks` or a
+direct dev-doc audit instead.
 
 ## Workflow
 
@@ -44,4 +50,8 @@ Produce detailed, click-by-click instructions for manual tasks that block automa
 - Read-only except for checking off items in `tasks/manual-todo.md`.
 - Do not check off or modify `tasks/record-todo.md`; record items are advisory unless a separate workflow updates them.
 - One task at a time.
+- No task-ledger reconciliation — do not produce a guide for requests such as
+  "reconcile manual-todo", "audit stale manual tasks", or "check off completed
+  todo items". Route those to `$reconcile-dev-docs fix tasks` or a direct
+  dev-doc audit.
 - Don't execute the task — produce instructions for the user to follow.

@@ -151,7 +151,8 @@ Rules:
   - Hybrid execution handoff → recommend `/delegate $run`.
   - Claude-only or orchestration-heavy work → recommend `/run`.
   - Codex-only execution → recommend `$run`.
-  - Manual, browser, auth, DNS, console, or production smoke-test work → recommend `/guide` or a Claude-guided manual step rather than `/run`.
+  - External manual work (browser, auth, DNS, service console/dashboard, or production smoke-test work) → recommend `/guide` or a Claude-guided manual step rather than `/run`.
+  - Task-doc bookkeeping, stale `tasks/manual-todo.md` cleanup, or reconciliation against repo/history reality → recommend `/reconcile-dev-docs fix tasks` or a direct dev-doc audit, not `/guide`.
 - Only present multiple commands when the ambiguity materially changes execution safety or there are equally valid next work items. Otherwise choose the best route and mention degraded mode lookup inline.
 
 ## Constraints

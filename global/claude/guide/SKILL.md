@@ -8,7 +8,13 @@ argument-hint: "[optional: task description or manual-todo item text]"
 
 # Guide
 
-Produce detailed, click-by-click instructions for manual tasks that block automated progress — service signups, DNS configuration, OAuth credential creation, dashboard settings, and anything else that requires a GUI or third-party portal.
+Produce detailed, click-by-click instructions for manual tasks that block automated progress — service signups, DNS configuration, OAuth credential creation, dashboard settings, production smoke checks, and anything else that requires a GUI or third-party portal.
+
+This skill is not for development-document bookkeeping. If the requested task is
+auditing, reconciling, checking off, moving, or classifying entries in
+`tasks/manual-todo.md`, `tasks/todo.md`, `tasks/record-todo.md`, or history
+against repo reality, stop and route to `/reconcile-dev-docs fix tasks` or a
+direct dev-doc audit instead.
 
 ## Process
 
@@ -89,4 +95,5 @@ When you've completed these steps, let me know and I'll mark the item done in `t
 - Do not check off or modify `tasks/record-todo.md`; record items are advisory unless a separate workflow updates them.
 - **No shipping contract** — checking off a manual-todo item is a minor bookkeeping edit, not a code change. Do not auto-commit just for that. If other tracked changes are present, leave them for a proper shipping skill.
 - **One task at a time** — if multiple blockers exist, guide the user through the first one. They can run `/guide` again for the next.
+- **No task-ledger reconciliation** — do not produce a guide for requests such as "reconcile manual-todo", "audit stale manual tasks", or "check off completed todo items". Route those to `/reconcile-dev-docs fix tasks` or a direct dev-doc audit.
 - **Don't execute the task** — produce instructions for the user to follow. Do not attempt to call external APIs, create accounts, or configure services on the user's behalf.
