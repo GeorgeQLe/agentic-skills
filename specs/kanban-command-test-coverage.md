@@ -1,5 +1,9 @@
 # Spec: Kanban Command Test Coverage Expansion
 
+> **Status:** Legacy (kanban.mjs fallback path).
+> Active kanban skills now run on `poketo kanban` (headless HTTP). `kanban.mjs` is fallback/admin-only.
+> See `specs/poketo-headless-auth-migration.md` for the active path.
+
 ## Goal
 
 Bring all 11 kanban.mjs commands to dedicated test coverage and fill edge case gaps in existing command tests. All tests go in `kanban.test.mjs`, sharing the existing test board, using the live Neon DB.
