@@ -82,6 +82,8 @@ Add this section before implementation steps:
 
 For `serial`, use `**Subagent lanes:** none`. For `research-only` and `review-only`, lanes must not have write mode. For `implementation-safe`, every write lane must have non-overlapping `Owns` paths and explicit `Must not edit` boundaries.
 
+For `agent-team` profiles, every lane **must** have `Mode:` and `Depends on:` filled in with concrete values (not placeholders). Write lanes must have disjoint `Owns:` paths and explicit `Must not edit:` boundaries — `/run` auto-dispatches agent-team lanes via isolated worktrees and uses those fields to build the lane DAG and enforce write-boundary integration. If this cannot be satisfied, downgrade to `implementation-safe`, `research-only`, or `serial`.
+
 ### Break the Phase into Steps
 
 Define ordered steps beneath the existing Goal/Scope/Acceptance Criteria. The structure depends on the test strategy:
