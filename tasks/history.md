@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-04-22 — Refresh stale canonical workflow report
+
+- `docs/canonical-workflow-report.md` (dated 2026-04-19) still said Phase 11 Steps 7–11 were "planned but not fully wired" and listed Phase 11 Step 7 as "active planning work", but Phase 11 completed 2026-04-19 per `tasks/roadmap.md:25,33`.
+- Chose in-place refresh over demote-and-snapshot: the drift was localized to the scope line and the "Current Gaps And Active Work" section, so a light edit was sufficient and preserved the document's otherwise-still-accurate body.
+- Updated `docs/canonical-workflow-report.md:3–4` to reflect Phase 11 completion and point readers at `docs/operating-modes.md` as the authoritative operating-model reference. Added a "(refreshed 2026-04-22)" date annotation.
+- Rewrote `docs/canonical-workflow-report.md:484–494` to list Steps 7–11 as shipped and redirect remaining drift/follow-up questions to `tasks/todo.md` + `tasks/history.md`. Dropped the stale "`docs/operating-modes.md` still says no skill consumes the mode signal" note, which Step 11 has since resolved.
+- Marked `$spec-drift fix docs/canonical-workflow-report.md` complete in `tasks/todo.md:1013`. `grep -n "Phase 11 Step 7\|not fully wired\|active planning work" docs/canonical-workflow-report.md` now returns nothing.
+
 ## 2026-04-22 — Tighten guide routing for task-doc reconciliation
 
 - Root cause: roadmap and ship next-step routing treated any "manual" or `tasks/manual-todo.md` cleanup as `/guide`-eligible. That introduced a bad downstream handoff in `lexcorp-war-room` (`$guide reconcile manual-todo`) even though the guide skill correctly targets GUI/service-console work.

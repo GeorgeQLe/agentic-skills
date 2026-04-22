@@ -1,7 +1,7 @@
 # Canonical Agentic Workflow Report
 
-> Date: 2026-04-19
-> Scope: current `agentic-skills` workflow as implemented through Phase 11 Step 6, with Phase 11 Step 7 still active planning work.
+> Date: 2026-04-19 (refreshed 2026-04-22)
+> Scope: current `agentic-skills` workflow as implemented through Phase 11 (completed 2026-04-19). Authoritative operating-model reference: `docs/operating-modes.md`.
 > Evidence: `tasks/todo.md`, `tasks/history.md`, `docs/operating-modes.md`, `docs/codex-workflow.md`, `README.md`, `CLAUDE.md`, `global/{claude,codex}/*/SKILL.md`, and recent git history.
 
 ## Executive Summary
@@ -483,15 +483,15 @@ Codex:
 
 ## Current Gaps And Active Work
 
-The following are planned but not fully wired as of this report:
+Phase 11 completed 2026-04-19 (see `tasks/roadmap.md:25,33`). Steps 7–11 all shipped:
 
-1. Phase 11 Step 7: next-step routing across planning/execution skills.
-2. Phase 11 Step 8: degraded-path audit table in `docs/operating-modes.md`.
-3. Phase 11 Step 9: pack emphasis split by CLI role.
-4. Phase 11 Step 10: pack-aware `$run` routing on Codex.
-5. Phase 11 Step 11: expand `docs/operating-modes.md` into the authoritative reference.
+1. Step 7 — next-step routing across planning/execution skills: done.
+2. Step 8 — degraded-path audit table in `docs/operating-modes.md`: done.
+3. Step 9 — pack emphasis split by CLI role: done.
+4. Step 10 — pack-aware `$run` routing on Codex: done.
+5. Step 11 — `docs/operating-modes.md` as the authoritative reference: done.
 
-There is also a known documentation freshness issue: `docs/operating-modes.md` still says no skill consumes the mode signal or packet, but Steps 4-6 have shipped consumers and producers. Treat `tasks/todo.md` and `tasks/history.md` as newer evidence until Step 11 rewrites the operating modes reference.
+For the current state of the operating model (mode signal, packet contract, delegation, degraded-path matrix), read `docs/operating-modes.md`. For remaining drift or follow-up items, see the live queue in `tasks/todo.md` and recent entries in `tasks/history.md`.
 
 ## Recommended Canonical Decision Tree
 
