@@ -1057,60 +1057,67 @@ Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch r
 
 Start with `$devtool-user-map` from the priority documentation todo, or start a new spec and roadmap cycle if new work is being introduced.
 
-## Next Step Plan: `$spec-drift fix kanban legacy specs`
+## Next Step Plan: `$reconcile-dev-docs fix skills-reference`
 
 ### Goal
 
-Classify or update specs under `specs/` that still target the legacy `kanban.mjs` / direct-Neon path, now that active kanban skills use `poketo kanban` (headless HTTP) and `kanban.mjs` is explicitly fallback/admin-only (per `specs/poketo-headless-auth-migration.md:164,306` and `tasks/history.md` Phase 4 migration). Without rewriting real implementation plans, mark or annotate the specs so a reader can tell at a glance which describe the current path vs. the legacy path.
+Decide how to document Claude-only `delegate` in `README.md` and `docs/skills-reference.md`. The skill exists at `global/claude/delegate/SKILL.md` and is central to hybrid Claude→Codex live delegation, but has no Codex mirror and is not mentioned in either reference doc.
 
 ### Scope
 
-Doc-only drift fix across `specs/*.md`. No skill code, no `kanban.mjs` changes. Same shape as prior `$spec-drift fix …` steps.
+Doc-only reconciliation. No skill code changes. Same shape as prior `$reconcile-dev-docs fix …` and `$spec-drift fix …` doc-only steps.
 
 ### Execution Profile
 
-Serial, implementation-safe. Single-agent, doc-only edits. No tests, no migrations, no cross-skill coordination.
+Serial, implementation-safe. Single-agent, doc-only edits. No tests, no migrations.
 
 ### Ground truth
 
-- Active path: `poketo kanban` (headless). Reference: `packs/poketowork-kanban/{claude,codex}/poketo-kanban/SKILL.md` and `tasks/history.md` Phase 4/Phase 10 entries.
-- `kanban.mjs` current role: fallback/admin-only (per `specs/poketo-headless-auth-migration.md:164,306`).
-- Specs that reference `kanban.mjs` (from `grep -rn "kanban\.mjs" specs/`):
-  - `specs/board-flag-kanban-search.md` — `--board` flag on `kanban.mjs search`.
-  - `specs/kanban-multi-user.md` — multi-user activity log in `kanban.mjs`.
-  - `specs/kanban-production-test-plan.md` — test plan against `kanban.mjs` subprocess vs. web app Drizzle.
-  - `specs/kanban-command-test-coverage.md` — test coverage for all 11 `kanban.mjs` commands.
-  - `specs/kanban-offline-queue-soft-delete.md` — offline queue + soft-delete in `kanban.mjs`.
-  - `specs/poketo-headless-auth-migration.md` — already declares the legacy status; do not re-rewrite, just verify.
-- `tasks/todo.md:1014` is the queue item to tick.
+- Source of truth: `global/claude/delegate/SKILL.md` (Claude-only). No `global/codex/delegate/` directory exists.
+- The skill's purpose: live in-session delegation from Claude to Codex via the approved-packet contract; sibling to `/handoff --target=codex` (async) and complementary to `$run`/`$ship` execution paths.
+- `docs/skills-reference.md` and `README.md` currently contain zero mentions of `delegate` (`grep -in delegate` returns no hits).
+- `tasks/todo.md:1015` is the queue item to tick.
 
 ### Files to inspect / modify
 
-- For each `specs/kanban-*.md` (except `poketo-headless-auth-migration.md`): add a short **Status** or **Scope** banner at the top describing whether the spec targets the legacy `kanban.mjs` fallback path or the active `poketo kanban` path. Do **not** rewrite the technical body.
-- `specs/board-flag-kanban-search.md`, `specs/kanban-command-test-coverage.md`, `specs/kanban-offline-queue-soft-delete.md`, `specs/kanban-multi-user.md`, `specs/kanban-production-test-plan.md` — add "Legacy (kanban.mjs fallback path)" banner pointing at `specs/poketo-headless-auth-migration.md` for the active path.
-- `specs/poketo-headless-auth-migration.md` — verify current legacy/active wording still reads correctly; only edit if a new banner on sibling specs creates a mismatch.
-- Tick `tasks/todo.md:1014`.
+- `docs/skills-reference.md` — add a `delegate` entry in the appropriate section (likely under the cross-CLI / orchestration / hybrid-mode group), explicitly marked Claude-only with a short blurb mirroring the SKILL.md description.
+- `README.md` — add a brief mention in whichever section currently lists hybrid-mode or Claude-only skills (or the skills overview list, depending on existing structure). Mark it Claude-only.
+- Tick `tasks/todo.md:1015`.
 - `tasks/history.md` — add a dated 2026-04-22 entry.
 
 ### Key context
 
-- Do not delete or rewrite the specs' technical content. They remain valid for the fallback path and for historical reference. The drift is that a reader hitting `specs/kanban-multi-user.md` first would assume `kanban.mjs` is still the active kanban entry point.
-- Archive-first is **not** required because we are adding banners, not substantively rewriting. If any banner grows into a substantive rewrite, snapshot the pre-edit file under `docs/history/archive/YYYY-MM-DD/HHMMSS/specs/…` first.
-- Keep the banner short (2–4 lines). Format suggestion: a `> Status:` blockquote directly after the `#` heading.
+- `delegate` has no Codex mirror by design (it is the Claude→Codex transport). Document the asymmetry explicitly so a Codex user reading the reference does not expect to find `$delegate`.
+- Cross-link to `/handoff --target=codex` for the async equivalent and to the approved-packet contract docs (`tasks/approved-plan.md` / `scripts/approved-plan.sh`).
+- Archive-first is **not** required for additive doc entries. If either edit grows into a substantive rewrite of an existing section, snapshot the pre-edit file under `docs/history/archive/YYYY-MM-DD/HHMMSS/<path>` first.
 
 ### Acceptance criteria
 
-- Each of the five legacy-path kanban specs above carries a top-of-file status banner identifying it as targeting the legacy `kanban.mjs` fallback path, with a pointer to `specs/poketo-headless-auth-migration.md` for the active path.
-- `specs/poketo-headless-auth-migration.md` still declares `kanban.mjs` as fallback/admin-only (no regression).
-- `tasks/todo.md:1014` ticked.
-- `tasks/history.md` has a dated entry summarizing the banners added.
+- `docs/skills-reference.md` lists `delegate` with a short description and a Claude-only marker.
+- `README.md` mentions `delegate` (Claude-only) wherever skills are catalogued or hybrid-mode workflow is discussed.
+- `tasks/todo.md:1015` ticked.
+- `tasks/history.md` has a dated 2026-04-22 entry summarizing the additions.
 - Ship via `/commit-and-push-by-feature` on `master`. No deploy contract → deploy skipped.
 
 ### Ship-one-step handoff contract
 
-After approval, implement **only** this step: add the status banners to the five kanban-legacy specs, tick `tasks/todo.md:1014`, add a dated entry to `tasks/history.md`, commit and push to `master` via `/commit-and-push-by-feature`. Deploy skipped (no `deploy.md` / `tasks/deploy.md`). Then write the following step's plan (next unchecked queue item — likely `$reconcile-dev-docs fix skills-reference` at `tasks/todo.md:1015`), ensure `.claude/settings.local.json` has `"showClearContextOnPlanAccept": true` and `permissions.defaultMode: "acceptEdits"`, start the approval UI for that following step by calling `EnterPlanMode` first, write a brief pass-through plan in plan mode, call `ExitPlanMode`, and stop before implementing it. Do not call `ExitPlanMode` from normal mode. If `EnterPlanMode` is denied because an explicit user request is required, stop and ask for `/plan <next step>`.
+After approval, implement **only** this step: add `delegate` entries to `docs/skills-reference.md` and `README.md` (Claude-only), tick `tasks/todo.md:1015`, add a dated entry to `tasks/history.md`, commit and push to `master` via `/commit-and-push-by-feature`. Deploy skipped (no `deploy.md` / `tasks/deploy.md`). Then write the following step's plan (next unchecked queue item — likely `$reconcile-dev-docs fix pack-command docs` at `tasks/todo.md:1016`), ensure `.claude/settings.local.json` has `"showClearContextOnPlanAccept": true` and `permissions.defaultMode: "acceptEdits"`, start the approval UI for that following step by calling `EnterPlanMode` first, write a brief pass-through plan in plan mode, call `ExitPlanMode`, and stop before implementing it. Do not call `ExitPlanMode` from normal mode. If `EnterPlanMode` is denied because an explicit user request is required, stop and ask for `/plan <next step>`.
 
-## Previous Step Plan (shipped): `$spec-drift fix docs/canonical-workflow-report.md`
+## Previous Step Plan (shipped): `$spec-drift fix kanban legacy specs`
+
+### Goal
+
+Classify five `specs/kanban-*.md` files that still described `kanban.mjs` as the primary kanban entry point, even though active kanban skills now run on `poketo kanban` (headless HTTP) and `kanban.mjs` is fallback/admin-only.
+
+### Outcome
+
+- Added a 3-line `> Status:` blockquote banner directly under the H1 of each of the five legacy-path specs (`board-flag-kanban-search.md`, `kanban-multi-user.md`, `kanban-production-test-plan.md`, `kanban-command-test-coverage.md`, `kanban-offline-queue-soft-delete.md`), identifying them as targeting the legacy `kanban.mjs` fallback path and pointing readers at `specs/poketo-headless-auth-migration.md` for the active path.
+- Technical bodies left untouched — still valid for the fallback path and for historical reference.
+- `specs/poketo-headless-auth-migration.md` already declared the legacy/active split; no edit needed.
+- `tasks/todo.md:1014` ticked. `tasks/history.md` updated with a 2026-04-22 entry.
+- Shipped to `master` as commits `2b63265` (banners) and `044d80b` (tasks bookkeeping). Deploy skipped.
+
+## Previous Previous Step Plan (shipped): `$spec-drift fix docs/canonical-workflow-report.md`
 
 ### Goal
 
