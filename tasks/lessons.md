@@ -6,6 +6,12 @@
 - First verify current auth with `aws sts get-caller-identity --profile <profile>` or let the deploy command fail with a current credential error.
 - Only run `aws sso login --profile <profile>` after that live check proves credentials are missing or expired.
 
+## 2026-04-22 — `/run` must trust profile metadata over legacy step prose
+
+- `/run` auto-dispatches `agent-team` phases via isolated worktrees. Do not stop just because the profile says `agent-team` or because the phase/step body contains stale advisory text like *"do not implement in a single `/run`"* or *"use `/delegate`"*.
+- That prose typically predates the agent-team dispatch feature. The current authority is the `### Execution Profile` block (after `/patch-exec-profile` fills it), not narrative embedded in the step description.
+- Only stop if `/patch-exec-profile` cannot resolve the profile (overlapping `Owns`, cyclic `Depends on`, missing lane specs that can't be inferred). `/delegate` is for Claude↔Codex handoff, not lane parallelism.
+
 ## 2026-04-19 — Keep Claude `/run` execution-only and `/ship` handoffs bounded
 
 - Claude `/run` should execute exactly one approved step and then hand the dirty tree to `/ship`; it should not commit or push.

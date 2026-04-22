@@ -1,5 +1,11 @@
 # Session History
 
+## 2026-04-22 — Harden `/run` agent-team dispatch against stale step prose
+
+- Fixed a real blocker hit in a downstream repo (Pitwall) where `/run` correctly identified an `agent-team` profile but stopped because the Step 5.1 body still contained legacy advisory text (*"do not implement… through a single /run"*, *"use /delegate"*) from before the auto-dispatch feature (commit `de3d506`) shipped.
+- Updated `global/claude/run/SKILL.md` § "Execution Profile Handling": the `agent-team` bullet now explicitly says do **not** stop for legacy advisory prose in the phase/step body — trust the `### Execution Profile` metadata (post-`/patch-exec-profile`) and only stop if lane specs cannot be resolved. Added a Next-Step Routing rule: don't recommend `/delegate` as a workaround for agent-team.
+- Captured the pattern in `tasks/lessons.md` (2026-04-22 entry) so a future `/run` in a repo with stale step prose won't repeat the mistake.
+
 ## 2026-04-20 — Add `create-skill` global skill
 
 - Added `create-skill` to `global/claude` and `global/codex` as a meta-skill that scaffolds new **user-local** skills directly into `~/.claude/skills/<name>/` and `~/.codex/skills/<name>/` as real directories (never inside the agentic-skills repo).
