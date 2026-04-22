@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-04-22 — Reconcile `code-quality` pack docs with shipped skills
+
+- `README.md` and `specs/code-quality-skill-pack.md` still described `code-quality` as a single-skill pack (only `extract-shared-types`); the pack has also shipped `quality-sweep` since commit `975c823` (2026-04-16).
+- Updated `README.md:149` to list both skills and summarize `quality-sweep`. Rewrote `specs/code-quality-skill-pack.md` summary, folder layout, naming, skill specifications (adding a `quality-sweep` subsection mirroring `packs/code-quality/{claude,codex}/quality-sweep/SKILL.md`), implementation notes, and acceptance criteria to cover both skills.
+- Mirrored behavior from the shipped `SKILL.md` files rather than inventing it: audit/fix/full modes, eight audit lanes, triage buckets, subagent policy, non-goals around behavior/public-API/error-handling preservation.
+- Marked `$spec-drift fix code-quality docs` complete in `tasks/todo.md`. Archival references in `tasks/history.md`, `tasks/todo.md` historical notes, and `specs/drift-report.md` are intentionally left as-is.
+
 ## 2026-04-22 — Fix approval-packet section anchors
 
 - Phase 11 renamed the operating-modes doc heading from `## Approval / Delegation Packet` to `## Approval packet`; three in-repo references still pointed at the old anchor.

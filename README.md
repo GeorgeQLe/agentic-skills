@@ -151,10 +151,10 @@ The devtool workflow validates developer adoption, integration fit, documentatio
 For behavior-preserving refactors, type hygiene, import honesty, dependency-boundary cleanup, and module organization.
 
 ```text
-extract-shared-types
+extract-shared-types, quality-sweep
 ```
 
-The first code-quality workflow extracts shared type definitions into dedicated `types/` files without runtime behavior changes.
+`extract-shared-types` moves shared type definitions into dedicated `types/` files without runtime behavior changes. `quality-sweep` orchestrates a behavior-preserving cleanup campaign across duplication, type hygiene, dead code, dependency boundaries, defensive error handling, legacy paths, and comments — audit-only by default, with optional `fix` or `full` modes.
 
 ### Kanban Variants
 
