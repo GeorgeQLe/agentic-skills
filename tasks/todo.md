@@ -1011,7 +1011,7 @@ Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch r
 - [x] `$spec-drift fix code-quality docs` - reconcile `README.md` and `specs/code-quality-skill-pack.md` with the implemented `code-quality` pack, which now includes both `extract-shared-types` and `quality-sweep`.
 - [x] `$spec-drift fix kanban archive docs` - update roadmap/archive references that still describe `/kanban-archive` as a standalone skill; current implementation exposes archive mode through `poketo-kanban --archive`.
 - [x] `$spec-drift fix docs/canonical-workflow-report.md` - refresh or demote the stale canonical workflow report, which still says Phase 11 Steps 7-11 are not fully wired even though Phase 11 is complete.
-- [ ] `$spec-drift fix kanban legacy specs` - classify or update specs that still target the legacy `kanban.mjs`/direct-Neon path now that active kanban skills use `poketo kanban` and `kanban.mjs` is fallback/admin-only.
+- [x] `$spec-drift fix kanban legacy specs` - classify or update specs that still target the legacy `kanban.mjs`/direct-Neon path now that active kanban skills use `poketo kanban` and `kanban.mjs` is fallback/admin-only.
 - [ ] `$reconcile-dev-docs fix skills-reference` - decide how to document Claude-only `delegate` in `README.md` and `docs/skills-reference.md`, since it exists under `global/claude/delegate` and is central to hybrid mode but has no Codex mirror.
 - [ ] `$reconcile-dev-docs fix pack-command docs` - document `scripts/pack.sh list-packs` where appropriate, or explicitly mark it as an internal subcommand used by Codex `$run` routing.
 - [ ] `$devtool-user-map` - create/update `research/devtool-user-map.md` because the repo infers as a devtool project and the canonical research output is missing.

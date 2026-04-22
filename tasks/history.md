@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-04-22 — Banner legacy `kanban.mjs` specs
+
+- Five `specs/kanban-*.md` files (`board-flag-kanban-search.md`, `kanban-multi-user.md`, `kanban-production-test-plan.md`, `kanban-command-test-coverage.md`, `kanban-offline-queue-soft-delete.md`) still described `kanban.mjs` as the primary kanban entry point. Active path is `poketo kanban` (headless HTTP); `kanban.mjs` is fallback/admin-only per `specs/poketo-headless-auth-migration.md:164,306`.
+- Added a 3-line `> Status:` blockquote banner directly under each spec's H1, identifying it as targeting the legacy `kanban.mjs` fallback path and pointing readers to `specs/poketo-headless-auth-migration.md` for the active path. Technical bodies left untouched (still valid for the fallback path and historical reference).
+- `specs/poketo-headless-auth-migration.md` already declared the legacy/active split; no edit needed.
+- Marked `$spec-drift fix kanban legacy specs` complete in `tasks/todo.md:1014`.
+
 ## 2026-04-22 — Refresh stale canonical workflow report
 
 - `docs/canonical-workflow-report.md` (dated 2026-04-19) still said Phase 11 Steps 7–11 were "planned but not fully wired" and listed Phase 11 Step 7 as "active planning work", but Phase 11 completed 2026-04-19 per `tasks/roadmap.md:25,33`.
