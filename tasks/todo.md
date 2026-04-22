@@ -1057,15 +1057,15 @@ Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch r
 
 Start with `$devtool-user-map` from the priority documentation todo, or start a new spec and roadmap cycle if new work is being introduced.
 
-## Next Step Plan: `$devtool-user-map`
+## Next Step Plan: `$devtool-integration-map`
 
 ### Goal
 
-Create `research/devtool-user-map.md` because the repo infers as a devtool project (see `.agents/project.json`) and the canonical research output required by the devtool research chain is missing. This unblocks downstream research steps (`$devtool-integration-map`, `$devtool-dx-journey`, `$devtool-adoption`, `$devtool-positioning`, `$devtool-monetization`, `$devtool-docs-audit`).
+Create `research/devtool-integration-map.md` per `packs/devtool/claude/devtool-integration-map/SKILL.md`. With `research/devtool-user-map.md` now in place, this is the next unchecked item in the devtool research chain (`tasks/todo.md:1018`) and unblocks `$devtool-dx-journey` at `tasks/todo.md:1019`.
 
 ### Scope
 
-Research-only. Create a new file `research/devtool-user-map.md` per the contract in `packs/devtool/claude/devtool-user-map/SKILL.md`. No code changes, no scripts, no spec edits. Archive-first not required — this is a new file, not a replacement.
+Research-only. Create a new file `research/devtool-integration-map.md`. No code, scripts, or spec edits. Archive-first not required (new file).
 
 ### Execution Profile
 
@@ -1073,38 +1073,42 @@ Serial, implementation-safe. Single-agent. Documentation/research artifact.
 
 ### Ground truth
 
-- The research skill lives at `packs/devtool/claude/devtool-user-map/SKILL.md` and its Codex mirror `packs/devtool/codex/devtool-user-map/SKILL.md`. It requires the output at `research/devtool-user-map.md` covering: developer users, economic buyers, champions, maintainers, operators, use cases, and adoption blockers.
-- `research/` directory does not yet exist.
-- The devtool research chain at `tasks/todo.md:1017–1023` is blocked on this file.
-- `tasks/todo.md:1017` is the queue item to tick.
+- Skill contract: `packs/devtool/claude/devtool-integration-map/SKILL.md` (mirror at `packs/devtool/codex/devtool-integration-map/SKILL.md`). Required output sections: required integrations, ecosystem assumptions, setup path, compatibility constraints, migration risks.
+- Cross-read `research/devtool-user-map.md` (just shipped) for continuity of audience framing.
+- Repo reality: this repo's integrations are Claude Code CLI, OpenAI Codex CLI, shell, git, symlinks, `.agents/project.json`, `.claude/skills/`, `.codex/skills/`, `SKILLS_AGENT_MODE`. Setup path is `./install.sh` then `scripts/pack.sh install <pack>`. See `README.md`, `docs/operating-modes.md`, `docs/packs.md`, `scripts/pack.sh`, `scripts/agent-mode.sh`.
 
 ### Files to inspect / modify
 
-- Read `packs/devtool/claude/devtool-user-map/SKILL.md` and any sibling skills under `packs/devtool/**` for subject framing.
-- Read `README.md`, `docs/skills-reference.md`, `docs/operating-modes.md`, `CLAUDE.md` to characterize this repo's own developer audience (it is itself a devtool project — an agentic-skills distribution).
-- Create `research/devtool-user-map.md` with sections: Developer users, Economic buyers, Champions, Maintainers, Operators, Use cases, Adoption blockers.
-- Tick `tasks/todo.md:1017`.
-- Add a dated 2026-04-22 entry to `tasks/history.md`.
-
-### Key context
-
-- This repo is the subject of the research, not a generic devtool template. Ground claims in observable repo signals (README positioning, skill catalog, install flow, operating modes, pack model) rather than fabricating market personas.
-- Keep the output grounded and specific. Do not pad with generic SaaS persona language.
-- Adoption blockers should reference the actual friction points surfaced in `docs/` (e.g., dual Claude/Codex maintenance, hybrid-mode prerequisites, pack install requiring symlinks).
+- Read `packs/devtool/claude/devtool-integration-map/SKILL.md`, `research/devtool-user-map.md`, `README.md`, `docs/operating-modes.md`, `docs/packs.md`, `scripts/pack.sh`, `scripts/agent-mode.sh`, `install.sh`.
+- Create `research/devtool-integration-map.md` with: Required integrations, Ecosystem assumptions, Setup path, Compatibility constraints, Migration risks.
+- Tick `tasks/todo.md:1018`.
+- Add a dated entry to `tasks/history.md`.
 
 ### Acceptance criteria
 
-- `research/devtool-user-map.md` exists and covers all seven required sections.
-- Content is grounded in the actual repo, not generic devtool boilerplate.
-- `tasks/todo.md:1017` ticked.
-- `tasks/history.md` has a dated 2026-04-22 entry.
+- `research/devtool-integration-map.md` exists and covers all five required sections, grounded in this repo's actual integration surface.
+- `tasks/todo.md:1018` ticked.
+- `tasks/history.md` has a dated entry.
 - Shipped to `master` via `/commit-and-push-by-feature`. Deploy skipped (no deploy contract).
 
 ### Ship-one-step handoff contract
 
-After approval, implement **only** this step: create `research/devtool-user-map.md`, tick `tasks/todo.md:1017`, add a dated entry to `tasks/history.md`, commit and push to `master` via `/commit-and-push-by-feature`. Deploy skipped. Then write the following step's plan (next unchecked queue item — `$devtool-integration-map` at `tasks/todo.md:1018`), ensure `.claude/settings.local.json` retains `"showClearContextOnPlanAccept": true` and `permissions.defaultMode: "acceptEdits"` (currently satisfied), start the approval UI for that following step by calling `EnterPlanMode` first, write a brief pass-through plan, call `ExitPlanMode`, and stop before implementing it. Do not call `ExitPlanMode` from normal mode. If `EnterPlanMode` is denied, stop and ask for `/plan <next step>`.
+After approval, implement **only** this step. Then write the following step's plan (next unchecked queue item — `$devtool-dx-journey` at `tasks/todo.md:1019`), ensure `.claude/settings.local.json` retains `"showClearContextOnPlanAccept": true` and `permissions.defaultMode: "acceptEdits"` (currently satisfied), start the approval UI for that following step by calling `EnterPlanMode` first, write a brief pass-through plan, call `ExitPlanMode`, and stop before implementing it. Do not call `ExitPlanMode` from normal mode. If `EnterPlanMode` is denied, stop and ask for `/plan <next step>`.
 
-## Previous Step Plan (shipped): `$reconcile-dev-docs fix skills-reference`
+## Previous Step Plan (shipped): `$devtool-user-map`
+
+### Goal
+
+Create `research/devtool-user-map.md` because the repo infers as a devtool project and the canonical research output required by the devtool research chain was missing. Unblocks downstream research steps.
+
+### Outcome
+
+- Created `research/devtool-user-map.md` with all seven required sections (Developer users, Economic buyers, Champions, Maintainers, Operators, Use cases, Adoption blockers), grounded in observable repo signals (`README.md`, `docs/operating-modes.md`, `scripts/pack.sh`, pack layout) rather than generic devtool boilerplate.
+- Adoption blockers name real friction points: dual Claude/Codex maintenance tax, symlink install + CLI-restart requirement, long `docs/operating-modes.md`, absent `CONTRIBUTING.md`, asymmetric `/delegate` surface, no skill-contract test harness under the explicit `No GitHub Actions` rule.
+- `tasks/todo.md:1017` ticked. `tasks/history.md` has a 2026-04-22 entry.
+- Shipped to `master` as commits `aba4e94` (research) and `d5385d7` (tasks bookkeeping). Deploy skipped.
+
+## Previous Previous Step Plan (shipped): `$reconcile-dev-docs fix skills-reference`
 
 ### Goal
 
