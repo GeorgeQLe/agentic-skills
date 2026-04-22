@@ -1,5 +1,21 @@
 # Spec Drift Report
 
+## 2026-04-22 - `docs/operating-modes.md` + `global/codex/handoff`
+
+### Resolved
+
+- [x] `docs/operating-modes.md` § "Approval packet" (line 51) - Corrected claim that `codex-only` cross-session handoff uses the shared approval packet. Packet-producing handoff is Claude-side only (`/handoff --target=codex`); `codex-only` projects have no packet writer. Reworded to "cross-session handoff from `claude-only` or `hybrid` into a later Codex session."
+- [x] `docs/operating-modes.md` § "Skills matrix" handoff row (line 192) - Expanded the note to disambiguate Claude `/handoff --target=codex` (produces approval packet) from Codex `$handoff` (writes `tasks/handoff.md` prose only, no packet).
+- [x] `global/codex/handoff/SKILL.md` § "Constraints" - Added an explicit note that `$handoff` does not produce `.agents/approved-plan.json` or `tasks/approved-plan.md`, and pointed packet-needing users at Claude-side `/handoff --target=codex` + `$run --execute-approved`.
+
+### Deferred
+
+- [ ] No skill behavior, schema, or script changed. Doc-only disambiguation.
+
+### Remaining Findings
+
+- None in scope. Next queue item: `$spec-drift fix approval-packet references` (stale `## Approval / Delegation Packet` anchors).
+
 ## 2026-04-20 - `packs/business-app/*/scale-audit`
 
 ### Resolved
