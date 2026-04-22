@@ -1,5 +1,9 @@
 # Spec: Add --board flag to kanban search
 
+> **Status:** Legacy (kanban.mjs fallback path).
+> Active kanban skills now run on `poketo kanban` (headless HTTP). `kanban.mjs` is fallback/admin-only.
+> See `specs/poketo-headless-auth-migration.md` for the active path.
+
 ## Overview
 
 Add an optional `--board <id>` flag to `kanban.mjs search` that scopes results to specific board(s) instead of scanning all org boards. The flag can be repeated to search a subset of boards.

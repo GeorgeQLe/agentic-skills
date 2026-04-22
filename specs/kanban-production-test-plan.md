@@ -1,5 +1,9 @@
 # Kanban Production Test Plan
 
+> **Status:** Legacy (kanban.mjs fallback path).
+> Active kanban skills now run on `poketo kanban` (headless HTTP). `kanban.mjs` is fallback/admin-only.
+> See `specs/poketo-headless-auth-migration.md` for the active path.
+
 **Status:** Draft
 **Date:** 2026-03-27
 **Scope:** Test plans for multi-user concurrency, progressive load/stress testing, and rollback/undo safety gates

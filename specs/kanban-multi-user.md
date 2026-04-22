@@ -1,5 +1,9 @@
 # Kanban Multi-User Support (CLI Side)
 
+> **Status:** Legacy (kanban.mjs fallback path).
+> Active kanban skills now run on `poketo kanban` (headless HTTP). `kanban.mjs` is fallback/admin-only.
+> See `specs/poketo-headless-auth-migration.md` for the active path.
+
 **Status:** Draft
 **Date:** 2026-03-31
 **Companion spec:** `poke/monorepo/docs/specifications/work-realtime-collaboration-spec.md`
