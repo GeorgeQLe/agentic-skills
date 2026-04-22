@@ -106,6 +106,16 @@ ship, ship-end, skills, slim-audit, spec-drift, sync,
 trace, research-roadmap
 ```
 
+### Claude-only global skills
+
+One global skill ships only under `global/claude/` and has no Codex mirror:
+
+```text
+delegate
+```
+
+`/delegate` is the synchronous, in-session sibling of `/handoff --target=codex`: it drafts and approves a packet via `scripts/approved-plan.sh`, then invokes `codex exec "<target-skill> --execute-approved"` live from Claude. It is `hybrid`-only by design. Codex users should not expect a `$delegate` — drive hybrid delegation from the Claude side, or use `/handoff --target=codex` for the async variant. See `global/claude/delegate/SKILL.md` and `docs/operating-modes.md`.
+
 ## Packs
 
 ### Business App
