@@ -200,11 +200,19 @@ Action item format:
 - [ ] `$skill [args]` - [action description] because [reason with evidence].
 ```
 
-For manual tasks that block progress:
+For external manual tasks that block progress (browser/service-console work such as
+DNS, OAuth, Stripe/Vercel/GitHub dashboard setup, signups, production smoke
+checks):
 
 ```md
 - [ ] Complete manual task: "[task description]" _(blocks: Step N.X)_ — resolve before `$run` can continue.
 ```
+
+Do not use this format for bookkeeping or documentation reconciliation just
+because the finding mentions `tasks/manual-todo.md`. If the work is auditing,
+classifying, checking off, moving, or reconciling task-doc entries against repo
+reality, route it to `$reconcile-dev-docs fix tasks` or describe it as a direct
+dev-doc audit task.
 
 For advisory record or recurring tasks:
 
@@ -289,7 +297,8 @@ Rules:
 - Inference defaults:
   - Codex skill invocation (`$roadmap`, `$plan-phase`, `$run`, `$research-roadmap`) → recommend the matching `$...` command.
   - Claude slash invocation (`/roadmap`, `/plan-phase`, `/run`, `/delegate`) or orchestration-heavy work → recommend the matching `/...` route.
-  - Manual or browser-gathered evidence → recommend `$guide` or a Claude-guided manual step.
+  - External manual work or browser-gathered evidence (DNS/OAuth/service dashboards, auth setup, production smoke checks) → recommend `$guide` or a Claude-guided manual step.
+  - Task-doc bookkeeping, stale `tasks/manual-todo.md` cleanup, or reconciliation against repo/history reality → recommend `$reconcile-dev-docs fix tasks` or a direct dev-doc audit, not `$guide`.
 - Only present multiple commands when the ambiguity materially changes execution safety or there are equally valid next work items. Otherwise choose the best route and mention degraded mode lookup inline.
 
 ## Constraints
