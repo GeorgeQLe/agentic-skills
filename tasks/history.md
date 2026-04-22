@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-04-22 — Create `research/devtool-user-map.md`
+
+- The devtool research chain (`tasks/todo.md:1017–1023`) was blocked because the canonical `research/devtool-user-map.md` did not exist. `research/` directory was also absent on disk.
+- Created `research/devtool-user-map.md` grounded in this repo's own observable signals rather than generic devtool boilerplate: audience from `README.md` (solo builders, embedded contributors, hybrid-mode orchestrators), economic buyers from upstream CLI dependencies (Claude Max / Codex subscriptions), maintainers from `CLAUDE.md` + `tasks/history.md` cadence, operators from `scripts/pack.sh` surfaces, and adoption blockers from real friction (dual Claude/Codex maintenance tax, symlink install + CLI restart requirement, long `docs/operating-modes.md`, absent `CONTRIBUTING.md`, asymmetric `/delegate`, no skill-contract test harness under the explicit `No GitHub Actions` rule).
+- All seven required sections present per `packs/devtool/claude/devtool-user-map/SKILL.md`: Developer users, Economic buyers, Champions, Maintainers, Operators, Use cases, Adoption blockers.
+- Archive-first not required — new file, no existing canonical doc replaced.
+- Marked `$devtool-user-map` complete in `tasks/todo.md:1017`. Unblocks `$devtool-integration-map` at `tasks/todo.md:1018`.
+
 ## 2026-04-22 — Document `pack.sh list-packs` as internal Codex `$run` subcommand
 
 - `scripts/pack.sh list-packs` is advertised in the script's own `--help` (`scripts/pack.sh:19`) and dispatched at `scripts/pack.sh:358`, but neither `README.md` nor `docs/skills-reference.md` mentioned it. The only external consumer is `global/codex/run/SKILL.md`. Users reading the reference docs could not distinguish it from the human-facing `list`.
