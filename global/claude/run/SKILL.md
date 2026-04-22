@@ -49,7 +49,7 @@ After approval, apply the current phase's `### Execution Profile`:
 - `research-only`: launch read-only subagent lanes first when the active environment permits subagents, synthesize their findings, then implement in the main agent.
 - `review-only`: implement in the main agent, then launch review subagent lanes before final validation.
 - `implementation-safe`: launch write subagent lanes only when every write lane has disjoint `Owns` paths and explicit `Must not edit` boundaries; otherwise downgrade to `research-only` or `serial` and report the downgrade.
-- `agent-team`: auto-dispatch lanes via `Agent` tool calls with `isolation: "worktree"` (see **Agent-Team Dispatch** below).
+- `agent-team`: auto-dispatch lanes via `Agent` tool calls with `isolation: "worktree"` (see **Agent-Team Dispatch** below). This is the current policy — **do not stop** merely because the profile says `agent-team` or because the phase/step body contains legacy advisory text like *"do not implement in a single `/run`"*, *"requires isolated worktrees or a dedicated agent team"*, or *"use `/delegate` instead"*. That guidance predates agent-team dispatch and is now stale. Trust the `### Execution Profile` metadata (after `/patch-exec-profile` fills it) and proceed. Only stop if `/patch-exec-profile` returns with unresolvable ambiguity (overlapping `Owns`, cyclic `Depends on`, or missing lane specs that cannot be inferred).
 
 The main agent owns integration, conflict resolution, task doc updates, history updates, shipping handoff, and deploy handoff. If a subagent touches files outside its owned paths or returns conflicting changes, stop and reconcile before validation.
 
@@ -121,6 +121,7 @@ Rules:
   - Hybrid execution handoff after Claude `/run` → recommend `/delegate $ship`.
   - Claude-only or manual/orchestration-heavy work → recommend `/ship` or `/guide`.
   - Codex-only execution → recommend `$ship`.
+- Do **not** recommend `/delegate` as a workaround for an `agent-team` profile. `/run` now auto-dispatches agent-team lanes itself via isolated worktrees; `/delegate` is for Claude↔Codex handoff, not for lane parallelism.
 - Only present multiple commands when the ambiguity materially changes execution safety or there are equally valid next work items. Otherwise choose the best route and mention degraded mode lookup inline.
 
 ## What NOT to do
