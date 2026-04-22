@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-04-22 — Document Claude-only `delegate` in skills reference
+
+- `global/claude/delegate/SKILL.md` exists and is central to live Claude→Codex hybrid-mode delegation, but neither `README.md` nor `docs/skills-reference.md` mentioned it. `grep -in delegate` on both files returned nothing, so a Codex user scanning the reference docs could reasonably expect a symmetric `$delegate` that does not exist (no `global/codex/delegate/` directory).
+- Added a "Claude-only Global Skills" subsection to `docs/skills-reference.md` under the global-core table, with a single-row table marking `delegate` as Claude-only and a short blurb positioning it as the synchronous sibling of `/handoff --target=codex` (hybrid-only, falls cleanly into pre-start-failure if `codex` is missing). Cross-linked `global/claude/delegate/SKILL.md` and `docs/operating-modes.md`.
+- Mirrored the asymmetry in `README.md` § "Global Core" with a "Claude-only global skills" subsection that names `delegate`, explains the hybrid-only invariant, and redirects Codex users to `/handoff --target=codex` for the async variant.
+- Kept the existing bilateral global-skill listings untouched so the rest of the reference still describes only symmetric skills.
+- Marked `$reconcile-dev-docs fix skills-reference` complete in `tasks/todo.md:1015`.
+
 ## 2026-04-22 — Banner legacy `kanban.mjs` specs
 
 - Five `specs/kanban-*.md` files (`board-flag-kanban-search.md`, `kanban-multi-user.md`, `kanban-production-test-plan.md`, `kanban-command-test-coverage.md`, `kanban-offline-queue-soft-delete.md`) still described `kanban.mjs` as the primary kanban entry point. Active path is `poketo kanban` (headless HTTP); `kanban.mjs` is fallback/admin-only per `specs/poketo-headless-auth-migration.md:164,306`.
