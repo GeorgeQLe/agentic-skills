@@ -1057,15 +1057,15 @@ Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch r
 
 Start with `$devtool-user-map` from the priority documentation todo, or start a new spec and roadmap cycle if new work is being introduced.
 
-## Next Step Plan: `$reconcile-dev-docs fix skills-reference`
+## Next Step Plan: `$reconcile-dev-docs fix pack-command docs`
 
 ### Goal
 
-Decide how to document Claude-only `delegate` in `README.md` and `docs/skills-reference.md`. The skill exists at `global/claude/delegate/SKILL.md` and is central to hybrid Claude→Codex live delegation, but has no Codex mirror and is not mentioned in either reference doc.
+Document `scripts/pack.sh list-packs` appropriately, or explicitly mark it as an internal subcommand used by Codex `$run` routing, so the reference docs do not silently omit a real subcommand while users scanning the pack CLI see only the public subset.
 
 ### Scope
 
-Doc-only reconciliation. No skill code changes. Same shape as prior `$reconcile-dev-docs fix …` and `$spec-drift fix …` doc-only steps.
+Doc-only reconciliation. No script or skill changes. Same shape as prior `$reconcile-dev-docs fix …` and `$spec-drift fix …` doc-only steps.
 
 ### Execution Profile
 
@@ -1073,37 +1073,51 @@ Serial, implementation-safe. Single-agent, doc-only edits. No tests, no migratio
 
 ### Ground truth
 
-- Source of truth: `global/claude/delegate/SKILL.md` (Claude-only). No `global/codex/delegate/` directory exists.
-- The skill's purpose: live in-session delegation from Claude to Codex via the approved-packet contract; sibling to `/handoff --target=codex` (async) and complementary to `$run`/`$ship` execution paths.
-- `docs/skills-reference.md` and `README.md` currently contain zero mentions of `delegate` (`grep -in delegate` returns no hits).
-- `tasks/todo.md:1015` is the queue item to tick.
+- `scripts/pack.sh:19` advertises `list-packs` in its own `--help` header as "List enabled packs from `.agents/project.json` (one per line, no decoration)."
+- `scripts/pack.sh:358` is the dispatcher entry that calls `read_enabled_packs`.
+- Only caller outside `scripts/pack.sh` today is `global/codex/run/SKILL.md`, which uses `scripts/pack.sh list-packs` to discover enabled packs during Codex `$run` routing.
+- Neither `README.md` nor `docs/skills-reference.md` lists `list-packs` in their pack-command blocks. Both show only `list`, `recommend`, `install`, `remove`, `refresh`, `status`.
+- `tasks/todo.md:1016` is the queue item to tick.
 
 ### Files to inspect / modify
 
-- `docs/skills-reference.md` — add a `delegate` entry in the appropriate section (likely under the cross-CLI / orchestration / hybrid-mode group), explicitly marked Claude-only with a short blurb mirroring the SKILL.md description.
-- `README.md` — add a brief mention in whichever section currently lists hybrid-mode or Claude-only skills (or the skills overview list, depending on existing structure). Mark it Claude-only.
-- Tick `tasks/todo.md:1015`.
-- `tasks/history.md` — add a dated 2026-04-22 entry.
+- `docs/skills-reference.md` § "Project Pack Commands" — add `list-packs` to the fenced command list with a one-line annotation noting that it is an internal subcommand used by Codex `$run` (machine-readable, one-per-line output, not the human-facing `list`).
+- `README.md` — if a similar pack-command block exists, mirror the annotation; otherwise leave untouched and rely on the skills-reference update. Confirm by grepping `README.md` for `pack.sh` / `list-packs` first.
+- Tick `tasks/todo.md:1016`.
+- `tasks/history.md` — add a dated 2026-04-22 entry summarizing the addition.
 
 ### Key context
 
-- `delegate` has no Codex mirror by design (it is the Claude→Codex transport). Document the asymmetry explicitly so a Codex user reading the reference does not expect to find `$delegate`.
-- Cross-link to `/handoff --target=codex` for the async equivalent and to the approved-packet contract docs (`tasks/approved-plan.md` / `scripts/approved-plan.sh`).
+- `list-packs` and `list` are distinct: `list` is the decorated human-facing view, `list-packs` is the machine-readable feed consumed by Codex `$run`. Document that distinction explicitly — do not conflate them.
 - Archive-first is **not** required for additive doc entries. If either edit grows into a substantive rewrite of an existing section, snapshot the pre-edit file under `docs/history/archive/YYYY-MM-DD/HHMMSS/<path>` first.
 
 ### Acceptance criteria
 
-- `docs/skills-reference.md` lists `delegate` with a short description and a Claude-only marker.
-- `README.md` mentions `delegate` (Claude-only) wherever skills are catalogued or hybrid-mode workflow is discussed.
-- `tasks/todo.md:1015` ticked.
-- `tasks/history.md` has a dated 2026-04-22 entry summarizing the additions.
-- Ship via `/commit-and-push-by-feature` on `master`. No deploy contract → deploy skipped.
+- `docs/skills-reference.md` § "Project Pack Commands" lists `list-packs` with a short annotation marking it as an internal/Codex-routing subcommand.
+- `README.md` either lists `list-packs` with the same annotation, or — if the README does not expose pack commands — is verified to have no stale pack-command block that should be updated.
+- `tasks/todo.md:1016` ticked.
+- `tasks/history.md` has a dated 2026-04-22 entry.
+- Shipped to `master` via `/commit-and-push-by-feature`. No deploy contract → deploy skipped.
 
 ### Ship-one-step handoff contract
 
-After approval, implement **only** this step: add `delegate` entries to `docs/skills-reference.md` and `README.md` (Claude-only), tick `tasks/todo.md:1015`, add a dated entry to `tasks/history.md`, commit and push to `master` via `/commit-and-push-by-feature`. Deploy skipped (no `deploy.md` / `tasks/deploy.md`). Then write the following step's plan (next unchecked queue item — likely `$reconcile-dev-docs fix pack-command docs` at `tasks/todo.md:1016`), ensure `.claude/settings.local.json` has `"showClearContextOnPlanAccept": true` and `permissions.defaultMode: "acceptEdits"`, start the approval UI for that following step by calling `EnterPlanMode` first, write a brief pass-through plan in plan mode, call `ExitPlanMode`, and stop before implementing it. Do not call `ExitPlanMode` from normal mode. If `EnterPlanMode` is denied because an explicit user request is required, stop and ask for `/plan <next step>`.
+After approval, implement **only** this step: add `list-packs` documentation to `docs/skills-reference.md` (and `README.md` if a pack-command block exists there), tick `tasks/todo.md:1016`, add a dated entry to `tasks/history.md`, commit and push to `master` via `/commit-and-push-by-feature`. Deploy skipped (no `deploy.md` / `tasks/deploy.md`). Then write the following step's plan (next unchecked queue item — likely `$devtool-user-map` at `tasks/todo.md:1017`), ensure `.claude/settings.local.json` has `"showClearContextOnPlanAccept": true` and `permissions.defaultMode: "acceptEdits"` (already satisfied), start the approval UI for that following step by calling `EnterPlanMode` first, write a brief pass-through plan in plan mode, call `ExitPlanMode`, and stop before implementing it. Do not call `ExitPlanMode` from normal mode. If `EnterPlanMode` is denied because an explicit user request is required, stop and ask for `/plan <next step>`.
 
-## Previous Step Plan (shipped): `$spec-drift fix kanban legacy specs`
+## Previous Step Plan (shipped): `$reconcile-dev-docs fix skills-reference`
+
+### Goal
+
+Document Claude-only `delegate` in `README.md` and `docs/skills-reference.md`, since the skill at `global/claude/delegate/SKILL.md` is central to hybrid-mode live delegation but had no Codex mirror and no reference-doc mention.
+
+### Outcome
+
+- Added a "Claude-only Global Skills" subsection to `docs/skills-reference.md` with a single-row table marking `delegate` Claude-only plus a short blurb positioning it as the synchronous, hybrid-only sibling of `/handoff --target=codex` and cross-linking `global/claude/delegate/SKILL.md` and `docs/operating-modes.md`.
+- Mirrored the asymmetry in `README.md` § "Global Core" with a "Claude-only global skills" subsection naming `delegate`, noting the hybrid-only invariant, and redirecting Codex users to `/handoff --target=codex` for the async variant.
+- Left the existing bilateral global-skill listings untouched so the rest of the reference still describes only symmetric skills.
+- `tasks/todo.md:1015` ticked. `tasks/history.md` updated with a 2026-04-22 entry.
+- Shipped to `master` as commit `09278c2` (docs) and `f85c5fc` (tasks bookkeeping). Deploy skipped (no deploy contract).
+
+## Previous Previous Step Plan (shipped): `$spec-drift fix kanban legacy specs`
 
 ### Goal
 
