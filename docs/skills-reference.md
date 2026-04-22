@@ -76,6 +76,16 @@ Global skills are safe across business apps, games, devtools, libraries, service
 | `trace` | Follow a request end-to-end through the stack |
 | `research-roadmap` | Scan research and documentation health, then maintain a priority documentation queue |
 
+### Claude-only Global Skills
+
+The following global skill ships only under `global/claude/`. It has **no Codex mirror**, so `$delegate` does not exist in Codex — do not expect a symmetric invocation.
+
+| Skill | Platform | Purpose |
+| --- | --- | --- |
+| `delegate` | Claude-only | Live in-session delegation from Claude to Codex via the approval/delegation packet contract (`hybrid`-only). |
+
+`/delegate` is the synchronous sibling of `/handoff --target=codex`: it drafts and approves a packet using the shared `scripts/approved-plan.sh` helpers, then invokes `codex exec "<target-skill> --execute-approved"` inside the current Claude session instead of handing off for the user to resume later. It is hybrid-only by design and falls cleanly into the pre-start-failure branch of the fallback matrix if the `codex` binary is missing. See `global/claude/delegate/SKILL.md` for the full contract and `docs/operating-modes.md` § "Approval packet" for the lifecycle states.
+
 ## Business App Pack
 
 Install in SaaS, marketplace, productivity, business workflow, and enterprise projects:
