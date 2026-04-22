@@ -44,6 +44,8 @@ scripts/pack.sh status
 scripts/pack.sh remove game
 ```
 
+`scripts/pack.sh list-packs` is an internal subcommand used by Codex `$run` routing (see `global/codex/run/SKILL.md`). It prints enabled packs from `.agents/project.json` one per line with no decoration, distinct from the human-facing `list` above; prefer `list` or `status` for interactive use.
+
 Claude users can run `/pack` with no arguments, and Codex users can run `$pack` with no arguments. If `.agents/project.json` exists, the skill refreshes local links from that committed project designation. If it is missing, the assistant inspects the repository, recommends a pack, and asks before installing.
 
 `scripts/pack.sh refresh` recreates local symlinks; it does not reload an already-running Claude Code or Codex session. After installing, removing, or refreshing packs, start a fresh CLI session if the changed skills are not visible.
