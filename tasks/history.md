@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-04-23 - Add global dogfood skill
+
+- Added mirrored global `dogfood` skills for Codex and Claude. The skill derives operator-run product scenarios from specs, journey maps, user stories, task docs, and pack-specific research, then writes UAT-style instructions for a human operator rather than running the product itself.
+- The workflow resolves project type from `.agents/project.json` or repo signals, loads business-app/devtool/game/generic evidence, infers active-use cadence, generates 3-7 concrete scenarios, and routes operator execution to `tasks/manual-todo.md` under `## Dogfood Operator Scenarios`.
+- Added `research/dogfood-audit.md` as the canonical audit output with scenario matrix, evidence checklist, and operator result logs. Recurring dogfood obligations are routed to `tasks/recurring-todo.md` only when a cadence is useful.
+- Registered `dogfood` in the global core README list and in both Claude/Codex `$skills` / `/skills` Evaluate mappings.
+- Verified with `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, and an ASCII scan of both new skill files.
+
 ## 2026-04-22 — Create `research/devtool-adoption.md`
 
 - The devtool research chain's adoption step (`tasks/todo.md:1020`) was the next unchecked item after `$devtool-dx-journey` shipped earlier today. `research/devtool-adoption.md` did not exist.

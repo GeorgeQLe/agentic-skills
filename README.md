@@ -100,7 +100,7 @@ Global skills should stay domain-neutral:
 
 ```text
 affected, analyze-sessions, brainstorm, branch-lifecycle,
-clone-spec-store, commit-and-push-by-feature, create-skill, dead-code, debug, decommission, deploy,
+clone-spec-store, commit-and-push-by-feature, create-skill, dead-code, debug, decommission, deploy, dogfood,
 expert-review, guide, handoff, hygiene, install-workflow-orchestration,
 investigate, migrate, pack, patch-exec-profile, spec-interview, plan-phase,
 reconcile-dev-docs, regression-check, release, roadmap, run, scaffold,
