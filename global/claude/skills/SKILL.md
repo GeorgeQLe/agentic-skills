@@ -38,7 +38,7 @@ Discover and search installed global skills plus enabled project-local pack skil
    | Planning | `brainstorm`, `brainstorm-kanban`, `spec-interview`, `spec-interview --ideas`, `spec-interview-kanban`, `experiment` |
    | Mapping | `journey-map`, `metrics` |
    | Strategize | `roadmap`, `roadmap-kanban`, `competitive-analysis`, `platform-strategy`, `gtm`, `landing-copy`, `monetization`, `positioning`, `runway-model` |
-   | Evaluate | `mvp-gap`, `scale-audit`, `customer-feedback`, `assumption-tracker`, `cohort-review`, `retro` |
+   | Evaluate | `dogfood`, `mvp-gap`, `scale-audit`, `customer-feedback`, `assumption-tracker`, `cohort-review`, `retro` |
    | Research Health | `research-roadmap`, `reconcile-research`, `reconcile-dev-docs` |
    | Detail | `plan-phase` |
    | Execution | `run`, `run-kanban`, `guide` |
