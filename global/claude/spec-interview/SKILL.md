@@ -22,7 +22,24 @@ Interview the user to validate, refine, and complete a specification from a roug
    - When the user proposes something that conflicts with the ICP, flag it — e.g., "Your ICP says users are non-technical ops managers — does this CLI-based workflow fit their profile?"
    - Do not re-interview on ICP topics already covered — focus on solution design.
 
-2. **Conduct the interview:**
+2. **Surface assumptions before probing (Assumptions Manifest):**
+   - After reading the draft/prompt and research context but **before** asking deep probing questions, compile and present an **Assumptions Manifest** — a structured list of everything you are taking as given.
+   - Tag each assumption with its source:
+     - `[from spec]` — explicitly stated in the draft or spec document
+     - `[from codebase]` — derived from reading existing code, config, or infrastructure
+     - `[from research]` — derived from research docs (ICP, audience, journey maps)
+     - `[inferred]` — not stated anywhere; you filled in a default or made a judgment call
+   - The manifest must cover these categories at minimum:
+     - **Product identity**: what type of product this is (SaaS tool, video game, marketplace, etc.) and who the primary user is
+     - **Core experience**: the central interaction or value loop the user will have
+     - **Technical foundation**: stack, hosting, deployment model, existing infra to preserve or replace
+     - **Integration risk**: whether this work touches, replaces, or coexists with existing features — and what breaks if the assumption is wrong
+     - **UX direction**: navigation model, interaction patterns, visual language
+     - **Data model**: what persists, what's ephemeral, migration path from current state
+   - Present the manifest using AskUserQuestion and explicitly ask the user to confirm, correct, or flag any assumption before proceeding. Do not continue the interview until the user has reviewed the manifest.
+   - If any `[inferred]` assumption is corrected, note the correction — these corrections are high-signal for downstream risk and must appear in the interview log.
+
+3. **Conduct the interview:**
    - Use the project description provided as a working draft. Treat the existing spec as a starting point that requires confirmation rather than settled decisions.
    - Ask the user to validate key assumptions and choices from the original document.
    - Probe for ambiguities and missing details, and explore edge cases, technical implementation, UI and UX considerations, concerns, and tradeoffs.
@@ -30,13 +47,14 @@ Interview the user to validate, refine, and complete a specification from a roug
    - Ask one to three focused questions per turn.
    - **Research and recommend by default.** For each decision point, use web search, upstream research docs (`research/*.md`), and codebase analysis to gather evidence before asking the user. Present your findings with data, state your recommendation with reasoning, and ask the user to approve, adjust, or override. When a decision point genuinely has multiple viable approaches, list each option with a clear rationale, pros/cons, and your recommendation with reasoning. For the recommended option, explain how the con can be mitigated if feasible. Only ask the user to choose without a recommendation when the decision genuinely requires insider knowledge (internal constraints, personal preferences, strategic bets). Do not manufacture choices.
 
-3. **Cover all areas:**
+4. **Cover all areas:**
    - Continue until you have thoroughly covered: goals, user stories, technical architecture, data models, APIs, UI flows, edge cases, security, performance, and scope boundaries.
    - **Coverage checkpoint** — Before concluding, use AskUserQuestion to present a structured summary: list each area covered with the key decisions made and the evidence or reasoning that supported each decision. Then ask: "Does this cover everything? Any areas we should revisit or that I missed?"
 
-4. **Write outputs:**
+5. **Write outputs:**
    - Write the completed specification to `specs/[topic].md` (create the `specs/` directory if it doesn't exist) where `topic` is a short kebab-case summary.
-   - Create an interview log file named `[topic]-interview.md` recording each turn of the interview including questions asked, options presented with pros/cons, and user selections. Conclude with a summary of significant deviations from the original spec.
+   - Append an **Assumptions & Risks** section to the end of the spec listing: each assumption that was confirmed or corrected during the manifest review, its source tag, and the downstream risk if the assumption turns out to be wrong later. Flag any `[inferred]` assumptions that were never explicitly confirmed by the user.
+   - Create an interview log file named `[topic]-interview.md` recording each turn of the interview including questions asked, options presented with pros/cons, and user selections. The log must include the full Assumptions Manifest as presented, user corrections, and a summary of significant deviations from the original spec.
 
 ## Output Format
 
