@@ -21,16 +21,32 @@ Use this skill when the user has a draft spec, feature description, or rough ide
    If project type is missing or mismatched, recommend `$pack recommend` or `$pack install <pack>` before doing domain-specific planning.
 2. For business-app projects, check if `research/icp.md` exists. If so, read it and use it as foundational context — ground solution decisions against the ICP's user journey, technical sophistication, and customer provisioning model. Flag conflicts (e.g., "ICP says users are non-technical — does this CLI workflow fit?"). Do not re-interview on ICP topics.
 3. Treat the existing spec or prompt as a draft, not a final decision record.
-4. Interview the user in depth to validate assumptions, resolve ambiguities, and close gaps.
-5. If the session is already in Plan mode, prefer `request_user_input` for material decisions with 2-3 real options. Otherwise ask concise direct questions in plain text.
-6. Ask 1 to 3 focused questions per turn.
-7. **Research and recommend by default.** Use web search, upstream research docs, and codebase analysis to gather evidence before asking the user. Assume the user has no insider knowledge unless they explicitly provide it. Present findings with data, define relevant terms, state a recommendation with reasoning, and ask the user to approve, adjust, or override based on hard constraints, proprietary facts, or corrections. Only present options without a recommendation when internal constraints, preferences, or missing facts make evidence insufficient. For each real choice:
+4. **Surface assumptions before probing (Assumptions Manifest):**
+   - After reading the draft/prompt and research context but **before** asking deep probing questions, compile and present an **Assumptions Manifest** — a structured list of everything you are taking as given.
+   - Tag each assumption with its source:
+     - `[from spec]` — explicitly stated in the draft or spec document
+     - `[from codebase]` — derived from reading existing code, config, or infrastructure
+     - `[from research]` — derived from research docs (ICP, audience, journey maps)
+     - `[inferred]` — not stated anywhere; you filled in a default or made a judgment call
+   - The manifest must cover these categories at minimum:
+     - **Product identity**: what type of product this is (SaaS tool, video game, marketplace, etc.) and who the primary user is
+     - **Core experience**: the central interaction or value loop the user will have
+     - **Technical foundation**: stack, hosting, deployment model, existing infra to preserve or replace
+     - **Integration risk**: whether this work touches, replaces, or coexists with existing features — and what breaks if the assumption is wrong
+     - **UX direction**: navigation model, interaction patterns, visual language
+     - **Data model**: what persists, what's ephemeral, migration path from current state
+   - Present the manifest and explicitly ask the user to confirm, correct, or flag any assumption before proceeding. Do not continue the interview until the user has reviewed the manifest.
+   - If any `[inferred]` assumption is corrected, note the correction — these corrections are high-signal for downstream risk and must appear in the interview log.
+5. Interview the user in depth to validate assumptions, resolve ambiguities, and close gaps.
+6. If the session is already in Plan mode, prefer `request_user_input` for material decisions with 2-3 real options. Otherwise ask concise direct questions in plain text.
+7. Ask 1 to 3 focused questions per turn.
+8. **Research and recommend by default.** Use web search, upstream research docs, and codebase analysis to gather evidence before asking the user. Assume the user has no insider knowledge unless they explicitly provide it. Present findings with data, define relevant terms, state a recommendation with reasoning, and ask the user to approve, adjust, or override based on hard constraints, proprietary facts, or corrections. Only present options without a recommendation when internal constraints, preferences, or missing facts make evidence insufficient. For each real choice:
    - Explain the options with evidence
    - Give a brief pros and cons comparison
    - State a recommendation and why
    - Explain how to mitigate the recommended option's downside when useful
-8. Continue until goals, user stories, architecture, data models, APIs, UX flows, edge cases, security, performance, and scope boundaries are all covered.
-9. **Coverage checkpoint** — Before concluding, present a structured summary: list each area covered with key decisions made and the evidence/reasoning that supported each. Ask: "Does this cover everything? Any constraints, missing facts, or areas to revisit?"
+9. Continue until goals, user stories, architecture, data models, APIs, UX flows, edge cases, security, performance, and scope boundaries are all covered.
+10. **Coverage checkpoint** — Before concluding, present a structured summary: list each area covered with key decisions made and the evidence/reasoning that supported each. Ask: "Does this cover everything? Any constraints, missing facts, or areas to revisit?"
 
 ## Deliverables
 
@@ -39,10 +55,13 @@ Use this skill when the user has a draft spec, feature description, or rough ide
 
 The interview log should include:
 
+- The full Assumptions Manifest as presented, with user corrections noted
 - Each question asked
 - Options presented, if any
 - The user's responses and chosen direction
 - A closing summary of significant deviations from the initial draft and why they changed
+
+Append an **Assumptions & Risks** section to the end of the spec listing: each assumption that was confirmed or corrected during the manifest review, its source tag, and the downstream risk if the assumption turns out to be wrong later. Flag any `[inferred]` assumptions that were never explicitly confirmed by the user.
 
 After writing the files, tell the user the next step: run `$roadmap` to sequence specs into phases and seed Phase 1 implementation. Do not invoke `$roadmap` automatically — the user may want to run multiple `$spec-interview` sessions first.
 
