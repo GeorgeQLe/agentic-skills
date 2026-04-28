@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-04-25 — Add Assumptions Manifest to spec-interview skill
+
+- Analyzed full Claude/Codex session history (~8,120 + 3,401 records) to find cases where agent assumptions during plan-interview and spec-interview sessions caused downstream refactors or project restarts.
+- Identified 5 recurring patterns: unprobed product-identity assumptions (bismarck v0.4 tool-vs-game → sunset), feature integration risk not surfaced (loadoutworks 3D breaking 2D builder → full rebuild), deployment readiness assumed (bismarck v0.4 deployment day disaster), data model assumptions causing phase rewrites (poke monorepo phase 4), and UX direction inferred from technical descriptions (sidebar nav, loading skeletons).
+- Root cause: spec-interview skill lacked a structured step to surface and validate the agent's own assumptions before probing. The agent's mental model was invisible to the user.
+- Added new **Step 2: Assumptions Manifest** to both Claude and Codex spec-interview skills. The agent must now compile a tagged assumption list (`[from spec]`, `[from codebase]`, `[from research]`, `[inferred]`) covering 6 mandatory categories (product identity, core experience, technical foundation, integration risk, UX direction, data model) and block the interview until the user reviews it.
+- Spec output now includes an **Assumptions & Risks** appendix. Interview logs record the full manifest with user corrections.
+- Updated all 4 skill files (2 repo canonical + 2 user-local via hardlinks). Validated with `skill-deps.sh --broken` and `skill-versions.sh --missing`.
+
 ## 2026-04-23 - Add global dogfood skill
 
 - Added mirrored global `dogfood` skills for Codex and Claude. The skill derives operator-run product scenarios from specs, journey maps, user stories, task docs, and pack-specific research, then writes UAT-style instructions for a human operator rather than running the product itself.
