@@ -668,7 +668,7 @@
 - Scopes: skills (frontmatter, sections), tasks (expected files), docs (reference sync), codex (mirror parity)
 - Ran initial audit and fixed all errors/warnings:
   - Added missing `argument-hint` fields to 6 skills
-  - Restructured 5 flat-format skills to use `## Process`/`## Output Format`/`## Constraints` headings (analyze-sessions, commit-and-push-by-feature, install-workflow-orchestration, plan-interview, ship-end)
+  - Restructured 5 flat-format skills to use `## Process`/`## Output Format`/`## Constraints` headings (analyze-sessions, commit-and-push-by-feature, provision-agentic-config, plan-interview, ship-end)
   - Created 2 missing codex mirrors (poketo-kanban, skills)
   - Added `/competitive-analysis` to Quick Reference table
   - Synced 29 codex skill descriptions to match claude source of truth
@@ -993,7 +993,7 @@ Resolved all 10 findings from `/expert-review`:
 - Aligned deploy search order across `deploy` and `ship` skills
 - Added `/brainstorm` entry to skills-reference.md, fixed skill count to 26
 - Removed inconsistent `allowed-tools` from `ship` and `ship-then-plan`
-- Rewrote "CI tests" → "tests" in install-workflow-orchestration
+- Rewrote "CI tests" → "tests" in provision-agentic-config
 - Removed stale `docs/` plan reference from `ship-end`
 
 ## 2026-03-18 — Brainstorm output & plan-interview-ideas skill

@@ -100,9 +100,10 @@ Global skills should stay domain-neutral:
 
 ```text
 affected, analyze-sessions, brainstorm, branch-lifecycle,
-clone-spec-store, commit-and-push-by-feature, create-skill, dead-code, debug, decommission, deploy, dogfood,
-expert-review, guide, handoff, hygiene, install-workflow-orchestration,
-investigate, migrate, pack, patch-exec-profile, spec-interview, plan-phase,
+clone-spec-store, commit-and-push-by-feature, concept-exploration, create-skill, dead-code, debug, decommission, deploy, dogfood,
+expert-review, guide, handoff, hygiene, provision-agentic-config,
+investigate, migrate, pack, patch-exec-profile, spec-interview, ui-interview,
+ux-variation, plan-phase,
 reconcile-dev-docs, regression-check, release, roadmap, run, scaffold,
 ship, ship-end, skills, slim-audit, spec-drift, sync,
 trace, research-roadmap, uat
@@ -132,6 +133,13 @@ journey-map, metrics, gtm, monetization, positioning, landing-copy,
 mvp-gap, scale-audit, assumption-tracker, experiment, cohort-review,
 retro, risk-register, burn-rate, runway-model, investor-update,
 platform-strategy, reconcile-research
+```
+
+Default user-facing planning flow:
+
+```text
+concept-exploration -> icp -> competitive-analysis -> positioning -> journey-map -> spec-interview
+-> ux-variation -> ui-interview -> roadmap -> run
 ```
 
 ### Game

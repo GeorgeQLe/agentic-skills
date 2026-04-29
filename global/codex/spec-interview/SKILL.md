@@ -10,7 +10,7 @@ argument-hint: "[--ideas]"
 
 Invoke as `$spec-interview`.
 
-Use this skill when the user has a draft spec, feature description, or rough idea that needs to be validated and turned into a complete implementation specification.
+Use this skill when the user has a concept brief, research-backed opportunity, draft spec, or feature description that needs to be turned into a complete implementation specification. For half-formed product ideas, run `$concept-exploration` before this skill.
 
 ## Workflow
 
@@ -19,7 +19,7 @@ Use this skill when the user has a draft spec, feature description, or rough ide
    - `game` → use game artifacts such as `research/game-audience.md`, `research/game-fantasy.md`, and `research/game-core-loop.md`.
    - `devtool` → use devtool artifacts such as `research/devtool-user-map.md`, `research/devtool-dx-journey.md`, and `research/devtool-integration-map.md`.
    If project type is missing or mismatched, recommend `$pack recommend` or `$pack install <pack>` before doing domain-specific planning.
-2. For business-app projects, check if `research/icp.md` exists. If so, read it and use it as foundational context — ground solution decisions against the ICP's user journey, technical sophistication, and customer provisioning model. Flag conflicts (e.g., "ICP says users are non-technical — does this CLI workflow fit?"). Do not re-interview on ICP topics.
+2. For business-app projects, check if `research/concept-brief.md`, `research/icp.md`, and `research/journey-map.md` exist. Read them as source evidence — ground implementation decisions against the concept constraints, ICP, user journey, customer journey, technical sophistication, customer provisioning model, path to aha, conversion path, retention loop, and champion dynamics. Flag conflicts (e.g., "Journey map says the buyer needs a demo before sign-up — does this self-serve-only onboarding fit?"). Do not re-interview on concept, ICP, or journey topics already covered.
 3. Treat the existing spec or prompt as a draft, not a final decision record.
 4. **Surface assumptions before probing (Assumptions Manifest):**
    - After reading the draft/prompt and research context but **before** asking deep probing questions, compile and present an **Assumptions Manifest** — a structured list of everything you are taking as given.
@@ -29,12 +29,13 @@ Use this skill when the user has a draft spec, feature description, or rough ide
      - `[from research]` — derived from research docs (ICP, audience, journey maps)
      - `[inferred]` — not stated anywhere; you filled in a default or made a judgment call
    - The manifest must cover these categories at minimum:
-     - **Product identity**: what type of product this is (SaaS tool, video game, marketplace, etc.) and who the primary user is
-     - **Core experience**: the central interaction or value loop the user will have
+     - **Source context**: concept, ICP, journey, and spec inputs being used as product evidence
+     - **Implementation goal**: what concrete capability this spec will make buildable
      - **Technical foundation**: stack, hosting, deployment model, existing infra to preserve or replace
      - **Integration risk**: whether this work touches, replaces, or coexists with existing features — and what breaks if the assumption is wrong
-     - **UX direction**: navigation model, interaction patterns, visual language
      - **Data model**: what persists, what's ephemeral, migration path from current state
+     - **API and contract surface**: routes, events, SDKs, schemas, external integrations, or CLI contracts
+     - **Operational requirements**: security, privacy, permissions, performance, observability, and failure handling
    - Present the manifest and explicitly ask the user to confirm, correct, or flag any assumption before proceeding. Do not continue the interview until the user has reviewed the manifest.
    - If any `[inferred]` assumption is corrected, note the correction — these corrections are high-signal for downstream risk and must appear in the interview log.
 5. Interview the user in depth to validate assumptions, resolve ambiguities, and close gaps.
@@ -45,12 +46,23 @@ Use this skill when the user has a draft spec, feature description, or rough ide
    - Give a brief pros and cons comparison
    - State a recommendation and why
    - Explain how to mitigate the recommended option's downside when useful
-9. Continue until goals, user stories, architecture, data models, APIs, UX flows, edge cases, security, performance, and scope boundaries are all covered.
+9. Continue until implementation goals, architecture, data models, APIs/contracts, migrations, edge cases, security, performance, observability, test strategy, and scope boundaries are all covered.
 10. **Coverage checkpoint** — Before concluding, present a structured summary: list each area covered with key decisions made and the evidence/reasoning that supported each. Ask: "Does this cover everything? Any constraints, missing facts, or areas to revisit?"
 
 ## Deliverables
 
 - Write the completed specification to `specs/[topic].md` (create the `specs/` directory if needed), where `topic` is a short kebab-case summary
+- The spec must use these canonical section headings (unnumbered):
+  - `## Overview`
+  - `## Goals`
+  - `## Non-Goals`
+  - `## Detailed Design` (architecture, data models, APIs, UI flows)
+  - `## Edge Cases`
+  - `## Test Plan`
+  - `## Acceptance Criteria`
+  - `## Open Questions`
+  - `## Assumptions & Risks` (the manifest output)
+  Additional topic-specific sections (e.g. `## Data Model`, `## Security`) may appear between Detailed Design and Edge Cases. Do not number sections.
 - Write an interview log to `[topic]-interview.md`
 
 The interview log should include:
@@ -63,7 +75,7 @@ The interview log should include:
 
 Append an **Assumptions & Risks** section to the end of the spec listing: each assumption that was confirmed or corrected during the manifest review, its source tag, and the downstream risk if the assumption turns out to be wrong later. Flag any `[inferred]` assumptions that were never explicitly confirmed by the user.
 
-After writing the files, tell the user the next step: run `$roadmap` to sequence specs into phases and seed Phase 1 implementation. Do not invoke `$roadmap` automatically — the user may want to run multiple `$spec-interview` sessions first.
+After writing the files, tell the user the next step based on available context: for user-facing work with no journey map, run `$journey-map`; for user-facing work with a journey map but no experience variants, run `$ux-variation`; for user-facing work with a selected UX direction but no UI spec, run `$ui-interview`; otherwise run `$roadmap` to sequence specs into phases and seed Phase 1 implementation. Do not invoke the next skill automatically — the user may want to run multiple planning sessions first.
 
 If the interview identifies follow-up work that is itself a named skill, recommend invoking that skill directly instead of phrasing it as another `$spec-interview` run. For example: say "run `$icp` and `$monetization`, then `$roadmap`" rather than "run `$spec-interview` for `$icp` and `$monetization`." This applies to research and planning skills such as `$icp`, `$monetization`, `$metrics`, `$positioning`, and `$competitive-analysis`.
 
@@ -78,7 +90,7 @@ Output exactly two lines beyond the normal report:
 
 Rules:
 
-- Make the next work item primary. For the normal completed-interview path, the next work is sequencing the spec into phases. If follow-up research skills were identified, name those first.
+- Make the next work item primary. For user-facing completed specs, prefer missing journey, UX variation, and UI interview work before roadmap. If follow-up research skills were identified, name those first. Use roadmap only when product, journey, UX, and UI planning are complete enough for implementation sequencing or the work has no meaningful human-facing interface.
 - Use `./scripts/agent-mode.sh` only to choose command text. If it is missing, unset, or non-zero, infer routing from the current invocation and task type instead of asking the user to select a mode by default.
 - Inference defaults:
   - Codex skill invocation (`$spec-interview`, `$roadmap`) → recommend the matching `$...` command.
@@ -97,7 +109,7 @@ When `$ARGUMENTS` contains `--ideas`, read `tasks/ideas.md` and run the intervie
 
 1. Read `tasks/ideas.md` and extract every distinct idea entry. If a filter keyword is provided, limit to matching ideas.
 2. Show the user the list and ask them to confirm, skip any, or reorder.
-3. For each idea, run the standard interview process using the idea's title and description as the initial draft.
+3. For each idea, run the standard interview process using the idea's title and description as the initial implementation draft. If an idea is still only a raw concept, route it to `$concept-exploration` first.
 4. Write deliverables (`specs/[topic].md` and `[topic]-interview.md`) for each completed idea.
 5. After each idea, summarize decisions and move to the next. The user may say "skip".
 6. If the user stops partway through, write deliverables for completed ideas and note which remain.

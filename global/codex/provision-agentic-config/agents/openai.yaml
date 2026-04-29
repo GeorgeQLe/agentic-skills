@@ -1,7 +1,7 @@
 interface:
   display_name: "Install Workflow Orchestration"
   short_description: "Insert workflow rules into CLAUDE.md and AGENTS.md"
-  default_prompt: "Use $install-workflow-orchestration to add the workflow orchestration block to this repo's CLAUDE.md and AGENTS.md exactly once per file."
+  default_prompt: "Use $provision-agentic-config to add the workflow orchestration block to this repo's CLAUDE.md and AGENTS.md exactly once per file."
 
 policy:
   allow_implicit_invocation: true

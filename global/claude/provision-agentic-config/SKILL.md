@@ -1,6 +1,6 @@
 ---
-name: install-workflow-orchestration
-description: Install workflow orchestration instructions into the current repository's CLAUDE.md and AGENTS.md
+name: provision-agentic-config
+description: Provision workflow orchestration and agent conventions into project CLAUDE.md and AGENTS.md
 type: ops
 version: 1.0.0
 argument-hint:
