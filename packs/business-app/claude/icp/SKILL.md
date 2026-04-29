@@ -3,12 +3,12 @@ name: icp
 description: Research-driven ICP discovery — web search + codebase analysis to identify multiple ICPs, pain points, value props, and cross-ICP prioritization
 type: research
 version: 3.5.0
-argument-hint: <spec file path or concept/idea>
+argument-hint: <spec file path, concept/idea, or empty to use concept brief>
 ---
 
 # ICP — Research-Driven Customer Discovery
 
-Automated research that identifies **multiple ICP candidates**, maps their pain points and value props, scores them, and selects a primary ICP. Replaces interview-driven approaches with web search + codebase analysis. Input is a spec file path or a concept/idea as `$ARGUMENTS`.
+Automated research that identifies **multiple ICP candidates**, maps their pain points and value props, scores them, and selects a primary ICP. Replaces interview-driven approaches with web search + codebase analysis. Input is a spec file path, concept/idea as `$ARGUMENTS`, or `research/concept-brief.md` / `research/{app}/concept-brief.md` when present.
 
 The output preserves the canonical 9-section format at the top level (for downstream compatibility with `/spec-interview`, `/mvp-gap`, `/roadmap`, `/journey-map`) while adding multi-ICP analysis, cross-ICP prioritization, and a supplementary section 10 (`## Acquisition & Conversion Model`) that covers business model, funnel, champions, and expansion dynamics.
 
@@ -25,6 +25,7 @@ Before parsing input, determine the app scope:
 When app scope `{app}` is active:
 - Read/write research from `research/{app}/` instead of `research/`
 - Read/write specs from `specs/{app}/` instead of `specs/`
+- Prefer `research/{app}/concept-brief.md` as concept context when present
 - Also read `research/icp.md` (cross-app overview) for broader context
 
 ### 1. Parse Input & Gather Context
@@ -32,7 +33,10 @@ When app scope `{app}` is active:
 **Read `$ARGUMENTS`:**
 - If it's a file path, read the file for product/concept context
 - If it's text, treat it as the concept or idea description
-- If empty, check for `specs/spec.md`, `specs/plan.md`, or README for context — if nothing exists, ask the user what product or idea to research
+- If empty, check for `research/{app}/concept-brief.md` in app scope or `research/concept-brief.md` in flat scope first; then check `specs/spec.md`, `specs/plan.md`, or README for context — if nothing exists, ask the user what product or idea to research
+
+**Read concept brief if present:**
+Read `research/{app}/concept-brief.md` in app scope, or `research/concept-brief.md` in flat scope, whenever it exists. Treat it as starting context and source hypotheses, not as settled truth. Use its problem hypothesis, beneficiary hypothesis, value wedge, constraints, non-goals, and ICP readiness notes to frame search queries and candidate generation. If `$ARGUMENTS` conflicts with the concept brief, flag the mismatch at the first checkpoint and ask which premise should guide ICP research.
 
 **Read codebase (if it exists):**
 Read CLAUDE.md, README, package config, key source files, routes, and data models to understand what's been built. This grounds the research in reality rather than pure market abstraction.

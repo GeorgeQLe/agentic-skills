@@ -16,7 +16,7 @@ Default stance: assume the user has no insider knowledge of the market. Present 
 
 **Detect mode before proceeding:**
 
-- **Concept-validation mode** activates when: no `research/icp.md` AND (no meaningful codebase OR `$ARGUMENTS` contains "concept"/"validate"). Announce mode to user, then ask for concept description (problem, audience, approach).
+- **Concept-validation mode** activates when: no `research/icp.md` AND (no meaningful codebase OR `$ARGUMENTS` contains "concept"/"validate"). Use this mode to validate market gaps after a concept has been shaped by `$concept-exploration` or an equivalent brief; if no concept is clear, recommend `$concept-exploration` first. Announce mode to user, then ask for concept description (problem, audience, approach).
 - **Standard mode** (default): Read the codebase, README, CLAUDE.md, and existing research/specs (`research/icp.md` or `research/{app}/icp.md`, `research/enterprise-icp.md` or `research/{app}/enterprise-icp.md`, `research/mvp-gap.md` or `research/{app}/mvp-gap.md`) to understand the product.
 
 ## Process
@@ -38,7 +38,7 @@ When app scope `{app}` is active:
 
 **Standard mode:** Read CLAUDE.md, README, package config, key source files. Read `research/icp.md` (or `research/{app}/icp.md`) if it exists — the ICP defines the competitive frame. Read `research/enterprise-icp.md` (or `research/{app}/enterprise-icp.md`) and `research/mvp-gap.md` (or `research/{app}/mvp-gap.md`) if they exist. Summarise what the product does, who it's for, and what problem it solves.
 
-**Concept-validation mode:** Use the concept description from Prerequisites. Summarise what the concept proposes (problem, audience, approach). Confirm with the user before researching.
+**Concept-validation mode:** Use `research/concept-brief.md` when present, otherwise use the concept description from Prerequisites. Summarise what the concept proposes (problem, audience, approach). Confirm with the user before researching.
 
 ### 2. Identify Competitors
 
@@ -79,8 +79,8 @@ Only after user validates, write the output files.
 
 **Standard mode next steps:** `## Next Steps` section with a **Recommended** item and **Other options** (2–4 alternatives). Choose the recommended item by the first matching condition:
 
-1. IF no `specs/` directory or it's empty: `$spec-interview [top market gap or positioning opportunity]` — spec the strongest opportunity from the analysis
-2. IF `specs/` exist but no `research/journey-map.md`: `$journey-map` — map the customer journey to find where competitors fall short
+1. IF no `research/journey-map.md`: `$journey-map` — map the customer and user journey before spec decisions, using competitive gaps as inspiration
+2. IF no `specs/` directory or it's empty: `$spec-interview [top journey-backed market gap or positioning opportunity]` — spec the strongest opportunity after journey context exists
 3. IF no `research/gtm.md`: `$gtm` — build go-to-market plan leveraging competitive gaps
 4. IF codebase exists and no `research/mvp-gap.md`: `$mvp-gap` — check if the codebase exploits the gaps found
 
@@ -91,8 +91,8 @@ Use this format in the output:
 **Recommended:** `[first matching command above]` — [reason grounded in this analysis]
 
 Other options:
-- `$spec-interview [riskiest competitive assumption or top market gap]` — validate the most important unresolved competitive assumption with a targeted interview (if not recommended)
 - `$journey-map` — map the customer journey to find where competitors fall short (if no `research/journey-map.md` and not recommended)
+- `$spec-interview [riskiest competitive assumption or top journey-backed market gap]` — validate the most important unresolved competitive assumption with a targeted interview (if not recommended and journey context exists)
 - `$gtm` — build go-to-market plan leveraging competitive gaps (if no `research/gtm.md` and not recommended)
 - `$mvp-gap` — check if the codebase exploits the gaps found (if codebase exists, no `research/mvp-gap.md` exists, and not recommended)
 - `$brainstorm` — generate alternative solution ideas (only if the analysis found multiple plausible market gaps and product direction is still unclear)

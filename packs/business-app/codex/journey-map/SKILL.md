@@ -10,17 +10,17 @@ argument-hint: "[optional: specific use case or journey stage to focus on]"
 
 Invoke as `$journey-map`.
 
-Research-first journey mapping for how people flow through the product (user journey) and through the business relationship (customer journey). Requires both `research/icp.md` and at least one `specs/*.md`.
+Research-first journey mapping for how people will flow through the product (user journey) and through the business relationship (customer journey). Requires `research/icp.md`; specs are useful supporting context when they exist, but this skill should normally run before `$spec-interview` so the spec is grounded in discovery, evaluation, onboarding, aha, conversion, retention, and advocacy.
 
 ## Prerequisites
 
 - `research/icp.md` (or `research/{app}/icp.md` in monorepo mode) must exist — run `$icp` first.
-- At least one spec in `specs/*.md` (or `specs/{app}/*.md`) must exist — run `$spec-interview` first.
+- Specs in `specs/*.md` (or `specs/{app}/*.md`) are optional supporting context. If no specs exist, map the intended journey from ICP, competitive research, and codebase/product evidence, then route top journey gaps to `$spec-interview`.
 
 ## Workflow
 
 0. **App Scope Resolution (Monorepo Support)**: Before checking prerequisites, determine the app scope: (1) If `$ARGUMENTS` specifies an app name matching a subdirectory of `research/`, use it. (2) If `research/` contains subdirectories (excluding files), list them and ask the user which app to target; if the session is already in Plan mode and there are 2-3 concrete choices, prefer `request_user_input`, otherwise ask in plain text; if only one subdirectory exists, use it automatically. (3) If no subdirectories exist, proceed with flat structure (single-product mode). When app scope `{app}` is active: read/write research from `research/{app}/` instead of `research/`, read/write specs from `specs/{app}/` instead of `specs/`, also read `research/icp.md` (cross-app overview) for broader context.
-1. **Load context**: Read `research/icp.md` (or `research/{app}/icp.md`), `research/competitive-analysis.md` (or `research/{app}/competitive-analysis.md`), `research/enterprise-icp.md` (or `research/{app}/enterprise-icp.md`), all spec files in `specs/` (or `specs/{app}/`), codebase if it exists.
+1. **Load context**: Read `research/icp.md` (or `research/{app}/icp.md`), `research/competitive-analysis.md` (or `research/{app}/competitive-analysis.md`), `research/enterprise-icp.md` (or `research/{app}/enterprise-icp.md`), all spec files in `specs/` (or `specs/{app}/`) if they exist, codebase if it exists.
 2. **Interview — User Journeys** (1–3 questions per turn, research and recommend by default — assume the user has no insider knowledge unless they explicitly provide it; present findings with data, define relevant terms, state a recommendation, and ask for hard constraints, proprietary facts, or corrections; only ask without a recommendation when evidence cannot resolve the choice):
    - **Identify use cases** per user profile — 3–5 core tasks, entry point, highest-value use case, frequency patterns
    - **Map task flows** per use case — entry point, steps, decision points, happy path, failure modes, output
@@ -40,7 +40,7 @@ Research-first journey mapping for how people flow through the product (user jou
 - `research/journey-map.md` (or `research/{app}/journey-map.md`) — User journeys (use case overview + task flows per profile), customer journey (full funnel), critical moments, journey gaps with `$spec-interview` prompts
 - `research/journey-map-interview.md` (or `research/{app}/journey-map-interview.md`) — Raw interview log
 
-The output file must end with a `## Next Steps` section (3–5 contextual items, "Pick one:" framing) based on which files exist: always suggest `$metrics`; conditionally suggest `$roadmap`, `$gtm`, `$spec-interview [top gap]`, `$run` based on whether `specs/`, `tasks/roadmap.md`, `research/gtm.md` exist and whether journey gaps were identified.
+The output file must end with a `## Next Steps` section (3–5 contextual items, "Pick one:" framing) based on which files exist. Recommended order: `$spec-interview [top journey opportunity or gap]` when specs are missing or journey gaps need product decisions; `$metrics` to define success metrics tied to journey stages; `$ux-variation` when specs exist and experience alternatives need exploration; `$gtm` when no GTM plan exists; `$roadmap` only when specs plus UX/UI planning artifacts are complete enough for implementation sequencing.
 
 ## Task Classification
 
@@ -54,10 +54,10 @@ When this skill produces follow-up work, file it by execution semantics:
 
 ## Constraints
 
-- Requires both ICP and specs — cannot work without knowing the user AND the solution.
+- Requires ICP; specs are optional supporting context.
 - Stay concrete — specific actions, screens, decisions, not abstract concepts.
 - Ground in ICP — every journey step should connect to a real user need.
-- Cross-reference specs — flag functionality gaps with `$spec-interview` prompts.
+- Cross-reference specs when present; otherwise convert journey gaps and opportunities into `$spec-interview` prompts.
 - Do not prescribe UI or architecture.
 - Present before writing — never write until validated.
 - `## Next Steps` must be the final section in the output file, with 3–5 contextual items and "Pick one:" framing.
