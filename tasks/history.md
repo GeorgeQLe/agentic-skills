@@ -1105,3 +1105,10 @@ Resolved all 10 findings from `/expert-review`:
 - Expanded the handoff row in the skills matrix (line 192) to disambiguate Claude `/handoff --target=codex` (produces packet) from Codex `$handoff` (writes prose only to `tasks/handoff.md`, no packet).
 - Added a disambiguation note under `global/codex/handoff/SKILL.md` § "Constraints": `$handoff` does not write `.agents/approved-plan.json` or `tasks/approved-plan.md`; for packet-gated resume, use Claude-side `/handoff --target=codex` + `$run --execute-approved`.
 - Recorded the fix in `specs/drift-report.md` and checked off the queue item in `tasks/todo.md` § "Priority Documentation Todo". Doc-only change; no skill, schema, or script behavior touched.
+
+## 2026-04-29 — Add first-class UAT skill and clarify dogfood scope
+
+- Added mirrored `uat` skills for Claude and Codex focused on target-user acceptance journeys, role-based criteria, and evidence capture.
+- Updated `dogfood` in both platforms to remove the former UAT-proxy framing and define dogfood as owner/operator adoption into the builder's workflow.
+- Registered `uat` in the global skill docs and added a `dogfood` reference entry to `docs/skills-reference.md`.
+- Verified skill metadata and dependency references with `./scripts/skill-deps.sh --broken` and `./scripts/skill-versions.sh --missing`.
