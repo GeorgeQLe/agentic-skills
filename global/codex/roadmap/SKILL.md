@@ -42,6 +42,9 @@ Record existence, content summary, and last-modified timestamps for:
 - `tasks/phases/` — archived phase files
 - `tasks/lessons.md` — accumulated lessons
 - `specs/` or `spec.md` — specifications
+- `specs/ux-variations-*.md` — UX variation plans for user-facing work
+- `specs/ui-*.md` — implementation-ready UI specifications for user-facing work
+- `research/journey-map.md` — user/customer journey context for user-facing work
 
 Also gather:
 
@@ -54,8 +57,10 @@ Route behavior based on the current pipeline state:
 
 | State | Condition | Behavior |
 |-------|-----------|----------|
-| A — No specs | No `specs/` files, no `spec.md` | Queue `$spec-interview`. Done (skip to step 7). |
-| B — Specs, no roadmap | Specs exist, `tasks/roadmap.md` missing or empty | Go to step 4 (build roadmap), then continue to step 5. |
+| A0 — No specs, missing journey | User-facing business-app work has no specs and no `research/journey-map.md` | Queue `$journey-map`. Done (skip to step 7). |
+| A — No specs | No `specs/` files, no `spec.md`, and journey is complete or not applicable | Queue `$spec-interview`. Done (skip to step 7). |
+| B0 — Specs, missing design gate | User-facing specs exist, but `research/journey-map.md`, `specs/ux-variations-*.md`, or `specs/ui-*.md` is missing | Queue the missing journey/UX/UI planning item. Done (skip to step 7). |
+| B — Specs, no roadmap | Specs exist and required journey/UX/UI planning is complete or not applicable, `tasks/roadmap.md` missing or empty | Go to step 4 (build roadmap), then continue to step 5. |
 | C — Work in progress | `tasks/roadmap.md` exists, unchecked phases remain | Skip to step 5 (classify issues). |
 | D — All complete | All phases in `tasks/roadmap.md` are checked | Queue `$research-roadmap` for documentation scan. Done (skip to step 7). |
 
@@ -148,13 +153,22 @@ Work has been completed (checked-off steps in todo, archived phases) but `tasks/
 #### 10. Spec-Task Drift
 Specs have been modified more recently than the roadmap, suggesting the plan may not reflect the current specifications. Evidence: spec mtime vs roadmap mtime. Only flag when the spec modification is substantive (not just formatting).
 
-#### 11. Missing Roadmap (defensive)
+#### 11. Missing Journey/UX/UI Planning
+User-facing specs exist, but one or more required design-planning artifacts are missing:
+
+- `research/journey-map.md` — run `$journey-map` first to define discovery, onboarding, aha, conversion, retention, and advocacy.
+- `specs/ux-variations-*.md` — run `$ux-variation` after journey/spec context to compare onboarding, workflow, sharing, return-use, and UI variants.
+- `specs/ui-*.md` — run `$ui-interview` after UX variation to lock buildable screen-level detail.
+
+Only flag this for user-facing product work. Skip for pure backend, CLI, library, infrastructure, or internal automation specs unless they include a meaningful human workflow or interface.
+
+#### 12. Missing Roadmap (defensive)
 Specs exist in `specs/` (or `spec.md`) but `tasks/roadmap.md` does not exist. This should not occur after step 4 but is included as a safety net.
 
-#### 12. Lessons Not Reviewed
+#### 13. Lessons Not Reviewed
 `tasks/lessons.md` was updated more recently than the current phase's implementation steps were written, suggesting new lessons may apply to in-progress work.
 
-#### 13. Unspecced Ideas
+#### 14. Unspecced Ideas
 `tasks/ideas.md` contains ideas that have no corresponding spec in `specs/`. These are candidates for `$spec-interview --ideas` or individual `$spec-interview` runs.
 
 ### 6. Order the Priority Queue
@@ -171,9 +185,10 @@ Order action items so the user can resolve pipeline issues without guessing:
 8. Due recurring tasks (advisory unless promoted to execution work).
 9. History gap (completed work not recorded).
 10. Spec-task drift (plan may be outdated).
-11. Missing roadmap (specs exist but no plan).
-12. Lessons not reviewed (new lessons may apply).
-13. Unspecced ideas (ideas waiting for interview).
+11. Missing journey/UX/UI planning (user-facing specs are not ready for roadmap).
+12. Missing roadmap (specs exist but no plan).
+13. Lessons not reviewed (new lessons may apply).
+14. Unspecced ideas (ideas waiting for interview).
 
 Within each category, prefer items that unblock the most downstream work.
 
@@ -232,6 +247,14 @@ For dirty tree:
 - [ ] `$ship-end --no-deploy` - commit and push uncommitted changes before continuing task work.
 ```
 
+For missing journey/UX/UI planning:
+
+```md
+- [ ] `$journey-map` - create `research/journey-map.md` before roadmap because user-facing specs need lifecycle context.
+- [ ] `$ux-variation` - create `specs/ux-variations-[topic].md` before roadmap because user-facing specs need experience alternatives.
+- [ ] `$ui-interview` - create `specs/ui-[topic].md` before roadmap because the selected experience needs implementation-ready interface detail.
+```
+
 If all pipeline checks pass:
 
 ```md
@@ -259,9 +282,9 @@ For State A (no specs):
 ## No Specs Found
 
 - No specifications found in `specs/` or `spec.md`
-- Queued `$spec-interview` to create project specifications
+- Queued `$journey-map` first if user-facing lifecycle context is missing; otherwise queued `$spec-interview` to create project specifications
 
-Next: `$spec-interview` to define what to build.
+Next: `$journey-map` to define the customer/user lifecycle, or `$spec-interview` when journey context is already present or not applicable.
 ```
 
 For State D (all complete):

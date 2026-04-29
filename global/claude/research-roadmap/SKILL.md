@@ -102,7 +102,10 @@ Also include documentation-producing non-research skills when their outputs are 
 
 | Skill | Output |
 | --- | --- |
+| `/concept-exploration` | `research/concept-brief.md` or `research/{app}/concept-brief.md` |
 | `/spec-interview` | `specs/*.md` |
+| `/ux-variation` | `specs/ux-variations-*.md` |
+| `/ui-interview` | `specs/ui-*.md` |
 | `/scale-audit` | `specs/scale-audit.md` |
 | `/roadmap` | `tasks/roadmap.md`, `tasks/todo.md` |
 | `/game-roadmap` | `tasks/roadmap.md`, `tasks/todo.md` |
@@ -114,8 +117,11 @@ Also include documentation-producing non-research skills when their outputs are 
 Record existence and last-modified timestamps for:
 
 - all discovered research outputs
+- `research/concept-brief.md` and app-scoped `research/{app}/concept-brief.md` when present
 - `research/*-search-log.md` and `research/*-interview.md` only as supporting context, not primary completion artifacts
 - `specs/*.md` and app-scoped `specs/{app}/*.md`
+- `specs/ux-variations-*.md` and app-scoped `specs/{app}/ux-variations-*.md`
+- `specs/ui-*.md` and app-scoped `specs/{app}/ui-*.md`
 - `tasks/roadmap.md`
 - `tasks/todo.md`
 - `tasks/history.md`
@@ -134,6 +140,7 @@ An item is stale when a newer upstream document should invalidate or refresh it.
 
 | Newer input | Stale target |
 | --- | --- |
+| `research/concept-brief.md` or `research/{app}/concept-brief.md` | matching `research/icp.md` or `research/{app}/icp.md` |
 | `research/customer-feedback.md` | `research/icp.md`, `research/journey-map.md`, `research/monetization.md`, `research/landing-copy.md` |
 | `research/icp.md` | `research/competitive-analysis.md`, `research/positioning.md`, `research/gtm.md`, `research/monetization.md`, `research/landing-copy.md` |
 | `research/competitive-analysis.md` | `research/positioning.md`, `research/gtm.md`, `research/monetization.md`, `research/landing-copy.md` |
@@ -145,10 +152,15 @@ An item is stale when a newer upstream document should invalidate or refresh it.
 | `research/experiments/*.md` with results | `research/assumption-tracker.md` |
 | `research/cohort-review-*.md` latest | `research/metrics.md`, `research/gtm.md`, `research/monetization.md`, `research/investor-update-*.md` |
 | `research/enterprise-icp.md` | `specs/scale-audit.md` |
-| any `specs/*.md` | `research/journey-map.md`, `tasks/roadmap.md` |
+| `research/journey-map.md` | `specs/*.md`, `specs/ux-variations-*.md`, `specs/ui-*.md`, `research/metrics.md`, `research/gtm.md`, `research/monetization.md`, `research/landing-copy.md` |
+| any non-UX/UI `specs/*.md` | `specs/ux-variations-*.md`, `specs/ui-*.md`, `tasks/roadmap.md` |
+| `specs/ux-variations-*.md` | `specs/ui-*.md`, `tasks/roadmap.md` |
+| `specs/ui-*.md` | `tasks/roadmap.md` |
 | `research/runway-model.md` | `tasks/roadmap.md` |
 
 Also flag potentially stale specs when source code has commits newer than the spec files. Add `/spec-drift fix all` as a priority documentation item when specs are probably behind implementation.
+
+Do not queue a missing `/concept-exploration` item for established projects that already have `research/icp.md`, `research/competitive-analysis.md`, `research/journey-map.md`, or `specs/`. Queue it only for idea-only projects where no concept brief or downstream research/spec artifact exists.
 
 ### 6. Order The Priority Queue
 
@@ -160,16 +172,22 @@ Order immediately actionable todo items so the user can complete documentation w
 4. Stale downstream research.
 5. Missing downstream research.
 6. Missing or stale specs.
-7. Missing or stale roadmap/task docs.
-8. Reconciliation items when conflicting docs are detected.
+7. Missing or stale UX/UI planning artifacts for user-facing work.
+8. Missing or stale roadmap/task docs.
+9. Reconciliation items when conflicting docs are detected.
 
 Within research items, use this dependency order when relevant:
 
 ```
-/icp
+/concept-exploration
+  -> /icp
   -> /competitive-analysis
   -> /positioning
   -> /journey-map
+    -> /spec-interview
+      -> /ux-variation
+        -> /ui-interview
+          -> /roadmap
     -> /metrics
   -> /gtm
   -> /monetization
