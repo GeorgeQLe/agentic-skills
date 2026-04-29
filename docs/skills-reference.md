@@ -63,6 +63,8 @@ Global skills are safe across business apps, games, devtools, libraries, service
 | `pack` | Manage project-local packs and `.agents/project.json` |
 | `patch-exec-profile` | Audit and fill missing lane metadata in agent-team/implementation-safe execution profiles |
 | `spec-interview` | Interview to validate and complete an implementation specification |
+| `ui-interview` | Interview page by page to define implementation-ready UI detail |
+| `ux-variation` | Plan and compare onboarding, workflow, sharing, return-use, and UI variants before locking an experience |
 | `plan-phase` | Decompose a single roadmap phase into implementation steps, tests, and file-level detail |
 | `reconcile-dev-docs` | Reconcile roadmap, todo, history, phase archives, specs, and git evidence |
 | `regression-check` | Run a comprehensive health check after a phase or major change |
@@ -79,6 +81,7 @@ Global skills are safe across business apps, games, devtools, libraries, service
 | `trace` | Follow a request end-to-end through the stack |
 | `research-roadmap` | Scan research and documentation health, then maintain a priority documentation queue |
 | `uat` | Create target-user acceptance journeys with role-based criteria and evidence capture |
+| `uat-guide` | Expand a UAT journey into click-by-click tester instructions and update result logs |
 
 ### Claude-only Global Skills
 
