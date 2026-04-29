@@ -111,6 +111,7 @@ Also include documentation-producing non-research skills when their outputs are 
 | `/game-roadmap` | `tasks/roadmap.md`, `tasks/todo.md` |
 | `/reconcile-research fix all` | `research/reconciliation-report.md` |
 | `/reconcile-dev-docs fix all` | reconciled `tasks/`, `specs/`, and phase archives |
+| `/youtube-audit` | `research/youtube-audit-YYYY-MM-DD.md` |
 
 ### 4. Scan Documentation State
 
