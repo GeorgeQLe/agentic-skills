@@ -14,7 +14,7 @@ Conduct deep web-based research to compile a comprehensive competitive landscape
 
 **Detect mode before proceeding:**
 
-- **Concept-validation mode** activates when: no `research/icp.md` exists AND (no meaningful codebase — i.e. no README, no source files, no package config — OR `$ARGUMENTS` contains "concept" or "validate"). In this mode, announce to the user: "Running in concept-validation mode — no ICP or product detected. I'll evaluate the market gap for your concept." Then ask the user to describe the concept, the problem it addresses, and the intended audience.
+- **Concept-validation mode** activates when: no `research/icp.md` exists AND (no meaningful codebase — i.e. no README, no source files, no package config — OR `$ARGUMENTS` contains "concept" or "validate"). Use this mode to validate market gaps after a concept has been shaped by `/concept-exploration` or an equivalent brief; if no concept is clear, recommend `/concept-exploration` first. In this mode, announce to the user: "Running in concept-validation mode — no ICP or product detected. I'll evaluate the market gap for your concept." Then ask the user to describe the concept, the problem it addresses, and the intended audience.
 - **Standard mode** (default): Read the codebase, README, CLAUDE.md, and existing research/specs (`research/icp.md` or `research/{app}/icp.md`, `research/enterprise-icp.md` or `research/{app}/enterprise-icp.md`, `research/mvp-gap.md` or `research/{app}/mvp-gap.md`) to understand what the product does, who it's for, and what value it claims to provide. This context is essential for identifying the right competitors and evaluating positioning. If no codebase or specs exist but `research/icp.md` is present, proceed in standard mode using the ICP as context.
 
 ## Process
@@ -42,7 +42,7 @@ When app scope `{app}` is active:
 - Summarise what the product does, who it's for, and what problem it solves. Confirm this understanding with the user before researching.
 
 **Concept-validation mode:**
-- Use the concept description from Prerequisites to establish the problem space
+- Use `research/concept-brief.md` when present, otherwise use the concept description from Prerequisites to establish the problem space
 - Summarise what the concept proposes (problem it addresses, intended audience, hypothesised approach)
 - Confirm this understanding with the user before researching
 
@@ -183,8 +183,8 @@ Before writing, check which files exist to populate the `## Next Steps` section 
 
 **Standard mode:**
 - RECOMMEND the first matching item:
-  1. IF no `specs/` directory or it's empty: `/spec-interview [top market gap or positioning opportunity]` — Spec features that exploit the most important market gap above
-  2. IF `specs/` exist but no `research/journey-map.md`: `/journey-map` — Map how the ICP experiences the product vs. competitors
+  1. IF no `research/journey-map.md`: `/journey-map` — Map the customer and user journey before spec decisions, using competitive gaps as inspiration
+  2. IF no `specs/` directory or it's empty: `/spec-interview [top journey-backed market gap or positioning opportunity]` — Spec features that exploit the most important market gap after journey context exists
   3. IF no `research/gtm.md`: `/gtm` — Build a GTM plan using the channel and positioning insights
   4. IF codebase exists and no `research/mvp-gap.md`: `/mvp-gap` — Evaluate codebase against ICP and competitive landscape
 - Include `/brainstorm` only as an "Other option" when the analysis found multiple plausible market gaps and the product direction is still unclear. Do not recommend brainstorm just because competitive whitespace exists.

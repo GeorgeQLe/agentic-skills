@@ -3,21 +3,28 @@ name: icp
 description: Research-driven ICP discovery — web search + codebase analysis to identify multiple ICPs, pain points, value props, and cross-ICP prioritization
 type: research
 version: 3.5.0
-argument-hint: <spec file path or concept/idea>
+argument-hint: <spec file path, concept/idea, or empty to use concept brief>
 ---
 
 # ICP — Research-Driven Customer Discovery
 
 Invoke as `$icp`.
 
-Automated research that identifies **multiple ICP candidates**, maps pain points and value props, and selects a primary ICP. Uses web search + codebase analysis instead of interviews.
+Automated research that identifies **multiple ICP candidates**, maps pain points and value props, and selects a primary ICP. Uses web search + codebase analysis instead of interviews. If `research/concept-brief.md` or `research/{app}/concept-brief.md` exists, use it as starting context for the research frame.
 
 Default stance: assume the user has no insider knowledge of the market. Explain segments, pain signals, and tradeoffs from first principles so the recommendation is defensible without founder intuition. Ask for corrections, hard constraints, or proprietary facts only when needed.
 
 ## Workflow
 
-0. **App Scope Resolution (Monorepo Support)**: Before parsing input, determine the app scope: (a) If `$ARGUMENTS` specifies an app name matching a subdirectory of `research/`, use it. (b) If `research/` contains subdirectories (excluding files), list them and ask the user which app to target; if the session is already in Plan mode and there are 2-3 concrete choices, prefer `request_user_input`, otherwise ask in plain text; if only one subdirectory exists, use it automatically. (c) If no subdirectories exist, proceed with flat structure (single-product mode). When app scope `{app}` is active: read/write research from `research/{app}/` instead of `research/`, read/write specs from `specs/{app}/` instead of `specs/`, and also read `research/icp.md` (cross-app overview) for broader context.
-1. **Parse input**: Read `$ARGUMENTS` as spec file path or concept text. Read codebase if it exists. Read existing research for background. **Detect monorepo** (`turbo.json`, `pnpm-workspace.yaml`, `lerna.json`, `nx.json`, or `package.json` workspaces) — if multiple distinct user-facing products exist, run the full ICP process per app and produce `research/{app-name}/icp.md` per app plus a unified `research/icp.md`. **Migrate old convention:** If `research/icp-{app}.md` files exist (old naming), offer to move them to `research/{app}/icp.md` (and corresponding search logs to `research/{app}/icp-search-log.md`). Create the subdirectories as needed.
+0. **App Scope Resolution (Monorepo Support)**: Before parsing input, determine the app scope: (a) If `$ARGUMENTS` specifies an app name matching a subdirectory of `research/`, use it. (b) If `research/` contains subdirectories (excluding files), list them and ask the user which app to target; if the session is already in Plan mode and there are 2-3 concrete choices, prefer `request_user_input`, otherwise ask in plain text; if only one subdirectory exists, use it automatically. (c) If no subdirectories exist, proceed with flat structure (single-product mode). When app scope `{app}` is active: read/write research from `research/{app}/` instead of `research/`, read/write specs from `specs/{app}/` instead of `specs/`, prefer `research/{app}/concept-brief.md` as concept context when present, and also read `research/icp.md` (cross-app overview) for broader context.
+1. **Parse input and gather concept context**:
+   - Read `$ARGUMENTS` as a spec file path or concept text when provided.
+   - Read `research/{app}/concept-brief.md` in app scope, or `research/concept-brief.md` in flat scope, when present. Treat it as starting context and source hypotheses, not as settled truth.
+   - If `$ARGUMENTS` is empty and a concept brief exists, use the concept brief as the primary input before falling back to README, specs, or codebase inference.
+   - If `$ARGUMENTS` conflicts with the concept brief, flag the mismatch at the first checkpoint and ask which premise should guide ICP research.
+   - Read codebase if it exists. Read existing research for background.
+   - **Detect monorepo** (`turbo.json`, `pnpm-workspace.yaml`, `lerna.json`, `nx.json`, or `package.json` workspaces) — if multiple distinct user-facing products exist, run the full ICP process per app and produce `research/{app-name}/icp.md` per app plus a unified `research/icp.md`.
+   - **Migrate old convention:** If `research/icp-{app}.md` files exist (old naming), offer to move them to `research/{app}/icp.md` (and corresponding search logs to `research/{app}/icp-search-log.md`). Create the subdirectories as needed.
 2. **Broad market research**: WebSearch with 8–12 query strategies (personas, pain points, segments, trends, competitors, forums, job postings, industry reports, business model). Log all queries and findings. **Classify the business model** into one or more of: B2B SaaS (PLG), B2B SaaS (SLG), B2C, B2C subscription, marketplace/platform, B2B2C, D2C, open-source/open-core, API/developer-first. Document classification with evidence in search log — this gates which sub-sections appear in the Acquisition & Conversion Model.
 3. **Identify 2–5 ICP candidates** from research evidence — note who they are, pain evidence, accessibility, and value potential.
 4. **Checkpoint 1 — Present candidates to user.** Show ICP candidates with rationale — cite pain evidence found, accessibility signals, and value delivery reasoning from search findings for each candidate. Ask: "Do any surprise you? Any segment I'm missing?" Incorporate feedback before proceeding.
