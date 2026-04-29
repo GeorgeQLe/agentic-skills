@@ -75,7 +75,7 @@ Two files written:
 - `specs/[topic].md` — the completed specification
 - `[topic]-interview.md` — full interview log with deviation summary
 
-After writing the files, tell the user the next step based on available context: for user-facing work with no journey map, run `/journey-map`; for user-facing work with a journey map but no experience variants, run `/ux-variation`; for user-facing work with a selected UX direction but no UI spec, run `/ui-interview`; otherwise run `/roadmap` to sequence specs into phases and seed Phase 1 implementation. Do not invoke the next skill automatically — the user may want to run multiple planning sessions first.
+After writing the files, tell the user the next step based on available context: for user-facing work with no journey map, run `/journey-map`; for user-facing work with a journey map but no experience variants, run `/ux-variation`; for user-facing work with a chosen experience plan but no UI spec, run `/ui-interview`; otherwise run `/roadmap` to sequence specs into phases and seed Phase 1 implementation. Do not invoke the next skill automatically — the user may want to run multiple planning sessions first.
 
 If the interview identifies follow-up work that is itself a named skill, recommend invoking that skill directly instead of phrasing it as another `/spec-interview` run. For example: say "run `/icp` and `/monetization`, then `/roadmap`" rather than "run `/spec-interview` for `/icp` and `/monetization`." This applies to research and planning skills such as `/icp`, `/monetization`, `/metrics`, `/positioning`, and `/competitive-analysis`.
 

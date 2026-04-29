@@ -314,22 +314,38 @@ After execution, leave behind clean repo state:
 
 If you are used to this Claude Code rhythm:
 
-1. `$spec-interview`
-2. `$roadmap`
-3. `$plan-phase` (seeded by `$roadmap`; rerun only for later phases)
-4. `$run`
-5. `$ship`
-6. `$ship-end` when wrapping an off-script or partial session
+1. `$concept-exploration`
+2. `$pack install business-app` for business/product concepts
+3. `$icp`
+4. `$competitive-analysis`
+5. `$positioning`
+6. `$journey-map`
+7. `$spec-interview`
+8. `$ux-variation`
+9. `$ui-interview`
+10. `$roadmap`
+11. `$plan-phase` (seeded by `$roadmap`; rerun only for later phases)
+12. `$run`
+13. `$ship`
+14. `$ship-end` when wrapping an off-script or partial session
 
 The closest Codex translation is:
 
-1. `$spec-interview`
-2. `$roadmap`
-3. `$plan-phase` (seeded by `$roadmap`; rerun only for later phases)
-4. `$run` to present the plan, execute the work, ship it, and refresh `tasks/todo.md`
-5. repeat `$run` for the next planned step
-6. use `$ship` only if finished work needs manual packaging
-7. use `$ship-end` to wrap an interrupted or partial session
+1. `$concept-exploration`
+2. `$pack install business-app` for business/product concepts
+3. `$icp`
+4. `$competitive-analysis`
+5. `$positioning`
+6. `$journey-map`
+7. `$spec-interview`
+8. `$ux-variation`
+9. `$ui-interview`
+10. `$roadmap`
+11. `$plan-phase` (seeded by `$roadmap`; rerun only for later phases)
+12. `$run` to present the plan, execute the work, ship it, and refresh `tasks/todo.md`
+13. repeat `$run` for the next planned step
+14. use `$ship` only if finished work needs manual packaging
+15. use `$ship-end` to wrap an interrupted or partial session
 
 The main manual additions are still plain-chat approval and the lack of a skill-controlled plan-mode boundary.
 

@@ -21,7 +21,7 @@ The canonical entry path depends on what exists in the directory:
 
 | Starting point | Canonical first move | Next move |
 | --- | --- | --- |
-| Fresh directory + rough idea | `/pack` or `$pack`, then `/spec-interview` or `$spec-interview` | `/roadmap` or `$roadmap` |
+| Fresh directory + rough idea | `/concept-exploration` or `$concept-exploration`, then `/pack install business-app` or `$pack install business-app` when applicable | `/icp` or `$icp` |
 | Existing spec | `/roadmap` or `$roadmap` | auto-seed Phase 1 with `/plan-phase 1` or `$plan-phase 1` |
 | Existing codebase | `/pack` or `$pack`, then `/roadmap` or `$roadmap` | resolve queued pipeline issues or create specs |
 | Existing active session | read `tasks/todo.md`, `tasks/roadmap.md`, `tasks/history.md`, git status | `/run`, `$run`, `/delegate $run`, or `/ship` depending on mode and state |
@@ -86,8 +86,11 @@ specs/*.md
 
 Not every project has every file. Missing files route the workflow:
 
-- No specs: run `spec-interview`.
-- Specs but no roadmap: run `roadmap`.
+- No concept brief, no ICP, and no specs in an idea-only project: run `concept-exploration`.
+- No journey map: run `journey-map` after ICP/competitive context.
+- No specs: run `spec-interview` after journey context.
+- Specs but no UX/UI planning: run `ux-variation`, then `ui-interview`.
+- Specs plus UX/UI planning but no roadmap: run `roadmap`.
 - Roadmap but no executable current phase: run `plan-phase`.
 - Current phase with unchecked steps: run `run`.
 - Finished work or dirty tree: run `ship`.
@@ -125,8 +128,9 @@ The state machine is:
 
 | State | Condition | Canonical behavior |
 | --- | --- | --- |
-| No specs | no `specs/` and no `spec.md` | queue `spec-interview` |
-| Specs, no roadmap | specs exist, no usable `tasks/roadmap.md` | interview and write roadmap |
+| No specs | no `specs/` and no `spec.md` | queue `spec-interview` after required journey context |
+| Specs, missing design gate | user-facing specs exist, but journey, UX variation, or UI spec is missing | queue `journey-map`, `ux-variation`, or `ui-interview` |
+| Specs, no roadmap | specs and required design planning exist, no usable `tasks/roadmap.md` | interview and write roadmap |
 | Work in progress | roadmap exists with unchecked phases | classify pipeline issues |
 | All complete | all phases checked | queue `research-roadmap` |
 
@@ -163,7 +167,12 @@ Use this when there is no codebase contract and no spec.
 Claude:
 
 ```bash
+/concept-exploration
 /pack
+/icp
+/competitive-analysis
+/positioning
+/journey-map
 /spec-interview
 /roadmap
 /run
@@ -174,7 +183,12 @@ Claude:
 Codex:
 
 ```bash
+$concept-exploration
 $pack
+$icp
+$competitive-analysis
+$positioning
+$journey-map
 $spec-interview
 $roadmap
 $run
@@ -184,8 +198,13 @@ $ship-end
 Hybrid:
 
 ```bash
+/concept-exploration
 /pack
 scripts/pack.sh set-mode hybrid
+/icp
+/competitive-analysis
+/positioning
+/journey-map
 /spec-interview
 /roadmap
 /delegate $run
@@ -194,12 +213,15 @@ scripts/pack.sh set-mode hybrid
 
 Canonical behavior:
 
-1. `pack` designates the project type and installs local pack skills.
-2. `spec-interview` turns the rough idea into a decision-complete spec under `specs/`.
-3. `roadmap` sequences specs into phases and seeds Phase 1 with `plan-phase`.
-4. Execution proceeds through the mode-specific loop.
+1. `concept-exploration` turns the raw idea into `research/concept-brief.md`.
+2. `pack` designates the project type and installs local pack skills. For business/product concepts, install `business-app`.
+3. Business-app research runs `icp`, `competitive-analysis`, `positioning`, then `journey-map` so the customer/user lifecycle is known before specs.
+4. `spec-interview` turns the journey-backed opportunity into a decision-complete implementation spec under `specs/`.
+5. For user-facing work, `ux-variation` compares experience directions and `ui-interview` locks buildable interface detail.
+6. `roadmap` sequences specs into phases and seeds Phase 1 with `plan-phase`.
+7. Execution proceeds through the mode-specific loop.
 
-Do not skip `spec-interview` for non-trivial ideas. The current workflow assumes specs are the boundary between ideation and implementation planning.
+Do not skip `concept-exploration`, `journey-map`, or `spec-interview` for non-trivial user-facing ideas. The current workflow assumes a concept brief, journey context, and specs are the boundary between raw ideation and implementation planning.
 
 ### Fresh Directory With An Existing Spec
 
@@ -498,6 +520,10 @@ For the current state of the operating model (mode signal, packet contract, dele
 Use this as the high-level workflow router:
 
 ```text
+Do I have a concept brief, ICP, existing product, or existing spec?
+  no  -> /concept-exploration or $concept-exploration
+  yes -> continue
+
 Do I have a project designation?
   no  -> /pack or $pack
   yes -> continue
@@ -534,7 +560,7 @@ Am I switching sessions or CLIs?
 The canonical workflow is now:
 
 ```text
-pack -> spec-interview -> roadmap -> plan-phase -> run/delegate -> ship -> ship-end
+concept-exploration -> pack -> icp -> competitive-analysis -> positioning -> journey-map -> spec-interview -> ux-variation -> ui-interview -> roadmap -> plan-phase -> run/delegate -> ship -> ship-end
 ```
 
 with three valid execution modes:
