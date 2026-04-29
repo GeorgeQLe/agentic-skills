@@ -38,6 +38,13 @@
 - Zero context switching required from the user
 - Go fix failing tests without being told how
 
+### 7. Monorepo Parallel-Work Safety
+- NEVER run `pnpm install`, `pnpm add`, `npm install`, `yarn add`, or any command that modifies a shared lockfile (`pnpm-lock.yaml`, `package-lock.json`, `yarn.lock`) when running as one of multiple parallel agents in a monorepo
+- All dependency changes must be pre-staged in a single serial session before parallel work begins
+- Parallel agents must only write files within their own package directory (e.g. `packages/<name>/src/`)
+- Before launching parallel agents, verify their planned work scopes do not overlap on any shared files
+- If you need a new dependency mid-task, stop and request it be added centrally rather than running the package manager yourself
+
 ## Task Management
 
 1. **Plan First**: Write plan to `tasks/roadmap.md` (full plan) and `tasks/todo.md` (current phase) with checkable items
