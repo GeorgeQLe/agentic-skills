@@ -1,0 +1,7 @@
+interface:
+  display_name: "UI Interview"
+  short_description: "Define implementation-ready UI detail"
+  default_prompt: "Use $ui-interview to interrogate this interface page by page and produce a detailed UI specification."
+
+policy:
+  allow_implicit_invocation: true

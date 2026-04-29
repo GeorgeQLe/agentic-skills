@@ -1,0 +1,7 @@
+interface:
+  display_name: "Concept Exploration"
+  short_description: "Shape rough ideas into concept briefs"
+  default_prompt: "Use $concept-exploration to turn this rough idea into an actionable concept brief before ICP."
+
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,7 @@
+interface:
+  display_name: "UX Variation"
+  short_description: "Plan and compare experience variants"
+  default_prompt: "Use $ux-variation to interrogate onboarding, workflows, sharing, return use, and UI alternatives so I can compare variants and lock a final experience direction."
+
+policy:
+  allow_implicit_invocation: true
