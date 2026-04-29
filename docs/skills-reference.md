@@ -48,6 +48,7 @@ Global skills are safe across business apps, games, devtools, libraries, service
 | `branch-lifecycle` | Evaluate feature branches for merge, salvage, keep-open, or delete decisions |
 | `clone-spec-store` | Build lawful functional-parity spec stores and private downstream clone repos |
 | `commit-and-push-by-feature` | Commit and push changes grouped by logical feature buckets |
+| `concept-exploration` | Shape a rough idea into a concept brief before ICP and market research |
 | `dead-code` | Scan for unused exports, unreachable code, orphaned files, and stale dependencies |
 | `debug` | Investigate a problem, log findings, and suggest a non-duplicate fix |
 | `decommission` | Tear down and remove a service, package, or infrastructure component |
@@ -57,7 +58,7 @@ Global skills are safe across business apps, games, devtools, libraries, service
 | `guide` | Produce click-by-click instructions for manual blockers |
 | `handoff` | Generate a project-level context snapshot for a fresh session |
 | `hygiene` | Audit project structure, conventions, mirrors, and documentation references |
-| `install-workflow-orchestration` | Install workflow orchestration instructions into project agent docs |
+| `provision-agentic-config` | Provision workflow orchestration and agent conventions into project agent docs |
 | `investigate` | Validate claims against codebase and git history, then trace root cause |
 | `migrate` | Guide a structural migration or dependency upgrade |
 | `pack` | Manage project-local packs and `.agents/project.json` |
@@ -114,8 +115,13 @@ platform-strategy, reconcile-research
 Default flow:
 
 ```text
-icp -> competitive-analysis -> positioning -> journey-map -> metrics
--> gtm / monetization -> roadmap -> run (roadmap seeds plan-phase 1; later phases decomposed just-in-time by /ship and /run)
+concept-exploration -> icp -> competitive-analysis -> positioning -> journey-map -> spec-interview
+-> ux-variation -> ui-interview -> roadmap -> run
+
+Parallel research after journey-map:
+metrics -> gtm / monetization -> landing-copy
+
+roadmap seeds plan-phase 1; later phases are decomposed just-in-time by /ship and /run.
 ```
 
 ## Game Pack
