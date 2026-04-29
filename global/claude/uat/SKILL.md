@@ -65,7 +65,8 @@ This is a human-run acceptance plan, not automated testing. Do not start servers
    - Implementation or documentation fixes discovered after a completed UAT run belong in `tasks/todo.md`, but do not invent fixes before the user journey has been attempted.
    - One-time evidence collection belongs in `tasks/record-todo.md`.
    - Recurring release acceptance checks belong in `tasks/recurring-todo.md` only when there is a clear release cadence.
-   - If a journey needs click-by-click help for a human-only external blocker, recommend `/guide`.
+   - If a journey needs step-by-step tester guidance, recommend `/uat-guide`.
+   - If a journey step needs click-by-click help for a human-only external blocker (OAuth, DNS, service signup), recommend `/guide`.
 
 6. **Present findings before writing when risk is high**
    - If source material is thin, contradictory, or missing target-user evidence, summarize the gap and ask whether to proceed with assumptions.
