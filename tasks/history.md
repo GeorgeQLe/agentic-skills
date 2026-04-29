@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-04-29 — Ship pre-spec planning skills and concept-brief integration
+
+- Added 3 new global skills (concept-exploration, ui-interview, ux-variation) for both Claude and Codex, covering the pre-spec planning workflow: concept → ICP → journey → UX variation → UI spec → spec-interview → roadmap.
+- Updated roadmap and research-roadmap skills (both CLIs) to add journey/UX/UI planning gates — user-facing specs now require journey-map, ux-variation, and ui-interview artifacts before entering the roadmap pipeline.
+- Updated business-app pack skills (icp, competitive-analysis, journey-map) to integrate concept-brief as input source and prefer `research/{app}/concept-brief.md` when present.
+- Updated canonical-workflow-report and codex-workflow docs to reflect the expanded entry path through concept-exploration and research skills.
+- Fixed spec-interview heading format: added canonical section heading template (Overview, Goals, Non-Goals, etc.) to prevent numbered headings; renamed install-workflow-orchestration → provision-agentic-config across all references.
+- Minor linter tweaks to spec-interview wording ("chosen experience plan").
+
 ## 2026-04-25 — Add Assumptions Manifest to spec-interview skill
 
 - Analyzed full Claude/Codex session history (~8,120 + 3,401 records) to find cases where agent assumptions during plan-interview and spec-interview sessions caused downstream refactors or project restarts.
