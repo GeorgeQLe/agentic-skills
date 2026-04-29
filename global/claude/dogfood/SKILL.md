@@ -1,6 +1,6 @@
 ---
 name: dogfood
-description: Derive operator-run product scenarios from journeys, user stories, specs, and active-use cadence, then produce UAT-style dogfood instructions and manual acceptance checks
+description: Derive owner/operator dogfood scenarios from product evidence and active-use cadence, then produce adoption instructions and manual evaluation checks
 type: analysis
 version: 1.0.0
 argument-hint: "[optional: scenario focus, persona, feature, or release]"
@@ -10,9 +10,11 @@ argument-hint: "[optional: scenario focus, persona, feature, or release]"
 
 Invoke as `/dogfood`.
 
-Create a practical dogfood plan for a human operator. This skill reads the codebase, specs, journey maps, stories, roadmap, and pack-specific research, then tells the operator what real product scenarios to perform and what evidence to capture.
+Create a practical dogfood plan for the app owner or operator. This skill reads the codebase, specs, journey maps, stories, roadmap, and pack-specific research, then tells the operator how to adopt the product into their own workflow so they can understand, evaluate, and improve it through real use.
 
-This is a UAT proxy, not automated testing. Do not run the product, start servers, drive a browser, call APIs, create accounts, or perform the scenarios yourself.
+Dogfood is not UAT. Dogfood asks how the app owner can use the product in their own work and observe what that reveals. UAT asks whether a target user can complete meaningful real-world journeys and would accept the product as fit for use; use `/uat` for that.
+
+This is a human-run product adoption plan, not automated testing. Do not run the product, start servers, drive a browser, call APIs, create accounts, or perform the scenarios yourself.
 
 ## Workflow
 
@@ -34,25 +36,26 @@ This is a UAT proxy, not automated testing. Do not run the product, start server
    - In monorepos with `research/{app}/` or `specs/{app}/`, produce app-scoped scenarios for the requested app. If no app is specified and multiple apps are plausible, ask the user to choose.
 
 3. **Identify active-use cadence**
-   - Infer how often a real target user would use the product: first session, daily, weekly, per incident, per project, per release, monthly review, or another cadence supported by the docs.
+   - Infer how often the app owner or operator should use the product in their own workflow: first session, daily, weekly, per incident, per project, per release, monthly review, or another cadence supported by the docs.
    - If cadence is unclear, recommend a default and state the assumption in the audit.
-   - Prefer scenarios that exercise the expected habit loop or activation loop over isolated feature checks.
+   - Prefer scenarios that exercise owner/operator adoption, repeated use, and product understanding over isolated feature checks.
 
-4. **Create operator scenarios**
+4. **Create owner/operator scenarios**
    - Generate 3-7 scenarios unless the user requested a narrower focus.
    - Cover at least one happy path, one recovery/failure path, and one return-use or retention path when the product evidence supports them.
    - Each scenario must include:
-     - persona or role
+     - owner/operator role
      - active cadence
      - trigger
      - setup and preconditions
-     - exact task for the operator to perform
+     - exact task for the operator to perform in their own workflow
      - expected success state
      - acceptance checks
      - evidence to capture
      - friction or failure signals
      - follow-up routing
    - Use concrete product language from specs and journeys. Avoid vague instructions such as "verify the flow works."
+   - If the scenario is primarily about whether a target user would accept the product, route it to `/uat` instead.
 
 5. **Classify follow-up work**
    - Operator-run dogfood scenarios go in `tasks/manual-todo.md` under `## Dogfood Operator Scenarios`.
@@ -68,7 +71,7 @@ This is a UAT proxy, not automated testing. Do not run the product, start server
 
 ## Deliverables
 
-- `research/dogfood-audit.md` - scenario matrix, source evidence, operator instructions, acceptance checklist, findings template, and next steps.
+- `research/dogfood-audit.md` - scenario matrix, source evidence, owner/operator adoption instructions, evaluation checklist, findings template, and next steps.
 - `tasks/manual-todo.md` - append or replace only the `## Dogfood Operator Scenarios` section.
 - `tasks/recurring-todo.md` - optional, only when a recurring dogfood cadence is useful and not already tracked.
 
@@ -79,17 +82,17 @@ Use this scenario format in `research/dogfood-audit.md`:
 ```markdown
 ### Scenario N: [Name]
 
-- Persona: [role]
+- Owner/operator role: [role]
 - Active cadence: [first session/daily/weekly/per incident/per release/etc.]
 - Trigger: [why the user opens the product]
 - Setup: [accounts, data, environment, permissions, or sample state needed]
-- Task: [specific operator action sequence]
+- Task: [specific action sequence in the operator's own workflow]
 - Expected success state: [observable result]
 - Acceptance checks:
   - [ ] [specific check]
 - Evidence to capture: [screenshots, command output, notes, timestamps, records]
 - Friction/failure signals: [what counts as confusion, delay, breakage, or mismatch]
-- Follow-up routing: [manual note, /spec-interview, /journey-map, /guide, or task promotion guidance]
+- Follow-up routing: [manual note, /uat, /spec-interview, /journey-map, /guide, or task promotion guidance]
 
 #### Operator result log
 
@@ -104,7 +107,7 @@ Use this item format in `tasks/manual-todo.md`:
 ```markdown
 ## Dogfood Operator Scenarios
 
-- [ ] Perform dogfood scenario: [Scenario name] for [persona] ([cadence]) _(after: research/dogfood-audit.md)_ - capture evidence in `research/dogfood-audit.md`.
+- [ ] Perform dogfood scenario: [Scenario name] for [owner/operator role] ([cadence]) _(after: research/dogfood-audit.md)_ - capture evidence in `research/dogfood-audit.md`.
 ```
 
 ## Task Classification
@@ -121,7 +124,8 @@ Use this item format in `tasks/manual-todo.md`:
 - Do not start dev servers, launch browsers, use Playwright, call APIs, create accounts, or perform CLI workflows.
 - Do not mark scenarios complete; only the human operator can do that after performing them.
 - Do not duplicate existing unchecked dogfood/manual tasks. Reference existing items when they already cover the same scenario.
-- Prefer evidence-backed scenarios over exhaustive coverage.
+- Prefer evidence-backed owner/operator adoption scenarios over exhaustive coverage.
+- Keep dogfood and UAT separate: use `/dogfood` for owner/operator adoption into the builder's workflow; use `/uat` for target-user acceptance journeys.
 - If no credible user journey, story, spec, or product surface can be found, stop and recommend `/spec-interview`, `/journey-map`, or the relevant pack research skill.
 
 ## Archive-First Replacement Policy

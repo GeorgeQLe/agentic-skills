@@ -105,7 +105,7 @@ expert-review, guide, handoff, hygiene, install-workflow-orchestration,
 investigate, migrate, pack, patch-exec-profile, spec-interview, plan-phase,
 reconcile-dev-docs, regression-check, release, roadmap, run, scaffold,
 ship, ship-end, skills, slim-audit, spec-drift, sync,
-trace, research-roadmap
+trace, research-roadmap, uat
 ```
 
 ### Claude-only global skills

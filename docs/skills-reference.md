@@ -52,6 +52,7 @@ Global skills are safe across business apps, games, devtools, libraries, service
 | `debug` | Investigate a problem, log findings, and suggest a non-duplicate fix |
 | `decommission` | Tear down and remove a service, package, or infrastructure component |
 | `deploy` | Deploy the project to a target environment with deployment history tracking |
+| `dogfood` | Create owner/operator scenarios for adopting the product into the builder's workflow |
 | `expert-review` | Conduct a project-wide code review against specs, docs, and implementation |
 | `guide` | Produce click-by-click instructions for manual blockers |
 | `handoff` | Generate a project-level context snapshot for a fresh session |
@@ -77,6 +78,7 @@ Global skills are safe across business apps, games, devtools, libraries, service
 | `sync` | Pull latest remote changes and report status |
 | `trace` | Follow a request end-to-end through the stack |
 | `research-roadmap` | Scan research and documentation health, then maintain a priority documentation queue |
+| `uat` | Create target-user acceptance journeys with role-based criteria and evidence capture |
 
 ### Claude-only Global Skills
 
