@@ -64,13 +64,6 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
    - Zero context switching required from the user
    - Go fix failing tests without being told how
 
-   ### 7. Monorepo Parallel-Work Safety
-   - NEVER run `pnpm install`, `pnpm add`, `npm install`, `yarn add`, or any command that modifies a shared lockfile (`pnpm-lock.yaml`, `package-lock.json`, `yarn.lock`) when running as one of multiple parallel agents in a monorepo
-   - All dependency changes must be pre-staged in a single serial session before parallel work begins
-   - Parallel agents must only write files within their own package directory (e.g. `packages/<name>/src/`)
-   - Before launching parallel agents, verify their planned work scopes do not overlap on any shared files
-   - If you need a new dependency mid-task, stop and request it be added centrally rather than running the package manager yourself
-
    ## Task Management
 
    1. **Plan First**: Write plan to `tasks/roadmap.md` (full plan) and `tasks/todo.md` (current phase) with checkable items
@@ -89,9 +82,31 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
    - **No GitHub Actions**: Do not create, modify, or suggest GitHub Actions workflows. This project does not use GitHub Actions for CI/CD.
    ```
 
-3. **Report result:**
+3. **Conditionally add Monorepo Parallel-Work Safety:**
+
+   Detect whether the target repo is a monorepo by checking these heuristics (any match = monorepo):
+   1. `pnpm-workspace.yaml` exists at repo root
+   2. `package.json` at repo root has a `workspaces` field
+   3. `lerna.json` exists at repo root
+   4. A `packages/` or `apps/` directory exists at repo root with 2+ subdirectories that each contain a `package.json`
+
+   **If monorepo detected:** append the following section after `### 6. Autonomous Bug Fixing` and before `## Task Management` in both target files:
+
+   ```markdown
+   ### 7. Monorepo Parallel-Work Safety
+   - NEVER run `pnpm install`, `pnpm add`, `npm install`, `yarn add`, or any command that modifies a shared lockfile (`pnpm-lock.yaml`, `package-lock.json`, `yarn.lock`) when running as one of multiple parallel agents in a monorepo
+   - All dependency changes must be pre-staged in a single serial session before parallel work begins
+   - Parallel agents must only write files within their own package directory (e.g. `packages/<name>/src/`)
+   - Before launching parallel agents, verify their planned work scopes do not overlap on any shared files
+   - If you need a new dependency mid-task, stop and request it be added centrally rather than running the package manager yourself
+   ```
+
+   **If not a monorepo:** ensure that `### 7. Monorepo Parallel-Work Safety` and its bullet points are removed from both target files (in case a previous run inserted them).
+
+4. **Report result:**
    - Print whether each target file was created or modified.
    - Print where the block was inserted in each file (top/bottom/after which heading).
+   - Print whether the monorepo block was included or skipped (and which heuristic matched, if any).
    - Confirm that the final block appears exactly once in each target file.
 
 ## Output Format
@@ -102,6 +117,7 @@ Display confirmation directly to the user (the block itself is written to `./CLA
 Installed workflow orchestration into ./CLAUDE.md and ./AGENTS.md
 - ./CLAUDE.md: [created | updated], [top | bottom | after "<heading>"], block appears once
 - ./AGENTS.md: [created | updated], [top | bottom | after "<heading>"], block appears once
+- Monorepo safety block: [included (matched: <heuristic>) | skipped (not a monorepo)]
 ```
 
 ## Constraints
