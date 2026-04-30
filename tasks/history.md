@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-04-30 — Devtool positioning research
+
+- Created `research/devtool-positioning.md` for the `agentic-skills` devtool research chain.
+- Positioned the repo against raw Claude/Codex usage, personal dotfiles, vendor-native instructions, prompt libraries, task runners, hosted agent platforms, and internal prompt frameworks.
+- Captured workflow advantages, ecosystem fit, evidence-backed trust claims, switching costs, concise positioning, homepage-style copy, differentiated claims, taglines, and avoided positioning.
+- Checked off `$devtool-positioning` in `tasks/todo.md`; `$devtool-monetization` is now unblocked.
+
 ## 2026-04-30 — Add creator-media YouTube strategy pack
 
 - Upgraded global `youtube-audit` for both Claude and Codex from a transcript-only content critique into an evidence-first channel audit contract. It now requires full `yt-dlp` metadata, a venv-aware `youtube-transcript-api` import check, raw metadata/transcript persistence under `research/youtube/data/<slug>/`, and portfolio/performance fields: views, likes, comments, views/day, views/minute, top-video concentration, archetype, content role, packaging signals, and cleanup candidates.
