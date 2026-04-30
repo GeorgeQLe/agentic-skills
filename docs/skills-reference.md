@@ -44,6 +44,7 @@ Global skills are safe across business apps, games, devtools, libraries, service
 | --- | --- |
 | `affected` | Analyze which monorepo packages and apps are affected by current changes |
 | `analyze-sessions` | Analyze Claude Code session history and recommend automation |
+| `bootstrap-repo` | Initialize repository README and agent workflow docs from a project brief |
 | `brainstorm` | Evaluate the codebase and suggest ideas to explore with planning |
 | `branch-lifecycle` | Evaluate feature branches for merge, salvage, keep-open, or delete decisions |
 | `clone-spec-store` | Build lawful functional-parity spec stores and private downstream clone repos |
