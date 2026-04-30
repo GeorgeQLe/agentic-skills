@@ -590,7 +590,7 @@ Am I switching sessions or CLIs?
 The canonical workflow is now:
 
 ```text
-concept-exploration -> pack -> icp -> competitive-analysis -> positioning -> journey-map -> spec-interview -> ux-variation -> ui-interview -> roadmap -> plan-phase -> run/delegate -> ship -> ship-end
+concept-exploration -> pack -> icp -> competitive-analysis -> value-prop-canvas -> positioning -> lean-canvas -> journey-map -> hook-model -> metrics -> monetization -> gtm -> growth-model -> spec-interview -> ux-variation -> ui-interview -> roadmap -> plan-phase -> run/delegate -> ship -> ship-end -> pmf-assessment (post-launch)
 ```
 
 with three valid execution modes:
