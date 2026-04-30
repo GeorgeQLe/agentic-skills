@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-04-30 — Devtool docs audit research
+
+- Created `research/devtool-docs-audit.md` as the final default-flow devtool research artifact for `agentic-skills`.
+- Audited `README.md`, `docs/skills-reference.md`, `docs/packs.md`, `docs/operating-modes.md`, and the completed devtool research chain for quickstart clarity, examples, API/script reference, troubleshooting, migration paths, and proof artifacts.
+- Found no P0 documentation blocker for a shell-comfortable user. Logged the highest-leverage improvements as README first-success quickstart, curated dogfood examples, central troubleshooting, compact script reference, team rollout checklist, and better surfacing of proof artifacts.
+- Checked off `$devtool-docs-audit` in `tasks/todo.md`; the active Priority Documentation Todo queue is now complete, and the next planned step is a post-audit `$research-roadmap` refresh.
+
 ## 2026-04-30 — Devtool positioning research
 
 - Created `research/devtool-positioning.md` for the `agentic-skills` devtool research chain.
