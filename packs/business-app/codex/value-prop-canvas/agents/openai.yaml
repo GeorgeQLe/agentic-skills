@@ -1,0 +1,7 @@
+interface:
+  display_name: "Value Proposition Canvas"
+  short_description: "Validate solution-customer fit with a Strategyzer VPC"
+  default_prompt: "Use $value-prop-canvas to map customer jobs, pains, and gains against product features, pain relievers, and gain creators."
+
+policy:
+  allow_implicit_invocation: true

@@ -139,8 +139,9 @@ Present the full positioning framework and statement to the user. Ask:
 
 Include 3–5 applicable items with "Pick one:" framing:
 
-- ALWAYS: `/gtm` — Update go-to-market plan with this positioning (messaging should flow from positioning)
-- IF no `research/gtm.md`: `/gtm` — Build go-to-market plan grounded in this positioning
+- ALWAYS: `/lean-canvas` — Synthesize positioning + upstream research into a one-page business model before GTM
+- IF no `research/journey-map.md`: `/journey-map` — Map the customer journey to ground the business model in reality
+- IF no `research/gtm.md`: `/gtm` — Build go-to-market plan grounded in this positioning (after lean canvas)
 - IF `research/gtm.md` exists: `/gtm` — Refresh messaging framework to align with positioning
 - IF no `research/monetization.md`: `/monetization` — Positioning informs pricing — "premium" vs "value" positioning changes price expectations
 - IF codebase exists: `/mvp-gap` — Check if the product delivers on the positioning promise

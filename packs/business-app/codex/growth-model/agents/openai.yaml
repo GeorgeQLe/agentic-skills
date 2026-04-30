@@ -1,0 +1,7 @@
+interface:
+  display_name: "Growth Model"
+  short_description: "Design compounding growth loops"
+  default_prompt: "Use $growth-model to design Reforge-style acquisition, retention, and monetization growth loops."
+
+policy:
+  allow_implicit_invocation: true

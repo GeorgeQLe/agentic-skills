@@ -1,0 +1,7 @@
+interface:
+  display_name: "Lean Canvas"
+  short_description: "Synthesize a one-page business model"
+  default_prompt: "Use $lean-canvas to synthesize all upstream research into a one-page Lean Canvas business model."
+
+policy:
+  allow_implicit_invocation: true

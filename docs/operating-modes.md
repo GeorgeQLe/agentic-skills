@@ -217,7 +217,7 @@ This section tags every global skill and every pack with a **primary CLI role** 
 
 | Pack | Primary role | Notes |
 | --- | --- | --- |
-| `business-app` | Claude-orchestration | Strategy, ICP, GTM, positioning, metrics, retro — framing/research skills |
+| `business-app` | Claude-orchestration | Strategy, ICP, value-prop-canvas, lean-canvas, hook-model, growth-model, pmf-assessment, GTM, positioning, metrics, retro — framing/research skills |
 | `business-app-kanban` | Both | Inherits `business-app` (orchestration) + adds kanban `run`/`ship`/`ship-end` variants (execution) |
 | `code-quality` | Codex-execution | `extract-shared-types`, `quality-sweep` — behavior-preserving refactor mutation |
 | `devtool` | Claude-orchestration | Adoption, docs audit, DX journey, positioning, workflow — framing skills |
