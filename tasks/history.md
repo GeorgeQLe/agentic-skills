@@ -1,5 +1,11 @@
 # Session History
 
+## 2026-04-30 — Refresh documentation priority roadmap
+
+- Ran `$research-roadmap` after Phase 11 closure. Classified this repository as a devtool-style skills/tooling project with canonical `research/`, `specs/`, and `tasks/` roots.
+- Added `tasks/todo.md` § "Priority Documentation Todo" with three immediately actionable documentation items: missing `research/devtool-positioning.md`, blocked missing `research/devtool-monetization.md`, and `$spec-drift fix all` because implementation/docs changed on 2026-04-30 while canonical specs last changed on 2026-04-22.
+- Marked the `/research-roadmap` queue item complete and preserved the user-authored `creator-media research pack` task as the next product workstream.
+
 ## 2026-04-30 — Make Codex `$run` approval implicit by default
 
 - Updated `global/codex/run/SKILL.md` so `$run` presents the execution plan, updates `update_plan`, then proceeds by default. A `$run` invocation is now treated as implicit approval for the next planned step or scoped phase.
