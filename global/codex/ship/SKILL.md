@@ -59,7 +59,7 @@ Ship already-finished work, commit it, optionally deploy it, and plan the next s
        4. If no more phases remain, run `$roadmap` to recommend the next action based on project state. Then stop.
        5. **Just-in-time planning:** Invoke `$plan-phase` for the new phase. This generates implementation steps, the phase `### Execution Profile`, and file-level detail using the full context of what was learned during prior phases.
      - If **NO:** find the next uncompleted step within the current phase.
-5. Write a self-contained implementation plan for the next step into `tasks/todo.md`, complete enough for a fresh session to execute from `tasks/todo.md` alone. Preserve the current phase's `### Execution Profile` so `$run` can decide whether to execute serially, use read-only subagents, use review subagents, or use disjoint write subagents after the normal approval gate.
+5. Write a self-contained implementation plan for the next step into `tasks/todo.md`, complete enough for a fresh session to execute from `tasks/todo.md` alone. Preserve the current phase's `### Execution Profile` so `$run` can decide whether to execute serially, use read-only subagents, use review subagents, or use disjoint write subagents after presenting the plan and proceeding under implicit approval.
 6. Ship `tasks/todo.md`, `tasks/roadmap.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, `tasks/recurring-todo.md` (when they exist), and `tasks/phases/` (if created) via `$commit-and-push-by-feature`, landing them on `main` or `master`.
 7. Output a brief summary:
    - What was shipped (if anything)
