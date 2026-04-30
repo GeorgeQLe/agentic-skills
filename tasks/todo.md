@@ -2,9 +2,16 @@
 
 **Status:** Planning complete 2026-04-19. New workstream kicking off; prior roadmap phases archived.
 
+## Priority Documentation Todo
+
+- [ ] `$devtool-positioning` - create/update `research/devtool-positioning.md` because the enabled devtool research chain is missing this downstream positioning artifact.
+- [ ] `$devtool-monetization` - create/update `research/devtool-monetization.md` after `$devtool-positioning`; currently blocked because `research/devtool-positioning.md` is missing.
+- [ ] `$spec-drift fix all` - create/update `specs/drift-report.md` because implementation/documentation files changed on 2026-04-30 (`73374eb feat(skills): add project fleet orchestration`) while canonical specs last changed on 2026-04-22 (`2b63265 docs(spec-drift): banner legacy kanban.mjs specs`).
+
 ## Priority Task Queue
 
-- [ ] `/research-roadmap` - scan documentation health and maintain priority documentation queue because all 11 roadmap phases are complete (last phase completed 2026-04-19).
+- [x] `/research-roadmap` - scan documentation health and maintain priority documentation queue because all 11 roadmap phases are complete (last phase completed 2026-04-19).
+- [ ] `creator-media research pack` - upgrade `youtube-audit` into an evidence-first channel audit workflow and add a `creator-media` pack for YouTube/founder-media strategy. Scope: improve metadata/transcript fetching (`yt-dlp` full metadata, venv-aware `youtube-transcript-api`, raw JSON outputs under `research/youtube/data/`); add performance/portfolio fields (views, likes, views/day, views/minute, top-video concentration, archetype, content role, cleanup candidates); create pack skills for `youtube-channel-audit`, `youtube-portfolio`, `youtube-peer-benchmark`, `creator-positioning`, `content-programming`, `series-spec`, `product-led-media-map`, and `creator-metrics-review`; include `PACK.md`, Claude/Codex skill variants consistent with existing pack conventions, and validation against `@GeorgeLe` / `WeeklyG` / `WeeklySOTA` use cases.
 
 ## Phase 11 — Three-Mode Operating Model
 
@@ -1006,7 +1013,7 @@ Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch r
 
 **Last completed step:** Phase 10 Step 6 — Deprecate the standalone DB-write path
 
-## Priority Documentation Todo
+## Archived Priority Documentation Todo
 
 - [x] `$reconcile-dev-docs fix tasks` - resolve the Phase 11 task-doc contradiction: `tasks/todo.md` still contains unchecked archived Phase 11 acceptance criteria even though `tasks/roadmap.md` and `tasks/history.md` report Phase 11 complete.
 - [x] `$spec-drift fix packs/business-app/*/scale-audit` - align Claude and Codex `scale-audit` next-step guidance with `docs/skill-next-step-contracts.md`: recommend `spec-interview [top blocker]` when hard blockers lack specs, and make `roadmap` primary only when blockers are already specced.
@@ -1028,7 +1035,7 @@ Pick **one** small, self-contained task (e.g., a one-line doc fix in a scratch r
 - [ ] `$spec-drift fix all` - reconcile `specs/*.md` against implementation because source changes are newer than the latest spec evidence: commit `975c823` (`feat(code-quality): add quality sweep skill`, 2026-04-16 12:38:47 -0400) updated `packs/code-quality/.../quality-sweep` after `specs/code-quality-skill-pack.md` was last modified on 2026-04-13 09:52:16.
 - [ ] `$roadmap` - create/update `tasks/roadmap.md` and `tasks/todo.md` after `$spec-drift fix all`; currently blocked because specs may be stale, and `specs/code-quality-skill-pack.md` (2026-04-13 09:52:16) is newer than `tasks/roadmap.md` (2026-04-07 22:58:31).
 
-## Priority Task Queue
+## Archived Priority Task Queue
 
 - [x] `$research-roadmap` - refreshed `tasks/todo.md` with priority documentation items because all roadmap phases are complete and the next useful project action is a research/documentation health scan.
 
