@@ -1164,3 +1164,19 @@ Resolved all 10 findings from `/expert-review`:
 - Found no Error or Warning drift requiring user arbitration or implementation work.
 - Recorded one Info finding: `$project-fleet` is a public Codex skill documented in README and linked from `clone-spec-store`, but it has no dedicated canonical spec yet. Deferred optional `specs/project-fleet.md` until the workflow needs durable spec coverage.
 - Marked `$spec-drift fix all` complete in `tasks/todo.md` and planned a `$research-roadmap` refresh as next work.
+
+## 2026-04-30 — Bootstrap repo skill
+
+- Added mirrored `bootstrap-repo` skills under `global/claude/` and `global/codex/`.
+- The new skill writes or preserves `README.md` from a user-supplied project brief, prompts when the brief is missing, and delegates agent workflow doc setup to `provision-agentic-config`.
+- Added Codex UI metadata in `global/codex/bootstrap-repo/agents/openai.yaml`.
+- Registered the skill in the global core lists in `README.md` and `docs/skills-reference.md`.
+
+## 2026-04-30 — Research roadmap refresh after documentation queue completion
+
+- Re-ran `$research-roadmap` after completing devtool positioning, monetization, and spec-drift refresh work.
+- Inferred the repository as a devtool project from repo signals and `packs/devtool` because `.agents/project.json` is absent.
+- Confirmed canonical documentation roots are top-level `research/`, `specs/`, and `tasks/`.
+- Confirmed the six fallback devtool research outputs are present and current: `research/devtool-user-map.md`, `research/devtool-integration-map.md`, `research/devtool-dx-journey.md`, `research/devtool-adoption.md`, `research/devtool-positioning.md`, and `research/devtool-monetization.md`.
+- Promoted the one remaining default-flow devtool documentation item: `$devtool-docs-audit` to create `research/devtool-docs-audit.md`.
+- No record or recurring documentation advisory tasks were needed.

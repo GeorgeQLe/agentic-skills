@@ -4,14 +4,20 @@
 
 ## Priority Documentation Todo
 
-- [x] `$devtool-positioning` - create/update `research/devtool-positioning.md` because the enabled devtool research chain is missing this downstream positioning artifact.
-- [x] `$devtool-monetization` - create/update `research/devtool-monetization.md` after `$devtool-positioning`; now unblocked by `research/devtool-positioning.md`.
-- [x] `$spec-drift fix all` - create/update `specs/drift-report.md` because implementation/documentation files changed on 2026-04-30 (`73374eb feat(skills): add project fleet orchestration`) while canonical specs last changed on 2026-04-22 (`2b63265 docs(spec-drift): banner legacy kanban.mjs specs`).
+- [ ] `$devtool-docs-audit` - create/update `research/devtool-docs-audit.md` after `$devtool-monetization`; now unblocked by `research/devtool-monetization.md`, and no docs-audit artifact exists for the devtool default flow documented in `docs/skills-reference.md`.
 
 ## Priority Task Queue
 
+- [x] `$bootstrap-repo` - add mirrored Claude/Codex global skill that initializes `README.md` from a project brief and provisions `CLAUDE.md` / `AGENTS.md` via `provision-agentic-config`.
 - [x] `/research-roadmap` - scan documentation health and maintain priority documentation queue because all 11 roadmap phases are complete (last phase completed 2026-04-19).
 - [x] `creator-media research pack` - upgrade `youtube-audit` into an evidence-first channel audit workflow and add a `creator-media` pack for YouTube/founder-media strategy. Scope: improve metadata/transcript fetching (`yt-dlp` full metadata, venv-aware `youtube-transcript-api`, raw JSON outputs under `research/youtube/data/`); add performance/portfolio fields (views, likes, views/day, views/minute, top-video concentration, archetype, content role, cleanup candidates); create pack skills for `youtube-channel-audit`, `youtube-portfolio`, `youtube-peer-benchmark`, `creator-positioning`, `content-programming`, `series-spec`, `product-led-media-map`, and `creator-metrics-review`; include `PACK.md`, Claude/Codex skill variants consistent with existing pack conventions, and validation against `@GeorgeLe` / `WeeklyG` / `WeeklySOTA` use cases.
+
+### Review — Bootstrap Repo Skill
+
+- Added mirrored `bootstrap-repo` skills for Claude and Codex.
+- Added Codex `agents/openai.yaml` metadata.
+- Registered the skill in `README.md` and `docs/skills-reference.md`.
+- Validation passed: `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, and grep checks for required bootstrap surfaces.
 
 ### Active Step Plan — Devtool Positioning
 
@@ -142,9 +148,44 @@
 
 **Acceptance criteria:**
 
-- [ ] Documentation health is re-scanned after the completed queue.
-- [ ] The next concrete work item is recorded in `tasks/todo.md`, or the queue is explicitly marked empty.
-- [ ] Validation evidence is recorded for any updates.
+- [x] Documentation health is re-scanned after the completed queue.
+- [x] The next concrete work item is recorded in `tasks/todo.md`, or the queue is explicitly marked empty.
+- [x] Validation evidence is recorded for any updates.
+
+**Review:**
+
+- Inferred this repository as a devtool project from repo signals and the installed `packs/devtool` skill files because `.agents/project.json` is absent.
+- Confirmed canonical roots are top-level `research/`, `specs/`, and `tasks/`.
+- Confirmed the six fallback devtool research outputs are present and current: user map, integration map, DX journey, adoption, positioning, and monetization.
+- Dynamically discovered the additional devtool default-flow review skill `$devtool-docs-audit`; no `research/devtool-docs-audit.md` artifact exists yet, so it is now the only active Priority Documentation Todo item.
+- No record or recurring documentation advisory items were needed.
+- Verified with `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, and targeted grep checks.
+
+### Next Step Plan — Devtool Docs Audit
+
+**Goal:** Produce the missing devtool docs audit artifact for this repository now that the upstream devtool research chain is complete.
+
+**Execution profile:** serial.
+
+**Scope:**
+
+1. Read `packs/devtool/codex/devtool-docs-audit/SKILL.md`, `docs/skills-reference.md`, `README.md`, `docs/packs.md`, `docs/operating-modes.md`, and the completed devtool research artifacts.
+2. Create `research/devtool-docs-audit.md` with a findings-first audit covering quickstart clarity, examples, API reference, troubleshooting, migration paths, and proof artifacts.
+3. Mark `$devtool-docs-audit` complete in the Priority Documentation Todo and update `tasks/history.md`.
+4. Validate with standard skill metadata scans and targeted grep checks for required docs-audit sections.
+
+**Files expected to change:**
+
+- `research/devtool-docs-audit.md`
+- `tasks/todo.md`
+- `tasks/history.md`
+
+**Acceptance criteria:**
+
+- [ ] `research/devtool-docs-audit.md` exists and is specific to `agentic-skills`.
+- [ ] The artifact covers quickstart clarity, examples, API reference, troubleshooting, migration paths, and proof artifacts.
+- [ ] `$devtool-docs-audit` is checked off in the Priority Documentation Todo.
+- [ ] Validation passes for the docs-audit artifact and standard skill metadata scans.
 
 ### Active Step Plan — Creator-Media Research Pack
 

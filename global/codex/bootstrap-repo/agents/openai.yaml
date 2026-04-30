@@ -1,0 +1,7 @@
+interface:
+  display_name: "Bootstrap Repo"
+  short_description: "Create README and agent workflow docs"
+  default_prompt: "Use $bootstrap-repo with a short project brief to create or update README.md, then provision CLAUDE.md and AGENTS.md."
+
+policy:
+  allow_implicit_invocation: true
