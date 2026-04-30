@@ -103,7 +103,7 @@ affected, analyze-sessions, brainstorm, branch-lifecycle,
 clone-spec-store, commit-and-push-by-feature, concept-exploration, create-skill, dead-code, debug, decommission, deploy, dogfood,
 expert-review, guide, handoff, hygiene, provision-agentic-config,
 investigate, migrate, pack, patch-exec-profile, spec-interview, ui-interview,
-ux-variation, plan-phase,
+ux-variation, plan-phase, project-fleet,
 reconcile-dev-docs, regression-check, release, roadmap, run, scaffold,
 ship, ship-end, skills, slim-audit, spec-drift, sync,
 trace, research-roadmap, uat

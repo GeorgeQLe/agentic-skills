@@ -14,6 +14,8 @@ Produce a canonical specification store for N "clone" software ideas and seed on
 
 This skill reproduces the pipeline used to build `GeorgeQLe/mobile-ideas` (100 mobile-app specs + 100 seeded private downstream repos), but generalized.
 
+For ongoing operation after a spec store has become a multi-repo queue, pair this with `$project-fleet`. `clone-spec-store` defines the lawful clone/spec-store pipeline; `$project-fleet` owns generic fleet orchestration patterns such as guarded batches, blocker ledgers, status dashboards, and productive fallback work while waiting on external limits.
+
 ## Invocation
 
 Default arguments:
@@ -214,6 +216,7 @@ In every case, keep: Metadata block, Research Sources, Goals/Non-Goals, Data Mod
 3. Work one phase at a time. After each phase: update `tasks/roadmap.md`, commit with a conventional message (`feat(seeding): complete Phase N step X.Y ...`), push if `--owner` is configured and the user has approved remote actions.
 4. Never advance to Phase 6 remote execution without explicit user approval for each batch.
 5. Never flip the spec store to public visibility without explicit user approval.
+6. After Phase 6 exists and the user's request is about continuing batches, selecting work while waiting, repairing blockers, or summarizing cross-repo status, route through `$project-fleet` unless the requested change is clone/spec specific.
 
 ## Reference Implementation
 

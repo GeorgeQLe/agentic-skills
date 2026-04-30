@@ -1,0 +1,3 @@
+display_name: Project Fleet
+short_description: Coordinate many related repos, targets, or work items from one control repo.
+default_prompt: Use project-fleet to inspect the control repo, summarize fleet status, choose the next safe lane, and advance the next eligible item.
