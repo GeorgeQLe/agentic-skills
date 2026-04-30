@@ -1,23 +1,23 @@
 ---
 name: youtube-audit
-description: Analyze a YouTube channel's content quality by fetching video metadata and transcripts, then producing a critical audit of repeated strengths and weaknesses
+description: Analyze a YouTube channel with evidence-first metadata, transcripts, performance fields, portfolio shape, and repeated content-quality patterns
 type: research
-version: 1.0.0
+version: 1.1.0
 argument-hint: "<channel URL or handle> [--count N]"
 ---
 
-# YouTube Audit — Channel Content Quality Analysis
+# YouTube Audit — Evidence-First Channel Analysis
 
 Invoke as `$youtube-audit`.
 
-Fetch video metadata and transcripts from a YouTube channel, then analyze content quality across multiple dimensions. The output identifies repeated patterns — both strengths to double down on and weaknesses to fix — with evidence cited from specific videos.
+Fetch full video metadata and transcripts from a YouTube channel, persist raw evidence, then analyze both performance shape and content quality. The output identifies repeated strengths, repeated weaknesses, portfolio concentration, content roles, archetypes, and cleanup candidates with evidence cited from specific videos.
 
 ## Prerequisites
 
 Two CLI tools are required. Neither needs API keys.
 
 - **yt-dlp**: Lists channel videos as JSON. Install: `brew install yt-dlp` or `pip install yt-dlp`.
-- **youtube-transcript-api**: Fetches transcripts via Python. Install: `pip install youtube-transcript-api`.
+- **youtube-transcript-api**: Fetches transcripts via Python. Install in the active Python environment with `python3 -m pip install youtube-transcript-api`.
 
 Check both are installed before proceeding. If either is missing, tell the user exactly what to install and stop.
 
@@ -28,11 +28,18 @@ Check both are installed before proceeding. If either is missing, tell the user 
 - `$ARGUMENTS` must contain a YouTube channel URL or handle (e.g. `@handle`).
 - Optional `--count N` sets how many recent videos to fetch (default 20, max 50).
 - If no channel is provided, ask the user for one and stop.
-- Validate that `yt-dlp` and `youtube-transcript-api` are available by running `which yt-dlp` and `python3 -c "import youtube_transcript_api"`.
+- Normalize handles to channel video URLs when needed: `@handle` -> `https://www.youtube.com/@handle/videos`.
+- Validate that `yt-dlp` and `youtube-transcript-api` are available by running `command -v yt-dlp` and a venv-aware Python import check:
+
+```bash
+python3 -c "from youtube_transcript_api import YouTubeTranscriptApi; print('ok')"
+```
+
+If the import fails, report the exact interpreter path from `python3 -c "import sys; print(sys.executable)"` and tell the user to install into that environment.
 
 ### 2. Archive Previous Audit
 
-If `research/youtube-audit-*.md` already exists for the same channel (check the `> Channel:` header in existing files):
+If `research/youtube/youtube-audit-*.md` or legacy `research/youtube-audit-*.md` already exists for the same channel (check the `> Channel:` header in existing files):
 
 1. Copy the existing file to `docs/history/archive/YYYY-MM-DD/HHMMSS/research/youtube-audit-*.md`.
 2. Preserve the archived snapshot exactly.
@@ -42,44 +49,86 @@ New files do not need archive snapshots.
 
 ### 3. Fetch Video List
 
-Run:
+Create:
 
-```bash
-yt-dlp --flat-playlist --dump-json --playlist-end N "CHANNEL_URL/videos"
+```text
+research/youtube/data/<slug>/
 ```
 
-Parse each JSON line for: `id`, `title`, `upload_date`, `url`, `duration`, `view_count`. Build a video table sorted by upload date (newest first). Report total videos found.
+Run full metadata export, not flat playlist metadata:
+
+```bash
+yt-dlp --dump-json --playlist-end N "CHANNEL_URL/videos"
+```
+
+Persist the raw newline-delimited response exactly to:
+
+```text
+research/youtube/data/<slug>/videos-YYYY-MM-DD.jsonl
+```
+
+Parse each JSON object for at least:
+
+| Field | Notes |
+| --- | --- |
+| `id`, `webpage_url`, `title`, `description` | Identity and audit links |
+| `channel`, `channel_id`, `uploader`, `uploader_id` | Channel identity |
+| `upload_date`, `timestamp` | Used for recency and views/day |
+| `duration` | Used for views/minute |
+| `view_count`, `like_count`, `comment_count` | Performance |
+| `tags`, `categories`, `chapters` | Positioning and packaging signals |
+| `thumbnail`, `thumbnails` | Packaging review signal |
+
+Build a video table sorted by upload date (newest first). Report total videos found.
 
 ### 4. Fetch Transcripts
 
-Use an inline Python script to batch-fetch transcripts:
+Use the same Python interpreter that passed the import check. Fetch transcripts sequentially and persist raw transcript JSON:
 
 ```python
 from youtube_transcript_api import YouTubeTranscriptApi
+from pathlib import Path
 import json, sys, time
 
 video_ids = json.loads(sys.argv[1])
+out_dir = Path(sys.argv[2])
+out_dir.mkdir(parents=True, exist_ok=True)
 results = {}
 errors = []
 
 for vid in video_ids:
     try:
         transcript = YouTubeTranscriptApi.get_transcript(vid)
+        (out_dir / f"{vid}.json").write_text(json.dumps(transcript, ensure_ascii=False, indent=2))
         results[vid] = " ".join(entry["text"] for entry in transcript)
     except Exception as e:
         errors.append({"id": vid, "reason": str(e)})
     time.sleep(1.5)
 
-json.dump({"transcripts": results, "errors": errors}, sys.stdout)
+summary = {"transcripts": results, "errors": errors}
+(out_dir / "transcripts-summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2))
+json.dump(summary, sys.stdout)
 ```
 
 - Fetch sequentially with 1.5s delay to avoid rate limiting.
 - Skip videos without transcripts and log the reason.
 - If more than 80% lack transcripts, warn the user and ask whether to proceed.
+- Do not fabricate transcript text; transcript gaps are evidence quality limits.
 
 ### 5. Prepare Analysis Context
 
-Build structured records per video (title, date, URL, duration, views, transcript text).
+Build structured records per video:
+
+| Field | Computation |
+| --- | --- |
+| Title, date, URL, duration, views, likes, comments | Direct from metadata |
+| Age in days | From upload date to current date |
+| Views/day | `view_count / max(age_days, 1)` |
+| Views/minute | `view_count / max(duration_minutes, 1)` |
+| Like rate | `like_count / view_count` when both exist |
+| Transcript coverage | `yes`, `no`, or `partial` |
+| Archetype | Format pattern such as founder update, interview, tutorial, analysis, vlog, launch, reaction, teardown |
+| Content role | Strategic role such as acquisition, trust-building, proof, education, launch support, community retention, cleanup candidate |
 
 If total transcript text exceeds 80,000 words, truncate each transcript to preserve:
 - First 500 words (hook and intro)
@@ -88,7 +137,22 @@ If total transcript text exceeds 80,000 words, truncate each transcript to prese
 
 ### 6. Analyze Content
 
-Single reasoning pass across all transcripts. Split into positive patterns (double down) and critical patterns (fix).
+Analyze performance and content in one pass.
+
+### Performance And Portfolio Fields
+
+Include:
+
+- Total videos analyzed, transcript coverage, total views, median views, top video, bottom video.
+- Views/day and views/minute leaders.
+- Top-video concentration: top 1, top 3, and top 5 share of analyzed views.
+- Portfolio distribution by archetype and content role.
+- Packaging signals from titles, thumbnails, tags, descriptions, and chapters.
+- Cleanup candidates: videos with poor fit, weak performance relative to channel median, stale positioning, or inconsistent audience promise. Mark as `keep`, `refresh`, `unlist/private candidate`, or `needs human review`; do not recommend deletion as an automated action.
+
+### Content Quality Patterns
+
+Split into positive patterns (double down) and critical patterns (fix).
 
 **Every finding must cite evidence from 2+ videos to qualify as a pattern.** Single-video observations are not patterns — discard them.
 
@@ -105,10 +169,12 @@ Analyze across these dimensions:
 | Editing signals | Verbal cues for cuts, chapters, graphics. Does the script feel edited or rambling? |
 | Startup rigor | If startup/business content — are frameworks used? Is advice actionable or generic? |
 | Audience trust | Does the creator build trust or erode it? Sponsorship handling, honesty, consistency |
+| Portfolio fit | Does each video serve a clear role in the channel strategy? |
+| Packaging | Do title, thumbnail, topic, and opening promise align? |
 
 ### 7. Write Report
 
-Save to `research/youtube-audit-YYYY-MM-DD.md`:
+Save to `research/youtube/youtube-audit-<slug>-YYYY-MM-DD.md`:
 
 ```markdown
 # YouTube Audit — [Channel Name]
@@ -117,13 +183,34 @@ Save to `research/youtube-audit-YYYY-MM-DD.md`:
 > Videos analyzed: N
 > Transcripts available: N of M
 > Date: YYYY-MM-DD
+> Raw metadata: research/youtube/data/<slug>/videos-YYYY-MM-DD.jsonl
+> Raw transcripts: research/youtube/data/<slug>/transcripts/
 
 ## Videos Analyzed
 
-| # | Title | Date | Views | Duration | Transcript |
-|---|-------|------|-------|----------|------------|
-| 1 | [Title](URL) | YYYY-MM-DD | N | Xm | Yes/No |
+| # | Title | Date | Views | Likes | Views/day | Views/min | Duration | Archetype | Role | Transcript |
+|---|-------|------|-------|-------|-----------|-----------|----------|-----------|------|------------|
+| 1 | [Title](URL) | YYYY-MM-DD | N | N | N | N | Xm | [type] | [role] | Yes/No |
 | ... | | | | | |
+
+## Performance Snapshot
+
+- **Total views analyzed**: N
+- **Median views**: N
+- **Top 1 concentration**: N%
+- **Top 3 concentration**: N%
+- **Views/day leader**: [video]
+- **Views/minute leader**: [video]
+
+## Portfolio Shape
+
+| Archetype | Videos | View share | Notes |
+|---|---:|---:|---|
+| ... | | | |
+
+| Content role | Videos | View share | Notes |
+|---|---:|---:|---|
+| ... | | | |
 
 ## Positive Patterns (Double Down)
 
@@ -145,6 +232,12 @@ Save to `research/youtube-audit-YYYY-MM-DD.md`:
 
 ### ...
 
+## Cleanup Candidates
+
+| Video | Recommendation | Evidence | Human check |
+|---|---|---|---|
+| [Title](URL) | Keep / Refresh / Unlist-private candidate / Needs human review | [performance + fit evidence] | [what to inspect before action] |
+
 ## Summary
 
 ### Top 3 Strengths
@@ -161,11 +254,11 @@ Save to `research/youtube-audit-YYYY-MM-DD.md`:
 [2-3 sentences: the single most impactful change the channel should make, grounded in the patterns found]
 ```
 
-Create the `research/` directory if it doesn't exist.
+Create the `research/youtube/` and `research/youtube/data/<slug>/` directories if they do not exist.
 
 ### 8. Summarize In Thread
 
-After saving the report, output: top 3 strengths, top 3 weaknesses, strategic recommendation, and path to the full report.
+After saving the report, output: top 3 strengths, top 3 weaknesses, performance/portfolio headline, strategic recommendation, report path, and raw data paths.
 
 ## Constraints
 
@@ -174,6 +267,8 @@ After saving the report, output: top 3 strengths, top 3 weaknesses, strategic re
 - **No API keys**: Both tools work unauthenticated against public data. Do not ask the user for API keys.
 - **Smart truncation**: When truncating, always preserve hooks (first 500 words) and outros (last 300 words).
 - **Honest coverage**: If transcripts are sparse, say so. Do not fabricate transcript content or hallucinate quotes.
+- **Raw evidence first**: Always persist raw `yt-dlp` JSONL and transcript JSON before writing analysis.
+- **No automated destructive content advice**: Cleanup candidates are review recommendations, not instructions to delete content.
 - **Stay in analysis mode**: Do not propose video ideas, scripts, or content calendars. The job is to audit what exists.
 
 ## Archive-First Replacement Policy

@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-04-30 — Add creator-media YouTube strategy pack
+
+- Upgraded global `youtube-audit` for both Claude and Codex from a transcript-only content critique into an evidence-first channel audit contract. It now requires full `yt-dlp` metadata, a venv-aware `youtube-transcript-api` import check, raw metadata/transcript persistence under `research/youtube/data/<slug>/`, and portfolio/performance fields: views, likes, comments, views/day, views/minute, top-video concentration, archetype, content role, packaging signals, and cleanup candidates.
+- Added `packs/creator-media/` with `PACK.md` plus mirrored Claude/Codex skills: `youtube-channel-audit`, `youtube-portfolio`, `youtube-peer-benchmark`, `creator-positioning`, `content-programming`, `series-spec`, `product-led-media-map`, and `creator-metrics-review`.
+- Registered `creator-media` in `scripts/pack.sh` aliases/project type handling, `README.md`, and `docs/skills-reference.md`. The docs name the intended validation target shapes: `@GeorgeLe`, `WeeklyG`, and `WeeklySOTA`.
+- Validation: `./scripts/skill-deps.sh --broken` passed; `./scripts/skill-versions.sh --missing` passed with 255 versioned skills; `bash -n scripts/pack.sh` passed; grep checks confirmed target use cases, raw-data paths, and performance fields are present.
+
 ## 2026-04-30 — Refresh documentation priority roadmap
 
 - Ran `$research-roadmap` after Phase 11 closure. Classified this repository as a devtool-style skills/tooling project with canonical `research/`, `specs/`, and `tasks/` roots.

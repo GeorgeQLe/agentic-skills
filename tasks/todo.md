@@ -11,7 +11,54 @@
 ## Priority Task Queue
 
 - [x] `/research-roadmap` - scan documentation health and maintain priority documentation queue because all 11 roadmap phases are complete (last phase completed 2026-04-19).
-- [ ] `creator-media research pack` - upgrade `youtube-audit` into an evidence-first channel audit workflow and add a `creator-media` pack for YouTube/founder-media strategy. Scope: improve metadata/transcript fetching (`yt-dlp` full metadata, venv-aware `youtube-transcript-api`, raw JSON outputs under `research/youtube/data/`); add performance/portfolio fields (views, likes, views/day, views/minute, top-video concentration, archetype, content role, cleanup candidates); create pack skills for `youtube-channel-audit`, `youtube-portfolio`, `youtube-peer-benchmark`, `creator-positioning`, `content-programming`, `series-spec`, `product-led-media-map`, and `creator-metrics-review`; include `PACK.md`, Claude/Codex skill variants consistent with existing pack conventions, and validation against `@GeorgeLe` / `WeeklyG` / `WeeklySOTA` use cases.
+- [x] `creator-media research pack` - upgrade `youtube-audit` into an evidence-first channel audit workflow and add a `creator-media` pack for YouTube/founder-media strategy. Scope: improve metadata/transcript fetching (`yt-dlp` full metadata, venv-aware `youtube-transcript-api`, raw JSON outputs under `research/youtube/data/`); add performance/portfolio fields (views, likes, views/day, views/minute, top-video concentration, archetype, content role, cleanup candidates); create pack skills for `youtube-channel-audit`, `youtube-portfolio`, `youtube-peer-benchmark`, `creator-positioning`, `content-programming`, `series-spec`, `product-led-media-map`, and `creator-metrics-review`; include `PACK.md`, Claude/Codex skill variants consistent with existing pack conventions, and validation against `@GeorgeLe` / `WeeklyG` / `WeeklySOTA` use cases.
+
+### Active Step Plan — Creator-Media Research Pack
+
+**Goal:** Turn the existing global `youtube-audit` skill into a stronger evidence-first channel audit contract and add a first-class `creator-media` project pack for YouTube/founder-media strategy.
+
+**Execution profile:** serial.
+
+**Scope:**
+
+1. Upgrade `global/{claude,codex}/youtube-audit/SKILL.md` so audits fetch full `yt-dlp` metadata, use a venv-aware transcript import check, persist raw JSON under `research/youtube/data/`, and report performance/portfolio fields such as views, likes, views/day, views/minute, concentration, archetype, content role, and cleanup candidates.
+2. Add `packs/creator-media/PACK.md`.
+3. Add mirrored Claude/Codex creator-media skills:
+   - `youtube-channel-audit`
+   - `youtube-portfolio`
+   - `youtube-peer-benchmark`
+   - `creator-positioning`
+   - `content-programming`
+   - `series-spec`
+   - `product-led-media-map`
+   - `creator-metrics-review`
+4. Register `creator-media` in `scripts/pack.sh`, `README.md`, and `docs/skills-reference.md`.
+5. Validate with skill dependency/version scans and a lightweight grep check for the three target use cases (`@GeorgeLe`, `WeeklyG`, `WeeklySOTA`).
+
+**Files expected to change:**
+
+- `global/claude/youtube-audit/SKILL.md`
+- `global/codex/youtube-audit/SKILL.md`
+- `packs/creator-media/**`
+- `scripts/pack.sh`
+- `README.md`
+- `docs/skills-reference.md`
+- `tasks/todo.md`
+- `tasks/history.md`
+
+**Acceptance criteria:**
+
+- [x] Global `youtube-audit` requires raw data persistence under `research/youtube/data/` and includes performance/portfolio analysis fields.
+- [x] The `creator-media` pack has `PACK.md` and mirrored Claude/Codex `SKILL.md` files for all eight requested skills.
+- [x] Pack install aliases and docs include `creator-media`.
+- [x] Validation passes: `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, and target-use-case grep checks.
+
+**Review:**
+
+- Upgraded both global `youtube-audit` variants to version 1.1.0 with full `yt-dlp` metadata capture, venv-aware transcript import checks, raw JSONL/transcript persistence under `research/youtube/data/<slug>/`, performance metrics, portfolio roles, and cleanup candidates.
+- Added the `creator-media` pack with mirrored Claude/Codex skills for channel audits, portfolio mapping, peer benchmarking, positioning, programming, series specs, product-led media mapping, and metrics reviews.
+- Registered `creator-media` in pack aliases and user-facing docs.
+- Verified with `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, `bash -n scripts/pack.sh`, and grep checks for `@GeorgeLe`, `WeeklyG`, `WeeklySOTA`, `research/youtube/data`, and performance fields.
 
 ## Phase 11 — Three-Mode Operating Model
 

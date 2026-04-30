@@ -215,6 +215,32 @@ Default flow:
 quality-sweep audit -> extract-shared-types / quality-sweep fix -> regression-check
 ```
 
+## Creator Media Pack
+
+Install in YouTube, founder-media, creator-portfolio, and product-led media projects:
+
+```bash
+scripts/pack.sh install creator-media
+```
+
+Skills:
+
+```text
+youtube-channel-audit, youtube-portfolio, youtube-peer-benchmark,
+creator-positioning, content-programming, series-spec,
+product-led-media-map, creator-metrics-review
+```
+
+Default flow:
+
+```text
+youtube-channel-audit -> youtube-portfolio -> youtube-peer-benchmark
+-> creator-positioning -> content-programming -> series-spec
+-> product-led-media-map -> creator-metrics-review
+```
+
+The pack is evidence-first: channel audits persist raw `yt-dlp` JSONL and transcript JSON under `research/youtube/data/`, then downstream skills reuse that evidence for portfolio, benchmark, positioning, programming, series, product-led media, and metrics-review work. Validation target shapes include `@GeorgeLe`, `WeeklyG`, and `WeeklySOTA`.
+
 ## Kanban Variant Packs
 
 Install only in projects that intentionally use PoketoWork boards. Base domain packs do not install these automatically.
