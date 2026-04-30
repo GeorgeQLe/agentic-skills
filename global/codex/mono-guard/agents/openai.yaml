@@ -1,0 +1,7 @@
+interface:
+  display_name: "Mono Guard"
+  short_description: "Validate monorepo lane boundaries before dispatch"
+  default_prompt: "Use $mono-guard to validate execution profile lane boundaries against monorepo structure."
+
+policy:
+  allow_implicit_invocation: true
