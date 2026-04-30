@@ -6,7 +6,7 @@
 
 - [x] `$devtool-positioning` - create/update `research/devtool-positioning.md` because the enabled devtool research chain is missing this downstream positioning artifact.
 - [x] `$devtool-monetization` - create/update `research/devtool-monetization.md` after `$devtool-positioning`; now unblocked by `research/devtool-positioning.md`.
-- [ ] `$spec-drift fix all` - create/update `specs/drift-report.md` because implementation/documentation files changed on 2026-04-30 (`73374eb feat(skills): add project fleet orchestration`) while canonical specs last changed on 2026-04-22 (`2b63265 docs(spec-drift): banner legacy kanban.mjs specs`).
+- [x] `$spec-drift fix all` - create/update `specs/drift-report.md` because implementation/documentation files changed on 2026-04-30 (`73374eb feat(skills): add project fleet orchestration`) while canonical specs last changed on 2026-04-22 (`2b63265 docs(spec-drift): banner legacy kanban.mjs specs`).
 
 ## Priority Task Queue
 
@@ -108,10 +108,43 @@
 
 **Acceptance criteria:**
 
-- [ ] `specs/drift-report.md` reflects the current code/docs state after the 2026-04-30 changes.
-- [ ] Confirmed drift items are fixed or explicitly recorded with rationale.
-- [ ] `$spec-drift fix all` is checked off in the Priority Documentation Todo.
-- [ ] Validation passes for the updated drift report and standard skill metadata scans.
+- [x] `specs/drift-report.md` reflects the current code/docs state after the 2026-04-30 changes.
+- [x] Confirmed drift items are fixed or explicitly recorded with rationale.
+- [x] `$spec-drift fix all` is checked off in the Priority Documentation Todo.
+- [x] Validation passes for the updated drift report and standard skill metadata scans.
+
+**Review:**
+
+- Archived the previous drift report to `docs/history/archive/2026-04-30/180205/specs/drift-report.md` before replacement.
+- Refreshed `specs/drift-report.md` for `73374eb feat(skills): add project fleet orchestration` and the 2026-04-30 devtool research updates.
+- Confirmed no Error-class spec/code contradictions and no Warning-class active unimplemented spec claims.
+- Recorded one Info finding: `$project-fleet` is documented in README and linked from `clone-spec-store`, but has no dedicated canonical spec yet. Deferred optional `specs/project-fleet.md` creation until the workflow needs durable spec coverage.
+- Verified with standard skill metadata scans and targeted grep checks for the refreshed report.
+
+### Next Step Plan — Research Roadmap Refresh
+
+**Goal:** Re-scan documentation health now that the priority documentation queue is complete, then recommend the next concrete project action.
+
+**Execution profile:** serial.
+
+**Scope:**
+
+1. Run `$research-roadmap` to scan research/spec/doc freshness after completing the devtool positioning, monetization, and spec-drift queue.
+2. Update `tasks/todo.md` with the next priority documentation or project task queue item if the scan finds one.
+3. Update `tasks/history.md` with the result.
+4. Validate any changed docs with the relevant scans named by `$research-roadmap`.
+
+**Files expected to change:**
+
+- `tasks/todo.md`
+- `tasks/history.md`
+- Possibly research/spec/task queue files identified by `$research-roadmap`.
+
+**Acceptance criteria:**
+
+- [ ] Documentation health is re-scanned after the completed queue.
+- [ ] The next concrete work item is recorded in `tasks/todo.md`, or the queue is explicitly marked empty.
+- [ ] Validation evidence is recorded for any updates.
 
 ### Active Step Plan — Creator-Media Research Pack
 

@@ -1155,3 +1155,12 @@ Resolved all 10 findings from `/expert-review`:
 - Recommended preserving the free/local-first core and monetizing team enablement, private pack design, maintained pack subscriptions, advisory implementation, and a future optional managed layer only after repeated demand.
 - Covered free/open-source boundaries, packaging, usage limits, team conversion, enterprise triggers, unit economics, pricing anchors, and monetization risks.
 - Marked `$devtool-monetization` complete in `tasks/todo.md` and planned the next queue item, `$spec-drift fix all`.
+
+## 2026-04-30 — Spec drift refresh after project fleet orchestration
+
+- Archived the previous drift report to `docs/history/archive/2026-04-30/180205/specs/drift-report.md`.
+- Replaced `specs/drift-report.md` with a fresh `$spec-drift fix all` audit covering the current spec inventory and recent 2026-04-30 changes.
+- Verified active specs against implementation/docs: approval-packet schema, code-quality pack layout and aliases, Poketo headless migration status, and legacy kanban fallback banners.
+- Found no Error or Warning drift requiring user arbitration or implementation work.
+- Recorded one Info finding: `$project-fleet` is a public Codex skill documented in README and linked from `clone-spec-store`, but it has no dedicated canonical spec yet. Deferred optional `specs/project-fleet.md` until the workflow needs durable spec coverage.
+- Marked `$spec-drift fix all` complete in `tasks/todo.md` and planned a `$research-roadmap` refresh as next work.
