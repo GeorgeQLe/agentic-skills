@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-04-30 — Completed-roadmap scans must be idempotent
+
+- `$roadmap` and `/roadmap` previously re-queued research-roadmap whenever all implementation phases were complete, even after research-roadmap had already written an active or current `## Priority Documentation Todo`.
+- When one planning skill queues another one-shot scan, teach the caller to recognize the callee's completion surface before recommending it again.
+- For completed implementation roadmaps, route to the first unchecked documentation item when the documentation queue exists, and only queue research-roadmap when no current documentation queue/result exists.
+
 ## 2026-04-30 — Codex `$run` plans are implicitly approved
 
 - Session history showed the user consistently accepted `$run` plans with bare approvals (`y`, `yes`, `yes please`) and did not reject normal `$run` execution plans.

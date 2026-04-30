@@ -32,6 +32,7 @@ Record existence, content summary, and last-modified timestamps for:
 
 - `tasks/roadmap.md` — full phased plan
 - `tasks/todo.md` — current phase working document
+- `tasks/todo.md` § `Priority Documentation Todo` — current documentation queue and whether it has unchecked items
 - `tasks/manual-todo.md` — pending manual tasks
 - `tasks/record-todo.md` — non-blocking condition-gated records and measurements
 - `tasks/recurring-todo.md` — cadence-based operational, research, or maintenance tasks
@@ -60,7 +61,9 @@ Route behavior based on the current pipeline state:
 | B0 — Specs, missing design gate | User-facing specs exist, but `research/journey-map.md`, `specs/ux-variations-*.md`, or `specs/ui-*.md` is missing | Queue the missing journey/UX/UI planning item. Done (skip to step 7). |
 | B — Specs, no roadmap | Specs exist and required journey/UX/UI planning is complete or not applicable, `tasks/roadmap.md` missing or empty | Go to step 4 (build roadmap), then continue to step 5. |
 | C — Work in progress | `tasks/roadmap.md` exists, unchecked phases remain | Skip to step 5 (classify issues). |
-| D — All complete | All phases in `tasks/roadmap.md` are checked | Queue `/research-roadmap` for documentation scan. Done (skip to step 7). |
+| D — All complete, documentation scan needed | All phases in `tasks/roadmap.md` are checked and `tasks/todo.md` has no current `## Priority Documentation Todo` section from a previous `/research-roadmap` run | Queue `/research-roadmap` for documentation scan. Done (skip to step 7). |
+| E — All complete, documentation queue active | All phases in `tasks/roadmap.md` are checked and `tasks/todo.md` has an unchecked `## Priority Documentation Todo` item | Preserve the existing documentation queue and recommend the first unchecked documentation item. Done (skip to step 8; do not add another `/research-roadmap` task). |
+| F — All complete, documentation current | All phases in `tasks/roadmap.md` are checked and `tasks/todo.md` § `Priority Documentation Todo` says documentation is current with no unchecked documentation items | Report that implementation phases and documentation scan are complete; do not queue `/research-roadmap` again. Done (skip to step 8). |
 
 ### 4. Build Roadmap (State B Only)
 
@@ -339,15 +342,38 @@ For State A (no specs):
 Next: `/journey-map` to define the customer/user lifecycle, or `/spec-interview` when journey context is already present or not applicable.
 ```
 
-For State D (all complete):
+For State D (all complete, documentation scan needed):
 
 ```
 ## All Phases Complete
 
 - All roadmap phases are checked off
+- No current `## Priority Documentation Todo` section from a previous `/research-roadmap` run was found
 - Queued `/research-roadmap` for documentation scan
 
 Next: `/research-roadmap` to check documentation health.
+```
+
+For State E (all complete, documentation queue active):
+
+```
+## Documentation Queue Active
+
+- All roadmap phases are checked off
+- Existing `## Priority Documentation Todo` contains unchecked documentation work
+
+Next: start at the first unchecked item in `tasks/todo.md` § `Priority Documentation Todo`.
+```
+
+For State F (all complete, documentation current):
+
+```
+## Roadmap Complete
+
+- All roadmap phases are checked off
+- Documentation scan is current; no missing or stale documentation work is queued
+
+Next: no roadmap or documentation pipeline work is queued.
 ```
 
 If the pipeline is fully healthy:
