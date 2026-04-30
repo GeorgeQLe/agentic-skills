@@ -1,0 +1,38 @@
+---
+name: creator-positioning
+description: Define a creator or founder-media channel's audience promise, category, differentiated wedge, proof, and anti-positioning
+type: research
+version: 1.0.0
+argument-hint: "[channel slug or audit path]"
+---
+
+# Creator Positioning
+
+Invoke as `$creator-positioning`.
+
+Turn audit, portfolio, and benchmark evidence into a clear creator positioning brief.
+
+## Inputs
+
+- Prefer `research/youtube/channel-audit-<slug>.md`, `portfolio-<slug>.md`, and `peer-benchmark-<slug>.md`.
+- Read product/company context when present: `README.md`, `research/**`, `specs/**`, and product docs.
+- If no channel evidence exists, run `$youtube-channel-audit` first.
+
+## Output
+
+Write `research/youtube/creator-positioning-<slug>.md` with:
+
+- Current audience promise.
+- Best-fit viewer segment and non-viewer.
+- Category or subcategory the channel should be understood within.
+- Differentiated wedge and why it is credible.
+- Proof assets: videos, founder experience, product evidence, community evidence.
+- Anti-positioning: topics, formats, and promises to avoid.
+- One-sentence positioning statement.
+- Implications for `$content-programming` and `$series-spec`.
+
+## Constraints
+
+- Position from evidence; do not invent credentials or audience demand.
+- Prefer a narrow owned wedge over a broad generic creator promise.
+- If the evidence supports multiple incompatible positions, present the trade-off and recommend one.

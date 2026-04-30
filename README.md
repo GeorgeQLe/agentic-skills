@@ -38,6 +38,7 @@ scripts/pack.sh recommend
 scripts/pack.sh install business-app
 scripts/pack.sh install game
 scripts/pack.sh install devtool
+scripts/pack.sh install creator-media
 scripts/pack.sh install code-quality
 scripts/pack.sh install business-app-kanban
 scripts/pack.sh status
@@ -85,6 +86,7 @@ agentic-skills/
 │   ├── code-quality/{claude,codex}/<name>/SKILL.md
 │   ├── game/{claude,codex}/<name>/SKILL.md
 │   ├── devtool/{claude,codex}/<name>/SKILL.md
+│   ├── creator-media/{claude,codex}/<name>/SKILL.md
 │   └── *-kanban/{claude,codex}/<name>/SKILL.md
 ├── scripts/
 │   ├── pack.sh
@@ -168,6 +170,18 @@ devtool-monetization, devtool-docs-audit
 ```
 
 The devtool workflow validates developer adoption, integration fit, documentation clarity, trust, and team conversion.
+
+### Creator Media
+
+For YouTube channels, founder-led media, product-led content, creator portfolios, and recurring shows.
+
+```text
+youtube-channel-audit, youtube-portfolio, youtube-peer-benchmark,
+creator-positioning, content-programming, series-spec,
+product-led-media-map, creator-metrics-review
+```
+
+The creator-media workflow validates channel evidence, portfolio shape, peer benchmarks, positioning, programming, repeatable series, product-media fit, and recurring metrics. Target use cases include `@GeorgeLe`, `WeeklyG`, and `WeeklySOTA`.
 
 ### Code Quality
 
