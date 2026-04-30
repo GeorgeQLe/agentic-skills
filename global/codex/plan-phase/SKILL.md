@@ -356,7 +356,7 @@ Rules:
 - Every `tdd` phase must start with writing failing tests. `tests-after` phases write tests in the Green step.
 - Do not include implementation code — describe what to build and what to test.
 - Note what already exists in the codebase vs. what needs to be created.
-- The `### Execution Profile` must be decision-complete enough for `$run` to decide whether to use serial execution, read-only subagents, review subagents, or disjoint write subagents after the normal approval gate.
+- The `### Execution Profile` must be decision-complete enough for `$run` to decide whether to use serial execution, read-only subagents, review subagents, or disjoint write subagents after presenting the plan and proceeding under implicit approval.
 - Subagents must not own task docs, roadmap/history updates, shipping, or deploy steps. Those stay with the main agent.
 - Manual tasks MUST NOT appear in `tasks/todo.md` — they go in `tasks/manual-todo.md` only.
 - Agent-executable work MUST NOT appear in `tasks/manual-todo.md` — it goes in `tasks/todo.md` or an implementation skill.

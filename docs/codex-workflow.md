@@ -136,7 +136,7 @@ In this document, Codex skill invocations use the native `$skill` form.
 **Codex**
 - identify next step
 - summarize the plan
-- ask for approval in plain chat
+- execute by default under implicit approval
 - execute in-thread
 - update `tasks/todo.md` and `tasks/history.md`
 - commit/push the result
@@ -145,7 +145,7 @@ In this document, Codex skill invocations use the native `$skill` form.
 
 **Manual gap**
 - no `EnterPlanMode`
-- no automatic approval gate
+- no automatic clear-context approval gate; `$run` treats invocation as approval for the next planned step
 - no automatic clear-context transition
 
 **Recommended Codex usage**
@@ -221,7 +221,7 @@ This skill ports well because it already depends on repo state more than tool st
 - move card into progress
 - warn on conflicts
 - summarize the plan
-- ask for approval in plain chat
+- execute by default under implicit approval
 - execute in-thread
 - commit/push the result
 - move the completed card to Done
@@ -258,15 +258,15 @@ These are the main workflow features that Claude Code has and Codex currently do
 
 The manual replacements are:
 
-- plain-text approval questions
-- executing in-thread after approval
+- plan visibility plus implicit approval for routine `$run` execution
+- executing in-thread after the plan is presented
 - treating `tasks/todo.md` as the execution handoff artifact
 
 ## Recommended Operating Rules
 
-### 1. Non-trivial tasks still require explicit approval
+### 1. `$run` uses implicit approval
 
-Codex should still present the plan and get approval before implementation. The refactor changes when shipping happens, not the approval bar.
+Codex should still present the plan before implementation, then proceed by default for `$run`. Ask explicitly only for separate safety decisions such as destructive commands, production deploys, paid/external account actions, credential or secret handling beyond the project contract, execution-profile downgrades, blockers, or material scope changes.
 
 ### 2. `tasks/todo.md` must be execution-ready
 
@@ -359,4 +359,4 @@ Do not aim for fake parity. The Codex workflow should be optimized for:
 
 - explicit handoff artifacts when work crosses sessions
 - compact execution context
-- clear approval before implementation
+- plan visibility before implementation, with implicit approval for normal `$run` execution

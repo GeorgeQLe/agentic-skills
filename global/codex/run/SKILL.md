@@ -33,15 +33,15 @@ Identify the next incomplete unit of work from the phased plan, build an executi
    - Reject `--execute-approved --phase` — approved packets target one step, not a full phase.
    - Run `scripts/approved-plan.sh check`.
    - On `ok`: run `scripts/approved-plan.sh consume`, log `Approved packet consumed: Phase X / Step Y (approved_at=…).`, then skip steps 7 and 8 and jump to step 9 (execute).
-   - On non-zero exit: relay the single-line reason to the user, run `scripts/approved-plan.sh mark-stale`, then fall through to steps 7–8 (standard plan + approval gate). Never auto-retry.
+   - On non-zero exit: relay the single-line reason to the user, run `scripts/approved-plan.sh mark-stale`, then fall through to steps 7–8 (standard plan + implicit approval). Never auto-retry.
    - Requires `jq` for the write path. If `jq` is absent, `scripts/approved-plan.sh consume` dies with `ERROR: jq required for write operations. Install with: brew install jq (macOS) or apt install jq (Debian/Ubuntu).` (see `require_jq_write` at `scripts/approved-plan.sh:21`); `check` may surface the same message via its write-path preflight. Relay the message verbatim and stop — no `jq`-free fallback exists. If the check prints a `mode-mismatch` reason (resolved mode is `claude-only`), treat it as a user error and stop.
 7. Present the execution plan to the user:
    - What the step requires
    - Which files will be created or modified
    - The approach and any trade-offs
    - Whether the execution profile will run serially, use read-only research lanes, use review lanes, or use disjoint write lanes
-8. Use `update_plan` to track the proposed work. If the session is already in Plan mode and a structured choice would help, use `request_user_input`. Otherwise ask for approval with a single concise plain-text question. Do not repeat or restate the approval ask in a second sentence. Wait for approval before writing any code.
-9. After approval, execute the plan:
+8. Use `update_plan` to track the proposed work, then execute by default. Do not ask for routine approval after presenting a `$run` plan; the user's `$run` invocation is implicit approval for the next planned step or scoped phase. Ask a concise confirmation question only when the work requires a separate safety decision: destructive commands, production deploys, paid/external account actions, credential or secret handling beyond the project contract, accepting an execution-profile downgrade, proceeding despite a blocker, or materially changing the planned scope.
+9. Execute the plan:
    - Apply the execution profile:
      - `serial`: execute normally.
      - `research-only`: launch read-only subagent lanes first when the active environment permits subagents, synthesize their findings, then implement in the main agent.
@@ -143,8 +143,8 @@ After resolving or inferring the command route, resolve enabled packs via `./scr
 
 - One step at a time by default, or one phase with `--phase`. Then stop and let the user decide what is next.
 - `--execute-approved` consumes an `approved` packet at `.agents/approved-plan.json` (contract in `docs/operating-modes.md` § "Approval packet"). `--execute-approved --phase` is rejected — packets target one step. In `claude-only` mode the flag is a user error; Codex is not the executor. Requires `jq` on PATH.
-- Always present the plan and get approval before executing. Do not assume a Claude-style `EnterPlanMode` or clear-context accept flow exists.
-- The approval gate should be one question only. Avoid back-to-back variants like "Approve and I'll run..." followed by a second restatement of the same action.
+- Always present the plan before executing, then proceed by default under implicit approval. Do not assume a Claude-style `EnterPlanMode` or clear-context accept flow exists.
+- Ask for explicit confirmation only for separate safety decisions, and ask one concise question when that is needed. Avoid back-to-back variants like "Approve and I'll run..." followed by a second restatement of the same action.
 - Keep context footprint minimal — only read files relevant to the current step.
 - If a blocker prevents completion, document it in `tasks/todo.md` and stop.
 - Follow the test strategy annotated on each phase. Do not skip test steps for `tdd` phases.

@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-04-30 — Codex `$run` plans are implicitly approved
+
+- Session history showed the user consistently accepted `$run` plans with bare approvals (`y`, `yes`, `yes please`) and did not reject normal `$run` execution plans.
+- Treat a `$run` invocation as approval for the next planned step or scoped phase after presenting the plan. Do not add a second routine approval question.
+- Still ask explicitly for separate safety decisions: destructive commands, production deploys, paid/external account actions, credential or secret handling beyond the project contract, execution-profile downgrades, blockers, or material scope changes.
+
 ## 2026-04-17 — Check live AWS auth before SSO login
 
 - When a deploy path may use AWS SSO, do not infer that credentials are expired from stale context, earlier logs, or memory.

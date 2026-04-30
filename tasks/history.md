@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-04-30 — Make Codex `$run` approval implicit by default
+
+- Updated `global/codex/run/SKILL.md` so `$run` presents the execution plan, updates `update_plan`, then proceeds by default. A `$run` invocation is now treated as implicit approval for the next planned step or scoped phase.
+- Preserved explicit confirmation for separate safety decisions: destructive commands, production deploys, paid/external account actions, credential/secret handling beyond the project contract, execution-profile downgrades, blockers, and material scope changes.
+- Updated Codex workflow documentation plus `$ship` and `$plan-phase` references so they no longer describe a normal `$run` approval gate.
+- Added a lesson from session-history analysis: routine `$run` approval prompts are friction and should not be reintroduced.
+
 ## 2026-04-29 — Ship pre-spec planning skills and concept-brief integration
 
 - Added 3 new global skills (concept-exploration, ui-interview, ux-variation) for both Claude and Codex, covering the pre-spec planning workflow: concept → ICP → journey → UX variation → UI spec → spec-interview → roadmap.
