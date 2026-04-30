@@ -1148,3 +1148,10 @@ Resolved all 10 findings from `/expert-review`:
 - Updated `dogfood` in both platforms to remove the former UAT-proxy framing and define dogfood as owner/operator adoption into the builder's workflow.
 - Registered `uat` in the global skill docs and added a `dogfood` reference entry to `docs/skills-reference.md`.
 - Verified skill metadata and dependency references with `./scripts/skill-deps.sh --broken` and `./scripts/skill-versions.sh --missing`.
+
+## 2026-04-30 — Devtool monetization research artifact
+
+- Created `research/devtool-monetization.md` from the completed devtool research chain, especially `research/devtool-positioning.md`.
+- Recommended preserving the free/local-first core and monetizing team enablement, private pack design, maintained pack subscriptions, advisory implementation, and a future optional managed layer only after repeated demand.
+- Covered free/open-source boundaries, packaging, usage limits, team conversion, enterprise triggers, unit economics, pricing anchors, and monetization risks.
+- Marked `$devtool-monetization` complete in `tasks/todo.md` and planned the next queue item, `$spec-drift fix all`.

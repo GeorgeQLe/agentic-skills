@@ -5,7 +5,7 @@
 ## Priority Documentation Todo
 
 - [x] `$devtool-positioning` - create/update `research/devtool-positioning.md` because the enabled devtool research chain is missing this downstream positioning artifact.
-- [ ] `$devtool-monetization` - create/update `research/devtool-monetization.md` after `$devtool-positioning`; now unblocked by `research/devtool-positioning.md`.
+- [x] `$devtool-monetization` - create/update `research/devtool-monetization.md` after `$devtool-positioning`; now unblocked by `research/devtool-positioning.md`.
 - [ ] `$spec-drift fix all` - create/update `specs/drift-report.md` because implementation/documentation files changed on 2026-04-30 (`73374eb feat(skills): add project fleet orchestration`) while canonical specs last changed on 2026-04-22 (`2b63265 docs(spec-drift): banner legacy kanban.mjs specs`).
 
 ## Priority Task Queue
@@ -72,11 +72,46 @@
 
 **Acceptance criteria:**
 
-- [ ] `research/devtool-monetization.md` exists and is specific to `agentic-skills`.
-- [ ] The artifact uses `research/devtool-positioning.md` as an input.
-- [ ] The artifact covers pricing model, packaging, open-source/commercial boundaries, buyer fit, conversion path, and monetization risks.
-- [ ] `$devtool-monetization` is checked off in the Priority Documentation Todo.
-- [ ] Validation passes: `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, and required-section grep checks.
+- [x] `research/devtool-monetization.md` exists and is specific to `agentic-skills`.
+- [x] The artifact uses `research/devtool-positioning.md` as an input.
+- [x] The artifact covers pricing model, packaging, open-source/commercial boundaries, buyer fit, conversion path, and monetization risks.
+- [x] `$devtool-monetization` is checked off in the Priority Documentation Todo.
+- [x] Validation passes: `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, and required-section grep checks.
+
+**Review:**
+
+- Created `research/devtool-monetization.md` as a new artifact, so no archive snapshot was required.
+- Preserved the local-first/open-core positioning from `research/devtool-positioning.md`: keep core skills, pack mechanics, approval-packet docs, and validation scripts free and inspectable.
+- Defined commercial surfaces around team enablement, private pack design, maintained pack subscriptions, advisory implementation, and a future optional managed layer only after repeated demand.
+- Covered usage limits, team conversion, enterprise triggers, unit economics, pricing anchors, and monetization risks.
+- Verified with `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, and grep checks for the required monetization sections.
+
+### Next Step Plan — Devtool Spec Drift
+
+**Goal:** Refresh `specs/drift-report.md` now that implementation and documentation files have changed since the last canonical spec update.
+
+**Execution profile:** serial.
+
+**Scope:**
+
+1. Run `$spec-drift fix all` or perform the equivalent spec-drift audit against the current repository state.
+2. Reconcile the report with recent changes, especially the project fleet orchestration and devtool research artifacts.
+3. Update `specs/drift-report.md` with any confirmed drift, false positives, and completed fixes.
+4. Mark `$spec-drift fix all` complete in the Priority Documentation Todo if the report is refreshed.
+5. Validate with the relevant repo scans and targeted grep/read checks from the spec-drift output.
+
+**Files expected to change:**
+
+- `specs/drift-report.md`
+- `tasks/todo.md`
+- `tasks/history.md`
+
+**Acceptance criteria:**
+
+- [ ] `specs/drift-report.md` reflects the current code/docs state after the 2026-04-30 changes.
+- [ ] Confirmed drift items are fixed or explicitly recorded with rationale.
+- [ ] `$spec-drift fix all` is checked off in the Priority Documentation Todo.
+- [ ] Validation passes for the updated drift report and standard skill metadata scans.
 
 ### Active Step Plan — Creator-Media Research Pack
 
