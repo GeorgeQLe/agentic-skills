@@ -171,13 +171,23 @@ Claude:
 /pack
 /icp
 /competitive-analysis
+/value-prop-canvas
 /positioning
+/lean-canvas
 /journey-map
+/hook-model           # consumer/PLG; skip to /metrics for B2B
+/metrics
+/monetization
+/gtm
+/growth-model
 /spec-interview
+/ux-variation
+/ui-interview
 /roadmap
 /run
 /ship
 /ship-end
+/pmf-assessment       # post-launch
 ```
 
 Codex:
@@ -187,12 +197,22 @@ $concept-exploration
 $pack
 $icp
 $competitive-analysis
+$value-prop-canvas
 $positioning
+$lean-canvas
 $journey-map
+$hook-model           # consumer/PLG; skip to $metrics for B2B
+$metrics
+$monetization
+$gtm
+$growth-model
 $spec-interview
+$ux-variation
+$ui-interview
 $roadmap
 $run
 $ship-end
+$pmf-assessment       # post-launch
 ```
 
 Hybrid:
@@ -203,19 +223,29 @@ Hybrid:
 scripts/pack.sh set-mode hybrid
 /icp
 /competitive-analysis
+/value-prop-canvas
 /positioning
+/lean-canvas
 /journey-map
+/hook-model (consumer/PLG) or skip to /metrics (B2B)
+/metrics
+/monetization
+/gtm
+/growth-model
 /spec-interview
+/ux-variation
+/ui-interview
 /roadmap
 /delegate $run
 /ship-end
+/pmf-assessment (post-launch)
 ```
 
 Canonical behavior:
 
 1. `concept-exploration` turns the raw idea into `research/concept-brief.md`.
 2. `pack` designates the project type and installs local pack skills. For business/product concepts, install `business-app`.
-3. Business-app research runs `icp`, `competitive-analysis`, `positioning`, then `journey-map` so the customer/user lifecycle is known before specs.
+3. Business-app research runs `icp`, `competitive-analysis`, `value-prop-canvas`, `positioning`, `lean-canvas`, then `journey-map` (with optional `hook-model` for consumer/PLG), followed by `metrics`, `monetization`, `gtm`, and `growth-model` so the customer lifecycle and business model are known before specs.
 4. `spec-interview` turns the journey-backed opportunity into a decision-complete implementation spec under `specs/`.
 5. For user-facing work, `ux-variation` compares experience directions and `ui-interview` locks buildable interface detail.
 6. `roadmap` sequences specs into phases and seeds Phase 1 with `plan-phase`.

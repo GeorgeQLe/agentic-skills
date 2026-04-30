@@ -1,0 +1,7 @@
+interface:
+  display_name: "PMF Assessment"
+  short_description: "Measure product-market fit"
+  default_prompt: "Use $pmf-assessment to design a Sean Ellis PMF survey and analyze qualitative fit signals."
+
+policy:
+  allow_implicit_invocation: true

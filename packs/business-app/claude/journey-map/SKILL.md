@@ -125,7 +125,8 @@ Continue until the user confirms the journeys are complete. Only then proceed to
 
 Before writing, check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with "Pick one:" framing:
 
-- ALWAYS: `/metrics` — Define success metrics tied to the journey stages and critical moments
+- IF consumer or PLG product AND no `research/hook-model.md`: `/hook-model` — Design habit loops grounded in the journey before defining metrics
+- ALWAYS (fallback when hook-model skipped or exists): `/metrics` — Define success metrics tied to the journey stages and critical moments
 - IF no `specs/` exist or journey gaps require product decisions: `/spec-interview [top journey opportunity or gap]` — turn the journey into a buildable product spec
 - IF `specs/` exist and no UX variation exists: `/ux-variation` — explore experience alternatives for onboarding, workflow, sharing, retention, and conversion before UI lock-in
 - IF UX variation exists and no UI spec exists: `/ui-interview` — lock the selected experience into buildable screen detail

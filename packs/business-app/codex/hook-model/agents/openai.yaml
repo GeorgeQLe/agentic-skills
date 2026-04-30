@@ -1,0 +1,7 @@
+interface:
+  display_name: "Hook Model"
+  short_description: "Design habit-forming engagement loops"
+  default_prompt: "Use $hook-model to design engagement loops using Nir Eyal's Hook Model — triggers, actions, variable rewards, and investments."
+
+policy:
+  allow_implicit_invocation: true

@@ -145,15 +145,16 @@ Include a **Recommended** item (the single highest-impact next step given curren
 
 ## Next Steps
 
-**Recommended:** `$gtm` — messaging should flow directly from positioning; this is the natural next step
+**Recommended:** `$lean-canvas` — synthesize positioning + upstream research into a one-page business model before GTM planning
 
 Other options:
+- IF no `research/journey-map.md`: `$journey-map` — map the customer journey to ground the business model in reality
 - IF no `research/gtm.md`: `$gtm` — Build go-to-market plan grounded in this positioning
 - IF `research/gtm.md` exists: `$gtm` — Refresh messaging framework to align with positioning
 - IF no `research/monetization.md`: `$monetization` — Positioning informs pricing — "premium" vs "value" positioning changes price expectations
 - IF codebase exists: `$mvp-gap` — Check if the product delivers on the positioning promise
 
-The recommendation (`$gtm`) is always applicable — positioning without a GTM plan to execute it is incomplete.
+The recommendation (`$lean-canvas`) is always applicable — a business model synthesis grounds GTM planning.
 
 ### 10. Write Output
 

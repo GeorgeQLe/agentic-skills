@@ -129,17 +129,20 @@ Includes the former product-research lane:
 
 ```text
 icp, enterprise-icp, competitive-analysis, customer-feedback,
+value-prop-canvas, lean-canvas, hook-model, growth-model, pmf-assessment,
 journey-map, metrics, gtm, monetization, positioning, landing-copy,
 mvp-gap, scale-audit, assumption-tracker, experiment, cohort-review,
 retro, risk-register, burn-rate, runway-model, investor-update,
 platform-strategy, reconcile-research
 ```
 
-Default user-facing planning flow:
+Default user-facing planning flow (18-step):
 
 ```text
-concept-exploration -> icp -> competitive-analysis -> positioning -> journey-map -> spec-interview
--> ux-variation -> ui-interview -> roadmap -> run
+concept-exploration -> icp -> competitive-analysis -> value-prop-canvas -> positioning
+-> lean-canvas -> journey-map -> hook-model -> metrics -> monetization -> gtm
+-> growth-model -> spec-interview -> ux-variation -> ui-interview -> roadmap -> run
+-> pmf-assessment (post-launch)
 ```
 
 ### Game

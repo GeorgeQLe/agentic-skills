@@ -114,6 +114,7 @@ Other options:
 **Recommendation priority:**
 1. IF downstream impact is **Major**: recommend `$reconcile-research` — [N] conflicts found in downstream docs need resolution before other work
 2. Otherwise, recommend the first applicable from this list:
+   - IF no `research/growth-model.md`: `$growth-model` — design compounding growth loops to make the GTM strategy sustainable
    - IF `specs/` exist and no `tasks/roadmap.md`: `$roadmap` — plan the build with launch milestones from above
    - IF no `research/metrics.md`: `$metrics` — define success metrics for the launch goals
    - IF open questions need research: `$spec-interview [top question]` — validate the most critical open question
@@ -125,6 +126,7 @@ Other options:
 - IF open questions need research: `$spec-interview [top question]` — Validate the most critical open question
 - IF `tasks/roadmap.md` exists: `$run` — Start executing — the GTM plan is set
 - IF no `research/journey-map.md`: `$journey-map` — Map the customer journey to validate funnel assumptions
+- IF no `research/growth-model.md`: `$growth-model` — Design compounding growth loops to sustain GTM momentum
 - IF no `research/positioning.md`: `$positioning` — Define strategic positioning — messaging should flow from positioning
 
 **Impact-aware adjustments:**

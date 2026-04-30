@@ -183,10 +183,11 @@ Before writing, check which files exist to populate the `## Next Steps` section 
 
 **Standard mode:**
 - RECOMMEND the first matching item:
-  1. IF no `research/journey-map.md`: `/journey-map` — Map the customer and user journey before spec decisions, using competitive gaps as inspiration
-  2. IF no `specs/` directory or it's empty: `/spec-interview [top journey-backed market gap or positioning opportunity]` — Spec features that exploit the most important market gap after journey context exists
-  3. IF no `research/gtm.md`: `/gtm` — Build a GTM plan using the channel and positioning insights
-  4. IF codebase exists and no `research/mvp-gap.md`: `/mvp-gap` — Evaluate codebase against ICP and competitive landscape
+  1. IF no `research/value-prop.md`: `/value-prop-canvas` — Validate solution-customer fit using competitive gaps to sharpen the value map
+  2. IF no `research/journey-map.md`: `/journey-map` — Map the customer and user journey before spec decisions, using competitive gaps as inspiration
+  3. IF no `specs/` directory or it's empty: `/spec-interview [top journey-backed market gap or positioning opportunity]` — Spec features that exploit the most important market gap after journey context exists
+  4. IF no `research/gtm.md`: `/gtm` — Build a GTM plan using the channel and positioning insights
+  5. IF codebase exists and no `research/mvp-gap.md`: `/mvp-gap` — Evaluate codebase against ICP and competitive landscape
 - Include `/brainstorm` only as an "Other option" when the analysis found multiple plausible market gaps and the product direction is still unclear. Do not recommend brainstorm just because competitive whitespace exists.
 
 Any `/spec-interview` recommendation must include a concrete target from the analysis, not a bare command. Use the top market gap, riskiest competitive assumption, or strongest positioning opportunity as the bracketed topic.

@@ -318,16 +318,24 @@ If you are used to this Claude Code rhythm:
 2. `$pack install business-app` for business/product concepts
 3. `$icp`
 4. `$competitive-analysis`
-5. `$positioning`
-6. `$journey-map`
-7. `$spec-interview`
-8. `$ux-variation`
-9. `$ui-interview`
-10. `$roadmap`
-11. `$plan-phase` (seeded by `$roadmap`; rerun only for later phases)
-12. `$run`
-13. `$ship`
-14. `$ship-end` when wrapping an off-script or partial session
+5. `$value-prop-canvas`
+6. `$positioning`
+7. `$lean-canvas`
+8. `$journey-map`
+9. `$hook-model` (consumer/PLG; skip to `$metrics` for B2B)
+10. `$metrics`
+11. `$monetization`
+12. `$gtm`
+13. `$growth-model`
+14. `$spec-interview`
+15. `$ux-variation`
+16. `$ui-interview`
+17. `$roadmap`
+18. `$plan-phase` (seeded by `$roadmap`; rerun only for later phases)
+19. `$run`
+20. `$ship`
+21. `$ship-end` when wrapping an off-script or partial session
+22. `$pmf-assessment` (post-launch)
 
 The closest Codex translation is:
 
@@ -335,17 +343,25 @@ The closest Codex translation is:
 2. `$pack install business-app` for business/product concepts
 3. `$icp`
 4. `$competitive-analysis`
-5. `$positioning`
-6. `$journey-map`
-7. `$spec-interview`
-8. `$ux-variation`
-9. `$ui-interview`
-10. `$roadmap`
-11. `$plan-phase` (seeded by `$roadmap`; rerun only for later phases)
-12. `$run` to present the plan, execute the work, ship it, and refresh `tasks/todo.md`
-13. repeat `$run` for the next planned step
-14. use `$ship` only if finished work needs manual packaging
-15. use `$ship-end` to wrap an interrupted or partial session
+5. `$value-prop-canvas`
+6. `$positioning`
+7. `$lean-canvas`
+8. `$journey-map`
+9. `$hook-model` (consumer/PLG; skip to `$metrics` for B2B)
+10. `$metrics`
+11. `$monetization`
+12. `$gtm`
+13. `$growth-model`
+14. `$spec-interview`
+15. `$ux-variation`
+16. `$ui-interview`
+17. `$roadmap`
+18. `$plan-phase` (seeded by `$roadmap`; rerun only for later phases)
+19. `$run` to present the plan, execute the work, ship it, and refresh `tasks/todo.md`
+20. repeat `$run` for the next planned step
+21. use `$ship` only if finished work needs manual packaging
+22. use `$ship-end` to wrap an interrupted or partial session
+23. `$pmf-assessment` (post-launch)
 
 The main manual additions are still plain-chat approval and the lack of a skill-controlled plan-mode boundary.
 

@@ -40,7 +40,7 @@ Research-first journey mapping for how people will flow through the product (use
 - `research/journey-map.md` (or `research/{app}/journey-map.md`) — User journeys (use case overview + task flows per profile), customer journey (full funnel), critical moments, journey gaps with `$spec-interview` prompts
 - `research/journey-map-interview.md` (or `research/{app}/journey-map-interview.md`) — Raw interview log
 
-The output file must end with a `## Next Steps` section (3–5 contextual items, "Pick one:" framing) based on which files exist. Recommended order: `$spec-interview [top journey opportunity or gap]` when specs are missing or journey gaps need product decisions; `$metrics` to define success metrics tied to journey stages; `$ux-variation` when specs exist and experience alternatives need exploration; `$gtm` when no GTM plan exists; `$roadmap` only when specs plus UX/UI planning artifacts are complete enough for implementation sequencing.
+The output file must end with a `## Next Steps` section (3–5 contextual items, "Pick one:" framing) based on which files exist. Recommended order: `$spec-interview [top journey opportunity or gap]` when specs are missing or journey gaps need product decisions; `$hook-model` for consumer/PLG products to design habit loops grounded in the journey (skip for B2B/enterprise); `$metrics` to define success metrics tied to journey stages; `$ux-variation` when specs exist and experience alternatives need exploration; `$gtm` when no GTM plan exists; `$roadmap` only when specs plus UX/UI planning artifacts are complete enough for implementation sequencing.
 
 ## Task Classification
 

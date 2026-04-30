@@ -106,22 +106,45 @@ Skills:
 
 ```text
 icp, enterprise-icp, competitive-analysis, customer-feedback,
+value-prop-canvas, lean-canvas, hook-model, growth-model, pmf-assessment,
 journey-map, metrics, gtm, monetization, positioning, landing-copy,
 mvp-gap, scale-audit, assumption-tracker, experiment, cohort-review,
 retro, risk-register, burn-rate, runway-model, investor-update,
 platform-strategy, reconcile-research
 ```
 
-Default flow:
+Default flow (18-step):
 
 ```text
-concept-exploration -> icp -> competitive-analysis -> positioning -> journey-map -> spec-interview
--> ux-variation -> ui-interview -> roadmap -> run
+DISCOVER:
+ 1. concept-exploration        shape the idea
+ 2. icp                        discover target customers
+ 3. competitive-analysis       map the market
 
-Parallel research after journey-map:
-metrics -> gtm / monetization -> landing-copy
+VALIDATE FIT:
+ 4. value-prop-canvas          does solution match customer?
+ 5. positioning                frame against alternatives
+ 6. lean-canvas                synthesize 1-page business model
 
-roadmap seeds plan-phase 1; later phases are decomposed just-in-time by /ship and /run.
+DESIGN THE EXPERIENCE:
+ 7. journey-map                map discovery → advocacy path
+ 8. hook-model                 design habit loops (skip for B2B)
+
+DESIGN THE BUSINESS:
+ 9. metrics                    define success targets
+10. monetization               design pricing & revenue
+11. gtm                        plan go-to-market
+12. growth-model               design compounding loops
+
+SPEC & BUILD:
+13. spec-interview             turn research into specs
+14. ux-variation               explore experience alternatives
+15. ui-interview               lock interface detail
+16. roadmap                    sequence into phases
+17. plan-phase → run → ship
+
+VALIDATE PMF:
+18. pmf-assessment             measure product-market fit
 ```
 
 ## Game Pack
