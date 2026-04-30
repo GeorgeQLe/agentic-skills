@@ -4,14 +4,79 @@
 
 ## Priority Documentation Todo
 
-- [ ] `$devtool-positioning` - create/update `research/devtool-positioning.md` because the enabled devtool research chain is missing this downstream positioning artifact.
-- [ ] `$devtool-monetization` - create/update `research/devtool-monetization.md` after `$devtool-positioning`; currently blocked because `research/devtool-positioning.md` is missing.
+- [x] `$devtool-positioning` - create/update `research/devtool-positioning.md` because the enabled devtool research chain is missing this downstream positioning artifact.
+- [ ] `$devtool-monetization` - create/update `research/devtool-monetization.md` after `$devtool-positioning`; now unblocked by `research/devtool-positioning.md`.
 - [ ] `$spec-drift fix all` - create/update `specs/drift-report.md` because implementation/documentation files changed on 2026-04-30 (`73374eb feat(skills): add project fleet orchestration`) while canonical specs last changed on 2026-04-22 (`2b63265 docs(spec-drift): banner legacy kanban.mjs specs`).
 
 ## Priority Task Queue
 
 - [x] `/research-roadmap` - scan documentation health and maintain priority documentation queue because all 11 roadmap phases are complete (last phase completed 2026-04-19).
 - [x] `creator-media research pack` - upgrade `youtube-audit` into an evidence-first channel audit workflow and add a `creator-media` pack for YouTube/founder-media strategy. Scope: improve metadata/transcript fetching (`yt-dlp` full metadata, venv-aware `youtube-transcript-api`, raw JSON outputs under `research/youtube/data/`); add performance/portfolio fields (views, likes, views/day, views/minute, top-video concentration, archetype, content role, cleanup candidates); create pack skills for `youtube-channel-audit`, `youtube-portfolio`, `youtube-peer-benchmark`, `creator-positioning`, `content-programming`, `series-spec`, `product-led-media-map`, and `creator-metrics-review`; include `PACK.md`, Claude/Codex skill variants consistent with existing pack conventions, and validation against `@GeorgeLe` / `WeeklyG` / `WeeklySOTA` use cases.
+
+### Active Step Plan — Devtool Positioning
+
+**Goal:** Create `research/devtool-positioning.md` for this repository's devtool research chain, grounded in existing repo evidence and the upstream devtool artifacts.
+
+**Execution profile:** serial.
+
+**Scope:**
+
+1. Synthesize positioning from `research/devtool-user-map.md`, `research/devtool-integration-map.md`, `research/devtool-dx-journey.md`, `research/devtool-adoption.md`, `README.md`, and operating-mode/pack docs.
+2. Create `research/devtool-positioning.md` with the `devtool-positioning` contract: alternatives, unique workflow advantages, ecosystem fit, trust claims, switching cost, and concise positioning.
+3. Mark `$devtool-positioning` complete in the Priority Documentation Todo, update `tasks/history.md`, and leave `$devtool-monetization` as the next blocked-then-unblocked research step.
+4. Validate with skill dependency/version scans and grep checks for the required positioning fields.
+
+**Files expected to change:**
+
+- `research/devtool-positioning.md`
+- `tasks/todo.md`
+- `tasks/history.md`
+
+**Acceptance criteria:**
+
+- [x] `research/devtool-positioning.md` exists and is specific to `agentic-skills`.
+- [x] The artifact covers alternatives, workflow advantages, ecosystem fit, trust claims, switching cost, and concise positioning.
+- [x] `$devtool-positioning` is checked off in the Priority Documentation Todo.
+- [x] Validation passes: `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, and required-section grep checks.
+
+**Review:**
+
+- Created `research/devtool-positioning.md` as a new artifact, so no archive snapshot was required.
+- Positioned `agentic-skills` against raw Claude/Codex usage, personal dotfiles, vendor-native instructions, prompt libraries, task runners, hosted agent platforms, and internal prompt frameworks.
+- Covered workflow advantages, ecosystem fit, evidence-backed trust claims, switching cost, short positioning, one-sentence pitch, homepage-style copy, differentiated claims, taglines, and avoided positioning.
+- Verified with `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, and grep checks for required positioning sections.
+
+### Next Step Plan — Devtool Monetization
+
+**Goal:** Create `research/devtool-monetization.md` for this repository's devtool research chain, using the now-complete positioning artifact to reason about realistic monetization paths.
+
+**Execution profile:** serial.
+
+**Scope:**
+
+1. Read `packs/devtool/codex/devtool-monetization/SKILL.md` and the existing devtool research chain:
+   - `research/devtool-user-map.md`
+   - `research/devtool-integration-map.md`
+   - `research/devtool-dx-journey.md`
+   - `research/devtool-adoption.md`
+   - `research/devtool-positioning.md`
+2. Create `research/devtool-monetization.md` with pricing model, packaging, open-source/commercial boundaries, buyer fit, conversion path, and risks.
+3. Mark `$devtool-monetization` complete in the Priority Documentation Todo and update `tasks/history.md`.
+4. Validate with `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, and grep checks for required monetization sections.
+
+**Files expected to change:**
+
+- `research/devtool-monetization.md`
+- `tasks/todo.md`
+- `tasks/history.md`
+
+**Acceptance criteria:**
+
+- [ ] `research/devtool-monetization.md` exists and is specific to `agentic-skills`.
+- [ ] The artifact uses `research/devtool-positioning.md` as an input.
+- [ ] The artifact covers pricing model, packaging, open-source/commercial boundaries, buyer fit, conversion path, and monetization risks.
+- [ ] `$devtool-monetization` is checked off in the Priority Documentation Todo.
+- [ ] Validation passes: `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, and required-section grep checks.
 
 ### Active Step Plan — Creator-Media Research Pack
 
