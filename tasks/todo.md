@@ -4,7 +4,7 @@
 
 ## Priority Documentation Todo
 
-- [ ] `$devtool-docs-audit` - create/update `research/devtool-docs-audit.md` after `$devtool-monetization`; now unblocked by `research/devtool-monetization.md`, and no docs-audit artifact exists for the devtool default flow documented in `docs/skills-reference.md`.
+- [x] `$devtool-docs-audit` - create/update `research/devtool-docs-audit.md` after `$devtool-monetization`; now unblocked by `research/devtool-monetization.md`, and no docs-audit artifact exists for the devtool default flow documented in `docs/skills-reference.md`.
 
 ## Priority Task Queue
 
@@ -182,10 +182,42 @@
 
 **Acceptance criteria:**
 
-- [ ] `research/devtool-docs-audit.md` exists and is specific to `agentic-skills`.
-- [ ] The artifact covers quickstart clarity, examples, API reference, troubleshooting, migration paths, and proof artifacts.
-- [ ] `$devtool-docs-audit` is checked off in the Priority Documentation Todo.
-- [ ] Validation passes for the docs-audit artifact and standard skill metadata scans.
+- [x] `research/devtool-docs-audit.md` exists and is specific to `agentic-skills`.
+- [x] The artifact covers quickstart clarity, examples, API reference, troubleshooting, migration paths, and proof artifacts.
+- [x] `$devtool-docs-audit` is checked off in the Priority Documentation Todo.
+- [x] Validation passes for the docs-audit artifact and standard skill metadata scans.
+
+**Review:**
+
+- Created `research/devtool-docs-audit.md` as a new artifact, so no archive snapshot was required.
+- Audited README, skills reference, packs docs, operating modes, and the completed devtool research chain for quickstart clarity, examples, API/script reference, troubleshooting, migration paths, and proof artifacts.
+- Found no P0 blocker. Recorded P1/P2 documentation improvements: first-success quickstart, curated examples, central troubleshooting, compact script reference, team rollout checklist, and better surfacing of self-dogfooding proof.
+- Verified with `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, and targeted grep checks for required audit sections.
+
+### Next Step Plan — Post-Audit Research Roadmap Refresh
+
+**Goal:** Re-scan documentation health now that the devtool default-flow research chain is complete through docs audit, then record the next concrete project action or explicitly confirm that no documentation queue remains.
+
+**Execution profile:** serial.
+
+**Scope:**
+
+1. Run `$research-roadmap` against the current repository state.
+2. Confirm whether the documentation queue is empty after `research/devtool-docs-audit.md`, or add the next priority documentation item if the scan finds one.
+3. Update `tasks/todo.md` and `tasks/history.md` with the result.
+4. Validate any changed docs with the relevant scans named by `$research-roadmap`.
+
+**Files expected to change:**
+
+- `tasks/todo.md`
+- `tasks/history.md`
+- Possibly research/spec/task queue files identified by `$research-roadmap`.
+
+**Acceptance criteria:**
+
+- [ ] Documentation health is re-scanned after the completed devtool docs audit.
+- [ ] The next concrete work item is recorded in `tasks/todo.md`, or the queue is explicitly marked empty.
+- [ ] Validation evidence is recorded for any updates.
 
 ### Active Step Plan — Creator-Media Research Pack
 
