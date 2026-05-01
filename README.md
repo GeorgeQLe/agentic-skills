@@ -176,12 +176,13 @@ The devtool workflow validates developer adoption, integration fit, documentatio
 For YouTube channels, founder-led media, product-led content, creator portfolios, and recurring shows.
 
 ```text
-youtube-channel-audit, youtube-portfolio, youtube-peer-benchmark,
-creator-positioning, content-programming, series-spec,
-product-led-media-map, creator-metrics-review
+youtube-channel-audit, youtube-title-thumbnail-audit, youtube-portfolio,
+youtube-peer-benchmark, youtube-search-positioning, youtube-cadence-diagnosis,
+creator-positioning, content-programming, series-spec, product-led-media-map,
+creator-metrics-review
 ```
 
-The creator-media workflow validates channel evidence, portfolio shape, peer benchmarks, positioning, programming, repeatable series, product-media fit, and recurring metrics. Target use cases include `@GeorgeLe`, `WeeklyG`, and `WeeklySOTA`.
+The creator-media workflow validates channel evidence, packaging, portfolio shape, peer benchmarks, search opportunities, publishing cadence, positioning, programming, repeatable series, product-media fit, and recurring metrics. Target use cases include `@GeorgeLe`, `WeeklyG`, and `WeeklySOTA`.
 
 ### Code Quality
 
