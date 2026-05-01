@@ -13,6 +13,14 @@ Position the developer tool in a way developers can understand quickly.
 
 Write or update `research/devtool-positioning.md` with alternatives, unique workflow advantages, ecosystem fit, trust claims, switching cost, and concise positioning.
 
+## Next-Skill Routing
+
+After writing the artifact, recommend the next contextual skill:
+
+1. If `tasks/todo.md` has an unchecked devtool item in `## Priority Documentation Todo`, recommend the first unchecked devtool command from that queue.
+2. Otherwise, follow the default devtool sequence: `/devtool-monetization` after this skill.
+3. If the sequence is ambiguous or multiple devtool artifacts are stale, recommend `/research-roadmap` to rebuild the ordered documentation queue.
+
 ## Task Classification
 
 When this skill produces follow-up work, file it by execution semantics:

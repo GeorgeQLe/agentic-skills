@@ -8,9 +8,45 @@
 
 ## Priority Task Queue
 
+- [x] `$investigate devtool contextual next-skill routing` - make devtool pack skills recommend the next contextual skill and ensure `$research-roadmap` can sequence the full devtool flow including docs audit.
 - [x] `$bootstrap-repo` - add mirrored Claude/Codex global skill that initializes `README.md` from a project brief and provisions `CLAUDE.md` / `AGENTS.md` via `provision-agentic-config`.
 - [x] `/research-roadmap` - scan documentation health and maintain priority documentation queue because all 11 roadmap phases are complete (last phase completed 2026-04-19).
 - [x] `creator-media research pack` - upgrade `youtube-audit` into an evidence-first channel audit workflow and add a `creator-media` pack for YouTube/founder-media strategy. Scope: improve metadata/transcript fetching (`yt-dlp` full metadata, venv-aware `youtube-transcript-api`, raw JSON outputs under `research/youtube/data/`); add performance/portfolio fields (views, likes, views/day, views/minute, top-video concentration, archetype, content role, cleanup candidates); create pack skills for `youtube-channel-audit`, `youtube-portfolio`, `youtube-peer-benchmark`, `creator-positioning`, `content-programming`, `series-spec`, `product-led-media-map`, and `creator-metrics-review`; include `PACK.md`, Claude/Codex skill variants consistent with existing pack conventions, and validation against `@GeorgeLe` / `WeeklyG` / `WeeklySOTA` use cases.
+
+### Active Step Plan — Devtool Contextual Next-Skill Routing
+
+**Goal:** Make devtool pack skills lead into the next contextual skill and make `$research-roadmap` sequence the complete devtool documentation chain.
+
+**Execution profile:** serial.
+
+**Scope:**
+
+1. Validate the reported gap against `packs/devtool/**/SKILL.md`, `global/*/research-roadmap/SKILL.md`, docs, and git history.
+2. Add a shared next-skill routing contract to mirrored devtool pack skills so each artifact points to the next skill in the documented flow, with `$research-roadmap`/`/research-roadmap` as the fallback queue manager.
+3. Update research-roadmap fallback maps and ordering so docs audit is part of the devtool sequence when dynamic discovery is unavailable.
+4. Verify skill metadata/dependency scripts and targeted grep checks.
+
+**Files expected to change:**
+
+- `packs/devtool/claude/*/SKILL.md`
+- `packs/devtool/codex/*/SKILL.md`
+- `global/claude/research-roadmap/SKILL.md`
+- `global/codex/research-roadmap/SKILL.md`
+- `tasks/todo.md`
+- `tasks/history.md`
+
+**Acceptance criteria:**
+
+- [x] Each devtool skill emits a contextual next command or explicitly routes through research-roadmap.
+- [x] Research-roadmap fallback sequencing includes `$devtool-docs-audit` / `/devtool-docs-audit`.
+- [x] Validation passes: `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, and targeted grep checks.
+
+**Review:**
+
+- Added `## Next-Skill Routing` to all 16 mirrored devtool pack skills.
+- Made `devtool-docs-audit` write `research/devtool-docs-audit.md`, so research-roadmap can track it as a documentation artifact.
+- Added docs audit to both research-roadmap devtool fallback maps and documented the complete default devtool order through the final `$research-roadmap` / `/research-roadmap` confirmation pass.
+- Validation evidence: `rg -l "## Next-Skill Routing" packs/devtool/codex packs/devtool/claude | wc -l` returned 16; `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken` reported no broken references; `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing` reported all 257 skills have a version field. Direct `./scripts/...` invocation still fails under macOS Bash 3.2 because the existing scripts use `declare -A`.
 
 ### Review — Bootstrap Repo Skill
 

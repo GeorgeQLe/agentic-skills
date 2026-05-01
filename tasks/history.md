@@ -1201,3 +1201,11 @@ Resolved all 10 findings from `/expert-review`:
 - Confirmed the six fallback devtool research outputs are present and current: `research/devtool-user-map.md`, `research/devtool-integration-map.md`, `research/devtool-dx-journey.md`, `research/devtool-adoption.md`, `research/devtool-positioning.md`, and `research/devtool-monetization.md`.
 - Promoted the one remaining default-flow devtool documentation item: `$devtool-docs-audit` to create `research/devtool-docs-audit.md`.
 - No record or recurring documentation advisory tasks were needed.
+
+## 2026-05-01 — Devtool contextual next-skill routing
+
+- Confirmed the reported gap: `$research-roadmap` referenced the devtool default flow, but its fallback devtool map omitted `$devtool-docs-audit`, and the individual devtool pack skills did not emit contextual next-skill guidance.
+- Added `## Next-Skill Routing` to all mirrored devtool pack skills for Claude and Codex.
+- Updated `devtool-docs-audit` so it writes `research/devtool-docs-audit.md`, allowing research-roadmap to track the artifact.
+- Added docs audit to both research-roadmap fallback maps and documented the full devtool order through the final research-roadmap confirmation pass.
+- Verified with targeted grep checks, `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken`, and `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`. Direct script invocation still uses macOS Bash 3.2 in this shell and fails on the scripts' existing associative arrays.
