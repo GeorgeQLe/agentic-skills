@@ -4,8 +4,7 @@
 
 ## Priority Documentation Todo
 
-- [x] `$devtool-docs-audit` - create/update `research/devtool-docs-audit.md` after `$devtool-monetization`; now unblocked by `research/devtool-monetization.md`, and no docs-audit artifact exists for the devtool default flow documented in `docs/skills-reference.md`.
-- [x] Post-audit `$research-roadmap` refresh - documentation health re-scanned after `research/devtool-docs-audit.md`; no new priority documentation items remain.
+- [ ] `$spec-drift fix all` - reconcile `specs/*.md` against implementation because source changes are newer than the latest spec evidence: commit `3e3bbf6` (`fix(skills): use local venv for youtube transcripts`, 2026-05-01 10:19:30 -0400) updated skill/doc surfaces after `specs/drift-report.md` was last modified on 2026-04-30 14:02:55 -0400.
 
 ## Priority Task Queue
 
