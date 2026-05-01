@@ -11,4 +11,12 @@ Review developer documentation for adoption blockers.
 
 ## Output
 
-Produce a findings-first docs audit covering quickstart clarity, examples, API reference, troubleshooting, migration paths, and missing proof artifacts.
+Write or update `research/devtool-docs-audit.md` with a findings-first docs audit covering quickstart clarity, examples, API reference, troubleshooting, migration paths, and missing proof artifacts.
+
+## Next-Skill Routing
+
+After writing the artifact, recommend the next contextual skill:
+
+1. If `tasks/todo.md` has an unchecked devtool item in `## Priority Documentation Todo`, recommend the first unchecked devtool command from that queue.
+2. Otherwise, recommend `/research-roadmap` to confirm the devtool documentation queue is complete and identify any non-devtool follow-up.
+3. If `/research-roadmap` reports no queue, recommend `/roadmap` only when implementation planning is missing or stale.

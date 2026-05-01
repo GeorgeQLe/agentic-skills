@@ -99,6 +99,7 @@ Devtool research outputs:
 | `$devtool-adoption` | `research/devtool-adoption.md` |
 | `$devtool-positioning` | `research/devtool-positioning.md` |
 | `$devtool-monetization` | `research/devtool-monetization.md` |
+| `$devtool-docs-audit` | `research/devtool-docs-audit.md` |
 
 Also include documentation-producing non-research skills when their outputs are missing or stale:
 
@@ -205,6 +206,19 @@ multi-product expansion -> $platform-strategy
 ```
 
 For game and devtool projects, follow the default pack flow from `docs/skills-reference.md` when available. Add review or planning skills such as `$devtool-docs-audit` and `$game-roadmap` only when their documented output is missing from the documentation contract.
+
+Default devtool order:
+
+```
+$devtool-user-map
+  -> $devtool-integration-map
+    -> $devtool-dx-journey
+      -> $devtool-adoption
+        -> $devtool-positioning
+          -> $devtool-monetization
+            -> $devtool-docs-audit
+              -> $research-roadmap
+```
 
 ### 6b. Classify Advisory Documentation Work
 

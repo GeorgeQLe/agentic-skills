@@ -13,6 +13,14 @@ Map where the tool fits into a developer's stack.
 
 Write or update `research/devtool-integration-map.md` with required integrations, ecosystem assumptions, setup path, compatibility constraints, and migration risks.
 
+## Next-Skill Routing
+
+After writing the artifact, recommend the next contextual skill:
+
+1. If `tasks/todo.md` has an unchecked devtool item in `## Priority Documentation Todo`, recommend the first unchecked devtool command from that queue.
+2. Otherwise, follow the default devtool sequence: `/devtool-dx-journey` after this skill.
+3. If the sequence is ambiguous or multiple devtool artifacts are stale, recommend `/research-roadmap` to rebuild the ordered documentation queue.
+
 ## Task Classification
 
 When this skill produces follow-up work, file it by execution semantics:
