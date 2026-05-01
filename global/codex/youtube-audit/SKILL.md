@@ -17,7 +17,7 @@ Fetch full video metadata and transcripts from a YouTube channel, persist raw ev
 Two CLI tools are required. Neither needs API keys.
 
 - **yt-dlp**: Lists channel videos as JSON. Install: `brew install yt-dlp` or `pip install yt-dlp`.
-- **youtube-transcript-api**: Fetches transcripts via Python. Install in the active Python environment with `python3 -m pip install youtube-transcript-api`.
+- **youtube-transcript-api**: Fetches transcripts via Python. If the active Python is externally managed, such as Homebrew Python on macOS under PEP 668, install this package in a project-local virtual environment instead of the system Python.
 
 Check both are installed before proceeding. If either is missing, tell the user exactly what to install and stop.
 
@@ -29,13 +29,38 @@ Check both are installed before proceeding. If either is missing, tell the user 
 - Optional `--count N` sets how many recent videos to fetch (default 20, max 50).
 - If no channel is provided, ask the user for one and stop.
 - Normalize handles to channel video URLs when needed: `@handle` -> `https://www.youtube.com/@handle/videos`.
-- Validate that `yt-dlp` and `youtube-transcript-api` are available by running `command -v yt-dlp` and a venv-aware Python import check:
+- Validate that `yt-dlp` is available first:
 
 ```bash
-python3 -c "from youtube_transcript_api import YouTubeTranscriptApi; print('ok')"
+command -v yt-dlp
 ```
 
-If the import fails, report the exact interpreter path from `python3 -c "import sys; print(sys.executable)"` and tell the user to install into that environment.
+- Select the Python interpreter for transcript fetching. Prefer a workspace-local virtual environment when present:
+
+```bash
+if [ -x .venv/bin/python ]; then
+  TRANSCRIPT_PYTHON=.venv/bin/python
+else
+  TRANSCRIPT_PYTHON=python3
+fi
+"$TRANSCRIPT_PYTHON" -c "from youtube_transcript_api import YouTubeTranscriptApi; print('ok')"
+```
+
+- Store the selected interpreter path and use it for every transcript-fetching command in this audit.
+- If the import check fails, run the selected interpreter command below and report exactly which interpreter is missing `youtube-transcript-api`:
+
+```bash
+"$TRANSCRIPT_PYTHON" -c "import sys; print(sys.executable)"
+```
+
+Then recommend this safe install path:
+
+```bash
+python3 -m venv .venv
+.venv/bin/python -m pip install youtube-transcript-api
+```
+
+Do not recommend installing `youtube-transcript-api` into Homebrew/system Python with `python3 -m pip install ...`, and do not recommend `--break-system-packages`. The local-venv path avoids PEP 668 `externally-managed-environment` failures on Homebrew Python.
 
 ### 2. Archive Previous Audit
 
@@ -83,7 +108,7 @@ Build a video table sorted by upload date (newest first). Report total videos fo
 
 ### 4. Fetch Transcripts
 
-Use the same Python interpreter that passed the import check. Fetch transcripts sequentially and persist raw transcript JSON:
+Use the same Python interpreter that passed the import check. If `.venv/bin/python` exists and passed the import check, run transcript fetching with `.venv/bin/python`; otherwise use the Python executable that passed the import check. Fetch transcripts sequentially and persist raw transcript JSON:
 
 ```python
 from youtube_transcript_api import YouTubeTranscriptApi
