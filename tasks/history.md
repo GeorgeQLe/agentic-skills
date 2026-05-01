@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-05-01 — Research roadmap finds post-drift source change
+
+- Ran `$research-roadmap` after the post-audit refresh and re-scanned the devtool documentation queue.
+- Confirmed the devtool research chain is complete and no missing devtool research artifact remains.
+- Found one strict freshness trigger: source commit `3e3bbf6` (`fix(skills): use local venv for youtube transcripts`, 2026-05-01 10:19:30 -0400) is newer than `specs/drift-report.md` (2026-04-30 14:02:55 -0400).
+- Promoted `$spec-drift fix all` into `tasks/todo.md` as the next priority documentation item.
+
 ## 2026-05-01 — Post-audit research roadmap refresh
 
 - Re-ran the `$research-roadmap` decision path after `research/devtool-docs-audit.md` completed the devtool default-flow research chain.
