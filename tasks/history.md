@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-05-01 — YouTube audit transcript dependency self-healing
+
+- Fixed the mirrored global `youtube-audit` skills so missing `youtube-transcript-api` is handled through a project-local `.venv`.
+- Claude and Codex variants now create `.venv` when needed, install with `.venv/bin/python -m pip install youtube-transcript-api`, rerun the import check, and use that interpreter for transcript fetching.
+- Preserved the explicit guard against Homebrew/system Python installs and `--break-system-packages`.
+- Added `.venv/` to `.gitignore` and recorded the correction pattern in `tasks/lessons.md`.
+
 ## 2026-05-01 — Add creator-media YouTube diagnostics
 
 - Added mirrored Claude/Codex creator-media skills for `youtube-title-thumbnail-audit`, `youtube-search-positioning`, and `youtube-cadence-diagnosis`.

@@ -2,6 +2,35 @@
 
 **Status:** Planning complete 2026-04-19. New workstream kicking off; prior roadmap phases archived.
 
+## Active Step Plan — YouTube Audit Dependency Self-Healing
+
+**Goal:** Fix `youtube-audit` so missing `youtube-transcript-api` is handled through a project-local `.venv` instead of telling users to install into Homebrew/system Python.
+
+**Execution profile:** serial.
+
+**Scope:**
+
+1. Align Claude and Codex `youtube-audit` prerequisite flows on project-local `.venv` setup.
+2. Make missing transcript dependency handling self-healing when network access is available.
+3. Keep failure messaging on the safe `.venv` install path when network access is unavailable or denied.
+4. Ignore local `.venv/` so audit tooling state is not tracked.
+5. Validate mirrored guidance and skill metadata/reference health.
+
+**Acceptance criteria:**
+
+- [x] Both global `youtube-audit` variants create or reuse `.venv` before checking transcript imports.
+- [x] Both variants install missing `youtube-transcript-api` with `.venv/bin/python -m pip install youtube-transcript-api`.
+- [x] Both variants explicitly forbid Homebrew/system Python installs and `--break-system-packages`.
+- [x] `.venv/` is ignored.
+- [x] Task docs/history record the result.
+
+**Review:**
+
+- Updated mirrored Claude/Codex `youtube-audit` skills so transcript setup uses a project-local `.venv` by default.
+- Changed missing dependency behavior from "tell user to install into the selected interpreter" to "install into `.venv` and retry," with a safe fallback message only when installation cannot run.
+- Added `.venv/` to `.gitignore`.
+- Captured the correction in `tasks/lessons.md`.
+
 ## Active Step Plan — Creator-Media YouTube Diagnostics
 
 **Goal:** Add three focused creator-media pack skills from the current YouTube strategy findings: `youtube-title-thumbnail-audit`, `youtube-search-positioning`, and `youtube-cadence-diagnosis`.
