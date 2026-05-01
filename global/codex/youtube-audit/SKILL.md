@@ -19,7 +19,7 @@ Two CLI tools are required. Neither needs API keys.
 - **yt-dlp**: Lists channel videos as JSON. Install: `brew install yt-dlp` or `pip install yt-dlp`.
 - **youtube-transcript-api**: Fetches transcripts via Python. If the active Python is externally managed, such as Homebrew Python on macOS under PEP 668, install this package in a project-local virtual environment instead of the system Python.
 
-Check both are installed before proceeding. If either is missing, tell the user exactly what to install and stop.
+Check `yt-dlp` before proceeding. The transcript dependency should be handled through a project-local `.venv` when it is missing.
 
 ## Workflow
 
@@ -35,25 +35,25 @@ Check both are installed before proceeding. If either is missing, tell the user 
 command -v yt-dlp
 ```
 
-- Select the Python interpreter for transcript fetching. Prefer a workspace-local virtual environment when present:
+- Select the Python interpreter for transcript fetching. Prefer a workspace-local virtual environment when present; if one is not present, create it before checking the transcript import:
 
 ```bash
-if [ -x .venv/bin/python ]; then
-  TRANSCRIPT_PYTHON=.venv/bin/python
-else
-  TRANSCRIPT_PYTHON=python3
+if [ ! -x .venv/bin/python ]; then
+  python3 -m venv .venv
 fi
+TRANSCRIPT_PYTHON=.venv/bin/python
+"$TRANSCRIPT_PYTHON" -c "from youtube_transcript_api import YouTubeTranscriptApi; print('ok')"
+```
+
+- If the import check fails, install the missing package into the project-local virtual environment, then rerun the import check:
+
+```bash
+.venv/bin/python -m pip install youtube-transcript-api
 "$TRANSCRIPT_PYTHON" -c "from youtube_transcript_api import YouTubeTranscriptApi; print('ok')"
 ```
 
 - Store the selected interpreter path and use it for every transcript-fetching command in this audit.
-- If the import check fails, run the selected interpreter command below and report exactly which interpreter is missing `youtube-transcript-api`:
-
-```bash
-"$TRANSCRIPT_PYTHON" -c "import sys; print(sys.executable)"
-```
-
-Then recommend this safe install path:
+- If package installation fails because network access is unavailable or denied, stop and report the exact safe install commands below:
 
 ```bash
 python3 -m venv .venv

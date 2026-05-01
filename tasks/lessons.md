@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-05-01 — Use local venv for YouTube transcript dependency
+
+- A `$youtube-audit` prerequisite failure under Homebrew Python was handled with a system-Python install recommendation, which conflicts with the skill's PEP 668-safe instructions.
+- When `youtube_transcript_api` is missing, create or reuse project `.venv` and install with `.venv/bin/python -m pip install youtube-transcript-api`.
+- Do not recommend `python3 -m pip install youtube-transcript-api` against Homebrew/system Python, and do not recommend `--break-system-packages`.
+
 ## 2026-05-01 — Put required handoffs in Output, not only routing notes
 
 - Devtool pack skills had `## Next-Skill Routing` sections, but users still saw runs that did not recommend the next skill.
