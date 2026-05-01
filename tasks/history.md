@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-05-01 — Post-audit research roadmap refresh
+
+- Re-ran the `$research-roadmap` decision path after `research/devtool-docs-audit.md` completed the devtool default-flow research chain.
+- Confirmed the current devtool documentation set is complete: user map, integration map, DX journey, adoption, positioning, monetization, and docs audit all exist.
+- Confirmed the 2026-04-30 creator-media pack work is already shipped and recorded, and no additional priority documentation item needs promotion into `tasks/todo.md`.
+- Marked the post-audit refresh acceptance criteria complete in `tasks/todo.md`; the Priority Documentation Todo queue is now explicitly empty.
+
 ## 2026-04-30 — Devtool docs audit research
 
 - Created `research/devtool-docs-audit.md` as the final default-flow devtool research artifact for `agentic-skills`.

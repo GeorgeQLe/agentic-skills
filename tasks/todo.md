@@ -5,6 +5,7 @@
 ## Priority Documentation Todo
 
 - [x] `$devtool-docs-audit` - create/update `research/devtool-docs-audit.md` after `$devtool-monetization`; now unblocked by `research/devtool-monetization.md`, and no docs-audit artifact exists for the devtool default flow documented in `docs/skills-reference.md`.
+- [x] Post-audit `$research-roadmap` refresh - documentation health re-scanned after `research/devtool-docs-audit.md`; no new priority documentation items remain.
 
 ## Priority Task Queue
 
@@ -194,7 +195,7 @@
 - Found no P0 blocker. Recorded P1/P2 documentation improvements: first-success quickstart, curated examples, central troubleshooting, compact script reference, team rollout checklist, and better surfacing of self-dogfooding proof.
 - Verified with `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, and targeted grep checks for required audit sections.
 
-### Next Step Plan — Post-Audit Research Roadmap Refresh
+### Review — Post-Audit Research Roadmap Refresh
 
 **Goal:** Re-scan documentation health now that the devtool default-flow research chain is complete through docs audit, then record the next concrete project action or explicitly confirm that no documentation queue remains.
 
@@ -215,9 +216,17 @@
 
 **Acceptance criteria:**
 
-- [ ] Documentation health is re-scanned after the completed devtool docs audit.
-- [ ] The next concrete work item is recorded in `tasks/todo.md`, or the queue is explicitly marked empty.
-- [ ] Validation evidence is recorded for any updates.
+- [x] Documentation health is re-scanned after the completed devtool docs audit.
+- [x] The next concrete work item is recorded in `tasks/todo.md`, or the queue is explicitly marked empty.
+- [x] Validation evidence is recorded for any updates.
+
+**Review:**
+
+- Re-ran the `$research-roadmap` decision logic against the current repository state after `research/devtool-docs-audit.md`.
+- Confirmed the devtool research chain is complete: user map, integration map, DX journey, adoption, positioning, monetization, and docs audit all exist.
+- Confirmed `specs/drift-report.md` is current for the 2026-04-30 project-fleet and devtool research changes, and the 2026-04-30 creator-media pack work is already recorded in `tasks/history.md`.
+- No new missing or stale priority documentation item was found, so the Priority Documentation Todo is explicitly empty after this refresh.
+- Validation evidence: `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, and targeted grep checks for the complete devtool artifact set and creator-media registration.
 
 ### Active Step Plan — Creator-Media Research Pack
 
