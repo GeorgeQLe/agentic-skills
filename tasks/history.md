@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-05-01 — Add creator-media YouTube diagnostics
+
+- Added mirrored Claude/Codex creator-media skills for `youtube-title-thumbnail-audit`, `youtube-search-positioning`, and `youtube-cadence-diagnosis`.
+- `youtube-title-thumbnail-audit` scores title patterns and thumbnail visual signals against channel performance and peer packaging evidence, then writes `research/youtube/title-thumbnail-audit-<slug>.md`.
+- `youtube-search-positioning` maps query demand, ranking competition, and underserved YouTube search opportunities, then writes `research/youtube/search-positioning-<slug>.md`.
+- `youtube-cadence-diagnosis` computes upload streaks, gaps, post-gap performance patterns, and realistic cadence recommendations, then writes `research/youtube/cadence-diagnosis-<slug>.md`.
+- Updated creator-media pack docs in `packs/creator-media/PACK.md`, `README.md`, and `docs/skills-reference.md` so the new skills are discoverable in the pack flow.
+
 ## 2026-05-01 — Spec drift fix all
 
 - Ran `$spec-drift fix all` against the current flat `specs/` inventory after `3e3bbf6` updated the `$youtube-audit` transcript dependency guidance.

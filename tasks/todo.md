@@ -2,6 +2,47 @@
 
 **Status:** Planning complete 2026-04-19. New workstream kicking off; prior roadmap phases archived.
 
+## Active Step Plan — Creator-Media YouTube Diagnostics
+
+**Goal:** Add three focused creator-media pack skills from the current YouTube strategy findings: `youtube-title-thumbnail-audit`, `youtube-search-positioning`, and `youtube-cadence-diagnosis`.
+
+**Execution profile:** serial.
+
+**Scope:**
+
+1. Add mirrored Claude/Codex skill definitions for:
+   - `youtube-title-thumbnail-audit`
+   - `youtube-search-positioning`
+   - `youtube-cadence-diagnosis`
+2. Update creator-media pack flow docs so the new skills sit between channel audit, peer benchmark, portfolio, and content programming.
+3. Record the result in `tasks/history.md`.
+4. Validate skill presence and references with repository scans.
+
+**Files expected to change:**
+
+- `packs/creator-media/PACK.md`
+- `packs/creator-media/{claude,codex}/youtube-title-thumbnail-audit/SKILL.md`
+- `packs/creator-media/{claude,codex}/youtube-search-positioning/SKILL.md`
+- `packs/creator-media/{claude,codex}/youtube-cadence-diagnosis/SKILL.md`
+- `README.md`
+- `docs/skills-reference.md`
+- `tasks/roadmap.md`
+- `tasks/todo.md`
+- `tasks/history.md`
+
+**Acceptance criteria:**
+
+- [x] All three skills exist for both Claude and Codex.
+- [x] Each skill defines inputs, output artifact path, report sections, and constraints.
+- [x] Pack docs show where each skill fits in the creator-media workflow.
+- [x] Validation scans confirm the new skill names are discoverable and mirrored.
+
+**Review:**
+
+- Added mirrored Claude/Codex skills for `youtube-title-thumbnail-audit`, `youtube-search-positioning`, and `youtube-cadence-diagnosis`.
+- Updated `packs/creator-media/PACK.md`, `README.md`, and `docs/skills-reference.md` so packaging follows channel audit, search/cadence follow peer benchmark, and all three feed portfolio/programming decisions.
+- Validation evidence: mirror file scan, targeted skill-name reference grep, frontmatter-name count check, `./scripts/skill-versions.sh --missing`, and `./scripts/skill-deps.sh --broken`.
+
 ## Priority Documentation Todo
 
 - [x] `$spec-drift fix all` - reconcile `specs/*.md` against implementation because source changes are newer than the latest spec evidence: commit `3e3bbf6` (`fix(skills): use local venv for youtube transcripts`, 2026-05-01 10:19:30 -0400) updated skill/doc surfaces after `specs/drift-report.md` was last modified on 2026-04-30 14:02:55 -0400.

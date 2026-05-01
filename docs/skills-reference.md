@@ -227,20 +227,22 @@ scripts/pack.sh install creator-media
 Skills:
 
 ```text
-youtube-channel-audit, youtube-portfolio, youtube-peer-benchmark,
-creator-positioning, content-programming, series-spec,
-product-led-media-map, creator-metrics-review
+youtube-channel-audit, youtube-title-thumbnail-audit, youtube-portfolio,
+youtube-peer-benchmark, youtube-search-positioning, youtube-cadence-diagnosis,
+creator-positioning, content-programming, series-spec, product-led-media-map,
+creator-metrics-review
 ```
 
 Default flow:
 
 ```text
-youtube-channel-audit -> youtube-portfolio -> youtube-peer-benchmark
+youtube-channel-audit -> youtube-title-thumbnail-audit -> youtube-portfolio
+-> youtube-peer-benchmark -> youtube-search-positioning / youtube-cadence-diagnosis
 -> creator-positioning -> content-programming -> series-spec
 -> product-led-media-map -> creator-metrics-review
 ```
 
-The pack is evidence-first: channel audits persist raw `yt-dlp` JSONL and transcript JSON under `research/youtube/data/`, then downstream skills reuse that evidence for portfolio, benchmark, positioning, programming, series, product-led media, and metrics-review work. Validation target shapes include `@GeorgeLe`, `WeeklyG`, and `WeeklySOTA`.
+The pack is evidence-first: channel audits persist raw `yt-dlp` JSONL and transcript JSON under `research/youtube/data/`, then downstream skills reuse that evidence for packaging, portfolio, benchmark, search-positioning, cadence, positioning, programming, series, product-led media, and metrics-review work. Validation target shapes include `@GeorgeLe`, `WeeklyG`, and `WeeklySOTA`.
 
 ## Kanban Variant Packs
 
