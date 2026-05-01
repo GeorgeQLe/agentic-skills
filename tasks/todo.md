@@ -4,7 +4,45 @@
 
 ## Priority Documentation Todo
 
-- [ ] `$spec-drift fix all` - reconcile `specs/*.md` against implementation because source changes are newer than the latest spec evidence: commit `3e3bbf6` (`fix(skills): use local venv for youtube transcripts`, 2026-05-01 10:19:30 -0400) updated skill/doc surfaces after `specs/drift-report.md` was last modified on 2026-04-30 14:02:55 -0400.
+- [x] `$spec-drift fix all` - reconcile `specs/*.md` against implementation because source changes are newer than the latest spec evidence: commit `3e3bbf6` (`fix(skills): use local venv for youtube transcripts`, 2026-05-01 10:19:30 -0400) updated skill/doc surfaces after `specs/drift-report.md` was last modified on 2026-04-30 14:02:55 -0400.
+
+### Active Step Plan — Spec Drift Fix All
+
+**Goal:** Refresh the canonical spec drift report against the current repository state and resolve any fix-mode-safe documentation drift.
+
+**Execution profile:** serial.
+
+**Scope:**
+
+1. Inventory canonical specs under `specs/`, skipping interviews and prior report files where appropriate.
+2. Compare verifiable spec claims against current implementation, skill surfaces, task docs, and research artifacts.
+3. Archive and replace `specs/drift-report.md` with a current audit trail covering verified, resolved, deferred, and remaining items.
+4. Update task docs/history to mark this documentation queue item complete if the report is refreshed.
+5. Validate with standard skill metadata scans and targeted checks against the updated report.
+
+**Files expected to change:**
+
+- `specs/drift-report.md`
+- `tasks/todo.md`
+- `tasks/history.md`
+- `docs/history/archive/<date>/<time>/specs/drift-report.md`
+
+**Acceptance criteria:**
+
+- [x] Current drift report cites the latest implementation/doc evidence.
+- [x] Error-class contradictions are either absent or held for explicit user decision.
+- [x] Warning/info items are resolved, deferred, or recorded with rationale.
+- [x] `$spec-drift fix all` is checked off in the Priority Documentation Todo.
+- [x] Validation passes for the updated drift report and standard skill metadata scans.
+
+**Review:**
+
+- Added `specs/project-fleet.md` as the canonical spec for the previously undocumented `$project-fleet` public workflow.
+- Archived the previous drift report to `docs/history/archive/2026-05-01/112050/specs/drift-report.md` before replacement.
+- Refreshed `specs/drift-report.md` for current repository state after `3e3bbf6` and the devtool/docs audit queue.
+- Confirmed no Error-class spec/code contradictions and no Warning-class active unimplemented spec claims.
+- Recorded the `$youtube-audit` local-venv change as skill guidance with no existing spec contradiction.
+- Validation passed: `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken`, `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`, targeted `rg` checks, and `git diff --check`.
 
 ## Priority Task Queue
 

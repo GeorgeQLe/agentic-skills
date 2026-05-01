@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-05-01 — Spec drift fix all
+
+- Ran `$spec-drift fix all` against the current flat `specs/` inventory after `3e3bbf6` updated the `$youtube-audit` transcript dependency guidance.
+- Added `specs/project-fleet.md` as the canonical spec for `$project-fleet`, resolving the prior Info-class coverage gap for a public fleet orchestration workflow.
+- Archived the previous drift report at `docs/history/archive/2026-05-01/112050/specs/drift-report.md` before replacing `specs/drift-report.md`.
+- Refreshed `specs/drift-report.md` with current evidence for approval packets, code-quality pack layout, project-fleet, headless kanban migration, legacy kanban fallback specs, devtool research artifacts, and the youtube local-venv change.
+- Result: 0 Errors, 0 Warnings, 0 Info findings remain in the current audit scope.
+
 ## 2026-05-01 — Research roadmap finds post-drift source change
 
 - Ran `$research-roadmap` after the post-audit refresh and re-scanned the devtool documentation queue.
