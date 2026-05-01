@@ -11,7 +11,7 @@ Design monetization for developer adoption and team expansion.
 
 ## Output
 
-Write or update `research/devtool-monetization.md` with free/open-source stance, packaging, usage limits, team conversion, enterprise triggers, and unit economics.
+Write or update `research/devtool-monetization.md` with free/open-source stance, packaging, usage limits, team conversion, enterprise triggers, and unit economics. In the final response, include `Recommended next skill: <command>` using the `## Next-Skill Routing` rules below.
 
 ## Next-Skill Routing
 

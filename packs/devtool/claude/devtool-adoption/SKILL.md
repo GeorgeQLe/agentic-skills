@@ -11,7 +11,7 @@ Plan how developers find, try, trust, and keep using the tool.
 
 ## Output
 
-Write or update `research/devtool-adoption.md` with adoption loops, examples, templates, community channels, proof artifacts, and activation metrics.
+Write or update `research/devtool-adoption.md` with adoption loops, examples, templates, community channels, proof artifacts, and activation metrics. In the final response, include `Recommended next skill: <command>` using the `## Next-Skill Routing` rules below.
 
 ## Next-Skill Routing
 

@@ -19,7 +19,7 @@ Use this skill when the project is primarily developer-facing.
 
 ## Output
 
-Recommend the next single devtool-pack skill to run and explain the missing artifact or decision that makes it next.
+Recommend the next single devtool-pack skill to run and explain the missing artifact or decision that makes it next. In the final response, include `Recommended next skill: <command>` using the `## Next-Skill Routing` rules below.
 
 ## Next-Skill Routing
 

@@ -1225,3 +1225,9 @@ Resolved all 10 findings from `/expert-review`:
 - Updated `devtool-docs-audit` so it writes `research/devtool-docs-audit.md`, allowing research-roadmap to track the artifact.
 - Added docs audit to both research-roadmap fallback maps and documented the full devtool order through the final research-roadmap confirmation pass.
 - Verified with targeted grep checks, `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken`, and `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`. Direct script invocation still uses macOS Bash 3.2 in this shell and fails on the scripts' existing associative arrays.
+
+## 2026-05-01 — Devtool final-response next-skill enforcement
+
+- Tightened all 16 mirrored devtool pack skills so `## Output` explicitly requires the final response to include `Recommended next skill: <command>`.
+- Kept the existing `## Next-Skill Routing` sections as the decision logic for choosing the command.
+- Verified the explicit output requirement appears in all mirrored devtool skills, and reran `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken` plus `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`.
