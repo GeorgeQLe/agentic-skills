@@ -11,7 +11,7 @@ Map the developer-facing audience and buying context.
 
 ## Output
 
-Write or update `research/devtool-user-map.md` with developer users, economic buyers, champions, maintainers, operators, use cases, and adoption blockers.
+Write or update `research/devtool-user-map.md` with developer users, economic buyers, champions, maintainers, operators, use cases, and adoption blockers. In the final response, include `Recommended next skill: <command>` using the `## Next-Skill Routing` rules below.
 
 ## Next-Skill Routing
 

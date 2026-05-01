@@ -13,7 +13,7 @@ Position the developer tool in a way developers can understand quickly.
 
 ## Output
 
-Write or update `research/devtool-positioning.md` with alternatives, unique workflow advantages, ecosystem fit, trust claims, switching cost, and concise positioning.
+Write or update `research/devtool-positioning.md` with alternatives, unique workflow advantages, ecosystem fit, trust claims, switching cost, and concise positioning. In the final response, include `Recommended next skill: <command>` using the `## Next-Skill Routing` rules below.
 
 ## Next-Skill Routing
 

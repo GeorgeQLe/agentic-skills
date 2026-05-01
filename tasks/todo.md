@@ -123,9 +123,10 @@
 **Review:**
 
 - Added `## Next-Skill Routing` to all 16 mirrored devtool pack skills.
+- Follow-up correction: made every devtool skill's `## Output` section require the final response to include `Recommended next skill: <command>`, so the handoff is emitted rather than only documented as routing guidance.
 - Made `devtool-docs-audit` write `research/devtool-docs-audit.md`, so research-roadmap can track it as a documentation artifact.
 - Added docs audit to both research-roadmap devtool fallback maps and documented the complete default devtool order through the final `$research-roadmap` / `/research-roadmap` confirmation pass.
-- Validation evidence: `rg -l "## Next-Skill Routing" packs/devtool/codex packs/devtool/claude | wc -l` returned 16; `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken` reported no broken references; `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing` reported all 257 skills have a version field. Direct `./scripts/...` invocation still fails under macOS Bash 3.2 because the existing scripts use `declare -A`.
+- Validation evidence: `rg -l "## Next-Skill Routing" packs/devtool/codex packs/devtool/claude | wc -l` returned 16; `rg -l "Recommended next skill: <command>" packs/devtool/codex packs/devtool/claude | wc -l` returned 16; `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken` reported no broken references; `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing` reported all 263 skills have a version field. Direct `./scripts/...` invocation still fails under macOS Bash 3.2 because the existing scripts use `declare -A`.
 
 ### Review — Bootstrap Repo Skill
 

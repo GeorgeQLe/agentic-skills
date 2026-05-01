@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-05-01 — Put required handoffs in Output, not only routing notes
+
+- Devtool pack skills had `## Next-Skill Routing` sections, but users still saw runs that did not recommend the next skill.
+- When a skill must emit a handoff, state the requirement in `## Output` and specify the exact final-response shape, then keep the routing section as the decision logic.
+- Validate both presence of the routing logic and presence of the final-output phrase across mirrored Claude/Codex skills.
+
 ## 2026-04-30 — Completed-roadmap scans must be idempotent
 
 - `$roadmap` and `/roadmap` previously re-queued research-roadmap whenever all implementation phases were complete, even after research-roadmap had already written an active or current `## Priority Documentation Todo`.
