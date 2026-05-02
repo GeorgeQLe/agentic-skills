@@ -44,6 +44,8 @@ Default stance: assume the user has no insider knowledge of the market. Explain 
 8. **Checkpoint 3 — Present cross-ICP analysis and build sequence.** Show shared pains with source data, conflicts with specific examples, and build sequence rationale grounded in the scoring matrix. Ask: "Does this sequencing make sense?" Incorporate feedback.
 9. **Final review**: Present complete findings summary. Ask: "Ready to write? Anything to adjust?" Only write after user confirms.
 
+**After writing is complete, repeat the Recommended next step from the generated `## Next Steps` section in the final chat response.**
+
 ## Deliverables
 
 - `research/icp.md` — Primary ICP in canonical 9 top-level `##` sections (Customer Profile, User Profile(s), Trigger Events, Current State Journey, Pain Map, Market Landscape, Market Sizing, Value Proposition, Customer ↔ User Dynamics), then supplementary `## Acquisition & Conversion Model` (section 10: funnel shape, motion type & cycle length, DMU [B2B only], champion & advocate dynamics [B2B/B2B2C only], expansion & retention dynamics [all models], budget & procurement [B2B only]), then `## Additional ICPs` (condensed 9-section + condensed acquisition model per ICP), then `## Cross-ICP Analysis` (prioritization matrix, shared pains, conflicts, product line recs, build sequence, acquisition model comparison)

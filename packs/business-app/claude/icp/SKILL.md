@@ -167,6 +167,8 @@ Present the **complete findings summary** to the user — primary ICP, key secti
 
 Only after the user confirms, write the output files.
 
+**After writing is complete, repeat the Recommended next step from the generated `## Next Steps` section in the final chat response.**
+
 ### 9. Downstream Impact Check
 
 After writing, check for downstream research documents that may be affected by what was just decided. Only check documents that exist on disk.
