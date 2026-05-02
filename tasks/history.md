@@ -1255,3 +1255,9 @@ Resolved all 10 findings from `/expert-review`:
 - Tightened all 16 mirrored devtool pack skills so `## Output` explicitly requires the final response to include `Recommended next skill: <command>`.
 - Kept the existing `## Next-Skill Routing` sections as the decision logic for choosing the command.
 - Verified the explicit output requirement appears in all mirrored devtool skills, and reran `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken` plus `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`.
+
+## 2026-05-02 — Phase 12 Step 12.1: creator platform capability matrix
+
+- Added mirrored `creator-platform-capability-matrix` skills under `packs/creator-media/claude/` and `packs/creator-media/codex/`.
+- Defined the required output path `research/creator-platforms/capability-matrix.md`, baseline platform rows, collection method vocabulary, matrix columns, operational risk levels, evidence-gap handling, and next-skill routing to `creator-evidence-schema`.
+- Verified the new skill contracts with targeted `rg` scans, `./scripts/skill-versions.sh --missing`, `./scripts/skill-deps.sh --broken`, and `git diff --check`.
