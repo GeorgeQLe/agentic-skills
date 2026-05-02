@@ -1,12 +1,14 @@
 # Roadmap: Claude Skills
 
 > Generated from: tasks/roadmap.md (existing), specs/board-flag-kanban-search.md, tasks/ideas.md, tasks/history.md
-> Date: 2026-03-27 (last updated 2026-04-19)
-> Total Phases: 11 (11 complete, 0 planned)
+> Date: 2026-03-27 (last updated 2026-05-02)
+> Total Phases: 14 (11 complete, 3 planned)
 
 ## Summary
 
 Phases 1-11 complete: kanban skill suite, board intelligence, templates, archive automation, expert review fixes, test hardening (83 tests), kanban DX, skill infrastructure, the shared Poketo headless API migration for both Claude and Codex, and the three-mode operating model (`claude-only` / `codex-only` / `hybrid`) with shared approval-packet contract and next-step routing.
+
+Phases 12-14 planned from `specs/creator-platform-evidence-schema.md`: expand the creator-media pack beyond YouTube with a platform capability matrix, shared evidence schema, repo-backed creator presence dossier, and LinkedIn-first free/manual evidence lane.
 
 ## Phase Overview
 
@@ -23,6 +25,9 @@ Phases 1-11 complete: kanban skill suite, board intelligence, templates, archive
 | 9 | Skill Infrastructure ✓ | tasks/ideas.md | Skill discovery, dependency graph, versioning | L |
 | 10 | Headless API Migration ✓ | — | Shared Poketo app-layer kanban integration for Claude + Codex | L |
 | 11 | Three-Mode Operating Model ✓ | tasks/todo.md | `claude-only`/`codex-only`/`hybrid` modes, approval packet, `/delegate`, next-step routing | XL |
+| 12 | Creator Platform Evidence Foundation | specs/creator-platform-evidence-schema.md | Capability matrix + shared evidence schema skills | M |
+| 13 | Creator Presence Dossier | specs/creator-platform-evidence-schema.md | Repo-backed creator career/presence dossier skill | M |
+| 14 | LinkedIn Evidence Lane | specs/creator-platform-evidence-schema.md | LinkedIn export/manual evidence templates and guidance | M |
 
 ---
 
@@ -325,6 +330,84 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Claude and Codex should migrate to the same target surface in close succession to avoid long-lived behavioral drift.
 
 ---
+
+## Phase 12: Creator Platform Evidence Foundation
+
+**Goal:** Add the shared creator-media foundation for non-YouTube platforms: a platform capability matrix and normalized evidence schema that future platform-specific skills can consume.
+
+**Source Spec:** `specs/creator-platform-evidence-schema.md`
+
+**Scope:**
+- Add mirrored Claude/Codex `creator-platform-capability-matrix` skill definitions.
+- Add mirrored Claude/Codex `creator-evidence-schema` skill definitions.
+- Define output artifacts under `research/creator-platforms/`.
+- Document supported baseline collection methods: `export`, `manual_snapshot`, `rss_feed`, `public_page_capture`, `open_source_tool`, and `free_api`.
+- Update creator-media pack docs and global skill references so the new foundation appears before platform-specific audits.
+- Validate mirrored skill metadata, references, and required output-path language.
+
+**Acceptance Criteria:**
+- [ ] `creator-platform-capability-matrix` exists for both Claude and Codex.
+- [ ] `creator-evidence-schema` exists for both Claude and Codex.
+- [ ] The capability matrix skill records platform evidence sources, fields, missing fields, metric availability, audit depth, operational risk, and recommended next skill.
+- [ ] The schema skill defines normalized evidence records, metric confidence, evidence confidence, capture method, auth context, raw evidence paths, and privacy notes.
+- [ ] Pack docs route non-YouTube creator-media work through the foundation before platform-specific skills.
+- [ ] Validation passes with skill dependency/version checks and targeted reference scans.
+
+**Parallelization:** serial
+**Coordination Notes:** This phase changes shared pack contracts and docs, so keep it integrated. Later platform-specific work should depend on this schema instead of creating incompatible evidence fields.
+
+---
+
+## Phase 13: Creator Presence Dossier
+
+**Goal:** Add a repo-backed Markdown dossier skill that tracks a creator's public professional presence, career arc, platform roles, proof assets, and content opportunities over time.
+
+**Source Spec:** `specs/creator-platform-evidence-schema.md`
+
+**Scope:**
+- Add mirrored Claude/Codex `creator-presence-dossier` skill definitions.
+- Make the dossier consume `research/creator-platforms/capability-matrix.md`, `research/creator-platforms/evidence-schema.md`, and available creator evidence.
+- Define output under `research/creator-presence/<slug>.md`.
+- Include sections for identity, career timeline, platform map, core themes, expertise claims, proof assets, signature formats, audience/community signals, product/company links, evidence register, gaps, and next collection tasks.
+- Update pack docs and references so the dossier feeds `creator-positioning`, `content-programming`, `product-led-media-map`, and `creator-metrics-review`.
+
+**Acceptance Criteria:**
+- [ ] `creator-presence-dossier` exists for both Claude and Codex.
+- [ ] The skill distinguishes public/professional evidence from private repo planning context.
+- [ ] The skill requires source paths, capture dates, confidence levels, and evidence gaps.
+- [ ] The dossier contract supports LinkedIn, personal websites, GitHub, podcasts, talks, newsletters, and product docs.
+- [ ] Follow-up routing recommends the correct creator-media strategy skill from dossier findings.
+- [ ] Validation passes with skill dependency/version checks and targeted reference scans.
+
+**Parallelization:** serial
+**Coordination Notes:** The dossier depends on the Phase 12 matrix/schema contract. Keep implementation serial because it touches pack routing and cross-skill handoffs.
+
+---
+
+## Phase 14: LinkedIn Evidence Lane
+
+**Goal:** Add LinkedIn-first free/manual evidence support that uses owner exports, manual snapshots, and public page captures without paid APIs, logged-in scraping, or access-control bypassing.
+
+**Source Spec:** `specs/creator-platform-evidence-schema.md`
+
+**Scope:**
+- Add LinkedIn-specific collection guidance to the creator-media pack.
+- Provide templates or skill guidance for owner-provided LinkedIn exports, profile snapshots, article/post snapshots, rich media evidence, recommendations, skills, and career timeline records.
+- Define redaction guidance for sensitive export fields such as private contacts, messages, or relationship data.
+- Add optional parsing/template support only where it can operate on local user-provided files.
+- Route LinkedIn evidence into `creator-evidence-schema` and `creator-presence-dossier`.
+- Document analytics as unavailable unless owner-provided; official company/page APIs are a later authorized lane, not a baseline dependency.
+
+**Acceptance Criteria:**
+- [ ] LinkedIn evidence guidance is present in mirrored creator-media skills or a dedicated mirrored LinkedIn skill, depending on Phase 12/13 implementation shape.
+- [ ] The LinkedIn lane uses owner exports and manual/public snapshots as the baseline.
+- [ ] The lane explicitly forbids logged-in scraping, paid API dependency, bot-protection bypass, and private-data collection.
+- [ ] Redaction and privacy handling are documented before analysis.
+- [ ] LinkedIn records normalize into the shared evidence schema and dossier.
+- [ ] Validation passes with targeted checks for LinkedIn baseline, privacy constraints, and no paid/API-first language.
+
+**Parallelization:** serial
+**Coordination Notes:** LinkedIn access constraints are the highest-risk part of the expansion. Implement after the shared foundation and dossier exist so LinkedIn remains one evidence lane, not a special-case schema.
 
 ## Post-Phase Tail Work
 

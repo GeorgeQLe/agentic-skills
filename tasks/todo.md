@@ -150,10 +150,8 @@
 
 ## Priority Task Queue
 
-- [x] `$investigate devtool contextual next-skill routing` - make devtool pack skills recommend the next contextual skill and ensure `$research-roadmap` can sequence the full devtool flow including docs audit.
-- [x] `$bootstrap-repo` - add mirrored Claude/Codex global skill that initializes `README.md` from a project brief and provisions `CLAUDE.md` / `AGENTS.md` via `provision-agentic-config`.
-- [x] `/research-roadmap` - scan documentation health and maintain priority documentation queue because all 11 roadmap phases are complete (last phase completed 2026-04-19).
-- [x] `creator-media research pack` - upgrade `youtube-audit` into an evidence-first channel audit workflow and add a `creator-media` pack for YouTube/founder-media strategy. Scope: improve metadata/transcript fetching (`yt-dlp` full metadata, venv-aware `youtube-transcript-api`, raw JSON outputs under `research/youtube/data/`); add performance/portfolio fields (views, likes, views/day, views/minute, top-video concentration, archetype, content role, cleanup candidates); create pack skills for `youtube-channel-audit`, `youtube-portfolio`, `youtube-peer-benchmark`, `creator-positioning`, `content-programming`, `series-spec`, `product-led-media-map`, and `creator-metrics-review`; include `PACK.md`, Claude/Codex skill variants consistent with existing pack conventions, and validation against `@GeorgeLe` / `WeeklyG` / `WeeklySOTA` use cases.
+- [ ] `$plan-phase 12` - generate implementation steps for Phase 12 because `tasks/roadmap.md` now contains unchecked Phase 12 acceptance criteria from `specs/creator-platform-evidence-schema.md`, but `tasks/todo.md` has no Phase 12 implementation plan.
+- [ ] `$reconcile-dev-docs fix tasks` - reconcile stale active-step sections because `tasks/todo.md` still contains older unchecked work such as "Pack Next-Step Routing Contracts" while the current roadmap now points to Phase 12 as the next planned phase.
 
 ### Active Step Plan — Devtool Contextual Next-Skill Routing
 
