@@ -1,5 +1,11 @@
 # Session History
 
+## 2026-05-02 — Wire creator-media evidence foundation into docs
+
+- Registered `creator-platform-capability-matrix` and `creator-evidence-schema` ahead of platform-specific audits in `packs/creator-media/PACK.md`, `README.md`, and `docs/skills-reference.md`.
+- Clarified that YouTube-specific work may still start at `youtube-channel-audit`, while non-YouTube or mixed-platform creator-media work starts with the platform capability matrix and evidence schema.
+- Validation passed: targeted creator-media routing scans, `./scripts/skill-versions.sh --missing`, `./scripts/skill-deps.sh --broken`, and `git diff --check`.
+
 ## 2026-05-02 — ICP skill final-response next-step echo
 
 - Added instruction to both Claude and Codex ICP skills requiring the agent to repeat the Recommended next step from the generated `## Next Steps` section in the final chat response.
