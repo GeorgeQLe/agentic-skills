@@ -2,6 +2,40 @@
 
 **Status:** Planning complete 2026-04-19. New workstream kicking off; prior roadmap phases archived.
 
+## Active Step Plan — Creator Platform Evidence Schema
+
+**Goal:** Specify the creator-media pack expansion path beyond YouTube using a platform capability matrix, shared evidence schema, and repo-backed creator presence dossier, constrained to free, open-source, and manual evidence collection.
+
+**Execution profile:** serial.
+
+**Scope:**
+
+1. Research current free/manual/OSS evidence options for LinkedIn and public web capture.
+2. Write `specs/creator-platform-evidence-schema.md`.
+3. Write `specs/creator-platform-evidence-schema-interview.md`.
+4. Validate the new spec structure and repository state.
+
+**Files expected to change:**
+
+- `specs/creator-platform-evidence-schema.md`
+- `specs/creator-platform-evidence-schema-interview.md`
+- `tasks/todo.md`
+- `tasks/history.md`
+
+**Acceptance criteria:**
+
+- [x] Spec defines matrix-first expansion rather than platform-specific skills first.
+- [x] Spec defines free/manual/OSS collection methods.
+- [x] Spec includes LinkedIn as the first non-YouTube priority lane.
+- [x] Spec includes a repo-backed creator presence dossier.
+- [x] Validation confirms the new files and no diff whitespace errors.
+
+**Review:**
+
+- Added `specs/creator-platform-evidence-schema.md` with the matrix-first expansion plan, shared evidence schema, collection methods, LinkedIn baseline, dossier artifact, edge cases, and test plan.
+- Added `specs/creator-platform-evidence-schema-interview.md` with the assumptions manifest, user decisions, options, and coverage checkpoint.
+- Validation passed: targeted `rg` checks for required headings/terms and `git diff --check`.
+
 ## Active Step Plan — YouTube Audit Dependency Self-Healing
 
 **Goal:** Fix `youtube-audit` so missing `youtube-transcript-api` is handled through a project-local `.venv` instead of telling users to install into Homebrew/system Python.

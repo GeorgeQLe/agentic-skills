@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-05-02 — Creator platform evidence schema spec
+
+- Ran `$spec-interview` for expanding the creator-media pack beyond YouTube.
+- Chose a matrix-first implementation target: `creator-platform-capability-matrix`, `creator-evidence-schema`, and `creator-presence-dossier` before platform-specific audit skills.
+- Constrained the baseline collection model to free, open-source, and manual evidence paths: owner exports, manual snapshots, RSS/feed capture, public page capture, and optional OSS tools.
+- Made LinkedIn the first non-YouTube priority lane, using owner exports and manual/public snapshots rather than paid API access or logged-in scraping.
+- Added `specs/creator-platform-evidence-schema.md` and `specs/creator-platform-evidence-schema-interview.md`.
+
 ## 2026-05-01 — YouTube audit transcript dependency self-healing
 
 - Fixed the mirrored global `youtube-audit` skills so missing `youtube-transcript-api` is handled through a project-local `.venv`.
