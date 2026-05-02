@@ -48,7 +48,7 @@
   - Require output at `research/creator-platforms/capability-matrix.md`.
   - Require columns for evidence sources, likely fields, missing fields, metric availability, body/media/transcript availability, peer benchmarking practicality, operational risk, audit depth, and recommended next skill.
   - Classify collection methods as `export`, `manual_snapshot`, `rss_feed`, `public_page_capture`, `open_source_tool`, or `free_api`.
-- Step 12.2: Create mirrored `creator-evidence-schema` skill contracts.
+- [x] Step 12.2: Create mirrored `creator-evidence-schema` skill contracts.
   - Classification: automated
   - Files: create `packs/creator-media/claude/creator-evidence-schema/SKILL.md`, create `packs/creator-media/codex/creator-evidence-schema/SKILL.md`
   - Require output at `research/creator-platforms/evidence-schema.md`.
@@ -138,4 +138,9 @@
 - Step 12.1 validation: `rg` targeted scans for frontmatter names, output path, platforms, collection methods, matrix columns, LinkedIn guidance, and next-skill language; `./scripts/skill-versions.sh --missing`; `./scripts/skill-deps.sh --broken`; `git diff --check`.
 - Deviations from plan: none for Step 12.1.
 - Tech debt / follow-ups: Step 12.2 should create the mirrored evidence schema contracts and keep the same final-response next-skill convention.
+- Ready for next phase: no
+- Step 12.2 completed: added mirrored Claude/Codex `creator-evidence-schema` skill contracts with the required evidence-schema output path, raw evidence root, normalized record fields, metric/evidence confidence rules, privacy notes, collection method vocabulary, missing-evidence gap handling, and contextual next-skill routing.
+- Step 12.2 validation: `rg` targeted scans for frontmatter names, version fields, output paths, raw evidence root, normalized schema fields, collection methods, confidence/privacy language, missing metrics/bodies handling, and next-skill language; `./scripts/skill-versions.sh --missing`; `./scripts/skill-deps.sh --broken`; `git diff --check`.
+- Deviations from plan: none for Step 12.2.
+- Tech debt / follow-ups: Step 12.3 should register the two foundation skills in creator-media pack docs and public discovery references before platform-specific audits.
 - Ready for next phase: no
