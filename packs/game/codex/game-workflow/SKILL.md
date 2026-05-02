@@ -22,3 +22,10 @@ Use this skill when a project is a video game or playable entertainment product.
 ## Output
 
 Recommend the next single game-pack skill to run and explain the missing artifact or decision that makes it next.
+## Next-Skill Routing
+
+Recommend the first missing or stale game-pack artifact in this order:
+
+`$game-audience` -> `$game-fantasy` -> `$game-genre-map` -> `$game-comparables` -> `$game-core-loop` -> `$game-prototype-test` -> `$game-playtest-metrics` -> `$game-store-page-test` -> `$game-launch` -> `$game-roadmap`
+
+In the final response, include `Recommended next skill: <command>` and one sentence explaining the missing artifact or stale decision that makes it next.

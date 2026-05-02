@@ -99,7 +99,18 @@ Continue until the user confirms. Only then proceed to writing.
 
 ### 4. Populate Next Steps
 
-Before writing, check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with "Pick one:" framing:
+Before writing, check which files exist to populate the `## Next Steps` section contextually. Include a **Recommended** item (the single highest-impact next step given current project state) with a one-line reason, followed by **Other options** (2-4 alternatives). Choose the recommendation by the first matching condition:
+
+Use this format in the output:
+
+```markdown
+## Next Steps
+
+**Recommended:** [recommended skill] — [one-line reason grounded in this metrics framework]
+
+Other options:
+- [2-4 applicable alternatives]
+```
 
 - IF instrumentation gaps and no specs for them: `$spec-interview [topic]` — Spec instrumentation for the top metric gap
 - IF no `tasks/roadmap.md`: `$roadmap` — Plan the build with instrumentation phases
@@ -244,7 +255,9 @@ _Start with:_ `$spec-interview [instrumentation topic]` for high-priority gaps.
 
 ## Next Steps
 
-Pick one:
+**Recommended:** [recommended next step] — [one-line reason grounded in this artifact]
+
+Other options:
 - [conditional items from step 4 — only include items whose conditions are met]
 ```
 

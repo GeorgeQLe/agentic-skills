@@ -162,12 +162,25 @@ Only after confirmation, write the output file.
 
 ## Next Steps
 
-Pick one:
+**Recommended:** [recommended skill] — [one-line reason grounded in the highest-priority risk]
+
+Other options:
 - `/assumption-tracker` — Cross-reference product/market assumptions with these broader risks
+- `/experiment [top risk assumption]` — Test the riskiest uncertainty when it can be validated cheaply
+- `/reconcile-research` — Update downstream research if risk findings contradict existing assumptions
 - `/research-roadmap` — Check overall project status
 ```
 
 Create the `research/` directory if it doesn't exist.
+
+### 7. Populate Next Steps
+
+Before writing, choose one recommended next step using the first applicable rule:
+
+1. IF a high-priority risk is a product/market assumption: recommend `/assumption-tracker`.
+2. IF the top risk can be cheaply validated: recommend `/experiment [top risk assumption]`.
+3. IF the findings contradict existing research: recommend `/reconcile-research`.
+4. Otherwise recommend `/research-roadmap`.
 
 ## Task Classification
 
