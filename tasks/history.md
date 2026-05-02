@@ -1266,3 +1266,9 @@ Resolved all 10 findings from `/expert-review`:
 - Added mirrored `creator-platform-capability-matrix` skills under `packs/creator-media/claude/` and `packs/creator-media/codex/`.
 - Defined the required output path `research/creator-platforms/capability-matrix.md`, baseline platform rows, collection method vocabulary, matrix columns, operational risk levels, evidence-gap handling, and next-skill routing to `creator-evidence-schema`.
 - Verified the new skill contracts with targeted `rg` scans, `./scripts/skill-versions.sh --missing`, `./scripts/skill-deps.sh --broken`, and `git diff --check`.
+
+## 2026-05-02 — Phase 12 Step 12.2: creator evidence schema
+
+- Added mirrored `creator-evidence-schema` skills under `packs/creator-media/claude/` and `packs/creator-media/codex/`.
+- Defined the required output path `research/creator-platforms/evidence-schema.md`, raw evidence root `research/creator-platforms/data/<platform>/<slug>/`, normalized evidence fields, metrics object, confidence rules, privacy notes, evidence-gap handling, and next-skill routing.
+- Verified the new skill contracts with targeted `rg` scans, `./scripts/skill-versions.sh --missing`, `./scripts/skill-deps.sh --broken`, and `git diff --check`.
