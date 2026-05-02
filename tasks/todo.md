@@ -60,7 +60,7 @@
   - Files: modify `packs/creator-media/PACK.md`, modify `README.md`, modify `docs/skills-reference.md`
   - Put `creator-platform-capability-matrix` and `creator-evidence-schema` before platform-specific audits in the creator-media skill list and default flow.
   - Document that YouTube-specific work may still start at `youtube-channel-audit`, while non-YouTube or mixed-platform work starts with the foundation.
-- Step 12.4: Align creator-media next-skill routing with the new foundation.
+- [x] Step 12.4: Align creator-media next-skill routing with the new foundation.
   - Classification: automated
   - Files: modify `packs/creator-media/claude/creator-platform-capability-matrix/SKILL.md`, modify `packs/creator-media/codex/creator-platform-capability-matrix/SKILL.md`, modify `packs/creator-media/claude/creator-evidence-schema/SKILL.md`, modify `packs/creator-media/codex/creator-evidence-schema/SKILL.md`, inspect existing `packs/creator-media/{claude,codex}/*/SKILL.md`
   - Ensure the new skills emit `Recommended next skill: <command>` in the final response.
@@ -93,30 +93,27 @@
 
 ---
 
-### Next Step: 12.4 — Align creator-media next-skill routing with the new foundation
+### Next Step: 12.5 — Write regression validation coverage for Phase 12 acceptance criteria
 
-**What:** Tighten the new foundation skills' next-skill routing so their final responses emit an explicit `Recommended next skill: <command>` line and route correctly into the creator-media workflow.
+**What:** Record regression validation coverage for the Phase 12 creator platform evidence foundation acceptance criteria, using targeted scans that prove the mirrored skill files and docs still carry the required contracts.
 
 **Files to modify:**
-- `packs/creator-media/claude/creator-platform-capability-matrix/SKILL.md`
-- `packs/creator-media/codex/creator-platform-capability-matrix/SKILL.md`
-- `packs/creator-media/claude/creator-evidence-schema/SKILL.md`
-- `packs/creator-media/codex/creator-evidence-schema/SKILL.md`
+- `tasks/todo.md`
 
 **Requirements:**
-- Inspect existing creator-media skill routing conventions under `packs/creator-media/{claude,codex}/*/SKILL.md`.
-- Ensure both capability-matrix skills tell the agent to emit `Recommended next skill: creator-evidence-schema` in the final response by default.
-- Ensure both evidence-schema skills tell the agent to emit `Recommended next skill: creator-presence-dossier` when that future skill exists or is available in the project.
-- When `creator-presence-dossier` is absent, route evidence-schema outputs to the best available platform-specific audit when sufficient platform evidence exists, otherwise to `creator-positioning`.
-- Preserve existing YouTube workflow routing: YouTube-only audits with channel evidence may still proceed through `youtube-channel-audit`; non-YouTube or mixed-platform work should not skip the foundation.
-- Keep Claude and Codex variants semantically mirrored while preserving their existing verbosity differences.
+- Add a Step 12.5 review entry with exact validation commands and results.
+- Run targeted scans confirming mirrored new skill files, frontmatter names, output paths, collection method language, normalized schema fields, LinkedIn baseline language, and pack-doc routing.
+- Include scans for the Step 12.4 next-skill routing contract so regression coverage includes `creator-evidence-schema`, `creator-presence-dossier`, `creator-positioning`, and YouTube-only preservation.
+- Record any warnings as fixed, accepted with rationale, or unresolved.
 
 **Reference files:**
 - `packs/creator-media/claude/creator-platform-capability-matrix/SKILL.md`
 - `packs/creator-media/codex/creator-platform-capability-matrix/SKILL.md`
 - `packs/creator-media/claude/creator-evidence-schema/SKILL.md`
 - `packs/creator-media/codex/creator-evidence-schema/SKILL.md`
-- Existing creator-media routing sections in `packs/creator-media/{claude,codex}/*/SKILL.md`
+- `packs/creator-media/PACK.md`
+- `README.md`
+- `docs/skills-reference.md`
 
 **Execution Profile:**
 - Parallel mode: serial
@@ -124,13 +121,13 @@
 - Classification: automated
 
 **Acceptance criteria:**
-- Both capability-matrix skills contain final-response guidance for `Recommended next skill: creator-evidence-schema`.
-- Both evidence-schema skills contain final-response guidance for `Recommended next skill: creator-presence-dossier` when available.
-- Both evidence-schema skills define fallback routing to platform-specific audits or `creator-positioning`.
-- Targeted scans confirm routing language is mirrored across Claude and Codex variants.
+- Targeted scans prove both mirrored foundation skill files exist and have the expected frontmatter names.
+- Targeted scans prove required output paths, collection methods, normalized schema fields, confidence/privacy fields, and LinkedIn baseline language remain present.
+- Targeted scans prove pack docs route non-YouTube or mixed-platform work through the foundation before platform-specific audits.
+- Targeted scans prove Step 12.4 routing language remains mirrored across Claude and Codex variants.
 - `./scripts/skill-versions.sh --missing`, `./scripts/skill-deps.sh --broken`, and `git diff --check` pass.
 
-**Ship-one-step handoff contract:** Implement only Step 12.4. Validate with targeted `rg` scans. Mark step done in `tasks/todo.md`. Update `tasks/history.md`. Commit and push. Write Step 12.5 plan.
+**Ship-one-step handoff contract:** Implement only Step 12.5. Update the review section with exact validation commands and results. Mark step done in `tasks/todo.md`. Update `tasks/history.md`. Commit and push. Write Step 12.6 plan.
 
 ### Review
 - Step 12.1 completed: added mirrored Claude/Codex capability-matrix skill contracts with baseline platform rows, required matrix columns, collection method vocabulary, output path, operational risk guidance, and next-skill routing to `creator-evidence-schema`.
@@ -147,4 +144,10 @@
 - Step 12.3 validation: `rg -n "creator-platform-capability-matrix, creator-evidence-schema|creator-platform-capability-matrix -> creator-evidence-schema|YouTube-specific work may|non-YouTube or mixed-platform" packs/creator-media/PACK.md README.md docs/skills-reference.md`; `rg -n "research/creator-platforms|platform-specific audit|youtube-channel-audit" packs/creator-media/PACK.md README.md docs/skills-reference.md`; `./scripts/skill-versions.sh --missing`; `./scripts/skill-deps.sh --broken`; `git diff --check`.
 - Deviations from plan: none for Step 12.3.
 - Tech debt / follow-ups: Step 12.4 should tighten final-response next-skill routing in the new foundation skills and preserve the YouTube-specific shortcut.
+- Ready for next phase: no
+- Step 12.4 completed: tightened mirrored Claude/Codex next-skill routing in the capability-matrix and evidence-schema foundation skills.
+- Step 12.4 validation: inspected existing creator-media routing conventions with `rg`; confirmed explicit final-response lines and routing fallbacks with `rg -n 'Recommended next skill: [/\\$]creator-evidence-schema|Recommended next skill: [/\\$]creator-presence-dossier|Recommended next skill: [/\\$]creator-positioning|non-YouTube or mixed-platform work must not skip|non-YouTube or mixed-platform work should use this foundation|YouTube-only work with channel evidence' packs/creator-media/claude/creator-platform-capability-matrix/SKILL.md packs/creator-media/codex/creator-platform-capability-matrix/SKILL.md packs/creator-media/claude/creator-evidence-schema/SKILL.md packs/creator-media/codex/creator-evidence-schema/SKILL.md`; `./scripts/skill-versions.sh --missing`; `./scripts/skill-deps.sh --broken`; `git diff --check`.
+- Step 12.4 warnings: one initial targeted `rg` command used unsafe shell quoting around Markdown backticks and printed `command not found: Recommended`; reran with safe single-quoted regex and the scan passed cleanly.
+- Deviations from plan: none for Step 12.4.
+- Tech debt / follow-ups: Step 12.5 should record full regression coverage for all Phase 12 acceptance criteria.
 - Ready for next phase: no

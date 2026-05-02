@@ -1278,3 +1278,10 @@ Resolved all 10 findings from `/expert-review`:
 - Added mirrored `creator-evidence-schema` skills under `packs/creator-media/claude/` and `packs/creator-media/codex/`.
 - Defined the required output path `research/creator-platforms/evidence-schema.md`, raw evidence root `research/creator-platforms/data/<platform>/<slug>/`, normalized evidence fields, metrics object, confidence rules, privacy notes, evidence-gap handling, and next-skill routing.
 - Verified the new skill contracts with targeted `rg` scans, `./scripts/skill-versions.sh --missing`, `./scripts/skill-deps.sh --broken`, and `git diff --check`.
+
+## 2026-05-02 — Phase 12 Step 12.4: creator-media next-skill routing
+
+- Tightened mirrored Claude/Codex routing in `creator-platform-capability-matrix` so the default final response emits `Recommended next skill: creator-evidence-schema`.
+- Tightened mirrored Claude/Codex routing in `creator-evidence-schema` so `creator-presence-dossier` is preferred when present, with fallback to platform-specific audits or `creator-positioning`.
+- Preserved the YouTube-only shortcut while making non-YouTube and mixed-platform work keep the foundation before platform-specific audits.
+- Verified with targeted routing scans, `./scripts/skill-versions.sh --missing`, `./scripts/skill-deps.sh --broken`, and `git diff --check`.

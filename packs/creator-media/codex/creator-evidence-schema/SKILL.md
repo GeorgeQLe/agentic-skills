@@ -134,9 +134,14 @@ High-risk evidence must recommend manual snapshots, owner exports, or stopping f
 
 After writing the artifact, recommend the next contextual creator-media skill in the final response as `Recommended next skill: <command>`.
 
-Default recommendation: `$creator-positioning`.
+Default final-response line when no better route is available: `Recommended next skill: $creator-positioning`.
 
-If a future `$creator-presence-dossier` skill is present, recommend it after schema creation for mixed-platform or LinkedIn-first work. If strong platform-specific evidence is already available, recommend the matching platform-specific audit. Preserve the existing YouTube workflow by recommending YouTube-specific skills only for YouTube-first work.
+Routing rules:
+
+- If a `$creator-presence-dossier` skill is present or available in the project, emit `Recommended next skill: $creator-presence-dossier` after schema creation for mixed-platform, LinkedIn-first, career-signal, or owned-presence work.
+- If `$creator-presence-dossier` is absent and strong platform-specific evidence is available, emit the best matching available platform-specific audit skill.
+- Preserve the existing YouTube workflow: YouTube-only work with channel evidence may route to `$youtube-channel-audit` or the next YouTube audit; non-YouTube or mixed-platform work should use this foundation before platform-specific audits.
+- If `$creator-presence-dossier` is absent and no platform-specific audit fits the available evidence, emit `Recommended next skill: $creator-positioning`.
 
 ## Constraints
 
