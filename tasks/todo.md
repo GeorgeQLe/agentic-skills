@@ -41,7 +41,7 @@
 **Subagent lanes:** none
 
 ### Implementation
-- Step 12.1: Create mirrored `creator-platform-capability-matrix` skill contracts.
+- [x] Step 12.1: Create mirrored `creator-platform-capability-matrix` skill contracts.
   - Classification: automated
   - Files: create `packs/creator-media/claude/creator-platform-capability-matrix/SKILL.md`, create `packs/creator-media/codex/creator-platform-capability-matrix/SKILL.md`
   - Include platform rows for LinkedIn personal profile, LinkedIn company page, personal website/blog, newsletter, podcast, GitHub, X/Threads/Instagram/TikTok, and Bluesky/Mastodon.
@@ -92,6 +92,8 @@
 - [ ] No regressions in previous phase tests.
 
 ### Review
-- Deviations from plan: [fill when complete]
-- Tech debt / follow-ups: [fill when complete]
+- Step 12.1 completed: added mirrored Claude/Codex capability-matrix skill contracts with baseline platform rows, required matrix columns, collection method vocabulary, output path, operational risk guidance, and next-skill routing to `creator-evidence-schema`.
+- Step 12.1 validation: `rg` targeted scans for frontmatter names, output path, platforms, collection methods, matrix columns, LinkedIn guidance, and next-skill language; `./scripts/skill-versions.sh --missing`; `./scripts/skill-deps.sh --broken`; `git diff --check`.
+- Deviations from plan: none for Step 12.1.
+- Tech debt / follow-ups: Step 12.2 should create the mirrored evidence schema contracts and keep the same final-response next-skill convention.
 - Ready for next phase: no
