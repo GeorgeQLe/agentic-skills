@@ -356,6 +356,65 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 **Parallelization:** serial
 **Coordination Notes:** This phase changes shared pack contracts and docs, so keep it integrated. Later platform-specific work should depend on this schema instead of creating incompatible evidence fields.
 
+> Test strategy: tests-after
+
+### Execution Profile
+**Parallel mode:** serial
+**Integration owner:** main agent
+**Conflict risk:** medium
+**Review gates:** correctness, tests, docs/API conformance
+
+**Subagent lanes:** none
+
+### Implementation
+- Step 12.1: Create mirrored `creator-platform-capability-matrix` skill contracts.
+  - Files: create `packs/creator-media/claude/creator-platform-capability-matrix/SKILL.md`, create `packs/creator-media/codex/creator-platform-capability-matrix/SKILL.md`
+  - Include platform rows for LinkedIn personal profile, LinkedIn company page, personal website/blog, newsletter, podcast, GitHub, X/Threads/Instagram/TikTok, and Bluesky/Mastodon.
+  - Require output at `research/creator-platforms/capability-matrix.md`.
+  - Require columns for evidence sources, likely fields, missing fields, metric availability, body/media/transcript availability, peer benchmarking practicality, operational risk, audit depth, and recommended next skill.
+  - Classify collection methods as `export`, `manual_snapshot`, `rss_feed`, `public_page_capture`, `open_source_tool`, or `free_api`.
+- Step 12.2: Create mirrored `creator-evidence-schema` skill contracts.
+  - Files: create `packs/creator-media/claude/creator-evidence-schema/SKILL.md`, create `packs/creator-media/codex/creator-evidence-schema/SKILL.md`
+  - Require output at `research/creator-platforms/evidence-schema.md`.
+  - Define raw evidence root `research/creator-platforms/data/<platform>/<slug>/`.
+  - Define normalized record fields for `evidence_id`, `platform`, `source_type`, `source_url`, `raw_path`, `captured_at`, `capture_method`, `auth_context`, `terms_risk`, `title`, `body_text_path`, `published_at`, `creator_role`, `media_type`, `topic_tags`, `content_role`, `metrics`, `metric_confidence`, `evidence_confidence`, privacy notes, and review notes.
+  - State that optional metrics must not be invented and missing metrics/bodies must be recorded as evidence gaps.
+- Step 12.3: Wire the foundation into creator-media pack docs and discovery references.
+  - Files: modify `packs/creator-media/PACK.md`, modify `README.md`, modify `docs/skills-reference.md`
+  - Put `creator-platform-capability-matrix` and `creator-evidence-schema` before platform-specific audits in the creator-media skill list and default flow.
+  - Document that YouTube-specific work may still start at `youtube-channel-audit`, while non-YouTube or mixed-platform work starts with the foundation.
+- Step 12.4: Align creator-media next-skill routing with the new foundation.
+  - Files: modify `packs/creator-media/claude/creator-platform-capability-matrix/SKILL.md`, modify `packs/creator-media/codex/creator-platform-capability-matrix/SKILL.md`, modify `packs/creator-media/claude/creator-evidence-schema/SKILL.md`, modify `packs/creator-media/codex/creator-evidence-schema/SKILL.md`, inspect existing `packs/creator-media/{claude,codex}/*/SKILL.md`
+  - Ensure the new skills emit `Recommended next skill: <command>` in the final response.
+  - Route matrix to schema by default; route schema to the future creator presence dossier when present, otherwise to platform-specific audits or `creator-positioning` based on available evidence.
+  - Preserve existing YouTube workflow routing unless a non-YouTube evidence foundation is missing.
+
+### Green
+- Step 12.5: Write regression validation coverage for Phase 12 acceptance criteria.
+  - Files: modify `tasks/todo.md` review section with exact validation commands and results
+  - Run targeted scans confirming mirrored new skill files, frontmatter names, output paths, collection method language, normalized schema fields, LinkedIn baseline language, and pack-doc routing.
+- Step 12.6: Run repository validation.
+  - Files: no source changes expected
+  - Run `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, targeted `rg` checks, and `git diff --check`.
+- Step 12.7: Refactor wording for consistency if validation exposes drift while keeping the contracts unchanged.
+  - Files: modify only the new skill files and creator-media reference docs if needed.
+
+### Milestone: Creator Platform Evidence Foundation
+**Acceptance Criteria:**
+- [ ] `creator-platform-capability-matrix` exists for both Claude and Codex.
+- [ ] `creator-evidence-schema` exists for both Claude and Codex.
+- [ ] The capability matrix skill records platform evidence sources, fields, missing fields, metric availability, audit depth, operational risk, and recommended next skill.
+- [ ] The schema skill defines normalized evidence records, metric confidence, evidence confidence, capture method, auth context, raw evidence paths, and privacy notes.
+- [ ] Pack docs route non-YouTube creator-media work through the foundation before platform-specific skills.
+- [ ] Validation passes with skill dependency/version checks and targeted reference scans.
+- [ ] All phase tests pass.
+- [ ] No regressions in previous phase tests.
+
+**On Completion:**
+- Deviations from plan: [fill when complete]
+- Tech debt / follow-ups: [fill when complete]
+- Ready for next phase: no
+
 ---
 
 ## Phase 13: Creator Presence Dossier
