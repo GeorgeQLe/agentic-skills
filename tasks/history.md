@@ -1,5 +1,10 @@
 # Session History
 
+## 2026-05-02 — ICP skill final-response next-step echo
+
+- Added instruction to both Claude and Codex ICP skills requiring the agent to repeat the Recommended next step from the generated `## Next Steps` section in the final chat response.
+- Files changed: `packs/business-app/claude/icp/SKILL.md`, `packs/business-app/codex/icp/SKILL.md`.
+
 ## 2026-05-02 — Add pack next-step routing contracts
 
 - Added explicit `## Next-Skill Routing` sections to all mirrored creator-media, game, and code-quality pack skills.
