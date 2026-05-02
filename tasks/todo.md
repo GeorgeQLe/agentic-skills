@@ -93,29 +93,26 @@
 
 ---
 
-### Next Step: 12.2 — Create mirrored `creator-evidence-schema` skill contracts
+### Next Step: 12.3 — Wire the foundation into creator-media pack docs and discovery references
 
-**What:** Create `SKILL.md` files for the `creator-evidence-schema` skill for both Claude and Codex, following the same pattern established in Step 12.1 for the capability matrix skill.
+**What:** Register `creator-platform-capability-matrix` and `creator-evidence-schema` in the creator-media pack docs, README, and skills reference so they appear before platform-specific audits in the default flow.
 
-**Files to create:**
-- `packs/creator-media/claude/creator-evidence-schema/SKILL.md`
-- `packs/creator-media/codex/creator-evidence-schema/SKILL.md`
+**Files to modify:**
+- `packs/creator-media/PACK.md`
+- `README.md`
+- `docs/skills-reference.md`
 
 **Requirements:**
-- Frontmatter: `name: creator-evidence-schema`, `type: research`, `version: 1.0.0`
-- Output artifact: `research/creator-platforms/evidence-schema.md`
-- Raw evidence root: `research/creator-platforms/data/<platform>/<slug>/`
-- Normalized record fields: `evidence_id`, `platform`, `source_type`, `source_url`, `raw_path`, `captured_at`, `capture_method`, `auth_context`, `terms_risk`, `title`, `body_text_path`, `published_at`, `creator_role`, `media_type`, `topic_tags`, `content_role`, `metrics`, `metric_confidence`, `evidence_confidence`, privacy notes, review notes
-- Capture methods must match the vocabulary from 12.1: `export`, `manual_snapshot`, `rss_feed`, `public_page_capture`, `open_source_tool`, `free_api`
-- Optional metrics must not be invented; missing metrics/bodies recorded as evidence gaps
-- Include `## Next-Skill Routing` section: default recommend `/creator-presence-dossier`; if not available, recommend platform-specific audit or `/creator-positioning`
-- Include `## Constraints` section matching the privacy/access controls pattern from the capability matrix skill
-- Codex variant should be a condensed version (same pattern as codex capability-matrix vs claude capability-matrix)
+- Add `creator-platform-capability-matrix` and `creator-evidence-schema` to the skill list and default flow in all three files.
+- Place them before `youtube-channel-audit` in the flow, representing the foundation entry point for non-YouTube or mixed-platform work.
+- Document that YouTube-specific work may still start at `youtube-channel-audit`, while non-YouTube or mixed-platform work starts with `creator-platform-capability-matrix`.
+- Update the PACK.md description to mention multi-platform evidence foundation alongside YouTube.
+- Update the skills-reference.md evidence-first description to mention the platform capability matrix and evidence schema.
+- Update the README creator-media section to include the two new skills and mention the multi-platform foundation.
 
-**Reference files:**
-- `packs/creator-media/claude/creator-platform-capability-matrix/SKILL.md` (pattern to follow)
-- `packs/creator-media/codex/creator-platform-capability-matrix/SKILL.md` (codex pattern)
-- `specs/creator-platform-evidence-schema.md` (source spec for field definitions)
+**Reference:**
+- Current PACK.md flow: `youtube-channel-audit -> ... -> creator-metrics-review`
+- New flow should show: `creator-platform-capability-matrix -> creator-evidence-schema -> [platform-specific or strategy skills]` as an alternative entry, with YouTube flow preserved.
 
 **Execution Profile:**
 - Parallel mode: serial
@@ -123,15 +120,12 @@
 - Classification: automated
 
 **Acceptance criteria:**
-- Both files exist with correct frontmatter
-- All normalized record fields are defined
-- Output path is `research/creator-platforms/evidence-schema.md`
-- Raw evidence root is `research/creator-platforms/data/<platform>/<slug>/`
-- Collection method vocabulary matches Step 12.1
-- Next-skill routing section present with default `/creator-presence-dossier`
-- Constraints section forbids private data collection, bot-protection bypass, and metric invention
+- Both new skills appear in the skill lists in all three files
+- Default flow shows the foundation skills as an alternative entry point
+- YouTube-first workflow is preserved as a valid starting point
+- No broken references or inconsistent skill names
 
-**Ship-one-step handoff contract:** After approval, implement only this step. Validate with targeted `rg` scans. Mark step 12.2 done in `tasks/todo.md`. Update `tasks/history.md`. Commit and push. Write step 12.3 plan. Ensure `.claude/settings.local.json` has `"showClearContextOnPlanAccept": true` and `"defaultMode": "acceptEdits"`. Start the approval UI for step 12.3 by calling `EnterPlanMode`, write a brief pass-through plan, call `ExitPlanMode`, and stop.
+**Ship-one-step handoff contract:** After approval, implement only Step 12.3. Validate with targeted `rg` scans. Mark step done in `tasks/todo.md`. Update `tasks/history.md`. Commit and push. Write step 12.4 plan. Ensure `.claude/settings.local.json` has `"showClearContextOnPlanAccept": true` and `"defaultMode": "acceptEdits"`. Start the approval UI for step 12.4, then stop.
 
 ### Review
 - Step 12.1 completed: added mirrored Claude/Codex capability-matrix skill contracts with baseline platform rows, required matrix columns, collection method vocabulary, output path, operational risk guidance, and next-skill routing to `creator-evidence-schema`.
