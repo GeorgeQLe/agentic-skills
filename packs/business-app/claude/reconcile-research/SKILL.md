@@ -217,6 +217,21 @@ After walking through all findings:
 
   3. Re-run the audit to confirm fixes resolved the flagged issues.
 
+### 8. Populate Next Steps
+
+After presenting findings (audit mode) or applying resolutions (fix mode), display a `## Next Steps` section with a **Recommended** item and **Other options**. Use this format:
+
+```markdown
+## Next Steps
+
+**Recommended:** [skill with most conflicts] — [N] conflicts traced to this document; re-running it will resolve the most inconsistencies at once
+
+Other options:
+- `/research-roadmap` — rebuild the ordered documentation queue after reconciliation
+- `/spec-drift` — check whether code/spec drift remains after research reconciliation
+- `/roadmap` — resequence implementation if reconciliation changed priorities
+```
+
 ## Output Format
 
 Findings are presented **interactively one at a time** via `AskUserQuestion`, not as a batch report. After all findings have been walked through, display a final summary:

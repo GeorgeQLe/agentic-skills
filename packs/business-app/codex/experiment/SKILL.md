@@ -98,7 +98,18 @@ For each possible outcome, define what happens next:
 
 ### 6. Populate Next Steps
 
-Include 3–5 applicable items with "Pick one:" framing. Separate the current design-stage next step from outcome-specific next steps:
+Include a **Recommended** item for the current design-stage next step, followed by **Other options**. Separate current next steps from outcome-specific next steps:
+
+Use this format in the output:
+
+```markdown
+## Next Steps
+
+**Recommended:** Run the experiment — the plan is only useful after the evidence is collected
+
+Other options:
+- [2-4 applicable alternatives]
+```
 
 - ALWAYS: Run the experiment (manual step — the plan tells you how)
 - For a newly designed experiment, do not list validation/invalidation commands as current top-level next steps; put those under `## Decision Rules` because they are only valid after results exist.
@@ -214,7 +225,9 @@ Only after confirmation, write the output file.
 
 ## Next Steps
 
-Pick one:
+**Recommended:** [recommended next step] — [one-line reason grounded in this artifact]
+
+Other options:
 - [conditional items from step 6 — only include items whose conditions are met]
 ```
 

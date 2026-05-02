@@ -53,6 +53,17 @@ When reporting completion, include:
 - Verification commands run and their results.
 - Any skipped candidates with the reason they were runtime-coupled or public-API-sensitive.
 
+## Next-Skill Routing
+
+In the final response, include `Recommended next skill: <command>` using these rules:
+
+- Audit-only results with type/module coupling as the top finding: recommend `/extract-shared-types`.
+- Audit-only results with safe mechanical cleanup available: recommend `/quality-sweep fix`.
+- Any mutation or broad refactor completion: recommend `/regression-check`.
+- Validation complete with changes ready to ship: recommend `/ship`.
+
+Default recommendation: `/regression-check after mutation, or /quality-sweep fix/full when broader cleanup remains`.
+
 ## Constraints
 
 - Zero runtime behavior changes.

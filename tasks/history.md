@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-05-02 — Add pack next-step routing contracts
+
+- Added explicit `## Next-Skill Routing` sections to all mirrored creator-media, game, and code-quality pack skills.
+- Creator-media skills now recommend the next contextual skill across the documented flow: channel audit, title/thumbnail audit, portfolio, peer benchmark, search positioning, cadence diagnosis, creator positioning, content programming, series spec, product-led media map, and metrics review.
+- Game skills now recommend the next game-pack skill across audience, fantasy, genre, comparables, core loop, prototype test, playtest metrics, store-page test, launch, and roadmap, with upstream rerouting when evidence invalidates an earlier assumption.
+- Code-quality skills now recommend `extract-shared-types`, `quality-sweep fix`, `regression-check`, or `ship` based on audit vs mutation state.
+- Filled business-app recommendation gaps in `investor-update` and Claude `reconcile-research`, and tightened `risk-register`, `metrics`, and `experiment` so they emit explicit recommended next steps instead of ambiguous "Pick one" outputs.
+- Validation passed: routing coverage scans for creator-media/game/code-quality, targeted business-app ambiguity scan, `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken`, `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`, and `git diff --check`.
+
 ## 2026-05-02 — Creator platform evidence schema spec
 
 - Ran `$spec-interview` for expanding the creator-media pack beyond YouTube.

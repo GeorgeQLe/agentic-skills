@@ -2,6 +2,44 @@
 
 **Status:** Planning complete 2026-04-19. New workstream kicking off; prior roadmap phases archived.
 
+## Active Step Plan — Pack Next-Step Routing Contracts
+
+**Goal:** Make pack skills reliably emit contextual recommended next steps by adding explicit workflow maps and final-response contracts where routing is missing or inconsistent.
+
+**Execution profile:** serial.
+
+**Scope:**
+
+1. Add explicit `Recommended next skill: <command>` output contracts and `## Next-Skill Routing` maps to creator-media, game, and code-quality pack skills.
+2. Normalize missing or inconsistent business-app next-step contracts, especially `investor-update`, `risk-register`, `experiment`, `metrics`, and mirrored Claude/Codex variants that still use ambiguous "Pick one" framing.
+3. Preserve devtool routing as the template and avoid changing already-working devtool behavior.
+4. Validate mirrored coverage with repository scans and standard skill metadata/dependency checks.
+
+**Files expected to change:**
+
+- `packs/creator-media/{claude,codex}/*/SKILL.md`
+- `packs/game/{claude,codex}/*/SKILL.md`
+- `packs/code-quality/{claude,codex}/*/SKILL.md`
+- targeted `packs/business-app/{claude,codex}/*/SKILL.md`
+- `tasks/todo.md`
+- `tasks/history.md`
+
+**Acceptance criteria:**
+
+- [x] Creator-media, game, and code-quality skills each include explicit next-skill routing.
+- [x] Final responses for updated pack skills are required to include `Recommended next skill: <command>` or an equivalent explicit `## Next Steps` recommendation where artifact output already owns that format.
+- [x] Business-app skills with missing contracts now emit a single recommended next step.
+- [x] Validation confirms no broken skill references and no missing skill versions.
+
+**Review:**
+
+- Added `## Next-Skill Routing` to all mirrored creator-media, game, and code-quality pack skills.
+- Creator-media routing now follows the documented channel audit -> packaging -> portfolio -> peer/search/cadence -> positioning -> programming -> series -> product-media -> metrics loop.
+- Game routing now follows the game-workflow sequence from audience/fantasy validation through prototype/playtest/store/launch/roadmap, with upstream rerouting when evidence invalidates assumptions.
+- Code-quality routing now distinguishes audit-only next steps, safe fix mode, post-mutation regression checks, and shipping.
+- Added missing business-app next-step contracts for `investor-update` and Claude `reconcile-research`; tightened `risk-register`, `metrics`, and `experiment` to emit explicit recommended next steps.
+- Validation passed: creator-media/game/code-quality routing coverage scans, targeted business-app ambiguity scan, `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken`, `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`, and `git diff --check`.
+
 ## Active Step Plan — Creator Platform Evidence Schema
 
 **Goal:** Specify the creator-media pack expansion path beyond YouTube using a platform capability matrix, shared evidence schema, and repo-backed creator presence dossier, constrained to free, open-source, and manual evidence collection.

@@ -13,6 +13,18 @@ Define what the game lets players feel, become, master, discover, build, survive
 
 Write or update `research/game-fantasy.md` with the player fantasy, emotional pillars, vibe references, one-sentence hook, and fast first-session promise.
 
+## Next-Skill Routing
+
+After writing the artifact, recommend the next contextual game-pack skill in the final response as `Recommended next skill: <command>`.
+
+Default recommendation: `/game-genre-map`.
+
+If prototype, playtest, or market evidence invalidates an upstream assumption, route back to the earliest affected artifact (`/game-audience`, `/game-fantasy`, `/game-genre-map`, or `/game-comparables`) and explain the evidence. Otherwise, follow the default game sequence:
+
+`/game-audience` -> `/game-fantasy` -> `/game-genre-map` -> `/game-comparables` -> `/game-core-loop` -> `/game-prototype-test` -> `/game-playtest-metrics` -> `/game-store-page-test` -> `/game-launch` -> `/game-roadmap`
+
+If the next artifact already exists and is current, recommend `/game-workflow` to identify the first missing or stale game-pack artifact.
+
 ## Task Classification
 
 When this skill produces follow-up work, file it by execution semantics:

@@ -71,6 +71,17 @@ Use this skill when a project needs a behavior-preserving code quality cleanup c
 - **Do Not Change:** suspicious-looking patterns intentionally preserved.
 - **Verification:** commands run, pass/fail status, and pre-existing failures if any.
 
+## Next-Skill Routing
+
+In the final response, include `Recommended next skill: <command>` using these rules:
+
+- Audit-only results with type/module coupling as the top finding: recommend `$extract-shared-types`.
+- Audit-only results with safe mechanical cleanup available: recommend `$quality-sweep fix`.
+- Any mutation or broad refactor completion: recommend `$regression-check`.
+- Validation complete with changes ready to ship: recommend `$ship`.
+
+Default recommendation: `$extract-shared-types when type/module coupling is the top finding, $quality-sweep fix when safe fixes are identified, or $regression-check after mutation`.
+
 ## Constraints
 
 - Audit-only by default. Never edit files unless mode is `fix` or `full`.

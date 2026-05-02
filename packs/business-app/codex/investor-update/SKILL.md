@@ -119,6 +119,29 @@ Only after confirmation, write the output file.
 
 Create the `research/` directory if it doesn't exist.
 
+### Next Steps Guidance
+
+The final response and output file must include a `## Next Steps` section with one explicit recommendation and 2-4 other options.
+
+**Recommendation priority** (first applicable becomes the recommendation):
+
+1. IF runway, burn, or revenue data is missing or stale: recommend `$runway-model` — investor updates need current financial context.
+2. IF metrics are missing or stale: recommend `$metrics` — investor updates need a defensible KPI frame.
+3. IF actual usage or retention data exists but has not been reviewed: recommend `$cohort-review` — convert operational data into investor-ready signal.
+4. IF the update surfaced strategic misses, stale assumptions, or missed commitments: recommend `$retro` — turn the update into a corrective learning loop.
+5. Otherwise recommend `$research-roadmap` — choose the next lifecycle task after the stakeholder update is current.
+
+Use this format:
+
+```markdown
+## Next Steps
+
+**Recommended:** [recommended skill] — [one-line reason grounded in the update]
+
+Other options:
+- [2-4 applicable alternatives]
+```
+
 ## Task Classification
 
 When this skill produces follow-up work, file it by execution semantics:

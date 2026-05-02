@@ -29,6 +29,18 @@ Benchmark one primary channel against comparable channels. Use this for creator 
 - Opportunity gaps: formats or promises peers prove but the primary channel does not yet own.
 - Strategic benchmark recommendation.
 
+## Next-Skill Routing
+
+After writing the artifact, recommend the next contextual creator-media skill in the final response as `Recommended next skill: <command>`.
+
+Default recommendation: `$youtube-search-positioning`.
+
+If the default successor already exists and is current, recommend the first missing or stale downstream creator-media artifact in this order:
+
+`$youtube-channel-audit` -> `$youtube-title-thumbnail-audit` -> `$youtube-portfolio` -> `$youtube-peer-benchmark` -> `$youtube-search-positioning` -> `$youtube-cadence-diagnosis` -> `$creator-positioning` -> `$content-programming` -> `$series-spec` -> `$product-led-media-map` -> `$creator-metrics-review`
+
+If the sequence is ambiguous, multiple upstream artifacts are stale, or the recommendation depends on channel-level strategy vs programming-level changes, recommend `$creator-metrics-review` when metrics evidence exists, otherwise recommend the default successor and explain the missing artifact.
+
 ## Constraints
 
 - Do not compare channels without comparable evidence windows.
