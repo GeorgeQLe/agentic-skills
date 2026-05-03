@@ -85,6 +85,7 @@ Use `$ui-interview` first when the interface has not yet been specified page by 
 5. **Create distinct variation concepts**
    - Produce 3 to 5 variations unless the user requests a different count.
    - Each variation must be meaningfully different, not just a color or spacing change.
+   - At this stage, keep each concept lightweight: name, thesis, archetype, best-fit user/context, core workflow difference, major tradeoff, and rough complexity. Do not fully specify screens, controls, or implementation details yet.
    - Useful archetypes include:
      - Task-first workflow
      - Data-dense operator console
@@ -101,7 +102,20 @@ Use `$ui-interview` first when the interface has not yet been specified page by 
      - Editorial or showcase layout
    - Only choose archetypes that fit the product and user context.
 
-6. **Specify each variation enough to build**
+6. **Concept selection checkpoint**
+   - Before fully specifying any variant, ask the user to adjust the concept set.
+   - Use bounded wording such as: "How should I adjust these UX variants before writing the final spec?"
+   - Present clear options:
+     - Keep all concepts
+     - Remove one
+     - Merge concepts
+     - Make one concept bolder or more extreme
+     - Add another concept
+   - Ask the user to name the affected concept and briefly describe the change when they choose anything other than keeping all concepts.
+   - Recommend a practical default when evidence supports it; do not imply that variants have already been built or committed.
+   - Revise the concept set based on the answer before moving on.
+
+7. **Specify each approved variation enough to build**
    - For each variation, define:
      - Name and design thesis
      - Target user fit
@@ -123,7 +137,7 @@ Use `$ui-interview` first when the interface has not yet been specified page by 
      - What to prototype first
      - What user signal would make this the winner
 
-7. **Plan experimentation**
+8. **Plan experimentation**
    - Recommend the cheapest useful validation method:
      - Static mockups for visual direction
      - Clickable prototype for navigation and flow
@@ -133,9 +147,9 @@ Use `$ui-interview` first when the interface has not yet been specified page by 
    - Define comparison criteria before selecting a winner.
    - Include a lock-in checklist so the chosen direction becomes a decision record, not a vague preference.
 
-8. **Coverage checkpoint**
+9. **Coverage checkpoint**
    - Before concluding, summarize the variants, the decision criteria, and the proposed experiment plan.
-   - Ask whether any variant should be removed, merged, made more extreme, or added before writing deliverables.
+   - Ask whether any decision criteria, risks, validation steps, or implementation constraints are missing before writing deliverables.
 
 ## Deliverables
 

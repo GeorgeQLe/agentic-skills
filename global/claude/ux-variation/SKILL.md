@@ -57,6 +57,7 @@ When invoked with `--layout-mode` (or when the user says "layout mode", "layout 
 5. **Create distinct variation concepts**
    - Produce 3 to 5 variations unless the user requests a different count.
    - Each variation must be meaningfully different, not just a color or spacing change.
+   - At this stage, keep each concept lightweight: name, thesis, archetype, best-fit user/context, core workflow difference, major tradeoff, and rough complexity. Do not fully specify screens, controls, or implementation details yet.
    - Useful archetypes include task-first workflow, data-dense operator console, guided step-by-step flow, onboarding-first activation path, collaboration-first workspace, sharing-first artifact flow, notification/status-driven workflow, role-based handoff workflow, visual canvas or board, command/search-first interface, mobile-first progressive disclosure, familiar SaaS dashboard, and editorial or showcase layout.
    - Only choose archetypes that fit the product and user context.
    - **Layout-mode archetypes** (use these instead of the UX-flow archetypes above when in layout-mode):
@@ -71,7 +72,20 @@ When invoked with `--layout-mode` (or when the user says "layout mode", "layout 
      - Command-first minimal: search/command bar with minimal chrome, good for keyboard-heavy power users
      - Sidebar-driven: persistent sidebar navigation with content area, good for settings and multi-section apps
 
-6. **Specify each variation enough to build**
+6. **Concept selection checkpoint**
+   - Before fully specifying any variant, ask the user to adjust the concept set.
+   - Use bounded wording such as: "How should I adjust these UX variants before writing the final spec?"
+   - Present clear options:
+     - Keep all concepts
+     - Remove one
+     - Merge concepts
+     - Make one concept bolder or more extreme
+     - Add another concept
+   - Ask the user to name the affected concept and briefly describe the change when they choose anything other than keeping all concepts.
+   - Recommend a practical default when evidence supports it; do not imply that variants have already been built or committed.
+   - Revise the concept set based on the answer before moving on.
+
+7. **Specify each approved variation enough to build**
    - For each variation, define name and thesis, target user fit, onboarding and activation model, typical workflow sequence, sharing and collaboration model, permissions model, return-use and notification model, failure recovery behavior, page and flow changes, navigation model, screen-by-screen layout, key components and controls, button and link behavior, spatial density, sizing, hierarchy, responsive behavior, visual tone, strengths, risks, failure modes, implementation complexity, prototype scope, and winning signal.
    - **Layout-mode variation spec additions**: In layout-mode, each variation spec must also include:
      - Content-to-component mapping: which content requirement maps to which UI component
@@ -86,14 +100,14 @@ When invoked with `--layout-mode` (or when the user says "layout mode", "layout 
      - Implementation file list (components, routes, layouts to create or modify)
      - Estimated build time (hours)
 
-7. **Plan experimentation**
+8. **Plan experimentation**
    - Recommend the cheapest useful validation method: static mockups, clickable prototype, feature-flagged implementation, A/B test only when traffic and metrics are credible, or human UAT when acceptance is the question.
    - Define comparison criteria before selecting a winner.
    - Include a lock-in checklist so the chosen direction becomes a decision record, not a vague preference.
 
-8. **Coverage checkpoint**
+9. **Coverage checkpoint**
    - Before concluding, use AskUserQuestion to summarize the variants, decision criteria, and experiment plan.
-   - Ask whether any variant should be removed, merged, made more extreme, or added before writing deliverables.
+   - Ask whether any decision criteria, risks, validation steps, or implementation constraints are missing before writing deliverables.
 
 ## Deliverables
 

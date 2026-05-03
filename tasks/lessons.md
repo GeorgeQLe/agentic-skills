@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-05-03 — Variation pruning belongs before full specification
+
+- `$ux-variation` surfaced "remove, merge, make more extreme, or add a fourth" only after presenting three fully framed variants, which made the checkpoint feel like late-stage rework instead of concept selection.
+- For interrogation skills that generate alternatives, split the flow into two gates: first present lightweight concept candidates for keep/remove/merge/extreme/add decisions, then fully specify only the approved set.
+- Wording should ask for a bounded adjustment action and optional rationale, not combine several vague decisions into one prose question.
+- Do not say "before I commit" or imply implementation/build commitment when the actual next step is writing a planning deliverable.
+
 ## 2026-05-02 — Scanner skills must not route to themselves
 
 - A `$roadmap` run could end by recommending `$roadmap` again because final routing chose a matching command without a self-recursion guard.
