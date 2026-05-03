@@ -1285,3 +1285,9 @@ Resolved all 10 findings from `/expert-review`:
 - Tightened mirrored Claude/Codex routing in `creator-evidence-schema` so `creator-presence-dossier` is preferred when present, with fallback to platform-specific audits or `creator-positioning`.
 - Preserved the YouTube-only shortcut while making non-YouTube and mixed-platform work keep the foundation before platform-specific audits.
 - Verified with targeted routing scans, `./scripts/skill-versions.sh --missing`, `./scripts/skill-deps.sh --broken`, and `git diff --check`.
+
+## 2026-05-02 — Phase 12 Step 12.5: creator evidence regression coverage
+
+- Recorded full regression validation coverage for the Phase 12 creator platform evidence foundation acceptance criteria in `tasks/todo.md`.
+- Confirmed mirrored foundation skill frontmatter names, required output paths, collection method vocabulary, normalized schema fields, confidence/privacy fields, LinkedIn baseline language, pack-doc routing, and Step 12.4 next-skill routing.
+- Verified with targeted `rg` scans, `./scripts/skill-versions.sh --missing`, `./scripts/skill-deps.sh --broken`, and `git diff --check`.

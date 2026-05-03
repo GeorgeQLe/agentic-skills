@@ -68,7 +68,7 @@
   - Preserve existing YouTube workflow routing unless a non-YouTube evidence foundation is missing.
 
 ### Green
-- Step 12.5: Write regression validation coverage for Phase 12 acceptance criteria.
+- [x] Step 12.5: Write regression validation coverage for Phase 12 acceptance criteria.
   - Classification: automated
   - Files: modify `tasks/todo.md` review section with exact validation commands and results
   - Run targeted scans confirming mirrored new skill files, frontmatter names, output paths, collection method language, normalized schema fields, LinkedIn baseline language, and pack-doc routing.
@@ -93,27 +93,27 @@
 
 ---
 
-### Next Step: 12.5 — Write regression validation coverage for Phase 12 acceptance criteria
+### Next Step: 12.6 — Run repository validation
 
-**What:** Record regression validation coverage for the Phase 12 creator platform evidence foundation acceptance criteria, using targeted scans that prove the mirrored skill files and docs still carry the required contracts.
+**What:** Run the repository validation commands for Phase 12 after Step 12.5's regression scans, confirm there are no dependency/version/check regressions, and record the exact results.
 
 **Files to modify:**
 - `tasks/todo.md`
 
 **Requirements:**
-- Add a Step 12.5 review entry with exact validation commands and results.
-- Run targeted scans confirming mirrored new skill files, frontmatter names, output paths, collection method language, normalized schema fields, LinkedIn baseline language, and pack-doc routing.
-- Include scans for the Step 12.4 next-skill routing contract so regression coverage includes `creator-evidence-schema`, `creator-presence-dossier`, `creator-positioning`, and YouTube-only preservation.
+- Run `./scripts/skill-deps.sh --broken`.
+- Run `./scripts/skill-versions.sh --missing`.
+- Run targeted `rg` checks only if a validation result points to a specific drift concern.
+- Run `git diff --check`.
+- Record all validation commands and results in the review section.
 - Record any warnings as fixed, accepted with rationale, or unresolved.
 
 **Reference files:**
+- `tasks/todo.md`
 - `packs/creator-media/claude/creator-platform-capability-matrix/SKILL.md`
 - `packs/creator-media/codex/creator-platform-capability-matrix/SKILL.md`
 - `packs/creator-media/claude/creator-evidence-schema/SKILL.md`
 - `packs/creator-media/codex/creator-evidence-schema/SKILL.md`
-- `packs/creator-media/PACK.md`
-- `README.md`
-- `docs/skills-reference.md`
 
 **Execution Profile:**
 - Parallel mode: serial
@@ -121,13 +121,12 @@
 - Classification: automated
 
 **Acceptance criteria:**
-- Targeted scans prove both mirrored foundation skill files exist and have the expected frontmatter names.
-- Targeted scans prove required output paths, collection methods, normalized schema fields, confidence/privacy fields, and LinkedIn baseline language remain present.
-- Targeted scans prove pack docs route non-YouTube or mixed-platform work through the foundation before platform-specific audits.
-- Targeted scans prove Step 12.4 routing language remains mirrored across Claude and Codex variants.
-- `./scripts/skill-versions.sh --missing`, `./scripts/skill-deps.sh --broken`, and `git diff --check` pass.
+- `./scripts/skill-deps.sh --broken` passes.
+- `./scripts/skill-versions.sh --missing` passes.
+- `git diff --check` passes.
+- Any warnings are explicitly fixed, accepted with rationale, or unresolved.
 
-**Ship-one-step handoff contract:** Implement only Step 12.5. Update the review section with exact validation commands and results. Mark step done in `tasks/todo.md`. Update `tasks/history.md`. Commit and push. Write Step 12.6 plan.
+**Ship-one-step handoff contract:** Implement only Step 12.6. Update the review section with exact validation commands and results. Mark step done in `tasks/todo.md`. Update `tasks/history.md`. Commit and push. Write Step 12.7 plan.
 
 ### Review
 - Step 12.1 completed: added mirrored Claude/Codex capability-matrix skill contracts with baseline platform rows, required matrix columns, collection method vocabulary, output path, operational risk guidance, and next-skill routing to `creator-evidence-schema`.
@@ -150,4 +149,11 @@
 - Step 12.4 warnings: one initial targeted `rg` command used unsafe shell quoting around Markdown backticks and printed `command not found: Recommended`; reran with safe single-quoted regex and the scan passed cleanly.
 - Deviations from plan: none for Step 12.4.
 - Tech debt / follow-ups: Step 12.5 should record full regression coverage for all Phase 12 acceptance criteria.
+- Ready for next phase: no
+- Step 12.5 completed: recorded full regression validation coverage for the Phase 12 creator platform evidence foundation acceptance criteria.
+- Step 12.5 validation: `rg -n '^name: creator-platform-capability-matrix$|^name: creator-evidence-schema$' packs/creator-media/claude/creator-platform-capability-matrix/SKILL.md packs/creator-media/codex/creator-platform-capability-matrix/SKILL.md packs/creator-media/claude/creator-evidence-schema/SKILL.md packs/creator-media/codex/creator-evidence-schema/SKILL.md`; `rg -n 'research/creator-platforms/capability-matrix.md|research/creator-platforms/evidence-schema.md|research/creator-platforms/data/<platform>/<slug>/' packs/creator-media/claude/creator-platform-capability-matrix/SKILL.md packs/creator-media/codex/creator-platform-capability-matrix/SKILL.md packs/creator-media/claude/creator-evidence-schema/SKILL.md packs/creator-media/codex/creator-evidence-schema/SKILL.md`; `rg -n 'export|manual_snapshot|rss_feed|public_page_capture|open_source_tool|free_api' packs/creator-media/claude/creator-platform-capability-matrix/SKILL.md packs/creator-media/codex/creator-platform-capability-matrix/SKILL.md packs/creator-media/claude/creator-evidence-schema/SKILL.md packs/creator-media/codex/creator-evidence-schema/SKILL.md`; `rg -n 'evidence_id|platform|source_type|source_url|raw_path|captured_at|capture_method|auth_context|terms_risk|metric_confidence|evidence_confidence|privacy_notes|review_notes' packs/creator-media/claude/creator-evidence-schema/SKILL.md packs/creator-media/codex/creator-evidence-schema/SKILL.md`; `rg -n 'LinkedIn personal profile|LinkedIn company page|evidence sources|likely fields|missing fields|metric availability|audit depth|operational risk|recommended next skill|body/media/transcript availability|peer benchmarking practicality' packs/creator-media/claude/creator-platform-capability-matrix/SKILL.md packs/creator-media/codex/creator-platform-capability-matrix/SKILL.md`; `rg -n 'non-YouTube or mixed-platform|creator-platform-capability-matrix -> creator-evidence-schema|creator-platform-capability-matrix, creator-evidence-schema|YouTube-specific work may still start at youtube-channel-audit|platform-specific audits' packs/creator-media/PACK.md README.md docs/skills-reference.md`; `rg -n 'Recommended next skill: [/\\$]creator-evidence-schema|Recommended next skill: [/\\$]creator-presence-dossier|Recommended next skill: [/\\$]creator-positioning|YouTube-only work with channel evidence|non-YouTube or mixed-platform work should use this foundation' packs/creator-media/claude/creator-platform-capability-matrix/SKILL.md packs/creator-media/codex/creator-platform-capability-matrix/SKILL.md packs/creator-media/claude/creator-evidence-schema/SKILL.md packs/creator-media/codex/creator-evidence-schema/SKILL.md`; `./scripts/skill-versions.sh --missing`; `./scripts/skill-deps.sh --broken`; `git diff --check`.
+- Step 12.5 validation results: frontmatter names, output paths, collection methods, normalized schema fields, LinkedIn baseline language, pack-doc routing, next-skill routing, skill versions, skill dependencies, and whitespace checks all passed. `./scripts/skill-versions.sh --missing` reported `All 267 skills have a version field.`; `./scripts/skill-deps.sh --broken` reported `No broken references found.`; `git diff --check` produced no output.
+- Step 12.5 warnings: none.
+- Deviations from plan: none for Step 12.5.
+- Tech debt / follow-ups: Step 12.6 should run repository validation as the formal green gate before any Step 12.7 wording cleanup.
 - Ready for next phase: no
