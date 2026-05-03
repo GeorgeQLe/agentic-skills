@@ -1314,3 +1314,9 @@ Resolved all 10 findings from `/expert-review`:
 - Marked Phase 12 complete in `tasks/roadmap.md`, including acceptance criteria and completion notes.
 - Planned Phase 13 just in time from `specs/creator-platform-evidence-schema.md`, with a serial execution profile and focused steps for mirrored `creator-presence-dossier` contracts, dossier sections, pack/docs wiring, downstream routing, and validation.
 - Replaced `tasks/todo.md` with the Phase 13 working plan and a self-contained Step 13.1 handoff.
+
+## 2026-05-02 — Phase 13 Step 13.1: creator presence dossier contracts
+
+- Added mirrored `creator-presence-dossier` skills under `packs/creator-media/claude/` and `packs/creator-media/codex/`.
+- Defined the required output path `research/creator-presence/<slug>.md`, Phase 12 foundation reads, normalized/raw evidence citation requirements, public/professional evidence boundaries, supported source families, and final-response next-skill routing.
+- Verified the new skill contracts with targeted `rg` scans, `./scripts/skill-versions.sh --missing`, `./scripts/skill-deps.sh --broken`, and `git diff --check`.

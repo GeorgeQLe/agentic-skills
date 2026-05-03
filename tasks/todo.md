@@ -40,7 +40,7 @@
 **Subagent lanes:** none
 
 ### Implementation
-- [ ] Step 13.1: Create mirrored `creator-presence-dossier` skill contracts.
+- [x] Step 13.1: Create mirrored `creator-presence-dossier` skill contracts.
   - Classification: automated
   - Files: create `packs/creator-media/claude/creator-presence-dossier/SKILL.md`, create `packs/creator-media/codex/creator-presence-dossier/SKILL.md`
   - Require output at `research/creator-presence/<slug>.md`.
@@ -95,32 +95,31 @@
 
 ---
 
-### Next Step: 13.1 — Create mirrored `creator-presence-dossier` skill contracts
+### Review
+- Phase 13 planned just in time after Phase 12 completion.
+- Ready for implementation: Step 13.1.
+- Step 13.1 complete: added mirrored Claude/Codex `creator-presence-dossier` skill contracts with frontmatter, output path, Phase 12 foundation reads, public/professional evidence boundaries, evidence-path citation, and final-response next-skill routing.
+- Validation:
+  - `rg -n "name: creator-presence-dossier|version:|Invoke as|research/creator-presence/<slug>\\.md|research/creator-platforms/capability-matrix\\.md|research/creator-platforms/evidence-schema\\.md|public/professional|private repo planning context|source paths|capture dates|confidence levels|Recommended next skill: <command>|creator-positioning|content-programming|product-led-media-map|creator-metrics-review" packs/creator-media/claude/creator-presence-dossier/SKILL.md packs/creator-media/codex/creator-presence-dossier/SKILL.md` - passed; confirmed mirrored contract strings and routing language.
+  - `./scripts/skill-versions.sh --missing` - passed; `All 269 skills have a version field.`
+  - `./scripts/skill-deps.sh --broken` - passed; `No broken references found.`
+  - `git diff --check` - passed; no output.
 
-**What:** Add the initial mirrored Claude and Codex skill contracts for the repo-backed creator presence dossier. Keep this step focused on the core contract and routing entry point; the full section-by-section evidence-register detail follows in Step 13.2.
+### Next Step: 13.2 — Define the dossier Markdown contract and evidence register requirements
+
+**What:** Expand the mirrored dossier skills with the full section-by-section Markdown contract and evidence register requirements from Phase 13.
 
 **Files to modify:**
-- Create `packs/creator-media/claude/creator-presence-dossier/SKILL.md`
-- Create `packs/creator-media/codex/creator-presence-dossier/SKILL.md`
-- Modify `tasks/todo.md`
-- Modify `tasks/history.md`
+- `packs/creator-media/claude/creator-presence-dossier/SKILL.md`
+- `packs/creator-media/codex/creator-presence-dossier/SKILL.md`
+- `tasks/todo.md`
+- `tasks/history.md`
 
 **Requirements:**
-- Use mirrored frontmatter with `name: creator-presence-dossier`, `type: research`, a `version` field, and `argument-hint: "[creator or project slug]"`.
-- Use the correct invocation syntax for each mirror: `/creator-presence-dossier` for Claude and `$creator-presence-dossier` for Codex.
-- Require the output artifact at `research/creator-presence/<slug>.md`.
-- Require the skill to read the Phase 12 foundation artifacts when present: `research/creator-platforms/capability-matrix.md` and `research/creator-platforms/evidence-schema.md`.
-- Require citation of available normalized/raw creator evidence paths before synthesis.
-- State that the dossier is for public/professional presence and must not include private repo planning context unless explicitly marked as internal notes.
-- Add a `## Next-Skill Routing` section that requires the final response line `Recommended next skill: <command>`.
-- Route by default to the best creator-media strategy skill from the dossier findings, with sensible fallbacks to `$creator-positioning` or `/creator-positioning` when no stronger route is available.
-
-**Reference files:**
-- `specs/creator-platform-evidence-schema.md`
-- `packs/creator-media/claude/creator-evidence-schema/SKILL.md`
-- `packs/creator-media/codex/creator-evidence-schema/SKILL.md`
-- `packs/creator-media/claude/creator-platform-capability-matrix/SKILL.md`
-- `packs/creator-media/codex/creator-platform-capability-matrix/SKILL.md`
+- Require sections for identity, current public promise, career timeline, platform map, core themes, expertise claims, proof assets, signature formats, audience/community signals, product/company connections, gaps/contradictions/stale positioning, evidence register, next collection tasks, and recommended next skills.
+- Require evidence rows to include source path or URL, capture date, confidence level, public/private boundary, and evidence gaps.
+- Require support for LinkedIn, personal websites/blogs, GitHub, podcasts, talks, newsletters, and product docs when evidence is present.
+- Keep mirrored Claude/Codex contracts equivalent except command syntax.
 
 **Execution Profile:**
 - Parallel mode: serial
@@ -128,14 +127,9 @@
 - Classification: automated
 
 **Acceptance criteria:**
-- Mirrored `creator-presence-dossier` skill files exist.
-- Both files require `research/creator-presence/<slug>.md`.
-- Both files require Phase 12 foundation artifacts and evidence-path citation.
-- Both files distinguish public/professional evidence from private repo planning context.
-- Both files include final-response next-skill routing.
+- Both skill files contain the full dossier section contract.
+- Both skill files define evidence register row requirements.
+- Both skill files explicitly support the required source families when evidence is present.
+- Targeted scans and repository validation pass.
 
-**Ship-one-step handoff contract:** Implement only Step 13.1. Update the review section with exact validation commands and results. Mark step done in `tasks/todo.md`. Update `tasks/history.md`. Commit and push. Stop after preparing the next step.
-
-### Review
-- Phase 13 planned just in time after Phase 12 completion.
-- Ready for implementation: Step 13.1.
+**Ship-one-step handoff contract:** Implement only Step 13.2. Update the review section with exact validation commands and results. Mark step done in `tasks/todo.md`. Update `tasks/history.md`. Commit and push. Stop after preparing the next step.
