@@ -72,7 +72,7 @@
   - Classification: automated
   - Files: modify `tasks/todo.md` review section with exact validation commands and results
   - Run targeted scans confirming mirrored new skill files, frontmatter names, output paths, collection method language, normalized schema fields, LinkedIn baseline language, and pack-doc routing.
-- Step 12.6: Run repository validation.
+- [x] Step 12.6: Run repository validation.
   - Classification: automated
   - Files: no source changes expected
   - Run `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, targeted `rg` checks, and `git diff --check`.
@@ -93,20 +93,29 @@
 
 ---
 
-### Next Step: 12.6 — Run repository validation
+### Next Step: 12.7 — Refactor wording for consistency if validation exposes drift
 
-**What:** Run the repository validation commands for Phase 12 after Step 12.5's regression scans, confirm there are no dependency/version/check regressions, and record the exact results.
+**What:** Inspect the Phase 12 foundation skill contracts and creator-media discovery docs for wording drift after the repository validation gate. Make only minimal consistency edits if a concrete inconsistency is found; otherwise record that no refactor was needed and complete the step.
 
 **Files to modify:**
 - `tasks/todo.md`
+- `tasks/history.md`
+- Only if needed: `packs/creator-media/claude/creator-platform-capability-matrix/SKILL.md`
+- Only if needed: `packs/creator-media/codex/creator-platform-capability-matrix/SKILL.md`
+- Only if needed: `packs/creator-media/claude/creator-evidence-schema/SKILL.md`
+- Only if needed: `packs/creator-media/codex/creator-evidence-schema/SKILL.md`
+- Only if needed: `packs/creator-media/PACK.md`
+- Only if needed: `README.md`
+- Only if needed: `docs/skills-reference.md`
 
 **Requirements:**
-- Run `./scripts/skill-deps.sh --broken`.
-- Run `./scripts/skill-versions.sh --missing`.
-- Run targeted `rg` checks only if a validation result points to a specific drift concern.
-- Run `git diff --check`.
-- Record all validation commands and results in the review section.
-- Record any warnings as fixed, accepted with rationale, or unresolved.
+- Compare the mirrored Claude/Codex `creator-platform-capability-matrix` contracts for required output path, collection method vocabulary, matrix columns, platform baseline language, and final-response next-skill wording.
+- Compare the mirrored Claude/Codex `creator-evidence-schema` contracts for required output path, raw evidence root, normalized field names, confidence/privacy wording, missing-evidence handling, and final-response next-skill wording.
+- Inspect creator-media pack docs and discovery references for consistent routing language around YouTube-only versus non-YouTube or mixed-platform work.
+- If wording drift is found, apply the smallest edits that restore consistency without changing the Phase 12 contracts.
+- If no drift is found, do not churn source docs; record the no-op result in the review section.
+- Run targeted `rg` checks for any edited wording plus `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, and `git diff --check`.
+- Record warnings as fixed, accepted with rationale, or unresolved.
 
 **Reference files:**
 - `tasks/todo.md`
@@ -121,12 +130,12 @@
 - Classification: automated
 
 **Acceptance criteria:**
-- `./scripts/skill-deps.sh --broken` passes.
-- `./scripts/skill-versions.sh --missing` passes.
-- `git diff --check` passes.
-- Any warnings are explicitly fixed, accepted with rationale, or unresolved.
+- Mirrored Claude/Codex foundation skill wording is consistent.
+- Creator-media pack docs and public references route non-YouTube or mixed-platform work through the foundation before platform-specific audits.
+- Any source edits are minimal and preserve existing contracts.
+- Validation passes with no unresolved warnings.
 
-**Ship-one-step handoff contract:** Implement only Step 12.6. Update the review section with exact validation commands and results. Mark step done in `tasks/todo.md`. Update `tasks/history.md`. Commit and push. Write Step 12.7 plan.
+**Ship-one-step handoff contract:** Implement only Step 12.7. Update the review section with exact validation commands and results. Mark step done in `tasks/todo.md`. Update `tasks/history.md`. Commit and push. Prepare the phase transition if all Phase 12 acceptance criteria are satisfied.
 
 ### Review
 - Step 12.1 completed: added mirrored Claude/Codex capability-matrix skill contracts with baseline platform rows, required matrix columns, collection method vocabulary, output path, operational risk guidance, and next-skill routing to `creator-evidence-schema`.
@@ -156,4 +165,11 @@
 - Step 12.5 warnings: none.
 - Deviations from plan: none for Step 12.5.
 - Tech debt / follow-ups: Step 12.6 should run repository validation as the formal green gate before any Step 12.7 wording cleanup.
+- Ready for next phase: no
+- Step 12.6 completed: ran the formal repository validation gate for Phase 12.
+- Step 12.6 validation: `./scripts/skill-deps.sh --broken`; `./scripts/skill-versions.sh --missing`; `git diff --check`.
+- Step 12.6 validation results: `./scripts/skill-deps.sh --broken` reported `No broken references found.`; `./scripts/skill-versions.sh --missing` reported `All 267 skills have a version field.`; `git diff --check` produced no output.
+- Step 12.6 warnings: none.
+- Deviations from plan: none for Step 12.6.
+- Tech debt / follow-ups: Step 12.7 should inspect wording consistency and avoid source churn if no concrete drift is present.
 - Ready for next phase: no

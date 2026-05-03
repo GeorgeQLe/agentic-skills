@@ -1291,3 +1291,11 @@ Resolved all 10 findings from `/expert-review`:
 - Recorded full regression validation coverage for the Phase 12 creator platform evidence foundation acceptance criteria in `tasks/todo.md`.
 - Confirmed mirrored foundation skill frontmatter names, required output paths, collection method vocabulary, normalized schema fields, confidence/privacy fields, LinkedIn baseline language, pack-doc routing, and Step 12.4 next-skill routing.
 - Verified with targeted `rg` scans, `./scripts/skill-versions.sh --missing`, `./scripts/skill-deps.sh --broken`, and `git diff --check`.
+
+## 2026-05-02 — Phase 12 Step 12.6: repository validation gate
+
+- Ran the formal Phase 12 repository validation gate after the targeted regression coverage.
+- Confirmed `./scripts/skill-deps.sh --broken` reports `No broken references found.`.
+- Confirmed `./scripts/skill-versions.sh --missing` reports `All 267 skills have a version field.`.
+- Confirmed `git diff --check` produces no output.
+- Planned Step 12.7 to inspect wording consistency and avoid source churn unless concrete drift is found.
