@@ -229,9 +229,9 @@ Skills:
 ```text
 creator-platform-capability-matrix, creator-evidence-schema,
 creator-presence-dossier, youtube-channel-audit, youtube-video-audit,
-youtube-title-thumbnail-audit, youtube-portfolio, youtube-peer-benchmark, youtube-search-positioning,
+youtube-title-thumbnail-audit, youtube-description-optimizer, youtube-portfolio, youtube-peer-benchmark, youtube-search-positioning,
 youtube-cadence-diagnosis, creator-positioning, content-programming,
-series-spec, product-led-media-map, creator-metrics-review
+series-spec, product-led-media-map, video-script, video-build, creator-metrics-review
 ```
 
 Default flow:
@@ -240,13 +240,13 @@ Default flow:
 creator-platform-capability-matrix -> creator-evidence-schema
 -> creator-presence-dossier -> creator-positioning / content-programming / product-led-media-map / creator-metrics-review
 -> youtube-channel-audit / youtube-video-audit / platform-specific audit
--> youtube-title-thumbnail-audit -> youtube-portfolio
+-> youtube-title-thumbnail-audit -> youtube-description-optimizer -> youtube-portfolio
 -> youtube-peer-benchmark -> youtube-search-positioning / youtube-cadence-diagnosis
 -> creator-positioning -> content-programming -> series-spec
--> product-led-media-map -> creator-metrics-review
+-> product-led-media-map -> video-script -> video-build -> creator-metrics-review
 ```
 
-The pack is evidence-first: non-YouTube or mixed-platform work starts with `creator-platform-capability-matrix` and `creator-evidence-schema`, which define `research/creator-platforms/` artifacts before platform-specific audits. Creator/persona research starts with `creator-presence-dossier`, which feeds `creator-positioning`, `content-programming`, `product-led-media-map`, and `creator-metrics-review`. YouTube-specific work may still start at `youtube-channel-audit` for channel-level patterns or `youtube-video-audit` for one video's performance, release timing, packaging, comments, transcript/content, and optional owner analytics; both persist raw evidence under `research/youtube/data/`. Downstream skills then reuse available evidence for packaging, portfolio, benchmark, search-positioning, cadence, positioning, programming, series, product-led media, and metrics-review work. Validation target shapes include `@GeorgeLe`, `WeeklyG`, and `WeeklySOTA`.
+The pack is evidence-first: non-YouTube or mixed-platform work starts with `creator-platform-capability-matrix` and `creator-evidence-schema`, which define `research/creator-platforms/` artifacts before platform-specific audits. Creator/persona research starts with `creator-presence-dossier`, which feeds `creator-positioning`, `content-programming`, `product-led-media-map`, and `creator-metrics-review`. YouTube-specific work may still start at `youtube-channel-audit` for channel-level patterns or `youtube-video-audit` for one video's performance, release timing, packaging, comments, transcript/content, and optional owner analytics; both persist raw evidence under `research/youtube/data/`. Downstream skills then reuse available evidence for packaging, descriptions, portfolio, benchmark, search-positioning, cadence, positioning, programming, series, product-led media, video scripting, video builds, and metrics-review work. Validation target shapes include `@GeorgeLe`, `WeeklyG`, and `WeeklySOTA`.
 
 ## Kanban Variant Packs
 

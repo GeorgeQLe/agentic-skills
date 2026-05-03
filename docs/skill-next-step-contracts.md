@@ -43,6 +43,11 @@ This audit checked:
 
 | Skill | End states | Valid recommendation |
 | --- | --- | --- |
+| `video-script` | Script approved, no upstream artifacts, user declined | Approved -> `video-build`. No artifacts -> recommend prerequisite (`creator-positioning`, `product-led-media-map`, or `series-spec`). Declined -> no follow-up. |
+| `video-build` | Build complete, script missing, user declined | Complete -> `creator-metrics-review` + task items in `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/recurring-todo.md`. Missing -> `video-script`. Declined -> no follow-up. |
+
+| Skill | End states | Valid recommendation |
+| --- | --- | --- |
 | `concept-exploration` | Business-app pack missing, business-app pack enabled, project type unclear | Pack missing -> `pack install business-app`. Pack enabled -> `icp` using `research/concept-brief.md`. Project unclear -> `pack recommend`. |
 | `competitive-analysis` concept-validation mode | `Proceed to ICP`, `Pivot concept`, `Abandon` | `Proceed` -> `icp`; `Pivot` -> `brainstorm`; `Abandon` -> `No follow-up skill recommended` unless the user wants a new concept. Standard-mode re-run is valid only after `icp` creates `research/icp.md`. |
 | `competitive-analysis` standard mode | Value-prop missing, journey missing, specs missing, GTM missing, codebase exists | `value-prop-canvas` is the first standard-mode recommendation when `research/value-prop.md` is missing; then `journey-map`, `spec-interview`, `gtm`, `mvp-gap`. |

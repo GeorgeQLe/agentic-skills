@@ -1,5 +1,11 @@
 # Session History
 
+## 2026-05-03 — Add YouTube description optimizer
+
+- Added mirrored Claude/Codex `youtube-description-optimizer` skills to the creator-media pack for existing-video description audits, future upload drafts, and reusable description templates.
+- Wired the skill into creator-media docs and next-skill routing between `youtube-title-thumbnail-audit` and `youtube-portfolio`, while preserving the in-progress `video-script` / `video-build` flow.
+- Validation passed: targeted contract/docs/routing scans, normalized Claude/Codex skill diff, `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken`, `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`, `./scripts/skill-next-step-routing.sh --missing`, and `git diff --check`.
+
 ## 2026-05-03 — Mutation-capable next-step routing audit
 
 - Added `scripts/skill-next-step-routing.sh` to audit mutation-capable skill contracts for missing final next-step routing.
