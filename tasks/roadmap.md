@@ -2,13 +2,13 @@
 
 > Generated from: tasks/roadmap.md (existing), specs/board-flag-kanban-search.md, tasks/ideas.md, tasks/history.md
 > Date: 2026-03-27 (last updated 2026-05-03)
-> Total Phases: 15 (13 complete, 2 planned)
+> Total Phases: 15 (14 complete, 1 planned)
 
 ## Summary
 
 Phases 1-11 complete: kanban skill suite, board intelligence, templates, archive automation, expert review fixes, test hardening (83 tests), kanban DX, skill infrastructure, the shared Poketo headless API migration for both Claude and Codex, and the three-mode operating model (`claude-only` / `codex-only` / `hybrid`) with shared approval-packet contract and next-step routing.
 
-Phases 12-13 complete and Phases 14-15 planned: expand the creator-media pack beyond YouTube with a platform capability matrix, shared evidence schema, repo-backed creator presence dossier, LinkedIn-first free/manual evidence lane, and a single-video YouTube audit skill.
+Phases 12-13 and 15 complete, with Phase 14 planned: expand the creator-media pack beyond YouTube with a platform capability matrix, shared evidence schema, repo-backed creator presence dossier, LinkedIn-first free/manual evidence lane, and a single-video YouTube audit skill.
 
 ## Phase Overview
 
@@ -28,7 +28,7 @@ Phases 12-13 complete and Phases 14-15 planned: expand the creator-media pack be
 | 12 | Creator Platform Evidence Foundation ✓ | specs/creator-platform-evidence-schema.md | Capability matrix + shared evidence schema skills | M |
 | 13 | Creator Presence Dossier ✓ | specs/creator-platform-evidence-schema.md | Repo-backed creator career/presence dossier skill | M |
 | 14 | LinkedIn Evidence Lane | specs/creator-platform-evidence-schema.md | LinkedIn export/manual evidence templates and guidance | M |
-| 15 | YouTube Video Audit | user request, YouTube API/docs research | Single-video public-first audit with optional owner analytics | M |
+| 15 | YouTube Video Audit ✓ | user request, YouTube API/docs research | Single-video public-first audit with optional owner analytics | M |
 
 ---
 
@@ -528,7 +528,7 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 **Parallelization:** serial
 **Coordination Notes:** LinkedIn access constraints are the highest-risk part of the expansion. Implement after the shared foundation and dossier exist so LinkedIn remains one evidence lane, not a special-case schema.
 
-## Phase 15: YouTube Video Audit
+## Phase 15: YouTube Video Audit ✓
 
 **Goal:** Add an evidence-first single-video YouTube audit skill that analyzes public metadata, transcript/content, packaging, release timing, comments, and optional owner analytics for one video.
 
@@ -542,15 +542,17 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Wire pack docs and discovery references so single-video work routes to `youtube-video-audit` without replacing channel-level `youtube-channel-audit`.
 
 **Acceptance Criteria:**
-- [ ] `youtube-video-audit` exists for both Claude and Codex.
-- [ ] The skill has a public-first evidence path and optional owner-analytics path.
-- [ ] The skill distinguishes public evidence from owner-provided/private analytics and records evidence gaps.
-- [ ] The report contract covers release timing, performance snapshot, packaging, hook/content structure, transcript evidence, comments/audience response, and prioritized fixes.
-- [ ] Creator-media docs/reference lists include `youtube-video-audit` and preserve the existing channel audit flow.
-- [ ] Validation passes with skill dependency/version checks and targeted routing scans.
+- [x] `youtube-video-audit` exists for both Claude and Codex.
+- [x] The skill has a public-first evidence path and optional owner-analytics path.
+- [x] The skill distinguishes public evidence from owner-provided/private analytics and records evidence gaps.
+- [x] The report contract covers release timing, performance snapshot, packaging, hook/content structure, transcript evidence, comments/audience response, and prioritized fixes.
+- [x] Creator-media docs/reference lists include `youtube-video-audit` and preserve the existing channel audit flow.
+- [x] Validation passes with skill dependency/version checks and targeted routing scans.
 
 **Parallelization:** serial
 **Coordination Notes:** Keep this serial because it touches mirrored skills, pack routing, and docs. Do not add dependencies or GitHub Actions.
+
+**Completed:** 2026-05-03. Mirrored Claude/Codex `youtube-video-audit` skills were added to the creator-media pack, documentation references now expose the single-video lane beside channel audits, and validation passed with dependency/version checks, targeted evidence-boundary scans, docs routing scans, and `git diff --check`.
 
 ## Post-Phase Tail Work
 

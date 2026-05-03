@@ -17,12 +17,12 @@
 - Wire pack docs and discovery references so single-video work routes to `youtube-video-audit` without replacing channel-level `youtube-channel-audit`.
 
 **Acceptance Criteria:**
-- [ ] `youtube-video-audit` exists for both Claude and Codex.
-- [ ] The skill has a public-first evidence path and optional owner-analytics path.
-- [ ] The skill distinguishes public evidence from owner-provided/private analytics and records evidence gaps.
-- [ ] The report contract covers release timing, performance snapshot, packaging, hook/content structure, transcript evidence, comments/audience response, and prioritized fixes.
-- [ ] Creator-media docs/reference lists include `youtube-video-audit` and preserve the existing channel audit flow.
-- [ ] Validation passes with skill dependency/version checks and targeted routing scans.
+- [x] `youtube-video-audit` exists for both Claude and Codex.
+- [x] The skill has a public-first evidence path and optional owner-analytics path.
+- [x] The skill distinguishes public evidence from owner-provided/private analytics and records evidence gaps.
+- [x] The report contract covers release timing, performance snapshot, packaging, hook/content structure, transcript evidence, comments/audience response, and prioritized fixes.
+- [x] Creator-media docs/reference lists include `youtube-video-audit` and preserve the existing channel audit flow.
+- [x] Validation passes with skill dependency/version checks and targeted routing scans.
 
 **Parallelization:** serial
 **Coordination Notes:** Keep this serial because it touches mirrored skills, pack routing, and docs. Do not add dependencies or GitHub Actions.
@@ -38,33 +38,51 @@
 **Subagent lanes:** none
 
 ### Implementation
-- [ ] Step 15.1: Create mirrored `youtube-video-audit` skill contracts.
+- [x] Step 15.1: Create mirrored `youtube-video-audit` skill contracts.
   - Classification: automated
   - Files: create `packs/creator-media/claude/youtube-video-audit/SKILL.md`, create `packs/creator-media/codex/youtube-video-audit/SKILL.md`
   - Require video URL or ID input, public-first evidence capture, optional owner analytics, raw evidence paths, report output path, and final-response next-skill routing.
-- [ ] Step 15.2: Define the report contract and evidence boundaries.
+- [x] Step 15.2: Define the report contract and evidence boundaries.
   - Classification: automated
   - Files: modify mirrored `youtube-video-audit` skill files
   - Require sections for evidence coverage, public metadata, release timing, performance snapshot, packaging, transcript/content structure, comments/audience response, owner analytics when present, prioritized fixes, and evidence gaps.
-- [ ] Step 15.3: Wire `youtube-video-audit` into creator-media pack docs and discovery references.
+- [x] Step 15.3: Wire `youtube-video-audit` into creator-media pack docs and discovery references.
   - Classification: automated
   - Files: modify `packs/creator-media/PACK.md`, `README.md`, `docs/skills-reference.md`
   - Put `youtube-video-audit` near `youtube-channel-audit` and document that it is the single-video lane, not the channel-level trend lane.
 
 ### Green
-- [ ] Step 15.4: Run focused validation and record results.
+- [x] Step 15.4: Run focused validation and record results.
   - Classification: automated
   - Files: modify `tasks/todo.md` review section with exact validation commands and results
   - Run targeted scans for mirrored files, frontmatter, output paths, evidence boundaries, optional owner analytics, report sections, docs routing, plus `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, and `git diff --check`.
 
 ### Milestone: YouTube Video Audit
 **Acceptance Criteria:**
-- [ ] `youtube-video-audit` exists for both Claude and Codex.
-- [ ] The skill has a public-first evidence path and optional owner-analytics path.
-- [ ] The skill distinguishes public evidence from owner-provided/private analytics and records evidence gaps.
-- [ ] The report contract covers release timing, performance snapshot, packaging, hook/content structure, transcript evidence, comments/audience response, and prioritized fixes.
-- [ ] Creator-media docs/reference lists include `youtube-video-audit` and preserve the existing channel audit flow.
-- [ ] Validation passes with skill dependency/version checks and targeted routing scans.
+- [x] `youtube-video-audit` exists for both Claude and Codex.
+- [x] The skill has a public-first evidence path and optional owner-analytics path.
+- [x] The skill distinguishes public evidence from owner-provided/private analytics and records evidence gaps.
+- [x] The report contract covers release timing, performance snapshot, packaging, hook/content structure, transcript evidence, comments/audience response, and prioritized fixes.
+- [x] Creator-media docs/reference lists include `youtube-video-audit` and preserve the existing channel audit flow.
+- [x] Validation passes with skill dependency/version checks and targeted routing scans.
+
+**On Completion:**
+- Deviations from plan: none.
+- Tech debt / follow-ups: none.
+- Ready for next phase: yes
+
+---
+
+### Review
+- Step 15.1 complete: added mirrored Claude/Codex `youtube-video-audit` skills with video URL/ID input, public-first evidence capture, optional owner analytics, raw evidence paths, report output path, constraints, and next-skill routing.
+- Step 15.2 complete: defined the report contract and evidence boundaries for evidence coverage, performance snapshot, release timing, packaging, content/retention diagnosis, audience response, owner analytics findings, prioritized fixes, reusable lessons, and evidence gaps.
+- Step 15.3 complete: wired `youtube-video-audit` into `packs/creator-media/PACK.md`, `README.md`, and `docs/skills-reference.md` beside `youtube-channel-audit`, while preserving channel-level audit routing.
+- Step 15.4 validation:
+  - `./scripts/skill-deps.sh --broken` - passed; `No broken references found.`
+  - `./scripts/skill-versions.sh --missing` - passed; `All 271 skills have a version field.`
+  - `rg -n "name: youtube-video-audit|version:|Invoke as|research/youtube/data/<video-id>|research/youtube/video-audit-<video-id>-YYYY-MM-DD\\.md|owner analytics|owner-provided|public-first|Evidence Coverage|Release Timing|Packaging Diagnosis|Content and Retention Diagnosis|Audience Response|Recommended Fixes|Recommended next skill: <command>" packs/creator-media/claude/youtube-video-audit/SKILL.md packs/creator-media/codex/youtube-video-audit/SKILL.md` - passed; confirmed mirrored skill metadata, evidence paths, owner analytics, public-first constraints, report sections, and routing language.
+  - `rg -n "youtube-video-audit|single-video|one video's performance|youtube-channel-audit / youtube-video-audit" README.md docs/skills-reference.md packs/creator-media/PACK.md tasks/roadmap.md tasks/todo.md` - passed; confirmed docs and task references expose the single-video lane without replacing `youtube-channel-audit`.
+  - `git diff --check` - passed; no output.
 
 ---
 
