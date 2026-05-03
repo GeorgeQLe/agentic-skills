@@ -1341,3 +1341,9 @@ Resolved all 10 findings from `/expert-review`:
 - Updated `creator-positioning`, `content-programming`, `product-led-media-map`, and `creator-metrics-review` to prefer `research/creator-presence/<slug>.md` as optional creator context when present.
 - Preserved the existing YouTube-only flow by keeping channel audit and raw YouTube evidence as the source of channel-only and performance claims.
 - Verified with targeted routing scans, normalized mirror diff for `creator-evidence-schema`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-deps.sh --broken`, and `git diff --check`.
+
+## 2026-05-03 — Phase 13 Step 13.5: creator presence regression coverage
+
+- Recorded focused regression validation coverage for the Phase 13 creator presence dossier acceptance criteria in `tasks/todo.md`.
+- Confirmed mirrored dossier skill frontmatter names, required output path, required Markdown sections, public/private evidence boundary rules, source/capture/confidence/evidence-gap fields, supported source families, pack-doc routing, downstream strategy routing, and final-response next-skill language.
+- Verified with targeted `rg` scans, `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, and `git diff --check`.
