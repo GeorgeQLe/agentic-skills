@@ -2,7 +2,7 @@
 name: pack
 description: Manage project-local skill packs and project designation without installing domain skills globally
 type: ops
-version: 1.1.1
+version: 1.2.0
 argument-hint: "[list|status|recommend|install <pack>|remove <pack>|refresh] or no args for guided setup"
 ---
 
@@ -39,6 +39,7 @@ Use this skill when the user wants to inspect, recommend, install, remove, or re
    The launcher is intentionally located at `scripts/pack.sh` under this skill directory and forwards to the repository-level pack manager.
 4. For `install`, `remove`, `refresh`, and guided setup installs, report:
    - `.agents/project.json` project type and enabled packs
+   - any `project_scopes` entries when present, including the path, `project_type`, packs, and purpose
    - local skill links created or removed under `.claude/skills` and `.codex/skills`
    - any skipped links caused by non-symlink targets
    - that the user should start a fresh Claude Code or Codex CLI session if the active session does not show the changed skills
@@ -48,7 +49,10 @@ Use this skill when the user wants to inspect, recommend, install, remove, or re
 - Global skills are domain-neutral and installed by `install.sh`.
 - Domain workflows live in project-local packs.
 - Project designation is stored in `.agents/project.json`.
+- Mixed monorepos may keep a coarse default `project_type` and add `project_scopes` entries for subtrees that need different domain routing.
+- `enabled_packs` is the union of packs available to the repository; `project_scopes[].packs` explains which packs are appropriate for a specific path or glob.
 - Pack installs use symlinks back to this skill-library repository by default.
+- `scripts/pack.sh install`, `remove`, `refresh`, and `set-mode` preserve existing `project_scopes` and `notes` fields when `jq` is available.
 - `scripts/pack.sh refresh` recreates project-local symlinks from `.agents/project.json`; it does not refresh the active Claude Code or Codex process.
 - Claude Code and Codex may load available skills at session startup. If newly installed or removed skills are not visible, start a fresh CLI session. No supported in-session CLI skill refresh command is configured in this pack workflow.
 
@@ -60,6 +64,40 @@ Use this skill when the user wants to inspect, recommend, install, remove, or re
 - Use `devtool` for SDKs, CLIs, APIs, libraries, infrastructure products, developer platforms, and documentation-first developer workflows.
 - Use `business-app-kanban`, `game-kanban`, or `devtool-kanban` only when the project intentionally uses PoketoWork boards.
 - Use `poketowork-kanban` only when the user wants the generic board-management utilities independent of a domain pack.
+
+## Mixed Monorepos
+
+Use one repo-level `.agents/project.json` with a primary default plus scoped overrides:
+
+```json
+{
+  "project_type": "devtool",
+  "enabled_packs": ["devtool", "business-app"],
+  "skill_pack_version": 1,
+  "project_scopes": [
+    {
+      "path": "apps/pitwall-local",
+      "project_type": "devtool",
+      "packs": ["devtool"],
+      "purpose": "Pitwall Local / OSS developer utility work."
+    },
+    {
+      "path": "apps/pitwall-calcllm",
+      "project_type": "business-app",
+      "packs": ["business-app"],
+      "purpose": "CalcLLM-powered connected edition research, GTM, monetization, and SaaS product work."
+    },
+    {
+      "path": "packages/calcllm-sync",
+      "project_type": "business-app",
+      "packs": ["business-app"],
+      "purpose": "Connected-edition sync and SaaS integration work."
+    }
+  ]
+}
+```
+
+When a task clearly names a scoped path, route to that scope's `project_type` and packs. When no scope matches, use the top-level `project_type` as the default.
 
 ## Pack Decision Checkpoint
 

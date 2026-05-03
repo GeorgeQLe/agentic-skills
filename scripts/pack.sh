@@ -131,6 +131,9 @@ read_enabled_packs() {
 write_project_file() {
   local project_type="$1"
   shift
+  local project_scopes notes
+  project_scopes="$(project_json_value project_scopes)"
+  notes="$(project_json_value notes)"
 
   mkdir -p "$(dirname "$PROJECT_FILE")"
   {
@@ -152,10 +155,17 @@ write_project_file() {
     echo "],"
     if [[ -n "$PROJECT_AGENT_MODE" ]]; then
       echo '  "skill_pack_version": 1,'
-      printf '  "agent_mode": "%s"\n' "$PROJECT_AGENT_MODE"
+      printf '  "agent_mode": "%s"' "$PROJECT_AGENT_MODE"
     else
-      echo '  "skill_pack_version": 1'
+      printf '  "skill_pack_version": 1'
     fi
+    if [[ -n "$project_scopes" ]]; then
+      printf ',\n  "project_scopes": %s' "$project_scopes"
+    fi
+    if [[ -n "$notes" ]]; then
+      printf ',\n  "notes": %s' "$notes"
+    fi
+    echo ""
     echo "}"
   } > "$PROJECT_FILE"
 }
@@ -179,6 +189,13 @@ current_project_type() {
 current_agent_mode() {
   if [[ -f "$PROJECT_FILE" ]]; then
     sed -n 's/.*"agent_mode"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' "$PROJECT_FILE" | head -1
+  fi
+}
+
+project_json_value() {
+  local key="$1"
+  if [[ -f "$PROJECT_FILE" ]] && command -v jq >/dev/null 2>&1; then
+    jq -c --arg key "$key" '.[$key] // empty' "$PROJECT_FILE" 2>/dev/null || true
   fi
 }
 

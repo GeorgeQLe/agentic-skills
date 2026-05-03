@@ -1,26 +1,26 @@
-# Mutation Contract Routing Audit
+# Mixed Monorepo Pack Routing
 
 **Project:** Claude Skills / agentic-skills
-**Current phase:** 16 of 16
+**Current phase:** 17 of 17
 **Source roadmap:** `tasks/roadmap.md`
-**Source spec:** User request and `tasks/lessons.md`
+**Source spec:** User request
 
-## Phase 16: Mutation Contract Routing Audit
+## Phase 17: Mixed Monorepo Pack Routing
 
-**Goal:** Ensure mutation-capable skills explicitly emit next-step routing in their final responses, then add a repeatable audit for missing routing coverage.
+**Goal:** Allow a repository to declare a default project designation plus path-scoped domain designations for mixed monorepos.
 
 **Scope:**
-- Patch mutation-capable contracts whose output sections or routing notes do not require a concrete final next-step handoff.
-- Add an audit command under `scripts/` that scans mutation-capable skill contracts and fails on missing routing.
-- Record validation evidence in this task doc.
+- Document `project_scopes` in the pack skill and public pack docs.
+- Keep `enabled_packs` as the repository-wide union of available local packs.
+- Preserve existing `project_scopes` and `notes` fields when pack commands rewrite `.agents/project.json`.
 
 **Acceptance Criteria:**
-- [x] Mutation-capable skills patched by this phase explicitly require next-step routing in their final response.
-- [x] `scripts/skill-next-step-routing.sh --missing` exists and fails on mutation-capable contracts without routing.
-- [x] Validation passes with the new audit, existing skill dependency/version checks, and whitespace checks.
+- [x] `global/claude/pack` and `global/codex/pack` describe mixed-monorepo routing.
+- [x] `README.md` and `docs/packs.md` show a mixed devtool/business-app example.
+- [x] `scripts/pack.sh install`, `remove`, `refresh`, and `set-mode` do not drop existing `project_scopes` or `notes` when `jq` is available.
 
 **Parallelization:** serial
-**Coordination Notes:** Keep serial because this touches shared skill contracts and repository validation scripts. Do not add dependencies or GitHub Actions.
+**Coordination Notes:** Keep serial because this touches shared pack schema and writer behavior. Do not add dependencies or GitHub Actions.
 
 > Test strategy: tests-after
 
@@ -33,31 +33,30 @@
 **Subagent lanes:** none
 
 ### Implementation
-- [x] Step 16.1: Identify mutation-capable skill contracts missing final next-step routing.
+- [x] Step 17.1: Validate current pack model and writer behavior.
   - Classification: automated
-  - Files: no source changes expected
-  - Scan `global/` and `packs/` `SKILL.md` files for mutation signals such as tracked-file shipping contracts, write/update/create language, and explicit mutation/refactor modes.
-  - Compare that set against existing `Recommended next skill`, `Recommended next command`, or `Next work` final-response routing language.
-- [x] Step 16.2: Patch affected mutation-capable contracts.
+  - Files: inspect only
+  - Confirm whether `.agents/project.json` currently supports only one coarse `project_type`, and whether pack commands rewrite the file.
+- [x] Step 17.2: Document mixed-monorepo routing.
   - Classification: automated
-  - Files: modify only affected `SKILL.md` files
-  - Add or tighten output/routing text so final responses include concrete next-step routing.
-- [x] Step 16.3: Add the missing-routing audit.
+  - Files: `global/claude/pack/SKILL.md`, `global/codex/pack/SKILL.md`, `README.md`, `docs/packs.md`
+  - Define `project_scopes`, repository-wide `enabled_packs`, and default `project_type` behavior.
+- [x] Step 17.3: Preserve scoped metadata during pack writes.
   - Classification: automated
-  - Files: create `scripts/skill-next-step-routing.sh`
-  - The audit should expose `--missing`, scan `global/` and `packs/`, and report mutation-capable skill files missing final next-step routing.
+  - Files: `scripts/pack.sh`
+  - Preserve existing `project_scopes` and `notes` when writing `.agents/project.json`, using `jq` when available.
 
 ### Green
-- [x] Step 16.4: Run focused validation and record results.
+- [x] Step 17.4: Run focused validation and record results.
   - Classification: automated
   - Files: modify `tasks/todo.md` review section with exact validation commands and results
-  - Run `./scripts/skill-next-step-routing.sh --missing`, `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, targeted routing scans for patched files, and `git diff --check`.
+  - Run shell syntax checks, project-scope preservation smoke tests, skill dependency/version checks, and `git diff --check`.
 
-### Milestone: Mutation Contract Routing Audit
+### Milestone: Mixed Monorepo Pack Routing
 **Acceptance Criteria:**
-- [x] Mutation-capable skills patched by this phase explicitly require next-step routing in their final response.
-- [x] `scripts/skill-next-step-routing.sh --missing` exists and fails on mutation-capable contracts without routing.
-- [x] Validation passes with the new audit, existing skill dependency/version checks, and whitespace checks.
+- [x] `global/claude/pack` and `global/codex/pack` describe mixed-monorepo routing.
+- [x] `README.md` and `docs/packs.md` show a mixed devtool/business-app example.
+- [x] `scripts/pack.sh install`, `remove`, `refresh`, and `set-mode` do not drop existing `project_scopes` or `notes` when `jq` is available.
 
 **On Completion:**
 - Deviations from plan: none.
@@ -67,6 +66,20 @@
 ---
 
 ### Review
+- User claim validation:
+  - Confirmed: a single repo-level `project_type` is too coarse for a repo containing both Pitwall Local / OSS devtool work and CalcLLM-powered SaaS/business-app work.
+  - Confirmed: before this phase, `scripts/pack.sh` rewrote `.agents/project.json` from `project_type`, `enabled_packs`, `skill_pack_version`, and optional `agent_mode`, which would drop hand-authored mixed-monorepo metadata.
+  - Confirmed direction: keep `devtool` as the coarse default for local/OSS developer tooling, enable both `devtool` and `business-app`, and use scoped routing for CalcLLM-connected paths.
+- Step 17.2 complete: documented mixed-monorepo routing in mirrored Claude/Codex `pack` skills and public pack docs. The documented model keeps `project_type` as the default, `enabled_packs` as the repository-wide union, and `project_scopes[]` as path-scoped routing metadata.
+- Step 17.3 complete: updated `scripts/pack.sh` so pack writes preserve existing `project_scopes` and `notes` fields when `jq` is available.
+- Step 17.4 validation:
+  - `bash -n scripts/pack.sh` - passed.
+  - `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken` - passed; `No broken references found.`
+  - `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing` - passed; `All 271 skills have a version field.`
+  - `git diff --check` - passed; no output.
+  - Temp-project smoke test for `scripts/pack.sh set-mode hybrid` - passed; `agent_mode`, `project_scopes[0].path`, and `notes.devtool` were all present after rewrite.
+  - Temp-project smoke test for `scripts/pack.sh install business-app` - passed; `enabled_packs` contained both `devtool` and `business-app`, and existing `project_scopes` and `notes` survived.
+  - Note: `./scripts/skill-deps.sh --broken` and `./scripts/skill-versions.sh --missing` fail under macOS `/bin/bash` because those existing scripts use associative arrays; validation used `/opt/homebrew/bin/bash`.
 - Step 16.1 complete: added a mutation-capable contract audit and used its initial `--missing` output to identify gaps in default shipping-contract skills and kanban mutation wrappers.
 - Step 16.2 complete: patched 139 default shipping-contract skill files with a `Default next-step routing` requirement, and patched 40 kanban mutation wrappers with a `## Next-Step Routing` section.
 - Step 16.3 complete: added `scripts/skill-next-step-routing.sh` with `--missing` and `--list` modes. The audit scans `global/` and `packs/` `SKILL.md` files for mutation signals and requires `Recommended next skill`, `Recommended next command`, `Recommended next step`, `## Next Steps`, `## Next-Step Routing`, or `## Next-Skill Routing`.

@@ -70,6 +70,32 @@ It also writes:
 
 to `.agents/project.json`.
 
+For mixed monorepos, keep `project_type` as the default designation, set `enabled_packs` to the union of local packs needed by the repo, and add scoped routing:
+
+```json
+{
+  "project_type": "devtool",
+  "enabled_packs": ["devtool", "business-app"],
+  "skill_pack_version": 1,
+  "project_scopes": [
+    {
+      "path": "apps/pitwall-local",
+      "project_type": "devtool",
+      "packs": ["devtool"],
+      "purpose": "Pitwall Local / OSS developer utility work."
+    },
+    {
+      "path": "apps/pitwall-calcllm",
+      "project_type": "business-app",
+      "packs": ["business-app"],
+      "purpose": "CalcLLM-powered connected edition research, GTM, monetization, and SaaS product work."
+    }
+  ]
+}
+```
+
+Pack commands preserve existing `project_scopes` and `notes` fields when `jq` is available.
+
 `.agents/project.json` also accepts an optional `agent_mode` field (`"claude-only" | "codex-only" | "hybrid"`) that names the Phase 11 operating mode for the project. Set or clear it with `scripts/pack.sh set-mode <claude-only|codex-only|hybrid|unset>`; the value is preserved across `install`, `remove`, and `refresh`. `SKILLS_AGENT_MODE` overrides the file for the current shell, and `scripts/agent-mode.sh` resolves the effective mode (env > project.json > empty). See `docs/operating-modes.md`.
 
 If an assistant does not discover project-local skills, use the global `pack` or `research-roadmap` skill as the launcher. The pack files still stay project-local.
