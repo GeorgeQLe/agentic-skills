@@ -2,13 +2,13 @@
 
 > Generated from: tasks/roadmap.md (existing), specs/board-flag-kanban-search.md, tasks/ideas.md, tasks/history.md
 > Date: 2026-03-27 (last updated 2026-05-03)
-> Total Phases: 16 (16 complete)
+> Total Phases: 17 (16 complete, 1 active)
 
 ## Summary
 
 Phases 1-11 complete: kanban skill suite, board intelligence, templates, archive automation, expert review fixes, test hardening (83 tests), kanban DX, skill infrastructure, the shared Poketo headless API migration for both Claude and Codex, and the three-mode operating model (`claude-only` / `codex-only` / `hybrid`) with shared approval-packet contract and next-step routing.
 
-Phases 12-13, 15, and 16 complete, with Phase 14 still available as planned future creator-media work. Phase 16 hardened mutation-capable skill contracts with final next-step routing language and an audit that catches future omissions.
+Phases 12-13, 15, and 16 complete, with Phase 14 still available as planned future creator-media work. Phase 16 hardened mutation-capable skill contracts with final next-step routing language and an audit that catches future omissions. Phase 17 adds mixed-monorepo pack routing so one repository can carry devtool, business-app, game, or other domain scopes without forcing one global designation.
 
 ## Phase Overview
 
@@ -30,8 +30,26 @@ Phases 12-13, 15, and 16 complete, with Phase 14 still available as planned futu
 | 14 | LinkedIn Evidence Lane | specs/creator-platform-evidence-schema.md | LinkedIn export/manual evidence templates and guidance | M |
 | 15 | YouTube Video Audit ✓ | user request, YouTube API/docs research | Single-video public-first audit with optional owner analytics | M |
 | 16 | Mutation Contract Routing Audit ✓ | user request, tasks/lessons.md | Mutation-capable skills emit next-step routes; audit catches gaps | S |
+| 17 | Mixed Monorepo Pack Routing | user request | `.agents/project.json.project_scopes` schema + pack writer preservation | S |
 
 ---
+
+## Phase 17: Mixed Monorepo Pack Routing
+
+**Goal:** Allow a repository to declare a default project designation plus path-scoped domain designations for mixed monorepos.
+
+**Scope:**
+- Document `project_scopes` in the pack skill and public pack docs.
+- Keep `enabled_packs` as the repository-wide union of available local packs.
+- Preserve existing `project_scopes` and `notes` fields when pack commands rewrite `.agents/project.json`.
+
+**Acceptance Criteria:**
+- [x] `global/claude/pack` and `global/codex/pack` describe mixed-monorepo routing.
+- [x] `README.md` and `docs/packs.md` show a mixed devtool/business-app example.
+- [x] `scripts/pack.sh install`, `remove`, `refresh`, and `set-mode` do not drop existing `project_scopes` or `notes` when `jq` is available.
+
+**Parallelization:** serial
+**Coordination Notes:** Keep serial because this touches shared pack schema and writer behavior.
 
 ## Phase 16: Mutation Contract Routing Audit ✓
 

@@ -7,6 +7,7 @@ Project-local packs keep domain-specific workflows out of global assistant conte
 - Global skills live in `global/{claude,codex}`.
 - Domain packs live in `packs/<pack>/{claude,codex}`.
 - Project designation lives in `.agents/project.json`.
+- Mixed monorepos can declare scoped domain routing in `.agents/project.json.project_scopes`.
 
 Example:
 
@@ -17,6 +18,38 @@ Example:
   "skill_pack_version": 1
 }
 ```
+
+Mixed monorepo example:
+
+```json
+{
+  "project_type": "devtool",
+  "enabled_packs": ["devtool", "business-app"],
+  "skill_pack_version": 1,
+  "project_scopes": [
+    {
+      "path": "apps/pitwall-local",
+      "project_type": "devtool",
+      "packs": ["devtool"],
+      "purpose": "Pitwall Local / OSS developer utility work."
+    },
+    {
+      "path": "apps/pitwall-calcllm",
+      "project_type": "business-app",
+      "packs": ["business-app"],
+      "purpose": "CalcLLM-powered connected edition research, GTM, monetization, and SaaS product work."
+    },
+    {
+      "path": "packages/calcllm-sync",
+      "project_type": "business-app",
+      "packs": ["business-app"],
+      "purpose": "Connected-edition sync and SaaS integration work."
+    }
+  ]
+}
+```
+
+In this model, `project_type` is the default designation for uncategorized work, `enabled_packs` is the union of local skills available in the repo, and each `project_scopes[]` entry tells agents which pack family to apply for a path or glob.
 
 ## Commands
 
@@ -77,6 +110,8 @@ If a tool does not discover project-local `.claude/skills` or `.codex/skills`, u
 Do not install `packs/*` globally as a fallback; that recreates the context pollution this design avoids.
 
 Commit `.agents/project.json` with the project. Do not commit generated local skill links under `.claude/skills` or `.codex/skills`; recreate them with `/pack`, `$pack`, or `scripts/pack.sh refresh`.
+
+`scripts/pack.sh install`, `remove`, `refresh`, and `set-mode` preserve existing `project_scopes` and `notes` fields when `jq` is available.
 
 ## Former Global Domain Skills
 
