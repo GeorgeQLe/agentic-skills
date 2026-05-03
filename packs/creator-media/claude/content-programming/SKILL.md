@@ -14,6 +14,7 @@ Create a programming strategy for a creator-media channel. This is the channel a
 
 ## Inputs
 
+- Prefer `research/creator-presence/<slug>.md` when present for cross-platform themes, signature formats, cadence constraints, and proof assets.
 - `research/youtube/creator-positioning-<slug>.md`
 - `research/youtube/portfolio-<slug>.md`
 - Optional peer benchmark and product-led media map.
@@ -39,7 +40,7 @@ Default recommendation: `/series-spec`.
 
 If the default successor already exists and is current, recommend the first missing or stale downstream creator-media artifact in this order:
 
-`/youtube-channel-audit` -> `/youtube-title-thumbnail-audit` -> `/youtube-portfolio` -> `/youtube-peer-benchmark` -> `/youtube-search-positioning` -> `/youtube-cadence-diagnosis` -> `/creator-positioning` -> `/content-programming` -> `/series-spec` -> `/product-led-media-map` -> `/creator-metrics-review`
+`/creator-presence-dossier` -> `/youtube-channel-audit` -> `/youtube-title-thumbnail-audit` -> `/youtube-portfolio` -> `/youtube-peer-benchmark` -> `/youtube-search-positioning` -> `/youtube-cadence-diagnosis` -> `/creator-positioning` -> `/content-programming` -> `/series-spec` -> `/product-led-media-map` -> `/creator-metrics-review`
 
 If the sequence is ambiguous, multiple upstream artifacts are stale, or the recommendation depends on channel-level strategy vs programming-level changes, recommend `/creator-metrics-review` when metrics evidence exists, otherwise recommend the default successor and explain the missing artifact.
 
@@ -47,4 +48,5 @@ If the sequence is ambiguous, multiple upstream artifacts are stale, or the reco
 
 - Do not generate full scripts or a calendar unless explicitly asked.
 - Every proposed pillar must connect to audit, positioning, product, or benchmark evidence.
+- Use the dossier when present as preferred creator context, while preserving channel audit and portfolio evidence for YouTube-only programming.
 - Keep programming realistic for the apparent production capacity.

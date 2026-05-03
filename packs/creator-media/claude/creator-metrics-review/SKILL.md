@@ -14,6 +14,7 @@ Review channel performance against the strategy and decide what to continue, cha
 
 ## Inputs
 
+- Preferred creator context when present: `research/creator-presence/<slug>.md`, especially for cross-platform performance, audience/community signals, and stale-positioning checks.
 - Raw metadata under `research/youtube/data/<slug>/`.
 - Channel audit, portfolio, positioning, programming, series specs, and product-led media map when present.
 - Optional prior metrics reviews.
@@ -42,7 +43,7 @@ Default recommendation: `/youtube-channel-audit or /content-programming`.
 
 If the default successor already exists and is current, recommend the first missing or stale downstream creator-media artifact in this order:
 
-`/youtube-channel-audit` -> `/youtube-title-thumbnail-audit` -> `/youtube-portfolio` -> `/youtube-peer-benchmark` -> `/youtube-search-positioning` -> `/youtube-cadence-diagnosis` -> `/creator-positioning` -> `/content-programming` -> `/series-spec` -> `/product-led-media-map` -> `/creator-metrics-review`
+`/creator-presence-dossier` -> `/youtube-channel-audit` -> `/youtube-title-thumbnail-audit` -> `/youtube-portfolio` -> `/youtube-peer-benchmark` -> `/youtube-search-positioning` -> `/youtube-cadence-diagnosis` -> `/creator-positioning` -> `/content-programming` -> `/series-spec` -> `/product-led-media-map` -> `/creator-metrics-review`
 
 If the sequence is ambiguous, multiple upstream artifacts are stale, or the recommendation depends on channel-level strategy vs programming-level changes, recommend `/creator-metrics-review` when metrics evidence exists, otherwise recommend the default successor and explain the missing artifact.
 
@@ -50,4 +51,5 @@ If the sequence is ambiguous, multiple upstream artifacts are stale, or the reco
 
 - Do not treat one video as a trend.
 - State metric gaps explicitly.
+- Use the dossier when present as preferred creator context for cross-platform signals; preserve raw YouTube evidence as the source of YouTube performance claims.
 - Do not perform external account actions or channel changes.
