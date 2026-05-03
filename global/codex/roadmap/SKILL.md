@@ -63,13 +63,14 @@ Route behavior based on the current pipeline state:
 | B0 — Specs, missing design gate | User-facing specs exist, but `research/journey-map.md`, `specs/ux-variations-*.md`, or `specs/ui-*.md` is missing | Queue the missing journey/UX/UI planning item. Done (skip to step 7). |
 | B — Specs, no roadmap | Specs exist and required journey/UX/UI planning is complete or not applicable, `tasks/roadmap.md` missing or empty | Go to step 4 (build roadmap), then continue to step 5. |
 | C — Work in progress | `tasks/roadmap.md` exists, unchecked phases remain | Skip to step 5 (classify issues). |
+| G — Roadmap extension needed | `tasks/roadmap.md` exists, all phases are checked, and a substantive spec exists that is newer than the roadmap or is not represented in any completed phase | Go to step 4 in extension mode: interview only for the new/changed spec scope, append the agreed next phase(s), then seed the first new phase with `$plan-phase N`. Do not queue `$roadmap`. |
 | D — All complete, documentation scan needed | All phases in `tasks/roadmap.md` are checked and `tasks/todo.md` has no current `## Priority Documentation Todo` section from a previous `$research-roadmap` run | Queue `$research-roadmap` for documentation scan. Done (skip to step 7). |
 | E — All complete, documentation queue active | All phases in `tasks/roadmap.md` are checked and `tasks/todo.md` has an unchecked `## Priority Documentation Todo` item | Preserve the existing documentation queue and recommend the first unchecked documentation item. Done (skip to step 8; do not add another `$research-roadmap` task). |
 | F — All complete, documentation current | All phases in `tasks/roadmap.md` are checked and `tasks/todo.md` § `Priority Documentation Todo` says documentation is current with no unchecked documentation items | Report that implementation phases and documentation scan are complete; do not queue `$research-roadmap` again. Done (skip to step 8). |
 
-### 4. Build Roadmap (State B Only)
+### 4. Build or Extend Roadmap (States B and G)
 
-When specs exist but no roadmap does, interview the user to build one.
+When specs exist but no roadmap does, interview the user to build one. When State G applies, interview only on the new or changed spec scope needed to extend the existing roadmap; preserve completed phases and append the agreed next phase(s).
 
 #### 4a. Synthesize and Present
 
@@ -101,7 +102,7 @@ Continue until the user confirms the phase structure is complete.
 
 #### 4c. Write the Roadmap
 
-Write `tasks/roadmap.md` with the agreed phase structure (phases, goals, scope, acceptance criteria, parallelization strategy — NOT implementation steps). Implementation detail is generated just-in-time by `$plan-phase` when a phase is started, not upfront.
+Write or update `tasks/roadmap.md` with the agreed phase structure (phases, goals, scope, acceptance criteria, parallelization strategy — NOT implementation steps). In State B, create the full roadmap. In State G, append or adjust only the new/changed future phase scope needed for the changed spec; do not rewrite completed phases except to add a short note that a later phase supersedes or extends prior work. Implementation detail is generated just-in-time by `$plan-phase` when a phase is started, not upfront.
 
 If a phase has human-gated prerequisites, include a concise `**Manual Tasks:**` block with only those external prerequisites and `_(blocks: Step N.X)_` or `_(after: Step N.X)_` annotations when known. Split mixed work: human account/approval/credential steps belong in `**Manual Tasks:**`; code changes, repo configuration, CLI/API calls with available auth, tests, audits, and generated assets stay in Scope/Acceptance Criteria for `$plan-phase` to turn into `tasks/todo.md`.
 
@@ -116,13 +117,13 @@ Use `serial` when work is tightly coupled or file ownership cannot be separated.
 
 #### 4d. Seed Phase 1
 
-After writing `tasks/roadmap.md`, immediately invoke `$plan-phase 1` to generate the implementation detail for the first phase. This produces `tasks/todo.md` and, when applicable, `tasks/manual-todo.md`, `tasks/record-todo.md`, or `tasks/recurring-todo.md`, so the user lands on an actionable starting point rather than an undecomposed roadmap.
+After writing `tasks/roadmap.md`, immediately invoke `$plan-phase 1` for State B or `$plan-phase N` for the first newly appended State G phase to generate implementation detail. This produces `tasks/todo.md` and, when applicable, `tasks/manual-todo.md`, `tasks/record-todo.md`, or `tasks/recurring-todo.md`, so the user lands on an actionable starting point rather than an undecomposed roadmap.
 
 Do not decompose later phases — those are generated just-in-time when each phase begins (via `$ship` or `$run`).
 
-After `$plan-phase 1` completes, continue to step 5 to scan the freshly-created roadmap for any pipeline issues.
+After `$plan-phase` completes, continue to step 5 to scan the freshly-created or freshly-extended roadmap for any pipeline issues.
 
-### 5. Classify Issues (States B-after and C)
+### 5. Classify Issues (States B-after, G-after, and C)
 
 Check for each issue type in order. Include timestamps or evidence for every finding.
 
@@ -154,7 +155,7 @@ A roadmap phase has acceptance criteria but no implementation steps (no `### Tes
 Work has been completed (checked-off steps in todo, archived phases) but `tasks/history.md` is missing, empty, or its last entry predates the most recent phase archive. Evidence: phase archive timestamps vs history mtime.
 
 #### 10. Spec-Task Drift
-Specs have been modified more recently than the roadmap, suggesting the plan may not reflect the current specifications. Evidence: spec mtime vs roadmap mtime. Only flag when the spec modification is substantive (not just formatting).
+Specs have been modified more recently than the roadmap, suggesting the plan may not reflect the current specifications. Evidence: spec mtime vs roadmap mtime. Only flag when the spec modification is substantive (not just formatting). If the drift is a new or changed implementation scope after all roadmap phases are complete, handle it as State G in this run by extending the roadmap and seeding the first new phase; do not queue `$roadmap`. Queue `$spec-interview` only when the changed spec is incomplete or ambiguous enough that roadmap sequencing cannot proceed.
 
 #### 11. Missing Journey/UX/UI Planning
 User-facing specs exist, but one or more required design-planning artifacts are missing:
@@ -165,8 +166,8 @@ User-facing specs exist, but one or more required design-planning artifacts are 
 
 Only flag this for user-facing product work. Skip for pure backend, CLI, library, infrastructure, or internal automation specs unless they include a meaningful human workflow or interface.
 
-#### 12. Missing Roadmap (defensive)
-Specs exist in `specs/` (or `spec.md`) but `tasks/roadmap.md` does not exist. This should not occur after step 4 but is included as a safety net.
+#### 12. Missing Roadmap (internal consistency fallback)
+Specs exist in `specs/` (or `spec.md`) but `tasks/roadmap.md` does not exist. Do not queue `$roadmap` for this. This means State B was misclassified or the roadmap disappeared during the run. Re-enter State B in the same run, build the roadmap through step 4, then seed `$plan-phase 1`. If the roadmap cannot be built because required input is missing, queue the missing upstream input skill (`$spec-interview`, `$journey-map`, `$ux-variation`, or `$ui-interview`) with evidence.
 
 #### 13. Lessons Not Reviewed
 `tasks/lessons.md` was updated more recently than the current phase's implementation steps were written, suggesting new lessons may apply to in-progress work.
@@ -189,7 +190,7 @@ Order action items so the user can resolve pipeline issues without guessing:
 9. History gap (completed work not recorded).
 10. Spec-task drift (plan may be outdated).
 11. Missing journey/UX/UI planning (user-facing specs are not ready for roadmap).
-12. Missing roadmap (specs exist but no plan).
+12. Missing roadmap fallback (recover in this run by building the roadmap or queueing the missing upstream input; never queue `$roadmap`).
 13. Lessons not reviewed (new lessons may apply).
 14. Unspecced ideas (ideas waiting for interview).
 
@@ -213,6 +214,11 @@ Rules:
 6. Do not remove unrelated todo sections.
 7. Use unchecked boxes for unresolved issues.
 8. Use checked boxes only when an issue is already resolved.
+9. Never write `$roadmap` into `## Priority Task Queue`. If an issue appears to require `$roadmap`, resolve the underlying state in this run:
+   - specs missing: queue `$spec-interview` or the relevant idea/spec interview command
+   - user-facing design gate missing: queue `$journey-map`, `$ux-variation`, or `$ui-interview`
+   - specs exist but roadmap missing: build `tasks/roadmap.md` through State B and seed `$plan-phase 1`
+   - existing queue already contains `$roadmap`: replace it with `$reconcile-dev-docs fix tasks` because the queue is stale/self-referential
 
 Action item format:
 

@@ -5,6 +5,8 @@
 - A `$roadmap` run could end by recommending `$roadmap` again because final routing chose a matching command without a self-recursion guard.
 - For scanner/router skills, explicitly forbid recommending the same skill as the next command after it has updated its queue.
 - If the first unchecked queue item is self-referential, treat it as stale task-doc state and route to `$reconcile-dev-docs fix tasks` (or the Claude slash equivalent) with evidence.
+- Also fix the queue-writing source: a scanner should not write itself into its own priority queue. For `$roadmap`, missing-roadmap states must be handled by State B in the same run or by queueing the missing upstream input, never by queueing `$roadmap`.
+- When a completed roadmap has a newer substantive spec, `$roadmap` must extend the roadmap in the same run and seed the new phase with `$plan-phase N`; it must not write a `$roadmap` queue item asking a later run to do that extension.
 
 ## 2026-05-01 — Use local venv for YouTube transcript dependency
 
