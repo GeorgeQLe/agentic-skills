@@ -1347,3 +1347,12 @@ Resolved all 10 findings from `/expert-review`:
 - Recorded focused regression validation coverage for the Phase 13 creator presence dossier acceptance criteria in `tasks/todo.md`.
 - Confirmed mirrored dossier skill frontmatter names, required output path, required Markdown sections, public/private evidence boundary rules, source/capture/confidence/evidence-gap fields, supported source families, pack-doc routing, downstream strategy routing, and final-response next-skill language.
 - Verified with targeted `rg` scans, `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, and `git diff --check`.
+
+## 2026-05-03 — Phase 13 Step 13.6: repository validation gate
+
+- Ran the formal Phase 13 repository validation gate after the focused regression coverage.
+- Confirmed `./scripts/skill-deps.sh --broken` reports `No broken references found.`.
+- Confirmed `./scripts/skill-versions.sh --missing` reports `All 269 skills have a version field.`.
+- Confirmed targeted `rg` scans still cover mirrored dossier contracts, required sections, evidence boundaries, supported source families, pack-doc routing, downstream strategy routing, and final-response next-skill language.
+- Confirmed `git diff --check` produces no output.
+- Planned Step 13.7 to inspect wording consistency and avoid source churn unless concrete drift is found.
