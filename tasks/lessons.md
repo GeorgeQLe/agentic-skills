@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-05-03 — Verification gates should not become no-op plan handoffs
+
+- A clean validation gate was followed by a separate "refactor if validation exposes drift" step, which forced Claude `/ship` to open a clear-context plan even though no remediation was expected.
+- Keep verification mandatory, but fold conditional cleanup into the active Green/validation step unless there is known concrete remediation work.
+- If validation passes and the expected source changes are none, record the no-op result, mark the gate complete, and advance to the next substantive step.
+- Enter plan mode only when verification discovers failures, drift, warnings needing judgment, or a non-trivial remediation plan.
+
 ## 2026-05-03 — Variation pruning belongs before full specification
 
 - `$ux-variation` surfaced "remove, merge, make more extreme, or add a fourth" only after presenting three fully framed variants, which made the checkpoint feel like late-stage rework instead of concept selection.

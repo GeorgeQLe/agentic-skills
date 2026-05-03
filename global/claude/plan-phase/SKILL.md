@@ -124,8 +124,7 @@ Define ordered steps beneath the existing Goal/Scope/Acceptance Criteria. The st
 - ...
 
 ### Green
-- Step N.X: Run tests and verify all pass (green)
-- Step N.Y: Refactor if needed while keeping tests green
+- Step N.X: Run tests, verify all pass, and perform only concrete cleanup found by validation
 
 ### Milestone: [Phase N Milestone Name]
 **Acceptance Criteria:** (preserve from roadmap — do not rewrite)
@@ -163,8 +162,7 @@ Define ordered steps beneath the existing Goal/Scope/Acceptance Criteria. The st
 
 ### Green
 - Step N.X: Write regression tests covering acceptance criteria
-- Step N.Y: Run all tests and verify they pass
-- Step N.Z: Refactor if needed while keeping tests green
+- Step N.Y: Run all tests, verify they pass, and perform only concrete cleanup found by validation
 
 ### Milestone: [Phase N Milestone Name]
 **Acceptance Criteria:** (preserve from roadmap)
@@ -356,6 +354,7 @@ Rules:
 - **Phase headers must use `## Phase N: [Title]` format** and steps must use `- Step N.X:` format — this is required by `/run` and `/ship`.
 - Every milestone must have specific, checkable acceptance criteria — not vague statements like "works correctly" but concrete conditions like "POST /api/items returns 201 with valid payload and persists to database."
 - Every `tdd` phase must start with writing failing tests. `tests-after` phases write tests in the Green step.
+- Do not generate standalone cleanup/refactor steps that are conditional on validation finding drift. Fold those checks into the Green validation step and only create a separate follow-up when there is known concrete remediation work.
 - Do not include implementation code — describe what to build and what to test.
 - Note what already exists in the codebase vs. what needs to be created.
 - The `### Execution Profile` must be decision-complete enough for `/run` to decide whether to use serial execution, read-only subagents, review subagents, or disjoint write subagents after the normal approval gate.

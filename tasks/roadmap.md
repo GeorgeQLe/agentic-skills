@@ -1,14 +1,14 @@
 # Roadmap: Claude Skills
 
 > Generated from: tasks/roadmap.md (existing), specs/board-flag-kanban-search.md, tasks/ideas.md, tasks/history.md
-> Date: 2026-03-27 (last updated 2026-05-02)
-> Total Phases: 14 (12 complete, 2 planned)
+> Date: 2026-03-27 (last updated 2026-05-03)
+> Total Phases: 15 (13 complete, 2 planned)
 
 ## Summary
 
 Phases 1-11 complete: kanban skill suite, board intelligence, templates, archive automation, expert review fixes, test hardening (83 tests), kanban DX, skill infrastructure, the shared Poketo headless API migration for both Claude and Codex, and the three-mode operating model (`claude-only` / `codex-only` / `hybrid`) with shared approval-packet contract and next-step routing.
 
-Phase 12 complete and Phases 13-14 planned from `specs/creator-platform-evidence-schema.md`: expand the creator-media pack beyond YouTube with a platform capability matrix, shared evidence schema, repo-backed creator presence dossier, and LinkedIn-first free/manual evidence lane.
+Phases 12-13 complete and Phases 14-15 planned: expand the creator-media pack beyond YouTube with a platform capability matrix, shared evidence schema, repo-backed creator presence dossier, LinkedIn-first free/manual evidence lane, and a single-video YouTube audit skill.
 
 ## Phase Overview
 
@@ -26,8 +26,9 @@ Phase 12 complete and Phases 13-14 planned from `specs/creator-platform-evidence
 | 10 | Headless API Migration ✓ | — | Shared Poketo app-layer kanban integration for Claude + Codex | L |
 | 11 | Three-Mode Operating Model ✓ | tasks/todo.md | `claude-only`/`codex-only`/`hybrid` modes, approval packet, `/delegate`, next-step routing | XL |
 | 12 | Creator Platform Evidence Foundation ✓ | specs/creator-platform-evidence-schema.md | Capability matrix + shared evidence schema skills | M |
-| 13 | Creator Presence Dossier | specs/creator-platform-evidence-schema.md | Repo-backed creator career/presence dossier skill | M |
+| 13 | Creator Presence Dossier ✓ | specs/creator-platform-evidence-schema.md | Repo-backed creator career/presence dossier skill | M |
 | 14 | LinkedIn Evidence Lane | specs/creator-platform-evidence-schema.md | LinkedIn export/manual evidence templates and guidance | M |
+| 15 | YouTube Video Audit | user request, YouTube API/docs research | Single-video public-first audit with optional owner analytics | M |
 
 ---
 
@@ -395,9 +396,7 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
   - Run targeted scans confirming mirrored new skill files, frontmatter names, output paths, collection method language, normalized schema fields, LinkedIn baseline language, and pack-doc routing.
 - Step 12.6: Run repository validation.
   - Files: no source changes expected
-  - Run `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, targeted `rg` checks, and `git diff --check`.
-- Step 12.7: Refactor wording for consistency if validation exposes drift while keeping the contracts unchanged.
-  - Files: modify only the new skill files and creator-media reference docs if needed.
+  - Run `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, targeted `rg` checks, `git diff --check`, and perform only concrete cleanup found by validation.
 
 ### Milestone: Creator Platform Evidence Foundation
 **Acceptance Criteria:**
@@ -431,12 +430,12 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Update pack docs and references so the dossier feeds `creator-positioning`, `content-programming`, `product-led-media-map`, and `creator-metrics-review`.
 
 **Acceptance Criteria:**
-- [ ] `creator-presence-dossier` exists for both Claude and Codex.
-- [ ] The skill distinguishes public/professional evidence from private repo planning context.
-- [ ] The skill requires source paths, capture dates, confidence levels, and evidence gaps.
-- [ ] The dossier contract supports LinkedIn, personal websites, GitHub, podcasts, talks, newsletters, and product docs.
-- [ ] Follow-up routing recommends the correct creator-media strategy skill from dossier findings.
-- [ ] Validation passes with skill dependency/version checks and targeted reference scans.
+- [x] `creator-presence-dossier` exists for both Claude and Codex.
+- [x] The skill distinguishes public/professional evidence from private repo planning context.
+- [x] The skill requires source paths, capture dates, confidence levels, and evidence gaps.
+- [x] The dossier contract supports LinkedIn, personal websites, GitHub, podcasts, talks, newsletters, and product docs.
+- [x] Follow-up routing recommends the correct creator-media strategy skill from dossier findings.
+- [x] Validation passes with skill dependency/version checks and targeted reference scans.
 
 **Parallelization:** serial
 **Coordination Notes:** The dossier depends on the Phase 12 matrix/schema contract. Keep implementation serial because it touches pack routing and cross-skill handoffs.
@@ -484,26 +483,23 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Step 13.6: Run repository validation.
   - Classification: automated
   - Files: no source changes expected
-  - Run `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, targeted `rg` checks, and `git diff --check`.
-- Step 13.7: Refactor wording for consistency if validation exposes drift while keeping the contracts unchanged.
-  - Classification: automated
-  - Files: modify only the new skill files and creator-media reference docs if needed.
+  - Run `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, targeted `rg` checks, `git diff --check`, and perform only concrete cleanup found by validation.
 
 ### Milestone: Creator Presence Dossier
 **Acceptance Criteria:**
-- [ ] `creator-presence-dossier` exists for both Claude and Codex.
-- [ ] The skill distinguishes public/professional evidence from private repo planning context.
-- [ ] The skill requires source paths, capture dates, confidence levels, and evidence gaps.
-- [ ] The dossier contract supports LinkedIn, personal websites, GitHub, podcasts, talks, newsletters, and product docs.
-- [ ] Follow-up routing recommends the correct creator-media strategy skill from dossier findings.
-- [ ] Validation passes with skill dependency/version checks and targeted reference scans.
-- [ ] All phase tests pass.
-- [ ] No regressions in previous phase tests.
+- [x] `creator-presence-dossier` exists for both Claude and Codex.
+- [x] The skill distinguishes public/professional evidence from private repo planning context.
+- [x] The skill requires source paths, capture dates, confidence levels, and evidence gaps.
+- [x] The dossier contract supports LinkedIn, personal websites, GitHub, podcasts, talks, newsletters, and product docs.
+- [x] Follow-up routing recommends the correct creator-media strategy skill from dossier findings.
+- [x] Validation passes with skill dependency/version checks and targeted reference scans.
+- [x] All phase tests pass.
+- [x] No regressions in previous phase tests.
 
 **On Completion:**
-- Deviations from plan: [fill when complete]
-- Tech debt / follow-ups: [fill when complete]
-- Ready for next phase: no
+- Deviations from plan: Folded the conditional no-op wording cleanup into the validation gate to avoid a separate plan-mode handoff after clean checks.
+- Tech debt / follow-ups: none.
+- Ready for next phase: yes
 
 ---
 
@@ -531,6 +527,30 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 
 **Parallelization:** serial
 **Coordination Notes:** LinkedIn access constraints are the highest-risk part of the expansion. Implement after the shared foundation and dossier exist so LinkedIn remains one evidence lane, not a special-case schema.
+
+## Phase 15: YouTube Video Audit
+
+**Goal:** Add an evidence-first single-video YouTube audit skill that analyzes public metadata, transcript/content, packaging, release timing, comments, and optional owner analytics for one video.
+
+**Source Spec:** User request and YouTube API/docs research on 2026-05-03.
+
+**Scope:**
+- Add mirrored Claude/Codex `youtube-video-audit` skill definitions to the creator-media pack.
+- Default to public evidence through `yt-dlp`, public transcript tooling, and optional YouTube Data API enrichment when `YOUTUBE_API_KEY` is already available.
+- Support optional owner-provided analytics exports or OAuth/API output for retention, impressions/CTR, traffic sources, watch time, average view duration, subscriber change, shares, and time-series performance.
+- Persist raw evidence under `research/youtube/data/<video-id>/` and write `research/youtube/video-audit-<video-id>-YYYY-MM-DD.md`.
+- Wire pack docs and discovery references so single-video work routes to `youtube-video-audit` without replacing channel-level `youtube-channel-audit`.
+
+**Acceptance Criteria:**
+- [ ] `youtube-video-audit` exists for both Claude and Codex.
+- [ ] The skill has a public-first evidence path and optional owner-analytics path.
+- [ ] The skill distinguishes public evidence from owner-provided/private analytics and records evidence gaps.
+- [ ] The report contract covers release timing, performance snapshot, packaging, hook/content structure, transcript evidence, comments/audience response, and prioritized fixes.
+- [ ] Creator-media docs/reference lists include `youtube-video-audit` and preserve the existing channel audit flow.
+- [ ] Validation passes with skill dependency/version checks and targeted routing scans.
+
+**Parallelization:** serial
+**Coordination Notes:** Keep this serial because it touches mirrored skills, pack routing, and docs. Do not add dependencies or GitHub Actions.
 
 ## Post-Phase Tail Work
 

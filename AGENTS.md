@@ -3,7 +3,7 @@
 ### 1. Plan Mode Default
 - Enter plan mode for ANY non-trivial task (3+ steps or architectural decisions)
 - If something goes sideways, STOP and re-plan immediately — don't keep pushing
-- Use plan mode for verification steps, not just building
+- Verification is mandatory, but routine no-op verification runs inside the active execution/shipping step. Enter plan mode for non-trivial remediation or new work discovered by verification, not for validation that already has clear commands and no expected source changes.
 - Write detailed specs upfront to reduce ambiguity
 - In Codex: use `update_plan` in Default mode and `request_user_input` only when already in Plan mode
 - Do not assume a Claude-style clear-context-on-accept flow or related JSON setting exists

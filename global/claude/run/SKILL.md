@@ -78,7 +78,7 @@ When the profile is `agent-team`:
 
 - If it's a "Tests First" step: write the failing tests, run them to confirm they fail (red). Stop.
 - If it's an implementation step: implement it, run existing tests to check for regressions. Stop.
-- If it's a "Green" step: run all tests. For `tests-after` phases, also write regression tests covering acceptance criteria. Fix any failures. Stop.
+- If it's a "Green" step: run all tests. For `tests-after` phases, also write regression tests covering acceptance criteria. Fix any failures. If validation is clean and a following cleanup/refactor step is explicitly conditional on validation findings or says no source changes are expected, complete that no-op cleanup in the same run by recording the no-op result instead of leaving it for a separate plan-mode handoff. Stop.
 - **Mark the step as done** in `tasks/todo.md` (check it off).
 
 ### Full Phase Mode (`--phase`)
@@ -88,7 +88,7 @@ When the profile is `agent-team`:
   - Run the tests to confirm they fail (red).
   - Implement each step in order.
   - Run tests after implementation to confirm they pass (green).
-  - Refactor if needed while keeping tests green.
+  - Refactor only when validation exposes concrete drift or cleanup work; do not create or preserve separate no-op refactor steps after a clean validation gate.
 - **Verify the milestone**:
   - Check each acceptance criterion.
   - Run the full test suite to confirm no regressions.

@@ -1356,3 +1356,10 @@ Resolved all 10 findings from `/expert-review`:
 - Confirmed targeted `rg` scans still cover mirrored dossier contracts, required sections, evidence boundaries, supported source families, pack-doc routing, downstream strategy routing, and final-response next-skill language.
 - Confirmed `git diff --check` produces no output.
 - Planned Step 13.7 to inspect wording consistency and avoid source churn unless concrete drift is found.
+
+## 2026-05-03 — Verification-only handoff cleanup and Phase 13 close
+
+- Updated Claude/Codex workflow instructions so routine clean verification runs inside the active execution/shipping step instead of opening a separate plan-mode handoff.
+- Updated `/run`, `/ship`, `$run`, `$ship`, and both `/plan-phase`/`$plan-phase` templates to fold conditional no-op cleanup into Green validation unless verification finds concrete remediation work.
+- Folded the Phase 13 conditional wording-cleanup step into Step 13.6 because validation had already passed and no source-doc drift was found.
+- Marked Phase 13 acceptance criteria, phase tests, and regression checks complete in the task docs.
