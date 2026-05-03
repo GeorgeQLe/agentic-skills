@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-05-02 — Scanner skills must not route to themselves
+
+- A `$roadmap` run could end by recommending `$roadmap` again because final routing chose a matching command without a self-recursion guard.
+- For scanner/router skills, explicitly forbid recommending the same skill as the next command after it has updated its queue.
+- If the first unchecked queue item is self-referential, treat it as stale task-doc state and route to `$reconcile-dev-docs fix tasks` (or the Claude slash equivalent) with evidence.
+
 ## 2026-05-01 — Use local venv for YouTube transcript dependency
 
 - A `$youtube-audit` prerequisite failure under Homebrew Python was handled with a system-Python install recommendation, which conflicts with the skill's PEP 668-safe instructions.
