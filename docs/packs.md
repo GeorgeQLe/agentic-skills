@@ -113,6 +113,8 @@ Commit `.agents/project.json` with the project. Do not commit generated local sk
 
 `scripts/pack.sh install`, `remove`, `refresh`, and `set-mode` preserve existing `project_scopes` and `notes` fields when `jq` is available.
 
+Pack writes use `.agents/.pack.lock` with owner metadata (`pid`, `started_at`, `command`). If a previous pack command exits without releasing the lock and its recorded process is no longer running, the next pack command removes the stale lock automatically. If a live process still owns the lock, timeout errors include the owner metadata.
+
 ## Former Global Domain Skills
 
 Business/product workflows that used to be globally installed now live only in the `business-app` pack. Restore them in a project with:

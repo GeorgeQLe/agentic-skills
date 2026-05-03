@@ -2,13 +2,13 @@
 
 > Generated from: tasks/roadmap.md (existing), specs/board-flag-kanban-search.md, tasks/ideas.md, tasks/history.md
 > Date: 2026-03-27 (last updated 2026-05-03)
-> Total Phases: 17 (16 complete, 1 active)
+> Total Phases: 18 (18 complete)
 
 ## Summary
 
 Phases 1-11 complete: kanban skill suite, board intelligence, templates, archive automation, expert review fixes, test hardening (83 tests), kanban DX, skill infrastructure, the shared Poketo headless API migration for both Claude and Codex, and the three-mode operating model (`claude-only` / `codex-only` / `hybrid`) with shared approval-packet contract and next-step routing.
 
-Phases 12-13, 15, and 16 complete, with Phase 14 still available as planned future creator-media work. Phase 16 hardened mutation-capable skill contracts with final next-step routing language and an audit that catches future omissions. Phase 17 adds mixed-monorepo pack routing so one repository can carry devtool, business-app, game, or other domain scopes without forcing one global designation.
+Phases 12-13 and 15-18 complete, with Phase 14 still available as planned future creator-media work. Phase 16 hardened mutation-capable skill contracts with final next-step routing language and an audit that catches future omissions. Phase 17 added mixed-monorepo pack routing so one repository can carry devtool, business-app, game, or other domain scopes without forcing one global designation. Phase 18 hardened pack lock recovery after a `pitwall-monorepo` refresh timeout.
 
 ## Phase Overview
 
@@ -30,11 +30,31 @@ Phases 12-13, 15, and 16 complete, with Phase 14 still available as planned futu
 | 14 | LinkedIn Evidence Lane | specs/creator-platform-evidence-schema.md | LinkedIn export/manual evidence templates and guidance | M |
 | 15 | YouTube Video Audit ✓ | user request, YouTube API/docs research | Single-video public-first audit with optional owner analytics | M |
 | 16 | Mutation Contract Routing Audit ✓ | user request, tasks/lessons.md | Mutation-capable skills emit next-step routes; audit catches gaps | S |
-| 17 | Mixed Monorepo Pack Routing | user request | `.agents/project.json.project_scopes` schema + pack writer preservation | S |
+| 17 | Mixed Monorepo Pack Routing ✓ | user request | `.agents/project.json.project_scopes` schema + pack writer preservation | S |
+| 18 | Pack Lock Stale Recovery ✓ | user report | Lock owner metadata and stale-lock cleanup for pack writes | S |
 
 ---
 
-## Phase 17: Mixed Monorepo Pack Routing
+## Phase 18: Pack Lock Stale Recovery ✓
+
+**Goal:** Make pack lock failures diagnosable and recover automatically when a previous pack process left a stale lock behind.
+
+**Scope:**
+- Add owner metadata to `.agents/.pack.lock`.
+- Remove stale locks automatically when the recorded owner PID is no longer running.
+- Include lock owner details in timeout errors.
+- Document the lock behavior in pack docs.
+
+**Acceptance Criteria:**
+- [x] `scripts/pack.sh` writes lock owner metadata and removes stale dead-PID locks.
+- [x] Timeout errors report lock owner metadata.
+- [x] Pack docs describe stale-lock behavior.
+- [x] Focused smoke tests cover live-lock waiting and stale-lock recovery.
+
+**Parallelization:** serial
+**Coordination Notes:** Keep serial because this is shared pack write coordination.
+
+## Phase 17: Mixed Monorepo Pack Routing ✓
 
 **Goal:** Allow a repository to declare a default project designation plus path-scoped domain designations for mixed monorepos.
 
