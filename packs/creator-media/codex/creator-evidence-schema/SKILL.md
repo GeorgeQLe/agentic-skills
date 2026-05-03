@@ -138,7 +138,7 @@ Default final-response line when no better route is available: `Recommended next
 
 Routing rules:
 
-- If a `$creator-presence-dossier` skill is present or available in the project, emit `Recommended next skill: $creator-presence-dossier` after schema creation for mixed-platform, LinkedIn-first, career-signal, or owned-presence work.
+- If a `$creator-presence-dossier` skill is present or available in the project, emit `Recommended next skill: $creator-presence-dossier` after schema creation for mixed-platform, LinkedIn-first, career signal, career-signal, owned presence, owned-presence, personal website, GitHub-profile, podcast, talk, newsletter, or professional bio work.
 - If `$creator-presence-dossier` is absent and strong platform-specific evidence is available, emit the best matching available platform-specific audit skill.
 - Preserve the existing YouTube workflow: YouTube-only work with channel evidence may route to `$youtube-channel-audit` or the next YouTube audit; non-YouTube or mixed-platform work should use this foundation before platform-specific audits.
 - If `$creator-presence-dossier` is absent and no platform-specific audit fits the available evidence, emit `Recommended next skill: $creator-positioning`.

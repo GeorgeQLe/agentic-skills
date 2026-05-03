@@ -1334,3 +1334,10 @@ Resolved all 10 findings from `/expert-review`:
 - Placed the dossier before platform-specific audits or strategy synthesis in creator-media default flows.
 - Documented that the dossier feeds `creator-positioning`, `content-programming`, `product-led-media-map`, and `creator-metrics-review` while preserving the YouTube-only shortcut.
 - Verified the docs wiring with targeted `rg` scans, `./scripts/skill-versions.sh --missing`, `./scripts/skill-deps.sh --broken`, and `git diff --check`.
+
+## 2026-05-02 — Phase 13 Step 13.4: downstream creator-media dossier routing
+
+- Tightened mirrored `creator-evidence-schema` routing so mixed-platform, LinkedIn-first, career-signal/career signal, owned-presence/owned presence, personal website, GitHub-profile, podcast, talk, newsletter, and professional bio work recommends `creator-presence-dossier` when the skill is present.
+- Updated `creator-positioning`, `content-programming`, `product-led-media-map`, and `creator-metrics-review` to prefer `research/creator-presence/<slug>.md` as optional creator context when present.
+- Preserved the existing YouTube-only flow by keeping channel audit and raw YouTube evidence as the source of channel-only and performance claims.
+- Verified with targeted routing scans, normalized mirror diff for `creator-evidence-schema`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-deps.sh --broken`, and `git diff --check`.

@@ -15,6 +15,7 @@ Connect a product, company, or founder project to a credible creator-media strat
 ## Inputs
 
 - Product context: `README.md`, `specs/**`, `research/**`, docs, changelogs, demos, launch notes.
+- Preferred creator context when present: `research/creator-presence/<slug>.md`.
 - Creator context: `research/youtube/creator-positioning-<slug>.md`, channel audit, portfolio, and programming docs when present.
 
 ## Output
@@ -37,7 +38,7 @@ Default recommendation: `$creator-metrics-review`.
 
 If the default successor already exists and is current, recommend the first missing or stale downstream creator-media artifact in this order:
 
-`$youtube-channel-audit` -> `$youtube-title-thumbnail-audit` -> `$youtube-portfolio` -> `$youtube-peer-benchmark` -> `$youtube-search-positioning` -> `$youtube-cadence-diagnosis` -> `$creator-positioning` -> `$content-programming` -> `$series-spec` -> `$product-led-media-map` -> `$creator-metrics-review`
+`$creator-presence-dossier` -> `$youtube-channel-audit` -> `$youtube-title-thumbnail-audit` -> `$youtube-portfolio` -> `$youtube-peer-benchmark` -> `$youtube-search-positioning` -> `$youtube-cadence-diagnosis` -> `$creator-positioning` -> `$content-programming` -> `$series-spec` -> `$product-led-media-map` -> `$creator-metrics-review`
 
 If the sequence is ambiguous, multiple upstream artifacts are stale, or the recommendation depends on channel-level strategy vs programming-level changes, recommend `$creator-metrics-review` when metrics evidence exists, otherwise recommend the default successor and explain the missing artifact.
 
@@ -45,4 +46,5 @@ If the sequence is ambiguous, multiple upstream artifacts are stale, or the reco
 
 - Do not create product claims the repo cannot support.
 - Do not expose secrets, private customer data, or unreleased commitments.
+- Use the dossier when present to connect product proof to the creator's public roles and proof assets; do not require it for YouTube-only product-led channel work.
 - Keep product-led media distinct from ad copy; show evidence and judgment.

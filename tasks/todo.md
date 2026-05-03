@@ -58,7 +58,7 @@
   - Files: modify `packs/creator-media/PACK.md`, modify `README.md`, modify `docs/skills-reference.md`
   - Put `creator-presence-dossier` after `creator-evidence-schema` and before platform-specific audits or strategy synthesis in creator-media skill lists and default flows.
   - Document that the dossier feeds `creator-positioning`, `content-programming`, `product-led-media-map`, and `creator-metrics-review`.
-- [ ] Step 13.4: Align downstream creator-media routing with the dossier.
+- [x] Step 13.4: Align downstream creator-media routing with the dossier.
   - Classification: automated
   - Files: inspect and modify only as needed in `packs/creator-media/claude/creator-evidence-schema/SKILL.md`, `packs/creator-media/codex/creator-evidence-schema/SKILL.md`, `packs/creator-media/claude/creator-positioning/SKILL.md`, `packs/creator-media/codex/creator-positioning/SKILL.md`, `packs/creator-media/claude/content-programming/SKILL.md`, `packs/creator-media/codex/content-programming/SKILL.md`, `packs/creator-media/claude/product-led-media-map/SKILL.md`, `packs/creator-media/codex/product-led-media-map/SKILL.md`, `packs/creator-media/claude/creator-metrics-review/SKILL.md`, `packs/creator-media/codex/creator-metrics-review/SKILL.md`
   - Ensure schema routing can recommend the now-present dossier for mixed-platform, LinkedIn-first, career-signal, or owned-presence work.
@@ -118,30 +118,27 @@
   - `./scripts/skill-versions.sh --missing` - passed; `All 269 skills have a version field.`
   - `./scripts/skill-deps.sh --broken` - passed; `No broken references found.`
   - `git diff --check` - passed; no output.
+- Step 13.4 complete: aligned downstream creator-media routing with the new dossier. `creator-evidence-schema` now routes mixed-platform, LinkedIn-first, career-signal/career signal, owned-presence/owned presence, personal website, GitHub-profile, podcast, talk, newsletter, and professional bio work to `creator-presence-dossier` when available. `creator-positioning`, `content-programming`, `product-led-media-map`, and `creator-metrics-review` now treat `research/creator-presence/<slug>.md` as preferred optional creator context while preserving the existing YouTube-only channel audit flow.
+- Validation:
+  - `rg -n "Recommended next skill: (\\$|/)creator-presence-dossier|mixed-platform, LinkedIn-first, career signal, career-signal, owned presence, owned-presence|personal website|GitHub-profile|podcast|talk|newsletter|professional bio" packs/creator-media/claude/creator-evidence-schema/SKILL.md packs/creator-media/codex/creator-evidence-schema/SKILL.md` - passed; confirmed mirrored schema routing triggers and final-response dossier recommendations.
+  - `rg -n "research/creator-presence/<slug>\\.md|creator-presence-dossier.*youtube-channel-audit|YouTube-only|channel-only|preferred creator context|optional preferred creator context|not a replacement for YouTube audit evidence|preserve raw YouTube evidence" packs/creator-media/claude/creator-positioning/SKILL.md packs/creator-media/codex/creator-positioning/SKILL.md packs/creator-media/claude/content-programming/SKILL.md packs/creator-media/codex/content-programming/SKILL.md packs/creator-media/claude/product-led-media-map/SKILL.md packs/creator-media/codex/product-led-media-map/SKILL.md packs/creator-media/claude/creator-metrics-review/SKILL.md packs/creator-media/codex/creator-metrics-review/SKILL.md` - passed; confirmed strategy skills prefer the dossier when present and preserve YouTube evidence paths.
+  - `perl -0pe ... packs/creator-media/claude/creator-evidence-schema/SKILL.md > /tmp/a`; `perl -0pe ... packs/creator-media/codex/creator-evidence-schema/SKILL.md > /tmp/b`; `diff -u /tmp/a /tmp/b` - passed; confirmed `creator-evidence-schema` mirrors after command-token normalization.
+  - `./scripts/skill-versions.sh --missing` - passed; `All 269 skills have a version field.`
+  - `./scripts/skill-deps.sh --broken` - passed; `No broken references found.`
+  - `git diff --check` - passed; no output.
 
-### Next Step: 13.4 — Align downstream creator-media routing with the dossier
+### Next Step: 13.5 — Write regression validation coverage for Phase 13 acceptance criteria
 
-**What:** Update downstream creator-media skills so schema routing can recommend the dossier and strategy skills treat it as a preferred creator context source.
+**What:** Record focused regression validation coverage for the Phase 13 acceptance criteria in this review section.
 
 **Files to modify:**
-- `packs/creator-media/claude/creator-evidence-schema/SKILL.md`
-- `packs/creator-media/codex/creator-evidence-schema/SKILL.md`
-- `packs/creator-media/claude/creator-positioning/SKILL.md`
-- `packs/creator-media/codex/creator-positioning/SKILL.md`
-- `packs/creator-media/claude/content-programming/SKILL.md`
-- `packs/creator-media/codex/content-programming/SKILL.md`
-- `packs/creator-media/claude/product-led-media-map/SKILL.md`
-- `packs/creator-media/codex/product-led-media-map/SKILL.md`
-- `packs/creator-media/claude/creator-metrics-review/SKILL.md`
-- `packs/creator-media/codex/creator-metrics-review/SKILL.md`
 - `tasks/todo.md`
 - `tasks/history.md`
 
 **Requirements:**
-- Ensure `creator-evidence-schema` recommends `creator-presence-dossier` for mixed-platform, LinkedIn-first, career-signal, or owned-presence work.
-- Ensure `creator-positioning`, `content-programming`, `product-led-media-map`, and `creator-metrics-review` mention `research/creator-presence/<slug>.md` as a preferred creator context source when present.
-- Preserve existing YouTube evidence flow and do not make the dossier mandatory for YouTube-only channel work.
-- Keep Claude/Codex mirrors aligned except for command syntax.
+- Run targeted scans confirming mirrored dossier skill files, frontmatter names, output path, required sections, public/private evidence boundaries, confidence/capture/source fields, supported source types, pack-doc routing, downstream routing, and final-response next-skill language.
+- Record exact commands and outputs in `tasks/todo.md` under this review section.
+- Mark Phase 13 acceptance criteria only when directly proven by the scans.
 
 **Execution Profile:**
 - Parallel mode: serial
@@ -149,9 +146,8 @@
 - Classification: automated
 
 **Acceptance criteria:**
-- Schema routing points mixed-platform, LinkedIn-first, career-signal, and owned-presence work toward `creator-presence-dossier`.
-- Strategy skills prefer the dossier as context when it exists, while still accepting YouTube audit artifacts.
-- Targeted mirror and routing scans pass.
-- Targeted scans and repository validation pass.
+- Mirrored dossier skill files, frontmatter, output path, required sections, evidence boundary rules, confidence/source/capture fields, supported source families, and routing language are confirmed by targeted scans.
+- `tasks/todo.md` review records exact validation commands and results.
+- No source contract edits are made unless validation exposes concrete drift.
 
-**Ship-one-step handoff contract:** Implement only Step 13.4. Update the review section with exact validation commands and results. Mark step done in `tasks/todo.md`. Update `tasks/history.md`. Commit and push. Stop after preparing the next step.
+**Ship-one-step handoff contract:** Implement only Step 13.5. Update the review section with exact validation commands and results. Mark step done in `tasks/todo.md`. Update `tasks/history.md`. Commit and push. Stop after preparing the next step.
