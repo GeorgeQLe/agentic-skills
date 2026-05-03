@@ -48,17 +48,84 @@ Support these source families when evidence is present:
 `research/creator-presence/<slug>.md` must contain:
 
 - Scope, capture date, and source assumptions.
-- Identity and current public promise.
-- Career timeline and platform map.
-- Core themes, expertise claims, proof assets, and product/company links.
-- Signature formats and recurring content patterns.
-- Audience/community signals when evidence supports them.
-- Evidence gaps, stale captures, contradictions, and confidence limits.
-- Evidence register with source paths or URLs, capture dates, confidence levels, public/private boundary, and gaps.
+- Identity.
+- Current public promise.
+- Career timeline.
+- Platform map.
+- Core themes.
+- Expertise claims.
+- Proof assets.
+- Signature formats.
+- Audience/community signals.
+- Product/company connections.
+- Gaps, contradictions, and stale positioning.
+- Evidence register.
 - Next collection tasks.
 - Recommended next skills.
 
 Do not invent missing metrics, private context, career milestones, content bodies, transcripts, or audience signals. Record missing fields as evidence gaps.
+
+## Markdown Contract
+
+Use these sections in the dossier, keeping unsupported sections brief with explicit evidence gaps rather than omitting them:
+
+1. `# <Creator or Project Name> Presence Dossier`
+2. `## Scope and Capture`
+   - Creator or project slug.
+   - Capture date.
+   - Source assumptions.
+   - Included platforms and excluded platforms.
+   - Public/professional boundary summary.
+3. `## Identity`
+   - Public names, roles, affiliations, locations only when publicly stated, and canonical profile links.
+   - Distinguish confirmed identity facts from inferred identity signals.
+4. `## Current Public Promise`
+   - The creator's current public positioning, promise, audience, and category.
+   - Confidence and evidence gaps for each claim.
+5. `## Career Timeline`
+   - Chronological public milestones, roles, launches, talks, publications, repos, and product/company events.
+   - Include dates or date ranges when available; mark undated items as gaps.
+6. `## Platform Map`
+   - Platform, handle or URL, role of the platform, activity state, evidence coverage, and collection gaps.
+   - Support LinkedIn, personal websites/blogs, GitHub, podcasts, talks, newsletters, and product docs when evidence is present.
+7. `## Core Themes`
+   - Recurring subjects, categories, language patterns, and audience problems.
+8. `## Expertise Claims`
+   - Claimed expertise, evidence supporting each claim, confidence, and missing proof.
+9. `## Proof Assets`
+   - Public artifacts that substantiate credibility: posts, articles, repos, talks, case studies, product docs, launches, testimonials, podcasts, newsletters, and public metrics.
+10. `## Signature Formats`
+    - Repeated formats, hooks, series, talk structures, newsletter styles, repo/doc formats, and content patterns.
+11. `## Audience and Community Signals`
+    - Public engagement signals, community roles, collaborator signals, comments, testimonials, recommendations, event participation, and owner-provided metrics.
+12. `## Product and Company Connections`
+    - Companies, products, docs, launches, customer proof, open-source projects, and founder/operator narratives tied to the creator.
+13. `## Gaps, Contradictions, and Stale Positioning`
+    - Missing evidence, outdated profiles, contradictory claims, unsupported metrics, stale bios, unclear role changes, and collection risks.
+14. `## Evidence Register`
+    - A table with one row per material source.
+15. `## Next Collection Tasks`
+    - Prioritized tasks to close evidence gaps, with target platform, collection method, owner, and reason.
+16. `## Recommended Next Skills`
+    - The next creator-media skills to run and why, using the routing rules below.
+
+## Evidence Register
+
+Every material source must appear in the evidence register. Each row must include:
+
+- `Source path or URL`: repo path, raw evidence path, normalized evidence path, or public URL.
+- `Capture date`: the date the source was collected or last verified; use `unknown` only when the date is unavailable and record that as a gap.
+- `Source family`: LinkedIn, personal website/blog, GitHub, podcast, talk, newsletter, product docs, YouTube, owner export, or other.
+- `Public/private boundary`: `public`, `owner-provided`, `internal notes`, or `mixed/redaction needed`.
+- `Confidence level`: `high`, `medium`, or `low`.
+- `Claims supported`: the dossier claims this source supports.
+- `Evidence gaps`: missing dates, missing body text, unavailable metrics, stale captures, missing transcripts, unclear attribution, or private material that must be excluded.
+
+Use confidence levels consistently:
+
+- `high`: primary public source, owner-provided export, or directly captured artifact with a capture date.
+- `medium`: secondary public source, partial capture, or credible source with incomplete metadata.
+- `low`: inferred signal, stale capture, ambiguous attribution, or source with unresolved gaps.
 
 ## Next-Skill Routing
 

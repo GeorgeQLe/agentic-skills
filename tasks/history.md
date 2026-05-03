@@ -1320,3 +1320,10 @@ Resolved all 10 findings from `/expert-review`:
 - Added mirrored `creator-presence-dossier` skills under `packs/creator-media/claude/` and `packs/creator-media/codex/`.
 - Defined the required output path `research/creator-presence/<slug>.md`, Phase 12 foundation reads, normalized/raw evidence citation requirements, public/professional evidence boundaries, supported source families, and final-response next-skill routing.
 - Verified the new skill contracts with targeted `rg` scans, `./scripts/skill-versions.sh --missing`, `./scripts/skill-deps.sh --broken`, and `git diff --check`.
+
+## 2026-05-02 — Phase 13 Step 13.2: creator presence dossier Markdown contract
+
+- Expanded mirrored `creator-presence-dossier` skills with a section-by-section Markdown dossier contract.
+- Added evidence register requirements for source path or URL, capture date, source family, public/private boundary, confidence level, supported claims, and evidence gaps.
+- Defined confidence level rules and kept required source-family support for LinkedIn, personal websites/blogs, GitHub, podcasts, talks, newsletters, and product docs.
+- Verified the mirrored contract with targeted `rg` scans, normalized Claude/Codex diff, `./scripts/skill-versions.sh --missing`, `./scripts/skill-deps.sh --broken`, and `git diff --check`.
