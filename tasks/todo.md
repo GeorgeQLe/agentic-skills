@@ -1,26 +1,28 @@
-# Mixed Monorepo Pack Routing
+# Pack Lock Stale Recovery
 
 **Project:** Claude Skills / agentic-skills
-**Current phase:** 17 of 17
+**Current phase:** 18 of 18
 **Source roadmap:** `tasks/roadmap.md`
-**Source spec:** User request
+**Source spec:** User report from `pitwall-monorepo` `$pack refresh`
 
-## Phase 17: Mixed Monorepo Pack Routing
+## Phase 18: Pack Lock Stale Recovery
 
-**Goal:** Allow a repository to declare a default project designation plus path-scoped domain designations for mixed monorepos.
+**Goal:** Make pack lock failures diagnosable and recover automatically when a previous pack process left a stale lock behind.
 
 **Scope:**
-- Document `project_scopes` in the pack skill and public pack docs.
-- Keep `enabled_packs` as the repository-wide union of available local packs.
-- Preserve existing `project_scopes` and `notes` fields when pack commands rewrite `.agents/project.json`.
+- Add owner metadata to `.agents/.pack.lock`.
+- Remove stale locks automatically when the recorded owner PID is no longer running.
+- Include lock owner details in timeout errors.
+- Document the lock behavior in pack docs.
 
 **Acceptance Criteria:**
-- [x] `global/claude/pack` and `global/codex/pack` describe mixed-monorepo routing.
-- [x] `README.md` and `docs/packs.md` show a mixed devtool/business-app example.
-- [x] `scripts/pack.sh install`, `remove`, `refresh`, and `set-mode` do not drop existing `project_scopes` or `notes` when `jq` is available.
+- [x] `scripts/pack.sh` writes lock owner metadata and removes stale dead-PID locks.
+- [x] Timeout errors report lock owner metadata.
+- [x] Pack docs describe stale-lock behavior.
+- [x] Focused smoke tests cover live-lock waiting and stale-lock recovery.
 
 **Parallelization:** serial
-**Coordination Notes:** Keep serial because this touches shared pack schema and writer behavior. Do not add dependencies or GitHub Actions.
+**Coordination Notes:** Keep serial because this is shared pack write coordination. Do not add dependencies or GitHub Actions.
 
 > Test strategy: tests-after
 
@@ -33,30 +35,33 @@
 **Subagent lanes:** none
 
 ### Implementation
-- [x] Step 17.1: Validate current pack model and writer behavior.
+- [x] Step 18.1: Analyze session evidence and current lock state.
   - Classification: automated
   - Files: inspect only
-  - Confirm whether `.agents/project.json` currently supports only one coarse `project_type`, and whether pack commands rewrite the file.
-- [x] Step 17.2: Document mixed-monorepo routing.
-  - Classification: automated
-  - Files: `global/claude/pack/SKILL.md`, `global/codex/pack/SKILL.md`, `README.md`, `docs/packs.md`
-  - Define `project_scopes`, repository-wide `enabled_packs`, and default `project_type` behavior.
-- [x] Step 17.3: Preserve scoped metadata during pack writes.
+  - Read full local Claude/Codex history and identify the failing `pitwall-monorepo` `$pack refresh` prompt.
+  - Check current `pitwall-monorepo` lock state.
+- [x] Step 18.2: Harden pack lock acquisition.
   - Classification: automated
   - Files: `scripts/pack.sh`
-  - Preserve existing `project_scopes` and `notes` when writing `.agents/project.json`, using `jq` when available.
+  - Write `pid`, `started_at`, and `command` into `.agents/.pack.lock`.
+  - Remove stale locks when the recorded PID is not running.
+  - Include owner metadata in timeout errors.
+- [x] Step 18.3: Document lock behavior.
+  - Classification: automated
+  - Files: `global/claude/pack/SKILL.md`, `global/codex/pack/SKILL.md`, `README.md`, `docs/packs.md`
 
 ### Green
-- [x] Step 17.4: Run focused validation and record results.
+- [x] Step 18.4: Run focused validation and record results.
   - Classification: automated
   - Files: modify `tasks/todo.md` review section with exact validation commands and results
-  - Run shell syntax checks, project-scope preservation smoke tests, skill dependency/version checks, and `git diff --check`.
+  - Run shell syntax checks, stale-lock and live-lock smoke tests, skill dependency/version checks, and `git diff --check`.
 
-### Milestone: Mixed Monorepo Pack Routing
+### Milestone: Pack Lock Stale Recovery
 **Acceptance Criteria:**
-- [x] `global/claude/pack` and `global/codex/pack` describe mixed-monorepo routing.
-- [x] `README.md` and `docs/packs.md` show a mixed devtool/business-app example.
-- [x] `scripts/pack.sh install`, `remove`, `refresh`, and `set-mode` do not drop existing `project_scopes` or `notes` when `jq` is available.
+- [x] `scripts/pack.sh` writes lock owner metadata and removes stale dead-PID locks.
+- [x] Timeout errors report lock owner metadata.
+- [x] Pack docs describe stale-lock behavior.
+- [x] Focused smoke tests cover live-lock waiting and stale-lock recovery.
 
 **On Completion:**
 - Deviations from plan: none.
@@ -66,6 +71,20 @@
 ---
 
 ### Review
+- Session analysis:
+  - Read 572,617 JSONL lines across 1,691 Claude/Codex history/session files.
+  - Found the reported prompt in `~/.codex/history.jsonl` session `019df025-a516-74d3-9606-e67aa42d35f9`.
+  - Current live check showed `/Users/georgele/projects/apps/pitwall-monorepo/.agents` exists and `.agents/.pack.lock` is absent.
+  - Root risk: the previous pack lock had no owner metadata, so a timeout could not distinguish a live competing process from a stale lock or tell the user what held it.
+- Step 18.2 complete: `scripts/pack.sh` now writes `pid`, `started_at`, and `command` files inside `.agents/.pack.lock`, removes stale locks whose recorded PID is no longer running, and includes owner metadata in timeout errors. `PACK_LOCK_MAX_ATTEMPTS` and `PACK_LOCK_SLEEP_SECONDS` allow fast lock-path tests.
+- Step 18.3 complete: documented lock owner metadata and stale-lock cleanup in mirrored pack skills, `README.md`, and `docs/packs.md`.
+- Step 18.4 validation:
+  - `bash -n scripts/pack.sh` - passed.
+  - Stale-lock smoke test - passed; lock with dead PID `999999` was removed, `refresh` completed, and devtool skill links were created.
+  - Live-lock smoke test - passed; lock owned by the current shell PID timed out with `pid`, `started_at`, and `command` in the error.
+  - `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken` - passed; `No broken references found.`
+  - `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing` - passed; `All 271 skills have a version field.`
+  - `git diff --check` - passed; no output.
 - User claim validation:
   - Confirmed: a single repo-level `project_type` is too coarse for a repo containing both Pitwall Local / OSS devtool work and CalcLLM-powered SaaS/business-app work.
   - Confirmed: before this phase, `scripts/pack.sh` rewrote `.agents/project.json` from `project_type`, `enabled_packs`, `skill_pack_version`, and optional `agent_mode`, which would drop hand-authored mixed-monorepo metadata.

@@ -6,6 +6,8 @@ PACKS_DIR="$REPO_ROOT/packs"
 PROJECT_ROOT="$(pwd)"
 PROJECT_FILE="$PROJECT_ROOT/.agents/project.json"
 PROJECT_LOCK_DIR="$PROJECT_ROOT/.agents/.pack.lock"
+PROJECT_LOCK_MAX_ATTEMPTS="${PACK_LOCK_MAX_ATTEMPTS:-300}"
+PROJECT_LOCK_SLEEP_SECONDS="${PACK_LOCK_SLEEP_SECONDS:-0.1}"
 PROJECT_LOCKED=false
 PROJECT_AGENT_MODE=""
 source "$REPO_ROOT/scripts/skill-links.sh"
@@ -36,9 +38,45 @@ die() {
 
 release_project_lock() {
   if [[ "$PROJECT_LOCKED" == true ]]; then
+    rm -f "$PROJECT_LOCK_DIR/pid" "$PROJECT_LOCK_DIR/started_at" "$PROJECT_LOCK_DIR/command" 2>/dev/null || true
     rmdir "$PROJECT_LOCK_DIR" 2>/dev/null || true
     PROJECT_LOCKED=false
   fi
+}
+
+lock_pid() {
+  if [[ -f "$PROJECT_LOCK_DIR/pid" ]]; then
+    sed -n '1p' "$PROJECT_LOCK_DIR/pid" 2>/dev/null || true
+  fi
+}
+
+lock_started_at() {
+  if [[ -f "$PROJECT_LOCK_DIR/started_at" ]]; then
+    sed -n '1p' "$PROJECT_LOCK_DIR/started_at" 2>/dev/null || true
+  fi
+}
+
+lock_command() {
+  if [[ -f "$PROJECT_LOCK_DIR/command" ]]; then
+    sed -n '1p' "$PROJECT_LOCK_DIR/command" 2>/dev/null || true
+  fi
+}
+
+process_is_running() {
+  local pid="$1"
+  [[ "$pid" =~ ^[0-9]+$ ]] || return 1
+  kill -0 "$pid" 2>/dev/null
+}
+
+clear_stale_project_lock() {
+  local pid
+  pid="$(lock_pid)"
+  [[ -n "$pid" ]] || return 1
+  process_is_running "$pid" && return 1
+
+  echo "Removing stale project pack lock at $PROJECT_LOCK_DIR (pid $pid is not running)" >&2
+  rm -f "$PROJECT_LOCK_DIR/pid" "$PROJECT_LOCK_DIR/started_at" "$PROJECT_LOCK_DIR/command" 2>/dev/null || true
+  rmdir "$PROJECT_LOCK_DIR" 2>/dev/null || true
 }
 
 acquire_project_lock() {
@@ -46,14 +84,22 @@ acquire_project_lock() {
 
   local attempts=0
   until mkdir "$PROJECT_LOCK_DIR" 2>/dev/null; do
+    clear_stale_project_lock || true
     attempts=$((attempts + 1))
-    if [[ "$attempts" -gt 300 ]]; then
-      die "Timed out waiting for project pack lock at $PROJECT_LOCK_DIR"
+    if [[ "$attempts" -gt "$PROJECT_LOCK_MAX_ATTEMPTS" ]]; then
+      local pid started_at command
+      pid="$(lock_pid)"
+      started_at="$(lock_started_at)"
+      command="$(lock_command)"
+      die "Timed out waiting for project pack lock at $PROJECT_LOCK_DIR (pid: ${pid:-unknown}; started_at: ${started_at:-unknown}; command: ${command:-unknown})"
     fi
-    sleep 0.1
+    sleep "$PROJECT_LOCK_SLEEP_SECONDS"
   done
 
   PROJECT_LOCKED=true
+  printf '%s\n' "$$" >"$PROJECT_LOCK_DIR/pid"
+  date -u '+%Y-%m-%dT%H:%M:%SZ' >"$PROJECT_LOCK_DIR/started_at"
+  printf 'pack.sh %s\n' "${*:-unknown}" >"$PROJECT_LOCK_DIR/command"
   trap release_project_lock EXIT INT TERM
 }
 
@@ -378,7 +424,7 @@ case "$cmd" in
   status) status ;;
   recommend) recommend ;;
   install)
-    acquire_project_lock
+    acquire_project_lock "$@"
     shift
     read_lines_into_packs < <(collect_pack_args "$@")
     [[ "${#packs[@]}" -gt 0 ]] || die "install requires a pack name"
@@ -388,7 +434,7 @@ case "$cmd" in
     print_session_reload_notice
     ;;
   remove)
-    acquire_project_lock
+    acquire_project_lock "$@"
     shift
     read_lines_into_packs < <(collect_pack_args "$@")
     [[ "${#packs[@]}" -gt 0 ]] || die "remove requires a pack name"
@@ -398,12 +444,12 @@ case "$cmd" in
     print_session_reload_notice
     ;;
   refresh)
-    acquire_project_lock
+    acquire_project_lock "$@"
     refresh
     print_session_reload_notice
     ;;
   set-mode)
-    acquire_project_lock
+    acquire_project_lock "$@"
     shift
     set_mode "${1:-}"
     ;;
