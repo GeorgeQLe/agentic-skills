@@ -1,31 +1,26 @@
-# YouTube Video Audit
+# Mutation Contract Routing Audit
 
 **Project:** Claude Skills / agentic-skills
-**Current phase:** 15 of 15
+**Current phase:** 16 of 16
 **Source roadmap:** `tasks/roadmap.md`
-**Source spec:** User request and YouTube API/docs research
+**Source spec:** User request and `tasks/lessons.md`
 
-## Phase 15: YouTube Video Audit
+## Phase 16: Mutation Contract Routing Audit
 
-**Goal:** Add an evidence-first single-video YouTube audit skill that analyzes public metadata, transcript/content, packaging, release timing, comments, and optional owner analytics for one video.
+**Goal:** Ensure mutation-capable skills explicitly emit next-step routing in their final responses, then add a repeatable audit for missing routing coverage.
 
 **Scope:**
-- Add mirrored Claude/Codex `youtube-video-audit` skill definitions.
-- Default to public evidence through `yt-dlp`, public transcript tooling, and optional YouTube Data API enrichment when `YOUTUBE_API_KEY` is already available.
-- Support optional owner-provided analytics exports or OAuth/API output for retention, impressions/CTR, traffic sources, watch time, average view duration, subscriber change, shares, and time-series performance.
-- Persist raw evidence under `research/youtube/data/<video-id>/` and write `research/youtube/video-audit-<video-id>-YYYY-MM-DD.md`.
-- Wire pack docs and discovery references so single-video work routes to `youtube-video-audit` without replacing channel-level `youtube-channel-audit`.
+- Patch mutation-capable contracts whose output sections or routing notes do not require a concrete final next-step handoff.
+- Add an audit command under `scripts/` that scans mutation-capable skill contracts and fails on missing routing.
+- Record validation evidence in this task doc.
 
 **Acceptance Criteria:**
-- [x] `youtube-video-audit` exists for both Claude and Codex.
-- [x] The skill has a public-first evidence path and optional owner-analytics path.
-- [x] The skill distinguishes public evidence from owner-provided/private analytics and records evidence gaps.
-- [x] The report contract covers release timing, performance snapshot, packaging, hook/content structure, transcript evidence, comments/audience response, and prioritized fixes.
-- [x] Creator-media docs/reference lists include `youtube-video-audit` and preserve the existing channel audit flow.
-- [x] Validation passes with skill dependency/version checks and targeted routing scans.
+- [x] Mutation-capable skills patched by this phase explicitly require next-step routing in their final response.
+- [x] `scripts/skill-next-step-routing.sh --missing` exists and fails on mutation-capable contracts without routing.
+- [x] Validation passes with the new audit, existing skill dependency/version checks, and whitespace checks.
 
 **Parallelization:** serial
-**Coordination Notes:** Keep this serial because it touches mirrored skills, pack routing, and docs. Do not add dependencies or GitHub Actions.
+**Coordination Notes:** Keep serial because this touches shared skill contracts and repository validation scripts. Do not add dependencies or GitHub Actions.
 
 > Test strategy: tests-after
 
@@ -38,33 +33,31 @@
 **Subagent lanes:** none
 
 ### Implementation
-- [x] Step 15.1: Create mirrored `youtube-video-audit` skill contracts.
+- [x] Step 16.1: Identify mutation-capable skill contracts missing final next-step routing.
   - Classification: automated
-  - Files: create `packs/creator-media/claude/youtube-video-audit/SKILL.md`, create `packs/creator-media/codex/youtube-video-audit/SKILL.md`
-  - Require video URL or ID input, public-first evidence capture, optional owner analytics, raw evidence paths, report output path, and final-response next-skill routing.
-- [x] Step 15.2: Define the report contract and evidence boundaries.
+  - Files: no source changes expected
+  - Scan `global/` and `packs/` `SKILL.md` files for mutation signals such as tracked-file shipping contracts, write/update/create language, and explicit mutation/refactor modes.
+  - Compare that set against existing `Recommended next skill`, `Recommended next command`, or `Next work` final-response routing language.
+- [x] Step 16.2: Patch affected mutation-capable contracts.
   - Classification: automated
-  - Files: modify mirrored `youtube-video-audit` skill files
-  - Require sections for evidence coverage, public metadata, release timing, performance snapshot, packaging, transcript/content structure, comments/audience response, owner analytics when present, prioritized fixes, and evidence gaps.
-- [x] Step 15.3: Wire `youtube-video-audit` into creator-media pack docs and discovery references.
+  - Files: modify only affected `SKILL.md` files
+  - Add or tighten output/routing text so final responses include concrete next-step routing.
+- [x] Step 16.3: Add the missing-routing audit.
   - Classification: automated
-  - Files: modify `packs/creator-media/PACK.md`, `README.md`, `docs/skills-reference.md`
-  - Put `youtube-video-audit` near `youtube-channel-audit` and document that it is the single-video lane, not the channel-level trend lane.
+  - Files: create `scripts/skill-next-step-routing.sh`
+  - The audit should expose `--missing`, scan `global/` and `packs/`, and report mutation-capable skill files missing final next-step routing.
 
 ### Green
-- [x] Step 15.4: Run focused validation and record results.
+- [x] Step 16.4: Run focused validation and record results.
   - Classification: automated
   - Files: modify `tasks/todo.md` review section with exact validation commands and results
-  - Run targeted scans for mirrored files, frontmatter, output paths, evidence boundaries, optional owner analytics, report sections, docs routing, plus `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, and `git diff --check`.
+  - Run `./scripts/skill-next-step-routing.sh --missing`, `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, targeted routing scans for patched files, and `git diff --check`.
 
-### Milestone: YouTube Video Audit
+### Milestone: Mutation Contract Routing Audit
 **Acceptance Criteria:**
-- [x] `youtube-video-audit` exists for both Claude and Codex.
-- [x] The skill has a public-first evidence path and optional owner-analytics path.
-- [x] The skill distinguishes public evidence from owner-provided/private analytics and records evidence gaps.
-- [x] The report contract covers release timing, performance snapshot, packaging, hook/content structure, transcript evidence, comments/audience response, and prioritized fixes.
-- [x] Creator-media docs/reference lists include `youtube-video-audit` and preserve the existing channel audit flow.
-- [x] Validation passes with skill dependency/version checks and targeted routing scans.
+- [x] Mutation-capable skills patched by this phase explicitly require next-step routing in their final response.
+- [x] `scripts/skill-next-step-routing.sh --missing` exists and fails on mutation-capable contracts without routing.
+- [x] Validation passes with the new audit, existing skill dependency/version checks, and whitespace checks.
 
 **On Completion:**
 - Deviations from plan: none.
@@ -74,14 +67,16 @@
 ---
 
 ### Review
-- Step 15.1 complete: added mirrored Claude/Codex `youtube-video-audit` skills with video URL/ID input, public-first evidence capture, optional owner analytics, raw evidence paths, report output path, constraints, and next-skill routing.
-- Step 15.2 complete: defined the report contract and evidence boundaries for evidence coverage, performance snapshot, release timing, packaging, content/retention diagnosis, audience response, owner analytics findings, prioritized fixes, reusable lessons, and evidence gaps.
-- Step 15.3 complete: wired `youtube-video-audit` into `packs/creator-media/PACK.md`, `README.md`, and `docs/skills-reference.md` beside `youtube-channel-audit`, while preserving channel-level audit routing.
-- Step 15.4 validation:
+- Step 16.1 complete: added a mutation-capable contract audit and used its initial `--missing` output to identify gaps in default shipping-contract skills and kanban mutation wrappers.
+- Step 16.2 complete: patched 139 default shipping-contract skill files with a `Default next-step routing` requirement, and patched 40 kanban mutation wrappers with a `## Next-Step Routing` section.
+- Step 16.3 complete: added `scripts/skill-next-step-routing.sh` with `--missing` and `--list` modes. The audit scans `global/` and `packs/` `SKILL.md` files for mutation signals and requires `Recommended next skill`, `Recommended next command`, `Recommended next step`, `## Next Steps`, `## Next-Step Routing`, or `## Next-Skill Routing`.
+- Step 16.4 validation:
+  - `./scripts/skill-next-step-routing.sh --missing` - passed; `All 211 mutation-capable skills have next-step routing.`
   - `./scripts/skill-deps.sh --broken` - passed; `No broken references found.`
   - `./scripts/skill-versions.sh --missing` - passed; `All 271 skills have a version field.`
-  - `rg -n "name: youtube-video-audit|version:|Invoke as|research/youtube/data/<video-id>|research/youtube/video-audit-<video-id>-YYYY-MM-DD\\.md|owner analytics|owner-provided|public-first|Evidence Coverage|Release Timing|Packaging Diagnosis|Content and Retention Diagnosis|Audience Response|Recommended Fixes|Recommended next skill: <command>" packs/creator-media/claude/youtube-video-audit/SKILL.md packs/creator-media/codex/youtube-video-audit/SKILL.md` - passed; confirmed mirrored skill metadata, evidence paths, owner analytics, public-first constraints, report sections, and routing language.
-  - `rg -n "youtube-video-audit|single-video|one video's performance|youtube-channel-audit / youtube-video-audit" README.md docs/skills-reference.md packs/creator-media/PACK.md tasks/roadmap.md tasks/todo.md` - passed; confirmed docs and task references expose the single-video lane without replacing `youtube-channel-audit`.
+  - `rg -n "Default next-step routing" global packs -g 'SKILL.md' | wc -l` - passed; `139`.
+  - `rg -n "## Next-Step Routing" packs/*-kanban packs/poketowork-kanban -g 'SKILL.md' | wc -l` - passed; `40`.
+  - `./scripts/skill-next-step-routing.sh --list | wc -l` - passed; `211`.
   - `git diff --check` - passed; no output.
 
 ---

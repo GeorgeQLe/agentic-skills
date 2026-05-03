@@ -25,3 +25,7 @@ Use this skill only in projects that have opted into a PoketoWork kanban pack.
 5. Report cards created, moved, skipped, and any failures.
 
 Only move cards from Backlog to Todo. Never move cards backward. If kanban fails, warn and keep the roadmap output.
+
+## Next-Step Routing
+
+In the final response, include either `Recommended next skill: <command>` or the two-line pair `**Next work:** <specific task or "none">` and `**Recommended next command:** <one command or route>`. Route to the matching kanban workflow when board state can advance; otherwise route to the documented non-kanban fallback or say `No follow-up skill recommended` with the reason.

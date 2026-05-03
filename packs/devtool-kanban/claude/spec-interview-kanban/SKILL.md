@@ -38,3 +38,7 @@ Never move cards backward from Done or Punt. If kanban fails, warn and keep the 
 - Report both the archive path and the updated canonical path in the final output.
 - New files do not need archive snapshots. Append-only updates do not need archive snapshots unless an existing section is regenerated or rewritten.
 - Keep any existing user approval requirement before overwriting or replacing a document; archiving does not replace asking when the skill already requires approval.
+
+## Next-Step Routing
+
+In the final response, include either `Recommended next skill: <command>` or the two-line pair `**Next work:** <specific task or "none">` and `**Recommended next command:** <one command or route>`. Route to the matching kanban workflow when board state can advance; otherwise route to the documented non-kanban fallback or say `No follow-up skill recommended` with the reason.

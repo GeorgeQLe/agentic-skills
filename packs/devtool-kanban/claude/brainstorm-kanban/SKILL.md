@@ -27,3 +27,7 @@ Use this skill only in projects that have opted into a PoketoWork kanban pack.
 6. Report cards created, skipped, and any kanban failures.
 
 If `poketo` is unavailable or a kanban command fails, warn and continue with the base brainstorm output. Kanban is additive; it must not block `tasks/ideas.md`.
+
+## Next-Step Routing
+
+In the final response, include either `Recommended next skill: <command>` or the two-line pair `**Next work:** <specific task or "none">` and `**Recommended next command:** <one command or route>`. Route to the matching kanban workflow when board state can advance; otherwise route to the documented non-kanban fallback or say `No follow-up skill recommended` with the reason.

@@ -1,5 +1,11 @@
 # Session History
 
+## 2026-05-03 — Mutation-capable next-step routing audit
+
+- Added `scripts/skill-next-step-routing.sh` to audit mutation-capable skill contracts for missing final next-step routing.
+- Patched mutation-capable skill contracts: default shipping-contract skills now require either `Recommended next skill` or the `Next work` / `Recommended next command` handoff, and kanban mutation wrappers now include a `## Next-Step Routing` section.
+- Recorded Phase 16 in `tasks/roadmap.md` and `tasks/todo.md`. Validation passed: `./scripts/skill-next-step-routing.sh --missing`, `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, targeted routing counts, and `git diff --check`.
+
 ## 2026-05-02 — Wire creator-media evidence foundation into docs
 
 - Registered `creator-platform-capability-matrix` and `creator-evidence-schema` ahead of platform-specific audits in `packs/creator-media/PACK.md`, `README.md`, and `docs/skills-reference.md`.
