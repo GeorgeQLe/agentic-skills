@@ -2,7 +2,7 @@
 
 > Generated from: tasks/roadmap.md (existing), specs/board-flag-kanban-search.md, tasks/ideas.md, tasks/history.md
 > Date: 2026-03-27 (last updated 2026-05-03)
-> Total Phases: 18 (18 complete)
+> Total Phases: 19 (18 complete, 1 active)
 
 ## Summary
 
@@ -32,8 +32,32 @@ Phases 12-13 and 15-18 complete, with Phase 14 still available as planned future
 | 16 | Mutation Contract Routing Audit ✓ | user request, tasks/lessons.md | Mutation-capable skills emit next-step routes; audit catches gaps | S |
 | 17 | Mixed Monorepo Pack Routing ✓ | user request | `.agents/project.json.project_scopes` schema + pack writer preservation | S |
 | 18 | Pack Lock Stale Recovery ✓ | user report | Lock owner metadata and stale-lock cleanup for pack writes | S |
+| 19 | YouTube Description Optimizer | user request | Existing-video description audits, future upload drafts, and reusable metadata templates | S |
 
 ---
+
+## Phase 19: YouTube Description Optimizer
+
+**Goal:** Add a focused YouTube description and metadata optimization skill for existing videos, future uploads, and reusable series templates.
+
+**Scope:**
+- Add mirrored Claude/Codex `youtube-description-optimizer` skill definitions to the creator-media pack.
+- Support audit, draft, and template modes for video metadata, scripts/outlines, channel evidence, and series evidence.
+- Cover first-two-lines promise support, search clarity, CTA/link hierarchy, chapters, hashtags, disclosures, pinned-comment fit, and practical rewritten description blocks.
+- Wire creator-media docs and routing so description optimization sits between title/thumbnail audit and portfolio decisions.
+
+**Acceptance Criteria:**
+- [x] `youtube-description-optimizer` exists for both Claude and Codex.
+- [x] The skill supports `audit`, `draft`, and `template` modes with explicit output paths.
+- [x] The skill requires evidence coverage and forbids invented links, sponsors, disclosures, chapters, transcript details, comments, and owner-only metrics.
+- [x] Creator-media docs/reference lists include `youtube-description-optimizer` in the packaging flow.
+- [x] Creator-media next-skill routing includes `youtube-description-optimizer` between title/thumbnail audit and portfolio.
+- [x] Validation passes with skill dependency/version checks, next-step routing audit, targeted mirrored-contract scans, and `git diff --check`.
+
+**Parallelization:** serial
+**Coordination Notes:** Keep this serial because it touches mirrored skills, shared creator-media routing, and public pack docs. Preserve any in-progress creator-media video-script/video-build routing work.
+
+**Completed:** 2026-05-03. Mirrored Claude/Codex `youtube-description-optimizer` skills were added to the creator-media pack, documentation references now expose the description/metadata lane between title/thumbnail audit and portfolio, and validation passed with dependency/version checks, next-step routing audit, mirrored contract scan, docs/routing scans, and `git diff --check`.
 
 ## Phase 18: Pack Lock Stale Recovery ✓
 

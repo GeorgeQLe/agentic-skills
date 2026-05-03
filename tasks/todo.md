@@ -1,3 +1,90 @@
+# YouTube Description Optimizer
+
+**Project:** Claude Skills / agentic-skills
+**Current phase:** 19 of 19
+**Source roadmap:** `tasks/roadmap.md`
+**Source spec:** User request on 2026-05-03
+
+## Phase 19: YouTube Description Optimizer
+
+**Goal:** Add a focused YouTube description and metadata optimization skill for existing videos, future uploads, and reusable series templates.
+
+**Scope:**
+- Add mirrored Claude/Codex `youtube-description-optimizer` skill definitions to the creator-media pack.
+- Support audit, draft, and template modes.
+- Cover first-two-lines promise support, search clarity, CTA/link hierarchy, chapters, hashtags, disclosures, pinned-comment fit, and rewritten description blocks.
+- Wire creator-media docs and routing so description optimization sits between title/thumbnail audit and portfolio decisions.
+
+**Acceptance Criteria:**
+- [x] `youtube-description-optimizer` exists for both Claude and Codex.
+- [x] The skill supports `audit`, `draft`, and `template` modes with explicit output paths.
+- [x] The skill requires evidence coverage and forbids invented links, sponsors, disclosures, chapters, transcript details, comments, and owner-only metrics.
+- [x] Creator-media docs/reference lists include `youtube-description-optimizer` in the packaging flow.
+- [x] Creator-media next-skill routing includes `youtube-description-optimizer` between title/thumbnail audit and portfolio.
+- [x] Validation passes with skill dependency/version checks, next-step routing audit, targeted mirrored-contract scans, and `git diff --check`.
+
+**Parallelization:** serial
+**Coordination Notes:** Keep this serial because it touches mirrored skills, shared creator-media routing, and public pack docs. Preserve any in-progress creator-media video-script/video-build routing work.
+
+> Test strategy: tests-after
+
+### Execution Profile
+**Parallel mode:** serial
+**Integration owner:** main agent
+**Conflict risk:** medium
+**Review gates:** correctness, docs/API conformance, routing, validation
+
+**Subagent lanes:** none
+
+### Implementation
+- [x] Step 19.1: Add mirrored `youtube-description-optimizer` skill contracts.
+  - Classification: automated
+  - Files: `packs/creator-media/claude/youtube-description-optimizer/SKILL.md`, `packs/creator-media/codex/youtube-description-optimizer/SKILL.md`
+- [x] Step 19.2: Wire creator-media docs and discovery references.
+  - Classification: automated
+  - Files: `packs/creator-media/PACK.md`, `README.md`, `docs/skills-reference.md`
+- [x] Step 19.3: Align creator-media next-skill routing.
+  - Classification: automated
+  - Files: mirrored creator-media `SKILL.md` routing sections
+
+### Green
+- [x] Step 19.4: Run focused validation and record results.
+  - Classification: automated
+  - Files: modify `tasks/todo.md` review section with exact validation commands and results
+  - Run targeted contract/routing scans, mirrored diff normalization, skill dependency/version checks, next-step routing audit, and `git diff --check`.
+
+### Milestone: YouTube Description Optimizer
+**Acceptance Criteria:**
+- [x] `youtube-description-optimizer` exists for both Claude and Codex.
+- [x] The skill supports `audit`, `draft`, and `template` modes with explicit output paths.
+- [x] The skill requires evidence coverage and forbids invented links, sponsors, disclosures, chapters, transcript details, comments, and owner-only metrics.
+- [x] Creator-media docs/reference lists include `youtube-description-optimizer` in the packaging flow.
+- [x] Creator-media next-skill routing includes `youtube-description-optimizer` between title/thumbnail audit and portfolio.
+- [x] Validation passes with skill dependency/version checks, next-step routing audit, targeted mirrored-contract scans, and `git diff --check`.
+
+**On Completion:**
+- Deviations from plan: none.
+- Tech debt / follow-ups: none.
+- Ready for next phase: yes
+
+---
+
+### Review
+- Step 19.1 complete: added mirrored `youtube-description-optimizer` skill contracts under `packs/creator-media/claude/` and `packs/creator-media/codex/`.
+- Step 19.2 complete: updated creator-media pack docs and public discovery references to place description optimization between title/thumbnail audit and portfolio.
+- Step 19.3 complete: updated mirrored creator-media routing lists and `youtube-video-audit` default routing so description/CTA/link/chapter/hashtag/disclosure issues route to the new skill.
+- Validation:
+  - `rg -n 'name: youtube-description-optimizer|version:|Invoke as|--mode audit\|draft\|template|description-optimizer-<video-id>|description-draft-<slug>|description-template-<slug>|Do not invent links|owner-only metrics|Evidence Coverage|Recommended next skill' packs/creator-media/claude/youtube-description-optimizer/SKILL.md packs/creator-media/codex/youtube-description-optimizer/SKILL.md` - passed; confirmed mirrored contract fields, modes, outputs, evidence coverage, and anti-fabrication language.
+  - `rg -n 'youtube-title-thumbnail-audit -> youtube-description-optimizer -> youtube-portfolio|youtube-title-thumbnail-audit, youtube-description-optimizer, youtube-portfolio|packaging, descriptions, portfolio|description optimization' README.md docs/skills-reference.md packs/creator-media/PACK.md` - passed; confirmed docs expose the new flow.
+  - `rg -n 'youtube-title-thumbnail-audit.*youtube-description-optimizer.*youtube-portfolio|Default recommendation:.*youtube-description-optimizer|description support, CTA/link structure' packs/creator-media -g 'SKILL.md'` - passed; confirmed routing placement and video-audit handoff language.
+  - Normalized Claude/Codex `youtube-description-optimizer` command syntax and ran `diff -u /tmp/youtube-description-optimizer-claude-normalized.md /tmp/youtube-description-optimizer-codex-normalized.md` - passed; no output.
+  - `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken` - passed; `No broken references found.`
+  - `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing` - passed; `All 277 skills have a version field.`
+  - `./scripts/skill-next-step-routing.sh --missing` - passed; `All 211 mutation-capable skills have next-step routing.`
+  - `git diff --check` - passed; no output.
+
+---
+
 # Pack Lock Stale Recovery
 
 **Project:** Claude Skills / agentic-skills
