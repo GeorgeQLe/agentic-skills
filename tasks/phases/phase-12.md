@@ -75,10 +75,7 @@
 - [x] Step 12.6: Run repository validation.
   - Classification: automated
   - Files: no source changes expected
-  - Run `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, targeted `rg` checks, and `git diff --check`.
-- [x] Step 12.7: Refactor wording for consistency if validation exposes drift while keeping the contracts unchanged.
-  - Classification: automated
-  - Files: modify only the new skill files and creator-media reference docs if needed.
+  - Run `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, targeted `rg` checks, `git diff --check`, and perform only concrete cleanup found by validation.
 
 ### Milestone: Creator Platform Evidence Foundation
 **Acceptance Criteria:**
@@ -93,49 +90,9 @@
 
 ---
 
-### Next Step: 12.7 — Refactor wording for consistency if validation exposes drift
+### Validation No-Op Cleanup
 
-**What:** Inspect the Phase 12 foundation skill contracts and creator-media discovery docs for wording drift after the repository validation gate. Make only minimal consistency edits if a concrete inconsistency is found; otherwise record that no refactor was needed and complete the step.
-
-**Files to modify:**
-- `tasks/todo.md`
-- `tasks/history.md`
-- Only if needed: `packs/creator-media/claude/creator-platform-capability-matrix/SKILL.md`
-- Only if needed: `packs/creator-media/codex/creator-platform-capability-matrix/SKILL.md`
-- Only if needed: `packs/creator-media/claude/creator-evidence-schema/SKILL.md`
-- Only if needed: `packs/creator-media/codex/creator-evidence-schema/SKILL.md`
-- Only if needed: `packs/creator-media/PACK.md`
-- Only if needed: `README.md`
-- Only if needed: `docs/skills-reference.md`
-
-**Requirements:**
-- Compare the mirrored Claude/Codex `creator-platform-capability-matrix` contracts for required output path, collection method vocabulary, matrix columns, platform baseline language, and final-response next-skill wording.
-- Compare the mirrored Claude/Codex `creator-evidence-schema` contracts for required output path, raw evidence root, normalized field names, confidence/privacy wording, missing-evidence handling, and final-response next-skill wording.
-- Inspect creator-media pack docs and discovery references for consistent routing language around YouTube-only versus non-YouTube or mixed-platform work.
-- If wording drift is found, apply the smallest edits that restore consistency without changing the Phase 12 contracts.
-- If no drift is found, do not churn source docs; record the no-op result in the review section.
-- Run targeted `rg` checks for any edited wording plus `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, and `git diff --check`.
-- Record warnings as fixed, accepted with rationale, or unresolved.
-
-**Reference files:**
-- `tasks/todo.md`
-- `packs/creator-media/claude/creator-platform-capability-matrix/SKILL.md`
-- `packs/creator-media/codex/creator-platform-capability-matrix/SKILL.md`
-- `packs/creator-media/claude/creator-evidence-schema/SKILL.md`
-- `packs/creator-media/codex/creator-evidence-schema/SKILL.md`
-
-**Execution Profile:**
-- Parallel mode: serial
-- Integration owner: main agent
-- Classification: automated
-
-**Acceptance criteria:**
-- Mirrored Claude/Codex foundation skill wording is consistent.
-- Creator-media pack docs and public references route non-YouTube or mixed-platform work through the foundation before platform-specific audits.
-- Any source edits are minimal and preserve existing contracts.
-- Validation passes with no unresolved warnings.
-
-**Ship-one-step handoff contract:** Implement only Step 12.7. Update the review section with exact validation commands and results. Mark step done in `tasks/todo.md`. Update `tasks/history.md`. Commit and push. Prepare the phase transition if all Phase 12 acceptance criteria are satisfied.
+The Phase 12 wording consistency check was folded into the validation gate after clean checks. No source-doc wording edits were needed because the only mirrored diffs were expected Claude/Codex command syntax differences.
 
 ### Review
 - Step 12.1 completed: added mirrored Claude/Codex capability-matrix skill contracts with baseline platform rows, required matrix columns, collection method vocabulary, output path, operational risk guidance, and next-skill routing to `creator-evidence-schema`.

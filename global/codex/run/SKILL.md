@@ -50,7 +50,7 @@ Identify the next incomplete unit of work from the phased plan, build an executi
      - `agent-team`: do not execute locally; report that the phase requires isolated worktrees or a dedicated agent team.
    - If it is a tests-first step: write the failing tests, run them to confirm they fail.
    - If it is an implementation step: implement it, run existing tests for regressions.
-   - If it is a verification step: run all tests, fix any failures.
+   - If it is a verification step: run all tests, fix any failures. If validation is clean and a following cleanup/refactor step is explicitly conditional on validation findings or says no source changes are expected, complete that no-op cleanup in the same run by recording the no-op result instead of preserving it as a separate next-step plan.
    - The main agent owns integration, conflict resolution, task doc updates, history updates, shipping, and deployment.
    - If a subagent touches files outside its owned paths or returns conflicting changes, stop and reconcile before validation.
 10. Mark the completed work in `tasks/todo.md`:
@@ -95,6 +95,7 @@ Identify the next incomplete unit of work from the phased plan, build an executi
        4. If no more phases remain, ship the planning/task updates via `$commit-and-push-by-feature`, landing them on `main` or `master`, then run `$research-roadmap` to recommend the next action based on project state. Then stop.
        5. **Just-in-time planning:** Invoke `$plan-phase` for the new phase. This generates implementation steps and file-level detail using the full context of what was learned during prior phases.
      - If **NO:** find the next uncompleted step within the current phase.
+   - If the next uncompleted step is verification-only/no-op-only (for example, "refactor if validation exposes drift", "verify", "run validation", or `Files: no source changes expected`) and the current session already has passing validation evidence for the same scope, mark it complete with a review note and continue to the next substantive item. Do not write a fresh execution plan for a step whose expected result is "no source changes".
 15. Write a self-contained implementation plan for the next step into `tasks/todo.md`, complete enough for a fresh session to execute from `tasks/todo.md` alone.
 16. Ship `tasks/todo.md`, `tasks/roadmap.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, `tasks/recurring-todo.md` (when they exist), and `tasks/phases/` (if created) via `$commit-and-push-by-feature`, landing them on `main` or `master`.
 
