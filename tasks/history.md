@@ -1299,3 +1299,18 @@ Resolved all 10 findings from `/expert-review`:
 - Confirmed `./scripts/skill-versions.sh --missing` reports `All 267 skills have a version field.`.
 - Confirmed `git diff --check` produces no output.
 - Planned Step 12.7 to inspect wording consistency and avoid source churn unless concrete drift is found.
+
+## 2026-05-02 — Phase 12 Step 12.7: creator foundation wording consistency
+
+- Compared the mirrored Claude/Codex `creator-platform-capability-matrix` and `creator-evidence-schema` skill contracts after the validation gate.
+- Confirmed the only mirror diffs are expected command syntax differences (`/skill` for Claude, `$skill` for Codex).
+- Confirmed creator-media pack docs and public references consistently route non-YouTube or mixed-platform work through `creator-platform-capability-matrix` and `creator-evidence-schema` before platform-specific audits while preserving the YouTube-only shortcut.
+- Made no source-doc wording edits because no concrete drift was found.
+- Verified with targeted `diff`/`rg` scans, `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, and `git diff --check`.
+
+## 2026-05-02 — Phase 12 complete and Phase 13 planned
+
+- Archived the completed Phase 12 working document to `tasks/phases/phase-12.md`.
+- Marked Phase 12 complete in `tasks/roadmap.md`, including acceptance criteria and completion notes.
+- Planned Phase 13 just in time from `specs/creator-platform-evidence-schema.md`, with a serial execution profile and focused steps for mirrored `creator-presence-dossier` contracts, dossier sections, pack/docs wiring, downstream routing, and validation.
+- Replaced `tasks/todo.md` with the Phase 13 working plan and a self-contained Step 13.1 handoff.
