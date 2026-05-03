@@ -53,7 +53,7 @@
   - Require sections for identity, current public promise, career timeline, platform map, core themes, expertise claims, proof assets, signature formats, audience/community signals, product/company connections, gaps/contradictions/stale positioning, evidence register, next collection tasks, and recommended next skills.
   - Require evidence rows to include source path or URL, capture date, confidence level, public/private boundary, and evidence gaps.
   - Require support for LinkedIn, personal websites/blogs, GitHub, podcasts, talks, newsletters, and product docs when evidence is present.
-- [ ] Step 13.3: Wire `creator-presence-dossier` into creator-media pack docs and discovery references.
+- [x] Step 13.3: Wire `creator-presence-dossier` into creator-media pack docs and discovery references.
   - Classification: automated
   - Files: modify `packs/creator-media/PACK.md`, modify `README.md`, modify `docs/skills-reference.md`
   - Put `creator-presence-dossier` after `creator-evidence-schema` and before platform-specific audits or strategy synthesis in creator-media skill lists and default flows.
@@ -111,23 +111,37 @@
   - `./scripts/skill-versions.sh --missing` - passed; `All 269 skills have a version field.`
   - `./scripts/skill-deps.sh --broken` - passed; `No broken references found.`
   - `git diff --check` - passed; no output.
+- Step 13.3 complete: wired `creator-presence-dossier` into creator-media pack docs and discovery references after `creator-evidence-schema`, before platform-specific audits or strategy synthesis, and documented that the dossier feeds `creator-positioning`, `content-programming`, `product-led-media-map`, and `creator-metrics-review`.
+- Validation:
+  - `rg -n "creator-platform-capability-matrix, creator-evidence-schema,|creator-presence-dossier|creator-presence-dossier.*creator-positioning|creator-positioning.*content-programming|product-led-media-map|creator-metrics-review" README.md packs/creator-media/PACK.md docs/skills-reference.md` - passed; confirmed the dossier is exposed in public references and downstream strategy routing language appears in all three docs.
+  - `rg -n "creator-platform-capability-matrix -> creator-evidence-schema|-> creator-presence-dossier|-> youtube-channel-audit / platform-specific audit" packs/creator-media/PACK.md docs/skills-reference.md` - passed; confirmed the default flow places the dossier after the evidence schema and before platform-specific audits.
+  - `./scripts/skill-versions.sh --missing` - passed; `All 269 skills have a version field.`
+  - `./scripts/skill-deps.sh --broken` - passed; `No broken references found.`
+  - `git diff --check` - passed; no output.
 
-### Next Step: 13.3 — Wire `creator-presence-dossier` into creator-media pack docs and discovery references
+### Next Step: 13.4 — Align downstream creator-media routing with the dossier
 
-**What:** Add `creator-presence-dossier` to the creator-media pack docs and public discovery references so it sits after `creator-evidence-schema` and before platform-specific audits or strategy synthesis.
+**What:** Update downstream creator-media skills so schema routing can recommend the dossier and strategy skills treat it as a preferred creator context source.
 
 **Files to modify:**
-- `packs/creator-media/PACK.md`
-- `README.md`
-- `docs/skills-reference.md`
+- `packs/creator-media/claude/creator-evidence-schema/SKILL.md`
+- `packs/creator-media/codex/creator-evidence-schema/SKILL.md`
+- `packs/creator-media/claude/creator-positioning/SKILL.md`
+- `packs/creator-media/codex/creator-positioning/SKILL.md`
+- `packs/creator-media/claude/content-programming/SKILL.md`
+- `packs/creator-media/codex/content-programming/SKILL.md`
+- `packs/creator-media/claude/product-led-media-map/SKILL.md`
+- `packs/creator-media/codex/product-led-media-map/SKILL.md`
+- `packs/creator-media/claude/creator-metrics-review/SKILL.md`
+- `packs/creator-media/codex/creator-metrics-review/SKILL.md`
 - `tasks/todo.md`
 - `tasks/history.md`
 
 **Requirements:**
-- Put `creator-presence-dossier` after `creator-evidence-schema` in creator-media skill lists and default flows.
-- Put `creator-presence-dossier` before platform-specific audits or strategy synthesis where the pack describes recommended sequence.
-- Document that the dossier feeds `creator-positioning`, `content-programming`, `product-led-media-map`, and `creator-metrics-review`.
-- Preserve existing YouTube-only routing notes where they are already documented.
+- Ensure `creator-evidence-schema` recommends `creator-presence-dossier` for mixed-platform, LinkedIn-first, career-signal, or owned-presence work.
+- Ensure `creator-positioning`, `content-programming`, `product-led-media-map`, and `creator-metrics-review` mention `research/creator-presence/<slug>.md` as a preferred creator context source when present.
+- Preserve existing YouTube evidence flow and do not make the dossier mandatory for YouTube-only channel work.
+- Keep Claude/Codex mirrors aligned except for command syntax.
 
 **Execution Profile:**
 - Parallel mode: serial
@@ -135,9 +149,9 @@
 - Classification: automated
 
 **Acceptance criteria:**
-- Creator-media pack docs list `creator-presence-dossier` in the intended sequence.
-- `README.md` and `docs/skills-reference.md` expose the new skill.
-- Reference docs explain that the dossier feeds the downstream creator-media strategy skills.
+- Schema routing points mixed-platform, LinkedIn-first, career-signal, and owned-presence work toward `creator-presence-dossier`.
+- Strategy skills prefer the dossier as context when it exists, while still accepting YouTube audit artifacts.
+- Targeted mirror and routing scans pass.
 - Targeted scans and repository validation pass.
 
-**Ship-one-step handoff contract:** Implement only Step 13.3. Update the review section with exact validation commands and results. Mark step done in `tasks/todo.md`. Update `tasks/history.md`. Commit and push. Stop after preparing the next step.
+**Ship-one-step handoff contract:** Implement only Step 13.4. Update the review section with exact validation commands and results. Mark step done in `tasks/todo.md`. Update `tasks/history.md`. Commit and push. Stop after preparing the next step.

@@ -177,13 +177,13 @@ For YouTube channels, non-YouTube creator platforms, founder-led media, product-
 
 ```text
 creator-platform-capability-matrix, creator-evidence-schema,
-youtube-channel-audit, youtube-title-thumbnail-audit, youtube-portfolio,
-youtube-peer-benchmark, youtube-search-positioning, youtube-cadence-diagnosis,
-creator-positioning, content-programming, series-spec, product-led-media-map,
-creator-metrics-review
+creator-presence-dossier, youtube-channel-audit, youtube-title-thumbnail-audit,
+youtube-portfolio, youtube-peer-benchmark, youtube-search-positioning,
+youtube-cadence-diagnosis, creator-positioning, content-programming,
+series-spec, product-led-media-map, creator-metrics-review
 ```
 
-The creator-media workflow validates platform evidence sources, normalized evidence records, channel evidence, packaging, portfolio shape, peer benchmarks, search opportunities, publishing cadence, positioning, programming, repeatable series, product-media fit, and recurring metrics. YouTube-specific work may start at `youtube-channel-audit`; non-YouTube or mixed-platform work starts with `creator-platform-capability-matrix` and `creator-evidence-schema`. Target use cases include `@GeorgeLe`, `WeeklyG`, and `WeeklySOTA`.
+The creator-media workflow validates platform evidence sources, normalized evidence records, creator presence, channel evidence, packaging, portfolio shape, peer benchmarks, search opportunities, publishing cadence, positioning, programming, repeatable series, product-media fit, and recurring metrics. YouTube-specific work may start at `youtube-channel-audit`; creator/persona research may start at `creator-presence-dossier`, which feeds `creator-positioning`, `content-programming`, `product-led-media-map`, and `creator-metrics-review`; non-YouTube or mixed-platform work starts with `creator-platform-capability-matrix` and `creator-evidence-schema`. Target use cases include `@GeorgeLe`, `WeeklyG`, and `WeeklySOTA`.
 
 ### Code Quality
 

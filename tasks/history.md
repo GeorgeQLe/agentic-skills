@@ -1327,3 +1327,10 @@ Resolved all 10 findings from `/expert-review`:
 - Added evidence register requirements for source path or URL, capture date, source family, public/private boundary, confidence level, supported claims, and evidence gaps.
 - Defined confidence level rules and kept required source-family support for LinkedIn, personal websites/blogs, GitHub, podcasts, talks, newsletters, and product docs.
 - Verified the mirrored contract with targeted `rg` scans, normalized Claude/Codex diff, `./scripts/skill-versions.sh --missing`, `./scripts/skill-deps.sh --broken`, and `git diff --check`.
+
+## 2026-05-02 — Phase 13 Step 13.3: creator presence dossier docs wiring
+
+- Added `creator-presence-dossier` to the creator-media pack docs, README, and skills reference after `creator-evidence-schema`.
+- Placed the dossier before platform-specific audits or strategy synthesis in creator-media default flows.
+- Documented that the dossier feeds `creator-positioning`, `content-programming`, `product-led-media-map`, and `creator-metrics-review` while preserving the YouTube-only shortcut.
+- Verified the docs wiring with targeted `rg` scans, `./scripts/skill-versions.sh --missing`, `./scripts/skill-deps.sh --broken`, and `git diff --check`.
