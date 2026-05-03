@@ -47,7 +47,7 @@
   - Require reading `research/creator-platforms/capability-matrix.md`, `research/creator-platforms/evidence-schema.md`, and available normalized/raw creator evidence before synthesis.
   - Require public/professional evidence boundaries so private repo planning context is excluded unless explicitly marked as internal notes.
   - Include final-response next-skill routing as `Recommended next skill: <command>`.
-- [ ] Step 13.2: Define the dossier Markdown contract and evidence register requirements.
+- [x] Step 13.2: Define the dossier Markdown contract and evidence register requirements.
   - Classification: automated
   - Files: modify `packs/creator-media/claude/creator-presence-dossier/SKILL.md`, modify `packs/creator-media/codex/creator-presence-dossier/SKILL.md`
   - Require sections for identity, current public promise, career timeline, platform map, core themes, expertise claims, proof assets, signature formats, audience/community signals, product/company connections, gaps/contradictions/stale positioning, evidence register, next collection tasks, and recommended next skills.
@@ -104,22 +104,30 @@
   - `./scripts/skill-versions.sh --missing` - passed; `All 269 skills have a version field.`
   - `./scripts/skill-deps.sh --broken` - passed; `No broken references found.`
   - `git diff --check` - passed; no output.
+- Step 13.2 complete: expanded mirrored Claude/Codex `creator-presence-dossier` skills with a section-by-section Markdown contract, evidence register row schema, confidence level rules, required public/private boundary field, and explicit support for LinkedIn, personal websites/blogs, GitHub, podcasts, talks, newsletters, and product docs when evidence is present.
+- Validation:
+  - `rg -n "## Markdown Contract|## Scope and Capture|## Identity|## Current Public Promise|## Career Timeline|## Platform Map|## Core Themes|## Expertise Claims|## Proof Assets|## Signature Formats|## Audience and Community Signals|## Product and Company Connections|## Gaps, Contradictions, and Stale Positioning|## Evidence Register|## Next Collection Tasks|## Recommended Next Skills|Source path or URL|Capture date|Source family|Public/private boundary|Confidence level|Claims supported|Evidence gaps|LinkedIn|personal websites/blogs|GitHub|podcasts|talks|newsletters|product docs" packs/creator-media/claude/creator-presence-dossier/SKILL.md packs/creator-media/codex/creator-presence-dossier/SKILL.md` - passed; confirmed required sections, row fields, confidence/capture/source language, and source families in both mirrored skills.
+  - `perl -0pe ... packs/creator-media/claude/creator-presence-dossier/SKILL.md > /tmp/creator-presence-claude-normalized.md`; `perl -0pe ... packs/creator-media/codex/creator-presence-dossier/SKILL.md > /tmp/creator-presence-codex-normalized.md`; `diff -u /tmp/creator-presence-claude-normalized.md /tmp/creator-presence-codex-normalized.md` - passed; no output after normalizing command syntax.
+  - `./scripts/skill-versions.sh --missing` - passed; `All 269 skills have a version field.`
+  - `./scripts/skill-deps.sh --broken` - passed; `No broken references found.`
+  - `git diff --check` - passed; no output.
 
-### Next Step: 13.2 — Define the dossier Markdown contract and evidence register requirements
+### Next Step: 13.3 — Wire `creator-presence-dossier` into creator-media pack docs and discovery references
 
-**What:** Expand the mirrored dossier skills with the full section-by-section Markdown contract and evidence register requirements from Phase 13.
+**What:** Add `creator-presence-dossier` to the creator-media pack docs and public discovery references so it sits after `creator-evidence-schema` and before platform-specific audits or strategy synthesis.
 
 **Files to modify:**
-- `packs/creator-media/claude/creator-presence-dossier/SKILL.md`
-- `packs/creator-media/codex/creator-presence-dossier/SKILL.md`
+- `packs/creator-media/PACK.md`
+- `README.md`
+- `docs/skills-reference.md`
 - `tasks/todo.md`
 - `tasks/history.md`
 
 **Requirements:**
-- Require sections for identity, current public promise, career timeline, platform map, core themes, expertise claims, proof assets, signature formats, audience/community signals, product/company connections, gaps/contradictions/stale positioning, evidence register, next collection tasks, and recommended next skills.
-- Require evidence rows to include source path or URL, capture date, confidence level, public/private boundary, and evidence gaps.
-- Require support for LinkedIn, personal websites/blogs, GitHub, podcasts, talks, newsletters, and product docs when evidence is present.
-- Keep mirrored Claude/Codex contracts equivalent except command syntax.
+- Put `creator-presence-dossier` after `creator-evidence-schema` in creator-media skill lists and default flows.
+- Put `creator-presence-dossier` before platform-specific audits or strategy synthesis where the pack describes recommended sequence.
+- Document that the dossier feeds `creator-positioning`, `content-programming`, `product-led-media-map`, and `creator-metrics-review`.
+- Preserve existing YouTube-only routing notes where they are already documented.
 
 **Execution Profile:**
 - Parallel mode: serial
@@ -127,9 +135,9 @@
 - Classification: automated
 
 **Acceptance criteria:**
-- Both skill files contain the full dossier section contract.
-- Both skill files define evidence register row requirements.
-- Both skill files explicitly support the required source families when evidence is present.
+- Creator-media pack docs list `creator-presence-dossier` in the intended sequence.
+- `README.md` and `docs/skills-reference.md` expose the new skill.
+- Reference docs explain that the dossier feeds the downstream creator-media strategy skills.
 - Targeted scans and repository validation pass.
 
-**Ship-one-step handoff contract:** Implement only Step 13.2. Update the review section with exact validation commands and results. Mark step done in `tasks/todo.md`. Update `tasks/history.md`. Commit and push. Stop after preparing the next step.
+**Ship-one-step handoff contract:** Implement only Step 13.3. Update the review section with exact validation commands and results. Mark step done in `tasks/todo.md`. Update `tasks/history.md`. Commit and push. Stop after preparing the next step.
