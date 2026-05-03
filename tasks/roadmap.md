@@ -2,13 +2,13 @@
 
 > Generated from: tasks/roadmap.md (existing), specs/board-flag-kanban-search.md, tasks/ideas.md, tasks/history.md
 > Date: 2026-03-27 (last updated 2026-05-03)
-> Total Phases: 15 (14 complete, 1 planned)
+> Total Phases: 16 (16 complete)
 
 ## Summary
 
 Phases 1-11 complete: kanban skill suite, board intelligence, templates, archive automation, expert review fixes, test hardening (83 tests), kanban DX, skill infrastructure, the shared Poketo headless API migration for both Claude and Codex, and the three-mode operating model (`claude-only` / `codex-only` / `hybrid`) with shared approval-packet contract and next-step routing.
 
-Phases 12-13 and 15 complete, with Phase 14 planned: expand the creator-media pack beyond YouTube with a platform capability matrix, shared evidence schema, repo-backed creator presence dossier, LinkedIn-first free/manual evidence lane, and a single-video YouTube audit skill.
+Phases 12-13, 15, and 16 complete, with Phase 14 still available as planned future creator-media work. Phase 16 hardened mutation-capable skill contracts with final next-step routing language and an audit that catches future omissions.
 
 ## Phase Overview
 
@@ -29,8 +29,26 @@ Phases 12-13 and 15 complete, with Phase 14 planned: expand the creator-media pa
 | 13 | Creator Presence Dossier ✓ | specs/creator-platform-evidence-schema.md | Repo-backed creator career/presence dossier skill | M |
 | 14 | LinkedIn Evidence Lane | specs/creator-platform-evidence-schema.md | LinkedIn export/manual evidence templates and guidance | M |
 | 15 | YouTube Video Audit ✓ | user request, YouTube API/docs research | Single-video public-first audit with optional owner analytics | M |
+| 16 | Mutation Contract Routing Audit ✓ | user request, tasks/lessons.md | Mutation-capable skills emit next-step routes; audit catches gaps | S |
 
 ---
+
+## Phase 16: Mutation Contract Routing Audit ✓
+
+**Goal:** Ensure every mutation-capable skill contract emits explicit next-step routing in its final response, and add a repeatable audit that fails when future mutation-capable skills omit that routing.
+
+**Scope:**
+- Patch mutation-capable skill contracts whose output section or routing section does not require a final next-step handoff.
+- Add a script-level audit for mutation-capable `SKILL.md` files missing `Recommended next skill`, `Recommended next command`, or the `Next work`/`Recommended next command` pair.
+- Document the audit in task review output and run it with the existing skill dependency/version checks.
+
+**Acceptance Criteria:**
+- [x] Mutation-capable skills patched by this phase explicitly require next-step routing in their final response.
+- [x] The repository has a repeatable audit command for missing next-step routing in mutation-capable skill contracts.
+- [x] The audit passes along with `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, and `git diff --check`.
+
+**Parallelization:** serial
+**Coordination Notes:** Keep serial because this touches shared skill contract text and validation scripts.
 
 ## Phase 11: Three-Mode Operating Model ✓
 
