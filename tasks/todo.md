@@ -65,7 +65,7 @@
   - Ensure strategy skills mention the dossier as a preferred creator context source without breaking the existing YouTube evidence flow.
 
 ### Green
-- [ ] Step 13.5: Write regression validation coverage for Phase 13 acceptance criteria.
+- [x] Step 13.5: Write regression validation coverage for Phase 13 acceptance criteria.
   - Classification: automated
   - Files: modify `tasks/todo.md` review section with exact validation commands and results
   - Run targeted scans confirming mirrored dossier skill files, frontmatter names, output path, required sections, public/private evidence boundaries, confidence/capture/source fields, supported source types, pack-doc routing, and final-response next-skill language.
@@ -79,12 +79,12 @@
 
 ### Milestone: Creator Presence Dossier
 **Acceptance Criteria:**
-- [ ] `creator-presence-dossier` exists for both Claude and Codex.
-- [ ] The skill distinguishes public/professional evidence from private repo planning context.
-- [ ] The skill requires source paths, capture dates, confidence levels, and evidence gaps.
-- [ ] The dossier contract supports LinkedIn, personal websites, GitHub, podcasts, talks, newsletters, and product docs.
-- [ ] Follow-up routing recommends the correct creator-media strategy skill from dossier findings.
-- [ ] Validation passes with skill dependency/version checks and targeted reference scans.
+- [x] `creator-presence-dossier` exists for both Claude and Codex.
+- [x] The skill distinguishes public/professional evidence from private repo planning context.
+- [x] The skill requires source paths, capture dates, confidence levels, and evidence gaps.
+- [x] The dossier contract supports LinkedIn, personal websites, GitHub, podcasts, talks, newsletters, and product docs.
+- [x] Follow-up routing recommends the correct creator-media strategy skill from dossier findings.
+- [x] Validation passes with skill dependency/version checks and targeted reference scans.
 - [ ] All phase tests pass.
 - [ ] No regressions in previous phase tests.
 
@@ -126,19 +126,31 @@
   - `./scripts/skill-versions.sh --missing` - passed; `All 269 skills have a version field.`
   - `./scripts/skill-deps.sh --broken` - passed; `No broken references found.`
   - `git diff --check` - passed; no output.
+- Step 13.5 complete: recorded focused regression validation coverage for the Phase 13 acceptance criteria. The scans confirmed mirrored dossier skill files, frontmatter names, output path, required sections, public/private evidence boundaries, confidence/capture/source fields, supported source families, pack-doc routing, downstream routing, and final-response next-skill language. No source contract edits were needed.
+- Validation:
+  - `rg -n "name: creator-presence-dossier|version:|research/creator-presence/<slug>\\.md|research/creator-platforms/capability-matrix\\.md|research/creator-platforms/evidence-schema\\.md" packs/creator-media/claude/creator-presence-dossier/SKILL.md packs/creator-media/codex/creator-presence-dossier/SKILL.md` - passed; confirmed mirrored frontmatter names, version fields, required output path, and Phase 12 foundation reads in both dossier skills.
+  - `rg -n "## Identity|## Current Public Promise|## Career Timeline|## Platform Map|## Core Themes|## Expertise Claims|## Proof Assets|## Signature Formats|## Audience and Community Signals|## Product and Company Connections|## Gaps, Contradictions, and Stale Positioning|## Evidence Register|## Next Collection Tasks|## Recommended Next Skills" packs/creator-media/claude/creator-presence-dossier/SKILL.md packs/creator-media/codex/creator-presence-dossier/SKILL.md` - passed; confirmed all required dossier sections in both mirrored skills.
+  - `rg -n "public/professional|private repo planning context|Source path or URL|Capture date|Confidence level|Evidence gaps|Public/private boundary|LinkedIn|personal websites/blogs|GitHub|podcasts|talks|newsletters|product docs" packs/creator-media/claude/creator-presence-dossier/SKILL.md packs/creator-media/codex/creator-presence-dossier/SKILL.md` - passed; confirmed public/private evidence boundaries, evidence register fields, and supported source families in both mirrored skills.
+  - `rg -n "creator-presence-dossier|creator-positioning|content-programming|product-led-media-map|creator-metrics-review|creator-platform-capability-matrix -> creator-evidence-schema|-> creator-presence-dossier" README.md packs/creator-media/PACK.md docs/skills-reference.md` - passed; confirmed pack docs and discovery references expose the dossier after the evidence schema and before downstream strategy skills.
+  - `rg -n "Recommended next skill: (\\$|/)creator-presence-dossier|mixed-platform, LinkedIn-first, career signal, career-signal, owned presence, owned-presence|personal website|GitHub-profile|podcast|talk|newsletter|professional bio" packs/creator-media/claude/creator-evidence-schema/SKILL.md packs/creator-media/codex/creator-evidence-schema/SKILL.md` - passed; confirmed schema follow-up routing recommends the dossier for mixed-platform and career/owned-presence work in both command syntaxes.
+  - `rg -n "research/creator-presence/<slug>\\.md|creator-presence-dossier.*youtube-channel-audit|YouTube-only|channel-only|preferred creator context|optional preferred creator context|not a replacement for YouTube audit evidence|preserve raw YouTube evidence" packs/creator-media/claude/creator-positioning/SKILL.md packs/creator-media/codex/creator-positioning/SKILL.md packs/creator-media/claude/content-programming/SKILL.md packs/creator-media/codex/content-programming/SKILL.md packs/creator-media/claude/product-led-media-map/SKILL.md packs/creator-media/codex/product-led-media-map/SKILL.md packs/creator-media/claude/creator-metrics-review/SKILL.md packs/creator-media/codex/creator-metrics-review/SKILL.md` - passed; confirmed downstream strategy skills prefer the dossier when present while preserving YouTube evidence flow.
+  - `./scripts/skill-deps.sh --broken` - passed; `No broken references found.`
+  - `./scripts/skill-versions.sh --missing` - passed; `All 269 skills have a version field.`
+  - `git diff --check` - passed; no output.
 
-### Next Step: 13.5 — Write regression validation coverage for Phase 13 acceptance criteria
+### Next Step: 13.6 — Run repository validation
 
-**What:** Record focused regression validation coverage for the Phase 13 acceptance criteria in this review section.
+**What:** Run the formal repository validation gate for Phase 13 after the targeted acceptance-criteria scans.
 
 **Files to modify:**
 - `tasks/todo.md`
 - `tasks/history.md`
 
 **Requirements:**
-- Run targeted scans confirming mirrored dossier skill files, frontmatter names, output path, required sections, public/private evidence boundaries, confidence/capture/source fields, supported source types, pack-doc routing, downstream routing, and final-response next-skill language.
-- Record exact commands and outputs in `tasks/todo.md` under this review section.
-- Mark Phase 13 acceptance criteria only when directly proven by the scans.
+- Run `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, targeted `rg` checks, and `git diff --check`.
+- Inspect command output for warnings as well as failures.
+- Record exact validation commands and results in this review section.
+- Do not modify source contracts unless validation exposes concrete drift or a regression.
 
 **Execution Profile:**
 - Parallel mode: serial
@@ -146,8 +158,8 @@
 - Classification: automated
 
 **Acceptance criteria:**
-- Mirrored dossier skill files, frontmatter, output path, required sections, evidence boundary rules, confidence/source/capture fields, supported source families, and routing language are confirmed by targeted scans.
+- Repository validation commands pass with no unresolved warnings.
 - `tasks/todo.md` review records exact validation commands and results.
-- No source contract edits are made unless validation exposes concrete drift.
+- Step 13.6 is marked complete only after the validation gate passes.
 
-**Ship-one-step handoff contract:** Implement only Step 13.5. Update the review section with exact validation commands and results. Mark step done in `tasks/todo.md`. Update `tasks/history.md`. Commit and push. Stop after preparing the next step.
+**Ship-one-step handoff contract:** Implement only Step 13.6. Update the review section with exact validation commands and results. Mark step done in `tasks/todo.md`. Update `tasks/history.md`. Commit and push. Stop after preparing the next step.
