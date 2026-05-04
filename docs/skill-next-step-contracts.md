@@ -50,7 +50,7 @@ This audit checked:
 
 | Skill | End states | Valid recommendation |
 | --- | --- | --- |
-| `concept-exploration` | Business-app pack missing, business-app pack enabled, project type unclear | Pack missing -> `pack install business-app`. Pack enabled -> `icp` using `research/concept-brief.md`. Project unclear -> `pack recommend`. |
+| `concept-exploration` | Business discovery lane missing, business discovery enabled, project type unclear | Pack missing -> `pack install business-discovery`. Pack enabled -> `icp` using `research/concept-brief.md`. Project unclear -> `pack recommend`. |
 | `competitive-analysis` concept-validation mode | `Proceed to ICP`, `Pivot concept`, `Abandon` | `Proceed` -> `icp`; `Pivot` -> `brainstorm`; `Abandon` -> `No follow-up skill recommended` unless the user wants a new concept. Standard-mode re-run is valid only after `icp` creates `research/icp.md`. |
 | `competitive-analysis` standard mode | Value-prop missing, journey missing, specs missing, GTM missing, codebase exists | `value-prop-canvas` is the first standard-mode recommendation when `research/value-prop.md` is missing; then `journey-map`, `spec-interview`, `gtm`, `mvp-gap`. |
 | `experiment` | Designed, validated, invalidated, inconclusive | Designed -> run the experiment manually. Validated -> log evidence with `customer-feedback`, update `assumption-tracker`, or plan/spec the validated opportunity. Invalidated -> update `assumption-tracker` and return to the domain skill for the failed assumption. Inconclusive -> `experiment [follow-up]` or `customer-feedback`. |

@@ -180,7 +180,6 @@ This section tags every global skill and every pack with a **primary CLI role** 
 | `analyze-sessions` | Claude-orchestration | Usage analysis + automation recommendations |
 | `brainstorm` | Claude-orchestration | Idea surfacing into `/concept-exploration` or `/feature-interview` |
 | `branch-lifecycle` | Both | Evaluation is orchestration; merge/delete acts execute |
-| `clone-spec-store` | Both | Spec-store planning plus portfolio-gated private downstream repo seeding |
 | `codebase-status` | Claude-orchestration | Read-only repo status plus related local conversation history |
 | `commit-and-push-by-feature` | Codex-execution | Grouped commits + push |
 | `concept-exploration` | Claude-orchestration | Raw idea shaping before ICP and implementation specs |
@@ -221,9 +220,15 @@ This section tags every global skill and every pack with a **primary CLI role** 
 
 | Pack | Primary role | Notes |
 | --- | --- | --- |
-| `business-app` | Claude-orchestration | Strategy, ICP, value-prop-canvas, lean-canvas, hook-model, growth-model, pmf-assessment, GTM, positioning, metrics, retro — framing/research skills |
-| `business-app-kanban` | Both | Inherits `business-app` (orchestration) + adds kanban `run`/`ship`/`ship-end` variants (execution) |
+| `business-discovery` | Claude-orchestration | ICP, customer/market research, value proposition, positioning, lean canvas, journeys |
+| `business-growth` | Claude-orchestration | Engagement loops, metrics, monetization, GTM, landing copy, experiments, growth, PMF |
+| `business-ops` | Both | Assumptions, cohorts, retros, risks, runway, stakeholder reporting, platform/research reconciliation |
+| `business-app` | Claude-orchestration | Compatibility alias for `business-discovery`, `business-growth`, and `business-ops` |
+| `business-app-kanban` | Both | Business-app kanban `run`/`ship`/`ship-end` variants (execution) |
 | `code-quality` | Codex-execution | `extract-shared-types`, `quality-sweep` — behavior-preserving refactor mutation |
+| `creator-foundation` | Both | Creator evidence, dossier, positioning, programming, series, product-led media, metrics |
+| `youtube-ops` | Both | YouTube audit, packaging, portfolio, benchmarking, search, cadence, external video research |
+| `project-fleet` | Both | Spec-store, multi-repo fleet orchestration, and spin-off workflows |
 | `devtool` | Claude-orchestration | Adoption, docs audit, DX journey, positioning, workflow — framing skills |
 | `devtool-kanban` | Both | Inherits `devtool` (orchestration) + kanban `run`/`ship`/`ship-end` variants (execution) |
 | `game` | Claude-orchestration | Audience, core loop, fantasy, launch, playtest metrics — framing/research skills |

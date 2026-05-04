@@ -79,8 +79,8 @@ The `## ICP Readiness` section must state whether the concept is ready for `$icp
 
 The `## Next Steps` section must recommend exactly one primary command:
 
-- If the concept appears to be a business app or user-facing product and the business-app pack is not enabled: `$pack install business-app`
-- If the business-app pack is enabled: `$icp`
+- If the concept appears to be a business app or user-facing product and the business discovery lane is not enabled: `$pack install business-discovery`
+- If `business-discovery` or the compatibility `business-app` alias is enabled: `$icp`
 - If project type is unclear: `$pack recommend`
 
 Include 1-3 other options only when they are materially useful.

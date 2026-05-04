@@ -35,13 +35,17 @@ Project packs are enabled per repository.
 ```bash
 scripts/pack.sh list
 scripts/pack.sh recommend
-scripts/pack.sh install business-app
+scripts/pack.sh install business-discovery
+scripts/pack.sh install business-growth
+scripts/pack.sh install business-ops
 scripts/pack.sh install game
 scripts/pack.sh install devtool
-scripts/pack.sh install creator-media
+scripts/pack.sh install creator-foundation
+scripts/pack.sh install youtube-ops
 scripts/pack.sh install code-quality
 scripts/pack.sh install monorepo
 scripts/pack.sh install remotion
+scripts/pack.sh install project-fleet
 scripts/pack.sh install business-app-kanban
 scripts/pack.sh status
 scripts/pack.sh remove game
@@ -77,7 +81,7 @@ For mixed monorepos, keep `project_type` as the default designation, set `enable
 ```json
 {
   "project_type": "devtool",
-  "enabled_packs": ["devtool", "business-app"],
+  "enabled_packs": ["devtool", "business-discovery", "business-growth"],
   "skill_pack_version": 1,
   "project_scopes": [
     {
@@ -89,7 +93,7 @@ For mixed monorepos, keep `project_type` as the default designation, set `enable
     {
       "path": "apps/pitwall-calcllm",
       "project_type": "business-app",
-      "packs": ["business-app"],
+      "packs": ["business-discovery", "business-growth"],
       "purpose": "CalcLLM-powered connected edition research, GTM, monetization, and SaaS product work."
     }
   ]
@@ -112,13 +116,15 @@ agentic-skills/
 │   ├── claude/<name>/SKILL.md
 │   └── codex/<name>/SKILL.md
 ├── packs/
-│   ├── business-app/{claude,codex}/<name>/SKILL.md
+│   ├── business-{discovery,growth,ops}/{claude,codex}/<name>/SKILL.md
 │   ├── code-quality/{claude,codex}/<name>/SKILL.md
 │   ├── game/{claude,codex}/<name>/SKILL.md
 │   ├── devtool/{claude,codex}/<name>/SKILL.md
-│   ├── creator-media/{claude,codex}/<name>/SKILL.md
+│   ├── creator-foundation/{claude,codex}/<name>/SKILL.md
+│   ├── youtube-ops/{claude,codex}/<name>/SKILL.md
 │   ├── monorepo/{claude,codex}/<name>/SKILL.md
 │   ├── remotion/{claude,codex}/<name>/SKILL.md
+│   ├── project-fleet/{claude,codex}/<name>/SKILL.md
 │   └── *-kanban/{claude,codex}/<name>/SKILL.md
 ├── scripts/
 │   ├── pack.sh
@@ -134,11 +140,10 @@ Global skills should stay domain-neutral:
 
 ```text
 affected, analyze-sessions, bootstrap-repo, brainstorm, branch-lifecycle,
-clone-spec-store, codebase-status, commit-and-push-by-feature, concept-exploration, create-skill, dead-code, debug, decommission, deploy, dogfood,
+codebase-status, commit-and-push-by-feature, concept-exploration, create-skill, dead-code, debug, decommission, deploy, dogfood,
 expert-review, guide, handoff, hygiene, install-agentic-skills, provision-agentic-config,
 investigate, migrate, pack, patch-exec-profile, spec-interview, ui-interview,
-ux-variation, plan-phase, project-fleet,
-reconcile-dev-docs, regression-check, release, roadmap, run, scaffold,
+ux-variation, plan-phase, reconcile-dev-docs, regression-check, release, roadmap, run, scaffold,
 ship, ship-end, skills, slim-audit, spec-drift, sync,
 targeted-skill-builder, trace, research-roadmap, uat
 ```
@@ -155,29 +160,26 @@ delegate
 
 ## Packs
 
-### Business App
+### Business Packs
 
 For SaaS, marketplaces, productivity tools, business applications, and enterprise workflows.
 
-Includes the former product-research lane:
+Install only the current lane:
 
 ```text
-icp, enterprise-icp, competitive-analysis, customer-feedback,
-value-prop-canvas, lean-canvas, hook-model, growth-model, pmf-assessment,
-journey-map, metrics, gtm, monetization, positioning, landing-copy,
-mvp-gap, scale-audit, assumption-tracker, experiment, cohort-review,
-retro, risk-register, burn-rate, runway-model, investor-update,
-platform-strategy, reconcile-research
+business-discovery: icp, enterprise-icp, competitive-analysis, customer-feedback,
+value-prop-canvas, lean-canvas, positioning, journey-map
+
+business-growth: hook-model, growth-model, metrics, gtm, monetization,
+landing-copy, pmf-assessment, experiment
+
+business-ops: assumption-tracker, cohort-review, retro, risk-register,
+burn-rate, runway-model, investor-update, reconcile-research,
+mvp-gap, scale-audit, platform-strategy
 ```
 
-Default user-facing planning flow (18-step):
+`scripts/pack.sh install business-app` remains a compatibility alias that installs all three, but narrow installs are preferred for context size.
 
-```text
-concept-exploration -> icp -> competitive-analysis -> value-prop-canvas -> positioning
--> lean-canvas -> journey-map -> hook-model -> metrics -> monetization -> gtm
--> growth-model -> spec-interview -> ux-variation -> ui-interview -> roadmap -> run
--> pmf-assessment (post-launch)
-```
 
 ### Game
 
@@ -203,19 +205,32 @@ devtool-monetization, devtool-docs-audit
 
 The devtool workflow validates developer adoption, integration fit, documentation clarity, trust, and team conversion.
 
-### Creator Media
+### Creator Media Packs
 
 For YouTube channels, non-YouTube creator platforms, founder-led media, product-led content, creator portfolios, and recurring shows.
 
 ```text
+creator-foundation: research-bootstrap, research-directory-conventions,
 creator-platform-capability-matrix, creator-evidence-schema,
-creator-presence-dossier, youtube-channel-audit, youtube-video-audit, youtube-vid-research,
-youtube-competitive-research, youtube-title-thumbnail-audit, youtube-description-optimizer, youtube-portfolio, youtube-peer-benchmark, youtube-search-positioning,
-youtube-cadence-diagnosis, creator-positioning, content-programming,
+creator-presence-dossier, creator-positioning, content-programming,
 series-spec, product-led-media-map, creator-metrics-review
+
+youtube-ops: youtube-audit, youtube-channel-audit, youtube-video-audit,
+youtube-vid-research, youtube-competitive-research,
+youtube-title-thumbnail-audit, youtube-description-optimizer,
+youtube-portfolio, youtube-peer-benchmark, youtube-search-positioning,
+youtube-cadence-diagnosis
 ```
 
-The creator-media workflow validates platform evidence sources, normalized evidence records, creator presence, channel evidence, single-video performance, external video research, competitive lessons, packaging, descriptions, portfolio shape, peer benchmarks, search opportunities, publishing cadence, positioning, programming, repeatable series, product-media fit, and recurring metrics. YouTube-specific work may start at `youtube-channel-audit` for channel-level patterns or `youtube-video-audit` for one video's performance, release timing, packaging, comments, transcript/content, and optional owner analytics; creator/persona research may start at `creator-presence-dossier`, which feeds `creator-positioning`, `content-programming`, `product-led-media-map`, and `creator-metrics-review`; non-YouTube or mixed-platform work starts with `creator-platform-capability-matrix` and `creator-evidence-schema`. Target use cases include `@GeorgeLe`, `WeeklyG`, and `WeeklySOTA`. Use the `remotion` pack for `youtube-format-research`, `video-script`, and `video-build`.
+`scripts/pack.sh install creator-media` remains a compatibility alias that installs `creator-foundation` and `youtube-ops`. Use `remotion` for `youtube-format-research`, `video-script`, and `video-build`.
+
+### Project Fleet
+
+For control repositories managing many downstream repos, clone/spec-store portfolios, or bounded spin-offs.
+
+```text
+clone-spec-store, project-fleet, spin-off
+```
 
 ### Remotion
 
@@ -225,7 +240,7 @@ For Remotion-oriented video production from reference format analysis through sc
 youtube-format-research, video-script, video-build
 ```
 
-Install alongside `creator-media` when a project needs the full creator strategy to Remotion production path.
+Install alongside `creator-foundation` and, when YouTube evidence is needed, `youtube-ops` for the full creator strategy to Remotion production path.
 
 ### Code Quality
 
@@ -290,13 +305,15 @@ The generic `poketowork-kanban` pack contains board-management utilities such as
 
 ## Moved Skills
 
-Former global business/product skills now live only in the `business-app` project pack. To get those skills back in a project, install the pack from that project:
+Former global business/product skills now live in narrower project packs. `business-app` remains a compatibility alias for all three business packs.
 
 ```bash
-scripts/pack.sh install business-app
+scripts/pack.sh install business-discovery
+scripts/pack.sh install business-growth
+scripts/pack.sh install business-ops
 ```
 
-Claude users can also invoke `/pack install business-app`; Codex users can invoke `$pack install business-app`. The pack creates project-local `.claude/skills/*` and `.codex/skills/*` links without adding domain skills back to the global assistant context.
+Creator-media and YouTube work is similarly split between `creator-foundation`, `youtube-ops`, and `remotion`. Fleet/portfolio work moved from global core into `project-fleet`.
 
 ## Validation
 
