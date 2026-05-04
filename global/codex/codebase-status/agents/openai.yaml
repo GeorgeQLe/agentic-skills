@@ -1,0 +1,7 @@
+interface:
+  display_name: "Codebase Status"
+  short_description: "Report repo state, related conversation history, and outstanding work"
+  default_prompt: "Use $codebase-status to inspect the current repo, related local Claude/Codex prompt history, task docs, git state, and outstanding work, then recommend the next command."
+
+policy:
+  allow_implicit_invocation: true

@@ -2,13 +2,13 @@
 
 > Generated from: tasks/roadmap.md (existing), specs/board-flag-kanban-search.md, tasks/ideas.md, tasks/history.md
 > Date: 2026-03-27 (last updated 2026-05-04)
-> Total Phases: 24 (22 complete, 2 planned future)
+> Total Phases: 25 (23 complete, 2 planned future)
 
 ## Summary
 
 Phases 1-11 complete: kanban skill suite, board intelligence, templates, archive automation, expert review fixes, test hardening (83 tests), kanban DX, skill infrastructure, the shared Poketo headless API migration for both Claude and Codex, and the three-mode operating model (`claude-only` / `codex-only` / `hybrid`) with shared approval-packet contract and next-step routing.
 
-Phases 12-13 and 15-21 complete, with Phase 14 still available as planned future creator-media work. Phase 16 hardened mutation-capable skill contracts with final next-step routing language and an audit that catches future omissions. Phase 17 added mixed-monorepo pack routing so one repository can carry devtool, business-app, game, or other domain scopes without forcing one global designation. Phase 18 hardened pack lock recovery after a `pitwall-monorepo` refresh timeout. Phase 19 added a YouTube description and metadata optimization lane to the creator-media pack. Phase 20 added external YouTube video research lanes for comprehension, format/Remotion-style analysis, and competitive learning. Phase 21 hardened default mutation/shipping quality gates from the session workflow audit. Phase 22 adds feature-interview as the triage step between brainstorm ideas and full specifications. Phase 23 adds targeted-skill-builder for focused skill creation or updates from concrete workflow gaps without defaulting to broad session-history analysis. Phase 24 adds install-agentic-skills for refreshing global skill links and routing pack access through the existing project-local workflow.
+Phases 12-13 and 15-21 complete, with Phase 14 still available as planned future creator-media work. Phase 16 hardened mutation-capable skill contracts with final next-step routing language and an audit that catches future omissions. Phase 17 added mixed-monorepo pack routing so one repository can carry devtool, business-app, game, or other domain scopes without forcing one global designation. Phase 18 hardened pack lock recovery after a `pitwall-monorepo` refresh timeout. Phase 19 added a YouTube description and metadata optimization lane to the creator-media pack. Phase 20 added external YouTube video research lanes for comprehension, format/Remotion-style analysis, and competitive learning. Phase 21 hardened default mutation/shipping quality gates from the session workflow audit. Phase 22 adds feature-interview as the triage step between brainstorm ideas and full specifications. Phase 23 adds targeted-skill-builder for focused skill creation or updates from concrete workflow gaps without defaulting to broad session-history analysis. Phase 24 adds install-agentic-skills for refreshing global skill links and routing pack access through the existing project-local workflow. Phase 25 adds codebase-status for read-only repo status reports that combine codebase, task docs, git state, and related local conversation history.
 
 ## Current Analysis: Mobile Ideas Return Assessment
 
@@ -51,8 +51,34 @@ Phases 12-13 and 15-21 complete, with Phase 14 still available as planned future
 | 22 | Feature Interview Routing ✓ | user request, session history | Feature triage skill plus brainstorm/roadmap routing into specs or roadmap | S |
 | 23 | Targeted Skill Builder ✓ | user request, tasks/lessons.md | Focused skill creation/update workflow for concrete correction patterns and capability gaps | S |
 | 24 | Installer Skill ✓ | user request | Mirrored global installer skill with root install launcher and pack access guidance | S |
+| 25 | Codebase Status ✓ | user request, session history | Read-only repo status reports with related conversation-history evidence | S |
 
 ---
+
+## Phase 25: Codebase Status ✓
+
+**Goal:** Add a read-only status skill for "what is this repo/app, where did we leave it, and what work is outstanding?" requests.
+
+**Source:** User request to create a skill that explores a codebase, finds conversation history related to the directory/repo, and reports application status and outstanding work; full-history scan found 181 authored roadmap mentions and 111 roadmap/repo status-audit prompts after filtering injected skill/instruction payloads.
+
+**Scope:**
+- Add mirrored Claude/Codex `codebase-status` skills.
+- Add Codex OpenAI agent metadata.
+- Distinguish `codebase-status` from `roadmap`: status synthesis and conversation-history evidence versus task pipeline queue maintenance.
+- Update discovery docs and skill catalog mappings.
+
+**Acceptance Criteria:**
+- [x] `global/codex/codebase-status/SKILL.md` and `global/claude/codebase-status/SKILL.md` exist with versioned frontmatter.
+- [x] Codex has `global/codex/codebase-status/agents/openai.yaml`.
+- [x] Skill workflow reads repo orientation, task docs, git evidence, code health signals, and full local Claude/Codex prompt history filtered to the target repo.
+- [x] Output requires overview, history signal, recent work, current status, outstanding work, risks/drift, and a concrete next command.
+- [x] Discovery docs include `codebase-status`.
+- [x] Validation passes with dependency/version/routing audits, targeted text scans, install refresh, and `git diff --check`.
+
+**Completed:** 2026-05-04. Added mirrored Claude/Codex `codebase-status` skills, Codex OpenAI metadata, discovery references, and read-only status-reporting guidance. Evidence came from full authored Claude/Codex history filtering, which showed repeated status/outstanding-work prompts distinct from roadmap queue maintenance. Validation passed with install refresh, dependency/version/routing audits, targeted behavior scans, and `git diff --check`.
+
+**Parallelization:** serial
+**Coordination Notes:** Keep serial because this touches global skill discovery and mirrored skill definitions.
 
 ## Phase 24: Installer Skill ✓
 
