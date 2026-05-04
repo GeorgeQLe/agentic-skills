@@ -2,13 +2,13 @@
 
 > Generated from: tasks/roadmap.md (existing), specs/board-flag-kanban-search.md, tasks/ideas.md, tasks/history.md
 > Date: 2026-03-27 (last updated 2026-05-04)
-> Total Phases: 25 (23 complete, 2 planned future)
+> Total Phases: 25 (24 complete, 1 planned future)
 
 ## Summary
 
 Phases 1-11 complete: kanban skill suite, board intelligence, templates, archive automation, expert review fixes, test hardening (83 tests), kanban DX, skill infrastructure, the shared Poketo headless API migration for both Claude and Codex, and the three-mode operating model (`claude-only` / `codex-only` / `hybrid`) with shared approval-packet contract and next-step routing.
 
-Phases 12-13 and 15-21 complete, with Phase 14 still available as planned future creator-media work. Phase 16 hardened mutation-capable skill contracts with final next-step routing language and an audit that catches future omissions. Phase 17 added mixed-monorepo pack routing so one repository can carry devtool, business-app, game, or other domain scopes without forcing one global designation. Phase 18 hardened pack lock recovery after a `pitwall-monorepo` refresh timeout. Phase 19 added a YouTube description and metadata optimization lane to the creator-media pack. Phase 20 added external YouTube video research lanes for comprehension, format/Remotion-style analysis, and competitive learning. Phase 21 hardened default mutation/shipping quality gates from the session workflow audit. Phase 22 adds feature-interview as the triage step between brainstorm ideas and full specifications. Phase 23 adds targeted-skill-builder for focused skill creation or updates from concrete workflow gaps without defaulting to broad session-history analysis. Phase 24 adds install-agentic-skills for refreshing global skill links and routing pack access through the existing project-local workflow. Phase 25 adds codebase-status for read-only repo status reports that combine codebase, task docs, git state, and related local conversation history.
+Phases 12-13 and 15-25 complete, with Phase 14 still available as planned future creator-media work. Phase 16 hardened mutation-capable skill contracts with final next-step routing language and an audit that catches future omissions. Phase 17 added mixed-monorepo pack routing so one repository can carry devtool, business-app, game, or other domain scopes without forcing one global designation. Phase 18 hardened pack lock recovery after a `pitwall-monorepo` refresh timeout. Phase 19 added a YouTube description and metadata optimization lane to the creator-media pack. Phase 20 added external YouTube video research lanes for comprehension, format/Remotion-style analysis, and competitive learning. Phase 21 hardened default mutation/shipping quality gates from the session workflow audit. Phase 22 added feature-interview as the triage step between brainstorm ideas and full specifications. Phase 23 added targeted-skill-builder for focused skill creation or updates from concrete workflow gaps without defaulting to broad session-history analysis. Phase 24 added install-agentic-skills for refreshing global skill links and routing pack access through the existing project-local workflow. Phase 25 added codebase-status for read-only repo status reports that combine codebase, task docs, git state, and related local conversation history.
 
 ## Current Analysis: Mobile Ideas Return Assessment
 
@@ -249,20 +249,20 @@ Phases 12-13 and 15-21 complete, with Phase 14 still available as planned future
 
 ### Milestone: Quality Gate Hardening
 **Acceptance Criteria:**
-- [ ] A reusable quality-gate contract exists and is referenced by the global mutation/shipping skills.
-- [ ] `$run`, `$ship`, `$ship-end`, and `$commit-and-push-by-feature` require a ship manifest for non-trivial source changes.
-- [ ] The ship manifest requires changed files, per-file purpose, user-goal mapping, tests run, skipped tests, residual risk, and next command.
-- [ ] Non-trivial source changes require targeted `quality-sweep audit`, `expert-review`, or an explicitly justified equivalent adversarial review before commit/push.
-- [ ] A validation script detects missing required ship-manifest fields and passes on a complete fixture.
-- [ ] User-correction handling requires updating `tasks/lessons.md` and, when applicable, the relevant skill or validation check.
-- [ ] Validation passes with targeted contract scans, script fixture checks, skill dependency/version/routing audits, and `git diff --check`.
-- [ ] All phase tests pass.
-- [ ] No regressions in previous phase tests.
+- [x] A reusable quality-gate contract exists and is referenced by the global mutation/shipping skills.
+- [x] `$run`, `$ship`, `$ship-end`, and `$commit-and-push-by-feature` require a ship manifest for non-trivial source changes.
+- [x] The ship manifest requires changed files, per-file purpose, user-goal mapping, tests run, skipped tests, residual risk, and next command.
+- [x] Non-trivial source changes require targeted `quality-sweep audit`, `expert-review`, or an explicitly justified equivalent adversarial review before commit/push.
+- [x] A validation script detects missing required ship-manifest fields and passes on a complete fixture.
+- [x] User-correction handling requires updating `tasks/lessons.md` and, when applicable, the relevant skill or validation check.
+- [x] Validation passes with targeted contract scans, script fixture checks, skill dependency/version/routing audits, and `git diff --check`.
+- [x] All phase tests pass.
+- [x] No regressions in previous phase tests.
 
 **On Completion:**
-- Deviations from plan: [fill when complete]
-- Tech debt / follow-ups: [fill when complete]
-- Ready for next phase: [fill when complete]
+- Deviations from plan: none recorded.
+- Tech debt / follow-ups: none recorded.
+- Ready for next phase: yes.
 
 ---
 
