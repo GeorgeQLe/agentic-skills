@@ -1,0 +1,7 @@
+interface:
+  display_name: "Mono Ship"
+  short_description: "Run package-scoped and transitive-dependent validation before shipping"
+  default_prompt: "Use $mono-ship to run monorepo-aware package validation before delegating to $ship."
+
+policy:
+  allow_implicit_invocation: true

@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-05-04 — Phase 26 Step 26.7: mono-ship skill contracts
+
+- Added mirrored Claude/Codex `mono-ship` skill contracts and Codex OpenAI metadata for the monorepo pack.
+- Documented the pre-ship augmentation flow: `mono-detect`, `.agents/lane-specs.json`, `.agents/monorepo.json`, modified package detection, package-scoped test/lint/build, and transitive-dependent validation from `dependency_graph`.
+- Documented Turbo-first validation, `pnpm --filter` fallback behavior, validation-failure stop semantics, standard ship delegation, post-ship lane-spec mirror status updates, and next-step routing.
+- Fixed an output-path conflict found by the test harness by keeping `mono-ship`'s post-ship status behavior while avoiding independent ownership of the `mono-run` lane-spec output path.
+- Verified the contracts with targeted scans, Claude/Codex parity diff, skill dependency/version/routing audits, `pnpm --dir tests test`, and `git diff --check`.
+- Recorded the Step 26.7 quality-gate manifest in `tasks/todo.md`.
+
 ## 2026-05-04 — Phase 26 Step 26.6: mono-run skill contracts
 
 - Added mirrored Claude/Codex `mono-run` skill contracts and Codex OpenAI metadata for the monorepo pack.
