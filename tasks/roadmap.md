@@ -1,14 +1,27 @@
 # Roadmap: Claude Skills
 
 > Generated from: tasks/roadmap.md (existing), specs/board-flag-kanban-search.md, tasks/ideas.md, tasks/history.md
-> Date: 2026-03-27 (last updated 2026-05-03)
-> Total Phases: 19 (18 complete, 1 active)
+> Date: 2026-03-27 (last updated 2026-05-04)
+> Total Phases: 20 (20 complete, 0 active)
 
 ## Summary
 
 Phases 1-11 complete: kanban skill suite, board intelligence, templates, archive automation, expert review fixes, test hardening (83 tests), kanban DX, skill infrastructure, the shared Poketo headless API migration for both Claude and Codex, and the three-mode operating model (`claude-only` / `codex-only` / `hybrid`) with shared approval-packet contract and next-step routing.
 
-Phases 12-13 and 15-18 complete, with Phase 14 still available as planned future creator-media work. Phase 16 hardened mutation-capable skill contracts with final next-step routing language and an audit that catches future omissions. Phase 17 added mixed-monorepo pack routing so one repository can carry devtool, business-app, game, or other domain scopes without forcing one global designation. Phase 18 hardened pack lock recovery after a `pitwall-monorepo` refresh timeout.
+Phases 12-13 and 15-20 complete, with Phase 14 still available as planned future creator-media work. Phase 16 hardened mutation-capable skill contracts with final next-step routing language and an audit that catches future omissions. Phase 17 added mixed-monorepo pack routing so one repository can carry devtool, business-app, game, or other domain scopes without forcing one global designation. Phase 18 hardened pack lock recovery after a `pitwall-monorepo` refresh timeout. Phase 19 added a YouTube description and metadata optimization lane to the creator-media pack. Phase 20 added external YouTube video research lanes for comprehension, format/Remotion-style analysis, and competitive learning.
+
+## Current Analysis: Mobile Ideas Return Assessment
+
+**Goal:** Evaluate the local Claude/Codex effort spent in `/Users/georgele/projects/mobile/dev/mobile-ideas`, estimate return from generated artifacts and project progress, and identify workflow changes that would improve future ROI.
+
+**Acceptance Criteria:**
+- [x] Full available Claude/Codex history is parsed for `mobile-ideas` activity.
+- [x] Repository artifacts, commits, and planning outputs are inventoried.
+- [x] Repeated prompts and multi-step workflow patterns are grouped with counts and examples.
+- [x] Recommendations distinguish skills, agents, plugins/integrations, and standing instructions.
+- [x] Final report includes highest-impact automations and a concrete next route.
+
+**Result:** See `tasks/mobile-ideas-return-assessment.md`. Recommended next skill: `$project-fleet --plan`.
 
 ## Phase Overview
 
@@ -32,9 +45,34 @@ Phases 12-13 and 15-18 complete, with Phase 14 still available as planned future
 | 16 | Mutation Contract Routing Audit ✓ | user request, tasks/lessons.md | Mutation-capable skills emit next-step routes; audit catches gaps | S |
 | 17 | Mixed Monorepo Pack Routing ✓ | user request | `.agents/project.json.project_scopes` schema + pack writer preservation | S |
 | 18 | Pack Lock Stale Recovery ✓ | user report | Lock owner metadata and stale-lock cleanup for pack writes | S |
-| 19 | YouTube Description Optimizer | user request | Existing-video description audits, future upload drafts, and reusable metadata templates | S |
+| 19 | YouTube Description Optimizer ✓ | user request | Existing-video description audits, future upload drafts, and reusable metadata templates | S |
+| 20 | YouTube External Video Research Skills ✓ | user request | External video context, format/Remotion-style, and competitive research skills | S |
 
 ---
+
+## Phase 20: YouTube External Video Research Skills
+
+**Goal:** Add focused external YouTube video research skills for context comprehension, format/Remotion-style analysis, and competitive performance learning.
+
+**Scope:**
+- Add mirrored Claude/Codex `youtube-vid-research`, `youtube-format-research`, and `youtube-competitive-research` skills to the creator-media pack.
+- Reuse the existing YouTube public-evidence contract: `yt-dlp`, local transcript venv, raw evidence under `research/youtube/data/`, explicit evidence gaps, and no fabricated transcripts/comments/metrics/visual claims.
+- Wire creator-media docs and next-skill routing so external reference-video work sits between single-video audit and packaging/strategy work.
+- Keep Remotion implementation owned by `video-build`; `youtube-format-research` only emits a format and Remotion handoff spec.
+
+**Acceptance Criteria:**
+- [x] Mirrored Claude/Codex `youtube-vid-research` skill contracts exist.
+- [x] Mirrored Claude/Codex `youtube-format-research` skill contracts exist.
+- [x] Mirrored Claude/Codex `youtube-competitive-research` skill contracts exist.
+- [x] The three skills require persisted evidence, explicit evidence coverage, anti-fabrication constraints, output paths, archive-first replacement, and next-skill routing.
+- [x] Creator-media docs/reference lists include the three new skills in discovery and default flow.
+- [x] Existing creator-media routing orders include the three new external-video research lanes.
+- [x] Validation passes with mirrored-contract scans, docs/routing scans, dependency/version/routing audits, and `git diff --check`.
+
+**Parallelization:** serial
+**Coordination Notes:** Keep serial because this touches mirrored creator-media skills, shared pack docs, and routing lists. Do not add dependencies or GitHub Actions.
+
+**Completed:** 2026-05-04. Mirrored Claude/Codex `youtube-vid-research`, `youtube-format-research`, and `youtube-competitive-research` skills were added to the creator-media pack, documentation references now expose external video context, format/Remotion-style analysis, and competitive lessons, and validation passed with mirrored contract scans, docs/routing scans, dependency/version/routing audits, and `git diff --check`.
 
 ## Phase 19: YouTube Description Optimizer
 

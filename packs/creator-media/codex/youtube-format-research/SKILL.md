@@ -1,0 +1,129 @@
+---
+name: youtube-format-research
+description: Break down a YouTube video's format, visual system, pacing, editing grammar, motion, audio, and Remotion-ready production patterns
+type: research
+version: 1.0.0
+argument-hint: "<video URL or ID> [--target remotion|script|style-guide] [--compare <video URL or ID...>]"
+---
+
+# YouTube Format Research
+
+Invoke as `$youtube-format-research`.
+
+Analyze how a reference YouTube video is constructed so its format, design language, pacing, and production grammar can be adapted. This is the production-pattern lane; use `$youtube-vid-research` for general comprehension, `$youtube-competitive-research` for performance lessons, and `$video-build` when an approved script is ready for Remotion implementation.
+
+## Inputs
+
+- Required: one YouTube video URL or video ID.
+- Optional `--target remotion|script|style-guide`: default `remotion`.
+- Optional `--compare <video URL or ID...>`: additional references to distinguish repeatable format rules from one-off choices.
+
+## Workflow
+
+1. Resolve all video targets into video IDs from watch URLs, Shorts URLs, youtu.be URLs, embed URLs, or raw 11-character IDs.
+2. Require `yt-dlp` for public metadata:
+
+   ```bash
+   command -v yt-dlp
+   ```
+
+3. Select a transcript Python interpreter. Prefer a workspace-local `.venv`; create it if missing. Install `youtube-transcript-api` into `.venv` only when the import check fails and network access is available.
+4. Persist raw evidence under `research/youtube/data/<video-id>/`:
+   - `metadata-YYYY-MM-DD.json`: raw `yt-dlp --dump-json "VIDEO_URL"` output.
+   - `transcript/<video-id>.json`: raw transcript JSON when available.
+   - `transcript/transcript-summary.json`: transcript text or failure reason.
+5. Inspect available metadata, transcript, chapters, thumbnail URLs, description, and any user-provided screenshots or notes. If visual details cannot be verified from available evidence, mark them as gaps instead of guessing.
+6. Analyze:
+   - Scene grammar: opener, recurring segments, transitions, title cards, examples, proof moments, CTA, outro.
+   - Timing and pacing: section durations, speaking density, cut rhythm, beats, visual resets, and retention support.
+   - Visual system: typography, color, layout, framing, captions, lower thirds, callouts, charts, browser frames, code blocks, or product shots.
+   - Motion language: camera moves, zooms, wipes, kinetic text, object movement, reveal timing, and transition rules.
+   - Audio language: music bed, silence, sound effects, emphasis beats, voiceover style, and mix notes when evidence supports them.
+   - Production assets: required footage, screenshots, diagrams, logos, fonts, icons, stock, B-roll, music, SFX, and licensing checks.
+7. Translate the reference into reusable format rules without copying copyrighted assets or pretending the exact source project is available.
+
+## Output
+
+Write:
+
+```text
+research/youtube/format-research-<video-id>-YYYY-MM-DD.md
+```
+
+Use this structure:
+
+```markdown
+# YouTube Format Research - [Title]
+
+> Video: [URL]
+> Target: remotion / script / style-guide
+> Date captured: YYYY-MM-DD
+> Evidence: [raw paths used]
+
+## Evidence Coverage
+
+| Evidence | Status | Path or gap |
+|---|---|---|
+| Public metadata | Available / Missing | ... |
+| Transcript | Available / Missing | ... |
+| Chapters | Available / Missing | ... |
+| Visual references | Available / Missing | ... |
+| Audio references | Available / Missing | ... |
+
+## Format Summary
+
+[The repeatable format in one concise brief.]
+
+## Scene And Timing Map
+
+| Segment | Approx time | Purpose | Visual treatment | Audio / motion notes |
+|---|---:|---|---|---|
+| ... | ... | ... | ... | ... |
+
+## Visual And Motion System
+
+- **Typography**: ...
+- **Color and layout**: ...
+- **Captions / callouts**: ...
+- **Transitions**: ...
+- **Recurring components**: ...
+
+## Production Grammar
+
+[Rules for pacing, proof, examples, visual resets, CTA placement, and when to change scenes.]
+
+## Remotion Handoff
+
+| Component / asset | Role | Inputs | Notes |
+|---|---|---|---|
+| ... | ... | ... | ... |
+
+## Adaptation Guidance
+
+[What to copy as a pattern, what to avoid copying directly, and what to change for the user's brand or series.]
+
+## Evidence Gaps And Human Checks
+
+[Missing screenshots, unavailable fonts, uncertain audio details, licensing checks, or manual review needs.]
+```
+
+## Constraints
+
+- Do not copy or embed copyrighted assets, music, fonts, footage, or thumbnails unless the user confirms licensing.
+- Do not invent visual details that are not evident from metadata, transcript, screenshots, or user-provided notes.
+- Distinguish repeatable format rules from one-off creative choices.
+- Keep Remotion handoff at the component/spec level; actual scaffold and render planning belongs to `$video-build`.
+- Do not bypass login walls, bot protections, access controls, or private YouTube Studio data.
+- Archive existing canonical artifacts before replacing them under `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-relative-path>`.
+
+## Next-Skill Routing
+
+After writing the artifact, recommend the next contextual creator-media skill in the final response as `Recommended next skill: <command>`.
+
+Default recommendation: `$video-build` when the user has an approved script and wants a Remotion implementation next; `$video-script` when the format needs to be adapted into a new script first; `$series-spec` when the output should become a reusable show format.
+
+If the default successor already exists and is current, recommend the first missing or stale downstream creator-media artifact in this order:
+
+`$youtube-channel-audit` -> `$youtube-video-audit` -> `$youtube-vid-research` -> `$youtube-format-research` -> `$youtube-competitive-research` -> `$youtube-title-thumbnail-audit` -> `$youtube-description-optimizer` -> `$youtube-portfolio` -> `$youtube-peer-benchmark` -> `$youtube-search-positioning` -> `$youtube-cadence-diagnosis` -> `$creator-positioning` -> `$content-programming` -> `$series-spec` -> `$product-led-media-map` -> `$video-script` -> `$video-build` -> `$creator-metrics-review`
+
+If the sequence is ambiguous, recommend `$series-spec` for reusable formats or `$video-script` for one-off production and explain the missing artifact.
