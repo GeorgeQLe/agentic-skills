@@ -22,7 +22,7 @@ Phase 26 creates a new `monorepo` pack using an augmentation injection pattern â
 
 ### Implementation
 
-- Step 26.1: Create the monorepo pack structure and PACK.md.
+- [x] Step 26.1: Create the monorepo pack structure and PACK.md.
   - Classification: automated
   - Files: create `packs/monorepo/PACK.md`
   - Define the pack: name, description, skill list (mono-detect, mono-run, mono-ship, mono-guard), install instructions, and the augmentation injection pattern explanation.
@@ -154,3 +154,19 @@ Phase 26 creates a new `monorepo` pack using an augmentation injection pattern â
 - Planning created from `tasks/roadmap.md` Phase 26 and `specs/monorepo-execution-controller.md`.
 - No manual tasks identified; this phase is repo-edit, script, and local-validation work only.
 - No record or recurring tasks identified.
+
+### Step 26.1 Review - Monorepo Pack Structure
+
+**Result:** Created `packs/monorepo/PACK.md` as the monorepo pack contract.
+
+**Ship manifest:**
+- User goal: Execute the next `$run` unit from the active Phase 26 plan.
+- Changed files: `packs/monorepo/PACK.md`, `tasks/todo.md`, `tasks/history.md`.
+- Per-file purpose: `PACK.md` defines the new pack, skill inventory, augmentation injection pattern, pnpm/Turbo scope, package-scope tags, V1/V2 boundary, and relationship to global monorepo skills; `tasks/todo.md` records Step 26.1 completion and review evidence; `tasks/history.md` records the shipped project history.
+- User-goal mapping: Step 26.1 explicitly requires creating the monorepo pack structure and `PACK.md`; task and history updates satisfy the `$run` shipping contract.
+- Tests run: `rg -n "augmentation injection pattern|pnpm-workspace.yaml|turbo.json|package-scope|V1|V2|mono-detect|mono-run|mono-ship|mono-guard|global /mono-plan|global /mono-guard" packs/monorepo/PACK.md` passed; `git diff --check` passed.
+- Skipped tests: executable monorepo scripts and pack fixtures do not exist until later Phase 26 steps, so script-based validation is not applicable to Step 26.1.
+- Adversarial review: changed-file self-review plus targeted contract scans found one gap: concrete install commands were missing from `PACK.md`; fixed before commit.
+- Residual risk: the pack is not discoverable from global docs until planned Step 26.8, so users must know the pack path or install name before that docs registration step.
+- Rollback note: revert the Step 26.1 commit to remove the new pack contract and task/history records.
+- Next command: `$run`.

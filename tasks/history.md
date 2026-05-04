@@ -1387,6 +1387,12 @@ Resolved all 10 findings from `/expert-review`:
 - Defined the required output path `research/creator-presence/<slug>.md`, Phase 12 foundation reads, normalized/raw evidence citation requirements, public/professional evidence boundaries, supported source families, and final-response next-skill routing.
 - Verified the new skill contracts with targeted `rg` scans, `./scripts/skill-versions.sh --missing`, `./scripts/skill-deps.sh --broken`, and `git diff --check`.
 
+## 2026-05-04 - Phase 26 Step 26.1: monorepo pack contract
+
+- Added `packs/monorepo/PACK.md` to define the monorepo pack, V1 skill inventory, augmentation injection pattern, pnpm workspace + Turborepo target, package-scope tags, V1/V2 boundary, and relationship to existing global monorepo skills.
+- Marked Step 26.1 complete in `tasks/todo.md` and recorded the quality-gate manifest for the documentation/workflow contract change.
+- Verified with targeted contract scans and `git diff --check`.
+
 ## 2026-05-02 — Phase 13 Step 13.2: creator presence dossier Markdown contract
 
 - Expanded mirrored `creator-presence-dossier` skills with a section-by-section Markdown dossier contract.
