@@ -52,7 +52,7 @@
   - Files: create `docs/quality-gate-contract.md`
   - Define non-trivial mutation, ship manifest fields, skipped-test rationale, residual-risk language, adversarial review expectations, and direct-to-primary compatibility.
   - Include the recommended policy from `tasks/session-workflow-quality-audit.md`: Plan, Implement, Self-review, Quality sweep, Verification, Ship manifest.
-- [ ] Step 21.2: Add ship-manifest validation script and fixtures.
+- [x] Step 21.2: Add ship-manifest validation script and fixtures.
   - Classification: automated
   - Files: create `scripts/ship-quality-gate.sh`, create `tests/fixtures/ship-quality-gate/complete.md`, create `tests/fixtures/ship-quality-gate/missing-fields.md`
   - Script should fail on missing required fields and pass on a complete manifest fixture.
@@ -114,4 +114,9 @@
 - Validation:
   - `rg -n "non-trivial|Ship Manifest|Skipped-Test|Residual-Risk|Adversarial Review|Direct-To-Primary|Plan:|Implement:|Self-review:|Quality sweep:|Verification:|User Corrections" docs/quality-gate-contract.md` - passed; confirmed the Step 21.1 required topics are present.
   - `git diff --check` - passed; no whitespace errors.
-- Next implementation step: Step 21.2.
+- Step 21.2 complete: added `scripts/ship-quality-gate.sh` and the complete/missing-fields fixtures under `tests/fixtures/ship-quality-gate/`.
+- Validation:
+  - `scripts/ship-quality-gate.sh tests/fixtures/ship-quality-gate/complete.md` - passed; complete manifest fixture includes all required fields.
+  - `scripts/ship-quality-gate.sh tests/fixtures/ship-quality-gate/missing-fields.md` - failed as expected with missing `Per-file purpose`, `User-goal mapping`, `Skipped tests`, `Adversarial review`, `Residual risk`, and `Rollback note`.
+  - `git diff --check` - passed; no whitespace errors.
+- Next implementation step: Step 21.3.
