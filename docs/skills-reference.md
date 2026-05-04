@@ -220,6 +220,43 @@ Default flow:
 quality-sweep audit -> extract-shared-types / quality-sweep fix -> regression-check
 ```
 
+## Monorepo Pack
+
+Install in pnpm workspace monorepos that may use Turborepo and need package-aware planning, guarded execution, and scoped shipping:
+
+```bash
+scripts/pack.sh install monorepo
+```
+
+Skills:
+
+```text
+mono-detect, mono-run, mono-guard, mono-ship
+```
+
+Default flow:
+
+```text
+mono-detect -> mono-run -> mono-guard -> mono-ship
+```
+
+`mono-detect` writes `.agents/monorepo.json` with workspace packages, package paths, dependency graph, script inventory, and Turborepo awareness. `mono-run` augments standard `run` with lane-spec generation, `mono-guard` pre-flight checks, serial cross-cutting work, and package-scoped dispatch. `mono-guard` validates lane specs before dispatch and audits integrated diffs against declared boundaries. `mono-ship` augments standard `ship` with package-scoped test/lint/build and transitive-dependent validation before delegating to normal shipping.
+
+The pack uses an augmentation injection pattern rather than a duplication pattern. The global `run` and `ship` skills remain the source of truth for task selection, validation policy, history updates, commit/push, deploy handling, and final next-step routing. By contrast, `*-kanban` packs provide explicit workflow variants such as `run-kanban`, `ship-kanban`, and `ship-end-kanban`.
+
+Lane dispatch uses `.agents/lane-specs.json` as the machine-readable artifact and `tasks/lane-specs.md` as the committed Markdown mirror. Lifecycle values are `draft`, `approved`, `dispatched`, `integrated`, and `failed`; package lanes declare `packages`, `owns`, `must_not_edit`, `depends_on`, and `mode`.
+
+Specs and roadmap phases may declare package scope with YAML frontmatter:
+
+```yaml
+---
+packages: [api, web]
+scope: cross-cutting
+---
+```
+
+Use `scope: package-scoped` for work contained to declared packages, `scope: cross-cutting` for shared packages or multiple package boundaries, and `scope: root-only` for root config, scripts, docs, or repository-level policy.
+
 ## Creator Media Pack
 
 Install in YouTube, founder-media, creator-portfolio, and product-led media projects:

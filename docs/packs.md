@@ -60,6 +60,7 @@ scripts/pack.sh install game
 scripts/pack.sh install business-app
 scripts/pack.sh install devtool
 scripts/pack.sh install code-quality
+scripts/pack.sh install monorepo
 scripts/pack.sh install game-kanban
 scripts/pack.sh remove game
 scripts/pack.sh refresh
@@ -92,6 +93,7 @@ The skill source stays centralized in this repository. Projects opt into packs w
 - Use `code-quality` as an additive pack for behavior-preserving refactors, type hygiene, import honesty, dependency-boundary cleanup, and module organization.
 - Use `game` for video games, prototypes, playable entertainment, and store-page/wishlist validation.
 - Use `devtool` for SDKs, CLIs, APIs, libraries, infrastructure products, and developer-facing platforms.
+- Use `monorepo` for pnpm workspace monorepos, with optional Turborepo, that need package-aware lane specs, guardrails, and scoped shipping.
 - Use `business-app-kanban`, `game-kanban`, or `devtool-kanban` only when the project intentionally uses PoketoWork boards.
 
 Kanban packs are never installed automatically by the base domain packs. Install the base domain pack and the matching kanban variant as separate, explicit choices:
@@ -102,6 +104,49 @@ scripts/pack.sh install business-app-kanban
 ```
 
 The generic `poketowork-kanban` pack contains direct board-management utilities, including `poketo-kanban` and `sync-roadmap-kanban`.
+
+## Monorepo Pack
+
+The `monorepo` pack is an execution overlay for pnpm workspace repositories. It targets repositories with `pnpm-workspace.yaml` and optionally `turbo.json`.
+
+```bash
+scripts/pack.sh install monorepo
+```
+
+Skills:
+
+```text
+mono-detect, mono-run, mono-guard, mono-ship
+```
+
+The pack uses an augmentation injection pattern. Its skills add pre/post behavior around the global `run` and `ship` contracts instead of replacing them:
+
+- `mono-detect` writes `.agents/monorepo.json` with workspace packages, package paths, package scripts, dependency graph, and Turborepo awareness.
+- `mono-run` injects monorepo detection, lane-spec generation, guard pre-flight checks, serial cross-cutting work, and package-scoped dispatch around standard `run`.
+- `mono-guard` validates lane specs before dispatch and checks integrated diffs against declared ownership after dispatch.
+- `mono-ship` injects package-scoped test/lint/build and transitive-dependent validation before delegating to standard `ship`.
+
+This differs from the `*-kanban` duplication pattern. Kanban packs intentionally provide alternate command variants such as `run-kanban`, `ship-kanban`, and `ship-end-kanban`; the monorepo pack keeps the global lifecycle skills authoritative and makes them workspace-aware through pre/post steps.
+
+Lane dispatch uses two artifacts:
+
+```text
+.agents/lane-specs.json
+tasks/lane-specs.md
+```
+
+`.agents/lane-specs.json` is the machine-readable lane plan. `tasks/lane-specs.md` is the committed human-readable mirror. Lane lifecycle values are `draft`, `approved`, `dispatched`, `integrated`, and `failed`; package lanes declare `packages`, `owns`, `must_not_edit`, `depends_on`, and `mode`.
+
+Specs and roadmap phases may declare package scope with YAML frontmatter:
+
+```yaml
+---
+packages: [api, web]
+scope: cross-cutting
+---
+```
+
+Use `scope: package-scoped` when work is contained to declared package paths, `scope: cross-cutting` when work touches shared packages or multiple package boundaries, and `scope: root-only` for root config, scripts, docs, or repository policy. If `scope` is omitted, agents infer `package-scoped` for one package and `cross-cutting` for multiple packages.
 
 ## Compatibility
 
