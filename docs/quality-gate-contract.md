@@ -82,7 +82,16 @@ The review is not complete until findings are either fixed or explicitly accepte
 
 ## User Corrections
 
-When the user corrects the agent, update `tasks/lessons.md` with the repeatable pattern. If the correction exposes a workflow failure that can recur, also update the relevant skill contract, validation script, fixture, or test. If no skill or validation update applies, state the "not applicable" rationale in the manifest or final response.
+When the user corrects the agent, update `tasks/lessons.md` with the repeatable pattern before shipping any related work. The lesson must name the behavior to avoid, the preferred replacement behavior, and the trigger that should make future agents apply it.
+
+User corrections are presumed repeatable until the ship manifest proves otherwise. A correction follow-up must not be committed or pushed unless the exact shipping boundary includes:
+
+- A `tasks/lessons.md` update for the current correction.
+- Either a relevant skill contract, validation script, fixture, or test enforcement update; or an explicit **Correction enforcement:** manifest entry explaining why no repository enforcement update applies.
+
+Treat repeated mistakes in planning, blocker routing, verification, commit/push behavior, deployment handling, or next-step routing as workflow failures unless the manifest proves otherwise. If an enforcement update would apply but cannot be shipped in the same boundary, stop unless the manifest includes **Correction enforcement:** with the blocker, why it cannot be encoded now, and the concrete follow-up file or command that will close it.
+
+If claiming the correction is already covered by an existing rule, cite the exact file and rule, script, fixture, or test, and explain why it would have prevented the corrected behavior. A final-response rationale is acceptable only for non-shipping review or advice work where no commit or push occurs; mutation shipping requires the rationale in the pre-commit ship manifest.
 
 Corrections should not stop at memory. The quality gate should turn repeated mistakes into enforceable workflow changes whenever practical.
 

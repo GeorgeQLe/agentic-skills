@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-05-03 — Harden correction enforcement in quality gate
+
+- Tightened `docs/quality-gate-contract.md` so user corrections are presumed repeatable until the ship manifest proves otherwise.
+- Updated `$run`, `$ship`, `$ship-end`, and `$commit-and-push-by-feature` so correction follow-ups require current-shipping-boundary `tasks/lessons.md` evidence plus an enforcement update or a pre-commit `Correction enforcement:` rationale.
+- Applied review-lane findings that removed weak `when practical` and final-response escape hatches and required exact file/rule/check citations for existing-rule coverage.
+- Validation passed: targeted correction-enforcement `rg` scan and `git diff --check`.
+
 ## 2026-05-03 — Add YouTube description optimizer
 
 - Added mirrored Claude/Codex `youtube-description-optimizer` skills to the creator-media pack for existing-video description audits, future upload drafts, and reusable description templates.
