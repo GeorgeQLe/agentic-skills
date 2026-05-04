@@ -39,7 +39,7 @@ Phase 26 creates a new `monorepo` pack using an augmentation injection pattern â
   - Output `.agents/monorepo.json` with workspace_manager, build_orchestrator, root, packages, dependency_graph, turbo_pipelines, and detected_at.
   - Support staleness check: re-run if workspace config files are newer than `.agents/monorepo.json`.
 
-- [ ] Step 26.3: Create the lane-spec artifact schema and `lane-spec-validate.sh`.
+- [x] Step 26.3: Create the lane-spec artifact schema and `lane-spec-validate.sh`.
   - Classification: automated
   - Files: create `packs/monorepo/scripts/lane-spec-validate.sh`
   - Validate `.agents/lane-specs.json` against required fields: phase, source_roadmap_hash, lifecycle, cross_cutting_steps, lanes (each with id, step, packages, owns, must_not_edit, depends_on, mode).
@@ -185,4 +185,20 @@ Phase 26 creates a new `monorepo` pack using an augmentation injection pattern â
 - **Adversarial review:** changed-file self-review found that package dependency arrays were incorrectly collapsed to internal-only dependencies while the schema needed to preserve package.json dependency keys; fixed by preserving package entries and filtering only `dependency_graph` to internal workspace references. The same review found a stale status-line variable after that fix; fixed and reran checks.
 - **Residual risk:** the pnpm-workspace YAML parser intentionally supports the common `packages:` list shape used by pnpm workspaces but is not a full YAML parser; Step 26.10 fixtures and Step 26.11 pack validation should cover the supported contract before broader use.
 - **Rollback note:** revert the Step 26.2 commit to remove the detection script and task/history records.
+- **Next command:** `$run`.
+
+### Step 26.3 Review - Lane-Spec Validation Script
+
+**Result:** Created `packs/monorepo/scripts/lane-spec-validate.sh` to validate `.agents/lane-specs.json` artifacts.
+
+**Ship manifest:**
+- **User goal:** Execute the next `$run` unit from the active Phase 26 plan.
+- **Changed files:** `packs/monorepo/scripts/lane-spec-validate.sh`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** `lane-spec-validate.sh` implements the Step 26.3 lane-spec validation command, including required schema fields, lifecycle validation, disjoint lane ownership boundaries, required root `must_not_edit` boundaries, and dependency reference checks; `tasks/todo.md` records Step 26.3 completion and validation evidence; `tasks/history.md` records the shipped project history.
+- **User-goal mapping:** Step 26.3 explicitly requires creating the lane-spec artifact schema validator; the script provides the command surface that later `mono-guard`, `mono-run`, and pack validation steps can consume, while task/history updates satisfy the `$run` shipping contract.
+- **Tests run:** `bash -n packs/monorepo/scripts/lane-spec-validate.sh` passed; temporary valid lane-spec fixture passed; temporary overlapping `owns` fixture failed as expected with `owns paths overlap`; temporary missing root boundary fixture failed as expected with `missing required root boundary: turbo.json`; temporary unknown dependency fixture failed as expected with `depends_on references unknown step: 26.99`; temporary invalid lifecycle fixture failed as expected with `invalid lifecycle: reviewed`; temporary duplicate step fixture failed as expected with `duplicate step id: 26.1`; `pnpm --dir tests test` passed with 4 files and 1148 tests; `git diff --check` passed.
+- **Skipped tests:** committed `tests/fixtures/monorepo/*` and `monorepo-validate.sh` are planned for later Phase 26 steps, so this step used temporary local fixtures instead of committing the Step 26.10 fixture set early.
+- **Adversarial review:** changed-file self-review found that duplicate cross-cutting step IDs were not rejected, which could let `depends_on` resolution become ambiguous; fixed by rejecting duplicate step IDs while collecting cross-cutting steps, then reran focused fixtures and regression tests.
+- **Residual risk:** root config coverage is encoded as the v1 shared-boundary set `pnpm-lock.yaml`, `package.json`, `pnpm-workspace.yaml`, and `turbo.json`; projects with additional root config chokepoints will need generated lane specs to include those explicitly until later guard/run steps decide whether to infer project-specific root config files.
+- **Rollback note:** revert the Step 26.3 commit to remove the validator and task/history records.
 - **Next command:** `$run`.

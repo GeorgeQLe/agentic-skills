@@ -1,5 +1,11 @@
 # Session History
 
+## 2026-05-04 — Phase 26 Step 26.3: lane-spec validation script
+
+- Added `packs/monorepo/scripts/lane-spec-validate.sh` to validate lane-spec required fields, lifecycle state, disjoint `owns` boundaries, required root `must_not_edit` entries, dependency references, and duplicate step IDs.
+- Verified the script with temporary valid, overlapping-owns, missing-root-boundary, unknown-dependency, invalid-lifecycle, and duplicate-step fixtures plus `bash -n`, `pnpm --dir tests test`, and `git diff --check`.
+- Recorded the Step 26.3 quality-gate manifest in `tasks/todo.md`.
+
 ## 2026-05-04 — Phase 26 Step 26.2: monorepo detection script
 
 - Added `packs/monorepo/scripts/mono-detect.sh` for pnpm workspace detection, package enumeration, internal dependency graph generation, DAG validation, Turbo pipeline detection, `.agents/monorepo.json` output, and `--check-stale`.
