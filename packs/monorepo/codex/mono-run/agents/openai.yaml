@@ -1,0 +1,7 @@
+interface:
+  display_name: "Mono Run"
+  short_description: "Run monorepo work with lane specs, guard checks, and package-scoped dispatch"
+  default_prompt: "Use $mono-run to add monorepo detection, lane specs, guard validation, and package-scoped dispatch around the standard $run flow."
+
+policy:
+  allow_implicit_invocation: true
