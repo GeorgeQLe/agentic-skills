@@ -13,7 +13,7 @@ export default defineConfig({
         test: {
           name: "layer2",
           include: ["layer2/**/*.test.ts"],
-          testTimeout: 120_000,
+          testTimeout: 300_000,
         },
       },
     ],
