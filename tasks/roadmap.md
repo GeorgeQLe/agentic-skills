@@ -2,13 +2,13 @@
 
 > Generated from: tasks/roadmap.md (existing), specs/board-flag-kanban-search.md, tasks/ideas.md, tasks/history.md
 > Date: 2026-03-27 (last updated 2026-05-04)
-> Total Phases: 22 (20 complete, 2 planned future)
+> Total Phases: 23 (21 complete, 2 planned future)
 
 ## Summary
 
 Phases 1-11 complete: kanban skill suite, board intelligence, templates, archive automation, expert review fixes, test hardening (83 tests), kanban DX, skill infrastructure, the shared Poketo headless API migration for both Claude and Codex, and the three-mode operating model (`claude-only` / `codex-only` / `hybrid`) with shared approval-packet contract and next-step routing.
 
-Phases 12-13 and 15-21 complete, with Phase 14 still available as planned future creator-media work. Phase 16 hardened mutation-capable skill contracts with final next-step routing language and an audit that catches future omissions. Phase 17 added mixed-monorepo pack routing so one repository can carry devtool, business-app, game, or other domain scopes without forcing one global designation. Phase 18 hardened pack lock recovery after a `pitwall-monorepo` refresh timeout. Phase 19 added a YouTube description and metadata optimization lane to the creator-media pack. Phase 20 added external YouTube video research lanes for comprehension, format/Remotion-style analysis, and competitive learning. Phase 21 hardened default mutation/shipping quality gates from the session workflow audit. Phase 22 adds feature-interview as the triage step between brainstorm ideas and full specifications.
+Phases 12-13 and 15-21 complete, with Phase 14 still available as planned future creator-media work. Phase 16 hardened mutation-capable skill contracts with final next-step routing language and an audit that catches future omissions. Phase 17 added mixed-monorepo pack routing so one repository can carry devtool, business-app, game, or other domain scopes without forcing one global designation. Phase 18 hardened pack lock recovery after a `pitwall-monorepo` refresh timeout. Phase 19 added a YouTube description and metadata optimization lane to the creator-media pack. Phase 20 added external YouTube video research lanes for comprehension, format/Remotion-style analysis, and competitive learning. Phase 21 hardened default mutation/shipping quality gates from the session workflow audit. Phase 22 adds feature-interview as the triage step between brainstorm ideas and full specifications. Phase 23 adds targeted-skill-builder for focused skill creation or updates from concrete workflow gaps without defaulting to broad session-history analysis.
 
 ## Current Analysis: Mobile Ideas Return Assessment
 
@@ -49,6 +49,37 @@ Phases 12-13 and 15-21 complete, with Phase 14 still available as planned future
 | 20 | YouTube External Video Research Skills ✓ | user request | External video context, format/Remotion-style, and competitive research skills | S |
 | 21 | Quality Gate Hardening ✓ | tasks/session-workflow-quality-audit.md | Default anti-slop ship manifest, adversarial review, and validation script | M |
 | 22 | Feature Interview Routing ✓ | user request, session history | Feature triage skill plus brainstorm/roadmap routing into specs or roadmap | S |
+| 23 | Targeted Skill Builder ✓ | user request, tasks/lessons.md | Focused skill creation/update workflow for concrete correction patterns and capability gaps | S |
+
+---
+
+## Phase 23: Targeted Skill Builder ✓
+
+**Goal:** Add a focused skill-building workflow that turns a concrete correction, bad recommendation pattern, repeated workflow problem, or narrow capability gap into the smallest durable fix: a new skill, an existing-skill update, or a reusable prompt/template.
+
+**Source:** User request after providing the current `analyze-sessions` contract and explicitly rejecting broad session-history analysis as the default path for targeted skill work.
+
+**Scope:**
+- Add mirrored Claude/Codex `targeted-skill-builder` skills.
+- Keep `tasks/lessons.md` as the first evidence source.
+- Require a destination checkpoint: new skill, update existing skill, reusable prompt only, or unsure/recommend.
+- Search existing skills for overlap before creating a duplicate.
+- Inspect only user-provided files, a named skill, current conversation context, or a tightly scoped history query unless the user explicitly requests full history analysis.
+- Default new shared skills to this `agentic-skills` repo, while providing a prompt for the user to run in this repo when an external project session needs an existing shared skill amended.
+- Require Codex global skills to include `agents/openai.yaml`.
+- Run `./install.sh` after skill mutations so Claude/Codex symlinks are current, and tell the user to start a fresh CLI/session if the new skill is not visible yet.
+
+**Acceptance Criteria:**
+- [x] `global/codex/targeted-skill-builder/SKILL.md` and `global/claude/targeted-skill-builder/SKILL.md` exist with versioned frontmatter.
+- [x] Codex has `global/codex/targeted-skill-builder/agents/openai.yaml`.
+- [x] Skill discovery docs include targeted-skill-builder.
+- [x] The workflow explicitly avoids default broad `$analyze-sessions` behavior.
+- [x] Validation passes with dependency/version/routing audits, targeted text scans, install refresh, and `git diff --check`.
+
+**Parallelization:** serial
+**Coordination Notes:** Keep serial because this adds a global skill pair plus discovery and routing documentation.
+
+**Completed:** 2026-05-04. Added mirrored Claude/Codex `targeted-skill-builder`, Codex OpenAI metadata, discovery references, and validation notes. Validation passed with dependency/version/routing audits, targeted behavior scans, install refresh, and `git diff --check`.
 
 ---
 

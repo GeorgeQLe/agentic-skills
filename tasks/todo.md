@@ -1,20 +1,46 @@
 # No Active Phase
 
 **Project:** Claude Skills / agentic-skills
-**Status:** Phase 22 complete; no later implementation phase is planned in `tasks/roadmap.md`.
+**Status:** Phase 23 complete; no later implementation phase is planned in `tasks/roadmap.md`.
 
-## Priority Documentation Todo
+## Current Phase Todo
 
-- [x] Documentation is current; no missing or stale research, spec, roadmap, or task artifacts found for the enabled devtool documentation set.
+- [x] Read `tasks/lessons.md` for relevant correction patterns.
+- [x] Document Phase 23 in `tasks/roadmap.md`.
+- [x] Add mirrored Claude/Codex `targeted-skill-builder` skills.
+- [x] Add Codex `agents/openai.yaml`.
+- [x] Update discovery/routing docs only where needed.
+- [x] Run `./install.sh`.
+- [x] Run validation:
+  - [x] `./scripts/skill-deps.sh --broken`
+  - [x] `./scripts/skill-versions.sh --missing`
+  - [x] `./scripts/skill-next-step-routing.sh --missing`
+  - [x] targeted `rg` checks for focused behavior
+  - [x] `git diff --check`
+- [ ] Commit and push intended changes.
 
 ## Current State
 
-- [x] Phase 21: Quality Gate Hardening is complete and archived to `tasks/phases/phase-21.md`.
 - [x] Phase 22: Feature Interview Routing is complete in `tasks/roadmap.md`.
-- [x] `tasks/roadmap.md` marks Phase 22 complete.
+- [x] Phase 23: Targeted Skill Builder is complete in `tasks/roadmap.md`.
 - [ ] Discover candidate next phase or explicitly park the project.
 
 ## Review
+
+### Phase 23 Review
+
+- Implemented mirrored Claude/Codex `targeted-skill-builder` skills and Codex OpenAI agent metadata.
+- Updated README, global `skills` discovery tables, `docs/skills-reference.md`, and `docs/operating-modes.md`.
+- Ran `./install.sh`; refreshed 3 Claude core skills and 3 Codex core skills, including `targeted-skill-builder`.
+- Validation:
+  - `./scripts/skill-deps.sh --broken` - passed; no broken references found.
+  - `./scripts/skill-versions.sh --missing` - passed; all 291 skills have a version field.
+  - `./scripts/skill-next-step-routing.sh --missing` - passed; all 215 mutation-capable skills have next-step routing.
+  - Targeted focused-behavior `rg` scan - passed; mirrored skills require `tasks/lessons.md` first, forbid default broad history scans, treat broad session analysis as optional evidence, require Codex `agents/openai.yaml`, and route uncertain planning to `feature-interview`.
+  - `git diff --check` - passed; no whitespace errors.
+- Reload note: after the install refresh, start a fresh Claude Code or Codex CLI/session if `targeted-skill-builder` is not visible yet.
+
+### Previous Review
 
 - Completed Phase 21 Step 21.6 repository validation and review gate.
 - Validation:
