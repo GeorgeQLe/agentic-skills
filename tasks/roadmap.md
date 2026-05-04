@@ -2,7 +2,7 @@
 
 > Generated from: tasks/roadmap.md (existing), specs/board-flag-kanban-search.md, tasks/ideas.md, tasks/history.md
 > Date: 2026-03-27 (last updated 2026-05-04)
-> Total Phases: 25 (24 complete, 1 planned future)
+> Total Phases: 26 (24 complete, 2 planned future)
 
 ## Summary
 
@@ -52,6 +52,7 @@ Phases 12-13 and 15-25 complete, with Phase 14 still available as planned future
 | 23 | Targeted Skill Builder ✓ | user request, tasks/lessons.md | Focused skill creation/update workflow for concrete correction patterns and capability gaps | S |
 | 24 | Installer Skill ✓ | user request | Mirrored global installer skill with root install launcher and pack access guidance | S |
 | 25 | Codebase Status ✓ | user request, session history | Read-only repo status reports with related conversation-history evidence | S |
+| 26 | Monorepo Pack V1 | specs/monorepo-execution-controller.md | New monorepo pack with detect, run, ship, guard skills + lane-spec artifact | L |
 
 ---
 
@@ -952,6 +953,48 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 
 **Completed:** 2026-05-03. Mirrored Claude/Codex `youtube-video-audit` skills were added to the creator-media pack, documentation references now expose the single-video lane beside channel audits, and validation passed with dependency/version checks, targeted evidence-boundary scans, docs routing scans, and `git diff --check`.
 
+## Phase 26: Monorepo Pack V1
+
+**Goal:** Create a new `monorepo` pack that makes the skill library monorepo-aware using an augmentation injection pattern. V1 ships four skills (mono-detect, mono-run, mono-ship, mono-guard) targeting pnpm workspaces + Turborepo, with a structured lane-spec artifact for parallel agent-team dispatch.
+
+**Source Spec:** `specs/monorepo-execution-controller.md`
+
+**Scope:**
+- Create the `packs/monorepo/` pack structure with mirrored Claude/Codex skills.
+- `mono-detect`: Workspace detection via `pnpm-workspace.yaml` and `turbo.json`, package graph output to `.agents/monorepo.json`.
+- `mono-run`: Augmented `/run` with lane-spec generation, `/mono-guard` pre-flight, parallel worktree dispatch for package-scoped steps, serial execution for cross-cutting steps, stop-all-lanes failure semantics.
+- `mono-ship`: Augmented `/ship` with package-scoped and transitive-dependent test/lint/build validation before shipping.
+- `mono-guard`: Pack-local boundary enforcement consuming the lane-spec artifact for pre-flight and post-integration validation.
+- Structured lane-spec artifact: `.agents/lane-specs.json` (machine-readable) + `tasks/lane-specs.md` (committed Markdown mirror) with lifecycle `draft → approved → dispatched → integrated | failed`.
+- Detection script `scripts/mono-detect.sh` and validation script `scripts/lane-spec-validate.sh`.
+- Script-based validation `scripts/monorepo-validate.sh` for contract compliance, lane-spec schema, and detection correctness.
+- Test fixtures for monorepo detection and lane-spec validation.
+- Pack docs (`PACK.md`), README registration, `docs/skills-reference.md` updates, and `docs/packs.md` updates.
+
+**Acceptance Criteria:**
+- [ ] `mono-detect` correctly identifies pnpm workspaces and Turborepo, outputs `.agents/monorepo.json` with package list and dependency graph.
+- [ ] `mono-run` generates lane specs from roadmap execution profiles, runs `/mono-guard` pre-flight, dispatches parallel worktree agents for package-scoped steps, and runs cross-cutting steps serially.
+- [ ] `mono-run` stops all lanes on any lane failure and preserves worktree state.
+- [ ] `mono-ship` runs package-scoped and transitive-dependent tests/lint/build before delegating to `/ship`.
+- [ ] `mono-guard` validates lane-spec disjointness pre-flight and boundary compliance post-integration.
+- [ ] Lane-spec artifact follows JSON + Markdown mirror pattern with lifecycle tracking.
+- [ ] Skills defer to `turbo run` when `turbo.json` is present, fall back to `pnpm --filter` otherwise.
+- [ ] Mirrored Claude/Codex skill contracts exist for all v1 skills.
+- [ ] Pack structure registered in README, `docs/skills-reference.md`, and `docs/packs.md`.
+- [ ] Script-based validation passes for contracts, lane-spec schema, detection, and boundary checks.
+- [ ] All phase tests pass.
+- [ ] No regressions in previous phase tests.
+
+**Parallelization:** serial
+**Coordination Notes:** Keep serial because this creates a new pack with interdependent skills (detect → guard → run → ship). The lane-spec artifact design must be settled before run/guard can reference it. The pack also touches shared docs (README, skills-reference, packs.md).
+
+**On Completion:**
+- Deviations from plan: [none, or describe]
+- Tech debt / follow-ups: [none, or list]
+- Ready for next phase: yes/no
+
+---
+
 ## Post-Phase Tail Work
 
 - **2026-05-01 — Creator-media packaging/search/cadence skills:** Added focused YouTube strategy skills for title/thumbnail audit, search positioning, and cadence diagnosis so the pack can turn channel audit and peer benchmark evidence into packaging fixes and programming inputs.
@@ -963,7 +1006,8 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - **Multi-project kanban dashboard** — cross-board view (larger initiative, deferred)
 - **Add Codex poketo-kanban skill** — parity item, low priority
 - **Cross-tool portability layer** — single-source skill generation (larger initiative)
-- **Workflow orchestrator / meta-skill** — guided pipeline execution (larger initiative)
+- **Workflow orchestrator / meta-skill** — guided pipeline execution (larger initiative; partially addressed by Phase 26 monorepo pack)
+- **Monorepo Pack V2** — planning skills (mono-roadmap, mono-plan-phase, mono-spec-interview), analysis skills (mono-affected, mono-debug, mono-trace, mono-investigate), and mono-migrate (single-app → monorepo migration with guided execution). Deferred until V1 is validated in real use.
 - **Session continuity automation** — `/resume` skill for cold-start (medium effort)
 
 ## Cross-Phase Concerns
