@@ -17,6 +17,7 @@ Use this skill when the user wants current changes committed and pushed in sensi
 1b. For non-trivial mutations, confirm the caller has produced a `docs/quality-gate-contract.md` ship manifest for the exact shipping boundary before staging. The manifest must include: User goal, Changed files, Per-file purpose, User-goal mapping, Tests run, Skipped tests, Adversarial review, Residual risk, Rollback note, and Next command.
 1c. If the change set includes non-trivial source changes, confirm the manifest records a targeted `quality-sweep audit`, `$expert-review`, configured review lane, or explicitly justified equivalent adversarial review. If the review is missing, stop before committing.
 1d. Confirm validation evidence distinguishes executable checks from documentation-only or task-only checks. If non-trivial source changes rely only on documentation/task checks, stop before committing unless the manifest gives a concrete skipped-test rationale and residual-risk explanation.
+1e. If the work being shipped follows a user correction, confirm the pre-commit ship manifest proves the exact shipping boundary includes a `tasks/lessons.md` update for the current correction. Treat the correction as repeatable unless the manifest proves otherwise. If it exposed a workflow failure, confirm the same shipping boundary includes the relevant skill contract, validation script, fixture, or test enforcement update, or a `Correction enforcement:` entry with the blocker or not-applicable rationale and the concrete follow-up file/command when needed.
 2. Partition changes into logical buckets such as `auth`, `api`, `ui`, `tests`, `docs`, `build`, or `refactor`.
 3. Prefer 2 to 6 commits unless the change set is genuinely tiny.
 4. For each bucket:
@@ -38,6 +39,7 @@ Use this skill when the user wants current changes committed and pushed in sensi
 - If hooks or tests fail and the expected fix is straightforward, fix them and continue; otherwise report the blocker.
 - Do not commit or push a non-trivial mutation without a ship manifest that covers the exact files being shipped. If unrelated tracked changes are present, the manifest must identify which files are included and why the remaining files are safe to leave untouched.
 - Do not treat documentation-only or task-only checks as sufficient executable verification for source changes. Require a skipped-test rationale when no executable check was run.
+- Do not ship a user-correction follow-up unless the manifest proves the current correction's `tasks/lessons.md` update is in the exact shipping boundary and includes either an enforcement update or a `Correction enforcement:` rationale. If claiming an existing rule already covers the correction, require the manifest to cite the exact file and rule/check and explain why it would have prevented the corrected behavior.
 
 ## Output
 

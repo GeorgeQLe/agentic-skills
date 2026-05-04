@@ -69,7 +69,7 @@
   - Require ship manifest generation for non-trivial source mutations before commit/push.
   - Require targeted `quality-sweep audit`, `expert-review`, or an explicitly justified equivalent adversarial review for non-trivial code changes.
   - Require final responses to distinguish executable verification from doc-only/task-only checks.
-- [ ] Step 21.4: Add user-correction enforcement guidance.
+- [x] Step 21.4: Add user-correction enforcement guidance.
   - Classification: automated
   - Files: modify `global/codex/run/SKILL.md`, modify `global/codex/ship/SKILL.md`, modify `global/codex/ship-end/SKILL.md`, modify `global/codex/commit-and-push-by-feature/SKILL.md`, modify `docs/quality-gate-contract.md`
   - Require corrections to update `tasks/lessons.md`.
@@ -135,3 +135,19 @@
   - `rg -n "docs/quality-gate-contract.md|ship manifest|User goal|Changed files|Per-file purpose|User-goal mapping|Tests run|Skipped tests|Adversarial review|Residual risk|Rollback note|Next command|documentation-only|task-only" global/codex/run/SKILL.md global/codex/ship/SKILL.md global/codex/ship-end/SKILL.md global/codex/commit-and-push-by-feature/SKILL.md` - passed; required quality-gate references and manifest fields are present in all touched global skills.
   - `git diff --check` - passed; no whitespace errors.
 - Next implementation step: Step 21.4.
+- Step 21.4 complete: tightened user-correction enforcement in `docs/quality-gate-contract.md`, `global/codex/run/SKILL.md`, `global/codex/ship/SKILL.md`, `global/codex/ship-end/SKILL.md`, and `global/codex/commit-and-push-by-feature/SKILL.md`.
+- Step 21.4 ship manifest:
+  - User goal: Execute Phase 21 Step 21.4 by making user-correction handling enforceable in the reusable quality gate and the global execution/shipping workflows.
+  - Changed files: `docs/quality-gate-contract.md`, `global/codex/run/SKILL.md`, `global/codex/ship/SKILL.md`, `global/codex/ship-end/SKILL.md`, `global/codex/commit-and-push-by-feature/SKILL.md`, `tasks/todo.md`, and `tasks/history.md`.
+  - Per-file purpose: `docs/quality-gate-contract.md` defines the canonical correction-enforcement contract; the four global skill files apply that contract during run/ship/session-wrap/commit-push flows; `tasks/todo.md` records completion, validation, review, and the ship manifest; `tasks/history.md` records the shipped step.
+  - User-goal mapping: the quality contract and skill edits satisfy the Step 21.4 requirements to update `tasks/lessons.md`, require a relevant skill/script/fixture/test update when a correction exposes a repeatable workflow failure, and require an explicit not-applicable rationale when no enforcement update applies.
+  - Tests run: `rg -n "User corrections are presumed repeatable|exact shipping boundary|tasks/lessons.md update for the current correction|Correction enforcement|pre-commit ship manifest|existing rule|concrete follow-up file|validation script, fixture, or test" docs/quality-gate-contract.md global/codex/run/SKILL.md global/codex/ship/SKILL.md global/codex/ship-end/SKILL.md global/codex/commit-and-push-by-feature/SKILL.md` - passed; all touched contracts contain the stricter correction-enforcement wording. `git diff --check` - passed; no whitespace errors.
+  - Skipped tests: no executable runtime suite was run because Step 21.4 changes workflow-policy Markdown only; targeted contract scans and whitespace validation cover the changed behavior surface. Broader script fixture checks and repository validation remain explicitly scheduled for Steps 21.5 and 21.6.
+  - Adversarial review: the `quality-contract-review` explorer lane found four loopholes: `when practical` escape wording, final-response rationale after commit/push, stale `tasks/lessons.md` satisfaction, and unsupported existing-rule claims. The final wording fixes those by making current shipping-boundary evidence mandatory, requiring pre-commit manifest rationale for mutation shipping, and requiring exact file/rule/check citations for existing-rule coverage.
+  - Residual risk: enforcement is still policy-based until Step 21.5 expands focused validation; the review lane also noted that `scripts/ship-quality-gate.sh` does not yet conditionally validate correction-follow-up manifests.
+  - Rollback note: revert the Step 21.4 commit to remove the correction-enforcement hardening language.
+  - Next command: `$run`.
+- Validation:
+  - `rg -n "User corrections are presumed repeatable|exact shipping boundary|tasks/lessons.md update for the current correction|Correction enforcement|pre-commit ship manifest|existing rule|concrete follow-up file|validation script, fixture, or test" docs/quality-gate-contract.md global/codex/run/SKILL.md global/codex/ship/SKILL.md global/codex/ship-end/SKILL.md global/codex/commit-and-push-by-feature/SKILL.md` - passed; required correction-enforcement wording is present in the canonical contract and all touched global skills.
+  - `git diff --check` - passed; no whitespace errors.
+- Next implementation step: Step 21.5.
