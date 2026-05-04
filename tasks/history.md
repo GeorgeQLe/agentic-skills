@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-05-04 — Refresh spec drift after monorepo controller spec
+
+- Ran `$spec-drift fix all` after `e350448 spec: monorepo execution controller integration`.
+- Archived the previous drift report at `docs/history/archive/2026-05-04/110835/specs/drift-report.md`.
+- Refreshed `specs/drift-report.md` with the current spec inventory, including `specs/monorepo-execution-controller.md` and `specs/creator-platform-evidence-schema.md`.
+- Found 0 Errors, 1 Warning, and 0 Info findings.
+- Queued the Warning in `tasks/todo.md`: `specs/monorepo-execution-controller.md` promises an unimplemented `packs/monorepo` V1 pack, scripts, and fixtures; next work should either implement the pack or rescope the spec.
+
 ## 2026-05-04 — Reconcile task docs after Phase 25
 
 - Ran `$reconcile-dev-docs fix tasks` after the Phase 25 codebase-status shipment.

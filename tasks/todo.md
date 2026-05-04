@@ -28,6 +28,13 @@
 - [x] Phase 25: Codebase Status is complete in `tasks/roadmap.md`.
 - [ ] Discover candidate next phase or explicitly park the project.
 
+## Spec Drift Follow-up
+
+- [ ] Implement or rescope `specs/monorepo-execution-controller.md`.
+  - Evidence: `$spec-drift fix all` on 2026-05-04 found that the spec promises a `packs/monorepo` V1 pack with `mono-detect`, `mono-run`, `mono-ship`, `mono-guard`, plus `scripts/mono-detect.sh`, `scripts/lane-spec-validate.sh`, `scripts/monorepo-validate.sh`, and monorepo fixtures.
+  - Current repo state: only global advisory `mono-plan` and `mono-guard` skills exist; `packs/monorepo/` and the V1 scripts/fixtures do not exist.
+  - Next implementation route: `$roadmap` should promote this into a new phase, or `$spec-interview specs/monorepo-execution-controller.md` should revise the spec if the intended scope is global skills only.
+
 ## Review
 
 ### Phase 25 Review
