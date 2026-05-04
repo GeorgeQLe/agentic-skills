@@ -47,7 +47,7 @@ Global skills are safe across business apps, games, devtools, libraries, service
 | `bootstrap-repo` | Initialize repository README and agent workflow docs from a project brief |
 | `brainstorm` | Evaluate the codebase and suggest ideas to explore with planning |
 | `branch-lifecycle` | Evaluate feature branches for merge, salvage, keep-open, or delete decisions |
-| `clone-spec-store` | Build lawful functional-parity spec stores and private downstream clone repos |
+| `clone-spec-store` | Build lawful functional-parity spec stores with portfolio-gated downstream seeding |
 | `commit-and-push-by-feature` | Commit and push changes grouped by logical feature buckets |
 | `concept-exploration` | Shape a rough idea into a concept brief before ICP and market research |
 | `dead-code` | Scan for unused exports, unreachable code, orphaned files, and stale dependencies |

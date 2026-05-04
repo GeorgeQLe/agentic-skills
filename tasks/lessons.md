@@ -1,5 +1,19 @@
 # Lessons
 
+## 2026-05-04 — Exhausted queues route to discovery, not none
+
+- A completed roadmap plus current documentation scan allowed `Recommended next command: none`, leaving a repo in a dead-end handoff even though candidate new-phase discovery was still possible.
+- Scanner and shipping skills should reserve `none` for explicit user-requested pause, park, archive, or wait states.
+- When implementation phases, documentation work, and promotable advisory items are all exhausted, recommend `$brainstorm` to discover candidate next phases before formal `$spec-interview` work.
+- Keep this rule in both output templates and next-step routing sections so final responses cannot bypass it.
+
+## 2026-05-04 — Distinguish workflow policy from existing orchestration skills
+
+- A recommendation for a "workflow" around `mobile-ideas` sounded like inventing a new skill even though `$project-fleet` already exists.
+- When an orchestration skill already exists, frame recommendations as project-specific policy, queues, scoring gates, and defaults that the existing skill should consume.
+- Say "extend/configure `$project-fleet` for this fleet shape" instead of implying a separate new controller unless there is a clear missing primitive.
+- For repeated fleet work, recommend durable playbooks/config/contracts first, then skill changes only where the current skill cannot read or enforce those contracts.
+
 ## 2026-05-03 — Verification gates should not become no-op plan handoffs
 
 - A clean validation gate was followed by a separate "refactor if validation exposes drift" step, which forced Claude `/ship` to open a clear-context plan even though no remediation was expected.
