@@ -116,12 +116,14 @@ Before handing back, identify the next concrete work item from project state, th
 
 Output exactly two lines beyond the normal report:
 
-- **Next work:** <specific task name, manual blocker, verification gap, or "none">
+- **Next work:** <specific task name, manual blocker, verification gap, discovery task, or explicit parked state>
 - **Recommended next command:** <one command or route>
 
 Rules:
 
-- Make the next work item primary. Derive it from `tasks/todo.md`, `tasks/manual-todo.md`, deploy status, validation gaps, smoke-test gaps, phase-transition output, or the absence of any remaining work. Do not use agent mode itself as the next work item.
+- Make the next work item primary. Derive it from `tasks/todo.md`, `tasks/manual-todo.md`, deploy status, validation gaps, smoke-test gaps, phase-transition output, or completion of the current queues. Do not use agent mode itself as the next work item.
+- Do not emit `Recommended next command: none` unless the latest user request explicitly asks to pause, park, archive, or wait. If implementation phases, documentation work, and promotable advisory items are all exhausted, route to new-phase discovery: `**Next work:** discover candidate next phase or explicitly park the project` and `**Recommended next command:** $brainstorm`.
+- If a post-roadmap `$research-roadmap` scan reports documentation current with no missing or stale work, do not stop at documentation completeness; recommend `$brainstorm` as the next route for candidate phase discovery.
 - Use `./scripts/agent-mode.sh` only to choose command text. If it is missing, unset, or non-zero, infer routing from the current invocation and task type instead of asking the user to select a mode by default.
 - Inference defaults:
   - Codex skill invocation (`$run`, `$ship`, `$ship-end`, or `$run --execute-approved`) → recommend the matching `$...` command.
@@ -162,7 +164,7 @@ After resolving or inferring the command route, resolve enabled packs via `./scr
 
 ## Default Shipping Contract
 
-- **Default next-step routing:** when reporting completion, include either `Recommended next skill: <command>` or the two-line pair `**Next work:** <specific task or "none">` and `**Recommended next command:** <one command or route>` so the next operator has a concrete handoff.
+- **Default next-step routing:** when reporting completion, include either `Recommended next skill: <command>` or the two-line pair `**Next work:** <specific task, discovery task, blocker, or explicit parked state>` and `**Recommended next command:** <one command or route>` so the next operator has a concrete handoff. Do not use `none` as the command unless the user explicitly asked to pause, park, archive, or wait; exhausted queues route to `$brainstorm`.
 - If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
 - Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
 - This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.

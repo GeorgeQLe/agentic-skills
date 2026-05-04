@@ -2,13 +2,13 @@
 
 > Generated from: tasks/roadmap.md (existing), specs/board-flag-kanban-search.md, tasks/ideas.md, tasks/history.md
 > Date: 2026-03-27 (last updated 2026-05-04)
-> Total Phases: 20 (20 complete, 0 active)
+> Total Phases: 21 (19 complete, 1 active, 1 planned future)
 
 ## Summary
 
 Phases 1-11 complete: kanban skill suite, board intelligence, templates, archive automation, expert review fixes, test hardening (83 tests), kanban DX, skill infrastructure, the shared Poketo headless API migration for both Claude and Codex, and the three-mode operating model (`claude-only` / `codex-only` / `hybrid`) with shared approval-packet contract and next-step routing.
 
-Phases 12-13 and 15-20 complete, with Phase 14 still available as planned future creator-media work. Phase 16 hardened mutation-capable skill contracts with final next-step routing language and an audit that catches future omissions. Phase 17 added mixed-monorepo pack routing so one repository can carry devtool, business-app, game, or other domain scopes without forcing one global designation. Phase 18 hardened pack lock recovery after a `pitwall-monorepo` refresh timeout. Phase 19 added a YouTube description and metadata optimization lane to the creator-media pack. Phase 20 added external YouTube video research lanes for comprehension, format/Remotion-style analysis, and competitive learning.
+Phases 12-13 and 15-20 complete, with Phase 14 still available as planned future creator-media work. Phase 16 hardened mutation-capable skill contracts with final next-step routing language and an audit that catches future omissions. Phase 17 added mixed-monorepo pack routing so one repository can carry devtool, business-app, game, or other domain scopes without forcing one global designation. Phase 18 hardened pack lock recovery after a `pitwall-monorepo` refresh timeout. Phase 19 added a YouTube description and metadata optimization lane to the creator-media pack. Phase 20 added external YouTube video research lanes for comprehension, format/Remotion-style analysis, and competitive learning. Phase 21 hardens default mutation/shipping quality gates from the session workflow audit.
 
 ## Current Analysis: Mobile Ideas Return Assessment
 
@@ -47,6 +47,106 @@ Phases 12-13 and 15-20 complete, with Phase 14 still available as planned future
 | 18 | Pack Lock Stale Recovery ✓ | user report | Lock owner metadata and stale-lock cleanup for pack writes | S |
 | 19 | YouTube Description Optimizer ✓ | user request | Existing-video description audits, future upload drafts, and reusable metadata templates | S |
 | 20 | YouTube External Video Research Skills ✓ | user request | External video context, format/Remotion-style, and competitive research skills | S |
+| 21 | Quality Gate Hardening | tasks/session-workflow-quality-audit.md | Default anti-slop ship manifest, adversarial review, and validation script | M |
+
+---
+
+## Phase 21: Quality Gate Hardening
+
+**Goal:** Make anti-slop quality controls a default part of non-trivial mutation and shipping workflows so code cannot be committed by procedural compliance alone.
+
+**Source Spec:** `tasks/session-workflow-quality-audit.md`
+
+**Scope:**
+- Add a shared quality-gate contract for mutation/shipping skills that requires changed files, user-goal mapping, tests run, skipped tests, residual risk, and next command.
+- Harden `$run`, `$ship`, `$ship-end`, and `$commit-and-push-by-feature` so non-trivial source mutations require a diff-aware ship manifest and cannot rely on doc-only verification.
+- Promote targeted `quality-sweep audit` or equivalent adversarial review into the default pre-ship path for non-trivial code changes.
+- Add a lightweight local validation script that can check generated ship manifests or final-response drafts for required quality-gate fields.
+- Document how user corrections flow from `tasks/lessons.md` into relevant skill/test updates when a correction exposes a repeatable workflow failure.
+- Preserve existing direct-to-primary shipping and next-step routing contracts.
+
+**Acceptance Criteria:**
+- [ ] A reusable quality-gate contract exists and is referenced by the global mutation/shipping skills.
+- [ ] `$run`, `$ship`, `$ship-end`, and `$commit-and-push-by-feature` require a ship manifest for non-trivial source changes.
+- [ ] The ship manifest requires changed files, per-file purpose, user-goal mapping, tests run, skipped tests, residual risk, and next command.
+- [ ] Non-trivial source changes require targeted `quality-sweep audit`, `expert-review`, or an explicitly justified equivalent adversarial review before commit/push.
+- [ ] A validation script detects missing required ship-manifest fields and passes on a complete fixture.
+- [ ] User-correction handling requires updating `tasks/lessons.md` and, when applicable, the relevant skill or validation check.
+- [ ] Validation passes with targeted contract scans, script fixture checks, skill dependency/version/routing audits, and `git diff --check`.
+
+**Parallelization:** review-only
+**Coordination Notes:** Keep implementation serial because the phase touches shared global workflow skills and validation scripts. Use review-only lanes for adversarial contract review after the main edits are drafted.
+
+> Test strategy: tests-after
+
+### Execution Profile
+**Parallel mode:** review-only
+**Integration owner:** main agent
+**Conflict risk:** high
+**Review gates:** correctness, tests, docs/API conformance, workflow safety
+
+**Subagent lanes:**
+- Lane: quality-contract-review
+  - Agent: explorer
+  - Role: reviewer
+  - Mode: review
+  - Scope: Review the proposed quality-gate contract and skill-routing changes for loopholes that would still allow source changes to ship without diff-aware evidence.
+  - Depends on: Step 21.4
+  - Deliverable: Review report listing blockers, recommended wording changes, and validation gaps.
+
+### Implementation
+- Step 21.1: Add reusable quality-gate contract documentation.
+  - Classification: automated
+  - Files: create `docs/quality-gate-contract.md`
+  - Define non-trivial mutation, ship manifest fields, skipped-test rationale, residual-risk language, adversarial review expectations, and direct-to-primary compatibility.
+  - Include the recommended policy from `tasks/session-workflow-quality-audit.md`: Plan, Implement, Self-review, Quality sweep, Verification, Ship manifest.
+- Step 21.2: Add ship-manifest validation script and fixtures.
+  - Classification: automated
+  - Files: create `scripts/ship-quality-gate.sh`, create `tests/fixtures/ship-quality-gate/complete.md`, create `tests/fixtures/ship-quality-gate/missing-fields.md`
+  - Script should fail on missing required fields and pass on a complete manifest fixture.
+  - Keep it dependency-light and shell-compatible with existing repository scripts.
+- Step 21.3: Harden global execution and shipping skill contracts.
+  - Classification: automated
+  - Files: modify `global/codex/run/SKILL.md`, modify `global/codex/ship/SKILL.md`, modify `global/codex/ship-end/SKILL.md`, modify `global/codex/commit-and-push-by-feature/SKILL.md`
+  - Require ship manifest generation for non-trivial source mutations before commit/push.
+  - Require targeted `quality-sweep audit`, `expert-review`, or an explicitly justified equivalent adversarial review for non-trivial code changes.
+  - Require final responses to distinguish executable verification from doc-only/task-only checks.
+- Step 21.4: Add user-correction enforcement guidance.
+  - Classification: automated
+  - Files: modify `global/codex/run/SKILL.md`, modify `global/codex/ship/SKILL.md`, modify `global/codex/ship-end/SKILL.md`, modify `global/codex/commit-and-push-by-feature/SKILL.md`, modify `docs/quality-gate-contract.md`
+  - Require corrections to update `tasks/lessons.md`.
+  - Require a relevant skill or validation script update when the correction exposes a repeatable workflow failure.
+  - Require explicit "not applicable" rationale when no skill/test update is made.
+
+### Green
+- Step 21.5: Write and run focused validation for the quality gate.
+  - Classification: automated
+  - Files: modify `tasks/todo.md` review section with exact validation commands and results
+  - Run `scripts/ship-quality-gate.sh tests/fixtures/ship-quality-gate/complete.md` and confirm it passes.
+  - Run `scripts/ship-quality-gate.sh tests/fixtures/ship-quality-gate/missing-fields.md` and confirm it fails for the expected missing fields.
+  - Run targeted `rg` scans confirming `docs/quality-gate-contract.md` references and required manifest fields in all touched global skills.
+- Step 21.6: Run repository validation and review gate.
+  - Classification: automated
+  - Files: no source changes expected beyond review-driven fixes and task review notes
+  - Run `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-next-step-routing.sh --missing`, and `git diff --check`.
+  - Apply concrete review findings from the `quality-contract-review` lane before marking the phase complete.
+
+### Milestone: Quality Gate Hardening
+**Acceptance Criteria:**
+- [ ] A reusable quality-gate contract exists and is referenced by the global mutation/shipping skills.
+- [ ] `$run`, `$ship`, `$ship-end`, and `$commit-and-push-by-feature` require a ship manifest for non-trivial source changes.
+- [ ] The ship manifest requires changed files, per-file purpose, user-goal mapping, tests run, skipped tests, residual risk, and next command.
+- [ ] Non-trivial source changes require targeted `quality-sweep audit`, `expert-review`, or an explicitly justified equivalent adversarial review before commit/push.
+- [ ] A validation script detects missing required ship-manifest fields and passes on a complete fixture.
+- [ ] User-correction handling requires updating `tasks/lessons.md` and, when applicable, the relevant skill or validation check.
+- [ ] Validation passes with targeted contract scans, script fixture checks, skill dependency/version/routing audits, and `git diff --check`.
+- [ ] All phase tests pass.
+- [ ] No regressions in previous phase tests.
+
+**On Completion:**
+- Deviations from plan: [fill when complete]
+- Tech debt / follow-ups: [fill when complete]
+- Ready for next phase: [fill when complete]
 
 ---
 

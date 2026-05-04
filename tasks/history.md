@@ -1375,3 +1375,9 @@ Resolved all 10 findings from `/expert-review`:
 - Updated `/run`, `/ship`, `$run`, `$ship`, and both `/plan-phase`/`$plan-phase` templates to fold conditional no-op cleanup into Green validation unless verification finds concrete remediation work.
 - Folded the Phase 13 conditional wording-cleanup step into Step 13.6 because validation had already passed and no source-doc drift was found.
 - Marked Phase 13 acceptance criteria, phase tests, and regression checks complete in the task docs.
+
+## 2026-05-04 — Phase 21 Step 21.1: quality gate contract
+
+- Added `docs/quality-gate-contract.md` as the reusable quality-gate contract for mutation and shipping skills.
+- Defined non-trivial mutation scope, the Plan/Implement/Self-review/Quality sweep/Verification/Ship manifest flow, required ship-manifest fields, skipped-test and residual-risk standards, adversarial review expectations, user-correction handling, and direct-to-primary compatibility.
+- Verified with a targeted contract-topic scan and `git diff --check`.
