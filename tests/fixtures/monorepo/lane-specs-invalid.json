@@ -1,0 +1,36 @@
+{
+  "phase": "26",
+  "source_roadmap_hash": "fixture-phase-26",
+  "lifecycle": "approved",
+  "cross_cutting_steps": [],
+  "lanes": [
+    {
+      "id": "api-a",
+      "step": "26.1",
+      "packages": ["@fixture/api"],
+      "owns": ["packages/api/"],
+      "must_not_edit": [
+        "pnpm-lock.yaml",
+        "package.json",
+        "pnpm-workspace.yaml",
+        "turbo.json"
+      ],
+      "depends_on": [],
+      "mode": "implementation-safe"
+    },
+    {
+      "id": "api-b",
+      "step": "26.2",
+      "packages": ["@fixture/api"],
+      "owns": ["packages/api/src/"],
+      "must_not_edit": [
+        "pnpm-lock.yaml",
+        "package.json",
+        "pnpm-workspace.yaml",
+        "turbo.json"
+      ],
+      "depends_on": [],
+      "mode": "implementation-safe"
+    }
+  ]
+}

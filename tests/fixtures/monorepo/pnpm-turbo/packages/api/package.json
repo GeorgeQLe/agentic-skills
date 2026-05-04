@@ -1,0 +1,17 @@
+{
+  "name": "@fixture/api",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "echo build api",
+    "lint": "echo lint api",
+    "test": "echo test api"
+  },
+  "dependencies": {
+    "@fixture/shared-lib": "workspace:*",
+    "express": "^4.18.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

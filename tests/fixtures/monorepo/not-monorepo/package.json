@@ -1,0 +1,11 @@
+{
+  "name": "not-monorepo",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "test": "echo test single app"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0"
+  }
+}
