@@ -25,13 +25,13 @@ describe("video pipeline (script → build)", () => {
 
   it("chains video-script → video-build end-to-end", () => {
     workDir = createTempProject();
-    installPack(workDir, "creator-media");
+    installPack(workDir, "remotion");
     setupDriftctlFixture(workDir, { tier: 4 });
 
     // Step 1: video-script
     const step1 = runClaude({
       prompt: buildSkillPrompt({
-        pack: "creator-media",
+        pack: "remotion",
         skill: "video-script",
         args: `${SLUG} --type launch --duration medium`,
         answers: [
@@ -62,7 +62,7 @@ describe("video pipeline (script → build)", () => {
     // Step 2: video-build
     const step2 = runClaude({
       prompt: buildSkillPrompt({
-        pack: "creator-media",
+        pack: "remotion",
         skill: "video-build",
         args: `${SLUG} --style minimal --fps 30 --resolution 1080p`,
         answers: [

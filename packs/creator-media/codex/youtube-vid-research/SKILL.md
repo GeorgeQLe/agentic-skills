@@ -10,7 +10,7 @@ argument-hint: "<video URL or ID...> [--focus context|claims|summary|references]
 
 Invoke as `$youtube-vid-research`.
 
-Research external YouTube videos so the agent can understand what the user is referring to and reuse that context in specs, strategy, writing, product work, or implementation. This is the general comprehension lane; use `$youtube-video-audit` for performance diagnosis, `$youtube-format-research` for production/style breakdowns, and `$youtube-competitive-research` for why a competitor video worked.
+Research external YouTube videos so the agent can understand what the user is referring to and reuse that context in specs, strategy, writing, product work, or implementation. This is the general comprehension lane; use `$youtube-video-audit` for performance diagnosis, `$youtube-competitive-research` for why a competitor video worked, and the `remotion` pack's `$youtube-format-research` for production/style breakdowns.
 
 ## Inputs
 
@@ -108,10 +108,10 @@ Use this structure:
 
 After writing the artifact, recommend the next contextual creator-media skill in the final response as `Recommended next skill: <command>`.
 
-Default recommendation: `$youtube-format-research` when the user wants to reuse the video's structure, style, edit, or design; `$youtube-competitive-research` when the user asks why the video performed well or what can be learned from a competitor; otherwise `$content-programming` when the research should inform future topics.
+Default recommendation: `$youtube-format-research` from the `remotion` pack when the user wants to reuse the video's structure, style, edit, or design; `$youtube-competitive-research` when the user asks why the video performed well or what can be learned from a competitor; otherwise `$content-programming` when the research should inform future topics.
 
 If the default successor already exists and is current, recommend the first missing or stale downstream creator-media artifact in this order:
 
-`$youtube-channel-audit` -> `$youtube-video-audit` -> `$youtube-vid-research` -> `$youtube-format-research` -> `$youtube-competitive-research` -> `$youtube-title-thumbnail-audit` -> `$youtube-description-optimizer` -> `$youtube-portfolio` -> `$youtube-peer-benchmark` -> `$youtube-search-positioning` -> `$youtube-cadence-diagnosis` -> `$creator-positioning` -> `$content-programming` -> `$series-spec` -> `$product-led-media-map` -> `$video-script` -> `$video-build` -> `$creator-metrics-review`
+`$youtube-channel-audit` -> `$youtube-video-audit` -> `$youtube-vid-research` -> `$youtube-competitive-research` -> `$youtube-title-thumbnail-audit` -> `$youtube-description-optimizer` -> `$youtube-portfolio` -> `$youtube-peer-benchmark` -> `$youtube-search-positioning` -> `$youtube-cadence-diagnosis` -> `$creator-positioning` -> `$content-programming` -> `$series-spec` -> `$product-led-media-map` -> `$creator-metrics-review`
 
 If the sequence is ambiguous, multiple upstream artifacts are stale, or the recommendation depends on research vs production strategy, recommend `$content-programming` and explain the missing artifact.

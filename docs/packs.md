@@ -61,6 +61,7 @@ scripts/pack.sh install business-app
 scripts/pack.sh install devtool
 scripts/pack.sh install code-quality
 scripts/pack.sh install monorepo
+scripts/pack.sh install remotion
 scripts/pack.sh install game-kanban
 scripts/pack.sh remove game
 scripts/pack.sh refresh
@@ -94,6 +95,7 @@ The skill source stays centralized in this repository. Projects opt into packs w
 - Use `game` for video games, prototypes, playable entertainment, and store-page/wishlist validation.
 - Use `devtool` for SDKs, CLIs, APIs, libraries, infrastructure products, and developer-facing platforms.
 - Use `monorepo` for pnpm workspace monorepos, with optional Turborepo, that need package-aware lane specs, guardrails, and scoped shipping.
+- Use `remotion` for Remotion-oriented format research, scene-by-scene video scripting, and build/scaffold planning.
 - Use `business-app-kanban`, `game-kanban`, or `devtool-kanban` only when the project intentionally uses PoketoWork boards.
 
 Kanban packs are never installed automatically by the base domain packs. Install the base domain pack and the matching kanban variant as separate, explicit choices:
@@ -147,6 +149,32 @@ scope: cross-cutting
 ```
 
 Use `scope: package-scoped` when work is contained to declared package paths, `scope: cross-cutting` when work touches shared packages or multiple package boundaries, and `scope: root-only` for root config, scripts, docs, or repository policy. If `scope` is omitted, agents infer `package-scoped` for one package and `cross-cutting` for multiple packages.
+
+## Remotion Pack
+
+The `remotion` pack contains the production path that turns reference-video research and creator-media strategy into Remotion-ready artifacts.
+
+```bash
+scripts/pack.sh install remotion
+```
+
+Skills:
+
+```text
+youtube-format-research, video-script, video-build
+```
+
+Default flow:
+
+```text
+youtube-format-research -> video-script -> video-build
+```
+
+Install it alongside `creator-media` when a project needs the full path from channel evidence, positioning, programming, or product-led media strategy into production:
+
+```bash
+scripts/pack.sh install creator-media remotion
+```
 
 ## Compatibility
 

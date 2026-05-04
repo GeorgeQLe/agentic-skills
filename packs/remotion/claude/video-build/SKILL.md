@@ -73,13 +73,13 @@ After writing output:
 
 ## Next-Skill Routing
 
-After writing the artifact, recommend the next contextual creator-media skill in the final response as `Recommended next skill: <command>`.
+After writing the artifact, recommend the next contextual Remotion or creator-media skill in the final response as `Recommended next skill: <command>`.
 
 Default recommendation: `/creator-metrics-review`.
 
 If the script is missing, recommend `/video-script`. If the user declined the build, do not recommend a follow-up.
 
-If the default successor already exists and is current, recommend the first missing or stale downstream creator-media artifact in this order:
+If the default successor already exists and is current, recommend the first missing or stale downstream Remotion or creator-media artifact in this order:
 
 `/creator-presence-dossier` -> `/youtube-channel-audit` -> `/youtube-video-audit` -> `/youtube-vid-research` -> `/youtube-format-research` -> `/youtube-competitive-research` -> `/youtube-title-thumbnail-audit` -> `/youtube-description-optimizer` -> `/youtube-portfolio` -> `/youtube-peer-benchmark` -> `/youtube-search-positioning` -> `/youtube-cadence-diagnosis` -> `/creator-positioning` -> `/content-programming` -> `/series-spec` -> `/product-led-media-map` -> `/video-script` -> `/video-build` -> `/creator-metrics-review`
 

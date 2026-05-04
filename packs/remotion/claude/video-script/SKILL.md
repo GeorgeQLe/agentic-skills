@@ -8,7 +8,7 @@ argument-hint: "<topic or slug> [--type launch|explainer|demo|testimonial] [--du
 
 # Video Script
 
-Invoke as `$video-script`.
+Invoke as `/video-script`.
 
 Read upstream research and spec artifacts, interview on video goal and audience, then produce a scene-by-scene script with narration text, visual direction, timing, and source attribution.
 
@@ -40,10 +40,10 @@ Enhancement tiers based on available artifacts:
 
 0. Resolve arguments: topic/slug, video type (`launch`, `explainer`, `demo`, `testimonial`), duration (`short`, `medium`, `long`), optional series slug.
 1. Load all available upstream artifacts. Determine enhancement tier.
-2. Text-based checkpoint: confirm video goal, target audience, narrative approach, tone, production constraints with the user before proceeding.
+2. Interview (AskUserQuestion): video goal, target audience, narrative approach, tone, production constraints.
 3. Draft narrative arc using the type-specific template. Present for approval before proceeding.
 4. Write scene-by-scene script: narration text, visual direction, on-screen text, music cues, timing, source attribution.
-5. Text-based checkpoint: present complete script with duration estimate, asset requirements, and ungrounded claims. Validate with user.
+5. Present complete script with duration estimate, asset requirements, and ungrounded claims. Validate with user.
 6. Write output only after user confirmation.
 
 ### Narrative Arc Templates
@@ -70,17 +70,17 @@ Write `specs/youtube/video-script-<slug>-interview.md` with the interview log.
 
 ## Next-Skill Routing
 
-After writing the artifact, recommend the next contextual creator-media skill in the final response as `Recommended next skill: <command>`.
+After writing the artifact, recommend the next contextual Remotion or creator-media skill in the final response as `Recommended next skill: <command>`.
 
-Default recommendation: `$video-build`.
+Default recommendation: `/video-build`.
 
-If the user declined the script or no upstream artifacts exist, do not recommend `$video-build`. When no artifacts exist, recommend the first missing prerequisite (`$creator-positioning`, `$product-led-media-map`, or `$series-spec`).
+If the user declined the script or no upstream artifacts exist, do not recommend `/video-build`. When no artifacts exist, recommend the first missing prerequisite (`/creator-positioning`, `/product-led-media-map`, or `/series-spec`).
 
-If the default successor already exists and is current, recommend the first missing or stale downstream creator-media artifact in this order:
+If the default successor already exists and is current, recommend the first missing or stale downstream Remotion or creator-media artifact in this order:
 
-`$creator-presence-dossier` -> `$youtube-channel-audit` -> `$youtube-video-audit` -> `$youtube-vid-research` -> `$youtube-format-research` -> `$youtube-competitive-research` -> `$youtube-title-thumbnail-audit` -> `$youtube-description-optimizer` -> `$youtube-portfolio` -> `$youtube-peer-benchmark` -> `$youtube-search-positioning` -> `$youtube-cadence-diagnosis` -> `$creator-positioning` -> `$content-programming` -> `$series-spec` -> `$product-led-media-map` -> `$video-script` -> `$video-build` -> `$creator-metrics-review`
+`/creator-presence-dossier` -> `/youtube-channel-audit` -> `/youtube-video-audit` -> `/youtube-vid-research` -> `/youtube-format-research` -> `/youtube-competitive-research` -> `/youtube-title-thumbnail-audit` -> `/youtube-description-optimizer` -> `/youtube-portfolio` -> `/youtube-peer-benchmark` -> `/youtube-search-positioning` -> `/youtube-cadence-diagnosis` -> `/creator-positioning` -> `/content-programming` -> `/series-spec` -> `/product-led-media-map` -> `/video-script` -> `/video-build` -> `/creator-metrics-review`
 
-If the sequence is ambiguous, multiple upstream artifacts are stale, or the recommendation depends on channel-level strategy vs programming-level changes, recommend `$creator-metrics-review` when metrics evidence exists, otherwise recommend the default successor and explain the missing artifact.
+If the sequence is ambiguous, multiple upstream artifacts are stale, or the recommendation depends on channel-level strategy vs programming-level changes, recommend `/creator-metrics-review` when metrics evidence exists, otherwise recommend the default successor and explain the missing artifact.
 
 ## Constraints
 

@@ -46,6 +46,8 @@ This audit checked:
 | `video-script` | Script approved, no upstream artifacts, user declined | Approved -> `video-build`. No artifacts -> recommend prerequisite (`creator-positioning`, `product-led-media-map`, or `series-spec`). Declined -> no follow-up. |
 | `video-build` | Build complete, script missing, user declined | Complete -> `creator-metrics-review` + task items in `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/recurring-todo.md`. Missing -> `video-script`. Declined -> no follow-up. |
 
+`youtube-format-research`, `video-script`, and `video-build` live in the `remotion` pack. Creator-media skills that recommend them should mention enabling `remotion` when it is not installed.
+
 | Skill | End states | Valid recommendation |
 | --- | --- | --- |
 | `concept-exploration` | Business-app pack missing, business-app pack enabled, project type unclear | Pack missing -> `pack install business-app`. Pack enabled -> `icp` using `research/concept-brief.md`. Project unclear -> `pack recommend`. |

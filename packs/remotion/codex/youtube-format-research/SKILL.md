@@ -118,11 +118,11 @@ Use this structure:
 
 ## Next-Skill Routing
 
-After writing the artifact, recommend the next contextual creator-media skill in the final response as `Recommended next skill: <command>`.
+After writing the artifact, recommend the next contextual Remotion or creator-media skill in the final response as `Recommended next skill: <command>`.
 
 Default recommendation: `$video-build` when the user has an approved script and wants a Remotion implementation next; `$video-script` when the format needs to be adapted into a new script first; `$series-spec` when the output should become a reusable show format.
 
-If the default successor already exists and is current, recommend the first missing or stale downstream creator-media artifact in this order:
+If the default successor already exists and is current, recommend the first missing or stale downstream Remotion or creator-media artifact in this order:
 
 `$youtube-channel-audit` -> `$youtube-video-audit` -> `$youtube-vid-research` -> `$youtube-format-research` -> `$youtube-competitive-research` -> `$youtube-title-thumbnail-audit` -> `$youtube-description-optimizer` -> `$youtube-portfolio` -> `$youtube-peer-benchmark` -> `$youtube-search-positioning` -> `$youtube-cadence-diagnosis` -> `$creator-positioning` -> `$content-programming` -> `$series-spec` -> `$product-led-media-map` -> `$video-script` -> `$video-build` -> `$creator-metrics-review`
 

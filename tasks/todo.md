@@ -4,6 +4,28 @@
 **Current phase:** 26 of 26
 **Status:** Planned; ready for `/run`.
 
+## Current Request: Remotion Pack Split
+
+**Goal:** Separate Remotion-oriented format, script, and implementation workflows from the broader `creator-media` pack so projects can opt into creator-media strategy without also enabling Remotion production skills.
+
+**Plan:**
+- [x] Create a new `packs/remotion` pack with mirrored Claude/Codex `youtube-format-research`, `video-script`, and `video-build` skill contracts.
+- [x] Remove those three skills from the `creator-media` pack inventory and default flow while preserving handoffs from creator-media research into Remotion production.
+- [x] Update pack selection, install docs, skill references, and tests to install `remotion` where `video-build` is exercised.
+- [x] Run focused validation for pack listing, routing scans, relevant tests, and diff hygiene.
+
+**Review:** Created `packs/remotion` and moved mirrored `youtube-format-research`, `video-script`, and `video-build` skill contracts from `creator-media`. Updated creator-media pack docs and fallback routing to treat those skills as Remotion-pack handoffs. Updated README, pack docs, skill references, next-step contract notes, pack normalization, and layer2 video tests to use `remotion`.
+
+Validation passed:
+- `scripts/pack.sh list` includes `remotion`.
+- `./scripts/skill-versions.sh --missing` -> `All 310 skills have a version field.`
+- `./scripts/skill-deps.sh --broken` -> `No broken references found.`
+- `./scripts/skill-next-step-routing.sh --missing` -> `All 225 mutation-capable skills have next-step routing.`
+- `pnpm --dir tests test -- --run tests/layer2/video-script.test.ts tests/layer2/video-build.test.ts tests/layer2/video-pipeline.test.ts` ran the configured layer1 project and passed 1143 tests.
+- Temporary `scripts/pack.sh install remotion` linked all three Claude and Codex Remotion skills and wrote `enabled_packs: ["remotion"]`.
+- Targeted `rg` checks confirmed layer2 video tests now install/use `remotion`.
+- `git diff --check` passed.
+
 ## Context
 
 Phase 26 creates a new `monorepo` pack using an augmentation injection pattern — pack skills add pre/post steps to existing global skill contracts rather than duplicating them. V1 ships four skills (mono-detect, mono-run, mono-ship, mono-guard) targeting pnpm workspaces + Turborepo, with a structured lane-spec artifact (JSON + Markdown mirror) for parallel agent-team dispatch.

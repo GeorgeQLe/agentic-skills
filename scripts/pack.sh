@@ -123,6 +123,7 @@ normalize_pack() {
     business|business_app|businessapp|product|saas) echo "business-app" ;;
     business-kanban|business_app_kanban|businessapp-kanban|saas-kanban) echo "business-app-kanban" ;;
     creator|creator_media|creatormedia|media|youtube|youtube-media|founder-media) echo "creator-media" ;;
+    remotion|video-production|video_production|video-build|videobuild|video-script|videoscript) echo "remotion" ;;
     quality|codequality|code_quality|code-quality) echo "code-quality" ;;
     games) echo "game" ;;
     dev|dev-tool|dev-tools|developer-tool|developer-tools) echo "devtool" ;;
@@ -149,7 +150,7 @@ project_type_for_pack() {
     business-app|business-app-kanban) echo "business-app" ;;
     game|game-kanban) echo "game" ;;
     devtool|devtool-kanban) echo "devtool" ;;
-    creator-media) echo "creator-media" ;;
+    creator-media|remotion) echo "creator-media" ;;
     *) return 1 ;;
   esac
 }
