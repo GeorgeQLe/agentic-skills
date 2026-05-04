@@ -58,12 +58,12 @@ describe("video-script skill", () => {
   it("launch-tier4", () => {
     const workDir = createTempProject();
     workDirs.push(workDir);
-    installPack(workDir, "creator-media");
+    installPack(workDir, "remotion");
     setupDriftctlFixture(workDir, { tier: 4 });
 
     const result = runClaude({
       prompt: buildSkillPrompt({
-        pack: "creator-media",
+        pack: "remotion",
         skill: "video-script",
         args: `${SLUG} --type launch --duration medium`,
         answers: baseAnswers.launch,
@@ -103,12 +103,12 @@ describe("video-script skill", () => {
   it("explainer-tier2", () => {
     const workDir = createTempProject();
     workDirs.push(workDir);
-    installPack(workDir, "creator-media");
+    installPack(workDir, "remotion");
     setupDriftctlFixture(workDir, { tier: 2 });
 
     const result = runClaude({
       prompt: buildSkillPrompt({
-        pack: "creator-media",
+        pack: "remotion",
         skill: "video-script",
         args: `${SLUG} --type explainer --duration medium`,
         answers: baseAnswers.explainer,
@@ -133,12 +133,12 @@ describe("video-script skill", () => {
   it("demo-tier1", () => {
     const workDir = createTempProject();
     workDirs.push(workDir);
-    installPack(workDir, "creator-media");
+    installPack(workDir, "remotion");
     setupDriftctlFixture(workDir, { tier: 1 });
 
     const result = runClaude({
       prompt: buildSkillPrompt({
-        pack: "creator-media",
+        pack: "remotion",
         skill: "video-script",
         args: `${SLUG} --type demo --duration short`,
         answers: baseAnswers.demo,
@@ -166,12 +166,12 @@ describe("video-script skill", () => {
   it("launch-tier3-series", () => {
     const workDir = createTempProject();
     workDirs.push(workDir);
-    installPack(workDir, "creator-media");
+    installPack(workDir, "remotion");
     setupDriftctlFixture(workDir, { tier: 3 });
 
     const result = runClaude({
       prompt: buildSkillPrompt({
-        pack: "creator-media",
+        pack: "remotion",
         skill: "video-script",
         args: `${SLUG} --type launch --duration medium --series driftctl-deep-dives`,
         answers: baseAnswers.launch,

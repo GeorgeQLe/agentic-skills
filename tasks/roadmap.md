@@ -23,6 +23,19 @@ Phases 12-13 and 15-25 complete, with Phase 14 still available as planned future
 
 **Result:** See `tasks/mobile-ideas-return-assessment.md`. Recommended next skill: `$project-fleet --plan`.
 
+## Current Change: Remotion Pack Split
+
+**Goal:** Move Remotion-oriented format, script, and build skills out of `creator-media` into a dedicated `remotion` pack.
+
+**Acceptance Criteria:**
+- [x] `packs/remotion` exists with mirrored Claude/Codex `youtube-format-research`, `video-script`, and `video-build` skill contracts.
+- [x] `creator-media` no longer installs those Remotion production skills by default.
+- [x] Creator-media handoffs point to the `remotion` pack when Remotion implementation is the next step.
+- [x] Pack docs, skill references, pack normalization, and relevant tests know about `remotion`.
+- [x] Focused validation passes.
+
+**Completed:** 2026-05-04. Moved `youtube-format-research`, `video-script`, and `video-build` into the new `remotion` pack; updated creator-media docs and routing to treat them as Remotion-pack handoffs; updated public pack references, pack normalization, and layer2 video test pack names. Focused validation passed with pack list/install checks, skill version/dependency/routing audits, configured layer1 tests, targeted source scans, and `git diff --check`.
+
 ## Phase Overview
 
 | Phase | Title | Source Spec(s) | Key Deliverable | Est. Complexity |

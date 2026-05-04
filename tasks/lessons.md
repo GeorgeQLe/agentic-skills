@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-05-04 — Remotion pack scope includes format, script, and build
+
+- A Remotion pack split was initially scoped only to `video-build`, but the user clarified that `youtube-format-research`, `video-script`, and `video-build` belong together.
+- When separating a domain-specific pack from a broader workflow pack, include the full adjacent workflow chain, not just the terminal implementation skill.
+- For Remotion work, treat `youtube-format-research -> video-script -> video-build` as the cohesive pack boundary unless the user explicitly asks for a narrower split.
+
 ## 2026-05-04 — Use repo-managed skill creation for agentic-skills contributions
 
 - `$create-local-skill` creates user-local skills under `~/.codex/skills` or `~/.claude/skills`; it is not the right workflow when the user wants a skill added to this `agentic-skills` repository.

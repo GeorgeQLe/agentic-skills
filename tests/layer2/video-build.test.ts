@@ -37,13 +37,13 @@ describe("video-build skill", () => {
   it("minimal-1080p", () => {
     const workDir = createTempProject();
     workDirs.push(workDir);
-    installPack(workDir, "creator-media");
+    installPack(workDir, "remotion");
     setupDriftctlFixture(workDir, { tier: 4 });
     driftctlScriptFixture(workDir);
 
     const result = runClaude({
       prompt: buildSkillPrompt({
-        pack: "creator-media",
+        pack: "remotion",
         skill: "video-build",
         args: `${SLUG} --style minimal --fps 30 --resolution 1080p`,
         answers: buildAnswers,
@@ -75,13 +75,13 @@ describe("video-build skill", () => {
   it("kinetic-text-1080p", () => {
     const workDir = createTempProject();
     workDirs.push(workDir);
-    installPack(workDir, "creator-media");
+    installPack(workDir, "remotion");
     setupDriftctlFixture(workDir, { tier: 4 });
     driftctlScriptFixture(workDir);
 
     const result = runClaude({
       prompt: buildSkillPrompt({
-        pack: "creator-media",
+        pack: "remotion",
         skill: "video-build",
         args: `${SLUG} --style kinetic-text --fps 30 --resolution 1080p`,
         answers: buildAnswers,
