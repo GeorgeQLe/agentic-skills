@@ -1,0 +1,7 @@
+interface:
+  display_name: "Install Agentic Skills"
+  short_description: "Refresh global Claude and Codex skill links from this checkout"
+  default_prompt: "Use $install-agentic-skills to run the agentic-skills installer, refresh global skill links, and explain how to enable project-local packs."
+
+policy:
+  allow_implicit_invocation: true

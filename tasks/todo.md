@@ -1,31 +1,50 @@
 # No Active Phase
 
 **Project:** Claude Skills / agentic-skills
-**Status:** Phase 23 complete; no later implementation phase is planned in `tasks/roadmap.md`.
+**Status:** Phase 24 complete; no later implementation phase is planned in `tasks/roadmap.md`.
 
 ## Current Phase Todo
 
-- [x] Read `tasks/lessons.md` for relevant correction patterns.
-- [x] Document Phase 23 in `tasks/roadmap.md`.
-- [x] Add mirrored Claude/Codex `targeted-skill-builder` skills.
+- [x] Inspect existing installer, pack, and skill patterns.
+- [x] Document Phase 24 in `tasks/roadmap.md`.
+- [x] Add mirrored `install-agentic-skills` skills and launcher scripts.
 - [x] Add Codex `agents/openai.yaml`.
-- [x] Update discovery/routing docs only where needed.
 - [x] Run `./install.sh`.
 - [x] Run validation:
+  - [x] installer launcher help/install checks
   - [x] `./scripts/skill-deps.sh --broken`
   - [x] `./scripts/skill-versions.sh --missing`
   - [x] `./scripts/skill-next-step-routing.sh --missing`
-  - [x] targeted `rg` checks for focused behavior
+  - [x] targeted `rg` checks for installer and pack behavior
+  - [x] `pnpm --dir tests test`
   - [x] `git diff --check`
-- [ ] Commit and push intended changes.
+- [x] Commit and push intended changes.
 
 ## Current State
 
 - [x] Phase 22: Feature Interview Routing is complete in `tasks/roadmap.md`.
 - [x] Phase 23: Targeted Skill Builder is complete in `tasks/roadmap.md`.
+- [x] Phase 24: Installer Skill is complete in `tasks/roadmap.md`.
 - [ ] Discover candidate next phase or explicitly park the project.
 
 ## Review
+
+### Phase 24 Review
+
+- Implemented mirrored Claude/Codex `install-agentic-skills` skills and Codex OpenAI agent metadata.
+- Added bundled launcher scripts that resolve the repository root from the skill directory and delegate to root `install.sh`.
+- Updated README, global `skills` discovery tables, `docs/skills-reference.md`, and `docs/operating-modes.md`.
+- Ran `./install.sh`; it completed with 0 newly installed Claude/Codex links because existing repo-managed symlinks were already current.
+- Ran `global/codex/install-agentic-skills/scripts/install-agentic-skills.sh`; it delegated to root `install.sh` and completed cleanly with the same current-link result.
+- Validation:
+  - `global/codex/install-agentic-skills/scripts/install-agentic-skills.sh --help` - passed; printed root `install.sh` usage, including `--uninstall`.
+  - Targeted installer/pack `rg` scan - passed across mirrored skills and discovery docs.
+  - `./scripts/skill-deps.sh --broken` - passed; no broken references found.
+  - `./scripts/skill-versions.sh --missing` - passed; all 293 skills have a version field.
+  - `./scripts/skill-next-step-routing.sh --missing` - passed; all 215 mutation-capable skills have next-step routing.
+  - `pnpm --dir tests test` - passed; 4 files and 1147 tests.
+  - `git diff --check` - passed; no whitespace errors.
+- Reload note: after the install refresh, start a fresh Claude Code or Codex CLI/session if `install-agentic-skills` is not visible yet.
 
 ### Phase 23 Review
 
