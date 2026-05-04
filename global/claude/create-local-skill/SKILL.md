@@ -1,12 +1,12 @@
 ---
-name: create-skill
+name: create-local-skill
 description: Scaffold a new user-local skill in ~/.claude/skills (and optionally ~/.codex/skills), then offer to promote it to a personal fork of agentic-skills
 type: execution
 version: 1.0.0
 argument-hint: <skill-name> [description]
 ---
 
-# Create Skill
+# Create Local Skill
 
 Scaffold a new **user-local** skill directly into `~/.claude/skills/<name>/` (and optionally `~/.codex/skills/<name>/`) so the user can experiment without touching the upstream agentic-skills repo. At the end, offer to **promote** the skill by copying it into their personal fork of agentic-skills.
 
