@@ -1,12 +1,14 @@
-# Active Phase: Phase 14 - LinkedIn Evidence Lane
+# Active Phase: Phase 26 - Monorepo Pack V1
 
 **Project:** Claude Skills / agentic-skills
-**Current phase:** 14 of 25
-**Status:** Planned; ready for `$run`.
+**Current phase:** 26 of 26
+**Status:** Planned; ready for `/run`.
 
 ## Context
 
-Phase 14 adds LinkedIn-first free/manual evidence support to the existing creator-media matrix/schema/dossier workflow. The lane must use owner exports, manual snapshots, public unauthenticated page captures, and user-provided files by default, while explicitly excluding paid API dependency, logged-in scraping, bot-protection bypass, access-control circumvention, and private-data collection.
+Phase 26 creates a new `monorepo` pack using an augmentation injection pattern — pack skills add pre/post steps to existing global skill contracts rather than duplicating them. V1 ships four skills (mono-detect, mono-run, mono-ship, mono-guard) targeting pnpm workspaces + Turborepo, with a structured lane-spec artifact (JSON + Markdown mirror) for parallel agent-team dispatch.
+
+**Source Spec:** `specs/monorepo-execution-controller.md`
 
 > Test strategy: tests-after
 
@@ -14,56 +16,131 @@ Phase 14 adds LinkedIn-first free/manual evidence support to the existing creato
 **Parallel mode:** serial
 **Integration owner:** main agent
 **Conflict risk:** medium
-**Review gates:** correctness, tests, security, docs/API conformance
+**Review gates:** correctness, tests, docs/API conformance
 
 **Subagent lanes:** none
 
 ### Implementation
-- Step 14.1: Harden the LinkedIn baseline in the platform foundation skills.
+
+- Step 26.1: Create the monorepo pack structure and PACK.md.
   - Classification: automated
-  - Files: modify `packs/creator-media/claude/creator-platform-capability-matrix/SKILL.md`, modify `packs/creator-media/codex/creator-platform-capability-matrix/SKILL.md`, modify `packs/creator-media/claude/creator-evidence-schema/SKILL.md`, modify `packs/creator-media/codex/creator-evidence-schema/SKILL.md`
-  - Make owner exports, manual snapshots, public unauthenticated page captures, and user-provided files the default LinkedIn collection lane.
-  - Treat LinkedIn personal analytics, company/page analytics, and API fields as unavailable unless owner-provided or already authorized.
-  - Require redaction/exclusion guidance for private contacts, messages, relationship data, sensitive account data, and unrelated personal information before analysis.
-  - Require high-risk LinkedIn surfaces to stop for user-provided evidence instead of attempting logged-in scraping, bot-protection bypass, paywall access, or access-control circumvention.
-- Step 14.2: Make the creator presence dossier explicitly consume LinkedIn evidence without leaking private material.
+  - Files: create `packs/monorepo/PACK.md`
+  - Define the pack: name, description, skill list (mono-detect, mono-run, mono-ship, mono-guard), install instructions, and the augmentation injection pattern explanation.
+  - Document that this pack targets pnpm workspaces + Turborepo and uses package-scope YAML frontmatter tags in specs/roadmap phases.
+  - Include the v1/v2 scope boundary and the relationship to existing global `/mono-plan` and `/mono-guard` skills.
+
+- Step 26.2: Create the `mono-detect.sh` detection script and `.agents/monorepo.json` schema.
   - Classification: automated
-  - Files: modify `packs/creator-media/claude/creator-presence-dossier/SKILL.md`, modify `packs/creator-media/codex/creator-presence-dossier/SKILL.md`
-  - Add LinkedIn evidence-register requirements for profile exports, profile snapshots, posts/shares, articles, rich media, recommendations, skills, positions, education, company pages, and manual/public snapshots when provided.
-  - Require the dossier to classify LinkedIn evidence as public, owner-provided, admin-provided, internal notes, or mixed/redaction needed.
-  - Route private or mixed LinkedIn material to redaction/exclusion before synthesis.
-- Step 14.3: Update creator-media pack and discovery docs for the LinkedIn lane.
+  - Files: create `packs/monorepo/scripts/mono-detect.sh`
+  - Detect workspace manager via `pnpm-workspace.yaml` presence, build orchestrator via `turbo.json` presence.
+  - Enumerate packages from `pnpm-workspace.yaml` globs, read each `package.json` for name, dependencies, devDependencies, and scripts.
+  - Build dependency graph from internal workspace references.
+  - Validate the graph is a DAG (detect circular dependencies).
+  - Output `.agents/monorepo.json` with workspace_manager, build_orchestrator, root, packages, dependency_graph, turbo_pipelines, and detected_at.
+  - Support staleness check: re-run if workspace config files are newer than `.agents/monorepo.json`.
+
+- Step 26.3: Create the lane-spec artifact schema and `lane-spec-validate.sh`.
   - Classification: automated
-  - Files: modify `packs/creator-media/PACK.md`, modify `README.md`, modify `docs/skills-reference.md`
-  - Document the LinkedIn-first lane as part of the existing matrix/schema/dossier workflow rather than a standalone scraper.
-  - State that LinkedIn collection starts from owner exports, manual snapshots, public unauthenticated captures, and user-provided files.
-  - State that paid APIs, logged-in scraping, bot-protection bypass, private-data collection, and access-control circumvention are out of scope.
-- Step 14.4: Add focused validation coverage for LinkedIn lane contracts.
+  - Files: create `packs/monorepo/scripts/lane-spec-validate.sh`
+  - Validate `.agents/lane-specs.json` against required fields: phase, source_roadmap_hash, lifecycle, cross_cutting_steps, lanes (each with id, step, packages, owns, must_not_edit, depends_on, mode).
+  - Check `owns` paths are disjoint across lanes.
+  - Check every lane's `must_not_edit` includes `pnpm-lock.yaml` and root config files.
+  - Check `depends_on` references resolve to valid step IDs.
+  - Check lifecycle is a valid state: draft, approved, dispatched, integrated, failed.
+  - Exit 0 on valid, exit 1 with diagnostic on invalid.
+
+- Step 26.4: Create mirrored Claude/Codex `mono-detect` skill contracts.
   - Classification: automated
-  - Files: modify `tests/layer1/routing-graph.test.ts` or create `tests/layer1/creator-media-linkedin.test.ts`
-  - Add layer1 checks that mirrored Claude/Codex creator-media contracts include LinkedIn baseline language, redaction/privacy language, normalized evidence routing, and forbidden access patterns.
-  - Keep checks structural and deterministic; do not require network, LinkedIn credentials, or external exports.
+  - Files: create `packs/monorepo/claude/mono-detect/SKILL.md`, create `packs/monorepo/codex/mono-detect/SKILL.md`, create `packs/monorepo/codex/mono-detect/agents/openai.yaml`
+  - Skill runs `mono-detect.sh`, reports workspace structure, package count, dependency graph summary, and Turborepo pipeline awareness.
+  - Include staleness detection: re-run if config files are newer than `.agents/monorepo.json`.
+  - If not a detected monorepo, exit with advisory and suggest `/mono-migrate` (v2).
+  - Include augmentation injection pattern documentation: this is a foundation skill consumed by mono-run, mono-ship, and mono-guard.
+  - Include next-step routing.
+
+- Step 26.5: Create mirrored Claude/Codex `mono-guard` skill contracts.
+  - Classification: automated
+  - Files: create `packs/monorepo/claude/mono-guard/SKILL.md`, create `packs/monorepo/codex/mono-guard/SKILL.md`, create `packs/monorepo/codex/mono-guard/agents/openai.yaml`
+  - Pre-flight mode: validate lane-spec JSON via `lane-spec-validate.sh`, verify `owns` disjointness, verify `must_not_edit` includes lockfiles and root config, verify dependency ordering is a valid DAG.
+  - Post-integration mode: verify actual file changes (from `git diff`) match declared `owns` paths, flag any lane that wrote outside its boundary, flag any lockfile modifications from parallel agents.
+  - Consume `.agents/lane-specs.json` and `.agents/monorepo.json`.
+  - Reference the existing global `/mono-guard` skill contract for behavioral compatibility.
+  - Include next-step routing.
+
+- Step 26.6: Create mirrored Claude/Codex `mono-run` skill contracts.
+  - Classification: automated
+  - Files: create `packs/monorepo/claude/mono-run/SKILL.md`, create `packs/monorepo/codex/mono-run/SKILL.md`, create `packs/monorepo/codex/mono-run/agents/openai.yaml`
+  - Document the augmentation injection: pre-execution (mono-detect, lane-spec generation, mono-guard pre-flight, plan-mode approval) → dispatch (cross-cutting serial first, then parallel worktree waves) → post-dispatch (mono-guard post-integration).
+  - Delegate to standard `/run` when the project is not a detected monorepo or the phase mode is serial.
+  - Generate `.agents/lane-specs.json` and `tasks/lane-specs.md` from roadmap execution profiles.
+  - Implement stop-all-lanes failure semantics: any lane failure halts remaining agents, preserves worktree state, updates lane-spec lifecycle to `failed`.
+  - Support flags: default (next step), `--phase` (all steps in current phase), `--pipeline` (plan → execute → ship).
+  - Defer to `turbo run` for build/test/lint when `turbo.json` is present.
+  - Include next-step routing.
+
+- Step 26.7: Create mirrored Claude/Codex `mono-ship` skill contracts.
+  - Classification: automated
+  - Files: create `packs/monorepo/claude/mono-ship/SKILL.md`, create `packs/monorepo/codex/mono-ship/SKILL.md`, create `packs/monorepo/codex/mono-ship/agents/openai.yaml`
+  - Document the augmentation injection: pre-ship (mono-detect, read lane-specs, package-scoped test/lint/build, transitive-dependent validation) → ship (delegate to `/ship`) → post-ship (update lane-specs.md).
+  - Use dependency graph from `.agents/monorepo.json` to test transitive dependents of modified packages.
+  - Defer to `turbo run` when available, fall back to `pnpm --filter`.
+  - Stop and report on any validation failure before shipping.
+  - Include next-step routing.
+
+- Step 26.8: Wire the monorepo pack into repository docs and discovery.
+  - Classification: automated
+  - Files: modify `README.md`, modify `docs/skills-reference.md`, modify `docs/packs.md`
+  - Register the monorepo pack in the pack list with description and skill inventory.
+  - Document the augmentation injection pattern and how it differs from the `-kanban` duplication pattern.
+  - Document the lane-spec artifact pattern (JSON + Markdown mirror) and its lifecycle.
+  - Document package-scope YAML frontmatter tags for specs and roadmap phases.
+
+- Step 26.9: Create `monorepo-validate.sh` pack validation script.
+  - Classification: automated
+  - Files: create `packs/monorepo/scripts/monorepo-validate.sh`
+  - Contract compliance: all monorepo pack skills reference the augmentation injection pattern.
+  - Lane-spec schema: validate fixture JSON files pass `lane-spec-validate.sh`.
+  - Detection correctness: run `mono-detect.sh` against fixture directories and verify output.
+  - Mirrored skill parity: Claude and Codex skill contracts are structurally consistent.
+  - Codex skills have `agents/openai.yaml` manifests.
+
+- Step 26.10: Create test fixtures for monorepo detection and lane-spec validation.
+  - Classification: automated
+  - Files: create `tests/fixtures/monorepo/pnpm-turbo/pnpm-workspace.yaml`, create `tests/fixtures/monorepo/pnpm-turbo/turbo.json`, create `tests/fixtures/monorepo/pnpm-turbo/packages/api/package.json`, create `tests/fixtures/monorepo/pnpm-turbo/packages/web/package.json`, create `tests/fixtures/monorepo/pnpm-turbo/packages/shared-lib/package.json`, create `tests/fixtures/monorepo/pnpm-only/pnpm-workspace.yaml`, create `tests/fixtures/monorepo/pnpm-only/packages/app/package.json`, create `tests/fixtures/monorepo/not-monorepo/package.json`, create `tests/fixtures/monorepo/lane-specs-valid.json`, create `tests/fixtures/monorepo/lane-specs-invalid.json`
+  - pnpm-turbo fixture: 2 packages (api, web) + 1 shared lib with internal dependencies and Turbo pipelines.
+  - pnpm-only fixture: single package without Turborepo.
+  - not-monorepo fixture: standard single-app package.json with no workspace config.
+  - lane-specs-valid.json: complete lane-spec with disjoint owns, valid must_not_edit, resolved depends_on.
+  - lane-specs-invalid.json: overlapping owns paths (should fail validation).
 
 ### Green
-- Step 14.5: Run focused validation for the LinkedIn evidence lane.
+- Step 26.11: Run focused validation for the monorepo pack.
   - Classification: automated
   - Files: modify `tasks/todo.md`
-  - Run targeted `rg` checks over creator-media pack skills and docs for owner export/manual snapshot/public capture baseline, redaction language, normalized schema/dossier routing, and forbidden scraping/API-first language.
+  - Run `packs/monorepo/scripts/monorepo-validate.sh` against fixtures and verify pass/fail.
+  - Run `packs/monorepo/scripts/lane-spec-validate.sh tests/fixtures/monorepo/lane-specs-valid.json` (expect pass).
+  - Run `packs/monorepo/scripts/lane-spec-validate.sh tests/fixtures/monorepo/lane-specs-invalid.json` (expect fail).
+  - Run `packs/monorepo/scripts/mono-detect.sh` against each fixture directory and verify correct detection output.
+  - Run targeted `rg` checks for augmentation injection language, lane-spec lifecycle, Turbo defer language, and stop-all-lanes semantics across all monorepo pack skills.
   - Run `pnpm --dir tests test`.
   - Run `./scripts/skill-deps.sh --broken`.
   - Run `./scripts/skill-versions.sh --missing`.
   - Run `./scripts/skill-next-step-routing.sh --missing`.
   - Run `git diff --check`.
-  - Record exact command results in the `tasks/todo.md` review section and perform only concrete cleanup found by validation.
+  - Record exact command results in the `tasks/todo.md` review section.
 
-### Milestone: Phase 14 LinkedIn Evidence Lane
+### Milestone: Phase 26 Monorepo Pack V1
 **Acceptance Criteria:**
-- [ ] LinkedIn evidence guidance is present in mirrored creator-media skills or a dedicated mirrored LinkedIn skill, depending on Phase 12/13 implementation shape.
-- [ ] The LinkedIn lane uses owner exports and manual/public snapshots as the baseline.
-- [ ] The lane explicitly forbids logged-in scraping, paid API dependency, bot-protection bypass, and private-data collection.
-- [ ] Redaction and privacy handling are documented before analysis.
-- [ ] LinkedIn records normalize into the shared evidence schema and dossier.
-- [ ] Validation passes with targeted checks for LinkedIn baseline, privacy constraints, and no paid/API-first language.
+- [ ] `mono-detect` correctly identifies pnpm workspaces and Turborepo, outputs `.agents/monorepo.json` with package list and dependency graph.
+- [ ] `mono-run` generates lane specs from roadmap execution profiles, runs `/mono-guard` pre-flight, dispatches parallel worktree agents for package-scoped steps, and runs cross-cutting steps serially.
+- [ ] `mono-run` stops all lanes on any lane failure and preserves worktree state.
+- [ ] `mono-ship` runs package-scoped and transitive-dependent tests/lint/build before delegating to `/ship`.
+- [ ] `mono-guard` validates lane-spec disjointness pre-flight and boundary compliance post-integration.
+- [ ] Lane-spec artifact follows JSON + Markdown mirror pattern with lifecycle tracking.
+- [ ] Skills defer to `turbo run` when `turbo.json` is present, fall back to `pnpm --filter` otherwise.
+- [ ] Mirrored Claude/Codex skill contracts exist for all v1 skills.
+- [ ] Pack structure registered in README, `docs/skills-reference.md`, and `docs/packs.md`.
+- [ ] Script-based validation passes for contracts, lane-spec schema, detection, and boundary checks.
 - [ ] All phase tests pass.
 - [ ] No regressions in previous phase tests.
 
@@ -74,6 +151,6 @@ Phase 14 adds LinkedIn-first free/manual evidence support to the existing creato
 
 ## Review
 
-- Planning created from `tasks/roadmap.md` Phase 14 and `specs/creator-platform-evidence-schema.md`.
-- No manual tasks identified; this phase is repo-edit and local-validation work only.
+- Planning created from `tasks/roadmap.md` Phase 26 and `specs/monorepo-execution-controller.md`.
+- No manual tasks identified; this phase is repo-edit, script, and local-validation work only.
 - No record or recurring tasks identified.
