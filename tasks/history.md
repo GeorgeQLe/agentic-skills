@@ -1381,3 +1381,9 @@ Resolved all 10 findings from `/expert-review`:
 - Added `docs/quality-gate-contract.md` as the reusable quality-gate contract for mutation and shipping skills.
 - Defined non-trivial mutation scope, the Plan/Implement/Self-review/Quality sweep/Verification/Ship manifest flow, required ship-manifest fields, skipped-test and residual-risk standards, adversarial review expectations, user-correction handling, and direct-to-primary compatibility.
 - Verified with a targeted contract-topic scan and `git diff --check`.
+
+## 2026-05-04 — Phase 21 Step 21.2: ship manifest validator
+
+- Added `scripts/ship-quality-gate.sh`, a dependency-light manifest validator for the required quality-gate fields.
+- Added complete and intentionally incomplete fixtures under `tests/fixtures/ship-quality-gate/`.
+- Verified the complete fixture passes, the incomplete fixture fails with expected missing-field output, and `git diff --check` is clean.
