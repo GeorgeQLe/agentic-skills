@@ -127,6 +127,7 @@ normalize_pack() {
     games) echo "game" ;;
     dev|dev-tool|dev-tools|developer-tool|developer-tools) echo "devtool" ;;
     dev-kanban|dev-tool-kanban|dev-tools-kanban|developer-tool-kanban|developer-tools-kanban) echo "devtool-kanban" ;;
+    alignment|align|grill|alignment_loop|alignmentloop) echo "alignment-loop" ;;
     pack|packs|"") return 1 ;;
     *) echo "$pack" ;;
   esac
