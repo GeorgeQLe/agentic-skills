@@ -57,7 +57,7 @@ Route behavior based on the current pipeline state:
 | State | Condition | Behavior |
 |-------|-----------|----------|
 | A0 — No specs, missing journey | User-facing business-app work has no specs and no `research/journey-map.md` | Queue `/journey-map`. Done (skip to step 7). |
-| A — No specs | No `specs/` files, no `spec.md`, and journey is complete or not applicable | Queue `/spec-interview`. Done (skip to step 7). |
+| A — No specs | No `specs/` files, no `spec.md`, and journey is complete or not applicable | Queue `/feature-interview` when an idea/research gap exists and the planning destination is not confirmed; queue `/spec-interview` only when the user already selected full-spec creation. Done (skip to step 7). |
 | B0 — Specs, missing design gate | User-facing specs exist, but `research/journey-map.md`, `specs/ux-variations-*.md`, or `specs/ui-*.md` is missing | Queue the missing journey/UX/UI planning item. Done (skip to step 7). |
 | B — Specs, no roadmap | Specs exist and required journey/UX/UI planning is complete or not applicable, `tasks/roadmap.md` missing or empty | Go to step 4 (build roadmap), then continue to step 5. |
 | C — Work in progress | `tasks/roadmap.md` exists, unchecked phases remain | Skip to step 5 (classify issues). |
@@ -225,7 +225,7 @@ Specs exist in `specs/` (or `spec.md`) but `tasks/roadmap.md` does not exist. Do
 `tasks/lessons.md` was updated more recently than the current phase's implementation steps were written, suggesting new lessons may apply to in-progress work.
 
 #### 14. Unspecced Ideas
-`tasks/ideas.md` contains ideas that have no corresponding spec in `specs/`. These are candidates for `/spec-interview --ideas` or individual `/spec-interview` runs.
+`tasks/ideas.md` contains ideas that have no corresponding spec in `specs/`. These are candidates for `/feature-interview` triage. Use `/spec-interview --ideas` or individual `/spec-interview` runs only when the user explicitly wants full specs for every selected idea.
 
 ### 6. Order the Priority Queue
 
@@ -267,7 +267,7 @@ Rules:
 7. Use unchecked boxes for unresolved issues.
 8. Use checked boxes only when an issue is already resolved.
 9. Never write `/roadmap` into `## Priority Task Queue`. If an issue appears to require `/roadmap`, resolve the underlying state in this run:
-   - specs missing: queue `/spec-interview` or the relevant idea/spec interview command
+   - specs missing: queue `/feature-interview` for idea triage, `/spec-interview` when full spec creation is already confirmed, or the relevant upstream planning command
    - user-facing design gate missing: queue `/journey-map`, `/ux-variation`, or `/ui-interview`
    - specs exist but roadmap missing: build `tasks/roadmap.md` through State B and seed `/plan-phase 1`
    - existing queue already contains `/roadmap`: replace it with `/reconcile-dev-docs fix tasks` because the queue is stale/self-referential
@@ -343,9 +343,9 @@ For State A (no specs):
 ## No Specs Found
 
 - No specifications found in `specs/` or `spec.md`
-- Queued `/journey-map` first if user-facing lifecycle context is missing; otherwise queued `/spec-interview` to create project specifications
+- Queued `/journey-map` first if user-facing lifecycle context is missing; otherwise queued `/feature-interview` to confirm whether to create a new spec, update an existing spec, or route elsewhere
 
-Next: `/journey-map` to define the customer/user lifecycle, or `/spec-interview` when journey context is already present or not applicable.
+Next: `/journey-map` to define the customer/user lifecycle, or `/feature-interview` when journey context is already present or not applicable.
 ```
 
 For State D (all complete, documentation scan needed):
@@ -405,7 +405,7 @@ Output exactly two lines beyond the normal report:
 Rules:
 
 - Make the next work item primary. Derive it from the roadmap state, the first unchecked priority-queue item, the next unplanned phase, advisory queues, or the absence of remaining work. Do not use agent mode itself as the next work item.
-- Never recommend `/roadmap` as the next command from a `/roadmap` run. This skill is the scanner/router; once it has updated the queue, the next command must be the first queued actionable skill (`/spec-interview`, `/journey-map`, `/ux-variation`, `/ui-interview`, `/research-roadmap`, `/plan-phase N`, `/ship-end --no-deploy`, `/reconcile-dev-docs fix tasks`, `/run`, `/guide`, or `none`). If the first unchecked item itself says `/roadmap`, treat that as a stale/self-referential queue item and route to `/reconcile-dev-docs fix tasks` with evidence.
+- Never recommend `/roadmap` as the next command from a `/roadmap` run. This skill is the scanner/router; once it has updated the queue, the next command must be the first queued actionable skill (`/feature-interview`, `/spec-interview`, `/journey-map`, `/ux-variation`, `/ui-interview`, `/research-roadmap`, `/plan-phase N`, `/ship-end --no-deploy`, `/reconcile-dev-docs fix tasks`, `/run`, `/guide`, or `none`). If the first unchecked item itself says `/roadmap`, treat that as a stale/self-referential queue item and route to `/reconcile-dev-docs fix tasks` with evidence.
 - Use `./scripts/agent-mode.sh` only to choose command text. If it is missing, unset, or non-zero, infer routing from the current invocation and task type instead of asking the user to select a mode by default.
 - Inference defaults:
   - Claude slash invocation (`/roadmap`, `/plan-phase`, `/run`, `/delegate`) or orchestration-heavy work → recommend the matching `/...` route.
