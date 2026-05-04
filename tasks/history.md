@@ -1401,3 +1401,10 @@ Resolved all 10 findings from `/expert-review`:
 - Required manifest coverage for changed files, per-file purpose, user-goal mapping, tests run, skipped tests, adversarial review, residual risk, rollback note, and next command.
 - Required targeted adversarial review for non-trivial source changes and made final outputs distinguish executable verification from documentation-only or task-only checks.
 - Verified with targeted contract-field scans across the four global skills and `git diff --check`.
+
+## 2026-05-04 — Phase 21 Step 21.5: focused quality-gate validation
+
+- Ran the focused quality-gate validator checks for the complete and intentionally incomplete ship-manifest fixtures.
+- Confirmed the complete fixture passes and the incomplete fixture fails with the expected missing fields: `Per-file purpose`, `User-goal mapping`, `Skipped tests`, `Adversarial review`, `Residual risk`, and `Rollback note`.
+- Confirmed targeted contract scans cover quality-gate references and required manifest fields across the global shipping skills, canonical contract, validator script, and complete fixture.
+- Verified the task-documentation shipping diff with `git diff --check`.
