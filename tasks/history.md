@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-05-04 — Add headless video-script/video-build test harness
+
+- Extended test harness with creator-media skill testing for `video-script` and `video-build`.
+- New `tests/harness/interview.ts`: prompt builder that embeds pre-scripted interview answers for non-interactive runs.
+- Extended `tests/harness/fixtures.ts` with `setupDriftctlFixture()` (tier-based artifact selection) and `driftctlScriptFixture()`.
+- Extended `tests/harness/judge.ts` with `hasSourceAttribution()`, `hasUngroundedSection()`, and `matchesNarrativeArc()` assertions.
+- Added Driftctl fixtures: creator-positioning, product-led-media-map, journey-map, gtm, video-script golden, and series-spec.
+- 4 video-script tests (launch-tier4, explainer-tier2, demo-tier1, launch-tier3-series), 2 video-build tests (minimal, kinetic-text), 1 pipeline test (script→build chain).
+- Budget: $1.50/test, 5-min timeout. Total: 7 tests, ~$10.50 max for full suite.
+
 ## 2026-05-04 — Add skill pack test harness
 
 - Built two-layer test architecture in `tests/`: layer1 (structural, free, instant) and layer2 (LLM-in-the-loop via `claude --print`).
