@@ -14,6 +14,10 @@ Use this skill to detect a pnpm workspace monorepo and generate the `.agents/mon
 
 `mono-detect` is the foundation skill for `mono-run`, `mono-ship`, and `mono-guard`. Those skills use its output to inject monorepo-aware pre/post steps into the standard `$run` and `$ship` contracts without duplicating the global workflow.
 
+## Augmentation Injection Pattern
+
+`mono-detect` is the pack's detection foundation for the augmentation injection pattern. It does not replace `$run`, `$ship`, or global monorepo planning skills; it supplies `.agents/monorepo.json` so `mono-run`, `mono-ship`, and `mono-guard` can inject monorepo-aware pre-flight and post-integration checks around those existing workflows.
+
 ## Workflow
 
 1. Resolve the target repository root.
