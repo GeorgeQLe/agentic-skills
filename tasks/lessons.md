@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-05-04 — Human-only blockers should not route back to run
+
+- A handoff identified a manual overlay playtest as next work but still recommended `/run`, which made an external human-only validation look agent-executable.
+- When next work requires human-only browser/OS interaction, real device access, authenticated dashboards without a reliable CLI/API path, or explicit sign-off, record it in `tasks/manual-todo.md` as a blocking manual task when it blocks the next automated step.
+- The recommended next route should be `$guide`, a Claude-guided manual step, or an explicit manual-blocker handoff, not `/run` or `$run`.
+- Keep the next work item primary; command routing should serve the work classification rather than mechanically matching the current skill invocation.
+
 ## 2026-05-04 — Exhausted queues route to discovery, not none
 
 - A completed roadmap plus current documentation scan allowed `Recommended next command: none`, leaving a repo in a dead-end handoff even though candidate new-phase discovery was still possible.

@@ -63,7 +63,7 @@
     - Make missing fields fail non-zero with one line per missing field so future skills can use the output directly.
     - Add one complete fixture that passes and one incomplete fixture that intentionally omits multiple fields.
     - Do not add external dependencies or package-manager changes.
-- [ ] Step 21.3: Harden global execution and shipping skill contracts.
+- [x] Step 21.3: Harden global execution and shipping skill contracts.
   - Classification: automated
   - Files: modify `global/codex/run/SKILL.md`, modify `global/codex/ship/SKILL.md`, modify `global/codex/ship-end/SKILL.md`, modify `global/codex/commit-and-push-by-feature/SKILL.md`
   - Require ship manifest generation for non-trivial source mutations before commit/push.
@@ -119,4 +119,19 @@
   - `scripts/ship-quality-gate.sh tests/fixtures/ship-quality-gate/complete.md` - passed; complete manifest fixture includes all required fields.
   - `scripts/ship-quality-gate.sh tests/fixtures/ship-quality-gate/missing-fields.md` - failed as expected with missing `Per-file purpose`, `User-goal mapping`, `Skipped tests`, `Adversarial review`, `Residual risk`, and `Rollback note`.
   - `git diff --check` - passed; no whitespace errors.
-- Next implementation step: Step 21.3.
+- Step 21.3 complete: hardened `global/codex/run/SKILL.md`, `global/codex/ship/SKILL.md`, `global/codex/ship-end/SKILL.md`, and `global/codex/commit-and-push-by-feature/SKILL.md` so non-trivial mutations require the `docs/quality-gate-contract.md` ship manifest before commit/push.
+- Step 21.3 ship manifest:
+  - User goal: Execute Phase 21 Step 21.3 by making global execution and shipping contracts require diff-aware quality-gate evidence for non-trivial source mutations.
+  - Changed files: `global/codex/run/SKILL.md`, `global/codex/ship/SKILL.md`, `global/codex/ship-end/SKILL.md`, `global/codex/commit-and-push-by-feature/SKILL.md`, `tasks/todo.md`, `tasks/history.md`, and pre-existing `tasks/lessons.md`.
+  - Per-file purpose: the four global skill files add quality-gate, manifest, adversarial-review, and executable-verification requirements; `tasks/todo.md` records completion and evidence; `tasks/history.md` records the shipped step; `tasks/lessons.md` contains a pre-existing lesson about human-only blocker routing and is not part of Step 21.3 implementation.
+  - User-goal mapping: the skill edits satisfy the Step 21.3 hardening goal; task/history edits satisfy `$run` progress and shipping requirements; `tasks/lessons.md` is separated as an already-present workflow lesson so the ship boundary is explicit.
+  - Tests run: `rg -n "docs/quality-gate-contract.md|ship manifest|User goal|Changed files|Per-file purpose|User-goal mapping|Tests run|Skipped tests|Adversarial review|Residual risk|Rollback note|Next command|documentation-only|task-only" global/codex/run/SKILL.md global/codex/ship/SKILL.md global/codex/ship-end/SKILL.md global/codex/commit-and-push-by-feature/SKILL.md` - passed; all touched global skills contain the expected contract references and fields. `git diff --check` - passed; no whitespace errors.
+  - Skipped tests: no executable runtime test suite was run for Step 21.3 because the change is workflow-policy Markdown only; targeted contract scans and whitespace validation cover the changed behavior surface.
+  - Adversarial review: changed-file self-review plus targeted `rg` scans checked for loopholes allowing non-trivial source changes to ship without a manifest, adversarial review, or executable-verification distinction. One unrelated next-step-routing drift in the diff was removed before validation.
+  - Residual risk: the wording is policy-only until operators follow it; Step 21.5 will add broader focused validation scans across the quality-gate contract.
+  - Rollback note: revert the Step 21.3 commit to remove the new skill-contract enforcement language.
+  - Next command: `$run`.
+- Validation:
+  - `rg -n "docs/quality-gate-contract.md|ship manifest|User goal|Changed files|Per-file purpose|User-goal mapping|Tests run|Skipped tests|Adversarial review|Residual risk|Rollback note|Next command|documentation-only|task-only" global/codex/run/SKILL.md global/codex/ship/SKILL.md global/codex/ship-end/SKILL.md global/codex/commit-and-push-by-feature/SKILL.md` - passed; required quality-gate references and manifest fields are present in all touched global skills.
+  - `git diff --check` - passed; no whitespace errors.
+- Next implementation step: Step 21.4.
