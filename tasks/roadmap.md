@@ -2,13 +2,13 @@
 
 > Generated from: tasks/roadmap.md (existing), specs/board-flag-kanban-search.md, tasks/ideas.md, tasks/history.md
 > Date: 2026-03-27 (last updated 2026-05-04)
-> Total Phases: 23 (21 complete, 2 planned future)
+> Total Phases: 24 (22 complete, 2 planned future)
 
 ## Summary
 
 Phases 1-11 complete: kanban skill suite, board intelligence, templates, archive automation, expert review fixes, test hardening (83 tests), kanban DX, skill infrastructure, the shared Poketo headless API migration for both Claude and Codex, and the three-mode operating model (`claude-only` / `codex-only` / `hybrid`) with shared approval-packet contract and next-step routing.
 
-Phases 12-13 and 15-21 complete, with Phase 14 still available as planned future creator-media work. Phase 16 hardened mutation-capable skill contracts with final next-step routing language and an audit that catches future omissions. Phase 17 added mixed-monorepo pack routing so one repository can carry devtool, business-app, game, or other domain scopes without forcing one global designation. Phase 18 hardened pack lock recovery after a `pitwall-monorepo` refresh timeout. Phase 19 added a YouTube description and metadata optimization lane to the creator-media pack. Phase 20 added external YouTube video research lanes for comprehension, format/Remotion-style analysis, and competitive learning. Phase 21 hardened default mutation/shipping quality gates from the session workflow audit. Phase 22 adds feature-interview as the triage step between brainstorm ideas and full specifications. Phase 23 adds targeted-skill-builder for focused skill creation or updates from concrete workflow gaps without defaulting to broad session-history analysis.
+Phases 12-13 and 15-21 complete, with Phase 14 still available as planned future creator-media work. Phase 16 hardened mutation-capable skill contracts with final next-step routing language and an audit that catches future omissions. Phase 17 added mixed-monorepo pack routing so one repository can carry devtool, business-app, game, or other domain scopes without forcing one global designation. Phase 18 hardened pack lock recovery after a `pitwall-monorepo` refresh timeout. Phase 19 added a YouTube description and metadata optimization lane to the creator-media pack. Phase 20 added external YouTube video research lanes for comprehension, format/Remotion-style analysis, and competitive learning. Phase 21 hardened default mutation/shipping quality gates from the session workflow audit. Phase 22 adds feature-interview as the triage step between brainstorm ideas and full specifications. Phase 23 adds targeted-skill-builder for focused skill creation or updates from concrete workflow gaps without defaulting to broad session-history analysis. Phase 24 adds install-agentic-skills for refreshing global skill links and routing pack access through the existing project-local workflow.
 
 ## Current Analysis: Mobile Ideas Return Assessment
 
@@ -50,6 +50,33 @@ Phases 12-13 and 15-21 complete, with Phase 14 still available as planned future
 | 21 | Quality Gate Hardening ✓ | tasks/session-workflow-quality-audit.md | Default anti-slop ship manifest, adversarial review, and validation script | M |
 | 22 | Feature Interview Routing ✓ | user request, session history | Feature triage skill plus brainstorm/roadmap routing into specs or roadmap | S |
 | 23 | Targeted Skill Builder ✓ | user request, tasks/lessons.md | Focused skill creation/update workflow for concrete correction patterns and capability gaps | S |
+| 24 | Installer Skill ✓ | user request | Mirrored global installer skill with root install launcher and pack access guidance | S |
+
+---
+
+## Phase 24: Installer Skill ✓
+
+**Goal:** Add a skill-creator-style global skill that lets any assistant instance with access to this `agentic-skills` checkout refresh global Claude/Codex skill links and keep pack installation discoverable.
+
+**Source:** User request to create a skill that runs the install script so all local instances can use the skills and access pack installs when needed.
+
+**Scope:**
+- Add mirrored Claude/Codex `install-agentic-skills` skills.
+- Add a bundled launcher that resolves the repository root from the installed skill symlink and delegates to root `install.sh`.
+- Add Codex OpenAI agent metadata.
+- Keep pack installation project-local through the existing `$pack` / `/pack` workflow.
+
+**Acceptance Criteria:**
+- [x] `global/codex/install-agentic-skills/SKILL.md` and `global/claude/install-agentic-skills/SKILL.md` exist with versioned frontmatter.
+- [x] Codex has `global/codex/install-agentic-skills/agents/openai.yaml`.
+- [x] The launcher runs the root `install.sh` and supports `--uninstall`.
+- [x] The skill explains that domain packs are not globally installed and routes users to `pack` for project-local access.
+- [x] Validation passes with install dry checks, skill dependency/version/routing audits, targeted text scans, and `git diff --check`.
+
+**Parallelization:** serial
+**Coordination Notes:** Keep serial because this touches global install/discovery behavior.
+
+**Completed:** 2026-05-04. Added mirrored Claude/Codex `install-agentic-skills` skills, Codex OpenAI metadata, root install launchers, discovery references, and pack-routing guidance. Validation passed with launcher help/install checks, root install refresh, dependency/version/routing audits, targeted behavior scans, Vitest layer1, and `git diff --check`.
 
 ---
 
