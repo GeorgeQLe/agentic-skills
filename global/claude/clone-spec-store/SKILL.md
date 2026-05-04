@@ -1,6 +1,6 @@
 ---
 name: clone-spec-store
-description: Build a canonical lawful-functional-parity spec store for N software ideas in any domain (mobile apps, web apps, desktop tools, CLIs, devtools, games, services, libraries), then seed one private downstream implementation repo per idea. Generalizes the mobile-ideas pipeline.
+description: Build a canonical lawful-functional-parity spec store for N software ideas in any domain, then use portfolio gates to seed only implementation-ready or explicit scaffold-only downstream repos.
 type: planning
 version: 1.0.0
 argument-hint: "[--domain <label>] [--count <N>] [--owner <github-owner>] [--repo-slug-suffix <suffix>]"
@@ -8,9 +8,9 @@ argument-hint: "[--domain <label>] [--count <N>] [--owner <github-owner>] [--rep
 
 # Clone Spec Store
 
-Produce a canonical specification store for N "clone" software ideas and seed one private downstream implementation repository per idea, using lawful functional-parity research only. Works for any software domain — mobile apps, web apps, desktop apps, CLIs, devtools, games, services, libraries.
+Produce a canonical specification store for N "clone" software ideas, then move selected ideas through a portfolio-gated downstream implementation pipeline using lawful functional-parity research only. Works for any software domain — mobile apps, web apps, desktop apps, CLIs, devtools, games, services, libraries.
 
-This skill reproduces the pipeline used to build `GeorgeQLe/mobile-ideas` (100 mobile-app specs + 100 seeded private downstream repos), but generalized.
+This skill generalizes the `GeorgeQLe/mobile-ideas` pattern, but corrects the default operating model: broad exploration is cheap, while implementation-ready specs, downstream repos, and active builds are gated portfolio assets.
 
 ## Invocation
 
@@ -29,6 +29,8 @@ If the user says "like `GeorgeQLe/mobile-ideas`" or similar, mirror that pipelin
 - **Non-affiliation.** Every artifact must explicitly state the project is independent and not affiliated with, endorsed by, sponsored by, certified by, or connected to the inspiration product owner.
 - **Manual verification blockers.** Any behavior requiring a real account, paid subscription, regional availability, device permission, regulated sandbox, physical hardware, or sensitive-data handling stays marked blocked until lawful hands-on evidence exists.
 - **Downstream repos private by default.** No `--public` visibility until the downstream repo has original code, original assets, and passes its own legal/name/license/attribution review.
+- **Spec-ready seeding by default.** Do not seed downstream repos until the source spec is implementation-ready unless the item is explicitly marked `scaffold-only`.
+- **Portfolio caps before implementation.** Do not move a seeded item into active build work unless it is `spec-ready` and fits the active-build cap recorded by the fleet workflow.
 - **Spec store private until release approved.** The top-level spec store stays private until the open-source checklist is complete and publication is explicitly approved.
 - **Category-specific risk review** for finance, health, location, marketplace, communications, media, minors, smart-home, education, security, identity.
 
@@ -86,9 +88,11 @@ Rewrite every spec to canonical sections (exactly one H1, stable Markdown headin
 
 Validate: exactly one H1 per file, every ID `001`–`NNN` present, every spec has Research Sources, Open Questions, Next Steps.
 
-### Phase 3 — Implementation Readiness
+### Phase 3 — Portfolio Scoring And Implementation Readiness
 
-For every spec, upgrade to implementation-ready:
+Score candidates before deepening all specs. Use project-specific criteria when present; otherwise score implementation leverage, demo value, legal/provider risk, reusable components, data/API availability, user or market signal, and build cost. Mark each item as `candidate`, `shortlisted`, `archived`, or `blocked`.
+
+For shortlisted specs, upgrade to implementation-ready:
 
 - Replace any discovery link with exact first-party URLs (official marketplace listing, vendor help center, policy pages, official docs).
 - Distinguish verified behavior from inferred requirements.
@@ -96,32 +100,33 @@ For every spec, upgrade to implementation-ready:
 - Add category-specific risk review notes where applicable.
 - Mark blocked flows with explicit owner/path for later verification.
 
-Pilot one app first (e.g., the most architecturally-teaching example), then extend the same structure to the rest in batches. The pilot becomes the reference template for the other specs.
+Pilot one app first (e.g., the most architecturally-teaching example), then extend the same structure to the top scored candidates in batches. The pilot becomes the reference template for the other specs. Do not treat N implementation-ready specs as required unless the user explicitly wants a complete spec encyclopedia rather than a portfolio funnel.
 
-### Phase 4 — Downstream Planning Pilot
+### Phase 4 — Downstream Planning Pilot And Active Cap
 
-- Pick one candidate from the backlog.
+- Pick one top-scored, implementation-ready candidate from the backlog.
 - Produce a build plan inside its spec: route map, API schema, data model, seed-data policy, test checklist.
 - Create the first downstream implementation repo manually (private) and seed it with the source spec copy plus `tasks/roadmap.md` + `tasks/todo.md`.
 - Use this pilot to finalize the downstream seed template.
+- Record the active-build cap. Default to 5 active downstream repos if the project has no explicit cap.
 
-### Phase 5 — 100-Item Implementation-Plan Queue
+### Phase 5 — Portfolio Implementation Queue
 
-Populate `tasks/roadmap.md` Phase 5 with a table:
+Populate `tasks/roadmap.md` Phase 5 with a portfolio queue table:
 
 ```
-| ID | <Product> | Source Spec | High-Level Implementation Plan |
+| ID | <Product> | State | Score | Source Spec | Downstream Repo | Next Milestone |
 ```
 
-Each row is a one-sentence implementation summary referencing `specs/batch-XX/NNN-<slug>.md`. Purpose: any team member can pick a row and expand it into detailed phases from the referenced spec's Build Plan.
+Each row references `specs/batch-XX/NNN-<slug>.md` and records whether the item is `candidate`, `shortlisted`, `spec-ready`, `seeded`, `active-build`, `shipped`, `archived`, or `blocked`. Purpose: the fleet workflow can select the next highest-return item without re-reading the whole spec store.
 
 ### Phase 6 — Downstream Repo Seeding And Spec-Store Release
 
-1. **Manifest.** Create `tasks/repo-seeding.md` with a `## Per-Repo Checklist` table:
+1. **Manifest.** Create `tasks/repo-seeding.md` with a `## Per-Repo Checklist` table for `spec-ready` targets and explicit `scaffold-only` exceptions:
    ```
-   | Done | ID  | App | Target Repo | Source Spec |
-   | :--: | :-: | --- | ----------- | ----------- |
-   | [ ]  | 001 | …   | `<owner>/<slug><suffix>` | `specs/batch-01/001-<slug>.md` |
+   | Done | ID  | App | State | Target Repo | Source Spec | Gate |
+   | :--: | :-: | --- | ----- | ----------- | ----------- | ---- |
+   | [ ]  | 001 | ... | spec-ready | `<owner>/<slug><suffix>` | `specs/batch-01/001-<slug>.md` | spec-ready |
    ```
    Include a `### Failures And Blockers` subsection and a `## Open-Source Spec Store Checklist`.
 
@@ -133,10 +138,11 @@ Each row is a one-sentence implementation summary referencing `specs/batch-XX/NN
    - `.gitignore` — stack-neutral defaults.
 
 3. **Seeding utility** at `scripts/seed-downstream-repos.mjs`:
-   - Parses `tasks/repo-seeding.md` manifest, validating all N rows.
+   - Parses `tasks/repo-seeding.md` manifest, validating every listed row.
    - Single-target only (`--target <id|app|owner/repo>`); batch creation is intentionally unsupported.
    - Modes: `--dry-run` (writes preview dir, prints exact `gh`/`git` commands, never runs remote); `--execute` (checks `gh auth status`, refuses `--public`/`--visibility public`/`--all`, creates private via `gh repo create … --private --clone=false`, clones, seeds, commits, pushes).
    - Refuses existing target repos unless `--reconcile-existing` is supplied.
+   - Refuses non-`spec-ready` rows unless the manifest gate is explicitly `scaffold-only`.
    - Extracts `Manual verification blockers` and `Legal scope` from the source-spec metadata block to fill placeholders.
    - Fails fast on unresolved `{{PLACEHOLDER}}` tokens.
    - Appends failure evidence to `### Failures And Blockers` unless `--no-record-blockers`.
@@ -148,9 +154,10 @@ Each row is a one-sentence implementation summary referencing `specs/batch-XX/NN
    - Step 6.4: Add public-release docs to spec store (`README.md`, `LICENSE` — CC BY 4.0 recommended for docs with explicit exclusions for third-party marks/media/APIs/data, `CONTRIBUTING.md`, `SECURITY.md`).
    - Step 6.5: Run one private non-pilot dry-run seed end-to-end. Record created repo URL, seeded files, commit SHA.
    - Step 6.6: Reconcile the Phase 4 pilot repo with the shared seed structure.
-   - Step 6.7: Seed remaining repos in controlled private batches. Stop on any auth/permission/naming/rate-limit/template-validation failure and record the blocker.
+   - Step 6.7: Seed remaining eligible repos in controlled private batches. Stop on any auth/permission/naming/rate-limit/template-validation failure and record the blocker.
    - Step 6.8: Verify every target repo either exists privately with expected seeded files and source-spec backlink, or has an explicit blocker note. Confirm no downstream repo is public and no proprietary assets were seeded.
    - Step 6.9: Spec-store publication — complete the open-source checklist (license, README scope, contribution policy, non-affiliation, content audit for secrets/assets/proprietary copy/private APIs/ambiguous affiliation) and run `gh repo edit <owner>/<spec-store-repo> --visibility public` only after explicit user approval.
+   - Step 6.10: Route ongoing queue execution through the fleet workflow so scoring, active-build caps, blockers, and runnable milestones govern future work.
 
 ## Canonical CLAUDE.md (spec store)
 
@@ -203,6 +210,7 @@ In every case, keep: Metadata block, Research Sources, Goals/Non-Goals, Data Mod
 3. Work one phase at a time. After each phase: update `tasks/roadmap.md`, commit with a conventional message (`feat(seeding): complete Phase N step X.Y …`), push if `--owner` is configured.
 4. Never advance to Phase 6 remote execution without explicit user approval for each batch.
 5. Never flip the spec store to public visibility without explicit user approval.
+6. After Phase 5 exists and the user's request is about selecting candidates, continuing batches, enforcing active caps, repairing blockers, summarizing cross-repo status, or advancing downstream repos, route through the fleet workflow unless the requested change is clone/spec specific.
 
 ## Reference Implementation
 
@@ -219,10 +227,10 @@ If accessible, read those files for the exact wording and reuse structure verbat
 ## Acceptance Criteria for the Skill Output
 
 - N ideas in `tasks/ideas.md`.
-- N numbered specs under `specs/batch-*/`, each with canonical sections and implementation-ready content.
-- `tasks/roadmap.md` with all six phases; Phase 5 table populated with all N high-level implementation plans.
-- `tasks/repo-seeding.md` with N manifest rows, command pattern, open-source checklist, and blocker log.
+- N numbered specs under `specs/batch-*/`, each with canonical sections; shortlisted specs have implementation-ready content before downstream build work.
+- `tasks/roadmap.md` with all six phases; Phase 5 table populated with all N portfolio rows, states, scores, source specs, downstream repo fields, and next milestones.
+- `tasks/repo-seeding.md` with eligible `spec-ready` rows and explicit `scaffold-only` exceptions, command pattern, open-source checklist, and blocker log.
 - `templates/downstream/` complete and placeholder-safe.
 - `scripts/seed-downstream-repos.mjs` passes a local dry-run for at least one target.
-- N private downstream repos exist with source-spec copy and scaffolded planning docs, or explicit blocker notes in the manifest.
+- Private downstream repos exist only for eligible `spec-ready` rows or explicit `scaffold-only` exceptions, with source-spec copy and scaffolded planning docs, or explicit blocker notes in the manifest.
 - No proprietary assets committed anywhere. No public visibility changes without explicit user approval.

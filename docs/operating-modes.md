@@ -180,7 +180,7 @@ This section tags every global skill and every pack with a **primary CLI role** 
 | `analyze-sessions` | Claude-orchestration | Usage analysis + automation recommendations |
 | `brainstorm` | Claude-orchestration | Idea surfacing into `/concept-exploration` or `/spec-interview` |
 | `branch-lifecycle` | Both | Evaluation is orchestration; merge/delete acts execute |
-| `clone-spec-store` | Both | Spec-store planning plus private downstream repo seeding |
+| `clone-spec-store` | Both | Spec-store planning plus portfolio-gated private downstream repo seeding |
 | `commit-and-push-by-feature` | Codex-execution | Grouped commits + push |
 | `concept-exploration` | Claude-orchestration | Raw idea shaping before ICP and implementation specs |
 | `dead-code` | Claude-orchestration | Scan + report; no mutation |
