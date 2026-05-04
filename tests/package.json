@@ -1,0 +1,18 @@
+{
+  "name": "agentic-skills-tests",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "vitest run --project layer1",
+    "test:layer1": "vitest run --project layer1",
+    "test:layer2": "vitest run --project layer2",
+    "test:all": "vitest run"
+  },
+  "devDependencies": {
+    "vitest": "^3.2.1",
+    "gray-matter": "^4.0.3",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3",
+    "glob": "^11.0.2"
+  }
+}
