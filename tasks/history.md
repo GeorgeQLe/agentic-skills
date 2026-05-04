@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-05-04 — Phase 26 Step 26.4: mono-detect skill contracts
+
+- Added mirrored Claude/Codex `mono-detect` skill contracts and Codex OpenAI metadata for the monorepo pack.
+- Documented `mono-detect.sh` execution, `.agents/monorepo.json` staleness behavior, non-monorepo advisory routing, workspace/package/dependency/Turbo summaries, and augmentation foundation usage by `mono-run`, `mono-ship`, and `mono-guard`.
+- Verified the contracts with targeted scans, Claude/Codex parity diff, skill dependency/version/routing audits, `pnpm --dir tests test`, and `git diff --check`.
+- Recorded the Step 26.4 quality-gate manifest in `tasks/todo.md`.
+
 ## 2026-05-04 — Phase 26 Step 26.3: lane-spec validation script
 
 - Added `packs/monorepo/scripts/lane-spec-validate.sh` to validate lane-spec required fields, lifecycle state, disjoint `owns` boundaries, required root `must_not_edit` entries, dependency references, and duplicate step IDs.

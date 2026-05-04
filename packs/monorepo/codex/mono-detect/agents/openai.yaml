@@ -1,0 +1,7 @@
+interface:
+  display_name: "Mono Detect"
+  short_description: "Detect pnpm workspace packages, dependency graph, and Turbo pipelines"
+  default_prompt: "Use $mono-detect to detect the monorepo workspace structure and write .agents/monorepo.json."
+
+policy:
+  allow_implicit_invocation: true
