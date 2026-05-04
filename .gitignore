@@ -5,3 +5,4 @@ packs/poketowork-kanban/claude/poketo-kanban/scripts/node_modules/
 *.db-shm
 .codex
 .agents/approved-plan.json
+tests/runs/
