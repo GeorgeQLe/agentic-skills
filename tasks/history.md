@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-05-04 — Add skill pack test harness
+
+- Built two-layer test architecture in `tests/`: layer1 (structural, free, instant) and layer2 (LLM-in-the-loop via `claude --print`).
+- Layer1: 1147 tests across 4 suites — frontmatter validation (all SKILL.md files), routing graph integrity, pack.sh install correctness, and output path conflict detection.
+- Layer2: destination-doc, vertical-slice-splitter, and full pipeline e2e tests with $0.50 budget caps per claude invocation.
+- Harness utilities: runner.ts (temp project + claude execution), judge.ts (structural validators), fixtures.ts (fixture loader), types.ts.
+- Fixtures: app-idea-fitness-tracker.md, destination-doc-sample.md, golden schemas for destination doc and issue card structure.
+- Default `pnpm test` runs only layer1 (free); `pnpm test:layer2` is opt-in.
+
 ## 2026-05-03 — Harden correction enforcement in quality gate
 
 - Tightened `docs/quality-gate-contract.md` so user corrections are presumed repeatable until the ship manifest proves otherwise.
