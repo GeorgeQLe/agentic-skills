@@ -1,5 +1,11 @@
 # Session History
 
+## 2026-05-04 — Split local and repo-managed skill creation
+
+- Renamed the user-local skill authoring workflow from `create-skill` to `create-local-skill` in both `global/claude` and `global/codex`.
+- Added mirrored `create-agentic-skill` workflows for creating or updating repo-managed skills under `global/claude/<name>/` and `global/codex/<name>/`, including validation, targeted staging, commit, and push guidance.
+- Updated `tasks/lessons.md` so future corrections distinguish local skill creation from agentic-skills repository contributions.
+
 ## 2026-05-04 — Phase 26 Step 26.8: monorepo pack docs and discovery
 
 - Registered the `monorepo` pack in `README.md`, `docs/skills-reference.md`, and `docs/packs.md`.

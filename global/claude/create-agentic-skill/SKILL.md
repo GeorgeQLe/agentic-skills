@@ -1,0 +1,72 @@
+---
+name: create-agentic-skill
+description: Create or update a repo-managed skill inside this agentic-skills checkout under global/claude and optionally global/codex, then validate, commit, and push it
+type: execution
+version: 0.1.0
+argument-hint: <skill-name> [description] [--claude-only|--codex-only|--mirror]
+---
+
+# Create Agentic Skill
+
+Use this skill when the user wants to add or update a skill in the `agentic-skills` repository itself. This is the repo-managed counterpart to `create-local-skill`, which writes experimental user-local skills under `~/.claude/skills` or `~/.codex/skills`.
+
+## Process
+
+1. **Confirm repository context.**
+   - Verify the current repo is `agentic-skills` by checking for `install.sh`, `global/claude/`, and `global/codex/`.
+   - If the current repo is not `agentic-skills`, stop and ask for the checkout path.
+   - Inspect `git status --short` and identify unrelated dirty files before editing.
+
+2. **Resolve skill identity.**
+   - Parse `<skill-name>` as kebab-case.
+   - Parse the description when provided; otherwise ask for a one-line description.
+   - Default to creating both `global/claude/<skill-name>/SKILL.md` and `global/codex/<skill-name>/SKILL.md` when the skill should exist for both agents.
+   - Honor `--claude-only`, `--codex-only`, or `--mirror`.
+   - If a local-only workflow is requested, route to `create-local-skill` instead.
+
+3. **Check for conflicts.**
+   - Refuse to overwrite an existing unrelated skill without explicit user approval.
+   - If updating an existing skill, read the current `SKILL.md` and preserve its purpose unless the user asked for a rewrite.
+   - Check for stale old names when the task is a rename, and move directories rather than duplicating the skill.
+
+4. **Draft the skill.**
+   - Follow repo frontmatter conventions:
+     - `name`
+     - `description`
+     - `type`
+     - `version`
+     - optional `argument-hint`
+   - For Claude skills, use `## Process` when that matches existing Claude conventions.
+   - For mirrored Codex skills, include `Invoke as \`$<skill-name>\`.` after the title.
+   - Include clear workflow/process, output, and constraints sections.
+   - Prefer durable procedure over one-off project notes.
+
+5. **Apply correction lessons when relevant.**
+   - If the skill is being created because of a user correction, update `tasks/lessons.md` with the mistake pattern and prevention rule.
+   - Keep the lesson specific enough to prevent recurrence.
+
+6. **Validate.**
+   - Read back the new or updated `SKILL.md` files.
+   - Run search checks for old skill names, missing `version:`, missing Codex invocation lines in Codex skills, and accidental writes under `~/.claude/skills` or `~/.codex/skills`.
+   - Confirm unrelated dirty files remain unstaged.
+
+7. **Commit and push.**
+   - Stage only intended repo-managed skill files and directly related docs or lesson updates.
+   - Commit on the repository primary branch (`main` when present, otherwise `master`) with a concise conventional commit message.
+   - Push the branch.
+   - Do not stage unrelated user changes.
+
+## Output
+
+- **Skill**: name and target paths created or updated
+- **Mode**: Claude, Codex, or mirrored
+- **Validation**: checks run and result
+- **Git**: commit hash and pushed branch
+- **Next Work**: exact follow-up, or `none` only when there is no useful follow-up
+
+## Constraints
+
+- Do not write to `~/.claude/skills` or `~/.codex/skills`; that is `create-local-skill`.
+- Do not update README or generated references when they already have unrelated unstaged edits unless the user explicitly asks to include them.
+- Do not create pack-local skills unless the user asks for a pack path.
+- Do not leave repo-managed skill changes uncommitted or unpushed unless the user explicitly says not to ship.

@@ -2,8 +2,8 @@
 
 ## 2026-05-04 — Use repo-managed skill creation for agentic-skills contributions
 
-- `$create-skill` creates user-local skills under `~/.codex/skills` (and optionally `~/.claude/skills`); it is not the right workflow when the user wants a skill added to this `agentic-skills` repository.
-- When the user is working inside `agentic-skills` and asks to create a skill for the library, create it under `global/codex/<name>/` (and matching Claude/global paths only if requested), following repository conventions.
+- `$create-local-skill` creates user-local skills under `~/.codex/skills` or `~/.claude/skills`; it is not the right workflow when the user wants a skill added to this `agentic-skills` repository.
+- When the user is working inside `agentic-skills` and asks to create a skill for the library, use `$create-agentic-skill` and create it under `global/codex/<name>/` and/or `global/claude/<name>/`, following repository conventions.
 - Before invoking or following a skill-creation workflow, distinguish "personal/local skill" from "repo-managed global skill" and state the target path.
 - If the wrong target is created, remove the mistaken local copy after preserving any useful draft content in the intended repo path.
 
