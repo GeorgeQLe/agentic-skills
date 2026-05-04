@@ -1,7 +1,12 @@
 # Active Phase: Phase 25 - Codebase Status
 
 **Project:** Claude Skills / agentic-skills
-**Status:** Phase 25 complete; no later implementation phase is planned in `tasks/roadmap.md`.
+**Status:** Phase 25 complete; priority queue refreshed for the next roadmap/spec-drift work.
+
+## Priority Task Queue
+
+- [ ] `$plan-phase 14` - generate implementation steps for Phase 14 LinkedIn Evidence Lane because `tasks/roadmap.md` still has unchecked Phase 14 acceptance criteria and `tasks/todo.md` is still oriented around completed Phase 25 work; evidence: `tasks/roadmap.md` modified 2026-05-04 11:04:38 -0400, `tasks/todo.md` modified 2026-05-04 11:09:39 -0400, Phase 14 acceptance criteria remain unchecked.
+- [ ] `$spec-interview specs/monorepo-execution-controller.md` - confirm whether to implement the promised monorepo pack as a future roadmap phase or rescope the spec because `specs/drift-report.md` reports one Warning: `packs/monorepo/`, `mono-detect`, `mono-run`, `mono-ship`, and V1 validation scripts/fixtures are not implemented; evidence: `specs/drift-report.md` modified 2026-05-04 11:09:39 -0400 and `tasks/todo.md` already carries this spec drift follow-up.
 
 ## Current Phase Todo
 
