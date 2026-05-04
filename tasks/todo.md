@@ -1,33 +1,53 @@
-# No Active Phase
+# Active Phase: Phase 25 - Codebase Status
 
 **Project:** Claude Skills / agentic-skills
-**Status:** Phase 24 complete; no later implementation phase is planned in `tasks/roadmap.md`.
+**Status:** Phase 25 complete; no later implementation phase is planned in `tasks/roadmap.md`.
 
 ## Current Phase Todo
 
-- [x] Inspect existing installer, pack, and skill patterns.
-- [x] Document Phase 24 in `tasks/roadmap.md`.
-- [x] Add mirrored `install-agentic-skills` skills and launcher scripts.
+- [x] Parse full Claude/Codex history for roadmap and status-audit patterns.
+- [x] Inspect `roadmap` and overlapping analysis/status skills.
+- [x] Document Phase 25 in `tasks/roadmap.md`.
+- [x] Add mirrored `codebase-status` skills.
 - [x] Add Codex `agents/openai.yaml`.
-- [x] Run `./install.sh`.
+- [x] Update discovery docs and skill catalog mappings.
 - [x] Run validation:
-  - [x] installer launcher help/install checks
+  - [x] `./install.sh`
   - [x] `./scripts/skill-deps.sh --broken`
   - [x] `./scripts/skill-versions.sh --missing`
   - [x] `./scripts/skill-next-step-routing.sh --missing`
-  - [x] targeted `rg` checks for installer and pack behavior
-  - [x] `pnpm --dir tests test`
+  - [x] targeted `rg` checks for codebase-status behavior
   - [x] `git diff --check`
-- [x] Commit and push intended changes.
+- [ ] Commit and push intended changes.
 
 ## Current State
 
 - [x] Phase 22: Feature Interview Routing is complete in `tasks/roadmap.md`.
 - [x] Phase 23: Targeted Skill Builder is complete in `tasks/roadmap.md`.
 - [x] Phase 24: Installer Skill is complete in `tasks/roadmap.md`.
+- [x] Phase 25: Codebase Status is complete in `tasks/roadmap.md`.
 - [ ] Discover candidate next phase or explicitly park the project.
 
 ## Review
+
+### Phase 25 Review
+
+- Evidence scan:
+  - Parsed full authored local histories: 8,506 Claude prompts and 4,386 Codex prompts.
+  - Excluded injected skill payloads, AGENTS/system instructions, and tool-output shaped records from prompt-pattern counts.
+  - Found 181 authored roadmap mentions and 111 roadmap/repo status-audit prompts relevant to this workflow shape.
+  - Representative prompts included: `$roadmap ... what specs are outstanding and we need to work on?`, "ok what other work do we have outstanding?", "what is the status of our codebase in order to support that user story?", and "can you summarize all of the goal of this directory and what has happened so far and what is outstanding?"
+- Decision: create a new `codebase-status` skill rather than overloading `roadmap`, because `roadmap` owns task-pipeline queue maintenance while the new workflow needs read-only status synthesis across code, task docs, git, and related conversation history.
+- Implemented mirrored Claude/Codex `codebase-status` skills and Codex OpenAI agent metadata.
+- Updated README, global `skills` discovery mappings, `docs/skills-reference.md`, `docs/operating-modes.md`, and `tasks/roadmap.md`.
+- Ran `./install.sh`; installed `codebase-status` into both global Claude and Codex skill directories.
+- Validation:
+  - `./scripts/skill-deps.sh --broken` - passed; no broken references found.
+  - `./scripts/skill-versions.sh --missing` - passed; all 295 skills have a version field.
+  - `./scripts/skill-next-step-routing.sh --missing` - passed; all 217 mutation-capable skills have next-step routing.
+  - Targeted `rg` scan - passed across mirrored skills, discovery docs, operating modes, and task docs.
+  - `git diff --check` - passed; no whitespace errors.
+- Reload note: after the install refresh, start a fresh Claude Code or Codex CLI/session if `codebase-status` is not visible yet.
 
 ### Phase 24 Review
 
