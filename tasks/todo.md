@@ -40,9 +40,9 @@
 **Subagent lanes:** none
 
 ### Implementation
-- Step 14.1: Harden the LinkedIn baseline in the platform foundation skills.
+- [x] Step 14.1: Harden the LinkedIn baseline in the platform foundation skills.
   - Classification: automated
-  - Files: modify `packs/creator-media/claude/creator-platform-capability-matrix/SKILL.md`, modify `packs/creator-media/codex/creator-platform-capability-matrix/SKILL.md`, modify `packs/creator-media/claude/creator-evidence-schema/SKILL.md`, modify `packs/creator-media/codex/creator-evidence-schema/SKILL.md`
+  - Files: modify `packs/creator-foundation/claude/creator-platform-capability-matrix/SKILL.md`, modify `packs/creator-foundation/codex/creator-platform-capability-matrix/SKILL.md`, modify `packs/creator-foundation/claude/creator-evidence-schema/SKILL.md`, modify `packs/creator-foundation/codex/creator-evidence-schema/SKILL.md`
   - Make owner exports, manual snapshots, public unauthenticated page captures, and user-provided files the default LinkedIn collection lane.
   - Treat LinkedIn personal analytics, company/page analytics, and API fields as unavailable unless owner-provided or already authorized.
   - Require redaction/exclusion guidance for private contacts, messages, relationship data, sensitive account data, and unrelated personal information before analysis.
@@ -98,3 +98,35 @@
 - Activated after completing and archiving Phase 26 on 2026-05-04.
 - No manual tasks identified yet; this phase is repo-edit, documentation, and local-validation work unless implementation discovers otherwise.
 - No record or recurring tasks identified.
+
+### Step 14.1 Review - LinkedIn Foundation Baseline
+
+**Result:** Hardened the mirrored creator-media platform foundation skills with explicit LinkedIn baseline collection, privacy redaction, and forbidden-access constraints.
+
+**Ship manifest:**
+- **User goal:** Execute the next `$run` unit from the active Phase 14 plan.
+- **Changed files:** `packs/creator-foundation/claude/creator-platform-capability-matrix/SKILL.md`, `packs/creator-foundation/codex/creator-platform-capability-matrix/SKILL.md`, `packs/creator-foundation/claude/creator-evidence-schema/SKILL.md`, `packs/creator-foundation/codex/creator-evidence-schema/SKILL.md`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** Capability matrix contracts now make LinkedIn owner exports, manual snapshots, public unauthenticated page captures, and user-provided files the default collection lane while treating analytics/API fields as unavailable unless owner-provided or authorized; evidence schema contracts now define LinkedIn capture paths, conservative `auth_context`, and required `privacy_notes` redaction/exclusion handling; task/history files record completion and validation evidence.
+- **User-goal mapping:** Step 14.1 requires hardening LinkedIn baseline behavior in the platform foundation skills; the mirrored contract edits define the default evidence lane, privacy exclusions, high-risk stop behavior, and forbidden access patterns.
+- **Tests run:** targeted `rg` scan passed for `LinkedIn Baseline`, `LinkedIn Evidence Baseline`, owner exports, manual snapshots, public unauthenticated page captures, user-provided files, logged-in scraping, bot-protection bypass, paid API dependency, access-control circumvention, private-data collection, private contacts, private messages, relationship data, sensitive account data, and unrelated personal information across the four touched contracts; Claude/Codex `diff -u` checks showed only expected slash-vs-dollar invocation/routing differences; `./scripts/skill-deps.sh --broken` passed with no broken references; `./scripts/skill-versions.sh --missing` passed with all 310 skills versioned; `./scripts/skill-next-step-routing.sh --missing` passed with all 225 mutation-capable skills covered; `pnpm --dir tests test` passed with 4 files and 1167 tests; `git diff --check` passed.
+- **Skipped tests:** no network, LinkedIn credentials, logged-in browser flow, paid API call, or external account mutation was relevant or allowed for this contract-only step.
+- **Adversarial review:** changed-contract self-review checked that the new language stops high-risk LinkedIn collection paths, distinguishes owner/admin-provided analytics from default availability, and requires redaction/exclusion before analysis rather than normalizing private LinkedIn material by default.
+- **Residual risk:** Phase 14 still needs Step 14.2 dossier handling, Step 14.3 docs registration, Step 14.4 deterministic validation coverage, and Step 14.5 final focused validation before the milestone criteria are complete.
+- **Rollback note:** revert the Step 14.1 shipping commit to remove the LinkedIn baseline hardening from the four foundation skill contracts and task/history records.
+- **Next command:** `$run`.
+
+### Pack Reorganization Ship Note
+
+**Result:** Shipped the already-staged pack context reduction boundary alongside Step 14.1 because the LinkedIn foundation files had been moved into `creator-foundation` before shipping.
+
+**Ship manifest:**
+- **User goal:** Ship already-finished work present in the tree without losing the completed LinkedIn baseline step.
+- **Changed files:** split `packs/business-app/**` into `packs/business-discovery/**`, `packs/business-growth/**`, and `packs/business-ops/**`; split `packs/creator-media/**` into `packs/creator-foundation/**` and `packs/youtube-ops/**`; moved fleet skills into `packs/project-fleet/**`; updated `scripts/pack.sh`, pack `PACK.md` files, `README.md`, `docs/packs.md`, `docs/operating-modes.md`, `docs/skills-reference.md`, global pack/concept/skills references, `tasks/pack-reorg-plan.md`, `tasks/todo.md`, and `tasks/history.md`.
+- **Per-file purpose:** New pack directories reduce loaded domain context by lane; compatibility `PACK.md` files and `scripts/pack.sh` aliases preserve old install names; docs and global skills point users to the narrow packs; task/history files record the shipping boundary.
+- **User-goal mapping:** `$ship` requires packaging already-finished tree work into a safe direct-to-primary commit; the reorg was already staged and intertwined with Step 14.1 paths, so shipping the combined verified boundary avoided leaving moved foundation files half-shipped.
+- **Tests run:** see final shipping validation for pack list/install checks, skill dependency/version/routing audits, targeted LinkedIn scans, test suite, `git diff --check`, and quality gate.
+- **Skipped tests:** no external network, pack installation into unrelated user projects, or LinkedIn account/API checks were relevant for this repository-local pack and contract update.
+- **Adversarial review:** changed-file review checked compatibility aliases, docs references, moved skill ownership, and the LinkedIn moved-path boundary; validation scans covered broken skill references and missing skill metadata.
+- **Residual risk:** Existing projects using `business-app` or `creator-media` should continue through aliases, but projects with hand-written references to old physical pack paths may need docs/config updates.
+- **Rollback note:** revert the shipping commit to restore the prior pack layout and global skill locations.
+- **Next command:** `$run`.
