@@ -49,7 +49,7 @@ Phase 26 creates a new `monorepo` pack using an augmentation injection pattern â
   - Check lifecycle is a valid state: draft, approved, dispatched, integrated, failed.
   - Exit 0 on valid, exit 1 with diagnostic on invalid.
 
-- [ ] Step 26.4: Create mirrored Claude/Codex `mono-detect` skill contracts.
+- [x] Step 26.4: Create mirrored Claude/Codex `mono-detect` skill contracts.
   - Classification: automated
   - Files: create `packs/monorepo/claude/mono-detect/SKILL.md`, create `packs/monorepo/codex/mono-detect/SKILL.md`, create `packs/monorepo/codex/mono-detect/agents/openai.yaml`
   - Skill runs `mono-detect.sh`, reports workspace structure, package count, dependency graph summary, and Turborepo pipeline awareness.
@@ -201,4 +201,20 @@ Phase 26 creates a new `monorepo` pack using an augmentation injection pattern â
 - **Adversarial review:** changed-file self-review found that duplicate cross-cutting step IDs were not rejected, which could let `depends_on` resolution become ambiguous; fixed by rejecting duplicate step IDs while collecting cross-cutting steps, then reran focused fixtures and regression tests.
 - **Residual risk:** root config coverage is encoded as the v1 shared-boundary set `pnpm-lock.yaml`, `package.json`, `pnpm-workspace.yaml`, and `turbo.json`; projects with additional root config chokepoints will need generated lane specs to include those explicitly until later guard/run steps decide whether to infer project-specific root config files.
 - **Rollback note:** revert the Step 26.3 commit to remove the validator and task/history records.
+- **Next command:** `$run`.
+
+### Step 26.4 Review - Mono Detect Skill Contracts
+
+**Result:** Created mirrored Claude/Codex `mono-detect` skill contracts and Codex OpenAI metadata.
+
+**Ship manifest:**
+- **User goal:** Execute the next `$run` unit from the active Phase 26 plan.
+- **Changed files:** `packs/monorepo/claude/mono-detect/SKILL.md`, `packs/monorepo/codex/mono-detect/SKILL.md`, `packs/monorepo/codex/mono-detect/agents/openai.yaml`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** Claude and Codex `mono-detect` skill contracts define how to run `mono-detect.sh`, handle staleness, report workspace/package/dependency/Turbo summaries, advise `/mono-migrate` or `$mono-migrate` for non-monorepos, and document the augmentation injection foundation for `mono-run`, `mono-ship`, and `mono-guard`; `openai.yaml` registers Codex display metadata and implicit invocation policy; `tasks/todo.md` records Step 26.4 completion and validation evidence; `tasks/history.md` records the shipped project history.
+- **User-goal mapping:** Step 26.4 explicitly requires creating mirrored Claude/Codex `mono-detect` contracts plus the Codex OpenAI manifest; the new files provide those contracts, and the task/history updates satisfy the `$run` shipping contract.
+- **Tests run:** targeted `rg` scan passed for frontmatter, `mono-detect.sh`, `--check-stale`, `pnpm-workspace.yaml`, `turbo.json`, `.agents/monorepo.json`, foundation language, `mono-run`, `mono-ship`, `mono-guard`, `mono-migrate`, and next-step routing across both skill contracts; Claude/Codex `diff -u` showed only expected invocation wording differences and the Codex `Invoke as` line; `./scripts/skill-deps.sh --broken` passed with no broken references; `./scripts/skill-versions.sh --missing` passed with all 297 skills versioned; `./scripts/skill-next-step-routing.sh --missing` passed with all 219 mutation-capable skills covered; `pnpm --dir tests test` passed with 4 files and 1154 tests; `git diff --check` passed.
+- **Skipped tests:** full `monorepo-validate.sh` fixture-backed validation is planned for Step 26.9 and fixtures are planned for Step 26.10, so this step used repository skill audits and targeted contract scans instead of pack-level fixture validation.
+- **Adversarial review:** changed-file self-review checked that the contracts do not modify task files, do not run install/add commands, do not infer non-pnpm managers in V1, and do not hand-edit `.agents/monorepo.json`; no source changes were needed after review.
+- **Residual risk:** `/mono-migrate` and `$mono-migrate` are documented as V2 advisory routes but are not implemented in this V1 pack; users who follow that route before V2 exists will need roadmap/spec planning rather than an installed skill.
+- **Rollback note:** revert the Step 26.4 commit to remove the new `mono-detect` skill contracts, Codex metadata, and task/history records.
 - **Next command:** `$run`.
