@@ -14,6 +14,10 @@ Use this skill to validate monorepo pack lane artifacts before parallel dispatch
 
 This pack-local `mono-guard` consumes `.agents/lane-specs.json` and `.agents/monorepo.json`. It preserves behavioral compatibility with the global `$mono-guard` contract while using the monorepo pack's JSON artifacts and scripts as the project-local enforcement surface.
 
+## Augmentation Injection Pattern
+
+`mono-guard` is the pack's safety gate for the augmentation injection pattern. `mono-run` injects it before package-scoped dispatch, and `mono-ship` relies on its post-integration boundary checks before delegating to `$ship`. The skill augments existing run/ship workflows with monorepo lane enforcement rather than replacing their task selection, validation, history, commit, push, or deploy responsibilities.
+
 ## Modes
 
 - **Pre-flight (default):** Validate `.agents/lane-specs.json` before `mono-run` dispatches package-scoped lanes.

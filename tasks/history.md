@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-05-04 — Phase 26 Step 26.9: monorepo pack validation script
+
+- Added `packs/monorepo/scripts/monorepo-validate.sh` to verify augmentation injection sections, mirrored Claude/Codex skill structure, Codex `agents/openai.yaml` manifests, lane-spec fixtures, and monorepo detection fixtures.
+- Normalized `mono-detect` and `mono-guard` Claude/Codex contracts with explicit `## Augmentation Injection Pattern` sections so pack validation can enforce the contract consistently.
+- Kept fixture-backed validation required by default while adding `--skip-fixtures` for Step 26.9 pre-fixture checks; committed fixtures are still planned for Step 26.10 and full fixture execution for Step 26.11.
+- Verified with `bash -n`, `monorepo-validate.sh --skip-fixtures`, skill dependency/version/routing audits, `pnpm --dir tests test`, `git diff --check`, and the ship quality gate.
+- Recorded the Step 26.9 quality-gate manifest in `tasks/todo.md`.
+
 ## 2026-05-04 — Split local and repo-managed skill creation
 
 - Renamed the user-local skill authoring workflow from `create-skill` to `create-local-skill` in both `global/claude` and `global/codex`.
