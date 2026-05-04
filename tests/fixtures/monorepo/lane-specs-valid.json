@@ -1,0 +1,41 @@
+{
+  "phase": "26",
+  "source_roadmap_hash": "fixture-phase-26",
+  "lifecycle": "approved",
+  "cross_cutting_steps": [
+    {
+      "step": "26.0",
+      "description": "Review root-level execution profile before dispatch."
+    }
+  ],
+  "lanes": [
+    {
+      "id": "api",
+      "step": "26.1",
+      "packages": ["@fixture/api"],
+      "owns": ["packages/api/"],
+      "must_not_edit": [
+        "pnpm-lock.yaml",
+        "package.json",
+        "pnpm-workspace.yaml",
+        "turbo.json"
+      ],
+      "depends_on": ["26.0"],
+      "mode": "implementation-safe"
+    },
+    {
+      "id": "web",
+      "step": "26.2",
+      "packages": ["@fixture/web"],
+      "owns": ["packages/web/"],
+      "must_not_edit": [
+        "pnpm-lock.yaml",
+        "package.json",
+        "pnpm-workspace.yaml",
+        "turbo.json"
+      ],
+      "depends_on": ["26.0", "26.1"],
+      "mode": "implementation-safe"
+    }
+  ]
+}

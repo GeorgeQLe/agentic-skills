@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-05-04 — Phase 26 Step 26.10: monorepo pack fixtures
+
+- Added committed `tests/fixtures/monorepo` inputs for pnpm+Turbo, pnpm-only, and not-monorepo detection cases.
+- Added valid and invalid lane-spec JSON fixtures covering disjoint ownership, required root `must_not_edit` boundaries, valid dependencies, and overlapping `owns` rejection.
+- Verified the fixtures through `monorepo-validate.sh`, direct lane-spec validator positive/negative checks, skill dependency/version/routing audits, `pnpm --dir tests test`, and `git diff --check`.
+- Preserved the unrelated in-progress Remotion pack split edits outside the Step 26.10 shipping boundary.
+- Recorded the Step 26.10 quality-gate manifest in `tasks/todo.md`.
+
 ## 2026-05-04 — Phase 26 Step 26.9: monorepo pack validation script
 
 - Added `packs/monorepo/scripts/monorepo-validate.sh` to verify augmentation injection sections, mirrored Claude/Codex skill structure, Codex `agents/openai.yaml` manifests, lane-spec fixtures, and monorepo detection fixtures.

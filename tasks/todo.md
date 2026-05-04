@@ -126,7 +126,7 @@ Phase 26 creates a new `monorepo` pack using an augmentation injection pattern â
   - Mirrored skill parity: Claude and Codex skill contracts are structurally consistent.
   - Codex skills have `agents/openai.yaml` manifests.
 
-- [ ] Step 26.10: Create test fixtures for monorepo detection and lane-spec validation.
+- [x] Step 26.10: Create test fixtures for monorepo detection and lane-spec validation.
   - Classification: automated
   - Files: create `tests/fixtures/monorepo/pnpm-turbo/pnpm-workspace.yaml`, create `tests/fixtures/monorepo/pnpm-turbo/turbo.json`, create `tests/fixtures/monorepo/pnpm-turbo/packages/api/package.json`, create `tests/fixtures/monorepo/pnpm-turbo/packages/web/package.json`, create `tests/fixtures/monorepo/pnpm-turbo/packages/shared-lib/package.json`, create `tests/fixtures/monorepo/pnpm-only/pnpm-workspace.yaml`, create `tests/fixtures/monorepo/pnpm-only/packages/app/package.json`, create `tests/fixtures/monorepo/not-monorepo/package.json`, create `tests/fixtures/monorepo/lane-specs-valid.json`, create `tests/fixtures/monorepo/lane-specs-invalid.json`
   - pnpm-turbo fixture: 2 packages (api, web) + 1 shared lib with internal dependencies and Turbo pipelines.
@@ -321,4 +321,21 @@ Phase 26 creates a new `monorepo` pack using an augmentation injection pattern â
 - **Adversarial review:** changed-file self-review checked that validation fails closed for missing fixture directories unless `--skip-fixtures` is explicit, avoids weakening contract compliance to loose text searches, verifies Codex manifests for every Codex monorepo skill, and copies detection fixtures to a temporary directory before running `mono-detect.sh` so validation does not dirty committed fixtures.
 - **Residual risk:** the fixture-checking branch is implemented but not yet exercised against committed fixtures; Step 26.10 and Step 26.11 are required to prove the default validation path end to end.
 - **Rollback note:** revert the Step 26.9 commit to remove the validation script, detect/guard contract normalization, and task/history records.
+- **Next command:** `$run`.
+
+### Step 26.10 Review - Monorepo Fixture Set
+
+**Result:** Created committed monorepo pack fixtures for pnpm+Turbo detection, pnpm-only detection, not-monorepo rejection, and lane-spec valid/invalid validation.
+
+**Ship manifest:**
+- **User goal:** Execute the next `$run` unit from the active Phase 26 plan.
+- **Changed files:** `tests/fixtures/monorepo/pnpm-turbo/pnpm-workspace.yaml`, `tests/fixtures/monorepo/pnpm-turbo/turbo.json`, `tests/fixtures/monorepo/pnpm-turbo/packages/api/package.json`, `tests/fixtures/monorepo/pnpm-turbo/packages/web/package.json`, `tests/fixtures/monorepo/pnpm-turbo/packages/shared-lib/package.json`, `tests/fixtures/monorepo/pnpm-only/pnpm-workspace.yaml`, `tests/fixtures/monorepo/pnpm-only/packages/app/package.json`, `tests/fixtures/monorepo/not-monorepo/package.json`, `tests/fixtures/monorepo/lane-specs-valid.json`, `tests/fixtures/monorepo/lane-specs-invalid.json`, `tasks/todo.md`, `tasks/history.md`.
+- **Unrelated worktree changes:** the in-progress Remotion pack split edits across docs, `packs/creator-media`, `packs/remotion`, scripts, tests, `tasks/lessons.md`, `tasks/roadmap.md`, and the top "Current Request" section of `tasks/todo.md` are outside the Step 26.10 shipping boundary and were preserved unstaged.
+- **Per-file purpose:** pnpm+Turbo fixture models three packages (`@fixture/api`, `@fixture/web`, `@fixture/shared-lib`) with internal dependencies and Turbo tasks; pnpm-only fixture models a single workspace package without Turborepo; not-monorepo fixture proves detector rejection without `pnpm-workspace.yaml`; valid lane-spec fixture exercises required fields, lifecycle, disjoint owns, root `must_not_edit`, and resolved `depends_on`; invalid lane-spec fixture exercises overlapping `owns` failure; task/history files record completion and validation evidence.
+- **User-goal mapping:** Step 26.10 explicitly requires these fixture files and their intended positive/negative cases; the new fixtures provide the committed inputs needed for Step 26.11 focused validation.
+- **Tests run:** `packs/monorepo/scripts/monorepo-validate.sh` passed with fixture-backed lane-spec and detection checks; `packs/monorepo/scripts/lane-spec-validate.sh tests/fixtures/monorepo/lane-specs-valid.json` passed; `packs/monorepo/scripts/lane-spec-validate.sh tests/fixtures/monorepo/lane-specs-invalid.json` failed as expected with `owns paths overlap between lanes api-a and api-b: packages/api/ <-> packages/api/src/`; `./scripts/skill-deps.sh --broken` passed with no broken references; `./scripts/skill-versions.sh --missing` passed with all 310 skills versioned; `./scripts/skill-next-step-routing.sh --missing` passed with all 225 mutation-capable skills covered; `pnpm --dir tests test` passed with 4 files and 1143 tests; `git diff --check` passed.
+- **Skipped tests:** direct `mono-detect.sh` runs against fixture directories were covered through `monorepo-validate.sh`, which copies fixtures to a temporary directory before detection to avoid dirtying committed fixtures with `.agents/monorepo.json`; standalone direct detector commands remain listed for Step 26.11 focused validation.
+- **Adversarial review:** changed-fixture self-review checked that package graph direction is acyclic, external dependencies are preserved for detector output coverage, Turbo and non-Turbo cases are distinct, invalid lane-spec failure is intentional and specific, and fixture package names align with lane package names.
+- **Residual risk:** Step 26.11 still needs to run the final focused validation sequence and record exact command results for phase acceptance.
+- **Rollback note:** revert the Step 26.10 commit to remove the committed fixture tree and task/history records.
 - **Next command:** `$run`.
