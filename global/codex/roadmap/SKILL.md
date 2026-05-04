@@ -66,7 +66,7 @@ Route behavior based on the current pipeline state:
 | G — Roadmap extension needed | `tasks/roadmap.md` exists, all phases are checked, and a substantive spec exists that is newer than the roadmap or is not represented in any completed phase | Go to step 4 in extension mode: interview only for the new/changed spec scope, append the agreed next phase(s), then seed the first new phase with `$plan-phase N`. Do not queue `$roadmap`. |
 | D — All complete, documentation scan needed | All phases in `tasks/roadmap.md` are checked and `tasks/todo.md` has no current `## Priority Documentation Todo` section from a previous `$research-roadmap` run | Queue `$research-roadmap` for documentation scan. Done (skip to step 7). |
 | E — All complete, documentation queue active | All phases in `tasks/roadmap.md` are checked and `tasks/todo.md` has an unchecked `## Priority Documentation Todo` item | Preserve the existing documentation queue and recommend the first unchecked documentation item. Done (skip to step 8; do not add another `$research-roadmap` task). |
-| F — All complete, documentation current | All phases in `tasks/roadmap.md` are checked and `tasks/todo.md` § `Priority Documentation Todo` says documentation is current with no unchecked documentation items | Report that implementation phases and documentation scan are complete; do not queue `$research-roadmap` again. Done (skip to step 8). |
+| F — All complete, documentation current | All phases in `tasks/roadmap.md` are checked and `tasks/todo.md` § `Priority Documentation Todo` says documentation is current with no unchecked documentation items | Report that implementation phases and documentation scan are complete; route to `$brainstorm` for candidate next-phase discovery unless the latest user request explicitly asks to pause, park, archive, or wait. Done (skip to step 8). |
 
 ### 4. Build or Extend Roadmap (States B and G)
 
@@ -327,7 +327,7 @@ For State F (all complete, documentation current):
 - All roadmap phases are checked off
 - Documentation scan is current; no missing or stale documentation work is queued
 
-Next: no roadmap or documentation pipeline work is queued.
+Next: `$brainstorm` to discover candidate next phases, or explicitly park the project if the user requested a waiting state.
 ```
 
 If the pipeline is fully healthy:
@@ -352,8 +352,9 @@ Output exactly two lines beyond the normal report:
 
 Rules:
 
-- Make the next work item primary. Derive it from the roadmap state, the first unchecked priority-queue item, the next unplanned phase, advisory queues, or the absence of remaining work. Do not use agent mode itself as the next work item.
-- Never recommend `$roadmap` as the next command from a `$roadmap` run. This skill is the scanner/router; once it has updated the queue, the next command must be the first queued actionable skill (`$spec-interview`, `$journey-map`, `$ux-variation`, `$ui-interview`, `$research-roadmap`, `$plan-phase N`, `$ship-end --no-deploy`, `$reconcile-dev-docs fix tasks`, `$run`, `$guide`, or `none`). If the first unchecked item itself says `$roadmap`, treat that as a stale/self-referential queue item and route to `$reconcile-dev-docs fix tasks` with evidence.
+- Make the next work item primary. Derive it from the roadmap state, the first unchecked priority-queue item, the next unplanned phase, advisory queues, or completion of the current queues. Do not use agent mode itself as the next work item.
+- Never recommend `$roadmap` as the next command from a `$roadmap` run. This skill is the scanner/router; once it has updated the queue, the next command must be the first queued actionable skill (`$spec-interview`, `$journey-map`, `$ux-variation`, `$ui-interview`, `$research-roadmap`, `$plan-phase N`, `$ship-end --no-deploy`, `$reconcile-dev-docs fix tasks`, `$run`, `$guide`, or `$brainstorm`). If the first unchecked item itself says `$roadmap`, treat that as a stale/self-referential queue item and route to `$reconcile-dev-docs fix tasks` with evidence.
+- Do not emit `Recommended next command: none` unless the latest user request explicitly asks to pause, park, archive, or wait. If implementation phases, documentation work, and promotable advisory items are all exhausted, route to new-phase discovery: `**Next work:** discover candidate next phase or explicitly park the project` and `**Recommended next command:** $brainstorm`.
 - Use `./scripts/agent-mode.sh` only to choose command text. If it is missing, unset, or non-zero, infer routing from the current invocation and task type instead of asking the user to select a mode by default.
 - Inference defaults:
   - Codex skill invocation (`$roadmap`, `$plan-phase`, `$run`, `$research-roadmap`) → recommend the matching `$...` command.
@@ -377,7 +378,7 @@ Rules:
 - Do not treat `tasks/record-todo.md` or `tasks/recurring-todo.md` as execution queues. They are advisory surfaces unless an item is explicitly promoted into `tasks/todo.md`.
 - Do not create or modify source code.
 - Do not archive phases, advance the pipeline, or execute implementation steps.
-- Prefer actionable skill invocations (`$ship`, `$run`, `$plan-phase N`, `$research-roadmap`) over vague guidance.
+- Prefer actionable skill invocations (`$ship`, `$run`, `$plan-phase N`, `$research-roadmap`, `$brainstorm`) over vague guidance.
 
 ## Archive-First Replacement Policy
 
@@ -390,7 +391,7 @@ Rules:
 
 ## Default Shipping Contract
 
-- **Default next-step routing:** when reporting completion, include either `Recommended next skill: <command>` or the two-line pair `**Next work:** <specific task or "none">` and `**Recommended next command:** <one command or route>` so the next operator has a concrete handoff.
+- **Default next-step routing:** when reporting completion, include either `Recommended next skill: <command>` or the two-line pair `**Next work:** <specific task, discovery task, blocker, or explicit parked state>` and `**Recommended next command:** <one command or route>` so the next operator has a concrete handoff. Do not use `none` as the command unless the user explicitly asked to pause, park, archive, or wait; exhausted queues route to `$brainstorm`.
 - If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
 - Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
 - This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.

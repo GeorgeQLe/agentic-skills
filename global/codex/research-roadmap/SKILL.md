@@ -322,10 +322,27 @@ After editing, summarize:
 - Record items: N
 - Recurring items: N
 
-Next: start at the first unchecked item in `tasks/todo.md`; review advisory task files separately.
+Next: start at the first unchecked item in `tasks/todo.md`; review advisory task files separately. If there are no unchecked priority documentation items and no promotable advisory items, route to `$brainstorm` for candidate next-phase discovery unless the latest user request explicitly asks to pause, park, archive, or wait.
 ```
 
 If fallback discovery was used, include a short note naming the inferred roots.
+
+## Next-Step Routing
+
+Before handing back, identify the next concrete documentation, planning, or discovery route from project state.
+
+Output exactly two lines beyond the normal report:
+
+- **Next work:** <specific documentation task, promotable advisory review, discovery task, or explicit parked state>
+- **Recommended next command:** <one command or route>
+
+Rules:
+
+- Recommend the first unchecked `## Priority Documentation Todo` item when one exists.
+- If a record or recurring item appears promotable to concrete execution work, recommend reviewing or promoting that item rather than discovery.
+- Do not emit `Recommended next command: none` unless the latest user request explicitly asks to pause, park, archive, or wait.
+- If documentation is current and no advisory item is promotable, route to new-phase discovery: `**Next work:** discover candidate next phase or explicitly park the project` and `**Recommended next command:** $brainstorm`.
+- Use `$spec-interview` instead of `$brainstorm` only when the project already has a concrete unspecced idea selected for formal specification.
 
 ## Constraints
 
@@ -350,7 +367,7 @@ If fallback discovery was used, include a short note naming the inferred roots.
 
 ## Default Shipping Contract
 
-- **Default next-step routing:** when reporting completion, include either `Recommended next skill: <command>` or the two-line pair `**Next work:** <specific task or "none">` and `**Recommended next command:** <one command or route>` so the next operator has a concrete handoff.
+- **Default next-step routing:** when reporting completion, include either `Recommended next skill: <command>` or the two-line pair `**Next work:** <specific task, discovery task, blocker, or explicit parked state>` and `**Recommended next command:** <one command or route>` so the next operator has a concrete handoff. Do not use `none` as the command unless the user explicitly asked to pause, park, archive, or wait; exhausted queues route to `$brainstorm`.
 - If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
 - Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
 - This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.

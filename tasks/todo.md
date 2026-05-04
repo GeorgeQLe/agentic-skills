@@ -1,467 +1,117 @@
-# YouTube External Video Research Skills
+# Quality Gate Hardening
 
 **Project:** Claude Skills / agentic-skills
-**Current phase:** 20 of 20
+**Current phase:** 21 of 21
 **Source roadmap:** `tasks/roadmap.md`
-**Source spec:** User request on 2026-05-04
+**Source spec:** `tasks/session-workflow-quality-audit.md`
 
-## Phase 20: YouTube External Video Research Skills
+## Phase 21: Quality Gate Hardening
 
-**Goal:** Add focused external YouTube video research skills for context comprehension, format/Remotion-style analysis, and competitive performance learning.
+**Goal:** Make anti-slop quality controls a default part of non-trivial mutation and shipping workflows so code cannot be committed by procedural compliance alone.
 
 **Scope:**
-- Add mirrored Claude/Codex creator-media pack skills for `youtube-vid-research`, `youtube-format-research`, and `youtube-competitive-research`.
-- Reuse the existing YouTube public-evidence contract: `yt-dlp`, local transcript venv, raw evidence under `research/youtube/data/`, evidence gaps, and no fabricated transcripts/comments/metrics/visual claims.
-- Wire creator-media docs and next-skill routing so external reference-video work sits between single-video audit and packaging/strategy work.
-- Keep Remotion implementation owned by `video-build`; `youtube-format-research` only emits a format and Remotion handoff spec.
+- Add a shared quality-gate contract for mutation/shipping skills that requires changed files, user-goal mapping, tests run, skipped tests, residual risk, and next command.
+- Harden `$run`, `$ship`, `$ship-end`, and `$commit-and-push-by-feature` so non-trivial source mutations require a diff-aware ship manifest and cannot rely on doc-only verification.
+- Promote targeted `quality-sweep audit` or equivalent adversarial review into the default pre-ship path for non-trivial code changes.
+- Add a lightweight local validation script that can check generated ship manifests or final-response drafts for required quality-gate fields.
+- Document how user corrections flow from `tasks/lessons.md` into relevant skill/test updates when a correction exposes a repeatable workflow failure.
+- Preserve existing direct-to-primary shipping and next-step routing contracts.
 
 **Acceptance Criteria:**
-- [x] Mirrored Claude/Codex `youtube-vid-research` skill contracts exist.
-- [x] Mirrored Claude/Codex `youtube-format-research` skill contracts exist.
-- [x] Mirrored Claude/Codex `youtube-competitive-research` skill contracts exist.
-- [x] The three skills require persisted evidence, explicit evidence coverage, anti-fabrication constraints, output paths, archive-first replacement, and next-skill routing.
-- [x] Creator-media docs/reference lists include the three new skills in discovery and default flow.
-- [x] Existing creator-media routing orders include the three new external-video research lanes.
-- [x] Validation passes with mirrored-contract scans, docs/routing scans, dependency/version/routing audits, and `git diff --check`.
+- [ ] A reusable quality-gate contract exists and is referenced by the global mutation/shipping skills.
+- [ ] `$run`, `$ship`, `$ship-end`, and `$commit-and-push-by-feature` require a ship manifest for non-trivial source changes.
+- [ ] The ship manifest requires changed files, per-file purpose, user-goal mapping, tests run, skipped tests, residual risk, and next command.
+- [ ] Non-trivial source changes require targeted `quality-sweep audit`, `expert-review`, or an explicitly justified equivalent adversarial review before commit/push.
+- [ ] A validation script detects missing required ship-manifest fields and passes on a complete fixture.
+- [ ] User-correction handling requires updating `tasks/lessons.md` and, when applicable, the relevant skill or validation check.
+- [ ] Validation passes with targeted contract scans, script fixture checks, skill dependency/version/routing audits, and `git diff --check`.
 
-**Parallelization:** serial
-**Coordination Notes:** Keep serial because this touches mirrored creator-media skills, shared pack docs, and routing lists. Do not add dependencies or GitHub Actions.
+**Parallelization:** review-only
+**Coordination Notes:** Keep implementation serial because the phase touches shared global workflow skills and validation scripts. Use review-only lanes for adversarial contract review after the main edits are drafted.
 
 > Test strategy: tests-after
 
 ### Execution Profile
-**Parallel mode:** serial
+**Parallel mode:** review-only
 **Integration owner:** main agent
-**Conflict risk:** medium
-**Review gates:** correctness, docs/API conformance, routing, validation
+**Conflict risk:** high
+**Review gates:** correctness, tests, docs/API conformance, workflow safety
 
-**Subagent lanes:** none
+**Subagent lanes:**
+- Lane: quality-contract-review
+  - Agent: explorer
+  - Role: reviewer
+  - Mode: review
+  - Scope: Review the proposed quality-gate contract and skill-routing changes for loopholes that would still allow source changes to ship without diff-aware evidence.
+  - Depends on: Step 21.4
+  - Deliverable: Review report listing blockers, recommended wording changes, and validation gaps.
 
 ### Implementation
-- [x] Step 20.1: Add mirrored external video research skill contracts.
+- [x] Step 21.1: Add reusable quality-gate contract documentation.
   - Classification: automated
-  - Files: `packs/creator-media/{claude,codex}/youtube-vid-research/SKILL.md`, `packs/creator-media/{claude,codex}/youtube-format-research/SKILL.md`, `packs/creator-media/{claude,codex}/youtube-competitive-research/SKILL.md`
-- [x] Step 20.2: Wire creator-media docs and routing.
+  - Files: create `docs/quality-gate-contract.md`
+  - Define non-trivial mutation, ship manifest fields, skipped-test rationale, residual-risk language, adversarial review expectations, and direct-to-primary compatibility.
+  - Include the recommended policy from `tasks/session-workflow-quality-audit.md`: Plan, Implement, Self-review, Quality sweep, Verification, Ship manifest.
+- [ ] Step 21.2: Add ship-manifest validation script and fixtures.
   - Classification: automated
-  - Files: `packs/creator-media/PACK.md`, `README.md`, `docs/skills-reference.md`, creator-media `SKILL.md` routing sections
+  - Files: create `scripts/ship-quality-gate.sh`, create `tests/fixtures/ship-quality-gate/complete.md`, create `tests/fixtures/ship-quality-gate/missing-fields.md`
+  - Script should fail on missing required fields and pass on a complete manifest fixture.
+  - Keep it dependency-light and shell-compatible with existing repository scripts.
+  - Implementation plan:
+    - Create a POSIX/Bash-compatible local script that accepts one manifest path, prints a clear usage error when missing, and scans for the required contract fields from `docs/quality-gate-contract.md`.
+    - Required fields for the first validation pass: User goal, Changed files, Per-file purpose, User-goal mapping, Tests run, Skipped tests, Adversarial review, Residual risk, Rollback note, Next command.
+    - Make missing fields fail non-zero with one line per missing field so future skills can use the output directly.
+    - Add one complete fixture that passes and one incomplete fixture that intentionally omits multiple fields.
+    - Do not add external dependencies or package-manager changes.
+- [ ] Step 21.3: Harden global execution and shipping skill contracts.
+  - Classification: automated
+  - Files: modify `global/codex/run/SKILL.md`, modify `global/codex/ship/SKILL.md`, modify `global/codex/ship-end/SKILL.md`, modify `global/codex/commit-and-push-by-feature/SKILL.md`
+  - Require ship manifest generation for non-trivial source mutations before commit/push.
+  - Require targeted `quality-sweep audit`, `expert-review`, or an explicitly justified equivalent adversarial review for non-trivial code changes.
+  - Require final responses to distinguish executable verification from doc-only/task-only checks.
+- [ ] Step 21.4: Add user-correction enforcement guidance.
+  - Classification: automated
+  - Files: modify `global/codex/run/SKILL.md`, modify `global/codex/ship/SKILL.md`, modify `global/codex/ship-end/SKILL.md`, modify `global/codex/commit-and-push-by-feature/SKILL.md`, modify `docs/quality-gate-contract.md`
+  - Require corrections to update `tasks/lessons.md`.
+  - Require a relevant skill or validation script update when the correction exposes a repeatable workflow failure.
+  - Require explicit "not applicable" rationale when no skill/test update is made.
 
 ### Green
-- [x] Step 20.3: Run focused validation and record results.
+- [ ] Step 21.5: Write and run focused validation for the quality gate.
   - Classification: automated
   - Files: modify `tasks/todo.md` review section with exact validation commands and results
-  - Run mirrored contract scans, docs/routing scans, skill dependency/version/routing audits, and `git diff --check`.
+  - Run `scripts/ship-quality-gate.sh tests/fixtures/ship-quality-gate/complete.md` and confirm it passes.
+  - Run `scripts/ship-quality-gate.sh tests/fixtures/ship-quality-gate/missing-fields.md` and confirm it fails for the expected missing fields.
+  - Run targeted `rg` scans confirming `docs/quality-gate-contract.md` references and required manifest fields in all touched global skills.
+- [ ] Step 21.6: Run repository validation and review gate.
+  - Classification: automated
+  - Files: no source changes expected beyond review-driven fixes and task review notes
+  - Run `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-next-step-routing.sh --missing`, and `git diff --check`.
+  - Apply concrete review findings from the `quality-contract-review` lane before marking the phase complete.
 
-### Milestone: YouTube External Video Research Skills
+### Milestone: Quality Gate Hardening
 **Acceptance Criteria:**
-- [x] Mirrored Claude/Codex `youtube-vid-research` skill contracts exist.
-- [x] Mirrored Claude/Codex `youtube-format-research` skill contracts exist.
-- [x] Mirrored Claude/Codex `youtube-competitive-research` skill contracts exist.
-- [x] The three skills require persisted evidence, explicit evidence coverage, anti-fabrication constraints, output paths, archive-first replacement, and next-skill routing.
-- [x] Creator-media docs/reference lists include the three new skills in discovery and default flow.
-- [x] Existing creator-media routing orders include the three new external-video research lanes.
-- [x] Validation passes with mirrored-contract scans, docs/routing scans, dependency/version/routing audits, and `git diff --check`.
+- [ ] A reusable quality-gate contract exists and is referenced by the global mutation/shipping skills.
+- [ ] `$run`, `$ship`, `$ship-end`, and `$commit-and-push-by-feature` require a ship manifest for non-trivial source changes.
+- [ ] The ship manifest requires changed files, per-file purpose, user-goal mapping, tests run, skipped tests, residual risk, and next command.
+- [ ] Non-trivial source changes require targeted `quality-sweep audit`, `expert-review`, or an explicitly justified equivalent adversarial review before commit/push.
+- [ ] A validation script detects missing required ship-manifest fields and passes on a complete fixture.
+- [ ] User-correction handling requires updating `tasks/lessons.md` and, when applicable, the relevant skill or validation check.
+- [ ] Validation passes with targeted contract scans, script fixture checks, skill dependency/version/routing audits, and `git diff --check`.
+- [ ] All phase tests pass.
+- [ ] No regressions in previous phase tests.
 
 **On Completion:**
-- Deviations from plan: none.
-- Tech debt / follow-ups: none.
-- Ready for next phase: yes
+- Deviations from plan: [fill when complete]
+- Tech debt / follow-ups: [fill when complete]
+- Ready for next phase: [fill when complete]
 
 ---
 
 ### Review
-- Step 20.1 complete: added mirrored `youtube-vid-research`, `youtube-format-research`, and `youtube-competitive-research` skill contracts under `packs/creator-media/claude/` and `packs/creator-media/codex/`.
-- Step 20.2 complete: updated creator-media pack docs, public discovery references, and mirrored next-skill routing orders to include external video context research, format/Remotion-style research, and competitive research lanes.
-- Step 20.3 validation:
-  - `rg -n 'name: youtube-(vid|format|competitive)-research|version: 1\\.0\\.0|Evidence Coverage|Do not invent|research/youtube/(video|format|competitive)-research-|Archive existing canonical artifacts|Recommended next skill' packs/creator-media/claude/youtube-*-research/SKILL.md packs/creator-media/codex/youtube-*-research/SKILL.md` - passed; confirmed mirrored contract fields, output paths, evidence coverage, anti-fabrication, archive-first policy, and routing.
-  - `rg -n 'youtube-vid-research|youtube-format-research|youtube-competitive-research|external video research|format research|competitive lessons' README.md docs/skills-reference.md packs/creator-media/PACK.md packs/creator-media/*/*/SKILL.md` - passed; confirmed docs and routing expose the three new lanes.
-  - Normalized Claude/Codex command syntax for the three new skills and ran `diff -u` per pair - passed; no output.
-  - `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken` - passed; `No broken references found.`
-  - `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing` - passed; `All 283 skills have a version field.`
-  - `./scripts/skill-next-step-routing.sh --missing` - passed; `All 211 mutation-capable skills have next-step routing.`
-  - `git diff --check` - passed; no output.
-
----
-
-# YouTube Description Optimizer
-
-**Project:** Claude Skills / agentic-skills
-**Current phase:** 19 of 19
-**Source roadmap:** `tasks/roadmap.md`
-**Source spec:** User request on 2026-05-03
-
-## Phase 19: YouTube Description Optimizer
-
-**Goal:** Add a focused YouTube description and metadata optimization skill for existing videos, future uploads, and reusable series templates.
-
-**Scope:**
-- Add mirrored Claude/Codex `youtube-description-optimizer` skill definitions to the creator-media pack.
-- Support audit, draft, and template modes.
-- Cover first-two-lines promise support, search clarity, CTA/link hierarchy, chapters, hashtags, disclosures, pinned-comment fit, and rewritten description blocks.
-- Wire creator-media docs and routing so description optimization sits between title/thumbnail audit and portfolio decisions.
-
-**Acceptance Criteria:**
-- [x] `youtube-description-optimizer` exists for both Claude and Codex.
-- [x] The skill supports `audit`, `draft`, and `template` modes with explicit output paths.
-- [x] The skill requires evidence coverage and forbids invented links, sponsors, disclosures, chapters, transcript details, comments, and owner-only metrics.
-- [x] Creator-media docs/reference lists include `youtube-description-optimizer` in the packaging flow.
-- [x] Creator-media next-skill routing includes `youtube-description-optimizer` between title/thumbnail audit and portfolio.
-- [x] Validation passes with skill dependency/version checks, next-step routing audit, targeted mirrored-contract scans, and `git diff --check`.
-
-**Parallelization:** serial
-**Coordination Notes:** Keep this serial because it touches mirrored skills, shared creator-media routing, and public pack docs. Preserve any in-progress creator-media video-script/video-build routing work.
-
-> Test strategy: tests-after
-
-### Execution Profile
-**Parallel mode:** serial
-**Integration owner:** main agent
-**Conflict risk:** medium
-**Review gates:** correctness, docs/API conformance, routing, validation
-
-**Subagent lanes:** none
-
-### Implementation
-- [x] Step 19.1: Add mirrored `youtube-description-optimizer` skill contracts.
-  - Classification: automated
-  - Files: `packs/creator-media/claude/youtube-description-optimizer/SKILL.md`, `packs/creator-media/codex/youtube-description-optimizer/SKILL.md`
-- [x] Step 19.2: Wire creator-media docs and discovery references.
-  - Classification: automated
-  - Files: `packs/creator-media/PACK.md`, `README.md`, `docs/skills-reference.md`
-- [x] Step 19.3: Align creator-media next-skill routing.
-  - Classification: automated
-  - Files: mirrored creator-media `SKILL.md` routing sections
-
-### Green
-- [x] Step 19.4: Run focused validation and record results.
-  - Classification: automated
-  - Files: modify `tasks/todo.md` review section with exact validation commands and results
-  - Run targeted contract/routing scans, mirrored diff normalization, skill dependency/version checks, next-step routing audit, and `git diff --check`.
-
-### Milestone: YouTube Description Optimizer
-**Acceptance Criteria:**
-- [x] `youtube-description-optimizer` exists for both Claude and Codex.
-- [x] The skill supports `audit`, `draft`, and `template` modes with explicit output paths.
-- [x] The skill requires evidence coverage and forbids invented links, sponsors, disclosures, chapters, transcript details, comments, and owner-only metrics.
-- [x] Creator-media docs/reference lists include `youtube-description-optimizer` in the packaging flow.
-- [x] Creator-media next-skill routing includes `youtube-description-optimizer` between title/thumbnail audit and portfolio.
-- [x] Validation passes with skill dependency/version checks, next-step routing audit, targeted mirrored-contract scans, and `git diff --check`.
-
-**On Completion:**
-- Deviations from plan: none.
-- Tech debt / follow-ups: none.
-- Ready for next phase: yes
-
----
-
-### Review
-- Step 19.1 complete: added mirrored `youtube-description-optimizer` skill contracts under `packs/creator-media/claude/` and `packs/creator-media/codex/`.
-- Step 19.2 complete: updated creator-media pack docs and public discovery references to place description optimization between title/thumbnail audit and portfolio.
-- Step 19.3 complete: updated mirrored creator-media routing lists and `youtube-video-audit` default routing so description/CTA/link/chapter/hashtag/disclosure issues route to the new skill.
+- Planned from `tasks/session-workflow-quality-audit.md` after the audit found that workflows constrain planning/routing slop but do not yet enforce implementation quality strongly enough by default.
+- Step 21.1 complete: added `docs/quality-gate-contract.md` with the reusable quality-gate contract for non-trivial mutations, the required Plan/Implement/Self-review/Quality sweep/Verification/Ship manifest flow, ship-manifest fields, skipped-test and residual-risk standards, adversarial review expectations, user-correction handling, and direct-to-primary compatibility.
 - Validation:
-  - `rg -n 'name: youtube-description-optimizer|version:|Invoke as|--mode audit\|draft\|template|description-optimizer-<video-id>|description-draft-<slug>|description-template-<slug>|Do not invent links|owner-only metrics|Evidence Coverage|Recommended next skill' packs/creator-media/claude/youtube-description-optimizer/SKILL.md packs/creator-media/codex/youtube-description-optimizer/SKILL.md` - passed; confirmed mirrored contract fields, modes, outputs, evidence coverage, and anti-fabrication language.
-  - `rg -n 'youtube-title-thumbnail-audit -> youtube-description-optimizer -> youtube-portfolio|youtube-title-thumbnail-audit, youtube-description-optimizer, youtube-portfolio|packaging, descriptions, portfolio|description optimization' README.md docs/skills-reference.md packs/creator-media/PACK.md` - passed; confirmed docs expose the new flow.
-  - `rg -n 'youtube-title-thumbnail-audit.*youtube-description-optimizer.*youtube-portfolio|Default recommendation:.*youtube-description-optimizer|description support, CTA/link structure' packs/creator-media -g 'SKILL.md'` - passed; confirmed routing placement and video-audit handoff language.
-  - Normalized Claude/Codex `youtube-description-optimizer` command syntax and ran `diff -u /tmp/youtube-description-optimizer-claude-normalized.md /tmp/youtube-description-optimizer-codex-normalized.md` - passed; no output.
-  - `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken` - passed; `No broken references found.`
-  - `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing` - passed; `All 277 skills have a version field.`
-  - `./scripts/skill-next-step-routing.sh --missing` - passed; `All 211 mutation-capable skills have next-step routing.`
-  - `git diff --check` - passed; no output.
-
----
-
-# Pack Lock Stale Recovery
-
-**Project:** Claude Skills / agentic-skills
-**Current phase:** 18 of 18
-**Source roadmap:** `tasks/roadmap.md`
-**Source spec:** User report from `pitwall-monorepo` `$pack refresh`
-
----
-
-# Mobile Ideas Return Assessment
-
-**Project:** Claude Skills / agentic-skills
-**Source request:** `$analyze-sessions` evaluation of `/Users/georgele/projects/mobile/dev/mobile-ideas`
-
-## Goal
-
-Assess how much return the `mobile-ideas` work has produced relative to local Claude/Codex effort, then recommend better future workflows and automation.
-
-## Plan
-
-- [x] Inventory `mobile-ideas` repository artifacts, commits, task docs, and output shape.
-- [x] Parse full available Claude and Codex history/session records for `mobile-ideas` activity.
-- [x] Quantify sessions, prompts, date range, source split, repeated prompt patterns, and workflow themes.
-- [x] Compare effort signals against tangible outputs and identify where work compounded versus churned.
-- [x] Produce ranked recommendations with next automation routes and verification notes.
-
-## Review
-
-- Report written: `tasks/mobile-ideas-return-assessment.md`.
-- History parsed:
-  - `~/.codex/history.jsonl`: 4,338 lines.
-  - `~/.claude/history.jsonl`: 8,437 lines.
-  - `~/.codex/sessions/**/*.jsonl`: 1,695 files, 561,190 lines.
-  - Scoped compact `mobile-ideas` user prompts: 272 across 104 sessions, from 2026-04-16 through 2026-05-03.
-  - Source split: Codex 219 prompts, Claude 53 prompts.
-- Repository evidence:
-  - `mobile-ideas` is clean.
-  - 162 commits from 2026-04-16 through 2026-05-03.
-  - 1,000 numbered specs; 1,046 total spec Markdown files.
-  - 1,000 downstream manifest rows checked, 0 unchecked.
-  - `node scripts/check-implementation-readiness.mjs` reports 280 implementation-ready specs, 720 Draft/non-ready specs, and 2,160 source-discovery placeholder rows across 720 files.
-- Assessment:
-  - Strong return from durable spec-store, readiness, seeding, and guardrail machinery.
-  - Weak return from breadth-before-selection: 1,000 specs and private repo scaffolds have not proportionally converted into runnable products.
-  - Highest-friction history patterns were `$run` plus approvals, repeated long seeding/downstream prompts, and vague downstream-continuation prompts.
-- Recommended next skill: `$project-fleet --plan`.
-
-## Phase 18: Pack Lock Stale Recovery
-
-**Goal:** Make pack lock failures diagnosable and recover automatically when a previous pack process left a stale lock behind.
-
-**Scope:**
-- Add owner metadata to `.agents/.pack.lock`.
-- Remove stale locks automatically when the recorded owner PID is no longer running.
-- Include lock owner details in timeout errors.
-- Document the lock behavior in pack docs.
-
-**Acceptance Criteria:**
-- [x] `scripts/pack.sh` writes lock owner metadata and removes stale dead-PID locks.
-- [x] Timeout errors report lock owner metadata.
-- [x] Pack docs describe stale-lock behavior.
-- [x] Focused smoke tests cover live-lock waiting and stale-lock recovery.
-
-**Parallelization:** serial
-**Coordination Notes:** Keep serial because this is shared pack write coordination. Do not add dependencies or GitHub Actions.
-
-> Test strategy: tests-after
-
-### Execution Profile
-**Parallel mode:** serial
-**Integration owner:** main agent
-**Conflict risk:** medium
-**Review gates:** correctness, tests, docs/API conformance
-
-**Subagent lanes:** none
-
-### Implementation
-- [x] Step 18.1: Analyze session evidence and current lock state.
-  - Classification: automated
-  - Files: inspect only
-  - Read full local Claude/Codex history and identify the failing `pitwall-monorepo` `$pack refresh` prompt.
-  - Check current `pitwall-monorepo` lock state.
-- [x] Step 18.2: Harden pack lock acquisition.
-  - Classification: automated
-  - Files: `scripts/pack.sh`
-  - Write `pid`, `started_at`, and `command` into `.agents/.pack.lock`.
-  - Remove stale locks when the recorded PID is not running.
-  - Include owner metadata in timeout errors.
-- [x] Step 18.3: Document lock behavior.
-  - Classification: automated
-  - Files: `global/claude/pack/SKILL.md`, `global/codex/pack/SKILL.md`, `README.md`, `docs/packs.md`
-
-### Green
-- [x] Step 18.4: Run focused validation and record results.
-  - Classification: automated
-  - Files: modify `tasks/todo.md` review section with exact validation commands and results
-  - Run shell syntax checks, stale-lock and live-lock smoke tests, skill dependency/version checks, and `git diff --check`.
-
-### Milestone: Pack Lock Stale Recovery
-**Acceptance Criteria:**
-- [x] `scripts/pack.sh` writes lock owner metadata and removes stale dead-PID locks.
-- [x] Timeout errors report lock owner metadata.
-- [x] Pack docs describe stale-lock behavior.
-- [x] Focused smoke tests cover live-lock waiting and stale-lock recovery.
-
-**On Completion:**
-- Deviations from plan: none.
-- Tech debt / follow-ups: none.
-- Ready for next phase: yes
-
----
-
-### Review
-- Session analysis:
-  - Read 572,617 JSONL lines across 1,691 Claude/Codex history/session files.
-  - Found the reported prompt in `~/.codex/history.jsonl` session `019df025-a516-74d3-9606-e67aa42d35f9`.
-  - Current live check showed `/Users/georgele/projects/apps/pitwall-monorepo/.agents` exists and `.agents/.pack.lock` is absent.
-  - Root risk: the previous pack lock had no owner metadata, so a timeout could not distinguish a live competing process from a stale lock or tell the user what held it.
-- Step 18.2 complete: `scripts/pack.sh` now writes `pid`, `started_at`, and `command` files inside `.agents/.pack.lock`, removes stale locks whose recorded PID is no longer running, and includes owner metadata in timeout errors. `PACK_LOCK_MAX_ATTEMPTS` and `PACK_LOCK_SLEEP_SECONDS` allow fast lock-path tests.
-- Step 18.3 complete: documented lock owner metadata and stale-lock cleanup in mirrored pack skills, `README.md`, and `docs/packs.md`.
-- Step 18.4 validation:
-  - `bash -n scripts/pack.sh` - passed.
-  - Stale-lock smoke test - passed; lock with dead PID `999999` was removed, `refresh` completed, and devtool skill links were created.
-  - Live-lock smoke test - passed; lock owned by the current shell PID timed out with `pid`, `started_at`, and `command` in the error.
-  - `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken` - passed; `No broken references found.`
-  - `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing` - passed; `All 271 skills have a version field.`
-  - `git diff --check` - passed; no output.
-- User claim validation:
-  - Confirmed: a single repo-level `project_type` is too coarse for a repo containing both Pitwall Local / OSS devtool work and CalcLLM-powered SaaS/business-app work.
-  - Confirmed: before this phase, `scripts/pack.sh` rewrote `.agents/project.json` from `project_type`, `enabled_packs`, `skill_pack_version`, and optional `agent_mode`, which would drop hand-authored mixed-monorepo metadata.
-  - Confirmed direction: keep `devtool` as the coarse default for local/OSS developer tooling, enable both `devtool` and `business-app`, and use scoped routing for CalcLLM-connected paths.
-- Step 17.2 complete: documented mixed-monorepo routing in mirrored Claude/Codex `pack` skills and public pack docs. The documented model keeps `project_type` as the default, `enabled_packs` as the repository-wide union, and `project_scopes[]` as path-scoped routing metadata.
-- Step 17.3 complete: updated `scripts/pack.sh` so pack writes preserve existing `project_scopes` and `notes` fields when `jq` is available.
-- Step 17.4 validation:
-  - `bash -n scripts/pack.sh` - passed.
-  - `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken` - passed; `No broken references found.`
-  - `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing` - passed; `All 271 skills have a version field.`
-  - `git diff --check` - passed; no output.
-  - Temp-project smoke test for `scripts/pack.sh set-mode hybrid` - passed; `agent_mode`, `project_scopes[0].path`, and `notes.devtool` were all present after rewrite.
-  - Temp-project smoke test for `scripts/pack.sh install business-app` - passed; `enabled_packs` contained both `devtool` and `business-app`, and existing `project_scopes` and `notes` survived.
-  - Note: `./scripts/skill-deps.sh --broken` and `./scripts/skill-versions.sh --missing` fail under macOS `/bin/bash` because those existing scripts use associative arrays; validation used `/opt/homebrew/bin/bash`.
-- Step 16.1 complete: added a mutation-capable contract audit and used its initial `--missing` output to identify gaps in default shipping-contract skills and kanban mutation wrappers.
-- Step 16.2 complete: patched 139 default shipping-contract skill files with a `Default next-step routing` requirement, and patched 40 kanban mutation wrappers with a `## Next-Step Routing` section.
-- Step 16.3 complete: added `scripts/skill-next-step-routing.sh` with `--missing` and `--list` modes. The audit scans `global/` and `packs/` `SKILL.md` files for mutation signals and requires `Recommended next skill`, `Recommended next command`, `Recommended next step`, `## Next Steps`, `## Next-Step Routing`, or `## Next-Skill Routing`.
-- Step 16.4 validation:
-  - `./scripts/skill-next-step-routing.sh --missing` - passed; `All 211 mutation-capable skills have next-step routing.`
-  - `./scripts/skill-deps.sh --broken` - passed; `No broken references found.`
-  - `./scripts/skill-versions.sh --missing` - passed; `All 271 skills have a version field.`
-  - `rg -n "Default next-step routing" global packs -g 'SKILL.md' | wc -l` - passed; `139`.
-  - `rg -n "## Next-Step Routing" packs/*-kanban packs/poketowork-kanban -g 'SKILL.md' | wc -l` - passed; `40`.
-  - `./scripts/skill-next-step-routing.sh --list | wc -l` - passed; `211`.
-  - `git diff --check` - passed; no output.
-
----
-
-## Prior Phase Snapshot: Creator Presence Dossier
-
-**Goal:** Add a repo-backed Markdown dossier skill that tracks a creator's public professional presence, career arc, platform roles, proof assets, and content opportunities over time.
-
-**Source Spec:** `specs/creator-platform-evidence-schema.md`
-
-**Scope:**
-- Add mirrored Claude/Codex `creator-presence-dossier` skill definitions.
-- Make the dossier consume `research/creator-platforms/capability-matrix.md`, `research/creator-platforms/evidence-schema.md`, and available creator evidence.
-- Define output under `research/creator-presence/<slug>.md`.
-- Include sections for identity, career timeline, platform map, core themes, expertise claims, proof assets, signature formats, audience/community signals, product/company links, evidence register, gaps, and next collection tasks.
-- Update pack docs and references so the dossier feeds `creator-positioning`, `content-programming`, `product-led-media-map`, and `creator-metrics-review`.
-
-**Acceptance Criteria:**
-- [x] `creator-presence-dossier` exists for both Claude and Codex.
-- [x] The skill distinguishes public/professional evidence from private repo planning context.
-- [x] The skill requires source paths, capture dates, confidence levels, and evidence gaps.
-- [x] The dossier contract supports LinkedIn, personal websites, GitHub, podcasts, talks, newsletters, and product docs.
-- [x] Follow-up routing recommends the correct creator-media strategy skill from dossier findings.
-- [x] Validation passes with skill dependency/version checks and targeted reference scans.
-
-**Parallelization:** serial
-**Coordination Notes:** The dossier depends on the Phase 12 matrix/schema contract. Keep implementation serial because it touches pack routing and cross-skill handoffs.
-
-> Test strategy: tests-after
-
-### Execution Profile
-**Parallel mode:** serial
-**Integration owner:** main agent
-**Conflict risk:** medium
-**Review gates:** correctness, tests, docs/API conformance
-
-**Subagent lanes:** none
-
-### Implementation
-- [x] Step 13.1: Create mirrored `creator-presence-dossier` skill contracts.
-  - Classification: automated
-  - Files: create `packs/creator-media/claude/creator-presence-dossier/SKILL.md`, create `packs/creator-media/codex/creator-presence-dossier/SKILL.md`
-  - Require output at `research/creator-presence/<slug>.md`.
-  - Require reading `research/creator-platforms/capability-matrix.md`, `research/creator-platforms/evidence-schema.md`, and available normalized/raw creator evidence before synthesis.
-  - Require public/professional evidence boundaries so private repo planning context is excluded unless explicitly marked as internal notes.
-  - Include final-response next-skill routing as `Recommended next skill: <command>`.
-- [x] Step 13.2: Define the dossier Markdown contract and evidence register requirements.
-  - Classification: automated
-  - Files: modify `packs/creator-media/claude/creator-presence-dossier/SKILL.md`, modify `packs/creator-media/codex/creator-presence-dossier/SKILL.md`
-  - Require sections for identity, current public promise, career timeline, platform map, core themes, expertise claims, proof assets, signature formats, audience/community signals, product/company connections, gaps/contradictions/stale positioning, evidence register, next collection tasks, and recommended next skills.
-  - Require evidence rows to include source path or URL, capture date, confidence level, public/private boundary, and evidence gaps.
-  - Require support for LinkedIn, personal websites/blogs, GitHub, podcasts, talks, newsletters, and product docs when evidence is present.
-- [x] Step 13.3: Wire `creator-presence-dossier` into creator-media pack docs and discovery references.
-  - Classification: automated
-  - Files: modify `packs/creator-media/PACK.md`, modify `README.md`, modify `docs/skills-reference.md`
-  - Put `creator-presence-dossier` after `creator-evidence-schema` and before platform-specific audits or strategy synthesis in creator-media skill lists and default flows.
-  - Document that the dossier feeds `creator-positioning`, `content-programming`, `product-led-media-map`, and `creator-metrics-review`.
-- [x] Step 13.4: Align downstream creator-media routing with the dossier.
-  - Classification: automated
-  - Files: inspect and modify only as needed in `packs/creator-media/claude/creator-evidence-schema/SKILL.md`, `packs/creator-media/codex/creator-evidence-schema/SKILL.md`, `packs/creator-media/claude/creator-positioning/SKILL.md`, `packs/creator-media/codex/creator-positioning/SKILL.md`, `packs/creator-media/claude/content-programming/SKILL.md`, `packs/creator-media/codex/content-programming/SKILL.md`, `packs/creator-media/claude/product-led-media-map/SKILL.md`, `packs/creator-media/codex/product-led-media-map/SKILL.md`, `packs/creator-media/claude/creator-metrics-review/SKILL.md`, `packs/creator-media/codex/creator-metrics-review/SKILL.md`
-  - Ensure schema routing can recommend the now-present dossier for mixed-platform, LinkedIn-first, career-signal, or owned-presence work.
-  - Ensure strategy skills mention the dossier as a preferred creator context source without breaking the existing YouTube evidence flow.
-
-### Green
-- [x] Step 13.5: Write regression validation coverage for Phase 13 acceptance criteria.
-  - Classification: automated
-  - Files: modify `tasks/todo.md` review section with exact validation commands and results
-  - Run targeted scans confirming mirrored dossier skill files, frontmatter names, output path, required sections, public/private evidence boundaries, confidence/capture/source fields, supported source types, pack-doc routing, and final-response next-skill language.
-- [x] Step 13.6: Run repository validation.
-  - Classification: automated
-  - Files: no source changes expected
-  - Run `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, targeted `rg` checks, `git diff --check`, and perform only concrete cleanup found by validation.
-
-### Milestone: Creator Presence Dossier
-**Acceptance Criteria:**
-- [x] `creator-presence-dossier` exists for both Claude and Codex.
-- [x] The skill distinguishes public/professional evidence from private repo planning context.
-- [x] The skill requires source paths, capture dates, confidence levels, and evidence gaps.
-- [x] The dossier contract supports LinkedIn, personal websites, GitHub, podcasts, talks, newsletters, and product docs.
-- [x] Follow-up routing recommends the correct creator-media strategy skill from dossier findings.
-- [x] Validation passes with skill dependency/version checks and targeted reference scans.
-- [x] All phase tests pass.
-- [x] No regressions in previous phase tests.
-
-**On Completion:**
-- Deviations from plan: Folded the conditional no-op wording cleanup into the validation gate to avoid a separate plan-mode handoff after clean checks.
-- Tech debt / follow-ups: none.
-- Ready for next phase: yes
-
----
-
-### Review
-- Phase 13 planned just in time after Phase 12 completion.
-- Ready for implementation: Step 13.1.
-- Step 13.1 complete: added mirrored Claude/Codex `creator-presence-dossier` skill contracts with frontmatter, output path, Phase 12 foundation reads, public/professional evidence boundaries, evidence-path citation, and final-response next-skill routing.
-- Validation:
-  - `rg -n "name: creator-presence-dossier|version:|Invoke as|research/creator-presence/<slug>\\.md|research/creator-platforms/capability-matrix\\.md|research/creator-platforms/evidence-schema\\.md|public/professional|private repo planning context|source paths|capture dates|confidence levels|Recommended next skill: <command>|creator-positioning|content-programming|product-led-media-map|creator-metrics-review" packs/creator-media/claude/creator-presence-dossier/SKILL.md packs/creator-media/codex/creator-presence-dossier/SKILL.md` - passed; confirmed mirrored contract strings and routing language.
-  - `./scripts/skill-versions.sh --missing` - passed; `All 269 skills have a version field.`
-  - `./scripts/skill-deps.sh --broken` - passed; `No broken references found.`
-  - `git diff --check` - passed; no output.
-- Step 13.2 complete: expanded mirrored Claude/Codex `creator-presence-dossier` skills with a section-by-section Markdown contract, evidence register row schema, confidence level rules, required public/private boundary field, and explicit support for LinkedIn, personal websites/blogs, GitHub, podcasts, talks, newsletters, and product docs when evidence is present.
-- Validation:
-  - `rg -n "## Markdown Contract|## Scope and Capture|## Identity|## Current Public Promise|## Career Timeline|## Platform Map|## Core Themes|## Expertise Claims|## Proof Assets|## Signature Formats|## Audience and Community Signals|## Product and Company Connections|## Gaps, Contradictions, and Stale Positioning|## Evidence Register|## Next Collection Tasks|## Recommended Next Skills|Source path or URL|Capture date|Source family|Public/private boundary|Confidence level|Claims supported|Evidence gaps|LinkedIn|personal websites/blogs|GitHub|podcasts|talks|newsletters|product docs" packs/creator-media/claude/creator-presence-dossier/SKILL.md packs/creator-media/codex/creator-presence-dossier/SKILL.md` - passed; confirmed required sections, row fields, confidence/capture/source language, and source families in both mirrored skills.
-  - `perl -0pe ... packs/creator-media/claude/creator-presence-dossier/SKILL.md > /tmp/creator-presence-claude-normalized.md`; `perl -0pe ... packs/creator-media/codex/creator-presence-dossier/SKILL.md > /tmp/creator-presence-codex-normalized.md`; `diff -u /tmp/creator-presence-claude-normalized.md /tmp/creator-presence-codex-normalized.md` - passed; no output after normalizing command syntax.
-  - `./scripts/skill-versions.sh --missing` - passed; `All 269 skills have a version field.`
-  - `./scripts/skill-deps.sh --broken` - passed; `No broken references found.`
-  - `git diff --check` - passed; no output.
-- Step 13.3 complete: wired `creator-presence-dossier` into creator-media pack docs and discovery references after `creator-evidence-schema`, before platform-specific audits or strategy synthesis, and documented that the dossier feeds `creator-positioning`, `content-programming`, `product-led-media-map`, and `creator-metrics-review`.
-- Validation:
-  - `rg -n "creator-platform-capability-matrix, creator-evidence-schema,|creator-presence-dossier|creator-presence-dossier.*creator-positioning|creator-positioning.*content-programming|product-led-media-map|creator-metrics-review" README.md packs/creator-media/PACK.md docs/skills-reference.md` - passed; confirmed the dossier is exposed in public references and downstream strategy routing language appears in all three docs.
-  - `rg -n "creator-platform-capability-matrix -> creator-evidence-schema|-> creator-presence-dossier|-> youtube-channel-audit / platform-specific audit" packs/creator-media/PACK.md docs/skills-reference.md` - passed; confirmed the default flow places the dossier after the evidence schema and before platform-specific audits.
-  - `./scripts/skill-versions.sh --missing` - passed; `All 269 skills have a version field.`
-  - `./scripts/skill-deps.sh --broken` - passed; `No broken references found.`
-  - `git diff --check` - passed; no output.
-- Step 13.4 complete: aligned downstream creator-media routing with the new dossier. `creator-evidence-schema` now routes mixed-platform, LinkedIn-first, career-signal/career signal, owned-presence/owned presence, personal website, GitHub-profile, podcast, talk, newsletter, and professional bio work to `creator-presence-dossier` when available. `creator-positioning`, `content-programming`, `product-led-media-map`, and `creator-metrics-review` now treat `research/creator-presence/<slug>.md` as preferred optional creator context while preserving the existing YouTube-only channel audit flow.
-- Validation:
-  - `rg -n "Recommended next skill: (\\$|/)creator-presence-dossier|mixed-platform, LinkedIn-first, career signal, career-signal, owned presence, owned-presence|personal website|GitHub-profile|podcast|talk|newsletter|professional bio" packs/creator-media/claude/creator-evidence-schema/SKILL.md packs/creator-media/codex/creator-evidence-schema/SKILL.md` - passed; confirmed mirrored schema routing triggers and final-response dossier recommendations.
-  - `rg -n "research/creator-presence/<slug>\\.md|creator-presence-dossier.*youtube-channel-audit|YouTube-only|channel-only|preferred creator context|optional preferred creator context|not a replacement for YouTube audit evidence|preserve raw YouTube evidence" packs/creator-media/claude/creator-positioning/SKILL.md packs/creator-media/codex/creator-positioning/SKILL.md packs/creator-media/claude/content-programming/SKILL.md packs/creator-media/codex/content-programming/SKILL.md packs/creator-media/claude/product-led-media-map/SKILL.md packs/creator-media/codex/product-led-media-map/SKILL.md packs/creator-media/claude/creator-metrics-review/SKILL.md packs/creator-media/codex/creator-metrics-review/SKILL.md` - passed; confirmed strategy skills prefer the dossier when present and preserve YouTube evidence paths.
-  - `perl -0pe ... packs/creator-media/claude/creator-evidence-schema/SKILL.md > /tmp/a`; `perl -0pe ... packs/creator-media/codex/creator-evidence-schema/SKILL.md > /tmp/b`; `diff -u /tmp/a /tmp/b` - passed; confirmed `creator-evidence-schema` mirrors after command-token normalization.
-  - `./scripts/skill-versions.sh --missing` - passed; `All 269 skills have a version field.`
-  - `./scripts/skill-deps.sh --broken` - passed; `No broken references found.`
-  - `git diff --check` - passed; no output.
-- Step 13.5 complete: recorded focused regression validation coverage for the Phase 13 acceptance criteria. The scans confirmed mirrored dossier skill files, frontmatter names, output path, required sections, public/private evidence boundaries, confidence/capture/source fields, supported source families, pack-doc routing, downstream routing, and final-response next-skill language. No source contract edits were needed.
-- Validation:
-  - `rg -n "name: creator-presence-dossier|version:|research/creator-presence/<slug>\\.md|research/creator-platforms/capability-matrix\\.md|research/creator-platforms/evidence-schema\\.md" packs/creator-media/claude/creator-presence-dossier/SKILL.md packs/creator-media/codex/creator-presence-dossier/SKILL.md` - passed; confirmed mirrored frontmatter names, version fields, required output path, and Phase 12 foundation reads in both dossier skills.
-  - `rg -n "## Identity|## Current Public Promise|## Career Timeline|## Platform Map|## Core Themes|## Expertise Claims|## Proof Assets|## Signature Formats|## Audience and Community Signals|## Product and Company Connections|## Gaps, Contradictions, and Stale Positioning|## Evidence Register|## Next Collection Tasks|## Recommended Next Skills" packs/creator-media/claude/creator-presence-dossier/SKILL.md packs/creator-media/codex/creator-presence-dossier/SKILL.md` - passed; confirmed all required dossier sections in both mirrored skills.
-  - `rg -n "public/professional|private repo planning context|Source path or URL|Capture date|Confidence level|Evidence gaps|Public/private boundary|LinkedIn|personal websites/blogs|GitHub|podcasts|talks|newsletters|product docs" packs/creator-media/claude/creator-presence-dossier/SKILL.md packs/creator-media/codex/creator-presence-dossier/SKILL.md` - passed; confirmed public/private evidence boundaries, evidence register fields, and supported source families in both mirrored skills.
-  - `rg -n "creator-presence-dossier|creator-positioning|content-programming|product-led-media-map|creator-metrics-review|creator-platform-capability-matrix -> creator-evidence-schema|-> creator-presence-dossier" README.md packs/creator-media/PACK.md docs/skills-reference.md` - passed; confirmed pack docs and discovery references expose the dossier after the evidence schema and before downstream strategy skills.
-  - `rg -n "Recommended next skill: (\\$|/)creator-presence-dossier|mixed-platform, LinkedIn-first, career signal, career-signal, owned presence, owned-presence|personal website|GitHub-profile|podcast|talk|newsletter|professional bio" packs/creator-media/claude/creator-evidence-schema/SKILL.md packs/creator-media/codex/creator-evidence-schema/SKILL.md` - passed; confirmed schema follow-up routing recommends the dossier for mixed-platform and career/owned-presence work in both command syntaxes.
-  - `rg -n "research/creator-presence/<slug>\\.md|creator-presence-dossier.*youtube-channel-audit|YouTube-only|channel-only|preferred creator context|optional preferred creator context|not a replacement for YouTube audit evidence|preserve raw YouTube evidence" packs/creator-media/claude/creator-positioning/SKILL.md packs/creator-media/codex/creator-positioning/SKILL.md packs/creator-media/claude/content-programming/SKILL.md packs/creator-media/codex/content-programming/SKILL.md packs/creator-media/claude/product-led-media-map/SKILL.md packs/creator-media/codex/product-led-media-map/SKILL.md packs/creator-media/claude/creator-metrics-review/SKILL.md packs/creator-media/codex/creator-metrics-review/SKILL.md` - passed; confirmed downstream strategy skills prefer the dossier when present while preserving YouTube evidence flow.
-  - `./scripts/skill-deps.sh --broken` - passed; `No broken references found.`
-  - `./scripts/skill-versions.sh --missing` - passed; `All 269 skills have a version field.`
-  - `git diff --check` - passed; no output.
-- Step 13.6 complete: ran the formal repository validation gate for Phase 13 after targeted acceptance-criteria scans. No source contract edits were needed and no unresolved warnings were emitted.
-- Validation:
-  - `./scripts/skill-deps.sh --broken` - passed; `No broken references found.`
-  - `./scripts/skill-versions.sh --missing` - passed; `All 269 skills have a version field.`
-  - `rg -n "name: creator-presence-dossier|version:|research/creator-presence/<slug>\\.md|research/creator-platforms/capability-matrix\\.md|research/creator-platforms/evidence-schema\\.md" packs/creator-media/claude/creator-presence-dossier/SKILL.md packs/creator-media/codex/creator-presence-dossier/SKILL.md` - passed; confirmed mirrored frontmatter names, version fields, required output path, and Phase 12 foundation reads in both dossier skills.
-  - `rg -n "## Identity|## Current Public Promise|## Career Timeline|## Platform Map|## Core Themes|## Expertise Claims|## Proof Assets|## Signature Formats|## Audience and Community Signals|## Product and Company Connections|## Gaps, Contradictions, and Stale Positioning|## Evidence Register|## Next Collection Tasks|## Recommended Next Skills" packs/creator-media/claude/creator-presence-dossier/SKILL.md packs/creator-media/codex/creator-presence-dossier/SKILL.md` - passed; confirmed all required dossier sections in both mirrored skills.
-  - `rg -n "public/professional|private repo planning context|Source path or URL|Capture date|Confidence level|Evidence gaps|Public/private boundary|LinkedIn|personal websites/blogs|GitHub|podcasts|talks|newsletters|product docs" packs/creator-media/claude/creator-presence-dossier/SKILL.md packs/creator-media/codex/creator-presence-dossier/SKILL.md` - passed; confirmed public/private evidence boundaries, evidence register fields, and supported source families in both mirrored skills.
-  - `rg -n "creator-presence-dossier|creator-positioning|content-programming|product-led-media-map|creator-metrics-review|creator-platform-capability-matrix -> creator-evidence-schema|-> creator-presence-dossier" README.md packs/creator-media/PACK.md docs/skills-reference.md` - passed; confirmed pack docs and discovery references expose the dossier after the evidence schema and before downstream strategy skills.
-  - `rg -n "Recommended next skill: (\\$|/)creator-presence-dossier|mixed-platform, LinkedIn-first, career signal, career-signal, owned presence, owned-presence|personal website|GitHub-profile|podcast|talk|newsletter|professional bio" packs/creator-media/claude/creator-evidence-schema/SKILL.md packs/creator-media/codex/creator-evidence-schema/SKILL.md` - passed; confirmed schema follow-up routing recommends the dossier for mixed-platform and career/owned-presence work in both command syntaxes.
-  - `rg -n "research/creator-presence/<slug>\\.md|creator-presence-dossier.*youtube-channel-audit|YouTube-only|channel-only|preferred creator context|optional preferred creator context|not a replacement for YouTube audit evidence|preserve raw YouTube evidence" packs/creator-media/claude/creator-positioning/SKILL.md packs/creator-media/codex/creator-positioning/SKILL.md packs/creator-media/claude/content-programming/SKILL.md packs/creator-media/codex/content-programming/SKILL.md packs/creator-media/claude/product-led-media-map/SKILL.md packs/creator-media/codex/product-led-media-map/SKILL.md packs/creator-media/claude/creator-metrics-review/SKILL.md packs/creator-media/codex/creator-metrics-review/SKILL.md` - passed; confirmed downstream strategy skills prefer the dossier when present while preserving YouTube evidence flow.
-  - `git diff --check` - passed; no output.
-- Phase 13 no-op cleanup folded into Step 13.6: the successful validation gate exposed no concrete wording drift or regression, so no separate source-doc cleanup step was needed. This avoids a clear-context plan for a step whose expected source changes are none.
+  - `rg -n "non-trivial|Ship Manifest|Skipped-Test|Residual-Risk|Adversarial Review|Direct-To-Primary|Plan:|Implement:|Self-review:|Quality sweep:|Verification:|User Corrections" docs/quality-gate-contract.md` - passed; confirmed the Step 21.1 required topics are present.
+  - `git diff --check` - passed; no whitespace errors.
+- Next implementation step: Step 21.2.
