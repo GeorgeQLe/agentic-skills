@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-05-04 — Phase 26 Step 26.5: mono-guard skill contracts
+
+- Added mirrored Claude/Codex `mono-guard` skill contracts and Codex OpenAI metadata for the monorepo pack.
+- Documented pre-flight validation against `.agents/lane-specs.json`, `lane-spec-validate.sh`, `.agents/monorepo.json`, lane ownership, shared file exclusions, dependency ordering, and lane DAG safety.
+- Documented post-integration boundary audits using `git diff --name-only`, lockfile/root-config checks, and out-of-boundary write reporting while preserving compatibility with the global `mono-guard` contract.
+- Verified the contracts with targeted scans, Claude/Codex parity diff, skill dependency/version/routing audits, `pnpm --dir tests test`, and `git diff --check`.
+- Recorded the Step 26.5 quality-gate manifest in `tasks/todo.md`.
+
 ## 2026-05-04 — Phase 26 Step 26.4: mono-detect skill contracts
 
 - Added mirrored Claude/Codex `mono-detect` skill contracts and Codex OpenAI metadata for the monorepo pack.

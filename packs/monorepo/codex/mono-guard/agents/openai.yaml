@@ -1,0 +1,7 @@
+interface:
+  display_name: "Mono Guard"
+  short_description: "Validate lane specs and guard monorepo lane boundaries"
+  default_prompt: "Use $mono-guard to validate .agents/lane-specs.json before dispatch or audit integrated lane changes with --post-integration."
+
+policy:
+  allow_implicit_invocation: true
