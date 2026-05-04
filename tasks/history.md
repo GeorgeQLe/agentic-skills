@@ -1,5 +1,21 @@
 # Session History
 
+## 2026-05-04 — Pack context reorganization
+
+- Split `business-app` into `business-discovery`, `business-growth`, and `business-ops` packs while preserving `business-app` as a compatibility alias.
+- Split `creator-media` into `creator-foundation` and `youtube-ops`, moved `youtube-audit` into `youtube-ops`, and preserved `creator-media` as a compatibility alias.
+- Moved fleet/portfolio workflows into the new `project-fleet` pack.
+- Updated `scripts/pack.sh`, pack metadata, README, pack docs, operating-mode docs, skill references, and global pack/concept guidance for the narrower pack names.
+- Preserved the in-progress LinkedIn foundation edits under the moved `creator-foundation` files.
+
+## 2026-05-04 — Phase 14 Step 14.1: LinkedIn foundation baseline
+
+- Hardened mirrored creator-media `creator-platform-capability-matrix` and `creator-evidence-schema` contracts for LinkedIn-first evidence collection.
+- Made owner exports, manual snapshots, public unauthenticated page captures, and redacted user-provided files the default LinkedIn baseline.
+- Marked LinkedIn analytics/API fields as unavailable unless owner-provided, admin-provided, or already authorized, and forbade logged-in scraping, paid API dependency, bot-protection bypass, access-control circumvention, and private-data collection as baseline paths.
+- Required redaction or exclusion for private contacts, private messages, relationship data, sensitive account data, unrelated personal information, and confidential employer/customer material before analysis.
+- Verified with targeted LinkedIn safety scans, mirrored contract diffs, skill dependency/version/routing audits, layer1 tests, and `git diff --check`.
+
 ## 2026-05-04 — Phase 26 Step 26.11: focused monorepo pack validation
 
 - Ran the final monorepo pack validation sequence against committed fixtures.
