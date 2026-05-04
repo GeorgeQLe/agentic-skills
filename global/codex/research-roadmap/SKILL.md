@@ -342,7 +342,7 @@ Rules:
 - If a record or recurring item appears promotable to concrete execution work, recommend reviewing or promoting that item rather than discovery.
 - Do not emit `Recommended next command: none` unless the latest user request explicitly asks to pause, park, archive, or wait.
 - If documentation is current and no advisory item is promotable, route to new-phase discovery: `**Next work:** discover candidate next phase or explicitly park the project` and `**Recommended next command:** $brainstorm`.
-- Use `$spec-interview` instead of `$brainstorm` only when the project already has a concrete unspecced idea selected for formal specification.
+- Use `$feature-interview` instead of `$brainstorm` when the project already has a concrete unspecced idea selected but still needs planning-destination triage. Use `$spec-interview` only when full-spec creation is already confirmed.
 
 ## Constraints
 

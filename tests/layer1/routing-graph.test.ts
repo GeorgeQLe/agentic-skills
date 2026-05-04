@@ -78,6 +78,7 @@ describe("Next-Skill routing references", () => {
             "ship",
             "run",
             "spec-interview",
+            "feature-interview",
             "brainstorm",
             "roadmap",
           ]);

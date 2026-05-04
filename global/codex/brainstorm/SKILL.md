@@ -1,6 +1,6 @@
 ---
 name: brainstorm
-description: Evaluate the codebase and suggest ideas to explore with $spec-interview
+description: Evaluate the codebase and suggest ideas to explore with $feature-interview
 type: planning
 version: 1.1.0
 argument-hint: "[optional focus area]"
@@ -10,7 +10,7 @@ argument-hint: "[optional focus area]"
 
 Invoke as `$brainstorm`.
 
-Evaluate the current codebase and generate actionable suggestions that the user can take into `$spec-interview` for deeper exploration and specification.
+Evaluate the current codebase and generate actionable suggestions that the user can take into `$feature-interview` for human/agent alignment, planning-destination triage, and follow-up specification or roadmap work.
 
 ## Workflow
 
@@ -64,7 +64,7 @@ Append the suggestions to `tasks/ideas.md` (do not overwrite existing content). 
 Group suggestions by effort level (hours / days / weeks). Each suggestion should include:
 - A specific, actionable title
 - A one-line description with the concrete codebase signal that motivates it
-- A `$spec-interview <topic>` prompt the user can copy-paste
+- A `$feature-interview <topic>` prompt the user can copy-paste
 
 ## Constraints
 

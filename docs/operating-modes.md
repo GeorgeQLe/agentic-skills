@@ -178,7 +178,7 @@ This section tags every global skill and every pack with a **primary CLI role** 
 | --- | --- | --- |
 | `affected` | Claude-orchestration | Monorepo scope framing for planning; read-only |
 | `analyze-sessions` | Claude-orchestration | Usage analysis + automation recommendations |
-| `brainstorm` | Claude-orchestration | Idea surfacing into `/concept-exploration` or `/spec-interview` |
+| `brainstorm` | Claude-orchestration | Idea surfacing into `/concept-exploration` or `/feature-interview` |
 | `branch-lifecycle` | Both | Evaluation is orchestration; merge/delete acts execute |
 | `clone-spec-store` | Both | Spec-store planning plus portfolio-gated private downstream repo seeding |
 | `commit-and-push-by-feature` | Codex-execution | Grouped commits + push |
@@ -196,6 +196,7 @@ This section tags every global skill and every pack with a **primary CLI role** 
 | `investigate` | Claude-orchestration | Validate claims, trace to root cause, propose fix |
 | `migrate` | Both | Plan + step-by-step verified mutation |
 | `pack` | Both | Manages pack state; orchestrates which skills live per project |
+| `feature-interview` | Claude-orchestration | Feature idea alignment and decision on new spec vs. existing spec update vs. roadmap route |
 | `spec-interview` | Claude-orchestration | Implementation spec completion via interview |
 | `plan-phase` | Claude-orchestration | Decompose roadmap phase into steps |
 | `reconcile-dev-docs` | Codex-execution | Rewrites task docs to match reality |

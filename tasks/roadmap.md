@@ -2,13 +2,13 @@
 
 > Generated from: tasks/roadmap.md (existing), specs/board-flag-kanban-search.md, tasks/ideas.md, tasks/history.md
 > Date: 2026-03-27 (last updated 2026-05-04)
-> Total Phases: 21 (20 complete, 1 planned future)
+> Total Phases: 22 (20 complete, 2 planned future)
 
 ## Summary
 
 Phases 1-11 complete: kanban skill suite, board intelligence, templates, archive automation, expert review fixes, test hardening (83 tests), kanban DX, skill infrastructure, the shared Poketo headless API migration for both Claude and Codex, and the three-mode operating model (`claude-only` / `codex-only` / `hybrid`) with shared approval-packet contract and next-step routing.
 
-Phases 12-13 and 15-21 complete, with Phase 14 still available as planned future creator-media work. Phase 16 hardened mutation-capable skill contracts with final next-step routing language and an audit that catches future omissions. Phase 17 added mixed-monorepo pack routing so one repository can carry devtool, business-app, game, or other domain scopes without forcing one global designation. Phase 18 hardened pack lock recovery after a `pitwall-monorepo` refresh timeout. Phase 19 added a YouTube description and metadata optimization lane to the creator-media pack. Phase 20 added external YouTube video research lanes for comprehension, format/Remotion-style analysis, and competitive learning. Phase 21 hardened default mutation/shipping quality gates from the session workflow audit.
+Phases 12-13 and 15-21 complete, with Phase 14 still available as planned future creator-media work. Phase 16 hardened mutation-capable skill contracts with final next-step routing language and an audit that catches future omissions. Phase 17 added mixed-monorepo pack routing so one repository can carry devtool, business-app, game, or other domain scopes without forcing one global designation. Phase 18 hardened pack lock recovery after a `pitwall-monorepo` refresh timeout. Phase 19 added a YouTube description and metadata optimization lane to the creator-media pack. Phase 20 added external YouTube video research lanes for comprehension, format/Remotion-style analysis, and competitive learning. Phase 21 hardened default mutation/shipping quality gates from the session workflow audit. Phase 22 adds feature-interview as the triage step between brainstorm ideas and full specifications.
 
 ## Current Analysis: Mobile Ideas Return Assessment
 
@@ -48,6 +48,36 @@ Phases 12-13 and 15-21 complete, with Phase 14 still available as planned future
 | 19 | YouTube Description Optimizer ✓ | user request | Existing-video description audits, future upload drafts, and reusable metadata templates | S |
 | 20 | YouTube External Video Research Skills ✓ | user request | External video context, format/Remotion-style, and competitive research skills | S |
 | 21 | Quality Gate Hardening ✓ | tasks/session-workflow-quality-audit.md | Default anti-slop ship manifest, adversarial review, and validation script | M |
+| 22 | Feature Interview Routing ✓ | user request, session history | Feature triage skill plus brainstorm/roadmap routing into specs or roadmap | S |
+
+---
+
+## Phase 22: Feature Interview Routing ✓
+
+**Goal:** Add a planning interface between raw brainstorm ideas and full specs so ideas receive human/agent alignment, feature-specific questioning, and a decision on whether to create a new spec, update an existing spec, or route into roadmap/task work.
+
+**Source:** User request after reviewing recent brainstorm runs and session history showing brainstorm's direct handoff to spec-interview.
+
+**Scope:**
+- Add mirrored Claude/Codex `feature-interview` skills.
+- Update brainstorm so generated ideas route to feature-interview instead of assuming every idea needs a full spec.
+- Update roadmap/research routing so unspecced ideas use feature-interview unless full-spec creation is already confirmed.
+- Make spec-interview's post-spec route explicitly default to roadmap unless missing journey/UX/UI gates take priority.
+- Expose feature-interview in skill discovery and routing documentation.
+
+**Acceptance Criteria:**
+- [x] `global/codex/feature-interview/SKILL.md` and `global/claude/feature-interview/SKILL.md` exist with versioned frontmatter.
+- [x] Codex has `global/codex/feature-interview/agents/openai.yaml`.
+- [x] Brainstorm output prompts use `$feature-interview` / `/feature-interview`.
+- [x] Roadmap unspecced-idea handling prefers feature-interview triage and keeps spec-interview for confirmed full-spec work.
+- [x] Spec-interview explicitly recommends roadmap after completed/updated specs when no higher-priority design gate is missing.
+- [x] Skill discovery docs include feature-interview.
+- [x] Validation passes with dependency/version/routing audits, targeted text scans, and `git diff --check`.
+
+**Parallelization:** serial
+**Coordination Notes:** Keep serial because this touches shared planning skill contracts and routing documentation in both Claude and Codex mirrors.
+
+**Completed:** 2026-05-04. Added feature-interview and redirected brainstorm/roadmap/research-routing language so brainstorm ideas no longer assume full spec creation. Validation passed with dependency/version/routing audits, targeted text scans, and `git diff --check`.
 
 ---
 
