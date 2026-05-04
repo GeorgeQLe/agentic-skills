@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-05-04 — Phase 26 Step 26.6: mono-run skill contracts
+
+- Added mirrored Claude/Codex `mono-run` skill contracts and Codex OpenAI metadata for the monorepo pack.
+- Documented the augmentation injection flow: `mono-detect`, lane-spec generation, `mono-guard` pre-flight, plan-mode approval, cross-cutting serial work, package-scoped worktree dispatch, post-integration guard checks, and optional `mono-ship` pipeline continuation.
+- Documented stop-all-lanes failure semantics, lifecycle updates, `--phase`, `--pipeline`, Turbo validation preference, and `pnpm --filter` fallback behavior.
+- Verified the contracts with targeted scans, Claude/Codex parity diff, skill dependency/version/routing audits, `pnpm --dir tests test`, and `git diff --check`.
+- Recorded the Step 26.6 quality-gate manifest in `tasks/todo.md`.
+
 ## 2026-05-04 — Phase 26 Step 26.5: mono-guard skill contracts
 
 - Added mirrored Claude/Codex `mono-guard` skill contracts and Codex OpenAI metadata for the monorepo pack.
