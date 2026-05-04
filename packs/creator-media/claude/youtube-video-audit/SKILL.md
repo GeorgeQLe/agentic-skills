@@ -206,7 +206,7 @@ After saving the report, output the performance headline, top 3 strengths, top 3
 
 After writing the artifact, recommend the next contextual creator-media skill in the final response as `Recommended next skill: <command>`.
 
-Default recommendation: `/youtube-description-optimizer` when description support, CTA/link structure, chapters, hashtags, disclosures, or metadata/search alignment are the main next step; `/youtube-title-thumbnail-audit` when title/thumbnail packaging changes are the main next step; otherwise `/creator-metrics-review` when owner analytics or channel comparison evidence suggests broader performance review.
+Default recommendation: `/youtube-vid-research` when the user needs neutral context from an external reference video; `/youtube-format-research` when the next step is to reuse the video's format, design, pacing, edit, or production grammar; `/youtube-competitive-research` when the user asks why the video worked or what to learn from a competitor; `/youtube-description-optimizer` when description support, CTA/link structure, chapters, hashtags, disclosures, or metadata/search alignment are the main next step; `/youtube-title-thumbnail-audit` when title/thumbnail packaging changes are the main next step; otherwise `/creator-metrics-review` when owner analytics or channel comparison evidence suggests broader performance review.
 
 If the user asks whether the issue is unique to this one video, recommend `/youtube-channel-audit`. If the user asks what to make next, recommend `/content-programming` after the audit report exists.
 

@@ -1,3 +1,87 @@
+# YouTube External Video Research Skills
+
+**Project:** Claude Skills / agentic-skills
+**Current phase:** 20 of 20
+**Source roadmap:** `tasks/roadmap.md`
+**Source spec:** User request on 2026-05-04
+
+## Phase 20: YouTube External Video Research Skills
+
+**Goal:** Add focused external YouTube video research skills for context comprehension, format/Remotion-style analysis, and competitive performance learning.
+
+**Scope:**
+- Add mirrored Claude/Codex creator-media pack skills for `youtube-vid-research`, `youtube-format-research`, and `youtube-competitive-research`.
+- Reuse the existing YouTube public-evidence contract: `yt-dlp`, local transcript venv, raw evidence under `research/youtube/data/`, evidence gaps, and no fabricated transcripts/comments/metrics/visual claims.
+- Wire creator-media docs and next-skill routing so external reference-video work sits between single-video audit and packaging/strategy work.
+- Keep Remotion implementation owned by `video-build`; `youtube-format-research` only emits a format and Remotion handoff spec.
+
+**Acceptance Criteria:**
+- [x] Mirrored Claude/Codex `youtube-vid-research` skill contracts exist.
+- [x] Mirrored Claude/Codex `youtube-format-research` skill contracts exist.
+- [x] Mirrored Claude/Codex `youtube-competitive-research` skill contracts exist.
+- [x] The three skills require persisted evidence, explicit evidence coverage, anti-fabrication constraints, output paths, archive-first replacement, and next-skill routing.
+- [x] Creator-media docs/reference lists include the three new skills in discovery and default flow.
+- [x] Existing creator-media routing orders include the three new external-video research lanes.
+- [x] Validation passes with mirrored-contract scans, docs/routing scans, dependency/version/routing audits, and `git diff --check`.
+
+**Parallelization:** serial
+**Coordination Notes:** Keep serial because this touches mirrored creator-media skills, shared pack docs, and routing lists. Do not add dependencies or GitHub Actions.
+
+> Test strategy: tests-after
+
+### Execution Profile
+**Parallel mode:** serial
+**Integration owner:** main agent
+**Conflict risk:** medium
+**Review gates:** correctness, docs/API conformance, routing, validation
+
+**Subagent lanes:** none
+
+### Implementation
+- [x] Step 20.1: Add mirrored external video research skill contracts.
+  - Classification: automated
+  - Files: `packs/creator-media/{claude,codex}/youtube-vid-research/SKILL.md`, `packs/creator-media/{claude,codex}/youtube-format-research/SKILL.md`, `packs/creator-media/{claude,codex}/youtube-competitive-research/SKILL.md`
+- [x] Step 20.2: Wire creator-media docs and routing.
+  - Classification: automated
+  - Files: `packs/creator-media/PACK.md`, `README.md`, `docs/skills-reference.md`, creator-media `SKILL.md` routing sections
+
+### Green
+- [x] Step 20.3: Run focused validation and record results.
+  - Classification: automated
+  - Files: modify `tasks/todo.md` review section with exact validation commands and results
+  - Run mirrored contract scans, docs/routing scans, skill dependency/version/routing audits, and `git diff --check`.
+
+### Milestone: YouTube External Video Research Skills
+**Acceptance Criteria:**
+- [x] Mirrored Claude/Codex `youtube-vid-research` skill contracts exist.
+- [x] Mirrored Claude/Codex `youtube-format-research` skill contracts exist.
+- [x] Mirrored Claude/Codex `youtube-competitive-research` skill contracts exist.
+- [x] The three skills require persisted evidence, explicit evidence coverage, anti-fabrication constraints, output paths, archive-first replacement, and next-skill routing.
+- [x] Creator-media docs/reference lists include the three new skills in discovery and default flow.
+- [x] Existing creator-media routing orders include the three new external-video research lanes.
+- [x] Validation passes with mirrored-contract scans, docs/routing scans, dependency/version/routing audits, and `git diff --check`.
+
+**On Completion:**
+- Deviations from plan: none.
+- Tech debt / follow-ups: none.
+- Ready for next phase: yes
+
+---
+
+### Review
+- Step 20.1 complete: added mirrored `youtube-vid-research`, `youtube-format-research`, and `youtube-competitive-research` skill contracts under `packs/creator-media/claude/` and `packs/creator-media/codex/`.
+- Step 20.2 complete: updated creator-media pack docs, public discovery references, and mirrored next-skill routing orders to include external video context research, format/Remotion-style research, and competitive research lanes.
+- Step 20.3 validation:
+  - `rg -n 'name: youtube-(vid|format|competitive)-research|version: 1\\.0\\.0|Evidence Coverage|Do not invent|research/youtube/(video|format|competitive)-research-|Archive existing canonical artifacts|Recommended next skill' packs/creator-media/claude/youtube-*-research/SKILL.md packs/creator-media/codex/youtube-*-research/SKILL.md` - passed; confirmed mirrored contract fields, output paths, evidence coverage, anti-fabrication, archive-first policy, and routing.
+  - `rg -n 'youtube-vid-research|youtube-format-research|youtube-competitive-research|external video research|format research|competitive lessons' README.md docs/skills-reference.md packs/creator-media/PACK.md packs/creator-media/*/*/SKILL.md` - passed; confirmed docs and routing expose the three new lanes.
+  - Normalized Claude/Codex command syntax for the three new skills and ran `diff -u` per pair - passed; no output.
+  - `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken` - passed; `No broken references found.`
+  - `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing` - passed; `All 283 skills have a version field.`
+  - `./scripts/skill-next-step-routing.sh --missing` - passed; `All 211 mutation-capable skills have next-step routing.`
+  - `git diff --check` - passed; no output.
+
+---
+
 # YouTube Description Optimizer
 
 **Project:** Claude Skills / agentic-skills
@@ -91,6 +175,46 @@
 **Current phase:** 18 of 18
 **Source roadmap:** `tasks/roadmap.md`
 **Source spec:** User report from `pitwall-monorepo` `$pack refresh`
+
+---
+
+# Mobile Ideas Return Assessment
+
+**Project:** Claude Skills / agentic-skills
+**Source request:** `$analyze-sessions` evaluation of `/Users/georgele/projects/mobile/dev/mobile-ideas`
+
+## Goal
+
+Assess how much return the `mobile-ideas` work has produced relative to local Claude/Codex effort, then recommend better future workflows and automation.
+
+## Plan
+
+- [x] Inventory `mobile-ideas` repository artifacts, commits, task docs, and output shape.
+- [x] Parse full available Claude and Codex history/session records for `mobile-ideas` activity.
+- [x] Quantify sessions, prompts, date range, source split, repeated prompt patterns, and workflow themes.
+- [x] Compare effort signals against tangible outputs and identify where work compounded versus churned.
+- [x] Produce ranked recommendations with next automation routes and verification notes.
+
+## Review
+
+- Report written: `tasks/mobile-ideas-return-assessment.md`.
+- History parsed:
+  - `~/.codex/history.jsonl`: 4,338 lines.
+  - `~/.claude/history.jsonl`: 8,437 lines.
+  - `~/.codex/sessions/**/*.jsonl`: 1,695 files, 561,190 lines.
+  - Scoped compact `mobile-ideas` user prompts: 272 across 104 sessions, from 2026-04-16 through 2026-05-03.
+  - Source split: Codex 219 prompts, Claude 53 prompts.
+- Repository evidence:
+  - `mobile-ideas` is clean.
+  - 162 commits from 2026-04-16 through 2026-05-03.
+  - 1,000 numbered specs; 1,046 total spec Markdown files.
+  - 1,000 downstream manifest rows checked, 0 unchecked.
+  - `node scripts/check-implementation-readiness.mjs` reports 280 implementation-ready specs, 720 Draft/non-ready specs, and 2,160 source-discovery placeholder rows across 720 files.
+- Assessment:
+  - Strong return from durable spec-store, readiness, seeding, and guardrail machinery.
+  - Weak return from breadth-before-selection: 1,000 specs and private repo scaffolds have not proportionally converted into runnable products.
+  - Highest-friction history patterns were `$run` plus approvals, repeated long seeding/downstream prompts, and vague downstream-continuation prompts.
+- Recommended next skill: `$project-fleet --plan`.
 
 ## Phase 18: Pack Lock Stale Recovery
 
