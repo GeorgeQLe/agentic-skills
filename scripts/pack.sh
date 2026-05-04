@@ -120,10 +120,23 @@ normalize_pack() {
   pack="${pack%,}"
   pack="${pack#pack:}"
   case "$pack" in
-    business|business_app|businessapp|product|saas) echo "business-app" ;;
+    business|business_app|businessapp|product|saas|business-app)
+      echo "business-discovery"
+      echo "business-growth"
+      echo "business-ops"
+      ;;
+    business-discovery|discovery|customer-discovery|customer_discovery) echo "business-discovery" ;;
+    business-growth|growth|gtm-growth|gtm_growth) echo "business-growth" ;;
+    business-ops|business_ops|ops|business-operations|business_operations) echo "business-ops" ;;
     business-kanban|business_app_kanban|businessapp-kanban|saas-kanban) echo "business-app-kanban" ;;
-    creator|creator_media|creatormedia|media|youtube|youtube-media|founder-media) echo "creator-media" ;;
+    creator|creator_media|creatormedia|media|founder-media|creator-media)
+      echo "creator-foundation"
+      echo "youtube-ops"
+      ;;
+    creator-foundation|creator_foundation|creator-strategy|creator_strategy|founder-media-foundation) echo "creator-foundation" ;;
+    youtube|youtube-media|youtube_media|youtube-ops|youtube_ops) echo "youtube-ops" ;;
     remotion|video-production|video_production|video-build|videobuild|video-script|videoscript) echo "remotion" ;;
+    project-fleet|project_fleet|fleet|portfolio|portfolio-ops|portfolio_ops|clone-spec-store|spin-off|spinoff) echo "project-fleet" ;;
     quality|codequality|code_quality|code-quality) echo "code-quality" ;;
     games) echo "game" ;;
     dev|dev-tool|dev-tools|developer-tool|developer-tools) echo "devtool" ;;
@@ -147,10 +160,11 @@ collect_pack_args() {
 
 project_type_for_pack() {
   case "$1" in
-    business-app|business-app-kanban) echo "business-app" ;;
+    business-discovery|business-growth|business-ops|business-app|business-app-kanban) echo "business-app" ;;
     game|game-kanban) echo "game" ;;
     devtool|devtool-kanban) echo "devtool" ;;
-    creator-media|remotion) echo "creator-media" ;;
+    creator-foundation|youtube-ops|creator-media|remotion) echo "creator-media" ;;
+    project-fleet) echo "project-fleet" ;;
     *) return 1 ;;
   esac
 }
@@ -400,12 +414,13 @@ recommend() {
     echo "Recommended pack: game"
     echo "If this project intentionally uses PoketoWork boards, also install game-kanban."
   elif [[ "$inferred_project_type" == "devtool" ]]; then
-    echo "Recommended pack: devtool or business-app"
-    echo "Use devtool for developer-facing tools/libraries; use business-app for SaaS or business applications."
+    echo "Recommended pack: devtool or a narrow business pack"
+    echo "Use devtool for developer-facing tools/libraries; use business-discovery, business-growth, or business-ops for SaaS/business work."
     echo "If this project intentionally uses PoketoWork boards, install the matching explicit kanban pack: devtool-kanban or business-app-kanban."
     echo "For behavior-preserving refactors and code-health workflows, also install code-quality."
   else
-    echo "Recommended pack: business-app"
+    echo "Recommended pack: business-discovery"
+    echo "Add business-growth or business-ops only when the current phase needs them."
     echo "If this project intentionally uses PoketoWork boards, also install business-app-kanban."
     echo "For behavior-preserving refactors and code-health workflows, also install code-quality."
   fi

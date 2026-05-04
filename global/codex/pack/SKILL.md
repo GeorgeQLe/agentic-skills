@@ -59,7 +59,9 @@ Use this skill when the user wants to inspect, recommend, install, remove, or re
 
 ## Pack Selection
 
-- Use `business-app` for SaaS, marketplaces, productivity apps, internal/admin tools, business workflows, and enterprise applications.
+- Use `business-discovery`, `business-growth`, or `business-ops` for SaaS, marketplaces, productivity apps, internal/admin tools, business workflows, and enterprise applications. `business-app` is a compatibility alias for all three.
+- Use `creator-foundation`, `youtube-ops`, and `remotion` separately for creator-media work; `creator-media` is a compatibility alias for foundation plus YouTube operations.
+- Use `project-fleet` for control repositories that manage downstream repos, spec-store portfolios, or spin-offs.
 - Use `code-quality` as an additive pack for behavior-preserving refactors, type hygiene, import honesty, dependency-boundary cleanup, and module organization.
 - Use `game` for video games, prototypes, playable entertainment, game engines, store pages, playtest loops, and game assets.
 - Use `devtool` for SDKs, CLIs, APIs, libraries, infrastructure products, developer platforms, and documentation-first developer workflows.
@@ -73,7 +75,7 @@ Use one repo-level `.agents/project.json` with a primary default plus scoped ove
 ```json
 {
   "project_type": "devtool",
-  "enabled_packs": ["devtool", "business-app"],
+  "enabled_packs": ["devtool", "business-discovery", "business-growth"],
   "skill_pack_version": 1,
   "project_scopes": [
     {
@@ -85,13 +87,13 @@ Use one repo-level `.agents/project.json` with a primary default plus scoped ove
     {
       "path": "apps/pitwall-calcllm",
       "project_type": "business-app",
-      "packs": ["business-app"],
+      "packs": ["business-discovery", "business-growth"],
       "purpose": "CalcLLM-powered connected edition research, GTM, monetization, and SaaS product work."
     },
     {
       "path": "packages/calcllm-sync",
       "project_type": "business-app",
-      "packs": ["business-app"],
+      "packs": ["business-discovery", "business-growth"],
       "purpose": "Connected-edition sync and SaaS integration work."
     }
   ]

@@ -49,6 +49,19 @@ Recommended subpaths:
 
 Raw files must be cited by local repo path. Do not summarize private or sensitive raw material into public-facing artifacts unless the user explicitly authorizes it.
 
+## LinkedIn Evidence Baseline
+
+For LinkedIn evidence, allow only these baseline capture paths unless the user has already provided explicit authorization and credentials for a later API lane:
+
+- owner exports or admin exports supplied by the user;
+- manual snapshots, screenshots, copied post/article text, or manually captured URL lists;
+- public unauthenticated page captures with polite retrieval;
+- redacted user-provided files.
+
+LinkedIn personal analytics, company/page analytics, private contacts, private messages, relationship data, sensitive account data, and API-only fields are unavailable unless owner-provided, admin-provided, already authorized, and redacted where needed. Do not use logged-in scraping, bot-protection bypass, paywall access, access-control circumvention, paid API dependency, or private-data collection as a baseline collection path.
+
+Before normalizing LinkedIn records, require `privacy_notes` to state whether private contacts, messages, relationship data, sensitive account data, unrelated personal information, and confidential employer/customer material were redacted, excluded, or absent.
+
 ## Normalized Record Fields
 
 Each evidence record must define these fields or record why the field is unavailable:
@@ -74,6 +87,8 @@ Each evidence record must define these fields or record why the field is unavail
 - `evidence_confidence`: high, medium, or low.
 - `privacy_notes`: redactions, sensitive fields excluded, private context boundaries, or sharing restrictions.
 - `review_notes`: human review notes, conflicts, stale evidence, and quality caveats.
+
+LinkedIn records must use `auth_context` values conservatively: `public` for public unauthenticated captures, `owner_export` for personal exports, `admin_export` for company/page exports or analytics supplied by an authorized admin, and `manual` for user-saved snapshots or notes. Do not normalize private LinkedIn contacts, messages, relationship data, or sensitive account fields unless the user explicitly supplies redacted evidence for that purpose.
 
 ## Metrics Object
 
@@ -148,7 +163,9 @@ Routing rules:
 - Do not mutate external accounts or collect private data.
 - Do not bypass bot protections, rate limits, paywalls, login walls, or access controls.
 - Do not require paid APIs, privileged platform programs, or logged-in scraping.
+- Do not use logged-in LinkedIn scraping, bot-protection bypass, paid API dependency, access-control circumvention, or private-data collection as a baseline path.
 - Do not invent optional metrics, bodies, media assets, or transcripts.
 - Do not treat missing metrics or missing bodies as failures; record them as evidence gaps.
 - Ask the user to redact or exclude private contacts, private messages, sensitive account data, and unrelated personal data before analysis.
+- For LinkedIn, also ask the user to redact or exclude relationship data and confidential employer/customer material before analysis.
 - Cite raw repo paths and source URLs when available.

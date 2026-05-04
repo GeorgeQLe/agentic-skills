@@ -47,7 +47,6 @@ Global skills are safe across business apps, games, devtools, libraries, service
 | `bootstrap-repo` | Initialize repository README and agent workflow docs from a project brief |
 | `brainstorm` | Evaluate the codebase and suggest ideas to explore with planning |
 | `branch-lifecycle` | Evaluate feature branches for merge, salvage, keep-open, or delete decisions |
-| `clone-spec-store` | Build lawful functional-parity spec stores with portfolio-gated downstream seeding |
 | `codebase-status` | Report repo state, related conversation history, and outstanding work |
 | `commit-and-push-by-feature` | Commit and push changes grouped by logical feature buckets |
 | `concept-exploration` | Shape a rough idea into a concept brief before ICP and market research |
@@ -99,57 +98,38 @@ The following global skill ships only under `global/claude/`. It has **no Codex 
 
 `/delegate` is the synchronous sibling of `/handoff --target=codex`: it drafts and approves a packet using the shared `scripts/approved-plan.sh` helpers, then invokes `codex exec "<target-skill> --execute-approved"` inside the current Claude session instead of handing off for the user to resume later. It is hybrid-only by design and falls cleanly into the pre-start-failure branch of the fallback matrix if the `codex` binary is missing. See `global/claude/delegate/SKILL.md` for the full contract and `docs/operating-modes.md` § "Approval packet" for the lifecycle states.
 
-## Business App Pack
+## Business Packs
 
-Install in SaaS, marketplace, productivity, business workflow, and enterprise projects:
+Install the narrow business lane needed for the current phase:
 
 ```bash
-scripts/pack.sh install business-app
+scripts/pack.sh install business-discovery
+scripts/pack.sh install business-growth
+scripts/pack.sh install business-ops
 ```
 
-Skills:
+`business-app` remains a compatibility alias that installs all three.
+
+Business discovery:
 
 ```text
 icp, enterprise-icp, competitive-analysis, customer-feedback,
-value-prop-canvas, lean-canvas, hook-model, growth-model, pmf-assessment,
-journey-map, metrics, gtm, monetization, positioning, landing-copy,
-mvp-gap, scale-audit, assumption-tracker, experiment, cohort-review,
-retro, risk-register, burn-rate, runway-model, investor-update,
-platform-strategy, reconcile-research
+value-prop-canvas, lean-canvas, positioning, journey-map
 ```
 
-Default flow (18-step):
+Business growth:
 
 ```text
-DISCOVER:
- 1. concept-exploration        shape the idea
- 2. icp                        discover target customers
- 3. competitive-analysis       map the market
+hook-model, growth-model, metrics, gtm, monetization,
+landing-copy, pmf-assessment, experiment
+```
 
-VALIDATE FIT:
- 4. value-prop-canvas          does solution match customer?
- 5. positioning                frame against alternatives
- 6. lean-canvas                synthesize 1-page business model
+Business ops:
 
-DESIGN THE EXPERIENCE:
- 7. journey-map                map discovery → advocacy path
- 8. hook-model                 design habit loops (skip for B2B)
-
-DESIGN THE BUSINESS:
- 9. metrics                    define success targets
-10. monetization               design pricing & revenue
-11. gtm                        plan go-to-market
-12. growth-model               design compounding loops
-
-SPEC & BUILD:
-13. spec-interview             turn research into specs
-14. ux-variation               explore experience alternatives
-15. ui-interview               lock interface detail
-16. roadmap                    sequence into phases
-17. plan-phase → run → ship
-
-VALIDATE PMF:
-18. pmf-assessment             measure product-market fit
+```text
+assumption-tracker, cohort-review, retro, risk-register, burn-rate,
+runway-model, investor-update, reconcile-research, mvp-gap,
+scale-audit, platform-strategy
 ```
 
 ## Game Pack
@@ -257,38 +237,51 @@ scope: cross-cutting
 
 Use `scope: package-scoped` for work contained to declared packages, `scope: cross-cutting` for shared packages or multiple package boundaries, and `scope: root-only` for root config, scripts, docs, or repository-level policy.
 
-## Creator Media Pack
+## Creator Media Packs
 
-Install in YouTube, founder-media, creator-portfolio, and product-led media projects:
+Install the narrow creator-media lane needed for the current phase:
 
 ```bash
-scripts/pack.sh install creator-media
+scripts/pack.sh install creator-foundation
+scripts/pack.sh install youtube-ops
+```
+
+`creator-media` remains a compatibility alias that installs both.
+
+Creator foundation:
+
+```text
+research-bootstrap, research-directory-conventions,
+creator-platform-capability-matrix, creator-evidence-schema,
+creator-presence-dossier, creator-positioning, content-programming,
+series-spec, product-led-media-map, creator-metrics-review
+```
+
+YouTube ops:
+
+```text
+youtube-audit, youtube-channel-audit, youtube-video-audit,
+youtube-vid-research, youtube-competitive-research,
+youtube-title-thumbnail-audit, youtube-description-optimizer,
+youtube-portfolio, youtube-peer-benchmark, youtube-search-positioning,
+youtube-cadence-diagnosis
+```
+
+Use `remotion` for format analysis, video scripting, and Remotion build planning.
+
+## Project Fleet Pack
+
+Install in control repositories that manage downstream repo portfolios or spin-offs:
+
+```bash
+scripts/pack.sh install project-fleet
 ```
 
 Skills:
 
 ```text
-creator-platform-capability-matrix, creator-evidence-schema,
-creator-presence-dossier, youtube-channel-audit, youtube-video-audit, youtube-vid-research,
-youtube-competitive-research, youtube-title-thumbnail-audit, youtube-description-optimizer, youtube-portfolio, youtube-peer-benchmark, youtube-search-positioning,
-youtube-cadence-diagnosis, creator-positioning, content-programming,
-series-spec, product-led-media-map, creator-metrics-review
+clone-spec-store, project-fleet, spin-off
 ```
-
-Default flow:
-
-```text
-creator-platform-capability-matrix -> creator-evidence-schema
--> creator-presence-dossier -> creator-positioning / content-programming / product-led-media-map / creator-metrics-review
--> youtube-channel-audit / youtube-video-audit / youtube-vid-research / platform-specific audit
--> youtube-competitive-research
--> youtube-title-thumbnail-audit -> youtube-description-optimizer -> youtube-portfolio
--> youtube-peer-benchmark -> youtube-search-positioning / youtube-cadence-diagnosis
--> creator-positioning -> content-programming -> series-spec
--> product-led-media-map -> creator-metrics-review
-```
-
-The pack is evidence-first: non-YouTube or mixed-platform work starts with `creator-platform-capability-matrix` and `creator-evidence-schema`, which define `research/creator-platforms/` artifacts before platform-specific audits. Creator/persona research starts with `creator-presence-dossier`, which feeds `creator-positioning`, `content-programming`, `product-led-media-map`, and `creator-metrics-review`. YouTube-specific work may still start at `youtube-channel-audit` for channel-level patterns or `youtube-video-audit` for one video's performance, release timing, packaging, comments, transcript/content, and optional owner analytics; both persist raw evidence under `research/youtube/data/`. Downstream skills then reuse available evidence for external video context, competitive lessons, packaging, descriptions, portfolio, benchmark, search-positioning, cadence, positioning, programming, series, product-led media, and metrics-review work. Validation target shapes include `@GeorgeLe`, `WeeklyG`, and `WeeklySOTA`. Use the `remotion` pack for format analysis, video scripting, and Remotion build planning.
 
 ## Remotion Pack
 
@@ -337,12 +330,14 @@ That pack contains `poketo-kanban` and `sync-roadmap-kanban`.
 
 ## Moved Skills
 
-Former global business-app skills now live only in the `business-app` project pack.
+Former global business/product skills now live in narrower project packs. `business-app` remains a compatibility alias for all three business packs.
 
-Install them in the current project with:
+Prefer one of:
 
 ```bash
-scripts/pack.sh install business-app
+scripts/pack.sh install business-discovery
+scripts/pack.sh install business-growth
+scripts/pack.sh install business-ops
 ```
 
-Claude users can also run `/pack install business-app`; Codex users can run `$pack install business-app`.
+Creator-media and YouTube work is similarly split between `creator-foundation`, `youtube-ops`, and `remotion`. Fleet/portfolio work moved from global core into `project-fleet`.

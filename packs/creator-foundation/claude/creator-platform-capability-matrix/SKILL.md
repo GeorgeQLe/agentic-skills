@@ -65,14 +65,20 @@ The matrix must include these columns:
 
 ## Platform Guidance
 
-- LinkedIn personal profile: start with owner export plus manual/public snapshots. Treat analytics as unavailable unless owner-provided.
-- LinkedIn company page: start with manual/admin export. Treat free API use as a later authorized lane only when already available.
+- LinkedIn personal profile: start with owner export plus manual snapshots, public unauthenticated page captures, and user-provided files. Treat profile analytics, search appearances, connection data, private messages, private contacts, relationship data, and sensitive account fields as unavailable unless the owner provides already-redacted evidence.
+- LinkedIn company page: start with owner/admin export plus manual snapshots and public unauthenticated page captures. Treat company/page analytics and API fields as unavailable unless owner-provided or already authorized. Treat official LinkedIn API use as a later authorized lane only when credentials, permissions, and scope are already in place.
 - Personal website/blog: prefer RSS, sitemap, and public page capture for body text and metadata.
 - Newsletter: prefer export, RSS, and public archives. Treat subscribers and private analytics as owner-only.
 - Podcast: prefer RSS, public show pages, and manual transcripts. Do not invent transcripts.
 - GitHub: use public API, public repo evidence, and manual repo notes for projects and proof assets.
 - X/Threads/Instagram/TikTok: prefer manual snapshots and exports. Treat metrics as owner-only unless public counters are visible.
 - Bluesky/Mastodon: use public protocol/API where available and respect instance or service limits.
+
+## LinkedIn Baseline
+
+For LinkedIn rows, the default collection lane is owner exports, manual snapshots, public unauthenticated page captures, and user-provided files. Do not attempt logged-in scraping, bot-protection bypass, paywall access, access-control circumvention, or private-data collection.
+
+Before any LinkedIn analysis, require redaction or exclusion of private contacts, private messages, relationship data, sensitive account data, unrelated personal information, and any employer/customer confidential material. If the only available LinkedIn source is high-risk, stop and ask for an owner export, manual snapshot, public unauthenticated capture, or redacted user-provided file.
 
 ## Operational Risk
 
@@ -113,6 +119,8 @@ Routing rules:
 
 - Do not mutate external accounts or collect private data.
 - Do not bypass bot protections, rate limits, paywalls, login walls, or access controls.
+- Do not use logged-in LinkedIn scraping, paid API dependency, bot-protection bypass, access-control circumvention, or private-data collection as a baseline path.
 - Do not imply YouTube-equivalent metrics, transcripts, thumbnails, or benchmarking are available for every platform.
 - Record missing metrics, missing bodies, and missing transcripts as evidence gaps.
+- Require LinkedIn private contacts, messages, relationship data, sensitive account data, and unrelated personal information to be redacted or excluded before analysis.
 - Cite repo paths and source URLs when available.

@@ -10,12 +10,12 @@ argument-hint: "<channel URL or handle> [--count N]"
 
 Invoke as `/youtube-channel-audit`.
 
-Use the global `/youtube-audit` workflow as the evidence-capture engine, then synthesize a creator-media channel audit.
+Use the local `/youtube-audit` workflow as the evidence-capture engine, then synthesize a creator-media channel audit.
 
 ## Workflow
 
 1. Require a channel URL or handle. Good target shapes include `@GeorgeLe`, `WeeklyG`, and `WeeklySOTA`.
-2. Run `/youtube-audit <channel> [--count N]` or follow its contract directly when the global skill is unavailable.
+2. Run `/youtube-audit <channel> [--count N]` or follow its contract directly when the skill link is unavailable.
 3. Confirm raw evidence exists under `research/youtube/data/<slug>/`:
    - `videos-YYYY-MM-DD.jsonl`
    - `transcripts/*.json`

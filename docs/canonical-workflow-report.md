@@ -21,7 +21,7 @@ The canonical entry path depends on what exists in the directory:
 
 | Starting point | Canonical first move | Next move |
 | --- | --- | --- |
-| Fresh directory + rough idea | `/concept-exploration` or `$concept-exploration`, then `/pack install business-app` or `$pack install business-app` when applicable | `/icp` or `$icp` |
+| Fresh directory + rough idea | `/concept-exploration` or `$concept-exploration`, then `/pack install business-discovery` or `$pack install business-discovery` when applicable | `/icp` or `$icp` |
 | Existing spec | `/roadmap` or `$roadmap` | auto-seed Phase 1 with `/plan-phase 1` or `$plan-phase 1` |
 | Existing codebase | `/pack` or `$pack`, then `/roadmap` or `$roadmap` | resolve queued pipeline issues or create specs |
 | Existing active session | read `tasks/todo.md`, `tasks/roadmap.md`, `tasks/history.md`, git status | `/run`, `$run`, `/delegate $run`, or `/ship` depending on mode and state |
@@ -56,7 +56,7 @@ For scripted setup:
 
 ```bash
 scripts/pack.sh recommend
-scripts/pack.sh install business-app
+scripts/pack.sh install business-discovery
 scripts/pack.sh install game
 scripts/pack.sh install devtool
 scripts/pack.sh install code-quality
@@ -244,7 +244,7 @@ scripts/pack.sh set-mode hybrid
 Canonical behavior:
 
 1. `concept-exploration` turns the raw idea into `research/concept-brief.md`.
-2. `pack` designates the project type and installs local pack skills. For business/product concepts, install `business-app`.
+2. `pack` designates the project type and installs local pack skills. For business/product concepts, install `business-discovery`.
 3. Business-app research runs `icp`, `competitive-analysis`, `value-prop-canvas`, `positioning`, `lean-canvas`, then `journey-map` (with optional `hook-model` for consumer/PLG), followed by `metrics`, `monetization`, `gtm`, and `growth-model` so the customer lifecycle and business model are known before specs.
 4. `spec-interview` turns the journey-backed opportunity into a decision-complete implementation spec under `specs/`.
 5. For user-facing work, `ux-variation` compares experience directions and `ui-interview` locks buildable interface detail.

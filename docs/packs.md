@@ -24,7 +24,7 @@ Mixed monorepo example:
 ```json
 {
   "project_type": "devtool",
-  "enabled_packs": ["devtool", "business-app"],
+  "enabled_packs": ["devtool", "business-discovery", "business-growth"],
   "skill_pack_version": 1,
   "project_scopes": [
     {
@@ -36,13 +36,13 @@ Mixed monorepo example:
     {
       "path": "apps/pitwall-calcllm",
       "project_type": "business-app",
-      "packs": ["business-app"],
+      "packs": ["business-discovery", "business-growth"],
       "purpose": "CalcLLM-powered connected edition research, GTM, monetization, and SaaS product work."
     },
     {
       "path": "packages/calcllm-sync",
       "project_type": "business-app",
-      "packs": ["business-app"],
+      "packs": ["business-discovery", "business-growth"],
       "purpose": "Connected-edition sync and SaaS integration work."
     }
   ]
@@ -57,11 +57,16 @@ In this model, `project_type` is the default designation for uncategorized work,
 scripts/pack.sh list
 scripts/pack.sh recommend
 scripts/pack.sh install game
-scripts/pack.sh install business-app
+scripts/pack.sh install business-discovery
+scripts/pack.sh install business-growth
+scripts/pack.sh install business-ops
 scripts/pack.sh install devtool
+scripts/pack.sh install creator-foundation
+scripts/pack.sh install youtube-ops
 scripts/pack.sh install code-quality
 scripts/pack.sh install monorepo
 scripts/pack.sh install remotion
+scripts/pack.sh install project-fleet
 scripts/pack.sh install game-kanban
 scripts/pack.sh remove game
 scripts/pack.sh refresh
@@ -90,12 +95,17 @@ The skill source stays centralized in this repository. Projects opt into packs w
 
 ## Pack Selection
 
-- Use `business-app` for SaaS, marketplaces, productivity apps, business workflows, and enterprise applications.
+- Use `business-discovery` for ICP, market/customer discovery, value proposition, positioning, lean canvas, and journeys.
+- Use `business-growth` for GTM, growth, metrics, monetization, landing copy, experiments, and PMF.
+- Use `business-ops` for assumptions, feedback/cohorts/retros, risks, runway, stakeholder updates, platform strategy, and research reconciliation.
 - Use `code-quality` as an additive pack for behavior-preserving refactors, type hygiene, import honesty, dependency-boundary cleanup, and module organization.
 - Use `game` for video games, prototypes, playable entertainment, and store-page/wishlist validation.
 - Use `devtool` for SDKs, CLIs, APIs, libraries, infrastructure products, and developer-facing platforms.
+- Use `creator-foundation` for creator-media evidence foundations, dossiers, positioning, programming, series, product-led media mapping, and metrics review.
+- Use `youtube-ops` for YouTube channel/video audits, external-video context, competitive research, packaging, metadata, portfolio, benchmarking, search, and cadence.
 - Use `monorepo` for pnpm workspace monorepos, with optional Turborepo, that need package-aware lane specs, guardrails, and scoped shipping.
 - Use `remotion` for Remotion-oriented format research, scene-by-scene video scripting, and build/scaffold planning.
+- Use `project-fleet` for control repos that manage many downstream repos, clone/spec-store portfolios, or spin-offs.
 - Use `business-app-kanban`, `game-kanban`, or `devtool-kanban` only when the project intentionally uses PoketoWork boards.
 
 Kanban packs are never installed automatically by the base domain packs. Install the base domain pack and the matching kanban variant as separate, explicit choices:
@@ -104,6 +114,8 @@ Kanban packs are never installed automatically by the base domain packs. Install
 scripts/pack.sh install business-app
 scripts/pack.sh install business-app-kanban
 ```
+
+`business-app` is a compatibility alias that expands to `business-discovery`, `business-growth`, and `business-ops`. `creator-media` is a compatibility alias that expands to `creator-foundation` and `youtube-ops`.
 
 The generic `poketowork-kanban` pack contains direct board-management utilities, including `poketo-kanban` and `sync-roadmap-kanban`.
 
@@ -170,10 +182,10 @@ Default flow:
 youtube-format-research -> video-script -> video-build
 ```
 
-Install it alongside `creator-media` when a project needs the full path from channel evidence, positioning, programming, or product-led media strategy into production:
+Install it alongside `creator-foundation` and, when YouTube evidence is needed, `youtube-ops` for the full path from channel evidence, positioning, programming, or product-led media strategy into production:
 
 ```bash
-scripts/pack.sh install creator-media remotion
+scripts/pack.sh install creator-foundation youtube-ops remotion
 ```
 
 ## Compatibility
@@ -190,10 +202,12 @@ Pack writes use `.agents/.pack.lock` with owner metadata (`pid`, `started_at`, `
 
 ## Former Global Domain Skills
 
-Business/product workflows that used to be globally installed now live only in the `business-app` pack. Restore them in a project with:
+Business/product workflows that used to be globally installed now live in narrow business packs. Prefer the current lane:
 
 ```bash
-scripts/pack.sh install business-app
+scripts/pack.sh install business-discovery
+scripts/pack.sh install business-growth
+scripts/pack.sh install business-ops
 ```
 
-For assistant-native invocation, use `/pack install business-app` in Claude or `$pack install business-app` in Codex.
+`business-app` remains a compatibility alias that installs all three. Creator-media and YouTube work is split between `creator-foundation`, `youtube-ops`, and `remotion`; fleet/portfolio work lives in `project-fleet`.
