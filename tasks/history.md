@@ -1,5 +1,11 @@
 # Session History
 
+## 2026-05-04 — Phase 26 Step 26.2: monorepo detection script
+
+- Added `packs/monorepo/scripts/mono-detect.sh` for pnpm workspace detection, package enumeration, internal dependency graph generation, DAG validation, Turbo pipeline detection, `.agents/monorepo.json` output, and `--check-stale`.
+- Verified the script with temporary positive, stale, circular-dependency, and not-monorepo fixtures plus `bash -n`, `pnpm --dir tests test`, and `git diff --check`.
+- Recorded the Step 26.2 quality-gate manifest in `tasks/todo.md`.
+
 ## 2026-05-04 — Refresh spec drift after monorepo controller spec
 
 - Ran `$spec-drift fix all` after `e350448 spec: monorepo execution controller integration`.
