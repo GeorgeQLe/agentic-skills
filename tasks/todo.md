@@ -77,7 +77,7 @@
   - Require explicit "not applicable" rationale when no skill/test update is made.
 
 ### Green
-- [ ] Step 21.5: Write and run focused validation for the quality gate.
+- [x] Step 21.5: Write and run focused validation for the quality gate.
   - Classification: automated
   - Files: modify `tasks/todo.md` review section with exact validation commands and results
   - Run `scripts/ship-quality-gate.sh tests/fixtures/ship-quality-gate/complete.md` and confirm it passes.
@@ -151,3 +151,20 @@
   - `rg -n "User corrections are presumed repeatable|exact shipping boundary|tasks/lessons.md update for the current correction|Correction enforcement|pre-commit ship manifest|existing rule|concrete follow-up file|validation script, fixture, or test" docs/quality-gate-contract.md global/codex/run/SKILL.md global/codex/ship/SKILL.md global/codex/ship-end/SKILL.md global/codex/commit-and-push-by-feature/SKILL.md` - passed; required correction-enforcement wording is present in the canonical contract and all touched global skills.
   - `git diff --check` - passed; no whitespace errors.
 - Next implementation step: Step 21.5.
+- Step 21.5 complete: ran focused validation for the quality gate and recorded the expected pass/fail behavior plus targeted contract scan evidence.
+- Step 21.5 ship manifest:
+  - User goal: Execute Phase 21 Step 21.5 by proving the quality-gate validator and contract references behave as planned.
+  - Changed files: `tasks/todo.md`.
+  - Per-file purpose: `tasks/todo.md` marks Step 21.5 complete and records the exact validation evidence for the phase review.
+  - User-goal mapping: the task update satisfies the Step 21.5 requirement to record exact validation commands and results.
+  - Tests run: `scripts/ship-quality-gate.sh tests/fixtures/ship-quality-gate/complete.md` - passed with `ship quality gate passed: tests/fixtures/ship-quality-gate/complete.md`. `scripts/ship-quality-gate.sh tests/fixtures/ship-quality-gate/missing-fields.md` - failed as expected with missing `Per-file purpose`, `User-goal mapping`, `Skipped tests`, `Adversarial review`, `Residual risk`, and `Rollback note`. `rg -n "docs/quality-gate-contract.md|quality-gate contract|quality gate|ship manifest|User goal|Changed files|Per-file purpose|User-goal mapping|Tests run|Skipped tests|Adversarial review|Residual risk|Rollback note|Next command" global/codex/run/SKILL.md global/codex/ship/SKILL.md global/codex/ship-end/SKILL.md global/codex/commit-and-push-by-feature/SKILL.md docs/quality-gate-contract.md scripts/ship-quality-gate.sh tests/fixtures/ship-quality-gate/complete.md` - passed; confirmed contract references and required manifest fields in the touched global skills, canonical contract, script, and complete fixture.
+  - Skipped tests: full repository validation was not run in Step 21.5 because Step 21.6 explicitly owns `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-next-step-routing.sh --missing`, and final `git diff --check`; this step only validates the focused quality-gate contract.
+  - Adversarial review: changed-file self-review checked whether the validator could pass incomplete manifests or whether global skills lacked required field references. The incomplete fixture produced the expected non-zero failure and required missing-field list, and the targeted scan confirmed all required field names are present in the shipping skills.
+  - Residual risk: Step 21.5 does not prove repository-wide skill dependency, version, or routing health; Step 21.6 remains the explicit repository validation and review gate for that broader scope.
+  - Rollback note: revert the Step 21.5 task-doc commit to reopen the validation step and remove the recorded evidence.
+  - Next command: `$run`.
+- Validation:
+  - `scripts/ship-quality-gate.sh tests/fixtures/ship-quality-gate/complete.md` - passed; complete manifest fixture includes all required fields.
+  - `scripts/ship-quality-gate.sh tests/fixtures/ship-quality-gate/missing-fields.md` - failed as expected with missing `Per-file purpose`, `User-goal mapping`, `Skipped tests`, `Adversarial review`, `Residual risk`, and `Rollback note`.
+  - `rg -n "docs/quality-gate-contract.md|quality-gate contract|quality gate|ship manifest|User goal|Changed files|Per-file purpose|User-goal mapping|Tests run|Skipped tests|Adversarial review|Residual risk|Rollback note|Next command" global/codex/run/SKILL.md global/codex/ship/SKILL.md global/codex/ship-end/SKILL.md global/codex/commit-and-push-by-feature/SKILL.md docs/quality-gate-contract.md scripts/ship-quality-gate.sh tests/fixtures/ship-quality-gate/complete.md` - passed; required contract references and manifest fields are present in the expected quality-gate surfaces.
+- Next implementation step: Step 21.6.
