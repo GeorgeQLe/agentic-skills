@@ -39,7 +39,7 @@ Phase 26 creates a new `monorepo` pack using an augmentation injection pattern â
   - Output `.agents/monorepo.json` with workspace_manager, build_orchestrator, root, packages, dependency_graph, turbo_pipelines, and detected_at.
   - Support staleness check: re-run if workspace config files are newer than `.agents/monorepo.json`.
 
-- Step 26.3: Create the lane-spec artifact schema and `lane-spec-validate.sh`.
+- [ ] Step 26.3: Create the lane-spec artifact schema and `lane-spec-validate.sh`.
   - Classification: automated
   - Files: create `packs/monorepo/scripts/lane-spec-validate.sh`
   - Validate `.agents/lane-specs.json` against required fields: phase, source_roadmap_hash, lifecycle, cross_cutting_steps, lanes (each with id, step, packages, owns, must_not_edit, depends_on, mode).
@@ -49,7 +49,7 @@ Phase 26 creates a new `monorepo` pack using an augmentation injection pattern â
   - Check lifecycle is a valid state: draft, approved, dispatched, integrated, failed.
   - Exit 0 on valid, exit 1 with diagnostic on invalid.
 
-- Step 26.4: Create mirrored Claude/Codex `mono-detect` skill contracts.
+- [ ] Step 26.4: Create mirrored Claude/Codex `mono-detect` skill contracts.
   - Classification: automated
   - Files: create `packs/monorepo/claude/mono-detect/SKILL.md`, create `packs/monorepo/codex/mono-detect/SKILL.md`, create `packs/monorepo/codex/mono-detect/agents/openai.yaml`
   - Skill runs `mono-detect.sh`, reports workspace structure, package count, dependency graph summary, and Turborepo pipeline awareness.
@@ -58,7 +58,7 @@ Phase 26 creates a new `monorepo` pack using an augmentation injection pattern â
   - Include augmentation injection pattern documentation: this is a foundation skill consumed by mono-run, mono-ship, and mono-guard.
   - Include next-step routing.
 
-- Step 26.5: Create mirrored Claude/Codex `mono-guard` skill contracts.
+- [ ] Step 26.5: Create mirrored Claude/Codex `mono-guard` skill contracts.
   - Classification: automated
   - Files: create `packs/monorepo/claude/mono-guard/SKILL.md`, create `packs/monorepo/codex/mono-guard/SKILL.md`, create `packs/monorepo/codex/mono-guard/agents/openai.yaml`
   - Pre-flight mode: validate lane-spec JSON via `lane-spec-validate.sh`, verify `owns` disjointness, verify `must_not_edit` includes lockfiles and root config, verify dependency ordering is a valid DAG.
@@ -67,7 +67,7 @@ Phase 26 creates a new `monorepo` pack using an augmentation injection pattern â
   - Reference the existing global `/mono-guard` skill contract for behavioral compatibility.
   - Include next-step routing.
 
-- Step 26.6: Create mirrored Claude/Codex `mono-run` skill contracts.
+- [ ] Step 26.6: Create mirrored Claude/Codex `mono-run` skill contracts.
   - Classification: automated
   - Files: create `packs/monorepo/claude/mono-run/SKILL.md`, create `packs/monorepo/codex/mono-run/SKILL.md`, create `packs/monorepo/codex/mono-run/agents/openai.yaml`
   - Document the augmentation injection: pre-execution (mono-detect, lane-spec generation, mono-guard pre-flight, plan-mode approval) â†’ dispatch (cross-cutting serial first, then parallel worktree waves) â†’ post-dispatch (mono-guard post-integration).
@@ -78,7 +78,7 @@ Phase 26 creates a new `monorepo` pack using an augmentation injection pattern â
   - Defer to `turbo run` for build/test/lint when `turbo.json` is present.
   - Include next-step routing.
 
-- Step 26.7: Create mirrored Claude/Codex `mono-ship` skill contracts.
+- [ ] Step 26.7: Create mirrored Claude/Codex `mono-ship` skill contracts.
   - Classification: automated
   - Files: create `packs/monorepo/claude/mono-ship/SKILL.md`, create `packs/monorepo/codex/mono-ship/SKILL.md`, create `packs/monorepo/codex/mono-ship/agents/openai.yaml`
   - Document the augmentation injection: pre-ship (mono-detect, read lane-specs, package-scoped test/lint/build, transitive-dependent validation) â†’ ship (delegate to `/ship`) â†’ post-ship (update lane-specs.md).
@@ -87,7 +87,7 @@ Phase 26 creates a new `monorepo` pack using an augmentation injection pattern â
   - Stop and report on any validation failure before shipping.
   - Include next-step routing.
 
-- Step 26.8: Wire the monorepo pack into repository docs and discovery.
+- [ ] Step 26.8: Wire the monorepo pack into repository docs and discovery.
   - Classification: automated
   - Files: modify `README.md`, modify `docs/skills-reference.md`, modify `docs/packs.md`
   - Register the monorepo pack in the pack list with description and skill inventory.
@@ -95,7 +95,7 @@ Phase 26 creates a new `monorepo` pack using an augmentation injection pattern â
   - Document the lane-spec artifact pattern (JSON + Markdown mirror) and its lifecycle.
   - Document package-scope YAML frontmatter tags for specs and roadmap phases.
 
-- Step 26.9: Create `monorepo-validate.sh` pack validation script.
+- [ ] Step 26.9: Create `monorepo-validate.sh` pack validation script.
   - Classification: automated
   - Files: create `packs/monorepo/scripts/monorepo-validate.sh`
   - Contract compliance: all monorepo pack skills reference the augmentation injection pattern.
@@ -104,7 +104,7 @@ Phase 26 creates a new `monorepo` pack using an augmentation injection pattern â
   - Mirrored skill parity: Claude and Codex skill contracts are structurally consistent.
   - Codex skills have `agents/openai.yaml` manifests.
 
-- Step 26.10: Create test fixtures for monorepo detection and lane-spec validation.
+- [ ] Step 26.10: Create test fixtures for monorepo detection and lane-spec validation.
   - Classification: automated
   - Files: create `tests/fixtures/monorepo/pnpm-turbo/pnpm-workspace.yaml`, create `tests/fixtures/monorepo/pnpm-turbo/turbo.json`, create `tests/fixtures/monorepo/pnpm-turbo/packages/api/package.json`, create `tests/fixtures/monorepo/pnpm-turbo/packages/web/package.json`, create `tests/fixtures/monorepo/pnpm-turbo/packages/shared-lib/package.json`, create `tests/fixtures/monorepo/pnpm-only/pnpm-workspace.yaml`, create `tests/fixtures/monorepo/pnpm-only/packages/app/package.json`, create `tests/fixtures/monorepo/not-monorepo/package.json`, create `tests/fixtures/monorepo/lane-specs-valid.json`, create `tests/fixtures/monorepo/lane-specs-invalid.json`
   - pnpm-turbo fixture: 2 packages (api, web) + 1 shared lib with internal dependencies and Turbo pipelines.
@@ -114,7 +114,7 @@ Phase 26 creates a new `monorepo` pack using an augmentation injection pattern â
   - lane-specs-invalid.json: overlapping owns paths (should fail validation).
 
 ### Green
-- Step 26.11: Run focused validation for the monorepo pack.
+- [ ] Step 26.11: Run focused validation for the monorepo pack.
   - Classification: automated
   - Files: modify `tasks/todo.md`
   - Run `packs/monorepo/scripts/monorepo-validate.sh` against fixtures and verify pass/fail.
