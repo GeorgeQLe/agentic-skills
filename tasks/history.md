@@ -1,5 +1,25 @@
 # Session History
 
+## 2026-05-04 — Reconcile task docs after Phase 25
+
+- Ran `$reconcile-dev-docs fix tasks` after the Phase 25 codebase-status shipment.
+- Checked the shipped Phase 25 commit/push todo item based on clean `git status --short` and `159b4ee feat(skills): add codebase status skill`.
+- Corrected `tasks/roadmap.md` completion counts and summary language to reflect 24 complete phases and 1 planned future phase.
+- Checked the duplicated Phase 21 milestone checklist that remained stale after `412a5f8 docs(tasks): close quality gate phase`.
+- Recorded recent shipped work missing from history: `159b4ee feat(skills): add codebase status skill` and `e350448 spec: monorepo execution controller integration`.
+
+## 2026-05-04 — Add monorepo execution controller spec
+
+- Added `specs/monorepo-execution-controller.md` and `specs/monorepo-execution-controller-interview.md`.
+- Captured the pnpm/Turborepo-first monorepo execution controller contract, including package-boundary planning, lane safety, dependency-change discipline, and composition with `$project-fleet`.
+- Shipped as `e350448 spec: monorepo execution controller integration`.
+
+## 2026-05-04 — Add codebase status skill
+
+- Added mirrored Claude/Codex `codebase-status` skills plus Codex OpenAI metadata.
+- Updated README, `docs/operating-modes.md`, `docs/skills-reference.md`, global skill discovery, `tasks/roadmap.md`, and `tasks/todo.md`.
+- Shipped as `159b4ee feat(skills): add codebase status skill`.
+
 ## 2026-05-04 — Add headless video-script/video-build test harness
 
 - Extended test harness with creator-media skill testing for `video-script` and `video-build`.

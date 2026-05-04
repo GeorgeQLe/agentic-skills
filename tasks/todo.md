@@ -18,7 +18,7 @@
   - [x] `./scripts/skill-next-step-routing.sh --missing`
   - [x] targeted `rg` checks for codebase-status behavior
   - [x] `git diff --check`
-- [ ] Commit and push intended changes.
+- [x] Commit and push intended changes.
 
 ## Current State
 
