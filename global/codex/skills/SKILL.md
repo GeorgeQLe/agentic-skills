@@ -50,7 +50,7 @@ Discover and search installed global skills plus enabled project-local pack skil
    | Release & Deploy | `release`, `deploy` |
    | Context & Session | `handoff`, `sync`, `investor-update` |
    | Git Workflow | `branch-lifecycle` |
-   | Utility | `commit-and-push-by-feature`, `analyze-sessions`, `provision-agentic-config`, `poketo-kanban`, `poketo-kanban --archive`, `sync-roadmap-kanban`, `skills`, `risk-register` |
+   | Utility | `commit-and-push-by-feature`, `analyze-sessions`, `targeted-skill-builder`, `provision-agentic-config`, `poketo-kanban`, `poketo-kanban --archive`, `sync-roadmap-kanban`, `skills`, `risk-register` |
 
    Skills not found in the mapping go into an **Other** group at the end.
 

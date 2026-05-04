@@ -136,7 +136,7 @@ investigate, migrate, pack, patch-exec-profile, spec-interview, ui-interview,
 ux-variation, plan-phase, project-fleet,
 reconcile-dev-docs, regression-check, release, roadmap, run, scaffold,
 ship, ship-end, skills, slim-audit, spec-drift, sync,
-trace, research-roadmap, uat
+targeted-skill-builder, trace, research-roadmap, uat
 ```
 
 ### Claude-only global skills

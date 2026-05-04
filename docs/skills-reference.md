@@ -81,6 +81,7 @@ Global skills are safe across business apps, games, devtools, libraries, service
 | `slim-audit` | Audit for opportunities to reduce lines of code while preserving behavior |
 | `spec-drift` | Audit specs against codebase reality |
 | `sync` | Pull latest remote changes and report status |
+| `targeted-skill-builder` | Build or update one specific skill from a concrete workflow gap or correction |
 | `trace` | Follow a request end-to-end through the stack |
 | `research-roadmap` | Scan research and documentation health, then maintain a priority documentation queue |
 | `uat` | Create target-user acceptance journeys with role-based criteria and evidence capture |
