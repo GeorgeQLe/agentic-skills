@@ -40,6 +40,7 @@ scripts/pack.sh install game
 scripts/pack.sh install devtool
 scripts/pack.sh install creator-media
 scripts/pack.sh install code-quality
+scripts/pack.sh install monorepo
 scripts/pack.sh install business-app-kanban
 scripts/pack.sh status
 scripts/pack.sh remove game
@@ -115,6 +116,7 @@ agentic-skills/
 │   ├── game/{claude,codex}/<name>/SKILL.md
 │   ├── devtool/{claude,codex}/<name>/SKILL.md
 │   ├── creator-media/{claude,codex}/<name>/SKILL.md
+│   ├── monorepo/{claude,codex}/<name>/SKILL.md
 │   └── *-kanban/{claude,codex}/<name>/SKILL.md
 ├── scripts/
 │   ├── pack.sh
@@ -222,6 +224,38 @@ extract-shared-types, quality-sweep
 ```
 
 `extract-shared-types` moves shared type definitions into dedicated `types/` files without runtime behavior changes. `quality-sweep` orchestrates a behavior-preserving cleanup campaign across duplication, type hygiene, dead code, dependency boundaries, defensive error handling, legacy paths, and comments — audit-only by default, with optional `fix` or `full` modes.
+
+### Monorepo
+
+For pnpm workspace monorepos that may use Turborepo and need package-aware execution, guardrails, and shipping.
+
+```bash
+scripts/pack.sh install monorepo
+```
+
+```text
+mono-detect, mono-run, mono-guard, mono-ship
+```
+
+The monorepo pack uses an augmentation injection pattern: it adds workspace detection, lane-spec generation, boundary checks, package-scoped validation, and transitive-dependent validation around the existing `run` and `ship` skills. This differs from `*-kanban` packs, which intentionally provide workflow variants such as `run-kanban` and `ship-kanban`.
+
+Lane dispatch uses a JSON + Markdown mirror:
+
+```text
+.agents/lane-specs.json -> machine-readable lifecycle, package lanes, owns, must_not_edit, depends_on
+tasks/lane-specs.md -> committed human-readable mirror
+```
+
+Lane lifecycle values are `draft`, `approved`, `dispatched`, `integrated`, and `failed`. Specs and roadmap phases may use YAML frontmatter package-scope tags:
+
+```yaml
+---
+packages: [api, web]
+scope: cross-cutting
+---
+```
+
+Use `scope: package-scoped` for package-contained work, `scope: cross-cutting` for shared-package or multi-package work, and `scope: root-only` for root config, scripts, docs, or repository policy.
 
 ### Kanban Variants
 

@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-05-04 — Phase 26 Step 26.8: monorepo pack docs and discovery
+
+- Registered the `monorepo` pack in `README.md`, `docs/skills-reference.md`, and `docs/packs.md`.
+- Added install/discovery references, skill inventory, and default flow for `mono-detect`, `mono-run`, `mono-guard`, and `mono-ship`.
+- Documented the augmentation injection pattern and how it differs from `*-kanban` workflow variants.
+- Documented lane-spec artifacts, lifecycle states, and package-scope YAML frontmatter tags for specs and roadmap phases.
+- Verified the docs with targeted scans, skill dependency/version/routing audits, `pnpm --dir tests test`, and `git diff --check`.
+- Recorded the Step 26.8 quality-gate manifest in `tasks/todo.md`.
+
 ## 2026-05-04 — Phase 26 Step 26.7: mono-ship skill contracts
 
 - Added mirrored Claude/Codex `mono-ship` skill contracts and Codex OpenAI metadata for the monorepo pack.
