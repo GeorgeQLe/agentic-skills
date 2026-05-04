@@ -1408,3 +1408,13 @@ Resolved all 10 findings from `/expert-review`:
 - Confirmed the complete fixture passes and the incomplete fixture fails with the expected missing fields: `Per-file purpose`, `User-goal mapping`, `Skipped tests`, `Adversarial review`, `Residual risk`, and `Rollback note`.
 - Confirmed targeted contract scans cover quality-gate references and required manifest fields across the global shipping skills, canonical contract, validator script, and complete fixture.
 - Verified the task-documentation shipping diff with `git diff --check`.
+
+## 2026-05-04 — Phase 21 Step 21.6: repository validation gate and phase close
+
+- Ran the formal Phase 21 repository validation and review gate.
+- Confirmed `./scripts/skill-deps.sh --broken` reports `No broken references found.`.
+- Confirmed `./scripts/skill-versions.sh --missing` reports `All 287 skills have a version field.`.
+- Confirmed `./scripts/skill-next-step-routing.sh --missing` reports `All 211 mutation-capable skills have next-step routing.`.
+- Confirmed `git diff --check` produces no output.
+- Archived the completed phase to `tasks/phases/phase-21.md`, marked Phase 21 complete in `tasks/roadmap.md`, and replaced `tasks/todo.md` with a no-active-phase handoff that routes next discovery to `$brainstorm`.
+- Ran the post-roadmap `$research-roadmap` scan; existing devtool research, specs, roadmap, and task docs are current, with no priority documentation, record, or recurring item promoted.
