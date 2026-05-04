@@ -14,6 +14,9 @@ Use this skill when the user wants current changes committed and pushed in sensi
 ## Workflow
 
 1. Inspect `git status` and relevant diffs to understand the change set.
+1b. For non-trivial mutations, confirm the caller has produced a `docs/quality-gate-contract.md` ship manifest for the exact shipping boundary before staging. The manifest must include: User goal, Changed files, Per-file purpose, User-goal mapping, Tests run, Skipped tests, Adversarial review, Residual risk, Rollback note, and Next command.
+1c. If the change set includes non-trivial source changes, confirm the manifest records a targeted `quality-sweep audit`, `$expert-review`, configured review lane, or explicitly justified equivalent adversarial review. If the review is missing, stop before committing.
+1d. Confirm validation evidence distinguishes executable checks from documentation-only or task-only checks. If non-trivial source changes rely only on documentation/task checks, stop before committing unless the manifest gives a concrete skipped-test rationale and residual-risk explanation.
 2. Partition changes into logical buckets such as `auth`, `api`, `ui`, `tests`, `docs`, `build`, or `refactor`.
 3. Prefer 2 to 6 commits unless the change set is genuinely tiny.
 4. For each bucket:
@@ -33,6 +36,8 @@ Use this skill when the user wants current changes committed and pushed in sensi
 - Do not amend or rewrite history unless the user explicitly asks.
 - Stop if you detect likely secrets or credentials in the diff.
 - If hooks or tests fail and the expected fix is straightforward, fix them and continue; otherwise report the blocker.
+- Do not commit or push a non-trivial mutation without a ship manifest that covers the exact files being shipped. If unrelated tracked changes are present, the manifest must identify which files are included and why the remaining files are safe to leave untouched.
+- Do not treat documentation-only or task-only checks as sufficient executable verification for source changes. Require a skipped-test rationale when no executable check was run.
 
 ## Output
 
@@ -47,5 +52,6 @@ Report:
 
 - **Default next-step routing:** when reporting completion, include either `Recommended next skill: <command>` or the two-line pair `**Next work:** <specific task or "none">` and `**Recommended next command:** <one command or route>` so the next operator has a concrete handoff.
 - If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
+- For non-trivial mutations, report the ship manifest location or summarize its required fields in the final output.
 - Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
 - This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.

@@ -1387,3 +1387,10 @@ Resolved all 10 findings from `/expert-review`:
 - Added `scripts/ship-quality-gate.sh`, a dependency-light manifest validator for the required quality-gate fields.
 - Added complete and intentionally incomplete fixtures under `tests/fixtures/ship-quality-gate/`.
 - Verified the complete fixture passes, the incomplete fixture fails with expected missing-field output, and `git diff --check` is clean.
+
+## 2026-05-04 — Phase 21 Step 21.3: global quality-gate skill contracts
+
+- Updated `$run`, `$ship`, `$ship-end`, and `$commit-and-push-by-feature` to require the `docs/quality-gate-contract.md` ship manifest for non-trivial mutations before commit/push.
+- Required manifest coverage for changed files, per-file purpose, user-goal mapping, tests run, skipped tests, adversarial review, residual risk, rollback note, and next command.
+- Required targeted adversarial review for non-trivial source changes and made final outputs distinguish executable verification from documentation-only or task-only checks.
+- Verified with targeted contract-field scans across the four global skills and `git diff --check`.

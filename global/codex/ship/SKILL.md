@@ -22,6 +22,12 @@ Ship already-finished work, commit it, optionally deploy it, and plan the next s
    - Inspect validation output even when commands exit zero. If warnings are emitted, either fix them, record them as explicitly accepted with rationale, or report them clearly as unresolved.
    - If errors are found (from prior output or fresh runs), fix them and re-run only the failing commands to confirm. Include fixes in the step's commit (or as a separate commit if unrelated).
    - If errors can't be auto-fixed, **STOP. Do not ship.** Report the errors to the user and ask how to proceed. Never commit or push code with known build/lint/type/test failures.
+1c. **Quality gate for non-trivial mutations:**
+   - Apply `docs/quality-gate-contract.md` when the work to ship changes source code, scripts, configuration, schemas, generated runtime assets, deploy behavior, workflow policy, validation rules, command surfaces, or multiple files.
+   - Build a ship manifest from the exact diff and unpushed commits that will be included in the shipping boundary. The manifest must include: User goal, Changed files, Per-file purpose, User-goal mapping, Tests run, Skipped tests, Adversarial review, Residual risk, Rollback note, and Next command.
+   - For non-trivial source changes, run a targeted `quality-sweep audit`, `$expert-review`, configured review lane, or explicitly justified equivalent adversarial review before commit/push. Fix findings or record accepted residual concerns in the manifest.
+   - Final output must distinguish executable verification from documentation-only or task-only checks. Documentation/task checks can support source changes, but cannot be the only proof for non-trivial source mutations.
+   - If the tree contains unrelated pre-existing changes, the manifest must separate included files from untouched files and explain why the ship boundary is safe. If that cannot be proven, stop instead of shipping.
 2. Ship the work:
    - Read `CLAUDE.md` to understand current progress.
    - Update `tasks/todo.md` — mark completed items as done.
@@ -114,5 +120,6 @@ Rules:
 
 - **Default next-step routing:** when reporting completion, include either `Recommended next skill: <command>` or the two-line pair `**Next work:** <specific task, discovery task, blocker, or explicit parked state>` and `**Recommended next command:** <one command or route>` so the next operator has a concrete handoff. Do not use `none` as the command unless the user explicitly asked to pause, park, archive, or wait; exhausted queues route to `$brainstorm`.
 - If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
+- For non-trivial mutations, include the `docs/quality-gate-contract.md` ship manifest in the task review notes, history entry, or final response before invoking `$commit-and-push-by-feature`.
 - Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
 - This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.
