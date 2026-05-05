@@ -2,7 +2,7 @@
 
 **Project:** Claude Skills / agentic-skills
 **Current phase:** 14 of 26
-**Status:** Planned; ready for `$run`.
+**Status:** In progress; Step 14.1 complete, ready for `$run` on Step 14.2.
 
 ## Phase 14: LinkedIn Evidence Lane
 

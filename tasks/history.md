@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-05-04 — Pack workflow matrix documentation
+
+- Added `docs/pack-workflow-matrix.md` as the current source for pack workflow ordering, lead-in recommendations, overlay dependencies, and compatibility aliases.
+- Linked the matrix from `README.md`, `docs/packs.md`, and `docs/skills-reference.md`.
+- Updated pack guidance so `monorepo`, `code-quality`, and `*-kanban` are treated as overlays that usually pair with a domain pack.
+- Added missing `alignment-loop`, `remotion`, `monorepo`, and `creator-media` alias coverage to the pack role table in `docs/operating-modes.md`.
+- Verified with skill dependency/version/routing audits, `scripts/pack.sh list`, layer1 tests, and `git diff --check`.
+
 ## 2026-05-04 — Pack context reorganization
 
 - Split `business-app` into `business-discovery`, `business-growth`, and `business-ops` packs while preserving `business-app` as a compatibility alias.

@@ -6,7 +6,7 @@
 
 ## Scope
 
-This spec covers the generic fleet orchestration contract implemented by `packs/project-fleet/codex/project-fleet/SKILL.md`. Domain-specific workflows may use clearer file names and scripts, but they must preserve the state, guard, blocker, verification, and shipping semantics below.
+This spec covers the generic fleet orchestration contract implemented by `global/codex/project-fleet/SKILL.md`. Domain-specific workflows may use clearer file names and scripts, but they must preserve the state, guard, blocker, verification, and shipping semantics below.
 
 ## Core Model
 
@@ -106,9 +106,9 @@ The final report should include current fleet count by state, lane selected and 
 
 ## Integration Points
 
-- `packs/project-fleet/codex/project-fleet/SKILL.md` is the implementation surface for `$project-fleet`.
-- `packs/project-fleet/codex/clone-spec-store/SKILL.md` routes ongoing multi-repo queue operation through `$project-fleet` after the clone/spec-store pipeline reaches downstream seeding.
-- `README.md`, `docs/packs.md`, and `docs/skills-reference.md` list `project-fleet` as a project-local pack.
+- `global/codex/project-fleet/SKILL.md` is the implementation surface for `$project-fleet`.
+- `global/codex/clone-spec-store/SKILL.md` routes ongoing multi-repo queue operation through `$project-fleet` after the clone/spec-store pipeline reaches downstream seeding.
+- `README.md` lists `project-fleet` in the global skill catalog.
 
 ## Acceptance Criteria
 

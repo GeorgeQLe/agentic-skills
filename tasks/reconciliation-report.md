@@ -1,5 +1,24 @@
 # Development Docs Reconciliation Report
 
+## 2026-05-04 - `$reconcile-dev-docs fix all`
+
+### Resolved
+
+- [x] `tasks/roadmap.md` - Reconciled active Phase 14 and creator foundation file paths from old `packs/creator-media/...` physical locations to `packs/creator-foundation/...` after the pack split. Evidence: the referenced skills now exist under `packs/creator-foundation/`; old physical skill paths do not exist.
+- [x] `tasks/todo.md` - Updated active Phase 14 status from planned to in progress because Step 14.1 is complete and Step 14.2 is next.
+- [x] `tasks/history.md` - Appended a factual history entry for `ad65caf Document skill pack workflow matrix`.
+- [x] `specs/project-fleet.md` - Archived the prior spec and updated implementation references from old global paths to `packs/project-fleet/codex/...`.
+- [x] `specs/drift-report.md` - Archived the prior report and refreshed current evidence for project-fleet, creator-foundation, and the shipped monorepo pack.
+
+### Deferred
+
+- [ ] `tasks/phases/phase-12.md` and other archived phase snapshots still contain old pack paths from the historical state at the time. They remain unchanged because archived phase notes are evidence records, not current execution contracts.
+
+### Remaining Findings
+
+- No remaining unambiguous current-doc contradictions found for the pack reorganization.
+- Recommended next action: `$run` for Phase 14 Step 14.2.
+
 ## 2026-05-04 - `$reconcile-dev-docs fix tasks`
 
 ### Resolved
