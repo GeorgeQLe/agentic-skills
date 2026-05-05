@@ -2,7 +2,7 @@
 
 **Project:** Claude Skills / agentic-skills
 **Current phase:** 14 of 26
-**Status:** In progress; Step 14.1 complete, ready for `$run` on Step 14.2.
+**Status:** In progress; Step 14.4 complete, ready for `$run` on Step 14.5.
 
 ## Phase 14: LinkedIn Evidence Lane
 
@@ -59,7 +59,7 @@
   - Document the LinkedIn-first lane as part of the existing matrix/schema/dossier workflow rather than a standalone scraper.
   - State that LinkedIn collection starts from owner exports, manual snapshots, public unauthenticated captures, and user-provided files.
   - State that paid APIs, logged-in scraping, bot-protection bypass, private-data collection, and access-control circumvention are out of scope.
-- Step 14.4: Add focused validation coverage for LinkedIn lane contracts.
+- [x] Step 14.4: Add focused validation coverage for LinkedIn lane contracts.
   - Classification: automated
   - Files: modify `tests/layer1/routing-graph.test.ts` or create `tests/layer1/creator-media-linkedin.test.ts`
   - Add layer1 checks that mirrored Claude/Codex creator-media contracts include LinkedIn baseline language, redaction/privacy language, normalized evidence routing, and forbidden access patterns.
@@ -161,4 +161,20 @@
 - **Adversarial review:** changed-doc self-review checked that the docs do not introduce a standalone LinkedIn scraper lane, do not imply paid/API-first collection, and keep analytics unavailable unless owner-provided, admin-provided, or already authorized.
 - **Residual risk:** Phase 14 still needs Step 14.4 deterministic validation coverage and Step 14.5 final focused validation before all milestone criteria are complete.
 - **Rollback note:** revert the Step 14.3 shipping commit to remove the LinkedIn lane guidance from pack/public docs and task/history records.
+- **Next command:** `$run`.
+
+### Step 14.4 Review - LinkedIn Lane Contract Coverage
+
+**Result:** Added deterministic layer1 coverage for the LinkedIn evidence lane and tightened pack docs where the new contract checks found drift.
+
+**Ship manifest:**
+- **User goal:** Execute the next `$run` unit from the active Phase 14 plan.
+- **Changed files:** `tests/layer1/creator-media-linkedin.test.ts`, `packs/creator-foundation/PACK.md`, `packs/creator-media/PACK.md`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** The new layer1 test asserts mirrored LinkedIn foundation and dossier contracts include baseline sources, redaction/privacy gates, normalized dossier routing, and forbidden access patterns; creator-foundation docs now expose the exact matrix/schema/dossier route; creator-media compatibility docs now include the owner/admin authorization boundary for analytics; task/history files record completion and validation evidence.
+- **User-goal mapping:** Step 14.4 requires focused structural validation for LinkedIn lane contracts without network, LinkedIn credentials, or external exports; the new test reads local skill/docs files only and fails if the baseline, privacy, routing, or forbidden-access language disappears.
+- **Tests run:** `pnpm --dir tests test -- --run tests/layer1/creator-media-linkedin.test.ts` initially failed on missing exact route wording in `packs/creator-foundation/PACK.md` and missing owner/admin authorization wording in `packs/creator-media/PACK.md`; after doc cleanup the same command passed with 5 files and 1177 tests; targeted `rg` scan passed for LinkedIn baseline, evidence handling, owner exports, manual snapshots, public unauthenticated captures, user-provided files, forbidden scraping/API/private collection patterns, mixed redaction, and matrix/schema/dossier routing; `./scripts/skill-deps.sh --broken` passed with no broken references; `./scripts/skill-versions.sh --missing` passed with all 310 skills versioned; `./scripts/skill-next-step-routing.sh --missing` passed with all 225 mutation-capable skills covered; `pnpm --dir tests test` passed with 5 files and 1177 tests; `git diff --check` passed.
+- **Skipped tests:** no network, LinkedIn credentials, logged-in browser flow, paid API call, external account mutation, or live LinkedIn export parsing was relevant or allowed for this structural contract step.
+- **Adversarial review:** the focused test intentionally spans Claude/Codex mirrors, pack compatibility docs, README, and skills reference so future edits cannot silently drop the LinkedIn baseline, redaction gate, normalized evidence route, or forbidden access boundary from only one surface.
+- **Residual risk:** Phase 14 still needs Step 14.5 final focused validation before the milestone acceptance criteria and phase tests can be marked complete.
+- **Rollback note:** revert the Step 14.4 shipping commit to remove the new layer1 test, doc wording cleanup, and task/history records.
 - **Next command:** `$run`.

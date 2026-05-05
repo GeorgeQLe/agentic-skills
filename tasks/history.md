@@ -1592,3 +1592,10 @@ Resolved all 10 findings from `/expert-review`:
 - Confirmed `git diff --check` produces no output.
 - Archived the completed phase to `tasks/phases/phase-21.md`, marked Phase 21 complete in `tasks/roadmap.md`, and replaced `tasks/todo.md` with a no-active-phase handoff that routes next discovery to `$brainstorm`.
 - Ran the post-roadmap `$research-roadmap` scan; existing devtool research, specs, roadmap, and task docs are current, with no priority documentation, record, or recurring item promoted.
+
+## 2026-05-04 — Phase 14 Step 14.4: LinkedIn lane contract coverage
+
+- Added `tests/layer1/creator-media-linkedin.test.ts` to assert the mirrored LinkedIn foundation and dossier contracts include baseline sources, privacy/redaction gates, normalized dossier routing, and forbidden access patterns.
+- Tightened `packs/creator-foundation/PACK.md` with the exact `creator-platform-capability-matrix -> creator-evidence-schema -> creator-presence-dossier` LinkedIn route.
+- Tightened `packs/creator-media/PACK.md` so compatibility docs carry the same owner-provided, admin-provided, or already-authorized analytics boundary as README and the skills reference.
+- Verified with the focused layer1 LinkedIn contract test, targeted `rg` scans, full `pnpm --dir tests test`, skill dependency/version/routing audits, and `git diff --check`.
