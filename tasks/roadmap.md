@@ -717,23 +717,23 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 
 ### Implementation
 - Step 12.1: Create mirrored `creator-platform-capability-matrix` skill contracts.
-  - Files: create `packs/creator-media/claude/creator-platform-capability-matrix/SKILL.md`, create `packs/creator-media/codex/creator-platform-capability-matrix/SKILL.md`
+  - Files: create `packs/creator-foundation/claude/creator-platform-capability-matrix/SKILL.md`, create `packs/creator-foundation/codex/creator-platform-capability-matrix/SKILL.md`
   - Include platform rows for LinkedIn personal profile, LinkedIn company page, personal website/blog, newsletter, podcast, GitHub, X/Threads/Instagram/TikTok, and Bluesky/Mastodon.
   - Require output at `research/creator-platforms/capability-matrix.md`.
   - Require columns for evidence sources, likely fields, missing fields, metric availability, body/media/transcript availability, peer benchmarking practicality, operational risk, audit depth, and recommended next skill.
   - Classify collection methods as `export`, `manual_snapshot`, `rss_feed`, `public_page_capture`, `open_source_tool`, or `free_api`.
 - Step 12.2: Create mirrored `creator-evidence-schema` skill contracts.
-  - Files: create `packs/creator-media/claude/creator-evidence-schema/SKILL.md`, create `packs/creator-media/codex/creator-evidence-schema/SKILL.md`
+  - Files: create `packs/creator-foundation/claude/creator-evidence-schema/SKILL.md`, create `packs/creator-foundation/codex/creator-evidence-schema/SKILL.md`
   - Require output at `research/creator-platforms/evidence-schema.md`.
   - Define raw evidence root `research/creator-platforms/data/<platform>/<slug>/`.
   - Define normalized record fields for `evidence_id`, `platform`, `source_type`, `source_url`, `raw_path`, `captured_at`, `capture_method`, `auth_context`, `terms_risk`, `title`, `body_text_path`, `published_at`, `creator_role`, `media_type`, `topic_tags`, `content_role`, `metrics`, `metric_confidence`, `evidence_confidence`, privacy notes, and review notes.
   - State that optional metrics must not be invented and missing metrics/bodies must be recorded as evidence gaps.
 - Step 12.3: Wire the foundation into creator-media pack docs and discovery references.
-  - Files: modify `packs/creator-media/PACK.md`, modify `README.md`, modify `docs/skills-reference.md`
+  - Files: modify `packs/creator-foundation/PACK.md`, modify `packs/creator-media/PACK.md`, modify `README.md`, modify `docs/skills-reference.md`
   - Put `creator-platform-capability-matrix` and `creator-evidence-schema` before platform-specific audits in the creator-media skill list and default flow.
   - Document that YouTube-specific work may still start at `youtube-channel-audit`, while non-YouTube or mixed-platform work starts with the foundation.
 - Step 12.4: Align creator-media next-skill routing with the new foundation.
-  - Files: modify `packs/creator-media/claude/creator-platform-capability-matrix/SKILL.md`, modify `packs/creator-media/codex/creator-platform-capability-matrix/SKILL.md`, modify `packs/creator-media/claude/creator-evidence-schema/SKILL.md`, modify `packs/creator-media/codex/creator-evidence-schema/SKILL.md`, inspect existing `packs/creator-media/{claude,codex}/*/SKILL.md`
+  - Files: modify `packs/creator-foundation/claude/creator-platform-capability-matrix/SKILL.md`, modify `packs/creator-foundation/codex/creator-platform-capability-matrix/SKILL.md`, modify `packs/creator-foundation/claude/creator-evidence-schema/SKILL.md`, modify `packs/creator-foundation/codex/creator-evidence-schema/SKILL.md`, inspect existing `packs/creator-foundation/{claude,codex}/*/SKILL.md` and `packs/youtube-ops/{claude,codex}/*/SKILL.md`
   - Ensure the new skills emit `Recommended next skill: <command>` in the final response.
   - Route matrix to schema by default; route schema to the future creator presence dossier when present, otherwise to platform-specific audits or `creator-positioning` based on available evidence.
   - Preserve existing YouTube workflow routing unless a non-YouTube evidence foundation is missing.
@@ -801,25 +801,25 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 ### Implementation
 - Step 13.1: Create mirrored `creator-presence-dossier` skill contracts.
   - Classification: automated
-  - Files: create `packs/creator-media/claude/creator-presence-dossier/SKILL.md`, create `packs/creator-media/codex/creator-presence-dossier/SKILL.md`
+  - Files: create `packs/creator-foundation/claude/creator-presence-dossier/SKILL.md`, create `packs/creator-foundation/codex/creator-presence-dossier/SKILL.md`
   - Require output at `research/creator-presence/<slug>.md`.
   - Require reading `research/creator-platforms/capability-matrix.md`, `research/creator-platforms/evidence-schema.md`, and available normalized/raw creator evidence before synthesis.
   - Require public/professional evidence boundaries so private repo planning context is excluded unless explicitly marked as internal notes.
   - Include final-response next-skill routing as `Recommended next skill: <command>`.
 - Step 13.2: Define the dossier Markdown contract and evidence register requirements.
   - Classification: automated
-  - Files: modify `packs/creator-media/claude/creator-presence-dossier/SKILL.md`, modify `packs/creator-media/codex/creator-presence-dossier/SKILL.md`
+  - Files: modify `packs/creator-foundation/claude/creator-presence-dossier/SKILL.md`, modify `packs/creator-foundation/codex/creator-presence-dossier/SKILL.md`
   - Require sections for identity, current public promise, career timeline, platform map, core themes, expertise claims, proof assets, signature formats, audience/community signals, product/company connections, gaps/contradictions/stale positioning, evidence register, next collection tasks, and recommended next skills.
   - Require evidence rows to include source path or URL, capture date, confidence level, public/private boundary, and evidence gaps.
   - Require support for LinkedIn, personal websites/blogs, GitHub, podcasts, talks, newsletters, and product docs when evidence is present.
 - Step 13.3: Wire `creator-presence-dossier` into creator-media pack docs and discovery references.
   - Classification: automated
-  - Files: modify `packs/creator-media/PACK.md`, modify `README.md`, modify `docs/skills-reference.md`
+  - Files: modify `packs/creator-foundation/PACK.md`, modify `packs/creator-media/PACK.md`, modify `README.md`, modify `docs/skills-reference.md`
   - Put `creator-presence-dossier` after `creator-evidence-schema` and before platform-specific audits or strategy synthesis in creator-media skill lists and default flows.
   - Document that the dossier feeds `creator-positioning`, `content-programming`, `product-led-media-map`, and `creator-metrics-review`.
 - Step 13.4: Align downstream creator-media routing with the dossier.
   - Classification: automated
-  - Files: inspect and modify only as needed in `packs/creator-media/claude/creator-evidence-schema/SKILL.md`, `packs/creator-media/codex/creator-evidence-schema/SKILL.md`, `packs/creator-media/claude/creator-positioning/SKILL.md`, `packs/creator-media/codex/creator-positioning/SKILL.md`, `packs/creator-media/claude/content-programming/SKILL.md`, `packs/creator-media/codex/content-programming/SKILL.md`, `packs/creator-media/claude/product-led-media-map/SKILL.md`, `packs/creator-media/codex/product-led-media-map/SKILL.md`, `packs/creator-media/claude/creator-metrics-review/SKILL.md`, `packs/creator-media/codex/creator-metrics-review/SKILL.md`
+  - Files: inspect and modify only as needed in `packs/creator-foundation/claude/creator-evidence-schema/SKILL.md`, `packs/creator-foundation/codex/creator-evidence-schema/SKILL.md`, `packs/creator-foundation/claude/creator-positioning/SKILL.md`, `packs/creator-foundation/codex/creator-positioning/SKILL.md`, `packs/creator-foundation/claude/content-programming/SKILL.md`, `packs/creator-foundation/codex/content-programming/SKILL.md`, `packs/creator-foundation/claude/product-led-media-map/SKILL.md`, `packs/creator-foundation/codex/product-led-media-map/SKILL.md`, `packs/creator-foundation/claude/creator-metrics-review/SKILL.md`, `packs/creator-foundation/codex/creator-metrics-review/SKILL.md`
   - Ensure schema routing can recommend the now-present dossier for mixed-platform, LinkedIn-first, career-signal, or owned-presence work.
   - Ensure strategy skills mention the dossier as a preferred creator context source without breaking the existing YouTube evidence flow.
 
@@ -889,20 +889,20 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 ### Implementation
 - Step 14.1: Harden the LinkedIn baseline in the platform foundation skills.
   - Classification: automated
-  - Files: modify `packs/creator-media/claude/creator-platform-capability-matrix/SKILL.md`, modify `packs/creator-media/codex/creator-platform-capability-matrix/SKILL.md`, modify `packs/creator-media/claude/creator-evidence-schema/SKILL.md`, modify `packs/creator-media/codex/creator-evidence-schema/SKILL.md`
+  - Files: modify `packs/creator-foundation/claude/creator-platform-capability-matrix/SKILL.md`, modify `packs/creator-foundation/codex/creator-platform-capability-matrix/SKILL.md`, modify `packs/creator-foundation/claude/creator-evidence-schema/SKILL.md`, modify `packs/creator-foundation/codex/creator-evidence-schema/SKILL.md`
   - Make owner exports, manual snapshots, public unauthenticated page captures, and user-provided files the default LinkedIn collection lane.
   - Treat LinkedIn personal analytics, company/page analytics, and API fields as unavailable unless owner-provided or already authorized.
   - Require redaction/exclusion guidance for private contacts, messages, relationship data, sensitive account data, and unrelated personal information before analysis.
   - Require high-risk LinkedIn surfaces to stop for user-provided evidence instead of attempting logged-in scraping, bot-protection bypass, paywall access, or access-control circumvention.
 - Step 14.2: Make the creator presence dossier explicitly consume LinkedIn evidence without leaking private material.
   - Classification: automated
-  - Files: modify `packs/creator-media/claude/creator-presence-dossier/SKILL.md`, modify `packs/creator-media/codex/creator-presence-dossier/SKILL.md`
+  - Files: modify `packs/creator-foundation/claude/creator-presence-dossier/SKILL.md`, modify `packs/creator-foundation/codex/creator-presence-dossier/SKILL.md`
   - Add LinkedIn evidence-register requirements for profile exports, profile snapshots, posts/shares, articles, rich media, recommendations, skills, positions, education, company pages, and manual/public snapshots when provided.
   - Require the dossier to classify LinkedIn evidence as public, owner-provided, admin-provided, internal notes, or mixed/redaction needed.
   - Route private or mixed LinkedIn material to redaction/exclusion before synthesis.
 - Step 14.3: Update creator-media pack and discovery docs for the LinkedIn lane.
   - Classification: automated
-  - Files: modify `packs/creator-media/PACK.md`, modify `README.md`, modify `docs/skills-reference.md`
+  - Files: modify `packs/creator-foundation/PACK.md`, modify `packs/creator-media/PACK.md`, modify `README.md`, modify `docs/skills-reference.md`
   - Document the LinkedIn-first lane as part of the existing matrix/schema/dossier workflow rather than a standalone scraper.
   - State that LinkedIn collection starts from owner exports, manual snapshots, public unauthenticated captures, and user-provided files.
   - State that paid APIs, logged-in scraping, bot-protection bypass, private-data collection, and access-control circumvention are out of scope.
@@ -916,7 +916,7 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Step 14.5: Run focused validation for the LinkedIn evidence lane.
   - Classification: automated
   - Files: modify `tasks/todo.md`
-  - Run targeted `rg` checks over creator-media pack skills and docs for owner export/manual snapshot/public capture baseline, redaction language, normalized schema/dossier routing, and forbidden scraping/API-first language.
+  - Run targeted `rg` checks over creator-foundation pack skills and creator-media compatibility docs for owner export/manual snapshot/public capture baseline, redaction language, normalized schema/dossier routing, and forbidden scraping/API-first language.
   - Run `pnpm --dir tests test`.
   - Run `./scripts/skill-deps.sh --broken`.
   - Run `./scripts/skill-versions.sh --missing`.

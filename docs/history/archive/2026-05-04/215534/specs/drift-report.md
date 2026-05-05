@@ -4,7 +4,7 @@
 
 ### Scope
 
-Refreshed the drift report after the 2026-05-04 pack reorganization moved business, creator-media, Remotion, fleet, and monorepo workflows into narrower project-local packs.
+Refreshed the drift report after `e350448` (`spec: monorepo execution controller integration`) added `specs/monorepo-execution-controller.md` and `specs/monorepo-execution-controller-interview.md`, and after the task-doc reconciliation commit `8ae7d4a`.
 
 Spec inventory audited:
 
@@ -26,11 +26,11 @@ Skipped by contract: `*-interview.md` files and this drift report.
 ### Summary
 
 - **Errors:** 0
-- **Warnings:** 0
+- **Warnings:** 1
 - **Info:** 0
 - **Verified / intentionally scoped:** 8 groups
 
-No Error-class spec/code contradictions were found. No Warning-class active spec claims remain after reconciling pack-location evidence for `project-fleet`, creator platform evidence, and the now-shipped monorepo pack.
+No Error-class spec/code contradictions were found. One Warning-class unimplemented spec surface remains: the new monorepo execution controller spec describes a future monorepo pack and scripts that are not implemented yet. The spec appears to be the intended target, so the fix is to queue concrete implementation work rather than rewrite the spec.
 
 ### Verified
 
@@ -47,19 +47,14 @@ No Error-class spec/code contradictions were found. No Warning-class active spec
 
 - [x] `specs/project-fleet.md` still matches the public `$project-fleet` workflow.
   - Spec claim: `$project-fleet` owns fleet queue state, guarded provisioning, blocker handling, productive fallback work, verification, status reporting, and shipping.
-  - Evidence: `packs/project-fleet/codex/project-fleet/SKILL.md` defines the same core model, state machine, lane selection, guarded provisioning rules, blocker ledger, output contract, constraints, and default shipping contract.
-  - Evidence: `packs/project-fleet/codex/clone-spec-store/SKILL.md` routes ongoing multi-repo queue operation through `$project-fleet` after Phase 6 exists.
-  - Evidence: `README.md`, `docs/packs.md`, and `docs/skills-reference.md` list `project-fleet` as a project-local pack.
+  - Evidence: `global/codex/project-fleet/SKILL.md` defines the same core model, state machine, lane selection, guarded provisioning rules, blocker ledger, output contract, constraints, and default shipping contract.
+  - Evidence: `global/codex/clone-spec-store/SKILL.md` routes ongoing multi-repo queue operation through `$project-fleet` after Phase 6 exists.
+  - Evidence: `README.md` lists `project-fleet` in the global skill catalog.
 
 - [x] `specs/creator-platform-evidence-schema.md` remains represented by the shipped creator-media evidence foundation.
   - Spec claim: creator platform work starts with capability and evidence schema foundations before platform-specific audits.
-  - Evidence: `packs/creator-foundation/claude/creator-platform-capability-matrix/SKILL.md`, `packs/creator-foundation/codex/creator-platform-capability-matrix/SKILL.md`, `packs/creator-foundation/claude/creator-evidence-schema/SKILL.md`, and `packs/creator-foundation/codex/creator-evidence-schema/SKILL.md` exist.
-  - Evidence: `packs/creator-foundation/PACK.md`, `packs/creator-media/PACK.md`, `README.md`, and `docs/skills-reference.md` route non-YouTube creator-media work through the foundation skills.
-
-- [x] `specs/monorepo-execution-controller.md` now matches the shipped monorepo pack.
-  - Spec claim: V1 ships a `monorepo` pack with `mono-detect`, `mono-run`, `mono-ship`, `mono-guard`, lane-spec validation, and fixture-backed validation.
-  - Evidence: `packs/monorepo/PACK.md`, mirrored `packs/monorepo/{claude,codex}/mono-{detect,run,ship,guard}/SKILL.md`, `packs/monorepo/scripts/mono-detect.sh`, `packs/monorepo/scripts/lane-spec-validate.sh`, `packs/monorepo/scripts/monorepo-validate.sh`, and `tests/fixtures/monorepo/` exist.
-  - Evidence: `tasks/roadmap.md` marks Phase 26 complete, and `tasks/phases/phase-26.md` records the focused validation results.
+  - Evidence: `packs/creator-media/claude/creator-platform-capability-matrix/SKILL.md`, `packs/creator-media/codex/creator-platform-capability-matrix/SKILL.md`, `packs/creator-media/claude/creator-evidence-schema/SKILL.md`, and `packs/creator-media/codex/creator-evidence-schema/SKILL.md` exist.
+  - Evidence: `packs/creator-media/PACK.md`, `README.md`, and `docs/skills-reference.md` route non-YouTube creator-media work through the foundation skills.
 
 - [x] `specs/poketo-headless-auth-migration.md` remains the active architectural reference for kanban migration.
   - Spec claim: active kanban skills should run on the headless path, while `kanban.mjs` remains fallback/admin tooling.
@@ -81,22 +76,27 @@ No Error-class spec/code contradictions were found. No Warning-class active spec
 
 ### Warnings
 
-- None.
+- [ ] `specs/monorepo-execution-controller.md` describes an unimplemented monorepo pack.
+  - Spec quote: "A new `monorepo` pack for the agentic-skills library" and "V1 ships four skills: `mono-detect`, `mono-run`, `mono-ship`, and `mono-guard`."
+  - Code evidence: `packs/monorepo/` does not exist; no `mono-detect`, `mono-run`, or `mono-ship` skill exists under `global/` or `packs/`; no `scripts/mono-detect.sh`, `scripts/lane-spec-validate.sh`, or `scripts/monorepo-validate.sh` exists.
+  - Related code evidence: only global advisory skills exist today: `global/codex/mono-plan/SKILL.md`, `global/codex/mono-guard/SKILL.md`, `global/claude/mono-plan/SKILL.md`, and `global/claude/mono-guard/SKILL.md`.
+  - Fix applied: queued concrete implementation work in `tasks/todo.md` under `## Spec Drift Follow-up`.
 
 ### Resolved
 
 - [x] Refreshed `specs/drift-report.md` with the current audit scope and evidence.
-- [x] Preserved the previous drift report at `docs/history/archive/2026-05-04/215534/specs/drift-report.md` before replacement.
+- [x] Preserved the previous drift report at `docs/history/archive/2026-05-04/110835/specs/drift-report.md` before replacement.
 - [x] Confirmed no Error-class active spec/code contradictions require user arbitration.
-- [x] Updated current evidence paths for project-fleet, creator-foundation, and monorepo pack implementation.
+- [x] Queued the unimplemented monorepo execution controller spec as concrete task work instead of rewriting the spec.
 
 ### Deferred
 
-- [ ] No deferred drift findings remain in this audit scope.
+- [ ] Implement the monorepo execution controller pack or explicitly revise the spec scope if the intended implementation should stay with global `mono-plan` / `mono-guard` only.
 
 ### Remaining Findings
 
-- No Error, Warning, or Info findings remain in this audit scope.
+- No Error findings remain in this audit scope.
+- One Warning remains tracked in `tasks/todo.md`: implement or rescope the monorepo execution controller spec.
 
 ## 2026-05-01 - `$spec-drift fix all`
 
