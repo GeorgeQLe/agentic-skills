@@ -1599,3 +1599,9 @@ Resolved all 10 findings from `/expert-review`:
 - Tightened `packs/creator-foundation/PACK.md` with the exact `creator-platform-capability-matrix -> creator-evidence-schema -> creator-presence-dossier` LinkedIn route.
 - Tightened `packs/creator-media/PACK.md` so compatibility docs carry the same owner-provided, admin-provided, or already-authorized analytics boundary as README and the skills reference.
 - Verified with the focused layer1 LinkedIn contract test, targeted `rg` scans, full `pnpm --dir tests test`, skill dependency/version/routing audits, and `git diff --check`.
+
+## 2026-05-04 — Phase 14 Step 14.5: final LinkedIn lane validation and phase close
+
+- Ran the final focused Phase 14 validation gate for LinkedIn baseline/evidence handling, owner exports, manual snapshots, public unauthenticated captures, user-provided files, privacy/redaction language, schema/dossier routing, and forbidden scraping/API/private collection patterns.
+- Confirmed `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-next-step-routing.sh --missing`, `pnpm --dir tests test`, and `git diff --check` all pass.
+- Marked Phase 14 acceptance criteria complete in `tasks/roadmap.md`, archived the completed phase to `tasks/phases/phase-14.md`, and replaced `tasks/todo.md` with a no-active-phase handoff.

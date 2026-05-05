@@ -2,13 +2,13 @@
 
 > Generated from: tasks/roadmap.md (existing), specs/board-flag-kanban-search.md, tasks/ideas.md, tasks/history.md
 > Date: 2026-03-27 (last updated 2026-05-04)
-> Total Phases: 26 (25 complete, 1 planned future)
+> Total Phases: 26 (26 complete, 0 planned future)
 
 ## Summary
 
 Phases 1-11 complete: kanban skill suite, board intelligence, templates, archive automation, expert review fixes, test hardening (83 tests), kanban DX, skill infrastructure, the shared Poketo headless API migration for both Claude and Codex, and the three-mode operating model (`claude-only` / `codex-only` / `hybrid`) with shared approval-packet contract and next-step routing.
 
-Phases 12-13 and 15-26 complete, with Phase 14 still available as planned future creator-media work. Phase 16 hardened mutation-capable skill contracts with final next-step routing language and an audit that catches future omissions. Phase 17 added mixed-monorepo pack routing so one repository can carry devtool, business-app, game, or other domain scopes without forcing one global designation. Phase 18 hardened pack lock recovery after a `pitwall-monorepo` refresh timeout. Phase 19 added a YouTube description and metadata optimization lane to the creator-media pack. Phase 20 added external YouTube video research lanes for comprehension, format/Remotion-style analysis, and competitive learning. Phase 21 hardened default mutation/shipping quality gates from the session workflow audit. Phase 22 added feature-interview as the triage step between brainstorm ideas and full specifications. Phase 23 added targeted-skill-builder for focused skill creation or updates from concrete workflow gaps without defaulting to broad session-history analysis. Phase 24 added install-agentic-skills for refreshing global skill links and routing pack access through the existing project-local workflow. Phase 25 added codebase-status for read-only repo status reports that combine codebase, task docs, git state, and related local conversation history. Phase 26 added the monorepo pack V1 with detection, guard, run, ship, lane-spec validation, fixtures, and script-backed validation.
+Phases 12-26 complete. Phase 14 added the LinkedIn evidence lane to the creator foundation workflow with owner exports, manual snapshots, public unauthenticated captures, redaction gates, shared evidence-schema/dossier routing, and deterministic layer1 contract coverage. Phase 16 hardened mutation-capable skill contracts with final next-step routing language and an audit that catches future omissions. Phase 17 added mixed-monorepo pack routing so one repository can carry devtool, business-app, game, or other domain scopes without forcing one global designation. Phase 18 hardened pack lock recovery after a `pitwall-monorepo` refresh timeout. Phase 19 added a YouTube description and metadata optimization lane to the creator-media pack. Phase 20 added external YouTube video research lanes for comprehension, format/Remotion-style analysis, and competitive learning. Phase 21 hardened default mutation/shipping quality gates from the session workflow audit. Phase 22 added feature-interview as the triage step between brainstorm ideas and full specifications. Phase 23 added targeted-skill-builder for focused skill creation or updates from concrete workflow gaps without defaulting to broad session-history analysis. Phase 24 added install-agentic-skills for refreshing global skill links and routing pack access through the existing project-local workflow. Phase 25 added codebase-status for read-only repo status reports that combine codebase, task docs, git state, and related local conversation history. Phase 26 added the monorepo pack V1 with detection, guard, run, ship, lane-spec validation, fixtures, and script-backed validation.
 
 ## Current Analysis: Mobile Ideas Return Assessment
 
@@ -53,7 +53,7 @@ Phases 12-13 and 15-26 complete, with Phase 14 still available as planned future
 | 11 | Three-Mode Operating Model ✓ | tasks/todo.md | `claude-only`/`codex-only`/`hybrid` modes, approval packet, `/delegate`, next-step routing | XL |
 | 12 | Creator Platform Evidence Foundation ✓ | specs/creator-platform-evidence-schema.md | Capability matrix + shared evidence schema skills | M |
 | 13 | Creator Presence Dossier ✓ | specs/creator-platform-evidence-schema.md | Repo-backed creator career/presence dossier skill | M |
-| 14 | LinkedIn Evidence Lane | specs/creator-platform-evidence-schema.md | LinkedIn export/manual evidence templates and guidance | M |
+| 14 | LinkedIn Evidence Lane ✓ | specs/creator-platform-evidence-schema.md | LinkedIn export/manual evidence templates and guidance | M |
 | 15 | YouTube Video Audit ✓ | user request, YouTube API/docs research | Single-video public-first audit with optional owner analytics | M |
 | 16 | Mutation Contract Routing Audit ✓ | user request, tasks/lessons.md | Mutation-capable skills emit next-step routes; audit catches gaps | S |
 | 17 | Mixed Monorepo Pack Routing ✓ | user request | `.agents/project.json.project_scopes` schema + pack writer preservation | S |
@@ -851,7 +851,7 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 
 ---
 
-## Phase 14: LinkedIn Evidence Lane
+## Phase 14: LinkedIn Evidence Lane ✓
 
 **Goal:** Add LinkedIn-first free/manual evidence support that uses owner exports, manual snapshots, and public page captures without paid APIs, logged-in scraping, or access-control bypassing.
 
@@ -866,12 +866,14 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Document analytics as unavailable unless owner-provided; official company/page APIs are a later authorized lane, not a baseline dependency.
 
 **Acceptance Criteria:**
-- [ ] LinkedIn evidence guidance is present in mirrored creator-media skills or a dedicated mirrored LinkedIn skill, depending on Phase 12/13 implementation shape.
-- [ ] The LinkedIn lane uses owner exports and manual/public snapshots as the baseline.
-- [ ] The lane explicitly forbids logged-in scraping, paid API dependency, bot-protection bypass, and private-data collection.
-- [ ] Redaction and privacy handling are documented before analysis.
-- [ ] LinkedIn records normalize into the shared evidence schema and dossier.
-- [ ] Validation passes with targeted checks for LinkedIn baseline, privacy constraints, and no paid/API-first language.
+- [x] LinkedIn evidence guidance is present in mirrored creator-media skills or a dedicated mirrored LinkedIn skill, depending on Phase 12/13 implementation shape.
+- [x] The LinkedIn lane uses owner exports and manual/public snapshots as the baseline.
+- [x] The lane explicitly forbids logged-in scraping, paid API dependency, bot-protection bypass, and private-data collection.
+- [x] Redaction and privacy handling are documented before analysis.
+- [x] LinkedIn records normalize into the shared evidence schema and dossier.
+- [x] Validation passes with targeted checks for LinkedIn baseline, privacy constraints, and no paid/API-first language.
+
+**Completed:** 2026-05-04. Hardened mirrored creator foundation skills for LinkedIn owner exports, manual snapshots, public unauthenticated captures, user-provided files, privacy redaction, unavailable analytics/API fields, forbidden scraping/API/private collection patterns, and dossier evidence classification. Updated creator-foundation, creator-media compatibility, README, and skills reference docs. Added deterministic layer1 coverage in `tests/layer1/creator-media-linkedin.test.ts`. Final validation passed with targeted scans, full layer1 tests, skill dependency/version/routing audits, and `git diff --check`.
 
 **Parallelization:** serial
 **Coordination Notes:** LinkedIn access constraints are the highest-risk part of the expansion. Implement after the shared foundation and dossier exist so LinkedIn remains one evidence lane, not a special-case schema.
@@ -926,19 +928,19 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 
 ### Milestone: Phase 14 LinkedIn Evidence Lane
 **Acceptance Criteria:**
-- [ ] LinkedIn evidence guidance is present in mirrored creator-media skills or a dedicated mirrored LinkedIn skill, depending on Phase 12/13 implementation shape.
-- [ ] The LinkedIn lane uses owner exports and manual/public snapshots as the baseline.
-- [ ] The lane explicitly forbids logged-in scraping, paid API dependency, bot-protection bypass, and private-data collection.
-- [ ] Redaction and privacy handling are documented before analysis.
-- [ ] LinkedIn records normalize into the shared evidence schema and dossier.
-- [ ] Validation passes with targeted checks for LinkedIn baseline, privacy constraints, and no paid/API-first language.
-- [ ] All phase tests pass.
-- [ ] No regressions in previous phase tests.
+- [x] LinkedIn evidence guidance is present in mirrored creator-media skills or a dedicated mirrored LinkedIn skill, depending on Phase 12/13 implementation shape.
+- [x] The LinkedIn lane uses owner exports and manual/public snapshots as the baseline.
+- [x] The lane explicitly forbids logged-in scraping, paid API dependency, bot-protection bypass, and private-data collection.
+- [x] Redaction and privacy handling are documented before analysis.
+- [x] LinkedIn records normalize into the shared evidence schema and dossier.
+- [x] Validation passes with targeted checks for LinkedIn baseline, privacy constraints, and no paid/API-first language.
+- [x] All phase tests pass.
+- [x] No regressions in previous phase tests.
 
 **On Completion:**
-- Deviations from plan: [none, or describe]
-- Tech debt / follow-ups: [none, or list]
-- Ready for next phase: yes/no
+- Deviations from plan: Step 14.4 validation found two documentation wording gaps, which were fixed before the final validation gate.
+- Tech debt / follow-ups: none.
+- Ready for next phase: no; Phases 15-26 are already complete, so future work should come from discovery or a new roadmap phase.
 
 ## Phase 15: YouTube Video Audit ✓
 
