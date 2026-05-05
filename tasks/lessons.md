@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-05-05 — Keep Claude and Codex agent config blocks separate
+
+- A config conflict was easy to underweight because Codex reads `AGENTS.md`, not `CLAUDE.md`, but the provisioning workflow had been copying Claude-oriented subagent guidance into both files.
+- When auditing or generating agent config, evaluate each file according to the agent that consumes it instead of assuming mirrored instructions are harmless.
+- Keep Codex `AGENTS.md` subagent guidance constrained by active Codex tool permissions; Claude-specific subagent defaults belong only in `CLAUDE.md`.
+
 ## 2026-05-05 — Next-step skill routing must validate pack installation
 
 - A next-step routing answer initially cited the universal contract but did not check for existing skill contracts that still recommend pack-local skills directly.

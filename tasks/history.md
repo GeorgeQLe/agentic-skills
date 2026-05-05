@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-05-05 — Agentic config Claude/Codex split
+
+- Updated root `AGENTS.md` to keep Codex subagent guidance constrained by active Codex tool permissions while leaving Claude-specific subagent defaults in `CLAUDE.md`.
+- Split mirrored provisioning contracts so `provision-agentic-config` writes a Claude block to `CLAUDE.md` and an AGENTS block to `AGENTS.md`.
+- Tightened bootstrap verification language to check the corresponding workflow block in each target file.
+- Recorded the config-generation lesson so future audits do not assume mirrored agent config is harmless.
+
 ## 2026-05-04 — Phase 14 Step 14.3: LinkedIn lane docs
 
 - Documented the LinkedIn-first lane in `packs/creator-foundation/PACK.md`, `packs/creator-media/PACK.md`, `README.md`, and `docs/skills-reference.md`.
