@@ -32,6 +32,8 @@ Project designation is stored in `.agents/project.json`.
 
 `refresh` recreates project-local symlinks from `.agents/project.json`; it does not reload an active Claude Code or Codex process. Start a fresh CLI session after pack changes if the changed skills are not visible.
 
+For workflow ordering, lead-in recommendations, and overlay dependencies, see [`docs/pack-workflow-matrix.md`](pack-workflow-matrix.md).
+
 ## Next-Step Validity
 
 Recommended next steps are governed by `docs/skill-next-step-contracts.md`. A skill may recommend another skill only when the target skill exists in the active platform/pack context and the current end state satisfies that target's prerequisites. Multi-state skills must branch by end state, and a terminal "no useful follow-up" state should say `No follow-up skill recommended` rather than invent work.
@@ -281,6 +283,32 @@ Skills:
 
 ```text
 clone-spec-store, project-fleet, spin-off
+```
+
+Default flow:
+
+```text
+clone-spec-store -> project-fleet -> spin-off
+```
+
+## Alignment Loop Pack
+
+Install when a project needs lightweight operator-agent calibration before the full spec-interview pipeline:
+
+```bash
+scripts/pack.sh install alignment-loop
+```
+
+Skills:
+
+```text
+taste-calibration, destination-doc, vertical-slice-splitter
+```
+
+Default flow:
+
+```text
+taste-calibration -> destination-doc -> vertical-slice-splitter -> implementation
 ```
 
 ## Remotion Pack

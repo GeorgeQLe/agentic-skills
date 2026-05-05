@@ -174,7 +174,7 @@ Display directly to the user (no files written in audit mode):
 
 ### Errors (X)
 - **global/claude/foo/SKILL.md** — missing `version` field in frontmatter
-- **packs/business-app/claude/bar/SKILL.md** — directory name `bar` doesn't match frontmatter name `baz`
+- **packs/business-discovery/claude/bar/SKILL.md** — directory name `bar` doesn't match frontmatter name `baz`
 
 ### Warnings (X)
 - **packs/example-pack/codex/example-skill/** — missing Codex mirror (exists in Claude only)

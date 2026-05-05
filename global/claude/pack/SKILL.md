@@ -60,10 +60,13 @@ Use this skill when the user wants to inspect, recommend, install, remove, or re
 - Use `creator-foundation`, `youtube-ops`, and `remotion` separately for creator-media work; `creator-media` is a compatibility alias for foundation plus YouTube operations.
 - Use `project-fleet` for control repositories that manage downstream repos, spec-store portfolios, or spin-offs.
 - Use `code-quality` as an additive pack for behavior-preserving refactors, type hygiene, import honesty, dependency-boundary cleanup, and module organization.
+- Use `alignment-loop` for lightweight operator-agent calibration before committing to a full spec-interview pipeline.
 - Use `game` for video games, prototypes, playable entertainment, game engines, store pages, playtest loops, and game assets.
 - Use `devtool` for SDKs, CLIs, APIs, libraries, infrastructure products, developer platforms, and documentation-first developer workflows.
 - Use `business-app-kanban`, `game-kanban`, or `devtool-kanban` only when the project intentionally uses PoketoWork boards.
 - Use `poketowork-kanban` only when the user wants the generic board-management utilities independent of a domain pack.
+- Treat `monorepo`, `code-quality`, and `*-kanban` packs as overlays. Pair them with a domain pack unless the user explicitly wants only the overlay behavior.
+- For workflow ordering, lead-in recommendations, and overlay dependencies, read `docs/pack-workflow-matrix.md`.
 
 ## Mixed Monorepos
 

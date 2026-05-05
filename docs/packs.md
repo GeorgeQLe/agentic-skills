@@ -67,6 +67,7 @@ scripts/pack.sh install code-quality
 scripts/pack.sh install monorepo
 scripts/pack.sh install remotion
 scripts/pack.sh install project-fleet
+scripts/pack.sh install alignment-loop
 scripts/pack.sh install game-kanban
 scripts/pack.sh remove game
 scripts/pack.sh refresh
@@ -106,16 +107,19 @@ The skill source stays centralized in this repository. Projects opt into packs w
 - Use `monorepo` for pnpm workspace monorepos, with optional Turborepo, that need package-aware lane specs, guardrails, and scoped shipping.
 - Use `remotion` for Remotion-oriented format research, scene-by-scene video scripting, and build/scaffold planning.
 - Use `project-fleet` for control repos that manage many downstream repos, clone/spec-store portfolios, or spin-offs.
+- Use `alignment-loop` for lightweight operator-agent calibration before committing to a full spec-interview pipeline.
 - Use `business-app-kanban`, `game-kanban`, or `devtool-kanban` only when the project intentionally uses PoketoWork boards.
 
 Kanban packs are never installed automatically by the base domain packs. Install the base domain pack and the matching kanban variant as separate, explicit choices:
 
 ```bash
-scripts/pack.sh install business-app
+scripts/pack.sh install business-discovery
 scripts/pack.sh install business-app-kanban
 ```
 
 `business-app` is a compatibility alias that expands to `business-discovery`, `business-growth`, and `business-ops`. `creator-media` is a compatibility alias that expands to `creator-foundation` and `youtube-ops`.
+
+For the full workflow/dependency matrix, see [`docs/pack-workflow-matrix.md`](pack-workflow-matrix.md).
 
 The generic `poketowork-kanban` pack contains direct board-management utilities, including `poketo-kanban` and `sync-roadmap-kanban`.
 
@@ -186,6 +190,26 @@ Install it alongside `creator-foundation` and, when YouTube evidence is needed, 
 
 ```bash
 scripts/pack.sh install creator-foundation youtube-ops remotion
+```
+
+## Alignment Loop Pack
+
+The `alignment-loop` pack is a lightweight planning on-ramp for projects that need shared taste and intent before a full specification cycle.
+
+```bash
+scripts/pack.sh install alignment-loop
+```
+
+Skills:
+
+```text
+taste-calibration, destination-doc, vertical-slice-splitter
+```
+
+Default flow:
+
+```text
+taste-calibration -> destination-doc -> vertical-slice-splitter -> implementation
 ```
 
 ## Compatibility
