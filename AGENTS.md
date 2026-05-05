@@ -9,10 +9,10 @@
 - Do not assume a Claude-style clear-context-on-accept flow or related JSON setting exists
 
 ### 2. Subagent Strategy
-- Use subagents liberally to keep main context window clean
-- Offload research, exploration, and parallel analysis to subagents
-- For complex problems, throw more compute at it via subagents
-- One task per subagent for focused execution
+- Use subagents only when the active Codex tool instructions allow them.
+- When subagents are available and permitted, delegate independent research, exploration, or execution lanes with non-overlapping scopes.
+- One task per subagent for focused execution.
+- Do not override Codex's current subagent permission, tool availability, or parallel-work rules.
 
 ### 3. Self-Improvement Loop
 - After ANY correction from the user: update `tasks/lessons.md` with the pattern

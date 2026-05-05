@@ -39,7 +39,7 @@ Initialize a repository with a useful `README.md` and the standard agent workflo
 
 5. **Verify the result:**
    - Check that `README.md`, `CLAUDE.md`, and `AGENTS.md` exist.
-   - Confirm the workflow orchestration block appears exactly once in both `CLAUDE.md` and `AGENTS.md`.
+   - Confirm the corresponding workflow orchestration block appears exactly once in each of `CLAUDE.md` and `AGENTS.md`.
    - Report whether the monorepo safety block was included or skipped by `$provision-agentic-config`.
 
 ## Output Format
@@ -47,8 +47,8 @@ Initialize a repository with a useful `README.md` and the standard agent workflo
 ```markdown
 Bootstrapped repository
 - README.md: [created | updated | preserved], source: [arguments | prompts | existing content]
-- CLAUDE.md: [created | updated | unchanged], workflow block appears once
-- AGENTS.md: [created | updated | unchanged], workflow block appears once
+- CLAUDE.md: [created | updated | unchanged], corresponding workflow block appears once
+- AGENTS.md: [created | updated | unchanged], corresponding workflow block appears once
 - Monorepo safety block: [included (<heuristic>) | skipped]
 - Verification: [commands/checks run]
 ```
