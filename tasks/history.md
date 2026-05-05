@@ -1605,3 +1605,10 @@ Resolved all 10 findings from `/expert-review`:
 - Ran the final focused Phase 14 validation gate for LinkedIn baseline/evidence handling, owner exports, manual snapshots, public unauthenticated captures, user-provided files, privacy/redaction language, schema/dossier routing, and forbidden scraping/API/private collection patterns.
 - Confirmed `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-next-step-routing.sh --missing`, `pnpm --dir tests test`, and `git diff --check` all pass.
 - Marked Phase 14 acceptance criteria complete in `tasks/roadmap.md`, archived the completed phase to `tasks/phases/phase-14.md`, and replaced `tasks/todo.md` with a no-active-phase handoff.
+
+## 2026-05-05 — Cross-pack next-step routing guard
+
+- Audited recommendation-like cross-pack skill references and found 95 Claude/Codex skill contracts that could tell users to run a pack-local skill without first requiring the target pack to be enabled.
+- Added a standardized Pack Availability Guard to affected global, business, creator-foundation, youtube-ops, and remotion contracts.
+- Added `scripts/skill-pack-routing-audit.sh` and wired it into README and the next-step contract audit evidence.
+- Verified with `bash -n scripts/skill-pack-routing-audit.sh`, `./scripts/skill-pack-routing-audit.sh`, `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-next-step-routing.sh --missing`, `pnpm --dir tests test`, and `git diff --check`.

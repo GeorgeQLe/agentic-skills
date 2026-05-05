@@ -6,6 +6,10 @@ description: Reforge-style growth loop design — acquisition, retention, and mo
 argument-hint: "[optional: specific loop type e.g. \"viral\", \"content\", \"paid\"]"
 ---
 
+## Pack Availability Guard
+
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+
 # Growth Model — Reforge-Style Growth Loop Design
 
 Designs compounding growth loops using Reforge methodology. Identifies and designs acquisition loops (viral, content, paid, sales), retention loops, and monetization loops that compound over time. Growth loops replace the traditional funnel model — each loop's output becomes its input, creating sustainable growth.

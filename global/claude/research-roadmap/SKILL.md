@@ -5,6 +5,10 @@ type: planning
 version: 2.0.0
 ---
 
+## Pack Availability Guard
+
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+
 # Research Roadmap - Documentation Queue Manager
 
 Use this skill to make the project documentation contract complete before build work continues. It scans research, specs, and task docs, then updates `tasks/todo.md` with immediately actionable documentation work and uses `tasks/record-todo.md` or `tasks/recurring-todo.md` for non-blocking future documentation records.

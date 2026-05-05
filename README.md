@@ -132,6 +132,7 @@ agentic-skills/
 ├── scripts/
 │   ├── pack.sh
 │   ├── skill-deps.sh
+│   ├── skill-pack-routing-audit.sh
 │   └── skill-versions.sh
 ├── install.sh
 └── docs/
@@ -344,8 +345,9 @@ Creator-media and YouTube work is similarly split between `creator-foundation`, 
 
 ```bash
 ./scripts/skill-deps.sh --broken
+./scripts/skill-pack-routing-audit.sh
 ./scripts/skill-versions.sh --missing
 cd packs/poketowork-kanban/claude/poketo-kanban/scripts && npm test
 ```
 
-`skill-deps.sh` and `skill-versions.sh` scan `global/` and `packs/`.
+`skill-deps.sh`, `skill-pack-routing-audit.sh`, and `skill-versions.sh` scan `global/` and `packs/`.

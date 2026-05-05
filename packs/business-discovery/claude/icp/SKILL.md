@@ -6,6 +6,10 @@ version: 3.5.0
 argument-hint: <spec file path, concept/idea, or empty to use concept brief>
 ---
 
+## Pack Availability Guard
+
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+
 # ICP — Research-Driven Customer Discovery
 
 Automated research that identifies **multiple ICP candidates**, maps their pain points and value props, scores them, and selects a primary ICP. Replaces interview-driven approaches with web search + codebase analysis. Input is a spec file path, concept/idea as `$ARGUMENTS`, or `research/concept-brief.md` / `research/{app}/concept-brief.md` when present.

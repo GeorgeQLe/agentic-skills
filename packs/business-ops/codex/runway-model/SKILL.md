@@ -6,6 +6,10 @@ version: 1.0.0
 argument-hint: "[file path to financials, pasted data, or empty to be prompted]"
 ---
 
+## Pack Availability Guard
+
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+
 # Runway Model — Financial Runway & Unit Economics
 
 Invoke as `$runway-model`.

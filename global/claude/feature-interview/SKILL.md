@@ -6,6 +6,10 @@ version: 1.0.0
 argument-hint: "[feature idea or tasks/ideas.md entry]"
 ---
 
+## Pack Availability Guard
+
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+
 # Feature Interview
 
 Use this skill when the user has a feature idea, brainstorm suggestion, research gap, bug-shaped improvement, or implementation direction that needs alignment before deciding whether to write a new spec, update an existing spec, or route directly to another planning skill.

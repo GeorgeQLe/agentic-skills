@@ -6,6 +6,10 @@ version: 1.0.0
 argument-hint: "[optional: focus area e.g. \"category\", \"vs competitor X\"]"
 ---
 
+## Pack Availability Guard
+
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+
 # Positioning — Strategic Product Positioning
 
 Develops rigorous product positioning using the "Obviously Awesome" methodology (April Dunford). Determines competitive alternatives, unique attributes, customer value, target segment, and market category. Positioning is upstream of messaging — it determines *how you frame the product category itself*.
