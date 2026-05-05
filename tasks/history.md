@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-05-04 — Phase 14 Step 14.3: LinkedIn lane docs
+
+- Documented the LinkedIn-first lane in `packs/creator-foundation/PACK.md`, `packs/creator-media/PACK.md`, `README.md`, and `docs/skills-reference.md`.
+- Routed LinkedIn evidence through `creator-platform-capability-matrix -> creator-evidence-schema -> creator-presence-dossier` rather than a standalone scraper.
+- Stated the baseline as owner exports, manual snapshots, public unauthenticated captures, and user-provided files.
+- Kept paid APIs, logged-in scraping, bot-protection bypass, private-data collection, private relationship graph extraction, paywall access, and access-control circumvention out of scope.
+- Verified with targeted docs scans, skill dependency/version/routing audits, layer1 tests, and `git diff --check`.
+
 ## 2026-05-04 — Phase 14 Step 14.2: LinkedIn dossier evidence handling
 
 - Hardened mirrored `creator-presence-dossier` contracts so LinkedIn evidence must come from owner-provided exports, user-provided snapshots, public unauthenticated captures, or authorized owner/admin material.

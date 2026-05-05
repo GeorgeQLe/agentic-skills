@@ -259,6 +259,14 @@ creator-presence-dossier, creator-positioning, content-programming,
 series-spec, product-led-media-map, creator-metrics-review
 ```
 
+LinkedIn-first evidence work uses the creator foundation path:
+
+```text
+creator-platform-capability-matrix -> creator-evidence-schema -> creator-presence-dossier
+```
+
+Use owner exports, manual snapshots, public unauthenticated captures, and user-provided files as the baseline. Paid APIs, logged-in scraping, bot-protection bypass, private-data collection, private relationship graph extraction, paywall access, and access-control circumvention are out of scope; analytics are unavailable unless owner-provided, admin-provided, or already authorized.
+
 YouTube ops:
 
 ```text
