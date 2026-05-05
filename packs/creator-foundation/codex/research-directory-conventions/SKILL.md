@@ -9,7 +9,7 @@ version: 1.0.0
 
 Invoke as `$research-directory-conventions`.
 
-Reference skill that defines the shared directory layout for all creator-media research. Other skills in the creator-media pack should follow these conventions when writing artifacts.
+Reference skill that defines the shared directory layout for all creator-media research. Skills in the `creator-foundation`, `youtube-ops`, and `remotion` packs should follow these conventions when writing artifacts.
 
 ## Directory Tree
 

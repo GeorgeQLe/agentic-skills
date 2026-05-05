@@ -220,6 +220,7 @@ This section tags every global skill and every pack with a **primary CLI role** 
 
 | Pack | Primary role | Notes |
 | --- | --- | --- |
+| `alignment-loop` | Claude-orchestration | Lightweight operator-agent calibration: grill, destination doc, vertical slice |
 | `business-discovery` | Claude-orchestration | ICP, customer/market research, value proposition, positioning, lean canvas, journeys |
 | `business-growth` | Claude-orchestration | Engagement loops, metrics, monetization, GTM, landing copy, experiments, growth, PMF |
 | `business-ops` | Both | Assumptions, cohorts, retros, risks, runway, stakeholder reporting, platform/research reconciliation |
@@ -227,12 +228,15 @@ This section tags every global skill and every pack with a **primary CLI role** 
 | `business-app-kanban` | Both | Business-app kanban `run`/`ship`/`ship-end` variants (execution) |
 | `code-quality` | Codex-execution | `extract-shared-types`, `quality-sweep` — behavior-preserving refactor mutation |
 | `creator-foundation` | Both | Creator evidence, dossier, positioning, programming, series, product-led media, metrics |
+| `creator-media` | Both | Compatibility alias for `creator-foundation` and `youtube-ops`; add `remotion` separately for production work |
 | `youtube-ops` | Both | YouTube audit, packaging, portfolio, benchmarking, search, cadence, external video research |
+| `remotion` | Both | Format research, scene-by-scene scripts, Remotion build specs and scaffolds |
 | `project-fleet` | Both | Spec-store, multi-repo fleet orchestration, and spin-off workflows |
 | `devtool` | Claude-orchestration | Adoption, docs audit, DX journey, positioning, workflow — framing skills |
 | `devtool-kanban` | Both | Inherits `devtool` (orchestration) + kanban `run`/`ship`/`ship-end` variants (execution) |
 | `game` | Claude-orchestration | Audience, core loop, fantasy, launch, playtest metrics — framing/research skills |
 | `game-kanban` | Both | Inherits `game` (orchestration) + kanban `run`/`ship`/`ship-end` variants (execution) |
+| `monorepo` | Both | Workspace-aware detection, lane specs, guardrails, and scoped shipping overlay |
 | `poketowork-kanban` | Both | Kanban orchestration skills + `run`/`ship`/`ship-end` execution variants; no base pack to inherit from |
 
 ### Codex `$run` routing

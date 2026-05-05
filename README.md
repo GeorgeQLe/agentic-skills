@@ -46,6 +46,7 @@ scripts/pack.sh install code-quality
 scripts/pack.sh install monorepo
 scripts/pack.sh install remotion
 scripts/pack.sh install project-fleet
+scripts/pack.sh install alignment-loop
 scripts/pack.sh install business-app-kanban
 scripts/pack.sh status
 scripts/pack.sh remove game
@@ -107,6 +108,8 @@ Pack commands also write `.agents/.pack.lock` owner metadata and automatically r
 `.agents/project.json` also accepts an optional `agent_mode` field (`"claude-only" | "codex-only" | "hybrid"`) that names the Phase 11 operating mode for the project. Set or clear it with `scripts/pack.sh set-mode <claude-only|codex-only|hybrid|unset>`; the value is preserved across `install`, `remove`, and `refresh`. `SKILLS_AGENT_MODE` overrides the file for the current shell, and `scripts/agent-mode.sh` resolves the effective mode (env > project.json > empty). See `docs/operating-modes.md`.
 
 If an assistant does not discover project-local skills, use the global `pack` or `research-roadmap` skill as the launcher. The pack files still stay project-local.
+
+For workflow ordering, lead-in recommendations, and overlay dependencies, see [`docs/pack-workflow-matrix.md`](docs/pack-workflow-matrix.md).
 
 ## Repository Structure
 
@@ -230,6 +233,20 @@ For control repositories managing many downstream repos, clone/spec-store portfo
 
 ```text
 clone-spec-store, project-fleet, spin-off
+```
+
+### Alignment Loop
+
+For lightweight operator-agent calibration before committing to a full spec-interview pipeline.
+
+```text
+grill-me, destination-doc, vertical-slice-splitter
+```
+
+Default flow:
+
+```text
+grill-me -> destination-doc -> vertical-slice-splitter -> implementation
 ```
 
 ### Remotion
