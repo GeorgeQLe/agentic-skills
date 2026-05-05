@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-05-05 — Next-step skill routing must validate pack installation
+
+- A next-step routing answer initially cited the universal contract but did not check for existing skill contracts that still recommend pack-local skills directly.
+- When auditing or writing next-step recommendations, validate the target skill against the active platform and `.agents/project.json.enabled_packs`, not only against repository-wide skill existence.
+- If a target skill lives in a pack that is not guaranteed active, the recommending skill must either check the pack is enabled before recommending it or recommend installing/enabling the pack first, e.g. `$pack install <pack>` / `/pack install <pack>`.
+- Cross-pack examples, routing tables, and "default recommendation" lines need the same fallback language because agents often copy them into final responses.
+
 ## 2026-05-04 — Remotion pack scope includes format, script, and build
 
 - A Remotion pack split was initially scoped only to `video-build`, but the user clarified that `youtube-format-research`, `video-script`, and `video-build` belong together.
