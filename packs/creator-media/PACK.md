@@ -17,7 +17,7 @@ LinkedIn-first evidence work is part of `creator-foundation`, not a standalone s
 creator-platform-capability-matrix -> creator-evidence-schema -> creator-presence-dossier
 ```
 
-Use owner exports, manual snapshots, public unauthenticated captures, and user-provided files as the baseline. Paid APIs, logged-in scraping, bot-protection bypass, private-data collection, private relationship graph extraction, paywall access, and access-control circumvention are out of scope.
+Use owner exports, manual snapshots, public unauthenticated captures, and user-provided files as the baseline. Paid APIs, logged-in scraping, bot-protection bypass, private-data collection, private relationship graph extraction, paywall access, and access-control circumvention are out of scope. Analytics are unavailable unless owner-provided, admin-provided, or already authorized by the user.
 
 For backwards compatibility, `scripts/pack.sh install creator-media` expands to `creator-foundation` and `youtube-ops`.
 

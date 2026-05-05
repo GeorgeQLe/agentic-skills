@@ -6,6 +6,8 @@ LinkedIn-first evidence work belongs in this foundation flow. It starts with `cr
 
 LinkedIn collection is not a scraper lane. Paid APIs, logged-in scraping, bot-protection bypass, private-data collection, private relationship graph extraction, paywall access, and access-control circumvention are out of scope. Analytics are unavailable unless owner-provided, admin-provided, or already authorized by the user.
 
+LinkedIn route: `creator-platform-capability-matrix -> creator-evidence-schema -> creator-presence-dossier`.
+
 Default flow:
 
 ```text
