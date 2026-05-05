@@ -31,6 +31,28 @@ Do not include private repo planning context, private messages, private contacts
 
 When evidence contains sensitive or mixed public/private material, ask the user to redact or exclude the private material before analysis. Do not infer private facts from public artifacts.
 
+## LinkedIn Evidence Handling
+
+LinkedIn evidence must come from user-provided or public-safe sources only:
+
+- Owner-provided LinkedIn exports.
+- Profile snapshots supplied by the user.
+- Public unauthenticated profile or company page captures.
+- User-provided post, share, article, newsletter, rich media, recommendation, skill, position, education, certification, or company page snapshots.
+- User-provided admin or analytics exports only when the user explicitly says they are authorized to share them.
+
+Do not collect LinkedIn evidence through logged-in scraping, bot-protection bypass, paywall access, access-control circumvention, paid API dependency, private-data collection, or private relationship graph extraction.
+
+Before synthesis, classify every LinkedIn source in the evidence register as one of:
+
+- `public`: public profile, public company page, public post/share/article, public recommendation, public rich media, or public career milestone.
+- `owner-provided`: owner export, profile snapshot, post/article snapshot, recommendation snapshot, skills export, positions export, education export, or authorized analytics/admin export.
+- `admin-provided`: company/page analytics or admin material supplied by an authorized owner/admin.
+- `internal notes`: private repo notes the user explicitly asks to preserve outside the public dossier.
+- `mixed/redaction needed`: any source containing private contacts, private messages, relationship data, sensitive account data, unrelated personal information, confidential employer/customer material, or a mix of public and private fields.
+
+For `mixed/redaction needed` LinkedIn evidence, stop before synthesis and ask the user for a redacted version or permission to exclude the private fields. If the user has already provided a redacted extract, cite only the redacted path and record the excluded fields as evidence gaps. Never summarize private contacts, private messages, relationship data, or unrelated personal information into the public dossier.
+
 ## Source Types
 
 Support these source families when evidence is present:
@@ -88,6 +110,7 @@ Use these sections in the dossier, keeping unsupported sections brief with expli
 6. `## Platform Map`
    - Platform, handle or URL, role of the platform, activity state, evidence coverage, and collection gaps.
    - Support LinkedIn, personal websites/blogs, GitHub, podcasts, talks, newsletters, and product docs when evidence is present.
+   - For LinkedIn, distinguish personal profile, company page, posts/shares, articles/newsletters, recommendations, skills, positions, education, rich media, and owner/admin-provided analytics when present.
 7. `## Core Themes`
    - Recurring subjects, categories, language patterns, and audience problems.
 8. `## Expertise Claims`
@@ -98,6 +121,7 @@ Use these sections in the dossier, keeping unsupported sections brief with expli
     - Repeated formats, hooks, series, talk structures, newsletter styles, repo/doc formats, and content patterns.
 11. `## Audience and Community Signals`
     - Public engagement signals, community roles, collaborator signals, comments, testimonials, recommendations, event participation, and owner-provided metrics.
+    - LinkedIn recommendations, reactions, comments, follower counts, impressions, or company/page analytics may appear only when they are public, owner-provided, admin-provided, or already redacted.
 12. `## Product and Company Connections`
     - Companies, products, docs, launches, customer proof, open-source projects, and founder/operator narratives tied to the creator.
 13. `## Gaps, Contradictions, and Stale Positioning`
@@ -120,6 +144,8 @@ Every material source must appear in the evidence register. Each row must includ
 - `Confidence level`: `high`, `medium`, or `low`.
 - `Claims supported`: the dossier claims this source supports.
 - `Evidence gaps`: missing dates, missing body text, unavailable metrics, stale captures, missing transcripts, unclear attribution, or private material that must be excluded.
+
+For LinkedIn rows, `Claims supported` should identify the specific evidence kind when relevant: profile export, profile snapshot, post/share, article/newsletter, rich media, recommendation, skill, position, education, certification, company page, public snapshot, owner-provided analytics, or admin-provided analytics.
 
 Use confidence levels consistently:
 

@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-05-04 — Phase 14 Step 14.2: LinkedIn dossier evidence handling
+
+- Hardened mirrored `creator-presence-dossier` contracts so LinkedIn evidence must come from owner-provided exports, user-provided snapshots, public unauthenticated captures, or authorized owner/admin material.
+- Required LinkedIn evidence-register classification as public, owner-provided, admin-provided, internal notes, or mixed/redaction needed.
+- Required private or mixed LinkedIn material to be redacted or excluded before synthesis and forbade summarizing private contacts, private messages, relationship data, sensitive account data, unrelated personal information, or confidential employer/customer material into the public dossier.
+- Verified with mirrored contract diff, targeted LinkedIn safety scans, skill dependency/version/routing audits, layer1 tests, and `git diff --check`.
+
 ## 2026-05-04 — Pack workflow matrix documentation
 
 - Added `docs/pack-workflow-matrix.md` as the current source for pack workflow ordering, lead-in recommendations, overlay dependencies, and compatibility aliases.

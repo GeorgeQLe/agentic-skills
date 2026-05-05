@@ -47,7 +47,7 @@
   - Treat LinkedIn personal analytics, company/page analytics, and API fields as unavailable unless owner-provided or already authorized.
   - Require redaction/exclusion guidance for private contacts, messages, relationship data, sensitive account data, and unrelated personal information before analysis.
   - Require high-risk LinkedIn surfaces to stop for user-provided evidence instead of attempting logged-in scraping, bot-protection bypass, paywall access, or access-control circumvention.
-- Step 14.2: Make the creator presence dossier explicitly consume LinkedIn evidence without leaking private material.
+- [x] Step 14.2: Make the creator presence dossier explicitly consume LinkedIn evidence without leaking private material.
   - Classification: automated
   - Files: modify `packs/creator-foundation/claude/creator-presence-dossier/SKILL.md`, modify `packs/creator-foundation/codex/creator-presence-dossier/SKILL.md`
   - Add LinkedIn evidence-register requirements for profile exports, profile snapshots, posts/shares, articles, rich media, recommendations, skills, positions, education, company pages, and manual/public snapshots when provided.
@@ -129,4 +129,20 @@
 - **Adversarial review:** changed-file review checked compatibility aliases, docs references, moved skill ownership, and the LinkedIn moved-path boundary; validation scans covered broken skill references and missing skill metadata.
 - **Residual risk:** Existing projects using `business-app` or `creator-media` should continue through aliases, but projects with hand-written references to old physical pack paths may need docs/config updates.
 - **Rollback note:** revert the shipping commit to restore the prior pack layout and global skill locations.
+- **Next command:** `$run`.
+
+### Step 14.2 Review - LinkedIn Dossier Evidence Handling
+
+**Result:** Hardened the mirrored creator presence dossier contracts so LinkedIn evidence is classified, redacted, and synthesized through the shared dossier without leaking private material.
+
+**Ship manifest:**
+- **User goal:** Execute the next `$run` unit from the active Phase 14 plan.
+- **Changed files:** `packs/creator-foundation/claude/creator-presence-dossier/SKILL.md`, `packs/creator-foundation/codex/creator-presence-dossier/SKILL.md`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** The mirrored dossier contracts now define allowed LinkedIn evidence sources, evidence-register boundary classifications, redaction gates for mixed/private LinkedIn material, LinkedIn-specific platform map/audience signal handling, and required evidence-kind labeling; task/history files record completion and validation evidence.
+- **User-goal mapping:** Step 14.2 requires the dossier to consume LinkedIn evidence without leaking private material; the contract edits require public, owner-provided, admin-provided, internal-notes, or mixed/redaction-needed classification and block synthesis of private contacts, private messages, relationship data, sensitive account data, unrelated personal information, and confidential employer/customer material.
+- **Tests run:** `diff -u packs/creator-foundation/claude/creator-presence-dossier/SKILL.md packs/creator-foundation/codex/creator-presence-dossier/SKILL.md` showed only expected slash-vs-dollar command syntax differences; targeted `rg` scan passed for `LinkedIn Evidence Handling`, owner exports, profile snapshots, public unauthenticated captures, posts/shares/articles/newsletters/rich media/recommendations/skills/positions/education/certifications, logged-in scraping, bot-protection bypass, paid API dependency, private-data collection, private relationship graph, `admin-provided`, `mixed/redaction needed`, private contacts, private messages, relationship data, confidential employer/customer material, redaction handling, and private-summary prohibition; `./scripts/skill-deps.sh --broken` passed with no broken references; `./scripts/skill-versions.sh --missing` passed with all 310 skills versioned; `./scripts/skill-next-step-routing.sh --missing` passed with all 225 mutation-capable skills covered; `pnpm --dir tests test` passed with 4 files and 1167 tests; `git diff --check` passed.
+- **Skipped tests:** no network, LinkedIn credentials, logged-in scraping flow, paid API call, or external account mutation was relevant or allowed for this contract-only step.
+- **Adversarial review:** changed-contract self-review checked that LinkedIn analytics/admin data requires user-provided authorization, mixed/private inputs stop for redaction or exclusion before synthesis, and the public dossier cannot summarize private relationship or message data.
+- **Residual risk:** Phase 14 still needs Step 14.3 docs registration, Step 14.4 deterministic validation coverage, and Step 14.5 final focused validation before all milestone criteria are complete.
+- **Rollback note:** revert the Step 14.2 shipping commit to remove the LinkedIn-specific evidence handling from the mirrored dossier contracts and task/history records.
 - **Next command:** `$run`.
