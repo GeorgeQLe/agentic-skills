@@ -53,7 +53,7 @@
   - Add LinkedIn evidence-register requirements for profile exports, profile snapshots, posts/shares, articles, rich media, recommendations, skills, positions, education, company pages, and manual/public snapshots when provided.
   - Require the dossier to classify LinkedIn evidence as public, owner-provided, admin-provided, internal notes, or mixed/redaction needed.
   - Route private or mixed LinkedIn material to redaction/exclusion before synthesis.
-- Step 14.3: Update creator-media pack and discovery docs for the LinkedIn lane.
+- [x] Step 14.3: Update creator-media pack and discovery docs for the LinkedIn lane.
   - Classification: automated
   - Files: modify `packs/creator-foundation/PACK.md`, modify `packs/creator-media/PACK.md`, modify `README.md`, modify `docs/skills-reference.md`
   - Document the LinkedIn-first lane as part of the existing matrix/schema/dossier workflow rather than a standalone scraper.
@@ -145,4 +145,20 @@
 - **Adversarial review:** changed-contract self-review checked that LinkedIn analytics/admin data requires user-provided authorization, mixed/private inputs stop for redaction or exclusion before synthesis, and the public dossier cannot summarize private relationship or message data.
 - **Residual risk:** Phase 14 still needs Step 14.3 docs registration, Step 14.4 deterministic validation coverage, and Step 14.5 final focused validation before all milestone criteria are complete.
 - **Rollback note:** revert the Step 14.2 shipping commit to remove the LinkedIn-specific evidence handling from the mirrored dossier contracts and task/history records.
+- **Next command:** `$run`.
+
+### Step 14.3 Review - LinkedIn Lane Docs
+
+**Result:** Documented the LinkedIn-first lane in creator-foundation, creator-media compatibility, README, and skills reference surfaces.
+
+**Ship manifest:**
+- **User goal:** Execute the next `$run` unit from the active Phase 14 plan.
+- **Changed files:** `packs/creator-foundation/PACK.md`, `packs/creator-media/PACK.md`, `README.md`, `docs/skills-reference.md`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** Creator foundation docs now state the matrix/schema/dossier LinkedIn lane and forbidden collection methods; creator-media compatibility docs route LinkedIn work to `creator-foundation`; README and skills reference expose the same public install/discovery guidance; task/history files record completion and validation evidence.
+- **User-goal mapping:** Step 14.3 requires documenting LinkedIn-first evidence as part of the existing matrix/schema/dossier workflow rather than a standalone scraper, with owner exports/manual snapshots/public unauthenticated captures/user-provided files as baseline and paid APIs/logged-in scraping/bot bypass/private collection out of scope.
+- **Tests run:** targeted `rg` scan passed across the four docs for `LinkedIn-first evidence`, `creator-platform-capability-matrix -> creator-evidence-schema -> creator-presence-dossier`, owner exports, manual snapshots, public unauthenticated captures, user-provided files, paid APIs, logged-in scraping, bot-protection bypass, private-data collection, private relationship graph, paywall access, access-control circumvention, and owner/admin-provided analytics language; `./scripts/skill-deps.sh --broken` passed with no broken references; `./scripts/skill-versions.sh --missing` passed with all 310 skills versioned; `./scripts/skill-next-step-routing.sh --missing` passed with all 225 mutation-capable skills covered; `pnpm --dir tests test` passed with 4 files and 1167 tests; `git diff --check` passed.
+- **Skipped tests:** no network, LinkedIn credentials, logged-in browser flow, paid API call, or external account mutation was relevant or allowed for this documentation-only step.
+- **Adversarial review:** changed-doc self-review checked that the docs do not introduce a standalone LinkedIn scraper lane, do not imply paid/API-first collection, and keep analytics unavailable unless owner-provided, admin-provided, or already authorized.
+- **Residual risk:** Phase 14 still needs Step 14.4 deterministic validation coverage and Step 14.5 final focused validation before all milestone criteria are complete.
+- **Rollback note:** revert the Step 14.3 shipping commit to remove the LinkedIn lane guidance from pack/public docs and task/history records.
 - **Next command:** `$run`.

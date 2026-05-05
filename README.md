@@ -227,6 +227,14 @@ youtube-cadence-diagnosis
 
 `scripts/pack.sh install creator-media` remains a compatibility alias that installs `creator-foundation` and `youtube-ops`. Use `remotion` for `youtube-format-research`, `video-script`, and `video-build`.
 
+LinkedIn-first evidence work uses the `creator-foundation` matrix/schema/dossier path:
+
+```text
+creator-platform-capability-matrix -> creator-evidence-schema -> creator-presence-dossier
+```
+
+The baseline is owner exports, manual snapshots, public unauthenticated captures, and user-provided files. Paid APIs, logged-in scraping, bot-protection bypass, private-data collection, private relationship graph extraction, paywall access, and access-control circumvention are out of scope; analytics are unavailable unless owner-provided, admin-provided, or already authorized.
+
 ### Project Fleet
 
 For control repositories managing many downstream repos, clone/spec-store portfolios, or bounded spin-offs.
