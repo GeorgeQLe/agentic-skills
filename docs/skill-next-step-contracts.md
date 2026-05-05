@@ -76,6 +76,7 @@ Command-reference validation:
 
 ```bash
 scripts/skill-deps.sh --broken
+scripts/skill-pack-routing-audit.sh
 ```
 
 Expected result:

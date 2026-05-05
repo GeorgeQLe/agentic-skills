@@ -6,6 +6,10 @@ version: 1.0.0
 argument-hint: "<channel slug or handle> [--peer <channel>...] [--count N]"
 ---
 
+## Pack Availability Guard
+
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+
 # YouTube Title Thumbnail Audit
 
 Invoke as `/youtube-title-thumbnail-audit`.

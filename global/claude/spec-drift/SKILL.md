@@ -6,6 +6,10 @@ version: 1.0.0
 argument-hint: "[audit|fix] [spec-file|all]"
 ---
 
+## Pack Availability Guard
+
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+
 # Spec Drift — Spec-to-Code Conformance Audit
 
 Checks that specs and codebase tell the same story. Extracts verifiable claims from spec documents, checks each against the actual implementation, and flags divergence. Think of it as a linter for spec-to-code fidelity — complementary to `/reconcile-research` (doc-to-doc) and `/expert-review` (broad code review).

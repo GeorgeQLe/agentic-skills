@@ -6,6 +6,10 @@ description: Sean Ellis PMF survey design + qualitative signal analysis for post
 argument-hint: "[optional: specific signal or segment to focus on]"
 ---
 
+## Pack Availability Guard
+
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+
 # PMF Assessment — Product-Market Fit Measurement
 
 Designs a Sean Ellis PMF survey and qualitative signal analysis framework for measuring product-market fit post-launch. Combines the quantitative "very disappointed" threshold (40%) with qualitative signal analysis from customer feedback, usage patterns, and market indicators. This is a post-launch measurement skill — it should run after the product has real users.

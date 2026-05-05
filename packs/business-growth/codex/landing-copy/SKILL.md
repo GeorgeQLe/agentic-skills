@@ -6,6 +6,10 @@ version: 1.0.0
 argument-hint: "[generate|audit] [optional: focus section e.g. \"hero\", \"pricing\", \"FAQ\"]"
 ---
 
+## Pack Availability Guard
+
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+
 # Landing Copy — Research-Grounded Landing Page Copy
 
 Dual-mode skill that either **generates** complete landing page copy from upstream research artifacts or **audits** existing copy against codebase reality, research drift, and conversion best practices. Every claim in the generated copy links back to a research source so nothing is hand-waved.

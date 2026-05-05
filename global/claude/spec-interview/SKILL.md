@@ -6,6 +6,10 @@ version: 1.0.0
 argument-hint: "[optional-topic-override] [--ideas]"
 ---
 
+## Pack Availability Guard
+
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+
 # Spec Interview
 
 Interview the user to validate, refine, and complete an implementation specification from a concept brief, research-backed opportunity, draft spec, or feature description. For half-formed product ideas, run `/concept-exploration` before this skill.

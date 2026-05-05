@@ -6,6 +6,10 @@ version: 1.0.0
 argument-hint: "<script-path-or-slug> [--style minimal|motion-heavy|kinetic-text] [--fps 30|60] [--resolution 1080p|4k]"
 ---
 
+## Pack Availability Guard
+
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+
 # Video Build
 
 Invoke as `/video-build`.

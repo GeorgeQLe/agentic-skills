@@ -6,6 +6,10 @@ version: 1.2.0
 argument-hint: "[optional: specific use case or journey stage to focus on]"
 ---
 
+## Pack Availability Guard
+
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+
 # Journey Map — User & Customer Journey Mapping
 
 Interview the user to map how people will flow through the product (user journey) and through the business relationship (customer journey). Requires an ICP (`research/icp.md`); solution specs are useful supporting context when present, but this skill should normally run before `/spec-interview` so the spec is grounded in discovery, evaluation, onboarding, aha, conversion, retention, and advocacy.
