@@ -2,13 +2,13 @@
 
 > Generated from: tasks/roadmap.md (existing), specs/board-flag-kanban-search.md, tasks/ideas.md, tasks/history.md
 > Date: 2026-03-27 (last updated 2026-05-05)
-> Total Phases: 28 (28 complete, 0 active)
+> Total Phases: 29 (29 complete, 0 active)
 
 ## Summary
 
 Phases 1-11 complete: kanban skill suite, board intelligence, templates, archive automation, expert review fixes, test hardening (83 tests), kanban DX, skill infrastructure, the shared Poketo headless API migration for both Claude and Codex, and the three-mode operating model (`claude-only` / `codex-only` / `hybrid`) with shared approval-packet contract and next-step routing.
 
-Phases 12-28 complete. Phase 14 added the LinkedIn evidence lane to the creator foundation workflow with owner exports, manual snapshots, public unauthenticated captures, redaction gates, shared evidence-schema/dossier routing, and deterministic layer1 contract coverage. Phase 16 hardened mutation-capable skill contracts with final next-step routing language and an audit that catches future omissions. Phase 17 added mixed-monorepo pack routing so one repository can carry devtool, business-app, game, or other domain scopes without forcing one global designation. Phase 18 hardened pack lock recovery after a `pitwall-monorepo` refresh timeout. Phase 19 added a YouTube description and metadata optimization lane to the creator-media pack. Phase 20 added external YouTube video research lanes for comprehension, format/Remotion-style analysis, and competitive learning. Phase 21 hardened default mutation/shipping quality gates from the session workflow audit. Phase 22 added feature-interview as the triage step between brainstorm ideas and full specifications. Phase 23 added targeted-skill-builder for focused skill creation or updates from concrete workflow gaps without defaulting to broad session-history analysis. Phase 24 added install-agentic-skills for refreshing global skill links and routing pack access through the existing project-local workflow. Phase 25 added codebase-status for read-only repo status reports that combine codebase, task docs, git state, and related local conversation history. Phase 26 added the monorepo pack V1 with detection, guard, run, ship, lane-spec validation, fixtures, and script-backed validation. Phase 27 added targeted skill retrospectives to analyze-sessions; Phase 28 split that focused behavior into session-triage to avoid singular/plural command ambiguity.
+Phases 12-29 complete. Phase 14 added the LinkedIn evidence lane to the creator foundation workflow with owner exports, manual snapshots, public unauthenticated captures, redaction gates, shared evidence-schema/dossier routing, and deterministic layer1 contract coverage. Phase 16 hardened mutation-capable skill contracts with final next-step routing language and an audit that catches future omissions. Phase 17 added mixed-monorepo pack routing so one repository can carry devtool, business-app, game, or other domain scopes without forcing one global designation. Phase 18 hardened pack lock recovery after a `pitwall-monorepo` refresh timeout. Phase 19 added a YouTube description and metadata optimization lane to the creator-media pack. Phase 20 added external YouTube video research lanes for comprehension, format/Remotion-style analysis, and competitive learning. Phase 21 hardened default mutation/shipping quality gates from the session workflow audit. Phase 22 added feature-interview as the triage step between brainstorm ideas and full specifications. Phase 23 added targeted-skill-builder for focused skill creation or updates from concrete workflow gaps without defaulting to broad session-history analysis. Phase 24 added install-agentic-skills for refreshing global skill links and routing pack access through the existing project-local workflow. Phase 25 added codebase-status for read-only repo status reports that combine codebase, task docs, git state, and related local conversation history. Phase 26 added the monorepo pack V1 with detection, guard, run, ship, lane-spec validation, fixtures, and script-backed validation. Phase 27 added targeted skill retrospectives to analyze-sessions; Phase 28 split that focused behavior into session-triage to avoid singular/plural command ambiguity. Phase 29 added opt-in live-agent behavior tests for skill contracts.
 
 ## Current Analysis: Mobile Ideas Return Assessment
 
@@ -68,6 +68,7 @@ Phases 12-28 complete. Phase 14 added the LinkedIn evidence lane to the creator 
 | 26 | Monorepo Pack V1 ✓ | specs/monorepo-execution-controller.md | New monorepo pack with detect, run, ship, guard skills + lane-spec artifact | L |
 | 27 | Analyze-Sessions Targeted Skill Retrospectives ✓ | user request | Targeted skill-performance retrospectives inside analyze-sessions | S |
 | 28 | Session Triage Split | user request, Phase 27 feedback | Dedicated session-triage skill plus broad-only analyze-sessions | S |
+| 29 | Live Skill Harness | user request | Opt-in live Claude/Codex behavior tests for skills | M |
 
 ---
 
@@ -1065,6 +1066,32 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 **Coordination Notes:** Keep serial because this touches mirrored global skills and shared docs. Do not add dependencies or GitHub Actions.
 
 **Completed:** 2026-05-05. Split immediate issue/session/correction investigations into mirrored `session-triage` skills, restored `analyze-sessions` to broad cross-session trend analysis, added Codex agent metadata, updated discovery and routing references, and recorded the naming lesson. Validation passed with install, skill dependency/version/routing checks, layer1 tests, targeted `rg`/directory scans, and `git diff --check`.
+
+## Phase 29: Live Skill Harness
+
+**Goal:** Add an opt-in live-agent test harness that invokes Claude and Codex headlessly in controlled temporary repos, validates structured outputs, and catches skill-behavior regressions that structural tests cannot see.
+
+**Source:** User request on 2026-05-06 asking for thorough live skill testing through Claude `-p` and Codex headless execution.
+
+**Scope:**
+- Add a layer3 Vitest project for live agent behavior tests.
+- Keep live tests opt-in with an environment flag so routine `pnpm test` remains fast and does not spend model budget.
+- Add reusable harness helpers for temp git fixtures, JSON schemas, Claude `-p`, and `codex exec`.
+- Add session-analysis behavior scenarios covering broad trend routing, single-incident triage, required triage report fields, and the forbidden `analyze-session` alias.
+- Add package scripts and docs describing how to run the live tests.
+
+**Acceptance Criteria:**
+- [x] `pnpm --dir tests test` still runs only fast layer1 tests by default.
+- [x] `pnpm --dir tests test:live` runs the live layer3 suite when `LIVE_AGENT_TESTS=1` is set.
+- [x] Live tests can target Claude, Codex, or both through documented environment flags.
+- [x] Live tests use temporary repos and do not mutate tracked repo files.
+- [x] Session-analysis live tests assert structured outputs for `analyze-sessions` and `session-triage`.
+- [x] Validation passes with layer1 tests, skipped live-test dry run, live Claude/Codex runs, and skill contract scripts.
+
+**Parallelization:** serial
+**Coordination Notes:** Keep serial because this touches shared test infrastructure and package scripts. Do not add dependencies unless strictly necessary.
+
+**Completed:** 2026-05-06. Added opt-in layer3 live-agent tests with reusable Claude/Codex headless runners, temp repo fixtures, structured JSON schemas, and session-analysis behavior assertions. Added scripts for all live tests and Claude/Codex-only targets, documented usage in README, and kept default tests on layer1 only. Validation passed with layer3 skipped dry run, live Claude and Codex runs, layer1 tests, skill contract scripts, and `git diff --check`. `tsc --noEmit` remains outside the validation gate because the existing tests package lacks Node type definitions.
 
 ---
 
