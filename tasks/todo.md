@@ -1,22 +1,38 @@
-# Active Phase: Phase 28 - Session Triage Split
+# Active Phase: Phase 29 - Live Skill Harness
 
 **Project:** Claude Skills / agentic-skills
-**Current phase:** Phase 28
-**Status:** Complete as of 2026-05-05.
+**Current phase:** Phase 29
+**Status:** Complete as of 2026-05-06.
 
 ## Plan
 
-- [x] Narrow `global/codex/analyze-sessions/SKILL.md` back to broad cross-session trend analysis.
-- [x] Narrow `global/claude/analyze-sessions/SKILL.md` back to broad cross-session trend analysis.
-- [x] Add mirrored `session-triage` skills for immediate issue/session/correction investigations.
-- [x] Add Codex `session-triage` agent metadata.
-- [x] Update discovery docs, skill grouping, next-step contracts, and targeted-skill-builder routing language.
-- [x] Validate the split and repository hygiene.
+- [x] Add reusable layer3 live-agent harness helpers.
+- [x] Add opt-in Vitest project and package scripts for live tests.
+- [x] Add live session-analysis scenarios for `analyze-sessions` and `session-triage`.
+- [x] Document live harness usage and environment flags.
+- [x] Validate default tests, live skipped dry run, and skill contract scripts.
 
 ## Notes
 
-- Use `$session-triage`, not `$analyze-session`, to avoid singular/plural command confusion.
-- `$session-triage` remains analysis-oriented; it recommends skill fixes and routes implementation to `$targeted-skill-builder` or `$create-agentic-skill`.
+- Live tests may spend model budget and require installed/authenticated Claude or Codex CLIs.
+- Default tests must stay fast and non-live.
+
+## Review - 2026-05-06 Live Skill Harness
+
+- Added reusable live-agent test helpers for temp git fixtures, structured JSON schemas, Claude `-p`, and `codex exec`.
+- Added opt-in layer3 Vitest tests for `analyze-sessions` and `session-triage` behavior.
+- Added `test:layer3`, `test:live`, `test:live:claude`, and `test:live:codex` scripts while keeping `pnpm --dir tests test` on layer1.
+- Documented live test usage in `README.md`.
+- Live Codex validation passed for single-incident `session-triage` routing and broad-trend `analyze-sessions` routing.
+- Live Claude validation passed for the same two scenarios after the harness learned to parse Claude's `structured_output` envelope.
+- Validation passed: `pnpm --dir tests test:layer3` with live tests skipped, `pnpm --dir tests test`, `pnpm --dir tests test:live:claude`, `pnpm --dir tests test:live:codex`, skill dependency/version/routing scripts, and `git diff --check`.
+- Note: `pnpm --dir tests exec tsc --noEmit` is not part of the gate because the existing tests package lacks Node type definitions; it fails on pre-existing imports across the suite.
+
+## Next Work
+
+Phase 29 is complete. Run `$brainstorm` to discover a candidate next phase, or explicitly park the project if no new work is desired.
+
+**Recommended next command:** `$brainstorm`
 
 ## Review - 2026-05-05 Session Triage Split
 

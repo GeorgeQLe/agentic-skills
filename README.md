@@ -347,7 +347,18 @@ Creator-media and YouTube work is similarly split between `creator-foundation`, 
 ./scripts/skill-deps.sh --broken
 ./scripts/skill-pack-routing-audit.sh
 ./scripts/skill-versions.sh --missing
+pnpm --dir tests test
 cd packs/poketowork-kanban/claude/poketo-kanban/scripts && npm test
 ```
 
 `skill-deps.sh`, `skill-pack-routing-audit.sh`, and `skill-versions.sh` scan `global/` and `packs/`.
+
+Live agent behavior tests are opt-in because they invoke authenticated CLIs and may spend model budget:
+
+```bash
+pnpm --dir tests test:live          # Claude + Codex when both are installed
+pnpm --dir tests test:live:claude   # Claude only
+pnpm --dir tests test:live:codex    # Codex only
+```
+
+The live harness runs in temporary git repositories, requests structured JSON from `claude -p` or `codex exec`, and validates skill behavior such as `analyze-sessions` versus `session-triage` routing. Routine `pnpm --dir tests test` does not run live model calls.

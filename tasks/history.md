@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-05-06 — Live skill behavior harness
+
+- Added opt-in layer3 Vitest live-agent tests that invoke Claude with `claude -p` and Codex with `codex exec` in temporary git repositories.
+- Added reusable live harness helpers for temp fixtures, structured JSON schema output, CLI invocation, command availability checks, and cleanup.
+- Added session-analysis behavior scenarios that verify `session-triage` handles one concrete incident and `analyze-sessions` handles broad repeated-prompt trends.
+- Added package scripts for skipped layer3 dry runs, all live tests, Claude-only live tests, and Codex-only live tests.
+- Documented live harness usage and budget/CLI requirements in `README.md`.
+- Verified with skipped layer3 dry run, live Claude and Codex runs, layer1 tests, skill contract scripts, and `git diff --check`.
+
 ## 2026-05-05 — Session triage split
 
 - Split focused one-session/one-issue investigations out of `analyze-sessions` into mirrored Claude/Codex `session-triage` skills.

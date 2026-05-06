@@ -16,6 +16,13 @@ export default defineConfig({
           testTimeout: 300_000,
         },
       },
+      {
+        test: {
+          name: "layer3",
+          include: ["layer3/**/*.test.ts"],
+          testTimeout: 360_000,
+        },
+      },
     ],
   },
 });
