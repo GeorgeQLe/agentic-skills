@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-05-05 — Analyze-sessions targeted skill retrospectives
+
+- Updated mirrored Claude/Codex `analyze-sessions` contracts so the skill can audit a named skill's performance in a repo or session after a user identifies a possible mistake.
+- Added targeted evidence scoping across `agentic-skills`, pack/project-local skill directories, installed read-only fallback copies, and Claude/Codex session metadata.
+- Required reports to distinguish user-identified mistakes from agent-verified mistakes before recommending fixes.
+- Added output requirements for root cause, exact skill-contract changes, validation plans, confidence, evidence gaps, and next-skill routing.
+- Verified with install, targeted mirrored scans, skill dependency/version/routing audits, layer1 tests, and `git diff --check`.
+
 ## 2026-05-05 — Agentic config Claude/Codex split
 
 - Updated root `AGENTS.md` to keep Codex subagent guidance constrained by active Codex tool permissions while leaving Claude-specific subagent defaults in `CLAUDE.md`.

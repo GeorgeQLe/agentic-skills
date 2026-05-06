@@ -1,19 +1,34 @@
-# Active Phase: None
+# Active Phase: Phase 27 - Analyze-Sessions Targeted Skill Retrospectives
 
 **Project:** Claude Skills / agentic-skills
-**Current phase:** none
-**Status:** All planned roadmap phases are complete as of 2026-05-04.
+**Current phase:** Phase 27
+**Status:** Complete as of 2026-05-05.
 
-## Handoff
+## Plan
 
-- Phase 14 was archived to `tasks/phases/phase-14.md`.
-- `tasks/roadmap.md` now marks Phases 1-26 complete.
-- No manual blockers were present for Phase 14.
-- No record or recurring advisory tasks are currently active in this repo.
+- [x] Update `global/codex/analyze-sessions/SKILL.md` with a targeted skill-retrospective mode.
+- [x] Update `global/claude/analyze-sessions/SKILL.md` with the mirrored targeted workflow.
+- [x] Ensure the workflow resolves skills from `agentic-skills`, pack/project-local locations, and active session/repo metadata.
+- [x] Require agent verification before treating a user-reported mistake as confirmed.
+- [x] Define output fields for evidence, root cause, skill fixes, validation checks, and confidence gaps.
+- [x] Validate the mirrored contracts and repository hygiene.
+
+## Notes
+
+- Preserve broad usage-history analysis as the default path for general `$analyze-sessions` requests.
+- Keep this analysis-oriented; it should recommend skill fixes, not silently rewrite a skill unless paired with a builder/update workflow.
+
+## Review - 2026-05-05 Analyze-Sessions Targeted Skill Retrospectives
+
+- Updated mirrored Claude/Codex `analyze-sessions` contracts to support targeted retrospectives for a named skill, skill path, repo/session scope, or user-identified mistake.
+- Added explicit resolution rules for `agentic-skills`, pack/project-local skills, installed read-only fallback copies, and session metadata from Claude/Codex histories.
+- Required the report to separate user-identified mistakes from agent-verified mistakes and to output root cause, exact skill fixes, validation checks, confidence, and evidence gaps.
+- Updated the Codex `agents/openai.yaml` prompt metadata for the broader history-or-skill-retrospective behavior.
+- Validation passed: `./install.sh`, targeted mirrored `rg` scans, `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-next-step-routing.sh --missing`, `pnpm --dir tests test`, and `git diff --check`.
 
 ## Next Work
 
-Run `$brainstorm` to discover a candidate next phase, or explicitly park the project if no new work is desired.
+Phase 27 is complete. Run `$brainstorm` to discover a candidate next phase, or explicitly park the project if no new work is desired.
 
 **Recommended next command:** `$brainstorm`
 

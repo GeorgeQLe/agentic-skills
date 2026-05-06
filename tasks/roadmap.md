@@ -1010,6 +1010,33 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Tech debt / follow-ups: Monorepo Pack V2 remains deferred until V1 is validated in real use.
 - Ready for next phase: yes.
 
+## Phase 27: Analyze-Sessions Targeted Skill Retrospectives
+
+**Goal:** Extend the existing mirrored `analyze-sessions` skill so it can audit a particular skill's performance in a repository or active agent session, verify a user-identified mistake against session/code evidence, and recommend concrete skill-contract fixes that prevent the mistake from recurring.
+
+**Source:** User request on 2026-05-05 asking for an analyze-sessions workflow that can evaluate a skill from `agentic-skills` or the invoking agent's repo/session directory and produce feedback after agent verification.
+
+**Scope:**
+- Preserve the current broad usage-history analysis behavior.
+- Add a targeted skill-retrospective mode triggered by a named skill, skill path, repository path, session path, or mistake description.
+- Teach the workflow to resolve skill definitions from `agentic-skills`, pack-local/project-local skill locations, and the invoking repo/session metadata.
+- Require evidence-backed verification of the mistake before recommending fixes.
+- Produce specific `SKILL.md` changes, validation checks, and lesson-capture recommendations without pretending unverifiable claims are proven.
+- Mirror the updated contract for Claude and Codex.
+
+**Acceptance Criteria:**
+- [x] `global/codex/analyze-sessions/SKILL.md` documents targeted skill-performance retrospectives.
+- [x] `global/claude/analyze-sessions/SKILL.md` documents the same targeted retrospective workflow.
+- [x] The workflow distinguishes user-identified mistakes from agent-verified mistakes.
+- [x] The workflow can scope evidence to the current repo/session directory before broad history scanning.
+- [x] The output contract includes root cause, skill-contract fixes, validation checks, and confidence/evidence gaps.
+- [x] Validation passes with mirrored contract checks, version checks, targeted text scans, and `git diff --check`.
+
+**Parallelization:** serial
+**Coordination Notes:** Keep serial because this updates mirrored global skills and shared task docs. Do not add dependencies or GitHub Actions.
+
+**Completed:** 2026-05-05. Updated mirrored Claude/Codex `analyze-sessions` contracts to add targeted skill retrospectives while preserving broad history analysis. The new mode resolves skills from shared, pack-local, project-local, installed, and session-derived scopes; requires evidence before calling a user-reported mistake agent-verified; and outputs concrete skill fixes plus validation plans. Validation passed with install, targeted mirrored scans, skill dependency/version/routing audits, layer1 tests, and `git diff --check`.
+
 ---
 
 ## Post-Phase Tail Work

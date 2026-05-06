@@ -1,7 +1,7 @@
 interface:
   display_name: "Analyze Sessions"
-  short_description: "Analyze Claude usage history patterns"
-  default_prompt: "Use $analyze-sessions to analyze my local Claude history and recommend the highest-impact automation opportunities."
+  short_description: "Analyze session history and skill performance mistakes"
+  default_prompt: "Use $analyze-sessions to analyze my local Claude/Codex history or a specific skill's verified performance mistake."
 
 policy:
   allow_implicit_invocation: true
