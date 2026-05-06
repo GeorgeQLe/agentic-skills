@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-05-06 — Feature interview evidence intake
+
+- Enhanced mirrored Claude/Codex `feature-interview` contracts so impromptu feature ideas start with an evidence-backed intake pass before deep interrogation.
+- Required claim validation against code, docs, research, task state, and git history where relevant, while preserving `investigate` as the route for actual bug fixing.
+- Added technical gotcha discovery across architecture, data model, APIs/contracts, migrations, security/privacy, performance, observability, tests, rollout, and external dependencies.
+- Required user-story, journey, workflow, or loop placement and explicit documentation destination decisions for specs, research, journey docs, roadmap, task queues, interview logs, or no action.
+- Added a user-confirmed priority gate before roadmap or task mutation and updated the durable interview-log output contract.
+- Refreshed Codex metadata and skill discovery descriptions.
+- Verified with stale-text scans, skill dependency/version/routing audits, pack-routing audit, layer1 tests, and `git diff --check`.
+
 ## 2026-05-06 — Live skill behavior harness
 
 - Added opt-in layer3 Vitest live-agent tests that invoke Claude with `claude -p` and Codex with `codex exec` in temporary git repositories.

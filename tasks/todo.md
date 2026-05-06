@@ -1,21 +1,37 @@
-# Active Phase: Phase 29 - Live Skill Harness
+# Active Phase: Phase 30 - Feature Interview Evidence Intake
 
 **Project:** Claude Skills / agentic-skills
-**Current phase:** Phase 29
+**Current phase:** Phase 30
 **Status:** Complete as of 2026-05-06.
 
 ## Plan
 
-- [x] Add reusable layer3 live-agent harness helpers.
-- [x] Add opt-in Vitest project and package scripts for live tests.
-- [x] Add live session-analysis scenarios for `analyze-sessions` and `session-triage`.
-- [x] Document live harness usage and environment flags.
-- [x] Validate default tests, live skipped dry run, and skill contract scripts.
+- [x] Update the Codex `feature-interview` contract to require evidence-backed claim validation and technical gotcha discovery before deep user interrogation.
+- [x] Mirror the same behavior in the Claude `feature-interview` contract while preserving slash-command routing language.
+- [x] Add explicit journey/user-story placement and research/spec documentation destination rules.
+- [x] Add a user-confirmed prioritization gate before mutating roadmap or task files.
+- [x] Validate mirrored behavior, skill metadata, routing contracts, tests, and whitespace.
 
 ## Notes
 
-- Live tests may spend model budget and require installed/authenticated Claude or Codex CLIs.
-- Default tests must stay fast and non-live.
+- This is an enhancement to the existing `feature-interview` workflow, not a new skill.
+- The skill should borrow `$investigate`'s evidence discipline without inheriting its automatic fix-and-test behavior.
+- User prioritization belongs before roadmap/todo mutation; phase-level sequencing remains owned by `$roadmap`.
+
+## Review - 2026-05-06 Feature Interview Evidence Intake
+
+- Updated mirrored Claude/Codex `feature-interview` contracts from v1.0.0 to v1.1.0.
+- Added a required evidence-backed intake pass before deep questioning, including claim validation, technical gotcha discovery, journey/workflow placement, and documentation destination selection.
+- Added a Planning Destination + Priority Checkpoint so roadmap/task mutation requires user-confirmed priority.
+- Expanded deliverables so interview logs preserve evidence, gotchas, journey placement, documentation changes, priority decision, and next command.
+- Refreshed Codex `agents/openai.yaml`, `docs/skills-reference.md`, and `docs/operating-modes.md` descriptions.
+- Validation passed: stale-text scans, `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-next-step-routing.sh --missing`, `./scripts/skill-pack-routing-audit.sh`, `pnpm --dir tests test`, and `git diff --check`.
+
+## Next Work
+
+Phase 30 is complete. Run `$brainstorm` to discover a candidate next phase, or explicitly park the project if no new work is desired.
+
+**Recommended next command:** `$brainstorm`
 
 ## Review - 2026-05-06 Live Skill Harness
 

@@ -1,14 +1,14 @@
 # Roadmap: Claude Skills
 
 > Generated from: tasks/roadmap.md (existing), specs/board-flag-kanban-search.md, tasks/ideas.md, tasks/history.md
-> Date: 2026-03-27 (last updated 2026-05-05)
-> Total Phases: 29 (29 complete, 0 active)
+> Date: 2026-03-27 (last updated 2026-05-06)
+> Total Phases: 30 (30 complete, 0 active)
 
 ## Summary
 
 Phases 1-11 complete: kanban skill suite, board intelligence, templates, archive automation, expert review fixes, test hardening (83 tests), kanban DX, skill infrastructure, the shared Poketo headless API migration for both Claude and Codex, and the three-mode operating model (`claude-only` / `codex-only` / `hybrid`) with shared approval-packet contract and next-step routing.
 
-Phases 12-29 complete. Phase 14 added the LinkedIn evidence lane to the creator foundation workflow with owner exports, manual snapshots, public unauthenticated captures, redaction gates, shared evidence-schema/dossier routing, and deterministic layer1 contract coverage. Phase 16 hardened mutation-capable skill contracts with final next-step routing language and an audit that catches future omissions. Phase 17 added mixed-monorepo pack routing so one repository can carry devtool, business-app, game, or other domain scopes without forcing one global designation. Phase 18 hardened pack lock recovery after a `pitwall-monorepo` refresh timeout. Phase 19 added a YouTube description and metadata optimization lane to the creator-media pack. Phase 20 added external YouTube video research lanes for comprehension, format/Remotion-style analysis, and competitive learning. Phase 21 hardened default mutation/shipping quality gates from the session workflow audit. Phase 22 added feature-interview as the triage step between brainstorm ideas and full specifications. Phase 23 added targeted-skill-builder for focused skill creation or updates from concrete workflow gaps without defaulting to broad session-history analysis. Phase 24 added install-agentic-skills for refreshing global skill links and routing pack access through the existing project-local workflow. Phase 25 added codebase-status for read-only repo status reports that combine codebase, task docs, git state, and related local conversation history. Phase 26 added the monorepo pack V1 with detection, guard, run, ship, lane-spec validation, fixtures, and script-backed validation. Phase 27 added targeted skill retrospectives to analyze-sessions; Phase 28 split that focused behavior into session-triage to avoid singular/plural command ambiguity. Phase 29 added opt-in live-agent behavior tests for skill contracts.
+Phases 12-30 complete. Phase 14 added the LinkedIn evidence lane to the creator foundation workflow with owner exports, manual snapshots, public unauthenticated captures, redaction gates, shared evidence-schema/dossier routing, and deterministic layer1 contract coverage. Phase 16 hardened mutation-capable skill contracts with final next-step routing language and an audit that catches future omissions. Phase 17 added mixed-monorepo pack routing so one repository can carry devtool, business-app, game, or other domain scopes without forcing one global designation. Phase 18 hardened pack lock recovery after a `pitwall-monorepo` refresh timeout. Phase 19 added a YouTube description and metadata optimization lane to the creator-media pack. Phase 20 added external YouTube video research lanes for comprehension, format/Remotion-style analysis, and competitive learning. Phase 21 hardened default mutation/shipping quality gates from the session workflow audit. Phase 22 added feature-interview as the triage step between brainstorm ideas and full specifications. Phase 23 added targeted-skill-builder for focused skill creation or updates from concrete workflow gaps without defaulting to broad session-history analysis. Phase 24 added install-agentic-skills for refreshing global skill links and routing pack access through the existing project-local workflow. Phase 25 added codebase-status for read-only repo status reports that combine codebase, task docs, git state, and related local conversation history. Phase 26 added the monorepo pack V1 with detection, guard, run, ship, lane-spec validation, fixtures, and script-backed validation. Phase 27 added targeted skill retrospectives to analyze-sessions; Phase 28 split that focused behavior into session-triage to avoid singular/plural command ambiguity. Phase 29 added opt-in live-agent behavior tests for skill contracts. Phase 30 deepened feature-interview into an evidence-backed feature intake workflow.
 
 ## Current Analysis: Mobile Ideas Return Assessment
 
@@ -69,6 +69,37 @@ Phases 12-29 complete. Phase 14 added the LinkedIn evidence lane to the creator 
 | 27 | Analyze-Sessions Targeted Skill Retrospectives ✓ | user request | Targeted skill-performance retrospectives inside analyze-sessions | S |
 | 28 | Session Triage Split | user request, Phase 27 feedback | Dedicated session-triage skill plus broad-only analyze-sessions | S |
 | 29 | Live Skill Harness | user request | Opt-in live Claude/Codex behavior tests for skills | M |
+| 30 | Feature Interview Evidence Intake | user request, existing feature-interview gap review | Evidence-backed feature intake with technical gotchas, journey placement, doc updates, and user priority decision | S |
+
+---
+
+## Phase 30: Feature Interview Evidence Intake ✓
+
+**Goal:** Enhance the existing mirrored `feature-interview` skill so impromptu feature ideas receive a deep evidence pass, technical gotcha analysis, user-story/journey placement, durable documentation updates, and a user-confirmed prioritization decision before they enter the roadmap or active todo queue.
+
+**Source:** User request on 2026-05-06 after evaluating the desired "impromptu feature creation" workflow against the existing `feature-interview`, `spec-interview`, `investigate`, and `roadmap` skill contracts.
+
+**Scope:**
+- Preserve `feature-interview` as the existing intake command rather than adding a duplicate feature-creation skill.
+- Add an investigate-style evidence pass that validates user claims and feature assumptions against code, docs, task state, research artifacts, and git history where relevant.
+- Require a technical gotchas report covering architecture, data model, API/contracts, migrations, security/privacy, performance, observability, tests, rollout, and external dependency risk.
+- Require explicit placement in the user story, journey map, or developer workflow; update or queue updates to journey/research docs when the feature changes the known journey.
+- Clarify documentation destinations: new spec, existing spec patch, research/journey patch, roadmap/task-only update, interview log only, or no action.
+- Add a user-confirmed prioritization gate before updating `tasks/roadmap.md`, `tasks/todo.md`, `tasks/record-todo.md`, or `tasks/manual-todo.md`.
+- Mirror the updated behavior for Claude and Codex while preserving command-prefix differences.
+
+**Acceptance Criteria:**
+- [x] `global/codex/feature-interview/SKILL.md` requires evidence-backed claim validation and technical gotcha discovery before deep user interrogation.
+- [x] `global/claude/feature-interview/SKILL.md` mirrors the same workflow with Claude command prefixes.
+- [x] Both skills require a journey/user-story placement decision and document when research or journey artifacts need updates.
+- [x] Both skills require user-confirmed prioritization before roadmap or todo mutation.
+- [x] Deliverables include a durable leave-behind with evidence, gotchas, journey placement, documentation changes, priority decision, and exact next command.
+- [x] Validation passes with mirrored contract scans, dependency/version/routing checks, layer1 tests, and `git diff --check`.
+
+**Parallelization:** serial
+**Coordination Notes:** Keep serial because this touches mirrored global planning contracts and task docs. Do not create a new skill name unless the user explicitly changes the direction.
+
+**Completed:** 2026-05-06. Updated mirrored Claude/Codex `feature-interview` contracts to require an evidence-backed intake pass, claim validation, technical gotcha discovery, journey/workflow placement, documentation destination selection, and user-confirmed prioritization before roadmap or task mutation. Refreshed Codex metadata and discovery descriptions. Validation passed with stale-text scans, dependency/version/routing audits, pack-routing audit, layer1 tests, and `git diff --check`.
 
 ---
 

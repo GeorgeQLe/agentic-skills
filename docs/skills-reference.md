@@ -67,7 +67,7 @@ Global skills are safe across business apps, games, devtools, libraries, service
 | `migrate` | Guide a structural migration or dependency upgrade |
 | `pack` | Manage project-local packs and `.agents/project.json` |
 | `patch-exec-profile` | Audit and fill missing lane metadata in agent-team/implementation-safe execution profiles |
-| `feature-interview` | Interview a feature idea, align human and agent intent, then decide whether to create or update a spec |
+| `feature-interview` | Interview a feature idea with evidence-backed alignment, then decide whether to update docs, specs, roadmap, or tasks |
 | `spec-interview` | Interview to validate and complete an implementation specification |
 | `ui-interview` | Interview page by page to define implementation-ready UI detail |
 | `ux-variation` | Plan and compare onboarding, workflow, sharing, return-use, and UI variants before locking an experience |
