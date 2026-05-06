@@ -1,22 +1,37 @@
-# Active Phase: Phase 27 - Analyze-Sessions Targeted Skill Retrospectives
+# Active Phase: Phase 28 - Session Triage Split
 
 **Project:** Claude Skills / agentic-skills
-**Current phase:** Phase 27
+**Current phase:** Phase 28
 **Status:** Complete as of 2026-05-05.
 
 ## Plan
 
-- [x] Update `global/codex/analyze-sessions/SKILL.md` with a targeted skill-retrospective mode.
-- [x] Update `global/claude/analyze-sessions/SKILL.md` with the mirrored targeted workflow.
-- [x] Ensure the workflow resolves skills from `agentic-skills`, pack/project-local locations, and active session/repo metadata.
-- [x] Require agent verification before treating a user-reported mistake as confirmed.
-- [x] Define output fields for evidence, root cause, skill fixes, validation checks, and confidence gaps.
-- [x] Validate the mirrored contracts and repository hygiene.
+- [x] Narrow `global/codex/analyze-sessions/SKILL.md` back to broad cross-session trend analysis.
+- [x] Narrow `global/claude/analyze-sessions/SKILL.md` back to broad cross-session trend analysis.
+- [x] Add mirrored `session-triage` skills for immediate issue/session/correction investigations.
+- [x] Add Codex `session-triage` agent metadata.
+- [x] Update discovery docs, skill grouping, next-step contracts, and targeted-skill-builder routing language.
+- [x] Validate the split and repository hygiene.
 
 ## Notes
 
-- Preserve broad usage-history analysis as the default path for general `$analyze-sessions` requests.
-- Keep this analysis-oriented; it should recommend skill fixes, not silently rewrite a skill unless paired with a builder/update workflow.
+- Use `$session-triage`, not `$analyze-session`, to avoid singular/plural command confusion.
+- `$session-triage` remains analysis-oriented; it recommends skill fixes and routes implementation to `$targeted-skill-builder` or `$create-agentic-skill`.
+
+## Review - 2026-05-05 Session Triage Split
+
+- Restored mirrored `analyze-sessions` contracts to broad cross-session trend, repeated prompt, workflow evolution, automation, and skill-performance-over-time analysis.
+- Added mirrored `session-triage` contracts for one immediate issue, correction, session, repo incident, failed run, or suspected skill failure.
+- Added Codex `session-triage` agent metadata and narrowed `analyze-sessions` metadata to broad history analysis.
+- Updated discovery docs, operating-mode roles, next-step contracts, `skills` grouping, and `targeted-skill-builder` guidance.
+- Recorded the singular/plural command ambiguity lesson in `tasks/lessons.md`.
+- Validation passed: `./install.sh`, `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-next-step-routing.sh --missing`, `pnpm --dir tests test`, targeted `rg` scans, exact no-`analyze-session` directory scan, and `git diff --check`.
+
+## Next Work
+
+Phase 28 is complete. Run `$brainstorm` to discover a candidate next phase, or explicitly park the project if no new work is desired.
+
+**Recommended next command:** `$brainstorm`
 
 ## Review - 2026-05-05 Analyze-Sessions Targeted Skill Retrospectives
 

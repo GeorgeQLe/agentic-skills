@@ -1,14 +1,14 @@
 # Roadmap: Claude Skills
 
 > Generated from: tasks/roadmap.md (existing), specs/board-flag-kanban-search.md, tasks/ideas.md, tasks/history.md
-> Date: 2026-03-27 (last updated 2026-05-04)
-> Total Phases: 26 (26 complete, 0 planned future)
+> Date: 2026-03-27 (last updated 2026-05-05)
+> Total Phases: 28 (28 complete, 0 active)
 
 ## Summary
 
 Phases 1-11 complete: kanban skill suite, board intelligence, templates, archive automation, expert review fixes, test hardening (83 tests), kanban DX, skill infrastructure, the shared Poketo headless API migration for both Claude and Codex, and the three-mode operating model (`claude-only` / `codex-only` / `hybrid`) with shared approval-packet contract and next-step routing.
 
-Phases 12-26 complete. Phase 14 added the LinkedIn evidence lane to the creator foundation workflow with owner exports, manual snapshots, public unauthenticated captures, redaction gates, shared evidence-schema/dossier routing, and deterministic layer1 contract coverage. Phase 16 hardened mutation-capable skill contracts with final next-step routing language and an audit that catches future omissions. Phase 17 added mixed-monorepo pack routing so one repository can carry devtool, business-app, game, or other domain scopes without forcing one global designation. Phase 18 hardened pack lock recovery after a `pitwall-monorepo` refresh timeout. Phase 19 added a YouTube description and metadata optimization lane to the creator-media pack. Phase 20 added external YouTube video research lanes for comprehension, format/Remotion-style analysis, and competitive learning. Phase 21 hardened default mutation/shipping quality gates from the session workflow audit. Phase 22 added feature-interview as the triage step between brainstorm ideas and full specifications. Phase 23 added targeted-skill-builder for focused skill creation or updates from concrete workflow gaps without defaulting to broad session-history analysis. Phase 24 added install-agentic-skills for refreshing global skill links and routing pack access through the existing project-local workflow. Phase 25 added codebase-status for read-only repo status reports that combine codebase, task docs, git state, and related local conversation history. Phase 26 added the monorepo pack V1 with detection, guard, run, ship, lane-spec validation, fixtures, and script-backed validation.
+Phases 12-28 complete. Phase 14 added the LinkedIn evidence lane to the creator foundation workflow with owner exports, manual snapshots, public unauthenticated captures, redaction gates, shared evidence-schema/dossier routing, and deterministic layer1 contract coverage. Phase 16 hardened mutation-capable skill contracts with final next-step routing language and an audit that catches future omissions. Phase 17 added mixed-monorepo pack routing so one repository can carry devtool, business-app, game, or other domain scopes without forcing one global designation. Phase 18 hardened pack lock recovery after a `pitwall-monorepo` refresh timeout. Phase 19 added a YouTube description and metadata optimization lane to the creator-media pack. Phase 20 added external YouTube video research lanes for comprehension, format/Remotion-style analysis, and competitive learning. Phase 21 hardened default mutation/shipping quality gates from the session workflow audit. Phase 22 added feature-interview as the triage step between brainstorm ideas and full specifications. Phase 23 added targeted-skill-builder for focused skill creation or updates from concrete workflow gaps without defaulting to broad session-history analysis. Phase 24 added install-agentic-skills for refreshing global skill links and routing pack access through the existing project-local workflow. Phase 25 added codebase-status for read-only repo status reports that combine codebase, task docs, git state, and related local conversation history. Phase 26 added the monorepo pack V1 with detection, guard, run, ship, lane-spec validation, fixtures, and script-backed validation. Phase 27 added targeted skill retrospectives to analyze-sessions; Phase 28 split that focused behavior into session-triage to avoid singular/plural command ambiguity.
 
 ## Current Analysis: Mobile Ideas Return Assessment
 
@@ -66,6 +66,8 @@ Phases 12-26 complete. Phase 14 added the LinkedIn evidence lane to the creator 
 | 24 | Installer Skill ✓ | user request | Mirrored global installer skill with root install launcher and pack access guidance | S |
 | 25 | Codebase Status ✓ | user request, session history | Read-only repo status reports with related conversation-history evidence | S |
 | 26 | Monorepo Pack V1 ✓ | specs/monorepo-execution-controller.md | New monorepo pack with detect, run, ship, guard skills + lane-spec artifact | L |
+| 27 | Analyze-Sessions Targeted Skill Retrospectives ✓ | user request | Targeted skill-performance retrospectives inside analyze-sessions | S |
+| 28 | Session Triage Split | user request, Phase 27 feedback | Dedicated session-triage skill plus broad-only analyze-sessions | S |
 
 ---
 
@@ -1036,6 +1038,33 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 **Coordination Notes:** Keep serial because this updates mirrored global skills and shared task docs. Do not add dependencies or GitHub Actions.
 
 **Completed:** 2026-05-05. Updated mirrored Claude/Codex `analyze-sessions` contracts to add targeted skill retrospectives while preserving broad history analysis. The new mode resolves skills from shared, pack-local, project-local, installed, and session-derived scopes; requires evidence before calling a user-reported mistake agent-verified; and outputs concrete skill fixes plus validation plans. Validation passed with install, targeted mirrored scans, skill dependency/version/routing audits, layer1 tests, and `git diff --check`.
+
+## Phase 28: Session Triage Split
+
+**Goal:** Split the focused one-issue/session investigation behavior out of `analyze-sessions` into a distinct mirrored `session-triage` skill so broad trend analysis and immediate incident triage cannot be confused.
+
+**Source:** User request on 2026-05-05 after Phase 27, noting that singular/plural command names like `analyze-session` and `analyze-sessions` could be mistaken for each other.
+
+**Scope:**
+- Restore `analyze-sessions` to broad cross-session trend, pattern, frustration, automation, and skill-performance-over-time analysis.
+- Add mirrored Claude/Codex `session-triage` skills for one immediate issue, correction, repo/session incident, or skill failure.
+- Route single-session or one-mistake requests from `analyze-sessions` to `session-triage` instead of handling them directly.
+- Add Codex `agents/openai.yaml` metadata for `session-triage`.
+- Update discovery docs, skill listing guidance, next-step contracts, and `targeted-skill-builder` references.
+- Record the naming lesson so future split workflows avoid near-identical singular/plural command pairs.
+
+**Acceptance Criteria:**
+- [x] `analyze-sessions` no longer owns targeted skill retrospective or single-incident triage behavior.
+- [x] `session-triage` exists for Claude and Codex with verification verdict, timeline, root cause, skill fix, validation plan, confidence, and evidence-gap outputs.
+- [x] No `analyze-session` skill or alias is created.
+- [x] Discovery docs and `skills` grouping include `session-triage`.
+- [x] `targeted-skill-builder` distinguishes `$session-triage` for immediate incidents from `$analyze-sessions` for broad history analysis.
+- [x] Validation passes with install, skill dependency/version/routing checks, layer1 tests, targeted scans, and `git diff --check`.
+
+**Parallelization:** serial
+**Coordination Notes:** Keep serial because this touches mirrored global skills and shared docs. Do not add dependencies or GitHub Actions.
+
+**Completed:** 2026-05-05. Split immediate issue/session/correction investigations into mirrored `session-triage` skills, restored `analyze-sessions` to broad cross-session trend analysis, added Codex agent metadata, updated discovery and routing references, and recorded the naming lesson. Validation passed with install, skill dependency/version/routing checks, layer1 tests, targeted `rg`/directory scans, and `git diff --check`.
 
 ---
 

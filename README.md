@@ -148,7 +148,7 @@ codebase-status, commit-and-push-by-feature, concept-exploration, create-skill, 
 expert-review, guide, handoff, hygiene, install-agentic-skills, provision-agentic-config,
 investigate, migrate, pack, patch-exec-profile, spec-interview, ui-interview,
 ux-variation, plan-phase, reconcile-dev-docs, regression-check, release, roadmap, run, scaffold,
-ship, ship-end, skills, slim-audit, spec-drift, sync,
+session-triage, ship, ship-end, skills, slim-audit, spec-drift, sync,
 targeted-skill-builder, trace, research-roadmap, uat
 ```
 

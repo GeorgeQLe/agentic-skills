@@ -44,13 +44,13 @@ Discover and search installed global skills plus enabled project-local pack skil
    | Execution | `run`, `run-kanban` |
    | Shipping | `ship`, `ship-end`, `ship-kanban`, `ship-end-kanban` |
    | Code Quality | `expert-review`, `regression-check`, `dead-code` |
-   | Debugging | `investigate`, `debug`, `trace` |
+   | Debugging | `investigate`, `debug`, `trace`, `session-triage` |
    | Refactoring & Migration | `migrate`, `decommission`, `scaffold` |
    | Monorepo | `affected` |
    | Release & Deploy | `release`, `deploy` |
-   | Context & Session | `codebase-status`, `handoff`, `sync`, `investor-update` |
+   | Context & Session | `codebase-status`, `analyze-sessions`, `handoff`, `sync`, `investor-update` |
    | Git Workflow | `branch-lifecycle` |
-   | Utility | `commit-and-push-by-feature`, `analyze-sessions`, `install-agentic-skills`, `targeted-skill-builder`, `provision-agentic-config`, `poketo-kanban`, `poketo-kanban --archive`, `sync-roadmap-kanban`, `skills`, `risk-register` |
+   | Utility | `commit-and-push-by-feature`, `install-agentic-skills`, `targeted-skill-builder`, `provision-agentic-config`, `poketo-kanban`, `poketo-kanban --archive`, `sync-roadmap-kanban`, `skills`, `risk-register` |
 
    Skills not found in the mapping go into an **Other** group at the end.
 

@@ -10,7 +10,7 @@ argument-hint: "[workflow gap, correction, skill name, or capability request]"
 
 Use this skill when the user wants a narrow, durable workflow improvement from the current prompt or conversation: a concrete problem, user correction, repeated bad recommendation, or capability gap that may deserve a new skill, an existing-skill update, or a reusable prompt/template.
 
-This is intentionally narrower than `/analyze-sessions`. Do not scan all Claude/Codex history by default. Treat broad session analysis as optional evidence only when the user explicitly asks for it.
+This is intentionally narrower than `/analyze-sessions`. Do not scan all Claude/Codex history by default. Treat broad session analysis as optional evidence only when the user explicitly asks for it. Use `/session-triage` first when one immediate issue, correction, repo incident, or suspected skill failure still needs verification before a skill change is designed.
 
 ## Process
 
@@ -29,6 +29,7 @@ This is intentionally narrower than `/analyze-sessions`. Do not scan all Claude/
    - Use the current prompt and conversation context first.
    - Read a named skill file when provided.
    - Inspect user-provided files or paths when provided.
+   - Route to `/session-triage` when the user wants investigation of one immediate issue or the available evidence is not enough to verify the correction.
    - If examples are needed, ask for them or run a tightly scoped history query limited by path, skill name, date range, or exact phrase.
    - Do not scan all session history unless explicitly requested.
 5. Search existing skills for overlap before creating anything:
@@ -90,7 +91,8 @@ From /Users/georgele/projects/tools/agentic-skills, run targeted-skill-builder f
 - Prefer the smallest durable workflow fix.
 - Do not create a broad meta-skill when a precise skill, existing-skill update, or reusable prompt solves the problem.
 - Do not route every idea to `/spec-interview`; use `/feature-interview` when the planning destination is uncertain.
-- Treat broad `/analyze-sessions` work as optional evidence, not the default workflow.
+- Treat broad `/analyze-sessions` work as optional evidence for recurrence and trend analysis, not the default workflow.
+- Use `/session-triage` for one immediate issue, correction, repo incident, or suspected skill failure that needs verification before building or updating a skill.
 - Do not read unrelated history, projects, or private files for examples without user direction.
 - Do not create or modify GitHub Actions workflows.
 

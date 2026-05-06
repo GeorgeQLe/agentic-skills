@@ -1,113 +1,91 @@
 ---
 name: analyze-sessions
-description: Analyze Claude Code and Codex session history, including targeted retrospectives on a skill's verified performance mistakes
+description: Analyze Claude Code and Codex session history for cross-session trends, recurring patterns, and automation opportunities
 type: analysis
-version: 1.2.0
-argument-hint: "[skill name/path, repo/session path, or mistake description]"
+version: 1.3.0
+argument-hint: "[history file, session directory, repo path, date range, or trend question]"
 ---
 
 # Analyze Sessions
 
 Invoke as `$analyze-sessions`.
 
-Use this skill when the user wants either a data-driven breakdown of local Claude Code and Codex usage history or a targeted retrospective on how a particular skill performed in a repository/session after a user identified a possible mistake.
+Use this skill when the user wants a data-driven breakdown of local Claude Code and Codex usage history across conversations, sessions, tools, projects, or time periods. This skill is for broad trend analysis, repeated prompt patterns, recurring frustrations, workflow evolution, automation opportunities, and skill performance over multiple sessions.
+
+If the user asks about one current session, one mistake, one correction, one repo incident, or one skill failure, route to `$session-triage` instead of handling the incident here.
 
 ## Inputs
 
 - Default Claude history file: `~/.claude/history.jsonl`
 - Default Codex prompt history file: `~/.codex/history.jsonl`
 - Default Codex rich session root: `~/.codex/sessions/**/*.jsonl`
-- Optional paths from the user. Accept history files, session files, repository directories, or skill files.
-- Optional target skill. Accept `$skill-name`, `skill-name`, a `SKILL.md` path, or a pack/project-local skill path.
-- Optional mistake description. Treat this as a user-identified claim until independently verified from session, repo, log, test, or skill-contract evidence.
+- Optional paths from the user. Accept history files, session directories, repository directories, or exported logs.
+- Optional filters such as repo path, project name, date range, command/skill name, exact phrase, or trend question.
 
 ## Workflow
 
-1. Choose the analysis mode:
-   - Use **broad usage analysis** when the user asks for overall history, usage breakdowns, repeated prompts, workflow trends, or automation opportunities without naming a target skill or mistake.
-   - Use **targeted skill retrospective** when the user names a skill, provides a skill path, points at a repo/session, cites a correction, or asks why a skill led to a bad recommendation or behavior.
-   - If both are requested, run the targeted retrospective first, then use broader history only for recurrence and frequency evidence.
+1. Confirm the request is broad enough for cross-session analysis:
+   - Continue when the user asks for overall history, usage breakdowns, repeated prompts, recurring workflow issues, cross-tool changes, automation opportunities, or performance trends across multiple sessions.
+   - Route to `$session-triage` when the user asks to investigate one immediate issue, correction, failed run, session, repo incident, or skill mistake.
+   - When a request contains both a single incident and recurrence questions, recommend `$session-triage` first for the incident and use this skill afterward for frequency or trend evidence.
 
-2. For broad usage analysis:
-   - Read the full available history, not a sample.
-   - Use a scriptable approach for scale. Prefer streaming or line-by-line processing for large files.
-   - Normalize records into one common shape:
-     - `source`: `claude` or `codex`
-     - `timestamp`
-     - `session_id`
-     - `project` or `cwd`
-     - `text`
-     - optional metadata such as git branch, repository URL, model, and CLI version
-   - Parse Claude history from `~/.claude/history.jsonl` lines with fields such as `display`, `timestamp` in milliseconds, `project`, `sessionId`, and `pastedContents`.
-   - Parse Codex history from `~/.codex/history.jsonl` compact prompts and `~/.codex/sessions/**/*.jsonl` rollout records. Use `session_meta.payload.id` to map session IDs to `cwd`, git metadata, CLI version, and model/provider.
+2. Read the full available history for the selected scope, not a sample.
+
+3. Use a scriptable approach for scale. Prefer streaming or line-by-line processing for large files.
+
+4. Normalize records into one common shape:
+   - `source`: `claude` or `codex`
+   - `timestamp`
+   - `session_id`
+   - `project` or `cwd`
+   - `text`
+   - optional metadata such as git branch, repository URL, model, provider, and CLI version
+
+5. Parse Claude history:
+   - `~/.claude/history.jsonl` lines contain user messages with fields such as `display`, `timestamp` in milliseconds, `project`, `sessionId`, and `pastedContents`.
+
+6. Parse Codex history:
+   - `~/.codex/history.jsonl` lines contain compact user prompts with `text`, `ts` in seconds, and `session_id`.
+   - `~/.codex/sessions/**/*.jsonl` lines contain richer rollout records. Use `session_meta.payload.id` to map session IDs to `cwd`, git metadata, CLI version, and model/provider.
    - Include user `response_item` records only when they represent user messages. Exclude developer/system/base instruction payloads from prompt-pattern counts.
    - Prefer compact Codex prompt history for user prompt counts, enriched with rollout metadata. Use rollout user records only for prompts missing from compact history or for metadata checks.
-   - Extract project breakdowns, source breakdowns, activity categories, repeated prompts, common multi-step sequences, cross-tool workflow changes, and automation recommendations.
 
-3. For targeted skill retrospectives, resolve the target skill and scope:
-   - Treat the current working directory as the invoking repo unless the user provided a repo path or session path.
-   - If running inside `agentic-skills`, search `global/codex`, `global/claude`, and `packs` for the named skill.
-   - If running from another repo, search project-local `.agents`, `.codex`, `.claude`, and pack directories first, then use installed `~/.codex/skills` or `~/.claude/skills` only as read-only fallback evidence.
-   - If the user provides a `SKILL.md` path, use it as the primary contract and still check the mirrored Claude/Codex counterpart when it exists.
-   - Use Codex rollout `session_meta.payload.cwd`, git metadata, and Claude `project` fields to associate sessions with the invoking repo. Prefer user-provided session IDs, files, date ranges, or exact correction phrases before broader searches.
-   - Report the resolved skill path, repo/session scope, and whether the evidence came from `agentic-skills`, a project-local copy, an installed copy, or local session history.
+7. Extract and report:
+   - Project breakdown: top projects by message volume with percentages.
+   - Source breakdown: Claude vs. Codex message/session counts and date ranges.
+   - Activity categories and recurring workflow themes.
+   - Exact and fuzzy repeated prompt patterns.
+   - Common multi-step workflow sequences.
+   - Cross-tool differences, including workflows that moved from Claude to Codex or still require different commands.
+   - Skill performance patterns across multiple invocations, including recurring corrections or repeated bad recommendations when supported by scoped history evidence.
 
-4. Gather targeted evidence:
-   - Read the target skill contract and any directly related project instructions such as `AGENTS.md`, `CLAUDE.md`, task docs, or pack docs when they affect the target behavior.
-   - Search only the scoped repo/session/history for the skill name, invocation command, user correction text, claimed mistake, relevant file paths, and nearby agent actions.
-   - Include the current conversation as evidence when the correction is happening in the active session.
-   - Broaden to full Claude/Codex history only when scoped evidence is insufficient or the user explicitly asks for recurrence analysis. State when and why the scope was broadened.
-   - Keep excerpts short, redact secrets, and do not include unrelated private prompt text.
-
-5. Verify the mistake before diagnosing it:
-   - Separate the **user-identified mistake** from the **agent-verified mistake**.
-   - A mistake is agent-verified only when independent evidence shows what the agent did, what the skill or repo contract required, and why the outcome was wrong or risky.
-   - Classify the verdict as `verified`, `partially verified`, `not verified`, or `inconclusive`.
-   - If the evidence shows the skill already gave the correct instruction and the agent ignored it, say that directly. Recommend a skill wording change only if it would materially reduce recurrence.
-
-6. Diagnose the skill-contract failure:
-   - Identify whether the root cause is a missing trigger, ambiguous trigger, missing evidence gate, insufficient scope resolution, weak output contract, bad next-step routing, missing validation, missing safety constraint, stale mirrored contract, or agent noncompliance with an adequate contract.
-   - Compare Claude and Codex versions when both exist. Flag drift when one version would prevent the mistake and the other would not.
-   - Check `tasks/lessons.md` when working in `agentic-skills`; reuse existing lessons that match the correction and recommend a new lesson when the pattern is novel.
-
-7. Recommend the smallest durable fix:
-   - Name the exact skill file(s) and section(s) to change.
-   - Provide concrete rule text or workflow-step wording, not just a generic suggestion.
-   - Include validation checks that would prove the skill now prevents the mistake, such as targeted `rg` checks, mirrored contract checks, version checks, and a replay of the corrected decision path.
-   - If implementation is requested, route the verified fix to `$targeted-skill-builder` or `$create-agentic-skill` as appropriate. Otherwise, keep the output as an analysis report.
+8. For each major pattern, recommend the best automation shape:
+   - Skill: repeatable workflow with a stable sequence.
+   - Agent: complex exploratory or autonomous work.
+   - Plugin/integration: external-service or persistent-connection workflow.
+   - Standing instruction/project convention: behavior that should always apply.
+   - `$session-triage`: one concrete incident needs verification before a durable fix is designed.
 
 ## Output
 
-For broad usage analysis, produce a structured report with:
+Produce a structured report with:
 
-- Overview stats: total messages, sessions, date range, top projects
-- Source comparison: Claude vs. Codex totals, top projects, command usage, and recent trend
-- Categorized patterns with counts and real examples from history
-- Ranked recommendations table: pattern, frequency, recommendation type, suggested name/description
-- Highest-impact section: top 5 automations by avoided manual prompts
-
-For targeted skill retrospectives, produce a structured report with:
-
-- Target: skill name, resolved skill file(s), invoking repo/session scope, and evidence sources
-- User-identified mistake: the user's claim in concise terms
-- Verification verdict: `verified`, `partially verified`, `not verified`, or `inconclusive`, with the evidence that supports the verdict
-- What happened: short timeline of user prompt, skill trigger, agent behavior, correction, and relevant repo/session state
-- Root cause: the specific skill-contract gap or agent noncompliance pattern
-- Recommended skill fixes: exact file(s), section(s), and proposed wording or workflow changes
-- Validation plan: commands or checks to prove the revised skill prevents the mistake
-- Confidence and gaps: what is known, what could not be verified, and whether broader session analysis is needed
-- Recommended next skill: `$targeted-skill-builder` for a verified narrow update, `$create-agentic-skill` for a new repo-managed skill, or `none` when no skill change is justified
+- Overview stats: total messages, sessions, date range, and top projects.
+- Source comparison: Claude vs. Codex totals, top projects, command usage, and recent trend.
+- Categorized patterns with counts and real examples from history.
+- Skill performance trends when requested or visible in the scoped data.
+- Ranked recommendations table: pattern, frequency, recommendation type, suggested name/description.
+- Highest-impact section: top 5 automations by avoided manual prompts.
+- Recommended next skill: `$session-triage` for any concrete incident that needs verification, `$targeted-skill-builder` for a broad verified workflow gap, or `none` when no follow-up is justified.
 
 ## Constraints
 
-- Use real message examples from history or the active conversation.
+- Use real message examples from history.
 - Show exact counts where possible.
 - Group near-identical prompts into one pattern.
 - Deduplicate Codex prompts that appear in both `~/.codex/history.jsonl` and rollout files by `(session_id, timestamp, normalized text)` where possible.
 - Do not include system, developer, base instruction, or tool output text in repeated-prompt counts.
-- Do not claim a user-identified mistake is agent-verified without independent evidence.
-- Do not run broad full-history scans for targeted retrospectives until scoped evidence has been checked or the user explicitly requests recurrence analysis.
-- Do not modify the target skill during analysis unless the user also asked for implementation and the active workflow permits edits.
+- Do not diagnose one immediate issue here; route it to `$session-triage`.
 - Do not create or modify GitHub Actions workflows.
 - If one source is missing or unreadable, report that clearly and continue with the other source instead of guessing.
 

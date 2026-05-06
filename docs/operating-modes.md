@@ -177,7 +177,7 @@ This section tags every global skill and every pack with a **primary CLI role** 
 | Skill | Primary role | Notes |
 | --- | --- | --- |
 | `affected` | Claude-orchestration | Monorepo scope framing for planning; read-only |
-| `analyze-sessions` | Claude-orchestration | Usage analysis + automation recommendations |
+| `analyze-sessions` | Claude-orchestration | Cross-session usage trends + automation recommendations |
 | `brainstorm` | Claude-orchestration | Idea surfacing into `/concept-exploration` or `/feature-interview` |
 | `branch-lifecycle` | Both | Evaluation is orchestration; merge/delete acts execute |
 | `codebase-status` | Claude-orchestration | Read-only repo status plus related local conversation history |
@@ -208,6 +208,7 @@ This section tags every global skill and every pack with a **primary CLI role** 
 | `roadmap` | Claude-orchestration | Task pipeline + priority queue |
 | `run` | Both | Plans next step (orchestration) and executes on approval (execution) |
 | `scaffold` | Codex-execution | Generate package/app |
+| `session-triage` | Claude-orchestration | Focused one-session issue verification + fix recommendation |
 | `ship` | Codex-execution | Update docs, commit, push, deploy |
 | `ship-end` | Codex-execution | End-of-session wrap: docs, commit, push |
 | `skills` | Claude-orchestration | Browse/search the skill catalog |
