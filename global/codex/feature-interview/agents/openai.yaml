@@ -1,7 +1,7 @@
 interface:
   display_name: "Feature Interview"
-  short_description: "Interview a feature idea and choose the right planning destination"
-  default_prompt: "Use $feature-interview to align on this feature idea, then decide whether to create a new spec, update an existing spec, or route into roadmap planning."
+  short_description: "Interview a feature idea with evidence-backed planning alignment"
+  default_prompt: "Use $feature-interview to validate this feature idea against code, docs, research, and task state, then decide the documentation destination, priority, and next planning route."
 
 policy:
   allow_implicit_invocation: true
