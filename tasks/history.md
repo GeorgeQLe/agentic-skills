@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-05-05 — Session triage split
+
+- Split focused one-session/one-issue investigations out of `analyze-sessions` into mirrored Claude/Codex `session-triage` skills.
+- Restored `analyze-sessions` to broad cross-session trends, repeated prompt patterns, workflow evolution, automation opportunities, and skill performance over time.
+- Added Codex `session-triage` agent metadata and narrowed `analyze-sessions` metadata to broad history analysis.
+- Updated discovery docs, skill grouping, operating-mode roles, next-step contracts, and `targeted-skill-builder` routing guidance.
+- Recorded the naming lesson: avoid near-identical singular/plural command pairs for split workflows.
+- Verified with install, skill dependency/version/routing audits, layer1 tests, targeted scans, exact no-`analyze-session` directory check, and `git diff --check`.
+
 ## 2026-05-05 — Analyze-sessions targeted skill retrospectives
 
 - Updated mirrored Claude/Codex `analyze-sessions` contracts so the skill can audit a named skill's performance in a repo or session after a user identifies a possible mistake.

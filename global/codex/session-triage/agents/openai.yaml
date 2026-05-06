@@ -1,0 +1,7 @@
+interface:
+  display_name: "Session Triage"
+  short_description: "Investigate one session issue or skill mistake"
+  default_prompt: "Use $session-triage to investigate one immediate issue, correction, repo incident, or suspected skill failure and recommend a verified fix."
+
+policy:
+  allow_implicit_invocation: true

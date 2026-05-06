@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-05-05 — Avoid singular/plural skill name ambiguity
+
+- Splitting one workflow into broad and focused commands can create a near-duplicate naming trap when the only visible difference is singular versus plural.
+- When users identify a likely command-selection ambiguity, prefer a semantically distinct name for the focused workflow instead of a one-letter variant.
+- For session analysis, keep `$analyze-sessions` as the broad cross-session trend command and use `$session-triage` for one immediate issue, correction, repo/session incident, or skill failure.
+
 ## 2026-05-05 — Keep Claude and Codex agent config blocks separate
 
 - A config conflict was easy to underweight because Codex reads `AGENTS.md`, not `CLAUDE.md`, but the provisioning workflow had been copying Claude-oriented subagent guidance into both files.

@@ -45,7 +45,7 @@ Global skills are safe across business apps, games, devtools, libraries, service
 | Skill | Purpose |
 | --- | --- |
 | `affected` | Analyze which monorepo packages and apps are affected by current changes |
-| `analyze-sessions` | Analyze Claude Code session history and recommend automation |
+| `analyze-sessions` | Analyze Claude/Codex session history trends and recommend automation |
 | `bootstrap-repo` | Initialize repository README and agent workflow docs from a project brief |
 | `brainstorm` | Evaluate the codebase and suggest ideas to explore with planning |
 | `branch-lifecycle` | Evaluate feature branches for merge, salvage, keep-open, or delete decisions |
@@ -78,6 +78,7 @@ Global skills are safe across business apps, games, devtools, libraries, service
 | `roadmap` | Scan task pipeline health, build or update the project roadmap, and maintain a priority task queue |
 | `run` | Execute the next incomplete step or phase, then ship the result |
 | `scaffold` | Generate a new package or app using repo conventions |
+| `session-triage` | Investigate one immediate session issue, correction, repo incident, or skill failure |
 | `ship` | Ship already-finished work, optionally deploy it, and prepare the next step |
 | `ship-end` | Wrap up the current session, update docs, commit, and push |
 | `skills` | Browse global and enabled project-local skills |
