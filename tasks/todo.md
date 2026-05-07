@@ -43,7 +43,7 @@ Establish the static product foundation for the showcase: multi-page routing, sh
 
 - [x] Step 32.1: Scaffold the multi-page static shell and shared blueprint foundation.
   - Files: add `docs/skills-showcase/index.html`, `docs/skills-showcase/workflows/index.html`, `docs/skills-showcase/packs/index.html`, `docs/skills-showcase/catalog/index.html`, `docs/skills-showcase/inspect/index.html`, `docs/skills-showcase/follow/index.html`, `docs/skills-showcase/styles.css`, `docs/skills-showcase/app.js`
-- [ ] Step 32.2: Add generated skill catalog data.
+- [x] Step 32.2: Add generated skill catalog data.
   - Files: add `scripts/generate-skills-showcase-data.mjs`, add generated `docs/skills-showcase/assets/skills-data.js`
   - Implementation plan:
     - Write a dependency-free Node.js generator that scans tracked source skill files under `global/*/*/SKILL.md` and `packs/*/{claude,codex}/*/SKILL.md`, plus `packs/*/PACK.md` when present.
@@ -57,6 +57,16 @@ Establish the static product foundation for the showcase: multi-page routing, sh
     - Run `git diff --check`.
 - [ ] Step 32.3: Add generated GitHub/open-source proof data.
   - Files: add `scripts/generate-skills-showcase-github-data.mjs`, add generated `docs/skills-showcase/assets/github-proof-data.js`
+  - Implementation plan:
+    - Write a dependency-free Node.js generator that produces `window.SKILLS_SHOWCASE_GITHUB_PROOF_DATA` for static use by the Inspect page.
+    - Use public/local evidence only: repository URL from `git remote get-url origin`, current branch/HEAD commit from local git, tracked proof artifact paths such as `tasks/history.md` and validation scripts, and optional public GitHub metadata only when unauthenticated network access is available without secrets.
+    - Degrade honestly when public GitHub metadata cannot be refreshed by writing fallback fields with `status`, `reason`, and local evidence instead of failing or inventing metrics.
+    - Keep output deterministic for unchanged local sources by using Git commit timestamps/fingerprints rather than wall-clock timestamps where possible.
+    - Do not add secrets, analytics, a runtime API, a database, GitHub Actions, or dependencies.
+  - Verification plan:
+    - Run `node scripts/generate-skills-showcase-github-data.mjs`.
+    - Run a targeted Node check confirming the browser global, repository evidence, local commit evidence, proof artifact links, and fallback status fields exist.
+    - Run `git diff --check`.
 - [ ] Step 32.4: Add stale-data validation and tests.
   - Files: add `scripts/validate-skills-showcase-data.sh`, add `tests/layer1/skills-showcase-data.test.ts` if script-level coverage is needed
 - [ ] Step 32.5: Update skill mutation contracts to maintain the website after skill changes.
@@ -95,8 +105,21 @@ No manual tasks block Phase 32. Vercel deployment and newsletter provider setup 
 - **Rollback note:** Revert the Step 32.1 commit to remove the `docs/skills-showcase/` static shell and task/history bookkeeping.
 - **Next command:** `$run`
 
+#### 2026-05-07 - Step 32.2 Ship Manifest
+
+- **User goal:** Execute `$run` for the next incomplete Phase 32 step by adding generated skill catalog data for the static showcase.
+- **Changed files:** `scripts/generate-skills-showcase-data.mjs`, `docs/skills-showcase/assets/skills-data.js`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** The generator scans tracked global and pack skill sources, parses frontmatter, derives catalog metadata, pack summaries, and a source fingerprint; the generated browser data file commits the static catalog payload for Vercel; task/history docs record completion, validation, and the next executable plan.
+- **User-goal mapping:** Step 32.2 requires generated data covering every tracked source skill under `global/` and `packs/`; the generator uses `git ls-files` for the tracked source boundary and generated `312` skills across `16` packs from `327` source inputs.
+- **Tests run:** `node scripts/generate-skills-showcase-data.mjs` passed; `node --check scripts/generate-skills-showcase-data.mjs` passed; targeted Node data-shape check confirmed `window.SKILLS_SHOWCASE_DATA`, `sourceFingerprint`, `generatedAt`, `global/codex/run/SKILL.md`, `$run`, pack-scoped monorepo records, and mirrored monorepo pack platforms; idempotence check `node scripts/generate-skills-showcase-data.mjs && git diff --exit-code -- docs/skills-showcase/assets/skills-data.js` passed; `git diff --check` passed.
+- **Skipped tests:** Full stale-data validator was not run because Step 32.4 has not added `scripts/validate-skills-showcase-data.sh` yet. Browser catalog rendering against generated data was not run because Step 32.2 only commits the generated payload; wiring the UI to consume it belongs to the later experience phase.
+- **Adversarial review:** Self-review found and fixed an unstable wall-clock `generatedAt` value that would have made future freshness checks noisy; the final generator derives `generatedAt` from the latest Git commit timestamp for tracked source inputs and uses a content fingerprint for stale-data detection. Review also checked that no dependency, secret, runtime API, database, GitHub Actions, or invented skill metadata was introduced.
+- **Residual risk:** The frontmatter parser intentionally supports simple scalar fields only; this matches current skill metadata but would need expansion if future `SKILL.md` frontmatter adopts nested YAML. Step 32.4 should encode stale-data validation against this exact generator contract.
+- **Rollback note:** Revert the Step 32.2 commit to remove the generator, generated `skills-data.js`, and task/history bookkeeping.
+- **Next command:** `$run`
+
 ## Next Work
 
-Start Step 32.1 by scaffolding the multi-page static shell and shared blueprint foundation under `docs/skills-showcase/`.
+Start Step 32.3 by adding generated GitHub/open-source proof data for the static showcase.
 
 **Recommended next command:** `$run`

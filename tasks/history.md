@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-05-07 - Phase 32 Step 32.2: skills showcase catalog data
+
+- Added `scripts/generate-skills-showcase-data.mjs`, a dependency-free generator that scans tracked `global/*/*/SKILL.md`, `packs/*/{claude,codex}/*/SKILL.md`, and `packs/*/PACK.md` sources.
+- Generated committed `docs/skills-showcase/assets/skills-data.js` with `312` skills, `16` packs, `327` source inputs, derived commands, path metadata, pack summaries, tags, and a deterministic source fingerprint.
+- Made generation stable for unchanged sources by deriving `generatedAt` from the latest Git commit timestamp for the tracked source inputs rather than wall-clock time.
+- Verified with generator execution, Node syntax check, targeted browser-global/data-shape checks, generated-output idempotence check, and `git diff --check`.
+
 ## 2026-05-07 — Fold consistently-accepted patterns into ux-variation and ui-interview
 
 - Updated `ux-variation/SKILL.md` to default to 5 maximally contrasting variants, skip breadth/count/evaluator questions, remove pre-build narrowing options (Remove one, Merge concepts), require full buildout of all variants before evaluation, add "Make this a variant axis" affordance for ambiguous design decisions, and unlock per-variation design constraints (only tech stack shared).
