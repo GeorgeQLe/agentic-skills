@@ -27,7 +27,7 @@ Establish the static product foundation for the showcase: multi-page routing, sh
 - [ ] `scripts/generate-skills-showcase-data.mjs` writes committed generated data covering every tracked source skill.
 - [ ] `scripts/generate-skills-showcase-github-data.mjs` writes committed proof data or an honest fallback without requiring secrets.
 - [x] `scripts/validate-skills-showcase-data.sh` fails when generated showcase data is stale.
-- [ ] Skill-changing contracts prompt regeneration and curated website review when `SKILL.md` behavior or metadata changes.
+- [x] Skill-changing contracts prompt regeneration and curated website review when `SKILL.md` behavior or metadata changes.
 - [ ] Focused validation passes without adding a database, video, Remotion, runtime API, GitHub Actions, or unnecessary root dependencies.
 
 ### Execution Profile
@@ -80,7 +80,7 @@ Establish the static product foundation for the showcase: multi-page routing, sh
     - Run `scripts/validate-skills-showcase-data.sh`.
     - Run targeted checks confirming the validator references both generator scripts and both generated assets.
     - Run `git diff --check`.
-- [ ] Step 32.5: Update skill mutation contracts to maintain the website after skill changes.
+- [x] Step 32.5: Update skill mutation contracts to maintain the website after skill changes.
   - Files: modify `global/codex/create-agentic-skill/SKILL.md`, `global/claude/create-agentic-skill/SKILL.md`, `global/codex/targeted-skill-builder/SKILL.md`, `global/claude/targeted-skill-builder/SKILL.md`, `global/codex/run/SKILL.md`, `global/claude/run/SKILL.md`, `global/codex/ship/SKILL.md`, `global/claude/ship/SKILL.md`, `docs/skills-reference.md`
   - Implementation plan:
     - Add a shared freshness requirement to skill-changing workflows: when a run creates, deletes, renames, or changes behavior/metadata in any tracked `SKILL.md` or `PACK.md`, rerun `node scripts/generate-skills-showcase-data.mjs`, `node scripts/generate-skills-showcase-github-data.mjs`, and `scripts/validate-skills-showcase-data.sh` before shipping.
@@ -95,16 +95,26 @@ Establish the static product foundation for the showcase: multi-page routing, sh
     - Run `git diff --check`.
 - [ ] Step 32.6: Validate and record the phase.
   - Files: modify `tasks/todo.md`, `tasks/history.md`
+  - Implementation plan:
+    - Run the full Phase 32 green checklist: `node scripts/generate-skills-showcase-data.mjs`, `node scripts/generate-skills-showcase-github-data.mjs`, `scripts/validate-skills-showcase-data.sh`, `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-next-step-routing.sh --missing`, `./scripts/skill-pack-routing-audit.sh`, any focused generator/validator checks still relevant, and `git diff --check`.
+    - Confirm all Phase 32 acceptance criteria that have been satisfied by Steps 32.1-32.5 are checked in `tasks/todo.md`; leave only genuinely future Phase 33/34 UI or launch work unchecked if applicable.
+    - Add a final Phase 32 review section summarizing validation, residual risks, skipped tests with rationale, and whether the phase is ready to archive.
+    - Update `tasks/history.md` with the Phase 32 validation result.
+    - If all Phase 32 steps and acceptance criteria are complete, archive the phase to `tasks/phases/phase-32.md`, update `tasks/roadmap.md`, and prepare the Phase 33 todo per the phase-transition workflow.
+  - Verification plan:
+    - Run the full green checklist commands listed above.
+    - Run targeted checks that `tasks/todo.md`, `tasks/history.md`, and any archived phase file reflect the final status.
+    - Run `git diff --check`.
 
 ### Green / Verification
 
 - [ ] Run `node scripts/generate-skills-showcase-data.mjs`.
 - [ ] Run `node scripts/generate-skills-showcase-github-data.mjs`.
 - [x] Run `scripts/validate-skills-showcase-data.sh`.
-- [ ] Run `./scripts/skill-deps.sh --broken`.
-- [ ] Run `./scripts/skill-versions.sh --missing`.
-- [ ] Run `./scripts/skill-next-step-routing.sh --missing`.
-- [ ] Run `./scripts/skill-pack-routing-audit.sh`.
+- [x] Run `./scripts/skill-deps.sh --broken`.
+- [x] Run `./scripts/skill-versions.sh --missing`.
+- [x] Run `./scripts/skill-next-step-routing.sh --missing`.
+- [x] Run `./scripts/skill-pack-routing-audit.sh`.
 - [ ] Run focused tests for any added generator or validator coverage.
 - [ ] Run `git diff --check`.
 
@@ -113,6 +123,19 @@ Establish the static product foundation for the showcase: multi-page routing, sh
 No manual tasks block Phase 32. Vercel deployment and newsletter provider setup are planned for Phase 34 after source implementation and local validation.
 
 ### Review
+
+#### 2026-05-07 - Step 32.5 Ship Manifest
+
+- **User goal:** Execute `$run` for the next incomplete Phase 32 step by updating skill mutation contracts so skill behavior changes maintain the static Skills Showcase data and curated public copy.
+- **Changed files:** `global/codex/create-agentic-skill/SKILL.md`, `global/claude/create-agentic-skill/SKILL.md`, `global/codex/targeted-skill-builder/SKILL.md`, `global/claude/targeted-skill-builder/SKILL.md`, `global/codex/run/SKILL.md`, `global/claude/run/SKILL.md`, `global/codex/ship/SKILL.md`, `global/claude/ship/SKILL.md`, `docs/skills-reference.md`, `docs/skills-showcase/assets/skills-data.js`, `docs/skills-showcase/assets/github-proof-data.js`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** Creation/update skills now regenerate showcase data and review curated website copy after repo-managed skill changes; run/ship skills now include the showcase freshness gate in skill mutation shipping boundaries; `docs/skills-reference.md` documents the maintainer contract; generated assets capture the updated skill-contract source fingerprints; task/history docs record completion and next work.
+- **User-goal mapping:** Step 32.5 requires skill-changing contracts to prompt regeneration and curated website review when `SKILL.md` behavior or metadata changes. The mirrored skill contracts now require both generator commands, the freshness validator, generated assets in the shipping boundary, and curated website/proof review language.
+- **Tests run:** `node scripts/generate-skills-showcase-data.mjs` passed; `node scripts/generate-skills-showcase-github-data.mjs` passed; `scripts/validate-skills-showcase-data.sh` first failed with stale generated assets as expected after skill edits, then passed after regeneration; `./install.sh` passed; `./scripts/skill-deps.sh --broken` passed; `./scripts/skill-versions.sh --missing` passed; `./scripts/skill-next-step-routing.sh --missing` passed; `./scripts/skill-pack-routing-audit.sh` passed; targeted `rg -l` confirmed all eight target skill contracts plus `docs/skills-reference.md` reference `scripts/validate-skills-showcase-data.sh`; `git diff --check` passed.
+- **Skipped tests:** No browser UI checks were run because this step changes workflow policy and generated data, not rendered page behavior. No package test suite was run because the executable surface is shell/skill-contract validation and the generator freshness gate already covered the changed generated assets.
+- **Adversarial review:** Checked the contract wording against the Phase 32 boundaries: it requires static data regeneration and curated copy/proof review without introducing a runtime API, database, GitHub Actions workflow, video/Remotion pipeline, analytics, or live product metrics. The edits preserve Claude/Codex command syntax differences.
+- **Residual risk:** Curated website review remains an operator judgment gate rather than a fully automated diff check; later Phase 33 UI work should make public copy and workflow animation data more structured if this proves easy to miss.
+- **Rollback note:** Revert the Step 32.5 commit to remove the showcase freshness requirements from mutation-capable skills and restore the previous generated data fingerprints.
+- **Next command:** `$run`
 
 #### 2026-05-07 - Step 32.4 Ship Manifest
 
@@ -178,6 +201,6 @@ No manual tasks block Phase 32. Vercel deployment and newsletter provider setup 
 
 ## Next Work
 
-Start Step 32.5 by updating skill mutation contracts to maintain the showcase website after skill changes.
+Start Step 32.6 by running the full Phase 32 validation gate and recording/archive-ready phase status.
 
 **Recommended next command:** `$run`

@@ -82,6 +82,7 @@ When the profile is `agent-team`:
 
 ### Single Step Mode (default)
 
+- If the step creates, deletes, renames, or changes behavior/metadata in any tracked `SKILL.md` or `PACK.md`, refresh the Skills Showcase before handing off to `/ship`: run `node scripts/generate-skills-showcase-data.mjs`, `node scripts/generate-skills-showcase-github-data.mjs`, and `scripts/validate-skills-showcase-data.sh`; include changed generated assets in the dirty tree. Review curated showcase copy, catalog grouping, workflow animation text, and proof receipts; update affected site files or record why no curated website copy changed.
 - If it's a "Tests First" step: write the failing tests, run them to confirm they fail (red). Stop.
 - If it's an implementation step: implement it, run existing tests to check for regressions. Stop.
 - If it's a "Green" step: run all tests. For `tests-after` phases, also write regression tests covering acceptance criteria. Fix any failures. If validation is clean and a following cleanup/refactor step is explicitly conditional on validation findings or says no source changes are expected, complete that no-op cleanup in the same run by recording the no-op result instead of leaving it for a separate plan-mode handoff. Stop.

@@ -61,6 +61,11 @@ This is intentionally narrower than `$analyze-sessions`. Do not scan all Claude/
     - `./scripts/skill-deps.sh --broken`
     - `./scripts/skill-versions.sh --missing`
     - `./scripts/skill-next-step-routing.sh --missing`
+    - If any tracked `SKILL.md` or `PACK.md` behavior or metadata changed, refresh the Skills Showcase data:
+      - `node scripts/generate-skills-showcase-data.mjs`
+      - `node scripts/generate-skills-showcase-github-data.mjs`
+      - `scripts/validate-skills-showcase-data.sh`
+    - Review curated showcase copy, catalog grouping, workflow animation text, and proof receipts when the skill change could affect the public website; update those files or record why no curated website copy changed.
     - Targeted `rg` checks for the behavior being changed.
     - `git diff --check`
 11. Update `tasks/todo.md` review notes with validation results.
@@ -73,7 +78,7 @@ Produce a concise report with:
 - Decision: new skill, existing-skill update, reusable prompt/template, or no repository change.
 - Evidence used and evidence intentionally skipped.
 - Existing-skill overlap findings.
-- Files created or changed, if any.
+- Files created or changed, if any, including generated showcase assets when skill metadata or behavior changed.
 - Validation results.
 - Reload note: after `./install.sh`, tell the user to start a fresh Claude Code or Codex CLI/session if the new or changed skill is not visible yet. Codex desktop sessions may list newly created skills only after the active skill registry refreshes; starting a fresh session is the reliable fallback.
 
