@@ -23,7 +23,7 @@ This pack-local `mono-guard` consumes `.agents/lane-specs.json` and `.agents/mon
 
 ## Inputs
 
-- `.agents/lane-specs.json`: generated lane plan with lifecycle, cross-cutting steps, lanes, `owns`, `must_not_edit`, `depends_on`, and mode.
+- `.agents/lane-specs.json`: generated lane plan with lifecycle, cross-cutting steps, lanes, `owns`, `must_not_edit`, `depends_on`, mode, and branch.
 - `.agents/monorepo.json`: workspace detection output from `mono-detect`, including packages and internal dependency graph.
 - `packs/monorepo/scripts/lane-spec-validate.sh`: schema and boundary validator for lane specs.
 
@@ -35,7 +35,7 @@ If `.agents/monorepo.json` is missing or stale, run `mono-detect` first. If `.ag
    - Use the path in `$ARGUMENTS` when provided.
    - Otherwise use `.agents/lane-specs.json`.
 2. Run `packs/monorepo/scripts/lane-spec-validate.sh <lane-specs.json>`.
-   - This verifies required fields, lifecycle state, disjoint `owns`, required root `must_not_edit` entries, valid `depends_on` references, and duplicate step protection.
+   - This verifies required fields, lifecycle state, disjoint `owns`, required root `must_not_edit` entries, valid `depends_on` references, unique non-primary branches, and duplicate step protection.
    - On failure, report `FAIL` and do not dispatch.
 3. Read `.agents/monorepo.json`.
    - If missing, run or recommend `mono-detect`.
@@ -52,7 +52,11 @@ If `.agents/monorepo.json` is missing or stale, run `mono-detect` first. If `.ag
 7. Verify lane dependency graph validity:
    - All `depends_on` references resolve to known cross-cutting step IDs or lane step IDs.
    - No lane dependency cycle exists.
-8. Scan lane descriptions, scopes, and modes when present for install/add intent.
+8. Verify branch isolation:
+   - Every write lane has a unique non-primary GitHub branch.
+   - No lane branch is `main` or `master`.
+   - If PR review is required by the execution profile but branch/PR evidence is missing after dispatch, report `FAIL`.
+9. Scan lane descriptions, scopes, and modes when present for install/add intent.
    - Fail non-serial package lanes that instruct `pnpm install`, `pnpm add`, `npm install`, `yarn add`, or equivalent lockfile-modifying commands.
    - Warn on natural-language dependency changes such as "add dependency" or "install package".
 
@@ -65,7 +69,10 @@ If `.agents/monorepo.json` is missing or stale, run `mono-detect` first. If `.ag
    - Flag root config changes as `WARN` unless they are declared in a serial cross-cutting step.
    - Verify the path is inside at least one declared lane `owns` path or an allowed serial cross-cutting/root scope.
    - Flag files outside declared ownership as boundary violations.
-4. Report violations without reverting, fixing, or editing task files.
+4. Verify consolidation/PR review evidence when lane specs record branch-backed dispatch:
+   - Every integrated lane must have branch, commit SHA, and PR URL evidence recorded in `tasks/lane-specs.md` or the dispatch report.
+   - Missing PR review evidence is `FAIL` because package lanes must not bypass consolidation review.
+5. Report violations without reverting, fixing, or editing task files.
 
 ## Output Format
 
@@ -84,6 +91,7 @@ If `.agents/monorepo.json` is missing or stale, run `mono-detect` first. If `.ag
 | Lane-spec schema | PASS | lane-spec-validate.sh passed |
 | Owns disjointness | PASS | all lane owns paths are disjoint |
 | Shared file exclusions | PASS | lockfile and root config paths are in must_not_edit |
+| Branch isolation | PASS | each write lane has a unique non-primary GitHub branch |
 | Dependency ordering | PASS | package dependency lanes are ordered |
 | Integrated diff boundaries | WARN | one root config changed in serial integration |
 

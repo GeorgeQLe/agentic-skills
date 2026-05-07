@@ -102,7 +102,7 @@ This contract does not replace the repository's direct-to-primary shipping flow.
 For direct-to-primary work:
 
 - Build the manifest from the exact diff that will be committed.
-- Do not use a feature branch as a substitute for the quality gate.
+- Do not use a feature branch as a substitute for the quality gate. `agent-team` lane branches add isolation and PR review, but the final shipping boundary still needs this manifest.
 - Do not commit or push with known lint, type, test, build, or review failures.
 - Do not include unrelated tracked changes unless the manifest explicitly proves the ownership boundary and the operator accepts it.
 - Preserve the required next-step routing so the next operator has one concrete continuation path.

@@ -16,6 +16,7 @@ Checks:
   - Lane owns paths are disjoint.
   - Every lane must_not_edit includes lockfile and root config paths.
   - Lane depends_on references resolve to known step IDs.
+  - Every lane has a unique non-primary branch name for PR review.
 EOF
 }
 
@@ -47,7 +48,7 @@ const specFile = process.argv[2];
 const validLifecycles = new Set(["draft", "approved", "dispatched", "integrated", "failed"]);
 const requiredRootMustNotEdit = ["pnpm-lock.yaml", "package.json", "pnpm-workspace.yaml", "turbo.json"];
 const topLevelFields = ["phase", "source_roadmap_hash", "lifecycle", "cross_cutting_steps", "lanes"];
-const laneFields = ["id", "step", "packages", "owns", "must_not_edit", "depends_on", "mode"];
+const laneFields = ["id", "step", "packages", "owns", "must_not_edit", "depends_on", "mode", "branch"];
 
 function fail(message, code = 1) {
   console.error(`ERROR: ${message}`);
@@ -164,6 +165,7 @@ for (const [index, step] of spec.cross_cutting_steps.entries()) {
 }
 
 const laneIds = new Set();
+const branchNames = new Set();
 const owns = [];
 
 for (const [index, lane] of spec.lanes.entries()) {
@@ -181,6 +183,7 @@ for (const [index, lane] of spec.lanes.entries()) {
   assertString(lane.id, `${label}.id`);
   assertString(lane.step, `${label}.step`);
   assertString(lane.mode, `${label}.mode`);
+  assertString(lane.branch, `${label}.branch`);
   assertStringArray(lane.packages, `${label}.packages`, { allowEmpty: false });
   assertStringArray(lane.owns, `${label}.owns`, { allowEmpty: false });
   assertStringArray(lane.must_not_edit, `${label}.must_not_edit`, { allowEmpty: false });
@@ -190,6 +193,18 @@ for (const [index, lane] of spec.lanes.entries()) {
     fail(`duplicate lane id: ${lane.id}`);
   }
   laneIds.add(lane.id);
+
+  const branch = lane.branch.trim();
+  if (branch === "main" || branch === "master") {
+    fail(`${label}.branch must not be the primary branch: ${branch}`);
+  }
+  if (!/^[A-Za-z0-9._/-]+$/.test(branch)) {
+    fail(`${label}.branch contains unsupported characters: ${branch}`);
+  }
+  if (branchNames.has(branch)) {
+    fail(`duplicate branch name: ${branch}`);
+  }
+  branchNames.add(branch);
 
   if (knownSteps.has(lane.step)) {
     fail(`duplicate step id: ${lane.step}`);

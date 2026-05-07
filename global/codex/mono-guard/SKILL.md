@@ -9,7 +9,7 @@ version: 1.0.0
 
 Invoke as `$mono-guard`.
 
-Use this skill to validate execution profile lane boundaries before `/run` dispatches parallel agents. Catches lockfile contention, root config conflicts, and package boundary violations before they cause failures.
+Use this skill to validate execution profile lane boundaries before `/run` dispatches parallel agents. Catches lockfile contention, root config conflicts, package boundary violations, and missing branch/PR isolation before they cause failures.
 
 ## Modes
 
@@ -25,12 +25,14 @@ Use this skill to validate execution profile lane boundaries before `/run` dispa
 5. **Serialization Check:** No write lane's Scope contains `pnpm install`, `npm install`, `yarn add`, etc. (except a dedicated deps lane). FAIL if found.
 6. **Install Command Check:** Scan for natural-language install intent ("add dependency", "install package"). WARN if detected.
 7. **DAG Validity:** No cycles in lane dependency graph, all `Depends on` references exist. FAIL if violated.
+8. **Branch/PR Isolation:** For `agent-team` write lanes, every lane has a unique `Branch` that is not `main` or `master`, and the phase includes a consolidation/PR review gate. FAIL if missing.
 
 ## Post-Integration Checks
 
 1. **Lockfile audit:** Verify lockfile was only touched by deps lane or main agent.
 2. **Root config audit:** Same check for root configs.
 3. **Boundary audit:** Verify each lane's changes fall within its `Owns` paths.
+4. **PR review audit:** Verify branch, commit SHA, and PR URL evidence exists for every integrated `agent-team` write lane.
 
 ## Output Format
 

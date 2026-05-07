@@ -13,6 +13,7 @@
 - When subagents are available and permitted, delegate independent research, exploration, or execution lanes with non-overlapping scopes.
 - One task per subagent for focused execution.
 - Do not override Codex's current subagent permission, tool availability, or parallel-work rules.
+- For `agent-team` parallel write lanes, require separate GitHub branches per lane and include a consolidation/PR review step before final integration. This is the explicit exception to direct-to-primary work.
 
 ### 3. Self-Improvement Loop
 - After ANY correction from the user: update `tasks/lessons.md` with the pattern
@@ -43,6 +44,7 @@
 - All dependency changes must be pre-staged in a single serial session before parallel work begins
 - Parallel agents must only write files within their own package directory (e.g. `packages/<name>/src/`)
 - Before launching parallel agents, verify their planned work scopes do not overlap on any shared files
+- Parallel `agent-team` write lanes must use separate GitHub branches with deterministic names, push those branches, and return branch/commit/PR evidence for consolidation review
 - If you need a new dependency mid-task, stop and request it be added centrally rather than running the package manager yourself
 
 ## Task Management
@@ -58,6 +60,6 @@
 - **Simplicity First**: Make every change as simple as possible. Impact minimal code.
 - **No Laziness**: Find root causes. No temporary fixes. Senior developer standards.
 - **Minimal Impact**: Changes should only touch what's necessary. Avoid introducing bugs.
-- **Direct-To-Primary Git Flow**: Default to committing and pushing on the repository primary branch (`main` when present, otherwise `master`). Do not introduce or continue feature-branch workflows unless the user explicitly asks for them.
+- **Direct-To-Primary Git Flow**: Default to committing and pushing sequential work on the repository primary branch (`main` when present, otherwise `master`). Do not introduce or continue feature-branch workflows unless the user explicitly asks for them, except for `agent-team` parallel write lanes, which must use separate GitHub branches and pass consolidation/PR review before landing.
 - **Always Ship Mutations**: If a task creates or modifies tracked files, finish by committing and pushing all intended changes before stopping unless the user explicitly says not to. Exception: direct Claude `/run` is execution-only and hands a dirty tracked tree to `/ship`. Claude clear-context sessions launched from `/ship` plan mode are ship-one-step sessions: implement the approved step, validate, update task docs/history, commit and push, deploy when an explicit manual deploy contract exists, write the next plan, ensure `.claude/settings.local.json` has `"showClearContextOnPlanAccept": true` and `"defaultMode": "acceptEdits"`, start the next approval UI with `EnterPlanMode` before `ExitPlanMode`, and stop before implementing the next step. If Claude refuses `EnterPlanMode` because an explicit user request is required, stop and ask the user to explicitly run `/plan <next step>`.
 - **No GitHub Actions**: Do not create, modify, or suggest GitHub Actions workflows. This project does not use GitHub Actions for CI/CD.

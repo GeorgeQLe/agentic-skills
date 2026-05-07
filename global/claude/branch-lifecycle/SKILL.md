@@ -10,7 +10,7 @@ argument-hint: "[--force] [list | pr [branch...] | review <branch-or-pr> | merge
 
 Evaluate feature branches after review and drive one of four outcomes: `merge`, `salvage`, `keep-open`, or `delete`.
 
-This is an exception workflow. The default repository policy is direct-to-primary development on `main`/`master`; use this skill for legacy branches, externally introduced branches, or explicit user requests for branch/PR work.
+This is an exception workflow. The default repository policy is direct-to-primary development on `main`/`master`; use this skill for legacy branches, externally introduced branches, explicit user requests for branch/PR work, or `agent-team` lane branches created by an approved parallel plan.
 
 ## Arguments
 

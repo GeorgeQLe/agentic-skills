@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-05-07 — Parallel agent branch/PR guard
+
+- Added the narrow `agent-team` branch exception to root `AGENTS.md`/`CLAUDE.md` guidance and to the `provision-agentic-config` templates that regenerate those blocks.
+- Updated mirrored `roadmap`, `plan-phase`, `run`, `mono-plan`, `mono-guard`, `mono-run`, `mono-ship`, `branch-lifecycle`, and `patch-exec-profile` contracts so parallel write lanes use separate non-primary GitHub branches and return branch, commit SHA, validation, and PR evidence.
+- Added consolidation/PR review as a required planning and integration gate before final validation or shipping for `agent-team` work.
+- Extended `lane-spec-validate.sh` and monorepo fixtures so package lane specs require unique non-primary branch names.
+- Recorded the correction in `tasks/lessons.md` and updated monorepo docs/reference material.
+- Verified with `./install.sh`, skill dependency/version/routing audits, pack-routing audit, lane-spec valid/invalid checks, `monorepo-validate.sh`, targeted policy scans, `pnpm --dir tests test`, and `git diff --check`.
+
 ## 2026-05-06 — Feature interview evidence intake
 
 - Enhanced mirrored Claude/Codex `feature-interview` contracts so impromptu feature ideas start with an evidence-backed intake pass before deep interrogation.

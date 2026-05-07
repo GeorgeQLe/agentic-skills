@@ -30,14 +30,16 @@ Identify the next incomplete unit of work from the phased plan, build an executi
    - If missing, treat the phase as `serial`.
    - Use the profile only for the current step or scoped phase; do not plan ahead.
    - If the profile's `Parallel mode` is `agent-team`:
-     - Parse all lanes. If any lane is missing `Mode:` or `Depends on:`, still contains placeholder text, or write lanes have overlapping `Owns`, **auto-invoke `/patch-exec-profile`** for this phase (same pattern as step 4's auto-invocation of `/plan-phase`). Re-read `tasks/todo.md` after it returns. Do not tell the user to run `/patch-exec-profile` manually — this auto-invocation is the designed workflow.
+     - Parse all lanes. If any lane is missing `Mode:` or `Depends on:`, still contains placeholder text, write lanes have overlapping `Owns`, or write lanes are missing a concrete non-primary `Branch:`, **auto-invoke `/patch-exec-profile`** for this phase (same pattern as step 4's auto-invocation of `/plan-phase`). Re-read `tasks/todo.md` after it returns. Do not tell the user to run `/patch-exec-profile` manually — this auto-invocation is the designed workflow.
      - Build the lane DAG from each lane's `Depends on:` field. Compute topological waves. Include the DAG and wave structure in the plan-mode presentation at step 8.
+     - Confirm the plan includes a consolidation/PR review step after all write lanes and before final validation or shipping. If not, stop and patch the phase plan before dispatch.
 7. **Enter plan mode** using the EnterPlanMode tool.
 8. **Present the execution plan** to the user:
    - What the step/phase requires
    - Which files will be created or modified
    - The approach (e.g., what tests to write, what code to change)
    - Whether the execution profile will run serially, use read-only research lanes, use review lanes, or use disjoint write lanes
+   - For `agent-team`: the planned lane branches and the consolidation/PR review gate
    - Any decisions or trade-offs the user should weigh in on
 9. **Wait for user approval.** Do NOT write any code until the user approves.
 10. **After approval, execute the approved plan.** If Claude Code already returned to normal mode after approval, do not call ExitPlanMode again; continue directly with implementation. Only use the plan-mode exit tool when the session is still visibly in plan mode.
@@ -50,7 +52,7 @@ After approval, apply the current phase's `### Execution Profile`:
 - `research-only`: launch read-only subagent lanes first when the active environment permits subagents, synthesize their findings, then implement in the main agent.
 - `review-only`: implement in the main agent, then launch review subagent lanes before final validation.
 - `implementation-safe`: launch write subagent lanes only when every write lane has disjoint `Owns` paths and explicit `Must not edit` boundaries; otherwise downgrade to `research-only` or `serial` and report the downgrade.
-- `agent-team`: auto-dispatch lanes via `Agent` tool calls with `isolation: "worktree"` (see **Agent-Team Dispatch** below). This is the current policy — **do not stop** merely because the profile says `agent-team` or because the phase/step body contains legacy advisory text like *"do not implement in a single `/run`"*, *"requires isolated worktrees or a dedicated agent team"*, or *"use `/delegate` instead"*. That guidance predates agent-team dispatch and is now stale. Trust the `### Execution Profile` metadata (after `/patch-exec-profile` fills it) and proceed. Only stop if `/patch-exec-profile` returns with unresolvable ambiguity (overlapping `Owns`, cyclic `Depends on`, or missing lane specs that cannot be inferred).
+- `agent-team`: auto-dispatch lanes via `Agent` tool calls with `isolation: "worktree"` (see **Agent-Team Dispatch** below). Each write lane must run on its declared separate GitHub branch and return branch, commit SHA, validation evidence, and PR URL. This is the current policy — **do not stop** merely because the profile says `agent-team` or because the phase/step body contains legacy advisory text like *"do not implement in a single `/run`"*, *"requires isolated worktrees or a dedicated agent team"*, or *"use `/delegate` instead"*. That guidance predates agent-team dispatch and is now stale. Trust the `### Execution Profile` metadata (after `/patch-exec-profile` fills it) and proceed. Only stop if `/patch-exec-profile` returns with unresolvable ambiguity (overlapping `Owns`, cyclic `Depends on`, missing lane specs that cannot be inferred, or missing branch/PR review requirements).
 
 The main agent owns integration, conflict resolution, task doc updates, history updates, shipping handoff, and deploy handoff. If a subagent touches files outside its owned paths or returns conflicting changes, stop and reconcile before validation.
 
@@ -61,14 +63,18 @@ When the profile is `agent-team`:
 - Execute lane waves in topological order (computed from `Depends on:` in step 6b).
 - For each wave of **write** lanes: dispatch one `Agent` call per lane, in a single message (parallel execution), with:
   - `isolation: "worktree"`
+  - The lane's declared `Branch:` value, created from the current primary branch (`main` when present, otherwise `master`) and never named `main` or `master`
   - `subagent_type: "general-purpose"` unless the lane spec names another agent
   - Prompt scoped to the lane's `Scope`, `Owns`, `Must not edit`, and `Deliverable`
-  - Explicit instruction in the prompt: "Before returning, commit all your changes inside the worktree. Your deliverable must include the final commit SHA on your branch."
+  - Explicit instruction in the prompt: "Work only on your assigned branch. Before returning, commit all your changes, push the branch to GitHub, open or update a draft PR, and include the branch name, final commit SHA, validation evidence, and PR URL."
+- If the repository has no GitHub remote, branch push is unavailable, or PR creation/review cannot be performed, stop before dispatch and report the blocker instead of downgrading silently.
 - When each lane returns:
-  1. **Validate write boundaries:** run `git diff --name-only <primary>..<lane-branch>`. Every changed path must be a subset of the lane's declared `Owns`. If any file falls outside (including matches against `Must not edit`), abort integration for that lane and surface the violation. Do not attempt partial integration.
-  2. **Integrate into the shared tree:** `git restore --source=<lane-branch> --staged --worktree -- <owns-path-1> <owns-path-2> …`. This captures modifications, additions, and deletions. Do not use `git checkout <branch> -- <paths>` — it silently drops deletions. Do not create a merge commit; the result is a dirty working tree for `/ship`.
-  3. **Clean up:** `git worktree remove <worktree-path>` then `git branch -D <lane-branch>`. Lane branches aren't reachable from primary, so `-d` would refuse.
-- After all write waves integrate, dispatch **review** lanes as non-worktree `Agent` calls (no `isolation`) against the integrated dirty tree. Their deliverable contract: return findings as a list, each classified `blocker` or `advisory`, with file path and line references.
+  1. **Verify branch evidence:** confirm the returned branch matches the lane's `Branch:`, the commit exists on that branch, and a PR URL was returned. If not, stop.
+  2. **Validate write boundaries:** fetch the lane branch, then run `git diff --name-only <primary>...origin/<lane-branch>` (or the reviewed remote branch ref). Every changed path must be a subset of the lane's declared `Owns`. If any file falls outside (including matches against `Must not edit`), abort integration for that lane and surface the violation. Do not attempt partial integration.
+  3. **Consolidation/PR review:** inspect the PR diff, test evidence, and lane summary. Record findings as `blocker` or `advisory` with file path and line references. Do not integrate a branch with blocker findings.
+  4. **Integrate approved branch work into the shared tree:** `git restore --source=origin/<lane-branch> --staged --worktree -- <owns-path-1> <owns-path-2> …`. This captures modifications, additions, and deletions. Do not use `git checkout <branch> -- <paths>` — it silently drops deletions. Do not create a merge commit; the result is a dirty working tree for `/ship`.
+  5. **Clean up local worktrees only after integration:** `git worktree remove <worktree-path>` then delete the local lane branch when safe. Leave the remote branch/PR available until consolidation status is documented or the project explicitly closes/merges it.
+- After all write waves integrate, dispatch any additional **review** lanes as non-worktree `Agent` calls (no `isolation`) against the integrated dirty tree. Their deliverable contract: return findings as a list, each classified `blocker` or `advisory`, with file path and line references.
 - Write a `### Review Findings` block under the step in `tasks/todo.md`:
   - If any finding is `blocker`: leave the step unchecked, stop `/run`, and surface the findings in the final report.
   - Else: record the findings, check off the step, and continue normal `/run` flow.
@@ -157,8 +163,8 @@ Rules:
 - Follow the `### Execution Profile` annotated on each phase. If subagents are unavailable in the active environment, execute serially and report the downgrade.
 - Do not let subagents update `tasks/todo.md`, `tasks/roadmap.md`, `tasks/history.md`, shipping commits, or deploy steps. Those remain main-agent responsibilities.
 - Do not run parallel write lanes unless their `Owns` paths are disjoint. When in doubt, downgrade to `research-only` or `serial`.
-- Do not invoke `/commit-and-push-by-feature`, `git commit`, or `git push`. A dirty tracked tree after successful `/run` is expected and is the handoff to `/ship`.
-- For `agent-team` phases: do not integrate a lane whose diff contains files outside its declared `Owns` — surface the violation and stop instead. Lane agent prompts must require commit-before-return; do not integrate from an uncommitted worktree. Clean up worktrees and lane branches after every integration — do not leave orphan worktrees or unreachable branches behind.
+- Do not invoke `/commit-and-push-by-feature` or push shipping commits from the main `/run` tree. A dirty tracked tree after successful `/run` is expected and is the handoff to `/ship`. The narrow exception is `agent-team` lane work: lane agents must commit and push their assigned non-primary GitHub branches for PR review.
+- For `agent-team` phases: do not integrate a lane whose diff contains files outside its declared `Owns` — surface the violation and stop instead. Lane agent prompts must require branch-backed commit, push, and PR evidence before return; do not integrate from an uncommitted worktree, unpushed branch, or unreviewed PR. Clean up local worktrees after every integration, but preserve remote branches/PRs until consolidation status is documented.
 - Each execution must be self-contained — read the plan fresh, don't rely on prior context.
 
 ## Execution Handoff Contract

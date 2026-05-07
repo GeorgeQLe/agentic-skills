@@ -28,7 +28,7 @@ Identify the next incomplete unit of work from the phased plan, build an executi
 6b. Read the current phase's `### Execution Profile` from `tasks/todo.md` if present:
    - If missing, treat the phase as `serial`.
    - Use the profile only for the current step or scoped phase; do not plan ahead.
-   - If the profile's `Parallel mode` is `agent-team`, stop before implementation and recommend running the work in Codex app worktrees or a Claude agent team rather than one shared local tree.
+   - If the profile's `Parallel mode` is `agent-team`, stop before implementation unless the active workflow can run branch-backed isolated worktrees or a dedicated agent team. Each write lane must have a non-primary GitHub `Branch:` value and the phase must include a consolidation/PR review step before final validation or shipping.
 6c. **`--execute-approved` branch** (if `$ARGUMENTS` contains `--execute-approved`):
    - Reject `--execute-approved --phase` — approved packets target one step, not a full phase.
    - Run `scripts/approved-plan.sh check`.
@@ -40,6 +40,7 @@ Identify the next incomplete unit of work from the phased plan, build an executi
    - Which files will be created or modified
    - The approach and any trade-offs
    - Whether the execution profile will run serially, use read-only research lanes, use review lanes, or use disjoint write lanes
+   - For `agent-team`: the planned lane branches and the consolidation/PR review gate
 8. Use `update_plan` to track the proposed work, then execute by default. Do not ask for routine approval after presenting a `$run` plan; the user's `$run` invocation is implicit approval for the next planned step or scoped phase. Ask a concise confirmation question only when the work requires a separate safety decision: destructive commands, production deploys, paid/external account actions, credential or secret handling beyond the project contract, accepting an execution-profile downgrade, proceeding despite a blocker, or materially changing the planned scope.
 9. Execute the plan:
    - Apply the execution profile:
@@ -47,7 +48,7 @@ Identify the next incomplete unit of work from the phased plan, build an executi
      - `research-only`: launch read-only subagent lanes first when the active environment permits subagents, synthesize their findings, then implement in the main agent.
      - `review-only`: implement in the main agent, then launch review subagent lanes before final validation.
      - `implementation-safe`: launch write subagent lanes only when every write lane has disjoint `Owns` paths and explicit `Must not edit` boundaries; otherwise downgrade to `research-only` or `serial` and report the downgrade.
-     - `agent-team`: do not execute locally; report that the phase requires isolated worktrees or a dedicated agent team.
+     - `agent-team`: do not execute in one shared local tree. Use separate GitHub branches for every write lane, require branch + commit SHA + PR URL deliverables, and run the planned consolidation/PR review step before integration. If branch push or PR review cannot be performed, stop and report the blocker.
    - If it is a tests-first step: write the failing tests, run them to confirm they fail.
    - If it is an implementation step: implement it, run existing tests for regressions.
    - If it is a verification step: run all tests, fix any failures. If validation is clean and a following cleanup/refactor step is explicitly conditional on validation findings or says no source changes are expected, complete that no-op cleanup in the same run by recording the no-op result instead of preserving it as a separate next-step plan.
@@ -161,7 +162,7 @@ After resolving or inferring the command route, resolve enabled packs via `./scr
 - Follow the `### Execution Profile` annotated on each phase. If subagents are unavailable in the active environment, execute serially and report the downgrade.
 - Do not let subagents update `tasks/todo.md`, `tasks/roadmap.md`, `tasks/history.md`, shipping commits, or deploy steps. Those remain main-agent responsibilities.
 - Do not run parallel write lanes unless their `Owns` paths are disjoint. When in doubt, downgrade to `research-only` or `serial`.
-- Do not push shipping commits to an existing feature branch. Use `$commit-and-push-by-feature` to move the work onto `main` or `master` and push it there, or stop and report a blocker if that cannot be done safely.
+- Do not push shipping commits to an existing feature branch. Use `$commit-and-push-by-feature` to move the work onto `main` or `master` and push it there, or stop and report a blocker if that cannot be done safely. Temporary `agent-team` lane branches are allowed only for parallel write isolation and must pass consolidation/PR review before landing.
 - Do NOT execute external human-action items from `tasks/manual-todo.md`. Bookkeeping or agent-executable items that were misfiled there should be reconciled through `$reconcile-dev-docs` or promoted into `tasks/todo.md`, not routed to `$guide`.
 - Do NOT execute items from `tasks/record-todo.md` or `tasks/recurring-todo.md` unless the item has first been promoted into `tasks/todo.md`.
 - `run` ships by default in Codex. Use `$ship` only when there is already finished work in the tree or unpushed commits that need packaging without running a new step.

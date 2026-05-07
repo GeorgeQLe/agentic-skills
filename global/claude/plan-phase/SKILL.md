@@ -55,7 +55,7 @@ Use these modes:
 - **`research-only`**: read-only subagents may gather context before implementation; main agent implements.
 - **`review-only`**: main agent implements; subagents review before final validation.
 - **`implementation-safe`**: write subagents may work only on disjoint owned paths; main agent integrates.
-- **`agent-team`**: work is too broad or cross-cutting for one shared local tree; recommend worktree isolation or Claude agent teams instead of local subagent writes.
+- **`agent-team`**: work is too broad or cross-cutting for one shared local tree; write lanes must use separate GitHub branches and a consolidation/PR review gate before final integration.
 
 Downgrade `implementation-safe` to `research-only` or `serial` if path ownership overlaps, shared chokepoints dominate, or the likely integration surface is unclear.
 
@@ -76,13 +76,14 @@ Add this section before implementation steps:
   - Scope: [bounded task]
   - Owns: `path/or/glob` (write lanes only)
   - Must not edit: `path/or/glob` (write lanes only)
+  - Branch: `agent-team/phase-N-lane-name` (agent-team write lanes only)
   - Depends on: [lane, step, or none]
-  - Deliverable: [findings, patch summary, changed paths, tests, or review report]
+  - Deliverable: [findings, patch summary, changed paths, tests, branch + commit SHA + PR URL, or review report]
 ```
 
 For `serial`, use `**Subagent lanes:** none`. For `research-only` and `review-only`, lanes must not have write mode. For `implementation-safe`, every write lane must have non-overlapping `Owns` paths and explicit `Must not edit` boundaries.
 
-For `agent-team` profiles, every lane **must** have `Mode:` and `Depends on:` filled in with concrete values (not placeholders). Write lanes must have disjoint `Owns:` paths and explicit `Must not edit:` boundaries — `/run` auto-dispatches agent-team lanes via isolated worktrees and uses those fields to build the lane DAG and enforce write-boundary integration. If this cannot be satisfied, downgrade to `implementation-safe`, `research-only`, or `serial`.
+For `agent-team` profiles, every lane **must** have `Mode:` and `Depends on:` filled in with concrete values (not placeholders). Write lanes must have disjoint `Owns:` paths, explicit `Must not edit:` boundaries, and deterministic `Branch:` values that are not `main` or `master` — `/run` auto-dispatches agent-team lanes via isolated worktrees and uses those fields to build the lane DAG, push lane branches, open PRs, and enforce write-boundary integration. The phase steps must include a consolidation/PR review step after all write lanes complete and before final validation or shipping. If GitHub branch push or PR review is unavailable, downgrade to `implementation-safe`, `research-only`, or `serial`, or stop and document the blocker.
 
 ### Break the Phase into Steps
 
@@ -107,8 +108,9 @@ Define ordered steps beneath the existing Goal/Scope/Acceptance Criteria. The st
   - Scope: [bounded task]
   - Owns: `path/or/glob` (write lanes only)
   - Must not edit: `path/or/glob` (write lanes only)
+  - Branch: `agent-team/phase-N-lane-name` (agent-team write lanes only)
   - Depends on: [lane, step, or none]
-  - Deliverable: [expected output]
+  - Deliverable: [expected output, including branch + commit SHA + PR URL for agent-team write lanes]
 
 ### Tests First
 - Step N.1: Write failing tests for this phase's acceptance criteria
@@ -152,8 +154,9 @@ Define ordered steps beneath the existing Goal/Scope/Acceptance Criteria. The st
   - Scope: [bounded task]
   - Owns: `path/or/glob` (write lanes only)
   - Must not edit: `path/or/glob` (write lanes only)
+  - Branch: `agent-team/phase-N-lane-name` (agent-team write lanes only)
   - Depends on: [lane, step, or none]
-  - Deliverable: [expected output]
+  - Deliverable: [expected output, including branch + commit SHA + PR URL for agent-team write lanes]
 
 ### Implementation
 - Step N.1: [First implementation task]
@@ -190,8 +193,9 @@ Define ordered steps beneath the existing Goal/Scope/Acceptance Criteria. The st
   - Scope: [bounded task]
   - Owns: `path/or/glob` (write lanes only)
   - Must not edit: `path/or/glob` (write lanes only)
+  - Branch: `agent-team/phase-N-lane-name` (agent-team write lanes only)
   - Depends on: [lane, step, or none]
-  - Deliverable: [expected output]
+  - Deliverable: [expected output, including branch + commit SHA + PR URL for agent-team write lanes]
 
 ### Implementation
 - Step N.1: [First implementation task]
@@ -221,6 +225,7 @@ Define ordered steps beneath the existing Goal/Scope/Acceptance Criteria. The st
 - Every implementation step lists the specific files to create, modify, or delete.
 - This gives the executing agent clear scope and prevents steps from becoming unbounded.
 - Write-capable subagent lanes must have disjoint owned paths. If they do not, keep implementation serial and use research or review lanes only.
+- Agent-team phases must include a final automated consolidation/PR review step that inspects each lane's branch/PR, verifies changed paths against `Owns` and `Must not edit`, records blocker/advisory findings, integrates only approved lane work, and then runs the phase validation gate.
 
 ### Task Classification
 
@@ -359,6 +364,7 @@ Rules:
 - Note what already exists in the codebase vs. what needs to be created.
 - The `### Execution Profile` must be decision-complete enough for `/run` to decide whether to use serial execution, read-only subagents, review subagents, or disjoint write subagents after the normal approval gate.
 - Subagents must not own task docs, roadmap/history updates, shipping, or deploy steps. Those stay with the main agent.
+- Agent-team write lanes must not target `main` or `master`; each lane gets its own GitHub branch and must return branch, commit SHA, validation evidence, and PR URL before consolidation.
 - Manual tasks MUST NOT appear in `tasks/todo.md` — they go in `tasks/manual-todo.md` only.
 - Agent-executable work MUST NOT appear in `tasks/manual-todo.md` — it goes in `tasks/todo.md` or an implementation skill.
 - Non-blocking record tasks MUST NOT appear in `tasks/todo.md` — they go in `tasks/record-todo.md` unless explicitly promoted.

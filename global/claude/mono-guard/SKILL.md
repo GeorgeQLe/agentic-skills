@@ -8,7 +8,7 @@ argument-hint: "[--post-integration] [optional: path to todo.md]"
 
 # Mono Guard
 
-Pre-flight validation of execution profile lane boundaries against the actual monorepo structure. Run this **before** `/run` dispatches `agent-team` or `implementation-safe` lanes to catch unsafe configurations that would cause lockfile contention, root config conflicts, or package boundary violations.
+Pre-flight validation of execution profile lane boundaries against the actual monorepo structure. Run this **before** `/run` dispatches `agent-team` or `implementation-safe` lanes to catch unsafe configurations that would cause lockfile contention, root config conflicts, package boundary violations, or missing branch/PR isolation.
 
 ## Modes
 
@@ -73,6 +73,13 @@ Run all checks against every `agent-team` or `implementation-safe` profile in `t
 - Verify all `Depends on` references name existing lanes in the same phase.
 - **FAIL** on cycles or dangling references.
 
+### Check 8: Branch/PR Isolation
+
+- For every `agent-team` write lane, verify there is a unique `Branch:` field.
+- The branch must not be `main` or `master`.
+- Verify the phase includes a consolidation/PR review step after write lanes and before final validation or shipping.
+- **FAIL** if any branch is missing, duplicated, primary-branch named, or the consolidation/PR review gate is absent.
+
 ## Post-Integration Checks
 
 When invoked with `--post-integration`:
@@ -80,6 +87,7 @@ When invoked with `--post-integration`:
 1. **Lockfile audit:** Run `git diff --name-only` on the integration result. If a lockfile was modified, verify it was only touched by the designated deps lane (or the main integrating agent). If multiple lanes touched it: **FAIL**.
 2. **Root config audit:** Same check for root configs. Multiple-lane modifications: **WARN**.
 3. **Boundary audit:** Verify each lane's committed changes fall within its `Owns` paths. Files outside `Owns`: **WARN** per file.
+4. **PR review audit:** Verify branch, commit SHA, and PR URL evidence exists for every integrated `agent-team` write lane. Missing PR evidence is **FAIL**.
 
 ## Output Format
 
@@ -101,6 +109,7 @@ When invoked with `--post-integration`:
 | 5 | Serialization Check | PASS | No install commands in write lanes |
 | 6 | Install Command Check | PASS | No install intent detected |
 | 7 | DAG Validity | PASS | No cycles, all references valid |
+| 8 | Branch/PR Isolation | PASS | All agent-team write lanes have non-primary branches and PR review gate |
 
 #### Failures (action required)
 

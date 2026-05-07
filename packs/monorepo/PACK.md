@@ -25,8 +25,8 @@ scripts/pack.sh refresh
 ## Skills
 
 - `mono-detect`: detects pnpm workspace structure, optional Turborepo overlay, package metadata, internal dependency graph, and writes `.agents/monorepo.json`.
-- `mono-run`: augments the standard `/run` or `$run` lifecycle with monorepo detection, lane-spec generation, pre-flight guard checks, cross-cutting serial work, and package-scoped worktree dispatch when a phase is explicitly eligible.
-- `mono-guard`: validates lane-spec artifacts before dispatch and verifies actual changed files stay inside declared lane ownership after integration.
+- `mono-run`: augments the standard `/run` or `$run` lifecycle with monorepo detection, lane-spec generation, pre-flight guard checks, cross-cutting serial work, package-scoped worktree dispatch on separate GitHub branches, and consolidation/PR review when a phase is explicitly eligible.
+- `mono-guard`: validates lane-spec artifacts before dispatch and verifies actual changed files stay inside declared lane ownership and branch/PR review requirements after integration.
 - `mono-ship`: augments the standard `/ship` or `$ship` lifecycle with package-scoped validation and transitive-dependent validation before delegating to normal shipping.
 
 ## Augmentation Injection Pattern
@@ -34,8 +34,8 @@ scripts/pack.sh refresh
 This pack does not duplicate the global execution and shipping skills. It injects monorepo-aware pre/post steps around the existing contracts:
 
 - Pre-execution: run `mono-detect`, read the phase execution profile, generate lane specs when appropriate, and run `mono-guard` pre-flight.
-- Execution: keep root-only and cross-cutting steps serial in the main agent; dispatch only approved package-scoped lanes with disjoint `owns` paths.
-- Post-integration: run `mono-guard` against the actual diff before package-scoped shipping.
+- Execution: keep root-only and cross-cutting steps serial in the main agent; dispatch only approved package-scoped lanes with disjoint `owns` paths and separate non-primary GitHub branches.
+- Post-integration: run consolidation/PR review, then `mono-guard` against the actual diff before package-scoped shipping.
 - Pre-ship: use `.agents/monorepo.json` and lane specs to run package and transitive-dependent validation before delegating to `/ship` or `$ship`.
 
 This differs from `*-kanban` packs, which intentionally provide workflow variants. The monorepo pack is an overlay that makes the normal skill pipeline workspace-aware while preserving the global skill contracts as the source of truth.
@@ -71,7 +71,7 @@ V1 includes:
 - Turborepo detection from `turbo.json`.
 - `.agents/monorepo.json` as the package graph artifact.
 - `.agents/lane-specs.json` plus `tasks/lane-specs.md` as the lane dispatch artifact.
-- Guardrails for disjoint lane ownership, lockfile/root-config protection, dependency ordering, and post-integration boundary checks.
+- Guardrails for disjoint lane ownership, lockfile/root-config protection, dependency ordering, branch/PR isolation, and post-integration boundary checks.
 - Stop-all-lanes failure semantics that preserve failed worktree state for inspection.
 
 V1 does not include:

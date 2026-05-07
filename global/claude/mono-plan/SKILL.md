@@ -49,10 +49,11 @@ Run this **after** `/roadmap` sets `agent-team` or `implementation-safe` on a ph
      - **Shared:** a high-fan-out package that multiple lanes would need — requires careful ownership.
 
 7. **Recommend parallelization strategy:**
-   - If all packages are independent → `agent-team` with one lane per package.
+   - If all packages are independent and GitHub branch/PR review is available → `agent-team` with one branch-backed lane per package.
    - If linear dependency chain → `serial` or `implementation-safe` with ordered lanes.
-   - If mixed → `agent-team` with dependency edges between lanes.
+   - If mixed and GitHub branch/PR review is available → `agent-team` with dependency edges between branch-backed lanes.
    - If scope touches only root configs or shared packages → downgrade to `serial`.
+   - If branch push or PR review is unavailable → downgrade to `implementation-safe`, `research-only`, or `serial`.
 
 8. **Generate lane specs:**
    - **Lane 0 — deps (serial, conditional):** If ANY lane's scope requires adding dependencies (`pnpm add`, `npm install`, etc.), generate a serial deps lane that:
@@ -63,10 +64,11 @@ Run this **after** `/roadmap` sets `agent-team` or `implementation-safe` on a ph
    - **Package lanes (one per independent package or group):**
      - `Owns: packages/<name>/` (or `apps/<name>/`)
      - `Must not edit:` all lockfiles, all root configs, all paths owned by other lanes
+     - `Branch:` `agent-team/phase-N-<package-or-lane>`; never `main` or `master`
      - `Mode: write`
      - `Depends on:` Lane 0 (if it exists) + lanes for upstream internal dependencies
-     - `Scope:` the phase work scoped to this package. Append: "Do NOT run pnpm install, npm install, yarn add, or any command that modifies the lockfile."
-   - **Review lane (optional):** If the phase warrants review, add a `Mode: review` lane depending on all write lanes.
+     - `Scope:` the phase work scoped to this package. Append: "Do NOT run pnpm install, npm install, yarn add, or any command that modifies the lockfile. Commit to your assigned branch, push it, and open or update a draft PR before returning."
+   - **Consolidation/PR review lane (required for `agent-team`):** Add a `Mode: review` lane depending on all write lanes. Its scope must inspect every branch/PR, validate changed paths against `Owns` and `Must not edit`, record blocker/advisory findings, and approve only lanes safe to integrate.
 
 9. **Validate lane specs:**
    - Every lockfile appears in `Must not edit` for ALL write lanes except the deps lane.
@@ -115,8 +117,17 @@ Run this **after** `/roadmap` sets `agent-team` or `implementation-safe` on a ph
   - Scope: [phase work for foo]. Do NOT run pnpm install or any lockfile-modifying command.
   - Owns: `packages/foo/`
   - Must not edit: `pnpm-lock.yaml`, `tsconfig.base.json`, `packages/bar/`, `apps/web/`
+  - Branch: `agent-team/phase-N-foo`
   - Depends on: deps
-  - Deliverable: [what this lane produces]
+  - Deliverable: branch name, commit SHA, validation evidence, PR URL, and changed paths
+
+- Lane: consolidation-pr-review
+  - Agent: general-purpose
+  - Role: reviewer
+  - Mode: review
+  - Scope: Review every lane branch/PR, verify path boundaries, classify findings as blocker/advisory, and approve only safe lanes for integration.
+  - Depends on: foo, [all other write lanes]
+  - Deliverable: PR review summary, blocker/advisory findings, approved branches, and integration order
 
 [...more lanes...]
 ```
@@ -128,6 +139,7 @@ Run this **after** `/roadmap` sets `agent-team` or `implementation-safe` on a ph
 - Do not create lanes for packages outside the phase's scope.
 - If the phase scope is ambiguous (can't map to specific packages), enter plan mode and ask the user via `AskUserQuestion`.
 - Maximum 12 parallel write lanes — if more packages are in scope, group related packages into combined lanes.
+- Do not recommend `agent-team` if the project cannot push lane branches to GitHub and review PRs; use `implementation-safe`, `research-only`, or `serial` instead.
 
 ## Next-Step Routing
 
