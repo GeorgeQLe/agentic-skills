@@ -133,21 +133,6 @@ function fingerprintFor(files) {
   return hash.digest("hex");
 }
 
-function generatedAtFor(files) {
-  try {
-    const output = execFileSync("git", ["log", "-1", "--format=%cI", "--", ...files], {
-      cwd: repoRoot,
-      encoding: "utf8"
-    }).trim();
-    if (output) {
-      return output;
-    }
-  } catch {
-    // Fall through to a fixed epoch for unusual non-git checkouts.
-  }
-  return "1970-01-01T00:00:00+00:00";
-}
-
 function main() {
   const files = gitFiles();
   const skillPaths = files.filter((file) => {
@@ -180,9 +165,11 @@ function main() {
       };
     });
 
+  const sourceFingerprint = fingerprintFor(sourcePaths);
+
   const data = {
-    generatedAt: generatedAtFor(sourcePaths),
-    sourceFingerprint: fingerprintFor(sourcePaths),
+    generatedAt: "1970-01-01T00:00:00.000Z",
+    sourceFingerprint,
     sourceCount: sourcePaths.length,
     skillCount: skills.length,
     packCount: packs.length,

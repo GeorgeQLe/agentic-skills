@@ -60,6 +60,12 @@ const validationScripts = [
     title: "Cross-pack routing guard",
     command: "./scripts/skill-pack-routing-audit.sh",
     path: "scripts/skill-pack-routing-audit.sh"
+  },
+  {
+    id: "showcase-data",
+    title: "Skills Showcase data freshness",
+    command: "./scripts/validate-skills-showcase-data.sh",
+    path: "scripts/validate-skills-showcase-data.sh"
   }
 ];
 
@@ -73,11 +79,6 @@ function git(args, fallback = null) {
   } catch {
     return fallback;
   }
-}
-
-function gitFiles() {
-  const output = git(["ls-files"], "");
-  return output ? output.split("\n").filter(Boolean).sort() : [];
 }
 
 function readText(relativePath) {
@@ -115,23 +116,12 @@ function fileFingerprint(files) {
   return hash.digest("hex");
 }
 
-function generatedAtFor(files) {
-  const tracked = files.filter((relativePath) => git(["ls-files", "--", relativePath], ""));
-  if (tracked.length > 0) {
-    const timestamp = git(["log", "-1", "--format=%cI", "--", ...tracked], "");
-    if (timestamp) {
-      return timestamp;
-    }
-  }
-  return git(["log", "-1", "--format=%cI"], "1970-01-01T00:00:00+00:00");
-}
-
 function trackedStatus(relativePath) {
-  const tracked = Boolean(git(["ls-files", "--", relativePath], ""));
+  const exists = existsSync(path.join(repoRoot, relativePath));
   return {
     path: relativePath,
-    tracked,
-    exists: existsSync(path.join(repoRoot, relativePath))
+    tracked: exists,
+    exists
   };
 }
 
@@ -202,28 +192,25 @@ async function publicGithubMetadata(repositoryUrl) {
 }
 
 async function main() {
-  const files = gitFiles();
   const remoteUrl = git(["remote", "get-url", "origin"], null);
   const repositoryUrl = normalizeRepoUrl(remoteUrl);
-  const headSha = git(["rev-parse", "HEAD"], null);
   const sourceFiles = [
     ...proofArtifacts.map((artifact) => artifact.path),
     ...validationScripts.map((script) => script.path),
     "docs/skills-showcase/assets/skills-data.js"
-  ].filter((relativePath) => files.includes(relativePath));
+  ].filter((relativePath) => existsSync(path.join(repoRoot, relativePath)));
+  const sourceFingerprint = fileFingerprint(sourceFiles);
 
   const data = {
-    generatedAt: generatedAtFor(sourceFiles),
-    sourceFingerprint: fileFingerprint(sourceFiles),
+    generatedAt: "1970-01-01T00:00:00.000Z",
+    sourceFingerprint,
     repository: {
       remoteUrl,
       url: repositoryUrl,
       branch: git(["branch", "--show-current"], null),
-      head: {
-        sha: headSha,
-        shortSha: headSha ? headSha.slice(0, 7) : null,
-        committedAt: git(["log", "-1", "--format=%cI"], null),
-        subject: git(["log", "-1", "--format=%s"], null)
+      revisionPolicy: {
+        status: "content-fingerprint",
+        reason: "Commit SHA is excluded so committed generated data does not become stale immediately after the shipping commit."
       }
     },
     publicGithub: await publicGithubMetadata(repositoryUrl),

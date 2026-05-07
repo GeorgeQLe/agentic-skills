@@ -26,7 +26,7 @@ Establish the static product foundation for the showcase: multi-page routing, sh
 - [ ] Shared styles and scripts provide the responsive Swiss grid/blueprint foundation without one-off page styling.
 - [ ] `scripts/generate-skills-showcase-data.mjs` writes committed generated data covering every tracked source skill.
 - [ ] `scripts/generate-skills-showcase-github-data.mjs` writes committed proof data or an honest fallback without requiring secrets.
-- [ ] `scripts/validate-skills-showcase-data.sh` fails when generated showcase data is stale.
+- [x] `scripts/validate-skills-showcase-data.sh` fails when generated showcase data is stale.
 - [ ] Skill-changing contracts prompt regeneration and curated website review when `SKILL.md` behavior or metadata changes.
 - [ ] Focused validation passes without adding a database, video, Remotion, runtime API, GitHub Actions, or unnecessary root dependencies.
 
@@ -67,7 +67,7 @@ Establish the static product foundation for the showcase: multi-page routing, sh
     - Run `node scripts/generate-skills-showcase-github-data.mjs`.
     - Run a targeted Node check confirming the browser global, repository evidence, local commit evidence, proof artifact links, and fallback status fields exist.
     - Run `git diff --check`.
-- [ ] Step 32.4: Add stale-data validation and tests.
+- [x] Step 32.4: Add stale-data validation and tests.
   - Files: add `scripts/validate-skills-showcase-data.sh`, add `tests/layer1/skills-showcase-data.test.ts` if script-level coverage is needed
   - Implementation plan:
     - Add `scripts/validate-skills-showcase-data.sh` as the canonical freshness gate for the static showcase generated assets.
@@ -82,6 +82,17 @@ Establish the static product foundation for the showcase: multi-page routing, sh
     - Run `git diff --check`.
 - [ ] Step 32.5: Update skill mutation contracts to maintain the website after skill changes.
   - Files: modify `global/codex/create-agentic-skill/SKILL.md`, `global/claude/create-agentic-skill/SKILL.md`, `global/codex/targeted-skill-builder/SKILL.md`, `global/claude/targeted-skill-builder/SKILL.md`, `global/codex/run/SKILL.md`, `global/claude/run/SKILL.md`, `global/codex/ship/SKILL.md`, `global/claude/ship/SKILL.md`, `docs/skills-reference.md`
+  - Implementation plan:
+    - Add a shared freshness requirement to skill-changing workflows: when a run creates, deletes, renames, or changes behavior/metadata in any tracked `SKILL.md` or `PACK.md`, rerun `node scripts/generate-skills-showcase-data.mjs`, `node scripts/generate-skills-showcase-github-data.mjs`, and `scripts/validate-skills-showcase-data.sh` before shipping.
+    - Update creation/update skills (`create-agentic-skill`, `targeted-skill-builder`) so their validation sections include showcase data regeneration and a short curated website review whenever skill behavior or metadata changes could affect public copy, catalog grouping, workflow animations, or proof receipts.
+    - Update execution/shipping skills (`run`, `ship`) so source mutations touching skill contracts include the showcase freshness gate in pre-ship validation and generated assets in the shipping boundary.
+    - Update `docs/skills-reference.md` to document the freshness contract for maintainers without implying a runtime API, database, GitHub Actions workflow, video, Remotion, or live product metrics.
+    - Keep mirrored Claude/Codex contracts aligned while preserving command syntax differences (`/` vs `$`) and existing next-step routing language.
+  - Verification plan:
+    - Run both showcase generators and `scripts/validate-skills-showcase-data.sh`.
+    - Run `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-next-step-routing.sh --missing`, and `./scripts/skill-pack-routing-audit.sh`.
+    - Run targeted `rg` checks confirming every listed skill contract references the showcase freshness commands where appropriate.
+    - Run `git diff --check`.
 - [ ] Step 32.6: Validate and record the phase.
   - Files: modify `tasks/todo.md`, `tasks/history.md`
 
@@ -89,7 +100,7 @@ Establish the static product foundation for the showcase: multi-page routing, sh
 
 - [ ] Run `node scripts/generate-skills-showcase-data.mjs`.
 - [ ] Run `node scripts/generate-skills-showcase-github-data.mjs`.
-- [ ] Run `scripts/validate-skills-showcase-data.sh`.
+- [x] Run `scripts/validate-skills-showcase-data.sh`.
 - [ ] Run `./scripts/skill-deps.sh --broken`.
 - [ ] Run `./scripts/skill-versions.sh --missing`.
 - [ ] Run `./scripts/skill-next-step-routing.sh --missing`.
@@ -102,6 +113,19 @@ Establish the static product foundation for the showcase: multi-page routing, sh
 No manual tasks block Phase 32. Vercel deployment and newsletter provider setup are planned for Phase 34 after source implementation and local validation.
 
 ### Review
+
+#### 2026-05-07 - Step 32.4 Ship Manifest
+
+- **User goal:** Execute `$run` for the next incomplete Phase 32 step by adding stale-data validation for the generated Skills Showcase assets.
+- **Changed files:** `scripts/validate-skills-showcase-data.sh`, `scripts/generate-skills-showcase-data.mjs`, `scripts/generate-skills-showcase-github-data.mjs`, `docs/skills-showcase/assets/skills-data.js`, `docs/skills-showcase/assets/github-proof-data.js`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** The validator reruns both showcase generators and detects whether the current working-copy generated assets changed; the catalog generator now uses content-stable freshness metadata; the proof generator adds the new validator to proof receipts and removes commit-derived fields that would make generated data stale immediately after a shipping commit; generated assets record the updated deterministic contract; task/history docs record completion and next work.
+- **User-goal mapping:** Step 32.4 requires a canonical freshness gate that fails when generated showcase data is stale. The validator produced the expected stale failure after generator inputs changed, then passed after regeneration, with clear remediation commands for operators.
+- **Tests run:** `bash -n scripts/validate-skills-showcase-data.sh` passed; `node --check scripts/generate-skills-showcase-data.mjs` passed; `node --check scripts/generate-skills-showcase-github-data.mjs` passed; `scripts/validate-skills-showcase-data.sh` first failed with stale generated assets as expected, then passed after regeneration; targeted `rg` confirmed the validator references both generators, both generated assets, stale/fresh messages, and the hash comparison; `git diff --check` passed.
+- **Skipped tests:** No new Vitest fixture was added because the validator is a direct shell freshness gate and the phase plan allowed direct shell validation when fixture behavior was unnecessary. Browser UI checks remain out of scope because this step changes data freshness scripts, not rendered UI.
+- **Adversarial review:** The initial `git diff`-against-HEAD design was rejected because it would fail during normal pre-commit shipping when generated assets were already fresh but uncommitted. Commit-derived generator metadata was also removed because it would create post-commit drift. The final design compares generated asset fingerprints before and after generator execution, which catches stale data without depending on commit SHA churn.
+- **Residual risk:** `generatedAt` is now a stable placeholder and freshness is represented by `sourceFingerprint`; future UI should label fingerprint freshness honestly instead of presenting `generatedAt` as a wall-clock refresh time.
+- **Rollback note:** Revert the Step 32.4 commit to remove the validator and restore the previous commit-derived generated metadata contract.
+- **Next command:** `$run`
 
 #### 2026-05-07 - Targeted Skill Builder: Spec Interview Checkpoint Fix
 
@@ -154,6 +178,6 @@ No manual tasks block Phase 32. Vercel deployment and newsletter provider setup 
 
 ## Next Work
 
-Start Step 32.4 by adding stale-data validation for the generated showcase data.
+Start Step 32.5 by updating skill mutation contracts to maintain the showcase website after skill changes.
 
 **Recommended next command:** `$run`
