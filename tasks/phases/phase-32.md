@@ -1,0 +1,225 @@
+# Active Phase: Phase 32 - Skills Showcase Product Foundation
+
+**Project:** Claude Skills / agentic-skills
+**Current phase:** Phase 32 of 34
+**Status:** Active as of 2026-05-07.
+
+## Phase 32: Skills Showcase Product Foundation
+> Test strategy: tests-after
+
+### Goal
+
+Establish the static product foundation for the showcase: multi-page routing, shared blueprint visual system, generated source data, generated GitHub/open-source proof data, and the freshness contract that makes future skill changes update the website when relevant.
+
+### Scope
+
+- Scaffold `docs/skills-showcase/` as a multi-page static website with direct-reloadable routes for home, workflows, packs, catalog, inspect, and follow.
+- Add shared HTML/CSS/JS foundations for the Swiss grid and blueprint motif without introducing a runtime framework or root dependency requirement.
+- Add generated skill catalog data from every tracked `SKILL.md` under `global/` and `packs/`.
+- Add generated GitHub/open-source proof data from public GitHub/local git evidence with deterministic fallback behavior.
+- Add validation that fails when generated showcase data is stale after source changes.
+- Update skill-changing workflow contracts so agents regenerate the site data and review curated showcase copy/animations when skill behavior changes.
+
+### Acceptance Criteria
+
+- [x] Static route entrypoints exist for `/`, `/workflows/`, `/packs/`, `/catalog/`, `/inspect/`, and `/follow/`.
+- [x] Shared styles and scripts provide the responsive Swiss grid/blueprint foundation without one-off page styling.
+- [x] `scripts/generate-skills-showcase-data.mjs` writes committed generated data covering every tracked source skill.
+- [x] `scripts/generate-skills-showcase-github-data.mjs` writes committed proof data or an honest fallback without requiring secrets.
+- [x] `scripts/validate-skills-showcase-data.sh` fails when generated showcase data is stale.
+- [x] Skill-changing contracts prompt regeneration and curated website review when `SKILL.md` behavior or metadata changes.
+- [x] Focused validation passes without adding a database, video, Remotion, runtime API, GitHub Actions, or unnecessary root dependencies.
+
+### Execution Profile
+
+**Parallel mode:** serial
+**Integration owner:** main agent
+**Conflict risk:** medium
+**Review gates:** data contract, static-route behavior, skill-contract consistency, validation freshness
+
+**Subagent lanes:** none
+
+### Implementation
+
+- [x] Step 32.1: Scaffold the multi-page static shell and shared blueprint foundation.
+  - Files: add `docs/skills-showcase/index.html`, `docs/skills-showcase/workflows/index.html`, `docs/skills-showcase/packs/index.html`, `docs/skills-showcase/catalog/index.html`, `docs/skills-showcase/inspect/index.html`, `docs/skills-showcase/follow/index.html`, `docs/skills-showcase/styles.css`, `docs/skills-showcase/app.js`
+- [x] Step 32.2: Add generated skill catalog data.
+  - Files: add `scripts/generate-skills-showcase-data.mjs`, add generated `docs/skills-showcase/assets/skills-data.js`
+  - Implementation plan:
+    - Write a dependency-free Node.js generator that scans tracked source skill files under `global/*/*/SKILL.md` and `packs/*/{claude,codex}/*/SKILL.md`, plus `packs/*/PACK.md` when present.
+    - Parse frontmatter fields `name`, `description`, `type`, `version`, and `argument-hint`; derive `platform`, `scope`, `pack`, `command`, `mirrorKey`, `id`, and relative source `path` from the file path.
+    - Generate deterministic `window.SKILLS_SHOWCASE_DATA` in `docs/skills-showcase/assets/skills-data.js` with `generatedAt`, `sourceFingerprint`, `skills`, `packs`, and an empty `workflows` array reserved for curated UI data.
+    - Use stable sorting by path/name and a content fingerprint from source paths plus contents so later stale-data validation can detect missed regeneration.
+    - Keep missing optional metadata honest: preserve blank/null fields rather than inventing claims, and avoid installing dependencies or adding a root build step.
+  - Verification plan:
+    - Run `node scripts/generate-skills-showcase-data.mjs`.
+    - Run a targeted Node check or `rg` scan confirming `window.SKILLS_SHOWCASE_DATA`, at least one global skill, at least one pack skill, pack summaries, and `sourceFingerprint` exist.
+    - Run `git diff --check`.
+- [x] Step 32.3: Add generated GitHub/open-source proof data.
+  - Files: add `scripts/generate-skills-showcase-github-data.mjs`, add generated `docs/skills-showcase/assets/github-proof-data.js`
+  - Implementation plan:
+    - Write a dependency-free Node.js generator that produces `window.SKILLS_SHOWCASE_GITHUB_PROOF_DATA` for static use by the Inspect page.
+    - Use public/local evidence only: repository URL from `git remote get-url origin`, current branch/HEAD commit from local git, tracked proof artifact paths such as `tasks/history.md` and validation scripts, and optional public GitHub metadata only when unauthenticated network access is available without secrets.
+    - Degrade honestly when public GitHub metadata cannot be refreshed by writing fallback fields with `status`, `reason`, and local evidence instead of failing or inventing metrics.
+    - Keep output deterministic for unchanged local sources by using Git commit timestamps/fingerprints rather than wall-clock timestamps where possible.
+    - Do not add secrets, analytics, a runtime API, a database, GitHub Actions, or dependencies.
+  - Verification plan:
+    - Run `node scripts/generate-skills-showcase-github-data.mjs`.
+    - Run a targeted Node check confirming the browser global, repository evidence, local commit evidence, proof artifact links, and fallback status fields exist.
+    - Run `git diff --check`.
+- [x] Step 32.4: Add stale-data validation and tests.
+  - Files: add `scripts/validate-skills-showcase-data.sh`, add `tests/layer1/skills-showcase-data.test.ts` if script-level coverage is needed
+  - Implementation plan:
+    - Add `scripts/validate-skills-showcase-data.sh` as the canonical freshness gate for the static showcase generated assets.
+    - Make the validator rerun `node scripts/generate-skills-showcase-data.mjs` and `node scripts/generate-skills-showcase-github-data.mjs`, then fail if either committed generated asset changes.
+    - Keep the script dependency-light and POSIX/Bash compatible with existing repository script style; do not install dependencies or mutate shared lockfiles.
+    - Add focused layer1 coverage only if script-level behavior needs a fixture; otherwise use direct shell validation plus idempotence checks to avoid unnecessary test scaffolding.
+    - Include clear failure output telling the operator to rerun both generators and commit the generated files.
+  - Verification plan:
+    - Run `bash -n scripts/validate-skills-showcase-data.sh`.
+    - Run `scripts/validate-skills-showcase-data.sh`.
+    - Run targeted checks confirming the validator references both generator scripts and both generated assets.
+    - Run `git diff --check`.
+- [x] Step 32.5: Update skill mutation contracts to maintain the website after skill changes.
+  - Files: modify `global/codex/create-agentic-skill/SKILL.md`, `global/claude/create-agentic-skill/SKILL.md`, `global/codex/targeted-skill-builder/SKILL.md`, `global/claude/targeted-skill-builder/SKILL.md`, `global/codex/run/SKILL.md`, `global/claude/run/SKILL.md`, `global/codex/ship/SKILL.md`, `global/claude/ship/SKILL.md`, `docs/skills-reference.md`
+  - Implementation plan:
+    - Add a shared freshness requirement to skill-changing workflows: when a run creates, deletes, renames, or changes behavior/metadata in any tracked `SKILL.md` or `PACK.md`, rerun `node scripts/generate-skills-showcase-data.mjs`, `node scripts/generate-skills-showcase-github-data.mjs`, and `scripts/validate-skills-showcase-data.sh` before shipping.
+    - Update creation/update skills (`create-agentic-skill`, `targeted-skill-builder`) so their validation sections include showcase data regeneration and a short curated website review whenever skill behavior or metadata changes could affect public copy, catalog grouping, workflow animations, or proof receipts.
+    - Update execution/shipping skills (`run`, `ship`) so source mutations touching skill contracts include the showcase freshness gate in pre-ship validation and generated assets in the shipping boundary.
+    - Update `docs/skills-reference.md` to document the freshness contract for maintainers without implying a runtime API, database, GitHub Actions workflow, video, Remotion, or live product metrics.
+    - Keep mirrored Claude/Codex contracts aligned while preserving command syntax differences (`/` vs `$`) and existing next-step routing language.
+  - Verification plan:
+    - Run both showcase generators and `scripts/validate-skills-showcase-data.sh`.
+    - Run `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-next-step-routing.sh --missing`, and `./scripts/skill-pack-routing-audit.sh`.
+    - Run targeted `rg` checks confirming every listed skill contract references the showcase freshness commands where appropriate.
+    - Run `git diff --check`.
+- [x] Step 32.6: Validate and record the phase.
+  - Files: modify `tasks/todo.md`, `tasks/history.md`
+  - Implementation plan:
+    - Run the full Phase 32 green checklist: `node scripts/generate-skills-showcase-data.mjs`, `node scripts/generate-skills-showcase-github-data.mjs`, `scripts/validate-skills-showcase-data.sh`, `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-next-step-routing.sh --missing`, `./scripts/skill-pack-routing-audit.sh`, any focused generator/validator checks still relevant, and `git diff --check`.
+    - Confirm all Phase 32 acceptance criteria that have been satisfied by Steps 32.1-32.5 are checked in `tasks/todo.md`; leave only genuinely future Phase 33/34 UI or launch work unchecked if applicable.
+    - Add a final Phase 32 review section summarizing validation, residual risks, skipped tests with rationale, and whether the phase is ready to archive.
+    - Update `tasks/history.md` with the Phase 32 validation result.
+    - If all Phase 32 steps and acceptance criteria are complete, archive the phase to `tasks/phases/phase-32.md`, update `tasks/roadmap.md`, and prepare the Phase 33 todo per the phase-transition workflow.
+  - Verification plan:
+    - Run the full green checklist commands listed above.
+    - Run targeted checks that `tasks/todo.md`, `tasks/history.md`, and any archived phase file reflect the final status.
+    - Run `git diff --check`.
+
+### Green / Verification
+
+- [x] Run `node scripts/generate-skills-showcase-data.mjs`.
+- [x] Run `node scripts/generate-skills-showcase-github-data.mjs`.
+- [x] Run `scripts/validate-skills-showcase-data.sh`.
+- [x] Run `./scripts/skill-deps.sh --broken`.
+- [x] Run `./scripts/skill-versions.sh --missing`.
+- [x] Run `./scripts/skill-next-step-routing.sh --missing`.
+- [x] Run `./scripts/skill-pack-routing-audit.sh`.
+- [x] Run focused tests for any added generator or validator coverage.
+- [x] Run `git diff --check`.
+
+### Manual Tasks
+
+No manual tasks block Phase 32. Vercel deployment and newsletter provider setup are planned for Phase 34 after source implementation and local validation.
+
+### Review
+
+#### 2026-05-07 - Step 32.6 Ship Manifest
+
+- **User goal:** Execute `$run` for the next incomplete Phase 32 step by running the full validation gate, recording the phase result, and preparing the next phase.
+- **Changed files:** `tasks/todo.md`, `tasks/history.md`, `tasks/roadmap.md`, `tasks/phases/phase-32.md`.
+- **Per-file purpose:** `tasks/todo.md` records the completed Phase 32 status before archival and then becomes the active Phase 33 plan; `tasks/history.md` records the Phase 32 validation result; `tasks/roadmap.md` marks Phase 32 complete and Phase 33 active; `tasks/phases/phase-32.md` preserves the completed Phase 32 record.
+- **User-goal mapping:** Step 32.6 required full validation and archive-ready phase status. All Phase 32 acceptance criteria are checked, validation passed, and the next phase has a self-contained execution plan.
+- **Tests run:** `node scripts/generate-skills-showcase-data.mjs` passed; `node scripts/generate-skills-showcase-github-data.mjs` passed; `node --check docs/skills-showcase/app.js` passed; `bash -n scripts/validate-skills-showcase-data.sh` passed; `scripts/validate-skills-showcase-data.sh` passed; static route file presence check passed for all six routes plus shared CSS/JS; targeted generated-data scans passed; `./scripts/skill-deps.sh --broken` passed; `./scripts/skill-versions.sh --missing` passed; `./scripts/skill-next-step-routing.sh --missing` passed; `./scripts/skill-pack-routing-audit.sh` passed; `pnpm --dir tests test` passed with 1,177 layer1 tests; `git diff --check` passed.
+- **Skipped tests:** Browser screenshot/responsive UI validation was not run for Phase 32 because the phase foundation is static shell, data, and workflow contracts. Phase 33 explicitly owns the richer interactive UI, generated catalog rendering, responsive behavior, and browser verification.
+- **Adversarial review:** Validation checked that the phase did not add a database, video/Remotion implementation, runtime API, GitHub Actions workflow, unnecessary root dependency, secrets, live LexCorp metrics, or visitor analytics. Generated proof data states those boundaries explicitly.
+- **Residual risk:** `generatedAt` is a stable placeholder while `sourceFingerprint` is the true freshness signal; Phase 33 should avoid presenting `generatedAt` as a wall-clock timestamp. Visual polish and responsive behavior still need browser verification in Phase 33.
+- **Rollback note:** Revert the Step 32.6 commit to restore Phase 32 as active and remove the Phase 33 active todo handoff.
+- **Next command:** `$run`
+
+#### 2026-05-07 - Step 32.5 Ship Manifest
+
+- **User goal:** Execute `$run` for the next incomplete Phase 32 step by updating skill mutation contracts so skill behavior changes maintain the static Skills Showcase data and curated public copy.
+- **Changed files:** `global/codex/create-agentic-skill/SKILL.md`, `global/claude/create-agentic-skill/SKILL.md`, `global/codex/targeted-skill-builder/SKILL.md`, `global/claude/targeted-skill-builder/SKILL.md`, `global/codex/run/SKILL.md`, `global/claude/run/SKILL.md`, `global/codex/ship/SKILL.md`, `global/claude/ship/SKILL.md`, `docs/skills-reference.md`, `docs/skills-showcase/assets/skills-data.js`, `docs/skills-showcase/assets/github-proof-data.js`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** Creation/update skills now regenerate showcase data and review curated website copy after repo-managed skill changes; run/ship skills now include the showcase freshness gate in skill mutation shipping boundaries; `docs/skills-reference.md` documents the maintainer contract; generated assets capture the updated skill-contract source fingerprints; task/history docs record completion and next work.
+- **User-goal mapping:** Step 32.5 requires skill-changing contracts to prompt regeneration and curated website review when `SKILL.md` behavior or metadata changes. The mirrored skill contracts now require both generator commands, the freshness validator, generated assets in the shipping boundary, and curated website/proof review language.
+- **Tests run:** `node scripts/generate-skills-showcase-data.mjs` passed; `node scripts/generate-skills-showcase-github-data.mjs` passed; `scripts/validate-skills-showcase-data.sh` first failed with stale generated assets as expected after skill edits, then passed after regeneration; `./install.sh` passed; `./scripts/skill-deps.sh --broken` passed; `./scripts/skill-versions.sh --missing` passed; `./scripts/skill-next-step-routing.sh --missing` passed; `./scripts/skill-pack-routing-audit.sh` passed; targeted `rg -l` confirmed all eight target skill contracts plus `docs/skills-reference.md` reference `scripts/validate-skills-showcase-data.sh`; `git diff --check` passed.
+- **Skipped tests:** No browser UI checks were run because this step changes workflow policy and generated data, not rendered page behavior. No package test suite was run because the executable surface is shell/skill-contract validation and the generator freshness gate already covered the changed generated assets.
+- **Adversarial review:** Checked the contract wording against the Phase 32 boundaries: it requires static data regeneration and curated copy/proof review without introducing a runtime API, database, GitHub Actions workflow, video/Remotion pipeline, analytics, or live product metrics. The edits preserve Claude/Codex command syntax differences.
+- **Residual risk:** Curated website review remains an operator judgment gate rather than a fully automated diff check; later Phase 33 UI work should make public copy and workflow animation data more structured if this proves easy to miss.
+- **Rollback note:** Revert the Step 32.5 commit to remove the showcase freshness requirements from mutation-capable skills and restore the previous generated data fingerprints.
+- **Next command:** `$run`
+
+#### 2026-05-07 - Step 32.4 Ship Manifest
+
+- **User goal:** Execute `$run` for the next incomplete Phase 32 step by adding stale-data validation for the generated Skills Showcase assets.
+- **Changed files:** `scripts/validate-skills-showcase-data.sh`, `scripts/generate-skills-showcase-data.mjs`, `scripts/generate-skills-showcase-github-data.mjs`, `docs/skills-showcase/assets/skills-data.js`, `docs/skills-showcase/assets/github-proof-data.js`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** The validator reruns both showcase generators and detects whether the current working-copy generated assets changed; the catalog generator now uses content-stable freshness metadata; the proof generator adds the new validator to proof receipts and removes commit-derived fields that would make generated data stale immediately after a shipping commit; generated assets record the updated deterministic contract; task/history docs record completion and next work.
+- **User-goal mapping:** Step 32.4 requires a canonical freshness gate that fails when generated showcase data is stale. The validator produced the expected stale failure after generator inputs changed, then passed after regeneration, with clear remediation commands for operators.
+- **Tests run:** `bash -n scripts/validate-skills-showcase-data.sh` passed; `node --check scripts/generate-skills-showcase-data.mjs` passed; `node --check scripts/generate-skills-showcase-github-data.mjs` passed; `scripts/validate-skills-showcase-data.sh` first failed with stale generated assets as expected, then passed after regeneration; targeted `rg` confirmed the validator references both generators, both generated assets, stale/fresh messages, and the hash comparison; `git diff --check` passed.
+- **Skipped tests:** No new Vitest fixture was added because the validator is a direct shell freshness gate and the phase plan allowed direct shell validation when fixture behavior was unnecessary. Browser UI checks remain out of scope because this step changes data freshness scripts, not rendered UI.
+- **Adversarial review:** The initial `git diff`-against-HEAD design was rejected because it would fail during normal pre-commit shipping when generated assets were already fresh but uncommitted. Commit-derived generator metadata was also removed because it would create post-commit drift. The final design compares generated asset fingerprints before and after generator execution, which catches stale data without depending on commit SHA churn.
+- **Residual risk:** `generatedAt` is now a stable placeholder and freshness is represented by `sourceFingerprint`; future UI should label fingerprint freshness honestly instead of presenting `generatedAt` as a wall-clock refresh time.
+- **Rollback note:** Revert the Step 32.4 commit to remove the validator and restore the previous commit-derived generated metadata contract.
+- **Next command:** `$run`
+
+#### 2026-05-07 - Targeted Skill Builder: Spec Interview Checkpoint Fix
+
+- **User goal:** Update the mirrored `spec-interview` contracts so `$spec-interview` behaves like an interview-first workflow instead of stopping at a blocking assumptions manifest.
+- **Changed files:** `global/codex/spec-interview/SKILL.md`, `global/claude/spec-interview/SKILL.md`, `tasks/todo.md`.
+- **Decision:** Existing-skill update. The verified issue was a contract gap in `spec-interview`, not a missing new skill or a random local execution drift.
+- **Evidence used:** User-provided session-triage verdict; `tasks/lessons.md`; current Codex and Claude `spec-interview` contracts; targeted `rg` search for blocking manifest language.
+- **Evidence intentionally skipped:** Broad session-history scanning, because the correction was already verified and the target skill paths were explicit.
+- **Overlap findings:** Existing `spec-interview` owns the workflow; no new skill is needed. Nearby interview skills also contain assumption checkpoints, but this fix intentionally changes only the verified failing contract.
+- **Validation results:** `./install.sh` passed; `./scripts/skill-deps.sh --broken` passed; `./scripts/skill-versions.sh --missing` passed; `./scripts/skill-next-step-routing.sh --missing` passed; targeted `rg` confirmed no blocking manifest language remains in either spec-interview contract; `node scripts/generate-skills-showcase-data.mjs` and `node scripts/generate-skills-showcase-github-data.mjs` passed; `git diff --check` passed. `scripts/validate-skills-showcase-data.sh` could not run because Step 32.4 has not added that planned script yet.
+
+#### 2026-05-07 - Step 32.1 Ship Manifest
+
+- **User goal:** Execute `$run` for the next incomplete Phase 32 step by scaffolding the multi-page static shell and shared blueprint foundation.
+- **Changed files:** `docs/skills-showcase/index.html`, `docs/skills-showcase/workflows/index.html`, `docs/skills-showcase/packs/index.html`, `docs/skills-showcase/catalog/index.html`, `docs/skills-showcase/inspect/index.html`, `docs/skills-showcase/follow/index.html`, `docs/skills-showcase/styles.css`, `docs/skills-showcase/app.js`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** Home route establishes the first-viewport hero, CTA, blueprint state machine, and route previews; route entrypoints establish direct-reloadable static pages for workflows, packs, catalog, inspect, and follow; shared CSS centralizes the responsive Swiss grid/blueprint visual system; shared JS centralizes mobile navigation, workflow selector behavior, and catalog sample filtering; task/history docs record completion and next work.
+- **User-goal mapping:** The six HTML entrypoints satisfy the static route foundation; `styles.css` and `app.js` satisfy the shared blueprint foundation without a runtime framework or root dependency; task docs keep `$run` progress and handoff state current.
+- **Tests run:** `node --check docs/skills-showcase/app.js` passed; route file presence check for all six HTML entrypoints plus shared CSS/JS passed; `git diff --check` passed; targeted `rg` review of route `href`/`src` and data hooks found the expected route references.
+- **Skipped tests:** Full generated-data validation was not run because Steps 32.2-32.4 have not added the generators or stale-data validator yet. Browser screenshot QA was not run because Step 32.1 is a static foundation with no dev server requirement; the files can be opened directly, and Phase 33 owns the richer responsive/animation experience.
+- **Adversarial review:** Diff-aware self-review checked that no dependency, database, runtime API, GitHub Actions, video, Remotion, or generated-data claim was introduced; corrected the nested Inspect proof link to target repository-level `tasks/history.md`; accepted that placeholder catalog/proof rows are temporary because later Phase 32 steps replace them with generated data.
+- **Residual risk:** Visual polish and responsive edge cases have not had browser screenshot verification yet; the next UI-heavy Phase 33 work should run browser checks after interaction/animation content is implemented.
+- **Rollback note:** Revert the Step 32.1 commit to remove the `docs/skills-showcase/` static shell and task/history bookkeeping.
+- **Next command:** `$run`
+
+#### 2026-05-07 - Step 32.2 Ship Manifest
+
+- **User goal:** Execute `$run` for the next incomplete Phase 32 step by adding generated skill catalog data for the static showcase.
+- **Changed files:** `scripts/generate-skills-showcase-data.mjs`, `docs/skills-showcase/assets/skills-data.js`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** The generator scans tracked global and pack skill sources, parses frontmatter, derives catalog metadata, pack summaries, and a source fingerprint; the generated browser data file commits the static catalog payload for Vercel; task/history docs record completion, validation, and the next executable plan.
+- **User-goal mapping:** Step 32.2 requires generated data covering every tracked source skill under `global/` and `packs/`; the generator uses `git ls-files` for the tracked source boundary and generated `312` skills across `16` packs from `327` source inputs.
+- **Tests run:** `node scripts/generate-skills-showcase-data.mjs` passed; `node --check scripts/generate-skills-showcase-data.mjs` passed; targeted Node data-shape check confirmed `window.SKILLS_SHOWCASE_DATA`, `sourceFingerprint`, `generatedAt`, `global/codex/run/SKILL.md`, `$run`, pack-scoped monorepo records, and mirrored monorepo pack platforms; idempotence check `node scripts/generate-skills-showcase-data.mjs && git diff --exit-code -- docs/skills-showcase/assets/skills-data.js` passed; `git diff --check` passed.
+- **Skipped tests:** Full stale-data validator was not run because Step 32.4 has not added `scripts/validate-skills-showcase-data.sh` yet. Browser catalog rendering against generated data was not run because Step 32.2 only commits the generated payload; wiring the UI to consume it belongs to the later experience phase.
+- **Adversarial review:** Self-review found and fixed an unstable wall-clock `generatedAt` value that would have made future freshness checks noisy; the final generator derives `generatedAt` from the latest Git commit timestamp for tracked source inputs and uses a content fingerprint for stale-data detection. Review also checked that no dependency, secret, runtime API, database, GitHub Actions, or invented skill metadata was introduced.
+- **Residual risk:** The frontmatter parser intentionally supports simple scalar fields only; this matches current skill metadata but would need expansion if future `SKILL.md` frontmatter adopts nested YAML. Step 32.4 should encode stale-data validation against this exact generator contract.
+- **Rollback note:** Revert the Step 32.2 commit to remove the generator, generated `skills-data.js`, and task/history bookkeeping.
+- **Next command:** `$run`
+
+#### 2026-05-07 - Step 32.3 Ship Manifest
+
+- **User goal:** Execute `$run` for the next incomplete Phase 32 step by adding generated GitHub/open-source proof data for the static showcase.
+- **Changed files:** `scripts/generate-skills-showcase-github-data.mjs`, `docs/skills-showcase/assets/github-proof-data.js`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** The generator writes static browser proof data from local/public repository evidence; the generated asset commits proof artifacts, validation script references, local HEAD metadata, public GitHub status, and honest boundaries; task/history docs record completion, validation, and the next Step 32.4 plan.
+- **User-goal mapping:** Step 32.3 requires committed proof data or an honest fallback without secrets; the generator records local git evidence, tracked proof artifacts, validation scripts, and fallback status when public GitHub metadata is unavailable.
+- **Tests run:** `node scripts/generate-skills-showcase-github-data.mjs` passed; `node --check scripts/generate-skills-showcase-github-data.mjs` passed; targeted Node data-shape check confirmed `window.SKILLS_SHOWCASE_GITHUB_PROOF_DATA`, repository HEAD evidence, `tasks/history.md`, validation command references, public GitHub `refreshed`/`fallback` status, and boundary language; targeted `rg` proof scan passed; idempotence check `node scripts/generate-skills-showcase-github-data.mjs && git diff --exit-code -- docs/skills-showcase/assets/github-proof-data.js` passed; `git diff --check` passed.
+- **Skipped tests:** Network-backed GitHub metadata was not required for success because the contract explicitly requires honest fallback behavior without secrets. Full stale-data validation was not run because Step 32.4 adds the validator.
+- **Adversarial review:** Self-review checked that the generator does not require credentials, does not fail when public GitHub metadata cannot refresh, does not claim live LexCorp metrics or analytics, and does not add dependencies, a runtime API, a database, or GitHub Actions.
+- **Residual risk:** Public GitHub metadata may remain in fallback status in restricted environments; the static proof surface still has local commit and artifact evidence, and Step 32.4 should protect both generated assets from stale commits.
+- **Rollback note:** Revert the Step 32.3 commit to remove the proof generator, generated proof asset, and task/history bookkeeping.
+- **Next command:** `$run`
+
+## Next Work
+
+Start Phase 33 Step 33.1 by wiring generated catalog/search interactions to the static showcase routes.
+
+**Recommended next command:** `$run`
+
+## On Completion
+
+- **Deviations from plan:** Added deterministic generated-data freshness behavior and a dedicated `scripts/validate-skills-showcase-data.sh` gate so generated assets do not drift after shipping commits. Did not add a Vitest fixture for the validator because direct shell stale/fresh validation covered the contract more directly.
+- **Tech debt / follow-ups:** Phase 33 should avoid treating `generatedAt` as a wall-clock timestamp and should run browser responsive/screenshot checks for generated catalog, workflow, pack, and proof UI. Curated website copy review remains operator-driven until Phase 33 structures more of the public-facing data.
+- **Ready for next phase:** yes.

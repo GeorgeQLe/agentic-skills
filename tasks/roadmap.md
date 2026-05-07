@@ -2,7 +2,7 @@
 
 > Generated from: tasks/roadmap.md (existing), specs/board-flag-kanban-search.md, tasks/ideas.md, tasks/history.md
 > Date: 2026-03-27 (last updated 2026-05-07)
-> Total Phases: 34 (31 complete, 1 active, 2 planned)
+> Total Phases: 34 (32 complete, 1 active, 1 planned)
 
 ## Summary
 
@@ -10,7 +10,7 @@ Phases 1-11 complete: kanban skill suite, board intelligence, templates, archive
 
 Phases 12-31 complete. Phase 14 added the LinkedIn evidence lane to the creator foundation workflow with owner exports, manual snapshots, public unauthenticated captures, redaction gates, shared evidence-schema/dossier routing, and deterministic layer1 contract coverage. Phase 16 hardened mutation-capable skill contracts with final next-step routing language and an audit that catches future omissions. Phase 17 added mixed-monorepo pack routing so one repository can carry devtool, business-app, game, or other domain scopes without forcing one global designation. Phase 18 hardened pack lock recovery after a `pitwall-monorepo` refresh timeout. Phase 19 added a YouTube description and metadata optimization lane to the creator-media pack. Phase 20 added external YouTube video research lanes for comprehension, format/Remotion-style analysis, and competitive learning. Phase 21 hardened default mutation/shipping quality gates from the session workflow audit. Phase 22 added feature-interview as the triage step between brainstorm ideas and full specifications. Phase 23 added targeted-skill-builder for focused skill creation or updates from concrete workflow gaps without defaulting to broad session-history analysis. Phase 24 added install-agentic-skills for refreshing global skill links and routing pack access through the existing project-local workflow. Phase 25 added codebase-status for read-only repo status reports with local history evidence. Phase 26 added the monorepo pack V1. Phase 27 added targeted skill retrospectives to analyze-sessions; Phase 28 split that focused behavior into session-triage. Phase 29 added opt-in live-agent behavior tests. Phase 30 deepened feature-interview into evidence-backed feature intake. Phase 31 hardened parallel agent-team branch/PR isolation.
 
-Phases 32-34 are planned for the Skills Showcase Website MVP. The product is a Vercel-deployable, multi-page static showcase for George "G" Le's open-source agentic engineering workflow library, including generated skill coverage, browser-native workflow animations, GitHub/open-source proof data, newsletter/email capture, and skill-change freshness prompts.
+Phase 32 is complete. Phases 33-34 are planned for the remaining Skills Showcase Website MVP. The product is a Vercel-deployable, multi-page static showcase for George "G" Le's open-source agentic engineering workflow library, including generated skill coverage, browser-native workflow animations, GitHub/open-source proof data, newsletter/email capture, and skill-change freshness prompts.
 
 ## Current Product: Skills Showcase Website MVP
 
@@ -87,13 +87,13 @@ Phases 32-34 are planned for the Skills Showcase Website MVP. The product is a V
 | 29 | Live Skill Harness | user request | Opt-in live Claude/Codex behavior tests for skills | M |
 | 30 | Feature Interview Evidence Intake | user request, existing feature-interview gap review | Evidence-backed feature intake with technical gotchas, journey placement, doc updates, and user priority decision | S |
 | 31 | Parallel Agent Branch/PR Guard ✓ | user correction, existing agent-team workflow contracts | Agent-team lanes use separate GitHub branches and plans include consolidation/PR review | S |
-| 32 | Skills Showcase Product Foundation | specs/skills-showcase-website.md, specs/ui-skills-showcase-website.md | Multi-page static shell, generated skill/GitHub proof data, stale-data validation, and skill-change freshness prompts | L |
+| 32 | Skills Showcase Product Foundation ✓ | specs/skills-showcase-website.md, specs/ui-skills-showcase-website.md | Multi-page static shell, generated skill/GitHub proof data, stale-data validation, and skill-change freshness prompts | L |
 | 33 | Skills Showcase Workflow Experience | specs/skills-showcase-website.md, specs/ui-skills-showcase-website.md | Workflow Lab animations, pack map, generated catalog, and responsive blueprint UI | L |
 | 34 | Skills Showcase Distribution Launch | specs/skills-showcase-website.md, specs/ui-skills-showcase-website.md | Proof telemetry UI, newsletter capture, follow/community funnel, and Vercel launch readiness | M |
 
 ---
 
-## Phase 32: Skills Showcase Product Foundation
+## Phase 32: Skills Showcase Product Foundation ✓
 
 **Goal:** Establish the static product foundation for the showcase: multi-page routing, shared blueprint visual system, generated source data, generated GitHub/open-source proof data, and the freshness contract that makes future skill changes update the website when relevant.
 
@@ -108,13 +108,13 @@ Phases 32-34 are planned for the Skills Showcase Website MVP. The product is a V
 - Update skill-changing workflow contracts so agents regenerate the site data and review curated showcase copy/animations when skill behavior changes.
 
 **Acceptance Criteria:**
-- [ ] Static route entrypoints exist for `/`, `/workflows/`, `/packs/`, `/catalog/`, `/inspect/`, and `/follow/`.
-- [ ] Shared styles and scripts provide the responsive Swiss grid/blueprint foundation without one-off page styling.
-- [ ] `scripts/generate-skills-showcase-data.mjs` writes committed generated data covering every tracked source skill.
-- [ ] `scripts/generate-skills-showcase-github-data.mjs` writes committed proof data or an honest fallback without requiring secrets.
-- [ ] `scripts/validate-skills-showcase-data.sh` fails when generated showcase data is stale.
-- [ ] Skill-changing contracts prompt regeneration and curated website review when `SKILL.md` behavior or metadata changes.
-- [ ] Focused validation passes without adding a database, video, Remotion, runtime API, GitHub Actions, or unnecessary root dependencies.
+- [x] Static route entrypoints exist for `/`, `/workflows/`, `/packs/`, `/catalog/`, `/inspect/`, and `/follow/`.
+- [x] Shared styles and scripts provide the responsive Swiss grid/blueprint foundation without one-off page styling.
+- [x] `scripts/generate-skills-showcase-data.mjs` writes committed generated data covering every tracked source skill.
+- [x] `scripts/generate-skills-showcase-github-data.mjs` writes committed proof data or an honest fallback without requiring secrets.
+- [x] `scripts/validate-skills-showcase-data.sh` fails when generated showcase data is stale.
+- [x] Skill-changing contracts prompt regeneration and curated website review when `SKILL.md` behavior or metadata changes.
+- [x] Focused validation passes without adding a database, video, Remotion, runtime API, GitHub Actions, or unnecessary root dependencies.
 
 **Parallelization:** serial
 **Coordination Notes:** Keep serial because this phase edits shared static site foundations, generated data contracts, validation scripts, and skill mutation contracts that must agree on one freshness model.
@@ -145,18 +145,18 @@ Phases 32-34 are planned for the Skills Showcase Website MVP. The product is a V
 
 ### Milestone: Phase 32 Product Foundation
 **Acceptance Criteria:**
-- [ ] Static route entrypoints exist for `/`, `/workflows/`, `/packs/`, `/catalog/`, `/inspect/`, and `/follow/`.
-- [ ] Shared styles and scripts provide the responsive Swiss grid/blueprint foundation without one-off page styling.
-- [ ] `scripts/generate-skills-showcase-data.mjs` writes committed generated data covering every tracked source skill.
-- [ ] `scripts/generate-skills-showcase-github-data.mjs` writes committed proof data or an honest fallback without requiring secrets.
-- [ ] `scripts/validate-skills-showcase-data.sh` fails when generated showcase data is stale.
-- [ ] Skill-changing contracts prompt regeneration and curated website review when `SKILL.md` behavior or metadata changes.
-- [ ] Focused validation passes without adding a database, video, Remotion, runtime API, GitHub Actions, or unnecessary root dependencies.
+- [x] Static route entrypoints exist for `/`, `/workflows/`, `/packs/`, `/catalog/`, `/inspect/`, and `/follow/`.
+- [x] Shared styles and scripts provide the responsive Swiss grid/blueprint foundation without one-off page styling.
+- [x] `scripts/generate-skills-showcase-data.mjs` writes committed generated data covering every tracked source skill.
+- [x] `scripts/generate-skills-showcase-github-data.mjs` writes committed proof data or an honest fallback without requiring secrets.
+- [x] `scripts/validate-skills-showcase-data.sh` fails when generated showcase data is stale.
+- [x] Skill-changing contracts prompt regeneration and curated website review when `SKILL.md` behavior or metadata changes.
+- [x] Focused validation passes without adding a database, video, Remotion, runtime API, GitHub Actions, or unnecessary root dependencies.
 
-**On Completion** (fill in when phase is done):
-- Deviations from plan:
-- Tech debt / follow-ups:
-- Ready for next phase:
+**On Completion**
+- Deviations from plan: Added deterministic generated-data freshness behavior and a dedicated `scripts/validate-skills-showcase-data.sh` gate so generated assets do not drift after shipping commits. Did not add a Vitest fixture for the validator because direct shell stale/fresh validation covered the contract more directly.
+- Tech debt / follow-ups: Phase 33 should avoid treating `generatedAt` as a wall-clock timestamp and should run browser responsive/screenshot checks for generated catalog, workflow, pack, and proof UI. Curated website copy review remains operator-driven until Phase 33 structures more of the public-facing data.
+- Ready for next phase: yes
 
 ## Phase 33: Skills Showcase Workflow Experience
 
