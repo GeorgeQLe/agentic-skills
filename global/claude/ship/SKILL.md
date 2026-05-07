@@ -37,6 +37,15 @@ c) **Fix errors.** If any pre-existing errors are found (from prior session outp
 
 d) **If errors can't be auto-fixed** (e.g., requires user decision, third-party dependency issue), **STOP. Do not ship.** Report the errors clearly to the user and ask how they want to proceed. Never commit or push code with known build/lint/type/test failures.
 
+### 1c. Skills Showcase freshness
+If the shipping boundary creates, deletes, renames, or changes behavior/metadata in any tracked `SKILL.md` or `PACK.md`, refresh the Skills Showcase before commit:
+
+- `node scripts/generate-skills-showcase-data.mjs`
+- `node scripts/generate-skills-showcase-github-data.mjs`
+- `scripts/validate-skills-showcase-data.sh`
+
+Include changed generated assets in the same shipping boundary. For skill behavior changes, review curated showcase copy, catalog grouping, workflow animation text, and proof receipts; update affected site files or record why no curated website copy changed.
+
 ### 2. Ship the work
 a) Read the project's CLAUDE.md to understand current progress.
 b) Update `tasks/todo.md` — mark completed items as done (check off steps and milestone criteria).

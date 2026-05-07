@@ -48,10 +48,15 @@ Use this skill when the user wants to add or update a skill in the `agentic-skil
 6. **Validate.**
    - Read back the new or updated `SKILL.md` files.
    - Run search checks for old skill names, missing `version:`, missing Codex invocation lines in Codex skills, and accidental writes under `~/.claude/skills` or `~/.codex/skills`.
+   - If any tracked `SKILL.md` or `PACK.md` was created, deleted, renamed, or changed in behavior or metadata, refresh the Skills Showcase data before shipping:
+     - `node scripts/generate-skills-showcase-data.mjs`
+     - `node scripts/generate-skills-showcase-github-data.mjs`
+     - `scripts/validate-skills-showcase-data.sh`
+   - Review curated showcase copy, catalog grouping, workflow animation text, and proof receipts when the skill change could affect the public website. Update the relevant site files or explicitly record why no curated website copy changed.
    - Confirm unrelated dirty files remain unstaged.
 
 7. **Commit and push.**
-   - Stage only intended repo-managed skill files and directly related docs or lesson updates.
+   - Stage only intended repo-managed skill files, generated showcase assets, and directly related docs or lesson updates.
    - Commit on the repository primary branch (`main` when present, otherwise `master`) with a concise conventional commit message.
    - Push the branch.
    - Do not stage unrelated user changes.

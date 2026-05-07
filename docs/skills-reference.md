@@ -38,6 +38,18 @@ For workflow ordering, lead-in recommendations, and overlay dependencies, see [`
 
 Recommended next steps are governed by `docs/skill-next-step-contracts.md`. A skill may recommend another skill only when the target skill exists in the active platform/pack context and the current end state satisfies that target's prerequisites. Multi-state skills must branch by end state, and a terminal "no useful follow-up" state should say `No follow-up skill recommended` rather than invent work.
 
+## Skills Showcase Freshness
+
+The static Skills Showcase under `docs/skills-showcase/` uses committed generated data. When a tracked `SKILL.md` or `PACK.md` is created, deleted, renamed, or changed in behavior or metadata, refresh and validate the showcase before shipping:
+
+```bash
+node scripts/generate-skills-showcase-data.mjs
+node scripts/generate-skills-showcase-github-data.mjs
+scripts/validate-skills-showcase-data.sh
+```
+
+Include changed generated assets in the same commit as the skill change. Also review curated website copy, catalog grouping, workflow animation text, and proof receipts when the skill change affects public-facing behavior. This is a static-data contract only; it does not add a runtime API, database, GitHub Actions workflow, video/Remotion pipeline, analytics, or live product metrics.
+
 ## Global Core Skills
 
 Global skills are safe across business apps, games, devtools, libraries, services, and infrastructure:

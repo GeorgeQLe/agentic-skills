@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-05-07 - Phase 32 Step 32.5: skill mutation showcase freshness contracts
+
+- Updated mirrored `create-agentic-skill`, `targeted-skill-builder`, `run`, and `ship` contracts so tracked `SKILL.md` or `PACK.md` behavior/metadata changes refresh Skills Showcase data before shipping.
+- Added maintainer-facing Skills Showcase freshness guidance to `docs/skills-reference.md`, including generator commands, freshness validation, generated asset shipping, and curated website/proof review.
+- Regenerated `docs/skills-showcase/assets/skills-data.js` and `docs/skills-showcase/assets/github-proof-data.js` for the changed skill-contract fingerprints.
+- Verified with showcase generators, stale/fresh validator behavior, install, skill dependency/version/routing audits, pack-routing audit, targeted command-presence scans, and `git diff --check`.
+
 ## 2026-05-07 - Phase 32 Step 32.4: skills showcase stale-data validation
 
 - Added `scripts/validate-skills-showcase-data.sh` as the canonical freshness gate for committed Skills Showcase generated assets.
