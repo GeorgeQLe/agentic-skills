@@ -1594,6 +1594,13 @@ Resolved all 10 findings from `/expert-review`:
 - Preserved the existing YouTube-only flow by keeping channel audit and raw YouTube evidence as the source of channel-only and performance claims.
 - Verified with targeted routing scans, normalized mirror diff for `creator-evidence-schema`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-deps.sh --broken`, and `git diff --check`.
 
+## 2026-05-07 - Phase 32 Step 32.1: skills showcase static shell
+
+- Added the `docs/skills-showcase/` static website foundation with direct-reloadable home, workflows, packs, catalog, inspect, and follow routes.
+- Added shared `styles.css` and `app.js` for the responsive Swiss grid/blueprint motif, sticky/mobile navigation, workflow selector behavior, and sample catalog filtering without adding dependencies or a runtime framework.
+- Kept generated catalog/proof data, stale-data validation, and skill mutation contract prompts scoped to later Phase 32 steps with honest placeholder states in the shell.
+- Verified with `node --check docs/skills-showcase/app.js`, route file presence checks, targeted route/data-hook scans, and `git diff --check`.
+
 ## 2026-05-03 — Phase 13 Step 13.5: creator presence regression coverage
 
 - Recorded focused regression validation coverage for the Phase 13 creator presence dossier acceptance criteria in `tasks/todo.md`.
