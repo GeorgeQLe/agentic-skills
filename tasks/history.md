@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-05-07 - Phase 32 Step 32.3: skills showcase proof data
+
+- Added `scripts/generate-skills-showcase-github-data.mjs`, a dependency-free proof generator for the static showcase Inspect surface.
+- Generated committed `docs/skills-showcase/assets/github-proof-data.js` with local repository URL, branch, HEAD commit evidence, tracked proof artifacts, validation script references, recent history headings, explicit boundary language, and public GitHub metadata status.
+- Kept public GitHub metadata optional: restricted network or unauthenticated failures produce an honest fallback instead of failing the generator or inventing metrics.
+- Verified with generator execution, Node syntax check, targeted browser-global/data-shape checks, targeted proof scans, generated-output idempotence check, and `git diff --check`.
+
 ## 2026-05-07 - Phase 32 Step 32.2: skills showcase catalog data
 
 - Added `scripts/generate-skills-showcase-data.mjs`, a dependency-free generator that scans tracked `global/*/*/SKILL.md`, `packs/*/{claude,codex}/*/SKILL.md`, and `packs/*/PACK.md` sources.
