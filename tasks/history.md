@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-05-07 - Phase 32 Step 32.4: skills showcase stale-data validation
+
+- Added `scripts/validate-skills-showcase-data.sh` as the canonical freshness gate for committed Skills Showcase generated assets.
+- The validator reruns both showcase generators, compares generated asset fingerprints before and after generation, and fails with explicit remediation commands when the current working-copy assets are stale.
+- Updated the catalog and proof generators to avoid commit-derived freshness fields that would make generated assets stale immediately after a shipping commit.
+- Regenerated `docs/skills-showcase/assets/skills-data.js` and `docs/skills-showcase/assets/github-proof-data.js`; the proof data now lists the showcase freshness validator among validation receipts.
+- Verified with Bash syntax check, Node syntax checks for both generators, stale/fresh validator runs, targeted validator content scans, and `git diff --check`.
+
 ## 2026-05-07 - Phase 32 Step 32.3: skills showcase proof data
 
 - Added `scripts/generate-skills-showcase-github-data.mjs`, a dependency-free proof generator for the static showcase Inspect surface.
