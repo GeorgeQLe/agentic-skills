@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-05-07 — Fold consistently-accepted patterns into ux-variation and ui-interview
+
+- Updated `ux-variation/SKILL.md` to default to 5 maximally contrasting variants, skip breadth/count/evaluator questions, remove pre-build narrowing options (Remove one, Merge concepts), require full buildout of all variants before evaluation, add "Make this a variant axis" affordance for ambiguous design decisions, and unlock per-variation design constraints (only tech stack shared).
+- Updated `ui-interview/SKILL.md` to make accessibility mandatory by default (not optional checkboxes), treat product specs/ICPs/journey maps as overridable reference material, and deprioritize reference/inspiration questions.
+- No changes needed to `ui-consolidate/SKILL.md` — its design already aligns with these patterns.
+- Verified with `./install.sh`, `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-next-step-routing.sh --missing`, targeted `rg` scans for old/new patterns, and `git diff --check`.
+
 ## 2026-05-07 — Parallel agent branch/PR guard
 
 - Added the narrow `agent-team` branch exception to root `AGENTS.md`/`CLAUDE.md` guidance and to the `provision-agentic-config` templates that regenerate those blocks.
