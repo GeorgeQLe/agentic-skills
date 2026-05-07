@@ -103,6 +103,16 @@ No manual tasks block Phase 32. Vercel deployment and newsletter provider setup 
 
 ### Review
 
+#### 2026-05-07 - Targeted Skill Builder: Spec Interview Checkpoint Fix
+
+- **User goal:** Update the mirrored `spec-interview` contracts so `$spec-interview` behaves like an interview-first workflow instead of stopping at a blocking assumptions manifest.
+- **Changed files:** `global/codex/spec-interview/SKILL.md`, `global/claude/spec-interview/SKILL.md`, `tasks/todo.md`.
+- **Decision:** Existing-skill update. The verified issue was a contract gap in `spec-interview`, not a missing new skill or a random local execution drift.
+- **Evidence used:** User-provided session-triage verdict; `tasks/lessons.md`; current Codex and Claude `spec-interview` contracts; targeted `rg` search for blocking manifest language.
+- **Evidence intentionally skipped:** Broad session-history scanning, because the correction was already verified and the target skill paths were explicit.
+- **Overlap findings:** Existing `spec-interview` owns the workflow; no new skill is needed. Nearby interview skills also contain assumption checkpoints, but this fix intentionally changes only the verified failing contract.
+- **Validation results:** `./install.sh` passed; `./scripts/skill-deps.sh --broken` passed; `./scripts/skill-versions.sh --missing` passed; `./scripts/skill-next-step-routing.sh --missing` passed; targeted `rg` confirmed no blocking manifest language remains in either spec-interview contract; `node scripts/generate-skills-showcase-data.mjs` and `node scripts/generate-skills-showcase-github-data.mjs` passed; `git diff --check` passed. `scripts/validate-skills-showcase-data.sh` could not run because Step 32.4 has not added that planned script yet.
+
 #### 2026-05-07 - Step 32.1 Ship Manifest
 
 - **User goal:** Execute `$run` for the next incomplete Phase 32 step by scaffolding the multi-page static shell and shared blueprint foundation.

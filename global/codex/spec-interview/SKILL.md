@@ -25,14 +25,16 @@ Use this skill when the user has a concept brief, research-backed opportunity, d
    If project type is missing or mismatched, recommend `$pack recommend` or `$pack install <pack>` before doing domain-specific planning.
 2. For business-app projects, check if `research/concept-brief.md`, `research/icp.md`, and `research/journey-map.md` exist. Read them as source evidence — ground implementation decisions against the concept constraints, ICP, user journey, customer journey, technical sophistication, customer provisioning model, path to aha, conversion path, retention loop, and champion dynamics. Flag conflicts (e.g., "Journey map says the buyer needs a demo before sign-up — does this self-serve-only onboarding fit?"). Do not re-interview on concept, ICP, or journey topics already covered.
 3. Treat the existing spec or prompt as a draft, not a final decision record.
-4. **Surface assumptions before probing (Assumptions Manifest):**
-   - After reading the draft/prompt and research context but **before** asking deep probing questions, compile and present an **Assumptions Manifest** — a structured list of everything you are taking as given.
+4. **Surface a lightweight assumptions checkpoint before probing:**
+   - After reading the draft/prompt and research context but **before** asking deep probing questions, present a concise **Assumptions Checkpoint** — the few assumptions most likely to affect implementation direction.
    - Tag each assumption with its source:
      - `[from spec]` — explicitly stated in the draft or spec document
      - `[from codebase]` — derived from reading existing code, config, or infrastructure
      - `[from research]` — derived from research docs (ICP, audience, journey maps)
      - `[inferred]` — not stated anywhere; you filled in a default or made a judgment call
-   - The manifest must cover these categories at minimum:
+   - Keep the checkpoint short enough to preserve interview momentum: normally 3 to 7 bullets, grouped only when useful. Do not dump a comprehensive manifest unless the user explicitly asks to review assumptions first.
+   - Bias the checkpoint toward assumptions that are uncertain, risky, contradicted by evidence, or likely to change data/API/architecture choices. Omit obvious restatements that can be captured later in the spec.
+   - Consider these categories while selecting the checkpoint items, but do not force every category into the first turn:
      - **Source context**: concept, ICP, journey, and spec inputs being used as product evidence
      - **Implementation goal**: what concrete capability this spec will make buildable
      - **Technical foundation**: stack, hosting, deployment model, existing infra to preserve or replace
@@ -40,7 +42,7 @@ Use this skill when the user has a concept brief, research-backed opportunity, d
      - **Data model**: what persists, what's ephemeral, migration path from current state
      - **API and contract surface**: routes, events, SDKs, schemas, external integrations, or CLI contracts
      - **Operational requirements**: security, privacy, permissions, performance, observability, and failure handling
-   - Present the manifest and explicitly ask the user to confirm, correct, or flag any assumption before proceeding. Do not continue the interview until the user has reviewed the manifest.
+   - Immediately follow the checkpoint with 1 to 3 focused interview questions. Do not stop at the assumptions checkpoint unless the user explicitly asks to pause and review assumptions first.
    - If any `[inferred]` assumption is corrected, note the correction — these corrections are high-signal for downstream risk and must appear in the interview log.
 5. Interview the user in depth to validate assumptions, resolve ambiguities, and close gaps.
 6. If the session is already in Plan mode, prefer `request_user_input` for material decisions with 2-3 real options. Otherwise ask concise direct questions in plain text.
@@ -65,19 +67,19 @@ Use this skill when the user has a concept brief, research-backed opportunity, d
   - `## Test Plan`
   - `## Acceptance Criteria`
   - `## Open Questions`
-  - `## Assumptions & Risks` (the manifest output)
+  - `## Assumptions & Risks` (the checkpoint output)
   Additional topic-specific sections (e.g. `## Data Model`, `## Security`) may appear between Detailed Design and Edge Cases. Do not number sections.
 - Write an interview log to `[topic]-interview.md`
 
 The interview log should include:
 
-- The full Assumptions Manifest as presented, with user corrections noted
+- The Assumptions Checkpoint as presented, with user corrections noted
 - Each question asked
 - Options presented, if any
 - The user's responses and chosen direction
 - A closing summary of significant deviations from the initial draft and why they changed
 
-Append an **Assumptions & Risks** section to the end of the spec listing: each assumption that was confirmed or corrected during the manifest review, its source tag, and the downstream risk if the assumption turns out to be wrong later. Flag any `[inferred]` assumptions that were never explicitly confirmed by the user.
+Append an **Assumptions & Risks** section to the end of the spec listing: each checkpoint assumption that was confirmed, corrected, or left unresolved during the interview, its source tag, and the downstream risk if the assumption turns out to be wrong later. Flag any `[inferred]` assumptions that were never explicitly confirmed by the user.
 
 After writing the files, tell the user the next step based on available context: for user-facing work with no journey map, run `$journey-map`; for user-facing work with a journey map but no experience variants, run `$ux-variation`; for user-facing work with a chosen experience plan but no UI spec, run `$ui-interview`; otherwise run `$roadmap` to sequence specs into phases and seed Phase 1 implementation. Treat `$roadmap` as the default next route after a completed or updated spec unless a missing research/design gate is clearly higher priority. Do not invoke the next skill automatically — the user may want to run multiple planning sessions first.
 
