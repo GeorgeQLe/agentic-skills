@@ -1,5 +1,11 @@
 # Session History
 
+## 2026-05-07 - Phase 32 Step 32.6: validation and phase transition
+
+- Ran the full Phase 32 validation gate: showcase generators, static app syntax, validator syntax, freshness validation, route file presence, generated-data scans, skill dependency/version/routing audits, pack-routing audit, layer1 Vitest suite, and `git diff --check`.
+- Confirmed all Phase 32 acceptance criteria are satisfied without adding a database, runtime API, GitHub Actions workflow, video/Remotion implementation, visitor analytics, live LexCorp metrics, secrets, or unnecessary root dependencies.
+- Archived the completed phase to `tasks/phases/phase-32.md`, marked Phase 32 complete in `tasks/roadmap.md`, and prepared Phase 33 as the active todo with generated catalog/proof wiring as Step 33.1.
+
 ## 2026-05-07 - Phase 32 Step 32.5: skill mutation showcase freshness contracts
 
 - Updated mirrored `create-agentic-skill`, `targeted-skill-builder`, `run`, and `ship` contracts so tracked `SKILL.md` or `PACK.md` behavior/metadata changes refresh Skills Showcase data before shipping.
