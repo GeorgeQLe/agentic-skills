@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-05-07 — Treat product showcases as product roadmaps, not one-off pages
+
+- A showcase for an agentic workflow library can be a real top-of-funnel product, not a single marketing page, when the user's goal includes personal brand, distribution, community, and product proof.
+- Do not defer newsletter/email capture, public GitHub proof data, or multi-page routing by default just because the first implementation can be static.
+- Distinguish public/open-source proof telemetry from visitor-tracking analytics and from unrelated live product metrics; GitHub proof data can belong in MVP while live LexCorp metrics remain out of scope.
+- When the user wants skill changes to keep the site current, roadmap the freshness contract explicitly: generated data, validation, and skill-changing workflow prompts all need to agree.
+
 ## 2026-05-07 — Agent-team parallel work needs branch and PR isolation
 
 - A direct-to-primary rule is correct for sequential work, but it becomes unsafe when multiple write agents work in parallel from one base.
