@@ -41,10 +41,20 @@ Establish the static product foundation for the showcase: multi-page routing, sh
 
 ### Implementation
 
-- [ ] Step 32.1: Scaffold the multi-page static shell and shared blueprint foundation.
+- [x] Step 32.1: Scaffold the multi-page static shell and shared blueprint foundation.
   - Files: add `docs/skills-showcase/index.html`, `docs/skills-showcase/workflows/index.html`, `docs/skills-showcase/packs/index.html`, `docs/skills-showcase/catalog/index.html`, `docs/skills-showcase/inspect/index.html`, `docs/skills-showcase/follow/index.html`, `docs/skills-showcase/styles.css`, `docs/skills-showcase/app.js`
 - [ ] Step 32.2: Add generated skill catalog data.
   - Files: add `scripts/generate-skills-showcase-data.mjs`, add generated `docs/skills-showcase/assets/skills-data.js`
+  - Implementation plan:
+    - Write a dependency-free Node.js generator that scans tracked source skill files under `global/*/*/SKILL.md` and `packs/*/{claude,codex}/*/SKILL.md`, plus `packs/*/PACK.md` when present.
+    - Parse frontmatter fields `name`, `description`, `type`, `version`, and `argument-hint`; derive `platform`, `scope`, `pack`, `command`, `mirrorKey`, `id`, and relative source `path` from the file path.
+    - Generate deterministic `window.SKILLS_SHOWCASE_DATA` in `docs/skills-showcase/assets/skills-data.js` with `generatedAt`, `sourceFingerprint`, `skills`, `packs`, and an empty `workflows` array reserved for curated UI data.
+    - Use stable sorting by path/name and a content fingerprint from source paths plus contents so later stale-data validation can detect missed regeneration.
+    - Keep missing optional metadata honest: preserve blank/null fields rather than inventing claims, and avoid installing dependencies or adding a root build step.
+  - Verification plan:
+    - Run `node scripts/generate-skills-showcase-data.mjs`.
+    - Run a targeted Node check or `rg` scan confirming `window.SKILLS_SHOWCASE_DATA`, at least one global skill, at least one pack skill, pack summaries, and `sourceFingerprint` exist.
+    - Run `git diff --check`.
 - [ ] Step 32.3: Add generated GitHub/open-source proof data.
   - Files: add `scripts/generate-skills-showcase-github-data.mjs`, add generated `docs/skills-showcase/assets/github-proof-data.js`
 - [ ] Step 32.4: Add stale-data validation and tests.
@@ -72,7 +82,18 @@ No manual tasks block Phase 32. Vercel deployment and newsletter provider setup 
 
 ### Review
 
-Not started.
+#### 2026-05-07 - Step 32.1 Ship Manifest
+
+- **User goal:** Execute `$run` for the next incomplete Phase 32 step by scaffolding the multi-page static shell and shared blueprint foundation.
+- **Changed files:** `docs/skills-showcase/index.html`, `docs/skills-showcase/workflows/index.html`, `docs/skills-showcase/packs/index.html`, `docs/skills-showcase/catalog/index.html`, `docs/skills-showcase/inspect/index.html`, `docs/skills-showcase/follow/index.html`, `docs/skills-showcase/styles.css`, `docs/skills-showcase/app.js`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** Home route establishes the first-viewport hero, CTA, blueprint state machine, and route previews; route entrypoints establish direct-reloadable static pages for workflows, packs, catalog, inspect, and follow; shared CSS centralizes the responsive Swiss grid/blueprint visual system; shared JS centralizes mobile navigation, workflow selector behavior, and catalog sample filtering; task/history docs record completion and next work.
+- **User-goal mapping:** The six HTML entrypoints satisfy the static route foundation; `styles.css` and `app.js` satisfy the shared blueprint foundation without a runtime framework or root dependency; task docs keep `$run` progress and handoff state current.
+- **Tests run:** `node --check docs/skills-showcase/app.js` passed; route file presence check for all six HTML entrypoints plus shared CSS/JS passed; `git diff --check` passed; targeted `rg` review of route `href`/`src` and data hooks found the expected route references.
+- **Skipped tests:** Full generated-data validation was not run because Steps 32.2-32.4 have not added the generators or stale-data validator yet. Browser screenshot QA was not run because Step 32.1 is a static foundation with no dev server requirement; the files can be opened directly, and Phase 33 owns the richer responsive/animation experience.
+- **Adversarial review:** Diff-aware self-review checked that no dependency, database, runtime API, GitHub Actions, video, Remotion, or generated-data claim was introduced; corrected the nested Inspect proof link to target repository-level `tasks/history.md`; accepted that placeholder catalog/proof rows are temporary because later Phase 32 steps replace them with generated data.
+- **Residual risk:** Visual polish and responsive edge cases have not had browser screenshot verification yet; the next UI-heavy Phase 33 work should run browser checks after interaction/animation content is implemented.
+- **Rollback note:** Revert the Step 32.1 commit to remove the `docs/skills-showcase/` static shell and task/history bookkeeping.
+- **Next command:** `$run`
 
 ## Next Work
 
