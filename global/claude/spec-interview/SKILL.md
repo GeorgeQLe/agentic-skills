@@ -26,14 +26,16 @@ Interview the user to validate, refine, and complete an implementation specifica
    - When the user proposes something that conflicts with the ICP or journey map, flag it — e.g., "The journey map says the buyer needs a demo before sign-up — does this self-serve-only onboarding fit?"
    - Do not re-interview on concept, ICP, or journey topics already covered — focus on technical solution design.
 
-2. **Surface assumptions before probing (Assumptions Manifest):**
-   - After reading the draft/prompt and research context but **before** asking deep probing questions, compile and present an **Assumptions Manifest** — a structured list of everything you are taking as given.
+2. **Surface a lightweight assumptions checkpoint before probing:**
+   - After reading the draft/prompt and research context but **before** asking deep probing questions, present a concise **Assumptions Checkpoint** — the few assumptions most likely to affect implementation direction.
    - Tag each assumption with its source:
      - `[from spec]` — explicitly stated in the draft or spec document
      - `[from codebase]` — derived from reading existing code, config, or infrastructure
      - `[from research]` — derived from research docs (ICP, audience, journey maps)
      - `[inferred]` — not stated anywhere; you filled in a default or made a judgment call
-   - The manifest must cover these categories at minimum:
+   - Keep the checkpoint short enough to preserve interview momentum: normally 3 to 7 bullets, grouped only when useful. Do not dump a comprehensive manifest unless the user explicitly asks to review assumptions first.
+   - Bias the checkpoint toward assumptions that are uncertain, risky, contradicted by evidence, or likely to change data/API/architecture choices. Omit obvious restatements that can be captured later in the spec.
+   - Consider these categories while selecting the checkpoint items, but do not force every category into the first turn:
      - **Source context**: concept, ICP, journey, and spec inputs being used as product evidence
      - **Implementation goal**: what concrete capability this spec will make buildable
      - **Technical foundation**: stack, hosting, deployment model, existing infra to preserve or replace
@@ -41,7 +43,7 @@ Interview the user to validate, refine, and complete an implementation specifica
      - **Data model**: what persists, what's ephemeral, migration path from current state
      - **API and contract surface**: routes, events, SDKs, schemas, external integrations, or CLI contracts
      - **Operational requirements**: security, privacy, permissions, performance, observability, and failure handling
-   - Present the manifest using AskUserQuestion and explicitly ask the user to confirm, correct, or flag any assumption before proceeding. Do not continue the interview until the user has reviewed the manifest.
+   - Present the checkpoint with the first AskUserQuestion turn and immediately include 1 to 3 focused interview questions. Do not stop at the assumptions checkpoint unless the user explicitly asks to pause and review assumptions first.
    - If any `[inferred]` assumption is corrected, note the correction — these corrections are high-signal for downstream risk and must appear in the interview log.
 
 3. **Conduct the interview:**
@@ -67,10 +69,10 @@ Interview the user to validate, refine, and complete an implementation specifica
      - `## Test Plan`
      - `## Acceptance Criteria`
      - `## Open Questions`
-     - `## Assumptions & Risks` (the manifest output)
+     - `## Assumptions & Risks` (the checkpoint output)
      Additional topic-specific sections (e.g. `## Data Model`, `## Security`) may appear between Detailed Design and Edge Cases. Do not number sections.
-   - Append an **Assumptions & Risks** section to the end of the spec listing: each assumption that was confirmed or corrected during the manifest review, its source tag, and the downstream risk if the assumption turns out to be wrong later. Flag any `[inferred]` assumptions that were never explicitly confirmed by the user.
-   - Create an interview log file named `[topic]-interview.md` recording each turn of the interview including questions asked, options presented with pros/cons, and user selections. The log must include the full Assumptions Manifest as presented, user corrections, and a summary of significant deviations from the original spec.
+   - Append an **Assumptions & Risks** section to the end of the spec listing: each checkpoint assumption that was confirmed, corrected, or left unresolved during the interview, its source tag, and the downstream risk if the assumption turns out to be wrong later. Flag any `[inferred]` assumptions that were never explicitly confirmed by the user.
+   - Create an interview log file named `[topic]-interview.md` recording each turn of the interview including questions asked, options presented with pros/cons, and user selections. The log must include the Assumptions Checkpoint as presented, user corrections, and a summary of significant deviations from the original spec.
 
 ## Output Format
 
