@@ -512,7 +512,7 @@ Shipping is direct-to-primary by default:
 
 - commit to `main` or `master`
 - push before stopping
-- do not continue feature-branch workflows unless explicitly requested
+- do not continue feature-branch workflows unless explicitly requested, except for temporary `agent-team` lane branches that exist for parallel isolation and PR review
 - do not commit secrets
 - do not rewrite history
 

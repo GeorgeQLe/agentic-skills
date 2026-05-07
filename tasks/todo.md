@@ -1,24 +1,74 @@
-# Active Phase: Phase 30 - Feature Interview Evidence Intake
+# Active Phase: Phase 31 - Parallel Agent Branch/PR Guard
 
 **Project:** Claude Skills / agentic-skills
-**Current phase:** Phase 30
-**Status:** Complete as of 2026-05-06.
+**Current phase:** Phase 31 of 31
+**Status:** Complete as of 2026-05-07.
 
-## Plan
+## Phase 31: Parallel Agent Branch/PR Guard
+> Test strategy: none
 
-- [x] Update the Codex `feature-interview` contract to require evidence-backed claim validation and technical gotcha discovery before deep user interrogation.
-- [x] Mirror the same behavior in the Claude `feature-interview` contract while preserving slash-command routing language.
-- [x] Add explicit journey/user-story placement and research/spec documentation destination rules.
-- [x] Add a user-confirmed prioritization gate before mutating roadmap or task files.
-- [x] Validate mirrored behavior, skill metadata, routing contracts, tests, and whitespace.
+### Goal
 
-## Notes
+Make the branch policy explicit across parallel agent-team skills: sequential work still lands directly on `main`/`master`, but parallel agent-team write lanes must work on separate GitHub branches and pass a consolidation/PR review gate before final integration.
 
-- This is an enhancement to the existing `feature-interview` workflow, not a new skill.
-- The skill should borrow `$investigate`'s evidence discipline without inheriting its automatic fix-and-test behavior.
-- User prioritization belongs before roadmap/todo mutation; phase-level sequencing remains owned by `$roadmap`.
+### Scope
 
-## Review - 2026-05-06 Feature Interview Evidence Intake
+- Update root guidance in `AGENTS.md` and `CLAUDE.md` to add a narrow branch exception for agent-team parallel write lanes.
+- Update mirrored `plan-phase` contracts so `agent-team` execution profiles include branch names and an explicit consolidation/PR review step.
+- Update `run` and monorepo parallel skills so write lanes create/use separate GitHub branches, return commit/PR evidence, and stop when PR review cannot happen.
+- Update monorepo docs and lessons so the branch/PR lifecycle is discoverable and repeatable.
+
+### Acceptance Criteria
+
+- [x] Sequential/direct work still defaults to committing and pushing on `main` or `master`.
+- [x] Agent-team write lanes require separate GitHub branches with deterministic names.
+- [x] Agent-team lane deliverables include branch, commit SHA, validation evidence, and PR URL or an explicit blocker.
+- [x] Agent-team planning includes a consolidation/PR review step after parallel lanes and before final validation/shipping.
+- [x] Monorepo lane-spec guidance carries the same branch/PR requirements.
+- [x] Validation passes with targeted scans, skill metadata/routing checks, tests, and whitespace checks.
+
+### Execution Profile
+
+**Parallel mode:** serial
+**Integration owner:** main agent
+**Conflict risk:** low
+**Review gates:** docs/API conformance, workflow-policy consistency
+
+**Subagent lanes:** none
+
+### Implementation
+
+- [x] Step 31.1: Update task planning and lessons for the branch/PR correction.
+  - Files: modify `tasks/roadmap.md`, `tasks/todo.md`, `tasks/lessons.md`
+- [x] Step 31.2: Update root agent guidance and mirrored planning contracts.
+  - Files: modify `AGENTS.md`, `CLAUDE.md`, `global/codex/plan-phase/SKILL.md`, `global/claude/plan-phase/SKILL.md`
+- [x] Step 31.3: Update execution and monorepo parallel contracts.
+  - Files: modify `global/codex/run/SKILL.md`, `global/claude/run/SKILL.md`, `global/codex/mono-plan/SKILL.md`, `global/claude/mono-plan/SKILL.md`, `packs/monorepo/codex/mono-run/SKILL.md`, `packs/monorepo/claude/mono-run/SKILL.md`, `docs/skills-reference.md`
+- [x] Step 31.4: Validate focused behavior and ship.
+  - Files: modify `tasks/todo.md`, `tasks/history.md`
+
+### Review
+
+## Review - 2026-05-07 Parallel Agent Branch/PR Guard
+
+- **User goal:** Parallel agent-team skills must use separate GitHub branches and include consolidation/PR review, while sequential work remains direct-to-primary.
+- **Changed files:** Root guidance (`AGENTS.md`, `CLAUDE.md`), mirrored global planning/execution skills (`roadmap`, `plan-phase`, `run`, `mono-plan`, `mono-guard`, `branch-lifecycle`, `provision-agentic-config`, `patch-exec-profile`), monorepo pack skills (`mono-run`, `mono-guard`, `mono-ship`), monorepo docs, lane-spec validator/fixtures, and task docs.
+- **Per-file purpose:** Root and provisioned guidance now document the agent-team branch exception; planning skills require `Branch:` fields and consolidation/PR review steps; run/mono-run require branch, commit, validation, and PR evidence; guard/ship contracts verify branch/PR evidence; the lane-spec validator enforces non-primary unique branch names; docs and lessons preserve the policy.
+- **User-goal mapping:** The branch exception is limited to `agent-team` parallel write lanes; normal serial shipping still routes to `main`/`master`. Agent-team plans now require branch-backed lanes and a consolidation/PR review gate before integration or shipping.
+- **Tests run:** `./install.sh`; `./scripts/skill-deps.sh --broken`; `./scripts/skill-versions.sh --missing`; `./scripts/skill-next-step-routing.sh --missing`; `./scripts/skill-pack-routing-audit.sh`; `packs/monorepo/scripts/lane-spec-validate.sh tests/fixtures/monorepo/lane-specs-valid.json`; intentionally invalid `lane-specs-invalid.json` failed with the expected overlapping-owns error; `packs/monorepo/scripts/monorepo-validate.sh`; targeted branch/PR policy `rg` scan; `pnpm --dir tests test` passed with 5 files and 1177 tests; `git diff --check`.
+- **Skipped tests:** No live agent-team GitHub branch/PR dispatch was run because these are skill-contract and fixture changes, not an execution of a real parallel phase against GitHub.
+- **Adversarial review:** Checked for direct-to-primary contradictions, stale generated config text, missing branch fields in monorepo fixtures, and accidental branch-policy bleed into serial shipping. Also patched `provision-agentic-config` so future generated `AGENTS.md`/`CLAUDE.md` blocks retain the exception.
+- **Residual risk:** Actual branch push and PR creation remain runtime responsibilities of the agent-team execution environment; the contracts now stop when GitHub branch/PR review is unavailable, but no live GitHub PR was opened for this documentation-policy update.
+- **Rollback note:** Revert the Phase 31 commit to restore the prior direct-to-primary-only policy and lane-spec schema without branch requirements.
+- **Next command:** `$brainstorm`
+
+## Next Work
+
+Phase 31 is complete. Run `$brainstorm` to discover a candidate next phase, or explicitly park the project if no new work is desired.
+
+**Recommended next command:** `$brainstorm`
+
+## Prior Review - 2026-05-06 Feature Interview Evidence Intake
 
 - Updated mirrored Claude/Codex `feature-interview` contracts from v1.0.0 to v1.1.0.
 - Added a required evidence-backed intake pass before deep questioning, including claim validation, technical gotcha discovery, journey/workflow placement, and documentation destination selection.
@@ -26,12 +76,6 @@
 - Expanded deliverables so interview logs preserve evidence, gotchas, journey placement, documentation changes, priority decision, and next command.
 - Refreshed Codex `agents/openai.yaml`, `docs/skills-reference.md`, and `docs/operating-modes.md` descriptions.
 - Validation passed: stale-text scans, `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-next-step-routing.sh --missing`, `./scripts/skill-pack-routing-audit.sh`, `pnpm --dir tests test`, and `git diff --check`.
-
-## Next Work
-
-Phase 30 is complete. Run `$brainstorm` to discover a candidate next phase, or explicitly park the project if no new work is desired.
-
-**Recommended next command:** `$brainstorm`
 
 ## Review - 2026-05-06 Live Skill Harness
 

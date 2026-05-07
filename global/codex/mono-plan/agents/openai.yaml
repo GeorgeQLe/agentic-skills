@@ -1,7 +1,7 @@
 interface:
   display_name: "Mono Plan"
-  short_description: "Generate monorepo-safe parallel lane specs"
-  default_prompt: "Use $mono-plan to generate safe parallel lane specs for this monorepo phase."
+  short_description: "Generate branch-backed monorepo parallel lane specs"
+  default_prompt: "Use $mono-plan to generate safe branch-backed parallel lane specs for this monorepo phase."
 
 policy:
   allow_implicit_invocation: true

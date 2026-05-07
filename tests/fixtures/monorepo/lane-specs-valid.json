@@ -21,7 +21,8 @@
         "turbo.json"
       ],
       "depends_on": ["26.0"],
-      "mode": "implementation-safe"
+      "mode": "implementation-safe",
+      "branch": "agent-team/phase-26-api"
     },
     {
       "id": "web",
@@ -35,7 +36,8 @@
         "turbo.json"
       ],
       "depends_on": ["26.0", "26.1"],
-      "mode": "implementation-safe"
+      "mode": "implementation-safe",
+      "branch": "agent-team/phase-26-web"
     }
   ]
 }

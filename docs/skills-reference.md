@@ -66,7 +66,7 @@ Global skills are safe across business apps, games, devtools, libraries, service
 | `investigate` | Validate claims against codebase and git history, then trace root cause |
 | `migrate` | Guide a structural migration or dependency upgrade |
 | `pack` | Manage project-local packs and `.agents/project.json` |
-| `patch-exec-profile` | Audit and fill missing lane metadata in agent-team/implementation-safe execution profiles |
+| `patch-exec-profile` | Audit and fill missing lane/branch metadata in agent-team/implementation-safe execution profiles |
 | `feature-interview` | Interview a feature idea with evidence-backed alignment, then decide whether to update docs, specs, roadmap, or tasks |
 | `spec-interview` | Interview to validate and complete an implementation specification |
 | `ui-interview` | Interview page by page to define implementation-ready UI detail |
@@ -223,11 +223,11 @@ Default flow:
 mono-detect -> mono-run -> mono-guard -> mono-ship
 ```
 
-`mono-detect` writes `.agents/monorepo.json` with workspace packages, package paths, dependency graph, script inventory, and Turborepo awareness. `mono-run` augments standard `run` with lane-spec generation, `mono-guard` pre-flight checks, serial cross-cutting work, and package-scoped dispatch. `mono-guard` validates lane specs before dispatch and audits integrated diffs against declared boundaries. `mono-ship` augments standard `ship` with package-scoped test/lint/build and transitive-dependent validation before delegating to normal shipping.
+`mono-detect` writes `.agents/monorepo.json` with workspace packages, package paths, dependency graph, script inventory, and Turborepo awareness. `mono-run` augments standard `run` with lane-spec generation, `mono-guard` pre-flight checks, serial cross-cutting work, package-scoped dispatch on separate GitHub branches, and consolidation/PR review before integration. `mono-guard` validates lane specs before dispatch and audits integrated diffs against declared boundaries and PR-review evidence. `mono-ship` augments standard `ship` with package-scoped test/lint/build and transitive-dependent validation before delegating to normal shipping.
 
 The pack uses an augmentation injection pattern rather than a duplication pattern. The global `run` and `ship` skills remain the source of truth for task selection, validation policy, history updates, commit/push, deploy handling, and final next-step routing. By contrast, `*-kanban` packs provide explicit workflow variants such as `run-kanban`, `ship-kanban`, and `ship-end-kanban`.
 
-Lane dispatch uses `.agents/lane-specs.json` as the machine-readable artifact and `tasks/lane-specs.md` as the committed Markdown mirror. Lifecycle values are `draft`, `approved`, `dispatched`, `integrated`, and `failed`; package lanes declare `packages`, `owns`, `must_not_edit`, `depends_on`, and `mode`.
+Lane dispatch uses `.agents/lane-specs.json` as the machine-readable artifact and `tasks/lane-specs.md` as the committed Markdown mirror. Lifecycle values are `draft`, `approved`, `dispatched`, `integrated`, and `failed`; package lanes declare `packages`, `owns`, `must_not_edit`, `depends_on`, `mode`, and `branch`. For `agent-team` work, each write lane must push its non-primary GitHub branch and provide commit SHA, validation evidence, and PR URL before the consolidation/PR review gate approves integration.
 
 Specs and roadmap phases may declare package scope with YAML frontmatter:
 

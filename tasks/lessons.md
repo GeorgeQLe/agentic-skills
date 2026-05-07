@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-05-07 — Agent-team parallel work needs branch and PR isolation
+
+- A direct-to-primary rule is correct for sequential work, but it becomes unsafe when multiple write agents work in parallel from one base.
+- When a phase uses `agent-team` write lanes, each lane needs its own non-primary GitHub branch, commit evidence, pushed branch, and PR URL before returning.
+- Planning skills must include a consolidation/PR review step after parallel lane completion and before final validation, shipping, or integration into the primary branch.
+- Treat branch-backed lane PRs as the explicit exception to the normal direct-to-primary workflow; do not let broad feature-branch habits leak back into serial work.
+
 ## 2026-05-05 — Avoid singular/plural skill name ambiguity
 
 - Splitting one workflow into broad and focused commands can create a near-duplicate naming trap when the only visible difference is singular versus plural.

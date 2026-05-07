@@ -98,7 +98,7 @@ Ask focused questions to align on roadmap decisions (1–3 questions per turn). 
 - **Manual tasks**: Any human-only external prerequisites (DNS/account setup, OAuth app creation, billing/approval, real-device or production browser verification with subjective sign-off)? Which phases do they block or follow? Do not classify repo edits, SDK wiring, CLI/API work, local tests, or audits as manual.
 - **Parallelization**: Which phase work can run independently, which modules or files are shared chokepoints, and where should work stay serial?
 - **Review needs**: Which phases need specialized review gates (correctness, tests, security, performance, docs/API conformance, UX)?
-- **Agent-team fit**: Which phases are too broad or cross-cutting for local in-session subagents and should instead use Codex app worktrees or Claude agent teams?
+- **Agent-team fit**: Which phases are too broad or cross-cutting for local in-session subagents and should instead use branch-backed Codex app worktrees or Claude agent teams with consolidation/PR review?
 
 When options exist, present pros/cons with a recommendation. Do not manufacture artificial choices.
 
@@ -117,7 +117,7 @@ For each phase, include these strategic fields:
 **Coordination Notes:** [dependencies, shared chokepoints, and why this mode was chosen]
 ```
 
-Use `serial` when work is tightly coupled or file ownership cannot be separated. Use `research-only` when parallel exploration helps but implementation should remain integrated. Use `review-only` when the build should be serial but post-implementation review benefits from multiple lenses. Use `implementation-safe` only when likely write ownership can be cleanly separated. Use `agent-team` for broad cross-cutting phases that should run in isolated worktrees or a dedicated multi-agent team rather than one shared local tree.
+Use `serial` when work is tightly coupled or file ownership cannot be separated. Use `research-only` when parallel exploration helps but implementation should remain integrated. Use `review-only` when the build should be serial but post-implementation review benefits from multiple lenses. Use `implementation-safe` only when likely write ownership can be cleanly separated. Use `agent-team` for broad cross-cutting phases that should run in isolated GitHub branches/worktrees or a dedicated multi-agent team rather than one shared local tree; the later `$plan-phase` detail must include branch-backed write lanes and a consolidation/PR review gate.
 
 #### 4d. Seed Phase 1
 

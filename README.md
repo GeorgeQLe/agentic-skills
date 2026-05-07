@@ -290,12 +290,12 @@ scripts/pack.sh install monorepo
 mono-detect, mono-run, mono-guard, mono-ship
 ```
 
-The monorepo pack uses an augmentation injection pattern: it adds workspace detection, lane-spec generation, boundary checks, package-scoped validation, and transitive-dependent validation around the existing `run` and `ship` skills. This differs from `*-kanban` packs, which intentionally provide workflow variants such as `run-kanban` and `ship-kanban`.
+The monorepo pack uses an augmentation injection pattern: it adds workspace detection, lane-spec generation, branch-backed package dispatch, consolidation/PR review, boundary checks, package-scoped validation, and transitive-dependent validation around the existing `run` and `ship` skills. This differs from `*-kanban` packs, which intentionally provide workflow variants such as `run-kanban` and `ship-kanban`.
 
 Lane dispatch uses a JSON + Markdown mirror:
 
 ```text
-.agents/lane-specs.json -> machine-readable lifecycle, package lanes, owns, must_not_edit, depends_on
+.agents/lane-specs.json -> machine-readable lifecycle, package lanes, owns, must_not_edit, depends_on, branch
 tasks/lane-specs.md -> committed human-readable mirror
 ```
 

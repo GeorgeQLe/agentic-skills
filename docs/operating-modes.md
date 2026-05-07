@@ -237,7 +237,7 @@ This section tags every global skill and every pack with a **primary CLI role** 
 | `devtool-kanban` | Both | Inherits `devtool` (orchestration) + kanban `run`/`ship`/`ship-end` variants (execution) |
 | `game` | Claude-orchestration | Audience, core loop, fantasy, launch, playtest metrics — framing/research skills |
 | `game-kanban` | Both | Inherits `game` (orchestration) + kanban `run`/`ship`/`ship-end` variants (execution) |
-| `monorepo` | Both | Workspace-aware detection, lane specs, guardrails, and scoped shipping overlay |
+| `monorepo` | Both | Workspace-aware detection, branch-backed lane specs, guardrails, and scoped shipping overlay |
 | `poketowork-kanban` | Both | Kanban orchestration skills + `run`/`ship`/`ship-end` execution variants; no base pack to inherit from |
 
 ### Codex `$run` routing

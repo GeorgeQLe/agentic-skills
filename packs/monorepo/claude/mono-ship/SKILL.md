@@ -16,7 +16,7 @@ Use this skill to ship completed work in a pnpm workspace monorepo only after pa
 
 `mono-ship` adds these stages around normal ship execution:
 
-1. **Pre-ship:** run `mono-detect` when needed, read `.agents/lane-specs.json` and `.agents/monorepo.json`, identify modified packages, run package-scoped test/lint/build, and run transitive-dependent validation from the dependency graph.
+1. **Pre-ship:** run `mono-detect` when needed, read `.agents/lane-specs.json` and `.agents/monorepo.json`, confirm branch-backed lane work has passed consolidation/PR review, identify modified packages, run package-scoped test/lint/build, and run transitive-dependent validation from the dependency graph.
 2. **Ship:** delegate to the standard `/ship` contract after validation passes.
 3. **Post-ship:** update `tasks/lane-specs.md` with shipping status, lifecycle notes, and the next routed command.
 
@@ -43,6 +43,7 @@ If `.agents/monorepo.json` is missing or stale, run `mono-detect` first. If the 
 3. Read `.agents/lane-specs.json` when present.
    - Treat lanes with lifecycle `integrated` as the preferred source for modified packages.
    - If lane specs are missing or do not identify all changed package paths, supplement with `git diff --name-only`.
+   - If lane specs contain branch-backed `agent-team` lanes, confirm consolidation/PR review evidence exists before shipping; otherwise stop and rerun `/mono-guard --post-integration`.
 4. Determine the package validation set.
    - Include every package modified by the current shipping boundary.
    - Include every transitive dependent of each modified package by walking reverse edges from `dependency_graph`.
