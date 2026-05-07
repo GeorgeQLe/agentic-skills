@@ -55,7 +55,7 @@ Establish the static product foundation for the showcase: multi-page routing, sh
     - Run `node scripts/generate-skills-showcase-data.mjs`.
     - Run a targeted Node check or `rg` scan confirming `window.SKILLS_SHOWCASE_DATA`, at least one global skill, at least one pack skill, pack summaries, and `sourceFingerprint` exist.
     - Run `git diff --check`.
-- [ ] Step 32.3: Add generated GitHub/open-source proof data.
+- [x] Step 32.3: Add generated GitHub/open-source proof data.
   - Files: add `scripts/generate-skills-showcase-github-data.mjs`, add generated `docs/skills-showcase/assets/github-proof-data.js`
   - Implementation plan:
     - Write a dependency-free Node.js generator that produces `window.SKILLS_SHOWCASE_GITHUB_PROOF_DATA` for static use by the Inspect page.
@@ -69,6 +69,17 @@ Establish the static product foundation for the showcase: multi-page routing, sh
     - Run `git diff --check`.
 - [ ] Step 32.4: Add stale-data validation and tests.
   - Files: add `scripts/validate-skills-showcase-data.sh`, add `tests/layer1/skills-showcase-data.test.ts` if script-level coverage is needed
+  - Implementation plan:
+    - Add `scripts/validate-skills-showcase-data.sh` as the canonical freshness gate for the static showcase generated assets.
+    - Make the validator rerun `node scripts/generate-skills-showcase-data.mjs` and `node scripts/generate-skills-showcase-github-data.mjs`, then fail if either committed generated asset changes.
+    - Keep the script dependency-light and POSIX/Bash compatible with existing repository script style; do not install dependencies or mutate shared lockfiles.
+    - Add focused layer1 coverage only if script-level behavior needs a fixture; otherwise use direct shell validation plus idempotence checks to avoid unnecessary test scaffolding.
+    - Include clear failure output telling the operator to rerun both generators and commit the generated files.
+  - Verification plan:
+    - Run `bash -n scripts/validate-skills-showcase-data.sh`.
+    - Run `scripts/validate-skills-showcase-data.sh`.
+    - Run targeted checks confirming the validator references both generator scripts and both generated assets.
+    - Run `git diff --check`.
 - [ ] Step 32.5: Update skill mutation contracts to maintain the website after skill changes.
   - Files: modify `global/codex/create-agentic-skill/SKILL.md`, `global/claude/create-agentic-skill/SKILL.md`, `global/codex/targeted-skill-builder/SKILL.md`, `global/claude/targeted-skill-builder/SKILL.md`, `global/codex/run/SKILL.md`, `global/claude/run/SKILL.md`, `global/codex/ship/SKILL.md`, `global/claude/ship/SKILL.md`, `docs/skills-reference.md`
 - [ ] Step 32.6: Validate and record the phase.
@@ -118,8 +129,21 @@ No manual tasks block Phase 32. Vercel deployment and newsletter provider setup 
 - **Rollback note:** Revert the Step 32.2 commit to remove the generator, generated `skills-data.js`, and task/history bookkeeping.
 - **Next command:** `$run`
 
+#### 2026-05-07 - Step 32.3 Ship Manifest
+
+- **User goal:** Execute `$run` for the next incomplete Phase 32 step by adding generated GitHub/open-source proof data for the static showcase.
+- **Changed files:** `scripts/generate-skills-showcase-github-data.mjs`, `docs/skills-showcase/assets/github-proof-data.js`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** The generator writes static browser proof data from local/public repository evidence; the generated asset commits proof artifacts, validation script references, local HEAD metadata, public GitHub status, and honest boundaries; task/history docs record completion, validation, and the next Step 32.4 plan.
+- **User-goal mapping:** Step 32.3 requires committed proof data or an honest fallback without secrets; the generator records local git evidence, tracked proof artifacts, validation scripts, and fallback status when public GitHub metadata is unavailable.
+- **Tests run:** `node scripts/generate-skills-showcase-github-data.mjs` passed; `node --check scripts/generate-skills-showcase-github-data.mjs` passed; targeted Node data-shape check confirmed `window.SKILLS_SHOWCASE_GITHUB_PROOF_DATA`, repository HEAD evidence, `tasks/history.md`, validation command references, public GitHub `refreshed`/`fallback` status, and boundary language; targeted `rg` proof scan passed; idempotence check `node scripts/generate-skills-showcase-github-data.mjs && git diff --exit-code -- docs/skills-showcase/assets/github-proof-data.js` passed; `git diff --check` passed.
+- **Skipped tests:** Network-backed GitHub metadata was not required for success because the contract explicitly requires honest fallback behavior without secrets. Full stale-data validation was not run because Step 32.4 adds the validator.
+- **Adversarial review:** Self-review checked that the generator does not require credentials, does not fail when public GitHub metadata cannot refresh, does not claim live LexCorp metrics or analytics, and does not add dependencies, a runtime API, a database, or GitHub Actions.
+- **Residual risk:** Public GitHub metadata may remain in fallback status in restricted environments; the static proof surface still has local commit and artifact evidence, and Step 32.4 should protect both generated assets from stale commits.
+- **Rollback note:** Revert the Step 32.3 commit to remove the proof generator, generated proof asset, and task/history bookkeeping.
+- **Next command:** `$run`
+
 ## Next Work
 
-Start Step 32.3 by adding generated GitHub/open-source proof data for the static showcase.
+Start Step 32.4 by adding stale-data validation for the generated showcase data.
 
 **Recommended next command:** `$run`
