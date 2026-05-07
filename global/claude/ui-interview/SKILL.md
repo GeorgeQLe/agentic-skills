@@ -26,6 +26,7 @@ When invoked with `--requirements-only` (or when the user says "just requirement
 
 2. **Treat inputs as draft material**
    - Do not assume the current UI, prompt, screenshot, or mockup is final.
+   - Product specs, ICP documents, and journey maps are reference material, not locked constraints. The user may override any product decision during the interview. When a user's interview answer contradicts an existing spec, adopt the interview answer and note the divergence.
    - Preserve explicit constraints, but challenge unclear defaults before they become implementation decisions.
    - Distinguish product behavior decisions from UI presentation decisions.
 
@@ -63,7 +64,7 @@ When invoked with `--requirements-only` (or when the user says "just requirement
      - States: default, hover, focus, active, selected, disabled, loading, error, success, partial, offline
      - Spatial details: element prominence, approximate sizes, gaps, padding, fixed or fluid dimensions, sticky regions, overlap rules, max widths
      - Responsive behavior: desktop, tablet, mobile, wide desktop, touch target sizing, collapsed controls
-     - Accessibility: keyboard order, focus traps, labels, contrast, reduced motion, screen reader names
+     - Accessibility: keyboard order, focus traps, labels, contrast, reduced motion, screen reader names. Include color-blind safe patterns, keyboard navigation, reduced motion support, and screen reader labels by default in every spec. Do not present accessibility features as optional checkboxes. Only ask about domain-specific accessibility (gamepad support, dyslexia fonts) when the product context warrants it.
    - When a page includes repeated items, define one canonical item and its variations rather than asking about every row individually.
 
 5. **Research and recommend by default**
@@ -71,6 +72,7 @@ When invoked with `--requirements-only` (or when the user says "just requirement
    - For material decisions, present options, a recommendation, rationale, tradeoffs, and mitigation.
    - Recommend familiar controls over novel patterns unless the product has a strong reason to deviate.
    - Respect the existing design system, component library, and implementation patterns.
+   - Reference and inspiration questions ("apps you admire?") are low-priority. Ask once early, accept any answer including "none" or "let's experiment," and move on. Do not block the interview on reference input.
 
 6. **Coverage checkpoint**
    - Before concluding, use AskUserQuestion to present a concise checklist of pages, components, controls, states, responsive behavior, and unresolved risks.

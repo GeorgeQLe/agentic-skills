@@ -44,7 +44,10 @@ When invoked with `--layout-mode` (or when the user says "layout mode", "layout 
 
 4. **Interview for variation goals**
    - Ask 1 to 3 focused questions per turn using AskUserQuestion.
-   - Establish who will judge the variants, what they must accomplish, how a new user arrives and reaches first value, what the normal repeat workflow looks like, what users create/save/share/export/invite others into, what roles or permission levels exist, what notifications or status updates users expect, how users resume work after time away, what happens when a workflow is abandoned or blocked, which current interface parts work, which parts feel wrong or uncertain, how different the variants should be, what would make a variant unacceptable, and what evidence will decide the winner.
+   - Default to maximally contrasting archetypes. Do not ask how different variants should be — assume dramatic contrast unless the user explicitly requests graduated steps.
+   - Default evaluation method is: build each variation and evaluate by using it. Do not ask who will judge or how — assume solo evaluator building and gut-checking unless the user states otherwise.
+   - When presenting a design decision with 3+ plausible answers during the interview, always include "Make this a variant axis (test all approaches)" as an option. When the user has already chosen "test all" for a prior question in the same session, default subsequent ambiguous decisions to variant axes without asking.
+   - Establish what the variants must accomplish, how a new user arrives and reaches first value, what the normal repeat workflow looks like, what users create/save/share/export/invite others into, what roles or permission levels exist, what notifications or status updates users expect, how users resume work after time away, what happens when a workflow is abandoned or blocked, which current interface parts work, which parts feel wrong or uncertain, what would make a variant unacceptable, and what evidence will decide the winner.
    - When the user is unsure, recommend a practical default and explain why.
    - **Layout-mode interview additions**: When in layout-mode, also ask:
      - What is the primary user task on this page? (scan, search, create, compare, monitor, triage)
@@ -55,7 +58,7 @@ When invoked with `--layout-mode` (or when the user says "layout mode", "layout 
      - How will the user evaluate variations? (looking at screenshots, using the built UI, comparing side-by-side)
 
 5. **Create distinct variation concepts**
-   - Produce 3 to 5 variations unless the user requests a different count.
+   - Produce 5 variations by default. Present the concepts for adjustment — do not ask the user to choose a count first.
    - Each variation must be meaningfully different, not just a color or spacing change.
    - At this stage, keep each concept lightweight: name, thesis, archetype, best-fit user/context, core workflow difference, major tradeoff, and rough complexity. Do not fully specify screens, controls, or implementation details yet.
    - Useful archetypes include task-first workflow, data-dense operator console, guided step-by-step flow, onboarding-first activation path, collaboration-first workspace, sharing-first artifact flow, notification/status-driven workflow, role-based handoff workflow, visual canvas or board, command/search-first interface, mobile-first progressive disclosure, familiar SaaS dashboard, and editorial or showcase layout.
@@ -77,10 +80,9 @@ When invoked with `--layout-mode` (or when the user says "layout mode", "layout 
    - Use bounded wording such as: "How should I adjust these UX variants before writing the final spec?"
    - Present clear options:
      - Keep all concepts
-     - Remove one
-     - Merge concepts
      - Make one concept bolder or more extreme
      - Add another concept
+   - Do not ask the user to remove or merge concepts before they have been built. Pre-build narrowing is consistently rejected.
    - Ask the user to name the affected concept and briefly describe the change when they choose anything other than keeping all concepts.
    - Recommend a practical default when evidence supports it; do not imply that variants have already been built or committed.
    - Revise the concept set based on the answer before moving on.
@@ -101,7 +103,7 @@ When invoked with `--layout-mode` (or when the user says "layout mode", "layout 
      - Estimated build time (hours)
 
 8. **Plan experimentation**
-   - Recommend the cheapest useful validation method: static mockups, clickable prototype, feature-flagged implementation, A/B test only when traffic and metrics are credible, or human UAT when acceptance is the question.
+   - Recommend serial full buildout of all approved variants. Do not recommend building a subset first — the user's consistent preference is to build all variants before evaluating. After all are built, recommend `/ui-consolidate`.
    - Define comparison criteria before selecting a winner.
    - Include a lock-in checklist so the chosen direction becomes a decision record, not a vague preference.
 
@@ -182,6 +184,7 @@ After writing files in standard mode, recommend `/run` or `/roadmap` if the next
 - Do not choose a winner for the user unless the evidence clearly supports it and the user asked for a recommendation.
 - Do not defer all decisions to testing. State a recommended variant or experiment when evidence is sufficient.
 - Do not ignore implementation cost. A compelling variation still needs a prototype path and selection criteria.
+- Do not enforce shared design constraints across variations. Each variation independently decides layout, density, color, navigation, and component choices. Only technical stack (framework, renderer, design system tokens) is shared unless the user explicitly locks a shared constraint.
 
 ## Archive-First Replacement Policy
 
