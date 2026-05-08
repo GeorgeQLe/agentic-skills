@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-05-08 - Phase 34 Step 34.3: launch proof/follow telemetry boundaries
+
+- Added inspect-route proof-to-follow CTAs, generated static telemetry summary copy, and an explicit static-proof limitation note.
+- Strengthened follow proof-funnel copy around route freshness, GitHub fallback status, newsletter-performance boundaries, and non-claims for live LexCorp metrics.
+- Rendered generated proof summary counts, GitHub enrichment fallback cards, and extra boundary rows from committed proof data.
+- Refreshed Skills Showcase generated assets after freshness validation found stale fingerprints/history/skill metadata.
+- Verified with `scripts/validate-skills-showcase-data.sh`, `node --check docs/skills-showcase/app.js`, targeted proof/boundary scans, local HTTP HEAD checks for `/inspect/` and `/follow/`, and `git diff --check`.
+
 ## 2026-05-08 - Phase 34 Step 34.2: newsletter static provider contract
 
 - Replaced the provider-pending newsletter preview with a static/provider-backed form contract on `/follow/`.
