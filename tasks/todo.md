@@ -28,7 +28,7 @@ Finish the top-of-funnel launch surface: G/LexCorp/community conversion paths, n
 - [x] Follow/about route converts proof interest into G, LexCorp, YouTube, X/Twitter, Discord, GitHub, and newsletter actions.
 - [x] Newsletter/email capture works with a configured provider endpoint or clearly degrades to a non-collecting fallback.
 - [x] GitHub/open-source proof telemetry is visible and does not claim live LexCorp product metrics.
-- [ ] Vercel static deployment instructions and manual launch tasks are current.
+- [x] Vercel static deployment instructions and manual launch tasks are current.
 - [ ] Final validation covers generated data freshness, responsive UI, accessibility/reduced-motion behavior, links, and static-route reloads.
 
 ### Execution Profile
@@ -75,7 +75,7 @@ Finish the top-of-funnel launch surface: G/LexCorp/community conversion paths, n
     - Run `node --check docs/skills-showcase/app.js`.
     - Browser-check inspect and follow route proof/CTA links.
     - Run `git diff --check`.
-- [ ] Step 34.4: Add Vercel/static deployment notes and manual launch checklist.
+- [x] Step 34.4: Add Vercel/static deployment notes and manual launch checklist.
   - Files: add or modify `tasks/deploy.md`, `tasks/manual-todo.md`, `tasks/todo.md`
   - Implementation plan:
     - Record the explicit manual deploy contract for hosting `docs/skills-showcase/` as a static site.
@@ -131,6 +131,28 @@ Manual launch tasks are tracked in `tasks/manual-todo.md`.
 
 **Next command:** `$run`
 
+#### 2026-05-08 - Step 34.4 Vercel static deployment contract
+
+**User goal:** Execute Phase 34 Step 34.4 by adding current Vercel/static deployment instructions and manual launch checklist tasks without introducing GitHub Actions or implicit CI/CD.
+
+**Changed files:** `tasks/deploy.md`, `tasks/manual-todo.md`, `tasks/todo.md`, `tasks/history.md`.
+
+**Per-file purpose:** `tasks/deploy.md` records the explicit manual deploy contract for hosting `docs/skills-showcase/` on Vercel as a static site. `tasks/manual-todo.md` now separates provider endpoint setup from Vercel project setup with after-step timing and exact Vercel settings. `tasks/todo.md` marks Step 34.4 and the deployment acceptance criterion complete with this manifest. `tasks/history.md` records the shipped task.
+
+**User-goal mapping:** The project now has a concrete deploy contract that says root `docs/skills-showcase/`, no build command, no install command, output directory `.`, no runtime API, no database, no GitHub Actions, and manual route/link verification.
+
+**Tests run:** Targeted scans confirmed `tasks/deploy.md` contains Vercel provider, `docs/skills-showcase/` root, no build/install commands, output directory `.`, no runtime API/database/GitHub Actions, newsletter provider instructions, and route reload checks. Targeted scans confirmed `tasks/manual-todo.md` has newsletter provider and Vercel setup tasks with `after:` timing. `git diff --check` passed.
+
+**Skipped tests:** No executable app checks were required because this step only changes deployment/task documentation and does not alter source, generated assets, scripts, or runtime behavior.
+
+**Adversarial review:** Diff-aware self-review checked that the contract does not create or suggest GitHub Actions, does not imply automatic deployment, keeps production launch manual, and does not ask for a backend/database/analytics.
+
+**Residual risk:** Actual Vercel UI labels may vary slightly, and the selected newsletter provider may require provider-specific fields. Those are manual launch tasks after this source contract and should be verified before production launch.
+
+**Rollback note:** Revert the Step 34.4 commit to remove `tasks/deploy.md` and restore prior manual launch task wording.
+
+**Next command:** `$run`
+
 #### 2026-05-08 - Step 34.3 launch proof/follow telemetry boundaries
 
 **User goal:** Execute Phase 34 Step 34.3 by making GitHub/open-source proof telemetry visible across inspect and follow while keeping LexCorp/community/newsletter claims static and bounded.
@@ -177,6 +199,6 @@ Manual launch tasks are tracked in `tasks/manual-todo.md`.
 
 ## Next Work
 
-Start Phase 34 Step 34.4 by adding Vercel/static deployment notes and manual launch checklist.
+Start Phase 34 Step 34.5 by running final launch validation and phase transition.
 
 **Recommended next command:** `$run`
