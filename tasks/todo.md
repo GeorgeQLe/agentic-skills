@@ -57,7 +57,7 @@ Build the user-facing product experience on top of the Phase 32 foundation: anim
     - Run targeted `rg` checks that catalog, pack, and proof route placeholders were replaced with generated-data hooks and that generated browser globals are referenced.
     - Use browser or screenshot verification when interaction/rendering changes need visual proof; at minimum test desktop and mobile widths for text overlap and nonblank generated lists.
     - Run `git diff --check`.
-- [ ] Step 33.2: Build workflow lab content and browser-native animations.
+- [x] Step 33.2: Build workflow lab content and browser-native animations.
   - Files: modify `docs/skills-showcase/index.html`, `docs/skills-showcase/workflows/index.html`, `docs/skills-showcase/app.js`, `docs/skills-showcase/styles.css`
   - Implementation plan:
     - Define eight curated workflow narratives with steps, artifacts, commands, and static reduced-motion fallbacks.
@@ -125,8 +125,28 @@ Quality gate manifest:
 - **Rollback note:** Revert the Step 33.1 commit to restore the Phase 32 static placeholder routes.
 - **Next command:** `$run`
 
+#### 2026-05-08 - Step 33.2: workflow lab content and browser-native animations
+
+- Added all eight curated workflow narratives: first successful cycle, pack selection, plan -> run -> ship, spec -> roadmap -> implementation, research chains, hybrid handoff, skill authoring, and validation/troubleshooting.
+- Rebuilt the workflow lab as a data-driven static component with command-first selector cards, proof copy, manual previous/next/play/restart controls, progress rail labels, artifact lists, change lists, and recovery text.
+- Added homepage workflow preview cards and wired the homepage skill count to generated `skills-data.js`.
+- Implemented CSS-only motion states for the active workflow stage and reduced-motion-safe manual controls.
+
+Quality gate manifest:
+
+- **User goal:** Execute Phase 33 Step 33.2 from `$run`: build workflow lab content and browser-native animations.
+- **Changed files:** `docs/skills-showcase/app.js`, `docs/skills-showcase/index.html`, `docs/skills-showcase/workflows/index.html`, `docs/skills-showcase/styles.css`, `docs/skills-showcase/assets/github-proof-data.js`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** `app.js` defines and renders the eight workflows, progress controls, autoplay/reduced-motion behavior, homepage preview cards, and generated skill-count metric; `index.html` adds the workflow preview band and generated data asset; `workflows/index.html` exposes workflow render targets and controls; `styles.css` adds selector, stage, progress, control, preview, and responsive layout styles; `github-proof-data.js` refreshes generated proof history after the new history entry; task docs record completion and shipping evidence.
+- **User-goal mapping:** The workflow lab now satisfies the curated workflow set, selectable text, browser-native state animation, reduced-motion/manual control, homepage preview, and artifact/recovery text requirements without adding video, Remotion, a framework, a runtime API, GitHub Actions, or a dependency.
+- **Tests run:** `node --check docs/skills-showcase/app.js` passed; `scripts/validate-skills-showcase-data.sh` initially caught stale proof data after the history entry, then passed after regenerating the proof asset and reported 312 skills, 16 packs, 4 proof artifacts, and 5 validation scripts; targeted `rg` scans confirmed all eight workflow names, progress hooks, preview hooks, reduced-motion checks, and animation controls; local static `curl -sS` checks confirmed homepage/workflows route hooks and JS workflow content are served; Brave desktop visual/accessibility-tree checks confirmed the workflow route hard-reloads to all eight selector cards, updates to Research Chains on click, exposes progress/control buttons, and the homepage renders the generated `312 skills` metric plus eight preview links; `git diff --check` passed.
+- **Skipped tests:** Mobile screenshot validation was not run in a resized viewport; CSS responsive rules were inspected and desktop browser verification covered the primary rendered route. Full tablet/mobile overlap checks remain in Step 33.4 final frontend validation.
+- **Adversarial review:** Diff-aware self-review checked for missing V1 workflows, stale Phase 32 placeholder text, dependency creep, video/runtime additions, inaccessible motion-only information, unbacked factual counts, and route reload issues. The review found a browser cache false alarm during visual verification; hard reload confirmed the live DOM.
+- **Residual risk:** The mobile horizontal selector and one-column workflow panel need final visual confirmation in Step 33.4; unusually narrow screens could still need spacing tweaks around long command labels.
+- **Rollback note:** Revert the Step 33.2 commit to restore the previous four-workflow static foundation.
+- **Next command:** `$run`
+
 ## Next Work
 
-Start Step 33.2 by building workflow lab content and browser-native animations.
+Start Step 33.3 by improving the pack map and route-level responsive behavior.
 
 **Recommended next command:** `$run`
