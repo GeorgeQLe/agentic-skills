@@ -69,7 +69,7 @@ Build the user-facing product experience on top of the Phase 32 foundation: anim
     - Run browser/screenshot checks for desktop and mobile workflow states, including reduced-motion fallback where practical.
     - Run targeted `rg` checks for the eight workflow names and animation/reduced-motion hooks.
     - Run `git diff --check`.
-- [ ] Step 33.3: Improve pack map and route-level responsive behavior.
+- [x] Step 33.3: Improve pack map and route-level responsive behavior.
   - Files: modify `docs/skills-showcase/packs/index.html`, `docs/skills-showcase/styles.css`, `docs/skills-showcase/app.js`
   - Implementation plan:
     - Build the pack map from generated pack data plus curated overlay/compatibility annotations.
@@ -145,8 +145,28 @@ Quality gate manifest:
 - **Rollback note:** Revert the Step 33.2 commit to restore the previous four-workflow static foundation.
 - **Next command:** `$run`
 
+#### 2026-05-08 - Step 33.3: pack map and responsive route behavior
+
+- Added project-type highlighter controls for all, business, devtool, game, creator, monorepo, and kanban pack views.
+- Added overlay visibility control, generated pack annotations, alias labels, overlay labels, keyboard-selectable pack nodes, and a live detail panel with install command, key generated skills, and catalog link.
+- Added global-core and output bands so the pack route distinguishes global foundations, domain packs, overlays, compatibility aliases, and produced artifacts.
+- Tightened responsive constraints for route headings, generated cards, controls, pack details, catalog rows, and compact mobile surfaces.
+
+Quality gate manifest:
+
+- **User goal:** Execute Phase 33 Step 33.3 from `$run`: improve pack map and route-level responsive behavior.
+- **Changed files:** `docs/skills-showcase/app.js`, `docs/skills-showcase/packs/index.html`, `docs/skills-showcase/styles.css`, `docs/skills-showcase/assets/github-proof-data.js`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** `app.js` adds generated-data-backed pack annotations, filter behavior, overlay toggle, selected pack detail rendering, and keyboard selection; `packs/index.html` adds highlighter controls, global/output bands, and detail panel targets; `styles.css` adds pack control/detail/layout styling and responsive constraints for route components; `github-proof-data.js` refreshes generated proof history after the new history entry; task docs record completion and shipping evidence.
+- **User-goal mapping:** The pack map now distinguishes global core, domain packs, overlays, compatibility aliases, project-type selections, and output artifacts while keeping counts and pack metadata tied to generated data.
+- **Tests run:** `node --check docs/skills-showcase/app.js` passed; `scripts/validate-skills-showcase-data.sh` initially caught stale proof data after the history entry, then passed after regenerating the proof asset and reported 312 skills, 16 packs, 4 proof artifacts, and 5 validation scripts; targeted `rg` scans confirmed pack filter/detail hooks, annotation metadata, alias language, and responsive CSS hooks; local static `curl -sS` checks confirmed packs route, app JS, and CSS serve the new hooks; Brave desktop visual/accessibility-tree checks confirmed hard reload renders project-type controls, global core band, generated pack nodes, selected detail panel, Devtool filtering, alias labels, and overlay labels; `git diff --check` passed.
+- **Skipped tests:** Mobile screenshot validation was not run in a resized viewport; responsive CSS was tightened and desktop browser verification covered the main interaction. Full mobile/tablet overlap checks remain in Step 33.4 final frontend validation.
+- **Adversarial review:** Diff-aware self-review checked for hard-coded counts, missing generated-data source ties, pack aliases without labels, overlay filtering gaps, non-keyboard-selectable pack cards, and route overflow risks. The review accepted curated category annotations as static explanatory metadata layered on generated pack records.
+- **Residual risk:** The catalog `#pack-*` links are navigable anchors but the catalog route does not yet apply hash-based pack filtering; this is a known V1 limitation unless Step 33.4 chooses to tighten it during final validation.
+- **Rollback note:** Revert the Step 33.3 commit to restore the generated pack list without project-type controls or detail panel.
+- **Next command:** `$run`
+
 ## Next Work
 
-Start Step 33.3 by improving the pack map and route-level responsive behavior.
+Start Step 33.4 by running final Phase 33 frontend/data validation.
 
 **Recommended next command:** `$run`
