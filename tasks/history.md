@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-05-08 - Phase 34 Step 34.1: follow/about conversion route
+
+- Replaced the follow placeholder with a launch-oriented static route for G, LexCorp, YouTube, X/Twitter, Discord, GitHub, inspect, catalog, and newsletter-preview actions.
+- Added scoped follow route CSS for conversion cards, proof stats, generated receipt previews, newsletter provider-pending preview, and mobile grid collapse.
+- Added a follow proof renderer that consumes generated static GitHub/proof data without claiming live LexCorp product metrics or collecting visitor analytics.
+- Verified with `scripts/validate-skills-showcase-data.sh`, `node --check docs/skills-showcase/app.js`, targeted CTA/proof/fallback scans, local HTTP route fetches for `/follow/`, and `git diff --check`.
+
 ## 2026-05-08 - Phase 33 Step 33.4: final validation and phase transition
 
 - Ran final Phase 33 validation across generated skill/proof data, app syntax, static route reloads, generated asset serving, targeted route/content scans, desktop browser checks, and mobile-width browser checks.

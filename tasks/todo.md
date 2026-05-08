@@ -42,7 +42,7 @@ Finish the top-of-funnel launch surface: G/LexCorp/community conversion paths, n
 
 ### Implementation
 
-- [ ] Step 34.1: Build the follow/about conversion route and proof/funnel preview.
+- [x] Step 34.1: Build the follow/about conversion route and proof/funnel preview.
   - Files: modify `docs/skills-showcase/follow/index.html`, `docs/skills-showcase/styles.css`, `docs/skills-showcase/app.js`
   - Implementation plan:
     - Replace the Phase 32 follow placeholder with a launch-oriented route for G, LexCorp, YouTube, X/Twitter, Discord, GitHub, and newsletter actions.
@@ -109,10 +109,30 @@ Manual launch tasks are tracked in `tasks/manual-todo.md`.
 
 ### Review
 
-No Phase 34 work has been executed yet.
+#### 2026-05-08 - Step 34.1 follow/about conversion route
+
+**User goal:** Execute Phase 34 Step 34.1 by replacing the follow placeholder with a static launch-oriented route for G, LexCorp, community, GitHub, and newsletter preview actions.
+
+**Changed files:** `docs/skills-showcase/follow/index.html`, `docs/skills-showcase/styles.css`, `docs/skills-showcase/app.js`, `tasks/todo.md`, `tasks/history.md`.
+
+**Per-file purpose:** `follow/index.html` now contains the conversion route, static proof/funnel preview, honest LexCorp metric boundaries, external CTAs, and disabled newsletter preview. `styles.css` adds scoped follow cards, proof stats, receipt grid, newsletter preview, and responsive grid behavior. `app.js` renders follow-route proof stats and receipt cards from generated static proof data. Task/history files record execution and next work.
+
+**User-goal mapping:** The follow route now routes visitors to G, LexCorp, YouTube, X/Twitter, Discord, GitHub, inspect, catalog, and newsletter-preview actions without implying live LexCorp metrics or collecting email before Step 34.2.
+
+**Tests run:** `scripts/validate-skills-showcase-data.sh` passed and rewrote generated data with no diff. `node --check docs/skills-showcase/app.js` passed. Targeted `rg` scans confirmed expected CTAs, proof boundaries, provider-missing/non-collecting copy, and data hooks. `curl -sS -I http://localhost:8765/follow/` returned `HTTP/1.0 200 OK`. `curl -sS http://localhost:8765/follow/` confirmed the static route body loads. `git diff --check` passed.
+
+**Skipped tests:** Programmatic desktop/mobile browser smoke was attempted through the Node browser runtime, but `playwright` is not installed. Full viewport/browser validation remains covered by Step 34.5 final launch validation; this step still has executable syntax, content, generated-data, HTTP route, and diff checks.
+
+**Adversarial review:** Diff-aware self-review checked that the route does not claim live LexCorp metrics, the newsletter preview is disabled/non-collecting, proof cards consume only generated static data, CSS changes are scoped to follow-specific classes, and responsive rules collapse new grids. One accidental footer-link selector expansion was found and fixed before validation.
+
+**Residual risk:** Without an installed browser runtime, visual spacing and overflow on real desktop/mobile viewports still need final browser confirmation in Step 34.5. The most likely issue would be copy density in the follow hero or proof cards, not data loss or collection behavior.
+
+**Rollback note:** Revert the Step 34.1 commit to restore the placeholder follow route and remove the follow proof renderer/styles.
+
+**Next command:** `$run`
 
 ## Next Work
 
-Start Phase 34 Step 34.1 by building the follow/about conversion route and proof/funnel preview.
+Start Phase 34 Step 34.2 by adding static newsletter/email capture states and provider-missing fallback.
 
 **Recommended next command:** `$run`
