@@ -43,7 +43,7 @@ Build the user-facing product experience on top of the Phase 32 foundation: anim
 
 ### Implementation
 
-- [ ] Step 33.1: Wire generated catalog and proof data into the static routes.
+- [x] Step 33.1: Wire generated catalog and proof data into the static routes.
   - Files: modify `docs/skills-showcase/app.js`, `docs/skills-showcase/catalog/index.html`, `docs/skills-showcase/inspect/index.html`, `docs/skills-showcase/packs/index.html`, `docs/skills-showcase/styles.css`
   - Implementation plan:
     - Replace placeholder catalog rows with rendering from `window.SKILLS_SHOWCASE_DATA.skills`, including search, platform/type/scope filters, result counts, asymmetry labels for one-platform skills, and expandable detail rows with source paths.
@@ -105,10 +105,28 @@ No manual tasks block Phase 33. Vercel deployment and newsletter provider setup 
 
 ### Review
 
-No Phase 33 work has shipped yet.
+#### 2026-05-08 - Step 33.1: generated catalog/proof route wiring
+
+- Wired catalog, packs, and inspect routes to committed generated browser globals.
+- Catalog now renders generated skill rows with search, platform/type/scope filters, result counts, one-platform labels, and expandable source details.
+- Packs now renders generated pack summaries, platform coverage, skill counts, source paths, and alias fallbacks.
+- Inspect now renders repository evidence, public GitHub fallback status, proof artifacts, validation scripts, recent history, and explicit boundary language from generated proof data.
+
+Quality gate manifest:
+
+- **User goal:** Execute Phase 33 Step 33.1 from `$run`: wire generated catalog, pack, and proof data into static showcase routes.
+- **Changed files:** `docs/skills-showcase/app.js`, `docs/skills-showcase/assets/github-proof-data.js`, `docs/skills-showcase/catalog/index.html`, `docs/skills-showcase/packs/index.html`, `docs/skills-showcase/inspect/index.html`, `docs/skills-showcase/styles.css`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** `app.js` renders generated catalog, pack, and proof data defensively; `github-proof-data.js` refreshes the generated proof fingerprint and recent history after this step's history entry; route HTML files load the generated assets and expose render/fallback targets; `styles.css` supports generated grids, filters, expandable details, and responsive wrapping; task docs record completion and shipping evidence.
+- **User-goal mapping:** Every source-facing claim now comes from `window.SKILLS_SHOWCASE_DATA` or `window.SKILLS_SHOWCASE_GITHUB_PROOF_DATA`; no runtime API, database, video, analytics, GitHub Actions workflow, or dependency was added.
+- **Tests run:** `node --check docs/skills-showcase/app.js` passed; `node --check docs/skills-showcase/assets/github-proof-data.js` passed; `scripts/validate-skills-showcase-data.sh` initially caught stale proof data after the history entry, then passed after regenerating the proof asset and reported 312 skills, 16 packs, 4 proof artifacts, and 5 validation scripts; targeted `rg` scans confirmed generated-data hooks replaced placeholder/sample rows and that proof metadata is rendered; local static `curl -sS` route/asset checks confirmed catalog, pack, inspect, and asset script references are served; `git diff --check` passed.
+- **Skipped tests:** Full screenshot/browser interaction validation was attempted but blocked because Playwright is not installed and macOS Computer Use permissions are not granted in this session. Static server route checks and executable data/syntax validation covered loadability; desktop/mobile visual overlap remains for Step 33.4 final frontend validation.
+- **Adversarial review:** Diff-aware self-review checked for stale placeholders, generated-data claims not backed by browser globals, missing proof metadata, unsafe scope expansion, and responsive overflow. It found and fixed the missing repository/public GitHub metadata rendering in Inspect.
+- **Residual risk:** Dynamic DOM rendering and mobile layout were not visually inspected in a real browser from this session; if a generated row has unusually long text, the next visual pass should check wrapping and focus states on catalog/details controls.
+- **Rollback note:** Revert the Step 33.1 commit to restore the Phase 32 static placeholder routes.
+- **Next command:** `$run`
 
 ## Next Work
 
-Start Step 33.1 by wiring generated catalog and proof data into the static showcase routes.
+Start Step 33.2 by building workflow lab content and browser-native animations.
 
 **Recommended next command:** `$run`

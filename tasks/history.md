@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-05-08 - Phase 33 Step 33.1: generated catalog and proof route wiring
+
+- Wired the Skills Showcase catalog, packs, and inspect routes to committed generated browser globals instead of placeholder rows.
+- Catalog now renders generated skill rows with search, platform/type/scope filters, visible/total counts, one-platform labels, and expandable GitHub source links.
+- Packs now renders generated pack metrics, platform coverage, skill counts, PACK.md links, and compatibility-alias fallback language.
+- Inspect now renders generated repository evidence, public GitHub fallback status, proof artifacts, validation scripts, recent history entries, and boundary language.
+- Verified with `node --check docs/skills-showcase/app.js`, `scripts/validate-skills-showcase-data.sh`, targeted generated-data/placeholder scans, local static route/asset `curl` checks, diff-aware self-review, and `git diff --check`.
+- Recorded residual visual-verification risk: Playwright is unavailable and macOS Computer Use permissions are not granted, so full desktop/mobile screenshot validation remains part of Step 33.4.
+
 ## 2026-05-07 - Phase 32 Step 32.6: validation and phase transition
 
 - Ran the full Phase 32 validation gate: showcase generators, static app syntax, validator syntax, freshness validation, route file presence, generated-data scans, skill dependency/version/routing audits, pack-routing audit, layer1 Vitest suite, and `git diff --check`.
