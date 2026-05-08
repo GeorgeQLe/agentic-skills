@@ -1704,6 +1704,14 @@ Resolved all 10 findings from `/expert-review`:
 - Kept generated catalog/proof data, stale-data validation, and skill mutation contract prompts scoped to later Phase 32 steps with honest placeholder states in the shell.
 - Verified with `node --check docs/skills-showcase/app.js`, route file presence checks, targeted route/data-hook scans, and `git diff --check`.
 
+## 2026-05-08 — Skills Showcase hero overlap hotfix
+
+- Investigated the homepage hero layout after a report that the text was cut off by the right-side blueprint diagram.
+- Confirmed the root cause was the original asymmetric 5/7 hero grid plus oversized viewport-scaled headline and a late `900px` stacking breakpoint.
+- Updated `docs/skills-showcase/styles.css` to use balanced desktop columns, prevent grid item overflow, stack the hero at compact desktop widths, and wrap/tighten the stacked headline and blueprint text.
+- Refreshed the generated GitHub proof fingerprint after the showcase data validator reported stale generated data.
+- Verified with `scripts/validate-skills-showcase-data.sh`, `node --check docs/skills-showcase/app.js`, `git diff --check`, and local Brave visual checks at desktop and narrow widths.
+
 ## 2026-05-03 — Phase 13 Step 13.5: creator presence regression coverage
 
 - Recorded focused regression validation coverage for the Phase 13 creator presence dossier acceptance criteria in `tasks/todo.md`.

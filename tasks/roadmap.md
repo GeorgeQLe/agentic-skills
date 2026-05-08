@@ -26,6 +26,15 @@ Phase 33 is complete. Phase 34 is planned for the remaining Skills Showcase Webs
 - [ ] Skill-changing workflows prompt agents to regenerate site data and review curated website copy/animations when relevant.
 - [ ] Vercel and newsletter setup are recorded as manual launch tasks, not hidden implementation assumptions.
 
+## Current Hotfix: Skills Showcase Hero Overlap
+
+**Goal:** Fix the homepage hero so the headline and supporting text never collide with the right-side workflow blueprint across desktop, tablet, and mobile widths.
+
+**Acceptance Criteria:**
+- [x] The reported text/diagram collision is validated against current code and visual behavior.
+- [x] The fix is scoped to the responsive hero layout and does not refactor unrelated site sections.
+- [x] Static checks and browser visual verification pass after the change.
+
 ## Current Analysis: Mobile Ideas Return Assessment
 
 **Goal:** Evaluate the local Claude/Codex effort spent in `/Users/georgele/projects/mobile/dev/mobile-ideas`, estimate return from generated artifacts and project progress, and identify workflow changes that would improve future ROI.
