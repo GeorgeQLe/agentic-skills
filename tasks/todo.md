@@ -27,7 +27,7 @@ Finish the top-of-funnel launch surface: G/LexCorp/community conversion paths, n
 
 - [x] Follow/about route converts proof interest into G, LexCorp, YouTube, X/Twitter, Discord, GitHub, and newsletter actions.
 - [x] Newsletter/email capture works with a configured provider endpoint or clearly degrades to a non-collecting fallback.
-- [ ] GitHub/open-source proof telemetry is visible and does not claim live LexCorp product metrics.
+- [x] GitHub/open-source proof telemetry is visible and does not claim live LexCorp product metrics.
 - [ ] Vercel static deployment instructions and manual launch tasks are current.
 - [ ] Final validation covers generated data freshness, responsive UI, accessibility/reduced-motion behavior, links, and static-route reloads.
 
@@ -64,7 +64,7 @@ Finish the top-of-funnel launch surface: G/LexCorp/community conversion paths, n
     - Browser-check invalid email, missing-provider, and configured-endpoint simulation paths where static behavior permits.
     - Run targeted scans for fallback-state copy and no runtime API/dependency additions.
     - Run `git diff --check`.
-- [ ] Step 34.3: Present launch proof/follow telemetry and honest boundaries.
+- [x] Step 34.3: Present launch proof/follow telemetry and honest boundaries.
   - Files: modify `docs/skills-showcase/inspect/index.html`, `docs/skills-showcase/follow/index.html`, `docs/skills-showcase/app.js`, `docs/skills-showcase/styles.css`
   - Implementation plan:
     - Strengthen generated proof presentation around public GitHub/local evidence, validation artifacts, route freshness, and clear metric boundaries.
@@ -131,6 +131,28 @@ Manual launch tasks are tracked in `tasks/manual-todo.md`.
 
 **Next command:** `$run`
 
+#### 2026-05-08 - Step 34.3 launch proof/follow telemetry boundaries
+
+**User goal:** Execute Phase 34 Step 34.3 by making GitHub/open-source proof telemetry visible across inspect and follow while keeping LexCorp/community/newsletter claims static and bounded.
+
+**Changed files:** `docs/skills-showcase/inspect/index.html`, `docs/skills-showcase/follow/index.html`, `docs/skills-showcase/app.js`, `docs/skills-showcase/styles.css`, `docs/skills-showcase/assets/skills-data.js`, `docs/skills-showcase/assets/github-proof-data.js`, `tasks/todo.md`, `tasks/history.md`.
+
+**Per-file purpose:** `inspect/index.html` now adds proof-to-follow CTAs, a generated telemetry summary slot, and explicit static-proof limitations. `follow/index.html` expands proof-funnel copy to include route freshness, GitHub fallback status, and newsletter-performance boundaries. `app.js` renders inspect proof summary telemetry, extra boundary rows, and follow-side GitHub enrichment cards from generated proof data. `styles.css` adds scoped proof summary styling. Generated assets were refreshed because validation found stale fingerprints/history/skill metadata. Task/history files record execution and next work.
+
+**User-goal mapping:** Visitors can now move from proof receipts to follow/community actions, and both routes state that static telemetry proves repository artifacts, validation commands, freshness, and fallback behavior only, not live LexCorp adoption, visitor analytics, community membership, or newsletter performance.
+
+**Tests run:** `scripts/validate-skills-showcase-data.sh` initially failed with stale generated assets, then passed after regeneration. `node --check docs/skills-showcase/app.js` passed. Targeted `rg` scans confirmed proof summary text, inspect/follow cross-links, GitHub fallback language, and no-live-metric boundaries. Local HTTP HEAD checks for `/inspect/` and `/follow/` returned `HTTP/1.0 200 OK`. `git diff --check` passed.
+
+**Skipped tests:** Full browser screenshot/interaction checks remain deferred to Step 34.5 final validation because the local Node runtime still lacks Playwright. This step has executable generated-data freshness, syntax, route-load, content-boundary, and whitespace checks.
+
+**Adversarial review:** Diff-aware self-review checked that new telemetry counts come from generated proof arrays, GitHub enrichment is labeled optional/fallback, follow/community/newsletter actions are explicitly not measured outcomes, generated asset changes are freshness-only output, and no live analytics or LexCorp metric claims were introduced.
+
+**Residual risk:** The static proof summary depends on generated proof data being present; if the asset is missing, the existing inspect missing-data notice still handles the failure, but the summary aside remains empty. Final route/browser validation should confirm the empty-state layout if assets are removed or blocked.
+
+**Rollback note:** Revert the Step 34.3 commit to remove the proof summary/cross-link copy and restore the previous generated assets.
+
+**Next command:** `$run`
+
 #### 2026-05-08 - Step 34.2 newsletter static provider contract
 
 **User goal:** Execute Phase 34 Step 34.2 by adding static newsletter/email capture states and a provider-missing fallback without adding a runtime API, database, root dependency, or GitHub Actions workflow.
@@ -155,6 +177,6 @@ Manual launch tasks are tracked in `tasks/manual-todo.md`.
 
 ## Next Work
 
-Start Phase 34 Step 34.3 by presenting launch proof/follow telemetry and honest boundaries across inspect and follow.
+Start Phase 34 Step 34.4 by adding Vercel/static deployment notes and manual launch checklist.
 
 **Recommended next command:** `$run`
