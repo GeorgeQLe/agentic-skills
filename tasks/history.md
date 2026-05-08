@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-05-08 - Phase 34 Step 34.2: newsletter static provider contract
+
+- Replaced the provider-pending newsletter preview with a static/provider-backed form contract on `/follow/`.
+- Added provider-missing, invalid-email, pending, success, and error states with accessible live status copy and scoped status styling.
+- Kept the committed default non-collecting by leaving `data-provider-endpoint` empty; configured-provider submission is isolated to a static provider `fetch` path with no runtime API, database, dependency, or GitHub Actions workflow.
+- Verified with `node --check docs/skills-showcase/app.js`, targeted state and no-backend scans, local HTTP HEAD route validation for `/follow/`, and `git diff --check`.
+
 ## 2026-05-08 - Phase 34 Step 34.1: follow/about conversion route
 
 - Replaced the follow placeholder with a launch-oriented static route for G, LexCorp, YouTube, X/Twitter, Discord, GitHub, inspect, catalog, and newsletter-preview actions.

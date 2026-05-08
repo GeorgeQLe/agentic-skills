@@ -25,8 +25,8 @@ Finish the top-of-funnel launch surface: G/LexCorp/community conversion paths, n
 
 ### Acceptance Criteria
 
-- [ ] Follow/about route converts proof interest into G, LexCorp, YouTube, X/Twitter, Discord, GitHub, and newsletter actions.
-- [ ] Newsletter/email capture works with a configured provider endpoint or clearly degrades to a non-collecting fallback.
+- [x] Follow/about route converts proof interest into G, LexCorp, YouTube, X/Twitter, Discord, GitHub, and newsletter actions.
+- [x] Newsletter/email capture works with a configured provider endpoint or clearly degrades to a non-collecting fallback.
 - [ ] GitHub/open-source proof telemetry is visible and does not claim live LexCorp product metrics.
 - [ ] Vercel static deployment instructions and manual launch tasks are current.
 - [ ] Final validation covers generated data freshness, responsive UI, accessibility/reduced-motion behavior, links, and static-route reloads.
@@ -53,7 +53,7 @@ Finish the top-of-funnel launch surface: G/LexCorp/community conversion paths, n
     - Run route/content scans for the expected CTAs and proof/funnel hooks.
     - Browser-check desktop and mobile follow route layout.
     - Run `git diff --check`.
-- [ ] Step 34.2: Add static newsletter/email capture states and provider-missing fallback.
+- [x] Step 34.2: Add static newsletter/email capture states and provider-missing fallback.
   - Files: modify `docs/skills-showcase/follow/index.html`, `docs/skills-showcase/app.js`, `docs/skills-showcase/styles.css`
   - Implementation plan:
     - Add a static newsletter form contract with invalid-email, pending, success, error, and provider-missing states.
@@ -131,8 +131,30 @@ Manual launch tasks are tracked in `tasks/manual-todo.md`.
 
 **Next command:** `$run`
 
+#### 2026-05-08 - Step 34.2 newsletter static provider contract
+
+**User goal:** Execute Phase 34 Step 34.2 by adding static newsletter/email capture states and a provider-missing fallback without adding a runtime API, database, root dependency, or GitHub Actions workflow.
+
+**Changed files:** `docs/skills-showcase/follow/index.html`, `docs/skills-showcase/app.js`, `docs/skills-showcase/styles.css`, `tasks/todo.md`, `tasks/history.md`.
+
+**Per-file purpose:** `follow/index.html` now exposes a static newsletter form with `data-provider-endpoint`, accessible email input, submit button, provider-missing/invalid/pending/success/error state labels, live status copy, and provider configuration note. `app.js` validates email, prevents default submission, avoids network calls when no endpoint is configured, posts to a configured static provider endpoint only, and renders pending/success/error states. `styles.css` adds scoped newsletter layout, invalid input styling, active state tags, and status borders. Task/history files record completion and next work.
+
+**User-goal mapping:** The route can now degrade honestly to a non-collecting fallback by default, while the manual launch operator can later configure a static provider endpoint without code architecture changes.
+
+**Tests run:** `node --check docs/skills-showcase/app.js` passed. Targeted `rg` scans confirmed `data-newsletter-form`, `data-provider-endpoint`, provider-missing, invalid-email, pending, success, error, non-collecting copy, `fetch`, `URLSearchParams`, and `FormData` coverage. A forbidden-surface scan over the changed showcase files found no API/server/database/Supabase/Neon/GitHub Actions/package-manager additions. `curl -sS -I http://127.0.0.1:8766/follow/` returned `HTTP/1.0 200 OK`. `git diff --check` passed.
+
+**Skipped tests:** Full browser interaction testing was not run because the available Node runtime still lacks Playwright, and repeated body fetches from the temporary static server failed after the first successful HEAD check despite the server process staying up. Step 34.5 retains the full desktop/mobile browser validation gate; this step has source-level state coverage, syntax validation, route HEAD validation, and no-backend scans.
+
+**Adversarial review:** Diff-aware self-review checked that the default form has an empty endpoint, the no-endpoint submit path returns before `fetch`, email is never written to repository files or a local backend, configured-provider submission is isolated to `fetch(providerEndpoint)`, and all required states have visible labels and status styling. Residual concern is limited to visual/interactive browser confirmation.
+
+**Residual risk:** The configured-provider branch depends on the eventual provider accepting `application/x-www-form-urlencoded` `email` submissions. If the selected provider requires extra hidden fields or JSON, the manual provider setup task after Step 34.2 must update the static form attributes or provider configuration.
+
+**Rollback note:** Revert the Step 34.2 commit to restore the provider-pending preview while keeping the Step 34.1 follow route.
+
+**Next command:** `$run`
+
 ## Next Work
 
-Start Phase 34 Step 34.2 by adding static newsletter/email capture states and provider-missing fallback.
+Start Phase 34 Step 34.3 by presenting launch proof/follow telemetry and honest boundaries across inspect and follow.
 
 **Recommended next command:** `$run`
