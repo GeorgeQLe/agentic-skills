@@ -1,172 +1,118 @@
-# Active Phase: Phase 33 - Skills Showcase Workflow Experience
+# Active Phase: Phase 34 - Skills Showcase Distribution Launch
 
 **Project:** Claude Skills / agentic-skills
-**Current phase:** Phase 33 of 34
-**Status:** Active as of 2026-05-07.
+**Current phase:** Phase 34 of 34
+**Status:** Planned as of 2026-05-08.
 
-## Phase 33: Skills Showcase Workflow Experience
+## Phase 34: Skills Showcase Distribution Launch
 > Test strategy: tests-after
 
 ### Goal
 
-Build the user-facing product experience on top of the Phase 32 foundation: animated workflow explanations, pack map, generated catalog interactions, proof UI, and accessible responsive page behavior.
+Finish the top-of-funnel launch surface: G/LexCorp/community conversion paths, newsletter/email capture, GitHub/open-source proof telemetry presentation, deployment guidance, and final launch validation.
 
 ### Source
 
-`specs/skills-showcase-website.md`, `specs/ui-skills-showcase-website.md`, and the completed Phase 32 static shell/data contracts.
+`specs/skills-showcase-website.md`, `specs/ui-skills-showcase-website.md`, and the completed Phase 32-33 static showcase foundation.
 
 ### Scope
 
-- Implement the homepage previews and full workflow, pack, catalog, and inspect route experiences.
-- Build browser-native animations for the eight curated workflows: first successful cycle, pack selection, plan -> run -> ship, spec -> roadmap -> implementation, research chains, hybrid handoff, skill authoring, and validation/troubleshooting.
-- Implement the pack map, project-type highlighter, generated catalog search/filter/expand controls, and proof receipt links.
-- Honor reduced-motion, keyboard, focus, and mobile layout requirements.
-- Keep all factual counts and skill claims tied to generated data or clearly marked static receipts.
+- Build the follow/about route with G, LexCorp, YouTube, X/Twitter, Discord, GitHub, and newsletter/email capture CTAs.
+- Integrate static newsletter/email capture with provider-missing, pending, success, error, and invalid-email states.
+- Present generated GitHub/open-source proof data honestly without implying live LexCorp metrics.
+- Add deployment notes for Vercel static hosting and manual launch checks.
+- Run final local/browser/static validation and document launch readiness.
 
 ### Acceptance Criteria
 
-- [ ] Every curated workflow has selectable text, steps, artifacts, and a non-video browser-native animation or static reduced-motion fallback.
-- [ ] Pack map distinguishes global core, packs, overlays, and compatibility aliases with usable mobile behavior.
-- [ ] Catalog search, filtering, result counts, asymmetry labels, and expandable rows work against generated skill data.
-- [ ] Inspect/proof UI links to public GitHub receipts and validation artifacts.
-- [ ] Desktop, tablet, and mobile layouts avoid overlap and meet the UI spec's accessibility states.
-- [ ] Focused frontend and data validation passes.
+- [ ] Follow/about route converts proof interest into G, LexCorp, YouTube, X/Twitter, Discord, GitHub, and newsletter actions.
+- [ ] Newsletter/email capture works with a configured provider endpoint or clearly degrades to a non-collecting fallback.
+- [ ] GitHub/open-source proof telemetry is visible and does not claim live LexCorp product metrics.
+- [ ] Vercel static deployment instructions and manual launch tasks are current.
+- [ ] Final validation covers generated data freshness, responsive UI, accessibility/reduced-motion behavior, links, and static-route reloads.
 
 ### Execution Profile
 
 **Parallel mode:** serial
 **Integration owner:** main agent
 **Conflict risk:** medium
-**Review gates:** generated-data rendering, interaction states, responsive UI, accessibility/reduced-motion behavior
+**Review gates:** form fallback states, proof/link claims, static route behavior, deployment docs/manual tasks
 
 **Subagent lanes:** none
 
 ### Implementation
 
-- [x] Step 33.1: Wire generated catalog and proof data into the static routes.
-  - Files: modify `docs/skills-showcase/app.js`, `docs/skills-showcase/catalog/index.html`, `docs/skills-showcase/inspect/index.html`, `docs/skills-showcase/packs/index.html`, `docs/skills-showcase/styles.css`
+- [ ] Step 34.1: Build the follow/about conversion route and proof/funnel preview.
+  - Files: modify `docs/skills-showcase/follow/index.html`, `docs/skills-showcase/styles.css`, `docs/skills-showcase/app.js`
   - Implementation plan:
-    - Replace placeholder catalog rows with rendering from `window.SKILLS_SHOWCASE_DATA.skills`, including search, platform/type/scope filters, result counts, asymmetry labels for one-platform skills, and expandable detail rows with source paths.
-    - Render pack summaries from `window.SKILLS_SHOWCASE_DATA.packs` on the packs route and keep labels tied to generated pack metadata rather than hard-coded counts.
-    - Render proof artifacts, validation scripts, fallback/refreshed GitHub metadata, and boundary language from `window.SKILLS_SHOWCASE_GITHUB_PROOF_DATA` on the inspect route.
-    - Keep the site static: no runtime API, database, GitHub Actions workflow, root dependency, video, Remotion build, visitor analytics, or live LexCorp metrics.
-    - Preserve direct-reloadable route behavior and shared CSS/JS foundations from Phase 32.
+    - Replace the Phase 32 follow placeholder with a launch-oriented route for G, LexCorp, YouTube, X/Twitter, Discord, GitHub, and newsletter actions.
+    - Add proof-to-follow copy and route-level sections that connect generated skill coverage and workflow proof to the conversion choices.
+    - Keep the route static, direct-reloadable, accessible, and honest about unavailable live metrics.
   - Verification plan:
     - Run `node --check docs/skills-showcase/app.js`.
+    - Run route/content scans for the expected CTAs and proof/funnel hooks.
+    - Browser-check desktop and mobile follow route layout.
+    - Run `git diff --check`.
+- [ ] Step 34.2: Add static newsletter/email capture states and provider-missing fallback.
+  - Files: modify `docs/skills-showcase/follow/index.html`, `docs/skills-showcase/app.js`, `docs/skills-showcase/styles.css`
+  - Implementation plan:
+    - Add a static newsletter form contract with invalid-email, pending, success, error, and provider-missing states.
+    - Avoid collecting email when no provider endpoint is configured; explain the fallback through UI state rather than hidden assumptions.
+    - Keep the provider endpoint configurable without adding a runtime API, database, root dependency, or GitHub Actions workflow.
+  - Verification plan:
+    - Run `node --check docs/skills-showcase/app.js`.
+    - Browser-check invalid email, missing-provider, and configured-endpoint simulation paths where static behavior permits.
+    - Run targeted scans for fallback-state copy and no runtime API/dependency additions.
+    - Run `git diff --check`.
+- [ ] Step 34.3: Present launch proof/follow telemetry and honest boundaries.
+  - Files: modify `docs/skills-showcase/inspect/index.html`, `docs/skills-showcase/follow/index.html`, `docs/skills-showcase/app.js`, `docs/skills-showcase/styles.css`
+  - Implementation plan:
+    - Strengthen generated proof presentation around public GitHub/local evidence, validation artifacts, route freshness, and clear metric boundaries.
+    - Cross-link inspect and follow routes so interested visitors can move from proof receipts to community/follow/newsletter actions.
+    - Keep LexCorp/community claims static and bounded; do not imply live product analytics.
+  - Verification plan:
     - Run `scripts/validate-skills-showcase-data.sh`.
-    - Run targeted `rg` checks that catalog, pack, and proof route placeholders were replaced with generated-data hooks and that generated browser globals are referenced.
-    - Use browser or screenshot verification when interaction/rendering changes need visual proof; at minimum test desktop and mobile widths for text overlap and nonblank generated lists.
-    - Run `git diff --check`.
-- [x] Step 33.2: Build workflow lab content and browser-native animations.
-  - Files: modify `docs/skills-showcase/index.html`, `docs/skills-showcase/workflows/index.html`, `docs/skills-showcase/app.js`, `docs/skills-showcase/styles.css`
-  - Implementation plan:
-    - Define eight curated workflow narratives with steps, artifacts, commands, and static reduced-motion fallbacks.
-    - Implement selectable workflow lab controls and browser-native animation states without video or Remotion.
-    - Reuse generated data where counts or skill names are factual; keep curated explanatory text clearly static.
-    - Honor keyboard navigation, focus states, and `prefers-reduced-motion`.
-  - Verification plan:
     - Run `node --check docs/skills-showcase/app.js`.
-    - Run browser/screenshot checks for desktop and mobile workflow states, including reduced-motion fallback where practical.
-    - Run targeted `rg` checks for the eight workflow names and animation/reduced-motion hooks.
+    - Browser-check inspect and follow route proof/CTA links.
     - Run `git diff --check`.
-- [x] Step 33.3: Improve pack map and route-level responsive behavior.
-  - Files: modify `docs/skills-showcase/packs/index.html`, `docs/skills-showcase/styles.css`, `docs/skills-showcase/app.js`
+- [ ] Step 34.4: Add Vercel/static deployment notes and manual launch checklist.
+  - Files: add or modify `tasks/deploy.md`, `tasks/manual-todo.md`, `tasks/todo.md`
   - Implementation plan:
-    - Build the pack map from generated pack data plus curated overlay/compatibility annotations.
-    - Add project-type highlighter behavior and usable mobile navigation for global core, domain packs, overlays, and aliases.
-    - Tighten responsive constraints so cards, controls, generated rows, and route headers do not overlap on mobile or desktop.
+    - Record the explicit manual deploy contract for hosting `docs/skills-showcase/` as a static site.
+    - Keep newsletter provider and Vercel setup as manual launch tasks with clear after-step timing.
+    - Avoid GitHub Actions or implicit CI/CD assumptions.
   - Verification plan:
-    - Run `node --check docs/skills-showcase/app.js`.
-    - Run desktop/mobile browser or screenshot checks for packs route layout and controls.
-    - Run targeted route/content checks.
+    - Run targeted scans for deploy root/output settings, manual task entries, and the no-GitHub-Actions boundary.
     - Run `git diff --check`.
-- [ ] Step 33.4: Final Phase 33 frontend/data validation.
-  - Files: modify `tasks/todo.md`, `tasks/history.md`
+- [ ] Step 34.5: Final Phase 34 launch validation and phase transition.
+  - Files: modify `tasks/todo.md`, `tasks/history.md`, `tasks/roadmap.md`, `tasks/phases/phase-34.md`
   - Implementation plan:
-    - Run `scripts/validate-skills-showcase-data.sh`, `node --check docs/skills-showcase/app.js`, and focused browser/screenshot validation across home, workflows, packs, catalog, inspect, and follow routes.
-    - Verify keyboard/focus/reduced-motion behavior for the new interactions.
-    - Check all Phase 33 acceptance criteria and record residual risks or manual follow-ups.
-    - If complete, archive Phase 33 and prepare Phase 34 according to the phase-transition workflow.
+    - Run final generated-data, syntax, static-route, link/CTA, reduced-motion, desktop, and mobile validation.
+    - Confirm manual launch tasks are current and no hidden deployment/provider assumptions remain.
+    - Archive Phase 34 and document MVP readiness or the exact remaining blocker.
   - Verification plan:
-    - Run the commands above plus `git diff --check`.
-    - Record screenshot/browser evidence summary in the review notes.
+    - Run all Green commands below.
+    - Record launch-readiness evidence and residual risks in the review notes.
 
 ### Green / Verification
 
 - [ ] Run `scripts/validate-skills-showcase-data.sh`.
 - [ ] Run `node --check docs/skills-showcase/app.js`.
-- [ ] Run browser/screenshot validation for generated catalog, packs, proof, and workflow interactions on desktop and mobile.
-- [ ] Run targeted route/content scans.
+- [ ] Run static route reload checks across `/`, `/workflows/`, `/packs/`, `/catalog/`, `/inspect/`, and `/follow/`.
+- [ ] Run browser desktop/mobile checks for follow form states, proof links, navigation, and responsive layout.
+- [ ] Run link/CTA scans for G, LexCorp, YouTube, X/Twitter, Discord, GitHub, and newsletter actions.
 - [ ] Run `git diff --check`.
 
 ### Manual Tasks
 
-No manual tasks block Phase 33. Vercel deployment and newsletter provider setup are planned for Phase 34 after source implementation and local validation.
+Manual launch tasks are tracked in `tasks/manual-todo.md`.
 
 ### Review
 
-#### 2026-05-08 - Step 33.1: generated catalog/proof route wiring
-
-- Wired catalog, packs, and inspect routes to committed generated browser globals.
-- Catalog now renders generated skill rows with search, platform/type/scope filters, result counts, one-platform labels, and expandable source details.
-- Packs now renders generated pack summaries, platform coverage, skill counts, source paths, and alias fallbacks.
-- Inspect now renders repository evidence, public GitHub fallback status, proof artifacts, validation scripts, recent history, and explicit boundary language from generated proof data.
-
-Quality gate manifest:
-
-- **User goal:** Execute Phase 33 Step 33.1 from `$run`: wire generated catalog, pack, and proof data into static showcase routes.
-- **Changed files:** `docs/skills-showcase/app.js`, `docs/skills-showcase/assets/github-proof-data.js`, `docs/skills-showcase/catalog/index.html`, `docs/skills-showcase/packs/index.html`, `docs/skills-showcase/inspect/index.html`, `docs/skills-showcase/styles.css`, `tasks/todo.md`, `tasks/history.md`.
-- **Per-file purpose:** `app.js` renders generated catalog, pack, and proof data defensively; `github-proof-data.js` refreshes the generated proof fingerprint and recent history after this step's history entry; route HTML files load the generated assets and expose render/fallback targets; `styles.css` supports generated grids, filters, expandable details, and responsive wrapping; task docs record completion and shipping evidence.
-- **User-goal mapping:** Every source-facing claim now comes from `window.SKILLS_SHOWCASE_DATA` or `window.SKILLS_SHOWCASE_GITHUB_PROOF_DATA`; no runtime API, database, video, analytics, GitHub Actions workflow, or dependency was added.
-- **Tests run:** `node --check docs/skills-showcase/app.js` passed; `node --check docs/skills-showcase/assets/github-proof-data.js` passed; `scripts/validate-skills-showcase-data.sh` initially caught stale proof data after the history entry, then passed after regenerating the proof asset and reported 312 skills, 16 packs, 4 proof artifacts, and 5 validation scripts; targeted `rg` scans confirmed generated-data hooks replaced placeholder/sample rows and that proof metadata is rendered; local static `curl -sS` route/asset checks confirmed catalog, pack, inspect, and asset script references are served; `git diff --check` passed.
-- **Skipped tests:** Full screenshot/browser interaction validation was attempted but blocked because Playwright is not installed and macOS Computer Use permissions are not granted in this session. Static server route checks and executable data/syntax validation covered loadability; desktop/mobile visual overlap remains for Step 33.4 final frontend validation.
-- **Adversarial review:** Diff-aware self-review checked for stale placeholders, generated-data claims not backed by browser globals, missing proof metadata, unsafe scope expansion, and responsive overflow. It found and fixed the missing repository/public GitHub metadata rendering in Inspect.
-- **Residual risk:** Dynamic DOM rendering and mobile layout were not visually inspected in a real browser from this session; if a generated row has unusually long text, the next visual pass should check wrapping and focus states on catalog/details controls.
-- **Rollback note:** Revert the Step 33.1 commit to restore the Phase 32 static placeholder routes.
-- **Next command:** `$run`
-
-#### 2026-05-08 - Step 33.2: workflow lab content and browser-native animations
-
-- Added all eight curated workflow narratives: first successful cycle, pack selection, plan -> run -> ship, spec -> roadmap -> implementation, research chains, hybrid handoff, skill authoring, and validation/troubleshooting.
-- Rebuilt the workflow lab as a data-driven static component with command-first selector cards, proof copy, manual previous/next/play/restart controls, progress rail labels, artifact lists, change lists, and recovery text.
-- Added homepage workflow preview cards and wired the homepage skill count to generated `skills-data.js`.
-- Implemented CSS-only motion states for the active workflow stage and reduced-motion-safe manual controls.
-
-Quality gate manifest:
-
-- **User goal:** Execute Phase 33 Step 33.2 from `$run`: build workflow lab content and browser-native animations.
-- **Changed files:** `docs/skills-showcase/app.js`, `docs/skills-showcase/index.html`, `docs/skills-showcase/workflows/index.html`, `docs/skills-showcase/styles.css`, `docs/skills-showcase/assets/github-proof-data.js`, `tasks/todo.md`, `tasks/history.md`.
-- **Per-file purpose:** `app.js` defines and renders the eight workflows, progress controls, autoplay/reduced-motion behavior, homepage preview cards, and generated skill-count metric; `index.html` adds the workflow preview band and generated data asset; `workflows/index.html` exposes workflow render targets and controls; `styles.css` adds selector, stage, progress, control, preview, and responsive layout styles; `github-proof-data.js` refreshes generated proof history after the new history entry; task docs record completion and shipping evidence.
-- **User-goal mapping:** The workflow lab now satisfies the curated workflow set, selectable text, browser-native state animation, reduced-motion/manual control, homepage preview, and artifact/recovery text requirements without adding video, Remotion, a framework, a runtime API, GitHub Actions, or a dependency.
-- **Tests run:** `node --check docs/skills-showcase/app.js` passed; `scripts/validate-skills-showcase-data.sh` initially caught stale proof data after the history entry, then passed after regenerating the proof asset and reported 312 skills, 16 packs, 4 proof artifacts, and 5 validation scripts; targeted `rg` scans confirmed all eight workflow names, progress hooks, preview hooks, reduced-motion checks, and animation controls; local static `curl -sS` checks confirmed homepage/workflows route hooks and JS workflow content are served; Brave desktop visual/accessibility-tree checks confirmed the workflow route hard-reloads to all eight selector cards, updates to Research Chains on click, exposes progress/control buttons, and the homepage renders the generated `312 skills` metric plus eight preview links; `git diff --check` passed.
-- **Skipped tests:** Mobile screenshot validation was not run in a resized viewport; CSS responsive rules were inspected and desktop browser verification covered the primary rendered route. Full tablet/mobile overlap checks remain in Step 33.4 final frontend validation.
-- **Adversarial review:** Diff-aware self-review checked for missing V1 workflows, stale Phase 32 placeholder text, dependency creep, video/runtime additions, inaccessible motion-only information, unbacked factual counts, and route reload issues. The review found a browser cache false alarm during visual verification; hard reload confirmed the live DOM.
-- **Residual risk:** The mobile horizontal selector and one-column workflow panel need final visual confirmation in Step 33.4; unusually narrow screens could still need spacing tweaks around long command labels.
-- **Rollback note:** Revert the Step 33.2 commit to restore the previous four-workflow static foundation.
-- **Next command:** `$run`
-
-#### 2026-05-08 - Step 33.3: pack map and responsive route behavior
-
-- Added project-type highlighter controls for all, business, devtool, game, creator, monorepo, and kanban pack views.
-- Added overlay visibility control, generated pack annotations, alias labels, overlay labels, keyboard-selectable pack nodes, and a live detail panel with install command, key generated skills, and catalog link.
-- Added global-core and output bands so the pack route distinguishes global foundations, domain packs, overlays, compatibility aliases, and produced artifacts.
-- Tightened responsive constraints for route headings, generated cards, controls, pack details, catalog rows, and compact mobile surfaces.
-
-Quality gate manifest:
-
-- **User goal:** Execute Phase 33 Step 33.3 from `$run`: improve pack map and route-level responsive behavior.
-- **Changed files:** `docs/skills-showcase/app.js`, `docs/skills-showcase/packs/index.html`, `docs/skills-showcase/styles.css`, `docs/skills-showcase/assets/github-proof-data.js`, `tasks/todo.md`, `tasks/history.md`.
-- **Per-file purpose:** `app.js` adds generated-data-backed pack annotations, filter behavior, overlay toggle, selected pack detail rendering, and keyboard selection; `packs/index.html` adds highlighter controls, global/output bands, and detail panel targets; `styles.css` adds pack control/detail/layout styling and responsive constraints for route components; `github-proof-data.js` refreshes generated proof history after the new history entry; task docs record completion and shipping evidence.
-- **User-goal mapping:** The pack map now distinguishes global core, domain packs, overlays, compatibility aliases, project-type selections, and output artifacts while keeping counts and pack metadata tied to generated data.
-- **Tests run:** `node --check docs/skills-showcase/app.js` passed; `scripts/validate-skills-showcase-data.sh` initially caught stale proof data after the history entry, then passed after regenerating the proof asset and reported 312 skills, 16 packs, 4 proof artifacts, and 5 validation scripts; targeted `rg` scans confirmed pack filter/detail hooks, annotation metadata, alias language, and responsive CSS hooks; local static `curl -sS` checks confirmed packs route, app JS, and CSS serve the new hooks; Brave desktop visual/accessibility-tree checks confirmed hard reload renders project-type controls, global core band, generated pack nodes, selected detail panel, Devtool filtering, alias labels, and overlay labels; `git diff --check` passed.
-- **Skipped tests:** Mobile screenshot validation was not run in a resized viewport; responsive CSS was tightened and desktop browser verification covered the main interaction. Full mobile/tablet overlap checks remain in Step 33.4 final frontend validation.
-- **Adversarial review:** Diff-aware self-review checked for hard-coded counts, missing generated-data source ties, pack aliases without labels, overlay filtering gaps, non-keyboard-selectable pack cards, and route overflow risks. The review accepted curated category annotations as static explanatory metadata layered on generated pack records.
-- **Residual risk:** The catalog `#pack-*` links are navigable anchors but the catalog route does not yet apply hash-based pack filtering; this is a known V1 limitation unless Step 33.4 chooses to tighten it during final validation.
-- **Rollback note:** Revert the Step 33.3 commit to restore the generated pack list without project-type controls or detail panel.
-- **Next command:** `$run`
+No Phase 34 work has been executed yet.
 
 ## Next Work
 
-Start Step 33.4 by running final Phase 33 frontend/data validation.
+Start Phase 34 Step 34.1 by building the follow/about conversion route and proof/funnel preview.
 
 **Recommended next command:** `$run`

@@ -1,8 +1,8 @@
 # Roadmap: Claude Skills
 
 > Generated from: tasks/roadmap.md (existing), specs/board-flag-kanban-search.md, tasks/ideas.md, tasks/history.md
-> Date: 2026-03-27 (last updated 2026-05-07)
-> Total Phases: 34 (32 complete, 1 active, 1 planned)
+> Date: 2026-03-27 (last updated 2026-05-08)
+> Total Phases: 34 (33 complete, 1 planned)
 
 ## Summary
 
@@ -10,7 +10,7 @@ Phases 1-11 complete: kanban skill suite, board intelligence, templates, archive
 
 Phases 12-31 complete. Phase 14 added the LinkedIn evidence lane to the creator foundation workflow with owner exports, manual snapshots, public unauthenticated captures, redaction gates, shared evidence-schema/dossier routing, and deterministic layer1 contract coverage. Phase 16 hardened mutation-capable skill contracts with final next-step routing language and an audit that catches future omissions. Phase 17 added mixed-monorepo pack routing so one repository can carry devtool, business-app, game, or other domain scopes without forcing one global designation. Phase 18 hardened pack lock recovery after a `pitwall-monorepo` refresh timeout. Phase 19 added a YouTube description and metadata optimization lane to the creator-media pack. Phase 20 added external YouTube video research lanes for comprehension, format/Remotion-style analysis, and competitive learning. Phase 21 hardened default mutation/shipping quality gates from the session workflow audit. Phase 22 added feature-interview as the triage step between brainstorm ideas and full specifications. Phase 23 added targeted-skill-builder for focused skill creation or updates from concrete workflow gaps without defaulting to broad session-history analysis. Phase 24 added install-agentic-skills for refreshing global skill links and routing pack access through the existing project-local workflow. Phase 25 added codebase-status for read-only repo status reports with local history evidence. Phase 26 added the monorepo pack V1. Phase 27 added targeted skill retrospectives to analyze-sessions; Phase 28 split that focused behavior into session-triage. Phase 29 added opt-in live-agent behavior tests. Phase 30 deepened feature-interview into evidence-backed feature intake. Phase 31 hardened parallel agent-team branch/PR isolation.
 
-Phase 32 is complete. Phases 33-34 are planned for the remaining Skills Showcase Website MVP. The product is a Vercel-deployable, multi-page static showcase for George "G" Le's open-source agentic engineering workflow library, including generated skill coverage, browser-native workflow animations, GitHub/open-source proof data, newsletter/email capture, and skill-change freshness prompts.
+Phase 33 is complete. Phase 34 is planned for the remaining Skills Showcase Website MVP. The product is a Vercel-deployable, multi-page static showcase for George "G" Le's open-source agentic engineering workflow library, including generated skill coverage, browser-native workflow animations, GitHub/open-source proof data, newsletter/email capture, and skill-change freshness prompts.
 
 ## Current Product: Skills Showcase Website MVP
 
@@ -88,7 +88,7 @@ Phase 32 is complete. Phases 33-34 are planned for the remaining Skills Showcase
 | 30 | Feature Interview Evidence Intake | user request, existing feature-interview gap review | Evidence-backed feature intake with technical gotchas, journey placement, doc updates, and user priority decision | S |
 | 31 | Parallel Agent Branch/PR Guard ✓ | user correction, existing agent-team workflow contracts | Agent-team lanes use separate GitHub branches and plans include consolidation/PR review | S |
 | 32 | Skills Showcase Product Foundation ✓ | specs/skills-showcase-website.md, specs/ui-skills-showcase-website.md | Multi-page static shell, generated skill/GitHub proof data, stale-data validation, and skill-change freshness prompts | L |
-| 33 | Skills Showcase Workflow Experience | specs/skills-showcase-website.md, specs/ui-skills-showcase-website.md | Workflow Lab animations, pack map, generated catalog, and responsive blueprint UI | L |
+| 33 | Skills Showcase Workflow Experience ✓ | specs/skills-showcase-website.md, specs/ui-skills-showcase-website.md | Workflow Lab animations, pack map, generated catalog, and responsive blueprint UI | L |
 | 34 | Skills Showcase Distribution Launch | specs/skills-showcase-website.md, specs/ui-skills-showcase-website.md | Proof telemetry UI, newsletter capture, follow/community funnel, and Vercel launch readiness | M |
 
 ---
@@ -158,7 +158,7 @@ Phase 32 is complete. Phases 33-34 are planned for the remaining Skills Showcase
 - Tech debt / follow-ups: Phase 33 should avoid treating `generatedAt` as a wall-clock timestamp and should run browser responsive/screenshot checks for generated catalog, workflow, pack, and proof UI. Curated website copy review remains operator-driven until Phase 33 structures more of the public-facing data.
 - Ready for next phase: yes
 
-## Phase 33: Skills Showcase Workflow Experience
+## Phase 33: Skills Showcase Workflow Experience ✓
 
 **Goal:** Build the user-facing product experience on top of the foundation: animated workflow explanations, pack map, generated catalog interactions, and accessible responsive page behavior.
 
@@ -172,17 +172,22 @@ Phase 32 is complete. Phases 33-34 are planned for the remaining Skills Showcase
 - Keep all factual counts and skill claims tied to generated data or clearly marked static receipts.
 
 **Acceptance Criteria:**
-- [ ] Every curated workflow has selectable text, steps, artifacts, and a non-video browser-native animation or static reduced-motion fallback.
-- [ ] Pack map distinguishes global core, packs, overlays, and compatibility aliases with usable mobile behavior.
-- [ ] Catalog search, filtering, result counts, asymmetry labels, and expandable rows work against generated skill data.
-- [ ] Inspect/proof UI links to public GitHub receipts and validation artifacts.
-- [ ] Desktop, tablet, and mobile layouts avoid overlap and meet the UI spec's accessibility states.
-- [ ] Focused frontend and data validation passes.
+- [x] Every curated workflow has selectable text, steps, artifacts, and a non-video browser-native animation or static reduced-motion fallback.
+- [x] Pack map distinguishes global core, packs, overlays, and compatibility aliases with usable mobile behavior.
+- [x] Catalog search, filtering, result counts, asymmetry labels, and expandable rows work against generated skill data.
+- [x] Inspect/proof UI links to public GitHub receipts and validation artifacts.
+- [x] Desktop, tablet, and mobile layouts avoid overlap and meet the UI spec's accessibility states.
+- [x] Focused frontend and data validation passes.
 
 **Parallelization:** serial
 **Coordination Notes:** Keep serial unless Phase 32 later creates stable file boundaries for independent UI lanes. The interaction model, shared CSS, data contracts, and responsive states are coupled enough for one integration owner in V1.
 
 > Test strategy: tests-after
+
+**On Completion**
+- Deviations from plan: Kept the implementation static and dependency-free; catalog pack links remain navigable anchors rather than hash-driven filters because generated search/filter/count/expand behavior satisfied the Phase 33 acceptance criteria.
+- Tech debt / follow-ups: Phase 34 should add launch/follow conversion behavior, newsletter/provider fallback states, Vercel deployment guidance, and final deployed-route checks. A future catalog improvement can read `#pack-*` hashes into filters.
+- Ready for next phase: yes
 
 ## Phase 34: Skills Showcase Distribution Launch
 
