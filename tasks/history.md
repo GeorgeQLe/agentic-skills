@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-05-08 - Phase 34 Step 34.5: final launch validation and phase close
+
+- Ran final Skills Showcase launch validation across generated data freshness, JavaScript syntax, route file presence, link/CTA scans, accessibility/reduced-motion hooks, manual deploy contract, and whitespace checks.
+- Refreshed `docs/skills-showcase/assets/github-proof-data.js` after validation found stale proof history metadata from the latest task updates.
+- Confirmed pending manual launch tasks remain explicit: newsletter provider endpoint setup and Vercel deployed-route verification.
+- Archived Phase 34 and marked the Skills Showcase Website MVP phase complete in the roadmap.
+- Verified with `scripts/validate-skills-showcase-data.sh`, `node --check docs/skills-showcase/app.js`, static route file checks, one local HTTP HEAD for `/`, targeted scans, and `git diff --check`.
+
 ## 2026-05-08 - Phase 34 Step 34.4: Vercel static deployment contract
 
 - Added `tasks/deploy.md` as the explicit manual deploy contract for hosting `docs/skills-showcase/` on Vercel as a static site.

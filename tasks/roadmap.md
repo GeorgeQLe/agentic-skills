@@ -203,11 +203,11 @@ Phase 33 is complete. Phase 34 is planned for the remaining Skills Showcase Webs
 - Run final local/browser/static validation and document launch readiness.
 
 **Acceptance Criteria:**
-- [ ] Follow/about route converts proof interest into G, LexCorp, YouTube, X/Twitter, Discord, GitHub, and newsletter actions.
-- [ ] Newsletter/email capture works with a configured provider endpoint or clearly degrades to a non-collecting fallback.
-- [ ] GitHub/open-source proof telemetry is visible and does not claim live LexCorp product metrics.
-- [ ] Vercel static deployment instructions and manual launch tasks are current.
-- [ ] Final validation covers generated data freshness, responsive UI, accessibility/reduced-motion behavior, links, and static-route reloads.
+- [x] Follow/about route converts proof interest into G, LexCorp, YouTube, X/Twitter, Discord, GitHub, and newsletter actions.
+- [x] Newsletter/email capture works with a configured provider endpoint or clearly degrades to a non-collecting fallback.
+- [x] GitHub/open-source proof telemetry is visible and does not claim live LexCorp product metrics.
+- [x] Vercel static deployment instructions and manual launch tasks are current.
+- [x] Final validation covers generated data freshness, responsive UI, accessibility/reduced-motion behavior, links, and static-route reloads.
 
 **Parallelization:** serial
 **Coordination Notes:** Keep serial because final launch readiness crosses copy, proof claims, email capture behavior, deployment instructions, and QA evidence.
