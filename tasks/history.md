@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-05-08 - Phase 33 Step 33.3: pack map and responsive route behavior
+
+- Added project-type highlighter controls, overlay visibility, generated pack annotations, alias/overlay labels, keyboard-selectable pack nodes, and a live pack detail panel to `/packs/`.
+- Added global-core and output bands so the pack map distinguishes shared foundations, domain packs, overlays, compatibility aliases, and generated artifact outcomes.
+- Tightened responsive constraints for route headings, generated card layouts, controls, detail panels, catalog rows, and compact mobile surfaces.
+- Verified with `node --check docs/skills-showcase/app.js`, `scripts/validate-skills-showcase-data.sh`, targeted route/content scans, local static `curl` checks, Brave desktop route inspection, and `git diff --check`.
+
 ## 2026-05-08 - Phase 33 Step 33.2: workflow lab content and browser-native animations
 
 - Added the full eight-workflow curated set to the Skills Showcase: first successful cycle, pack selection, plan -> run -> ship, spec -> roadmap -> implementation, research chains, hybrid handoff, skill authoring, and validation/troubleshooting.
