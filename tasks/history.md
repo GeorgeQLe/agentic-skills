@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-05-08 - Phase 34 Step 34.4: Vercel static deployment contract
+
+- Added `tasks/deploy.md` as the explicit manual deploy contract for hosting `docs/skills-showcase/` on Vercel as a static site.
+- Recorded Vercel settings: project root `docs/skills-showcase/`, no build command, no install command, output directory `.`, no runtime API, no database, and no GitHub Actions.
+- Updated manual launch tasks for newsletter provider endpoint setup and Vercel route verification with after-step timing.
+- Verified with targeted deploy/manual-task/no-GitHub-Actions scans and `git diff --check`.
+
 ## 2026-05-08 - Phase 34 Step 34.3: launch proof/follow telemetry boundaries
 
 - Added inspect-route proof-to-follow CTAs, generated static telemetry summary copy, and an explicit static-proof limitation note.
