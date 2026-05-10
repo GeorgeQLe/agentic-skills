@@ -3,6 +3,26 @@
 **Project:** Claude Skills / agentic-skills
 **Status:** Targeted skill update in progress on 2026-05-10.
 
+## Current Benchmark Run: design-system
+
+- [x] Confirm the project-local `benchmark-test-skill` contract and `design-system` target.
+- [x] Run `pnpm verify --skill design-system` from `tests/`.
+- [x] If verify passes, run `pnpm bench --skill design-system --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [x] Write `benchmark/test-design-system-2026-05-10.md` from the latest `report.json`.
+- [x] Record review results, then commit and push intended benchmark artifacts.
+
+## Review: Current design-system benchmark run
+
+**Strategy Used:** Project-local `$benchmark-test-skill design-system` from `packs/agentic-skills-bench/codex/benchmark-test-skill/SKILL.md`.
+
+**Verify:** `pnpm verify --skill design-system` passed from `tests/`: layer1 PASS in 7.9s with 1,186 tests, and layer2 PASS in 185.7s with both `design-system` behavior tests passing.
+
+**Benchmark:** `pnpm bench --skill design-system --agent both --runs 3 --chunk-size 3 --pause 0` completed both agent sessions. Claude session `design-system-claude-d263df0d` passed 3/3 evaluated runs with p50 latency 154.9s, p95 319.0s, p99 333.6s, mean pairwise similarity 0.822, no outliers, and $3.00 total estimated cost. Codex session `design-system-codex-1a9bc956` completed 3/3 evaluated runs but passed 0/3 because every run failed `DESIGN.md created in project root`; p50 latency was 429.8s, p95 1014.6s, p99 1066.6s, mean pairwise similarity 1.000, no outliers, and $3.00 total estimated cost.
+
+**Infrastructure Blocks:** None reported.
+
+**Report:** Updated `benchmark/test-design-system-2026-05-10.md` with both-agent metrics and failed assertions.
+
 ## Current Plan
 
 - [ ] Harden benchmark-test-skill for both-agent runs and rate-limit classification.
