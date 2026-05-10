@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-05-09 - Slim ship-one-step handoff contract
+
+- Replaced 3 verbose ship-one-step handoff contracts (~350 words each) with slim one-liners: "implement only this step, validate it, then run `/ship` when done."
+- Removed 6 constraints from `/ship` SKILL.md that duplicated CLAUDE.md (amend history, commit secrets, feature branches, GitHub Actions, production deploy, code-in-deploy).
+- Shortened "Always Ship Mutations" in CLAUDE.md to delegate back to `/ship` instead of inlining ceremony instructions.
+- Replaced AGENTS.md "Always Ship Mutations" with Codex-appropriate version (no EnterPlanMode/ExitPlanMode references).
+- Updated both templates in provision-agentic-config SKILL.md to match.
+- Net token savings: ~1,350 tokens across `/ship`, CLAUDE.md, and AGENTS.md per session.
+
 ## 2026-05-08 - Phase 34 Step 34.5: final launch validation and phase close
 
 - Ran final Skills Showcase launch validation across generated data freshness, JavaScript syntax, route file presence, link/CTA scans, accessibility/reduced-motion hooks, manual deploy contract, and whitespace checks.
