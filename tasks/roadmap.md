@@ -22,6 +22,16 @@ Phase 33 is complete. Phase 34 is planned for the remaining Skills Showcase Webs
 - [x] `benchmark/test-design-system-2026-05-10.md` reflects the latest `report.json` metrics, failures, latency, cost, consistency, and raw session path.
 - [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
 
+## Current Fix: Both-Agent Benchmark Semantics
+
+**Goal:** Make `$benchmark-test-skill <skill>` benchmark Claude and Codex by default while classifying runner rate limits as infrastructure-blocked instead of skill failures.
+
+**Acceptance Criteria:**
+- [x] `pnpm bench` accepts `--agent claude`, `--agent codex`, and `--agent both`, defaulting to both.
+- [x] Claude and Codex benchmark sessions persist under separate raw run directories.
+- [x] Rate limit and quota outputs are reported as infrastructure-blocked runs outside the evaluated skill pass rate.
+- [x] Targeted report and type validation passes, then changes are committed and pushed on `master`.
+
 ## Current Documentation Sweep: Skills Showcase Design System
 
 **Goal:** Capture the implemented Skills Showcase visual system in a root `DESIGN.md` so future site changes preserve the Swiss grid/blueprint motif, token names, accessibility constraints, and component styling rules.

@@ -27,6 +27,20 @@ describe("bench report", () => {
     expect(markdown).toContain("## Failed Runs");
     expect(markdown).toContain("| #1 | 143 | Interview log created |");
   });
+
+  it("separates infrastructure-blocked runs from skill pass rate", () => {
+    const markdown = formatMarkdown({
+      ...report([]),
+      totalRuns: 3,
+      evaluatedRuns: 1,
+      blockedRuns: [{ index: 2, reason: "agent runner rate limit" }],
+      passRate: 1,
+    });
+
+    expect(markdown).toContain("**100.0%** (1/1 evaluated runs)");
+    expect(markdown).toContain("Infrastructure blocked: 1");
+    expect(markdown).toContain("| #2 | agent runner rate limit |");
+  });
 });
 
 function run(opts: {
@@ -47,6 +61,7 @@ function run(opts: {
     })),
     passed: opts.passed,
     stdout: "",
+    stderr: "",
     files: [],
     estimatedCostUsd: 1,
   };
@@ -56,7 +71,10 @@ function report(failedRuns: BenchReport["failedRuns"]): BenchReport {
   return {
     sessionId: "test",
     skill: "design-system",
+    agent: "claude",
     totalRuns: 2,
+    evaluatedRuns: 2,
+    blockedRuns: [],
     passRate: 0.5,
     wilsonLower: 0.1,
     wilsonUpper: 0.9,

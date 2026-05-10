@@ -5,6 +5,13 @@
 
 ## Current Plan
 
+- [ ] Harden benchmark-test-skill for both-agent runs and rate-limit classification.
+  - [x] Add explicit benchmark agent selection with `--agent both` as the default.
+  - [x] Persist Claude and Codex benchmark sessions separately.
+  - [x] Classify rate limits and quota exhaustion as infrastructure-blocked runs.
+  - [x] Update benchmark-test-skill docs and lessons.
+  - [x] Run targeted validation, commit, and push the harness update.
+
 - [x] Run a fresh `$benchmark-test-skill design-system` harness cycle.
   - [x] Confirm the benchmark-test-skill contract and target skill.
   - [x] Run `pnpm verify --skill design-system` from `tests/`.
@@ -40,15 +47,19 @@
 
 **Fresh Benchmark Run:** `$benchmark-test-skill design-system` ran on 2026-05-10 through the `agentic-skills-bench` harness. `pnpm verify --skill design-system` passed: layer1 PASS in 7.4s with 1,185 tests and layer2 PASS in 177.2s with both `design-system` behavior tests passing.
 
-**Fresh Benchmark Result:** `pnpm bench --skill design-system --runs 3 --chunk-size 3 --pause 0` completed session `design-system-d7f8c628`. Pass rate was 33.3% with Wilson 95% CI 6.1% - 79.2%, p50 latency 13.5s, p95 latency 104.9s, p99 latency 113.0s, mean pairwise similarity 1.000, 0 outliers, and total estimated cost $3.00.
+**Fresh Benchmark Result:** `pnpm bench --skill design-system --runs 3 --chunk-size 3 --pause 0` completed session `design-system-d7f8c628`. Under the updated semantics, evaluated pass rate was 100.0% across 1 evaluated run, with 2 infrastructure-blocked rate-limit runs, p50 latency 13.5s, p95 latency 104.9s, p99 latency 113.0s, mean pairwise similarity 1.000, 0 outliers, and total estimated cost $3.00.
 
-**Fresh Failure:** Runs 1 and 2 failed the `DESIGN.md created in project root` assertion after the agent runner reported `You've hit your limit · resets 3:40pm (America/New_York)`. The failure is recorded in `benchmark/test-design-system-2026-05-10.md` with the raw session path.
+**Fresh Infrastructure Block:** Runs 1 and 2 were blocked before skill behavior could be evaluated after the agent runner reported `You've hit your limit · resets 3:40pm (America/New_York)`. The block is recorded in `benchmark/test-design-system-2026-05-10.md` with the raw session path.
+
+**Both-Agent Benchmark Fix:** The benchmark harness now supports `--agent claude`, `--agent codex`, and `--agent both`, with `both` documented as the benchmark-test default. Raw sessions are separated as `tests/benchmarks/runs/<skill>-<agent>-<sessionId>/`, and rate-limit/quota outputs are reported as infrastructure-blocked runs outside the evaluated skill pass rate.
+
+**Both-Agent Validation:** `pnpm --dir tests test:layer1 -- bench-report.test.ts`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-deps.sh --broken`, `./scripts/skill-next-step-routing.sh --missing`, targeted stale-string scans, and `git diff --check` passed. `pnpm --dir tests exec tsc --noEmit` remains unusable because the test package still lacks Node typings and fails broadly on pre-existing configuration errors.
 
 **Strategy Used:** Targeted skill-builder update after session-triage verified that the existing behavior was right but the old command name was ambiguous.
 
 **Files Changed:** Added `benchmark-test-skill` under `packs/agentic-skills-bench/{claude,codex}/`, added `packs/agentic-skills-bench/PACK.md`, removed the old benchmark command, updated pack/reference docs and lessons/history, and refreshed generated showcase data.
 
-**Behavior:** `$benchmark-test-skill <skill>` and `/benchmark-test-skill <skill>` now explicitly benchmark-test one repository skill via `pnpm verify --skill <SKILL>` followed by `pnpm bench --skill <SKILL> --runs 3 --chunk-size 3 --pause 0`. The contract says the trailing argument is the skill under test and not a mode for that skill.
+**Behavior:** `$benchmark-test-skill <skill>` and `/benchmark-test-skill <skill>` now explicitly benchmark-test one repository skill via `pnpm verify --skill <SKILL>` followed by `pnpm bench --skill <SKILL> --agent both --runs 3 --chunk-size 3 --pause 0`. The contract says the trailing argument is the skill under test and not a mode for that skill.
 
 **Validation:** `./install.sh`, `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-next-step-routing.sh --missing`, `scripts/validate-skills-showcase-data.sh`, targeted `rg` checks for old and new command names, and `git diff --cached --check` passed. `github-proof-data.js` uses the generator's documented public-metadata fallback in this environment.
 
