@@ -6,3 +6,4 @@ packs/poketowork-kanban/claude/poketo-kanban/scripts/node_modules/
 .codex
 .agents/approved-plan.json
 tests/runs/
+tests/benchmarks/

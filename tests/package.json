@@ -10,7 +10,10 @@
     "test:live": "LIVE_AGENT_TESTS=1 vitest run --project layer3",
     "test:live:claude": "LIVE_AGENT_TESTS=1 LIVE_AGENT_TARGETS=claude vitest run --project layer3",
     "test:live:codex": "LIVE_AGENT_TESTS=1 LIVE_AGENT_TARGETS=codex vitest run --project layer3",
-    "test:all": "vitest run"
+    "test:all": "vitest run",
+    "verify": "tsx verify.ts",
+    "bench": "tsx bench.ts",
+    "bench:quick": "BENCH_RUNS=5 vitest run --project layer4"
   },
   "devDependencies": {
     "vitest": "^3.2.1",
