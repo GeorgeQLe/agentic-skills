@@ -23,6 +23,36 @@
 
 **Report:** Updated `benchmark/test-design-system-2026-05-10.md` with both-agent metrics and failed assertions.
 
+## Current Triage: design-system benchmark failure
+
+- [x] Define scope from the current benchmark report and `design-system` skill.
+- [x] Inspect failed Codex run artifacts and benchmark evaluator expectations.
+- [x] Compare Claude and Codex skill contracts for mirrored drift.
+- [x] Diagnose whether the failure is skill contract, harness, or agent-runner behavior.
+- [x] Record triage result and recommended fix.
+
+## Review: design-system benchmark failure triage
+
+**Target:** Current benchmark failure for `design-system`, scoped to `benchmark/test-design-system-2026-05-10.md`, `tests/benchmarks/runs/design-system-codex-1a9bc956/`, `tests/layer4/setups/design-system.setup.ts`, `tests/harness/runner.ts`, and mirrored `global/{claude,codex}/design-system/SKILL.md`.
+
+**User-identified issue:** `$session-triage design-system benchmark failure` asked for focused diagnosis of the benchmark failure reported after `$benchmark-test-skill design-system`.
+
+**Verification Verdict:** Verified, but the verified issue is a benchmark harness Codex-runner failure, not a `design-system` skill contract failure. The Codex benchmark completed three evaluated runs with exit code 0, empty stdout, only `Reading additional input from stdin...` on stderr, and no generated files beyond the input spec. A narrow local reproduction using Node `execFile("codex", ["exec", ..., "Say done only."])` produced the same empty stdout plus stdin message with exit code 0.
+
+**Timeline:** The benchmark report showed Claude passing 3/3 runs and Codex failing 3/3 on `DESIGN.md created in project root`. The failed Codex run JSONs show the model did not produce output or files; the only stderr was Codex reading stdin. `design-system` layer2 verification still passed, and the Claude/Codex skill contracts are identical, so the target skill text is not the differentiator. `tests/harness/runner.ts` invokes Codex through promisified `execFile`, while `codex exec --help` says stdin is appended when piped.
+
+**Root Cause:** Codex benchmark invocation uses Node `execFile` in a way that leaves stdin looking piped to `codex exec`; the Codex CLI reads/appends stdin and exits without executing the benchmark prompt in this environment. The benchmark harness then evaluates an empty temp project result as a skill failure. This is harness/runner contract drift caused by CLI I/O behavior, not missing `DESIGN.md` instructions in the `design-system` skill.
+
+**Responsible Contract Gap:** `tests/harness/runner.ts` Codex runner. The benchmark report is accurate about observed output, but its next-step routing should be treated as harness triage before skill remediation.
+
+**Recommended Fix:** Route to `$targeted-skill-builder benchmark Codex runner stdin handling` or implement a focused harness patch directly: replace the async `execFile` Codex invocation with a runner that explicitly closes/ignores stdin in a supported way, preferably `spawn` with `stdio: ["ignore", "pipe", "pipe"]` and collected stdout/stderr, or `execFileSync` with `stdio` if async execution is not needed. Add a regression test around Codex runner command construction or a mocked child-process helper so future runs cannot silently classify "empty stdout + Reading additional input from stdin" as a skill assertion failure.
+
+**Validation Plan:** Run `pnpm --dir tests test:layer1 -- bench-report.test.ts` plus a targeted runner test for Codex stdin handling. Then run a single Codex benchmark smoke with `pnpm bench --skill design-system --agent codex --runs 1 --chunk-size 1 --pause 0` and verify stdout/files show real agent work before re-running the full both-agent benchmark. Finish with `git diff --check`.
+
+**Confidence:** High for harness-level root cause. Evidence gaps: this triage did not patch and rerun the runner, so the exact implementation choice still needs validation. No `$analyze-sessions` recurrence analysis is needed.
+
+**Recommended next skill:** `$targeted-skill-builder`
+
 ## Current Plan
 
 - [ ] Harden benchmark-test-skill for both-agent runs and rate-limit classification.
