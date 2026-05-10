@@ -1,7 +1,7 @@
 import { parseArgs } from "node:util";
 import { designSystemSetup } from "./layer4/setups/design-system.setup.js";
 import { designSystemDraftstonkSetup } from "./layer4/setups/design-system-draftstonk.setup.js";
-import type { SkillBenchSetup, BenchConfig } from "./harness/bench-types.js";
+import type { BenchAgent, SkillBenchSetup, BenchConfig } from "./harness/bench-types.js";
 import { startOrResumeSession, runChunk } from "./harness/bench-runner.js";
 import { writeReport } from "./harness/bench-report.js";
 import {
@@ -21,6 +21,7 @@ const { values } = parseArgs({
     runs: { type: "string", default: "100" },
     "chunk-size": { type: "string", default: "25" },
     pause: { type: "string", default: "1800" },
+    agent: { type: "string", default: "both" },
     resume: { type: "boolean", default: false },
     "report-only": { type: "boolean", default: false },
   },
@@ -30,6 +31,7 @@ const skill = values.skill!;
 const runs = parseInt(values.runs!, 10);
 const chunkSize = parseInt(values["chunk-size"]!, 10);
 const pauseSeconds = parseInt(values.pause!, 10);
+const agents = resolveAgents(values.agent!);
 
 const setup = SETUPS[skill];
 if (!setup) {
@@ -41,11 +43,19 @@ async function sleep(ms: number): Promise<void> {
   return new Promise((r) => setTimeout(r, ms));
 }
 
-async function main() {
+function resolveAgents(value: string): BenchAgent[] {
+  if (value === "both") return ["claude", "codex"];
+  if (value === "claude" || value === "codex") return [value];
+  console.error("Invalid agent. Use: claude, codex, or both.");
+  process.exit(1);
+  throw new Error("unreachable");
+}
+
+async function runForAgent(agent: BenchAgent) {
   if (values["report-only"]) {
-    const existing = findResumeableSession(skill);
+    const existing = findResumeableSession(skill, agent);
     if (!existing) {
-      console.error(`No session found for skill: ${skill}`);
+      console.error(`No session found for skill: ${skill}, agent: ${agent}`);
       process.exit(1);
       return;
     }
@@ -57,6 +67,7 @@ async function main() {
 
   const config: BenchConfig = {
     skill,
+    agent,
     runs,
     chunkSize,
     pauseSeconds,
@@ -69,7 +80,7 @@ async function main() {
   let completedRuns = manifest.completedRuns;
 
   console.log(
-    `Session ${manifest.sessionId}: ${completedRuns}/${runs} completed, ` +
+    `Session ${manifest.sessionId} (${agent}): ${completedRuns}/${runs} completed, ` +
       `$${manifest.totalEstimatedCostUsd.toFixed(2)} spent`,
   );
 
@@ -125,6 +136,12 @@ async function main() {
       `outliers=${report.consistency.outliers.length}`,
   );
   console.log(`Total cost: $${report.totalEstimatedCostUsd.toFixed(2)}`);
+}
+
+async function main() {
+  for (const agent of agents) {
+    await runForAgent(agent);
+  }
 }
 
 main().catch((err) => {

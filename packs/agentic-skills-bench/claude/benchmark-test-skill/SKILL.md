@@ -12,7 +12,7 @@ Invoke as `/benchmark-test-skill <skill>`.
 
 Use this skill when the user wants to benchmark-test a skill defined in this repository. The trailing argument is the skill under test, not a mode for that skill. For example, `/benchmark-test-skill design-system` tests the `design-system` skill with the harness; it does not run `design-system` against the current app or website.
 
-This skill runs the agentic-skills test harness verification gate followed by the benchmark extension for a single skill.
+This skill runs the agentic-skills test harness verification gate followed by the benchmark extension for a single skill. By default, benchmark both Claude and Codex runners and report them separately.
 
 ## Input
 
@@ -38,12 +38,14 @@ pnpm verify --skill <SKILL>
 Run only if verify passes:
 
 ```bash
-pnpm bench --skill <SKILL> --runs 3 --chunk-size 3 --pause 0
+pnpm bench --skill <SKILL> --agent both --runs 3 --chunk-size 3 --pause 0
 ```
 
 - Use 3 iterations by default.
+- Use `--agent both` by default. Only use `--agent claude` or `--agent codex` when the user explicitly asks to isolate one runner.
 - The expected budget is about $1 per run for the current design-system variant; report actual cost from the benchmark output when available.
-- The bench system persists raw data to `tests/benchmarks/runs/<skill>-<sessionId>/` and generates `report.json`.
+- The bench system persists raw data to `tests/benchmarks/runs/<skill>-<agent>-<sessionId>/` and generates `report.json`.
+- Treat rate limits, quota exhaustion, and similar runner-capacity errors as infrastructure-blocked runs, not skill failures. Report them separately from evaluated pass rate.
 
 ### Step 3 - Report
 
@@ -52,8 +54,9 @@ Write results to `benchmark/test-<SKILL>-<YYYY-MM-DD>.md` at the repository root
 Populate the report from `report.json` and verify the output includes:
 
 - verify table with layer status and wall time
-- pass rate and Wilson 95% confidence interval
+- agent name, evaluated pass rate, blocked-run count, and Wilson 95% confidence interval
 - failed assertions, if any
+- infrastructure-blocked runs, if any
 - latency p50, p95, and p99
 - cost per run and total cost
 - mean pairwise similarity and outlier count
@@ -65,6 +68,7 @@ Print a concise benchmark summary:
 
 - verify pass/fail
 - benchmark pass rate
+- infrastructure-blocked count, if any
 - p50 latency
 - total cost
 - report path
@@ -79,5 +83,7 @@ Print a concise benchmark summary:
 ## Next-Step Routing
 
 If the skill fails verification or benchmark assertions, recommend `/session-triage <skill> benchmark failure`.
+
+If benchmark runs are blocked only by rate limits or quota exhaustion, recommend re-running `/benchmark-test-skill <skill>` after the reset instead of treating the skill as failed.
 
 If the skill passes and the report is written, recommend `/ship`.

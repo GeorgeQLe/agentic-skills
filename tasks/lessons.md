@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-05-10 — Benchmark rate limits are infrastructure blocks, not skill failures
+
+- When a benchmark runner reports a rate limit, quota exhaustion, or account-capacity error, classify that run as infrastructure-blocked instead of counting it as a failed skill assertion.
+- `$benchmark-test-skill <skill>` should benchmark both Claude and Codex by default so one runner's capacity or behavior does not stand in for the skill as a whole.
+- Report pass rate over evaluated runs only, and separately report blocked-run counts and reasons.
+
 ## 2026-05-10 — Benchmark-test-skill means skill benchmark, not target skill execution
 
 - `$benchmark-test-skill <skill>` belongs to the `agentic-skills-bench` pack and should run the harness verification plus benchmark extension for that skill.
