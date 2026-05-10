@@ -79,6 +79,36 @@
 
 **Recommended next command:** `$session-triage design-system benchmark prose heading assertion`
 
+## Current Triage: design-system prose heading assertion
+
+- [x] Define scope from the one-run Codex smoke and `design-system` benchmark evaluator.
+- [x] Inspect failed assertions and generated output shape.
+- [x] Compare benchmark/layer2 expectations with the mirrored skill contract.
+- [x] Diagnose whether this is evaluator strictness or skill contract ambiguity.
+- [x] Record triage result and recommended fix.
+
+## Review: design-system prose heading assertion
+
+**Target:** The remaining `design-system` benchmark smoke failure after the Codex stdin fix, scoped to `tests/benchmarks/runs/design-system-codex-7fba9da2/report.json`, `tests/layer4/setups/design-system.setup.ts`, `tests/layer2/design-system*.test.ts`, and mirrored `global/{claude,codex}/design-system/SKILL.md`.
+
+**User-identified issue:** `$session-triage design-system benchmark prose heading assertion` asked for focused diagnosis of why the Codex smoke still failed after it created the required files.
+
+**Verification Verdict:** Verified. The Codex smoke generated both `DESIGN.md` and `design-system-interview.md`, and all frontmatter/token assertions passed. The only failed assertions were `Has Colors prose section` and `Has Typography prose section`. The generated document used bold labels like `**Colors**` and `**Typography**` for prose sections, while the benchmark and layer2 tests require Markdown heading syntax matching `/##?\s+Colors/i` and `/##?\s+Typography/i`.
+
+**Timeline:** The earlier benchmark runner failure was fixed. A one-run Codex smoke then produced real artifacts. The evaluator read `DESIGN.md` and failed only the prose-section heading regex. The mirrored `design-system` skill says "Part 2 - Prose sections" and lists section names as bold text, not explicit Markdown headings, while tests encode headings as the accepted structure.
+
+**Root Cause:** Weak output contract in the `design-system` skill. The skill requires prose sections and order but does not explicitly say each prose section must be a Markdown heading. Its own numbered list demonstrates bold section labels, which makes Codex's `**Colors**` output a reasonable interpretation even though the benchmark expects headings.
+
+**Responsible Contract Gap:** `global/codex/design-system/SKILL.md` and `global/claude/design-system/SKILL.md`, mirrored. The benchmark assertion is reasonable for machine-readable document structure, but the skill text should match it.
+
+**Recommended Fix:** Route to `$targeted-skill-builder design-system prose headings`. Update both mirrored `design-system` skills to require Part 2 prose sections as Markdown headings, e.g. "Each prose section must be written as a Markdown heading (`## Overview`, `## Colors`, ...), not bold paragraph labels." Optionally update the Part 2 list examples to use heading literals. Because tracked `SKILL.md` behavior changes, refresh Skills Showcase data and run the standard skill validation scripts.
+
+**Validation Plan:** Run `diff -u global/claude/design-system/SKILL.md global/codex/design-system/SKILL.md`, targeted `rg` for the new heading requirement, `./install.sh`, `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-next-step-routing.sh --missing`, regenerate/validate Skills Showcase data, and run `pnpm --dir tests test:layer1 -- runner.test.ts bench-report.test.ts`. Then rerun `pnpm bench --skill design-system --agent codex --runs 1 --chunk-size 1 --pause 0` when runner budget permits.
+
+**Confidence:** High. Evidence gaps: this triage did not change the skill text or rerun the smoke after contract tightening.
+
+**Recommended next skill:** `$targeted-skill-builder`
+
 ## Current Plan
 
 - [ ] Harden benchmark-test-skill for both-agent runs and rate-limit classification.
