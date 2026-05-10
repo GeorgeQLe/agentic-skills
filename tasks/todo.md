@@ -53,6 +53,32 @@
 
 **Recommended next skill:** `$targeted-skill-builder`
 
+## Current Fix: benchmark Codex runner stdin handling
+
+- [x] Decide the smallest durable fix from the verified triage.
+- [x] Patch `tests/harness/runner.ts` so Codex bench runs close stdin explicitly.
+- [x] Add regression coverage for the Codex child-process invocation.
+- [x] Run targeted benchmark harness validation.
+- [x] Record review results, commit, and push.
+
+## Review: benchmark Codex runner stdin handling
+
+**Decision:** Existing harness update, not a new skill. The verified gap was in `tests/harness/runner.ts`, so creating a new workflow skill would duplicate existing benchmark ownership.
+
+**Evidence Used:** Current benchmark report, session-triage findings, `tests/benchmarks/runs/design-system-codex-1a9bc956/run-*.json`, `codex exec --help`, and a narrow reproduction of Node `execFile("codex", ["exec", ...])` returning empty stdout with `Reading additional input from stdin...`.
+
+**Evidence Skipped:** Broad session-history analysis. The issue was already verified as one harness failure.
+
+**Existing-Skill Overlap:** `benchmark-test-skill` owns running the benchmark, but the durable fix is harness code. No new skill or skill contract update was needed.
+
+**Changes:** Replaced the Codex benchmark runner's promisified `execFile` path with a `spawn` path that explicitly uses `stdio: ["ignore", "pipe", "pipe"]`, added exported `codexExecArgs`, and added `tests/layer1/runner.test.ts` to lock the Codex command/stdin contract.
+
+**Validation:** `pnpm --dir tests test:layer1 -- runner.test.ts bench-report.test.ts` passed with 1,188 layer1 tests. `pnpm bench --skill design-system --agent codex --runs 1 --chunk-size 1 --pause 0` no longer reproduced the empty-stdout/no-file stdin failure: Codex created `DESIGN.md` and `design-system-interview.md`. The smoke still failed evaluated assertions because the generated prose section labels were bold text rather than Markdown headings, which is a separate evaluator strictness issue. `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-next-step-routing.sh --missing`, and `git diff --check` passed. `pnpm --dir tests exec tsc --noEmit` remains blocked by pre-existing missing Node typings across the test package.
+
+**Next Work:** Triage whether the `design-system` benchmark evaluator should accept bold prose section labels or the skill should require Markdown heading syntax for prose sections.
+
+**Recommended next command:** `$session-triage design-system benchmark prose heading assertion`
+
 ## Current Plan
 
 - [ ] Harden benchmark-test-skill for both-agent runs and rate-limit classification.
