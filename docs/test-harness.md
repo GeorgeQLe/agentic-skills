@@ -6,7 +6,7 @@
 |------|---------|---------|
 | **verify** | Layer 1+2 gate (unit + integration). Binary pass/fail. | `pnpm verify --skill <SKILL>` |
 | **bench** | Repeated runs for metrics (pass rate, latency, cost, consistency). | `pnpm bench --skill <SKILL> --runs N` |
-| **full sweep** | Verify first, then bench if it passes. | verify → bench sequentially |
+| **benchmark-test-skill** | Verify first, then bench if it passes. | verify -> bench sequentially |
 
 - **test harness** — the infrastructure under `tests/harness/` (runner, persistence, reporting).
 - **benchmark extension** — the bench runner (`bench.ts`) built on top of the harness.
@@ -20,12 +20,12 @@
 | 3 | Live agent tests | minutes | varies |
 | 4 | Bench via vitest (`bench:quick`) | minutes | ~$1/run |
 
-## Full Sweep Prompt
+## Benchmark Test Skill Prompt
 
 Paste into Claude Code and append the skill name at the end:
 
 ```
-Run a full sweep of the agentic-skills test harness from /Users/georgele/projects/tools/agentic-skills/tests.
+Run benchmark-test-skill for the agentic-skills test harness from /Users/georgele/projects/tools/agentic-skills/tests.
 
 1. Verify: `pnpm verify --skill <SKILL>` — expect layer1 + layer2 PASS with no birpc false-failure exit codes. Record pass/fail and wall time per layer.
 2. Bench (only if verify passes): `pnpm bench --skill <SKILL> --runs 3 --chunk-size 3 --pause 0` — 3 iterations, ~$1/run, 180s timeout each.

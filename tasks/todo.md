@@ -1,26 +1,27 @@
-# Active Phase: Skills Showcase Design System Sweep
+# Active Phase: Benchmark Test Skill Rename
 
 **Project:** Claude Skills / agentic-skills
-**Status:** Documentation sweep in progress on 2026-05-10.
+**Status:** Targeted skill update in progress on 2026-05-10.
 
 ## Current Plan
 
-- [x] Read repo instructions, lessons, roadmap, todo, UI spec, and product spec.
-- [x] Scan `docs/skills-showcase/styles.css` and static route files for implemented design tokens and component conventions.
-- [x] Write `design-system-interview.md` with extracted tokens, source evidence, and accessibility findings.
-- [x] Write root `DESIGN.md` using only tokens found in spec/code.
-- [x] Verify Markdown/frontmatter, contrast notes, whitespace, and diff scope.
-- [x] Commit and push the intended design-system sweep files.
+- [x] Read the relevant lesson and current `agentic-skills-bench` pack files.
+- [x] Replace the old benchmark command with the clearer `benchmark-test-skill` skill for Claude and Codex.
+- [x] Add `packs/agentic-skills-bench/PACK.md` and update discovery docs.
+- [x] Remove the old benchmark command's skill files and references.
+- [x] Regenerate Skills Showcase data for the skill and pack metadata change.
+- [x] Run skill metadata, dependency, next-step routing, showcase freshness, targeted search, and whitespace validation.
+- [ ] Commit and push the intended rename.
 
 ## Review
 
-**Strategy Used:** Full design-system scan across the implemented Skills Showcase CSS and the source UI/product specs. No code changes were needed.
+**Strategy Used:** Targeted skill-builder update after session-triage verified that the existing behavior was right but the old command name was ambiguous.
 
-**Files Created:** `DESIGN.md` and `design-system-interview.md`.
+**Files Changed:** Added `benchmark-test-skill` under `packs/agentic-skills-bench/{claude,codex}/`, added `packs/agentic-skills-bench/PACK.md`, removed the old benchmark command, updated pack/reference docs and lessons/history, and refreshed generated showcase data.
 
-**Accessibility Findings:** Primary text, muted text, blueprint blue, strong blue, red, and terminal text pass WCAG AA normal-text contrast on their implemented backgrounds. Success green (`#0f8a5f`) and warning amber (`#a86700`) fail normal-text contrast on the light foundation, so the design system restricts them to large text, UI indicators, borders, or paired labels unless future work darkens those tokens. The line token (`#cfd8e3`) is decorative only.
+**Behavior:** `$benchmark-test-skill <skill>` and `/benchmark-test-skill <skill>` now explicitly benchmark-test one repository skill via `pnpm verify --skill <SKILL>` followed by `pnpm bench --skill <SKILL> --runs 3 --chunk-size 3 --pause 0`. The contract says the trailing argument is the skill under test and not a mode for that skill.
 
-**Verification:** `DESIGN.md` frontmatter section check passed, contrast calculations were rerun, and `git diff --check -- DESIGN.md design-system-interview.md tasks/roadmap.md tasks/todo.md` passed.
+**Validation:** `./install.sh`, `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-next-step-routing.sh --missing`, `scripts/validate-skills-showcase-data.sh`, targeted `rg` checks for old and new command names, and `git diff --cached --check` passed. `github-proof-data.js` uses the generator's documented public-metadata fallback in this environment.
 
 ## Completed Phase
 
