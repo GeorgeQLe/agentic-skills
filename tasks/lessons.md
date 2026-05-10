@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-05-10 — Full-sweep means skill benchmark, not target skill execution
+
+- `$full-sweep <skill>` belongs to the `agentic-skills-bench` pack and should run the harness verification plus benchmark extension for that skill.
+- Do not interpret `$full-sweep design-system` as "run design-system in a full scan mode" or produce app/site design-system deliverables unless the user explicitly asks for those artifacts.
+- When a command composes two skill-like names, resolve the leading command first, including project-local pack skills and dirty/untracked pack additions, before applying the trailing argument as the active workflow.
+
 ## 2026-05-07 — Treat product showcases as product roadmaps, not one-off pages
 
 - A showcase for an agentic workflow library can be a real top-of-funnel product, not a single marketing page, when the user's goal includes personal brand, distribution, community, and product proof.
