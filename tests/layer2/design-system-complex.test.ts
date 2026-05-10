@@ -81,12 +81,15 @@ describe("design-system skill (complex spec)", () => {
 
     // Prose sections
     const proseContent = content.slice(frontmatterEnd + 3);
-    expect(proseContent, "Has Colors section").toMatch(/##?\s+Colors/i);
+    const heading = (title: string) =>
+      new RegExp(`##?\\s+(?:\\d+\\.\\s*)?${title}`, "i");
+
+    expect(proseContent, "Has Colors section").toMatch(heading("Colors"));
     expect(proseContent, "Has Typography section").toMatch(
-      /##?\s+Typography/i,
+      heading("Typography"),
     );
     expect(proseContent, "Has Components section").toMatch(
-      /##?\s+Components/i,
+      heading("Components"),
     );
 
     // Interview log created

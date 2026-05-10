@@ -75,21 +75,24 @@ describe("design-system skill", () => {
 
     // Prose sections
     const proseContent = content.slice(frontmatterEnd + 3);
-    expect(proseContent, "Has Colors section").toMatch(/##?\s+Colors/i);
+    const heading = (title: string) =>
+      new RegExp(`##?\\s+(?:\\d+\\.\\s*)?${title}`, "i");
+
+    expect(proseContent, "Has Colors section").toMatch(heading("Colors"));
     expect(proseContent, "Has Typography section").toMatch(
-      /##?\s+Typography/i,
+      heading("Typography"),
     );
     expect(proseContent, "Has Layout or Spacing section").toMatch(
-      /##?\s+(Layout|Spacing)/i,
+      heading("(Layout|Spacing)"),
     );
     expect(proseContent, "Has Elevation or Depth section").toMatch(
-      /##?\s+(Elevation|Depth)/i,
+      heading("(Elevation|Depth)"),
     );
     expect(proseContent, "Has Components section").toMatch(
-      /##?\s+Components/i,
+      heading("Components"),
     );
     expect(proseContent, "Has Do's and Don'ts section").toMatch(
-      /##?\s+Do['']?s?\s+(and|&)\s+Don['']?ts?/i,
+      heading("Do['']?s?\\s+(and|&)\\s+Don['']?ts?"),
     );
 
     // Interview log created
