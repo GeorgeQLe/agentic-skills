@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-05-10 — Missing injected skills may still exist in project packs
+
+- The session skill list can omit project-local pack skills when the pack is not loaded into the active runtime context, even if the skill exists in the repository.
+- When a user invokes `$<command> <arg>` and `<command>` is missing from the injected skill list, search `packs/*/{codex,claude}/<command>/SKILL.md` and project pack metadata before treating `<arg>` as the active skill.
+- In this repository, `benchmark-test-skill` lives under `packs/agentic-skills-bench/` and should be resolved there before falling back to `design-system`.
+
 ## 2026-05-10 — Benchmark rate limits are infrastructure blocks, not skill failures
 
 - When a benchmark runner reports a rate limit, quota exhaustion, or account-capacity error, classify that run as infrastructure-blocked instead of counting it as a failed skill assertion.
