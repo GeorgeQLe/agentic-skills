@@ -5,6 +5,13 @@
 
 ## Current Plan
 
+- [x] Run a fresh `$benchmark-test-skill design-system` harness cycle.
+  - [x] Confirm the benchmark-test-skill contract and target skill.
+  - [x] Run `pnpm verify --skill design-system` from `tests/`.
+  - [x] If verify passes, run `pnpm bench --skill design-system --runs 3 --chunk-size 3 --pause 0`.
+  - [x] Write or update `benchmark/test-design-system-2026-05-10.md` from `report.json`.
+  - [x] Record review results, then commit and push the intended changes.
+
 - [x] Read the relevant lesson and current `agentic-skills-bench` pack files.
 - [x] Replace the old benchmark command with the clearer `benchmark-test-skill` skill for Claude and Codex.
 - [x] Add `packs/agentic-skills-bench/PACK.md` and update discovery docs.
@@ -30,6 +37,12 @@
 - [ ] Commit and push the harness fix.
 
 ## Review
+
+**Fresh Benchmark Run:** `$benchmark-test-skill design-system` ran on 2026-05-10 through the `agentic-skills-bench` harness. `pnpm verify --skill design-system` passed: layer1 PASS in 7.4s with 1,185 tests and layer2 PASS in 177.2s with both `design-system` behavior tests passing.
+
+**Fresh Benchmark Result:** `pnpm bench --skill design-system --runs 3 --chunk-size 3 --pause 0` completed session `design-system-d7f8c628`. Pass rate was 33.3% with Wilson 95% CI 6.1% - 79.2%, p50 latency 13.5s, p95 latency 104.9s, p99 latency 113.0s, mean pairwise similarity 1.000, 0 outliers, and total estimated cost $3.00.
+
+**Fresh Failure:** Runs 1 and 2 failed the `DESIGN.md created in project root` assertion after the agent runner reported `You've hit your limit · resets 3:40pm (America/New_York)`. The failure is recorded in `benchmark/test-design-system-2026-05-10.md` with the raw session path.
 
 **Strategy Used:** Targeted skill-builder update after session-triage verified that the existing behavior was right but the old command name was ambiguous.
 
