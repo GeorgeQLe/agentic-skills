@@ -47,6 +47,11 @@
 - Parallel `agent-team` write lanes must use separate GitHub branches with deterministic names, push those branches, and return branch/commit/PR evidence for consolidation review
 - If you need a new dependency mid-task, stop and request it be added centrally rather than running the package manager yourself
 
+### 8. Project Pack Command Resolution
+- If a user invokes a command-like skill such as `$benchmark-test-skill design-system` and the leading command is not in the injected session skill list, search project-local packs before falling back to the trailing argument as the active skill.
+- Check `packs/*/codex/<command>/SKILL.md` and pack metadata such as `packs/*/PACK.md`; project-local pack skills may exist in this repository even when they are not visible in the active session list.
+- In this repository, `$benchmark-test-skill` lives under `packs/agentic-skills-bench/codex/benchmark-test-skill/SKILL.md`, and `design-system` is its target skill argument.
+
 ## Task Management
 
 1. **Plan First**: Write plan to `tasks/roadmap.md` (full plan) and `tasks/todo.md` (current phase) with checkable items

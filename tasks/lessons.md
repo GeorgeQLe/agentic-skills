@@ -5,6 +5,7 @@
 - The session skill list can omit project-local pack skills when the pack is not loaded into the active runtime context, even if the skill exists in the repository.
 - When a user invokes `$<command> <arg>` and `<command>` is missing from the injected skill list, search `packs/*/{codex,claude}/<command>/SKILL.md` and project pack metadata before treating `<arg>` as the active skill.
 - In this repository, `benchmark-test-skill` lives under `packs/agentic-skills-bench/` and should be resolved there before falling back to `design-system`.
+- When a rule applies to both Claude and Codex command resolution, update both `CLAUDE.md` and `AGENTS.md` unless the user explicitly limits it to one agent file.
 
 ## 2026-05-10 — Benchmark rate limits are infrastructure blocks, not skill failures
 
