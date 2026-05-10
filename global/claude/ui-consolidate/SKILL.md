@@ -101,7 +101,7 @@ The consolidated UI specification must include:
 
 The interview log must include the variation inventory, per-variation interview responses (keep/reject/neutral), consolidation matrix, conflict resolutions, draft review, coverage checkpoint results, and all user responses.
 
-After writing files, recommend `/run` or `/roadmap` for final implementation, or `/ui-interview` (full mode) if individual pages need deeper specification beyond what the consolidated layout covers.
+After writing files, recommend `/design-system` to lock visual tokens into a machine-readable `DESIGN.md` before implementation begins. If the user wants to skip token extraction, recommend `/run` or `/roadmap` for final implementation, or `/ui-interview` (full mode) if individual pages need deeper specification beyond what the consolidated layout covers.
 
 ## Constraints
 
