@@ -34,14 +34,14 @@ describe("video-build skill", () => {
     }
   });
 
-  it("minimal-1080p", () => {
+  it("minimal-1080p", async () => {
     const workDir = createTempProject();
     workDirs.push(workDir);
     installPack(workDir, "remotion");
     setupDriftctlFixture(workDir, { tier: 4 });
     driftctlScriptFixture(workDir);
 
-    const result = runClaude({
+    const result = await runClaude({
       prompt: buildSkillPrompt({
         pack: "remotion",
         skill: "video-build",
@@ -72,14 +72,14 @@ describe("video-build skill", () => {
     expect(hasScaffold, "Scaffold directory with .tsx files created").toBe(true);
   });
 
-  it("kinetic-text-1080p", () => {
+  it("kinetic-text-1080p", async () => {
     const workDir = createTempProject();
     workDirs.push(workDir);
     installPack(workDir, "remotion");
     setupDriftctlFixture(workDir, { tier: 4 });
     driftctlScriptFixture(workDir);
 
-    const result = runClaude({
+    const result = await runClaude({
       prompt: buildSkillPrompt({
         pack: "remotion",
         skill: "video-build",

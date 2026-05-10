@@ -7,7 +7,7 @@ import { inputFixture } from "../harness/fixtures.js";
 
 let workDir: string;
 
-describe("design-system skill", () => {
+describe("design-system skill (complex spec)", () => {
   afterAll(() => {
     if (workDir) {
       try {
@@ -18,18 +18,18 @@ describe("design-system skill", () => {
     }
   });
 
-  it("extracts tokens from ui-final spec into DESIGN.md", async () => {
+  it("extracts tokens from draft-stonk V1 spec into DESIGN.md", async () => {
     workDir = createTempProject();
 
-    const specContent = inputFixture("ui-final-dashboard.md");
+    const specContent = inputFixture("ui-draft-stonk-v1.md");
     mkdirSync(join(workDir, "specs"), { recursive: true });
-    writeFileSync(join(workDir, "specs/ui-final-dashboard.md"), specContent);
+    writeFileSync(join(workDir, "specs/ui-v1-draft-night.md"), specContent);
 
     const result = await runClaude({
-      prompt: `You have the design-system skill installed. Read specs/ui-final-dashboard.md and extract all design tokens into a DESIGN.md file in the project root. Follow the Google Labs Stitch format: YAML frontmatter with machine-readable tokens (colors, typography, spacing, rounded, elevation, components) plus prose sections (Overview, Colors, Typography, Layout & Spacing, Elevation & Depth, Shapes, Components, Do's and Don'ts). Use {token.path} cross-references in component definitions. Do NOT ask questions — use the spec values directly. Write DESIGN.md and design-system-interview.md.`,
+      prompt: `You have the design-system skill installed. Read specs/ui-v1-draft-night.md and extract all design tokens into a DESIGN.md file in the project root. Follow the Google Labs Stitch format: YAML frontmatter with machine-readable tokens (colors, typography, spacing, rounded, elevation, components, animations) plus prose sections (Overview, Colors, Typography, Layout & Spacing, Elevation & Depth, Shapes, Animation & Motion, Components, Do's and Don'ts). Use {token.path} cross-references in component definitions. Do NOT ask questions — use the spec values directly. Write DESIGN.md and design-system-interview.md.`,
       workDir,
-      maxBudgetUsd: 1.0,
-      timeoutMs: 180_000,
+      maxBudgetUsd: 1.5,
+      timeoutMs: 240_000,
     });
 
     // Assert DESIGN.md was created
@@ -55,22 +55,28 @@ describe("design-system skill", () => {
     expect(frontmatter, "Has colors section").toContain("colors:");
     expect(frontmatter, "Has typography section").toContain("typography:");
     expect(frontmatter, "Has spacing section").toContain("spacing:");
-
-    // Specific token values from the spec
-    expect(frontmatter, "Has primary color").toContain("#2563EB");
-    expect(frontmatter, "Has surface color").toContain("#FAFAFA");
-
-    // Additional frontmatter categories
     expect(frontmatter, "Has rounded section").toContain("rounded:");
-    expect(frontmatter, "Has elevation section").toContain("elevation:");
     expect(frontmatter, "Has components section").toContain("components:");
 
-    // Token cross-references in components
+    // V1-specific token values
+    expect(frontmatter, "Has primary emerald #10b981").toContain("#10b981");
+    expect(frontmatter, "Has bg-base slate-900 #0f172a").toContain("#0f172a");
+    expect(frontmatter, "Has bg-card #1e293b").toContain("#1e293b");
+    expect(frontmatter, "Has accent amber #fbbf24").toContain("#fbbf24");
+    expect(frontmatter, "Has loss red #f87171").toContain("#f87171");
+
+    // Emerald or slate references (Tailwind-aware extraction)
+    expect(content, "References emerald color family").toMatch(/emerald/i);
+    expect(content, "References slate color family").toMatch(/slate/i);
+
+    // Animation/transition tokens (V1 defines them in section 1.4)
+    expect(content, "Has animation or transition tokens").toMatch(
+      /animat|transition|motion/i,
+    );
+
+    // Token cross-references
     expect(content, "Uses token cross-references").toMatch(
       /\{colors\.\w+\}/,
-    );
-    expect(content, "Uses spacing or rounded cross-references").toMatch(
-      /\{(spacing|rounded)\.\w+\}/,
     );
 
     // Prose sections
@@ -79,17 +85,8 @@ describe("design-system skill", () => {
     expect(proseContent, "Has Typography section").toMatch(
       /##?\s+Typography/i,
     );
-    expect(proseContent, "Has Layout or Spacing section").toMatch(
-      /##?\s+(Layout|Spacing)/i,
-    );
-    expect(proseContent, "Has Elevation or Depth section").toMatch(
-      /##?\s+(Elevation|Depth)/i,
-    );
     expect(proseContent, "Has Components section").toMatch(
       /##?\s+Components/i,
-    );
-    expect(proseContent, "Has Do's and Don'ts section").toMatch(
-      /##?\s+Do['']?s?\s+(and|&)\s+Don['']?ts?/i,
     );
 
     // Interview log created

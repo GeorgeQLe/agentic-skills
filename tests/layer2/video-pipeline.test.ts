@@ -23,13 +23,13 @@ describe("video pipeline (script → build)", () => {
     }
   });
 
-  it("chains video-script → video-build end-to-end", () => {
+  it("chains video-script → video-build end-to-end", async () => {
     workDir = createTempProject();
     installPack(workDir, "remotion");
     setupDriftctlFixture(workDir, { tier: 4 });
 
     // Step 1: video-script
-    const step1 = runClaude({
+    const step1 = await runClaude({
       prompt: buildSkillPrompt({
         pack: "remotion",
         skill: "video-script",
@@ -60,7 +60,7 @@ describe("video pipeline (script → build)", () => {
     expect(attribution.pass, `Step 1: ${attribution.description}`).toBe(true);
 
     // Step 2: video-build
-    const step2 = runClaude({
+    const step2 = await runClaude({
       prompt: buildSkillPrompt({
         pack: "remotion",
         skill: "video-build",

@@ -19,7 +19,7 @@ describe("full alignment-loop pipeline", () => {
     }
   });
 
-  it("chains destination-doc → vertical-slice-splitter end-to-end", () => {
+  it("chains destination-doc → vertical-slice-splitter end-to-end", async () => {
     workDir = createTempProject();
     installPack(workDir, "alignment-loop");
 
@@ -27,7 +27,7 @@ describe("full alignment-loop pipeline", () => {
     writeFileSync(join(workDir, "context.md"), appIdea);
 
     // Step 1: destination-doc
-    const step1 = runClaude({
+    const step1 = await runClaude({
       prompt: `You have the alignment-loop skill pack installed. Read context.md for the project context. Run the destination-doc skill to create a destination document for the fitness-tracker project. Write the output to research/destination-fitness-tracker.md following the skill's document structure exactly. Do NOT run vertical-slice-splitter yet.`,
       workDir,
       maxBudgetUsd: 0.5,
@@ -47,7 +47,7 @@ describe("full alignment-loop pipeline", () => {
     expect(sectionCheck.pass, `Step 1: ${sectionCheck.description}`).toBe(true);
 
     // Step 2: vertical-slice-splitter
-    const step2 = runClaude({
+    const step2 = await runClaude({
       prompt: `You have the alignment-loop skill pack installed. Run the vertical-slice-splitter skill on ${docPath}. Create the issues/ directory with a DAG.md file and numbered issue card files following the skill's format exactly.`,
       workDir,
       maxBudgetUsd: 0.5,
