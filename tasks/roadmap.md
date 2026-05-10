@@ -12,6 +12,16 @@ Phases 12-31 complete. Phase 14 added the LinkedIn evidence lane to the creator 
 
 Phase 33 is complete. Phase 34 is planned for the remaining Skills Showcase Website MVP. The product is a Vercel-deployable, multi-page static showcase for George "G" Le's open-source agentic engineering workflow library, including generated skill coverage, browser-native workflow animations, GitHub/open-source proof data, newsletter/email capture, and skill-change freshness prompts.
 
+## Current Benchmark: design-system
+
+**Goal:** Run `$benchmark-test-skill design-system` through the repository harness with fresh verify and benchmark evidence.
+
+**Acceptance Criteria:**
+- [x] `pnpm verify --skill design-system` passes from `tests/`.
+- [x] `pnpm bench --skill design-system --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [x] `benchmark/test-design-system-2026-05-10.md` reflects the latest `report.json` metrics, failures, latency, cost, consistency, and raw session path.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
 ## Current Documentation Sweep: Skills Showcase Design System
 
 **Goal:** Capture the implemented Skills Showcase visual system in a root `DESIGN.md` so future site changes preserve the Swiss grid/blueprint motif, token names, accessibility constraints, and component styling rules.
