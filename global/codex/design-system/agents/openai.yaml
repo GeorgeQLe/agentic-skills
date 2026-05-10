@@ -1,0 +1,7 @@
+interface:
+  display_name: "Design System"
+  short_description: "Extract design tokens into DESIGN.md"
+  default_prompt: "Use $design-system to extract design tokens from the consolidated UI spec or codebase and produce a DESIGN.md file."
+
+policy:
+  allow_implicit_invocation: true
