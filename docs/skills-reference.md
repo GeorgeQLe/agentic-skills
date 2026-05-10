@@ -215,6 +215,26 @@ Default flow:
 quality-sweep audit -> extract-shared-types / quality-sweep fix -> regression-check
 ```
 
+## Agentic Skills Bench Pack
+
+Install when working in this repository and measuring one skill with the local verify and benchmark harness:
+
+```bash
+scripts/pack.sh install agentic-skills-bench
+```
+
+Skills:
+
+```text
+benchmark-test-skill
+```
+
+Default flow:
+
+```text
+benchmark-test-skill <skill> -> session-triage on failure / ship on pass
+```
+
 ## Monorepo Pack
 
 Install in pnpm workspace monorepos that may use Turborepo and need package-aware planning, guarded execution, and scoped shipping:

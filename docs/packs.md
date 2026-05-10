@@ -64,6 +64,7 @@ scripts/pack.sh install devtool
 scripts/pack.sh install creator-foundation
 scripts/pack.sh install youtube-ops
 scripts/pack.sh install code-quality
+scripts/pack.sh install agentic-skills-bench
 scripts/pack.sh install monorepo
 scripts/pack.sh install remotion
 scripts/pack.sh install project-fleet
@@ -100,6 +101,7 @@ The skill source stays centralized in this repository. Projects opt into packs w
 - Use `business-growth` for GTM, growth, metrics, monetization, landing copy, experiments, and PMF.
 - Use `business-ops` for assumptions, feedback/cohorts/retros, risks, runway, stakeholder updates, platform strategy, and research reconciliation.
 - Use `code-quality` as an additive pack for behavior-preserving refactors, type hygiene, import honesty, dependency-boundary cleanup, and module organization.
+- Use `agentic-skills-bench` when working in this repository and needing to verify or benchmark-test one skill with the local harness.
 - Use `game` for video games, prototypes, playable entertainment, and store-page/wishlist validation.
 - Use `devtool` for SDKs, CLIs, APIs, libraries, infrastructure products, and developer-facing platforms.
 - Use `creator-foundation` for creator-media evidence foundations, dossiers, positioning, programming, series, product-led media mapping, and metrics review.

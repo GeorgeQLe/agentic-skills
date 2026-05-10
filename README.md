@@ -43,6 +43,7 @@ scripts/pack.sh install devtool
 scripts/pack.sh install creator-foundation
 scripts/pack.sh install youtube-ops
 scripts/pack.sh install code-quality
+scripts/pack.sh install agentic-skills-bench
 scripts/pack.sh install monorepo
 scripts/pack.sh install remotion
 scripts/pack.sh install project-fleet
@@ -125,6 +126,7 @@ agentic-skills/
 │   ├── devtool/{claude,codex}/<name>/SKILL.md
 │   ├── creator-foundation/{claude,codex}/<name>/SKILL.md
 │   ├── youtube-ops/{claude,codex}/<name>/SKILL.md
+│   ├── agentic-skills-bench/{claude,codex}/<name>/SKILL.md
 │   ├── monorepo/{claude,codex}/<name>/SKILL.md
 │   ├── remotion/{claude,codex}/<name>/SKILL.md
 │   ├── project-fleet/{claude,codex}/<name>/SKILL.md
