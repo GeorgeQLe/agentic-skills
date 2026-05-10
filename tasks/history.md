@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-05-10 — Benchmark harness, birpc fix validation, agentic-skills-bench pack
+
+- Validated birpc fix (execSync → async execFile): layer1 (1177 tests, 8.3s) + layer2 (2 tests, 179s) pass cleanly with no false-failure exit codes.
+- Ran 3-run benchmark for design-system skill: 100% pass rate, p50=89s, $1/run, consistency 0.790.
+- Created `benchmark/test-design-system-2026-05-10.md` consolidated report.
+- Created `docs/test-harness.md` documenting terminology (verify/bench/full-sweep), layers, and the full-sweep prompt.
+- Created `packs/agentic-skills-bench/` pack with `full-sweep` skill (claude + codex) for running verify→bench→report.
+- Added bench infrastructure: `tests/bench.ts`, `tests/verify.ts`, bench harness modules, layer4 vitest config, design-system-complex test + fixture.
+
 ## 2026-05-09 - Slim ship-one-step handoff contract
 
 - Replaced 3 verbose ship-one-step handoff contracts (~350 words each) with slim one-liners: "implement only this step, validate it, then run `/ship` when done."
