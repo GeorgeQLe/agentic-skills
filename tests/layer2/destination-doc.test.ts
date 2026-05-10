@@ -19,7 +19,7 @@ describe("destination-doc skill", () => {
     }
   });
 
-  it("produces a destination doc with required sections", () => {
+  it("produces a destination doc with required sections", async () => {
     workDir = createTempProject();
     installPack(workDir, "alignment-loop");
 
@@ -27,7 +27,7 @@ describe("destination-doc skill", () => {
     mkdirSync(join(workDir, "research"), { recursive: true });
     writeFileSync(join(workDir, "context.md"), appIdea);
 
-    const result = runClaude({
+    const result = await runClaude({
       prompt: `You have the alignment-loop skill pack installed. Read context.md for the project context. Run the destination-doc skill to create a destination document for the fitness-tracker project. Write the output to research/destination-fitness-tracker.md following the skill's document structure exactly.`,
       workDir,
       maxBudgetUsd: 0.5,

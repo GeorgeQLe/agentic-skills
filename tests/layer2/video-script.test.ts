@@ -55,13 +55,13 @@ describe("video-script skill", () => {
     }
   });
 
-  it("launch-tier4", () => {
+  it("launch-tier4", async () => {
     const workDir = createTempProject();
     workDirs.push(workDir);
     installPack(workDir, "remotion");
     setupDriftctlFixture(workDir, { tier: 4 });
 
-    const result = runClaude({
+    const result = await runClaude({
       prompt: buildSkillPrompt({
         pack: "remotion",
         skill: "video-script",
@@ -100,13 +100,13 @@ describe("video-script skill", () => {
     expect(arc.pass, `${arc.description}${arc.detail ? ` — ${arc.detail}` : ""}`).toBe(true);
   });
 
-  it("explainer-tier2", () => {
+  it("explainer-tier2", async () => {
     const workDir = createTempProject();
     workDirs.push(workDir);
     installPack(workDir, "remotion");
     setupDriftctlFixture(workDir, { tier: 2 });
 
-    const result = runClaude({
+    const result = await runClaude({
       prompt: buildSkillPrompt({
         pack: "remotion",
         skill: "video-script",
@@ -130,13 +130,13 @@ describe("video-script skill", () => {
     expect(content).not.toMatch(/journey-map/i);
   });
 
-  it("demo-tier1", () => {
+  it("demo-tier1", async () => {
     const workDir = createTempProject();
     workDirs.push(workDir);
     installPack(workDir, "remotion");
     setupDriftctlFixture(workDir, { tier: 1 });
 
-    const result = runClaude({
+    const result = await runClaude({
       prompt: buildSkillPrompt({
         pack: "remotion",
         skill: "video-script",
@@ -163,13 +163,13 @@ describe("video-script skill", () => {
     expect(content.toLowerCase()).toMatch(/tier.{0,5}1/);
   });
 
-  it("launch-tier3-series", () => {
+  it("launch-tier3-series", async () => {
     const workDir = createTempProject();
     workDirs.push(workDir);
     installPack(workDir, "remotion");
     setupDriftctlFixture(workDir, { tier: 3 });
 
-    const result = runClaude({
+    const result = await runClaude({
       prompt: buildSkillPrompt({
         pack: "remotion",
         skill: "video-script",

@@ -19,7 +19,7 @@ describe("vertical-slice-splitter skill", () => {
     }
   });
 
-  it("produces DAG and issue cards from a destination doc", () => {
+  it("produces DAG and issue cards from a destination doc", async () => {
     workDir = createTempProject();
     installPack(workDir, "alignment-loop");
 
@@ -29,7 +29,7 @@ describe("vertical-slice-splitter skill", () => {
       join(workDir, "research/destination-sample.md"),
     );
 
-    const result = runClaude({
+    const result = await runClaude({
       prompt: `You have the alignment-loop skill pack installed. Run the vertical-slice-splitter skill on research/destination-sample.md. Create the issues/ directory with a DAG.md file and numbered issue card files (000-xxx.md, 001-xxx.md, etc.) following the skill's format exactly.`,
       workDir,
       maxBudgetUsd: 0.5,
