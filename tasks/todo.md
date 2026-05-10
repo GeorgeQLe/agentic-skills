@@ -13,6 +13,14 @@
 - [x] Run skill metadata, dependency, next-step routing, showcase freshness, targeted search, and whitespace validation.
 - [ ] Commit and push the intended rename.
 
+## Current Benchmark: design-system
+
+- [x] Read the `benchmark-test-skill` contract and confirmed `design-system` is the skill under test.
+- [x] Ran `pnpm verify --skill design-system`.
+- [x] Ran `pnpm bench --skill design-system --runs 3 --chunk-size 3 --pause 0`.
+- [x] Wrote `benchmark/test-design-system-2026-05-10.md`.
+- [ ] Commit and push the benchmark report.
+
 ## Review
 
 **Strategy Used:** Targeted skill-builder update after session-triage verified that the existing behavior was right but the old command name was ambiguous.
@@ -22,6 +30,16 @@
 **Behavior:** `$benchmark-test-skill <skill>` and `/benchmark-test-skill <skill>` now explicitly benchmark-test one repository skill via `pnpm verify --skill <SKILL>` followed by `pnpm bench --skill <SKILL> --runs 3 --chunk-size 3 --pause 0`. The contract says the trailing argument is the skill under test and not a mode for that skill.
 
 **Validation:** `./install.sh`, `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-next-step-routing.sh --missing`, `scripts/validate-skills-showcase-data.sh`, targeted `rg` checks for old and new command names, and `git diff --cached --check` passed. `github-proof-data.js` uses the generator's documented public-metadata fallback in this environment.
+
+## Benchmark Review: design-system
+
+**Strategy Used:** `benchmark-test-skill` harness run for the `design-system` skill only.
+
+**Validation:** `pnpm verify --skill design-system` passed: layer1 PASS in 7.5s with 1,184 tests, and layer2 PASS in 167.1s with both `design-system` behavior tests passing.
+
+**Benchmark Result:** `pnpm bench --skill design-system --runs 3 --chunk-size 3 --pause 0` completed session `design-system-534194ed`. Pass rate was 66.7% with Wilson 95% CI 20.8% - 93.9%, p50 latency 91.0s, p95 latency 225.0s, p99 latency 236.9s, mean pairwise similarity 0.843, 0 outliers, and total estimated cost $3.00.
+
+**Failure:** Run 2 failed the `Interview log created` assertion. All other assertions passed in all runs.
 
 ## Completed Phase
 
