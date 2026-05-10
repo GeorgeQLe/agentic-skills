@@ -19,7 +19,15 @@
 - [x] Ran `pnpm verify --skill design-system`.
 - [x] Ran `pnpm bench --skill design-system --runs 3 --chunk-size 3 --pause 0`.
 - [x] Wrote `benchmark/test-design-system-2026-05-10.md`.
-- [ ] Commit and push the benchmark report.
+- [x] Committed and pushed the benchmark report.
+
+## Current Fix: design-system benchmark timeout reporting
+
+- [x] Triage confirmed the failing benchmark run exited 143 after a partial write.
+- [x] Increase the `design-system` benchmark timeout above the observed slow run.
+- [x] Add failed-run exit-code and failed-assertion reporting to benchmark reports.
+- [x] Run targeted validation.
+- [ ] Commit and push the harness fix.
 
 ## Review
 
@@ -40,6 +48,14 @@
 **Benchmark Result:** `pnpm bench --skill design-system --runs 3 --chunk-size 3 --pause 0` completed session `design-system-534194ed`. Pass rate was 66.7% with Wilson 95% CI 20.8% - 93.9%, p50 latency 91.0s, p95 latency 225.0s, p99 latency 236.9s, mean pairwise similarity 0.843, 0 outliers, and total estimated cost $3.00.
 
 **Failure:** Run 2 failed the `Interview log created` assertion. All other assertions passed in all runs.
+
+## Fix Review: design-system benchmark timeout reporting
+
+**Strategy Used:** Targeted harness hardening. The `design-system` skill contract already requires `design-system-interview.md`, so the fix belongs in benchmark timeout/reporting rather than the skill text.
+
+**Changes:** Increased the `design-system` benchmark timeout to 300s and extended benchmark reports with a `Failed Runs` section that includes each failed run's exit code and failed assertions.
+
+**Validation:** `pnpm --dir tests test:layer1 -- bench-report.test.ts`, `./install.sh`, `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-next-step-routing.sh --missing`, and `git diff --check` passed. `pnpm --dir tests exec tsc --noEmit` is not a usable gate because the test package currently lacks Node typings and fails broadly on pre-existing configuration errors.
 
 ## Completed Phase
 
