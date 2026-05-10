@@ -12,6 +12,16 @@ Phases 12-31 complete. Phase 14 added the LinkedIn evidence lane to the creator 
 
 Phase 33 is complete. Phase 34 is planned for the remaining Skills Showcase Website MVP. The product is a Vercel-deployable, multi-page static showcase for George "G" Le's open-source agentic engineering workflow library, including generated skill coverage, browser-native workflow animations, GitHub/open-source proof data, newsletter/email capture, and skill-change freshness prompts.
 
+## Current Documentation Sweep: Skills Showcase Design System
+
+**Goal:** Capture the implemented Skills Showcase visual system in a root `DESIGN.md` so future site changes preserve the Swiss grid/blueprint motif, token names, accessibility constraints, and component styling rules.
+
+**Acceptance Criteria:**
+- [x] Scan the current static site CSS, UI spec, and product spec for concrete design tokens.
+- [x] Record extracted token decisions and accessibility findings in `design-system-interview.md`.
+- [x] Write `DESIGN.md` in the Google Labs Stitch-style format with machine-readable YAML frontmatter and prose guardrails.
+- [x] Verify Markdown/frontmatter structure, contrast findings, and diff scope before shipping.
+
 ## Current Product: Skills Showcase Website MVP
 
 **Goal:** Build the showcase as a real top-of-funnel product for `agentic-skills`, G's agentic engineering brand, LexCorp distribution, and the Discord/community funnel.

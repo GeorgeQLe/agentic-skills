@@ -1,7 +1,26 @@
-# Active Phase: None
+# Active Phase: Skills Showcase Design System Sweep
 
 **Project:** Claude Skills / agentic-skills
-**Status:** Phase 34 is complete as of 2026-05-08. No implementation phase is currently active.
+**Status:** Documentation sweep in progress on 2026-05-10.
+
+## Current Plan
+
+- [x] Read repo instructions, lessons, roadmap, todo, UI spec, and product spec.
+- [x] Scan `docs/skills-showcase/styles.css` and static route files for implemented design tokens and component conventions.
+- [x] Write `design-system-interview.md` with extracted tokens, source evidence, and accessibility findings.
+- [x] Write root `DESIGN.md` using only tokens found in spec/code.
+- [x] Verify Markdown/frontmatter, contrast notes, whitespace, and diff scope.
+- [x] Commit and push the intended design-system sweep files.
+
+## Review
+
+**Strategy Used:** Full design-system scan across the implemented Skills Showcase CSS and the source UI/product specs. No code changes were needed.
+
+**Files Created:** `DESIGN.md` and `design-system-interview.md`.
+
+**Accessibility Findings:** Primary text, muted text, blueprint blue, strong blue, red, and terminal text pass WCAG AA normal-text contrast on their implemented backgrounds. Success green (`#0f8a5f`) and warning amber (`#a86700`) fail normal-text contrast on the light foundation, so the design system restricts them to large text, UI indicators, borders, or paired labels unless future work darkens those tokens. The line token (`#cfd8e3`) is decorative only.
+
+**Verification:** `DESIGN.md` frontmatter section check passed, contrast calculations were rerun, and `git diff --check -- DESIGN.md design-system-interview.md tasks/roadmap.md tasks/todo.md` passed.
 
 ## Completed Phase
 
