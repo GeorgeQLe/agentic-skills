@@ -15,6 +15,20 @@ import {
   supportedBenchSkillRows,
   supportedBenchSkills,
 } from "../harness/bench-setups.js";
+import { assertFileCreated } from "../layer4/setup-helpers/artifacts.js";
+import { BENCH_BUDGETS_USD, BENCH_TIMEOUTS_MS } from "../layer4/setup-helpers/budgets.js";
+import {
+  assertFrontmatterKeys,
+  assertMarkdownHeadings,
+  assertTokenCrossReferences,
+  parseYamlFrontmatter,
+} from "../layer4/setup-helpers/markdown.js";
+import {
+  assertReportHasEvaluatedRuns,
+  assertReportPassRateAtLeast,
+  assertReportRecordsFailedAssertions,
+} from "../layer4/setup-helpers/reports.js";
+import { assertNextCommand, assertRecommendedRoute } from "../layer4/setup-helpers/routing.js";
 
 const TESTS_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -145,5 +159,109 @@ describe("benchmark coverage matrix", () => {
     expect(result.ok).toBe(false);
     expect(result.errors).toContain('Blocked benchmark coverage row for "run" must include blocked_reason.');
     expect(result.errors).toContain('Blocked benchmark coverage row for "run" must include next_command.');
+  });
+});
+
+describe("layer4 setup helpers", () => {
+  it("asserts generated artifact presence", () => {
+    expect(assertFileCreated({
+      stdout: "",
+      stderr: "",
+      exitCode: 0,
+      workDir: TESTS_ROOT,
+      files: ["DESIGN.md"],
+    }, "DESIGN.md")).toMatchObject({
+      description: "DESIGN.md created in project root",
+      pass: true,
+    });
+  });
+
+  it("parses YAML frontmatter and Markdown prose headings", () => {
+    const parsed = parseYamlFrontmatter([
+      "---",
+      "colors:",
+      "  primary: '#2563EB'",
+      "typography:",
+      "  sans: Inter",
+      "---",
+      "",
+      "## Colors",
+      "## Typography",
+    ].join("\n"));
+
+    expect(parsed.assertions.every((assertion) => assertion.pass)).toBe(true);
+    expect(assertFrontmatterKeys(parsed.frontmatter, ["colors", "typography"]))
+      .toEqual([
+        { description: "Has colors section", pass: true },
+        { description: "Has typography section", pass: true },
+      ]);
+    expect(assertMarkdownHeadings(parsed.prose, ["Colors", "Typography"]))
+      .toEqual([
+        { description: "Has Colors prose section", pass: true },
+        { description: "Has Typography prose section", pass: true },
+      ]);
+  });
+
+  it("asserts token references and next-command routing", () => {
+    expect(assertTokenCrossReferences("Use {colors.primary} here")).toMatchObject({
+      pass: true,
+    });
+    expect(assertNextCommand("Next command: $run")).toMatchObject({
+      pass: true,
+    });
+    expect(assertRecommendedRoute("Next command: $run", "$run")).toMatchObject({
+      pass: true,
+    });
+  });
+
+  it("exposes reusable benchmark budget and timeout tiers", () => {
+    expect(BENCH_BUDGETS_USD).toMatchObject({
+      smoke: 0.25,
+      standard: 1.0,
+      expanded: 1.5,
+    });
+    expect(BENCH_TIMEOUTS_MS).toMatchObject({
+      smoke: 180_000,
+      standard: 300_000,
+      focused: 240_000,
+    });
+  });
+
+  it("asserts benchmark report expectations", () => {
+    const report = {
+      sessionId: "session-1",
+      skill: "design-system",
+      agent: "codex" as const,
+      totalRuns: 2,
+      evaluatedRuns: 2,
+      blockedRuns: [],
+      passRate: 0.5,
+      wilsonLower: 0,
+      wilsonUpper: 1,
+      latency: {
+        p50: 100,
+        p95: 100,
+        p99: 100,
+      },
+      consistency: {
+        meanPairwiseSimilarity: 1,
+        medoidIndex: 0,
+        medoidAvgSimilarity: 1,
+        outliers: [],
+      },
+      totalEstimatedCostUsd: 0.1,
+      failedRuns: [
+        {
+          index: 1,
+          exitCode: 1,
+          failedAssertions: ["DESIGN.md created in project root"],
+        },
+      ],
+      generatedAt: "2026-05-11T00:00:00.000Z",
+    };
+
+    expect(assertReportHasEvaluatedRuns(report)).toMatchObject({ pass: true });
+    expect(assertReportPassRateAtLeast(report, 0.5)).toMatchObject({ pass: true });
+    expect(assertReportRecordsFailedAssertions(report)).toMatchObject({ pass: true });
   });
 });

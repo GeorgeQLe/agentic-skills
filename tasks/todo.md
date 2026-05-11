@@ -65,7 +65,7 @@ Build custom Codex benchmark test setups for every repository skill and enforce 
   - Preserve generic fallback for repository skills without custom setups.
   - Make `pnpm bench --list-skills` show enough status information to distinguish `custom`, `generic`, and `blocked` coverage.
   - Make `pnpm bench --skill <skill>` print the resolved coverage status before agent execution and stop clearly for blocked coverage rows.
-- [ ] Step 35.3: Add reusable custom setup helpers and fixture conventions.
+- [x] Step 35.3: Add reusable custom setup helpers and fixture conventions.
   - Classification: automated
   - Files: create `tests/layer4/setup-helpers/artifacts.ts`, create `tests/layer4/setup-helpers/markdown.ts`, create `tests/layer4/setup-helpers/routing.ts`, create `tests/layer4/setup-helpers/budgets.ts`, create `tests/layer4/setup-helpers/reports.ts`, modify existing `tests/layer4/setups/design-system.setup.ts`, modify existing `tests/layer4/setups/design-system-draftstonk.setup.ts`, modify `tests/layer1/bench-setups.test.ts`
   - Provide helpers for file existence/content assertions, Markdown heading/frontmatter assertions, next-command/routing assertions, budget tiers, timeout tiers, and benchmark report expectations.
@@ -81,6 +81,12 @@ Build custom Codex benchmark test setups for every repository skill and enforce 
   - Files: create or modify setup files under `tests/layer4/setups/` for `run`, `ship`, `ship-end`, `roadmap`, `plan-phase`, `feature-interview`, `spec-interview`, `investigate`, `session-triage`, `targeted-skill-builder`, and `benchmark-test-skill`; modify `tests/harness/bench-setups.ts`; modify `tests/harness/bench-coverage.ts`; modify `tests/layer1/bench-setups.test.ts`
   - Use deterministic temp-project fixtures and assert the observable artifact, routing, or report shape for each skill without requiring real remote pushes, external accounts, or user approval.
   - Set Tier 1 rows to `custom` with `agent_scope: codex` when setup files exist.
+  - Implementation plan for next run:
+    1. Inspect `tests/harness/bench-coverage.ts`, `tests/harness/bench-setups.ts`, and representative Tier 1 skill contracts to confirm the current matrix rows, setup registry shape, and deterministic output expectations.
+    2. Add custom setup files for the Tier 1 skills using the Step 35.3 helpers. Keep each fixture local, avoid external services, and assert concrete outputs such as task-doc mutations, next-command routing, generated reports, or benchmark result files.
+    3. Register every new setup in `CUSTOM_BENCH_SETUPS` and update matching coverage rows to `coverage_status: "custom"`, `agent_scope: "codex"`, concrete `setup_path`, and non-generic fixture metadata.
+    4. Extend layer1 tests to verify Tier 1 setup resolution, coverage row updates, and at least one representative assertion path for execution/shipping, planning/interview, debugging, and benchmark-test workflows.
+    5. Validate with targeted setup tests, `pnpm --dir tests bench:coverage`, full layer1, `pnpm --dir tests bench --list-skills`, and `git diff --check`. If setup prompts materially change skill behavior coverage, add one zero-run CLI smoke for a new Tier 1 setup before shipping.
 - [ ] Step 35.5: Add Tier 2 and Tier 3 custom setups or explicit blocked statuses.
   - Classification: automated
   - Files: create or modify setup files under `tests/layer4/setups/` for Tier 2 and Tier 3 skills where deterministic local coverage is practical; modify `tests/harness/bench-setups.ts`; modify `tests/harness/bench-coverage.ts`; modify `tests/layer1/bench-setups.test.ts`
@@ -185,10 +191,36 @@ Build custom Codex benchmark test setups for every repository skill and enforce 
 - Rollback note: revert the Step 35.2 commit to restore plain skill listing and setup-only resolution.
 - Next command: `$run`
 
+### Step 35.3 Review — Reusable Custom Setup Helpers and Fixture Conventions
+
+- Added reusable layer4 setup helpers for artifact/file assertions, Markdown frontmatter and prose-heading assertions, next-command routing assertions, budget/timeout tiers, and benchmark report expectations.
+- Refactored the existing `design-system` and `design-system-draftstonk` custom setups to consume those helpers while preserving prompts, fixture files, budget values, timeout values, and assertion descriptions.
+- Extended layer1 setup tests with representative helper coverage and confirmed the two existing custom setups still resolve as `custom`.
+- Execution profile note: the phase requests a review-only subagent lane after Step 35.6, so no review lane was due for this step. I used local changed-file adversarial review for the Step 35.3 quality gate.
+
+**Validation:**
+- `pnpm --dir tests exec vitest run --project layer1 layer1/bench-setups.test.ts` — passed, 17 tests.
+- `pnpm --dir tests bench:coverage` — passed, `Benchmark coverage matrix valid (143 skills).`
+- `pnpm --dir tests test:layer1` — passed, 8 files / 1205 tests.
+- `git diff --check` — passed.
+- Additional non-authoritative sanity check: `pnpm --dir tests exec tsc --noEmit` — failed on the existing tests package TypeScript configuration and strictness baseline, including missing Node type declarations and pre-existing possibly-undefined/unknown diagnostics. No package script currently declares this as a validation gate, and fixing it would require separate dependency/configuration work outside Step 35.3.
+
+**Quality Gate Manifest:**
+- User goal: execute Step 35.3 for repository-wide custom benchmark coverage.
+- Changed files: `tests/layer4/setup-helpers/artifacts.ts`, `tests/layer4/setup-helpers/markdown.ts`, `tests/layer4/setup-helpers/routing.ts`, `tests/layer4/setup-helpers/budgets.ts`, `tests/layer4/setup-helpers/reports.ts`, `tests/layer4/setups/design-system.setup.ts`, `tests/layer4/setups/design-system-draftstonk.setup.ts`, `tests/layer1/bench-setups.test.ts`, `tasks/todo.md`, `tasks/history.md`.
+- Per-file purpose: add helper modules for repeated layer4 benchmark setup assertions and constants; refactor the two existing custom setups to prove helper usability; test representative helper behavior; record task/history evidence.
+- User-goal mapping: Step 35.3 required reusable helper conventions and a minimal refactor of existing custom setups before Tier 1+ custom setup expansion.
+- Tests run: listed above.
+- Skipped tests: live layer4 benchmark runs were not run because this step only refactors setup assertion helpers and preserves existing prompts/fixtures/budgets; representative one-run Codex benchmarks are assigned to later phase validation after Tier 1 and pack setups exist. Raw `tsc --noEmit` was attempted but is not a configured validation gate and currently fails on a broader baseline unrelated to this helper refactor.
+- Adversarial review: changed-file self-review checked for prompt/fixture/budget drift, assertion-description drift, generic fallback impact, missing helper coverage, and no GitHub Actions changes. No blocker findings remained after adding report helper coverage.
+- Residual risk: the new helpers cover the assertion shapes needed by the two current custom setups, but later Tier 1/Tier 2 setups may expose additional helper needs for richer artifact layouts; the next setup implementation step should extend helpers from observed duplication rather than overgeneralizing now.
+- Rollback note: revert the Step 35.3 commit to restore inline assertions in the two design-system custom setups and remove helper modules/tests.
+- Next command: `$run`
+
 **On Completion** (fill in when phase is done):
 - Deviations from plan: TBD
 - Tech debt / follow-ups: TBD
 - Ready for next phase: TBD
 
-**Next work:** Step 35.2: Wire coverage status into benchmark setup resolution and CLI reporting.
+**Next work:** Step 35.4: Add Tier 1 Codex custom benchmark setups.
 **Recommended next command:** `$run`
