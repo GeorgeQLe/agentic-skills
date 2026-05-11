@@ -94,3 +94,4 @@
 ## Review
 
 - 2026-05-11 — Planned Phase 37 from `tasks/roadmap.md` and `specs/first-party-skills-showcase-newsletter-capture.md`. Execution is serial because the app shell, generated data paths, route migration, styling, and deployment documentation share integration points. Test strategy is tests-after because the work is a preservation-focused UI/app migration with design parity checks after the route and asset surface exists.
+- 2026-05-11 — Completed `$benchmark-agent-review ship` against `tests/benchmarks/runs/ship-claude-726530ae/` and `tests/benchmarks/runs/ship-codex-b69cb187/`. The review report is `benchmark/review-ship-2026-05-11.md`; median subjective score was 79 with a 74-88 range. Next work is to tighten the `ship` benchmark rubric for retained artifact text, evidence-linked manifest fields, and full manifest-completeness checks.
