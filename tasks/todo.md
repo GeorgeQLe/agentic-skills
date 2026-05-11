@@ -113,6 +113,13 @@ Optionally add a small harness helper or CLI option so `tests/bench.ts` can list
 
 **Recommended next command:** `$targeted-skill-builder <skill> benchmark coverage`
 
+## Planned Follow-up: Codex custom benchmark coverage
+
+- [ ] Build the reusable custom benchmark setup pattern for Codex-first coverage.
+- [ ] Apply that custom setup pattern across Codex skills, starting with high-use global skills and benchmark-test-related workflows.
+
+**Reason:** Codex currently has more spare token capacity, so custom benchmark buildout should prioritize Codex runs before mirrored Claude benchmark coverage. Keep the generic fallback active while custom coverage is added incrementally.
+
 ## Current Update: design-system prose headings
 
 - [x] Read relevant lessons and the mirrored `design-system` skill contracts.

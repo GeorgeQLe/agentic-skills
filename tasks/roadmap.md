@@ -48,6 +48,17 @@ Phase 33 is complete. Phase 34 is planned for the remaining Skills Showcase Webs
 - [x] `pnpm bench --skill run --agent codex --runs 1 --chunk-size 1 --pause 0` completes through the generic benchmark path.
 - [x] Mirrored benchmark-test-skill contracts explain the distinction between generic smoke evidence and deep domain-quality evidence.
 
+## Planned Benchmark Work: Codex Custom Coverage
+
+**Goal:** Use the current Codex token headroom to move beyond generic smoke benchmarks and build custom Codex benchmark coverage for repository skills.
+
+**Acceptance Criteria:**
+- [ ] Build the reusable custom benchmark setup pattern for Codex-first coverage: fixture conventions, assertion helpers, budget/timeout defaults, report expectations, and registry wiring.
+- [ ] Apply the custom setup pattern across Codex skills, prioritizing high-use global skills and benchmark-test-related workflows before lower-traffic pack skills.
+- [ ] Keep the generic fallback for skills that do not yet have custom assertions.
+- [ ] Record which skills have custom Codex assertions versus generic smoke coverage.
+- [ ] Defer Claude custom coverage until the Codex-first pass proves the pattern and priority ordering.
+
 ## Current Benchmark: design-system
 
 **Goal:** Run `$benchmark-test-skill design-system` through the repository harness with fresh verify and benchmark evidence.
