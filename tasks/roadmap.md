@@ -36,6 +36,18 @@ Phase 33 is complete. Phase 34 is planned for the remaining Skills Showcase Webs
 - [x] Supported target verification still works for `design-system`.
 - [x] Skills Showcase generated data is refreshed and results are recorded in `tasks/todo.md`.
 
+## Current Fix: Generic Skill Benchmarks
+
+**Goal:** Make `$benchmark-test-skill <skill>` work for every repository skill while preserving richer custom layer4 setups for skills with domain-specific assertions.
+
+**Acceptance Criteria:**
+- [x] `pnpm bench --list-skills` lists repository skills, not only custom layer4 targets.
+- [x] Skills with custom setups still use their custom fixtures and assertions.
+- [x] Skills without custom setups use a generic smoke benchmark.
+- [x] `pnpm verify --skill run` passes with layer2 skipped when no target-specific layer2 test exists.
+- [x] `pnpm bench --skill run --agent codex --runs 1 --chunk-size 1 --pause 0` completes through the generic benchmark path.
+- [x] Mirrored benchmark-test-skill contracts explain the distinction between generic smoke evidence and deep domain-quality evidence.
+
 ## Current Benchmark: design-system
 
 **Goal:** Run `$benchmark-test-skill design-system` through the repository harness with fresh verify and benchmark evidence.

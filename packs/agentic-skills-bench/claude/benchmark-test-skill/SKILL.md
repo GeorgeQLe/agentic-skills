@@ -25,17 +25,17 @@ Run commands from `/Users/georgele/projects/tools/agentic-skills/tests`.
 
 ### Step 1 - Eligibility Preflight
 
-Before running verify, check whether the requested skill is a registered benchmark target:
+Before running verify, check whether the requested skill is a repository skill known to the benchmark harness:
 
 ```bash
 pnpm bench --list-skills
 ```
 
-- If `<SKILL>` is not listed, stop immediately and report `unsupported benchmark target: <SKILL>`.
-- List the supported targets from the command output.
-- Do not run `pnpm verify` or `pnpm bench` for unsupported targets.
-- Recommend creating layer2 behavior coverage and a layer4 benchmark setup for `<SKILL>` before retrying.
-- This unsupported-target result is a benchmark coverage gap, not a skill behavior failure.
+- If `<SKILL>` is not listed, stop immediately and report `unknown skill: <SKILL>`.
+- List the known repository skills from the command output.
+- Do not run `pnpm verify` or `pnpm bench` for unknown skills.
+- Skills with custom layer4 setups use skill-specific fixtures and assertions.
+- Skills without custom layer4 setups use the harness generic smoke benchmark. Treat that as invocation/compliance evidence, not deep domain-quality evidence.
 
 ### Step 2 - Verify
 
@@ -43,7 +43,8 @@ pnpm bench --list-skills
 pnpm verify --skill <SKILL>
 ```
 
-- Expect layer1 and layer2 to pass with no birpc false-failure exit codes.
+- Expect layer1 to pass and layer2 to pass when target-specific tests exist.
+- If layer2 reports no tests matched `<SKILL>`, treat that layer as skipped and continue to the benchmark step. Record the skip clearly because generic benchmark coverage is weaker than target-specific layer2 verification.
 - Record pass/fail and wall time per layer.
 - If verify fails, stop and report the failure. Do not run the benchmark step.
 
@@ -96,7 +97,9 @@ Print a concise benchmark summary:
 
 ## Next-Step Routing
 
-If the skill is an unsupported benchmark target, recommend `/targeted-skill-builder <skill> benchmark coverage`.
+If the skill is unknown to the repository, recommend checking the skill name or creating the skill first with `/create-agentic-skill`.
+
+If the skill only has generic smoke benchmark coverage and needs domain-quality assertions, recommend `/targeted-skill-builder <skill> benchmark coverage`.
 
 If the skill fails verification or benchmark assertions, recommend `/session-triage <skill> benchmark failure`.
 

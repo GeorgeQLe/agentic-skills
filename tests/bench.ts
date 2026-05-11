@@ -6,7 +6,7 @@ import {
   findResumeableSession,
   getSessionDir,
 } from "./harness/bench-persistence.js";
-import { BENCH_SETUPS, supportedBenchSkills } from "./harness/bench-setups.js";
+import { resolveBenchSetup, supportedBenchSkills } from "./harness/bench-setups.js";
 
 const { values } = parseArgs({
   options: {
@@ -34,9 +34,9 @@ const chunkSize = parseInt(values["chunk-size"]!, 10);
 const pauseSeconds = parseInt(values.pause!, 10);
 const agents = resolveAgents(values.agent!);
 
-const setup = BENCH_SETUPS[skill];
+const setup = resolveBenchSetup(skill);
 if (!setup) {
-  console.error(`Unknown benchmark target: ${skill}. Supported: ${supportedBenchSkills().join(", ")}`);
+  console.error(`Unknown skill: ${skill}. Repository skills: ${supportedBenchSkills().join(", ")}`);
   process.exit(1);
 }
 

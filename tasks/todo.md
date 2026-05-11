@@ -84,6 +84,35 @@ Optionally add a small harness helper or CLI option so `tests/bench.ts` can list
 
 **Recommended next command:** `$benchmark-test-skill run --codex`
 
+## Current Fix: generic benchmarks for all repository skills
+
+- [x] Re-evaluate the selective layer4 design after user feedback.
+- [x] Add generic smoke benchmark fallback for repository skills without custom setups.
+- [x] Keep custom layer4 setups for domain-specific assertions.
+- [x] Change verify behavior so missing target-specific layer2 tests are recorded as `SKIP`, not fatal.
+- [x] Validate the generic path with `run`.
+- [x] Record review results, commit, and push.
+
+## Review: generic benchmarks for all repository skills
+
+**Decision:** Extend the existing benchmark harness, not create a new skill. Layer4 was selective because domain-quality benchmarks require a per-skill oracle. The durable fix is a two-tier benchmark model: custom setup when available, generic smoke setup for every other repository skill.
+
+**Evidence Used:** Current user feedback, `tests/harness/bench-types.ts`, `tests/harness/bench-runner.ts`, `tests/harness/bench-setups.ts`, `tests/verify.ts`, existing `design-system` layer4 setup, and mirrored `benchmark-test-skill` contracts.
+
+**Evidence Skipped:** Broad session-history analysis. The design issue was local to the benchmark harness and already verified.
+
+**Existing-Skill Overlap:** `benchmark-test-skill` owns this workflow. No new skill was needed.
+
+**Changes:** `tests/harness/bench-setups.ts` now lists all repository skill names from `global/` and `packs/`, resolves custom setups for registered skills, and creates a generic smoke setup for other known skills. The generic setup asks the agent to create `benchmark-output.md` with the skill name and next-command handoff, then asserts command success, file creation, skill naming, and handoff presence. `tests/verify.ts` now treats "no layer2 tests matched this skill" as a target-specific layer2 `SKIP` instead of a verify failure. `pnpm bench --list-skills` now lists all repository skills. Mirrored benchmark-test-skill contracts explain generic smoke coverage versus deeper custom coverage.
+
+**Validation:** `pnpm bench --list-skills` lists repository skills including `design-system` and `run`. `pnpm --dir tests test:layer1 -- bench-setups.test.ts bench-report.test.ts runner.test.ts` passed with 1,192 layer1 tests. `pnpm verify --skill run` passed with layer1 PASS and layer2 SKIP because no target-specific layer2 tests matched `run`. `pnpm bench --skill run --agent codex --runs 1 --chunk-size 1 --pause 0` completed session `run-codex-925f015a` with 100.0% pass rate, p50 latency 19.9s, and $0.25 estimated cost. `./install.sh`, `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-next-step-routing.sh --missing`, targeted `rg` checks, and Skills Showcase regeneration ran.
+
+**Residual Risk:** Generic benchmark results prove invocation/compliance only. Skills that need output-specific quality measurement still need a custom layer4 setup.
+
+**Next Work:** Add custom benchmark coverage for high-value skills where generic smoke evidence is too weak.
+
+**Recommended next command:** `$targeted-skill-builder <skill> benchmark coverage`
+
 ## Current Update: design-system prose headings
 
 - [x] Read relevant lessons and the mirrored `design-system` skill contracts.
