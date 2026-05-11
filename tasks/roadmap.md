@@ -1,8 +1,8 @@
 # Roadmap: Claude Skills
 
 > Generated from: tasks/roadmap.md (existing), specs/board-flag-kanban-search.md, tasks/ideas.md, tasks/history.md
-> Date: 2026-03-27 (last updated 2026-05-08)
-> Total Phases: 35 (33 complete, 2 planned)
+> Date: 2026-03-27 (last updated 2026-05-11)
+> Total Phases: 36 (34 complete, 2 planned)
 
 ## Summary
 
@@ -10,7 +10,7 @@ Phases 1-11 complete: kanban skill suite, board intelligence, templates, archive
 
 Phases 12-31 complete. Phase 14 added the LinkedIn evidence lane to the creator foundation workflow with owner exports, manual snapshots, public unauthenticated captures, redaction gates, shared evidence-schema/dossier routing, and deterministic layer1 contract coverage. Phase 16 hardened mutation-capable skill contracts with final next-step routing language and an audit that catches future omissions. Phase 17 added mixed-monorepo pack routing so one repository can carry devtool, business-app, game, or other domain scopes without forcing one global designation. Phase 18 hardened pack lock recovery after a `pitwall-monorepo` refresh timeout. Phase 19 added a YouTube description and metadata optimization lane to the creator-media pack. Phase 20 added external YouTube video research lanes for comprehension, format/Remotion-style analysis, and competitive learning. Phase 21 hardened default mutation/shipping quality gates from the session workflow audit. Phase 22 added feature-interview as the triage step between brainstorm ideas and full specifications. Phase 23 added targeted-skill-builder for focused skill creation or updates from concrete workflow gaps without defaulting to broad session-history analysis. Phase 24 added install-agentic-skills for refreshing global skill links and routing pack access through the existing project-local workflow. Phase 25 added codebase-status for read-only repo status reports with local history evidence. Phase 26 added the monorepo pack V1. Phase 27 added targeted skill retrospectives to analyze-sessions; Phase 28 split that focused behavior into session-triage. Phase 29 added opt-in live-agent behavior tests. Phase 30 deepened feature-interview into evidence-backed feature intake. Phase 31 hardened parallel agent-team branch/PR isolation.
 
-Phase 35 is complete. The repository now has repository-wide Codex benchmark coverage metadata, custom or explicitly blocked coverage for every current skill, and future skill creation/update workflows require benchmark coverage handling.
+Phase 35 is complete. The repository now has repository-wide Codex benchmark coverage metadata, custom or explicitly blocked coverage for every current skill, and future skill creation/update workflows require benchmark coverage handling. Phase 36 is planned to add output-quality evaluation on top of the current contract/assertion benchmark checks.
 
 ## Current Benchmark: run Codex
 
@@ -192,6 +192,7 @@ Phase 35 is complete. The repository now has repository-wide Codex benchmark cov
 | 33 | Skills Showcase Workflow Experience ✓ | specs/skills-showcase-website.md, specs/ui-skills-showcase-website.md | Workflow Lab animations, pack map, generated catalog, and responsive blueprint UI | L |
 | 34 | Skills Showcase Distribution Launch | specs/skills-showcase-website.md, specs/ui-skills-showcase-website.md | Proof telemetry UI, newsletter capture, follow/community funnel, and Vercel launch readiness | M |
 | 35 | Repository-Wide Custom Benchmark Coverage | specs/benchmark-custom-coverage.md | Custom Codex benchmark setups for all skills plus future-skill coverage enforcement | XL |
+| 36 | Benchmark Output Quality Evaluation | user request | Rubric-based output-quality scoring for benchmarked skills | XL |
 
 ---
 
@@ -317,6 +318,113 @@ Phase 35 is complete. The repository now has repository-wide Codex benchmark cov
 - Deviations from plan: Review-only subagent lane was replaced with local adversarial review because active Codex subagent instructions require explicit user authorization for subagents. Validation also refreshed stale generated Skills Showcase proof data found by the freshness check.
 - Tech debt / follow-ups: Claude parity remains intentionally deferred. Blocked benchmark rows still need deterministic dry-run fixture design before they can move to custom coverage.
 - Ready for next phase: Yes. Phase 35 is complete and archived to `tasks/phases/phase-35.md`.
+
+---
+
+## Phase 36: Benchmark Output Quality Evaluation
+
+**Goal:** Add output-quality evaluation to the benchmark harness so skill benchmarks measure not only contract compliance and artifact shape, but also whether generated outputs are specific, evidence-linked, useful, and free of hallucinated or generic content.
+
+**Source:** User request on 2026-05-11 after reviewing benchmark setup coverage and identifying that current checks are mostly deterministic contract assertions rather than semantic quality evaluation.
+
+**Scope:**
+- Extend benchmark result types, reports, and persistence to include optional quality scores alongside existing pass/fail assertions.
+- Add reusable quality-evaluation primitives: rubric criteria, weighted scoring, critical-failure handling, fixture fact coverage, reference-trait comparison, and hallucination/overreach checks.
+- Define baseline quality rubrics for Tier 1 workflow skills first, then work through Tier 2/Tier 3 global skills and pack skills by priority.
+- Keep hard contract assertions as mandatory gates; quality scoring must augment them, not replace them.
+- Add evaluator tests using both high-quality and intentionally degraded outputs so the quality layer proves it can reject vague, generic, or fabricated answers.
+- Update `$benchmark-test-skill` reporting language to distinguish hard assertion pass rate from output-quality score.
+- Update future skill creation/update workflows so new or materially changed benchmark setups include a quality rubric when deterministic quality signals are practical, or record why quality scoring is blocked.
+
+**Non-Goals:**
+- Do not make LLM-as-judge mandatory for every skill in the first pass.
+- Do not require exact golden-output matching where multiple good answers are valid.
+- Do not create, modify, or suggest GitHub Actions.
+- Do not remove existing custom setup assertions or blocked coverage semantics.
+
+**Acceptance Criteria:**
+- [ ] Benchmark reports include quality score summaries when a setup defines a quality evaluator.
+- [ ] The harness supports weighted rubric criteria, critical criteria, evaluator notes, and minimum score thresholds.
+- [ ] Quality evaluator tests prove that strong fixture outputs pass and degraded/generic/hallucinated outputs fail.
+- [ ] Tier 1 workflow skills have quality rubrics and evaluator coverage.
+- [ ] Tier 2/Tier 3 global skills have quality rubrics where deterministic signals are practical, or explicit blocked/deferred quality notes.
+- [ ] Pack skills have quality rubrics where deterministic signals are practical, or explicit blocked/deferred quality notes.
+- [ ] `$benchmark-test-skill <skill>` reports hard pass rate separately from quality score.
+- [ ] Future skill creation/update workflows require benchmark quality-rubric handling where practical.
+- [ ] Representative one-run Codex benchmarks produce quality-scored reports for at least `run`, `investigate`, `design-system`, and one pack skill.
+- [ ] No GitHub Actions are created, modified, or recommended.
+
+**Parallelization:** serial for harness schema/report changes, then agent-team eligible by setup family or pack once evaluator interfaces are stable.
+**Coordination Notes:** Shared harness files and report schemas must land before per-skill rubrics. Per-skill rubric work can split by non-overlapping setup files, but registry/report integration needs one consolidation pass.
+
+> Test strategy: tests-first for evaluator primitives and degraded-output fixtures, then targeted layer1 setup tests plus representative one-run Codex benchmarks after rubric wiring lands.
+
+### Execution Profile
+**Parallel mode:** serial first, parallel eligible after evaluator interface is stable
+**Integration owner:** main agent
+**Conflict risk:** high for harness/report files; medium for setup-only rubric work
+**Review gates:** scoring validity, false-positive resistance, report clarity, budget safety, no-GitHub-Actions constraint
+
+### Implementation
+- Step 36.1: Design and add quality scoring types.
+  - Classification: automated
+  - Files: modify `tests/harness/bench-types.ts`, create `tests/harness/bench-quality.ts`, modify `tests/layer1/bench-report.test.ts` or add `tests/layer1/bench-quality.test.ts`
+  - Define rubric criteria with `id`, `description`, `weight`, optional `critical`, score range, notes, and threshold semantics.
+  - Preserve backward compatibility for setups that only define hard assertions.
+- Step 36.2: Persist and report quality results.
+  - Classification: automated
+  - Files: modify `tests/harness/bench-runner.ts`, modify `tests/harness/bench-report.ts`, modify `tests/harness/bench-persistence.ts` if needed, modify `tests/layer1/bench-report.test.ts`
+  - Record quality evaluations per run and summarize average score, threshold failures, critical failures, and lowest-scoring criteria in `report.json` and `report.md`.
+  - Keep infrastructure-blocked runs out of evaluated quality statistics.
+- Step 36.3: Add reusable evaluator helpers and degraded-output fixtures.
+  - Classification: automated
+  - Files: create `tests/layer4/setup-helpers/quality.ts`, create fixtures under `tests/fixtures/bench-quality/`, modify focused layer1 tests
+  - Add helpers for required fact coverage, forbidden fabrication, concrete file/command references, specificity checks, reference-trait checks, and rubric aggregation.
+  - Include intentionally vague, generic, and hallucinated outputs that must fail quality thresholds.
+- Step 36.4: Add Tier 1 workflow quality rubrics.
+  - Classification: automated
+  - Files: modify `tests/layer4/setups/tier1-workflows.setup.ts`, modify `tests/layer1/bench-setups.test.ts`
+  - Cover `run`, `ship`, `ship-end`, `roadmap`, `plan-phase`, `feature-interview`, `spec-interview`, `investigate`, `session-triage`, `targeted-skill-builder`, and `benchmark-test-skill`.
+  - Assert skill-specific quality such as evidence linkage, concrete next action, scope control, validation specificity, root-cause specificity, and no fabricated fixture facts.
+- Step 36.5: Add quality rubrics for high-signal global and design-system setups.
+  - Classification: automated
+  - Files: modify `tests/layer4/setups/design-system.setup.ts`, modify `tests/layer4/setups/design-system-draftstonk.setup.ts`, modify `tests/layer4/setups/tier23-global-workflows.setup.ts`, modify focused layer1 tests
+  - Prioritize deterministic signals for planning, debugging, audit, research, and design-token outputs.
+  - Record deferred notes for skills whose quality cannot be scored reliably without external state or human judgment.
+- Step 36.6: Add pack-skill quality rubrics by family.
+  - Classification: automated
+  - Files: modify `tests/layer4/setups/packs/pack-workflows.setup.ts`, modify focused layer1 tests
+  - Group rubrics by pack family where possible: creator-media, business-ops, game, devtool, monorepo, kanban, project-fleet, remotion.
+  - Test that pack outputs include pack/skill context, fixture evidence, practical risks, and non-generic next routes.
+- Step 36.7: Update skill workflows and benchmark command docs.
+  - Classification: automated
+  - Files: modify mirrored skill creation/update workflows, modify `packs/agentic-skills-bench/*/benchmark-test-skill/SKILL.md`, modify `docs/skills-reference.md` if needed
+  - Require future benchmark setup work to consider quality rubrics, not only hard assertions.
+  - Teach benchmark reports to explain hard pass rate versus quality score without overstating statistical certainty.
+- Step 36.8: Validate and review the phase.
+  - Classification: automated
+  - Files: modify `tasks/todo.md`, modify `tasks/history.md`
+  - Run focused quality/evaluator tests, setup registry tests, report tests, benchmark coverage validation, `pnpm bench --list-skills`, representative one-run Codex benchmarks with quality scoring, standard skill audits, and `git diff --check`.
+
+### Milestone: Phase 36 Benchmark Output Quality Evaluation
+**Acceptance Criteria:**
+- [ ] Benchmark reports include quality score summaries when a setup defines a quality evaluator.
+- [ ] The harness supports weighted rubric criteria, critical criteria, evaluator notes, and minimum score thresholds.
+- [ ] Quality evaluator tests prove that strong fixture outputs pass and degraded/generic/hallucinated outputs fail.
+- [ ] Tier 1 workflow skills have quality rubrics and evaluator coverage.
+- [ ] Tier 2/Tier 3 global skills have quality rubrics where deterministic signals are practical, or explicit blocked/deferred quality notes.
+- [ ] Pack skills have quality rubrics where deterministic signals are practical, or explicit blocked/deferred quality notes.
+- [ ] `$benchmark-test-skill <skill>` reports hard pass rate separately from quality score.
+- [ ] Future skill creation/update workflows require benchmark quality-rubric handling where practical.
+- [ ] Representative one-run Codex benchmarks produce quality-scored reports for at least `run`, `investigate`, `design-system`, and one pack skill.
+- [ ] No GitHub Actions are created, modified, or recommended.
+- [ ] All phase tests pass.
+- [ ] No regressions in previous phase tests.
+
+**On Completion** (fill in when phase is done):
+- Deviations from plan:
+- Tech debt / follow-ups:
+- Ready for next phase:
 
 ---
 
