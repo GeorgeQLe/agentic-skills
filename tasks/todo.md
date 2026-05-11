@@ -1,12 +1,14 @@
 # Active Phase
 
 **Project:** Claude Skills / agentic-skills
-**Status:** All 36 roadmap phases complete. Documentation scan pending.
+**Status:** Phase 37 planned; dirty worktree must be resolved before implementation.
 **Last completed phase:** Phase 36 — Benchmark Output Quality Evaluation
 
 ## Priority Task Queue
 
-- [x] `/research-roadmap` - scan documentation health and build priority documentation queue because all 36 roadmap phases are complete and no `## Priority Documentation Todo` section exists yet.
+- [ ] `$ship-end --no-deploy` - commit and push uncommitted changes before continuing task work because `git status --short --branch` on 2026-05-11 shows modified showcase data, ship skills, task docs, and benchmark test files on `master`.
+- [ ] `$plan-phase 37` - generate implementation steps for Phase 37 because `tasks/roadmap.md` now includes planned Phase 37 but `tasks/todo.md` has no current Tests First / Implementation / Green breakdown for it.
+- [ ] `$reconcile-dev-docs fix tasks` - reconcile stale task status because `tasks/todo.md` still contains a completed spec section with unchecked "Spec artifacts are committed and pushed on `master`" even though commit `cbf1b38` is already on `origin/master`.
 
 ## Priority Documentation Todo
 

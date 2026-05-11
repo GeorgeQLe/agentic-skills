@@ -2,7 +2,7 @@
 
 > Generated from: tasks/roadmap.md (existing), specs/board-flag-kanban-search.md, tasks/ideas.md, tasks/history.md
 > Date: 2026-03-27 (last updated 2026-05-11)
-> Total Phases: 36 (36 complete)
+> Total Phases: 38 (36 complete, 2 planned)
 
 ## Summary
 
@@ -11,6 +11,8 @@ Phases 1-11 complete: kanban skill suite, board intelligence, templates, archive
 Phases 12-31 complete. Phase 14 added the LinkedIn evidence lane to the creator foundation workflow with owner exports, manual snapshots, public unauthenticated captures, redaction gates, shared evidence-schema/dossier routing, and deterministic layer1 contract coverage. Phase 16 hardened mutation-capable skill contracts with final next-step routing language and an audit that catches future omissions. Phase 17 added mixed-monorepo pack routing so one repository can carry devtool, business-app, game, or other domain scopes without forcing one global designation. Phase 18 hardened pack lock recovery after a `pitwall-monorepo` refresh timeout. Phase 19 added a YouTube description and metadata optimization lane to the creator-media pack. Phase 20 added external YouTube video research lanes for comprehension, format/Remotion-style analysis, and competitive learning. Phase 21 hardened default mutation/shipping quality gates from the session workflow audit. Phase 22 added feature-interview as the triage step between brainstorm ideas and full specifications. Phase 23 added targeted-skill-builder for focused skill creation or updates from concrete workflow gaps without defaulting to broad session-history analysis. Phase 24 added install-agentic-skills for refreshing global skill links and routing pack access through the existing project-local workflow. Phase 25 added codebase-status for read-only repo status reports with local history evidence. Phase 26 added the monorepo pack V1. Phase 27 added targeted skill retrospectives to analyze-sessions; Phase 28 split that focused behavior into session-triage. Phase 29 added opt-in live-agent behavior tests. Phase 30 deepened feature-interview into evidence-backed feature intake. Phase 31 hardened parallel agent-team branch/PR isolation.
 
 Phases 32-36 complete. Phase 35 added repository-wide Codex benchmark coverage metadata, custom or explicitly blocked coverage for every current skill, and future skill creation/update workflows require benchmark coverage handling. Phase 36 added rubric-based output-quality evaluation on top of the contract/assertion benchmark checks.
+
+Phases 37-38 are planned from `specs/first-party-skills-showcase-newsletter-capture.md`. Phase 37 preserves and migrates the existing static Skills Showcase into a minimal Next.js app surface. Phase 38 adds Neon-backed first-party newsletter capture, tRPC contracts, TanStack Query mutation/admin state, and an admin export page.
 
 ## Current Benchmark: ship
 
@@ -246,6 +248,8 @@ Phases 32-36 complete. Phase 35 added repository-wide Codex benchmark coverage m
 | 34 | Skills Showcase Distribution Launch ✓ | specs/skills-showcase-website.md, specs/ui-skills-showcase-website.md | Proof telemetry UI, newsletter capture, follow/community funnel, and Vercel launch readiness | M |
 | 35 | Repository-Wide Custom Benchmark Coverage | specs/benchmark-custom-coverage.md | Custom Codex benchmark setups for all skills plus future-skill coverage enforcement | XL |
 | 36 | Benchmark Output Quality Evaluation ✓ | user request | Rubric-based output-quality scoring for benchmarked skills | XL |
+| 37 | Skills Showcase Next.js Preservation Refactor | specs/first-party-skills-showcase-newsletter-capture.md | Existing showcase routes/design/data ported into a minimal Next.js app | L |
+| 38 | First-Party Newsletter Capture And Admin | specs/first-party-skills-showcase-newsletter-capture.md | Neon subscriber persistence, tRPC/TanStack Query capture flow, and admin export page | L |
 
 ---
 
@@ -492,6 +496,78 @@ Phases 32-36 complete. Phase 35 added repository-wide Codex benchmark coverage m
 - Deviations from plan: Validation exposed one over-specific `investigate` benchmark assertion that required the literal `$run` route even though the fixture asks for a diagnostic report and concrete next command without source edits. The setup now requires an actionable next-command handoff but does not force `$run` for this diagnostic-only fixture.
 - Tech debt / follow-ups: None for Phase 36. Representative one-run samples passed with quality scores for `run`, `investigate`, `design-system`, and `run-kanban`; broader multi-run statistical confidence remains outside this phase's scope.
 - Ready for next phase: Yes. The current roadmap queue is complete; route next work through discovery.
+
+---
+
+## Phase 37: Skills Showcase Next.js Preservation Refactor
+
+**Goal:** Preserve the existing Skills Showcase website while migrating it from static HTML/CSS/JS under `docs/skills-showcase/` into a minimal Next.js app that can support first-party newsletter capture in the following phase.
+
+**Source:** `specs/first-party-skills-showcase-newsletter-capture.md` and user clarification on 2026-05-11 to split the work into a Next.js refactor phase followed by the Neon capture/admin phase.
+
+**Scope:**
+- Create a minimal Next.js app surface for the Skills Showcase without redesigning the product.
+- Port existing routes, content hierarchy, Swiss grid/blueprint visual system, shared interactions, and generated data consumption from `docs/skills-showcase/`.
+- Preserve the existing public routes: `/`, `/workflows`, `/packs`, `/catalog`, `/inspect`, and `/follow`.
+- Keep generated skill/proof data committed and deployable, updating generator/validator output paths only as needed.
+- Keep the follow page newsletter UI present but do not add Neon persistence or admin export behavior in this phase.
+- Update Vercel/deployment notes to reflect the app-enabled showcase path.
+
+**Non-Goals:**
+- Do not add Neon, tRPC, TanStack Query, admin authentication, or subscriber persistence in this phase.
+- Do not redesign the showcase or change its positioning.
+- Do not replace generated catalog/proof data with runtime database reads.
+- Do not create or modify GitHub Actions.
+
+**Acceptance Criteria:**
+- [ ] A minimal Next.js Skills Showcase app exists and can render the migrated public routes.
+- [ ] Existing showcase content, styling intent, catalog, workflow, pack, inspect, and follow surfaces are preserved.
+- [ ] Generated skill/proof data still loads from committed assets and freshness validation remains available.
+- [ ] Old static-site deployment assumptions are replaced or clearly superseded by the Next.js app deployment contract.
+- [ ] Newsletter capture remains non-persistent until Phase 38.
+- [ ] Local app validation, generated-data validation, and whitespace checks pass.
+- [ ] No GitHub Actions are created, modified, or recommended.
+
+**Parallelization:** serial
+**Coordination Notes:** This phase introduces package/dependency and route-structure changes while preserving existing generated-data contracts. Keep it serial to avoid conflicts across app setup, asset paths, shared styles, and deployment docs.
+
+---
+
+## Phase 38: First-Party Newsletter Capture And Admin
+
+**Goal:** Add first-party newsletter capture to the app-enabled Skills Showcase using Neon persistence, tRPC contracts, TanStack Query client state, and a protected admin export page.
+
+**Source:** `specs/first-party-skills-showcase-newsletter-capture.md` and `specs/first-party-skills-showcase-newsletter-capture-interview.md`.
+
+**Scope:**
+- Add Neon schema and database access for newsletter subscribers.
+- Add tRPC contracts for subscribing, admin login/session validation, subscriber listing, and subscriber export.
+- Use TanStack Query for public subscribe mutation state and admin list/export state.
+- Update `/follow` so the newsletter form submits to first-party capture instead of static/provider-backed capture.
+- Add `/admin/newsletter` protected by a Vercel-configured shared admin secret.
+- Support subscriber search, copy-all active emails, and CSV download for use in an external newsletter app or email client.
+- Preserve privacy posture by storing email, status, source page, consent text version, and timestamps only.
+
+**Non-Goals:**
+- Do not implement newsletter sending.
+- Do not add a full auth provider or user accounts.
+- Do not store raw IP addresses, raw user-agent strings, or visitor-tracking analytics.
+- Do not add admin edit/delete/status-management unless a narrow implementation need appears.
+- Do not create or modify GitHub Actions.
+
+**Acceptance Criteria:**
+- [ ] `/follow` submits valid email addresses through a first-party tRPC mutation.
+- [ ] Neon stores subscriber records with `email`, `status`, `source_page`, `consent_text_version`, `created_at`, and `updated_at`.
+- [ ] Duplicate signup behavior is idempotent.
+- [ ] Invalid emails and database failures produce appropriate public UI states without leaking internals.
+- [ ] `/admin/newsletter` requires the configured admin secret.
+- [ ] Admin can list, search, copy active emails, and download CSV.
+- [ ] Subscriber data is never exposed in generated public assets or committed files.
+- [ ] Local app validation, database-contract checks, admin access checks, and whitespace checks pass.
+- [ ] No GitHub Actions are created, modified, or recommended.
+
+**Parallelization:** serial
+**Coordination Notes:** This phase crosses database schema, API contracts, client mutation state, admin access, and privacy behavior. Keep serial until the app/data contract is stable; review security/privacy before shipping.
 
 ---
 
