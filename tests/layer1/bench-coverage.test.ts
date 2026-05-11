@@ -61,6 +61,39 @@ describe("benchmark coverage contract", () => {
     }
   });
 
+  it("lints ship contracts to prevent routine self-routing after completion", () => {
+    const skillContracts = [
+      {
+        path: "global/claude/ship/SKILL.md",
+        command: "/ship",
+        forbiddenDeployRoute: "/ship --no-deploy",
+        executableRoute: "/run",
+      },
+      {
+        path: "global/codex/ship/SKILL.md",
+        command: "$ship",
+        forbiddenDeployRoute: "$ship --no-deploy",
+        executableRoute: "$run",
+      },
+    ];
+
+    for (const contract of skillContracts) {
+      const content = readFileSync(resolve(REPO_ROOT, contract.path), "utf8");
+
+      expect(content, `${contract.path} completed ship guard`).toContain(
+        `Never recommend \`${contract.command}\``,
+      );
+      expect(content, `${contract.path} no-deploy self-route guard`).toContain(
+        `or \`${contract.forbiddenDeployRoute}\``,
+      );
+      expect(content, `${contract.path} incomplete retry exception`).toContain(
+        "shipping failed before commit/push",
+      );
+      expect(content, `${contract.path} executable handoff`).toContain(contract.executableRoute);
+      expect(content, `${contract.path} final contract guard`).toContain("must not self-route back");
+    }
+  });
+
   it("accepts the committed matrix for every repository skill", () => {
     const result = validateBenchmarkCoverage();
 
