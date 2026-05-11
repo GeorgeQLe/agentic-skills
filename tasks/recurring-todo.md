@@ -18,8 +18,8 @@
   - Owner/agent: `/spec-drift fix all`
   - Scope: all specs vs. current codebase
   - Trigger: commit count threshold or calendar month
-  - Last run: 2026-05-04
-  - Next due: 2026-06-04
+  - Last run: 2026-05-11
+  - Next due: 2026-06-11
   - Command/skill: `/spec-drift fix all`
   - Evidence/output path: `specs/drift-report.md`
   - Escalation conditions: becomes blocking if specs are used to generate roadmap phases for unimplemented work

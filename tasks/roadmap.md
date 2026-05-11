@@ -246,7 +246,7 @@ Phases 37-38 are planned from `specs/first-party-skills-showcase-newsletter-capt
 | 32 | Skills Showcase Product Foundation ✓ | specs/skills-showcase-website.md, specs/ui-skills-showcase-website.md | Multi-page static shell, generated skill/GitHub proof data, stale-data validation, and skill-change freshness prompts | L |
 | 33 | Skills Showcase Workflow Experience ✓ | specs/skills-showcase-website.md, specs/ui-skills-showcase-website.md | Workflow Lab animations, pack map, generated catalog, and responsive blueprint UI | L |
 | 34 | Skills Showcase Distribution Launch ✓ | specs/skills-showcase-website.md, specs/ui-skills-showcase-website.md | Proof telemetry UI, newsletter capture, follow/community funnel, and Vercel launch readiness | M |
-| 35 | Repository-Wide Custom Benchmark Coverage | specs/benchmark-custom-coverage.md | Custom Codex benchmark setups for all skills plus future-skill coverage enforcement | XL |
+| 35 | Repository-Wide Custom Benchmark Coverage ✓ | specs/benchmark-custom-coverage.md | Custom Codex benchmark setups for all skills plus future-skill coverage enforcement | XL |
 | 36 | Benchmark Output Quality Evaluation ✓ | user request | Rubric-based output-quality scoring for benchmarked skills | XL |
 | 37 | Skills Showcase Next.js Preservation Refactor | specs/first-party-skills-showcase-newsletter-capture.md | Existing showcase routes/design/data ported into a minimal Next.js app | L |
 | 38 | First-Party Newsletter Capture And Admin | specs/first-party-skills-showcase-newsletter-capture.md | Neon subscriber persistence, tRPC/TanStack Query capture flow, and admin export page | L |
