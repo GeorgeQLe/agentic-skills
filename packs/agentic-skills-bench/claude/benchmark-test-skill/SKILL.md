@@ -14,6 +14,8 @@ Use this skill when the user wants to benchmark-test a skill defined in this rep
 
 This skill runs the agentic-skills test harness verification gate followed by the benchmark extension for a single skill. By default, benchmark both Claude and Codex runners and report them separately.
 
+This skill produces deterministic benchmark evidence only. It should hand off to `/benchmark-agent-review <skill>` as a separate step when the user needs subjective ergonomic judgment or remediation planning for the generated skill outputs.
+
 ## Input
 
 - Required: one skill name, such as `design-system`.
@@ -104,6 +106,7 @@ Print a concise benchmark summary:
 - p50 latency
 - total cost
 - report path
+- next review handoff when subjective output-quality judgment or remediation planning is still needed
 
 ## Constraints
 
@@ -126,4 +129,6 @@ If the skill fails verification, hard benchmark assertions, or configured qualit
 
 If benchmark runs are blocked only by rate limits or quota exhaustion, recommend re-running `/benchmark-test-skill <skill>` after the reset instead of treating the skill as failed.
 
-If the skill passes and the report is written, recommend `/ship`.
+If evaluated benchmark runs completed and subjective output-quality review or remediation planning has not yet been performed, recommend `/benchmark-agent-review <skill>` as the next separate step.
+
+If the skill passes, the report is written, and no subjective review is needed or the separate `/benchmark-agent-review <skill>` step has already been completed, recommend `/ship`.

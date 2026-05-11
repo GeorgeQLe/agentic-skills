@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-05-11 — Benchmark execution and subjective review are separate steps
+
+- `$benchmark-test-skill` should run deterministic verify/benchmark evidence and write the benchmark report; it should not absorb subjective agent-review work into the same step.
+- After deterministic benchmark completion with evaluated runs, route to `$benchmark-agent-review <skill>` as a separate review step when subjective ergonomic quality or remediation planning is needed.
+- `$benchmark-agent-review` owns output-quality judgment and remediation-ready handoff details after persisted benchmark artifacts exist.
+- Route directly from `$benchmark-test-skill` to `$ship` only when no subjective review is needed or after the separate review step has already been completed.
+
 ## 2026-05-11 — Review reports need remediation-ready next steps
 
 - A `$benchmark-agent-review ship` report identified weaknesses but did not make every remediation decision definitive enough for the next operator.
