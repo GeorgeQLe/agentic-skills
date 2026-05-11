@@ -1922,3 +1922,10 @@ Resolved all 10 findings from `/expert-review`:
 - Updated Codex and Claude `benchmark-test-skill` pack contracts to report hard assertion pass rate separately from optional output-quality score, include quality threshold failures in failure routing, and avoid presenting small benchmark runs as statistically definitive.
 - Added the quality-rubric requirement to `docs/skills-reference.md` and refreshed generated Skills Showcase data after tracked skill contract changes.
 - Verified with Skills Showcase generation/validation, skill dependency/version/routing audits, targeted contract scans, focused layer1 benchmark report/setup tests, benchmark coverage validation, and `git diff --check`.
+
+## 2026-05-11 — Phase 36 Step 36.9: final quality benchmark validation and phase close
+
+- Ran the Phase 36 validation gate for benchmark quality primitives, report rendering, setup registry behavior, runner persistence, coverage status, coverage matrix integrity, CLI list output, standard skill audits, and whitespace diff checks.
+- Ran representative one-run Codex benchmarks with quality scoring for `run`, `investigate`, `design-system`, and `run-kanban`; all final runs passed hard assertions and produced quality scores in the report output.
+- Fixed a validation-discovered false negative in the `investigate` benchmark setup: the diagnostic-only fixture now requires an actionable next-command handoff without forcing the literal `$run` route.
+- Marked Phase 36 acceptance criteria complete in `tasks/roadmap.md`, archived the completed phase to `tasks/phases/phase-36.md`, and replaced `tasks/todo.md` with a no-active-phase handoff to `$brainstorm`.

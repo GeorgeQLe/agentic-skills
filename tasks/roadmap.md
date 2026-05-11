@@ -205,7 +205,7 @@ Phase 35 is complete. The repository now has repository-wide Codex benchmark cov
 | 33 | Skills Showcase Workflow Experience ✓ | specs/skills-showcase-website.md, specs/ui-skills-showcase-website.md | Workflow Lab animations, pack map, generated catalog, and responsive blueprint UI | L |
 | 34 | Skills Showcase Distribution Launch | specs/skills-showcase-website.md, specs/ui-skills-showcase-website.md | Proof telemetry UI, newsletter capture, follow/community funnel, and Vercel launch readiness | M |
 | 35 | Repository-Wide Custom Benchmark Coverage | specs/benchmark-custom-coverage.md | Custom Codex benchmark setups for all skills plus future-skill coverage enforcement | XL |
-| 36 | Benchmark Output Quality Evaluation | user request | Rubric-based output-quality scoring for benchmarked skills | XL |
+| 36 | Benchmark Output Quality Evaluation ✓ | user request | Rubric-based output-quality scoring for benchmarked skills | XL |
 
 ---
 
@@ -356,16 +356,16 @@ Phase 35 is complete. The repository now has repository-wide Codex benchmark cov
 - Do not remove existing custom setup assertions or blocked coverage semantics.
 
 **Acceptance Criteria:**
-- [ ] Benchmark reports include quality score summaries when a setup defines a quality evaluator.
-- [ ] The harness supports weighted rubric criteria, critical criteria, evaluator notes, and minimum score thresholds.
-- [ ] Quality evaluator tests prove that strong fixture outputs pass and degraded/generic/hallucinated outputs fail.
-- [ ] Tier 1 workflow skills have quality rubrics and evaluator coverage.
-- [ ] Tier 2/Tier 3 global skills have quality rubrics where deterministic signals are practical, or explicit blocked/deferred quality notes.
-- [ ] Pack skills have quality rubrics where deterministic signals are practical, or explicit blocked/deferred quality notes.
-- [ ] `$benchmark-test-skill <skill>` reports hard pass rate separately from quality score.
-- [ ] Future skill creation/update workflows require benchmark quality-rubric handling where practical.
-- [ ] Representative one-run Codex benchmarks produce quality-scored reports for at least `run`, `investigate`, `design-system`, and one pack skill.
-- [ ] No GitHub Actions are created, modified, or recommended.
+- [x] Benchmark reports include quality score summaries when a setup defines a quality evaluator.
+- [x] The harness supports weighted rubric criteria, critical criteria, evaluator notes, and minimum score thresholds.
+- [x] Quality evaluator tests prove that strong fixture outputs pass and degraded/generic/hallucinated outputs fail.
+- [x] Tier 1 workflow skills have quality rubrics and evaluator coverage.
+- [x] Tier 2/Tier 3 global skills have quality rubrics where deterministic signals are practical, or explicit blocked/deferred quality notes.
+- [x] Pack skills have quality rubrics where deterministic signals are practical, or explicit blocked/deferred quality notes.
+- [x] `$benchmark-test-skill <skill>` reports hard pass rate separately from quality score.
+- [x] Future skill creation/update workflows require benchmark quality-rubric handling where practical.
+- [x] Representative one-run Codex benchmarks produce quality-scored reports for at least `run`, `investigate`, `design-system`, and one pack skill.
+- [x] No GitHub Actions are created, modified, or recommended.
 
 **Parallelization:** serial for harness schema/report changes, then agent-team eligible by setup family or pack once evaluator interfaces are stable.
 **Coordination Notes:** Shared harness files and report schemas must land before per-skill rubrics. Per-skill rubric work can split by non-overlapping setup files, but registry/report integration needs one consolidation pass.
@@ -435,23 +435,23 @@ Phase 35 is complete. The repository now has repository-wide Codex benchmark cov
 
 ### Milestone: Phase 36 Benchmark Output Quality Evaluation
 **Acceptance Criteria:**
-- [ ] Benchmark reports include quality score summaries when a setup defines a quality evaluator.
-- [ ] The harness supports weighted rubric criteria, critical criteria, evaluator notes, and minimum score thresholds.
-- [ ] Quality evaluator tests prove that strong fixture outputs pass and degraded/generic/hallucinated outputs fail.
-- [ ] Tier 1 workflow skills have quality rubrics and evaluator coverage.
-- [ ] Tier 2/Tier 3 global skills have quality rubrics where deterministic signals are practical, or explicit blocked/deferred quality notes.
-- [ ] Pack skills have quality rubrics where deterministic signals are practical, or explicit blocked/deferred quality notes.
-- [ ] `$benchmark-test-skill <skill>` reports hard pass rate separately from quality score.
-- [ ] Future skill creation/update workflows require benchmark quality-rubric handling where practical.
-- [ ] Representative one-run Codex benchmarks produce quality-scored reports for at least `run`, `investigate`, `design-system`, and one pack skill.
-- [ ] No GitHub Actions are created, modified, or recommended.
-- [ ] All phase tests pass.
-- [ ] No regressions in previous phase tests.
+- [x] Benchmark reports include quality score summaries when a setup defines a quality evaluator.
+- [x] The harness supports weighted rubric criteria, critical criteria, evaluator notes, and minimum score thresholds.
+- [x] Quality evaluator tests prove that strong fixture outputs pass and degraded/generic/hallucinated outputs fail.
+- [x] Tier 1 workflow skills have quality rubrics and evaluator coverage.
+- [x] Tier 2/Tier 3 global skills have quality rubrics where deterministic signals are practical, or explicit blocked/deferred quality notes.
+- [x] Pack skills have quality rubrics where deterministic signals are practical, or explicit blocked/deferred quality notes.
+- [x] `$benchmark-test-skill <skill>` reports hard pass rate separately from quality score.
+- [x] Future skill creation/update workflows require benchmark quality-rubric handling where practical.
+- [x] Representative one-run Codex benchmarks produce quality-scored reports for at least `run`, `investigate`, `design-system`, and one pack skill.
+- [x] No GitHub Actions are created, modified, or recommended.
+- [x] All phase tests pass.
+- [x] No regressions in previous phase tests.
 
-**On Completion** (fill in when phase is done):
-- Deviations from plan:
-- Tech debt / follow-ups:
-- Ready for next phase:
+**On Completion**
+- Deviations from plan: Validation exposed one over-specific `investigate` benchmark assertion that required the literal `$run` route even though the fixture asks for a diagnostic report and concrete next command without source edits. The setup now requires an actionable next-command handoff but does not force `$run` for this diagnostic-only fixture.
+- Tech debt / follow-ups: None for Phase 36. Representative one-run samples passed with quality scores for `run`, `investigate`, `design-system`, and `run-kanban`; broader multi-run statistical confidence remains outside this phase's scope.
+- Ready for next phase: Yes. The current roadmap queue is complete; route next work through discovery.
 
 ---
 
