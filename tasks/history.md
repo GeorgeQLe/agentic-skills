@@ -1908,3 +1908,10 @@ Resolved all 10 findings from `/expert-review`:
 - Scored global workflow outputs for required fixture terms, setup-specific evidence patterns, expected next routes, workflow actionability, and generic/external overreach guards.
 - Extended setup registry tests for design-system and representative high-signal global quality evaluator discovery while preserving no-evaluator compatibility for generic fallback setups.
 - Verified with `pnpm --dir tests test:layer1 -- bench-quality bench-setups runner`, `pnpm --dir tests bench:coverage`, and `git diff --check`.
+
+## 2026-05-11 — Phase 36 Step 36.7: pack-family quality rubrics
+
+- Added deterministic output-quality rubrics for grouped pack workflow benchmark setups across creator, business, game, devtool, monorepo, kanban, project-fleet, remotion, and YouTube families.
+- Scored pack outputs for exact pack/skill context, local fixture evidence, practical risk or validation specificity, `$run` next-route handoff, family context, workflow traits, and unsupported external overreach guards.
+- Extended setup registry tests for representative pack-family evaluator discovery and added a strong-versus-generic pack quality regression.
+- Verified with red-first `pnpm --dir tests test:layer1 -- bench-setups`, green `pnpm --dir tests test:layer1 -- bench-quality bench-setups runner`, `pnpm --dir tests bench:coverage`, and `git diff --check`.

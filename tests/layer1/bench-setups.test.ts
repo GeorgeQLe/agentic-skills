@@ -537,6 +537,33 @@ describe("benchmark coverage matrix", () => {
 
     expect(genericPackRows).toEqual([]);
   });
+
+  it("exposes quality evaluators for representative pack workflow families", () => {
+    const representativePackSkills = [
+      ["creator-presence-dossier", "creator-media-context"],
+      ["assumption-tracker", "business-ops-context"],
+      ["game-core-loop", "game-context"],
+      ["devtool-workflow", "devtool-context"],
+      ["mono-guard", "monorepo-context"],
+      ["run-kanban", "kanban-context"],
+      ["project-fleet", "project-fleet-context"],
+      ["video-script", "remotion-context"],
+      ["youtube-video-audit", "youtube-ops-context"],
+    ];
+
+    for (const [skill, familyCriterionId] of representativePackSkills) {
+      expect(resolveBenchSetup(skill)?.qualityEvaluator?.rubric.criteria.map((criterion) => criterion.id), skill).toEqual(
+        expect.arrayContaining([
+          "pack-skill-context",
+          "pack-fixture-evidence",
+          "pack-practical-risk-or-validation",
+          "pack-next-route",
+          "no-generic-or-external-pack-overreach",
+          familyCriterionId,
+        ]),
+      );
+    }
+  });
 });
 
 describe("Tier 1 workflow benchmark setups", () => {
@@ -661,6 +688,43 @@ describe("pack workflow benchmark setups", () => {
     });
 
     expect(assertions.every((assertion) => assertion.pass)).toBe(true);
+  });
+
+  it("scores pack workflow output quality and rejects generic output", () => {
+    const setup = CUSTOM_BENCH_SETUPS["youtube-video-audit"];
+    const evaluator = setup.qualityEvaluator;
+
+    expect(evaluator).toBeDefined();
+
+    const strong = evaluator!.evaluate(
+      [
+        "# youtube-video-audit",
+        "",
+        "Pack: youtube-ops",
+        "Skill: youtube-video-audit",
+        "Focus: YouTube single-video audit.",
+        "Local-fixture evidence covers Retention notes and Packaging notes from pack-input.md.",
+        "Risks: public data may be stale, so validate against local evidence before publishing.",
+        "Next command: $run",
+        "",
+      ].join("\n"),
+    );
+    const generic = evaluator!.evaluate(
+      [
+        "# Great Plan",
+        "",
+        "This is a comprehensive strategy using best practices and industry-leading insights.",
+        "It may use Google Analytics and an API dashboard to optimize everything.",
+        "Next steps should be considered later.",
+        "",
+      ].join("\n"),
+    );
+
+    expect(strong.passed).toBe(true);
+    expect(generic.passed).toBe(false);
+    expect(generic.criticalFailures).toEqual(
+      expect.arrayContaining(["pack-skill-context", "pack-fixture-evidence", "no-generic-or-external-pack-overreach"]),
+    );
   });
 });
 
