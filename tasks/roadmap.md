@@ -2,7 +2,7 @@
 
 > Generated from: tasks/roadmap.md (existing), specs/board-flag-kanban-search.md, tasks/ideas.md, tasks/history.md
 > Date: 2026-03-27 (last updated 2026-05-11)
-> Total Phases: 38 (36 complete, 2 planned)
+> Total Phases: 39 (36 complete, 3 planned)
 
 ## Summary
 
@@ -12,7 +12,7 @@ Phases 12-31 complete. Phase 14 added the LinkedIn evidence lane to the creator 
 
 Phases 32-36 complete. Phase 35 added repository-wide Codex benchmark coverage metadata, custom or explicitly blocked coverage for every current skill, and future skill creation/update workflows require benchmark coverage handling. Phase 36 added rubric-based output-quality evaluation on top of the contract/assertion benchmark checks.
 
-Phases 37-38 are planned from `specs/first-party-skills-showcase-newsletter-capture.md`. Phase 37 preserves and migrates the existing static Skills Showcase into a minimal Next.js app surface. Phase 38 adds Neon-backed first-party newsletter capture, tRPC contracts, TanStack Query mutation/admin state, and an admin export page.
+Phases 37-38 are planned from `specs/first-party-skills-showcase-newsletter-capture.md`. Phase 37 preserves and migrates the existing static Skills Showcase into a minimal Next.js app surface. Phase 38 adds Neon-backed first-party newsletter capture, tRPC contracts, TanStack Query mutation/admin state, and an admin export page. Phase 39 adds benchmark results visibility and permission-gated safe Git integration fixtures for benchmarkable git-mutating skills.
 
 ## Current Benchmark: ship
 
@@ -263,6 +263,7 @@ Phases 37-38 are planned from `specs/first-party-skills-showcase-newsletter-capt
 | 36 | Benchmark Output Quality Evaluation ✓ | user request | Rubric-based output-quality scoring for benchmarked skills | XL |
 | 37 | Skills Showcase Next.js Preservation Refactor | specs/first-party-skills-showcase-newsletter-capture.md | Existing showcase routes/design/data ported into a minimal Next.js app | L |
 | 38 | First-Party Newsletter Capture And Admin | specs/first-party-skills-showcase-newsletter-capture.md | Neon subscriber persistence, tRPC/TanStack Query capture flow, and admin export page | L |
+| 39 | Benchmark Results Visibility And Safe Git Fixtures | docs/benchmark-results-matrix.md, user request | Public benchmark-results matrix plus permission-gated test-repo fixtures for `commit-and-push-by-feature` and `sync` | M |
 
 ---
 
@@ -635,6 +636,38 @@ Phases 37-38 are planned from `specs/first-party-skills-showcase-newsletter-capt
 
 **Parallelization:** serial
 **Coordination Notes:** This phase crosses database schema, API contracts, client mutation state, admin access, and privacy behavior. Keep serial until the app/data contract is stable; review security/privacy before shipping.
+
+---
+
+## Phase 39: Benchmark Results Visibility And Safe Git Fixtures
+
+**Goal:** Make already-benchmarked skills visible as a durable results matrix and unblock safe integration benchmark setups for git-mutating workflows that can run against disposable test repositories.
+
+**Source:** User request on 2026-05-11 and `docs/benchmark-results-matrix.md`.
+
+**Scope:**
+- Promote `docs/benchmark-results-matrix.md` into a generated or validated source of truth for persisted benchmark run data and grades.
+- Add a Skills Showcase surface for benchmark results that distinguishes setup coverage from completed benchmark evidence and grades.
+- Design permission-gated, disposable GitHub test-repository fixtures for `commit-and-push-by-feature` and `sync`.
+- Require explicit user approval before any `gh` operation that creates, mutates, or deletes a live GitHub test repository.
+- Treat test-repo cleanup failures as infrastructure-blocked evidence, not skill failures.
+
+**Non-Goals:**
+- Do not run live GitHub repository creation without explicit user permission.
+- Do not run git-mutating benchmarks against the primary `agentic-skills` repository.
+- Do not create, modify, or recommend GitHub Actions.
+
+**Acceptance Criteria:**
+- [ ] A clean benchmark-results matrix lists skills with persisted evaluated benchmark data, hard pass rates, quality scores, subjective review grades when present, and raw report paths.
+- [ ] Skills Showcase exposes benchmark results or links to the generated matrix without confusing coverage status with completed graded runs.
+- [ ] `commit-and-push-by-feature` has a safe fixture plan using an explicit-permission disposable GitHub test repository.
+- [ ] `sync` has a safe fixture plan using an explicit-permission disposable GitHub test repository.
+- [ ] The benchmark coverage registry reflects any newly unblocked setup status only after the safe fixture is implemented and validated.
+- [ ] Cleanup and infrastructure-block handling are documented for the disposable repository workflow.
+- [ ] No GitHub Actions are created, modified, or recommended.
+
+**Parallelization:** serial for live-GitHub fixture design and validation.
+**Coordination Notes:** Keep this work serial because it touches benchmark evidence semantics, website presentation, and live external repository safety. Treat any `gh`-backed execution as an explicit operator-approved integration test.
 
 ---
 

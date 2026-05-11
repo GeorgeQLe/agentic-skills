@@ -74,6 +74,14 @@
   - Files: modify only files implicated by failing validation
   - Run the app's typecheck/build/test command, `scripts/validate-skills-showcase-data.sh`, and `git diff --check`.
 
+### Follow-up Todo
+
+- [ ] Add a Skills Showcase benchmark-results surface after the app routes and generated asset pipeline are stable.
+  - Source: `docs/benchmark-results-matrix.md`
+  - Files: create or modify a benchmark-results route or section under `apps/skills-showcase/`, and update generated-data validation if the surface consumes generated benchmark metadata.
+  - Requirement: distinguish benchmark setup coverage from skills that have already undergone evaluated benchmark runs with persisted test data and grades.
+  - Related roadmap: Phase 39, including permission-gated safe GitHub test-repository fixtures for `commit-and-push-by-feature` and `sync`.
+
 ### Milestone: Phase 37 Next.js Preservation Refactor
 **Acceptance Criteria:**
 - [ ] A minimal Next.js Skills Showcase app exists and can render the migrated public routes.
@@ -112,6 +120,7 @@
 - **Next command:** `$run`
 
 - 2026-05-11 — Completed Step 37.2 App Router refactor. Moved ShowcaseHeader + MobilePanel into root layout (rendered once), added per-page `metadata` exports with unique titles, converted ShowcaseHeader to `"use client"` with `usePathname()` replacing the manual `currentPath` prop, switched all imports to the `@/` path alias, and added `viewport` export to root layout. All 6 page files now contain only `<main>` content. Verified: `"use client"` only on ShowcaseHeader, zero `currentPath` prop usage, zero `../../src/` imports, every page exports metadata, no page imports ShowcaseHeader/MobilePanel.
+- 2026-05-11 — Added `docs/benchmark-results-matrix.md` as the clean matrix for skills that already have persisted evaluated benchmark data and grades. Added Phase 39 to the roadmap for Skills Showcase benchmark-results visibility and permission-gated disposable GitHub test-repository fixtures for `commit-and-push-by-feature` and `sync`. Added a follow-up todo to surface the matrix on the website after the app route/data pipeline is stable.
 
 ### Next Step Plan — Step 37.3
 
