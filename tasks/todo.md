@@ -3,6 +3,25 @@
 **Project:** Claude Skills / agentic-skills
 **Status:** Targeted skill update in progress on 2026-05-10.
 
+## Current Benchmark Run: run Codex
+
+- [x] Resolve the project-local `benchmark-test-skill` contract and confirm `run` is the skill under test.
+- [x] Run `pnpm verify --skill run` from `tests/`.
+- [x] Stop before benchmark because verify failed.
+- [x] Record review results, then commit and push intended benchmark artifacts.
+
+## Review: run Codex benchmark request
+
+**Strategy Used:** Project-local `$benchmark-test-skill run --codex` from `packs/agentic-skills-bench/codex/benchmark-test-skill/SKILL.md`. The `run` argument was treated as the skill under test, and `--codex` narrowed the benchmark runner to Codex.
+
+**Verify:** `pnpm verify --skill run` failed from `tests/`. Layer1 passed in 7.1s with 1,188 tests. Layer2 failed in 286ms because Vitest found no layer2 test files matching the `run` filter.
+
+**Benchmark:** Skipped. The benchmark-test-skill contract forbids running `pnpm bench` when verify fails.
+
+**Report:** No `benchmark/test-run-2026-05-11.md` was written because no benchmark `report.json` exists for this failed verify-only run.
+
+**Recommended next command:** `$session-triage run benchmark verify failure`
+
 ## Current Update: design-system prose headings
 
 - [x] Read relevant lessons and the mirrored `design-system` skill contracts.

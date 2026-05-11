@@ -12,6 +12,17 @@ Phases 12-31 complete. Phase 14 added the LinkedIn evidence lane to the creator 
 
 Phase 33 is complete. Phase 34 is planned for the remaining Skills Showcase Website MVP. The product is a Vercel-deployable, multi-page static showcase for George "G" Le's open-source agentic engineering workflow library, including generated skill coverage, browser-native workflow animations, GitHub/open-source proof data, newsletter/email capture, and skill-change freshness prompts.
 
+## Current Benchmark: run Codex
+
+**Goal:** Run `$benchmark-test-skill run --codex` through the repository harness with fresh verify and Codex-only benchmark evidence.
+
+**Acceptance Criteria:**
+- [x] `pnpm verify --skill run` is attempted from `tests/`.
+- [x] Benchmark execution is skipped if verify fails.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Blocked at verify on 2026-05-11. Layer1 passed in 7.1s with 1,188 tests, but layer2 failed in 286ms because no layer2 test files matched the `run` skill filter. No Codex benchmark was run and no benchmark report was written.
+
 ## Current Benchmark: design-system
 
 **Goal:** Run `$benchmark-test-skill design-system` through the repository harness with fresh verify and benchmark evidence.
