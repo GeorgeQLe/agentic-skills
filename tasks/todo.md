@@ -108,6 +108,12 @@ Build custom Codex benchmark test setups for every repository skill and enforce 
   - Files: modify `global/codex/create-agentic-skill/SKILL.md`, `global/claude/create-agentic-skill/SKILL.md`, `global/codex/create-local-skill/SKILL.md`, `global/claude/create-local-skill/SKILL.md`, `global/codex/targeted-skill-builder/SKILL.md`, `global/claude/targeted-skill-builder/SKILL.md`, `global/codex/plugin-creator/SKILL.md`, `global/claude/plugin-creator/SKILL.md`, `packs/agentic-skills-bench/codex/benchmark-test-skill/SKILL.md`, `packs/agentic-skills-bench/claude/benchmark-test-skill/SKILL.md`, `docs/skills-reference.md`
   - Require new or materially updated skills to add a coverage matrix row and either a custom setup or explicit blocked status.
   - Make benchmark-test-skill reports route missing custom coverage to `$targeted-skill-builder <skill> benchmark coverage`.
+  - Implementation plan for next run:
+    1. Read the mirrored create/update skill contracts and the benchmark-test-skill pack contracts to identify every place that creates a new skill, materially edits a skill, or routes missing benchmark coverage.
+    2. Add the benchmark coverage requirement to each creation/update workflow: update `tests/harness/bench-coverage.ts`, add or register a custom setup under `tests/layer4/setups/` when deterministic, or record an explicit blocked row with `blocked_reason` and `next_command`.
+    3. Update benchmark-test-skill routing language so missing custom coverage points to `$targeted-skill-builder <skill> benchmark coverage` and distinguishes generic smoke evidence from custom coverage.
+    4. Refresh `docs/skills-reference.md` for the changed workflow contracts and, because tracked `SKILL.md` files will change, run the Skills Showcase data refresh commands required by the quality gate.
+    5. Validate with targeted contract scans across the edited skill files, `pnpm --dir tests bench:coverage`, focused layer1 benchmark setup tests, Skills Showcase data validation, full layer1, and `git diff --check`.
 - [ ] Step 35.8: Run validation and review the phase.
   - Classification: automated
   - Files: modify `tasks/todo.md`, modify `tasks/history.md`
