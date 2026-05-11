@@ -14,6 +14,8 @@ Use this skill after `/benchmark-test-skill <skill>` when the deterministic benc
 
 This skill is a follow-up review workflow. It does not replace hard benchmark assertions, deterministic output-quality rubrics, or verify/bench commands.
 
+The primary object of review is the generated skill output, not the benchmark harness. Treat hard assertions and deterministic output-quality scores as context and triage signals only. Lead with whether each retained output is excellent, good, usable, weak, or failing under the agent-review rubric; discuss deterministic rubric tightening only after output-quality findings, and only when it would help future triage surface the same output-quality issue.
+
 ## Input
 
 - Required: a benchmark target skill name such as `run`, or a raw run directory such as `tests/benchmarks/runs/run-codex-47e0dd54/`.
@@ -75,19 +77,21 @@ Report:
 - Source benchmark report paths.
 - Reviewed run directories and run indexes.
 - Hard assertion pass rate and deterministic output-quality score from the benchmark report.
+- Output-quality verdict against the agent-review rubric, explicitly focused on the generated skill artifacts rather than the benchmark's ease or strictness.
 - Agent-review score table with reviewer, runner, run index, score, and grade band.
 - Median subjective score and score range when multiple scores exist.
 - Common strengths.
 - Common weaknesses.
-- Whether the deterministic rubric should be tightened, with concrete proposed criteria.
-- **Next work:** one concrete follow-up, such as tightening a benchmark rubric, triaging a benchmark failure, or no follow-up.
-- **Recommended next command:** one command, usually `/targeted-skill-builder <skill> benchmark review rubric`, `/session-triage <skill> benchmark review`, or `/ship`.
+- Optional deterministic-rubric notes only when the retained output-quality findings show the deterministic rubric failed to surface a meaningful issue or produced misleading context.
+- **Next work:** one concrete follow-up, such as improving the reviewed skill's output expectations, tightening the agent-review rubric, triaging a benchmark failure, or no follow-up.
+- **Recommended next command:** one command, usually `/targeted-skill-builder <skill> output quality`, `/targeted-skill-builder benchmark-agent-review review rubric`, `/session-triage <skill> benchmark review`, or `/ship`.
 
 ## Constraints
 
 - Do not re-run `/benchmark-test-skill` unless the requested benchmark artifacts are missing or stale and the user explicitly asks for a fresh benchmark.
 - Do not present subjective agent-review scores as statistically definitive.
 - Do not merge subjective scores into deterministic output-quality scores.
+- Do not frame benchmark pass/fail laxness as the primary problem when the task is to judge skill output quality. If the benchmark intentionally passes weak-but-compliant outputs, grade the output quality directly and use deterministic-rubric notes only as supporting context.
 - Do not grade infrastructure-blocked runs as skill outputs.
 - Do not fabricate missing artifact content. State when only stdout summaries, assertions, or quality results are available.
 - Do not create or modify GitHub Actions workflows.
