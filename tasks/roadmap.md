@@ -2,7 +2,7 @@
 
 > Generated from: tasks/roadmap.md (existing), specs/board-flag-kanban-search.md, tasks/ideas.md, tasks/history.md
 > Date: 2026-03-27 (last updated 2026-05-08)
-> Total Phases: 34 (33 complete, 1 planned)
+> Total Phases: 35 (33 complete, 2 planned)
 
 ## Summary
 
@@ -10,7 +10,7 @@ Phases 1-11 complete: kanban skill suite, board intelligence, templates, archive
 
 Phases 12-31 complete. Phase 14 added the LinkedIn evidence lane to the creator foundation workflow with owner exports, manual snapshots, public unauthenticated captures, redaction gates, shared evidence-schema/dossier routing, and deterministic layer1 contract coverage. Phase 16 hardened mutation-capable skill contracts with final next-step routing language and an audit that catches future omissions. Phase 17 added mixed-monorepo pack routing so one repository can carry devtool, business-app, game, or other domain scopes without forcing one global designation. Phase 18 hardened pack lock recovery after a `pitwall-monorepo` refresh timeout. Phase 19 added a YouTube description and metadata optimization lane to the creator-media pack. Phase 20 added external YouTube video research lanes for comprehension, format/Remotion-style analysis, and competitive learning. Phase 21 hardened default mutation/shipping quality gates from the session workflow audit. Phase 22 added feature-interview as the triage step between brainstorm ideas and full specifications. Phase 23 added targeted-skill-builder for focused skill creation or updates from concrete workflow gaps without defaulting to broad session-history analysis. Phase 24 added install-agentic-skills for refreshing global skill links and routing pack access through the existing project-local workflow. Phase 25 added codebase-status for read-only repo status reports with local history evidence. Phase 26 added the monorepo pack V1. Phase 27 added targeted skill retrospectives to analyze-sessions; Phase 28 split that focused behavior into session-triage. Phase 29 added opt-in live-agent behavior tests. Phase 30 deepened feature-interview into evidence-backed feature intake. Phase 31 hardened parallel agent-team branch/PR isolation.
 
-Phase 33 is complete. Phase 34 is planned for the remaining Skills Showcase Website MVP. The product is a Vercel-deployable, multi-page static showcase for George "G" Le's open-source agentic engineering workflow library, including generated skill coverage, browser-native workflow animations, GitHub/open-source proof data, newsletter/email capture, and skill-change freshness prompts.
+Phase 33 is complete. Phase 34 is planned for the remaining Skills Showcase Website MVP. The product is a Vercel-deployable, multi-page static showcase for George "G" Le's open-source agentic engineering workflow library, including generated skill coverage, browser-native workflow animations, GitHub/open-source proof data, newsletter/email capture, and skill-change freshness prompts. Phase 35 is planned for repository-wide custom Codex benchmark coverage for every skill, with future skill creation required to add benchmark setup coverage or an explicit blocked status.
 
 ## Current Benchmark: run Codex
 
@@ -52,12 +52,16 @@ Phase 33 is complete. Phase 34 is planned for the remaining Skills Showcase Webs
 
 **Goal:** Use the current Codex token headroom to move beyond generic smoke benchmarks and build custom Codex benchmark coverage for repository skills.
 
+**Source:** `specs/benchmark-custom-coverage.md`, `specs/benchmark-custom-coverage-feature-interview.md`, and 2026-05-11 user clarification that every current and future skill should have a custom benchmark test setup.
+
 **Acceptance Criteria:**
 - [ ] Build the reusable custom benchmark setup pattern for Codex-first coverage: fixture conventions, assertion helpers, budget/timeout defaults, report expectations, and registry wiring.
-- [ ] Apply the custom setup pattern across Codex skills, prioritizing high-use global skills and benchmark-test-related workflows before lower-traffic pack skills.
+- [ ] Apply the custom setup pattern across all Codex skills, prioritizing high-use global skills and benchmark-test-related workflows before lower-traffic pack skills.
 - [ ] Keep the generic fallback for skills that do not yet have custom assertions.
 - [ ] Record which skills have custom Codex assertions versus generic smoke coverage.
+- [ ] Require future skill creation/update workflows to add a benchmark setup or record an explicit blocked coverage status.
 - [ ] Defer Claude custom coverage until the Codex-first pass proves the pattern and priority ordering.
+- [ ] Do not create, modify, or suggest GitHub Actions.
 
 ## Current Benchmark: design-system
 
@@ -187,6 +191,43 @@ Phase 33 is complete. Phase 34 is planned for the remaining Skills Showcase Webs
 | 32 | Skills Showcase Product Foundation ✓ | specs/skills-showcase-website.md, specs/ui-skills-showcase-website.md | Multi-page static shell, generated skill/GitHub proof data, stale-data validation, and skill-change freshness prompts | L |
 | 33 | Skills Showcase Workflow Experience ✓ | specs/skills-showcase-website.md, specs/ui-skills-showcase-website.md | Workflow Lab animations, pack map, generated catalog, and responsive blueprint UI | L |
 | 34 | Skills Showcase Distribution Launch | specs/skills-showcase-website.md, specs/ui-skills-showcase-website.md | Proof telemetry UI, newsletter capture, follow/community funnel, and Vercel launch readiness | M |
+| 35 | Repository-Wide Custom Benchmark Coverage | specs/benchmark-custom-coverage.md | Custom Codex benchmark setups for all skills plus future-skill coverage enforcement | XL |
+
+---
+
+## Phase 35: Repository-Wide Custom Benchmark Coverage
+
+**Goal:** Build custom Codex benchmark test setups for every repository skill and enforce benchmark setup handling for every future skill.
+
+**Source:** `specs/benchmark-custom-coverage.md`, `specs/benchmark-custom-coverage-feature-interview.md`, and user clarification on 2026-05-11.
+
+**Scope:**
+- Add a durable benchmark coverage matrix that lists every skill under `global/` and `packs/`.
+- Validate that every repository skill appears in the matrix and that custom/blocked statuses are well-formed.
+- Update benchmark reporting so `$benchmark-test-skill <skill>` distinguishes custom, generic, and blocked coverage.
+- Add reusable custom setup helpers for fixtures, Markdown/frontmatter assertions, routing assertions, budget tiers, and report expectations.
+- Implement Codex custom benchmark setups in priority tiers, starting with high-use global execution/planning/debug skills.
+- Update future skill creation/update workflows so new skills must add a benchmark setup or record an explicit blocked coverage status.
+- Keep generic smoke fallback active until each skill has custom coverage.
+- Defer Claude parity until the Codex-first pattern is proven.
+
+**Acceptance Criteria:**
+- [ ] A committed coverage matrix lists every repository skill.
+- [ ] Validation fails when a repository skill is missing from the coverage matrix.
+- [ ] Validation fails when a `custom` coverage row points to a missing setup.
+- [ ] Validation fails when a `blocked` row lacks a reason and next command.
+- [ ] `$benchmark-test-skill <skill>` reports custom/generic/blocked coverage status.
+- [ ] Future skill creation/update workflows require benchmark coverage handling.
+- [ ] Tier 1 skills have custom Codex benchmark setups.
+- [ ] Tier 2 and Tier 3 skills have custom Codex benchmark setups or explicit blocked statuses.
+- [ ] Pack skills are covered by custom Codex benchmark setups or explicit blocked statuses.
+- [ ] Generic fallback remains available until all skills have custom coverage.
+- [ ] No GitHub Actions are created, modified, or recommended.
+
+**Parallelization:** serial for registry/harness contract, then agent-team eligible by pack or tier once the coverage matrix and file ownership boundaries are established.
+**Coordination Notes:** Initial registry and validation work touches shared harness files and must be serial. Later setup implementation can split by non-overlapping setup files and fixture directories, but shared registry updates must be consolidated carefully.
+
+> Test strategy: tests-after with focused layer1 validation plus one-run Codex benchmarks for representative setups in each tier.
 
 ---
 
