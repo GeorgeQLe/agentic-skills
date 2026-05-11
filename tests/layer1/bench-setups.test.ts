@@ -75,17 +75,34 @@ describe("benchmark setup registry", () => {
     });
   });
 
-  it("uses a generic smoke setup for repository skills without custom assertions", () => {
+  it("uses custom setup for deterministic pack workflows", () => {
     const setup = resolveBenchSetup("assumption-tracker");
     const target = resolveBenchTarget("assumption-tracker");
 
     expect(setup?.skill).toBe("assumption-tracker");
-    expect(setup).not.toBe(CUSTOM_BENCH_SETUPS["assumption-tracker"]);
+    expect(setup).toBe(CUSTOM_BENCH_SETUPS["assumption-tracker"]);
     expect(target).toMatchObject({
       skill: "assumption-tracker",
-      coverageStatus: "generic",
+      coverageStatus: "custom",
+      setupPath: "tests/layer4/setups/packs/pack-workflows.setup.ts",
     });
     expect(target?.setup?.skill).toBe("assumption-tracker");
+  });
+
+  it("keeps the generic smoke setup available for rows without custom assertions", () => {
+    const rows = benchmarkCoverageMatrix().map((row): BenchCoverageRow => (
+      row.skill === "deploy"
+        ? { ...row, coverage_status: "generic", blocked_reason: undefined, next_command: undefined }
+        : row
+    ));
+    const target = resolveBenchTarget("deploy", rows);
+
+    expect(target).toMatchObject({
+      skill: "deploy",
+      coverageStatus: "generic",
+    });
+    expect(target?.setup?.skill).toBe("deploy");
+    expect(target?.setup).not.toBe(CUSTOM_BENCH_SETUPS.deploy);
   });
 
   it("does not resolve unknown skills", () => {
@@ -124,11 +141,11 @@ describe("benchmark setup registry", () => {
     expect(supportedBenchSkillRows().find((row) => row.skill === "affected")).toMatchObject({
       coverage_status: "custom",
     });
+    expect(supportedBenchSkillRows().find((row) => row.skill === "assumption-tracker")).toMatchObject({
+      coverage_status: "custom",
+    });
     expect(supportedBenchSkillRows().find((row) => row.skill === "deploy")).toMatchObject({
       coverage_status: "blocked",
-    });
-    expect(supportedBenchSkillRows().find((row) => row.skill === "assumption-tracker")).toMatchObject({
-      coverage_status: "generic",
     });
   });
 
@@ -141,8 +158,8 @@ describe("benchmark setup registry", () => {
     expect(output).toContain("design-system\tcoverage=custom setup=tests/layer4/setups/design-system.setup.ts");
     expect(output).toContain("run\tcoverage=custom setup=tests/layer4/setups/tier1-workflows.setup.ts");
     expect(output).toContain("affected\tcoverage=custom setup=tests/layer4/setups/tier23-global-workflows.setup.ts");
+    expect(output).toContain("assumption-tracker\tcoverage=custom setup=tests/layer4/setups/packs/pack-workflows.setup.ts");
     expect(output).toContain("deploy\tcoverage=blocked reason=Requires environment-specific deploy credentials");
-    expect(output).toContain("assumption-tracker\tcoverage=generic");
   });
 });
 
@@ -299,6 +316,41 @@ describe("benchmark coverage matrix", () => {
     expect(result.errors).toContain('Blocked benchmark coverage row for "run" must include blocked_reason.');
     expect(result.errors).toContain('Blocked benchmark coverage row for "run" must include next_command.');
   });
+
+  it("records custom coverage for pack skill setups", () => {
+    const matrix = benchmarkCoverageMatrix();
+    const expectedPackSkills = [
+      "assumption-tracker",
+      "brainstorm-kanban",
+      "competitive-analysis",
+      "devtool-workflow",
+      "game-core-loop",
+      "mono-guard",
+      "poketo-kanban",
+      "project-fleet",
+      "video-script",
+      "youtube-video-audit",
+    ];
+
+    for (const skill of expectedPackSkills) {
+      expect(matrix.find((row) => row.skill === skill)).toMatchObject({
+        coverage_status: "custom",
+        setup_path: "tests/layer4/setups/packs/pack-workflows.setup.ts",
+        agent_scope: "codex",
+        fixture_type: "pack-local-fixture",
+      });
+      expect(resolveBenchSetup(skill)).toBe(CUSTOM_BENCH_SETUPS[skill]);
+    }
+  });
+
+  it("does not leave pack skill rows on generic coverage", () => {
+    const genericPackRows = benchmarkCoverageMatrix().filter((row) => (
+      row.coverage_status === "generic"
+      && row.source_paths.some((sourcePath) => sourcePath.startsWith("packs/"))
+    ));
+
+    expect(genericPackRows).toEqual([]);
+  });
 });
 
 describe("Tier 1 workflow benchmark setups", () => {
@@ -388,6 +440,38 @@ describe("Tier 2 and Tier 3 global workflow benchmark setups", () => {
       exitCode: 0,
       workDir,
       files: ["affected-report.md"],
+    });
+
+    expect(assertions.every((assertion) => assertion.pass)).toBe(true);
+  });
+});
+
+describe("pack workflow benchmark setups", () => {
+  it("sets up and validates a pack workflow artifact", () => {
+    const setup = CUSTOM_BENCH_SETUPS["youtube-video-audit"];
+    const workDir = mkdtempSync(resolve(tmpdir(), "pack-youtube-video-audit-"));
+
+    setup.setupProject(workDir);
+    writeFileSync(
+      resolve(workDir, "pack-benchmark-output.md"),
+      [
+        "# youtube-video-audit",
+        "",
+        "Pack: youtube-ops",
+        "Skill: youtube-video-audit",
+        "Local-fixture evidence covers YouTube video audit packaging and retention notes.",
+        "Risks: public data may be stale.",
+        "Next command: $run",
+        "",
+      ].join("\n"),
+    );
+
+    const assertions = setup.assertResult({
+      stdout: "",
+      stderr: "",
+      exitCode: 0,
+      workDir,
+      files: ["pack-benchmark-output.md"],
     });
 
     expect(assertions.every((assertion) => assertion.pass)).toBe(true);
