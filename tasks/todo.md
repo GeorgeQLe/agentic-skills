@@ -5,7 +5,7 @@
 
 ## Priority Task Queue
 
-- [x] `$feature-interview benchmark custom coverage` - turn the broad benchmark coverage follow-up into a scoped spec/roadmap extension because `tasks/roadmap.md` had `## Planned Benchmark Work: Codex Custom Coverage` with unchecked acceptance criteria but no numbered `## Phase N:` entry, no pack/skill coverage matrix, and no implementation steps.
+- [ ] `$plan-phase 35` - decompose Phase 35 before execution because `tasks/roadmap.md` now has `## Phase 35: Repository-Wide Custom Benchmark Coverage` with unchecked acceptance criteria, while `tasks/todo.md` only contains the completed feature-planning review and no Phase 35 implementation steps.
 
 ## Current Planning: benchmark custom coverage
 
