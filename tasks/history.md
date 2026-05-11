@@ -1900,3 +1900,11 @@ Resolved all 10 findings from `/expert-review`:
 - Kept the rubrics fixture-bound with evidence facts, concrete file references, route handoffs, validation/evidence specificity, workflow-specific trait checks, and fabricated-content guards.
 - Extended setup registry coverage so every Tier 1 workflow setup must expose a quality evaluator, with representative rubric ID checks for shipping, investigation, and benchmark reporting.
 - Verified with `pnpm --dir tests test:layer1 -- bench-quality bench-setups runner`, `pnpm --dir tests bench:coverage`, and `git diff --check`.
+
+## 2026-05-11 — Phase 36 Step 36.6: global and design-system quality rubrics
+
+- Added deterministic output-quality rubrics for `design-system`, `design-system-draftstonk`, and grouped Tier 2/Tier 3 global workflow benchmark setups.
+- Scored design-system outputs for fixture token facts, Stitch frontmatter shape, component/token reference coverage, and fabricated design values.
+- Scored global workflow outputs for required fixture terms, setup-specific evidence patterns, expected next routes, workflow actionability, and generic/external overreach guards.
+- Extended setup registry tests for design-system and representative high-signal global quality evaluator discovery while preserving no-evaluator compatibility for generic fallback setups.
+- Verified with `pnpm --dir tests test:layer1 -- bench-quality bench-setups runner`, `pnpm --dir tests bench:coverage`, and `git diff --check`.
