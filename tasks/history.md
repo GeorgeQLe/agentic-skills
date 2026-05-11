@@ -1862,3 +1862,11 @@ Resolved all 10 findings from `/expert-review`:
 - Fixed validation-discovered harness defects: benchmark runs now resume only with `--resume`, compatible resume manifests must match the requested benchmark config, and infrastructure-blocked rate-limit classification only applies to non-zero agent exits.
 - Hardened custom setup assertions for case-insensitive expected text and Markdown next-command headings, and clarified the benchmark-test-skill setup prompt's expected `$ship` route.
 - Verified with focused layer1 tests, `pnpm --dir tests bench:coverage`, `pnpm --dir tests bench --list-skills`, one-run Codex benchmarks for `run`, `plan-phase`, `benchmark-test-skill`, and `youtube-video-audit`, full `pnpm --dir tests test:layer1`, skill dependency/version/routing audits, `./install.sh`, and `git diff --check`.
+
+## 2026-05-11 — Phase 35 Step 35.9: final benchmark coverage regressions and phase close
+
+- Added `tests/layer1/bench-coverage.test.ts` for final benchmark coverage contract regressions: complete matrix validation, missing rows, duplicate/unknown rows, missing custom setup paths, blocked row reason/next-command failures, custom/generic/blocked status resolution, generic fallback retention, CLI status output, and blocked preflight behavior.
+- Extended `tests/layer1/runner.test.ts` with exact resume-config matching and non-zero rate-limit infrastructure-block classification coverage.
+- Refreshed stale generated Skills Showcase proof data discovered by `scripts/validate-skills-showcase-data.sh`.
+- Verified with focused layer1 tests, `pnpm --dir tests bench:coverage`, `pnpm --dir tests bench --list-skills`, full `pnpm --dir tests test:layer1`, one-run Codex benchmarks for `run`, `plan-phase`, `benchmark-test-skill`, and `youtube-video-audit`, skill dependency/version/routing/pack audits, Skills Showcase freshness validation, and `git diff --check`.
+- Marked Phase 35 complete in `tasks/roadmap.md`, archived it to `tasks/phases/phase-35.md`, and replaced `tasks/todo.md` with a no-active-phase handoff to `$brainstorm`.

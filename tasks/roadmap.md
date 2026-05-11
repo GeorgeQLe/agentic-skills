@@ -10,7 +10,7 @@ Phases 1-11 complete: kanban skill suite, board intelligence, templates, archive
 
 Phases 12-31 complete. Phase 14 added the LinkedIn evidence lane to the creator foundation workflow with owner exports, manual snapshots, public unauthenticated captures, redaction gates, shared evidence-schema/dossier routing, and deterministic layer1 contract coverage. Phase 16 hardened mutation-capable skill contracts with final next-step routing language and an audit that catches future omissions. Phase 17 added mixed-monorepo pack routing so one repository can carry devtool, business-app, game, or other domain scopes without forcing one global designation. Phase 18 hardened pack lock recovery after a `pitwall-monorepo` refresh timeout. Phase 19 added a YouTube description and metadata optimization lane to the creator-media pack. Phase 20 added external YouTube video research lanes for comprehension, format/Remotion-style analysis, and competitive learning. Phase 21 hardened default mutation/shipping quality gates from the session workflow audit. Phase 22 added feature-interview as the triage step between brainstorm ideas and full specifications. Phase 23 added targeted-skill-builder for focused skill creation or updates from concrete workflow gaps without defaulting to broad session-history analysis. Phase 24 added install-agentic-skills for refreshing global skill links and routing pack access through the existing project-local workflow. Phase 25 added codebase-status for read-only repo status reports with local history evidence. Phase 26 added the monorepo pack V1. Phase 27 added targeted skill retrospectives to analyze-sessions; Phase 28 split that focused behavior into session-triage. Phase 29 added opt-in live-agent behavior tests. Phase 30 deepened feature-interview into evidence-backed feature intake. Phase 31 hardened parallel agent-team branch/PR isolation.
 
-Phase 33 is complete. Phase 34 is planned for the remaining Skills Showcase Website MVP. The product is a Vercel-deployable, multi-page static showcase for George "G" Le's open-source agentic engineering workflow library, including generated skill coverage, browser-native workflow animations, GitHub/open-source proof data, newsletter/email capture, and skill-change freshness prompts. Phase 35 is planned for repository-wide custom Codex benchmark coverage for every skill, with future skill creation required to add benchmark setup coverage or an explicit blocked status.
+Phase 35 is complete. The repository now has repository-wide Codex benchmark coverage metadata, custom or explicitly blocked coverage for every current skill, and future skill creation/update workflows require benchmark coverage handling.
 
 ## Current Benchmark: run Codex
 
@@ -195,7 +195,7 @@ Phase 33 is complete. Phase 34 is planned for the remaining Skills Showcase Webs
 
 ---
 
-## Phase 35: Repository-Wide Custom Benchmark Coverage
+## Phase 35: Repository-Wide Custom Benchmark Coverage ✓
 
 **Goal:** Build custom Codex benchmark test setups for every repository skill and enforce benchmark setup handling for every future skill.
 
@@ -212,17 +212,17 @@ Phase 33 is complete. Phase 34 is planned for the remaining Skills Showcase Webs
 - Defer Claude parity until the Codex-first pattern is proven.
 
 **Acceptance Criteria:**
-- [ ] A committed coverage matrix lists every repository skill.
-- [ ] Validation fails when a repository skill is missing from the coverage matrix.
-- [ ] Validation fails when a `custom` coverage row points to a missing setup.
-- [ ] Validation fails when a `blocked` row lacks a reason and next command.
-- [ ] `$benchmark-test-skill <skill>` reports custom/generic/blocked coverage status.
-- [ ] Future skill creation/update workflows require benchmark coverage handling.
-- [ ] Tier 1 skills have custom Codex benchmark setups.
-- [ ] Tier 2 and Tier 3 skills have custom Codex benchmark setups or explicit blocked statuses.
-- [ ] Pack skills are covered by custom Codex benchmark setups or explicit blocked statuses.
-- [ ] Generic fallback remains available until all skills have custom coverage.
-- [ ] No GitHub Actions are created, modified, or recommended.
+- [x] A committed coverage matrix lists every repository skill.
+- [x] Validation fails when a repository skill is missing from the coverage matrix.
+- [x] Validation fails when a `custom` coverage row points to a missing setup.
+- [x] Validation fails when a `blocked` row lacks a reason and next command.
+- [x] `$benchmark-test-skill <skill>` reports custom/generic/blocked coverage status.
+- [x] Future skill creation/update workflows require benchmark coverage handling.
+- [x] Tier 1 skills have custom Codex benchmark setups.
+- [x] Tier 2 and Tier 3 skills have custom Codex benchmark setups or explicit blocked statuses.
+- [x] Pack skills are covered by custom Codex benchmark setups or explicit blocked statuses.
+- [x] Generic fallback remains available until all skills have custom coverage.
+- [x] No GitHub Actions are created, modified, or recommended.
 
 **Parallelization:** serial for registry/harness contract, then agent-team eligible by pack or tier once the coverage matrix and file ownership boundaries are established.
 **Coordination Notes:** Initial registry and validation work touches shared harness files and must be serial. Later setup implementation can split by non-overlapping setup files and fixture directories, but shared registry updates must be consolidated carefully.
@@ -299,24 +299,24 @@ Phase 33 is complete. Phase 34 is planned for the remaining Skills Showcase Webs
 
 ### Milestone: Phase 35 Repository-Wide Custom Benchmark Coverage
 **Acceptance Criteria:**
-- [ ] A committed coverage matrix lists every repository skill.
-- [ ] Validation fails when a repository skill is missing from the coverage matrix.
-- [ ] Validation fails when a `custom` coverage row points to a missing setup.
-- [ ] Validation fails when a `blocked` row lacks a reason and next command.
-- [ ] `$benchmark-test-skill <skill>` reports custom/generic/blocked coverage status.
-- [ ] Future skill creation/update workflows require benchmark coverage handling.
-- [ ] Tier 1 skills have custom Codex benchmark setups.
-- [ ] Tier 2 and Tier 3 skills have custom Codex benchmark setups or explicit blocked statuses.
-- [ ] Pack skills are covered by custom Codex benchmark setups or explicit blocked statuses.
-- [ ] Generic fallback remains available until all skills have custom coverage.
-- [ ] No GitHub Actions are created, modified, or recommended.
-- [ ] All phase tests pass.
-- [ ] No regressions in previous phase tests.
+- [x] A committed coverage matrix lists every repository skill.
+- [x] Validation fails when a repository skill is missing from the coverage matrix.
+- [x] Validation fails when a `custom` coverage row points to a missing setup.
+- [x] Validation fails when a `blocked` row lacks a reason and next command.
+- [x] `$benchmark-test-skill <skill>` reports custom/generic/blocked coverage status.
+- [x] Future skill creation/update workflows require benchmark coverage handling.
+- [x] Tier 1 skills have custom Codex benchmark setups.
+- [x] Tier 2 and Tier 3 skills have custom Codex benchmark setups or explicit blocked statuses.
+- [x] Pack skills are covered by custom Codex benchmark setups or explicit blocked statuses.
+- [x] Generic fallback remains available until all skills have custom coverage.
+- [x] No GitHub Actions are created, modified, or recommended.
+- [x] All phase tests pass.
+- [x] No regressions in previous phase tests.
 
 **On Completion** (fill in when phase is done):
-- Deviations from plan: TBD
-- Tech debt / follow-ups: TBD
-- Ready for next phase: TBD
+- Deviations from plan: Review-only subagent lane was replaced with local adversarial review because active Codex subagent instructions require explicit user authorization for subagents. Validation also refreshed stale generated Skills Showcase proof data found by the freshness check.
+- Tech debt / follow-ups: Claude parity remains intentionally deferred. Blocked benchmark rows still need deterministic dry-run fixture design before they can move to custom coverage.
+- Ready for next phase: Yes. Phase 35 is complete and archived to `tasks/phases/phase-35.md`.
 
 ---
 
