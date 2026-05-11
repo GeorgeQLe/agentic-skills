@@ -25,6 +25,17 @@ Phase 33 is complete. Phase 34 is planned for the remaining Skills Showcase Webs
 
 **Triage Result:** Verified benchmark eligibility gap. `run` is a repository skill, but the current benchmark harness only registers `design-system` and `design-system-draftstonk` layer4 setups, so `$benchmark-test-skill run --codex` should fail earlier with an unsupported-target message rather than presenting the failure as a `run` verify problem.
 
+## Current Fix: Benchmark Target Eligibility Preflight
+
+**Goal:** Make `$benchmark-test-skill <skill>` fail unsupported benchmark targets before verify with a clear supported-target list.
+
+**Acceptance Criteria:**
+- [x] Supported benchmark targets are available from the harness without reading source.
+- [x] Unsupported targets such as `run` fail before any agent benchmark work with a clear unsupported-target message.
+- [x] Mirrored benchmark-test-skill contracts require the eligibility preflight before verify.
+- [x] Supported target verification still works for `design-system`.
+- [x] Skills Showcase generated data is refreshed and results are recorded in `tasks/todo.md`.
+
 ## Current Benchmark: design-system
 
 **Goal:** Run `$benchmark-test-skill design-system` through the repository harness with fresh verify and benchmark evidence.

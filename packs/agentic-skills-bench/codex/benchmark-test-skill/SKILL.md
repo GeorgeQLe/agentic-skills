@@ -23,7 +23,21 @@ This skill runs the agentic-skills test harness verification gate followed by th
 
 Run commands from `/Users/georgele/projects/tools/agentic-skills/tests`.
 
-### Step 1 - Verify
+### Step 1 - Eligibility Preflight
+
+Before running verify, check whether the requested skill is a registered benchmark target:
+
+```bash
+pnpm bench --list-skills
+```
+
+- If `<SKILL>` is not listed, stop immediately and report `unsupported benchmark target: <SKILL>`.
+- List the supported targets from the command output.
+- Do not run `pnpm verify` or `pnpm bench` for unsupported targets.
+- Recommend creating layer2 behavior coverage and a layer4 benchmark setup for `<SKILL>` before retrying.
+- This unsupported-target result is a benchmark coverage gap, not a skill behavior failure.
+
+### Step 2 - Verify
 
 ```bash
 pnpm verify --skill <SKILL>
@@ -33,7 +47,7 @@ pnpm verify --skill <SKILL>
 - Record pass/fail and wall time per layer.
 - If verify fails, stop and report the failure. Do not run the benchmark step.
 
-### Step 2 - Bench
+### Step 3 - Bench
 
 Run only if verify passes:
 
@@ -47,7 +61,7 @@ pnpm bench --skill <SKILL> --agent both --runs 3 --chunk-size 3 --pause 0
 - The bench system persists raw data to `tests/benchmarks/runs/<skill>-<agent>-<sessionId>/` and generates `report.json`.
 - Treat rate limits, quota exhaustion, and similar runner-capacity errors as infrastructure-blocked runs, not skill failures. Report them separately from evaluated pass rate.
 
-### Step 3 - Report
+### Step 4 - Report
 
 Write results to `benchmark/test-<SKILL>-<YYYY-MM-DD>.md` at the repository root. Use the current date.
 
@@ -81,6 +95,8 @@ Print a concise benchmark summary:
 - Do not create or modify GitHub Actions workflows.
 
 ## Next-Step Routing
+
+If the skill is an unsupported benchmark target, recommend `$targeted-skill-builder <skill> benchmark coverage`.
 
 If the skill fails verification or benchmark assertions, recommend `$session-triage <skill> benchmark failure`.
 
