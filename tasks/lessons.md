@@ -1,5 +1,13 @@
 # Lessons
 
+## 2026-05-11 — Preserve existing product surfaces before proposing framework migration
+
+- A first-party newsletter capture spec initially discussed moving to a minimal app framework without first making the existing Skills Showcase site concrete.
+- When a user asks to extend an existing product surface, inspect and name the current files/routes before recommending a migration or architecture change.
+- Treat framework migration as a preservation refactor when the product surface already exists: port the current content, route map, data contracts, and visual system unless the user explicitly asks for a redesign.
+- If a requested library stack fits poorly with the current implementation style, explain the mismatch against the existing files and frame the refactor as the smallest way to support the new capability.
+
+
 ## 2026-05-11 — UI consolidation needs UAT after variants are built
 
 - A workflow audit initially treated low `ui-consolidate` usage as a missing handoff, but the user clarified that consolidation can also be recommended too early.

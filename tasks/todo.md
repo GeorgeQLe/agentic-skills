@@ -107,8 +107,22 @@ Completed on 2026-05-11. `ship` is a known custom benchmark target using `tests/
 - [x] Standard skill validation, showcase data refresh, targeted checks, and whitespace validation pass.
 - [x] Results are recorded in this file, then committed and pushed on `master`.
 
+## Current Spec: First-Party Skills Showcase Newsletter Capture
+
+**Goal:** Specify first-party newsletter capture for the existing Skills Showcase website, including Neon persistence, tRPC contracts, TanStack Query client state, and an admin export page.
+
+### Acceptance Criteria
+
+- [x] Existing showcase website context is identified before choosing the app architecture.
+- [x] Assumptions checkpoint and interview decisions are recorded.
+- [x] Spec covers architecture, data model, API contracts, admin access, security/privacy, edge cases, tests, and acceptance criteria.
+- [x] Interview log records user corrections and the Next.js refactor decision.
+- [x] Validation is run and results are recorded.
+- [ ] Spec artifacts are committed and pushed on `master`.
+
 ## Review
 
+- 2026-05-11 — Used `$spec-interview` for first-party Skills Showcase newsletter capture. Existing site context was confirmed under `docs/skills-showcase/`; the spec now recommends a conservative Next.js refactor because the current site is plain static HTML/CSS/JS and the approved stack is Neon, tRPC, and TanStack Query. Deliverables written to `specs/first-party-skills-showcase-newsletter-capture.md` and `specs/first-party-skills-showcase-newsletter-capture-interview.md`. Validation passed: canonical spec headings present, interview log includes assumptions/questions/coverage/closing summary, and `git diff --check`.
 - 2026-05-11 — Ran `$benchmark-test-skill ship`. Preflight confirmed custom coverage; verify passed layer1 and skipped layer2; both-agent benchmark produced Claude 0/3 and Codex 3/3 hard assertion pass rates with no infrastructure-blocked runs. Claude failed the actionable next-route assertion (`Output recommends $run`) in all three runs. Report written to `benchmark/test-ship-2026-05-11.md`; route to `$session-triage ship benchmark failure`.
 - 2026-05-11 — Used `$targeted-skill-builder` for the `ship` Codex benchmark failure. Decision: update the existing mirrored `ship` contracts, not create a new skill. Added a no-self-route rule so completed `$ship`/`/ship` runs hand off to `$run`/`/run` or another concrete next route, with retry exceptions only for incomplete shipping. Added layer1 contract lint coverage. Validation passed: `./install.sh`, `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-next-step-routing.sh --missing`, `pnpm --dir tests bench:coverage`, `pnpm --dir tests test:layer1 -- bench-coverage.test.ts`, showcase data generation, targeted `rg`, `git diff --check`, and focused `pnpm --dir tests bench --skill ship --agent codex --runs 3 --chunk-size 3 --pause 0` with 3/3 hard assertion passes, 78.6% average quality, no infrastructure-blocked runs, p50 26.1s, total cost $0.75. `scripts/validate-skills-showcase-data.sh` regenerated dirty generated assets as expected before commit; re-run after commit to confirm clean showcase state.
 - 2026-05-11 — Used `$targeted-skill-builder` for benchmark contract lint and routing hardening. Decision: update existing `benchmark-test-skill` rather than create a duplicate lint skill. Added mirrored command-resolution guards, report verification, and final-route requirements; added layer1 contract lint coverage in `bench-coverage.test.ts`; refreshed Skills Showcase assets. Validation passed: `./install.sh`, `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-next-step-routing.sh --missing`, `pnpm --dir tests bench:coverage`, `pnpm --dir tests test:layer1 -- bench-coverage.test.ts`, showcase generation/validation, targeted `rg`, and `git diff --check`.
