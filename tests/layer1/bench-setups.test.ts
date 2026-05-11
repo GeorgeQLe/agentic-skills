@@ -431,6 +431,7 @@ describe("benchmark coverage matrix", () => {
       "spec-drift",
       "trace",
       "uat",
+      "ui-consolidate",
       "ui-interview",
       "ux-variation",
     ];
@@ -443,7 +444,6 @@ describe("benchmark coverage matrix", () => {
       "release",
       "sync",
       "uat-guide",
-      "ui-consolidate",
     ];
 
     for (const skill of expectedCustomSkills) {
