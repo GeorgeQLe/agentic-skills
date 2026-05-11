@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { execFileSync } from "node:child_process";
+import { readFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
@@ -11,6 +12,7 @@ import {
 import { resolveBenchTarget } from "../harness/bench-setups.js";
 
 const TESTS_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const REPO_ROOT = resolve(TESTS_ROOT, "..");
 
 function rowsWithSkillPatch(
   skill: string,
@@ -22,6 +24,43 @@ function rowsWithSkillPatch(
 }
 
 describe("benchmark coverage contract", () => {
+  it("lints benchmark-test-skill contracts for command routing and report verification", () => {
+    const skillContracts = [
+      {
+        path: "packs/agentic-skills-bench/claude/benchmark-test-skill/SKILL.md",
+        command: "/benchmark-test-skill",
+        customCoverageRoute: "/targeted-skill-builder <SKILL> benchmark coverage",
+        failureRoute: "/session-triage <skill> benchmark failure",
+      },
+      {
+        path: "packs/agentic-skills-bench/codex/benchmark-test-skill/SKILL.md",
+        command: "$benchmark-test-skill",
+        customCoverageRoute: "$targeted-skill-builder <SKILL> benchmark coverage",
+        failureRoute: "$session-triage <skill> benchmark failure",
+      },
+    ];
+
+    for (const contract of skillContracts) {
+      const content = readFileSync(resolve(REPO_ROOT, contract.path), "utf8");
+
+      expect(content, `${contract.path} active command`).toContain(
+        `resolve \`benchmark-test-skill\` as the active command first`,
+      );
+      expect(content, `${contract.path} pack path`).toContain("packs/agentic-skills-bench");
+      expect(content, `${contract.path} trailing argument`).toContain("trailing argument as the skill under test");
+      expect(content, `${contract.path} command syntax`).toContain(contract.command);
+      expect(content, `${contract.path} direct-run guard`).toContain("never run that skill directly as the benchmark action");
+      expect(content, `${contract.path} eligibility preflight`).toContain("pnpm bench --list-skills");
+      expect(content, `${contract.path} unknown skill stop`).toContain("Do not run `pnpm verify` or `pnpm bench` for unknown skills.");
+      expect(content, `${contract.path} both-agent default`).toContain("Use `--agent both` by default.");
+      expect(content, `${contract.path} infrastructure blocked`).toContain("infrastructure-blocked runs, not skill failures");
+      expect(content, `${contract.path} report verification`).toContain("After writing the report, verify the file exists");
+      expect(content, `${contract.path} final route output`).toContain("Do not omit the final next-step route.");
+      expect(content, `${contract.path} custom coverage route`).toContain(contract.customCoverageRoute);
+      expect(content, `${contract.path} failure route`).toContain(contract.failureRoute);
+    }
+  });
+
   it("accepts the committed matrix for every repository skill", () => {
     const result = validateBenchmarkCoverage();
 
