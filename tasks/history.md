@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-05-11 — Phase 35 Step 35.3: reusable benchmark setup helpers
+
+- Added shared layer4 setup helpers for generated artifacts, Markdown/frontmatter assertions, routing handoffs, budget/timeout tiers, and benchmark report expectations.
+- Refactored the existing `design-system` and `design-system-draftstonk` custom setups to use those helpers without changing prompts, fixtures, budgets, timeouts, or intended assertion descriptions.
+- Added focused layer1 coverage for representative helper behavior and preserved custom setup resolution.
+- Verified with targeted `bench-setups.test.ts`, `pnpm --dir tests bench:coverage`, full `pnpm --dir tests test:layer1`, and `git diff --check`.
+
 ## 2026-05-10 — Benchmark harness, birpc fix validation, agentic-skills-bench pack
 
 - Validated birpc fix (execSync → async execFile): layer1 (1177 tests, 8.3s) + layer2 (2 tests, 179s) pass cleanly with no false-failure exit codes.
