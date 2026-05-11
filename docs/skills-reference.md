@@ -50,6 +50,22 @@ scripts/validate-skills-showcase-data.sh
 
 Include changed generated assets in the same commit as the skill change. Also review curated website copy, catalog grouping, workflow animation text, and proof receipts when the skill change affects public-facing behavior. This is a static-data contract only; it does not add a runtime API, database, GitHub Actions workflow, video/Remotion pipeline, analytics, or live product metrics.
 
+## Benchmark Coverage Freshness
+
+Every repository skill under `global/` or `packs/` must be represented in `tests/harness/bench-coverage.ts`. When a shared skill is created or materially updated, the same shipping boundary must add or update its benchmark coverage row:
+
+- Use `coverage_status: "custom"` with a registered deterministic setup under `tests/layer4/setups/` when local fixtures can exercise the workflow safely.
+- Use `coverage_status: "blocked"` with `blocked_reason` and `next_command` when custom coverage depends on credentials, external services, paid actions, production deploys, real devices, or unsafe account state.
+- Keep `coverage_status: "generic"` only as an explicit smoke fallback while custom coverage is still pending.
+
+Validate the matrix with:
+
+```bash
+pnpm --dir tests bench:coverage
+```
+
+If a skill only has generic smoke coverage and needs domain-quality assertions, route to `targeted-skill-builder <skill> benchmark coverage`.
+
 ## Global Core Skills
 
 Global skills are safe across business apps, games, devtools, libraries, services, and infrastructure:
@@ -232,7 +248,7 @@ benchmark-test-skill
 Default flow:
 
 ```text
-benchmark-test-skill <skill> -> session-triage on failure / ship on pass
+benchmark-test-skill <skill> -> targeted-skill-builder on generic or blocked coverage / session-triage on failure / ship on pass
 ```
 
 ## Monorepo Pack

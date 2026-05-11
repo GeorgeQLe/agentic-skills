@@ -52,6 +52,8 @@ This is intentionally narrower than `$analyze-sessions`. Do not scan all Claude/
    - Keep `SKILL.md` concise and operational.
    - Include clear trigger conditions, workflow steps, outputs, constraints, and next-step routing for mutation-capable skills.
    - For Codex global skills, add `agents/openai.yaml` with display name, short description, default prompt, and implicit-invocation policy.
+   - Update `tests/harness/bench-coverage.ts` for every new repository skill or material skill behavior update.
+   - Add/register a deterministic custom setup under `tests/layer4/setups/` when practical, or record an explicit blocked row with `blocked_reason` and `next_command` when coverage depends on unsafe or external conditions.
    - Update skill discovery docs and routing docs only when the new or changed skill must be discoverable or routed by other skills.
 9. If writing a reusable prompt/template only:
    - Store it only when the user asks for a file or the current repo has an obvious prompt/template location.
@@ -61,6 +63,8 @@ This is intentionally narrower than `$analyze-sessions`. Do not scan all Claude/
     - `./scripts/skill-deps.sh --broken`
     - `./scripts/skill-versions.sh --missing`
     - `./scripts/skill-next-step-routing.sh --missing`
+    - `pnpm --dir tests bench:coverage`
+    - Focused layer1 benchmark setup tests when `tests/harness/bench-coverage.ts`, `tests/harness/bench-setups.ts`, or `tests/layer4/setups/` changed.
     - If any tracked `SKILL.md` or `PACK.md` behavior or metadata changed, refresh the Skills Showcase data:
       - `node scripts/generate-skills-showcase-data.mjs`
       - `node scripts/generate-skills-showcase-github-data.mjs`

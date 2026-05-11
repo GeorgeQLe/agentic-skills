@@ -34,8 +34,11 @@ pnpm bench --list-skills
 - If `<SKILL>` is not listed, stop immediately and report `unknown skill: <SKILL>`.
 - List the known repository skills from the command output.
 - Do not run `pnpm verify` or `pnpm bench` for unknown skills.
+- Read and report the listed coverage status for `<SKILL>`: `custom`, `generic`, or `blocked`.
 - Skills with custom layer4 setups use skill-specific fixtures and assertions.
 - Skills without custom layer4 setups use the harness generic smoke benchmark. Treat that as invocation/compliance evidence, not deep domain-quality evidence.
+- If the row is `blocked`, stop before verify and bench. Report the blocked reason and next command from the list output.
+- If the row is `generic`, continue only as generic smoke evidence and route missing custom coverage to `$targeted-skill-builder <SKILL> benchmark coverage`.
 
 ### Step 2 - Verify
 
@@ -99,7 +102,9 @@ Print a concise benchmark summary:
 
 If the skill is unknown to the repository, recommend checking the skill name or creating the skill first with `$create-agentic-skill`.
 
-If the skill only has generic smoke benchmark coverage and needs domain-quality assertions, recommend `$targeted-skill-builder <skill> benchmark coverage`.
+If the skill has blocked benchmark coverage, recommend the row's `next_command`.
+
+If the skill only has generic smoke benchmark coverage or otherwise lacks custom domain-quality assertions, recommend `$targeted-skill-builder <skill> benchmark coverage`.
 
 If the skill fails verification or benchmark assertions, recommend `$session-triage <skill> benchmark failure`.
 

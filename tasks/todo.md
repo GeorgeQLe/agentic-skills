@@ -103,7 +103,7 @@ Build custom Codex benchmark test setups for every repository skill and enforce 
   - Files: create or modify setup files under `tests/layer4/setups/packs/`; modify `tests/harness/bench-setups.ts`; modify `tests/harness/bench-coverage.ts`; modify `tests/layer1/bench-setups.test.ts`
   - Cover pack skills with custom Codex setups when deterministic local fixtures exist.
   - Record explicit blocked statuses for pack skills that depend on external credentials, real browser/device state, paid services, or unsafe access patterns.
-- [ ] Step 35.7: Update skill creation and update workflows to require benchmark coverage handling.
+- [x] Step 35.7: Update skill creation and update workflows to require benchmark coverage handling.
   - Classification: automated
   - Files: modify `global/codex/create-agentic-skill/SKILL.md`, `global/claude/create-agentic-skill/SKILL.md`, `global/codex/create-local-skill/SKILL.md`, `global/claude/create-local-skill/SKILL.md`, `global/codex/targeted-skill-builder/SKILL.md`, `global/claude/targeted-skill-builder/SKILL.md`, `global/codex/plugin-creator/SKILL.md`, `global/claude/plugin-creator/SKILL.md`, `packs/agentic-skills-bench/codex/benchmark-test-skill/SKILL.md`, `packs/agentic-skills-bench/claude/benchmark-test-skill/SKILL.md`, `docs/skills-reference.md`
   - Require new or materially updated skills to add a coverage matrix row and either a custom setup or explicit blocked status.
@@ -314,10 +314,47 @@ Build custom Codex benchmark test setups for every repository skill and enforce 
 - Rollback note: revert the Step 35.6 commit to restore generic fallback behavior for pack skills and remove the pack setup registry entries.
 - Next command: `$run`
 
+### Step 35.7 Review — Future Skill Benchmark Coverage Enforcement
+
+- Updated mirrored repo-managed skill creation workflows so new shared skills and material skill behavior updates must update `tests/harness/bench-coverage.ts` and add a deterministic custom setup or explicit blocked row before shipping.
+- Updated mirrored local-skill promotion flows so promoted skills in `global/` or `packs/` carry the same benchmark coverage requirement in the target fork.
+- Updated mirrored `targeted-skill-builder` workflows to include benchmark matrix/setup handling and `pnpm --dir tests bench:coverage` in repository skill validation.
+- Updated the benchmark-test-skill pack contracts to read custom/generic/blocked coverage status from `pnpm bench --list-skills`, stop cleanly for blocked rows, and route missing custom coverage to the targeted builder command.
+- Documented the repository-wide benchmark coverage freshness contract in `docs/skills-reference.md`.
+- Refreshed Skills Showcase generated data because tracked `SKILL.md` behavior changed.
+- Planned but absent files: `global/codex/plugin-creator/SKILL.md` and `global/claude/plugin-creator/SKILL.md` do not exist in this checkout, so no plugin-creator edits were made.
+- Execution profile note: the phase requests a review-only lane after Step 35.6, but active Codex subagent instructions only permit subagents when explicitly requested by the user. I downgraded the review gate to local changed-file adversarial review plus targeted scans.
+
+**Validation:**
+- `node scripts/generate-skills-showcase-data.mjs` — passed, wrote 316 skills and 17 packs.
+- `node scripts/generate-skills-showcase-github-data.mjs` — passed, wrote 4 proof artifacts and 5 validation scripts.
+- `scripts/validate-skills-showcase-data.sh` — passed, generated data is fresh.
+- `pnpm --dir tests bench:coverage` — passed, `Benchmark coverage matrix valid (143 skills).`
+- `pnpm --dir tests exec vitest run --project layer1 layer1/bench-setups.test.ts` — passed, 28 tests.
+- `./scripts/skill-deps.sh --broken` — passed, no broken references found.
+- `./scripts/skill-versions.sh --missing` — passed, all 316 skills have a version field.
+- `./scripts/skill-next-step-routing.sh --missing` — passed, all 229 mutation-capable skills have next-step routing.
+- Targeted `rg` contract scan across changed workflow files and docs — passed.
+- `pnpm --dir tests test:layer1` — passed, 8 files / 1216 tests.
+- `./install.sh` — passed.
+- `git diff --check` — passed.
+
+**Quality Gate Manifest:**
+- User goal: execute Step 35.7 for repository-wide custom benchmark coverage.
+- Changed files: `global/codex/create-agentic-skill/SKILL.md`, `global/claude/create-agentic-skill/SKILL.md`, `global/codex/create-local-skill/SKILL.md`, `global/claude/create-local-skill/SKILL.md`, `global/codex/targeted-skill-builder/SKILL.md`, `global/claude/targeted-skill-builder/SKILL.md`, `packs/agentic-skills-bench/codex/benchmark-test-skill/SKILL.md`, `packs/agentic-skills-bench/claude/benchmark-test-skill/SKILL.md`, `docs/skills-reference.md`, `docs/skills-showcase/assets/skills-data.js`, `docs/skills-showcase/assets/github-proof-data.js`, `tasks/todo.md`, `tasks/history.md`.
+- Per-file purpose: add benchmark coverage requirements to shared skill creation/update and local promotion flows; add coverage-aware benchmark-test routing; document the repository coverage freshness contract; refresh generated showcase data; record task/history evidence.
+- User-goal mapping: Step 35.7 required future skill creation/update workflows to require benchmark coverage handling and benchmark-test-skill reports to route missing custom coverage to targeted skill-builder.
+- Tests run: listed above.
+- Skipped tests: live benchmark runs were not run because this step changes workflow contracts and documentation rather than benchmark execution code; Step 35.8 owns representative one-run Codex benchmarks. No plugin-creator validation was run because the planned plugin-creator files are absent from this repository.
+- Adversarial review: changed-file self-review checked mirrored Claude/Codex command syntax, coverage matrix requirements, blocked-row next-command requirements, benchmark-test blocked/generic routing, generated showcase freshness, stale planned plugin-creator paths, and no GitHub Actions changes. No blocker findings remained.
+- Residual risk: future plugin-creator coverage enforcement is not encoded in this repo because plugin-creator is only available as an external/system skill in the active session, not as tracked repository files. If plugin-creator becomes repo-managed later, add the same benchmark coverage requirement there.
+- Rollback note: revert the Step 35.7 commit to restore the prior skill creation/update and benchmark-test-skill contracts.
+- Next command: `$run`
+
 **On Completion** (fill in when phase is done):
 - Deviations from plan: TBD
 - Tech debt / follow-ups: TBD
 - Ready for next phase: TBD
 
-**Next work:** Step 35.6: Add pack skill coverage rows and pack-level setup coverage.
+**Next work:** Step 35.8: Run validation and review the phase.
 **Recommended next command:** `$run`

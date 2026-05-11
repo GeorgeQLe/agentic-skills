@@ -72,6 +72,8 @@ This skill writes **real directories**, not symlinks back to the shared repo. `i
    - Copy the scaffolded skill into:
      - `<fork>/global/claude/<name>/` (and `<fork>/global/codex/<name>/` if a Codex version was created), **or**
      - `<fork>/personal/claude/<name>/` if the user wants to keep personal skills segregated from upstream-syncable dirs. Ask which.
+   - If the skill is promoted into a fork's `global/` or `packs/` tree, also update that fork's `tests/harness/bench-coverage.ts` and add either a deterministic custom setup under `tests/layer4/setups/` or an explicit blocked row with `blocked_reason` and `next_command`.
+   - Recommend `pnpm --dir tests bench:coverage` before the promoted skill is committed.
    - Show the `git status` in the fork and suggest a commit message like `feat(skill): add <name>`. Do **not** commit or push automatically — leave that to the user.
 
 7. **Safety note to surface:** pushing to the upstream agentic-skills repo requires write access. A plain clone without write access will be rejected at the remote; a fork pushes to the user's own repo. There is no path by which this skill can push a user's experimental skill to the shared upstream.

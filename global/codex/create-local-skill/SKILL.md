@@ -62,6 +62,8 @@ Scaffold a new **user-local** skill directly into `~/.codex/skills/<name>/` (and
    - Ask for the path to their fork. If they don't have one, explain: fork on GitHub and clone, or `git remote set-url origin <their-repo>` to repoint an existing clone.
    - Verify with `git -C <path> rev-parse --show-toplevel`.
    - Copy the skill into `<fork>/global/codex/<name>/` (and `<fork>/global/claude/<name>/` if applicable), or into a `<fork>/personal/...` subtree if the user prefers to segregate personal skills.
+   - If the skill is promoted into a fork's `global/` or `packs/` tree, also update that fork's `tests/harness/bench-coverage.ts` and add either a deterministic custom setup under `tests/layer4/setups/` or an explicit blocked row with `blocked_reason` and `next_command`.
+   - Recommend `pnpm --dir tests bench:coverage` before the promoted skill is committed.
    - Run `git status` in the fork and suggest a commit message. Do not commit or push — leave that to the user.
 
 7. Safety note: pushing to the upstream agentic-skills repo requires write access. Plain clones without access are rejected at the remote; forks push to the user's own repo. This skill cannot route a user's experimental skill into the shared upstream.
