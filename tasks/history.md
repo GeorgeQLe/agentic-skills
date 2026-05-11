@@ -1976,3 +1976,10 @@ Resolved all 10 findings from `/expert-review`:
   - Residual risk: The new `ui-consolidate` Codex skill has deterministic benchmark coverage but has not yet been exercised in a live multi-turn UI consolidation session; the first real use should verify the evidence gate asks for UAT results at the right time.
   - Rollback note: Revert the UI variant route commits and regenerated showcase assets to remove `ui-consolidate` as a Codex skill and restore the prior direct variation-to-consolidation route.
   - Next command: `$brainstorm`
+
+## 2026-05-11 — ship benchmark agent review
+
+- Reviewed the persisted `ship` benchmark outputs from `tests/benchmarks/runs/ship-claude-726530ae/` and `tests/benchmarks/runs/ship-codex-b69cb187/`.
+- Created `benchmark/review-ship-2026-05-11.md` with subjective agent-review scores, common strengths and weaknesses, rubric-tightening recommendations, and a concrete next command.
+- The review found all evaluated outputs usable, but not excellent: median subjective score 79, range 74-88. The deterministic report already caught the main gap with `evidence-linked` scoring at 0.0% for both runners.
+- Recommended next work: tighten the `ship` benchmark rubric for retained artifact text, evidence-linked manifest fields, and full manifest-completeness checks.
