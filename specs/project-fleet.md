@@ -18,6 +18,7 @@ A fleet has these parts:
 - **Work lane:** advances already-provisioned targets while provisioning is blocked or waiting.
 - **Repair lane:** fixes actionable blockers without bypassing guards.
 - **Planning lane:** adds enough detail for later execution when queue state is incomplete.
+- **Portfolio lane:** manages the candidate-to-active-build funnel with shortlisting, seeding, and active-build caps when the fleet operates as a portfolio of projects.
 - **Blocker ledger:** records stop conditions and retry rules.
 - **Status dashboard:** summarizes fleet state and next action without requiring a full project reread.
 
@@ -46,7 +47,7 @@ blocked
 2. Locate or create minimal fleet state in `tasks/`, `docs/`, scripts, manifests, queue files, or project-specific status files.
 3. Normalize the queue so each item has ID, name, target, source/reference, state, last action, blocker, and next action.
 4. Run preflight guards for auth, rate limits, dirty worktrees, target visibility/safety, required scripts, and project-specific stop conditions.
-5. Select exactly one lane: provisioning, work, repair, or planning.
+5. Select exactly one lane: provisioning, work, repair, planning, or portfolio.
 6. Execute bounded batches using the project batch size, serial/parallel limits, and external-service rules. Default batch size is one item when no policy exists.
 7. Verify before changing item state.
 8. Update central state with completed work, blocker evidence, retry timing, next targets, and skipped items.
@@ -114,7 +115,7 @@ The final report should include current fleet count by state, lane selected and 
 
 - A fleet queue has explicit item state, target, source/reference, blocker, and next action fields.
 - The workflow runs preflight guards before external provisioning.
-- Exactly one execution lane is selected per run.
+- Exactly one execution lane is selected per run (provisioning, work, repair, planning, or portfolio).
 - Provisioning stops on guard failures and records blocker evidence.
 - Productive fallback work advances only eligible items and does not bypass guards.
 - Items are not marked advanced until verification evidence exists.

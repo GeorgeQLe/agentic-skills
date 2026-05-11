@@ -100,7 +100,6 @@ Following the approval-packet pattern, lane specs use a JSON + committed Markdow
   "phase": "Phase 22: API Auth Refactor",
   "source_roadmap_hash": "abc123",
   "lifecycle": "draft",
-  "created_at": "2026-05-03T10:00:00Z",
   "cross_cutting_steps": [
     {
       "step": "22.1",
@@ -267,7 +266,7 @@ Script-based validation matching the existing repo validation pattern:
 - **Contract compliance:** All monorepo pack skills reference the augmentation injection pattern (pre/post steps, not full copies).
 - **Lane-spec schema:** `.agents/lane-specs.json` fixtures pass schema validation (required fields: phase, lifecycle, lanes with owns/must_not_edit/depends_on).
 - **Detection correctness:** `mono-detect.sh` correctly identifies pnpm-workspace.yaml and turbo.json presence/absence against fixture directories.
-- **Package-scope tags:** Scan `tasks/roadmap.md` and `specs/*.md` for `packages:` frontmatter when monorepo pack is enabled.
+- **Package-scope tags:** Validate that `packages:` frontmatter is well-formed when present in spec/roadmap files. Note: the current `monorepo-validate.sh` does not yet scan `tasks/roadmap.md` or `specs/*.md` for these tags — this is a V2 validation expansion.
 - **Disjointness check:** Verify that `owns` paths across lanes in a fixture lane-spec are disjoint.
 - **Must-not-edit baseline:** Verify that every lane's `must_not_edit` includes `pnpm-lock.yaml` and root config files.
 

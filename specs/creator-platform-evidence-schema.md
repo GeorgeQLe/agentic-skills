@@ -2,7 +2,7 @@
 
 ## Overview
 
-The creator-media pack currently has strong YouTube evidence workflows and platform-neutral strategy skills. The next expansion should start with a platform capability matrix and shared evidence schema before adding more platform-specific audit skills.
+The creator-foundation pack (formerly creator-media) currently has strong YouTube evidence workflows and platform-neutral strategy skills. The next expansion should start with a platform capability matrix and shared evidence schema before adding more platform-specific audit skills.
 
 The first practical use case is LinkedIn plus a repo-maintained creator presence dossier: a Markdown record of a creator's public professional footprint, career arc, proof assets, platform roles, and content opportunities. The collection model must use free, open-source, and manual evidence paths by default. Paid APIs, privileged platform programs, and logged-in scraping are out of scope for the baseline.
 
@@ -129,7 +129,8 @@ Core fields:
 | `metrics` | Platform-specific metrics object |
 | `metric_confidence` | observed, owner-provided, estimated, unavailable |
 | `evidence_confidence` | high, medium, low |
-| `notes` | Human review notes |
+| `privacy_notes` | Redactions and sensitive field notes |
+| `review_notes` | Human review notes and conflict flags |
 
 Metrics object fields are optional and must not be invented:
 
@@ -205,7 +206,7 @@ LinkedIn analytics should be treated as unavailable unless owner-provided. Compa
 
 ## Acceptance Criteria
 
-- The creator-media pack documents a matrix-first expansion path beyond YouTube.
+- The creator-foundation pack documents a matrix-first expansion path beyond YouTube.
 - The shared evidence schema supports LinkedIn, websites/blogs, newsletters, podcasts, GitHub, and social platforms without requiring paid APIs.
 - The LinkedIn baseline uses owner export and manual/public snapshots, not logged-in scraping.
 - The creator presence dossier can be maintained entirely in Markdown in a git repo.
@@ -221,7 +222,7 @@ LinkedIn analytics should be treated as unavailable unless owner-provided. Compa
 
 ## Assumptions & Risks
 
-- `[from spec]` The work expands the creator-media pack beyond YouTube. Risk: if the goal changes to only LinkedIn, the matrix may be broader than needed.
+- `[from spec]` The work expands the creator-foundation pack (formerly creator-media) beyond YouTube. Risk: if the goal changes to only LinkedIn, the matrix may be broader than needed.
 - `[from codebase]` Existing skills are Markdown contracts mirrored for Claude and Codex. Risk: implementation must preserve mirror parity.
 - `[from codebase]` Existing YouTube workflows store raw evidence before synthesis. Risk: skipping raw evidence would weaken audit quality.
 - `[confirmed]` The first implementation target is a platform capability matrix plus shared evidence schema. Risk: downstream platform skills should wait until this foundation exists.

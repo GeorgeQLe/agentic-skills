@@ -1983,3 +1983,16 @@ Resolved all 10 findings from `/expert-review`:
 - Created `benchmark/review-ship-2026-05-11.md` with subjective agent-review scores, common strengths and weaknesses, rubric-tightening recommendations, and a concrete next command.
 - The review found all evaluated outputs usable, but not excellent: median subjective score 79, range 74-88. The deterministic report already caught the main gap with `evidence-linked` scoring at 0.0% for both runners.
 - Recommended next work: tighten the `ship` benchmark rubric for retained artifact text, evidence-linked manifest fields, and full manifest-completeness checks.
+
+## 2026-05-11 — Phase 37 Step 37.1: Skills Showcase Next.js shell
+
+- Created a self-contained `apps/skills-showcase` Next.js app shell with package scripts, Next config, strict TypeScript config, root App Router layout, baseline global CSS, and a canonical public route inventory.
+- Kept the dependency surface limited to Next, React, React DOM, TypeScript, and type packages; no Neon, tRPC, TanStack Query, admin auth, database package, generated-data path, or GitHub Actions change was introduced.
+- Verified current package versions with `npm view`, parsed the new JSON files with Node, and passed `git diff --check`.
+- Marked Step 37.1 complete in `tasks/todo.md` and prepared Step 37.2 to port the existing static route hierarchy into the App Router.
+
+## 2026-05-11 — Spec reconciliation archive cleanup
+
+- Included pre-existing spec reconciliation edits from the shared tree in the shipping boundary so the repository does not retain dirty tracked changes after `$run`.
+- Preserved stale kanban specs by moving them from `specs/` into `docs/history/archive/2026-05-11/165500/specs/`; archived copies match the deleted HEAD blobs. Also archived a copy of `poketo-headless-auth-migration.md` while keeping the active spec updated.
+- Reran Skills Showcase data validation after source-fingerprint churn; the validator passed on the second run once regenerated proof data matched the current source tree.
