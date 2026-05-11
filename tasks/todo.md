@@ -124,7 +124,7 @@
     - Residual risk: The rubrics are deterministic and fixture-bound, so they intentionally catch evidence linkage and specificity rather than broad prose quality. Later Step 36.9 live benchmarks should confirm that real generated Tier 1 outputs meet these stricter rubric expectations without excessive false negatives.
     - Rollback note: Revert the Step 36.5 commit to remove the Tier 1 quality rubrics while preserving the foundational quality harness and `run` rubric from earlier steps.
     - Next command: `$run`
-- [ ] Step 36.6: Add quality rubrics for high-signal global and design-system setups.
+- [x] Step 36.6: Add quality rubrics for high-signal global and design-system setups.
   - Classification: automated
   - Files: modify `tests/layer4/setups/design-system.setup.ts`, modify `tests/layer4/setups/design-system-draftstonk.setup.ts`, modify `tests/layer4/setups/tier23-global-workflows.setup.ts`, modify focused layer1 tests
   - Prioritize deterministic signals for planning, debugging, audit, research, and design-token outputs.
@@ -136,11 +136,30 @@
     - Extend focused layer1 setup tests so opted-in global/design-system evaluators are discoverable and representative rubric IDs are asserted. Preserve backward compatibility for setups that intentionally remain hard-assertion-only with a documented deferral.
     - Do not change benchmark prompts, hard assertions, budgets, report schemas, or runner behavior unless a failing test proves a setup cannot expose the intended quality rubric otherwise.
     - Validate with `pnpm --dir tests test:layer1 -- bench-quality bench-setups runner`, `pnpm --dir tests bench:coverage`, and `git diff --check`.
+  - Review: Added deterministic quality evaluators for both design-system custom setups and the grouped Tier 2/Tier 3 global workflow setups. Design-system rubrics score fixture token facts, Stitch frontmatter shape, component/token references, and fabricated design values. Global workflow rubrics score required fixture terms, setup-specific domain evidence, expected next-route handoffs, actionability traits, and generic/external overreach guards. No setup prompts, hard assertions, budgets, runner/report schemas, package dependencies, or GitHub Actions changed.
+  - Ship manifest:
+    - User goal: Execute Phase 36 Step 36.6 from `$run` by adding quality rubrics for high-signal global and design-system benchmark setups.
+    - Changed files: `tests/layer4/setups/design-system.setup.ts`, `tests/layer4/setups/design-system-draftstonk.setup.ts`, `tests/layer4/setups/tier23-global-workflows.setup.ts`, `tests/layer1/bench-setups.test.ts`, `tasks/todo.md`, `tasks/history.md`.
+    - Per-file purpose: `design-system.setup.ts` adds output-quality scoring for core dashboard design-token extraction; `design-system-draftstonk.setup.ts` adds output-quality scoring for the DraftStonk token extraction variant; `tier23-global-workflows.setup.ts` adds a shared deterministic quality evaluator for grouped global workflow fixtures; `bench-setups.test.ts` asserts discoverability and representative rubric IDs while preserving generic no-evaluator compatibility; task/history docs record completion evidence, manifest, and next-step plan.
+    - User-goal mapping: The setup rubrics satisfy the Phase 36 acceptance item requiring Tier 2/Tier 3 global skills to have deterministic quality rubrics where practical, and strengthen design-system benchmark output quality beyond hard artifact assertions.
+    - Tests run: `pnpm --dir tests test:layer1 -- bench-quality bench-setups runner` initially failed because `design-system-draftstonk` is a custom setup but not a repository benchmark target resolved through `resolveBenchSetup`; the test was corrected to assert it through `CUSTOM_BENCH_SETUPS`, then passed with 10 files and 1243 tests. `pnpm --dir tests bench:coverage` passed with 143 skills. `git diff --check` passed.
+    - Skipped tests: Full phase validation, live representative Codex benchmarks, and standard skill audits remain reserved for Step 36.9 after pack rubrics and workflow documentation updates land. Skills Showcase refresh was not run because no tracked `SKILL.md` or `PACK.md` changed.
+    - Adversarial review: Diff-aware self-review checked for false coupling to non-repository setup resolution, accidental prompt/assertion/schema changes, over-broad fabricated-content bans, dependency or lockfile changes, and GitHub Actions edits. The only issue found was the invalid DraftStonk registry assertion, fixed by testing the setup through the custom setup registry.
+    - Residual risk: The global workflow rubric is intentionally shared across many deterministic fixtures, so a future live benchmark may reveal one skill family needs a more specialized criterion to avoid false negatives. Step 36.9 representative benchmarks are the planned proof point for real generated output.
+    - Rollback note: Revert the Step 36.6 commit to remove the design-system and Tier 2/Tier 3 global quality rubrics while preserving foundational quality helpers and Tier 1 rubrics.
+    - Next command: `$run`
 - [ ] Step 36.7: Add pack-skill quality rubrics by family.
   - Classification: automated
   - Files: modify `tests/layer4/setups/packs/pack-workflows.setup.ts`, modify focused layer1 tests
   - Group rubrics by pack family where possible: creator-media, business-ops, game, devtool, monorepo, kanban, project-fleet, remotion.
   - Test that pack outputs include pack/skill context, fixture evidence, practical risks, and non-generic next routes.
+  - Implementation plan:
+    - Inspect `tests/layer4/setups/packs/pack-workflows.setup.ts` to identify shared fixture fields, pack families, expected routes, and existing hard assertions.
+    - Add a pack-family-aware quality evaluator using `tests/layer4/setup-helpers/quality.ts`. Reuse shared criteria for pack/skill context, fixture evidence, practical risk or validation specificity, expected next-route handoff, and no generic/external overreach.
+    - Keep rubrics deterministic and fixture-bound. If a pack family lacks reliable local evidence signals, add an explicit deferred quality note in focused test expectations rather than forcing subjective scoring.
+    - Extend focused layer1 setup tests so representative pack skills expose quality evaluators and rubric IDs by family, while blocked/generic fallback behavior remains unchanged.
+    - Do not change pack benchmark prompts, hard assertions, budgets, runner/report schemas, package dependencies, or GitHub Actions.
+    - Validate with `pnpm --dir tests test:layer1 -- bench-quality bench-setups runner`, `pnpm --dir tests bench:coverage`, and `git diff --check`.
 - [ ] Step 36.8: Update skill workflows and benchmark command docs.
   - Classification: automated
   - Files: modify mirrored skill creation/update workflows, modify `packs/agentic-skills-bench/*/benchmark-test-skill/SKILL.md`, modify `docs/skills-reference.md` if needed

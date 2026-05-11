@@ -110,11 +110,60 @@ describe("benchmark setup registry", () => {
   });
 
   it("preserves custom setups that only define hard assertions", () => {
-    const setup = resolveBenchSetup("design-system");
+    const rows = benchmarkCoverageMatrix().map((row): BenchCoverageRow => (
+      row.skill === "deploy"
+        ? { ...row, coverage_status: "generic", blocked_reason: undefined, next_command: undefined }
+        : row
+    ));
+    const setup = resolveBenchTarget("deploy", rows)?.setup;
 
     expect(setup).toBeDefined();
     expect(setup?.assertResult).toBeTypeOf("function");
     expect(setup?.qualityEvaluator).toBeUndefined();
+  });
+
+  it("exposes quality evaluators for design-system and high-signal global setups", () => {
+    expect(resolveBenchSetup("design-system")?.qualityEvaluator?.rubric.criteria.map((criterion) => criterion.id)).toEqual(
+      expect.arrayContaining([
+        "design-token-facts",
+        "stitch-frontmatter-shape",
+        "component-token-cross-references",
+        "no-fabricated-design-values",
+      ]),
+    );
+    expect(
+      CUSTOM_BENCH_SETUPS["design-system-draftstonk"].qualityEvaluator?.rubric.criteria.map((criterion) => criterion.id),
+    ).toEqual(
+      expect.arrayContaining([
+        "draftstonk-token-facts",
+        "draftstonk-frontmatter-shape",
+        "draftstonk-prose-coverage",
+        "no-fabricated-draftstonk-values",
+      ]),
+    );
+
+    const globalSkills = [
+      "affected",
+      "brainstorm",
+      "debug",
+      "expert-review",
+      "research-roadmap",
+      "slim-audit",
+      "spec-drift",
+      "trace",
+      "ui-interview",
+    ];
+
+    for (const skill of globalSkills) {
+      expect(resolveBenchSetup(skill)?.qualityEvaluator?.rubric.criteria.map((criterion) => criterion.id), skill).toEqual(
+        expect.arrayContaining([
+          "workflow-fixture-facts",
+          "workflow-domain-specificity",
+          "workflow-next-route",
+          "no-generic-or-external-overreach",
+        ]),
+      );
+    }
   });
 
   it("uses agent-specific route assertions for the run workflow setup", () => {
