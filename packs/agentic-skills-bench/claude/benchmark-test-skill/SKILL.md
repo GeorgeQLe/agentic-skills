@@ -35,7 +35,7 @@ pnpm bench --list-skills
 - List the known repository skills from the command output.
 - Do not run `pnpm verify` or `pnpm bench` for unknown skills.
 - Read and report the listed coverage status for `<SKILL>`: `custom`, `generic`, or `blocked`.
-- Skills with custom layer4 setups use skill-specific fixtures and assertions.
+- Skills with custom layer4 setups use skill-specific fixtures and hard assertions. Some setups also include deterministic output-quality rubrics.
 - Skills without custom layer4 setups use the harness generic smoke benchmark. Treat that as invocation/compliance evidence, not deep domain-quality evidence.
 - If the row is `blocked`, stop before verify and bench. Report the blocked reason and next command from the list output.
 - If the row is `generic`, continue only as generic smoke evidence and route missing custom coverage to `/targeted-skill-builder <SKILL> benchmark coverage`.
@@ -74,6 +74,7 @@ Populate the report from `report.json` and verify the output includes:
 - verify table with layer status and wall time
 - agent name, evaluated pass rate, blocked-run count, and Wilson 95% confidence interval
 - failed assertions, if any
+- output-quality score summary when the setup defines a quality evaluator, including threshold failures, critical failures, and lowest-scoring criteria when present
 - infrastructure-blocked runs, if any
 - latency p50, p95, and p99
 - cost per run and total cost
@@ -85,7 +86,8 @@ Populate the report from `report.json` and verify the output includes:
 Print a concise benchmark summary:
 
 - verify pass/fail
-- benchmark pass rate
+- hard assertion pass rate
+- output-quality score when present, labeled as an additional rubric score rather than a statistical confidence measure
 - infrastructure-blocked count, if any
 - p50 latency
 - total cost
@@ -96,6 +98,7 @@ Print a concise benchmark summary:
 - Do not audit or benchmark the app, website, docs, or product surface unless the user explicitly asks for a separate website/product benchmark workflow.
 - Do not run `pnpm bench` when `pnpm verify` fails.
 - Do not fabricate benchmark metrics. Use the command output and `report.json`.
+- Do not present quality score as a replacement for hard assertion pass rate, or present a small benchmark run as statistically definitive.
 - Do not create or modify GitHub Actions workflows.
 
 ## Next-Step Routing
@@ -106,7 +109,7 @@ If the skill has blocked benchmark coverage, recommend the row's `next_command`.
 
 If the skill only has generic smoke benchmark coverage or otherwise lacks custom domain-quality assertions, recommend `/targeted-skill-builder <skill> benchmark coverage`.
 
-If the skill fails verification or benchmark assertions, recommend `/session-triage <skill> benchmark failure`.
+If the skill fails verification, hard benchmark assertions, or configured quality thresholds, recommend `/session-triage <skill> benchmark failure`.
 
 If benchmark runs are blocked only by rate limits or quota exhaustion, recommend re-running `/benchmark-test-skill <skill>` after the reset instead of treating the skill as failed.
 

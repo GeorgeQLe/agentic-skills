@@ -50,6 +50,8 @@ Use this skill when the user wants to add or update a skill in the `agentic-skil
 6. **Handle benchmark coverage.**
    - For every new shared skill or material behavior update, update `tests/harness/bench-coverage.ts` in the same shipping boundary.
    - Add or register a deterministic custom setup under `tests/layer4/setups/` when local fixtures can exercise the skill without credentials, external services, paid actions, production deploys, or unsafe account state.
+   - When adding or materially updating a custom setup, include a deterministic quality rubric when practical. Score local fixture facts, concrete file/command references, expected next-route handoffs, specificity, and forbidden fabrications as appropriate for the skill.
+   - If output quality cannot be scored reliably from local fixtures, record an explicit blocked/deferred quality note in the setup or coverage review instead of adding a weak subjective rubric.
    - If deterministic local coverage is not safe yet, record an explicit `blocked` row with `blocked_reason` and `next_command`.
    - Use `$targeted-skill-builder <skill-name> benchmark coverage` when the coverage work needs a focused follow-up before the skill can ship.
    - Run `pnpm --dir tests bench:coverage` after updating the matrix.

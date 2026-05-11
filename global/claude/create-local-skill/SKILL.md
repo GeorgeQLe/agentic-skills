@@ -73,6 +73,7 @@ This skill writes **real directories**, not symlinks back to the shared repo. `i
      - `<fork>/global/claude/<name>/` (and `<fork>/global/codex/<name>/` if a Codex version was created), **or**
      - `<fork>/personal/claude/<name>/` if the user wants to keep personal skills segregated from upstream-syncable dirs. Ask which.
    - If the skill is promoted into a fork's `global/` or `packs/` tree, also update that fork's `tests/harness/bench-coverage.ts` and add either a deterministic custom setup under `tests/layer4/setups/` or an explicit blocked row with `blocked_reason` and `next_command`.
+   - For promoted custom setups, include a deterministic quality rubric when practical, or record why quality scoring is blocked/deferred instead of adding a subjective rubric.
    - Recommend `pnpm --dir tests bench:coverage` before the promoted skill is committed.
    - Show the `git status` in the fork and suggest a commit message like `feat(skill): add <name>`. Do **not** commit or push automatically — leave that to the user.
 

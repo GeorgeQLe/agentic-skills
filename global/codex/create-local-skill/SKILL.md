@@ -63,6 +63,7 @@ Scaffold a new **user-local** skill directly into `~/.codex/skills/<name>/` (and
    - Verify with `git -C <path> rev-parse --show-toplevel`.
    - Copy the skill into `<fork>/global/codex/<name>/` (and `<fork>/global/claude/<name>/` if applicable), or into a `<fork>/personal/...` subtree if the user prefers to segregate personal skills.
    - If the skill is promoted into a fork's `global/` or `packs/` tree, also update that fork's `tests/harness/bench-coverage.ts` and add either a deterministic custom setup under `tests/layer4/setups/` or an explicit blocked row with `blocked_reason` and `next_command`.
+   - For promoted custom setups, include a deterministic quality rubric when practical, or record why quality scoring is blocked/deferred instead of adding a subjective rubric.
    - Recommend `pnpm --dir tests bench:coverage` before the promoted skill is committed.
    - Run `git status` in the fork and suggest a commit message. Do not commit or push — leave that to the user.
 

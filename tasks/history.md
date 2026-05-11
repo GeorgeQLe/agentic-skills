@@ -1915,3 +1915,10 @@ Resolved all 10 findings from `/expert-review`:
 - Scored pack outputs for exact pack/skill context, local fixture evidence, practical risk or validation specificity, `$run` next-route handoff, family context, workflow traits, and unsupported external overreach guards.
 - Extended setup registry tests for representative pack-family evaluator discovery and added a strong-versus-generic pack quality regression.
 - Verified with red-first `pnpm --dir tests test:layer1 -- bench-setups`, green `pnpm --dir tests test:layer1 -- bench-quality bench-setups runner`, `pnpm --dir tests bench:coverage`, and `git diff --check`.
+
+## 2026-05-11 — Phase 36 Step 36.8: benchmark quality workflow contracts
+
+- Updated mirrored shared-skill creation, local-skill promotion, and targeted skill-builder contracts so future custom benchmark setup work must include deterministic output-quality rubrics when practical or record an explicit blocked/deferred quality rationale.
+- Updated Codex and Claude `benchmark-test-skill` pack contracts to report hard assertion pass rate separately from optional output-quality score, include quality threshold failures in failure routing, and avoid presenting small benchmark runs as statistically definitive.
+- Added the quality-rubric requirement to `docs/skills-reference.md` and refreshed generated Skills Showcase data after tracked skill contract changes.
+- Verified with Skills Showcase generation/validation, skill dependency/version/routing audits, targeted contract scans, focused layer1 benchmark report/setup tests, benchmark coverage validation, and `git diff --check`.

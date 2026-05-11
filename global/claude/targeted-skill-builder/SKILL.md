@@ -52,6 +52,8 @@ This is intentionally narrower than `/analyze-sessions`. Do not scan all Claude/
    - Mirror Codex when shared behavior is expected, and add Codex `agents/openai.yaml`.
    - Update `tests/harness/bench-coverage.ts` for every new repository skill or material skill behavior update.
    - Add/register a deterministic custom setup under `tests/layer4/setups/` when practical, or record an explicit blocked row with `blocked_reason` and `next_command` when coverage depends on unsafe or external conditions.
+   - For custom setup work, include a deterministic output-quality rubric when practical. Prefer fixture fact coverage, concrete file/command references, expected next-route handoffs, specificity checks, reference traits, and forbidden-fabrication checks over broad prose judgments.
+   - If deterministic quality scoring is not reliable for the skill, record the blocked/deferred quality rationale in the setup review notes or coverage follow-up instead of shipping only silent hard assertions.
    - Update skill discovery docs and routing docs only when the new or changed skill must be discoverable or routed by other skills.
 9. If writing a reusable prompt/template only:
    - Store it only when the user asks for a file or the current repo has an obvious prompt/template location.
