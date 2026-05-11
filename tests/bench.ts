@@ -90,7 +90,7 @@ async function runForAgent(agent: BenchAgent) {
     timeoutMs: setup.timeoutMs,
   };
 
-  const manifest = startOrResumeSession(setup, config);
+  const manifest = startOrResumeSession(setup, config, Boolean(values.resume));
   let completedRuns = manifest.completedRuns;
 
   console.log(

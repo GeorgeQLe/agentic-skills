@@ -1855,3 +1855,10 @@ Resolved all 10 findings from `/expert-review`:
 - Updated benchmark-test-skill pack contracts to report custom/generic/blocked status, stop on blocked rows, and route missing custom coverage to targeted-skill-builder.
 - Added the benchmark coverage freshness contract to `docs/skills-reference.md` and refreshed generated Skills Showcase assets.
 - Verified with Skills Showcase generation/validation, `pnpm --dir tests bench:coverage`, focused `bench-setups.test.ts`, skill dependency/version/routing audits, full `pnpm --dir tests test:layer1`, `./install.sh`, targeted contract scans, and `git diff --check`.
+
+## 2026-05-11 — Phase 35 Step 35.8: validation and benchmark review
+
+- Ran the Phase 35 validation gate for benchmark coverage, setup registry, reporting, runner behavior, coverage-status list output, standard skill audits, and representative live Codex benchmark setups.
+- Fixed validation-discovered harness defects: benchmark runs now resume only with `--resume`, compatible resume manifests must match the requested benchmark config, and infrastructure-blocked rate-limit classification only applies to non-zero agent exits.
+- Hardened custom setup assertions for case-insensitive expected text and Markdown next-command headings, and clarified the benchmark-test-skill setup prompt's expected `$ship` route.
+- Verified with focused layer1 tests, `pnpm --dir tests bench:coverage`, `pnpm --dir tests bench --list-skills`, one-run Codex benchmarks for `run`, `plan-phase`, `benchmark-test-skill`, and `youtube-video-audit`, full `pnpm --dir tests test:layer1`, skill dependency/version/routing audits, `./install.sh`, and `git diff --check`.
