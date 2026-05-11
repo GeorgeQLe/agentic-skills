@@ -1,12 +1,12 @@
 # Active Phase
 
 **Project:** Claude Skills / agentic-skills
-**Status:** Phase 37 planned; dirty worktree must be resolved before implementation.
+**Status:** Phase 37 planned; ready for implementation planning.
 **Last completed phase:** Phase 36 — Benchmark Output Quality Evaluation
 
 ## Priority Task Queue
 
-- [ ] `$ship-end --no-deploy` - commit and push uncommitted changes before continuing task work because `git status --short --branch` on 2026-05-11 shows modified showcase data, ship skills, task docs, and benchmark test files on `master`.
+- [x] `$ship-end --no-deploy` - clean working tree confirmed on 2026-05-11 at 12:38:41 -0400; no uncommitted benchmark/showcase changes remain to ship.
 - [ ] `$plan-phase 37` - generate implementation steps for Phase 37 because `tasks/roadmap.md` now includes planned Phase 37 but `tasks/todo.md` has no current Tests First / Implementation / Green breakdown for it.
 - [ ] `$reconcile-dev-docs fix tasks` - reconcile stale task status because `tasks/todo.md` still contains a completed spec section with unchecked "Spec artifacts are committed and pushed on `master`" even though commit `cbf1b38` is already on `origin/master`.
 
