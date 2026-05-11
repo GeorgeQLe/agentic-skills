@@ -22,6 +22,17 @@ Phase 33 is complete. Phase 34 is planned for the remaining Skills Showcase Webs
 - [x] `benchmark/test-design-system-2026-05-10.md` reflects the latest `report.json` metrics, failures, latency, cost, consistency, and raw session path.
 - [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
 
+## Current Skill Update: design-system Prose Headings
+
+**Goal:** Tighten the mirrored `design-system` skill contract so generated `DESIGN.md` prose sections use parseable Markdown headings instead of bold paragraph labels.
+
+**Acceptance Criteria:**
+- [x] Update both `global/claude/design-system/SKILL.md` and `global/codex/design-system/SKILL.md` with the same Markdown-heading requirement.
+- [x] Confirm no existing skill already owns this narrower behavior.
+- [x] Refresh Skills Showcase generated data if tracked skill behavior changes.
+- [x] Run standard skill validation, targeted heading checks, and whitespace validation.
+- [x] Record results in `tasks/todo.md`, then commit and push on `master`.
+
 ## Current Fix: Both-Agent Benchmark Semantics
 
 **Goal:** Make `$benchmark-test-skill <skill>` benchmark Claude and Codex by default while classifying runner rate limits as infrastructure-blocked instead of skill failures.

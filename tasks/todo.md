@@ -1,4 +1,36 @@
-# Active Phase: Benchmark Test Skill Rename
+# Active Phase: design-system Prose Heading Contract
+
+**Project:** Claude Skills / agentic-skills
+**Status:** Targeted skill update in progress on 2026-05-10.
+
+## Current Update: design-system prose headings
+
+- [x] Read relevant lessons and the mirrored `design-system` skill contracts.
+- [x] Confirm the smallest durable fix is an existing-skill update, not a new skill.
+- [x] Patch both mirrored skills to require Markdown headings for `DESIGN.md` prose sections.
+- [x] Refresh generated Skills Showcase data for the skill behavior change.
+- [x] Run standard skill validation, targeted heading checks, and diff checks.
+- [x] Record review results, commit, and push intended changes.
+
+## Review: design-system prose heading contract
+
+**Decision:** Existing-skill update. The verified gap was ambiguity inside the mirrored `design-system` contract, not a missing workflow.
+
+**Evidence Used:** `tasks/lessons.md`, the recent `design-system prose heading assertion` triage in `tasks/todo.md`, mirrored `global/{claude,codex}/design-system/SKILL.md`, benchmark/layer2 heading expectations recorded in the triage notes, and targeted overlap search for related heading/DESIGN.md contracts.
+
+**Evidence Skipped:** Broad session-history analysis. The issue was already verified by focused triage and did not need recurrence mining.
+
+**Existing-Skill Overlap:** `design-system` already owns the `DESIGN.md` output contract. No separate skill covers this narrower prose-heading rule, so updating the existing skill avoids a duplicate command.
+
+**Changes:** Updated both mirrored `design-system` skills to require Part 2 prose sections as Markdown headings such as `## Colors` and `## Typography`, explicitly disallowing bold paragraph labels. Refreshed generated Skills Showcase assets for the tracked skill behavior change.
+
+**Validation:** `diff -u global/claude/design-system/SKILL.md global/codex/design-system/SKILL.md` passed with no differences. `./install.sh`, `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-next-step-routing.sh --missing`, `scripts/validate-skills-showcase-data.sh`, `pnpm --dir tests test:layer1 -- runner.test.ts bench-report.test.ts`, targeted `rg` checks, and `git diff --check` passed.
+
+**Next Work:** Re-run a one-run Codex smoke for `design-system` when benchmark budget permits, to verify the tightened contract resolves the prose-section assertion end to end.
+
+**Recommended next command:** `$benchmark-test-skill design-system`
+
+# Prior Active Phase: Benchmark Test Skill Rename
 
 **Project:** Claude Skills / agentic-skills
 **Status:** Targeted skill update in progress on 2026-05-10.
