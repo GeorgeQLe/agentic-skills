@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { execFileSync } from "node:child_process";
+import { mkdtempSync, mkdirSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
@@ -46,17 +48,31 @@ describe("benchmark setup registry", () => {
     });
   });
 
-  it("uses a generic smoke setup for repository skills without custom assertions", () => {
+  it("uses custom setup for Tier 1 workflow skills", () => {
     const setup = resolveBenchSetup("run");
     const target = resolveBenchTarget("run");
 
     expect(setup?.skill).toBe("run");
-    expect(setup).not.toBe(CUSTOM_BENCH_SETUPS.run);
+    expect(setup).toBe(CUSTOM_BENCH_SETUPS.run);
     expect(target).toMatchObject({
       skill: "run",
-      coverageStatus: "generic",
+      coverageStatus: "custom",
+      setupPath: "tests/layer4/setups/tier1-workflows.setup.ts",
     });
     expect(target?.setup?.skill).toBe("run");
+  });
+
+  it("uses a generic smoke setup for repository skills without custom assertions", () => {
+    const setup = resolveBenchSetup("affected");
+    const target = resolveBenchTarget("affected");
+
+    expect(setup?.skill).toBe("affected");
+    expect(setup).not.toBe(CUSTOM_BENCH_SETUPS.affected);
+    expect(target).toMatchObject({
+      skill: "affected",
+      coverageStatus: "generic",
+    });
+    expect(target?.setup?.skill).toBe("affected");
   });
 
   it("does not resolve unknown skills", () => {
@@ -90,6 +106,9 @@ describe("benchmark setup registry", () => {
       coverage_status: "custom",
     });
     expect(supportedBenchSkillRows().find((row) => row.skill === "run")).toMatchObject({
+      coverage_status: "custom",
+    });
+    expect(supportedBenchSkillRows().find((row) => row.skill === "affected")).toMatchObject({
       coverage_status: "generic",
     });
   });
@@ -101,7 +120,8 @@ describe("benchmark setup registry", () => {
     });
 
     expect(output).toContain("design-system\tcoverage=custom setup=tests/layer4/setups/design-system.setup.ts");
-    expect(output).toContain("run\tcoverage=generic");
+    expect(output).toContain("run\tcoverage=custom setup=tests/layer4/setups/tier1-workflows.setup.ts");
+    expect(output).toContain("affected\tcoverage=generic");
   });
 });
 
@@ -121,9 +141,36 @@ describe("benchmark coverage matrix", () => {
       setup_path: "tests/layer4/setups/design-system.setup.ts",
     });
     expect(matrix.find((row) => row.skill === "run")).toMatchObject({
-      coverage_status: "generic",
-      fixture_type: "generic-smoke",
+      coverage_status: "custom",
+      fixture_type: "execution-plan-fixture",
+      priority_tier: 1,
     });
+  });
+
+  it("records custom coverage for every Tier 1 workflow setup", () => {
+    const tier1Skills = [
+      "benchmark-test-skill",
+      "feature-interview",
+      "investigate",
+      "plan-phase",
+      "roadmap",
+      "run",
+      "session-triage",
+      "ship",
+      "ship-end",
+      "spec-interview",
+      "targeted-skill-builder",
+    ];
+
+    for (const skill of tier1Skills) {
+      expect(benchmarkCoverageMatrix().find((row) => row.skill === skill)).toMatchObject({
+        coverage_status: "custom",
+        setup_path: "tests/layer4/setups/tier1-workflows.setup.ts",
+        priority_tier: 1,
+        agent_scope: "codex",
+      });
+      expect(resolveBenchSetup(skill)).toBe(CUSTOM_BENCH_SETUPS[skill]);
+    }
   });
 
   it("fails when a repository skill is missing from the matrix", () => {
@@ -159,6 +206,68 @@ describe("benchmark coverage matrix", () => {
     expect(result.ok).toBe(false);
     expect(result.errors).toContain('Blocked benchmark coverage row for "run" must include blocked_reason.');
     expect(result.errors).toContain('Blocked benchmark coverage row for "run" must include next_command.');
+  });
+});
+
+describe("Tier 1 workflow benchmark setups", () => {
+  it("sets up and validates the run workflow artifact", () => {
+    const setup = CUSTOM_BENCH_SETUPS.run;
+    const workDir = mkdtempSync(resolve(tmpdir(), "tier1-run-"));
+
+    setup.setupProject(workDir);
+    writeFileSync(
+      resolve(workDir, "run-plan.md"),
+      [
+        "# Run Plan",
+        "",
+        "Selected next step: Step 1.1.",
+        "Modify tests/example.test.ts for the benchmark fixture.",
+        "validation commands cover tests and git diff --check.",
+        "shipping note: commit and push after validation.",
+        "Next command: $run",
+        "",
+      ].join("\n"),
+    );
+
+    const assertions = setup.assertResult({
+      stdout: "",
+      stderr: "",
+      exitCode: 0,
+      workDir,
+      files: ["run-plan.md"],
+    });
+
+    expect(assertions.every((assertion) => assertion.pass)).toBe(true);
+  });
+
+  it("validates benchmark-test-skill report expectations", () => {
+    const setup = CUSTOM_BENCH_SETUPS["benchmark-test-skill"];
+    const workDir = mkdtempSync(resolve(tmpdir(), "tier1-benchmark-test-skill-"));
+    mkdirSync(resolve(workDir, "benchmark"), { recursive: true });
+    writeFileSync(
+      resolve(workDir, "benchmark/test-run-2026-05-11.md"),
+      [
+        "# Benchmark run",
+        "",
+        "verify passed with one layer skip.",
+        "custom coverage pass rate: 1.0.",
+        "latency p50 was 1200ms.",
+        "cost was 0.42.",
+        "raw session path: tests/benchmarks/runs/run-codex-abc/report.json",
+        "Next command: $ship",
+        "",
+      ].join("\n"),
+    );
+
+    const assertions = setup.assertResult({
+      stdout: "",
+      stderr: "",
+      exitCode: 0,
+      workDir,
+      files: ["benchmark/test-run-2026-05-11.md"],
+    });
+
+    expect(assertions.every((assertion) => assertion.pass)).toBe(true);
   });
 });
 

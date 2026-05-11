@@ -76,7 +76,7 @@ Build custom Codex benchmark test setups for every repository skill and enforce 
     3. Refactor `design-system.setup.ts` and `design-system-draftstonk.setup.ts` to consume the helpers without changing prompts, budgets, fixtures, or expected outputs except where helper names improve assertion descriptions.
     4. Extend layer1 setup tests to cover representative helper behavior and confirm the two existing custom setups still resolve as `custom`.
     5. Validate with targeted layer1 tests, `pnpm --dir tests bench:coverage`, full layer1, and `git diff --check`.
-- [ ] Step 35.4: Add Tier 1 Codex custom benchmark setups.
+- [x] Step 35.4: Add Tier 1 Codex custom benchmark setups.
   - Classification: automated
   - Files: create or modify setup files under `tests/layer4/setups/` for `run`, `ship`, `ship-end`, `roadmap`, `plan-phase`, `feature-interview`, `spec-interview`, `investigate`, `session-triage`, `targeted-skill-builder`, and `benchmark-test-skill`; modify `tests/harness/bench-setups.ts`; modify `tests/harness/bench-coverage.ts`; modify `tests/layer1/bench-setups.test.ts`
   - Use deterministic temp-project fixtures and assert the observable artifact, routing, or report shape for each skill without requiring real remote pushes, external accounts, or user approval.
@@ -215,6 +215,35 @@ Build custom Codex benchmark test setups for every repository skill and enforce 
 - Adversarial review: changed-file self-review checked for prompt/fixture/budget drift, assertion-description drift, generic fallback impact, missing helper coverage, and no GitHub Actions changes. No blocker findings remained after adding report helper coverage.
 - Residual risk: the new helpers cover the assertion shapes needed by the two current custom setups, but later Tier 1/Tier 2 setups may expose additional helper needs for richer artifact layouts; the next setup implementation step should extend helpers from observed duplication rather than overgeneralizing now.
 - Rollback note: revert the Step 35.3 commit to restore inline assertions in the two design-system custom setups and remove helper modules/tests.
+- Next command: `$run`
+
+### Step 35.4 Review — Tier 1 Codex Custom Benchmark Setups
+
+- Added custom Codex benchmark setup coverage for Tier 1 workflow skills: `run`, `ship`, `ship-end`, `roadmap`, `plan-phase`, `feature-interview`, `spec-interview`, `investigate`, `session-triage`, `targeted-skill-builder`, and `benchmark-test-skill`.
+- Kept the implementation compact with one grouped Tier 1 setup module that creates deterministic local fixtures and checks observable artifacts, routing handoffs, report content, planning outputs, or debugging summaries per skill.
+- Registered every Tier 1 setup in `CUSTOM_BENCH_SETUPS` and changed matching coverage rows to `custom`, `priority_tier: 1`, `agent_scope: codex`, and concrete fixture metadata.
+- Extended layer1 coverage for Tier 1 custom resolution, matrix metadata, generic fallback retention, CLI list output, and representative run/report assertion paths.
+- Execution profile note: the phase requests a review-only lane after Step 35.6. This step was executed serially; active Codex instructions also only permit subagents when explicitly requested by the user, so the quality gate used local changed-file adversarial review.
+
+**Validation:**
+- `pnpm --dir tests exec vitest run --project layer1 layer1/bench-setups.test.ts` — passed, 21 tests.
+- `pnpm --dir tests bench:coverage` — passed, `Benchmark coverage matrix valid (143 skills).`
+- `pnpm --dir tests test:layer1` — passed, 8 files / 1209 tests.
+- `pnpm --dir tests bench --list-skills` — passed and showed Tier 1 workflow skills as `coverage=custom setup=tests/layer4/setups/tier1-workflows.setup.ts` while preserving generic rows such as `affected`.
+- `pnpm --dir tests bench --skill run --agent codex --runs 0 --chunk-size 1 --pause 0` — passed and printed `Benchmark coverage for run: custom`.
+- `git diff --check` — passed.
+- Diagnostic note: a one-off `pnpm --dir tests exec tsx -e ...` assertion debug command failed because the sandbox blocked tsx IPC pipe creation under `/var/folders/.../tsx-501/*.pipe`; this was not a project validation command and the focused Vitest rerun covered the assertion path.
+
+**Quality Gate Manifest:**
+- User goal: execute Step 35.4 for repository-wide custom benchmark coverage.
+- Changed files: `tests/layer4/setups/tier1-workflows.setup.ts`, `tests/harness/bench-setups.ts`, `tests/harness/bench-coverage.ts`, `tests/layer1/bench-setups.test.ts`, `tasks/todo.md`, `tasks/history.md`.
+- Per-file purpose: add deterministic Tier 1 setup definitions; register custom setups; update coverage metadata; test Tier 1 setup resolution, matrix rows, CLI output, assertion paths, and generic fallback; record task/history evidence.
+- User-goal mapping: Step 35.4 required Tier 1 Codex custom benchmark setups with deterministic fixtures and observable assertions, plus registry and coverage matrix updates.
+- Tests run: listed above.
+- Skipped tests: live one-run agent benchmarks were not run because this step adds setup contracts and registry coverage for 11 skills; the zero-run `run` smoke proves custom setup resolution without spending agent budget, and Step 35.8 owns representative one-run Codex benchmarks after Tier 1, Tier 2/3, and pack coverage are in place.
+- Adversarial review: changed-file self-review checked for stale generic expectations, missing Tier 1 registry entries, custom rows pointing to nonexistent setup paths, generic fallback regressions, case-sensitive assertion fragility, command-surface output for `--list-skills`, and no GitHub Actions changes. The first focused test run found and fixed stale `run` generic expectations and a case-sensitive fixture mismatch.
+- Residual risk: the grouped setup module favors compact deterministic coverage over per-skill bespoke fixtures; later Tier 2/3 work may justify splitting setups if individual workflow assertions become substantially richer.
+- Rollback note: revert the Step 35.4 commit to remove the Tier 1 setup module, registry entries, matrix overrides, and tests.
 - Next command: `$run`
 
 **On Completion** (fill in when phase is done):

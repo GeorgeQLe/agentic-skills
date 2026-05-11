@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-05-11 — Phase 35 Step 35.4: Tier 1 custom benchmark setups
+
+- Added custom Codex benchmark setups for Tier 1 workflow skills: `run`, `ship`, `ship-end`, `roadmap`, `plan-phase`, `feature-interview`, `spec-interview`, `investigate`, `session-triage`, `targeted-skill-builder`, and `benchmark-test-skill`.
+- Registered the new setups in the benchmark harness and updated the coverage matrix to mark those rows as `custom` with Tier 1 fixture metadata.
+- Extended layer1 coverage for Tier 1 setup resolution, coverage row metadata, CLI list output, generic fallback retention, and representative assertion paths.
+- Verified with targeted `bench-setups.test.ts`, `pnpm --dir tests bench:coverage`, full `pnpm --dir tests test:layer1`, `pnpm --dir tests bench --list-skills`, a zero-run custom `run` benchmark smoke, and `git diff --check`.
+
 ## 2026-05-11 — Phase 35 Step 35.3: reusable benchmark setup helpers
 
 - Added shared layer4 setup helpers for generated artifacts, Markdown/frontmatter assertions, routing handoffs, budget/timeout tiers, and benchmark report expectations.
