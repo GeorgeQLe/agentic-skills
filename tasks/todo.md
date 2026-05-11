@@ -36,6 +36,18 @@
 
 **Recommended Next Step:** `$session-triage run benchmark failure`.
 
+## Current Fix: run benchmark route assertion
+
+**Goal:** Make the `run` custom benchmark route assertion agent-aware so Claude is evaluated against the Claude `/ship` handoff while Codex remains evaluated against the Codex `$run` handoff for the planning fixture.
+
+**Acceptance Criteria:**
+- [x] Benchmark assertion context includes the active runner agent.
+- [x] The tier1 `run` benchmark setup accepts `/ship` for Claude and `$run` for Codex.
+- [x] Focused layer1 tests cover the agent-specific route behavior.
+- [x] One-run Claude and Codex benchmarks for `run` pass after the fix.
+
+**Result:** Updated the benchmark harness to pass `{ agent }` into setup assertions and updated the tier1 workflow setup to support per-agent route expectations. Added a focused regression test proving the `run` setup accepts `/ship` for Claude while preserving `$run` for Codex. Validation passed with `pnpm --dir tests test -- layer1/bench-setups.test.ts` (1,230 layer1 tests), `pnpm --dir tests bench:coverage` (143 skills valid), `pnpm bench --skill run --agent claude --runs 1 --chunk-size 1 --pause 0` (100.0%, session `run-claude-715a2214`), and `pnpm bench --skill run --agent codex --runs 1 --chunk-size 1 --pause 0` (100.0%, session `run-codex-9584a113`).
+
 ## Recommended Command
 
 `$plan-phase 36`

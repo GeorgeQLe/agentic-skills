@@ -62,6 +62,88 @@ describe("benchmark setup registry", () => {
     expect(target?.setup?.skill).toBe("run");
   });
 
+  it("uses agent-specific route assertions for the run workflow setup", () => {
+    const setup = resolveBenchSetup("run");
+    expect(setup).toBeDefined();
+
+    const workDir = mkdtempSync(resolve(tmpdir(), "run-route-"));
+    mkdirSync(resolve(workDir, "tasks"), { recursive: true });
+    writeFileSync(
+      resolve(workDir, "run-plan.md"),
+      [
+        "# Run Plan",
+        "",
+        "Step 1.1: Add a deterministic benchmark fixture.",
+        "",
+        "Validation commands are discovered before execution.",
+        "",
+        "Shipping note: ship verified changes.",
+        "",
+        "Next Command",
+        "`/ship`",
+      ].join("\n"),
+    );
+
+    const claudeAssertions = setup!.assertResult(
+      {
+        stdout: "",
+        stderr: "",
+        exitCode: 0,
+        workDir,
+        files: ["run-plan.md"],
+      },
+      { agent: "claude" },
+    );
+    const codexAssertions = setup!.assertResult(
+      {
+        stdout: "",
+        stderr: "",
+        exitCode: 0,
+        workDir,
+        files: ["run-plan.md"],
+      },
+      { agent: "codex" },
+    );
+
+    expect(claudeAssertions.find((assertion) => assertion.description === "Output recommends /ship")).toMatchObject({
+      pass: true,
+    });
+    expect(codexAssertions.find((assertion) => assertion.description === "Output recommends $run")).toMatchObject({
+      pass: false,
+    });
+
+    writeFileSync(
+      resolve(workDir, "run-plan.md"),
+      [
+        "# Run Plan",
+        "",
+        "Step 1.1: Add a deterministic benchmark fixture.",
+        "",
+        "Validation commands are discovered before execution.",
+        "",
+        "Shipping note: ship verified changes.",
+        "",
+        "Next Command",
+        "`$run`",
+      ].join("\n"),
+    );
+
+    expect(
+      setup!.assertResult(
+        {
+          stdout: "",
+          stderr: "",
+          exitCode: 0,
+          workDir,
+          files: ["run-plan.md"],
+        },
+        { agent: "codex" },
+      ).find((assertion) => assertion.description === "Output recommends $run"),
+    ).toMatchObject({
+      pass: true,
+    });
+  });
+
   it("uses custom setup for deterministic Tier 2 and Tier 3 global workflows", () => {
     const setup = resolveBenchSetup("affected");
     const target = resolveBenchTarget("affected");
