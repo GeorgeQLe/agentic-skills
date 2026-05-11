@@ -1,6 +1,6 @@
 ---
 name: ui-interview
-description: Interview page by page to define a complete UI specification, including layout, hierarchy, controls, links, spacing, sizing, responsive behavior, visual states, and implementation-ready interface details
+description: Interview page by page to define a complete UI specification, including layout, hierarchy, controls, links, spacing, sizing, responsive behavior, visual states, and implementation-ready interface details — supports a requirements-only mode that establishes data, actions, and states without locking layout or component decisions
 type: planning
 version: 1.0.0
 argument-hint: "[optional: app, page, flow, feature, or draft UI]"
@@ -14,6 +14,8 @@ Use this skill when the user needs to turn a rough product idea, feature, page, 
 
 Use `$ux-variation` after this skill when the user wants multiple experience concepts or interface variants to compare before locking the final direction.
 
+When invoked with `--requirements-only` (or when the user says "just requirements", "requirements only", or "content requirements"), this skill stops after establishing what the page needs — data, actions, states, and constraints — without committing to any layout, component, or spatial decisions. This mode feeds directly into `$ux-variation --layout-mode` to explore multiple concrete visual approaches for the same content contract.
+
 ## Workflow
 
 1. **Resolve context**
@@ -24,6 +26,7 @@ Use `$ux-variation` after this skill when the user wants multiple experience con
 
 2. **Treat inputs as draft material**
    - Do not assume the current UI, prompt, screenshot, or mockup is final.
+   - Product specs, ICP documents, and journey maps are reference material, not locked constraints. The user may override any product decision during the interview. When a user's interview answer contradicts an existing spec, adopt the interview answer and note the divergence.
    - Preserve explicit constraints, but challenge unclear defaults before they become implementation decisions.
    - Distinguish product behavior decisions from UI presentation decisions.
 
@@ -58,6 +61,21 @@ Use `$ux-variation` after this skill when the user wants multiple experience con
      - Global shell: header, sidebar, footer, navigation, account controls, notifications
      - Page inventory: every route, modal, drawer, overlay, and important empty state
      - Page purpose: user goal, task priority, and success condition
+
+4b. **Requirements gate (requirements-only mode)**
+   - In requirements-only mode, stop here — do not proceed to layout anatomy, component inventory, or spatial decisions.
+   - For each page, confirm:
+     - Data fields and entities with cardinality: one, many, nested, or polymorphic
+     - User actions: create, edit, delete, filter, sort, export, navigate, bulk-select, reorder
+     - States: empty, loading, error, partial, full, offline, permission-denied
+     - Constraints: real-time updates, offline support, accessibility requirements, performance budgets
+     - Content hierarchy: primary, secondary, tertiary information
+     - Relationships between data elements: parent-child, peer, reference, aggregate
+   - Present a **Content Requirements Manifest** summarizing all pages, then ask the user to confirm before writing deliverables.
+   - Write `specs/ui-requirements-[topic].md` and `ui-requirements-[topic]-interview.md`.
+   - After writing files, recommend `$ux-variation --layout-mode` to explore multiple visual approaches for these requirements, or `$ui-interview` without the flag to proceed directly to a single deep UI specification.
+   - Stop. Do not continue to step 5 or beyond.
+
      - Layout anatomy: top-to-bottom and left-to-right regions, alignment, density, scroll behavior
      - Component inventory: tables, lists, cards, forms, charts, media, editors, maps, canvases
      - Controls: every button, icon button, segmented control, checkbox, radio, toggle, input, menu, tab, link, and destructive action
@@ -65,7 +83,7 @@ Use `$ux-variation` after this skill when the user wants multiple experience con
      - States: default, hover, focus, active, selected, disabled, loading, error, success, partial, offline
      - Spatial details: element prominence, approximate sizes, gaps, padding, fixed or fluid dimensions, sticky regions, overlap rules, max widths
      - Responsive behavior: desktop, tablet, mobile, wide desktop, touch target sizing, collapsed controls
-     - Accessibility: keyboard order, focus traps, labels, contrast, reduced motion, screen reader names
+     - Accessibility: keyboard order, focus traps, labels, contrast, reduced motion, screen reader names. Include color-blind safe patterns, keyboard navigation, reduced motion support, and screen reader labels by default in every spec. Do not present accessibility features as optional checkboxes. Only ask about domain-specific accessibility when the product context warrants it.
    - When a page includes repeated items, define one canonical item and its variations rather than asking about every row individually.
 
 5. **Research and recommend by default**
@@ -73,6 +91,7 @@ Use `$ux-variation` after this skill when the user wants multiple experience con
    - For material decisions, present options, a recommendation, rationale, tradeoffs, and mitigation.
    - Recommend familiar controls over novel patterns unless the product has a strong reason to deviate.
    - For frontend work, respect the existing design system, component library, and implementation patterns.
+   - Reference and inspiration questions are low-priority. Ask once early, accept any answer including "none" or "let's experiment," and move on. Do not block the interview on reference input.
 
 6. **Coverage checkpoint**
    - Before concluding, present a concise checklist of pages, components, controls, states, responsive behavior, and unresolved risks.
@@ -108,6 +127,8 @@ The interview log must include:
 - Notable changes from the initial draft, current implementation, or artifact
 
 After writing files, recommend `$ux-variation` if variants are needed before implementation, or `$roadmap` if the interface is ready to sequence into work.
+
+In requirements-only mode, recommend `$ux-variation --layout-mode`, not `$roadmap`, because the content contract still needs concrete visual alternatives before implementation sequencing.
 
 ## Constraints
 

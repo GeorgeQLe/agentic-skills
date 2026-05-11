@@ -14,7 +14,7 @@ Use this skill when the user wants to explore multiple UX/UI directions before c
 
 Use `/ui-interview` first when the interface has not yet been specified page by page. Use this skill directly when a UI spec, current implementation, screenshot, prototype, or clear feature scope already exists.
 
-When invoked with `--layout-mode` (or when the user says "layout mode", "layout variations", or "UI variations"), this skill operates at the concrete component/layout level — it varies HOW the same content is presented visually, not WHAT the user flow is. Layout-mode takes a fixed content contract (from `specs/ui-requirements-[topic].md` or equivalent) and generates 2–5 concrete visual/spatial approaches: different container patterns, detail views, navigation styles, density levels, and responsive strategies. Each variation is specified well enough to build as a lightweight implementation so the user can react to real output before converging via `/ui-consolidate`.
+When invoked with `--layout-mode` (or when the user says "layout mode", "layout variations", or "UI variations"), this skill operates at the concrete component/layout level — it varies HOW the same content is presented visually, not WHAT the user flow is. Layout-mode takes a fixed content contract (from `specs/ui-requirements-[topic].md` or equivalent) and generates 2–5 concrete visual/spatial approaches: different container patterns, detail views, navigation styles, density levels, and responsive strategies. Each variation is specified well enough to build as a lightweight implementation, then evaluated through `/uat --variant-evaluation` before `/ui-consolidate`.
 
 ## Workflow
 
@@ -45,7 +45,7 @@ When invoked with `--layout-mode` (or when the user says "layout mode", "layout 
 4. **Interview for variation goals**
    - Ask 1 to 3 focused questions per turn using AskUserQuestion.
    - Default to maximally contrasting archetypes. Do not ask how different variants should be — assume dramatic contrast unless the user explicitly requests graduated steps.
-   - Default evaluation method is: build each variation and evaluate by using it. Do not ask who will judge or how — assume solo evaluator building and gut-checking unless the user states otherwise.
+   - Default evaluation method is: build each variation, then run `/uat --variant-evaluation` so the user has task-based evidence before consolidation. Do not ask who will judge — assume solo evaluator building and gut-checking unless the user states otherwise.
    - When presenting a design decision with 3+ plausible answers during the interview, always include "Make this a variant axis (test all approaches)" as an option. When the user has already chosen "test all" for a prior question in the same session, default subsequent ambiguous decisions to variant axes without asking.
    - Establish what the variants must accomplish, how a new user arrives and reaches first value, what the normal repeat workflow looks like, what users create/save/share/export/invite others into, what roles or permission levels exist, what notifications or status updates users expect, how users resume work after time away, what happens when a workflow is abandoned or blocked, which current interface parts work, which parts feel wrong or uncertain, what would make a variant unacceptable, and what evidence will decide the winner.
    - When the user is unsure, recommend a practical default and explain why.
@@ -55,7 +55,7 @@ When invoked with `--layout-mode` (or when the user says "layout mode", "layout 
      - Are there reference apps or pages the user admires for this type of content?
      - Are any layout patterns explicitly off the table?
      - What is the build budget per variation? (quick prototype, medium fidelity, production-ready)
-     - How will the user evaluate variations? (looking at screenshots, using the built UI, comparing side-by-side)
+     - What must the user do in each built variant before they are ready to consolidate?
 
 5. **Create distinct variation concepts**
    - Produce 5 variations by default. Present the concepts for adjustment — do not ask the user to choose a count first.
@@ -101,11 +101,15 @@ When invoked with `--layout-mode` (or when the user says "layout mode", "layout 
      - States rendering (how empty, loading, error, and partial states appear in this layout)
      - Implementation file list (components, routes, layouts to create or modify)
      - Estimated build time (hours)
+     - Variant evaluation task: the user task to perform in this variation before consolidation
+     - Evidence to capture: screenshots, notes, time-to-complete, friction points, and acceptance/rejection signals
 
 8. **Plan experimentation**
-   - Recommend serial full buildout of all approved variants. Do not recommend building a subset first — the user's consistent preference is to build all variants before evaluating. After all are built, recommend `/ui-consolidate`.
+   - Recommend serial full buildout of all approved variants. Do not recommend building a subset first — the user's consistent preference is to build all variants before evaluating.
+   - After variants are built, recommend `/uat --variant-evaluation` before `/ui-consolidate`. Consolidation is premature until evaluation evidence exists or the user explicitly says they reviewed the variants and is ready to converge.
    - Define comparison criteria before selecting a winner.
    - Include a lock-in checklist so the chosen direction becomes a decision record, not a vague preference.
+   - Include a UAT handoff checklist: target task for each variant, success criteria, side-by-side comparison questions, evidence to capture, tradeoffs to notice, and readiness criteria for `/ui-consolidate`.
 
 9. **Coverage checkpoint**
    - Before concluding, use AskUserQuestion to summarize the variants, decision criteria, and experiment plan.
@@ -167,6 +171,8 @@ In layout-mode, use this variation format instead:
   - Error: [inline / toast / page-level]
 - Implementation files: [list of components, routes, layouts]
 - Estimated build time: [hours]
+- Variant evaluation task: [what the user should try in the built variant]
+- Evidence to capture: [screenshots, notes, friction, timing, confidence]
 - Strengths:
 - Risks:
 - Complexity: Low | Medium | High
@@ -174,7 +180,7 @@ In layout-mode, use this variation format instead:
 
 Layout-mode deliverable filenames: `specs/ui-layout-variations-[topic].md` and `ui-layout-variations-[topic]-interview.md`.
 
-After writing files in layout-mode, recommend `/run` to build each variation as a lightweight implementation, then `/ui-consolidate` to compare and converge on a final design.
+After writing files in layout-mode, recommend `/run` to build each variation as a lightweight implementation, then `/uat --variant-evaluation` to guide hands-on review. Do not recommend `/ui-consolidate` until evaluation evidence exists or the user explicitly says they have reviewed variants and are ready to converge.
 
 After writing files in standard mode, recommend `/run` or `/roadmap` if the next step is building variants, `/uat` if humans should evaluate acceptance, or `/ui-interview` if the winning direction still lacks implementation-ready interface detail.
 
@@ -184,6 +190,7 @@ After writing files in standard mode, recommend `/run` or `/roadmap` if the next
 - Do not choose a winner for the user unless the evidence clearly supports it and the user asked for a recommendation.
 - Do not defer all decisions to testing. State a recommended variant or experiment when evidence is sufficient.
 - Do not ignore implementation cost. A compelling variation still needs a prototype path and selection criteria.
+- Do not route directly from built UI variants to `/ui-consolidate`; insert `/uat --variant-evaluation` unless the user explicitly confirms they have already evaluated the variants.
 - Do not enforce shared design constraints across variations. Each variation independently decides layout, density, color, navigation, and component choices. Only technical stack (framework, renderer, design system tokens) is shared unless the user explicitly locks a shared constraint.
 
 ## Archive-First Replacement Policy

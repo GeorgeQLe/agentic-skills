@@ -1,0 +1,7 @@
+interface:
+  display_name: "UI Consolidate"
+  short_description: "Converge evaluated UI variants into a final spec"
+  default_prompt: "Use $ui-consolidate after built UI variants have UAT evidence to compare what worked, resolve conflicts, and write a final implementation-ready UI specification."
+
+policy:
+  allow_implicit_invocation: true

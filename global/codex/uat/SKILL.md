@@ -3,7 +3,7 @@ name: uat
 description: Create user acceptance test journeys from a target user's perspective, with role-based scenarios, acceptance criteria, and evidence capture
 type: analysis
 version: 1.0.0
-argument-hint: "[optional: persona, feature, release, journey, or app]"
+argument-hint: "[--variant-evaluation] [optional: persona, feature, release, journey, app, or variation spec]"
 ---
 
 ## Pack Availability Guard
@@ -19,6 +19,8 @@ Create a user acceptance testing plan from the perspective of a potential or tar
 UAT is not dogfooding. Dogfood asks how the app owner can adopt the product into their own workflow to understand and evaluate it. UAT asks whether a target user can complete meaningful real-world journeys and would accept the product as fit for use.
 
 This is a human-run acceptance plan, not automated testing. Do not start servers, drive browsers, call APIs, create accounts, or perform the scenarios yourself.
+
+When invoked with `--variant-evaluation` (or when the user asks to test/review UI variants), create a hands-on evaluation plan for built UX/UI variants before `$ui-consolidate`. This mode helps the user try each variant in a comparable way and capture enough evidence to form a defensible consolidation opinion.
 
 ## Workflow
 
@@ -38,6 +40,16 @@ This is a human-run acceptance plan, not automated testing. Do not start servers
    - Game: read `research/game-audience.md`, `research/game-fantasy.md`, `research/game-core-loop.md`, `research/game-prototype-test.md`, and `research/game-playtest-metrics.md` when present.
    - Generic: use specs, README, routes, tests, examples, issue descriptions, and task acceptance criteria.
    - In monorepos with `research/{app}/` or `specs/{app}/`, produce app-scoped UAT journeys for the requested app. If no app is specified and multiple apps are plausible, ask the user to choose.
+
+2b. **Variant evaluation mode**
+   - Trigger this branch when invoked with `--variant-evaluation`, when `specs/ui-layout-variations-*.md` exists for the requested topic, or when the user asks how to test/review built variants.
+   - Read `specs/ui-layout-variations-[topic].md`, `specs/ux-variations-[topic].md`, `specs/ui-requirements-[topic].md`, built variant routes/components, and any existing `research/uat-variant-evaluation-[topic].md`.
+   - Identify each variant, its intended thesis, implementation location, and the target user task it should support.
+   - Create comparable journeys that make the user perform the same core task in every variant, then capture variant-specific strengths, friction, confidence, and rejection signals.
+   - Include a side-by-side comparison matrix and a "Ready for `$ui-consolidate`?" checklist.
+   - Human execution still belongs in `tasks/manual-todo.md`; this skill writes the plan and manual tasks, but does not run the variants.
+   - After writing files, recommend `$ui-consolidate` only as the next step after the manual evaluation tasks are completed or when the user explicitly says they have already evaluated the variants.
+   - Stop after this branch. Do not generate generic target-user acceptance journeys unless the user also requested them.
 
 3. **Define acceptance perspective**
    - Identify 1-3 target user personas or roles from the evidence.
@@ -78,6 +90,7 @@ This is a human-run acceptance plan, not automated testing. Do not start servers
 ## Deliverables
 
 - `research/uat-plan.md` - persona assumptions, journey matrix, source evidence, acceptance checklist, result log template, and follow-up guidance.
+- In variant evaluation mode: `research/uat-variant-evaluation-[topic].md` - variant inventory, task script, comparison matrix, result logs, and consolidation readiness checklist.
 - `tasks/manual-todo.md` - append or replace only the `## UAT Journeys` section.
 - `tasks/recurring-todo.md` - optional, only when recurring UAT is useful and not already tracked.
 
@@ -110,6 +123,52 @@ Use this journey format in `research/uat-plan.md`:
 - Follow-up tasks promoted:
 ```
 
+Use this variant evaluation format in `research/uat-variant-evaluation-[topic].md`:
+
+```markdown
+## Variant Evaluation Plan
+
+### Variant Inventory
+
+| Variant | Implementation location | Thesis | Primary task |
+|---|---|---|---|
+
+### Shared Evaluation Script
+
+- Target user:
+- Scenario:
+- Setup:
+- Core task sequence:
+- Success criteria:
+- Non-acceptance signals:
+- Evidence to capture:
+
+### Per-Variant Result Log
+
+#### [Variant name]
+
+- Status: Not run | Pass | Fail | Blocked
+- Evidence captured:
+- What worked:
+- What felt wrong:
+- Time/friction notes:
+- Keep for consolidation:
+- Reject for consolidation:
+- Confidence: Low | Medium | High
+
+### Side-by-Side Comparison Matrix
+
+| Dimension | Variant A | Variant B | Variant C | Current preference | Evidence |
+|---|---|---|---|---|---|
+
+### Ready for `$ui-consolidate`?
+
+- [ ] Every built variant has been tried or explicitly skipped.
+- [ ] Evidence exists for each kept/rejected design element.
+- [ ] Open blockers are documented.
+- [ ] The user has enough confidence to converge.
+```
+
 Use this item format in `tasks/manual-todo.md`:
 
 ```markdown
@@ -121,6 +180,7 @@ Use this item format in `tasks/manual-todo.md`:
 ## Task Classification
 
 - Human UAT journey execution goes in `tasks/manual-todo.md`.
+- Variant evaluation tasks go in `tasks/manual-todo.md` under `## UAT Journeys` and should reference `research/uat-variant-evaluation-[topic].md`.
 - Immediate implementation or documentation fixes confirmed by completed UAT go in `tasks/todo.md`.
 - One-time condition-gated evidence collection goes in `tasks/record-todo.md`.
 - Release-cadence UAT checks go in `tasks/recurring-todo.md`.
@@ -131,6 +191,7 @@ Use this item format in `tasks/manual-todo.md`:
 - Do not run or operate the product in this skill.
 - Do not start dev servers, launch browsers, use Playwright, call APIs, create accounts, or perform CLI workflows.
 - Do not mark journeys complete; only a human tester can do that after performing them.
+- Do not recommend `$ui-consolidate` before variant evaluation evidence exists, unless the user explicitly confirms they have already reviewed the variants and are ready to converge.
 - Do not duplicate existing unchecked UAT or manual tasks. Reference existing items when they already cover the same journey.
 - Prefer evidence-backed target-user journeys over exhaustive feature coverage.
 - Keep dogfood and UAT separate: use `$dogfood` for owner/operator adoption into the builder's workflow; use `$uat` for target-user acceptance journeys.
