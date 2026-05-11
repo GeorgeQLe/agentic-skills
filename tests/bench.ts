@@ -1,19 +1,12 @@
 import { parseArgs } from "node:util";
-import { designSystemSetup } from "./layer4/setups/design-system.setup.js";
-import { designSystemDraftstonkSetup } from "./layer4/setups/design-system-draftstonk.setup.js";
-import type { BenchAgent, SkillBenchSetup, BenchConfig } from "./harness/bench-types.js";
+import type { BenchAgent, BenchConfig } from "./harness/bench-types.js";
 import { startOrResumeSession, runChunk } from "./harness/bench-runner.js";
 import { writeReport } from "./harness/bench-report.js";
 import {
   findResumeableSession,
-  loadSessionRuns,
   getSessionDir,
 } from "./harness/bench-persistence.js";
-
-const SETUPS: Record<string, SkillBenchSetup> = {
-  "design-system": designSystemSetup,
-  "design-system-draftstonk": designSystemDraftstonkSetup,
-};
+import { BENCH_SETUPS, supportedBenchSkills } from "./harness/bench-setups.js";
 
 const { values } = parseArgs({
   options: {
@@ -24,8 +17,16 @@ const { values } = parseArgs({
     agent: { type: "string", default: "both" },
     resume: { type: "boolean", default: false },
     "report-only": { type: "boolean", default: false },
+    "list-skills": { type: "boolean", default: false },
   },
 });
+
+if (values["list-skills"]) {
+  for (const supportedSkill of supportedBenchSkills()) {
+    console.log(supportedSkill);
+  }
+  process.exit(0);
+}
 
 const skill = values.skill!;
 const runs = parseInt(values.runs!, 10);
@@ -33,9 +34,9 @@ const chunkSize = parseInt(values["chunk-size"]!, 10);
 const pauseSeconds = parseInt(values.pause!, 10);
 const agents = resolveAgents(values.agent!);
 
-const setup = SETUPS[skill];
+const setup = BENCH_SETUPS[skill];
 if (!setup) {
-  console.error(`Unknown skill: ${skill}. Available: ${Object.keys(SETUPS).join(", ")}`);
+  console.error(`Unknown benchmark target: ${skill}. Supported: ${supportedBenchSkills().join(", ")}`);
   process.exit(1);
 }
 

@@ -57,6 +57,33 @@ Optionally add a small harness helper or CLI option so `tests/bench.ts` can list
 
 **Recommended next command:** `$targeted-skill-builder benchmark target eligibility preflight`
 
+## Current Fix: benchmark target eligibility preflight
+
+- [x] Read relevant lessons, triage notes, and mirrored benchmark-test-skill contracts.
+- [x] Confirm the smallest durable fix is an existing-skill update plus small harness target-list support.
+- [x] Add an explicit benchmark setup registry and `pnpm bench --list-skills`.
+- [x] Update mirrored benchmark-test-skill contracts to preflight unsupported targets before verify.
+- [x] Run targeted validation and refresh Skills Showcase generated data.
+- [x] Record review results, commit, and push.
+
+## Review: benchmark target eligibility preflight
+
+**Decision:** Existing-skill update. `benchmark-test-skill` already owns verify -> bench -> report, so the fix belongs in that skill contract, with a small harness affordance to make supported targets discoverable.
+
+**Evidence Used:** `tasks/lessons.md`, the run benchmark verify triage above, `packs/agentic-skills-bench/{claude,codex}/benchmark-test-skill/SKILL.md`, `tests/bench.ts`, `tests/layer4/bench.test.ts`, and the prior failed `run` verify/bench preflight output.
+
+**Evidence Skipped:** Broad session-history analysis. The issue was already verified from the immediate failing command and current harness code.
+
+**Existing-Skill Overlap:** `benchmark-test-skill` substantially covers the workflow. No new skill was needed.
+
+**Changes:** Added `tests/harness/bench-setups.ts` as the explicit benchmark setup registry, added `tests/layer1/bench-setups.test.ts`, wired `tests/bench.ts` and `tests/layer4/bench.test.ts` through the registry, and added `pnpm bench --list-skills`. Updated both mirrored benchmark-test-skill contracts to run the eligibility preflight before verify, stop unsupported targets with `unsupported benchmark target`, list supported targets, and route to benchmark coverage creation instead of treating unsupported targets as skill behavior failures. Refreshed generated Skills Showcase assets for the tracked skill behavior change.
+
+**Validation:** `pnpm bench --list-skills` prints `design-system` and `design-system-draftstonk`. `pnpm bench --skill run --agent codex --runs 1 --chunk-size 1 --pause 0` now fails before any agent work with `Unknown benchmark target: run. Supported: design-system, design-system-draftstonk`. `pnpm --dir tests test:layer1 -- bench-setups.test.ts bench-report.test.ts runner.test.ts` passed with 1,190 layer1 tests. `pnpm verify --skill design-system` passed layer1 in 7.2s and layer2 in 206.7s. `./install.sh`, `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-next-step-routing.sh --missing`, targeted `rg` checks, mirrored benchmark skill diff with only slash-vs-dollar differences, and `git diff --check` passed. `scripts/validate-skills-showcase-data.sh` required a generated proof refresh after the final task-doc review update; the refreshed generated assets are included in the shipping boundary.
+
+**Next Work:** Re-run `$benchmark-test-skill run --codex` after this commit to confirm the user-facing workflow stops at the new eligibility preflight instead of the verify gate.
+
+**Recommended next command:** `$benchmark-test-skill run --codex`
+
 ## Current Update: design-system prose headings
 
 - [x] Read relevant lessons and the mirrored `design-system` skill contracts.
