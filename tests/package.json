@@ -13,6 +13,7 @@
     "test:all": "vitest run",
     "verify": "tsx verify.ts",
     "bench": "tsx bench.ts",
+    "bench:coverage": "tsx harness/bench-coverage.ts",
     "bench:quick": "BENCH_RUNS=5 vitest run --project layer4"
   },
   "devDependencies": {

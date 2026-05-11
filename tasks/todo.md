@@ -22,10 +22,10 @@ Build custom Codex benchmark test setups for every repository skill and enforce 
 
 ## Acceptance Criteria
 
-- [ ] A committed coverage matrix lists every repository skill.
-- [ ] Validation fails when a repository skill is missing from the coverage matrix.
-- [ ] Validation fails when a `custom` coverage row points to a missing setup.
-- [ ] Validation fails when a `blocked` row lacks a reason and next command.
+- [x] A committed coverage matrix lists every repository skill.
+- [x] Validation fails when a repository skill is missing from the coverage matrix.
+- [x] Validation fails when a `custom` coverage row points to a missing setup.
+- [x] Validation fails when a `blocked` row lacks a reason and next command.
 - [ ] `$benchmark-test-skill <skill>` reports custom/generic/blocked coverage status.
 - [ ] Future skill creation/update workflows require benchmark coverage handling.
 - [ ] Tier 1 skills have custom Codex benchmark setups.
@@ -53,7 +53,7 @@ Build custom Codex benchmark test setups for every repository skill and enforce 
 
 ## Implementation
 
-- [ ] Step 35.1: Add the committed benchmark coverage matrix and validation CLI.
+- [x] Step 35.1: Add the committed benchmark coverage matrix and validation CLI.
   - Classification: automated
   - Files: create `tests/harness/bench-coverage.ts`, create `tests/fixtures/bench-coverage/README.md` if fixture notes are needed, modify `tests/package.json`, modify `tests/layer1/bench-setups.test.ts`
   - Define one machine-readable row per repository skill name with `skill`, `source_paths`, `coverage_status`, `setup_path`, `priority_tier`, `agent_scope`, `fixture_type`, `blocked_reason`, `next_command`, and `last_verified`.
@@ -125,10 +125,36 @@ Build custom Codex benchmark test setups for every repository skill and enforce 
 
 ## Review
 
+### Step 35.1 Review — Benchmark Coverage Matrix and Validation CLI
+
+- Completed `tests/harness/bench-coverage.ts` with a committed 143-skill coverage matrix, repository skill discovery, per-skill source path projection, and validation for missing rows, missing custom setup paths, and incomplete blocked rows.
+- Added `pnpm --dir tests bench:coverage` as the coverage validation CLI.
+- Extended layer1 benchmark setup tests to cover the happy path and the required validation failure modes.
+- Kept current non-custom skills as `generic` so the existing smoke fallback remains available until later steps migrate rows to `custom` or `blocked`.
+
+**Validation:**
+- `pnpm --dir tests bench:coverage` — passed, `Benchmark coverage matrix valid (143 skills).`
+- `pnpm --dir tests exec vitest run --project layer1 layer1/bench-setups.test.ts` — passed, 9 tests.
+- `pnpm --dir tests test:layer1` — passed, 8 files / 1197 tests.
+- `pnpm --dir tests verify --skill design-system --layers 1` — passed, layer1 PASS in 7.1s.
+- `git diff --check` — passed.
+
+**Quality Gate Manifest:**
+- User goal: execute Step 35.1 for repository-wide custom benchmark coverage.
+- Changed files: `tests/harness/bench-coverage.ts`, `tests/layer1/bench-setups.test.ts`, `tests/package.json`, `tasks/todo.md`, `tasks/history.md`.
+- Per-file purpose: add the coverage matrix/validator CLI, test the contract, expose the command, and record task/history evidence.
+- User-goal mapping: the matrix lists repository skills; validator and tests enforce missing-row, missing-custom-setup, and blocked-row contract failures.
+- Tests run: listed above.
+- Skipped tests: layer2/layer3/layer4 benchmark execution not run because Step 35.1 only adds the coverage contract and does not alter agent execution or benchmark running behavior.
+- Adversarial review: changed-file self-review plus targeted checks for non-repository custom targets, matrix completeness, validation failure modes, and no GitHub Actions changes; removed the dead `design-system-draftstonk` matrix override because it is a benchmark target but not a repository skill.
+- Residual risk: the matrix currently stores committed skill names while source paths are projected from live discovery; future steps that need serialized source paths in reports should consume `benchmarkCoverageMatrix()` rather than the raw name list.
+- Rollback note: revert the Step 35.1 commit to remove the new validator, package script, and tests.
+- Next command: `$run`
+
 **On Completion** (fill in when phase is done):
 - Deviations from plan: TBD
 - Tech debt / follow-ups: TBD
 - Ready for next phase: TBD
 
-**Next work:** Step 35.1: Add the committed benchmark coverage matrix and validation CLI.
+**Next work:** Step 35.2: Wire coverage status into benchmark setup resolution and CLI reporting.
 **Recommended next command:** `$run`
