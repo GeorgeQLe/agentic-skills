@@ -35,7 +35,7 @@ Discover and search installed global skills plus enabled project-local pack skil
    | Discovery & Market Fit | `icp`, `enterprise-icp` |
    | Game Development | `game-workflow`, `game-audience`, `game-fantasy`, `game-genre-map`, `game-comparables`, `game-core-loop`, `game-prototype-test`, `game-store-page-test`, `game-playtest-metrics`, `game-roadmap`, `game-launch` |
    | Devtool Development | `devtool-workflow`, `devtool-user-map`, `devtool-integration-map`, `devtool-dx-journey`, `devtool-adoption`, `devtool-positioning`, `devtool-monetization`, `devtool-docs-audit` |
-   | Planning | `brainstorm`, `brainstorm-kanban`, `concept-exploration`, `feature-interview`, `spec-interview`, `spec-interview --ideas`, `ui-interview`, `ux-variation`, `spec-interview-kanban`, `experiment` |
+   | Planning | `brainstorm`, `brainstorm-kanban`, `concept-exploration`, `feature-interview`, `spec-interview`, `spec-interview --ideas`, `ui-interview`, `ux-variation`, `ui-consolidate`, `spec-interview-kanban`, `experiment` |
    | Mapping | `journey-map`, `metrics` |
    | Strategize | `roadmap`, `roadmap-kanban`, `competitive-analysis`, `platform-strategy`, `gtm`, `landing-copy`, `monetization`, `positioning`, `runway-model` |
    | Evaluate | `dogfood`, `mvp-gap`, `scale-audit`, `customer-feedback`, `assumption-tracker`, `cohort-review`, `retro` |

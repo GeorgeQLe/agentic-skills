@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-05-11 — UI consolidation needs UAT after variants are built
+
+- A workflow audit initially treated low `ui-consolidate` usage as a missing handoff, but the user clarified that consolidation can also be recommended too early.
+- After UX/UI variants are built, route through a UAT/evaluation step before `ui-consolidate` so the user has time and structure to try each variant and form a defensible opinion.
+- Variant deliverables should define how to test each option: target task, success criteria, comparison questions, evidence to capture, and what tradeoffs to notice.
+- Recommend `ui-consolidate` only after evaluation evidence exists or the user explicitly says they have reviewed the variants and are ready to converge.
+
 ## 2026-05-10 — Missing injected skills may still exist in project packs
 
 - The session skill list can omit project-local pack skills when the pack is not loaded into the active runtime context, even if the skill exists in the repository.

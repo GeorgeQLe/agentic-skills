@@ -593,6 +593,12 @@ The canonical workflow is now:
 concept-exploration -> pack -> icp -> competitive-analysis -> value-prop-canvas -> positioning -> lean-canvas -> journey-map -> hook-model -> metrics -> monetization -> gtm -> growth-model -> spec-interview -> ux-variation -> ui-interview -> roadmap -> plan-phase -> run/delegate -> ship -> ship-end -> pmf-assessment (post-launch)
 ```
 
+For UI layout variation work, the variant-specific path is:
+
+```text
+ui-interview --requirements-only -> ux-variation --layout-mode -> run/delegate to build variants -> uat --variant-evaluation -> ui-consolidate -> design-system or roadmap/run
+```
+
 with three valid execution modes:
 
 ```text
