@@ -27,10 +27,14 @@ Completed on 2026-05-11. `run` is a known custom benchmark target using `tests/l
 
 ### Acceptance Criteria
 
-- [ ] Skills Showcase generated data includes benchmark evidence for both `run` skill rows.
-- [ ] The catalog can search and display the `run` benchmark pass, quality, cost, latency, and report path without hand-editing generated data.
-- [ ] Showcase data validation passes after regeneration.
-- [ ] The focused website update is committed and pushed on `master`.
+- [x] Skills Showcase generated data includes benchmark evidence for both `run` skill rows.
+- [x] The catalog can search and display the `run` benchmark pass, quality, cost, latency, and report path without hand-editing generated data.
+- [x] Showcase data validation passes after regeneration.
+- [x] The focused website update is committed and pushed on `master`.
+
+### Result
+
+Completed on 2026-05-11. `docs(showcase): render benchmark evidence` added benchmark evidence parsing to `scripts/generate-skills-showcase-data.mjs`, rendered benchmark panels in the static catalog, refreshed generated showcase data, and pushed the result to `master`.
 
 ## Review
 
