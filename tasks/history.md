@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-05-11 — Ship-end clean queue unblock
+
+- Ran `$ship-end --no-deploy` after the roadmap queue flagged a dirty worktree blocker.
+- Verified `git status --short --branch` was clean against `origin/master`; no benchmark report or showcase changes remained to commit.
+- Updated `tasks/todo.md` to mark the dirty-worktree blocker resolved so Phase 37 planning can proceed next.
+- Deploy skipped by request via `--no-deploy`.
+
 ## 2026-05-11 — Reconcile dev docs fix
 
 - Fixed roadmap header phase count (34→36 complete), summary paragraph (Phase 36 planned→complete), 7 unchecked acceptance criteria across 2 completed sections, 5 missing ✓ markers (Phases 28, 29, 30, 34, 36), and 2 stale pre-phase planning sections (Codex Custom Coverage, Showcase MVP) now marked superseded.
