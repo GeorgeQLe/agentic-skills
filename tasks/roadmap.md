@@ -12,6 +12,19 @@ Phases 12-31 complete. Phase 14 added the LinkedIn evidence lane to the creator 
 
 Phase 35 is complete. The repository now has repository-wide Codex benchmark coverage metadata, custom or explicitly blocked coverage for every current skill, and future skill creation/update workflows require benchmark coverage handling. Phase 36 is planned to add output-quality evaluation on top of the current contract/assertion benchmark checks.
 
+## Current Benchmark: ship
+
+**Goal:** Run `$benchmark-test-skill ship` through the repository harness with fresh eligibility, verify, and both-agent benchmark evidence on 2026-05-11.
+
+**Acceptance Criteria:**
+- [x] `pnpm bench --list-skills` confirms `ship` is known and reports its coverage status.
+- [x] `pnpm verify --skill ship` passes or blocks benchmark execution with a recorded failure.
+- [x] `pnpm bench --skill ship --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [x] `benchmark/test-ship-2026-05-11.md` records verify, benchmark, latency, cost, consistency, and raw session evidence.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Benchmark completed on 2026-05-11. `ship` is a known custom benchmark target using `tests/layer4/setups/tier1-workflows.setup.ts`. Verify passed with layer1 in 8.2s across 1,253 tests; layer2 was skipped because no target-specific layer2 tests matched `ship`. The both-agent benchmark completed with no infrastructure-blocked runs: Claude failed 0/3 hard assertions because every run omitted the expected actionable `$run` handoff, while Codex passed 3/3. Output-quality scores were 71.4% for Claude and 78.6% for Codex. See `benchmark/test-ship-2026-05-11.md`. Recommended next command: `$session-triage ship benchmark failure`.
+
 ## Current Benchmark: run Codex
 
 **Goal:** Run `$benchmark-test-skill run --codex` through the repository harness with fresh verify and Codex-only benchmark evidence.

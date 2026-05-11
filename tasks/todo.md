@@ -1,9 +1,25 @@
 # Active Phase
 
 **Project:** Claude Skills / agentic-skills
-**Status:** Hardening benchmark-test-skill contract lint and routing.
+**Status:** Benchmarking `ship` with the benchmark-test-skill harness.
 **Last completed phase:** Phase 36 — Benchmark Output Quality Evaluation
-**Current phase:** Skill Contract Lint and Benchmark Routing Hardening.
+**Current phase:** Fresh `ship` benchmark.
+
+## Current Benchmark: ship
+
+**Goal:** Run `$benchmark-test-skill ship` through the repository harness with fresh eligibility, verify, and both-agent benchmark evidence on 2026-05-11.
+
+### Acceptance Criteria
+
+- [x] `pnpm bench --list-skills` confirms `ship` is known and reports its coverage status.
+- [x] `pnpm verify --skill ship` passes or blocks benchmark execution with a recorded failure.
+- [x] `pnpm bench --skill ship --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [x] `benchmark/test-ship-2026-05-11.md` records verify, benchmark, latency, cost, consistency, and raw session evidence.
+- [x] Results are recorded in this file, then committed and pushed on `master`.
+
+### Result
+
+Completed on 2026-05-11. `ship` is a known custom benchmark target using `tests/layer4/setups/tier1-workflows.setup.ts`. Verify passed with layer1 in 8.2s across 1,253 tests; layer2 was skipped because no target-specific layer2 tests matched `ship`. The both-agent benchmark completed with no infrastructure-blocked runs: Claude failed 0/3 hard assertions because every run omitted the expected actionable `$run` handoff, while Codex passed 3/3. Output-quality scores were 71.4% for Claude and 78.6% for Codex. See `benchmark/test-ship-2026-05-11.md`. Recommended next command: `$session-triage ship benchmark failure`.
 
 ## Current Skill Update: Benchmark Contract Lint and Routing
 
@@ -79,6 +95,7 @@ Completed on 2026-05-11. `ship` is a known custom benchmark target using `tests/
 
 ## Review
 
+- 2026-05-11 — Ran `$benchmark-test-skill ship`. Preflight confirmed custom coverage; verify passed layer1 and skipped layer2; both-agent benchmark produced Claude 0/3 and Codex 3/3 hard assertion pass rates with no infrastructure-blocked runs. Claude failed the actionable next-route assertion (`Output recommends $run`) in all three runs. Report written to `benchmark/test-ship-2026-05-11.md`; route to `$session-triage ship benchmark failure`.
 - 2026-05-11 — Used `$targeted-skill-builder` for the `ship` Codex benchmark failure. Decision: update the existing mirrored `ship` contracts, not create a new skill. Added a no-self-route rule so completed `$ship`/`/ship` runs hand off to `$run`/`/run` or another concrete next route, with retry exceptions only for incomplete shipping. Added layer1 contract lint coverage. Validation passed: `./install.sh`, `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-next-step-routing.sh --missing`, `pnpm --dir tests bench:coverage`, `pnpm --dir tests test:layer1 -- bench-coverage.test.ts`, showcase data generation, targeted `rg`, `git diff --check`, and focused `pnpm --dir tests bench --skill ship --agent codex --runs 3 --chunk-size 3 --pause 0` with 3/3 hard assertion passes, 78.6% average quality, no infrastructure-blocked runs, p50 26.1s, total cost $0.75. `scripts/validate-skills-showcase-data.sh` regenerated dirty generated assets as expected before commit; re-run after commit to confirm clean showcase state.
 - 2026-05-11 — Used `$targeted-skill-builder` for benchmark contract lint and routing hardening. Decision: update existing `benchmark-test-skill` rather than create a duplicate lint skill. Added mirrored command-resolution guards, report verification, and final-route requirements; added layer1 contract lint coverage in `bench-coverage.test.ts`; refreshed Skills Showcase assets. Validation passed: `./install.sh`, `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-next-step-routing.sh --missing`, `pnpm --dir tests bench:coverage`, `pnpm --dir tests test:layer1 -- bench-coverage.test.ts`, showcase generation/validation, targeted `rg`, and `git diff --check`.
 - 2026-05-11 — Ran `$benchmark-test-skill ship --codex`. Preflight confirmed custom coverage; verify passed layer1 and skipped layer2; Codex benchmark failed 0/3 with no infra blocks because every run recommended `$ship`/`$ship --no-deploy` instead of an actionable next route. Report written to `benchmark/test-ship-2026-05-11.md`; route to `$session-triage ship benchmark failure`.
