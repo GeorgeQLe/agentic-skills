@@ -8,7 +8,7 @@
 - Extended benchmark report tests to require an `Output Quality` section that separates quality score summaries from hard assertion pass rate and excludes infrastructure-blocked runs from quality statistics.
 - Extended setup registry tests to require opted-in custom setups such as `run` to expose a quality evaluator while preserving compatibility for setups that only define hard assertions, and added the first `run` quality rubric.
 - Included the pre-existing benchmark runner budget-exhaustion handling already present in the worktree: agent budget errors are classified as infrastructure-blocked and the `run` workflow uses the standard benchmark budget.
-- Verified with an initial red `pnpm --dir tests test:layer1 -- bench-quality bench-report bench-setups`, then passing focused and full layer1 runs, plus `git diff --check`.
+- Verified with an initial red `pnpm --dir tests test:layer1 -- bench-quality bench-report bench-setups`, then passing focused layer1 coverage, benchmark coverage validation, `git diff --check`, a 3-run Claude `run` benchmark after the budget fix, and a 1-run Claude `run` benchmark after quality artifact wiring.
 
 ## 2026-05-11 — Phase 35 Step 35.4: Tier 1 custom benchmark setups
 
