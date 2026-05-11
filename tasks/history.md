@@ -1886,3 +1886,10 @@ Resolved all 10 findings from `/expert-review`:
 - Fixed the `run` custom benchmark setup so route assertions are agent-aware: Claude is evaluated against `/ship`, while Codex remains evaluated against `$run`.
 - Passed benchmark runner context into custom setup assertions and added focused layer1 coverage for the agent-specific route behavior.
 - Verified with focused layer1 tests, benchmark coverage validation, and one-run live benchmarks for both `run` Claude and Codex runners.
+
+## 2026-05-11 — Phase 36 Step 36.4: setup-facing benchmark quality helpers
+
+- Added `tests/layer4/setup-helpers/quality.ts` with reusable setup-facing quality criterion builders for required facts, concrete file and command references, specificity, reference traits, next-route checks, and forbidden fabrications.
+- Refactored the existing `run` benchmark quality rubric to use the helper API while preserving its threshold and hard assertion behavior.
+- Added focused layer1 coverage proving the helper-composed rubric passes the strong fixture and fails the hallucinated fixture.
+- Verified with `pnpm --dir tests test:layer1 -- bench-quality bench-setups runner`, `pnpm --dir tests bench:coverage`, and `git diff --check`.
