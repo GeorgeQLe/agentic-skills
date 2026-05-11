@@ -113,14 +113,16 @@ Also use this skill retroactively on an existing codebase (`--scan`) to generate
 
    **Part 2 — Prose sections** (all optional, must appear in this order if present):
 
-   1. **Overview** — brand identity, visual tone, and design philosophy.
-   2. **Colors** — palette rationale, dark mode strategy, semantic color usage.
-   3. **Typography** — type scale rationale, heading hierarchy, body text rules.
-   4. **Layout & Spacing** — grid strategy, spacing scale rationale, container max-widths, content density.
-   5. **Elevation & Depth** — shadow usage, layering rules, z-index strategy.
-   6. **Shapes** — corner radius philosophy, form language.
-   7. **Components** — styling guidance for UI atoms including state variants (hover, active, disabled, focus). Reference tokens using `{token.path}` syntax.
-   8. **Do's and Don'ts** — concrete guardrails. Include at least: colors to never use, spacing anti-patterns, component misuse patterns observed in prior implementations.
+   Each prose section must be written as a Markdown heading, not a bold paragraph label. Use `## Overview`, `## Colors`, `## Typography`, and the other section names below exactly when present.
+
+   1. `## Overview` — brand identity, visual tone, and design philosophy.
+   2. `## Colors` — palette rationale, dark mode strategy, semantic color usage.
+   3. `## Typography` — type scale rationale, heading hierarchy, body text rules.
+   4. `## Layout & Spacing` — grid strategy, spacing scale rationale, container max-widths, content density.
+   5. `## Elevation & Depth` — shadow usage, layering rules, z-index strategy.
+   6. `## Shapes` — corner radius philosophy, form language.
+   7. `## Components` — styling guidance for UI atoms including state variants (hover, active, disabled, focus). Reference tokens using `{token.path}` syntax.
+   8. `## Do's and Don'ts` — concrete guardrails. Include at least: colors to never use, spacing anti-patterns, component misuse patterns observed in prior implementations.
 
    - Use `{colors.primary}` cross-reference syntax in component definitions and prose.
    - Present the draft to the user via AskUserQuestion before writing.
