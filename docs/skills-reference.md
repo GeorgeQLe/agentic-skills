@@ -245,13 +245,13 @@ scripts/pack.sh install agentic-skills-bench
 Skills:
 
 ```text
-benchmark-test-skill
+benchmark-test-skill, benchmark-agent-review
 ```
 
 Default flow:
 
 ```text
-benchmark-test-skill <skill> -> targeted-skill-builder on generic or blocked coverage / session-triage on failure / ship on pass
+benchmark-test-skill <skill> -> benchmark-agent-review <skill> when subjective artifact quality needs review / targeted-skill-builder on generic or blocked coverage / session-triage on failure / ship on pass
 ```
 
 ## Monorepo Pack
