@@ -6,7 +6,18 @@
 
 ## Priority Task Queue
 
-- [ ] `/research-roadmap` - scan documentation health and build priority documentation queue because all 36 roadmap phases are complete and no `## Priority Documentation Todo` section exists yet.
+- [x] `/research-roadmap` - scan documentation health and build priority documentation queue because all 36 roadmap phases are complete and no `## Priority Documentation Todo` section exists yet.
+
+## Priority Documentation Todo
+
+- [ ] `/devtool-docs-audit` - update `research/devtool-docs-audit.md` because it was last written 2026-04-30 and 81 skill/pack commits have landed since (benchmark harness, session-triage, live skill tests, skills showcase website, custom benchmark coverage, output-quality evaluation).
+- [ ] `/spec-drift fix all` - update `specs/drift-report.md` because it was last refreshed 2026-05-04 and 41 skill/pack commits have landed since, including material contract changes to `ship`, `benchmark-test-skill`, and new skills like `ui-consolidate`.
+- [x] `/devtool-user-map` - `research/devtool-user-map.md` exists (2026-04-22); no newer upstream input.
+- [x] `/devtool-integration-map` - `research/devtool-integration-map.md` exists (2026-04-22); no newer upstream input.
+- [x] `/devtool-dx-journey` - `research/devtool-dx-journey.md` exists (2026-04-22); no newer upstream input.
+- [x] `/devtool-adoption` - `research/devtool-adoption.md` exists (2026-04-22); no newer upstream input.
+- [x] `/devtool-positioning` - `research/devtool-positioning.md` exists (2026-04-30); no newer upstream input.
+- [x] `/devtool-monetization` - `research/devtool-monetization.md` exists (2026-04-30); no newer upstream input.
 
 ## Current Benchmark: ship
 
