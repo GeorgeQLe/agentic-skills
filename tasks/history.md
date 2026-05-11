@@ -1893,3 +1893,10 @@ Resolved all 10 findings from `/expert-review`:
 - Refactored the existing `run` benchmark quality rubric to use the helper API while preserving its threshold and hard assertion behavior.
 - Added focused layer1 coverage proving the helper-composed rubric passes the strong fixture and fails the hallucinated fixture.
 - Verified with `pnpm --dir tests test:layer1 -- bench-quality bench-setups runner`, `pnpm --dir tests bench:coverage`, and `git diff --check`.
+
+## 2026-05-11 — Phase 36 Step 36.5: Tier 1 workflow quality rubrics
+
+- Added deterministic output-quality rubrics for all Tier 1 workflow benchmark setups: `run`, `ship`, `ship-end`, `roadmap`, `plan-phase`, `feature-interview`, `spec-interview`, `investigate`, `session-triage`, `targeted-skill-builder`, and `benchmark-test-skill`.
+- Kept the rubrics fixture-bound with evidence facts, concrete file references, route handoffs, validation/evidence specificity, workflow-specific trait checks, and fabricated-content guards.
+- Extended setup registry coverage so every Tier 1 workflow setup must expose a quality evaluator, with representative rubric ID checks for shipping, investigation, and benchmark reporting.
+- Verified with `pnpm --dir tests test:layer1 -- bench-quality bench-setups runner`, `pnpm --dir tests bench:coverage`, and `git diff --check`.

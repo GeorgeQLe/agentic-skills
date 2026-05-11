@@ -101,7 +101,7 @@
     - Residual risk: The helper API is intentionally narrow and may need additional builders as later skill families expose new deterministic quality signals; Step 36.5 is the first broader consumer and should refine names only if needed by actual Tier 1 rubric patterns.
     - Rollback note: Revert the Step 36.4 commit to remove the setup-facing helper and restore the `run` rubric to direct harness assertions.
     - Next command: `$run`
-- [ ] Step 36.5: Add Tier 1 workflow quality rubrics.
+- [x] Step 36.5: Add Tier 1 workflow quality rubrics.
   - Classification: automated
   - Files: modify `tests/layer4/setups/tier1-workflows.setup.ts`, modify `tests/layer1/bench-setups.test.ts`
   - Cover `run`, `ship`, `ship-end`, `roadmap`, `plan-phase`, `feature-interview`, `spec-interview`, `investigate`, `session-triage`, `targeted-skill-builder`, and `benchmark-test-skill`.
@@ -112,11 +112,30 @@
     - Extend `tests/layer1/bench-setups.test.ts` so Tier 1 opted-in quality evaluators are discoverable and representative rubric IDs exist for the covered skills.
     - Avoid changing benchmark prompts, hard assertions, budgets, or runner/report schemas unless a failing test proves the current setup cannot support the rubrics.
     - Validate with `pnpm --dir tests test:layer1 -- bench-quality bench-setups runner`, `pnpm --dir tests bench:coverage`, and `git diff --check`.
+  - Review: Added deterministic quality evaluators for all Tier 1 workflow benchmark setups: `run`, `ship`, `ship-end`, `roadmap`, `plan-phase`, `feature-interview`, `spec-interview`, `investigate`, `session-triage`, `targeted-skill-builder`, and `benchmark-test-skill`. The remaining rubrics use fixture-bound evidence, file references, route handoffs, validation/evidence specificity, workflow-specific trait checks, and fabricated-content guards without changing prompts, hard assertions, budgets, runner behavior, or report schemas.
+  - Ship manifest:
+    - User goal: Execute Phase 36 Step 36.5 from `$run` by adding Tier 1 workflow quality rubrics and evaluator discovery coverage.
+    - Changed files: `tests/layer4/setups/tier1-workflows.setup.ts`, `tests/layer1/bench-setups.test.ts`, `tasks/todo.md`, `tasks/history.md`.
+    - Per-file purpose: `tier1-workflows.setup.ts` adds a shared Tier 1 quality-rubric composer and per-skill deterministic rubrics for the remaining workflow setups; `bench-setups.test.ts` asserts every Tier 1 workflow setup exposes a quality evaluator and representative rubric IDs; task/history docs record completion evidence, manifest, and next-step plan.
+    - User-goal mapping: The setup rubrics satisfy the Phase 36 acceptance item requiring Tier 1 workflow quality rubrics and evaluator coverage; the registry test keeps that coverage discoverable and prevents silent removal.
+    - Tests run: `pnpm --dir tests test:layer1 -- bench-quality bench-setups runner` passed with 10 files and 1242 tests; `pnpm --dir tests bench:coverage` passed with 143 skills; `git diff --check` passed.
+    - Skipped tests: Full phase validation and representative live Codex benchmarks remain reserved for Step 36.9 after Tier 2/Tier 3, pack, and workflow-doc rubric work lands. Skills Showcase refresh was not run because no tracked `SKILL.md` or `PACK.md` changed.
+    - Adversarial review: Diff-aware self-review checked that the change composes existing scoring primitives, leaves benchmark prompts and hard assertions unchanged, does not alter runner/report schemas, does not add dependencies or lockfile changes, and does not touch GitHub Actions. No fixes were required after review.
+    - Residual risk: The rubrics are deterministic and fixture-bound, so they intentionally catch evidence linkage and specificity rather than broad prose quality. Later Step 36.9 live benchmarks should confirm that real generated Tier 1 outputs meet these stricter rubric expectations without excessive false negatives.
+    - Rollback note: Revert the Step 36.5 commit to remove the Tier 1 quality rubrics while preserving the foundational quality harness and `run` rubric from earlier steps.
+    - Next command: `$run`
 - [ ] Step 36.6: Add quality rubrics for high-signal global and design-system setups.
   - Classification: automated
   - Files: modify `tests/layer4/setups/design-system.setup.ts`, modify `tests/layer4/setups/design-system-draftstonk.setup.ts`, modify `tests/layer4/setups/tier23-global-workflows.setup.ts`, modify focused layer1 tests
   - Prioritize deterministic signals for planning, debugging, audit, research, and design-token outputs.
   - Record deferred notes for skills whose quality cannot be scored reliably without external state or human judgment.
+  - Implementation plan:
+    - Inspect the existing custom setup definitions in `tests/layer4/setups/design-system.setup.ts`, `tests/layer4/setups/design-system-draftstonk.setup.ts`, and `tests/layer4/setups/tier23-global-workflows.setup.ts` to identify outputs with deterministic fixture facts, expected files, commands, tokens, or next routes.
+    - Reuse `tests/layer4/setup-helpers/quality.ts` for deterministic rubrics. Favor required fixture facts, concrete file/command references, validation-specificity patterns, reference traits, next-route checks, and fabricated-content guards over broad subjective prose checks.
+    - Add quality evaluators for high-signal design-system, planning, debugging, audit, and research setups where deterministic signals are practical. For any custom global setup that cannot be scored reliably from local fixtures, record an explicit deferred/blocked quality note in the setup metadata or focused test expectation rather than forcing a weak rubric.
+    - Extend focused layer1 setup tests so opted-in global/design-system evaluators are discoverable and representative rubric IDs are asserted. Preserve backward compatibility for setups that intentionally remain hard-assertion-only with a documented deferral.
+    - Do not change benchmark prompts, hard assertions, budgets, report schemas, or runner behavior unless a failing test proves a setup cannot expose the intended quality rubric otherwise.
+    - Validate with `pnpm --dir tests test:layer1 -- bench-quality bench-setups runner`, `pnpm --dir tests bench:coverage`, and `git diff --check`.
 - [ ] Step 36.7: Add pack-skill quality rubrics by family.
   - Classification: automated
   - Files: modify `tests/layer4/setups/packs/pack-workflows.setup.ts`, modify focused layer1 tests
