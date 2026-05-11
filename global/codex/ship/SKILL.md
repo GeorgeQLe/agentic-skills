@@ -92,11 +92,13 @@ Output exactly two lines beyond the normal report:
 Rules:
 
 - Make the next work item primary. Derive it from `tasks/todo.md`, `tasks/manual-todo.md`, deploy status, validation gaps, smoke-test gaps, phase-transition output, or completion of the current queues. Do not use agent mode itself as the next work item.
+- Never recommend `$ship`, `$ship --no-deploy`, or `$ship --no-plan` as the routine next command from a completed `$ship` run. `$ship` packages current work; after it completes, hand off to the next executable route such as `$run`, `$roadmap`, `$brainstorm`, `$guide`, or `$reconcile-dev-docs fix tasks` based on project state. Recommend `$ship` again only when shipping failed before commit/push or when the next concrete work is explicitly to retry an incomplete shipping operation.
 - Do not emit `Recommended next command: none` unless the latest user request explicitly asks to pause, park, archive, or wait. If implementation phases, documentation work, and promotable advisory items are all exhausted, route to new-phase discovery: `**Next work:** discover candidate next phase or explicitly park the project` and `**Recommended next command:** $brainstorm`.
 - If a post-roadmap `$research-roadmap` scan reports documentation current with no missing or stale work, do not stop at documentation completeness; recommend `$brainstorm` as the next route for candidate phase discovery.
 - Use `./scripts/agent-mode.sh` only to choose command text. If it is missing, unset, or non-zero, infer routing from the current invocation and task type instead of asking the user to select a mode by default.
 - Inference defaults:
-  - Codex skill invocation (`$run`, `$ship`, `$ship-end`) → recommend the matching `$...` command.
+  - Codex `$ship` invocation after shipping or packaging current work → recommend `$run` for the next agent-executable project step, or the more specific next skill named by project state.
+  - Other Codex skill invocations (`$run`, `$ship-end`) → recommend the matching `$...` command.
   - Claude slash invocation (`/run`, `/ship`, `/delegate`) or orchestration-heavy work → recommend the matching `/...` route.
   - External human-only manual work (browser/auth/DNS/service dashboard work with no reliable authenticated CLI/API path, paid account setup, real-device checks, or production smoke-test work needing human sign-off) → recommend `$guide` or a Claude-guided manual step rather than `$run`.
   - Agent-executable work misfiled in `tasks/manual-todo.md`, task-doc bookkeeping, stale `tasks/manual-todo.md` cleanup, or reconciliation against repo/history reality → recommend `$reconcile-dev-docs fix tasks`, promotion to `tasks/todo.md`, or a direct dev-doc audit, not `$guide`.
@@ -121,7 +123,7 @@ Rules:
 
 ## Default Shipping Contract
 
-- **Default next-step routing:** when reporting completion, include either `Recommended next skill: <command>` or the two-line pair `**Next work:** <specific task, discovery task, blocker, or explicit parked state>` and `**Recommended next command:** <one command or route>` so the next operator has a concrete handoff. Do not use `none` as the command unless the user explicitly asked to pause, park, archive, or wait; exhausted queues route to `$brainstorm`.
+- **Default next-step routing:** when reporting completion, include either `Recommended next skill: <command>` or the two-line pair `**Next work:** <specific task, discovery task, blocker, or explicit parked state>` and `**Recommended next command:** <one command or route>` so the next operator has a concrete handoff. Do not use `none` as the command unless the user explicitly asked to pause, park, archive, or wait; exhausted queues route to `$brainstorm`. A completed `$ship` run must not self-route back to `$ship` or `$ship --no-deploy` unless the shipping operation itself remains incomplete and needs a retry.
 - If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
 - For non-trivial mutations, include the `docs/quality-gate-contract.md` ship manifest in the task review notes, history entry, or final response before invoking `$commit-and-push-by-feature`.
 - Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.

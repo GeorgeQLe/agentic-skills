@@ -38,6 +38,19 @@ Phase 35 is complete. The repository now has repository-wide Codex benchmark cov
 
 **Result:** Benchmark completed on 2026-05-11. `ship` is a known custom benchmark target using `tests/layer4/setups/tier1-workflows.setup.ts`. Verify passed with layer1 in 12.1s across 1,245 tests; layer2 was skipped because no target-specific layer2 tests matched `ship`. Codex benchmark failed 0/3 hard assertions with no infrastructure-blocked runs. Each failed run created the manifest but recommended `$ship` or `$ship --no-deploy` as the next command, which failed the actionable next-route assertion. Output quality averaged 71.4%, below the 78.0% threshold, with evidence-linked and actionable-next-route at 0.0%. See `benchmark/test-ship-2026-05-11.md`. Recommended next command: `$session-triage ship benchmark failure`.
 
+## Current Skill Update: Ship Benchmark Self-Route Fix
+
+**Goal:** Update the existing `ship` skill contracts so `$ship` completion never routes back to `$ship` as routine next work and instead hands off to the next executable project step.
+
+**Acceptance Criteria:**
+- [x] Existing-skill overlap confirms the fix belongs in `ship`, not a new skill.
+- [x] Codex and Claude `ship` contracts forbid routine self-routing after ship completion.
+- [x] Deterministic layer1 coverage catches future loss of the self-route guard.
+- [x] Standard skill validation, showcase data refresh, targeted checks, and whitespace validation pass.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Completed on 2026-05-11. The mirrored `ship` contracts now forbid routine self-routing after successful shipping and route completed ship runs to `$run`/`/run` or another concrete next route, with retry exceptions only for incomplete shipping. Layer1 contract lint coverage was added, and the focused Codex `ship` benchmark passed 3/3 with no infrastructure-blocked runs.
+
 ## Current Skill Update: Benchmark Contract Lint and Routing
 
 **Goal:** Harden `$benchmark-test-skill` so future benchmark requests resolve the benchmark pack command, preflight target eligibility, preserve both-agent default routing, and verify report/next-route output before completion.

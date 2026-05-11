@@ -1,5 +1,11 @@
 # Session History
 
+## 2026-05-11 — Ship benchmark self-route fix
+
+- Updated mirrored `ship` contracts so completed `$ship`/`/ship` runs do not routinely recommend shipping again as the next route.
+- Added layer1 contract lint coverage for the self-route guard and retry exception.
+- Re-ran the focused Codex `ship` benchmark after the contract change; it passed 3/3 hard assertions with no infrastructure blocks.
+
 ## 2026-05-11 — Benchmark agent review follow-up skill
 
 - Added mirrored `benchmark-agent-review` skills to the `agentic-skills-bench` pack for subjective agent review of persisted benchmark artifacts after `$benchmark-test-skill`.
