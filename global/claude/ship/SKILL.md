@@ -46,6 +46,9 @@ If the shipping boundary creates, deletes, renames, or changes behavior/metadata
 
 Include changed generated assets in the same shipping boundary. For skill behavior changes, review curated showcase copy, catalog grouping, workflow animation text, and proof receipts; update affected site files or record why no curated website copy changed.
 
+### 1d. Ship manifest route convention
+When writing a ship manifest, summary, task review note, or final response with a `Next command` field, use Claude slash-command syntax. For a completed `/ship` run, the default executable handoff is `/run` unless project state names a more specific next route. Do not leave `Next command` blank.
+
 ### 2. Ship the work
 a) Read the project's CLAUDE.md to understand current progress.
 b) Update `tasks/todo.md` — mark completed items as done (check off steps and milestone criteria).

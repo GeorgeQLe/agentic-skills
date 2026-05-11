@@ -7,6 +7,12 @@
 - Treat framework migration as a preservation refactor when the product surface already exists: port the current content, route map, data contracts, and visual system unless the user explicitly asks for a redesign.
 - If a requested library stack fits poorly with the current implementation style, explain the mismatch against the existing files and frame the refactor as the smallest way to support the new capability.
 
+## 2026-05-11 — Benchmarks must respect Claude slash and Codex dollar route conventions
+
+- A `ship` benchmark initially treated Claude failure as a skill failure because the setup expected `$run` for both Claude and Codex.
+- When a benchmark runs both agents, hard assertions and quality rubrics must use the corresponding route convention for the runner: slash commands for Claude (`/run`, `/ship`) and dollar commands for Codex (`$run`, `$ship`).
+- Before diagnosing a mirrored skill as failed, compare the benchmark setup against both `global/claude/<skill>/SKILL.md` and `global/codex/<skill>/SKILL.md`; a mismatch in the harness is a test bug, not proof of a skill-contract bug.
+- Add deterministic layer1 coverage for runner-specific route expectations whenever a shared setup supports both agents.
 
 ## 2026-05-11 — UI consolidation needs UAT after variants are built
 
