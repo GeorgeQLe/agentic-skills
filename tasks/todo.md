@@ -3,6 +3,10 @@
 **Project:** Claude Skills / agentic-skills
 **Status:** Targeted skill update in progress on 2026-05-10.
 
+## Priority Task Queue
+
+- [ ] `$feature-interview benchmark custom coverage` - turn the broad benchmark coverage follow-up into a scoped spec/roadmap extension because `tasks/roadmap.md` has `## Planned Benchmark Work: Codex Custom Coverage` with unchecked acceptance criteria but no numbered `## Phase N:` entry, no pack/skill coverage matrix, and no `### Implementation` steps; evidence: roadmap and todo mtimes are both `2026-05-10 20:31:48`, and the planned block is at `tasks/roadmap.md` lines 51-60.
+
 ## Current Benchmark Run: run Codex
 
 - [x] Resolve the project-local `benchmark-test-skill` contract and confirm `run` is the skill under test.
