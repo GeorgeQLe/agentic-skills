@@ -1,7 +1,7 @@
 # Poketo Headless Auth Migration Brief
 
-Date: 2026-04-03 (original), 2026-05-11 (reconciled with implementation)
-Status: Partially completed — skills migrated to CLI gateway; Work tool stubs and API-key-to-session bridge remain open
+Date: 2026-04-03
+Status: Step 1 brief for Phase 10
 
 ## Decision Summary
 
@@ -31,10 +31,10 @@ These files explicitly require direct Neon database access for standard kanban u
 
 | File | Current assumption |
 | --- | --- |
-| `packs/poketowork-kanban/claude/poketo-kanban/SKILL.md` | **Migrated**: now says "All operations go through the poketo CLI gateway." Direct DB is fallback only. |
-| `packs/poketowork-kanban/codex/poketo-kanban/SKILL.md` | **Migrated**: uses `poketo kanban <command>` CLI, not direct DB. |
-| `packs/poketowork-kanban/claude/poketo-kanban/scripts/kanban.mjs` | **Legacy fallback**: still connects to Neon directly. Marked `DEPRECATED`. |
-| `packs/poketowork-kanban/claude/poketo-kanban/scripts/bootstrap-session.mjs` | Bootstraps local auth; requires `AUTH_DATABASE_URL` and `POKEAPPS_DATABASE_URL` only (not `POKETOWORK_DATABASE_URL`). |
+| `/Users/georgele/projects/tools/claude-skills/claude/poketo-kanban/SKILL.md` | Standard usage requires `POKETOWORK_DATABASE_URL`; all operations go straight to Neon. |
+| `/Users/georgele/projects/tools/claude-skills/codex/poketo-kanban/SKILL.md` | Same direct DB requirement for Codex usage. |
+| `/Users/georgele/projects/tools/claude-skills/claude/poketo-kanban/scripts/kanban.mjs` | Resolves `POKETOWORK_DATABASE_URL`, connects with `@neondatabase/serverless`, and queries tables directly. |
+| `/Users/georgele/projects/tools/claude-skills/claude/poketo-kanban/scripts/bootstrap-session.mjs` | Bootstraps local auth by querying auth and app databases directly; requires `AUTH_DATABASE_URL`, `POKEAPPS_DATABASE_URL`, and `POKETOWORK_DATABASE_URL`. |
 
 ### Session-file-only local auth
 
@@ -42,10 +42,10 @@ These files assume `~/.poketo/config.json` is the auth source for standard kanba
 
 | File | Current assumption |
 | --- | --- |
-| `packs/poketowork-kanban/claude/poketo-kanban/SKILL.md` | **Migrated**: uses CLI gateway path; config file is secondary. |
-| `packs/poketowork-kanban/codex/poketo-kanban/SKILL.md` | **Migrated**: uses `poketo kanban` CLI; no config file dependency. |
-| `/Users/georgele/projects/tools/agentic-skills/packs/poketowork-kanban/claude/poketo-kanban/scripts/kanban.mjs` | Loads `~/.poketo/config.json` and uses it as the session model. |
-| `/Users/georgele/projects/tools/agentic-skills/packs/poketowork-kanban/claude/poketo-kanban/scripts/bootstrap-session.mjs` | Creates `~/.poketo/config.json` locally via direct DB queries. |
+| `/Users/georgele/projects/tools/claude-skills/claude/poketo-kanban/SKILL.md` | `~/.poketo/config.json` must contain a valid session. |
+| `/Users/georgele/projects/tools/claude-skills/codex/poketo-kanban/SKILL.md` | Same prerequisite. |
+| `/Users/georgele/projects/tools/claude-skills/claude/poketo-kanban/scripts/kanban.mjs` | Loads `~/.poketo/config.json` and uses it as the session model. |
+| `/Users/georgele/projects/tools/claude-skills/claude/poketo-kanban/scripts/bootstrap-session.mjs` | Creates `~/.poketo/config.json` locally via direct DB queries. |
 
 Important constraint:
 - The current config file is not a proper Better Auth session. `bootstrap-session.mjs` writes a synthetic session payload for the standalone DB script.
@@ -57,14 +57,14 @@ These files still hardcode Claude install paths for Codex behavior:
 
 | File | Current assumption |
 | --- | --- |
-| `packs/poketowork-kanban/codex/brainstorm-kanban/SKILL.md` | **Migrated**: uses `poketo kanban <command>` CLI. |
-| `packs/poketowork-kanban/codex/spec-interview-kanban/SKILL.md` | **Migrated**: uses `poketo kanban` CLI. |
-| `packs/poketowork-kanban/codex/roadmap-kanban/SKILL.md` | **Migrated**: uses `poketo kanban` CLI. |
-| `packs/poketowork-kanban/codex/run-kanban/SKILL.md` | **Migrated**: uses `poketo kanban` CLI. |
-| `packs/poketowork-kanban/codex/ship-kanban/SKILL.md` | **Migrated**: uses `poketo kanban` CLI. |
-| `packs/poketowork-kanban/codex/ship-end-kanban/SKILL.md` | **Migrated**: uses `poketo kanban` CLI. |
-| `packs/poketowork-kanban/codex/kanban-archive/` | **Removed**: merged into `poketo-kanban --archive` flag. |
-| `packs/poketowork-kanban/codex/sync-roadmap-kanban/SKILL.md` | **Migrated**: uses `poketo kanban` CLI. |
+| `/Users/georgele/projects/tools/claude-skills/codex/brainstorm-kanban/SKILL.md` | Runs `node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs ...` |
+| `/Users/georgele/projects/tools/claude-skills/codex/spec-interview-kanban/SKILL.md` | Same hardcoded Claude path. |
+| `/Users/georgele/projects/tools/claude-skills/codex/roadmap-kanban/SKILL.md` | Same hardcoded Claude path. |
+| `/Users/georgele/projects/tools/claude-skills/codex/run-kanban/SKILL.md` | Same hardcoded Claude path. |
+| `/Users/georgele/projects/tools/claude-skills/codex/ship-kanban/SKILL.md` | Same hardcoded Claude path. |
+| `/Users/georgele/projects/tools/claude-skills/codex/ship-end-kanban/SKILL.md` | Same hardcoded Claude path. |
+| `/Users/georgele/projects/tools/claude-skills/codex/kanban-archive/SKILL.md` (merged into `poketo-kanban --archive`; path no longer present) | Same hardcoded Claude path and treats script presence as required runtime contract. |
+| `/Users/georgele/projects/tools/claude-skills/codex/sync-roadmap-kanban/SKILL.md` | Still describes applying changes through `kanban.mjs`. |
 
 ### Shared setup docs tied to the standalone script
 
@@ -72,9 +72,10 @@ These files document the legacy script as the normal workflow:
 
 | File | Current assumption |
 | --- | --- |
-| `packs/poketowork-kanban/claude/poketo-kanban/KANBAN-SETUP.md` | Board resolution docs may still reference legacy paths. |
-| `packs/poketowork-kanban/claude/poketo-kanban/SKILL.md` | **Migrated**: now says "All operations go through the poketo CLI gateway." |
-| `packs/poketowork-kanban/codex/poketo-kanban/SKILL.md` | **Migrated**: uses `poketo kanban` CLI. |
+| `/Users/georgele/projects/tools/claude-skills/claude/poketo-kanban/KANBAN-SETUP.md` | Board resolution starts with `node ~/.claude/skills/poketo-kanban/scripts/kanban.mjs boards`. |
+| `/Users/georgele/projects/tools/claude-skills/claude/poketo-kanban/KANBAN-SETUP.md` | Graceful degradation is defined in terms of script presence and DB connectivity. |
+| `/Users/georgele/projects/tools/claude-skills/claude/poketo-kanban/SKILL.md` | Says "All operations go straight to the Neon Postgres database — no gateway server needed." |
+| `/Users/georgele/projects/tools/claude-skills/codex/poketo-kanban/SKILL.md` | Same direct-DB statement for Codex. |
 
 ## Canonical Poketo Headless Path
 
@@ -113,12 +114,11 @@ Primary mechanism:
 - Scoped durable API key, validated by the gateway.
 
 Required scope model:
-- The gateway enforces a 3-part scope: `{app}:{resource}:{action}` (e.g., `work:board:read`, `work:card:write`).
-- Read-only skill flows should require read-scoped keys.
-- Mutating kanban flows should require write-scoped keys.
+- Read-only skill flows should require `work:read`.
+- Mutating kanban flows should require `work:write`.
 
 Reasoning:
-- The actual gateway model in `packages/agents/src/gateway/index.ts` uses `${app}:${resource}:${action}` (3-part), not the 2-part `work:read`/`work:write` originally proposed.
+- This already matches the gateway model in `packages/agents/src/gateway/index.ts`.
 - It avoids distributing raw DB credentials to local agent environments.
 - It routes mutations through the canonical router layer, where permissions and `board_actions` already exist.
 
@@ -249,28 +249,29 @@ The current Work headless tool layer is not yet sufficient for kanban skill migr
 - `/Users/georgele/projects/apps/poke/monorepo/apps/work/src/tools/primitives/*.ts`
   - Primitive tool definitions are still mostly stubbed placeholders.
 - `/Users/georgele/projects/apps/poke/monorepo/apps/work/src/tools/adapted-tools.ts`
-  - Adapts 15 tools as of 2026-05-11:
-    - `get_my_boards` (added since original brief)
+  - Adapts only 11 tools today:
     - `get_board_details`
     - `get_card_details`
     - `get_board_activity`
     - `get_today_summary`
-    - `create_board` (added since original brief)
     - `create_card`
     - `update_card`
     - `move_card`
-    - `delete_card` (now describes archive semantics: "Archives a card (soft delete). Use restore_card to undo.")
-    - `restore_card` (added since original brief)
-    - `search_cards` (added since original brief)
+    - `delete_card`
     - `create_list`
     - `update_list`
     - `delete_list`
-- Remaining gaps:
-  - Most primitives are still stubs returning empty fixtures (Step 2 not completed)
-  - `get_my_boards` returns `{ boards: [] }`
-  - `search_cards` returns `{ cards: [] }`
-  - `create_board` returns `{ board: { id: "" } }`
-  - Stable migration-ready response contract still needed for all skill flows
+- Missing from the adapted surface for current skill needs:
+  - board listing for board resolution
+  - create board
+  - search cards
+  - explicit archive/restore surface
+  - stable migration-ready response contract for all skill flows
+
+There is also a semantic mismatch to fix:
+- The primitive `delete_card` is described as permanent deletion in `/Users/georgele/projects/apps/poke/monorepo/apps/work/src/tools/primitives/delete-card.ts`.
+- The documented Work API behavior says delete moves to archive when an archive list is configured in `/Users/georgele/projects/apps/poke/monorepo/apps/work/docs/api-reference.md`.
+- The migration should normalize this before skills depend on it.
 
 ## Recommendation For Phase 10 Sequencing
 

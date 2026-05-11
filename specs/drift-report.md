@@ -1,5 +1,53 @@
 # Spec Drift Report
 
+## 2026-05-11 - `$spec-drift fix all`
+
+### Scope
+
+Full audit of all 14 canonical specs against codebase. 284 claims extracted and verified.
+
+Spec inventory: benchmark-custom-coverage, board-flag-kanban-search, code-quality-skill-pack, creator-platform-evidence-schema, first-party-skills-showcase-newsletter-capture, kanban-command-test-coverage, kanban-multi-user, kanban-offline-queue-soft-delete, kanban-production-test-plan, monorepo-execution-controller, poketo-headless-auth-migration, project-fleet, skills-showcase-website, ui-skills-showcase-website.
+
+### Summary
+
+- **Claims:** 284 total — 186 verified (65%), 33 diverged, 65 unimplemented
+- **Errors resolved:** 33 (all by updating specs to match code, per user decision)
+- **Specs archived:** 5 legacy kanban specs
+- **Specs updated:** 7
+- **Specs unchanged:** 2
+
+### Archived (5 legacy kanban specs → `docs/history/archive/2026-05-11/165500/specs/`)
+
+- `kanban-multi-user.md` — legacy kanban.mjs fallback path; 74% verified, notable bug: logAction not try/catch wrapped
+- `kanban-offline-queue-soft-delete.md` — 0% implemented; superseded by poketo headless migration
+- `board-flag-kanban-search.md` — fully implemented; stale line numbers only divergence
+- `kanban-command-test-coverage.md` — exceeded acceptance criteria (92 tests vs 44 target)
+- `kanban-production-test-plan.md` — partially implemented; concurrency/load sections never built
+
+### Resolved (spec updates to match code)
+
+- `poketo-headless-auth-migration.md` — corrected all path refs from `/claude-skills/` to `packs/poketowork-kanban/`; updated migration status (skills already on CLI gateway); fixed scope model from 2-part to 3-part; updated adapted-tools from 11 to 15; noted delete_card archive semantics resolved; removed POKETOWORK_DATABASE_URL from bootstrap-session
+- `skills-showcase-website.md` — corrected `SKILLS_SHOWCASE_GITHUB_DATA` → `SKILLS_SHOWCASE_GITHUB_PROOF_DATA`
+- `ui-skills-showcase-website.md` — updated stats strip to dynamic count; corrected blueprint node label; updated Inspect/Catalog/Follow headings to match deployed site
+- `benchmark-custom-coverage.md` — removed `not_started` from status enum; added `next_command` field; noted matrix is TypeScript
+- `monorepo-execution-controller.md` — removed `created_at` from required lane-spec fields; noted package-scope tag scanning is V2
+- `project-fleet.md` — added Portfolio lane to Core Model and lane selection
+- `creator-platform-evidence-schema.md` — updated pack name from `creator-media` to `creator-foundation`; split `notes` into `privacy_notes`/`review_notes`
+
+### Deferred (kept as future work)
+
+- `first-party-skills-showcase-newsletter-capture.md` — 0% implemented Next.js/Neon/tRPC migration
+- Showcase: 4/8 workflows, copy button, asymmetries filter, centralized links, catalog type chips
+- Benchmark: 3 planned Tier 3 skills, future skill creation contract
+- Monorepo: `--cleanup` flag, `mono-migrate` V2
+- Poketo: `POKETO_GATEWAY_URL` env var, API-key-to-session bridge, Work tool stub implementations
+
+### Downstream Impact
+
+No Major downstream impacts. Roadmap path references are cosmetic. `/reconcile-research` not required.
+
+---
+
 ## 2026-05-04 - `$spec-drift fix all`
 
 ### Scope
