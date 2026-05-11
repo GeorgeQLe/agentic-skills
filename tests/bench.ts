@@ -6,7 +6,7 @@ import {
   findResumeableSession,
   getSessionDir,
 } from "./harness/bench-persistence.js";
-import { resolveBenchSetup, supportedBenchSkills } from "./harness/bench-setups.js";
+import { resolveBenchTarget, supportedBenchSkillRows, supportedBenchSkills } from "./harness/bench-setups.js";
 
 const { values } = parseArgs({
   options: {
@@ -22,8 +22,12 @@ const { values } = parseArgs({
 });
 
 if (values["list-skills"]) {
-  for (const supportedSkill of supportedBenchSkills()) {
-    console.log(supportedSkill);
+  for (const row of supportedBenchSkillRows()) {
+    const setup = row.coverage_status === "custom" ? ` setup=${row.setup_path ?? "missing"}` : "";
+    const blocked = row.coverage_status === "blocked"
+      ? ` reason=${row.blocked_reason} next=${row.next_command}`
+      : "";
+    console.log(`${row.skill}\tcoverage=${row.coverage_status}${setup}${blocked}`);
   }
   process.exit(0);
 }
@@ -34,11 +38,20 @@ const chunkSize = parseInt(values["chunk-size"]!, 10);
 const pauseSeconds = parseInt(values.pause!, 10);
 const agents = resolveAgents(values.agent!);
 
-const setup = resolveBenchSetup(skill);
-if (!setup) {
+const target = resolveBenchTarget(skill);
+if (!target) {
   console.error(`Unknown skill: ${skill}. Repository skills: ${supportedBenchSkills().join(", ")}`);
   process.exit(1);
 }
+if (target.coverageStatus === "blocked") {
+  console.error(`Benchmark coverage for ${skill}: blocked`);
+  console.error(`Reason: ${target.blockedReason ?? "No reason recorded."}`);
+  console.error(`Next command: ${target.nextCommand ?? "No next command recorded."}`);
+  process.exit(1);
+}
+
+const setup = target.setup!;
+console.log(`Benchmark coverage for ${skill}: ${target.coverageStatus}`);
 
 async function sleep(ms: number): Promise<void> {
   return new Promise((r) => setTimeout(r, ms));

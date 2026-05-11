@@ -1,11 +1,22 @@
 import { describe, expect, it } from "vitest";
+import { execFileSync } from "node:child_process";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import {
   benchmarkCoverageMatrix,
   discoverRepositorySkills,
   validateBenchmarkCoverage,
   type BenchCoverageRow,
 } from "../harness/bench-coverage.js";
-import { CUSTOM_BENCH_SETUPS, resolveBenchSetup, supportedBenchSkills } from "../harness/bench-setups.js";
+import {
+  CUSTOM_BENCH_SETUPS,
+  resolveBenchSetup,
+  resolveBenchTarget,
+  supportedBenchSkillRows,
+  supportedBenchSkills,
+} from "../harness/bench-setups.js";
+
+const TESTS_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
 describe("benchmark setup registry", () => {
   it("lists repository skills as benchmarkable targets", () => {
@@ -15,17 +26,68 @@ describe("benchmark setup registry", () => {
 
   it("uses custom setup for skills with domain-specific assertions", () => {
     expect(resolveBenchSetup("design-system")).toBe(CUSTOM_BENCH_SETUPS["design-system"]);
+    expect(resolveBenchTarget("design-system")).toMatchObject({
+      coverageStatus: "custom",
+      setupPath: "tests/layer4/setups/design-system.setup.ts",
+    });
   });
 
   it("uses a generic smoke setup for repository skills without custom assertions", () => {
     const setup = resolveBenchSetup("run");
+    const target = resolveBenchTarget("run");
 
     expect(setup?.skill).toBe("run");
     expect(setup).not.toBe(CUSTOM_BENCH_SETUPS.run);
+    expect(target).toMatchObject({
+      skill: "run",
+      coverageStatus: "generic",
+    });
+    expect(target?.setup?.skill).toBe("run");
   });
 
   it("does not resolve unknown skills", () => {
     expect(resolveBenchSetup("not-a-real-skill")).toBeUndefined();
+    expect(resolveBenchTarget("not-a-real-skill")).toBeUndefined();
+  });
+
+  it("resolves blocked coverage rows without a runnable setup", () => {
+    const rows = benchmarkCoverageMatrix().map((row): BenchCoverageRow => (
+      row.skill === "run"
+        ? {
+          ...row,
+          coverage_status: "blocked",
+          blocked_reason: "Requires paid external account",
+          next_command: "$guide",
+        }
+        : row
+    ));
+
+    expect(resolveBenchTarget("run", rows)).toMatchObject({
+      skill: "run",
+      coverageStatus: "blocked",
+      blockedReason: "Requires paid external account",
+      nextCommand: "$guide",
+    });
+    expect(resolveBenchTarget("run", rows)?.setup).toBeUndefined();
+  });
+
+  it("lists benchmark skills with coverage status", () => {
+    expect(supportedBenchSkillRows().find((row) => row.skill === "design-system")).toMatchObject({
+      coverage_status: "custom",
+    });
+    expect(supportedBenchSkillRows().find((row) => row.skill === "run")).toMatchObject({
+      coverage_status: "generic",
+    });
+  });
+
+  it("prints coverage status in the list-skills CLI", () => {
+    const output = execFileSync("pnpm", ["bench", "--list-skills"], {
+      cwd: TESTS_ROOT,
+      encoding: "utf8",
+    });
+
+    expect(output).toContain("design-system\tcoverage=custom setup=tests/layer4/setups/design-system.setup.ts");
+    expect(output).toContain("run\tcoverage=generic");
   });
 });
 
