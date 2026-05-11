@@ -1,5 +1,31 @@
 # Development Docs Reconciliation Report
 
+## 2026-05-11 - `$reconcile-dev-docs fix all`
+
+### Resolved
+
+- [x] `tasks/roadmap.md` - Fixed header phase count from "34 complete, 2 planned" to "36 complete". Evidence: all 36 phases have checked acceptance criteria, todo.md says "All 36 roadmap phases complete", and phase-36.md archive exists.
+- [x] `tasks/roadmap.md` - Updated summary paragraph to mark Phases 32-36 complete instead of saying "Phase 36 is planned." Evidence: Phase 36 has all acceptance criteria checked and a completed milestone section.
+- [x] `tasks/roadmap.md` - Checked all 6 acceptance criteria in "Benchmark Contract Lint and Routing" section. Evidence: todo.md Review entry on 2026-05-11 records full validation and completion.
+- [x] `tasks/roadmap.md` - Checked the final unchecked criterion in "Current Benchmark: run" section. Evidence: the Result paragraph in the same section records benchmark completion on 2026-05-11.
+- [x] `tasks/roadmap.md` - Added ✓ to Phase 36 section header. Evidence: all acceptance criteria checked, phase-36.md archive exists, history entry records closure.
+- [x] `tasks/roadmap.md` - Added ✓ to Phase 34 section header. Evidence: all acceptance criteria checked, phase-34.md archive exists, history entry records closure.
+- [x] `tasks/roadmap.md` - Added ✓ to Phase overview table rows for Phases 28, 29, 30, 34. Evidence: summary text says "Phases 12-31 complete" and Phase 34 is archived.
+- [x] `tasks/roadmap.md` - Marked "Planned Benchmark Work: Codex Custom Coverage" section as superseded by Phase 35. Evidence: Phase 35 delivered all listed goals with full acceptance criteria checked.
+- [x] `tasks/roadmap.md` - Marked "Current Product: Skills Showcase Website MVP" section as superseded by Phases 32-34. Evidence: Phases 32, 33, 34 are all complete with archives.
+
+### Deferred
+
+- [ ] `tasks/phases/` - 25 of 36 completed phases lack archive files. This is a backfill decision, not an active contradiction.
+- [ ] `tasks/roadmap.md` - Multiple completed "Current" sections (ship benchmark, run benchmark, design-system benchmark, hero overlap fix, mobile ideas assessment, etc.) remain at the top of the roadmap. Removing or collapsing them is a cleanup decision.
+- [ ] `tasks/manual-todo.md` - 2 unchecked items reference Phase 34 (newsletter provider, Vercel deploy). These are intentional post-phase manual launch tasks, not contradictions.
+- [ ] `tasks/recurring-todo.md` - Devtool docs audit has passed the 50-commit threshold. Already flagged in todo.md Priority Documentation section.
+
+### Remaining Findings
+
+- No remaining unambiguous current-doc contradictions after the fixes above.
+- Recommended next action: `/spec-drift fix all` or `/devtool-docs-audit` per the Priority Documentation Todo queue.
+
 ## 2026-05-04 - `$reconcile-dev-docs fix all`
 
 ### Resolved

@@ -2,7 +2,7 @@
 
 > Generated from: tasks/roadmap.md (existing), specs/board-flag-kanban-search.md, tasks/ideas.md, tasks/history.md
 > Date: 2026-03-27 (last updated 2026-05-11)
-> Total Phases: 36 (34 complete, 2 planned)
+> Total Phases: 36 (36 complete)
 
 ## Summary
 
@@ -10,7 +10,7 @@ Phases 1-11 complete: kanban skill suite, board intelligence, templates, archive
 
 Phases 12-31 complete. Phase 14 added the LinkedIn evidence lane to the creator foundation workflow with owner exports, manual snapshots, public unauthenticated captures, redaction gates, shared evidence-schema/dossier routing, and deterministic layer1 contract coverage. Phase 16 hardened mutation-capable skill contracts with final next-step routing language and an audit that catches future omissions. Phase 17 added mixed-monorepo pack routing so one repository can carry devtool, business-app, game, or other domain scopes without forcing one global designation. Phase 18 hardened pack lock recovery after a `pitwall-monorepo` refresh timeout. Phase 19 added a YouTube description and metadata optimization lane to the creator-media pack. Phase 20 added external YouTube video research lanes for comprehension, format/Remotion-style analysis, and competitive learning. Phase 21 hardened default mutation/shipping quality gates from the session workflow audit. Phase 22 added feature-interview as the triage step between brainstorm ideas and full specifications. Phase 23 added targeted-skill-builder for focused skill creation or updates from concrete workflow gaps without defaulting to broad session-history analysis. Phase 24 added install-agentic-skills for refreshing global skill links and routing pack access through the existing project-local workflow. Phase 25 added codebase-status for read-only repo status reports with local history evidence. Phase 26 added the monorepo pack V1. Phase 27 added targeted skill retrospectives to analyze-sessions; Phase 28 split that focused behavior into session-triage. Phase 29 added opt-in live-agent behavior tests. Phase 30 deepened feature-interview into evidence-backed feature intake. Phase 31 hardened parallel agent-team branch/PR isolation.
 
-Phase 35 is complete. The repository now has repository-wide Codex benchmark coverage metadata, custom or explicitly blocked coverage for every current skill, and future skill creation/update workflows require benchmark coverage handling. Phase 36 is planned to add output-quality evaluation on top of the current contract/assertion benchmark checks.
+Phases 32-36 complete. Phase 35 added repository-wide Codex benchmark coverage metadata, custom or explicitly blocked coverage for every current skill, and future skill creation/update workflows require benchmark coverage handling. Phase 36 added rubric-based output-quality evaluation on top of the contract/assertion benchmark checks.
 
 ## Current Benchmark: ship
 
@@ -71,12 +71,14 @@ Phase 35 is complete. The repository now has repository-wide Codex benchmark cov
 **Source:** 2026-05-11 targeted-skill-builder request for a "skill contract lint and benchmark routing hardening" workflow, plus lessons on benchmark command ambiguity, pack-local command resolution, rate-limit classification, and next-step routing validation.
 
 **Acceptance Criteria:**
-- [ ] Existing-skill overlap confirms the benchmark pack skill owns this behavior; no duplicate broad lint skill is added.
-- [ ] Mirrored Claude/Codex `benchmark-test-skill` contracts explicitly require command resolution, eligibility preflight, report verification, infrastructure-blocked classification, and final next-step routing.
-- [ ] Deterministic layer1 contract tests lint the mirrored skill text for these requirements.
-- [ ] Benchmark coverage metadata remains valid for the material skill behavior update.
-- [ ] Standard skill validation, showcase data refresh, targeted behavior checks, and `git diff --check` pass.
-- [ ] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+- [x] Existing-skill overlap confirms the benchmark pack skill owns this behavior; no duplicate broad lint skill is added.
+- [x] Mirrored Claude/Codex `benchmark-test-skill` contracts explicitly require command resolution, eligibility preflight, report verification, infrastructure-blocked classification, and final next-step routing.
+- [x] Deterministic layer1 contract tests lint the mirrored skill text for these requirements.
+- [x] Benchmark coverage metadata remains valid for the material skill behavior update.
+- [x] Standard skill validation, showcase data refresh, targeted behavior checks, and `git diff --check` pass.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Completed on 2026-05-11. Updated existing `benchmark-test-skill` with mirrored command-resolution guards, report verification, and final-route requirements. Added layer1 contract lint coverage. Validation passed per `tasks/todo.md` Review.
 
 ## Current Benchmark: run
 
@@ -87,7 +89,7 @@ Phase 35 is complete. The repository now has repository-wide Codex benchmark cov
 - [x] `pnpm verify --skill run` passes or blocks benchmark execution with a recorded failure.
 - [x] `pnpm bench --skill run --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
 - [x] `benchmark/test-run-2026-05-11.md` records verify, benchmark, latency, cost, consistency, and raw session evidence.
-- [ ] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
 
 **Result:** Benchmark completed on 2026-05-11. Claude passed 1/3 with two command-exit failures; Codex passed 3/3. No infrastructure-blocked runs occurred. Route the failure to `$session-triage run benchmark failure`.
 
@@ -114,20 +116,13 @@ Phase 35 is complete. The repository now has repository-wide Codex benchmark cov
 - [x] `pnpm bench --skill run --agent codex --runs 1 --chunk-size 1 --pause 0` completes through the generic benchmark path.
 - [x] Mirrored benchmark-test-skill contracts explain the distinction between generic smoke evidence and deep domain-quality evidence.
 
-## Planned Benchmark Work: Codex Custom Coverage
+## Planned Benchmark Work: Codex Custom Coverage *(superseded by Phase 35)*
+
+> This pre-phase planning section is superseded by Phase 35: Repository-Wide Custom Benchmark Coverage ✓, which delivered all of these goals with full acceptance criteria checked.
 
 **Goal:** Use the current Codex token headroom to move beyond generic smoke benchmarks and build custom Codex benchmark coverage for repository skills.
 
 **Source:** `specs/benchmark-custom-coverage.md`, `specs/benchmark-custom-coverage-feature-interview.md`, and 2026-05-11 user clarification that every current and future skill should have a custom benchmark test setup.
-
-**Acceptance Criteria:**
-- [ ] Build the reusable custom benchmark setup pattern for Codex-first coverage: fixture conventions, assertion helpers, budget/timeout defaults, report expectations, and registry wiring.
-- [ ] Apply the custom setup pattern across all Codex skills, prioritizing high-use global skills and benchmark-test-related workflows before lower-traffic pack skills.
-- [ ] Keep the generic fallback for skills that do not yet have custom assertions.
-- [ ] Record which skills have custom Codex assertions versus generic smoke coverage.
-- [ ] Require future skill creation/update workflows to add a benchmark setup or record an explicit blocked coverage status.
-- [ ] Defer Claude custom coverage until the Codex-first pass proves the pattern and priority ordering.
-- [ ] Do not create, modify, or suggest GitHub Actions.
 
 ## Current Benchmark: design-system
 
@@ -170,19 +165,11 @@ Phase 35 is complete. The repository now has repository-wide Codex benchmark cov
 - [x] Write `DESIGN.md` in the Google Labs Stitch-style format with machine-readable YAML frontmatter and prose guardrails.
 - [x] Verify Markdown/frontmatter structure, contrast findings, and diff scope before shipping.
 
-## Current Product: Skills Showcase Website MVP
+## Current Product: Skills Showcase Website MVP *(superseded by Phases 32-34)*
+
+> This pre-phase planning section is superseded by Phases 32 (Product Foundation ✓), 33 (Workflow Experience ✓), and 34 (Distribution Launch ✓), which delivered all MVP goals. Manual launch tasks (newsletter provider, Vercel deploy) remain in `tasks/manual-todo.md`.
 
 **Goal:** Build the showcase as a real top-of-funnel product for `agentic-skills`, G's agentic engineering brand, LexCorp distribution, and the Discord/community funnel.
-
-**MVP Acceptance Criteria:**
-- [ ] Multi-page static routes work locally and on Vercel without a runtime API or database.
-- [ ] Generated skill data covers every tracked `SKILL.md` under `global/` and `packs/`.
-- [ ] GitHub/open-source proof data is generated from public GitHub/local git evidence and degrades honestly when public metrics cannot refresh.
-- [ ] Browser-native workflow animations explain the core workflows without video or Remotion.
-- [ ] Pack map, catalog, and proof pages are responsive, accessible, and aligned to the Swiss grid/blueprint motif.
-- [ ] Newsletter/email capture exists through a static/provider-backed form with non-collecting fallback states.
-- [ ] Skill-changing workflows prompt agents to regenerate site data and review curated website copy/animations when relevant.
-- [ ] Vercel and newsletter setup are recorded as manual launch tasks, not hidden implementation assumptions.
 
 ## Current Hotfix: Skills Showcase Hero Overlap
 
@@ -250,13 +237,13 @@ Phase 35 is complete. The repository now has repository-wide Codex benchmark cov
 | 25 | Codebase Status ✓ | user request, session history | Read-only repo status reports with related conversation-history evidence | S |
 | 26 | Monorepo Pack V1 ✓ | specs/monorepo-execution-controller.md | New monorepo pack with detect, run, ship, guard skills + lane-spec artifact | L |
 | 27 | Analyze-Sessions Targeted Skill Retrospectives ✓ | user request | Targeted skill-performance retrospectives inside analyze-sessions | S |
-| 28 | Session Triage Split | user request, Phase 27 feedback | Dedicated session-triage skill plus broad-only analyze-sessions | S |
-| 29 | Live Skill Harness | user request | Opt-in live Claude/Codex behavior tests for skills | M |
-| 30 | Feature Interview Evidence Intake | user request, existing feature-interview gap review | Evidence-backed feature intake with technical gotchas, journey placement, doc updates, and user priority decision | S |
+| 28 | Session Triage Split ✓ | user request, Phase 27 feedback | Dedicated session-triage skill plus broad-only analyze-sessions | S |
+| 29 | Live Skill Harness ✓ | user request | Opt-in live Claude/Codex behavior tests for skills | M |
+| 30 | Feature Interview Evidence Intake ✓ | user request, existing feature-interview gap review | Evidence-backed feature intake with technical gotchas, journey placement, doc updates, and user priority decision | S |
 | 31 | Parallel Agent Branch/PR Guard ✓ | user correction, existing agent-team workflow contracts | Agent-team lanes use separate GitHub branches and plans include consolidation/PR review | S |
 | 32 | Skills Showcase Product Foundation ✓ | specs/skills-showcase-website.md, specs/ui-skills-showcase-website.md | Multi-page static shell, generated skill/GitHub proof data, stale-data validation, and skill-change freshness prompts | L |
 | 33 | Skills Showcase Workflow Experience ✓ | specs/skills-showcase-website.md, specs/ui-skills-showcase-website.md | Workflow Lab animations, pack map, generated catalog, and responsive blueprint UI | L |
-| 34 | Skills Showcase Distribution Launch | specs/skills-showcase-website.md, specs/ui-skills-showcase-website.md | Proof telemetry UI, newsletter capture, follow/community funnel, and Vercel launch readiness | M |
+| 34 | Skills Showcase Distribution Launch ✓ | specs/skills-showcase-website.md, specs/ui-skills-showcase-website.md | Proof telemetry UI, newsletter capture, follow/community funnel, and Vercel launch readiness | M |
 | 35 | Repository-Wide Custom Benchmark Coverage | specs/benchmark-custom-coverage.md | Custom Codex benchmark setups for all skills plus future-skill coverage enforcement | XL |
 | 36 | Benchmark Output Quality Evaluation ✓ | user request | Rubric-based output-quality scoring for benchmarked skills | XL |
 
@@ -387,7 +374,7 @@ Phase 35 is complete. The repository now has repository-wide Codex benchmark cov
 
 ---
 
-## Phase 36: Benchmark Output Quality Evaluation
+## Phase 36: Benchmark Output Quality Evaluation ✓
 
 **Goal:** Add output-quality evaluation to the benchmark harness so skill benchmarks measure not only contract compliance and artifact shape, but also whether generated outputs are specific, evidence-linked, useful, and free of hallucinated or generic content.
 
@@ -604,7 +591,7 @@ Phase 35 is complete. The repository now has repository-wide Codex benchmark cov
 - Tech debt / follow-ups: Phase 34 should add launch/follow conversion behavior, newsletter/provider fallback states, Vercel deployment guidance, and final deployed-route checks. A future catalog improvement can read `#pack-*` hashes into filters.
 - Ready for next phase: yes
 
-## Phase 34: Skills Showcase Distribution Launch
+## Phase 34: Skills Showcase Distribution Launch ✓
 
 **Goal:** Finish the top-of-funnel launch surface: G/LexCorp/community conversion paths, newsletter/email capture, GitHub/open-source proof telemetry presentation, deployment guidance, and final launch validation.
 

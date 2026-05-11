@@ -248,6 +248,107 @@ describe("benchmark setup registry", () => {
     });
   });
 
+  it("uses agent-specific route assertions for the ship workflow setup", () => {
+    const setup = resolveBenchSetup("ship");
+    expect(setup).toBeDefined();
+
+    const workDir = mkdtempSync(resolve(tmpdir(), "ship-route-"));
+    writeFileSync(
+      resolve(workDir, "ship-manifest.md"),
+      [
+        "# Ship Manifest",
+        "",
+        "## User goal",
+        "Package the completed fixture step.",
+        "",
+        "## Changed files",
+        "- `tests/example.test.ts`",
+        "- `tasks/todo.md`",
+        "",
+        "## Tests run",
+        "Validation passed.",
+        "",
+        "## Deploy status",
+        "Deploy skipped.",
+        "",
+        "## Rollback note",
+        "Revert the fixture changes.",
+        "",
+        "## Next command",
+        "`/run`",
+      ].join("\n"),
+    );
+
+    const claudeAssertions = setup!.assertResult(
+      {
+        stdout: "",
+        stderr: "",
+        exitCode: 0,
+        workDir,
+        files: ["ship-manifest.md"],
+      },
+      { agent: "claude" },
+    );
+    const codexAssertions = setup!.assertResult(
+      {
+        stdout: "",
+        stderr: "",
+        exitCode: 0,
+        workDir,
+        files: ["ship-manifest.md"],
+      },
+      { agent: "codex" },
+    );
+
+    expect(claudeAssertions.find((assertion) => assertion.description === "Output recommends /run")).toMatchObject({
+      pass: true,
+    });
+    expect(codexAssertions.find((assertion) => assertion.description === "Output recommends $run")).toMatchObject({
+      pass: false,
+    });
+
+    writeFileSync(
+      resolve(workDir, "ship-manifest.md"),
+      [
+        "# Ship Manifest",
+        "",
+        "## User goal",
+        "Package the completed fixture step.",
+        "",
+        "## Changed files",
+        "- `tests/example.test.ts`",
+        "- `tasks/todo.md`",
+        "",
+        "## Tests run",
+        "Validation passed.",
+        "",
+        "## Deploy status",
+        "Deploy skipped.",
+        "",
+        "## Rollback note",
+        "Revert the fixture changes.",
+        "",
+        "## Next command",
+        "`$run`",
+      ].join("\n"),
+    );
+
+    expect(
+      setup!.assertResult(
+        {
+          stdout: "",
+          stderr: "",
+          exitCode: 0,
+          workDir,
+          files: ["ship-manifest.md"],
+        },
+        { agent: "codex" },
+      ).find((assertion) => assertion.description === "Output recommends $run"),
+    ).toMatchObject({
+      pass: true,
+    });
+  });
+
   it("uses custom setup for deterministic Tier 2 and Tier 3 global workflows", () => {
     const setup = resolveBenchSetup("affected");
     const target = resolveBenchTarget("affected");

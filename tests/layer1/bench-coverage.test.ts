@@ -90,6 +90,8 @@ describe("benchmark coverage contract", () => {
         "shipping failed before commit/push",
       );
       expect(content, `${contract.path} executable handoff`).toContain(contract.executableRoute);
+      expect(content, `${contract.path} route convention`).toContain("Next command");
+      expect(content, `${contract.path} blank route guard`).toContain("Do not leave `Next command` blank");
       expect(content, `${contract.path} final contract guard`).toContain("must not self-route back");
     }
   });

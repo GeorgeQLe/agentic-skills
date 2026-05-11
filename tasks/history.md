@@ -1,5 +1,10 @@
 # Session History
 
+## 2026-05-11 — Reconcile dev docs fix
+
+- Fixed roadmap header phase count (34→36 complete), summary paragraph (Phase 36 planned→complete), 7 unchecked acceptance criteria across 2 completed sections, 5 missing ✓ markers (Phases 28, 29, 30, 34, 36), and 2 stale pre-phase planning sections (Codex Custom Coverage, Showcase MVP) now marked superseded.
+- Updated `tasks/reconciliation-report.md` with resolved, deferred, and remaining findings.
+
 ## 2026-05-11 — Fix hero h1 mobile layout + ship benchmark results
 
 - Fixed hero h1 squished on mobile by removing `ch`-based `max-width` constraints at tablet (≤1080px) and small-mobile (≤560px) breakpoints in `docs/skills-showcase/styles.css`.
