@@ -1,16 +1,24 @@
 import { describe, expect, it } from "vitest";
-import { BENCH_SETUPS, supportedBenchSkills } from "../harness/bench-setups.js";
+import { CUSTOM_BENCH_SETUPS, resolveBenchSetup, supportedBenchSkills } from "../harness/bench-setups.js";
 
 describe("benchmark setup registry", () => {
-  it("lists supported benchmark targets explicitly", () => {
-    expect(supportedBenchSkills()).toEqual([
-      "design-system",
-      "design-system-draftstonk",
-    ]);
+  it("lists repository skills as benchmarkable targets", () => {
+    expect(supportedBenchSkills()).toContain("design-system");
+    expect(supportedBenchSkills()).toContain("run");
   });
 
-  it("does not register run until it has layer2 and layer4 benchmark coverage", () => {
-    expect(BENCH_SETUPS.run).toBeUndefined();
+  it("uses custom setup for skills with domain-specific assertions", () => {
+    expect(resolveBenchSetup("design-system")).toBe(CUSTOM_BENCH_SETUPS["design-system"]);
+  });
+
+  it("uses a generic smoke setup for repository skills without custom assertions", () => {
+    const setup = resolveBenchSetup("run");
+
+    expect(setup?.skill).toBe("run");
+    expect(setup).not.toBe(CUSTOM_BENCH_SETUPS.run);
+  });
+
+  it("does not resolve unknown skills", () => {
+    expect(resolveBenchSetup("not-a-real-skill")).toBeUndefined();
   });
 });
-

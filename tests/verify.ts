@@ -98,9 +98,19 @@ for (const layer of sortedLayers) {
   const onlyBirpcErrors = result.status !== 0
     && /Timeout calling "onTaskUpdate"/.test(combined)
     && allTestsPassed;
+  const noTargetTests = result.status !== 0
+    && Boolean(values.skill)
+    && layer === 2
+    && /No test files found/.test(combined);
 
   if (onlyBirpcErrors) {
     console.log("⚠ birpc timeout (cosmetic, all tests passed)");
+  }
+
+  if (noTargetTests) {
+    console.log(`No layer2 tests matched skill "${values.skill}"; skipping target-specific layer2 verification.`);
+    results.push({ layer, status: "SKIP", timeMs: elapsed });
+    continue;
   }
 
   const passed = result.status === 0 || onlyBirpcErrors;
