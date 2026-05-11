@@ -25,6 +25,19 @@ Phase 35 is complete. The repository now has repository-wide Codex benchmark cov
 
 **Triage Result:** Verified benchmark eligibility gap. `run` is a repository skill, but the current benchmark harness only registers `design-system` and `design-system-draftstonk` layer4 setups, so `$benchmark-test-skill run --codex` should fail earlier with an unsupported-target message rather than presenting the failure as a `run` verify problem.
 
+## Current Benchmark: run
+
+**Goal:** Run `$benchmark-test-skill run` through the repository harness with fresh eligibility, verify, and both-agent benchmark evidence on 2026-05-11.
+
+**Acceptance Criteria:**
+- [x] `pnpm bench --list-skills` confirms `run` is known and reports its coverage status.
+- [x] `pnpm verify --skill run` passes or blocks benchmark execution with a recorded failure.
+- [x] `pnpm bench --skill run --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [x] `benchmark/test-run-2026-05-11.md` records verify, benchmark, latency, cost, consistency, and raw session evidence.
+- [ ] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Benchmark completed on 2026-05-11. Claude passed 1/3 with two command-exit failures; Codex passed 3/3. No infrastructure-blocked runs occurred. Route the failure to `$session-triage run benchmark failure`.
+
 ## Current Fix: Benchmark Target Eligibility Preflight
 
 **Goal:** Make `$benchmark-test-skill <skill>` fail unsupported benchmark targets before verify with a clear supported-target list.

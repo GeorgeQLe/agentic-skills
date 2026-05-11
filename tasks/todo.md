@@ -30,9 +30,9 @@
 - [x] `pnpm verify --skill run` passes or blocks benchmark execution with a recorded failure.
 - [x] `pnpm bench --skill run --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
 - [x] `benchmark/test-run-2026-05-11.md` records verify, benchmark, latency, cost, consistency, and raw session evidence.
-- [x] Results are recorded in this file, then committed and pushed on `master`.
+- [ ] Results are recorded in this file, then committed and pushed on `master`.
 
-**Result:** Benchmark completed on 2026-05-11. Preflight listed `run` with custom coverage via `tests/layer4/setups/tier1-workflows.setup.ts`. Verify passed layer1 in 7.7s with 1,229 tests; layer2 was skipped because no target-specific layer2 tests matched `run`. Both-agent benchmark completed with no infrastructure-blocked runs. Claude evaluated 0/3 pass, failing `Output recommends $run` in all runs, with p50 33.3s and $0.75 total estimated cost. Codex evaluated 3/3 pass, with p50 40.8s and $0.75 total estimated cost. Report written to `benchmark/test-run-2026-05-11.md`.
+**Result:** Benchmark completed on 2026-05-11. Preflight listed `run` with custom coverage via `tests/layer4/setups/tier1-workflows.setup.ts`. Verify passed layer1 in 8.6s with 1,230 tests; layer2 was skipped because no target-specific layer2 tests matched `run`. Both-agent benchmark completed with no infrastructure-blocked runs. Claude evaluated 1/3 pass, failing `Agent command exited successfully` in runs #0 and #1, with p50 31.1s and $0.75 total estimated cost. Codex evaluated 3/3 pass, with p50 41.7s and $0.75 total estimated cost. Report written to `benchmark/test-run-2026-05-11.md`.
 
 **Recommended Next Step:** `$session-triage run benchmark failure`.
 
