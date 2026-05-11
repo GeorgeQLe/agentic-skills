@@ -4,6 +4,10 @@
 **Status:** Phase 35 complete; no active implementation phase remains.
 **Last completed phase:** Phase 35 — Repository-Wide Custom Benchmark Coverage
 
+## Priority Documentation Todo
+
+- [x] Documentation is current; no missing or stale research, spec, roadmap, or task artifacts found.
+
 ## Current State
 
 - Phase 35 is complete and archived at `tasks/phases/phase-35.md`.
