@@ -6,6 +6,16 @@ import {
   qualityAssertions,
   type QualityRubric,
 } from "../harness/bench-quality.js";
+import {
+  concreteCommandReferenceCriterion,
+  concreteFileReferenceCriterion,
+  createSetupQualityEvaluator,
+  forbiddenFabricationCriterion,
+  nextRouteCriterion,
+  referenceTraitCriterion,
+  requiredFactCoverageCriterion,
+  specificityCriterion,
+} from "../layer4/setup-helpers/quality.js";
 
 const FIXTURE_ROOT = resolve(import.meta.dirname, "../fixtures/bench-quality");
 
@@ -116,6 +126,77 @@ describe("benchmark output quality evaluation", () => {
         expect.stringContaining("forbidden phrase"),
       ]),
     );
+  });
+
+  it("provides setup-facing criterion helpers for common quality checks", () => {
+    const evaluator = createSetupQualityEvaluator({
+      minimumScore: 0.85,
+      criteria: [
+        requiredFactCoverageCriterion({
+          id: "step-fact",
+          description: "Names the selected step",
+          weight: 2,
+          critical: true,
+          facts: ["Step 36.1"],
+        }),
+        concreteFileReferenceCriterion({
+          id: "file-reference",
+          description: "Names concrete changed files",
+          weight: 2,
+          files: ["tests/harness/bench-report.ts"],
+        }),
+        concreteCommandReferenceCriterion({
+          id: "command-reference",
+          description: "Names concrete validation commands",
+          weight: 1,
+          commands: ["git diff --check"],
+        }),
+        specificityCriterion({
+          id: "scope",
+          description: "Avoids generic scope language",
+          weight: 1,
+          requiredAny: ["benchmark quality"],
+          forbiddenPhrases: ["made the benchmark better"],
+        }),
+        referenceTraitCriterion({
+          id: "traits",
+          description: "Includes useful handoff traits",
+          weight: 1,
+          traits: ["evidence", "validation", "scope"],
+        }),
+        nextRouteCriterion({
+          id: "route",
+          description: "Includes the next route",
+          weight: 1,
+          route: "$run",
+        }),
+        forbiddenFabricationCriterion({
+          id: "fabrication",
+          description: "Rejects invented implementation facts",
+          weight: 2,
+          critical: true,
+          forbidden: ["OpenAI Evals API", "GitHub Actions"],
+        }),
+      ],
+    });
+
+    const strong = evaluator.evaluate(fixture("strong-run-output.md"));
+    const hallucinated = evaluator.evaluate(fixture("hallucinated-run-output.md"));
+
+    expect(strong.passed).toBe(true);
+    expect(strong.criteria.map((criterion) => criterion.id)).toEqual(
+      expect.arrayContaining([
+        "step-fact",
+        "file-reference",
+        "command-reference",
+        "scope",
+        "traits",
+        "route",
+        "fabrication",
+      ]),
+    );
+    expect(hallucinated.passed).toBe(false);
+    expect(hallucinated.criticalFailures).toContain("fabrication");
   });
 });
 

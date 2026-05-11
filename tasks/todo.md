@@ -84,40 +84,52 @@
   - Preserve existing hard assertion pass/fail behavior and label quality scoring as an additional output-quality signal.
   - Keep infrastructure-blocked runs out of evaluated quality statistics.
   - Review: Runner now stores optional `qualityResult` per non-blocked run, report generation summarizes quality only for evaluated runs with quality results, and markdown renders `Output Quality` separately from the hard assertion pass rate. A runner regression test confirms artifact file content is included in the evaluated output.
-- Step 36.4: Add reusable setup-facing quality helpers and degraded-output fixtures.
+- [x] Step 36.4: Add reusable setup-facing quality helpers and degraded-output fixtures.
   - Classification: automated
   - Files: create `tests/layer4/setup-helpers/quality.ts`, create fixtures under `tests/fixtures/bench-quality/`, modify focused layer1 tests
   - Add helpers for required fact coverage, forbidden fabrication, concrete file/command references, specificity checks, reference-trait checks, and rubric aggregation.
   - Include intentionally vague, generic, and hallucinated outputs that must fail quality thresholds.
-  - Implementation plan:
-    - Create `tests/layer4/setup-helpers/quality.ts` as the setup-facing wrapper over `tests/harness/bench-quality.ts`, so layer4 setup files do not need to assemble low-level rubric criteria by hand.
-    - Move or wrap common helper patterns for required file references, required command references, forbidden fabrication phrases, specificity markers, next-route checks, and reference traits into named helper functions.
-    - Keep existing fixtures under `tests/fixtures/bench-quality/` and add any missing fixture variants needed to prove vague, generic, hallucinated, and strong outputs are distinguished.
-    - Refactor the `run` quality rubric in `tests/layer4/setups/tier1-workflows.setup.ts` to use the setup helper without changing behavior.
-    - Validate with `pnpm --dir tests test:layer1 -- bench-quality bench-setups runner` and `git diff --check`.
-- Step 36.5: Add Tier 1 workflow quality rubrics.
+  - Review: Added `tests/layer4/setup-helpers/quality.ts` with setup-facing criterion builders for required facts, concrete file references, concrete command references, specificity, reference traits, next-route checks, and forbidden fabrications. Added focused layer1 coverage proving the helpers distinguish the existing strong and hallucinated benchmark-quality fixtures. Refactored the existing `run` quality rubric to use the helper API without changing its threshold or hard assertion behavior.
+  - Ship manifest:
+    - User goal: Execute Phase 36 Step 36.4 from `$run` by adding reusable setup-facing quality helpers and degraded-output fixture coverage for benchmark quality rubrics.
+    - Changed files: `tests/layer4/setup-helpers/quality.ts`, `tests/layer4/setups/tier1-workflows.setup.ts`, `tests/layer1/bench-quality.test.ts`, `tasks/todo.md`, `tasks/history.md`.
+    - Per-file purpose: `quality.ts` exposes named setup-facing quality criterion builders over the lower-level harness scoring primitives; `tier1-workflows.setup.ts` proves the helper can express the existing `run` rubric while keeping the same quality threshold and benchmark setup behavior; `bench-quality.test.ts` covers helper aggregation, concrete file/command checks, route checks, trait checks, and hallucination rejection against existing fixtures; task/history docs record the completed step, validation, and next plan.
+    - User-goal mapping: The helper API directly supports the Phase 36 goal of reusable quality-evaluation primitives for future Tier 1, Tier 2/Tier 3, and pack rubrics, while the focused test keeps the intentionally strong/degraded/hallucinated fixture behavior executable.
+    - Tests run: `pnpm --dir tests test:layer1 -- bench-quality bench-setups runner` passed with 10 files and 1242 tests; `pnpm --dir tests bench:coverage` passed with 143 skills; `git diff --check` passed.
+    - Skipped tests: Full phase validation, benchmark coverage validation, and representative live benchmarks are reserved for Step 36.9 after all planned rubrics and docs land. Skills Showcase refresh was not run because no tracked `SKILL.md` or `PACK.md` changed.
+    - Adversarial review: Diff-aware self-review checked that the helper is a thin wrapper over existing scoring primitives, does not alter report schemas or runner persistence, does not add dependencies or package-manager changes, does not broaden the `run` setup prompt/assertions, and does not touch GitHub Actions. One possible behavior drift from splitting `tests/example.test.ts` into a separate criterion was accepted because the file reference remains critical and the minimum threshold is unchanged.
+    - Residual risk: The helper API is intentionally narrow and may need additional builders as later skill families expose new deterministic quality signals; Step 36.5 is the first broader consumer and should refine names only if needed by actual Tier 1 rubric patterns.
+    - Rollback note: Revert the Step 36.4 commit to remove the setup-facing helper and restore the `run` rubric to direct harness assertions.
+    - Next command: `$run`
+- [ ] Step 36.5: Add Tier 1 workflow quality rubrics.
   - Classification: automated
   - Files: modify `tests/layer4/setups/tier1-workflows.setup.ts`, modify `tests/layer1/bench-setups.test.ts`
   - Cover `run`, `ship`, `ship-end`, `roadmap`, `plan-phase`, `feature-interview`, `spec-interview`, `investigate`, `session-triage`, `targeted-skill-builder`, and `benchmark-test-skill`.
   - Assert skill-specific quality such as evidence linkage, concrete next action, scope control, validation specificity, root-cause specificity, and no fabricated fixture facts.
-- Step 36.6: Add quality rubrics for high-signal global and design-system setups.
+  - Implementation plan:
+    - Use `tests/layer4/setup-helpers/quality.ts` to add `qualityEvaluator` rubrics to each remaining Tier 1 workflow definition in `tests/layer4/setups/tier1-workflows.setup.ts`.
+    - Keep each rubric deterministic and fixture-bound: require key fixture facts/files, enforce the expected next route, reject obvious fabricated services/files/GitHub Actions, and add one skill-specific criterion for the workflow's core value (shipping manifest completeness, phase planning specificity, root-cause specificity, benchmark evidence reporting, or correction-to-contract mapping).
+    - Extend `tests/layer1/bench-setups.test.ts` so Tier 1 opted-in quality evaluators are discoverable and representative rubric IDs exist for the covered skills.
+    - Avoid changing benchmark prompts, hard assertions, budgets, or runner/report schemas unless a failing test proves the current setup cannot support the rubrics.
+    - Validate with `pnpm --dir tests test:layer1 -- bench-quality bench-setups runner`, `pnpm --dir tests bench:coverage`, and `git diff --check`.
+- [ ] Step 36.6: Add quality rubrics for high-signal global and design-system setups.
   - Classification: automated
   - Files: modify `tests/layer4/setups/design-system.setup.ts`, modify `tests/layer4/setups/design-system-draftstonk.setup.ts`, modify `tests/layer4/setups/tier23-global-workflows.setup.ts`, modify focused layer1 tests
   - Prioritize deterministic signals for planning, debugging, audit, research, and design-token outputs.
   - Record deferred notes for skills whose quality cannot be scored reliably without external state or human judgment.
-- Step 36.7: Add pack-skill quality rubrics by family.
+- [ ] Step 36.7: Add pack-skill quality rubrics by family.
   - Classification: automated
   - Files: modify `tests/layer4/setups/packs/pack-workflows.setup.ts`, modify focused layer1 tests
   - Group rubrics by pack family where possible: creator-media, business-ops, game, devtool, monorepo, kanban, project-fleet, remotion.
   - Test that pack outputs include pack/skill context, fixture evidence, practical risks, and non-generic next routes.
-- Step 36.8: Update skill workflows and benchmark command docs.
+- [ ] Step 36.8: Update skill workflows and benchmark command docs.
   - Classification: automated
   - Files: modify mirrored skill creation/update workflows, modify `packs/agentic-skills-bench/*/benchmark-test-skill/SKILL.md`, modify `docs/skills-reference.md` if needed
   - Require future benchmark setup work to consider quality rubrics, not only hard assertions.
   - Teach benchmark reports to explain hard pass rate versus quality score without overstating statistical certainty.
 
 ### Green
-- Step 36.9: Run tests, representative benchmarks, and phase review.
+- [ ] Step 36.9: Run tests, representative benchmarks, and phase review.
   - Classification: automated
   - Files: modify `tasks/todo.md`, modify `tasks/history.md`
   - Run focused quality/evaluator tests, setup registry tests, report tests, benchmark coverage validation, `pnpm bench --list-skills`, representative one-run Codex benchmarks with quality scoring, standard skill audits, and `git diff --check`.
