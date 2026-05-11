@@ -25,6 +25,19 @@ Phase 35 is complete. The repository now has repository-wide Codex benchmark cov
 
 **Triage Result:** Verified benchmark eligibility gap. `run` is a repository skill, but the current benchmark harness only registers `design-system` and `design-system-draftstonk` layer4 setups, so `$benchmark-test-skill run --codex` should fail earlier with an unsupported-target message rather than presenting the failure as a `run` verify problem.
 
+## Current Benchmark: ship Codex
+
+**Goal:** Run `$benchmark-test-skill ship --codex` through the repository harness with fresh eligibility, verify, and Codex-only benchmark evidence on 2026-05-11.
+
+**Acceptance Criteria:**
+- [x] `pnpm bench --list-skills` confirms `ship` is known and reports its coverage status.
+- [x] `pnpm verify --skill ship` passes or blocks benchmark execution with a recorded failure.
+- [x] `pnpm bench --skill ship --agent codex --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [x] `benchmark/test-ship-2026-05-11.md` records verify, benchmark, latency, cost, consistency, and raw session evidence.
+- [x] Results are recorded in `tasks/todo.md`.
+
+**Result:** Benchmark completed on 2026-05-11. `ship` is a known custom benchmark target using `tests/layer4/setups/tier1-workflows.setup.ts`. Verify passed with layer1 in 12.1s across 1,245 tests; layer2 was skipped because no target-specific layer2 tests matched `ship`. Codex benchmark failed 0/3 hard assertions with no infrastructure-blocked runs. Each failed run created the manifest but recommended `$ship` or `$ship --no-deploy` as the next command, which failed the actionable next-route assertion. Output quality averaged 71.4%, below the 78.0% threshold, with evidence-linked and actionable-next-route at 0.0%. See `benchmark/test-ship-2026-05-11.md`. Recommended next command: `$session-triage ship benchmark failure`.
+
 ## Current Benchmark: run
 
 **Goal:** Run `$benchmark-test-skill run` through the repository harness with fresh eligibility, verify, and both-agent benchmark evidence on 2026-05-11.
