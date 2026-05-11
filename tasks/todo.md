@@ -92,6 +92,12 @@ Build custom Codex benchmark test setups for every repository skill and enforce 
   - Files: create or modify setup files under `tests/layer4/setups/` for Tier 2 and Tier 3 skills where deterministic local coverage is practical; modify `tests/harness/bench-setups.ts`; modify `tests/harness/bench-coverage.ts`; modify `tests/layer1/bench-setups.test.ts`
   - Mark any unsafe or externally blocked setup as `blocked` with a concrete `blocked_reason` and `next_command`.
   - Keep generic fallback available only for rows that are not yet custom and not blocked.
+  - Implementation plan for next run:
+    1. Classify the remaining non-pack global skills by deterministic local coverage feasibility, starting with broadly used analysis, audit, and repo-maintenance workflows before lower-traffic creator/business/game skills.
+    2. Add compact setup definitions for practical Tier 2/Tier 3 skills, reusing the Step 35.3 helpers and the grouped-definition pattern from `tests/layer4/setups/tier1-workflows.setup.ts` when assertions are similar.
+    3. Mark skills that require external credentials, real browser/device state, paid services, production deploys, or unsafe account access as `blocked` with a concrete `blocked_reason` and `next_command`.
+    4. Update `CUSTOM_BENCH_SETUPS`, `COVERAGE_OVERRIDES`, and layer1 tests so custom, blocked, and remaining generic rows are all intentional and covered by representative assertions.
+    5. Validate with targeted `bench-setups.test.ts`, `pnpm --dir tests bench:coverage`, full layer1, `pnpm --dir tests bench --list-skills`, at least one zero-run smoke for a newly custom Tier 2/Tier 3 setup, and `git diff --check`.
 - [ ] Step 35.6: Add pack skill coverage rows and pack-level setup coverage.
   - Classification: automated
   - Files: create or modify setup files under `tests/layer4/setups/packs/`; modify `tests/harness/bench-setups.ts`; modify `tests/harness/bench-coverage.ts`; modify `tests/layer1/bench-setups.test.ts`
