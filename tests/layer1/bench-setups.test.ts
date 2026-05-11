@@ -62,6 +62,35 @@ describe("benchmark setup registry", () => {
     expect(target?.setup?.skill).toBe("run");
   });
 
+  it("gives the run workflow enough budget for Claude plan output", () => {
+    const setup = resolveBenchSetup("run");
+
+    expect(setup?.perRunBudgetUsd).toBe(BENCH_BUDGETS_USD.standard);
+  });
+
+  it("exposes quality evaluators for opted-in custom setups", () => {
+    const setup = resolveBenchSetup("run");
+
+    expect(setup?.qualityEvaluator).toBeDefined();
+    expect(setup?.qualityEvaluator?.rubric.criteria.map((criterion) => criterion.id)).toEqual(
+      expect.arrayContaining([
+        "evidence-linked",
+        "scope-control",
+        "validation-specificity",
+        "actionable-next-route",
+        "no-fabricated-facts",
+      ]),
+    );
+  });
+
+  it("preserves custom setups that only define hard assertions", () => {
+    const setup = resolveBenchSetup("design-system");
+
+    expect(setup).toBeDefined();
+    expect(setup?.assertResult).toBeTypeOf("function");
+    expect(setup?.qualityEvaluator).toBeUndefined();
+  });
+
   it("uses agent-specific route assertions for the run workflow setup", () => {
     const setup = resolveBenchSetup("run");
     expect(setup).toBeDefined();

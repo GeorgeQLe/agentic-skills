@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-05-11 — Phase 36 Steps 36.1-36.3: benchmark quality foundation
+
+- Added red layer1 tests and fixtures for benchmark output-quality evaluation, covering weighted rubric aggregation, minimum thresholds, critical failures, evaluator notes, strong/generic/degraded/hallucinated fixture behavior, and reference-trait expectations.
+- Added dependency-free benchmark quality primitives and types for weighted rubric scoring, threshold evaluation, critical failures, notes, required facts, forbidden fabrications, required patterns, specificity, and reference traits.
+- Persisted optional per-run quality results and added report summaries for average quality score, threshold failures, critical failures, and lowest-scoring criteria while keeping hard assertion pass rate separate.
+- Extended benchmark report tests to require an `Output Quality` section that separates quality score summaries from hard assertion pass rate and excludes infrastructure-blocked runs from quality statistics.
+- Extended setup registry tests to require opted-in custom setups such as `run` to expose a quality evaluator while preserving compatibility for setups that only define hard assertions, and added the first `run` quality rubric.
+- Included the pre-existing benchmark runner budget-exhaustion handling already present in the worktree: agent budget errors are classified as infrastructure-blocked and the `run` workflow uses the standard benchmark budget.
+- Verified with an initial red `pnpm --dir tests test:layer1 -- bench-quality bench-report bench-setups`, then passing focused and full layer1 runs, plus `git diff --check`.
+
 ## 2026-05-11 — Phase 35 Step 35.4: Tier 1 custom benchmark setups
 
 - Added custom Codex benchmark setups for Tier 1 workflow skills: `run`, `ship`, `ship-end`, `roadmap`, `plan-phase`, `feature-interview`, `spec-interview`, `investigate`, `session-triage`, `targeted-skill-builder`, and `benchmark-test-skill`.
