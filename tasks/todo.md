@@ -51,7 +51,7 @@
 - [x] Step 37.1: Establish the minimal Next.js app shell without adding persistence dependencies
   - Files: create `apps/skills-showcase/package.json`, create `apps/skills-showcase/next.config.mjs`, create `apps/skills-showcase/tsconfig.json`, create `apps/skills-showcase/app/layout.tsx`, create `apps/skills-showcase/app/globals.css`, create `apps/skills-showcase/src/showcase/routes.ts`
   - Keep dependencies limited to the app framework needed for this phase. Do not add Neon, tRPC, TanStack Query, admin auth, or database packages.
-- [ ] Step 37.2: Port the existing static routes into the app router while preserving content hierarchy
+- [x] Step 37.2: Port the existing static routes into the app router while preserving content hierarchy
   - Files: create `apps/skills-showcase/app/page.tsx`, create `apps/skills-showcase/app/workflows/page.tsx`, create `apps/skills-showcase/app/packs/page.tsx`, create `apps/skills-showcase/app/catalog/page.tsx`, create `apps/skills-showcase/app/inspect/page.tsx`, create `apps/skills-showcase/app/follow/page.tsx`, create or modify files under `apps/skills-showcase/src/showcase/`
   - Use the existing route inventory from `docs/skills-showcase/index.html`, `docs/skills-showcase/workflows/index.html`, `docs/skills-showcase/packs/index.html`, `docs/skills-showcase/catalog/index.html`, `docs/skills-showcase/inspect/index.html`, and `docs/skills-showcase/follow/index.html` as the source of truth.
 - [ ] Step 37.3: Migrate the showcase styling and client interactions conservatively
@@ -111,9 +111,23 @@
 - **Rollback note:** Revert the Step 37.1 commit to remove the `apps/skills-showcase` shell and restore Phase 37 task tracking.
 - **Next command:** `$run`
 
-### Next Step Plan — Step 37.2
+- 2026-05-11 — Completed Step 37.2 App Router refactor. Moved ShowcaseHeader + MobilePanel into root layout (rendered once), added per-page `metadata` exports with unique titles, converted ShowcaseHeader to `"use client"` with `usePathname()` replacing the manual `currentPath` prop, switched all imports to the `@/` path alias, and added `viewport` export to root layout. All 6 page files now contain only `<main>` content. Verified: `"use client"` only on ShowcaseHeader, zero `currentPath` prop usage, zero `../../src/` imports, every page exports metadata, no page imports ShowcaseHeader/MobilePanel.
 
-- **Scope:** Port the existing static route surfaces into the Next.js App Router while preserving the current content hierarchy and public route paths.
-- **Files expected:** Create `apps/skills-showcase/app/page.tsx`, `apps/skills-showcase/app/workflows/page.tsx`, `apps/skills-showcase/app/packs/page.tsx`, `apps/skills-showcase/app/catalog/page.tsx`, `apps/skills-showcase/app/inspect/page.tsx`, `apps/skills-showcase/app/follow/page.tsx`, and shared presentation/data helpers under `apps/skills-showcase/src/showcase/` as needed.
-- **Source of truth:** Read only the existing static route files under `docs/skills-showcase/` plus `styles.css` and `app.js` where needed to preserve route hierarchy. Do not redesign the site and do not add persistence.
-- **Verification target:** Run structural checks available without dependency installation, then defer full app build/typecheck until dependencies and migrated surfaces make those commands meaningful.
+### Next Step Plan — Step 37.3
+
+- **Scope:** Migrate the showcase styling and client interactions from the old static site (`docs/skills-showcase/styles.css` and `docs/skills-showcase/app.js`) into the Next.js app, preserving the Swiss grid/blueprint visual system and route-specific interactions (workflow animations, pack filtering, catalog search, newsletter form states).
+- **Files to modify/create:**
+  - `apps/skills-showcase/app/globals.css` — port CSS custom properties, grid system, component styles, responsive breakpoints, and dark-theme variables from `docs/skills-showcase/styles.css`
+  - `apps/skills-showcase/src/showcase/ShowcaseShell.tsx` — create client-side shell for menu toggle and mobile panel interactions
+  - `apps/skills-showcase/src/showcase/catalog.tsx` — create client component for catalog search/filter/platform interactions from the static `app.js` catalog logic
+  - `apps/skills-showcase/src/showcase/workflows.tsx` — create client component for workflow animation, step navigation, and workflow selector from the static `app.js` workflow logic
+  - `apps/skills-showcase/src/showcase/newsletter-form.tsx` — create client component for the follow page newsletter form states (provider-missing, invalid-email, pending, success, error) from the static `app.js` newsletter logic
+- **Source of truth:** `docs/skills-showcase/styles.css` for all CSS and `docs/skills-showcase/app.js` for all client interactions. Preserve visual parity, not code structure.
+- **Key decisions:**
+  - Each interactive surface becomes a separate `"use client"` component to keep the server-component boundary clean
+  - CSS goes into `globals.css` since the showcase is a single visual system (no CSS modules needed)
+  - The newsletter form must preserve its non-persistent state machine (no Neon in this phase)
+- **Execution Profile:** serial, implementation-safe, main agent
+- **Verification:** Visual inspection of rendered pages after `pnpm dev`, CSS custom property coverage check against the static source, interaction smoke test for each client component
+- **Acceptance criteria:** All 6 routes render with visual parity to the static site. Workflow animations, pack filtering, catalog search, and newsletter form states work. No persistence is added.
+- **Ship-one-step handoff:** implement only Step 37.3, validate it, then run `/ship` when done.

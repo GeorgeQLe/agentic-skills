@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-05-11 — Step 37.2 App Router refactor
+
+- Leveraged Next.js App Router features on the ported showcase pages.
+- Moved ShowcaseHeader + MobilePanel into root `app/layout.tsx` (single render), removed from all 6 page files.
+- Added per-page `metadata` exports with unique titles matching the original static HTML `<title>` tags.
+- Converted ShowcaseHeader to `"use client"` + `usePathname()`, eliminating the manual `currentPath` prop.
+- Switched all imports from `../../src/` to the configured `@/` path alias.
+- Added `viewport` export to root layout.
+- Added `*.tsbuildinfo` to `.gitignore`.
+
 ## 2026-05-11 — Spec drift fix all + dev docs reconciliation
 
 - Ran `/spec-drift fix all` across 14 canonical specs, extracting 284 claims: 186 verified (65%), 33 diverged, 65 unimplemented.
