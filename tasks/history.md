@@ -1870,3 +1870,9 @@ Resolved all 10 findings from `/expert-review`:
 - Refreshed stale generated Skills Showcase proof data discovered by `scripts/validate-skills-showcase-data.sh`.
 - Verified with focused layer1 tests, `pnpm --dir tests bench:coverage`, `pnpm --dir tests bench --list-skills`, full `pnpm --dir tests test:layer1`, one-run Codex benchmarks for `run`, `plan-phase`, `benchmark-test-skill`, and `youtube-video-audit`, skill dependency/version/routing/pack audits, Skills Showcase freshness validation, and `git diff --check`.
 - Marked Phase 35 complete in `tasks/roadmap.md`, archived it to `tasks/phases/phase-35.md`, and replaced `tasks/todo.md` with a no-active-phase handoff to `$brainstorm`.
+
+## 2026-05-11 — run benchmark route assertion fix
+
+- Fixed the `run` custom benchmark setup so route assertions are agent-aware: Claude is evaluated against `/ship`, while Codex remains evaluated against `$run`.
+- Passed benchmark runner context into custom setup assertions and added focused layer1 coverage for the agent-specific route behavior.
+- Verified with focused layer1 tests, benchmark coverage validation, and one-run live benchmarks for both `run` Claude and Codex runners.
