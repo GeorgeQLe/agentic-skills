@@ -148,7 +148,7 @@
     - Residual risk: The global workflow rubric is intentionally shared across many deterministic fixtures, so a future live benchmark may reveal one skill family needs a more specialized criterion to avoid false negatives. Step 36.9 representative benchmarks are the planned proof point for real generated output.
     - Rollback note: Revert the Step 36.6 commit to remove the design-system and Tier 2/Tier 3 global quality rubrics while preserving foundational quality helpers and Tier 1 rubrics.
     - Next command: `$run`
-- [ ] Step 36.7: Add pack-skill quality rubrics by family.
+- [x] Step 36.7: Add pack-skill quality rubrics by family.
   - Classification: automated
   - Files: modify `tests/layer4/setups/packs/pack-workflows.setup.ts`, modify focused layer1 tests
   - Group rubrics by pack family where possible: creator-media, business-ops, game, devtool, monorepo, kanban, project-fleet, remotion.
@@ -160,11 +160,29 @@
     - Extend focused layer1 setup tests so representative pack skills expose quality evaluators and rubric IDs by family, while blocked/generic fallback behavior remains unchanged.
     - Do not change pack benchmark prompts, hard assertions, budgets, runner/report schemas, package dependencies, or GitHub Actions.
     - Validate with `pnpm --dir tests test:layer1 -- bench-quality bench-setups runner`, `pnpm --dir tests bench:coverage`, and `git diff --check`.
+  - Review: Added deterministic pack-family quality evaluators to every grouped pack workflow setup. The shared rubric scores exact pack/skill context, local fixture evidence, practical risk or validation specificity, `$run` next-route handoff, family-specific context, workflow traits, and generic/external overreach guards without changing prompts, hard assertions, budgets, runner/report schemas, dependencies, or GitHub Actions.
+  - Ship manifest:
+    - User goal: Execute Phase 36 Step 36.7 from `$run` by adding pack-skill quality rubrics by family and evaluator coverage.
+    - Changed files: `tests/layer4/setups/packs/pack-workflows.setup.ts`, `tests/layer1/bench-setups.test.ts`, `tasks/todo.md`, `tasks/history.md`.
+    - Per-file purpose: `pack-workflows.setup.ts` adds the shared pack-family quality evaluator and family context map; `bench-setups.test.ts` adds representative family discovery assertions plus a strong/generic quality scoring regression; task/history docs record completion evidence, manifest, and the next-step plan.
+    - User-goal mapping: The setup rubrics satisfy the Phase 36 acceptance item requiring pack skills to have deterministic quality rubrics where practical, and the focused tests prove pack outputs must include pack/skill context, fixture evidence, practical risk, non-generic next routes, and no unsupported external overreach.
+    - Tests run: `pnpm --dir tests test:layer1 -- bench-setups` failed as expected before implementation because pack setups had no quality evaluators; `pnpm --dir tests test:layer1 -- bench-quality bench-setups runner` initially failed because the test used `pass` instead of `passed`, then because the strong fixture did not include exact required fixture facts; after fixing the test fixture, it passed with 10 files and 1245 tests. `pnpm --dir tests bench:coverage` passed with 143 skills. `git diff --check` passed.
+    - Skipped tests: Full phase validation and representative live Codex benchmarks remain reserved for Step 36.9 after workflow-documentation updates land. Skills Showcase refresh was not run because no tracked `SKILL.md` or `PACK.md` changed.
+    - Adversarial review: Diff-aware self-review checked for prompt/assertion/schema drift, excessive subjective criteria, family false positives, dependency or lockfile changes, and GitHub Actions edits. Findings fixed: the test was corrected to use `QualityEvaluationResult.passed`, and the strong fixture was made exact enough to prove local input fact coverage rather than only broad topical quality.
+    - Residual risk: The pack-family context map is intentionally broad for shared setup coverage; a later live benchmark may reveal that a specific pack skill needs a narrower family-specific criterion to avoid false positives or false negatives. Step 36.9 representative pack benchmark validation is the planned proof point.
+    - Rollback note: Revert the Step 36.7 commit to remove pack-family quality evaluators and focused quality discovery tests while preserving earlier quality harness and global/Tier 1 rubrics.
+    - Next command: `$run`
 - [ ] Step 36.8: Update skill workflows and benchmark command docs.
   - Classification: automated
   - Files: modify mirrored skill creation/update workflows, modify `packs/agentic-skills-bench/*/benchmark-test-skill/SKILL.md`, modify `docs/skills-reference.md` if needed
   - Require future benchmark setup work to consider quality rubrics, not only hard assertions.
   - Teach benchmark reports to explain hard pass rate versus quality score without overstating statistical certainty.
+  - Implementation plan:
+    - Inspect mirrored skill creation and update workflows that currently mention benchmark coverage, especially repo-managed skill creation, local-skill promotion, targeted skill builder, and benchmark-test-skill contracts under both Codex and Claude paths where present.
+    - Update only the workflow contracts that govern new or materially changed benchmark setups so they require quality-rubric handling when deterministic signals are practical, or an explicit blocked/deferred quality note when not practical.
+    - Update the `benchmark-test-skill` pack contract text so benchmark output language distinguishes hard assertion pass rate from output-quality score and avoids implying statistical certainty from small benchmark runs.
+    - Update `docs/skills-reference.md` only if the public reference includes benchmark coverage requirements that would otherwise drift from the workflow contracts.
+    - Because tracked `SKILL.md` files are expected to change, refresh and validate Skills Showcase generated data before shipping, then run focused contract scans, relevant layer1 tests, benchmark coverage, and `git diff --check`.
 
 ### Green
 - [ ] Step 36.9: Run tests, representative benchmarks, and phase review.
