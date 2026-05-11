@@ -52,29 +52,49 @@
 **Subagent lanes:** none
 
 ### Tests First
-- Step 36.1: Write failing quality-evaluator and report tests for this phase's acceptance criteria.
+- [x] Step 36.1: Write failing quality-evaluator and report tests for this phase's acceptance criteria.
   - Classification: automated
   - Files: create `tests/layer1/bench-quality.test.ts`, modify `tests/layer1/bench-report.test.ts`, modify `tests/layer1/bench-setups.test.ts`, add fixtures under `tests/fixtures/bench-quality/`
   - Add red tests for weighted rubric aggregation, minimum thresholds, critical criterion failure, evaluator notes, strong fixture output passing, generic/degraded fixture output failing, hallucinated fixture output failing, report summaries separating hard assertion pass rate from quality score, and setup registry behavior for skills with and without evaluators.
   - Tests must prove backward compatibility for setups that only define hard assertions and must keep infrastructure-blocked runs out of quality statistics.
+  - Review: Added red tests and fixtures for the intended quality evaluator API, markdown quality summaries, setup evaluator discovery, backward compatibility, and infrastructure-block exclusion. Initial focused validation `pnpm --dir tests test:layer1 -- bench-quality bench-report bench-setups` failed as expected for missing quality primitives/report/setup wiring; after the foundational implementation landed, focused validation `pnpm --dir tests test:layer1 -- bench-quality bench-report bench-setups runner` passed with 10 files and 1241 tests.
+  - Ship manifest:
+    - User goal: Execute Phase 36 Step 36.1 from `$run` by adding tests-first coverage for benchmark output quality evaluation.
+    - Changed files: `tests/layer1/bench-quality.test.ts`, `tests/layer1/bench-report.test.ts`, `tests/layer1/bench-setups.test.ts`, `tests/fixtures/bench-quality/strong-run-output.md`, `tests/fixtures/bench-quality/generic-run-output.md`, `tests/fixtures/bench-quality/hallucinated-run-output.md`, `tests/fixtures/bench-quality/degraded-run-output.md`, `tests/harness/bench-quality.ts`, `tests/harness/bench-types.ts`, `tests/harness/bench-report.ts`, `tests/harness/bench-runner.ts`, `tests/layer1/runner.test.ts`, `tests/layer4/setups/tier1-workflows.setup.ts`, `tasks/todo.md`, `tasks/history.md`.
+    - Per-file purpose: New quality test and fixtures define scoring primitives and degraded-output behavior; quality harness/types implement deterministic scoring and result shapes; report tests and report code define quality-summary rendering separate from hard pass rate; runner code persists per-run quality results and reads generated artifact content for evaluation; setup tests and Tier 1 setup code define evaluator discovery, no-evaluator compatibility, the first `run` quality rubric, and the pre-existing run budget expectation; pre-existing runner/setup edits classify agent budget exhaustion as infrastructure-blocked and give the `run` workflow a standard budget; task docs record evidence.
+    - User-goal mapping: The tests and implementation map to Phase 36 acceptance coverage for weighted scoring, thresholds, critical failures, evaluator notes, fixture pass/fail behavior, report summaries, setup registry behavior, backward compatibility, blocked-run exclusion, and initial `run` rubric behavior. The budget-exhaustion edits were already present before this `$run`; they are included because repository policy requires not leaving tracked mutations behind, and focused validation covered their assertions.
+    - Tests run: `pnpm --dir tests test:layer1 -- bench-quality bench-report bench-setups` exited 1 as expected before implementation; `pnpm --dir tests test:layer1 -- bench-quality bench-report bench-setups runner` passed after implementation with 10 test files and 1241 tests; `pnpm --dir tests test:layer1` passed with 10 test files and 1241 tests; `git diff --check` passed.
+    - Skipped tests: Live/representative benchmark runs are reserved for Step 36.9 after all rubrics land.
+    - Adversarial review: Changed-file self-review found that quality evaluation was initially using stdout/stderr instead of generated artifact contents; fixed by reading result files in `bench-runner.ts` and adding a runner regression test for artifact-only quality evidence.
+    - Residual risk: Only the `run` setup has a quality rubric so far; Tier 1-wide, Tier 2/Tier 3, and pack rubric coverage remains for later planned steps. Report JSON shape is covered locally but representative live benchmark output remains for Step 36.9.
+    - Rollback note: Revert the Step 36.1/36.2/36.3 foundational benchmark quality commit to remove the quality test contract and implementation.
+    - Next command: `$run`
 
 ### Implementation
-- Step 36.2: Add benchmark quality types and scoring primitives.
+- [x] Step 36.2: Add benchmark quality types and scoring primitives.
   - Classification: automated
   - Files: modify `tests/harness/bench-types.ts`, create `tests/harness/bench-quality.ts`, modify `tests/harness/bench-setups.ts` if setup metadata needs evaluator discovery
   - Define rubric criteria with `id`, `description`, `weight`, optional `critical`, per-criterion score, evaluator notes, minimum score thresholds, and result summaries.
   - Add helper APIs for weighted scoring, critical-failure handling, threshold evaluation, required fact coverage, forbidden fabrication checks, concrete file/command reference checks, specificity checks, and reference-trait comparison.
-- Step 36.3: Persist and report quality results.
+  - Review: Implemented dependency-free quality rubric types, weighted scoring, threshold and critical-failure handling, result notes, required fact checks, forbidden fabrication checks, required regex checks, specificity checks, and reference-trait scoring in `tests/harness/bench-quality.ts` and `tests/harness/bench-types.ts`.
+- [x] Step 36.3: Persist and report quality results.
   - Classification: automated
   - Files: modify `tests/harness/bench-runner.ts`, modify `tests/harness/bench-report.ts`, modify `tests/harness/bench-persistence.ts` if needed, modify `tests/layer1/bench-report.test.ts`
   - Record quality evaluations per run and summarize average score, threshold failures, critical failures, and lowest-scoring criteria in `report.json` and `report.md`.
   - Preserve existing hard assertion pass/fail behavior and label quality scoring as an additional output-quality signal.
   - Keep infrastructure-blocked runs out of evaluated quality statistics.
+  - Review: Runner now stores optional `qualityResult` per non-blocked run, report generation summarizes quality only for evaluated runs with quality results, and markdown renders `Output Quality` separately from the hard assertion pass rate. A runner regression test confirms artifact file content is included in the evaluated output.
 - Step 36.4: Add reusable setup-facing quality helpers and degraded-output fixtures.
   - Classification: automated
   - Files: create `tests/layer4/setup-helpers/quality.ts`, create fixtures under `tests/fixtures/bench-quality/`, modify focused layer1 tests
   - Add helpers for required fact coverage, forbidden fabrication, concrete file/command references, specificity checks, reference-trait checks, and rubric aggregation.
   - Include intentionally vague, generic, and hallucinated outputs that must fail quality thresholds.
+  - Implementation plan:
+    - Create `tests/layer4/setup-helpers/quality.ts` as the setup-facing wrapper over `tests/harness/bench-quality.ts`, so layer4 setup files do not need to assemble low-level rubric criteria by hand.
+    - Move or wrap common helper patterns for required file references, required command references, forbidden fabrication phrases, specificity markers, next-route checks, and reference traits into named helper functions.
+    - Keep existing fixtures under `tests/fixtures/bench-quality/` and add any missing fixture variants needed to prove vague, generic, hallucinated, and strong outputs are distinguished.
+    - Refactor the `run` quality rubric in `tests/layer4/setups/tier1-workflows.setup.ts` to use the setup helper without changing behavior.
+    - Validate with `pnpm --dir tests test:layer1 -- bench-quality bench-setups runner` and `git diff --check`.
 - Step 36.5: Add Tier 1 workflow quality rubrics.
   - Classification: automated
   - Files: modify `tests/layer4/setups/tier1-workflows.setup.ts`, modify `tests/layer1/bench-setups.test.ts`

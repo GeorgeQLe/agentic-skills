@@ -1,8 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { mkdirSync, rmSync } from "node:fs";
+import { mkdirSync, rmSync, writeFileSync } from "node:fs";
 import type { BenchConfig, SessionManifest } from "../harness/bench-types.js";
 import { canResumeSession, runChunk } from "../harness/bench-runner.js";
 import { CODEX_EXEC_STDIO, codexExecArgs } from "../harness/runner.js";
+import { createQualityEvaluator, qualityAssertions } from "../harness/bench-quality.js";
 
 describe("benchmark runner", () => {
   it("invokes codex exec with stdin closed", () => {
@@ -186,6 +187,141 @@ describe("benchmark runner", () => {
 
       expect(result.runs[0]?.infrastructureBlocked).toBe(true);
       expect(result.runs[0]?.infrastructureReason).toBe("agent runner rate limit");
+      expect(result.runs[0]?.assertions).toEqual([]);
+      expect(result.runs[0]?.passed).toBe(false);
+    } finally {
+      rmSync(sessionDir, { recursive: true, force: true });
+    }
+  });
+
+  it("evaluates quality against generated artifact content", async () => {
+    const workDir = "/tmp/skill-test-quality-output";
+    const sessionDir = "benchmarks/runs/quality-output-codex-quality";
+    rmSync(sessionDir, { recursive: true, force: true });
+    rmSync(workDir, { recursive: true, force: true });
+    mkdirSync(sessionDir, { recursive: true });
+    mkdirSync(workDir, { recursive: true });
+
+    try {
+      const result = await runChunk(
+        {
+          skill: "quality-output",
+          prompt: "unused",
+          perRunBudgetUsd: 0.01,
+          timeoutMs: 1_000,
+          setupProject() {},
+          assertResult() {
+            return [{ description: "successful assertion", pass: true }];
+          },
+          qualityEvaluator: createQualityEvaluator({
+            minimumScore: 1,
+            criteria: [
+              {
+                id: "artifact-evidence",
+                description: "Output includes generated artifact evidence",
+                weight: 1,
+                evaluate: qualityAssertions.requiredFacts(["artifact-only quality evidence"]),
+              },
+            ],
+          }),
+        },
+        {
+          skill: "quality-output",
+          sessionId: "quality",
+          createdAt: "2026-05-11T00:00:00.000Z",
+          updatedAt: "2026-05-11T00:00:00.000Z",
+          status: "running",
+          config: {
+            skill: "quality-output",
+            agent: "codex",
+            runs: 1,
+            chunkSize: 1,
+            pauseSeconds: 0,
+            maxBudgetUsd: 0.01,
+            perRunBudgetUsd: 0.01,
+            timeoutMs: 1_000,
+          },
+          completedRuns: 0,
+          totalEstimatedCostUsd: 0,
+          chunks: [],
+        },
+        0,
+        1,
+        async () => {
+          writeFileSync(`${workDir}/quality.md`, "artifact-only quality evidence\n");
+          return {
+            stdout: "Created quality.md",
+            stderr: "",
+            exitCode: 0,
+            workDir,
+            files: ["quality.md"],
+          };
+        },
+        () => workDir,
+      );
+
+      expect(result.runs[0]?.qualityResult).toMatchObject({
+        passed: true,
+        score: 1,
+      });
+    } finally {
+      rmSync(sessionDir, { recursive: true, force: true });
+      rmSync(workDir, { recursive: true, force: true });
+    }
+  });
+
+  it("classifies agent budget exhaustion as infrastructure-blocked", async () => {
+    const workDir = "/tmp/skill-test-budget-block";
+    const sessionDir = "benchmarks/runs/budget-block-claude-budget";
+    rmSync(sessionDir, { recursive: true, force: true });
+    mkdirSync(sessionDir, { recursive: true });
+
+    try {
+      const result = await runChunk(
+        {
+          skill: "budget-block",
+          prompt: "unused",
+          perRunBudgetUsd: 0.01,
+          timeoutMs: 1_000,
+          setupProject() {},
+          assertResult() {
+            return [{ description: "should be skipped for infrastructure blocks", pass: false }];
+          },
+        },
+        {
+          skill: "budget-block",
+          sessionId: "budget",
+          createdAt: "2026-05-11T00:00:00.000Z",
+          updatedAt: "2026-05-11T00:00:00.000Z",
+          status: "running",
+          config: {
+            skill: "budget-block",
+            agent: "claude",
+            runs: 1,
+            chunkSize: 1,
+            pauseSeconds: 0,
+            maxBudgetUsd: 0.01,
+            perRunBudgetUsd: 0.01,
+            timeoutMs: 1_000,
+          },
+          completedRuns: 0,
+          totalEstimatedCostUsd: 0,
+          chunks: [],
+        },
+        0,
+        1,
+        async () => ({
+          stdout: "Error: Exceeded USD budget (0.25)",
+          stderr: "",
+          exitCode: 1,
+          workDir,
+          files: ["run-plan.md"],
+        }),
+        () => workDir,
+      );
+
+      expect(result.runs[0]?.infrastructureBlocked).toBe(true);
+      expect(result.runs[0]?.infrastructureReason).toBe("agent runner budget exceeded");
       expect(result.runs[0]?.assertions).toEqual([]);
       expect(result.runs[0]?.passed).toBe(false);
     } finally {

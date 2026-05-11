@@ -41,6 +41,51 @@ describe("bench report", () => {
     expect(markdown).toContain("Infrastructure blocked: 1");
     expect(markdown).toContain("| #2 | agent runner rate limit |");
   });
+
+  it("reports output-quality score separately from hard assertion pass rate", () => {
+    const markdown = formatMarkdown({
+      ...report([]),
+      passRate: 1,
+      qualitySummary: {
+        evaluatedRuns: 2,
+        averageScore: 0.775,
+        thresholdFailures: 1,
+        criticalFailures: 1,
+        lowestScoringCriteria: [
+          { id: "evidence-linked", averageScore: 0.5 },
+          { id: "no-fabrication", averageScore: 0.75 },
+        ],
+      },
+    } as BenchReport);
+
+    expect(markdown).toContain("## Output Quality");
+    expect(markdown).toContain("Hard assertion pass rate");
+    expect(markdown).toContain("**100.0%** (2/2 evaluated runs)");
+    expect(markdown).toContain("Average quality score: **77.5%** (2 evaluated runs)");
+    expect(markdown).toContain("Threshold failures: 1");
+    expect(markdown).toContain("Critical failures: 1");
+    expect(markdown).toContain("| evidence-linked | 50.0% |");
+  });
+
+  it("keeps infrastructure-blocked runs out of output-quality statistics", () => {
+    const markdown = formatMarkdown({
+      ...report([]),
+      totalRuns: 3,
+      evaluatedRuns: 2,
+      blockedRuns: [{ index: 2, reason: "agent runner budget exceeded" }],
+      qualitySummary: {
+        evaluatedRuns: 2,
+        averageScore: 0.9,
+        thresholdFailures: 0,
+        criticalFailures: 0,
+        lowestScoringCriteria: [],
+      },
+    } as BenchReport);
+
+    expect(markdown).toContain("Average quality score: **90.0%** (2 evaluated runs)");
+    expect(markdown).toContain("Infrastructure blocked: 1");
+    expect(markdown).not.toContain("3 evaluated runs");
+  });
 });
 
 function run(opts: {
