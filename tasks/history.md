@@ -2004,3 +2004,8 @@ Resolved all 10 findings from `/expert-review`:
 - Included pre-existing spec reconciliation edits from the shared tree in the shipping boundary so the repository does not retain dirty tracked changes after `$run`.
 - Preserved stale kanban specs by moving them from `specs/` into `docs/history/archive/2026-05-11/165500/specs/`; archived copies match the deleted HEAD blobs. Also archived a copy of `poketo-headless-auth-migration.md` while keeping the active spec updated.
 - Reran Skills Showcase data validation after source-fingerprint churn; the validator passed on the second run once regenerated proof data matched the current source tree.
+
+## 2026-05-11 — Skills Showcase proof data refresh
+
+- Refreshed `docs/skills-showcase/assets/github-proof-data.js` after the latest shipped history/spec commit changed the generated proof source fingerprint and recent history list.
+- Verified with `scripts/validate-skills-showcase-data.sh`, `node --check docs/skills-showcase/app.js`, and `git diff --check`.
