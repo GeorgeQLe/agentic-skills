@@ -55,6 +55,8 @@ Include changed generated assets in the same commit as the skill change. Also re
 Every repository skill under `global/` or `packs/` must be represented in `tests/harness/bench-coverage.ts`. When a shared skill is created or materially updated, the same shipping boundary must add or update its benchmark coverage row:
 
 - Use `coverage_status: "custom"` with a registered deterministic setup under `tests/layer4/setups/` when local fixtures can exercise the workflow safely.
+- For custom setups, add a deterministic output-quality rubric when practical. Prefer local fixture facts, concrete file or command references, expected next-route handoffs, specificity checks, reference traits, and forbidden-fabrication checks over subjective prose scoring.
+- If deterministic quality scoring is not reliable, record an explicit blocked/deferred quality note in the setup or coverage review so the gap is visible.
 - Use `coverage_status: "blocked"` with `blocked_reason` and `next_command` when custom coverage depends on credentials, external services, paid actions, production deploys, real devices, or unsafe account state.
 - Keep `coverage_status: "generic"` only as an explicit smoke fallback while custom coverage is still pending.
 

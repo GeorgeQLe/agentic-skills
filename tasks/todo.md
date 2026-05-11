@@ -172,7 +172,7 @@
     - Residual risk: The pack-family context map is intentionally broad for shared setup coverage; a later live benchmark may reveal that a specific pack skill needs a narrower family-specific criterion to avoid false positives or false negatives. Step 36.9 representative pack benchmark validation is the planned proof point.
     - Rollback note: Revert the Step 36.7 commit to remove pack-family quality evaluators and focused quality discovery tests while preserving earlier quality harness and global/Tier 1 rubrics.
     - Next command: `$run`
-- [ ] Step 36.8: Update skill workflows and benchmark command docs.
+- [x] Step 36.8: Update skill workflows and benchmark command docs.
   - Classification: automated
   - Files: modify mirrored skill creation/update workflows, modify `packs/agentic-skills-bench/*/benchmark-test-skill/SKILL.md`, modify `docs/skills-reference.md` if needed
   - Require future benchmark setup work to consider quality rubrics, not only hard assertions.
@@ -183,6 +183,18 @@
     - Update the `benchmark-test-skill` pack contract text so benchmark output language distinguishes hard assertion pass rate from output-quality score and avoids implying statistical certainty from small benchmark runs.
     - Update `docs/skills-reference.md` only if the public reference includes benchmark coverage requirements that would otherwise drift from the workflow contracts.
     - Because tracked `SKILL.md` files are expected to change, refresh and validate Skills Showcase generated data before shipping, then run focused contract scans, relevant layer1 tests, benchmark coverage, and `git diff --check`.
+  - Review: Updated mirrored shared-skill creation, local-skill promotion, and targeted skill-builder workflows so future custom benchmark setup work must consider deterministic output-quality rubrics or record an explicit blocked/deferred rationale. Updated benchmark-test-skill pack contracts to report hard assertion pass rate separately from optional output-quality score, include quality threshold failures in routing, and avoid overstating small benchmark runs as statistically definitive. Updated the public skills reference benchmark coverage contract and refreshed generated Skills Showcase data.
+  - Ship manifest:
+    - User goal: Execute Phase 36 Step 36.8 from `$run` by updating skill workflow contracts and benchmark command docs for benchmark output-quality handling.
+    - Changed files: `global/codex/create-agentic-skill/SKILL.md`, `global/claude/create-agentic-skill/SKILL.md`, `global/codex/create-local-skill/SKILL.md`, `global/claude/create-local-skill/SKILL.md`, `global/codex/targeted-skill-builder/SKILL.md`, `global/claude/targeted-skill-builder/SKILL.md`, `packs/agentic-skills-bench/codex/benchmark-test-skill/SKILL.md`, `packs/agentic-skills-bench/claude/benchmark-test-skill/SKILL.md`, `docs/skills-reference.md`, `docs/skills-showcase/assets/skills-data.js`, `docs/skills-showcase/assets/github-proof-data.js`, `tasks/todo.md`, `tasks/history.md`.
+    - Per-file purpose: Creation/promotion/builder skill contracts now require quality-rubric handling for future custom benchmark setup work; benchmark-test-skill contracts now distinguish hard assertion pass rate from optional quality score and route quality-threshold failures; the public skills reference mirrors the benchmark coverage freshness contract; generated showcase assets refresh fingerprints and proof metadata after tracked skill changes; task/history docs record completion evidence and next-step planning.
+    - User-goal mapping: These workflow contracts satisfy the Phase 36 acceptance item requiring future skill creation/update workflows to handle benchmark quality rubrics where practical, and they teach benchmark report consumers to treat quality scoring as an additional rubric signal rather than a replacement for hard assertions.
+    - Tests run: `node scripts/generate-skills-showcase-data.mjs` passed with 316 skills and 17 packs; `node scripts/generate-skills-showcase-github-data.mjs` passed with 4 proof artifacts and 5 validation scripts; `scripts/validate-skills-showcase-data.sh` passed; `./scripts/skill-deps.sh --broken` passed; `./scripts/skill-versions.sh --missing` passed with all 316 skills versioned; `./scripts/skill-next-step-routing.sh --missing` passed with all 229 mutation-capable skills routed; targeted `rg` contract scan confirmed the new hard assertion and output-quality wording; `pnpm --dir tests test:layer1 -- bench-report bench-setups` passed with 10 files and 1245 tests; `pnpm --dir tests bench:coverage` passed with 143 skills; `git diff --check` passed.
+    - Skipped tests: Full phase validation, `pnpm bench --list-skills`, representative live Codex benchmarks, and broader standard skill audits are reserved for Step 36.9 because this step changed workflow documentation and command contracts, not runner code or setup behavior.
+    - Adversarial review: Diff-aware self-review checked that changes stayed within benchmark workflow contracts, preserved Codex/Claude mirrored command syntax, did not alter benchmark prompts, assertions, schemas, dependencies, lockfiles, or GitHub Actions, and that generated showcase changes were limited to expected fingerprints/proof-history refresh. No fixes were required after review.
+    - Residual risk: The contract language is procedural; it relies on future skill-building workflows following these instructions. Step 36.9's full validation and representative benchmarks remain the next proof that the implemented harness/report behavior and documented workflow stay aligned.
+    - Rollback note: Revert the Step 36.8 commit to remove the quality-rubric workflow contract updates and restore previous benchmark-test-skill reporting language.
+    - Next command: `$run`
 
 ### Green
 - [ ] Step 36.9: Run tests, representative benchmarks, and phase review.
@@ -191,6 +203,12 @@
   - Run focused quality/evaluator tests, setup registry tests, report tests, benchmark coverage validation, `pnpm bench --list-skills`, representative one-run Codex benchmarks with quality scoring, standard skill audits, and `git diff --check`.
   - Representative one-run Codex benchmarks must include at least `run`, `investigate`, `design-system`, and one pack skill.
   - Perform only concrete cleanup found by validation.
+  - Implementation plan:
+    - Run focused layer1 suites for quality primitives, setup registry, report rendering, runner persistence, and coverage-status behavior.
+    - Run `pnpm --dir tests bench:coverage` and `pnpm --dir tests bench --list-skills` to prove the registry and CLI surface remain coherent.
+    - Run representative one-run Codex benchmarks with quality scoring for `run`, `investigate`, `design-system`, and one deterministic pack skill, using the standard benchmark command shape with `--agent codex --runs 1 --chunk-size 1 --pause 0`.
+    - Run standard skill audits and `git diff --check`.
+    - Fix only concrete failures or drift found by validation; otherwise record the no-op review, mark satisfied acceptance criteria, close the phase, archive it, and prepare the next project route.
 
 ### Milestone: Phase 36 Benchmark Output Quality Evaluation
 **Acceptance Criteria:**
