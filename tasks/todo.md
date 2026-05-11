@@ -1,9 +1,12 @@
 # Active Phase
 
 **Project:** Claude Skills / agentic-skills
-**Status:** Benchmarking `ship` with the benchmark-test-skill harness.
+**Status:** All 36 roadmap phases complete. Documentation scan pending.
 **Last completed phase:** Phase 36 — Benchmark Output Quality Evaluation
-**Current phase:** Fresh `ship` benchmark.
+
+## Priority Task Queue
+
+- [ ] `/research-roadmap` - scan documentation health and build priority documentation queue because all 36 roadmap phases are complete and no `## Priority Documentation Todo` section exists yet.
 
 ## Current Benchmark: ship
 
