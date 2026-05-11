@@ -27,6 +27,19 @@ Phases 37-38 are planned from `specs/first-party-skills-showcase-newsletter-capt
 
 **Result:** Benchmark completed on 2026-05-11. `ship` is a known custom benchmark target using `tests/layer4/setups/tier1-workflows.setup.ts`. Verify passed with layer1 in 8.2s across 1,253 tests; layer2 was skipped because no target-specific layer2 tests matched `ship`. The both-agent benchmark completed with no infrastructure-blocked runs: Claude failed 0/3 hard assertions because every run omitted the expected actionable `$run` handoff, while Codex passed 3/3. Output-quality scores were 71.4% for Claude and 78.6% for Codex. See `benchmark/test-ship-2026-05-11.md`. Recommended next command: `$session-triage ship benchmark failure`.
 
+## Current Triage: benchmark-agent-review Remediation Handoff
+
+**Goal:** Verify whether `$benchmark-agent-review` has a contract gap that prevents it from giving definitive next steps to remediate issues it identifies.
+
+**Acceptance Criteria:**
+- [x] The current `benchmark-agent-review` contract is inspected.
+- [x] The latest `ship` review output is compared against the desired remediation handoff behavior.
+- [x] Mirrored Claude/Codex skill presence and relevant lessons are checked.
+- [x] The triage report names the responsible contract gap, exact recommended wording, validation checks, and next skill route.
+- [x] Results are recorded in `tasks/todo.md`; if tracked files change, commit and push on `master`.
+
+**Result:** Triage completed on 2026-05-11. Verified a mirrored `benchmark-agent-review` contract gap: the skill requires output-quality verdicts and one concrete follow-up, but does not require remediation-ready mapping from each material finding to owner, exact contract/rubric target, validation check, and next route. Recommended next command: `$targeted-skill-builder benchmark-agent-review remediation handoff`.
+
 ## Current Benchmark: run Codex
 
 **Goal:** Run `$benchmark-test-skill run --codex` through the repository harness with fresh verify and Codex-only benchmark evidence.

@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-05-11 — Review reports need remediation-ready next steps
+
+- A `$benchmark-agent-review ship` report identified weaknesses but did not make every remediation decision definitive enough for the next operator.
+- Agent-review skills should convert each material weakness into a remediation target: owning skill or harness file, exact contract or rubric gap, validation command, and recommended next route.
+- Keep the output-quality verdict primary, but add a remediation plan that distinguishes skill contract fixes from benchmark rubric fixes, retained-evidence issues, and one-off run problems.
+- Validate this with contract-lint coverage so future review workflows cannot stop at broad advice like "tighten the rubric" when the report found actionable output-quality issues.
+
 ## 2026-05-11 — Agent benchmark reviews judge skill outputs first
 
 - A `$benchmark-agent-review ship` run over-focused on deterministic benchmark laxness and recommended benchmark tightening as the primary conclusion.
