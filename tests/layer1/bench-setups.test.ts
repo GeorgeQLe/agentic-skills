@@ -69,10 +69,27 @@ describe("benchmark setup registry", () => {
   });
 
   it("exposes quality evaluators for opted-in custom setups", () => {
-    const setup = resolveBenchSetup("run");
+    const tier1Skills = [
+      "run",
+      "ship",
+      "ship-end",
+      "roadmap",
+      "plan-phase",
+      "feature-interview",
+      "spec-interview",
+      "investigate",
+      "session-triage",
+      "targeted-skill-builder",
+      "benchmark-test-skill",
+    ];
 
-    expect(setup?.qualityEvaluator).toBeDefined();
-    expect(setup?.qualityEvaluator?.rubric.criteria.map((criterion) => criterion.id)).toEqual(
+    for (const skill of tier1Skills) {
+      const setup = resolveBenchSetup(skill);
+
+      expect(setup?.qualityEvaluator, `${skill} quality evaluator`).toBeDefined();
+    }
+
+    expect(resolveBenchSetup("run")?.qualityEvaluator?.rubric.criteria.map((criterion) => criterion.id)).toEqual(
       expect.arrayContaining([
         "evidence-linked",
         "scope-control",
@@ -80,6 +97,15 @@ describe("benchmark setup registry", () => {
         "actionable-next-route",
         "no-fabricated-facts",
       ]),
+    );
+    expect(resolveBenchSetup("ship")?.qualityEvaluator?.rubric.criteria.map((criterion) => criterion.id)).toContain(
+      "shipping-manifest-completeness",
+    );
+    expect(resolveBenchSetup("investigate")?.qualityEvaluator?.rubric.criteria.map((criterion) => criterion.id)).toContain(
+      "root-cause-specificity",
+    );
+    expect(resolveBenchSetup("benchmark-test-skill")?.qualityEvaluator?.rubric.criteria.map((criterion) => criterion.id)).toContain(
+      "benchmark-evidence-reporting",
     );
   });
 
