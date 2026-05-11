@@ -1848,3 +1848,10 @@ Resolved all 10 findings from `/expert-review`:
 - Registered `PACK_WORKFLOW_SETUPS` and updated the coverage matrix so every current pack row resolves to custom coverage instead of generic fallback.
 - Preserved the generic fallback path through synthetic-row test coverage and added a guard that fails if any current pack skill remains generic.
 - Verified with focused `bench-setups.test.ts`, `pnpm --dir tests bench:coverage`, `pnpm --dir tests bench --list-skills`, zero-run `youtube-video-audit` benchmark smoke, full `pnpm --dir tests test:layer1`, generic-pack-row scan, and `git diff --check`.
+
+## 2026-05-11 — Phase 35 Step 35.7: future skill benchmark coverage enforcement
+
+- Updated mirrored shared-skill creation, local-skill promotion, and targeted skill-builder workflows so new or materially updated repository skills must update the benchmark coverage matrix and add custom coverage or an explicit blocked row.
+- Updated benchmark-test-skill pack contracts to report custom/generic/blocked status, stop on blocked rows, and route missing custom coverage to targeted-skill-builder.
+- Added the benchmark coverage freshness contract to `docs/skills-reference.md` and refreshed generated Skills Showcase assets.
+- Verified with Skills Showcase generation/validation, `pnpm --dir tests bench:coverage`, focused `bench-setups.test.ts`, skill dependency/version/routing audits, full `pnpm --dir tests test:layer1`, `./install.sh`, targeted contract scans, and `git diff --check`.
