@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-05-11 — Separate benchmark coverage from benchmarked results
+
+- A benchmark coverage matrix can show custom/generic/blocked setup eligibility without proving that a skill already has persisted evaluated runs, test data, and grades.
+- When the user asks which skills have been benchmarked, report from persisted benchmark artifacts and curated reports, not from setup coverage metadata alone.
+- Keep a separate benchmark-results matrix with raw report paths, evaluated run counts, hard pass rates, quality scores, subjective review grades, and incomplete/blocked persisted reports.
+- For git-mutating skills, do not leave them permanently blocked if a safe explicit-permission integration fixture can use a disposable test repository; document the safety boundary before implementation.
+
 ## 2026-05-11 — Benchmark execution and subjective review are separate steps
 
 - `$benchmark-test-skill` should run deterministic verify/benchmark evidence and write the benchmark report; it should not absorb subjective agent-review work into the same step.
