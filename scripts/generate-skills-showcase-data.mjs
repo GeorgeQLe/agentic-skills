@@ -70,6 +70,86 @@ function unique(values) {
   return Array.from(new Set(values.filter(Boolean))).sort();
 }
 
+function parsePercent(value) {
+  const match = String(value || "").match(/(\d+(?:\.\d+)?)%/);
+  return match ? Number(match[1]) : null;
+}
+
+function parseBenchmarkReport(relativePath) {
+  const text = readText(relativePath);
+  const pathMatch = relativePath.match(/^benchmark\/test-(.+)-(\d{4}-\d{2}-\d{2})\.md$/);
+  if (!pathMatch) return null;
+
+  const skill = pathMatch[1];
+  const date = pathMatch[2];
+  const coverage = (text.match(/\*\*Coverage:\*\*\s*([^\n]+)/) || [])[1] || null;
+  const verifyPassed = /\|\s*layer1\s*\|\s*PASS\s*\|/i.test(text);
+  const layer2Skipped = /\|\s*layer2\s*\|\s*SKIP\s*\|/i.test(text);
+  const agents = [];
+  const agentRowPattern = /^\|\s*(claude|codex)\s*\|\s*([^|]+)\|\s*([^|]+)\|\s*([^|]+)\|\s*([^|]+)\|\s*([^|]+)\|\s*([^|]+)\|\s*([^|]+)\|\s*([^|]+)\|\s*([^|]+)\|\s*([^|]+)\|\s*`?([^|`]+)`?\s*\|$/gim;
+  let match;
+
+  while ((match = agentRowPattern.exec(text)) !== null) {
+    agents.push({
+      agent: match[1],
+      passRate: match[2].trim(),
+      passRatePercent: parsePercent(match[2]),
+      infrastructureBlocked: match[3].trim(),
+      wilson95: match[4].trim(),
+      latencyP50: match[5].trim(),
+      latencyP95: match[6].trim(),
+      latencyP99: match[7].trim(),
+      costPerRun: match[8].trim(),
+      totalCost: match[9].trim(),
+      meanPairwiseSimilarity: match[10].trim(),
+      outliers: match[11].trim(),
+      rawSessionPath: match[12].trim()
+    });
+  }
+
+  const qualityRows = [];
+  const qualityRowPattern = /^\|\s*(claude|codex)\s*\|\s*([^|]+)\|\s*([^|]+)\|\s*([^|]+)\|\s*([^|]+)\|$/gim;
+  while ((match = qualityRowPattern.exec(text)) !== null) {
+    if (!/%/.test(match[2])) continue;
+    qualityRows.push({
+      agent: match[1],
+      averageQualityScore: match[2].trim(),
+      thresholdFailures: match[3].trim(),
+      criticalFailures: match[4].trim(),
+      lowestScoringCriteria: match[5].trim()
+    });
+  }
+
+  const failedAssertions = /## Failed Assertions\s+None\./i.test(text) ? "none" : "see-report";
+
+  return {
+    skill,
+    date,
+    reportPath: relativePath,
+    coverage,
+    verify: {
+      layer1: verifyPassed ? "PASS" : "UNKNOWN",
+      layer2: layer2Skipped ? "SKIP" : "UNKNOWN"
+    },
+    agents,
+    quality: qualityRows,
+    failedAssertions
+  };
+}
+
+function benchmarkEvidenceBySkill(files) {
+  const reports = files
+    .filter((file) => /^benchmark\/test-.+-\d{4}-\d{2}-\d{2}\.md$/.test(file))
+    .map(parseBenchmarkReport)
+    .filter(Boolean)
+    .filter((report) => report.agents.length > 0)
+    .sort((a, b) => a.date.localeCompare(b.date));
+
+  const evidence = new Map();
+  reports.forEach((report) => evidence.set(report.skill, report));
+  return evidence;
+}
+
 function skillTags({ name, type, scope, pack, platform }) {
   const raw = [
     type,
@@ -135,6 +215,7 @@ function fingerprintFor(files) {
 
 function main() {
   const files = gitFiles();
+  const benchmarkEvidence = benchmarkEvidenceBySkill(files);
   const skillPaths = files.filter((file) => {
     return (
       /^global\/[^/]+\/[^/]+\/SKILL\.md$/.test(file) ||
@@ -142,9 +223,16 @@ function main() {
     );
   });
   const packPaths = files.filter((file) => /^packs\/[^/]+\/PACK\.md$/.test(file));
-  const sourcePaths = [...skillPaths, ...packPaths].sort();
+  const benchmarkPaths = files.filter((file) => /^benchmark\/test-.+-\d{4}-\d{2}-\d{2}\.md$/.test(file));
+  const sourcePaths = [...skillPaths, ...packPaths, ...benchmarkPaths].sort();
 
-  const skills = skillPaths.map(parseSkill).sort((a, b) => a.path.localeCompare(b.path));
+  const skills = skillPaths
+    .map(parseSkill)
+    .map((skill) => {
+      const evidence = benchmarkEvidence.get(skill.mirrorKey);
+      return evidence ? { ...skill, benchmarkEvidence: evidence } : skill;
+    })
+    .sort((a, b) => a.path.localeCompare(b.path));
   const packMetadata = new Map(packPaths.map((packPath) => {
     const pack = parsePack(packPath);
     return [pack.name, pack];
