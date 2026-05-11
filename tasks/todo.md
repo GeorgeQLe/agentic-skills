@@ -98,7 +98,7 @@ Build custom Codex benchmark test setups for every repository skill and enforce 
     3. Mark skills that require external credentials, real browser/device state, paid services, production deploys, or unsafe account access as `blocked` with a concrete `blocked_reason` and `next_command`.
     4. Update `CUSTOM_BENCH_SETUPS`, `COVERAGE_OVERRIDES`, and layer1 tests so custom, blocked, and remaining generic rows are all intentional and covered by representative assertions.
     5. Validate with targeted `bench-setups.test.ts`, `pnpm --dir tests bench:coverage`, full layer1, `pnpm --dir tests bench --list-skills`, at least one zero-run smoke for a newly custom Tier 2/Tier 3 setup, and `git diff --check`.
-- [ ] Step 35.6: Add pack skill coverage rows and pack-level setup coverage.
+- [x] Step 35.6: Add pack skill coverage rows and pack-level setup coverage.
   - Classification: automated
   - Files: create or modify setup files under `tests/layer4/setups/packs/`; modify `tests/harness/bench-setups.ts`; modify `tests/harness/bench-coverage.ts`; modify `tests/layer1/bench-setups.test.ts`
   - Cover pack skills with custom Codex setups when deterministic local fixtures exist.
@@ -278,6 +278,34 @@ Build custom Codex benchmark test setups for every repository skill and enforce 
 - Adversarial review: changed-file self-review checked that blocked rows include actionable reasons and next commands, deterministic setups avoid external services and package-manager mutation, pack rows remain deferred to Step 35.6, generic fallback still exists, and no GitHub Actions files or recommendations changed. The first full layer1 failure was treated as a review finding and fixed by caching repository discovery and reducing repeated matrix rebuilds.
 - Residual risk: grouped setups prove local fixture contracts, but they do not exercise real agent output quality until representative one-run benchmarks are run in Step 35.8/35.9.
 - Rollback note: revert the Step 35.5 commit to restore prior generic fallback behavior for these global skills.
+- Next command: `$run`
+
+### Step 35.6 Review — Pack Skill Benchmark Coverage
+
+- Added grouped custom Codex benchmark setups for deterministic pack skills across kanban, business, creator, devtool, game, monorepo, project-fleet, remotion, and YouTube workflows.
+- Registered the pack setup module in `CUSTOM_BENCH_SETUPS` and updated the coverage matrix so pack rows resolve to `custom` coverage with `tests/layer4/setups/packs/pack-workflows.setup.ts`.
+- Preserved the generic fallback code path with synthetic-row test coverage while ensuring no current pack skill remains on generic coverage.
+- Execution profile note: the phase requests a review-only lane after Step 35.6, but active Codex subagent instructions only permit subagents when explicitly requested by the user. I downgraded the review gate to local changed-file adversarial review plus targeted scans.
+
+**Validation:**
+- `pnpm --dir tests exec vitest run --project layer1 layer1/bench-setups.test.ts` — passed, 28 tests.
+- `pnpm --dir tests bench:coverage` — passed, `Benchmark coverage matrix valid (143 skills).`
+- `pnpm --dir tests bench --list-skills` — passed and printed pack skills such as `assumption-tracker`, `game-core-loop`, `mono-guard`, and `youtube-video-audit` as `coverage=custom setup=tests/layer4/setups/packs/pack-workflows.setup.ts`.
+- `pnpm --dir tests bench --skill youtube-video-audit --agent codex --runs 0 --chunk-size 1 --pause 0` — passed and printed `Benchmark coverage for youtube-video-audit: custom`.
+- `pnpm --dir tests test:layer1` — passed, 8 files / 1216 tests.
+- `pnpm --dir tests exec tsx -e "import { benchmarkCoverageMatrix } from './harness/bench-coverage.ts'; const genericPacks = benchmarkCoverageMatrix().filter(r => r.coverage_status === 'generic' && r.source_paths.some(p => p.startsWith('packs/'))); console.log(JSON.stringify({genericPackRows: genericPacks.map(r => r.skill), total: benchmarkCoverageMatrix().length}, null, 2));"` — passed with `genericPackRows: []` and `total: 143`.
+- `git diff --check` — passed.
+
+**Quality Gate Manifest:**
+- User goal: execute Step 35.6 for repository-wide custom benchmark coverage.
+- Changed files: `tests/layer4/setups/packs/pack-workflows.setup.ts`, `tests/harness/bench-setups.ts`, `tests/harness/bench-coverage.ts`, `tests/layer1/bench-setups.test.ts`, `tasks/todo.md`, `tasks/history.md`.
+- Per-file purpose: add deterministic pack setup definitions; register pack setups; update matrix custom coverage metadata; test pack setup resolution, no generic pack rows, generic fallback preservation, CLI output, and representative pack assertions; record task/history evidence.
+- User-goal mapping: Step 35.6 required pack skills to have custom Codex setup coverage or explicit blocked statuses; every current pack row now resolves to custom local-fixture coverage, and the test suite prevents pack rows from silently remaining generic.
+- Tests run: listed above.
+- Skipped tests: live non-zero pack benchmark runs were not run because Step 35.6 adds setup contracts and coverage metadata; the zero-run `youtube-video-audit` smoke proves custom pack setup resolution without spending agent budget, and Step 35.8/35.9 own representative one-run Codex benchmarks after future-skill coverage enforcement lands.
+- Adversarial review: changed-file self-review checked for unregistered custom rows, pack rows left on generic status, unsafe external-service prompts, blocked-status completeness, generic fallback removal, CLI status drift, and no GitHub Actions changes. The added `genericPackRows` assertion and CLI smoke covered the main failure modes.
+- Residual risk: grouped pack fixtures prove deterministic local setup coverage, but they do not yet measure real agent output quality for each pack skill; final phase validation should run representative one-run benchmarks across at least one pack setup.
+- Rollback note: revert the Step 35.6 commit to restore generic fallback behavior for pack skills and remove the pack setup registry entries.
 - Next command: `$run`
 
 **On Completion** (fill in when phase is done):

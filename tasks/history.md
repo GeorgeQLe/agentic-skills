@@ -1841,3 +1841,10 @@ Resolved all 10 findings from `/expert-review`:
 - Marked 9 global skills as blocked with concrete reasons and next commands for push/deploy/release/sync, local installation, and Claude-only workflows.
 - Registered the grouped setup module, updated the coverage matrix, preserved pack generic fallback for Step 35.6, and cached repository skill discovery to keep full layer1 tests stable.
 - Verified with focused `bench-setups.test.ts`, `pnpm --dir tests bench:coverage`, `pnpm --dir tests bench --list-skills`, zero-run `affected` benchmark smoke, full `pnpm --dir tests test:layer1`, and `git diff --check`.
+
+## 2026-05-11 — Phase 35 Step 35.6: pack benchmark coverage
+
+- Added grouped custom Codex benchmark setups for pack skills with deterministic local fixtures and assertion coverage.
+- Registered `PACK_WORKFLOW_SETUPS` and updated the coverage matrix so every current pack row resolves to custom coverage instead of generic fallback.
+- Preserved the generic fallback path through synthetic-row test coverage and added a guard that fails if any current pack skill remains generic.
+- Verified with focused `bench-setups.test.ts`, `pnpm --dir tests bench:coverage`, `pnpm --dir tests bench --list-skills`, zero-run `youtube-video-audit` benchmark smoke, full `pnpm --dir tests test:layer1`, generic-pack-row scan, and `git diff --check`.
