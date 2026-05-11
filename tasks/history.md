@@ -1,5 +1,10 @@
 # Session History
 
+## 2026-05-11 — Fix hero h1 mobile layout + ship benchmark results
+
+- Fixed hero h1 squished on mobile by removing `ch`-based `max-width` constraints at tablet (≤1080px) and small-mobile (≤560px) breakpoints in `docs/skills-showcase/styles.css`.
+- Shipped pre-existing both-agent `ship` benchmark results (`benchmark/test-ship-2026-05-11.md`) with Claude 0/3 and Codex 3/3 pass rates.
+
 ## 2026-05-11 — Ship benchmark self-route fix
 
 - Updated mirrored `ship` contracts so completed `$ship`/`/ship` runs do not routinely recommend shipping again as the next route.
