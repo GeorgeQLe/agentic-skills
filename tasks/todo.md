@@ -11,12 +11,12 @@
 
 ### Acceptance Criteria
 
-- [ ] Existing skill overlap is checked so the fix updates the benchmark workflow instead of adding a duplicate skill.
-- [ ] Mirrored `benchmark-test-skill` contracts explicitly require command resolution, eligibility preflight, report verification, and final next-step routing.
-- [ ] Deterministic layer1 contract tests lint the mirrored skill text for the benchmark routing requirements.
-- [ ] Benchmark coverage metadata remains valid for the material skill behavior update.
-- [ ] Standard skill validation, showcase data refresh, targeted checks, and whitespace validation pass.
-- [ ] Results are recorded in this file, then committed and pushed on `master`.
+- [x] Existing skill overlap is checked so the fix updates the benchmark workflow instead of adding a duplicate skill.
+- [x] Mirrored `benchmark-test-skill` contracts explicitly require command resolution, eligibility preflight, report verification, and final next-step routing.
+- [x] Deterministic layer1 contract tests lint the mirrored skill text for the benchmark routing requirements.
+- [x] Benchmark coverage metadata remains valid for the material skill behavior update.
+- [x] Standard skill validation, showcase data refresh, targeted checks, and whitespace validation pass.
+- [x] Results are recorded in this file, then committed and pushed on `master`.
 
 ## Current Benchmark: run
 
@@ -67,6 +67,7 @@ Completed on 2026-05-11. `ship` is a known custom benchmark target using `tests/
 
 ## Review
 
+- 2026-05-11 — Used `$targeted-skill-builder` for benchmark contract lint and routing hardening. Decision: update existing `benchmark-test-skill` rather than create a duplicate lint skill. Added mirrored command-resolution guards, report verification, and final-route requirements; added layer1 contract lint coverage in `bench-coverage.test.ts`; refreshed Skills Showcase assets. Validation passed: `./install.sh`, `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-next-step-routing.sh --missing`, `pnpm --dir tests bench:coverage`, `pnpm --dir tests test:layer1 -- bench-coverage.test.ts`, showcase generation/validation, targeted `rg`, and `git diff --check`.
 - 2026-05-11 — Ran `$benchmark-test-skill ship --codex`. Preflight confirmed custom coverage; verify passed layer1 and skipped layer2; Codex benchmark failed 0/3 with no infra blocks because every run recommended `$ship`/`$ship --no-deploy` instead of an actionable next route. Report written to `benchmark/test-ship-2026-05-11.md`; route to `$session-triage ship benchmark failure`.
 - 2026-05-11 — Added the variant-evaluation gate across the UI workflow: `$ux-variation --layout-mode` now routes built variants to `$uat --variant-evaluation` before `$ui-consolidate`; UAT has a variant evaluation mode; Codex now has a `ui-consolidate` skill with an evidence gate; docs, showcase data, and benchmark coverage were updated. Validation passed: `./install.sh`, `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-next-step-routing.sh --missing`, `pnpm --dir tests bench:coverage`, `pnpm --dir tests test:layer1 -- bench-setups.test.ts`, showcase data generation/validation, and `git diff --check`.
 - Phase 36 closed on 2026-05-11 after focused benchmark-quality tests, benchmark coverage validation, `pnpm --dir tests bench --list-skills`, representative one-run Codex benchmarks for `run`, `investigate`, `design-system`, and `run-kanban`, standard skill audits, and `git diff --check`.

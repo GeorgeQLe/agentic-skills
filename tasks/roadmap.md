@@ -38,6 +38,20 @@ Phase 35 is complete. The repository now has repository-wide Codex benchmark cov
 
 **Result:** Benchmark completed on 2026-05-11. `ship` is a known custom benchmark target using `tests/layer4/setups/tier1-workflows.setup.ts`. Verify passed with layer1 in 12.1s across 1,245 tests; layer2 was skipped because no target-specific layer2 tests matched `ship`. Codex benchmark failed 0/3 hard assertions with no infrastructure-blocked runs. Each failed run created the manifest but recommended `$ship` or `$ship --no-deploy` as the next command, which failed the actionable next-route assertion. Output quality averaged 71.4%, below the 78.0% threshold, with evidence-linked and actionable-next-route at 0.0%. See `benchmark/test-ship-2026-05-11.md`. Recommended next command: `$session-triage ship benchmark failure`.
 
+## Current Skill Update: Benchmark Contract Lint and Routing
+
+**Goal:** Harden `$benchmark-test-skill` so future benchmark requests resolve the benchmark pack command, preflight target eligibility, preserve both-agent default routing, and verify report/next-route output before completion.
+
+**Source:** 2026-05-11 targeted-skill-builder request for a "skill contract lint and benchmark routing hardening" workflow, plus lessons on benchmark command ambiguity, pack-local command resolution, rate-limit classification, and next-step routing validation.
+
+**Acceptance Criteria:**
+- [ ] Existing-skill overlap confirms the benchmark pack skill owns this behavior; no duplicate broad lint skill is added.
+- [ ] Mirrored Claude/Codex `benchmark-test-skill` contracts explicitly require command resolution, eligibility preflight, report verification, infrastructure-blocked classification, and final next-step routing.
+- [ ] Deterministic layer1 contract tests lint the mirrored skill text for these requirements.
+- [ ] Benchmark coverage metadata remains valid for the material skill behavior update.
+- [ ] Standard skill validation, showcase data refresh, targeted behavior checks, and `git diff --check` pass.
+- [ ] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
 ## Current Benchmark: run
 
 **Goal:** Run `$benchmark-test-skill run` through the repository harness with fresh eligibility, verify, and both-agent benchmark evidence on 2026-05-11.

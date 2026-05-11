@@ -18,10 +18,20 @@ This skill runs the agentic-skills test harness verification gate followed by th
 
 - Required: one skill name, such as `design-system`.
 - If no skill name is provided, ask the user which skill to benchmark-test.
+- When invoked as `/benchmark-test-skill <skill>`, resolve `benchmark-test-skill` as the active command first, including this project-local pack path, before treating the trailing argument as the skill under test.
+- Do not reinterpret the trailing argument as the active workflow unless the benchmark-test-skill command cannot be found after checking project-local packs.
 
 ## Execution
 
 Run commands from `/Users/georgele/projects/tools/agentic-skills/tests`.
+
+### Step 0 - Command Resolution Guard
+
+Confirm the active workflow is this `packs/agentic-skills-bench` skill. The requested target skill is data for the benchmark harness, not a command to execute directly.
+
+- For command-like invocations, preserve the leading command and route by the pack command first.
+- If a target such as `design-system`, `run`, or `ship` is provided, never run that skill directly as the benchmark action.
+- If command resolution is ambiguous, stop and report the ambiguity instead of running the target skill.
 
 ### Step 1 - Eligibility Preflight
 
@@ -81,6 +91,8 @@ Populate the report from `report.json` and verify the output includes:
 - mean pairwise similarity and outlier count
 - raw session path
 
+After writing the report, verify the file exists and contains the benchmark target, agent rows, pass-rate or blocked-run data, latency, cost, and raw session path. If any required report field is missing, treat the workflow as incomplete and fix the report before marking the benchmark done.
+
 ## Output
 
 Print a concise benchmark summary:
@@ -99,6 +111,7 @@ Print a concise benchmark summary:
 - Do not run `pnpm bench` when `pnpm verify` fails.
 - Do not fabricate benchmark metrics. Use the command output and `report.json`.
 - Do not present quality score as a replacement for hard assertion pass rate, or present a small benchmark run as statistically definitive.
+- Do not omit the final next-step route. Completion output must include either `Recommended next skill: <command>` or the two-line pair `**Next work:** <specific task or "none">` and `**Recommended next command:** <one command or route>`.
 - Do not create or modify GitHub Actions workflows.
 
 ## Next-Step Routing
