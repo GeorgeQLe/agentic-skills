@@ -21,6 +21,21 @@
 
 - [ ] Run `$plan-phase 36` to turn the quality-evaluation roadmap into an implementation-ready task plan.
 
+## Current Benchmark: run
+
+**Goal:** Run `$benchmark-test-skill run` through repository benchmark harness with fresh eligibility, verify, and both-agent benchmark evidence.
+
+**Acceptance Criteria:**
+- [x] `pnpm bench --list-skills` confirms `run` is known and reports its coverage status.
+- [x] `pnpm verify --skill run` passes or blocks benchmark execution with a recorded failure.
+- [x] `pnpm bench --skill run --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [x] `benchmark/test-run-2026-05-11.md` records verify, benchmark, latency, cost, consistency, and raw session evidence.
+- [x] Results are recorded in this file, then committed and pushed on `master`.
+
+**Result:** Benchmark completed on 2026-05-11. Preflight listed `run` with custom coverage via `tests/layer4/setups/tier1-workflows.setup.ts`. Verify passed layer1 in 7.7s with 1,229 tests; layer2 was skipped because no target-specific layer2 tests matched `run`. Both-agent benchmark completed with no infrastructure-blocked runs. Claude evaluated 0/3 pass, failing `Output recommends $run` in all runs, with p50 33.3s and $0.75 total estimated cost. Codex evaluated 3/3 pass, with p50 40.8s and $0.75 total estimated cost. Report written to `benchmark/test-run-2026-05-11.md`.
+
+**Recommended Next Step:** `$session-triage run benchmark failure`.
+
 ## Recommended Command
 
 `$plan-phase 36`
