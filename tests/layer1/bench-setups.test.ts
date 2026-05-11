@@ -62,17 +62,30 @@ describe("benchmark setup registry", () => {
     expect(target?.setup?.skill).toBe("run");
   });
 
-  it("uses a generic smoke setup for repository skills without custom assertions", () => {
+  it("uses custom setup for deterministic Tier 2 and Tier 3 global workflows", () => {
     const setup = resolveBenchSetup("affected");
     const target = resolveBenchTarget("affected");
 
     expect(setup?.skill).toBe("affected");
-    expect(setup).not.toBe(CUSTOM_BENCH_SETUPS.affected);
+    expect(setup).toBe(CUSTOM_BENCH_SETUPS.affected);
     expect(target).toMatchObject({
       skill: "affected",
+      coverageStatus: "custom",
+      setupPath: "tests/layer4/setups/tier23-global-workflows.setup.ts",
+    });
+  });
+
+  it("uses a generic smoke setup for repository skills without custom assertions", () => {
+    const setup = resolveBenchSetup("assumption-tracker");
+    const target = resolveBenchTarget("assumption-tracker");
+
+    expect(setup?.skill).toBe("assumption-tracker");
+    expect(setup).not.toBe(CUSTOM_BENCH_SETUPS["assumption-tracker"]);
+    expect(target).toMatchObject({
+      skill: "assumption-tracker",
       coverageStatus: "generic",
     });
-    expect(target?.setup?.skill).toBe("affected");
+    expect(target?.setup?.skill).toBe("assumption-tracker");
   });
 
   it("does not resolve unknown skills", () => {
@@ -109,6 +122,12 @@ describe("benchmark setup registry", () => {
       coverage_status: "custom",
     });
     expect(supportedBenchSkillRows().find((row) => row.skill === "affected")).toMatchObject({
+      coverage_status: "custom",
+    });
+    expect(supportedBenchSkillRows().find((row) => row.skill === "deploy")).toMatchObject({
+      coverage_status: "blocked",
+    });
+    expect(supportedBenchSkillRows().find((row) => row.skill === "assumption-tracker")).toMatchObject({
       coverage_status: "generic",
     });
   });
@@ -121,7 +140,9 @@ describe("benchmark setup registry", () => {
 
     expect(output).toContain("design-system\tcoverage=custom setup=tests/layer4/setups/design-system.setup.ts");
     expect(output).toContain("run\tcoverage=custom setup=tests/layer4/setups/tier1-workflows.setup.ts");
-    expect(output).toContain("affected\tcoverage=generic");
+    expect(output).toContain("affected\tcoverage=custom setup=tests/layer4/setups/tier23-global-workflows.setup.ts");
+    expect(output).toContain("deploy\tcoverage=blocked reason=Requires environment-specific deploy credentials");
+    expect(output).toContain("assumption-tracker\tcoverage=generic");
   });
 });
 
@@ -148,6 +169,7 @@ describe("benchmark coverage matrix", () => {
   });
 
   it("records custom coverage for every Tier 1 workflow setup", () => {
+    const matrix = benchmarkCoverageMatrix();
     const tier1Skills = [
       "benchmark-test-skill",
       "feature-interview",
@@ -163,13 +185,83 @@ describe("benchmark coverage matrix", () => {
     ];
 
     for (const skill of tier1Skills) {
-      expect(benchmarkCoverageMatrix().find((row) => row.skill === skill)).toMatchObject({
+      expect(matrix.find((row) => row.skill === skill)).toMatchObject({
         coverage_status: "custom",
         setup_path: "tests/layer4/setups/tier1-workflows.setup.ts",
         priority_tier: 1,
         agent_scope: "codex",
       });
       expect(resolveBenchSetup(skill)).toBe(CUSTOM_BENCH_SETUPS[skill]);
+    }
+  });
+
+  it("records custom or blocked coverage for remaining global Tier 2 and Tier 3 skills", () => {
+    const matrix = benchmarkCoverageMatrix();
+    const expectedCustomSkills = [
+      "affected",
+      "analyze-sessions",
+      "bootstrap-repo",
+      "brainstorm",
+      "branch-lifecycle",
+      "codebase-status",
+      "concept-exploration",
+      "create-agentic-skill",
+      "create-local-skill",
+      "dead-code",
+      "debug",
+      "decommission",
+      "dogfood",
+      "expert-review",
+      "guide",
+      "handoff",
+      "hygiene",
+      "migrate",
+      "mono-plan",
+      "pack",
+      "provision-agentic-config",
+      "reconcile-dev-docs",
+      "regression-check",
+      "research-roadmap",
+      "scaffold",
+      "skills",
+      "slim-audit",
+      "spec-drift",
+      "trace",
+      "uat",
+      "ui-interview",
+      "ux-variation",
+    ];
+    const expectedBlockedSkills = [
+      "commit-and-push-by-feature",
+      "delegate",
+      "deploy",
+      "install-agentic-skills",
+      "patch-exec-profile",
+      "release",
+      "sync",
+      "uat-guide",
+      "ui-consolidate",
+    ];
+
+    for (const skill of expectedCustomSkills) {
+      expect(matrix.find((row) => row.skill === skill)).toMatchObject({
+        coverage_status: "custom",
+        setup_path: "tests/layer4/setups/tier23-global-workflows.setup.ts",
+        agent_scope: "codex",
+      });
+      expect(resolveBenchSetup(skill)).toBe(CUSTOM_BENCH_SETUPS[skill]);
+    }
+
+    for (const skill of expectedBlockedSkills) {
+      const target = resolveBenchTarget(skill);
+      expect(matrix.find((row) => row.skill === skill)).toMatchObject({
+        coverage_status: "blocked",
+        agent_scope: "codex",
+      });
+      expect(target?.coverageStatus).toBe("blocked");
+      expect(target?.blockedReason).toBeTruthy();
+      expect(target?.nextCommand).toBeTruthy();
+      expect(target?.setup).toBeUndefined();
     }
   });
 
@@ -265,6 +357,37 @@ describe("Tier 1 workflow benchmark setups", () => {
       exitCode: 0,
       workDir,
       files: ["benchmark/test-run-2026-05-11.md"],
+    });
+
+    expect(assertions.every((assertion) => assertion.pass)).toBe(true);
+  });
+});
+
+describe("Tier 2 and Tier 3 global workflow benchmark setups", () => {
+  it("sets up and validates the affected workflow artifact", () => {
+    const setup = CUSTOM_BENCH_SETUPS.affected;
+    const workDir = mkdtempSync(resolve(tmpdir(), "tier23-affected-"));
+
+    setup.setupProject(workDir);
+    writeFileSync(
+      resolve(workDir, "affected-report.md"),
+      [
+        "# Affected Report",
+        "",
+        "changed files: packages/web/src/button.ts and packages/shared/src/tokens.ts.",
+        "affected packages: web and shared.",
+        "validation commands: pnpm --filter web test and pnpm --filter shared test.",
+        "Next command: $run",
+        "",
+      ].join("\n"),
+    );
+
+    const assertions = setup.assertResult({
+      stdout: "",
+      stderr: "",
+      exitCode: 0,
+      workDir,
+      files: ["affected-report.md"],
     });
 
     expect(assertions.every((assertion) => assertion.pass)).toBe(true);

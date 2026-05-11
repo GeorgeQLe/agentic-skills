@@ -1834,3 +1834,10 @@ Resolved all 10 findings from `/expert-review`:
 - Added a standardized Pack Availability Guard to affected global, business, creator-foundation, youtube-ops, and remotion contracts.
 - Added `scripts/skill-pack-routing-audit.sh` and wired it into README and the next-step contract audit evidence.
 - Verified with `bash -n scripts/skill-pack-routing-audit.sh`, `./scripts/skill-pack-routing-audit.sh`, `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-next-step-routing.sh --missing`, `pnpm --dir tests test`, and `git diff --check`.
+
+## 2026-05-11 — Phase 35 Step 35.5: Tier 2/3 global benchmark coverage
+
+- Added grouped custom Codex benchmark setups for 32 deterministic Tier 2/Tier 3 global skills.
+- Marked 9 global skills as blocked with concrete reasons and next commands for push/deploy/release/sync, local installation, and Claude-only workflows.
+- Registered the grouped setup module, updated the coverage matrix, preserved pack generic fallback for Step 35.6, and cached repository skill discovery to keep full layer1 tests stable.
+- Verified with focused `bench-setups.test.ts`, `pnpm --dir tests bench:coverage`, `pnpm --dir tests bench --list-skills`, zero-run `affected` benchmark smoke, full `pnpm --dir tests test:layer1`, and `git diff --check`.
