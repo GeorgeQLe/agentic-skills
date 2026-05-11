@@ -1,5 +1,11 @@
 # Session History
 
+## 2026-05-11 — Benchmark agent review follow-up skill
+
+- Added mirrored `benchmark-agent-review` skills to the `agentic-skills-bench` pack for subjective agent review of persisted benchmark artifacts after `$benchmark-test-skill`.
+- Kept the review score separate from hard assertion pass rate and deterministic output-quality score, with median/range reporting for multiple review passes.
+- Registered the new skill in benchmark coverage with a custom pack workflow fixture and refreshed Skills Showcase generated assets.
+
 ## 2026-05-11 — Phase 36 Steps 36.1-36.3: benchmark quality foundation
 
 - Added red layer1 tests and fixtures for benchmark output-quality evaluation, covering weighted rubric aggregation, minimum thresholds, critical failures, evaluator notes, strong/generic/degraded/hallucinated fixture behavior, and reference-trait expectations.

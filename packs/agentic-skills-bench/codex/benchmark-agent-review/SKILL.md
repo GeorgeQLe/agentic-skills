@@ -1,0 +1,93 @@
+---
+name: benchmark-agent-review
+description: Review persisted benchmark run outputs with one or more agent graders and report subjective ergonomic quality separately from deterministic benchmark scores
+type: analysis
+version: 0.1.0
+argument-hint: "<skill name or run path> [--reviewers codex,claude] [--runs N]"
+---
+
+# Benchmark Agent Review
+
+Invoke as `$benchmark-agent-review <skill-or-run-path>`.
+
+Use this skill after `$benchmark-test-skill <skill>` when the deterministic benchmark passed but the user wants agent judgment on whether the generated artifacts are actually excellent, ergonomic, and useful for the next operator.
+
+This skill is a follow-up review workflow. It does not replace hard benchmark assertions, deterministic output-quality rubrics, or verify/bench commands.
+
+## Input
+
+- Required: a benchmark target skill name such as `run`, or a raw run directory such as `tests/benchmarks/runs/run-codex-47e0dd54/`.
+- Optional: `--reviewers codex,claude` to request named reviewer families when both outputs are available.
+- Optional: `--runs N` to request multiple independent review passes. Default to 3 when practical; use 1 when only one reviewer pass is available in the active environment.
+
+## Workflow
+
+1. Resolve benchmark evidence:
+   - If the input is a run directory, inspect that directory.
+   - If the input is a skill name, find the newest matching directories under `tests/benchmarks/runs/<skill>-*/`.
+   - Prefer the latest Claude and Codex run directories when both exist.
+   - Read `report.md`, `report.json`, each `run-*.json`, and any persisted generated artifact content visible in stdout/stderr or file snapshots.
+   - If generated artifact content is not fully available, state that limitation and grade only the retained evidence.
+
+2. Extract outputs under review:
+   - Identify the artifact path the benchmark expected, such as `run-plan.md` or `benchmark/test-*.md`.
+   - Extract the generated artifact text when available.
+   - Preserve runner identity, run index, hard assertions, deterministic quality score, and infrastructure-blocked status.
+   - Exclude infrastructure-blocked runs from subjective scoring.
+
+3. Build the review packet:
+   - Include the original benchmark prompt.
+   - Include the benchmark fixture facts.
+   - Include the output artifact text or retained summary.
+   - Include hard assertions and deterministic quality scores for context.
+   - Include the target skill contract only when needed to judge ergonomics.
+
+4. Grade each evaluated output with this rubric:
+   - **Task selection clarity**: the selected work is unambiguous and traceable to fixture evidence.
+   - **Implementation specificity**: the output gives a next operator concrete enough steps to act without redoing basic discovery.
+   - **Validation strength**: proposed checks prove behavior or artifact quality, not just file existence or generic completion.
+   - **Scope control**: the output respects the fixture and user constraints without becoming timid or incomplete.
+   - **Next-route ergonomics**: the next command is correct for the runner mode and explains what it will do.
+   - **No invented facts**: the output avoids unsupported services, files, metrics, commands, deploys, or repository claims.
+   - **Residual-risk awareness**: the output names meaningful uncertainty, missing evidence, or follow-up risk when relevant.
+
+5. Score:
+   - Use a 0-100 integer score per reviewed output.
+   - Treat 90-100 as excellent, 80-89 as good, 70-79 as usable but meaningfully incomplete, 60-69 as weak, and below 60 as failing human review.
+   - When multiple review passes are available, report median score, score range, and common findings.
+   - Do not blend subjective scores into hard assertion pass rate or deterministic quality score.
+
+6. Optional multi-reviewer handling:
+   - Use subagents only when the active Codex tool instructions permit them and the user explicitly requested multiple agent review passes.
+   - Assign each reviewer one independent grading pass over the same review packet.
+   - Do not let reviewers edit repository files.
+   - Synthesize reviewer findings into a normalized score table.
+
+7. Write the report:
+   - Create `benchmark/review-<SKILL>-<YYYY-MM-DD>.md` when the input resolves to a skill.
+   - Create `benchmark/review-<RUN-DIR-NAME>-<YYYY-MM-DD>.md` when the input is one run directory.
+   - If the review is exploratory and the user asks for chat-only output, do not write a file.
+
+## Output
+
+Report:
+
+- Source benchmark report paths.
+- Reviewed run directories and run indexes.
+- Hard assertion pass rate and deterministic output-quality score from the benchmark report.
+- Agent-review score table with reviewer, runner, run index, score, and grade band.
+- Median subjective score and score range when multiple scores exist.
+- Common strengths.
+- Common weaknesses.
+- Whether the deterministic rubric should be tightened, with concrete proposed criteria.
+- **Next work:** one concrete follow-up, such as tightening a benchmark rubric, triaging a benchmark failure, or no follow-up.
+- **Recommended next command:** one command, usually `$targeted-skill-builder <skill> benchmark review rubric`, `$session-triage <skill> benchmark review`, or `$ship`.
+
+## Constraints
+
+- Do not re-run `$benchmark-test-skill` unless the requested benchmark artifacts are missing or stale and the user explicitly asks for a fresh benchmark.
+- Do not present subjective agent-review scores as statistically definitive.
+- Do not merge subjective scores into deterministic output-quality scores.
+- Do not grade infrastructure-blocked runs as skill outputs.
+- Do not fabricate missing artifact content. State when only stdout summaries, assertions, or quality results are available.
+- Do not create or modify GitHub Actions workflows.
