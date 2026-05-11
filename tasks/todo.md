@@ -1,11 +1,37 @@
-# Active Phase: design-system Prose Heading Contract
+# Active Phase: Benchmark Custom Coverage Planning
 
 **Project:** Claude Skills / agentic-skills
-**Status:** Targeted skill update in progress on 2026-05-10.
+**Status:** Feature planning in progress on 2026-05-11.
 
 ## Priority Task Queue
 
-- [ ] `$feature-interview benchmark custom coverage` - turn the broad benchmark coverage follow-up into a scoped spec/roadmap extension because `tasks/roadmap.md` has `## Planned Benchmark Work: Codex Custom Coverage` with unchecked acceptance criteria but no numbered `## Phase N:` entry, no pack/skill coverage matrix, and no `### Implementation` steps; evidence: roadmap and todo mtimes are both `2026-05-10 20:31:48`, and the planned block is at `tasks/roadmap.md` lines 51-60.
+- [x] `$feature-interview benchmark custom coverage` - turn the broad benchmark coverage follow-up into a scoped spec/roadmap extension because `tasks/roadmap.md` had `## Planned Benchmark Work: Codex Custom Coverage` with unchecked acceptance criteria but no numbered `## Phase N:` entry, no pack/skill coverage matrix, and no implementation steps.
+
+## Current Planning: benchmark custom coverage
+
+- [x] Gather evidence from roadmap, todo, benchmark harness, bench pack contract, and recent git history.
+- [x] Confirm the end state: every current skill should eventually have a custom benchmark test setup.
+- [x] Confirm priority: start with highest-use skills, but do not limit the end state to high-use skills.
+- [x] Confirm future contract: every future skill creation should include a benchmark test setup or an explicit blocked status.
+- [x] Confirm constraint: no GitHub Actions.
+- [x] Write `specs/benchmark-custom-coverage-feature-interview.md`.
+- [x] Write `specs/benchmark-custom-coverage.md`.
+- [x] Update `tasks/roadmap.md` with Phase 35 and benchmark coverage acceptance criteria.
+- [x] Validate docs and record review results.
+
+## Review: benchmark custom coverage planning
+
+**Decision:** Create a durable custom coverage spec and roadmap phase. The user's desired end state is not a representative benchmark sample; it is custom benchmark setup coverage for every current and future skill.
+
+**Evidence Used:** `tasks/roadmap.md`, `tasks/todo.md`, `tests/harness/bench-setups.ts`, `tests/harness/bench-types.ts`, `tests/harness/bench-runner.ts`, `tests/bench.ts`, existing `tests/layer4/setups/design-system*.setup.ts`, `tests/layer1/bench-setups.test.ts`, `packs/agentic-skills-bench/PACK.md`, `packs/agentic-skills-bench/codex/benchmark-test-skill/SKILL.md`, and recent benchmark commits.
+
+**Changes:** Added `specs/benchmark-custom-coverage-feature-interview.md` with the evidence brief, assumptions, claim validation, user answers, and destination checkpoint. Added `specs/benchmark-custom-coverage.md` with the repository-wide custom coverage plan, coverage matrix model, setup conventions, priority tiers, future skill creation contract, implementation phases, acceptance criteria, and validation commands. Updated `tasks/roadmap.md` to make custom benchmark coverage Phase 35 and explicitly require future skill coverage handling and no GitHub Actions.
+
+**Validation:** `git diff --check` passed. Targeted `rg` checks confirmed Phase 35, future skill coverage handling, coverage matrix language, benchmark custom coverage spec links, and no-GitHub-Actions constraints appear in the new specs and task docs.
+
+**Next Work:** Sequence Phase 35 into detailed implementation steps.
+
+**Recommended next command:** `$roadmap`
 
 ## Current Benchmark Run: run Codex
 
