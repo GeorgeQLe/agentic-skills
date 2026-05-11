@@ -87,7 +87,7 @@ Build custom Codex benchmark test setups for every repository skill and enforce 
     3. Register every new setup in `CUSTOM_BENCH_SETUPS` and update matching coverage rows to `coverage_status: "custom"`, `agent_scope: "codex"`, concrete `setup_path`, and non-generic fixture metadata.
     4. Extend layer1 tests to verify Tier 1 setup resolution, coverage row updates, and at least one representative assertion path for execution/shipping, planning/interview, debugging, and benchmark-test workflows.
     5. Validate with targeted setup tests, `pnpm --dir tests bench:coverage`, full layer1, `pnpm --dir tests bench --list-skills`, and `git diff --check`. If setup prompts materially change skill behavior coverage, add one zero-run CLI smoke for a new Tier 1 setup before shipping.
-- [ ] Step 35.5: Add Tier 2 and Tier 3 custom setups or explicit blocked statuses.
+- [x] Step 35.5: Add Tier 2 and Tier 3 custom setups or explicit blocked statuses.
   - Classification: automated
   - Files: create or modify setup files under `tests/layer4/setups/` for Tier 2 and Tier 3 skills where deterministic local coverage is practical; modify `tests/harness/bench-setups.ts`; modify `tests/harness/bench-coverage.ts`; modify `tests/layer1/bench-setups.test.ts`
   - Mark any unsafe or externally blocked setup as `blocked` with a concrete `blocked_reason` and `next_command`.
@@ -252,10 +252,38 @@ Build custom Codex benchmark test setups for every repository skill and enforce 
 - Rollback note: revert the Step 35.4 commit to remove the Tier 1 setup module, registry entries, matrix overrides, and tests.
 - Next command: `$run`
 
+### Step 35.5 Review — Tier 2 and Tier 3 Global Coverage
+
+- Added grouped custom Codex benchmark setups for 32 deterministic Tier 2/Tier 3 global skills using local fixture files and shared assertion helpers.
+- Marked 9 global skills as `blocked` where deterministic Codex benchmarks would require real git push/release/deploy/sync mutation, local installation side effects, or Claude-only workflow semantics.
+- Registered the grouped setup module in the custom setup registry and updated the coverage matrix so global non-pack rows are now intentional `custom` or `blocked` statuses.
+- Preserved generic fallback for pack and pack-derived rows that are assigned to Step 35.6.
+- Optimized repository skill discovery caching and the new layer1 assertions after the first full layer1 run exposed Vitest worker timeouts from repeated repository walks under parallel test load.
+
+**Validation:**
+- `pnpm --dir tests exec vitest run --project layer1 layer1/bench-setups.test.ts` — passed, 24 tests.
+- `pnpm --dir tests bench:coverage` — passed, `Benchmark coverage matrix valid (143 skills).`
+- `pnpm --dir tests bench --list-skills` — passed and printed custom Tier 2/3 global rows, blocked rows with reasons/next commands, and remaining generic rows.
+- `pnpm --dir tests bench --skill affected --agent codex --runs 0 --chunk-size 1 --pause 0` — passed and printed `Benchmark coverage for affected: custom`.
+- `pnpm --dir tests test:layer1` — passed, 8 files / 1212 tests after caching repository discovery.
+- `git diff --check` — passed.
+
+**Quality Gate Manifest:**
+- User goal: execute Step 35.5 for repository-wide custom benchmark coverage.
+- Changed files: `tests/layer4/setups/tier23-global-workflows.setup.ts`, `tests/harness/bench-setups.ts`, `tests/harness/bench-coverage.ts`, `tests/layer1/bench-setups.test.ts`, `tasks/todo.md`, `tasks/history.md`.
+- Per-file purpose: add grouped Tier 2/Tier 3 global custom setups; register them; update matrix custom/blocked overrides and cache discovery; test custom, blocked, and generic reporting; record task/history evidence.
+- User-goal mapping: Step 35.5 required Tier 2/Tier 3 deterministic local setups where practical and explicit blocked statuses where unsafe; the diff covers all remaining global non-pack generic rows while leaving pack rows for Step 35.6.
+- Tests run: listed above.
+- Skipped tests: live non-zero agent benchmark runs were not run because Step 35.5 only adds setup definitions and coverage metadata; the required representative smoke was a zero-run CLI check for a newly custom setup, while one-run live benchmarks are assigned to final phase validation after pack coverage exists.
+- Adversarial review: changed-file self-review checked that blocked rows include actionable reasons and next commands, deterministic setups avoid external services and package-manager mutation, pack rows remain deferred to Step 35.6, generic fallback still exists, and no GitHub Actions files or recommendations changed. The first full layer1 failure was treated as a review finding and fixed by caching repository discovery and reducing repeated matrix rebuilds.
+- Residual risk: grouped setups prove local fixture contracts, but they do not exercise real agent output quality until representative one-run benchmarks are run in Step 35.8/35.9.
+- Rollback note: revert the Step 35.5 commit to restore prior generic fallback behavior for these global skills.
+- Next command: `$run`
+
 **On Completion** (fill in when phase is done):
 - Deviations from plan: TBD
 - Tech debt / follow-ups: TBD
 - Ready for next phase: TBD
 
-**Next work:** Step 35.4: Add Tier 1 Codex custom benchmark setups.
+**Next work:** Step 35.6: Add pack skill coverage rows and pack-level setup coverage.
 **Recommended next command:** `$run`
