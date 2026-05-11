@@ -114,7 +114,7 @@ Build custom Codex benchmark test setups for every repository skill and enforce 
     3. Update benchmark-test-skill routing language so missing custom coverage points to `$targeted-skill-builder <skill> benchmark coverage` and distinguishes generic smoke evidence from custom coverage.
     4. Refresh `docs/skills-reference.md` for the changed workflow contracts and, because tracked `SKILL.md` files will change, run the Skills Showcase data refresh commands required by the quality gate.
     5. Validate with targeted contract scans across the edited skill files, `pnpm --dir tests bench:coverage`, focused layer1 benchmark setup tests, Skills Showcase data validation, full layer1, and `git diff --check`.
-- [ ] Step 35.8: Run validation and review the phase.
+- [x] Step 35.8: Run validation and review the phase.
   - Classification: automated
   - Files: modify `tasks/todo.md`, modify `tasks/history.md`
   - Run focused layer1 tests for benchmark coverage, setup registry, report handling, and runner behavior.
@@ -129,6 +129,12 @@ Build custom Codex benchmark test setups for every repository skill and enforce 
   - Files: modify `tests/layer1/bench-setups.test.ts`, add or modify `tests/layer1/bench-coverage.test.ts`, modify `tasks/todo.md`
   - Cover missing matrix row, missing custom setup path, blocked row without reason, blocked row without next command, custom/generic/blocked reporting, and generic fallback retention.
   - Run all phase validation commands and record exact results in the review section.
+  - Implementation plan for next run:
+    1. Read `tests/layer1/bench-setups.test.ts`, `tests/harness/bench-coverage.ts`, `tests/harness/bench-setups.ts`, and `tests/bench.ts` to identify which coverage contract cases are already tested and which need clearer final regression coverage.
+    2. Add or split `tests/layer1/bench-coverage.test.ts` if it improves separation between matrix validation tests and setup registry tests; otherwise keep edits in `bench-setups.test.ts` with focused `describe` blocks.
+    3. Ensure regression tests cover missing matrix row, missing custom setup path, blocked row without `blocked_reason`, blocked row without `next_command`, custom/generic/blocked CLI or resolver reporting, generic fallback retention for synthetic generic rows, explicit `--resume` behavior, and non-zero-only infrastructure block classification.
+    4. Run focused layer1 tests for benchmark setup, coverage, report, and runner behavior; run `pnpm --dir tests bench:coverage`; run `pnpm --dir tests bench --list-skills`; run full `pnpm --dir tests test:layer1`; run standard skill audits and `git diff --check`.
+    5. Record final evidence in this review section, update acceptance criteria that are now fully proven, and if all phase criteria are satisfied, prepare the phase transition/closeout in the following shipping step.
 
 ## Milestone: Phase 35 Repository-Wide Custom Benchmark Coverage
 
@@ -349,6 +355,44 @@ Build custom Codex benchmark test setups for every repository skill and enforce 
 - Adversarial review: changed-file self-review checked mirrored Claude/Codex command syntax, coverage matrix requirements, blocked-row next-command requirements, benchmark-test blocked/generic routing, generated showcase freshness, stale planned plugin-creator paths, and no GitHub Actions changes. No blocker findings remained.
 - Residual risk: future plugin-creator coverage enforcement is not encoded in this repo because plugin-creator is only available as an external/system skill in the active session, not as tracked repository files. If plugin-creator becomes repo-managed later, add the same benchmark coverage requirement there.
 - Rollback note: revert the Step 35.7 commit to restore the prior skill creation/update and benchmark-test-skill contracts.
+- Next command: `$run`
+
+### Step 35.8 Review — Phase Validation and Benchmark Review
+
+- Ran the phase validation gate for benchmark coverage, setup registry, report formatting, runner behavior, coverage status reporting, representative live Codex benchmark setups, and standard skill contract checks.
+- Fixed validation-discovered benchmark harness issues:
+  - `pnpm bench` now starts a fresh session by default and only resumes paused/running sessions when `--resume` is provided.
+  - Resume now requires the existing manifest config to match the requested benchmark config, preventing stale zero-run sessions from causing infinite no-progress loops.
+  - Infrastructure-blocked rate-limit classification now applies only to non-zero agent exits, avoiding false positives when successful skill documentation mentions rate limits.
+- Hardened custom setup assertions so benchmark artifacts can use case variants and Markdown heading forms such as `## Next Command` or `## Next command line` without failing an otherwise valid artifact.
+- Representative one-run Codex benchmark reports passed for `run`, `plan-phase`, `benchmark-test-skill`, and `youtube-video-audit` after the harness/setup fixes.
+- Execution profile note: the phase requested a review-only lane after Step 35.6, but active Codex subagent instructions only permit subagents when explicitly requested by the user. I used local changed-file adversarial review and live benchmark evidence instead.
+
+**Validation:**
+- `pnpm --dir tests exec vitest run --project layer1 layer1/bench-setups.test.ts layer1/bench-report.test.ts layer1/runner.test.ts` — passed, 3 files / 34 tests.
+- `pnpm --dir tests bench:coverage` — passed, `Benchmark coverage matrix valid (143 skills).`
+- `pnpm --dir tests bench --list-skills` — passed and printed custom/blocked coverage status for repository skills.
+- `pnpm --dir tests bench --skill run --agent codex --runs 1 --chunk-size 1 --pause 0` — passed, report `tests/benchmarks/runs/run-codex-fac4ecf6/report.md`, pass rate 100%.
+- `pnpm --dir tests bench --skill plan-phase --agent codex --runs 1 --chunk-size 1 --pause 0` — passed, report `tests/benchmarks/runs/plan-phase-codex-5b50adee/report.md`, pass rate 100%.
+- `pnpm --dir tests bench --skill benchmark-test-skill --agent codex --runs 1 --chunk-size 1 --pause 0` — passed, report `tests/benchmarks/runs/benchmark-test-skill-codex-7f77992e/report.md`, pass rate 100%.
+- `pnpm --dir tests bench --skill youtube-video-audit --agent codex --runs 1 --chunk-size 1 --pause 0` — passed, report `tests/benchmarks/runs/youtube-video-audit-codex-15596169/report.md`, pass rate 100%.
+- `pnpm --dir tests test:layer1` — passed, 8 files / 1218 tests.
+- `./scripts/skill-deps.sh --broken` — passed, no broken references found.
+- `./scripts/skill-versions.sh --missing` — passed, all 316 skills have a version field.
+- `./scripts/skill-next-step-routing.sh --missing` — passed, all 229 mutation-capable skills have next-step routing.
+- `./install.sh` — passed.
+- `git diff --check` — passed.
+
+**Quality Gate Manifest:**
+- User goal: execute Step 35.8 for repository-wide custom benchmark coverage.
+- Changed files: `tests/bench.ts`, `tests/harness/bench-runner.ts`, `tests/layer1/runner.test.ts`, `tests/layer4/setup-helpers/artifacts.ts`, `tests/layer4/setup-helpers/routing.ts`, `tests/layer4/setups/tier1-workflows.setup.ts`, `tasks/todo.md`, `tasks/history.md`.
+- Per-file purpose: make benchmark resume explicit and config-compatible; prevent false infrastructure-blocked classification for successful runs; add regression coverage for both validation-discovered runner bugs; make setup assertions robust to harmless artifact wording/case differences; clarify the benchmark-test-skill setup prompt's expected `$ship` route; record task/history evidence.
+- User-goal mapping: Step 35.8 required phase validation and representative live Codex benchmarks. The validation surfaced harness/setup defects that blocked trustworthy benchmark evidence, so the source changes directly unblock and harden the phase validation contract.
+- Tests run: listed above.
+- Skipped tests: no layer2/layer3/layer4 Vitest suites were run because the changed code is benchmark harness/setup behavior covered by focused layer1 tests, full layer1, coverage CLI validation, and four live one-run layer4 benchmark executions. Claude live benchmarks were not run because the phase is Codex-first and the requested representative smokes were Codex benchmarks.
+- Adversarial review: changed-file self-review checked resume semantics, stale zero-run session behavior, compatible resume matching, rate-limit false positives from successful skill documentation output, next-command assertion breadth, benchmark-test-skill routing expectations, generated benchmark reports, and no GitHub Actions changes. Initial live benchmark failures exposed and drove the fixes before final validation passed.
+- Residual risk: the benchmark harness now avoids the observed stale-session loop and false infrastructure block, but long-running live agent commands can still consume the setup timeout before returning; Step 35.9 should add final regression coverage for matrix/reporting failure modes and can decide whether a hard maximum chunk retry guard is warranted.
+- Rollback note: revert the Step 35.8 commit to restore the prior benchmark resume/classification behavior and setup assertions.
 - Next command: `$run`
 
 **On Completion** (fill in when phase is done):
