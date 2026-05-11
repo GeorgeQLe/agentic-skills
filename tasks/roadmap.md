@@ -229,6 +229,95 @@ Phase 33 is complete. Phase 34 is planned for the remaining Skills Showcase Webs
 
 > Test strategy: tests-after with focused layer1 validation plus one-run Codex benchmarks for representative setups in each tier.
 
+### Execution Profile
+**Parallel mode:** review-only
+**Integration owner:** main agent
+**Conflict risk:** high
+**Review gates:** correctness, tests, docs/API conformance, budget safety, no-GitHub-Actions constraint
+
+**Subagent lanes:**
+- Lane: coverage-contract-review
+  - Agent: explorer
+  - Role: reviewer
+  - Mode: review
+  - Scope: Review the planned coverage matrix, harness reporting contract, and future skill-creation contract for missing acceptance-criteria coverage after the main implementation lands.
+  - Depends on: Step 35.6
+  - Deliverable: Review report with blocker/advisory findings and any missing validation commands.
+
+### Implementation
+- Step 35.1: Add the committed benchmark coverage matrix and validation CLI.
+  - Classification: automated
+  - Files: create `tests/harness/bench-coverage.ts`, create `tests/fixtures/bench-coverage/README.md` if fixture notes are needed, modify `tests/package.json`, modify `tests/layer1/bench-setups.test.ts`
+  - Define one machine-readable row per repository skill name with `skill`, `source_paths`, `coverage_status`, `setup_path`, `priority_tier`, `agent_scope`, `fixture_type`, `blocked_reason`, `next_command`, and `last_verified`.
+  - Add validation that fails when a repository skill is missing from the matrix, a `custom` row points to a missing setup, a `blocked` row lacks `blocked_reason`, or a `blocked` row lacks `next_command`.
+  - Keep existing repository skill discovery as the source of truth for completeness checks.
+- Step 35.2: Wire coverage status into benchmark setup resolution and CLI reporting.
+  - Classification: automated
+  - Files: modify `tests/harness/bench-setups.ts`, modify `tests/harness/bench-types.ts`, modify `tests/bench.ts`, modify `tests/layer1/bench-setups.test.ts`
+  - Preserve generic fallback for repository skills without custom setups.
+  - Make `pnpm bench --list-skills` show enough status information to distinguish `custom`, `generic`, and `blocked` coverage.
+  - Make `pnpm bench --skill <skill>` print the resolved coverage status before agent execution and stop clearly for blocked coverage rows.
+- Step 35.3: Add reusable custom setup helpers and fixture conventions.
+  - Classification: automated
+  - Files: create `tests/layer4/setup-helpers/artifacts.ts`, create `tests/layer4/setup-helpers/markdown.ts`, create `tests/layer4/setup-helpers/routing.ts`, create `tests/layer4/setup-helpers/budgets.ts`, create `tests/layer4/setup-helpers/reports.ts`, modify existing `tests/layer4/setups/design-system.setup.ts`, modify existing `tests/layer4/setups/design-system-draftstonk.setup.ts`, modify `tests/layer1/bench-setups.test.ts`
+  - Provide helpers for file existence/content assertions, Markdown heading/frontmatter assertions, next-command/routing assertions, budget tiers, timeout tiers, and benchmark report expectations.
+  - Refactor existing custom setups only enough to prove the helpers are usable without changing their benchmark behavior.
+- Step 35.4: Add Tier 1 Codex custom benchmark setups.
+  - Classification: automated
+  - Files: create or modify setup files under `tests/layer4/setups/` for `run`, `ship`, `ship-end`, `roadmap`, `plan-phase`, `feature-interview`, `spec-interview`, `investigate`, `session-triage`, `targeted-skill-builder`, and `benchmark-test-skill`; modify `tests/harness/bench-setups.ts`; modify `tests/harness/bench-coverage.ts`; modify `tests/layer1/bench-setups.test.ts`
+  - Use deterministic temp-project fixtures and assert the observable artifact, routing, or report shape for each skill without requiring real remote pushes, external accounts, or user approval.
+  - Set Tier 1 rows to `custom` with `agent_scope: codex` when setup files exist.
+- Step 35.5: Add Tier 2 and Tier 3 custom setups or explicit blocked statuses.
+  - Classification: automated
+  - Files: create or modify setup files under `tests/layer4/setups/` for Tier 2 and Tier 3 skills where deterministic local coverage is practical; modify `tests/harness/bench-setups.ts`; modify `tests/harness/bench-coverage.ts`; modify `tests/layer1/bench-setups.test.ts`
+  - Mark any unsafe or externally blocked setup as `blocked` with a concrete `blocked_reason` and `next_command`.
+  - Keep generic fallback available only for rows that are not yet custom and not blocked.
+- Step 35.6: Add pack skill coverage rows and pack-level setup coverage.
+  - Classification: automated
+  - Files: create or modify setup files under `tests/layer4/setups/packs/`; modify `tests/harness/bench-setups.ts`; modify `tests/harness/bench-coverage.ts`; modify `tests/layer1/bench-setups.test.ts`
+  - Cover pack skills with custom Codex setups when deterministic local fixtures exist.
+  - Record explicit blocked statuses for pack skills that depend on external credentials, real browser/device state, paid services, or unsafe access patterns.
+- Step 35.7: Update skill creation and update workflows to require benchmark coverage handling.
+  - Classification: automated
+  - Files: modify `global/codex/create-agentic-skill/SKILL.md`, `global/claude/create-agentic-skill/SKILL.md`, `global/codex/create-local-skill/SKILL.md`, `global/claude/create-local-skill/SKILL.md`, `global/codex/targeted-skill-builder/SKILL.md`, `global/claude/targeted-skill-builder/SKILL.md`, `global/codex/plugin-creator/SKILL.md`, `global/claude/plugin-creator/SKILL.md`, `packs/agentic-skills-bench/codex/benchmark-test-skill/SKILL.md`, `packs/agentic-skills-bench/claude/benchmark-test-skill/SKILL.md`, `docs/skills-reference.md`
+  - Require new or materially updated skills to add a coverage matrix row and either a custom setup or explicit blocked status.
+  - Make benchmark-test-skill reports route missing custom coverage to `$targeted-skill-builder <skill> benchmark coverage`.
+- Step 35.8: Run validation and review the phase.
+  - Classification: automated
+  - Files: modify `tasks/todo.md`, modify `tasks/history.md`
+  - Run focused layer1 tests for benchmark coverage, setup registry, report handling, and runner behavior.
+  - Run coverage validation, `pnpm bench --list-skills`, and representative one-run Codex benchmarks for `run`, `plan-phase`, `benchmark-test-skill`, and one pack skill that has custom coverage.
+  - Run standard skill validation scripts and `git diff --check`.
+  - Use the review-only lane findings to fix concrete blockers before final validation.
+
+### Green
+- Step 35.9: Write regression tests and final validation evidence for the coverage contract.
+  - Classification: automated
+  - Files: modify `tests/layer1/bench-setups.test.ts`, add or modify `tests/layer1/bench-coverage.test.ts`, modify `tasks/todo.md`
+  - Cover missing matrix row, missing custom setup path, blocked row without reason, blocked row without next command, custom/generic/blocked reporting, and generic fallback retention.
+  - Run all phase validation commands and record exact results in the review section.
+
+### Milestone: Phase 35 Repository-Wide Custom Benchmark Coverage
+**Acceptance Criteria:**
+- [ ] A committed coverage matrix lists every repository skill.
+- [ ] Validation fails when a repository skill is missing from the coverage matrix.
+- [ ] Validation fails when a `custom` coverage row points to a missing setup.
+- [ ] Validation fails when a `blocked` row lacks a reason and next command.
+- [ ] `$benchmark-test-skill <skill>` reports custom/generic/blocked coverage status.
+- [ ] Future skill creation/update workflows require benchmark coverage handling.
+- [ ] Tier 1 skills have custom Codex benchmark setups.
+- [ ] Tier 2 and Tier 3 skills have custom Codex benchmark setups or explicit blocked statuses.
+- [ ] Pack skills are covered by custom Codex benchmark setups or explicit blocked statuses.
+- [ ] Generic fallback remains available until all skills have custom coverage.
+- [ ] No GitHub Actions are created, modified, or recommended.
+- [ ] All phase tests pass.
+- [ ] No regressions in previous phase tests.
+
+**On Completion** (fill in when phase is done):
+- Deviations from plan: TBD
+- Tech debt / follow-ups: TBD
+- Ready for next phase: TBD
+
 ---
 
 ## Phase 32: Skills Showcase Product Foundation ✓
