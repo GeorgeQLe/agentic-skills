@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-05-11 — Spec drift fix all + dev docs reconciliation
+
+- Ran `/spec-drift fix all` across 14 canonical specs, extracting 284 claims: 186 verified (65%), 33 diverged, 65 unimplemented.
+- Archived 5 legacy kanban specs (`kanban-multi-user`, `kanban-offline-queue-soft-delete`, `board-flag-kanban-search`, `kanban-command-test-coverage`, `kanban-production-test-plan`) to `docs/history/archive/2026-05-11/165500/specs/`.
+- Updated 7 specs to match code: poketo path/scope/migration fixes, showcase heading/variable corrections, benchmark coverage model alignment, monorepo lane-spec field cleanup, fleet Portfolio lane addition, creator pack rename.
+- Kept newsletter capture spec and showcase/benchmark/monorepo unimplemented features as future work.
+- Ran `/reconcile-dev-docs` to fix Phase 35 ✓ marker in roadmap overview table, update recurring spec-drift cadence, and annotate manual tasks with Phase 37 migration notes.
+
 ## 2026-05-11 — Ship-end clean queue unblock
 
 - Ran `$ship-end --no-deploy` after the roadmap queue flagged a dirty worktree blocker.

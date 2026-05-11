@@ -1,5 +1,27 @@
 # Development Docs Reconciliation Report
 
+## 2026-05-11 (post-spec-drift) - `$reconcile-dev-docs`
+
+### Resolved
+
+- [x] `tasks/roadmap.md` - Added ✓ to Phase 35 row in overview table. Evidence: Phase 35 heading already has ✓, all acceptance criteria checked, phase-35.md archive exists.
+- [x] `tasks/recurring-todo.md` - Updated spec drift check last run from 2026-05-04 to 2026-05-11, next due from 2026-06-04 to 2026-06-11. Evidence: `/spec-drift fix all` completed this session with commit `2b056f1`.
+- [x] `tasks/manual-todo.md` - Annotated both manual tasks with Phase 37 migration notes. The Vercel config task was updated to target `apps/skills-showcase/` and reference Phase 37 completion as the dependency. Evidence: Phase 37 todo.md documents the Next.js migration from `docs/skills-showcase/` to `apps/skills-showcase/`.
+- [x] `tasks/history.md` - Added standalone history entry for the 2026-05-11 spec-drift fix all run. Previously only documented within the Step 37.1 ship manifest.
+
+### Deferred
+
+- [ ] `tasks/phases/` - 25 of 36 completed phases lack archive files. Backfill decision, not active contradiction.
+- [ ] `tasks/roadmap.md` - Multiple completed "Current" sections remain at the top of the roadmap. Cleanup decision.
+- [ ] `tasks/recurring-todo.md` - Devtool docs audit has passed the 50-commit threshold since last run (2026-04-30). Next due 2026-05-30.
+
+### Remaining Findings
+
+- No remaining unambiguous current-doc contradictions.
+- Recommended next action: `/run` to continue Phase 37 Step 37.2 (port static routes to Next.js App Router).
+
+---
+
 ## 2026-05-11 - `$reconcile-dev-docs fix all`
 
 ### Resolved
