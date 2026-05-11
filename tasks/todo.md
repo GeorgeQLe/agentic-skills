@@ -22,6 +22,41 @@
 
 **Recommended next command:** `$session-triage run benchmark verify failure`
 
+## Current Triage: run benchmark verify failure
+
+- [x] Define scope from the failed `$benchmark-test-skill run --codex` verify gate.
+- [x] Read the `benchmark-test-skill` and `run` skill contracts.
+- [x] Inspect verify filtering, layer2 coverage, and layer4 benchmark setup support.
+- [x] Diagnose whether this is a `run` skill failure, verifier behavior, or benchmark eligibility issue.
+- [x] Record triage result and recommended fix.
+
+## Review: run benchmark verify failure
+
+**Target:** Failed `$benchmark-test-skill run --codex` request, scoped to the current conversation, `packs/agentic-skills-bench/codex/benchmark-test-skill/SKILL.md`, `global/codex/run/SKILL.md`, `tests/verify.ts`, `tests/bench.ts`, `tests/layer4/bench.test.ts`, and current task docs.
+
+**User-identified issue:** `$benchmark-test-skill run --codex` could not proceed because `pnpm verify --skill run` failed before the Codex benchmark step.
+
+**Verification Verdict:** Verified. `pnpm verify --skill run` passed layer1 with 1,188 tests, then failed layer2 because Vitest found no layer2 test files matching the `run` filter. A diagnostic preflight of `pnpm bench --skill run --agent codex --runs 1 --chunk-size 1 --pause 0` failed before any agent run with `Unknown skill: run. Available: design-system, design-system-draftstonk`.
+
+**Timeline:** The user invoked `$benchmark-test-skill run --codex`. The project-local benchmark skill correctly resolved `run` as the skill under test and `--codex` as the runner selector. The verify gate ran `pnpm verify --skill run`. `tests/verify.ts` applies the skill argument as a Vitest filter for layer2, and no layer2 `run` behavior test exists. The benchmark step was skipped per contract. Further inspection showed the benchmark runner only has setups for `design-system` and `design-system-draftstonk`.
+
+**Root Cause:** Benchmark eligibility gap. The `benchmark-test-skill` contract says it benchmark-tests one skill defined in the repository, but the current harness only supports skills with both matching layer2 behavior coverage and a layer4 setup registered in `tests/bench.ts`. `run` is a repository skill but not a registered benchmark target, so the failure is not evidence that the `run` skill behavior is broken.
+
+**Responsible Contract Gap:** `packs/agentic-skills-bench/{claude,codex}/benchmark-test-skill/SKILL.md` should preflight supported benchmark targets before running verify, or route unsupported skills to a setup-building workflow. The harness may also need an explicit supported-target listing to avoid relying on Vitest's "No test files found" as the first signal.
+
+**Recommended Fix:** Route to `$targeted-skill-builder benchmark target eligibility preflight`. Update both mirrored benchmark-test-skill contracts to:
+1. Check that the requested skill has a registered layer4 benchmark setup before running verify.
+2. If unsupported, stop with `unsupported benchmark target`, list currently supported targets, and recommend creating layer2/layer4 benchmark coverage for the target skill.
+3. Keep the existing rule that verify failure stops benchmark execution.
+
+Optionally add a small harness helper or CLI option so `tests/bench.ts` can list supported benchmark targets from the shared setup registry.
+
+**Validation Plan:** Run a supported target path (`pnpm verify --skill design-system`) to confirm unchanged behavior, run the unsupported target preflight for `run` to confirm it stops before verify with a clear message, run `pnpm --dir tests test:layer1 -- bench-report.test.ts runner.test.ts` if harness code changes, run `diff -u packs/agentic-skills-bench/claude/benchmark-test-skill/SKILL.md packs/agentic-skills-bench/codex/benchmark-test-skill/SKILL.md` allowing only slash/dollar syntax differences, then run `git diff --check`.
+
+**Confidence:** High. No broad `$analyze-sessions` recurrence analysis is needed; the issue is fully explained by current harness target support.
+
+**Recommended next command:** `$targeted-skill-builder benchmark target eligibility preflight`
+
 ## Current Update: design-system prose headings
 
 - [x] Read relevant lessons and the mirrored `design-system` skill contracts.

@@ -23,6 +23,8 @@ Phase 33 is complete. Phase 34 is planned for the remaining Skills Showcase Webs
 
 **Result:** Blocked at verify on 2026-05-11. Layer1 passed in 7.1s with 1,188 tests, but layer2 failed in 286ms because no layer2 test files matched the `run` skill filter. No Codex benchmark was run and no benchmark report was written.
 
+**Triage Result:** Verified benchmark eligibility gap. `run` is a repository skill, but the current benchmark harness only registers `design-system` and `design-system-draftstonk` layer4 setups, so `$benchmark-test-skill run --codex` should fail earlier with an unsupported-target message rather than presenting the failure as a `run` verify problem.
+
 ## Current Benchmark: design-system
 
 **Goal:** Run `$benchmark-test-skill design-system` through the repository harness with fresh verify and benchmark evidence.
