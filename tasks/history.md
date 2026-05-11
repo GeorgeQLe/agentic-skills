@@ -1734,6 +1734,12 @@ Resolved all 10 findings from `/expert-review`:
 
 - Added `tests/harness/bench-coverage.ts` with a committed 143-skill coverage matrix, repository skill discovery, coverage row projection, and validation for missing rows, missing custom setup paths, and incomplete blocked rows.
 - Added the `pnpm --dir tests bench:coverage` CLI and layer1 tests for the coverage contract.
+- 2026-05-11 — Phase 35 Step 35.2: coverage-aware benchmark reporting
+  - Wired benchmark coverage rows into setup resolution with explicit custom/generic/blocked target metadata.
+  - Updated `pnpm bench --list-skills` and `pnpm bench --skill <skill>` to report coverage status, while preserving generic fallback for repository skills that do not yet have custom setups.
+  - Added layer1 tests for custom metadata, generic fallback metadata, blocked row resolution, coverage-status listing, and CLI list output.
+  - Verified with targeted `bench-setups.test.ts`, `pnpm --dir tests bench:coverage`, `pnpm --dir tests bench --list-skills`, full layer1 tests, a zero-run `run` CLI status smoke, and `git diff --check`.
+
 - Marked the first four Phase 35 acceptance criteria complete while preserving generic smoke coverage for later migration to custom or blocked statuses.
 - Verified with `pnpm --dir tests bench:coverage`, targeted `bench-setups.test.ts`, full layer1 tests, `pnpm --dir tests verify --skill design-system --layers 1`, and `git diff --check`.
 
