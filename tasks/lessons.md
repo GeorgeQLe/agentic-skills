@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-05-11 — Agent benchmark reviews judge skill outputs first
+
+- A `$benchmark-agent-review ship` run over-focused on deterministic benchmark laxness and recommended benchmark tightening as the primary conclusion.
+- `$benchmark-agent-review` should treat hard assertions and deterministic quality scores as context for triage, not as the object of review.
+- Lead with the generated skill output verdict against the agent-review rubric: usefulness, specificity, validation strength, scope control, route ergonomics, absence of invented facts, and residual-risk awareness.
+- Mention deterministic rubric tightening only after the output-quality judgment, and only when it would help future triage surface the same skill-output issue.
+
 ## 2026-05-11 — Preserve existing product surfaces before proposing framework migration
 
 - A first-party newsletter capture spec initially discussed moving to a minimal app framework without first making the existing Skills Showcase site concrete.
