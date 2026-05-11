@@ -70,6 +70,14 @@ The primary object of review is the generated skill output, not the benchmark ha
    - Create `benchmark/review-<RUN-DIR-NAME>-<YYYY-MM-DD>.md` when the input is one run directory.
    - If the review is exploratory and the user asks for chat-only output, do not write a file.
 
+8. Build the remediation handoff:
+   - Convert every material weakness into a remediation target instead of stopping at broad advice.
+   - Classify each target as target-skill contract, benchmark rubric, retained-evidence gap, harness/setup issue, or one-off run behavior.
+   - Name the exact owner file, skill contract, benchmark setup, or report artifact when known.
+   - Propose the exact contract, rubric, fixture, or evidence-capture behavior to add or tighten.
+   - Include the validation command or contract-lint assertion that would prove the issue is fixed.
+   - Choose one definitive next route from the highest-impact verified remediation; do not leave the next operator to choose among generic options.
+
 ## Output
 
 Report:
@@ -82,9 +90,10 @@ Report:
 - Median subjective score and score range when multiple scores exist.
 - Common strengths.
 - Common weaknesses.
+- Remediation table with finding, classification, owner target, proposed change, validation check, and route.
 - Optional deterministic-rubric notes only when the retained output-quality findings show the deterministic rubric failed to surface a meaningful issue or produced misleading context.
-- **Next work:** one concrete follow-up, such as improving the reviewed skill's output expectations, tightening the agent-review rubric, triaging a benchmark failure, or no follow-up.
-- **Recommended next command:** one command, usually `/targeted-skill-builder <skill> output quality`, `/targeted-skill-builder benchmark-agent-review review rubric`, `/session-triage <skill> benchmark review`, or `/ship`.
+- **Next work:** the one definitive remediation selected from the remediation table, or no follow-up when all evaluated outputs are excellent and no meaningful issue remains.
+- **Recommended next command:** one command derived from that remediation, usually `/targeted-skill-builder <skill> <specific output-quality gap>`, `/targeted-skill-builder <benchmark setup or reviewed skill> <specific rubric gap>`, `/session-triage <skill> benchmark review`, or `/ship` only when no remediation is needed.
 
 ## Constraints
 
@@ -94,4 +103,5 @@ Report:
 - Do not frame benchmark pass/fail laxness as the primary problem when the task is to judge skill output quality. If the benchmark intentionally passes weak-but-compliant outputs, grade the output quality directly and use deterministic-rubric notes only as supporting context.
 - Do not grade infrastructure-blocked runs as skill outputs.
 - Do not fabricate missing artifact content. State when only stdout summaries, assertions, or quality results are available.
+- Do not collapse multiple material weaknesses into a vague handoff such as "tighten the rubric"; the remediation table must preserve the responsible target, exact behavior change, and validation check for each issue.
 - Do not create or modify GitHub Actions workflows.

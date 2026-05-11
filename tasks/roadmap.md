@@ -38,7 +38,7 @@ Phases 37-38 are planned from `specs/first-party-skills-showcase-newsletter-capt
 - [x] The triage report names the responsible contract gap, exact recommended wording, validation checks, and next skill route.
 - [x] Results are recorded in `tasks/todo.md`; if tracked files change, commit and push on `master`.
 
-**Result:** Triage completed on 2026-05-11. Verified a mirrored `benchmark-agent-review` contract gap: the skill requires output-quality verdicts and one concrete follow-up, but does not require remediation-ready mapping from each material finding to owner, exact contract/rubric target, validation check, and next route. Recommended next command: `$targeted-skill-builder benchmark-agent-review remediation handoff`.
+**Result:** Triage completed on 2026-05-11 and the targeted skill update was implemented. Mirrored `benchmark-agent-review` now requires remediation-ready mapping from each material finding to owner, exact contract/rubric target, validation check, and route. Mirrored `benchmark-test-skill` now hands off deterministic benchmark reports to `benchmark-agent-review` as a separate subjective review/remediation step when needed. Recommended next command: `$ship`.
 
 ## Current Benchmark: run Codex
 

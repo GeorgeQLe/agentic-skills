@@ -31,12 +31,14 @@ describe("benchmark coverage contract", () => {
         command: "/benchmark-test-skill",
         customCoverageRoute: "/targeted-skill-builder <SKILL> benchmark coverage",
         failureRoute: "/session-triage <skill> benchmark failure",
+        reviewRoute: "/benchmark-agent-review <skill>",
       },
       {
         path: "packs/agentic-skills-bench/codex/benchmark-test-skill/SKILL.md",
         command: "$benchmark-test-skill",
         customCoverageRoute: "$targeted-skill-builder <SKILL> benchmark coverage",
         failureRoute: "$session-triage <skill> benchmark failure",
+        reviewRoute: "$benchmark-agent-review <skill>",
       },
     ];
 
@@ -58,6 +60,58 @@ describe("benchmark coverage contract", () => {
       expect(content, `${contract.path} final route output`).toContain("Do not omit the final next-step route.");
       expect(content, `${contract.path} custom coverage route`).toContain(contract.customCoverageRoute);
       expect(content, `${contract.path} failure route`).toContain(contract.failureRoute);
+      expect(content, `${contract.path} deterministic boundary`).toContain(
+        "This skill produces deterministic benchmark evidence only.",
+      );
+      expect(content, `${contract.path} review handoff`).toContain(contract.reviewRoute);
+      expect(content, `${contract.path} separate step`).toContain("as the next separate step");
+      expect(content, `${contract.path} subjective review gate`).toContain(
+        "subjective output-quality review or remediation planning has not yet been performed",
+      );
+    }
+  });
+
+  it("lints benchmark-agent-review contracts for remediation-ready handoffs", () => {
+    const skillContracts = [
+      {
+        path: "packs/agentic-skills-bench/claude/benchmark-agent-review/SKILL.md",
+        targetedRoute: "/targeted-skill-builder <skill> <specific output-quality gap>",
+        shipRoute: "`/ship` only when no remediation is needed",
+      },
+      {
+        path: "packs/agentic-skills-bench/codex/benchmark-agent-review/SKILL.md",
+        targetedRoute: "$targeted-skill-builder <skill> <specific output-quality gap>",
+        shipRoute: "`$ship` only when no remediation is needed",
+      },
+    ];
+
+    for (const contract of skillContracts) {
+      const content = readFileSync(resolve(REPO_ROOT, contract.path), "utf8");
+
+      expect(content, `${contract.path} remediation handoff`).toContain("Build the remediation handoff");
+      expect(content, `${contract.path} weakness conversion`).toContain(
+        "Convert every material weakness into a remediation target",
+      );
+      expect(content, `${contract.path} classification`).toContain(
+        "target-skill contract, benchmark rubric, retained-evidence gap, harness/setup issue, or one-off run behavior",
+      );
+      expect(content, `${contract.path} owner target`).toContain(
+        "Name the exact owner file, skill contract, benchmark setup, or report artifact",
+      );
+      expect(content, `${contract.path} validation proof`).toContain(
+        "validation command or contract-lint assertion",
+      );
+      expect(content, `${contract.path} remediation table`).toContain(
+        "Remediation table with finding, classification, owner target, proposed change, validation check, and route",
+      );
+      expect(content, `${contract.path} definitive next route`).toContain(
+        "one definitive remediation selected from the remediation table",
+      );
+      expect(content, `${contract.path} targeted route`).toContain(contract.targetedRoute);
+      expect(content, `${contract.path} ship route guard`).toContain(contract.shipRoute);
+      expect(content, `${contract.path} vague handoff guard`).toContain(
+        "Do not collapse multiple material weaknesses into a vague handoff",
+      );
     }
   });
 
