@@ -271,6 +271,51 @@ Implement only this step, validate it, then run `/ship` when done.
 - **Next work:** Step 39.5 — add `sync` safe fixture plan using the disposable repo infrastructure
 - **Recommended next command:** `/run`
 
+## Handoff — Step 39.5
+
+### What Needs to Be Built
+
+Step 39.5 adds the `sync` safe fixture plan using the disposable repo infrastructure built in Step 39.3.
+
+**Create** `tests/layer4/setups/git-fixture-sync.setup.ts` — benchmark fixture definition:
+- Import `SkillBenchSetup` from `../../harness/bench-types.js` and follow the pattern established in `git-fixture-commit-and-push.setup.ts`.
+- Import disposable repo helpers from `../helpers/disposable-repo.js`.
+- Define a benchmark setup that:
+  1. Creates a disposable repo via `createDisposableRepo("sync")`.
+  2. Seeds the repo with initial files (e.g., `README.md`, `src/index.ts`, `package.json`).
+  3. Simulates upstream changes: after seeding, create additional commits directly on the remote (via a second clone or `git push` from a temp dir) so the local clone is behind origin.
+  4. Optionally creates a local uncommitted change to test stash behavior.
+  5. Runs `sync` against the local clone.
+  6. Hard assertions verify: pulled commits are present locally, branch is up to date with origin, stashed changes (if any) were re-applied, output reports branch name and sync status.
+  7. Cleanup via `repo.cleanup()`.
+- Export as a `SkillBenchSetup` with `BENCH_BUDGETS_USD.standard` and `BENCH_TIMEOUTS_MS.standard`.
+- If confirmation gate denies creation, return `infrastructure-blocked` — do not fail the benchmark.
+
+**Modify** `tests/harness/bench-coverage.ts`:
+- Remove `"sync"` from `TIER23_GLOBAL_BLOCKED_SKILLS` (currently at the entry with `blocked_reason: "Requires live remote git fetch/pull state..."`).
+- Add `"sync"` to `COVERAGE_OVERRIDES` with `coverage: "custom"`, `agent_scope: "both"`, `setup_path: "tests/layer4/setups/git-fixture-sync.setup.ts"`, `fixture_type: "git-disposable-repo-fixture"`.
+
+**Modify** `tests/layer1/bench-setups.test.ts`:
+- Remove `"sync"` from `expectedBlockedSkills` array.
+- Add a dedicated assertion (like the one for `commit-and-push-by-feature`) checking that `sync` has `coverage_status: "custom"`, correct `setup_path`, `agent_scope: "both"`, and `fixture_type`.
+
+**Context from Step 39.4:**
+- `git-fixture-commit-and-push.setup.ts` at `tests/layer4/setups/` is the closest pattern to follow — same imports, same structure, same budget/timeout, same `SkillBenchSetup` export pattern.
+- The `bench-coverage.ts` override entry for `commit-and-push-by-feature` is the exact shape to replicate for `sync`.
+- The test assertion added for `commit-and-push-by-feature` in `bench-setups.test.ts` is the pattern to follow.
+
+**Validation:**
+- `pnpm --dir tests test:layer1` — must pass (no regressions). The coverage test should now show `sync` as `custom` instead of `blocked`.
+- `pnpm --dir tests bench:coverage` — must be valid.
+- `git diff --check` — no whitespace errors.
+
+### Execution Profile
+- **Parallel mode:** serial
+- **Test strategy:** tests-after
+
+### Handoff
+Implement only this step, validate it, then run `/ship` when done.
+
 ## Review — Step 39.3
 
 - Completed on 2026-05-12.
