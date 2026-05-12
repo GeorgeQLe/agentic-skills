@@ -40,7 +40,7 @@ Recommended next steps are governed by `docs/skill-next-step-contracts.md`. A sk
 
 ## Skills Showcase Freshness
 
-Generator scripts dual-write to both `docs/skills-showcase/assets/` (legacy static site) and `apps/skills-showcase/public/assets/` (Next.js app). The Next.js app at `apps/skills-showcase/` is the primary showcase surface; the static site under `docs/skills-showcase/` is retained for compatibility until Step 37.6.
+Generator scripts dual-write to both `docs/skills-showcase/assets/` and `apps/skills-showcase/public/assets/`. The Next.js app at `apps/skills-showcase/` is the sole showcase surface.
 
 When a tracked `SKILL.md` or `PACK.md` is created, deleted, renamed, or changed in behavior or metadata, refresh and validate the showcase before shipping:
 
@@ -50,7 +50,7 @@ node scripts/generate-skills-showcase-github-data.mjs
 scripts/validate-skills-showcase-data.sh
 ```
 
-The validator fingerprints all four generated assets across both output paths. Include changed generated assets in the same commit as the skill change. Also review curated website copy, catalog grouping, workflow animation text, and proof receipts when the skill change affects public-facing behavior. This is a static-data contract only; it does not add a runtime API, database, GitHub Actions workflow, video/Remotion pipeline, analytics, or live product metrics.
+The validator fingerprints all four generated assets across both output paths. Include changed generated assets in the same commit as the skill change. Also review curated website copy, catalog grouping, workflow animation text, and proof receipts when the skill change affects public-facing behavior. `docs/skills-showcase/assets/` is kept for dual-write; the static site HTML/CSS/JS files were removed in Step 37.6. This is a static-data contract only; it does not add a runtime API, database, GitHub Actions workflow, video/Remotion pipeline, analytics, or live product metrics.
 
 ## Benchmark Coverage Freshness
 

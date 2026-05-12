@@ -2,7 +2,7 @@
 
 ## Scope
 
-This contract covers deployment for the Skills Showcase. The primary surface is the Next.js app at `apps/skills-showcase/`. The legacy static site at `docs/skills-showcase/` is retained for compatibility until Step 37.6.
+This contract covers deployment for the Skills Showcase. The primary surface is the Next.js app at `apps/skills-showcase/`.
 
 ## Next.js App (Primary)
 
@@ -51,22 +51,6 @@ The Next.js app produces 6 static routes. Verify after deploy:
 5. Do not add GitHub Actions, serverless functions, a database, visitor analytics, or a runtime API.
 6. Deploy from the current `master` branch after local validation passes.
 7. Verify deployed route reloads and links manually.
-
-## Legacy Static Site (Compatibility)
-
-The static site at `docs/skills-showcase/` remains deployable as a standalone static directory until Step 37.6, when it will be removed.
-
-- Project root: `docs/skills-showcase/`.
-- Build command: none.
-- Install command: none.
-- Output directory: `.` from inside `docs/skills-showcase/`.
-
-Pre-deploy validation for the static site:
-
-```sh
-scripts/validate-skills-showcase-data.sh
-node --check docs/skills-showcase/app.js
-```
 
 ## Newsletter Provider
 
