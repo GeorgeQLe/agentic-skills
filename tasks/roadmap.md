@@ -794,7 +794,7 @@ Current brand decision: the public site brand is **G Skillmap** and the producti
 - [ ] A clean benchmark-results matrix lists skills with persisted evaluated benchmark data, hard pass rates, quality scores, subjective review grades when present, and raw report paths.
 - [ ] Skills Showcase exposes benchmark results or links to the generated matrix without confusing coverage status with completed graded runs.
 - [ ] `commit-and-push-by-feature` has a safe fixture plan using an explicit-permission disposable GitHub test repository.
-- [ ] `sync` has a safe fixture plan using an explicit-permission disposable GitHub test repository.
+- [x] `sync` has a safe fixture plan using an explicit-permission disposable GitHub test repository.
 - [ ] The benchmark coverage registry reflects any newly unblocked setup status only after the safe fixture is implemented and validated.
 - [ ] Cleanup and infrastructure-block handling are documented for the disposable repository workflow.
 - [ ] No GitHub Actions are created, modified, or recommended.
@@ -865,7 +865,7 @@ Current brand decision: the public site brand is **G Skillmap** and the producti
 - [ ] A clean benchmark-results matrix lists skills with persisted evaluated benchmark data, hard pass rates, quality scores, subjective review grades when present, and raw report paths.
 - [ ] Skills Showcase exposes benchmark results or links to the generated matrix without confusing coverage status with completed graded runs.
 - [ ] `commit-and-push-by-feature` has a safe fixture plan using an explicit-permission disposable GitHub test repository.
-- [ ] `sync` has a safe fixture plan using an explicit-permission disposable GitHub test repository.
+- [x] `sync` has a safe fixture plan using an explicit-permission disposable GitHub test repository.
 - [ ] The benchmark coverage registry reflects any newly unblocked setup status only after the safe fixture is implemented and validated.
 - [ ] Cleanup and infrastructure-block handling are documented for the disposable repository workflow.
 - [ ] No GitHub Actions are created, modified, or recommended.

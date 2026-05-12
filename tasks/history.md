@@ -2181,3 +2181,10 @@ Resolved all 10 findings from `/expert-review`:
 - Added `docs/benchmark-results-matrix.md` to `scripts/validate-skills-showcase-data.sh` freshness checks.
 - Added `tests/layer1/benchmark-results-matrix.test.ts` asserting generated matrix content.
 - Verified: 12 test files / 1304 tests passed, showcase data validation fresh.
+
+## 2026-05-12 — Step 39.5: Add sync safe fixture plan
+
+- Created `tests/layer4/setups/git-fixture-sync.setup.ts` — benchmark fixture that seeds a disposable repo, simulates upstream changes via a second clone, adds an uncommitted local change (NOTES.md), then asserts `sync` performs pull/rebase, reports branch status, handles stash, and reports sync completion.
+- Updated `tests/harness/bench-coverage.ts`: removed `sync` from `TIER23_GLOBAL_BLOCKED_SKILLS`, added to `COVERAGE_OVERRIDES` with `coverage: "custom"`, `agent_scope: "both"`, `fixture_type: "git-disposable-repo-fixture"`.
+- Updated `tests/layer1/bench-setups.test.ts`: removed `sync` from blocked list, added dedicated custom assertion.
+- Verified: 12 test files / 1304 tests passed, bench:coverage valid (145 skills), git diff --check clean.
