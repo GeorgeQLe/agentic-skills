@@ -2,7 +2,7 @@
 
 > Generated from: tasks/roadmap.md (existing), specs/board-flag-kanban-search.md, tasks/ideas.md, tasks/history.md
 > Date: 2026-03-27 (last updated 2026-05-11)
-> Total Phases: 39 (37 complete, 2 planned)
+> Total Phases: 39 (38 complete, 1 planned)
 
 ## Summary
 
@@ -12,7 +12,7 @@ Phases 12-31 complete. Phase 14 added the LinkedIn evidence lane to the creator 
 
 Phases 32-36 complete. Phase 35 added repository-wide Codex benchmark coverage metadata, custom or explicitly blocked coverage for every current skill, and future skill creation/update workflows require benchmark coverage handling. Phase 36 added rubric-based output-quality evaluation on top of the contract/assertion benchmark checks.
 
-Phase 37 complete: preserved and migrated the static Skills Showcase into a minimal Next.js app at `apps/skills-showcase/` with 6 public routes, generated data pipeline, 54 regression tests, and updated deploy contract. Phase 38 adds Neon-backed first-party newsletter capture, tRPC contracts, TanStack Query mutation/admin state, and an admin export page. Phase 39 adds benchmark results visibility and permission-gated safe Git integration fixtures for benchmarkable git-mutating skills.
+Phase 37 complete: preserved and migrated the static Skills Showcase into a minimal Next.js app at `apps/skills-showcase/` with 6 public routes, generated data pipeline, 54 regression tests, and updated deploy contract. Phase 38 complete: added Neon-backed first-party newsletter capture with tRPC contracts, TanStack Query mutation/admin state, admin export page, 74 regression tests, and privacy posture enforcement. Phase 39 adds benchmark results visibility and permission-gated safe Git integration fixtures for benchmarkable git-mutating skills.
 
 Current brand decision: the public site brand is **G Skillmap** and the production domain is `gskillmap.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill-map language while reserving `agentic-skills` for the underlying open-source library/repository.
 
@@ -26,6 +26,17 @@ Current brand decision: the public site brand is **G Skillmap** and the producti
 - [ ] The brand site renders benchmark-backed prompt/output demos for relevant pack/skill pages while preserving existing summary metrics.
 - [ ] Layer1 or generator tests cover the new data shape and fallback behavior when raw run artifacts are absent.
 - [ ] Showcase data is regenerated and validated.
+
+## Current Benchmark Rerun: benchmark-test-skill Self Benchmark
+
+**Goal:** Run `$benchmark-test-skill benchmark-test-skill` with fresh eligibility, verify, and both-agent benchmark evidence on 2026-05-12.
+
+**Acceptance Criteria:**
+- [ ] `pnpm bench --list-skills` confirms `benchmark-test-skill` is known and reports its coverage status.
+- [ ] `pnpm verify --skill benchmark-test-skill` passes or blocks benchmark execution with a recorded failure.
+- [ ] `pnpm bench --skill benchmark-test-skill --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [ ] `benchmark/test-benchmark-test-skill-2026-05-12.md` records fresh verify, benchmark, latency, cost, consistency, and raw session evidence.
+- [ ] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
 
 ## Current Fix: benchmark-test-skill Neutral Benchmark Fixture
 
@@ -644,7 +655,7 @@ Current brand decision: the public site brand is **G Skillmap** and the producti
 
 ---
 
-## Phase 38: First-Party Newsletter Capture And Admin
+## Phase 38: First-Party Newsletter Capture And Admin ✓
 
 **Goal:** Add first-party newsletter capture to the app-enabled Skills Showcase using Neon persistence, tRPC contracts, TanStack Query client state, and a protected admin export page.
 
@@ -721,24 +732,24 @@ Current brand decision: the public site brand is **G Skillmap** and the producti
   - Files: modify only files implicated by failing validation
   - Run typecheck, build, tests, showcase data validation, `git diff --check`.
 
-### Milestone: Phase 38 First-Party Newsletter Capture And Admin
+### Milestone: Phase 38 First-Party Newsletter Capture And Admin ✓
 **Acceptance Criteria:**
-- [ ] `/follow` submits valid email addresses through a first-party tRPC mutation.
-- [ ] Neon stores subscriber records with `email`, `status`, `source_page`, `consent_text_version`, `created_at`, and `updated_at`.
-- [ ] Duplicate signup behavior is idempotent.
-- [ ] Invalid emails and database failures produce appropriate public UI states without leaking internals.
-- [ ] `/admin/newsletter` requires the configured admin secret.
-- [ ] Admin can list, search, copy active emails, and download CSV.
-- [ ] Subscriber data is never exposed in generated public assets or committed files.
-- [ ] Local app validation, database-contract checks, admin access checks, and whitespace checks pass.
-- [ ] No GitHub Actions are created, modified, or recommended.
-- [ ] All phase tests pass.
-- [ ] No regressions in previous phase tests.
+- [x] `/follow` submits valid email addresses through a first-party tRPC mutation.
+- [x] Neon stores subscriber records with `email`, `status`, `source_page`, `consent_text_version`, `created_at`, and `updated_at`.
+- [x] Duplicate signup behavior is idempotent.
+- [x] Invalid emails and database failures produce appropriate public UI states without leaking internals.
+- [x] `/admin/newsletter` requires the configured admin secret.
+- [x] Admin can list, search, copy active emails, and download CSV.
+- [x] Subscriber data is never exposed in generated public assets or committed files.
+- [x] Local app validation, database-contract checks, admin access checks, and whitespace checks pass.
+- [x] No GitHub Actions are created, modified, or recommended.
+- [x] All phase tests pass.
+- [x] No regressions in previous phase tests.
 
 **On Completion**
-- Deviations from plan: [fill when phase is done]
-- Tech debt / follow-ups: [fill when phase is done]
-- Ready for next phase: no
+- Deviations from plan: DB uses uuid for id instead of serial; 74 tests total. No other deviations.
+- Tech debt / follow-ups: Vercel deploy not yet configured (manual). Admin does not support edit/delete/status-management per non-goals.
+- Ready for next phase: yes
 
 ---
 
