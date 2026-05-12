@@ -26,7 +26,7 @@
 **Acceptance Criteria:**
 - [ ] A clean benchmark-results matrix lists skills with persisted evaluated benchmark data, hard pass rates, quality scores, subjective review grades when present, and raw report paths.
 - [ ] Skills Showcase exposes benchmark results or links to the generated matrix without confusing coverage status with completed graded runs.
-- [ ] `commit-and-push-by-feature` has a safe fixture plan using an explicit-permission disposable GitHub test repository.
+- [x] `commit-and-push-by-feature` has a safe fixture plan using an explicit-permission disposable GitHub test repository.
 - [ ] `sync` has a safe fixture plan using an explicit-permission disposable GitHub test repository.
 - [ ] The benchmark coverage registry reflects any newly unblocked setup status only after the safe fixture is implemented and validated.
 - [ ] Cleanup and infrastructure-block handling are documented for the disposable repository workflow.
@@ -117,7 +117,7 @@
   - Document the permission-gated disposable repository workflow: explicit user approval before `gh repo create`, `gh repo delete`, or any mutation of a live GitHub test repository.
   - Document cleanup handling: cleanup failures are infrastructure-blocked evidence, not skill failures.
   - Implement a reusable fixture helper that creates a temporary GitHub repo via `gh`, clones it locally, and provides cleanup — all gated behind explicit confirmation.
-- [ ] Step 39.4: Add `commit-and-push-by-feature` safe fixture plan using the disposable repo infrastructure.
+- [x] Step 39.4: Add `commit-and-push-by-feature` safe fixture plan using the disposable repo infrastructure.
   - Classification: automated
   - Files: create `tests/layer4/setups/git-fixture-commit-and-push.setup.ts` (fixture definition), modify `tests/harness/bench-coverage.ts` (update coverage status from blocked to custom)
   - Define the benchmark setup: create disposable repo, stage mixed changes across multiple files, run `commit-and-push-by-feature`, verify commits are grouped by feature with conventional messages.
@@ -149,7 +149,7 @@
 **Acceptance Criteria:**
 - [ ] A clean benchmark-results matrix lists skills with persisted evaluated benchmark data, hard pass rates, quality scores, subjective review grades when present, and raw report paths.
 - [ ] Skills Showcase exposes benchmark results or links to the generated matrix without confusing coverage status with completed graded runs.
-- [ ] `commit-and-push-by-feature` has a safe fixture plan using an explicit-permission disposable GitHub test repository.
+- [x] `commit-and-push-by-feature` has a safe fixture plan using an explicit-permission disposable GitHub test repository.
 - [ ] `sync` has a safe fixture plan using an explicit-permission disposable GitHub test repository.
 - [ ] The benchmark coverage registry reflects any newly unblocked setup status only after the safe fixture is implemented and validated.
 - [x] Cleanup and infrastructure-block handling are documented for the disposable repository workflow.
@@ -254,6 +254,21 @@ Step 39.4 adds the `commit-and-push-by-feature` safe fixture plan using the disp
 Implement only this step, validate it, then run `/ship` when done.
 
 - **Next work:** Step 39.4 — add `commit-and-push-by-feature` safe fixture plan using the disposable repo infrastructure
+- **Recommended next command:** `/run`
+
+## Review — Step 39.4
+
+- Completed on 2026-05-12.
+- Created `tests/layer4/setups/git-fixture-commit-and-push.setup.ts` — benchmark fixture that stages mixed-feature files (auth, UI, tests, docs) without committing, then asserts `commit-and-push-by-feature` produces multiple conventional commits grouped by feature and pushes them.
+- Hard assertions: conventional commit messages, multiple commits (feature grouping), push performed, clean working tree.
+- Updated `tests/harness/bench-coverage.ts`: removed `commit-and-push-by-feature` from `TIER23_GLOBAL_BLOCKED_SKILLS`, added it to `COVERAGE_OVERRIDES` with `coverage: "custom"`, `agent_scope: "both"`, `setup_path: "tests/layer4/setups/git-fixture-commit-and-push.setup.ts"`.
+- Updated `tests/layer1/bench-setups.test.ts`: moved `commit-and-push-by-feature` from `expectedBlockedSkills` to a dedicated assertion checking custom status, setup path, agent scope, and fixture type.
+- Validation:
+  - `pnpm --dir tests test:layer1` — 1304 tests passed across 12 files (no regressions).
+  - `pnpm --dir tests bench:coverage` — valid (145 skills).
+  - `git diff --check` — passed.
+
+- **Next work:** Step 39.5 — add `sync` safe fixture plan using the disposable repo infrastructure
 - **Recommended next command:** `/run`
 
 ## Review — Step 39.3
