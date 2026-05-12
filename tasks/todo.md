@@ -173,6 +173,59 @@
 
 Step 38.7 complete — updated deploy contract, routes registry, README, and tests. Typecheck, build, and 52/52 tests pass.
 
+## What needs to be built
+
+### Step 38.8: Write regression tests covering newsletter capture and admin behavior
+
+Add test coverage for admin newsletter UI and tRPC newsletter router logic. The newsletter form (`newsletter-form.tsx`) already has 8 tests covering all UI states. Focus new tests on:
+
+1. **Admin newsletter UI** (`apps/skills-showcase/src/showcase/admin-newsletter.test.tsx` — new file):
+   - Login gate renders on mount (shows secret input, log in button)
+   - Login error displays error message
+   - After successful login, admin view renders (subscriber table, search, copy, download buttons)
+   - Subscriber count text renders correctly
+   - Empty state shows "No subscribers found."
+   - Search input updates filter
+   - Mock tRPC hooks: `newsletter.adminLogin.useMutation`, `newsletter.adminList.useQuery`, `newsletter.adminExport.useQuery`
+
+2. **tRPC newsletter router** (`apps/skills-showcase/src/trpc/newsletter.test.ts` — new file):
+   - `subscribe`: valid email calls `insertSubscriber`
+   - `subscribe`: Zod rejects invalid email (no `@`, empty)
+   - `subscribe`: database error throws INTERNAL_SERVER_ERROR
+   - `adminLogin`: correct secret sets session cookie, returns success
+   - `adminLogin`: wrong secret throws UNAUTHORIZED
+   - `adminLogin`: missing env var throws UNAUTHORIZED
+   - `adminExport`: CSV output includes header and escaped values
+   - `csvEscape` helper: handles commas, quotes, newlines
+
+3. **Privacy check** (add to existing `routes.test.ts`):
+   - Verify generated public assets in `public/assets/` don't contain subscriber data patterns
+
+### Files to create or modify
+
+- Create `apps/skills-showcase/src/showcase/admin-newsletter.test.tsx`
+- Create `apps/skills-showcase/src/trpc/newsletter.test.ts`
+- Modify `apps/skills-showcase/src/showcase/routes.test.ts` (add privacy assertion)
+
+### Technical approach
+
+- Admin UI tests: mock tRPC hooks (same pattern as `newsletter-form.test.tsx`), render with `QueryClientProvider`, test login gate flow and admin view rendering.
+- Router tests: mock `@/db` module, call router procedures directly via tRPC `createCaller` or by testing the procedure input validation with Zod and mocking the DB layer. Since the router uses `@trpc/server` procedures with context, create a minimal test caller.
+- Privacy test: read `public/assets/skills-data.js` and `public/assets/github-proof-data.js`, assert they don't contain email-like patterns or subscriber table references.
+
+### Execution Profile
+- **Parallel mode:** serial
+- **Integration owner:** main agent
+- **Test strategy:** tests-after (this IS the test-writing step)
+
+### Verification
+- `pnpm --dir apps/skills-showcase typecheck` passes
+- `pnpm --dir apps/skills-showcase build` passes
+- `pnpm --dir apps/skills-showcase test` passes (60+ tests expected)
+- `git diff --check` clean
+
+**Ship-one-step handoff:** implement only Step 38.8, validate it, then run `/ship` when done.
+
 **Ship-one-step handoff:** implement only Step 38.7, validate it, then run `/ship` when done.
 
 ## Routing
