@@ -182,8 +182,18 @@ describe("benchmark output quality evaluation", () => {
 
     const strong = evaluator.evaluate(fixture("strong-run-output.md"));
     const hallucinated = evaluator.evaluate(fixture("hallucinated-run-output.md"));
+    const recommendedNextSkill = evaluator.evaluate([
+      "Step 36.1 evidence",
+      "tests/harness/bench-report.ts",
+      "benchmark quality",
+      "evidence validation scope",
+      "Recommended next skill: $run",
+    ].join("\n"));
 
     expect(strong.passed).toBe(true);
+    expect(recommendedNextSkill.criteria.find((criterion) => criterion.id === "route")).toMatchObject({
+      passed: true,
+    });
     expect(strong.criteria.map((criterion) => criterion.id)).toEqual(
       expect.arrayContaining([
         "step-fact",
