@@ -2,7 +2,7 @@
 
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
-import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -76,6 +76,75 @@ function parsePercent(value) {
   return match ? Number(match[1]) : null;
 }
 
+function compactText(value, maxLength = 700) {
+  const clean = String(value || "")
+    .replace(/\r\n/g, "\n")
+    .replace(/[ \t]+\n/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+  if (clean.length <= maxLength) return clean;
+  return `${clean.slice(0, maxLength - 1).trimEnd()}…`;
+}
+
+function readJson(relativePath) {
+  const absolutePath = path.join(repoRoot, relativePath);
+  if (!existsSync(absolutePath)) return null;
+  try {
+    return JSON.parse(readFileSync(absolutePath, "utf8"));
+  } catch {
+    return null;
+  }
+}
+
+function extractPromptFromRun(run) {
+  const stderr = String(run?.stderr || "");
+  const codexPrompt = stderr.match(/\nuser\n([\s\S]*?)(?:\n(?:codex|assistant|exec|apply patch)\n|$)/);
+  if (codexPrompt) return compactText(codexPrompt[1], 600);
+  return "";
+}
+
+function extractOutputFromRun(run) {
+  return compactText(String(run?.stdout || ""), 900);
+}
+
+function buildBenchmarkDemo(report) {
+  for (const agent of report.agents) {
+    const rawSessionPath = String(agent.rawSessionPath || "").replace(/\/?$/, "/");
+    if (!rawSessionPath.startsWith("tests/benchmarks/runs/")) continue;
+
+    const reportJsonPath = `${rawSessionPath}report.json`;
+    const reportJson = readJson(reportJsonPath);
+    const preferredIndex =
+      Array.isArray(reportJson?.failedRuns) && reportJson.failedRuns.length
+        ? 0
+        : Number.isInteger(reportJson?.consistency?.medoidIndex)
+          ? reportJson.consistency.medoidIndex
+          : 0;
+
+    const candidateIndexes = Array.from(new Set([preferredIndex, 0, 1, 2])).filter((index) => index >= 0);
+    for (const index of candidateIndexes) {
+      const runPath = `${rawSessionPath}run-${String(index).padStart(3, "0")}.json`;
+      const run = readJson(runPath);
+      if (!run || run.infrastructureBlocked) continue;
+
+      const prompt = extractPromptFromRun(run);
+      const output = extractOutputFromRun(run);
+      if (!prompt || !output) continue;
+
+      return {
+        agent: agent.agent,
+        runIndex: index,
+        prompt,
+        output,
+        runPath,
+        reportPath: report.reportPath
+      };
+    }
+  }
+
+  return null;
+}
+
 function parseBenchmarkReport(relativePath) {
   const text = readText(relativePath);
   const pathMatch = relativePath.match(/^benchmark\/test-(.+)-(\d{4}-\d{2}-\d{2})\.md$/);
@@ -123,7 +192,7 @@ function parseBenchmarkReport(relativePath) {
 
   const failedAssertions = /## Failed Assertions\s+None\./i.test(text) ? "none" : "see-report";
 
-  return {
+  const report = {
     skill,
     date,
     reportPath: relativePath,
@@ -136,6 +205,9 @@ function parseBenchmarkReport(relativePath) {
     quality: qualityRows,
     failedAssertions
   };
+
+  const demo = buildBenchmarkDemo(report);
+  return demo ? { ...report, demo } : report;
 }
 
 function benchmarkEvidenceBySkill(files) {
@@ -225,7 +297,10 @@ function main() {
   });
   const packPaths = files.filter((file) => /^packs\/[^/]+\/PACK\.md$/.test(file));
   const benchmarkPaths = files.filter((file) => /^benchmark\/test-.+-\d{4}-\d{2}-\d{2}\.md$/.test(file));
-  const sourcePaths = [...skillPaths, ...packPaths, ...benchmarkPaths].sort();
+  const benchmarkDemoPaths = Array.from(benchmarkEvidence.values())
+    .flatMap((evidence) => (evidence.demo ? [evidence.demo.runPath] : []))
+    .filter((file) => files.includes(file));
+  const sourcePaths = [...skillPaths, ...packPaths, ...benchmarkPaths, ...benchmarkDemoPaths].sort();
 
   const skills = skillPaths
     .map(parseSkill)
