@@ -20,6 +20,12 @@
 
 **Result:** Benchmark completed on 2026-05-12. Verify passed with layer1 in 7.9s across 1,255 tests; layer2 was skipped because no target-specific layer2 tests matched `spec-interview`. Claude had 3/3 infrastructure-blocked runs because the agent runner budget was exceeded. Codex completed 3 evaluated runs and failed 0/3 hard assertions because every run omitted the expected `$plan-phase` recommendation. Codex output quality averaged 85.7%, with no threshold failures and 3 critical failures. Report: `benchmark/test-spec-interview-2026-05-12.md`. Recommended next command: `$session-triage spec-interview benchmark failure`.
 
+## Current Fix: spec-interview Benchmark Route
+
+**Goal:** Fix the stale `spec-interview` benchmark setup so it expects the current `$roadmap` post-spec route instead of `$plan-phase`.
+
+**Result:** Updated `tests/layer4/setups/tier1-workflows.setup.ts` to align the hard assertion and output-quality next-route criterion with the mirrored `spec-interview` contract. Removed the generated-spec body file-reference quality criterion because the skill contract requires creating `specs/benchmark-reporting.md`, not embedding fixture file paths inside the generated spec. Validation passed with focused layer1 benchmark setup tests, benchmark coverage validation, `pnpm --dir tests verify --skill spec-interview`, and a one-run Codex smoke benchmark that passed 1/1 with 100.0% quality and no blocked runs.
+
 ## Phase 37: Skills Showcase Next.js Preservation Refactor
 
 **Goal:** Preserve the existing Skills Showcase website while migrating it from static HTML/CSS/JS under `docs/skills-showcase/` into a minimal Next.js app that can support first-party newsletter capture in the following phase.
