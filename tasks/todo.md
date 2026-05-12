@@ -5,6 +5,21 @@
 **Current phase:** Phase 37 of 38 — Skills Showcase Next.js Preservation Refactor
 **Last completed phase:** Phase 36 — Benchmark Output Quality Evaluation
 
+## Current Benchmark: spec-interview
+
+**Goal:** Run `$benchmark-test-skill spec-interview` through the repository harness with fresh eligibility, verify, and both-agent benchmark evidence on 2026-05-12.
+
+**Acceptance Criteria:**
+- [x] `pnpm bench --list-skills` confirms `spec-interview` is known and reports its coverage status.
+- [x] `pnpm verify --skill spec-interview` passes or blocks benchmark execution with a recorded failure.
+- [x] `pnpm bench --skill spec-interview --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [x] `benchmark/test-spec-interview-2026-05-12.md` records verify, benchmark, latency, cost, consistency, and raw session evidence.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Preflight:** `spec-interview` is known with `coverage=custom` using `tests/layer4/setups/tier1-workflows.setup.ts`.
+
+**Result:** Benchmark completed on 2026-05-12. Verify passed with layer1 in 7.9s across 1,255 tests; layer2 was skipped because no target-specific layer2 tests matched `spec-interview`. Claude had 3/3 infrastructure-blocked runs because the agent runner budget was exceeded. Codex completed 3 evaluated runs and failed 0/3 hard assertions because every run omitted the expected `$plan-phase` recommendation. Codex output quality averaged 85.7%, with no threshold failures and 3 critical failures. Report: `benchmark/test-spec-interview-2026-05-12.md`. Recommended next command: `$session-triage spec-interview benchmark failure`.
+
 ## Phase 37: Skills Showcase Next.js Preservation Refactor
 
 **Goal:** Preserve the existing Skills Showcase website while migrating it from static HTML/CSS/JS under `docs/skills-showcase/` into a minimal Next.js app that can support first-party newsletter capture in the following phase.
