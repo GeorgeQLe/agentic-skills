@@ -59,6 +59,8 @@ pnpm verify --skill <SKILL>
 ```
 
 - Expect layer1 to pass and layer2 to pass when target-specific tests exist.
+- Treat layer1 as the static harness-contract gate, including basic benchmark setup alignment checks such as expected next-route handoffs, runner command conventions, output file expectations, and quality-rubric facts against the current skill contract.
+- If layer1 fails because a benchmark setup is misaligned with the skill contract, classify it as a harness/benchmark coverage defect and route to `/targeted-skill-builder <SKILL> benchmark failure`; do not spend agent budget on `pnpm bench`.
 - If layer2 reports no tests matched `<SKILL>`, treat that layer as skipped and continue to the benchmark step. Record the skip clearly because generic benchmark coverage is weaker than target-specific layer2 verification.
 - Record pass/fail and wall time per layer.
 - If verify fails, stop and report the failure. Do not run the benchmark step.

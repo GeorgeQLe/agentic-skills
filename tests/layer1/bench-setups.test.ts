@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, mkdirSync, writeFileSync } from "node:fs";
+import { mkdtempSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -347,6 +347,65 @@ describe("benchmark setup registry", () => {
     ).toMatchObject({
       pass: true,
     });
+  });
+
+  it("keeps the spec-interview benchmark route aligned with mirrored skill contracts", () => {
+    const setup = resolveBenchSetup("spec-interview");
+    expect(setup).toBeDefined();
+
+    const codexSkill = readFileSync(resolve(TESTS_ROOT, "../global/codex/spec-interview/SKILL.md"), "utf8");
+    const claudeSkill = readFileSync(resolve(TESTS_ROOT, "../global/claude/spec-interview/SKILL.md"), "utf8");
+
+    expect(codexSkill).toContain("Treat `$roadmap` as the default next route after a completed or updated spec");
+    expect(claudeSkill).toContain("Treat `/roadmap` as the default next route after a completed or updated spec");
+
+    const workDir = mkdtempSync(resolve(tmpdir(), "spec-interview-route-"));
+    mkdirSync(resolve(workDir, "specs"), { recursive: true });
+    writeFileSync(
+      resolve(workDir, "specs/benchmark-reporting.md"),
+      [
+        "# Benchmark Reporting",
+        "",
+        "## Overview",
+        "Add benchmark coverage status to reports and list output.",
+        "",
+        "## Detailed Design",
+        "The report and list output share one coverage status model.",
+        "",
+        "## Test Plan",
+        "Validate report and list behavior.",
+        "",
+        "## Acceptance Criteria",
+        "Coverage status appears in both surfaces.",
+        "",
+        "## Assumptions & Risks",
+        "Benchmark coverage status is informational.",
+        "",
+        "## Next command",
+        "`$roadmap`",
+      ].join("\n"),
+    );
+
+    const assertions = setup!.assertResult({
+      stdout: "",
+      stderr: "",
+      exitCode: 0,
+      workDir,
+      files: ["specs/benchmark-reporting.md"],
+    });
+
+    expect(assertions.find((assertion) => assertion.description === "Output recommends $roadmap")).toMatchObject({
+      pass: true,
+    });
+    expect(assertions.some((assertion) => assertion.description === "Output recommends $plan-phase")).toBe(false);
+    const nextRouteCriterion = setup!.qualityEvaluator?.rubric.criteria.find((criterion) => criterion.id === "actionable-next-route");
+    expect(nextRouteCriterion?.evaluate("## Next command\n`$roadmap`")).toMatchObject({
+      score: 1,
+    });
+    expect(nextRouteCriterion?.evaluate("## Next command\n`$plan-phase`")).toMatchObject({
+      score: 0,
+    });
+    expect(setup!.qualityEvaluator?.rubric.criteria.some((criterion) => criterion.id === "file-reference")).toBe(false);
   });
 
   it("uses custom setup for deterministic Tier 2 and Tier 3 global workflows", () => {

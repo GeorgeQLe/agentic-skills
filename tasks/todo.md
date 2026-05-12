@@ -26,6 +26,12 @@
 
 **Result:** Updated `tests/layer4/setups/tier1-workflows.setup.ts` to align the hard assertion and output-quality next-route criterion with the mirrored `spec-interview` contract. Removed the generated-spec body file-reference quality criterion because the skill contract requires creating `specs/benchmark-reporting.md`, not embedding fixture file paths inside the generated spec. Validation passed with focused layer1 benchmark setup tests, benchmark coverage validation, `pnpm --dir tests verify --skill spec-interview`, and a one-run Codex smoke benchmark that passed 1/1 with 100.0% quality and no blocked runs.
 
+## Current Fix: benchmark-test-skill Setup Alignment Gate
+
+**Goal:** Make basic benchmark setup versus skill-contract drift fail during verify/layer1 before paid or slow benchmark runs.
+
+**Result:** Added a layer1 alignment test that reads the mirrored `spec-interview` contracts and proves the custom benchmark setup/rubric expects `$roadmap` rather than stale `$plan-phase`. Updated mirrored `benchmark-test-skill` pack contracts to explain layer1's static harness-contract gate and route setup-alignment failures to targeted benchmark remediation before running `pnpm bench`. Validation passed with focused layer1 benchmark setup tests, `pnpm --dir tests bench:coverage`, skill dependency/version/routing checks, `./install.sh`, `pnpm --dir tests verify --skill benchmark-test-skill`, generated showcase data refresh/validation, and `git diff --check`.
+
 ## Phase 37: Skills Showcase Next.js Preservation Refactor
 
 **Goal:** Preserve the existing Skills Showcase website while migrating it from static HTML/CSS/JS under `docs/skills-showcase/` into a minimal Next.js app that can support first-party newsletter capture in the following phase.
