@@ -2133,3 +2133,10 @@ Resolved all 10 findings from `/expert-review`:
 - Updated `src/showcase/smoke.test.tsx` — added tRPC client mock for FollowPage rendering.
 - Rewrote `src/showcase/newsletter-form.test.tsx` — mock tRPC hooks instead of DOM + fetch mocking.
 - Verified: typecheck clean, build passing, 52/52 showcase tests green.
+
+## 2026-05-12 — Benchmark-backed showcase demos
+
+- Added benchmark-backed demo rendering to the G Skillmap catalog cards so skills with persisted run artifacts can show a representative prompt and output excerpt alongside pass-rate, latency, cost, and quality metrics.
+- Sanitized generated benchmark demo excerpts to remove local temporary run directories while preserving artifact names and links to the persisted run JSON.
+- Refreshed Skills Showcase generated data and proof assets for both the archived static path and the Next.js app public assets.
+- Verified with focused layer1 generated-data coverage, focused showcase catalog tests, app typecheck, showcase data validation, and whitespace checks.
