@@ -122,7 +122,7 @@
   - Files: modify or delete files under `docs/skills-showcase/` only if the replacement app and docs clearly preserve public routes and data freshness; otherwise leave the old static files in place as compatibility evidence for this phase.
 
 ### Green
-- [ ] Step 37.7: Write regression tests covering migrated route/data behavior
+- [x] Step 37.7: Write regression tests covering migrated route/data behavior
   - Files: create or modify `apps/skills-showcase/src/showcase/*.test.tsx`, create or modify `apps/skills-showcase/src/showcase/*.test.ts`, create or modify test configuration under `apps/skills-showcase/` if needed
   - Cover public route rendering, generated asset loading/parsing, catalog/search/filter behavior, inspect proof rendering, workflow/pack surfaces, and the follow form's non-persistent states.
 - [ ] Step 37.8: Run local app validation, generated-data validation, and whitespace checks; perform only concrete cleanup found by validation
@@ -199,7 +199,19 @@
 - Updated `apps/skills-showcase/README.md`: removed "retained for compatibility" language, noted static site files removed.
 - Validator passes, Next.js build produces 6 routes, `git diff --check` clean.
 
-### Next Step Plan — Step 37.7
+### Step 37.7 Result
+
+- Added Vitest + @testing-library/react + jsdom test infrastructure to `apps/skills-showcase`.
+- Created Next.js module mocks (`next/link`, `next/navigation`, `next/script`) for jsdom testing.
+- Wrote 54 tests across 5 test files:
+  - `routes.test.ts` — 7 tests: route inventory (count, uniqueness, required hrefs/labels)
+  - `catalog.test.tsx` — 17 tests: catalog search/filter, pack map rendering, proof artifacts/validation/history/boundaries, follow proof
+  - `workflows.test.tsx` — 11 tests: selector rendering, default workflow, step navigation, prev/next/restart controls, aria-pressed state
+  - `newsletter-form.test.tsx` — 9 tests: provider-missing/ready initial state, email validation, pending/success/error submission states
+  - `smoke.test.tsx` — 8 tests: smoke rendering of all 6 page components (HomePage, WorkflowsPage, CatalogPage, PacksPage, InspectPage, FollowPage)
+- Verified: `pnpm test` passes (54/54), `pnpm typecheck` passes, `git diff --check` clean.
+
+### Previous Next Step Plan — Step 37.7
 
 - **Scope:** Write regression tests covering migrated route/data behavior for the Next.js Skills Showcase app. No test framework exists yet — Vitest must be added.
 - **Files to create/modify:**
