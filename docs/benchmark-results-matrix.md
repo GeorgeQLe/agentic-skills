@@ -18,7 +18,7 @@ This matrix tracks skills that already have persisted benchmark run data and gra
 |---|---|---:|---:|---:|---:|---|---|---|
 | `benchmark-agent-review` | Codex | `tests/benchmarks/runs/benchmark-agent-review-codex-1d9a5c8b/report.json` | 1 | 100% | 100.0% | none | graded | One evaluated persisted run with deterministic quality scoring. |
 | `benchmark-test-skill` | Claude | `tests/benchmarks/runs/benchmark-test-skill-claude-d0075f7e/report.json` | 2 | 100% | 72.9% | `benchmark/review-benchmark-test-skill-2026-05-12.md` | graded | Curated report: `benchmark/test-benchmark-test-skill-2026-05-12.md`. Subjective review median score available. |
-| `benchmark-test-skill` | Codex | `tests/benchmarks/runs/benchmark-test-skill-codex-76616c00/report.json` | 3 | 100% | 85.7% | `benchmark/review-benchmark-test-skill-2026-05-12.md` | graded | Curated report: `benchmark/test-benchmark-test-skill-2026-05-12.md`. Subjective review median score available. |
+| `benchmark-test-skill` | Codex | `tests/benchmarks/runs/benchmark-test-skill-codex-2527788d/report.json` | 1 | 100% | 91.4% | `benchmark/review-benchmark-test-skill-2026-05-12.md` | graded | Curated report: `benchmark/test-benchmark-test-skill-2026-05-12.md`. One evaluated persisted run with deterministic quality scoring. Subjective review median score available. |
 | `design-system` | Claude | `tests/benchmarks/runs/design-system-claude-d263df0d/report.json` | 3 | 100% | not scored | none | partially graded | Curated report: `benchmark/test-design-system-2026-05-10.md`. Hard assertion evidence exists; no quality score in the latest persisted evaluated report. |
 | `design-system` | Codex | `tests/benchmarks/runs/design-system-codex-43b808d6/report.json` | 1 | 100% | 90.9% | none | graded | Curated report: `benchmark/test-design-system-2026-05-10.md`. One evaluated persisted run with deterministic quality scoring. |
 | `investigate` | Codex | `tests/benchmarks/runs/investigate-codex-701bd642/report.json` | 1 | 100% | 100.0% | none | graded | One evaluated persisted run with deterministic quality scoring. |
@@ -37,7 +37,7 @@ This matrix tracks skills that already have persisted benchmark run data and gra
 |---|---|---|---|---|
 | `affected` | Codex | `tests/benchmarks/runs/affected-codex-3c36c9a8/report.json` | blocked/incomplete | Report exists with zero total and evaluated runs. Do not count as benchmarked. |
 | `benchmark-test-skill` | Codex | `tests/benchmarks/runs/benchmark-test-skill-codex-8a1dccd0/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
-| `run` | Codex | `tests/benchmarks/runs/run-codex-a8487bb5/report.json` | blocked/incomplete | Report exists with zero total and evaluated runs. Do not count as benchmarked. Prefer the later evaluated report listed above. |
+| `run` | Codex | `tests/benchmarks/runs/run-codex-f04cc521/report.json` | blocked/incomplete | Report exists with zero total and evaluated runs. Do not count as benchmarked. Prefer the later evaluated report listed above. |
 | `spec-interview` | Claude | `tests/benchmarks/runs/spec-interview-claude-b83d0caa/report.json` | blocked/incomplete | Report exists with zero evaluated runs. |
 | `youtube-video-audit` | Codex | `tests/benchmarks/runs/youtube-video-audit-codex-306e24a9/report.json` | blocked/incomplete | Report exists with zero total and evaluated runs. Do not count as benchmarked. Prefer the later evaluated report listed above. |
 
