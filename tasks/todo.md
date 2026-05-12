@@ -4,9 +4,15 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
-## Priority Task Queue
+## Priority Documentation Todo
 
-- [ ] `/research-roadmap` - Scan documentation health and build priority documentation queue because all roadmap phases are complete and no documentation scan has been run yet.
+- [x] Documentation is current; no missing or stale research, spec, roadmap, or task artifacts found.
+
+**Notes:**
+- All 7 devtool research docs exist. Foundational docs (user-map, integration-map, dx-journey, adoption) date to 2026-04-22 with 55+ skill commits since; refresh is advisory, not blocking. Next `/devtool-docs-audit` is due 2026-05-30.
+- Skills Showcase website has a full spec chain: `specs/skills-showcase-website.md`, `specs/ui-skills-showcase-website.md`, plus interview records. No additional research documentation is needed for the website.
+- No `specs/ux-variations-*.md` exists, but UX decisions were made via UI interview and are baked into the built site. Creating a retroactive UX variations doc would be low-value.
+- 5 ideas in `tasks/ideas.md` are unspecced; candidates for `/feature-interview` if any are prioritized.
 
 ## Phase 39: Benchmark Results Visibility And Safe Git Fixtures
 
