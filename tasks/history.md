@@ -1,5 +1,11 @@
 # Session History
 
+## 2026-05-12 — Step 38.6: Create admin newsletter page with secret-based auth gate
+
+- Created `app/admin/newsletter/page.tsx`: server component shell with noindex metadata.
+- Created `src/showcase/admin-newsletter.tsx`: client component with login gate (`adminLogin` mutation), subscriber table with search (`adminList` query), copy-active-emails to clipboard, CSV download (`adminExport` query). Styled with existing showcase classes.
+- Validation: typecheck, build, 52/52 tests, `git diff --check` clean.
+
 ## 2026-05-12 — Step 38.2: Create database schema, connection module, and migration SQL
 
 - Created `src/db/schema.ts`: `NewsletterSubscriber` interface, `SubscriberStatus` type union.
