@@ -74,7 +74,7 @@
   - Parse persisted `benchmark/test-*.md` reports to extract skill name, date, agent, hard pass rate, quality score, subjective review grade (when present), and raw report path.
   - Generate a clean Markdown matrix table in `docs/benchmark-results-matrix.md` from the parsed data, replacing the hand-maintained content with generated output.
   - Add a freshness validation step to `scripts/validate-skills-showcase-data.sh` that fails when the matrix is stale relative to benchmark reports.
-- [ ] Step 39.2: Add benchmark results surface to Skills Showcase UI.
+- [x] Step 39.2: Add benchmark results surface to Skills Showcase UI.
   - Classification: automated
   - Files: create `apps/skills-showcase/app/benchmarks/page.tsx` (server page with static HTML structure), create `apps/skills-showcase/src/showcase/benchmarks.tsx` (client component rendering the aggregated benchmark results table), modify `apps/skills-showcase/app/globals.css` (benchmark results page styles), modify `apps/skills-showcase/src/showcase/catalog.tsx` (add link from benchmark-passed tags to `/benchmarks`), regenerate `apps/skills-showcase/public/assets/skills-data.js`
 
@@ -147,6 +147,60 @@
 - [ ] No regressions in previous phase tests.
 
 ## Routing
+
+## Review — Step 39.2
+
+- Completed on 2026-05-12.
+- Created `/benchmarks` page at `apps/skills-showcase/app/benchmarks/page.tsx` with server-rendered shell following the catalog page pattern.
+- Created `src/showcase/benchmarks.tsx` client component that reads `window.SKILLS_SHOWCASE_DATA.skills`, filters to those with `benchmarkEvidence`, deduplicates by `mirrorKey`, and renders an aggregated table with columns: Skill, Status, Agent, Pass Rate, Quality, Date, Report.
+- Extracted shared TypeScript interfaces (`BenchmarkEvidence`, `BenchmarkAgent`, `BenchmarkQuality`, `BenchmarkDemo`, `Skill`, `Pack`, `ShowcaseData`) from `catalog.tsx` into `src/showcase/types.ts`.
+- Updated `catalog.tsx` to import shared types and make the "benchmark-passed" tag chip link to `/benchmarks` via `tag-link` styling.
+- Added "Benchmarks" nav link to `ShowcaseHeader.tsx` and `MobilePanel.tsx`.
+- Added `/benchmarks` route to `routes.ts` and updated `routes.test.ts` count from 7 to 8.
+- Added benchmark table CSS (`.benchmarks-table`, `.badge`, `.badge-graded`, `.badge-partial`, `.tag-link`) to `globals.css`.
+- Added smoke test for `BenchmarksPage` in `smoke.test.tsx`.
+- Created `src/showcase/benchmarks.test.tsx` with 10 tests covering: table rendering, deduplication, count, graded/partial badges, catalog links, GitHub report links, quality scores, missing data notice.
+- Regenerated showcase data and proof data.
+- Validation:
+  - `npx vitest run` — 85 tests passed across 8 files.
+  - `npx next build` — succeeded, `/benchmarks` rendered as static route.
+  - `pnpm --dir tests test:layer1` — 1304 tests passed across 12 files.
+  - `git diff --check` — passed.
+
+- **Next work:** Step 39.3 — design safe disposable GitHub test-repository fixture infrastructure
+- **Recommended next command:** `/run`
+
+## Handoff — Step 39.3
+
+### What Needs to Be Built
+
+Step 39.3 designs the safe disposable GitHub test-repository fixture infrastructure used by Steps 39.4 and 39.5 to benchmark `commit-and-push-by-feature` and `sync`.
+
+**Create** `docs/safe-git-benchmark-fixtures.md` — design doc covering:
+- The permission-gated disposable repository workflow: explicit user approval before any `gh repo create`, `gh repo delete`, or mutation of a live GitHub test repository.
+- Cleanup handling: cleanup failures are infrastructure-blocked evidence, not skill failures.
+- Naming convention for disposable repos (e.g., `agentic-skills-bench-<skill>-<timestamp>`).
+- The lifecycle: create → clone → seed with fixture files → run benchmark → evaluate → cleanup.
+- Security boundary: disposable repos are private, contain no secrets, and are deleted after use.
+
+**Create** `tests/layer4/helpers/disposable-repo.ts` — reusable fixture helper:
+- `createDisposableRepo(skillName: string)` — calls `gh repo create` with explicit confirmation gate, returns `{ repoUrl, localPath, cleanup }`.
+- `seedRepo(localPath: string, files: Record<string, string>)` — writes fixture files, commits, and pushes initial state.
+- `cleanupRepo(repoUrl: string)` — calls `gh repo delete` with confirmation gate. Logs cleanup failure as infrastructure-blocked, not a test failure.
+- All `gh` operations must be gated: the helper throws or returns a blocked status if confirmation is not granted.
+- Check for existing `tests/layer4/helpers/` directory structure and follow existing patterns.
+
+**Validation:**
+- `pnpm --dir tests test:layer1` — must pass (no regressions).
+- TypeScript compilation of the new helper file.
+- `git diff --check` — no whitespace errors.
+
+### Execution Profile
+- **Parallel mode:** serial
+- **Test strategy:** tests-after
+
+### Handoff
+Implement only this step, validate it, then run `/ship` when done.
 
 ## Review — Step 39.1
 
