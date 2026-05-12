@@ -5,6 +5,16 @@
 **Current phase:** Phase 38 of 39 — First-Party Newsletter Capture And Admin
 **Last completed phase:** Phase 37 — Skills Showcase Next.js Preservation Refactor
 
+## Current Documentation Update: G Skillmap Brand
+
+**Goal:** Record `gskillmap.com` as the production domain and align public site/docs language around the **G Skillmap** brand while keeping `agentic-skills` as the underlying open-source library name.
+
+**Plan:**
+- [x] Update site metadata, header, homepage, footer, and app README to use **G Skillmap** and `gskillmap.com`.
+- [x] Update product/UI/newsletter specs with the brand/domain decision and skill-map layout vocabulary.
+- [x] Update root design guidance so future UI work preserves G Skillmap naming, map language, routes, coordinates, nodes, pack maps, and proof surfaces.
+- [x] Verify remaining brand references and whitespace.
+
 ## Current Triage: benchmark-test-skill Fresh Benchmark Failure
 
 **Goal:** Triage the fresh `$benchmark-test-skill benchmark-test-skill` benchmark failure after the latest targeted fix.
@@ -190,6 +200,12 @@ Straightforward doc/config updates. Key changes:
 - **Recommended next command:** `/run`
 
 ## Review
+
+### Ad-Hoc: G Skillmap Brand And Domain
+
+**Review:** Complete. Updated the public site shell, metadata, hero, footer, app README, root design guidance, and product/UI/newsletter specs so the public brand is **G Skillmap** and the production domain is `gskillmap.com`. The layout guidance now explicitly preserves skill-map language: maps, routes, coordinates, nodes, pack maps, catalog entries, and proof surfaces. `agentic-skills` remains the name of the underlying open-source library/repository.
+
+**Validation:** `rg` found no stale `G / agentic-skills` or `Agentic Skills Showcase` references in the active app/spec/design/task scope. `pnpm --dir apps/skills-showcase typecheck` passed. `git diff --check` passed.
 
 ### Ad-Hoc: YouTube Concept Research Skill
 
