@@ -16,6 +16,17 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillmap** and the production domain is `gskillmap.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill-map language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Fix: benchmark-test-skill Neutral Benchmark Fixture
+
+**Goal:** Remove misleading Codex-specific fixture evidence from the `benchmark-test-skill` tier1 benchmark while preserving runner-specific `/ship` and `$ship` route assertions.
+
+**Acceptance Criteria:**
+- [x] Existing-skill overlap confirms the fix belongs in the benchmark harness/setup, not a new skill.
+- [x] The fixture raw session path is neutral and no longer nudges Claude toward `$ship`.
+- [x] The fixture prompt says runner route convention is authoritative regardless of fixture filenames or raw session paths.
+- [x] Layer1 coverage guards against reintroducing the misleading `run-codex-abc` fixture.
+- [ ] Focused layer1 tests, benchmark coverage, verify, smoke benchmarks, and whitespace validation pass.
+
 ## Current Triage: benchmark-test-skill Fresh Benchmark Failure
 
 **Goal:** Triage the fresh `$benchmark-test-skill benchmark-test-skill` benchmark failure after the latest targeted fix.
