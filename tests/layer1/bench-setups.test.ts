@@ -408,6 +408,88 @@ describe("benchmark setup registry", () => {
     expect(setup!.qualityEvaluator?.rubric.criteria.some((criterion) => criterion.id === "file-reference")).toBe(false);
   });
 
+  it("keeps the benchmark-test-skill setup aligned with report-level route labels", () => {
+    const setup = resolveBenchSetup("benchmark-test-skill");
+    expect(setup).toBeDefined();
+
+    const codexSkill = readFileSync(
+      resolve(TESTS_ROOT, "../packs/agentic-skills-bench/codex/benchmark-test-skill/SKILL.md"),
+      "utf8",
+    );
+    const claudeSkill = readFileSync(
+      resolve(TESTS_ROOT, "../packs/agentic-skills-bench/claude/benchmark-test-skill/SKILL.md"),
+      "utf8",
+    );
+
+    expect(codexSkill).toContain("recommended next route, using a literal label");
+    expect(codexSkill).toContain("Recommended next skill: $benchmark-agent-review <skill>");
+    expect(claudeSkill).toContain("recommended next route, using a literal label");
+    expect(claudeSkill).toContain("Recommended next skill: /benchmark-agent-review <skill>");
+    expect(setup!.prompt).toContain("literal `Recommended next command:` line");
+    expect(setup!.prompt).toContain("Claude `/ship`, Codex `$ship`");
+
+    const workDir = mkdtempSync(resolve(tmpdir(), "benchmark-test-skill-route-"));
+    mkdirSync(resolve(workDir, "benchmark"), { recursive: true });
+    const reportBody = (route: string) => [
+      "# Benchmark Test Run",
+      "",
+      "## Verify",
+      "layer1 PASS in 7.1s; layer2 SKIPPED.",
+      "",
+      "## Benchmark",
+      "Benchmark coverage for run: custom; pass rate 1.0; latency p50 1200; cost 0.42.",
+      "",
+      "## Sources",
+      "`bench-output.txt`, `verify-output.txt`, `tests/benchmarks/runs/run-codex-abc/report.json`, `benchmark/test-run-2026-05-11.md`.",
+      "",
+      "Recommended next command:",
+      route,
+    ].join("\n");
+
+    writeFileSync(resolve(workDir, "benchmark/test-run-2026-05-11.md"), reportBody("/ship"));
+    expect(
+      setup!.assertResult(
+        {
+          stdout: "",
+          stderr: "",
+          exitCode: 0,
+          workDir,
+          files: ["benchmark/test-run-2026-05-11.md"],
+        },
+        { agent: "claude" },
+      ).find((assertion) => assertion.description === "Output recommends /ship"),
+    ).toMatchObject({
+      pass: true,
+    });
+
+    writeFileSync(resolve(workDir, "benchmark/test-run-2026-05-11.md"), reportBody("$ship"));
+    expect(
+      setup!.assertResult(
+        {
+          stdout: "",
+          stderr: "",
+          exitCode: 0,
+          workDir,
+          files: ["benchmark/test-run-2026-05-11.md"],
+        },
+        { agent: "codex" },
+      ).find((assertion) => assertion.description === "Output recommends $ship"),
+    ).toMatchObject({
+      pass: true,
+    });
+
+    const nextRouteCriterion = setup!.qualityEvaluator?.rubric.criteria.find((criterion) => criterion.id === "actionable-next-route");
+    expect(nextRouteCriterion?.evaluate("Recommended next command:\n/ship")).toMatchObject({
+      score: 1,
+    });
+    expect(nextRouteCriterion?.evaluate("Recommended next command:\n$ship")).toMatchObject({
+      score: 1,
+    });
+    expect(nextRouteCriterion?.evaluate("Next: $ship")).toMatchObject({
+      score: 0,
+    });
+  });
+
   it("uses custom setup for deterministic Tier 2 and Tier 3 global workflows", () => {
     const setup = resolveBenchSetup("affected");
     const target = resolveBenchTarget("affected");

@@ -94,6 +94,7 @@ Populate the report from `report.json` and verify the output includes:
 - cost per run and total cost
 - mean pairwise similarity and outlier count
 - raw session path
+- recommended next route, using a literal label such as `Recommended next command:` or `Recommended next skill:`
 
 After writing the report, verify the file exists and contains the benchmark target, agent rows, pass-rate or blocked-run data, latency, cost, and raw session path. If any required report field is missing, treat the workflow as incomplete and fix the report before marking the benchmark done.
 
@@ -109,6 +110,8 @@ Print a concise benchmark summary:
 - total cost
 - report path
 - next review handoff when subjective output-quality judgment or remediation planning is still needed
+
+The Markdown report and the final assistant response must both include a literal next-route label accepted by the harness, such as `Recommended next skill: $benchmark-agent-review <skill>` or `Recommended next command: $ship`.
 
 ## Constraints
 
