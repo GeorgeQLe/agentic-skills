@@ -112,10 +112,10 @@ Use this structure:
 
 After writing the artifact, recommend the next contextual creator-media skill in the final response as `Recommended next skill: <command>`.
 
-Default recommendation: `/youtube-format-research` from the `remotion` pack when the user wants to reuse the video's structure, style, edit, or design; `/youtube-competitive-research` when the user asks why the video performed well or what can be learned from a competitor; otherwise `/content-programming` when the research should inform future topics.
+Default recommendation: `/youtube-format-research` from the `remotion` pack when the user wants to reuse the video's structure, style, edit, or design; `/youtube-competitive-research` when the user asks why the video performed well or what can be learned from a specific competitor; `/youtube-concept-research` when the reference should inform a proposed new video concept; otherwise `/content-programming` when the research should inform future topics.
 
 If the default successor already exists and is current, recommend the first missing or stale downstream creator-media artifact in this order:
 
-`/youtube-channel-audit` -> `/youtube-video-audit` -> `/youtube-vid-research` -> `/youtube-competitive-research` -> `/youtube-title-thumbnail-audit` -> `/youtube-description-optimizer` -> `/youtube-portfolio` -> `/youtube-peer-benchmark` -> `/youtube-search-positioning` -> `/youtube-cadence-diagnosis` -> `/creator-positioning` -> `/content-programming` -> `/series-spec` -> `/product-led-media-map` -> `/creator-metrics-review`
+`/youtube-channel-audit` -> `/youtube-video-audit` -> `/youtube-vid-research` -> `/youtube-concept-research` -> `/youtube-competitive-research` -> `/youtube-title-thumbnail-audit` -> `/youtube-description-optimizer` -> `/youtube-portfolio` -> `/youtube-peer-benchmark` -> `/youtube-search-positioning` -> `/youtube-cadence-diagnosis` -> `/creator-positioning` -> `/content-programming` -> `/series-spec` -> `/product-led-media-map` -> `/creator-metrics-review`
 
 If the sequence is ambiguous, multiple upstream artifacts are stale, or the recommendation depends on research vs production strategy, recommend `/content-programming` and explain the missing artifact.
