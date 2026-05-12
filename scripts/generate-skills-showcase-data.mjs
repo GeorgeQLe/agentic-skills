@@ -79,6 +79,7 @@ function parsePercent(value) {
 function compactText(value, maxLength = 700) {
   const clean = String(value || "")
     .replace(/\r\n/g, "\n")
+    .replace(/\/(?:private\/)?var\/folders\/[^\s)`]+\/skill-test-[A-Za-z0-9_-]+\/?/g, "")
     .replace(/[ \t]+\n/g, "\n")
     .replace(/\n{3,}/g, "\n\n")
     .trim();
