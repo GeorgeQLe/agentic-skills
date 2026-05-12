@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
@@ -16,8 +16,40 @@ describe("benchmark results matrix", () => {
     expect(matrix).toContain(
       "| `affected` | Codex | `tests/benchmarks/runs/affected-codex-3c36c9a8/report.json` | blocked/incomplete | Report exists with zero total and evaluated runs. Do not count as benchmarked. |",
     );
+    expect(matrix).toContain("## Safe Git-Fixture Skills");
     expect(matrix).toContain(
-      "`commit-and-push-by-feature` and `sync` are currently blocked in the coverage registry",
+      "`commit-and-push-by-feature` and `sync` now have custom benchmark coverage",
     );
+    expect(matrix).toContain("tests/layer4/setups/git-fixture-commit-and-push.setup.ts");
+    expect(matrix).toContain("tests/layer4/setups/git-fixture-sync.setup.ts");
+  });
+
+  it("does not claim commit-and-push-by-feature or sync are blocked", () => {
+    const matrix = readFileSync(resolve(repoRoot, "docs/benchmark-results-matrix.md"), "utf8");
+    expect(matrix).not.toContain("currently blocked in the coverage registry");
+  });
+
+  it("references the safe git benchmark fixtures design doc", () => {
+    const matrix = readFileSync(resolve(repoRoot, "docs/benchmark-results-matrix.md"), "utf8");
+    expect(matrix).toContain("docs/safe-git-benchmark-fixtures.md");
+  });
+});
+
+describe("phase 39 acceptance criteria", () => {
+  it("no GitHub Actions workflows exist", () => {
+    expect(existsSync(resolve(repoRoot, ".github/workflows"))).toBe(false);
+  });
+
+  it("safe git benchmark fixtures design doc exists", () => {
+    expect(existsSync(resolve(repoRoot, "docs/safe-git-benchmark-fixtures.md"))).toBe(true);
+  });
+
+  it("disposable repo helper exists", () => {
+    expect(existsSync(resolve(repoRoot, "tests/layer4/helpers/disposable-repo.ts"))).toBe(true);
+  });
+
+  it("git fixture setups exist for both unblocked skills", () => {
+    expect(existsSync(resolve(repoRoot, "tests/layer4/setups/git-fixture-commit-and-push.setup.ts"))).toBe(true);
+    expect(existsSync(resolve(repoRoot, "tests/layer4/setups/git-fixture-sync.setup.ts"))).toBe(true);
   });
 });

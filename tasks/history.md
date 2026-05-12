@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-05-12 — Steps 39.6/39.7: Regression tests and phase validation
+
+- Updated `scripts/generate-skills-showcase-data.mjs` to replace stale "currently blocked" text with "Safe Git-Fixture Skills" section reflecting custom coverage for `commit-and-push-by-feature` and `sync`.
+- Regenerated `docs/benchmark-results-matrix.md` and all showcase data assets.
+- Updated `tests/layer1/benchmark-results-matrix.test.ts`: replaced stale blocked assertion, added 6 new regression tests covering safe git-fixture content, no-GitHub-Actions constraint, and fixture file existence.
+- All 1310 layer1 tests pass. Validation script passes. Phase 39 complete.
+
 ## 2026-05-12 — Step 39.4: Add commit-and-push-by-feature safe fixture plan
 
 - Created `tests/layer4/setups/git-fixture-commit-and-push.setup.ts` — benchmark fixture that stages mixed-feature files (auth, UI, tests, docs) without committing, then asserts the skill produces multiple conventional commits grouped by feature and pushes them.
