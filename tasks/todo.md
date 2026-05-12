@@ -101,7 +101,7 @@
 - [x] Step 38.5: Refactor newsletter form to use tRPC subscribe mutation
   - Files: modify `apps/skills-showcase/src/showcase/newsletter-form.tsx`, modify `apps/skills-showcase/app/follow/page.tsx`
   - Replace the imperative `fetch` + `data-provider-endpoint` logic with a tRPC `newsletter.subscribe` mutation via TanStack Query. Preserve the state machine (ready, invalid-email, pending, success, error), ARIA attributes, and visual states. Remove the `provider-missing` state since the endpoint is now first-party. Remove the `data-provider-endpoint` attribute and related HTML notes from the follow page. Add `source_page` and `consent_text_version` to the mutation payload.
-- [ ] Step 38.6: Create admin newsletter page with secret-based auth gate
+- [x] Step 38.6: Create admin newsletter page with secret-based auth gate
   - Files: create `apps/skills-showcase/app/admin/newsletter/page.tsx`, create `apps/skills-showcase/src/showcase/admin-newsletter.tsx`
   - Build `/admin/newsletter` with a login gate (prompt for admin secret, call `adminLogin` mutation). After auth: subscriber list table with search input, copy-all-active-emails button, CSV download button. Use tRPC `adminList` and `adminExport` queries. Style consistently with the showcase blueprint system.
 - [ ] Step 38.7: Update deploy contract, routes, and documentation
@@ -137,59 +137,13 @@
 
 ## Ship Summary
 
-Step 38.5 complete — refactored `newsletter-form.tsx` from imperative DOM manipulation (`useEffect` + `querySelector` + `fetch`) to a proper React component using `useState`, `trpc.newsletter.subscribe.useMutation()`, and controlled inputs. Removed `provider-missing` state. Updated `app/follow/page.tsx` to render `<NewsletterFormClient />` directly instead of static form markup + `data-provider-endpoint`. Updated smoke tests and newsletter-form tests. 52/52 tests green, typecheck and build passing.
+Step 38.6 complete — created `/admin/newsletter` page with secret-based auth gate. Server component shell at `app/admin/newsletter/page.tsx` with `robots: noindex/nofollow`. Client component `admin-newsletter.tsx` implements login form calling `trpc.newsletter.adminLogin.useMutation()`, subscriber table with search via `trpc.newsletter.adminList.useQuery()`, copy-active-emails to clipboard, and CSV download via `trpc.newsletter.adminExport`. Styled with existing showcase classes (`form-panel`, `button`, `tag`, `eyebrow`, `coordinate`). Typecheck, build, and 52/52 tests pass. `git diff --check` clean.
 
 Deploy skipped (manual Vercel, not yet configured). No failing tests expected.
 
-## What needs to be built
-
-Create the admin newsletter page with secret-based auth gate.
-
-### Files to create/modify
-
-- `apps/skills-showcase/app/admin/newsletter/page.tsx` — Create the admin newsletter route page (server component shell with metadata).
-- `apps/skills-showcase/src/showcase/admin-newsletter.tsx` — Create `"use client"` admin newsletter component with:
-  - Login gate: text input for admin secret, calls `trpc.newsletter.adminLogin.useMutation()`
-  - After auth: subscriber list table using `trpc.newsletter.adminList.useQuery()`
-  - Search input that filters the list via the `search` query param
-  - "Copy all active emails" button — copies active subscriber emails to clipboard
-  - "Download CSV" button — calls `trpc.newsletter.adminExport.useQuery()` and triggers file download
-  - Style consistently with showcase blueprint system (use existing `form-panel`, `button`, `tag`, `eyebrow`, `coordinate` classes)
-
-### Technical approach
-
-**Auth gate:**
-- Component state: `authenticated` boolean, stored in React state (not persisted — relies on the HTTP-only session cookie set by `adminLogin`)
-- On page load: attempt an `adminList` query — if it succeeds, user is authenticated (cookie present); if 401, show login form
-- Login form: single input for secret, submit calls `adminLogin` mutation, on success set `authenticated = true`
-
-**Subscriber list:**
-- Use `trpc.newsletter.adminList.useQuery({ search, limit: 100, offset })` with refetch on search change
-- Render as a simple `<table>` with columns: email, status, source page, created at
-- Search input above the table with debounced refetch
-
-**Export actions:**
-- "Copy active emails": filter displayed data for `status === 'active'`, join with `, `, copy to clipboard
-- "Download CSV": call `adminExport` query, create Blob, trigger download
-
-### Execution Profile
-- **Parallel mode:** serial
-- **Integration owner:** main agent
-- **Test strategy:** tests-after
-
-### Verification
-- `pnpm --dir apps/skills-showcase typecheck` passes
-- `pnpm --dir apps/skills-showcase build` passes
-- `pnpm --dir apps/skills-showcase test` passes (52+ tests green)
-- `git diff --check` clean
-- Admin page renders login gate without errors
-- After login, list/search/copy/download all functional
-
-**Ship-one-step handoff:** implement only Step 38.6, validate it, then run `/ship` when done.
-
 ## Routing
 
-- **Next work:** Step 38.6 — Create admin newsletter page with secret-based auth gate
+- **Next work:** Step 38.7 — Update deploy contract, routes, and documentation
 - **Recommended next command:** `/run`
 
 ## Review
