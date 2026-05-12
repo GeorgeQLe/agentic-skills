@@ -20,6 +20,19 @@
 
 **Result:** Benchmark completed on 2026-05-12. Verify passed with layer1 in 8.4s across 1,256 tests; layer2 was skipped because no target-specific layer2 tests matched `benchmark-test-skill`. The both-agent benchmark completed with no infrastructure-blocked runs. Claude failed 0/3 hard assertions because all three runs omitted the required next-command handoff; Claude output quality averaged 63.1%, with 3 threshold failures and 6 critical failures. Codex passed 3/3 hard assertions; Codex output quality averaged 85.8%, with 1 threshold failure and 4 critical failures. Report: `benchmark/test-benchmark-test-skill-2026-05-12.md`. Recommended next command: `$session-triage benchmark-test-skill benchmark failure`.
 
+## Current Triage: benchmark-test-skill Benchmark Failure
+
+**Goal:** Triage the failed `benchmark-test-skill` benchmark and identify the smallest durable fix.
+
+**Acceptance Criteria:**
+- [x] The benchmark report and persisted run evidence are inspected.
+- [x] Mirrored Claude/Codex `benchmark-test-skill` contracts are compared.
+- [x] The tier1 benchmark setup, hard route assertion, and quality scoring path are inspected.
+- [x] Existing lessons are checked for relevant routing/rubric patterns.
+- [x] The triage report records verdict, root cause, responsible gap, validation plan, and next route.
+
+**Result:** Triage completed on 2026-05-12. The benchmark failure is verified, but the responsible gap is in the benchmark harness/rubric, not the mirrored `benchmark-test-skill` contracts. The hard route assertion recognizes `Next command` but not all contract-valid route shapes, and the quality rubric appears to penalize final runner summaries or generated reports for not repeating fixture file names. Report: `benchmark/triage-benchmark-test-skill-2026-05-12.md`. Recommended next command: `$targeted-skill-builder benchmark-test-skill benchmark failure`.
+
 ## Current Benchmark: spec-interview
 
 **Goal:** Run `$benchmark-test-skill spec-interview` through the repository harness with fresh eligibility, verify, and both-agent benchmark evidence on 2026-05-12.
@@ -143,6 +156,7 @@
 
 ## Review
 
+- 2026-05-12 — Completed `$session-triage benchmark-test-skill benchmark failure`. Verified the benchmark failure from persisted run evidence. Root cause is harness/rubric drift: `assertNextCommand` is stricter than the skill's allowed final-route contract, and the quality rubric should target the generated benchmark report artifact rather than over-weighting runner final-response summaries. Report: `benchmark/triage-benchmark-test-skill-2026-05-12.md`. Recommended next command: `$targeted-skill-builder benchmark-test-skill benchmark failure`.
 - 2026-05-12 — Completed `$benchmark-test-skill benchmark-test-skill`. Preflight found custom coverage in `tests/layer4/setups/tier1-workflows.setup.ts`. Verify passed with layer1 in 8.4s and layer2 skipped. Benchmark completed with no infrastructure-blocked runs: Claude failed 0/3 hard assertions due to missing next-command handoffs and averaged 63.1% quality; Codex passed 3/3 hard assertions and averaged 85.8% quality, with quality threshold/critical failures still present. Report: `benchmark/test-benchmark-test-skill-2026-05-12.md`. Recommended next command: `$session-triage benchmark-test-skill benchmark failure`.
 - 2026-05-11 — Completed `$targeted-skill-builder benchmark-agent-review remediation handoff`. Updated mirrored `benchmark-agent-review` contracts to require a remediation table and definitive next route for every material finding. Updated mirrored `benchmark-test-skill` contracts so deterministic benchmark execution hands off to `benchmark-agent-review` as a separate subjective review/remediation step when needed. Added layer1 contract lint coverage and refreshed the correction lesson.
 - 2026-05-11 — Planned Phase 37 from `tasks/roadmap.md` and `specs/first-party-skills-showcase-newsletter-capture.md`. Execution is serial because the app shell, generated data paths, route migration, styling, and deployment documentation share integration points. Test strategy is tests-after because the work is a preservation-focused UI/app migration with design parity checks after the route and asset surface exists.
