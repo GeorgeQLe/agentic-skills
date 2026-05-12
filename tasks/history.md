@@ -2019,3 +2019,13 @@ Resolved all 10 findings from `/expert-review`:
 
 - Refreshed `docs/skills-showcase/assets/github-proof-data.js` after the latest shipped history/spec commit changed the generated proof source fingerprint and recent history list.
 - Verified with `scripts/validate-skills-showcase-data.sh`, `node --check docs/skills-showcase/app.js`, and `git diff --check`.
+
+## 2026-05-12 — Step 37.3: Migrate showcase styling and client interactions
+
+- Ported the full Swiss grid/blueprint CSS from `docs/skills-showcase/styles.css` into `apps/skills-showcase/app/globals.css` — custom properties, grid system, component styles, responsive breakpoints, and animations.
+- Created `ShowcaseShell.tsx` ("use client") for mobile menu toggle and Escape-key dismissal.
+- Created `workflows.tsx` ("use client") for the 8-workflow selector, step animation with autoplay/pause, progress indicators, and workflow preview grid on the home page.
+- Created `catalog.tsx` ("use client") for catalog search/filter/platform interactions, pack map with filter/overlay/detail panel, proof rendering on the inspect page, and follow proof receipts.
+- Created `newsletter-form.tsx` ("use client") for the follow page newsletter form state machine (provider-missing, invalid-email, pending, success, error).
+- Wired all client components into their respective pages and the root layout. Added `.gitignore` for `.next/` and `node_modules/`.
+- Verified: `pnpm typecheck` passes, `pnpm build` produces 6 static routes, dev server renders styled pages with all data attributes present.
