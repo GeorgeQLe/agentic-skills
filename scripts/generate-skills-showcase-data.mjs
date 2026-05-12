@@ -438,20 +438,15 @@ This matrix tracks skills that already have persisted benchmark run data and gra
 
 - Most repository skills have custom benchmark setup coverage but do not yet have persisted evaluated benchmark data and grades.
 - The website currently has no public benchmark-results surface. A follow-up should expose this matrix or generated data derived from it in the Skills Showcase.
-- \`commit-and-push-by-feature\` and \`sync\` are currently blocked in the coverage registry, but they are plausible candidates for safe benchmark fixtures when a user explicitly permits creation of a temporary GitHub test repository through \`gh\`.
 
-## Safe Git-Fixture Candidate
+## Safe Git-Fixture Skills
 
-For \`commit-and-push-by-feature\` and \`sync\`, a safe setup can be designed around an ephemeral test repository instead of the primary repository:
+\`commit-and-push-by-feature\` and \`sync\` now have custom benchmark coverage using permission-gated disposable GitHub test repositories (see \`docs/safe-git-benchmark-fixtures.md\`):
 
-- Require explicit user permission before any live GitHub operation.
-- Create a temporary private GitHub repository with \`gh repo create\`.
-- Seed it with a minimal fixture project and a default branch.
-- Run the skill against only that temporary repository.
-- Assert expected git/remote behavior from the temporary repo state and persisted benchmark output.
-- Delete or archive the temporary repository at the end of the run, with cleanup failure reported as infrastructure-blocked.
+- \`commit-and-push-by-feature\`: \`tests/layer4/setups/git-fixture-commit-and-push.setup.ts\`
+- \`sync\`: \`tests/layer4/setups/git-fixture-sync.setup.ts\`
 
-This would convert those two skills from blocked coverage candidates into live, permission-gated integration benchmark targets without risking the main \`agentic-skills\` repository.
+Both fixtures require explicit user permission before any live GitHub operation (\`gh repo create\`, \`gh repo delete\`). Cleanup failures are reported as infrastructure-blocked evidence, not skill failures.
 `;
 
   writeFileSync(matrixOutputPath, md);
