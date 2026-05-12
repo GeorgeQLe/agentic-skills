@@ -105,6 +105,7 @@ Production-ready artifacts (series specs, video scripts, video builds) live unde
 | youtube-video-audit | `research/youtube/video-audit-<slug>-YYYY-MM-DD.md` |
 | youtube-vid-research | `research/youtube/video-research-<video-id-or-slug>-YYYY-MM-DD.md` |
 | youtube-format-research | `research/youtube/format-research-<video-id>-YYYY-MM-DD.md` |
+| youtube-concept-research | `research/youtube/concept-research-<slug>-YYYY-MM-DD.md` |
 | youtube-competitive-research | `research/youtube/competitive-research-<slug>-YYYY-MM-DD.md` |
 | youtube-title-thumbnail-audit | `research/youtube/title-thumbnail-audit-<slug>.md` |
 | youtube-description-optimizer | `research/youtube/description-optimizer-<slug>.md` |
