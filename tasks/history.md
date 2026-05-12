@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-05-12 — Step 37.5 Deployment and local operation documentation
+
+- Updated `docs/skills-reference.md` "Skills Showcase Freshness" section to document dual-write paths and mark the Next.js app as primary.
+- Rewrote `tasks/deploy.md` deploy contract with Next.js app as primary target and legacy static site as compatibility section.
+- Created `apps/skills-showcase/README.md` with local dev/build, data freshness validation, and relationship to `docs/skills-showcase/`.
+- Regenerated stale github-proof-data. Validator passes, no whitespace issues.
+
 ## 2026-05-12 — Step 37.4 Generated data pipeline for Next.js app
 
 - Updated `scripts/generate-skills-showcase-data.mjs` and `scripts/generate-skills-showcase-github-data.mjs` to dual-write to both `docs/skills-showcase/assets/` (compatibility) and `apps/skills-showcase/public/assets/` (Next.js app).
