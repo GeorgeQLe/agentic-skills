@@ -16,6 +16,17 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillmap** and the production domain is `gskillmap.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill-map language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Refactor: Benchmark-Backed Skill Demos
+
+**Goal:** Replace or augment curated/demo-only skill examples on the G Skillmap brand site with evidence-backed benchmark prompts and outputs from persisted benchmark runs.
+
+**Acceptance Criteria:**
+- [ ] The showcase data generator derives a compact demo payload from benchmark run artifacts when a skill has persisted benchmark evidence.
+- [ ] Demo payloads include the exact benchmark prompt source and representative output excerpt/path without exposing unrelated temp paths or excessive transcript noise.
+- [ ] The brand site renders benchmark-backed prompt/output demos for relevant pack/skill pages while preserving existing summary metrics.
+- [ ] Layer1 or generator tests cover the new data shape and fallback behavior when raw run artifacts are absent.
+- [ ] Showcase data is regenerated and validated.
+
 ## Current Fix: benchmark-test-skill Neutral Benchmark Fixture
 
 **Goal:** Remove misleading Codex-specific fixture evidence from the `benchmark-test-skill` tier1 benchmark while preserving runner-specific `/ship` and `$ship` route assertions.

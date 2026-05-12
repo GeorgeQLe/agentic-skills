@@ -5,6 +5,17 @@
 **Current phase:** Phase 38 of 39 — First-Party Newsletter Capture And Admin
 **Last completed phase:** Phase 37 — Skills Showcase Next.js Preservation Refactor
 
+## Current Refactor: Benchmark-Backed Skill Demos
+
+**Goal:** Use persisted benchmark data as the source of truth for relevant G Skillmap demo sections, showing representative prompts and outputs instead of hand-wavy curated examples.
+
+**Plan:**
+- [ ] Inspect current showcase generator/app demo rendering and benchmark artifact shape.
+- [ ] Extend generated skill data with sanitized prompt/output demo fields sourced from benchmark run JSON.
+- [ ] Update the brand site demo UI to render benchmark-backed prompt/output evidence where available.
+- [ ] Add focused tests for generator data shape and fallback behavior.
+- [ ] Regenerate showcase assets, run validation, and record review results.
+
 ## Current Fix: benchmark-test-skill Neutral Benchmark Fixture
 
 **Goal:** Remove misleading Codex-specific fixture evidence from the `benchmark-test-skill` tier1 benchmark while preserving runner-specific `/ship` and `$ship` route assertions.
@@ -143,7 +154,7 @@
   - Update deploy contract: remove "static export" / "no runtime API" / "no database" language, add Neon `DATABASE_URL` and `NEWSLETTER_ADMIN_SECRET` env var requirements, note server-side deployment. Add `/admin/newsletter` to routes.ts. Update README with new local dev setup (env vars, database).
 
 ### Green
-- [ ] Step 38.8: Write regression tests covering newsletter capture and admin behavior
+- [x] Step 38.8: Write regression tests covering newsletter capture and admin behavior
   - Files: create or modify test files under `apps/skills-showcase/src/`
   - Cover: subscribe mutation validation (valid email, invalid email, idempotent duplicate), newsletter form UI states (ready, invalid-email, pending, success, error — no more provider-missing), admin auth gate (reject without secret, accept with correct secret), admin list/search/export rendering, privacy (no subscriber data in generated assets).
 - [ ] Step 38.9: Run local app validation, database-contract checks, and whitespace checks; fix only concrete issues found by validation
@@ -171,7 +182,7 @@
 
 ## Ship Summary
 
-Step 38.7 complete — updated deploy contract, routes registry, README, and tests. Typecheck, build, and 52/52 tests pass.
+Step 38.8 complete — added 21 regression tests: admin newsletter UI (7 tests), tRPC newsletter router (10 tests), privacy check (1 test), plus routes.test.ts update. Typecheck clean, 73/73 tests pass.
 
 ## What needs to be built
 

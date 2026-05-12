@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-05-12 — Step 38.8: Write regression tests for newsletter capture and admin
+
+- Created `src/showcase/admin-newsletter.test.tsx`: 7 tests covering login gate (renders, submit, error, pending) and admin view (table, empty state, search, buttons).
+- Created `src/trpc/newsletter.test.ts`: 10 tests covering subscribe (valid, Zod rejection, DB error), adminLogin (correct/wrong/missing secret), adminList (auth gate, authenticated list), adminExport (CSV with escaping, auth gate).
+- Updated `src/showcase/routes.test.ts`: added privacy check scanning public assets for subscriber data patterns.
+- Validation: typecheck clean, 73/73 tests pass.
+
 ## 2026-05-12 — Step 38.7: Update deploy contract, routes, and documentation
 
 - Updated `tasks/deploy.md`: replaced static export/no-database language with server-side Node.js + Neon PostgreSQL, added env vars section, updated route list with `/admin/newsletter` and `/api/trpc/*`, removed stale Newsletter Provider section, updated launch checks.
