@@ -33,6 +33,19 @@
 
 **Result:** Triage completed on 2026-05-12. The benchmark failure is verified, but the responsible gap is in the benchmark harness/rubric, not the mirrored `benchmark-test-skill` contracts. The hard route assertion recognizes `Next command` but not all contract-valid route shapes, and the quality rubric appears to penalize final runner summaries or generated reports for not repeating fixture file names. Report: `benchmark/triage-benchmark-test-skill-2026-05-12.md`. Recommended next command: `$targeted-skill-builder benchmark-test-skill benchmark failure`.
 
+## Current Fix: benchmark-test-skill Benchmark Harness Routing
+
+**Goal:** Fix the `benchmark-test-skill` tier1 benchmark harness so contract-valid next-route labels and report evidence formats pass deterministic assertions and quality scoring.
+
+**Acceptance Criteria:**
+- [x] Existing-skill overlap confirms the fix belongs in the benchmark harness/setup, not a new skill.
+- [x] Route assertions accept `Next command`, `Recommended next command`, `Recommended next skill`, and `Next work` plus `Recommended next command`.
+- [x] The `benchmark-test-skill` fixture requires source file names and report path in generated reports.
+- [x] The output-quality rubric accepts semantic latency/cost evidence rather than one exact serialized key format.
+- [x] Focused layer1 tests, benchmark coverage, verify, and one-run Codex benchmark smoke pass.
+
+**Result:** Completed on 2026-05-12. Updated routing and quality helper coverage plus the `benchmark-test-skill` tier1 fixture. Validation passed with `pnpm --dir tests test:layer1 -- bench-setups bench-quality`, `pnpm --dir tests bench:coverage`, `pnpm --dir tests verify --skill benchmark-test-skill`, and `pnpm --dir tests bench --skill benchmark-test-skill --agent codex --runs 1 --chunk-size 1 --pause 0` (`benchmark-test-skill-codex-8a56e0ed`, 1/1 hard assertions, 100.0% quality, no blocked runs). Recommended next command: `$benchmark-test-skill benchmark-test-skill`.
+
 ## Current Benchmark: spec-interview
 
 **Goal:** Run `$benchmark-test-skill spec-interview` through the repository harness with fresh eligibility, verify, and both-agent benchmark evidence on 2026-05-12.
@@ -156,6 +169,7 @@
 
 ## Review
 
+- 2026-05-12 — Completed `$targeted-skill-builder benchmark-test-skill benchmark failure`. Updated the benchmark harness route helper and next-route quality criterion to accept contract-valid handoff labels beyond only `Next command`. Tightened the `benchmark-test-skill` tier1 fixture to require source file names and report path in generated reports, and made latency/cost quality evidence format-tolerant. Validation passed with focused layer1 tests, coverage, verify, and a 1-run Codex benchmark smoke (`benchmark-test-skill-codex-8a56e0ed`) with 100.0% hard pass and 100.0% quality. Recommended next command: `$benchmark-test-skill benchmark-test-skill`.
 - 2026-05-12 — Completed `$session-triage benchmark-test-skill benchmark failure`. Verified the benchmark failure from persisted run evidence. Root cause is harness/rubric drift: `assertNextCommand` is stricter than the skill's allowed final-route contract, and the quality rubric should target the generated benchmark report artifact rather than over-weighting runner final-response summaries. Report: `benchmark/triage-benchmark-test-skill-2026-05-12.md`. Recommended next command: `$targeted-skill-builder benchmark-test-skill benchmark failure`.
 - 2026-05-12 — Completed `$benchmark-test-skill benchmark-test-skill`. Preflight found custom coverage in `tests/layer4/setups/tier1-workflows.setup.ts`. Verify passed with layer1 in 8.4s and layer2 skipped. Benchmark completed with no infrastructure-blocked runs: Claude failed 0/3 hard assertions due to missing next-command handoffs and averaged 63.1% quality; Codex passed 3/3 hard assertions and averaged 85.8% quality, with quality threshold/critical failures still present. Report: `benchmark/test-benchmark-test-skill-2026-05-12.md`. Recommended next command: `$session-triage benchmark-test-skill benchmark failure`.
 - 2026-05-11 — Completed `$targeted-skill-builder benchmark-agent-review remediation handoff`. Updated mirrored `benchmark-agent-review` contracts to require a remediation table and definitive next route for every material finding. Updated mirrored `benchmark-test-skill` contracts so deterministic benchmark execution hands off to `benchmark-agent-review` as a separate subjective review/remediation step when needed. Added layer1 contract lint coverage and refreshed the correction lesson.

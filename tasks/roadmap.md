@@ -40,6 +40,19 @@ Phases 37-38 are planned from `specs/first-party-skills-showcase-newsletter-capt
 
 **Result:** Triage completed on 2026-05-12. The benchmark failure is verified, but the responsible gap is in the benchmark harness/rubric, not the mirrored `benchmark-test-skill` contracts. The hard route assertion recognizes `Next command` but not all contract-valid route shapes, and the quality rubric appears to penalize final runner summaries or generated reports for not repeating fixture file names. See `benchmark/triage-benchmark-test-skill-2026-05-12.md`. Recommended next command: `$targeted-skill-builder benchmark-test-skill benchmark failure`.
 
+## Current Fix: benchmark-test-skill Benchmark Harness Routing
+
+**Goal:** Fix the `benchmark-test-skill` tier1 benchmark harness so contract-valid next-route labels and report evidence formats pass deterministic assertions and quality scoring.
+
+**Acceptance Criteria:**
+- [x] Existing-skill overlap confirms the fix belongs in the benchmark harness/setup, not a new skill.
+- [x] Route assertions accept `Next command`, `Recommended next command`, `Recommended next skill`, and `Next work` plus `Recommended next command`.
+- [x] The `benchmark-test-skill` fixture requires source file names and report path in generated reports.
+- [x] The output-quality rubric accepts semantic latency/cost evidence rather than one exact serialized key format.
+- [x] Focused layer1 tests, benchmark coverage, verify, and one-run Codex benchmark smoke pass.
+
+**Result:** Completed on 2026-05-12. Updated routing and quality helper coverage plus the `benchmark-test-skill` tier1 fixture. Validation passed with `pnpm --dir tests test:layer1 -- bench-setups bench-quality`, `pnpm --dir tests bench:coverage`, `pnpm --dir tests verify --skill benchmark-test-skill`, and `pnpm --dir tests bench --skill benchmark-test-skill --agent codex --runs 1 --chunk-size 1 --pause 0` (`benchmark-test-skill-codex-8a56e0ed`, 1/1 hard assertions, 100.0% quality, no blocked runs). Recommended next command: `$benchmark-test-skill benchmark-test-skill`.
+
 ## Current Benchmark: spec-interview
 
 **Goal:** Run `$benchmark-test-skill spec-interview` through the repository harness with fresh eligibility, verify, and both-agent benchmark evidence on 2026-05-12.
