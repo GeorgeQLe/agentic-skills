@@ -426,6 +426,13 @@ describe("benchmark setup registry", () => {
     expect(claudeSkill).toContain("recommended next route, using a literal label");
     expect(claudeSkill).toContain("Recommended next skill: /benchmark-agent-review <skill>");
     expect(setup!.prompt).toContain("literal `Recommended next command:` line");
+    expect(setup!.prompt).toContain("exact evidence from the fixture");
+    expect(setup!.prompt).toContain("`layer1 PASS`");
+    expect(setup!.prompt).toContain("`layer2 SKIPPED`");
+    expect(setup!.prompt).toContain("`passRate=1.0` or `100%`");
+    expect(setup!.prompt).toContain("`p50=1200`");
+    expect(setup!.prompt).toContain("`totalCost=0.42`");
+    expect(setup!.prompt).toContain("literal report path `benchmark/test-run-2026-05-11.md`");
     expect(setup!.prompt).toContain("Claude `/ship`, Codex `$ship`");
     expect(setup!.prompt).toContain("regardless of fixture file names or raw session path text");
     expect(setup!.prompt).not.toContain("run-codex-abc");
@@ -440,7 +447,7 @@ describe("benchmark setup registry", () => {
       "layer1 PASS in 7.1s; layer2 SKIPPED.",
       "",
       "## Benchmark",
-      "Benchmark coverage for run: custom; pass rate 1.0; latency p50 1200; cost 0.42.",
+      "Benchmark coverage for run: custom; passRate=1.0; p50=1200; totalCost=0.42.",
       "",
       "## Sources",
       "`bench-output.txt`, `verify-output.txt`, `tests/benchmarks/runs/run-agent-abc/report.json`, `benchmark/test-run-2026-05-11.md`.",
@@ -479,6 +486,67 @@ describe("benchmark setup registry", () => {
       ).find((assertion) => assertion.description === "Output recommends $ship"),
     ).toMatchObject({
       pass: true,
+    });
+
+    const codexAssertions = setup!.assertResult(
+      {
+        stdout: "",
+        stderr: "",
+        exitCode: 0,
+        workDir,
+        files: ["benchmark/test-run-2026-05-11.md"],
+      },
+      { agent: "codex" },
+    );
+    expect(codexAssertions.find((assertion) => assertion.description === "Output includes layer1 PASS")).toMatchObject({
+      pass: true,
+    });
+    expect(codexAssertions.find((assertion) => assertion.description === "Output includes layer2 SKIPPED")).toMatchObject({
+      pass: true,
+    });
+    expect(codexAssertions.find((assertion) => assertion.description === "Output includes p50=1200")).toMatchObject({
+      pass: true,
+    });
+    expect(codexAssertions.find((assertion) => assertion.description === "Output includes totalCost=0.42")).toMatchObject({
+      pass: true,
+    });
+
+    writeFileSync(
+      resolve(workDir, "benchmark/test-run-2026-05-11.md"),
+      [
+        "# Benchmark Test Run",
+        "",
+        "Verify status: PASS.",
+        "Benchmark pass rate: 100%.",
+        "Latency and cost recorded.",
+        "Raw session path: tests/benchmarks/runs/run-agent-abc/report.json.",
+        "Source file names: bench-output.txt, verify-output.txt.",
+        "Report path: benchmark/test-run-2026-05-11.md.",
+        "",
+        "Recommended next command: $ship",
+      ].join("\n"),
+    );
+    const thinAssertions = setup!.assertResult(
+      {
+        stdout: "",
+        stderr: "",
+        exitCode: 0,
+        workDir,
+        files: ["benchmark/test-run-2026-05-11.md"],
+      },
+      { agent: "codex" },
+    );
+    expect(thinAssertions.find((assertion) => assertion.description === "Output includes layer1 PASS")).toMatchObject({
+      pass: false,
+    });
+    expect(thinAssertions.find((assertion) => assertion.description === "Output includes layer2 SKIPPED")).toMatchObject({
+      pass: false,
+    });
+    expect(thinAssertions.find((assertion) => assertion.description === "Output includes p50=1200")).toMatchObject({
+      pass: false,
+    });
+    expect(thinAssertions.find((assertion) => assertion.description === "Output includes totalCost=0.42")).toMatchObject({
+      pass: false,
     });
 
     const nextRouteCriterion = setup!.qualityEvaluator?.rubric.criteria.find((criterion) => criterion.id === "actionable-next-route");
@@ -851,10 +919,11 @@ describe("Tier 1 workflow benchmark setups", () => {
       [
         "# Benchmark run",
         "",
-        "verify passed with one layer skip.",
-        "custom coverage pass rate: 1.0.",
-        "latency p50 was 1200ms.",
-        "cost was 0.42.",
+        "layer1 PASS in 7.1s.",
+        "layer2 SKIPPED because no tests matched run.",
+        "custom coverage passRate=1.0.",
+        "latency p50=1200.",
+        "totalCost=0.42.",
         "raw session path: tests/benchmarks/runs/run-agent-abc/report.json",
         "source files: bench-output.txt and verify-output.txt.",
         "report path: benchmark/test-run-2026-05-11.md.",
