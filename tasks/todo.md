@@ -5,6 +5,21 @@
 **Current phase:** Phase 38 of 39 — First-Party Newsletter Capture And Admin
 **Last completed phase:** Phase 37 — Skills Showcase Next.js Preservation Refactor
 
+## Current Benchmark Rerun: benchmark-test-skill
+
+**Goal:** Rerun `$benchmark-test-skill benchmark-test-skill` after the benchmark harness routing fix, using fresh eligibility, verify, and both-agent benchmark evidence on 2026-05-12.
+
+**Acceptance Criteria:**
+- [x] `pnpm bench --list-skills` confirms `benchmark-test-skill` is known and reports its coverage status.
+- [x] `pnpm verify --skill benchmark-test-skill` passes or blocks benchmark execution with a recorded failure.
+- [x] `pnpm bench --skill benchmark-test-skill --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [x] `benchmark/test-benchmark-test-skill-2026-05-12.md` records fresh verify, benchmark, latency, cost, consistency, and raw session evidence.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Preflight:** `benchmark-test-skill` is known with `coverage=custom` using `tests/layer4/setups/tier1-workflows.setup.ts`.
+
+**Result:** Benchmark rerun completed on 2026-05-12. Verify passed with layer1 in 8.5s across 1,256 tests; layer2 was skipped because no target-specific layer2 tests matched `benchmark-test-skill`. The both-agent benchmark completed with no infrastructure-blocked runs. Claude failed 0/3 hard assertions because all three runs omitted the required next-command handoff, and run #1 also exited with code 143; Claude output quality averaged 89.8%, with no threshold or critical failures. Codex passed 3/3 hard assertions; Codex output quality averaged 85.8%, with 1 threshold failure and 2 critical failures. Report: `benchmark/test-benchmark-test-skill-2026-05-12.md`. Recommended next command: `$session-triage benchmark-test-skill benchmark failure`.
+
 ## Phase 38: First-Party Newsletter Capture And Admin
 
 **Goal:** Add first-party newsletter capture to the app-enabled Skills Showcase using Neon persistence, tRPC contracts, TanStack Query client state, and a protected admin export page.
@@ -52,7 +67,7 @@
 **Subagent lanes:** none
 
 ### Implementation
-- [ ] Step 38.1: Add Phase 38 dependencies and configure environment
+- [x] Step 38.1: Add Phase 38 dependencies and configure environment
   - Files: modify `apps/skills-showcase/package.json`, create `apps/skills-showcase/.env.example`, modify `apps/skills-showcase/next.config.mjs`
   - Add `@trpc/server`, `@trpc/client`, `@trpc/react-query` (11.17.0), `@tanstack/react-query` (5.x), `@neondatabase/serverless` (1.x), `zod` (4.x). Update `next.config.mjs` to remove any static export assumption. Create `.env.example` with `DATABASE_URL` and `NEWSLETTER_ADMIN_SECRET` placeholders.
 - [ ] Step 38.2: Create database schema, connection module, and migration SQL
@@ -108,10 +123,10 @@
 **Goal:** Add a mirrored `youtube-concept-research` skill to the `youtube-ops` pack for concept-first YouTube research before scripting or production.
 
 **Plan:**
-- [ ] Add Codex `packs/youtube-ops/codex/youtube-concept-research/SKILL.md`.
-- [ ] Add Claude mirror `packs/youtube-ops/claude/youtube-concept-research/SKILL.md`.
-- [ ] Update `packs/youtube-ops/PACK.md` to include the new skill in the flow and skill list.
-- [ ] Update relevant next-skill routing lists so the concept-first lane is discoverable.
-- [ ] Verify frontmatter, routing references, whitespace, and git diff.
+- [x] Add Codex `packs/youtube-ops/codex/youtube-concept-research/SKILL.md`.
+- [x] Add Claude mirror `packs/youtube-ops/claude/youtube-concept-research/SKILL.md`.
+- [x] Update `packs/youtube-ops/PACK.md` to include the new skill in the flow and skill list.
+- [x] Update relevant next-skill routing lists so the concept-first lane is discoverable.
+- [x] Verify frontmatter, routing references, whitespace, and git diff.
 
-**Review:** Pending.
+**Review:** Complete. Both Claude and Codex mirrors exist, PACK.md updated, routing references updated across all pack skills, whitespace clean.
