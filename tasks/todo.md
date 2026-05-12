@@ -10,11 +10,15 @@
 **Goal:** Rerun `$benchmark-test-skill benchmark-test-skill` after the latest targeted fix, using fresh eligibility, verify, and both-agent benchmark evidence on 2026-05-12.
 
 **Acceptance Criteria:**
-- [ ] `pnpm bench --list-skills` confirms `benchmark-test-skill` is known and reports its coverage status.
-- [ ] `pnpm verify --skill benchmark-test-skill` passes or blocks benchmark execution with a recorded failure.
-- [ ] `pnpm bench --skill benchmark-test-skill --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
-- [ ] `benchmark/test-benchmark-test-skill-2026-05-12.md` records fresh verify, benchmark, latency, cost, consistency, and raw session evidence.
-- [ ] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+- [x] `pnpm bench --list-skills` confirms `benchmark-test-skill` is known and reports its coverage status.
+- [x] `pnpm verify --skill benchmark-test-skill` passes or blocks benchmark execution with a recorded failure.
+- [x] `pnpm bench --skill benchmark-test-skill --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [x] `benchmark/test-benchmark-test-skill-2026-05-12.md` records fresh verify, benchmark, latency, cost, consistency, and raw session evidence.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Preflight:** `benchmark-test-skill` is known with `coverage=custom` using `tests/layer4/setups/tier1-workflows.setup.ts`.
+
+**Result:** Fresh benchmark validation completed on 2026-05-12. Verify passed with layer1 in 9.1s across 1,302 tests; layer2 was skipped because no target-specific layer2 tests matched `benchmark-test-skill`. The both-agent benchmark completed with no infrastructure-blocked runs. Claude passed 1/3 hard assertions and failed two runs because the output recommended `/ship`; Claude output quality averaged 80.0%, with 2 threshold failures and 2 critical failures. Codex passed 2/3 hard assertions and failed one run because it created `benchmark/test-run-2026-05-11.md` instead of the expected benchmark-test-skill report path; Codex output quality averaged 85.7%, with 1 threshold failure and 1 critical failure. Report: `benchmark/test-benchmark-test-skill-2026-05-12.md`. Recommended next command: `$session-triage benchmark-test-skill benchmark failure`.
 
 ## Previous Benchmark Rerun: benchmark-test-skill
 
@@ -94,7 +98,7 @@
 - [x] Step 38.4: Set up tRPC client, TanStack Query provider, and layout integration
   - Files: create `apps/skills-showcase/src/trpc/client.ts`, create `apps/skills-showcase/src/trpc/provider.tsx`, modify `apps/skills-showcase/app/layout.tsx`
   - Create tRPC-React client binding with TanStack Query. Create a `"use client"` provider component wrapping `QueryClientProvider` and `trpc.Provider`. Add to root layout around `{children}`.
-- [ ] Step 38.5: Refactor newsletter form to use tRPC subscribe mutation
+- [x] Step 38.5: Refactor newsletter form to use tRPC subscribe mutation
   - Files: modify `apps/skills-showcase/src/showcase/newsletter-form.tsx`, modify `apps/skills-showcase/app/follow/page.tsx`
   - Replace the imperative `fetch` + `data-provider-endpoint` logic with a tRPC `newsletter.subscribe` mutation via TanStack Query. Preserve the state machine (ready, invalid-email, pending, success, error), ARIA attributes, and visual states. Remove the `provider-missing` state since the endpoint is now first-party. Remove the `data-provider-endpoint` attribute and related HTML notes from the follow page. Add `source_page` and `consent_text_version` to the mutation payload.
 - [ ] Step 38.6: Create admin newsletter page with secret-based auth gate
@@ -133,32 +137,40 @@
 
 ## Ship Summary
 
-Step 38.4 complete — created tRPC client infrastructure: `src/trpc/client.ts` (typed `createTRPCReact<AppRouter>` binding), `src/trpc/provider.tsx` (`"use client"` provider wrapping `QueryClientProvider` + `trpc.Provider` with `httpBatchLink`), and updated `app/layout.tsx` to wrap body contents with `<TRPCProvider>`. All 54 showcase tests green, typecheck and build passing.
+Step 38.5 complete — refactored `newsletter-form.tsx` from imperative DOM manipulation (`useEffect` + `querySelector` + `fetch`) to a proper React component using `useState`, `trpc.newsletter.subscribe.useMutation()`, and controlled inputs. Removed `provider-missing` state. Updated `app/follow/page.tsx` to render `<NewsletterFormClient />` directly instead of static form markup + `data-provider-endpoint`. Updated smoke tests and newsletter-form tests. 52/52 tests green, typecheck and build passing.
 
 Deploy skipped (manual Vercel, not yet configured). No failing tests expected.
 
 ## What needs to be built
 
-Refactor the newsletter form to use the tRPC subscribe mutation instead of the current imperative `fetch` + `data-provider-endpoint` logic.
+Create the admin newsletter page with secret-based auth gate.
 
-### Files to modify
+### Files to create/modify
 
-- `apps/skills-showcase/src/showcase/newsletter-form.tsx` — Replace imperative `fetch` with `trpc.newsletter.subscribe.useMutation()`. Preserve the state machine (ready, invalid-email, pending, success, error), ARIA attributes, and visual states. Remove the `provider-missing` state since the endpoint is now first-party. Add `source_page` and `consent_text_version` to the mutation payload.
-- `apps/skills-showcase/app/follow/page.tsx` — Remove the `data-provider-endpoint` attribute and related HTML notes from the follow page, since the endpoint is now hardcoded via the tRPC client.
+- `apps/skills-showcase/app/admin/newsletter/page.tsx` — Create the admin newsletter route page (server component shell with metadata).
+- `apps/skills-showcase/src/showcase/admin-newsletter.tsx` — Create `"use client"` admin newsletter component with:
+  - Login gate: text input for admin secret, calls `trpc.newsletter.adminLogin.useMutation()`
+  - After auth: subscriber list table using `trpc.newsletter.adminList.useQuery()`
+  - Search input that filters the list via the `search` query param
+  - "Copy all active emails" button — copies active subscriber emails to clipboard
+  - "Download CSV" button — calls `trpc.newsletter.adminExport.useQuery()` and triggers file download
+  - Style consistently with showcase blueprint system (use existing `form-panel`, `button`, `tag`, `eyebrow`, `coordinate` classes)
 
 ### Technical approach
 
-**Newsletter form refactor** (`src/showcase/newsletter-form.tsx`):
-- Import `trpc` from `@/trpc/client`
-- Use `trpc.newsletter.subscribe.useMutation()` to get `mutate`, `isPending`, `isSuccess`, `isError`
-- On submit: call `mutate({ email, sourcePage: window.location.pathname, consentTextVersion: "1.0" })`
-- Map mutation states to existing UI states: `isPending` → pending, `isSuccess` → success, `isError` → error
-- Keep client-side email validation for the `invalid-email` state
-- Remove `provider-missing` state and any `data-provider-endpoint` reading logic
+**Auth gate:**
+- Component state: `authenticated` boolean, stored in React state (not persisted — relies on the HTTP-only session cookie set by `adminLogin`)
+- On page load: attempt an `adminList` query — if it succeeds, user is authenticated (cookie present); if 401, show login form
+- Login form: single input for secret, submit calls `adminLogin` mutation, on success set `authenticated = true`
 
-**Follow page** (`app/follow/page.tsx`):
-- Remove `data-provider-endpoint` attribute from the newsletter form container
-- Remove any HTML comments about configuring the provider endpoint
+**Subscriber list:**
+- Use `trpc.newsletter.adminList.useQuery({ search, limit: 100, offset })` with refetch on search change
+- Render as a simple `<table>` with columns: email, status, source page, created at
+- Search input above the table with debounced refetch
+
+**Export actions:**
+- "Copy active emails": filter displayed data for `status === 'active'`, join with `, `, copy to clipboard
+- "Download CSV": call `adminExport` query, create Blob, trigger download
 
 ### Execution Profile
 - **Parallel mode:** serial
@@ -168,14 +180,16 @@ Refactor the newsletter form to use the tRPC subscribe mutation instead of the c
 ### Verification
 - `pnpm --dir apps/skills-showcase typecheck` passes
 - `pnpm --dir apps/skills-showcase build` passes
-- `pnpm --dir apps/skills-showcase test` passes (54/54 existing tests still green)
+- `pnpm --dir apps/skills-showcase test` passes (52+ tests green)
 - `git diff --check` clean
+- Admin page renders login gate without errors
+- After login, list/search/copy/download all functional
 
-**Ship-one-step handoff:** implement only Step 38.5, validate it, then run `/ship` when done.
+**Ship-one-step handoff:** implement only Step 38.6, validate it, then run `/ship` when done.
 
 ## Routing
 
-- **Next work:** Step 38.5 — Refactor newsletter form to use tRPC subscribe mutation
+- **Next work:** Step 38.6 — Create admin newsletter page with secret-based auth gate
 - **Recommended next command:** `/run`
 
 ## Review
