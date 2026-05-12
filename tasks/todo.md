@@ -22,6 +22,8 @@
 
 **Triage Result:** Completed `$session-triage benchmark-test-skill benchmark failure`. The failure is verified as Claude output noncompliance with the benchmark fixture's route-label requirement: Claude generated the report and recommended `$ship`, but did not include a literal next-route label in the generated report file, while Codex did. The durable gap is the fixture/contract alignment around artifact-level route labels, not a new skill or broad recurrence issue. Report: `benchmark/triage-benchmark-test-skill-rerun-2026-05-12.md`. Recommended next command: `$targeted-skill-builder benchmark-test-skill benchmark failure`.
 
+**Targeted Fix Result:** Completed `$targeted-skill-builder benchmark-test-skill benchmark failure`. Mirrored benchmark-test-skill contracts now require a report-level literal next-route label, and the tier1 fixture prompts for `Recommended next command:` with Claude `/ship` and Codex `$ship` route expectations. Added layer1 coverage for the mirrored contract wording, fixture prompt, hard assertions, and next-route quality scoring. Validation passed with install/dependency/version/routing checks, focused layer1 tests, benchmark coverage, `pnpm --dir tests verify --skill benchmark-test-skill`, Claude smoke `benchmark-test-skill-claude-d6496431` (1/1 hard pass, 94.3% quality), and Codex smoke `benchmark-test-skill-codex-159870b2` (1/1 hard pass, 100.0% quality). Recommended next command: `$benchmark-test-skill benchmark-test-skill`.
+
 ## Phase 38: First-Party Newsletter Capture And Admin
 
 **Goal:** Add first-party newsletter capture to the app-enabled Skills Showcase using Neon persistence, tRPC contracts, TanStack Query client state, and a protected admin export page.
