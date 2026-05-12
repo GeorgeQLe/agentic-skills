@@ -151,23 +151,21 @@
 
 - 2026-05-12 — Completed Step 37.3. Ported full CSS from `docs/skills-showcase/styles.css` into `globals.css`. Created 4 client components: `ShowcaseShell.tsx` (menu toggle), `workflows.tsx` (8-workflow selector/animation/preview), `catalog.tsx` (search/filter, pack map, proof rendering, follow proof), `newsletter-form.tsx` (form state machine). Wired all into pages and layout. Added `.gitignore`. Verified: `pnpm typecheck` clean, `pnpm build` produces 6 static routes, dev server renders styled pages.
 
-### Next Step Plan — Step 37.4
+- 2026-05-12 — Completed Step 37.4. Updated both generator scripts to dual-write to `docs/skills-showcase/assets/` and `apps/skills-showcase/public/assets/`. Extended validator to fingerprint all four generated assets. Added `<Script strategy="beforeInteractive">` tags in root layout for `skills-data.js` and `github-proof-data.js`. Verified: generators produce both outputs, validator passes, build succeeds with 6 routes, dev server serves data assets at `/assets/`, catalog/proof pages reference data globals. `docs/skills-reference.md` had no existing asset-path references to update.
 
-- **Scope:** Preserve generated showcase data as committed static app assets. The Next.js app currently has no access to `skills-data.js` or `github-proof-data.js` — the client components read from `window.SKILLS_SHOWCASE_DATA` and `window.SKILLS_SHOWCASE_GITHUB_PROOF_DATA` but no script tags load those files.
+### Next Step Plan — Step 37.5
+
+- **Scope:** Update deployment and local operation documentation for the app-enabled showcase. The Next.js app at `apps/skills-showcase/` now has working routes, styling, client interactions, and generated data. Documentation still references only the old static site at `docs/skills-showcase/`.
 - **Files to modify/create:**
-  - `apps/skills-showcase/public/assets/skills-data.js` — copy or symlink from `docs/skills-showcase/assets/skills-data.js`
-  - `apps/skills-showcase/public/assets/github-proof-data.js` — copy or symlink from `docs/skills-showcase/assets/github-proof-data.js`
-  - `scripts/generate-skills-showcase-data.mjs` — update output path to also write to the Next.js app's `public/assets/` directory
-  - `scripts/generate-skills-showcase-github-data.mjs` — update output path to also write to the Next.js app's `public/assets/` directory
-  - `scripts/validate-skills-showcase-data.sh` — update to validate the app asset path alongside or instead of the old static-site path
-  - `apps/skills-showcase/app/layout.tsx` — add `<script>` tags to load the generated data files from `/assets/skills-data.js` and `/assets/github-proof-data.js`
-  - `docs/skills-reference.md` — update any references to the generated data asset paths
+  - `docs/skills-reference.md` — update the "Skills Showcase Freshness" section (lines 41-48) to mention both the old `docs/skills-showcase/assets/` and new `apps/skills-showcase/public/assets/` output paths, and note the Next.js app as the primary surface
+  - `deploy.md` — update the deploy contract: change project root from `docs/skills-showcase/` to `apps/skills-showcase/`, add build command (`pnpm build` or `next build`), set output directory to `.next` or `out`, update validation commands to include the app's typecheck/build, and note that the old static site is retained as compatibility until Step 37.6
+  - `apps/skills-showcase/README.md` — create a minimal README with: what the app is, how to run locally (`pnpm dev`), how to build (`pnpm build`), how to validate data freshness, and the relationship to `docs/skills-showcase/`
 - **Key decisions:**
-  - Generated assets must set `window.SKILLS_SHOWCASE_DATA` and `window.SKILLS_SHOWCASE_GITHUB_PROOF_DATA` before client components mount — use `<Script strategy="beforeInteractive">` or standard `<script>` in the layout
-  - Keep `docs/skills-showcase/assets/` as compatibility output for now (Step 37.6 handles retirement)
-  - The validator must prove canonical generated assets are fresh after skill/pack metadata changes
+  - The deploy contract should describe both the current (old static) and upcoming (Next.js app) deploy targets, clearly marking the app as the intended successor
+  - Do not create, modify, or recommend GitHub Actions
+  - Keep the old static site path in docs as compatibility until Step 37.6 handles retirement
 - **Execution Profile:** serial, implementation-safe, main agent
-- **Test strategy:** tests-after
-- **Verification:** Run `node scripts/generate-skills-showcase-data.mjs` and `node scripts/generate-skills-showcase-github-data.mjs`, verify outputs land in `apps/skills-showcase/public/assets/`, run `scripts/validate-skills-showcase-data.sh`, confirm catalog/proof data renders in the dev server
-- **Acceptance criteria:** Generated data files load in the Next.js app, catalog populates with skill rows, proof/inspect surfaces show data, validator passes against the app asset path.
-- **Ship-one-step handoff:** implement only Step 37.4, validate it, then run `/ship` when done.
+- **Test strategy:** tests-after (documentation changes only, no code)
+- **Verification:** Read the modified docs and confirm they accurately describe the current dual-path state. Run `scripts/validate-skills-showcase-data.sh` to confirm it still passes. Confirm `git diff --check` shows no whitespace issues.
+- **Acceptance criteria:** `docs/skills-reference.md` references the app asset path, `deploy.md` describes the Next.js app deployment, `apps/skills-showcase/README.md` exists with local dev and validation instructions.
+- **Ship-one-step handoff:** implement only Step 37.5, validate it, then run `/ship` when done.
