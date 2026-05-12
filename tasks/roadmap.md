@@ -36,7 +36,9 @@ Current brand decision: the public site brand is **G Skillmap** and the producti
 - [x] The fixture raw session path is neutral and no longer nudges Claude toward `$ship`.
 - [x] The fixture prompt says runner route convention is authoritative regardless of fixture filenames or raw session paths.
 - [x] Layer1 coverage guards against reintroducing the misleading `run-codex-abc` fixture.
-- [ ] Focused layer1 tests, benchmark coverage, verify, smoke benchmarks, and whitespace validation pass.
+- [x] Focused layer1 tests, benchmark coverage, verify, smoke benchmarks, and whitespace validation pass.
+
+**Result:** Completed on 2026-05-12. The `benchmark-test-skill` tier1 fixture now uses neutral `run-agent-abc` benchmark evidence, explicitly tells runners that their command convention overrides fixture filenames/raw session text, preserves runner-specific `/ship` and `$ship` assertions, and uses a focused timeout for this slower fixture. Layer1 coverage guards against reintroducing `run-codex-abc`. Validation passed with focused layer1 tests, benchmark coverage, verify, Claude smoke `benchmark-test-skill-claude-a04dd30c` (1/1 hard pass), Codex smoke `benchmark-test-skill-codex-103b0680` (1/1 hard pass), install/link checks, routing checks, and `git diff --check`. Recommended next command: `$benchmark-test-skill benchmark-test-skill`.
 
 ## Current Triage: benchmark-test-skill Fresh Benchmark Failure
 
