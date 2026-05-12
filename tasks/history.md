@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-05-12 — Step 39.4: Add commit-and-push-by-feature safe fixture plan
+
+- Created `tests/layer4/setups/git-fixture-commit-and-push.setup.ts` — benchmark fixture that stages mixed-feature files (auth, UI, tests, docs) without committing, then asserts the skill produces multiple conventional commits grouped by feature and pushes them.
+- Removed `commit-and-push-by-feature` from `TIER23_GLOBAL_BLOCKED_SKILLS` in `tests/harness/bench-coverage.ts`.
+- Added `commit-and-push-by-feature` to `COVERAGE_OVERRIDES` with `coverage: "custom"`, `agent_scope: "both"`, `setup_path` pointing to the new fixture.
+- Updated `tests/layer1/bench-setups.test.ts` to assert the skill is now custom (not blocked) with correct fixture metadata.
+- Verified: 1304 layer1 tests passed, bench:coverage valid (145 skills), git diff --check clean.
+
 ## 2026-05-12 — Step 39.3: Design safe disposable GitHub test-repository fixture infrastructure
 
 - Created `docs/safe-git-benchmark-fixtures.md` — design doc covering permission-gated disposable repo workflow, naming convention, lifecycle, security boundary, and cleanup handling.
