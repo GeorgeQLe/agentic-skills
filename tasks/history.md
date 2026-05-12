@@ -1,5 +1,18 @@
 # Session History
 
+## 2026-05-12 — Step 38.1: Add Phase 38 dependencies and configure environment
+
+- Added 6 runtime dependencies to `apps/skills-showcase/package.json`: `@trpc/server`, `@trpc/client`, `@trpc/react-query` ^11.17.0, `@tanstack/react-query` ^5, `@neondatabase/serverless` ^1, `zod` ^4.
+- Created `apps/skills-showcase/.env.example` with `DATABASE_URL` and `NEWSLETTER_ADMIN_SECRET` placeholders.
+- Confirmed `next.config.mjs` has no `output: "export"` — compatible with API routes.
+- Validation: typecheck, build, 54/54 tests, showcase data fresh, `git diff --check` clean.
+
+## 2026-05-12 — Ad-Hoc: YouTube Concept Research Skill
+
+- Added mirrored `youtube-concept-research` skill to `youtube-ops` pack (Claude + Codex).
+- Updated PACK.md flow and skill list. Updated next-skill routing across all youtube-ops and creator-foundation skills.
+- Benchmark rerun results recorded for `benchmark-test-skill`.
+
 ## 2026-05-12 — Phase 37 Complete: Skills Showcase Next.js Preservation Refactor
 
 - Completed Step 37.8: local app validation and whitespace checks. Regenerated stale data assets.
