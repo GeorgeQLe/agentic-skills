@@ -429,6 +429,7 @@ describe("benchmark setup registry", () => {
     expect(setup!.prompt).toContain("Claude `/ship`, Codex `$ship`");
     expect(setup!.prompt).toContain("regardless of fixture file names or raw session path text");
     expect(setup!.prompt).not.toContain("run-codex-abc");
+    expect(setup!.timeoutMs).toBe(BENCH_TIMEOUTS_MS.focused);
 
     const workDir = mkdtempSync(resolve(tmpdir(), "benchmark-test-skill-route-"));
     mkdirSync(resolve(workDir, "benchmark"), { recursive: true });
