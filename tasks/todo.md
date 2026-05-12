@@ -67,6 +67,17 @@
 
 **Subagent lanes:** none
 
+## Ad-Hoc Benchmark Rerun: benchmark-test-skill Fresh Self Benchmark
+
+**Goal:** Run `$benchmark-test-skill benchmark-test-skill` with fresh eligibility, verify, and both-agent benchmark evidence on 2026-05-12.
+
+**Plan:**
+- [x] Confirm `benchmark-test-skill` is a known benchmark harness target and record its coverage status.
+- [x] Run `pnpm verify --skill benchmark-test-skill` from `tests/` and stop if it fails.
+- [ ] If verify passes, run `pnpm bench --skill benchmark-test-skill --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [ ] Write and validate `benchmark/test-benchmark-test-skill-2026-05-12.md` with verify, benchmark, latency, cost, consistency, and raw session evidence.
+- [ ] Record results here, then commit and push intended benchmark/task changes on `master`.
+
 ### Implementation
 - [x] Step 39.1: Validate and promote `docs/benchmark-results-matrix.md` as a generated source of truth.
   - Classification: automated
@@ -100,7 +111,7 @@
   - Shared types: extract `BenchmarkEvidence`, `BenchmarkAgent`, `BenchmarkQuality`, `BenchmarkDemo`, `Skill` interfaces to `src/showcase/types.ts` since both catalog and benchmarks need them.
   - The page should note at the top that benchmark results come from persisted run data and the generated matrix, linking to `docs/benchmark-results-matrix.md` on GitHub.
   - Do NOT confuse "benchmark coverage setup" (which 30+ skills have) with "completed graded runs" (which 14 skills have). Only show skills with actual `benchmarkEvidence` data.
-- [ ] Step 39.3: Design safe disposable GitHub test-repository fixture infrastructure.
+- [x] Step 39.3: Design safe disposable GitHub test-repository fixture infrastructure.
   - Classification: automated
   - Files: create `docs/safe-git-benchmark-fixtures.md` (design doc), create `tests/layer4/helpers/disposable-repo.ts` (fixture helper)
   - Document the permission-gated disposable repository workflow: explicit user approval before `gh repo create`, `gh repo delete`, or any mutation of a live GitHub test repository.
@@ -141,7 +152,7 @@
 - [ ] `commit-and-push-by-feature` has a safe fixture plan using an explicit-permission disposable GitHub test repository.
 - [ ] `sync` has a safe fixture plan using an explicit-permission disposable GitHub test repository.
 - [ ] The benchmark coverage registry reflects any newly unblocked setup status only after the safe fixture is implemented and validated.
-- [ ] Cleanup and infrastructure-block handling are documented for the disposable repository workflow.
+- [x] Cleanup and infrastructure-block handling are documented for the disposable repository workflow.
 - [ ] No GitHub Actions are created, modified, or recommended.
 - [ ] All phase tests pass.
 - [ ] No regressions in previous phase tests.
@@ -201,6 +212,20 @@ Step 39.3 designs the safe disposable GitHub test-repository fixture infrastruct
 
 ### Handoff
 Implement only this step, validate it, then run `/ship` when done.
+
+## Review — Step 39.3
+
+- Completed on 2026-05-12.
+- Created `docs/safe-git-benchmark-fixtures.md` — design doc covering permission-gated disposable repo workflow, naming convention (`agentic-skills-bench-<skill>-<timestamp>`), lifecycle (create → clone → seed → benchmark → evaluate → cleanup), security boundary (private, no secrets, deleted after use), and cleanup handling (failures are infrastructure-blocked evidence, not skill failures).
+- Created `tests/layer4/helpers/disposable-repo.ts` — reusable fixture helper exporting `createDisposableRepo()`, `seedRepo()`, and `cleanupRepo()`, all gated behind a `ConfirmationGate` callback. Returns discriminated union types (`CreateResult`, `CleanupResult`) with `infrastructure-blocked` status when confirmation is denied or `gh` commands fail.
+- Follows existing `setup-helpers/` patterns: pure functions, typed returns, no side effects without explicit invocation.
+- Validation:
+  - `pnpm --dir tests test:layer1` — 1304 tests passed across 12 files (no regressions).
+  - TypeScript compilation — project does not have `@types/node` as an explicit dep; existing layer4 files have the same `tsc --noEmit` limitation. File is syntactically valid and follows the same import/export patterns as sibling helpers.
+  - `git diff --check` — passed.
+
+- **Next work:** Step 39.4 — add `commit-and-push-by-feature` safe fixture plan using the disposable repo infrastructure
+- **Recommended next command:** `/run`
 
 ## Review — Step 39.1
 
