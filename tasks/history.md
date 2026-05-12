@@ -1,5 +1,11 @@
 # Session History
 
+## 2026-05-12 — Step 37.6 Retire old static-site surface
+
+- Deleted 8 static site files (HTML/CSS/JS) from `docs/skills-showcase/`. Kept `docs/skills-showcase/assets/` for dual-write.
+- Updated `docs/skills-reference.md`, `tasks/deploy.md`, and `apps/skills-showcase/README.md` to remove compatibility language and mark Next.js app as sole showcase surface.
+- Regenerated stale github-proof-data. Validator passes, build produces 6 routes.
+
 ## 2026-05-12 — Step 37.5 Deployment and local operation documentation
 
 - Updated `docs/skills-reference.md` "Skills Showcase Freshness" section to document dual-write paths and mark the Next.js app as primary.
