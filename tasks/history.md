@@ -1,5 +1,11 @@
 # Session History
 
+## 2026-05-12 — Step 38.9: Local app validation (no-op)
+
+- Typecheck, build, 73/73 tests, `git diff --check` all passed during Step 38.8 session.
+- Showcase data validated; stale docs copy is from pre-existing benchmark demo scaffolding, not newsletter work.
+- No fixes needed. Marked complete as no-op.
+
 ## 2026-05-12 — Step 38.8: Write regression tests for newsletter capture and admin
 
 - Created `src/showcase/admin-newsletter.test.tsx`: 7 tests covering login gate (renders, submit, error, pending) and admin view (table, empty state, search, buttons).
