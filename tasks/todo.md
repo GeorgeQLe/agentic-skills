@@ -5,6 +5,17 @@
 **Current phase:** Phase 37 of 38 — Skills Showcase Next.js Preservation Refactor
 **Last completed phase:** Phase 36 — Benchmark Output Quality Evaluation
 
+## Current Benchmark: benchmark-test-skill
+
+**Goal:** Run `$benchmark-test-skill benchmark-test-skill` through the repository harness with fresh eligibility, verify, and both-agent benchmark evidence on 2026-05-12.
+
+**Acceptance Criteria:**
+- [ ] `pnpm bench --list-skills` confirms `benchmark-test-skill` is known and reports its coverage status.
+- [ ] `pnpm verify --skill benchmark-test-skill` passes or blocks benchmark execution with a recorded failure.
+- [ ] `pnpm bench --skill benchmark-test-skill --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [ ] `benchmark/test-benchmark-test-skill-2026-05-12.md` records verify, benchmark, latency, cost, consistency, and raw session evidence.
+- [ ] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
 ## Current Benchmark: spec-interview
 
 **Goal:** Run `$benchmark-test-skill spec-interview` through the repository harness with fresh eligibility, verify, and both-agent benchmark evidence on 2026-05-12.
@@ -87,7 +98,7 @@
 - [x] Step 37.4: Preserve generated showcase data as committed static app assets
   - Files: modify `scripts/generate-skills-showcase-data.mjs`, modify `scripts/generate-skills-showcase-github-data.mjs`, modify `scripts/validate-skills-showcase-data.sh`, create `apps/skills-showcase/public/assets/skills-data.js`, create `apps/skills-showcase/public/assets/github-proof-data.js`, modify `docs/skills-reference.md`
   - Either keep `docs/skills-showcase/assets/` as compatibility output or clearly supersede it, but the validator must prove the canonical generated assets are fresh after skill or pack metadata changes.
-- [ ] Step 37.5: Update deployment and local operation documentation for the app-enabled showcase
+- [x] Step 37.5: Update deployment and local operation documentation for the app-enabled showcase
   - Files: modify `README.md`, modify `docs/skills-reference.md`, create or modify `apps/skills-showcase/README.md`
   - Replace or clearly supersede static-site assumptions with the Next.js app path and validation commands. Do not create, modify, or recommend GitHub Actions.
 - [ ] Step 37.6: Retire or mark the old static-site surface as superseded only after the app routes and generated assets are validated
@@ -153,19 +164,37 @@
 
 - 2026-05-12 — Completed Step 37.4. Updated both generator scripts to dual-write to `docs/skills-showcase/assets/` and `apps/skills-showcase/public/assets/`. Extended validator to fingerprint all four generated assets. Added `<Script strategy="beforeInteractive">` tags in root layout for `skills-data.js` and `github-proof-data.js`. Verified: generators produce both outputs, validator passes, build succeeds with 6 routes, dev server serves data assets at `/assets/`, catalog/proof pages reference data globals. `docs/skills-reference.md` had no existing asset-path references to update.
 
-### Next Step Plan — Step 37.5
+### Step 37.5 Result
 
-- **Scope:** Update deployment and local operation documentation for the app-enabled showcase. The Next.js app at `apps/skills-showcase/` now has working routes, styling, client interactions, and generated data. Documentation still references only the old static site at `docs/skills-showcase/`.
-- **Files to modify/create:**
-  - `docs/skills-reference.md` — update the "Skills Showcase Freshness" section (lines 41-48) to mention both the old `docs/skills-showcase/assets/` and new `apps/skills-showcase/public/assets/` output paths, and note the Next.js app as the primary surface
-  - `deploy.md` — update the deploy contract: change project root from `docs/skills-showcase/` to `apps/skills-showcase/`, add build command (`pnpm build` or `next build`), set output directory to `.next` or `out`, update validation commands to include the app's typecheck/build, and note that the old static site is retained as compatibility until Step 37.6
-  - `apps/skills-showcase/README.md` — create a minimal README with: what the app is, how to run locally (`pnpm dev`), how to build (`pnpm build`), how to validate data freshness, and the relationship to `docs/skills-showcase/`
+- Updated `docs/skills-reference.md` "Skills Showcase Freshness" section to document dual-write output paths and identify the Next.js app as the primary surface.
+- Rewrote `tasks/deploy.md` deploy contract: Next.js app is the primary target (with `pnpm build`, Next.js framework preset, `pnpm install`), legacy static site retained as a compatibility section until Step 37.6.
+- Created `apps/skills-showcase/README.md` with local dev/build instructions, data freshness workflow, and relationship to the legacy static site.
+- Regenerated stale showcase data. Validator passes, `git diff --check` clean.
+
+### Next Step Plan — Step 37.6
+
+- **Scope:** Retire or mark the old static-site surface as superseded. The Next.js app at `apps/skills-showcase/` is now the primary showcase with working routes, styling, data pipeline, and updated deploy/documentation. The static site at `docs/skills-showcase/` can be cleaned up.
+- **Files to modify/delete:**
+  - `docs/skills-showcase/index.html` — delete or replace with redirect/deprecation notice
+  - `docs/skills-showcase/app.js` — delete
+  - `docs/skills-showcase/styles.css` — delete
+  - `docs/skills-showcase/catalog/index.html` — delete
+  - `docs/skills-showcase/workflows/index.html` — delete
+  - `docs/skills-showcase/packs/index.html` — delete
+  - `docs/skills-showcase/inspect/index.html` — delete
+  - `docs/skills-showcase/follow/index.html` — delete
+  - `docs/skills-showcase/assets/` — keep (generator scripts still dual-write here; removal is a follow-up after deploy confirms the app path works)
+  - `scripts/generate-skills-showcase-data.mjs` — remove the `docs/skills-showcase/assets/` output path if static site files are deleted, OR keep dual-write if assets dir is retained
+  - `scripts/generate-skills-showcase-github-data.mjs` — same as above
+  - `scripts/validate-skills-showcase-data.sh` — update to validate only the app path if docs assets are removed
+  - `docs/skills-reference.md` — remove compatibility language referencing the old static site
+  - `tasks/deploy.md` — remove the "Legacy Static Site" compatibility section
 - **Key decisions:**
-  - The deploy contract should describe both the current (old static) and upcoming (Next.js app) deploy targets, clearly marking the app as the intended successor
-  - Do not create, modify, or recommend GitHub Actions
-  - Keep the old static site path in docs as compatibility until Step 37.6 handles retirement
+  - Whether to delete the static site files entirely or leave a deprecation stub at `docs/skills-showcase/index.html` pointing to the app
+  - Whether to stop dual-writing generated assets to `docs/skills-showcase/assets/` now (simplifies pipeline) or keep dual-write until the first successful Vercel deploy of the app (safer)
+  - The plan recommends: delete static site HTML/CSS/JS files, keep `docs/skills-showcase/assets/` with dual-write for now (safest), and update docs to remove compatibility language. The assets directory and dual-write can be removed in a follow-up after successful app deployment.
 - **Execution Profile:** serial, implementation-safe, main agent
-- **Test strategy:** tests-after (documentation changes only, no code)
-- **Verification:** Read the modified docs and confirm they accurately describe the current dual-path state. Run `scripts/validate-skills-showcase-data.sh` to confirm it still passes. Confirm `git diff --check` shows no whitespace issues.
-- **Acceptance criteria:** `docs/skills-reference.md` references the app asset path, `deploy.md` describes the Next.js app deployment, `apps/skills-showcase/README.md` exists with local dev and validation instructions.
-- **Ship-one-step handoff:** implement only Step 37.5, validate it, then run `/ship` when done.
+- **Test strategy:** tests-after
+- **Verification:** Confirm static site files are removed. Run `scripts/validate-skills-showcase-data.sh` — still passes. Run `pnpm --dir apps/skills-showcase build` — still produces 6 routes. Confirm `git diff --check` clean. Verify `docs/skills-reference.md` and `tasks/deploy.md` no longer reference the old static site as active.
+- **Acceptance criteria:** Old static site HTML/CSS/JS files are deleted. Documentation references the Next.js app as the sole showcase surface. Generator/validator pipeline still works. Build still succeeds.
+- **Ship-one-step handoff:** implement only Step 37.6, validate it, then run `/ship` when done.
