@@ -57,6 +57,17 @@ Current brand decision: the public site brand is **G Skillmap** and the producti
 
 **Targeted Fix Result:** Completed on 2026-05-12. The `benchmark-test-skill` tier1 fixture now requires exact report evidence in both the prompt and hard assertions: `layer1 PASS`, `layer2 SKIPPED`, `passRate=1.0` or `100%`, `p50=1200`, `totalCost=0.42`, `run-agent-abc`, source files, and literal report path `benchmark/test-run-2026-05-11.md`. Layer1 regression coverage rejects a broad keyword-only report. Validation passed with focused layer1 tests, coverage, install/dependency/version/routing checks, verify, Codex smoke `benchmark-test-skill-codex-2527788d`, and whitespace validation. Recommended next command: `$benchmark-test-skill benchmark-test-skill`.
 
+## Current Fix: benchmark-test-skill Structured Fixture Report Ergonomics
+
+**Goal:** Tighten the `benchmark-test-skill` tier1 benchmark fixture so generated benchmark reports are exact and easy for the next operator to scan.
+
+**Acceptance Criteria:**
+- [ ] Existing-skill overlap confirms the fix belongs in the benchmark fixture/setup, not a new skill.
+- [ ] The fixture prompt requires stable report sections/tables for verification, benchmark metrics, raw evidence, and next route.
+- [ ] Hard assertions require structured report headings in addition to exact fixture evidence.
+- [ ] The output-quality rubric rewards report ergonomics and rejects unstructured evidence dumps.
+- [ ] Focused layer1 tests, benchmark coverage, required skill validation, and whitespace validation pass.
+
 ## Current Fix: benchmark-test-skill Neutral Benchmark Fixture
 
 **Goal:** Remove misleading Codex-specific fixture evidence from the `benchmark-test-skill` tier1 benchmark while preserving runner-specific `/ship` and `$ship` route assertions.
@@ -772,7 +783,7 @@ Current brand decision: the public site brand is **G Skillmap** and the producti
 
 ---
 
-## Phase 39: Benchmark Results Visibility And Safe Git Fixtures
+## Phase 39: Benchmark Results Visibility And Safe Git Fixtures ✓
 
 **Goal:** Make already-benchmarked skills visible as a durable results matrix and unblock safe integration benchmark setups for git-mutating workflows that can run against disposable test repositories.
 
