@@ -14,7 +14,7 @@
 - [x] `pnpm verify --skill benchmark-test-skill` passes or blocks benchmark execution with a recorded failure.
 - [x] `pnpm bench --skill benchmark-test-skill --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
 - [x] `benchmark/test-benchmark-test-skill-2026-05-12.md` records verify, benchmark, latency, cost, consistency, and raw session evidence.
-- [ ] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
 
 **Preflight:** `benchmark-test-skill` is known with `coverage=custom` using `tests/layer4/setups/tier1-workflows.setup.ts`.
 
@@ -143,6 +143,7 @@
 
 ## Review
 
+- 2026-05-12 — Completed `$benchmark-test-skill benchmark-test-skill`. Preflight found custom coverage in `tests/layer4/setups/tier1-workflows.setup.ts`. Verify passed with layer1 in 8.4s and layer2 skipped. Benchmark completed with no infrastructure-blocked runs: Claude failed 0/3 hard assertions due to missing next-command handoffs and averaged 63.1% quality; Codex passed 3/3 hard assertions and averaged 85.8% quality, with quality threshold/critical failures still present. Report: `benchmark/test-benchmark-test-skill-2026-05-12.md`. Recommended next command: `$session-triage benchmark-test-skill benchmark failure`.
 - 2026-05-11 — Completed `$targeted-skill-builder benchmark-agent-review remediation handoff`. Updated mirrored `benchmark-agent-review` contracts to require a remediation table and definitive next route for every material finding. Updated mirrored `benchmark-test-skill` contracts so deterministic benchmark execution hands off to `benchmark-agent-review` as a separate subjective review/remediation step when needed. Added layer1 contract lint coverage and refreshed the correction lesson.
 - 2026-05-11 — Planned Phase 37 from `tasks/roadmap.md` and `specs/first-party-skills-showcase-newsletter-capture.md`. Execution is serial because the app shell, generated data paths, route migration, styling, and deployment documentation share integration points. Test strategy is tests-after because the work is a preservation-focused UI/app migration with design parity checks after the route and asset surface exists.
 - 2026-05-11 — Completed `$benchmark-agent-review ship` against `tests/benchmarks/runs/ship-claude-726530ae/` and `tests/benchmarks/runs/ship-codex-b69cb187/`. The review report is `benchmark/review-ship-2026-05-11.md`; median subjective score was 79 with a 74-88 range. Next work is to tighten the `ship` benchmark rubric for retained artifact text, evidence-linked manifest fields, and full manifest-completeness checks.
