@@ -70,11 +70,30 @@
   - Add a freshness validation step to `scripts/validate-skills-showcase-data.sh` that fails when the matrix is stale relative to benchmark reports.
 - [ ] Step 39.2: Add benchmark results surface to Skills Showcase UI.
   - Classification: automated
-  - Files: modify `apps/skills-showcase/app/catalog/page.tsx` or add `apps/skills-showcase/app/benchmarks/page.tsx` (benchmark results display), modify `apps/skills-showcase/src/showcase/catalog.tsx` (add benchmark evidence rendering to skill rows if using catalog), modify `apps/skills-showcase/public/assets/skills-data.js` (regenerated)
-  - Render benchmark evidence data already attached to skills in `skills-data.js` (the `benchmarkEvidence` field on 6+ skills).
-  - Distinguish "has benchmark coverage setup" from "has completed graded benchmark results" in the UI.
-  - Show per-agent pass rates, quality scores, and link to raw report paths.
-  - Regenerate showcase data and validate.
+  - Files: create `apps/skills-showcase/app/benchmarks/page.tsx` (server page with static HTML structure), create `apps/skills-showcase/src/showcase/benchmarks.tsx` (client component rendering the aggregated benchmark results table), modify `apps/skills-showcase/app/globals.css` (benchmark results page styles), modify `apps/skills-showcase/src/showcase/catalog.tsx` (add link from benchmark-passed tags to `/benchmarks`), regenerate `apps/skills-showcase/public/assets/skills-data.js`
+
+  **Context from Step 39.1:** The catalog already renders benchmark evidence inline via `makeBenchmarkPanel()` in `src/showcase/catalog.tsx` (lines 121-196). Benchmark data is attached to skills in `window.SKILLS_SHOWCASE_DATA.skills[].benchmarkEvidence`. The `BenchmarkEvidence`, `BenchmarkAgent`, `BenchmarkQuality`, `BenchmarkDemo` interfaces are defined in `catalog.tsx` lines 42-84. CSS classes `.benchmark-panel`, `.benchmark-metrics`, `.benchmark-demo` already exist in `globals.css` (lines 902-969).
+
+  **Approach:**
+  1. Create `apps/skills-showcase/app/benchmarks/page.tsx` — server-rendered page with heading, intro text, and a `[data-benchmarks-list]` container. Follow the pattern of `app/catalog/page.tsx` (static HTML shell + client component).
+  2. Create `apps/skills-showcase/src/showcase/benchmarks.tsx` — client component that:
+     - Reads `window.SKILLS_SHOWCASE_DATA.skills` and filters to those with `benchmarkEvidence`.
+     - Renders an aggregated table with columns: Skill, Agent(s), Hard Pass Rate, Output Quality, Runs, Report Link.
+     - Distinguishes "graded" (has quality scores) from "partially graded" (hard assertions only) with a status badge.
+     - Links skill names back to `/catalog` with a search filter, and report paths to GitHub.
+     - Reuses the `BenchmarkEvidence` interface from catalog.tsx (extract shared types to a `src/showcase/types.ts` or inline).
+  3. Add a "Benchmarks" link to the nav in `app/catalog/page.tsx` or the site layout.
+  4. In `catalog.tsx`, make the "benchmark-passed" tag chip link to `/benchmarks`.
+  5. Add benchmark page styles to `globals.css` — reuse `.benchmark-panel` green theme for consistency.
+  6. Add test coverage in `src/showcase/benchmarks.test.tsx` — verify page renders with test data, shows skill count, renders agent rows.
+  7. Regenerate showcase data and run `scripts/validate-skills-showcase-data.sh`.
+  8. Run `pnpm --dir apps/skills-showcase build` to verify no build errors.
+  9. Start dev server and verify the `/benchmarks` route renders, links work, and the page distinguishes graded from partially-graded skills.
+
+  **Key decisions:**
+  - Shared types: extract `BenchmarkEvidence`, `BenchmarkAgent`, `BenchmarkQuality`, `BenchmarkDemo`, `Skill` interfaces to `src/showcase/types.ts` since both catalog and benchmarks need them.
+  - The page should note at the top that benchmark results come from persisted run data and the generated matrix, linking to `docs/benchmark-results-matrix.md` on GitHub.
+  - Do NOT confuse "benchmark coverage setup" (which 30+ skills have) with "completed graded runs" (which 14 skills have). Only show skills with actual `benchmarkEvidence` data.
 - [ ] Step 39.3: Design safe disposable GitHub test-repository fixture infrastructure.
   - Classification: automated
   - Files: create `docs/safe-git-benchmark-fixtures.md` (design doc), create `tests/layer4/helpers/disposable-repo.ts` (fixture helper)
