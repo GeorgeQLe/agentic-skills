@@ -14,6 +14,19 @@ Phases 32-36 complete. Phase 35 added repository-wide Codex benchmark coverage m
 
 Phase 37 complete: preserved and migrated the static Skills Showcase into a minimal Next.js app at `apps/skills-showcase/` with 6 public routes, generated data pipeline, 54 regression tests, and updated deploy contract. Phase 38 adds Neon-backed first-party newsletter capture, tRPC contracts, TanStack Query mutation/admin state, and an admin export page. Phase 39 adds benchmark results visibility and permission-gated safe Git integration fixtures for benchmarkable git-mutating skills.
 
+## Current Triage: benchmark-test-skill Fresh Benchmark Failure
+
+**Goal:** Triage the fresh `$benchmark-test-skill benchmark-test-skill` benchmark failure after the latest targeted fix.
+
+**Acceptance Criteria:**
+- [x] Fresh benchmark report and persisted Claude/Codex run artifacts are inspected.
+- [x] Mirrored benchmark-test-skill contracts are compared for drift.
+- [x] The tier1 fixture prompt, route assertions, and quality scoring expectations are checked.
+- [x] Existing lessons are checked for runner-route and benchmark workflow patterns.
+- [x] Triage report records verdict, root cause, responsible gap, validation plan, and next route.
+
+**Result:** Fresh triage completed on 2026-05-12. The failure is verified. The primary durable issue is fixture ambiguity: the tier1 benchmark asks Claude to emit `/ship` but the fixture raw path still says `run-codex-abc`, which caused two Claude runs to infer `$ship`. The secondary Codex failure is an artifact-missing runner/write anomaly in one run, not yet a skill-contract defect. Report: `benchmark/triage-benchmark-test-skill-fresh-2026-05-12.md`. Recommended next command: `$targeted-skill-builder benchmark-test-skill benchmark failure`.
+
 ## Current Benchmark Rerun: benchmark-test-skill Fresh Validation
 
 **Goal:** Rerun `$benchmark-test-skill benchmark-test-skill` after the latest targeted fix, using fresh eligibility, verify, and both-agent benchmark evidence on 2026-05-12.
