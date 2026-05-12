@@ -1,5 +1,11 @@
 # Session History
 
+## 2026-05-12 — Step 39.3: Design safe disposable GitHub test-repository fixture infrastructure
+
+- Created `docs/safe-git-benchmark-fixtures.md` — design doc covering permission-gated disposable repo workflow, naming convention, lifecycle, security boundary, and cleanup handling.
+- Created `tests/layer4/helpers/disposable-repo.ts` — reusable fixture helper with `createDisposableRepo()`, `seedRepo()`, `cleanupRepo()`, all gated behind a `ConfirmationGate` callback. Returns discriminated union types with `infrastructure-blocked` status.
+- Verified: 1304 layer1 tests passed, no regressions, `git diff --check` clean.
+
 ## 2026-05-12 — Step 39.2: Add benchmark results surface to Skills Showcase UI
 
 - Created `/benchmarks` page with server-rendered shell and client component rendering an aggregated benchmark results table (Skill, Status, Agent, Pass Rate, Quality, Date, Report).

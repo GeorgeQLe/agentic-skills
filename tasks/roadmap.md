@@ -16,6 +16,17 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillmap** and the production domain is `gskillmap.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill-map language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Benchmark Rerun: benchmark-test-skill Fresh Self Benchmark
+
+**Goal:** Run `$benchmark-test-skill benchmark-test-skill` with fresh eligibility, verify, and both-agent benchmark evidence on 2026-05-12.
+
+**Acceptance Criteria:**
+- [ ] `pnpm bench --list-skills` confirms `benchmark-test-skill` is known and reports its coverage status.
+- [ ] `pnpm verify --skill benchmark-test-skill` passes or blocks benchmark execution with a recorded failure.
+- [ ] `pnpm bench --skill benchmark-test-skill --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [ ] `benchmark/test-benchmark-test-skill-2026-05-12.md` records fresh verify, benchmark, latency, cost, consistency, and raw session evidence.
+- [ ] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
 ## Current Refactor: Benchmark-Backed Skill Demos
 
 **Goal:** Replace or augment curated/demo-only skill examples on the G Skillmap brand site with evidence-backed benchmark prompts and outputs from persisted benchmark runs.
