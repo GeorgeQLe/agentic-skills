@@ -213,6 +213,49 @@ Step 39.3 designs the safe disposable GitHub test-repository fixture infrastruct
 ### Handoff
 Implement only this step, validate it, then run `/ship` when done.
 
+## Handoff — Step 39.4
+
+### What Needs to Be Built
+
+Step 39.4 adds the `commit-and-push-by-feature` safe fixture plan using the disposable repo infrastructure built in Step 39.3.
+
+**Create** `tests/layer4/setups/git-fixture-commit-and-push.setup.ts` — benchmark fixture definition:
+- Import `SkillBenchSetup` from `../../harness/bench-types.js` and follow the pattern in `tier1-workflows.setup.ts`.
+- Import disposable repo helpers from `../helpers/disposable-repo.js`.
+- Define a benchmark setup that:
+  1. Creates a disposable repo via `createDisposableRepo("commit-and-push-by-feature")` with a confirmation gate.
+  2. Seeds the repo with mixed changes across multiple files in different feature areas (e.g., `src/auth/login.ts`, `src/ui/button.css`, `README.md`, `tests/auth.test.ts`) to give the skill something to group by feature.
+  3. Stages the files (via `git add`) but does NOT commit — the skill under test (`commit-and-push-by-feature`) should do the committing.
+  4. Runs `commit-and-push-by-feature` against the local clone.
+  5. Hard assertions verify: commits are grouped by feature (not one monolithic commit), commit messages follow conventional format, changes are pushed to origin.
+  6. Cleanup via `repo.cleanup()`.
+- Export the setup as a `SkillBenchSetup` with appropriate budget and timeout from `setup-helpers/budgets.js`.
+- If the confirmation gate denies creation, return `infrastructure-blocked` status — do not fail the benchmark.
+
+**Modify** `tests/harness/bench-coverage.ts`:
+- Remove `"commit-and-push-by-feature"` from `TIER23_GLOBAL_BLOCKED_SKILLS` (lines 69-72).
+- Add `"commit-and-push-by-feature"` to `COVERAGE_OVERRIDES` with `coverage: "custom"` and `setup_path: "tests/layer4/setups/git-fixture-commit-and-push.setup.ts"`.
+
+**Context from Step 39.3:**
+- `tests/layer4/helpers/disposable-repo.ts` exports: `createDisposableRepo(skillName, confirm)` → `CreateResult`, `seedRepo(localPath, files)` → void, `cleanupRepo(repoUrl, confirm)` → `CleanupResult`.
+- `ConfirmationGate = (action: string) => Promise<boolean>`.
+- `CreateResult` is `{ status: "created"; repo: DisposableRepo }` | `{ status: "infrastructure-blocked"; reason: string }`.
+- `DisposableRepo` has `{ repoName, repoUrl, localPath, cleanup }`.
+
+**Validation:**
+- `pnpm --dir tests test:layer1` — must pass (no regressions). The coverage test should now show `commit-and-push-by-feature` as `custom` instead of `blocked`.
+- `git diff --check` — no whitespace errors.
+
+### Execution Profile
+- **Parallel mode:** serial
+- **Test strategy:** tests-after
+
+### Handoff
+Implement only this step, validate it, then run `/ship` when done.
+
+- **Next work:** Step 39.4 — add `commit-and-push-by-feature` safe fixture plan using the disposable repo infrastructure
+- **Recommended next command:** `/run`
+
 ## Review — Step 39.3
 
 - Completed on 2026-05-12.
