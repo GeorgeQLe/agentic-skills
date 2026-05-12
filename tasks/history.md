@@ -1,5 +1,16 @@
 # Session History
 
+## 2026-05-12 — Step 39.2: Add benchmark results surface to Skills Showcase UI
+
+- Created `/benchmarks` page with server-rendered shell and client component rendering an aggregated benchmark results table (Skill, Status, Agent, Pass Rate, Quality, Date, Report).
+- Extracted shared TypeScript interfaces into `src/showcase/types.ts` from `catalog.tsx`.
+- Made "benchmark-passed" tag chip link to `/benchmarks` in catalog view.
+- Added "Benchmarks" nav link to header and mobile panel; added route to `routes.ts`.
+- Added benchmark table CSS, badge styles (graded/partial), and tag-link styles.
+- Created 10 tests in `benchmarks.test.tsx` and 1 smoke test; updated routes test count to 8.
+- Regenerated showcase data and proof data.
+- All 85 showcase tests pass, 1304 layer1 tests pass, Next.js build succeeds.
+
 ## 2026-05-12 — Phase 38 milestone review and phase transition
 
 - Verified all 11 Phase 38 acceptance criteria: tRPC subscribe mutation, Neon schema fields, idempotent duplicates, error UI states, admin secret gate, admin list/search/copy/CSV, privacy test, 74/74 tests passing, typecheck clean, whitespace clean, no GitHub Actions.
