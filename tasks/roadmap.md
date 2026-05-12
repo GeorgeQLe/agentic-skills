@@ -14,6 +14,17 @@ Phases 32-36 complete. Phase 35 added repository-wide Codex benchmark coverage m
 
 Phases 37-38 are planned from `specs/first-party-skills-showcase-newsletter-capture.md`. Phase 37 preserves and migrates the existing static Skills Showcase into a minimal Next.js app surface. Phase 38 adds Neon-backed first-party newsletter capture, tRPC contracts, TanStack Query mutation/admin state, and an admin export page. Phase 39 adds benchmark results visibility and permission-gated safe Git integration fixtures for benchmarkable git-mutating skills.
 
+## Current Benchmark: benchmark-test-skill
+
+**Goal:** Run `$benchmark-test-skill benchmark-test-skill` through the repository harness with fresh eligibility, verify, and both-agent benchmark evidence on 2026-05-12.
+
+**Acceptance Criteria:**
+- [ ] `pnpm bench --list-skills` confirms `benchmark-test-skill` is known and reports its coverage status.
+- [ ] `pnpm verify --skill benchmark-test-skill` passes or blocks benchmark execution with a recorded failure.
+- [ ] `pnpm bench --skill benchmark-test-skill --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [ ] `benchmark/test-benchmark-test-skill-2026-05-12.md` records verify, benchmark, latency, cost, consistency, and raw session evidence.
+- [ ] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
 ## Current Benchmark: spec-interview
 
 **Goal:** Run `$benchmark-test-skill spec-interview` through the repository harness with fresh eligibility, verify, and both-agent benchmark evidence on 2026-05-12.
