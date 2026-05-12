@@ -211,6 +211,27 @@
   - `smoke.test.tsx` — 8 tests: smoke rendering of all 6 page components (HomePage, WorkflowsPage, CatalogPage, PacksPage, InspectPage, FollowPage)
 - Verified: `pnpm test` passes (54/54), `pnpm typecheck` passes, `git diff --check` clean.
 
+### Next Step Plan — Step 37.8
+
+- **Scope:** Run local app validation, generated-data validation, and whitespace checks. Fix only concrete issues found by validation.
+- **Files to modify:** Only files implicated by failing validation.
+- **Commands to run:**
+  1. `pnpm --dir apps/skills-showcase test` — regression tests (already passing from Step 37.7)
+  2. `pnpm --dir apps/skills-showcase typecheck` — TypeScript strict checks
+  3. `pnpm --dir apps/skills-showcase build` — Next.js static export (6 routes)
+  4. `scripts/validate-skills-showcase-data.sh` — generated asset freshness
+  5. `git diff --check` — whitespace cleanliness
+- **Execution Profile:** serial, validation-only, main agent
+- **Test strategy:** tests-after (validation step, not implementation)
+- **Verification:** All 5 commands pass clean. Fix any issues found before marking complete.
+- **Acceptance criteria:** Clean validation output from all commands. Only modify files if validation surfaces concrete failures.
+- **Ship-one-step handoff:** implement only Step 37.8, validate it, then run `/ship` when done.
+
+## Routing
+
+- **Next work:** Step 37.8 — local app validation and whitespace checks
+- **Recommended next command:** `/run`
+
 ### Previous Next Step Plan — Step 37.7
 
 - **Scope:** Write regression tests covering migrated route/data behavior for the Next.js Skills Showcase app. No test framework exists yet — Vitest must be added.
