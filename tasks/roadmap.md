@@ -40,6 +40,8 @@ Current brand decision: the public site brand is **G Skillmap** and the producti
 
 **Result:** Benchmark rerun completed on 2026-05-12. `benchmark-test-skill` is known with `coverage=custom` using `tests/layer4/setups/tier1-workflows.setup.ts`. Verify passed with layer1 in 9.2s across 1,303 tests; layer2 was skipped because no target-specific layer2 tests matched `benchmark-test-skill`. The both-agent benchmark completed with one Claude infrastructure-blocked run due to agent runner budget. Evaluated hard assertions passed for both agents: Claude 2/2 evaluated runs, Codex 3/3 evaluated runs. Claude output quality averaged 72.9% with 2 threshold failures and 2 critical failures; Codex output quality averaged 85.7% with 0 threshold failures and 2 critical failures. Report: `benchmark/test-benchmark-test-skill-2026-05-12.md`. Recommended next skill: `$benchmark-agent-review benchmark-test-skill`.
 
+**Agent Review Result:** Completed on 2026-05-12. Reviewed the latest Claude and Codex persisted outputs, excluding one Claude infrastructure-blocked run. Median subjective score was 80 with range 70-92. The outputs are usable-to-good but need tighter exact evidence reporting: several reports summarize `layer1 PASS` as generic `PASS` or broad "verify status". Report: `benchmark/review-benchmark-test-skill-2026-05-12.md`. Recommended next command: `$targeted-skill-builder benchmark-test-skill exact benchmark evidence reporting`.
+
 ## Current Fix: benchmark-test-skill Neutral Benchmark Fixture
 
 **Goal:** Remove misleading Codex-specific fixture evidence from the `benchmark-test-skill` tier1 benchmark while preserving runner-specific `/ship` and `$ship` route assertions.
