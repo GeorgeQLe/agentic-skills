@@ -2147,3 +2147,12 @@ Resolved all 10 findings from `/expert-review`:
 - Sanitized generated benchmark demo excerpts to remove local temporary run directories while preserving artifact names and links to the persisted run JSON.
 - Refreshed Skills Showcase generated data and proof assets for both the archived static path and the Next.js app public assets.
 - Verified with focused layer1 generated-data coverage, focused showcase catalog tests, app typecheck, showcase data validation, and whitespace checks.
+
+## 2026-05-12 — Step 39.1: Generate benchmark-results-matrix.md from persisted reports
+
+- Replaced hand-maintained `docs/benchmark-results-matrix.md` with a generated artifact produced by `scripts/generate-skills-showcase-data.mjs`.
+- Generator scans `tests/benchmarks/runs/*/report.json` (filesystem, not git-tracked), cross-references curated `benchmark/test-*.md` reports and `benchmark/review-*.md` subjective reviews, and writes a graded table (14 rows) and incomplete table (5 rows).
+- Added `.sort()` for deterministic filesystem directory ordering.
+- Added `docs/benchmark-results-matrix.md` to `scripts/validate-skills-showcase-data.sh` freshness checks.
+- Added `tests/layer1/benchmark-results-matrix.test.ts` asserting generated matrix content.
+- Verified: 12 test files / 1304 tests passed, showcase data validation fresh.

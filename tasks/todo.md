@@ -47,6 +47,12 @@
 
 **Review:** Complete. `benchmark-test-skill` is known with `coverage=custom` using `tests/layer4/setups/tier1-workflows.setup.ts`. Verify passed with layer1 in 9.2s across 1,303 tests; layer2 was skipped because no target-specific layer2 tests matched `benchmark-test-skill`. The both-agent benchmark completed with one Claude infrastructure-blocked run due to agent runner budget. Evaluated hard assertions passed for both agents: Claude 2/2 evaluated runs, Codex 3/3 evaluated runs. Claude output quality averaged 72.9% with 2 threshold failures and 2 critical failures; Codex output quality averaged 85.7% with 0 threshold failures and 2 critical failures. Report: `benchmark/test-benchmark-test-skill-2026-05-12.md`. Recommended next skill: `$benchmark-agent-review benchmark-test-skill`.
 
+## Ad-Hoc Agent Review: benchmark-test-skill
+
+**Goal:** Review the persisted `$benchmark-test-skill benchmark-test-skill` outputs for subjective operator ergonomics after deterministic hard assertions passed.
+
+**Review:** Complete. Reviewed latest Claude run `tests/benchmarks/runs/benchmark-test-skill-claude-d0075f7e/` and Codex run `tests/benchmarks/runs/benchmark-test-skill-codex-76616c00/`, excluding Claude run #0 because it was infrastructure-blocked by agent runner budget. Median subjective score was 80 with range 70-92. The evaluated outputs are usable-to-good overall: they create the requested report, stay scoped, avoid unsupported external work, and choose the correct runner route. The material weakness is exact evidence fidelity: several reports summarize `layer1 PASS` as generic `PASS` or broad "verify status", leaving the next operator to infer source facts. Review report: `benchmark/review-benchmark-test-skill-2026-05-12.md`. Recommended next command: `$targeted-skill-builder benchmark-test-skill exact benchmark evidence reporting`.
+
 ### Execution Profile
 **Parallel mode:** serial
 **Integration owner:** main agent
@@ -56,7 +62,7 @@
 **Subagent lanes:** none
 
 ### Implementation
-- [ ] Step 39.1: Validate and promote `docs/benchmark-results-matrix.md` as a generated source of truth.
+- [x] Step 39.1: Validate and promote `docs/benchmark-results-matrix.md` as a generated source of truth.
   - Classification: automated
   - Files: modify `scripts/generate-skills-showcase-data.mjs` (add matrix generation/validation logic), modify `docs/benchmark-results-matrix.md` (regenerate from persisted benchmark reports), modify `scripts/validate-skills-showcase-data.sh` (add matrix freshness check)
   - Parse persisted `benchmark/test-*.md` reports to extract skill name, date, agent, hard pass rate, quality score, subjective review grade (when present), and raw report path.
@@ -117,5 +123,19 @@
 
 ## Routing
 
-- **Next work:** Step 39.1 — validate and promote benchmark-results-matrix.md as generated source of truth
-- **Recommended next command:** `/run`
+## Review — Step 39.1
+
+- Completed on 2026-05-12.
+- `scripts/generate-skills-showcase-data.mjs` now generates `docs/benchmark-results-matrix.md` from persisted benchmark report JSON, curated benchmark reports, and subjective review files.
+- `docs/benchmark-results-matrix.md` now lists 14 latest evaluated skill/agent result rows and 5 incomplete persisted reports, with coverage registry status kept separate from benchmarked-result status.
+- `scripts/validate-skills-showcase-data.sh` now includes `docs/benchmark-results-matrix.md` in generated asset freshness checks.
+- Added `tests/layer1/benchmark-results-matrix.test.ts` to assert the generated matrix includes evaluated results, incomplete persisted reports, and the coverage/results separation.
+- Validation:
+  - `pnpm --dir tests test:layer1 -- benchmark-results-matrix` — passed, 12 files / 1304 tests.
+  - `scripts/validate-skills-showcase-data.sh` — passed after regenerating stale assets.
+  - `git diff --check` — passed.
+- Skipped tests: no live GitHub fixture validation was relevant to Step 39.1; that is planned for later permission-gated fixture steps.
+- Residual risk: subjective review grade extraction currently records the review path in the matrix and notes that a median score is available; a later showcase/results UI step can decide whether to expose the numeric score directly.
+
+- **Next work:** Step 39.2 — add benchmark results surface to Skills Showcase UI
+- **Recommended next command:** `$run`
