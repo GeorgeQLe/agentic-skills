@@ -53,6 +53,12 @@
 
 **Review:** Complete. Reviewed latest Claude run `tests/benchmarks/runs/benchmark-test-skill-claude-d0075f7e/` and Codex run `tests/benchmarks/runs/benchmark-test-skill-codex-76616c00/`, excluding Claude run #0 because it was infrastructure-blocked by agent runner budget. Median subjective score was 80 with range 70-92. The evaluated outputs are usable-to-good overall: they create the requested report, stay scoped, avoid unsupported external work, and choose the correct runner route. The material weakness is exact evidence fidelity: several reports summarize `layer1 PASS` as generic `PASS` or broad "verify status", leaving the next operator to infer source facts. Review report: `benchmark/review-benchmark-test-skill-2026-05-12.md`. Recommended next command: `$targeted-skill-builder benchmark-test-skill exact benchmark evidence reporting`.
 
+## Ad-Hoc Targeted Skill Update: benchmark-test-skill Exact Evidence Reporting
+
+**Goal:** Tighten the existing `benchmark-test-skill` tier1 benchmark fixture so passing generated reports preserve exact benchmark evidence instead of broad keywords.
+
+**Review:** Complete. Updated `tests/layer4/setups/tier1-workflows.setup.ts` so the benchmark prompt and hard assertions require exact report evidence: `layer1 PASS`, `layer2 SKIPPED`, `passRate=1.0` or `100%`, `p50=1200`, `totalCost=0.42`, `run-agent-abc`, source files, and literal report path `benchmark/test-run-2026-05-11.md`. Updated `tests/layer1/bench-setups.test.ts` to assert the prompt contract and reject a thin keyword-only report. Validation passed with `pnpm --dir tests test:layer1 -- bench-setups bench-quality`, `pnpm --dir tests bench:coverage`, `./install.sh`, dependency/version/routing checks, `pnpm --dir tests verify --skill benchmark-test-skill`, Codex smoke `benchmark-test-skill-codex-2527788d` (1/1 hard assertions), and `git diff --check`. Recommended next command: `$benchmark-test-skill benchmark-test-skill`.
+
 ### Execution Profile
 **Parallel mode:** serial
 **Integration owner:** main agent
