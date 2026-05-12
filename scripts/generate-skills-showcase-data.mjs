@@ -295,6 +295,7 @@ function generateBenchmarkMatrix(files) {
         .filter((d) => d.isDirectory())
         .map((d) => `tests/benchmarks/runs/${d.name}/report.json`)
         .filter((p) => existsSync(path.join(repoRoot, p)))
+        .sort()
     : [];
   const curatedReports = files.filter((f) => /^benchmark\/test-.+-\d{4}-\d{2}-\d{2}\.md$/.test(f));
   const reviewFiles = files.filter((f) => /^benchmark\/review-.+-\d{4}-\d{2}-\d{2}\.md$/.test(f));
