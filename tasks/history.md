@@ -2097,3 +2097,11 @@ Resolved all 10 findings from `/expert-review`:
 - Created `src/trpc/provider.tsx` — `"use client"` provider with `QueryClientProvider` + `trpc.Provider` using `httpBatchLink({ url: "/api/trpc" })`.
 - Updated `app/layout.tsx` — wrapped body contents with `<TRPCProvider>`.
 - Verified: typecheck clean, build passing, 54/54 showcase tests green.
+
+### Step 38.5: Refactor newsletter form to use tRPC subscribe mutation (2026-05-12)
+- Rewrote `src/showcase/newsletter-form.tsx` from imperative DOM manipulation to React component with `useState` + `trpc.newsletter.subscribe.useMutation()`.
+- Removed `provider-missing` state (first-party endpoint eliminates the need).
+- Updated `app/follow/page.tsx` — replaced static form markup with `<NewsletterFormClient />`, removed `data-provider-endpoint`.
+- Updated `src/showcase/smoke.test.tsx` — added tRPC client mock for FollowPage rendering.
+- Rewrote `src/showcase/newsletter-form.test.tsx` — mock tRPC hooks instead of DOM + fetch mocking.
+- Verified: typecheck clean, build passing, 52/52 showcase tests green.
