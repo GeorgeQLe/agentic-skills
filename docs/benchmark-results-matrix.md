@@ -17,8 +17,8 @@ This matrix tracks skills that already have persisted benchmark run data and gra
 | Skill | Agent | Latest Raw Report | Runs | Hard Pass Rate | Output Quality | Subjective Review | Status | Notes |
 |---|---|---:|---:|---:|---:|---|---|---|
 | `benchmark-agent-review` | Codex | `tests/benchmarks/runs/benchmark-agent-review-codex-1d9a5c8b/report.json` | 1 | 100% | 100.0% | none | graded | One evaluated persisted run with deterministic quality scoring. |
-| `benchmark-test-skill` | Claude | `tests/benchmarks/runs/benchmark-test-skill-claude-d0075f7e/report.json` | 2 | 100% | 72.9% | `benchmark/review-benchmark-test-skill-2026-05-12.md` | graded | Curated report: `benchmark/test-benchmark-test-skill-2026-05-12.md`. Subjective review median score available. |
-| `benchmark-test-skill` | Codex | `tests/benchmarks/runs/benchmark-test-skill-codex-2527788d/report.json` | 1 | 100% | 91.4% | `benchmark/review-benchmark-test-skill-2026-05-12.md` | graded | Curated report: `benchmark/test-benchmark-test-skill-2026-05-12.md`. One evaluated persisted run with deterministic quality scoring. Subjective review median score available. |
+| `benchmark-test-skill` | Claude | `tests/benchmarks/runs/benchmark-test-skill-claude-babf5870/report.json` | 3 | 100% | 92.4% | `benchmark/review-benchmark-test-skill-2026-05-12.md` | graded | Curated report: `benchmark/test-benchmark-test-skill-2026-05-12.md`. Subjective review median score available. |
+| `benchmark-test-skill` | Codex | `tests/benchmarks/runs/benchmark-test-skill-codex-c4f58932/report.json` | 3 | 100% | 92.4% | `benchmark/review-benchmark-test-skill-2026-05-12.md` | graded | Curated report: `benchmark/test-benchmark-test-skill-2026-05-12.md`. Subjective review median score available. |
 | `design-system` | Claude | `tests/benchmarks/runs/design-system-claude-d263df0d/report.json` | 3 | 100% | not scored | none | partially graded | Curated report: `benchmark/test-design-system-2026-05-10.md`. Hard assertion evidence exists; no quality score in the latest persisted evaluated report. |
 | `design-system` | Codex | `tests/benchmarks/runs/design-system-codex-43b808d6/report.json` | 1 | 100% | 90.9% | none | graded | Curated report: `benchmark/test-design-system-2026-05-10.md`. One evaluated persisted run with deterministic quality scoring. |
 | `investigate` | Codex | `tests/benchmarks/runs/investigate-codex-701bd642/report.json` | 1 | 100% | 100.0% | none | graded | One evaluated persisted run with deterministic quality scoring. |
@@ -37,7 +37,7 @@ This matrix tracks skills that already have persisted benchmark run data and gra
 |---|---|---|---|---|
 | `affected` | Codex | `tests/benchmarks/runs/affected-codex-3c36c9a8/report.json` | blocked/incomplete | Report exists with zero total and evaluated runs. Do not count as benchmarked. |
 | `benchmark-test-skill` | Codex | `tests/benchmarks/runs/benchmark-test-skill-codex-8a1dccd0/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
-| `run` | Codex | `tests/benchmarks/runs/run-codex-6fdbe8b0/report.json` | blocked/incomplete | Report exists with zero total and evaluated runs. Do not count as benchmarked. Prefer the later evaluated report listed above. |
+| `run` | Codex | `tests/benchmarks/runs/run-codex-1bab3ba4/report.json` | blocked/incomplete | Report exists with zero total and evaluated runs. Do not count as benchmarked. Prefer the later evaluated report listed above. |
 | `spec-interview` | Claude | `tests/benchmarks/runs/spec-interview-claude-b83d0caa/report.json` | blocked/incomplete | Report exists with zero evaluated runs. |
 | `youtube-video-audit` | Codex | `tests/benchmarks/runs/youtube-video-audit-codex-306e24a9/report.json` | blocked/incomplete | Report exists with zero total and evaluated runs. Do not count as benchmarked. Prefer the later evaluated report listed above. |
 
@@ -45,17 +45,12 @@ This matrix tracks skills that already have persisted benchmark run data and gra
 
 - Most repository skills have custom benchmark setup coverage but do not yet have persisted evaluated benchmark data and grades.
 - The website currently has no public benchmark-results surface. A follow-up should expose this matrix or generated data derived from it in the Skills Showcase.
-- `commit-and-push-by-feature` and `sync` are currently blocked in the coverage registry, but they are plausible candidates for safe benchmark fixtures when a user explicitly permits creation of a temporary GitHub test repository through `gh`.
 
-## Safe Git-Fixture Candidate
+## Safe Git-Fixture Skills
 
-For `commit-and-push-by-feature` and `sync`, a safe setup can be designed around an ephemeral test repository instead of the primary repository:
+`commit-and-push-by-feature` and `sync` now have custom benchmark coverage using permission-gated disposable GitHub test repositories (see `docs/safe-git-benchmark-fixtures.md`):
 
-- Require explicit user permission before any live GitHub operation.
-- Create a temporary private GitHub repository with `gh repo create`.
-- Seed it with a minimal fixture project and a default branch.
-- Run the skill against only that temporary repository.
-- Assert expected git/remote behavior from the temporary repo state and persisted benchmark output.
-- Delete or archive the temporary repository at the end of the run, with cleanup failure reported as infrastructure-blocked.
+- `commit-and-push-by-feature`: `tests/layer4/setups/git-fixture-commit-and-push.setup.ts`
+- `sync`: `tests/layer4/setups/git-fixture-sync.setup.ts`
 
-This would convert those two skills from blocked coverage candidates into live, permission-gated integration benchmark targets without risking the main `agentic-skills` repository.
+Both fixtures require explicit user permission before any live GitHub operation (`gh repo create`, `gh repo delete`). Cleanup failures are reported as infrastructure-blocked evidence, not skill failures.
