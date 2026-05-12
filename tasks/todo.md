@@ -116,6 +116,72 @@
 - Tech debt / follow-ups: [fill when phase is done]
 - Ready for next phase: no
 
+## Ship Summary
+
+Phase 37 complete — Skills Showcase Next.js app at `apps/skills-showcase/`. Phase 38 Step 38.1 complete — added 6 runtime dependencies (`@trpc/server`, `@trpc/client`, `@trpc/react-query`, `@tanstack/react-query`, `@neondatabase/serverless`, `zod`) and `.env.example`. Config already compatible with API routes. All 54 tests green, typecheck and build passing.
+
+No failing tests expected. 2 manual tasks block Phase 38 runtime testing: Neon project creation (blocks Step 38.2) and admin secret setup (blocks Step 38.6).
+
+## What needs to be built
+
+Create the database schema, connection module, and idempotent migration SQL for the `newsletter_subscribers` table.
+
+### Files to create or modify
+
+- Create `apps/skills-showcase/src/db/schema.ts` — TypeScript type definitions for the `newsletter_subscribers` table
+- Create `apps/skills-showcase/src/db/index.ts` — Neon connection module using `@neondatabase/serverless` with `DATABASE_URL` from env, typed query helpers
+- Create `apps/skills-showcase/src/db/migrate.sql` — Idempotent migration SQL
+
+### Technical Details
+
+**Schema** (from spec `specs/first-party-skills-showcase-newsletter-capture.md`):
+```sql
+create table if not exists newsletter_subscribers (
+  id uuid primary key default gen_random_uuid(),
+  email text not null unique,
+  status text not null default 'active',
+  source_page text not null,
+  consent_text_version text not null,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+```
+- Note: spec uses `uuid` PK (not `serial` as the step outline says) — follow the spec.
+- Add indexes on `status` and `created_at desc`.
+- Allowed `status` values for V1: `active`, `unsubscribed`, `bounced`. Only `active` records created in V1.
+- Migration SQL must be idempotent (`CREATE TABLE IF NOT EXISTS`, `CREATE INDEX IF NOT EXISTS`).
+
+**Connection module** (`src/db/index.ts`):
+- Import `neon` from `@neondatabase/serverless`.
+- Read `DATABASE_URL` from `process.env` at call time (not module scope) for serverless compatibility.
+- Export a `getDb()` function that returns a typed SQL query function.
+- Export typed helpers: `insertSubscriber(email, sourcePage, consentTextVersion)`, `findSubscriberByEmail(email)`, `listSubscribers(search?, limit?, offset?)`, `exportSubscribers()`.
+- Upsert logic: `INSERT ... ON CONFLICT (email) DO UPDATE SET updated_at = now(), source_page = EXCLUDED.source_page, consent_text_version = EXCLUDED.consent_text_version`.
+- Do not log submitted email addresses.
+
+**Type definitions** (`src/db/schema.ts`):
+- Export `NewsletterSubscriber` interface matching the table columns.
+- Export `SubscriberStatus` type: `'active' | 'unsubscribed' | 'bounced'`.
+
+### Execution Profile
+- **Parallel mode:** serial
+- **Integration owner:** main agent
+- **Test strategy:** tests-after (validation step)
+
+### Verification
+- `pnpm --dir apps/skills-showcase typecheck` passes
+- `pnpm --dir apps/skills-showcase build` passes
+- `pnpm --dir apps/skills-showcase test` passes (54/54 existing tests still green)
+- `git diff --check` clean
+- NOTE: Runtime DB testing blocked by manual task (Neon project creation). This step validates compile-time correctness only.
+
+**Ship-one-step handoff:** implement only Step 38.2, validate it, then run `/ship` when done.
+
+## Routing
+
+- **Next work:** Step 38.2 — Create database schema, connection module, and migration SQL
+- **Recommended next command:** `/run`
+
 ## Review
 
 ### Ad-Hoc: YouTube Concept Research Skill
