@@ -1,6 +1,6 @@
 ---
 version: "1.0"
-name: "Agentic Skills Showcase Design System"
+name: "G Skillmap Design System"
 colors:
   ink: "#111827"
   muted: "#5B6472"
@@ -104,7 +104,14 @@ components:
 
 ## Overview
 
-The Skills Showcase visual system is a precise static-site language for `agentic-skills`: Swiss grid discipline, blueprint construction lines, compact technical density, and visible proof. The site should feel like a command center crossed with a productized field manual, not a generic SaaS landing page.
+The G Skillmap visual system is a precise site language for `agentic-skills`: Swiss grid discipline, blueprint construction lines, compact technical density, and visible proof. The site should feel like a command center crossed with a productized field manual, not a generic SaaS landing page.
+
+Public naming must keep the brand and product layout aligned:
+
+- Use **G Skillmap** as the visible brand in the header, metadata, footer, hero, and docs.
+- Use `gskillmap.com` as the production domain reference.
+- Use "skill map" language for information architecture: maps, routes, coordinates, workflow nodes, pack maps, catalog entries, and proof surfaces.
+- Use `agentic-skills` only for the underlying open-source repository/library, not as the public site brand.
 
 The canonical implementation source is `docs/skills-showcase/styles.css`; the motivating product and UI decisions live in `specs/skills-showcase-website.md` and `specs/ui-skills-showcase-website.md`.
 

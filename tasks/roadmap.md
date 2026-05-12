@@ -14,6 +14,8 @@ Phases 32-36 complete. Phase 35 added repository-wide Codex benchmark coverage m
 
 Phase 37 complete: preserved and migrated the static Skills Showcase into a minimal Next.js app at `apps/skills-showcase/` with 6 public routes, generated data pipeline, 54 regression tests, and updated deploy contract. Phase 38 adds Neon-backed first-party newsletter capture, tRPC contracts, TanStack Query mutation/admin state, and an admin export page. Phase 39 adds benchmark results visibility and permission-gated safe Git integration fixtures for benchmarkable git-mutating skills.
 
+Current brand decision: the public site brand is **G Skillmap** and the production domain is `gskillmap.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill-map language while reserving `agentic-skills` for the underlying open-source library/repository.
+
 ## Current Triage: benchmark-test-skill Fresh Benchmark Failure
 
 **Goal:** Triage the fresh `$benchmark-test-skill benchmark-test-skill` benchmark failure after the latest targeted fix.
