@@ -427,6 +427,8 @@ describe("benchmark setup registry", () => {
     expect(claudeSkill).toContain("Recommended next skill: /benchmark-agent-review <skill>");
     expect(setup!.prompt).toContain("literal `Recommended next command:` line");
     expect(setup!.prompt).toContain("Claude `/ship`, Codex `$ship`");
+    expect(setup!.prompt).toContain("regardless of fixture file names or raw session path text");
+    expect(setup!.prompt).not.toContain("run-codex-abc");
 
     const workDir = mkdtempSync(resolve(tmpdir(), "benchmark-test-skill-route-"));
     mkdirSync(resolve(workDir, "benchmark"), { recursive: true });
@@ -440,7 +442,7 @@ describe("benchmark setup registry", () => {
       "Benchmark coverage for run: custom; pass rate 1.0; latency p50 1200; cost 0.42.",
       "",
       "## Sources",
-      "`bench-output.txt`, `verify-output.txt`, `tests/benchmarks/runs/run-codex-abc/report.json`, `benchmark/test-run-2026-05-11.md`.",
+      "`bench-output.txt`, `verify-output.txt`, `tests/benchmarks/runs/run-agent-abc/report.json`, `benchmark/test-run-2026-05-11.md`.",
       "",
       "Recommended next command:",
       route,
@@ -852,7 +854,7 @@ describe("Tier 1 workflow benchmark setups", () => {
         "custom coverage pass rate: 1.0.",
         "latency p50 was 1200ms.",
         "cost was 0.42.",
-        "raw session path: tests/benchmarks/runs/run-codex-abc/report.json",
+        "raw session path: tests/benchmarks/runs/run-agent-abc/report.json",
         "source files: bench-output.txt and verify-output.txt.",
         "report path: benchmark/test-run-2026-05-11.md.",
         "Next command: $ship",
