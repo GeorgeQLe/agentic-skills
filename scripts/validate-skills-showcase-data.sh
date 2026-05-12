@@ -16,6 +16,7 @@ GENERATED_ASSETS=(
   "docs/skills-showcase/assets/github-proof-data.js"
   "apps/skills-showcase/public/assets/skills-data.js"
   "apps/skills-showcase/public/assets/github-proof-data.js"
+  "docs/benchmark-results-matrix.md"
 )
 
 cd "$REPO_ROOT"

@@ -2,13 +2,14 @@
 
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const outputPath = path.join(repoRoot, "docs/skills-showcase/assets/skills-data.js");
 const appOutputPath = path.join(repoRoot, "apps/skills-showcase/public/assets/skills-data.js");
+const matrixOutputPath = path.join(repoRoot, "docs/benchmark-results-matrix.md");
 
 function gitFiles() {
   const output = execFileSync("git", ["ls-files"], {
@@ -287,6 +288,175 @@ function fingerprintFor(files) {
   return hash.digest("hex");
 }
 
+function generateBenchmarkMatrix(files) {
+  const runsDir = path.join(repoRoot, "tests/benchmarks/runs");
+  const reportPaths = existsSync(runsDir)
+    ? readdirSync(runsDir, { withFileTypes: true })
+        .filter((d) => d.isDirectory())
+        .map((d) => `tests/benchmarks/runs/${d.name}/report.json`)
+        .filter((p) => existsSync(path.join(repoRoot, p)))
+    : [];
+  const curatedReports = files.filter((f) => /^benchmark\/test-.+-\d{4}-\d{2}-\d{2}\.md$/.test(f));
+  const reviewFiles = files.filter((f) => /^benchmark\/review-.+-\d{4}-\d{2}-\d{2}\.md$/.test(f));
+
+  const curatedBySkill = new Map();
+  for (const rp of curatedReports) {
+    const m = rp.match(/^benchmark\/test-(.+)-(\d{4}-\d{2}-\d{2})\.md$/);
+    if (m) {
+      const existing = curatedBySkill.get(m[1]);
+      if (!existing || m[2] > existing.date) curatedBySkill.set(m[1], { path: rp, date: m[2] });
+    }
+  }
+
+  const reviewBySkill = new Map();
+  for (const rv of reviewFiles) {
+    const m = rv.match(/^benchmark\/review-(.+)-(\d{4}-\d{2}-\d{2})\.md$/);
+    if (m) {
+      const existing = reviewBySkill.get(m[1]);
+      if (!existing || m[2] > existing.date) reviewBySkill.set(m[1], { path: rv, date: m[2] });
+    }
+  }
+
+  const reports = reportPaths.map((rp) => {
+    const json = readJson(rp);
+    if (!json || !json.skill || !json.agent) return null;
+    return { ...json, reportPath: rp };
+  }).filter(Boolean);
+
+  // Group by skill+agent: keep latest evaluated report (for graded table)
+  // and collect all zero-evaluated reports (for incomplete table)
+  const latestEvaluated = new Map();
+  const zeroEvaluated = [];
+  for (const r of reports) {
+    if (r.evaluatedRuns > 0) {
+      const key = `${r.skill}|${r.agent}`;
+      const existing = latestEvaluated.get(key);
+      if (!existing || (r.generatedAt || "") > (existing.generatedAt || "")) {
+        latestEvaluated.set(key, r);
+      }
+    } else {
+      zeroEvaluated.push(r);
+    }
+  }
+
+  const graded = [];
+  for (const r of Array.from(latestEvaluated.values()).sort((a, b) => a.skill.localeCompare(b.skill) || a.agent.localeCompare(b.agent))) {
+    const hardPassRate = `${Math.round(r.passRate * 100)}%`;
+    const hasQuality = r.qualitySummary && r.qualitySummary.evaluatedRuns > 0;
+    const outputQuality = hasQuality ? `${(r.qualitySummary.averageScore * 100).toFixed(1)}%` : "not scored";
+    const review = reviewBySkill.get(r.skill);
+    const subjectiveReview = review ? `\`${review.path}\`` : "none";
+    const curated = curatedBySkill.get(r.skill);
+    const status = hasQuality ? "graded" : "partially graded";
+
+    const notes = [];
+    if (curated) notes.push(`Curated report: \`${curated.path}\`.`);
+    if (hasQuality && r.evaluatedRuns === 1) notes.push("One evaluated persisted run with deterministic quality scoring.");
+    if (!hasQuality && r.evaluatedRuns > 0) notes.push("Hard assertion evidence exists; no quality score in the latest persisted evaluated report.");
+    if (review) notes.push(`Subjective review median score available.`);
+
+    graded.push({
+      skill: r.skill,
+      agent: titleize(r.agent),
+      reportPath: r.reportPath,
+      runs: r.evaluatedRuns,
+      hardPassRate,
+      outputQuality,
+      subjectiveReview,
+      status,
+      notes: notes.join(" ") || "—"
+    });
+  }
+
+  // Keep only the latest zero-evaluated report per skill+agent for the incomplete table
+  const latestZero = new Map();
+  for (const r of zeroEvaluated) {
+    const key = `${r.skill}|${r.agent}`;
+    const existing = latestZero.get(key);
+    if (!existing || (r.generatedAt || "") > (existing.generatedAt || "")) {
+      latestZero.set(key, r);
+    }
+  }
+
+  const dedupedIncomplete = Array.from(latestZero.values())
+    .sort((a, b) => a.skill.localeCompare(b.skill) || a.agent.localeCompare(b.agent))
+    .map((r) => {
+      const hasEvaluated = latestEvaluated.has(`${r.skill}|${r.agent}`);
+      const notes = [];
+      if (r.totalRuns === 0 && r.evaluatedRuns === 0) notes.push("Report exists with zero total and evaluated runs. Do not count as benchmarked.");
+      if (hasEvaluated) notes.push("Prefer the later evaluated report listed above.");
+      return {
+        skill: r.skill,
+        agent: titleize(r.agent),
+        reportPath: r.reportPath,
+        status: "blocked/incomplete",
+        notes: notes.join(" ") || "Report exists with zero evaluated runs."
+      };
+    });
+
+  const now = new Date().toISOString().slice(0, 10);
+
+  let md = `# Benchmark Results Matrix
+
+> Generated by \`scripts/generate-skills-showcase-data.mjs\` on ${now}. Do not edit by hand.
+
+This matrix tracks skills that already have persisted benchmark run data and grades. It is separate from the benchmark coverage registry in \`tests/harness/bench-coverage.ts\`, which tracks whether a skill has custom, generic, or blocked setup coverage.
+
+## Status Definitions
+
+| Status | Meaning |
+|---|---|
+| \`graded\` | Persisted benchmark data exists with evaluated runs and either hard assertion grades, output-quality grades, or both. |
+| \`partially graded\` | Persisted evaluated runs exist, but quality scoring or subjective review is missing. |
+| \`blocked/incomplete\` | Persisted report exists, but no evaluated skill run was completed. |
+
+## Current Graded Skills
+
+| Skill | Agent | Latest Raw Report | Runs | Hard Pass Rate | Output Quality | Subjective Review | Status | Notes |
+|---|---|---:|---:|---:|---:|---|---|---|
+`;
+
+  for (const row of graded) {
+    md += `| \`${row.skill}\` | ${row.agent} | \`${row.reportPath}\` | ${row.runs} | ${row.hardPassRate} | ${row.outputQuality} | ${row.subjectiveReview} | ${row.status} | ${row.notes} |\n`;
+  }
+
+  if (dedupedIncomplete.length > 0) {
+    md += `
+## Incomplete Persisted Reports
+
+| Skill | Agent | Raw Report | Status | Notes |
+|---|---|---|---|---|
+`;
+    for (const row of dedupedIncomplete) {
+      md += `| \`${row.skill}\` | ${row.agent} | \`${row.reportPath}\` | ${row.status} | ${row.notes} |\n`;
+    }
+  }
+
+  md += `
+## Coverage Gaps
+
+- Most repository skills have custom benchmark setup coverage but do not yet have persisted evaluated benchmark data and grades.
+- The website currently has no public benchmark-results surface. A follow-up should expose this matrix or generated data derived from it in the Skills Showcase.
+- \`commit-and-push-by-feature\` and \`sync\` are currently blocked in the coverage registry, but they are plausible candidates for safe benchmark fixtures when a user explicitly permits creation of a temporary GitHub test repository through \`gh\`.
+
+## Safe Git-Fixture Candidate
+
+For \`commit-and-push-by-feature\` and \`sync\`, a safe setup can be designed around an ephemeral test repository instead of the primary repository:
+
+- Require explicit user permission before any live GitHub operation.
+- Create a temporary private GitHub repository with \`gh repo create\`.
+- Seed it with a minimal fixture project and a default branch.
+- Run the skill against only that temporary repository.
+- Assert expected git/remote behavior from the temporary repo state and persisted benchmark output.
+- Delete or archive the temporary repository at the end of the run, with cleanup failure reported as infrastructure-blocked.
+
+This would convert those two skills from blocked coverage candidates into live, permission-gated integration benchmark targets without risking the main \`agentic-skills\` repository.
+`;
+
+  writeFileSync(matrixOutputPath, md);
+  console.log(`Wrote ${path.relative(repoRoot, matrixOutputPath)} with ${graded.length} graded and ${dedupedIncomplete.length} incomplete rows.`);
+}
+
 function main() {
   const files = gitFiles();
   const benchmarkEvidence = benchmarkEvidenceBySkill(files);
@@ -352,6 +522,8 @@ function main() {
   writeFileSync(appOutputPath, contents);
   console.log(`Wrote ${path.relative(repoRoot, outputPath)} with ${skills.length} skills and ${packs.length} packs.`);
   console.log(`Wrote ${path.relative(repoRoot, appOutputPath)} (Next.js app copy).`);
+
+  generateBenchmarkMatrix(files);
 }
 
 main();
