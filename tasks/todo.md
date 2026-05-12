@@ -70,7 +70,7 @@
 - [x] Step 38.1: Add Phase 38 dependencies and configure environment
   - Files: modify `apps/skills-showcase/package.json`, create `apps/skills-showcase/.env.example`, modify `apps/skills-showcase/next.config.mjs`
   - Add `@trpc/server`, `@trpc/client`, `@trpc/react-query` (11.17.0), `@tanstack/react-query` (5.x), `@neondatabase/serverless` (1.x), `zod` (4.x). Update `next.config.mjs` to remove any static export assumption. Create `.env.example` with `DATABASE_URL` and `NEWSLETTER_ADMIN_SECRET` placeholders.
-- [ ] Step 38.2: Create database schema, connection module, and migration SQL
+- [x] Step 38.2: Create database schema, connection module, and migration SQL
   - Files: create `apps/skills-showcase/src/db/index.ts`, create `apps/skills-showcase/src/db/schema.ts`, create `apps/skills-showcase/src/db/migrate.sql`
   - Use `@neondatabase/serverless` with `DATABASE_URL` from env. Define `newsletter_subscribers` table with `id` (serial PK), `email` (unique, not null), `status` (default `active`), `source_page`, `consent_text_version`, `created_at`, `updated_at`. Create idempotent migration SQL. Export typed query helpers.
 - [ ] Step 38.3: Set up tRPC server with newsletter router
@@ -118,50 +118,42 @@
 
 ## Ship Summary
 
-Phase 37 complete — Skills Showcase Next.js app at `apps/skills-showcase/`. Phase 38 Step 38.1 complete — added 6 runtime dependencies (`@trpc/server`, `@trpc/client`, `@trpc/react-query`, `@tanstack/react-query`, `@neondatabase/serverless`, `zod`) and `.env.example`. Config already compatible with API routes. All 54 tests green, typecheck and build passing.
+Step 38.2 complete — created `src/db/schema.ts` (types), `src/db/index.ts` (Neon connection + typed query helpers), and `src/db/migrate.sql` (idempotent DDL). Schema uses uuid PK per spec, with indexes on `status` and `created_at desc`. Connection module reads `DATABASE_URL` at call time for serverless compatibility. Upsert on email conflict. All 54 tests green, typecheck and build passing.
 
-No failing tests expected. 2 manual tasks block Phase 38 runtime testing: Neon project creation (blocks Step 38.2) and admin secret setup (blocks Step 38.6).
+No failing tests expected. Runtime DB testing still blocked by manual Neon project creation task.
 
 ## What needs to be built
 
-Create the database schema, connection module, and idempotent migration SQL for the `newsletter_subscribers` table.
+Set up the tRPC server infrastructure with the newsletter router and wire it to the Next.js App Router API route.
 
 ### Files to create or modify
 
-- Create `apps/skills-showcase/src/db/schema.ts` — TypeScript type definitions for the `newsletter_subscribers` table
-- Create `apps/skills-showcase/src/db/index.ts` — Neon connection module using `@neondatabase/serverless` with `DATABASE_URL` from env, typed query helpers
-- Create `apps/skills-showcase/src/db/migrate.sql` — Idempotent migration SQL
+- Create `apps/skills-showcase/src/trpc/init.ts` — tRPC context factory and base router with public/protected procedures
+- Create `apps/skills-showcase/src/trpc/newsletter.ts` — Newsletter sub-router with subscribe, adminLogin, adminList, adminExport procedures
+- Create `apps/skills-showcase/src/trpc/router.ts` — Root app router merging newsletter sub-router
+- Create `apps/skills-showcase/app/api/trpc/[trpc]/route.ts` — Next.js App Router catch-all API route handler
 
 ### Technical Details
 
-**Schema** (from spec `specs/first-party-skills-showcase-newsletter-capture.md`):
-```sql
-create table if not exists newsletter_subscribers (
-  id uuid primary key default gen_random_uuid(),
-  email text not null unique,
-  status text not null default 'active',
-  source_page text not null,
-  consent_text_version text not null,
-  created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now()
-);
-```
-- Note: spec uses `uuid` PK (not `serial` as the step outline says) — follow the spec.
-- Add indexes on `status` and `created_at desc`.
-- Allowed `status` values for V1: `active`, `unsubscribed`, `bounced`. Only `active` records created in V1.
-- Migration SQL must be idempotent (`CREATE TABLE IF NOT EXISTS`, `CREATE INDEX IF NOT EXISTS`).
+**tRPC context** (`src/trpc/init.ts`):
+- Create context factory that reads cookies/headers for admin session validation.
+- Create base router with `publicProcedure` and `protectedProcedure` (admin-only, checks session cookie against `NEWSLETTER_ADMIN_SECRET`).
+- Use `@trpc/server` v11 `initTRPC` API.
 
-**Connection module** (`src/db/index.ts`):
-- Import `neon` from `@neondatabase/serverless`.
-- Read `DATABASE_URL` from `process.env` at call time (not module scope) for serverless compatibility.
-- Export a `getDb()` function that returns a typed SQL query function.
-- Export typed helpers: `insertSubscriber(email, sourcePage, consentTextVersion)`, `findSubscriberByEmail(email)`, `listSubscribers(search?, limit?, offset?)`, `exportSubscribers()`.
-- Upsert logic: `INSERT ... ON CONFLICT (email) DO UPDATE SET updated_at = now(), source_page = EXCLUDED.source_page, consent_text_version = EXCLUDED.consent_text_version`.
-- Do not log submitted email addresses.
+**Newsletter router** (`src/trpc/newsletter.ts`):
+- `subscribe` — public mutation. Validate email with Zod. Call `insertSubscriber` from `src/db`. Return success status. Do not leak database errors to client.
+- `adminLogin` — public mutation. Accept `{ secret: string }`, compare against `process.env.NEWSLETTER_ADMIN_SECRET`. On match, set an HTTP-only session cookie and return success. On mismatch, return error.
+- `adminList` — protected query. Accept optional `{ search?, limit?, offset? }`. Call `listSubscribers` from `src/db`.
+- `adminExport` — protected query. Call `exportSubscribers` from `src/db`. Return CSV-formatted string.
 
-**Type definitions** (`src/db/schema.ts`):
-- Export `NewsletterSubscriber` interface matching the table columns.
-- Export `SubscriberStatus` type: `'active' | 'unsubscribed' | 'bounced'`.
+**Root router** (`src/trpc/router.ts`):
+- Merge newsletter sub-router under `newsletter` namespace.
+- Export `AppRouter` type for client-side type inference.
+
+**API route** (`app/api/trpc/[trpc]/route.ts`):
+- Use `fetchRequestHandler` from `@trpc/server/adapters/fetch`.
+- Wire to root router with context factory.
+- Export GET and POST handlers.
 
 ### Execution Profile
 - **Parallel mode:** serial
@@ -169,17 +161,17 @@ create table if not exists newsletter_subscribers (
 - **Test strategy:** tests-after (validation step)
 
 ### Verification
-- `pnpm --dir apps/skills-showcase typecheck` passes
-- `pnpm --dir apps/skills-showcase build` passes
-- `pnpm --dir apps/skills-showcase test` passes (54/54 existing tests still green)
+- `pnpm typecheck` passes
+- `pnpm build` passes
+- `pnpm test` passes (54/54 existing tests still green)
 - `git diff --check` clean
-- NOTE: Runtime DB testing blocked by manual task (Neon project creation). This step validates compile-time correctness only.
+- NOTE: Runtime API testing blocked by manual task (Neon project creation). This step validates compile-time correctness only.
 
-**Ship-one-step handoff:** implement only Step 38.2, validate it, then run `/ship` when done.
+**Ship-one-step handoff:** implement only Step 38.3, validate it, then run `/ship` when done.
 
 ## Routing
 
-- **Next work:** Step 38.2 — Create database schema, connection module, and migration SQL
+- **Next work:** Step 38.3 — Set up tRPC server with newsletter router
 - **Recommended next command:** `/run`
 
 ## Review

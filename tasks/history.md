@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-05-12 — Step 38.2: Create database schema, connection module, and migration SQL
+
+- Created `src/db/schema.ts`: `NewsletterSubscriber` interface, `SubscriberStatus` type union.
+- Created `src/db/index.ts`: `getDb()` Neon connection (reads `DATABASE_URL` at call time), `insertSubscriber` (upsert on email conflict), `findSubscriberByEmail`, `listSubscribers` (with ILIKE search, pagination), `exportSubscribers` (active only).
+- Created `src/db/migrate.sql`: idempotent DDL with uuid PK, two indexes (status, created_at desc).
+- Validation: typecheck, build, 54/54 tests, `git diff --check` clean.
+
 ## 2026-05-12 — Step 38.1: Add Phase 38 dependencies and configure environment
 
 - Added 6 runtime dependencies to `apps/skills-showcase/package.json`: `@trpc/server`, `@trpc/client`, `@trpc/react-query` ^11.17.0, `@tanstack/react-query` ^5, `@neondatabase/serverless` ^1, `zod` ^4.
