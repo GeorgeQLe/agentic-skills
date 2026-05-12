@@ -2083,3 +2083,11 @@ Resolved all 10 findings from `/expert-review`:
 - Created `newsletter-form.tsx` ("use client") for the follow page newsletter form state machine (provider-missing, invalid-email, pending, success, error).
 - Wired all client components into their respective pages and the root layout. Added `.gitignore` for `.next/` and `node_modules/`.
 - Verified: `pnpm typecheck` passes, `pnpm build` produces 6 static routes, dev server renders styled pages with all data attributes present.
+
+## 2026-05-12 — Step 38.3: Set up tRPC server with newsletter router
+
+- Created `src/trpc/init.ts` with tRPC v11 context factory (cookie-based admin session parsing), base router, `publicProcedure`, and `protectedProcedure` (validates session cookie against `NEWSLETTER_ADMIN_SECRET`).
+- Created `src/trpc/newsletter.ts` with four procedures: `subscribe` (Zod v4 email validation, idempotent upsert, no DB error leaks), `adminLogin` (secret comparison, HTTP-only secure cookie), `adminList` (search/limit/offset), `adminExport` (CSV-formatted active subscribers).
+- Created `src/trpc/router.ts` merging newsletter sub-router, exporting `AppRouter` type.
+- Created `app/api/trpc/[trpc]/route.ts` using `fetchRequestHandler` from `@trpc/server/adapters/fetch`.
+- Verified: typecheck clean, build shows `/api/trpc/[trpc]` as dynamic route, 54/54 showcase tests + 1302 layer1 tests green.

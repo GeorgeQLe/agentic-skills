@@ -120,60 +120,67 @@
 
 ## Ship Summary
 
-Step 38.2 complete — created `src/db/schema.ts` (types), `src/db/index.ts` (Neon connection + typed query helpers), and `src/db/migrate.sql` (idempotent DDL). Schema uses uuid PK per spec, with indexes on `status` and `created_at desc`. Connection module reads `DATABASE_URL` at call time for serverless compatibility. Upsert on email conflict. All 54 tests green, typecheck and build passing.
+Step 38.3 complete — created tRPC server infrastructure: `src/trpc/init.ts` (context factory with cookie-based admin session, public/protected procedures), `src/trpc/newsletter.ts` (subscribe, adminLogin, adminList, adminExport), `src/trpc/router.ts` (root router with `AppRouter` type), and `app/api/trpc/[trpc]/route.ts` (fetch adapter API route). All 54 showcase tests green, 1302 layer1 tests green, typecheck and build passing.
 
-No failing tests expected. Runtime DB testing still blocked by manual Neon project creation task.
+Deploy skipped (manual Vercel, not yet configured). No failing tests expected.
 
 ## What needs to be built
 
-Set up the tRPC server infrastructure with the newsletter router and wire it to the Next.js App Router API route.
+Set up the tRPC client binding, TanStack Query provider, and integrate into the root layout.
 
 ### Files to create or modify
 
-- Create `apps/skills-showcase/src/trpc/init.ts` — tRPC context factory and base router with public/protected procedures
-- Create `apps/skills-showcase/src/trpc/newsletter.ts` — Newsletter sub-router with subscribe, adminLogin, adminList, adminExport procedures
-- Create `apps/skills-showcase/src/trpc/router.ts` — Root app router merging newsletter sub-router
-- Create `apps/skills-showcase/app/api/trpc/[trpc]/route.ts` — Next.js App Router catch-all API route handler
+- Create `apps/skills-showcase/src/trpc/client.ts` — tRPC-React client binding with TanStack Query integration
+- Create `apps/skills-showcase/src/trpc/provider.tsx` — `"use client"` provider component wrapping `QueryClientProvider` and `trpc.Provider`
+- Modify `apps/skills-showcase/app/layout.tsx` — Wrap `{children}` with the tRPC/Query provider
 
 ### Technical Details
 
-**tRPC context** (`src/trpc/init.ts`):
-- Create context factory that reads cookies/headers for admin session validation.
-- Create base router with `publicProcedure` and `protectedProcedure` (admin-only, checks session cookie against `NEWSLETTER_ADMIN_SECRET`).
-- Use `@trpc/server` v11 `initTRPC` API.
+**tRPC client** (`src/trpc/client.ts`):
+- Use `createTRPCReact` from `@trpc/react-query` with `AppRouter` type from `./router`
+- Export the typed `trpc` client object for use in components
 
-**Newsletter router** (`src/trpc/newsletter.ts`):
-- `subscribe` — public mutation. Validate email with Zod. Call `insertSubscriber` from `src/db`. Return success status. Do not leak database errors to client.
-- `adminLogin` — public mutation. Accept `{ secret: string }`, compare against `process.env.NEWSLETTER_ADMIN_SECRET`. On match, set an HTTP-only session cookie and return success. On mismatch, return error.
-- `adminList` — protected query. Accept optional `{ search?, limit?, offset? }`. Call `listSubscribers` from `src/db`.
-- `adminExport` — protected query. Call `exportSubscribers` from `src/db`. Return CSV-formatted string.
+**Provider** (`src/trpc/provider.tsx`):
+- `"use client"` directive required (React context uses client-side state)
+- Create `QueryClient` with sensible defaults (e.g., `staleTime`, `retry` settings)
+- Create tRPC client with `httpBatchLink` pointing to `/api/trpc`
+- Wrap children in `trpc.Provider` > `QueryClientProvider`
+- Use `useState` for both `queryClient` and `trpcClient` to avoid SSR re-creation
 
-**Root router** (`src/trpc/router.ts`):
-- Merge newsletter sub-router under `newsletter` namespace.
-- Export `AppRouter` type for client-side type inference.
+**Layout integration** (`app/layout.tsx`):
+- Import `TRPCProvider` from `@/trpc/provider`
+- Wrap the existing `{children}` inside `<TRPCProvider>{children}</TRPCProvider>`
+- Keep all existing layout content (header, mobile panel, showcase shell) intact
 
-**API route** (`app/api/trpc/[trpc]/route.ts`):
-- Use `fetchRequestHandler` from `@trpc/server/adapters/fetch`.
-- Wire to root router with context factory.
-- Export GET and POST handlers.
+**Existing layout structure** (for reference):
+```tsx
+<html lang="en">
+  <head>...</head>
+  <body>
+    <ShowcaseHeader />
+    <MobilePanel />
+    <ShowcaseShell />
+    {children}
+  </body>
+</html>
+```
 
 ### Execution Profile
 - **Parallel mode:** serial
 - **Integration owner:** main agent
-- **Test strategy:** tests-after (validation step)
+- **Test strategy:** tests-after
 
 ### Verification
-- `pnpm typecheck` passes
-- `pnpm build` passes
-- `pnpm test` passes (54/54 existing tests still green)
+- `pnpm --dir apps/skills-showcase typecheck` passes
+- `pnpm --dir apps/skills-showcase build` passes
+- `pnpm --dir apps/skills-showcase test` passes (54/54 existing tests still green)
 - `git diff --check` clean
-- NOTE: Runtime API testing blocked by manual task (Neon project creation). This step validates compile-time correctness only.
 
-**Ship-one-step handoff:** implement only Step 38.3, validate it, then run `/ship` when done.
+**Ship-one-step handoff:** implement only Step 38.4, validate it, then run `/ship` when done.
 
 ## Routing
 
-- **Next work:** Step 38.3 — Set up tRPC server with newsletter router
+- **Next work:** Step 38.4 — Set up tRPC client, TanStack Query provider, and layout integration
 - **Recommended next command:** `/run`
 
 ## Review
