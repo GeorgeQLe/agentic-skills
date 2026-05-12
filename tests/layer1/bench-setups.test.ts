@@ -771,6 +771,8 @@ describe("Tier 1 workflow benchmark setups", () => {
         "latency p50 was 1200ms.",
         "cost was 0.42.",
         "raw session path: tests/benchmarks/runs/run-codex-abc/report.json",
+        "source files: bench-output.txt and verify-output.txt.",
+        "report path: benchmark/test-run-2026-05-11.md.",
         "Next command: $ship",
         "",
       ].join("\n"),
@@ -934,6 +936,18 @@ describe("layer4 setup helpers", () => {
     });
     expect(assertNextCommand("Next command: $run")).toMatchObject({
       pass: true,
+    });
+    expect(assertNextCommand("Recommended next command: $run")).toMatchObject({
+      pass: true,
+    });
+    expect(assertNextCommand("Recommended next skill: $ship")).toMatchObject({
+      pass: true,
+    });
+    expect(assertNextCommand("Next work: none\nRecommended next command: $ship")).toMatchObject({
+      pass: true,
+    });
+    expect(assertNextCommand("Next: keep going")).toMatchObject({
+      pass: false,
     });
     expect(assertRecommendedRoute("Next command: $run", "$run")).toMatchObject({
       pass: true,
