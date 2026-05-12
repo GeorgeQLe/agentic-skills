@@ -754,7 +754,6 @@ describe("benchmark coverage matrix", () => {
       "install-agentic-skills",
       "patch-exec-profile",
       "release",
-      "sync",
       "uat-guide",
     ];
 
@@ -783,6 +782,14 @@ describe("benchmark coverage matrix", () => {
     expect(commitPushRow).toMatchObject({
       coverage_status: "custom",
       setup_path: "tests/layer4/setups/git-fixture-commit-and-push.setup.ts",
+      agent_scope: "both",
+      fixture_type: "git-disposable-repo-fixture",
+    });
+
+    const syncRow = matrix.find((row) => row.skill === "sync");
+    expect(syncRow).toMatchObject({
+      coverage_status: "custom",
+      setup_path: "tests/layer4/setups/git-fixture-sync.setup.ts",
       agent_scope: "both",
       fixture_type: "git-disposable-repo-fixture",
     });
