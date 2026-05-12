@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-05-12 — Step 37.4 Generated data pipeline for Next.js app
+
+- Updated `scripts/generate-skills-showcase-data.mjs` and `scripts/generate-skills-showcase-github-data.mjs` to dual-write to both `docs/skills-showcase/assets/` (compatibility) and `apps/skills-showcase/public/assets/` (Next.js app).
+- Updated `scripts/validate-skills-showcase-data.sh` to fingerprint all four generated assets (old + new paths).
+- Added `<Script strategy="beforeInteractive">` tags in root `app/layout.tsx` to load `skills-data.js` and `github-proof-data.js` before React hydration.
+- Verified: generators produce both outputs, validator passes, build produces 6 static routes, dev server serves data assets at `/assets/`, and catalog/proof pages reference the data globals.
+
 ## 2026-05-11 — Step 37.2 App Router refactor
 
 - Leveraged Next.js App Router features on the ported showcase pages.
