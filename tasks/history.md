@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-05-12 — Step 37.7 Regression tests for showcase app
+
+- Added Vitest + @testing-library/react + jsdom test infrastructure to `apps/skills-showcase`.
+- Created Next.js module mocks for jsdom (`next/link`, `next/navigation`, `next/script`).
+- Wrote 54 tests across 5 files: routes (7), catalog (17), workflows (11), newsletter-form (9), smoke rendering (8).
+- All tests pass, typecheck clean.
+
 ## 2026-05-12 — Step 37.6 Retire old static-site surface
 
 - Deleted 8 static site files (HTML/CSS/JS) from `docs/skills-showcase/`. Kept `docs/skills-showcase/assets/` for dual-write.
