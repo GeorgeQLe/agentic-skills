@@ -159,6 +159,36 @@
 - [ ] All phase tests pass.
 - [ ] No regressions in previous phase tests.
 
+## Handoff — Step 39.6
+
+### What Needs to Be Built
+
+Step 39.6 writes regression tests covering the Phase 39 acceptance criteria and fixes any stale generated assets.
+
+**Regenerate stale assets:** The `docs/benchmark-results-matrix.md` still says "`commit-and-push-by-feature` and `sync` are currently blocked" — this is now stale since both were unblocked in Steps 39.4 and 39.5. Run `node scripts/generate-skills-showcase-data.mjs` to regenerate the matrix from the updated coverage registry. The generator reads `tests/harness/bench-coverage.ts` at runtime, so it will pick up the new custom status.
+
+**Update** `tests/layer1/benchmark-results-matrix.test.ts`:
+- The existing assertion checks for the exact string "`commit-and-push-by-feature` and `sync` are currently blocked in the coverage registry" — this will now fail because the generator should no longer emit that line. Update or remove this assertion to match the regenerated matrix content.
+- Add assertions that the matrix reflects the updated coverage status (both skills are now `custom` with `git-disposable-repo-fixture`).
+
+**Verify existing coverage tests already pass:** The `bench-setups.test.ts` and `bench-coverage.test.ts` already assert that `commit-and-push-by-feature` and `sync` have `coverage_status: "custom"` — confirmed passing in this session (1304 tests).
+
+**Additional regression tests to consider:**
+- Test that showcase data includes `benchmarkEvidence` for graded skills (may already be covered by existing `skills-showcase-*.test.ts` files — check before adding duplicates).
+- Test that no GitHub Actions workflows exist in `.github/workflows/` (acceptance criterion).
+
+**Validation:**
+- `pnpm --dir tests test:layer1` — must pass.
+- `scripts/validate-skills-showcase-data.sh` — must pass after regeneration.
+- `git diff --check` — no whitespace errors.
+
+### Execution Profile
+- **Parallel mode:** serial
+- **Test strategy:** tests-after
+
+### Handoff
+Implement only this step, validate it, then run `/ship` when done.
+
 ## Routing
 
 ## Review — Step 39.2
