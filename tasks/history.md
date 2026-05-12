@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-05-12 — Step 38.7: Update deploy contract, routes, and documentation
+
+- Updated `tasks/deploy.md`: replaced static export/no-database language with server-side Node.js + Neon PostgreSQL, added env vars section, updated route list with `/admin/newsletter` and `/api/trpc/*`, removed stale Newsletter Provider section, updated launch checks.
+- Updated `apps/skills-showcase/src/showcase/routes.ts`: added `/admin/newsletter` route, updated `/follow` description.
+- Updated `apps/skills-showcase/README.md`: added Environment Variables and Database sections.
+- Updated `routes.test.ts`: route count 6→7, added admin route/label assertions.
+- Fixed `smoke.test.tsx`: corrected stale "Explore the Library" → "Explore the Map" assertion.
+- Verified: typecheck clean, build passing, 52/52 showcase tests green.
+
 ## 2026-05-12 — Step 38.6: Create admin newsletter page with secret-based auth gate
 
 - Created `app/admin/newsletter/page.tsx`: server component shell with noindex metadata.
