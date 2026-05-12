@@ -27,6 +27,19 @@ Phases 37-38 are planned from `specs/first-party-skills-showcase-newsletter-capt
 
 **Result:** Benchmark completed on 2026-05-12. `benchmark-test-skill` is a known custom benchmark target using `tests/layer4/setups/tier1-workflows.setup.ts`. Verify passed with layer1 in 8.4s across 1,256 tests; layer2 was skipped because no target-specific layer2 tests matched `benchmark-test-skill`. The both-agent benchmark completed with no infrastructure-blocked runs. Claude failed 0/3 hard assertions because every run omitted the required next-command handoff; Claude output quality averaged 63.1%, with 3 threshold failures and 6 critical failures. Codex passed 3/3 hard assertions; Codex output quality averaged 85.8%, with 1 threshold failure and 4 critical failures. See `benchmark/test-benchmark-test-skill-2026-05-12.md`. Recommended next command: `$session-triage benchmark-test-skill benchmark failure`.
 
+## Current Triage: benchmark-test-skill Benchmark Failure
+
+**Goal:** Triage the failed `benchmark-test-skill` benchmark and identify the smallest durable fix.
+
+**Acceptance Criteria:**
+- [x] The benchmark report and persisted run evidence are inspected.
+- [x] Mirrored Claude/Codex `benchmark-test-skill` contracts are compared.
+- [x] The tier1 benchmark setup, hard route assertion, and quality scoring path are inspected.
+- [x] Existing lessons are checked for relevant routing/rubric patterns.
+- [x] The triage report records verdict, root cause, responsible gap, validation plan, and next route.
+
+**Result:** Triage completed on 2026-05-12. The benchmark failure is verified, but the responsible gap is in the benchmark harness/rubric, not the mirrored `benchmark-test-skill` contracts. The hard route assertion recognizes `Next command` but not all contract-valid route shapes, and the quality rubric appears to penalize final runner summaries or generated reports for not repeating fixture file names. See `benchmark/triage-benchmark-test-skill-2026-05-12.md`. Recommended next command: `$targeted-skill-builder benchmark-test-skill benchmark failure`.
+
 ## Current Benchmark: spec-interview
 
 **Goal:** Run `$benchmark-test-skill spec-interview` through the repository harness with fresh eligibility, verify, and both-agent benchmark evidence on 2026-05-12.
