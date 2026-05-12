@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-05-12 — Phase 37 Complete: Skills Showcase Next.js Preservation Refactor
+
+- Completed Step 37.8: local app validation and whitespace checks. Regenerated stale data assets.
+- All 5 validation commands pass, 54/54 app tests, 1256/1256 layer1 tests.
+- Phase 37 milestone fully met (all 9 criteria). Archived to `tasks/phases/phase-37.md`.
+- Non-blocking manual tasks remain: Vercel project setup and newsletter provider config.
+
 ## 2026-05-12 — Step 37.7 Regression tests for showcase app
 
 - Added Vitest + @testing-library/react + jsdom test infrastructure to `apps/skills-showcase`.
