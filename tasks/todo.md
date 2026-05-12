@@ -1,9 +1,12 @@
 # Active Phase
 
 **Project:** Claude Skills / agentic-skills
-**Status:** Phase 39 decomposed, ready for Step 39.1.
-**Current phase:** Phase 39 of 39 — Benchmark Results Visibility And Safe Git Fixtures
-**Last completed phase:** Phase 38 — First-Party Newsletter Capture And Admin
+**Status:** All 39 roadmap phases complete.
+**Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
+
+## Priority Task Queue
+
+- [ ] `/research-roadmap` - Scan documentation health and build priority documentation queue because all roadmap phases are complete and no documentation scan has been run yet.
 
 ## Phase 39: Benchmark Results Visibility And Safe Git Fixtures
 

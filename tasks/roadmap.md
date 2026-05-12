@@ -1010,7 +1010,7 @@ Current brand decision: the public site brand is **G Skillmap** and the producti
 
 > Test strategy: tests-after
 
-## Phase 31: Parallel Agent Branch/PR Guard
+## Phase 31: Parallel Agent Branch/PR Guard ✓
 
 **Goal:** Make the branch policy explicit across parallel agent-team skills: sequential work still lands directly on `main`/`master`, but parallel agent-team write lanes must work on separate GitHub branches and pass a consolidation/PR review gate before final integration.
 
@@ -1310,7 +1310,7 @@ Current brand decision: the public site brand is **G Skillmap** and the producti
 
 ---
 
-## Phase 20: YouTube External Video Research Skills
+## Phase 20: YouTube External Video Research Skills ✓
 
 **Goal:** Add focused external YouTube video research skills for context comprehension, format/Remotion-style analysis, and competitive performance learning.
 
@@ -1334,7 +1334,7 @@ Current brand decision: the public site brand is **G Skillmap** and the producti
 
 **Completed:** 2026-05-04. Mirrored Claude/Codex `youtube-vid-research`, `youtube-format-research`, and `youtube-competitive-research` skills were added to the creator-media pack, documentation references now expose external video context, format/Remotion-style analysis, and competitive lessons, and validation passed with mirrored contract scans, docs/routing scans, dependency/version/routing audits, and `git diff --check`.
 
-## Phase 19: YouTube Description Optimizer
+## Phase 19: YouTube Description Optimizer ✓
 
 **Goal:** Add a focused YouTube description and metadata optimization skill for existing videos, future uploads, and reusable series templates.
 
@@ -1794,7 +1794,7 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 
 ---
 
-## Phase 13: Creator Presence Dossier
+## Phase 13: Creator Presence Dossier ✓
 
 **Goal:** Add a repo-backed Markdown dossier skill that tracks a creator's public professional presence, career arc, platform roles, proof assets, and content opportunities over time.
 
@@ -2040,7 +2040,7 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Tech debt / follow-ups: Monorepo Pack V2 remains deferred until V1 is validated in real use.
 - Ready for next phase: yes.
 
-## Phase 27: Analyze-Sessions Targeted Skill Retrospectives
+## Phase 27: Analyze-Sessions Targeted Skill Retrospectives ✓
 
 **Goal:** Extend the existing mirrored `analyze-sessions` skill so it can audit a particular skill's performance in a repository or active agent session, verify a user-identified mistake against session/code evidence, and recommend concrete skill-contract fixes that prevent the mistake from recurring.
 
@@ -2067,7 +2067,7 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 
 **Completed:** 2026-05-05. Updated mirrored Claude/Codex `analyze-sessions` contracts to add targeted skill retrospectives while preserving broad history analysis. The new mode resolves skills from shared, pack-local, project-local, installed, and session-derived scopes; requires evidence before calling a user-reported mistake agent-verified; and outputs concrete skill fixes plus validation plans. Validation passed with install, targeted mirrored scans, skill dependency/version/routing audits, layer1 tests, and `git diff --check`.
 
-## Phase 28: Session Triage Split
+## Phase 28: Session Triage Split ✓
 
 **Goal:** Split the focused one-issue/session investigation behavior out of `analyze-sessions` into a distinct mirrored `session-triage` skill so broad trend analysis and immediate incident triage cannot be confused.
 
@@ -2094,7 +2094,7 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 
 **Completed:** 2026-05-05. Split immediate issue/session/correction investigations into mirrored `session-triage` skills, restored `analyze-sessions` to broad cross-session trend analysis, added Codex agent metadata, updated discovery and routing references, and recorded the naming lesson. Validation passed with install, skill dependency/version/routing checks, layer1 tests, targeted `rg`/directory scans, and `git diff --check`.
 
-## Phase 29: Live Skill Harness
+## Phase 29: Live Skill Harness ✓
 
 **Goal:** Add an opt-in live-agent test harness that invokes Claude and Codex headlessly in controlled temporary repos, validates structured outputs, and catches skill-behavior regressions that structural tests cannot see.
 
