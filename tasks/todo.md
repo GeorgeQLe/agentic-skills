@@ -73,10 +73,12 @@
 **Goal:** Tighten the existing `benchmark-test-skill` tier1 benchmark fixture so generated reports preserve exact fixture evidence in a structured, operator-readable report shape.
 
 **Plan:**
-- [ ] Confirm the fix belongs in the existing benchmark-test-skill fixture and layer1 setup tests, not a new skill.
-- [ ] Update the tier1 benchmark fixture prompt, hard assertions, and output-quality rubric to require stable report sections/tables for verification, benchmark metrics, raw evidence, and next route.
-- [ ] Add layer1 regression coverage that accepts a structured fixture report and rejects an exact-but-unstructured evidence dump.
-- [ ] Run targeted and required skill validation, then record results here.
+- [x] Confirm the fix belongs in the existing benchmark-test-skill fixture and layer1 setup tests, not a new skill.
+- [x] Update the tier1 benchmark fixture prompt, hard assertions, and output-quality rubric to require stable report sections/tables for verification, benchmark metrics, raw evidence, and next route.
+- [x] Add layer1 regression coverage that accepts a structured fixture report and rejects an exact-but-unstructured evidence dump.
+- [x] Run targeted and required skill validation, then record results here.
+
+**Review:** Complete. Updated `tests/layer4/setups/tier1-workflows.setup.ts` so the benchmark-test-skill fixture asks agents to use only `bench-output.txt` and `verify-output.txt`, avoid repository searching, and write a structured benchmark report with `## Verify`, `## Benchmark Metrics`, `## Raw Evidence`, and `## Next Route` sections plus Markdown metric tables. Hard assertions now require those headings/tables alongside exact fixture evidence, and the quality rubric scores the structured report fields directly. Updated `tests/layer1/bench-setups.test.ts` with prompt-contract checks, a passing structured report fixture, and a failing exact-but-unstructured report fixture. Validation passed with focused layer1 tests, benchmark coverage, install/dependency/version/routing checks, `pnpm --dir tests verify --skill benchmark-test-skill`, Codex smoke `benchmark-test-skill-codex-39561c73` (1/1 hard assertions, 100.0% quality), and `git diff --check`. Recommended next command: `$benchmark-test-skill benchmark-test-skill`.
 
 ### Execution Profile
 **Parallel mode:** serial

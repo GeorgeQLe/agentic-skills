@@ -62,11 +62,13 @@ Current brand decision: the public site brand is **G Skillmap** and the producti
 **Goal:** Tighten the `benchmark-test-skill` tier1 benchmark fixture so generated benchmark reports are exact and easy for the next operator to scan.
 
 **Acceptance Criteria:**
-- [ ] Existing-skill overlap confirms the fix belongs in the benchmark fixture/setup, not a new skill.
-- [ ] The fixture prompt requires stable report sections/tables for verification, benchmark metrics, raw evidence, and next route.
-- [ ] Hard assertions require structured report headings in addition to exact fixture evidence.
-- [ ] The output-quality rubric rewards report ergonomics and rejects unstructured evidence dumps.
-- [ ] Focused layer1 tests, benchmark coverage, required skill validation, and whitespace validation pass.
+- [x] Existing-skill overlap confirms the fix belongs in the benchmark fixture/setup, not a new skill.
+- [x] The fixture prompt requires stable report sections/tables for verification, benchmark metrics, raw evidence, and next route.
+- [x] Hard assertions require structured report headings in addition to exact fixture evidence.
+- [x] The output-quality rubric rewards report ergonomics and rejects unstructured evidence dumps.
+- [x] Focused layer1 tests, benchmark coverage, required skill validation, and whitespace validation pass.
+
+**Result:** Completed on 2026-05-12. The `benchmark-test-skill` tier1 fixture now requires a structured fixture report with verification, benchmark metrics, raw evidence, and next-route sections, plus Markdown tables and exact fixture facts. Layer1 coverage accepts the structured report and rejects exact-but-unstructured evidence dumps. Final Codex smoke `benchmark-test-skill-codex-39561c73` passed 1/1 hard assertions with 100.0% quality. Recommended next command: `$benchmark-test-skill benchmark-test-skill`.
 
 ## Current Fix: benchmark-test-skill Neutral Benchmark Fixture
 
