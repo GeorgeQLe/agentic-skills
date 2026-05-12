@@ -5,6 +5,17 @@
 **Current phase:** Phase 38 of 39 — First-Party Newsletter Capture And Admin
 **Last completed phase:** Phase 37 — Skills Showcase Next.js Preservation Refactor
 
+## Current Fix: benchmark-test-skill Neutral Benchmark Fixture
+
+**Goal:** Remove misleading Codex-specific fixture evidence from the `benchmark-test-skill` tier1 benchmark while preserving runner-specific `/ship` and `$ship` route assertions.
+
+**Acceptance Criteria:**
+- [x] Existing-skill overlap confirms the fix belongs in the benchmark harness/setup, not a new skill.
+- [x] The fixture raw session path is neutral and no longer nudges Claude toward `$ship`.
+- [x] The fixture prompt says runner route convention is authoritative regardless of fixture filenames or raw session paths.
+- [x] Layer1 coverage guards against reintroducing the misleading `run-codex-abc` fixture.
+- [ ] Focused layer1 tests, benchmark coverage, verify, smoke benchmarks, and whitespace validation pass.
+
 ## Current Documentation Update: G Skillmap Brand
 
 **Goal:** Record `gskillmap.com` as the production domain and align public site/docs language around the **G Skillmap** brand while keeping `agentic-skills` as the underlying open-source library name.
@@ -127,7 +138,7 @@
 - [x] Step 38.6: Create admin newsletter page with secret-based auth gate
   - Files: create `apps/skills-showcase/app/admin/newsletter/page.tsx`, create `apps/skills-showcase/src/showcase/admin-newsletter.tsx`
   - Build `/admin/newsletter` with a login gate (prompt for admin secret, call `adminLogin` mutation). After auth: subscriber list table with search input, copy-all-active-emails button, CSV download button. Use tRPC `adminList` and `adminExport` queries. Style consistently with the showcase blueprint system.
-- [ ] Step 38.7: Update deploy contract, routes, and documentation
+- [x] Step 38.7: Update deploy contract, routes, and documentation
   - Files: modify `tasks/deploy.md`, modify `apps/skills-showcase/src/showcase/routes.ts`, modify `apps/skills-showcase/README.md`
   - Update deploy contract: remove "static export" / "no runtime API" / "no database" language, add Neon `DATABASE_URL` and `NEWSLETTER_ADMIN_SECRET` env var requirements, note server-side deployment. Add `/admin/newsletter` to routes.ts. Update README with new local dev setup (env vars, database).
 
@@ -160,37 +171,7 @@
 
 ## Ship Summary
 
-Step 38.6 complete — created `/admin/newsletter` page with secret-based auth gate. Typecheck, build, and 52/52 tests pass.
-
-Deploy skipped (manual Vercel, not yet configured). No failing tests expected.
-
-## What needs to be built
-
-Update deploy contract, routes registry, and README to reflect the Phase 38 changes: the app is no longer a static export, it has a database, tRPC API routes, and an admin page.
-
-### Files to modify
-
-- `tasks/deploy.md` — Remove stale "static export" / "no runtime API" / "no database" language. Add `DATABASE_URL` and `NEWSLETTER_ADMIN_SECRET` env var requirements. Update route list to include `/admin/newsletter` and `/api/trpc/*`. Note server-side deployment (no `output: "export"`). Remove stale "Newsletter Provider" section (now first-party). Update launch checks.
-- `apps/skills-showcase/src/showcase/routes.ts` — Add `/admin/newsletter` route entry. Update `/follow` description (no longer "non-persistent" — it's now first-party capture).
-- `apps/skills-showcase/README.md` — Remove "static export" / "out/" references. Add env var setup section (`DATABASE_URL`, `NEWSLETTER_ADMIN_SECRET`). Note the Neon database dependency. Update route count (7 static + 1 dynamic API).
-
-### Technical approach
-
-Straightforward doc/config updates. Key changes:
-1. **deploy.md**: Replace `Runtime API: none (static export with output: "export")` → `Runtime: server-side (Node.js)`. Replace `Database: none` → `Database: Neon PostgreSQL`. Add env vars section. Update route list. Remove the "Newsletter Provider" section entirely (replaced by first-party tRPC). Update launch checks to drop provider-missing fallback and add admin secret check.
-2. **routes.ts**: Add `{ href: "/admin/newsletter", label: "Admin", description: "Protected newsletter subscriber admin panel." }`. Update Follow description from "Non-persistent newsletter interest surface for Phase 37" → "Newsletter subscription and mailing list capture."
-3. **README.md**: Replace "Produces a static export to `apps/skills-showcase/out/` with 6 routes" → "Produces a server-rendered app with 8 routes (7 static + 1 dynamic API)". Add `## Environment Variables` section with `DATABASE_URL` and `NEWSLETTER_ADMIN_SECRET`. Add `## Database` section noting Neon and the migration SQL path.
-
-### Execution Profile
-- **Parallel mode:** serial
-- **Integration owner:** main agent
-- **Test strategy:** tests-after
-
-### Verification
-- `pnpm --dir apps/skills-showcase typecheck` passes
-- `pnpm --dir apps/skills-showcase build` passes
-- `pnpm --dir apps/skills-showcase test` passes (52+ tests green)
-- `git diff --check` clean
+Step 38.7 complete — updated deploy contract, routes registry, README, and tests. Typecheck, build, and 52/52 tests pass.
 
 **Ship-one-step handoff:** implement only Step 38.7, validate it, then run `/ship` when done.
 
