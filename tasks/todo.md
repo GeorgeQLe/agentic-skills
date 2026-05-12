@@ -27,7 +27,7 @@
 - [ ] A clean benchmark-results matrix lists skills with persisted evaluated benchmark data, hard pass rates, quality scores, subjective review grades when present, and raw report paths.
 - [ ] Skills Showcase exposes benchmark results or links to the generated matrix without confusing coverage status with completed graded runs.
 - [x] `commit-and-push-by-feature` has a safe fixture plan using an explicit-permission disposable GitHub test repository.
-- [ ] `sync` has a safe fixture plan using an explicit-permission disposable GitHub test repository.
+- [x] `sync` has a safe fixture plan using an explicit-permission disposable GitHub test repository.
 - [ ] The benchmark coverage registry reflects any newly unblocked setup status only after the safe fixture is implemented and validated.
 - [ ] Cleanup and infrastructure-block handling are documented for the disposable repository workflow.
 - [ ] No GitHub Actions are created, modified, or recommended.
@@ -124,7 +124,7 @@
   - Files: create `tests/layer4/setups/git-fixture-commit-and-push.setup.ts` (fixture definition), modify `tests/harness/bench-coverage.ts` (update coverage status from blocked to custom)
   - Define the benchmark setup: create disposable repo, stage mixed changes across multiple files, run `commit-and-push-by-feature`, verify commits are grouped by feature with conventional messages.
   - Update `COVERAGE_OVERRIDES` and `TIER23_GLOBAL_BLOCKED_SKILLS` to reflect newly unblocked status with the safe fixture path.
-- [ ] Step 39.5: Add `sync` safe fixture plan using the disposable repo infrastructure.
+- [x] Step 39.5: Add `sync` safe fixture plan using the disposable repo infrastructure.
   - Classification: automated
   - Files: create `tests/layer4/setups/git-fixture-sync.setup.ts` (fixture definition), modify `tests/harness/bench-coverage.ts` (update coverage status from blocked to custom)
   - Define the benchmark setup: create disposable repo with upstream changes, run `sync`, verify pull/rebase behavior and stash handling.
@@ -152,7 +152,7 @@
 - [ ] A clean benchmark-results matrix lists skills with persisted evaluated benchmark data, hard pass rates, quality scores, subjective review grades when present, and raw report paths.
 - [ ] Skills Showcase exposes benchmark results or links to the generated matrix without confusing coverage status with completed graded runs.
 - [x] `commit-and-push-by-feature` has a safe fixture plan using an explicit-permission disposable GitHub test repository.
-- [ ] `sync` has a safe fixture plan using an explicit-permission disposable GitHub test repository.
+- [x] `sync` has a safe fixture plan using an explicit-permission disposable GitHub test repository.
 - [ ] The benchmark coverage registry reflects any newly unblocked setup status only after the safe fixture is implemented and validated.
 - [x] Cleanup and infrastructure-block handling are documented for the disposable repository workflow.
 - [ ] No GitHub Actions are created, modified, or recommended.
@@ -317,6 +317,21 @@ Step 39.5 adds the `sync` safe fixture plan using the disposable repo infrastruc
 
 ### Handoff
 Implement only this step, validate it, then run `/ship` when done.
+
+## Review — Step 39.5
+
+- Completed on 2026-05-12.
+- Created `tests/layer4/setups/git-fixture-sync.setup.ts` — benchmark fixture that seeds a disposable repo, simulates upstream changes via a second clone, adds a local uncommitted change (NOTES.md), then asserts `sync` performs pull/rebase, reports branch status, handles stashed local changes, and reports sync completion.
+- Hard assertions: pull performed, branch reported, stash handling, sync status reported.
+- Updated `tests/harness/bench-coverage.ts`: removed `sync` from `TIER23_GLOBAL_BLOCKED_SKILLS`, added it to `COVERAGE_OVERRIDES` with `coverage: "custom"`, `agent_scope: "both"`, `setup_path: "tests/layer4/setups/git-fixture-sync.setup.ts"`.
+- Updated `tests/layer1/bench-setups.test.ts`: removed `sync` from `expectedBlockedSkills`, added a dedicated assertion checking custom status, setup path, agent scope, and fixture type.
+- Validation:
+  - `pnpm --dir tests test:layer1` — 1304 tests passed across 12 files (no regressions).
+  - `pnpm --dir tests bench:coverage` — valid (145 skills).
+  - `git diff --check` — passed.
+
+- **Next work:** Step 39.6 — write regression tests covering acceptance criteria
+- **Recommended next command:** `/run`
 
 ## Review — Step 39.3
 
