@@ -69,7 +69,7 @@
 - [x] Step 37.2: Port the existing static routes into the app router while preserving content hierarchy
   - Files: create `apps/skills-showcase/app/page.tsx`, create `apps/skills-showcase/app/workflows/page.tsx`, create `apps/skills-showcase/app/packs/page.tsx`, create `apps/skills-showcase/app/catalog/page.tsx`, create `apps/skills-showcase/app/inspect/page.tsx`, create `apps/skills-showcase/app/follow/page.tsx`, create or modify files under `apps/skills-showcase/src/showcase/`
   - Use the existing route inventory from `docs/skills-showcase/index.html`, `docs/skills-showcase/workflows/index.html`, `docs/skills-showcase/packs/index.html`, `docs/skills-showcase/catalog/index.html`, `docs/skills-showcase/inspect/index.html`, and `docs/skills-showcase/follow/index.html` as the source of truth.
-- [ ] Step 37.3: Migrate the showcase styling and client interactions conservatively
+- [x] Step 37.3: Migrate the showcase styling and client interactions conservatively
   - Files: modify `apps/skills-showcase/app/globals.css`, create or modify `apps/skills-showcase/src/showcase/ShowcaseShell.tsx`, create or modify `apps/skills-showcase/src/showcase/catalog.tsx`, create or modify `apps/skills-showcase/src/showcase/workflows.tsx`, create or modify `apps/skills-showcase/src/showcase/newsletter-form.tsx`
   - Preserve the Swiss grid/blueprint visual system from `docs/skills-showcase/styles.css` and the route-specific interactions from `docs/skills-showcase/app.js`, including the non-persistent follow form states.
 - [ ] Step 37.4: Preserve generated showcase data as committed static app assets
@@ -137,21 +137,25 @@
 - 2026-05-11 — Completed Step 37.2 App Router refactor. Moved ShowcaseHeader + MobilePanel into root layout (rendered once), added per-page `metadata` exports with unique titles, converted ShowcaseHeader to `"use client"` with `usePathname()` replacing the manual `currentPath` prop, switched all imports to the `@/` path alias, and added `viewport` export to root layout. All 6 page files now contain only `<main>` content. Verified: `"use client"` only on ShowcaseHeader, zero `currentPath` prop usage, zero `../../src/` imports, every page exports metadata, no page imports ShowcaseHeader/MobilePanel.
 - 2026-05-11 — Added `docs/benchmark-results-matrix.md` as the clean matrix for skills that already have persisted evaluated benchmark data and grades. Added Phase 39 to the roadmap for Skills Showcase benchmark-results visibility and permission-gated disposable GitHub test-repository fixtures for `commit-and-push-by-feature` and `sync`. Added a follow-up todo to surface the matrix on the website after the app route/data pipeline is stable.
 
-### Next Step Plan — Step 37.3
+- 2026-05-12 — Completed Step 37.3. Ported full CSS from `docs/skills-showcase/styles.css` into `globals.css`. Created 4 client components: `ShowcaseShell.tsx` (menu toggle), `workflows.tsx` (8-workflow selector/animation/preview), `catalog.tsx` (search/filter, pack map, proof rendering, follow proof), `newsletter-form.tsx` (form state machine). Wired all into pages and layout. Added `.gitignore`. Verified: `pnpm typecheck` clean, `pnpm build` produces 6 static routes, dev server renders styled pages.
 
-- **Scope:** Migrate the showcase styling and client interactions from the old static site (`docs/skills-showcase/styles.css` and `docs/skills-showcase/app.js`) into the Next.js app, preserving the Swiss grid/blueprint visual system and route-specific interactions (workflow animations, pack filtering, catalog search, newsletter form states).
+### Next Step Plan — Step 37.4
+
+- **Scope:** Preserve generated showcase data as committed static app assets. The Next.js app currently has no access to `skills-data.js` or `github-proof-data.js` — the client components read from `window.SKILLS_SHOWCASE_DATA` and `window.SKILLS_SHOWCASE_GITHUB_PROOF_DATA` but no script tags load those files.
 - **Files to modify/create:**
-  - `apps/skills-showcase/app/globals.css` — port CSS custom properties, grid system, component styles, responsive breakpoints, and dark-theme variables from `docs/skills-showcase/styles.css`
-  - `apps/skills-showcase/src/showcase/ShowcaseShell.tsx` — create client-side shell for menu toggle and mobile panel interactions
-  - `apps/skills-showcase/src/showcase/catalog.tsx` — create client component for catalog search/filter/platform interactions from the static `app.js` catalog logic
-  - `apps/skills-showcase/src/showcase/workflows.tsx` — create client component for workflow animation, step navigation, and workflow selector from the static `app.js` workflow logic
-  - `apps/skills-showcase/src/showcase/newsletter-form.tsx` — create client component for the follow page newsletter form states (provider-missing, invalid-email, pending, success, error) from the static `app.js` newsletter logic
-- **Source of truth:** `docs/skills-showcase/styles.css` for all CSS and `docs/skills-showcase/app.js` for all client interactions. Preserve visual parity, not code structure.
+  - `apps/skills-showcase/public/assets/skills-data.js` — copy or symlink from `docs/skills-showcase/assets/skills-data.js`
+  - `apps/skills-showcase/public/assets/github-proof-data.js` — copy or symlink from `docs/skills-showcase/assets/github-proof-data.js`
+  - `scripts/generate-skills-showcase-data.mjs` — update output path to also write to the Next.js app's `public/assets/` directory
+  - `scripts/generate-skills-showcase-github-data.mjs` — update output path to also write to the Next.js app's `public/assets/` directory
+  - `scripts/validate-skills-showcase-data.sh` — update to validate the app asset path alongside or instead of the old static-site path
+  - `apps/skills-showcase/app/layout.tsx` — add `<script>` tags to load the generated data files from `/assets/skills-data.js` and `/assets/github-proof-data.js`
+  - `docs/skills-reference.md` — update any references to the generated data asset paths
 - **Key decisions:**
-  - Each interactive surface becomes a separate `"use client"` component to keep the server-component boundary clean
-  - CSS goes into `globals.css` since the showcase is a single visual system (no CSS modules needed)
-  - The newsletter form must preserve its non-persistent state machine (no Neon in this phase)
+  - Generated assets must set `window.SKILLS_SHOWCASE_DATA` and `window.SKILLS_SHOWCASE_GITHUB_PROOF_DATA` before client components mount — use `<Script strategy="beforeInteractive">` or standard `<script>` in the layout
+  - Keep `docs/skills-showcase/assets/` as compatibility output for now (Step 37.6 handles retirement)
+  - The validator must prove canonical generated assets are fresh after skill/pack metadata changes
 - **Execution Profile:** serial, implementation-safe, main agent
-- **Verification:** Visual inspection of rendered pages after `pnpm dev`, CSS custom property coverage check against the static source, interaction smoke test for each client component
-- **Acceptance criteria:** All 6 routes render with visual parity to the static site. Workflow animations, pack filtering, catalog search, and newsletter form states work. No persistence is added.
-- **Ship-one-step handoff:** implement only Step 37.3, validate it, then run `/ship` when done.
+- **Test strategy:** tests-after
+- **Verification:** Run `node scripts/generate-skills-showcase-data.mjs` and `node scripts/generate-skills-showcase-github-data.mjs`, verify outputs land in `apps/skills-showcase/public/assets/`, run `scripts/validate-skills-showcase-data.sh`, confirm catalog/proof data renders in the dev server
+- **Acceptance criteria:** Generated data files load in the Next.js app, catalog populates with skill rows, proof/inspect surfaces show data, validator passes against the app asset path.
+- **Ship-one-step handoff:** implement only Step 37.4, validate it, then run `/ship` when done.
