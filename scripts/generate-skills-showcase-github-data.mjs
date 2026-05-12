@@ -8,6 +8,7 @@ import { fileURLToPath } from "node:url";
 
 const repoRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const outputPath = path.join(repoRoot, "docs/skills-showcase/assets/github-proof-data.js");
+const appOutputPath = path.join(repoRoot, "apps/skills-showcase/public/assets/github-proof-data.js");
 
 const proofArtifacts = [
   {
@@ -235,7 +236,10 @@ async function main() {
 
   mkdirSync(path.dirname(outputPath), { recursive: true });
   writeFileSync(outputPath, contents);
+  mkdirSync(path.dirname(appOutputPath), { recursive: true });
+  writeFileSync(appOutputPath, contents);
   console.log(`Wrote ${path.relative(repoRoot, outputPath)} with ${data.proofArtifacts.length} proof artifacts and ${data.validationScripts.length} validation scripts.`);
+  console.log(`Wrote ${path.relative(repoRoot, appOutputPath)} (Next.js app copy).`);
 }
 
 main().catch((error) => {

@@ -14,6 +14,8 @@ GENERATORS=(
 GENERATED_ASSETS=(
   "docs/skills-showcase/assets/skills-data.js"
   "docs/skills-showcase/assets/github-proof-data.js"
+  "apps/skills-showcase/public/assets/skills-data.js"
+  "apps/skills-showcase/public/assets/github-proof-data.js"
 )
 
 cd "$REPO_ROOT"
