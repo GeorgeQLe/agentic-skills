@@ -10,11 +10,15 @@
 **Goal:** Run `$benchmark-test-skill benchmark-test-skill` through the repository harness with fresh eligibility, verify, and both-agent benchmark evidence on 2026-05-12.
 
 **Acceptance Criteria:**
-- [ ] `pnpm bench --list-skills` confirms `benchmark-test-skill` is known and reports its coverage status.
-- [ ] `pnpm verify --skill benchmark-test-skill` passes or blocks benchmark execution with a recorded failure.
-- [ ] `pnpm bench --skill benchmark-test-skill --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
-- [ ] `benchmark/test-benchmark-test-skill-2026-05-12.md` records verify, benchmark, latency, cost, consistency, and raw session evidence.
+- [x] `pnpm bench --list-skills` confirms `benchmark-test-skill` is known and reports its coverage status.
+- [x] `pnpm verify --skill benchmark-test-skill` passes or blocks benchmark execution with a recorded failure.
+- [x] `pnpm bench --skill benchmark-test-skill --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [x] `benchmark/test-benchmark-test-skill-2026-05-12.md` records verify, benchmark, latency, cost, consistency, and raw session evidence.
 - [ ] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Preflight:** `benchmark-test-skill` is known with `coverage=custom` using `tests/layer4/setups/tier1-workflows.setup.ts`.
+
+**Result:** Benchmark completed on 2026-05-12. Verify passed with layer1 in 8.4s across 1,256 tests; layer2 was skipped because no target-specific layer2 tests matched `benchmark-test-skill`. The both-agent benchmark completed with no infrastructure-blocked runs. Claude failed 0/3 hard assertions because all three runs omitted the required next-command handoff; Claude output quality averaged 63.1%, with 3 threshold failures and 6 critical failures. Codex passed 3/3 hard assertions; Codex output quality averaged 85.8%, with 1 threshold failure and 4 critical failures. Report: `benchmark/test-benchmark-test-skill-2026-05-12.md`. Recommended next command: `$session-triage benchmark-test-skill benchmark failure`.
 
 ## Current Benchmark: spec-interview
 
@@ -179,3 +183,26 @@
 - Updated `tasks/deploy.md`: removed "Legacy Static Site (Compatibility)" section and compatibility intro.
 - Updated `apps/skills-showcase/README.md`: removed "retained for compatibility" language, noted static site files removed.
 - Validator passes, Next.js build produces 6 routes, `git diff --check` clean.
+
+### Next Step Plan — Step 37.7
+
+- **Scope:** Write regression tests covering migrated route/data behavior for the Next.js Skills Showcase app. No test framework exists yet — Vitest must be added.
+- **Files to create/modify:**
+  - `apps/skills-showcase/vitest.config.ts` — Vitest config with React support and path aliases
+  - `apps/skills-showcase/package.json` — add vitest, @testing-library/react, @testing-library/jest-dom, jsdom as devDependencies; add `"test"` script
+  - `apps/skills-showcase/src/showcase/routes.test.ts` — route inventory assertions (6 public routes with correct paths/labels)
+  - `apps/skills-showcase/src/showcase/catalog.test.tsx` — catalog search/filter behavior, pack map rendering, proof rendering
+  - `apps/skills-showcase/src/showcase/workflows.test.tsx` — workflow selector/animation/preview state
+  - `apps/skills-showcase/src/showcase/newsletter-form.test.tsx` — form state machine (idle → submitting → success/error), non-persistent states
+  - `apps/skills-showcase/app/page.test.tsx` (or colocated test files) — smoke rendering of each public route page
+- **Key decisions:**
+  - Use Vitest + @testing-library/react (consistent with React 19 / Next.js 16 ecosystem)
+  - Test client components in jsdom; test data/route modules as pure unit tests
+  - Mock generated data globals (`window.SKILLS_DATA`, `window.GITHUB_PROOF_DATA`) for component tests that consume them
+  - Do NOT test Next.js build output or static export — that's Step 37.8 validation
+- **Existing source components to test:** `catalog.tsx` (search/filter/pack-map/proof), `workflows.tsx` (8-workflow selector/animation), `newsletter-form.tsx` (form state machine), `ShowcaseShell.tsx` (menu toggle), `ShowcaseHeader.tsx` (nav/pathname), `routes.ts` (route metadata)
+- **Execution Profile:** serial, implementation-safe, main agent
+- **Test strategy:** tests-after (this IS the test-writing step)
+- **Verification:** `pnpm --dir apps/skills-showcase test` passes. `pnpm --dir apps/skills-showcase typecheck` still passes. `git diff --check` clean.
+- **Acceptance criteria:** All test files exist and pass. Coverage includes route metadata, catalog search/filter, workflow selector, newsletter form states, and smoke rendering of all 6 pages.
+- **Ship-one-step handoff:** implement only Step 37.7, validate it, then run `/ship` when done.
