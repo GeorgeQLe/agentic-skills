@@ -5,7 +5,18 @@
 **Current phase:** Phase 38 of 39 — First-Party Newsletter Capture And Admin
 **Last completed phase:** Phase 37 — Skills Showcase Next.js Preservation Refactor
 
-## Current Benchmark Rerun: benchmark-test-skill
+## Current Benchmark Rerun: benchmark-test-skill Fresh Validation
+
+**Goal:** Rerun `$benchmark-test-skill benchmark-test-skill` after the latest targeted fix, using fresh eligibility, verify, and both-agent benchmark evidence on 2026-05-12.
+
+**Acceptance Criteria:**
+- [ ] `pnpm bench --list-skills` confirms `benchmark-test-skill` is known and reports its coverage status.
+- [ ] `pnpm verify --skill benchmark-test-skill` passes or blocks benchmark execution with a recorded failure.
+- [ ] `pnpm bench --skill benchmark-test-skill --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [ ] `benchmark/test-benchmark-test-skill-2026-05-12.md` records fresh verify, benchmark, latency, cost, consistency, and raw session evidence.
+- [ ] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+## Previous Benchmark Rerun: benchmark-test-skill
 
 **Goal:** Rerun `$benchmark-test-skill benchmark-test-skill` after the benchmark harness routing fix, using fresh eligibility, verify, and both-agent benchmark evidence on 2026-05-12.
 
@@ -80,7 +91,7 @@
 - [x] Step 38.3: Set up tRPC server with newsletter router
   - Files: create `apps/skills-showcase/src/trpc/init.ts`, create `apps/skills-showcase/src/trpc/router.ts`, create `apps/skills-showcase/src/trpc/newsletter.ts`, create `apps/skills-showcase/app/api/trpc/[trpc]/route.ts`
   - Create tRPC context (with admin secret check), base router, and newsletter sub-router. Procedures: `subscribe` (public mutation — validate email with Zod, upsert into Neon, idempotent), `adminLogin` (mutation — verify secret, set session cookie), `adminList` (protected query — list/search subscribers), `adminExport` (protected query — CSV-formatted subscriber dump). Wire to Next.js App Router catch-all API route.
-- [ ] Step 38.4: Set up tRPC client, TanStack Query provider, and layout integration
+- [x] Step 38.4: Set up tRPC client, TanStack Query provider, and layout integration
   - Files: create `apps/skills-showcase/src/trpc/client.ts`, create `apps/skills-showcase/src/trpc/provider.tsx`, modify `apps/skills-showcase/app/layout.tsx`
   - Create tRPC-React client binding with TanStack Query. Create a `"use client"` provider component wrapping `QueryClientProvider` and `trpc.Provider`. Add to root layout around `{children}`.
 - [ ] Step 38.5: Refactor newsletter form to use tRPC subscribe mutation
@@ -122,50 +133,32 @@
 
 ## Ship Summary
 
-Step 38.3 complete — created tRPC server infrastructure: `src/trpc/init.ts` (context factory with cookie-based admin session, public/protected procedures), `src/trpc/newsletter.ts` (subscribe, adminLogin, adminList, adminExport), `src/trpc/router.ts` (root router with `AppRouter` type), and `app/api/trpc/[trpc]/route.ts` (fetch adapter API route). All 54 showcase tests green, 1302 layer1 tests green, typecheck and build passing.
+Step 38.4 complete — created tRPC client infrastructure: `src/trpc/client.ts` (typed `createTRPCReact<AppRouter>` binding), `src/trpc/provider.tsx` (`"use client"` provider wrapping `QueryClientProvider` + `trpc.Provider` with `httpBatchLink`), and updated `app/layout.tsx` to wrap body contents with `<TRPCProvider>`. All 54 showcase tests green, typecheck and build passing.
 
 Deploy skipped (manual Vercel, not yet configured). No failing tests expected.
 
 ## What needs to be built
 
-Set up the tRPC client binding, TanStack Query provider, and integrate into the root layout.
+Refactor the newsletter form to use the tRPC subscribe mutation instead of the current imperative `fetch` + `data-provider-endpoint` logic.
 
-### Files to create or modify
+### Files to modify
 
-- Create `apps/skills-showcase/src/trpc/client.ts` — tRPC-React client binding with TanStack Query integration
-- Create `apps/skills-showcase/src/trpc/provider.tsx` — `"use client"` provider component wrapping `QueryClientProvider` and `trpc.Provider`
-- Modify `apps/skills-showcase/app/layout.tsx` — Wrap `{children}` with the tRPC/Query provider
+- `apps/skills-showcase/src/showcase/newsletter-form.tsx` — Replace imperative `fetch` with `trpc.newsletter.subscribe.useMutation()`. Preserve the state machine (ready, invalid-email, pending, success, error), ARIA attributes, and visual states. Remove the `provider-missing` state since the endpoint is now first-party. Add `source_page` and `consent_text_version` to the mutation payload.
+- `apps/skills-showcase/app/follow/page.tsx` — Remove the `data-provider-endpoint` attribute and related HTML notes from the follow page, since the endpoint is now hardcoded via the tRPC client.
 
-### Technical Details
+### Technical approach
 
-**tRPC client** (`src/trpc/client.ts`):
-- Use `createTRPCReact` from `@trpc/react-query` with `AppRouter` type from `./router`
-- Export the typed `trpc` client object for use in components
+**Newsletter form refactor** (`src/showcase/newsletter-form.tsx`):
+- Import `trpc` from `@/trpc/client`
+- Use `trpc.newsletter.subscribe.useMutation()` to get `mutate`, `isPending`, `isSuccess`, `isError`
+- On submit: call `mutate({ email, sourcePage: window.location.pathname, consentTextVersion: "1.0" })`
+- Map mutation states to existing UI states: `isPending` → pending, `isSuccess` → success, `isError` → error
+- Keep client-side email validation for the `invalid-email` state
+- Remove `provider-missing` state and any `data-provider-endpoint` reading logic
 
-**Provider** (`src/trpc/provider.tsx`):
-- `"use client"` directive required (React context uses client-side state)
-- Create `QueryClient` with sensible defaults (e.g., `staleTime`, `retry` settings)
-- Create tRPC client with `httpBatchLink` pointing to `/api/trpc`
-- Wrap children in `trpc.Provider` > `QueryClientProvider`
-- Use `useState` for both `queryClient` and `trpcClient` to avoid SSR re-creation
-
-**Layout integration** (`app/layout.tsx`):
-- Import `TRPCProvider` from `@/trpc/provider`
-- Wrap the existing `{children}` inside `<TRPCProvider>{children}</TRPCProvider>`
-- Keep all existing layout content (header, mobile panel, showcase shell) intact
-
-**Existing layout structure** (for reference):
-```tsx
-<html lang="en">
-  <head>...</head>
-  <body>
-    <ShowcaseHeader />
-    <MobilePanel />
-    <ShowcaseShell />
-    {children}
-  </body>
-</html>
-```
+**Follow page** (`app/follow/page.tsx`):
+- Remove `data-provider-endpoint` attribute from the newsletter form container
+- Remove any HTML comments about configuring the provider endpoint
 
 ### Execution Profile
 - **Parallel mode:** serial
@@ -178,11 +171,11 @@ Set up the tRPC client binding, TanStack Query provider, and integrate into the 
 - `pnpm --dir apps/skills-showcase test` passes (54/54 existing tests still green)
 - `git diff --check` clean
 
-**Ship-one-step handoff:** implement only Step 38.4, validate it, then run `/ship` when done.
+**Ship-one-step handoff:** implement only Step 38.5, validate it, then run `/ship` when done.
 
 ## Routing
 
-- **Next work:** Step 38.4 — Set up tRPC client, TanStack Query provider, and layout integration
+- **Next work:** Step 38.5 — Refactor newsletter form to use tRPC subscribe mutation
 - **Recommended next command:** `/run`
 
 ## Review

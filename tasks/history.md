@@ -2091,3 +2091,9 @@ Resolved all 10 findings from `/expert-review`:
 - Created `src/trpc/router.ts` merging newsletter sub-router, exporting `AppRouter` type.
 - Created `app/api/trpc/[trpc]/route.ts` using `fetchRequestHandler` from `@trpc/server/adapters/fetch`.
 - Verified: typecheck clean, build shows `/api/trpc/[trpc]` as dynamic route, 54/54 showcase tests + 1302 layer1 tests green.
+
+### Step 38.4: tRPC client, TanStack Query provider, and layout integration (2026-05-12)
+- Created `src/trpc/client.ts` — typed `createTRPCReact<AppRouter>` binding.
+- Created `src/trpc/provider.tsx` — `"use client"` provider with `QueryClientProvider` + `trpc.Provider` using `httpBatchLink({ url: "/api/trpc" })`.
+- Updated `app/layout.tsx` — wrapped body contents with `<TRPCProvider>`.
+- Verified: typecheck clean, build passing, 54/54 showcase tests green.
