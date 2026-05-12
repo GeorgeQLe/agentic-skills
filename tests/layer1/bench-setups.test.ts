@@ -749,7 +749,6 @@ describe("benchmark coverage matrix", () => {
       "ux-variation",
     ];
     const expectedBlockedSkills = [
-      "commit-and-push-by-feature",
       "delegate",
       "deploy",
       "install-agentic-skills",
@@ -779,6 +778,14 @@ describe("benchmark coverage matrix", () => {
       expect(target?.nextCommand).toBeTruthy();
       expect(target?.setup).toBeUndefined();
     }
+
+    const commitPushRow = matrix.find((row) => row.skill === "commit-and-push-by-feature");
+    expect(commitPushRow).toMatchObject({
+      coverage_status: "custom",
+      setup_path: "tests/layer4/setups/git-fixture-commit-and-push.setup.ts",
+      agent_scope: "both",
+      fixture_type: "git-disposable-repo-fixture",
+    });
   });
 
   it("fails when a repository skill is missing from the matrix", () => {
