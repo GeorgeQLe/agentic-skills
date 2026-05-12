@@ -426,6 +426,11 @@ describe("benchmark setup registry", () => {
     expect(claudeSkill).toContain("recommended next route, using a literal label");
     expect(claudeSkill).toContain("Recommended next skill: /benchmark-agent-review <skill>");
     expect(setup!.prompt).toContain("literal `Recommended next command:` line");
+    expect(setup!.prompt).toContain("structured benchmark report");
+    expect(setup!.prompt).toContain("Use only bench-output.txt and verify-output.txt");
+    expect(setup!.prompt).toContain("do not search the repository, read extra skill files, or run pnpm");
+    expect(setup!.prompt).toContain("`## Verify`, `## Benchmark Metrics`, `## Raw Evidence`, and `## Next Route` sections");
+    expect(setup!.prompt).toContain("Markdown tables for the verify and benchmark metrics sections");
     expect(setup!.prompt).toContain("exact evidence from the fixture");
     expect(setup!.prompt).toContain("`layer1 PASS`");
     expect(setup!.prompt).toContain("`layer2 SKIPPED`");
@@ -436,7 +441,7 @@ describe("benchmark setup registry", () => {
     expect(setup!.prompt).toContain("Claude `/ship`, Codex `$ship`");
     expect(setup!.prompt).toContain("regardless of fixture file names or raw session path text");
     expect(setup!.prompt).not.toContain("run-codex-abc");
-    expect(setup!.timeoutMs).toBe(BENCH_TIMEOUTS_MS.focused);
+    expect(setup!.timeoutMs).toBe(BENCH_TIMEOUTS_MS.standard);
 
     const workDir = mkdtempSync(resolve(tmpdir(), "benchmark-test-skill-route-"));
     mkdirSync(resolve(workDir, "benchmark"), { recursive: true });
@@ -444,14 +449,25 @@ describe("benchmark setup registry", () => {
       "# Benchmark Test Run",
       "",
       "## Verify",
-      "layer1 PASS in 7.1s; layer2 SKIPPED.",
+      "| Layer | Status | Wall time |",
+      "| --- | --- | --- |",
+      "| layer1 | layer1 PASS | 7.1s |",
+      "| layer2 | layer2 SKIPPED | no tests matched run |",
       "",
-      "## Benchmark",
-      "Benchmark coverage for run: custom; passRate=1.0; p50=1200; totalCost=0.42.",
+      "## Benchmark Metrics",
+      "| Metric | Value |",
+      "| --- | --- |",
+      "| coverage | custom |",
+      "| pass rate | passRate=1.0 |",
+      "| latency p50 | p50=1200 |",
+      "| total cost | totalCost=0.42 |",
       "",
-      "## Sources",
-      "`bench-output.txt`, `verify-output.txt`, `tests/benchmarks/runs/run-agent-abc/report.json`, `benchmark/test-run-2026-05-11.md`.",
+      "## Raw Evidence",
+      "Raw session path: `tests/benchmarks/runs/run-agent-abc/report.json`.",
+      "Source file names: `bench-output.txt`, `verify-output.txt`.",
+      "Report path: `benchmark/test-run-2026-05-11.md`.",
       "",
+      "## Next Route",
       "Recommended next command:",
       route,
     ].join("\n");
@@ -509,6 +525,49 @@ describe("benchmark setup registry", () => {
     });
     expect(codexAssertions.find((assertion) => assertion.description === "Output includes totalCost=0.42")).toMatchObject({
       pass: true,
+    });
+    expect(codexAssertions.find((assertion) => assertion.description === "Output includes ## Verify")).toMatchObject({
+      pass: true,
+    });
+    expect(codexAssertions.find((assertion) => assertion.description === "Output includes ## Benchmark Metrics")).toMatchObject({
+      pass: true,
+    });
+    expect(codexAssertions.find((assertion) => assertion.description === "Output includes ## Raw Evidence")).toMatchObject({
+      pass: true,
+    });
+    expect(codexAssertions.find((assertion) => assertion.description === "Output includes ## Next Route")).toMatchObject({
+      pass: true,
+    });
+    expect(codexAssertions.find((assertion) => assertion.description === "Output matches workflow expectation")).toMatchObject({
+      pass: true,
+    });
+
+    writeFileSync(
+      resolve(workDir, "benchmark/test-run-2026-05-11.md"),
+      [
+        "# Benchmark Test Run",
+        "",
+        "layer1 PASS; layer2 SKIPPED.",
+        "passRate=1.0; p50=1200; totalCost=0.42.",
+        "Raw session path: tests/benchmarks/runs/run-agent-abc/report.json.",
+        "Source file names: bench-output.txt, verify-output.txt.",
+        "Report path: benchmark/test-run-2026-05-11.md.",
+        "",
+        "Recommended next command: $ship",
+      ].join("\n"),
+    );
+    const unstructuredAssertions = setup!.assertResult(
+      {
+        stdout: "",
+        stderr: "",
+        exitCode: 0,
+        workDir,
+        files: ["benchmark/test-run-2026-05-11.md"],
+      },
+      { agent: "codex" },
+    );
+    expect(unstructuredAssertions.find((assertion) => assertion.description === "Output matches workflow expectation")).toMatchObject({
+      pass: false,
     });
 
     writeFileSync(
@@ -933,15 +992,27 @@ describe("Tier 1 workflow benchmark setups", () => {
       [
         "# Benchmark run",
         "",
-        "layer1 PASS in 7.1s.",
-        "layer2 SKIPPED because no tests matched run.",
-        "custom coverage passRate=1.0.",
-        "latency p50=1200.",
-        "totalCost=0.42.",
+        "## Verify",
+        "| Layer | Status | Wall time |",
+        "| --- | --- | --- |",
+        "| layer1 | layer1 PASS | 7.1s |",
+        "| layer2 | layer2 SKIPPED | no tests matched run |",
+        "",
+        "## Benchmark Metrics",
+        "| Metric | Value |",
+        "| --- | --- |",
+        "| coverage | custom |",
+        "| pass rate | passRate=1.0 |",
+        "| latency p50 | p50=1200 |",
+        "| total cost | totalCost=0.42 |",
+        "",
+        "## Raw Evidence",
         "raw session path: tests/benchmarks/runs/run-agent-abc/report.json",
         "source files: bench-output.txt and verify-output.txt.",
         "report path: benchmark/test-run-2026-05-11.md.",
-        "Next command: $ship",
+        "",
+        "## Next Route",
+        "Recommended next command: $ship",
         "",
       ].join("\n"),
     );
@@ -955,6 +1026,41 @@ describe("Tier 1 workflow benchmark setups", () => {
     });
 
     expect(assertions.every((assertion) => assertion.pass)).toBe(true);
+  });
+
+  it("rejects benchmark-test-skill reports that preserve facts but drop report structure", () => {
+    const setup = CUSTOM_BENCH_SETUPS["benchmark-test-skill"];
+    const workDir = mkdtempSync(resolve(tmpdir(), "tier1-benchmark-test-skill-unstructured-"));
+    mkdirSync(resolve(workDir, "benchmark"), { recursive: true });
+    writeFileSync(
+      resolve(workDir, "benchmark/test-run-2026-05-11.md"),
+      [
+        "# Benchmark run",
+        "",
+        "layer1 PASS in 7.1s.",
+        "layer2 SKIPPED because no tests matched run.",
+        "custom coverage passRate=1.0.",
+        "latency p50=1200.",
+        "totalCost=0.42.",
+        "raw session path: tests/benchmarks/runs/run-agent-abc/report.json",
+        "source files: bench-output.txt and verify-output.txt.",
+        "report path: benchmark/test-run-2026-05-11.md.",
+        "Recommended next command: $ship",
+        "",
+      ].join("\n"),
+    );
+
+    const assertions = setup.assertResult({
+      stdout: "",
+      stderr: "",
+      exitCode: 0,
+      workDir,
+      files: ["benchmark/test-run-2026-05-11.md"],
+    });
+
+    expect(assertions.find((assertion) => assertion.description === "Output matches workflow expectation")).toMatchObject({
+      pass: false,
+    });
   });
 });
 
