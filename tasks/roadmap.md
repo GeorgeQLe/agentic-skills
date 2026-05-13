@@ -200,11 +200,13 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 **Goal:** Run `$benchmark-test-skill session-triage` with fresh repository harness eligibility, verify, and both-agent benchmark evidence after the latest benchmark fixture routing fix.
 
 **Acceptance Criteria:**
-- [ ] `pnpm bench --list-skills` confirms `session-triage` is known and reports its coverage status.
-- [ ] `pnpm verify --skill session-triage` passes or blocks benchmark execution with a recorded failure.
-- [ ] `pnpm bench --skill session-triage --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
-- [ ] `benchmark/test-session-triage-2026-05-13.md` records fresh verify, benchmark, latency, cost, consistency, and raw session evidence.
-- [ ] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+- [x] `pnpm bench --list-skills` confirms `session-triage` is known and reports its coverage status.
+- [x] `pnpm verify --skill session-triage` passes or blocks benchmark execution with a recorded failure.
+- [x] `pnpm bench --skill session-triage --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [x] `benchmark/test-session-triage-2026-05-13.md` records fresh verify, benchmark, latency, cost, consistency, and raw session evidence.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Fresh benchmark rerun completed on 2026-05-13 at 10:40 ET. `session-triage` is known with `coverage=custom` using `tests/layer4/setups/tier1-workflows.setup.ts`. Verify passed with layer1 in 8.6s across 1,350 tests; layer2 was skipped because no target-specific layer2 tests matched `session-triage`. The both-agent benchmark completed with no infrastructure-blocked runs. Claude passed 3/3 evaluated hard assertions with 93.8% output quality, 1 critical quality failure, p50 latency 44.1s, and $0.75 total cost. Codex passed 3/3 evaluated hard assertions with 95.8% output quality, 1 critical quality failure, p50 latency 64.1s, and $0.75 total cost. Report: `benchmark/test-session-triage-2026-05-13.md`. Recommended next skill: `$benchmark-agent-review session-triage`.
 
 ## Current Benchmark Rerun: benchmark-test-skill Self Benchmark
 
