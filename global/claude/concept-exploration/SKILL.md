@@ -78,6 +78,7 @@ The `## ICP Readiness` section must state whether the concept is ready for `/icp
 The `## Next Steps` section must recommend exactly one primary command:
 
 - If the concept appears to be a business app or user-facing product and the business discovery lane is not enabled: `/pack install business-discovery`
+- If the concept already has ICP/market evidence but needs journey, onboarding, conversion, or retention planning: `/pack install customer-lifecycle`
 - If `business-discovery` or the compatibility `business-app` alias is enabled: `/icp`
 - If project type is unclear: `/pack recommend`
 

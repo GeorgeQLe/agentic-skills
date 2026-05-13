@@ -14,6 +14,19 @@
 - No `specs/ux-variations-*.md` exists, but UX decisions were made via UI interview and are baked into the built site. Creating a retroactive UX variations doc would be low-value.
 - 5 ideas in `tasks/ideas.md` are unspecced; candidates for `/feature-interview` if any are prioritized.
 
+## Ad-Hoc Pack Split: Customer Lifecycle
+
+**Goal:** Split lifecycle planning out of `business-discovery` into a mirrored `customer-lifecycle` pack that owns journey, onboarding, conversion, transaction, retention, expansion, and lifecycle metrics workflows.
+
+**Plan:**
+- [x] Create mirrored Claude/Codex `customer-lifecycle` pack skills for the full lifecycle chain.
+- [x] Hard-move `journey-map` out of `business-discovery`, including stale agent metadata.
+- [x] Update pack aliases, `business-app` expansion, docs, and routing guidance.
+- [x] Update benchmark coverage and pack workflow fixtures.
+- [x] Refresh generated Skills Showcase data and validate pack install behavior.
+
+**Review:** Complete. Added `packs/customer-lifecycle` with `journey-map`, `onboarding-map`, `conversion-map`, `transaction-map`, `retention-map`, `expansion-map`, and `lifecycle-metrics` for both Claude and Codex. `business-app` now expands to `business-discovery`, `customer-lifecycle`, `business-growth`, and `business-ops`; `business-discovery` no longer owns `journey-map`. Validation passed with benchmark coverage, focused layer1 tests, showcase data validation, and disposable pack install checks. Recommended next command: `$ship`.
+
 ## Ad-Hoc Benchmark Rerun: benchmark-test-skill Self Benchmark 2026-05-13 Fresh
 
 **Goal:** Run `$benchmark-test-skill benchmark-test-skill` with fresh eligibility, verify, and both-agent benchmark evidence on 2026-05-13.

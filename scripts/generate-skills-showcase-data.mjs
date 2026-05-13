@@ -324,6 +324,15 @@ function generateBenchmarkMatrix(files) {
     return { ...json, reportPath: rp };
   }).filter(Boolean);
 
+  const isNewerReport = (candidate, existing) => {
+    const candidateGeneratedAt = candidate.generatedAt || "";
+    const existingGeneratedAt = existing.generatedAt || "";
+    if (candidateGeneratedAt !== existingGeneratedAt) {
+      return candidateGeneratedAt > existingGeneratedAt;
+    }
+    return (candidate.reportPath || "") > (existing.reportPath || "");
+  };
+
   // Group by skill+agent: keep latest evaluated report (for graded table)
   // and collect all zero-evaluated reports (for incomplete table)
   const latestEvaluated = new Map();
@@ -332,7 +341,7 @@ function generateBenchmarkMatrix(files) {
     if (r.evaluatedRuns > 0) {
       const key = `${r.skill}|${r.agent}`;
       const existing = latestEvaluated.get(key);
-      if (!existing || (r.generatedAt || "") > (existing.generatedAt || "")) {
+      if (!existing || isNewerReport(r, existing)) {
         latestEvaluated.set(key, r);
       }
     } else {
@@ -374,7 +383,7 @@ function generateBenchmarkMatrix(files) {
   for (const r of zeroEvaluated) {
     const key = `${r.skill}|${r.agent}`;
     const existing = latestZero.get(key);
-    if (!existing || (r.generatedAt || "") > (existing.generatedAt || "")) {
+    if (!existing || isNewerReport(r, existing)) {
       latestZero.set(key, r);
     }
   }

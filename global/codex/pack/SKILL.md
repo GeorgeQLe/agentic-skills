@@ -59,7 +59,7 @@ Use this skill when the user wants to inspect, recommend, install, remove, or re
 
 ## Pack Selection
 
-- Use `business-discovery`, `business-growth`, or `business-ops` for SaaS, marketplaces, productivity apps, internal/admin tools, business workflows, and enterprise applications. `business-app` is a compatibility alias for all three.
+- Use `business-discovery`, `customer-lifecycle`, `business-growth`, or `business-ops` for SaaS, marketplaces, productivity apps, internal/admin tools, business workflows, and enterprise applications. `business-app` is a compatibility alias for all four.
 - Use `creator-foundation`, `youtube-ops`, and `remotion` separately for creator-media work; `creator-media` is a compatibility alias for foundation plus YouTube operations.
 - Use `project-fleet` for control repositories that manage downstream repos, spec-store portfolios, or spin-offs.
 - Use `code-quality` as an additive pack for behavior-preserving refactors, type hygiene, import honesty, dependency-boundary cleanup, and module organization.
@@ -78,7 +78,7 @@ Use one repo-level `.agents/project.json` with a primary default plus scoped ove
 ```json
 {
   "project_type": "devtool",
-  "enabled_packs": ["devtool", "business-discovery", "business-growth"],
+  "enabled_packs": ["devtool", "business-discovery", "customer-lifecycle", "business-growth"],
   "skill_pack_version": 1,
   "project_scopes": [
     {
@@ -90,13 +90,13 @@ Use one repo-level `.agents/project.json` with a primary default plus scoped ove
     {
       "path": "apps/pitwall-calcllm",
       "project_type": "business-app",
-      "packs": ["business-discovery", "business-growth"],
+      "packs": ["business-discovery", "customer-lifecycle", "business-growth"],
       "purpose": "CalcLLM-powered connected edition research, GTM, monetization, and SaaS product work."
     },
     {
       "path": "packages/calcllm-sync",
       "project_type": "business-app",
-      "packs": ["business-discovery", "business-growth"],
+      "packs": ["business-discovery", "customer-lifecycle", "business-growth"],
       "purpose": "Connected-edition sync and SaaS integration work."
     }
   ]

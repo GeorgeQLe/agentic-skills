@@ -1,7 +1,0 @@
-interface:
-  display_name: "Journey Map"
-  short_description: "Map user and customer journeys through the product"
-  default_prompt: "Use $journey-map to map user task flows and customer journey funnel."
-
-policy:
-  allow_implicit_invocation: true

@@ -232,8 +232,9 @@ Business/product workflows that used to be globally installed now live in narrow
 
 ```bash
 scripts/pack.sh install business-discovery
+scripts/pack.sh install customer-lifecycle
 scripts/pack.sh install business-growth
 scripts/pack.sh install business-ops
 ```
 
-`business-app` remains a compatibility alias that installs all three. Creator-media and YouTube work is split between `creator-foundation`, `youtube-ops`, and `remotion`; fleet/portfolio work lives in `project-fleet`.
+`business-app` remains a compatibility alias that installs all four. Creator-media and YouTube work is split between `creator-foundation`, `youtube-ops`, and `remotion`; fleet/portfolio work lives in `project-fleet`.

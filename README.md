@@ -174,7 +174,10 @@ Install only the current lane:
 
 ```text
 business-discovery: icp, enterprise-icp, competitive-analysis, customer-feedback,
-value-prop-canvas, lean-canvas, positioning, journey-map
+value-prop-canvas, lean-canvas, positioning
+
+customer-lifecycle: journey-map, onboarding-map, conversion-map,
+transaction-map, retention-map, expansion-map, lifecycle-metrics
 
 business-growth: hook-model, growth-model, metrics, gtm, monetization,
 landing-copy, pmf-assessment, experiment
@@ -184,7 +187,7 @@ burn-rate, runway-model, investor-update, reconcile-research,
 mvp-gap, scale-audit, platform-strategy
 ```
 
-`scripts/pack.sh install business-app` remains a compatibility alias that installs all three, but narrow installs are preferred for context size.
+`scripts/pack.sh install business-app` remains a compatibility alias that installs all four, but narrow installs are preferred for context size.
 
 
 ### Game
@@ -333,10 +336,11 @@ The generic `poketowork-kanban` pack contains board-management utilities such as
 
 ## Moved Skills
 
-Former global business/product skills now live in narrower project packs. `business-app` remains a compatibility alias for all three business packs.
+Former global business/product skills now live in narrower project packs. `business-app` remains a compatibility alias for all four business packs.
 
 ```bash
 scripts/pack.sh install business-discovery
+scripts/pack.sh install customer-lifecycle
 scripts/pack.sh install business-growth
 scripts/pack.sh install business-ops
 ```

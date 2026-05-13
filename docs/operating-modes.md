@@ -222,10 +222,11 @@ This section tags every global skill and every pack with a **primary CLI role** 
 | Pack | Primary role | Notes |
 | --- | --- | --- |
 | `alignment-loop` | Claude-orchestration | Lightweight operator-agent calibration: taste calibration, destination doc, vertical slice |
-| `business-discovery` | Claude-orchestration | ICP, customer/market research, value proposition, positioning, lean canvas, journeys |
+| `business-discovery` | Claude-orchestration | ICP, customer/market research, value proposition, positioning, lean canvas |
+| `customer-lifecycle` | Both | Journey, onboarding, conversion, transaction, retention, expansion, lifecycle metrics |
 | `business-growth` | Claude-orchestration | Engagement loops, metrics, monetization, GTM, landing copy, experiments, growth, PMF |
 | `business-ops` | Both | Assumptions, cohorts, retros, risks, runway, stakeholder reporting, platform/research reconciliation |
-| `business-app` | Claude-orchestration | Compatibility alias for `business-discovery`, `business-growth`, and `business-ops` |
+| `business-app` | Claude-orchestration | Compatibility alias for `business-discovery`, `customer-lifecycle`, `business-growth`, and `business-ops` |
 | `business-app-kanban` | Both | Business-app kanban `run`/`ship`/`ship-end` variants (execution) |
 | `code-quality` | Codex-execution | `extract-shared-types`, `quality-sweep` — behavior-preserving refactor mutation |
 | `creator-foundation` | Both | Creator evidence, dossier, positioning, programming, series, product-led media, metrics |
