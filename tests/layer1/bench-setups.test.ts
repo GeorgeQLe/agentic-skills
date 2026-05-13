@@ -412,6 +412,8 @@ describe("benchmark setup registry", () => {
     const setup = resolveBenchSetup("session-triage");
     expect(setup).toBeDefined();
     expect(setup!.prompt).toContain("write session-triage-report.md in the project root before doing any optional exploration");
+    expect(setup!.prompt).toContain("verify that session-triage-report.md exists in the project root");
+    expect(setup!.prompt).toContain("If it is missing, create it before responding");
     expect(setup!.prompt).toContain("one-off agent noncompliance with an adequate existing validation rule");
     expect(setup!.prompt).toContain("recommend no skill change");
 
