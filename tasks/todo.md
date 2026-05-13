@@ -27,6 +27,19 @@
 
 **Review:** Complete. `benchmark-test-skill` is known with `coverage=custom` using `tests/layer4/setups/tier1-workflows.setup.ts`. Verify passed with layer1 in 9.5s across 1,312 tests; layer2 was skipped because no target-specific layer2 tests matched `benchmark-test-skill`. The both-agent benchmark completed with no infrastructure-blocked runs. Claude passed 3/3 evaluated hard assertions with 100.0% output quality, p50 latency 17.8s, and $0.75 total cost. Codex passed 3/3 evaluated hard assertions with 100.0% output quality, p50 latency 30.5s, and $0.75 total cost. Report: `benchmark/test-benchmark-test-skill-2026-05-13.md`. Recommended next skill: `$benchmark-agent-review benchmark-test-skill`.
 
+## Ad-Hoc Agent Review: benchmark-test-skill Fresh Benchmark 2026-05-13
+
+**Goal:** Review the latest persisted `benchmark-test-skill` Claude and Codex benchmark outputs for subjective operator quality.
+
+**Plan:**
+- [x] Resolve the latest Claude and Codex run directories from `tests/benchmarks/runs/benchmark-test-skill-*`.
+- [x] Extract retained generated report artifacts and benchmark context from each evaluated run.
+- [x] Grade each evaluated output against the agent-review rubric without merging scores into deterministic benchmark metrics.
+- [x] Write and validate `benchmark/review-benchmark-test-skill-2026-05-13.md` with scores, findings, remediation, and next route.
+- [x] Record results here, then commit and push intended review/task changes on `master`.
+
+**Review:** Complete. Reviewed latest persisted runs `benchmark-test-skill-claude-46f32ef6` and `benchmark-test-skill-codex-e4c6aef6`. Both runners had 3/3 hard assertion pass rates and 100.0% deterministic output-quality scores. Subjective agent-review scores were excellent: Claude retained evidence scored 92/100 for each run, with the caveat that full generated report text was not retained; Codex scored 96/100, 96/100, and 95/100 with fully retained generated report diffs. Median subjective score was 93.5 with range 92-96. No target-skill remediation is needed. Report: `benchmark/review-benchmark-test-skill-2026-05-13.md`. Recommended next command: `$ship`.
+
 ## Ad-Hoc Benchmark Rerun: benchmark-test-skill Self Benchmark 2026-05-13
 
 **Goal:** Run `$benchmark-test-skill benchmark-test-skill` with fresh eligibility, verify, and both-agent benchmark evidence on 2026-05-13.
