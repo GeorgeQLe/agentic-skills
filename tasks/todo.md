@@ -916,3 +916,22 @@ Implement only this step, validate it, then run `/ship` when done.
 - Report validation passed: required target, agent rows, pass-rate and blocked-run data, latency, cost, consistency, raw session paths, and recommended next route are present. `git diff --check` passed.
 - Committed and pushed on `master`.
 - **Recommended next command:** `$session-triage icon-handler benchmark failure`
+
+## Current Task — Triage `icon-handler` Benchmark Failure 2026-05-13
+
+- [x] Inspect `benchmark/test-icon-handler-2026-05-13.md` and persisted failed Claude run evidence.
+- [x] Compare mirrored `icon-handler` contracts against benchmark setup expectations.
+- [x] Check existing lessons and classify the failure as skill contract gap, benchmark harness gap, or runner noncompliance.
+- [x] Write `benchmark/triage-icon-handler-2026-05-13.md` with verdict, root cause, responsible gap, validation plan, and next route.
+- [x] Validate report fields, then commit and push intended changes.
+
+## Review — Triage `icon-handler` Benchmark Failure 2026-05-13
+
+- Verification verdict: verified.
+- Evidence inspected: `benchmark/test-icon-handler-2026-05-13.md`, Claude failed runs #0 and #1 in `icon-handler-claude-7d05699b`, Claude passing run #2, Codex passing runs in `icon-handler-codex-e4f1a34a`, mirrored `icon-handler` skill contracts, `tests/layer4/setups/tier23-global-workflows.setup.ts`, layer1 route coverage, and `tasks/lessons.md`.
+- Root cause: benchmark fixture robustness gap. The fixture writes ASCII text to a file named `calc-mascot-icon.png`, which can trigger runner/image transport processing before the skill can audit the file locally; failed Claude runs exited with `API Error: 400 Could not process image`.
+- Responsible gap: benchmark fixture, not the mirrored `icon-handler` skill contracts.
+- Recommended fix: make the canonical source asset a tiny valid PNG or add binary fixture support, while preserving stale placeholder evidence for existing icon surfaces; add layer1 coverage so the source asset cannot regress to ASCII placeholder content.
+- Report written to `benchmark/triage-icon-handler-2026-05-13.md`.
+- Report validation passed: required triage sections, persisted failure evidence, root-cause classification, validation plan, and recommended next route are present. `git diff --check` passed.
+- **Recommended next skill:** `$targeted-skill-builder icon-handler benchmark valid source asset`

@@ -57,6 +57,19 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Benchmark completed on 2026-05-13. `icon-handler` is known with `coverage=custom` using `tests/layer4/setups/tier23-global-workflows.setup.ts`. Verify passed with layer1 in 8.8s across 1,352 tests; layer2 was skipped because no target-specific layer2 tests matched `icon-handler`. The both-agent benchmark completed with no infrastructure-blocked runs. Claude passed 1/3 evaluated hard assertions with 40.2% output quality, p50 latency 21.6s, and $0.75 total cost. Codex passed 3/3 evaluated hard assertions with 84.1% output quality, p50 latency 65.8s, and $0.75 total cost. Report: `benchmark/test-icon-handler-2026-05-13.md`. Committed and pushed on `master`. Recommended next command: `$session-triage icon-handler benchmark failure`.
 
+## Current Triage: icon-handler Benchmark Failure 2026-05-13
+
+**Goal:** Verify the fresh `icon-handler` benchmark failure and identify the smallest durable fix.
+
+**Acceptance Criteria:**
+- [x] Fresh benchmark report and persisted Claude/Codex run evidence are inspected.
+- [x] Mirrored `icon-handler` contracts are compared against the Tier 2/3 benchmark setup expectations.
+- [x] The failure is classified as a skill contract gap, benchmark harness gap, runner infrastructure issue, or runner noncompliance.
+- [x] `benchmark/triage-icon-handler-2026-05-13.md` records verdict, root cause, responsible gap, validation plan, and next route.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Triage completed on 2026-05-13. The benchmark failure is verified. Claude runs #0 and #1 in `icon-handler-claude-7d05699b` exited with `API Error: 400 Could not process image` before creating `icon-audit.md`; Claude run #2 and all Codex runs completed successfully. The responsible gap is the benchmark fixture, not the mirrored `icon-handler` skill contracts: the fixture writes ASCII text to `calc-mascot-icon.png`, which can trigger runner/image transport handling before local file audit. Report: `benchmark/triage-icon-handler-2026-05-13.md`. Recommended next skill: `$targeted-skill-builder icon-handler benchmark valid source asset`.
+
 ## Current Benchmark: session-triage Fresh Rerun 2026-05-13 Latest
 
 **Goal:** Run `$benchmark-test-skill session-triage` with current repository harness eligibility, verify, and both-agent benchmark evidence.
