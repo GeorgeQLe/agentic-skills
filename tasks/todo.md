@@ -4,6 +4,19 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Ad-Hoc Triage: session-triage Benchmark Failure Current 2026-05-13
+
+**Goal:** Triage the current `session-triage` benchmark failure from `session-triage-codex-fbec4404` and identify the smallest durable fix.
+
+**Plan:**
+- [x] Inspect the current benchmark report and persisted Claude/Codex run evidence.
+- [x] Compare mirrored `session-triage` contracts against the tier1 benchmark setup expectations.
+- [x] Classify whether the failure is a skill contract gap, benchmark harness gap, or runner noncompliance.
+- [x] Update `benchmark/triage-session-triage-2026-05-13.md` with verdict, root cause, responsible gap, validation plan, and next route.
+- [x] Record results here, then commit and push intended triage/task changes on `master`.
+
+**Review:** Complete. The current benchmark failure is verified. Verify passed, but Codex passed only 2/3 hard assertions because run #0 exited without creating `session-triage-report.md` in the project root. Claude passed hard assertions but had low output-quality scores from over-remediation. The responsible gap is the benchmark fixture prompt and layer1 regression coverage, not the mirrored `session-triage` skill contracts. The prompt should force a bounded evidence pass and root report creation before optional exploration while preserving the no-skill-change branch for one-off noncompliance with an adequate validation rule. Report: `benchmark/triage-session-triage-2026-05-13.md`. Recommended next skill: `$targeted-skill-builder session-triage benchmark fixture robustness`.
+
 ## Ad-Hoc Benchmark: session-triage Fresh Rerun 2026-05-13 Current
 
 **Goal:** Run `$benchmark-test-skill session-triage` with current repository harness eligibility, verify, and both-agent benchmark evidence.
