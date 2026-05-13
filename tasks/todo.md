@@ -4,6 +4,19 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Ad-Hoc Investigation: Research Skill Approval Reports
+
+**Goal:** Update research-oriented skills so they can present findings for user approval before writing canonical research files, instead of always writing directly to disk.
+
+**Plan:**
+- [ ] Identify research skills that currently require direct file writes.
+- [ ] Classify the smallest contract change that makes report-first approval behavior consistent.
+- [ ] Update affected skill contracts without weakening explicit write/update modes.
+- [ ] Run skill contract and targeted text validation.
+- [ ] Record investigation results here, then commit and push intended changes on `master`.
+
+**Review:** Pending.
+
 ## Ad-Hoc Targeted Skill Update: icon-handler Benchmark Coverage
 
 **Goal:** Align the `icon-handler` benchmark coverage with Claude and Codex command conventions so Claude outputs are not failed for correctly recommending `/icon-handler`.
@@ -881,3 +894,25 @@ Implement only this step, validate it, then run `/ship` when done.
 - Files changed: `tests/layer4/setups/tier1-workflows.setup.ts`, `tests/layer1/bench-setups.test.ts`, `tasks/roadmap.md`, and `tasks/todo.md`.
 - No Skills Showcase regeneration was needed because no tracked `SKILL.md` or `PACK.md` behavior/metadata changed.
 - **Recommended next command:** `$benchmark-test-skill session-triage`
+
+## Current Task — Benchmark `icon-handler` 2026-05-13
+
+- [x] Confirm `$benchmark-test-skill` is the active workflow and `icon-handler` is the target skill argument.
+- [x] Run `pnpm bench --list-skills` and confirm `icon-handler` is known to the harness.
+- [x] Record coverage status and setup path from the harness list output. `coverage=custom`, setup `tests/layer4/setups/tier23-global-workflows.setup.ts`.
+- [x] Run `pnpm verify --skill icon-handler`; stop before bench if verification fails. ✓ layer1 PASS in 8.8s; layer2 SKIP because no target-specific layer2 tests matched.
+- [x] If verify passes, run `pnpm bench --skill icon-handler --agent both --runs 3 --chunk-size 3 --pause 0`. ✓ Claude 1/3 (33.3%), Codex 3/3 (100.0%), no blocked runs.
+- [x] Write `benchmark/test-icon-handler-2026-05-13.md` with verify, benchmark, latency, cost, consistency, raw paths, and recommended next route.
+- [x] Validate the report contains required benchmark fields.
+- [x] Record results here, then commit and push intended changes.
+
+## Review — Benchmark `icon-handler` 2026-05-13
+
+- Verify passed: layer1 PASS in 8.8s with 1,352 tests across 12 files; layer2 SKIP because no target-specific layer2 tests matched `icon-handler`.
+- Benchmark completed for both agents:
+  - Claude session `7d05699b`: 1/3 evaluated hard assertions passed, 0 infrastructure-blocked runs, failed runs #0 and #1 on `Agent command exited successfully` and `icon-audit.md created in project root`, quality score 40.2%, p50 21.6s, p95 30.0s, p99 30.8s, total cost $0.75.
+  - Codex session `e4f1a34a`: 3/3 evaluated hard assertions passed, 0 infrastructure-blocked runs, quality score 84.1%, p50 65.8s, p95 71.5s, p99 72.0s, total cost $0.75.
+- Report written to `benchmark/test-icon-handler-2026-05-13.md`.
+- Report validation passed: required target, agent rows, pass-rate and blocked-run data, latency, cost, consistency, raw session paths, and recommended next route are present. `git diff --check` passed.
+- Committed and pushed on `master`.
+- **Recommended next command:** `$session-triage icon-handler benchmark failure`
