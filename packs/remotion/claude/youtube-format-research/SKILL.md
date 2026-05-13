@@ -14,6 +14,12 @@ Before telling the user to run a skill from another project-local pack, check `.
 
 Invoke as `/youtube-format-research`.
 
+## Report-First Approval Gate
+
+Default to report-only: present findings, evidence coverage, assumptions, recommended artifact path, and proposed file changes in the conversation for user approval before creating or updating canonical research, spec, or task files.
+
+Do not write or overwrite synthesized deliverables until the user explicitly approves, unless the user invoked an explicit write/update/fix mode or clearly asked to write files upfront. Raw evidence capture may be persisted before analysis when reproducibility requires it; report those raw paths separately and still gate synthesized research/report writes.
+
 Analyze how a reference YouTube video is constructed so its format, design language, pacing, and production grammar can be adapted. This is the production-pattern lane; use `/youtube-vid-research` for general comprehension, `/youtube-competitive-research` for performance lessons, and `/video-build` when an approved script is ready for Remotion implementation.
 
 ## Inputs

@@ -12,6 +12,12 @@ Before telling the user to run a skill from another project-local pack, check `.
 
 # Hook Model — Engagement Loop Design
 
+## Report-First Approval Gate
+
+Default to report-only: present findings, evidence coverage, assumptions, recommended artifact path, and proposed file changes in the conversation for user approval before creating or updating canonical research, spec, or task files.
+
+Do not write or overwrite synthesized deliverables until the user explicitly approves, unless the user invoked an explicit write/update/fix mode or clearly asked to write files upfront. Raw evidence capture may be persisted before analysis when reproducibility requires it; report those raw paths separately and still gate synthesized research/report writes.
+
 Designs habit-forming engagement loops using Nir Eyal's Hook Model framework. Maps External Triggers → Internal Triggers → Action → Variable Reward → Investment for each core product behavior. This skill is most relevant for consumer and PLG products — B2B/enterprise products should typically skip to `/metrics`.
 
 ## Prerequisites

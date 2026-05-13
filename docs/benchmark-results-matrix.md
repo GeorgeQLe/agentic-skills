@@ -21,6 +21,8 @@ This matrix tracks skills that already have persisted benchmark run data and gra
 | `benchmark-test-skill` | Codex | `tests/benchmarks/runs/benchmark-test-skill-codex-e4c6aef6/report.json` | 3 | 100% | 100.0% | `benchmark/review-benchmark-test-skill-2026-05-13.md` | graded | Curated report: `benchmark/test-benchmark-test-skill-2026-05-13.md`. Subjective review median score available. |
 | `design-system` | Claude | `tests/benchmarks/runs/design-system-claude-d263df0d/report.json` | 3 | 100% | not scored | none | partially graded | Curated report: `benchmark/test-design-system-2026-05-10.md`. Hard assertion evidence exists; no quality score in the latest persisted evaluated report. |
 | `design-system` | Codex | `tests/benchmarks/runs/design-system-codex-43b808d6/report.json` | 1 | 100% | 90.9% | none | graded | Curated report: `benchmark/test-design-system-2026-05-10.md`. One evaluated persisted run with deterministic quality scoring. |
+| `icon-handler` | Claude | `tests/benchmarks/runs/icon-handler-claude-7d05699b/report.json` | 3 | 33% | 40.2% | none | graded | Curated report: `benchmark/test-icon-handler-2026-05-13.md`. |
+| `icon-handler` | Codex | `tests/benchmarks/runs/icon-handler-codex-e4f1a34a/report.json` | 3 | 100% | 84.1% | none | graded | Curated report: `benchmark/test-icon-handler-2026-05-13.md`. |
 | `investigate` | Codex | `tests/benchmarks/runs/investigate-codex-701bd642/report.json` | 1 | 100% | 100.0% | none | graded | One evaluated persisted run with deterministic quality scoring. |
 | `plan-phase` | Codex | `tests/benchmarks/runs/plan-phase-codex-0ea4e69c/report.json` | 1 | 100% | not scored | none | partially graded | Hard assertion evidence exists; no quality score in the latest persisted evaluated report. |
 | `run` | Claude | `tests/benchmarks/runs/run-claude-2e876403/report.json` | 3 | 100% | 100.0% | none | graded | Curated report: `benchmark/test-run-2026-05-11.md`. |
@@ -39,7 +41,7 @@ This matrix tracks skills that already have persisted benchmark run data and gra
 |---|---|---|---|---|
 | `affected` | Codex | `tests/benchmarks/runs/affected-codex-3c36c9a8/report.json` | blocked/incomplete | Report exists with zero total and evaluated runs. Do not count as benchmarked. |
 | `benchmark-test-skill` | Codex | `tests/benchmarks/runs/benchmark-test-skill-codex-8a1dccd0/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
-| `run` | Codex | `tests/benchmarks/runs/run-codex-ea7f3d14/report.json` | blocked/incomplete | Report exists with zero total and evaluated runs. Do not count as benchmarked. Prefer the later evaluated report listed above. |
+| `run` | Codex | `tests/benchmarks/runs/run-codex-f6909612/report.json` | blocked/incomplete | Report exists with zero total and evaluated runs. Do not count as benchmarked. Prefer the later evaluated report listed above. |
 | `spec-interview` | Claude | `tests/benchmarks/runs/spec-interview-claude-b83d0caa/report.json` | blocked/incomplete | Report exists with zero evaluated runs. |
 | `youtube-video-audit` | Codex | `tests/benchmarks/runs/youtube-video-audit-codex-306e24a9/report.json` | blocked/incomplete | Report exists with zero total and evaluated runs. Do not count as benchmarked. Prefer the later evaluated report listed above. |
 

@@ -14,6 +14,12 @@ Before telling the user to run a skill from another project-local pack, check `.
 
 Invoke as `$youtube-concept-research`.
 
+## Report-First Approval Gate
+
+Default to report-only: present findings, evidence coverage, assumptions, recommended artifact path, and proposed file changes in the conversation for user approval before creating or updating canonical research, spec, or task files.
+
+Do not write or overwrite synthesized deliverables until the user explicitly approves, unless the user invoked an explicit write/update/fix mode or clearly asked to write files upfront. Raw evidence capture may be persisted before analysis when reproducibility requires it; report those raw paths separately and still gate synthesized research/report writes.
+
 Research a proposed YouTube video concept before scripting or production. Start from the user's idea, find successful direct and adjacent videos, explain what likely worked from public evidence, and translate the lessons into differentiated concept directions. Use `$youtube-competitive-research` when the user already has specific reference videos and wants to know why they worked. Use `$youtube-search-positioning` when the task is only keyword/search opportunity research.
 
 ## Inputs

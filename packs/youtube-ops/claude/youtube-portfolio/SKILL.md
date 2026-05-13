@@ -14,6 +14,12 @@ Before telling the user to run a skill from another project-local pack, check `.
 
 Invoke as `/youtube-portfolio`.
 
+## Report-First Approval Gate
+
+Default to report-only: present findings, evidence coverage, assumptions, recommended artifact path, and proposed file changes in the conversation for user approval before creating or updating canonical research, spec, or task files.
+
+Do not write or overwrite synthesized deliverables until the user explicitly approves, unless the user invoked an explicit write/update/fix mode or clearly asked to write files upfront. Raw evidence capture may be persisted before analysis when reproducibility requires it; report those raw paths separately and still gate synthesized research/report writes.
+
 Turn channel-audit evidence into a portfolio view: what the channel has published, what roles those videos serve, where performance concentrates, and what should be kept, refreshed, or reviewed.
 
 ## Inputs
