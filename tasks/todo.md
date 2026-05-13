@@ -4,6 +4,21 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Ad-Hoc Targeted Skill Build: icon-handler
+
+**Goal:** Add a shared Claude/Codex skill for auditing and applying a project-root desired icon across favicon, app icon, Apple touch icon, and manifest surfaces with a hygiene-style audit-first approval gate.
+
+**Plan:**
+- [x] Confirm existing overlap: `$hygiene` covers structural audits but not icon conversion/metadata correction.
+- [x] Create mirrored `global/claude/icon-handler` and `global/codex/icon-handler` skill contracts.
+- [x] Add the Codex `agents/openai.yaml` manifest.
+- [x] Register benchmark coverage and a deterministic Next App Router icon audit fixture.
+- [x] Update discovery docs.
+- [x] Run install, skill integrity, coverage, showcase, and whitespace validation.
+- [x] Record validation results, then commit and push intended changes on `master`.
+
+**Review:** Complete. Created mirrored `global/claude/icon-handler` and `global/codex/icon-handler` skill contracts plus the Codex `agents/openai.yaml` manifest. The skill is audit-first by default, requires explicit `fix` approval before modifications, covers Next App Router favicon/app/Apple icon conventions, warns that `favicon.ico` is the conventional browser-probed file rather than `icon.ico`, and requires generated asset plus metadata/build-output verification. Added `icon-handler` to `docs/skills-reference.md`, `tests/harness/bench-coverage.ts`, and the Tier 2/3 global benchmark setup fixture. Refreshed Skills Showcase generated assets. Validation passed with `./install.sh`, `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken`, `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`, `/opt/homebrew/bin/bash ./scripts/skill-next-step-routing.sh --missing`, `pnpm --dir tests bench:coverage`, `pnpm --dir tests test:layer1 -- bench-coverage bench-setups`, `pnpm --dir tests verify --skill icon-handler` (layer1 pass, layer2 skipped because no target-specific tests matched), `node scripts/generate-skills-showcase-data.mjs`, `node scripts/generate-skills-showcase-github-data.mjs`, and `git diff --check`. `scripts/validate-skills-showcase-data.sh` correctly reported stale generated assets before commit after regeneration; rerun after commit should be clean. Recommended next command: `$icon-handler audit <asset>`.
+
 ## Ad-Hoc Targeted Skill Update: session-triage Benchmark Fixture Robustness
 
 **Goal:** Harden the `session-triage` benchmark fixture so runs write the root report before optional exploration and the rubric accepts explicit no-skill-change outputs.
