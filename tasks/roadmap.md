@@ -40,6 +40,19 @@ Current brand decision: the public site brand is **G Skillmap** and the producti
 - [ ] Layer1 or generator tests cover the new data shape and fallback behavior when raw run artifacts are absent.
 - [ ] Showcase data is regenerated and validated.
 
+## Current Fix: benchmark-test-skill Benchmark Failure Rubric Alignment
+
+**Goal:** Align the `benchmark-test-skill` tier1 benchmark quality rubric with the hard structural report assertion after the 2026-05-13 self-benchmark found Claude runs that preserved facts but failed report structure.
+
+**Acceptance Criteria:**
+- [x] Existing-skill overlap confirms the fix belongs in the benchmark harness/setup, not a new skill.
+- [x] The output-quality rubric fails reports that preserve facts but place benchmark metrics outside the `## Benchmark Metrics` table.
+- [x] Layer1 regression coverage rejects malformed metric-table reports while preserving the existing structured passing fixture.
+- [x] Targeted and required validation pass.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Completed on 2026-05-13. The `benchmark-test-skill` hard assertion and output-quality rubric now agree on the structured metrics-table requirement: pass rate, p50 latency, and total cost must appear as rows inside the `## Benchmark Metrics` table. A new layer1 regression rejects reports that keep the facts but move those metrics into prose. Validation passed with focused layer1 tests, benchmark coverage, install/link checks, verify, and whitespace validation. Recommended next command: `$benchmark-test-skill benchmark-test-skill`.
+
 ## Current Benchmark Rerun: benchmark-test-skill Self Benchmark
 
 **Goal:** Run `$benchmark-test-skill benchmark-test-skill` with fresh eligibility, verify, and both-agent benchmark evidence on 2026-05-12.
