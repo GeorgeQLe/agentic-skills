@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-05-13 — Benchmark-test-skill deterministic rerun and agent review
+
+- Ran `$benchmark-test-skill benchmark-test-skill` against the custom tier1 fixture. Verify passed with layer1 in 9.5s across 1,312 tests; layer2 skipped because no target-specific layer2 files matched.
+- Both-agent benchmark passed with no infrastructure-blocked runs: Claude 3/3 hard assertions, 100.0% deterministic output quality, p50 17.8s, $0.75 total; Codex 3/3 hard assertions, 100.0% deterministic output quality, p50 30.5s, $0.75 total.
+- Wrote `benchmark/test-benchmark-test-skill-2026-05-13.md` from persisted `report.json` evidence and pushed commit `8b3c4cb`.
+- Ran `$benchmark-agent-review benchmark-test-skill` on latest persisted runs `benchmark-test-skill-claude-46f32ef6` and `benchmark-test-skill-codex-e4c6aef6`.
+- Agent review found excellent subjective output quality: Claude retained evidence scored 92/100 for all three runs with a retained-artifact caveat; Codex scored 96/100, 96/100, and 95/100 with full generated report diffs. Wrote `benchmark/review-benchmark-test-skill-2026-05-13.md` and pushed commit `28d76f6`.
+- Deploy not run during ship: `tasks/deploy.md` requires Vercel/Neon environment setup and live verification; `tasks/manual-todo.md` still has those external setup items unchecked.
+
 ## 2026-05-12 — Steps 39.6/39.7: Regression tests and phase validation
 
 - Updated `scripts/generate-skills-showcase-data.mjs` to replace stale "currently blocked" text with "Safe Git-Fixture Skills" section reflecting custom coverage for `commit-and-push-by-feature` and `sync`.
