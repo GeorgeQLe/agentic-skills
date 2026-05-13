@@ -17,6 +17,17 @@
 
 **Review:** Complete. Updated `tests/layer4/setups/tier1-workflows.setup.ts` so the `session-triage` quality rubric includes a critical `no-over-remediation-route` criterion. It penalizes reports that recommend `$targeted-skill-builder` unconditionally while also framing the incident as one-off agent noncompliance or an adequate existing contract. Updated `tests/layer1/bench-setups.test.ts` to prove `Recommended next skill: none` passes this branch and unconditional `$targeted-skill-builder run` fails it. Validation passed with `pnpm --dir tests test:layer1 -- bench-setups bench-quality`, `pnpm --dir tests bench:coverage`, `./install.sh`, skill dependency/version/routing checks, `pnpm --dir tests verify --skill session-triage`, and `git diff --check`. Recommended next command: `$benchmark-test-skill session-triage`.
 
+## Ad-Hoc Benchmark: session-triage Fresh Rerun 2026-05-13 10:40
+
+**Goal:** Run `$benchmark-test-skill session-triage` with fresh repository harness eligibility, verify, and both-agent benchmark evidence after the latest benchmark fixture routing fix.
+
+**Plan:**
+- [ ] Confirm `session-triage` is a known benchmark harness target and record its coverage status.
+- [ ] Run `pnpm verify --skill session-triage` from `tests/` and stop if it fails.
+- [ ] If verify passes, run `pnpm bench --skill session-triage --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [ ] Write and validate `benchmark/test-session-triage-2026-05-13.md` with verify, benchmark, latency, cost, consistency, and raw session evidence.
+- [ ] Record results here, then commit and push intended benchmark/task changes on `master`.
+
 ## Ad-Hoc Agent Review: session-triage Fresh Benchmark 2026-05-13
 
 **Goal:** Review the latest persisted `session-triage` Claude and Codex benchmark outputs for subjective operator quality.
