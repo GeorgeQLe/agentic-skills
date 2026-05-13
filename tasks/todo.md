@@ -170,6 +170,19 @@
 - No `specs/ux-variations-*.md` exists, but UX decisions were made via UI interview and are baked into the built site. Creating a retroactive UX variations doc would be low-value.
 - 5 ideas in `tasks/ideas.md` are unspecced; candidates for `/feature-interview` if any are prioritized.
 
+## Ad-Hoc Benchmark: session-triage Fresh Rerun 2026-05-13 Latest
+
+**Goal:** Run `$benchmark-test-skill session-triage` with current harness eligibility, verify, and both-agent benchmark evidence.
+
+**Plan:**
+- [x] Confirm `session-triage` is a known benchmark harness target and record its coverage status. `coverage=custom`, `setup=tests/layer4/setups/tier1-workflows.setup.ts`.
+- [x] Run `pnpm verify --skill session-triage` from `tests/` and stop if it fails.
+- [x] If verify passes, run `pnpm bench --skill session-triage --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [x] Write and validate `benchmark/test-session-triage-2026-05-13.md` with verify, benchmark, latency, cost, consistency, raw session paths, and next route.
+- [x] Record results here, then commit and push intended benchmark/task changes on `master`.
+
+**Review:** Fresh benchmark rerun completed on 2026-05-13 at 13:06 ET. `session-triage` is known with `coverage=custom` using `tests/layer4/setups/tier1-workflows.setup.ts`. Verify passed with layer1 in 11.8s across 1,350 tests; layer2 was skipped because no target-specific layer2 tests matched `session-triage`. The both-agent benchmark completed with no infrastructure-blocked runs. Claude passed 3/3 evaluated hard assertions with 100.0% output quality, p50 latency 37.1s, and $0.75 total cost. Codex passed 3/3 evaluated hard assertions with 100.0% output quality, p50 latency 37.4s, and $0.75 total cost. Report validation passed with target, agent rows, pass-rate, latency, cost, consistency, raw session paths, and next-route evidence. Report: `benchmark/test-session-triage-2026-05-13.md`. Recommended next skill: `$benchmark-agent-review session-triage`.
+
 ## Ad-Hoc Pack Split: Customer Lifecycle
 
 **Goal:** Split lifecycle planning out of `business-discovery` into a mirrored `customer-lifecycle` pack that owns journey, onboarding, conversion, transaction, retention, expansion, and lifecycle metrics workflows.
