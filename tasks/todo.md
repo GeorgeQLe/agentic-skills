@@ -659,3 +659,25 @@ Implement only this step, validate it, then run `/ship` when done.
 - Report written to `benchmark/test-session-triage-2026-05-13.md`.
 - Report validation passed: required target, agent rows, pass-rate and blocked-run data, latency, cost, raw session paths, and recommended next route are present.
 - **Recommended next skill:** `$benchmark-agent-review session-triage`
+
+## Current Task — Agent Review `session-triage`
+
+- [x] Resolve `$benchmark-agent-review session-triage` as the active workflow.
+- [x] Locate latest persisted `session-triage` benchmark runs for Claude and Codex.
+- [x] Extract evaluated run outputs and exclude infrastructure-blocked runs.
+- [x] Grade generated artifacts against the agent-review rubric.
+- [x] Write `benchmark/review-session-triage-2026-05-13.md` with score table, findings, remediation handoff, and recommended next command.
+- [x] Validate the review report contains required fields.
+- [x] Commit and push intended changes.
+
+## Review — Agent Review `session-triage`
+
+- Reviewed latest benchmark runs:
+  - Claude `13f4872c`: evaluated runs 0 and 1; excluded infrastructure-blocked run 2.
+  - Codex `7cdefe10`: evaluated runs 0, 1, and 2.
+- Subjective score table: Claude run 0 = 64, Claude run 1 = 66, Codex run 0 = 97, Codex run 1 = 92, Codex run 2 = 86.
+- Median subjective score: 86; range: 64-97.
+- Main finding: Codex outputs are good to excellent, while Claude outputs over-route one-off noncompliance to `/targeted-skill-builder run` and one makes an unsupported `/run` contract availability claim.
+- Report written to `benchmark/review-session-triage-2026-05-13.md`.
+- Report validation passed: source paths, reviewed run IDs, benchmark context, subjective scores, median/range, strengths, weaknesses, remediation table, deterministic-rubric notes, and recommended next command are present. `git diff --check` passed.
+- **Recommended next command:** `$targeted-skill-builder session-triage benchmark over-remediation rubric`
