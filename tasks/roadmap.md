@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Triage: session-triage Benchmark Failure 2026-05-13 12:07
+
+**Goal:** Verify the fresh `session-triage` benchmark failure from Codex session `d417810e` and identify the smallest durable fix.
+
+**Acceptance Criteria:**
+- [x] Fresh benchmark report and persisted failed-run evidence are inspected.
+- [x] Mirrored `session-triage` contracts are compared against benchmark setup expectations.
+- [x] The failure is classified as a skill contract gap, benchmark fixture gap, or runner noncompliance.
+- [x] `benchmark/triage-session-triage-2026-05-13.md` records verdict, root cause, responsible gap, validation plan, and next route.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Triage completed on 2026-05-13. The fresh benchmark failure is verified: Codex session `d417810e` run #1 exited successfully after reading the right evidence but did not create `session-triage-report.md`, causing the hard assertion failure. Claude session `865e8407` passed 3/3 with 100.0% output quality, and adjacent Codex runs #0 and #2 passed, so the issue is not mirrored `session-triage` contract drift. Root cause is Codex runner noncompliance with an adequate fixture instruction, with a narrow benchmark fixture robustness opportunity: require a post-write existence check for `session-triage-report.md`. Report: `benchmark/triage-session-triage-2026-05-13.md`. Recommended next skill: `$targeted-skill-builder session-triage benchmark artifact verification`.
+
 ## Current Benchmark: session-triage Fresh Rerun 2026-05-13 12:07
 
 **Goal:** Run `$benchmark-test-skill session-triage` with fresh harness eligibility, verify, and both-agent benchmark evidence.

@@ -768,3 +768,22 @@ Implement only this step, validate it, then run `/ship` when done.
 - Report written to `benchmark/test-session-triage-2026-05-13.md`.
 - Report validation passed: required target, agent rows, pass-rate and blocked-run data, latency, cost, raw session paths, and recommended next route are present. `git diff --check` passed.
 - **Recommended next command:** `$session-triage session-triage benchmark failure`
+
+## Current Task — Triage `session-triage` Benchmark Failure 2026-05-13 12:07
+
+- [x] Inspect fresh benchmark report and persisted failed run evidence.
+- [x] Compare mirrored `session-triage` contracts against benchmark setup expectations.
+- [x] Check existing lessons and prior `session-triage` benchmark triage history.
+- [x] Write `benchmark/triage-session-triage-2026-05-13.md` with verdict, root cause, responsible gap, validation plan, and next route.
+- [x] Validate report fields, then commit and push intended changes.
+
+## Review — Triage `session-triage` Benchmark Failure 2026-05-13 12:07
+
+- Verification verdict: verified.
+- Evidence inspected: `benchmark/test-session-triage-2026-05-13.md`, Codex run `d417810e` run #1, adjacent Codex passing runs, Claude run `865e8407`, mirrored `session-triage` contracts, benchmark setup, layer1 setup tests, prior same-day triage/review reports, and `tasks/lessons.md`.
+- Root cause: Codex runner noncompliance with an adequate fixture instruction; the failed run read the correct evidence but did not complete the required root artifact write.
+- Responsible gap: benchmark fixture robustness, not the mirrored `session-triage` skill contracts.
+- Recommended fix: add a fixture-level post-write existence check for `session-triage-report.md` and layer1 coverage preserving the no-skill-change branch.
+- Report written to `benchmark/triage-session-triage-2026-05-13.md`.
+- Report validation passed: required triage sections, fresh session IDs, root-cause classification, validation plan, and recommended next route are present. `git diff --check` passed.
+- **Recommended next skill:** `$targeted-skill-builder session-triage benchmark artifact verification`
