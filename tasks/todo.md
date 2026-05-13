@@ -747,3 +747,24 @@ Implement only this step, validate it, then run `/ship` when done.
 - No Skills Showcase regeneration was needed because no tracked `SKILL.md` or `PACK.md` behavior/metadata changed.
 - **Next work:** none.
 - **Recommended next command:** `$benchmark-test-skill session-triage`
+
+## Current Task — Fresh Benchmark `session-triage` 2026-05-13
+
+- [x] Confirm `$benchmark-test-skill` is the active workflow and `session-triage` is the target skill argument.
+- [x] Run `pnpm bench --list-skills` and confirm `session-triage` is known to the harness.
+- [x] Record coverage status: `custom`, setup `tests/layer4/setups/tier1-workflows.setup.ts`.
+- [x] Run `pnpm verify --skill session-triage`. ✓ layer1 PASS in 8.9s; layer2 SKIP because no target-specific layer2 tests matched.
+- [x] If verify passes, run `pnpm bench --skill session-triage --agent both --runs 3 --chunk-size 3 --pause 0`. ✓ Claude 3/3 (100.0%), Codex 2/3 (66.7%), no blocked runs.
+- [x] Write `benchmark/test-session-triage-2026-05-13.md` with verify, benchmark, latency, cost, consistency, raw paths, and recommended next route.
+- [x] Validate the report contains required benchmark fields.
+- [x] Record results here, then commit and push intended changes.
+
+## Review — Fresh Benchmark `session-triage` 2026-05-13
+
+- Verify passed: layer1 PASS in 8.9s with 1,350 tests across 12 files; layer2 SKIP because no target-specific layer2 tests matched `session-triage`.
+- Benchmark completed for both agents:
+  - Claude session `865e8407`: 3/3 evaluated hard assertions passed, 0 infrastructure-blocked runs, quality score 100.0%, p50 29.7s, p95 31.8s, p99 31.9s, total cost $0.75.
+  - Codex session `d417810e`: 2/3 evaluated hard assertions passed, 0 infrastructure-blocked runs, failed run #1 on `session-triage-report.md created in project root`, quality score 82.5%, 1 threshold failure, 2 critical failures, p50 278.3s, total cost $0.75.
+- Report written to `benchmark/test-session-triage-2026-05-13.md`.
+- Report validation passed: required target, agent rows, pass-rate and blocked-run data, latency, cost, raw session paths, and recommended next route are present. `git diff --check` passed.
+- **Recommended next command:** `$session-triage session-triage benchmark failure`
