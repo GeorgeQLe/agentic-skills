@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Investigation: Research Skill Approval Reports
+
+**Goal:** Update research-oriented skills so they can present findings for user approval before writing canonical research files, instead of always writing directly to disk.
+
+**Acceptance Criteria:**
+- [ ] Research skills with direct-write contracts are identified.
+- [ ] A consistent report-first approval rule is added where appropriate.
+- [ ] Existing explicit write/update modes remain available after approval.
+- [ ] Targeted validation confirms the updated contracts.
+- [ ] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Pending.
+
 ## Current Targeted Skill Build: icon-handler
 
 **Goal:** Add a shared Claude/Codex skill for auditing and applying a project-root desired icon across favicon, app icon, Apple touch icon, and manifest surfaces with a hygiene-style audit-first approval gate.
@@ -30,6 +43,19 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 - [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
 
 **Result:** Complete. Created mirrored `global/claude/icon-handler` and `global/codex/icon-handler` skill contracts plus the Codex `agents/openai.yaml` manifest. The skill is audit-first by default, requires explicit `fix` approval before modifications, covers Next App Router favicon/app/Apple icon conventions, warns that `favicon.ico` is the conventional browser-probed file rather than `icon.ico`, and requires generated asset plus metadata/build-output verification. Added `icon-handler` to `docs/skills-reference.md`, `tests/harness/bench-coverage.ts`, and the Tier 2/3 global benchmark setup fixture. Refreshed Skills Showcase generated assets. Validation passed with `./install.sh`, `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-next-step-routing.sh --missing`, `pnpm --dir tests bench:coverage`, focused layer1 benchmark setup/quality files, `pnpm --dir tests verify --skill icon-handler`, showcase generation/validation, targeted `rg`, and `git diff --check`. Recommended next command: `$icon-handler audit <asset>`.
+
+## Current Benchmark: icon-handler 2026-05-13
+
+**Goal:** Run `$benchmark-test-skill icon-handler` with repository harness eligibility, verify, and both-agent benchmark evidence after the runner-specific route convention fix.
+
+**Acceptance Criteria:**
+- [x] `pnpm bench --list-skills` confirms `icon-handler` is known and reports its coverage status.
+- [x] `pnpm verify --skill icon-handler` passes or blocks benchmark execution with a recorded failure.
+- [x] `pnpm bench --skill icon-handler --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [x] `benchmark/test-icon-handler-2026-05-13.md` records verify, benchmark, latency, cost, consistency, and raw session evidence.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Benchmark completed on 2026-05-13. `icon-handler` is known with `coverage=custom` using `tests/layer4/setups/tier23-global-workflows.setup.ts`. Verify passed with layer1 in 8.8s across 1,352 tests; layer2 was skipped because no target-specific layer2 tests matched `icon-handler`. The both-agent benchmark completed with no infrastructure-blocked runs. Claude passed 1/3 evaluated hard assertions with 40.2% output quality, p50 latency 21.6s, and $0.75 total cost. Codex passed 3/3 evaluated hard assertions with 84.1% output quality, p50 latency 65.8s, and $0.75 total cost. Report: `benchmark/test-icon-handler-2026-05-13.md`. Committed and pushed on `master`. Recommended next command: `$session-triage icon-handler benchmark failure`.
 
 ## Current Benchmark: session-triage Fresh Rerun 2026-05-13 Latest
 
