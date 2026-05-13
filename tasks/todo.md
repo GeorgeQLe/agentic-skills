@@ -4,6 +4,17 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Ad-Hoc Benchmark: session-triage 2026-05-13
+
+**Goal:** Run `$benchmark-test-skill session-triage` with repository harness eligibility, verify, and both-agent benchmark evidence.
+
+**Plan:**
+- [ ] Confirm `session-triage` is a known benchmark harness target and record its coverage status.
+- [ ] Run `pnpm verify --skill session-triage` from `tests/` and stop if it fails.
+- [ ] If verify passes, run `pnpm bench --skill session-triage --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [ ] Write and validate `benchmark/test-session-triage-2026-05-13.md` with verify, benchmark, latency, cost, consistency, and raw session evidence.
+- [ ] Record results here, then commit and push intended benchmark/task changes on `master`.
+
 ## Priority Documentation Todo
 
 - [x] Documentation is current; no missing or stale research, spec, roadmap, or task artifacts found.
