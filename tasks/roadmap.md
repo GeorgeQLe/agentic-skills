@@ -16,6 +16,17 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Benchmark: session-triage 2026-05-13
+
+**Goal:** Run `$benchmark-test-skill session-triage` with repository harness eligibility, verify, and both-agent benchmark evidence.
+
+**Acceptance Criteria:**
+- [ ] `pnpm bench --list-skills` confirms `session-triage` is known and reports its coverage status.
+- [ ] `pnpm verify --skill session-triage` passes or blocks benchmark execution with a recorded failure.
+- [ ] `pnpm bench --skill session-triage --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [ ] `benchmark/test-session-triage-2026-05-13.md` records verify, benchmark, latency, cost, consistency, and raw session evidence.
+- [ ] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
 ## Current Benchmark Rerun: benchmark-test-skill Self Benchmark Fresh 2026-05-13
 
 **Goal:** Run `$benchmark-test-skill benchmark-test-skill` with fresh eligibility, verify, and both-agent benchmark evidence on 2026-05-13.
