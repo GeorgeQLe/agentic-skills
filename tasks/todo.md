@@ -787,3 +787,30 @@ Implement only this step, validate it, then run `/ship` when done.
 - Report written to `benchmark/triage-session-triage-2026-05-13.md`.
 - Report validation passed: required triage sections, fresh session IDs, root-cause classification, validation plan, and recommended next route are present. `git diff --check` passed.
 - **Recommended next skill:** `$targeted-skill-builder session-triage benchmark artifact verification`
+
+## Current Task — Targeted Update `session-triage` Benchmark Artifact Verification
+
+- [x] Read relevant lessons, fresh triage report, current benchmark fixture, and layer1 setup coverage.
+- [x] Identify existing-skill overlap: update the existing `session-triage` custom benchmark setup, not the mirrored `session-triage` skill contracts.
+- [x] Add a fixture prompt requirement to verify `session-triage-report.md` exists in the project root after writing and create it before responding if missing.
+- [x] Extend layer1 coverage for the post-write existence check while preserving the no-skill-change branch.
+- [x] Validate:
+  - `pnpm --dir tests test:layer1 -- bench-setups bench-quality` — passed, 1,350 tests across 12 files.
+  - `./scripts/skill-deps.sh --broken` — passed.
+  - `./scripts/skill-versions.sh --missing` — passed.
+  - `./scripts/skill-next-step-routing.sh --missing` — passed.
+  - `pnpm --dir tests bench:coverage` — passed, 151 skills.
+  - `./install.sh` — passed.
+  - `pnpm --dir tests verify --skill session-triage` — layer1 PASS in 10.5s; layer2 SKIP because no matching target-specific tests exist.
+  - `pnpm --dir tests bench --skill session-triage --agent codex --runs 1 --chunk-size 1 --pause 0` — passed, `session-triage-codex-9ee8c354`, 1/1 hard assertions, 100.0% quality, no blocked runs, $0.25.
+  - `git diff --check` — passed.
+- [x] Commit and push intended changes.
+
+## Review — Targeted Update `session-triage` Benchmark Artifact Verification
+
+- Decision: existing benchmark fixture update.
+- Evidence used: `benchmark/triage-session-triage-2026-05-13.md`, `tasks/lessons.md`, `tests/layer4/setups/tier1-workflows.setup.ts`, and `tests/layer1/bench-setups.test.ts`.
+- Evidence intentionally skipped: broad session-history scan; the fresh triage report already verified the concrete failure.
+- Files changed: `tests/layer4/setups/tier1-workflows.setup.ts`, `tests/layer1/bench-setups.test.ts`, `tasks/roadmap.md`, and `tasks/todo.md`.
+- No Skills Showcase regeneration was needed because no tracked `SKILL.md` or `PACK.md` behavior/metadata changed.
+- **Recommended next command:** `$benchmark-test-skill session-triage`
