@@ -195,6 +195,17 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Completed on 2026-05-13. The `benchmark-test-skill` hard assertion and output-quality rubric now agree on the structured metrics-table requirement: pass rate, p50 latency, and total cost must appear as rows inside the `## Benchmark Metrics` table. A new layer1 regression rejects reports that keep the facts but move those metrics into prose. Validation passed with focused layer1 tests, benchmark coverage, install/link checks, verify, and whitespace validation. Recommended next command: `$benchmark-test-skill benchmark-test-skill`.
 
+## Current Benchmark Rerun: session-triage Fresh Rerun 2026-05-13 10:40
+
+**Goal:** Run `$benchmark-test-skill session-triage` with fresh repository harness eligibility, verify, and both-agent benchmark evidence after the latest benchmark fixture routing fix.
+
+**Acceptance Criteria:**
+- [ ] `pnpm bench --list-skills` confirms `session-triage` is known and reports its coverage status.
+- [ ] `pnpm verify --skill session-triage` passes or blocks benchmark execution with a recorded failure.
+- [ ] `pnpm bench --skill session-triage --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [ ] `benchmark/test-session-triage-2026-05-13.md` records fresh verify, benchmark, latency, cost, consistency, and raw session evidence.
+- [ ] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
 ## Current Benchmark Rerun: benchmark-test-skill Self Benchmark
 
 **Goal:** Run `$benchmark-test-skill benchmark-test-skill` with fresh eligibility, verify, and both-agent benchmark evidence on 2026-05-12.
