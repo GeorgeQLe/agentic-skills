@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Agent Review: session-triage Fresh Benchmark 2026-05-13
+
+**Goal:** Review the latest persisted `session-triage` Claude and Codex benchmark outputs for subjective operator quality.
+
+**Acceptance Criteria:**
+- [x] Latest Claude and Codex run directories are resolved from `tests/benchmarks/runs/session-triage-*`.
+- [x] Retained generated triage artifacts and benchmark context are inspected for each evaluated run.
+- [x] Each evaluated output is graded against the agent-review rubric separately from deterministic benchmark metrics.
+- [x] `benchmark/review-session-triage-2026-05-13.md` records scores, findings, remediation, and next route.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Agent review completed on 2026-05-13. Reviewed `session-triage-claude-4cfa1e99` and `session-triage-codex-f8e827fb`, covering 6 evaluated outputs. Deterministic benchmark context was clean: both runners passed 3/3 hard assertions with 100.0% quality and no infrastructure blocks. Subjective median score was 82.5 with range 80-94. Outputs were generally good, with strong evidence-bounded incident triage, but several over-routed to `$targeted-skill-builder` despite identifying an adequate existing `$run` contract and likely one-off agent noncompliance. Report: `benchmark/review-session-triage-2026-05-13.md`. Recommended next command: `$targeted-skill-builder session-triage benchmark over-remediation rubric`.
+
 ## Current Benchmark: session-triage Fresh Rerun 2026-05-13
 
 **Goal:** Run `$benchmark-test-skill session-triage` with fresh repository harness eligibility, verify, and both-agent benchmark evidence after the benchmark fixture routing fix.
