@@ -40,6 +40,18 @@
 
 **Review:** Complete. The benchmark failure is verified and narrow: Claude completed all three runs, created the expected report, included broad required facts and `/ship`, but failed the hard workflow expectation because `p50=1200` and `totalCost=0.42` were not detected as rows inside the `## Benchmark Metrics` table. Codex passed with the intended table shape. The mirrored `benchmark-test-skill` contracts are aligned; the responsible gap is the custom tier1 fixture prompt in `tests/layer4/setups/tier1-workflows.setup.ts`, which should explicitly require separate metric-table rows containing `passRate=1.0` or `100%`, `p50=1200`, `totalCost=0.42`, and `run-agent-abc`. Report: `benchmark/triage-benchmark-test-skill-2026-05-13.md`. Recommended next skill: `$targeted-skill-builder benchmark-test-skill benchmark failure`.
 
+## Ad-Hoc Targeted Skill Update: benchmark-test-skill Fixture Prompt
+
+**Goal:** Make the `benchmark-test-skill` custom benchmark fixture prompt explicit about the metric-table row structure required by its hard assertion and quality rubric.
+
+**Plan:**
+- [x] Update `tests/layer4/setups/tier1-workflows.setup.ts` so the fixture prompt requires separate `## Benchmark Metrics` rows for pass rate, p50 latency, total cost, and raw session path with the exact evidence tokens.
+- [x] Run focused layer1 benchmark setup/quality tests.
+- [x] Run required skill-builder validation and one-run Claude benchmark smoke.
+- [x] Record results here, then commit and push intended changes on `master`.
+
+**Review:** Complete. Updated the `benchmark-test-skill` tier1 fixture prompt to explicitly require `## Benchmark Metrics` table rows for pass rate, p50 latency, total cost, and raw session path with exact evidence tokens. Validation passed: `pnpm --dir tests test:layer1 -- bench-setups bench-quality`, `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-next-step-routing.sh --missing`, `pnpm --dir tests bench:coverage`, `./install.sh`, `pnpm --dir tests verify --skill benchmark-test-skill`, `pnpm --dir tests bench --skill benchmark-test-skill --agent claude --runs 1 --chunk-size 1 --pause 0` (`benchmark-test-skill-claude-58480bc9`, 1/1 hard assertions, 100.0% quality, no blocked runs), and `git diff --check`. Recommended next command: `$benchmark-test-skill benchmark-test-skill`.
+
 ## Phase 39: Benchmark Results Visibility And Safe Git Fixtures
 
 **Goal:** Make already-benchmarked skills visible as a durable results matrix and unblock safe integration benchmark setups for git-mutating workflows that can run against disposable test repositories.
