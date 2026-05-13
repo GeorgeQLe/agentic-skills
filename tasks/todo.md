@@ -4,6 +4,19 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Ad-Hoc Targeted Skill Update: session-triage Benchmark Over-Remediation Rubric
+
+**Goal:** Tighten the `session-triage` benchmark rubric so reports that identify adequate existing contracts do not get full credit for unconditional `$targeted-skill-builder` remediation.
+
+**Plan:**
+- [x] Confirm the fix belongs in the benchmark fixture/rubric and layer1 setup tests, not the `session-triage` skill contract.
+- [x] Add a deterministic quality criterion that penalizes unconditional skill-builder routing when a report says the existing contract is adequate or the issue is one-off agent noncompliance.
+- [x] Add layer1 regression coverage for accepted no-skill-change routing and rejected over-remediation routing.
+- [x] Run focused layer1 setup/quality tests, benchmark coverage, target verify, install/skill contract checks, and whitespace validation.
+- [x] Record results here, then commit and push intended changes on `master`.
+
+**Review:** Complete. Updated `tests/layer4/setups/tier1-workflows.setup.ts` so the `session-triage` quality rubric includes a critical `no-over-remediation-route` criterion. It penalizes reports that recommend `$targeted-skill-builder` unconditionally while also framing the incident as one-off agent noncompliance or an adequate existing contract. Updated `tests/layer1/bench-setups.test.ts` to prove `Recommended next skill: none` passes this branch and unconditional `$targeted-skill-builder run` fails it. Validation passed with `pnpm --dir tests test:layer1 -- bench-setups bench-quality`, `pnpm --dir tests bench:coverage`, `./install.sh`, skill dependency/version/routing checks, `pnpm --dir tests verify --skill session-triage`, and `git diff --check`. Recommended next command: `$benchmark-test-skill session-triage`.
+
 ## Ad-Hoc Agent Review: session-triage Fresh Benchmark 2026-05-13
 
 **Goal:** Review the latest persisted `session-triage` Claude and Codex benchmark outputs for subjective operator quality.

@@ -468,6 +468,33 @@ describe("benchmark setup registry", () => {
     expect(nextRouteCriterion?.evaluate("No follow-up required.")).toMatchObject({
       score: 0,
     });
+
+    const overRemediationCriterion = setup!.qualityEvaluator?.rubric.criteria.find(
+      (criterion) => criterion.id === "no-over-remediation-route",
+    );
+    expect(overRemediationCriterion).toBeDefined();
+    expect(
+      overRemediationCriterion?.evaluate(
+        [
+          "## Root cause",
+          "Agent noncompliance with an adequate contract. The existing rule is already clear.",
+          "",
+          "## Next command",
+          "Recommended next skill: none",
+        ].join("\n"),
+      ),
+    ).toMatchObject({ score: 1 });
+    expect(
+      overRemediationCriterion?.evaluate(
+        [
+          "## Root cause",
+          "Agent noncompliance with an adequate contract. The existing rule is already clear.",
+          "",
+          "## Next command",
+          "Recommended next command: $targeted-skill-builder run",
+        ].join("\n"),
+      ),
+    ).toMatchObject({ score: 0 });
   });
 
   it("keeps the benchmark-test-skill setup aligned with report-level route labels", () => {
