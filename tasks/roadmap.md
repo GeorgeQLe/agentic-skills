@@ -42,6 +42,19 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Triage completed on 2026-05-13. The benchmark failure is verified, but the responsible gap is the benchmark setup, not the `session-triage` skill contract. The fixture describes one-off agent noncompliance with an adequate validation contract and existing lesson, while `session-triage` explicitly says not to recommend a skill change in that situation. The fixture still hard-requires `$targeted-skill-builder`; latest Codex evidence passes that assertion, but Claude still fails because the setup expects only the Codex dollar route instead of `/targeted-skill-builder`. Report: `benchmark/triage-session-triage-2026-05-13.md`. Recommended next skill: `$targeted-skill-builder session-triage benchmark fixture routing`.
 
+## Current Targeted Skill Update: session-triage Benchmark Fixture Routing
+
+**Goal:** Align the `session-triage` tier1 benchmark fixture with the skill contract's no-skill-change branch for one-off agent noncompliance.
+
+**Acceptance Criteria:**
+- [x] The fix is scoped to the benchmark fixture and layer1 setup tests, not the `session-triage` skill contract.
+- [x] The hard-coded `$targeted-skill-builder` route requirement is removed from the current one-off noncompliance fixture.
+- [x] Layer1 regression coverage accepts `Recommended next skill: none` and rejects reintroducing the hard-coded route assertion.
+- [x] Focused layer1, benchmark coverage, target verify, smoke benchmark, and whitespace validation pass.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Targeted fixture update completed on 2026-05-13. Updated `tests/layer4/setups/tier1-workflows.setup.ts` so the `session-triage` fixture still requires report evidence, specificity, validation planning, and an explicit next-command handoff, but no longer hard-requires `$targeted-skill-builder` for a one-off noncompliance case where the existing contract is adequate. Added `tests/layer1/bench-setups.test.ts` coverage proving a `Recommended next skill: none` report passes route scoring and that the setup no longer emits `Output recommends $targeted-skill-builder`. Validation passed with focused layer1 tests, benchmark coverage, target verify, Codex smoke `session-triage-codex-14d81596`, and `git diff --check`. Recommended next command: `$benchmark-test-skill session-triage`.
+
 ## Current Benchmark Rerun: benchmark-test-skill Self Benchmark Fresh 2026-05-13
 
 **Goal:** Run `$benchmark-test-skill benchmark-test-skill` with fresh eligibility, verify, and both-agent benchmark evidence on 2026-05-13.
