@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Benchmark: session-triage Fresh Rerun 2026-05-13 Current
+
+**Goal:** Run `$benchmark-test-skill session-triage` with current repository harness eligibility, verify, and both-agent benchmark evidence.
+
+**Acceptance Criteria:**
+- [x] `pnpm bench --list-skills` confirms `session-triage` is known and reports its coverage status.
+- [x] `pnpm verify --skill session-triage` passes or blocks benchmark execution with a recorded failure.
+- [x] `pnpm bench --skill session-triage --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [x] `benchmark/test-session-triage-2026-05-13.md` records fresh verify, benchmark, latency, cost, consistency, and raw session evidence.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Current benchmark rerun completed on 2026-05-13 at 11:36 ET. Verify passed with layer1 in 8.4s across 1,350 tests and layer2 skipped because no target-specific layer2 tests matched. The both-agent benchmark completed with no infrastructure-blocked runs. Claude passed 3/3 hard assertions with 68.4% output quality, p50 latency 41.1s, and $0.75 total cost. Codex passed 2/3 hard assertions with 73.7% output quality, p50 latency 54.3s, and $0.75 total cost; Codex run #0 failed `session-triage-report.md created in project root`. Report: `benchmark/test-session-triage-2026-05-13.md`. Recommended next command: `$session-triage session-triage benchmark failure`.
+
 ## Current Fix: session-triage Benchmark Over-Remediation Rubric
 
 **Goal:** Tighten the `session-triage` benchmark rubric so reports that identify adequate existing contracts do not get full credit for unconditional `$targeted-skill-builder` remediation.

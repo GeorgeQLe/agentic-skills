@@ -4,6 +4,19 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Ad-Hoc Benchmark: session-triage Fresh Rerun 2026-05-13 Current
+
+**Goal:** Run `$benchmark-test-skill session-triage` with current repository harness eligibility, verify, and both-agent benchmark evidence.
+
+**Plan:**
+- [x] Confirm `session-triage` is a known benchmark harness target and record its coverage status. ✓ `coverage=custom`, `setup=tests/layer4/setups/tier1-workflows.setup.ts`.
+- [x] Run `pnpm verify --skill session-triage` from `tests/` and stop if it fails. ✓ layer1 PASS (1,350 tests, 8.4s), layer2 SKIP (no target-specific tests).
+- [x] If verify passes, run `pnpm bench --skill session-triage --agent both --runs 3 --chunk-size 3 --pause 0`. ✓ Claude 3/3 (100.0%), Codex 2/3 (66.7%), no blocked runs.
+- [x] Write and validate `benchmark/test-session-triage-2026-05-13.md` with verify, benchmark, latency, cost, consistency, and raw session evidence. ✓ Report updated with current 11:36 ET run data.
+- [x] Record results here, then commit and push intended benchmark/task changes on `master`.
+
+**Review:** Current benchmark rerun completed on 2026-05-13 at 11:36 ET. `session-triage` is known with `coverage=custom` using `tests/layer4/setups/tier1-workflows.setup.ts`. Verify passed with layer1 in 8.4s across 1,350 tests; layer2 was skipped because no target-specific layer2 tests matched `session-triage`. The both-agent benchmark completed with no infrastructure-blocked runs. Claude passed 3/3 evaluated hard assertions with 68.4% output quality, 3 threshold failures, 4 critical failures, p50 latency 41.1s, and $0.75 total cost. Codex passed 2/3 evaluated hard assertions with 73.7% output quality, 2 threshold failures, 3 critical failures, p50 latency 54.3s, and $0.75 total cost. Codex run #0 failed `session-triage-report.md created in project root`. Report validation passed with target, agent rows, pass-rate, latency, cost, consistency, raw session paths, and next-route evidence. Report: `benchmark/test-session-triage-2026-05-13.md`. Recommended next command: `$session-triage session-triage benchmark failure`.
+
 ## Ad-Hoc Targeted Skill Update: session-triage Benchmark Over-Remediation Rubric
 
 **Goal:** Tighten the `session-triage` benchmark rubric so reports that identify adequate existing contracts do not get full credit for unconditional `$targeted-skill-builder` remediation.
