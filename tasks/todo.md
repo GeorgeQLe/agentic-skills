@@ -43,6 +43,19 @@
 
 **Review:** Complete. Reviewed `session-triage-claude-e5f0772b` and `session-triage-codex-374ad6f0`, covering 6 evaluated outputs and excluding no infrastructure-blocked runs. Deterministic benchmark context remained clean on hard assertions: both runners passed 3/3. Subjective median score was 78 with range 74-94. The best outputs were evidence-bound and routed to operational validation, but several over-remediated by recommending `$targeted-skill-builder` or `$run` contract edits even after identifying an adequate existing `$run` contract and likely one-off noncompliance. Report: `benchmark/review-session-triage-2026-05-13.md`. Recommended next command: `$targeted-skill-builder session-triage benchmark over-remediation rubric`.
 
+## Ad-Hoc Targeted Skill Update: session-triage Evidence-Gate Over-Remediation Rubric
+
+**Goal:** Tighten the `session-triage` benchmark rubric so reports that identify adequate existing contracts do not get full credit for re-labeling one-off noncompliance as a new `$run` evidence-gate or contract-change task.
+
+**Plan:**
+- [x] Confirm the fix belongs in the existing benchmark fixture/rubric and layer1 setup tests, not the `session-triage` skill contract.
+- [x] Extend the `no-over-remediation-route` quality criterion to penalize evidence-gate or contract-change recommendations when the output also says the existing rule is adequate.
+- [x] Add layer1 regression coverage for rejected `$run` evidence-gate over-remediation and accepted operational `$run` routing.
+- [x] Run focused layer1 setup/quality tests, benchmark coverage, target verify, install/skill contract checks, showcase data refresh/validation, targeted `rg`, and whitespace validation.
+- [x] Record results here, then commit and push intended changes on `master`.
+
+**Review:** Complete. Updated `tests/layer4/setups/tier1-workflows.setup.ts` so `no-over-remediation-route` fails outputs that call for skill or contract changes, including `$run` evidence-gate changes, after framing the incident as one-off noncompliance or an adequate existing contract. Updated `tests/layer1/bench-setups.test.ts` with regression cases proving evidence-gate over-remediation fails while operational `$run` routing passes. Regenerated Skills Showcase data and benchmark matrix artifacts. Validation passed with `pnpm --dir tests test:layer1 -- bench-setups bench-quality`, `./install.sh`, `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-next-step-routing.sh --missing`, `pnpm --dir tests bench:coverage`, `pnpm --dir tests verify --skill session-triage`, `node scripts/generate-skills-showcase-data.mjs`, `node scripts/generate-skills-showcase-github-data.mjs`, `scripts/validate-skills-showcase-data.sh`, targeted `rg`, and `git diff --check`. Recommended next command: `$benchmark-test-skill session-triage`.
+
 ## Ad-Hoc Agent Review: session-triage Fresh Benchmark 2026-05-13
 
 **Goal:** Review the latest persisted `session-triage` Claude and Codex benchmark outputs for subjective operator quality.

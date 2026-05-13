@@ -495,6 +495,34 @@ describe("benchmark setup registry", () => {
         ].join("\n"),
       ),
     ).toMatchObject({ score: 0 });
+    expect(
+      overRemediationCriterion?.evaluate(
+        [
+          "## Root cause",
+          "Agent noncompliance with an adequate contract. The existing rule already requires validation before shipping.",
+          "",
+          "## Recommended fix",
+          "Patch `$run` with a new validation evidence gate and update the contract.",
+          "",
+          "## Next command",
+          "Recommended next command: $targeted-skill-builder run validation evidence gate",
+        ].join("\n"),
+      ),
+    ).toMatchObject({ score: 0 });
+    expect(
+      overRemediationCriterion?.evaluate(
+        [
+          "## Root cause",
+          "Agent noncompliance with an adequate contract. The existing rule already requires validation before shipping.",
+          "",
+          "## Recommended fix",
+          "Treat this as an execution compliance failure. Re-run the missing validation and only consider skill hardening if recurrence evidence appears.",
+          "",
+          "## Next command",
+          "Recommended next command: $run",
+        ].join("\n"),
+      ),
+    ).toMatchObject({ score: 1 });
   });
 
   it("keeps the benchmark-test-skill setup aligned with report-level route labels", () => {
