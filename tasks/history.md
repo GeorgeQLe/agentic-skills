@@ -2175,7 +2175,7 @@ Resolved all 10 findings from `/expert-review`:
 
 ## 2026-05-12 — Benchmark-backed showcase demos
 
-- Added benchmark-backed demo rendering to the G Skillmap catalog cards so skills with persisted run artifacts can show a representative prompt and output excerpt alongside pass-rate, latency, cost, and quality metrics.
+- Added benchmark-backed demo rendering to the G Skillpacks catalog cards so skills with persisted run artifacts can show a representative prompt and output excerpt alongside pass-rate, latency, cost, and quality metrics.
 - Sanitized generated benchmark demo excerpts to remove local temporary run directories while preserving artifact names and links to the persisted run JSON.
 - Refreshed Skills Showcase generated data and proof assets for both the archived static path and the Next.js app public assets.
 - Verified with focused layer1 generated-data coverage, focused showcase catalog tests, app typecheck, showcase data validation, and whitespace checks.

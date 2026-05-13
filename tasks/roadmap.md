@@ -14,7 +14,18 @@ Phases 32-36 complete. Phase 35 added repository-wide Codex benchmark coverage m
 
 Phase 37 complete: preserved and migrated the static Skills Showcase into a minimal Next.js app at `apps/skills-showcase/` with 6 public routes, generated data pipeline, 54 regression tests, and updated deploy contract. Phase 38 complete: added Neon-backed first-party newsletter capture with tRPC contracts, TanStack Query mutation/admin state, admin export page, 74 regression tests, and privacy posture enforcement. Phase 39 adds benchmark results visibility and permission-gated safe Git integration fixtures for benchmarkable git-mutating skills.
 
-Current brand decision: the public site brand is **G Skillmap** and the production domain is `gskillmap.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill-map language while reserving `agentic-skills` for the underlying open-source library/repository.
+Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
+
+## Current Benchmark Rerun: benchmark-test-skill Self Benchmark 2026-05-13
+
+**Goal:** Run `$benchmark-test-skill benchmark-test-skill` with fresh eligibility, verify, and both-agent benchmark evidence on 2026-05-13.
+
+**Acceptance Criteria:**
+- [ ] `pnpm bench --list-skills` confirms `benchmark-test-skill` is known and reports its coverage status.
+- [ ] `pnpm verify --skill benchmark-test-skill` passes or blocks benchmark execution with a recorded failure.
+- [ ] `pnpm bench --skill benchmark-test-skill --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [ ] `benchmark/test-benchmark-test-skill-2026-05-13.md` records fresh verify, benchmark, latency, cost, consistency, and raw session evidence.
+- [ ] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
 
 ## Current Benchmark Rerun: benchmark-test-skill Fresh Self Benchmark
 
@@ -31,7 +42,7 @@ Current brand decision: the public site brand is **G Skillmap** and the producti
 
 ## Current Refactor: Benchmark-Backed Skill Demos
 
-**Goal:** Replace or augment curated/demo-only skill examples on the G Skillmap brand site with evidence-backed benchmark prompts and outputs from persisted benchmark runs.
+**Goal:** Replace or augment curated/demo-only skill examples on the G Skillpacks brand site with evidence-backed benchmark prompts and outputs from persisted benchmark runs.
 
 **Acceptance Criteria:**
 - [ ] The showcase data generator derives a compact demo payload from benchmark run artifacts when a skill has persisted benchmark evidence.
