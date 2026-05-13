@@ -208,6 +208,19 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Fresh benchmark rerun completed on 2026-05-13 at 10:40 ET. `session-triage` is known with `coverage=custom` using `tests/layer4/setups/tier1-workflows.setup.ts`. Verify passed with layer1 in 8.6s across 1,350 tests; layer2 was skipped because no target-specific layer2 tests matched `session-triage`. The both-agent benchmark completed with no infrastructure-blocked runs. Claude passed 3/3 evaluated hard assertions with 93.8% output quality, 1 critical quality failure, p50 latency 44.1s, and $0.75 total cost. Codex passed 3/3 evaluated hard assertions with 95.8% output quality, 1 critical quality failure, p50 latency 64.1s, and $0.75 total cost. Report: `benchmark/test-session-triage-2026-05-13.md`. Recommended next skill: `$benchmark-agent-review session-triage`.
 
+## Current Agent Review: session-triage Fresh Rerun 2026-05-13 10:40
+
+**Goal:** Review the latest persisted `session-triage` Claude and Codex benchmark outputs for subjective operator quality after the fresh 10:40 benchmark rerun.
+
+**Acceptance Criteria:**
+- [x] Latest Claude and Codex run directories are resolved from `tests/benchmarks/runs/session-triage-*`.
+- [x] Retained generated triage artifacts and benchmark context are extracted for each evaluated run.
+- [x] Each evaluated output is graded against the agent-review rubric without merging subjective scores into deterministic benchmark metrics.
+- [x] `benchmark/review-session-triage-2026-05-13.md` records source reports, run indexes, scores, findings, remediation, and next route.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Complete. Reviewed `session-triage-claude-e5f0772b` and `session-triage-codex-374ad6f0`, covering 6 evaluated outputs and excluding no infrastructure-blocked runs. Deterministic benchmark context remained clean on hard assertions: both runners passed 3/3. Subjective median score was 78 with range 74-94. The best outputs were evidence-bound and routed to operational validation, but several over-remediated by recommending `$targeted-skill-builder` or `$run` contract edits even after identifying an adequate existing `$run` contract and likely one-off noncompliance. Report: `benchmark/review-session-triage-2026-05-13.md`. Recommended next command: `$targeted-skill-builder session-triage benchmark over-remediation rubric`.
+
 ## Current Benchmark Rerun: benchmark-test-skill Self Benchmark
 
 **Goal:** Run `$benchmark-test-skill benchmark-test-skill` with fresh eligibility, verify, and both-agent benchmark evidence on 2026-05-12.
