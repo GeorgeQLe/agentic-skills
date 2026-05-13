@@ -16,6 +16,21 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Skill Build: icon-handler
+
+**Goal:** Add a shared Claude/Codex skill for auditing and applying a project-root desired icon across favicon, app icon, Apple touch icon, and manifest surfaces with a hygiene-style audit-first approval gate.
+
+**Acceptance Criteria:**
+- [x] Existing overlap is checked; `$hygiene` covers structural audits but not icon conversion/metadata correction.
+- [x] Mirrored `global/claude/icon-handler` and `global/codex/icon-handler` skill contracts exist.
+- [x] Codex `agents/openai.yaml` manifest exists.
+- [x] Benchmark coverage and a deterministic Next App Router icon audit fixture are registered.
+- [x] Discovery docs and generated Skills Showcase assets are refreshed.
+- [x] Install, skill integrity, coverage, showcase, target verify, targeted `rg`, and whitespace validation pass.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Complete. Created mirrored `global/claude/icon-handler` and `global/codex/icon-handler` skill contracts plus the Codex `agents/openai.yaml` manifest. The skill is audit-first by default, requires explicit `fix` approval before modifications, covers Next App Router favicon/app/Apple icon conventions, warns that `favicon.ico` is the conventional browser-probed file rather than `icon.ico`, and requires generated asset plus metadata/build-output verification. Added `icon-handler` to `docs/skills-reference.md`, `tests/harness/bench-coverage.ts`, and the Tier 2/3 global benchmark setup fixture. Refreshed Skills Showcase generated assets. Validation passed with `./install.sh`, `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-next-step-routing.sh --missing`, `pnpm --dir tests bench:coverage`, focused layer1 benchmark setup/quality files, `pnpm --dir tests verify --skill icon-handler`, showcase generation/validation, targeted `rg`, and `git diff --check`. Recommended next command: `$icon-handler audit <asset>`.
+
 ## Current Benchmark: session-triage Fresh Rerun 2026-05-13 Latest
 
 **Goal:** Run `$benchmark-test-skill session-triage` with current repository harness eligibility, verify, and both-agent benchmark evidence.
