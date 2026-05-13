@@ -4,6 +4,19 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Ad-Hoc Agent Review: session-triage Fresh Benchmark 2026-05-13
+
+**Goal:** Review the latest persisted `session-triage` Claude and Codex benchmark outputs for subjective operator quality.
+
+**Plan:**
+- [x] Resolve the latest Claude and Codex run directories from `tests/benchmarks/runs/session-triage-*`.
+- [x] Extract retained generated triage artifacts and benchmark context from each evaluated run.
+- [x] Grade each evaluated output against the agent-review rubric without merging scores into deterministic benchmark metrics.
+- [x] Write and validate `benchmark/review-session-triage-2026-05-13.md` with scores, findings, remediation, and next route.
+- [x] Record results here, then commit and push intended review/task changes on `master`.
+
+**Review:** Complete. Reviewed `session-triage-claude-4cfa1e99` and `session-triage-codex-f8e827fb`, covering 6 evaluated outputs. Deterministic benchmark context was clean: both runners passed 3/3 hard assertions with 100.0% quality and no infrastructure blocks. Subjective median score was 82.5 with range 80-94. Outputs were generally good, with strong evidence-bounded incident triage, but several over-routed to `$targeted-skill-builder` despite identifying an adequate existing `$run` contract and likely one-off agent noncompliance. Report: `benchmark/review-session-triage-2026-05-13.md`. Recommended next command: `$targeted-skill-builder session-triage benchmark over-remediation rubric`.
+
 ## Ad-Hoc Benchmark: session-triage Fresh Rerun 2026-05-13
 
 **Goal:** Run `$benchmark-test-skill session-triage` with fresh repository harness eligibility, verify, and both-agent benchmark evidence after the benchmark fixture routing fix.
