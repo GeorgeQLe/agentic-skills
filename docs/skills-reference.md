@@ -93,6 +93,7 @@ Global skills are safe across business apps, games, devtools, libraries, service
 | `guide` | Produce click-by-click instructions for manual blockers |
 | `handoff` | Generate a project-level context snapshot for a fresh session |
 | `hygiene` | Audit project structure, conventions, mirrors, and documentation references |
+| `icon-handler` | Audit and apply project-root icon assets across favicon, app icon, Apple, and manifest surfaces |
 | `install-agentic-skills` | Refresh global Claude and Codex skill links from this checkout and route pack setup to the pack workflow |
 | `provision-agentic-config` | Provision workflow orchestration and agent conventions into project agent docs |
 | `investigate` | Validate claims against codebase and git history, then trace root cause |

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Icon Handler"
+  short_description: "Audit and apply project-root app icon assets"
+  default_prompt: "Use $icon-handler to audit project icon surfaces, request approval for changes, then apply and verify favicon, app icon, Apple touch icon, and manifest updates."
+
+policy:
+  allow_implicit_invocation: true
