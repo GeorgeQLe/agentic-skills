@@ -638,3 +638,24 @@ Implement only this step, validate it, then run `/ship` when done.
 
 - **Next work:** Step 39.2 — add benchmark results surface to Skills Showcase UI
 - **Recommended next command:** `$run`
+
+## Current Task — Benchmark `session-triage`
+
+- [x] Confirm `$benchmark-test-skill` is the active workflow and `session-triage` is the target skill argument.
+- [x] Run `pnpm bench --list-skills` and confirm `session-triage` is known to the harness.
+- [x] Record coverage status: `custom`, setup `tests/layer4/setups/tier1-workflows.setup.ts`.
+- [x] Run `pnpm verify --skill session-triage`.
+- [x] If verify passes, run `pnpm bench --skill session-triage --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [x] Write `benchmark/test-session-triage-2026-05-13.md` with verify, benchmark, latency, cost, consistency, raw paths, and recommended next route.
+- [x] Validate the report contains required benchmark fields.
+- [x] Commit and push intended changes.
+
+## Review — Benchmark `session-triage`
+
+- Verify passed: layer1 PASS in 8.5s with 1,350 tests across 12 files; layer2 SKIP because no target-specific layer2 tests matched `session-triage`.
+- Benchmark completed for both agents:
+  - Claude session `13f4872c`: 2/2 evaluated hard assertions passed, 1 infrastructure-blocked run due to agent runner budget, quality score 78.1%, 1 threshold failure, 3 critical failures, p50 40.7s, total cost $0.75.
+  - Codex session `7cdefe10`: 3/3 evaluated hard assertions passed, 0 infrastructure blocks, quality score 100.0%, p50 71.0s, total cost $0.75.
+- Report written to `benchmark/test-session-triage-2026-05-13.md`.
+- Report validation passed: required target, agent rows, pass-rate and blocked-run data, latency, cost, raw session paths, and recommended next route are present.
+- **Recommended next skill:** `$benchmark-agent-review session-triage`
