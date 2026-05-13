@@ -7,7 +7,7 @@
 
 ## Current Refactor: Benchmark-Backed Skill Demos
 
-**Goal:** Use persisted benchmark data as the source of truth for relevant G Skillmap demo sections, showing representative prompts and outputs instead of hand-wavy curated examples.
+**Goal:** Use persisted benchmark data as the source of truth for relevant G Skillpacks demo sections, showing representative prompts and outputs instead of hand-wavy curated examples.
 
 **Plan:**
 - [x] Inspect current showcase generator/app demo rendering and benchmark artifact shape.
@@ -46,14 +46,14 @@
 
 **Result:** Completed on 2026-05-12. The `benchmark-test-skill` tier1 fixture now uses neutral `run-agent-abc` benchmark evidence, explicitly tells runners that their command convention overrides fixture filenames/raw session text, preserves runner-specific `/ship` and `$ship` assertions, and uses a focused timeout for this slower fixture. Layer1 coverage guards against reintroducing `run-codex-abc`. Validation passed with focused layer1 tests, benchmark coverage, verify, Claude smoke `benchmark-test-skill-claude-a04dd30c` (1/1 hard pass), Codex smoke `benchmark-test-skill-codex-103b0680` (1/1 hard pass), install/link checks, routing checks, and `git diff --check`. Recommended next command: `$benchmark-test-skill benchmark-test-skill`.
 
-## Current Documentation Update: G Skillmap Brand
+## Current Documentation Update: G Skillpacks Brand
 
-**Goal:** Record `gskillmap.com` as the production domain and align public site/docs language around the **G Skillmap** brand while keeping `agentic-skills` as the underlying open-source library name.
+**Goal:** Record `gskillpacks.com` as the production domain and align public site/docs language around the **G Skillpacks** brand while keeping `agentic-skills` as the underlying open-source library name.
 
 **Plan:**
-- [x] Update site metadata, header, homepage, footer, and app README to use **G Skillmap** and `gskillmap.com`.
-- [x] Update product/UI/newsletter specs with the brand/domain decision and skill-map layout vocabulary.
-- [x] Update root design guidance so future UI work preserves G Skillmap naming, map language, routes, coordinates, nodes, pack maps, and proof surfaces.
+- [x] Update site metadata, header, homepage, footer, and app README to use **G Skillpacks** and `gskillpacks.com`.
+- [x] Update product/UI/newsletter specs with the brand/domain decision and skill packs layout vocabulary.
+- [x] Update root design guidance so future UI work preserves G Skillpacks naming, packs language, routes, coordinates, nodes, pack maps, and proof surfaces.
 - [x] Verify remaining brand references and whitespace.
 
 ## Current Triage: benchmark-test-skill Fresh Benchmark Failure
@@ -215,9 +215,9 @@ Steps 38.8 and 38.9 complete. 21 regression tests added (73/73 total). Typecheck
 
 ## Review
 
-### Ad-Hoc: G Skillmap Brand And Domain
+### Ad-Hoc: G Skillpacks Brand And Domain
 
-**Review:** Complete. Updated the public site shell, metadata, hero, footer, app README, root design guidance, and product/UI/newsletter specs so the public brand is **G Skillmap** and the production domain is `gskillmap.com`. The layout guidance now explicitly preserves skill-map language: maps, routes, coordinates, nodes, pack maps, catalog entries, and proof surfaces. `agentic-skills` remains the name of the underlying open-source library/repository.
+**Review:** Complete. Updated the public site shell, metadata, hero, footer, app README, root design guidance, and product/UI/newsletter specs so the public brand is **G Skillpacks** and the production domain is `gskillpacks.com`. The layout guidance now explicitly preserves skill packs language: packs, routes, coordinates, nodes, pack maps, catalog entries, and proof surfaces. `agentic-skills` remains the name of the underlying open-source library/repository.
 
 **Validation:** `rg` found no stale `G / agentic-skills` or `Agentic Skills Showcase` references in the active app/spec/design/task scope. `pnpm --dir apps/skills-showcase typecheck` passed. `git diff --check` passed.
 

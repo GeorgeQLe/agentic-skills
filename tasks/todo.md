@@ -14,6 +14,17 @@
 - No `specs/ux-variations-*.md` exists, but UX decisions were made via UI interview and are baked into the built site. Creating a retroactive UX variations doc would be low-value.
 - 5 ideas in `tasks/ideas.md` are unspecced; candidates for `/feature-interview` if any are prioritized.
 
+## Ad-Hoc Benchmark Rerun: benchmark-test-skill Self Benchmark 2026-05-13
+
+**Goal:** Run `$benchmark-test-skill benchmark-test-skill` with fresh eligibility, verify, and both-agent benchmark evidence on 2026-05-13.
+
+**Plan:**
+- [ ] Confirm `benchmark-test-skill` is a known benchmark harness target and record its coverage status.
+- [ ] Run `pnpm verify --skill benchmark-test-skill` from `tests/` and stop if it fails.
+- [ ] If verify passes, run `pnpm bench --skill benchmark-test-skill --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [ ] Write and validate `benchmark/test-benchmark-test-skill-2026-05-13.md` with verify, benchmark, latency, cost, consistency, and raw session evidence.
+- [ ] Record results here, then commit and push intended benchmark/task changes on `master`.
+
 ## Phase 39: Benchmark Results Visibility And Safe Git Fixtures
 
 **Goal:** Make already-benchmarked skills visible as a durable results matrix and unblock safe integration benchmark setups for git-mutating workflows that can run against disposable test repositories.
