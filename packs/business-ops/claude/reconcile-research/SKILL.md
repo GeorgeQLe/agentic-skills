@@ -8,6 +8,12 @@ argument-hint: "[audit|fix] [all|icp|pricing|journey|enterprise|feedback|specs]"
 
 # Reconcile Research — Cross-Document Consistency Audit
 
+## Report-First Approval Gate
+
+Default to report-only: present findings, evidence coverage, assumptions, recommended artifact path, and proposed file changes in the conversation for user approval before creating or updating canonical research, spec, or task files.
+
+Do not write or overwrite synthesized deliverables until the user explicitly approves, unless the user invoked an explicit write/update/fix mode or clearly asked to write files upfront. Raw evidence capture may be persisted before analysis when reproducibility requires it; report those raw paths separately and still gate synthesized research/report writes.
+
 Checks that research documents tell a consistent story. Finds contradictions between ICP and pricing, stale assumptions that customer feedback has invalidated, journey stages that metrics don't cover, and other cross-document gaps. Think of it as a linter for research coherence rather than structure.
 
 ## Process

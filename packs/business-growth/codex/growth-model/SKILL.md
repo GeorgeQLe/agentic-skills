@@ -14,6 +14,12 @@ Before telling the user to run a skill from another project-local pack, check `.
 
 Invoke as `$growth-model`.
 
+## Report-First Approval Gate
+
+Default to report-only: present findings, evidence coverage, assumptions, recommended artifact path, and proposed file changes in the conversation for user approval before creating or updating canonical research, spec, or task files.
+
+Do not write or overwrite synthesized deliverables until the user explicitly approves, unless the user invoked an explicit write/update/fix mode or clearly asked to write files upfront. Raw evidence capture may be persisted before analysis when reproducibility requires it; report those raw paths separately and still gate synthesized research/report writes.
+
 Designs compounding growth loops using Reforge methodology. Identifies and designs acquisition loops (viral, content, paid, sales), retention loops, and monetization loops that compound over time. Growth loops replace the traditional funnel model — each loop's output becomes its input, creating sustainable growth.
 
 Default stance: assume the user has no insider knowledge of growth mechanics or channel performance. The growth model must stand on research, metrics evidence, and codebase reality before asking for user input. Ask for corrections, proprietary data, and hard constraints, not intuition.

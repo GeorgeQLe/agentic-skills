@@ -12,6 +12,12 @@ Before telling the user to run a skill from another project-local pack, check `.
 
 # Platform Strategy — Multi-Product Expansion Planning
 
+## Report-First Approval Gate
+
+Default to report-only: present findings, evidence coverage, assumptions, recommended artifact path, and proposed file changes in the conversation for user approval before creating or updating canonical research, spec, or task files.
+
+Do not write or overwrite synthesized deliverables until the user explicitly approves, unless the user invoked an explicit write/update/fix mode or clearly asked to write files upfront. Raw evidence capture may be persisted before analysis when reproducibility requires it; report those raw paths separately and still gate synthesized research/report writes.
+
 Takes a single-product company and maps the path to a multi-product platform. Identifies vertical (deeper into the same customer base) and horizontal (new related product for a new customer base) expansion vectors, scores them, designs cheap validation experiments for the top candidates, and produces a sequenced portfolio plan.
 
 ## Prerequisites

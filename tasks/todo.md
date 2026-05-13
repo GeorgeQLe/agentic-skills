@@ -9,13 +9,13 @@
 **Goal:** Update research-oriented skills so they can present findings for user approval before writing canonical research files, instead of always writing directly to disk.
 
 **Plan:**
-- [ ] Identify research skills that currently require direct file writes.
-- [ ] Classify the smallest contract change that makes report-first approval behavior consistent.
-- [ ] Update affected skill contracts without weakening explicit write/update modes.
-- [ ] Run skill contract and targeted text validation.
-- [ ] Record investigation results here, then commit and push intended changes on `master`.
+- [x] Identify research skills that currently require direct file writes.
+- [x] Classify the smallest contract change that makes report-first approval behavior consistent.
+- [x] Update affected skill contracts without weakening explicit write/update modes.
+- [x] Run skill contract and targeted text validation.
+- [x] Record investigation results here, then commit and push intended changes on `master`.
 
-**Review:** Pending.
+**Review:** Complete. Added a shared `## Report-First Approval Gate` to all 92 exact `type: research` skills across mirrored Claude and Codex packs. The gate defaults research skills to report-only output, requires presenting findings, evidence coverage, assumptions, recommended artifact path, and proposed file changes for user approval before synthesized deliverables are written, and preserves explicit write/update/fix modes plus raw evidence capture for reproducibility. Added `tests/layer1/research-approval-gate.test.ts` so future research skills must include the gate. Validation passed with focused Vitest approval-gate coverage, direct YAML/text contract scan, skill dependency/version/routing checks, benchmark coverage, Skills Showcase data validation, and whitespace validation. Recommended next command: `$ship`.
 
 ## Ad-Hoc Targeted Skill Update: icon-handler Benchmark Coverage
 
@@ -935,3 +935,12 @@ Implement only this step, validate it, then run `/ship` when done.
 - Report written to `benchmark/triage-icon-handler-2026-05-13.md`.
 - Report validation passed: required triage sections, persisted failure evidence, root-cause classification, validation plan, and recommended next route are present. `git diff --check` passed.
 - **Recommended next skill:** `$targeted-skill-builder icon-handler benchmark valid source asset`
+
+## Current Task — Targeted Update `icon-handler` Benchmark Valid Source Asset
+
+- [ ] Read relevant lessons, triage report, current benchmark fixture, and layer1 setup coverage.
+- [ ] Identify existing-skill overlap: update the existing `icon-handler` benchmark setup, not the mirrored `icon-handler` skill contracts.
+- [ ] Replace the ASCII root `calc-mascot-icon.png` fixture with a tiny valid PNG source asset while preserving stale existing icon-surface evidence.
+- [ ] Add layer1 coverage that fails if the root source asset regresses to non-PNG placeholder text.
+- [ ] Validate focused layer1 setup/quality tests, required skill checks, benchmark coverage, target verify, Claude smoke benchmark, and whitespace.
+- [ ] Record results here, then commit and push intended changes on `master`.

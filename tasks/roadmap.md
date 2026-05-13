@@ -21,13 +21,13 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 **Goal:** Update research-oriented skills so they can present findings for user approval before writing canonical research files, instead of always writing directly to disk.
 
 **Acceptance Criteria:**
-- [ ] Research skills with direct-write contracts are identified.
-- [ ] A consistent report-first approval rule is added where appropriate.
-- [ ] Existing explicit write/update modes remain available after approval.
-- [ ] Targeted validation confirms the updated contracts.
-- [ ] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+- [x] Research skills with direct-write contracts are identified.
+- [x] A consistent report-first approval rule is added where appropriate.
+- [x] Existing explicit write/update modes remain available after approval.
+- [x] Targeted validation confirms the updated contracts.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
 
-**Result:** Pending.
+**Result:** Complete. Added a shared `## Report-First Approval Gate` to all 92 exact `type: research` skills across mirrored Claude and Codex packs. Added focused layer1 coverage in `tests/layer1/research-approval-gate.test.ts` to keep future research skills report-first by default. Validation passed with focused approval-gate tests, direct contract scan, skill dependency/version/routing checks, benchmark coverage, Skills Showcase data validation, and whitespace validation. Recommended next command: `$ship`.
 
 ## Current Targeted Skill Build: icon-handler
 

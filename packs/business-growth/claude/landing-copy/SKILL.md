@@ -12,6 +12,12 @@ Before telling the user to run a skill from another project-local pack, check `.
 
 # Landing Copy — Research-Grounded Landing Page Copy
 
+## Report-First Approval Gate
+
+Default to report-only: present findings, evidence coverage, assumptions, recommended artifact path, and proposed file changes in the conversation for user approval before creating or updating canonical research, spec, or task files.
+
+Do not write or overwrite synthesized deliverables until the user explicitly approves, unless the user invoked an explicit write/update/fix mode or clearly asked to write files upfront. Raw evidence capture may be persisted before analysis when reproducibility requires it; report those raw paths separately and still gate synthesized research/report writes.
+
 Dual-mode skill that either **generates** complete landing page copy from upstream research artifacts or **audits** existing copy against codebase reality, research drift, and conversion best practices. Every claim in the generated copy links back to a research source so nothing is hand-waved.
 
 ## Prerequisites
