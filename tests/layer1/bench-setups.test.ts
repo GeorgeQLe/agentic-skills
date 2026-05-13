@@ -473,6 +473,7 @@ describe("benchmark setup registry", () => {
       (criterion) => criterion.id === "no-over-remediation-route",
     );
     expect(overRemediationCriterion).toBeDefined();
+    expect(overRemediationCriterion?.weight).toBeGreaterThanOrEqual(5);
     expect(
       overRemediationCriterion?.evaluate(
         [
@@ -495,6 +496,36 @@ describe("benchmark setup registry", () => {
         ].join("\n"),
       ),
     ).toMatchObject({ score: 0 });
+    expect(
+      setup!.qualityEvaluator?.evaluate(
+        [
+          "## Target",
+          "`session-log.md` and `tasks/lessons.md`.",
+          "",
+          "## Verification verdict",
+          "Partially verified. The log confirms the agent skipped coverage matrix validation and shipped anyway.",
+          "",
+          "## Timeline",
+          "The user invoked `$run`, the agent skipped planned validation, and shipped anyway.",
+          "",
+          "## Root cause",
+          "Missing evidence gate in the shipping path. No `/run` skill file was present in scope to confirm whether the contract was silent or ignored.",
+          "",
+          "## Recommended fix",
+          "Add a blocking pre-ship validation gate referencing `tasks/lessons.md`.",
+          "",
+          "## Validation plan",
+          "Run coverage matrix validation before shipping.",
+          "",
+          "## Next command",
+          "Recommended next command: /targeted-skill-builder run",
+        ].join("\n"),
+      ),
+    ).toMatchObject({
+      thresholdPassed: false,
+      passed: false,
+      criticalFailures: expect.arrayContaining(["no-over-remediation-route"]),
+    });
     expect(
       overRemediationCriterion?.evaluate(
         [

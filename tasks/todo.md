@@ -681,3 +681,30 @@ Implement only this step, validate it, then run `/ship` when done.
 - Report written to `benchmark/review-session-triage-2026-05-13.md`.
 - Report validation passed: source paths, reviewed run IDs, benchmark context, subjective scores, median/range, strengths, weaknesses, remediation table, deterministic-rubric notes, and recommended next command are present. `git diff --check` passed.
 - **Recommended next command:** `$targeted-skill-builder session-triage benchmark over-remediation rubric`
+
+## Current Task — Tighten `session-triage` Benchmark Over-Remediation Rubric
+
+- [x] Read relevant lessons and current `session-triage` benchmark setup.
+- [x] Identify existing-skill overlap: update existing custom benchmark setup, not the `session-triage` skill contract.
+- [x] Increase `no-over-remediation-route` weight so unconditional skill/contract edit routes fall below the quality threshold.
+- [x] Add layer1 regression coverage for the bad Claude pattern: claiming `/run` is unavailable or needs a gate, then routing to `/targeted-skill-builder run`.
+- [x] Validate:
+  - `pnpm --dir tests test:layer1 -- bench-setups bench-quality` — passed, 1,350 tests across 12 files.
+  - `./scripts/skill-deps.sh --broken` — passed.
+  - `./scripts/skill-versions.sh --missing` — passed.
+  - `./scripts/skill-next-step-routing.sh --missing` — passed.
+  - `pnpm --dir tests bench:coverage` — passed, 151 skills.
+  - `./install.sh` — passed.
+  - `pnpm verify --skill session-triage` — layer1 PASS in 8.6s; layer2 SKIP because no matching target-specific layer2 tests exist.
+  - `git diff --check` — passed.
+- [x] Commit and push intended changes.
+
+## Review — Tighten `session-triage` Benchmark Over-Remediation Rubric
+
+- Decision: existing benchmark setup update.
+- Evidence used: current prompt, latest benchmark-agent-review findings, `tasks/lessons.md`, `tests/layer4/setups/tier1-workflows.setup.ts`, and focused layer1 tests.
+- Evidence intentionally skipped: broad session-history scan; the latest persisted benchmark and review reports already verified the concrete gap.
+- Files changed: `tests/layer4/setups/tier1-workflows.setup.ts`, `tests/layer1/bench-setups.test.ts`, `tasks/roadmap.md`, and `tasks/todo.md`.
+- No Skills Showcase regeneration was needed because no tracked `SKILL.md` or `PACK.md` behavior/metadata changed.
+- **Next work:** none.
+- **Recommended next command:** `$benchmark-test-skill session-triage`
