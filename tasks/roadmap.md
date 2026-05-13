@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Fix: session-triage Benchmark Over-Remediation Rubric
+
+**Goal:** Tighten the `session-triage` benchmark rubric so reports that identify adequate existing contracts do not get full credit for unconditional `$targeted-skill-builder` remediation.
+
+**Acceptance Criteria:**
+- [x] The fix is scoped to the benchmark fixture/rubric and layer1 setup tests, not the `session-triage` skill contract.
+- [x] A deterministic quality criterion penalizes unconditional skill-builder routing when a report says the existing contract is adequate or the issue is one-off agent noncompliance.
+- [x] Layer1 regression coverage accepts no-skill-change routing and rejects over-remediation routing.
+- [x] Focused layer1 setup/quality tests, benchmark coverage, target verify, install/skill contract checks, and whitespace validation pass.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Completed on 2026-05-13. Updated `tests/layer4/setups/tier1-workflows.setup.ts` so the `session-triage` quality rubric includes a critical `no-over-remediation-route` criterion. It penalizes reports that recommend `$targeted-skill-builder` unconditionally while also framing the incident as one-off agent noncompliance or an adequate existing contract. Updated `tests/layer1/bench-setups.test.ts` to prove `Recommended next skill: none` passes this branch and unconditional `$targeted-skill-builder run` fails it. Validation passed with focused layer1 tests, benchmark coverage, install, skill dependency/version/routing checks, target verify, and whitespace validation. Recommended next command: `$benchmark-test-skill session-triage`.
+
 ## Current Agent Review: session-triage Fresh Benchmark 2026-05-13
 
 **Goal:** Review the latest persisted `session-triage` Claude and Codex benchmark outputs for subjective operator quality.
