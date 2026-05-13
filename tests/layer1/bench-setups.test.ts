@@ -408,6 +408,68 @@ describe("benchmark setup registry", () => {
     expect(setup!.qualityEvaluator?.rubric.criteria.some((criterion) => criterion.id === "file-reference")).toBe(false);
   });
 
+  it("keeps session-triage benchmark routing aligned with the no-skill-change branch", () => {
+    const setup = resolveBenchSetup("session-triage");
+    expect(setup).toBeDefined();
+
+    const workDir = mkdtempSync(resolve(tmpdir(), "session-triage-route-"));
+    writeFileSync(
+      resolve(workDir, "session-triage-report.md"),
+      [
+        "# Session Triage Report",
+        "",
+        "## Target",
+        "",
+        "`session-log.md` and `tasks/lessons.md`.",
+        "",
+        "## Verification verdict",
+        "",
+        "Partially verified. The log says the agent skipped coverage matrix validation and shipped anyway.",
+        "",
+        "## Timeline",
+        "",
+        "The user invoked `$run`, the agent skipped planned validation, and the agent shipped.",
+        "",
+        "## Root cause",
+        "",
+        "Agent noncompliance with an adequate contract. `tasks/lessons.md` already says: Run required validation before shipping.",
+        "",
+        "## Recommended fix",
+        "",
+        "Do not change a skill for this one-off noncompliance; rerun the missing validation and document the result.",
+        "",
+        "## Validation plan",
+        "",
+        "Run the coverage matrix validation and stop if it fails.",
+        "",
+        "## Next command",
+        "",
+        "Recommended next skill: none",
+      ].join("\n"),
+    );
+
+    const assertions = setup!.assertResult({
+      stdout: "",
+      stderr: "",
+      exitCode: 0,
+      workDir,
+      files: ["session-triage-report.md"],
+    });
+
+    expect(assertions.find((assertion) => assertion.description === "Output includes next command handoff")).toMatchObject({
+      pass: true,
+    });
+    expect(assertions.some((assertion) => assertion.description === "Output recommends $targeted-skill-builder")).toBe(false);
+
+    const nextRouteCriterion = setup!.qualityEvaluator?.rubric.criteria.find((criterion) => criterion.id === "actionable-next-route");
+    expect(nextRouteCriterion?.evaluate("## Next command\nRecommended next skill: none")).toMatchObject({
+      score: 1,
+    });
+    expect(nextRouteCriterion?.evaluate("No follow-up required.")).toMatchObject({
+      score: 0,
+    });
+  });
+
   it("keeps the benchmark-test-skill setup aligned with report-level route labels", () => {
     const setup = resolveBenchSetup("benchmark-test-skill");
     expect(setup).toBeDefined();

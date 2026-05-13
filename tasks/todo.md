@@ -30,6 +30,19 @@
 
 **Review:** Complete. The benchmark failure is verified, but the responsible gap is the benchmark setup, not the `session-triage` skill contract. The fixture describes one-off agent noncompliance with an adequate validation contract and existing lesson, while `session-triage` explicitly says not to recommend a skill change in that situation. The fixture still hard-requires `$targeted-skill-builder`; latest Codex evidence passes that assertion, but Claude still fails because the setup expects only the Codex dollar route instead of `/targeted-skill-builder`. Report: `benchmark/triage-session-triage-2026-05-13.md`. Recommended next skill: `$targeted-skill-builder session-triage benchmark fixture routing`.
 
+## Ad-Hoc Targeted Skill Update: session-triage Benchmark Fixture Routing
+
+**Goal:** Align the `session-triage` tier1 benchmark fixture with the skill contract's no-skill-change branch for one-off agent noncompliance.
+
+**Plan:**
+- [x] Confirm the fix belongs in the benchmark fixture and layer1 setup tests, not the `session-triage` skill contract.
+- [x] Remove the hard-coded `$targeted-skill-builder` route requirement from the current one-off noncompliance fixture.
+- [x] Add layer1 regression coverage that accepts `Recommended next skill: none` and rejects reintroducing the hard-coded route assertion.
+- [x] Run focused layer1, benchmark coverage, target verify, smoke benchmark, and whitespace validation.
+- [x] Record results here, then commit and push intended fixture/task/generated changes on `master`.
+
+**Review:** Complete. Updated `tests/layer4/setups/tier1-workflows.setup.ts` so the `session-triage` fixture still requires report evidence, specificity, validation planning, and an explicit next-command handoff, but no longer hard-requires `$targeted-skill-builder` for a one-off noncompliance case where the existing contract is adequate. Added `tests/layer1/bench-setups.test.ts` coverage proving a `Recommended next skill: none` report passes route scoring and that the setup no longer emits `Output recommends $targeted-skill-builder`. Validation passed with focused layer1 tests (1,350 tests), `pnpm --dir tests bench:coverage`, `pnpm --dir tests verify --skill session-triage`, Codex smoke `session-triage-codex-14d81596` (1/1 hard assertions, $0.25), and `git diff --check`. Recommended next command: `$benchmark-test-skill session-triage`.
+
 ## Priority Documentation Todo
 
 - [x] Documentation is current; no missing or stale research, spec, roadmap, or task artifacts found.
