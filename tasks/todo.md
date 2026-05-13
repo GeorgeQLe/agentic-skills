@@ -183,6 +183,19 @@
 
 **Review:** Fresh benchmark rerun completed on 2026-05-13 at 13:06 ET. `session-triage` is known with `coverage=custom` using `tests/layer4/setups/tier1-workflows.setup.ts`. Verify passed with layer1 in 11.8s across 1,350 tests; layer2 was skipped because no target-specific layer2 tests matched `session-triage`. The both-agent benchmark completed with no infrastructure-blocked runs. Claude passed 3/3 evaluated hard assertions with 100.0% output quality, p50 latency 37.1s, and $0.75 total cost. Codex passed 3/3 evaluated hard assertions with 100.0% output quality, p50 latency 37.4s, and $0.75 total cost. Report validation passed with target, agent rows, pass-rate, latency, cost, consistency, raw session paths, and next-route evidence. Report: `benchmark/test-session-triage-2026-05-13.md`. Recommended next skill: `$benchmark-agent-review session-triage`.
 
+## Ad-Hoc Agent Review: session-triage Fresh Rerun 2026-05-13 Latest
+
+**Goal:** Review the latest persisted `session-triage` Claude and Codex benchmark outputs for subjective operator quality.
+
+**Plan:**
+- [x] Resolve latest Claude and Codex run directories from `tests/benchmarks/runs/session-triage-*`.
+- [x] Extract retained generated triage artifacts and benchmark context from each evaluated run.
+- [x] Grade each evaluated output against the agent-review rubric without merging scores into deterministic benchmark metrics.
+- [x] Write and validate `benchmark/review-session-triage-2026-05-13.md` with scores, findings, remediation, and next route.
+- [x] Record results here, then commit and push intended review/task changes on `master`.
+
+**Review:** Complete. Reviewed `session-triage-claude-69ca7dea` and `session-triage-codex-33b0cc9d`, covering 6 evaluated outputs and excluding no infrastructure-blocked runs. Deterministic benchmark context was clean: both runners passed 3/3 hard assertions with 100.0% output quality. Subjective median score was 89.5 with range 86-94. Codex outputs were excellent and evidence-bound; Claude outputs appeared good from retained summaries, but full generated report text was not persisted for Claude. Report: `benchmark/review-session-triage-2026-05-13.md`. Recommended next command: `$targeted-skill-builder benchmark-agent-review retained artifact evidence`.
+
 ## Ad-Hoc Pack Split: Customer Lifecycle
 
 **Goal:** Split lifecycle planning out of `business-discovery` into a mirrored `customer-lifecycle` pack that owns journey, onboarding, conversion, transaction, retention, expansion, and lifecycle metrics workflows.
