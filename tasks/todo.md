@@ -4,6 +4,19 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Ad-Hoc Targeted Skill Update: icon-handler Benchmark Coverage
+
+**Goal:** Align the `icon-handler` benchmark coverage with Claude and Codex command conventions so Claude outputs are not failed for correctly recommending `/icon-handler`.
+
+**Plan:**
+- [x] Confirm the fix belongs in benchmark setup/rubric coverage, not the mirrored `icon-handler` skill contracts.
+- [x] Add runner-specific route support to the Tier 2/3 global workflow benchmark helper.
+- [x] Update the `icon-handler` fixture to expect `/icon-handler` for Claude and `$icon-handler` for Codex.
+- [x] Add layer1 regression coverage for hard assertions and quality route scoring.
+- [x] Run targeted validation, record results, then commit and push intended changes on `master`.
+
+**Review:** Complete. Updated `tests/layer4/setups/tier23-global-workflows.setup.ts` to support `recommendedRoutes` by runner while preserving single-route definitions for existing global workflow fixtures. `icon-handler` now expects `/icon-handler` for Claude and `$icon-handler` for Codex; the quality route criterion accepts either syntax for the shared static evaluator. Added `tests/layer1/bench-setups.test.ts` regression coverage proving Claude slash routing passes, Codex dollar routing passes, and the wrong route fails. Validation passed with `pnpm --dir tests test -- --project layer1 tests/layer1/bench-setups.test.ts` (layer1 suite, 1,352 tests), `./install.sh`, `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-next-step-routing.sh --missing`, `pnpm --dir tests bench:coverage`, and `pnpm verify --skill icon-handler` (layer1 pass, layer2 skipped because no target-specific tests matched). Showcase regeneration was not needed because no tracked `SKILL.md` or `PACK.md` changed. Recommended next command: `$benchmark-test-skill icon-handler`.
+
 ## Ad-Hoc Targeted Skill Build: icon-handler
 
 **Goal:** Add a shared Claude/Codex skill for auditing and applying a project-root desired icon across favicon, app icon, Apple touch icon, and manifest surfaces with a hygiene-style audit-first approval gate.
