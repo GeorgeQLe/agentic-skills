@@ -14,6 +14,19 @@
 - No `specs/ux-variations-*.md` exists, but UX decisions were made via UI interview and are baked into the built site. Creating a retroactive UX variations doc would be low-value.
 - 5 ideas in `tasks/ideas.md` are unspecced; candidates for `/feature-interview` if any are prioritized.
 
+## Ad-Hoc Benchmark Rerun: benchmark-test-skill Self Benchmark 2026-05-13 Fresh
+
+**Goal:** Run `$benchmark-test-skill benchmark-test-skill` with fresh eligibility, verify, and both-agent benchmark evidence on 2026-05-13.
+
+**Plan:**
+- [x] Confirm `benchmark-test-skill` is a known benchmark harness target and record its coverage status.
+- [x] Run `pnpm verify --skill benchmark-test-skill` from `tests/` and stop if it fails.
+- [x] If verify passes, run `pnpm bench --skill benchmark-test-skill --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [x] Write and validate `benchmark/test-benchmark-test-skill-2026-05-13.md` with verify, benchmark, latency, cost, consistency, and raw session evidence.
+- [x] Record results here, then commit and push intended benchmark/task changes on `master`.
+
+**Review:** Complete. `benchmark-test-skill` is known with `coverage=custom` using `tests/layer4/setups/tier1-workflows.setup.ts`. Verify passed with layer1 in 9.5s across 1,312 tests; layer2 was skipped because no target-specific layer2 tests matched `benchmark-test-skill`. The both-agent benchmark completed with no infrastructure-blocked runs. Claude passed 3/3 evaluated hard assertions with 100.0% output quality, p50 latency 17.8s, and $0.75 total cost. Codex passed 3/3 evaluated hard assertions with 100.0% output quality, p50 latency 30.5s, and $0.75 total cost. Report: `benchmark/test-benchmark-test-skill-2026-05-13.md`. Recommended next skill: `$benchmark-agent-review benchmark-test-skill`.
+
 ## Ad-Hoc Benchmark Rerun: benchmark-test-skill Self Benchmark 2026-05-13
 
 **Goal:** Run `$benchmark-test-skill benchmark-test-skill` with fresh eligibility, verify, and both-agent benchmark evidence on 2026-05-13.
