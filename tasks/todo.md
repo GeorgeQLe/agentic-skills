@@ -56,6 +56,18 @@
 
 **Review:** Complete. `benchmark-test-skill` is known with `coverage=custom` using `tests/layer4/setups/tier1-workflows.setup.ts`. Verify passed with layer1 in 9.2s across 1,303 tests; layer2 was skipped because no target-specific layer2 tests matched `benchmark-test-skill`. The both-agent benchmark completed with one Claude infrastructure-blocked run due to agent runner budget. Evaluated hard assertions passed for both agents: Claude 2/2 evaluated runs, Codex 3/3 evaluated runs. Claude output quality averaged 72.9% with 2 threshold failures and 2 critical failures; Codex output quality averaged 85.7% with 0 threshold failures and 2 critical failures. Report: `benchmark/test-benchmark-test-skill-2026-05-12.md`. Recommended next skill: `$benchmark-agent-review benchmark-test-skill`.
 
+## Ad-Hoc Targeted Skill Update: benchmark-test-skill Benchmark Failure Rubric Alignment
+
+**Goal:** Align the existing `benchmark-test-skill` tier1 benchmark quality rubric with the hard structural report assertion after the 2026-05-13 self-benchmark found Claude runs that preserved facts but failed report structure.
+
+**Plan:**
+- [x] Confirm the fix belongs in the existing benchmark-test-skill fixture/setup, not a new skill.
+- [x] Update the output-quality rubric to require benchmark metrics inside a Markdown table under `## Benchmark Metrics`.
+- [x] Add layer1 regression coverage for a facts-present but malformed metrics section.
+- [x] Run targeted and required validation, then record results here.
+
+**Review:** Complete. Updated `tests/layer4/setups/tier1-workflows.setup.ts` so the `benchmark-test-skill` hard assertion and output-quality rubric both require `passRate`, `p50`, and `totalCost` to appear as rows in the `## Benchmark Metrics` Markdown table before `## Raw Evidence`. Added a layer1 regression in `tests/layer1/bench-setups.test.ts` for a report that preserves all facts but moves those metrics into prose outside the table; it now fails both the hard structural assertion and the critical `metrics-table-structure` quality criterion. Validation passed with `pnpm --dir tests test:layer1 -- bench-setups bench-quality`, `pnpm --dir tests bench:coverage`, `./install.sh`, dependency/version/routing checks, `pnpm --dir tests verify --skill benchmark-test-skill`, and `git diff --check`. Recommended next command: `$benchmark-test-skill benchmark-test-skill`.
+
 ## Ad-Hoc Agent Review: benchmark-test-skill
 
 **Goal:** Review the persisted `$benchmark-test-skill benchmark-test-skill` outputs for subjective operator ergonomics after deterministic hard assertions passed.

@@ -1026,6 +1026,11 @@ describe("Tier 1 workflow benchmark setups", () => {
     });
 
     expect(assertions.every((assertion) => assertion.pass)).toBe(true);
+    expect(setup.qualityEvaluator?.evaluate(readFileSync(resolve(workDir, "benchmark/test-run-2026-05-11.md"), "utf8"))).toMatchObject({
+      passed: true,
+      thresholdPassed: true,
+      criticalFailures: [],
+    });
   });
 
   it("rejects benchmark-test-skill reports that preserve facts but drop report structure", () => {
@@ -1061,6 +1066,56 @@ describe("Tier 1 workflow benchmark setups", () => {
     expect(assertions.find((assertion) => assertion.description === "Output matches workflow expectation")).toMatchObject({
       pass: false,
     });
+  });
+
+  it("rejects benchmark-test-skill reports that keep facts but move metrics out of the metrics table", () => {
+    const setup = CUSTOM_BENCH_SETUPS["benchmark-test-skill"];
+    const workDir = mkdtempSync(resolve(tmpdir(), "tier1-benchmark-test-skill-malformed-metrics-"));
+    mkdirSync(resolve(workDir, "benchmark"), { recursive: true });
+    writeFileSync(
+      resolve(workDir, "benchmark/test-run-2026-05-11.md"),
+      [
+        "# Benchmark run",
+        "",
+        "## Verify",
+        "| Layer | Status | Wall time |",
+        "| --- | --- | --- |",
+        "| layer1 | layer1 PASS | 7.1s |",
+        "| layer2 | layer2 SKIPPED | no tests matched run |",
+        "",
+        "## Benchmark Metrics",
+        "| Metric | Value |",
+        "| --- | --- |",
+        "| coverage | custom |",
+        "",
+        "The benchmark metrics were passRate=1.0, p50=1200, and totalCost=0.42.",
+        "",
+        "## Raw Evidence",
+        "raw session path: tests/benchmarks/runs/run-agent-abc/report.json",
+        "source files: bench-output.txt and verify-output.txt.",
+        "report path: benchmark/test-run-2026-05-11.md.",
+        "",
+        "## Next Route",
+        "Recommended next command: $ship",
+        "",
+      ].join("\n"),
+    );
+
+    const report = readFileSync(resolve(workDir, "benchmark/test-run-2026-05-11.md"), "utf8");
+    const assertions = setup.assertResult({
+      stdout: "",
+      stderr: "",
+      exitCode: 0,
+      workDir,
+      files: ["benchmark/test-run-2026-05-11.md"],
+    });
+    const quality = setup.qualityEvaluator?.evaluate(report);
+
+    expect(assertions.find((assertion) => assertion.description === "Output matches workflow expectation")).toMatchObject({
+      pass: false,
+    });
+    expect(quality?.passed).toBe(false);
+    expect(quality?.criticalFailures).toContain("metrics-table-structure");
   });
 });
 
