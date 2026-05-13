@@ -29,6 +29,19 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Fresh benchmark completed on 2026-05-13. `benchmark-test-skill` is known with `coverage=custom` using `tests/layer4/setups/tier1-workflows.setup.ts`. Verify passed with layer1 in 9.2s across 1,312 tests; layer2 was skipped because no target-specific layer2 tests matched `benchmark-test-skill`. The both-agent benchmark completed with no infrastructure-blocked runs. Claude failed 0/3 evaluated hard assertions, all on `Output matches workflow expectation`; its output-quality average was 80.0% with 3 threshold failures and 3 critical failures, driven by `metrics-table-structure`. Codex passed 3/3 evaluated hard assertions with 100.0% output quality. Report: `benchmark/test-benchmark-test-skill-2026-05-13.md`. Recommended next command: `$session-triage benchmark-test-skill benchmark failure`.
 
+## Current Triage: benchmark-test-skill Benchmark Failure 2026-05-13
+
+**Goal:** Verify the fresh `benchmark-test-skill` Claude benchmark failure and identify the smallest durable fix.
+
+**Acceptance Criteria:**
+- [x] The 2026-05-13 benchmark report and persisted Claude/Codex run evidence are inspected.
+- [x] Mirrored `benchmark-test-skill` contracts and the tier1 benchmark setup expectations are compared.
+- [x] The failure is classified as a skill contract gap, benchmark harness gap, or runner noncompliance.
+- [x] `benchmark/triage-benchmark-test-skill-2026-05-13.md` records verdict, root cause, responsible gap, validation plan, and next route.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Triage completed on 2026-05-13. The benchmark failure is verified and narrow: Claude completed all three runs, created the expected report, included broad required facts and `/ship`, but failed the hard workflow expectation because `p50=1200` and `totalCost=0.42` were not detected as rows inside the `## Benchmark Metrics` table. Codex passed with the intended table shape. The mirrored `benchmark-test-skill` contracts are aligned; the responsible gap is the custom tier1 fixture prompt in `tests/layer4/setups/tier1-workflows.setup.ts`, which should explicitly require separate metric-table rows containing `passRate=1.0` or `100%`, `p50=1200`, `totalCost=0.42`, and `run-agent-abc`. Report: `benchmark/triage-benchmark-test-skill-2026-05-13.md`. Recommended next skill: `$targeted-skill-builder benchmark-test-skill benchmark failure`.
+
 ## Current Benchmark Rerun: benchmark-test-skill Fresh Self Benchmark
 
 **Goal:** Run `$benchmark-test-skill benchmark-test-skill` with fresh eligibility, verify, and both-agent benchmark evidence on 2026-05-12.

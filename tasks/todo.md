@@ -27,6 +27,19 @@
 
 **Review:** Complete. `benchmark-test-skill` is known with `coverage=custom` using `tests/layer4/setups/tier1-workflows.setup.ts`. Verify passed with layer1 in 9.2s across 1,312 tests; layer2 was skipped because no target-specific layer2 tests matched `benchmark-test-skill`. The both-agent benchmark completed with no infrastructure-blocked runs. Claude failed 0/3 evaluated hard assertions, all on `Output matches workflow expectation`; its output-quality average was 80.0% with 3 threshold failures and 3 critical failures, driven by `metrics-table-structure`. Codex passed 3/3 evaluated hard assertions with 100.0% output quality. Report: `benchmark/test-benchmark-test-skill-2026-05-13.md`. Recommended next command: `$session-triage benchmark-test-skill benchmark failure`.
 
+## Ad-Hoc Triage: benchmark-test-skill Benchmark Failure 2026-05-13
+
+**Goal:** Verify the fresh `benchmark-test-skill` Claude benchmark failure and identify the smallest durable fix.
+
+**Plan:**
+- [x] Inspect the 2026-05-13 benchmark report and persisted Claude/Codex run evidence.
+- [x] Compare mirrored `benchmark-test-skill` contracts and the tier1 benchmark setup expectations.
+- [x] Classify whether the failure is a skill contract gap, benchmark harness gap, or runner noncompliance.
+- [x] Write `benchmark/triage-benchmark-test-skill-2026-05-13.md` with verdict, root cause, responsible gap, validation plan, and next route.
+- [x] Record results here, then commit and push intended triage/task changes on `master`.
+
+**Review:** Complete. The benchmark failure is verified and narrow: Claude completed all three runs, created the expected report, included broad required facts and `/ship`, but failed the hard workflow expectation because `p50=1200` and `totalCost=0.42` were not detected as rows inside the `## Benchmark Metrics` table. Codex passed with the intended table shape. The mirrored `benchmark-test-skill` contracts are aligned; the responsible gap is the custom tier1 fixture prompt in `tests/layer4/setups/tier1-workflows.setup.ts`, which should explicitly require separate metric-table rows containing `passRate=1.0` or `100%`, `p50=1200`, `totalCost=0.42`, and `run-agent-abc`. Report: `benchmark/triage-benchmark-test-skill-2026-05-13.md`. Recommended next skill: `$targeted-skill-builder benchmark-test-skill benchmark failure`.
+
 ## Phase 39: Benchmark Results Visibility And Safe Git Fixtures
 
 **Goal:** Make already-benchmarked skills visible as a durable results matrix and unblock safe integration benchmark setups for git-mutating workflows that can run against disposable test repositories.
