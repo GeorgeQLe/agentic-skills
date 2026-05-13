@@ -248,6 +248,92 @@ describe("benchmark setup registry", () => {
     });
   });
 
+  it("uses agent-specific route assertions for the icon-handler workflow setup", () => {
+    const setup = resolveBenchSetup("icon-handler");
+    expect(setup).toBeDefined();
+
+    const workDir = mkdtempSync(resolve(tmpdir(), "icon-handler-route-"));
+    writeFileSync(
+      resolve(workDir, "icon-audit.md"),
+      [
+        "## Icon Audit",
+        "",
+        "Framework: Next App Router",
+        "Source asset: calc-mascot-icon.png",
+        "Missing stale favicon.ico and apple-touch-icon surfaces need approval.",
+        "",
+        "Next command: `/icon-handler fix calc-mascot-icon.png`",
+      ].join("\n"),
+    );
+
+    const claudeAssertions = setup!.assertResult(
+      {
+        stdout: "",
+        stderr: "",
+        exitCode: 0,
+        workDir,
+        files: ["icon-audit.md"],
+      },
+      { agent: "claude" },
+    );
+    const codexAssertions = setup!.assertResult(
+      {
+        stdout: "",
+        stderr: "",
+        exitCode: 0,
+        workDir,
+        files: ["icon-audit.md"],
+      },
+      { agent: "codex" },
+    );
+
+    expect(claudeAssertions.find((assertion) => assertion.description === "Output recommends /icon-handler")).toMatchObject({
+      pass: true,
+    });
+    expect(codexAssertions.find((assertion) => assertion.description === "Output recommends $icon-handler")).toMatchObject({
+      pass: false,
+    });
+
+    writeFileSync(
+      resolve(workDir, "icon-audit.md"),
+      [
+        "## Icon Audit",
+        "",
+        "Framework: Next App Router",
+        "Source asset: calc-mascot-icon.png",
+        "Missing stale favicon.ico and apple-touch-icon surfaces need approval.",
+        "",
+        "Recommended next command: `$icon-handler fix calc-mascot-icon.png`",
+      ].join("\n"),
+    );
+
+    expect(
+      setup!.assertResult(
+        {
+          stdout: "",
+          stderr: "",
+          exitCode: 0,
+          workDir,
+          files: ["icon-audit.md"],
+        },
+        { agent: "codex" },
+      ).find((assertion) => assertion.description === "Output recommends $icon-handler"),
+    ).toMatchObject({
+      pass: true,
+    });
+
+    expect(
+      setup!.qualityEvaluator?.evaluate("Next command: /icon-handler").criteria.find((criterion) => criterion.id === "workflow-next-route"),
+    ).toMatchObject({
+      passed: true,
+    });
+    expect(
+      setup!.qualityEvaluator?.evaluate("Next command: $icon-handler").criteria.find((criterion) => criterion.id === "workflow-next-route"),
+    ).toMatchObject({
+      passed: true,
+    });
+  });
+
   it("uses agent-specific route assertions for the ship workflow setup", () => {
     const setup = resolveBenchSetup("ship");
     expect(setup).toBeDefined();
