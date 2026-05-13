@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-05-13 — Skills Showcase G Skillpacks icon fix
+
+- Fixed the Skills Showcase header so the existing G Skillpacks icon appears next to the brand label and links home.
+- Removed brittle explicit icon metadata paths from the root layout so Next.js App Router serves the canonical `app/icon.png` and `app/apple-icon.png` metadata routes, and added `metadataBase` for `gskillpacks.com` to keep social image metadata warning-free.
+- Updated stale app tests: smoke coverage now expects the current `Explore Packs` CTA, verifies the header icon, and the benchmark test fixture includes the required generated skill fields.
+- Verified: `pnpm --dir apps/skills-showcase typecheck`, `pnpm --dir apps/skills-showcase test` (86 tests), `pnpm --dir apps/skills-showcase build`, and `git diff --check` passed.
+
 ## 2026-05-13 — Benchmark-test-skill deterministic rerun and agent review
 
 - Ran `$benchmark-test-skill benchmark-test-skill` against the custom tier1 fixture. Verify passed with layer1 in 9.5s across 1,312 tests; layer2 skipped because no target-specific layer2 files matched.
