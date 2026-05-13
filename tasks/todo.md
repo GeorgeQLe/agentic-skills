@@ -30,6 +30,19 @@
 
 **Review:** Fresh benchmark rerun completed on 2026-05-13 at 10:40 ET. `session-triage` is known with `coverage=custom` using `tests/layer4/setups/tier1-workflows.setup.ts`. Verify passed with layer1 in 8.6s across 1,350 tests; layer2 was skipped because no target-specific layer2 tests matched `session-triage`. The both-agent benchmark completed with no infrastructure-blocked runs. Claude passed 3/3 evaluated hard assertions with 93.8% output quality, 1 critical quality failure, p50 latency 44.1s, and $0.75 total cost. Codex passed 3/3 evaluated hard assertions with 95.8% output quality, 1 critical quality failure, p50 latency 64.1s, and $0.75 total cost. Report validation passed with target, agent rows, pass-rate, latency, cost, consistency, raw session paths, and next-route evidence. Report: `benchmark/test-session-triage-2026-05-13.md`. Recommended next skill: `$benchmark-agent-review session-triage`.
 
+## Ad-Hoc Agent Review: session-triage Fresh Rerun 2026-05-13 10:40
+
+**Goal:** Review the latest persisted `session-triage` Claude and Codex benchmark outputs for subjective operator quality after the fresh 10:40 benchmark rerun.
+
+**Plan:**
+- [x] Resolve the latest Claude and Codex run directories from `tests/benchmarks/runs/session-triage-*`. ✓ `session-triage-claude-e5f0772b` and `session-triage-codex-374ad6f0`.
+- [x] Extract retained generated triage artifacts and benchmark context from each evaluated run. ✓ Claude retained stdout summaries; Codex retained full report text in transcripts.
+- [x] Grade each evaluated output against the agent-review rubric without merging scores into deterministic benchmark metrics. ✓ 6 evaluated outputs scored separately from hard pass rates.
+- [x] Write and validate `benchmark/review-session-triage-2026-05-13.md` with scores, findings, remediation, and next route. ✓ Required report fields present.
+- [x] Record results here, then commit and push intended review/task changes on `master`.
+
+**Review:** Complete. Reviewed `session-triage-claude-e5f0772b` and `session-triage-codex-374ad6f0`, covering 6 evaluated outputs and excluding no infrastructure-blocked runs. Deterministic benchmark context remained clean on hard assertions: both runners passed 3/3. Subjective median score was 78 with range 74-94. The best outputs were evidence-bound and routed to operational validation, but several over-remediated by recommending `$targeted-skill-builder` or `$run` contract edits even after identifying an adequate existing `$run` contract and likely one-off noncompliance. Report: `benchmark/review-session-triage-2026-05-13.md`. Recommended next command: `$targeted-skill-builder session-triage benchmark over-remediation rubric`.
+
 ## Ad-Hoc Agent Review: session-triage Fresh Benchmark 2026-05-13
 
 **Goal:** Review the latest persisted `session-triage` Claude and Codex benchmark outputs for subjective operator quality.
