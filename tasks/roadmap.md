@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Fix: session-triage Benchmark Fixture Robustness
+
+**Goal:** Harden the `session-triage` benchmark fixture so runs write the root report before optional exploration and the rubric accepts explicit no-skill-change outputs.
+
+**Acceptance Criteria:**
+- [x] The fix is scoped to the benchmark fixture/rubric and layer1 setup tests, not the mirrored `session-triage` skill contracts.
+- [x] The fixture prompt requires reading `session-log.md` and `tasks/lessons.md`, writing `session-triage-report.md` in the project root before optional exploration, and preserving the no-skill-change branch for one-off noncompliance with an adequate validation rule.
+- [x] Layer1 covers the root artifact requirement, required report sections, no-skill-change branch, and explicit "task checklist, not skill contract" language.
+- [x] Focused layer1 setup/quality tests, required skill checks, benchmark coverage, target verify, Codex smoke benchmark, and whitespace validation pass.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Completed on 2026-05-13. Updated `tests/layer4/setups/tier1-workflows.setup.ts` and `tests/layer1/bench-setups.test.ts` so the `session-triage` benchmark fixture is more robust and no longer false-fails explicit no-skill-change reports. Validation passed, including Codex smoke `session-triage-codex-48488be1` with 1/1 hard assertions, 100.0% quality, and no blocked runs. Recommended next command: `$benchmark-test-skill session-triage`.
+
 ## Current Triage: session-triage Benchmark Failure Current 2026-05-13
 
 **Goal:** Triage the current `session-triage` benchmark failure from `session-triage-codex-fbec4404` and identify the smallest durable fix.

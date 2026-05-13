@@ -411,6 +411,9 @@ describe("benchmark setup registry", () => {
   it("keeps session-triage benchmark routing aligned with the no-skill-change branch", () => {
     const setup = resolveBenchSetup("session-triage");
     expect(setup).toBeDefined();
+    expect(setup!.prompt).toContain("write session-triage-report.md in the project root before doing any optional exploration");
+    expect(setup!.prompt).toContain("one-off agent noncompliance with an adequate existing validation rule");
+    expect(setup!.prompt).toContain("recommend no skill change");
 
     const workDir = mkdtempSync(resolve(tmpdir(), "session-triage-route-"));
     writeFileSync(
@@ -459,7 +462,59 @@ describe("benchmark setup registry", () => {
     expect(assertions.find((assertion) => assertion.description === "Output includes next command handoff")).toMatchObject({
       pass: true,
     });
+    expect(assertions.find((assertion) => assertion.description === "session-triage-report.md created in project root")).toMatchObject({
+      pass: true,
+    });
+    expect(assertions.find((assertion) => assertion.description === "Output includes Responsible contract gap")).toMatchObject({
+      pass: false,
+    });
     expect(assertions.some((assertion) => assertion.description === "Output recommends $targeted-skill-builder")).toBe(false);
+
+    writeFileSync(
+      resolve(workDir, "session-triage-report.md"),
+      [
+        "# Session Triage Report",
+        "",
+        "## Target",
+        "`session-log.md` and `tasks/lessons.md`.",
+        "",
+        "## User-identified issue",
+        "The user says `$run` skipped coverage matrix validation and shipped anyway.",
+        "",
+        "## Verification verdict",
+        "Partially verified. The log says the agent skipped coverage matrix validation and shipped anyway.",
+        "",
+        "## Timeline",
+        "The user invoked `$run`, the agent skipped planned validation, and the agent shipped.",
+        "",
+        "## Root cause",
+        "Agent noncompliance with an adequate existing validation rule.",
+        "",
+        "## Responsible contract gap",
+        "None. `tasks/lessons.md` already says: Run required validation before shipping.",
+        "",
+        "## Recommended fix",
+        "Do not change a skill for this one-off noncompliance; rerun the missing validation and document the result.",
+        "",
+        "## Validation plan",
+        "Run the coverage matrix validation and stop if it fails.",
+        "",
+        "## Confidence and evidence gaps",
+        "The fixture does not include a full `$run` transcript, so no recurrence claim is made.",
+        "",
+        "## Recommended next skill",
+        "Recommended next skill: none",
+      ].join("\n"),
+    );
+
+    const completeAssertions = setup!.assertResult({
+      stdout: "",
+      stderr: "",
+      exitCode: 0,
+      workDir,
+      files: ["session-triage-report.md"],
+    });
+    expect(completeAssertions.every((assertion) => assertion.pass), completeAssertions.map((assertion) => assertion.description)).toBe(true);
 
     const nextRouteCriterion = setup!.qualityEvaluator?.rubric.criteria.find((criterion) => criterion.id === "actionable-next-route");
     expect(nextRouteCriterion?.evaluate("## Next command\nRecommended next skill: none")).toMatchObject({
@@ -551,6 +606,23 @@ describe("benchmark setup registry", () => {
           "",
           "## Next command",
           "Recommended next command: $run",
+        ].join("\n"),
+      ),
+    ).toMatchObject({ score: 1 });
+    expect(
+      overRemediationCriterion?.evaluate(
+        [
+          "## Root cause",
+          "The evidence points to one-off agent noncompliance with an existing validation rule.",
+          "",
+          "## Responsible contract gap",
+          "None verified.",
+          "",
+          "## Recommended fix",
+          "No skill change is recommended. Update the active task checklist, not the skill contract, unless additional evidence shows a contract gap.",
+          "",
+          "## Recommended next skill",
+          "none",
         ].join("\n"),
       ),
     ).toMatchObject({ score: 1 });

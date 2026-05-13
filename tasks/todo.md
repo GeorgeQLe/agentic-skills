@@ -4,6 +4,19 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Ad-Hoc Targeted Skill Update: session-triage Benchmark Fixture Robustness
+
+**Goal:** Harden the `session-triage` benchmark fixture so runs write the root report before optional exploration and the rubric accepts explicit no-skill-change outputs.
+
+**Plan:**
+- [x] Confirm the fix belongs in the benchmark fixture/rubric and layer1 setup tests, not the mirrored `session-triage` skill contracts.
+- [x] Update the fixture prompt to require reading `session-log.md` and `tasks/lessons.md`, writing `session-triage-report.md` in the project root before optional exploration, and preserving the no-skill-change branch for one-off noncompliance with an adequate validation rule.
+- [x] Add layer1 coverage for the root artifact requirement, required report sections, no-skill-change branch, and explicit "task checklist, not skill contract" language.
+- [x] Run focused layer1 setup/quality tests, required skill checks, benchmark coverage, target verify, Codex smoke benchmark, and whitespace validation.
+- [x] Record results here, then commit and push intended changes on `master`.
+
+**Review:** Complete. Updated `tests/layer4/setups/tier1-workflows.setup.ts` so the `session-triage` fixture prompt forces a bounded evidence pass, root `session-triage-report.md` creation before optional exploration, richer report sections, and the no-skill-change branch. Tightened `no-over-remediation-route` so it still fails real contract-change over-remediation but accepts reports that explicitly say to update task docs or checklists rather than the skill contract unless later evidence proves a contract gap. Updated `tests/layer1/bench-setups.test.ts` with regression coverage. Validation passed with `pnpm --dir tests test:layer1 -- bench-setups bench-quality`, `./install.sh`, `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-next-step-routing.sh --missing`, `pnpm --dir tests bench:coverage`, `pnpm --dir tests verify --skill session-triage`, Codex smoke `session-triage-codex-48488be1` (1/1 hard assertions, 100.0% quality, no blocked runs), and `git diff --check`. Recommended next command: `$benchmark-test-skill session-triage`.
+
 ## Ad-Hoc Triage: session-triage Benchmark Failure Current 2026-05-13
 
 **Goal:** Triage the current `session-triage` benchmark failure from `session-triage-codex-fbec4404` and identify the smallest durable fix.
