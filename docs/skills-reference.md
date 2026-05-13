@@ -140,17 +140,25 @@ Install the narrow business lane needed for the current phase:
 
 ```bash
 scripts/pack.sh install business-discovery
+scripts/pack.sh install customer-lifecycle
 scripts/pack.sh install business-growth
 scripts/pack.sh install business-ops
 ```
 
-`business-app` remains a compatibility alias that installs all three.
+`business-app` remains a compatibility alias that installs all four.
 
 Business discovery:
 
 ```text
 icp, enterprise-icp, competitive-analysis, customer-feedback,
-value-prop-canvas, lean-canvas, positioning, journey-map
+value-prop-canvas, lean-canvas, positioning
+```
+
+Customer lifecycle:
+
+```text
+journey-map, onboarding-map, conversion-map, transaction-map,
+retention-map, expansion-map, lifecycle-metrics
 ```
 
 Business growth:
@@ -420,12 +428,13 @@ That pack contains `poketo-kanban` and `sync-roadmap-kanban`.
 
 ## Moved Skills
 
-Former global business/product skills now live in narrower project packs. `business-app` remains a compatibility alias for all three business packs.
+Former global business/product skills now live in narrower project packs. `business-app` remains a compatibility alias for all four business packs.
 
 Prefer one of:
 
 ```bash
 scripts/pack.sh install business-discovery
+scripts/pack.sh install customer-lifecycle
 scripts/pack.sh install business-growth
 scripts/pack.sh install business-ops
 ```

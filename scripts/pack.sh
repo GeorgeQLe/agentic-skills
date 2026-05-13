@@ -122,10 +122,12 @@ normalize_pack() {
   case "$pack" in
     business|business_app|businessapp|product|saas|business-app)
       echo "business-discovery"
+      echo "customer-lifecycle"
       echo "business-growth"
       echo "business-ops"
       ;;
     business-discovery|discovery|customer-discovery|customer_discovery) echo "business-discovery" ;;
+    customer-lifecycle|customer_lifecycle|lifecycle|journey|customer-journey|customer_journey|user-journey|user_journey|onboarding|conversion|transactions|transaction) echo "customer-lifecycle" ;;
     business-growth|growth|gtm-growth|gtm_growth) echo "business-growth" ;;
     business-ops|business_ops|ops|business-operations|business_operations) echo "business-ops" ;;
     business-kanban|business_app_kanban|businessapp-kanban|saas-kanban) echo "business-app-kanban" ;;
@@ -160,7 +162,7 @@ collect_pack_args() {
 
 project_type_for_pack() {
   case "$1" in
-    business-discovery|business-growth|business-ops|business-app|business-app-kanban) echo "business-app" ;;
+    business-discovery|customer-lifecycle|business-growth|business-ops|business-app|business-app-kanban) echo "business-app" ;;
     game|game-kanban) echo "game" ;;
     devtool|devtool-kanban) echo "devtool" ;;
     creator-foundation|youtube-ops|creator-media|remotion) echo "creator-media" ;;
@@ -415,11 +417,12 @@ recommend() {
     echo "If this project intentionally uses PoketoWork boards, also install game-kanban."
   elif [[ "$inferred_project_type" == "devtool" ]]; then
     echo "Recommended pack: devtool or a narrow business pack"
-    echo "Use devtool for developer-facing tools/libraries; use business-discovery, business-growth, or business-ops for SaaS/business work."
+    echo "Use devtool for developer-facing tools/libraries; use business-discovery, customer-lifecycle, business-growth, or business-ops for SaaS/business work."
     echo "If this project intentionally uses PoketoWork boards, install the matching explicit kanban pack: devtool-kanban or business-app-kanban."
     echo "For behavior-preserving refactors and code-health workflows, also install code-quality."
   else
     echo "Recommended pack: business-discovery"
+    echo "Add customer-lifecycle when the current phase needs journey, onboarding, conversion, transaction, retention, expansion, or lifecycle metrics work."
     echo "Add business-growth or business-ops only when the current phase needs them."
     echo "If this project intentionally uses PoketoWork boards, also install business-app-kanban."
     echo "For behavior-preserving refactors and code-health workflows, also install code-quality."

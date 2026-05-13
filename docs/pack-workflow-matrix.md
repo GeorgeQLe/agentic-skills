@@ -16,10 +16,11 @@ compatibility alias = old broad name kept for existing commands
 
 | Workflow | Start with | Then add | Leads into | Command |
 | --- | --- | --- | --- | --- |
-| Business/product discovery | `business-discovery` | `business-growth` when ICP, positioning, or journey evidence is ready | `business-ops` after launch or active operation | `scripts/pack.sh install business-discovery` |
-| Business GTM/growth | `business-growth` | `business-discovery` if ICP, positioning, or journey evidence is missing | `business-ops` for metrics review, risk, runway, and stakeholder reporting | `scripts/pack.sh install business-growth` |
-| Business operations | `business-ops` | `business-discovery` for upstream customer/market evidence; `business-growth` for GTM, metrics, experiments, and PMF | ongoing operating review | `scripts/pack.sh install business-ops` |
-| Full business app compatibility | `business-app` | expands to all business packs | discovery -> growth -> ops | `scripts/pack.sh install business-app` |
+| Business/product discovery | `business-discovery` | `customer-lifecycle` when ICP, positioning, or market evidence is ready | `business-growth`, then `business-ops` | `scripts/pack.sh install business-discovery` |
+| Customer lifecycle planning | `customer-lifecycle` | `business-discovery` if ICP or market evidence is missing; `business-growth` when lifecycle evidence is ready for GTM/pricing/experiments | `business-growth`, then `business-ops` | `scripts/pack.sh install customer-lifecycle` |
+| Business GTM/growth | `business-growth` | `business-discovery` if ICP/positioning evidence is missing; `customer-lifecycle` if journey/onboarding/conversion evidence is missing | `business-ops` for metrics review, risk, runway, and stakeholder reporting | `scripts/pack.sh install business-growth` |
+| Business operations | `business-ops` | `business-discovery` for upstream customer/market evidence; `customer-lifecycle` for journey evidence; `business-growth` for GTM, metrics, experiments, and PMF | ongoing operating review | `scripts/pack.sh install business-ops` |
+| Full business app compatibility | `business-app` | expands to all business packs | discovery -> lifecycle -> growth -> ops | `scripts/pack.sh install business-app` |
 | Creator strategy | `creator-foundation` | `youtube-ops` for YouTube-specific channel/video work | `remotion` for production planning and build handoff | `scripts/pack.sh install creator-foundation` |
 | YouTube operations | `youtube-ops` | `creator-foundation` if positioning, programming, series, or cross-platform evidence is missing | `remotion` when work becomes scripting or production planning | `scripts/pack.sh install youtube-ops` |
 | Remotion production | `remotion` | `creator-foundation` for strategy; `youtube-ops` for YouTube evidence/reference analysis | script -> build spec/scaffold | `scripts/pack.sh install remotion` |
@@ -31,7 +32,7 @@ compatibility alias = old broad name kept for existing commands
 | Code quality overlay | `code-quality` | any domain pack | behavior-preserving refactor and quality campaigns | `scripts/pack.sh install code-quality` |
 | Project fleet/control repo | `project-fleet` | `monorepo` only if the control repo itself is a pnpm workspace | clone/spec-store -> fleet batches -> spin-off | `scripts/pack.sh install project-fleet` |
 | Alignment-first planning | `alignment-loop` | a domain pack once the project type is clear | grill -> destination doc -> vertical slice -> implementation | `scripts/pack.sh install alignment-loop` |
-| Business kanban flow | `business-app-kanban` | a narrow business pack, usually `business-discovery`, `business-growth`, or `business-ops` | board-aware brainstorm/spec/roadmap/run/ship | `scripts/pack.sh install business-discovery business-app-kanban` |
+| Business kanban flow | `business-app-kanban` | a narrow business pack, usually `business-discovery`, `customer-lifecycle`, `business-growth`, or `business-ops` | board-aware brainstorm/spec/roadmap/run/ship | `scripts/pack.sh install business-discovery business-app-kanban` |
 | Devtool kanban flow | `devtool-kanban` | `devtool` | board-aware brainstorm/spec/roadmap/run/ship | `scripts/pack.sh install devtool devtool-kanban` |
 | Game kanban flow | `game-kanban` | `game` | board-aware brainstorm/spec/roadmap/run/ship | `scripts/pack.sh install game game-kanban` |
 | Generic PoketoWork boards | `poketowork-kanban` | optional with any domain pack | board utilities independent of a domain pack | `scripts/pack.sh install poketowork-kanban` |
@@ -41,7 +42,7 @@ compatibility alias = old broad name kept for existing commands
 Business app:
 
 ```text
-business-discovery -> business-growth -> business-ops
+business-discovery -> customer-lifecycle -> business-growth -> business-ops
 ```
 
 Creator/media:

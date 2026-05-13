@@ -23,6 +23,7 @@ Interview the user to validate, refine, and complete an implementation specifica
    - For `devtool`, read devtool research artifacts when present: `research/devtool-user-map.md`, `research/devtool-dx-journey.md`, `research/devtool-integration-map.md`.
    - If project type is missing or mismatched, recommend `/pack recommend` or `/pack install <pack>` before doing domain-specific planning.
    - If `research/concept-brief.md`, `research/icp.md`, or `research/journey-map.md` exists in a business-app project, treat them as source evidence: does this implementation fit the concept constraints, user and customer journey, path to aha, conversion path, retention loop, champion dynamics, technical sophistication, and provisioning/onboarding model?
+   - If lifecycle evidence is missing and the `customer-lifecycle` pack is not enabled, recommend `/pack install customer-lifecycle` before `/journey-map`.
    - When the user proposes something that conflicts with the ICP or journey map, flag it — e.g., "The journey map says the buyer needs a demo before sign-up — does this self-serve-only onboarding fit?"
    - Do not re-interview on concept, ICP, or journey topics already covered — focus on technical solution design.
 
