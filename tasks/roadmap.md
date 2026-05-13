@@ -42,6 +42,19 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Agent review completed on 2026-05-13. Reviewed `session-triage-claude-69ca7dea` and `session-triage-codex-33b0cc9d`, covering 6 evaluated outputs and excluding no infrastructure-blocked runs. Deterministic benchmark context was clean: both runners passed 3/3 hard assertions with 100.0% output quality. Subjective median score was 89.5 with range 86-94. Codex outputs were excellent and evidence-bound; Claude outputs appeared good from retained summaries, but full generated report text was not persisted for Claude. Report: `benchmark/review-session-triage-2026-05-13.md`. Recommended next command: `$targeted-skill-builder benchmark-agent-review retained artifact evidence`.
 
+## Current Targeted Update: Benchmark Review Retained Artifact Evidence
+
+**Goal:** Persist generated benchmark artifacts in raw run results so `$benchmark-agent-review` can review Claude and Codex outputs with the same fidelity.
+
+**Acceptance Criteria:**
+- [x] The fix is scoped to benchmark harness persistence, not the `benchmark-agent-review` skill contract.
+- [x] `run-*.json` can include bounded generated artifact content when a benchmark setup declares `qualityOutputPath`.
+- [x] Focused layer1 coverage proves generated artifact content is persisted for later review.
+- [x] Focused layer1 tests, install, skill dependency/version/routing checks, targeted retained-artifact checks, and whitespace validation pass; benchmark coverage blocker is recorded.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Complete. Updated `tests/harness/bench-types.ts` and `tests/harness/bench-runner.ts` so each benchmark run can persist an optional `artifacts` map with bounded generated artifact content. Setups with `qualityOutputPath` now retain that artifact content in `run-*.json`, which directly addresses the review fidelity gap for Claude outputs that do not echo full file diffs. Updated `tests/layer1/runner.test.ts` with focused coverage for persisted artifact evidence. Validation passed with `pnpm --dir tests test:layer1 -- runner`, `./install.sh`, `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-next-step-routing.sh --missing`, targeted `rg` checks, and `git diff --check`. `pnpm --dir tests bench:coverage` is blocked by unrelated untracked `global/claude/icon-handler/` and `global/codex/icon-handler/` skill directories missing benchmark coverage; those files were not part of this retained-artifact fix and were left unmodified. Recommended next command: `$targeted-skill-builder icon-handler benchmark coverage`.
+
 ## Current Targeted Update: session-triage Benchmark Artifact Verification
 
 **Goal:** Harden the `session-triage` benchmark fixture so runs verify the required root report exists after writing it.
