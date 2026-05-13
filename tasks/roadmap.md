@@ -29,6 +29,19 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Benchmark completed on 2026-05-13. `session-triage` is known with `coverage=custom` using `tests/layer4/setups/tier1-workflows.setup.ts`. Verify passed with layer1 in 9.0s across 1,349 tests; layer2 was skipped because no target-specific layer2 tests matched `session-triage`. The both-agent benchmark completed with one Claude infrastructure-blocked run. Claude passed 0/2 evaluated hard assertions, with 92.9% output quality, p50 latency 42.8s, and $0.75 total cost. Codex passed 2/3 evaluated hard assertions, with 97.6% output quality, p50 latency 55.5s, and $0.75 total cost. Report: `benchmark/test-session-triage-2026-05-13.md`. Recommended next command: `$session-triage session-triage benchmark failure`.
 
+## Current Triage: session-triage Benchmark Failure 2026-05-13
+
+**Goal:** Verify the fresh `session-triage` benchmark failure and identify the smallest durable fix.
+
+**Acceptance Criteria:**
+- [x] Benchmark report and persisted Claude/Codex run evidence are inspected.
+- [x] Mirrored `session-triage` contracts are compared against the tier1 benchmark setup expectations.
+- [x] The failure is classified as a skill contract gap, benchmark harness gap, or runner noncompliance.
+- [x] `benchmark/triage-session-triage-2026-05-13.md` records verdict, root cause, responsible gap, validation plan, and next route.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Triage completed on 2026-05-13. The benchmark failure is verified, but the responsible gap is the benchmark setup, not the `session-triage` skill contract. The fixture describes one-off agent noncompliance with an adequate validation contract and existing lesson, while `session-triage` explicitly says not to recommend a skill change in that situation. The fixture still hard-requires `$targeted-skill-builder`; latest Codex evidence passes that assertion, but Claude still fails because the setup expects only the Codex dollar route instead of `/targeted-skill-builder`. Report: `benchmark/triage-session-triage-2026-05-13.md`. Recommended next skill: `$targeted-skill-builder session-triage benchmark fixture routing`.
+
 ## Current Benchmark Rerun: benchmark-test-skill Self Benchmark Fresh 2026-05-13
 
 **Goal:** Run `$benchmark-test-skill benchmark-test-skill` with fresh eligibility, verify, and both-agent benchmark evidence on 2026-05-13.

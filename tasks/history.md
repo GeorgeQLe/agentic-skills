@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-05-13 — Ad-Hoc Benchmark: session-triage rerun
+
+- Reran `$benchmark-test-skill session-triage` with both agents (3 runs each).
+- Codex improved to 100% pass rate (3/3) with 100% output quality.
+- Claude remains at 0% evaluated pass rate (0/2, 1 infra-blocked), failing "Output recommends $targeted-skill-builder" assertion.
+- Updated benchmark report with fresh results and prior-run comparison table.
+- Regenerated showcase data and benchmark results matrix.
+
 ## 2026-05-13 — Skills Showcase G Skillpacks icon fix
 
 - Fixed the Skills Showcase header so the existing G Skillpacks icon appears next to the brand label and links home.

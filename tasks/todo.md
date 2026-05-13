@@ -11,11 +11,24 @@
 **Plan:**
 - [x] Confirm `session-triage` is a known benchmark harness target and record its coverage status. ✓ `coverage=custom`, `setup_path=tests/layer4/setups/tier1-workflows.setup.ts`, `priority_tier=1`, `fixture_type=incident-report-fixture` (bench-coverage.ts:427-432).
 - [x] Run `pnpm verify --skill session-triage` from `tests/` and stop if it fails. ✓ layer1 PASS (1349 tests, 8.8s), layer2 SKIP (no target-specific tests).
-- [x] If verify passes, run `pnpm bench --skill session-triage --agent both --runs 3 --chunk-size 3 --pause 0`.
-- [x] Write and validate `benchmark/test-session-triage-2026-05-13.md` with verify, benchmark, latency, cost, consistency, and raw session evidence.
+- [x] If verify passes, run `pnpm bench --skill session-triage --agent both --runs 3 --chunk-size 3 --pause 0`. ✓ Claude 0/2 (0.0%), 1 blocked; Codex 3/3 (100.0%), 0 blocked.
+- [x] Write and validate `benchmark/test-session-triage-2026-05-13.md` with verify, benchmark, latency, cost, consistency, and raw session evidence. ✓ Report updated with fresh run data and prior-run comparison.
 - [x] Record results here, then commit and push intended benchmark/task changes on `master`.
 
-**Review:** Benchmark completed on 2026-05-13. `session-triage` is known with `coverage=custom` using `tests/layer4/setups/tier1-workflows.setup.ts`. Verify passed with layer1 in 9.0s across 1,349 tests; layer2 was skipped because no target-specific layer2 tests matched `session-triage`. The both-agent benchmark completed with one Claude infrastructure-blocked run. Claude passed 0/2 evaluated hard assertions, with 92.9% output quality, p50 latency 42.8s, and $0.75 total cost. Codex passed 2/3 evaluated hard assertions, with 97.6% output quality, p50 latency 55.5s, and $0.75 total cost. All evaluated hard assertion failures were `Output recommends $targeted-skill-builder`. Report: `benchmark/test-session-triage-2026-05-13.md`. Recommended next command: `$session-triage session-triage benchmark failure`.
+**Review:** Benchmark rerun completed on 2026-05-13. `session-triage` is known with `coverage=custom` using `tests/layer4/setups/tier1-workflows.setup.ts`. Verify passed with layer1 in 8.8s across 1,349 tests; layer2 was skipped because no target-specific layer2 tests matched `session-triage`. The both-agent benchmark completed with 1 Claude infrastructure-blocked run. Claude passed 0/2 evaluated hard assertions (82.1% output quality, p50 52.3s, $0.75 total cost). Codex passed 3/3 evaluated hard assertions (100.0% output quality, p50 58.7s, $0.75 total cost). Claude consistently fails the "Output recommends $targeted-skill-builder" hard assertion. Codex improved from 66.7% to 100.0% pass rate across sessions. Report: `benchmark/test-session-triage-2026-05-13.md`. Recommended next command: `$session-triage session-triage benchmark failure`.
+
+## Ad-Hoc Triage: session-triage Benchmark Failure 2026-05-13
+
+**Goal:** Verify the fresh `session-triage` benchmark failure and identify the smallest durable fix.
+
+**Plan:**
+- [x] Inspect the benchmark report and persisted Claude/Codex run evidence.
+- [x] Compare mirrored `session-triage` contracts against the tier1 benchmark setup expectations.
+- [x] Classify whether the failure is a skill contract gap, benchmark harness gap, or runner noncompliance.
+- [x] Write and validate `benchmark/triage-session-triage-2026-05-13.md` with verdict, root cause, responsible gap, validation plan, and next route.
+- [x] Record results here, then commit and push intended triage/task changes on `master`.
+
+**Review:** Complete. The benchmark failure is verified, but the responsible gap is the benchmark setup, not the `session-triage` skill contract. The fixture describes one-off agent noncompliance with an adequate validation contract and existing lesson, while `session-triage` explicitly says not to recommend a skill change in that situation. The fixture still hard-requires `$targeted-skill-builder`; latest Codex evidence passes that assertion, but Claude still fails because the setup expects only the Codex dollar route instead of `/targeted-skill-builder`. Report: `benchmark/triage-session-triage-2026-05-13.md`. Recommended next skill: `$targeted-skill-builder session-triage benchmark fixture routing`.
 
 ## Priority Documentation Todo
 
