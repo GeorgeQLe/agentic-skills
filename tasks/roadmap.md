@@ -21,11 +21,13 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 **Goal:** Run `$benchmark-test-skill session-triage` with repository harness eligibility, verify, and both-agent benchmark evidence.
 
 **Acceptance Criteria:**
-- [ ] `pnpm bench --list-skills` confirms `session-triage` is known and reports its coverage status.
-- [ ] `pnpm verify --skill session-triage` passes or blocks benchmark execution with a recorded failure.
-- [ ] `pnpm bench --skill session-triage --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
-- [ ] `benchmark/test-session-triage-2026-05-13.md` records verify, benchmark, latency, cost, consistency, and raw session evidence.
-- [ ] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+- [x] `pnpm bench --list-skills` confirms `session-triage` is known and reports its coverage status.
+- [x] `pnpm verify --skill session-triage` passes or blocks benchmark execution with a recorded failure.
+- [x] `pnpm bench --skill session-triage --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [x] `benchmark/test-session-triage-2026-05-13.md` records verify, benchmark, latency, cost, consistency, and raw session evidence.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Benchmark completed on 2026-05-13. `session-triage` is known with `coverage=custom` using `tests/layer4/setups/tier1-workflows.setup.ts`. Verify passed with layer1 in 9.0s across 1,349 tests; layer2 was skipped because no target-specific layer2 tests matched `session-triage`. The both-agent benchmark completed with one Claude infrastructure-blocked run. Claude passed 0/2 evaluated hard assertions, with 92.9% output quality, p50 latency 42.8s, and $0.75 total cost. Codex passed 2/3 evaluated hard assertions, with 97.6% output quality, p50 latency 55.5s, and $0.75 total cost. Report: `benchmark/test-session-triage-2026-05-13.md`. Recommended next command: `$session-triage session-triage benchmark failure`.
 
 ## Current Benchmark Rerun: benchmark-test-skill Self Benchmark Fresh 2026-05-13
 

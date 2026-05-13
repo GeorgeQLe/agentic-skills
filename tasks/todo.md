@@ -9,11 +9,13 @@
 **Goal:** Run `$benchmark-test-skill session-triage` with repository harness eligibility, verify, and both-agent benchmark evidence.
 
 **Plan:**
-- [ ] Confirm `session-triage` is a known benchmark harness target and record its coverage status.
-- [ ] Run `pnpm verify --skill session-triage` from `tests/` and stop if it fails.
-- [ ] If verify passes, run `pnpm bench --skill session-triage --agent both --runs 3 --chunk-size 3 --pause 0`.
-- [ ] Write and validate `benchmark/test-session-triage-2026-05-13.md` with verify, benchmark, latency, cost, consistency, and raw session evidence.
-- [ ] Record results here, then commit and push intended benchmark/task changes on `master`.
+- [x] Confirm `session-triage` is a known benchmark harness target and record its coverage status. ✓ `coverage=custom`, `setup_path=tests/layer4/setups/tier1-workflows.setup.ts`, `priority_tier=1`, `fixture_type=incident-report-fixture` (bench-coverage.ts:427-432).
+- [x] Run `pnpm verify --skill session-triage` from `tests/` and stop if it fails. ✓ layer1 PASS (1349 tests, 8.8s), layer2 SKIP (no target-specific tests).
+- [x] If verify passes, run `pnpm bench --skill session-triage --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [x] Write and validate `benchmark/test-session-triage-2026-05-13.md` with verify, benchmark, latency, cost, consistency, and raw session evidence.
+- [x] Record results here, then commit and push intended benchmark/task changes on `master`.
+
+**Review:** Benchmark completed on 2026-05-13. `session-triage` is known with `coverage=custom` using `tests/layer4/setups/tier1-workflows.setup.ts`. Verify passed with layer1 in 9.0s across 1,349 tests; layer2 was skipped because no target-specific layer2 tests matched `session-triage`. The both-agent benchmark completed with one Claude infrastructure-blocked run. Claude passed 0/2 evaluated hard assertions, with 92.9% output quality, p50 latency 42.8s, and $0.75 total cost. Codex passed 2/3 evaluated hard assertions, with 97.6% output quality, p50 latency 55.5s, and $0.75 total cost. All evaluated hard assertion failures were `Output recommends $targeted-skill-builder`. Report: `benchmark/test-session-triage-2026-05-13.md`. Recommended next command: `$session-triage session-triage benchmark failure`.
 
 ## Priority Documentation Todo
 
