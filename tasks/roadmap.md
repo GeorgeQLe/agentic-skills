@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Triage: session-triage Benchmark Failure Current 2026-05-13
+
+**Goal:** Triage the current `session-triage` benchmark failure from `session-triage-codex-fbec4404` and identify the smallest durable fix.
+
+**Acceptance Criteria:**
+- [x] Current benchmark report and persisted Claude/Codex run evidence are inspected.
+- [x] Mirrored `session-triage` contracts are compared against the tier1 benchmark setup expectations.
+- [x] The failure is classified as a skill contract gap, benchmark harness gap, or runner noncompliance.
+- [x] `benchmark/triage-session-triage-2026-05-13.md` records verdict, root cause, responsible gap, validation plan, and next route.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Triage completed on 2026-05-13. The current benchmark failure is verified. Codex run #0 exited without creating `session-triage-report.md` in the project root, causing a hard assertion failure; Claude passed hard assertions but had low output-quality scores from over-remediation. The responsible gap is the benchmark fixture prompt and layer1 regression coverage, not the mirrored `session-triage` skill contracts. Report: `benchmark/triage-session-triage-2026-05-13.md`. Recommended next skill: `$targeted-skill-builder session-triage benchmark fixture robustness`.
+
 ## Current Benchmark: session-triage Fresh Rerun 2026-05-13 Current
 
 **Goal:** Run `$benchmark-test-skill session-triage` with current repository harness eligibility, verify, and both-agent benchmark evidence.
