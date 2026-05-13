@@ -334,6 +334,19 @@ describe("benchmark setup registry", () => {
     });
   });
 
+  it("creates a valid PNG source asset for the icon-handler workflow setup", () => {
+    const setup = resolveBenchSetup("icon-handler");
+    expect(setup).toBeDefined();
+
+    const workDir = mkdtempSync(resolve(tmpdir(), "icon-handler-fixture-"));
+    setup!.setupProject?.(workDir);
+
+    const sourceAsset = readFileSync(resolve(workDir, "calc-mascot-icon.png"));
+    expect(sourceAsset.subarray(0, 8)).toEqual(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]));
+    expect(sourceAsset.toString("utf8")).not.toContain("fixture-png-placeholder");
+    expect(setup!.perRunBudgetUsd).toBe(BENCH_BUDGETS_USD.standard);
+  });
+
   it("uses agent-specific route assertions for the ship workflow setup", () => {
     const setup = resolveBenchSetup("ship");
     expect(setup).toBeDefined();

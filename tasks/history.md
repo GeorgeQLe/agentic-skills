@@ -2227,3 +2227,10 @@ Resolved all 10 findings from `/expert-review`:
 - Updated `tests/harness/bench-coverage.ts`: removed `sync` from `TIER23_GLOBAL_BLOCKED_SKILLS`, added to `COVERAGE_OVERRIDES` with `coverage: "custom"`, `agent_scope: "both"`, `fixture_type: "git-disposable-repo-fixture"`.
 - Updated `tests/layer1/bench-setups.test.ts`: removed `sync` from blocked list, added dedicated custom assertion.
 - Verified: 12 test files / 1304 tests passed, bench:coverage valid (145 skills), git diff --check clean.
+
+## 2026-05-13 — icon-handler benchmark valid source asset
+
+- Replaced the `icon-handler` benchmark fixture's root `calc-mascot-icon.png` ASCII placeholder with a tiny valid PNG buffer so runners do not try to process invalid image bytes before the skill can audit locally.
+- Preserved stale placeholder evidence for existing icon surfaces (`src/app/favicon.ico`, `src/app/icon.png`) so the benchmark still exercises missing/stale icon audit behavior.
+- Added layer1 coverage proving the root source asset has a PNG signature and is not the old `fixture-png-placeholder` text.
+- Verified with focused `bench-setups` layer1 coverage, benchmark coverage, `pnpm --dir tests verify --skill icon-handler`, and whitespace checks.
