@@ -2,7 +2,7 @@
 name: hygiene
 description: Audit project structure for convention violations, missing files, template drift, and cross-platform sync gaps; optionally auto-fix
 type: analysis
-version: 1.0.0
+version: 1.1.0
 argument-hint: "[audit|fix] [skills|tasks|docs|codex|all]"
 ---
 
@@ -87,6 +87,10 @@ Check expected project files exist based on project phase:
   - `specs/` for implementation specifications and interview logs
   - `research/` for research docs, interview logs, search logs, experiments, and reconciliation reports
   - `docs/specifications/` only as a fallback spec location
+- Check canonical root directories exist:
+  - `tasks/` — Warning if absent
+  - `research/` — Info if absent; Warning if absent AND research-pattern files (`icp-*.md`, `gtm-*.md`, `competitive-*.md`, `journey-*.md`, `metrics.md`, `monetization.md`, `customer-feedback*.md`) exist elsewhere (e.g., `docs/`)
+  - `specs/` — Info if absent; Warning if absent AND spec-pattern files exist elsewhere
 - Flag legacy or drifted planning locations such as new `docs/plan.md` or new `docs/phases/` phase archives; current workflows write plans under `tasks/`
 - Exempt archived snapshots under `docs/history/archive/**` from template checks
 - Treat unknown hand-written docs as Info unless they are clearly generated workflow artifacts

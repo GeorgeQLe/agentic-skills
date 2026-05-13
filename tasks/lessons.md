@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-05-13 — Hygiene must check canonical root existence, not just contents
+
+- Hygiene validated files *inside* `research/` but silently passed when `research/` did not exist at all, even when research-pattern files (`icp-*.md`, `gtm-*.md`) existed in non-canonical locations like `docs/`.
+- The war-room research ingester flagged pulseboard's missing `research/` directory while hygiene in the same project reported 0 errors.
+- Audit skills that define canonical roots must check root existence and scan for misfiled content in sibling directories, not only validate structure within present roots.
+- When adding a new canonical-root check, use Warning severity for "absent but misfiled content found elsewhere" and Info for "absent with no content found" to avoid false positives on early-stage projects.
+
 ## 2026-05-11 — Separate benchmark coverage from benchmarked results
 
 - A benchmark coverage matrix can show custom/generic/blocked setup eligibility without proving that a skill already has persisted evaluated runs, test data, and grades.
