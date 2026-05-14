@@ -4,6 +4,34 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Current Task — Skills Showcase Icon Refresh
+
+**Goal:** Replace stale Skills Showcase app icon surfaces with `apps/skills-showcase/new-app-icon.png`.
+
+**Plan:**
+- [x] Audit the app framework, source asset dimensions, existing icon surfaces, and stale assets.
+- [x] Copy the new source image to Next App Router icon surfaces and conventional public install/touch icon paths.
+- [x] Generate a conventional `app/favicon.ico` from the new source asset.
+- [x] Verify generated asset formats, production build output icon routes, and generated HTML references.
+- [ ] Record results here, then commit and push intended changes on `master`.
+
+## Review — Skills Showcase Icon Refresh
+
+- Source icon: `apps/skills-showcase/new-app-icon.png`, verified as a 1254x1254 RGB PNG.
+- Detected framework: Next App Router app at `apps/skills-showcase`.
+- Replaced stale app-router icon PNGs and added conventional public install/touch icon surfaces: `app/icon.png`, `app/apple-icon.png`, `public/icon.png`, `public/app-icon.png`, and `public/apple-touch-icon.png`.
+- Generated `app/favicon.ico` as a 256x256 ICO with embedded RGBA PNG data. Initial `sips`-only ICO generation failed `next build` because the embedded PNG was RGB; regenerated the ICO through existing project-local `sharp` so Next can decode it.
+- Added `public/manifest.webmanifest` and explicit `metadata.manifest` / `metadata.icons` references in `app/layout.tsx`.
+- Validation passed:
+  - `file` and `sips` format/dimension checks for generated icon assets.
+  - `pnpm --dir apps/skills-showcase typecheck`.
+  - `pnpm --dir apps/skills-showcase build`.
+  - Built artifact checks for `.next/server/app/favicon.ico.body`, `.next/server/app/icon.png.body`, and `.next/server/app/apple-icon.png.body`.
+  - Built HTML search confirmed `/manifest.webmanifest`, `/favicon.ico`, `/icon.png`, `/app-icon.png`, and `/apple-touch-icon.png` references.
+  - Manifest JSON parse check.
+  - `git diff --check`.
+- Cache caveat: browsers and iOS may require a hard refresh, cache clear, home-screen icon reinstall, or deployment/CDN cache expiry before the new icon appears everywhere.
+
 ## Current Task — Frontend Content-Programming Benchmark Review Results
 
 **Goal:** Update the Skills Showcase frontend so the latest `content-programming` deterministic and subjective review results are visible in the catalog and benchmarks surfaces.
