@@ -4,6 +4,29 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Current Task — Triage `icon-handler` Benchmark Failure 2026-05-14
+
+**Goal:** Verify the fresh `icon-handler` benchmark failure and identify the smallest durable fix.
+
+**Plan:**
+- [x] Inspect `benchmark/test-icon-handler-2026-05-14.md` and persisted failed run evidence.
+- [x] Compare mirrored `icon-handler` contracts against benchmark setup expectations.
+- [x] Check existing lessons and classify the failure as skill contract gap, benchmark harness gap, or runner noncompliance.
+- [x] Write `benchmark/triage-icon-handler-2026-05-14.md` with verdict, root cause, responsible gap, validation plan, and next route.
+- [x] Validate report fields, then commit and push intended changes.
+
+## Review — Triage `icon-handler` Benchmark Failure 2026-05-14
+
+- Verification verdict: verified.
+- Evidence inspected: `benchmark/test-icon-handler-2026-05-14.md`, failed Claude run #2 in `icon-handler-claude-ba6ebaf0`, failed Codex run #2 in `icon-handler-codex-dc9c3d30`, passing runs from both sessions, mirrored `icon-handler` skill contracts, `tests/layer4/setups/tier23-global-workflows.setup.ts`, layer1 route/PNG fixture tests, prior 2026-05-13 triage, and `tasks/lessons.md`.
+- Root cause: mixed. The old invalid-PNG fixture failure is fixed and did not recur. The remaining durable gap is benchmark fixture/rubric route clarity: the prompt asks for "verification commands, and Next command", which lets runners treat `npx next build` or `npm run build` as the next command even though the skill contract's audit-mode handoff is the approval/fix route. Codex run #2 is separate runner noncompletion after a status update, with no skill-contract evidence to change.
+- Responsible gap: `tests/layer4/setups/tier23-global-workflows.setup.ts` and `tests/layer1/bench-setups.test.ts`, not mirrored `global/*/icon-handler/SKILL.md`.
+- Recommended fix: tighten the `icon-handler` benchmark prompt/rubric so build commands are verification commands only and the final recommended next command must be `/icon-handler fix calc-mascot-icon.png` for Claude or `$icon-handler fix calc-mascot-icon.png` for Codex; add layer1 regressions for the observed wrong final routes.
+- Report written to `benchmark/triage-icon-handler-2026-05-14.md`.
+- Report validation passed: required triage sections, persisted failure evidence, root-cause classification, validation plan, and recommended next route are present. `git diff --check` passed.
+- Committed and pushed on `master`.
+- **Recommended next skill:** `$targeted-skill-builder icon-handler benchmark route clarity`
+
 ## Current Task — Benchmark `icon-handler` Fresh Rerun 2026-05-14
 
 **Goal:** Run `$benchmark-test-skill icon-handler` against the current repository state after the valid-source-asset benchmark fixture fix.
