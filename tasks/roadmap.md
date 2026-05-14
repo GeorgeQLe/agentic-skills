@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Triage: icon-handler Benchmark Image Failure 2026-05-14
+
+**Goal:** Verify the latest Claude `icon-handler` benchmark image-processing failure and identify the smallest durable fix.
+
+**Acceptance Criteria:**
+- [x] Fresh benchmark report and persisted failed-run evidence are inspected.
+- [x] Mirrored `icon-handler` contracts are compared against the Tier 2/3 benchmark setup expectations.
+- [x] The failure is classified as a skill contract gap, benchmark harness gap, runner infrastructure issue, or runner noncompliance.
+- [x] `benchmark/triage-icon-handler-2026-05-14-image.md` records verdict, root cause, responsible gap, validation plan, and next route.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Triage completed on 2026-05-14. The latest Claude failure is verified: `icon-handler-claude-86ed23d1` run #2 exited with `API Error: 400 Could not process image` before creating `icon-audit.md`. Codex passed 3/3 hard assertions and adjacent Claude run #0 completed normally, so the mirrored skill contracts and current route-clarified fixture are not the responsible gap. Root cause is benchmark harness classification: this runner/API image-processing failure should be infrastructure-blocked rather than counted as an evaluated skill failure. Report: `benchmark/triage-icon-handler-2026-05-14-image.md`. Recommended next skill: `$targeted-skill-builder icon-handler benchmark image-error classification`.
+
 ## Current Benchmark: icon-handler Rerun 2026-05-14
 
 **Goal:** Run `$benchmark-test-skill icon-handler` against the current repository state after the benchmark route-clarity fix.
