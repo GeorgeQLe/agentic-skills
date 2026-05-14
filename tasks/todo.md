@@ -4,6 +4,41 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Current Task — Targeted Update `icon-handler` Benchmark Route Clarity
+
+**Goal:** Tighten the `icon-handler` benchmark fixture and rubric so build commands are verification commands only, and the final next command must be the runner-specific fix approval route.
+
+**Plan:**
+- [x] Read relevant lessons, triage report, benchmark fixture, and layer1 route coverage.
+- [x] Confirm existing-skill overlap: update benchmark setup/rubric, not mirrored `icon-handler` skill contracts.
+- [x] Update the `icon-handler` benchmark prompt to distinguish verification commands from the required final next route.
+- [x] Tighten route assertions/quality scoring so approval-route mentions elsewhere cannot mask a final `npm run build` or `npx next build` handoff.
+- [x] Add layer1 regression coverage for the observed wrong final routes and correct runner-specific final routes.
+- [x] Run required validation, record results, then commit and push intended changes on `master`.
+
+## Review — Targeted Update `icon-handler` Benchmark Route Clarity
+
+- Decision: existing benchmark setup/rubric update. No mirrored `global/claude/icon-handler` or `global/codex/icon-handler` skill contract change was needed.
+- Evidence used: `benchmark/triage-icon-handler-2026-05-14.md`, relevant benchmark lessons in `tasks/lessons.md`, `tests/layer4/setups/tier23-global-workflows.setup.ts`, `tests/layer4/setup-helpers/routing.ts`, `tests/layer4/setup-helpers/quality.ts`, and `tests/layer1/bench-setups.test.ts`.
+- Evidence intentionally skipped: broad session-history scan; the dated triage report already verified the concrete benchmark failure.
+- Files changed: `tests/layer4/setup-helpers/routing.ts`, `tests/layer4/setup-helpers/quality.ts`, `tests/layer4/setups/tier23-global-workflows.setup.ts`, `tests/layer1/bench-setups.test.ts`, `tasks/todo.md`, and `tasks/roadmap.md`.
+- Implementation: added a final-next-route matcher/evaluator, opted `icon-handler` into final route enforcement, updated the fixture prompt so build commands are verification-only, changed the source fixture to `calc-mascot-icon.svg` to avoid Claude runner image ingestion while preserving stale PNG/ICO app surfaces, and added layer1 regressions for wrong final build routes plus valid fenced/bulleted final routes.
+- Validation passed:
+  - `./install.sh`
+  - `./scripts/skill-deps.sh --broken`
+  - `./scripts/skill-versions.sh --missing`
+  - `./scripts/skill-next-step-routing.sh --missing`
+  - `pnpm --dir tests bench:coverage`
+  - `pnpm --dir tests exec vitest run --project layer1 bench-setups bench-quality`
+  - `pnpm --dir tests verify --skill icon-handler` (layer1 PASS in 10.0s; layer2 SKIP because no target-specific tests matched)
+  - `pnpm --dir tests bench --skill icon-handler --agent claude --runs 1 --chunk-size 1 --pause 0` (`icon-handler-claude-aa0ca24c`, 1/1, 84.1% quality, no failed runs)
+  - `pnpm --dir tests bench --skill icon-handler --agent codex --runs 1 --chunk-size 1 --pause 0` (`icon-handler-codex-0e17fd76`, 1/1, 86.4% quality, no failed runs)
+  - Targeted `rg` for route, SVG fixture, and final-route matcher coverage
+  - `git diff --check`
+- Showcase regeneration was not needed because no tracked `SKILL.md` or `PACK.md` behavior/metadata changed.
+- Committed and pushed on `master`.
+- **Recommended next command:** `$benchmark-test-skill icon-handler`
+
 ## Current Task — Triage `icon-handler` Benchmark Failure 2026-05-14
 
 **Goal:** Verify the fresh `icon-handler` benchmark failure and identify the smallest durable fix.
