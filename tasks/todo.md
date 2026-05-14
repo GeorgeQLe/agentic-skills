@@ -34,6 +34,30 @@
   - `git diff --check`
 - **Recommended next command:** `$benchmark-test-skill content-programming`
 
+## Current Task — Benchmark `content-programming` Fresh Rerun 2026-05-14
+
+**Goal:** Run deterministic verify and both-agent benchmark evidence for `content-programming` after the benchmark next-route coverage fix.
+
+**Plan:**
+- [x] Confirm `$benchmark-test-skill` is the active workflow and `content-programming` is the target skill argument.
+- [x] Run `pnpm bench --list-skills` and confirm `content-programming` is known, including coverage status. `coverage=custom`, setup `tests/layer4/setups/packs/pack-workflows.setup.ts`.
+- [x] Run `pnpm verify --skill content-programming`; stop before bench if verification fails. Layer1 PASS in 3.9s; layer2 SKIP because no target-specific layer2 tests matched.
+- [x] If verify passes, run `pnpm bench --skill content-programming --agent both --runs 3 --chunk-size 3 --pause 0`. Claude 3/3 and Codex 3/3, no blocked runs.
+- [x] Write and validate `benchmark/test-content-programming-2026-05-14.md` with verify, benchmark, latency, cost, consistency, raw paths, and recommended next route.
+- [x] Record results here, then commit and push intended changes on `master`.
+
+## Review — Benchmark `content-programming` Fresh Rerun 2026-05-14
+
+- Command resolution: `$benchmark-test-skill` was the active workflow; `content-programming` was treated as the target skill argument.
+- Eligibility: `content-programming` is known to the harness with custom coverage via `tests/layer4/setups/packs/pack-workflows.setup.ts`.
+- Verify passed: layer1 PASS in 3.9s with 1,180 tests across 14 files; layer2 SKIP because no target-specific layer2 tests matched `content-programming`.
+- Benchmark completed for both agents with no infrastructure-blocked runs:
+  - Claude session `d041146e`: 3/3 evaluated hard assertions passed, output quality 89.2%, p50 29.0s, p95 30.5s, p99 30.6s, total cost $0.75. The output-quality rubric recorded 1 critical failure.
+  - Codex session `f56f9728`: 3/3 evaluated hard assertions passed, output quality 98.3%, p50 68.0s, p95 69.1s, p99 69.2s, total cost $0.75.
+- Report written to `benchmark/test-content-programming-2026-05-14.md`.
+- Report validation passed: target, agent rows, pass-rate and blocked-run data, latency, cost, consistency, raw session paths, output-quality details, failed assertion statement, and recommended next route are present.
+- **Recommended next skill:** `$session-triage content-programming benchmark failure`
+
 ## Current Task — Analyze Benchmark Claude/Codex Parity Trend
 
 **Goal:** Determine whether recent `$benchmark-test-skill` runs show a recurring Claude-vs-Codex reliability gap, and whether the cause is missing setup parity, benchmark harness behavior, runner infrastructure, or skill-contract drift.
