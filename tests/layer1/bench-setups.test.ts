@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -259,10 +259,10 @@ describe("benchmark setup registry", () => {
         "## Icon Audit",
         "",
         "Framework: Next App Router",
-        "Source asset: calc-mascot-icon.png",
+        "Source asset: calc-mascot-icon.svg",
         "Missing stale favicon.ico and apple-touch-icon surfaces need approval.",
         "",
-        "Next command: `/icon-handler fix calc-mascot-icon.png`",
+        "Next command: `/icon-handler fix calc-mascot-icon.svg`",
       ].join("\n"),
     );
 
@@ -300,10 +300,10 @@ describe("benchmark setup registry", () => {
         "## Icon Audit",
         "",
         "Framework: Next App Router",
-        "Source asset: calc-mascot-icon.png",
+        "Source asset: calc-mascot-icon.svg",
         "Missing stale favicon.ico and apple-touch-icon surfaces need approval.",
         "",
-        "Recommended next command: `$icon-handler fix calc-mascot-icon.png`",
+        "Recommended next command: `$icon-handler fix calc-mascot-icon.svg`",
       ].join("\n"),
     );
 
@@ -322,6 +322,65 @@ describe("benchmark setup registry", () => {
       pass: true,
     });
 
+    writeFileSync(
+      resolve(workDir, "icon-audit.md"),
+      [
+        "## Icon Audit",
+        "",
+        "Framework: Next App Router",
+        "Source asset: calc-mascot-icon.svg",
+        "Missing stale favicon.ico and apple-touch-icon surfaces need approval.",
+        "",
+        "Verification commands: npx next build",
+        "Next command: npx next build",
+      ].join("\n"),
+    );
+
+    expect(
+      setup!.assertResult(
+        {
+          stdout: "",
+          stderr: "",
+          exitCode: 0,
+          workDir,
+          files: ["icon-audit.md"],
+        },
+        { agent: "claude" },
+      ).find((assertion) => assertion.description === "Output recommends /icon-handler"),
+    ).toMatchObject({
+      pass: false,
+    });
+
+    writeFileSync(
+      resolve(workDir, "icon-audit.md"),
+      [
+        "## Icon Audit",
+        "",
+        "Framework: Next App Router",
+        "Source asset: calc-mascot-icon.svg",
+        "Missing stale favicon.ico and apple-touch-icon surfaces need approval.",
+        "",
+        "Approval requirement: Recommended approval command: `$icon-handler fix calc-mascot-icon.svg`",
+        "Verification commands: npm run build",
+        "Next command: npm run build",
+      ].join("\n"),
+    );
+
+    expect(
+      setup!.assertResult(
+        {
+          stdout: "",
+          stderr: "",
+          exitCode: 0,
+          workDir,
+          files: ["icon-audit.md"],
+        },
+        { agent: "codex" },
+      ).find((assertion) => assertion.description === "Output recommends $icon-handler"),
+    ).toMatchObject({
+      pass: false,
+    });
+
     expect(
       setup!.qualityEvaluator?.evaluate("Next command: /icon-handler").criteria.find((criterion) => criterion.id === "workflow-next-route"),
     ).toMatchObject({
@@ -332,18 +391,35 @@ describe("benchmark setup registry", () => {
     ).toMatchObject({
       passed: true,
     });
+    expect(
+      setup!.qualityEvaluator?.evaluate("## Recommended Next Command\n```\n/icon-handler fix calc-mascot-icon.svg\n```").criteria.find((criterion) => criterion.id === "workflow-next-route"),
+    ).toMatchObject({
+      passed: true,
+    });
+    expect(
+      setup!.qualityEvaluator?.evaluate("## Next command\nRun the icon-handler fix approval route for this runner:\n\n- Claude: `/icon-handler fix calc-mascot-icon.svg`\n- Codex: `$icon-handler fix calc-mascot-icon.svg`").criteria.find((criterion) => criterion.id === "workflow-next-route"),
+    ).toMatchObject({
+      passed: true,
+    });
+    expect(
+      setup!.qualityEvaluator?.evaluate("Recommended approval command: $icon-handler fix calc-mascot-icon.svg\nNext command: npm run build").criteria.find((criterion) => criterion.id === "workflow-next-route"),
+    ).toMatchObject({
+      passed: false,
+    });
   });
 
-  it("creates a valid PNG source asset for the icon-handler workflow setup", () => {
+  it("creates an SVG source asset for the icon-handler workflow setup to avoid runner image ingestion", () => {
     const setup = resolveBenchSetup("icon-handler");
     expect(setup).toBeDefined();
 
     const workDir = mkdtempSync(resolve(tmpdir(), "icon-handler-fixture-"));
     setup!.setupProject?.(workDir);
 
-    const sourceAsset = readFileSync(resolve(workDir, "calc-mascot-icon.png"));
-    expect(sourceAsset.subarray(0, 8)).toEqual(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]));
-    expect(sourceAsset.toString("utf8")).not.toContain("fixture-png-placeholder");
+    const sourceAsset = readFileSync(resolve(workDir, "calc-mascot-icon.svg"), "utf8");
+    expect(sourceAsset).toContain("<svg");
+    expect(sourceAsset).toContain('width="512"');
+    expect(sourceAsset).not.toContain("fixture-png-placeholder");
+    expect(existsSync(resolve(workDir, "calc-mascot-icon.png"))).toBe(false);
     expect(setup!.perRunBudgetUsd).toBe(BENCH_BUDGETS_USD.standard);
   });
 
