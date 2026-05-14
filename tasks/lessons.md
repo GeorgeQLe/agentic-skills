@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-05-14 — Benchmark evidence changes can stale the showcase frontend
+
+- A `$benchmark-agent-review icon-handler` run updated benchmark/review evidence but did not refresh the Skills Showcase frontend data, leaving `icon-handler` catalog benchmark evidence pointing at the older 2026-05-13 report.
+- The showcase freshness gate applies to public benchmark evidence as well as `SKILL.md` and `PACK.md` behavior/metadata changes.
+- After adding or updating curated benchmark reports, subjective review reports, or benchmark matrix inputs, run `node scripts/generate-skills-showcase-data.mjs`, `node scripts/generate-skills-showcase-github-data.mjs`, and `scripts/validate-skills-showcase-data.sh`.
+- Generator parsing must handle the current benchmark report table shape, including title-case agent labels and columns such as `Output Quality`.
+
 ## 2026-05-13 — Hygiene must check canonical root existence, not just contents
 
 - Hygiene validated files *inside* `research/` but silently passed when `research/` did not exist at all, even when research-pattern files (`icp-*.md`, `gtm-*.md`) existed in non-canonical locations like `docs/`.

@@ -4,6 +4,28 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Current Task — Refresh Showcase Data For `icon-handler` Benchmark Evidence
+
+**Goal:** Ensure the frontend Skills Showcase reflects the latest `icon-handler` benchmark and review evidence.
+
+**Plan:**
+- [x] Check whether `icon-handler` is already represented in the frontend generated data.
+- [x] Identify why the site payload still points at the older 2026-05-13 benchmark report.
+- [x] Patch the showcase data generator to parse current benchmark summary rows robustly.
+- [x] Regenerate showcase data assets and benchmark results matrix.
+- [x] Add layer1 regression coverage for the 2026-05-14 `icon-handler` evidence path.
+- [x] Validate, document the correction lesson, then commit and push on `master`.
+
+## Review — Refresh Showcase Data For `icon-handler` Benchmark Evidence
+
+- `icon-handler` was already present in the catalog data, but its `benchmarkEvidence.reportPath` still pointed at `benchmark/test-icon-handler-2026-05-13.md`.
+- Root cause: `scripts/generate-skills-showcase-data.mjs` used brittle benchmark table parsing that mishandled newer title-case `Claude`/`Codex` rows and the added `Output Quality` column.
+- Updated the generator to parse benchmark summary and output-quality tables by header name, normalize agent labels to lowercase, and support both `Raw Session` and `Raw Session Path`.
+- Regenerated `docs/skills-showcase/assets/skills-data.js`, `apps/skills-showcase/public/assets/skills-data.js`, both GitHub proof payloads, and `docs/benchmark-results-matrix.md`.
+- Added `tests/layer1/skills-showcase-benchmark-demo.test.ts` coverage proving `icon-handler` now publishes `benchmark/test-icon-handler-2026-05-14.md` with both runner rows.
+- Focused validation passed: `pnpm --dir tests exec vitest run --project layer1 skills-showcase-benchmark-demo benchmark-results-matrix`, `node --check scripts/generate-skills-showcase-data.mjs`, and `git diff --check`.
+- `scripts/validate-skills-showcase-data.sh` correctly reported stale generated assets while those assets were still uncommitted; it should pass after the generated assets are committed.
+
 ## Current Task — Agent Review `icon-handler` Benchmark 2026-05-14
 
 **Goal:** Review the latest persisted `icon-handler` Claude and Codex benchmark outputs for subjective operator quality.

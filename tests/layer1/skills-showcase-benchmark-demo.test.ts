@@ -13,6 +13,9 @@ function loadShowcaseData() {
       name: string;
       platform: string;
       benchmarkEvidence?: {
+        reportPath?: string;
+        agents: Array<{ agent: string }>;
+        quality?: Array<{ agent: string }>;
         demo?: {
           prompt?: string;
           output?: string;
@@ -24,6 +27,15 @@ function loadShowcaseData() {
 }
 
 describe("skills showcase benchmark demos", () => {
+  it("publishes the latest icon-handler benchmark evidence when report rows use title-case agents", () => {
+    const data = loadShowcaseData();
+    const iconHandler = data.skills.find((skill) => skill.name === "icon-handler" && skill.platform === "codex");
+
+    expect(iconHandler?.benchmarkEvidence?.reportPath).toBe("benchmark/test-icon-handler-2026-05-14.md");
+    expect(iconHandler?.benchmarkEvidence?.agents.map((agent) => agent.agent)).toEqual(["claude", "codex"]);
+    expect(iconHandler?.benchmarkEvidence?.quality?.map((entry) => entry.agent)).toEqual(["claude", "codex"]);
+  });
+
   it("publishes benchmark-backed prompt and output excerpts when raw run artifacts contain them", () => {
     const data = loadShowcaseData();
     const runSkill = data.skills.find((skill) => skill.name === "run" && skill.platform === "codex");
