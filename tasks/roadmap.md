@@ -29,6 +29,19 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Completed on 2026-05-14. Updated the pack benchmark harness instead of mirrored `content-programming` contracts. Pack prompts now require accepted handoff labels, route quality no longer defaults unknown pack skills to `$run`, and `content-programming` has runner-specific `series-spec` expectations for Claude and Codex. Added layer1 regression coverage for prompt wording, route assertions, and quality scoring. Validation passed with install/skill integrity/routing checks, benchmark coverage, focused layer1, `content-programming` verify, both-agent one-run benchmark smoke, targeted `rg`, and whitespace checks. Recommended next command: `$benchmark-test-skill content-programming`.
 
+## Current Benchmark: content-programming Fresh Rerun 2026-05-14
+
+**Goal:** Run `$benchmark-test-skill content-programming` with current repository harness eligibility, verify, and both-agent benchmark evidence after the benchmark next-route coverage fix.
+
+**Acceptance Criteria:**
+- [x] `pnpm bench --list-skills` confirms `content-programming` is known and reports its coverage status.
+- [x] `pnpm verify --skill content-programming` passes or blocks benchmark execution with a recorded failure.
+- [x] `pnpm bench --skill content-programming --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [x] `benchmark/test-content-programming-2026-05-14.md` records fresh verify, benchmark, latency, cost, consistency, and raw session evidence.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Completed on 2026-05-14. `content-programming` is known with `coverage=custom` using `tests/layer4/setups/packs/pack-workflows.setup.ts`. Verify passed with layer1 PASS in 3.9s and layer2 SKIP because no target-specific layer2 tests matched. The both-agent benchmark completed with no infrastructure-blocked runs. Claude session `d041146e` passed hard assertions at 3/3 with output quality 89.2%, p50 latency 29.0s, total cost $0.75, and 1 output-quality critical failure. Codex session `f56f9728` passed hard assertions at 3/3 with output quality 98.3%, p50 latency 68.0s, and total cost $0.75. Report validation passed for required benchmark fields. Report: `benchmark/test-content-programming-2026-05-14.md`. Recommended next skill: `$session-triage content-programming benchmark failure`.
+
 ## Current Targeted Update: Creator Pack Artifact Handoff And Routing Ergonomics
 
 **Goal:** Tighten creator-media pack skills so approved research writes include a concrete artifact handoff and next routing follows the user’s current content-production intent instead of only the default workflow sequence.
