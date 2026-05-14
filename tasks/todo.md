@@ -1171,6 +1171,31 @@ Implement only this step, validate it, then run `/ship` when done.
 
 **Recommended next command:** `$benchmark-test-skill icon-handler`
 
+## Current Task — Stop Approval-Gated Skills From Routing Past Approval
+
+**Goal:** Update report-first skill contracts so approval requests stop at the approval gate and do not recommend downstream commands before the current artifact is approved and written.
+
+**Plan:**
+- [x] Read the targeted-skill-builder contract and current lessons.
+- [x] Use the current `$creator-positioning` correction and `$session-triage` result as evidence.
+- [x] Audit report-first approval gates across packs and identify skills with the same risk.
+- [x] Add a stop rule to affected mirrored Claude/Codex skill contracts.
+- [x] Update benchmark coverage metadata and record a lesson.
+- [x] Run validation and record results.
+- [ ] Commit and push intended changes on `master`.
+
+## Review — Stop Approval-Gated Skills From Routing Past Approval
+
+- Decision: update existing report-first skill contracts instead of adding a new skill.
+- Evidence used: current `$creator-positioning` correction, `$session-triage` verification, `tasks/lessons.md`, and scoped `rg` scans of `Report-First Approval Gate` usage under `packs/` and `global/`.
+- Existing-skill overlap: the existing report-first approval gates owned the behavior; no new skill was needed.
+- Changed contracts: added the approval-stop rule to all 92 report-first skill contracts found under `packs/` across business-discovery, business-growth, business-ops, creator-foundation, devtool, game, remotion, and youtube-ops, in both Claude and Codex variants where present.
+- Benchmark coverage metadata: updated `tests/harness/bench-coverage.ts` `LAST_VERIFIED` to 2026-05-14.
+- Showcase data: refreshed `docs/skills-showcase/assets/skills-data.js`, `apps/skills-showcase/public/assets/skills-data.js`, `docs/skills-showcase/assets/github-proof-data.js`, `apps/skills-showcase/public/assets/github-proof-data.js`, and `docs/benchmark-results-matrix.md`.
+- Validation passed: `./install.sh`; `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken`; `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`; `/opt/homebrew/bin/bash ./scripts/skill-next-step-routing.sh --missing`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests exec vitest run --project layer1 bench-coverage bench-setups`; targeted `rg` check confirmed no report-first gates are missing the stop rule; `git diff --check`.
+- Validation note: the same shell scripts fail under macOS `/bin/bash`/direct `zsh` because they require Bash 4 features (`declare -A`, `mapfile`); they pass with `/opt/homebrew/bin/bash`.
+- Showcase validation note: `scripts/validate-skills-showcase-data.sh` regenerated the expected assets but exits nonzero while those generated files are uncommitted, reporting stale data. This should pass after the generated assets are committed.
+
 ## Current Task — Benchmark `icon-handler` After Image-Error Classification 2026-05-14
 
 **Goal:** Run `$benchmark-test-skill icon-handler` against the current repository state after classifying image-processing runner errors as infrastructure-blocked.

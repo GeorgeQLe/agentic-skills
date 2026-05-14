@@ -20,6 +20,8 @@ Default to report-only: present findings, evidence coverage, assumptions, recomm
 
 Do not write or overwrite synthesized deliverables until the user explicitly approves, unless the user invoked an explicit write/update/fix mode or clearly asked to write files upfront. Raw evidence capture may be persisted before analysis when reproducibility requires it; report those raw paths separately and still gate synthesized research/report writes.
 
+When stopping for approval, do not include `Recommended next skill`, `Recommended next command`, or downstream routing language. The approval request itself is the next action. Only emit next-skill routing after the approved artifact has been written or updated.
+
 Research external YouTube videos so the agent can understand what the user is referring to and reuse that context in specs, strategy, writing, product work, or implementation. This is the general comprehension lane; use `/youtube-video-audit` for performance diagnosis, `/youtube-competitive-research` for why a competitor video worked, and the `remotion` pack's `/youtube-format-research` for production/style breakdowns.
 
 ## Inputs
