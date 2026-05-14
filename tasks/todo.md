@@ -13,7 +13,7 @@
 - [x] Copy the new source image to Next App Router icon surfaces and conventional public install/touch icon paths.
 - [x] Generate a conventional `app/favicon.ico` from the new source asset.
 - [x] Verify generated asset formats, production build output icon routes, and generated HTML references.
-- [ ] Record results here, then commit and push intended changes on `master`.
+- [x] Record results here, then commit and push intended changes on `master`.
 
 ## Review — Skills Showcase Icon Refresh
 
@@ -31,6 +31,7 @@
   - Manifest JSON parse check.
   - `git diff --check`.
 - Cache caveat: browsers and iOS may require a hard refresh, cache clear, home-screen icon reinstall, or deployment/CDN cache expiry before the new icon appears everywhere.
+- Shipped on `master` in commit `e4644e0` (`fix: refresh skills showcase icons`).
 
 ## Current Task — Frontend Content-Programming Benchmark Review Results
 
