@@ -4,6 +4,27 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Current Task — Triage `icon-handler` Benchmark Image Failure 2026-05-14
+
+**Goal:** Verify the latest Claude `icon-handler` benchmark image-processing failure and identify the smallest durable fix.
+
+**Plan:**
+- [x] Inspect `benchmark/test-icon-handler-2026-05-14.md` and persisted failed run evidence for `icon-handler-claude-86ed23d1`.
+- [x] Compare mirrored `icon-handler` contracts against the benchmark setup expectations.
+- [x] Check existing lessons and classify the issue as a skill contract gap, benchmark harness gap, runner infrastructure issue, or runner noncompliance.
+- [x] Write `benchmark/triage-icon-handler-2026-05-14-image.md` with verdict, root cause, responsible gap, validation plan, and next route.
+- [x] Validate report fields, then commit and push intended changes.
+
+## Review — Triage `icon-handler` Benchmark Image Failure 2026-05-14
+
+- Verification verdict: verified.
+- Evidence inspected: latest `benchmark/test-icon-handler-2026-05-14.md`, failed Claude run #2 in `icon-handler-claude-86ed23d1`, adjacent passing Claude run #0, Codex session `icon-handler-codex-35de8ee4`, mirrored `icon-handler` contracts, current Tier 2/3 benchmark fixture, runner infrastructure classification, layer1 runner/setup coverage, prior 2026-05-13 and 2026-05-14 triage reports, and `tasks/lessons.md`.
+- Root cause: benchmark harness classification gap. Claude run #2 exited before skill execution with `API Error: 400 Could not process image` and no `icon-audit.md`; the harness did not classify that runner/API transport failure as infrastructure-blocked, so it counted as an evaluated skill failure.
+- Responsible gap: `tests/harness/bench-runner.ts` infrastructure-block classifier and `tests/layer1/runner.test.ts` regression coverage. No mirrored `global/*/icon-handler/SKILL.md` or benchmark fixture change is justified by this latest evidence.
+- Report written to `benchmark/triage-icon-handler-2026-05-14-image.md`.
+- Report validation passed: required triage sections, persisted failure evidence, root-cause classification, validation plan, and recommended next route are present.
+- **Recommended next skill:** `$targeted-skill-builder icon-handler benchmark image-error classification`
+
 ## Current Task — Benchmark `icon-handler` Rerun 2026-05-14
 
 **Goal:** Run `$benchmark-test-skill icon-handler` against the current repository state after the benchmark route-clarity fix.
