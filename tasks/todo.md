@@ -4,6 +4,16 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Current Task — Analyze Benchmark Claude/Codex Parity Trend
+
+**Goal:** Determine whether recent `$benchmark-test-skill` runs show a recurring Claude-vs-Codex reliability gap, and whether the cause is missing setup parity, benchmark harness behavior, runner infrastructure, or skill-contract drift.
+
+**Plan:**
+- [ ] Inventory recent persisted benchmark reports and raw both-agent run artifacts.
+- [ ] Cross-check local Claude and Codex session histories for benchmark-test-skill setup parity context.
+- [ ] Classify observed Claude/Codex failures by root-cause type with concrete examples.
+- [ ] Report counts, trend evidence, parity verdict, and recommended next route.
+
 ## Current Task — Creator Pack Artifact Handoff And Routing Ergonomics
 
 **Goal:** Tighten creator-media pack skills so high-quality approved research writes do not stop with untracked artifacts or mechanical next-skill routing.
@@ -64,6 +74,28 @@
 - Report written to `benchmark/test-content-programming-2026-05-14.md`.
 - Report validation passed: target, agent rows, pass-rate and blocked-run data, latency, cost, consistency, raw session paths, output-quality details, failed assertions, and recommended next route are present. `git diff --check` passed.
 - **Recommended next skill:** `$session-triage content-programming benchmark failure`
+
+## Current Task — Triage `content-programming` Benchmark Failure 2026-05-14
+
+**Goal:** Verify the fresh `content-programming` benchmark failure and identify the smallest durable fix.
+
+**Plan:**
+- [x] Inspect `benchmark/test-content-programming-2026-05-14.md` and persisted Claude/Codex run evidence.
+- [x] Compare mirrored `content-programming` contracts against benchmark setup expectations.
+- [x] Check existing lessons and classify the failure as skill contract gap, benchmark harness gap, runner infrastructure issue, or runner noncompliance.
+- [x] Write `benchmark/triage-content-programming-2026-05-14.md` with verdict, root cause, responsible gap, validation plan, and next route.
+- [x] Validate report fields, then commit and push intended changes.
+
+## Review — Triage `content-programming` Benchmark Failure 2026-05-14
+
+- Verification verdict: verified.
+- Evidence inspected: `benchmark/test-content-programming-2026-05-14.md`, persisted Claude session `content-programming-claude-20ea1edd`, persisted Codex session `content-programming-codex-cb044e72`, mirrored `content-programming` contracts, generic pack workflow setup, next-route helpers, quality helpers, and relevant lessons.
+- Root cause: benchmark harness coverage defect. The pack prompt asks for "a Next command line" but the hard assertion requires accepted labels such as `Recommended next command`, `Next command`, `Recommended next skill`, or `Next work`; Claude used bare `Next:`. The pack quality evaluator also defaults unknown pack routes to `$run`, which conflicts with `content-programming`'s contract successor of `/series-spec` for Claude and `$series-spec` for Codex.
+- Responsible gap: `tests/layer4/setups/packs/pack-workflows.setup.ts` and layer1 setup coverage, not mirrored `packs/creator-foundation/*/content-programming/SKILL.md`.
+- Recommended fix: tighten the pack benchmark prompt to require literal accepted next-route labels and add `content-programming` runner-aware `series-spec` route expectations.
+- Report written to `benchmark/triage-content-programming-2026-05-14.md`.
+- Report validation passed: target, issue, verdict, timeline, root cause, responsible gap, recommended fix, validation plan, confidence/evidence gaps, and recommended next route are present. `git diff --check` passed.
+- **Recommended next skill:** `$targeted-skill-builder content-programming benchmark next-route coverage`
 
 ## Current Task — Refresh Showcase Data For `icon-handler` Benchmark Evidence
 

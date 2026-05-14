@@ -42,6 +42,19 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Completed on 2026-05-14. Verify passed with layer1 PASS in 4.5s and layer2 SKIP because no target-specific layer2 tests matched. The benchmark completed with no infrastructure-blocked runs. Claude session `20ea1edd` failed hard assertions at 0/3 because every run missed `Output includes next command handoff`; output quality was 85.8%, p50 latency 29.9s, and total cost $0.75. Codex session `cb044e72` passed hard assertions at 3/3; output quality was 86.7%, p50 latency 51.2s, and total cost $0.75. Report validation passed for required benchmark fields and `git diff --check` passed. Report: `benchmark/test-content-programming-2026-05-14.md`. Recommended next skill: `$session-triage content-programming benchmark failure`.
 
+## Current Triage: content-programming Benchmark Failure 2026-05-14
+
+**Goal:** Verify the fresh `content-programming` benchmark failure and identify the smallest durable fix.
+
+**Acceptance Criteria:**
+- [x] Fresh benchmark report and persisted Claude/Codex run evidence are inspected.
+- [x] Mirrored `content-programming` contracts are compared against benchmark setup expectations.
+- [x] The failure is classified as a skill contract gap, benchmark harness gap, runner infrastructure issue, or runner noncompliance.
+- [x] `benchmark/triage-content-programming-2026-05-14.md` records verdict, root cause, responsible gap, validation plan, and next route.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Completed on 2026-05-14. The benchmark failure is verified. Claude session `20ea1edd` failed 0/3 only on `Output includes next command handoff`; all content, artifact, pack, skill, and workflow assertions passed. Codex session `cb044e72` passed 3/3. The responsible gap is the benchmark harness: the generic pack prompt asks for "a Next command line" while the hard assertion requires a stricter accepted label, and the quality evaluator defaults the expected pack route to `$run` even though mirrored `content-programming` contracts route to `/series-spec` or `$series-spec` after writing. Report validation passed and `git diff --check` passed. Report: `benchmark/triage-content-programming-2026-05-14.md`. Recommended next skill: `$targeted-skill-builder content-programming benchmark next-route coverage`.
+
 ## Current Fix: Showcase Data For `icon-handler` Benchmark Evidence
 
 **Goal:** Ensure the frontend Skills Showcase reflects the latest `icon-handler` benchmark and review evidence.
