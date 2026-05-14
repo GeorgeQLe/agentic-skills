@@ -55,6 +55,18 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Completed on 2026-05-14. The fresh quality failure is verified. Both agents passed 3/3 hard assertions and no runs were infrastructure-blocked, but Claude run 002 recorded a critical `pack-fixture-evidence` quality failure. The retained artifact cited `fixtures/local-evidence.md`, `pack-input.md`, the practical build notes audience input, weekly cadence input, and local-only fixture constraints; it failed because the rubric required the exact token `local-fixture`. Responsible gap is benchmark quality-rubric brittleness in `tests/layer4/setups/packs/pack-workflows.setup.ts`, not mirrored `content-programming` contract drift or runner infrastructure. Report: `benchmark/triage-content-programming-2026-05-14-quality.md`. Recommended next skill: `$targeted-skill-builder content-programming benchmark fixture-evidence rubric`.
 
+## Current Targeted Update: content-programming Benchmark Fixture-Evidence Rubric
+
+**Goal:** Fix the pack benchmark quality rubric so valid concrete fixture citations pass without requiring the exact token `local-fixture`.
+
+**Acceptance Criteria:**
+- [x] The fix is scoped to benchmark harness coverage, not mirrored `content-programming` skill contracts.
+- [x] `pack-fixture-evidence` requires concrete fixture paths and input facts.
+- [x] Layer1 regression coverage proves concrete fixture references pass and generic evidence prose still fails.
+- [x] Required validation passes and results are recorded in `tasks/todo.md`.
+
+**Result:** Completed on 2026-05-14. Updated `tests/layer4/setups/packs/pack-workflows.setup.ts` so pack prompts ask for concrete local fixture evidence from `pack-input.md` or `fixtures/local-evidence.md`, and the critical `pack-fixture-evidence` quality criterion requires those fixture paths plus the first two fixture input facts instead of the exact token `local-fixture`. Added layer1 coverage in `tests/layer1/bench-setups.test.ts` proving the `content-programming` concrete fixture citation path passes and generic evidence prose still fails. Validation passed with focused layer1 tests, install, skill integrity/routing checks, benchmark coverage, `content-programming` verify, both-agent one-run smoke (`content-programming-claude-8abf7ae4`, `content-programming-codex-b1c858d6`, both 1/1 hard assertions and 0 quality critical failures), targeted `rg`, and whitespace checks. Recommended next command: `$benchmark-test-skill content-programming`.
+
 ## Current Targeted Update: Creator Pack Artifact Handoff And Routing Ergonomics
 
 **Goal:** Tighten creator-media pack skills so approved research writes include a concrete artifact handoff and next routing follows the user’s current content-production intent instead of only the default workflow sequence.

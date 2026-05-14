@@ -1695,7 +1695,8 @@ describe("pack workflow benchmark setups", () => {
         "Pack: youtube-ops",
         "Skill: youtube-video-audit",
         "Focus: YouTube single-video audit.",
-        "Local-fixture evidence covers Retention notes and Packaging notes from pack-input.md.",
+        "`fixtures/local-evidence.md` confirms local deterministic evidence.",
+        "`pack-input.md` covers Retention notes and Packaging notes.",
         "Risks: public data may be stale, so validate against local evidence before publishing.",
         "Next command: $run",
         "",
@@ -1717,6 +1718,43 @@ describe("pack workflow benchmark setups", () => {
     expect(generic.criticalFailures).toEqual(
       expect.arrayContaining(["pack-skill-context", "pack-fixture-evidence", "no-generic-or-external-pack-overreach"]),
     );
+  });
+
+  it("accepts concrete fixture references for content-programming evidence quality", () => {
+    const setup = CUSTOM_BENCH_SETUPS["content-programming"];
+    const evaluator = setup.qualityEvaluator;
+
+    expect(evaluator).toBeDefined();
+
+    const fixtureCited = evaluator!.evaluate(
+      [
+        "# content-programming",
+        "",
+        "Pack: creator-foundation",
+        "Skill: content-programming",
+        "Focus: creator content programming calendar for a creator platform workflow.",
+        "Fixture evidence: `fixtures/local-evidence.md` confirms local deterministic evidence.",
+        "`pack-input.md` states Audience wants practical build notes and Cadence target: weekly.",
+        "Risk: cadence may need validation against real audience evidence and provenance.",
+        "Recommended next skill: /series-spec",
+        "",
+      ].join("\n"),
+    );
+    const generic = evaluator!.evaluate(
+      [
+        "# content-programming",
+        "",
+        "Pack: creator-foundation",
+        "Skill: content-programming",
+        "This creator calendar is based on local evidence and a weekly cadence.",
+        "Recommended next skill: /series-spec",
+        "",
+      ].join("\n"),
+    );
+
+    expect(fixtureCited.criticalFailures).not.toContain("pack-fixture-evidence");
+    expect(fixtureCited.passed).toBe(true);
+    expect(generic.criticalFailures).toContain("pack-fixture-evidence");
   });
 });
 

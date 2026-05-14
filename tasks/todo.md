@@ -80,6 +80,37 @@
 - Report written to `benchmark/triage-content-programming-2026-05-14-quality.md`.
 - **Recommended next skill:** `$targeted-skill-builder content-programming benchmark fixture-evidence rubric`
 
+## Current Task — Targeted Update `content-programming` Benchmark Fixture-Evidence Rubric
+
+**Goal:** Fix the pack benchmark quality rubric so valid concrete fixture citations pass without requiring the exact token `local-fixture`.
+
+**Plan:**
+- [x] Confirm the fix belongs in the existing pack benchmark setup, not mirrored `content-programming` skill contracts or a new skill.
+- [x] Update `pack-fixture-evidence` to require concrete fixture paths and fixture input facts.
+- [x] Add layer1 regression coverage proving concrete fixture references pass and generic evidence prose still fails.
+- [x] Run required validation, record results, then commit and push intended changes on `master`.
+
+## Review — Targeted Update `content-programming` Benchmark Fixture-Evidence Rubric
+
+- Decision: benchmark harness update. No mirrored `content-programming` skill contract changes were needed.
+- Evidence used: `benchmark/triage-content-programming-2026-05-14-quality.md`, fresh benchmark runs `content-programming-claude-d041146e` and `content-programming-codex-f56f9728`, pack benchmark setup, and existing layer1 benchmark setup coverage.
+- Evidence intentionally skipped: broad session-history scan; the triage report already verified the concrete failing criterion and responsible file.
+- Updated `tests/layer4/setups/packs/pack-workflows.setup.ts` so the prompt asks for concrete local fixture evidence from `pack-input.md` or `fixtures/local-evidence.md`, and the critical `pack-fixture-evidence` rubric requires those concrete paths plus the first two fixture input facts instead of the exact token `local-fixture`.
+- Updated `tests/layer1/bench-setups.test.ts` so representative pack quality evidence uses concrete fixture paths and added `content-programming` regression coverage proving fixture path/fact citations pass while generic evidence prose still fails.
+- Validation passed:
+  - `pnpm --dir tests exec vitest run --project layer1 bench-setups`
+  - `./install.sh`
+  - `./scripts/skill-deps.sh --broken`
+  - `./scripts/skill-versions.sh --missing`
+  - `./scripts/skill-next-step-routing.sh --missing`
+  - `pnpm --dir tests bench:coverage`
+  - `pnpm --dir tests verify --skill content-programming`
+  - `pnpm --dir tests bench --skill content-programming --agent both --runs 1 --chunk-size 1 --pause 0` (`content-programming-claude-8abf7ae4` and `content-programming-codex-b1c858d6`, both 1/1 hard assertions, both 97.5% quality, both 0 critical failures)
+  - targeted `rg` for `pack-fixture-evidence`, fixture paths, and `content-programming`
+  - `git diff --check`
+- Skills Showcase regeneration was not needed because no tracked `SKILL.md` or `PACK.md` behavior/metadata changed.
+- **Recommended next command:** `$benchmark-test-skill content-programming`
+
 ## Current Task — Analyze Benchmark Claude/Codex Parity Trend
 
 **Goal:** Determine whether recent `$benchmark-test-skill` runs show a recurring Claude-vs-Codex reliability gap, and whether the cause is missing setup parity, benchmark harness behavior, runner infrastructure, or skill-contract drift.
