@@ -40,6 +40,31 @@
   - `git diff --check`
 - **Recommended next command:** `$benchmark-test-skill content-programming`
 
+## Current Task — Benchmark `content-programming` 2026-05-14
+
+**Goal:** Run deterministic verify and both-agent benchmark evidence for the `content-programming` skill.
+
+**Plan:**
+- [x] Confirm `$benchmark-test-skill` is the active workflow and `content-programming` is the target skill argument.
+- [x] Run `pnpm bench --list-skills` and confirm `content-programming` is known to the harness, including coverage status. `coverage=custom`, setup `tests/layer4/setups/packs/pack-workflows.setup.ts`.
+- [x] Run `pnpm verify --skill content-programming`; stop before bench if verification fails. Layer1 PASS in 4.5s; layer2 SKIP because no target-specific layer2 tests matched.
+- [x] If verify passes, run `pnpm bench --skill content-programming --agent both --runs 3 --chunk-size 3 --pause 0`. Claude 0/3, Codex 3/3, no blocked runs.
+- [x] Write `benchmark/test-content-programming-2026-05-14.md` with verify, benchmark, latency, cost, consistency, raw paths, and recommended next route.
+- [x] Validate the report contains required benchmark fields.
+- [x] Record results here, then commit and push intended changes on `master`.
+
+## Review — Benchmark `content-programming` 2026-05-14
+
+- Command resolution: `$benchmark-test-skill` was the active workflow; `content-programming` was treated as the target skill argument.
+- Eligibility: `content-programming` is known to the harness with custom coverage via `tests/layer4/setups/packs/pack-workflows.setup.ts`.
+- Verify passed: layer1 PASS in 4.5s with 1,179 tests across 14 files; layer2 SKIP because no target-specific layer2 tests matched `content-programming`.
+- Benchmark completed for both agents with no infrastructure-blocked runs:
+  - Claude session `20ea1edd`: 0/3 evaluated hard assertions passed, output quality 85.8%, p50 29.9s, p95 35.4s, p99 35.9s, total cost $0.75. All three runs failed `Output includes next command handoff`.
+  - Codex session `cb044e72`: 3/3 evaluated hard assertions passed, output quality 86.7%, p50 51.2s, p95 53.9s, p99 54.2s, total cost $0.75.
+- Report written to `benchmark/test-content-programming-2026-05-14.md`.
+- Report validation passed: target, agent rows, pass-rate and blocked-run data, latency, cost, consistency, raw session paths, output-quality details, failed assertions, and recommended next route are present. `git diff --check` passed.
+- **Recommended next skill:** `$session-triage content-programming benchmark failure`
+
 ## Current Task — Refresh Showcase Data For `icon-handler` Benchmark Evidence
 
 **Goal:** Ensure the frontend Skills Showcase reflects the latest `icon-handler` benchmark and review evidence.
