@@ -4,6 +4,31 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Current Task — Benchmark `icon-handler` Rerun 2026-05-14
+
+**Goal:** Run `$benchmark-test-skill icon-handler` against the current repository state after the benchmark route-clarity fix.
+
+**Plan:**
+- [x] Confirm `$benchmark-test-skill` is the active workflow and `icon-handler` is the target skill argument.
+- [x] Run `pnpm bench --list-skills` and confirm `icon-handler` is known to the harness, including coverage status. `coverage=custom`, setup `tests/layer4/setups/tier23-global-workflows.setup.ts`.
+- [x] Run `pnpm verify --skill icon-handler`; stop before bench if verification fails. Layer1 PASS in 12.3s; layer2 SKIP because no target-specific layer2 tests matched.
+- [x] If verify passes, run `pnpm bench --skill icon-handler --agent both --runs 3 --chunk-size 3 --pause 0`. Claude 2/3, Codex 3/3, no blocked runs.
+- [x] Write `benchmark/test-icon-handler-2026-05-14.md` with verify, benchmark, latency, cost, consistency, raw paths, and recommended next route.
+- [x] Validate the report contains required benchmark fields.
+- [x] Record results here, then commit and push intended changes on `master`.
+
+## Review — Benchmark `icon-handler` Rerun 2026-05-14
+
+- Command resolution: `$benchmark-test-skill` was the active workflow; `icon-handler` was treated as the target skill argument.
+- Eligibility: `icon-handler` is known to the harness with custom coverage via `tests/layer4/setups/tier23-global-workflows.setup.ts`.
+- Verify passed: layer1 PASS in 12.3s with 1,446 tests across 13 files; layer2 SKIP because no target-specific layer2 tests matched `icon-handler`.
+- Benchmark completed for both agents with no infrastructure-blocked runs:
+  - Claude session `86ed23d1`: 2/3 evaluated hard assertions passed, output quality 62.1%, p50 38.5s, p95 41.6s, p99 41.9s, total cost $3.00. Run #2 failed `Agent command exited successfully` and `icon-audit.md created in project root` after `API Error: 400 Could not process image`.
+  - Codex session `35de8ee4`: 3/3 evaluated hard assertions passed, output quality 84.1%, p50 73.0s, p95 143.5s, p99 149.7s, total cost $3.00.
+- Report written to `benchmark/test-icon-handler-2026-05-14.md`.
+- Report validation passed: required target, agent rows, pass-rate and blocked-run data, latency, cost, consistency, raw session paths, quality details, and recommended next route are present.
+- **Recommended next command:** `$session-triage icon-handler benchmark failure`
+
 ## Current Task — Targeted Update `icon-handler` Benchmark Route Clarity
 
 **Goal:** Tighten the `icon-handler` benchmark fixture and rubric so build commands are verification commands only, and the final next command must be the runner-specific fix approval route.
