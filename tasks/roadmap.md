@@ -26,9 +26,9 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 - [x] Conventional public install/touch icon surfaces are present for static and app-install references.
 - [x] A conventional `favicon.ico` route is generated from the source asset.
 - [x] Verification confirms asset formats, production build icon route output, and generated HTML references.
-- [ ] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
 
-**Result:** In progress on 2026-05-14. Replaced stale Skills Showcase app icons with `apps/skills-showcase/new-app-icon.png`, added conventional public install/touch icon assets, generated a valid RGBA-backed `app/favicon.ico`, and wired explicit metadata plus `public/manifest.webmanifest`. Verification passed with format/dimension checks, app typecheck, production build, built metadata route artifact checks, generated HTML search, manifest JSON parse, and `git diff --check`.
+**Result:** Completed on 2026-05-14. Replaced stale Skills Showcase app icons with `apps/skills-showcase/new-app-icon.png`, added conventional public install/touch icon assets, generated a valid RGBA-backed `app/favicon.ico`, and wired explicit metadata plus `public/manifest.webmanifest`. Verification passed with format/dimension checks, app typecheck, production build, built metadata route artifact checks, generated HTML search, manifest JSON parse, and `git diff --check`. Shipped on `master` in commit `e4644e0`.
 
 ## Current Targeted Update: content-programming Full-Contract Benchmark Coverage
 
