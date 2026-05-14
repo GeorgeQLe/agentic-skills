@@ -98,6 +98,35 @@ function readJson(relativePath) {
   }
 }
 
+function parseMarkdownTableRows(text, heading) {
+  const headingIndex = text.indexOf(`## ${heading}`);
+  if (headingIndex === -1) return [];
+
+  const nextHeadingIndex = text.indexOf("\n## ", headingIndex + 1);
+  const section = text.slice(headingIndex, nextHeadingIndex === -1 ? undefined : nextHeadingIndex);
+  const tableLines = section
+    .split("\n")
+    .filter((line) => line.trim().startsWith("|") && line.trim().endsWith("|"));
+  if (tableLines.length < 2) return [];
+
+  const headers = tableLines[0]
+    .split("|")
+    .slice(1, -1)
+    .map((cell) => cell.trim().toLowerCase());
+
+  return tableLines
+    .slice(2)
+    .map((line) => {
+      const cells = line
+        .split("|")
+        .slice(1, -1)
+        .map((cell) => cell.trim());
+      if (cells.length !== headers.length) return null;
+      return Object.fromEntries(headers.map((header, index) => [header, cells[index]]));
+    })
+    .filter(Boolean);
+}
+
 function extractPromptFromRun(run) {
   const stderr = String(run?.stderr || "");
   const codexPrompt = stderr.match(/\nuser\n([\s\S]*?)(?:\n(?:codex|assistant|exec|apply patch)\n|$)/);
@@ -154,41 +183,44 @@ function parseBenchmarkReport(relativePath) {
 
   const skill = pathMatch[1];
   const date = pathMatch[2];
-  const coverage = (text.match(/\*\*Coverage:\*\*\s*([^\n]+)/) || [])[1] || null;
+  const coverage = ((text.match(/\*\*Coverage:\*\*\s*([^\n]+)/) || [])[1] || "").trim() || null;
   const verifyPassed = /\|\s*layer1\s*\|\s*PASS\s*\|/i.test(text);
   const layer2Skipped = /\|\s*layer2\s*\|\s*SKIP\s*\|/i.test(text);
   const agents = [];
-  const agentRowPattern = /^\|\s*(claude|codex)\s*\|\s*([^|]+)\|\s*([^|]+)\|\s*([^|]+)\|\s*([^|]+)\|\s*([^|]+)\|\s*([^|]+)\|\s*([^|]+)\|\s*([^|]+)\|\s*([^|]+)\|\s*([^|]+)\|\s*`?([^|`]+)`?\s*\|$/gim;
-  let match;
-
-  while ((match = agentRowPattern.exec(text)) !== null) {
+  for (const row of parseMarkdownTableRows(text, "Benchmark Summary")) {
+    const agent = String(row.agent || "").toLowerCase();
+    if (agent !== "claude" && agent !== "codex") continue;
     agents.push({
-      agent: match[1],
-      passRate: match[2].trim(),
-      passRatePercent: parsePercent(match[2]),
-      infrastructureBlocked: match[3].trim(),
-      wilson95: match[4].trim(),
-      latencyP50: match[5].trim(),
-      latencyP95: match[6].trim(),
-      latencyP99: match[7].trim(),
-      costPerRun: match[8].trim(),
-      totalCost: match[9].trim(),
-      meanPairwiseSimilarity: match[10].trim(),
-      outliers: match[11].trim(),
-      rawSessionPath: match[12].trim()
+      agent,
+      passRate: row["evaluated pass rate"] || row["pass rate"] || "",
+      passRatePercent: parsePercent(row["evaluated pass rate"] || row["pass rate"]),
+      infrastructureBlocked: row["blocked runs"] || row["infrastructure blocked"] || "",
+      wilson95: row["wilson 95% ci"] || row["wilson95"] || "",
+      latencyP50: row.p50 || "",
+      latencyP95: row.p95 || "",
+      latencyP99: row.p99 || "",
+      costPerRun: row["cost / run"] || row["cost per run"] || "",
+      totalCost: row["total cost"] || "",
+      meanPairwiseSimilarity: row.consistency || row["mean pairwise similarity"] || "",
+      outliers: row.outliers || "",
+      rawSessionPath: String(row["raw session"] || row["raw session path"] || "").replace(/^`|`$/g, "")
     });
   }
 
   const qualityRows = [];
-  const qualityRowPattern = /^\|\s*(claude|codex)\s*\|\s*([^|]+)\|\s*([^|]+)\|\s*([^|]+)\|\s*([^|]+)\|$/gim;
-  while ((match = qualityRowPattern.exec(text)) !== null) {
-    if (!/%/.test(match[2])) continue;
+  for (const row of [
+    ...parseMarkdownTableRows(text, "Output-Quality Details"),
+    ...parseMarkdownTableRows(text, "Output Quality")
+  ]) {
+    const agent = String(row.agent || "").toLowerCase();
+    if (agent !== "claude" && agent !== "codex") continue;
+    if (!/%/.test(String(row["average score"] || ""))) continue;
     qualityRows.push({
-      agent: match[1],
-      averageQualityScore: match[2].trim(),
-      thresholdFailures: match[3].trim(),
-      criticalFailures: match[4].trim(),
-      lowestScoringCriteria: match[5].trim()
+      agent,
+      averageQualityScore: row["average score"] || row["average quality score"] || "",
+      thresholdFailures: row["threshold failures"] || "",
+      criticalFailures: row["critical failures"] || "",
+      lowestScoringCriteria: row["lowest-scoring criteria"] || ""
     });
   }
 

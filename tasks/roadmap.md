@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Fix: Showcase Data For `icon-handler` Benchmark Evidence
+
+**Goal:** Ensure the frontend Skills Showcase reflects the latest `icon-handler` benchmark and review evidence.
+
+**Acceptance Criteria:**
+- [x] The current generated site payload is checked for `icon-handler` benchmark evidence.
+- [x] The generator selects `benchmark/test-icon-handler-2026-05-14.md` instead of the stale 2026-05-13 report.
+- [x] The benchmark results matrix references `benchmark/review-icon-handler-2026-05-14.md`.
+- [x] Layer1 regression coverage protects title-case agent rows in benchmark reports.
+- [x] Generated assets are validated, then committed and pushed on `master`.
+
+**Result:** In progress. The site data already listed `icon-handler`, but its benchmark evidence was stale. Updated `scripts/generate-skills-showcase-data.mjs` to parse benchmark tables by header name, normalize agent labels, and support current benchmark summary/output-quality columns. Regenerated the dual showcase payloads, GitHub proof payloads, and benchmark results matrix. Added layer1 coverage that checks `icon-handler` publishes `benchmark/test-icon-handler-2026-05-14.md` with both agent rows.
+
 ## Current Agent Review: icon-handler Benchmark 2026-05-14
 
 **Goal:** Review the latest persisted `icon-handler` Claude and Codex benchmark outputs for subjective operator quality.
