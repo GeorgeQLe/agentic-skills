@@ -16,6 +16,20 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Agent Review: content-programming Benchmark 2026-05-14
+
+**Goal:** Review the latest persisted `content-programming` Claude and Codex benchmark outputs for subjective operator quality.
+
+**Acceptance Criteria:**
+- [x] Latest Claude and Codex run directories are resolved from `tests/benchmarks/runs/content-programming-*`.
+- [x] Retained generated `pack-benchmark-output.md` artifacts and benchmark context are inspected for each evaluated run.
+- [x] Each evaluated output is graded against the agent-review rubric separately from deterministic benchmark metrics.
+- [x] `benchmark/review-content-programming-2026-05-14.md` records scores, findings, remediation, and next route.
+- [x] Generated Skills Showcase data is refreshed and validated because curated review evidence changed.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Completed on 2026-05-14. Reviewed `content-programming-claude-9f0c62c8` and `content-programming-codex-ff03c35c`, covering 6 evaluated outputs and excluding no infrastructure-blocked runs. Deterministic context was clean: Claude passed 3/3 hard assertions with 96.7% quality, and Codex passed 3/3 hard assertions with 97.5% quality. Full `pack-benchmark-output.md` artifacts were retained for both runners. Subjective verdict was good overall with median score 87.5 and range 84-90. The outputs are useful smoke-test artifacts, but the benchmark prompt only exercises a calendar path and does not prove the full `content-programming` contract for pillars, formats, portfolio balance, measurement, cleanup/refactor, and next series candidates. Skills Showcase data was regenerated and validated. Report: `benchmark/review-content-programming-2026-05-14.md`. Recommended next command: `$targeted-skill-builder content-programming full-contract benchmark coverage`.
+
 ## Current Benchmark: content-programming Post-Rubric Fix 2026-05-14
 
 **Goal:** Run `$benchmark-test-skill content-programming` with current repository harness eligibility, verify, and both-agent benchmark evidence after the fixture-evidence rubric fix.

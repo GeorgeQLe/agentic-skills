@@ -4,6 +4,29 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Current Task — Agent Review `content-programming` Benchmark 2026-05-14
+
+**Goal:** Review the latest persisted `content-programming` Claude and Codex benchmark outputs for subjective operator quality.
+
+**Plan:**
+- [x] Resolve latest Claude and Codex run directories from `tests/benchmarks/runs/content-programming-*`.
+- [x] Inspect retained generated `pack-benchmark-output.md` artifacts, fixture facts, benchmark report, and mirrored skill contract context.
+- [x] Grade each evaluated output against the agent-review rubric separately from deterministic benchmark metrics.
+- [x] Write `benchmark/review-content-programming-2026-05-14.md` with scores, findings, remediation, and next route.
+- [x] Refresh generated Skills Showcase data because curated review evidence changed.
+- [x] Validate report fields, record results, then commit and push on `master`.
+
+## Review — Agent Review `content-programming` Benchmark 2026-05-14
+
+- Reviewed `content-programming-claude-9f0c62c8` and `content-programming-codex-ff03c35c`, covering 6 evaluated outputs and excluding no infrastructure-blocked runs.
+- Deterministic context was clean: Claude passed 3/3 hard assertions with 96.7% quality, and Codex passed 3/3 hard assertions with 97.5% quality.
+- Full `pack-benchmark-output.md` artifact snapshots were retained in every `run-*.json`.
+- Subjective verdict: good overall, with median score 87.5 and range 84-90. The outputs are useful smoke-test artifacts: fixture-grounded, realistic about risks, and correctly routed to `/series-spec` or `$series-spec`.
+- Main output-quality limitation: the benchmark prompt only exercises a calendar smoke path, so the artifacts do not prove the full `content-programming` contract around pillars, recurring formats, portfolio balance, measurement plan, cleanup/refactor plan, and next series candidates.
+- Report: `benchmark/review-content-programming-2026-05-14.md`.
+- Validation passed: Skills Showcase data regeneration/validation, report field `rg`, and `git diff --check`.
+- **Recommended next command:** `$targeted-skill-builder content-programming full-contract benchmark coverage`
+
 ## Current Task — Benchmark `content-programming` Post-Rubric Fix 2026-05-14
 
 **Goal:** Run `$benchmark-test-skill content-programming` with current repository harness eligibility, verify, and both-agent benchmark evidence after the fixture-evidence rubric fix.
