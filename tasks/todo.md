@@ -1126,3 +1126,28 @@ Implement only this step, validate it, then run `/ship` when done.
 **Deploy:** Skipped. `tasks/deploy.md` describes a Vercel production deploy from `master`; no explicit production deploy confirmation was provided for this `$ship` run.
 
 **Recommended next command:** `$benchmark-test-skill icon-handler`
+
+## Current Task — Benchmark `icon-handler` After Image-Error Classification 2026-05-14
+
+**Goal:** Run `$benchmark-test-skill icon-handler` against the current repository state after classifying image-processing runner errors as infrastructure-blocked.
+
+**Plan:**
+- [x] Confirm `$benchmark-test-skill` is the active workflow and `icon-handler` is the target skill argument.
+- [x] Run `pnpm bench --list-skills` and confirm `icon-handler` is known to the harness, including coverage status. `coverage=custom`, setup `tests/layer4/setups/tier23-global-workflows.setup.ts`.
+- [x] Run `pnpm verify --skill icon-handler`; stop before bench if verification fails. Layer1 PASS in 8.9s; layer2 SKIP because no target-specific layer2 tests matched.
+- [x] If verify passes, run `pnpm bench --skill icon-handler --agent both --runs 3 --chunk-size 3 --pause 0`. Claude 3/3, Codex 3/3, no blocked runs.
+- [x] Write `benchmark/test-icon-handler-2026-05-14.md` with verify, benchmark, latency, cost, consistency, raw paths, and recommended next route.
+- [x] Validate the report contains required benchmark fields.
+- [x] Record results here, then commit and push intended changes on `master`.
+
+## Review — Benchmark `icon-handler` After Image-Error Classification 2026-05-14
+
+- Command resolution: `$benchmark-test-skill` was the active workflow; `icon-handler` was treated as the target skill argument.
+- Eligibility: `icon-handler` is known to the harness with custom coverage via `tests/layer4/setups/tier23-global-workflows.setup.ts`.
+- Verify passed: layer1 PASS in 8.9s with 1,447 tests across 13 files; layer2 SKIP because no target-specific layer2 tests matched `icon-handler`.
+- Benchmark completed for both agents with no infrastructure-blocked runs:
+  - Claude session `bccbdf8a`: 3/3 evaluated hard assertions passed, output quality 84.1%, p50 37.1s, p95 49.5s, p99 50.6s, total cost $3.00.
+  - Codex session `68b180e6`: 3/3 evaluated hard assertions passed, output quality 84.8%, p50 61.5s, p95 82.8s, p99 84.7s, total cost $3.00.
+- Report written to `benchmark/test-icon-handler-2026-05-14.md`.
+- Report validation passed: required target, agent rows, pass-rate and blocked-run data, latency, cost, consistency, raw session paths, quality details, and recommended next route are present.
+- **Recommended next skill:** `$benchmark-agent-review icon-handler`
