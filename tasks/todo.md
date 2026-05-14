@@ -4,6 +4,39 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Current Task — Targeted Update `icon-handler` Benchmark Image-Error Classification
+
+**Goal:** Classify Claude runner image-processing API errors as benchmark infrastructure blocks instead of evaluated `icon-handler` skill failures.
+
+**Plan:**
+- [x] Read relevant lessons and latest triage report.
+- [x] Confirm existing-skill overlap: update benchmark harness classification, not mirrored `icon-handler` skill contracts.
+- [x] Extend `tests/harness/bench-runner.ts` infrastructure-block classification for non-zero `Could not process image` API errors.
+- [x] Add layer1 regression coverage in `tests/layer1/runner.test.ts`.
+- [x] Run targeted and required validation, record results, then commit and push intended changes on `master`.
+
+## Review — Targeted Update `icon-handler` Benchmark Image-Error Classification
+
+- Decision: benchmark harness update. No mirrored `global/claude/icon-handler` or `global/codex/icon-handler` skill contract change was needed.
+- Evidence used: `benchmark/triage-icon-handler-2026-05-14-image.md`, benchmark infrastructure-block lesson in `tasks/lessons.md`, `tests/harness/bench-runner.ts`, and `tests/layer1/runner.test.ts`.
+- Evidence intentionally skipped: broad session-history scan; the dated triage report already verified the concrete failed run.
+- Files changed: `tests/harness/bench-runner.ts`, `tests/layer1/runner.test.ts`, `tasks/todo.md`, and `tasks/roadmap.md`.
+- Implementation: added `Could not process image` to non-zero runner infrastructure-block classification with reason `agent runner image processing error`, and added layer1 coverage proving assertions are skipped for this API/runner failure.
+- Validation passed:
+  - `pnpm --dir tests install --force` repaired incomplete local test dependencies after the first Vitest command failed before running tests.
+  - `pnpm --dir tests exec vitest run --project layer1 runner` (10 tests passed)
+  - `./install.sh`
+  - `./scripts/skill-deps.sh --broken`
+  - `./scripts/skill-versions.sh --missing`
+  - `./scripts/skill-next-step-routing.sh --missing`
+  - `pnpm --dir tests bench:coverage`
+  - `pnpm --dir tests verify --skill icon-handler` (layer1 PASS in 8.1s; layer2 SKIP because no target-specific tests matched)
+  - `pnpm --dir tests bench --skill icon-handler --agent claude --runs 1 --chunk-size 1 --pause 0` (`icon-handler-claude-04ff1a83`, 1/1 hard assertions, no blocked runs)
+  - Targeted `rg` for image-error classification coverage
+  - `git diff --check`
+- Showcase regeneration was not needed because no tracked `SKILL.md` or `PACK.md` behavior/metadata changed.
+- **Recommended next command:** `$benchmark-test-skill icon-handler`
+
 ## Current Task — Triage `icon-handler` Benchmark Image Failure 2026-05-14
 
 **Goal:** Verify the latest Claude `icon-handler` benchmark image-processing failure and identify the smallest durable fix.

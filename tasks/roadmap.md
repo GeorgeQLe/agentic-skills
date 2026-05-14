@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Update: icon-handler Benchmark Image-Error Classification
+
+**Goal:** Classify Claude runner image-processing API errors as benchmark infrastructure blocks instead of evaluated `icon-handler` skill failures.
+
+**Acceptance Criteria:**
+- [x] The fix is scoped to benchmark runner classification and layer1 regression coverage, not mirrored `icon-handler` skill contracts.
+- [x] Non-zero runner output containing `Could not process image` is marked infrastructure-blocked with a clear reason.
+- [x] Layer1 proves assertions are skipped for this image-processing API error.
+- [x] Targeted and required validation pass.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Completed on 2026-05-14. Updated `tests/harness/bench-runner.ts` so non-zero runner output containing `Could not process image` is classified as `agent runner image processing error` and therefore infrastructure-blocked. Added `tests/layer1/runner.test.ts` coverage proving assertions are skipped and the run is not marked passed. Validation passed with focused runner tests, install/skill checks, benchmark coverage, `pnpm --dir tests verify --skill icon-handler`, a Claude smoke benchmark `icon-handler-claude-04ff1a83` with 1/1 hard assertions, targeted `rg`, and `git diff --check`. Recommended next command: `$benchmark-test-skill icon-handler`.
+
 ## Current Triage: icon-handler Benchmark Image Failure 2026-05-14
 
 **Goal:** Verify the latest Claude `icon-handler` benchmark image-processing failure and identify the smallest durable fix.

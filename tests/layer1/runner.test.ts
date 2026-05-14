@@ -194,6 +194,65 @@ describe("benchmark runner", () => {
     }
   });
 
+  it("classifies non-zero agent image-processing API errors as infrastructure-blocked", async () => {
+    const workDir = "/tmp/skill-test-image-block";
+    const sessionDir = "benchmarks/runs/image-block-claude-imageerr";
+    rmSync(sessionDir, { recursive: true, force: true });
+    mkdirSync(sessionDir, { recursive: true });
+
+    try {
+      const result = await runChunk(
+        {
+          skill: "image-block",
+          prompt: "unused",
+          perRunBudgetUsd: 0.01,
+          timeoutMs: 1_000,
+          setupProject() {},
+          assertResult() {
+            return [{ description: "should be skipped for infrastructure blocks", pass: false }];
+          },
+        },
+        {
+          skill: "image-block",
+          sessionId: "imageerr",
+          createdAt: "2026-05-14T00:00:00.000Z",
+          updatedAt: "2026-05-14T00:00:00.000Z",
+          status: "running",
+          config: {
+            skill: "image-block",
+            agent: "claude",
+            runs: 1,
+            chunkSize: 1,
+            pauseSeconds: 0,
+            maxBudgetUsd: 0.01,
+            perRunBudgetUsd: 0.01,
+            timeoutMs: 1_000,
+          },
+          completedRuns: 0,
+          totalEstimatedCostUsd: 0,
+          chunks: [],
+        },
+        0,
+        1,
+        async () => ({
+          stdout: "API Error: 400 Could not process image\n",
+          stderr: "",
+          exitCode: 1,
+          workDir,
+          files: ["calc-mascot-icon.svg"],
+        }),
+        () => workDir,
+      );
+
+      expect(result.runs[0]?.infrastructureBlocked).toBe(true);
+      expect(result.runs[0]?.infrastructureReason).toBe("agent runner image processing error");
+      expect(result.runs[0]?.assertions).toEqual([]);
+      expect(result.runs[0]?.passed).toBe(false);
+    } finally {
+      rmSync(sessionDir, { recursive: true, force: true });
+    }
+  });
+
   it("evaluates quality against generated artifact content", async () => {
     const workDir = "/tmp/skill-test-quality-output";
     const sessionDir = "benchmarks/runs/quality-output-codex-quality";
