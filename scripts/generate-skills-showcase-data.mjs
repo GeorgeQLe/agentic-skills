@@ -210,14 +210,16 @@ function parseBenchmarkReport(relativePath) {
   const qualityRows = [];
   for (const row of [
     ...parseMarkdownTableRows(text, "Output-Quality Details"),
-    ...parseMarkdownTableRows(text, "Output Quality")
+    ...parseMarkdownTableRows(text, "Output Quality"),
+    ...parseMarkdownTableRows(text, "Output-Quality Rubric")
   ]) {
     const agent = String(row.agent || "").toLowerCase();
     if (agent !== "claude" && agent !== "codex") continue;
-    if (!/%/.test(String(row["average score"] || ""))) continue;
+    const averageQualityScore = row["average score"] || row["average quality score"] || "";
+    if (!/%/.test(String(averageQualityScore))) continue;
     qualityRows.push({
       agent,
-      averageQualityScore: row["average score"] || row["average quality score"] || "",
+      averageQualityScore,
       thresholdFailures: row["threshold failures"] || "",
       criticalFailures: row["critical failures"] || "",
       lowestScoringCriteria: row["lowest-scoring criteria"] || ""
@@ -244,7 +246,37 @@ function parseBenchmarkReport(relativePath) {
   return demo ? { ...report, demo } : report;
 }
 
+function parseBenchmarkReview(relativePath) {
+  const text = readText(relativePath);
+  const pathMatch = relativePath.match(/^benchmark\/review-(.+)-(\d{4}-\d{2}-\d{2})\.md$/);
+  if (!pathMatch) return null;
+
+  const median = (text.match(/Median subjective score:\s*([0-9]+(?:\.[0-9]+)?)/i) || [])[1] || "";
+  const range = (text.match(/Score range:\s*([0-9]+(?:\.[0-9]+)?-[0-9]+(?:\.[0-9]+)?)/i) || [])[1] || "";
+  const nextCommand = (text.match(/Recommended next command:\s*`([^`]+)`/i) || [])[1] || "";
+  const verdictMatch = text.match(/## Output-Quality Verdict\s+([\s\S]*?)(?:\n## |\n# |$)/i);
+  const verdict = verdictMatch ? compactText(verdictMatch[1], 280) : "";
+
+  return {
+    skill: pathMatch[1],
+    date: pathMatch[2],
+    reportPath: relativePath,
+    medianScore: median,
+    scoreRange: range,
+    verdict,
+    nextCommand
+  };
+}
+
 function benchmarkEvidenceBySkill(files) {
+  const reviews = files
+    .filter((file) => /^benchmark\/review-.+-\d{4}-\d{2}-\d{2}\.md$/.test(file))
+    .map(parseBenchmarkReview)
+    .filter(Boolean)
+    .sort((a, b) => a.date.localeCompare(b.date));
+  const reviewBySkill = new Map();
+  reviews.forEach((review) => reviewBySkill.set(review.skill, review));
+
   const reports = files
     .filter((file) => /^benchmark\/test-.+-\d{4}-\d{2}-\d{2}\.md$/.test(file))
     .map(parseBenchmarkReport)
@@ -253,7 +285,10 @@ function benchmarkEvidenceBySkill(files) {
     .sort((a, b) => a.date.localeCompare(b.date));
 
   const evidence = new Map();
-  reports.forEach((report) => evidence.set(report.skill, report));
+  reports.forEach((report) => {
+    const review = reviewBySkill.get(report.skill);
+    evidence.set(report.skill, review ? { ...report, subjectiveReview: review } : report);
+  });
   return evidence;
 }
 
@@ -505,10 +540,11 @@ function main() {
   });
   const packPaths = files.filter((file) => /^packs\/[^/]+\/PACK\.md$/.test(file));
   const benchmarkPaths = files.filter((file) => /^benchmark\/test-.+-\d{4}-\d{2}-\d{2}\.md$/.test(file));
+  const benchmarkReviewPaths = files.filter((file) => /^benchmark\/review-.+-\d{4}-\d{2}-\d{2}\.md$/.test(file));
   const benchmarkDemoPaths = Array.from(benchmarkEvidence.values())
     .flatMap((evidence) => (evidence.demo ? [evidence.demo.runPath] : []))
     .filter((file) => files.includes(file));
-  const sourcePaths = [...skillPaths, ...packPaths, ...benchmarkPaths, ...benchmarkDemoPaths].sort();
+  const sourcePaths = [...skillPaths, ...packPaths, ...benchmarkPaths, ...benchmarkReviewPaths, ...benchmarkDemoPaths].sort();
 
   const skills = skillPaths
     .map(parseSkill)

@@ -16,6 +16,12 @@ function loadShowcaseData() {
         reportPath?: string;
         agents: Array<{ agent: string }>;
         quality?: Array<{ agent: string }>;
+        subjectiveReview?: {
+          reportPath?: string;
+          medianScore?: string;
+          scoreRange?: string;
+          nextCommand?: string;
+        };
         demo?: {
           prompt?: string;
           output?: string;
@@ -34,6 +40,23 @@ describe("skills showcase benchmark demos", () => {
     expect(iconHandler?.benchmarkEvidence?.reportPath).toBe("benchmark/test-icon-handler-2026-05-14.md");
     expect(iconHandler?.benchmarkEvidence?.agents.map((agent) => agent.agent)).toEqual(["claude", "codex"]);
     expect(iconHandler?.benchmarkEvidence?.quality?.map((entry) => entry.agent)).toEqual(["claude", "codex"]);
+  });
+
+  it("publishes the latest content-programming benchmark and agent-review evidence", () => {
+    const data = loadShowcaseData();
+    const contentProgramming = data.skills.find(
+      (skill) => skill.name === "content-programming" && skill.platform === "codex",
+    );
+
+    expect(contentProgramming?.benchmarkEvidence?.reportPath).toBe("benchmark/test-content-programming-2026-05-14.md");
+    expect(contentProgramming?.benchmarkEvidence?.agents.map((agent) => agent.agent)).toEqual(["claude", "codex"]);
+    expect(contentProgramming?.benchmarkEvidence?.quality?.map((entry) => entry.agent)).toEqual(["claude", "codex"]);
+    expect(contentProgramming?.benchmarkEvidence?.subjectiveReview).toMatchObject({
+      reportPath: "benchmark/review-content-programming-2026-05-14.md",
+      medianScore: "92.0",
+      scoreRange: "90-94",
+      nextCommand: "$ship",
+    });
   });
 
   it("publishes benchmark-backed prompt and output excerpts when raw run artifacts contain them", () => {

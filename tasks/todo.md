@@ -4,6 +4,32 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Current Task — Frontend Content-Programming Benchmark Review Results
+
+**Goal:** Update the Skills Showcase frontend so the latest `content-programming` deterministic and subjective review results are visible in the catalog and benchmarks surfaces.
+
+**Plan:**
+- [x] Inspect existing benchmark evidence generation and frontend rendering.
+- [x] Fix generated benchmark data so current output-quality rows and subjective review summaries are included.
+- [x] Render subjective review score/report evidence in catalog benchmark panels and the benchmarks table.
+- [x] Add regression coverage for `content-programming` quality and review evidence.
+- [x] Regenerate showcase data, validate, verify the UI locally, then commit and push on `master`.
+
+## Review — Frontend Content-Programming Benchmark Review Results
+
+- Updated `scripts/generate-skills-showcase-data.mjs` to parse `Output-Quality Rubric` tables, normalize review median/range values, attach latest `benchmark/review-*.md` summaries to `benchmarkEvidence.subjectiveReview`, and include review reports in the showcase data fingerprint.
+- Updated the catalog benchmark panel to show subjective review median/range, verdict excerpt, and review report link.
+- Updated the benchmarks table with a `Review` column linking to the review report and showing the median score/range.
+- Regenerated `docs/skills-showcase/assets/skills-data.js` and `apps/skills-showcase/public/assets/skills-data.js`; both now include `content-programming` quality rows and subjective review evidence for median `92.0`, range `90-94`, and `$ship`.
+- Validation passed:
+  - `pnpm --dir tests exec vitest run --project layer1 skills-showcase-benchmark-demo`
+  - `pnpm --dir apps/skills-showcase test -- src/showcase/catalog.test.tsx src/showcase/benchmarks.test.tsx`
+  - `pnpm --dir apps/skills-showcase typecheck`
+  - `pnpm --dir apps/skills-showcase build`
+  - `curl -sS http://localhost:3026/benchmarks`
+  - `curl -sS http://localhost:3026/assets/skills-data.js`
+- The generated-data freshness check is expected to pass after commit because proof-data fingerprints include tracked source content.
+
 ## Current Task — Agent Review `content-programming` Fresh Full-Contract Benchmark 2026-05-14
 
 **Goal:** Review the latest persisted `content-programming` Claude and Codex benchmark outputs for subjective operator quality.
