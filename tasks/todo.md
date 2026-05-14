@@ -4,6 +4,32 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Current Task — Benchmark `content-programming` Post-Rubric Fix 2026-05-14
+
+**Goal:** Run `$benchmark-test-skill content-programming` with current repository harness eligibility, verify, and both-agent benchmark evidence after the fixture-evidence rubric fix.
+
+**Plan:**
+- [x] Confirm `$benchmark-test-skill` is the active workflow and `content-programming` is the target skill argument.
+- [x] Run `pnpm bench --list-skills` and confirm `content-programming` is known, including coverage status. `coverage=custom`, setup `tests/layer4/setups/packs/pack-workflows.setup.ts`.
+- [x] Run `pnpm verify --skill content-programming`; stop before bench if verification fails.
+- [x] If verify passes, run `pnpm bench --skill content-programming --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [x] Write and validate `benchmark/test-content-programming-2026-05-14.md` with verify, benchmark, latency, cost, consistency, raw paths, and recommended next route.
+- [x] Refresh generated Skills Showcase data because curated benchmark evidence changed.
+- [x] Record results here, then commit and push intended changes on `master`.
+
+## Review — Benchmark `content-programming` Post-Rubric Fix 2026-05-14
+
+- Command resolution: `$benchmark-test-skill` was the active workflow; `content-programming` was treated as the target skill argument.
+- Eligibility: `content-programming` is known to the harness with custom coverage via `tests/layer4/setups/packs/pack-workflows.setup.ts`.
+- Verify passed: layer1 PASS in 3.7s with 1,181 tests across 14 files; layer2 SKIP because no target-specific layer2 tests matched `content-programming`.
+- Benchmark completed for both agents with no infrastructure-blocked runs:
+  - Claude session `9f0c62c8`: 3/3 evaluated hard assertions passed, output quality 96.7%, p50 25.7s, p95 25.8s, p99 25.8s, total cost $0.75, 0 threshold failures, and 0 critical failures.
+  - Codex session `ff03c35c`: 3/3 evaluated hard assertions passed, output quality 97.5%, p50 49.0s, p95 53.9s, p99 54.4s, total cost $0.75, 0 threshold failures, and 0 critical failures.
+- Report updated at `benchmark/test-content-programming-2026-05-14.md`.
+- Report validation passed: target, agent rows, pass-rate and blocked-run data, latency, cost, consistency, raw session paths, output-quality details, failed assertion statement, and recommended next route are present.
+- Skills Showcase generated data was refreshed and validated; `docs/benchmark-results-matrix.md` now points to `content-programming-claude-9f0c62c8` and `content-programming-codex-ff03c35c`.
+- **Recommended next skill:** `$benchmark-agent-review content-programming`
+
 ## Current Task — Targeted Update `content-programming` Benchmark Next-Route Coverage
 
 **Goal:** Fix the `content-programming` pack benchmark setup so accepted next-route labels and runner-specific `series-spec` handoffs are tested instead of defaulting to `$run`.
