@@ -29,6 +29,19 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Completed on 2026-05-14. Added `Approved Artifact Handoff` and `Intent-Aware Routing` contracts across mirrored creator-foundation, youtube-ops, and remotion creator-media skills. Updated creator pack docs and added `tests/layer1/creator-media-handoff-routing.test.ts` to protect the handoff/routing behavior. Refreshed generated Skills Showcase data; no curated website copy changed beyond generated fingerprints/proof data. Validation passed with install, skill integrity, routing, benchmark coverage, focused layer1 tests, showcase generation/validation, targeted `rg`, and whitespace checks. Recommended next command: `$benchmark-test-skill content-programming`.
 
+## Current Benchmark: content-programming 2026-05-14
+
+**Goal:** Run `$benchmark-test-skill content-programming` with current repository harness eligibility, verify, and both-agent benchmark evidence.
+
+**Acceptance Criteria:**
+- [x] `pnpm bench --list-skills` confirms `content-programming` is known and reports its coverage status.
+- [x] `pnpm verify --skill content-programming` passes or blocks benchmark execution with a recorded failure.
+- [x] `pnpm bench --skill content-programming --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [x] `benchmark/test-content-programming-2026-05-14.md` records fresh verify, benchmark, latency, cost, consistency, and raw session evidence.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Completed on 2026-05-14. Verify passed with layer1 PASS in 4.5s and layer2 SKIP because no target-specific layer2 tests matched. The benchmark completed with no infrastructure-blocked runs. Claude session `20ea1edd` failed hard assertions at 0/3 because every run missed `Output includes next command handoff`; output quality was 85.8%, p50 latency 29.9s, and total cost $0.75. Codex session `cb044e72` passed hard assertions at 3/3; output quality was 86.7%, p50 latency 51.2s, and total cost $0.75. Report validation passed for required benchmark fields and `git diff --check` passed. Report: `benchmark/test-content-programming-2026-05-14.md`. Recommended next skill: `$session-triage content-programming benchmark failure`.
+
 ## Current Fix: Showcase Data For `icon-handler` Benchmark Evidence
 
 **Goal:** Ensure the frontend Skills Showcase reflects the latest `icon-handler` benchmark and review evidence.
