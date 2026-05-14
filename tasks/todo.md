@@ -4,6 +4,28 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Current Task — Agent Review `content-programming` Fresh Full-Contract Benchmark 2026-05-14
+
+**Goal:** Review the latest persisted `content-programming` Claude and Codex benchmark outputs for subjective operator quality.
+
+**Plan:**
+- [x] Resolve latest Claude and Codex run directories from `tests/benchmarks/runs/content-programming-*`.
+- [x] Inspect retained generated `pack-benchmark-output.md` artifacts, fixture facts, benchmark report, and benchmark setup context.
+- [x] Grade each evaluated output against the agent-review rubric separately from deterministic benchmark metrics.
+- [x] Write `benchmark/review-content-programming-2026-05-14.md` with scores, findings, remediation, and next route.
+- [x] Refresh generated Skills Showcase data because curated review evidence changes.
+- [x] Validate report fields, record results, then commit and push on `master`.
+
+## Review — Agent Review `content-programming` Fresh Full-Contract Benchmark 2026-05-14
+
+- Reviewed `content-programming-claude-a8dda4dc` and `content-programming-codex-7f0f09f4`, covering 6 evaluated outputs and excluding no infrastructure-blocked runs.
+- Deterministic context was clean: Claude passed 3/3 hard assertions with 96.8% quality, and Codex passed 3/3 hard assertions with 98.1% quality.
+- Full `pack-benchmark-output.md` artifact snapshots were retained in every `run-*.json`.
+- Subjective verdict: excellent overall, with median score 92.0 and range 90-94. The fresh outputs now exercise the full programming-strategy contract: thesis, durable pillars, recurring formats, cadence, portfolio balance, measurement, cleanup/refactor, next series candidates, fixture evidence, risks, and runner-specific `series-spec` routing.
+- No remediation-worthy output-quality issue was found. Minor variation remains around percentage targets and whether local-first benchmark workflow is framed as a pillar or next-series lane, but this is acceptable for the local fixture.
+- Report: `benchmark/review-content-programming-2026-05-14.md`.
+- **Recommended next command:** `$ship`
+
 ## Current Task — Benchmark `content-programming` Fresh Full-Contract Run 2026-05-14
 
 **Goal:** Run `$benchmark-test-skill content-programming` against the current repository harness and record fresh deterministic both-agent benchmark evidence.
