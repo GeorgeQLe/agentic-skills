@@ -4,6 +4,32 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Current Task — Benchmark `icon-handler` Fresh Rerun 2026-05-14
+
+**Goal:** Run `$benchmark-test-skill icon-handler` against the current repository state after the valid-source-asset benchmark fixture fix.
+
+**Plan:**
+- [x] Confirm `$benchmark-test-skill` is the active workflow and `icon-handler` is the target skill argument.
+- [x] Run `pnpm bench --list-skills` and confirm `icon-handler` is known to the harness. `coverage=custom`, setup `tests/layer4/setups/tier23-global-workflows.setup.ts`.
+- [x] Record coverage status and setup path from the harness list output.
+- [x] Run `pnpm verify --skill icon-handler`; stop before bench if verification fails. Layer1 PASS in 10.8s; layer2 SKIP because no target-specific layer2 tests matched.
+- [x] If verify passes, run `pnpm bench --skill icon-handler --agent both --runs 3 --chunk-size 3 --pause 0`. Claude 2/3, Codex 2/3, no blocked runs.
+- [x] Write `benchmark/test-icon-handler-2026-05-14.md` with verify, benchmark, latency, cost, consistency, raw paths, and recommended next route.
+- [x] Validate the report contains required benchmark fields.
+- [x] Record results here, then commit and push intended changes on `master`.
+
+## Review — Benchmark `icon-handler` Fresh Rerun 2026-05-14
+
+- Verify passed: layer1 PASS in 10.8s with 1,446 tests across 13 files; layer2 SKIP because no target-specific layer2 tests matched `icon-handler`.
+- Benchmark completed for both agents with no infrastructure-blocked runs:
+  - Claude session `ba6ebaf0`: 2/3 evaluated hard assertions passed, output quality 78.0%, p50 40.5s, p95 44.2s, p99 44.5s, total cost $3.00. Run #2 failed `Output recommends /icon-handler`.
+  - Codex session `dc9c3d30`: 2/3 evaluated hard assertions passed, output quality 81.1%, p50 65.0s, p95 7621.6s, p99 8293.3s, total cost $3.00. Run #2 failed `icon-audit.md created in project root`.
+- The previous invalid-source-PNG transport issue did not recur; all 6 runs completed and were evaluated.
+- Report written to `benchmark/test-icon-handler-2026-05-14.md`.
+- Report validation passed: required target, agent rows, pass-rate and blocked-run data, latency, cost, consistency, raw session paths, and recommended next route are present. `git diff --check` passed.
+- Committed and pushed on `master`.
+- **Recommended next command:** `$session-triage icon-handler benchmark failure`
+
 ## Ad-Hoc Investigation: Research Skill Approval Reports
 
 **Goal:** Update research-oriented skills so they can present findings for user approval before writing canonical research files, instead of always writing directly to disk.
