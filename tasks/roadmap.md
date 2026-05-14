@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Agent Review: icon-handler Benchmark 2026-05-14
+
+**Goal:** Review the latest persisted `icon-handler` Claude and Codex benchmark outputs for subjective operator quality.
+
+**Acceptance Criteria:**
+- [x] Latest Claude and Codex run directories are resolved from `tests/benchmarks/runs/icon-handler-*`.
+- [x] Retained generated `icon-audit.md` artifacts and benchmark context are inspected for each evaluated run.
+- [x] Each evaluated output is graded against the agent-review rubric separately from deterministic benchmark metrics.
+- [x] `benchmark/review-icon-handler-2026-05-14.md` records scores, findings, remediation, and next route.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Agent review completed on 2026-05-14. Reviewed `icon-handler-claude-bccbdf8a` and `icon-handler-codex-68b180e6`, covering 6 evaluated outputs and excluding no infrastructure-blocked runs. Deterministic benchmark context was clean: Claude passed 3/3 hard assertions with 84.1% quality, and Codex passed 3/3 hard assertions with 84.8% quality. Full `icon-audit.md` artifacts were retained for both runners. Subjective verdict was good overall with median score 89.0 and range 84-93. The main output-quality gap is precision: manifest destination varies across outputs, exact generated icon sizes/formats are not always named, and some outputs omit public install/touch surfaces. Report: `benchmark/review-icon-handler-2026-05-14.md`. Recommended next command: `$targeted-skill-builder icon-handler Next App Router manifest path specificity`.
+
 ## Current Targeted Update: icon-handler Benchmark Image-Error Classification
 
 **Goal:** Classify Claude runner image-processing API errors as benchmark infrastructure blocks instead of evaluated `icon-handler` skill failures.
