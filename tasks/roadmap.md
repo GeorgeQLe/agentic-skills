@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Benchmark: icon-handler Rerun 2026-05-14
+
+**Goal:** Run `$benchmark-test-skill icon-handler` against the current repository state after the benchmark route-clarity fix.
+
+**Acceptance Criteria:**
+- [x] `pnpm bench --list-skills` confirms `icon-handler` is known and reports its coverage status.
+- [x] `pnpm verify --skill icon-handler` passes or blocks benchmark execution with a recorded failure.
+- [x] `pnpm bench --skill icon-handler --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [x] `benchmark/test-icon-handler-2026-05-14.md` records verify, benchmark, latency, cost, consistency, and raw session evidence.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Benchmark rerun completed on 2026-05-14. `icon-handler` is known with `coverage=custom` using `tests/layer4/setups/tier23-global-workflows.setup.ts`. Verify passed with layer1 in 12.3s across 1,446 tests; layer2 was skipped because no target-specific layer2 tests matched `icon-handler`. The both-agent benchmark completed with no infrastructure-blocked runs. Claude passed 2/3 evaluated hard assertions with 62.1% output quality, p50 latency 38.5s, and $3.00 total cost; Claude run #2 hit `API Error: 400 Could not process image` and did not create `icon-audit.md`. Codex passed 3/3 evaluated hard assertions with 84.1% output quality, p50 latency 73.0s, and $3.00 total cost. Report: `benchmark/test-icon-handler-2026-05-14.md`. Recommended next command: `$session-triage icon-handler benchmark failure`.
+
 ## Current Investigation: Research Skill Approval Reports
 
 **Goal:** Update research-oriented skills so they can present findings for user approval before writing canonical research files, instead of always writing directly to disk.
