@@ -14,6 +14,8 @@ Default to report-only: present findings, evidence coverage, assumptions, recomm
 
 Do not write or overwrite synthesized deliverables until the user explicitly approves, unless the user invoked an explicit write/update/fix mode or clearly asked to write files upfront. Raw evidence capture may be persisted before analysis when reproducibility requires it; report those raw paths separately and still gate synthesized research/report writes.
 
+When stopping for approval, do not include `Recommended next skill`, `Recommended next command`, or downstream routing language. The approval request itself is the next action. Only emit next-skill routing after the approved artifact has been written or updated.
+
 Fetch full video metadata and transcripts from a YouTube channel, persist raw evidence, then analyze both performance shape and content quality. The output identifies repeated strengths, repeated weaknesses, portfolio concentration, content roles, archetypes, and cleanup candidates with evidence cited from specific videos.
 
 ## Prerequisites

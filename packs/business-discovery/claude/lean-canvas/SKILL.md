@@ -18,6 +18,8 @@ Default to report-only: present findings, evidence coverage, assumptions, recomm
 
 Do not write or overwrite synthesized deliverables until the user explicitly approves, unless the user invoked an explicit write/update/fix mode or clearly asked to write files upfront. Raw evidence capture may be persisted before analysis when reproducibility requires it; report those raw paths separately and still gate synthesized research/report writes.
 
+When stopping for approval, do not include `Recommended next skill`, `Recommended next command`, or downstream routing language. The approval request itself is the next action. Only emit next-skill routing after the approved artifact has been written or updated.
+
 Synthesizes all upstream research into a one-page Lean Canvas (Ash Maurya methodology). This is a business-model synthesis skill — it pulls from ICP, competitive analysis, positioning, and value proposition research to create a cohesive business model hypothesis. Revenue Streams and Cost Structure are marked as hypotheses to be validated by `/monetization`.
 
 ## Prerequisites

@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-05-14 — Approval-gated reports should not route past approval
+
+- A `$creator-positioning` report-first run included `Recommended next skill: $content-programming` while it was still waiting for user approval to write the positioning artifact.
+- In approval-gated workflows, the approval request is the next action. Do not emit downstream skill or command routing until the approved artifact has actually been written or updated.
+- Skills that combine `Report-First Approval Gate` with `Next-Skill Routing` need an explicit stop rule in the approval gate so agents do not mechanically copy post-write routing into pre-write approval reports.
+- Apply the rule to mirrored Claude and Codex skill contracts when the approval-gate pattern exists in both.
+
 ## 2026-05-14 — Benchmark evidence changes can stale the showcase frontend
 
 - A `$benchmark-agent-review icon-handler` run updated benchmark/review evidence but did not refresh the Skills Showcase frontend data, leaving `icon-handler` catalog benchmark evidence pointing at the older 2026-05-13 report.

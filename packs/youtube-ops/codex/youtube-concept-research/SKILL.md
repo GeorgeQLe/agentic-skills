@@ -20,6 +20,8 @@ Default to report-only: present findings, evidence coverage, assumptions, recomm
 
 Do not write or overwrite synthesized deliverables until the user explicitly approves, unless the user invoked an explicit write/update/fix mode or clearly asked to write files upfront. Raw evidence capture may be persisted before analysis when reproducibility requires it; report those raw paths separately and still gate synthesized research/report writes.
 
+When stopping for approval, do not include `Recommended next skill`, `Recommended next command`, or downstream routing language. The approval request itself is the next action. Only emit next-skill routing after the approved artifact has been written or updated.
+
 Research a proposed YouTube video concept before scripting or production. Start from the user's idea, find successful direct and adjacent videos, explain what likely worked from public evidence, and translate the lessons into differentiated concept directions. Use `$youtube-competitive-research` when the user already has specific reference videos and wants to know why they worked. Use `$youtube-search-positioning` when the task is only keyword/search opportunity research.
 
 ## Inputs
