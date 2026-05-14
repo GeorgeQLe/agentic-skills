@@ -1044,6 +1044,110 @@ describe("benchmark setup registry", () => {
     expect(target?.setup?.skill).toBe("assumption-tracker");
   });
 
+  it("requires runner-aware next-route coverage for content-programming", () => {
+    const setup = resolveBenchSetup("content-programming");
+    const target = resolveBenchTarget("content-programming");
+
+    expect(setup?.skill).toBe("content-programming");
+    expect(target).toMatchObject({
+      skill: "content-programming",
+      coverageStatus: "custom",
+      setupPath: "tests/layer4/setups/packs/pack-workflows.setup.ts",
+    });
+    expect(setup?.prompt).toContain("literal final handoff label accepted by the harness");
+    expect(setup?.prompt).toContain("claude: /series-spec");
+    expect(setup?.prompt).toContain("codex: $series-spec");
+
+    const workDir = mkdtempSync(resolve(tmpdir(), "content-programming-route-"));
+    writeFileSync(
+      resolve(workDir, "pack-benchmark-output.md"),
+      [
+        "# Pack Benchmark Output",
+        "",
+        "Pack: creator-foundation",
+        "Skill: content-programming",
+        "This content programming calendar uses local-fixture evidence.",
+        "Evidence: Audience wants practical build notes; Cadence target: weekly.",
+        "Risk: weekly cadence may exceed production capacity.",
+        "",
+        "Recommended next skill: /series-spec",
+      ].join("\n"),
+    );
+
+    const claudeAssertions = setup!.assertResult(
+      {
+        stdout: "",
+        stderr: "",
+        exitCode: 0,
+        workDir,
+        files: ["pack-benchmark-output.md"],
+      },
+      { agent: "claude" },
+    );
+    expect(claudeAssertions.find((assertion) => assertion.description === "Output recommends /series-spec")).toMatchObject({
+      pass: true,
+    });
+
+    const codexAssertionsWithClaudeRoute = setup!.assertResult(
+      {
+        stdout: "",
+        stderr: "",
+        exitCode: 0,
+        workDir,
+        files: ["pack-benchmark-output.md"],
+      },
+      { agent: "codex" },
+    );
+    expect(
+      codexAssertionsWithClaudeRoute.find((assertion) => assertion.description === "Output recommends $series-spec"),
+    ).toMatchObject({
+      pass: false,
+    });
+
+    writeFileSync(
+      resolve(workDir, "pack-benchmark-output.md"),
+      [
+        "# Pack Benchmark Output",
+        "",
+        "Pack: creator-foundation",
+        "Skill: content-programming",
+        "This content programming calendar uses local-fixture evidence.",
+        "Evidence: Audience wants practical build notes; Cadence target: weekly.",
+        "Risk: weekly cadence may exceed production capacity.",
+        "",
+        "Recommended next skill: $series-spec",
+      ].join("\n"),
+    );
+
+    const codexAssertions = setup!.assertResult(
+      {
+        stdout: "",
+        stderr: "",
+        exitCode: 0,
+        workDir,
+        files: ["pack-benchmark-output.md"],
+      },
+      { agent: "codex" },
+    );
+    expect(codexAssertions.find((assertion) => assertion.description === "Output recommends $series-spec")).toMatchObject({
+      pass: true,
+    });
+
+    const nextRouteCriterion = setup!.qualityEvaluator?.rubric.criteria.find((criterion) => criterion.id === "pack-next-route");
+    expect(nextRouteCriterion?.evaluate("Recommended next skill: /series-spec")).toMatchObject({
+      score: 1,
+    });
+    expect(nextRouteCriterion?.evaluate("Recommended next skill: $series-spec")).toMatchObject({
+      score: 1,
+    });
+    expect(nextRouteCriterion?.evaluate("Recommended next command: $run")).toMatchObject({
+      score: 0,
+    });
+    expect(nextRouteCriterion?.evaluate("Next: $series-spec")).toMatchObject({
+      score: 0,
+    });
+  });
+
   it("keeps the generic smoke setup available for rows without custom assertions", () => {
     const rows = benchmarkCoverageMatrix().map((row): BenchCoverageRow => (
       row.skill === "deploy"

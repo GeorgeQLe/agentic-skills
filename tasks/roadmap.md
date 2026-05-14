@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Update: content-programming Benchmark Next-Route Coverage
+
+**Goal:** Fix the `content-programming` pack benchmark setup so it tests the actual accepted handoff labels and runner-specific `series-spec` successor instead of generic `$run` routing.
+
+**Acceptance Criteria:**
+- [x] The fix is scoped to benchmark harness coverage, not mirrored `content-programming` skill contracts.
+- [x] Pack workflow prompts require literal accepted next-route labels.
+- [x] `content-programming` hard assertions and quality scoring accept Claude `/series-spec` and Codex `$series-spec`.
+- [x] Layer1 regression coverage protects the prompt, hard assertion, and quality behavior.
+- [x] Required validation passes and results are recorded in `tasks/todo.md`.
+
+**Result:** Completed on 2026-05-14. Updated the pack benchmark harness instead of mirrored `content-programming` contracts. Pack prompts now require accepted handoff labels, route quality no longer defaults unknown pack skills to `$run`, and `content-programming` has runner-specific `series-spec` expectations for Claude and Codex. Added layer1 regression coverage for prompt wording, route assertions, and quality scoring. Validation passed with install/skill integrity/routing checks, benchmark coverage, focused layer1, `content-programming` verify, both-agent one-run benchmark smoke, targeted `rg`, and whitespace checks. Recommended next command: `$benchmark-test-skill content-programming`.
+
 ## Current Targeted Update: Creator Pack Artifact Handoff And Routing Ergonomics
 
 **Goal:** Tighten creator-media pack skills so approved research writes include a concrete artifact handoff and next routing follows the user’s current content-production intent instead of only the default workflow sequence.
