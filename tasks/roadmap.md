@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Update: content-programming Full-Contract Benchmark Coverage
+
+**Goal:** Upgrade `content-programming` benchmark coverage from a generic calendar smoke path to full programming-strategy contract coverage.
+
+**Acceptance Criteria:**
+- [x] The fix is scoped to benchmark harness coverage, not mirrored `content-programming` skill contracts.
+- [x] The benchmark prompt asks for pillars, formats, cadence constraints, portfolio balance, measurement, cleanup/refactor, and next series candidates.
+- [x] Hard assertions reject calendar-only output for the full-contract fixture.
+- [x] Deterministic quality scoring distinguishes full strategy output from calendar-only output.
+- [x] Required validation passes and results are recorded in `tasks/todo.md`.
+
+**Result:** Completed on 2026-05-14. Updated `tests/layer4/setups/packs/pack-workflows.setup.ts` so the `content-programming` pack benchmark uses a full programming-strategy fixture with pillars, formats, portfolio balance, measurement, cleanup/refactor, and next series candidates while preserving runner-specific `/series-spec` and `$series-spec` routing. Added layer1 coverage in `tests/layer1/bench-setups.test.ts` proving full-contract prompt requirements, hard assertion rejection of calendar-only output, and quality scoring differences. Validation passed with focused layer1 tests, install, skill integrity/routing checks, benchmark coverage, `content-programming` verify, and both-agent one-run smoke (`content-programming-claude-089cd18e` 1/1 hard assertions and 96.2% quality; `content-programming-codex-1be45ef5` 1/1 hard assertions and 100.0% quality). Recommended next command: `$benchmark-test-skill content-programming`.
+
 ## Current Agent Review: content-programming Benchmark 2026-05-14
 
 **Goal:** Review the latest persisted `content-programming` Claude and Codex benchmark outputs for subjective operator quality.
