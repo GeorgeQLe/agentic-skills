@@ -9,8 +9,6 @@ colors:
   line: "#CFD8E3"
   primary: "#00D4AA"
   primary-strong: "#00A88A"
-  coral: "#ff6b6b"
-  coral-strong: "#e85555"
   success: "#0F8A5F"
   warning: "#A86700"
   error: "#B42318"
@@ -57,13 +55,8 @@ spacing:
   mobile-container-gutter: "24px"
 rounded:
   none: "0"
-  sm: "4px"
-  md: "8px"
-  lg: "12px"
-  pill: "999px"
 elevation:
   blueprint-panel: "0 18px 50px rgba(17, 24, 39, 0.08)"
-  card: "0 4px 16px rgba(17, 24, 39, 0.06)"
 layout:
   container: "min(1180px, calc(100% - 32px))"
   mobile-container: "min(100% - 24px, 1180px)"
@@ -77,7 +70,7 @@ components:
     backgroundColor: "{colors.ink}"
     textColor: "{colors.panel}"
     border: "1px solid {colors.ink}"
-    rounded: "{rounded.lg}"
+    rounded: "{rounded.none}"
     minHeight: "44px"
     paddingX: "15px"
     paddingY: "10px"
@@ -85,11 +78,10 @@ components:
     backgroundColor: "{colors.panel}"
     textColor: "{colors.ink}"
     border: "1px solid {colors.line}"
-    rounded: "{rounded.lg}"
+    rounded: "{rounded.none}"
     minHeight: "44px"
     paddingX: "15px"
     paddingY: "10px"
-    hoverTextColor: "{colors.coral-strong}"
   blueprint-panel:
     backgroundColor: "{colors.panel}"
     border: "1px solid {colors.line}"
@@ -99,33 +91,12 @@ components:
   card:
     backgroundColor: "{colors.panel}"
     border: "1px solid {colors.line}"
-    rounded: "{rounded.md}"
+    rounded: "{rounded.none}"
     padding: "{spacing.xl}"
-    shadow: "{elevation.card}"
-  chip:
-    backgroundColor: "transparent"
-    textColor: "{colors.ink}"
-    border: "2px solid {colors.ink}"
-    rounded: "{rounded.pill}"
-    paddingX: "1rem"
-    paddingY: "0.4rem"
-    fontSize: "0.8rem"
-    fontWeight: 600
-    activeBackgroundColor: "{colors.coral}"
-    activeBorderColor: "{colors.coral}"
-    activeTextColor: "#FFFFFF"
-  lab-notebook:
-    backgroundColor: "#f8f0ff"
-    border: "1px solid {colors.line}"
-    rounded: "{rounded.none} {rounded.none} {rounded.lg} {rounded.lg}"
-    accentStrip: "{colors.coral}"
-    tiltMax: "0.5deg"
-    padding: "1.5rem 1.75rem"
-    shadow: "2px 4px 16px rgba(17, 24, 39, 0.08)"
   form-control:
     backgroundColor: "{colors.panel}"
     border: "1px solid {colors.line}"
-    rounded: "{rounded.sm}"
+    rounded: "{rounded.none}"
     minHeight: "44px"
     paddingX: "{spacing.md}"
     paddingY: "10px"
@@ -133,7 +104,7 @@ components:
 
 ## Overview
 
-The G Skillpacks visual system blends Swiss grid discipline with playful blueprint energy: neutral paper foundations, teal blueprint construction lines, progressive corner rounding, coral warmth accents, bounce-in micro-interactions, and compact technical density. The site should feel like a lab notebook crossed with a productized command center, not a generic SaaS landing page.
+The G Skillpacks visual system is a precise site language for `agentic-skills`: Swiss grid discipline, blueprint construction lines, compact technical density, and visible proof. The site should feel like a command center crossed with a productized field manual, not a generic SaaS landing page.
 
 Public naming must keep the brand and product layout aligned:
 
@@ -148,9 +119,7 @@ The canonical implementation source is `docs/skills-showcase/styles.css`; the mo
 
 Use `{colors.paper}` as the page foundation and `{colors.panel}` for repeated panels, cards, route rows, and form surfaces. Use `{colors.ink}` for primary text, `{colors.muted}` for secondary copy, and `{colors.line}` for dividers and blueprint panel borders.
 
-Blueprint teal is the structural and selection color. Use `{colors.primary}` for active borders, state-machine connectors, focus outlines, selected rows, and measured accents — but sparingly, so it reads as structure rather than decoration. Use `{colors.primary-strong}` for hover text and command labels.
-
-Coral is the warmth and energy accent. Use `{colors.coral}` for active chip states, labels in the lab-notebook sidebar, selected workflow indicators, and decorative warmth on interactive elements. Use `{colors.coral-strong}` for secondary button hover text. Coral should appear at interaction points, not as a background wash.
+Blueprint blue is the action and selection color. Use `{colors.primary}` for active borders, state-machine connectors, focus outlines, selected rows, and measured accents. Use `{colors.primary-strong}` for hover text and command labels.
 
 Status colors are supporting signals: `{colors.success}` for completed/progress artifacts, `{colors.warning}` for provider-missing or overlay states, and `{colors.error}` for validation failure and invalid form states. Do not use success or warning as the only cue for normal body text on the light background; their current contrast is below WCAG AA for normal text.
 
@@ -170,31 +139,25 @@ Section spacing is substantial but not airy: `{spacing.section}` on desktop and 
 
 ## Elevation & Depth
 
-The hero blueprint panel uses `{elevation.blueprint-panel}` as the primary elevation. Interactive cards — route cards, follow cards, catalog rows, workflow items — use `{elevation.card}` to provide subtle lift on hover. Static structural surfaces (metrics, state nodes, terminals) stay flat with a `{colors.line}` border.
+Depth is intentionally sparse. The only elevation token is `{elevation.blueprint-panel}`, used for the hero blueprint panel. Most repeated surfaces stay flat with a `{colors.line}` border and panel grid background. Avoid adding shadows to cards or rows unless the hierarchy must match the hero blueprint panel.
 
 ## Shapes
 
-The shape language uses progressive corner rounding scaled by component importance: `{rounded.none}` for structural elements (blueprint panels, metrics, state nodes, terminals), `{rounded.sm}` for tags and form controls, `{rounded.md}` for cards and repeated surfaces, `{rounded.lg}` for buttons and step cards, and `{rounded.pill}` for chips and selection pills. This progression keeps technical density on structural surfaces while adding approachability to interactive elements.
+The implemented shape language is square and technical: `{rounded.none}` across buttons, panels, rows, inputs, tags, and cards. Do not introduce pill-shaped badges, rounded marketing cards, or soft SaaS containers unless the design system is intentionally revised.
 
 ## Components
 
-Buttons use at least `44px` touch targets with `{rounded.lg}`. Primary buttons use `{components.button.backgroundColor}` with white text; secondary buttons use `{components.secondary-button.backgroundColor}` with `{colors.ink}` text and coral hover text.
+Buttons use at least `44px` touch targets. Primary buttons use `{components.button.backgroundColor}` with white text; secondary buttons use `{components.secondary-button.backgroundColor}` with `{colors.ink}` text and blue hover text.
 
-Chips are horizontal pill selectors (`{rounded.pill}`) used for workflow selection. The active chip uses `{colors.coral}` background with white text. Chips provide a scannable, tap-friendly alternative to vertical lists.
+Panels, cards, catalog rows, proof items, workflow items, route cards, notices, and form panels share the blueprint panel background, `{colors.line}` border, and square corners. Use cards only for repeated items or framed tools; do not wrap page sections in decorative cards.
 
-The lab-notebook sidebar is a sticky metadata panel with a light lavender wash (`#f8f0ff`), a coral accent strip on the left edge, subtle tilt (max `0.5deg`), and asymmetric rounding (`{rounded.none}` top, `{rounded.lg}` bottom). It displays workflow metadata: title, when-to-use, changes, artifacts, and failure paths.
-
-Panels, cards, catalog rows, proof items, workflow items, route cards, notices, and form panels share the blueprint panel background, `{colors.line}` border, and `{rounded.md}` corners. Interactive cards get `{elevation.card}` on hover. Use cards only for repeated items or framed tools; do not wrap page sections in decorative cards.
-
-Selected workflow items use coral borders plus an inset coral rule (replacing the previous teal selection). Focus states use a `3px` translucent teal outline with `3px` offset. Error inputs use `{colors.error}` border and an inset one-pixel error ring.
+Selected states use blue borders plus an inset blue rule. Focus states use a `3px` translucent blue outline with `3px` offset. Error inputs use `{colors.error}` border and an inset one-pixel error ring.
 
 Terminal playback uses `{colors.terminal-background}` with `{colors.terminal-text}` and `{typography.mono.fontFamily}`. Keep terminal output horizontally scrollable instead of shrinking code below readability.
 
 ## Do's and Don'ts
 
-Do use neutral foundations, teal structural accents, coral warmth accents, green/amber/red status signals, visible construction lines, progressive corner rounding, and compact proof-oriented layouts.
-
-Do use bounce-in animations on step cards and hover scale/lift on interactive elements. Reduce overshoot to `cubic-bezier(0.34, 1.3, 0.64, 1)` to keep energy without bounciness feeling uncontrolled.
+Do use neutral foundations, blueprint blue accents, green/amber/red status signals, visible construction lines, and compact proof-oriented layouts.
 
 Do keep all factual metrics tied to generated data or explicit static proof receipts.
 
@@ -202,8 +165,6 @@ Do test desktop, tablet, and mobile text wrapping when hero copy, blueprint diag
 
 Don't use decorative blobs, orbs, bokeh, generic gradient hero art, video-only explanations, or Remotion assets for this V1 static showcase.
 
-Don't let the interface become one-note blue or one-note coral; teal identifies structure, coral identifies interaction energy, and neutral surfaces carry the page.
-
-Don't apply rounding to structural elements (blueprint panels, metrics, state nodes, terminals) — these stay square to preserve the technical blueprint feel.
+Don't let the interface become one-note blue; blue should identify structure and interaction, while neutral surfaces carry the page.
 
 Don't use `{colors.success}` or `{colors.warning}` as normal body-copy colors on `{colors.paper}` or `{colors.panel}` unless the token is darkened in a future design-system update.
