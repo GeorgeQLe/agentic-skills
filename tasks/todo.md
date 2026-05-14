@@ -4,6 +4,38 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Current Task — Targeted Update `content-programming` Full-Contract Benchmark Coverage
+
+**Goal:** Upgrade `content-programming` benchmark coverage from a generic calendar smoke path to full programming-strategy contract coverage.
+
+**Plan:**
+- [x] Read relevant lessons and the `content-programming` benchmark agent-review remediation.
+- [x] Confirm the fix belongs in benchmark harness coverage, not mirrored `content-programming` skill contracts or a new skill.
+- [x] Update the pack benchmark setup so `content-programming` asks for pillars, formats, cadence constraints, portfolio balance, measurement, cleanup/refactor, and next series candidates.
+- [x] Add hard assertions and deterministic quality criteria that distinguish full strategy output from calendar-only output.
+- [x] Run required validation, record results, then commit and push intended changes on `master`.
+
+## Review — Targeted Update `content-programming` Full-Contract Benchmark Coverage
+
+- Decision: existing benchmark harness update. No new skill and no mirrored `content-programming` skill contract changes were needed.
+- Evidence used: `tasks/lessons.md`, `benchmark/review-content-programming-2026-05-14.md`, mirrored `packs/creator-foundation/*/content-programming/SKILL.md`, and `tests/layer4/setups/packs/pack-workflows.setup.ts`.
+- Evidence intentionally skipped: broad session-history scan; the benchmark review already verified the concrete gap and owner target.
+- Updated `tests/layer4/setups/packs/pack-workflows.setup.ts` with `content-programming`-specific full-contract prompt requirements, fixture inputs, hard assertions, and quality criteria for full programming strategy coverage and fixture strategy facts.
+- Updated `tests/layer1/bench-setups.test.ts` to prove the prompt requires full-contract dimensions, calendar-only output fails hard assertions, and the quality rubric scores full strategy output above calendar-only output.
+- Validation passed:
+  - `pnpm --dir tests exec vitest run --project layer1 bench-setups`
+  - `./install.sh`
+  - `./scripts/skill-deps.sh --broken`
+  - `./scripts/skill-versions.sh --missing`
+  - `./scripts/skill-next-step-routing.sh --missing`
+  - `pnpm --dir tests bench:coverage`
+  - `pnpm --dir tests verify --skill content-programming`
+  - `pnpm --dir tests bench --skill content-programming --agent both --runs 1 --chunk-size 1 --pause 0` (`content-programming-claude-089cd18e` 1/1 hard assertions, 96.2% quality; `content-programming-codex-1be45ef5` 1/1 hard assertions, 100.0% quality)
+  - targeted `rg` checks for full-contract benchmark coverage terms
+  - `git diff --check`
+- Skills Showcase regeneration was not needed because no tracked `SKILL.md`, `PACK.md`, curated benchmark report, or subjective review report changed.
+- **Recommended next command:** `$benchmark-test-skill content-programming`
+
 ## Current Task — Agent Review `content-programming` Benchmark 2026-05-14
 
 **Goal:** Review the latest persisted `content-programming` Claude and Codex benchmark outputs for subjective operator quality.

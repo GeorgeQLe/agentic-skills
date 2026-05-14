@@ -1057,6 +1057,11 @@ describe("benchmark setup registry", () => {
     expect(setup?.prompt).toContain("literal final handoff label accepted by the harness");
     expect(setup?.prompt).toContain("claude: /series-spec");
     expect(setup?.prompt).toContain("codex: $series-spec");
+    expect(setup?.prompt).toContain("durable pillars with audience jobs");
+    expect(setup?.prompt).toContain("portfolio balance across acquisition, trust, proof, education, and retention");
+    expect(setup?.prompt).toContain("measurement plan with warning signs");
+    expect(setup?.prompt).toContain("cleanup or refactor plan for stale content");
+    expect(setup?.prompt).toContain("next series candidates to specify");
 
     const workDir = mkdtempSync(resolve(tmpdir(), "content-programming-route-"));
     writeFileSync(
@@ -1066,7 +1071,13 @@ describe("benchmark setup registry", () => {
         "",
         "Pack: creator-foundation",
         "Skill: content-programming",
-        "This content programming calendar uses local-fixture evidence.",
+        "This content programming strategy uses local-fixture evidence.",
+        "Pillars: build-in-public notes, implementation tradeoffs, and shipped artifact proof.",
+        "Formats: build note, decision log, demo walkthrough, and monthly retro.",
+        "Portfolio balance: acquisition, trust, proof, education, and retention.",
+        "Measurement plan: cadence completion, evidence coverage, artifact readiness, and warning signs.",
+        "Cleanup/refactor plan: update stale setup walkthroughs.",
+        "Next series candidate: local-first benchmark workflow.",
         "Evidence: Audience wants practical build notes; Cadence target: weekly.",
         "Risk: weekly cadence may exceed production capacity.",
         "",
@@ -1111,7 +1122,13 @@ describe("benchmark setup registry", () => {
         "",
         "Pack: creator-foundation",
         "Skill: content-programming",
-        "This content programming calendar uses local-fixture evidence.",
+        "This content programming strategy uses local-fixture evidence.",
+        "Pillars: build-in-public notes, implementation tradeoffs, and shipped artifact proof.",
+        "Formats: build note, decision log, demo walkthrough, and monthly retro.",
+        "Portfolio balance: acquisition, trust, proof, education, and retention.",
+        "Measurement plan: cadence completion, evidence coverage, artifact readiness, and warning signs.",
+        "Cleanup/refactor plan: update stale setup walkthroughs.",
+        "Next series candidate: local-first benchmark workflow.",
         "Evidence: Audience wants practical build notes; Cadence target: weekly.",
         "Risk: weekly cadence may exceed production capacity.",
         "",
@@ -1145,6 +1162,37 @@ describe("benchmark setup registry", () => {
     });
     expect(nextRouteCriterion?.evaluate("Next: $series-spec")).toMatchObject({
       score: 0,
+    });
+
+    writeFileSync(
+      resolve(workDir, "pack-benchmark-output.md"),
+      [
+        "# Pack Benchmark Output",
+        "",
+        "Pack: creator-foundation",
+        "Skill: content-programming",
+        "This content programming calendar uses local-fixture evidence.",
+        "Evidence: Audience wants practical build notes; Cadence target: weekly.",
+        "Risk: weekly cadence may exceed production capacity.",
+        "",
+        "Recommended next skill: /series-spec",
+      ].join("\n"),
+    );
+    const calendarOnlyAssertions = setup!.assertResult(
+      {
+        stdout: "",
+        stderr: "",
+        exitCode: 0,
+        workDir,
+        files: ["pack-benchmark-output.md"],
+      },
+      { agent: "claude" },
+    );
+    expect(calendarOnlyAssertions.find((assertion) => assertion.description === "Output covers durable pillars")).toMatchObject({
+      pass: false,
+    });
+    expect(calendarOnlyAssertions.find((assertion) => assertion.description === "Output covers measurement plan")).toMatchObject({
+      pass: false,
     });
   });
 
@@ -1732,7 +1780,14 @@ describe("pack workflow benchmark setups", () => {
         "",
         "Pack: creator-foundation",
         "Skill: content-programming",
-        "Focus: creator content programming calendar for a creator platform workflow.",
+        "Focus: creator content programming strategy for a creator platform workflow.",
+        "Pillars: build-in-public notes, implementation tradeoffs, and shipped artifact proof.",
+        "Formats: build note, decision log, demo walkthrough, and monthly retro.",
+        "Portfolio balance: acquisition, trust, proof, education, and retention.",
+        "Measurement plan: cadence completion, evidence coverage, artifact readiness, and warning signs.",
+        "Cleanup/refactor plan: update stale setup walkthroughs.",
+        "Next series candidate: local-first benchmark workflow.",
+        "Fixture strategy facts: build-in-public notes; implementation tradeoffs; shipped artifact proof; stale setup walkthroughs.",
         "Fixture evidence: `fixtures/local-evidence.md` confirms local deterministic evidence.",
         "`pack-input.md` states Audience wants practical build notes and Cadence target: weekly.",
         "Risk: cadence may need validation against real audience evidence and provenance.",
@@ -1755,6 +1810,57 @@ describe("pack workflow benchmark setups", () => {
     expect(fixtureCited.criticalFailures).not.toContain("pack-fixture-evidence");
     expect(fixtureCited.passed).toBe(true);
     expect(generic.criticalFailures).toContain("pack-fixture-evidence");
+  });
+
+  it("scores content-programming full-contract coverage beyond calendar-only output", () => {
+    const setup = CUSTOM_BENCH_SETUPS["content-programming"];
+    const evaluator = setup.qualityEvaluator;
+
+    expect(evaluator).toBeDefined();
+
+    const fullStrategy = evaluator!.evaluate(
+      [
+        "# content-programming",
+        "",
+        "Pack: creator-foundation",
+        "Skill: content-programming",
+        "Pillars: build-in-public notes, implementation tradeoffs, and shipped artifact proof.",
+        "Formats: build note, decision log, demo walkthrough, and monthly retro.",
+        "Portfolio balance: acquisition, trust, proof, education, and retention.",
+        "Measurement plan: cadence completion, evidence coverage, artifact readiness, and warning signs.",
+        "Cleanup/refactor plan: update stale setup walkthroughs.",
+        "Next series candidate: local-first benchmark workflow.",
+        "Fixture strategy facts: build-in-public notes; implementation tradeoffs; shipped artifact proof; stale setup walkthroughs.",
+        "`pack-input.md` states Audience wants practical build notes and Cadence target: weekly.",
+        "`fixtures/local-evidence.md` confirms local deterministic evidence.",
+        "Risk: weekly cadence may exceed production capacity.",
+        "Recommended next skill: $series-spec",
+      ].join("\n"),
+    );
+    const calendarOnly = evaluator!.evaluate(
+      [
+        "# content-programming",
+        "",
+        "Pack: creator-foundation",
+        "Skill: content-programming",
+        "Creator content programming calendar for practical build notes.",
+        "`pack-input.md` states Audience wants practical build notes and Cadence target: weekly.",
+        "`fixtures/local-evidence.md` confirms local deterministic evidence.",
+        "Risk: weekly cadence may exceed production capacity.",
+        "Recommended next skill: $series-spec",
+      ].join("\n"),
+    );
+
+    expect(fullStrategy.criteria.find((criterion) => criterion.id === "content-programming-full-contract")).toMatchObject({
+      score: 1,
+    });
+    expect(fullStrategy.criteria.find((criterion) => criterion.id === "content-programming-fixture-strategy-facts")).toMatchObject({
+      score: 1,
+    });
+    expect(calendarOnly.criteria.find((criterion) => criterion.id === "content-programming-full-contract")).toMatchObject({
+      score: 0,
+    });
+    expect(calendarOnly.score).toBeLessThan(fullStrategy.score);
   });
 });
 
