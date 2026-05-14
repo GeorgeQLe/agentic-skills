@@ -4,6 +4,32 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Current Task — Benchmark `content-programming` Fresh Full-Contract Run 2026-05-14
+
+**Goal:** Run `$benchmark-test-skill content-programming` against the current repository harness and record fresh deterministic both-agent benchmark evidence.
+
+**Plan:**
+- [x] Confirm `$benchmark-test-skill` is the active workflow and `content-programming` is only the target skill argument.
+- [x] Run `pnpm bench --list-skills` and confirm `content-programming` is known, including coverage status.
+- [x] Run `pnpm verify --skill content-programming`; stop before bench if verification fails.
+- [x] If verify passes, run `pnpm bench --skill content-programming --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [x] Write and validate `benchmark/test-content-programming-2026-05-14.md` with verify, benchmark, latency, cost, consistency, raw paths, and recommended next route.
+- [x] Refresh generated Skills Showcase data because curated benchmark evidence changes.
+- [x] Record results here, then commit and push intended changes on `master`.
+
+## Review — Benchmark `content-programming` Fresh Full-Contract Run 2026-05-14
+
+- Command resolution: `$benchmark-test-skill` was the active workflow; `content-programming` was treated as the target skill argument.
+- Eligibility: `content-programming` is known to the benchmark harness with custom coverage via `tests/layer4/setups/packs/pack-workflows.setup.ts`.
+- Verify passed: layer1 PASS in 3.6s with 1,182 tests across 14 files; layer2 SKIP because no target-specific layer2 tests matched `content-programming`.
+- Benchmark completed for both agents with no infrastructure-blocked runs:
+  - Claude session `a8dda4dc`: 3/3 evaluated hard assertions passed, output quality 96.8%, p50 45.9s, p95 126.4s, p99 133.6s, total cost $0.75, 0 threshold failures, and 0 critical failures.
+  - Codex session `7f0f09f4`: 3/3 evaluated hard assertions passed, output quality 98.1%, p50 68.0s, p95 68.4s, p99 68.4s, total cost $0.75, 0 threshold failures, and 0 critical failures.
+- Report updated at `benchmark/test-content-programming-2026-05-14.md`.
+- Report validation passed: target, agent rows, pass-rate and blocked-run data, latency, cost, consistency, raw session paths, output-quality details, failed assertion statement, and recommended next route are present.
+- Skills Showcase generated data was refreshed; `docs/benchmark-results-matrix.md` now points to `content-programming-claude-a8dda4dc` and `content-programming-codex-7f0f09f4`.
+- **Recommended next skill:** `$benchmark-agent-review content-programming`
+
 ## Current Task — Targeted Update `content-programming` Full-Contract Benchmark Coverage
 
 **Goal:** Upgrade `content-programming` benchmark coverage from a generic calendar smoke path to full programming-strategy contract coverage.
