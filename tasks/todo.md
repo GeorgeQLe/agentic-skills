@@ -9,10 +9,23 @@
 **Goal:** Determine whether recent `$benchmark-test-skill` runs show a recurring Claude-vs-Codex reliability gap, and whether the cause is missing setup parity, benchmark harness behavior, runner infrastructure, or skill-contract drift.
 
 **Plan:**
-- [ ] Inventory recent persisted benchmark reports and raw both-agent run artifacts.
-- [ ] Cross-check local Claude and Codex session histories for benchmark-test-skill setup parity context.
-- [ ] Classify observed Claude/Codex failures by root-cause type with concrete examples.
-- [ ] Report counts, trend evidence, parity verdict, and recommended next route.
+- [x] Inventory recent persisted benchmark reports and raw both-agent run artifacts.
+- [x] Cross-check local Claude and Codex session histories for benchmark-test-skill setup parity context.
+- [x] Classify observed Claude/Codex failures by root-cause type with concrete examples.
+- [x] Report counts, trend evidence, parity verdict, and recommended next route.
+
+## Review — Analyze Benchmark Claude/Codex Parity Trend
+
+- Source evidence: local Claude history (`~/.claude/history.jsonl`), local Codex history (`~/.codex/history.jsonl`), persisted benchmark reports under `benchmark/test-*.md`, triage reports for `content-programming` and `icon-handler`, and raw report JSON under `tests/benchmarks/runs/`.
+- History scale: Claude history had 8 `benchmark-test-skill`/benchmark-harness setup mentions; Codex history had 68. Most benchmark iteration and reruns after the pack was created happened through Codex, so Codex has had more repeated tuning.
+- Recent curated both-agent reports with parity after fixes: `benchmark-test-skill` passed both agents on 2026-05-12 and 2026-05-13; `run`, `ship`, `session-triage`, and final `icon-handler` also passed both agents in their latest curated reports.
+- Recent asymmetric failures:
+  - `design-system` 2026-05-10: Claude 3/3, Codex 0/3 because Codex did not create `DESIGN.md`.
+  - `ship` 2026-05-11: initial issue was benchmark harness route convention; fixed to accept Claude `/run` and Codex `$run`.
+  - `icon-handler` 2026-05-13/14: Claude failures included invalid image/runner transport and route-clarity issues; latest report passed both agents after fixture, route, and image-error classification fixes.
+  - `content-programming` 2026-05-14: Claude 0/3, Codex 3/3, but triage classified this as benchmark pack prompt/assertion and expected-route drift, not mirrored skill-contract drift.
+- Parity verdict: mirrored Claude/Codex skill setup parity is mostly present where checked, especially runner-specific slash-vs-dollar route conventions. The remaining gap is setup-level benchmark parity: generic pack fixtures and rubrics still default to Codex-shaped labels/routes often enough that Claude exposes false negatives.
+- Recommended next route: `$targeted-skill-builder content-programming benchmark next-route coverage`.
 
 ## Current Task — Creator Pack Artifact Handoff And Routing Ergonomics
 
