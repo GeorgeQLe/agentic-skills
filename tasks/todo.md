@@ -58,6 +58,28 @@
 - Report validation passed: target, agent rows, pass-rate and blocked-run data, latency, cost, consistency, raw session paths, output-quality details, failed assertion statement, and recommended next route are present.
 - **Recommended next skill:** `$session-triage content-programming benchmark failure`
 
+## Current Task — Triage `content-programming` Benchmark Quality Failure 2026-05-14
+
+**Goal:** Verify the fresh `content-programming` benchmark quality critical failure and identify the smallest durable fix.
+
+**Plan:**
+- [x] Inspect the fresh benchmark report and persisted Claude/Codex run evidence.
+- [x] Compare mirrored `content-programming` contracts against the benchmark setup and quality rubric.
+- [x] Classify the issue as a skill contract gap, benchmark harness gap, runner infrastructure issue, or agent noncompliance.
+- [x] Write `benchmark/triage-content-programming-2026-05-14-quality.md` with verdict, root cause, responsible gap, validation plan, and next route.
+- [x] Validate report fields, then commit and push intended changes on `master`.
+
+## Review — Triage `content-programming` Benchmark Quality Failure 2026-05-14
+
+- Verification verdict: verified.
+- Evidence inspected: `benchmark/test-content-programming-2026-05-14.md`, raw Claude session `content-programming-claude-d041146e`, raw Codex session `content-programming-codex-f56f9728`, mirrored `content-programming` contracts, pack benchmark setup, quality helpers, and relevant lessons.
+- Fresh benchmark context: both agents passed 3/3 hard assertions with no infrastructure-blocked runs. Claude alone had 1 output-quality critical failure.
+- Root cause: benchmark quality-rubric brittleness. Claude run 002 cited `fixtures/local-evidence.md`, `pack-input.md`, practical build notes, weekly cadence, and local-only fixture constraints, but the critical `pack-fixture-evidence` criterion required the exact hyphenated token `local-fixture`.
+- Responsible gap: `tests/layer4/setups/packs/pack-workflows.setup.ts`, not mirrored `packs/creator-foundation/*/content-programming/SKILL.md`.
+- Recommended fix: make `pack-fixture-evidence` accept concrete fixture paths or retained fixture facts rather than requiring the literal `local-fixture` token, while keeping generic evidence-only output failing.
+- Report written to `benchmark/triage-content-programming-2026-05-14-quality.md`.
+- **Recommended next skill:** `$targeted-skill-builder content-programming benchmark fixture-evidence rubric`
+
 ## Current Task — Analyze Benchmark Claude/Codex Parity Trend
 
 **Goal:** Determine whether recent `$benchmark-test-skill` runs show a recurring Claude-vs-Codex reliability gap, and whether the cause is missing setup parity, benchmark harness behavior, runner infrastructure, or skill-contract drift.

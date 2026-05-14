@@ -42,6 +42,19 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Completed on 2026-05-14. `content-programming` is known with `coverage=custom` using `tests/layer4/setups/packs/pack-workflows.setup.ts`. Verify passed with layer1 PASS in 3.9s and layer2 SKIP because no target-specific layer2 tests matched. The both-agent benchmark completed with no infrastructure-blocked runs. Claude session `d041146e` passed hard assertions at 3/3 with output quality 89.2%, p50 latency 29.0s, total cost $0.75, and 1 output-quality critical failure. Codex session `f56f9728` passed hard assertions at 3/3 with output quality 98.3%, p50 latency 68.0s, and total cost $0.75. Report validation passed for required benchmark fields. Report: `benchmark/test-content-programming-2026-05-14.md`. Recommended next skill: `$session-triage content-programming benchmark failure`.
 
+## Current Triage: content-programming Benchmark Quality Failure 2026-05-14
+
+**Goal:** Verify the fresh `content-programming` benchmark quality critical failure and identify the smallest durable fix.
+
+**Acceptance Criteria:**
+- [x] Fresh benchmark report and persisted Claude/Codex run evidence are inspected.
+- [x] Mirrored `content-programming` contracts are compared against benchmark setup and quality expectations.
+- [x] The failure is classified as a skill contract gap, benchmark harness gap, runner infrastructure issue, or agent noncompliance.
+- [x] `benchmark/triage-content-programming-2026-05-14-quality.md` records verdict, root cause, responsible gap, validation plan, and next route.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Completed on 2026-05-14. The fresh quality failure is verified. Both agents passed 3/3 hard assertions and no runs were infrastructure-blocked, but Claude run 002 recorded a critical `pack-fixture-evidence` quality failure. The retained artifact cited `fixtures/local-evidence.md`, `pack-input.md`, the practical build notes audience input, weekly cadence input, and local-only fixture constraints; it failed because the rubric required the exact token `local-fixture`. Responsible gap is benchmark quality-rubric brittleness in `tests/layer4/setups/packs/pack-workflows.setup.ts`, not mirrored `content-programming` contract drift or runner infrastructure. Report: `benchmark/triage-content-programming-2026-05-14-quality.md`. Recommended next skill: `$targeted-skill-builder content-programming benchmark fixture-evidence rubric`.
+
 ## Current Targeted Update: Creator Pack Artifact Handoff And Routing Ergonomics
 
 **Goal:** Tighten creator-media pack skills so approved research writes include a concrete artifact handoff and next routing follows the user’s current content-production intent instead of only the default workflow sequence.
