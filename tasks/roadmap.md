@@ -29,6 +29,19 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Completed on 2026-05-14. Updated `tests/harness/bench-runner.ts` so non-zero runner output containing `Could not process image` is classified as `agent runner image processing error` and therefore infrastructure-blocked. Added `tests/layer1/runner.test.ts` coverage proving assertions are skipped and the run is not marked passed. Validation passed with focused runner tests, install/skill checks, benchmark coverage, `pnpm --dir tests verify --skill icon-handler`, a Claude smoke benchmark `icon-handler-claude-04ff1a83` with 1/1 hard assertions, targeted `rg`, and `git diff --check`. Recommended next command: `$benchmark-test-skill icon-handler`.
 
+## Current Benchmark: icon-handler After Image-Error Classification 2026-05-14
+
+**Goal:** Run `$benchmark-test-skill icon-handler` against the current repository state after image-processing runner errors were reclassified as infrastructure blocks.
+
+**Acceptance Criteria:**
+- [x] `pnpm bench --list-skills` confirms `icon-handler` is known and reports its coverage status.
+- [x] `pnpm verify --skill icon-handler` passes or blocks benchmark execution with a recorded failure.
+- [x] `pnpm bench --skill icon-handler --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [x] `benchmark/test-icon-handler-2026-05-14.md` records verify, benchmark, latency, cost, consistency, and raw session evidence.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Benchmark completed on 2026-05-14. `icon-handler` is known with `coverage=custom` using `tests/layer4/setups/tier23-global-workflows.setup.ts`. Verify passed with layer1 in 8.9s across 1,447 tests; layer2 was skipped because no target-specific layer2 tests matched `icon-handler`. The both-agent benchmark completed with no infrastructure-blocked runs. Claude passed 3/3 evaluated hard assertions with 84.1% output quality, p50 latency 37.1s, and $3.00 total cost. Codex passed 3/3 evaluated hard assertions with 84.8% output quality, p50 latency 61.5s, and $3.00 total cost. Report: `benchmark/test-icon-handler-2026-05-14.md`. Recommended next skill: `$benchmark-agent-review icon-handler`.
+
 ## Current Triage: icon-handler Benchmark Image Failure 2026-05-14
 
 **Goal:** Verify the latest Claude `icon-handler` benchmark image-processing failure and identify the smallest durable fix.
