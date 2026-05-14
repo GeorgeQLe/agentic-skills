@@ -4,6 +4,36 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Current Task — Targeted Update `content-programming` Benchmark Next-Route Coverage
+
+**Goal:** Fix the `content-programming` pack benchmark setup so accepted next-route labels and runner-specific `series-spec` handoffs are tested instead of defaulting to `$run`.
+
+**Plan:**
+- [x] Read relevant lessons, triage evidence, mirrored `content-programming` contracts, and pack benchmark setup overlap.
+- [x] Update the existing pack benchmark setup rather than changing the mirrored skill contracts or creating a new skill.
+- [x] Add layer1 regression coverage for the prompt label requirement, Claude `/series-spec`, Codex `$series-spec`, and quality scoring.
+- [x] Run required validation, record results, then commit and push intended changes on `master`.
+
+## Review — Targeted Update `content-programming` Benchmark Next-Route Coverage
+
+- Decision: benchmark harness update. The mirrored `content-programming` skill contracts already define the correct approval gate and default successor, so no skill contract or new skill was needed.
+- Evidence used: `tasks/lessons.md`, `benchmark/triage-content-programming-2026-05-14.md`, `benchmark/test-content-programming-2026-05-14.md`, mirrored `packs/creator-foundation/*/content-programming/SKILL.md`, and the generic pack workflow setup.
+- Evidence intentionally skipped: broad session-history scan; the triage report already verified the concrete failure and responsible files.
+- Updated `tests/layer4/setups/packs/pack-workflows.setup.ts` so pack benchmark prompts require a literal accepted handoff label, route quality defaults to a valid handoff label when no known route exists, and `content-programming` has runner-specific route expectations: Claude `/series-spec`, Codex `$series-spec`.
+- Added `tests/layer1/bench-setups.test.ts` regression coverage for the prompt contract, runner-aware hard assertions, and quality scoring rejecting `$run` and bare `Next:` for this fixture.
+- Validation passed:
+  - `pnpm --dir tests exec vitest run --project layer1 bench-setups`
+  - `./install.sh`
+  - `./scripts/skill-deps.sh --broken`
+  - `./scripts/skill-versions.sh --missing`
+  - `./scripts/skill-next-step-routing.sh --missing`
+  - `pnpm --dir tests bench:coverage`
+  - `pnpm --dir tests verify --skill content-programming`
+  - `pnpm --dir tests bench --skill content-programming --agent both --runs 1 --chunk-size 1 --pause 0` (`content-programming-claude-14af9582` and `content-programming-codex-807dbdfd`, both 1/1 hard assertions)
+  - targeted `rg` checks for `content-programming`, `series-spec`, accepted handoff labels, and `pack-next-route`
+  - `git diff --check`
+- **Recommended next command:** `$benchmark-test-skill content-programming`
+
 ## Current Task — Analyze Benchmark Claude/Codex Parity Trend
 
 **Goal:** Determine whether recent `$benchmark-test-skill` runs show a recurring Claude-vs-Codex reliability gap, and whether the cause is missing setup parity, benchmark harness behavior, runner infrastructure, or skill-contract drift.
