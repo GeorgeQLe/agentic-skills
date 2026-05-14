@@ -4,6 +4,42 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Current Task — Creator Pack Artifact Handoff And Routing Ergonomics
+
+**Goal:** Tighten creator-media pack skills so high-quality approved research writes do not stop with untracked artifacts or mechanical next-skill routing.
+
+**Plan:**
+- [x] Confirm the narrow gap from the current `$analyze-sessions` findings and relevant lessons.
+- [x] Update existing creator-media skill contracts instead of creating a duplicate meta-skill.
+- [x] Add deterministic layer1 coverage for post-write artifact handoff and intent-aware routing.
+- [x] Refresh generated showcase data because tracked `SKILL.md`/`PACK.md` behavior changes.
+- [x] Validate, record review notes, then commit and push on `master`.
+
+## Review — Creator Pack Artifact Handoff And Routing Ergonomics
+
+- Decision: existing-skill update. No new meta-skill was created because the gap lives in creator-media pack contracts after approved artifact writes and next-step routing.
+- Evidence used: current `$analyze-sessions` report, `tasks/lessons.md` approval-gate and next-routing lessons, creator-foundation/youtube-ops/remotion pack skill contracts, and recent `/Users/georgele/projects/content` artifact state from the prior analysis.
+- Evidence intentionally skipped: another broad session-history scan; the previous `$analyze-sessions` run already established recurrence and concrete examples.
+- Updated mirrored creator-media-adjacent skill contracts in `packs/creator-foundation`, `packs/youtube-ops`, and `packs/remotion` with:
+  - `## Approved Artifact Handoff`: list created/updated artifacts, state verification/readback, report dirty/untracked intended files, and route to shipping/commit/handoff before downstream strategy when intended artifacts are not shipped.
+  - `## Intent-Aware Routing`: classify immediate intent before default sequence routing, including strategy refresh, recording prep, upload prep, performance review, owner-analytics/manual evidence, and dirty-artifact cleanup.
+- Updated `packs/creator-foundation/PACK.md` and `packs/creator-media/PACK.md` to document the same precedence.
+- Added `tests/layer1/creator-media-handoff-routing.test.ts` covering all 50 creator-foundation/youtube-ops/remotion mirrored skill contracts plus pack docs.
+- Refreshed Skills Showcase generated data. Only generated fingerprints/proof timestamps changed; no curated showcase copy, grouping, animation text, or proof receipts needed hand edits because the public catalog shape did not change.
+- Validation passed:
+  - `./install.sh`
+  - `./scripts/skill-deps.sh --broken`
+  - `./scripts/skill-versions.sh --missing`
+  - `./scripts/skill-next-step-routing.sh --missing`
+  - `pnpm --dir tests bench:coverage`
+  - `pnpm --dir tests exec vitest run --project layer1 creator-media-handoff-routing research-approval-gate creator-media-linkedin`
+  - `node scripts/generate-skills-showcase-data.mjs`
+  - `node scripts/generate-skills-showcase-github-data.mjs`
+  - `scripts/validate-skills-showcase-data.sh`
+  - Targeted `rg` for the new handoff/routing contract language
+  - `git diff --check`
+- **Recommended next command:** `$benchmark-test-skill content-programming`
+
 ## Current Task — Refresh Showcase Data For `icon-handler` Benchmark Evidence
 
 **Goal:** Ensure the frontend Skills Showcase reflects the latest `icon-handler` benchmark and review evidence.

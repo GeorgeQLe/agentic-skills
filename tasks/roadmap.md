@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Update: Creator Pack Artifact Handoff And Routing Ergonomics
+
+**Goal:** Tighten creator-media pack skills so approved research writes include a concrete artifact handoff and next routing follows the user’s current content-production intent instead of only the default workflow sequence.
+
+**Acceptance Criteria:**
+- [x] Existing creator-media skills are updated rather than adding a duplicate meta-skill.
+- [x] Approved synthesized writes require a created/updated file list, verification/readback note, git status or dirty-artifact handoff, and explicit next action.
+- [x] Next-skill routing gives priority to immediate user intent such as strategy refresh, recording prep, upload prep, performance review, or owner-analytics/manual blocker work.
+- [x] Deterministic layer1 coverage protects the creator-media contract language.
+- [x] Generated showcase data is refreshed, validation passes, and results are recorded in `tasks/todo.md`.
+
+**Result:** Completed on 2026-05-14. Added `Approved Artifact Handoff` and `Intent-Aware Routing` contracts across mirrored creator-foundation, youtube-ops, and remotion creator-media skills. Updated creator pack docs and added `tests/layer1/creator-media-handoff-routing.test.ts` to protect the handoff/routing behavior. Refreshed generated Skills Showcase data; no curated website copy changed beyond generated fingerprints/proof data. Validation passed with install, skill integrity, routing, benchmark coverage, focused layer1 tests, showcase generation/validation, targeted `rg`, and whitespace checks. Recommended next command: `$benchmark-test-skill content-programming`.
+
 ## Current Fix: Showcase Data For `icon-handler` Benchmark Evidence
 
 **Goal:** Ensure the frontend Skills Showcase reflects the latest `icon-handler` benchmark and review evidence.

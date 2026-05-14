@@ -17,6 +17,8 @@ research-bootstrap -> research-directory-conventions
 -> series-spec -> product-led-media-map -> creator-metrics-review
 ```
 
+After an approved synthesized artifact write, creator-foundation skills must hand off the artifact explicitly before routing onward: list created/updated artifact paths, state readback or validation performed, report dirty/untracked intended files when in a git repo, and make shipping/commit/handoff the next action when those intended artifacts are not yet shipped. Default next-skill routing is subordinate to the user's immediate content-production intent, including strategy refresh, recording prep, upload prep, performance review, owner-analytics/manual evidence collection, and dirty-artifact cleanup.
+
 Skills:
 
 ```text
