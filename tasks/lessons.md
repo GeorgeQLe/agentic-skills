@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-05-15 — Do not treat stale manual deploy tasks as live deployment truth
+
+- A `$ship` handoff reported the Skills Showcase Vercel setup as pending because `tasks/manual-todo.md` still contained old unchecked Vercel setup tasks.
+- When a user says a surface is already live, update the manual task source of truth before repeating older blockers.
+- Separate confirmed hosting status from unverified launch checks: Vercel project/deploy can be complete while Neon env vars, `/follow`, and `/admin/newsletter` still need verification.
+- Future ship handoffs should read manual tasks critically and distinguish "initial setup not done" from "live surface exists but smoke checks remain."
+
 ## 2026-05-15 — Codex interview skills should ask one primary question per turn
 
 - Codex interview runs inherited Claude's 1-3 grouped-question cadence even though Codex cannot open a structured ask-user prompt outside Plan mode.

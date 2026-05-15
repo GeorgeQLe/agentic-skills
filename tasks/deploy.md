@@ -4,6 +4,8 @@
 
 This contract covers deployment for the Skills Showcase. The primary surface is the Next.js app at `apps/skills-showcase/`.
 
+Current status: the Skills Showcase is live and hosted via Vercel as of 2026-05-15. Remaining manual launch checks should focus on environment variables, `/follow`, `/admin/newsletter`, and route/UI verification rather than initial Vercel project setup.
+
 ## Next.js App (Primary)
 
 ### Hosting Target
