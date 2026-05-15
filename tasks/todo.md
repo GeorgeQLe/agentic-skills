@@ -4,6 +4,32 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Current Task — Benchmark `analyze-sessions` 2026-05-15
+
+**Goal:** Run `$benchmark-test-skill analyze-sessions` against the current repository harness and record deterministic both-agent benchmark evidence.
+
+**Plan:**
+- [x] Confirm `$benchmark-test-skill` is the active workflow and `analyze-sessions` is only the target skill argument.
+- [x] Run `pnpm bench --list-skills` and confirm `analyze-sessions` is known, including coverage status.
+- [x] Run `pnpm verify --skill analyze-sessions`; stop before bench if verification fails.
+- [x] If verify passes, run `pnpm bench --skill analyze-sessions --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [x] Write and validate `benchmark/test-analyze-sessions-2026-05-15.md` with verify, benchmark, latency, cost, consistency, raw paths, and recommended next route.
+- [x] Refresh generated Skills Showcase data if curated benchmark evidence changes.
+- [x] Record results here, then commit and push intended changes on `master`.
+
+## Review — Benchmark `analyze-sessions` 2026-05-15
+
+- Command resolution: `$benchmark-test-skill` was the active workflow; `analyze-sessions` was treated as the target skill argument.
+- Eligibility: `analyze-sessions` is known to the benchmark harness with custom coverage via `tests/layer4/setups/tier23-global-workflows.setup.ts`.
+- Verify passed: layer1 PASS in 3.8s with 1,195 tests across 15 files; layer2 SKIP because no target-specific layer2 tests matched `analyze-sessions`.
+- Benchmark completed for both agents with no infrastructure-blocked runs:
+  - Claude session `6b8dbd1e`: 0/3 evaluated hard assertions passed, output quality 71.2%, p50 34.1s, p95 35.1s, p99 35.2s, total cost $0.75, 3 threshold failures, and 3 critical failures.
+  - Codex session `afaf2f22`: 2/3 evaluated hard assertions passed, output quality 80.3%, p50 80.2s, p95 307.9s, p99 328.2s, total cost $0.75, 1 threshold failure, and 2 critical failures.
+- Report written at `benchmark/test-analyze-sessions-2026-05-15.md`.
+- Report validation passed for target, agent rows, pass-rate and blocked-run data, latency, cost, consistency, raw session paths, output-quality details, failed assertions, and recommended next route.
+- Skills Showcase generated data was refreshed and validated; `docs/benchmark-results-matrix.md` now includes `analyze-sessions-claude-6b8dbd1e` and `analyze-sessions-codex-afaf2f22`.
+- **Recommended next skill:** `$session-triage analyze-sessions benchmark failure`
+
 ## Current Task — Codex Interview Question Cadence
 
 **Goal:** Update Codex interview-style skills so they ask one primary question per turn by default, instead of inheriting Claude's 1-3 grouped-question cadence.
