@@ -32,8 +32,10 @@ import {
 } from "../layer4/setup-helpers/reports.js";
 import {
   assertNextCommand,
+  assertRecommendedExactNextRoute,
   assertRecommendedRoute,
   nextCommandHandoffPattern,
+  recommendedExactNextRoutePattern,
   recommendedNextRoutePattern,
 } from "../layer4/setup-helpers/routing.js";
 
@@ -180,6 +182,8 @@ describe("benchmark setup registry", () => {
     expect(nextCommandHandoffPattern.test("**Next work:** verify the scoped incident")).toBe(true);
     expect(recommendedNextRoutePattern("/session-triage").test(slashRoute)).toBe(true);
     expect(recommendedNextRoutePattern("$targeted-skill-builder").test(dollarRoute)).toBe(true);
+    expect(assertRecommendedExactNextRoute("**Recommended next command:** `$run`", "$run")).toMatchObject({ pass: true });
+    expect(recommendedExactNextRoutePattern("$run").test("**Recommended next command:** $run for Codex")).toBe(false);
   });
 
   it("uses agent-specific route assertions for the run workflow setup", () => {
@@ -429,8 +433,9 @@ describe("benchmark setup registry", () => {
     expect(setup).toBeDefined();
     expect(setup?.prompt).toContain("all local session history files under sessions/");
     expect(setup?.prompt).toContain("remediation-ready targeted-skill-builder");
-    expect(setup?.prompt).toContain("/targeted-skill-builder run post-doc-edit validation and lessons capture gate for Claude");
-    expect(setup?.prompt).toContain("$targeted-skill-builder run post-doc-edit validation and lessons capture gate for Codex");
+    expect(setup?.prompt).toContain("no runner label suffix");
+    expect(setup?.prompt).toContain("Use exactly `/targeted-skill-builder run post-doc-edit validation and lessons capture gate` when running as Claude");
+    expect(setup?.prompt).toContain("Use exactly `$targeted-skill-builder run post-doc-edit validation and lessons capture gate` when running as Codex");
     expect(setup?.prompt).toContain("distinguish explicit evidence from inference");
     expect(setup?.prompt).toContain("do not put both route spellings in the final handoff");
     expect(setup?.perRunBudgetUsd).toBe(BENCH_BUDGETS_USD.standard);
@@ -487,7 +492,7 @@ describe("benchmark setup registry", () => {
     expect(claudeAssertions.find((assertion) => assertion.description === "Output includes next command handoff")).toMatchObject({
       pass: true,
     });
-    expect(claudeAssertions.find((assertion) => assertion.description === "Output recommends /targeted-skill-builder run post-doc-edit validation and lessons capture gate")).toMatchObject({
+    expect(claudeAssertions.find((assertion) => assertion.description === "Output recommends exactly /targeted-skill-builder run post-doc-edit validation and lessons capture gate")).toMatchObject({
       pass: true,
     });
     expect(
@@ -513,7 +518,7 @@ describe("benchmark setup registry", () => {
       },
       { agent: "claude" },
     );
-    expect(genericClaudeAssertions.find((assertion) => assertion.description === "Output recommends /targeted-skill-builder run post-doc-edit validation and lessons capture gate")).toMatchObject({
+    expect(genericClaudeAssertions.find((assertion) => assertion.description === "Output recommends exactly /targeted-skill-builder run post-doc-edit validation and lessons capture gate")).toMatchObject({
       pass: false,
     });
 
@@ -534,7 +539,7 @@ describe("benchmark setup registry", () => {
     expect(codexAssertions.find((assertion) => assertion.description === "Output includes next command handoff")).toMatchObject({
       pass: true,
     });
-    expect(codexAssertions.find((assertion) => assertion.description === "Output recommends $targeted-skill-builder run post-doc-edit validation and lessons capture gate")).toMatchObject({
+    expect(codexAssertions.find((assertion) => assertion.description === "Output recommends exactly $targeted-skill-builder run post-doc-edit validation and lessons capture gate")).toMatchObject({
       pass: true,
     });
     expect(
@@ -543,6 +548,31 @@ describe("benchmark setup registry", () => {
       ),
     ).toMatchObject({
       passed: true,
+    });
+
+    writeFileSync(
+      resolve(workDir, "session-analysis.md"),
+      `${baseReport}**Recommended next command:** $targeted-skill-builder run post-doc-edit validation and lessons capture gate for Codex\n`,
+    );
+    const suffixedCodexAssertions = setup!.assertResult(
+      {
+        stdout: "",
+        stderr: "",
+        exitCode: 0,
+        workDir,
+        files: ["session-analysis.md", ...fixtureFiles],
+      },
+      { agent: "codex" },
+    );
+    expect(suffixedCodexAssertions.find((assertion) => assertion.description === "Output recommends exactly $targeted-skill-builder run post-doc-edit validation and lessons capture gate")).toMatchObject({
+      pass: false,
+    });
+    expect(
+      setup!.qualityEvaluator?.evaluate(readFileSync(resolve(workDir, "session-analysis.md"), "utf8")).criteria.find(
+        (criterion) => criterion.id === "workflow-next-route",
+      ),
+    ).toMatchObject({
+      passed: false,
     });
 
     const missingOwnerSurface = [
