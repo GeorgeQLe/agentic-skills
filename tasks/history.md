@@ -1,5 +1,16 @@
 # Session History
 
+## 2026-05-15 — Benchmark-workflow integration on Skills Showcase
+
+- Connected workflow demos to benchmark evidence: workflow steps now display pass rates, quality scores, and real benchmark execution excerpts inline.
+- Extended `WorkflowStep` type with optional skill mapping (4th element); mapped 10 steps across 6 workflows to benchmarked skills.
+- Added `WorkflowStepBenchmark` and `WorkflowBenchmarkSummary` types; extended `ShowcaseData`.
+- Built `WORKFLOW_SKILL_MAP` and `buildWorkflowBenchmarks()` in the data pipeline to join workflow steps to benchmark evidence with per-step and aggregate metrics.
+- Updated `TuiWorkflow.tsx` with summary strip, inline pill badges on step cards, and expandable `<details>` demo panel showing real benchmark prompt/output.
+- Added CSS for strip, badges, and dark terminal-style demo panel.
+- Added 3 new workflow benchmark tests; all 1201 layer1 tests pass.
+- Shipped as commit `09b9712` on `master`.
+
 ## 2026-05-13 — UI review: G Skillpacks website
 
 - Full-site UI review of G Skillpacks website (all 8 routes + 5 workflow TUI variations).
