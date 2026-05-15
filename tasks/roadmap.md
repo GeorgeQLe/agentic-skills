@@ -16,6 +16,20 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Update: analyze-sessions Benchmark Fixture Routing
+
+**Goal:** Fix `analyze-sessions` benchmark coverage so fixture scope, route labels, and runner-specific next routes match the mirrored skill contracts.
+
+**Acceptance Criteria:**
+- [x] The fix is scoped to benchmark harness coverage and route parsing, not mirrored `analyze-sessions` skill contracts.
+- [x] Bold Markdown next-route labels accepted by the default shipping contract pass route detection.
+- [x] The `analyze-sessions` fixture provides broad repeated-history evidence when expecting `targeted-skill-builder`.
+- [x] Claude and Codex expected routes use their native conventions: `/targeted-skill-builder` and `$targeted-skill-builder`.
+- [x] Layer1 regression coverage protects the route parser and `analyze-sessions` fixture behavior.
+- [x] Required validation passes and results are recorded in `tasks/todo.md`.
+
+**Result:** Completed on 2026-05-15. Updated the benchmark harness rather than mirrored `analyze-sessions` contracts. Route detection now accepts bold Markdown next-route labels, and the `analyze-sessions` fixture now uses repeated dated session logs with runner-specific `/targeted-skill-builder` and `$targeted-skill-builder` expectations plus a standard benchmark budget. Added focused layer1 coverage. Validation passed with focused layer1, benchmark coverage, `analyze-sessions` verify, both-agent one-run smoke (`analyze-sessions-claude-59469ff4`, `analyze-sessions-codex-73090527`, both 1/1 hard assertions and no blocked runs), targeted `rg`, and whitespace checks. Recommended next command: `$benchmark-test-skill analyze-sessions`.
+
 ## Current Triage: analyze-sessions Benchmark Failure 2026-05-15
 
 **Goal:** Verify the fresh `analyze-sessions` deterministic benchmark failure and identify the smallest durable fix.
