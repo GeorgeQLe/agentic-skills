@@ -4,6 +4,26 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Current Task — Red/Green Testing Workflow Session Analysis
+
+**Goal:** Evaluate whether the repository's red/green test workflow is catching the right failures, producing false positives, or missing issues that require follow-up work.
+
+**Plan:**
+- [x] Inventory available Claude/Codex prompt history and rich Codex sessions for this repository.
+- [x] Extract red/green, benchmark, verify, test failure, false-positive, and missed-issue signals from full available history.
+- [x] Classify evidence into missed issues that tests should have caught, false positives/noisy detections, legitimate test detections, and infrastructure/tooling blockers.
+- [x] Write a report with counts, examples, limitations, and a recommendation: keep, reform, or replace the workflow.
+- [x] Verify the report against source evidence and record results here before shipping.
+
+## Review — Red/Green Testing Workflow Session Analysis
+
+- Full prompt-history scan found 122 repository-relevant testing prompts from 2026-04-07 through 2026-05-14: 104 Codex and 18 Claude.
+- Repository evidence included 26 benchmark/test/triage/review reports with red/green signals.
+- Incident-level classification: 8 legitimate detections, 7 false-positive/harness-noise incidents, 5 missed issues or coverage gaps that later required work, and 4 infrastructure/tooling blockers.
+- Report written at `tasks/red-green-testing-workflow-report.md`.
+- Recommendation: keep red/green as the backbone, but reform benchmark oracle classification, prompt/assertion/rubric alignment, artifact retention, and generated-surface freshness checks.
+- Verification passed: cited benchmark/review/triage files exist, report references were checked with `rg`, and `git diff --check` passed.
+
 ## Current Task — Skills Showcase Playful Lab Workflow Pilot
 
 **Goal:** Refactor the top `/workflows` page section first, because it mirrors the app's broader stale card/panel presentation and can guide the eventual sitewide Playful Lab / playful blueprint refactor.

@@ -30,6 +30,19 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Completed on 2026-05-14. Replaced stale Skills Showcase app icons with `apps/skills-showcase/new-app-icon.png`, added conventional public install/touch icon assets, generated a valid RGBA-backed `app/favicon.ico`, and wired explicit metadata plus `public/manifest.webmanifest`. Verification passed with format/dimension checks, app typecheck, production build, built metadata route artifact checks, generated HTML search, manifest JSON parse, and `git diff --check`. Shipped on `master` in commit `e4644e0`.
 
+## Current Analysis: Red/Green Testing Workflow
+
+**Goal:** Use local Claude/Codex session evidence to evaluate whether the repository's red/green testing workflow should be kept, reformed, or replaced.
+
+**Acceptance Criteria:**
+- [x] Full available Claude/Codex prompt history and rich Codex sessions are scanned for repository-scoped red/green, benchmark, verify, false-positive, and missed-test signals.
+- [x] The report separates missed issues, false positives, legitimate detections, and infrastructure/tooling blockers instead of treating all failures as equal.
+- [x] Real examples from history are cited with counts and clear limitations.
+- [x] The recommendation explicitly chooses keep, reform, or try something else and explains why.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Report drafted at `tasks/red-green-testing-workflow-report.md`. The scan found 122 repository-relevant testing prompts and 26 red/green evidence reports. Incident-level findings were 8 legitimate detections, 7 false-positive or harness-noise incidents, 5 missed issues/coverage gaps, and 4 infrastructure/tooling blockers. Recommendation: keep red/green as the backbone, but reform benchmark oracle classification, prompt/assertion/rubric alignment, artifact retention, generated-surface freshness checks, and subjective-review-to-coverage-debt routing. Verification passed with cited-file existence checks, report reference checks, and `git diff --check`.
+
 ## Current Targeted Update: content-programming Full-Contract Benchmark Coverage
 
 **Goal:** Upgrade `content-programming` benchmark coverage from a generic calendar smoke path to full programming-strategy contract coverage.
