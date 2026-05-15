@@ -4,6 +4,29 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Current Task — Agent Review `analyze-sessions` Fresh Benchmark 2026-05-15
+
+**Goal:** Review the latest persisted `analyze-sessions` Claude and Codex benchmark outputs for subjective operator quality after the fresh deterministic rerun.
+
+**Plan:**
+- [x] Resolve the latest Claude and Codex run directories from the fresh benchmark report.
+- [x] Inspect retained generated `session-analysis.md` artifacts and benchmark context for each evaluated run.
+- [x] Grade each evaluated output against the agent-review rubric separately from deterministic benchmark metrics.
+- [x] Update `benchmark/review-analyze-sessions-2026-05-15.md` with scores, findings, remediation, and next route.
+- [x] Refresh generated Skills Showcase data because curated review evidence changes.
+- [x] Record results here, then commit and push intended changes on `master`.
+
+## Review — Agent Review `analyze-sessions` Fresh Benchmark 2026-05-15
+
+- Reviewed fresh evaluated runs `analyze-sessions-claude-b5357730` and `analyze-sessions-codex-8f7e860a`, covering all 6 retained `session-analysis.md` artifacts and excluding no infrastructure-blocked runs.
+- Deterministic context was clean: Claude passed 3/3 hard assertions with 92.3% quality, and Codex passed 3/3 hard assertions with 92.3% quality.
+- Subjective verdict: good to excellent overall. Median score was 90.0 with range 88-94.
+- Strengths: every artifact found the repeated validation and lessons-capture misses, separated explicit evidence from inference, identified a likely run/ship or task-document owner surface, and included a validation expectation.
+- Main weakness: all three Codex artifacts appended `for Codex` to the final command, making an otherwise correct route less exact than `$targeted-skill-builder run post-doc-edit validation and lessons capture gate`.
+- Report updated at `benchmark/review-analyze-sessions-2026-05-15.md`.
+- Skills Showcase generated data was refreshed and validated; `docs/benchmark-results-matrix.md` retains the fresh raw report links and updated subjective review score.
+- **Recommended next command:** `$targeted-skill-builder analyze-sessions benchmark final-route exactness`
+
 ## Current Task — Benchmark `analyze-sessions` Fresh Rerun 2026-05-15
 
 **Goal:** Run `$benchmark-test-skill analyze-sessions` against the current repository harness and publish fresh deterministic both-agent evidence.
