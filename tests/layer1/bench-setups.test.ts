@@ -504,6 +504,53 @@ describe("benchmark setup registry", () => {
     });
     expect(claudeAssertions.some((assertion) => assertion.description === "Output recommends $targeted-skill-builder run post-doc-edit validation and lessons capture gate")).toBe(false);
 
+    const sectionBasedHandoff = [
+      "# Session Analysis",
+      "",
+      "## Automation Opportunities",
+      "All three sessions show validation and lessons misses.",
+      "",
+      "### Likely owner surface",
+      "",
+      "Task / roadmap / lessons documentation surface - i.e. the post-edit hook point that fires when `tasks/`, `roadmap`, or todo docs change.",
+      "",
+      "### Validation expectation",
+      "",
+      "A skill-specific validation command that runs the project task-doc validator and checks for a lessons-file update.",
+      "",
+      "Source attribution: explicit evidence says validation and lessons were missed; runner ownership is not stated for every log.",
+      "",
+      "**Recommended next command:** /targeted-skill-builder run post-doc-edit validation and lessons capture gate",
+    ].join("\n");
+    expect(
+      setup!.qualityEvaluator?.evaluate(sectionBasedHandoff).criteria.find(
+        (criterion) => criterion.id === "workflow-remediation-ready-handoff",
+      ),
+    ).toMatchObject({
+      passed: true,
+    });
+
+    const tableBasedHandoff = [
+      "# Session Analysis",
+      "",
+      "## Automation Opportunity",
+      "",
+      "| Pattern | Frequency | Recommendation | Likely owner surface | Validation expectation |",
+      "| --- | --- | --- | --- | --- |",
+      "| Validation and lessons capture skipped after doc edits | 3/3 sessions | Targeted skill builder update | `run` skill post-edit step | Skill must require a validation pass and lessons-file update before allowing ship/exit |",
+      "",
+      "Ownership note: explicit evidence points to the Codex `$run` path on 2 of 3 sessions; the third session is not stated.",
+      "",
+      "**Recommended next command:** /targeted-skill-builder run post-doc-edit validation and lessons capture gate",
+    ].join("\n");
+    expect(
+      setup!.qualityEvaluator?.evaluate(tableBasedHandoff).criteria.find(
+        (criterion) => criterion.id === "workflow-remediation-ready-handoff",
+      ),
+    ).toMatchObject({
+      passed: true,
+    });
+
     writeFileSync(
       resolve(workDir, "session-analysis.md"),
       `${baseReport}**Recommended next command:** /targeted-skill-builder\n`,
