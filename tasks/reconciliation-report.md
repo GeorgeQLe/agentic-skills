@@ -1,5 +1,42 @@
 # Development Docs Reconciliation Report
 
+## 2026-05-15 - `/reconcile-dev-docs fix tasks`
+
+### Errors (1)
+
+- **tasks/manual-todo.md** - Phase 38 marked ✓ in roadmap but 4 unchecked manual items remained (Neon DB, admin secret, Vercel env vars, live verification). Evidence: `tasks/roadmap.md` line 1469 has `## Phase 38: ... ✓`, milestone at line 1546 is checked, but `tasks/manual-todo.md` had 4 unchecked `- [ ]` items referencing Phase 38 steps.
+
+### Warnings (1)
+
+- **tasks/phases/** - 25 of 39 completed phases still lack archive files (previously deferred in 2026-05-11 and 2026-05-04 reports). Backfill decision, not active contradiction.
+
+### Info (2)
+
+- **tasks/recurring-todo.md** - Devtool docs audit next due 2026-05-30, spec drift check next due 2026-06-11. Neither is overdue.
+- **tasks/ideas.md** - 5 unspecced ideas remain as `/feature-interview` candidates (noted in Priority Task Queue).
+
+### Fixed
+
+- [x] `tasks/manual-todo.md` - Restructured: moved 4 unchecked Phase 38 items to a "Deferred from Phase 38" section with 2026-05-15 deferral date and context. Moved completed Vercel task to a "Completed" section. Updated header to indicate no active phase manual tasks. User chose "defer all to future work."
+- [x] `tasks/todo.md` - Checked off the `/reconcile-dev-docs fix tasks` priority queue item with resolution summary.
+
+### Deferred
+
+- [ ] `tasks/phases/` - 25 of 39 completed phases lack archive files. Recurring backfill decision.
+- [ ] `tasks/roadmap.md` - Multiple completed "Current" sections remain at the top of the roadmap. Cleanup decision (carried from 2026-05-11).
+
+### Summary
+
+- Roadmap/todo alignment: ok — all 39 phases ✓, todo status matches
+- History coverage: ok — recent work has matching entries
+- Phase archives: 14/39 present (warning, previously deferred)
+- Manual tasks: fixed — orphaned items deferred with context
+- Recurring tasks: ok — neither due
+- Spec freshness: ok — no specs newer than roadmap
+- **Recommended next command:** `/feature-interview` to triage 5 unspecced ideas in `tasks/ideas.md`
+
+---
+
 ## 2026-05-11 (post-spec-drift) - `$reconcile-dev-docs`
 
 ### Resolved
