@@ -4,6 +4,29 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Current Task — Agent Review `analyze-sessions` Quality-Rubric Matching Benchmark 2026-05-15
+
+**Goal:** Review the latest persisted `analyze-sessions` Claude and Codex benchmark outputs for subjective operator quality after the quality-rubric matching rerun.
+
+**Plan:**
+- [x] Resolve the latest Claude and Codex run directories from `benchmark/test-analyze-sessions-2026-05-15.md`.
+- [x] Inspect retained generated `session-analysis.md` artifacts and benchmark context for each evaluated run.
+- [x] Grade each evaluated output against the agent-review rubric separately from deterministic benchmark metrics.
+- [x] Update `benchmark/review-analyze-sessions-2026-05-15.md` with scores, findings, remediation, and next route.
+- [x] Refresh generated Skills Showcase data because curated review evidence changes.
+- [x] Record results here, then commit and push intended changes on `master`.
+
+## Review — Agent Review `analyze-sessions` Quality-Rubric Matching Benchmark 2026-05-15
+
+- Reviewed fresh evaluated runs `analyze-sessions-claude-fa3b696a` and `analyze-sessions-codex-e68803b1`, covering all 6 retained `session-analysis.md` artifacts and excluding no infrastructure-blocked runs.
+- Deterministic context was clean: Claude passed 3/3 hard assertions with 92.3% quality, and Codex passed 3/3 hard assertions with 92.3% quality.
+- Subjective verdict: excellent overall. Median score was 91.5 with range 90-94.
+- Strengths: every artifact found the repeated validation and lessons-capture misses, separated explicit evidence from inference, identified a likely `run` or post-doc-edit owner surface, included a validation expectation, and used exact runner-native final routes.
+- No material generated-output remediation remains. The deterministic `workflow-artifact-reference` 0.0% note is non-blocking because it does not reduce operator usefulness in the retained artifacts.
+- Report updated at `benchmark/review-analyze-sessions-2026-05-15.md`.
+- Skills Showcase generated data was refreshed. `scripts/validate-skills-showcase-data.sh` reported generated data stale because the refreshed assets differ from HEAD; those generated files are included in this ship set. `git diff --check` passed.
+- **Recommended next command:** `$ship`
+
 ## Current Task — Benchmark `analyze-sessions` Quality-Rubric Matching Rerun 2026-05-15
 
 **Goal:** Run `$benchmark-test-skill analyze-sessions` against the current repository harness after the quality-rubric matching fix and publish fresh deterministic both-agent evidence.
