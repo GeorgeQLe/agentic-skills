@@ -292,6 +292,76 @@ function benchmarkEvidenceBySkill(files) {
   return evidence;
 }
 
+const WORKFLOW_SKILL_MAP = {
+  first:      { 2: "roadmap", 3: "run" },
+  ship:       { 4: "ship" },
+  spec:       { 1: "spec-interview", 3: "roadmap", 4: "run" },
+  research:   { 4: "feature-interview" },
+  handoff:    { 2: "run", 4: "ship" },
+  validation: { 1: "debug" },
+};
+
+function buildWorkflowBenchmarks(benchmarkEvidence) {
+  const result = {};
+  for (const [workflowKey, stepMap] of Object.entries(WORKFLOW_SKILL_MAP)) {
+    const stepBenchmarks = {};
+    const passRates = [];
+    const qualityScores = [];
+    let stepsBenchmarked = 0;
+
+    for (const [indexStr, skillName] of Object.entries(stepMap)) {
+      const evidence = benchmarkEvidence.get(skillName);
+      if (!evidence) {
+        stepBenchmarks[Number(indexStr)] = {
+          skill: skillName,
+          passRate: null,
+          qualityScore: null,
+          demo: null,
+        };
+        continue;
+      }
+
+      const bestAgent = evidence.agents.reduce((best, a) => {
+        const bp = parsePercent(best.passRate);
+        const ap = parsePercent(a.passRate);
+        return (ap ?? -1) > (bp ?? -1) ? a : best;
+      }, evidence.agents[0]);
+
+      const passRate = bestAgent ? bestAgent.passRate : null;
+      const qualityEntry = (evidence.quality || []).find((q) => q.agent === (bestAgent?.agent || ""));
+      const qualityScore = qualityEntry ? qualityEntry.averageQualityScore : null;
+
+      if (passRate) {
+        const pv = parsePercent(passRate);
+        if (pv !== null) passRates.push(pv);
+      }
+      if (qualityScore) {
+        const qv = parsePercent(qualityScore);
+        if (qv !== null) qualityScores.push(qv);
+      }
+
+      stepsBenchmarked++;
+      stepBenchmarks[Number(indexStr)] = {
+        skill: skillName,
+        passRate: passRate || null,
+        qualityScore: qualityScore || null,
+        demo: evidence.demo || null,
+      };
+    }
+
+    const stepsTotal = Object.keys(stepMap).length;
+    result[workflowKey] = {
+      workflowKey,
+      stepsTotal,
+      stepsBenchmarked,
+      aggregatePassRate: passRates.length ? `${Math.round(passRates.reduce((a, b) => a + b, 0) / passRates.length)}%` : null,
+      aggregateQuality: qualityScores.length ? `${(qualityScores.reduce((a, b) => a + b, 0) / qualityScores.length).toFixed(1)}%` : null,
+      stepBenchmarks,
+    };
+  }
+  return result;
+}
+
 function skillTags({ name, type, scope, pack, platform }) {
   const raw = [
     type,
@@ -583,7 +653,8 @@ function main() {
     packCount: packs.length,
     skills,
     packs,
-    workflows: []
+    workflows: [],
+    workflowBenchmarks: buildWorkflowBenchmarks(benchmarkEvidence)
   };
 
   const serialized = JSON.stringify(data, null, 2);
