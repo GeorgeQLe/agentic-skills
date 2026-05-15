@@ -16,6 +16,18 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Benchmark: analyze-sessions Fresh Rerun 2026-05-15
+
+**Goal:** Run `$benchmark-test-skill analyze-sessions` against the current repository harness and publish fresh deterministic both-agent evidence.
+
+**Acceptance Criteria:**
+- [ ] `pnpm bench --list-skills` confirms `analyze-sessions` is known and reports its coverage status.
+- [ ] `pnpm verify --skill analyze-sessions` passes or blocks benchmark execution with a recorded failure.
+- [ ] `pnpm bench --skill analyze-sessions --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [ ] `benchmark/test-analyze-sessions-2026-05-15.md` records fresh verify, benchmark, latency, cost, consistency, and raw session evidence.
+- [ ] Generated Skills Showcase data is refreshed and validated if curated benchmark evidence changes.
+- [ ] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
 ## Current Targeted Update: analyze-sessions Remediation-Ready Handoff
 
 **Goal:** Tighten `analyze-sessions` so broad verified workflow gaps route to a remediation-ready `targeted-skill-builder` handoff instead of a generic or dual-mode route.

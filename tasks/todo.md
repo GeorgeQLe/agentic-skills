@@ -4,6 +4,19 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Current Task — Benchmark `analyze-sessions` Fresh Rerun 2026-05-15
+
+**Goal:** Run `$benchmark-test-skill analyze-sessions` against the current repository harness and publish fresh deterministic both-agent evidence.
+
+**Plan:**
+- [ ] Confirm `$benchmark-test-skill` is the active workflow and `analyze-sessions` is only the benchmark target.
+- [ ] Run `pnpm bench --list-skills` and record `analyze-sessions` coverage status.
+- [ ] Run `pnpm verify --skill analyze-sessions`; stop before bench if verification fails.
+- [ ] If verify passes, run `pnpm bench --skill analyze-sessions --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [ ] Update and validate `benchmark/test-analyze-sessions-2026-05-15.md` with verify, benchmark, latency, cost, consistency, raw paths, and recommended next route.
+- [ ] Refresh generated Skills Showcase data if curated benchmark evidence changes.
+- [ ] Record results here, then commit and push intended changes on `master`.
+
 ## Current Task — Targeted Update `analyze-sessions` Remediation-Ready Handoff
 
 **Goal:** Tighten `analyze-sessions` so broad verified workflow gaps route to a remediation-ready `targeted-skill-builder` handoff instead of a generic or dual-mode route.
@@ -28,19 +41,14 @@
 - Initial one-run smoke found the Claude artifact used singular headings (`Recurring Pattern`, `Automation Opportunity`); adjusted fixture fact matching to accept singular/plural stems while preserving the stricter route and remediation checks.
 - Skills Showcase data was regenerated and validated because tracked `SKILL.md` behavior changed; curated showcase copy did not need manual edits beyond generated data.
 - Validation passed:
-  - `./install.sh`
-  - `./scripts/skill-deps.sh --broken`
-  - `./scripts/skill-versions.sh --missing`
-  - `./scripts/skill-next-step-routing.sh --missing`
-  - `pnpm --dir tests bench:coverage`
-  - `pnpm --dir tests exec vitest run --project layer1 bench-setups bench-coverage`
+  - `pnpm --dir tests exec vitest run --project layer1 bench-setups`
   - `pnpm --dir tests verify --skill analyze-sessions`
+  - layer2 target-specific verification skipped as expected because no layer2 tests match `analyze-sessions`
   - `pnpm --dir tests bench --skill analyze-sessions --agent both --runs 1 --chunk-size 1 --pause 0`
-  - final smoke sessions `analyze-sessions-claude-b957fee9` and `analyze-sessions-codex-59d4510e`, both 1/1 hard assertions, 92.3% quality, and no blocked runs
+  - final smoke sessions `analyze-sessions-claude-186b846a` and `analyze-sessions-codex-2fe3abfa`, both 1/1 hard assertions and no blocked runs
   - `node scripts/generate-skills-showcase-data.mjs`
   - `node scripts/generate-skills-showcase-github-data.mjs`
   - `scripts/validate-skills-showcase-data.sh`
-  - targeted `rg` checks for remediation-ready handoff language and generated version data
   - `git diff --check`
 - **Recommended next command:** `$benchmark-test-skill analyze-sessions`
 

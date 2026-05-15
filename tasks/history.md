@@ -2234,3 +2234,10 @@ Resolved all 10 findings from `/expert-review`:
 - Preserved stale placeholder evidence for existing icon surfaces (`src/app/favicon.ico`, `src/app/icon.png`) so the benchmark still exercises missing/stale icon audit behavior.
 - Added layer1 coverage proving the root source asset has a PNG signature and is not the old `fixture-png-placeholder` text.
 - Verified with focused `bench-setups` layer1 coverage, benchmark coverage, `pnpm --dir tests verify --skill icon-handler`, and whitespace checks.
+
+## 2026-05-15 — analyze-sessions remediation-ready handoff
+
+- Updated mirrored Claude and Codex `analyze-sessions` contracts to require one runner-native `targeted-skill-builder` final command with a concrete gap phrase, likely owner surface, validation expectation, and explicit-vs-inferred attribution.
+- Tightened the `analyze-sessions` benchmark setup and layer1 coverage so generic or dual-mode targeted-skill-builder routes no longer satisfy the remediation-ready handoff.
+- Refreshed Skills Showcase generated data after the tracked `SKILL.md` behavior change.
+- Verified with focused layer1 `bench-setups`, `pnpm --dir tests verify --skill analyze-sessions`, one-run both-agent smoke sessions `analyze-sessions-claude-186b846a` and `analyze-sessions-codex-2fe3abfa`, showcase data validation, and `git diff --check`.

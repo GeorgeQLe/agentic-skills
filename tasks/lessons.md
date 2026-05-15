@@ -15,6 +15,12 @@
 - Separate categories in reports: app unit/integration tests, browser/e2e tests, generated-data validation, skill benchmark harnesses, and manual/UAT checks.
 - If the initial evidence source is ambiguous, state the scope assumption before drawing incident-level conclusions.
 
+## 2026-05-15 — Cross-board testing analysis must not collapse into the current repo
+
+- A follow-up app-test analysis overcorrected into auditing only this repository's Skills Showcase tests when the user wanted testing performance examined across projects/apps broadly.
+- For cross-board red/green test analysis, scan local session history by project and testing tool first, then group incidents by app/project and test layer before making repository-specific recommendations.
+- Treat the current repo as one data point, not the evidence universe, unless the user explicitly asks for a codebase-local audit.
+
 ## 2026-05-14 — UI refactor scope must include duplicate legacy blocks on already-themed pages
 
 - A sitewide theme refactor plan initially called out the rest of the Skills Showcase routes while underemphasizing that `/workflows` itself still has an older top selector/panel above the Playful Lab player.
