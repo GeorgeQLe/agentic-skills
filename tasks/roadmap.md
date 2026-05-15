@@ -16,6 +16,20 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Benchmark: analyze-sessions Quality-Rubric Matching Rerun 2026-05-15
+
+**Goal:** Run `$benchmark-test-skill analyze-sessions` against the current repository harness after the quality-rubric matching fix and publish fresh deterministic both-agent evidence.
+
+**Acceptance Criteria:**
+- [x] `pnpm bench --list-skills` confirms `analyze-sessions` is known and reports its coverage status.
+- [x] `pnpm verify --skill analyze-sessions` passes or blocks benchmark execution with a recorded failure.
+- [x] `pnpm bench --skill analyze-sessions --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [x] `benchmark/test-analyze-sessions-2026-05-15.md` records fresh verify, benchmark, latency, cost, consistency, and raw session evidence.
+- [x] Generated Skills Showcase data is refreshed and validated if curated benchmark evidence changes.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Completed on 2026-05-15. `analyze-sessions` is known with `coverage=custom` using `tests/layer4/setups/tier23-global-workflows.setup.ts`. Verify passed with layer1 PASS in 4.4s and layer2 SKIP because no target-specific layer2 tests matched. The both-agent benchmark completed with no infrastructure-blocked runs: Claude session `fa3b696a` passed 3/3 hard assertions with 92.3% output quality, and Codex session `e68803b1` passed 3/3 hard assertions with 92.3% output quality. Report validation passed, and generated Skills Showcase data was refreshed. Report: `benchmark/test-analyze-sessions-2026-05-15.md`. Recommended next skill: `$benchmark-agent-review analyze-sessions`.
+
 ## Current Targeted Update: analyze-sessions Benchmark Final-Route Exactness
 
 **Goal:** Tighten the `analyze-sessions` benchmark setup so runner-native final commands are unambiguous and exact, preventing suffixes like `for Codex` from passing.

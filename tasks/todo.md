@@ -4,6 +4,31 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Current Task — Benchmark `analyze-sessions` Quality-Rubric Matching Rerun 2026-05-15
+
+**Goal:** Run `$benchmark-test-skill analyze-sessions` against the current repository harness after the quality-rubric matching fix and publish fresh deterministic both-agent evidence.
+
+**Plan:**
+- [x] Confirm `$benchmark-test-skill` is the active workflow and `analyze-sessions` is only the benchmark target.
+- [x] Run `pnpm bench --list-skills` and record `analyze-sessions` coverage status.
+- [x] Run `pnpm verify --skill analyze-sessions`; stop before bench if verification fails.
+- [x] If verify passes, run `pnpm bench --skill analyze-sessions --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [x] Update and validate `benchmark/test-analyze-sessions-2026-05-15.md` with verify, benchmark, latency, cost, consistency, raw paths, and recommended next route.
+- [x] Refresh generated Skills Showcase data if curated benchmark evidence changes.
+- [x] Record results here, then commit and push intended changes on `master`.
+
+## Review — Benchmark `analyze-sessions` Quality-Rubric Matching Rerun 2026-05-15
+
+- Command resolution: `$benchmark-test-skill` was the active workflow; `analyze-sessions` was treated as the target skill argument.
+- Eligibility: `analyze-sessions` is known to the benchmark harness with custom coverage via `tests/layer4/setups/tier23-global-workflows.setup.ts`.
+- Verify passed: layer1 PASS in 4.4s with 1,198 tests across 15 files; layer2 SKIP because no target-specific layer2 tests matched `analyze-sessions`.
+- Benchmark completed for both agents with no infrastructure-blocked runs:
+  - Claude session `fa3b696a`: 3/3 evaluated hard assertions passed, output quality 92.3%, p50 50.0s, p95 52.2s, p99 52.4s, total cost $3.00, and 0 threshold or critical failures.
+  - Codex session `e68803b1`: 3/3 evaluated hard assertions passed, output quality 92.3%, p50 51.3s, p95 59.0s, p99 59.7s, total cost $3.00, and 0 threshold or critical failures.
+- Report updated at `benchmark/test-analyze-sessions-2026-05-15.md` and validated for target, agent rows, pass-rate and blocked-run data, latency, cost, raw session paths, output-quality details, failed assertions, and recommended next route.
+- Skills Showcase generated data was refreshed. `scripts/validate-skills-showcase-data.sh` reported generated data stale because the refreshed assets differ from HEAD; those generated files are included in this ship set. `git diff --check` passed.
+- **Recommended next skill:** `$benchmark-agent-review analyze-sessions`
+
 ## Current Task — Targeted Update `analyze-sessions` Benchmark Quality Rubric Matching
 
 **Goal:** Fix the `analyze-sessions` benchmark quality rubric so remediation-ready handoff scoring accepts valid section/table report structures instead of overfitting to one prose phrase order.
