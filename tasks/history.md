@@ -2252,3 +2252,11 @@ Resolved all 10 findings from `/expert-review`:
 - Tightened the `analyze-sessions` benchmark setup and layer1 coverage so generic or dual-mode targeted-skill-builder routes no longer satisfy the remediation-ready handoff.
 - Refreshed Skills Showcase generated data after the tracked `SKILL.md` behavior change.
 - Verified with focused layer1 `bench-setups`, `pnpm --dir tests verify --skill analyze-sessions`, one-run both-agent smoke sessions `analyze-sessions-claude-186b846a` and `analyze-sessions-codex-2fe3abfa`, showcase data validation, and `git diff --check`.
+
+## 2026-05-15 — Workflows mobile Playful Lab responsiveness
+
+- Improved the `/workflows` Playful Lab mobile layout by constraining the TUI workflow container, chip navigation, long command text, benchmark strip, demo panels, controls, and notebook stacking.
+- Confirmed the workflows route renders the newer `TuiWorkflow` lab surface only; the older DOM-driven workflow selector remains limited to the home-page preview support path.
+- Added smoke coverage to prevent the legacy `[data-workflow-list]` block from returning to `/workflows`.
+- Verified with focused Skills Showcase smoke/workflow tests, typecheck, production build, whitespace check, and Safari phone-width visual inspection.
+- Shipped on `master` in commit `0d119a2`.

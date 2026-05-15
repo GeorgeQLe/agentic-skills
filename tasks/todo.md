@@ -24,6 +24,19 @@
 - **Verification:** `pnpm --dir apps/skills-showcase test -- src/showcase/smoke.test.tsx src/showcase/workflows.test.tsx`, `pnpm --dir apps/skills-showcase typecheck`, `pnpm --dir apps/skills-showcase build`, `git diff --check`, and Safari visual verification at a phone-width window on `http://localhost:3004/workflows` passed.
 - **Prevention:** The smoke test now guards against accidentally reintroducing the legacy workflow selector on `/workflows`; future visual passes should include a phone-width check of the Playful Lab chips, controls, and notebook sections.
 
+### Ship Manifest — 2026-05-15
+
+- **User goal:** Ship the completed mobile responsiveness pass for the `/workflows` Playful Lab surface.
+- **Changed files:** `apps/skills-showcase/src/showcase/tui/workflow.css`, `apps/skills-showcase/app/globals.css`, `apps/skills-showcase/src/showcase/smoke.test.tsx`, `tasks/roadmap.md`, `tasks/todo.md`.
+- **Per-file purpose:** `workflow.css` contains the scoped mobile layout fixes; `globals.css` constrains the surrounding workflow console/header; `smoke.test.tsx` protects against legacy route regression; task docs record the plan, review, verification, and shipping manifest.
+- **User-goal mapping:** Every executable change targets the Playful Lab workflow items, mobile stacking, overflow containment, or protection against reintroducing the old route block.
+- **Tests run:** `pnpm --dir apps/skills-showcase test -- src/showcase/smoke.test.tsx src/showcase/workflows.test.tsx` passed with 88 tests; `pnpm --dir apps/skills-showcase typecheck` passed; `pnpm --dir apps/skills-showcase build` passed; `git diff --check` passed; Safari phone-width visual verification passed on `http://localhost:3004/workflows`.
+- **Skipped tests:** Full repository benchmark/skill suites were not rerun because this was scoped to the Skills Showcase workflows UI and no `SKILL.md`, `PACK.md`, benchmark harness, generated data, or shared validation script changed.
+- **Adversarial review:** Changed-file self-review plus live mobile viewport inspection checked for accidental legacy block rendering, chip/control overflow, long command wrapping, notebook stacking, and generated `next-env.d.ts` churn. The only finding was generated dev-server churn in `next-env.d.ts`, which was restored before commit.
+- **Residual risk:** Real-device Safari/Chrome touch behavior may differ slightly from the desktop Safari narrow-window check; the remaining risk is limited to horizontal chip scrolling feel, with no evidence of layout breakage in local visual verification.
+- **Rollback note:** Revert commit `0d119a2` to restore the previous workflows layout and smoke test state.
+- **Next command:** `$brainstorm`
+
 ## Current Task — Agent Review `analyze-sessions` Quality-Rubric Matching Benchmark 2026-05-15
 
 **Goal:** Review the latest persisted `analyze-sessions` Claude and Codex benchmark outputs for subjective operator quality after the quality-rubric matching rerun.
