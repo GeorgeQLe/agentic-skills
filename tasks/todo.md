@@ -4,6 +4,31 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Current Task — Benchmark `analyze-sessions` Post-Fixture Routing 2026-05-15
+
+**Goal:** Rerun `$benchmark-test-skill analyze-sessions` after the fixture-routing benchmark harness fix and record fresh deterministic both-agent evidence.
+
+**Plan:**
+- [x] Confirm `$benchmark-test-skill` remains the active workflow and `analyze-sessions` is only the benchmark target.
+- [x] Run `pnpm bench --list-skills` and record `analyze-sessions` coverage status.
+- [x] Run `pnpm verify --skill analyze-sessions`; stop before bench if verification fails.
+- [x] If verify passes, run `pnpm bench --skill analyze-sessions --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [x] Write and validate `benchmark/test-analyze-sessions-2026-05-15.md` with verify, benchmark, latency, cost, consistency, raw paths, and recommended next route.
+- [x] Refresh generated Skills Showcase data if curated benchmark evidence changes.
+- [x] Record results here, then commit and push intended changes on `master`.
+
+## Review — Benchmark `analyze-sessions` Post-Fixture Routing 2026-05-15
+
+- Command resolution: `$benchmark-test-skill` was the active workflow; `analyze-sessions` was treated as the target skill argument.
+- Eligibility: `analyze-sessions` is known to the benchmark harness with custom coverage via `tests/layer4/setups/tier23-global-workflows.setup.ts`.
+- Verify passed: layer1 PASS in 4.0s with 1,197 tests across 15 files; layer2 SKIP because no target-specific layer2 tests matched `analyze-sessions`.
+- Benchmark completed for both agents with no infrastructure-blocked runs:
+  - Claude session `bc867ac4`: 3/3 evaluated hard assertions passed, output quality 89.4%, p50 44.1s, p95 47.4s, p99 47.7s, total cost $3.00, and 0 threshold or critical failures.
+  - Codex session `f4218901`: 3/3 evaluated hard assertions passed, output quality 90.9%, p50 43.8s, p95 50.4s, p99 50.9s, total cost $3.00, and 0 threshold or critical failures.
+- Report written at `benchmark/test-analyze-sessions-2026-05-15.md` and validated for target, agent rows, pass-rate and blocked-run data, latency, cost, raw session paths, output-quality details, failed assertions, and recommended next route.
+- Skills Showcase generated data was refreshed and validated; `docs/benchmark-results-matrix.md` now points at `analyze-sessions-claude-bc867ac4` and `analyze-sessions-codex-f4218901`.
+- **Recommended next skill:** `$benchmark-agent-review analyze-sessions`
+
 ## Current Task — Targeted Update `analyze-sessions` Benchmark Fixture Routing
 
 **Goal:** Fix the `analyze-sessions` benchmark fixture so its route expectations match the skill contract and runner conventions.
