@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-05-14 — UI refactor scope must include duplicate legacy blocks on already-themed pages
+
+- A sitewide theme refactor plan initially called out the rest of the Skills Showcase routes while underemphasizing that `/workflows` itself still has an older top selector/panel above the Playful Lab player.
+- When evaluating a theme consolidation, audit every route for mixed-era sections on the same page, not only pages that appear untouched.
+- Refactor scope should explicitly remove duplicate legacy blocks when a newer component already represents the intended direction.
+
 ## 2026-05-14 — Approval-gated reports should not route past approval
 
 - A `$creator-positioning` report-first run included `Recommended next skill: $content-programming` while it was still waiting for user approval to write the positioning artifact.

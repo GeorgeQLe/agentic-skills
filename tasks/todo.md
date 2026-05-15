@@ -4,6 +4,36 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Current Task — Skills Showcase Playful Lab Workflow Pilot
+
+**Goal:** Refactor the top `/workflows` page section first, because it mirrors the app's broader stale card/panel presentation and can guide the eventual sitewide Playful Lab / playful blueprint refactor.
+
+**Plan:**
+- [x] Audit current Skills Showcase routes and identify the surfaces still using legacy cards, rows, and summary grids.
+- [x] Compare those surfaces with the existing Playful Lab workflow consolidation artifact.
+- [x] Replace the top `/workflows` legacy selector and `blueprint-panel` walkthrough with a single Playful Lab console.
+- [x] Keep the pilot pattern usable as the reference for later catalog, packs, benchmarks, proof, and follow refactors.
+- [x] Run focused workflow/smoke tests, typecheck, production build, and whitespace validation.
+- [ ] Commit and push intended changes on `master`.
+
+**Initial Findings:**
+- The prior consolidation applied the winning V4 Playful Lab direction mainly to the lower `/workflows` `TuiWorkflow` player through `TuiWorkflow` and `workflow.css`.
+- The top `/workflows` selector plus `blueprint-panel` workflow walkthrough still uses the older pre-consolidation structure and should be replaced, not preserved as a separate legacy block.
+- The rest of the site still uses legacy presentation surfaces: `route-card`, `catalog-row`, `pack-node`, `proof-item`, `follow-card`, metric grids, and traditional benchmark tables.
+- A real sitewide switch should replace those surfaces with lab-style operating views: mode rails, dense ledgers, lane maps, inspection panels, notebook callouts, and interactive selectors. `/workflows` should have one unified Playful Lab workflow experience rather than a legacy top block plus consolidated lower player.
+
+## Review — Skills Showcase Playful Lab Workflow Pilot
+
+- Removed the legacy top `/workflows` selector, stage panel, progress controls, and duplicate lower "Interactive Workflow Player" section.
+- Made the Playful Lab `TuiWorkflow` player the primary page experience inside a new `workflow-lab__console` shell.
+- Added a small `workflow-lab__manifest` notebook callout that names the pilot pattern for future generated-data surfaces.
+- Added accessible labels to the Playful Lab player controls so the page-level smoke tests still find Previous/Next/Pause/Restart behavior.
+- Validation passed:
+  - `pnpm --dir apps/skills-showcase test -- src/showcase/workflows.test.tsx src/showcase/smoke.test.tsx`
+  - `pnpm --dir apps/skills-showcase typecheck`
+  - `pnpm --dir apps/skills-showcase build`
+  - `git diff --check`
+
 ## Current Task — Skills Showcase Icon Refresh
 
 **Goal:** Replace stale Skills Showcase app icon surfaces with `apps/skills-showcase/new-app-icon.png`.
