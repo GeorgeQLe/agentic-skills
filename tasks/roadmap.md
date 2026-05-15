@@ -16,6 +16,20 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Update: analyze-sessions Remediation-Ready Handoff
+
+**Goal:** Tighten `analyze-sessions` so broad verified workflow gaps route to a remediation-ready `targeted-skill-builder` handoff instead of a generic or dual-mode route.
+
+**Acceptance Criteria:**
+- [x] The fix is scoped to mirrored `analyze-sessions` contracts and benchmark coverage, not a new meta-skill.
+- [x] Broad verified workflow gaps require one runner-native final `targeted-skill-builder` command with a concrete gap phrase.
+- [x] Reports distinguish explicit source evidence from inferred source labels and avoid unsupported runner ownership.
+- [x] The handoff names likely owner surface and validation expectation when recommending a skill update.
+- [x] Layer1 regression coverage protects the contract and benchmark rubric behavior.
+- [x] Required validation passes and results are recorded in `tasks/todo.md`.
+
+**Result:** Completed on 2026-05-15. Updated mirrored `analyze-sessions` contracts to version 1.4.0 with remediation-ready targeted-skill-builder handoff guidance: one runner-native final command, concrete gap phrase, likely owner surface, validation expectation, no dual final route, and explicit-vs-inferred attribution. Updated the `analyze-sessions` benchmark fixture and quality rubric to require runner-specific `run post-doc-edit validation and lessons capture gate` routes plus owner/validation/attribution evidence. Added layer1 coverage for contract language, generic-route rejection, and the new quality criterion. Validation passed with install, skill audits, benchmark coverage, focused layer1, `analyze-sessions` verify, both-agent one-run smoke (`analyze-sessions-claude-b957fee9`, `analyze-sessions-codex-59d4510e`, both 1/1 hard assertions and 92.3% quality), showcase generation/validation, targeted `rg`, and `git diff --check`. Recommended next command: `$benchmark-test-skill analyze-sessions`.
+
 ## Current Agent Review: analyze-sessions Benchmark 2026-05-15
 
 **Goal:** Review the latest persisted `analyze-sessions` Claude and Codex benchmark outputs for subjective operator quality.

@@ -428,8 +428,11 @@ describe("benchmark setup registry", () => {
     const setup = resolveBenchSetup("analyze-sessions");
     expect(setup).toBeDefined();
     expect(setup?.prompt).toContain("all local session history files under sessions/");
-    expect(setup?.prompt).toContain("/targeted-skill-builder for Claude");
-    expect(setup?.prompt).toContain("$targeted-skill-builder for Codex");
+    expect(setup?.prompt).toContain("remediation-ready targeted-skill-builder");
+    expect(setup?.prompt).toContain("/targeted-skill-builder run post-doc-edit validation and lessons capture gate for Claude");
+    expect(setup?.prompt).toContain("$targeted-skill-builder run post-doc-edit validation and lessons capture gate for Codex");
+    expect(setup?.prompt).toContain("distinguish explicit evidence from inference");
+    expect(setup?.prompt).toContain("do not put both route spellings in the final handoff");
     expect(setup?.perRunBudgetUsd).toBe(BENCH_BUDGETS_USD.standard);
 
     const workDir = mkdtempSync(resolve(tmpdir(), "analyze-sessions-fixture-"));
@@ -456,6 +459,12 @@ describe("benchmark setup registry", () => {
       "## Automation Opportunities",
       "- Add a targeted builder guard for validation and lessons capture.",
       "",
+      "Likely owner surface: the run workflow should own the post-doc-edit validation and lessons capture gate.",
+      "",
+      "Validation expectation: add a layer1 contract test and one-run benchmark smoke for this handoff.",
+      "",
+      "Source attribution: explicit evidence says validation and lessons were missed; runner ownership is not stated for every log.",
+      "",
       "## Risks",
       "- Repeated missing validation and lessons updates creates process drift.",
       "",
@@ -463,7 +472,7 @@ describe("benchmark setup registry", () => {
 
     writeFileSync(
       resolve(workDir, "session-analysis.md"),
-      `${baseReport}**Recommended next command:** /targeted-skill-builder analyze-sessions benchmark fixture routing\n`,
+      `${baseReport}**Recommended next command:** /targeted-skill-builder run post-doc-edit validation and lessons capture gate\n`,
     );
     const claudeAssertions = setup!.assertResult(
       {
@@ -478,14 +487,39 @@ describe("benchmark setup registry", () => {
     expect(claudeAssertions.find((assertion) => assertion.description === "Output includes next command handoff")).toMatchObject({
       pass: true,
     });
-    expect(claudeAssertions.find((assertion) => assertion.description === "Output recommends /targeted-skill-builder")).toMatchObject({
+    expect(claudeAssertions.find((assertion) => assertion.description === "Output recommends /targeted-skill-builder run post-doc-edit validation and lessons capture gate")).toMatchObject({
       pass: true,
     });
-    expect(claudeAssertions.some((assertion) => assertion.description === "Output recommends $targeted-skill-builder")).toBe(false);
+    expect(
+      setup!.qualityEvaluator?.evaluate(readFileSync(resolve(workDir, "session-analysis.md"), "utf8")).criteria.find(
+        (criterion) => criterion.id === "workflow-remediation-ready-handoff",
+      ),
+    ).toMatchObject({
+      passed: true,
+    });
+    expect(claudeAssertions.some((assertion) => assertion.description === "Output recommends $targeted-skill-builder run post-doc-edit validation and lessons capture gate")).toBe(false);
 
     writeFileSync(
       resolve(workDir, "session-analysis.md"),
-      `${baseReport}**Recommended next command:** $targeted-skill-builder analyze-sessions benchmark fixture routing\n`,
+      `${baseReport}**Recommended next command:** /targeted-skill-builder\n`,
+    );
+    const genericClaudeAssertions = setup!.assertResult(
+      {
+        stdout: "",
+        stderr: "",
+        exitCode: 0,
+        workDir,
+        files: ["session-analysis.md", ...fixtureFiles],
+      },
+      { agent: "claude" },
+    );
+    expect(genericClaudeAssertions.find((assertion) => assertion.description === "Output recommends /targeted-skill-builder run post-doc-edit validation and lessons capture gate")).toMatchObject({
+      pass: false,
+    });
+
+    writeFileSync(
+      resolve(workDir, "session-analysis.md"),
+      `${baseReport}**Recommended next command:** $targeted-skill-builder run post-doc-edit validation and lessons capture gate\n`,
     );
     const codexAssertions = setup!.assertResult(
       {
@@ -500,7 +534,7 @@ describe("benchmark setup registry", () => {
     expect(codexAssertions.find((assertion) => assertion.description === "Output includes next command handoff")).toMatchObject({
       pass: true,
     });
-    expect(codexAssertions.find((assertion) => assertion.description === "Output recommends $targeted-skill-builder")).toMatchObject({
+    expect(codexAssertions.find((assertion) => assertion.description === "Output recommends $targeted-skill-builder run post-doc-edit validation and lessons capture gate")).toMatchObject({
       pass: true,
     });
     expect(
@@ -510,6 +544,57 @@ describe("benchmark setup registry", () => {
     ).toMatchObject({
       passed: true,
     });
+
+    const missingOwnerSurface = [
+      "# Session Analysis",
+      "",
+      "## Recurring Patterns",
+      "recurring patterns show validation and lessons misses.",
+      "",
+      "## Automation Opportunities",
+      "automation opportunities include targeted skill building.",
+      "",
+      "## Risks",
+      "risks include process drift.",
+      "",
+      "**Recommended next command:** $targeted-skill-builder run post-doc-edit validation and lessons capture gate",
+    ].join("\n");
+    expect(
+      setup!.qualityEvaluator?.evaluate(missingOwnerSurface).criteria.find(
+        (criterion) => criterion.id === "workflow-remediation-ready-handoff",
+      ),
+    ).toMatchObject({
+      passed: false,
+    });
+  });
+
+  it("lints analyze-sessions contracts for remediation-ready targeted-skill-builder handoffs", () => {
+    const contracts = [
+      {
+        path: "global/claude/analyze-sessions/SKILL.md",
+        route: "/targeted-skill-builder <concrete gap phrase>",
+        example: "/targeted-skill-builder run post-doc-edit validation and lessons capture gate",
+        runner: "Claude-native",
+      },
+      {
+        path: "global/codex/analyze-sessions/SKILL.md",
+        route: "$targeted-skill-builder <concrete gap phrase>",
+        example: "$targeted-skill-builder run post-doc-edit validation and lessons capture gate",
+        runner: "Codex-native",
+      },
+    ];
+
+    for (const contract of contracts) {
+      const content = readFileSync(resolve(TESTS_ROOT, "..", contract.path), "utf8");
+
+      expect(content, `${contract.path} remediation section`).toContain("## Remediation-Ready Handoffs");
+      expect(content, `${contract.path} concrete route`).toContain(contract.route);
+      expect(content, `${contract.path} example`).toContain(contract.example);
+      expect(content, `${contract.path} runner-native final route`).toContain(contract.runner);
+      expect(content, `${contract.path} owner surface`).toContain("likely owner surface");
+      expect(content, `${contract.path} validation expectation`).toContain("validation expectation");
+      expect(content, `${contract.path} attribution guard`).toContain("Distinguish explicit evidence from inference");
+    }
   });
 
   it("creates an SVG source asset for the icon-handler workflow setup to avoid runner image ingestion", () => {
