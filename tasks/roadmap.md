@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Update: analyze-sessions Benchmark Final-Route Exactness
+
+**Goal:** Tighten the `analyze-sessions` benchmark setup so runner-native final commands are unambiguous and exact, preventing suffixes like `for Codex` from passing.
+
+**Acceptance Criteria:**
+- [x] The fix is scoped to benchmark harness coverage, not mirrored `analyze-sessions` skill contracts.
+- [x] The benchmark prompt tells runners the literal command must not include runner-label suffixes.
+- [x] Hard assertions fail suffixed final commands such as `$targeted-skill-builder run post-doc-edit validation and lessons capture gate for Codex`.
+- [x] The deterministic quality route criterion fails the same suffixed final command.
+- [x] Required validation passes and results are recorded in `tasks/todo.md`.
+
+**Result:** Completed on 2026-05-15. Updated the benchmark harness rather than mirrored `analyze-sessions` skill contracts. Added exact final next-route matching in routing and quality helpers, opted the `analyze-sessions` setup into exact matching, and reworded its prompt so runner labels are explanatory instead of part of the literal command. Focused layer1 proves suffixed Codex commands fail both hard assertions and the quality route criterion. Validation passed with focused layer1, install, skill audits, benchmark coverage, `analyze-sessions` verify, and Codex smoke `analyze-sessions-codex-a042d8d1` with the exact final command assertion passing. Recommended next command: `$benchmark-test-skill analyze-sessions`.
+
 ## Current Agent Review: analyze-sessions Fresh Benchmark 2026-05-15
 
 **Goal:** Review the latest persisted `analyze-sessions` Claude and Codex benchmark outputs for subjective operator quality after the fresh deterministic rerun.

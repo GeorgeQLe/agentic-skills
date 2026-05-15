@@ -4,6 +4,29 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Current Task — Targeted Update `analyze-sessions` Benchmark Final-Route Exactness
+
+**Goal:** Tighten the `analyze-sessions` benchmark setup so runner-native final commands are unambiguous and exact, preventing suffixes like `for Codex` from passing.
+
+**Plan:**
+- [x] Use the fresh benchmark-agent-review report as scoped evidence and avoid broad history scanning.
+- [x] Confirm existing benchmark setup ownership instead of creating a new skill.
+- [x] Update the route helper, `analyze-sessions` benchmark prompt, and quality/hard assertion path for exact final-route matching.
+- [x] Run focused layer1 coverage and `analyze-sessions` verify.
+- [x] Run a one-run benchmark smoke if focused validation passes.
+- [x] Record results here, then commit and push intended changes on `master`.
+
+## Review — Targeted Update `analyze-sessions` Benchmark Final-Route Exactness
+
+- Decision: existing benchmark harness update. The mirrored `analyze-sessions` skill contracts already require one runner-native command; the gap was the layer4 fixture prompt and route matcher accepting suffix text.
+- Evidence used: `benchmark/review-analyze-sessions-2026-05-15.md`, relevant routing/benchmark lessons, `tests/layer4/setups/tier23-global-workflows.setup.ts`, `tests/layer4/setup-helpers/routing.ts`, `tests/layer4/setup-helpers/quality.ts`, and focused layer1 coverage.
+- Evidence intentionally skipped: broad session-history scan; the review report already verified the narrow route-exactness issue.
+- Added exact final next-route matching and quality scoring, then opted only the `analyze-sessions` setup into exact matching.
+- Reworded the `analyze-sessions` prompt so the literal Claude/Codex commands are examples without runner-label suffixes.
+- Validation passed: focused `bench-setups` layer1, install, skill dependency/version/routing checks, benchmark coverage, `pnpm --dir tests verify --skill analyze-sessions`, Codex one-run smoke `analyze-sessions-codex-a042d8d1` with exact final command assertion passing, and no blocked runs.
+- Skills Showcase data was not refreshed because no tracked `SKILL.md`, `PACK.md`, curated benchmark report, or curated review report changed.
+- **Recommended next command:** `$benchmark-test-skill analyze-sessions`
+
 ## Current Task — Agent Review `analyze-sessions` Fresh Benchmark 2026-05-15
 
 **Goal:** Review the latest persisted `analyze-sessions` Claude and Codex benchmark outputs for subjective operator quality after the fresh deterministic rerun.
