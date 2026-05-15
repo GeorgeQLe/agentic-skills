@@ -21,12 +21,14 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 **Goal:** Run `$benchmark-test-skill analyze-sessions` against the current repository harness and publish fresh deterministic both-agent evidence.
 
 **Acceptance Criteria:**
-- [ ] `pnpm bench --list-skills` confirms `analyze-sessions` is known and reports its coverage status.
-- [ ] `pnpm verify --skill analyze-sessions` passes or blocks benchmark execution with a recorded failure.
-- [ ] `pnpm bench --skill analyze-sessions --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
-- [ ] `benchmark/test-analyze-sessions-2026-05-15.md` records fresh verify, benchmark, latency, cost, consistency, and raw session evidence.
-- [ ] Generated Skills Showcase data is refreshed and validated if curated benchmark evidence changes.
-- [ ] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+- [x] `pnpm bench --list-skills` confirms `analyze-sessions` is known and reports its coverage status.
+- [x] `pnpm verify --skill analyze-sessions` passes or blocks benchmark execution with a recorded failure.
+- [x] `pnpm bench --skill analyze-sessions --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [x] `benchmark/test-analyze-sessions-2026-05-15.md` records fresh verify, benchmark, latency, cost, consistency, and raw session evidence.
+- [x] Generated Skills Showcase data is refreshed and validated if curated benchmark evidence changes.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Completed on 2026-05-15. `analyze-sessions` is known with `coverage=custom` using `tests/layer4/setups/tier23-global-workflows.setup.ts`. Verify passed with layer1 PASS in 4.0s and layer2 SKIP because no target-specific layer2 tests matched. The both-agent benchmark completed with no infrastructure-blocked runs: Claude session `b5357730` passed 3/3 hard assertions with 92.3% output quality, and Codex session `8f7e860a` passed 3/3 hard assertions with 92.3% output quality. Report validation passed, and generated Skills Showcase data was refreshed and validated. Report: `benchmark/test-analyze-sessions-2026-05-15.md`. Recommended next skill: `$benchmark-agent-review analyze-sessions`.
 
 ## Current Targeted Update: analyze-sessions Remediation-Ready Handoff
 
