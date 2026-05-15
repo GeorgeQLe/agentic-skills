@@ -2,7 +2,7 @@
 name: analyze-sessions
 description: Analyze Claude Code and Codex session history for cross-session trends, recurring patterns, and automation opportunities
 type: analysis
-version: 1.3.0
+version: 1.4.0
 argument-hint: "[history file, session directory, repo path, date range, or trend question]"
 ---
 
@@ -66,6 +66,16 @@ If the user asks about one current session, one mistake, one correction, one rep
    - Standing instruction/project convention: behavior that should always apply.
    - `$session-triage`: one concrete incident needs verification before a durable fix is designed.
 
+## Remediation-Ready Handoffs
+
+When a broad verified workflow gap routes to `$targeted-skill-builder`:
+
+- Emit one final next route using the current runner command convention only: `$targeted-skill-builder <concrete gap phrase>`.
+- The command argument must name the workflow gap and likely owner surface, not just `analyze-sessions` or `targeted-skill-builder`; for example: `$targeted-skill-builder run post-doc-edit validation and lessons capture gate`.
+- In the recommendation table or next-work sentence, name the likely owner surface and one validation expectation, such as a layer1 contract test, focused benchmark smoke, or skill-specific validation command. If ownership is uncertain, state which evidence would decide it instead of guessing.
+- Do not put both Claude slash and Codex dollar commands in the final handoff. It is fine to mention the counterpart route in cross-tool analysis, but the final `Recommended next command:` must be one Codex-native command.
+- Distinguish explicit evidence from inference when labeling source, runner, project, or owner. Use language such as "explicitly says", "implies", or "not stated" rather than assigning runner ownership to sparse logs.
+
 ## Output
 
 Produce a structured report with:
@@ -76,7 +86,7 @@ Produce a structured report with:
 - Skill performance trends when requested or visible in the scoped data.
 - Ranked recommendations table: pattern, frequency, recommendation type, suggested name/description.
 - Highest-impact section: top 5 automations by avoided manual prompts.
-- Recommended next skill: `$session-triage` for any concrete incident that needs verification, `$targeted-skill-builder` for a broad verified workflow gap, or `none` when no follow-up is justified.
+- Recommended next skill: `$session-triage` for any concrete incident that needs verification, `$targeted-skill-builder <concrete gap phrase>` for a broad verified workflow gap, or `none` when no follow-up is justified. When recommending `$targeted-skill-builder`, include the likely owner surface and validation expectation in the report.
 
 ## Constraints
 

@@ -4,6 +4,46 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Current Task — Targeted Update `analyze-sessions` Remediation-Ready Handoff
+
+**Goal:** Tighten `analyze-sessions` so broad verified workflow gaps route to a remediation-ready `targeted-skill-builder` handoff instead of a generic or dual-mode route.
+
+**Plan:**
+- [x] Use `benchmark/review-analyze-sessions-2026-05-15.md` and relevant lessons as the scoped evidence source.
+- [x] Confirm existing-skill overlap and choose an `analyze-sessions` update rather than a new skill.
+- [x] Update mirrored Claude/Codex `analyze-sessions` contracts for one runner-native command, concrete gap phrase, owner surface, validation expectation, and explicit-vs-inferred attribution.
+- [x] Update benchmark setup and layer1 coverage to protect the remediation-ready handoff.
+- [x] Run required validation, refresh generated Skills Showcase data, and run a one-run both-agent smoke if practical.
+- [x] Record results here, then commit and push intended changes on `master`.
+
+## Review — Targeted Update `analyze-sessions` Remediation-Ready Handoff
+
+- Decision: existing-skill update. `analyze-sessions` owns broad cross-session workflow-gap recommendations; no new skill was needed.
+- Evidence used: `benchmark/review-analyze-sessions-2026-05-15.md`, relevant `tasks/lessons.md` benchmark-review/route-convention lessons, mirrored `global/{claude,codex}/analyze-sessions/SKILL.md`, and existing `analyze-sessions` layer4 setup evidence.
+- Evidence intentionally skipped: broad session-history scan; the review report already verified the narrow output-quality gap.
+- Updated mirrored `analyze-sessions` contracts to version 1.4.0 with `Remediation-Ready Handoffs` guidance: one runner-native final command, concrete gap phrase, likely owner surface, validation expectation, no dual final route, and explicit-vs-inferred source attribution.
+- Updated `tests/layer4/setups/tier23-global-workflows.setup.ts` so the `analyze-sessions` fixture now requires `/targeted-skill-builder run post-doc-edit validation and lessons capture gate` for Claude and `$targeted-skill-builder run post-doc-edit validation and lessons capture gate` for Codex, plus owner-surface, validation-expectation, and attribution-quality checks.
+- Added focused layer1 coverage in `tests/layer1/bench-setups.test.ts` for the mirrored contract language, generic-route rejection, route-specific assertions, and the new remediation-ready quality criterion.
+- Updated `tests/harness/bench-coverage.ts` `last_verified` date because benchmark coverage was revalidated.
+- Initial one-run smoke found the Claude artifact used singular headings (`Recurring Pattern`, `Automation Opportunity`); adjusted fixture fact matching to accept singular/plural stems while preserving the stricter route and remediation checks.
+- Skills Showcase data was regenerated and validated because tracked `SKILL.md` behavior changed; curated showcase copy did not need manual edits beyond generated data.
+- Validation passed:
+  - `./install.sh`
+  - `./scripts/skill-deps.sh --broken`
+  - `./scripts/skill-versions.sh --missing`
+  - `./scripts/skill-next-step-routing.sh --missing`
+  - `pnpm --dir tests bench:coverage`
+  - `pnpm --dir tests exec vitest run --project layer1 bench-setups bench-coverage`
+  - `pnpm --dir tests verify --skill analyze-sessions`
+  - `pnpm --dir tests bench --skill analyze-sessions --agent both --runs 1 --chunk-size 1 --pause 0`
+  - final smoke sessions `analyze-sessions-claude-b957fee9` and `analyze-sessions-codex-59d4510e`, both 1/1 hard assertions, 92.3% quality, and no blocked runs
+  - `node scripts/generate-skills-showcase-data.mjs`
+  - `node scripts/generate-skills-showcase-github-data.mjs`
+  - `scripts/validate-skills-showcase-data.sh`
+  - targeted `rg` checks for remediation-ready handoff language and generated version data
+  - `git diff --check`
+- **Recommended next command:** `$benchmark-test-skill analyze-sessions`
+
 ## Current Task — Agent Review `analyze-sessions` Benchmark 2026-05-15
 
 **Goal:** Review the latest persisted `analyze-sessions` Claude and Codex benchmark outputs for subjective operator quality.
