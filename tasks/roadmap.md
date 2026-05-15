@@ -16,6 +16,20 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Agent Review: analyze-sessions Benchmark 2026-05-15
+
+**Goal:** Review the latest persisted `analyze-sessions` Claude and Codex benchmark outputs for subjective operator quality.
+
+**Acceptance Criteria:**
+- [x] Latest Claude and Codex run directories are resolved from `tests/benchmarks/runs/analyze-sessions-*`.
+- [x] Retained generated `session-analysis.md` artifacts and benchmark context are inspected for each evaluated run.
+- [x] Each evaluated output is graded against the agent-review rubric separately from deterministic benchmark metrics.
+- [x] `benchmark/review-analyze-sessions-2026-05-15.md` records scores, findings, remediation, and next route.
+- [x] Generated Skills Showcase data is refreshed and validated because curated review evidence changes.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Completed on 2026-05-15. Reviewed `analyze-sessions-claude-bc867ac4` and `analyze-sessions-codex-f4218901`, covering 6 retained `session-analysis.md` artifacts and excluding no infrastructure-blocked runs. Deterministic context was clean: Claude passed 3/3 hard assertions with 89.4% quality, and Codex passed 3/3 hard assertions with 90.9% quality. Subjective verdict was good overall with median score 87.5 and range 84-91. The artifacts identify the recurring validation and lessons-capture misses, but several final handoffs are too broad or dual-mode instead of giving one remediation-ready targeted-skill-builder command. Skills Showcase data was regenerated and validated. Report: `benchmark/review-analyze-sessions-2026-05-15.md`. Recommended next command: `$targeted-skill-builder analyze-sessions remediation-ready targeted-skill-builder handoff`.
+
 ## Current Benchmark: analyze-sessions Post-Fixture Routing 2026-05-15
 
 **Goal:** Rerun `$benchmark-test-skill analyze-sessions` after the benchmark fixture-routing fix and publish fresh deterministic both-agent evidence.
