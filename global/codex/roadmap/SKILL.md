@@ -87,7 +87,7 @@ Present the user with a structured summary:
 
 #### 4b. Interview on Strategy
 
-Ask focused questions to align on roadmap decisions (1–3 questions per turn). If the session is already in Plan mode and there are 2–3 concrete choices, prefer `request_user_input`; otherwise ask concise plain-text questions. Cover:
+Ask focused questions to align on roadmap decisions. Codex cadence is one primary decision question per turn by default; use short follow-up bullets only when they clarify the same roadmap decision, not to batch unrelated questions. If the session is already in Plan mode and there are 2-3 concrete choices for the current decision, prefer `request_user_input`; otherwise ask one concise plain-text question. Cover:
 
 - **Priority**: Which features/specs are most important? What's MVP vs. later?
 - **Grouping**: Should any specs be combined into a single phase? Split apart?

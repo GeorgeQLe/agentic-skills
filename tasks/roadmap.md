@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Update: Codex Interview Question Cadence
+
+**Goal:** Update Codex interview-style skills so they ask one primary question per turn by default, while preserving Claude's grouped AskUserQuestion cadence for Claude skills.
+
+**Acceptance Criteria:**
+- [x] Full available Claude/Codex prompt history and rich Codex sessions are scanned for interview-question cadence evidence.
+- [x] Codex skills with explicit grouped-question or Claude-only AskUserQuestion language are updated to one-primary-question-per-turn guidance.
+- [x] Plan-mode `request_user_input` guidance remains allowed only for one material decision with 2-3 concrete options, not for batching unrelated questions.
+- [x] Regression coverage protects the Codex cadence language.
+- [x] Verification passes, results are recorded in `tasks/todo.md`, and changes are committed and pushed on `master`.
+
+**Result:** Completed on 2026-05-15. Full history scan found 14,370 compact Claude/Codex messages from 2025-12-10 through 2026-05-15, with 498 interview-related messages and recent direct Codex corrections asking to discuss `$spec-interview` questions one by one. Updated targeted Codex interview-style contracts to use one primary decision question per turn and preserve `request_user_input` only for one Plan-mode decision with concrete options. Added layer1 regression coverage and refreshed Skills Showcase generated data. Validation passed through targeted cadence tests, skill integrity checks, install, routing/frontmatter tests, generated data validation, full layer1, targeted `rg`, and `git diff --check`. Shipped on `master`.
+
 ## Current Targeted Update: Skills Showcase Icon Refresh
 
 **Goal:** Replace stale Skills Showcase app icon surfaces with `apps/skills-showcase/new-app-icon.png`.

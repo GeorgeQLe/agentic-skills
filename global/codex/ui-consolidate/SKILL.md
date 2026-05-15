@@ -37,7 +37,7 @@ Users with manually built variations can also use this skill directly, but conso
    - Confirm which variations the user wants to consolidate.
 
 4. **Interview per variation**
-   - For each reviewed variation, ask 1-3 focused questions per turn:
+   - For each reviewed variation, ask one primary decision question per turn by default. Use short follow-up bullets only when they clarify the same variation decision, not to batch unrelated questions:
      - What works well in this variation? Name specific elements, regions, or interactions.
      - What does not work? What feels wrong, cluttered, sparse, or confusing?
      - Any specific component, region, or interaction to keep in the final design?

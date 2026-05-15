@@ -40,7 +40,7 @@ When app scope `{app}` is active:
 - Also read `research/icp.md` (cross-app overview) for broader context
 
 1. Read `research/icp.md` (or `research/{app}/icp.md`) if it exists as a starting point. Read the codebase if one exists. Before asking the user how enterprise differs, use WebSearch to research enterprise buying patterns in this product category (e.g., "[category] enterprise buying process", "[category] enterprise vs SMB"). Present the startup ICP summary alongside enterprise research findings, then ask how enterprise differs.
-2. Interview the user (1–3 questions per turn, research and recommend by default — assume the user has no insider knowledge unless they explicitly provide it; present findings with data, define relevant terms, state a recommendation, and ask for hard constraints, proprietary facts, or corrections; only ask without a recommendation when evidence cannot resolve the choice) covering:
+2. Interview the user one primary decision question per turn by default. Use short follow-up bullets only when they clarify the same enterprise ICP decision, not to batch unrelated questions. Research and recommend by default: assume the user has no insider knowledge unless they explicitly provide it; present findings with data, define relevant terms, state a recommendation, and ask for hard constraints, proprietary facts, or corrections; only ask without a recommendation when evidence cannot resolve the choice. Cover:
    - **Stakeholder Map** — Which personas matter? End users, team admin, IT/Security, procurement, champion (see Champion Enablement & Risk for deep analysis), exec sponsor
    - **Per-Persona Journeys** — What each stakeholder needs to see/do/approve; their deal-killing "no"
    - **Enterprise Lifecycle** — Evaluation → pilot → rollout → expansion → renewal requirements
@@ -51,7 +51,7 @@ When app scope `{app}` is active:
    - **Budget Cycle & Procurement** — Budget cycle timing, budget source (IT/departmental/innovation/exec), procurement path (vendor registration, RFP, security questionnaire, legal, MSA), pricing expectations, competitive displacement
    - **Land-and-Expand Strategy** — Initial landing zone (smallest deployable unit), expansion triggers, expansion mechanics, expansion blockers, account growth trajectory (Year 1 → Year 2 → Year 3)
    - **Enterprise Segmentation** — Segment definitions (mid-market, large enterprise, strategic/Global 2000), segment differences (buying process, stakeholders, deal size), target segment priority, segment-specific deal-killers. Conditional — include only if product serves multiple enterprise tiers.
-   > Areas G–J (Champion, Budget, Land-and-Expand, Segmentation) often surface together in conversation. Group related questions across areas when answers naturally span them.
+   > Areas G-J (Champion, Budget, Land-and-Expand, Segmentation) often surface together in conversation. Let answers inform nearby areas, but keep Codex follow-up questions one primary decision at a time.
 3. **Present findings before writing.** Summarise with evidence: stakeholder map (citing interview responses and research data), critical deal-killers (citing competitor requirements, industry standards, or research findings), lifecycle friction points (citing specific examples or research findings), and key insights. Ask: "Which enterprise constraints, missing stakeholders, or weak assumptions should change this analysis?" Continue with follow-up questions until all non-trivial details are nailed down.
 4. Only after user confirms, write the output files.
 

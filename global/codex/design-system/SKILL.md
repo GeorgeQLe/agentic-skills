@@ -8,7 +8,7 @@ argument-hint: "[spec path | --scan | --update]"
 
 # Design System
 
-Invoke as `/design-system`.
+Invoke as `$design-system`.
 
 Use this skill after `$ui-consolidate` to lock design decisions into machine-readable tokens before implementation begins. It bridges the gap between prose UI specs and code — without it, agents interpret "dark surface with primary accent" differently each session, causing UI consistency drift.
 
@@ -38,11 +38,12 @@ Also use this skill retroactively on an existing codebase (`--scan`) to generate
 
 3. **Interview to confirm tokens**
    - Present the extracted token inventory grouped by category (Colors, Typography, Spacing, Shapes, Elevation, Components).
-   - For each category, use AskUserQuestion (1–3 questions per turn):
+   - For each category, ask one primary confirmation or adjustment question per turn. If the session is already in Plan mode and there are 2-3 concrete options for the current token decision, prefer `request_user_input`; otherwise ask one concise plain-text question.
      - Are these the correct values? Flag any that look like defaults vs intentional choices.
      - Are there missing semantic roles? (e.g., no error color found, no hover state defined)
      - For typography: confirm the scale — is this intentional or inherited from a framework default?
      - For spacing: confirm the scale — 4px base? 8px base? Irregular?
+   - Do not batch unrelated token categories into the same question. Continue one category or decision at a time so the user can have a deeper discussion before moving on.
    - Record user confirmations and adjustments.
 
 4. **Validate accessibility**
@@ -51,7 +52,7 @@ Also use this skill retroactively on an existing codebase (`--scan`) to generate
      - Large text (≥18px bold or ≥24px): minimum 3:1
      - UI components and graphical objects: minimum 3:1
    - Report failures with the specific pairing, current ratio, and minimum required.
-   - Use AskUserQuestion to resolve failures: adjust the color, accept the risk, or mark as decorative-only.
+   - Resolve failures one at a time: adjust the color, accept the risk, or mark as decorative-only. If already in Plan mode, `request_user_input` may present those options for the current failure; otherwise ask one concise plain-text question.
 
 5. **Draft DESIGN.md**
    - Follow the Google Labs Stitch format. The file has two parts:
@@ -125,7 +126,7 @@ Also use this skill retroactively on an existing codebase (`--scan`) to generate
    8. `## Do's and Don'ts` — concrete guardrails. Include at least: colors to never use, spacing anti-patterns, component misuse patterns observed in prior implementations.
 
    - Use `{colors.primary}` cross-reference syntax in component definitions and prose.
-   - Present the draft to the user via AskUserQuestion before writing.
+   - Present the draft to the user and ask one concise approval or adjustment question before writing.
 
 6. **Write deliverables**
    - Write `DESIGN.md` to the project root.
@@ -156,7 +157,7 @@ Also use this skill retroactively on an existing codebase (`--scan`) to generate
 ## Default Shipping Contract
 
 - **Default next-step routing:** when reporting completion, include either `Recommended next skill: <command>` or the two-line pair `**Next work:** <specific task or "none">` and `**Recommended next command:** <one command or route>` so the next operator has a concrete handoff.
-- After writing `DESIGN.md`, recommend `/roadmap` or `/run` for implementation. If the project has no roadmap yet, recommend `/roadmap`.
+- After writing `DESIGN.md`, recommend `$roadmap` or `$run` for implementation. If the project has no roadmap yet, recommend `$roadmap`.
 - If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
 - Do not leave tracked changes or unpushed commits behind.
 - This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.

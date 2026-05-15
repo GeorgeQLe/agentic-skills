@@ -1,5 +1,20 @@
 # Lessons
 
+## 2026-05-15 — Codex interview skills should ask one primary question per turn
+
+- Codex interview runs inherited Claude's 1-3 grouped-question cadence even though Codex cannot open a structured ask-user prompt outside Plan mode.
+- Recent Codex session history included repeated user corrections asking to discuss interview questions one by one after `$spec-interview` runs.
+- For Codex-facing interrogation skills, ask one primary decision question per turn by default and use short follow-up bullets only to clarify that same decision.
+- Reserve `request_user_input` for sessions that are already in Plan mode, and use it for one material decision with 2-3 concrete options rather than batching unrelated questions.
+- Keep Claude skills free to use grouped AskUserQuestion turns when that matches Claude's interaction model.
+
+## 2026-05-15 — Red/green test analysis must distinguish app tests from benchmark harness tests
+
+- A red/green testing workflow analysis answered with benchmark-harness incidents when the user meant app-level tests such as Vitest, Playwright, and frontend smoke tests.
+- When a user says "tests our apps do" or names Vitest/Playwright, scope evidence to product/application test suites first, not skill benchmark reports, unless they explicitly mention benchmark harnesses.
+- Separate categories in reports: app unit/integration tests, browser/e2e tests, generated-data validation, skill benchmark harnesses, and manual/UAT checks.
+- If the initial evidence source is ambiguous, state the scope assumption before drawing incident-level conclusions.
+
 ## 2026-05-14 — UI refactor scope must include duplicate legacy blocks on already-themed pages
 
 - A sitewide theme refactor plan initially called out the rest of the Skills Showcase routes while underemphasizing that `/workflows` itself still has an older top selector/panel above the Playful Lab player.

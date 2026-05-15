@@ -25,7 +25,7 @@ Use this skill when the user wants to inspect, recommend, install, remove, or re
      - Check top-level files and directories, package manifests, app/framework configs, source layout, docs, existing `research/`, `specs/`, and `tasks/` files.
      - Classify likely packs using the pack selection rules below.
      - Present a concise recommendation with evidence.
-     - Mock Claude's AskUserQuestion flow with a **Pack Decision Checkpoint**: show 2-4 numbered choices, mark the recommended choice, explain the tradeoff for each, and ask the user to reply with a number, exact pack list, `status`, or `cancel`.
+     - Present a plain-text **Pack Decision Checkpoint**: show 2-4 numbered choices, mark the recommended choice, explain the tradeoff for each, and ask the user to reply with a number, exact pack list, `status`, or `cancel`.
      - Stop after the checkpoint. Do not install anything until the user explicitly confirms a choice in a later message.
      - After the user confirms, run `scripts/pack.sh install <pack...>`.
    - If `.agents/project.json` exists but `refresh` fails, report the failure and the exact command the user can retry.

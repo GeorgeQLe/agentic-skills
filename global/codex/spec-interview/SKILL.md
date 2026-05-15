@@ -42,11 +42,11 @@ Use this skill when the user has a concept brief, research-backed opportunity, d
      - **Data model**: what persists, what's ephemeral, migration path from current state
      - **API and contract surface**: routes, events, SDKs, schemas, external integrations, or CLI contracts
      - **Operational requirements**: security, privacy, permissions, performance, observability, and failure handling
-   - Immediately follow the checkpoint with 1 to 3 focused interview questions. Do not stop at the assumptions checkpoint unless the user explicitly asks to pause and review assumptions first.
+   - Immediately follow the checkpoint with one focused interview question. Do not stop at the assumptions checkpoint unless the user explicitly asks to pause and review assumptions first.
    - If any `[inferred]` assumption is corrected, note the correction — these corrections are high-signal for downstream risk and must appear in the interview log.
 5. Interview the user in depth to validate assumptions, resolve ambiguities, and close gaps.
-6. If the session is already in Plan mode, prefer `request_user_input` for material decisions with 2-3 real options. Otherwise ask concise direct questions in plain text.
-7. Ask 1 to 3 focused questions per turn.
+6. Codex interview cadence: ask one primary decision question per turn by default. Use short follow-up bullets only when they clarify the same decision, not to batch unrelated questions.
+7. If the session is already in Plan mode, `request_user_input` may present 2-3 real options for the current material decision. Otherwise ask one concise direct question in plain text.
 8. **Research and recommend by default.** Use web search, upstream research docs, and codebase analysis to gather evidence before asking the user. Assume the user has no insider knowledge unless they explicitly provide it. Present findings with data, define relevant terms, state a recommendation with reasoning, and ask the user to approve, adjust, or override based on hard constraints, proprietary facts, or corrections. Only present options without a recommendation when internal constraints, preferences, or missing facts make evidence insufficient. For each real choice:
    - Explain the options with evidence
    - Give a brief pros and cons comparison

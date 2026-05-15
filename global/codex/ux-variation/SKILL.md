@@ -73,7 +73,7 @@ When invoked with `--layout-mode` (or when the user says "layout mode", "layout 
    - Ask the user to confirm, correct, or flag assumptions before proceeding.
 
 4. **Interview for variation goals**
-   - Ask 1 to 3 focused questions per turn.
+   - Codex interview cadence is one primary decision question per turn by default. Use short follow-up bullets only when they clarify the same variation decision, not to batch unrelated questions.
    - Default to maximally contrasting archetypes. Do not ask how different variants should be — assume dramatic contrast unless the user explicitly requests graduated steps.
    - Default evaluation method is: build each variation, then run `$uat --variant-evaluation` so the user has task-based evidence before consolidation.
    - When presenting a design decision with 3+ plausible answers during the interview, always include "Make this a variant axis (test all approaches)" as an option. When the user has already chosen "test all" for a prior question in the same session, default subsequent ambiguous decisions to variant axes without asking.
