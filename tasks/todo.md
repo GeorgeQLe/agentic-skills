@@ -7,7 +7,7 @@
 ## Priority Task Queue
 
 - [x] Task pipeline is healthy; no blocking issues found. All 39 roadmap phases complete, documentation scan current.
-- [ ] `/reconcile-dev-docs fix tasks` - Resolve orphaned manual tasks in `tasks/manual-todo.md` because Phase 38 is marked ✓ but 4 unchecked manual items remain (Neon DB setup, admin secret, Vercel env vars, live form verification).
+- [x] `/reconcile-dev-docs fix tasks` - Resolved orphaned Phase 38 manual tasks: 4 items deferred to future work (Neon DB, admin secret, Vercel env vars, live verification).
 - [ ] `/feature-interview` - Triage 5 unspecced ideas in `tasks/ideas.md` because no corresponding specs exist and they may contain prioritizable work.
 
 ## Current Task — Workflows Mobile Playful Lab Responsiveness 2026-05-15
