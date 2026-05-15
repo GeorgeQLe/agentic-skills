@@ -2,85 +2,46 @@
 
 ## Quick wins (hours)
 
-- **Redesign execution workflow for Codex** — The current repository workflow assumes Claude Code can enter plan mode and, after approval, continue through a clear-context implementation loop. Codex cannot do that from skills alone: `request_user_input` only works when already in Plan mode, and there is no Claude-style plan-mode entrypoint/settings flow. We need a Codex-native execution pattern for `/run`, `/ship`, `/migrate`, `/decommission`, and kanban variants instead of pretending parity. _Start with:_ `/spec-interview codex-native workflow redesign for execution and approval handling`
-
-
-- **Consolidate duplicate deploy logic across ship variants** — `/ship`, `/ship-then-plan`, and `/ship-end` each inline the full deploy search+execute logic (spec.md → CLAUDE.md → Makefile → ...). Extract a shared deploy protocol reference or use `/deploy` internally to avoid drift. Signal: `ship.md:26-38`, `ship-then-plan.md:23-29`, `ship-end.md` all repeat the same search order. _Start with:_ `/spec-interview extracting shared deploy protocol across ship skills`
-
-- **Add `--no-deploy` flag to `/ship-then-plan`** — `/ship` supports `--no-deploy` and `--no-plan`, but `/ship-then-plan` has no flag support at all. For this skills repo (and others with no deploy), the deploy step always triggers a "how do you deploy?" question. _Start with:_ `/spec-interview adding flag support to ship-then-plan`
+- **Consolidate duplicate deploy logic across ship variants** — `/ship` and `/ship-end` each inline the full deploy search+execute logic (spec.md → CLAUDE.md → Makefile → ...). A standalone `/deploy` skill exists (v2.0.0) but is not called internally by ship variants. Extract a shared deploy protocol reference or use `/deploy` internally to avoid drift. _Start with:_ `/feature-interview extracting shared deploy protocol across ship skills`
 
 ## Medium efforts (days)
 
-- **Skill dependency graph and validation** — Skills reference each other by name (e.g., `/roadmap` calls `/plan-phases`, `/ship` calls `/commit-and-push-by-feature`) but there's no validation that referenced skills exist or that the call chain is coherent. A `/lint-skills` skill could parse all SKILL.md files, build a dependency graph, detect broken references, circular dependencies, and inconsistent file format conventions. Signal: `roadmap/SKILL.md` references `/plan-phases`, `ship/SKILL.md` references `/commit-and-push-by-feature` — all implicit, never validated. _Start with:_ `/spec-interview skill dependency graph validation and lint tool`
+- **Skill dependency graph and validation** — Skills reference each other by name (e.g., `/roadmap` calls `/plan-phase`, `/ship` calls `/commit-and-push-by-feature`) but there's no validation that referenced skills exist or that the call chain is coherent. `scripts/skill-deps.sh` exists for broken-dep checking but no graph visualization or circular-dependency detection. _Start with:_ `/feature-interview skill dependency graph validation and lint tool`
 
-- **Skill versioning and changelog** — When a skill's behavior changes (like the `/plan-phases` refactor to dual-mode), downstream users have no way to know. A lightweight versioning scheme (semver in frontmatter) plus a `CHANGELOG.md` per skill or a single `docs/skill-changelog.md` would help users of the skills library understand what changed. Signal: the recent `/plan-phases` Mode A/B refactor changed its contract but nothing tracks that. _Start with:_ `/spec-interview skill versioning and changelog system`
+- **Session continuity automation** — The `/handoff` → fresh session → `/sync` → read `todo.md` loop is manual. A `/resume` skill could automate the cold-start: read `tasks/handoff.md` if present, read `tasks/todo.md`, read `CLAUDE.md`, show a status summary, and suggest next action. Reduces the "what was I doing?" friction to a single command. _Start with:_ `/feature-interview session resume skill for cold-start automation`
 
-- **Session continuity automation** — The `/handoff` → fresh session → `/sync` → read `todo.md` loop is manual. A `/resume` skill could automate the cold-start: read `tasks/handoff.md` if present, read `tasks/todo.md`, read `CLAUDE.md`, show a status summary, and suggest next action (`/run-step`, `/run --phase`, etc.). Reduces the "what was I doing?" friction to a single command. Signal: `handoff/SKILL.md:80` says "a fresh session should be able to read only this file + todo.md + roadmap.md" — but nothing automates that read. _Start with:_ `/spec-interview session resume skill for cold-start automation`
+- **Kanban card labels** — Cards lack categorization beyond name/description. A tags or labels field would enable filtering by type (bug, feature, test, debt) and improve Board Overview reporting. _Start with:_ `/feature-interview card labels and tag-based filtering for kanban boards`
 
-- **Spec multi-section awareness** — `/spec-interview-ideas` appends multiple specs into a single `spec.md`, but nothing in the toolchain explicitly handles multi-section specs. `/roadmap` now reads "all sections" but other skills (e.g., `/expert-review` checking spec conformance) treat `spec.md` as monolithic. A convention for spec section headers (e.g., `## Spec: [feature-name]`) and per-section metadata would make cross-referencing reliable. Signal: `spec-interview-ideas/SKILL.md` appends to `spec.md`, `expert-review/SKILL.md:37` checks spec conformance without section awareness. _Start with:_ `/spec-interview spec.md multi-section format convention`
+- **Kanban input validation layer** — `--progress` validates via `parseIntegerArg()` but `--due` accepts invalid date strings that silently become `Invalid Date`. No centralized validation layer exists. _Start with:_ `/feature-interview input validation layer for kanban CLI`
+
+- **Kanban database error path tests** — All kanban tests are happy-path only. `returning()` results are unchecked, and real DB errors propagate as unhandled rejections. _Start with:_ `/feature-interview database error path testing for kanban`
 
 ## Larger initiatives (weeks)
 
-- **Skill testing framework** — No skills have tests. A framework that runs a skill against a fixture project (git repo snapshot) and asserts on outputs (files created, questions asked, plan mode entered) would catch regressions when skills are modified. Could use a `tests/` directory with fixture repos and expected outcomes per skill. Signal: 28 skills with complex interdependencies, no automated verification — the only quality gate is `/expert-review` run manually. _Start with:_ `/spec-interview testing framework for claude-skills`
+- **Workflow orchestrator / meta-skill** — Users must manually chain skills (`/brainstorm` → `/feature-interview` → `/spec-interview` → `/roadmap` → `/plan-phase` → `/run`). A workflow-orchestrator skill could guide users through the full pipeline, tracking where they are and suggesting the next skill. _Start with:_ `/feature-interview workflow orchestrator meta-skill for guided pipeline execution`
 
-- **Workflow orchestrator / meta-skill** — Users must manually chain skills (`/brainstorm` → pick idea → `/spec-interview` → `/roadmap` → `/plan-phases` → `/run`). A future workflow-orchestrator skill could guide users through the full pipeline, tracking where they are and suggesting the next skill. For new users especially, the 28-skill surface area is overwhelming. Signal: `docs/skills-reference.md:32-38` shows the workflow diagram, but nothing enforces or guides it. _Start with:_ `/spec-interview workflow orchestrator meta-skill for guided pipeline execution`
-
-- **Cross-tool portability layer** — Claude and Codex skills are maintained in parallel (`claude/` and `codex/`) with near-identical content. A shared format that generates tool-specific variants would eliminate the duplication. Could be a single `skills/<name>/skill.yaml` that compiles to both `claude/SKILL.md` and `codex/SKILL.md + agents/openai.yaml`. Signal: 27 skills duplicated across `claude/` and `codex/`, manual sync required. _Start with:_ `/spec-interview cross-tool skill portability and single-source generation`
+- **Cross-tool portability layer** — Claude (57 skills) and Codex (54 skills) are maintained in parallel with near-identical content and manual sync. A shared format that generates tool-specific variants would eliminate the duplication. _Start with:_ `/feature-interview cross-tool skill portability and single-source generation`
 
 ---
 
-## Testing-focused ideas (2026-03-27)
+## Removed ideas (addressed by shipped work)
 
-### Quick wins (hours)
+> Cleaned 2026-05-15. These ideas were implemented during Phases 1-39 or became obsolete.
 
-- **Add vitest coverage reporting** — `kanban.test.mjs` has 24 tests but no coverage metrics. Add `vitest.config.mjs` with `coverage.provider: 'v8'` and `coverage.reporter: ['text', 'lcov']` to surface untested branches in `kanban.mjs`. Signal: `claude/poketo-kanban/scripts/package.json` has no coverage config; 702-line file with only integration tests. _Start with:_ `/spec-interview-kanban vitest coverage reporting for kanban.mjs`
-
-- **Test bootstrap-session.mjs** — 110 lines of env parsing, SQLite reads, and session extraction with zero tests. Errors here silently break all kanban skills. Can test with a fixture SQLite DB or mock. Signal: `claude/poketo-kanban/scripts/bootstrap-session.mjs` — only non-SKILL.md code file without any test coverage. _Start with:_ `/spec-interview-kanban bootstrap-session.mjs unit tests`
-
-### Medium efforts (days)
-
-- **install.sh test suite with bats** — The 106-line bash installer has no tests. Edge cases (broken symlinks, permission errors, partial installs, --uninstall with mixed state) are verified only by manual runs. A bats-core suite using temp directories could catch regressions. Signal: `install.sh` creates/removes 83 symlinks across two directories — any bug affects all skill availability. _Start with:_ `/spec-interview-kanban install.sh test suite with bats-core`
-
-- **Kanban edge case test expansion** — Current 24 tests cover happy paths but miss: concurrent card moves, cards with unicode/emoji names, very long descriptions, moving to same list, archiving already-archived cards, search with LIKE metacharacters (now escaped). Signal: Phase 5 fixed a LIKE injection bug and null dereference that existing tests didn't catch. _Start with:_ `/spec-interview-kanban kanban.mjs edge case and regression tests`
-
-- **SKILL.md lint and frontmatter validation** — 84 SKILL.md files have frontmatter (`name`, `description`, `argument-hint`) but no validation. A script could verify: all required fields present, no broken skill cross-references, codex/claude parity, agents/openai.yaml exists for every codex skill. Signal: Phase 5 found a missing `agents/openai.yaml` only via manual `/expert-review`. _Start with:_ `/spec-interview-kanban skill frontmatter lint and validation script`
-
----
-
-## Kanban & DX improvements (2026-03-27)
-
-### Quick wins (hours)
-
-- **Add `--board` flag to kanban search** — `cmdSearch` scans all 21 org boards, returning noise from unrelated projects. A `--board <id>` flag would scope results to the current project's board, making idempotency checks in brainstorm-kanban and spec-interview-kanban faster and more precise. Signal: `kanban.mjs:430-501` — no board filter option; search hits 21 boards × all lists. _Start with:_ `/spec-interview-kanban scoped board search for kanban.mjs`
-
-- **Add Codex `poketo-kanban` skill** — `poketo-kanban` is the only skill (1 of 42) without a Codex counterpart. All other skills have parity. Signal: `diff` of `claude/` vs `codex/` shows only `poketo-kanban` missing. _Start with:_ `/spec-interview-kanban codex poketo-kanban parity`
-
-- **Unify env path lists in kanban scripts** — `bootstrap-session.mjs` searches `projects/poke/dev/poke-productivity-suite/` while `kanban.mjs` searches `projects/apps/poke/monorepo/`. Neither shares the other's paths, so setup works on one machine but silently fails on another. Signal: `bootstrap-session.mjs:22-24` vs `kanban.mjs:39-44` — disjoint path arrays. _Start with:_ `/spec-interview-kanban unify env path discovery across kanban scripts`
-
-### Medium efforts (days)
-
-- **Dry-run mode for kanban skills** — All 8 kanban skills write directly to Neon with no preview. A `--dry-run` flag showing intended kanban operations (cards to create/move/update) without executing them would make testing safer and help users verify before modifying board state. Signal: Layer 3 testing requires manual board-state verification after each skill; the ship/run skills can move cards to wrong lists on misconfigured boards. _Start with:_ `/spec-interview-kanban dry-run mode for kanban board operations`
-
-- **Skill discovery command** — With 42 skills, users must consult the 416-line `docs/skills-reference.md` to find the right one. A `/skills` command that lists available skills grouped by workflow stage with keyword search and "did you mean?" suggestions would reduce friction. Signal: `/analyze-sessions` showed 5,332 messages — skill discovery is manual. _Start with:_ `/spec-interview-kanban skill discovery and search command`
-
-- **Kanban card labels** — Cards lack categorization beyond name/description. A tags or labels field would enable filtering by type (bug, feature, test, debt) and improve Board Overview reporting. Brainstorm-kanban currently embeds effort level as a string suffix in descriptions. Signal: `kanban.mjs` card schema has no label/tag column; board overview has no category-based filtering. _Start with:_ `/spec-interview-kanban card labels and tag-based filtering for kanban boards`
-
-### Larger initiatives (weeks)
-
-- **Multi-project kanban dashboard** — With 21 boards, there's no cross-project view. A `/kanban-dashboard` skill showing cards in progress across all boards, overdue items, stale boards with no recent activity, and WIP distribution would help manage a portfolio of projects. Signal: `boards` command returns 21 boards with zero card-level detail; switching between projects requires remembering board IDs. _Start with:_ `/spec-interview-kanban multi-project kanban dashboard`
-
----
-
-## Testing-focused ideas (2026-03-27, round 2)
-
-### Quick wins (hours)
-
-- **Test create-list command** — The only kanban.mjs command (1 of 11) with zero test coverage. Order calculation, board validation, and duplicate name handling are all untested. Signal: `kanban.mjs:398-428` has no corresponding describe block in `kanban.test.mjs`. _Start with:_ `/spec-interview-kanban create-list command test coverage`
-
-- **Fix search escape: backslash not handled** — The LIKE escape in `cmdSearch` handles `%` and `_` but not backslash (`\`), which is the escape character itself in SQL LIKE. A query containing `\` could produce unexpected results. Signal: `kanban.mjs:462` — only two replacements, missing `\` → `\\`. _Start with:_ `/spec-interview-kanban search escape completeness`
-
-### Medium efforts (days)
-
-- **Input validation layer for kanban.mjs** — `--progress` accepts NaN/negative/float via bare `parseInt`, `--due` accepts invalid date strings that silently become `Invalid Date` objects, and the argument parser drops flags at EOF or with duplicate keys. No validation between user input and DB writes. Signal: `kanban.mjs:249` (no `isNaN` check), `kanban.mjs:218` (no date validation). _Start with:_ `/spec-interview-kanban input validation layer for kanban CLI`
-
-- **Database error path test suite** — No tests verify behavior when DB operations fail: insert returning empty, FK constraint violations, connection timeouts. `returning()` results are unchecked on lines 222, 254, 389. Real DB errors propagate as unhandled rejections. Signal: all 24 tests are happy-path only against live Neon DB. _Start with:_ `/spec-interview-kanban database error path testing`
+- ~~Redesign execution workflow for Codex~~ — Codex-native execution patterns documented in `docs/codex-workflow.md`; codex/run and codex/ship skills exist.
+- ~~Add `--no-deploy` flag to `/ship-then-plan`~~ — `/ship-then-plan` no longer exists; `/ship` and `/ship-end` both support `--no-deploy`.
+- ~~Skill versioning and changelog~~ — Versioning shipped: all 105+ skills have `version:` semver frontmatter, `scripts/skill-versions.sh` audits. Per-skill changelogs not added but git log serves.
+- ~~Spec multi-section awareness~~ — Specs moved to individual files in `specs/`; monolithic `spec.md` pattern retired.
+- ~~Skill testing framework~~ — `tests/` directory with layer1-4 structure, `frontmatter.test.ts`, benchmark harness, and custom skill setups.
+- ~~Add vitest coverage reporting~~ — Coverage exists via layer1-4 test structure; kanban-specific coverage is low priority given project direction.
+- ~~Test bootstrap-session.mjs~~ — Kanban scripts are stable; low priority.
+- ~~install.sh test suite with bats~~ — `tests/layer1/install.test.ts` covers pack installation; `install.sh` itself is stable.
+- ~~SKILL.md lint and frontmatter validation~~ — `frontmatter.test.ts` validates all 105+ SKILL.md files.
+- ~~Add `--board` flag to kanban search~~ — Implemented: `cmdSearch()` accepts `--board` arguments.
+- ~~Add Codex poketo-kanban skill~~ — Codex skeleton exists at `packs/poketowork-kanban/codex/poketo-kanban/`.
+- ~~Unify env path lists~~ — `env-paths.mjs` consolidates path discovery; low priority remaining gap.
+- ~~Dry-run mode for kanban skills~~ — Implemented: create-card, move-card, update-card, update-list, create-list all support `--dry-run`.
+- ~~Skill discovery command~~ — `/skills` command exists in both claude and codex.
+- ~~Kanban edge case test expansion~~ — Backslash escape fixed; `parseIntegerArg()` added. Remaining gaps folded into "input validation" and "error path" ideas above.
+- ~~Fix search escape: backslash~~ — Fixed: `kanban.mjs` line 696 handles backslash, %, and _ escaping.
+- ~~Test create-list command~~ — 5 test blocks exist in `kanban.test.mjs` covering create-list.

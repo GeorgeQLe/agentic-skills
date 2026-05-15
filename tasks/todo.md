@@ -8,7 +8,7 @@
 
 - [x] Task pipeline is healthy; no blocking issues found. All 39 roadmap phases complete, documentation scan current.
 - [x] `/reconcile-dev-docs fix tasks` - Resolved orphaned Phase 38 manual tasks: 4 items deferred to future work (Neon DB, admin secret, Vercel env vars, live verification).
-- [ ] `/feature-interview` - Triage 5 unspecced ideas in `tasks/ideas.md` because no corresponding specs exist and they may contain prioritizable work.
+- [ ] `/feature-interview` - Triage 8 remaining unspecced ideas in `tasks/ideas.md` (cleaned from 25 on 2026-05-15; 17 removed as shipped/obsolete).
 
 ## Current Task — Workflows Mobile Playful Lab Responsiveness 2026-05-15
 
