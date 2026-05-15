@@ -30,7 +30,12 @@ import {
   assertReportPassRateAtLeast,
   assertReportRecordsFailedAssertions,
 } from "../layer4/setup-helpers/reports.js";
-import { assertNextCommand, assertRecommendedRoute } from "../layer4/setup-helpers/routing.js";
+import {
+  assertNextCommand,
+  assertRecommendedRoute,
+  nextCommandHandoffPattern,
+  recommendedNextRoutePattern,
+} from "../layer4/setup-helpers/routing.js";
 
 const TESTS_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -164,6 +169,17 @@ describe("benchmark setup registry", () => {
         ]),
       );
     }
+  });
+
+  it("accepts bold Markdown next-route labels from shipping contracts", () => {
+    const slashRoute = "**Recommended next command:** /session-triage";
+    const dollarRoute = "- **Recommended next skill:** $targeted-skill-builder analyze-sessions benchmark fixture routing";
+
+    expect(assertNextCommand(slashRoute)).toMatchObject({ pass: true });
+    expect(assertNextCommand(dollarRoute)).toMatchObject({ pass: true });
+    expect(nextCommandHandoffPattern.test("**Next work:** verify the scoped incident")).toBe(true);
+    expect(recommendedNextRoutePattern("/session-triage").test(slashRoute)).toBe(true);
+    expect(recommendedNextRoutePattern("$targeted-skill-builder").test(dollarRoute)).toBe(true);
   });
 
   it("uses agent-specific route assertions for the run workflow setup", () => {
@@ -405,6 +421,94 @@ describe("benchmark setup registry", () => {
       setup!.qualityEvaluator?.evaluate("Recommended approval command: $icon-handler fix calc-mascot-icon.svg\nNext command: npm run build").criteria.find((criterion) => criterion.id === "workflow-next-route"),
     ).toMatchObject({
       passed: false,
+    });
+  });
+
+  it("uses broad repeated evidence and runner-specific routes for the analyze-sessions setup", () => {
+    const setup = resolveBenchSetup("analyze-sessions");
+    expect(setup).toBeDefined();
+    expect(setup?.prompt).toContain("all local session history files under sessions/");
+    expect(setup?.prompt).toContain("/targeted-skill-builder for Claude");
+    expect(setup?.prompt).toContain("$targeted-skill-builder for Codex");
+    expect(setup?.perRunBudgetUsd).toBe(BENCH_BUDGETS_USD.standard);
+
+    const workDir = mkdtempSync(resolve(tmpdir(), "analyze-sessions-fixture-"));
+    setup!.setupProject?.(workDir);
+
+    const fixtureFiles = [
+      "sessions/2026-05-01-log.md",
+      "sessions/2026-05-08-log.md",
+      "sessions/2026-05-15-log.md",
+    ];
+    for (const file of fixtureFiles) {
+      expect(readFileSync(resolve(workDir, file), "utf8")).toMatch(/validation|lessons/i);
+    }
+
+    const baseReport = [
+      "# Session Analysis",
+      "",
+      "Generated artifact: session-analysis.md",
+      "",
+      "## Recurring Patterns",
+      "- validation skipped after task-doc edits across sessions/2026-05-01-log.md, sessions/2026-05-08-log.md, and sessions/2026-05-15-log.md.",
+      "- lessons updates were missed repeatedly.",
+      "",
+      "## Automation Opportunities",
+      "- Add a targeted builder guard for validation and lessons capture.",
+      "",
+      "## Risks",
+      "- Repeated missing validation and lessons updates creates process drift.",
+      "",
+    ].join("\n");
+
+    writeFileSync(
+      resolve(workDir, "session-analysis.md"),
+      `${baseReport}**Recommended next command:** /targeted-skill-builder analyze-sessions benchmark fixture routing\n`,
+    );
+    const claudeAssertions = setup!.assertResult(
+      {
+        stdout: "",
+        stderr: "",
+        exitCode: 0,
+        workDir,
+        files: ["session-analysis.md", ...fixtureFiles],
+      },
+      { agent: "claude" },
+    );
+    expect(claudeAssertions.find((assertion) => assertion.description === "Output includes next command handoff")).toMatchObject({
+      pass: true,
+    });
+    expect(claudeAssertions.find((assertion) => assertion.description === "Output recommends /targeted-skill-builder")).toMatchObject({
+      pass: true,
+    });
+    expect(claudeAssertions.some((assertion) => assertion.description === "Output recommends $targeted-skill-builder")).toBe(false);
+
+    writeFileSync(
+      resolve(workDir, "session-analysis.md"),
+      `${baseReport}**Recommended next command:** $targeted-skill-builder analyze-sessions benchmark fixture routing\n`,
+    );
+    const codexAssertions = setup!.assertResult(
+      {
+        stdout: "",
+        stderr: "",
+        exitCode: 0,
+        workDir,
+        files: ["session-analysis.md", ...fixtureFiles],
+      },
+      { agent: "codex" },
+    );
+    expect(codexAssertions.find((assertion) => assertion.description === "Output includes next command handoff")).toMatchObject({
+      pass: true,
+    });
+    expect(codexAssertions.find((assertion) => assertion.description === "Output recommends $targeted-skill-builder")).toMatchObject({
+      pass: true,
+    });
+    expect(
+      setup!.qualityEvaluator?.evaluate(readFileSync(resolve(workDir, "session-analysis.md"), "utf8")).criteria.find(
+        (criterion) => criterion.id === "workflow-next-route",
+      ),
+    ).toMatchObject({
+      passed: true,
     });
   });
 

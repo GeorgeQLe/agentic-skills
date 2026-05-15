@@ -4,6 +4,37 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Current Task — Targeted Update `analyze-sessions` Benchmark Fixture Routing
+
+**Goal:** Fix the `analyze-sessions` benchmark fixture so its route expectations match the skill contract and runner conventions.
+
+**Plan:**
+- [x] Use the triage report and relevant lessons as the scoped evidence source.
+- [x] Update the route helper so accepted bold next-route labels pass.
+- [x] Update the `analyze-sessions` benchmark fixture to provide broad repeated-history evidence and runner-specific `targeted-skill-builder` routes.
+- [x] Add focused layer1 coverage for bold labels, runner-specific routes, and the broadened fixture.
+- [x] Run focused validation, benchmark coverage, verify, one-run smoke, and whitespace checks.
+- [x] Record results here, then commit and push intended changes on `master`.
+
+## Review — Targeted Update `analyze-sessions` Benchmark Fixture Routing
+
+- Decision: existing benchmark harness update. No `analyze-sessions` skill contract changes were needed because mirrored Claude/Codex contracts already distinguish broad trend analysis from single-incident triage.
+- Evidence used: `benchmark/triage-analyze-sessions-2026-05-15.md`, `tasks/lessons.md`, `global/{claude,codex}/analyze-sessions/SKILL.md`, `tests/layer4/setups/tier23-global-workflows.setup.ts`, route helpers, and prior `analyze-sessions` benchmark runs.
+- Evidence intentionally skipped: broad session-history scan; the triage report already verified the concrete benchmark-harness gap.
+- Updated `tests/layer4/setup-helpers/routing.ts` so bold Markdown next-route labels such as `**Recommended next command:**` match the accepted handoff patterns.
+- Updated `tests/layer4/setups/tier23-global-workflows.setup.ts` so the `analyze-sessions` fixture now uses three dated session logs with repeated validation/lessons misses, runner-specific `/targeted-skill-builder` and `$targeted-skill-builder` routes, final-route enforcement, and a standard benchmark budget.
+- Added `tests/layer1/bench-setups.test.ts` coverage for bold route labels, broadened `analyze-sessions` fixture evidence, runner-specific routes, and the standard budget.
+- Skills Showcase generated data was not refreshed because no tracked `SKILL.md`, `PACK.md`, curated benchmark report, or curated review report changed.
+- Validation passed:
+  - `pnpm --dir tests exec vitest run --project layer1 bench-setups`
+  - `pnpm --dir tests bench:coverage`
+  - `pnpm --dir tests verify --skill analyze-sessions`
+  - `pnpm --dir tests bench --skill analyze-sessions --agent both --runs 1 --chunk-size 1 --pause 0` after the standard-budget adjustment
+  - smoke sessions `analyze-sessions-claude-59469ff4` and `analyze-sessions-codex-73090527`, both 1/1 hard assertions, no blocked runs, no critical quality failures
+  - targeted `rg` checks for runner routes and smoke report pass/block/critical-failure fields
+  - `git diff --check`
+- **Recommended next command:** `$benchmark-test-skill analyze-sessions`
+
 ## Current Task — Triage `analyze-sessions` Benchmark Failure 2026-05-15
 
 **Goal:** Verify the fresh `analyze-sessions` deterministic benchmark failure and identify the smallest durable fix.
