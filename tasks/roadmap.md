@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current UI Pass: Workflows Mobile Playful Lab Responsiveness 2026-05-15
+
+**Goal:** Make the `/workflows` Playful Lab interface work cleanly on mobile while preserving the newer lab-themed surface that will replace the older workflow presentation.
+
+**Acceptance Criteria:**
+- [x] Validate whether `/workflows` still renders a legacy workflow block above the Playful Lab demo.
+- [x] Keep the fix scoped to the workflows route and Playful Lab/TUI styling unless evidence shows shared CSS is the root cause.
+- [x] Mobile widths avoid horizontal page overflow from chips, commands, benchmark/demo pre blocks, controls, or notebook panels.
+- [x] The lab layout stacks predictably below tablet widths and remains usable at phone widths.
+- [x] Focused tests/build checks pass, and results are recorded in `tasks/todo.md`.
+
+**Result:** Completed on 2026-05-15. `/workflows` already renders only the `TuiWorkflow` Playful Lab component; the legacy DOM-driven workflow selector remains only for the home-page preview support path. The mobile pass tightened the Playful Lab/TUI styles for constrained widths, horizontal chip navigation, stacked controls, long commands, benchmark/demo blocks, and notebook width containment. Focused Vitest smoke/workflow coverage, typecheck, production build, `git diff --check`, and Safari mobile-width visual verification passed.
+
 ## Current Agent Review: analyze-sessions Quality-Rubric Matching Benchmark 2026-05-15
 
 **Goal:** Review the latest persisted `analyze-sessions` Claude and Codex benchmark outputs for subjective operator quality after the quality-rubric matching rerun.
