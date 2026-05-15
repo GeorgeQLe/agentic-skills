@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Triage: analyze-sessions Benchmark Failure 2026-05-15
+
+**Goal:** Verify the fresh `analyze-sessions` deterministic benchmark failure and identify the smallest durable fix.
+
+**Acceptance Criteria:**
+- [x] Fresh benchmark report and persisted Claude/Codex run evidence are inspected.
+- [x] Mirrored `analyze-sessions` contracts are compared against benchmark setup and quality expectations.
+- [x] The failure is classified as a skill contract gap, benchmark harness gap, runner infrastructure issue, or agent noncompliance.
+- [x] `benchmark/triage-analyze-sessions-2026-05-15.md` records verdict, root cause, responsible gap, validation plan, and next route.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Completed on 2026-05-15. The fresh benchmark failure is verified, but the responsible gap is benchmark harness coverage rather than mirrored `analyze-sessions` contracts. The fixture is a single concrete incident note while the setup hard-requires `$targeted-skill-builder`; the skill contracts say concrete incidents should route to `session-triage`, and broad verified workflow gaps can route to `targeted-skill-builder`. The setup also needs runner-specific routes and route-helper support for bold next-route labels permitted by the shipping contract. Codex run #1 was a no-artifact agent/runner no-op, but adjacent Codex runs passed. Report: `benchmark/triage-analyze-sessions-2026-05-15.md`. Recommended next skill: `$targeted-skill-builder analyze-sessions benchmark fixture routing`.
+
 ## Current Benchmark: analyze-sessions 2026-05-15
 
 **Goal:** Run `$benchmark-test-skill analyze-sessions` with current repository harness eligibility, verify, and both-agent benchmark evidence.

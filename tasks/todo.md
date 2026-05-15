@@ -4,6 +4,28 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Current Task — Triage `analyze-sessions` Benchmark Failure 2026-05-15
+
+**Goal:** Verify the fresh `analyze-sessions` deterministic benchmark failure and identify the smallest durable fix.
+
+**Plan:**
+- [x] Inspect the benchmark report, persisted Claude/Codex run data, and retained output artifacts.
+- [x] Compare `analyze-sessions` Claude/Codex contracts against the benchmark setup, hard assertions, and quality criteria.
+- [x] Classify the failure as a skill contract gap, benchmark harness gap, runner infrastructure issue, or agent noncompliance.
+- [x] Write `benchmark/triage-analyze-sessions-2026-05-15.md` with verdict, root cause, responsible gap, validation plan, and next route.
+- [x] Record results here, then commit and push intended changes on `master`.
+
+## Review — Triage `analyze-sessions` Benchmark Failure 2026-05-15
+
+- The benchmark failure is verified: verify passed, no infrastructure-blocked runs were recorded, Claude passed 0/3 hard assertion runs, and Codex passed 2/3.
+- Responsible gap is benchmark harness coverage, not mirrored `analyze-sessions` contracts.
+- The benchmark fixture uses one short incident note but hard-requires `$targeted-skill-builder`; `analyze-sessions` contracts say one concrete issue should route to `session-triage`, while broad verified workflow gaps may route to `targeted-skill-builder`.
+- The setup also expects the Codex dollar route for Claude. Runner-specific routing should use `/targeted-skill-builder` for Claude and `$targeted-skill-builder` for Codex if the fixture is broadened enough to justify that route.
+- The route helper rejects bold next-route labels such as `**Recommended next command:** /session-triage`, even though the default shipping contract permits those labels.
+- Codex run #1 exited 0 without creating `session-analysis.md`, but adjacent Codex runs passed all hard assertions; treat it as runner/agent no-op evidence to watch after the harness fix, not the primary root cause.
+- Report: `benchmark/triage-analyze-sessions-2026-05-15.md`.
+- **Recommended next skill:** `$targeted-skill-builder analyze-sessions benchmark fixture routing`
+
 ## Current Task — Benchmark `analyze-sessions` 2026-05-15
 
 **Goal:** Run `$benchmark-test-skill analyze-sessions` against the current repository harness and record deterministic both-agent benchmark evidence.
