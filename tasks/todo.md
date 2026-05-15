@@ -4,6 +4,26 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Current Task — Workflows Mobile Playful Lab Responsiveness 2026-05-15
+
+**Goal:** Make the `/workflows` Playful Lab interface responsive on mobile, with special attention to the playful lab-themed workflow items and without reviving the old workflow panel.
+
+**Plan:**
+- [x] Read relevant lessons and inspect the workflows route/component tree.
+- [x] Validate the user's old-version hypothesis against current route code.
+- [x] Tighten Playful Lab mobile CSS for chip navigation, body stacking, step card, demo panel, notebook, and controls.
+- [x] Run focused tests/type/build checks and browser viewport verification.
+- [x] Record investigation results and ship intended changes on `master`.
+
+## Review — Workflows Mobile Playful Lab Responsiveness 2026-05-15
+
+- **Strategy Used:** UI investigation; no pivot needed.
+- **User Claims Validated:** Confirmed directionally. `/workflows` now renders only the Playful Lab `TuiWorkflow`; the old DOM-driven workflow component remains in `src/showcase/workflows.tsx` for the home-page preview path, not above the lab demo on the workflows route.
+- **Root Cause:** `apps/skills-showcase/src/showcase/tui/workflow.css` used desktop-first flex proportions and only a minimal tablet breakpoint, so chips, commands, benchmark/demo content, controls, and notebook panels could crowd or create mobile overflow inside the lab console.
+- **Fix Applied:** Added mobile-safe containment and breakpoints in `workflow.css`, constrained the workflow console in `app/globals.css`, and added a smoke assertion that the workflows route renders `.tui-workflow` without the legacy `[data-workflow-list]` block.
+- **Verification:** `pnpm --dir apps/skills-showcase test -- src/showcase/smoke.test.tsx src/showcase/workflows.test.tsx`, `pnpm --dir apps/skills-showcase typecheck`, `pnpm --dir apps/skills-showcase build`, `git diff --check`, and Safari visual verification at a phone-width window on `http://localhost:3004/workflows` passed.
+- **Prevention:** The smoke test now guards against accidentally reintroducing the legacy workflow selector on `/workflows`; future visual passes should include a phone-width check of the Playful Lab chips, controls, and notebook sections.
+
 ## Current Task — Agent Review `analyze-sessions` Quality-Rubric Matching Benchmark 2026-05-15
 
 **Goal:** Review the latest persisted `analyze-sessions` Claude and Codex benchmark outputs for subjective operator quality after the quality-rubric matching rerun.
