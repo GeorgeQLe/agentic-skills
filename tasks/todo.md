@@ -4,6 +4,12 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Priority Task Queue
+
+- [x] Task pipeline is healthy; no blocking issues found. All 39 roadmap phases complete, documentation scan current.
+- [ ] `/reconcile-dev-docs fix tasks` - Resolve orphaned manual tasks in `tasks/manual-todo.md` because Phase 38 is marked ✓ but 4 unchecked manual items remain (Neon DB setup, admin secret, Vercel env vars, live form verification).
+- [ ] `/feature-interview` - Triage 5 unspecced ideas in `tasks/ideas.md` because no corresponding specs exist and they may contain prioritizable work.
+
 ## Current Task — Workflows Mobile Playful Lab Responsiveness 2026-05-15
 
 **Goal:** Make the `/workflows` Playful Lab interface responsive on mobile, with special attention to the playful lab-themed workflow items and without reviving the old workflow panel.
