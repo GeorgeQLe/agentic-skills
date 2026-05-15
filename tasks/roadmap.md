@@ -16,6 +16,20 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Agent Review: analyze-sessions Fresh Benchmark 2026-05-15
+
+**Goal:** Review the latest persisted `analyze-sessions` Claude and Codex benchmark outputs for subjective operator quality after the fresh deterministic rerun.
+
+**Acceptance Criteria:**
+- [x] Latest Claude and Codex run directories are resolved from `benchmark/test-analyze-sessions-2026-05-15.md`.
+- [x] Retained generated `session-analysis.md` artifacts and benchmark context are inspected for each evaluated run.
+- [x] Each evaluated output is graded against the agent-review rubric separately from deterministic benchmark metrics.
+- [x] `benchmark/review-analyze-sessions-2026-05-15.md` records scores, findings, remediation, and next route.
+- [x] Generated Skills Showcase data is refreshed and validated because curated review evidence changes.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Completed on 2026-05-15. Reviewed fresh evaluated runs `analyze-sessions-claude-b5357730` and `analyze-sessions-codex-8f7e860a`, covering all 6 retained `session-analysis.md` artifacts and excluding no infrastructure-blocked runs. Deterministic context was clean: both agents passed 3/3 hard assertions with 92.3% quality. Subjective verdict was good to excellent overall with median score 90.0 and range 88-94. The remaining weakness is final-route exactness: all three Codex artifacts append `for Codex` to the intended command. Skills Showcase data was regenerated and validated. Report: `benchmark/review-analyze-sessions-2026-05-15.md`. Recommended next command: `$targeted-skill-builder analyze-sessions benchmark final-route exactness`.
+
 ## Current Benchmark: analyze-sessions Fresh Rerun 2026-05-15
 
 **Goal:** Run `$benchmark-test-skill analyze-sessions` against the current repository harness and publish fresh deterministic both-agent evidence.
