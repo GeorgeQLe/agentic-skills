@@ -4,6 +4,32 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Current Task — Benchmark `analyze-sessions` Final-Route Exactness Rerun 2026-05-15
+
+**Goal:** Run `$benchmark-test-skill analyze-sessions` against the current repository harness after the final-route exactness update and publish fresh deterministic both-agent evidence.
+
+**Plan:**
+- [x] Confirm `$benchmark-test-skill` is the active workflow and `analyze-sessions` is only the benchmark target.
+- [x] Run `pnpm bench --list-skills` and record `analyze-sessions` coverage status.
+- [x] Run `pnpm verify --skill analyze-sessions`; stop before bench if verification fails.
+- [x] If verify passes, run `pnpm bench --skill analyze-sessions --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [x] Update and validate `benchmark/test-analyze-sessions-2026-05-15.md` with verify, benchmark, latency, cost, consistency, raw paths, and recommended next route.
+- [x] Refresh generated Skills Showcase data if curated benchmark evidence changes.
+- [x] Record results here, then commit and push intended changes on `master`.
+
+## Review — Benchmark `analyze-sessions` Final-Route Exactness Rerun 2026-05-15
+
+- Command resolution: `$benchmark-test-skill` was the active workflow; `analyze-sessions` was treated as the target skill argument.
+- Eligibility: `analyze-sessions` is known to the benchmark harness with custom coverage via `tests/layer4/setups/tier23-global-workflows.setup.ts`.
+- Verify passed: layer1 PASS in 4.1s with 1,198 tests across 15 files; layer2 SKIP because no target-specific layer2 tests matched `analyze-sessions`.
+- Benchmark completed for both agents with no infrastructure-blocked runs:
+  - Claude session `2fbe5bb3`: 3/3 evaluated hard assertions passed, output quality 82.1%, p50 55.3s, p95 55.5s, p99 55.5s, total cost $3.00, with 2 threshold failures and 2 critical failures in the additional deterministic quality rubric.
+  - Codex session `fbd564cc`: 3/3 evaluated hard assertions passed, output quality 92.3%, p50 49.5s, p95 62.4s, p99 63.6s, total cost $3.00, and 0 threshold or critical failures.
+- Report updated at `benchmark/test-analyze-sessions-2026-05-15.md` and validated for target, agent rows, pass-rate and blocked-run data, latency, cost, raw session paths, output-quality details, failed assertions, and recommended next route.
+- Skills Showcase generated data was refreshed. `scripts/validate-skills-showcase-data.sh` reported generated data stale because the refreshed assets differ from HEAD; those generated files are included in this ship set.
+- `git diff --check` passed.
+- **Recommended next skill:** `$session-triage analyze-sessions benchmark failure`
+
 ## Current Task — Targeted Update `analyze-sessions` Benchmark Final-Route Exactness
 
 **Goal:** Tighten the `analyze-sessions` benchmark setup so runner-native final commands are unambiguous and exact, preventing suffixes like `for Codex` from passing.
