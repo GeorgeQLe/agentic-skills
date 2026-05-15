@@ -4,6 +4,39 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Current Task — Targeted Update `analyze-sessions` Benchmark Quality Rubric Matching
+
+**Goal:** Fix the `analyze-sessions` benchmark quality rubric so remediation-ready handoff scoring accepts valid section/table report structures instead of overfitting to one prose phrase order.
+
+**Plan:**
+- [x] Use the fresh benchmark report, raw Claude run artifacts, session-triage finding, and relevant lessons as scoped evidence.
+- [x] Confirm existing-skill overlap and choose a benchmark harness update rather than mirrored `analyze-sessions` contract changes.
+- [x] Update the `analyze-sessions` layer4 quality patterns to accept valid owner-surface and validation-expectation report structures.
+- [x] Add focused layer1 regression coverage using the failing Claude artifact shapes while preserving rejection of missing remediation detail.
+- [x] Run required validation, record results here, then commit and push intended changes on `master`.
+
+## Review — Targeted Update `analyze-sessions` Benchmark Quality Rubric Matching
+
+- Decision: existing benchmark harness update. The mirrored `analyze-sessions` contracts already require remediation-ready handoffs; the failure was deterministic rubric overfitting.
+- Evidence used: `benchmark/test-analyze-sessions-2026-05-15.md`, raw Claude run artifacts in `tests/benchmarks/runs/analyze-sessions-claude-2fbe5bb3/`, the `$session-triage` finding, relevant benchmark lessons, `tests/layer4/setups/tier23-global-workflows.setup.ts`, and focused layer1 coverage.
+- Evidence intentionally skipped: broad session-history scan; the fresh benchmark artifacts already verified the narrow quality-rubric issue.
+- Updated the `analyze-sessions` remediation-ready quality patterns to accept section/table report structures that name owner surface plus validation expectation across a wider but still bounded context.
+- Added focused layer1 coverage for the section-based and table-based Claude artifact shapes while preserving the missing-owner-surface rejection case.
+- Skills Showcase data was not refreshed because no tracked `SKILL.md`, `PACK.md`, curated benchmark report, or curated review report changed.
+- Validation passed:
+  - `pnpm --dir tests exec vitest run --project layer1 bench-setups`
+  - `./install.sh`
+  - `./scripts/skill-deps.sh --broken`
+  - `./scripts/skill-versions.sh --missing`
+  - `./scripts/skill-next-step-routing.sh --missing`
+  - `pnpm --dir tests bench:coverage`
+  - `pnpm --dir tests verify --skill analyze-sessions`
+  - `pnpm --dir tests bench --skill analyze-sessions --agent claude --runs 1 --chunk-size 1 --pause 0`
+  - Claude smoke session `analyze-sessions-claude-aa4ffa10`: 1/1 hard assertions, 92.3% quality, 0 threshold failures, 0 critical failures
+  - targeted `rg` check for broadened owner/validation patterns
+  - `git diff --check`
+- **Recommended next command:** `$benchmark-test-skill analyze-sessions`
+
 ## Current Task — Benchmark `analyze-sessions` Final-Route Exactness Rerun 2026-05-15
 
 **Goal:** Run `$benchmark-test-skill analyze-sessions` against the current repository harness after the final-route exactness update and publish fresh deterministic both-agent evidence.
