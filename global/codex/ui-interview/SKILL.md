@@ -56,7 +56,7 @@ When invoked with `--requirements-only` (or when the user says "just requirement
    - Ask the user to confirm, correct, or flag assumptions before continuing.
 
 4. **Interview page by page**
-   - Ask 1 to 3 focused questions per turn.
+   - Codex interview cadence is one primary decision question per turn by default. Use short follow-up bullets only when they clarify the same page or interface decision, not to batch unrelated questions.
    - Move through the interface in this order unless the user asks otherwise:
      - Global shell: header, sidebar, footer, navigation, account controls, notifications
      - Page inventory: every route, modal, drawer, overlay, and important empty state

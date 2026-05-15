@@ -46,7 +46,7 @@ When app scope `{app}` is active:
 
 ### 2. Interview
 
-If the session is already in Plan mode, prefer `request_user_input` for 1-3 focused questions with concrete choices. Otherwise ask concise plain-text questions.
+Codex interview cadence is one primary decision question per turn by default. Use short follow-up bullets only when they clarify the same metrics decision, not to batch unrelated questions. If the session is already in Plan mode, `request_user_input` may present 2-3 concrete choices for the current decision; otherwise ask one concise plain-text question.
 
 **Research and recommend by default.** For each decision point, use web search, upstream research docs (`research/*.md`), and codebase analysis to gather evidence before asking the user. Assume the user has no insider knowledge unless they explicitly provide it. Present findings with data, define any relevant terms, state a recommendation with reasoning, and ask the user to approve, adjust, or override based on hard constraints, proprietary facts, or corrections. Only ask the user to choose without a recommendation when the decision genuinely depends on internal constraints, personal preferences, or strategic bets that cannot be inferred from evidence.
 

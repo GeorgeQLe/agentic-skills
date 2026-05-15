@@ -4,6 +4,42 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Current Task — Codex Interview Question Cadence
+
+**Goal:** Update Codex interview-style skills so they ask one primary question per turn by default, instead of inheriting Claude's 1-3 grouped-question cadence.
+
+**Plan:**
+- [x] Read `$analyze-sessions` guidance and current task/lesson docs.
+- [x] Scan full available Claude/Codex history for interview-question cadence evidence.
+- [x] Update Codex skill contracts that still instruct grouped interview questions or Claude-only `AskUserQuestion` behavior.
+- [x] Add focused regression coverage for Codex interview cadence.
+- [x] Verify skill integrity, targeted tests, generated data freshness if needed, and whitespace.
+- [x] Record results here, then commit and push intended changes on `master`.
+
+## Review — Codex Interview Question Cadence
+
+- `$analyze-sessions` scanned full available prompt history: 14,370 compact Claude/Codex messages from 2025-12-10 through 2026-05-15, plus 2,111 Codex rich session files / 689,087 JSONL records for metadata checks. No unreadable records were found.
+- Interview-related filtering found 498 messages; repository-scoped skill work represented 2,462 messages. Skill mentions included `spec-interview` 80 total / 37 Codex, `feature-interview` 9 / 6 Codex, `ui-interview` 15 / 8 Codex, `ux-variation` 16 / 7 Codex, `design-system` 17 / 13 Codex, and `roadmap` 219 / 125 Codex.
+- Direct Codex one-by-one correction examples appeared after recent `$spec-interview` runs: 2026-05-13 "let's discuss each question further one by one", 2026-05-14 "Let's discuss each question one by one", and the 2026-05-15 request to stop grouping Codex interview questions like Claude.
+- Updated Codex contracts with explicit one-primary-question cadence: `spec-interview`, `feature-interview`, `concept-exploration`, `ui-interview`, `ux-variation`, `ui-consolidate`, `roadmap`, `design-system`, `pack`, `enterprise-icp`, `gtm`, and `metrics`.
+- Preserved Claude grouped-question behavior; no Claude skill contracts were changed.
+- Added `tests/layer1/codex-interview-cadence.test.ts` to reject Codex `AskUserQuestion` instructions and grouped interview-question cadence in targeted Codex skills.
+- Skills Showcase generated data was refreshed because `SKILL.md` content changed.
+- Validation passed:
+  - `pnpm --dir tests exec vitest run --project layer1 codex-interview-cadence`
+  - `./scripts/skill-deps.sh --broken`
+  - `./scripts/skill-versions.sh --missing`
+  - `./scripts/skill-next-step-routing.sh --missing`
+  - `./install.sh`
+  - `pnpm --dir tests exec vitest run --project layer1 frontmatter routing-graph`
+  - targeted `rg` for grouped Codex interview/`AskUserQuestion` language (no matches)
+  - `node scripts/generate-skills-showcase-data.mjs`
+  - `node scripts/generate-skills-showcase-github-data.mjs`
+  - `scripts/validate-skills-showcase-data.sh`
+  - `pnpm --dir tests test`
+  - `git diff --check`
+- **Recommended next command:** none
+
 ## Current Task — Red/Green Testing Workflow Session Analysis
 
 **Goal:** Evaluate whether the repository's red/green test workflow is catching the right failures, producing false positives, or missing issues that require follow-up work.

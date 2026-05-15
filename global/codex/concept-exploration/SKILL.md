@@ -41,7 +41,7 @@ Use this skill when the user has a half-formed idea and needs it cleaned up enou
    - Ask the user to confirm, correct, or flag assumptions before writing.
 
 4. **Interview until concept-ready**
-   - Ask 1 to 3 focused questions per turn.
+   - Codex interview cadence is one primary decision question per turn by default. Use short follow-up bullets only when they clarify the same decision, not to batch unrelated questions.
    - Resolve only concept-level ambiguity:
      - what problem exists
      - who might care

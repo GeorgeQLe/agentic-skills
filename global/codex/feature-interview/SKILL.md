@@ -55,7 +55,7 @@ This is narrower than `$spec-interview`: it performs the same assumption surfaci
    - Risks and unknowns: ambiguity, integration risk, user-facing risk, external dependencies, and what breaks if the assumption is wrong.
    Tag each assumption with `[from idea]`, `[from spec]`, `[from codebase]`, `[from research]`, `[from roadmap]`, `[from git]`, or `[inferred]`.
 6. Ask the user to confirm, correct, or flag the evidence brief, claim verdicts, assumptions, journey placement, documentation destination, and priority hypothesis before continuing. Do not proceed past this checkpoint until the user has reviewed it.
-7. Interview in focused passes, 1 to 3 questions per turn. If the session is already in Plan mode and there are 2-3 concrete options, prefer `request_user_input`; otherwise ask concise direct questions.
+7. Interview in focused passes. Codex interview cadence is one primary decision question per turn by default. Use short follow-up bullets only when they clarify the same decision, not to batch unrelated questions. If the session is already in Plan mode and there are 2-3 concrete options for the current decision, prefer `request_user_input`; otherwise ask one concise direct question.
 8. Cover only the areas needed to choose and prepare the planning destination:
    - Intent and success criteria.
    - Target users, jobs, and journey/design implications.
