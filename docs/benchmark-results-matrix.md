@@ -16,8 +16,8 @@ This matrix tracks skills that already have persisted benchmark run data and gra
 
 | Skill | Agent | Latest Raw Report | Runs | Hard Pass Rate | Output Quality | Subjective Review | Status | Notes |
 |---|---|---:|---:|---:|---:|---|---|---|
-| `analyze-sessions` | Claude | `tests/benchmarks/runs/analyze-sessions-claude-bc867ac4/report.json` | 3 | 100% | 89.4% | none | graded | Curated report: `benchmark/test-analyze-sessions-2026-05-15.md`. |
-| `analyze-sessions` | Codex | `tests/benchmarks/runs/analyze-sessions-codex-f4218901/report.json` | 3 | 100% | 90.9% | none | graded | Curated report: `benchmark/test-analyze-sessions-2026-05-15.md`. |
+| `analyze-sessions` | Claude | `tests/benchmarks/runs/analyze-sessions-claude-bc867ac4/report.json` | 3 | 100% | 89.4% | `benchmark/review-analyze-sessions-2026-05-15.md` | graded | Curated report: `benchmark/test-analyze-sessions-2026-05-15.md`. Subjective review median score available. |
+| `analyze-sessions` | Codex | `tests/benchmarks/runs/analyze-sessions-codex-f4218901/report.json` | 3 | 100% | 90.9% | `benchmark/review-analyze-sessions-2026-05-15.md` | graded | Curated report: `benchmark/test-analyze-sessions-2026-05-15.md`. Subjective review median score available. |
 | `benchmark-agent-review` | Codex | `tests/benchmarks/runs/benchmark-agent-review-codex-1d9a5c8b/report.json` | 1 | 100% | 100.0% | none | graded | One evaluated persisted run with deterministic quality scoring. |
 | `benchmark-test-skill` | Claude | `tests/benchmarks/runs/benchmark-test-skill-claude-46f32ef6/report.json` | 3 | 100% | 100.0% | `benchmark/review-benchmark-test-skill-2026-05-13.md` | graded | Curated report: `benchmark/test-benchmark-test-skill-2026-05-13.md`. Subjective review median score available. |
 | `benchmark-test-skill` | Codex | `tests/benchmarks/runs/benchmark-test-skill-codex-e4c6aef6/report.json` | 3 | 100% | 100.0% | `benchmark/review-benchmark-test-skill-2026-05-13.md` | graded | Curated report: `benchmark/test-benchmark-test-skill-2026-05-13.md`. Subjective review median score available. |

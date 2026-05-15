@@ -4,6 +4,30 @@
 **Status:** All 39 roadmap phases complete.
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
+## Current Task — Agent Review `analyze-sessions` Benchmark 2026-05-15
+
+**Goal:** Review the latest persisted `analyze-sessions` Claude and Codex benchmark outputs for subjective operator quality.
+
+**Plan:**
+- [x] Resolve the latest Claude and Codex run directories from `tests/benchmarks/runs/analyze-sessions-*`.
+- [x] Inspect retained generated `session-analysis.md` artifacts and benchmark context for each evaluated run.
+- [x] Grade each evaluated output against the agent-review rubric separately from deterministic benchmark metrics.
+- [x] Write `benchmark/review-analyze-sessions-2026-05-15.md` with scores, findings, remediation, and next route.
+- [x] Refresh generated Skills Showcase data because curated review evidence changes.
+- [x] Record results here, then commit and push intended changes on `master`.
+
+## Review — Agent Review `analyze-sessions` Benchmark 2026-05-15
+
+- Reviewed latest evaluated runs `analyze-sessions-claude-bc867ac4` and `analyze-sessions-codex-f4218901`, covering all 6 retained `session-analysis.md` artifacts and excluding no infrastructure-blocked runs.
+- Deterministic context was clean: Claude passed 3/3 hard assertions with 89.4% quality, and Codex passed 3/3 hard assertions with 90.9% quality.
+- Subjective verdict: good overall, not uniformly excellent. Median score was 87.5 with range 84-91.
+- Strengths: every artifact found the repeated validation and lessons-capture misses across the three dated logs, treated the issue as a broad workflow gap, and avoided unsupported external actions.
+- Main weakness: several artifacts routed to `targeted-skill-builder` correctly but left the final handoff too broad, dual-mode, or dependent on nearby prose instead of giving one runner-native command with a concrete remediation phrase.
+- Secondary weakness: one Claude output over-inferred runner/source ownership from sparse fixture notes.
+- Report written at `benchmark/review-analyze-sessions-2026-05-15.md`.
+- Skills Showcase generated data was refreshed and validated; `docs/benchmark-results-matrix.md` now links the review report and median score.
+- **Recommended next command:** `$targeted-skill-builder analyze-sessions remediation-ready targeted-skill-builder handoff`
+
 ## Current Task — Benchmark `analyze-sessions` Post-Fixture Routing 2026-05-15
 
 **Goal:** Rerun `$benchmark-test-skill analyze-sessions` after the fixture-routing benchmark harness fix and record fresh deterministic both-agent evidence.
