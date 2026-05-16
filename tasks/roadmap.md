@@ -16,6 +16,20 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Benchmark: ship Fresh Run 2026-05-16
+
+**Goal:** Run `$benchmark-test-skill ship` against the current repository harness and publish fresh deterministic both-agent evidence.
+
+**Acceptance Criteria:**
+- [x] `pnpm bench --list-skills` confirms `ship` is known and reports its coverage status.
+- [x] `pnpm verify --skill ship` passes or blocks benchmark execution with a recorded failure.
+- [x] `pnpm bench --skill ship --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [x] `benchmark/test-ship-2026-05-16.md` records fresh verify, benchmark, latency, cost, consistency, and raw session evidence.
+- [x] Generated Skills Showcase data is refreshed and validated if curated benchmark evidence changes.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Completed on 2026-05-16. `ship` remained known with custom benchmark coverage via `tests/layer4/setups/tier1-workflows.setup.ts`. Verify passed with layer1 PASS in 4.4s and layer2 SKIP because no target-specific layer2 tests matched. The both-agent benchmark completed with no infrastructure-blocked runs: Claude session `920245e6` passed 3/3 hard assertions with 100.0% output quality, and Codex session `898663d6` passed 3/3 hard assertions with 100.0% output quality. Report validation passed, and generated Skills Showcase data was refreshed and validated. Report: `benchmark/test-ship-2026-05-16.md`. Recommended next skill: `$benchmark-agent-review ship`.
+
 ## Current Targeted Update: ship Benchmark Goal Field Extraction 2026-05-16
 
 **Goal:** Fix the `ship` benchmark quality rubric so `ship-goal-specificity` accepts valid field-style ship manifest `User goal` entries while still rejecting meta manifest-writing goals.
