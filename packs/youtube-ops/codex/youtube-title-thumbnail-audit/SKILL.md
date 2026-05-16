@@ -40,7 +40,8 @@ Turn channel and peer evidence into a packaging diagnosis for existing videos an
 5. Score each title for length, keyword clarity, specificity, curiosity pattern, series fit, and avoidable redundancy.
 6. Classify thumbnail patterns: text density, face presence, product screenshot presence, logo count, background style, contrast, focal clarity, and channel-template consistency.
 7. Correlate packaging features with views, views/day, upload age, and content role.
-8. Write `research/youtube/title-thumbnail-audit-<slug>.md`.
+8. Produce exactly 3 title+thumbnail combinations for YouTube's **Test and Compare** feature. Each combination is a paired title and thumbnail concept designed to run simultaneously — YouTube rotates all 3 across real viewers and measures watch-time-per-impression over up to 2 weeks to surface a winner. Do not frame these as "pick one and swap later"; all 3 upload at the same time. Each combo should test a distinct packaging hypothesis (e.g., search-led vs. curiosity-hook vs. feature-led) while staying within the channel's visual identity.
+9. Write `research/youtube/title-thumbnail-audit-<slug>.md`.
 
 ## Report Sections
 
@@ -51,7 +52,8 @@ Turn channel and peer evidence into a packaging diagnosis for existing videos an
 - Channel identity impact: whether packaging creates a coherent channel signal.
 - Existing-video fixes: prioritized title and thumbnail refresh candidates with expected rationale.
 - Future templates: 3-5 repeatable title/thumbnail patterns mapped to content roles.
-- Strategic packaging recommendation.
+- Test and Compare combos: exactly 3 title+thumbnail combinations ready for YouTube's native A/B testing. Each combo includes a full title, thumbnail concept description, packaging hypothesis, and what signal a win for that variant would confirm about the channel's audience. Present these as simultaneous uploads, not sequential swaps.
+- Strategic packaging recommendation: which combo to watch most closely and what to do after Test and Compare declares a winner.
 
 ## Constraints
 
