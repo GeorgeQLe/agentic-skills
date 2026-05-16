@@ -2,8 +2,6 @@
 
 ## Quick wins (hours)
 
-- **Consolidate duplicate deploy logic across ship variants** — `/ship` and `/ship-end` each inline the full deploy search+execute logic (spec.md → CLAUDE.md → Makefile → ...). A standalone `/deploy` skill exists (v2.0.0) but is not called internally by ship variants. Extract a shared deploy protocol reference or use `/deploy` internally to avoid drift. _Start with:_ `/feature-interview extracting shared deploy protocol across ship skills`
-
 ## Medium efforts (days)
 
 - **Skill dependency graph and validation** — Skills reference each other by name (e.g., `/roadmap` calls `/plan-phase`, `/ship` calls `/commit-and-push-by-feature`) but there's no validation that referenced skills exist or that the call chain is coherent. `scripts/skill-deps.sh` exists for broken-dep checking but no graph visualization or circular-dependency detection. _Start with:_ `/feature-interview skill dependency graph validation and lint tool`
@@ -27,6 +25,8 @@
 ## Removed ideas (addressed by shipped work)
 
 > Cleaned 2026-05-15. These ideas were implemented during Phases 1-39 or became obsolete.
+
+- ~~Consolidate duplicate deploy logic across ship variants~~ — `/ship` and `/ship-end` now invoke `/deploy` internally instead of inlining discovery+execution logic.
 
 - ~~Redesign execution workflow for Codex~~ — Codex-native execution patterns documented in `docs/codex-workflow.md`; codex/run and codex/ship skills exist.
 - ~~Add `--no-deploy` flag to `/ship-then-plan`~~ — `/ship-then-plan` no longer exists; `/ship` and `/ship-end` both support `--no-deploy`.

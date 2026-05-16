@@ -34,20 +34,14 @@ Use this skill when the user wants the current session wrapped up cleanly.
    - If no executable check is relevant, state why in `Skipped tests` and explain the residual risk. Do not write "not run" without a rationale.
    - If the user corrected the agent during the session, the pre-commit ship manifest must prove the exact shipping boundary includes a `tasks/lessons.md` update for the current correction. Treat the correction as repeatable unless the manifest proves otherwise. If it exposes a workflow failure, also include the relevant skill contract, validation script, fixture, or test enforcement update in the same shipping boundary, or include `Correction enforcement:` with the blocker or not-applicable rationale and the concrete follow-up file/command when needed.
 6. Deploy (skip if `--no-deploy`):
-   - Check for an explicit manual deploy contract in `deploy.md` or `tasks/deploy.md`.
+   After shipping, deploy only when the project has an explicit manual deploy contract.
+   - Check for deploy contract: look for `deploy.md` or `tasks/deploy.md`.
    - If neither file exists, skip deploy and report `Deploy skipped: no explicit manual deploy contract (deploy.md or tasks/deploy.md)`.
-   - If a deploy contract exists, read it first and use it to determine the deploy method.
-   - Supplement the contract by checking: `spec.md`, `CLAUDE.md`, `tasks/roadmap.md`, `tasks/todo.md`, `Makefile`/`Justfile`, `package.json`, `deploy/`/`infra/`/`scripts/`, `docker-compose*.yml`.
-   - Do NOT look in `.github/workflows/` — this project does not use GitHub Actions.
-   - If a deploy contract exists but no deploy method is found, ask the user how deployment works. Do not guess.
-   - Run the deploy and verify the output for errors.
-   - Do not run `aws sso login` preemptively from stale context, old logs, or assumptions. If the deploy method uses an AWS profile and auth status is uncertain, first run `aws sts get-caller-identity --profile <profile>` using the profile from the deploy contract or deploy command.
-   - If the AWS identity check succeeds, proceed directly with the deploy and do not run `aws sso login`.
-   - If the AWS identity check or the deploy command fails because AWS SSO credentials are missing or expired, do not skip deployment. Run the matching `aws sso login --profile <profile>` command, using the profile from the deploy contract, deploy command, or error output.
-   - When `aws sso login` prints a browser URL, device code, or verification instructions, relay them to the user and tell them to navigate to the provided URL and complete the login in their browser. Keep the login command running until it succeeds, fails, or times out.
-   - After a successful SSO login, rerun the original deploy command once. This auth recovery is part of the same deploy attempt, not an automatic retry of a failed deploy.
-   - If the user cannot complete SSO login or the login command fails, report the deploy as blocked by authentication. Do not report it as skipped.
-   - If the deploy fails, report the error. Do not retry automatically.
+   - If a deploy contract exists, continue.
+   - Invoke `$deploy` targeting the default environment (staging).
+   - Pass the deploy contract context to `$deploy`.
+   - Skip ledger recording and staleness reporting — those are for standalone `$deploy` invocations only.
+   - If `$deploy` reports failure, report the error. Do not retry.
 7. Commit and push using the `commit-and-push-by-feature` workflow. That workflow must land the resulting commits on `main` or `master`, not on an existing feature branch.
 8. Report:
    - What was accomplished
@@ -90,7 +84,7 @@ Rules:
 - Do not amend or rewrite history.
 - Stop and report if secrets are detected.
 - Do not push session-wrap-up commits to an existing feature branch. Use `commit-and-push-by-feature` to move the work onto `main` or `master` and push it there, or stop and report a blocker if that cannot be done safely.
-- `ship-end` only runs a deploy when `deploy.md` or `tasks/deploy.md` explicitly documents a manual deployment workflow. Repos without one are assumed to auto-deploy or require no manual deploy step.
+- `ship-end` only deploys when `deploy.md` or `tasks/deploy.md` exists. Repos without one are assumed to auto-deploy or require no manual deploy step.
 - Never use GitHub Actions for deployment. Only use manual deploy scripts, Makefiles, or CLI commands.
 - Never deploy to production without explicit user confirmation.
 

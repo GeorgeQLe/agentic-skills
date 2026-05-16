@@ -23,18 +23,15 @@ Wrap up the current session: mark progress, commit, and push.
    - Check `tasks/record-todo.md` and `tasks/recurring-todo.md` if they exist — note unchecked advisory counts only. Do NOT treat them as blockers unless an item has been promoted into `tasks/todo.md`.
    - Update `tasks/history.md` — append a brief record of what was accomplished this session (phase/step completed, key changes). Create it if it doesn't exist.
 
-3. **Deploy:**
-   - Find the deploy method by checking: `spec.md`, `CLAUDE.md`, `tasks/roadmap.md`, `tasks/todo.md`, `Makefile`/`Justfile`, `package.json`, `deploy/`/`infra/`/`scripts/`, `docker-compose*.yml`.
-   - Do NOT look in `.github/workflows/` — this project does not use GitHub Actions.
-   - If no deploy method is found, ask the user how deployment works. Do not guess or skip.
-   - Run the deploy and verify the output for errors.
-   - Do not run `aws sso login` preemptively from stale context, old logs, or assumptions. If the deploy method uses an AWS profile and auth status is uncertain, first run `aws sts get-caller-identity --profile <profile>` using the profile from the deploy contract or deploy command.
-   - If the AWS identity check succeeds, proceed directly with the deploy and do not run `aws sso login`.
-   - If the AWS identity check or the deploy command fails because AWS SSO credentials are missing or expired, do not skip deployment. Run the matching `aws sso login --profile <profile>` command, using the profile from the deploy contract, deploy command, or error output.
-   - When `aws sso login` prints a browser URL, device code, or verification instructions, relay them to the user and tell them to navigate to the provided URL and complete the login in their browser. Keep the login command running until it succeeds, fails, or times out.
-   - After a successful SSO login, rerun the original deploy command once. This auth recovery is part of the same deploy attempt, not an automatic retry of a failed deploy.
-   - If the user cannot complete SSO login or the login command fails, report the deploy as blocked by authentication. Do not report it as skipped.
-   - If the deploy fails, report the error. Do not retry automatically.
+3. **Deploy (skip if `--no-deploy`):**
+   After shipping, deploy only when the project has an explicit manual deploy contract.
+   - **Check for deploy contract.** Look for `deploy.md` or `tasks/deploy.md`.
+   - If neither file exists, skip deploy and report `Deploy skipped: no explicit manual deploy contract (deploy.md or tasks/deploy.md)`.
+   - If a deploy contract exists, continue.
+   - **Invoke `/deploy`** targeting the default environment (staging).
+   - Pass the deploy contract context to `/deploy`.
+   - Skip ledger recording and staleness reporting — those are for standalone `/deploy` invocations only.
+   - If `/deploy` reports failure, report the error. Do not retry.
 
 4. **Ship the session changes:**
    - Use the `/commit-and-push-by-feature` workflow: group changes into logical feature/function buckets, use conventional commit messages, land the resulting commits on `main` or `master`, and push them there when the workflow succeeds.
