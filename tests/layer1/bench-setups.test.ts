@@ -169,8 +169,28 @@ describe("benchmark setup registry", () => {
       "## Next command",
       "`$run`",
     ].join("\n"));
+    const bulletFieldGoal = evaluator?.evaluate([
+      "# Ship Manifest",
+      "- **User goal:** Wrap up the completed fixture step and prepare it for shipping.",
+      "- **Changed files:**",
+      "  - `tests/example.test.ts`",
+      "  - `tasks/todo.md`",
+      "- **Tests run:** Fixture validation passed (per `tasks/todo.md` Review section); no additional test command executed in this session.",
+      "- **Deploy status:** Not deployed. Staging/production deploy was skipped.",
+      "- **Rollback note:** Revert the two changed files (`tests/example.test.ts`, `tasks/todo.md`) to their prior commit state to undo this step.",
+      "- **Next command:** `/run`",
+    ].join("\n"));
 
     expect(strong?.criteria.find((criterion) => criterion.id === "ship-goal-specificity")).toMatchObject({
+      passed: true,
+    });
+    expect(bulletFieldGoal?.criteria.find((criterion) => criterion.id === "ship-goal-specificity")).toMatchObject({
+      passed: true,
+    });
+    expect(bulletFieldGoal?.criteria.find((criterion) => criterion.id === "scope-control")).toMatchObject({
+      passed: true,
+    });
+    expect(bulletFieldGoal?.criteria.find((criterion) => criterion.id === "no-fabricated-facts")).toMatchObject({
       passed: true,
     });
     expect(metaGoal?.criteria.find((criterion) => criterion.id === "ship-goal-specificity")).toMatchObject({

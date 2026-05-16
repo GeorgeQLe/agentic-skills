@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Update: ship Benchmark Goal Field Extraction 2026-05-16
+
+**Goal:** Fix the `ship` benchmark quality rubric so `ship-goal-specificity` accepts valid field-style ship manifest `User goal` entries while still rejecting meta manifest-writing goals.
+
+**Acceptance Criteria:**
+- [x] Use the fresh triage report and relevant lessons as scoped evidence.
+- [x] Confirm this is an existing benchmark-rubric update, not a mirrored `ship` skill contract change or new skill.
+- [x] Broaden `shipGoalSpecificityCriterion` to extract heading-style and field-style `User goal` content.
+- [x] Add focused layer1 regression coverage for the failing Claude bullet manifest shape and the existing meta-goal rejection.
+- [x] Run required validation, record results, then commit and push intended changes on `master`.
+
+**Result:** Completed on 2026-05-16. Updated the existing `ship` benchmark setup rather than mirrored skill contracts. `ship-goal-specificity` now extracts both heading-style and field-style `User goal` content, and focused layer1 coverage accepts the failing Claude bullet manifest shape while preserving the meta manifest-goal rejection. Verification also exposed a stale benchmark matrix assertion and an over-broad `production deploy` false positive for skipped deploy wording; both were fixed with focused coverage. Validation passed with focused layer1, install, skill audits, benchmark coverage, `ship` verify, Claude smoke `ship-claude-5517074a` with 1/1 hard assertions and 100.0% quality, targeted `rg`, and `git diff --check`. Recommended next command: `$benchmark-test-skill ship`.
+
 ## Current Triage: ship Benchmark Failure 2026-05-16
 
 **Goal:** Verify the fresh `ship` benchmark quality failure and identify the smallest durable fix.
