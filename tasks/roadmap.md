@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Triage: ship Benchmark Failure 2026-05-16
+
+**Goal:** Verify the fresh `ship` benchmark quality failure and identify the smallest durable fix.
+
+**Acceptance Criteria:**
+- [x] Fresh benchmark report and persisted Claude run evidence are inspected.
+- [x] Mirrored `ship` skill contracts are compared against benchmark setup and quality expectations.
+- [x] The failure is classified as a skill contract gap, benchmark harness gap, runner infrastructure issue, or agent noncompliance.
+- [x] `benchmark/triage-ship-2026-05-16.md` records verdict, root cause, responsible gap, validation plan, and next route.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Completed on 2026-05-16. The fresh `ship` quality failure is verified, but the responsible gap is the benchmark harness rather than mirrored `ship` contracts. Claude run `ship-claude-d6121a8f` run 2 emitted a valid bullet-style `User goal` manifest field, while `ship-goal-specificity` only extracts heading-style sections and therefore reported `missing User goal section text`. Report: `benchmark/triage-ship-2026-05-16.md`. Recommended next skill: `$targeted-skill-builder ship benchmark goal field extraction`.
+
 ## Current Benchmark: ship Post-Rubric Fix 2026-05-16
 
 **Goal:** Run `$benchmark-test-skill ship` against the current repository harness after the benchmark rubric fixes and publish fresh deterministic both-agent evidence.
