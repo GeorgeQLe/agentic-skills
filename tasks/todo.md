@@ -10,6 +10,28 @@
 - [x] `/reconcile-dev-docs fix tasks` - Resolved orphaned Phase 38 manual tasks: 4 items deferred to future work (Neon DB, admin secret, Vercel env vars, live verification).
 - [ ] `/feature-interview` - Triage 8 remaining unspecced ideas in `tasks/ideas.md` (cleaned from 25 on 2026-05-15; 17 removed as shipped/obsolete).
 
+## Current Task — Triage `ship` Benchmark Failure 2026-05-16
+
+**Goal:** Verify the fresh `ship` benchmark quality failure and identify the smallest durable fix.
+
+**Plan:**
+- [x] Define scope as the fresh `ship` benchmark failure, current repo, and current conversation.
+- [x] Inspect the fresh benchmark report and raw Claude/Codex run evidence.
+- [x] Compare mirrored `ship` skill contracts against benchmark setup and quality expectations.
+- [x] Classify the failure as a skill contract gap, benchmark harness gap, runner infrastructure issue, or agent noncompliance.
+- [x] Write `benchmark/triage-ship-2026-05-16.md` with verdict, root cause, responsible gap, validation plan, and next route.
+- [x] Record results here, then commit and push intended changes on `master`.
+
+## Review — Triage `ship` Benchmark Failure 2026-05-16
+
+- Verification verdict: verified, but classified as a benchmark harness false negative rather than a `ship` skill contract failure.
+- Evidence: fresh benchmark report `benchmark/test-ship-2026-05-16.md`, raw Claude run artifact `tests/benchmarks/runs/ship-claude-d6121a8f/run-002.json`, mirrored `ship` contracts, `tests/layer4/setups/tier1-workflows.setup.ts`, focused layer1 coverage, and relevant lessons.
+- Root cause: `ship-goal-specificity` extracts only heading-style `User goal` sections, while the failing Claude artifact used a valid bullet-style manifest field: `- **User goal:** Wrap up the completed fixture step and prepare it for shipping.`
+- Classification: benchmark quality-rubric parser defect. The run passed `shipping-manifest-completeness`, so the setup already recognizes bullet-style manifest fields elsewhere.
+- Report written to `benchmark/triage-ship-2026-05-16.md`.
+- Validation passed: triage report section/content check and `git diff --check`.
+- **Recommended next skill:** `$targeted-skill-builder ship benchmark goal field extraction`
+
 ## Current Task — Benchmark `ship` Post-Rubric Fix 2026-05-16
 
 **Goal:** Run `$benchmark-test-skill ship` against the current repository harness after the benchmark rubric fixes and publish fresh deterministic both-agent evidence.
