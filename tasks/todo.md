@@ -10,6 +10,31 @@
 - [x] `/reconcile-dev-docs fix tasks` - Resolved orphaned Phase 38 manual tasks: 4 items deferred to future work (Neon DB, admin secret, Vercel env vars, live verification).
 - [ ] `/feature-interview` - Triage 8 remaining unspecced ideas in `tasks/ideas.md` (cleaned from 25 on 2026-05-15; 17 removed as shipped/obsolete).
 
+## Current Task — Agent Review `ship` Fresh Benchmark 2026-05-16
+
+**Goal:** Review the latest persisted `ship` Claude and Codex benchmark outputs for subjective operator quality.
+
+**Plan:**
+- [x] Resolve the newest `ship` Claude and Codex benchmark directories from the fresh benchmark report.
+- [x] Read benchmark reports, raw run artifacts, prompt, fixture facts, hard assertions, and deterministic quality scores.
+- [x] Grade each retained `ship-manifest.md` output against the agent-review rubric.
+- [x] Update `benchmark/review-ship-2026-05-16.md` with source paths, score table, findings, remediation, and next route.
+- [x] Refresh generated Skills Showcase data because curated review evidence changes.
+- [x] Record results here, then commit and push intended changes on `master`.
+
+## Review — Agent Review `ship` Fresh Benchmark 2026-05-16
+
+- Evidence reviewed: `benchmark/test-ship-2026-05-16.md`, `tests/benchmarks/runs/ship-claude-920245e6/`, and `tests/benchmarks/runs/ship-codex-898663d6/`.
+- Retained artifacts: all six evaluated `ship-manifest.md` outputs were available in `run-*.json`.
+- Deterministic context: Claude and Codex each passed 3/3 hard assertions with 100.0% output-quality scores and no infrastructure-blocked runs.
+- Subjective verdict: all six retained manifests are excellent operator handoffs; median score 91.5, range 90-96.
+- Material remediation: none. Minor wording differences remain, but no skill-contract or benchmark-rubric change is justified from this evidence.
+- Report updated at `benchmark/review-ship-2026-05-16.md`.
+- Skills Showcase data and `docs/benchmark-results-matrix.md` were regenerated and `scripts/validate-skills-showcase-data.sh` passed.
+- Validation passed: report field `rg`, showcase data generation, showcase data validation.
+- **Next work:** none
+- **Recommended next command:** `$ship`
+
 ## Current Task — Benchmark `ship` Fresh Run 2026-05-16
 
 **Goal:** Run `$benchmark-test-skill ship` against the current repository harness and publish fresh deterministic both-agent evidence.
