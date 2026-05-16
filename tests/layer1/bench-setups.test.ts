@@ -108,6 +108,9 @@ describe("benchmark setup registry", () => {
     expect(resolveBenchSetup("ship")?.qualityEvaluator?.rubric.criteria.map((criterion) => criterion.id)).toContain(
       "shipping-manifest-completeness",
     );
+    expect(resolveBenchSetup("ship")?.qualityEvaluator?.rubric.criteria.map((criterion) => criterion.id)).toContain(
+      "ship-goal-specificity",
+    );
     expect(resolveBenchSetup("investigate")?.qualityEvaluator?.rubric.criteria.map((criterion) => criterion.id)).toContain(
       "root-cause-specificity",
     );
@@ -127,6 +130,52 @@ describe("benchmark setup registry", () => {
     expect(setup).toBeDefined();
     expect(setup?.assertResult).toBeTypeOf("function");
     expect(setup?.qualityEvaluator).toBeUndefined();
+  });
+
+  it("requires the ship manifest user goal to summarize completed fixture work", () => {
+    const evaluator = resolveBenchSetup("ship")?.qualityEvaluator;
+
+    expect(evaluator).toBeDefined();
+
+    const strong = evaluator?.evaluate([
+      "# Ship Manifest",
+      "## User goal",
+      "Wrap up the completed fixture step after validation passed.",
+      "## Changed files",
+      "- `tests/example.test.ts`",
+      "- `tasks/todo.md`",
+      "## Tests run",
+      "Validation passed for the completed fixture step.",
+      "## Deploy status",
+      "Deploy not run.",
+      "## Rollback note",
+      "Revert `tests/example.test.ts` and `tasks/todo.md`.",
+      "## Next command",
+      "`$run`",
+    ].join("\n"));
+    const metaGoal = evaluator?.evaluate([
+      "# Ship Manifest",
+      "## User goal",
+      "Record the completed fixture shipping summary from the task and diff summary.",
+      "## Changed files",
+      "- `tests/example.test.ts`",
+      "- `tasks/todo.md`",
+      "## Tests run",
+      "Validation passed for the completed fixture step.",
+      "## Deploy status",
+      "Deploy not run.",
+      "## Rollback note",
+      "Revert `tests/example.test.ts` and `tasks/todo.md`.",
+      "## Next command",
+      "`$run`",
+    ].join("\n"));
+
+    expect(strong?.criteria.find((criterion) => criterion.id === "ship-goal-specificity")).toMatchObject({
+      passed: true,
+    });
+    expect(metaGoal?.criteria.find((criterion) => criterion.id === "ship-goal-specificity")).toMatchObject({
+      passed: false,
+    });
   });
 
   it("exposes quality evaluators for design-system and high-signal global setups", () => {

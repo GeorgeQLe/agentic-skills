@@ -32,6 +32,28 @@
 - Skills Showcase data was not refreshed because no tracked `SKILL.md`, `PACK.md`, curated benchmark report, or curated review report changed.
 - **Recommended next command:** `$benchmark-test-skill ship`
 
+## Current Task — Targeted Update `ship` Benchmark Goal Specificity 2026-05-16
+
+**Goal:** Tighten the `ship` benchmark quality rubric so manifests summarize the completed validated fixture work instead of treating "write the manifest" as the user goal.
+
+**Plan:**
+- [x] Use the fresh benchmark-agent-review report and relevant lessons as scoped evidence.
+- [x] Confirm this is an existing benchmark-rubric update, not a mirrored `ship` skill contract change.
+- [x] Add a `ship-goal-specificity` criterion to the custom `ship` tier1 benchmark setup.
+- [x] Add focused layer1 regression coverage for accepted completed-work phrasing and rejected meta manifest-goal phrasing.
+- [x] Run required validation, record results, then commit and push intended changes on `master`.
+
+## Review — Targeted Update `ship` Benchmark Goal Specificity 2026-05-16
+
+- Decision: existing benchmark harness update. The `ship` skill contract already requires a ship manifest; the gap was deterministic rubric sensitivity to a meta `User goal`.
+- Evidence used: `benchmark/review-ship-2026-05-16.md`, relevant benchmark lessons, `tests/layer4/setups/tier1-workflows.setup.ts`, and `tests/layer1/bench-setups.test.ts`.
+- Evidence intentionally skipped: broad session-history scan; the review report already verified the narrow output-quality gap.
+- Added critical `ship-goal-specificity` quality criterion requiring the `User goal` field to connect the manifest to completed/validated fixture work rather than leading with write/create/record manifest language.
+- Added layer1 regression coverage proving completed-work phrasing passes and `Record the completed fixture shipping summary...` fails the new criterion.
+- Validation passed: `./install.sh`; `./scripts/skill-deps.sh --broken`; `./scripts/skill-versions.sh --missing`; `./scripts/skill-next-step-routing.sh --missing`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests exec vitest run layer1/bench-setups.test.ts layer1/bench-quality.test.ts`; `pnpm --dir tests verify --skill ship`; targeted `rg` check for `ship-goal-specificity`; `git diff --check`.
+- Skills Showcase data was not refreshed because no tracked `SKILL.md`, `PACK.md`, curated benchmark report, or curated review report changed.
+- **Recommended next command:** `$benchmark-test-skill ship`
+
 ## Current Task — Triage `ship` Benchmark Failure 2026-05-16
 
 **Goal:** Verify the fresh `ship` benchmark quality failure and identify the smallest durable fix.
