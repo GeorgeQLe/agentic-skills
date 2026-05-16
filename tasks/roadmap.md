@@ -16,6 +16,20 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Agent Review: ship Fresh Benchmark 2026-05-16
+
+**Goal:** Review the latest persisted `ship` Claude and Codex benchmark outputs for subjective operator quality.
+
+**Acceptance Criteria:**
+- [x] Latest Claude and Codex run directories are resolved from the fresh `ship` benchmark report.
+- [x] Retained generated `ship-manifest.md` artifacts and benchmark context are inspected for each evaluated run.
+- [x] Each evaluated output is graded against the agent-review rubric separately from deterministic benchmark metrics.
+- [x] `benchmark/review-ship-2026-05-16.md` records scores, findings, remediation, and next route.
+- [x] Generated Skills Showcase data is refreshed and validated because curated review evidence changes.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Completed on 2026-05-16. Reviewed latest `ship` Claude session `920245e6` and Codex session `898663d6`, covering six retained `ship-manifest.md` artifacts and excluding no infrastructure-blocked runs. Deterministic context was clean: both agents passed 3/3 hard assertions with 100.0% output-quality scores. Subjective verdict was excellent overall with median score 91.5 and range 90-96. No material remediation remains; generated Skills Showcase data was refreshed and validated. Report: `benchmark/review-ship-2026-05-16.md`. Recommended next command: `$ship`.
+
 ## Current Benchmark: ship Fresh Run 2026-05-16
 
 **Goal:** Run `$benchmark-test-skill ship` against the current repository harness and publish fresh deterministic both-agent evidence.
