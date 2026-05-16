@@ -35,6 +35,19 @@
 - **Next work:** none
 - **Recommended next command:** `$ship`
 
+### Ship Manifest — 2026-05-16
+
+- **User goal:** Package the completed fresh `ship` benchmark-agent review and generated proof-data freshness update.
+- **Changed files:** `apps/skills-showcase/public/assets/github-proof-data.js`, `docs/skills-showcase/assets/github-proof-data.js`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** `github-proof-data.js` files update the generated GitHub proof fingerprint and remote `pushedAt` timestamp after the latest pushed benchmark review commit; `tasks/todo.md` records this ship manifest and next route; `tasks/history.md` records the shipping event.
+- **User-goal mapping:** Every included file either keeps public proof assets fresh after the pushed benchmark-review commit or records the ship handoff for that work.
+- **Tests run:** `node scripts/generate-skills-showcase-data.mjs` passed; `node scripts/generate-skills-showcase-github-data.mjs` passed; `scripts/validate-skills-showcase-data.sh` passed; `pnpm --dir apps/skills-showcase build` passed; `git diff --check` passed.
+- **Skipped tests:** Full benchmark suites were not rerun because this ship only packages already-reviewed benchmark evidence and regenerated proof metadata; the fresh `ship` benchmark and agent-review validation are recorded above.
+- **Adversarial review:** Inspected `git status`, `git diff --stat`, and the generated proof-data diff. The only generated asset changes were `sourceFingerprint` and remote `pushedAt` updates, matching the latest pushed review commit state. Vercel deployment was not run because available recent Vercel targets are production deployments and production deployment requires explicit user confirmation.
+- **Residual risk:** Public proof metadata may change again after this commit is pushed because GitHub remote `pushedAt` is inherently time-sensitive; this is accepted as generated proof freshness metadata rather than product behavior risk.
+- **Rollback note:** Revert this ship commit to restore the prior generated proof-data fingerprint and task/history notes.
+- **Next command:** `$feature-interview`
+
 ## Current Task — Benchmark `ship` Fresh Run 2026-05-16
 
 **Goal:** Run `$benchmark-test-skill ship` against the current repository harness and publish fresh deterministic both-agent evidence.
