@@ -10,6 +10,32 @@
 - [x] `/reconcile-dev-docs fix tasks` - Resolved orphaned Phase 38 manual tasks: 4 items deferred to future work (Neon DB, admin secret, Vercel env vars, live verification).
 - [ ] `/feature-interview` - Triage 8 remaining unspecced ideas in `tasks/ideas.md` (cleaned from 25 on 2026-05-15; 17 removed as shipped/obsolete).
 
+## Current Task — Benchmark `ship` Fresh Run 2026-05-16
+
+**Goal:** Run `$benchmark-test-skill ship` against the current repository harness and publish fresh deterministic both-agent evidence.
+
+**Plan:**
+- [x] Confirm `$benchmark-test-skill` is the active workflow and `ship` is only the benchmark target.
+- [x] Run `pnpm bench --list-skills` and record `ship` coverage status.
+- [x] Run `pnpm verify --skill ship`; stop before bench if verification fails.
+- [x] If verify passes, run `pnpm bench --skill ship --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [x] Write and validate `benchmark/test-ship-2026-05-16.md` with verify, benchmark, latency, cost, consistency, raw paths, and recommended next route.
+- [x] Refresh generated Skills Showcase data if curated benchmark evidence changes.
+- [x] Record results here, then commit and push intended changes on `master`.
+
+## Review — Benchmark `ship` Fresh Run 2026-05-16
+
+- Command resolution: `$benchmark-test-skill` was the active workflow; `ship` was treated only as the benchmark target argument.
+- Eligibility: `ship` is known to the benchmark harness with custom coverage via `tests/layer4/setups/tier1-workflows.setup.ts`.
+- Verify passed: layer1 PASS in 4.4s with 1,202 tests across 15 files; layer2 SKIP because no target-specific layer2 tests matched `ship`.
+- Benchmark completed for both agents with no infrastructure-blocked runs:
+  - Claude session `920245e6`: 3/3 evaluated hard assertions passed, output quality 100.0%, p50 22.2s, p95 25.8s, p99 26.1s, total cost $0.75, with 0 threshold failures and 0 critical failures.
+  - Codex session `898663d6`: 3/3 evaluated hard assertions passed, output quality 100.0%, p50 27.3s, p95 33.3s, p99 33.8s, total cost $0.75, with 0 threshold failures and 0 critical failures.
+- Report updated at `benchmark/test-ship-2026-05-16.md` and validated for target, agent rows, pass-rate and blocked-run data, latency, cost, raw session paths, and next-route label.
+- Skills Showcase data and `docs/benchmark-results-matrix.md` were regenerated and `scripts/validate-skills-showcase-data.sh` passed.
+- Validation passed: `pnpm bench --list-skills`, `pnpm verify --skill ship`, `pnpm bench --skill ship --agent both --runs 3 --chunk-size 3 --pause 0`, report field `rg`, showcase data generation, showcase data validation.
+- **Recommended next skill:** `$benchmark-agent-review ship`
+
 ## Current Task — Targeted Update `ship` Benchmark Goal Field Extraction 2026-05-16
 
 **Goal:** Fix the `ship` benchmark quality rubric so `ship-goal-specificity` accepts valid field-style ship manifest `User goal` entries while still rejecting meta manifest-writing goals.
