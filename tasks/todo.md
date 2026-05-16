@@ -10,6 +10,40 @@
 - [x] `/reconcile-dev-docs fix tasks` - Resolved orphaned Phase 38 manual tasks: 4 items deferred to future work (Neon DB, admin secret, Vercel env vars, live verification).
 - [ ] `/feature-interview` - Triage 8 remaining unspecced ideas in `tasks/ideas.md` (cleaned from 25 on 2026-05-15; 17 removed as shipped/obsolete).
 
+## Current Task — Targeted Update `ship` Benchmark Goal Field Extraction 2026-05-16
+
+**Goal:** Fix the `ship` benchmark quality rubric so `ship-goal-specificity` accepts valid field-style ship manifest `User goal` entries while still rejecting meta manifest-writing goals.
+
+**Plan:**
+- [x] Use the fresh triage report and relevant lessons as scoped evidence.
+- [x] Confirm this is an existing benchmark-rubric update, not a mirrored `ship` skill contract change or new skill.
+- [x] Broaden `shipGoalSpecificityCriterion` to extract heading-style and field-style `User goal` content.
+- [x] Add focused layer1 regression coverage for the failing Claude bullet manifest shape and the existing meta-goal rejection.
+- [x] Run required validation, record results, then commit and push intended changes on `master`.
+
+## Review — Targeted Update `ship` Benchmark Goal Field Extraction 2026-05-16
+
+- Decision: existing benchmark harness update. No mirrored `ship` skill contract change or new skill was needed.
+- Evidence used: `benchmark/triage-ship-2026-05-16.md`, relevant benchmark lessons, `tests/layer4/setups/tier1-workflows.setup.ts`, and focused layer1 coverage.
+- Evidence intentionally skipped: broad session-history scan; the triage report already verified the narrow rubric parser defect.
+- Updated `shipGoalSpecificityCriterion` to extract `User goal` from both heading-style sections and bullet/bold field-style manifest entries.
+- Added layer1 regression coverage for the failing Claude bullet manifest shape and preserved rejection of meta manifest-writing goals.
+- Verification surfaced two adjacent harness-maintenance issues and both were fixed: the benchmark results matrix test expected an older `ship` raw report, and workflow quality treated the negated phrase "production deploy was skipped" as a forbidden fabrication.
+- Skills Showcase data was not refreshed because no tracked `SKILL.md`, `PACK.md`, curated benchmark report, or curated review report changed.
+- Validation passed:
+  - `pnpm --dir tests exec vitest run --project layer1 bench-setups`
+  - `./install.sh`
+  - `./scripts/skill-deps.sh --broken`
+  - `./scripts/skill-versions.sh --missing`
+  - `./scripts/skill-next-step-routing.sh --missing`
+  - `pnpm --dir tests bench:coverage`
+  - `pnpm --dir tests verify --skill ship`
+  - `pnpm --dir tests bench --skill ship --agent claude --runs 1 --chunk-size 1 --pause 0`
+  - Claude smoke session `ship-claude-5517074a`: 1/1 hard assertions, 100.0% quality, 0 threshold failures, 0 critical failures
+  - targeted `rg` check for `ship-goal-specificity`, field-style extraction, deploy-negation coverage, and current matrix raw report
+  - `git diff --check`
+- **Recommended next command:** `$benchmark-test-skill ship`
+
 ## Current Task — Triage `ship` Benchmark Failure 2026-05-16
 
 **Goal:** Verify the fresh `ship` benchmark quality failure and identify the smallest durable fix.
