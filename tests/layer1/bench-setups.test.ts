@@ -708,7 +708,7 @@ describe("benchmark setup registry", () => {
         "- `tasks/todo.md`",
         "",
         "## Tests run",
-        "Validation passed.",
+        "Fixture review notes validation already passed for the completed step.",
         "",
         "## Deploy status",
         "Deploy skipped.",
@@ -795,7 +795,40 @@ describe("benchmark setup registry", () => {
     expect(quality?.criteria.find((criterion) => criterion.id === "evidence-linked")).toMatchObject({
       passed: true,
     });
+    expect(quality?.criteria.find((criterion) => criterion.id === "validation-evidence")).toMatchObject({
+      passed: true,
+    });
     expect(quality?.criticalFailures).not.toContain("evidence-linked");
+    expect(quality?.criticalFailures).not.toContain("validation-evidence");
+
+    writeFileSync(
+      resolve(workDir, "ship-manifest.md"),
+      [
+        "# Ship Manifest",
+        "",
+        "## User goal",
+        "Package the completed fixture step.",
+        "",
+        "## Changed files",
+        "- `tests/example.test.ts`",
+        "- `tasks/todo.md`",
+        "",
+        "## Tests run",
+        "Not recorded in this manifest.",
+        "",
+        "## Deploy status",
+        "Deploy skipped.",
+        "",
+        "## Rollback note",
+        "Revert the fixture changes.",
+        "",
+        "## Next command",
+        "`$run`",
+      ].join("\n"),
+    );
+
+    const missingValidationQuality = setup!.qualityEvaluator?.evaluate(readFileSync(resolve(workDir, "ship-manifest.md"), "utf8"));
+    expect(missingValidationQuality?.criticalFailures).toContain("validation-evidence");
   });
 
   it("keeps the spec-interview benchmark route aligned with mirrored skill contracts", () => {
