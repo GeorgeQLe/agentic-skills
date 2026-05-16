@@ -10,28 +10,26 @@
 - [x] `/reconcile-dev-docs fix tasks` - Resolved orphaned Phase 38 manual tasks: 4 items deferred to future work (Neon DB, admin secret, Vercel env vars, live verification).
 - [ ] `/feature-interview` - Triage 8 remaining unspecced ideas in `tasks/ideas.md` (cleaned from 25 on 2026-05-15; 17 removed as shipped/obsolete).
 
-## Current Task — Targeted Update `ship` Benchmark Evidence-Linked File Status Prefix 2026-05-16
+## Current Task — Targeted Update `ship` Benchmark Validation Evidence 2026-05-16
 
-**Goal:** Fix the `ship` benchmark quality rubric so valid manifests that name clean changed-file paths satisfy evidence-linked scoring without preserving raw `M ` status prefixes.
+**Goal:** Fix the `ship` benchmark quality rubric so valid manifests that say validation already passed do not fail by missing the exact phrase `Validation passed`.
 
 **Plan:**
 - [x] Use the fresh triage report and relevant lessons as scoped evidence.
 - [x] Confirm existing-skill overlap and update the existing `ship` benchmark setup rather than mirrored `ship` skill contracts.
-- [x] Change `ship` evidence facts from raw status-prefixed lines to clean changed-file paths.
-- [x] Add focused layer1 regression coverage for clean changed-file path evidence.
+- [x] Move exact validation wording out of `evidence-linked` and add a critical validation-evidence pattern.
+- [x] Add focused layer1 regression coverage for semantic validation evidence and omitted-validation rejection.
 - [x] Run targeted validation, record results, then commit and push intended changes on `master`.
 
-## Review — Targeted Update `ship` Benchmark Evidence-Linked File Status Prefix 2026-05-16
+## Review — Targeted Update `ship` Benchmark Validation Evidence 2026-05-16
 
-- Decision: existing benchmark harness update. The mirrored `ship` skill contracts already require changed-file evidence; the defect was the benchmark rubric requiring raw `M ` status prefixes.
+- Decision: existing benchmark harness update. The mirrored `ship` skill contracts already require validation evidence; the defect was the benchmark rubric requiring one exact phrase.
 - Evidence used: `benchmark/triage-ship-2026-05-16.md`, relevant benchmark lessons, `tests/layer4/setups/tier1-workflows.setup.ts`, and focused layer1 coverage.
 - Evidence intentionally skipped: broad session-history scan; the triage report already verified the narrow harness false negative.
-- Changed `ship` evidence facts from `M tests/example.test.ts` and `M tasks/todo.md` to clean changed-file paths `tests/example.test.ts` and `tasks/todo.md`.
-- Added layer1 regression coverage proving the `ship` quality evaluator accepts a manifest with clean changed-file path evidence.
-- Fixed stale `benchmark-results-matrix.test.ts` expectation that still referenced the older `ship-codex-b69cb187` raw report after the matrix moved to `ship-codex-7e3f4bab`.
-- Validation passed: `pnpm --dir tests exec vitest run --project layer1 bench-setups`; `./install.sh`; `./scripts/skill-deps.sh --broken`; `./scripts/skill-versions.sh --missing`; `./scripts/skill-next-step-routing.sh --missing`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill ship`; Codex smoke benchmark `ship-codex-90042f7c` with 1/1 hard assertions, 100.0% quality, 0 threshold failures, and 0 critical failures; `git diff --check`.
+- Changed `ship` evidence facts to require the concrete changed files while a separate critical `validation-evidence` pattern accepts wording such as "validation already passed."
+- Added layer1 regression coverage proving the `ship` quality evaluator accepts semantic validation evidence and still fails when validation evidence is omitted.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 bench-setups`; `pnpm --dir tests verify --skill ship`; Codex smoke benchmark `ship-codex-3c6d8b24` with 1/1 hard assertions, 100.0% pass rate, and no infrastructure blocks; `./install.sh`; `./scripts/skill-deps.sh --broken`; `./scripts/skill-versions.sh --missing`; `./scripts/skill-next-step-routing.sh --missing`; `pnpm --dir tests bench:coverage`; targeted `rg` check for `validation-evidence`; `git diff --check`.
 - Skills Showcase data was not refreshed because no tracked `SKILL.md`, `PACK.md`, curated benchmark report, or curated review report changed.
-- Unrelated existing worktree change left untouched: `packs/youtube-ops/codex/youtube-title-thumbnail-audit/SKILL.md`.
 - **Recommended next command:** `$benchmark-test-skill ship`
 
 ## Current Task — Triage `ship` Benchmark Failure 2026-05-16
