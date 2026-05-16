@@ -2273,3 +2273,11 @@ Resolved all 10 findings from `/expert-review`:
 - Added focused layer1 coverage proving clean changed-file path evidence satisfies the quality evaluator.
 - Fixed the stale benchmark-results matrix test expectation for the latest `ship` Codex raw report.
 - Verified with focused layer1 setup coverage, skill integrity checks, benchmark coverage, `ship` verify, Codex smoke benchmark `ship-codex-90042f7c`, and whitespace checks.
+
+## 2026-05-16 — ship benchmark review and proof-data freshness
+
+- Refreshed the `ship` benchmark-agent review against Claude session `ship-claude-920245e6` and Codex session `ship-codex-898663d6`.
+- Reviewed all six retained `ship-manifest.md` artifacts and recorded an excellent subjective verdict with median score 91.5 and score range 90-96.
+- Confirmed no material remediation remains after the recent `ship` benchmark rubric fixes.
+- Regenerated Skills Showcase GitHub proof assets after the review commit push so public proof metadata points at the latest remote freshness state.
+- Verified generated data freshness, Skills Showcase production build, and whitespace checks.
