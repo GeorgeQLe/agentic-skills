@@ -2260,3 +2260,9 @@ Resolved all 10 findings from `/expert-review`:
 - Added smoke coverage to prevent the legacy `[data-workflow-list]` block from returning to `/workflows`.
 - Verified with focused Skills Showcase smoke/workflow tests, typecheck, production build, whitespace check, and Safari phone-width visual inspection.
 - Shipped on `master` in commit `0d119a2`.
+
+## 2026-05-16 — ship benchmark evidence-linked triage
+
+- Verified the fresh `ship` benchmark quality failure from `benchmark/test-ship-2026-05-16.md`.
+- Classified the issue as a benchmark harness false negative: the `evidence-linked` rubric requires raw `M ` diff-status prefixes even though the `ship` contracts and quality gate require exact changed file names, not raw status markers.
+- Wrote `benchmark/triage-ship-2026-05-16.md` with root cause, owner files, validation plan, and targeted next route.

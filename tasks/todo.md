@@ -10,6 +10,28 @@
 - [x] `/reconcile-dev-docs fix tasks` - Resolved orphaned Phase 38 manual tasks: 4 items deferred to future work (Neon DB, admin secret, Vercel env vars, live verification).
 - [ ] `/feature-interview` - Triage 8 remaining unspecced ideas in `tasks/ideas.md` (cleaned from 25 on 2026-05-15; 17 removed as shipped/obsolete).
 
+## Current Task — Triage `ship` Benchmark Failure 2026-05-16
+
+**Goal:** Verify the fresh `ship` benchmark quality failure and identify the smallest durable fix.
+
+**Plan:**
+- [x] Inspect the fresh benchmark report and raw Claude/Codex run evidence.
+- [x] Compare mirrored `ship` skill contracts against benchmark setup and quality expectations.
+- [x] Classify the failure as a skill contract gap, benchmark harness gap, runner infrastructure issue, or agent noncompliance.
+- [x] Write `benchmark/triage-ship-2026-05-16.md` with verdict, root cause, responsible gap, validation plan, and next route.
+- [x] Record results here, then commit and push intended changes on `master`.
+
+## Review — Triage `ship` Benchmark Failure 2026-05-16
+
+- Verification verdict: verified, but classified as a benchmark harness defect rather than a `ship` skill contract failure.
+- Evidence: fresh benchmark report `benchmark/test-ship-2026-05-16.md`, raw run artifacts under `tests/benchmarks/runs/ship-claude-a11036e8/` and `tests/benchmarks/runs/ship-codex-7e3f4bab/`, mirrored `ship` contracts, `docs/quality-gate-contract.md`, and `tests/layer4/setups/tier1-workflows.setup.ts`.
+- Root cause: the `ship` setup's critical `evidence-linked` criterion requires exact raw diff-summary facts `M tests/example.test.ts` and `M tasks/todo.md`, while valid ship manifests name clean changed-file paths `tests/example.test.ts` and `tasks/todo.md`.
+- Classification: benchmark quality-rubric false negative. The mirrored `ship` contracts require exact changed files, not preservation of `git status`/diff status prefixes.
+- Report written to `benchmark/triage-ship-2026-05-16.md`.
+- Validation passed: triage report section/content check and `git diff --check`.
+- Unrelated existing worktree change left untouched: `packs/youtube-ops/codex/youtube-title-thumbnail-audit/SKILL.md`.
+- **Recommended next skill:** `$targeted-skill-builder ship benchmark evidence-linked file status prefix`
+
 ## Current Task — Benchmark `ship` 2026-05-16
 
 **Goal:** Run `$benchmark-test-skill ship` against the current repository harness and publish fresh deterministic both-agent evidence.
