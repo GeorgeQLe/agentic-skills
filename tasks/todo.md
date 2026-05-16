@@ -10,6 +10,34 @@
 - [x] `/reconcile-dev-docs fix tasks` - Resolved orphaned Phase 38 manual tasks: 4 items deferred to future work (Neon DB, admin secret, Vercel env vars, live verification).
 - [ ] `/feature-interview` - Triage 8 remaining unspecced ideas in `tasks/ideas.md` (cleaned from 25 on 2026-05-15; 17 removed as shipped/obsolete).
 
+## Current Task — Benchmark `ship` 2026-05-16
+
+**Goal:** Run `$benchmark-test-skill ship` against the current repository harness and publish fresh deterministic both-agent evidence.
+
+**Plan:**
+- [x] Confirm `$benchmark-test-skill` is the active workflow and `ship` is only the benchmark target.
+- [x] Run `pnpm bench --list-skills` and record `ship` coverage status. `coverage=custom`, setup `tests/layer4/setups/tier1-workflows.setup.ts`.
+- [x] Run `pnpm verify --skill ship`; stop before bench if verification fails. Layer1 PASS in 4.5s; layer2 SKIP because no target-specific layer2 tests matched.
+- [x] If verify passes, run `pnpm bench --skill ship --agent both --runs 3 --chunk-size 3 --pause 0`. Claude 3/3, Codex 3/3, no blocked runs.
+- [x] Write and validate `benchmark/test-ship-2026-05-16.md` with verify, benchmark, latency, cost, consistency, raw paths, and recommended next route.
+- [x] Refresh generated Skills Showcase data if curated benchmark evidence changes.
+- [x] Record results here, then commit and push intended changes on `master`.
+
+## Review — Benchmark `ship` 2026-05-16
+
+- Command resolution: `$benchmark-test-skill` was the active workflow; `ship` was treated as the target skill argument.
+- Eligibility: `ship` is known to the harness with custom coverage via `tests/layer4/setups/tier1-workflows.setup.ts`.
+- Verify passed: layer1 PASS in 4.5s with 1,201 tests across 15 files; layer2 SKIP because no target-specific layer2 tests matched `ship`.
+- Benchmark completed for both agents with no infrastructure-blocked runs:
+  - Claude session `a11036e8`: 3/3 evaluated hard assertions passed, output quality 78.6%, p50 27.6s, p95 31.9s, p99 32.3s, total cost $0.75, with 0 threshold failures and 3 critical failures.
+  - Codex session `7e3f4bab`: 3/3 evaluated hard assertions passed, output quality 78.6%, p50 25.0s, p95 29.1s, p99 29.4s, total cost $0.75, with 0 threshold failures and 3 critical failures.
+- Report written to `benchmark/test-ship-2026-05-16.md`.
+- Report validation passed for target, agent rows, pass-rate and blocked-run data, latency, cost, consistency, raw session paths, quality details, failed assertions, and recommended next route.
+- Skills Showcase generated data was refreshed. `scripts/validate-skills-showcase-data.sh` regenerated the same expected assets but exits nonzero before commit because generated files are intentionally changed from HEAD.
+- `git diff --check` passed.
+- Unrelated existing worktree change left untouched: `packs/youtube-ops/codex/youtube-title-thumbnail-audit/SKILL.md`.
+- **Recommended next skill:** `$session-triage ship benchmark failure`
+
 ## Current Task — Workflows Mobile Playful Lab Responsiveness 2026-05-15
 
 **Goal:** Make the `/workflows` Playful Lab interface responsive on mobile, with special attention to the playful lab-themed workflow items and without reviving the old workflow panel.
