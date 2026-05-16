@@ -62,28 +62,14 @@ d) Ship the changes using the /commit-and-push-by-feature workflow:
 ### 3. Deploy (skip if `--no-deploy`)
 After shipping, deploy only when the project has an explicit manual deploy contract.
 
-a) **Find the deploy contract.**
-   - First check for `deploy.md` or `tasks/deploy.md`.
+a) **Check for deploy contract.** Look for `deploy.md` or `tasks/deploy.md`.
    - If neither file exists, skip deploy and report `Deploy skipped: no explicit manual deploy contract (deploy.md or tasks/deploy.md)`.
-   - If a deploy contract exists, read it first and use it to determine the deploy method.
-   - Supplement the contract by checking: `spec.md`, `CLAUDE.md`, `tasks/roadmap.md`, `tasks/todo.md`, `Makefile` / `Justfile`, `package.json`, `deploy/`, `infra/`, `scripts/`, and `docker-compose*.yml`.
-   - **Do NOT look in `.github/workflows/`** — this project does not use GitHub Actions.
-   - If a deploy contract exists but no deploy method is found, **ask the user** how deployment works for this project. Do not guess.
+   - If a deploy contract exists, continue.
 
-b) **Run the deploy** using the discovered mechanism.
-   - Do not run `aws sso login` preemptively from stale context, old logs, or assumptions. If the deploy method uses an AWS profile and auth status is uncertain, first run `aws sts get-caller-identity --profile <profile>` using the profile from the deploy contract or deploy command.
-   - If the AWS identity check succeeds, proceed directly with the deploy and do not run `aws sso login`.
-   - If the AWS identity check or the deploy command fails because AWS SSO credentials are missing or expired, do not skip deployment. Run the matching `aws sso login --profile <profile>` command, using the profile from the deploy contract, deploy command, or error output.
-   - When `aws sso login` prints a browser URL, device code, or verification instructions, relay them to the user and tell them to navigate to the provided URL and complete the login in their browser. Keep the login command running until it succeeds, fails, or times out.
-   - After a successful SSO login, rerun the original deploy command once. This auth recovery is part of the same deploy attempt, not an automatic retry of a failed deploy.
-   - If the user cannot complete SSO login or the login command fails, report the deploy as blocked by authentication. Do not report it as skipped.
-
-c) **Verify the deploy:**
-   - Check output for errors.
-   - If there's a health check URL or status command in the project config, run it.
-   - Report success or failure.
-
-d) If the deploy fails, report the error clearly. Do not retry automatically.
+b) **Invoke `/deploy`** targeting the default environment (staging).
+   - Pass the deploy contract context to `/deploy`.
+   - Skip ledger recording and staleness reporting — those are for standalone `/deploy` invocations only.
+   - If `/deploy` reports failure, report the error. Do not retry.
 
 ### 4. Plan the next step (skip if `--no-plan`)
 
