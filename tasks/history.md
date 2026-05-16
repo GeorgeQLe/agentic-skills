@@ -2266,3 +2266,10 @@ Resolved all 10 findings from `/expert-review`:
 - Verified the fresh `ship` benchmark quality failure from `benchmark/test-ship-2026-05-16.md`.
 - Classified the issue as a benchmark harness false negative: the `evidence-linked` rubric requires raw `M ` diff-status prefixes even though the `ship` contracts and quality gate require exact changed file names, not raw status markers.
 - Wrote `benchmark/triage-ship-2026-05-16.md` with root cause, owner files, validation plan, and targeted next route.
+
+## 2026-05-16 — ship benchmark evidence-linked prefix fix
+
+- Updated the `ship` benchmark setup so the deterministic evidence-linked criterion accepts clean changed-file paths instead of requiring raw `M ` diff-status prefixes.
+- Added focused layer1 coverage proving clean changed-file path evidence satisfies the quality evaluator.
+- Fixed the stale benchmark-results matrix test expectation for the latest `ship` Codex raw report.
+- Verified with focused layer1 setup coverage, skill integrity checks, benchmark coverage, `ship` verify, Codex smoke benchmark `ship-codex-90042f7c`, and whitespace checks.

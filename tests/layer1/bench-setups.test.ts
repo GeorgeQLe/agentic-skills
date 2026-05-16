@@ -266,6 +266,7 @@ describe("benchmark setup registry", () => {
     ).toMatchObject({
       pass: true,
     });
+
   });
 
   it("uses agent-specific route assertions for the icon-handler workflow setup", () => {
@@ -788,6 +789,13 @@ describe("benchmark setup registry", () => {
     ).toMatchObject({
       pass: true,
     });
+
+    const quality = setup!.qualityEvaluator?.evaluate(readFileSync(resolve(workDir, "ship-manifest.md"), "utf8"));
+
+    expect(quality?.criteria.find((criterion) => criterion.id === "evidence-linked")).toMatchObject({
+      passed: true,
+    });
+    expect(quality?.criticalFailures).not.toContain("evidence-linked");
   });
 
   it("keeps the spec-interview benchmark route aligned with mirrored skill contracts", () => {
