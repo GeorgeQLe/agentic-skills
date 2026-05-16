@@ -10,6 +10,33 @@
 - [x] `/reconcile-dev-docs fix tasks` - Resolved orphaned Phase 38 manual tasks: 4 items deferred to future work (Neon DB, admin secret, Vercel env vars, live verification).
 - [ ] `/feature-interview` - Triage 8 remaining unspecced ideas in `tasks/ideas.md` (cleaned from 25 on 2026-05-15; 17 removed as shipped/obsolete).
 
+## Current Task — Benchmark `ship` Post-Rubric Fix 2026-05-16
+
+**Goal:** Run `$benchmark-test-skill ship` against the current repository harness after the benchmark rubric fixes and publish fresh deterministic both-agent evidence.
+
+**Plan:**
+- [x] Confirm `$benchmark-test-skill` is the active workflow and `ship` is only the benchmark target.
+- [x] Run `pnpm bench --list-skills` and record `ship` coverage status. `coverage=custom`, setup `tests/layer4/setups/tier1-workflows.setup.ts`.
+- [x] Run `pnpm verify --skill ship`; stop before bench if verification fails. Layer1 PASS in 3.8s; layer2 SKIP because no target-specific layer2 tests matched.
+- [x] If verify passes, run `pnpm bench --skill ship --agent both --runs 3 --chunk-size 3 --pause 0`. Claude 3/3, Codex 3/3, no blocked runs.
+- [x] Write and validate `benchmark/test-ship-2026-05-16.md` with verify, benchmark, latency, cost, consistency, raw paths, and recommended next route.
+- [x] Refresh generated Skills Showcase data if curated benchmark evidence changes.
+- [x] Record results here, then commit and push intended changes on `master`.
+
+## Review — Benchmark `ship` Post-Rubric Fix 2026-05-16
+
+- Command resolution: `$benchmark-test-skill` was the active workflow; `ship` was treated as the target skill argument.
+- Eligibility: `ship` is known to the benchmark harness with custom coverage via `tests/layer4/setups/tier1-workflows.setup.ts`.
+- Verify passed: layer1 PASS in 3.8s with 1,202 tests across 15 files; layer2 SKIP because no target-specific layer2 tests matched `ship`.
+- Benchmark completed for both agents with no infrastructure-blocked runs:
+  - Claude session `d6121a8f`: 3/3 evaluated hard assertions passed, output quality 94.7%, p50 19.1s, p95 24.7s, p99 25.2s, total cost $0.75, with 0 threshold failures and 1 critical `ship-goal-specificity` failure.
+  - Codex session `a2685d9f`: 3/3 evaluated hard assertions passed, output quality 100.0%, p50 25.6s, p95 31.4s, p99 32.0s, total cost $0.75, with 0 threshold or critical failures.
+- Report updated at `benchmark/test-ship-2026-05-16.md`.
+- Report validation passed for target, agent rows, pass-rate and blocked-run data, latency, cost, consistency, raw session paths, quality details, failed assertions, and recommended next route.
+- Skills Showcase generated data was refreshed. `scripts/validate-skills-showcase-data.sh` regenerated expected assets and exited nonzero because generated files differ from HEAD; those generated files are included in this ship set.
+- `git diff --check` passed.
+- **Recommended next skill:** `$session-triage ship benchmark failure`
+
 ## Current Task — Targeted Update `ship` Benchmark Validation Evidence 2026-05-16
 
 **Goal:** Fix the `ship` benchmark quality rubric so valid manifests that say validation already passed do not fail by missing the exact phrase `Validation passed`.

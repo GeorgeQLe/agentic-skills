@@ -16,6 +16,20 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Benchmark: ship Post-Rubric Fix 2026-05-16
+
+**Goal:** Run `$benchmark-test-skill ship` against the current repository harness after the benchmark rubric fixes and publish fresh deterministic both-agent evidence.
+
+**Acceptance Criteria:**
+- [x] `pnpm bench --list-skills` confirms `ship` is known and reports its coverage status.
+- [x] `pnpm verify --skill ship` passes or blocks benchmark execution with a recorded failure.
+- [x] `pnpm bench --skill ship --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [x] `benchmark/test-ship-2026-05-16.md` records fresh verify, benchmark, latency, cost, consistency, and raw session evidence.
+- [x] Generated Skills Showcase data is refreshed and validated if curated benchmark evidence changes.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Completed on 2026-05-16. `ship` remained known with custom benchmark coverage via `tests/layer4/setups/tier1-workflows.setup.ts`. Verify passed with layer1 PASS in 3.8s and layer2 SKIP because no target-specific layer2 tests matched. The both-agent benchmark completed with no infrastructure-blocked runs: Claude session `d6121a8f` passed 3/3 hard assertions with 94.7% output quality and 1 critical `ship-goal-specificity` failure; Codex session `a2685d9f` passed 3/3 hard assertions with 100.0% output quality. Report validation passed, and generated Skills Showcase data was refreshed. Report: `benchmark/test-ship-2026-05-16.md`. Recommended next skill: `$session-triage ship benchmark failure`.
+
 ## Current UI Pass: Workflows Mobile Playful Lab Responsiveness 2026-05-15
 
 **Goal:** Make the `/workflows` Playful Lab interface work cleanly on mobile while preserving the newer lab-themed surface that will replace the older workflow presentation.
