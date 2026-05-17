@@ -2328,3 +2328,16 @@ Resolved all 10 findings from `/expert-review`:
 - Added focused `TuiWorkflow` tests covering replay prompt/agent/terminal/artifact rendering, step-circle navigation, visible benchmark receipt metadata, and curated no-receipt states.
 - Kept the assertions behavior-oriented by injecting minimal `workflowBenchmarks` data and using accessible step labels rather than decorative CSS details.
 - Verified with Skills Showcase tests, typecheck, production build, and whitespace validation.
+
+## 2026-05-17 — Step 40.6 workflow replay final validation
+
+- Completed final validation for the `/workflows` hybrid replay pilot with Skills Showcase tests, typecheck, production build, and whitespace validation all passing.
+- Started the local Next app on `http://localhost:3005` after port 3000 was occupied and visually checked `/workflows` in Safari at desktop and narrow mobile widths.
+- Confirmed step-circle navigation, benchmark receipt visibility, curated no-receipt states, command/result wrapping, long run-artifact path wrapping, and no mobile horizontal overflow.
+- Marked Phase 40 complete, archived the phase state, and promoted Phase 41 remaining benchmark result coverage as the next active work.
+
+## 2026-05-17 — roadmap benchmark route alignment
+
+- Updated the `roadmap` Tier 1 benchmark fixture to expect `$plan-phase 1` for a roadmap-only output that still needs phase decomposition, matching the roadmap skill contract.
+- Removed the stale `tasks/roadmap.md` concrete-file quality expectation from the fixture so the quality check focuses on the generated roadmap structure and next route.
+- Verified with focused `bench-setups` layer1 coverage, `pnpm --dir tests verify --skill roadmap`, and whitespace validation.
