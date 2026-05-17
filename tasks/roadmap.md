@@ -30,6 +30,19 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Completed on 2026-05-16. Reviewed latest `ship` Claude session `920245e6` and Codex session `898663d6`, covering six retained `ship-manifest.md` artifacts and excluding no infrastructure-blocked runs. Deterministic context was clean: both agents passed 3/3 hard assertions with 100.0% output-quality scores. Subjective verdict was excellent overall with median score 91.5 and range 90-96. No material remediation remains; generated Skills Showcase data was refreshed and validated. Report: `benchmark/review-ship-2026-05-16.md`. Recommended next command: `$ship`.
 
+## Current Benchmark: roadmap 2026-05-17
+
+**Goal:** Run `$benchmark-test-skill roadmap` against the current repository harness and publish fresh deterministic both-agent evidence.
+
+**Acceptance Criteria:**
+- [x] `pnpm bench --list-skills` confirms `roadmap` is known and reports its coverage status.
+- [x] `pnpm verify --skill roadmap` passes or blocks benchmark execution with a recorded failure.
+- [x] `pnpm bench --skill roadmap --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [x] `benchmark/test-roadmap-2026-05-17.md` records fresh verify, benchmark, latency, cost, consistency, and raw session evidence.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Verification-blocked on 2026-05-17. `roadmap` is known with custom benchmark coverage via `tests/layer4/setups/tier1-workflows.setup.ts`, but `pnpm verify --skill roadmap` failed at layer1 in 3.9s. The failure is `layer1/benchmark-results-matrix.test.ts` expecting the stale `ship-codex-a2685d9f` raw report row while the current generated matrix points at `ship-codex-898663d6`. The benchmark step was not run. Report: `benchmark/test-roadmap-2026-05-17.md`. Recommended next skill: `$session-triage roadmap benchmark failure`.
+
 ## Current Benchmark: ship Fresh Run 2026-05-16
 
 **Goal:** Run `$benchmark-test-skill ship` against the current repository harness and publish fresh deterministic both-agent evidence.
