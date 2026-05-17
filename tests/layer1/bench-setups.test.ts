@@ -269,7 +269,13 @@ describe("benchmark setup registry", () => {
       "For modern pnpm project config, also use `minimumReleaseAge: 11520`.",
       "Eligible versions older than 8 days: react 19.2.0, zod 3.25.76, vitest 3.2.4.",
       "Skipped packages: react 19.3.0, zod 4.1.12, and vitest 4.0.0 because they are inside the 8-day safety window.",
-      "Verification commands: pnpm install, pnpm test, pnpm build.",
+      "## Verification",
+      "",
+      "```sh",
+      "pnpm install --frozen-lockfile",
+      "pnpm run build",
+      "pnpm run test",
+      "```",
       `Recommended next command: ${route}`,
     ].join("\n\n");
 
@@ -290,15 +296,48 @@ describe("benchmark setup registry", () => {
 
     expect(codexAssertions.find((assertion) => assertion.description === "Output includes .npmrc")).toMatchObject({ pass: true });
     expect(codexAssertions.find((assertion) => assertion.description === "Output includes min-release-age")).toMatchObject({ pass: true });
+    expect(codexAssertions.find((assertion) => assertion.description === "Output includes verification command evidence")).toMatchObject({ pass: true });
     expect(codexAssertions.find((assertion) => assertion.description === "Output recommends $run")).toMatchObject({ pass: true });
     expect(claudeAssertions.find((assertion) => assertion.description === "Output recommends /run")).toMatchObject({ pass: true });
 
     const quality = setup!.qualityEvaluator?.evaluate(readFileSync(resolve(codexWorkDir, "package-update-plan.md"), "utf8"));
 
     expect(quality?.criteria.find((criterion) => criterion.id === "workflow-artifact-reference")).toMatchObject({ passed: true });
+    expect(quality?.criteria.find((criterion) => criterion.id === "workflow-output-includes-verification-command-evidence")).toMatchObject({ passed: true });
     expect(quality?.criteria.find((criterion) => criterion.id === "workflow-next-route")).toMatchObject({ passed: true });
     expect(quality?.criteria.find((criterion) => criterion.id === "no-generic-or-external-overreach")).toMatchObject({ passed: true });
     expect(quality?.criticalFailures).not.toContain("no-generic-or-external-overreach");
+  });
+
+  it("rejects update-packages plans without behavior-level verification command evidence", () => {
+    const setup = resolveBenchSetup("update-packages");
+    expect(setup).toBeDefined();
+
+    const workDir = mkdtempSync(resolve(tmpdir(), "update-packages-missing-verification-"));
+    writeFileSync(
+      resolve(workDir, "package-update-plan.md"),
+      [
+        "# Package Update Plan",
+        "This package-update-plan.md records the update plan.",
+        "Package-manager migration strategy: migrate to pnpm.",
+        "Age-gate config: create `.npmrc` with `min-release-age=8` and `minimum-release-age=11520`.",
+        "Eligible versions older than 8 days: react 19.2.0, zod 3.25.76, vitest 3.2.4.",
+        "Skipped packages: react 19.3.0, zod 4.1.12, and vitest 4.0.0.",
+        "Recommended next command: $run",
+      ].join("\n\n"),
+    );
+
+    const assertions = setup!.assertResult(
+      { stdout: "", stderr: "", exitCode: 0, workDir, files: ["package-update-plan.md"] },
+      { agent: "codex" },
+    );
+
+    expect(assertions.find((assertion) => assertion.description === "Output includes verification command evidence")).toMatchObject({ pass: false });
+
+    const quality = setup!.qualityEvaluator?.evaluate(readFileSync(resolve(workDir, "package-update-plan.md"), "utf8"));
+
+    expect(quality?.criteria.find((criterion) => criterion.id === "workflow-output-includes-verification-command-evidence")).toMatchObject({ passed: false });
+    expect(quality?.criticalFailures).toContain("workflow-output-includes-verification-command-evidence");
   });
 
   it("does not accept package-manager shell commands as the final update-packages handoff", () => {
