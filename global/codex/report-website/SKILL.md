@@ -24,12 +24,15 @@ Use this skill when the user wants one report, a directory of reports, or all do
    - Read the requested Markdown report path, directory, or `--all-output-docs` mode. If no path was provided, locate likely report files under `reports/`, `docs/`, `research/`, `benchmark/`, or the project root and ask only when there is no clear source.
    - For `--all-output-docs`, discover tracked Markdown files that are documented outputs rather than operational instructions. Prefer `reports/`, `docs/reports/`, `research/**/reports/`, `benchmark/test-*.md`, `benchmark/review-*.md`, `benchmark/triage-*.md`, `specs/*.md`, and project-specific output folders. Exclude `README.md`, `AGENTS.md`, `CLAUDE.md`, `SKILL.md`, `PACK.md`, changelog/history/task planning files, dependency docs, and generated assets unless the user explicitly includes them.
    - For directory mode, include Markdown descendants by default, but apply the same exclusions for instruction/config docs unless the directory itself is clearly a report archive.
-   - Identify the frontend stack from existing files before creating anything: framework, route conventions, component directories, styling system, icon library, image handling, and test commands.
-   - Choose the output location that matches the project:
-     - Existing app route or page when a frontend app already exists.
-     - A new static page/component inside the established app when there is no report route yet.
-     - A minimal static site only when no frontend app exists and the user asked for a standalone website.
+   - Identify the frontend stack from existing files before creating anything: framework, route conventions, component directories, styling system, icon library, image handling, deployment config, and test commands.
+   - Decide the frontend target before writing code:
+     - Integrate into an existing frontend app by default when exactly one obvious public/docs/showcase app exists, when an app already owns report-like content, or when an existing app has clear routing, styling, and deploy conventions for documentation pages.
+     - In a monorepo, prefer likely documentation/public surfaces by name and evidence: `apps/docs`, `apps/skills-showcase`, `apps/showcase`, `apps/web`, `apps/site`, or routes/components that already render docs, reports, changelogs, or benchmark evidence.
+     - Create a separate frontend subdirectory or standalone site only when no frontend app exists, when the user explicitly asks for a standalone site, when the report site needs a separate brand/domain/audience/access policy, or when existing apps cannot cleanly support static report routes.
+     - Ask one narrow question before choosing only when multiple plausible frontend apps exist with no clear owner, integrating would change public navigation or deployment in a non-obvious way, the desired base route conflicts with existing routes, or the audience/access level cannot be inferred.
+     - When asking, name the concrete candidates and default recommendation, for example: `I found apps/docs and apps/marketing. Should report routes live under apps/docs at /reports, or should I create a standalone report site?`
    - Choose a base route for multi-document mode, such as `/reports`, `/research`, `/benchmarks`, or the user-provided route.
+   - Check existing routes before finalizing the base route. If the requested route conflicts, either nest under a non-conflicting route or ask the user to choose between the concrete options.
    - Inspect `AGENTS.md`, `CLAUDE.md`, `README.md`, `DESIGN.md`, package scripts, and relevant neighboring pages before editing.
 
 2. **Build the route plan**
@@ -94,6 +97,7 @@ Use this skill when the user wants one report, a directory of reports, or all do
 
 - Do not use raw Markdown rendering as the final implementation when the user asked for clean JSX. Markdown may be an intermediate parsing source only.
 - Do not collapse multiple documented outputs into one giant page when route-based output is expected. Use an index route plus one route per document.
+- Do not create a separate frontend app just because reports are numerous. Prefer integrating into the existing documentation/public site unless the target-selection rules justify separation.
 - Do not invent report findings, citations, images, charts, or metrics.
 - Do not hide dense report content behind decorative cards, carousels, or marketing sections.
 - Do not introduce a new frontend framework inside an existing app unless the user explicitly requests a separate standalone site.

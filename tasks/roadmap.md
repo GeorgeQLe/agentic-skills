@@ -42,6 +42,18 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Updated on 2026-05-17. `report-website` now supports single-report, directory, and `--all-output-docs` modes. Multi-document output must be route-based, with a collection index plus one route per Markdown file, stable path-derived slugs, deterministic collision handling, route metadata, converted internal links, and batch parity checks. Recommended next command: `$report-website --all-output-docs /reports`.
 
+## Current Skill Update: report-website Frontend Target Selection 2026-05-17
+
+**Goal:** Make `report-website` decide whether to integrate into an existing frontend site or create a standalone site without asking unnecessarily.
+
+**Acceptance Criteria:**
+- [x] Mirrored contracts prefer integrating into an obvious public/docs/showcase frontend app.
+- [x] Standalone site creation is limited to explicit, evidence-backed conditions.
+- [x] The skill asks only when frontend ownership, route conflicts, audience, or deployment consequences are ambiguous.
+- [x] Generated showcase data is refreshed, validation passes, and changes are committed/pushed on `master`.
+
+**Result:** Updated on 2026-05-17. `report-website` now integrates into an obvious existing documentation/public frontend by default, creates a standalone site only under explicit evidence-backed conditions, and asks a narrow question only for multiple plausible targets, route conflicts, unclear audience/access, or non-obvious deployment/navigation consequences. Recommended next command: `$report-website --all-output-docs /reports`.
+
 ## Current Benchmark: feature-interview Fresh Rerun 2026-05-17
 
 **Goal:** Run `$benchmark-test-skill feature-interview` after the route-alignment remediation and publish fresh deterministic both-agent evidence.

@@ -5,6 +5,27 @@
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
+## Current Task — Update `report-website` Frontend Target Selection 2026-05-17
+
+**Goal:** Teach `report-website` how to choose between integrating into an existing frontend documentation/public site and creating a separate site.
+
+**Plan:**
+- [x] Inspect current target-selection wording and clean worktree state.
+- [x] Add a default integration policy for obvious public/docs/showcase apps.
+- [x] Add standalone-site conditions and narrow ask-only ambiguity triggers.
+- [x] Refresh generated showcase data and run validation.
+- [x] Commit and push intended changes on `master`.
+
+## Review — Update `report-website` Frontend Target Selection 2026-05-17
+
+- Added frontend target-selection rules to mirrored `report-website` contracts.
+- The skill now defaults to integrating into an existing public/docs/showcase frontend when one is obvious from repo evidence.
+- Standalone site creation is limited to no existing frontend, explicit user request, separate brand/domain/audience/access needs, or existing app incompatibility with static report routes.
+- The skill asks only when multiple plausible apps exist, integration affects public navigation/deployment in a non-obvious way, the base route conflicts, or audience/access cannot be inferred.
+- Refreshed Skills Showcase generated data after contract updates.
+- Validation passed: `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken`; `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`; `/opt/homebrew/bin/bash ./scripts/skill-next-step-routing.sh --missing`; `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests bench:coverage`; `git diff --check`.
+- **Recommended next command:** `$report-website --all-output-docs /reports`
+
 ## Current Task — Update `report-website` Route-Based Batch Mode 2026-05-17
 
 **Goal:** Extend `report-website` so it can build routes for all documented Markdown output files, with one collection index and one generated route per document.
