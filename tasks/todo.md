@@ -29,6 +29,32 @@
 - Generated Skills Showcase data and benchmark matrix were refreshed after tracked skill behavior and persisted benchmark evidence changed.
 - **Recommended next command:** `$benchmark-test-skill update-packages`
 
+## Current Task — Fresh Benchmark `update-packages` After Risk Handling 2026-05-17
+
+**Goal:** Run `$benchmark-test-skill update-packages` after the major-upgrade risk-handling update and publish deterministic both-agent benchmark evidence.
+
+**Plan:**
+- [x] Confirm `$benchmark-test-skill` is the active workflow and `update-packages` is only the benchmark target argument.
+- [x] Run `pnpm bench --list-skills` and record `update-packages` coverage status.
+- [x] Run `pnpm verify --skill update-packages`; stop before bench if verification fails.
+- [x] Run `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` only after verify passes.
+- [x] Write and validate `benchmark/test-update-packages-2026-05-17.md` with verify, benchmark, latency, cost, consistency, raw paths, failures, and recommended next route.
+- [x] Refresh generated evidence if curated benchmark evidence changes, validate, record results, then commit and push intended changes on `master`.
+
+## Review — Fresh Benchmark `update-packages` After Risk Handling 2026-05-17
+
+- Command resolution: `$benchmark-test-skill` was the active workflow; `update-packages` was treated only as the benchmark target argument.
+- Eligibility: `update-packages` is known with custom coverage via `tests/layer4/setups/tier23-global-workflows.setup.ts`.
+- Verify passed: layer1 PASS in 3.3s with 1,210 tests across 15 files; layer2 SKIP because no target-specific layer2 tests matched `update-packages`.
+- Benchmark ran with `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0`.
+- Claude session `update-packages-claude-e7c523af`: 1/3 evaluated hard assertion pass rate, 0 infrastructure blocks, 83.3% output-quality score, p50 latency 49.3s, and $0.75 total estimated cost.
+- Codex session `update-packages-codex-c8dbd66e`: 2/3 evaluated hard assertion pass rate, 0 infrastructure blocks, 93.6% output-quality score, p50 latency 90.2s, and $0.75 total estimated cost.
+- Failed assertions: Claude runs #1 and #2 and Codex run #2 missed `Output avoids unqualified pnpm@latest`.
+- Report written at `benchmark/test-update-packages-2026-05-17.md`.
+- Generated Skills Showcase data and the benchmark results matrix were refreshed after the curated benchmark report changed.
+- Validation passed: report field scan; `pnpm --dir tests bench:coverage`; `pnpm --dir tests exec vitest run --project layer1 benchmark-results-matrix skills-showcase-benchmark-demo`; `scripts/validate-skills-showcase-data.sh`; `git diff --check`.
+- **Recommended next skill:** `$session-triage update-packages benchmark failure`
+
 ## Current Task — Fresh Benchmark `benchmark-agent-review` Retained Artifact Evidence 2026-05-17
 
 **Goal:** Run `$benchmark-test-skill benchmark-agent-review` after the retained-artifact evidence fixture update and publish fresh deterministic both-agent benchmark evidence.
@@ -54,6 +80,17 @@
 - Generated Skills Showcase data and the benchmark results matrix were refreshed after the curated benchmark report changed.
 - Validation passed: report field scan; `pnpm --dir tests bench:coverage`; `pnpm --dir tests exec vitest run --project layer1 benchmark-results-matrix skills-showcase-benchmark-demo`; `git diff --check`. Pre-commit `scripts/validate-skills-showcase-data.sh` regenerated intended asset changes and reported them as stale pending commit.
 - **Recommended next skill:** `$benchmark-agent-review benchmark-agent-review`
+
+## Current Task — Agent Review `benchmark-agent-review` Retained Artifact Evidence 2026-05-17
+
+**Goal:** Review the latest persisted `benchmark-agent-review` Claude and Codex benchmark outputs for subjective operator quality after retained `ship-manifest.md` evidence was added to the fixture.
+
+**Plan:**
+- [ ] Resolve latest Claude and Codex run directories from `benchmark/test-benchmark-agent-review-2026-05-17.md`.
+- [ ] Inspect retained generated artifacts and benchmark metadata, excluding infrastructure-blocked runs.
+- [ ] Grade each evaluated output against the agent-review rubric separately from deterministic benchmark metrics.
+- [ ] Write `benchmark/review-benchmark-agent-review-2026-05-17.md` with scores, findings, remediation, and next route.
+- [ ] Refresh generated evidence if curated review evidence changes, validate, record results, then commit and push intended changes on `master`.
 
 ## Current Task — Targeted Update `benchmark-agent-review` Route Prompt Alignment 2026-05-17
 
