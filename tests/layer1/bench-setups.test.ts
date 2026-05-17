@@ -255,6 +255,85 @@ describe("benchmark setup registry", () => {
     expect(recommendedExactNextRoutePattern("$run").test("**Recommended next command:** $run for Codex")).toBe(false);
   });
 
+  it("requires runner-specific final routing and allows fixture-backed package-lock evidence for update-packages", () => {
+    const setup = resolveBenchSetup("update-packages");
+    expect(setup).toBeDefined();
+
+    const reportBody = (route: string) => [
+      "# Package Update Plan",
+      "",
+      "This package-update-plan.md records the update plan.",
+      "The source project has package-lock.json and no pnpm-lock.yaml according to package-lock-note.md.",
+      "Package-manager migration strategy: migrate to pnpm because no deployment notes require npm.",
+      "Age-gate config: create `.npmrc` with `min-release-age=8` and `minimum-release-age=11520`.",
+      "For modern pnpm project config, also use `minimumReleaseAge: 11520`.",
+      "Eligible versions older than 8 days: react 19.2.0, zod 3.25.76, vitest 3.2.4.",
+      "Skipped packages: react 19.3.0, zod 4.1.12, and vitest 4.0.0 because they are inside the 8-day safety window.",
+      "Verification commands: pnpm install, pnpm test, pnpm build.",
+      `Recommended next command: ${route}`,
+    ].join("\n\n");
+
+    const codexWorkDir = mkdtempSync(resolve(tmpdir(), "update-packages-codex-route-"));
+    writeFileSync(resolve(codexWorkDir, "package-update-plan.md"), reportBody("$run"));
+
+    const claudeWorkDir = mkdtempSync(resolve(tmpdir(), "update-packages-claude-route-"));
+    writeFileSync(resolve(claudeWorkDir, "package-update-plan.md"), reportBody("/run"));
+
+    const codexAssertions = setup!.assertResult(
+      { stdout: "", stderr: "", exitCode: 0, workDir: codexWorkDir, files: ["package-update-plan.md"] },
+      { agent: "codex" },
+    );
+    const claudeAssertions = setup!.assertResult(
+      { stdout: "", stderr: "", exitCode: 0, workDir: claudeWorkDir, files: ["package-update-plan.md"] },
+      { agent: "claude" },
+    );
+
+    expect(codexAssertions.find((assertion) => assertion.description === "Output includes .npmrc")).toMatchObject({ pass: true });
+    expect(codexAssertions.find((assertion) => assertion.description === "Output includes min-release-age")).toMatchObject({ pass: true });
+    expect(codexAssertions.find((assertion) => assertion.description === "Output recommends $run")).toMatchObject({ pass: true });
+    expect(claudeAssertions.find((assertion) => assertion.description === "Output recommends /run")).toMatchObject({ pass: true });
+
+    const quality = setup!.qualityEvaluator?.evaluate(readFileSync(resolve(codexWorkDir, "package-update-plan.md"), "utf8"));
+
+    expect(quality?.criteria.find((criterion) => criterion.id === "workflow-artifact-reference")).toMatchObject({ passed: true });
+    expect(quality?.criteria.find((criterion) => criterion.id === "workflow-next-route")).toMatchObject({ passed: true });
+    expect(quality?.criteria.find((criterion) => criterion.id === "no-generic-or-external-overreach")).toMatchObject({ passed: true });
+    expect(quality?.criticalFailures).not.toContain("no-generic-or-external-overreach");
+  });
+
+  it("does not accept package-manager shell commands as the final update-packages handoff", () => {
+    const setup = resolveBenchSetup("update-packages");
+    expect(setup).toBeDefined();
+
+    const workDir = mkdtempSync(resolve(tmpdir(), "update-packages-shell-route-"));
+    writeFileSync(
+      resolve(workDir, "package-update-plan.md"),
+      [
+        "# Package Update Plan",
+        "This package-update-plan.md records the update plan.",
+        "Package-manager migration strategy: migrate to pnpm.",
+        "Age-gate config: create `.npmrc` with `min-release-age=8` and `minimum-release-age=11520`.",
+        "Eligible versions older than 8 days: react 19.2.0, zod 3.25.76, vitest 3.2.4.",
+        "Skipped packages: react 19.3.0, zod 4.1.12, and vitest 4.0.0.",
+        "Verification commands: pnpm install, pnpm test, pnpm build.",
+        "Next command: pnpm install && pnpm test && pnpm build",
+      ].join("\n\n"),
+    );
+
+    const assertions = setup!.assertResult(
+      { stdout: "", stderr: "", exitCode: 0, workDir, files: ["package-update-plan.md"] },
+      { agent: "codex" },
+    );
+
+    expect(assertions.find((assertion) => assertion.description === "Output includes next command handoff")).toMatchObject({ pass: true });
+    expect(assertions.find((assertion) => assertion.description === "Output recommends $run")).toMatchObject({ pass: false });
+
+    const quality = setup!.qualityEvaluator?.evaluate(readFileSync(resolve(workDir, "package-update-plan.md"), "utf8"));
+
+    expect(quality?.criteria.find((criterion) => criterion.id === "workflow-next-route")).toMatchObject({ passed: false });
+    expect(quality?.criticalFailures).toContain("workflow-next-route");
+  });
+
   it("uses agent-specific route assertions for the run workflow setup", () => {
     const setup = resolveBenchSetup("run");
     expect(setup).toBeDefined();

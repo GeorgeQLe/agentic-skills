@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Update: update-packages Benchmark Route And Fixture Rubric 2026-05-17
+
+**Goal:** Fix the `update-packages` benchmark setup so it tests runner-native final handoffs and does not penalize fixture-backed `package-lock.json` evidence.
+
+**Acceptance Criteria:**
+- [x] `update-packages` benchmark prompt requires package-manager shell commands inside `package-update-plan.md`, not as the final handoff.
+- [x] The setup expects `/run` for Claude and `$run` for Codex.
+- [x] `package-lock.json` is allowed only when the setup fixture explicitly provides it.
+- [x] Focused layer1 tests cover accepted runner routes, rejected shell-command handoff, age-gate facts, and fixture-backed `package-lock.json`.
+- [x] Validation passes and results are recorded in `tasks/todo.md`; intended changes are committed and pushed on `master`.
+
+**Result:** Updated on 2026-05-17. `update-packages` benchmark coverage now requires runner-native final handoffs while keeping package-manager commands inside the generated plan artifact, and it allows the fixture-backed `package-lock.json` term without weakening the generic fabrication guard for other workflows. Recommended next command: `$benchmark-test-skill update-packages`.
+
 ## Current Benchmark: update-packages 2026-05-17
 
 **Goal:** Run `$benchmark-test-skill update-packages` after the installer age-gate contract update and publish deterministic both-agent evidence.
