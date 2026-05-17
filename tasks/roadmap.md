@@ -56,6 +56,20 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Completed on 2026-05-17. Reviewed Claude session `feature-interview-claude-e5b18930` and Codex session `feature-interview-codex-1ff31029`, covering four evaluated artifacts and excluding two Claude infrastructure-blocked runs. Subjective quality was strong overall: Codex artifacts were excellent, while Claude's evaluated artifact was good with a retained-file traceability gap and one unsupported installed-skill-list context claim. Median subjective score was 92.5/100 with range 84-96. Generated benchmark matrix/showcase data was refreshed and validated. Report: `benchmark/review-feature-interview-2026-05-17.md`. Recommended next skill: `$targeted-skill-builder feature-interview benchmark artifact path evidence`.
 
+## Current Targeted Update: feature-interview Benchmark Artifact Path Evidence 2026-05-17
+
+**Goal:** Close the retained-artifact traceability gap from the `feature-interview` agent review by requiring interview logs to cite their own artifact path.
+
+**Acceptance Criteria:**
+- [x] The gap is classified as an existing `feature-interview` update, not a new skill.
+- [x] Mirrored Claude and Codex `feature-interview` contracts require an explicit artifact path in the interview log.
+- [x] The Tier 1 benchmark prompt asks for the artifact path line.
+- [x] Focused layer1 benchmark setup coverage proves the contract, prompt, route, and `file-reference` quality behavior.
+- [x] Target verify, one-run Codex smoke benchmark, benchmark coverage, generated-data validation, and whitespace checks pass.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Completed on 2026-05-17. Updated mirrored `feature-interview` contracts to require `Artifact path: the exact path of this interview log.`, tightened the Tier 1 fixture prompt, and added layer1 coverage for artifact-path traceability. A one-run Codex smoke benchmark passed 1/1 hard assertions with 100.0% quality including `file-reference`; the temporary ignored smoke run was removed before regenerating public matrix data so the curated 3-run benchmark remains the public result. Generated benchmark matrix/showcase data now links the `feature-interview` subjective review. Recommended next skill: `$benchmark-test-skill feature-interview`.
+
 ## Current Triage: roadmap Benchmark Failure Fresh Rerun 2026-05-17
 
 **Goal:** Investigate the fresh `$benchmark-test-skill roadmap` failure and recommend the smallest verified fix.
