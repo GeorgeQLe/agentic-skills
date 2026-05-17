@@ -1705,6 +1705,128 @@ describe("benchmark setup registry", () => {
     expect(target?.setup?.skill).toBe("assumption-tracker");
   });
 
+  it("requires runner-aware targeted-skill-builder routes for benchmark-agent-review", () => {
+    const setup = resolveBenchSetup("benchmark-agent-review");
+    const target = resolveBenchTarget("benchmark-agent-review");
+
+    expect(setup?.skill).toBe("benchmark-agent-review");
+    expect(target).toMatchObject({
+      skill: "benchmark-agent-review",
+      coverageStatus: "custom",
+      setupPath: "tests/layer4/setups/packs/pack-workflows.setup.ts",
+    });
+    expect(setup?.prompt).toContain("remediation-ready handoff for the residual-risk-awareness output-quality gap");
+    expect(setup?.prompt).toContain("claude: /targeted-skill-builder benchmark-agent-review residual-risk-awareness output-quality gap");
+    expect(setup?.prompt).toContain("codex: $targeted-skill-builder benchmark-agent-review residual-risk-awareness output-quality gap");
+
+    const workDir = mkdtempSync(resolve(tmpdir(), "benchmark-agent-review-route-"));
+    setup!.setupProject?.(workDir);
+
+    const baseOutput = [
+      "# Pack Benchmark Output",
+      "",
+      "Pack: agentic-skills-bench",
+      "Skill: benchmark-agent-review",
+      "This subjective quality review scores the persisted output artifact and separates benchmark score from output quality.",
+      "Evidence: pack-input.md says Hard assertions: 100% and Deterministic quality score: 78.6%.",
+      "Evidence: fixtures/local-evidence.md says the fixture is local and deterministic.",
+      "Risk: ship-manifest.md is compliant but lacks residual-risk awareness, so remediation should target that output-quality gap.",
+      "",
+    ].join("\n");
+
+    writeFileSync(
+      resolve(workDir, "pack-benchmark-output.md"),
+      `${baseOutput}Recommended next command: /targeted-skill-builder benchmark-agent-review residual-risk-awareness output-quality gap\n`,
+    );
+    const claudeAssertions = setup!.assertResult(
+      {
+        stdout: "",
+        stderr: "",
+        exitCode: 0,
+        workDir,
+        files: ["pack-benchmark-output.md"],
+      },
+      { agent: "claude" },
+    );
+    expect(
+      claudeAssertions.find(
+        (assertion) =>
+          assertion.description === "Output recommends /targeted-skill-builder benchmark-agent-review residual-risk-awareness output-quality gap",
+      ),
+    ).toMatchObject({ pass: true });
+
+    const codexAssertionsWithClaudeRoute = setup!.assertResult(
+      {
+        stdout: "",
+        stderr: "",
+        exitCode: 0,
+        workDir,
+        files: ["pack-benchmark-output.md"],
+      },
+      { agent: "codex" },
+    );
+    expect(
+      codexAssertionsWithClaudeRoute.find(
+        (assertion) =>
+          assertion.description === "Output recommends $targeted-skill-builder benchmark-agent-review residual-risk-awareness output-quality gap",
+      ),
+    ).toMatchObject({ pass: false });
+
+    writeFileSync(
+      resolve(workDir, "pack-benchmark-output.md"),
+      `${baseOutput}Recommended next command: $targeted-skill-builder benchmark-agent-review residual-risk-awareness output-quality gap\n`,
+    );
+    const codexAssertions = setup!.assertResult(
+      {
+        stdout: "",
+        stderr: "",
+        exitCode: 0,
+        workDir,
+        files: ["pack-benchmark-output.md"],
+      },
+      { agent: "codex" },
+    );
+    expect(
+      codexAssertions.find(
+        (assertion) =>
+          assertion.description === "Output recommends $targeted-skill-builder benchmark-agent-review residual-risk-awareness output-quality gap",
+      ),
+    ).toMatchObject({ pass: true });
+
+    for (const route of ["$targeted-skill-builder", "$benchmark-agent-review", "$ship-end", "$expert-review"]) {
+      writeFileSync(resolve(workDir, "pack-benchmark-output.md"), `${baseOutput}Recommended next command: ${route}\n`);
+      const genericAssertions = setup!.assertResult(
+        {
+          stdout: "",
+          stderr: "",
+          exitCode: 0,
+          workDir,
+          files: ["pack-benchmark-output.md"],
+        },
+        { agent: "codex" },
+      );
+      expect(
+        genericAssertions.find(
+          (assertion) =>
+            assertion.description === "Output recommends $targeted-skill-builder benchmark-agent-review residual-risk-awareness output-quality gap",
+        ),
+      ).toMatchObject({ pass: false });
+    }
+
+    const nextRouteCriterion = setup!.qualityEvaluator?.rubric.criteria.find((criterion) => criterion.id === "pack-next-route");
+    expect(
+      nextRouteCriterion?.evaluate(
+        "Recommended next command: /targeted-skill-builder benchmark-agent-review residual-risk-awareness output-quality gap",
+      ),
+    ).toMatchObject({ score: 1 });
+    expect(
+      nextRouteCriterion?.evaluate(
+        "Recommended next command: $targeted-skill-builder benchmark-agent-review residual-risk-awareness output-quality gap",
+      ),
+    ).toMatchObject({ score: 1 });
+    expect(nextRouteCriterion?.evaluate("Recommended next command: $targeted-skill-builder")).toMatchObject({ score: 0 });
+  });
+
   it("requires runner-aware next-route coverage for content-programming", () => {
     const setup = resolveBenchSetup("content-programming");
     const target = resolveBenchTarget("content-programming");
