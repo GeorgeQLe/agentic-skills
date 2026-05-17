@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-05-17 — update-packages benchmark route and fixture rubric alignment
+
+- Updated the `update-packages` custom benchmark setup to require runner-native final handoffs: `/run` for Claude and `$run` for Codex.
+- Kept package-manager shell commands inside `package-update-plan.md` instead of allowing them as the final assistant handoff.
+- Added setup-local fixture-term allowance so `package-lock.json` is accepted only when the fixture evidence provides it, preserving the generic fabrication guard elsewhere.
+- Added focused layer1 tests for runner routes, shell-command handoff rejection, fixture-backed `package-lock.json`, and age-gate facts.
+- Validation passed: focused layer1 setup/quality tests, benchmark coverage, `update-packages` verify, skill hygiene scripts under Bash, install script, targeted `rg`, and whitespace checks.
+- Recommended next command: `$benchmark-test-skill update-packages`.
+
 ## 2026-05-17 — Report-website global skill
 
 - Added mirrored `report-website` skill contracts for Codex and Claude to convert Markdown reports into clean JSX frontend report websites.

@@ -5,6 +5,29 @@
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
+## Current Task — Targeted Update `update-packages` Benchmark Route And Fixture Rubric 2026-05-17
+
+**Goal:** Align the `update-packages` benchmark setup with runner-specific final routes and fixture-backed package-lock evidence.
+
+**Plan:**
+- [x] Read relevant lessons, triage report, mirrored `update-packages` contracts, and benchmark setup.
+- [x] Update the Tier 2/3 global workflow setup so `update-packages` requires runner-native final handoffs: `/run` for Claude and `$run` for Codex.
+- [x] Allow fixture-backed `package-lock.json` only for this setup while preserving the generic fabrication guard elsewhere.
+- [x] Add focused layer1 coverage for the final route, shell-command rejection, package-lock allowance, and age-gate facts.
+- [x] Run focused validation, generated-data validation, record results, then commit and push intended changes on `master`.
+
+## Review — Targeted Update `update-packages` Benchmark Route And Fixture Rubric 2026-05-17
+
+- Decision: existing benchmark setup update, not a new skill and not an `update-packages` skill-contract change.
+- Evidence used: `benchmark/triage-update-packages-2026-05-17.md`, current mirrored `update-packages` contracts, `tasks/lessons.md`, `tests/layer4/setups/tier23-global-workflows.setup.ts`, and existing layer1 setup tests.
+- Evidence intentionally skipped: broad session history, because this is a verified narrow benchmark setup/rubric defect.
+- Updated `tests/layer4/setups/tier23-global-workflows.setup.ts` so the `update-packages` prompt asks for runner-native final handoffs and keeps package-manager shell commands inside `package-update-plan.md`.
+- Added setup-local `allowedFixtureTerms` so `package-lock.json` is not treated as fabricated when the fixture explicitly includes `package-lock-note.md`; the generic forbidden-term guard remains unchanged for other workflows.
+- Added layer1 coverage in `tests/layer1/bench-setups.test.ts` proving `/run` for Claude, `$run` for Codex, rejection of shell commands as the final handoff, fixture-backed `package-lock.json`, and age-gate facts.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 bench-setups bench-quality`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill update-packages`; `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken`; `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`; `/opt/homebrew/bin/bash ./scripts/skill-next-step-routing.sh --missing`; `./install.sh`; targeted `rg`; `git diff --check`.
+- Generated benchmark matrix and GitHub proof data were refreshed by `scripts/validate-skills-showcase-data.sh` after persisted benchmark reports changed the latest matrix rows.
+- **Recommended next command:** `$benchmark-test-skill update-packages`
+
 ## Current Task — Benchmark `update-packages` 2026-05-17
 
 **Goal:** Run `$benchmark-test-skill update-packages` against the current repository state and publish deterministic both-agent benchmark evidence.
