@@ -5,6 +5,31 @@
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
+## Current Task — Agent Review `analyze-sessions` 2026-05-17
+
+**Goal:** Review the latest persisted `analyze-sessions` Claude and Codex benchmark outputs for subjective operator quality.
+
+**Plan:**
+- [x] Resolve latest Claude and Codex run directories from `benchmark/test-analyze-sessions-2026-05-17.md`.
+- [x] Inspect retained generated `session-analysis.md` artifacts and benchmark metadata, excluding infrastructure-blocked runs.
+- [x] Grade each evaluated output against the agent-review rubric separately from deterministic benchmark metrics.
+- [x] Write `benchmark/review-analyze-sessions-2026-05-17.md` with scores, findings, remediation, and next route.
+- [x] Refresh generated evidence if curated review evidence changes, validate, record results, then commit and push intended changes on `master`.
+
+## Review — Agent Review `analyze-sessions` 2026-05-17
+
+- Reviewed latest persisted benchmark outputs from `benchmark/test-analyze-sessions-2026-05-17.md`.
+- Source runs: `tests/benchmarks/runs/analyze-sessions-claude-0cb06af8/` and `tests/benchmarks/runs/analyze-sessions-codex-2da5dfa4/`.
+- Reviewed six retained `session-analysis.md` artifacts, excluding no runs because there were 0 infrastructure blocks.
+- Deterministic context: both agents passed 3/3 hard assertions with 92.3% output quality.
+- Subjective verdict: excellent overall; all reviewed artifacts identified the recurring post-doc-edit validation plus lessons-capture miss, separated evidence from inference, named a plausible owner surface, gave validation expectations, and used one runner-native route.
+- Median subjective score: 92.5/100; range: 90-95.
+- Main caveat: owner attribution can sound firmer than the sparse fixture warrants, but this is not severe enough to require remediation.
+- Report written: `benchmark/review-analyze-sessions-2026-05-17.md`.
+- Generated benchmark matrix and Skills Showcase assets were refreshed; matrix now links the 2026-05-17 review.
+- Validation passed: report field scan; `pnpm --dir tests bench:coverage`; `pnpm --dir tests exec vitest run --project layer1 benchmark-results-matrix skills-showcase-benchmark-demo`; `git diff --check`. `scripts/validate-skills-showcase-data.sh` was rerun and reported the regenerated assets as dirty pending commit, which is expected before the final commit.
+- **Recommended next command:** `$ship`
+
 ## Current Task — Tighten `update-packages` Install Age Gate 2026-05-17
 
 **Goal:** Update the `update-packages` skill so package updates leave behind package-manager configuration that prevents npm and pnpm from resolving packages published within the last 8 days.
