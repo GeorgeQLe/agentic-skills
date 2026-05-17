@@ -17,10 +17,10 @@
     "bench:quick": "BENCH_RUNS=5 vitest run --project layer4"
   },
   "devDependencies": {
-    "vitest": "^3.2.1",
+    "glob": "^13.0.6",
     "gray-matter": "^4.0.3",
-    "tsx": "^4.19.4",
-    "typescript": "^5.8.3",
-    "glob": "^11.0.2"
+    "tsx": "4.21.0",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.5"
   }
 }
