@@ -5,6 +5,41 @@
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
+## Current Task — Benchmark `roadmap` Post-Evidence-Rubric-Triage 2026-05-17
+
+**Goal:** Run `$benchmark-test-skill roadmap` against the current repository state and publish fresh deterministic both-agent benchmark evidence.
+
+**Plan:**
+- [ ] Confirm `$benchmark-test-skill` is the active workflow and `roadmap` is only the benchmark target argument.
+- [ ] Run `pnpm bench --list-skills` and record `roadmap` coverage status.
+- [ ] Run `pnpm verify --skill roadmap`; stop before bench if verification fails.
+- [ ] If verify passes, run `pnpm bench --skill roadmap --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [ ] Write and validate `benchmark/test-roadmap-2026-05-17.md` with verify, benchmark, latency, cost, consistency, raw paths, and recommended next route.
+- [ ] Refresh generated evidence if curated benchmark evidence changes, record results here, then commit and push intended changes on `master`.
+
+## Current Task — Benchmark `feature-interview` Post-Route-Fix 2026-05-17
+
+**Goal:** Run `$benchmark-test-skill feature-interview` against the current repository state after the route-alignment harness fix and publish deterministic both-agent evidence.
+
+**Plan:**
+- [x] Confirm `$benchmark-test-skill` is the active workflow and `feature-interview` is only the benchmark target argument.
+- [x] Run `pnpm bench --list-skills` and record `feature-interview` coverage status.
+- [x] Run `pnpm verify --skill feature-interview`; stop before bench if verification fails.
+- [x] If verify passes, run `pnpm bench --skill feature-interview --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [x] Write and validate `benchmark/test-feature-interview-2026-05-17.md` with verify, benchmark, latency, cost, consistency, raw paths, and recommended next route.
+- [ ] Refresh generated evidence if curated benchmark evidence changes, record results here, then commit and push intended changes on `master`.
+
+## Review — Benchmark `feature-interview` Post-Route-Fix 2026-05-17
+
+- Command resolution: `$benchmark-test-skill` was the active workflow; `feature-interview` was treated only as the benchmark target argument.
+- Eligibility: `feature-interview` is known to the harness with custom coverage via `tests/layer4/setups/tier1-workflows.setup.ts`.
+- Verify passed: layer1 PASS in 3.9s with 1,204 tests across 15 files; layer2 SKIP because no target-specific layer2 tests matched `feature-interview`.
+- Benchmark ran with `pnpm bench --skill feature-interview --agent both --runs 3 --chunk-size 3 --pause 0`.
+- Claude session `feature-interview-claude-e5b18930`: 1/1 evaluated hard assertion pass rate, 2 infrastructure-blocked runs (`agent runner budget exceeded`), 92.9% output-quality score, p50 latency 35.0s, total estimated cost $0.75.
+- Codex session `feature-interview-codex-1ff31029`: 3/3 evaluated hard assertion pass rate, 0 infrastructure blocks, 97.6% output-quality score, p50 latency 68.2s, total estimated cost $0.75.
+- Report updated at `benchmark/test-feature-interview-2026-05-17.md` with raw session paths and next route.
+- **Recommended next skill:** `$benchmark-agent-review feature-interview`
+
 ## Current Task — Targeted Update `feature-interview` Benchmark Route Alignment 2026-05-17
 
 **Goal:** Align the `feature-interview` benchmark fixture with the mirrored skill contracts so unconfirmed idea interviews do not route directly to `spec-interview`.
@@ -37,6 +72,15 @@
 - **Residual risk:** Claude route behavior still needs a full both-agent rerun; the prior Claude lane was partially blocked by runner budget.
 - **Rollback note:** Revert the `feature-interview` hunk in `tier1-workflows.setup.ts` and the associated `bench-setups.test.ts` coverage if the benchmark contract intentionally returns to direct spec-interview routing.
 - **Next command:** `$benchmark-test-skill feature-interview`
+
+### Post-Fix Benchmark Evidence Update — 2026-05-17
+
+- Full both-agent rerun completed after the route-alignment commit.
+- Claude session `feature-interview-claude-e5b18930`: 1/1 evaluated hard assertions passed, 2 infrastructure-blocked runs from `agent runner budget exceeded`, 92.9% output quality, p50/p95/p99 35.0s, total cost $0.75. One critical quality failure remains for `file-reference`.
+- Codex session `feature-interview-codex-1ff31029`: 3/3 evaluated hard assertions passed, 0 infrastructure blocks, 97.6% output quality, p50 68.2s, p95 73.9s, p99 74.4s, total cost $0.75. One critical quality failure remains for `file-reference`.
+- Updated `benchmark/test-feature-interview-2026-05-17.md`, refreshed generated benchmark matrix/showcase data, and reran the generated-data freshness gate.
+- Additional validation passed: `./install.sh`; `./scripts/skill-deps.sh --broken`; `./scripts/skill-versions.sh --missing`; `./scripts/skill-next-step-routing.sh --missing`; `pnpm --dir tests exec vitest run --project layer1 bench-setups benchmark-results-matrix skills-showcase-benchmark-demo`; targeted `rg`; `scripts/validate-skills-showcase-data.sh`; `git diff --check`.
+- **Recommended next skill:** `$benchmark-agent-review feature-interview`
 
 ## Current Task — Triage `feature-interview` Benchmark Failure 2026-05-17
 
