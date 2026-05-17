@@ -84,7 +84,8 @@
 
 - Updated the Tier 1 benchmark setup for `roadmap` so the roadmap-only fixture expects `$plan-phase 1`, matching the roadmap skill contract for a newly generated roadmap that still needs implementation-step decomposition.
 - Removed `tasks/roadmap.md` from the concrete-file quality expectation for the roadmap fixture because the benchmark prompt asks for roadmap creation and next routing, not self-referential mention of the output path.
-- Validation passed: `pnpm --dir tests exec vitest run --project layer1 bench-setups`; `pnpm --dir tests verify --skill roadmap`; `git diff --check`.
+- Tightened the benchmark prompt to require an exact `## Next Command` section so the hard next-command handoff assertion remains meaningful without weakening the shared routing helper.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 bench-setups`; `pnpm --dir tests verify --skill roadmap`; `./install.sh`; `./scripts/skill-deps.sh --broken`; `./scripts/skill-versions.sh --missing`; `./scripts/skill-next-step-routing.sh --missing`; `pnpm --dir tests bench:coverage`; Codex smoke `roadmap-codex-0c6a74ce` with 1/1 hard assertions and 100.0% output quality; `git diff --check`.
 
 ### Ship Manifest — Roadmap Benchmark Route Alignment
 
@@ -92,10 +93,10 @@
 - **Changed files:** `tests/layer4/setups/tier1-workflows.setup.ts`, `tasks/todo.md`, `tasks/history.md`.
 - **Per-file purpose:** `tier1-workflows.setup.ts` aligns the benchmark route and concrete-file quality expectations with the `roadmap` contract; task/history docs record the scoped update and validation.
 - **User-goal mapping:** The source change directly addresses the triaged mismatch where a roadmap-only fixture expected `$run` instead of the contract-aligned `$plan-phase 1`.
-- **Tests run:** `pnpm --dir tests exec vitest run --project layer1 bench-setups`; `pnpm --dir tests verify --skill roadmap`; `git diff --check`.
-- **Skipped tests:** A fresh both-agent `roadmap` benchmark was not run in this shipping boundary because Phase 41 Batch 41.2 explicitly scopes the broader rerun/triage step; focused setup coverage and target verify prove the benchmark contract now compiles and passes deterministic checks.
-- **Adversarial review:** Compared the change against the `roadmap` triage finding and verified the updated setup still requires phase structure, acceptance criteria, verification language, and a next command while removing the stale `$run` expectation.
-- **Residual risk:** The next live `roadmap` benchmark may still expose runner behavior differences or Claude infrastructure blocks; Batch 41.2 remains the planned fresh evidence route.
+- **Tests run:** `pnpm --dir tests exec vitest run --project layer1 bench-setups`; `pnpm --dir tests verify --skill roadmap`; `./install.sh`; `./scripts/skill-deps.sh --broken`; `./scripts/skill-versions.sh --missing`; `./scripts/skill-next-step-routing.sh --missing`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests bench --skill roadmap --agent codex --runs 1 --chunk-size 1 --pause 0`; `git diff --check`.
+- **Skipped tests:** A fresh both-agent 3-run `roadmap` benchmark was not run in this shipping boundary because the targeted fix was proven by focused setup coverage, target verify, and a Codex smoke run. Claude previously hit runner budget exhaustion, so the next full both-agent run should happen through `$benchmark-test-skill roadmap`.
+- **Adversarial review:** Compared the change against the `roadmap` triage finding and verified the updated setup still requires phase structure, acceptance criteria, verification language, and an explicit `## Next Command` handoff while removing the stale `$run` expectation. A first Codex smoke after the route-only change failed because `## Next` was too loose for the shared handoff assertion; the prompt was tightened and the second smoke passed.
+- **Residual risk:** The next full `roadmap` benchmark may still expose Claude infrastructure blocks or broader runner behavior differences; the benchmark route mismatch itself is covered by Codex smoke `roadmap-codex-0c6a74ce`.
 - **Rollback note:** Revert the `tier1-workflows.setup.ts` hunk to restore the prior `$run` expectation if the benchmark contract is intentionally changed back.
 - **Next command:** `$run`
 
