@@ -2304,6 +2304,14 @@ Resolved all 10 findings from `/expert-review`:
 - Updated `benchmark/test-feature-interview-2026-05-17.md`; the run routes to `$session-triage feature-interview benchmark failure` because evaluated outputs failed the configured next-route assertion.
 - Refreshed generated Skills Showcase data and `docs/benchmark-results-matrix.md` after the curated benchmark evidence changed.
 
+## 2026-05-17 — feature-interview benchmark post-route-fix rerun
+
+- Reran `$benchmark-test-skill feature-interview` after the route-alignment benchmark fixture update.
+- Verified `feature-interview` custom coverage and passed `pnpm verify --skill feature-interview` with layer1 PASS in 3.9s and layer2 SKIP.
+- Ran the both-agent benchmark: Claude session `feature-interview-claude-e5b18930` had 1 evaluated hard-assertion pass and 2 runner-budget infrastructure blocks; Codex session `feature-interview-codex-1ff31029` completed 3 evaluated hard-assertion passes.
+- Updated `benchmark/test-feature-interview-2026-05-17.md`; both evaluated agent lanes passed hard assertions, while the output-quality summary still records file-reference critical failures.
+- Refreshed generated Skills Showcase data and `docs/benchmark-results-matrix.md` after the curated benchmark evidence changed.
+
 ## 2026-05-17 — Step 40.1 structured workflow replay data
 
 - Replaced tuple-based Skills Showcase workflow steps with named step objects carrying structured replay blocks for user prompt, agent response, terminal/proof output, artifact/result output, and receipt state.
