@@ -2281,3 +2281,9 @@ Resolved all 10 findings from `/expert-review`:
 - Confirmed no material remediation remains after the recent `ship` benchmark rubric fixes.
 - Regenerated Skills Showcase GitHub proof assets after the review commit push so public proof metadata points at the latest remote freshness state.
 - Verified generated data freshness, Skills Showcase production build, and whitespace checks.
+
+## 2026-05-17 — Step 40.1 structured workflow replay data
+
+- Replaced tuple-based Skills Showcase workflow steps with named step objects carrying structured replay blocks for user prompt, agent response, terminal/proof output, artifact/result output, and receipt state.
+- Updated the `/workflows` TUI and homepage workflow preview consumers to read named step fields while preserving existing rendering behavior and benchmark indexing.
+- Verified with Skills Showcase typecheck, focused app tests, production build, and whitespace validation.
