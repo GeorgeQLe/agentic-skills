@@ -16,6 +16,32 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Triage: update-packages Fresh Benchmark Failure 2026-05-17
+
+**Goal:** Verify the latest `$benchmark-test-skill update-packages` failure and identify the smallest durable fix.
+
+**Acceptance Criteria:**
+- [x] Latest benchmark report and persisted Claude/Codex run evidence are inspected.
+- [x] `update-packages` skill contracts and the custom benchmark setup expectations are compared.
+- [x] Failure is classified as skill contract gap, benchmark harness defect, generated-data issue, infrastructure block, or agent noncompliance.
+- [x] `benchmark/triage-update-packages-2026-05-17-fresh.md` records verdict, root cause, recommended fix, validation plan, and next route.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Verified benchmark setup false negative on 2026-05-17. Claude session `update-packages-claude-c99f0776` passed 2/3 hard assertion runs; the failed run wrote `package-update-plan.md` with a `## Verification` section and command blocks, but missed the setup's exact `verification commands` phrase. Codex session `update-packages-codex-e51e553b` passed 3/3. The current mirrored `update-packages` contracts require verification behavior but not that literal phrase. Report: `benchmark/triage-update-packages-2026-05-17-fresh.md`. Recommended next skill: `$targeted-skill-builder update-packages benchmark verification phrase tolerance`.
+
+## Current Triage: benchmark-agent-review Benchmark Failure 2026-05-17
+
+**Goal:** Investigate why `$benchmark-test-skill benchmark-agent-review` failed the `$targeted-skill-builder` recommendation assertion and identify the smallest verified fix.
+
+**Acceptance Criteria:**
+- [x] Latest benchmark report and persisted Claude/Codex run evidence are inspected.
+- [x] Mirrored `benchmark-agent-review` skill contracts and the custom pack benchmark setup are compared.
+- [x] Failure is classified as skill contract gap, benchmark harness defect, generated-data issue, infrastructure block, or agent noncompliance.
+- [x] `benchmark/triage-benchmark-agent-review-2026-05-17.md` records verdict, root cause, recommended fix, validation plan, and next route.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Verified benchmark setup defect on 2026-05-17. The failed benchmark had no infrastructure blocks: Claude failed 3/3 and Codex failed 1/3 on `Output recommends $targeted-skill-builder`. The custom pack setup uses a single Codex-style `nextRoute: "$targeted-skill-builder"` and only exposes `nextRoutes` values in the prompt, so the benchmark both underprompts the expected route and fails Claude against the wrong runner convention. The mirrored `benchmark-agent-review` contracts already include remediation-ready targeted-skill-builder handoffs. Report: `benchmark/triage-benchmark-agent-review-2026-05-17.md`. Recommended next skill: `$targeted-skill-builder benchmark-agent-review benchmark runner route and prompt alignment`.
+
 ## Current Benchmark: benchmark-agent-review 2026-05-17
 
 **Goal:** Run `$benchmark-test-skill benchmark-agent-review` against the current repository state and publish deterministic both-agent benchmark evidence.
