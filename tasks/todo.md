@@ -78,6 +78,29 @@
 - Validation passed: report field scan; `pnpm --dir tests bench:coverage`; `pnpm --dir tests exec vitest run --project layer1 benchmark-results-matrix skills-showcase-benchmark-demo`; `scripts/validate-skills-showcase-data.sh`; `git diff --check`.
 - **Recommended next command:** `$targeted-skill-builder benchmark-agent-review retained-artifact evidence gap`
 
+## Current Task — Targeted Update `benchmark-agent-review` Retained Artifact Evidence 2026-05-17
+
+**Goal:** Update the `benchmark-agent-review` benchmark fixture so generated reviews can inspect retained `ship-manifest.md` artifact text, not only the fixture summary.
+
+**Plan:**
+- [x] Review relevant lessons, latest subjective review, current pack fixture setup, and existing layer1 route coverage.
+- [x] Add retained source-artifact fixture support for `benchmark-agent-review`.
+- [x] Require outputs to cite concrete `ship-manifest.md` evidence in addition to summary facts.
+- [x] Add focused layer1 coverage for fixture creation, prompt requirements, and artifact-evidence assertions.
+- [x] Run focused validation, generated-data checks if needed, record results, then commit and push intended changes on `master`.
+
+## Review — Targeted Update `benchmark-agent-review` Retained Artifact Evidence 2026-05-17
+
+- Decision: existing benchmark setup update, not a new skill and not a `benchmark-agent-review` skill-contract change.
+- Evidence used: `benchmark/review-benchmark-agent-review-2026-05-17.md`, relevant benchmark-review lessons, `tests/layer4/setups/packs/pack-workflows.setup.ts`, and existing layer1 route coverage.
+- Evidence intentionally skipped: broad session history, because the subjective review localized the gap to one retained benchmark fixture.
+- Updated the pack setup to support retained fixture artifacts and added `ship-manifest.md` for `benchmark-agent-review`.
+- The benchmark prompt now requires agents to inspect `ship-manifest.md` directly, and hard assertions require concrete retained artifact evidence rather than summary-only `pack-input.md` facts.
+- Added layer1 coverage proving `ship-manifest.md` is created, the prompt asks for direct inspection, concrete artifact evidence passes, and summary-only evidence fails.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 bench-setups bench-quality`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill benchmark-agent-review`; `./scripts/skill-deps.sh --broken`; `./scripts/skill-versions.sh --missing`; `./scripts/skill-next-step-routing.sh --missing`; `./install.sh`; `pnpm --dir tests bench --skill benchmark-agent-review --agent codex --runs 1 --chunk-size 1 --pause 0` (`benchmark-agent-review-codex-dd1c3ebb`, 1/1 hard assertions, 97.5% quality); `git diff --check`.
+- Generated Skills Showcase data was not refreshed for this commit because no tracked `SKILL.md`, `PACK.md`, curated benchmark report, or curated review report changed.
+- **Recommended next command:** `$benchmark-test-skill benchmark-agent-review`
+
 ## Current Task — Fresh Triage `update-packages` Benchmark Failure 2026-05-17
 
 **Goal:** Investigate why the fresh `$benchmark-test-skill update-packages` rerun failed one Claude verification-command assertion and identify the smallest verified fix.

@@ -81,6 +81,19 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Completed on 2026-05-17. Reviewed Claude session `benchmark-agent-review-claude-10351b11` and Codex session `benchmark-agent-review-codex-558b7ba6`, covering six evaluated `pack-benchmark-output.md` artifacts and excluding no infrastructure-blocked runs. Subjective quality was good to excellent: all outputs used local fixture evidence, focused on the generated artifact's residual-risk-awareness gap rather than benchmark laxness, and routed to targeted remediation. Median subjective score was 89.5/100 with range 82-95. Main caveat: the fixture summarizes `ship-manifest.md` but does not retain the full artifact text. Report: `benchmark/review-benchmark-agent-review-2026-05-17.md`. Recommended next command: `$targeted-skill-builder benchmark-agent-review retained-artifact evidence gap`.
 
+## Current Targeted Update: benchmark-agent-review Retained Artifact Evidence 2026-05-17
+
+**Goal:** Update the `benchmark-agent-review` benchmark fixture so generated reviews can inspect retained `ship-manifest.md` artifact text, not only the fixture summary.
+
+**Acceptance Criteria:**
+- [x] The pack setup creates a retained `ship-manifest.md` fixture for `benchmark-agent-review`.
+- [x] The benchmark prompt tells agents to inspect `ship-manifest.md` directly.
+- [x] Hard assertions require generated output to cite concrete retained artifact evidence, not only `pack-input.md`.
+- [x] Focused layer1 coverage proves fixture creation, prompt requirements, and artifact-evidence scoring.
+- [x] Validation passes and results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Completed on 2026-05-17. Updated `tests/layer4/setups/packs/pack-workflows.setup.ts` so the `benchmark-agent-review` fixture retains `ship-manifest.md`, prompts direct artifact inspection, and requires generated outputs to cite concrete retained artifact evidence. Added layer1 coverage for fixture creation, prompt requirements, passing artifact-specific evidence, and rejected summary-only evidence. Codex smoke benchmark `benchmark-agent-review-codex-dd1c3ebb` passed 1/1 with 97.5% quality. Recommended next command: `$benchmark-test-skill benchmark-agent-review`.
+
 ## Current Triage: update-packages Fresh Benchmark Failure 2026-05-17
 
 **Goal:** Verify the latest `$benchmark-test-skill update-packages` failure and identify the smallest durable fix.

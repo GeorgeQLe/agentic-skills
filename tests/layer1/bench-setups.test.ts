@@ -1716,11 +1716,17 @@ describe("benchmark setup registry", () => {
       setupPath: "tests/layer4/setups/packs/pack-workflows.setup.ts",
     });
     expect(setup?.prompt).toContain("remediation-ready handoff for the residual-risk-awareness output-quality gap");
+    expect(setup?.prompt).toContain("inspect retained artifact text in ship-manifest.md directly before grading the output");
     expect(setup?.prompt).toContain("claude: /targeted-skill-builder benchmark-agent-review residual-risk-awareness output-quality gap");
     expect(setup?.prompt).toContain("codex: $targeted-skill-builder benchmark-agent-review residual-risk-awareness output-quality gap");
 
     const workDir = mkdtempSync(resolve(tmpdir(), "benchmark-agent-review-route-"));
     setup!.setupProject?.(workDir);
+    const retainedArtifact = readFileSync(resolve(workDir, "ship-manifest.md"), "utf8");
+    expect(retainedArtifact).toContain("## Residual Risks");
+    expect(retainedArtifact).toContain("Not captured.");
+    expect(retainedArtifact).toContain("## Post-Ship Monitoring");
+    expect(retainedArtifact).toContain("## Known Unknowns");
 
     const baseOutput = [
       "# Pack Benchmark Output",
@@ -1730,6 +1736,7 @@ describe("benchmark setup registry", () => {
       "This subjective quality review scores the persisted output artifact and separates benchmark score from output quality.",
       "Evidence: pack-input.md says Hard assertions: 100% and Deterministic quality score: 78.6%.",
       "Evidence: fixtures/local-evidence.md says the fixture is local and deterministic.",
+      "Evidence from ship-manifest.md: the Residual Risks section says Not captured, Post-Ship Monitoring says Not specified, and Known Unknowns says future artifact-text inspection is not documented.",
       "Risk: ship-manifest.md is compliant but lacks residual-risk awareness, so remediation should target that output-quality gap.",
       "",
     ].join("\n");
@@ -1754,7 +1761,40 @@ describe("benchmark setup registry", () => {
           assertion.description === "Output recommends /targeted-skill-builder benchmark-agent-review residual-risk-awareness output-quality gap",
       ),
     ).toMatchObject({ pass: true });
+    expect(claudeAssertions.find((assertion) => assertion.description === "Output cites retained ship-manifest.md evidence")).toMatchObject({
+      pass: true,
+    });
 
+    writeFileSync(
+      resolve(workDir, "pack-benchmark-output.md"),
+      [
+        "# Pack Benchmark Output",
+        "",
+        "Pack: agentic-skills-bench",
+        "Skill: benchmark-agent-review",
+        "Evidence: pack-input.md says ship-manifest.md lacks residual-risk awareness.",
+        "Recommended next command: /targeted-skill-builder benchmark-agent-review residual-risk-awareness output-quality gap",
+        "",
+      ].join("\n"),
+    );
+    const summaryOnlyAssertions = setup!.assertResult(
+      {
+        stdout: "",
+        stderr: "",
+        exitCode: 0,
+        workDir,
+        files: ["pack-benchmark-output.md"],
+      },
+      { agent: "claude" },
+    );
+    expect(summaryOnlyAssertions.find((assertion) => assertion.description === "Output cites retained ship-manifest.md evidence")).toMatchObject({
+      pass: false,
+    });
+
+    writeFileSync(
+      resolve(workDir, "pack-benchmark-output.md"),
+      `${baseOutput}Recommended next command: /targeted-skill-builder benchmark-agent-review residual-risk-awareness output-quality gap\n`,
+    );
     const codexAssertionsWithClaudeRoute = setup!.assertResult(
       {
         stdout: "",
