@@ -5,6 +5,27 @@
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
+## Current Task — Create `report-website` Global Skill 2026-05-17
+
+**Goal:** Add a mirrored global skill that builds a frontend website from a Markdown report by converting the report into clean JSX for readable rendering.
+
+**Plan:**
+- [x] Confirm repo context and preserve unrelated dirty work.
+- [x] Create mirrored Codex and Claude `report-website` skill contracts.
+- [x] Register benchmark coverage for the new global skill.
+- [x] Run required validation and regenerate generated showcase data.
+- [x] Record review results, commit, and push intended changes on `master`.
+
+## Review — Create `report-website` Global Skill 2026-05-17
+
+- Created mirrored skill contracts at `global/codex/report-website/SKILL.md` and `global/claude/report-website/SKILL.md`.
+- The workflow covers report source/target resolution, Markdown-to-structured-content parsing, clean JSX implementation, responsive report reading UX, browser visual verification, and default shipping.
+- Registered `report-website` in `tests/harness/bench-coverage.ts` as a custom Tier 2 global workflow fixture skill.
+- Refreshed generated Skills Showcase data after adding tracked `SKILL.md` files.
+- Validation passed: `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken`; `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`; `/opt/homebrew/bin/bash ./scripts/skill-next-step-routing.sh --missing`; `node scripts/generate-skills-showcase-data.mjs`; `node scripts/generate-skills-showcase-github-data.mjs`; `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests bench:coverage`; `git diff --check`.
+- Pre-existing staged/generated `feature-interview` review artifacts were left out of this task scope.
+- **Recommended next command:** `$report-website <report.md>`
+
 ## Current Task — Benchmark `feature-interview` Fresh Rerun 2026-05-17
 
 **Goal:** Run `$benchmark-test-skill feature-interview` against the current repository harness and publish fresh deterministic both-agent benchmark evidence.
