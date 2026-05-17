@@ -959,6 +959,108 @@ describe("benchmark setup registry", () => {
     expect(setup!.qualityEvaluator?.rubric.criteria.some((criterion) => criterion.id === "file-reference")).toBe(false);
   });
 
+  it("keeps the feature-interview benchmark from routing unconfirmed ideas directly to spec-interview", () => {
+    const setup = resolveBenchSetup("feature-interview");
+    expect(setup).toBeDefined();
+    expect(setup!.prompt).toContain("Treat the planning destination as confirmed for roadmap sequencing");
+    expect(setup!.prompt).toContain("do not route directly to spec-interview");
+
+    const codexSkill = readFileSync(resolve(TESTS_ROOT, "../global/codex/feature-interview/SKILL.md"), "utf8");
+    const claudeSkill = readFileSync(resolve(TESTS_ROOT, "../global/claude/feature-interview/SKILL.md"), "utf8");
+
+    expect(codexSkill).toContain("Do not route brainstorm ideas directly to `$spec-interview`");
+    expect(claudeSkill).toContain("Do not route brainstorm ideas directly to `/spec-interview`");
+
+    const workDir = mkdtempSync(resolve(tmpdir(), "feature-interview-route-"));
+    mkdirSync(resolve(workDir, "specs"), { recursive: true });
+    writeFileSync(
+      resolve(workDir, "specs/benchmark-reporting-feature-interview.md"),
+      [
+        "# Benchmark Reporting Feature Interview",
+        "",
+        "## Assumptions",
+        "Benchmark reports need custom, generic, and blocked coverage labels.",
+        "",
+        "## Evidence",
+        "`feature-idea.md` requests custom, generic, and blocked coverage visibility in benchmark reports.",
+        "",
+        "## Decision",
+        "Proceed to roadmap sequencing for the confirmed reporting slice.",
+        "",
+        "## Risks",
+        "Blocked coverage labels need reasons so reports do not hide benchmark gaps.",
+        "",
+        "## Next command",
+        "`$roadmap`",
+      ].join("\n"),
+    );
+
+    const codexAssertions = setup!.assertResult(
+      {
+        stdout: "",
+        stderr: "",
+        exitCode: 0,
+        workDir,
+        files: ["specs/benchmark-reporting-feature-interview.md"],
+      },
+      { agent: "codex" },
+    );
+
+    expect(codexAssertions.find((assertion) => assertion.description === "Output recommends $roadmap")).toMatchObject({
+      pass: true,
+    });
+    expect(codexAssertions.some((assertion) => assertion.description === "Output recommends $spec-interview")).toBe(false);
+
+    writeFileSync(
+      resolve(workDir, "specs/benchmark-reporting-feature-interview.md"),
+      [
+        "# Benchmark Reporting Feature Interview",
+        "",
+        "## Assumptions",
+        "Benchmark reports need custom, generic, and blocked coverage labels.",
+        "",
+        "## Evidence",
+        "`feature-idea.md` requests custom, generic, and blocked coverage visibility in benchmark reports.",
+        "",
+        "## Decision",
+        "Proceed to roadmap sequencing for the confirmed reporting slice.",
+        "",
+        "## Risks",
+        "Blocked coverage labels need reasons so reports do not hide benchmark gaps.",
+        "",
+        "## Next command",
+        "`/roadmap`",
+      ].join("\n"),
+    );
+
+    const claudeAssertions = setup!.assertResult(
+      {
+        stdout: "",
+        stderr: "",
+        exitCode: 0,
+        workDir,
+        files: ["specs/benchmark-reporting-feature-interview.md"],
+      },
+      { agent: "claude" },
+    );
+
+    expect(claudeAssertions.find((assertion) => assertion.description === "Output recommends /roadmap")).toMatchObject({
+      pass: true,
+    });
+    expect(claudeAssertions.some((assertion) => assertion.description === "Output recommends /spec-interview")).toBe(false);
+
+    const nextRouteCriterion = setup!.qualityEvaluator?.rubric.criteria.find((criterion) => criterion.id === "actionable-next-route");
+    expect(nextRouteCriterion?.evaluate("## Next command\n`$roadmap`")).toMatchObject({
+      score: 1,
+    });
+    expect(nextRouteCriterion?.evaluate("## Next command\n`/roadmap`")).toMatchObject({
+      score: 1,
+    });
+    expect(nextRouteCriterion?.evaluate("## Next command\n`$spec-interview`")).toMatchObject({
+      score: 0,
+    });
+  });
+
   it("keeps session-triage benchmark routing aligned with the no-skill-change branch", () => {
     const setup = resolveBenchSetup("session-triage");
     expect(setup).toBeDefined();

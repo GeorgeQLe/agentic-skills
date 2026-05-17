@@ -5,6 +5,39 @@
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
+## Current Task — Targeted Update `feature-interview` Benchmark Route Alignment 2026-05-17
+
+**Goal:** Align the `feature-interview` benchmark fixture with the mirrored skill contracts so unconfirmed idea interviews do not route directly to `spec-interview`.
+
+**Plan:**
+- [x] Read relevant lessons and the fresh `feature-interview` benchmark triage report.
+- [x] Confirm this is a benchmark harness update, not a mirrored `feature-interview` skill contract change or new skill.
+- [x] Update the Tier 1 `feature-interview` setup to expect roadmap sequencing when the fixture prompt confirms the planning destination.
+- [x] Add focused layer1 coverage that rejects direct `spec-interview` routing for this fixture.
+- [x] Run focused validation, record results, then commit and push intended changes on `master`.
+
+## Review — Targeted Update `feature-interview` Benchmark Route Alignment 2026-05-17
+
+- Updated the Tier 1 `feature-interview` benchmark fixture so its no-follow-up prompt explicitly confirms roadmap sequencing and forbids direct `spec-interview` routing.
+- Replaced the hard-coded `$spec-interview` route expectation with agent-appropriate roadmap routes: `/roadmap` for Claude and `$roadmap` for Codex.
+- Added focused layer1 coverage proving the fixture prompt carries the route constraint, mirrored skill contracts forbid direct spec-interview routing, both roadmap route variants pass hard assertions, and direct spec-interview fails the quality route criterion.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 bench-setups`; `pnpm --dir tests verify --skill feature-interview`; `pnpm --dir tests bench --skill feature-interview --agent codex --runs 1 --chunk-size 1 --pause 0`; `pnpm --dir tests bench:coverage`; `git diff --check`.
+- Codex smoke `feature-interview-codex-e983c2bf` passed 1/1 hard assertions with 100.0% pass rate and 100.0% output quality, confirming the updated route expectation.
+- **Recommended next skill:** `$benchmark-test-skill feature-interview`
+
+### Ship Manifest — Feature Interview Benchmark Route Alignment
+
+- **User goal:** Complete the targeted benchmark harness remediation exposed by the fresh `feature-interview` benchmark failure.
+- **Changed files:** `tests/layer4/setups/tier1-workflows.setup.ts`, `tests/layer1/bench-setups.test.ts`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** Tier 1 setup aligns the fixture route expectation with the mirrored skill contracts; layer1 test locks the route behavior; task/history docs record validation and next route.
+- **User-goal mapping:** The source/test changes address the repeated benchmark failure where evaluated outputs were penalized for not routing directly to spec-interview despite the skill contract discouraging that route for unconfirmed ideas.
+- **Tests run:** `pnpm --dir tests exec vitest run --project layer1 bench-setups`; `pnpm --dir tests verify --skill feature-interview`; `pnpm --dir tests bench --skill feature-interview --agent codex --runs 1 --chunk-size 1 --pause 0`; `pnpm --dir tests bench:coverage`; `git diff --check`.
+- **Skipped tests:** Full both-agent 3-run `feature-interview` benchmark was not rerun in this shipping boundary because the narrow harness route fix was proven by focused layer1 coverage, target verify, and a one-run Codex smoke. The next command is the full rerun.
+- **Adversarial review:** Checked the setup against both mirrored `feature-interview` contracts and confirmed the test rejects `$spec-interview` while allowing only the roadmap routes requested by the revised fixture.
+- **Residual risk:** Claude route behavior still needs a full both-agent rerun; the prior Claude lane was partially blocked by runner budget.
+- **Rollback note:** Revert the `feature-interview` hunk in `tier1-workflows.setup.ts` and the associated `bench-setups.test.ts` coverage if the benchmark contract intentionally returns to direct spec-interview routing.
+- **Next command:** `$benchmark-test-skill feature-interview`
+
 ## Current Task — Triage `feature-interview` Benchmark Failure 2026-05-17
 
 **Goal:** Verify the fresh `$benchmark-test-skill feature-interview` failure and identify the smallest durable fix.
