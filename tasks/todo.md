@@ -11,6 +11,27 @@
 - [x] `/reconcile-dev-docs fix tasks` - Resolved orphaned Phase 38 manual tasks: 4 items deferred to future work (Neon DB, admin secret, Vercel env vars, live verification).
 - [ ] `/feature-interview` - Triage 8 remaining unspecced ideas in `tasks/ideas.md` (cleaned from 25 on 2026-05-15; 17 removed as shipped/obsolete).
 
+## Current Task — Benchmark `roadmap` 2026-05-17
+
+**Goal:** Run `$benchmark-test-skill roadmap` against the current repository harness and publish fresh deterministic both-agent evidence.
+
+**Plan:**
+- [x] Confirm `$benchmark-test-skill` is the active workflow and `roadmap` is only the benchmark target.
+- [x] Run `pnpm bench --list-skills` and record `roadmap` coverage status.
+- [x] Run `pnpm verify --skill roadmap`; stop before bench if verification fails.
+- [x] If verify passes, run `pnpm bench --skill roadmap --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [x] Write and validate `benchmark/test-roadmap-2026-05-17.md` with verify, benchmark, latency, cost, consistency, raw paths, and recommended next route.
+- [x] Record results here, then commit and push intended changes on `master`.
+
+## Review — Benchmark `roadmap` 2026-05-17
+
+- Command resolution: `$benchmark-test-skill` was the active workflow; `roadmap` was treated only as the benchmark target argument.
+- Eligibility: `roadmap` is known to the benchmark harness with custom coverage via `tests/layer4/setups/tier1-workflows.setup.ts`.
+- Verify failed: layer1 FAIL in 3.9s; layer2 SKIP. The failing assertion is `layer1/benchmark-results-matrix.test.ts`, which still expects the older `ship-codex-a2685d9f` raw report row while `docs/benchmark-results-matrix.md` now points at `ship-codex-898663d6`.
+- Benchmark not run: `pnpm bench --skill roadmap --agent both --runs 3 --chunk-size 3 --pause 0` was skipped because verify failed.
+- Report written at `benchmark/test-roadmap-2026-05-17.md`; no raw benchmark session, latency, or cost metrics exist because execution stopped before benchmark runs.
+- **Recommended next skill:** `$session-triage roadmap benchmark failure`
+
 ## Phase 40: Workflow Hybrid Replay Pilot
 
 **Goal:** Turn the `/workflows` Playful Lab into a hybrid chat-and-terminal replay pilot where step circles drive a compelling, benchmark-grounded recreation of successful skill runs.
