@@ -2290,6 +2290,12 @@ Resolved all 10 findings from `/expert-review`:
 - Regenerated Skills Showcase GitHub proof assets after the review commit push so public proof metadata points at the latest remote freshness state.
 - Verified generated data freshness, Skills Showcase production build, and whitespace checks.
 
+## 2026-05-17 — feature-interview benchmark route alignment
+
+- Updated the Tier 1 `feature-interview` benchmark fixture to route confirmed planning-destination interviews to `/roadmap` for Claude and `$roadmap` for Codex instead of direct spec-interview.
+- Added focused layer1 coverage that checks the revised prompt, mirrored skill contract guardrails, agent-specific roadmap hard assertions, and rejection of direct spec-interview in the route quality criterion.
+- Verified with focused bench setup tests, `feature-interview` verify, Codex smoke `feature-interview-codex-e983c2bf`, benchmark coverage validation, and whitespace validation.
+
 ## 2026-05-17 — feature-interview benchmark fresh evidence
 
 - Reran `$benchmark-test-skill feature-interview` through the project-local benchmark workflow and confirmed custom Tier 1 coverage.
