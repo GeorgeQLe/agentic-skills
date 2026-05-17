@@ -15,7 +15,7 @@
 - [ ] Run `pnpm verify --skill roadmap`; stop before bench if verification fails.
 - [ ] If verify passes, run `pnpm bench --skill roadmap --agent both --runs 3 --chunk-size 3 --pause 0`.
 - [ ] Write and validate `benchmark/test-roadmap-2026-05-17.md` with verify, benchmark, latency, cost, consistency, raw paths, and recommended next route.
-- [ ] Refresh generated evidence if curated benchmark evidence changes, record results here, then commit and push intended changes on `master`.
+- [x] Refresh generated evidence if curated benchmark evidence changes, record results here, then commit and push intended changes on `master`.
 
 ## Current Task — Benchmark `feature-interview` Post-Route-Fix 2026-05-17
 
@@ -38,6 +38,8 @@
 - Claude session `feature-interview-claude-e5b18930`: 1/1 evaluated hard assertion pass rate, 2 infrastructure-blocked runs (`agent runner budget exceeded`), 92.9% output-quality score, p50 latency 35.0s, total estimated cost $0.75.
 - Codex session `feature-interview-codex-1ff31029`: 3/3 evaluated hard assertion pass rate, 0 infrastructure blocks, 97.6% output-quality score, p50 latency 68.2s, total estimated cost $0.75.
 - Report updated at `benchmark/test-feature-interview-2026-05-17.md` with raw session paths and next route.
+- Generated Skills Showcase data and the benchmark results matrix were refreshed after the curated benchmark evidence changed.
+- Validation passed: report field scan; `pnpm --dir tests bench:coverage`; `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests exec vitest run --project layer1 benchmark-results-matrix skills-showcase-benchmark-demo`; `git diff --check`.
 - **Recommended next skill:** `$benchmark-agent-review feature-interview`
 
 ## Current Task — Targeted Update `feature-interview` Benchmark Route Alignment 2026-05-17
