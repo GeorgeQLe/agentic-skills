@@ -56,6 +56,20 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Completed on 2026-05-17. The verify failure is real, but the responsible gap is the benchmark harness regression test, not the `roadmap` skill. `tests/layer1/benchmark-results-matrix.test.ts` hard-codes the older `ship-codex-a2685d9f` latest-run path while the generated matrix correctly points at the fresher reviewed `ship-codex-898663d6` run. Report: `benchmark/triage-roadmap-2026-05-17.md`. Recommended next skill: `$targeted-skill-builder benchmark-results-matrix stale latest-run assertion`.
 
+## Current Targeted Update: Benchmark Results Matrix Latest-Run Assertion 2026-05-17
+
+**Goal:** Fix the benchmark-results matrix layer1 test so fresh benchmark runs do not stale the assertion for generated latest-run report paths.
+
+**Acceptance Criteria:**
+- [x] Relevant lessons and `roadmap` benchmark triage evidence are reviewed.
+- [x] The change is scoped to existing harness test coverage, not a new skill or `roadmap` contract update.
+- [x] `tests/layer1/benchmark-results-matrix.test.ts` matches the durable `ship` Codex row shape without pinning a superseded session id.
+- [x] Focused layer1 validation and `roadmap` verify pass.
+- [x] Generated-data validation and whitespace checks pass.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Completed on 2026-05-17. Updated `tests/layer1/benchmark-results-matrix.test.ts` so the `ship` Codex row assertion accepts any `ship-codex-*` latest report while preserving the durable metrics, subjective review path, and graded status. Refreshed generated Skills Showcase data after the recent benchmark evidence changes. Validation passed with focused layer1, `roadmap` verify, install/skill audits, benchmark coverage, generated-data validation, and whitespace checks. Recommended next skill: `$benchmark-test-skill roadmap`.
+
 ## Current Benchmark: ship Fresh Run 2026-05-16
 
 **Goal:** Run `$benchmark-test-skill ship` against the current repository harness and publish fresh deterministic both-agent evidence.
