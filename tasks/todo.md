@@ -12,10 +12,23 @@
 **Plan:**
 - [x] Confirm `$benchmark-test-skill` is the active workflow and `feature-interview` is only the benchmark target argument.
 - [x] Run `pnpm bench --list-skills` and record `feature-interview` coverage status.
-- [ ] Run `pnpm verify --skill feature-interview`; stop before bench if verification fails.
-- [ ] If verify passes, run `pnpm bench --skill feature-interview --agent both --runs 3 --chunk-size 3 --pause 0`.
-- [ ] Write and validate `benchmark/test-feature-interview-2026-05-17.md` with verify, benchmark, latency, cost, consistency, raw paths, and recommended next route.
-- [ ] Refresh generated evidence if curated benchmark evidence changes, record results here, then commit and push intended changes on `master`.
+- [x] Run `pnpm verify --skill feature-interview`; stop before bench if verification fails.
+- [x] If verify passes, run `pnpm bench --skill feature-interview --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [x] Write and validate `benchmark/test-feature-interview-2026-05-17.md` with verify, benchmark, latency, cost, consistency, raw paths, and recommended next route.
+- [x] Refresh generated evidence if curated benchmark evidence changes, record results here, then commit and push intended changes on `master`.
+
+## Review — Benchmark `feature-interview` Fresh Rerun 2026-05-17
+
+- Command resolution: `$benchmark-test-skill` was the active workflow; `feature-interview` was treated only as the benchmark target argument.
+- Eligibility: `feature-interview` is known with custom coverage via `tests/layer4/setups/tier1-workflows.setup.ts`.
+- Verify passed: layer1 PASS in 4.2s with 1,204 tests across 15 files; layer2 SKIP because no target-specific layer2 tests matched `feature-interview`.
+- Benchmark ran with `pnpm bench --skill feature-interview --agent both --runs 3 --chunk-size 3 --pause 0`.
+- Claude session `feature-interview-claude-9139ad15`: 0/0 evaluated hard assertion pass rate, 3 infrastructure-blocked runs (`agent runner budget exceeded`), no evaluated quality score, p50 latency 0.0s, total estimated cost $0.75.
+- Codex session `feature-interview-codex-ab46e0d0`: 3/3 evaluated hard assertion pass rate, 0 infrastructure blocks, 100.0% output-quality score, p50 latency 58.9s, total estimated cost $0.75.
+- Report updated at `benchmark/test-feature-interview-2026-05-17.md` with raw session paths and next route.
+- Generated Skills Showcase data and the benchmark results matrix were refreshed after the curated benchmark evidence changed.
+- Validation passed: report field scan; `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests exec vitest run --project layer1 benchmark-results-matrix skills-showcase-benchmark-demo`; `git diff --check`.
+- **Recommended next skill:** `$benchmark-agent-review feature-interview`
 
 ## Current Task — Benchmark `roadmap` Fresh Rerun 2026-05-17
 
@@ -40,7 +53,7 @@
 - Report updated at `benchmark/test-roadmap-2026-05-17.md` with raw session paths and next route.
 - Generated Skills Showcase data and the benchmark results matrix were refreshed after the curated benchmark evidence changed.
 - Validation passed: report field scan; `pnpm --dir tests bench:coverage`; `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests exec vitest run --project layer1 benchmark-results-matrix skills-showcase-benchmark-demo`; `git diff --check`.
-- **Recommended next skill:** `$benchmark-test-skill roadmap`
+- **Recommended next skill:** `$benchmark-agent-review roadmap`
 
 ## Current Task — Benchmark `roadmap` Post-Evidence-Rubric-Triage 2026-05-17
 

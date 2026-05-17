@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-05-17 — Benchmark test handoffs should route evaluated runs to agent review
+
+- A `$benchmark-test-skill roadmap` run ended by recommending another `$benchmark-test-skill roadmap` rerun even though Codex produced evaluated passing runs and only the Claude lane was infrastructure-blocked.
+- When at least one runner has evaluated benchmark outputs and no subjective review has been performed, route to `$benchmark-agent-review <skill>` unless the only outcome is infrastructure blocking or a deterministic failure that needs triage.
+- Fully blocked lanes should be reported separately, but they do not erase evaluated evidence from another runner.
+- Reserve repeat `$benchmark-test-skill <skill>` recommendations for pure infrastructure-blocked runs, post-remediation reruns, or explicit user requests for another deterministic run.
+
 ## 2026-05-15 — Do not treat stale manual deploy tasks as live deployment truth
 
 - A `$ship` handoff reported the Skills Showcase Vercel setup as pending because `tasks/manual-todo.md` still contained old unchecked Vercel setup tasks.
