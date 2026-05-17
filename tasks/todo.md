@@ -11,6 +11,29 @@
 - [x] `/reconcile-dev-docs fix tasks` - Resolved orphaned Phase 38 manual tasks: 4 items deferred to future work (Neon DB, admin secret, Vercel env vars, live verification).
 - [ ] `/feature-interview` - Triage 8 remaining unspecced ideas in `tasks/ideas.md` (cleaned from 25 on 2026-05-15; 17 removed as shipped/obsolete).
 
+## Current Task — Benchmark `roadmap` Fresh Rerun 2026-05-17
+
+**Goal:** Rerun `$benchmark-test-skill roadmap` after the benchmark-results matrix assertion fix and publish fresh deterministic both-agent evidence.
+
+**Plan:**
+- [x] Confirm `$benchmark-test-skill` is the active workflow and `roadmap` is only the benchmark target.
+- [x] Run `pnpm bench --list-skills` and record `roadmap` coverage status.
+- [x] Run `pnpm verify --skill roadmap`; stop before bench if verification fails.
+- [x] If verify passes, run `pnpm bench --skill roadmap --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [x] Write and validate `benchmark/test-roadmap-2026-05-17.md` with verify, benchmark, latency, cost, consistency, raw paths, and recommended next route.
+- [x] Record results here, then commit and push intended benchmark changes on `master`.
+
+## Review — Benchmark `roadmap` Fresh Rerun 2026-05-17
+
+- Command resolution: `$benchmark-test-skill` was the active workflow; `roadmap` was treated only as the benchmark target argument.
+- Eligibility: `roadmap` is known to the benchmark harness with custom coverage via `tests/layer4/setups/tier1-workflows.setup.ts`.
+- Verify passed: layer1 PASS in 3.6s; layer2 SKIP because no target-specific layer2 tests matched `roadmap`.
+- Benchmark ran with `pnpm bench --skill roadmap --agent both --runs 3 --chunk-size 3 --pause 0`.
+- Claude session `roadmap-claude-ceadee35`: 0 evaluated runs, 3 infrastructure-blocked runs (`agent runner budget exceeded`), total estimated cost $0.75.
+- Codex session `roadmap-codex-43f41fa9`: 0/3 hard assertion pass rate, 0 infrastructure blocks, 78.6% output-quality score, p50 latency 44.3s, total estimated cost $0.75. All three evaluated runs failed `Output recommends $run`.
+- Report written at `benchmark/test-roadmap-2026-05-17.md` and validated for target, agent rows, pass/block data, latency, cost, raw session paths, and next route.
+- **Recommended next skill:** `$session-triage roadmap benchmark failure`
+
 ## Current Task — Benchmark `roadmap` 2026-05-17
 
 **Goal:** Run `$benchmark-test-skill roadmap` against the current repository harness and publish fresh deterministic both-agent evidence.
