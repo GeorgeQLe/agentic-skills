@@ -27,7 +27,7 @@
 - [x] Run `pnpm verify --skill feature-interview`; stop before bench if verification fails.
 - [x] If verify passes, run `pnpm bench --skill feature-interview --agent both --runs 3 --chunk-size 3 --pause 0`.
 - [x] Write and validate `benchmark/test-feature-interview-2026-05-17.md` with verify, benchmark, latency, cost, consistency, raw paths, and recommended next route.
-- [ ] Refresh generated evidence if curated benchmark evidence changes, record results here, then commit and push intended changes on `master`.
+- [x] Refresh generated evidence if curated benchmark evidence changes, record results here, then commit and push intended changes on `master`.
 
 ## Review — Benchmark `feature-interview` Post-Route-Fix 2026-05-17
 
