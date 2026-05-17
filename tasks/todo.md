@@ -5,21 +5,36 @@
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
-## Current Task — Benchmark `feature-interview` 2026-05-17
+## Current Task — Benchmark `roadmap` Post-Route-Fix 2026-05-17
 
-**Goal:** Run `$benchmark-test-skill feature-interview` against the current repository harness and publish deterministic both-agent evidence.
+**Goal:** Run `$benchmark-test-skill roadmap` after the route-alignment harness fix and publish deterministic both-agent evidence.
 
 **Plan:**
-- [ ] Confirm `$benchmark-test-skill` is the active workflow and `feature-interview` is only the benchmark target argument.
-- [ ] Run `pnpm bench --list-skills` and record `feature-interview` coverage status.
-- [ ] Run `pnpm verify --skill feature-interview`; stop before bench if verification fails.
-- [ ] If verify passes, run `pnpm bench --skill feature-interview --agent both --runs 3 --chunk-size 3 --pause 0`.
-- [ ] Write and validate `benchmark/test-feature-interview-2026-05-17.md` with verify, benchmark, latency, cost, consistency, raw paths, and recommended next route.
+- [ ] Confirm `$benchmark-test-skill` is the active workflow and `roadmap` is only the benchmark target argument.
+- [ ] Run `pnpm bench --list-skills` and record `roadmap` coverage status.
+- [ ] Run `pnpm verify --skill roadmap`; stop before bench if verification fails.
+- [ ] If verify passes, run `pnpm bench --skill roadmap --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [ ] Write and validate `benchmark/test-roadmap-2026-05-17.md` with verify, benchmark, latency, cost, consistency, raw paths, and recommended next route.
 - [ ] Record results here, then commit and push intended changes on `master`.
+
+## Review — Benchmark `feature-interview` 2026-05-17
+
+- Command resolution: `$benchmark-test-skill` was the active workflow; `feature-interview` was treated only as the benchmark target argument.
+- Eligibility: `feature-interview` is known to the harness with custom coverage via `tests/layer4/setups/tier1-workflows.setup.ts`.
+- Verify passed: layer1 PASS in 4.6s with 1,202 tests across 15 files; layer2 SKIP because no target-specific layer2 tests matched `feature-interview`.
+- Benchmark completed for both agents with no infrastructure-blocked runs:
+  - Claude session `6bd2c89a`: 0/3 evaluated hard assertions passed, output quality 90.5%, p50 47.6s, p95 57.0s, p99 57.9s, total cost $0.75.
+  - Codex session `5bd5a8da`: 1/3 evaluated hard assertions passed, output quality 90.5%, p50 68.4s, p95 77.2s, p99 77.9s, total cost $0.75.
+- Failure pattern: failed runs recommended `$spec-interview`, violating the benchmark expectation for `feature-interview` next-route behavior.
+- Report written to `benchmark/test-feature-interview-2026-05-17.md`.
+- Report validation passed: required target, agent rows, pass/block data, latency, cost, consistency, raw session paths, quality details, and recommended next route are present.
+- Generated Skills Showcase data was refreshed and validated after the curated benchmark evidence changed.
+- Validation passed: `pnpm --dir tests bench:coverage`, `pnpm --dir tests exec vitest run --project layer1 benchmark-results-matrix skills-showcase-benchmark-demo`, `scripts/validate-skills-showcase-data.sh`, and `git diff --check`.
+- **Recommended next skill:** `$session-triage feature-interview benchmark failure`
 
 ## Priority Task Queue
 
-- [ ] `$benchmark-test-skill feature-interview` - Start Phase 41 remaining benchmark result coverage with the first Tier 1 gap batch.
+- [x] `$benchmark-test-skill feature-interview` - Start Phase 41 remaining benchmark result coverage with the first Tier 1 gap batch.
 - [ ] `$run` - Execute Batch 41.1 to create/verify the remaining-results queue and benchmark the first small batch.
 - [x] `/reconcile-dev-docs fix tasks` - Resolved orphaned Phase 38 manual tasks: 4 items deferred to future work (Neon DB, admin secret, Vercel env vars, live verification).
 - [ ] `/feature-interview` - Triage 8 remaining unspecced ideas in `tasks/ideas.md` (cleaned from 25 on 2026-05-15; 17 removed as shipped/obsolete).
