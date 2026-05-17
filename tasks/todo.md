@@ -5,6 +5,30 @@
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
+## Current Task — Tighten `update-packages` Install Age Gate 2026-05-17
+
+**Goal:** Update the `update-packages` skill so package updates leave behind package-manager configuration that prevents npm and pnpm from resolving packages published within the last 8 days.
+
+**Plan:**
+- [x] Inspect mirrored `update-packages` contracts, benchmark fixture, and current docs.
+- [x] Add the install-age gate requirement to both mirrored skill contracts.
+- [x] Update benchmark fixture expectations so `.npmrc`/age-gate behavior is covered.
+- [x] Refresh generated showcase data and run validation.
+- [x] Record results, commit, and push on `master`.
+
+## Review — Tighten `update-packages` Install Age Gate 2026-05-17
+
+- Updated mirrored `update-packages` contracts to version `0.2.0`.
+- Added a required installer age-gate step before dependency updates.
+- Required project `.npmrc` to preserve existing registry/auth settings and add npm's `min-release-age=8`.
+- Required pnpm's 8-day equivalent as `minimum-release-age=11520` where pnpm reads `.npmrc`, plus `minimumReleaseAge: 11520` in `pnpm-workspace.yaml` or project pnpm config when the active pnpm version requires non-auth settings there.
+- Added verification requirements to check the age-gate config before shipping.
+- Updated the Tier 2/3 benchmark fixture prompt and expected facts so benchmark outputs must mention `.npmrc`, `min-release-age`, and pnpm age-gate behavior.
+- Recorded the correction in `tasks/lessons.md`.
+- Refreshed Skills Showcase generated data and benchmark matrix assets after skill metadata changed.
+- Validation passed: `pnpm --dir tests verify --skill update-packages`; `pnpm --dir tests bench:coverage`; `scripts/validate-skills-showcase-data.sh`; `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`; `/opt/homebrew/bin/bash ./scripts/skill-next-step-routing.sh --missing`; `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken`; targeted `rg`; `git diff --check`.
+- **Recommended next command:** `$benchmark-test-skill update-packages`
+
 ## Current Task — Benchmark `analyze-sessions` 2026-05-17
 
 **Goal:** Run `$benchmark-test-skill analyze-sessions` against the current repository state and publish deterministic both-agent benchmark evidence.
@@ -3312,7 +3336,20 @@ Implement only this step, validate it, then run `/ship` when done.
 - [x] Confirm `$benchmark-test-skill` is the active workflow and `update-packages` is the target skill argument.
 - [x] Run `pnpm bench --list-skills` and confirm `update-packages` is known to the harness, including coverage status. `coverage=custom`, setup `tests/layer4/setups/tier23-global-workflows.setup.ts`.
 - [x] Run `pnpm verify --skill update-packages`; stop before bench if verification fails. Layer1 PASS in 5.6s; layer2 SKIP because no target-specific layer2 tests matched.
-- [ ] If verify passes, run `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0`.
-- [ ] Write `benchmark/test-update-packages-2026-05-17.md` with verify, benchmark, latency, cost, consistency, raw paths, and recommended next route.
-- [ ] Validate the report contains required benchmark fields.
+- [x] If verify passes, run `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0`. Claude 0/3, Codex 0/3, no blocked runs.
+- [x] Write `benchmark/test-update-packages-2026-05-17.md` with verify, benchmark, latency, cost, consistency, raw paths, and recommended next route.
+- [x] Validate the report contains required benchmark fields.
 - [ ] Record results here, then commit and push intended changes on `master`.
+
+## Review — Benchmark `update-packages` 2026-05-17
+
+- Command resolution: `$benchmark-test-skill` was the active workflow; `update-packages` was treated as the target skill argument.
+- Eligibility: `update-packages` is known to the harness with custom coverage via `tests/layer4/setups/tier23-global-workflows.setup.ts`.
+- Verify passed: layer1 PASS in 5.6s with 1,204 tests across 15 files; layer2 SKIP because no target-specific layer2 tests matched `update-packages`.
+- Benchmark completed for both agents with no infrastructure-blocked runs:
+  - Claude session `4f02cadc`: 0/3 evaluated hard assertions passed, output quality 39.4%, p50 33.3s, p95 39.0s, p99 39.5s, total cost $0.75.
+  - Codex session `febcb2db`: 0/3 evaluated hard assertions passed, output quality 38.6%, p50 46.4s, p95 50.0s, p99 50.4s, total cost $0.75.
+- Failed assertions: all six evaluated runs failed `Output recommends $run`; one Claude run and one Codex run also failed `Output includes older than 8 days`.
+- Report written to `benchmark/test-update-packages-2026-05-17.md`.
+- Report validation passed: required target, agent rows, pass-rate and blocked-run data, latency, cost, consistency, raw session paths, quality details, and recommended next route are present. `git diff --check` passed.
+- **Recommended next skill:** `$session-triage update-packages benchmark failure`

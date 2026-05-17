@@ -16,8 +16,8 @@ This matrix tracks skills that already have persisted benchmark run data and gra
 
 | Skill | Agent | Latest Raw Report | Runs | Hard Pass Rate | Output Quality | Subjective Review | Status | Notes |
 |---|---|---:|---:|---:|---:|---|---|---|
-| `analyze-sessions` | Claude | `tests/benchmarks/runs/analyze-sessions-claude-fa3b696a/report.json` | 3 | 100% | 92.3% | `benchmark/review-analyze-sessions-2026-05-15.md` | graded | Curated report: `benchmark/test-analyze-sessions-2026-05-15.md`. Subjective review median score available. |
-| `analyze-sessions` | Codex | `tests/benchmarks/runs/analyze-sessions-codex-e68803b1/report.json` | 3 | 100% | 92.3% | `benchmark/review-analyze-sessions-2026-05-15.md` | graded | Curated report: `benchmark/test-analyze-sessions-2026-05-15.md`. Subjective review median score available. |
+| `analyze-sessions` | Claude | `tests/benchmarks/runs/analyze-sessions-claude-0cb06af8/report.json` | 3 | 100% | 92.3% | `benchmark/review-analyze-sessions-2026-05-15.md` | graded | Curated report: `benchmark/test-analyze-sessions-2026-05-15.md`. Subjective review median score available. |
+| `analyze-sessions` | Codex | `tests/benchmarks/runs/analyze-sessions-codex-2da5dfa4/report.json` | 3 | 100% | 92.3% | `benchmark/review-analyze-sessions-2026-05-15.md` | graded | Curated report: `benchmark/test-analyze-sessions-2026-05-15.md`. Subjective review median score available. |
 | `benchmark-agent-review` | Codex | `tests/benchmarks/runs/benchmark-agent-review-codex-1d9a5c8b/report.json` | 1 | 100% | 100.0% | none | graded | One evaluated persisted run with deterministic quality scoring. |
 | `benchmark-test-skill` | Claude | `tests/benchmarks/runs/benchmark-test-skill-claude-46f32ef6/report.json` | 3 | 100% | 100.0% | `benchmark/review-benchmark-test-skill-2026-05-13.md` | graded | Curated report: `benchmark/test-benchmark-test-skill-2026-05-13.md`. Subjective review median score available. |
 | `benchmark-test-skill` | Codex | `tests/benchmarks/runs/benchmark-test-skill-codex-e4c6aef6/report.json` | 3 | 100% | 100.0% | `benchmark/review-benchmark-test-skill-2026-05-13.md` | graded | Curated report: `benchmark/test-benchmark-test-skill-2026-05-13.md`. Subjective review median score available. |
@@ -41,6 +41,8 @@ This matrix tracks skills that already have persisted benchmark run data and gra
 | `ship` | Claude | `tests/benchmarks/runs/ship-claude-920245e6/report.json` | 3 | 100% | 100.0% | `benchmark/review-ship-2026-05-16.md` | graded | Curated report: `benchmark/test-ship-2026-05-16.md`. Subjective review median score available. |
 | `ship` | Codex | `tests/benchmarks/runs/ship-codex-898663d6/report.json` | 3 | 100% | 100.0% | `benchmark/review-ship-2026-05-16.md` | graded | Curated report: `benchmark/test-ship-2026-05-16.md`. Subjective review median score available. |
 | `spec-interview` | Codex | `tests/benchmarks/runs/spec-interview-codex-40e3d74d/report.json` | 1 | 100% | 100.0% | none | graded | Curated report: `benchmark/test-spec-interview-2026-05-12.md`. One evaluated persisted run with deterministic quality scoring. |
+| `update-packages` | Claude | `tests/benchmarks/runs/update-packages-claude-4f02cadc/report.json` | 3 | 0% | 39.4% | none | graded | — |
+| `update-packages` | Codex | `tests/benchmarks/runs/update-packages-codex-febcb2db/report.json` | 3 | 0% | 38.6% | none | graded | — |
 | `youtube-video-audit` | Codex | `tests/benchmarks/runs/youtube-video-audit-codex-288097bc/report.json` | 1 | 100% | not scored | none | partially graded | Hard assertion evidence exists; no quality score in the latest persisted evaluated report. |
 
 ## Incomplete Persisted Reports
@@ -53,7 +55,7 @@ This matrix tracks skills that already have persisted benchmark run data and gra
 | `feature-interview` | Claude | `tests/benchmarks/runs/feature-interview-claude-9139ad15/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
 | `icon-handler` | Claude | `tests/benchmarks/runs/icon-handler-claude-47bab6aa/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
 | `roadmap` | Claude | `tests/benchmarks/runs/roadmap-claude-8c1ee4a6/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
-| `run` | Codex | `tests/benchmarks/runs/run-codex-a0f210f6/report.json` | blocked/incomplete | Report exists with zero total and evaluated runs. Do not count as benchmarked. Prefer the later evaluated report listed above. |
+| `run` | Codex | `tests/benchmarks/runs/run-codex-9f81c5b0/report.json` | blocked/incomplete | Report exists with zero total and evaluated runs. Do not count as benchmarked. Prefer the later evaluated report listed above. |
 | `spec-interview` | Claude | `tests/benchmarks/runs/spec-interview-claude-b83d0caa/report.json` | blocked/incomplete | Report exists with zero evaluated runs. |
 | `youtube-video-audit` | Codex | `tests/benchmarks/runs/youtube-video-audit-codex-306e24a9/report.json` | blocked/incomplete | Report exists with zero total and evaluated runs. Do not count as benchmarked. Prefer the later evaluated report listed above. |
 

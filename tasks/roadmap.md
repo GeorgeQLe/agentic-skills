@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Skill Update: update-packages Install Age Gate 2026-05-17
+
+**Goal:** Require `update-packages` runs to add project package-manager configuration that blocks npm and pnpm from installing package versions published within the last 8 days.
+
+**Acceptance Criteria:**
+- [x] Mirrored `global/codex/update-packages` and `global/claude/update-packages` contracts require a project `.npmrc` with npm's `min-release-age=8`.
+- [x] The contracts require pnpm's equivalent 8-day gate using `minimum-release-age=11520` where supported and `pnpm-workspace.yaml` `minimumReleaseAge: 11520` when modern pnpm configuration requires it.
+- [x] Benchmark fixture expectations cover `.npmrc` and package-manager age-gate behavior.
+- [x] Generated Skills Showcase data is refreshed and validation passes.
+- [x] Results are recorded in `tasks/todo.md`, then changes are committed and pushed on `master`.
+
+**Result:** Updated on 2026-05-17. `update-packages` now requires mutation runs to persist installer-level age gates: `.npmrc` with `min-release-age=8`, pnpm's `minimum-release-age=11520` where `.npmrc` is honored, and `minimumReleaseAge: 11520` in `pnpm-workspace.yaml` or project pnpm config when the active pnpm version requires non-auth settings there. The benchmark fixture now requires `.npmrc`/age-gate evidence. Recommended next command: `$benchmark-test-skill update-packages`.
+
 ## Current Maintenance: Active Project Package Updates 2026-05-17
 
 **Goal:** Update direct dependencies in active pnpm-managed JavaScript projects to the newest registry versions published more than 8 full days ago.
