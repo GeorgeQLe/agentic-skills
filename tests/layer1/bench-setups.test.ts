@@ -959,6 +959,37 @@ describe("benchmark setup registry", () => {
     expect(setup!.qualityEvaluator?.rubric.criteria.some((criterion) => criterion.id === "file-reference")).toBe(false);
   });
 
+  it("allows roadmap evidence-linked quality to preserve benchmark coverage without exact source phrasing", () => {
+    const setup = resolveBenchSetup("roadmap");
+    expect(setup).toBeDefined();
+
+    expect(setup!.prompt).toContain("$plan-phase 1");
+
+    const evidenceCriterion = setup!.qualityEvaluator?.rubric.criteria.find((criterion) => criterion.id === "evidence-linked");
+    expect(evidenceCriterion?.evaluate([
+      "# Roadmap: Benchmark Coverage Reporting",
+      "",
+      "## Phase 1: Benchmark Coverage Model",
+      "Define the benchmark coverage data model.",
+      "",
+      "## Phase 2: CLI Status Output",
+      "Expose coverage through CLI status output.",
+    ].join("\n"))).toMatchObject({
+      score: 1,
+    });
+    expect(evidenceCriterion?.evaluate([
+      "# Roadmap",
+      "",
+      "## Phase 1",
+      "Define generic reporting.",
+      "",
+      "## Phase 2",
+      "Expose generic status output.",
+    ].join("\n"))).toMatchObject({
+      score: 0,
+    });
+  });
+
   it("keeps the feature-interview benchmark from routing unconfirmed ideas directly to spec-interview", () => {
     const setup = resolveBenchSetup("feature-interview");
     expect(setup).toBeDefined();
