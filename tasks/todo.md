@@ -5,6 +5,49 @@
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
+## Current Task — Fresh Triage `update-packages` Benchmark Failure 2026-05-17
+
+**Goal:** Investigate why the fresh `$benchmark-test-skill update-packages` rerun failed one Claude verification-command assertion and identify the smallest verified fix.
+
+**Plan:**
+- [x] Inspect the latest benchmark report and persisted Claude/Codex run JSON/output.
+- [x] Compare current mirrored `update-packages` contracts against the benchmark setup expectations.
+- [x] Check relevant lessons and classify the failure source.
+- [x] Write `benchmark/triage-update-packages-2026-05-17-fresh.md` with verdict, root cause, recommended fix, validation plan, and next route.
+- [x] Validate the report fields, record results, then commit and push intended changes on `master`.
+
+## Review — Fresh Triage `update-packages` Benchmark Failure 2026-05-17
+
+- Verification verdict: verified.
+- Evidence inspected: `benchmark/test-update-packages-2026-05-17.md`, Claude report/run JSON for session `update-packages-claude-c99f0776`, Codex report JSON for session `update-packages-codex-e51e553b`, mirrored `update-packages` contracts, `tests/layer4/setups/tier23-global-workflows.setup.ts`, `tests/layer4/setup-helpers/quality.ts`, layer1 setup tests, and `tasks/lessons.md`.
+- Root cause: benchmark setup false negative. The failed Claude artifact included a `## Verification` section with concrete command blocks, but the setup requires the exact phrase `verification commands`.
+- Responsible gap: `tests/layer4/setups/tier23-global-workflows.setup.ts` and missing layer1 coverage for behavior-level verification evidence; not the mirrored `update-packages` contracts.
+- Report written to `benchmark/triage-update-packages-2026-05-17-fresh.md`.
+- Validation passed: required report field scan; targeted evidence scan for `verification commands`, `## Verification`, `pnpm install --frozen-lockfile`, version 0.2.0, and next route; `git diff --check`.
+- **Recommended next skill:** `$targeted-skill-builder update-packages benchmark verification phrase tolerance`
+
+## Current Task — Triage `benchmark-agent-review` Benchmark Failure 2026-05-17
+
+**Goal:** Investigate why `$benchmark-test-skill benchmark-agent-review` failed the `$targeted-skill-builder` recommendation assertion and identify the smallest verified fix.
+
+**Plan:**
+- [x] Inspect the benchmark report and persisted Claude/Codex run JSON/output.
+- [x] Compare current mirrored `benchmark-agent-review` contracts against the benchmark setup expectations.
+- [x] Check relevant lessons and classify the failure source.
+- [x] Write `benchmark/triage-benchmark-agent-review-2026-05-17.md` with verdict, root cause, recommended fix, validation plan, and next route.
+- [x] Validate the report fields, record results, then commit and push intended changes on `master`.
+
+## Review — Triage `benchmark-agent-review` Benchmark Failure 2026-05-17
+
+- Verification verdict: verified.
+- Evidence inspected: `benchmark/test-benchmark-agent-review-2026-05-17.md`, raw Claude/Codex run JSON under `tests/benchmarks/runs/benchmark-agent-review-*`, mirrored `benchmark-agent-review` contracts, `tests/layer4/setups/packs/pack-workflows.setup.ts`, focused layer1 route tests, and relevant lessons.
+- Failure classification: benchmark harness/setup defect with secondary agent noncompliance signal.
+- Root cause: the pack setup uses a single Codex-style `nextRoute: "$targeted-skill-builder"` and only exposes route guidance in the prompt when `nextRoutes` exists, so the benchmark underprompts the expected route and fails Claude against the wrong runner convention.
+- Responsible gap: benchmark setup for `benchmark-agent-review`, not infrastructure and not a proven mirrored skill-contract gap.
+- Report written to `benchmark/triage-benchmark-agent-review-2026-05-17.md`.
+- Validation passed: report field scan and `git diff --check`.
+- **Recommended next skill:** `$targeted-skill-builder benchmark-agent-review benchmark runner route and prompt alignment`
+
 ## Current Task — Benchmark `benchmark-agent-review` 2026-05-17
 
 **Goal:** Run `$benchmark-test-skill benchmark-agent-review` against the current repository state and publish deterministic both-agent benchmark evidence.
