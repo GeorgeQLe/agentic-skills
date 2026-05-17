@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Update: benchmark-agent-review Route Prompt Alignment 2026-05-17
+
+**Goal:** Align the `benchmark-agent-review` pack benchmark setup with runner-specific targeted-skill-builder routes and prompt the expected remediation handoff explicitly.
+
+**Acceptance Criteria:**
+- [x] The pack setup uses `/targeted-skill-builder ...` for Claude and `$targeted-skill-builder ...` for Codex.
+- [x] The benchmark prompt explicitly asks for a remediation-ready targeted-skill-builder handoff for the residual-risk gap.
+- [x] Focused layer1 coverage proves Claude/Codex route acceptance and rejects generic or non-remediation routes.
+- [x] Focused validation, benchmark coverage, install/skill checks, targeted searches, and whitespace checks pass.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Updated on 2026-05-17. `benchmark-agent-review` pack benchmark coverage now prompts a remediation-ready residual-risk-awareness handoff and asserts runner-specific targeted-skill-builder routes: `/targeted-skill-builder benchmark-agent-review residual-risk-awareness output-quality gap` for Claude and `$targeted-skill-builder benchmark-agent-review residual-risk-awareness output-quality gap` for Codex. Focused layer1 coverage proves exact route acceptance and rejects generic/non-remediation routes. Codex smoke benchmark `benchmark-agent-review-codex-384f7822` passed 1/1 after the fix. Recommended next command: `$benchmark-test-skill benchmark-agent-review`.
+
 ## Current Triage: update-packages Fresh Benchmark Failure 2026-05-17
 
 **Goal:** Verify the latest `$benchmark-test-skill update-packages` failure and identify the smallest durable fix.

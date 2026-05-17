@@ -5,6 +5,29 @@
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
+## Current Task — Targeted Update `benchmark-agent-review` Route Prompt Alignment 2026-05-17
+
+**Goal:** Align the `benchmark-agent-review` pack benchmark setup with runner-specific targeted-skill-builder routes and prompt the expected remediation handoff explicitly.
+
+**Plan:**
+- [x] Review the triage report, current pack setup, layer1 tests, and mirrored skill contracts.
+- [x] Update the pack setup route configuration and prompt requirements for `benchmark-agent-review`.
+- [x] Add focused layer1 coverage for Claude/Codex exact routes and rejected generic/non-remediation routes.
+- [x] Run focused validation, benchmark coverage, install/skill checks, targeted searches, and whitespace checks.
+- [x] Record results, commit, and push intended changes on `master`.
+
+## Review — Targeted Update `benchmark-agent-review` Route Prompt Alignment 2026-05-17
+
+- Decision: existing benchmark setup update, not a new skill and not a `benchmark-agent-review` skill-contract change.
+- Evidence used: `benchmark/triage-benchmark-agent-review-2026-05-17.md`, mirrored `benchmark-agent-review` contracts, `tasks/lessons.md`, `tests/layer4/setups/packs/pack-workflows.setup.ts`, and existing layer1 setup tests.
+- Evidence intentionally skipped: broad session history, because the triage localized the defect to one benchmark route/prompt mismatch.
+- Updated `tests/layer4/setups/packs/pack-workflows.setup.ts` so `benchmark-agent-review` uses runner-specific targeted-skill-builder routes and explicitly prompts a remediation-ready residual-risk-awareness handoff.
+- Added layer1 coverage in `tests/layer1/bench-setups.test.ts` proving Claude `/targeted-skill-builder ...` and Codex `$targeted-skill-builder ...` routes pass, while generic `$targeted-skill-builder`, `$benchmark-agent-review`, `$ship-end`, and `$expert-review` fail.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 bench-setups bench-quality`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill benchmark-agent-review`; `pnpm --dir tests bench --skill benchmark-agent-review --agent codex --runs 1 --chunk-size 1 --pause 0`; `./scripts/skill-deps.sh --broken`; `./scripts/skill-versions.sh --missing`; `./scripts/skill-next-step-routing.sh --missing`; `./install.sh`; targeted `rg`; `scripts/validate-skills-showcase-data.sh`; `git diff --check`.
+- Codex smoke benchmark `benchmark-agent-review-codex-384f7822` passed 1/1 with 100.0% hard assertion pass rate and 97.5% output quality.
+- Generated benchmark/showcase assets were refreshed after persisted benchmark evidence changed.
+- **Recommended next command:** `$benchmark-test-skill benchmark-agent-review`
+
 ## Current Task — Fresh Triage `update-packages` Benchmark Failure 2026-05-17
 
 **Goal:** Investigate why the fresh `$benchmark-test-skill update-packages` rerun failed one Claude verification-command assertion and identify the smallest verified fix.
