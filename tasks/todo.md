@@ -53,6 +53,27 @@
 - Validation: targeted evidence checks and `git diff --check` passed; remediation verification should run after the test matcher is updated.
 - **Recommended next skill:** `$targeted-skill-builder benchmark-results-matrix stale latest-run assertion`
 
+## Current Task — Targeted Update Benchmark Results Matrix Latest-Run Assertion 2026-05-17
+
+**Goal:** Fix the benchmark-results matrix layer1 test so fresh benchmark runs do not stale the assertion for generated latest-run report paths.
+
+**Plan:**
+- [x] Read relevant lessons and the `roadmap` benchmark triage report.
+- [x] Confirm the destination is an existing harness test update, not a new skill or `roadmap` skill contract change.
+- [x] Replace the hard-coded `ship-codex-a2685d9f` row assertion with a durable `ship-codex-*` row matcher.
+- [x] Run focused layer1 validation, original `roadmap` verify, generated-data validation, and whitespace checks.
+- [x] Record results here, then commit and push intended changes on `master`.
+
+## Review — Targeted Update Benchmark Results Matrix Latest-Run Assertion 2026-05-17
+
+- Decision: existing harness test update. No new skill and no `roadmap` skill contract change.
+- Evidence used: `tasks/lessons.md`, `benchmark/triage-roadmap-2026-05-17.md`, `tests/layer1/benchmark-results-matrix.test.ts`, `docs/benchmark-results-matrix.md`, and generated showcase asset diffs.
+- Evidence intentionally skipped: broad session-history analysis; the triage report already verified the narrow harness defect.
+- Changed `tests/layer1/benchmark-results-matrix.test.ts` so the `ship` Codex matrix assertion matches `ship-codex-*` while still requiring 3 runs, 100% hard pass rate, 100.0% output quality, the 2026-05-16 `ship` review path, and `graded` status.
+- Refreshed generated Skills Showcase data because curated benchmark evidence changed, including `docs/benchmark-results-matrix.md`, both `skills-data.js` copies, and both GitHub proof-data copies.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 benchmark-results-matrix`, `pnpm --dir tests verify --skill roadmap`, `./install.sh`, `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, `./scripts/skill-next-step-routing.sh --missing`, `pnpm --dir tests bench:coverage`, `scripts/validate-skills-showcase-data.sh`, and `git diff --check`.
+- **Recommended next skill:** `$benchmark-test-skill roadmap`
+
 ## Phase 40: Workflow Hybrid Replay Pilot
 
 **Goal:** Turn the `/workflows` Playful Lab into a hybrid chat-and-terminal replay pilot where step circles drive a compelling, benchmark-grounded recreation of successful skill runs.
