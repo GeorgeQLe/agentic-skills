@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-05-17 — Step 40.3: visible workflow benchmark receipts
+
+- Promoted `/workflows` benchmark receipts into the primary hybrid replay panel with pass rate, quality, agent, run index, report path, and run artifact path from `workflowBenchmarks`.
+- Removed the redundant collapsed benchmark execution details panel from the selected-step area, while preserving explicit no-receipt fallback states.
+- Added receipt styling with long-path wrapping and mobile single-column rows.
+- Verified: `pnpm --dir apps/skills-showcase typecheck`, `pnpm --dir apps/skills-showcase test -- --runInBand`, `pnpm --dir apps/skills-showcase build`, and `git diff --check` passed.
+- Deploy skipped: `tasks/deploy.md` describes Vercel production deployment from `master`; no explicit production deploy confirmation was provided for this `$ship` run.
+
 ## 2026-05-15 — Benchmark-workflow integration on Skills Showcase
 
 - Connected workflow demos to benchmark evidence: workflow steps now display pass rates, quality scores, and real benchmark execution excerpts inline.
