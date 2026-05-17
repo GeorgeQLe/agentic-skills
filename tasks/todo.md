@@ -258,7 +258,7 @@
 
 ## Priority Task Queue
 
-- [ ] `$ship-end --no-deploy` - commit and push uncommitted task-doc changes before continuing task work because `git status --short` shows `M tasks/todo.md`.
+- [x] `$ship-end --no-deploy` - committed and pushed session changes on `master`; final `git status --short` was clean.
 - [ ] `$session-triage roadmap benchmark failure` - resolve the latest `roadmap` benchmark quality failure because `tasks/todo.md` records Codex `roadmap-codex-3f01cb21` with 3/3 hard assertions but a critical `evidence-linked` quality failure.
 - [ ] `$feature-interview workflow terminal replay from benchmark transcripts` - update the confirmed `/workflows` replay planning destination so raw benchmark `run-*.json` user/agent/tool turns are mapped into terminal-style workflow replay events; evidence: `specs/workflow-hybrid-replay-feature-interview.md` covers hybrid replay but not raw transcript parsing, and the current user request confirmed this refinement.
 - [ ] `$run` - Execute Batch 41.1 to create/verify the remaining-results queue and benchmark the first small batch after the benchmark failure lane and transcript-replay planning route are no longer blocking.
