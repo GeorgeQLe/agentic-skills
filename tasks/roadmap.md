@@ -12,7 +12,7 @@ Phases 12-31 complete. Phase 14 added the LinkedIn evidence lane to the creator 
 
 Phases 32-36 complete. Phase 35 added repository-wide Codex benchmark coverage metadata, custom or explicitly blocked coverage for every current skill, and future skill creation/update workflows require benchmark coverage handling. Phase 36 added rubric-based output-quality evaluation on top of the contract/assertion benchmark checks.
 
-Phase 37 complete: preserved and migrated the static Skills Showcase into a minimal Next.js app at `apps/skills-showcase/` with 6 public routes, generated data pipeline, 54 regression tests, and updated deploy contract. Phase 38 complete: added Neon-backed first-party newsletter capture with tRPC contracts, TanStack Query mutation/admin state, admin export page, 74 regression tests, and privacy posture enforcement. Phase 39 complete: added benchmark results visibility and permission-gated safe Git integration fixtures for benchmarkable git-mutating skills. Phase 40 adds the `/workflows` hybrid replay pilot so benchmark evidence becomes primary step-by-step proof before the pattern is expanded to other showcase surfaces. Phase 41 builds out persisted benchmark result coverage for the remaining tracked skills in controlled batches.
+Phase 37 complete: preserved and migrated the static Skills Showcase into a minimal Next.js app at `apps/skills-showcase/` with 6 public routes, generated data pipeline, 54 regression tests, and updated deploy contract. Phase 38 complete: added Neon-backed first-party newsletter capture with tRPC contracts, TanStack Query mutation/admin state, admin export page, 74 regression tests, and privacy posture enforcement. Phase 39 complete: added benchmark results visibility and permission-gated safe Git integration fixtures for benchmarkable git-mutating skills. Phase 40 complete: added the `/workflows` hybrid replay pilot so benchmark evidence becomes primary step-by-step proof before the pattern is expanded to other showcase surfaces. Phase 41 builds out persisted benchmark result coverage for the remaining tracked skills in controlled batches.
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
@@ -3105,13 +3105,13 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Do not create, modify, or recommend GitHub Actions.
 
 **Acceptance Criteria:**
-- [ ] `/workflows` renders a hybrid replay panel as the primary selected-step surface.
-- [ ] Step circles change the active replay state and expose user prompt/command, agent response, artifact/result, and proof content for each step.
-- [ ] Benchmarked steps show visible pass-rate, quality, agent/run metadata, and report/run artifact paths without requiring a collapsed details panel.
-- [ ] Non-benchmarked steps render curated scenario transcript content and a clear no-receipt state.
-- [ ] The implementation uses structured replay data rather than adding more positional fields to `WorkflowStep`.
-- [ ] Mobile layouts constrain chat, command, report path, and benchmark output blocks without horizontal page overflow.
-- [ ] Focused component/data tests, typecheck, build, and whitespace validation pass.
+- [x] `/workflows` renders a hybrid replay panel as the primary selected-step surface.
+- [x] Step circles change the active replay state and expose user prompt/command, agent response, artifact/result, and proof content for each step.
+- [x] Benchmarked steps show visible pass-rate, quality, agent/run metadata, and report/run artifact paths without requiring a collapsed details panel.
+- [x] Non-benchmarked steps render curated scenario transcript content and a clear no-receipt state.
+- [x] The implementation uses structured replay data rather than adding more positional fields to `WorkflowStep`.
+- [x] Mobile layouts constrain chat, command, report path, and benchmark output blocks without horizontal page overflow.
+- [x] Focused component/data tests, typecheck, build, and whitespace validation pass.
 
 **Parallelization:** serial
 **Coordination Notes:** Keep serial because the work is a visual/data-model pilot in one tightly coupled component family: `TuiWorkflow.tsx`, `workflow-data.ts`, `workflow.css`, shared showcase types, and focused tests. The design needs one integration owner to preserve the pilot's visual coherence.
@@ -3127,25 +3127,25 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 **Subagent lanes:** none
 
 ### Implementation
-- Step 40.1: Define structured replay data for workflow steps.
+- [x] Step 40.1: Define structured replay data for workflow steps.
   - Classification: automated
   - Files: modify `apps/skills-showcase/src/showcase/tui/workflow-data.ts`, modify `apps/skills-showcase/src/showcase/types.ts` if shared replay or receipt types are needed
   - Add a replay-oriented data shape with user message, agent message, terminal/proof block, artifact/result block, and optional benchmark receipt state.
   - Keep existing workflow metadata available for notebook context and homepage preview support.
   - Avoid adding more positional tuple fields to `WorkflowStep`.
-- Step 40.2: Replace the active step card with the hybrid replay panel.
+- [x] Step 40.2: Replace the active step card with the hybrid replay panel.
   - Classification: automated
   - Files: modify `apps/skills-showcase/src/showcase/tui/TuiWorkflow.tsx`
   - Render chat-style user/agent messages as the primary active-step content.
   - Embed terminal/proof and artifact/result blocks inside the replay.
   - Keep step circles, play/pause, previous/next, restart, reduced-motion behavior, and notebook context working.
-- Step 40.3: Promote benchmark receipts into the visible replay.
+- [x] Step 40.3: Promote benchmark receipts into the visible replay.
   - Classification: automated
   - Files: modify `apps/skills-showcase/src/showcase/tui/TuiWorkflow.tsx`, modify `apps/skills-showcase/src/showcase/tui/workflow.css`
   - Use existing `workflowBenchmarks` data to show pass rate, quality, agent, run index, report path, and run artifact path when available.
   - Remove or demote the collapsed `View benchmark execution` details panel from the primary benchmarked-step experience.
   - Ensure no-receipt states are explicit for non-benchmarked steps.
-- Step 40.4: Style and harden the `/workflows` replay pilot.
+- [x] Step 40.4: Style and harden the `/workflows` replay pilot.
   - Classification: automated
   - Files: modify `apps/skills-showcase/src/showcase/tui/workflow.css`
   - Style chat messages, terminal/proof blocks, artifact/result blocks, and benchmark receipts within the existing playful blueprint theme.
@@ -3153,11 +3153,11 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
   - Preserve accessible focus states and readable contrast.
 
 ### Green
-- Step 40.5: Write focused regression coverage for the replay pilot.
+- [x] Step 40.5: Write focused regression coverage for the replay pilot.
   - Classification: automated
   - Files: modify `apps/skills-showcase/src/showcase/workflows.test.tsx`, modify `tests/layer1/skills-showcase-benchmark-demo.test.ts` if generated data contract assertions need updates
   - Cover replay data presence, active-step rendering, step-circle navigation, benchmark receipt rendering, and non-benchmarked receipt state.
-- Step 40.6: Run app validation and visual sanity checks.
+- [x] Step 40.6: Run app validation and visual sanity checks.
   - Classification: automated
   - Files: modify `tasks/todo.md` with review results
   - Run `pnpm --dir apps/skills-showcase test`.
@@ -3169,15 +3169,17 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 
 ### Milestone: Phase 40 Workflow Hybrid Replay Pilot
 **Acceptance Criteria:**
-- [ ] `/workflows` renders a hybrid replay panel as the primary selected-step surface.
-- [ ] Step circles change the active replay state and expose user prompt/command, agent response, artifact/result, and proof content for each step.
-- [ ] Benchmarked steps show visible pass-rate, quality, agent/run metadata, and report/run artifact paths without requiring a collapsed details panel.
-- [ ] Non-benchmarked steps render curated scenario transcript content and a clear no-receipt state.
-- [ ] The implementation uses structured replay data rather than adding more positional fields to `WorkflowStep`.
-- [ ] Mobile layouts constrain chat, command, report path, and benchmark output blocks without horizontal page overflow.
-- [ ] Focused component/data tests, typecheck, build, and whitespace validation pass.
-- [ ] All phase tests pass.
-- [ ] No regressions in previous phase tests.
+- [x] `/workflows` renders a hybrid replay panel as the primary selected-step surface.
+- [x] Step circles change the active replay state and expose user prompt/command, agent response, artifact/result, and proof content for each step.
+- [x] Benchmarked steps show visible pass-rate, quality, agent/run metadata, and report/run artifact paths without requiring a collapsed details panel.
+- [x] Non-benchmarked steps render curated scenario transcript content and a clear no-receipt state.
+- [x] The implementation uses structured replay data rather than adding more positional fields to `WorkflowStep`.
+- [x] Mobile layouts constrain chat, command, report path, and benchmark output blocks without horizontal page overflow.
+- [x] Focused component/data tests, typecheck, build, and whitespace validation pass.
+- [x] All phase tests pass.
+- [x] No regressions in previous phase tests.
+
+**Completed:** 2026-05-17. `/workflows` now uses structured replay data, chat-style user/agent messages, embedded terminal/result blocks, visible benchmark receipts, and curated no-receipt states. Step-circle navigation, app tests, typecheck, production build, whitespace validation, and Safari desktop/mobile visual sanity checks passed. Next phase: Phase 41 remaining benchmark result coverage.
 
 ---
 

@@ -2340,4 +2340,5 @@ Resolved all 10 findings from `/expert-review`:
 
 - Updated the `roadmap` Tier 1 benchmark fixture to expect `$plan-phase 1` for a roadmap-only output that still needs phase decomposition, matching the roadmap skill contract.
 - Removed the stale `tasks/roadmap.md` concrete-file quality expectation from the fixture so the quality check focuses on the generated roadmap structure and next route.
-- Verified with focused `bench-setups` layer1 coverage, `pnpm --dir tests verify --skill roadmap`, and whitespace validation.
+- Tightened the fixture prompt to require an exact `## Next Command` section after a first Codex smoke proved the route was fixed but the generic handoff label was still too loose.
+- Verified with focused `bench-setups` layer1 coverage, `pnpm --dir tests verify --skill roadmap`, install/skill integrity checks, benchmark coverage validation, Codex smoke `roadmap-codex-0c6a74ce`, and whitespace validation.
