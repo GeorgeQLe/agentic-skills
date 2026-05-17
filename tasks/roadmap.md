@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Agent Review: update-packages 2026-05-17
+
+**Goal:** Review the latest persisted `update-packages` Claude and Codex benchmark outputs for subjective operator quality.
+
+**Acceptance Criteria:**
+- [x] Latest Claude and Codex run directories are resolved from `benchmark/test-update-packages-2026-05-17.md`.
+- [x] Evaluated generated `package-update-plan.md` artifacts are inspected and infrastructure-blocked runs are excluded.
+- [x] `benchmark/review-update-packages-2026-05-17.md` records source reports, run directories, score table, strengths, weaknesses, remediation, and next route.
+- [x] Generated Skills Showcase data is refreshed if review evidence changes.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Reviewed six retained `package-update-plan.md` artifacts from `update-packages-claude-2611723c` and `update-packages-codex-2216d07d`. No runs were infrastructure-blocked. Subjective verdict: good overall, with median score 87/100 and range 80-90. The artifacts are operator-usable and correctly handle eligibility, skipped versions, age-gate config, verification commands, and runner-native routes. The main remediation is to strengthen major-upgrade risk handling for React/Vitest with concrete compatibility checks, batch boundaries, and stop-route guidance. Report: `benchmark/review-update-packages-2026-05-17.md`. Recommended next command: `$targeted-skill-builder update-packages major-upgrade risk handling`.
+
 ## Current Benchmark: update-packages Fresh Pass 2026-05-17
 
 **Goal:** Run `$benchmark-test-skill update-packages` against the current repository state and publish fresh deterministic both-agent benchmark evidence.
@@ -54,6 +67,19 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 - [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
 
 **Result:** Fresh rerun completed on 2026-05-17. `benchmark-agent-review` is known with custom benchmark coverage via `tests/layer4/setups/packs/pack-workflows.setup.ts`, and verify passed with layer1 PASS in 3.3s plus layer2 SKIP because no target-specific layer2 tests matched. The both-agent benchmark completed without infrastructure blocks: Claude session `benchmark-agent-review-claude-10351b11` passed 3/3 hard assertions with 100.0% output quality, p50 latency 41.1s, and $0.75 total estimated cost; Codex session `benchmark-agent-review-codex-558b7ba6` passed 3/3 hard assertions with 98.3% output quality, p50 latency 45.6s, and $0.75 total estimated cost. Report: `benchmark/test-benchmark-agent-review-2026-05-17.md`. Generated Skills Showcase data and the benchmark results matrix were refreshed and validated. Recommended next skill: `$benchmark-agent-review benchmark-agent-review`.
+
+## Current Agent Review: benchmark-agent-review 2026-05-17
+
+**Goal:** Review the latest persisted `benchmark-agent-review` Claude and Codex benchmark outputs for subjective operator quality.
+
+**Acceptance Criteria:**
+- [x] Latest Claude and Codex run directories are resolved from the curated benchmark report.
+- [x] Evaluated generated artifacts are inspected and infrastructure-blocked runs are excluded.
+- [x] `benchmark/review-benchmark-agent-review-2026-05-17.md` records source reports, run directories, score table, strengths, weaknesses, remediation, and next route.
+- [x] Generated Skills Showcase data is refreshed if review evidence changes.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Completed on 2026-05-17. Reviewed Claude session `benchmark-agent-review-claude-10351b11` and Codex session `benchmark-agent-review-codex-558b7ba6`, covering six evaluated `pack-benchmark-output.md` artifacts and excluding no infrastructure-blocked runs. Subjective quality was good to excellent: all outputs used local fixture evidence, focused on the generated artifact's residual-risk-awareness gap rather than benchmark laxness, and routed to targeted remediation. Median subjective score was 89.5/100 with range 82-95. Main caveat: the fixture summarizes `ship-manifest.md` but does not retain the full artifact text. Report: `benchmark/review-benchmark-agent-review-2026-05-17.md`. Recommended next command: `$targeted-skill-builder benchmark-agent-review retained-artifact evidence gap`.
 
 ## Current Triage: update-packages Fresh Benchmark Failure 2026-05-17
 
