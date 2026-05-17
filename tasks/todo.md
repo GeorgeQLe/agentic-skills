@@ -3605,7 +3605,7 @@ Implement only this step, validate it, then run `/ship` when done.
 - [x] Run `pnpm verify --skill update-packages`; stop before bench if verification fails.
 - [x] Run `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` only after verify passes.
 - [x] Write and validate `benchmark/test-update-packages-2026-05-17.md` with verify, benchmark, latency, cost, consistency, raw paths, failures, and recommended next route.
-- [ ] Refresh generated evidence if curated benchmark evidence changes, validate, record results, then commit and push intended changes on `master`.
+- [x] Refresh generated evidence if curated benchmark evidence changes, validate, record results, then commit and push intended changes on `master`.
 
 ## Review — Fresh Benchmark `update-packages` 2026-05-17
 
@@ -3617,4 +3617,7 @@ Implement only this step, validate it, then run `/ship` when done.
 - Codex session `update-packages-codex-2216d07d`: 3/3 evaluated hard assertion pass rate, 0 infrastructure blocks, 94.2% output-quality score, p50 latency 60.1s, total estimated cost $0.75.
 - Failed assertions: none.
 - Report written at `benchmark/test-update-packages-2026-05-17.md`.
+- Generated Skills Showcase data and the benchmark results matrix were refreshed after the curated benchmark evidence changed.
+- Validation passed: report field scan; `pnpm --dir tests bench:coverage`; `pnpm --dir tests exec vitest run --project layer1 benchmark-results-matrix skills-showcase-benchmark-demo`; `git diff --check`.
+- Validation note: `scripts/validate-skills-showcase-data.sh` regenerated the intended benchmark/showcase asset changes and reported them as stale before commit; rerun after commit/push to confirm the committed assets are clean.
 - **Recommended next skill:** `$benchmark-agent-review update-packages`
