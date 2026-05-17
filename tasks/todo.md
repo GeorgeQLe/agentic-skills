@@ -21,10 +21,23 @@
 - Created mirrored skill contracts at `global/codex/report-website/SKILL.md` and `global/claude/report-website/SKILL.md`.
 - The workflow covers report source/target resolution, Markdown-to-structured-content parsing, clean JSX implementation, responsive report reading UX, browser visual verification, and default shipping.
 - Registered `report-website` in `tests/harness/bench-coverage.ts` as a custom Tier 2 global workflow fixture skill.
-- Refreshed generated Skills Showcase data after adding tracked `SKILL.md` files.
+- Refreshed generated Skills Showcase data after adding tracked `SKILL.md` files; the generated `skills-data.js` assets now include Claude and Codex `report-website` entries.
 - Validation passed: `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken`; `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`; `/opt/homebrew/bin/bash ./scripts/skill-next-step-routing.sh --missing`; `node scripts/generate-skills-showcase-data.mjs`; `node scripts/generate-skills-showcase-github-data.mjs`; `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests bench:coverage`; `git diff --check`.
-- Pre-existing staged/generated `feature-interview` review artifacts were left out of this task scope.
+- Focused adversarial review passed: mirrored skill diff differs only by Claude/Codex invocation and routing syntax; generated showcase data contains both `global-claude-report-website` and `global-codex-report-website`; benchmark coverage contains `report-website` in both the Tier 2/3 custom list and overall coverage list.
 - **Recommended next command:** `$report-website <report.md>`
+
+### Ship Manifest — `report-website` Global Skill
+
+- **User goal:** Ship the finished `report-website` global skill addition, including mirrored contracts, benchmark coverage registration, generated showcase assets, and task records.
+- **Changed files:** `global/codex/report-website/SKILL.md`; `global/claude/report-website/SKILL.md`; `tests/harness/bench-coverage.ts`; `docs/skills-showcase/assets/skills-data.js`; `apps/skills-showcase/public/assets/skills-data.js`; `docs/skills-showcase/assets/github-proof-data.js`; `apps/skills-showcase/public/assets/github-proof-data.js`; `tasks/todo.md`; `tasks/roadmap.md`; `tasks/history.md`.
+- **Per-file purpose:** The mirrored `SKILL.md` files define the new workflow for Codex and Claude; `tests/harness/bench-coverage.ts` registers the skill as covered by the global Tier 2/3 fixture; generated showcase assets publish the new skill and refreshed repository proof fingerprint; task docs record completion, quality evidence, and history.
+- **User-goal mapping:** The skill contracts provide the requested Markdown-report-to-JSX-website workflow; the harness entry keeps benchmark coverage current; generated assets make the skill visible in the Skills Showcase; task docs satisfy the repository shipping contract.
+- **Tests run:** `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken` passed; `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing` passed; `/opt/homebrew/bin/bash ./scripts/skill-next-step-routing.sh --missing` passed; `node scripts/generate-skills-showcase-data.mjs` passed; `node scripts/generate-skills-showcase-github-data.mjs` passed; `scripts/validate-skills-showcase-data.sh` passed; `pnpm --dir tests bench:coverage` passed with 153 skills; `git diff --check` passed.
+- **Skipped tests:** Full app build was not run because this change adds skill metadata and generated data only, with no React, route, CSS, or runtime code changes. Browser visual checks are not applicable because no rendered page implementation changed in this shipping boundary.
+- **Adversarial review:** Focused review compared mirrored contracts with `diff -u`, scanned routing/command text with `rg`, confirmed generated showcase entries for both platforms, and confirmed coverage registration in both relevant arrays. Findings: no contract drift beyond expected command syntax; generated assets include the new mirrored skill entries; no unresolved review findings.
+- **Residual risk:** The new skill has not yet been exercised against a real Markdown report in an application repo, so future use could expose wording gaps in the workflow contract. The first proof command is `$report-website <report.md>` followed by browser verification in the target app.
+- **Rollback note:** Revert the shipping commit to remove the mirrored skill, benchmark coverage registration, generated showcase entries, and task documentation updates together.
+- **Next command:** `$report-website <report.md>`
 
 ## Current Task — Benchmark `feature-interview` Fresh Rerun 2026-05-17
 
