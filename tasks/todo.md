@@ -30,6 +30,28 @@
 - Validation passed: report field scan; `pnpm --dir tests bench:coverage`; `pnpm --dir tests exec vitest run --project layer1 benchmark-results-matrix skills-showcase-benchmark-demo`; `git diff --check`. `scripts/validate-skills-showcase-data.sh` was rerun and reported the regenerated assets as dirty pending commit, which is expected before the final commit.
 - **Recommended next command:** `$ship`
 
+## Current Task — Triage `update-packages` Benchmark Failure 2026-05-17
+
+**Goal:** Investigate why `$benchmark-test-skill update-packages` failed both-agent hard assertions and recommend the smallest verified fix.
+
+**Plan:**
+- [x] Inspect the benchmark report and persisted Claude/Codex run JSON.
+- [x] Compare current mirrored `update-packages` contracts against the contract version used in the failed run.
+- [x] Inspect benchmark setup expectations, quality criteria, and relevant lessons.
+- [x] Write `benchmark/triage-update-packages-2026-05-17.md` with verdict, root cause, responsible gap, validation plan, and next route.
+- [x] Validate the report fields, record results, then commit and push intended changes on `master`.
+
+## Review — Triage `update-packages` Benchmark Failure 2026-05-17
+
+- Verification verdict: verified.
+- Evidence inspected: `benchmark/test-update-packages-2026-05-17.md`, Claude report/run JSON, Codex report/run JSON, mirrored `update-packages` contracts, `tests/layer4/setups/tier23-global-workflows.setup.ts`, and `tasks/lessons.md`.
+- Root cause: mixed benchmark coverage defect. The setup expects final `$run` routing while the prompt and `update-packages` output contract allowed concrete package-manager next commands; the shared quality rubric also falsely forbids fixture-backed `package-lock.json`.
+- Contract version note: the failed raw Codex run read `update-packages` version 0.1.0, while the current repo has version 0.2.0 with explicit installer age-gate requirements.
+- Responsible gap: benchmark setup and quality rubric for `update-packages`, not runner capacity or GitHub Actions.
+- Report written to `benchmark/triage-update-packages-2026-05-17.md`.
+- Report validation passed: required session-triage sections, verification verdict, evidence, root cause, recommended fix, validation plan, confidence, and next route are present. `git diff --check` passed.
+- **Recommended next skill:** `$targeted-skill-builder update-packages benchmark route and fixture rubric alignment`
+
 ## Current Task — Tighten `update-packages` Install Age Gate 2026-05-17
 
 **Goal:** Update the `update-packages` skill so package updates leave behind package-manager configuration that prevents npm and pnpm from resolving packages published within the last 8 days.
