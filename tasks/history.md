@@ -2371,3 +2371,9 @@ Resolved all 10 findings from `/expert-review`:
 - Classified the failure as a benchmark harness false negative: the quality rubric requires the exact phrase `benchmark coverage reporting`, while the failing generated roadmap preserved the same concept through `Benchmark Coverage Model`, `benchmark coverage data model`, and `benchmark coverage metadata`.
 - Confirmed the failed run passed all hard assertions, created `tasks/roadmap.md`, included phase structure, acceptance criteria, verification, CLI status/validation scope, and routed to `$plan-phase 1`.
 - Wrote `benchmark/triage-roadmap-2026-05-17-quality.md` with the recommended targeted update route.
+
+## 2026-05-17 — roadmap benchmark evidence-rubric fix
+
+- Updated the `roadmap` Tier 1 benchmark quality rubric to require the broader `benchmark coverage` concept plus `CLI status output`, instead of requiring the exact source phrase `benchmark coverage reporting`.
+- Added focused layer1 coverage proving `Benchmark Coverage Model` satisfies `evidence-linked` while generic reporting text still fails.
+- Verified with focused `bench-setups` layer1 coverage, `pnpm --dir tests verify --skill roadmap`, benchmark coverage validation, install/skill integrity checks, Codex smoke `roadmap-codex-e5be3958`, and whitespace validation.
