@@ -5,6 +5,28 @@
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
+## Current Task — Update `report-website` Route-Based Batch Mode 2026-05-17
+
+**Goal:** Extend `report-website` so it can build routes for all documented Markdown output files, with one collection index and one generated route per document.
+
+**Plan:**
+- [x] Inspect current mirrored `report-website` contracts and clean worktree state.
+- [x] Add `--all-output-docs` and directory modes to both skill contracts.
+- [x] Require route splitting, stable path-derived slugs, collision handling, route metadata, and batch verification.
+- [x] Refresh generated showcase data and run validation.
+- [x] Commit and push intended changes on `master`.
+
+## Review — Update `report-website` Route-Based Batch Mode 2026-05-17
+
+- Updated mirrored `report-website` contracts to version `1.1.0`.
+- Added modes for single report, directory, and `--all-output-docs`.
+- Multi-document mode now requires a route split: index route at the base route plus one stable generated route per Markdown document.
+- Added discovery guidance for documented output Markdown files and exclusions for operational docs.
+- Added path-derived slug strategy, collision handling, route metadata, internal Markdown link conversion, shared layout reuse, and batch parity verification.
+- Refreshed Skills Showcase generated data after metadata changes.
+- Validation passed: `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken`; `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`; `/opt/homebrew/bin/bash ./scripts/skill-next-step-routing.sh --missing`; `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests bench:coverage`; `git diff --check`.
+- **Recommended next command:** `$report-website --all-output-docs /reports`
+
 ## Current Task — Create `report-website` Global Skill 2026-05-17
 
 **Goal:** Add a mirrored global skill that builds a frontend website from a Markdown report by converting the report into clean JSX for readable rendering.

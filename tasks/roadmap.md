@@ -29,6 +29,19 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Implementation complete on 2026-05-17. Added mirrored `report-website` skill contracts and registered the new global skill in benchmark coverage with the Tier 2/3 global workflow fixture. Generated Skills Showcase data was refreshed and validated. Recommended next command: `$report-website <report.md>`.
 
+## Current Skill Update: report-website Route-Based Batch Mode 2026-05-17
+
+**Goal:** Update `report-website` so it can convert all documented Markdown outputs into a route-based frontend site.
+
+**Acceptance Criteria:**
+- [x] Mirrored contracts support `--all-output-docs` discovery.
+- [x] Multi-document output is split by routes with an index route plus one route per Markdown document.
+- [x] The skill defines slug stability, collision handling, route metadata, internal Markdown link conversion, and batch verification.
+- [x] Generated Skills Showcase data is refreshed because skill metadata changed.
+- [x] Validation passes and changes are committed/pushed on `master`.
+
+**Result:** Updated on 2026-05-17. `report-website` now supports single-report, directory, and `--all-output-docs` modes. Multi-document output must be route-based, with a collection index plus one route per Markdown file, stable path-derived slugs, deterministic collision handling, route metadata, converted internal links, and batch parity checks. Recommended next command: `$report-website --all-output-docs /reports`.
+
 ## Current Benchmark: feature-interview Fresh Rerun 2026-05-17
 
 **Goal:** Run `$benchmark-test-skill feature-interview` after the route-alignment remediation and publish fresh deterministic both-agent evidence.
