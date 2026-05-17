@@ -5,6 +5,43 @@
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
+## Current Task — Benchmark `feature-interview` Fresh Rerun 2026-05-17
+
+**Goal:** Run `$benchmark-test-skill feature-interview` against the current repository harness and publish fresh deterministic both-agent benchmark evidence.
+
+**Plan:**
+- [x] Confirm `$benchmark-test-skill` is the active workflow and `feature-interview` is only the benchmark target argument.
+- [x] Run `pnpm bench --list-skills` and record `feature-interview` coverage status.
+- [ ] Run `pnpm verify --skill feature-interview`; stop before bench if verification fails.
+- [ ] If verify passes, run `pnpm bench --skill feature-interview --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [ ] Write and validate `benchmark/test-feature-interview-2026-05-17.md` with verify, benchmark, latency, cost, consistency, raw paths, and recommended next route.
+- [ ] Refresh generated evidence if curated benchmark evidence changes, record results here, then commit and push intended changes on `master`.
+
+## Current Task — Benchmark `roadmap` Fresh Rerun 2026-05-17
+
+**Goal:** Run `$benchmark-test-skill roadmap` against the current repository harness and publish fresh deterministic both-agent benchmark evidence.
+
+**Plan:**
+- [x] Confirm `$benchmark-test-skill` is the active workflow and `roadmap` is only the benchmark target argument.
+- [x] Run `pnpm bench --list-skills` and record `roadmap` coverage status.
+- [x] Run `pnpm verify --skill roadmap`; stop before bench if verification fails.
+- [x] If verify passes, run `pnpm bench --skill roadmap --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [x] Write and validate `benchmark/test-roadmap-2026-05-17.md` with verify, benchmark, latency, cost, consistency, raw paths, and recommended next route.
+- [x] Refresh generated evidence if curated benchmark evidence changes, record results here, then commit and push intended changes on `master`.
+
+## Review — Benchmark `roadmap` Fresh Rerun 2026-05-17
+
+- Command resolution: `$benchmark-test-skill` was the active workflow; `roadmap` was treated only as the benchmark target argument.
+- Eligibility: `roadmap` is known to the harness with custom coverage via `tests/layer4/setups/tier1-workflows.setup.ts`.
+- Verify passed: layer1 PASS in 3.8s with 1,204 tests across 15 files; layer2 SKIP because no target-specific layer2 tests matched `roadmap`.
+- Benchmark ran with `pnpm bench --skill roadmap --agent both --runs 3 --chunk-size 3 --pause 0`.
+- Claude session `roadmap-claude-8c1ee4a6`: 0/0 evaluated hard assertion pass rate, 3 infrastructure-blocked runs (`agent runner budget exceeded`), no evaluated quality score, p50 latency 0.0s, total estimated cost $0.75.
+- Codex session `roadmap-codex-94365e0f`: 3/3 evaluated hard assertion pass rate, 0 infrastructure blocks, 100.0% output-quality score, p50 latency 46.1s, total estimated cost $0.75.
+- Report updated at `benchmark/test-roadmap-2026-05-17.md` with raw session paths and next route.
+- Generated Skills Showcase data and the benchmark results matrix were refreshed after the curated benchmark evidence changed.
+- Validation passed: report field scan; `pnpm --dir tests bench:coverage`; `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests exec vitest run --project layer1 benchmark-results-matrix skills-showcase-benchmark-demo`; `git diff --check`.
+- **Recommended next skill:** `$benchmark-test-skill roadmap`
+
 ## Current Task — Benchmark `roadmap` Post-Evidence-Rubric-Triage 2026-05-17
 
 **Goal:** Run `$benchmark-test-skill roadmap` against the current repository state and publish fresh deterministic both-agent benchmark evidence.
