@@ -54,6 +54,19 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Updated on 2026-05-17. `report-website` now integrates into an obvious existing documentation/public frontend by default, creates a standalone site only under explicit evidence-backed conditions, and asks a narrow question only for multiple plausible targets, route conflicts, unclear audience/access, or non-obvious deployment/navigation consequences. Recommended next command: `$report-website --all-output-docs /reports`.
 
+## Current Skill Creation: update-packages 2026-05-17
+
+**Goal:** Create a mirrored global skill that updates package dependencies to the latest published version that is more than 8 days old, while preferring pnpm over npm.
+
+**Acceptance Criteria:**
+- [x] Mirrored `update-packages` skill contracts are created under `global/codex/` and `global/claude/`.
+- [x] The skill defines package-manager detection, npm-to-pnpm migration preference, dependency age gating, batch update strategy, and verification expectations.
+- [x] Benchmark coverage is registered in `tests/harness/bench-coverage.ts`.
+- [x] Required skill and showcase validation passes.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Implementation complete on 2026-05-17. Added mirrored `update-packages` skill contracts, registered benchmark coverage with a deterministic package-age fixture, refreshed Skills Showcase data, and installed the new global skill links. Recommended next command: `$update-packages --all`.
+
 ## Current Benchmark: feature-interview Fresh Rerun 2026-05-17
 
 **Goal:** Run `$benchmark-test-skill feature-interview` after the route-alignment remediation and publish fresh deterministic both-agent evidence.
