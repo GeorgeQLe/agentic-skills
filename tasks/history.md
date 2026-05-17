@@ -2302,6 +2302,13 @@ Resolved all 10 findings from `/expert-review`:
 - Preserved existing workflow chips, benchmark strip, step circles, playback controls, counter, notebook context, and benchmark demo details while moving the primary selected-step surface onto the replay data contract.
 - Verified with Skills Showcase typecheck, focused app tests, production build, and whitespace validation.
 
+## 2026-05-17 — roadmap benchmark fresh rerun
+
+- Reran `$benchmark-test-skill roadmap` after the benchmark-results matrix assertion fix.
+- Verified `roadmap` custom coverage and passed `pnpm verify --skill roadmap` with layer1 PASS in 3.6s and layer2 SKIP.
+- Ran the both-agent benchmark: Claude session `roadmap-claude-ceadee35` was fully infrastructure-blocked by runner budget, while Codex session `roadmap-codex-43f41fa9` completed 3 evaluated runs with 0/3 hard assertion pass rate and 78.6% output quality.
+- Updated `benchmark/test-roadmap-2026-05-17.md` and routed the evaluated failure to `$session-triage roadmap benchmark failure`.
+
 ## 2026-05-17 — Step 40.4 workflow replay styling and hardening
 
 - Styled the `/workflows` hybrid replay as distinct user and agent chat messages with blueprint-themed terminal/proof, artifact/result, and benchmark receipt blocks.

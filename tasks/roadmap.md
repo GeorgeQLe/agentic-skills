@@ -21,11 +21,13 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 **Goal:** Rerun `$benchmark-test-skill roadmap` after the benchmark-results matrix assertion fix and publish fresh deterministic both-agent evidence.
 
 **Acceptance Criteria:**
-- [ ] `pnpm bench --list-skills` confirms `roadmap` is known and reports its coverage status.
-- [ ] `pnpm verify --skill roadmap` passes or blocks benchmark execution with a recorded failure.
-- [ ] `pnpm bench --skill roadmap --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
-- [ ] `benchmark/test-roadmap-2026-05-17.md` records fresh verify, benchmark, latency, cost, consistency, and raw session evidence.
-- [ ] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+- [x] `pnpm bench --list-skills` confirms `roadmap` is known and reports its coverage status.
+- [x] `pnpm verify --skill roadmap` passes or blocks benchmark execution with a recorded failure.
+- [x] `pnpm bench --skill roadmap --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [x] `benchmark/test-roadmap-2026-05-17.md` records fresh verify, benchmark, latency, cost, consistency, and raw session evidence.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Benchmark failure on 2026-05-17. `roadmap` is known with custom benchmark coverage via `tests/layer4/setups/tier1-workflows.setup.ts`, and verify passed with layer1 PASS in 3.6s plus layer2 SKIP because no target-specific layer2 tests matched. The both-agent benchmark ran. Claude session `roadmap-claude-ceadee35` was fully infrastructure-blocked by `agent runner budget exceeded` (3 blocked runs, 0 evaluated, $0.75). Codex session `roadmap-codex-43f41fa9` completed three evaluated runs with 0/3 hard assertion pass rate, 78.6% output quality, p50 latency 44.3s, and $0.75 total estimated cost; every run failed `Output recommends $run`. Report: `benchmark/test-roadmap-2026-05-17.md`. Recommended next skill: `$session-triage roadmap benchmark failure`.
 
 ## Current Agent Review: ship Fresh Benchmark 2026-05-16
 
