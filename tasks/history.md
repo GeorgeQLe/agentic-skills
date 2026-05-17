@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-05-17 — Feature-interview benchmark artifact-path evidence
+
+- Updated mirrored `feature-interview` contracts to require an explicit artifact path in generated interview logs.
+- Tightened the Tier 1 `feature-interview` benchmark prompt and layer1 setup coverage so the `file-reference` quality criterion requires `specs/benchmark-reporting-feature-interview.md` to be named in the retained artifact.
+- Refreshed generated benchmark matrix and Skills Showcase data after the curated `feature-interview` benchmark/review evidence changed.
+- Validation passed: focused layer1 benchmark setup and generated-data checks.
+- Recommended next skill: `$session-triage roadmap benchmark failure`.
+
 ## 2026-05-17 — Agent review: feature-interview post-route-fix benchmark
 
 - Reviewed latest persisted `feature-interview` benchmark outputs from `benchmark/test-feature-interview-2026-05-17.md`.

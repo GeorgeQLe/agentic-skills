@@ -68,6 +68,30 @@
 - Validation passed: report field scan; `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests exec vitest run --project layer1 benchmark-results-matrix skills-showcase-benchmark-demo`; `git diff --check`.
 - **Recommended next skill:** `$targeted-skill-builder feature-interview benchmark artifact path evidence`
 
+## Current Task — Targeted Update `feature-interview` Benchmark Artifact Path Evidence 2026-05-17
+
+**Goal:** Make `feature-interview` interview logs consistently cite their retained artifact path when a benchmark or user prompt names an output file.
+
+**Plan:**
+- [x] Read relevant lessons and the latest `feature-interview` benchmark agent-review report.
+- [x] Confirm this is an existing `feature-interview` skill update plus benchmark fixture coverage, not a new skill.
+- [x] Update mirrored `feature-interview` contracts to require an explicit artifact path in the interview log.
+- [x] Update the Tier 1 `feature-interview` benchmark prompt and layer1 setup coverage for artifact-path traceability.
+- [x] Run focused and required validation, refresh generated evidence, then commit and push intended changes on `master`.
+
+## Review — Targeted Update `feature-interview` Benchmark Artifact Path Evidence 2026-05-17
+
+- Decision: updated the existing `feature-interview` skill; no new skill was needed.
+- Evidence used: `tasks/lessons.md`, `benchmark/review-feature-interview-2026-05-17.md`, mirrored `feature-interview` contracts, Tier 1 setup, and focused layer1 benchmark setup coverage.
+- Evidence intentionally skipped: broad session-history analysis, because the agent-review report already verified the narrow recurring gap.
+- Updated `global/codex/feature-interview/SKILL.md` and `global/claude/feature-interview/SKILL.md` so interview logs must include `Artifact path: the exact path of this interview log.`
+- Updated `tests/layer4/setups/tier1-workflows.setup.ts` so the feature-interview fixture asks for an explicit Artifact path line.
+- Updated `tests/layer1/bench-setups.test.ts` to assert the mirrored contracts, prompt, and `file-reference` quality behavior.
+- Codex smoke benchmark passed before cleanup: `feature-interview-codex-9239322b` completed 1/1 hard assertions with 100.0% quality, including `file-reference`. The temporary ignored smoke run was removed before regenerating public matrix data so the matrix keeps the curated 3-run Codex report.
+- Generated Skills Showcase data and the benchmark results matrix were refreshed after the skill behavior update and curated review link.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 bench-setups`; `./install.sh`; `./scripts/skill-deps.sh --broken`; `./scripts/skill-versions.sh --missing`; `./scripts/skill-next-step-routing.sh --missing`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill feature-interview`; `pnpm --dir tests bench --skill feature-interview --agent codex --runs 1 --chunk-size 1 --pause 0`; `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests exec vitest run --project layer1 benchmark-results-matrix skills-showcase-benchmark-demo`.
+- **Recommended next skill:** `$benchmark-test-skill feature-interview`
+
 ## Current Task — Benchmark `feature-interview` Post-Route-Fix 2026-05-17
 
 **Goal:** Run `$benchmark-test-skill feature-interview` against the current repository state after the route-alignment harness fix and publish deterministic both-agent evidence.
