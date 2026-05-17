@@ -7,7 +7,7 @@
 
 ## Priority Task Queue
 
-- [ ] `$run` - Execute Step 40.4 to style and harden the `/workflows` replay pilot after benchmark receipts were promoted into the visible replay.
+- [ ] `$run` - Execute Step 40.5 to add focused regression coverage for the `/workflows` replay pilot after the CSS hardening pass.
 - [x] `/reconcile-dev-docs fix tasks` - Resolved orphaned Phase 38 manual tasks: 4 items deferred to future work (Neon DB, admin secret, Vercel env vars, live verification).
 - [ ] `/feature-interview` - Triage 8 remaining unspecced ideas in `tasks/ideas.md` (cleaned from 25 on 2026-05-15; 17 removed as shipped/obsolete).
 
@@ -126,7 +126,7 @@
   - Use existing `workflowBenchmarks` data to show pass rate, quality, agent, run index, report path, and run artifact path when available.
   - Remove or demote the collapsed `View benchmark execution` details panel from the primary benchmarked-step experience.
   - Ensure no-receipt states are explicit for non-benchmarked steps.
-- [ ] Step 40.4: Style and harden the `/workflows` replay pilot.
+- [x] Step 40.4: Style and harden the `/workflows` replay pilot.
   - Classification: automated
   - Files: modify `apps/skills-showcase/src/showcase/tui/workflow.css`
   - Style chat messages, terminal/proof blocks, artifact/result blocks, and benchmark receipts within the existing playful blueprint theme.
@@ -211,7 +211,36 @@
 - **Rollback note:** Revert the Step 40.3 commit to restore the previous replay receipt text and collapsed benchmark execution details.
 - **Next command:** `$run`
 
-### Next Step Plan — Step 40.4 Style And Harden The Replay Pilot
+## Review — Step 40.4 Replay Pilot Styling And Hardening
+
+- Styled the selected `/workflows` replay into distinct chat-style user and agent messages with constrained widths, visible sender labels, and blueprint-themed color accents.
+- Hardened terminal/proof and artifact/result blocks with grid spacing, rounded framed output, stronger readable contrast, bounded height, and wrapping for long commands, report paths, run artifact paths, and benchmark excerpts.
+- Added overflow containment on the active step card and `overflow-wrap: anywhere` on replay text so long content cannot force horizontal page overflow.
+- Preserved keyboard accessibility by adding visible focus states for workflow chips, step circles, and playback controls.
+- Validation passed: `pnpm --dir apps/skills-showcase typecheck`; `pnpm --dir apps/skills-showcase test -- --runInBand` (8 files, 88 tests); `pnpm --dir apps/skills-showcase build`; `git diff --check`.
+
+### Ship Manifest — Step 40.4
+
+- **User goal:** Execute Phase 40 Step 40.4 by styling and hardening the `/workflows` replay pilot after benchmark receipts were promoted into the visible replay.
+- **Changed files:** `apps/skills-showcase/src/showcase/tui/workflow.css`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** `workflow.css` owns the replay presentation, overflow hardening, and focus styling; `tasks/todo.md` records completion, validation, manifest, and the next executable step; `tasks/history.md` records the shipped work.
+- **User-goal mapping:** The CSS changes directly implement the requested styling and hardening for chat messages, terminal/proof blocks, artifact/result blocks, benchmark receipts, mobile-safe wrapping, and accessible focus states.
+- **Tests run:** `pnpm --dir apps/skills-showcase typecheck`; `pnpm --dir apps/skills-showcase test -- --runInBand`; `pnpm --dir apps/skills-showcase build`; `git diff --check`.
+- **Skipped tests:** Generated-data validation was not run because Step 40.4 changes only component CSS and does not touch generated assets, skill contracts, benchmark data, or showcase data builders. Browser visual verification remains explicitly assigned to Step 40.6.
+- **Adversarial review:** Reviewed the exact CSS diff against the Step 40.4 scope, looking for accidental data/markup changes, inaccessible focus loss, color contrast regressions, and overflow gaps. The diff stays CSS-only, keeps existing controls and reduced-motion behavior, adds visible focus outlines, and applies min-width/wrapping constraints to replay text and preformatted blocks.
+- **Residual risk:** Browser-level desktop/mobile rendering has not been visually inspected in this step; Step 40.6 remains responsible for starting the app and verifying `/workflows` at desktop and mobile widths.
+- **Rollback note:** Revert the Step 40.4 commit to restore the prior replay styling while keeping the structured replay and visible receipt behavior from Steps 40.1-40.3.
+- **Next command:** `$run`
+
+### Next Step Plan — Step 40.5 Focused Replay Pilot Regression Coverage
+
+- Scope: modify `apps/skills-showcase/src/showcase/workflows.test.tsx`; modify `tests/layer1/skills-showcase-benchmark-demo.test.ts` only if generated data contract assertions need updates.
+- Add focused coverage proving `/workflows` renders the replay data surface, including user prompt, agent response, terminal/proof output, artifact/result output, visible benchmark receipt metadata, and explicit no-receipt text for non-benchmarked steps.
+- Cover step-circle navigation so changing the active step changes the replay state.
+- Keep assertions data-contract focused rather than brittle to decorative CSS details.
+- Validation target: `pnpm --dir apps/skills-showcase test -- --runInBand`, `pnpm --dir apps/skills-showcase typecheck`, `pnpm --dir apps/skills-showcase build`, and `git diff --check`.
+
+### Previous Next Step Plan — Step 40.4 Style And Harden The Replay Pilot
 
 - Scope: modify `apps/skills-showcase/src/showcase/tui/workflow.css`.
 - Style the existing replay messages, terminal/proof blocks, artifact/result blocks, and benchmark receipt block into a coherent chat-and-terminal presentation within the playful blueprint theme.

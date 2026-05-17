@@ -2301,3 +2301,10 @@ Resolved all 10 findings from `/expert-review`:
 - Replaced the `/workflows` active step-card summary body with a structured replay panel showing user prompt, agent response, terminal/proof text, artifact/result text, and receipt content.
 - Preserved existing workflow chips, benchmark strip, step circles, playback controls, counter, notebook context, and benchmark demo details while moving the primary selected-step surface onto the replay data contract.
 - Verified with Skills Showcase typecheck, focused app tests, production build, and whitespace validation.
+
+## 2026-05-17 — Step 40.4 workflow replay styling and hardening
+
+- Styled the `/workflows` hybrid replay as distinct user and agent chat messages with blueprint-themed terminal/proof, artifact/result, and benchmark receipt blocks.
+- Hardened the active replay card against long commands, report paths, run artifact paths, and benchmark excerpts by adding overflow containment and wrapping constraints.
+- Added visible focus states for workflow chips, step circles, and playback controls while preserving existing playback and reduced-motion behavior.
+- Verified with Skills Showcase typecheck, focused app tests, production build, and whitespace validation.
