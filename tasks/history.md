@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-05-17 — Report-website global skill
+
+- Added mirrored `report-website` skill contracts for Codex and Claude to convert Markdown reports into clean JSX frontend report websites.
+- Registered `report-website` in benchmark coverage as a Tier 2/3 global custom workflow fixture skill.
+- Regenerated Skills Showcase data so both platform skill entries are included in public assets and refreshed GitHub proof fingerprints.
+- Validation passed: skill dependency/version/routing checks, showcase data generation and validation, benchmark coverage, whitespace checks, and focused mirrored-contract/generated-data review.
+- Recommended next command: `$report-website <report.md>`.
+
 ## 2026-05-17 — Feature-interview benchmark artifact-path evidence
 
 - Updated mirrored `feature-interview` contracts to require an explicit artifact path in generated interview logs.
