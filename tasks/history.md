@@ -2315,3 +2315,9 @@ Resolved all 10 findings from `/expert-review`:
 - Hardened the active replay card against long commands, report paths, run artifact paths, and benchmark excerpts by adding overflow containment and wrapping constraints.
 - Added visible focus states for workflow chips, step circles, and playback controls while preserving existing playback and reduced-motion behavior.
 - Verified with Skills Showcase typecheck, focused app tests, production build, and whitespace validation.
+
+## 2026-05-17 — Step 40.5 workflow replay regression coverage
+
+- Added focused `TuiWorkflow` tests covering replay prompt/agent/terminal/artifact rendering, step-circle navigation, visible benchmark receipt metadata, and curated no-receipt states.
+- Kept the assertions behavior-oriented by injecting minimal `workflowBenchmarks` data and using accessible step labels rather than decorative CSS details.
+- Verified with Skills Showcase tests, typecheck, production build, and whitespace validation.
