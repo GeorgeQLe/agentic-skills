@@ -55,6 +55,29 @@
 - Validation plan recorded in the report: focused layer1 setup coverage, `roadmap` verify, Codex smoke benchmark, benchmark coverage, whitespace check, then full `$benchmark-test-skill roadmap` rerun.
 - **Recommended next skill:** `$targeted-skill-builder roadmap benchmark CLI evidence rubric`
 
+## Current Task — Targeted Update `roadmap` Benchmark CLI Evidence Rubric 2026-05-17
+
+**Goal:** Relax the roadmap benchmark `evidence-linked` rubric so it recognizes CLI/status-output concept preservation without requiring the exact contiguous phrase `CLI status output`.
+
+**Plan:**
+- [x] Read relevant lessons and the fresh roadmap benchmark quality triage report.
+- [x] Confirm this is a benchmark harness update, not a mirrored `roadmap` skill contract change or new skill.
+- [x] Update the Tier 1 roadmap setup to use a concept-aware evidence criterion for benchmark coverage and CLI/status output.
+- [x] Add focused layer1 coverage for the exact failing wording from Codex `roadmap-codex-3f01cb21` run 0.
+- [x] Run focused and required validation, record results, then commit and push intended changes on `master`.
+
+## Review — Targeted Update `roadmap` Benchmark CLI Evidence Rubric 2026-05-17
+
+- Decision: updated the existing benchmark harness; no new skill or mirrored `roadmap` contract change was needed.
+- Evidence used: `tasks/lessons.md`, `benchmark/triage-roadmap-2026-05-17-fresh-quality.md`, `benchmark/test-roadmap-2026-05-17.md`, raw Codex run `tests/benchmarks/runs/roadmap-codex-3f01cb21/run-000.json`, and the Tier 1 setup/test files.
+- Evidence intentionally skipped: broad session-history analysis, because the session triage already verified this as a narrow benchmark false negative.
+- Updated `tests/layer4/setups/tier1-workflows.setup.ts` so the roadmap `evidence-linked` criterion requires `benchmark coverage` plus a CLI/status-output pattern rather than exact phrase `CLI status output`.
+- Updated `tests/layer1/bench-setups.test.ts` to prove the failing wording `Add a CLI command that reads benchmark coverage data and prints status output` now passes while generic status wording still fails.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 bench-setups`; `pnpm --dir tests verify --skill roadmap`; `pnpm --dir tests bench:coverage`; `./scripts/skill-deps.sh --broken`; `./scripts/skill-versions.sh --missing`; `./scripts/skill-next-step-routing.sh --missing`; `./install.sh`; targeted `rg`; `git diff --check`.
+- Codex smoke `roadmap-codex-a17e155f` passed 1/1 hard assertions with 100.0% output quality and no critical failures.
+- Generated Skills Showcase data was not refreshed for this roadmap rubric update because no tracked `SKILL.md`, `PACK.md`, or curated benchmark report changed in this scope.
+- **Recommended next skill:** `$benchmark-test-skill roadmap`
+
 ## Review — Agent Review `feature-interview` Benchmark Outputs 2026-05-17
 
 - Reviewed latest persisted `feature-interview` benchmark evidence from `benchmark/test-feature-interview-2026-05-17.md`.
