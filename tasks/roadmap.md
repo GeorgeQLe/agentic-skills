@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Triage: roadmap Fresh Benchmark Quality Failure 2026-05-17
+
+**Goal:** Verify the latest `$benchmark-test-skill roadmap` quality failure and identify the smallest durable fix.
+
+**Acceptance Criteria:**
+- [x] Latest benchmark report and persisted Claude/Codex run evidence are inspected.
+- [x] `roadmap` skill contracts and the custom benchmark setup expectations are compared.
+- [x] Failure is classified as skill contract gap, benchmark harness defect, generated-data issue, infrastructure block, or agent noncompliance.
+- [x] `benchmark/triage-roadmap-2026-05-17-fresh-quality.md` records verdict, root cause, recommended fix, validation plan, and next route.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Verified benchmark harness false negative on 2026-05-17, not a `roadmap` skill behavior failure. Claude session `roadmap-claude-511af1ee` was fully infrastructure-blocked by runner budget. Codex session `roadmap-codex-3f01cb21` passed 3/3 hard assertions, but `run-000.json` failed the critical `evidence-linked` quality criterion because the rubric required exact phrase `CLI status output`. The generated roadmap preserved the CLI/status-output concept with `Add a CLI command that reads benchmark coverage data and prints status output`, but not the exact contiguous phrase. Report: `benchmark/triage-roadmap-2026-05-17-fresh-quality.md`. Recommended next skill: `$targeted-skill-builder roadmap benchmark CLI evidence rubric`.
+
 ## Current Benchmark: roadmap Post-Evidence-Rubric-Triage 2026-05-17
 
 **Goal:** Run `$benchmark-test-skill roadmap` against the current repository state and publish fresh deterministic both-agent evidence.

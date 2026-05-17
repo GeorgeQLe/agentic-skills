@@ -31,6 +31,30 @@
 - Validation passed: report field scan; `pnpm --dir tests bench:coverage`; `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests exec vitest run --project layer1 benchmark-results-matrix skills-showcase-benchmark-demo`; `git diff --check`.
 - **Recommended next skill:** `$session-triage roadmap benchmark failure`
 
+## Current Task — Triage `roadmap` Benchmark Quality Failure 2026-05-17 Fresh
+
+**Goal:** Verify the latest `$benchmark-test-skill roadmap` quality failure and identify the smallest durable fix.
+
+**Plan:**
+- [x] Inspect the latest roadmap benchmark report and raw Claude/Codex run evidence.
+- [x] Read the mirrored `roadmap` skill contracts and Tier 1 benchmark setup.
+- [x] Compare the `evidence-linked` quality criterion with generated outputs and the skill contract.
+- [x] Classify the failure as skill contract gap, benchmark harness defect, runner noncompliance, or infrastructure issue.
+- [x] Write `benchmark/triage-roadmap-2026-05-17-fresh-quality.md` with verdict, root cause, recommended fix, validation plan, and next route.
+- [x] Record results here, then commit and push intended changes on `master`.
+
+## Review — Triage `roadmap` Benchmark Quality Failure 2026-05-17 Fresh
+
+- Verdict: verified benchmark quality failure, not verified as a `roadmap` skill contract failure.
+- Fresh evidence: Claude session `roadmap-claude-511af1ee` was fully infrastructure-blocked; Codex session `roadmap-codex-3f01cb21` passed 3/3 hard assertions but recorded one critical `evidence-linked` quality failure.
+- Failed run: Codex `run-000.json` reported `missing required fact: CLI status output`.
+- Contract comparison: mirrored `roadmap` contracts require phase synthesis, verification planning, and next routing; they do not require verbatim source-spec phrase retention.
+- Root cause: the Tier 1 roadmap evidence rubric still requires contiguous exact phrase `CLI status output`; the failing artifact preserved the concept with `CLI command` and `status output` wording but not the exact phrase.
+- Responsible gap: benchmark harness false negative in `tests/layer4/setups/tier1-workflows.setup.ts`, with focused coverage needed in `tests/layer1/bench-setups.test.ts`.
+- Report written: `benchmark/triage-roadmap-2026-05-17-fresh-quality.md`.
+- Validation plan recorded in the report: focused layer1 setup coverage, `roadmap` verify, Codex smoke benchmark, benchmark coverage, whitespace check, then full `$benchmark-test-skill roadmap` rerun.
+- **Recommended next skill:** `$targeted-skill-builder roadmap benchmark CLI evidence rubric`
+
 ## Review — Agent Review `feature-interview` Benchmark Outputs 2026-05-17
 
 - Reviewed latest persisted `feature-interview` benchmark evidence from `benchmark/test-feature-interview-2026-05-17.md`.
@@ -210,8 +234,11 @@
 
 ## Priority Task Queue
 
+- [ ] `$ship-end --no-deploy` - commit and push uncommitted task-doc changes before continuing task work because `git status --short` shows `M tasks/todo.md`.
+- [ ] `$session-triage roadmap benchmark failure` - resolve the latest `roadmap` benchmark quality failure because `tasks/todo.md` records Codex `roadmap-codex-3f01cb21` with 3/3 hard assertions but a critical `evidence-linked` quality failure.
+- [ ] `$feature-interview workflow terminal replay from benchmark transcripts` - update the confirmed `/workflows` replay planning destination so raw benchmark `run-*.json` user/agent/tool turns are mapped into terminal-style workflow replay events; evidence: `specs/workflow-hybrid-replay-feature-interview.md` covers hybrid replay but not raw transcript parsing, and the current user request confirmed this refinement.
+- [ ] `$run` - Execute Batch 41.1 to create/verify the remaining-results queue and benchmark the first small batch after the benchmark failure lane and transcript-replay planning route are no longer blocking.
 - [x] `$benchmark-test-skill feature-interview` - Start Phase 41 remaining benchmark result coverage with the first Tier 1 gap batch.
-- [ ] `$run` - Execute Batch 41.1 to create/verify the remaining-results queue and benchmark the first small batch.
 - [x] `/reconcile-dev-docs fix tasks` - Resolved orphaned Phase 38 manual tasks: 4 items deferred to future work (Neon DB, admin secret, Vercel env vars, live verification).
 - [ ] `/feature-interview` - Triage 8 remaining unspecced ideas in `tasks/ideas.md` (cleaned from 25 on 2026-05-15; 17 removed as shipped/obsolete).
 
