@@ -7,7 +7,7 @@
 
 ## Priority Task Queue
 
-- [ ] `$run` - Execute Step 40.5 to add focused regression coverage for the `/workflows` replay pilot after the CSS hardening pass.
+- [ ] `$run` - Execute Step 40.6 to run final app validation and visual sanity checks for the `/workflows` replay pilot.
 - [x] `/reconcile-dev-docs fix tasks` - Resolved orphaned Phase 38 manual tasks: 4 items deferred to future work (Neon DB, admin secret, Vercel env vars, live verification).
 - [ ] `/feature-interview` - Triage 8 remaining unspecced ideas in `tasks/ideas.md` (cleaned from 25 on 2026-05-15; 17 removed as shipped/obsolete).
 
@@ -157,7 +157,7 @@
   - Preserve accessible focus states and readable contrast.
 
 ### Green
-- [ ] Step 40.5: Write focused regression coverage for the replay pilot.
+- [x] Step 40.5: Write focused regression coverage for the replay pilot.
   - Classification: automated
   - Files: modify `apps/skills-showcase/src/showcase/workflows.test.tsx`, modify `tests/layer1/skills-showcase-benchmark-demo.test.ts` if generated data contract assertions need updates
   - Cover replay data presence, active-step rendering, step-circle navigation, benchmark receipt rendering, and non-benchmarked receipt state.
@@ -255,7 +255,38 @@
 - **Rollback note:** Revert the Step 40.4 commit to restore the prior replay styling while keeping the structured replay and visible receipt behavior from Steps 40.1-40.3.
 - **Next command:** `$run`
 
-### Next Step Plan — Step 40.5 Focused Replay Pilot Regression Coverage
+## Review — Step 40.5 Focused Replay Pilot Regression Coverage
+
+- Added `TuiWorkflow` regression coverage to the existing workflows test file so the `/workflows` pilot is tested directly instead of only through the legacy homepage preview client.
+- Covered active replay data presence for user prompt, agent response, terminal/proof output, and artifact/result output.
+- Covered step-circle navigation by selecting the Plan step and verifying the replay state changes with the active command and response content.
+- Covered visible benchmark receipt metadata from injected `workflowBenchmarks`, including pass rate, quality, agent, report path, and run artifact path.
+- Covered the explicit no-receipt state for curated/non-benchmarked steps.
+- Validation passed after tightening duplicate-text queries: `pnpm --dir apps/skills-showcase test -- --runInBand` (8 files, 92 tests); `pnpm --dir apps/skills-showcase typecheck`; `pnpm --dir apps/skills-showcase build`; `git diff --check`.
+- Validation note: an initial parallel `typecheck` run failed while `next build` was writing `.next/types/validator.ts`; rerunning `pnpm --dir apps/skills-showcase typecheck` serially passed, confirming a command-concurrency artifact rather than a source regression.
+
+### Ship Manifest — Step 40.5
+
+- **User goal:** Execute Phase 40 Step 40.5 by writing focused regression coverage for the `/workflows` replay pilot.
+- **Changed files:** `apps/skills-showcase/src/showcase/workflows.test.tsx`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** `workflows.test.tsx` adds replay pilot regression coverage; `tasks/todo.md` records Step 40.5 completion, validation, manifest, and next work; `tasks/history.md` records the shipped Step 40.5 work.
+- **User-goal mapping:** The test change directly protects the replay data, active-step navigation, benchmark receipt, and no-receipt behaviors required by Step 40.5. Task/history changes keep the active phase state aligned with the shipped test coverage.
+- **Tests run:** `pnpm --dir apps/skills-showcase test -- --runInBand`; `pnpm --dir apps/skills-showcase typecheck`; `pnpm --dir apps/skills-showcase build`; `git diff --check`.
+- **Skipped tests:** Generated-data validation was not run because Step 40.5 changes only component tests and task/benchmark documentation; no generated showcase assets, skill contracts, benchmark data builders, or runtime source files changed. Browser visual verification remains assigned to Step 40.6.
+- **Adversarial review:** Reviewed the exact test diff for brittle decorative assertions, accidental production-data coupling, timer flakiness, and false positives. The tests use reduced-motion `matchMedia`, injected minimal benchmark data, accessible step labels, and behavior/content assertions rather than CSS decoration checks.
+- **Residual risk:** Step 40.5 adds jsdom coverage but not a rendered browser visual pass; Step 40.6 remains responsible for desktop/mobile `/workflows` sanity checks.
+- **Rollback note:** Revert the Step 40.5 commit to remove the new replay regression assertions and task/history records.
+- **Next command:** `$run`
+
+### Next Step Plan — Step 40.6 Final App Validation And Visual Sanity Checks
+
+- Scope: modify `tasks/todo.md` with final validation and visual review results; no source changes are expected unless validation exposes a defect.
+- Run `pnpm --dir apps/skills-showcase test`, `pnpm --dir apps/skills-showcase typecheck`, `pnpm --dir apps/skills-showcase build`, and `git diff --check`.
+- Run `scripts/validate-skills-showcase-data.sh` only if generated data or showcase assets changed.
+- Start the local Skills Showcase app if needed and verify `/workflows` at desktop and mobile widths, focusing on replay layout, step-circle navigation, receipt visibility, long path wrapping, and absence of horizontal overflow.
+- If validation and visual checks pass without source defects, mark Step 40.6 and satisfied Phase 40 acceptance criteria complete with the evidence. If validation exposes a real defect, stop to fix the defect before shipping.
+
+### Previous Next Step Plan — Step 40.5 Focused Replay Pilot Regression Coverage
 
 - Scope: modify `apps/skills-showcase/src/showcase/workflows.test.tsx`; modify `tests/layer1/skills-showcase-benchmark-demo.test.ts` only if generated data contract assertions need updates.
 - Add focused coverage proving `/workflows` renders the replay data surface, including user prompt, agent response, terminal/proof output, artifact/result output, visible benchmark receipt metadata, and explicit no-receipt text for non-benchmarked steps.
