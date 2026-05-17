@@ -5,17 +5,51 @@
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
+## Current Task — Triage `feature-interview` Benchmark Failure 2026-05-17
+
+**Goal:** Verify the fresh `$benchmark-test-skill feature-interview` failure and identify the smallest durable fix.
+
+**Plan:**
+- [x] Inspect the benchmark report and raw Claude/Codex run evidence.
+- [x] Read the `feature-interview` skill contracts and Tier 1 benchmark setup.
+- [x] Compare the benchmark next-route expectation with the skill contract and generated outputs.
+- [x] Classify the failure as skill contract gap, benchmark harness defect, runner noncompliance, or infrastructure issue.
+- [x] Write `benchmark/triage-feature-interview-2026-05-17.md` with verdict, root cause, recommended fix, validation plan, and next route.
+- [ ] Record results here, then commit and push intended changes on `master`.
+
+## Review — Triage `feature-interview` Benchmark Failure 2026-05-17
+
+- Verdict: verified benchmark failure, with corrected interpretation of the failed assertion. The failed assertion description `Output recommends $spec-interview` means the setup expected `$spec-interview`; raw failed outputs generally recommended `/feature-interview`, `$feature-interview`, `/investigate`, or `$roadmap` instead.
+- Root cause: benchmark harness route mismatch in `tests/layer4/setups/tier1-workflows.setup.ts`, not an infrastructure block and not a verified `feature-interview` skill contract failure.
+- Contract comparison: mirrored Claude/Codex `feature-interview` contracts both say not to route brainstorm ideas directly to `spec-interview` unless the user explicitly asks for a full spec.
+- Responsible gap: the Tier 1 benchmark fixture hard-codes `nextRoute: "$spec-interview"` and `recommendedRoute: "$spec-interview"` for a no-follow-up idea interview, which conflicts with the current skill contract.
+- Report written: `benchmark/triage-feature-interview-2026-05-17.md`.
+- Validation plan recorded in the report: focused layer1 bench setup coverage, `feature-interview` verify, Codex smoke benchmark, benchmark coverage, generated-data validation if curated evidence changes, whitespace check, then full both-agent rerun.
+- **Recommended next skill:** `$targeted-skill-builder feature-interview benchmark route alignment`
+
 ## Current Task — Benchmark `roadmap` Post-Route-Fix 2026-05-17
 
 **Goal:** Run `$benchmark-test-skill roadmap` after the route-alignment harness fix and publish deterministic both-agent evidence.
 
 **Plan:**
-- [ ] Confirm `$benchmark-test-skill` is the active workflow and `roadmap` is only the benchmark target argument.
-- [ ] Run `pnpm bench --list-skills` and record `roadmap` coverage status.
-- [ ] Run `pnpm verify --skill roadmap`; stop before bench if verification fails.
-- [ ] If verify passes, run `pnpm bench --skill roadmap --agent both --runs 3 --chunk-size 3 --pause 0`.
-- [ ] Write and validate `benchmark/test-roadmap-2026-05-17.md` with verify, benchmark, latency, cost, consistency, raw paths, and recommended next route.
+- [x] Confirm `$benchmark-test-skill` is the active workflow and `roadmap` is only the benchmark target argument.
+- [x] Run `pnpm bench --list-skills` and record `roadmap` coverage status.
+- [x] Run `pnpm verify --skill roadmap`; stop before bench if verification fails.
+- [x] If verify passes, run `pnpm bench --skill roadmap --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [x] Write and validate `benchmark/test-roadmap-2026-05-17.md` with verify, benchmark, latency, cost, consistency, raw paths, and recommended next route.
 - [ ] Record results here, then commit and push intended changes on `master`.
+
+## Review — Benchmark `roadmap` Post-Route-Fix 2026-05-17
+
+- Command resolution: `$benchmark-test-skill` was the active workflow; `roadmap` was treated only as the benchmark target argument.
+- Eligibility: `roadmap` is known to the benchmark harness with custom coverage via `tests/layer4/setups/tier1-workflows.setup.ts`.
+- Verify passed: layer1 PASS in 5.2s; layer2 SKIP because no target-specific layer2 tests matched `roadmap`.
+- Benchmark ran with `pnpm bench --skill roadmap --agent both --runs 3 --chunk-size 3 --pause 0`.
+- Claude session `roadmap-claude-578a7980`: 1/1 evaluated hard assertion pass rate, 2 infrastructure-blocked runs (`agent runner budget exceeded`), 100.0% output-quality score, p50 latency 28.5s, total estimated cost $0.75.
+- Codex session `roadmap-codex-00c1a8a4`: 3/3 evaluated hard assertion pass rate, 0 infrastructure blocks, 92.9% output-quality score, p50 latency 40.6s, total estimated cost $0.75. The quality summary recorded 1 critical failure on `evidence-linked`.
+- Report updated at `benchmark/test-roadmap-2026-05-17.md` and validated for target, agent rows, pass/block data, latency, cost, raw session paths, and next route.
+- Generated Skills Showcase data and the benchmark results matrix were refreshed after the curated benchmark evidence changed.
+- **Recommended next skill:** `$session-triage roadmap benchmark failure`
 
 ## Review — Benchmark `feature-interview` 2026-05-17
 
