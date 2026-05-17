@@ -28,6 +28,31 @@
 - Generated benchmark/showcase assets were refreshed after persisted benchmark evidence changed.
 - **Recommended next command:** `$benchmark-test-skill benchmark-agent-review`
 
+## Current Task — Fresh Benchmark `benchmark-agent-review` 2026-05-17
+
+**Goal:** Run `$benchmark-test-skill benchmark-agent-review` after the route prompt alignment fix and publish deterministic both-agent benchmark evidence.
+
+**Plan:**
+- [x] Confirm `$benchmark-test-skill` is the active workflow and `benchmark-agent-review` is only the benchmark target argument.
+- [x] Run `pnpm bench --list-skills` and record `benchmark-agent-review` coverage status.
+- [x] Run `pnpm verify --skill benchmark-agent-review`; stop before bench if verification fails.
+- [x] Run `pnpm bench --skill benchmark-agent-review --agent both --runs 3 --chunk-size 3 --pause 0` only after verify passes.
+- [x] Write and validate `benchmark/test-benchmark-agent-review-2026-05-17.md` with verify, benchmark, latency, cost, consistency, raw paths, failures, and recommended next route.
+- [x] Refresh generated evidence if curated benchmark evidence changes, validate, record results, then commit and push intended changes on `master`.
+
+## Review — Fresh Benchmark `benchmark-agent-review` 2026-05-17
+
+- Command resolution: `$benchmark-test-skill` was the active workflow; `benchmark-agent-review` was treated only as the benchmark target argument.
+- Eligibility: `benchmark-agent-review` is known with custom coverage via `tests/layer4/setups/packs/pack-workflows.setup.ts`.
+- Verify passed: layer1 PASS in 3.3s with 1,208 tests across 15 files; layer2 SKIP because no target-specific layer2 tests matched `benchmark-agent-review`.
+- Benchmark ran with `pnpm bench --skill benchmark-agent-review --agent both --runs 3 --chunk-size 3 --pause 0`.
+- Claude session `benchmark-agent-review-claude-10351b11`: 3/3 evaluated hard assertion pass rate, 0 infrastructure blocks, 100.0% output-quality score, p50 latency 41.1s, and $0.75 total estimated cost.
+- Codex session `benchmark-agent-review-codex-558b7ba6`: 3/3 evaluated hard assertion pass rate, 0 infrastructure blocks, 98.3% output-quality score, p50 latency 45.6s, and $0.75 total estimated cost.
+- Report written at `benchmark/test-benchmark-agent-review-2026-05-17.md`.
+- Generated Skills Showcase data and the benchmark results matrix were refreshed after the curated benchmark evidence changed.
+- Validation passed: report field scan; `pnpm --dir tests bench:coverage`; `pnpm --dir tests exec vitest run --project layer1 benchmark-results-matrix skills-showcase-benchmark-demo`; `git diff --check`. `scripts/validate-skills-showcase-data.sh` regenerated the intended benchmark/showcase asset changes and reported them as stale before commit, as expected.
+- **Recommended next skill:** `$benchmark-agent-review benchmark-agent-review`
+
 ## Current Task — Fresh Triage `update-packages` Benchmark Failure 2026-05-17
 
 **Goal:** Investigate why the fresh `$benchmark-test-skill update-packages` rerun failed one Claude verification-command assertion and identify the smallest verified fix.
@@ -3569,3 +3594,27 @@ Implement only this step, validate it, then run `/ship` when done.
 - Report written to `benchmark/test-update-packages-2026-05-17.md`.
 - Report validation passed: required target, agent rows, pass-rate and blocked-run data, latency, cost, consistency, raw session paths, quality details, and recommended next route are present. `git diff --check` passed.
 - **Recommended next skill:** `$session-triage update-packages benchmark failure`
+
+## Current Task — Fresh Benchmark `update-packages` 2026-05-17
+
+**Goal:** Run `$benchmark-test-skill update-packages` against the current repository state and publish fresh deterministic both-agent benchmark evidence.
+
+**Plan:**
+- [x] Confirm `$benchmark-test-skill` is the active workflow and `update-packages` is only the benchmark target argument.
+- [x] Run `pnpm bench --list-skills` and record `update-packages` coverage status.
+- [x] Run `pnpm verify --skill update-packages`; stop before bench if verification fails.
+- [x] Run `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` only after verify passes.
+- [x] Write and validate `benchmark/test-update-packages-2026-05-17.md` with verify, benchmark, latency, cost, consistency, raw paths, failures, and recommended next route.
+- [ ] Refresh generated evidence if curated benchmark evidence changes, validate, record results, then commit and push intended changes on `master`.
+
+## Review — Fresh Benchmark `update-packages` 2026-05-17
+
+- Command resolution: `$benchmark-test-skill` was the active workflow; `update-packages` was treated only as the benchmark target argument.
+- Eligibility: `update-packages` is known with custom coverage via `tests/layer4/setups/tier23-global-workflows.setup.ts`.
+- Verify passed: layer1 PASS in 3.3s with 1,208 tests across 15 files; layer2 SKIP because no target-specific layer2 tests matched `update-packages`.
+- Benchmark ran with `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0`.
+- Claude session `update-packages-claude-2611723c`: 3/3 evaluated hard assertion pass rate, 0 infrastructure blocks, 86.5% output-quality score, p50 latency 34.0s, total estimated cost $0.75.
+- Codex session `update-packages-codex-2216d07d`: 3/3 evaluated hard assertion pass rate, 0 infrastructure blocks, 94.2% output-quality score, p50 latency 60.1s, total estimated cost $0.75.
+- Failed assertions: none.
+- Report written at `benchmark/test-update-packages-2026-05-17.md`.
+- **Recommended next skill:** `$benchmark-agent-review update-packages`
