@@ -3216,3 +3216,25 @@ Implement only this step, validate it, then run `/ship` when done.
 - Report written to `benchmark/test-icon-handler-2026-05-14.md`.
 - Report validation passed: required target, agent rows, pass-rate and blocked-run data, latency, cost, consistency, raw session paths, quality details, and recommended next route are present.
 - **Recommended next skill:** `$benchmark-agent-review icon-handler`
+
+## Current Task — Create `update-packages` Skill 2026-05-17
+
+**Goal:** Add a mirrored global skill for updating dependencies to the latest version whose published package version is older than 8 days, with a preference to migrate npm projects to pnpm.
+
+**Plan:**
+- [x] Inspect existing skill creation conventions, benchmark coverage expectations, and package-management-related skills.
+- [x] Create mirrored Codex and Claude `update-packages` skill contracts.
+- [x] Register benchmark coverage for `update-packages`.
+- [x] Refresh generated Skills Showcase data.
+- [x] Run validation and record results.
+- [ ] Commit and push intended changes on `master`.
+
+## Review — Create `update-packages` Skill 2026-05-17
+
+- Created mirrored skill contracts: `global/codex/update-packages/SKILL.md` and `global/claude/update-packages/SKILL.md`.
+- Contract behavior: update dependencies to the latest version older than 8 full days; prefer pnpm; migrate npm projects to pnpm when safe; skip unsafe prereleases, packages without eligible versions, pinned packages, and peer-conflicted updates; verify install, typecheck, tests, lint, build, and focused smoke checks.
+- Benchmark coverage: added `update-packages` to `tests/harness/bench-coverage.ts` and `tests/layer4/setups/tier23-global-workflows.setup.ts` with fixture package metadata that proves older eligible versions are selected while newly published versions are skipped.
+- Showcase data refreshed: `docs/skills-showcase/assets/skills-data.js`, `apps/skills-showcase/public/assets/skills-data.js`, `docs/skills-showcase/assets/github-proof-data.js`, `apps/skills-showcase/public/assets/github-proof-data.js`, and `docs/benchmark-results-matrix.md`.
+- Validation passed: `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill update-packages`; `scripts/validate-skills-showcase-data.sh`; `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken`; `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`; `/opt/homebrew/bin/bash ./scripts/skill-next-step-routing.sh --missing`; `./install.sh`; targeted generated-data `rg`; `git diff --check`.
+- Validation note: direct execution of the skill shell scripts under the default macOS shell failed on Bash 4 features (`declare -A`, `mapfile`), then passed under `/opt/homebrew/bin/bash`.
+- **Recommended next command:** `$update-packages --all`
