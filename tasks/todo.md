@@ -53,6 +53,31 @@
 - Validation passed: report field scan; `pnpm --dir tests bench:coverage`; `pnpm --dir tests exec vitest run --project layer1 benchmark-results-matrix skills-showcase-benchmark-demo`; `git diff --check`. `scripts/validate-skills-showcase-data.sh` regenerated the intended benchmark/showcase asset changes and reported them as stale before commit, as expected.
 - **Recommended next skill:** `$benchmark-agent-review benchmark-agent-review`
 
+## Current Task — Agent Review `benchmark-agent-review` 2026-05-17
+
+**Goal:** Review the latest persisted `benchmark-agent-review` Claude and Codex benchmark outputs for subjective operator quality.
+
+**Plan:**
+- [x] Resolve latest Claude and Codex run directories from `benchmark/test-benchmark-agent-review-2026-05-17.md`.
+- [x] Inspect retained generated artifacts and benchmark metadata, excluding infrastructure-blocked runs.
+- [x] Grade each evaluated output against the agent-review rubric separately from deterministic benchmark metrics.
+- [x] Write `benchmark/review-benchmark-agent-review-2026-05-17.md` with scores, findings, remediation, and next route.
+- [x] Refresh generated evidence if curated review evidence changes, validate, record results, then commit and push intended changes on `master`.
+
+## Review — Agent Review `benchmark-agent-review` 2026-05-17
+
+- Reviewed latest persisted benchmark outputs from `benchmark/test-benchmark-agent-review-2026-05-17.md`.
+- Source runs: `tests/benchmarks/runs/benchmark-agent-review-claude-10351b11/` and `tests/benchmarks/runs/benchmark-agent-review-codex-558b7ba6/`.
+- Reviewed six retained `pack-benchmark-output.md` artifacts, excluding no runs because there were 0 infrastructure blocks.
+- Deterministic context: both agents passed 3/3 hard assertions; Claude had 100.0% deterministic output quality and Codex had 98.3%.
+- Subjective verdict: good to excellent overall. All outputs focus on the generated artifact's residual-risk-awareness gap rather than benchmark laxness, use local fixture evidence, and route to targeted remediation.
+- Median subjective score: 89.5/100; range: 82-95.
+- Main caveat: the fixture summarizes `ship-manifest.md` but does not retain the full artifact text, limiting direct subjective inspection.
+- Report written: `benchmark/review-benchmark-agent-review-2026-05-17.md`.
+- Generated benchmark matrix and Skills Showcase assets were refreshed; matrix now links the 2026-05-17 review.
+- Validation passed: report field scan; `pnpm --dir tests bench:coverage`; `pnpm --dir tests exec vitest run --project layer1 benchmark-results-matrix skills-showcase-benchmark-demo`; `scripts/validate-skills-showcase-data.sh`; `git diff --check`.
+- **Recommended next command:** `$targeted-skill-builder benchmark-agent-review retained-artifact evidence gap`
+
 ## Current Task — Fresh Triage `update-packages` Benchmark Failure 2026-05-17
 
 **Goal:** Investigate why the fresh `$benchmark-test-skill update-packages` rerun failed one Claude verification-command assertion and identify the smallest verified fix.
@@ -3621,3 +3646,28 @@ Implement only this step, validate it, then run `/ship` when done.
 - Validation passed: report field scan; `pnpm --dir tests bench:coverage`; `pnpm --dir tests exec vitest run --project layer1 benchmark-results-matrix skills-showcase-benchmark-demo`; `git diff --check`.
 - Validation note: `scripts/validate-skills-showcase-data.sh` regenerated the intended benchmark/showcase asset changes and reported them as stale before commit; rerun after commit/push to confirm the committed assets are clean.
 - **Recommended next skill:** `$benchmark-agent-review update-packages`
+
+## Current Task — Agent Review `update-packages` 2026-05-17
+
+**Goal:** Review the latest persisted `update-packages` Claude and Codex benchmark outputs for subjective operator quality.
+
+**Plan:**
+- [x] Resolve latest Claude and Codex run directories from `benchmark/test-update-packages-2026-05-17.md`.
+- [x] Inspect retained generated `package-update-plan.md` artifacts and benchmark metadata, excluding infrastructure-blocked runs.
+- [x] Grade each evaluated output against the agent-review rubric separately from deterministic benchmark metrics.
+- [x] Write `benchmark/review-update-packages-2026-05-17.md` with scores, findings, remediation, and next route.
+- [x] Refresh generated evidence if curated review evidence changes, validate, record results, then commit and push intended changes on `master`.
+
+## Review — Agent Review `update-packages` 2026-05-17
+
+- Reviewed latest persisted benchmark outputs from `benchmark/test-update-packages-2026-05-17.md`.
+- Source runs: `tests/benchmarks/runs/update-packages-claude-2611723c/` and `tests/benchmarks/runs/update-packages-codex-2216d07d/`.
+- Reviewed six retained `package-update-plan.md` artifacts, excluding no runs because there were 0 infrastructure blocks.
+- Deterministic context: both agents passed 3/3 hard assertions; Claude had 86.5% deterministic output quality and Codex had 94.2%.
+- Subjective verdict: good overall; artifacts are operator-usable and correctly handle package eligibility, skipped versions, age-gate config, verification commands, and runner-native next routes.
+- Median subjective score: 87/100; range: 80-90.
+- Main remediation: major React/Vitest upgrades need more concrete compatibility checks, batch boundaries, and stop-route guidance.
+- Report written: `benchmark/review-update-packages-2026-05-17.md`.
+- Validation passed: report field scan; `pnpm --dir tests bench:coverage`; `pnpm --dir tests exec vitest run --project layer1 benchmark-results-matrix skills-showcase-benchmark-demo`; `git diff --check`.
+- Validation note: `scripts/validate-skills-showcase-data.sh` regenerated proof data and reported stale files before commit, as expected.
+- **Recommended next command:** `$targeted-skill-builder update-packages major-upgrade risk handling`
