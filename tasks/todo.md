@@ -5,6 +5,32 @@
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
+## Current Task — Benchmark `benchmark-agent-review` 2026-05-17
+
+**Goal:** Run `$benchmark-test-skill benchmark-agent-review` against the current repository state and publish deterministic both-agent benchmark evidence.
+
+**Plan:**
+- [x] Confirm `$benchmark-test-skill` is the active workflow and `benchmark-agent-review` is only the benchmark target argument.
+- [x] Run `pnpm bench --list-skills` and record `benchmark-agent-review` coverage status.
+- [x] Run `pnpm verify --skill benchmark-agent-review`; stop before bench if verification fails.
+- [x] Run `pnpm bench --skill benchmark-agent-review --agent both --runs 3 --chunk-size 3 --pause 0` only after verify passes.
+- [x] Write and validate `benchmark/test-benchmark-agent-review-2026-05-17.md` with verify, benchmark, latency, cost, consistency, raw paths, failures, and recommended next route.
+- [x] Refresh generated evidence if curated benchmark evidence changes, validate, record results, then commit and push intended changes on `master`.
+
+## Review — Benchmark `benchmark-agent-review` 2026-05-17
+
+- Command resolution: `$benchmark-test-skill` was the active workflow; `benchmark-agent-review` was treated only as the benchmark target argument.
+- Eligibility: `benchmark-agent-review` is known to the harness with custom coverage via `tests/layer4/setups/packs/pack-workflows.setup.ts`.
+- Verify passed: layer1 PASS in 3.4s with 1,206 tests across 15 files; layer2 SKIP because no target-specific layer2 tests matched `benchmark-agent-review`.
+- Benchmark ran with `pnpm bench --skill benchmark-agent-review --agent both --runs 3 --chunk-size 3 --pause 0`.
+- Claude session `benchmark-agent-review-claude-a4f7218d`: 0/3 evaluated hard assertion pass rate, 0 infrastructure blocks, 89.2% output-quality score, p50 latency 33.4s, total estimated cost $0.75.
+- Codex session `benchmark-agent-review-codex-f6a6014a`: 2/3 evaluated hard assertion pass rate, 0 infrastructure blocks, 100.0% output-quality score, p50 latency 76.5s, total estimated cost $0.75.
+- Failed assertions: Claude missed `Output recommends $targeted-skill-builder` in all three runs; Codex missed the same assertion in run 2.
+- Report written at `benchmark/test-benchmark-agent-review-2026-05-17.md`.
+- Generated Skills Showcase data and the benchmark results matrix were refreshed after the curated benchmark evidence changed.
+- Validation passed: report field scan; `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests exec vitest run --project layer1 benchmark-results-matrix skills-showcase-benchmark-demo`; `git diff --check`.
+- **Recommended next skill:** `$session-triage benchmark-agent-review benchmark failure`
+
 ## Current Task — Fresh Benchmark `update-packages` 2026-05-17
 
 **Goal:** Rerun `$benchmark-test-skill update-packages` against the current repository state and publish deterministic both-agent benchmark evidence.
