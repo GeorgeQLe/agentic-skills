@@ -10,12 +10,39 @@
 **Goal:** Run `$benchmark-test-skill roadmap` against the current repository state and publish fresh deterministic both-agent benchmark evidence.
 
 **Plan:**
-- [ ] Confirm `$benchmark-test-skill` is the active workflow and `roadmap` is only the benchmark target argument.
-- [ ] Run `pnpm bench --list-skills` and record `roadmap` coverage status.
-- [ ] Run `pnpm verify --skill roadmap`; stop before bench if verification fails.
-- [ ] If verify passes, run `pnpm bench --skill roadmap --agent both --runs 3 --chunk-size 3 --pause 0`.
-- [ ] Write and validate `benchmark/test-roadmap-2026-05-17.md` with verify, benchmark, latency, cost, consistency, raw paths, and recommended next route.
+- [x] Confirm `$benchmark-test-skill` is the active workflow and `roadmap` is only the benchmark target argument.
+- [x] Run `pnpm bench --list-skills` and record `roadmap` coverage status.
+- [x] Run `pnpm verify --skill roadmap`; stop before bench if verification fails.
+- [x] If verify passes, run `pnpm bench --skill roadmap --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [x] Write and validate `benchmark/test-roadmap-2026-05-17.md` with verify, benchmark, latency, cost, consistency, raw paths, and recommended next route.
 - [x] Refresh generated evidence if curated benchmark evidence changes, record results here, then commit and push intended changes on `master`.
+
+## Review — Benchmark `roadmap` Post-Evidence-Rubric-Triage 2026-05-17
+
+- Command resolution: `$benchmark-test-skill` was the active workflow; `roadmap` was treated only as the benchmark target argument.
+- Eligibility: `roadmap` is known to the harness with custom coverage via `tests/layer4/setups/tier1-workflows.setup.ts`.
+- Verify passed: layer1 PASS in 8.8s with 1,204 tests across 15 files; layer2 SKIP because no target-specific layer2 tests matched `roadmap`.
+- Benchmark ran with `pnpm bench --skill roadmap --agent both --runs 3 --chunk-size 3 --pause 0`.
+- Claude session `roadmap-claude-511af1ee`: 0/0 evaluated hard assertion pass rate, 3 infrastructure-blocked runs (`agent runner budget exceeded`), no evaluated quality score, p50 latency 0.0s, total estimated cost $0.75.
+- Codex session `roadmap-codex-3f01cb21`: 3/3 evaluated hard assertion pass rate, 0 infrastructure blocks, 92.9% output-quality score, p50 latency 63.1s, total estimated cost $0.75.
+- Codex hard assertions passed, but the quality summary still recorded 1 critical `evidence-linked` failure, so the run remains a benchmark quality failure rather than a clean pass.
+- Report updated at `benchmark/test-roadmap-2026-05-17.md` with raw session paths and next route.
+- Generated Skills Showcase data and the benchmark results matrix were refreshed after the curated benchmark evidence changed.
+- Validation passed: report field scan; `pnpm --dir tests bench:coverage`; `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests exec vitest run --project layer1 benchmark-results-matrix skills-showcase-benchmark-demo`; `git diff --check`.
+- **Recommended next skill:** `$session-triage roadmap benchmark failure`
+
+## Review — Agent Review `feature-interview` Benchmark Outputs 2026-05-17
+
+- Reviewed latest persisted `feature-interview` benchmark evidence from `benchmark/test-feature-interview-2026-05-17.md`.
+- Claude session `feature-interview-claude-e5b18930`: one evaluated artifact reviewed; two runs excluded because they were infrastructure-blocked by `agent runner budget exceeded`.
+- Codex session `feature-interview-codex-1ff31029`: three evaluated artifacts reviewed.
+- Subjective verdict: strong overall. Codex artifacts were consistently excellent; Claude's evaluated artifact was good but had weaker retained-file traceability and one unsupported installed-skill-list context claim.
+- Subjective median score: 92.5/100, range 84-96.
+- Deterministic context stayed separate: all evaluated runs passed hard assertions after the route-alignment fix; the remaining recurring deterministic quality issue is `file-reference`.
+- Report written: `benchmark/review-feature-interview-2026-05-17.md`.
+- Generated Skills Showcase data and the benchmark results matrix were refreshed after adding curated review evidence.
+- Validation passed: report field scan; `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests exec vitest run --project layer1 benchmark-results-matrix skills-showcase-benchmark-demo`; `git diff --check`.
+- **Recommended next skill:** `$targeted-skill-builder feature-interview benchmark artifact path evidence`
 
 ## Current Task — Benchmark `feature-interview` Post-Route-Fix 2026-05-17
 
