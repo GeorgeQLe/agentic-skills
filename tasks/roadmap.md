@@ -29,6 +29,19 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Updated on 2026-05-17. `update-packages` now requires major/framework/build-tool updates to include batch order, peer/config compatibility checks, focused smoke checks, and a `$migrate`/`/migrate` stop route when compatibility work exceeds dependency-update scope. The contracts also forbid unqualified `pnpm@latest` defaults in favor of existing/toolchain or age-eligible pnpm versions. The custom benchmark setup now asks for this evidence and quality-checks it. Codex smoke benchmark `update-packages-codex-8d320ac5` passed 1/1 after the fix. Recommended next command: `$benchmark-test-skill update-packages`.
 
+## Current Benchmark: benchmark-agent-review Retained Artifact Evidence Rerun 2026-05-17
+
+**Goal:** Run `$benchmark-test-skill benchmark-agent-review` after the retained-artifact evidence fixture update and publish fresh deterministic both-agent evidence.
+
+**Acceptance Criteria:**
+- [x] `pnpm bench --list-skills` confirms `benchmark-agent-review` is known and reports custom coverage.
+- [x] `pnpm verify --skill benchmark-agent-review` passes or blocks benchmark execution with a recorded failure.
+- [x] `pnpm bench --skill benchmark-agent-review --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [x] `benchmark/test-benchmark-agent-review-2026-05-17.md` records fresh verify, benchmark, latency, cost, consistency, failed assertions, raw session evidence, and recommended next route.
+- [x] Results are recorded in `tasks/todo.md`, generated evidence is refreshed if needed, then intended changes are committed and pushed on `master`.
+
+**Result:** Fresh rerun completed on 2026-05-17 after the retained-artifact fixture update. `benchmark-agent-review` is known with custom benchmark coverage via `tests/layer4/setups/packs/pack-workflows.setup.ts`, and verify passed with layer1 PASS in 3.2s plus layer2 SKIP because no target-specific layer2 tests matched. The both-agent benchmark completed without infrastructure blocks: Claude session `benchmark-agent-review-claude-3378af86` passed 3/3 hard assertions with 99.2% output quality, p50 latency 48.2s, and $0.75 total estimated cost; Codex session `benchmark-agent-review-codex-0ceac781` passed 3/3 hard assertions with 99.2% output quality, p50 latency 56.1s, and $0.75 total estimated cost. Report: `benchmark/test-benchmark-agent-review-2026-05-17.md`. Generated Skills Showcase data and the benchmark results matrix were refreshed after curated benchmark evidence changed. Recommended next skill: `$benchmark-agent-review benchmark-agent-review`.
+
 ## Current Agent Review: update-packages 2026-05-17
 
 **Goal:** Review the latest persisted `update-packages` Claude and Codex benchmark outputs for subjective operator quality.
