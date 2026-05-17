@@ -32,6 +32,27 @@
 - Report written at `benchmark/test-roadmap-2026-05-17.md`; no raw benchmark session, latency, or cost metrics exist because execution stopped before benchmark runs.
 - **Recommended next skill:** `$session-triage roadmap benchmark failure`
 
+## Current Task — Triage `roadmap` Benchmark Failure 2026-05-17
+
+**Goal:** Verify why `$benchmark-test-skill roadmap` failed and identify the smallest durable fix.
+
+**Plan:**
+- [x] Inspect the failed benchmark report and current conversation context.
+- [x] Read the failing layer1 test and generated benchmark results matrix.
+- [x] Check the matrix generator and relevant lessons before diagnosing.
+- [x] Classify whether the issue belongs to `roadmap`, benchmark harness coverage, generated data, or agent behavior.
+- [x] Write `benchmark/triage-roadmap-2026-05-17.md` with verdict, root cause, fix, validation plan, and next route.
+- [x] Record results here, then commit and push intended changes on `master`.
+
+## Review — Triage `roadmap` Benchmark Failure 2026-05-17
+
+- Verdict: verified verify failure, but not a `roadmap` skill behavior failure.
+- Root cause: `tests/layer1/benchmark-results-matrix.test.ts` pins a volatile latest raw report path, `ship-codex-a2685d9f`, while `docs/benchmark-results-matrix.md` correctly points at the fresher reviewed `ship-codex-898663d6` run.
+- Responsible gap: benchmark harness regression test brittleness. The test should match the durable `ship` Codex row shape and reviewed status without hard-coding a superseded session id.
+- Report written: `benchmark/triage-roadmap-2026-05-17.md`.
+- Validation: targeted evidence checks and `git diff --check` passed; remediation verification should run after the test matcher is updated.
+- **Recommended next skill:** `$targeted-skill-builder benchmark-results-matrix stale latest-run assertion`
+
 ## Phase 40: Workflow Hybrid Replay Pilot
 
 **Goal:** Turn the `/workflows` Playful Lab into a hybrid chat-and-terminal replay pilot where step circles drive a compelling, benchmark-grounded recreation of successful skill runs.
