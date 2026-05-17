@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Benchmark: update-packages Fresh Pass 2026-05-17
+
+**Goal:** Run `$benchmark-test-skill update-packages` against the current repository state and publish fresh deterministic both-agent benchmark evidence.
+
+**Acceptance Criteria:**
+- [x] `pnpm bench --list-skills` confirms `update-packages` is known and reports custom coverage.
+- [x] `pnpm verify --skill update-packages` passes or blocks benchmark execution with a recorded failure.
+- [x] `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [x] `benchmark/test-update-packages-2026-05-17.md` records fresh verify, benchmark, latency, cost, consistency, failed assertions, raw session evidence, and recommended next route.
+- [ ] Results are recorded in `tasks/todo.md`, generated evidence is refreshed if needed, then intended changes are committed and pushed on `master`.
+
+**Result:** Fresh rerun completed on 2026-05-17 with a deterministic both-agent pass. `update-packages` is known with custom benchmark coverage via `tests/layer4/setups/tier23-global-workflows.setup.ts`, and verify passed with layer1 PASS in 3.3s plus layer2 SKIP because no target-specific layer2 tests matched. Claude session `update-packages-claude-2611723c` completed three evaluated runs with 3/3 hard assertion pass rate, 86.5% output quality, p50 latency 34.0s, and $0.75 total estimated cost. Codex session `update-packages-codex-2216d07d` completed three evaluated runs with 3/3 hard assertion pass rate, 94.2% output quality, p50 latency 60.1s, and $0.75 total estimated cost. No runs were infrastructure-blocked. Report: `benchmark/test-update-packages-2026-05-17.md`. Recommended next skill: `$benchmark-agent-review update-packages`.
+
 ## Current Targeted Update: benchmark-agent-review Route Prompt Alignment 2026-05-17
 
 **Goal:** Align the `benchmark-agent-review` pack benchmark setup with runner-specific targeted-skill-builder routes and prompt the expected remediation handoff explicitly.
@@ -28,6 +41,19 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 - [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
 
 **Result:** Updated on 2026-05-17. `benchmark-agent-review` pack benchmark coverage now prompts a remediation-ready residual-risk-awareness handoff and asserts runner-specific targeted-skill-builder routes: `/targeted-skill-builder benchmark-agent-review residual-risk-awareness output-quality gap` for Claude and `$targeted-skill-builder benchmark-agent-review residual-risk-awareness output-quality gap` for Codex. Focused layer1 coverage proves exact route acceptance and rejects generic/non-remediation routes. Codex smoke benchmark `benchmark-agent-review-codex-384f7822` passed 1/1 after the fix. Recommended next command: `$benchmark-test-skill benchmark-agent-review`.
+
+## Current Benchmark: benchmark-agent-review Fresh Rerun 2026-05-17
+
+**Goal:** Run `$benchmark-test-skill benchmark-agent-review` after the route prompt alignment fix and publish fresh deterministic both-agent evidence.
+
+**Acceptance Criteria:**
+- [x] `pnpm bench --list-skills` confirms `benchmark-agent-review` is known and reports custom coverage.
+- [x] `pnpm verify --skill benchmark-agent-review` passes or blocks benchmark execution with a recorded failure.
+- [x] `pnpm bench --skill benchmark-agent-review --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [x] `benchmark/test-benchmark-agent-review-2026-05-17.md` records fresh verify, benchmark, latency, cost, consistency, and raw session evidence.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Fresh rerun completed on 2026-05-17. `benchmark-agent-review` is known with custom benchmark coverage via `tests/layer4/setups/packs/pack-workflows.setup.ts`, and verify passed with layer1 PASS in 3.3s plus layer2 SKIP because no target-specific layer2 tests matched. The both-agent benchmark completed without infrastructure blocks: Claude session `benchmark-agent-review-claude-10351b11` passed 3/3 hard assertions with 100.0% output quality, p50 latency 41.1s, and $0.75 total estimated cost; Codex session `benchmark-agent-review-codex-558b7ba6` passed 3/3 hard assertions with 98.3% output quality, p50 latency 45.6s, and $0.75 total estimated cost. Report: `benchmark/test-benchmark-agent-review-2026-05-17.md`. Generated Skills Showcase data and the benchmark results matrix were refreshed and validated. Recommended next skill: `$benchmark-agent-review benchmark-agent-review`.
 
 ## Current Triage: update-packages Fresh Benchmark Failure 2026-05-17
 
