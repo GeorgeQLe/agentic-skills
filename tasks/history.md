@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-05-17 — Agent review: feature-interview post-route-fix benchmark
+
+- Reviewed latest persisted `feature-interview` benchmark outputs from `benchmark/test-feature-interview-2026-05-17.md`.
+- Covered Claude session `feature-interview-claude-e5b18930` and Codex session `feature-interview-codex-1ff31029`, excluding two Claude infrastructure-blocked runs.
+- Wrote `benchmark/review-feature-interview-2026-05-17.md` with subjective scores, strengths, weaknesses, remediation, and next route.
+- Subjective verdict: Codex outputs were consistently excellent; Claude's evaluated output was good but weaker on retained-file traceability.
+- Refreshed generated benchmark matrix/showcase data and validated the report plus generated surfaces.
+- Recommended next skill: `$targeted-skill-builder feature-interview benchmark artifact path evidence`.
+
 ## 2026-05-17 — Step 40.3: visible workflow benchmark receipts
 
 - Promoted `/workflows` benchmark receipts into the primary hybrid replay panel with pass rate, quality, agent, run index, report path, and run artifact path from `workflowBenchmarks`.

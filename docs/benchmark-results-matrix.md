@@ -32,7 +32,7 @@ This matrix tracks skills that already have persisted benchmark run data and gra
 | `investigate` | Codex | `tests/benchmarks/runs/investigate-codex-701bd642/report.json` | 1 | 100% | 100.0% | none | graded | One evaluated persisted run with deterministic quality scoring. |
 | `plan-phase` | Codex | `tests/benchmarks/runs/plan-phase-codex-0ea4e69c/report.json` | 1 | 100% | not scored | none | partially graded | Hard assertion evidence exists; no quality score in the latest persisted evaluated report. |
 | `roadmap` | Claude | `tests/benchmarks/runs/roadmap-claude-578a7980/report.json` | 1 | 100% | 100.0% | none | graded | Curated report: `benchmark/test-roadmap-2026-05-17.md`. One evaluated persisted run with deterministic quality scoring. |
-| `roadmap` | Codex | `tests/benchmarks/runs/roadmap-codex-e5be3958/report.json` | 1 | 100% | 100.0% | none | graded | Curated report: `benchmark/test-roadmap-2026-05-17.md`. One evaluated persisted run with deterministic quality scoring. |
+| `roadmap` | Codex | `tests/benchmarks/runs/roadmap-codex-3f01cb21/report.json` | 3 | 100% | 92.9% | none | graded | Curated report: `benchmark/test-roadmap-2026-05-17.md`. |
 | `run` | Claude | `tests/benchmarks/runs/run-claude-2e876403/report.json` | 3 | 100% | 100.0% | none | graded | Curated report: `benchmark/test-run-2026-05-11.md`. |
 | `run` | Codex | `tests/benchmarks/runs/run-codex-47e0dd54/report.json` | 3 | 100% | 100.0% | none | graded | Curated report: `benchmark/test-run-2026-05-11.md`. |
 | `run-kanban` | Codex | `tests/benchmarks/runs/run-kanban-codex-116983da/report.json` | 1 | 100% | 82.5% | none | graded | One evaluated persisted run with deterministic quality scoring. |
