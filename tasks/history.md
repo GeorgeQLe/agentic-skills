@@ -2342,3 +2342,11 @@ Resolved all 10 findings from `/expert-review`:
 - Removed the stale `tasks/roadmap.md` concrete-file quality expectation from the fixture so the quality check focuses on the generated roadmap structure and next route.
 - Tightened the fixture prompt to require an exact `## Next Command` section after a first Codex smoke proved the route was fixed but the generic handoff label was still too loose.
 - Verified with focused `bench-setups` layer1 coverage, `pnpm --dir tests verify --skill roadmap`, install/skill integrity checks, benchmark coverage validation, Codex smoke `roadmap-codex-0c6a74ce`, and whitespace validation.
+
+## 2026-05-17 — roadmap benchmark post-route-fix rerun
+
+- Reran `$benchmark-test-skill roadmap` after the route-alignment benchmark fixture update.
+- Verified `roadmap` custom coverage and passed `pnpm verify --skill roadmap` with layer1 PASS in 5.2s and layer2 SKIP.
+- Ran the both-agent benchmark: Claude session `roadmap-claude-578a7980` had 1 evaluated pass and 2 runner-budget infrastructure blocks; Codex session `roadmap-codex-00c1a8a4` completed 3 evaluated hard-assertion passes.
+- Updated `benchmark/test-roadmap-2026-05-17.md`; the run still routes to triage because the Codex output-quality summary recorded 1 critical `evidence-linked` failure despite 100.0% hard assertion pass rate.
+- Refreshed generated Skills Showcase data and `docs/benchmark-results-matrix.md` after the curated benchmark evidence changed.
