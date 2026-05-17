@@ -42,7 +42,7 @@ This matrix tracks skills that already have persisted benchmark run data and gra
 | `ship` | Codex | `tests/benchmarks/runs/ship-codex-898663d6/report.json` | 3 | 100% | 100.0% | `benchmark/review-ship-2026-05-16.md` | graded | Curated report: `benchmark/test-ship-2026-05-16.md`. Subjective review median score available. |
 | `spec-interview` | Codex | `tests/benchmarks/runs/spec-interview-codex-40e3d74d/report.json` | 1 | 100% | 100.0% | none | graded | Curated report: `benchmark/test-spec-interview-2026-05-12.md`. One evaluated persisted run with deterministic quality scoring. |
 | `update-packages` | Claude | `tests/benchmarks/runs/update-packages-claude-0aaf8eab/report.json` | 1 | 100% | 84.1% | none | graded | Curated report: `benchmark/test-update-packages-2026-05-17.md`. One evaluated persisted run with deterministic quality scoring. |
-| `update-packages` | Codex | `tests/benchmarks/runs/update-packages-codex-51516b57/report.json` | 3 | 0% | 47.7% | none | graded | Curated report: `benchmark/test-update-packages-2026-05-17.md`. |
+| `update-packages` | Codex | `tests/benchmarks/runs/update-packages-codex-55f625e5/report.json` | 1 | 100% | 93.2% | none | graded | Curated report: `benchmark/test-update-packages-2026-05-17.md`. One evaluated persisted run with deterministic quality scoring. |
 | `youtube-video-audit` | Codex | `tests/benchmarks/runs/youtube-video-audit-codex-288097bc/report.json` | 1 | 100% | not scored | none | partially graded | Hard assertion evidence exists; no quality score in the latest persisted evaluated report. |
 
 ## Incomplete Persisted Reports
