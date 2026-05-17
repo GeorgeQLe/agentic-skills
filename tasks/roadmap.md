@@ -43,6 +43,19 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Verification-blocked on 2026-05-17. `roadmap` is known with custom benchmark coverage via `tests/layer4/setups/tier1-workflows.setup.ts`, but `pnpm verify --skill roadmap` failed at layer1 in 3.9s. The failure is `layer1/benchmark-results-matrix.test.ts` expecting the stale `ship-codex-a2685d9f` raw report row while the current generated matrix points at `ship-codex-898663d6`. The benchmark step was not run. Report: `benchmark/test-roadmap-2026-05-17.md`. Recommended next skill: `$session-triage roadmap benchmark failure`.
 
+## Current Triage: roadmap Benchmark Failure 2026-05-17
+
+**Goal:** Verify why `$benchmark-test-skill roadmap` failed and identify the smallest durable fix.
+
+**Acceptance Criteria:**
+- [x] Failed benchmark report and verify output are inspected.
+- [x] Failing layer1 test, generated matrix, and matrix generator are compared.
+- [x] Failure is classified as a `roadmap` skill defect, benchmark harness defect, generated-data defect, or agent noncompliance.
+- [x] `benchmark/triage-roadmap-2026-05-17.md` records verdict, root cause, responsible gap, validation plan, and next route.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Completed on 2026-05-17. The verify failure is real, but the responsible gap is the benchmark harness regression test, not the `roadmap` skill. `tests/layer1/benchmark-results-matrix.test.ts` hard-codes the older `ship-codex-a2685d9f` latest-run path while the generated matrix correctly points at the fresher reviewed `ship-codex-898663d6` run. Report: `benchmark/triage-roadmap-2026-05-17.md`. Recommended next skill: `$targeted-skill-builder benchmark-results-matrix stale latest-run assertion`.
+
 ## Current Benchmark: ship Fresh Run 2026-05-16
 
 **Goal:** Run `$benchmark-test-skill ship` against the current repository harness and publish fresh deterministic both-agent evidence.
