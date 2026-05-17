@@ -1,14 +1,106 @@
 # Active Phase
 
 **Project:** Claude Skills / agentic-skills
-**Status:** All 39 roadmap phases complete.
+**Status:** Phase 40 decomposed, ready for Step 40.1.
+**Current phase:** Phase 40 of 40 — Workflow Hybrid Replay Pilot
 **Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
 
 ## Priority Task Queue
 
-- [x] Task pipeline is healthy; no blocking issues found. All 39 roadmap phases complete, documentation scan current.
+- [ ] `$run` - Execute Step 40.1 because the 2026-05-17 hybrid replay spec is newer than the completed Phase 39 roadmap and Phase 40 is now decomposed.
 - [x] `/reconcile-dev-docs fix tasks` - Resolved orphaned Phase 38 manual tasks: 4 items deferred to future work (Neon DB, admin secret, Vercel env vars, live verification).
 - [ ] `/feature-interview` - Triage 8 remaining unspecced ideas in `tasks/ideas.md` (cleaned from 25 on 2026-05-15; 17 removed as shipped/obsolete).
+
+## Phase 40: Workflow Hybrid Replay Pilot
+
+**Goal:** Turn the `/workflows` Playful Lab into a hybrid chat-and-terminal replay pilot where step circles drive a compelling, benchmark-grounded recreation of successful skill runs.
+
+**Source:** `specs/workflow-hybrid-replay-feature-interview.md` and the updated `/workflows` section of `specs/ui-skills-showcase-website.md` from 2026-05-17.
+
+**Scope:**
+- Replace the current primary step-card presentation in `apps/skills-showcase/src/showcase/tui/TuiWorkflow.tsx` with a hybrid replay panel for the `/workflows` route.
+- Keep `/workflows` as the pilot surface only; do not update homepage preview, catalog, or benchmark matrix visuals in this phase.
+- Model workflow steps as structured replay states instead of expanding the positional `WorkflowStep` tuple.
+- Render chat-style user and agent messages with embedded terminal, validation, artifact, and benchmark-proof blocks.
+- Promote benchmark evidence from collapsed details into visible receipt blocks when persisted evidence exists.
+- Preserve graceful non-benchmarked step states, reduced-motion behavior, keyboard-accessible step controls, and mobile overflow safety.
+
+**Acceptance Criteria:**
+- [ ] `/workflows` renders a hybrid replay panel as the primary selected-step surface.
+- [ ] Step circles change the active replay state and expose user prompt/command, agent response, artifact/result, and proof content for each step.
+- [ ] Benchmarked steps show visible pass-rate, quality, agent/run metadata, and report/run artifact paths without requiring a collapsed details panel.
+- [ ] Non-benchmarked steps render curated scenario transcript content and a clear no-receipt state.
+- [ ] The implementation uses structured replay data rather than adding more positional fields to `WorkflowStep`.
+- [ ] Mobile layouts constrain chat, command, report path, and benchmark output blocks without horizontal page overflow.
+- [ ] Focused component/data tests, typecheck, build, and whitespace validation pass.
+
+> Test strategy: tests-after
+
+### Execution Profile
+**Parallel mode:** serial
+**Integration owner:** main agent
+**Conflict risk:** medium
+**Review gates:** UX, tests, data contract, accessibility
+
+**Subagent lanes:** none
+
+### Implementation
+- [ ] Step 40.1: Define structured replay data for workflow steps.
+  - Classification: automated
+  - Files: modify `apps/skills-showcase/src/showcase/tui/workflow-data.ts`, modify `apps/skills-showcase/src/showcase/types.ts` if shared replay or receipt types are needed
+  - Add a replay-oriented data shape with user message, agent message, terminal/proof block, artifact/result block, and optional benchmark receipt state.
+  - Keep existing workflow metadata available for notebook context and homepage preview support.
+  - Avoid adding more positional tuple fields to `WorkflowStep`.
+- [ ] Step 40.2: Replace the active step card with the hybrid replay panel.
+  - Classification: automated
+  - Files: modify `apps/skills-showcase/src/showcase/tui/TuiWorkflow.tsx`
+  - Render chat-style user/agent messages as the primary active-step content.
+  - Embed terminal/proof and artifact/result blocks inside the replay.
+  - Keep step circles, play/pause, previous/next, restart, reduced-motion behavior, and notebook context working.
+- [ ] Step 40.3: Promote benchmark receipts into the visible replay.
+  - Classification: automated
+  - Files: modify `apps/skills-showcase/src/showcase/tui/TuiWorkflow.tsx`, modify `apps/skills-showcase/src/showcase/tui/workflow.css`
+  - Use existing `workflowBenchmarks` data to show pass rate, quality, agent, run index, report path, and run artifact path when available.
+  - Remove or demote the collapsed `View benchmark execution` details panel from the primary benchmarked-step experience.
+  - Ensure no-receipt states are explicit for non-benchmarked steps.
+- [ ] Step 40.4: Style and harden the `/workflows` replay pilot.
+  - Classification: automated
+  - Files: modify `apps/skills-showcase/src/showcase/tui/workflow.css`
+  - Style chat messages, terminal/proof blocks, artifact/result blocks, and benchmark receipts within the existing playful blueprint theme.
+  - Preserve mobile stacking and prevent horizontal overflow from long commands, report paths, and benchmark excerpts.
+  - Preserve accessible focus states and readable contrast.
+
+### Green
+- [ ] Step 40.5: Write focused regression coverage for the replay pilot.
+  - Classification: automated
+  - Files: modify `apps/skills-showcase/src/showcase/workflows.test.tsx`, modify `tests/layer1/skills-showcase-benchmark-demo.test.ts` if generated data contract assertions need updates
+  - Cover replay data presence, active-step rendering, step-circle navigation, benchmark receipt rendering, and non-benchmarked receipt state.
+- [ ] Step 40.6: Run app validation and visual sanity checks.
+  - Classification: automated
+  - Files: modify `tasks/todo.md` with review results
+  - Run `pnpm --dir apps/skills-showcase test`.
+  - Run `pnpm --dir apps/skills-showcase typecheck`.
+  - Run `pnpm --dir apps/skills-showcase build`.
+  - Run `scripts/validate-skills-showcase-data.sh` if generated data or showcase assets change.
+  - Run `git diff --check`.
+  - Start the local app if needed and verify `/workflows` at desktop and mobile widths before shipping.
+
+### Milestone: Phase 40 Workflow Hybrid Replay Pilot
+**Acceptance Criteria:**
+- [ ] `/workflows` renders a hybrid replay panel as the primary selected-step surface.
+- [ ] Step circles change the active replay state and expose user prompt/command, agent response, artifact/result, and proof content for each step.
+- [ ] Benchmarked steps show visible pass-rate, quality, agent/run metadata, and report/run artifact paths without requiring a collapsed details panel.
+- [ ] Non-benchmarked steps render curated scenario transcript content and a clear no-receipt state.
+- [ ] The implementation uses structured replay data rather than adding more positional fields to `WorkflowStep`.
+- [ ] Mobile layouts constrain chat, command, report path, and benchmark output blocks without horizontal page overflow.
+- [ ] Focused component/data tests, typecheck, build, and whitespace validation pass.
+- [ ] All phase tests pass.
+- [ ] No regressions in previous phase tests.
+
+**On Completion**
+- Deviations from plan: pending.
+- Tech debt / follow-ups: evaluate whether the validated replay pattern should expand to homepage preview, catalog proof, and benchmark surfaces.
+- Ready for next phase: pending.
 
 ## Current Task — Feature Interview Workflow Hybrid Replay 2026-05-17
 

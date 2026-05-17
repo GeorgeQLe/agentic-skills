@@ -1,8 +1,8 @@
 # Roadmap: Claude Skills
 
 > Generated from: tasks/roadmap.md (existing), specs/board-flag-kanban-search.md, tasks/ideas.md, tasks/history.md
-> Date: 2026-03-27 (last updated 2026-05-11)
-> Total Phases: 39 (38 complete, 1 planned)
+> Date: 2026-03-27 (last updated 2026-05-17)
+> Total Phases: 40 (39 complete, 1 planned)
 
 ## Summary
 
@@ -12,7 +12,7 @@ Phases 12-31 complete. Phase 14 added the LinkedIn evidence lane to the creator 
 
 Phases 32-36 complete. Phase 35 added repository-wide Codex benchmark coverage metadata, custom or explicitly blocked coverage for every current skill, and future skill creation/update workflows require benchmark coverage handling. Phase 36 added rubric-based output-quality evaluation on top of the contract/assertion benchmark checks.
 
-Phase 37 complete: preserved and migrated the static Skills Showcase into a minimal Next.js app at `apps/skills-showcase/` with 6 public routes, generated data pipeline, 54 regression tests, and updated deploy contract. Phase 38 complete: added Neon-backed first-party newsletter capture with tRPC contracts, TanStack Query mutation/admin state, admin export page, 74 regression tests, and privacy posture enforcement. Phase 39 adds benchmark results visibility and permission-gated safe Git integration fixtures for benchmarkable git-mutating skills.
+Phase 37 complete: preserved and migrated the static Skills Showcase into a minimal Next.js app at `apps/skills-showcase/` with 6 public routes, generated data pipeline, 54 regression tests, and updated deploy contract. Phase 38 complete: added Neon-backed first-party newsletter capture with tRPC contracts, TanStack Query mutation/admin state, admin export page, 74 regression tests, and privacy posture enforcement. Phase 39 complete: added benchmark results visibility and permission-gated safe Git integration fixtures for benchmarkable git-mutating skills. Phase 40 adds the `/workflows` hybrid replay pilot so benchmark evidence becomes primary step-by-step proof before the pattern is expanded to other showcase surfaces.
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
@@ -1651,13 +1651,13 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 - Do not create, modify, or recommend GitHub Actions.
 
 **Acceptance Criteria:**
-- [ ] A clean benchmark-results matrix lists skills with persisted evaluated benchmark data, hard pass rates, quality scores, subjective review grades when present, and raw report paths.
-- [ ] Skills Showcase exposes benchmark results or links to the generated matrix without confusing coverage status with completed graded runs.
-- [ ] `commit-and-push-by-feature` has a safe fixture plan using an explicit-permission disposable GitHub test repository.
+- [x] A clean benchmark-results matrix lists skills with persisted evaluated benchmark data, hard pass rates, quality scores, subjective review grades when present, and raw report paths.
+- [x] Skills Showcase exposes benchmark results or links to the generated matrix without confusing coverage status with completed graded runs.
+- [x] `commit-and-push-by-feature` has a safe fixture plan using an explicit-permission disposable GitHub test repository.
 - [x] `sync` has a safe fixture plan using an explicit-permission disposable GitHub test repository.
-- [ ] The benchmark coverage registry reflects any newly unblocked setup status only after the safe fixture is implemented and validated.
-- [ ] Cleanup and infrastructure-block handling are documented for the disposable repository workflow.
-- [ ] No GitHub Actions are created, modified, or recommended.
+- [x] The benchmark coverage registry reflects any newly unblocked setup status only after the safe fixture is implemented and validated.
+- [x] Cleanup and infrastructure-block handling are documented for the disposable repository workflow.
+- [x] No GitHub Actions are created, modified, or recommended.
 
 **Parallelization:** serial for live-GitHub fixture design and validation.
 **Coordination Notes:** Keep this work serial because it touches benchmark evidence semantics, website presentation, and live external repository safety. Treat any `gh`-backed execution as an explicit operator-approved integration test.
@@ -1722,15 +1722,15 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 ### Milestone: Phase 39 Benchmark Results Visibility And Safe Git Fixtures
 **Acceptance Criteria:**
-- [ ] A clean benchmark-results matrix lists skills with persisted evaluated benchmark data, hard pass rates, quality scores, subjective review grades when present, and raw report paths.
-- [ ] Skills Showcase exposes benchmark results or links to the generated matrix without confusing coverage status with completed graded runs.
-- [ ] `commit-and-push-by-feature` has a safe fixture plan using an explicit-permission disposable GitHub test repository.
+- [x] A clean benchmark-results matrix lists skills with persisted evaluated benchmark data, hard pass rates, quality scores, subjective review grades when present, and raw report paths.
+- [x] Skills Showcase exposes benchmark results or links to the generated matrix without confusing coverage status with completed graded runs.
+- [x] `commit-and-push-by-feature` has a safe fixture plan using an explicit-permission disposable GitHub test repository.
 - [x] `sync` has a safe fixture plan using an explicit-permission disposable GitHub test repository.
-- [ ] The benchmark coverage registry reflects any newly unblocked setup status only after the safe fixture is implemented and validated.
-- [ ] Cleanup and infrastructure-block handling are documented for the disposable repository workflow.
-- [ ] No GitHub Actions are created, modified, or recommended.
-- [ ] All phase tests pass.
-- [ ] No regressions in previous phase tests.
+- [x] The benchmark coverage registry reflects any newly unblocked setup status only after the safe fixture is implemented and validated.
+- [x] Cleanup and infrastructure-block handling are documented for the disposable repository workflow.
+- [x] No GitHub Actions are created, modified, or recommended.
+- [x] All phase tests pass.
+- [x] No regressions in previous phase tests.
 
 ---
 
@@ -2968,6 +2968,103 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 **Coordination Notes:** Keep serial because this touches shared test infrastructure and package scripts. Do not add dependencies unless strictly necessary.
 
 **Completed:** 2026-05-06. Added opt-in layer3 live-agent tests with reusable Claude/Codex headless runners, temp repo fixtures, structured JSON schemas, and session-analysis behavior assertions. Added scripts for all live tests and Claude/Codex-only targets, documented usage in README, and kept default tests on layer1 only. Validation passed with layer3 skipped dry run, live Claude and Codex runs, layer1 tests, skill contract scripts, and `git diff --check`. `tsc --noEmit` remains outside the validation gate because the existing tests package lacks Node type definitions.
+
+---
+
+## Phase 40: Workflow Hybrid Replay Pilot
+
+**Goal:** Turn the `/workflows` Playful Lab into a hybrid chat-and-terminal replay pilot where step circles drive a compelling, benchmark-grounded recreation of successful skill runs.
+
+**Source:** `specs/workflow-hybrid-replay-feature-interview.md` and the updated `/workflows` section of `specs/ui-skills-showcase-website.md` from 2026-05-17.
+
+**Scope:**
+- Replace the current primary step-card presentation in `apps/skills-showcase/src/showcase/tui/TuiWorkflow.tsx` with a hybrid replay panel for the `/workflows` route.
+- Keep `/workflows` as the pilot surface only; do not update homepage preview, catalog, or benchmark matrix visuals in this phase.
+- Model workflow steps as structured replay states instead of expanding the positional `WorkflowStep` tuple.
+- Render chat-style user and agent messages with embedded terminal, validation, artifact, and benchmark-proof blocks.
+- Promote benchmark evidence from collapsed details into visible receipt blocks when persisted evidence exists.
+- Preserve graceful non-benchmarked step states, reduced-motion behavior, keyboard-accessible step controls, and mobile overflow safety.
+
+**Non-Goals:**
+- Do not redesign homepage, catalog, packs, follow, inspect, or `/benchmarks` route surfaces.
+- Do not change benchmark harness semantics or generate new benchmark reports.
+- Do not add runtime dependencies or modify shared lockfiles.
+- Do not create, modify, or recommend GitHub Actions.
+
+**Acceptance Criteria:**
+- [ ] `/workflows` renders a hybrid replay panel as the primary selected-step surface.
+- [ ] Step circles change the active replay state and expose user prompt/command, agent response, artifact/result, and proof content for each step.
+- [ ] Benchmarked steps show visible pass-rate, quality, agent/run metadata, and report/run artifact paths without requiring a collapsed details panel.
+- [ ] Non-benchmarked steps render curated scenario transcript content and a clear no-receipt state.
+- [ ] The implementation uses structured replay data rather than adding more positional fields to `WorkflowStep`.
+- [ ] Mobile layouts constrain chat, command, report path, and benchmark output blocks without horizontal page overflow.
+- [ ] Focused component/data tests, typecheck, build, and whitespace validation pass.
+
+**Parallelization:** serial
+**Coordination Notes:** Keep serial because the work is a visual/data-model pilot in one tightly coupled component family: `TuiWorkflow.tsx`, `workflow-data.ts`, `workflow.css`, shared showcase types, and focused tests. The design needs one integration owner to preserve the pilot's visual coherence.
+
+> Test strategy: tests-after
+
+### Execution Profile
+**Parallel mode:** serial
+**Integration owner:** main agent
+**Conflict risk:** medium
+**Review gates:** UX, tests, data contract, accessibility
+
+**Subagent lanes:** none
+
+### Implementation
+- Step 40.1: Define structured replay data for workflow steps.
+  - Classification: automated
+  - Files: modify `apps/skills-showcase/src/showcase/tui/workflow-data.ts`, modify `apps/skills-showcase/src/showcase/types.ts` if shared replay or receipt types are needed
+  - Add a replay-oriented data shape with user message, agent message, terminal/proof block, artifact/result block, and optional benchmark receipt state.
+  - Keep existing workflow metadata available for notebook context and homepage preview support.
+  - Avoid adding more positional tuple fields to `WorkflowStep`.
+- Step 40.2: Replace the active step card with the hybrid replay panel.
+  - Classification: automated
+  - Files: modify `apps/skills-showcase/src/showcase/tui/TuiWorkflow.tsx`
+  - Render chat-style user/agent messages as the primary active-step content.
+  - Embed terminal/proof and artifact/result blocks inside the replay.
+  - Keep step circles, play/pause, previous/next, restart, reduced-motion behavior, and notebook context working.
+- Step 40.3: Promote benchmark receipts into the visible replay.
+  - Classification: automated
+  - Files: modify `apps/skills-showcase/src/showcase/tui/TuiWorkflow.tsx`, modify `apps/skills-showcase/src/showcase/tui/workflow.css`
+  - Use existing `workflowBenchmarks` data to show pass rate, quality, agent, run index, report path, and run artifact path when available.
+  - Remove or demote the collapsed `View benchmark execution` details panel from the primary benchmarked-step experience.
+  - Ensure no-receipt states are explicit for non-benchmarked steps.
+- Step 40.4: Style and harden the `/workflows` replay pilot.
+  - Classification: automated
+  - Files: modify `apps/skills-showcase/src/showcase/tui/workflow.css`
+  - Style chat messages, terminal/proof blocks, artifact/result blocks, and benchmark receipts within the existing playful blueprint theme.
+  - Preserve mobile stacking and prevent horizontal overflow from long commands, report paths, and benchmark excerpts.
+  - Preserve accessible focus states and readable contrast.
+
+### Green
+- Step 40.5: Write focused regression coverage for the replay pilot.
+  - Classification: automated
+  - Files: modify `apps/skills-showcase/src/showcase/workflows.test.tsx`, modify `tests/layer1/skills-showcase-benchmark-demo.test.ts` if generated data contract assertions need updates
+  - Cover replay data presence, active-step rendering, step-circle navigation, benchmark receipt rendering, and non-benchmarked receipt state.
+- Step 40.6: Run app validation and visual sanity checks.
+  - Classification: automated
+  - Files: modify `tasks/todo.md` with review results
+  - Run `pnpm --dir apps/skills-showcase test`.
+  - Run `pnpm --dir apps/skills-showcase typecheck`.
+  - Run `pnpm --dir apps/skills-showcase build`.
+  - Run `scripts/validate-skills-showcase-data.sh` if generated data or showcase assets change.
+  - Run `git diff --check`.
+  - Start the local app if needed and verify `/workflows` at desktop and mobile widths before shipping.
+
+### Milestone: Phase 40 Workflow Hybrid Replay Pilot
+**Acceptance Criteria:**
+- [ ] `/workflows` renders a hybrid replay panel as the primary selected-step surface.
+- [ ] Step circles change the active replay state and expose user prompt/command, agent response, artifact/result, and proof content for each step.
+- [ ] Benchmarked steps show visible pass-rate, quality, agent/run metadata, and report/run artifact paths without requiring a collapsed details panel.
+- [ ] Non-benchmarked steps render curated scenario transcript content and a clear no-receipt state.
+- [ ] The implementation uses structured replay data rather than adding more positional fields to `WorkflowStep`.
+- [ ] Mobile layouts constrain chat, command, report path, and benchmark output blocks without horizontal page overflow.
+- [ ] Focused component/data tests, typecheck, build, and whitespace validation pass.
+- [ ] All phase tests pass.
+- [ ] No regressions in previous phase tests.
 
 ---
 
