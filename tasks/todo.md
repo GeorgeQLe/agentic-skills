@@ -5,6 +5,57 @@
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
+## Current Task — Benchmark `analyze-sessions` 2026-05-17
+
+**Goal:** Run `$benchmark-test-skill analyze-sessions` against the current repository state and publish deterministic both-agent benchmark evidence.
+
+**Plan:**
+- [ ] Confirm `$benchmark-test-skill` is the active workflow and resolve the spaced user argument `analyze sessions` to the harness skill `analyze-sessions`.
+- [ ] Run `pnpm bench --list-skills` and record `analyze-sessions` coverage status.
+- [ ] Run `pnpm verify --skill analyze-sessions`; stop before bench if verification fails.
+- [ ] If verify passes, run `pnpm bench --skill analyze-sessions --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [ ] Write and validate `benchmark/test-analyze-sessions-2026-05-17.md` with verify, benchmark, latency, cost, consistency, raw paths, and recommended next route.
+- [ ] Refresh generated evidence if curated benchmark evidence changes, record results here, then commit and push intended changes on `master`.
+
+## Current Task — Update Active Project Packages 2026-05-17
+
+**Goal:** Update direct dependencies in the active pnpm-managed JavaScript projects to the latest registry versions published more than 8 full days ago.
+
+**Scope:**
+- `apps/skills-showcase/package.json` and `apps/skills-showcase/pnpm-lock.yaml`.
+- `tests/package.json` and `tests/pnpm-lock.yaml`.
+- Exclude archived npm snapshots and monorepo package-manager fixtures.
+
+**Plan:**
+- [x] Confirm clean worktree and active package-manager strategy.
+- [x] Query npm registry metadata and select eligible versions older than 8 full days.
+- [x] Apply pnpm updates in safe batches, keeping manifests and lockfiles synchronized.
+- [x] Run install/update, focused tests, typecheck, build, benchmark coverage, and whitespace validation.
+- [x] Record updated/skipped packages, verification results, commit, and push on `master`.
+
+## Review — Update Active Project Packages 2026-05-17
+
+- Package manager: pnpm before and after. Existing `pnpm-lock.yaml` files were preserved for `apps/skills-showcase` and `tests`; archived npm snapshots and monorepo fixtures were not touched.
+- Safety cutoff: selected versions must be older than 8 full days as of `2026-05-17T21:06:51Z`, so the effective cutoff was before `2026-05-09T21:06:51Z`.
+- Updated app dependencies:
+  - `@neondatabase/serverless` `^1.0.0` -> `1.1.0`, published `2026-04-17T14:01:05.102Z`.
+  - `@tanstack/react-query` `^5.0.0` -> `^5.100.9`, published `2026-05-03T14:48:42.837Z`; skipped `5.100.10` because it was published `2026-05-11T14:11:06.587Z`.
+  - `zod` `^4.0.0` -> `4.4.3`, published `2026-05-04T07:06:40.819Z`.
+  - `@types/node` `latest`/resolved `25.7.0` -> `25.6.2`, published `2026-05-07T22:21:36.801Z`; skipped `25.8.0` because it was published `2026-05-14T16:39:51.779Z`.
+  - `@types/react` `latest` -> `19.2.14`, published `2026-02-11T11:44:58.515Z`.
+  - `@types/react-dom` `latest` -> `19.2.3`, published `2025-11-12T04:37:39.524Z`.
+  - `vitest` `^4.1.6`/resolved `4.1.6` -> `^4.1.5`, published `2026-04-21T11:04:03.117Z`; skipped `4.1.6` because it was published `2026-05-11T14:37:46.246Z`.
+- Updated test harness dependencies:
+  - `glob` `^11.0.2`/resolved `11.1.0` -> `^13.0.6`, published `2026-02-19T17:26:33.269Z`.
+  - `tsx` `^4.19.4`/resolved latest -> `4.21.0`, published `2025-11-30T15:56:09.488Z`; skipped `4.22.1` because it was published `2026-05-17T03:23:26.935Z`.
+  - `typescript` `^5.8.3`/resolved `5.9.3` -> `^6.0.3`, published `2026-04-16T23:38:27.905Z`.
+  - `vitest` `^3.2.1`/resolved `3.2.4` -> `^4.1.5`, published `2026-04-21T11:04:03.117Z`; skipped `4.1.6` because it was published `2026-05-11T14:37:46.246Z`.
+- Unchanged current eligible packages: `@trpc/client`, `@trpc/react-query`, `@trpc/server`, `next`, `react`, `react-dom`, `@testing-library/dom`, `@testing-library/jest-dom`, `@testing-library/react`, `@vitejs/plugin-react`, `jsdom`, and `gray-matter`.
+- Generated proof data was refreshed because lockfile changes altered repository proof fingerprints.
+- Verification passed: `pnpm --dir apps/skills-showcase install --frozen-lockfile`; `pnpm --dir tests install --frozen-lockfile`; `pnpm --dir apps/skills-showcase test`; `pnpm --dir tests test:layer1`; `pnpm --dir apps/skills-showcase typecheck`; `pnpm --dir apps/skills-showcase build`; `pnpm --dir tests bench:coverage`; `scripts/validate-skills-showcase-data.sh`; `git diff --check`.
+- Validation note: pnpm reported ignored build scripts for `sharp` and `esbuild`; no approval change was made because existing validation passed.
+- **Recommended next command:** `$benchmark-test-skill update-packages`
+
 ## Current Task — Update `report-website` Frontend Target Selection 2026-05-17
 
 **Goal:** Teach `report-website` how to choose between integrating into an existing frontend documentation/public site and creating a separate site.
@@ -3238,3 +3289,16 @@ Implement only this step, validate it, then run `/ship` when done.
 - Validation passed: `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill update-packages`; `scripts/validate-skills-showcase-data.sh`; `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken`; `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`; `/opt/homebrew/bin/bash ./scripts/skill-next-step-routing.sh --missing`; `./install.sh`; targeted generated-data `rg`; `git diff --check`.
 - Validation note: direct execution of the skill shell scripts under the default macOS shell failed on Bash 4 features (`declare -A`, `mapfile`), then passed under `/opt/homebrew/bin/bash`.
 - **Recommended next command:** `$update-packages --all`
+
+## Current Task — Benchmark `update-packages` 2026-05-17
+
+**Goal:** Run `$benchmark-test-skill update-packages` against the current repository state and write a dated benchmark report with both-agent evidence.
+
+**Plan:**
+- [x] Confirm `$benchmark-test-skill` is the active workflow and `update-packages` is the target skill argument.
+- [x] Run `pnpm bench --list-skills` and confirm `update-packages` is known to the harness, including coverage status. `coverage=custom`, setup `tests/layer4/setups/tier23-global-workflows.setup.ts`.
+- [x] Run `pnpm verify --skill update-packages`; stop before bench if verification fails. Layer1 PASS in 5.6s; layer2 SKIP because no target-specific layer2 tests matched.
+- [ ] If verify passes, run `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [ ] Write `benchmark/test-update-packages-2026-05-17.md` with verify, benchmark, latency, cost, consistency, raw paths, and recommended next route.
+- [ ] Validate the report contains required benchmark fields.
+- [ ] Record results here, then commit and push intended changes on `master`.

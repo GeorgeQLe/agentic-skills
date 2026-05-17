@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Maintenance: Active Project Package Updates 2026-05-17
+
+**Goal:** Update direct dependencies in active pnpm-managed JavaScript projects to the newest registry versions published more than 8 full days ago.
+
+**Acceptance Criteria:**
+- [x] Active package surfaces are scoped to `apps/skills-showcase` and `tests`; archived npm snapshots and package-manager fixtures are left unchanged.
+- [x] Every selected package version has an npm publish timestamp older than 8 full days as of 2026-05-17.
+- [x] Manifests and pnpm lockfiles are updated through pnpm, not by hand.
+- [x] Install/update, app tests, app typecheck, app build, test harness validation, benchmark coverage, and whitespace checks pass or any blocker is documented.
+- [x] Updated and skipped packages plus verification results are recorded in `tasks/todo.md`, then intended changes are committed and pushed on `master`.
+
+**Result:** Dependency update completed on 2026-05-17. Active pnpm projects were updated with versions older than the `2026-05-09T21:06:51Z` safety cutoff, including app updates for Neon, TanStack Query, Zod, React type packages, Node types, and Vitest, plus test harness updates for Glob, TSX, TypeScript, and Vitest. Too-new registry versions were skipped for TanStack Query, Node types, Vite React plugin, Vitest, and TSX. Validation passed across frozen installs, app tests/typecheck/build, layer1 tests, benchmark coverage, generated showcase validation, and whitespace checks. Recommended next command: `$benchmark-test-skill update-packages`.
+
 ## Current Skill Creation: report-website 2026-05-17
 
 **Goal:** Create a mirrored global skill that converts a Markdown report into clean JSX and builds a frontend website for reading it.
@@ -176,6 +189,8 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 ## Phase 41: Remaining Skill Benchmark Result Coverage
 
 **Goal:** Convert the existing benchmark coverage registry into persisted evaluated benchmark results for the remaining tracked skills, without overloading the runner or treating infrastructure blocks as skill failures.
+
+**Current Batch 2026-05-17:** `$benchmark-test-skill analyze-sessions` resolved from the user phrase `analyze sessions`. The skill is listed by `pnpm bench --list-skills` with custom coverage via `tests/layer4/setups/tier23-global-workflows.setup.ts`.
 
 **Source:** `docs/benchmark-results-matrix.md`, `tests/harness/bench-coverage.ts`, `benchmark/test-*.md`, and the 2026-05-11 benchmark lessons distinguishing setup coverage from persisted evaluated results.
 
@@ -3341,6 +3356,7 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - **2026-05-14 — Triage `icon-handler` benchmark failure:** Investigate the fresh failed Claude/Codex benchmark assertions, classify contract versus harness versus runner noncompliance, write a dated triage report, validate, commit, and push. Result: verified mixed failure; primary durable gap is benchmark route clarity, while Codex no-artifact run is runner noncompletion. Report: `benchmark/triage-icon-handler-2026-05-14.md`. Recommended next skill: `$targeted-skill-builder icon-handler benchmark route clarity`.
 - **2026-05-14 — Tighten `icon-handler` benchmark route clarity:** Update the custom benchmark prompt/rubric so build commands remain verification commands and the final next route must be `/icon-handler fix ...` for Claude or `$icon-handler fix ...` for Codex. Result: added final-route evaluator coverage, switched the source fixture to SVG to avoid Claude image ingestion, and passed Claude/Codex smoke benchmarks. Recommended next command: `$benchmark-test-skill icon-handler`.
 - **2026-05-16 — Benchmark `ship`:** Run `$benchmark-test-skill ship` through eligibility, verify, both-agent benchmark, dated report generation, validation, commit, and push. Result: verify passed; both Claude and Codex completed 3 evaluated runs with 3/3 hard assertions passing and no infrastructure blocks, but both had deterministic quality critical failures on `evidence-linked`. Report: `benchmark/test-ship-2026-05-16.md`. Recommended next skill: `$session-triage ship benchmark failure`.
+- **2026-05-17 — Benchmark `update-packages`:** Run `$benchmark-test-skill update-packages` through eligibility, verify, both-agent benchmark, dated report generation, validation, commit, and push. Target skill has custom coverage through `tests/layer4/setups/tier23-global-workflows.setup.ts`.
 
 ## Deferred / Future Work
 - **Kanban analytics** — cycle time, throughput, WIP limits via `/kanban-stats` skill (from original backlog)
