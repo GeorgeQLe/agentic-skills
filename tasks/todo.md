@@ -5,6 +5,30 @@
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
+## Current Task — Targeted Update `update-packages` Major-Upgrade Risk Handling 2026-05-17
+
+**Goal:** Tighten `update-packages` so major/framework/build-tool updates require explicit compatibility checks, batch boundaries, focused smoke tests, and migration stop routes.
+
+**Plan:**
+- [x] Review relevant lessons, `benchmark/review-update-packages-2026-05-17.md`, mirrored `update-packages` contracts, and current benchmark setup coverage.
+- [x] Update mirrored `global/codex/update-packages` and `global/claude/update-packages` contracts.
+- [x] Tighten the `update-packages` custom benchmark prompt and quality checks for major-upgrade risk handling and unqualified `pnpm@latest`.
+- [x] Add focused layer1 coverage for passing risk-handling evidence, missing-risk failure, and unqualified-`pnpm@latest` failure.
+- [x] Run focused validation, generated-data checks, record results, then commit and push intended changes on `master`.
+
+## Review — Targeted Update `update-packages` Major-Upgrade Risk Handling 2026-05-17
+
+- Decision: existing-skill update, not a new skill. `update-packages` already owns dependency update risk handling.
+- Evidence used: `tasks/lessons.md`, `benchmark/review-update-packages-2026-05-17.md`, mirrored `update-packages` contracts, `tests/layer4/setups/tier23-global-workflows.setup.ts`, and existing layer1 setup coverage.
+- Evidence intentionally skipped: broad session history, because the subjective review localized the gap to major-upgrade risk handling in one skill.
+- Updated mirrored contracts to require major/framework/build-tool risk sections with batch order, peer/config compatibility checks, focused smoke checks, and `$migrate`/`/migrate` stop routes.
+- Updated mirrored contracts to reject unqualified `pnpm@latest` defaults and prefer existing/toolchain or explicitly age-eligible pnpm versions.
+- Tightened the custom benchmark prompt and quality checks to require major-upgrade compatibility evidence and reject unqualified `pnpm@latest`.
+- Added layer1 coverage proving valid risk handling passes, missing risk handling fails, and unqualified `pnpm@latest` fails.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 bench-setups bench-quality`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill update-packages`; `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken`; `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`; `/opt/homebrew/bin/bash ./scripts/skill-next-step-routing.sh --missing`; `./install.sh`; `pnpm --dir tests bench --skill update-packages --agent codex --runs 1 --chunk-size 1 --pause 0` (`update-packages-codex-8d320ac5`, 1/1 hard assertions); targeted `rg`; `git diff --check`.
+- Generated Skills Showcase data and benchmark matrix were refreshed after tracked skill behavior and persisted benchmark evidence changed.
+- **Recommended next command:** `$benchmark-test-skill update-packages`
+
 ## Current Task — Targeted Update `benchmark-agent-review` Route Prompt Alignment 2026-05-17
 
 **Goal:** Align the `benchmark-agent-review` pack benchmark setup with runner-specific targeted-skill-builder routes and prompt the expected remediation handoff explicitly.

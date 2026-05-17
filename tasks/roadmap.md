@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Update: update-packages Major-Upgrade Risk Handling 2026-05-17
+
+**Goal:** Tighten `update-packages` so major/framework/build-tool updates require explicit compatibility checks, batch boundaries, focused smoke tests, and migration stop routes.
+
+**Acceptance Criteria:**
+- [x] Mirrored `update-packages` contracts require package-manager version selection that avoids unqualified `pnpm@latest`.
+- [x] Mirrored contracts require major/framework/build-tool risk sections with batch order, peer/config compatibility checks, focused smoke checks, and stop routes.
+- [x] The `update-packages` benchmark prompt and quality checks require major-upgrade compatibility evidence and reject unqualified `pnpm@latest`.
+- [x] Focused layer1 coverage proves passing risk-handling evidence, missing-risk failure, and unqualified-`pnpm@latest` failure.
+- [x] Validation passes, generated assets are refreshed, and intended changes are committed and pushed on `master`.
+
+**Result:** Updated on 2026-05-17. `update-packages` now requires major/framework/build-tool updates to include batch order, peer/config compatibility checks, focused smoke checks, and a `$migrate`/`/migrate` stop route when compatibility work exceeds dependency-update scope. The contracts also forbid unqualified `pnpm@latest` defaults in favor of existing/toolchain or age-eligible pnpm versions. The custom benchmark setup now asks for this evidence and quality-checks it. Codex smoke benchmark `update-packages-codex-8d320ac5` passed 1/1 after the fix. Recommended next command: `$benchmark-test-skill update-packages`.
+
 ## Current Agent Review: update-packages 2026-05-17
 
 **Goal:** Review the latest persisted `update-packages` Claude and Codex benchmark outputs for subjective operator quality.

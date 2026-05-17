@@ -23,6 +23,7 @@ Use this skill when a project needs dependency updates but should avoid newly pu
    - If `pnpm-lock.yaml` or `packageManager: "pnpm@..."` exists, use pnpm.
    - If only npm is present (`package-lock.json`, npm scripts, or `packageManager: "npm@..."`), migrate to pnpm when practical:
      - Add or update `packageManager` to a stable pnpm version already used by the repo/toolchain when discoverable.
+     - Do not default to `pnpm@latest`; use an existing repo/toolchain pnpm version or an explicitly age-eligible pnpm version, and document the choice.
      - Generate `pnpm-lock.yaml` using pnpm.
      - Remove npm lockfile only after pnpm install/update succeeds and the repo does not explicitly require npm.
    - If npm must remain, record the reason and continue with npm commands without inventing a pnpm migration.
@@ -46,6 +47,11 @@ Use this skill when a project needs dependency updates but should avoid newly pu
 5. **Apply updates in safe batches.**
    - Update manifests through package-manager commands where practical (`pnpm up`, `pnpm add -D`, workspace filters) so manifests and lockfiles stay consistent.
    - Prefer small batches for major upgrades, framework packages, build tooling, and peer-sensitive groups such as React, Next.js, ESLint, TypeScript, Vite, Vitest, Playwright, Prisma, database clients, and SDKs.
+   - For every major, framework, build-tool, or peer-sensitive update, write an explicit risk section before applying it:
+     - batch order and whether the package should move alone or with a peer group;
+     - peer/config compatibility checks, such as React renderer/framework compatibility, Vitest/Vite/TypeScript config compatibility, ESLint/parser compatibility, Prisma/database client generation, or SDK API changes;
+     - focused smoke checks tied to the package's runtime surface, not only generic install/test/build commands;
+     - stop conditions that route broad compatibility work to `/migrate <package or framework>` instead of hiding it inside the package update.
    - For npm-to-pnpm migration, first establish a clean pnpm install, then perform dependency upgrades.
    - Do not edit lockfiles by hand.
 
@@ -53,6 +59,7 @@ Use this skill when a project needs dependency updates but should avoid newly pu
    - Confirm `.npmrc` contains `min-release-age=8` and, for pnpm coverage, `minimum-release-age=11520` unless the project has a documented reason to store pnpm settings only in `pnpm-workspace.yaml` or pnpm config.
    - For pnpm projects, confirm `minimumReleaseAge: 11520` is present in `pnpm-workspace.yaml` or equivalent project pnpm config when required by the active pnpm version.
    - Run the repo's install/update command, typecheck, tests, lint, build, and any focused smoke checks implied by changed packages.
+   - For major/framework/build-tool updates, run or document package-specific compatibility checks and smoke tests before calling the update complete.
    - If verification fails, diagnose the root cause. Apply the smallest durable fix when it is clearly inside the dependency update scope.
    - If a failure requires broad migration work, stop, report the blocker, and route to `/migrate <package or framework>`.
    - Re-run verification after fixes.
@@ -69,6 +76,7 @@ Use this skill when a project needs dependency updates but should avoid newly pu
 - **Age gate:** `.npmrc` and pnpm config files changed, including `min-release-age=8` and `minimum-release-age`/`minimumReleaseAge` values.
 - **Updated packages:** package, old version, new version, selected publish date, and batch.
 - **Skipped packages:** package and reason.
+- **Major-upgrade risk handling:** affected packages, batch order, compatibility checks, focused smoke checks, and any stop route to `/migrate <target>`.
 - **Verification:** install/update, typecheck, tests, lint, build, and smoke checks with pass/fail.
 - **Next work:** `none`, `/migrate <target>`, or another exact follow-up command.
 
