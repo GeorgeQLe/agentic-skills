@@ -7,7 +7,7 @@
 
 ## Priority Task Queue
 
-- [ ] `$run` - Execute Step 40.2 because Step 40.1 established the structured replay data contract.
+- [ ] `$run` - Execute Step 40.3 because Step 40.2 replaced the active step card with the structured replay panel.
 - [x] `/reconcile-dev-docs fix tasks` - Resolved orphaned Phase 38 manual tasks: 4 items deferred to future work (Neon DB, admin secret, Vercel env vars, live verification).
 - [ ] `/feature-interview` - Triage 8 remaining unspecced ideas in `tasks/ideas.md` (cleaned from 25 on 2026-05-15; 17 removed as shipped/obsolete).
 
@@ -93,7 +93,7 @@
   - Add a replay-oriented data shape with user message, agent message, terminal/proof block, artifact/result block, and optional benchmark receipt state.
   - Keep existing workflow metadata available for notebook context and homepage preview support.
   - Avoid adding more positional tuple fields to `WorkflowStep`.
-- [ ] Step 40.2: Replace the active step card with the hybrid replay panel.
+- [x] Step 40.2: Replace the active step card with the hybrid replay panel.
   - Classification: automated
   - Files: modify `apps/skills-showcase/src/showcase/tui/TuiWorkflow.tsx`
   - Render chat-style user/agent messages as the primary active-step content.
@@ -148,7 +148,36 @@
 - **Rollback note:** Revert this commit to restore tuple-based workflow steps and positional consumers.
 - **Next command:** `$run`
 
-### Next Step Plan — Step 40.2 Replace Active Step Card With Hybrid Replay Panel
+## Review — Step 40.2 Hybrid Replay Panel
+
+- Replaced the active `/workflows` step-card summary body with a structured replay surface sourced from `activeStep.replay`.
+- The selected step now exposes user prompt, agent response, terminal/proof text, artifact/result text, and receipt content in the primary selected-step panel.
+- Preserved workflow chips, benchmark strip, step circles, play/pause, previous/next, restart, counter, notebook context, and the existing collapsed benchmark execution details for Step 40.3 to demote.
+- Benchmark receipt text now uses available generated benchmark data for pass rate, quality, report path, and run artifact path when present; curated/no-receipt states still render from the replay data for non-benchmarked steps.
+- Validation passed: `pnpm --dir apps/skills-showcase typecheck`; `pnpm --dir apps/skills-showcase test -- --runInBand` (8 files, 88 tests); `pnpm --dir apps/skills-showcase build`; `git diff --check`.
+
+### Ship Manifest — Step 40.2
+
+- **User goal:** Execute Phase 40 Step 40.2 by replacing the active workflow step card with the hybrid replay panel.
+- **Changed files:** `apps/skills-showcase/src/showcase/tui/TuiWorkflow.tsx`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** `TuiWorkflow.tsx` renders the active replay content; `tasks/todo.md` records completion, validation, manifest, and the next plan; `tasks/history.md` records the shipped step.
+- **User-goal mapping:** The runtime change makes structured replay content the primary selected-step surface while preserving existing navigation and playback controls.
+- **Tests run:** `pnpm --dir apps/skills-showcase typecheck`; `pnpm --dir apps/skills-showcase test -- --runInBand`; `pnpm --dir apps/skills-showcase build`; `git diff --check`.
+- **Skipped tests:** Full repository benchmark suites were not rerun because Step 40.2 changes only the Skills Showcase workflow component; app typecheck, app tests, app build, and whitespace validation cover the touched runtime surface.
+- **Adversarial review:** Reviewed the diff for accidental control removal, benchmark-index drift, and scope creep. The change leaves Step 40.3's collapsed benchmark details in place intentionally and does not alter workflow data or player state.
+- **Residual risk:** The replay uses existing demo/card styling rather than final chat-specific styling; Step 40.4 remains responsible for mobile visual hardening and overflow polish.
+- **Rollback note:** Revert this commit to restore the prior summary-only active step card.
+- **Next command:** `$run`
+
+### Next Step Plan — Step 40.3 Promote Benchmark Receipts Into Visible Replay
+
+- Scope: modify `apps/skills-showcase/src/showcase/tui/TuiWorkflow.tsx` and `apps/skills-showcase/src/showcase/tui/workflow.css` to make benchmark receipts visible and durable inside the replay panel.
+- Render pass rate, quality, agent, run index, report path, and run artifact path from `workflowBenchmarks` when a step has persisted evidence.
+- Demote or remove the collapsed `View benchmark execution` details panel from the primary benchmarked-step experience after equivalent prompt/output/proof content is visible in the replay.
+- Keep non-benchmarked steps explicit with a curated/no-receipt state.
+- Validation target: `pnpm --dir apps/skills-showcase typecheck`, `pnpm --dir apps/skills-showcase test -- --runInBand`, `pnpm --dir apps/skills-showcase build`, and `git diff --check`.
+
+### Previous Next Step Plan — Step 40.2 Replace Active Step Card With Hybrid Replay Panel
 
 - Scope: modify `apps/skills-showcase/src/showcase/tui/TuiWorkflow.tsx` to render the active step's `replay` blocks as the primary selected-step surface.
 - Preserve: workflow chips, step circles, play/pause, previous/next, restart, reduced-motion behavior, benchmark lookup by active step index, and notebook context.

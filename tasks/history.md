@@ -2287,3 +2287,9 @@ Resolved all 10 findings from `/expert-review`:
 - Replaced tuple-based Skills Showcase workflow steps with named step objects carrying structured replay blocks for user prompt, agent response, terminal/proof output, artifact/result output, and receipt state.
 - Updated the `/workflows` TUI and homepage workflow preview consumers to read named step fields while preserving existing rendering behavior and benchmark indexing.
 - Verified with Skills Showcase typecheck, focused app tests, production build, and whitespace validation.
+
+## 2026-05-17 — Step 40.2 hybrid workflow replay panel
+
+- Replaced the `/workflows` active step-card summary body with a structured replay panel showing user prompt, agent response, terminal/proof text, artifact/result text, and receipt content.
+- Preserved existing workflow chips, benchmark strip, step circles, playback controls, counter, notebook context, and benchmark demo details while moving the primary selected-step surface onto the replay data contract.
+- Verified with Skills Showcase typecheck, focused app tests, production build, and whitespace validation.
