@@ -1,5 +1,13 @@
 # Lessons
 
+## 2026-05-17 — Package update skills should persist installer age gates
+
+- An `$update-packages` run manually selected versions older than 8 days but did not make future package-manager installs enforce the same safety policy.
+- Dependency-update workflows should add or update project package-manager config as part of the update, not only choose safe versions during the current run.
+- For npm, require project `.npmrc` `min-release-age=8`.
+- For pnpm, require an 8-day equivalent (`11520` minutes) in the configuration format the active pnpm version actually reads, while still documenting the `.npmrc` guard when the project uses it.
+- Verification should check the committed config files and not treat a one-time registry query as sufficient supply-chain protection.
+
 ## 2026-05-17 — Benchmark test handoffs should route evaluated runs to agent review
 
 - A `$benchmark-test-skill roadmap` run ended by recommending another `$benchmark-test-skill roadmap` rerun even though Codex produced evaluated passing runs and only the Claude lane was infrastructure-blocked.

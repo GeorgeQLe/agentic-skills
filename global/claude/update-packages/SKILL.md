@@ -1,14 +1,14 @@
 ---
 name: update-packages
-description: Update project dependencies to the latest version that is more than 8 days old, preferring pnpm over npm
+description: Update project dependencies to the latest version that is more than 8 days old, preferring pnpm over npm and enforcing installer age gates
 type: execution
-version: 0.1.0
+version: 0.2.0
 argument-hint: "[package names, workspace scope, or --all]"
 ---
 
 # Update Packages
 
-Use this skill when a project needs dependency updates but should avoid newly published versions that may still be unstable or compromised. The default target is the newest package version whose publish timestamp is more than 8 days old. When the project uses npm, try to migrate it to pnpm first unless project constraints make that unsafe.
+Use this skill when a project needs dependency updates but should avoid newly published versions that may still be unstable or compromised. The default target is the newest package version whose publish timestamp is more than 8 days old. When the project uses npm, try to migrate it to pnpm first unless project constraints make that unsafe. Every mutation run must also leave behind package-manager configuration that enforces the same age gate for future installs.
 
 ## Workflow
 
@@ -28,33 +28,45 @@ Use this skill when a project needs dependency updates but should avoid newly pu
    - If npm must remain, record the reason and continue with npm commands without inventing a pnpm migration.
    - In monorepo parallel-agent contexts, do not run commands that mutate shared lockfiles. Stop and route dependency changes to a single serial session.
 
-3. **Discover eligible versions.**
+3. **Add the installer age gate.**
+   - Create or update the project-root `.npmrc` before dependency updates, preserving existing registry/auth settings.
+   - Add npm's relative age gate: `min-release-age=8`.
+   - Add pnpm's 8-day equivalent in minutes for pnpm versions/configurations that read `.npmrc`: `minimum-release-age=11520`.
+   - If the active pnpm version uses `pnpm-workspace.yaml` or `pnpm config` for non-auth settings, also add or update `minimumReleaseAge: 11520` in the project `pnpm-workspace.yaml` or documented pnpm project config. Do this in addition to `.npmrc`, not instead of it, so npm and pnpm installs are both covered.
+   - Avoid overwriting private registry tokens, scoped registry lines, or unrelated project config.
+   - If an existing config deliberately excludes packages from the age gate, keep only exclusions that are documented and necessary; otherwise remove or narrow exclusions before updating.
+
+4. **Discover eligible versions.**
    - For each target package, query the registry for version metadata and publish times.
    - Select the highest semver version whose published timestamp is strictly older than 8 full days from the current date/time.
    - Include stable releases by default. Include prerelease/dist-tag targets only when the existing dependency already tracks that prerelease channel or the user explicitly requests it.
    - Skip packages when no eligible version is older than 8 days, when the package is pinned for a documented reason, or when peer constraints make the update unsafe.
    - Record the current version, selected version, publish date, and reason for skips.
 
-4. **Apply updates in safe batches.**
+5. **Apply updates in safe batches.**
    - Update manifests through package-manager commands where practical (`pnpm up`, `pnpm add -D`, workspace filters) so manifests and lockfiles stay consistent.
    - Prefer small batches for major upgrades, framework packages, build tooling, and peer-sensitive groups such as React, Next.js, ESLint, TypeScript, Vite, Vitest, Playwright, Prisma, database clients, and SDKs.
    - For npm-to-pnpm migration, first establish a clean pnpm install, then perform dependency upgrades.
    - Do not edit lockfiles by hand.
 
-5. **Verify after updates.**
+6. **Verify after updates.**
+   - Confirm `.npmrc` contains `min-release-age=8` and, for pnpm coverage, `minimum-release-age=11520` unless the project has a documented reason to store pnpm settings only in `pnpm-workspace.yaml` or pnpm config.
+   - For pnpm projects, confirm `minimumReleaseAge: 11520` is present in `pnpm-workspace.yaml` or equivalent project pnpm config when required by the active pnpm version.
    - Run the repo's install/update command, typecheck, tests, lint, build, and any focused smoke checks implied by changed packages.
    - If verification fails, diagnose the root cause. Apply the smallest durable fix when it is clearly inside the dependency update scope.
    - If a failure requires broad migration work, stop, report the blocker, and route to `/migrate <package or framework>`.
    - Re-run verification after fixes.
 
-6. **Document and ship.**
+7. **Document and ship.**
    - Summarize packages updated, versions selected, publish dates, packages skipped, package-manager changes, and verification.
+   - Include the age-gate config files changed and the exact setting values.
    - Update task docs or changelogs when the repository workflow requires it.
    - If tracked files changed, commit and push on the repository primary branch unless the user explicitly says not to.
 
 ## Output
 
 - **Package manager:** before and after, including any npm-to-pnpm migration result.
+- **Age gate:** `.npmrc` and pnpm config files changed, including `min-release-age=8` and `minimum-release-age`/`minimumReleaseAge` values.
 - **Updated packages:** package, old version, new version, selected publish date, and batch.
 - **Skipped packages:** package and reason.
 - **Verification:** install/update, typecheck, tests, lint, build, and smoke checks with pass/fail.
@@ -63,6 +75,7 @@ Use this skill when a project needs dependency updates but should avoid newly pu
 ## Constraints
 
 - Never select a package version published within the last 8 days unless the user explicitly overrides the safety gate.
+- Do not finish a mutation run without adding or verifying the package-manager age gate, unless the user explicitly declines it or the package manager cannot support it; document either exception.
 - Do not run package-manager commands that mutate a shared lockfile while acting as one of multiple parallel agents.
 - Do not hand-edit generated lockfiles.
 - Do not remove npm support when scripts, deployment docs, CI, or hosting constraints explicitly require npm.
