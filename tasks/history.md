@@ -2290,6 +2290,14 @@ Resolved all 10 findings from `/expert-review`:
 - Regenerated Skills Showcase GitHub proof assets after the review commit push so public proof metadata points at the latest remote freshness state.
 - Verified generated data freshness, Skills Showcase production build, and whitespace checks.
 
+## 2026-05-17 — feature-interview benchmark fresh evidence
+
+- Reran `$benchmark-test-skill feature-interview` through the project-local benchmark workflow and confirmed custom Tier 1 coverage.
+- Verified `feature-interview` with layer1 PASS in 4.5s and layer2 SKIP because no target-specific layer2 tests matched.
+- Ran the both-agent benchmark: Claude session `feature-interview-claude-52b6ef8a` had 0/1 evaluated hard assertion passes and 2 runner-budget infrastructure blocks; Codex session `feature-interview-codex-3d90c865` had 0/3 evaluated hard assertion passes.
+- Updated `benchmark/test-feature-interview-2026-05-17.md`; the run routes to `$session-triage feature-interview benchmark failure` because evaluated outputs failed the configured next-route assertion.
+- Refreshed generated Skills Showcase data and `docs/benchmark-results-matrix.md` after the curated benchmark evidence changed.
+
 ## 2026-05-17 — Step 40.1 structured workflow replay data
 
 - Replaced tuple-based Skills Showcase workflow steps with named step objects carrying structured replay blocks for user prompt, agent response, terminal/proof output, artifact/result output, and receipt state.
@@ -2350,3 +2358,10 @@ Resolved all 10 findings from `/expert-review`:
 - Ran the both-agent benchmark: Claude session `roadmap-claude-578a7980` had 1 evaluated pass and 2 runner-budget infrastructure blocks; Codex session `roadmap-codex-00c1a8a4` completed 3 evaluated hard-assertion passes.
 - Updated `benchmark/test-roadmap-2026-05-17.md`; the run still routes to triage because the Codex output-quality summary recorded 1 critical `evidence-linked` failure despite 100.0% hard assertion pass rate.
 - Refreshed generated Skills Showcase data and `docs/benchmark-results-matrix.md` after the curated benchmark evidence changed.
+
+## 2026-05-17 — roadmap benchmark evidence-rubric triage
+
+- Triaged the fresh `roadmap` output-quality critical failure against the retained Codex run artifacts, mirrored roadmap skill contracts, and Tier 1 benchmark setup.
+- Classified the failure as a benchmark harness false negative: the quality rubric requires the exact phrase `benchmark coverage reporting`, while the failing generated roadmap preserved the same concept through `Benchmark Coverage Model`, `benchmark coverage data model`, and `benchmark coverage metadata`.
+- Confirmed the failed run passed all hard assertions, created `tasks/roadmap.md`, included phase structure, acceptance criteria, verification, CLI status/validation scope, and routed to `$plan-phase 1`.
+- Wrote `benchmark/triage-roadmap-2026-05-17-quality.md` with the recommended targeted update route.

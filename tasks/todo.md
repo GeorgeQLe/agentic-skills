@@ -27,6 +27,29 @@
 - Validation plan recorded in the report: focused layer1 bench setup coverage, `feature-interview` verify, Codex smoke benchmark, benchmark coverage, generated-data validation if curated evidence changes, whitespace check, then full both-agent rerun.
 - **Recommended next skill:** `$targeted-skill-builder feature-interview benchmark route alignment`
 
+## Current Task — Triage `roadmap` Benchmark Quality Failure 2026-05-17
+
+**Goal:** Verify the fresh `$benchmark-test-skill roadmap` output-quality critical failure and identify the smallest durable fix.
+
+**Plan:**
+- [x] Inspect the benchmark report and raw Claude/Codex run evidence.
+- [x] Read the `roadmap` skill contracts and Tier 1 benchmark setup.
+- [x] Compare the `evidence-linked` quality criterion with the generated outputs and skill contract.
+- [x] Classify the failure as skill contract gap, benchmark harness defect, runner noncompliance, or infrastructure issue.
+- [x] Write `benchmark/triage-roadmap-2026-05-17-quality.md` with verdict, root cause, recommended fix, validation plan, and next route.
+- [ ] Record results here, then commit and push intended changes on `master`.
+
+## Review — Triage `roadmap` Benchmark Quality Failure 2026-05-17
+
+- Verdict: verified benchmark quality failure, not verified as a `roadmap` skill contract failure.
+- Evidence: Codex session `roadmap-codex-00c1a8a4` passed 3/3 hard assertions, but run 0 recorded a critical `evidence-linked` failure because it missed the exact required fact `benchmark coverage reporting`.
+- Contract comparison: mirrored Claude/Codex `roadmap` contracts require roadmap synthesis, phase structure, verification, and next routing; they do not require verbatim source-spec phrase retention.
+- Root cause: `tests/layer4/setups/tier1-workflows.setup.ts` uses exact substring facts `["benchmark coverage reporting", "CLI status output"]`; run 0 preserved the benchmark coverage concept with wording such as `Benchmark Coverage Model`, `benchmark coverage data model`, and `benchmark coverage metadata`.
+- Responsible gap: benchmark harness false negative in the roadmap quality rubric.
+- Report written: `benchmark/triage-roadmap-2026-05-17-quality.md`.
+- Validation plan recorded in the report: focused layer1 bench setup coverage, `roadmap` verify, Codex smoke benchmark, benchmark coverage, whitespace check, then full `$benchmark-test-skill roadmap` rerun; refresh generated Skills Showcase data if curated evidence changes.
+- **Recommended next skill:** `$targeted-skill-builder roadmap benchmark evidence rubric`
+
 ## Current Task — Benchmark `roadmap` Post-Route-Fix 2026-05-17
 
 **Goal:** Run `$benchmark-test-skill roadmap` after the route-alignment harness fix and publish deterministic both-agent evidence.
@@ -56,15 +79,28 @@
 - Command resolution: `$benchmark-test-skill` was the active workflow; `feature-interview` was treated only as the benchmark target argument.
 - Eligibility: `feature-interview` is known to the harness with custom coverage via `tests/layer4/setups/tier1-workflows.setup.ts`.
 - Verify passed: layer1 PASS in 4.6s with 1,202 tests across 15 files; layer2 SKIP because no target-specific layer2 tests matched `feature-interview`.
-- Benchmark completed for both agents with no infrastructure-blocked runs:
-  - Claude session `6bd2c89a`: 0/3 evaluated hard assertions passed, output quality 90.5%, p50 47.6s, p95 57.0s, p99 57.9s, total cost $0.75.
-  - Codex session `5bd5a8da`: 1/3 evaluated hard assertions passed, output quality 90.5%, p50 68.4s, p95 77.2s, p99 77.9s, total cost $0.75.
-- Failure pattern: failed runs recommended `$spec-interview`, violating the benchmark expectation for `feature-interview` next-route behavior.
-- Report written to `benchmark/test-feature-interview-2026-05-17.md`.
+- Fresh benchmark completed for both agents:
+  - Claude session `52b6ef8a`: 0/1 evaluated hard assertions passed, 2 infrastructure-blocked runs from `agent runner budget exceeded`, output quality 85.7%, p50/p95/p99 43.2s, total cost $0.75.
+  - Codex session `3d90c865`: 0/3 evaluated hard assertions passed, 0 infrastructure blocks, output quality 90.5%, p50 66.1s, p95 66.6s, p99 66.6s, total cost $0.75.
+- Failure pattern: all evaluated failed runs reported `Output recommends $spec-interview`, matching the existing triage finding that the benchmark setup route expectation needs targeted alignment with the `feature-interview` contract.
+- Report updated at `benchmark/test-feature-interview-2026-05-17.md`.
 - Report validation passed: required target, agent rows, pass/block data, latency, cost, consistency, raw session paths, quality details, and recommended next route are present.
 - Generated Skills Showcase data was refreshed and validated after the curated benchmark evidence changed.
-- Validation passed: `pnpm --dir tests bench:coverage`, `pnpm --dir tests exec vitest run --project layer1 benchmark-results-matrix skills-showcase-benchmark-demo`, `scripts/validate-skills-showcase-data.sh`, and `git diff --check`.
+- Validation passed this session: `pnpm verify --skill feature-interview`, `pnpm --dir tests bench:coverage`, `pnpm --dir tests exec vitest run --project layer1 benchmark-results-matrix skills-showcase-benchmark-demo`, `scripts/validate-skills-showcase-data.sh`, report field checks, and `git diff --check`.
 - **Recommended next skill:** `$session-triage feature-interview benchmark failure`
+
+### Ship Manifest — Feature Interview Benchmark Fresh Evidence
+
+- **User goal:** Execute the active `$run` step for persisted `feature-interview` benchmark result coverage.
+- **Changed files:** `benchmark/test-feature-interview-2026-05-17.md`, `docs/benchmark-results-matrix.md`, `docs/skills-showcase/assets/skills-data.js`, `docs/skills-showcase/assets/github-proof-data.js`, `apps/skills-showcase/public/assets/skills-data.js`, `apps/skills-showcase/public/assets/github-proof-data.js`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** Benchmark report records fresh both-agent metrics; generated matrix/showcase assets point at the latest curated raw report; task/history docs record the run, validation, and next route.
+- **User-goal mapping:** The benchmark report and generated matrix provide persisted evaluated evidence for `feature-interview`, which is the first Tier 1 remaining-result target in Phase 41.
+- **Tests run:** `pnpm bench --list-skills`; `pnpm verify --skill feature-interview`; `pnpm bench --skill feature-interview --agent both --runs 3 --chunk-size 3 --pause 0`; `scripts/validate-skills-showcase-data.sh`; report field checks with `rg`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests exec vitest run --project layer1 benchmark-results-matrix skills-showcase-benchmark-demo`; `git diff --check`.
+- **Skipped tests:** Full broad app build/typecheck was not relevant because this step changed benchmark evidence and generated data only, not app source behavior.
+- **Adversarial review:** Compared the fresh structured reports against the Markdown report and verified the failed assertion pattern, infrastructure block count, session IDs, latency, cost, quality scores, and raw paths. Removed an unrelated benchmark-runner task-doc side effect from the shipping boundary.
+- **Residual risk:** Claude only produced one evaluated run because two runs were runner-budget blocked; the evaluated evidence is enough to confirm the hard next-route failure but not to estimate Claude pass rate tightly.
+- **Rollback note:** Revert the benchmark report and generated data hunks to restore the prior `feature-interview` benchmark session references.
+- **Next command:** `$targeted-skill-builder feature-interview benchmark route alignment`
 
 ## Priority Task Queue
 
