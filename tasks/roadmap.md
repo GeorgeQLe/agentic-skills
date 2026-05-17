@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Benchmark: benchmark-agent-review 2026-05-17
+
+**Goal:** Run `$benchmark-test-skill benchmark-agent-review` against the current repository state and publish deterministic both-agent benchmark evidence.
+
+**Acceptance Criteria:**
+- [x] `pnpm bench --list-skills` confirms `benchmark-agent-review` is known and reports custom coverage.
+- [x] `pnpm verify --skill benchmark-agent-review` passes or blocks benchmark execution with a recorded failure.
+- [x] `pnpm bench --skill benchmark-agent-review --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [x] `benchmark/test-benchmark-agent-review-2026-05-17.md` records verify, benchmark, latency, cost, consistency, failed assertions, raw session evidence, and recommended next route.
+- [x] Results are recorded in `tasks/todo.md`, generated evidence is refreshed if needed, then intended changes are committed and pushed on `master`.
+
+**Result:** Deterministic benchmark failure on 2026-05-17. `benchmark-agent-review` is known with custom benchmark coverage via `tests/layer4/setups/packs/pack-workflows.setup.ts`, and verify passed with layer1 PASS in 3.4s plus layer2 SKIP because no target-specific layer2 tests matched. Claude session `benchmark-agent-review-claude-a4f7218d` completed three evaluated runs with 0/3 hard assertion pass rate, 89.2% output quality, p50 latency 33.4s, and $0.75 total estimated cost. Codex session `benchmark-agent-review-codex-f6a6014a` completed three evaluated runs with 2/3 hard assertion pass rate, 100.0% output quality, p50 latency 76.5s, and $0.75 total estimated cost. No runs were infrastructure-blocked. Report: `benchmark/test-benchmark-agent-review-2026-05-17.md`. Recommended next skill: `$session-triage benchmark-agent-review benchmark failure`.
+
 ## Current Benchmark Rerun: update-packages 2026-05-17
 
 **Goal:** Rerun `$benchmark-test-skill update-packages` after the route and fixture-rubric alignment and publish fresh deterministic both-agent evidence.
