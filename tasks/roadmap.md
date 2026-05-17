@@ -16,6 +16,17 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Benchmark: roadmap Fresh Rerun 2026-05-17
+
+**Goal:** Rerun `$benchmark-test-skill roadmap` after the benchmark-results matrix assertion fix and publish fresh deterministic both-agent evidence.
+
+**Acceptance Criteria:**
+- [ ] `pnpm bench --list-skills` confirms `roadmap` is known and reports its coverage status.
+- [ ] `pnpm verify --skill roadmap` passes or blocks benchmark execution with a recorded failure.
+- [ ] `pnpm bench --skill roadmap --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [ ] `benchmark/test-roadmap-2026-05-17.md` records fresh verify, benchmark, latency, cost, consistency, and raw session evidence.
+- [ ] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
 ## Current Agent Review: ship Fresh Benchmark 2026-05-16
 
 **Goal:** Review the latest persisted `ship` Claude and Codex benchmark outputs for subjective operator quality.

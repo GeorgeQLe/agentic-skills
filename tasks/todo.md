@@ -7,7 +7,7 @@
 
 ## Priority Task Queue
 
-- [ ] `$run` - Execute Step 40.3 because Step 40.2 replaced the active step card with the structured replay panel.
+- [ ] `$run` - Execute Step 40.4 to style and harden the `/workflows` replay pilot after benchmark receipts were promoted into the visible replay.
 - [x] `/reconcile-dev-docs fix tasks` - Resolved orphaned Phase 38 manual tasks: 4 items deferred to future work (Neon DB, admin secret, Vercel env vars, live verification).
 - [ ] `/feature-interview` - Triage 8 remaining unspecced ideas in `tasks/ideas.md` (cleaned from 25 on 2026-05-15; 17 removed as shipped/obsolete).
 
@@ -120,7 +120,7 @@
   - Render chat-style user/agent messages as the primary active-step content.
   - Embed terminal/proof and artifact/result blocks inside the replay.
   - Keep step circles, play/pause, previous/next, restart, reduced-motion behavior, and notebook context working.
-- [ ] Step 40.3: Promote benchmark receipts into the visible replay.
+- [x] Step 40.3: Promote benchmark receipts into the visible replay.
   - Classification: automated
   - Files: modify `apps/skills-showcase/src/showcase/tui/TuiWorkflow.tsx`, modify `apps/skills-showcase/src/showcase/tui/workflow.css`
   - Use existing `workflowBenchmarks` data to show pass rate, quality, agent, run index, report path, and run artifact path when available.
@@ -190,7 +190,37 @@
 - **Rollback note:** Revert this commit to restore the prior summary-only active step card.
 - **Next command:** `$run`
 
-### Next Step Plan — Step 40.3 Promote Benchmark Receipts Into Visible Replay
+## Review — Step 40.3 Visible Benchmark Receipts
+
+- Promoted benchmark receipts from plain replay text into a structured visible receipt block inside the selected `/workflows` replay.
+- Benchmarked steps now show persisted evidence status plus pass rate, quality, agent, run index, report path, and run artifact path when `workflowBenchmarks` provides them.
+- Removed the separate collapsed `View benchmark execution` panel so benchmarked-step proof no longer depends on opening a secondary details section.
+- Preserved explicit no-receipt states for curated and benchmark-pending steps through the replay receipt fallback text.
+- Validation passed: `pnpm --dir apps/skills-showcase typecheck`; `pnpm --dir apps/skills-showcase test -- --runInBand` (8 files, 88 tests); `pnpm --dir apps/skills-showcase build`; `git diff --check`.
+
+### Ship Manifest — Step 40.3
+
+- **User goal:** Package the completed Phase 40 Step 40.3 work that promotes benchmark receipts into the visible `/workflows` replay.
+- **Changed files:** `apps/skills-showcase/src/showcase/tui/TuiWorkflow.tsx`, `apps/skills-showcase/src/showcase/tui/workflow.css`, `tasks/todo.md`, `tasks/history.md`, `tasks/roadmap.md`.
+- **Per-file purpose:** `TuiWorkflow.tsx` derives and renders structured benchmark receipt rows; `workflow.css` styles benchmark/no-receipt states with mobile-safe wrapping; `tasks/todo.md` records completion, validation, manifest, and next plan; `tasks/history.md` records the shipped change; `tasks/roadmap.md` preserves the already-planned fresh `roadmap` benchmark rerun as roadmap-level backlog context without making it the active Phase 40 step.
+- **User-goal mapping:** Source changes support Step 40.3 by surfacing persisted benchmark proof directly in the replay while preserving explicit no-receipt states. Task-doc changes ship the completed work and keep the next active Phase 40 route pointed at Step 40.4.
+- **Tests run:** `pnpm --dir apps/skills-showcase typecheck`; `pnpm --dir apps/skills-showcase test -- --runInBand`; `pnpm --dir apps/skills-showcase build`; `git diff --check`.
+- **Skipped tests:** Full benchmark suites and generated-data validation were not rerun because Step 40.3 does not change benchmark data generation, generated assets, skill contracts, or benchmark fixtures. App typecheck, app tests, app build, and whitespace validation cover the touched runtime UI surface.
+- **Adversarial review:** Reviewed the diff for benchmark-index drift, accidental control removal, redundant hidden proof paths, and long path overflow. The receipt rows preserve existing `workflowBenchmarks` indexing and use `overflow-wrap: anywhere` plus mobile single-column rows for report and artifact paths. Also separated the roadmap-level `roadmap` benchmark rerun note from active `tasks/todo.md` routing so it does not override Step 40.4.
+- **Residual risk:** This step improves receipt visibility but leaves final chat/terminal/artifact visual polish to Step 40.4; a browser visual pass remains part of Step 40.6.
+- **Rollback note:** Revert the Step 40.3 commit to restore the previous replay receipt text and collapsed benchmark execution details.
+- **Next command:** `$run`
+
+### Next Step Plan — Step 40.4 Style And Harden The Replay Pilot
+
+- Scope: modify `apps/skills-showcase/src/showcase/tui/workflow.css`.
+- Style the existing replay messages, terminal/proof blocks, artifact/result blocks, and benchmark receipt block into a coherent chat-and-terminal presentation within the playful blueprint theme.
+- Preserve mobile stacking and prevent horizontal overflow from long commands, report paths, run artifact paths, and benchmark output excerpts.
+- Preserve keyboard focus visibility, reduced-motion behavior, readable contrast, step circles, playback controls, and notebook layout.
+- Keep source changes CSS-focused unless validation exposes a small component-class gap.
+- Validation target: `pnpm --dir apps/skills-showcase typecheck`, `pnpm --dir apps/skills-showcase test -- --runInBand`, `pnpm --dir apps/skills-showcase build`, and `git diff --check`.
+
+### Previous Next Step Plan — Step 40.3 Promote Benchmark Receipts Into Visible Replay
 
 - Scope: modify `apps/skills-showcase/src/showcase/tui/TuiWorkflow.tsx` and `apps/skills-showcase/src/showcase/tui/workflow.css` to make benchmark receipts visible and durable inside the replay panel.
 - Render pass rate, quality, agent, run index, report path, and run artifact path from `workflowBenchmarks` when a step has persisted evidence.
