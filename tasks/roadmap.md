@@ -86,11 +86,13 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 **Goal:** Review the latest persisted `benchmark-agent-review` Claude and Codex benchmark outputs for subjective operator quality after retained `ship-manifest.md` evidence was added to the fixture.
 
 **Acceptance Criteria:**
-- [ ] Latest Claude and Codex run directories are resolved from `benchmark/test-benchmark-agent-review-2026-05-17.md`.
-- [ ] Evaluated generated artifacts are inspected and infrastructure-blocked runs are excluded.
-- [ ] `benchmark/review-benchmark-agent-review-2026-05-17.md` records source reports, run directories, score table, strengths, weaknesses, remediation, and next route.
-- [ ] Generated Skills Showcase data is refreshed if review evidence changes.
-- [ ] Results are recorded in `tasks/todo.md`, then intended changes are committed and pushed on `master`.
+- [x] Latest Claude and Codex run directories are resolved from `benchmark/test-benchmark-agent-review-2026-05-17.md`.
+- [x] Evaluated generated artifacts are inspected and infrastructure-blocked runs are excluded.
+- [x] `benchmark/review-benchmark-agent-review-2026-05-17.md` records source reports, run directories, score table, strengths, weaknesses, remediation, and next route.
+- [x] Generated Skills Showcase data is refreshed if review evidence changes.
+- [x] Results are recorded in `tasks/todo.md`, then intended changes are committed and pushed on `master`.
+
+**Result:** Reviewed Claude session `benchmark-agent-review-claude-3378af86` and Codex session `benchmark-agent-review-codex-0ceac781`, covering six evaluated `pack-benchmark-output.md` artifacts and excluding no infrastructure-blocked runs. Subjective quality was usable to excellent: every output inspected retained `ship-manifest.md` artifact text directly, identified placeholder residual-risk and monitoring sections, avoided benchmark-laxness framing, and routed to targeted remediation. Median subjective score was 86/100 with range 78-94. Main remediation: strengthen `benchmark-agent-review` remediation expectations and the benchmark rubric so reviews must name owner targets and validation checks when retained artifacts contain placeholder risk/monitoring text. Report: `benchmark/review-benchmark-agent-review-2026-05-17.md`. Generated Skills Showcase data was refreshed after curated review evidence changed. Recommended next command: `$targeted-skill-builder benchmark-agent-review remediation-owner validation specificity`.
 
 ## Current Targeted Update: benchmark-agent-review Route Prompt Alignment 2026-05-17
 

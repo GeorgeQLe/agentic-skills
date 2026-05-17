@@ -86,11 +86,25 @@
 **Goal:** Review the latest persisted `benchmark-agent-review` Claude and Codex benchmark outputs for subjective operator quality after retained `ship-manifest.md` evidence was added to the fixture.
 
 **Plan:**
-- [ ] Resolve latest Claude and Codex run directories from `benchmark/test-benchmark-agent-review-2026-05-17.md`.
-- [ ] Inspect retained generated artifacts and benchmark metadata, excluding infrastructure-blocked runs.
-- [ ] Grade each evaluated output against the agent-review rubric separately from deterministic benchmark metrics.
-- [ ] Write `benchmark/review-benchmark-agent-review-2026-05-17.md` with scores, findings, remediation, and next route.
-- [ ] Refresh generated evidence if curated review evidence changes, validate, record results, then commit and push intended changes on `master`.
+- [x] Resolve latest Claude and Codex run directories from `benchmark/test-benchmark-agent-review-2026-05-17.md`.
+- [x] Inspect retained generated artifacts and benchmark metadata, excluding infrastructure-blocked runs.
+- [x] Grade each evaluated output against the agent-review rubric separately from deterministic benchmark metrics.
+- [x] Write `benchmark/review-benchmark-agent-review-2026-05-17.md` with scores, findings, remediation, and next route.
+- [x] Refresh generated evidence if curated review evidence changes, validate, record results, then commit and push intended changes on `master`.
+
+## Review — Agent Review `benchmark-agent-review` Retained Artifact Evidence 2026-05-17
+
+- Reviewed latest persisted benchmark outputs from `benchmark/test-benchmark-agent-review-2026-05-17.md`.
+- Source runs: `tests/benchmarks/runs/benchmark-agent-review-claude-3378af86/` and `tests/benchmarks/runs/benchmark-agent-review-codex-0ceac781/`.
+- Reviewed six retained `pack-benchmark-output.md` artifacts, excluding no runs because there were 0 infrastructure blocks.
+- Deterministic context: both agents passed 3/3 hard assertions; Claude and Codex both had 99.2% deterministic output quality.
+- Subjective verdict: usable to excellent overall. Every output inspected retained `ship-manifest.md` artifact text directly, identified the `Residual Risks: Not captured` and `Post-Ship Monitoring: Not specified` gap, avoided benchmark-laxness framing, and routed to targeted remediation.
+- Median subjective score: 86/100; range: 78-94.
+- Main remediation: strengthen `benchmark-agent-review` remediation expectations and the benchmark rubric so retained-artifact reviews must name owner targets and validation checks when they find placeholder risk/monitoring sections.
+- Report written: `benchmark/review-benchmark-agent-review-2026-05-17.md`.
+- Generated Skills Showcase data was refreshed after the curated review report changed.
+- Validation passed: report field scan; `pnpm --dir tests bench:coverage`; `pnpm --dir tests exec vitest run --project layer1 benchmark-results-matrix skills-showcase-benchmark-demo`; `git diff --check`. Pre-commit `scripts/validate-skills-showcase-data.sh` regenerated intended asset changes and reported them as stale pending commit.
+- **Recommended next command:** `$targeted-skill-builder benchmark-agent-review remediation-owner validation specificity`
 
 ## Current Task — Targeted Update `benchmark-agent-review` Route Prompt Alignment 2026-05-17
 
