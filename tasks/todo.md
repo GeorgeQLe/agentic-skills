@@ -10,6 +10,27 @@
 - [x] `/reconcile-dev-docs fix tasks` - Resolved orphaned Phase 38 manual tasks: 4 items deferred to future work (Neon DB, admin secret, Vercel env vars, live verification).
 - [ ] `/feature-interview` - Triage 8 remaining unspecced ideas in `tasks/ideas.md` (cleaned from 25 on 2026-05-15; 17 removed as shipped/obsolete).
 
+## Current Task — Feature Interview Workflow Hybrid Replay 2026-05-17
+
+**Goal:** Triage the idea that benchmark run history should become the primary `/workflows` showcase replay surface.
+
+**Plan:**
+- [x] Inspect existing Skills Showcase workflow specs, implementation, benchmark evidence, and recent history.
+- [x] Validate whether `TuiWorkflow` currently shows a replay or only benchmark-backed summaries.
+- [x] Confirm replay style and first implementation surface with the user.
+- [x] Write the feature-interview log and scoped UI spec update.
+- [x] Validate docs, then commit and push intended changes on `master`.
+
+## Review — Feature Interview Workflow Hybrid Replay 2026-05-17
+
+- Evidence verdict: current `TuiWorkflow` is grounded but shallow. It renders step cards, dots, benchmark badges, and collapsed prompt/output details rather than a compelling successful-run replay.
+- User-confirmed direction: hybrid replay, with chat-style user/agent messages and embedded terminal/test/artifact/benchmark proof blocks.
+- User-confirmed scope: pilot the visual pattern on `/workflows` only, not as a permanent boundary; later surfaces can adopt it after validation.
+- Artifacts updated: `specs/workflow-hybrid-replay-feature-interview.md` and `specs/ui-skills-showcase-website.md`.
+- Canonical spec archive: `docs/history/archive/2026-05-17/004446/specs/ui-skills-showcase-website.md`.
+- **Next work:** Sequence the `/workflows` hybrid replay pilot as the next UI implementation slice.
+- **Recommended next command:** `$roadmap`
+
 ## Current Task — Agent Review `ship` Fresh Benchmark 2026-05-16
 
 **Goal:** Review the latest persisted `ship` Claude and Codex benchmark outputs for subjective operator quality.
