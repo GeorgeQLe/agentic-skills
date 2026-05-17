@@ -1,16 +1,103 @@
 # Active Phase
 
 **Project:** Claude Skills / agentic-skills
-**Status:** Phase 40 decomposed, ready for Step 40.1.
-**Current phase:** Phase 40 of 40 — Workflow Hybrid Replay Pilot
-**Last completed phase:** Phase 39 — Benchmark Results Visibility And Safe Git Fixtures
+**Status:** Phase 40 complete; Phase 41 ready for Batch 41.1.
+**Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
+**Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
+
+## Current Task — Benchmark `feature-interview` 2026-05-17
+
+**Goal:** Run `$benchmark-test-skill feature-interview` against the current repository harness and publish deterministic both-agent evidence.
+
+**Plan:**
+- [ ] Confirm `$benchmark-test-skill` is the active workflow and `feature-interview` is only the benchmark target argument.
+- [ ] Run `pnpm bench --list-skills` and record `feature-interview` coverage status.
+- [ ] Run `pnpm verify --skill feature-interview`; stop before bench if verification fails.
+- [ ] If verify passes, run `pnpm bench --skill feature-interview --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [ ] Write and validate `benchmark/test-feature-interview-2026-05-17.md` with verify, benchmark, latency, cost, consistency, raw paths, and recommended next route.
+- [ ] Record results here, then commit and push intended changes on `master`.
 
 ## Priority Task Queue
 
 - [ ] `$benchmark-test-skill feature-interview` - Start Phase 41 remaining benchmark result coverage with the first Tier 1 gap batch.
-- [ ] `$run` - Execute Step 40.6 to run final app validation and visual sanity checks for the `/workflows` replay pilot.
+- [ ] `$run` - Execute Batch 41.1 to create/verify the remaining-results queue and benchmark the first small batch.
 - [x] `/reconcile-dev-docs fix tasks` - Resolved orphaned Phase 38 manual tasks: 4 items deferred to future work (Neon DB, admin secret, Vercel env vars, live verification).
 - [ ] `/feature-interview` - Triage 8 remaining unspecced ideas in `tasks/ideas.md` (cleaned from 25 on 2026-05-15; 17 removed as shipped/obsolete).
+
+## Phase 41: Remaining Skill Benchmark Result Coverage
+
+**Goal:** Convert the existing benchmark coverage registry into persisted evaluated benchmark results for the remaining tracked skills, without overloading the runner or treating infrastructure blocks as skill failures.
+
+**Source:** `docs/benchmark-results-matrix.md`, `tests/harness/bench-coverage.ts`, `benchmark/test-*.md`, and the 2026-05-11 benchmark lessons distinguishing setup coverage from persisted evaluated results.
+
+**Current Baseline:**
+- Benchmark coverage registry validates 152 tracked skills.
+- Persisted evaluated benchmark results currently cover 14 unique skill names.
+- Remaining without evaluated benchmark result rows: 138.
+- Remaining runnable, non-blocked skills: 132.
+- Coverage-blocked skills requiring fixture or policy work before execution: `delegate`, `deploy`, `install-agentic-skills`, `patch-exec-profile`, `release`, `uat-guide`.
+- Incomplete-only result needing retry: `affected` has a zero-evaluated-run persisted report and should not count as benchmarked until rerun successfully.
+
+**Scope:**
+- Run `$benchmark-test-skill <skill>` for remaining runnable skills in small batches.
+- Prefer batch order by priority tier and dependency value: Tier 1 workflow gaps, incomplete reports, Tier 2 global skills, git-fixture skills with explicit permission gates, then pack-local skills.
+- For each skill, preserve the existing `$benchmark-test-skill` contract: list coverage, verify first, benchmark only after verify passes, write `benchmark/test-<skill>-<date>.md`, refresh generated Skills Showcase data when curated benchmark evidence changes, and record results in task docs.
+- Do not run permission-gated GitHub disposable-repo fixtures (`commit-and-push-by-feature`, `sync`) until explicit permission and safety boundaries are confirmed.
+- Do not attempt blocked skills as live benchmarks until their next-command remediation creates a safe fixture or Codex-runnable contract.
+
+**Acceptance Criteria:**
+- [ ] A generated or scripted queue identifies remaining skills from `tests/harness/bench-coverage.ts` minus evaluated rows in `docs/benchmark-results-matrix.md`.
+- [ ] Tier 1 remaining skills are benchmarked or explicitly triaged: `feature-interview`, `roadmap`, `ship-end`, `targeted-skill-builder`.
+- [ ] `affected` is rerun because its only persisted report is blocked/incomplete.
+- [ ] Each completed benchmark has a curated report under `benchmark/test-<skill>-<YYYY-MM-DD>.md` and raw paths under `tests/benchmarks/runs/`.
+- [ ] Any failed benchmark is triaged before continuing broad execution if it indicates harness drift, shared setup drift, or skill-contract ambiguity.
+- [ ] `docs/benchmark-results-matrix.md` and Skills Showcase generated data are refreshed after each committed batch.
+- [ ] `pnpm --dir tests bench:coverage`, benchmark-results matrix validation, generated showcase validation, and `git diff --check` pass before shipping each batch.
+- [ ] Coverage-blocked skills have documented next remediation commands, not attempted live-run failures.
+
+### Execution Profile
+**Parallel mode:** serial
+**Integration owner:** main agent
+**Conflict risk:** medium
+**Review gates:** benchmark cost, runner capacity, GitHub fixture permission, generated-data freshness
+
+**Subagent lanes:** none
+
+### Batch Plan
+- [ ] Batch 41.1: Create/verify the remaining-results queue and run the first small batch: `feature-interview`, `ship-end`, `targeted-skill-builder`, and `affected`.
+- [ ] Batch 41.2: Resolve or triage `roadmap`, which currently has evaluated Codex failures and Claude infrastructure blocks from `benchmark/test-roadmap-2026-05-17.md`.
+- [ ] Batch 41.3: Run Tier 2 global skills in groups of 5-10, pausing after any shared harness failure pattern.
+- [ ] Batch 41.4: Run git-fixture skills `commit-and-push-by-feature` and `sync` only after explicit permission for disposable GitHub fixture operations.
+- [ ] Batch 41.5: Run pack-local skills by pack family, starting with packs that feed public showcase/workflow proof.
+- [ ] Batch 41.6: Address blocked skills through their remediation routes, then benchmark only after safe fixtures exist.
+
+### Next Step Plan — Batch 41.1 Remaining Results Queue And First Benchmark Batch
+
+- Scope: create or verify a deterministic remaining-results queue from `tests/harness/bench-coverage.ts`, `docs/benchmark-results-matrix.md`, and existing `benchmark/test-*.md` reports; then run the first small benchmark batch for `feature-interview`, `ship-end`, `targeted-skill-builder`, and `affected`.
+- Treat `$benchmark-test-skill` as the active workflow and each listed skill as a target argument.
+- For each target: run `pnpm bench --list-skills`, run `pnpm verify --skill <target>`, and run `pnpm bench --skill <target> --agent both --runs 3 --chunk-size 3 --pause 0` only after verify passes.
+- Write or update dated benchmark reports under `benchmark/test-<target>-2026-05-17.md` with verify, benchmark, latency, cost, consistency, raw session paths, and next-route evidence.
+- Refresh generated Skills Showcase data after curated benchmark evidence changes, then run `pnpm --dir tests bench:coverage`, focused benchmark-results matrix validation, `scripts/validate-skills-showcase-data.sh`, and `git diff --check`.
+- If any target fails in a way that indicates harness drift, shared setup drift, or skill-contract ambiguity, stop broad execution and route to triage before continuing the batch.
+
+## Review — Roadmap Benchmark Route Alignment Targeted Update 2026-05-17
+
+- Updated the Tier 1 benchmark setup for `roadmap` so the roadmap-only fixture expects `$plan-phase 1`, matching the roadmap skill contract for a newly generated roadmap that still needs implementation-step decomposition.
+- Removed `tasks/roadmap.md` from the concrete-file quality expectation for the roadmap fixture because the benchmark prompt asks for roadmap creation and next routing, not self-referential mention of the output path.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 bench-setups`; `pnpm --dir tests verify --skill roadmap`; `git diff --check`.
+
+### Ship Manifest — Roadmap Benchmark Route Alignment
+
+- **User goal:** Resolve the fresh `roadmap` benchmark route-alignment defect identified in the 2026-05-17 triage.
+- **Changed files:** `tests/layer4/setups/tier1-workflows.setup.ts`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** `tier1-workflows.setup.ts` aligns the benchmark route and concrete-file quality expectations with the `roadmap` contract; task/history docs record the scoped update and validation.
+- **User-goal mapping:** The source change directly addresses the triaged mismatch where a roadmap-only fixture expected `$run` instead of the contract-aligned `$plan-phase 1`.
+- **Tests run:** `pnpm --dir tests exec vitest run --project layer1 bench-setups`; `pnpm --dir tests verify --skill roadmap`; `git diff --check`.
+- **Skipped tests:** A fresh both-agent `roadmap` benchmark was not run in this shipping boundary because Phase 41 Batch 41.2 explicitly scopes the broader rerun/triage step; focused setup coverage and target verify prove the benchmark contract now compiles and passes deterministic checks.
+- **Adversarial review:** Compared the change against the `roadmap` triage finding and verified the updated setup still requires phase structure, acceptance criteria, verification language, and a next command while removing the stale `$run` expectation.
+- **Residual risk:** The next live `roadmap` benchmark may still expose runner behavior differences or Claude infrastructure blocks; Batch 41.2 remains the planned fresh evidence route.
+- **Rollback note:** Revert the `tier1-workflows.setup.ts` hunk to restore the prior `$run` expectation if the benchmark contract is intentionally changed back.
+- **Next command:** `$run`
 
 ## Current Task — Plan Remaining Benchmark Result Coverage 2026-05-17
 
@@ -205,7 +292,7 @@
   - Classification: automated
   - Files: modify `apps/skills-showcase/src/showcase/workflows.test.tsx`, modify `tests/layer1/skills-showcase-benchmark-demo.test.ts` if generated data contract assertions need updates
   - Cover replay data presence, active-step rendering, step-circle navigation, benchmark receipt rendering, and non-benchmarked receipt state.
-- [ ] Step 40.6: Run app validation and visual sanity checks.
+- [x] Step 40.6: Run app validation and visual sanity checks.
   - Classification: automated
   - Files: modify `tasks/todo.md` with review results
   - Run `pnpm --dir apps/skills-showcase test`.
@@ -299,6 +386,28 @@
 - **Rollback note:** Revert the Step 40.4 commit to restore the prior replay styling while keeping the structured replay and visible receipt behavior from Steps 40.1-40.3.
 - **Next command:** `$run`
 
+## Review — Step 40.6 Final App Validation And Visual Sanity Checks
+
+- Final validation passed: `pnpm --dir apps/skills-showcase test` (8 files, 92 tests), `pnpm --dir apps/skills-showcase typecheck`, `pnpm --dir apps/skills-showcase build`, and `git diff --check`.
+- Generated-data validation was not run because Step 40.6 changed only task/history docs and the prior replay pilot steps did not leave generated showcase assets dirty.
+- Local app started with `pnpm --dir apps/skills-showcase dev`; port 3000 was occupied, so Next selected `http://localhost:3005`.
+- Desktop Safari visual check passed for `/workflows`: hybrid replay panel rendered as the primary selected-step surface, workflow chips and step circles worked, the benchmarked Ship step showed pass rate, quality, agent, run index, report path, and run artifact path, and the no-receipt state remained visible on curated steps.
+- Narrow mobile-width Safari visual check passed: navigation collapsed, replay blocks stacked, command/result text wrapped, long benchmark artifact paths wrapped inside the receipt block, and no horizontal page overflow control appeared.
+- Browser plugin note: the in-app Browser workflow could not be used because the required Node REPL tool was not exposed in this session; Safari Computer Use was used for the visual pass instead.
+
+### Ship Manifest — Step 40.6 And Phase 40 Completion
+
+- **User goal:** Execute Phase 40 Step 40.6 by running final app validation and visual sanity checks for the `/workflows` replay pilot, then prepare the next phase.
+- **Changed files:** `tasks/todo.md`, `tasks/history.md`, `tasks/roadmap.md`, `tasks/phases/phase-40.md`.
+- **Per-file purpose:** `tasks/todo.md` records Step 40.6 evidence, closes Phase 40 acceptance criteria, and seeds Phase 41 Batch 41.1; `tasks/history.md` records the shipped validation and phase completion; `tasks/roadmap.md` marks Phase 40 complete; `tasks/phases/phase-40.md` archives the completed phase state.
+- **User-goal mapping:** The task-doc changes prove the requested final validation was run, preserve the completed phase record, and hand the next operator a concrete continuation path.
+- **Tests run:** `pnpm --dir apps/skills-showcase test`; `pnpm --dir apps/skills-showcase typecheck`; `pnpm --dir apps/skills-showcase build`; Safari visual checks for `/workflows` at desktop and narrow mobile widths; `git diff --check`.
+- **Skipped tests:** `scripts/validate-skills-showcase-data.sh` was skipped because no generated data, showcase assets, skill contracts, benchmark reports, or data builders changed in Step 40.6. Full repository benchmark suites were skipped because this was final app validation for a completed UI pilot, not a benchmark harness or skill-contract change.
+- **Adversarial review:** Reviewed the final runtime surface against Phase 40 acceptance criteria in Safari, including benchmark receipt visibility, non-benchmarked receipt fallback, step-circle state changes, desktop layout, mobile stacking, long path wrapping, and absence of horizontal overflow. No source defect was found.
+- **Residual risk:** Browser visual verification used Safari and Computer Use because the in-app Browser plugin's Node REPL control surface was unavailable; Chromium-specific rendering was not separately inspected. App tests, typecheck, production build, and Safari desktop/mobile checks cover the changed `/workflows` surface.
+- **Rollback note:** Revert the Phase 40 implementation commits to restore the previous `/workflows` step-card presentation, or revert this documentation commit to reopen Step 40.6 if further validation is required.
+- **Next command:** `$run`
+
 ## Review — Step 40.5 Focused Replay Pilot Regression Coverage
 
 - Added `TuiWorkflow` regression coverage to the existing workflows test file so the `/workflows` pilot is tested directly instead of only through the legacy homepage preview client.
@@ -364,20 +473,20 @@
 
 ### Milestone: Phase 40 Workflow Hybrid Replay Pilot
 **Acceptance Criteria:**
-- [ ] `/workflows` renders a hybrid replay panel as the primary selected-step surface.
-- [ ] Step circles change the active replay state and expose user prompt/command, agent response, artifact/result, and proof content for each step.
-- [ ] Benchmarked steps show visible pass-rate, quality, agent/run metadata, and report/run artifact paths without requiring a collapsed details panel.
-- [ ] Non-benchmarked steps render curated scenario transcript content and a clear no-receipt state.
-- [ ] The implementation uses structured replay data rather than adding more positional fields to `WorkflowStep`.
-- [ ] Mobile layouts constrain chat, command, report path, and benchmark output blocks without horizontal page overflow.
-- [ ] Focused component/data tests, typecheck, build, and whitespace validation pass.
-- [ ] All phase tests pass.
-- [ ] No regressions in previous phase tests.
+- [x] `/workflows` renders a hybrid replay panel as the primary selected-step surface.
+- [x] Step circles change the active replay state and expose user prompt/command, agent response, artifact/result, and proof content for each step.
+- [x] Benchmarked steps show visible pass-rate, quality, agent/run metadata, and report/run artifact paths without requiring a collapsed details panel.
+- [x] Non-benchmarked steps render curated scenario transcript content and a clear no-receipt state.
+- [x] The implementation uses structured replay data rather than adding more positional fields to `WorkflowStep`.
+- [x] Mobile layouts constrain chat, command, report path, and benchmark output blocks without horizontal page overflow.
+- [x] Focused component/data tests, typecheck, build, and whitespace validation pass.
+- [x] All phase tests pass.
+- [x] No regressions in previous phase tests.
 
 **On Completion**
-- Deviations from plan: pending.
+- Deviations from plan: none for source scope. Browser visual verification used Safari/Computer Use because the in-app Browser plugin's required Node REPL tool was unavailable.
 - Tech debt / follow-ups: evaluate whether the validated replay pattern should expand to homepage preview, catalog proof, and benchmark surfaces.
-- Ready for next phase: pending.
+- Ready for next phase: yes; Phase 41 Batch 41.1 is now the active next step.
 
 ## Current Task — Feature Interview Workflow Hybrid Replay 2026-05-17
 
