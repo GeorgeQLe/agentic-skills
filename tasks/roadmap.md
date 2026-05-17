@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Skill Creation: report-website 2026-05-17
+
+**Goal:** Create a mirrored global skill that converts a Markdown report into clean JSX and builds a frontend website for reading it.
+
+**Acceptance Criteria:**
+- [x] Mirrored `report-website` skill contracts are created under `global/codex/` and `global/claude/`.
+- [x] The skill defines source resolution, Markdown-to-structured-content conversion, JSX implementation, responsive reading UI, visual QA, and shipping expectations.
+- [x] Benchmark coverage is registered in `tests/harness/bench-coverage.ts`.
+- [x] Required skill and showcase validation passes.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Implementation complete on 2026-05-17. Added mirrored `report-website` skill contracts and registered the new global skill in benchmark coverage with the Tier 2/3 global workflow fixture. Generated Skills Showcase data was refreshed and validated. Recommended next command: `$report-website <report.md>`.
+
 ## Current Benchmark: feature-interview Fresh Rerun 2026-05-17
 
 **Goal:** Run `$benchmark-test-skill feature-interview` after the route-alignment remediation and publish fresh deterministic both-agent evidence.
