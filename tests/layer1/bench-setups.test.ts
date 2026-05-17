@@ -980,6 +980,17 @@ describe("benchmark setup registry", () => {
     expect(evidenceCriterion?.evaluate([
       "# Roadmap",
       "",
+      "## Phase 1: Coverage Report Foundation",
+      "Define the benchmark coverage data model and report format.",
+      "",
+      "## Phase 2: Validation Rules",
+      "Add a CLI command that reads benchmark coverage data and prints status output.",
+    ].join("\n"))).toMatchObject({
+      score: 1,
+    });
+    expect(evidenceCriterion?.evaluate([
+      "# Roadmap",
+      "",
       "## Phase 1",
       "Define generic reporting.",
       "",
@@ -993,12 +1004,15 @@ describe("benchmark setup registry", () => {
   it("keeps the feature-interview benchmark from routing unconfirmed ideas directly to spec-interview", () => {
     const setup = resolveBenchSetup("feature-interview");
     expect(setup).toBeDefined();
+    expect(setup!.prompt).toContain("explicit Artifact path line");
     expect(setup!.prompt).toContain("Treat the planning destination as confirmed for roadmap sequencing");
     expect(setup!.prompt).toContain("do not route directly to spec-interview");
 
     const codexSkill = readFileSync(resolve(TESTS_ROOT, "../global/codex/feature-interview/SKILL.md"), "utf8");
     const claudeSkill = readFileSync(resolve(TESTS_ROOT, "../global/claude/feature-interview/SKILL.md"), "utf8");
 
+    expect(codexSkill).toContain("Artifact path: the exact path of this interview log.");
+    expect(claudeSkill).toContain("Artifact path: the exact path of this interview log.");
     expect(codexSkill).toContain("Do not route brainstorm ideas directly to `$spec-interview`");
     expect(claudeSkill).toContain("Do not route brainstorm ideas directly to `/spec-interview`");
 
@@ -1008,6 +1022,8 @@ describe("benchmark setup registry", () => {
       resolve(workDir, "specs/benchmark-reporting-feature-interview.md"),
       [
         "# Benchmark Reporting Feature Interview",
+        "",
+        "Artifact path: `specs/benchmark-reporting-feature-interview.md`",
         "",
         "## Assumptions",
         "Benchmark reports need custom, generic, and blocked coverage labels.",
@@ -1046,6 +1062,8 @@ describe("benchmark setup registry", () => {
       resolve(workDir, "specs/benchmark-reporting-feature-interview.md"),
       [
         "# Benchmark Reporting Feature Interview",
+        "",
+        "Artifact path: `specs/benchmark-reporting-feature-interview.md`",
         "",
         "## Assumptions",
         "Benchmark reports need custom, generic, and blocked coverage labels.",
@@ -1088,6 +1106,22 @@ describe("benchmark setup registry", () => {
       score: 1,
     });
     expect(nextRouteCriterion?.evaluate("## Next command\n`$spec-interview`")).toMatchObject({
+      score: 0,
+    });
+
+    const fileReferenceCriterion = setup!.qualityEvaluator?.rubric.criteria.find((criterion) => criterion.id === "file-reference");
+    expect(fileReferenceCriterion?.evaluate([
+      "Artifact path: `specs/benchmark-reporting-feature-interview.md`",
+      "",
+      "Evidence: `feature-idea.md` requests custom, generic, and blocked coverage labels.",
+    ].join("\n"))).toMatchObject({
+      score: 1,
+    });
+    expect(fileReferenceCriterion?.evaluate([
+      "# Benchmark Reporting Feature Interview",
+      "",
+      "Evidence: `feature-idea.md` requests custom, generic, and blocked coverage labels.",
+    ].join("\n"))).toMatchObject({
       score: 0,
     });
   });

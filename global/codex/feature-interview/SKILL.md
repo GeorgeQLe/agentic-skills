@@ -87,6 +87,7 @@ After confirmation, write the minimum durable artifact needed:
 
 Always write an interview log to `specs/[topic]-feature-interview.md` (or `docs/specifications/[topic]-feature-interview.md` if that is the repo's canonical spec location). Include:
 
+- Artifact path: the exact path of this interview log.
 - The Feature Evidence Brief and Assumptions Manifest with user corrections.
 - Claim validation verdicts and evidence.
 - Technical gotchas, mitigations, and unresolved unknowns.
