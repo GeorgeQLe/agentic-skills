@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Benchmark Rerun: update-packages 2026-05-17
+
+**Goal:** Rerun `$benchmark-test-skill update-packages` after the route and fixture-rubric alignment and publish fresh deterministic both-agent evidence.
+
+**Acceptance Criteria:**
+- [x] `pnpm bench --list-skills` confirms `update-packages` is known and reports custom coverage.
+- [x] `pnpm verify --skill update-packages` passes or blocks benchmark execution with a recorded failure.
+- [x] `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [x] `benchmark/test-update-packages-2026-05-17.md` records fresh verify, benchmark, latency, cost, consistency, failed assertions, raw session evidence, and recommended next route.
+- [x] Results are recorded in `tasks/todo.md`, generated evidence is refreshed if needed, then intended changes are committed and pushed on `master`.
+
+**Result:** Fresh rerun completed on 2026-05-17 with a mixed deterministic result. `update-packages` is known with custom benchmark coverage via `tests/layer4/setups/tier23-global-workflows.setup.ts`, and verify passed with layer1 PASS in 3.3s plus layer2 SKIP because no target-specific layer2 tests matched. Claude session `update-packages-claude-c99f0776` completed three evaluated runs with 2/3 hard assertion pass rate, 75.0% output quality, p50 latency 34.7s, and $0.75 total estimated cost. Codex session `update-packages-codex-e51e553b` completed three evaluated runs with 3/3 hard assertion pass rate, 93.2% output quality, p50 latency 53.7s, and $0.75 total estimated cost. No runs were infrastructure-blocked. Report: `benchmark/test-update-packages-2026-05-17.md`. Recommended next skill: `$session-triage update-packages benchmark failure`.
+
 ## Current Targeted Update: update-packages Benchmark Route And Fixture Rubric 2026-05-17
 
 **Goal:** Fix the `update-packages` benchmark setup so it tests runner-native final handoffs and does not penalize fixture-backed `package-lock.json` evidence.

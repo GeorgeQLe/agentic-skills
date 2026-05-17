@@ -5,6 +5,33 @@
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
+## Current Task — Fresh Benchmark `update-packages` 2026-05-17
+
+**Goal:** Rerun `$benchmark-test-skill update-packages` against the current repository state and publish deterministic both-agent benchmark evidence.
+
+**Plan:**
+- [x] Confirm `$benchmark-test-skill` is the active workflow and `update-packages` is only the benchmark target argument.
+- [x] Run `pnpm bench --list-skills` and record `update-packages` coverage status.
+- [x] Run `pnpm verify --skill update-packages`; stop before bench if verification fails.
+- [x] Run `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` only after verify passes.
+- [x] Write `benchmark/test-update-packages-2026-05-17.md` with verify, benchmark, latency, cost, consistency, raw paths, failures, and recommended next route.
+- [x] Validate report fields, refresh generated evidence if curated benchmark evidence changes, record results, then commit and push intended changes on `master`.
+
+## Review — Fresh Benchmark `update-packages` 2026-05-17
+
+- Command resolution: `$benchmark-test-skill` was the active workflow; `update-packages` was treated only as the benchmark target argument.
+- Eligibility: `update-packages` is known with custom coverage via `tests/layer4/setups/tier23-global-workflows.setup.ts`.
+- Verify passed: layer1 PASS in 3.3s with 1,206 tests across 15 files; layer2 SKIP because no target-specific layer2 tests matched `update-packages`.
+- Benchmark ran with `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0`.
+- Claude session `update-packages-claude-c99f0776`: 2/3 evaluated hard assertion pass rate, 0 infrastructure blocks, 75.0% output-quality score, p50 latency 34.7s, total estimated cost $0.75.
+- Codex session `update-packages-codex-e51e553b`: 3/3 evaluated hard assertion pass rate, 0 infrastructure blocks, 93.2% output-quality score, p50 latency 53.7s, total estimated cost $0.75.
+- Failed assertions: Claude run #1 missed `Output includes verification commands`; Codex had no failed assertions.
+- Report written at `benchmark/test-update-packages-2026-05-17.md`.
+- Generated Skills Showcase data and the benchmark results matrix were refreshed after the curated benchmark evidence changed.
+- Validation passed: report field scan; `pnpm --dir tests bench:coverage`; `pnpm --dir tests exec vitest run --project layer1 benchmark-results-matrix skills-showcase-benchmark-demo`; `git diff --check`.
+- Validation note: `scripts/validate-skills-showcase-data.sh` regenerated the intended benchmark/showcase asset changes and reported them as stale before commit; rerun after commit/push to confirm the committed assets are clean.
+- **Recommended next skill:** `$session-triage update-packages benchmark failure`
+
 ## Current Task — Targeted Update `update-packages` Benchmark Route And Fixture Rubric 2026-05-17
 
 **Goal:** Align the `update-packages` benchmark setup with runner-specific final routes and fixture-backed package-lock evidence.
