@@ -7,9 +7,53 @@
 
 ## Priority Task Queue
 
+- [ ] `$benchmark-test-skill feature-interview` - Start Phase 41 remaining benchmark result coverage with the first Tier 1 gap batch.
 - [ ] `$run` - Execute Step 40.6 to run final app validation and visual sanity checks for the `/workflows` replay pilot.
 - [x] `/reconcile-dev-docs fix tasks` - Resolved orphaned Phase 38 manual tasks: 4 items deferred to future work (Neon DB, admin secret, Vercel env vars, live verification).
 - [ ] `/feature-interview` - Triage 8 remaining unspecced ideas in `tasks/ideas.md` (cleaned from 25 on 2026-05-15; 17 removed as shipped/obsolete).
+
+## Current Task — Plan Remaining Benchmark Result Coverage 2026-05-17
+
+**Goal:** Decide how to build persisted benchmark result coverage for the remaining tracked skills without running an oversized or unsafe benchmark campaign.
+
+**Plan:**
+- [x] Confirm the difference between benchmark setup coverage and persisted evaluated benchmark results.
+- [x] Count tracked skills, evaluated-result skills, remaining runnable skills, and coverage-blocked skills.
+- [x] Add Phase 41 to `tasks/roadmap.md` with scope, acceptance criteria, blocked-skill handling, and batch order.
+- [x] Seed the current task queue with the first small benchmark batch.
+- [ ] Check in with the user before executing benchmark runs.
+
+**Review — Plan Remaining Benchmark Result Coverage 2026-05-17**
+
+- Baseline: `pnpm --dir tests bench:coverage` validates 152 benchmark-tracked skills.
+- Persisted evaluated result coverage currently covers 14 unique skill names in `docs/benchmark-results-matrix.md`.
+- Remaining without evaluated result rows: 138 skills.
+- Runnable remaining skills: 132.
+- Coverage-blocked skills: `delegate`, `deploy`, `install-agentic-skills`, `patch-exec-profile`, `release`, and `uat-guide`.
+- First execution batch should be small and high-signal: `feature-interview`, `ship-end`, `targeted-skill-builder`, and `affected`.
+- `roadmap` needs a separate triage lane because the latest fresh rerun produced evaluated Codex failures and Claude infrastructure blocks rather than clean missing-result coverage.
+
+## Current Task — Triage `roadmap` Benchmark Failure Fresh Rerun 2026-05-17
+
+**Goal:** Investigate the fresh `$benchmark-test-skill roadmap` failure and recommend the smallest verified fix.
+
+**Plan:**
+- [x] Read the fresh benchmark report and persisted Claude/Codex run evidence.
+- [x] Inspect `roadmap` skill contracts and the custom benchmark setup expectations.
+- [x] Classify the failure as skill contract gap, benchmark harness defect, generated-data issue, infrastructure block, or agent noncompliance.
+- [x] Write `benchmark/triage-roadmap-2026-05-17-fresh.md` with verdict, root cause, recommended fix, validation plan, and next route.
+- [x] Validate the report and record results here, then commit and push intended triage changes on `master`.
+
+## Review — Triage `roadmap` Benchmark Failure Fresh Rerun 2026-05-17
+
+- Verdict: verified benchmark failure, but not a `roadmap` skill behavior failure.
+- Claude evidence: session `roadmap-claude-ceadee35` had 3 infrastructure-blocked runs from `agent runner budget exceeded`, so it cannot classify Claude behavior.
+- Codex evidence: session `roadmap-codex-43f41fa9` generated valid roadmap artifacts in all three evaluated runs and routed the generated roadmap to `$plan-phase 1`.
+- Root cause: `tests/layer4/setups/tier1-workflows.setup.ts` uses a roadmap-only prompt and only asserts `tasks/roadmap.md`, but hard-codes `$run` as the expected route. `$run` is only coherent after the fixture requires the explicit Phase 1 seed and `tasks/todo.md`.
+- Secondary quality mismatch: the quality evaluator checks the generated roadmap body for `tasks/roadmap.md`, even though the artifact path is already raw run metadata and self-reference is not part of the roadmap contract.
+- Report written: `benchmark/triage-roadmap-2026-05-17-fresh.md`.
+- Validation passed: report field check with `rg` and `git diff --check`.
+- **Recommended next skill:** `$targeted-skill-builder roadmap benchmark route alignment`
 
 ## Current Task — Benchmark `roadmap` Fresh Rerun 2026-05-17
 

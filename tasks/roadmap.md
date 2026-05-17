@@ -2,7 +2,7 @@
 
 > Generated from: tasks/roadmap.md (existing), specs/board-flag-kanban-search.md, tasks/ideas.md, tasks/history.md
 > Date: 2026-03-27 (last updated 2026-05-17)
-> Total Phases: 40 (39 complete, 1 planned)
+> Total Phases: 41 (39 complete, 2 planned)
 
 ## Summary
 
@@ -12,9 +12,69 @@ Phases 12-31 complete. Phase 14 added the LinkedIn evidence lane to the creator 
 
 Phases 32-36 complete. Phase 35 added repository-wide Codex benchmark coverage metadata, custom or explicitly blocked coverage for every current skill, and future skill creation/update workflows require benchmark coverage handling. Phase 36 added rubric-based output-quality evaluation on top of the contract/assertion benchmark checks.
 
-Phase 37 complete: preserved and migrated the static Skills Showcase into a minimal Next.js app at `apps/skills-showcase/` with 6 public routes, generated data pipeline, 54 regression tests, and updated deploy contract. Phase 38 complete: added Neon-backed first-party newsletter capture with tRPC contracts, TanStack Query mutation/admin state, admin export page, 74 regression tests, and privacy posture enforcement. Phase 39 complete: added benchmark results visibility and permission-gated safe Git integration fixtures for benchmarkable git-mutating skills. Phase 40 adds the `/workflows` hybrid replay pilot so benchmark evidence becomes primary step-by-step proof before the pattern is expanded to other showcase surfaces.
+Phase 37 complete: preserved and migrated the static Skills Showcase into a minimal Next.js app at `apps/skills-showcase/` with 6 public routes, generated data pipeline, 54 regression tests, and updated deploy contract. Phase 38 complete: added Neon-backed first-party newsletter capture with tRPC contracts, TanStack Query mutation/admin state, admin export page, 74 regression tests, and privacy posture enforcement. Phase 39 complete: added benchmark results visibility and permission-gated safe Git integration fixtures for benchmarkable git-mutating skills. Phase 40 adds the `/workflows` hybrid replay pilot so benchmark evidence becomes primary step-by-step proof before the pattern is expanded to other showcase surfaces. Phase 41 builds out persisted benchmark result coverage for the remaining tracked skills in controlled batches.
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
+
+## Current Triage: roadmap Benchmark Failure Fresh Rerun 2026-05-17
+
+**Goal:** Investigate the fresh `$benchmark-test-skill roadmap` failure and recommend the smallest verified fix.
+
+**Acceptance Criteria:**
+- [x] Fresh benchmark report and persisted Claude/Codex run evidence are inspected.
+- [x] `roadmap` skill contracts and the custom benchmark setup expectations are compared.
+- [x] Failure is classified as skill contract gap, benchmark harness defect, generated-data issue, infrastructure block, or agent noncompliance.
+- [x] `benchmark/triage-roadmap-2026-05-17-fresh.md` records verdict, root cause, recommended fix, validation plan, and next route.
+- [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
+
+**Result:** Verified benchmark harness setup defect on 2026-05-17, not a `roadmap` skill behavior failure. Claude was fully infrastructure-blocked by runner budget. Codex generated roadmap artifacts that route to `$plan-phase 1`, matching the new-roadmap seeding contract, but `tests/layer4/setups/tier1-workflows.setup.ts` expects `$run` while using a roadmap-only prompt and only asserting `tasks/roadmap.md`. Report: `benchmark/triage-roadmap-2026-05-17-fresh.md`. Recommended next skill: `$targeted-skill-builder roadmap benchmark route alignment`.
+
+## Phase 41: Remaining Skill Benchmark Result Coverage
+
+**Goal:** Convert the existing benchmark coverage registry into persisted evaluated benchmark results for the remaining tracked skills, without overloading the runner or treating infrastructure blocks as skill failures.
+
+**Source:** `docs/benchmark-results-matrix.md`, `tests/harness/bench-coverage.ts`, `benchmark/test-*.md`, and the 2026-05-11 benchmark lessons distinguishing setup coverage from persisted evaluated results.
+
+**Current Baseline:**
+- Benchmark coverage registry validates 152 tracked skills.
+- Persisted evaluated benchmark results currently cover 14 unique skill names.
+- Remaining without evaluated benchmark result rows: 138.
+- Remaining runnable, non-blocked skills: 132.
+- Coverage-blocked skills requiring fixture or policy work before execution: `delegate`, `deploy`, `install-agentic-skills`, `patch-exec-profile`, `release`, `uat-guide`.
+- Incomplete-only result needing retry: `affected` has a zero-evaluated-run persisted report and should not count as benchmarked until rerun successfully.
+
+**Scope:**
+- Run `$benchmark-test-skill <skill>` for remaining runnable skills in small batches.
+- Prefer batch order by priority tier and dependency value: Tier 1 workflow gaps, incomplete reports, Tier 2 global skills, git-fixture skills with explicit permission gates, then pack-local skills.
+- For each skill, preserve the existing `$benchmark-test-skill` contract: list coverage, verify first, benchmark only after verify passes, write `benchmark/test-<skill>-<date>.md`, refresh generated Skills Showcase data when curated benchmark evidence changes, and record results in task docs.
+- Do not run permission-gated GitHub disposable-repo fixtures (`commit-and-push-by-feature`, `sync`) until explicit permission and safety boundaries are confirmed.
+- Do not attempt blocked skills as live benchmarks until their next-command remediation creates a safe fixture or Codex-runnable contract.
+
+**Acceptance Criteria:**
+- [ ] A generated or scripted queue identifies remaining skills from `tests/harness/bench-coverage.ts` minus evaluated rows in `docs/benchmark-results-matrix.md`.
+- [ ] Tier 1 remaining skills are benchmarked or explicitly triaged: `feature-interview`, `roadmap`, `ship-end`, `targeted-skill-builder`.
+- [ ] `affected` is rerun because its only persisted report is blocked/incomplete.
+- [ ] Each completed benchmark has a curated report under `benchmark/test-<skill>-<YYYY-MM-DD>.md` and raw paths under `tests/benchmarks/runs/`.
+- [ ] Any failed benchmark is triaged before continuing broad execution if it indicates harness drift, shared setup drift, or skill-contract ambiguity.
+- [ ] `docs/benchmark-results-matrix.md` and Skills Showcase generated data are refreshed after each committed batch.
+- [ ] `pnpm --dir tests bench:coverage`, benchmark-results matrix validation, generated showcase validation, and `git diff --check` pass before shipping each batch.
+- [ ] Coverage-blocked skills have documented next remediation commands, not attempted live-run failures.
+
+### Execution Profile
+**Parallel mode:** serial
+**Integration owner:** main agent
+**Conflict risk:** medium
+**Review gates:** benchmark cost, runner capacity, GitHub fixture permission, generated-data freshness
+
+**Subagent lanes:** none
+
+### Batch Plan
+- [ ] Batch 41.1: Create/verify the remaining-results queue and run the first small batch: `feature-interview`, `ship-end`, `targeted-skill-builder`, and `affected`.
+- [ ] Batch 41.2: Resolve or triage `roadmap`, which currently has evaluated Codex failures and Claude infrastructure blocks from `benchmark/test-roadmap-2026-05-17.md`.
+- [ ] Batch 41.3: Run Tier 2 global skills in groups of 5-10, pausing after any shared harness failure pattern.
+- [ ] Batch 41.4: Run git-fixture skills `commit-and-push-by-feature` and `sync` only after explicit permission for disposable GitHub fixture operations.
+- [ ] Batch 41.5: Run pack-local skills by pack family, starting with packs that feed public showcase/workflow proof.
+- [ ] Batch 41.6: Address blocked skills through their remediation routes, then benchmark only after safe fixtures exist.
 
 ## Current Benchmark: roadmap Fresh Rerun 2026-05-17
 
