@@ -10,12 +10,26 @@
 **Goal:** Run `$benchmark-test-skill analyze-sessions` against the current repository state and publish deterministic both-agent benchmark evidence.
 
 **Plan:**
-- [ ] Confirm `$benchmark-test-skill` is the active workflow and resolve the spaced user argument `analyze sessions` to the harness skill `analyze-sessions`.
-- [ ] Run `pnpm bench --list-skills` and record `analyze-sessions` coverage status.
-- [ ] Run `pnpm verify --skill analyze-sessions`; stop before bench if verification fails.
-- [ ] If verify passes, run `pnpm bench --skill analyze-sessions --agent both --runs 3 --chunk-size 3 --pause 0`.
-- [ ] Write and validate `benchmark/test-analyze-sessions-2026-05-17.md` with verify, benchmark, latency, cost, consistency, raw paths, and recommended next route.
-- [ ] Refresh generated evidence if curated benchmark evidence changes, record results here, then commit and push intended changes on `master`.
+- [x] Confirm `$benchmark-test-skill` is the active workflow and resolve the spaced user argument `analyze sessions` to the harness skill `analyze-sessions`.
+- [x] Run `pnpm bench --list-skills` and record `analyze-sessions` coverage status.
+- [x] Run `pnpm verify --skill analyze-sessions`; stop before bench if verification fails.
+- [x] If verify passes, run `pnpm bench --skill analyze-sessions --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [x] Write and validate `benchmark/test-analyze-sessions-2026-05-17.md` with verify, benchmark, latency, cost, consistency, raw paths, and recommended next route.
+- [x] Refresh generated evidence if curated benchmark evidence changes, record results here, then commit and push intended changes on `master`.
+
+## Review — Benchmark `analyze-sessions` 2026-05-17
+
+- Command resolution: `$benchmark-test-skill` was the active workflow; the user phrase `analyze sessions` was resolved to the known harness target `analyze-sessions`.
+- Eligibility: `analyze-sessions` is known to the harness with custom coverage via `tests/layer4/setups/tier23-global-workflows.setup.ts`.
+- Verify passed: layer1 PASS in 3.2s with 1,204 tests across 15 files; layer2 SKIP because no target-specific layer2 tests matched `analyze-sessions`.
+- Benchmark ran with `pnpm bench --skill analyze-sessions --agent both --runs 3 --chunk-size 3 --pause 0`.
+- Claude session `analyze-sessions-claude-0cb06af8`: 3/3 evaluated hard assertion pass rate, 0 infrastructure blocks, 92.3% output-quality score, p50 latency 54.9s, total estimated cost $3.00.
+- Codex session `analyze-sessions-codex-2da5dfa4`: 3/3 evaluated hard assertion pass rate, 0 infrastructure blocks, 92.3% output-quality score, p50 latency 51.5s, total estimated cost $3.00.
+- Both agents recorded 0 threshold failures and 0 critical failures; `workflow-artifact-reference` scored 0.0% and lowered the rubric average without failing the benchmark.
+- Report written at `benchmark/test-analyze-sessions-2026-05-17.md`.
+- Generated Skills Showcase data and the benchmark results matrix were refreshed after the curated benchmark evidence changed.
+- Validation passed: report field scan; `pnpm --dir tests bench:coverage`; `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests exec vitest run --project layer1 benchmark-results-matrix skills-showcase-benchmark-demo`; `git diff --check`.
+- **Recommended next skill:** `$benchmark-agent-review analyze-sessions`
 
 ## Current Task — Update Active Project Packages 2026-05-17
 
