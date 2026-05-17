@@ -29,6 +29,19 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Verified benchmark harness false negative on 2026-05-17, not a `roadmap` skill behavior failure. Claude session `roadmap-claude-511af1ee` was fully infrastructure-blocked by runner budget. Codex session `roadmap-codex-3f01cb21` passed 3/3 hard assertions, but `run-000.json` failed the critical `evidence-linked` quality criterion because the rubric required exact phrase `CLI status output`. The generated roadmap preserved the CLI/status-output concept with `Add a CLI command that reads benchmark coverage data and prints status output`, but not the exact contiguous phrase. Report: `benchmark/triage-roadmap-2026-05-17-fresh-quality.md`. Recommended next skill: `$targeted-skill-builder roadmap benchmark CLI evidence rubric`.
 
+## Current Targeted Update: roadmap Benchmark CLI Evidence Rubric 2026-05-17
+
+**Goal:** Relax the roadmap benchmark `evidence-linked` rubric so it recognizes CLI/status-output concept preservation without requiring the exact contiguous phrase `CLI status output`.
+
+**Acceptance Criteria:**
+- [x] Relevant lessons and the fresh roadmap benchmark quality triage report are reviewed.
+- [x] The change is scoped to the benchmark harness, not mirrored `roadmap` skill contracts or a new skill.
+- [x] The Tier 1 roadmap setup uses a concept-aware evidence criterion for benchmark coverage and CLI/status output.
+- [x] Focused layer1 coverage proves the failing Codex wording passes and generic status wording still fails.
+- [x] Focused validation, `roadmap` verify, Codex smoke benchmark, benchmark coverage, skill audits, install check, targeted search, and whitespace checks pass.
+
+**Result:** Completed on 2026-05-17. Updated `tests/layer4/setups/tier1-workflows.setup.ts` so the roadmap quality rubric still requires benchmark coverage and CLI/status-output evidence, but no longer requires the exact contiguous phrase `CLI status output`. Added focused layer1 coverage in `tests/layer1/bench-setups.test.ts` for the failing Codex wording from `roadmap-codex-3f01cb21` run 0. Validation passed, including Codex smoke `roadmap-codex-a17e155f` with 1/1 hard assertions, 100.0% output quality, and no critical failures. Recommended next skill: `$benchmark-test-skill roadmap`.
+
 ## Current Benchmark: roadmap Post-Evidence-Rubric-Triage 2026-05-17
 
 **Goal:** Run `$benchmark-test-skill roadmap` against the current repository state and publish fresh deterministic both-agent evidence.
