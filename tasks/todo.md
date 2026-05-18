@@ -657,3 +657,22 @@
 - Evidence: hard assertions passed 3/3 for both agents; Claude quality failures came from generic `/migrate` routes and missing per-batch proof/actionability shape.
 - Report: `benchmark/triage-update-packages-2026-05-18-actionability-route.md`.
 - Recommended next command: `$targeted-skill-builder update-packages benchmark actionability threshold`.
+
+## Targeted Skill Builder: update-packages Benchmark Actionability Threshold
+
+**Goal:** Execute `$targeted-skill-builder update-packages benchmark actionability threshold` from the verified triage report.
+
+### Execution
+- [x] Step S.1: Read relevant lessons, triage evidence, and current `update-packages` benchmark setup.
+- [x] Step S.2: Check existing skill overlap and decide whether the fix belongs in the target skill or benchmark rubric.
+- [x] Step S.3: Validate current rubric/tests for actionability-critical scoring and target-specific migrate routes.
+- [x] Step S.4: Record decision and validation.
+
+### Review
+
+- Decision: no source change needed in this run because the current repository already contains the requested benchmark-rubric fix.
+- Existing coverage found: `tests/layer4/setups/tier23-global-workflows.setup.ts` has `actionabilityCritical: true`, `UPDATE_PACKAGES_BATCH_ACTIONABILITY_PATTERN`, and `UPDATE_PACKAGES_TARGETED_MIGRATION_ROUTE_PATTERN`; `tests/layer1/bench-setups.test.ts` has focused cases for missing actionability, bare migrate routes, and valid target-specific migrate routes.
+- Skill contract status: no `global/codex/update-packages/SKILL.md` or `global/claude/update-packages/SKILL.md` change is justified; both already require per-batch commands/proof/stop gates and `/migrate <package or framework>` routing.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 bench-setups`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill update-packages`.
+- Generated showcase data: not refreshed because no `SKILL.md`, `PACK.md`, curated benchmark/review report, or showcase source changed.
+- Recommended next command: `$benchmark-test-skill update-packages`.
