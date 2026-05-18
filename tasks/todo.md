@@ -31,6 +31,29 @@
 - Validation passed: `pnpm --dir tests exec vitest run --project layer1 bench-setups --testNamePattern update-packages`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill update-packages`; `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0`; `scripts/validate-skills-showcase-data.sh`; targeted `rg` for new raw sessions and next route; `git diff --check`.
 - Recommended next command: `$session-triage update-packages benchmark failure`.
 
+## Interrupt Task — Targeted Update `update-packages` Benchmark Batch-Label Actionability 2026-05-18
+
+**Goal:** Calibrate the `update-packages` benchmark actionability matcher so strong lettered batch plans receive quality credit while vague lettered batch lists and bare migrate routes still fail.
+
+**Plan:**
+- [x] Review relevant lessons, latest triage result, current benchmark setup, and focused layer1 coverage.
+- [x] Update `tests/layer4/setups/tier23-global-workflows.setup.ts` to accept numeric or lettered batch labels for actionable batch checklists.
+- [x] Add focused layer1 coverage for a strong `Batch A/B/C` update plan and preserve negative coverage for weak lettered batches.
+- [x] Run focused and target validation, record results, then commit and push intended changes on `master`.
+
+## Review — Targeted Update `update-packages` Benchmark Batch-Label Actionability 2026-05-18
+
+- Decision: existing benchmark setup update, not a new skill or `update-packages` skill-contract change.
+- Evidence used: current conversation triage, `tasks/lessons.md`, `benchmark/test-update-packages-2026-05-18.md`, raw Claude session `tests/benchmarks/runs/update-packages-claude-391a34fd/`, and existing layer1 setup tests.
+- Evidence intentionally skipped: broad session history, because the latest persisted benchmark artifacts were sufficient to isolate this matcher calibration.
+- Existing-skill overlap: `targeted-skill-builder` owns this narrow benchmark harness adjustment; no new skill is needed.
+- Updated `UPDATE_PACKAGES_BATCH_ACTIONABILITY_PATTERN` to accept `Batch 0/1/2` or `Batch A/B/C` labels while still requiring mutation or implementation command evidence, verification evidence, explicit proof/artifact or `pnpm-lock.yaml` evidence, and stop gates.
+- Preserved `workflow-targeted-migration-routes` quality scoring so bare `/migrate` or `$migrate` still loses credit when React, Vitest, pnpm, npm-to-pnpm, or zod is the known target.
+- Added focused layer1 coverage for a retained strong `Batch A/B/C` plan and confirmed the existing weak lettered batch fixture still fails actionability.
+- Validation passed: `./install.sh`; `./scripts/skill-deps.sh --broken`; `./scripts/skill-versions.sh --missing`; `./scripts/skill-next-step-routing.sh --missing`; `pnpm --dir tests exec vitest run --project layer1 bench-setups --testNamePattern update-packages`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill update-packages`; `git diff --check`.
+- Generated Skills Showcase data was not refreshed because no tracked `SKILL.md`, `PACK.md`, curated benchmark report, or curated review report changed.
+- Recommended next command: `$benchmark-test-skill update-packages`
+
 ### Benchmark Ship Manifest
 
 - **User goal:** Execute `$run` for the next incomplete benchmark step: run the fresh both-agent `update-packages` benchmark after actionability threshold calibration, publish deterministic evidence, and prepare the next route.

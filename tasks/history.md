@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-05-18 — update-packages batch-label actionability tolerance
+
+- Calibrated the `update-packages` benchmark actionability matcher so strong `Batch A/B/C` plans receive quality credit alongside existing `Batch 0/1/2` plans.
+- Kept the quality gate strict by requiring mutation or implementation command evidence, verification evidence, expected proof/artifact or `pnpm-lock.yaml` evidence, and stop gates before actionability passes.
+- Added focused layer1 coverage for a strong retained lettered batch shape while preserving the weak retained lettered batch negative and bare `/migrate` quality penalty.
+- Validation passed: install, skill dependency/version/routing audits, focused layer1 setup tests for `update-packages`, benchmark coverage, `pnpm --dir tests verify --skill update-packages`, and whitespace validation.
+- Recommended next command: `$benchmark-test-skill update-packages`.
+
 ## 2026-05-18 — ship-end benchmark failure triage
 
 - Triaged `benchmark/test-ship-end-2026-05-18.md` against raw Claude and Codex benchmark artifacts, the Tier 1 benchmark setup, and mirrored `ship-end` skill contracts.
