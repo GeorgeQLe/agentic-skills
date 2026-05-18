@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Triage: feature-interview Prototype Gate Benchmark Quality Failure 2026-05-18
+
+**Goal:** Investigate the fresh `$benchmark-test-skill feature-interview` quality failure and classify whether it is a skill-contract gap, benchmark harness defect, generated-output noncompliance, or infrastructure-only block.
+
+**Acceptance Criteria:**
+- [x] Curated benchmark report and raw Claude/Codex report JSON are inspected.
+- [x] Retained Codex run artifacts are inspected for failed `evidence-linked` and `prototype-first-product-gate` quality criteria.
+- [x] Mirrored `feature-interview` contracts are compared with benchmark setup and quality rubric.
+- [x] `benchmark/triage-feature-interview-2026-05-18-prototype-gate-quality.md` records verdict, root cause, responsible gap, recommended fix, validation plan, and next route.
+- [x] Results are recorded in `tasks/todo.md`, then intended changes are committed and pushed on `master`.
+
+**Result:** Triage verified the fresh `feature-interview` benchmark failure as a benchmark quality-evaluator false negative with a separate fully blocked Claude lane, not a mirrored skill-contract failure. Claude session `feature-interview-claude-02d30038` had 0 evaluated runs and 3 infrastructure blocks from agent runner budget exceeded. Codex session `feature-interview-codex-ed08cfc2` passed 3/3 hard assertions but recorded quality failures on `evidence-linked` and `prototype-first-product-gate`. Root cause: `tests/layer4/setups/tier1-workflows.setup.ts` still requires the stale exact phrase `Benchmark reports`, and the prototype gate regex misses valid promotion-evidence wording such as "Evidence that would justify promoting a deferred item into a later phase." Report: `benchmark/triage-feature-interview-2026-05-18-prototype-gate-quality.md`. Recommended next skill: `$targeted-skill-builder feature-interview benchmark prototype gate quality tolerance`.
+
 ## Current Triage: update-packages pnpm latest Parenthetical Negation Failure 2026-05-18
 
 **Goal:** Investigate the latest `$benchmark-test-skill update-packages` Claude failure and classify whether the `Output avoids unqualified pnpm@latest` failure is a skill-contract gap, benchmark harness defect, generated-output noncompliance, or infrastructure-only block.
