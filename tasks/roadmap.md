@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Triage: benchmark-agent-review Codex Owner Table Labels 2026-05-18
+
+**Goal:** Investigate why the fresh `$benchmark-test-skill benchmark-agent-review` rerun produced Codex output-quality threshold and critical failures on owner-target and validation-specificity criteria.
+
+**Acceptance Criteria:**
+- [x] Latest benchmark report and persisted Codex run artifacts are inspected.
+- [x] Mirrored `benchmark-agent-review` contracts are compared with benchmark setup and quality-rubric expectations.
+- [x] Failure is classified as skill-contract gap, benchmark rubric/setup defect, generated-output noncompliance, infrastructure block, or one-off variance.
+- [x] `benchmark/triage-benchmark-agent-review-2026-05-18-codex-owner-table-labels.md` records verdict, root cause, responsible gap, recommended fix, validation plan, and next route.
+- [x] Results are recorded in `tasks/todo.md`, then intended changes are committed and pushed on `master`.
+
+**Result:** Triage verified the fresh Codex quality failure as a benchmark quality-evaluator false negative, with a minor non-critical retained output weakness in run 2 for missing the `rubric` reference trait. Codex runs 1 and 2 named exact owner files and concrete validation checks in remediation tables, but the quality evaluator did not recognize table headers such as `Owner target / owner file` and `Exact owner target / files`. The validation-specificity failures are derivative because that criterion requires the same owner-label helper. Responsible gap: `tests/layer4/setups/packs/pack-workflows.setup.ts` plus focused layer1 coverage in `tests/layer1/bench-setups.test.ts`. Report: `benchmark/triage-benchmark-agent-review-2026-05-18-codex-owner-table-labels.md`. Recommended next skill: `$targeted-skill-builder benchmark-agent-review benchmark owner-table-label tolerance`.
+
 ## Current Benchmark: benchmark-agent-review Fresh Rerun 2026-05-18
 
 **Goal:** Run `$benchmark-test-skill benchmark-agent-review` against the current repository state and publish fresh deterministic both-agent benchmark evidence.
@@ -94,6 +107,17 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 - [x] Validation passes, generated assets are refreshed, and intended changes are committed and pushed on `master`.
 
 **Result:** Updated on 2026-05-18. `update-packages` now requires retained project-pin or registry publish-time proof before recommending a new `packageManager: "pnpm@..."` value as final, and clarifies age-gate setting ownership across npm and pnpm config surfaces. The custom benchmark setup now prompts for pnpm publish-time proof, includes pnpm fixture publish times, and checks both pnpm toolchain proof and age-gate key semantics as hard assertions and output-quality criteria. Focused layer1 coverage proves passing proof, missing-proof failure, and reversed-semantics failure. Validation passed: focused layer1 setup/quality tests, benchmark coverage, `pnpm --dir tests verify --skill update-packages`, install and skill scripts, Codex smoke benchmark `update-packages-codex-afdc4a08` (1/1 hard assertions, 98.8% quality), benchmark-results matrix tests, targeted `rg`, and `git diff --check`. Generated Skills Showcase data and benchmark matrix were refreshed after tracked skill behavior changed. Recommended next command: `$benchmark-test-skill update-packages`.
+
+## Current Benchmark: update-packages After pnpm Proof 2026-05-18
+
+**Goal:** Run `$benchmark-test-skill update-packages` after the pnpm toolchain-proof and age-gate semantics update and publish fresh deterministic both-agent benchmark evidence.
+
+**Acceptance Criteria:**
+- [x] `pnpm bench --list-skills` confirms `update-packages` is known and reports custom coverage.
+- [ ] `pnpm verify --skill update-packages` passes or blocks benchmark execution with a recorded failure.
+- [ ] `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [ ] `benchmark/test-update-packages-2026-05-18.md` records verify, benchmark, latency, cost, consistency, failed assertions, raw session evidence, and recommended next route.
+- [ ] Results are recorded in `tasks/todo.md`, generated evidence is refreshed if needed, then intended changes are committed and pushed on `master`.
 
 ## Current Targeted Update: benchmark-agent-review Benchmark Quality Owner Specificity Tolerance 2026-05-18
 
