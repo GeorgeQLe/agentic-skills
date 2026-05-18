@@ -130,6 +130,27 @@
 - Phase 41 had been deferred while `/workflows` transcript refinement landed; it is now the next active work.
 - Manual tasks: none for Phase 41. Git-fixture benchmark work remains permission-gated in Batch 41.4 and is not part of Batch 41.1.
 - Execution profile: serial, because benchmark runner capacity, generated data, and task/history updates are shared resources.
+- Batch 41.1 queue check on 2026-05-18 confirmed all four intended targets are known with custom benchmark coverage. `feature-interview` already has fresh evaluated rows and subjective review evidence from 2026-05-18, so it was treated as already covered for this batch.
+- `ship-end` verify passed with layer1 PASS in 10.5s and layer2 SKIP because no target-specific layer2 tests matched.
+- `ship-end` benchmark completed both agents: Claude session `ship-end-claude-edad4640` had 0/3 hard assertion pass rate, 73.8% output quality, and no infrastructure blocks; Codex session `ship-end-codex-558a21dc` had 3/3 hard assertion pass rate, 92.9% output quality, and no infrastructure blocks.
+- Broad Batch 41.1 execution stopped before `targeted-skill-builder` and `affected` because the evaluated Claude `ship-end` failure affects required continuity/next-route behavior and should be triaged before spending more runner budget.
+- Report written: `benchmark/test-ship-end-2026-05-18.md`.
+- Generated evidence refreshed and validated: `docs/benchmark-results-matrix.md`, `docs/skills-showcase/assets/skills-data.js`, `docs/skills-showcase/assets/github-proof-data.js`, `apps/skills-showcase/public/assets/skills-data.js`, and `apps/skills-showcase/public/assets/github-proof-data.js`.
+- Validation passed: `pnpm bench --list-skills`; `pnpm verify --skill ship-end`; `pnpm bench --skill ship-end --agent both --runs 3 --chunk-size 3 --pause 0`; `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests bench:coverage`.
+- Recommended next command: `$session-triage ship-end benchmark failure`.
+
+### Batch 41.1 Partial Ship Manifest
+
+- **User goal:** Execute `$run` for the next incomplete Phase 41 benchmark batch, publish deterministic benchmark evidence, and stop for triage if a benchmark failure indicates continuity, shared harness, or skill-contract ambiguity.
+- **Changed files:** `tasks/todo.md`; `tasks/history.md`. Evidence referenced by this task state is already present in `benchmark/test-ship-end-2026-05-18.md`, `docs/benchmark-results-matrix.md`, and raw run directories.
+- **Per-file purpose:** `tasks/todo.md` records the partial batch result, stop reason, validation, manifest, and next route; `tasks/history.md` records the shipped benchmark evidence.
+- **User-goal mapping:** The run advanced Batch 41.1 by confirming the queue, publishing fresh `ship-end` benchmark evidence, and routing the failed evaluated result to triage before continuing broad benchmark execution.
+- **Tests run:** `pnpm bench --list-skills` confirmed Batch 41.1 target eligibility; `pnpm verify --skill ship-end` passed layer1 and skipped layer2; `pnpm bench --skill ship-end --agent both --runs 3 --chunk-size 3 --pause 0` completed three evaluated non-blocked runs for both agents; `scripts/validate-skills-showcase-data.sh` passed; `pnpm --dir tests bench:coverage` passed.
+- **Skipped tests:** `targeted-skill-builder` and `affected` verifies/benchmarks were intentionally not run because the `ship-end` evaluated Claude failure should be triaged before continuing broad Batch 41.1 runner spend. App tests/build were not run because no app source behavior changed; generated-data validation covered the public asset changes.
+- **Adversarial review:** Diff-aware self-review checked the raw `report.md` summaries against the curated report, confirmed there were no infrastructure-blocked `ship-end` runs, verified the stop reason is failure-oriented rather than hiding incomplete batch work, and confirmed generated proof changes are metadata-only.
+- **Residual risk:** The `ship-end` failure is not yet root-caused, so it may be generated-output noncompliance, benchmark setup drift, or a skill-contract ambiguity. Continuing the remaining batch before triage could obscure whether related Tier 1 workflow benchmarks share the same route expectation issue.
+- **Rollback note:** Revert the shipping commit to restore the prior task state; the already-tracked curated `ship-end` report and generated matrix evidence remain available unless separately reverted.
+- **Next command:** `$session-triage ship-end benchmark failure`
 
 ### Step 42.7 Ship Manifest
 
