@@ -597,9 +597,9 @@
 
 - Command resolution: `$benchmark-test-skill` resolved to `packs/agentic-skills-bench/codex/benchmark-test-skill/SKILL.md`; `update-packages` is the target skill argument.
 - Eligibility: `update-packages` is listed with `coverage=custom` and setup `tests/layer4/setups/tier23-global-workflows.setup.ts`.
-- Verify: `pnpm verify --skill update-packages` passed on 2026-05-18 with layer1 PASS in 4.0s and layer2 SKIP because no target-specific layer2 tests matched `update-packages`.
-- Benchmark: latest `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` completed with Claude session `5d66f365` and Codex session `1ff2f8b0`.
-- Results: Claude hard assertions passed 2/2 evaluated runs with 1 infrastructure-blocked run and 1 quality critical failure; Codex hard assertions passed 3/3 evaluated runs with no blocked runs and no quality failures.
+- Verify: `pnpm verify --skill update-packages` passed on 2026-05-18 with layer1 PASS in 4.3s and layer2 SKIP because no target-specific layer2 tests matched `update-packages`.
+- Benchmark: latest `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` completed with Claude session `3612131f` and Codex session `d942a073`.
+- Results: Claude hard assertions passed 3/3 evaluated runs with no infrastructure-blocked runs and 2 deterministic quality critical failures; Codex hard assertions passed 3/3 evaluated runs with no blocked runs and no quality failures.
 - Report: `benchmark/test-update-packages-2026-05-18.md`.
 - Latest ship: pending current `$run` commit and push to `master`.
 - Recommended next command: `$session-triage update-packages benchmark failure`.
