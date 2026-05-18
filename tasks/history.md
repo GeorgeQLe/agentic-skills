@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-05-18 — ship-end benchmark partial Batch 41.1 run
+
+- Recomputed Phase 41 Batch 41.1 eligibility and confirmed `feature-interview`, `ship-end`, `targeted-skill-builder`, and `affected` are known to the benchmark harness with custom coverage.
+- Treated `feature-interview` as already covered for this batch because fresh evaluated rows and subjective review evidence already exist from 2026-05-18.
+- Verified `ship-end` with layer1 PASS in 10.5s and layer2 SKIP because no target-specific layer2 tests matched.
+- Ran `pnpm bench --skill ship-end --agent both --runs 3 --chunk-size 3 --pause 0`: Claude session `ship-end-claude-edad4640` completed three evaluated non-blocked runs with 0/3 hard assertion pass rate, while Codex session `ship-end-codex-558a21dc` completed three evaluated non-blocked runs with 3/3 hard assertion pass rate.
+- Wrote `benchmark/test-ship-end-2026-05-18.md`, refreshed generated proof metadata, and stopped before `targeted-skill-builder`/`affected` so `$session-triage ship-end benchmark failure` can classify the evaluated Claude continuity/next-route failure before broader runner spend continues.
+
 ## 2026-05-18 — update-packages expanded-budget benchmark rerun
 
 - Raised the `update-packages` benchmark setup from the `$0.25` smoke budget to the `$1.00` standard per-run budget and added layer1 coverage for that tier.
