@@ -5,6 +5,30 @@
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
+## Current Task — Targeted Update `update-packages` pnpm Fixture Evidence Tolerance 2026-05-18
+
+**Goal:** Fix the custom `update-packages` benchmark setup so fixture-based retained publish-time proof for the selected pnpm package-manager version passes without allowing mismatched or unverified pnpm versions.
+
+**Plan:**
+- [x] Review relevant lessons, the pnpm fixture evidence triage report, current benchmark proof detector, and focused layer1 coverage.
+- [x] Update `tests/layer4/setups/tier23-global-workflows.setup.ts` to detect selected-version fixture proof from `npm-view-times.json`.
+- [x] Add focused layer1 coverage for the failed Codex run #2 shape plus a mismatched-version negative.
+- [x] Run focused layer1 tests, benchmark coverage, target verify, required skill audits, targeted search, smoke benchmark, and whitespace validation.
+- [x] Record results, commit, and push intended changes on `master`.
+
+## Review — Targeted Update `update-packages` pnpm Fixture Evidence Tolerance 2026-05-18
+
+- Decision: existing benchmark setup update, not a new skill. The mirrored `update-packages` contracts already allow retained project evidence for pnpm toolchain age proof.
+- Evidence used: `tasks/lessons.md`, `benchmark/triage-update-packages-2026-05-18-pnpm-proof-fixture-evidence.md`, `tests/layer4/setups/tier23-global-workflows.setup.ts`, and `tests/layer1/bench-setups.test.ts`.
+- Evidence intentionally skipped: broad session history, because the triage localized the defect to the benchmark proof evaluator.
+- Updated the proof check from a regex-only expected-evidence pattern to a predicate-capable evidence path for the custom workflow setup.
+- Added `provesSelectedPnpmToolchainAgeEligibility`, which preserves existing regex pass cases and also accepts `npm-view-times.json` fixture proof only when the selected `packageManager` pnpm version matches the retained timestamp key.
+- Added focused layer1 coverage for the failed Codex run #2 shape and a mismatched fixture-proof negative where `packageManager` selects `pnpm@10.22.0` but the retained timestamp is for `10.11.0`.
+- Validation passed: focused layer1 setup/quality tests, benchmark coverage, target verify, install and skill scripts, targeted `rg`, `git diff --check`, and Codex smoke benchmark `update-packages-codex-120085b6` with 1/1 hard assertions.
+- Generated Skills Showcase data was not refreshed because no tracked `SKILL.md`, `PACK.md`, curated benchmark report, or curated review report changed.
+- Unrelated analysis work was left out of this commit scope.
+- **Recommended next command:** `$benchmark-test-skill update-packages`
+
 ## Current Task — Triage `update-packages` pnpm Proof Fixture Evidence Failure 2026-05-18
 
 **Goal:** Investigate the latest `$benchmark-test-skill update-packages` Codex failure and classify whether the failed pnpm toolchain-proof assertion is a skill-contract gap, benchmark harness defect, generated-output noncompliance, or infrastructure-only block.

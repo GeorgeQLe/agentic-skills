@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Update: update-packages pnpm Fixture Evidence Tolerance 2026-05-18
+
+**Goal:** Fix the custom `update-packages` benchmark setup so fixture-based retained publish-time proof for the selected pnpm package-manager version passes without allowing mismatched or unverified pnpm versions.
+
+**Acceptance Criteria:**
+- [x] Relevant lessons, the pnpm fixture evidence triage report, current benchmark proof detector, and focused layer1 coverage are reviewed.
+- [x] `tests/layer4/setups/tier23-global-workflows.setup.ts` detects selected-version fixture proof from `npm-view-times.json`.
+- [x] Focused layer1 coverage proves the failed Codex run #2 shape passes and a mismatched-version fixture proof still fails.
+- [x] Focused layer1 tests, benchmark coverage, target verify, required skill audits, targeted search, smoke benchmark, and whitespace validation pass.
+- [x] Results are recorded in `tasks/todo.md`, then intended changes are committed and pushed on `master`.
+
+**Result:** Updated on 2026-05-18. The custom `update-packages` benchmark setup now supports predicate-based expected evidence for cases where regex alone is too loose or too brittle. `provesSelectedPnpmToolchainAgeEligibility` preserves existing accepted proof forms and also accepts retained `npm-view-times.json` fixture evidence only when the selected `packageManager` pnpm version matches the timestamp key. Focused layer1 coverage proves the failed Codex run #2 shape and rejects a mismatched fixture proof where `packageManager` selects `pnpm@10.22.0` but the retained timestamp is for `10.11.0`. Validation passed: focused layer1 setup/quality tests, benchmark coverage, target verify, install and skill scripts, targeted `rg`, `git diff --check`, and Codex smoke benchmark `update-packages-codex-120085b6` with 1/1 hard assertions. Generated Skills Showcase data was not refreshed because no tracked skill metadata/behavior or curated benchmark/review report changed. Recommended next command: `$benchmark-test-skill update-packages`.
+
 ## Current Analysis: Prototype-First vs Complete SaaS Workflow Drag 2026-05-17
 
 **Goal:** Analyze local Claude and Codex session history for evidence that attempts to build complete SaaS products too early introduce database, payments, analytics, deployment, and production-hardening work before clickable prototypes have calibrated taste and feel.
