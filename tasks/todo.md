@@ -451,15 +451,15 @@
 
 ## Review — Agent Review `update-packages` 2026-05-18
 
-- Reviewed six retained `package-update-plan.md` artifacts from Claude session `update-packages-claude-fa542bcd` and Codex session `update-packages-codex-03d220e0`; no runs were infrastructure-blocked.
-- Subjective verdict: good overall. Median score was 88/100 with range 82-90.
-- Strengths: all artifacts selected eligible dependency targets, skipped newer versions inside the 8-day window, avoided unqualified `pnpm@latest`, isolated React/Vitest major upgrades, included focused smokes and migration stop routes, and used runner-native `/run` or `$run` handoffs.
-- Main weakness: pnpm toolchain-version selection is sometimes asserted from toolchain knowledge or local environment rather than proven from retained registry/project-pin evidence before becoming a `packageManager` recommendation.
-- Secondary weakness: one Claude artifact wrote both required `.npmrc` literals but described the npm/pnpm age-gate key semantics imprecisely.
+- Reviewed five evaluated `package-update-plan.md` artifacts from Claude session `update-packages-claude-bdc852e4` and Codex session `update-packages-codex-443aab01`; Claude run #1 was excluded because it was infrastructure-blocked by agent runner budget exhaustion.
+- Subjective verdict: excellent overall. Median score was 92/100 with range 88-94.
+- Strengths: all evaluated artifacts selected eligible dependency and pnpm targets, skipped too-new versions inside the 8-day window, avoided unqualified `pnpm@latest`, preserved npm/pnpm age-gate ownership, isolated React/Vitest major upgrades, included focused smokes and migration stop routes, and used runner-native `/run` or `$run` handoffs.
+- Main output weakness: one Codex artifact orders React before the lower-risk Zod update; it remains usable but is slightly less ergonomic than migration, low-risk Zod, then major React/Vitest batches.
+- Deterministic-rubric weakness: Claude artifacts include the plan name and verification/actionability evidence, but the quality rubric under-credited artifact-reference and actionability for retained valid shapes.
 - Report written at `benchmark/review-update-packages-2026-05-18.md`.
 - Generated Skills Showcase data and benchmark results matrix were refreshed after the curated review report changed.
 - Validation passed: review report field scan, benchmark-results matrix tests, showcase data freshness check, and `git diff --check`.
-- **Recommended next command:** `$targeted-skill-builder update-packages pnpm toolchain proof and age-gate semantics`
+- **Recommended next command:** `$targeted-skill-builder update-packages benchmark artifact-reference actionability tolerance`
 
 ## Current Task — Targeted Update `update-packages` pnpm Toolchain Proof and Age-Gate Semantics 2026-05-18
 
