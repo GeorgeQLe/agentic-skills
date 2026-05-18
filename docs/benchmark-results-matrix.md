@@ -53,7 +53,7 @@ This matrix tracks skills that already have persisted benchmark run data and gra
 | `affected` | Codex | `tests/benchmarks/runs/affected-codex-3c36c9a8/report.json` | blocked/incomplete | Report exists with zero total and evaluated runs. Do not count as benchmarked. |
 | `analyze-sessions` | Claude | `tests/benchmarks/runs/analyze-sessions-claude-00d0ff13/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
 | `benchmark-test-skill` | Codex | `tests/benchmarks/runs/benchmark-test-skill-codex-8a1dccd0/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
-| `feature-interview` | Claude | `tests/benchmarks/runs/feature-interview-claude-9139ad15/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
+| `feature-interview` | Claude | `tests/benchmarks/runs/feature-interview-claude-02d30038/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
 | `icon-handler` | Claude | `tests/benchmarks/runs/icon-handler-claude-47bab6aa/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
 | `roadmap` | Claude | `tests/benchmarks/runs/roadmap-claude-8c1ee4a6/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
 | `run` | Codex | `tests/benchmarks/runs/run-codex-ea5e6466/report.json` | blocked/incomplete | Report exists with zero total and evaluated runs. Do not count as benchmarked. Prefer the later evaluated report listed above. |
