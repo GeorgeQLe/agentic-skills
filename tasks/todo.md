@@ -5,6 +5,29 @@
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
+## Current Task — Targeted Update `update-packages` Benchmark pnpm Proof and Age-Gate Semantics Tolerance 2026-05-18
+
+**Goal:** Fix the custom `update-packages` benchmark setup so valid retained Markdown shapes for pnpm package-manager proof and npm/pnpm age-gate ownership pass, while missing proof and reversed ownership still fail.
+
+**Plan:**
+- [x] Review relevant lessons, the age-gate semantics triage report, current benchmark setup, and focused layer1 coverage.
+- [x] Update `tests/layer4/setups/tier23-global-workflows.setup.ts` to detect pnpm proof and age-gate ownership semantically across common Markdown shapes.
+- [x] Add focused layer1 coverage from failed Claude/Codex retained artifact shapes plus retained negative cases.
+- [x] Run focused layer1 tests, benchmark coverage, target verify, required skill audits, Codex smoke benchmark, targeted search, and whitespace validation.
+- [x] Record results, commit, and push intended changes on `master`.
+
+## Review — Targeted Update `update-packages` Benchmark pnpm Proof and Age-Gate Semantics Tolerance 2026-05-18
+
+- Decision: existing benchmark setup update, not a new skill. Mirrored `update-packages` contracts already require pnpm package-manager proof and npm/pnpm age-gate ownership semantics.
+- Evidence used: `tasks/lessons.md`, `benchmark/triage-update-packages-2026-05-18-age-gate-semantics.md`, `tests/layer4/setups/tier23-global-workflows.setup.ts`, and focused layer1 setup coverage.
+- Updated the pnpm toolchain proof pattern to accept either order: packageManager recommendation before publish-time proof or retained publish-time evidence before the matching packageManager recommendation.
+- Updated age-gate semantics detection to accept common Markdown bullet/list/config forms for `min-release-age=8`, `minimum-release-age=11520`, and `minimumReleaseAge: 11520` while retaining rejection for explicit reversed owner claims.
+- Added layer1 regression coverage for the failed Claude retained shape, the failed Codex retained shape, missing-proof rejection, and reversed-semantics rejection.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 bench-setups bench-quality`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill update-packages`; `./install.sh`; `./scripts/skill-deps.sh --broken`; `./scripts/skill-versions.sh --missing`; `./scripts/skill-next-step-routing.sh --missing`; targeted `rg`; `git diff --check`.
+- Codex smoke benchmark passed: `update-packages-codex-30ca6459`, 1/1 hard assertions, 98.8% output quality, 0 threshold failures, 0 critical failures, p50 latency 64.1s, total cost $0.25.
+- Generated Skills Showcase data was not refreshed because no tracked `SKILL.md`, `PACK.md`, curated benchmark report, or curated review report changed.
+- **Recommended next command:** `$benchmark-test-skill update-packages`
+
 ## Current Task — Triage `update-packages` Benchmark Failure 2026-05-18
 
 **Goal:** Investigate the fresh `$benchmark-test-skill update-packages` failure and classify whether the pnpm toolchain-proof and age-gate semantics failures are skill-contract gaps, benchmark harness defects, generated-output noncompliance, or infrastructure-only blocks.
