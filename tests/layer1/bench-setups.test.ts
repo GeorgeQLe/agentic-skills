@@ -261,6 +261,7 @@ describe("benchmark setup registry", () => {
   it("requires runner-specific final routing and allows fixture-backed package-lock evidence for update-packages", () => {
     const setup = resolveBenchSetup("update-packages");
     expect(setup).toBeDefined();
+    expect(setup?.perRunBudgetUsd).toBe(BENCH_BUDGETS_USD.standard);
 
     const reportBody = (route: string) => [
       "# Package Update Plan",
