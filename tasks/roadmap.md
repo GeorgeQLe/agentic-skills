@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Triage: feature-interview Fresh Claude Prototype Gate Failure 2026-05-18
+
+**Goal:** Investigate the fresh `$benchmark-test-skill feature-interview` failure and classify whether the Claude `prototype-first-product-gate` quality failure is a skill-contract gap, benchmark harness defect, generated-output noncompliance, or infrastructure-only block.
+
+**Acceptance Criteria:**
+- [x] Fresh curated benchmark report and raw Claude/Codex report JSON are inspected.
+- [x] Retained Claude evaluated run artifact is inspected for the failed `prototype-first-product-gate` quality criterion.
+- [x] Mirrored `feature-interview` contracts are compared with benchmark setup and focused layer1 coverage.
+- [x] `benchmark/triage-feature-interview-2026-05-18-fresh-claude-prototype-gate.md` records verdict, root cause, responsible gap, recommended fix, validation plan, and next route.
+- [x] Results are recorded in `tasks/todo.md`, then intended changes are committed and pushed on `master`.
+
+**Result:** Triage verified the fresh `feature-interview` benchmark failure as generated-output noncompliance plus partial infrastructure blocking, not a mirrored skill-contract gap and not a benchmark false negative. Claude session `feature-interview-claude-e499a20d` had one evaluated hard-assertion pass, two agent-runner budget blocks, and one critical `prototype-first-product-gate` quality failure. The retained Claude artifact included a prototype gate, fake/static data boundary, deferred infrastructure, and promotion criteria, but collapsed the fixture's requested table-first, board-first, and command-first route experiments into a single dashboard route. Codex session `feature-interview-codex-e6208aac` passed 3/3 hard assertions and 100.0% output quality. Report: `benchmark/triage-feature-interview-2026-05-18-fresh-claude-prototype-gate.md`. Recommended next command: `$benchmark-test-skill feature-interview`.
+
 ## Current Targeted Update: Prototype Phase and Route Experiment Workflow Tightening 2026-05-18
 
 **Goal:** Tighten prototype-first product and feature planning so the first milestone is a separate prototype/experiment phase, with multiple clickable route-based experiments when there is meaningful UX/workflow uncertainty, before any production infrastructure is promoted.
