@@ -5,6 +5,30 @@
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
+## Current Task — Targeted Update `benchmark-agent-review` Owner Table Label Tolerance 2026-05-18
+
+**Goal:** Fix the `benchmark-agent-review` benchmark quality evaluator so remediation table headers such as `Owner target / owner file` and `Exact owner target / files` pass when exact owner paths and validation checks are present, while broad owner targets still fail.
+
+**Plan:**
+- [x] Review relevant lessons, the Codex owner-table-label triage report, current pack benchmark setup, and focused layer1 coverage.
+- [x] Update `tests/layer4/setups/packs/pack-workflows.setup.ts` to accept slash-composed owner table headers.
+- [x] Add focused layer1 coverage for `Owner target / owner file` and `Exact owner target / files` table headers with exact owner paths and validation checks.
+- [x] Run focused layer1 tests, benchmark coverage, target verify, required skill audits, targeted search, Codex smoke benchmark, and whitespace validation.
+- [x] Record results, commit, and push intended changes on `master`.
+
+## Review — Targeted Update `benchmark-agent-review` Owner Table Label Tolerance 2026-05-18
+
+- Decision: existing benchmark setup update, not a new skill. The pack-local `benchmark-agent-review` contracts already require exact owner files or narrow owner surfaces plus validation checks.
+- Evidence used: `tasks/lessons.md`, `benchmark/triage-benchmark-agent-review-2026-05-18-codex-owner-table-labels.md`, `tests/layer4/setups/packs/pack-workflows.setup.ts`, and `tests/layer1/bench-setups.test.ts`.
+- Evidence intentionally skipped: broad session history, because the triage localized the defect to benchmark owner-label syntax tolerance.
+- Existing-skill overlap: `benchmark-agent-review` already owns remediation-ready output requirements; the gap was in the harness evaluator, not a duplicate skill need.
+- Updated `hasBenchmarkAgentReviewOwnerLabel` to accept remediation table headers with slash-composed owner columns such as `Owner target / owner file`, `Exact owner target / files`, and similar target/file/surface combinations.
+- Added layer1 examples for the two failed Codex table-header forms while retaining broad-owner and broad-only failure coverage.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 bench-setups bench-quality`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill benchmark-agent-review`; `./install.sh`; `./scripts/skill-deps.sh --broken`; `./scripts/skill-versions.sh --missing`; `./scripts/skill-next-step-routing.sh --missing`; targeted `rg`; `git diff --check`.
+- Codex smoke benchmark passed: `benchmark-agent-review-codex-176e11dd`, 1/1 hard assertions, 98.3% output quality, 0 threshold failures, 0 critical failures.
+- Generated Skills Showcase data was not refreshed because no tracked `SKILL.md`, `PACK.md`, curated benchmark report, or curated review report changed.
+- **Recommended next command:** `$benchmark-test-skill benchmark-agent-review`
+
 ## Current Task — Triage `benchmark-agent-review` Codex Owner Table Label Failure 2026-05-18
 
 **Goal:** Investigate why the fresh `$benchmark-test-skill benchmark-agent-review` rerun produced Codex output-quality threshold and critical failures on owner-target and validation-specificity criteria.
@@ -177,10 +201,25 @@
 **Plan:**
 - [x] Confirm `$benchmark-test-skill` is the active workflow and `update-packages` is only the benchmark target argument.
 - [x] Run `pnpm bench --list-skills` and record `update-packages` coverage status.
-- [ ] Run `pnpm verify --skill update-packages`; stop before bench if verification fails.
-- [ ] Run `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` only after verify passes.
-- [ ] Write and validate `benchmark/test-update-packages-2026-05-18.md` with verify, benchmark, latency, cost, consistency, raw paths, failures, and recommended next route.
-- [ ] Refresh generated evidence if curated benchmark evidence changes, validate, record results, then commit and push intended changes on `master`.
+- [x] Run `pnpm verify --skill update-packages`; stop before bench if verification fails.
+- [x] Run `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` only after verify passes.
+- [x] Write and validate `benchmark/test-update-packages-2026-05-18.md` with verify, benchmark, latency, cost, consistency, raw paths, failures, and recommended next route.
+- [x] Refresh generated evidence if curated benchmark evidence changes, validate, record results, then commit and push intended changes on `master`.
+
+## Review — Fresh Benchmark `update-packages` After pnpm Proof 2026-05-18
+
+- Command resolution: `$benchmark-test-skill` was the active workflow; `update-packages` was treated only as the benchmark target argument.
+- Eligibility: `update-packages` is known with custom coverage via `tests/layer4/setups/tier23-global-workflows.setup.ts`.
+- Verify passed: layer1 PASS in 3.5s with 1,211 tests across 15 files; layer2 SKIP because no target-specific layer2 tests matched `update-packages`.
+- Benchmark ran with `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0`.
+- Claude session `update-packages-claude-5c4392a3`: 0/1 evaluated hard assertion pass rate, 2 infrastructure blocks from agent runner budget exceeded, 75.0% output-quality score, p50 latency 60.0s, and $0.75 total estimated cost.
+- Codex session `update-packages-codex-31ad8c8d`: 1/3 evaluated hard assertion pass rate, 0 infrastructure blocks, 93.3% output-quality score, p50 latency 72.0s, and $0.75 total estimated cost.
+- Failed assertions: Claude run #0 missed `Output proves selected pnpm toolchain age eligibility` and `Output preserves age-gate key semantics`; Codex runs #0 and #1 missed `Output preserves age-gate key semantics`.
+- Report written at `benchmark/test-update-packages-2026-05-18.md`.
+- Note: failed retained artifacts include substantive pnpm proof and age-gate language in at least some failed runs, so this may be a benchmark-pattern calibration issue; triage should classify it.
+- Generated Skills Showcase data and benchmark results matrix refresh was attempted after the curated benchmark report changed, but generated assets were left uncommitted because unrelated dirty `benchmark-agent-review` setup/test changes would affect source fingerprints.
+- Validation passed: report field scan, benchmark-results matrix tests, and `git diff --check`. `scripts/validate-skills-showcase-data.sh` regenerated assets and reported them stale pending commit before those generated diffs were discarded to avoid coupling unrelated dirty work.
+- **Recommended next skill:** `$session-triage update-packages benchmark failure`
 
 ## Current Task — Fresh Benchmark `benchmark-agent-review` After Owner Specificity Tolerance 2026-05-18
 
