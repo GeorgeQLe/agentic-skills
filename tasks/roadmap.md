@@ -81,6 +81,19 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Fresh rerun completed on 2026-05-17 with a deterministic both-agent failure. `update-packages` is known with custom benchmark coverage via `tests/layer4/setups/tier23-global-workflows.setup.ts`, and verify passed with layer1 PASS in 3.3s plus layer2 SKIP because no target-specific layer2 tests matched. Claude session `update-packages-claude-e7c523af` completed three evaluated runs with 1/3 hard assertion pass rate, 83.3% output quality, p50 latency 49.3s, and $0.75 total estimated cost. Codex session `update-packages-codex-c8dbd66e` completed three evaluated runs with 2/3 hard assertion pass rate, 93.6% output quality, p50 latency 90.2s, and $0.75 total estimated cost. No runs were infrastructure-blocked. The failed assertion was `Output avoids unqualified pnpm@latest`. Report: `benchmark/test-update-packages-2026-05-17.md`. Recommended next skill: `$session-triage update-packages benchmark failure`.
 
+## Current Triage: update-packages Benchmark pnpm Latest Failure 2026-05-18
+
+**Goal:** Investigate why the fresh `$benchmark-test-skill update-packages` rerun failed `Output avoids unqualified pnpm@latest` and identify the smallest verified fix.
+
+**Acceptance Criteria:**
+- [x] Latest benchmark report and persisted failed run artifacts are inspected.
+- [x] Mirrored `update-packages` contracts are compared with the benchmark setup expectation.
+- [x] Failure is classified as skill-contract failure, harness false negative, infrastructure block, or agent noncompliance.
+- [x] `benchmark/triage-update-packages-2026-05-18-pnpm-latest.md` records verdict, root cause, responsible gap, recommended fix, validation plan, and next route.
+- [x] Results are recorded in `tasks/todo.md`, then intended changes are committed and pushed on `master`.
+
+**Result:** Triage verified the deterministic hard-assertion failure as a benchmark harness/setup false negative. The failed artifacts selected pinned pnpm versions such as `pnpm@9.12.0`, `pnpm@9.15.4`, and `pnpm@10.22.0`, while warning not to use unqualified `pnpm@latest`. The setup's negative-lookahead regex failed valid warning language unless a narrow allowed phrase appeared after `pnpm@latest`, and it failed Codex even when `existing local toolchain` appeared before the warning. Responsible gap: `tests/layer4/setups/tier23-global-workflows.setup.ts` and focused layer1 coverage. Report: `benchmark/triage-update-packages-2026-05-18-pnpm-latest.md`. Recommended next skill: `$targeted-skill-builder update-packages benchmark pnpm latest negation tolerance`.
+
 ## Current Agent Review: benchmark-agent-review Retained Artifact Evidence 2026-05-17
 
 **Goal:** Review the latest persisted `benchmark-agent-review` Claude and Codex benchmark outputs for subjective operator quality after retained `ship-manifest.md` evidence was added to the fixture.
@@ -93,6 +106,16 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 - [x] Results are recorded in `tasks/todo.md`, then intended changes are committed and pushed on `master`.
 
 **Result:** Reviewed Claude session `benchmark-agent-review-claude-3378af86` and Codex session `benchmark-agent-review-codex-0ceac781`, covering six evaluated `pack-benchmark-output.md` artifacts and excluding no infrastructure-blocked runs. Subjective quality was usable to excellent: every output inspected retained `ship-manifest.md` artifact text directly, identified placeholder residual-risk and monitoring sections, avoided benchmark-laxness framing, and routed to targeted remediation. Median subjective score was 86/100 with range 78-94. Main remediation: strengthen `benchmark-agent-review` remediation expectations and the benchmark rubric so reviews must name owner targets and validation checks when retained artifacts contain placeholder risk/monitoring text. Report: `benchmark/review-benchmark-agent-review-2026-05-17.md`. Generated Skills Showcase data was refreshed after curated review evidence changed. Recommended next command: `$targeted-skill-builder benchmark-agent-review remediation-owner validation specificity`.
+
+## Current Targeted Update: benchmark-agent-review Remediation Owner Validation Specificity 2026-05-17
+
+**Goal:** Tighten `benchmark-agent-review` so retained-artifact reviews turn output-quality weaknesses into owner-specific, validation-ready remediation.
+
+**Acceptance Criteria:**
+- [ ] Mirrored `benchmark-agent-review` contracts require owner targets, proposed behavior changes, and concrete validation checks when material weaknesses are found.
+- [ ] The benchmark prompt/rubric requires remediation owner-target and validation-check specificity for the retained `ship-manifest.md` fixture.
+- [ ] Focused layer1 coverage proves strong remediation passes and broad "update the skill / rerun fixture" remediation loses top-band quality credit.
+- [ ] Validation passes, generated assets are refreshed if needed, and intended changes are committed and pushed on `master`.
 
 ## Current Targeted Update: benchmark-agent-review Route Prompt Alignment 2026-05-17
 
