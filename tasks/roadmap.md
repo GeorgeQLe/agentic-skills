@@ -16,6 +16,18 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Triage: update-packages Reject pnpm Latest Warning Failure 2026-05-18
+
+**Goal:** Investigate the latest `$benchmark-test-skill update-packages` Claude failure and classify whether the `Output avoids unqualified pnpm@latest` failure is a skill-contract gap, benchmark harness defect, generated-output noncompliance, or infrastructure-only block.
+
+**Acceptance Criteria:**
+- [x] Latest curated benchmark report and raw failed Claude run artifact are inspected.
+- [x] Mirrored `update-packages` contracts are compared with the benchmark prompt, assertion helper, focused layer1 coverage, and relevant lessons.
+- [x] `benchmark/triage-update-packages-2026-05-18-pnpm-latest-reject-warning.md` records verdict, root cause, responsible gap, recommended fix, validation plan, and next route.
+- [x] Results are recorded in `tasks/todo.md`, then intended changes are committed and pushed on `master`.
+
+**Result:** Triage verified the latest `update-packages` benchmark failure as a benchmark harness false negative, not a mirrored skill-contract failure. Claude session `update-packages-claude-dbd3972f` completed three evaluated runs with 2/3 hard assertion pass rate, no infrastructure blocks, and one failed `Output avoids unqualified pnpm@latest` assertion. The failed artifact selected pinned `pnpm@10.11.0`, retained `npm view pnpm@10.11.0 time.version` evidence, documented publish time `2026-05-01T12:00:00.000Z`, and mentioned `pnpm@latest` only in explicit rejection language: `Reject \`pnpm@latest\` — unqualified, unverifiable at lock time.` Root cause: `lineOnlyWarnsAgainstPnpmLatest` accepts several warning forms but does not accept `reject` as safe rejection language. Report: `benchmark/triage-update-packages-2026-05-18-pnpm-latest-reject-warning.md`. Validation passed: required report field scan and `git diff --check`. Recommended next skill: `$targeted-skill-builder update-packages benchmark pnpm latest reject-warning tolerance`.
+
 ## Current Triage: feature-interview Latest Route and Prototype Gate Failure 2026-05-18
 
 **Goal:** Investigate the latest `$benchmark-test-skill feature-interview` failure and classify whether the Claude `/roadmap` assertion failure and both-agent `prototype-first-product-gate` quality failures are skill-contract gaps, benchmark harness defects, generated-output noncompliance, or infrastructure-only blocks.
