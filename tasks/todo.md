@@ -132,11 +132,24 @@
 **Goal:** Tighten `benchmark-agent-review` so retained-artifact reviews turn output-quality weaknesses into owner-specific, validation-ready remediation.
 
 **Plan:**
-- [ ] Review relevant lessons, latest `benchmark-agent-review` review report, mirrored skill contracts, and pack benchmark setup.
-- [ ] Update mirrored `benchmark-agent-review` contracts to require owner targets, proposed behavior changes, and concrete validation checks when material weaknesses are found.
-- [ ] Tighten the pack benchmark prompt and quality rubric for remediation owner-target and validation-check specificity.
-- [ ] Add focused layer1 coverage for strong and broad remediation examples.
+- [x] Review relevant lessons, latest `benchmark-agent-review` review report, mirrored skill contracts, and pack benchmark setup.
+- [x] Update mirrored `benchmark-agent-review` contracts to require owner targets, proposed behavior changes, and concrete validation checks when material weaknesses are found.
+- [x] Tighten the pack benchmark prompt and quality rubric for remediation owner-target and validation-check specificity.
+- [x] Add focused layer1 coverage for strong and broad remediation examples.
 - [ ] Run focused validation, generated-data checks if needed, record results, then commit and push intended changes on `master`.
+
+## Review — Targeted Update `benchmark-agent-review` Remediation Owner Validation Specificity 2026-05-17
+
+- Decision: existing-skill update. `benchmark-agent-review` owns subjective review report structure and remediation handoff requirements.
+- Evidence used: `tasks/lessons.md`, `benchmark/review-benchmark-agent-review-2026-05-17.md`, mirrored `benchmark-agent-review` contracts, `tests/layer4/setups/packs/pack-workflows.setup.ts`, and existing layer1 setup coverage.
+- Evidence intentionally skipped: broad session history, because the curated review localized the gap to remediation owner-target and validation specificity.
+- Updated mirrored contracts to require exact owner files/surfaces, behavior changes, and validation command or contract-lint proof, especially when retained artifact text contains placeholders such as `Not captured` or `Not specified`.
+- Updated the `benchmark-agent-review` pack benchmark prompt to require owner target, proposed behavior change, and validation check for each material remediation finding.
+- Added quality criteria for remediation owner target, validation specificity, and subjective/deterministic score separation.
+- Added focused layer1 coverage proving strong remediation passes and broad "update the skill / rerun fixture" remediation fails the new critical validation-specificity criterion.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 bench-setups bench-quality`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill benchmark-agent-review`; `./scripts/skill-deps.sh --broken`; `./scripts/skill-versions.sh --missing`; `./scripts/skill-next-step-routing.sh --missing`; `./install.sh`; `pnpm --dir tests bench --skill benchmark-agent-review --agent codex --runs 1 --chunk-size 1 --pause 0` (`benchmark-agent-review-codex-1c0359b3`, 1/1 hard assertions, 100.0% quality); targeted `rg`; `git diff --check`.
+- Generated Skills Showcase data and benchmark matrix were refreshed after tracked skill behavior and persisted benchmark evidence changed. `scripts/validate-skills-showcase-data.sh` regenerated intended asset changes and reported them as stale pending commit.
+- **Recommended next command:** `$benchmark-test-skill benchmark-agent-review`
 
 ## Current Task — Targeted Update `benchmark-agent-review` Route Prompt Alignment 2026-05-17
 

@@ -73,9 +73,10 @@ The primary object of review is the generated skill output, not the benchmark ha
 8. Build the remediation handoff:
    - Convert every material weakness into a remediation target instead of stopping at broad advice.
    - Classify each target as target-skill contract, benchmark rubric, retained-evidence gap, harness/setup issue, or one-off run behavior.
-   - Name the exact owner file, skill contract, benchmark setup, or report artifact when known.
-   - Propose the exact contract, rubric, fixture, or evidence-capture behavior to add or tighten.
-   - Include the validation command or contract-lint assertion that would prove the issue is fixed.
+   - Name the exact owner file, skill contract, benchmark setup, or report artifact when known; when the exact file is not proven, name the narrowest known owner surface and state the lookup needed to confirm it.
+   - Propose the exact contract, rubric, fixture, or evidence-capture behavior to add or tighten; avoid vague changes such as "update the skill" without naming the behavior that changes.
+   - Include the validation command or contract-lint assertion that would prove the issue is fixed; a focused fixture rerun is acceptable only when it names the expected assertion or artifact-quality behavior.
+   - When retained artifact text contains placeholder risk, monitoring, validation, or known-unknown sections such as `Not captured`, `Not specified`, `TBD`, `None`, or `N/A`, the remediation must identify the owner target that should reject or repair that placeholder and the validation check that would fail before the fix.
    - Choose one definitive next route from the highest-impact verified remediation; do not leave the next operator to choose among generic options.
 
 ## Output
@@ -91,6 +92,7 @@ Report:
 - Common strengths.
 - Common weaknesses.
 - Remediation table with finding, classification, owner target, proposed change, validation check, and route.
+- Remediation rows must be implementation-ready: each material finding needs a concrete owner target, a proposed behavior change, and a validation check or command. Broad rows like "tighten the rubric" or "update the skill" are incomplete unless they also name the owning file/surface, exact behavior, and proof.
 - Optional deterministic-rubric notes only when the retained output-quality findings show the deterministic rubric failed to surface a meaningful issue or produced misleading context.
 - **Next work:** the one definitive remediation selected from the remediation table, or no follow-up when all evaluated outputs are excellent and no meaningful issue remains.
 - **Recommended next command:** one command derived from that remediation, usually `$targeted-skill-builder <skill> <specific output-quality gap>`, `$targeted-skill-builder <benchmark setup or reviewed skill> <specific rubric gap>`, `$session-triage <skill> benchmark review`, or `$ship` only when no remediation is needed.
