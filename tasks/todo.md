@@ -5,6 +5,32 @@
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
+## Current Task — Fresh Benchmark `update-packages` After Age-Gate Tolerance 2026-05-18
+
+**Goal:** Run `$benchmark-test-skill update-packages` after the benchmark pnpm proof and age-gate semantics tolerance fix and publish deterministic both-agent evidence.
+
+**Plan:**
+- [x] Confirm `$benchmark-test-skill` is the active workflow and `update-packages` is only the benchmark target argument.
+- [x] Run `pnpm bench --list-skills` and record `update-packages` coverage status.
+- [x] Run `pnpm verify --skill update-packages`; stop before bench if verification fails.
+- [x] Run `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` only after verify passes.
+- [x] Write and validate `benchmark/test-update-packages-2026-05-18.md` with verify, benchmark, latency, cost, consistency, failures, raw paths, and recommended next route.
+- [x] Refresh generated evidence if needed, record results, then commit and push intended changes on `master`.
+
+## Review — Fresh Benchmark `update-packages` After Age-Gate Tolerance 2026-05-18
+
+- Command resolution: `$benchmark-test-skill` was the active workflow; `update-packages` was treated only as the benchmark target argument.
+- Eligibility: `update-packages` is known with custom coverage via `tests/layer4/setups/tier23-global-workflows.setup.ts`.
+- Verify passed: layer1 PASS in 3.3s with 1,211 tests across 15 files; layer2 SKIP because no target-specific layer2 tests matched `update-packages`.
+- Benchmark ran with `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0`.
+- Claude session `update-packages-claude-29df606d`: 0/0 evaluated hard assertion pass rate, 3 infrastructure blocks from agent runner budget exceeded, no evaluated quality score, p50 latency 0.0s, and $0.75 total estimated cost.
+- Codex session `update-packages-codex-870b131b`: 2/3 evaluated hard assertion pass rate, 0 infrastructure blocks, 96.8% output quality, p50 latency 69.5s, and $0.75 total estimated cost.
+- Failed assertions: Codex run #2 missed `Output proves selected pnpm toolchain age eligibility`.
+- Report written at `benchmark/test-update-packages-2026-05-18.md`.
+- Generated Skills Showcase data and benchmark results matrix were refreshed after the curated benchmark report changed. The benchmark matrix records the fully blocked Claude session as incomplete and keeps the latest evaluated Claude evidence in the graded row.
+- Validation passed: report field scan, benchmark-results matrix tests, and `git diff --check`. `scripts/validate-skills-showcase-data.sh` regenerated intended asset changes and reported them stale pending commit, which is the expected signal before committing generated assets.
+- **Recommended next skill:** `$session-triage update-packages benchmark failure`
+
 ## Current Task — Targeted Update `update-packages` Benchmark pnpm Proof and Age-Gate Semantics Tolerance 2026-05-18
 
 **Goal:** Fix the custom `update-packages` benchmark setup so valid retained Markdown shapes for pnpm package-manager proof and npm/pnpm age-gate ownership pass, while missing proof and reversed ownership still fail.
