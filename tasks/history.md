@@ -1,5 +1,21 @@
 # Session History
 
+## 2026-05-18 — Workflow persistent transcript feature interview
+
+- Captured the `/workflows` persistent transcript refinement in `specs/workflow-persistent-transcript-feature-interview.md`.
+- Updated `specs/ui-skills-showcase-website.md` so Workflow Lab behaves as one continuous terminal/chat session per selected workflow rather than a blinking card carousel.
+- Recorded the correction that interview questions should use visible product language before implementation terms in `tasks/lessons.md`.
+- Validation passed: `git diff --check`.
+- Recommended next command after the current benchmark coverage lane: `$roadmap`.
+
+## 2026-05-18 — update-packages benchmark handoff
+
+- Added the fresh `update-packages` benchmark rerun plan to `tasks/todo.md` and `tasks/roadmap.md`.
+- Recorded completed setup evidence: command resolution, `pnpm bench --list-skills`, and `pnpm verify --skill update-packages` with layer1 PASS plus layer2 SKIP.
+- Left the actual both-agent benchmark, curated report, generated evidence refresh, and final ship steps unchecked for the next executor.
+- Validation passed: `git diff --check`.
+- Recommended next command: `$benchmark-test-skill update-packages`.
+
 ## 2026-05-17 — update-packages benchmark route and fixture rubric alignment
 
 - Updated the `update-packages` custom benchmark setup to require runner-native final handoffs: `/run` for Claude and `$run` for Codex.
