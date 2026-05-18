@@ -4827,3 +4827,30 @@ Implement only this step, validate it, then run `/ship` when done.
 - Report written at `benchmark/triage-update-packages-2026-05-18-pnpm-latest-parenthetical.md`.
 - Validation passed: required report field scan and `git diff --check`.
 - **Recommended next skill:** `$targeted-skill-builder update-packages benchmark pnpm latest parenthetical-negation tolerance`
+
+## Current Task — Fresh Benchmark `feature-interview` After Prototype Wording Tolerance 2026-05-18
+
+**Goal:** Run `$benchmark-test-skill feature-interview` against the current repository state and publish fresh deterministic both-agent benchmark evidence after the prototype phase wording tolerance update.
+
+**Plan:**
+- [x] Confirm `$benchmark-test-skill` is the active workflow and `feature-interview` is only the benchmark target argument.
+- [x] Run `pnpm bench --list-skills` and confirm `feature-interview` is known to the harness, including coverage status. `coverage=custom`, setup `tests/layer4/setups/tier1-workflows.setup.ts`.
+- [x] Run `pnpm verify --skill feature-interview`; stop before benchmark if verification fails. Layer1 PASS in 3.7s; layer2 SKIP because no target-specific layer2 tests matched.
+- [x] If verify passes, run `pnpm bench --skill feature-interview --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [x] Write and validate `benchmark/test-feature-interview-2026-05-18.md` with verify, benchmark, latency, cost, consistency, raw paths, failures, and recommended next route.
+- [x] Refresh generated evidence if needed, record results, then commit and push intended changes on `master`.
+
+## Review — Fresh Benchmark `feature-interview` After Prototype Wording Tolerance 2026-05-18
+
+- Command resolution: `$benchmark-test-skill` was the active workflow; `feature-interview` was treated only as the benchmark target argument.
+- Eligibility: `feature-interview` is known with custom benchmark coverage via `tests/layer4/setups/tier1-workflows.setup.ts`.
+- Verify passed: layer1 PASS in 3.7s with 1,214 tests across 15 files; layer2 SKIP because no target-specific layer2 tests matched `feature-interview`.
+- Benchmark ran with `pnpm bench --skill feature-interview --agent both --runs 3 --chunk-size 3 --pause 0`.
+- Claude session `feature-interview-claude-bd781522`: 0 evaluated runs, 3 infrastructure blocks from agent runner budget, p50 latency 0.0s, and $0.75 total estimated cost. Treat this lane as inconclusive infrastructure blockage, not a skill failure.
+- Codex session `feature-interview-codex-59a38b3c`: 3/3 evaluated hard assertion pass rate, 0 infrastructure blocks, 100.0% output-quality score, p50 latency 87.1s, and $0.75 total estimated cost.
+- Failed assertions: none in evaluated runs.
+- Report written at `benchmark/test-feature-interview-2026-05-18.md`.
+- Generated Skills Showcase data and the benchmark results matrix were refreshed after the curated benchmark evidence changed.
+- Validation passed: report field scan; `pnpm --dir tests bench:coverage`; `pnpm --dir tests exec vitest run --project layer1 benchmark-results-matrix skills-showcase-benchmark-demo`; `git diff --check`.
+- Validation note: `scripts/validate-skills-showcase-data.sh` regenerated the intended benchmark/showcase asset changes and reported them as stale before commit; rerun after commit/push to confirm the committed assets are clean.
+- **Recommended next skill:** `$benchmark-agent-review feature-interview`
