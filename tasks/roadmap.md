@@ -69,6 +69,19 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Reviewed six retained `package-update-plan.md` artifacts from `update-packages-claude-fa542bcd` and `update-packages-codex-03d220e0`; no runs were infrastructure-blocked. Subjective verdict: good overall, with median score 88/100 and range 82-90. The artifacts are operator-usable and correctly handle eligible/skipped versions, persistent age-gate config, React/Vitest major-upgrade batches, focused smoke checks, migration stop routes, and runner-native handoffs. Main remediation: tighten package-manager version proof and age-gate key semantics so concrete pnpm recommendations are backed by retained publish-time or existing project-pin evidence before they become `packageManager` values. Report: `benchmark/review-update-packages-2026-05-18.md`. Recommended next command: `$targeted-skill-builder update-packages pnpm toolchain proof and age-gate semantics`.
 
+## Current Targeted Update: update-packages pnpm Toolchain Proof and Age-Gate Semantics 2026-05-18
+
+**Goal:** Tighten `update-packages` so pnpm package-manager recommendations are backed by retained age-eligibility proof and age-gate key semantics cannot drift.
+
+**Acceptance Criteria:**
+- [x] Mirrored `update-packages` contracts require retained project-pin or registry publish-time proof before recommending a new `packageManager: "pnpm@..."` value.
+- [x] Mirrored contracts clarify that `min-release-age=8` is npm's relative age guard and `minimum-release-age=11520`/`minimumReleaseAge: 11520` are pnpm coverage where supported.
+- [x] The custom benchmark prompt and quality checks require pnpm toolchain proof and correct age-gate semantics.
+- [x] Focused layer1 coverage proves passing proof, missing-proof failure, and reversed-semantics failure.
+- [x] Validation passes, generated assets are refreshed, and intended changes are committed and pushed on `master`.
+
+**Result:** Updated on 2026-05-18. `update-packages` now requires retained project-pin or registry publish-time proof before recommending a new `packageManager: "pnpm@..."` value as final, and clarifies age-gate setting ownership across npm and pnpm config surfaces. The custom benchmark setup now prompts for pnpm publish-time proof, includes pnpm fixture publish times, and checks both pnpm toolchain proof and age-gate key semantics as hard assertions and output-quality criteria. Focused layer1 coverage proves passing proof, missing-proof failure, and reversed-semantics failure. Validation passed: focused layer1 setup/quality tests, benchmark coverage, `pnpm --dir tests verify --skill update-packages`, install and skill scripts, Codex smoke benchmark `update-packages-codex-afdc4a08` (1/1 hard assertions, 98.8% quality), benchmark-results matrix tests, targeted `rg`, and `git diff --check`. Generated Skills Showcase data and benchmark matrix were refreshed after tracked skill behavior changed. Recommended next command: `$benchmark-test-skill update-packages`.
+
 ## Current Targeted Update: benchmark-agent-review Benchmark Quality Owner Specificity Tolerance 2026-05-18
 
 **Goal:** Align the `benchmark-agent-review` pack benchmark prompt and quality rubric so owner-specific remediation is tested without brittle literal-token false positives.

@@ -5,6 +5,18 @@
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
+## Current Task — Fresh Benchmark `benchmark-agent-review` 2026-05-18
+
+**Goal:** Run `$benchmark-test-skill benchmark-agent-review` against the current repository state and publish deterministic both-agent benchmark evidence.
+
+**Plan:**
+- [ ] Confirm `$benchmark-test-skill` is the active workflow and `benchmark-agent-review` is only the benchmark target argument.
+- [ ] Run `pnpm bench --list-skills` and record `benchmark-agent-review` coverage status.
+- [ ] Run `pnpm verify --skill benchmark-agent-review`; stop before bench if verification fails.
+- [ ] Run `pnpm bench --skill benchmark-agent-review --agent both --runs 3 --chunk-size 3 --pause 0` only after verify passes.
+- [ ] Write and validate `benchmark/test-benchmark-agent-review-2026-05-18.md` with verify, benchmark, latency, cost, consistency, raw paths, failures, and recommended next route.
+- [ ] Refresh generated evidence if curated benchmark evidence changes, validate, record results, then commit and push intended changes on `master`.
+
 ## Current Task — Targeted Update `benchmark-agent-review` Owner Label Tolerance 2026-05-18
 
 **Goal:** Fix the `benchmark-agent-review` benchmark quality evaluator so remediation-ready Markdown owner labels such as `Owner target / file:` and `Exact owner files.` pass while broad owner targets still fail.
@@ -97,6 +109,29 @@
 - Generated Skills Showcase data and benchmark results matrix were refreshed after the curated review report changed.
 - Validation passed: review report field scan, benchmark-results matrix tests, showcase data freshness check, and `git diff --check`.
 - **Recommended next command:** `$targeted-skill-builder update-packages pnpm toolchain proof and age-gate semantics`
+
+## Current Task — Targeted Update `update-packages` pnpm Toolchain Proof and Age-Gate Semantics 2026-05-18
+
+**Goal:** Tighten `update-packages` so pnpm package-manager recommendations are backed by retained age-eligibility proof and age-gate key semantics cannot drift.
+
+**Plan:**
+- [x] Review relevant lessons, the 2026-05-18 agent-review report, current `update-packages` contracts, and benchmark setup coverage.
+- [x] Update mirrored `global/codex/update-packages` and `global/claude/update-packages` contracts.
+- [x] Update the custom benchmark prompt and deterministic quality checks for pnpm toolchain proof and age-gate semantics.
+- [x] Add focused layer1 coverage for passing proof, missing proof, and reversed age-gate semantics.
+- [x] Run focused validation, target verify, skill checks, smoke benchmark, generated-data refresh, record results, then commit and push intended changes on `master`.
+
+## Review — Targeted Update `update-packages` pnpm Toolchain Proof and Age-Gate Semantics 2026-05-18
+
+- Decision: existing-skill update, not a new skill. `update-packages` already owns package-manager migration, installer age gates, and package-version proof.
+- Evidence used: `tasks/lessons.md`, `benchmark/review-update-packages-2026-05-18.md`, mirrored `update-packages` contracts, `tests/layer4/setups/tier23-global-workflows.setup.ts`, and focused layer1 setup coverage.
+- Updated mirrored contracts to require retained project-pin or registry publish-time evidence before a new `packageManager: "pnpm@..."` recommendation is treated as final.
+- Updated mirrored contracts to clarify age-gate setting ownership: `min-release-age=8` is npm's relative age guard, while `minimum-release-age=11520` and `minimumReleaseAge: 11520` are pnpm coverage where supported.
+- Updated the custom benchmark prompt, fixture publish-time data, hard assertions, and quality criteria for pnpm toolchain proof and age-gate key semantics.
+- Added focused layer1 coverage proving evidence-backed pnpm toolchain proof passes, unproven local/toolchain pnpm recommendations fail, and reversed age-gate semantics fail.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 bench-setups bench-quality`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill update-packages`; `./install.sh`; `./scripts/skill-deps.sh --broken`; `./scripts/skill-versions.sh --missing`; `./scripts/skill-next-step-routing.sh --missing`; Codex smoke benchmark `update-packages-codex-afdc4a08` (1/1 hard assertions, 98.8% quality); benchmark-results matrix tests; targeted `rg`; `git diff --check`.
+- Generated Skills Showcase data and benchmark results matrix were refreshed after tracked skill behavior changed. The validation script regenerated the intended assets and reported them stale pending commit.
+- **Recommended next command:** `$benchmark-test-skill update-packages`
 
 ## Current Task — Fresh Benchmark `benchmark-agent-review` After Owner Specificity Tolerance 2026-05-18
 

@@ -265,8 +265,9 @@ describe("benchmark setup registry", () => {
       "This package-update-plan.md records the update plan.",
       "The source project has package-lock.json and no pnpm-lock.yaml according to package-lock-note.md.",
       "Package-manager migration strategy: migrate to pnpm because no deployment notes require npm.",
-      "Age-gate config: create `.npmrc` with `min-release-age=8` and `minimum-release-age=11520`.",
-      "For modern pnpm project config, also use `minimumReleaseAge: 11520`.",
+      "Package-manager toolchain proof: set packageManager to pnpm@10.11.0 because npm view pnpm@10.11.0 time.version returned 2026-05-01T12:00:00.000Z, older than 8 days and age-eligible.",
+      "Age-gate config: create `.npmrc` with npm's relative age gate `min-release-age=8` and pnpm coverage `minimum-release-age=11520`.",
+      "For modern pnpm project config, also use pnpm `minimumReleaseAge: 11520`.",
       "Eligible versions older than 8 days: react 19.2.0, zod 3.25.76, vitest 3.2.4.",
       "Skipped packages: react 19.3.0, zod 4.1.12, and vitest 4.0.0 because they are inside the 8-day safety window.",
       "Major-upgrade risk handling: React 18 to 19 and Vitest 1 to 3 move in separate batches.",
@@ -303,6 +304,8 @@ describe("benchmark setup registry", () => {
     expect(codexAssertions.find((assertion) => assertion.description === "Output includes verification command evidence")).toMatchObject({ pass: true });
     expect(codexAssertions.find((assertion) => assertion.description === "Output includes major-upgrade compatibility risk handling")).toMatchObject({ pass: true });
     expect(codexAssertions.find((assertion) => assertion.description === "Output avoids unqualified pnpm@latest")).toMatchObject({ pass: true });
+    expect(codexAssertions.find((assertion) => assertion.description === "Output proves selected pnpm toolchain age eligibility")).toMatchObject({ pass: true });
+    expect(codexAssertions.find((assertion) => assertion.description === "Output preserves age-gate key semantics")).toMatchObject({ pass: true });
     expect(codexAssertions.find((assertion) => assertion.description === "Output recommends $run")).toMatchObject({ pass: true });
     expect(claudeAssertions.find((assertion) => assertion.description === "Output recommends /run")).toMatchObject({ pass: true });
 
@@ -312,6 +315,8 @@ describe("benchmark setup registry", () => {
     expect(quality?.criteria.find((criterion) => criterion.id === "workflow-output-includes-verification-command-evidence")).toMatchObject({ passed: true });
     expect(quality?.criteria.find((criterion) => criterion.id === "workflow-output-includes-major-upgrade-compatibility-risk-handling")).toMatchObject({ passed: true });
     expect(quality?.criteria.find((criterion) => criterion.id === "workflow-output-avoids-unqualified-pnpm-latest")).toMatchObject({ passed: true });
+    expect(quality?.criteria.find((criterion) => criterion.id === "workflow-output-proves-selected-pnpm-toolchain-age-eligibility")).toMatchObject({ passed: true });
+    expect(quality?.criteria.find((criterion) => criterion.id === "workflow-output-preserves-age-gate-key-semantics")).toMatchObject({ passed: true });
     expect(quality?.criteria.find((criterion) => criterion.id === "workflow-next-route")).toMatchObject({ passed: true });
     expect(quality?.criteria.find((criterion) => criterion.id === "no-generic-or-external-overreach")).toMatchObject({ passed: true });
     expect(quality?.criticalFailures).not.toContain("no-generic-or-external-overreach");
@@ -328,7 +333,9 @@ describe("benchmark setup registry", () => {
         "# Package Update Plan",
         "This package-update-plan.md records the update plan.",
         "Package-manager migration strategy: migrate to pnpm.",
-        "Age-gate config: create `.npmrc` with `min-release-age=8` and `minimum-release-age=11520`.",
+        "Package-manager toolchain proof: set packageManager to pnpm@10.11.0 because npm view pnpm@10.11.0 time.version returned 2026-05-01T12:00:00.000Z, older than 8 days.",
+        "Age-gate config: create `.npmrc` with npm's relative age gate `min-release-age=8` and pnpm coverage `minimum-release-age=11520`.",
+        "For modern pnpm project config, also use pnpm `minimumReleaseAge: 11520`.",
         "Eligible versions older than 8 days: react 19.2.0, zod 3.25.76, vitest 3.2.4.",
         "Skipped packages: react 19.3.0, zod 4.1.12, and vitest 4.0.0.",
         "Verification commands: pnpm install --frozen-lockfile, pnpm run build, pnpm run test.",
@@ -356,7 +363,9 @@ describe("benchmark setup registry", () => {
     const basePlan = [
       "# Package Update Plan",
       "This package-update-plan.md records the update plan.",
-      "Age-gate config: create `.npmrc` with `min-release-age=8` and `minimum-release-age=11520`.",
+      "Package-manager toolchain proof: set packageManager to pnpm@10.11.0 because npm view pnpm@10.11.0 time.version returned 2026-05-01T12:00:00.000Z, older than 8 days.",
+      "Age-gate config: create `.npmrc` with npm's relative age gate `min-release-age=8` and pnpm coverage `minimum-release-age=11520`.",
+      "For modern pnpm project config, also use pnpm `minimumReleaseAge: 11520`.",
       "Eligible versions older than 8 days: react 19.2.0, zod 3.25.76, vitest 3.2.4.",
       "Skipped packages: react 19.3.0, zod 4.1.12, and vitest 4.0.0.",
       "Major-upgrade risk handling: React 18 to 19 and Vitest 1 to 3 move in separate batches.",
@@ -410,6 +419,70 @@ describe("benchmark setup registry", () => {
     }
   });
 
+  it("scores update-packages pnpm toolchain proof and age-gate semantics", () => {
+    const setup = resolveBenchSetup("update-packages");
+    expect(setup).toBeDefined();
+
+    const basePlan = [
+      "# Package Update Plan",
+      "This package-update-plan.md records the update plan.",
+      "Eligible versions older than 8 days: react 19.2.0, zod 3.25.76, vitest 3.2.4.",
+      "Skipped packages: react 19.3.0, zod 4.1.12, and vitest 4.0.0.",
+      "Major-upgrade risk handling: React 18 to 19 and Vitest 1 to 3 move in separate batches.",
+      "Compatibility checks: verify React renderer/framework peer compatibility and Vitest/Vite/TypeScript config compatibility.",
+      "Focused smoke checks: run the primary React render smoke test and Vitest config smoke test.",
+      "Stop condition: if React compatibility requires broad source migration, route to $migrate react.",
+      "Verification commands: pnpm install --frozen-lockfile, pnpm run build, pnpm run test.",
+      "Recommended next command: $run",
+    ];
+
+    const evaluatePlan = (lines: string[]) => {
+      const workDir = mkdtempSync(resolve(tmpdir(), "update-packages-pnpm-proof-"));
+      writeFileSync(resolve(workDir, "package-update-plan.md"), lines.join("\n\n"));
+      const assertions = setup!.assertResult(
+        { stdout: "", stderr: "", exitCode: 0, workDir, files: ["package-update-plan.md"] },
+        { agent: "codex" },
+      );
+      const quality = setup!.qualityEvaluator?.evaluate(readFileSync(resolve(workDir, "package-update-plan.md"), "utf8"));
+
+      return { assertions, quality };
+    };
+
+    const passing = evaluatePlan([
+      ...basePlan.slice(0, 2),
+      "Package-manager toolchain proof: set packageManager to pnpm@10.11.0 because npm view pnpm@10.11.0 time.version returned 2026-05-01T12:00:00.000Z, older than 8 days and age-eligible.",
+      "Age-gate config: `.npmrc` keeps npm's relative guard `min-release-age=8`; pnpm coverage uses `minimum-release-age=11520`, and pnpm project config uses `minimumReleaseAge: 11520` when required.",
+      ...basePlan.slice(2),
+    ]);
+
+    expect(passing.assertions.find((assertion) => assertion.description === "Output proves selected pnpm toolchain age eligibility")).toMatchObject({ pass: true });
+    expect(passing.assertions.find((assertion) => assertion.description === "Output preserves age-gate key semantics")).toMatchObject({ pass: true });
+    expect(passing.quality?.criteria.find((criterion) => criterion.id === "workflow-output-proves-selected-pnpm-toolchain-age-eligibility")).toMatchObject({ passed: true });
+    expect(passing.quality?.criteria.find((criterion) => criterion.id === "workflow-output-preserves-age-gate-key-semantics")).toMatchObject({ passed: true });
+
+    const missingProof = evaluatePlan([
+      ...basePlan.slice(0, 2),
+      "Package-manager migration strategy: set packageManager to pnpm@10.22.0 from the existing local toolchain. Before real mutation, verify its publish timestamp with npm view pnpm@10.22.0 time.version.",
+      "Age-gate config: `.npmrc` keeps npm's relative guard `min-release-age=8`; pnpm coverage uses `minimum-release-age=11520`, and pnpm project config uses `minimumReleaseAge: 11520` when required.",
+      ...basePlan.slice(2),
+    ]);
+
+    expect(missingProof.assertions.find((assertion) => assertion.description === "Output proves selected pnpm toolchain age eligibility")).toMatchObject({ pass: false });
+    expect(missingProof.quality?.criteria.find((criterion) => criterion.id === "workflow-output-proves-selected-pnpm-toolchain-age-eligibility")).toMatchObject({ passed: false });
+    expect(missingProof.quality?.criticalFailures).toContain("workflow-output-proves-selected-pnpm-toolchain-age-eligibility");
+
+    const reversedSemantics = evaluatePlan([
+      ...basePlan.slice(0, 2),
+      "Package-manager toolchain proof: set packageManager to pnpm@10.11.0 because npm view pnpm@10.11.0 time.version returned 2026-05-01T12:00:00.000Z, older than 8 days and age-eligible.",
+      "Age-gate config: npm reads `minimum-release-age=11520`; pnpm reads `min-release-age=8`; write both values.",
+      ...basePlan.slice(2),
+    ]);
+
+    expect(reversedSemantics.assertions.find((assertion) => assertion.description === "Output preserves age-gate key semantics")).toMatchObject({ pass: false });
+    expect(reversedSemantics.quality?.criteria.find((criterion) => criterion.id === "workflow-output-preserves-age-gate-key-semantics")).toMatchObject({ passed: false });
+    expect(reversedSemantics.quality?.criticalFailures).toContain("workflow-output-preserves-age-gate-key-semantics");
+  });
+
   it("rejects update-packages plans without behavior-level verification command evidence", () => {
     const setup = resolveBenchSetup("update-packages");
     expect(setup).toBeDefined();
@@ -421,7 +494,9 @@ describe("benchmark setup registry", () => {
         "# Package Update Plan",
         "This package-update-plan.md records the update plan.",
         "Package-manager migration strategy: migrate to pnpm.",
-        "Age-gate config: create `.npmrc` with `min-release-age=8` and `minimum-release-age=11520`.",
+        "Package-manager toolchain proof: set packageManager to pnpm@10.11.0 because npm view pnpm@10.11.0 time.version returned 2026-05-01T12:00:00.000Z, older than 8 days.",
+        "Age-gate config: create `.npmrc` with npm's relative age gate `min-release-age=8` and pnpm coverage `minimum-release-age=11520`.",
+        "For modern pnpm project config, also use pnpm `minimumReleaseAge: 11520`.",
         "Eligible versions older than 8 days: react 19.2.0, zod 3.25.76, vitest 3.2.4.",
         "Skipped packages: react 19.3.0, zod 4.1.12, and vitest 4.0.0.",
         "Recommended next command: $run",
