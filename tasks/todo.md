@@ -5,6 +5,28 @@
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
+## Current Task — Triage `benchmark-agent-review` Codex Owner Table Label Failure 2026-05-18
+
+**Goal:** Investigate why the fresh `$benchmark-test-skill benchmark-agent-review` rerun produced Codex output-quality threshold and critical failures on owner-target and validation-specificity criteria.
+
+**Plan:**
+- [x] Inspect the fresh curated benchmark report and raw Codex report JSON.
+- [x] Inspect retained Codex generated outputs, benchmark quality criteria, and mirrored `benchmark-agent-review` contracts.
+- [x] Classify the failure as skill-contract gap, benchmark rubric/setup defect, generated-output noncompliance, infrastructure block, or one-off variance.
+- [x] Write `benchmark/triage-benchmark-agent-review-2026-05-18-codex-owner-table-labels.md` with verdict, root cause, recommended fix, validation plan, and next route.
+- [x] Validate the report fields, record results, then commit and push intended changes on `master`.
+
+## Review — Triage `benchmark-agent-review` Codex Owner Table Label Failure 2026-05-18
+
+- Verification verdict: verified as a benchmark quality-evaluator false negative, with a minor retained output-quality weakness in Codex run 2 for the non-critical `rubric` reference trait.
+- Evidence inspected: fresh curated benchmark report, raw Codex run JSON, retained Codex `pack-benchmark-output.md` artifacts, pack-local Codex and Claude `benchmark-agent-review` contracts, pack workflow setup, layer1 setup tests, prior owner-label triage, and relevant lessons.
+- Root cause: `hasBenchmarkAgentReviewOwnerLabel` accepts some Markdown owner-label forms but misses remediation table headers such as `Owner target / owner file` and `Exact owner target / files`.
+- The validation-specificity failures are derivative because that criterion requires the same owner-label helper even when concrete validation checks are present.
+- Responsible gap: `tests/layer4/setups/packs/pack-workflows.setup.ts` plus focused layer1 coverage in `tests/layer1/bench-setups.test.ts`.
+- Report written: `benchmark/triage-benchmark-agent-review-2026-05-18-codex-owner-table-labels.md`.
+- Validation passed: required report field scan and `git diff --check`.
+- **Recommended next skill:** `$targeted-skill-builder benchmark-agent-review benchmark owner-table-label tolerance`
+
 ## Current Task — Fresh Benchmark `benchmark-agent-review` 2026-05-18
 
 **Goal:** Run `$benchmark-test-skill benchmark-agent-review` against the current repository state and publish deterministic both-agent benchmark evidence.
@@ -147,6 +169,18 @@
 - Validation passed: `pnpm --dir tests exec vitest run --project layer1 bench-setups bench-quality`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill update-packages`; `./install.sh`; `./scripts/skill-deps.sh --broken`; `./scripts/skill-versions.sh --missing`; `./scripts/skill-next-step-routing.sh --missing`; Codex smoke benchmark `update-packages-codex-afdc4a08` (1/1 hard assertions, 98.8% quality); benchmark-results matrix tests; targeted `rg`; `git diff --check`.
 - Generated Skills Showcase data and benchmark results matrix were refreshed after tracked skill behavior changed. The validation script regenerated the intended assets and reported them stale pending commit.
 - **Recommended next command:** `$benchmark-test-skill update-packages`
+
+## Current Task — Fresh Benchmark `update-packages` After pnpm Proof 2026-05-18
+
+**Goal:** Run `$benchmark-test-skill update-packages` after the pnpm toolchain-proof and age-gate semantics update and publish fresh deterministic both-agent evidence.
+
+**Plan:**
+- [x] Confirm `$benchmark-test-skill` is the active workflow and `update-packages` is only the benchmark target argument.
+- [x] Run `pnpm bench --list-skills` and record `update-packages` coverage status.
+- [ ] Run `pnpm verify --skill update-packages`; stop before bench if verification fails.
+- [ ] Run `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` only after verify passes.
+- [ ] Write and validate `benchmark/test-update-packages-2026-05-18.md` with verify, benchmark, latency, cost, consistency, raw paths, failures, and recommended next route.
+- [ ] Refresh generated evidence if curated benchmark evidence changes, validate, record results, then commit and push intended changes on `master`.
 
 ## Current Task — Fresh Benchmark `benchmark-agent-review` After Owner Specificity Tolerance 2026-05-18
 
