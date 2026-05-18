@@ -45,7 +45,7 @@ This matrix tracks skills that already have persisted benchmark run data and gra
 | `ship-end` | Codex | `tests/benchmarks/runs/ship-end-codex-d7d92d34/report.json` | 3 | 100% | 100.0% | `benchmark/review-ship-end-2026-05-18.md` | graded | Curated report: `benchmark/test-ship-end-2026-05-18.md`. Subjective review median score available. |
 | `spec-interview` | Codex | `tests/benchmarks/runs/spec-interview-codex-40e3d74d/report.json` | 1 | 100% | 100.0% | none | graded | Curated report: `benchmark/test-spec-interview-2026-05-12.md`. One evaluated persisted run with deterministic quality scoring. |
 | `update-packages` | Claude | `tests/benchmarks/runs/update-packages-claude-3612131f/report.json` | 3 | 100% | 92.4% | `benchmark/review-update-packages-2026-05-18.md` | graded | Curated report: `benchmark/test-update-packages-2026-05-18.md`. Subjective review median score available. |
-| `update-packages` | Codex | `tests/benchmarks/runs/update-packages-codex-ddecf851/report.json` | 3 | 100% | 100.0% | `benchmark/review-update-packages-2026-05-18.md` | graded | Curated report: `benchmark/test-update-packages-2026-05-18.md`. Subjective review median score available. |
+| `update-packages` | Codex | `tests/benchmarks/runs/update-packages-codex-d942a073/report.json` | 3 | 100% | 100.0% | `benchmark/review-update-packages-2026-05-18.md` | graded | Curated report: `benchmark/test-update-packages-2026-05-18.md`. Subjective review median score available. |
 | `youtube-video-audit` | Codex | `tests/benchmarks/runs/youtube-video-audit-codex-288097bc/report.json` | 1 | 100% | not scored | none | partially graded | Hard assertion evidence exists; no quality score in the latest persisted evaluated report. |
 
 ## Incomplete Persisted Reports
