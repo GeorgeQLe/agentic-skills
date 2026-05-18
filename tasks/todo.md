@@ -4527,22 +4527,22 @@ Implement only this step, validate it, then run `/ship` when done.
 - [x] Run `pnpm verify --skill update-packages`; stop before benchmark if verification fails.
 - [x] If verify passes, run `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0`.
 - [x] Write and validate `benchmark/test-update-packages-2026-05-18.md` with verify, benchmark, latency, cost, consistency, raw paths, failures, and recommended next route.
-- [ ] Record results here, then commit and push intended changes on `master`.
+- [x] Record results here, then commit and push intended changes on `master`.
 
 ## Review — Benchmark `update-packages` 2026-05-18
 
 - Command resolution: `$benchmark-test-skill` was the active workflow; `update-packages` was treated only as the benchmark target argument.
 - Eligibility: `update-packages` is known with custom benchmark coverage via `tests/layer4/setups/tier23-global-workflows.setup.ts`.
-- Verify passed: layer1 PASS in 3.5s with 1,211 tests across 15 files; layer2 SKIP because no target-specific layer2 tests matched `update-packages`.
+- Verify passed: layer1 PASS in 3.5s with 1,212 tests across 15 files; layer2 SKIP because no target-specific layer2 tests matched `update-packages`.
 - Benchmark ran with `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0`.
-- Claude session `update-packages-claude-c663452c`: 1/2 evaluated hard assertion pass rate, 1 infrastructure block, 91.7% output-quality score, p50 latency 55.1s, total estimated cost $0.75.
-- Codex session `update-packages-codex-ebca44af`: 3/3 evaluated hard assertion pass rate, 0 infrastructure blocks, 100.0% output-quality score, p50 latency 75.0s, total estimated cost $0.75.
-- Failed assertions: Claude run #1 failed `Output avoids unqualified pnpm@latest`.
+- Claude session `update-packages-claude-bdc852e4`: 2/2 evaluated hard assertion pass rate, 1 infrastructure block, 94.0% output-quality score, p50 latency 57.3s, total estimated cost $0.75.
+- Codex session `update-packages-codex-443aab01`: 3/3 evaluated hard assertion pass rate, 0 infrastructure blocks, 99.6% output-quality score, p50 latency 73.2s, total estimated cost $0.75.
+- Failed assertions: none.
 - Report written at `benchmark/test-update-packages-2026-05-18.md`.
 - Generated Skills Showcase data and the benchmark results matrix were refreshed after the curated benchmark evidence changed.
 - Validation passed: report field scan; `pnpm --dir tests bench:coverage`; `pnpm --dir tests exec vitest run --project layer1 benchmark-results-matrix skills-showcase-benchmark-demo`; `git diff --check`.
 - Validation note: `scripts/validate-skills-showcase-data.sh` regenerated the intended benchmark/showcase asset changes and reported them as stale before commit; rerun after commit/push to confirm the committed assets are clean.
-- **Recommended next skill:** `$session-triage update-packages benchmark failure`
+- **Recommended next skill:** `$benchmark-agent-review update-packages`
 
 ## Current Task — Triage `update-packages` pnpm latest Parenthetical Negation Failure 2026-05-18
 
