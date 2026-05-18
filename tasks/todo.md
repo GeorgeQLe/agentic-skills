@@ -54,6 +54,30 @@
 - Generated Skills Showcase data was not refreshed because no tracked `SKILL.md`, `PACK.md`, curated benchmark report, or curated review report changed.
 - Recommended next command: `$benchmark-test-skill update-packages`
 
+## Interrupt Task — Benchmark `update-packages` After Batch-Label Tolerance 2026-05-18
+
+**Goal:** Run `$benchmark-test-skill update-packages` against the current repository state after the batch-label actionability tolerance update and publish deterministic both-agent benchmark evidence.
+
+**Plan:**
+- [x] Confirm `benchmark-test-skill` is the active workflow and `update-packages` is only the benchmark target.
+- [x] Run `pnpm bench --list-skills` from `tests/` and confirm `update-packages` is known, not blocked, and note its coverage status.
+- [x] Run `pnpm verify --skill update-packages`; stop without benchmarking if verify fails.
+- [x] Run `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` only after verify passes.
+- [x] Write and validate `benchmark/test-update-packages-2026-05-18.md`, refresh generated evidence, update this review section, then commit and push intended changes.
+
+## Review — Benchmark `update-packages` After Batch-Label Tolerance 2026-05-18
+
+- Command resolution: `$benchmark-test-skill` resolved to `packs/agentic-skills-bench/codex/benchmark-test-skill/SKILL.md`; `update-packages` is the target skill argument.
+- Eligibility: `update-packages` is listed with `coverage=custom` and setup `tests/layer4/setups/tier23-global-workflows.setup.ts`.
+- Verify gate: `pnpm --dir tests verify --skill update-packages` passed on 2026-05-18 with layer1 PASS in 14.9s and layer2 SKIP because no target-specific layer2 tests matched.
+- Benchmark: `pnpm --dir tests bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` completed on 2026-05-18 with Claude session `fee787f2` and Codex session `ddecf851`.
+- Results: Claude hard assertions passed 3/3 evaluated runs with no infrastructure-blocked runs, 93.9% output quality, and 1 quality critical failure; Codex hard assertions passed 3/3 evaluated runs with no blocked runs, 100.0% output quality, and no quality failures.
+- Report updated: `benchmark/test-update-packages-2026-05-18.md`.
+- Generated evidence refreshed: `docs/benchmark-results-matrix.md`, `docs/skills-showcase/assets/skills-data.js`, `docs/skills-showcase/assets/github-proof-data.js`, `apps/skills-showcase/public/assets/skills-data.js`, and `apps/skills-showcase/public/assets/github-proof-data.js`.
+- Validation passed: `pnpm --dir tests bench --list-skills`; `pnpm --dir tests verify --skill update-packages`; `pnpm --dir tests bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0`; `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests bench:coverage`; targeted `rg` confirmed report fields, raw session paths, latency, cost, and next route; `git diff --check`.
+- Related cleanup: pre-existing `ship-end` benchmark setup/report changes were validated separately and committed before this benchmark evidence so generated assets do not point at uncommitted raw evidence.
+- Recommended next skill: `$session-triage update-packages benchmark failure`
+
 ### Benchmark Ship Manifest
 
 - **User goal:** Execute `$run` for the next incomplete benchmark step: run the fresh both-agent `update-packages` benchmark after actionability threshold calibration, publish deterministic evidence, and prepare the next route.
