@@ -6,6 +6,41 @@
 **Total phases:** 42
 **Last completed phase:** Phase 42 — Workflow Persistent Transcript Refinement
 
+## Interrupt Task — Agent Review `ship-end` Single Active-Runner Outputs 2026-05-18
+
+**Goal:** Review the latest persisted `ship-end` benchmark outputs after the single active-runner handoff fix.
+
+**Plan:**
+- [x] Resolve latest Claude and Codex run directories from `benchmark/test-ship-end-2026-05-18.md`.
+- [x] Extract retained `session-handoff.md` artifacts from raw run JSON.
+- [x] Grade evaluated outputs against the agent-review rubric.
+- [x] Write `benchmark/review-ship-end-2026-05-18.md`, refresh generated evidence, validate, commit, and push intended changes.
+
+## Review — Agent Review `ship-end` Single Active-Runner Outputs 2026-05-18
+
+- Source report: `benchmark/test-ship-end-2026-05-18.md`.
+- Reviewed runs: Claude `tests/benchmarks/runs/ship-end-claude-9bf5f843/` and Codex `tests/benchmarks/runs/ship-end-codex-d7d92d34/`.
+- Deterministic context: both agents passed 3/3 hard assertions, had no infrastructure-blocked runs, and scored 100.0% deterministic output quality.
+- Subjective verdict: excellent overall. Median score 94, range 89-95.
+- Common strengths: fixture source-of-truth preserved, Step 1.1 and Step 1.2 carried forward, validation claims constrained to retained task evidence, no invented deploy/git/service facts, and single active-runner final routes.
+- Material weaknesses: none. Codex run 000 was terser than the other outputs but still correct, scoped, and actionable.
+- Report written: `benchmark/review-ship-end-2026-05-18.md`.
+- Validation passed: targeted raw artifact extraction; targeted `rg` report-field and route checks; generated-data refresh commands; generated-data validation; `git diff --check`.
+- Recommended next command: `$ship`
+
+### Ship-End Single Active-Runner Review Ship Manifest
+
+- **User goal:** Execute `$benchmark-agent-review ship-end`, reviewing the latest single active-runner benchmark outputs separately from deterministic pass/fail scoring.
+- **Changed files:** `benchmark/review-ship-end-2026-05-18.md`; generated Skills Showcase benchmark evidence files after data refresh; `tasks/todo.md`; `tasks/history.md`.
+- **Per-file purpose:** The review report records subjective scores, strengths, weaknesses, and no-remediation conclusion; generated assets expose the refreshed review evidence; task docs record completion, validation, manifest, and next route.
+- **User-goal mapping:** The prior dual-route review gap is now closed with human-quality review over retained artifacts that all use one active-runner route.
+- **Tests run:** Targeted raw artifact extraction confirmed six retained `session-handoff.md` outputs; targeted `rg` confirmed report paths, raw sessions, and route claims; generated data was refreshed and validated; `git diff --check` passed.
+- **Skipped tests:** No benchmark rerun was needed because the user asked to review the latest persisted outputs and the source benchmark already passed after the targeted fix. App tests/build were not run because only benchmark review/docs/generated data changed.
+- **Adversarial review:** Compared Claude and Codex retained artifacts against the rubric, checked that the previous dual-route issue is absent in all Codex outputs, and confirmed the only residual note is non-material terseness in one Codex handoff.
+- **Residual risk:** Scores are subjective and based on one local reviewer pass. Full artifact text was available, so no retained-evidence limitation remains.
+- **Rollback note:** Revert the review commit to remove the subjective report, generated evidence refresh, and task state update.
+- **Next command:** `$ship`
+
 ## Interrupt Task — Benchmark `update-packages` After Actionability Threshold 2026-05-18
 
 **Goal:** Run `$benchmark-test-skill update-packages` against the current repository state and publish deterministic both-agent benchmark evidence after the benchmark actionability threshold update.
@@ -603,3 +638,22 @@
 - Report: `benchmark/test-update-packages-2026-05-18.md`.
 - Latest ship: pending current `$run` commit and push to `master`.
 - Recommended next command: `$session-triage update-packages benchmark failure`.
+
+## Triage: update-packages Benchmark Failure
+
+**Goal:** Run `$session-triage update-packages benchmark failure` against the latest fresh deterministic report and raw sessions.
+
+### Execution
+- [x] Step T.1: Read the `session-triage` and `update-packages` skill contracts.
+- [x] Step T.2: Inspect `benchmark/test-update-packages-2026-05-18.md` and raw Claude/Codex benchmark reports.
+- [x] Step T.3: Compare Claude failures against the benchmark quality criteria and prior `update-packages` lessons/reviews.
+- [x] Step T.4: Write and validate a dated triage report.
+- [ ] Step T.5: Commit and push intended triage artifacts.
+
+### Review
+
+- Scope: latest `update-packages` benchmark sessions `update-packages-claude-3612131f` and `update-packages-codex-d942a073`.
+- Verification: issue verified as a benchmark quality-rubric calibration gap, not a mirrored `update-packages` skill-contract gap.
+- Evidence: hard assertions passed 3/3 for both agents; Claude quality failures came from generic `/migrate` routes and missing per-batch proof/actionability shape.
+- Report: `benchmark/triage-update-packages-2026-05-18-actionability-route.md`.
+- Recommended next command: `$targeted-skill-builder update-packages benchmark actionability threshold`.
