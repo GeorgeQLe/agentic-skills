@@ -5,6 +5,28 @@
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
+## Current Task — Triage `feature-interview` Prototype Gate Benchmark Failure 2026-05-18
+
+**Goal:** Investigate the fresh `$benchmark-test-skill feature-interview` quality failure and classify whether it is a skill-contract gap, benchmark harness defect, generated-output noncompliance, or infrastructure-only block.
+
+**Plan:**
+- [x] Inspect the curated benchmark report and raw Claude/Codex `report.json` files.
+- [x] Inspect retained Codex run artifacts for the failed `evidence-linked` and `prototype-first-product-gate` quality criteria.
+- [x] Compare mirrored `feature-interview` contracts with the benchmark setup and quality rubric.
+- [x] Write `benchmark/triage-feature-interview-2026-05-18-prototype-gate-quality.md` with verdict, root cause, responsible gap, recommended fix, validation plan, and next route.
+- [x] Validate the report fields, record results, then commit and push intended changes on `master`.
+
+## Review — Triage `feature-interview` Prototype Gate Benchmark Failure 2026-05-18
+
+- Verification verdict: verified as a benchmark quality-evaluator false negative with a separate fully blocked Claude lane, not a verified mirrored `feature-interview` contract failure.
+- Evidence inspected: curated benchmark report, raw Claude/Codex report JSON, retained Codex run artifacts, mirrored `feature-interview` contracts, tier1 benchmark setup, and relevant lessons.
+- Claude session `feature-interview-claude-02d30038` had 0 evaluated runs and 3 infrastructure blocks from agent runner budget exceeded.
+- Codex session `feature-interview-codex-ed08cfc2` had 3 evaluated hard-assertion passes, but quality failures on `evidence-linked` and `prototype-first-product-gate`.
+- Root cause: `tests/layer4/setups/tier1-workflows.setup.ts` still requires stale exact phrase `Benchmark reports` and the prototype gate regex misses valid retained wording such as "Evidence that would justify promoting a deferred item into a later phase".
+- Report written at `benchmark/triage-feature-interview-2026-05-18-prototype-gate-quality.md`.
+- Validation passed: required report field scan and `git diff --check` for the triage report and task notes.
+- **Recommended next skill:** `$targeted-skill-builder feature-interview benchmark prototype gate quality tolerance`
+
 ## Current Task — Benchmark `feature-interview` Prototype-First Gate 2026-05-18
 
 **Goal:** Run `$benchmark-test-skill feature-interview` after the prototype-first product workflow gate update and publish deterministic both-agent benchmark evidence.
