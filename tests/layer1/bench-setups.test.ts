@@ -389,6 +389,8 @@ describe("benchmark setup registry", () => {
       "Pin pnpm@9.15.4; do not use pnpm@latest because it floats past the age gate.",
       "Use pnpm@9.12.0 rather than pnpm@latest.",
       "Never default to pnpm@latest; choose an age-eligible pinned version.",
+      "We do **not** use unqualified `pnpm@latest` because pinning is required.",
+      "Choose pnpm@9.15.0, not `pnpm@latest`.",
     ]) {
       const result = assertPnpmLatest(line);
       expect(result.assertion).toMatchObject({ pass: true });
@@ -1916,6 +1918,51 @@ describe("benchmark setup registry", () => {
     });
     expect(strongQuality?.criteria.find((criterion) => criterion.id === "benchmark-agent-review-subjective-score-separation")).toMatchObject({
       passed: true,
+    });
+
+    const exactOwnerWithBenignUpdateLabel = setup!.qualityEvaluator?.evaluate([
+      baseOutput,
+      "Remediation table:",
+      "Owner target: packs/agentic-skills-bench/codex/benchmark-agent-review/SKILL.md and packs/agentic-skills-bench/claude/benchmark-agent-review/SKILL.md.",
+      "Proposed behavior change: require retained artifact placeholder risks to name a remediation owner and proof.",
+      "Validation check: add a focused layer1 assertion for placeholder residual-risk output and run $benchmark-test-skill benchmark-agent-review.",
+      "Preferred output: update existing skill.",
+      "Recommended next command: $targeted-skill-builder benchmark-agent-review residual-risk-awareness output-quality gap",
+    ].join("\n"));
+    expect(exactOwnerWithBenignUpdateLabel?.criteria.find((criterion) => criterion.id === "benchmark-agent-review-remediation-owner-target")).toMatchObject({
+      passed: true,
+    });
+    expect(exactOwnerWithBenignUpdateLabel?.criteria.find((criterion) => criterion.id === "benchmark-agent-review-validation-specificity")).toMatchObject({
+      passed: true,
+    });
+    expect(exactOwnerWithBenignUpdateLabel?.criticalFailures).not.toContain("benchmark-agent-review-validation-specificity");
+
+    const scopedOwnerWithLookup = setup!.qualityEvaluator?.evaluate([
+      baseOutput,
+      "Remediation table:",
+      "Owner target: benchmark-agent-review owner surface; lookup needed to confirm exact file before patching.",
+      "Proposed behavior change: require retained artifact placeholder risks to name a remediation owner and proof.",
+      "Validation check: add a focused layer1 assertion for placeholder residual-risk output.",
+      "Recommended next command: $targeted-skill-builder benchmark-agent-review residual-risk-awareness output-quality gap",
+    ].join("\n"));
+    expect(scopedOwnerWithLookup?.criteria.find((criterion) => criterion.id === "benchmark-agent-review-remediation-owner-target")).toMatchObject({
+      passed: true,
+    });
+
+    const broadOwnerQuality = setup!.qualityEvaluator?.evaluate([
+      "# Pack Benchmark Output",
+      "Pack: agentic-skills-bench",
+      "Skill: benchmark-agent-review",
+      "Evidence: pack-input.md and fixtures/local-evidence.md show ship-manifest.md has Residual Risks: Not captured.",
+      "Subjective score differs from deterministic quality.",
+      "Remediation table:",
+      "Owner target: benchmark-agent-review skill behavior.",
+      "Proposed behavior change: require retained artifact placeholder risks to name a remediation owner and proof.",
+      "Validation check: add a focused layer1 assertion for placeholder residual-risk output.",
+      "Recommended next command: $targeted-skill-builder benchmark-agent-review residual-risk-awareness output-quality gap",
+    ].join("\n"));
+    expect(broadOwnerQuality?.criteria.find((criterion) => criterion.id === "benchmark-agent-review-remediation-owner-target")).toMatchObject({
+      passed: false,
     });
 
     const broadQuality = setup!.qualityEvaluator?.evaluate([
