@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Benchmark: benchmark-agent-review Fresh Rerun 2026-05-18
+
+**Goal:** Run `$benchmark-test-skill benchmark-agent-review` against the current repository state and publish fresh deterministic both-agent evidence.
+
+**Acceptance Criteria:**
+- [x] `pnpm bench --list-skills` confirms `benchmark-agent-review` is known and reports custom coverage.
+- [x] `pnpm verify --skill benchmark-agent-review` passes or blocks benchmark execution with a recorded failure.
+- [x] `pnpm bench --skill benchmark-agent-review --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [x] `benchmark/test-benchmark-agent-review-2026-05-18.md` records fresh verify, benchmark, latency, cost, consistency, failed assertions, raw session evidence, and recommended next route.
+- [x] Results are recorded in `tasks/todo.md`, generated evidence is refreshed if needed, then intended changes are committed and pushed on `master`.
+
+**Result:** Fresh rerun completed on 2026-05-18. `benchmark-agent-review` is known with custom benchmark coverage via `tests/layer4/setups/packs/pack-workflows.setup.ts`, and verify passed with layer1 PASS in 3.5s plus layer2 SKIP because no target-specific layer2 tests matched. Claude session `benchmark-agent-review-claude-29400696` completed three evaluated runs with 3/3 hard assertion pass rate, 86.7% output quality, p50 latency 51.4s, and $0.75 total estimated cost. Codex session `benchmark-agent-review-codex-d0b564cf` completed three evaluated runs with 3/3 hard assertion pass rate, 82.2% output quality, p50 latency 48.1s, and $0.75 total estimated cost. No runs were infrastructure-blocked, and there were no failed hard assertions, but Codex reported 1 output-quality threshold failure and 1 critical failure for remediation specificity. Report: `benchmark/test-benchmark-agent-review-2026-05-18.md`. Validation passed: report field scan, benchmark coverage, benchmark-results matrix tests, showcase data freshness check, and `git diff --check`. Recommended next skill: `$session-triage benchmark-agent-review benchmark failure`.
+
 ## Current Targeted Update: update-packages Major-Upgrade Risk Handling 2026-05-17
 
 **Goal:** Tighten `update-packages` so major/framework/build-tool updates require explicit compatibility checks, batch boundaries, focused smoke tests, and migration stop routes.
@@ -93,6 +106,19 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 - [x] Results are recorded in `tasks/todo.md`, then intended changes are committed and pushed on `master`.
 
 **Result:** Triage verified the deterministic hard-assertion failure as a benchmark harness/setup false negative. The failed artifacts selected pinned pnpm versions such as `pnpm@9.12.0`, `pnpm@9.15.4`, and `pnpm@10.22.0`, while warning not to use unqualified `pnpm@latest`. The setup's negative-lookahead regex failed valid warning language unless a narrow allowed phrase appeared after `pnpm@latest`, and it failed Codex even when `existing local toolchain` appeared before the warning. Responsible gap: `tests/layer4/setups/tier23-global-workflows.setup.ts` and focused layer1 coverage. Report: `benchmark/triage-update-packages-2026-05-18-pnpm-latest.md`. Recommended next skill: `$targeted-skill-builder update-packages benchmark pnpm latest negation tolerance`.
+
+## Current Targeted Update: update-packages pnpm Latest Benchmark Tolerance 2026-05-18
+
+**Goal:** Fix the `update-packages` benchmark setup so negated `pnpm@latest` warnings pass while actual unqualified `pnpm@latest` recommendations still fail.
+
+**Acceptance Criteria:**
+- [x] The `update-packages` benchmark assertion accepts explicit warning/avoidance language around `pnpm@latest`.
+- [x] The setup still rejects actual unqualified `pnpm@latest` recommendations and package-manager commands.
+- [x] Focused layer1 coverage proves both accepted and rejected cases.
+- [x] Focused validation, benchmark coverage, verify, skill checks, Codex smoke benchmark, and whitespace checks pass.
+- [x] Results are recorded in `tasks/todo.md`, then intended changes are committed and pushed on `master`.
+
+**Result:** Updated on 2026-05-18. The `update-packages` benchmark assertion now tolerates explicit warning language such as `do not use unqualified pnpm@latest`, `rather than pnpm@latest`, and `never default to pnpm@latest`, while retaining failures for affirmative recommendations like `migrate to pnpm using pnpm@latest`, `corepack prepare pnpm@latest --activate`, and `packageManager: "pnpm@latest"`. Codex smoke benchmark `update-packages-codex-3a7b1c07` passed 1/1 with 97.1% quality. Recommended next command: `$benchmark-test-skill update-packages`.
 
 ## Current Agent Review: benchmark-agent-review Retained Artifact Evidence 2026-05-17
 

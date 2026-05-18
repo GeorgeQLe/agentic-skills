@@ -5,6 +5,33 @@
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
+## Current Task — Fresh Benchmark `benchmark-agent-review` 2026-05-18
+
+**Goal:** Run `$benchmark-test-skill benchmark-agent-review` against the current repository state and publish fresh deterministic both-agent benchmark evidence.
+
+**Plan:**
+- [x] Confirm `$benchmark-test-skill` is the active workflow and `benchmark-agent-review` is only the benchmark target argument.
+- [x] Run `pnpm bench --list-skills` and record `benchmark-agent-review` coverage status.
+- [x] Run `pnpm verify --skill benchmark-agent-review`; stop before bench if verification fails.
+- [x] Run `pnpm bench --skill benchmark-agent-review --agent both --runs 3 --chunk-size 3 --pause 0` only after verify passes.
+- [x] Write and validate `benchmark/test-benchmark-agent-review-2026-05-18.md` with verify, benchmark, latency, cost, consistency, raw paths, failures, and recommended next route.
+- [x] Refresh generated evidence if curated benchmark evidence changes, validate, record results, then commit and push intended changes on `master`.
+
+## Review — Fresh Benchmark `benchmark-agent-review` 2026-05-18
+
+- Command resolution: `$benchmark-test-skill` was the active workflow; `benchmark-agent-review` was treated only as the benchmark target argument.
+- Eligibility: `benchmark-agent-review` is known with custom coverage via `tests/layer4/setups/packs/pack-workflows.setup.ts`.
+- Verify passed: layer1 PASS in 3.5s with 1,210 tests across 15 files; layer2 SKIP because no target-specific layer2 tests matched `benchmark-agent-review`.
+- Benchmark ran with `pnpm bench --skill benchmark-agent-review --agent both --runs 3 --chunk-size 3 --pause 0`.
+- Claude session `benchmark-agent-review-claude-29400696`: 3/3 evaluated hard assertion pass rate, 0 infrastructure blocks, 86.7% output-quality score, p50 latency 51.4s, and $0.75 total estimated cost.
+- Codex session `benchmark-agent-review-codex-d0b564cf`: 3/3 evaluated hard assertion pass rate, 0 infrastructure blocks, 82.2% output-quality score, p50 latency 48.1s, and $0.75 total estimated cost.
+- Failed assertions: none.
+- Output-quality failures: Codex reported 1 threshold failure and 1 critical failure; lowest criteria were `benchmark-agent-review-remediation-owner-target` and `benchmark-agent-review-validation-specificity`.
+- Report written at `benchmark/test-benchmark-agent-review-2026-05-18.md`.
+- Generated Skills Showcase data and benchmark results matrix were refreshed after the curated benchmark report changed. The GitHub proof data generator also reflected a pre-existing uncommitted setup-file edit, so those proof-data files were left unstaged.
+- Validation passed: report field scan; `pnpm --dir tests bench:coverage`; `pnpm --dir tests exec vitest run --project layer1 benchmark-results-matrix skills-showcase-benchmark-demo`; `scripts/validate-skills-showcase-data.sh`; `git diff --check`.
+- **Recommended next skill:** `$session-triage benchmark-agent-review benchmark failure`
+
 ## Current Task — Targeted Update `update-packages` Major-Upgrade Risk Handling 2026-05-17
 
 **Goal:** Tighten `update-packages` so major/framework/build-tool updates require explicit compatibility checks, batch boundaries, focused smoke tests, and migration stop routes.
@@ -75,6 +102,28 @@
 - Report written to `benchmark/triage-update-packages-2026-05-18-pnpm-latest.md`.
 - Validation passed: required report field scan and `git diff --check`.
 - **Recommended next skill:** `$targeted-skill-builder update-packages benchmark pnpm latest negation tolerance`
+
+## Current Task — Targeted Update `update-packages` pnpm Latest Benchmark Tolerance 2026-05-18
+
+**Goal:** Fix the `update-packages` benchmark setup so negated `pnpm@latest` warnings pass while actual unqualified `pnpm@latest` recommendations still fail.
+
+**Plan:**
+- [x] Review relevant lessons, triage report, current benchmark setup, and existing layer1 coverage.
+- [x] Update the `update-packages` benchmark assertion to tolerate explicit warning/avoidance language.
+- [x] Add focused layer1 coverage for negated warning language and actual `pnpm@latest` recommendations.
+- [x] Run focused validation, benchmark coverage, verify, skill checks, and Codex smoke benchmark.
+- [x] Record results, commit, and push intended changes on `master`.
+
+## Review — Targeted Update `update-packages` pnpm Latest Benchmark Tolerance 2026-05-18
+
+- Decision: existing benchmark setup update, not a new skill and not an `update-packages` skill-contract change.
+- Evidence used: `benchmark/triage-update-packages-2026-05-18-pnpm-latest.md`, mirrored `update-packages` contracts, `tests/layer4/setups/tier23-global-workflows.setup.ts`, focused layer1 setup coverage, and `tasks/lessons.md`.
+- Existing-skill overlap: `update-packages` already owns package-manager selection policy; the defect was in benchmark evaluation semantics.
+- Updated the setup regex so explicit warning language such as `do not use unqualified pnpm@latest`, `rather than pnpm@latest`, and `never default to pnpm@latest` is accepted.
+- Focused layer1 coverage already proves those warning forms pass while `migrate to pnpm using pnpm@latest`, `corepack prepare pnpm@latest --activate`, and `packageManager: "pnpm@latest"` fail.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 bench-setups bench-quality`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill update-packages`; `./scripts/skill-deps.sh --broken`; `./scripts/skill-versions.sh --missing`; `./scripts/skill-next-step-routing.sh --missing`; `pnpm --dir tests bench --skill update-packages --agent codex --runs 1 --chunk-size 1 --pause 0` (`update-packages-codex-3a7b1c07`, 1/1 hard assertions, 97.1% quality); `git diff --check`.
+- Generated Skills Showcase data was not refreshed for this commit because no tracked `SKILL.md`, `PACK.md`, curated benchmark report, or curated review report changed.
+- **Recommended next command:** `$benchmark-test-skill update-packages`
 
 ## Current Task — Fresh Benchmark `benchmark-agent-review` Retained Artifact Evidence 2026-05-17
 
