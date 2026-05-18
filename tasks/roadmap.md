@@ -2,7 +2,7 @@
 
 > Generated from: tasks/roadmap.md (existing), specs/board-flag-kanban-search.md, tasks/ideas.md, tasks/history.md
 > Date: 2026-03-27 (last updated 2026-05-17)
-> Total Phases: 41 (39 complete, 2 planned)
+> Total Phases: 42 (40 complete, 2 planned)
 
 ## Summary
 
@@ -12,7 +12,7 @@ Phases 12-31 complete. Phase 14 added the LinkedIn evidence lane to the creator 
 
 Phases 32-36 complete. Phase 35 added repository-wide Codex benchmark coverage metadata, custom or explicitly blocked coverage for every current skill, and future skill creation/update workflows require benchmark coverage handling. Phase 36 added rubric-based output-quality evaluation on top of the contract/assertion benchmark checks.
 
-Phase 37 complete: preserved and migrated the static Skills Showcase into a minimal Next.js app at `apps/skills-showcase/` with 6 public routes, generated data pipeline, 54 regression tests, and updated deploy contract. Phase 38 complete: added Neon-backed first-party newsletter capture with tRPC contracts, TanStack Query mutation/admin state, admin export page, 74 regression tests, and privacy posture enforcement. Phase 39 complete: added benchmark results visibility and permission-gated safe Git integration fixtures for benchmarkable git-mutating skills. Phase 40 complete: added the `/workflows` hybrid replay pilot so benchmark evidence becomes primary step-by-step proof before the pattern is expanded to other showcase surfaces. Phase 41 builds out persisted benchmark result coverage for the remaining tracked skills in controlled batches.
+Phase 37 complete: preserved and migrated the static Skills Showcase into a minimal Next.js app at `apps/skills-showcase/` with 6 public routes, generated data pipeline, 54 regression tests, and updated deploy contract. Phase 38 complete: added Neon-backed first-party newsletter capture with tRPC contracts, TanStack Query mutation/admin state, admin export page, 74 regression tests, and privacy posture enforcement. Phase 39 complete: added benchmark results visibility and permission-gated safe Git integration fixtures for benchmarkable git-mutating skills. Phase 40 complete: added the `/workflows` hybrid replay pilot so benchmark evidence becomes primary step-by-step proof before the pattern is expanded to other showcase surfaces. Phase 41 builds out persisted benchmark result coverage for the remaining tracked skills in controlled batches. Phase 42 refines `/workflows` into a persistent ChatGPT/Claude-style transcript after the current benchmark coverage lane.
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
@@ -23,9 +23,11 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 **Acceptance Criteria:**
 - [x] `pnpm bench --list-skills` confirms `update-packages` is known and reports custom coverage via `tests/layer4/setups/tier23-global-workflows.setup.ts`.
 - [x] `pnpm verify --skill update-packages` passed with layer1 PASS in 3.6s and layer2 SKIP because no target-specific layer2 tests matched.
-- [ ] `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
-- [ ] `benchmark/test-update-packages-2026-05-18.md` records verify, benchmark, latency, cost, consistency, failures, raw session evidence, and recommended next route.
-- [ ] Results are recorded in `tasks/todo.md`, generated evidence is refreshed if needed, then intended changes are committed and pushed on `master`.
+- [x] `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` ran only after verify passed.
+- [x] `benchmark/test-update-packages-2026-05-18.md` records verify, benchmark, latency, cost, consistency, failures, raw session evidence, and recommended next route.
+- [x] Results are recorded in `tasks/todo.md`, generated evidence is refreshed, then intended changes are committed and pushed on `master`.
+
+**Result:** Fresh rerun completed on 2026-05-18 with evaluated passing Codex evidence and a fully infrastructure-blocked Claude lane. `update-packages` is known with custom benchmark coverage via `tests/layer4/setups/tier23-global-workflows.setup.ts`, and verify passed with layer1 PASS in 3.6s plus layer2 SKIP because no target-specific layer2 tests matched. Claude session `update-packages-claude-4d9966e8` had 0 evaluated runs and 3 agent-runner budget blocks, so that lane is inconclusive infrastructure blockage rather than a skill failure. Codex session `update-packages-codex-df005dbd` completed three evaluated runs with 3/3 hard assertion pass rate, no infrastructure blocks, 100.0% output quality, p50 latency 85.4s, and $0.75 total estimated cost. Report: `benchmark/test-update-packages-2026-05-18.md`. Generated Skills Showcase data and benchmark results matrix were refreshed. Recommended next skill: `$benchmark-agent-review update-packages`.
 
 ## Current Benchmark: feature-interview Fresh Rerun After Prototype Wording Tolerance 2026-05-18
 
@@ -1011,6 +1013,37 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 - [ ] Batch 41.4: Run git-fixture skills `commit-and-push-by-feature` and `sync` only after explicit permission for disposable GitHub fixture operations.
 - [ ] Batch 41.5: Run pack-local skills by pack family, starting with packs that feed public showcase/workflow proof.
 - [ ] Batch 41.6: Address blocked skills through their remediation routes, then benchmark only after safe fixtures exist.
+
+## Phase 42: Workflow Persistent Transcript Refinement
+
+**Goal:** Refine the `/workflows` hybrid replay pilot so each selected workflow behaves like one persistent ChatGPT/Claude-style terminal session instead of a card carousel.
+
+**Source:** `specs/workflow-persistent-transcript-feature-interview.md`, `specs/ui-skills-showcase-website.md`, Phase 40 implementation evidence, and the user-confirmed design decisions from 2026-05-18.
+
+**Scope:**
+- Keep `/workflows` as the pilot surface; do not expand the pattern to homepage, catalog, or inspect routes in this phase.
+- Render a selected workflow as a persistent transcript where each skill invocation is a new turn.
+- Keep step controls at the top and treat them as jump controls into existing transcript turns.
+- Reveal turns in the confirmed order: user command appears immediately, agent response fake-types in a ChatGPT/Claude style, then terminal/proof/artifact/receipt blocks reveal.
+- Keep completed turns fully expanded while auto-scrolling the active turn into view during playback.
+- Reset the transcript when changing workflows, but do not delete later turns when clicking an earlier step inside the current workflow.
+- Preserve benchmark receipts and curated no-receipt states as primary proof blocks inside transcript turns.
+- Preserve reduced-motion behavior by showing complete turn content without fake typing or animated scroll.
+
+**Acceptance Criteria:**
+- [ ] `/workflows` no longer remounts the active replay as a blinking step card when advancing through steps.
+- [ ] Playback reveals each new workflow turn with the confirmed ChatGPT/Claude-style cadence.
+- [ ] Completed turns stay fully expanded, and the active turn is followed by viewport scroll during playback.
+- [ ] Step controls jump to existing turns without destructive rewind or hiding later turns.
+- [ ] Workflow switching starts a fresh transcript session.
+- [ ] Benchmark receipt rendering remains available for benchmarked steps, and non-benchmarked steps show clear curated/no-receipt states.
+- [ ] Reduced-motion users receive complete content without fake typing or animated scroll.
+- [ ] Desktop and mobile visual checks confirm no horizontal overflow, clipped proof blocks, or overlapping transcript/controls.
+- [ ] Existing Skills Showcase tests, typecheck/build, generated-data validation when needed, and whitespace checks pass.
+
+**Parallelization:** serial
+
+**Coordination Notes:** The likely edits concentrate in `TuiWorkflow.tsx`, `workflow.css`, and the workflow player/typewriter helpers, with shared layout and timing behavior. Keep implementation serial to avoid conflicting state/rendering changes; use review-only validation after the build if needed.
 
 ## Current Benchmark: roadmap Fresh Rerun 2026-05-17
 

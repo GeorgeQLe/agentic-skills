@@ -5,6 +5,11 @@
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
+## Priority Task Queue
+
+- [ ] `$benchmark-agent-review update-packages` - review the fresh persisted benchmark outputs because `benchmark/test-update-packages-2026-05-18.md` now has evaluated Codex evidence and a fully infrastructure-blocked Claude lane.
+- [ ] `$plan-phase 42` - decompose the `/workflows` persistent transcript refinement after the current benchmark coverage lane because `specs/workflow-persistent-transcript-feature-interview.md` is confirmed and `tasks/roadmap.md` now contains Phase 42 without implementation steps.
+
 ## Current Task — Fresh Benchmark `update-packages` 2026-05-18
 
 **Goal:** Run `$benchmark-test-skill update-packages` against the current repository state and publish deterministic both-agent benchmark evidence.
@@ -13,18 +18,23 @@
 - [x] Confirm `$benchmark-test-skill` is the active workflow and `update-packages` is only the benchmark target argument.
 - [x] Run `pnpm bench --list-skills` and record `update-packages` coverage status. `coverage=custom`, setup `tests/layer4/setups/tier23-global-workflows.setup.ts`.
 - [x] Run `pnpm verify --skill update-packages`; layer1 PASS in 3.6s, layer2 SKIP because no target-specific layer2 tests matched.
-- [ ] Run `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` only after verify passes.
-- [ ] Write and validate `benchmark/test-update-packages-2026-05-18.md` with verify, benchmark, latency, cost, consistency, failures, raw paths, and recommended next route.
-- [ ] Refresh generated evidence if needed, record results, then commit and push intended changes on `master`.
+- [x] Run `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` only after verify passes.
+- [x] Write and validate `benchmark/test-update-packages-2026-05-18.md` with verify, benchmark, latency, cost, consistency, failures, raw paths, and recommended next route.
+- [x] Refresh generated evidence if needed, record results, then commit and push intended changes on `master`.
 
-## Review — Fresh Benchmark `update-packages` Handoff 2026-05-18
+## Review — Fresh Benchmark `update-packages` 2026-05-18
 
-- Shipping boundary: task-documentation handoff only. No source, skill, benchmark harness, generated asset, or deploy files changed.
-- Validation passed: `git diff --check`.
-- Skipped executable tests: no source/runtime behavior changed; the next executable step remains the benchmark command already listed above.
-- Deploy skipped: this handoff does not modify the Skills Showcase app or generated deploy assets.
-- **Next work:** run the fresh `update-packages` both-agent benchmark and publish its report.
-- **Recommended next command:** `$benchmark-test-skill update-packages`
+- Command resolution: `$benchmark-test-skill` was the active workflow; `update-packages` was treated only as the benchmark target argument.
+- Eligibility: `update-packages` is known with custom benchmark coverage via `tests/layer4/setups/tier23-global-workflows.setup.ts`.
+- Verify passed: layer1 PASS in 3.6s with 1,215 tests across 15 files; layer2 SKIP because no target-specific layer2 tests matched `update-packages`.
+- Benchmark ran with `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0`.
+- Claude session `update-packages-claude-4d9966e8`: 0 evaluated runs, 3 infrastructure blocks from agent runner budget, p50 latency 0.0s, and $0.75 total estimated cost.
+- Codex session `update-packages-codex-df005dbd`: 3/3 evaluated hard assertion pass rate, no infrastructure blocks, 100.0% output-quality score, p50 latency 85.4s, and $0.75 total estimated cost.
+- Report written at `benchmark/test-update-packages-2026-05-18.md`.
+- Generated Skills Showcase data and benchmark results matrix were refreshed after the curated benchmark report changed.
+- Validation passed: report field scan; `node scripts/generate-skills-showcase-data.mjs`; `node scripts/generate-skills-showcase-github-data.mjs`; `pnpm --dir tests exec vitest run --project layer1 benchmark-results-matrix skills-showcase-benchmark-demo`; `git diff --check`.
+- Validation note: `scripts/validate-skills-showcase-data.sh` regenerated the intended benchmark/showcase asset changes and reported them as stale before commit; rerun after commit/push to confirm the committed assets are clean.
+- **Recommended next skill:** `$benchmark-agent-review update-packages`
 
 ## Current Task — Targeted Update `update-packages` Per-Batch Actionability 2026-05-18
 
