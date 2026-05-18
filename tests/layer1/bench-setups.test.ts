@@ -404,6 +404,7 @@ describe("benchmark setup registry", () => {
       "pnpm@10.11.0 pinned with npm view evidence (not `pnpm@latest`).",
       "### pnpm version selection (no unqualified pnpm@latest)",
       "### pnpm version selection (no unqualified `pnpm@latest`)",
+      "Reject `pnpm@latest` — unqualified, unverifiable at lock time.",
     ]) {
       const result = assertPnpmLatest(line);
       expect(result.assertion).toMatchObject({ pass: true });
