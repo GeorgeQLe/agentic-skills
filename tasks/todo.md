@@ -7,8 +7,31 @@
 
 ## Priority Task Queue
 
-- [ ] `$benchmark-agent-review update-packages` - fresh benchmark evidence was regenerated after the previous review; review the new `a767ae3e` and `337a5d5e` sessions next.
+- [x] `$benchmark-agent-review update-packages` - reviewed the current `a767ae3e` and `337a5d5e` sessions; next route is `$targeted-skill-builder update-packages benchmark actionability threshold`.
 - [ ] `$plan-phase 42` - decompose the `/workflows` persistent transcript refinement after the current benchmark coverage lane because `specs/workflow-persistent-transcript-feature-interview.md` is confirmed and `tasks/roadmap.md` now contains Phase 42 without implementation steps.
+
+## Current Task — Benchmark Agent Review `update-packages` 2026-05-18
+
+**Goal:** Review the latest persisted `update-packages` benchmark outputs for subjective operator quality.
+
+**Plan:**
+- [x] Resolve latest Claude and Codex run directories from `benchmark/test-update-packages-2026-05-18.md`.
+- [x] Exclude infrastructure-blocked runs and inspect retained generated artifacts.
+- [x] Write `benchmark/review-update-packages-2026-05-18.md` with score table, findings, remediation, and next route.
+- [x] Refresh generated evidence, validate report fields and generated data, then commit and push intended changes on `master`.
+
+## Review — Benchmark Agent Review `update-packages` 2026-05-18
+
+- Source benchmark report: `benchmark/test-update-packages-2026-05-18.md`.
+- Reviewed run directories: `tests/benchmarks/runs/update-packages-claude-a767ae3e/` and `tests/benchmarks/runs/update-packages-codex-337a5d5e/`.
+- Claude had two evaluated `package-update-plan.md` artifacts and one infrastructure-blocked run from agent runner budget; the blocked run was excluded from subjective scoring.
+- Codex had three evaluated `package-update-plan.md` artifacts with deterministic 3/3 hard assertion pass rate and 100.0% output-quality score.
+- Subjective verdict: usable to excellent, median 90/100 with score range 76-96.
+- Main strength: all evaluated outputs preserve age-gate evidence, selected/skipped versions, pnpm migration safety, major-upgrade risk handling, and runner-native next routing.
+- Main weakness: Claude evaluated outputs lack explicit per-batch expected proof/artifact and target-specific migration routes; the deterministic quality summary still reports 95.2% despite `workflow-actionability` scoring 0.0%.
+- Report written at `benchmark/review-update-packages-2026-05-18.md`.
+- Post-push validation note: `scripts/validate-skills-showcase-data.sh` refreshed the GitHub proof `sourceFingerprint` after the first push; that generated metadata is included in the follow-up commit.
+- **Recommended next command:** `$targeted-skill-builder update-packages benchmark actionability threshold`
 
 ## Current Task — Fresh Benchmark `update-packages` 2026-05-18
 
