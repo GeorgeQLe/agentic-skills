@@ -460,6 +460,34 @@ describe("benchmark setup registry", () => {
     expect(passing.quality?.criteria.find((criterion) => criterion.id === "workflow-output-proves-selected-pnpm-toolchain-age-eligibility")).toMatchObject({ passed: true });
     expect(passing.quality?.criteria.find((criterion) => criterion.id === "workflow-output-preserves-age-gate-key-semantics")).toMatchObject({ passed: true });
 
+    const retainedClaudeShape = evaluatePlan([
+      ...basePlan.slice(0, 2),
+      "Chosen pnpm version: 10.11.0 (published 2026-05-01, 16 days old - age-eligible).",
+      "Retained publish-time evidence (from `npm view pnpm@10.11.0 time.version`): `2026-05-01T12:00:00.000Z`.",
+      "Migration steps: add `\"packageManager\": \"pnpm@10.11.0\"` to `package.json`.",
+      "Ownership: `min-release-age=8` - npm's relative age gate (days). `minimum-release-age=11520` (`.npmrc`) and `minimumReleaseAge: 11520` (`package.json#pnpm`) - pnpm coverage where supported.",
+      ...basePlan.slice(2),
+    ]);
+
+    expect(retainedClaudeShape.assertions.find((assertion) => assertion.description === "Output proves selected pnpm toolchain age eligibility")).toMatchObject({ pass: true });
+    expect(retainedClaudeShape.assertions.find((assertion) => assertion.description === "Output preserves age-gate key semantics")).toMatchObject({ pass: true });
+    expect(retainedClaudeShape.quality?.criteria.find((criterion) => criterion.id === "workflow-output-proves-selected-pnpm-toolchain-age-eligibility")).toMatchObject({ passed: true });
+    expect(retainedClaudeShape.quality?.criteria.find((criterion) => criterion.id === "workflow-output-preserves-age-gate-key-semantics")).toMatchObject({ passed: true });
+
+    const retainedCodexShape = evaluatePlan([
+      ...basePlan.slice(0, 2),
+      "Recommended `packageManager`: `pnpm@10.11.0`.",
+      "Retained publish-time evidence from `npm-view-times.json`: `pnpm@10.11.0` published `2026-05-01T12:00:00.000Z`, which is older than 8 days for this fixture.",
+      "Create or update project-root `.npmrc` with:\n\n```ini\nmin-release-age=8\nminimum-release-age=11520\n```",
+      "Ownership:\n\n- `min-release-age=8` is npm's relative age gate.\n- `minimum-release-age=11520` is pnpm coverage in `.npmrc` where supported.\n- `minimumReleaseAge: 11520` is pnpm project config coverage where supported, for example in `pnpm-workspace.yaml`.",
+      ...basePlan.slice(2),
+    ]);
+
+    expect(retainedCodexShape.assertions.find((assertion) => assertion.description === "Output proves selected pnpm toolchain age eligibility")).toMatchObject({ pass: true });
+    expect(retainedCodexShape.assertions.find((assertion) => assertion.description === "Output preserves age-gate key semantics")).toMatchObject({ pass: true });
+    expect(retainedCodexShape.quality?.criteria.find((criterion) => criterion.id === "workflow-output-proves-selected-pnpm-toolchain-age-eligibility")).toMatchObject({ passed: true });
+    expect(retainedCodexShape.quality?.criteria.find((criterion) => criterion.id === "workflow-output-preserves-age-gate-key-semantics")).toMatchObject({ passed: true });
+
     const missingProof = evaluatePlan([
       ...basePlan.slice(0, 2),
       "Package-manager migration strategy: set packageManager to pnpm@10.22.0 from the existing local toolchain. Before real mutation, verify its publish timestamp with npm view pnpm@10.22.0 time.version.",

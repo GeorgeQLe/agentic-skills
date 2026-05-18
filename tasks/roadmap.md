@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Update: update-packages Benchmark pnpm Proof and Age-Gate Semantics Tolerance 2026-05-18
+
+**Goal:** Fix the custom `update-packages` benchmark setup so valid retained Markdown shapes for pnpm package-manager proof and npm/pnpm age-gate ownership pass, while missing proof and reversed ownership still fail.
+
+**Acceptance Criteria:**
+- [x] Valid retained Claude/Codex artifact shapes for pnpm publish-time proof and `packageManager` recommendation pass benchmark assertions.
+- [x] Valid Markdown bullet/list/config forms for npm `min-release-age=8` and pnpm `minimum-release-age=11520` / `minimumReleaseAge: 11520` ownership pass benchmark assertions.
+- [x] Missing pnpm proof and reversed age-gate ownership examples still fail.
+- [x] Focused layer1 coverage, benchmark coverage, target verify, required skill audits, Codex smoke benchmark, targeted search, and whitespace validation pass.
+- [x] Results are recorded in `tasks/todo.md`, then intended changes are committed and pushed on `master`.
+
+**Result:** Updated on 2026-05-18. The custom `update-packages` benchmark setup now accepts valid retained Markdown shapes where pnpm publish-time proof and `packageManager` recommendation appear in either order, and accepts common bullet/list/config forms for npm `min-release-age=8` and pnpm `minimum-release-age=11520` / `minimumReleaseAge: 11520` ownership. Negative coverage still rejects missing pnpm proof and explicit reversed ownership. Focused layer1 coverage now includes the failed Claude and Codex retained shapes from the triage. Validation passed: focused layer1 setup/quality tests, benchmark coverage, target verify, install and skill scripts, targeted `rg`, `git diff --check`, and Codex smoke benchmark `update-packages-codex-30ca6459` with 1/1 hard assertions, 98.8% output quality, and no threshold or critical failures. Recommended next command: `$benchmark-test-skill update-packages`.
+
 ## Current Triage: update-packages Age-Gate Semantics Benchmark Failure 2026-05-18
 
 **Goal:** Investigate the fresh `$benchmark-test-skill update-packages` failure and classify whether the pnpm toolchain-proof and age-gate semantics failures are skill-contract gaps, benchmark harness defects, generated-output noncompliance, or infrastructure-only blocks.
