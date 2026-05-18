@@ -5,6 +5,77 @@
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
+## Current Task — Prototype Phase and Route Experiment Workflow Tightening 2026-05-18
+
+**Goal:** Tighten the prototype-first workflow so new product and substantial feature work uses a separate prototype/experiment phase and, when useful, multiple clickable experiments on separate routes before production infrastructure is promoted.
+
+**Plan:**
+- [x] Inspect current prototype-first skill wording and benchmark coverage for phase and route-experiment behavior.
+- [x] Update `tasks/lessons.md` with the correction that prototype-first gates need separate phases and multi-route experiments.
+- [x] Update mirrored roadmap, feature-interview, spec-interview, ui-interview, ux-variation, plan-phase, and run contracts.
+- [x] Update focused benchmark quality coverage to require separate prototype/experiment phase language and route-based experiments.
+- [x] Run focused layer1, benchmark coverage, target verifies, and whitespace validation.
+
+## Review — Prototype Phase and Route Experiment Workflow Tightening 2026-05-18
+
+- Roadmap now asks about prototype sequencing and experiment routes, and instructs new products/substantial features without an accepted clickable journey to start with a distinct prototype/experiment phase.
+- Plan-phase now stops before writing implementation steps when a phase mixes prototype exploration with production implementation, and re-scopes to a separate prototype/experiment phase.
+- Feature/spec/UI/UX planning now covers substantial new feature prototypes, multiple route-based experiments, experiment route maps, and calibration/consolidation criteria.
+- Run now re-plans premature infrastructure work around a separate prototype/experiment phase and prefers multiple small experiment routes when the direction is still uncertain.
+- Benchmark coverage now requires separate prototype/experiment phase evidence and route-based experiment evidence, not just fake data plus deferred infrastructure.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 bench-setups`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill roadmap`; `pnpm --dir tests verify --skill plan-phase`; `pnpm --dir tests verify --skill feature-interview`; `pnpm --dir tests verify --skill spec-interview`; `pnpm --dir tests verify --skill ui-interview`; `pnpm --dir tests verify --skill ux-variation`; `pnpm --dir tests verify --skill run`; `git diff --check`.
+- Note: pre-existing dirty changes for an unfinished `feature-interview` benchmark rerun record and unrelated tier23 benchmark evaluator edits were preserved and not included in this task's scope.
+- **Recommended next command:** `$benchmark-test-skill roadmap`
+
+## Current Task — Fresh Benchmark `feature-interview` After Prototype Gate Tolerance 2026-05-18
+
+**Goal:** Run `$benchmark-test-skill feature-interview` after the benchmark prototype-gate tolerance fix and publish deterministic both-agent benchmark evidence.
+
+**Plan:**
+- [x] Confirm `$benchmark-test-skill` is the active workflow and `feature-interview` is only the benchmark target argument.
+- [x] Run `pnpm bench --list-skills` and record `feature-interview` coverage status. `coverage=custom`, setup `tests/layer4/setups/tier1-workflows.setup.ts`.
+- [x] Run `pnpm verify --skill feature-interview`; layer1 PASS in 3.5s, layer2 SKIP because no target-specific layer2 tests matched.
+- [x] Run `pnpm bench --skill feature-interview --agent both --runs 3 --chunk-size 3 --pause 0` only after verify passes.
+- [x] Write and validate `benchmark/test-feature-interview-2026-05-18.md` with verify, benchmark, latency, cost, consistency, failures, raw paths, and recommended next route.
+- [x] Refresh generated evidence if needed, record results, then commit and push intended changes on `master`.
+
+## Review — Fresh Benchmark `feature-interview` After Prototype Gate Tolerance 2026-05-18
+
+- Command resolution: `$benchmark-test-skill` was the active workflow; `feature-interview` was treated only as the benchmark target argument.
+- Eligibility: `feature-interview` is known with custom benchmark coverage via `tests/layer4/setups/tier1-workflows.setup.ts`.
+- Verify passed: layer1 PASS in 3.5s with 1,212 tests across 15 files; layer2 SKIP because no target-specific layer2 tests matched `feature-interview`.
+- Benchmark ran with `pnpm bench --skill feature-interview --agent both --runs 3 --chunk-size 3 --pause 0`.
+- Claude session `feature-interview-claude-e499a20d`: 1/1 evaluated hard assertion pass rate, 2 infrastructure blocks from agent runner budget, 77.8% output quality, 1 threshold failure, 1 critical failure on `prototype-first-product-gate`, p50 latency 41.8s, and $0.75 total estimated cost.
+- Codex session `feature-interview-codex-e6208aac`: 3/3 evaluated hard assertion pass rate, no infrastructure blocks, 100.0% output quality, no threshold or critical failures, p50 latency 85.2s, and $0.75 total estimated cost.
+- Report written at `benchmark/test-feature-interview-2026-05-18.md`.
+- Generated Skills Showcase data and benchmark results matrix were refreshed after the curated benchmark report changed.
+- Validation passed: report field scan; `node scripts/generate-skills-showcase-data.mjs`; `node scripts/generate-skills-showcase-github-data.mjs`; `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests exec vitest run --project layer1 benchmark-results-matrix skills-showcase-benchmark-demo`; `git diff --check`.
+- **Recommended next skill:** `$session-triage feature-interview benchmark failure`
+
+## Current Task — Targeted Update `update-packages` Benchmark Artifact Reference and Actionability Tolerance 2026-05-18
+
+**Goal:** Tighten the `update-packages` benchmark quality rubric so retained valid `package-update-plan.md` artifact-reference and verification/actionability shapes receive deterministic quality credit while missing artifact/actionability evidence still fails.
+
+**Plan:**
+- [x] Review relevant lessons, the fresh `update-packages` benchmark-agent review, current Tier 2/3 benchmark setup, and focused layer1 coverage.
+- [x] Update `tests/layer4/setups/tier23-global-workflows.setup.ts` with scoped `update-packages` artifact-reference and actionability quality patterns.
+- [x] Add focused layer1 coverage for retained accepted shapes and retained negative cases.
+- [x] Run focused layer1 setup/quality tests, benchmark coverage, target verify, required skill audits, targeted search, install, and whitespace validation.
+- [x] Record results, commit, and push intended changes on `master`.
+
+## Review — Targeted Update `update-packages` Benchmark Artifact Reference and Actionability Tolerance 2026-05-18
+
+- Decision: existing benchmark setup update, not a new skill. The verified gap was a deterministic quality rubric under-credit in `tests/layer4/setups/tier23-global-workflows.setup.ts`, not an `update-packages` skill-contract defect.
+- Evidence used: `tasks/lessons.md`, `benchmark/review-update-packages-2026-05-18.md`, `tests/layer4/setups/tier23-global-workflows.setup.ts`, and `tests/layer1/bench-setups.test.ts`.
+- Evidence intentionally skipped: broad session history and new skill creation, because the review localized the issue to one benchmark quality tolerance.
+- Added optional per-workflow `artifactReferencePattern` and `actionabilityPatterns` quality overrides, then scoped them to `update-packages`.
+- The update-packages quality rubric now credits retained headings such as `# Package Update Plan` or `# package-update-plan.md`, explicit `package-update-plan.md` mentions, verification-command sections, focused smoke checks, stop conditions, and major-upgrade risk handling.
+- Negative coverage still rejects quality output that lacks both artifact naming and actionable validation/risk evidence.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 bench-setups bench-quality`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill update-packages`; `./scripts/skill-deps.sh --broken`; `./scripts/skill-versions.sh --missing`; `./scripts/skill-next-step-routing.sh --missing`; `./install.sh`; targeted `rg`; `git diff --check`.
+- Generated Skills Showcase data was not refreshed because no tracked `SKILL.md`, `PACK.md`, curated benchmark report, or curated review report changed.
+- Reload note: after `./install.sh`, start a fresh Claude Code or Codex CLI/session if changed skills are not visible; this update did not change installed skill contracts.
+- **Recommended next command:** `$benchmark-test-skill update-packages`
+
 ## Current Task — Targeted Update `feature-interview` Benchmark Prototype Gate Quality Tolerance 2026-05-18
 
 **Goal:** Fix the `feature-interview` benchmark quality evaluator so retained prototype-first outputs pass when they preserve the current fixture semantically and name valid promotion evidence, while shallow prototype deferrals still fail.

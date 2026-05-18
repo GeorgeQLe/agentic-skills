@@ -463,6 +463,82 @@ describe("benchmark setup registry", () => {
     expect(quality?.criticalFailures).not.toContain("workflow-output-avoids-unqualified-pnpm-latest");
   });
 
+  it("credits retained update-packages artifact-reference and actionability shapes", () => {
+    const setup = resolveBenchSetup("update-packages");
+    expect(setup).toBeDefined();
+
+    const evaluateQuality = (body: string) => {
+      const workDir = mkdtempSync(resolve(tmpdir(), "update-packages-artifact-quality-"));
+      writeFileSync(resolve(workDir, "package-update-plan.md"), body);
+      return setup!.qualityEvaluator?.evaluate(readFileSync(resolve(workDir, "package-update-plan.md"), "utf8"));
+    };
+
+    const retainedHeadingShape = evaluateQuality([
+      "# Package Update Plan",
+      "Today: 2026-05-18. Age gate: only versions older than 8 days are eligible.",
+      "Package-manager migration strategy: migrate to pnpm because no deployment notes require npm.",
+      "Set packageManager to pnpm@10.11.0 because npm view pnpm@10.11.0 time.version returned 2026-05-01T12:00:00.000Z.",
+      "Age-gate config: create `.npmrc` with npm's relative age gate `min-release-age=8` and pnpm coverage `minimum-release-age=11520`.",
+      "For modern pnpm project config, also use pnpm `minimumReleaseAge: 11520`.",
+      "Eligible versions older than 8 days: react 19.2.0, zod 3.25.76, vitest 3.2.4.",
+      "Skipped packages: react 19.3.0, zod 4.1.12, and vitest 4.0.0.",
+      "Major-upgrade risk handling: React 18 to 19 and Vitest 1 to 3 move in separate batches.",
+      "Compatibility checks: verify React renderer/framework peer compatibility and Vitest/Vite/TypeScript config compatibility.",
+      "Focused smoke checks: run the primary React render smoke test and Vitest config smoke test.",
+      "Stop condition: if React compatibility requires broad source migration, route to $migrate react.",
+      "## Verification commands",
+      "pnpm install --frozen-lockfile",
+      "pnpm run build",
+      "pnpm run test",
+      "Recommended next command: /run",
+    ].join("\n\n"));
+
+    expect(retainedHeadingShape?.criteria.find((criterion) => criterion.id === "workflow-artifact-reference")).toMatchObject({ passed: true });
+    expect(retainedHeadingShape?.criteria.find((criterion) => criterion.id === "workflow-actionability")).toMatchObject({ passed: true });
+
+    const retainedFilenameShape = evaluateQuality([
+      "# package-update-plan.md",
+      "Plan dependency updates using only versions published older than 8 days.",
+      "Package-manager migration strategy: migrate to pnpm and set packageManager to pnpm@10.11.0.",
+      "Retained publish-time evidence: npm view pnpm@10.11.0 time.version returned 2026-05-01T12:00:00.000Z.",
+      "Age-gate config: `.npmrc` keeps npm's relative guard `min-release-age=8`; pnpm coverage uses `minimum-release-age=11520`, and pnpm project config uses `minimumReleaseAge: 11520` when required.",
+      "Eligible versions older than 8 days: react 19.2.0, zod 3.25.76, vitest 3.2.4.",
+      "Skipped packages: react 19.3.0, zod 4.1.12, and vitest 4.0.0.",
+      "Major-upgrade risk handling: React 18 to 19 and Vitest 1 to 3 move in separate batches.",
+      "Compatibility checks: verify React renderer/framework peer compatibility and Vitest/Vite/TypeScript config compatibility.",
+      "Focused smoke checks: run the primary React render smoke test and Vitest config smoke test.",
+      "Stop condition: if React compatibility requires broad source migration, route to $migrate react.",
+      "Recommended next command: $run",
+    ].join("\n\n"));
+
+    expect(retainedFilenameShape?.criteria.find((criterion) => criterion.id === "workflow-artifact-reference")).toMatchObject({ passed: true });
+    expect(retainedFilenameShape?.criteria.find((criterion) => criterion.id === "workflow-actionability")).toMatchObject({ passed: true });
+  });
+
+  it("rejects update-packages quality without artifact naming or actionable validation evidence", () => {
+    const setup = resolveBenchSetup("update-packages");
+    expect(setup).toBeDefined();
+
+    const workDir = mkdtempSync(resolve(tmpdir(), "update-packages-missing-artifact-actionability-"));
+    writeFileSync(
+      resolve(workDir, "package-update-plan.md"),
+      [
+        "# Dependency Update Notes",
+        "Use pnpm and only versions older than 8 days.",
+        "Set packageManager to pnpm@10.11.0 because npm view pnpm@10.11.0 time.version returned 2026-05-01T12:00:00.000Z.",
+        "Age-gate config: `.npmrc` keeps npm's relative guard `min-release-age=8`; pnpm coverage uses `minimum-release-age=11520`, and pnpm project config uses `minimumReleaseAge: 11520` when required.",
+        "Eligible versions older than 8 days: react 19.2.0, zod 3.25.76, vitest 3.2.4.",
+        "Skipped packages: react 19.3.0, zod 4.1.12, and vitest 4.0.0.",
+        "Recommended next command: $run",
+      ].join("\n\n"),
+    );
+
+    const quality = setup!.qualityEvaluator?.evaluate(readFileSync(resolve(workDir, "package-update-plan.md"), "utf8"));
+
+    expect(quality?.criteria.find((criterion) => criterion.id === "workflow-artifact-reference")).toMatchObject({ passed: false });
+    expect(quality?.criteria.find((criterion) => criterion.id === "workflow-actionability")).toMatchObject({ passed: false });
+  });
+
   it("scores update-packages pnpm toolchain proof and age-gate semantics", () => {
     const setup = resolveBenchSetup("update-packages");
     expect(setup).toBeDefined();
@@ -1535,8 +1611,9 @@ describe("benchmark setup registry", () => {
     expect(prototypeGateCriterion?.evaluate([
       "## Prototype-First Gate",
       "",
-      "Decision: `clickable prototype`.",
+      "Decision: `multiple route experiments` in a separate Prototype Phase 0.",
       "The next build artifact should be a local/static dashboard prototype with fake or fixture-backed skill rows.",
+      "Experiment routes: `/experiments/table-first`, `/experiments/board-first`, and `/experiments/command-first`.",
       "Explicitly deferred until prototype acceptance: authentication, Stripe or billing, product analytics, durable database or storage, deployment, admin tooling, multi-tenancy, and production observability.",
       "Evidence that would justify promoting a deferred item into a later phase:",
       "- Auth: multiple user roles or private skill inventories are validated as necessary.",

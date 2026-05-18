@@ -106,6 +106,7 @@ When invoked with `--layout-mode` (or when the user says "layout mode", "layout 
 
 8. **Plan experimentation**
    - Recommend serial full buildout of all approved variants. Do not recommend building a subset first — the user's consistent preference is to build all variants before evaluating.
+   - For prototype-stage product or feature work, prefer numerous small route-based experiments over one merged prototype when multiple workflows, layouts, densities, copy approaches, navigation models, or interaction patterns remain plausible. Name the route for each experiment, such as `/experiments/table-first`, `/experiments/command-first`, or the project's equivalent, and keep shared production infrastructure out of those routes unless explicitly approved.
    - After variants are built, recommend `/uat --variant-evaluation` before `/ui-consolidate`. Consolidation is premature until evaluation evidence exists or the user explicitly says they reviewed the variants and is ready to converge.
    - Define comparison criteria before selecting a winner.
    - Include a lock-in checklist so the chosen direction becomes a decision record, not a vague preference.
@@ -120,7 +121,7 @@ When invoked with `--layout-mode` (or when the user says "layout mode", "layout 
 - Write the variation plan to `specs/ux-variations-[topic].md`.
 - Write the interview log to `ux-variations-[topic]-interview.md`.
 
-The variation plan must include source evidence, the confirmed assumptions manifest, fixed constraints, open decision dimensions, onboarding and activation model, typical workflow and repeat-use loop, sharing and collaboration model, permissions and handoffs, notification and return-use model, failure recovery behavior, evaluation criteria, selection method, variation matrix, detailed variation specifications, prototype or implementation plan, experiment plan, evidence capture, lock-in checklist, risks, non-goals, and follow-up work.
+The variation plan must include source evidence, the confirmed assumptions manifest, fixed constraints, open decision dimensions, onboarding and activation model, typical workflow and repeat-use loop, sharing and collaboration model, permissions and handoffs, notification and return-use model, failure recovery behavior, evaluation criteria, selection method, variation matrix, detailed variation specifications, prototype or implementation plan with separate experiment routes for prototype-stage alternatives, experiment plan, evidence capture, lock-in checklist, risks, non-goals, and follow-up work.
 
 Use this variation format:
 
@@ -140,6 +141,7 @@ Use this variation format:
 - Button and link behavior: [primary actions, secondary actions, destinations]
 - Visual tone: [hierarchy, typography, color, media, motion]
 - Prototype scope: [smallest useful build]
+- Experiment route: [`/experiments/<variant>` or project-native equivalent when prototype-stage]
 - Strengths:
 - Risks:
 - Complexity: Low | Medium | High

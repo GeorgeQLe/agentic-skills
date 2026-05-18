@@ -42,7 +42,7 @@ Use this skill when the user has a concept brief, research-backed opportunity, d
      - **Data model**: what persists, what's ephemeral, migration path from current state
      - **API and contract surface**: routes, events, SDKs, schemas, external integrations, or CLI contracts
      - **Operational requirements**: security, privacy, permissions, performance, observability, and failure handling
-     - **Prototype-first gate** for new user-facing product, SaaS, marketplace, dashboard, internal tool, or product-experience work: whether the first useful artifact is a clickable local/static prototype with fake, fixture, or in-memory data, and which infrastructure is intentionally deferred.
+     - **Prototype-first gate** for new user-facing product, SaaS, marketplace, dashboard, internal tool, product-experience work, or substantial new feature work: whether the first useful artifact is one clickable prototype or multiple route-based experiments with fake, fixture, or in-memory data, and which infrastructure is intentionally deferred.
    - Immediately follow the checkpoint with one focused interview question. Do not stop at the assumptions checkpoint unless the user explicitly asks to pause and review assumptions first.
    - If any `[inferred]` assumption is corrected, note the correction — these corrections are high-signal for downstream risk and must appear in the interview log.
 5. Interview the user in depth to validate assumptions, resolve ambiguities, and close gaps.
@@ -54,7 +54,9 @@ Use this skill when the user has a concept brief, research-backed opportunity, d
    - State a recommendation and why
    - Explain how to mitigate the recommended option's downside when useful
 9. Continue until implementation goals, architecture, data models, APIs/contracts, migrations, edge cases, security, performance, observability, test strategy, and scope boundaries are all covered.
-   - For new user-facing product work, establish a `Prototype Phase 0` before production architecture. Default to fixture/static/in-memory data and no auth, payments, analytics, persistent database, admin tooling, deployment, multi-tenancy, or production observability unless the user explicitly opts in or the core prototype cannot be tested without it.
+   - For new user-facing product or substantial feature work, establish a separate prototype/experiment stage before production architecture. Prefer `Prototype Phase 0` in the spec when the roadmap can support it, and do not combine prototype experiments, calibration, and production infrastructure in one implementation phase unless the user explicitly asks for a constrained spike.
+   - Default prototype work to fixture/static/in-memory data and no auth, payments, analytics, persistent database, admin tooling, deployment, multi-tenancy, or production observability unless the user explicitly opts in or the core prototype cannot be tested without it.
+   - When there are multiple plausible workflows, layouts, density choices, information architectures, or interaction models, specify numerous small experiments on separate routes such as `/experiments/<variant>` or project-native equivalents. Each route should name the hypothesis it tests and the evidence needed before consolidation.
    - Capture a taste-calibration checkpoint in the spec: what users can click, what felt right or wrong after trying it, which workflow assumption the prototype tests, and the smallest infrastructure decision that would be justified after one accepted journey.
 10. **Coverage checkpoint** — Before concluding, present a structured summary: list each area covered with key decisions made and the evidence/reasoning that supported each. Ask: "Does this cover everything? Any constraints, missing facts, or areas to revisit?"
 
@@ -72,7 +74,7 @@ Use this skill when the user has a concept brief, research-backed opportunity, d
   - `## Open Questions`
   - `## Assumptions & Risks` (the checkpoint output)
   Additional topic-specific sections (e.g. `## Data Model`, `## Security`) may appear between Detailed Design and Edge Cases. Do not number sections.
-  For new user-facing product work, include the prototype-first decision in `## Goals`, `## Non-Goals`, `## Detailed Design`, and `## Acceptance Criteria`: first clickable prototype scope, fake/fixture data boundary, deferred infrastructure list, and promotion criteria for any later database/auth/payment/analytics/deployment work.
+  For new user-facing product or substantial feature work, include the prototype-first decision in `## Goals`, `## Non-Goals`, `## Detailed Design`, and `## Acceptance Criteria`: separate prototype/experiment phase scope, experiment route map when multiple variants are useful, fake/fixture data boundary, deferred infrastructure list, calibration/consolidation criteria, and promotion criteria for any later database/auth/payment/analytics/deployment work.
 - Write an interview log to `[topic]-interview.md`
 
 The interview log should include:

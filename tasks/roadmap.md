@@ -16,6 +16,46 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Update: Prototype Phase and Route Experiment Workflow Tightening 2026-05-18
+
+**Goal:** Tighten prototype-first product and feature planning so the first milestone is a separate prototype/experiment phase, with multiple clickable route-based experiments when there is meaningful UX/workflow uncertainty, before any production infrastructure is promoted.
+
+**Acceptance Criteria:**
+- [x] Relevant prototype-first skill wording and benchmark coverage are reviewed.
+- [x] `tasks/lessons.md` captures the correction about separate prototype phases and multi-route experiments.
+- [x] Mirrored roadmap, feature-interview, spec-interview, ui-interview, ux-variation, plan-phase, and run contracts distinguish prototype exploration from production implementation.
+- [x] Benchmark fixture quality coverage requires separate prototype/experiment phase evidence and route-based experiment evidence.
+- [x] Focused layer1, benchmark coverage, target verifies, and whitespace validation pass.
+
+**Result:** Updated on 2026-05-18. Product and substantial feature workflows now prefer a separate prototype/experiment phase before production implementation, with multiple clickable experiment routes such as `/experiments/<variant>` when workflow, layout, density, copy, navigation, or interaction assumptions are uncertain. Durable database/storage, auth, payments, analytics, deployment, admin tooling, multi-tenancy, and production observability remain deferred until explicit approval or calibration evidence justifies promotion. Validation passed: focused layer1 bench setup tests, benchmark coverage, target verifies for roadmap/plan-phase/feature-interview/spec-interview/ui-interview/ux-variation/run, and `git diff --check`. Recommended next command: `$benchmark-test-skill roadmap`.
+
+## Current Benchmark: feature-interview Fresh Rerun After Prototype Gate Tolerance 2026-05-18
+
+**Goal:** Run `$benchmark-test-skill feature-interview` against the current repository state and publish deterministic both-agent benchmark evidence after the prototype-gate tolerance fix.
+
+**Acceptance Criteria:**
+- [x] `pnpm bench --list-skills` confirms `feature-interview` is known and reports custom coverage via `tests/layer4/setups/tier1-workflows.setup.ts`.
+- [x] `pnpm verify --skill feature-interview` passed with layer1 PASS in 3.5s and layer2 SKIP because no target-specific layer2 tests matched.
+- [x] `pnpm bench --skill feature-interview --agent both --runs 3 --chunk-size 3 --pause 0` ran only after verify passed.
+- [x] `benchmark/test-feature-interview-2026-05-18.md` records verify, benchmark, latency, cost, consistency, failures, raw session evidence, and recommended next route.
+- [x] Results are recorded in `tasks/todo.md`, generated evidence is refreshed if needed, then intended changes are committed and pushed on `master`.
+
+**Result:** Fresh rerun completed on 2026-05-18 with mixed deterministic evidence. `feature-interview` is known with custom benchmark coverage via `tests/layer4/setups/tier1-workflows.setup.ts`, and verify passed with layer1 PASS in 3.5s plus layer2 SKIP because no target-specific layer2 tests matched. Claude session `feature-interview-claude-e499a20d` completed one evaluated run with 1/1 hard assertion pass rate, two agent-runner budget blocks, 77.8% output quality, one threshold failure, one critical failure on `prototype-first-product-gate`, p50 latency 41.8s, and $0.75 total estimated cost. Codex session `feature-interview-codex-e6208aac` completed three evaluated runs with 3/3 hard assertion pass rate, no infrastructure blocks, 100.0% output quality, p50 latency 85.2s, and $0.75 total estimated cost. Report: `benchmark/test-feature-interview-2026-05-18.md`. Generated Skills Showcase data and benchmark results matrix were refreshed. Recommended next skill: `$session-triage feature-interview benchmark failure`.
+
+## Current Targeted Update: update-packages Benchmark Artifact Reference and Actionability Tolerance 2026-05-18
+
+**Goal:** Tighten the `update-packages` benchmark quality rubric so retained valid `package-update-plan.md` artifact-reference and verification/actionability shapes receive deterministic quality credit while missing artifact/actionability evidence still fails.
+
+**Acceptance Criteria:**
+- [x] Relevant lessons, the fresh benchmark-agent review, current update-packages benchmark setup, and focused layer1 coverage are reviewed.
+- [x] `tests/layer4/setups/tier23-global-workflows.setup.ts` supports scoped artifact-reference and actionability quality patterns for `update-packages`.
+- [x] Focused layer1 coverage accepts retained `# Package Update Plan`, `# package-update-plan.md`, verification-command, focused-smoke, stop-condition, and major-upgrade-risk shapes.
+- [x] Focused layer1 coverage rejects output with neither artifact naming nor actionable validation/risk evidence.
+- [x] Focused validation, benchmark coverage, target verify, required skill audits, targeted search, install, and whitespace checks pass.
+- [x] Results are recorded in `tasks/todo.md`, then intended changes are committed and pushed on `master`.
+
+**Result:** Updated on 2026-05-18. `tests/layer4/setups/tier23-global-workflows.setup.ts` now supports optional per-workflow `artifactReferencePattern` and `actionabilityPatterns` quality overrides, scoped to `update-packages` so the generic rubric is not weakened. The update-packages quality rubric credits retained headings such as `# Package Update Plan` or `# package-update-plan.md`, explicit `package-update-plan.md` mentions, verification-command sections, focused smoke checks, stop conditions, and major-upgrade risk handling. Focused layer1 coverage proves the accepted retained shapes and keeps missing artifact/actionability evidence failing. Validation passed: focused layer1 setup/quality tests, benchmark coverage, target verify, install and skill scripts, targeted `rg`, and `git diff --check`. Generated Skills Showcase data was not refreshed because no tracked skill metadata/behavior or curated benchmark/review report changed. Recommended next command: `$benchmark-test-skill update-packages`.
+
 ## Current Targeted Update: update-packages Benchmark pnpm latest Parenthetical Negation Tolerance 2026-05-18
 
 **Goal:** Fix the custom `update-packages` benchmark setup so valid parenthetical, backticked, and heading warnings about not using unqualified `pnpm@latest` pass while actual `pnpm@latest` recommendations still fail.
