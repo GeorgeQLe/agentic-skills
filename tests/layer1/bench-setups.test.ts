@@ -548,6 +548,26 @@ describe("benchmark setup registry", () => {
     expect(retainedFilenameShape?.criteria.find((criterion) => criterion.id === "workflow-artifact-reference")).toMatchObject({ passed: true });
     expect(retainedFilenameShape?.criteria.find((criterion) => criterion.id === "workflow-actionability")).toMatchObject({ passed: true });
     expect(retainedFilenameShape?.criteria.find((criterion) => criterion.id === "workflow-targeted-migration-routes")).toMatchObject({ passed: true });
+
+    const retainedLetteredBatchShape = evaluateQuality([
+      "# Package Update Plan",
+      "This package-update-plan.md records the update plan.",
+      "Package-manager migration strategy: migrate to pnpm and set packageManager to pnpm@10.11.0.",
+      "Retained publish-time evidence: npm view pnpm@10.11.0 time.version returned 2026-05-01T12:00:00.000Z, older than 8 days.",
+      "Age-gate config: `.npmrc` keeps npm's relative guard `min-release-age=8`; pnpm coverage uses `minimum-release-age=11520`, and pnpm project config uses `minimumReleaseAge: 11520` when required.",
+      "Eligible versions older than 8 days: react 19.2.0, zod 3.25.76, vitest 3.2.4.",
+      "Skipped packages: react 19.3.0, zod 4.1.12, and vitest 4.0.0.",
+      "Major-upgrade risk handling: React 18 to 19 and Vitest 1 to 3 move in separate batches.",
+      "Batch A package-manager migration: implementation command `pnpm install`; verification command `test -f pnpm-lock.yaml`; expected proof `packageManager` and `pnpm-lock.yaml`; do not proceed on red.",
+      "Batch B low-risk zod update: mutation command `pnpm add zod@3.25.76`; verification command `pnpm test`; expected proof selected package version; stop condition routes broad compatibility work to $migrate zod.",
+      "Batch C React 18 to 19: mutation command `pnpm add react@19.2.0`; verification command `pnpm build`; expected proof focused smoke-test output; stop condition routes broad compatibility work to $migrate react.",
+      "Compatibility checks: verify React renderer/framework peer compatibility and Vitest/Vite/TypeScript config compatibility.",
+      "Focused smoke checks: run the primary React render smoke test and Vitest config smoke test.",
+      "Recommended next command: $run",
+    ].join("\n\n"));
+
+    expect(retainedLetteredBatchShape?.criteria.find((criterion) => criterion.id === "workflow-actionability")).toMatchObject({ passed: true });
+    expect(retainedLetteredBatchShape?.criteria.find((criterion) => criterion.id === "workflow-targeted-migration-routes")).toMatchObject({ passed: true });
   });
 
   it("rejects update-packages quality without artifact naming or actionable validation evidence", () => {
