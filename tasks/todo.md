@@ -4902,5 +4902,7 @@ Implement only this step, validate it, then run `/ship` when done.
 - Median subjective score: 94/100; range: 93-95.
 - No material evaluated-output remediation remains. The only limitation is missing Claude comparison evidence due to runner budget infrastructure blockage.
 - Report written: `benchmark/review-feature-interview-2026-05-18.md`.
+- Validation passed: report field scan; `pnpm --dir tests bench:coverage`; `pnpm --dir tests exec vitest run --project layer1 benchmark-results-matrix skills-showcase-benchmark-demo`; `git diff --check`.
+- Validation note: `scripts/validate-skills-showcase-data.sh` regenerated current GitHub proof timestamps and reported generated data as stale before commit; the regenerated proof assets are included with this review.
 - **Next work:** none
 - **Recommended next command:** `$ship`
