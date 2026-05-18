@@ -353,36 +353,59 @@ describe("benchmark setup registry", () => {
     const setup = resolveBenchSetup("update-packages");
     expect(setup).toBeDefined();
 
-    const workDir = mkdtempSync(resolve(tmpdir(), "update-packages-pnpm-latest-"));
-    writeFileSync(
-      resolve(workDir, "package-update-plan.md"),
-      [
-        "# Package Update Plan",
-        "This package-update-plan.md records the update plan.",
-        "Package-manager migration strategy: migrate to pnpm using pnpm@latest.",
-        "Age-gate config: create `.npmrc` with `min-release-age=8` and `minimum-release-age=11520`.",
-        "Eligible versions older than 8 days: react 19.2.0, zod 3.25.76, vitest 3.2.4.",
-        "Skipped packages: react 19.3.0, zod 4.1.12, and vitest 4.0.0.",
-        "Major-upgrade risk handling: React 18 to 19 and Vitest 1 to 3 move in separate batches.",
-        "Compatibility checks: verify React renderer/framework peer compatibility and Vitest/Vite/TypeScript config compatibility.",
-        "Focused smoke checks: run the primary React render smoke test and Vitest config smoke test.",
-        "Stop condition: if React compatibility requires broad source migration, route to $migrate react.",
-        "Verification commands: pnpm install --frozen-lockfile, pnpm run build, pnpm run test.",
-        "Recommended next command: $run",
-      ].join("\n\n"),
-    );
+    const basePlan = [
+      "# Package Update Plan",
+      "This package-update-plan.md records the update plan.",
+      "Age-gate config: create `.npmrc` with `min-release-age=8` and `minimum-release-age=11520`.",
+      "Eligible versions older than 8 days: react 19.2.0, zod 3.25.76, vitest 3.2.4.",
+      "Skipped packages: react 19.3.0, zod 4.1.12, and vitest 4.0.0.",
+      "Major-upgrade risk handling: React 18 to 19 and Vitest 1 to 3 move in separate batches.",
+      "Compatibility checks: verify React renderer/framework peer compatibility and Vitest/Vite/TypeScript config compatibility.",
+      "Focused smoke checks: run the primary React render smoke test and Vitest config smoke test.",
+      "Stop condition: if React compatibility requires broad source migration, route to $migrate react.",
+      "Verification commands: pnpm install --frozen-lockfile, pnpm run build, pnpm run test.",
+      "Recommended next command: $run",
+    ];
 
-    const assertions = setup!.assertResult(
-      { stdout: "", stderr: "", exitCode: 0, workDir, files: ["package-update-plan.md"] },
-      { agent: "codex" },
-    );
+    const assertPnpmLatest = (line: string) => {
+      const workDir = mkdtempSync(resolve(tmpdir(), "update-packages-pnpm-latest-"));
+      writeFileSync(resolve(workDir, "package-update-plan.md"), [basePlan[0], line, ...basePlan.slice(1)].join("\n\n"));
 
-    expect(assertions.find((assertion) => assertion.description === "Output avoids unqualified pnpm@latest")).toMatchObject({ pass: false });
+      const assertions = setup!.assertResult(
+        { stdout: "", stderr: "", exitCode: 0, workDir, files: ["package-update-plan.md"] },
+        { agent: "codex" },
+      );
+      const quality = setup!.qualityEvaluator?.evaluate(readFileSync(resolve(workDir, "package-update-plan.md"), "utf8"));
 
-    const quality = setup!.qualityEvaluator?.evaluate(readFileSync(resolve(workDir, "package-update-plan.md"), "utf8"));
+      return {
+        assertion: assertions.find((assertion) => assertion.description === "Output avoids unqualified pnpm@latest"),
+        criterion: quality?.criteria.find((criterion) => criterion.id === "workflow-output-avoids-unqualified-pnpm-latest"),
+        criticalFailures: quality?.criticalFailures ?? [],
+      };
+    };
 
-    expect(quality?.criteria.find((criterion) => criterion.id === "workflow-output-avoids-unqualified-pnpm-latest")).toMatchObject({ passed: false });
-    expect(quality?.criticalFailures).toContain("workflow-output-avoids-unqualified-pnpm-latest");
+    for (const line of [
+      "Use pnpm@10.22.0 from the existing local toolchain; do not use unqualified pnpm@latest.",
+      "Pin pnpm@9.15.4; do not use pnpm@latest because it floats past the age gate.",
+      "Use pnpm@9.12.0 rather than pnpm@latest.",
+      "Never default to pnpm@latest; choose an age-eligible pinned version.",
+    ]) {
+      const result = assertPnpmLatest(line);
+      expect(result.assertion).toMatchObject({ pass: true });
+      expect(result.criterion).toMatchObject({ passed: true });
+      expect(result.criticalFailures).not.toContain("workflow-output-avoids-unqualified-pnpm-latest");
+    }
+
+    for (const line of [
+      "Package-manager migration strategy: migrate to pnpm using pnpm@latest.",
+      "corepack prepare pnpm@latest --activate",
+      'Add packageManager: "pnpm@latest" to package.json.',
+    ]) {
+      const result = assertPnpmLatest(line);
+      expect(result.assertion).toMatchObject({ pass: false });
+      expect(result.criterion).toMatchObject({ passed: false });
+      expect(result.criticalFailures).toContain("workflow-output-avoids-unqualified-pnpm-latest");
+    }
   });
 
   it("rejects update-packages plans without behavior-level verification command evidence", () => {
@@ -1793,6 +1816,7 @@ describe("benchmark setup registry", () => {
     });
     expect(setup?.prompt).toContain("remediation-ready handoff for the residual-risk-awareness output-quality gap");
     expect(setup?.prompt).toContain("inspect retained artifact text in ship-manifest.md directly before grading the output");
+    expect(setup?.prompt).toContain("name the owner target, proposed behavior change, and validation check for every material remediation finding");
     expect(setup?.prompt).toContain("claude: /targeted-skill-builder benchmark-agent-review residual-risk-awareness output-quality gap");
     expect(setup?.prompt).toContain("codex: $targeted-skill-builder benchmark-agent-review residual-risk-awareness output-quality gap");
 
@@ -1814,6 +1838,10 @@ describe("benchmark setup registry", () => {
       "Evidence: fixtures/local-evidence.md says the fixture is local and deterministic.",
       "Evidence from ship-manifest.md: the Residual Risks section says Not captured, Post-Ship Monitoring says Not specified, and Known Unknowns says future artifact-text inspection is not documented.",
       "Risk: ship-manifest.md is compliant but lacks residual-risk awareness, so remediation should target that output-quality gap.",
+      "Subjective score: 78/100, separate from deterministic quality score 78.6%.",
+      "Owner target: packs/agentic-skills-bench/codex/benchmark-agent-review/SKILL.md and the Claude mirror SKILL.md.",
+      "Proposed behavior change: require placeholder risk and monitoring text to become owner-specific remediation.",
+      "Validation check: add a layer1 assertion for placeholder residual-risk review output and run $benchmark-test-skill benchmark-agent-review.",
       "",
     ].join("\n");
 
@@ -1866,6 +1894,47 @@ describe("benchmark setup registry", () => {
     expect(summaryOnlyAssertions.find((assertion) => assertion.description === "Output cites retained ship-manifest.md evidence")).toMatchObject({
       pass: false,
     });
+    expect(
+      summaryOnlyAssertions.find((assertion) => assertion.description === "Output includes remediation owner target and validation check"),
+    ).toMatchObject({
+      pass: false,
+    });
+
+    const strongQuality = setup!.qualityEvaluator?.evaluate([
+      baseOutput,
+      "Remediation table:",
+      "Owner target: packs/agentic-skills-bench/codex/benchmark-agent-review/SKILL.md and packs/agentic-skills-bench/claude/benchmark-agent-review/SKILL.md.",
+      "Proposed behavior change: require retained artifact placeholder risks to name a remediation owner and proof.",
+      "Validation check: add a focused layer1 assertion for placeholder residual-risk output and run $benchmark-test-skill benchmark-agent-review.",
+      "Recommended next command: $targeted-skill-builder benchmark-agent-review residual-risk-awareness output-quality gap",
+    ].join("\n"));
+    expect(strongQuality?.criteria.find((criterion) => criterion.id === "benchmark-agent-review-remediation-owner-target")).toMatchObject({
+      passed: true,
+    });
+    expect(strongQuality?.criteria.find((criterion) => criterion.id === "benchmark-agent-review-validation-specificity")).toMatchObject({
+      passed: true,
+    });
+    expect(strongQuality?.criteria.find((criterion) => criterion.id === "benchmark-agent-review-subjective-score-separation")).toMatchObject({
+      passed: true,
+    });
+
+    const broadQuality = setup!.qualityEvaluator?.evaluate([
+      "# Pack Benchmark Output",
+      "Pack: agentic-skills-bench",
+      "Skill: benchmark-agent-review",
+      "Evidence: pack-input.md and fixtures/local-evidence.md show ship-manifest.md has Residual Risks: Not captured.",
+      "Subjective score differs from deterministic quality.",
+      "Risk: update the skill and tighten the rubric.",
+      "Validation: rerun the fixture.",
+      "Recommended next command: $targeted-skill-builder benchmark-agent-review residual-risk-awareness output-quality gap",
+    ].join("\n"));
+    expect(broadQuality?.criteria.find((criterion) => criterion.id === "benchmark-agent-review-remediation-owner-target")).toMatchObject({
+      passed: false,
+    });
+    expect(broadQuality?.criteria.find((criterion) => criterion.id === "benchmark-agent-review-validation-specificity")).toMatchObject({
+      passed: false,
+    });
+    expect(broadQuality?.criticalFailures).toContain("benchmark-agent-review-validation-specificity");
 
     writeFileSync(
       resolve(workDir, "pack-benchmark-output.md"),

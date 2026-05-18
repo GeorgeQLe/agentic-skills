@@ -112,10 +112,12 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 **Goal:** Tighten `benchmark-agent-review` so retained-artifact reviews turn output-quality weaknesses into owner-specific, validation-ready remediation.
 
 **Acceptance Criteria:**
-- [ ] Mirrored `benchmark-agent-review` contracts require owner targets, proposed behavior changes, and concrete validation checks when material weaknesses are found.
-- [ ] The benchmark prompt/rubric requires remediation owner-target and validation-check specificity for the retained `ship-manifest.md` fixture.
-- [ ] Focused layer1 coverage proves strong remediation passes and broad "update the skill / rerun fixture" remediation loses top-band quality credit.
+- [x] Mirrored `benchmark-agent-review` contracts require owner targets, proposed behavior changes, and concrete validation checks when material weaknesses are found.
+- [x] The benchmark prompt/rubric requires remediation owner-target and validation-check specificity for the retained `ship-manifest.md` fixture.
+- [x] Focused layer1 coverage proves strong remediation passes and broad "update the skill / rerun fixture" remediation loses top-band quality credit.
 - [ ] Validation passes, generated assets are refreshed if needed, and intended changes are committed and pushed on `master`.
+
+**Result:** Updated on 2026-05-17. Mirrored `benchmark-agent-review` contracts now require implementation-ready remediation rows with owner target, behavior change, and validation proof, especially when retained artifacts contain placeholder risk/monitoring text. The pack benchmark prompt and quality rubric now require owner-target and validation-check specificity for the retained `ship-manifest.md` fixture, with focused layer1 coverage proving strong remediation passes and broad "update the skill / rerun fixture" remediation fails the new critical validation-specificity criterion. Codex smoke benchmark `benchmark-agent-review-codex-1c0359b3` passed 1/1 with 100.0% quality. Recommended next command: `$benchmark-test-skill benchmark-agent-review`.
 
 ## Current Targeted Update: benchmark-agent-review Route Prompt Alignment 2026-05-17
 
