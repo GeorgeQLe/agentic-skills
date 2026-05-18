@@ -16,6 +16,30 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Benchmark: update-packages Fresh Rerun 2026-05-18
+
+**Goal:** Run `$benchmark-test-skill update-packages` after the pnpm latest benchmark-tolerance fix and publish fresh deterministic both-agent evidence.
+
+**Acceptance Criteria:**
+- [ ] `pnpm bench --list-skills` confirms `update-packages` is known and reports custom coverage.
+- [ ] `pnpm verify --skill update-packages` passes or blocks benchmark execution with a recorded failure.
+- [ ] `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [ ] `benchmark/test-update-packages-2026-05-18.md` records verify, benchmark, latency, cost, consistency, failed assertions, raw session evidence, and recommended next route.
+- [ ] Results are recorded in `tasks/todo.md`, generated evidence is refreshed if needed, then intended changes are committed and pushed on `master`.
+
+## Current Triage: benchmark-agent-review Quality Failure 2026-05-18
+
+**Goal:** Investigate the fresh `$benchmark-test-skill benchmark-agent-review` Codex output-quality threshold and critical failures and identify the smallest verified fix.
+
+**Acceptance Criteria:**
+- [x] Latest benchmark report and persisted Codex run evidence are inspected.
+- [x] Mirrored `benchmark-agent-review` contracts are compared with benchmark setup and quality rubric expectations.
+- [x] Failure is classified as skill-contract failure, harness/rubric defect, generated-output noncompliance, infrastructure block, or one-off variance.
+- [x] `benchmark/triage-benchmark-agent-review-2026-05-18.md` records verdict, root cause, responsible gap, recommended fix, validation plan, and next route.
+- [x] Results are recorded in `tasks/todo.md`, then intended changes are committed and pushed on `master`.
+
+**Result:** Triage verified a real deterministic output-quality gate failure but not a pure skill-contract failure. Both agents passed hard assertions 3/3, and Codex had 1 threshold failure plus 1 critical failure. The generated outputs cited retained `ship-manifest.md` evidence and included owner targets, behavior changes, validation checks, and the correct route, but owner targets were broad rather than exact files. Root cause is a benchmark setup/rubric calibration gap with a secondary output-specificity weakness: the prompt asks for owner targets while the quality criterion requires literal `SKILL.md`, and the validation-specificity check treats benign `update existing skill` wording as critical even when concrete validation checks exist. Report: `benchmark/triage-benchmark-agent-review-2026-05-18.md`. Validation passed: required report field scan and `git diff --check`. Recommended next skill: `$targeted-skill-builder benchmark-agent-review benchmark quality owner specificity tolerance`.
+
 ## Current Benchmark: benchmark-agent-review Fresh Rerun 2026-05-18
 
 **Goal:** Run `$benchmark-test-skill benchmark-agent-review` against the current repository state and publish fresh deterministic both-agent evidence.
