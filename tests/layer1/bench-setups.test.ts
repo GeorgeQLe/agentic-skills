@@ -1937,6 +1937,37 @@ describe("benchmark setup registry", () => {
     });
     expect(exactOwnerWithBenignUpdateLabel?.criticalFailures).not.toContain("benchmark-agent-review-validation-specificity");
 
+    const ownerTargetSlashFile = setup!.qualityEvaluator?.evaluate([
+      baseOutput,
+      "### Finding 1 — Residual Risks section emitted as a stub",
+      "**Owner target / file:** `packs/agentic-skills-bench/claude/benchmark-agent-review/SKILL.md` and `packs/agentic-skills-bench/codex/benchmark-agent-review/SKILL.md`",
+      "**Proposed behavior change:** require retained artifact placeholder risks to name a remediation owner and proof.",
+      "**Validation check:** Layer-level assertion that residual risk sections contain non-placeholder bullets.",
+      "Recommended next command: $targeted-skill-builder benchmark-agent-review residual-risk-awareness output-quality gap",
+    ].join("\n"));
+    expect(ownerTargetSlashFile?.criteria.find((criterion) => criterion.id === "benchmark-agent-review-remediation-owner-target")).toMatchObject({
+      passed: true,
+    });
+    expect(ownerTargetSlashFile?.criteria.find((criterion) => criterion.id === "benchmark-agent-review-validation-specificity")).toMatchObject({
+      passed: true,
+    });
+
+    const exactOwnerFilesSentence = setup!.qualityEvaluator?.evaluate([
+      baseOutput,
+      "**Exact owner files.**",
+      "- `packs/agentic-skills-bench/claude/benchmark-agent-review/SKILL.md`",
+      "- `packs/agentic-skills-bench/codex/benchmark-agent-review/SKILL.md`",
+      "- `tests/layer4/setups/packs/pack-workflows.setup.ts`",
+      "**Validation check.** Add a layer4 setup test that feeds placeholder residual-risk content and asserts a below-ceiling score.",
+      "Recommended next command: $targeted-skill-builder benchmark-agent-review residual-risk-awareness output-quality gap",
+    ].join("\n"));
+    expect(exactOwnerFilesSentence?.criteria.find((criterion) => criterion.id === "benchmark-agent-review-remediation-owner-target")).toMatchObject({
+      passed: true,
+    });
+    expect(exactOwnerFilesSentence?.criteria.find((criterion) => criterion.id === "benchmark-agent-review-validation-specificity")).toMatchObject({
+      passed: true,
+    });
+
     const scopedOwnerWithLookup = setup!.qualityEvaluator?.evaluate([
       baseOutput,
       "Remediation table:",

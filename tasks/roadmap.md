@@ -16,6 +16,20 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Update: benchmark-agent-review Owner Label Tolerance 2026-05-18
+
+**Goal:** Fix the `benchmark-agent-review` benchmark quality evaluator so remediation-ready Markdown owner labels pass while broad owner targets still fail.
+
+**Acceptance Criteria:**
+- [x] Owner-target and validation-specificity criteria share owner-label detection.
+- [x] The evaluator accepts `Owner target / file:`, `Owner files:`, and `Exact owner files.` when exact known owner paths or scoped owner-plus-lookup evidence is present.
+- [x] Broad owner targets and broad-only remediation remain failing cases.
+- [x] Focused layer1 coverage proves the newly accepted Markdown label forms and retained rejection cases.
+- [x] Focused validation, benchmark coverage, target verify, required skill audits, targeted search, Claude smoke benchmark, and whitespace checks pass.
+- [x] Results are recorded in `tasks/todo.md`, then intended changes are committed and pushed on `master`.
+
+**Result:** Updated on 2026-05-18. `tests/layer4/setups/packs/pack-workflows.setup.ts` now uses shared owner-label detection for `benchmark-agent-review` owner-target and validation-specificity quality criteria, accepting remediation-ready Markdown labels such as `Owner target / file:` and `Exact owner files.` while still requiring exact known owner paths or scoped owner-plus-lookup evidence. Focused layer1 coverage in `tests/layer1/bench-setups.test.ts` proves the newly accepted forms and keeps broad-owner/broad-only remediation failures intact. Validation passed: focused layer1 setup/quality tests, benchmark coverage, `pnpm --dir tests verify --skill benchmark-agent-review`, install and skill scripts, targeted `rg`, `git diff --check`, and Claude smoke benchmark `benchmark-agent-review-claude-2be30316` with 1/1 hard assertions, 98.3% output quality, and no threshold or critical failures. Recommended next command: `$benchmark-test-skill benchmark-agent-review`.
+
 ## Current Targeted Update: update-packages pnpm Latest Markdown-Negation Tolerance 2026-05-18
 
 **Goal:** Fix the `update-packages` benchmark setup so markdown-emphasized and concise negated `pnpm@latest` warnings pass while actual unqualified `pnpm@latest` recommendations still fail.

@@ -5,6 +5,28 @@
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
+## Current Task — Targeted Update `benchmark-agent-review` Owner Label Tolerance 2026-05-18
+
+**Goal:** Fix the `benchmark-agent-review` benchmark quality evaluator so remediation-ready Markdown owner labels such as `Owner target / file:` and `Exact owner files.` pass while broad owner targets still fail.
+
+**Plan:**
+- [x] Review relevant lessons, the Claude quality triage report, current pack benchmark setup, and focused layer1 coverage.
+- [x] Update `tests/layer4/setups/packs/pack-workflows.setup.ts` to share owner-label detection across owner-target and validation-specificity criteria.
+- [x] Add focused layer1 coverage for `Owner target / file:` and `Exact owner files.` labels with exact owner paths and validation checks.
+- [x] Run focused layer1 tests, benchmark coverage, target verify, required skill audits, targeted search, Claude smoke benchmark, and whitespace validation.
+- [x] Record results, commit, and push intended changes on `master`.
+
+## Review — Targeted Update `benchmark-agent-review` Owner Label Tolerance 2026-05-18
+
+- Decision: existing benchmark setup update, not a new skill. The mirrored `benchmark-agent-review` contracts already require remediation-ready owner files and validation checks.
+- Evidence used: `tasks/lessons.md`, `benchmark/triage-benchmark-agent-review-2026-05-18-claude-quality.md`, `tests/layer4/setups/packs/pack-workflows.setup.ts`, and `tests/layer1/bench-setups.test.ts`.
+- Evidence intentionally skipped: broad session history, because the triage localized the defect to the benchmark quality evaluator's owner-label syntax tolerance.
+- Updated the owner-target and validation-specificity quality criteria to use shared owner-label detection that accepts `Owner target / file:`, `Owner files:`, and `Exact owner files.` while still requiring exact known owner paths or a scoped owner-plus-lookup note.
+- Added layer1 coverage for the two failing Markdown forms from the latest Claude artifacts and retained broad-owner/broad-only failure coverage.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 bench-setups bench-quality`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill benchmark-agent-review`; `./install.sh`; `./scripts/skill-deps.sh --broken`; `./scripts/skill-versions.sh --missing`; `./scripts/skill-next-step-routing.sh --missing`; targeted `rg`; `git diff --check`; Claude smoke benchmark `benchmark-agent-review-claude-2be30316` passed 1/1 with 98.3% output quality, 0 threshold failures, and 0 critical failures.
+- Generated Skills Showcase data was not refreshed because no tracked `SKILL.md`, `PACK.md`, curated benchmark report, or curated review report changed for this fix.
+- **Recommended next command:** `$benchmark-test-skill benchmark-agent-review`
+
 ## Current Task — Targeted Update `update-packages` pnpm Latest Markdown-Negation Tolerance 2026-05-18
 
 **Goal:** Fix the `update-packages` benchmark setup so markdown-emphasized and concise negated `pnpm@latest` warnings pass while actual unqualified `pnpm@latest` recommendations still fail.
