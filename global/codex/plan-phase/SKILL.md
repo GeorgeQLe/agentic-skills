@@ -89,6 +89,12 @@ For `agent-team`, every write lane must have a deterministic `Branch:` value tha
 
 Define ordered steps beneath the existing Goal/Scope/Acceptance Criteria. The structure depends on the test strategy:
 
+For new user-facing product, SaaS, marketplace, dashboard, internal tool, or product-experience phases, apply a prototype-first planning gate before writing steps:
+
+- If the roadmap/spec does not explicitly approve durable database/storage, auth, payments, analytics, deployment, admin tooling, multi-tenancy, or production observability for the current phase, keep those items in a later "eventual production infrastructure" backlog and plan the current phase as a clickable local/static prototype with fake, fixture, or in-memory data.
+- Include a calibration step before any infrastructure promotion: the user must be able to try one journey and record what felt wrong, slow, generic, too dense, too sparse, off-brand, or workflow-breaking.
+- Promote infrastructure into the current phase only when the phase is explicitly production hardening, the user has approved that infrastructure, or the core prototype cannot test the primary interaction without it. State the evidence in the phase notes.
+
 **For `tdd` phases:**
 ```
 ## Phase N: [Title]

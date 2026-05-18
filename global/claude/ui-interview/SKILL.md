@@ -33,7 +33,7 @@ When invoked with `--requirements-only` (or when the user says "just requirement
 3. **Surface assumptions before probing**
    - Present a UI Assumptions Manifest before deep questioning.
    - Tag each assumption with `[from spec]`, `[from codebase]`, `[from research]`, `[from artifact]`, or `[inferred]`.
-   - Cover product and user context, pages and routes, primary tasks, navigation, hierarchy, layout grid, spatial density, component inventory, button and link semantics, form behavior, empty/loading/error/success states, responsive behavior, accessibility, visual language, and implementation constraints.
+   - Cover product and user context, pages and routes, primary tasks, navigation, hierarchy, layout grid, spatial density, component inventory, button and link semantics, form behavior, empty/loading/error/success states, responsive behavior, accessibility, visual language, implementation constraints, and the prototype-first boundary for new product work: what the user should be able to click through first, what data can be fake, fixture-backed, or in-memory, and which infrastructure must be represented visually but not implemented yet.
    - Use AskUserQuestion to ask the user to confirm, correct, or flag assumptions before continuing.
 
 4. **Interview page by page**
@@ -42,6 +42,7 @@ When invoked with `--requirements-only` (or when the user says "just requirement
      - Global shell: header, sidebar, footer, navigation, account controls, notifications
      - Page inventory: every route, modal, drawer, overlay, and important empty state
      - Page purpose: user goal, task priority, and success condition
+     - Prototype calibration: first clickable journey, fixture/fake data boundaries, infrastructure-only states to mock rather than implement, and taste/feel questions the prototype must answer before database, auth, payment, analytics, deployment, admin, or multi-tenant work is planned.
 
 4b. **Requirements gate (requirements-only mode)**
    - In requirements-only mode, stop here — do not proceed to layout anatomy, component inventory, or spatial decisions.
@@ -83,7 +84,7 @@ When invoked with `--requirements-only` (or when the user says "just requirement
 - Write the completed UI specification to `specs/ui-[topic].md`.
 - Write the interview log to `ui-[topic]-interview.md`.
 
-The UI specification must include source evidence, the confirmed UI Assumptions Manifest, page inventory, route map, global shell rules, page-by-page anatomy, component inventory, control inventory, link inventory, layout and responsive rules, visual style direction, interaction states, accessibility requirements, implementation notes, open questions, risks, and non-goals.
+The UI specification must include source evidence, the confirmed UI Assumptions Manifest, page inventory, route map, global shell rules, page-by-page anatomy, component inventory, control inventory, link inventory, layout and responsive rules, visual style direction, interaction states, accessibility requirements, implementation notes, open questions, risks, and non-goals. For new product interfaces, include a prototype-first section naming the first clickable journey, fake/fixture data, visually mocked infrastructure states, deferred production infrastructure, and the evidence required before implementation planning promotes any deferred infrastructure.
 
 The interview log must include the manifest, every question asked, options and recommendations presented, user responses, final decisions, and notable changes from the initial draft, current implementation, or artifact.
 

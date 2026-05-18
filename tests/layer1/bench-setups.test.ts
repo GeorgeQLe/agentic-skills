@@ -2714,6 +2714,7 @@ describe("Tier 1 workflow benchmark setups", () => {
         "",
         "Selected next step: Step 1.1.",
         "Modify tests/example.test.ts for the benchmark fixture.",
+        "Prototype gate: keep this as a clickable prototype with fixture data; defer database, auth, payments, analytics, deployment, admin, multi-tenant, and observability infrastructure until calibration evidence justifies promotion.",
         "validation commands cover tests and git diff --check.",
         "shipping note: commit and push after validation.",
         "Next command: $run",

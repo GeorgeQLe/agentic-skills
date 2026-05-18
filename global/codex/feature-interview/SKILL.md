@@ -35,6 +35,7 @@ This is narrower than `$spec-interview`: it performs the same assumption surfaci
    - Validate factual claims against code, docs, research, task state, and git history. Classify each as `confirmed`, `partially supported`, `not supported`, or `unknown / needs user context`.
    - Identify likely technical gotchas: architecture fit, shared modules, data model, API/contracts, migrations, security/privacy, permissions, performance, observability, tests, rollout, external dependencies, and backwards compatibility.
    - Identify how the feature fits into the user story, customer journey, developer workflow, game loop, or other project-specific journey artifact. If no credible journey exists for user-facing work, flag that as a planning gap.
+   - For new user-facing product, SaaS, marketplace, dashboard, internal tool, or product-experience work, add a prototype-first gate to the intake: default the first build artifact to a clickable local/static prototype with fake, fixture, or in-memory data unless the user explicitly opts into production infrastructure or the core interaction cannot be tested without it. Treat durable storage, auth, payments, analytics, deployment, admin tooling, multi-tenancy, and production observability as deferred infrastructure decisions until the prototype calibrates taste, feel, workflow density, and one accepted journey.
    - Identify whether research docs, journey docs, specs, roadmap, or task queues need a durable update if the feature proceeds.
 4. Match the feature against existing planning artifacts:
    - Identify whether it is already fully represented in a spec, partially represented in a spec, only present as an idea/research gap, or already sequenced in the roadmap.
@@ -52,6 +53,7 @@ This is narrower than `$spec-interview`: it performs the same assumption surfaci
    - Planning destination: likely `new spec`, `update existing spec`, `roadmap/task update`, `research/design skill first`, or `no new planning needed`.
    - Priority hypothesis: recommended priority relative to current roadmap/todo, with dependency and risk rationale.
    - Implementation shape: product behavior, design/UX needs, data model, APIs/contracts, migrations, tests, operations, and rollout surface as far as they can be inferred.
+   - Prototype-first gate for product work: state whether the next artifact should be `clickable prototype`, `production implementation`, or `research/spec only`. If there is no accepted prototype or user-approved infrastructure opt-in, recommend `clickable prototype` and explicitly defer database/storage, auth, payments, analytics, deployment, admin tooling, multi-tenancy, and production observability.
    - Risks and unknowns: ambiguity, integration risk, user-facing risk, external dependencies, and what breaks if the assumption is wrong.
    Tag each assumption with `[from idea]`, `[from spec]`, `[from codebase]`, `[from research]`, `[from roadmap]`, `[from git]`, or `[inferred]`.
 6. Ask the user to confirm, correct, or flag the evidence brief, claim verdicts, assumptions, journey placement, documentation destination, and priority hypothesis before continuing. Do not proceed past this checkpoint until the user has reviewed it.
@@ -70,6 +72,7 @@ This is narrower than `$spec-interview`: it performs the same assumption surfaci
    - Target artifact path(s).
    - Journey/workflow placement to record.
    - Scope to include now and explicitly defer.
+   - For user-facing product work, confirm the prototype-first decision: what users can click through first, what data can be fake or fixture-backed, which infrastructure is intentionally deferred, and what evidence would justify promoting one deferred infrastructure item into the next phase.
    - Priority decision: user-confirmed priority, dependencies, and whether the feature should interrupt, follow, or remain parked relative to current roadmap/todo work.
    - Roadmap/task impact and recommended next command.
    Ask: "Does this destination, priority, and scope match what you want?"

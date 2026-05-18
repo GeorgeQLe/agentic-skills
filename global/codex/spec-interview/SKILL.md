@@ -42,6 +42,7 @@ Use this skill when the user has a concept brief, research-backed opportunity, d
      - **Data model**: what persists, what's ephemeral, migration path from current state
      - **API and contract surface**: routes, events, SDKs, schemas, external integrations, or CLI contracts
      - **Operational requirements**: security, privacy, permissions, performance, observability, and failure handling
+     - **Prototype-first gate** for new user-facing product, SaaS, marketplace, dashboard, internal tool, or product-experience work: whether the first useful artifact is a clickable local/static prototype with fake, fixture, or in-memory data, and which infrastructure is intentionally deferred.
    - Immediately follow the checkpoint with one focused interview question. Do not stop at the assumptions checkpoint unless the user explicitly asks to pause and review assumptions first.
    - If any `[inferred]` assumption is corrected, note the correction — these corrections are high-signal for downstream risk and must appear in the interview log.
 5. Interview the user in depth to validate assumptions, resolve ambiguities, and close gaps.
@@ -53,6 +54,8 @@ Use this skill when the user has a concept brief, research-backed opportunity, d
    - State a recommendation and why
    - Explain how to mitigate the recommended option's downside when useful
 9. Continue until implementation goals, architecture, data models, APIs/contracts, migrations, edge cases, security, performance, observability, test strategy, and scope boundaries are all covered.
+   - For new user-facing product work, establish a `Prototype Phase 0` before production architecture. Default to fixture/static/in-memory data and no auth, payments, analytics, persistent database, admin tooling, deployment, multi-tenancy, or production observability unless the user explicitly opts in or the core prototype cannot be tested without it.
+   - Capture a taste-calibration checkpoint in the spec: what users can click, what felt right or wrong after trying it, which workflow assumption the prototype tests, and the smallest infrastructure decision that would be justified after one accepted journey.
 10. **Coverage checkpoint** — Before concluding, present a structured summary: list each area covered with key decisions made and the evidence/reasoning that supported each. Ask: "Does this cover everything? Any constraints, missing facts, or areas to revisit?"
 
 ## Deliverables
@@ -69,6 +72,7 @@ Use this skill when the user has a concept brief, research-backed opportunity, d
   - `## Open Questions`
   - `## Assumptions & Risks` (the checkpoint output)
   Additional topic-specific sections (e.g. `## Data Model`, `## Security`) may appear between Detailed Design and Edge Cases. Do not number sections.
+  For new user-facing product work, include the prototype-first decision in `## Goals`, `## Non-Goals`, `## Detailed Design`, and `## Acceptance Criteria`: first clickable prototype scope, fake/fixture data boundary, deferred infrastructure list, and promotion criteria for any later database/auth/payment/analytics/deployment work.
 - Write an interview log to `[topic]-interview.md`
 
 The interview log should include:
