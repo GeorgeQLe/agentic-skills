@@ -11,9 +11,9 @@
 **Goal:** Run `$benchmark-test-skill update-packages` against the current repository state and publish deterministic both-agent benchmark evidence after the benchmark actionability threshold update.
 
 **Plan:**
-- [ ] Confirm `benchmark-test-skill` is the active workflow and `update-packages` is only the benchmark target.
-- [ ] Run `pnpm bench --list-skills` from `tests/` and confirm `update-packages` is known, not blocked, and note its coverage status.
-- [ ] Run `pnpm verify --skill update-packages`; stop without benchmarking if verify fails.
+- [x] Confirm `benchmark-test-skill` is the active workflow and `update-packages` is only the benchmark target.
+- [x] Run `pnpm bench --list-skills` from `tests/` and confirm `update-packages` is known, not blocked, and note its coverage status.
+- [x] Run `pnpm verify --skill update-packages`; stop without benchmarking if verify fails.
 - [ ] Run `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` only after verify passes.
 - [ ] Write and validate `benchmark/test-update-packages-2026-05-18.md`, update this review section, refresh generated evidence if needed, then commit and push intended changes.
 
@@ -189,7 +189,7 @@
 
 ### Execution
 - [x] Step B.1: Confirm benchmark command resolution and harness eligibility.
-- [ ] Step B.2: Run verify gate for `update-packages`.
+- [x] Step B.2: Run verify gate for `update-packages`.
 - [ ] Step B.3: Run both-agent benchmark if verify passes.
 - [ ] Step B.4: Write and validate the dated benchmark report.
 - [ ] Step B.5: Commit and push intended benchmark/report changes.
@@ -198,3 +198,5 @@
 
 - Command resolution: `$benchmark-test-skill` resolved to `packs/agentic-skills-bench/codex/benchmark-test-skill/SKILL.md`; `update-packages` is the target skill argument.
 - Eligibility: `update-packages` is listed with `coverage=custom` and setup `tests/layer4/setups/tier23-global-workflows.setup.ts`.
+- Verify: `pnpm verify --skill update-packages` passed on 2026-05-18 with layer1 PASS in 3.7s and layer2 SKIP because no target-specific layer2 tests matched `update-packages`.
+- Next step plan: run `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` from `tests/`, then use the persisted `tests/benchmarks/runs/update-packages-*` report data to write `benchmark/test-update-packages-2026-05-18.md`.
