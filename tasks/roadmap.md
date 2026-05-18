@@ -12,7 +12,7 @@ Phases 12-31 complete. Phase 14 added the LinkedIn evidence lane to the creator 
 
 Phases 32-36 complete. Phase 35 added repository-wide Codex benchmark coverage metadata, custom or explicitly blocked coverage for every current skill, and future skill creation/update workflows require benchmark coverage handling. Phase 36 added rubric-based output-quality evaluation on top of the contract/assertion benchmark checks.
 
-Phase 37 complete: preserved and migrated the static Skills Showcase into a minimal Next.js app at `apps/skills-showcase/` with 6 public routes, generated data pipeline, 54 regression tests, and updated deploy contract. Phase 38 complete: added Neon-backed first-party newsletter capture with tRPC contracts, TanStack Query mutation/admin state, admin export page, 74 regression tests, and privacy posture enforcement. Phase 39 complete: added benchmark results visibility and permission-gated safe Git integration fixtures for benchmarkable git-mutating skills. Phase 40 complete: added the `/workflows` hybrid replay pilot so benchmark evidence becomes primary step-by-step proof before the pattern is expanded to other showcase surfaces. Phase 41 builds out persisted benchmark result coverage for the remaining tracked skills in controlled batches. Phase 42 refines `/workflows` into a persistent ChatGPT/Claude-style transcript after the current benchmark coverage lane.
+Phase 37 complete: preserved and migrated the static Skills Showcase into a minimal Next.js app at `apps/skills-showcase/` with 6 public routes, generated data pipeline, 54 regression tests, and updated deploy contract. Phase 38 complete: added Neon-backed first-party newsletter capture with tRPC contracts, TanStack Query mutation/admin state, admin export page, 74 regression tests, and privacy posture enforcement. Phase 39 complete: added benchmark results visibility and permission-gated safe Git integration fixtures for benchmarkable git-mutating skills. Phase 40 complete: added the `/workflows` hybrid replay pilot so benchmark evidence becomes primary step-by-step proof before the pattern is expanded to other showcase surfaces. Phase 42 complete: refined `/workflows` into a persistent ChatGPT/Claude-style transcript with validated desktop/mobile layout. Phase 41 remains deferred and builds out persisted benchmark result coverage for the remaining tracked skills in controlled batches.
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
@@ -1070,15 +1070,15 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 - Preserve reduced-motion behavior by showing complete turn content without fake typing or animated scroll.
 
 **Acceptance Criteria:**
-- [ ] `/workflows` no longer remounts the active replay as a blinking step card when advancing through steps.
-- [ ] Playback reveals each new workflow turn with the confirmed ChatGPT/Claude-style cadence.
-- [ ] Completed turns stay fully expanded, and the active turn is followed by viewport scroll during playback.
-- [ ] Step controls jump to existing turns without destructive rewind or hiding later turns.
-- [ ] Workflow switching starts a fresh transcript session.
-- [ ] Benchmark receipt rendering remains available for benchmarked steps, and non-benchmarked steps show clear curated/no-receipt states.
-- [ ] Reduced-motion users receive complete content without fake typing or animated scroll.
-- [ ] Desktop and mobile visual checks confirm no horizontal overflow, clipped proof blocks, or overlapping transcript/controls.
-- [ ] Existing Skills Showcase tests, typecheck/build, generated-data validation when needed, and whitespace checks pass.
+- [x] `/workflows` no longer remounts the active replay as a blinking step card when advancing through steps.
+- [x] Playback reveals each new workflow turn with the confirmed ChatGPT/Claude-style cadence.
+- [x] Completed turns stay fully expanded, and the active turn is followed by viewport scroll during playback.
+- [x] Step controls jump to existing turns without destructive rewind or hiding later turns.
+- [x] Workflow switching starts a fresh transcript session.
+- [x] Benchmark receipt rendering remains available for benchmarked steps, and non-benchmarked steps show clear curated/no-receipt states.
+- [x] Reduced-motion users receive complete content without fake typing or animated scroll.
+- [x] Desktop and mobile visual checks confirm no horizontal overflow, clipped proof blocks, or overlapping transcript/controls.
+- [x] Existing Skills Showcase tests, typecheck/build, generated-data validation when needed, and whitespace checks pass.
 
 **Parallelization:** serial
 
@@ -1121,7 +1121,7 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
   - Classification: automated
   - Files: modify `apps/skills-showcase/src/showcase/workflows.test.tsx`
   - Test cases: completed turns remain expanded after advancing; clicking an earlier step jumps to an existing turn without hiding later turns; workflow switching resets the transcript; benchmark receipts and curated no-receipt states render inside turns; reduced-motion shows complete content without typing delay.
-- Step 42.7: Run validation and perform only concrete cleanup found by validation.
+- [x] Step 42.7: Run validation and perform only concrete cleanup found by validation.
   - Classification: automated
   - Files: no planned source edits beyond fixes required by failed validation
   - Commands: `pnpm --dir apps/skills-showcase test`, `pnpm --dir apps/skills-showcase build`, `scripts/validate-skills-showcase-data.sh` if generated data changes, `git diff --check`
@@ -1129,22 +1129,22 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 ### Milestone: Phase 42 Workflow Persistent Transcript Refinement
 **Acceptance Criteria:**
-- [ ] `/workflows` no longer remounts the active replay as a blinking step card when advancing through steps.
-- [ ] Playback reveals each new workflow turn with the confirmed ChatGPT/Claude-style cadence.
-- [ ] Completed turns stay fully expanded, and the active turn is followed by viewport scroll during playback.
-- [ ] Step controls jump to existing turns without destructive rewind or hiding later turns.
-- [ ] Workflow switching starts a fresh transcript session.
-- [ ] Benchmark receipt rendering remains available for benchmarked steps, and non-benchmarked steps show clear curated/no-receipt states.
-- [ ] Reduced-motion users receive complete content without fake typing or animated scroll.
-- [ ] Desktop and mobile visual checks confirm no horizontal overflow, clipped proof blocks, or overlapping transcript/controls.
-- [ ] Existing Skills Showcase tests, typecheck/build, generated-data validation when needed, and whitespace checks pass.
-- [ ] All phase tests pass
-- [ ] No regressions in previous phase tests
+- [x] `/workflows` no longer remounts the active replay as a blinking step card when advancing through steps.
+- [x] Playback reveals each new workflow turn with the confirmed ChatGPT/Claude-style cadence.
+- [x] Completed turns stay fully expanded, and the active turn is followed by viewport scroll during playback.
+- [x] Step controls jump to existing turns without destructive rewind or hiding later turns.
+- [x] Workflow switching starts a fresh transcript session.
+- [x] Benchmark receipt rendering remains available for benchmarked steps, and non-benchmarked steps show clear curated/no-receipt states.
+- [x] Reduced-motion users receive complete content without fake typing or animated scroll.
+- [x] Desktop and mobile visual checks confirm no horizontal overflow, clipped proof blocks, or overlapping transcript/controls.
+- [x] Existing Skills Showcase tests, typecheck/build, generated-data validation when needed, and whitespace checks pass.
+- [x] All phase tests pass
+- [x] No regressions in previous phase tests
 
 **On Completion**
-- Deviations from plan: pending
-- Tech debt / follow-ups: pending
-- Ready for next phase: no
+- Deviations from plan: Generated proof/matrix assets were stale and were refreshed during validation. Safari visual checks were used because no project Playwright/browser automation setup is configured, and Safari JavaScript-from-Apple-Events is disabled for direct DOM width assertions.
+- Tech debt / follow-ups: Phase 41 benchmark result coverage remains deferred and should resume with Batch 41.1.
+- Ready for next phase: yes
 
 ## Current Benchmark: roadmap Fresh Rerun 2026-05-17
 

@@ -2415,6 +2415,14 @@ Resolved all 10 findings from `/expert-review`:
 - Preserved the Step 42.4 active-turn scroll anchoring and benchmark receipt data attributes while keeping the change CSS-only.
 - Verified with focused workflow tests, typecheck, production build, and whitespace validation.
 
+## 2026-05-18 — Step 42.7 workflow transcript final validation
+
+- Completed Phase 42 final validation for the `/workflows` persistent transcript refinement.
+- Verified the Skills Showcase with `pnpm --dir apps/skills-showcase test`, `pnpm --dir apps/skills-showcase build`, generated-data validation, and whitespace validation.
+- Refreshed stale generated proof/matrix assets found by `scripts/validate-skills-showcase-data.sh`.
+- Visually checked `/workflows` in Safari at desktop and narrow mobile widths for contained transcript controls, proof blocks, receipt rows, and no visible overlap.
+- Archived Phase 42 to `tasks/phases/phase-42.md` and resumed Phase 41 benchmark result coverage as the next active work.
+
 ## 2026-05-18 — Step 42.1 workflow persistent transcript model
 
 - Replaced the `/workflows` TUI single keyed active replay card with a transcript list that renders all revealed steps through the current active step.

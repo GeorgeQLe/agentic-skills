@@ -1,10 +1,10 @@
 # Active Phase
 
 **Project:** Claude Skills / agentic-skills
-**Status:** Phase 41 benchmark coverage lane deferred; Phase 42 planned and ready to implement.
-**Current phase:** Phase 42 — Workflow Persistent Transcript Refinement
+**Status:** Phase 42 complete; Phase 41 benchmark coverage lane resumed as the active deferred work.
+**Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Total phases:** 42
-**Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
+**Last completed phase:** Phase 42 — Workflow Persistent Transcript Refinement
 
 ## Interrupt Task — Benchmark `update-packages` After Actionability Threshold 2026-05-18
 
@@ -65,7 +65,84 @@
 - Generated Skills Showcase data was not refreshed because no tracked `SKILL.md`, `PACK.md`, curated benchmark report, or curated review report changed.
 - **Recommended next command:** `$benchmark-test-skill update-packages`
 
-## Phase 42: Workflow Persistent Transcript Refinement
+## Phase 41: Remaining Skill Benchmark Result Coverage
+
+**Goal:** Convert the existing benchmark coverage registry into persisted evaluated benchmark results for the remaining tracked skills, without overloading the runner or treating infrastructure blocks as skill failures.
+
+**Current Batch 2026-05-17:** `$benchmark-test-skill analyze-sessions` resolved from the user phrase `analyze sessions`. The skill is listed by `pnpm bench --list-skills` with custom coverage via `tests/layer4/setups/tier23-global-workflows.setup.ts`.
+
+**Source:** `docs/benchmark-results-matrix.md`, `tests/harness/bench-coverage.ts`, `benchmark/test-*.md`, and the 2026-05-11 benchmark lessons distinguishing setup coverage from persisted evaluated results.
+
+**Current Baseline:**
+- Benchmark coverage registry validates 152 tracked skills.
+- Persisted evaluated benchmark results currently cover 14 unique skill names.
+- Remaining without evaluated benchmark result rows: 138.
+- Remaining runnable, non-blocked skills: 132.
+- Coverage-blocked skills requiring fixture or policy work before execution: `delegate`, `deploy`, `install-agentic-skills`, `patch-exec-profile`, `release`, `uat-guide`.
+- Incomplete-only result needing retry: `affected` has a zero-evaluated-run persisted report and should not count as benchmarked until rerun successfully.
+
+**Scope:**
+- Run `$benchmark-test-skill <skill>` for remaining runnable skills in small batches.
+- Prefer batch order by priority tier and dependency value: Tier 1 workflow gaps, incomplete reports, Tier 2 global skills, git-fixture skills with explicit permission gates, then pack-local skills.
+- For each skill, preserve the existing `$benchmark-test-skill` contract: list coverage, verify first, benchmark only after verify passes, write `benchmark/test-<skill>-<date>.md`, refresh generated Skills Showcase data when curated benchmark evidence changes, and record results in task docs.
+- Do not run permission-gated GitHub disposable-repo fixtures (`commit-and-push-by-feature`, `sync`) until explicit permission and safety boundaries are confirmed.
+- Do not attempt blocked skills as live benchmarks until their next-command remediation creates a safe fixture or Codex-runnable contract.
+
+**Acceptance Criteria:**
+- [ ] A generated or scripted queue identifies remaining skills from `tests/harness/bench-coverage.ts` minus evaluated rows in `docs/benchmark-results-matrix.md`.
+- [ ] Tier 1 remaining skills are benchmarked or explicitly triaged: `feature-interview`, `roadmap`, `ship-end`, `targeted-skill-builder`.
+- [ ] `affected` is rerun because its only persisted report is blocked/incomplete.
+- [ ] Each completed benchmark has a curated report under `benchmark/test-<skill>-<YYYY-MM-DD>.md` and raw paths under `tests/benchmarks/runs/`.
+- [ ] Any failed benchmark is triaged before continuing broad execution if it indicates harness drift, shared setup drift, or skill-contract ambiguity.
+- [ ] `docs/benchmark-results-matrix.md` and Skills Showcase generated data are refreshed after each committed batch.
+- [ ] `pnpm --dir tests bench:coverage`, benchmark-results matrix validation, generated showcase validation, and `git diff --check` pass before shipping each batch.
+- [ ] Coverage-blocked skills have documented next remediation commands, not attempted live-run failures.
+
+### Execution Profile
+**Parallel mode:** serial
+**Integration owner:** main agent
+**Conflict risk:** medium
+**Review gates:** benchmark cost, runner capacity, GitHub fixture permission, generated-data freshness
+
+**Subagent lanes:** none
+
+### Batch Plan
+- [ ] Batch 41.1: Create/verify the remaining-results queue and run the first small batch: `feature-interview`, `ship-end`, `targeted-skill-builder`, and `affected`.
+  - Classification: automated
+  - Files: update benchmark reports under `benchmark/`, raw run outputs under `tests/benchmarks/runs/`, generated benchmark/showcase data, and task/history docs as results require.
+  - Implementation plan:
+    - Recompute the remaining-results queue from `tests/harness/bench-coverage.ts` and `docs/benchmark-results-matrix.md`; confirm `feature-interview`, `ship-end`, `targeted-skill-builder`, and `affected` are still the intended first small batch or record any already-completed substitutions.
+    - For each selected skill, follow `$benchmark-test-skill`: run `pnpm bench --list-skills`, run `pnpm verify --skill <skill>`, and only benchmark after verify passes.
+    - Run each benchmark with conservative runner settings, pausing if a shared harness failure, runner-capacity issue, or ambiguous skill-contract failure appears.
+    - Write or update each dated `benchmark/test-<skill>-<YYYY-MM-DD>.md` with verify evidence, benchmark results, raw session paths, failures/blocks, and recommended next route.
+    - Refresh generated Skills Showcase data and `docs/benchmark-results-matrix.md` after curated benchmark evidence changes, then validate with benchmark coverage, generated-data validation, and whitespace checks.
+- [ ] Batch 41.2: Resolve or triage `roadmap`, which currently has evaluated Codex failures and Claude infrastructure blocks from `benchmark/test-roadmap-2026-05-17.md`.
+- [ ] Batch 41.3: Run Tier 2 global skills in groups of 5-10, pausing after any shared harness failure pattern.
+- [ ] Batch 41.4: Run git-fixture skills `commit-and-push-by-feature` and `sync` only after explicit permission for disposable GitHub fixture operations.
+- [ ] Batch 41.5: Run pack-local skills by pack family, starting with packs that feed public showcase/workflow proof.
+- [ ] Batch 41.6: Address blocked skills through their remediation routes, then benchmark only after safe fixtures exist.
+
+## Review
+
+- Phase 42 completed on 2026-05-18 and was archived to `tasks/phases/phase-42.md`.
+- Phase 41 had been deferred while `/workflows` transcript refinement landed; it is now the next active work.
+- Manual tasks: none for Phase 41. Git-fixture benchmark work remains permission-gated in Batch 41.4 and is not part of Batch 41.1.
+- Execution profile: serial, because benchmark runner capacity, generated data, and task/history updates are shared resources.
+
+### Step 42.7 Ship Manifest
+
+- **User goal:** Execute `$run` for Step 42.7, completing phase-wide validation for the `/workflows` persistent transcript refinement and performing only concrete cleanup found by validation.
+- **Changed files:** `apps/skills-showcase/public/assets/github-proof-data.js`; `docs/benchmark-results-matrix.md`; `docs/skills-showcase/assets/github-proof-data.js`; `tasks/todo.md`; `tasks/roadmap.md`; `tasks/phases/phase-42.md`; `tasks/history.md`. Pre-existing dirty edits in `tests/layer1/bench-setups.test.ts` and `tests/layer4/setups/tier23-global-workflows.setup.ts` are unrelated and intentionally excluded from this shipping boundary.
+- **Per-file purpose:** Generated proof/matrix assets were refreshed because validation found stale repository proof metadata and newer persisted benchmark-result pointers; `tasks/todo.md` records Phase 42 completion and promotes Phase 41 Batch 41.1 as the next active work; `tasks/roadmap.md` marks Phase 42 criteria complete; `tasks/phases/phase-42.md` archives the completed phase; `tasks/history.md` records the validation result.
+- **User-goal mapping:** The phase is now backed by executable app tests, production build evidence, generated-data validation, whitespace validation, and desktop/mobile visual checks before routing the next `$run` to benchmark coverage work.
+- **Tests run:** `pnpm --dir apps/skills-showcase test` passed with 8 files and 98 tests; `pnpm --dir apps/skills-showcase build` passed; `scripts/validate-skills-showcase-data.sh` initially reported stale generated data, regenerated assets, then passed after the final history update; `git diff --check` passed after final task/doc edits; Safari desktop visual check passed for `/workflows`; Safari narrow mobile-width visual check passed for `/workflows`.
+- **Skipped tests:** A separate `pnpm --dir apps/skills-showcase typecheck` was not run because `next build` ran TypeScript successfully. Automated DOM `scrollWidth` assertion was not run because Safari's JavaScript-from-Apple-Events setting is disabled and the project has no Playwright/browser automation setup; manual Safari desktop and narrow-width checks covered the phase visual acceptance criterion. Broader repository tests were not run because Step 42.7 scope is the Skills Showcase `/workflows` phase and generated proof assets.
+- **Adversarial review:** Diff-aware self-review checked whether validation-only cleanup accidentally pulled unrelated benchmark setup edits into scope, whether generated proof data changes were mechanical outputs from the validator, whether Phase 42 acceptance criteria map to the prior implementation/test evidence, and whether Phase 41 Batch 41.1 is concrete enough for a fresh `$run`.
+- **Residual risk:** Visual checks were manual rather than script-enforced, so a future CSS regression could still slip past if Step 42 source changes resume without browser automation. The next workflow should keep visual checks explicit until a Playwright-style viewport assertion exists.
+- **Rollback note:** Revert the Step 42.7 commit to restore the previous task state and generated proof/matrix pointers; source implementation commits for Steps 42.1-42.6 remain separate.
+- **Next command:** `$run`
+
+## Completed Phase 42: Workflow Persistent Transcript Refinement
 
 > Test strategy: tests-after
 
@@ -84,15 +161,15 @@
 - Preserve reduced-motion behavior by showing complete turn content without fake typing or animated scroll.
 
 **Acceptance Criteria:**
-- [ ] `/workflows` no longer remounts the active replay as a blinking step card when advancing through steps.
-- [ ] Playback reveals each new workflow turn with the confirmed ChatGPT/Claude-style cadence.
-- [ ] Completed turns stay fully expanded, and the active turn is followed by viewport scroll during playback.
-- [ ] Step controls jump to existing turns without destructive rewind or hiding later turns.
-- [ ] Workflow switching starts a fresh transcript session.
-- [ ] Benchmark receipt rendering remains available for benchmarked steps, and non-benchmarked steps show clear curated/no-receipt states.
-- [ ] Reduced-motion users receive complete content without fake typing or animated scroll.
-- [ ] Desktop and mobile visual checks confirm no horizontal overflow, clipped proof blocks, or overlapping transcript/controls.
-- [ ] Existing Skills Showcase tests, typecheck/build, generated-data validation when needed, and whitespace checks pass.
+- [x] `/workflows` no longer remounts the active replay as a blinking step card when advancing through steps.
+- [x] Playback reveals each new workflow turn with the confirmed ChatGPT/Claude-style cadence.
+- [x] Completed turns stay fully expanded, and the active turn is followed by viewport scroll during playback.
+- [x] Step controls jump to existing turns without destructive rewind or hiding later turns.
+- [x] Workflow switching starts a fresh transcript session.
+- [x] Benchmark receipt rendering remains available for benchmarked steps, and non-benchmarked steps show clear curated/no-receipt states.
+- [x] Reduced-motion users receive complete content without fake typing or animated scroll.
+- [x] Desktop and mobile visual checks confirm no horizontal overflow, clipped proof blocks, or overlapping transcript/controls.
+- [x] Existing Skills Showcase tests, typecheck/build, generated-data validation when needed, and whitespace checks pass.
 
 ### Execution Profile
 **Parallel mode:** serial
@@ -160,7 +237,7 @@
     - Add receipt coverage for benchmark-backed rows and curated/no-receipt fallback states inside transcript turns.
     - Add a reduced-motion assertion that complete active-turn content and proof blocks render without waiting for fake typing timers.
     - Run `pnpm --dir apps/skills-showcase test -- workflows.test.tsx`, then typecheck/build if the test changes expose source issues.
-- [ ] Step 42.7: Run validation and perform only concrete cleanup found by validation.
+- [x] Step 42.7: Run validation and perform only concrete cleanup found by validation.
   - Classification: automated
   - Files: no planned source edits beyond fixes required by failed validation
   - Commands: `pnpm --dir apps/skills-showcase test`, `pnpm --dir apps/skills-showcase build`, `scripts/validate-skills-showcase-data.sh` if generated data changes, `git diff --check`
@@ -168,17 +245,17 @@
 
 ### Milestone: Phase 42 Workflow Persistent Transcript Refinement
 **Acceptance Criteria:**
-- [ ] `/workflows` no longer remounts the active replay as a blinking step card when advancing through steps.
-- [ ] Playback reveals each new workflow turn with the confirmed ChatGPT/Claude-style cadence.
-- [ ] Completed turns stay fully expanded, and the active turn is followed by viewport scroll during playback.
-- [ ] Step controls jump to existing turns without destructive rewind or hiding later turns.
-- [ ] Workflow switching starts a fresh transcript session.
-- [ ] Benchmark receipt rendering remains available for benchmarked steps, and non-benchmarked steps show clear curated/no-receipt states.
-- [ ] Reduced-motion users receive complete content without fake typing or animated scroll.
-- [ ] Desktop and mobile visual checks confirm no horizontal overflow, clipped proof blocks, or overlapping transcript/controls.
-- [ ] Existing Skills Showcase tests, typecheck/build, generated-data validation when needed, and whitespace checks pass.
-- [ ] All phase tests pass
-- [ ] No regressions in previous phase tests
+- [x] `/workflows` no longer remounts the active replay as a blinking step card when advancing through steps.
+- [x] Playback reveals each new workflow turn with the confirmed ChatGPT/Claude-style cadence.
+- [x] Completed turns stay fully expanded, and the active turn is followed by viewport scroll during playback.
+- [x] Step controls jump to existing turns without destructive rewind or hiding later turns.
+- [x] Workflow switching starts a fresh transcript session.
+- [x] Benchmark receipt rendering remains available for benchmarked steps, and non-benchmarked steps show clear curated/no-receipt states.
+- [x] Reduced-motion users receive complete content without fake typing or animated scroll.
+- [x] Desktop and mobile visual checks confirm no horizontal overflow, clipped proof blocks, or overlapping transcript/controls.
+- [x] Existing Skills Showcase tests, typecheck/build, generated-data validation when needed, and whitespace checks pass.
+- [x] All phase tests pass
+- [x] No regressions in previous phase tests
 
 ## Review
 
@@ -194,6 +271,8 @@
 - Step 42.4 completed on 2026-05-18.
 - Step 42.5 completed on 2026-05-18.
 - Step 42.6 completed on 2026-05-18.
+- Step 42.7 completed on 2026-05-18.
+- Phase 42 completed on 2026-05-18 and archived to `tasks/phases/phase-42.md`.
 
 ### Step 42.6 Ship Manifest
 
