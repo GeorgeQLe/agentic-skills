@@ -1536,6 +1536,89 @@ describe("benchmark setup registry", () => {
     expect(missingValidationQuality?.criticalFailures).toContain("validation-evidence");
   });
 
+  it("uses fixture-grounded runner-specific route assertions for the ship-end workflow setup", () => {
+    const setup = resolveBenchSetup("ship-end");
+    expect(setup).toBeDefined();
+    expect(setup?.prompt).toContain("Use the fixture task files as the source of truth");
+    expect(setup?.prompt).toContain("name both `tasks/todo.md` and `tasks/history.md`");
+    expect(setup?.prompt).toContain("`/run` when running as Claude and `$run` when running as Codex");
+
+    const writeHandoff = (workDir: string, route: string, nextWork = "- Complete `Step 1.2 next` from `tasks/todo.md`.") => {
+      writeFileSync(
+        resolve(workDir, "session-handoff.md"),
+        [
+          "# Session Handoff",
+          "",
+          "## Completed Work",
+          "- Completed `Step 1.1` from `tasks/todo.md`.",
+          "- `tasks/history.md` records: Completed Step 1.1 with tests.",
+          "",
+          "## Validation Evidence",
+          "- The fixture history says Step 1.1 was completed with tests.",
+          "",
+          "## Remaining Risks",
+          "- No git inspection was run for this benchmark fixture.",
+          "",
+          "## Next Work",
+          nextWork,
+          "",
+          "## Next Command",
+          `\`${route}\``,
+        ].join("\n"),
+      );
+    };
+
+    const claudeWorkDir = mkdtempSync(resolve(tmpdir(), "ship-end-claude-route-"));
+    writeHandoff(claudeWorkDir, "/run");
+    const claudeAssertions = setup!.assertResult(
+      { stdout: "", stderr: "", exitCode: 0, workDir: claudeWorkDir, files: ["session-handoff.md"] },
+      { agent: "claude" },
+    );
+    expect(claudeAssertions.find((assertion) => assertion.description === "Output includes Step 1.2")).toMatchObject({
+      pass: true,
+    });
+    expect(claudeAssertions.find((assertion) => assertion.description === "Output recommends /run")).toMatchObject({
+      pass: true,
+    });
+
+    const codexWorkDir = mkdtempSync(resolve(tmpdir(), "ship-end-codex-route-"));
+    writeHandoff(codexWorkDir, "$run");
+    const codexAssertions = setup!.assertResult(
+      { stdout: "", stderr: "", exitCode: 0, workDir: codexWorkDir, files: ["session-handoff.md"] },
+      { agent: "codex" },
+    );
+    expect(codexAssertions.find((assertion) => assertion.description === "Output recommends $run")).toMatchObject({
+      pass: true,
+    });
+
+    const quality = setup!.qualityEvaluator?.evaluate(readFileSync(resolve(claudeWorkDir, "session-handoff.md"), "utf8"));
+    expect(quality?.criteria.find((criterion) => criterion.id === "actionable-next-route")).toMatchObject({
+      passed: true,
+    });
+
+    const missingNextWorkDir = mkdtempSync(resolve(tmpdir(), "ship-end-missing-next-work-"));
+    writeHandoff(missingNextWorkDir, "/run", "- Decide what to work on next.");
+    expect(
+      setup!.assertResult(
+        { stdout: "", stderr: "", exitCode: 0, workDir: missingNextWorkDir, files: ["session-handoff.md"] },
+        { agent: "claude" },
+      ).find((assertion) => assertion.description === "Output includes Step 1.2"),
+    ).toMatchObject({
+      pass: false,
+    });
+
+    const recursiveRouteWorkDir = mkdtempSync(resolve(tmpdir(), "ship-end-recursive-route-"));
+    writeHandoff(recursiveRouteWorkDir, "/ship-end");
+    expect(
+      setup!.assertResult(
+        { stdout: "", stderr: "", exitCode: 0, workDir: recursiveRouteWorkDir, files: ["session-handoff.md"] },
+        { agent: "claude" },
+      ).find((assertion) => assertion.description === "Output recommends /run"),
+    ).toMatchObject({
+      pass: false,
+    });
+  });
+
   it("keeps the spec-interview benchmark route aligned with mirrored skill contracts", () => {
     const setup = resolveBenchSetup("spec-interview");
     expect(setup).toBeDefined();
