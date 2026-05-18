@@ -22,12 +22,25 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Acceptance Criteria:**
 - [x] `pnpm bench --list-skills` confirms `update-packages` is known and reports custom coverage via `tests/layer4/setups/tier23-global-workflows.setup.ts`.
-- [x] `pnpm verify --skill update-packages` passed with layer1 PASS in 3.6s and layer2 SKIP because no target-specific layer2 tests matched.
+- [x] `pnpm verify --skill update-packages` passed with layer1 PASS in 4.9s and layer2 SKIP because no target-specific layer2 tests matched.
 - [x] `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` ran only after verify passed.
 - [x] `benchmark/test-update-packages-2026-05-18.md` records verify, benchmark, latency, cost, consistency, failures, raw session evidence, and recommended next route.
 - [x] Results are recorded in `tasks/todo.md`, generated evidence is refreshed, then intended changes are committed and pushed on `master`.
 
-**Result:** Fresh rerun completed on 2026-05-18 with evaluated passing Codex evidence and a fully infrastructure-blocked Claude lane. `update-packages` is known with custom benchmark coverage via `tests/layer4/setups/tier23-global-workflows.setup.ts`, and verify passed with layer1 PASS in 3.6s plus layer2 SKIP because no target-specific layer2 tests matched. Claude session `update-packages-claude-4d9966e8` had 0 evaluated runs and 3 agent-runner budget blocks, so that lane is inconclusive infrastructure blockage rather than a skill failure. Codex session `update-packages-codex-df005dbd` completed three evaluated runs with 3/3 hard assertion pass rate, no infrastructure blocks, 100.0% output quality, p50 latency 85.4s, and $0.75 total estimated cost. Report: `benchmark/test-update-packages-2026-05-18.md`. Generated Skills Showcase data and benchmark results matrix were refreshed. Recommended next skill: `$benchmark-agent-review update-packages`.
+**Result:** Fresh rerun completed on 2026-05-18 with evaluated passing evidence for both runners and one Claude infrastructure block. `update-packages` is known with custom benchmark coverage via `tests/layer4/setups/tier23-global-workflows.setup.ts`, and verify passed with layer1 PASS in 4.9s plus layer2 SKIP because no target-specific layer2 tests matched. Claude session `update-packages-claude-a767ae3e` completed two evaluated runs with 2/2 hard assertion pass rate, one agent-runner budget block, 95.2% output quality, no threshold or critical failures, p50 latency 54.5s, and $0.75 total estimated cost. Codex session `update-packages-codex-337a5d5e` completed three evaluated runs with 3/3 hard assertion pass rate, no infrastructure blocks, 100.0% output quality, no threshold or critical failures, p50 latency 76.6s, and $0.75 total estimated cost. Report: `benchmark/test-update-packages-2026-05-18.md`. Generated Skills Showcase data and benchmark results matrix were refreshed. Recommended next skill: `$benchmark-agent-review update-packages`.
+
+## Current Review: update-packages Fresh Benchmark Agent Review 2026-05-18
+
+**Goal:** Review the latest persisted `update-packages` benchmark outputs for subjective operator quality.
+
+**Acceptance Criteria:**
+- [x] Latest Claude and Codex run directories are resolved from `benchmark/test-update-packages-2026-05-18.md`.
+- [x] Infrastructure-blocked runs are excluded from scoring.
+- [x] Retained Claude and Codex `package-update-plan.md` artifacts are reviewed against the agent-review rubric.
+- [x] `benchmark/review-update-packages-2026-05-18.md` records source evidence, scores, strengths, weaknesses, remediation, and next route.
+- [x] Results are recorded in `tasks/todo.md`, generated evidence is refreshed if needed, then intended changes are committed and pushed on `master`.
+
+**Result:** Agent review completed on 2026-05-18. Claude session `update-packages-claude-a767ae3e` had two evaluated retained `package-update-plan.md` artifacts and one infrastructure block, which was excluded from subjective scoring. Codex session `update-packages-codex-337a5d5e` had three evaluated retained `package-update-plan.md` artifacts. Subjective verdict: usable to excellent, median 90/100 with score range 76-96. All evaluated outputs preserved the fixture constraints, selected/skipped age-gated versions, pnpm migration safety, major-upgrade risk handling, and runner-native next routing. Remaining gap: Claude evaluated outputs lack explicit per-batch expected proof/artifact and target-specific migration routes while deterministic quality still reports 95.2% despite `workflow-actionability` scoring 0.0%. Report: `benchmark/review-update-packages-2026-05-18.md`. Recommended next command: `$targeted-skill-builder update-packages benchmark actionability threshold`.
 
 ## Current Benchmark: feature-interview Fresh Rerun After Prototype Wording Tolerance 2026-05-18
 
