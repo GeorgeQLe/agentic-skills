@@ -34,10 +34,24 @@
 **Plan:**
 - [x] Confirm `$benchmark-test-skill` is the active workflow and `update-packages` is only the benchmark target argument.
 - [x] Run `pnpm bench --list-skills` and record `update-packages` coverage status.
-- [ ] Run `pnpm verify --skill update-packages`; stop before bench if verification fails.
-- [ ] Run `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` only after verify passes.
-- [ ] Write and validate `benchmark/test-update-packages-2026-05-18.md` with verify, benchmark, latency, cost, consistency, raw paths, failures, and recommended next route.
-- [ ] Refresh generated evidence if curated benchmark evidence changes, validate, record results, then commit and push intended changes on `master`.
+- [x] Run `pnpm verify --skill update-packages`; stop before bench if verification fails.
+- [x] Run `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` only after verify passes.
+- [x] Write and validate `benchmark/test-update-packages-2026-05-18.md` with verify, benchmark, latency, cost, consistency, raw paths, failures, and recommended next route.
+- [x] Refresh generated evidence if curated benchmark evidence changes, validate, record results, then commit and push intended changes on `master`.
+
+## Review — Fresh Benchmark `update-packages` 2026-05-18
+
+- Command resolution: `$benchmark-test-skill` was the active workflow; `update-packages` was treated only as the benchmark target argument.
+- Eligibility: `update-packages` is known with custom coverage via `tests/layer4/setups/tier23-global-workflows.setup.ts`.
+- Verify passed: layer1 PASS in 3.5s with 1,210 tests across 15 files; layer2 SKIP because no target-specific layer2 tests matched `update-packages`.
+- Benchmark ran with `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0`.
+- Claude session `update-packages-claude-fa542bcd`: 3/3 evaluated hard assertion pass rate, 0 infrastructure blocks, 91.2% output-quality score, p50 latency 58.4s, and $0.75 total estimated cost.
+- Codex session `update-packages-codex-03d220e0`: 3/3 evaluated hard assertion pass rate, 0 infrastructure blocks, 98.5% output-quality score, p50 latency 85.7s, and $0.75 total estimated cost.
+- Failed assertions: none.
+- Report written at `benchmark/test-update-packages-2026-05-18.md`.
+- Generated Skills Showcase data and benchmark results matrix were refreshed after the curated benchmark report changed.
+- Validation passed: benchmark coverage, benchmark-results matrix tests, and `git diff --check`.
+- **Recommended next skill:** `$benchmark-agent-review update-packages`
 
 ## Current Task — Fresh Benchmark `benchmark-agent-review` After Owner Specificity Tolerance 2026-05-18
 
@@ -49,7 +63,7 @@
 - [x] Run `pnpm verify --skill benchmark-agent-review`; stop before bench if verification fails.
 - [x] Run `pnpm bench --skill benchmark-agent-review --agent both --runs 3 --chunk-size 3 --pause 0` only after verify passes.
 - [x] Write and validate `benchmark/test-benchmark-agent-review-2026-05-18.md` with verify, benchmark, latency, cost, consistency, raw paths, failures, and recommended next route.
-- [ ] Refresh generated evidence if curated benchmark evidence changes, validate, record results, then commit and push intended changes on `master`.
+- [x] Refresh generated evidence if curated benchmark evidence changes, validate, record results, then commit and push intended changes on `master`.
 
 ## Review — Fresh Benchmark `benchmark-agent-review` After Owner Specificity Tolerance 2026-05-18
 
@@ -62,6 +76,7 @@
 - Failed assertions: none.
 - Report written at `benchmark/test-benchmark-agent-review-2026-05-18.md`.
 - Generated Skills Showcase data and benchmark results matrix were refreshed after the curated benchmark report changed. The validation script regenerated expected assets and reported them stale pending commit.
+- Validation passed: report field scan, benchmark coverage, benchmark-results matrix tests, and `git diff --check`.
 - **Recommended next skill:** `$session-triage benchmark-agent-review benchmark failure`
 
 ## Current Task — Targeted Update `benchmark-agent-review` Benchmark Quality Owner Specificity Tolerance 2026-05-18

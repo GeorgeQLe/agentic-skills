@@ -35,10 +35,12 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Acceptance Criteria:**
 - [x] `pnpm bench --list-skills` confirms `update-packages` is known and reports custom coverage.
-- [ ] `pnpm verify --skill update-packages` passes or blocks benchmark execution with a recorded failure.
-- [ ] `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
-- [ ] `benchmark/test-update-packages-2026-05-18.md` records verify, benchmark, latency, cost, consistency, failed assertions, raw session evidence, and recommended next route.
+- [x] `pnpm verify --skill update-packages` passes or blocks benchmark execution with a recorded failure.
+- [x] `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [x] `benchmark/test-update-packages-2026-05-18.md` records verify, benchmark, latency, cost, consistency, failed assertions, raw session evidence, and recommended next route.
 - [ ] Results are recorded in `tasks/todo.md`, generated evidence is refreshed if needed, then intended changes are committed and pushed on `master`.
+
+**Result:** Fresh rerun completed on 2026-05-18 with a deterministic both-agent pass. `update-packages` is known with custom benchmark coverage via `tests/layer4/setups/tier23-global-workflows.setup.ts`, and verify passed with layer1 PASS in 3.5s plus layer2 SKIP because no target-specific layer2 tests matched. Claude session `update-packages-claude-fa542bcd` completed three evaluated runs with 3/3 hard assertion pass rate, 91.2% output quality, p50 latency 58.4s, and $0.75 total estimated cost. Codex session `update-packages-codex-03d220e0` completed three evaluated runs with 3/3 hard assertion pass rate, 98.5% output quality, p50 latency 85.7s, and $0.75 total estimated cost. No runs were infrastructure-blocked, and there were no failed hard assertions, threshold failures, or critical failures. Report: `benchmark/test-update-packages-2026-05-18.md`. Recommended next skill: `$benchmark-agent-review update-packages`.
 
 ## Current Targeted Update: benchmark-agent-review Benchmark Quality Owner Specificity Tolerance 2026-05-18
 
