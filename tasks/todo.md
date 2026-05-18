@@ -5,6 +5,32 @@
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
+## Current Task — Fresh Benchmark `update-packages` 2026-05-18
+
+**Goal:** Run `$benchmark-test-skill update-packages` against the current repository state and publish deterministic both-agent benchmark evidence.
+
+**Plan:**
+- [x] Confirm `$benchmark-test-skill` is the active workflow and `update-packages` is only the benchmark target argument.
+- [x] Run `pnpm bench --list-skills` and record `update-packages` coverage status.
+- [x] Run `pnpm verify --skill update-packages`; stop before bench if verification fails.
+- [x] Run `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` only after verify passes.
+- [x] Write and validate `benchmark/test-update-packages-2026-05-18.md` with verify, benchmark, latency, cost, consistency, failures, raw paths, and recommended next route.
+- [x] Refresh generated evidence if needed, record results, then commit and push intended changes on `master`.
+
+## Review — Fresh Benchmark `update-packages` 2026-05-18
+
+- Command resolution: `$benchmark-test-skill` was the active workflow; `update-packages` was treated only as the benchmark target argument.
+- Eligibility: `update-packages` is known with custom coverage via `tests/layer4/setups/tier23-global-workflows.setup.ts`.
+- Verify passed: layer1 PASS in 3.3s with 1,211 tests across 15 files; layer2 SKIP because no target-specific layer2 tests matched `update-packages`.
+- Benchmark ran with `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0`.
+- Claude session `update-packages-claude-225f6efc`: 0/1 evaluated hard assertion pass rate, 2 infrastructure blocks from agent runner budget exceeded, 75.0% output quality, p50 latency 57.1s, and $0.75 total estimated cost.
+- Codex session `update-packages-codex-fd2c4602`: 0/3 evaluated hard assertion pass rate, 0 infrastructure blocks, 89.7% output quality, p50 latency 68.0s, and $0.75 total estimated cost.
+- Failed assertions: Claude run #1 missed `Output proves selected pnpm toolchain age eligibility` and `Output preserves age-gate key semantics`; Codex runs #0, #1, and #2 missed `Output preserves age-gate key semantics`.
+- Report written at `benchmark/test-update-packages-2026-05-18.md`.
+- Generated Skills Showcase data and benchmark results matrix were refreshed after the curated benchmark report changed.
+- Validation passed: report field scan, benchmark-results matrix tests, and `git diff --check`. `scripts/validate-skills-showcase-data.sh` regenerated intended asset changes and reported them stale pending commit, which is the expected signal before committing generated assets.
+- **Recommended next skill:** `$session-triage update-packages benchmark failure`
+
 ## Current Task — Targeted Update `benchmark-agent-review` Owner Table Label Tolerance 2026-05-18
 
 **Goal:** Fix the `benchmark-agent-review` benchmark quality evaluator so remediation table headers such as `Owner target / owner file` and `Exact owner target / files` pass when exact owner paths and validation checks are present, while broad owner targets still fail.
