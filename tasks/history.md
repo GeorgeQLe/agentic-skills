@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-05-18 — Step 42.6: workflow transcript regression coverage
+
+- Added focused `TuiWorkflow` regression tests for persistent transcript behavior: completed turns stay expanded after advancing, backward step jumps preserve later revealed turns, and workflow switching resets the session to the new workflow's first turn.
+- Covered benchmark receipt metadata, curated no-receipt states, and reduced-motion immediate proof rendering inside transcript turns.
+- Tightened test setup by clearing stale DOM between client and TUI suites, restoring timers after each test, and mocking `scrollIntoView` where jsdom does not provide it.
+- Validation passed: focused workflows test suite, typecheck, Next build, and whitespace check.
+- Recommended next command: `$run`.
+
 ## 2026-05-18 — Step 42.3: workflow transcript reveal cadence
 
 - Coordinated `/workflows` persistent transcript replay so the newest active turn shows the user command immediately, fake-types the agent response, and reveals terminal/artifact/receipt proof blocks after typing completes.
