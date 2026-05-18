@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-05-18 — update-packages expanded-budget benchmark rerun
+
+- Raised the `update-packages` benchmark setup from the `$0.25` smoke budget to the `$1.00` standard per-run budget and added layer1 coverage for that tier.
+- Broadened retained-evidence benchmark matchers so valid `## Full Verification Checklist` sections and `npm-view-times.json` publish-time proof list shapes are accepted.
+- Final rerun evidence: Claude session `update-packages-claude-391a34fd` passed 3/3 evaluated hard assertions with no infrastructure blocks, 93.9% output quality, and two critical quality failures; Codex session `update-packages-codex-3784a689` passed 3/3 evaluated hard assertions with no infrastructure blocks and 100.0% output quality.
+- Updated `benchmark/test-update-packages-2026-05-18.md` and refreshed generated benchmark/showcase assets.
+- Validation passed: focused layer1 setup tests, benchmark coverage, target verify, expanded-budget both-agent benchmark, generated-data validation, targeted evidence scans, and whitespace check.
+- Recommended next command: `$session-triage update-packages benchmark failure`.
+
 ## 2026-05-18 — Step 42.6: workflow transcript regression coverage
 
 - Added focused `TuiWorkflow` regression tests for persistent transcript behavior: completed turns stay expanded after advancing, backward step jumps preserve later revealed turns, and workflow switching resets the session to the new workflow's first turn.

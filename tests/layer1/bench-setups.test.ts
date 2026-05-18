@@ -328,6 +328,18 @@ describe("benchmark setup registry", () => {
     expect(quality?.criteria.find((criterion) => criterion.id === "workflow-targeted-migration-routes")).toMatchObject({ passed: true });
     expect(quality?.criteria.find((criterion) => criterion.id === "no-generic-or-external-overreach")).toMatchObject({ passed: true });
     expect(quality?.criticalFailures).not.toContain("no-generic-or-external-overreach");
+
+    const checklistWorkDir = mkdtempSync(resolve(tmpdir(), "update-packages-verification-checklist-"));
+    writeFileSync(
+      resolve(checklistWorkDir, "package-update-plan.md"),
+      reportBody("$run").replace("## Verification", "## Full Verification Checklist"),
+    );
+    const checklistAssertions = setup!.assertResult(
+      { stdout: "", stderr: "", exitCode: 0, workDir: checklistWorkDir, files: ["package-update-plan.md"] },
+      { agent: "codex" },
+    );
+
+    expect(checklistAssertions.find((assertion) => assertion.description === "Output includes verification command evidence")).toMatchObject({ pass: true });
   });
 
   it("rejects update-packages plans without major-upgrade risk handling", () => {
@@ -734,6 +746,18 @@ describe("benchmark setup registry", () => {
     expect(retainedCodexShape.assertions.find((assertion) => assertion.description === "Output preserves age-gate key semantics")).toMatchObject({ pass: true });
     expect(retainedCodexShape.quality?.criteria.find((criterion) => criterion.id === "workflow-output-proves-selected-pnpm-toolchain-age-eligibility")).toMatchObject({ passed: true });
     expect(retainedCodexShape.quality?.criteria.find((criterion) => criterion.id === "workflow-output-preserves-age-gate-key-semantics")).toMatchObject({ passed: true });
+
+    const retainedProofListShape = evaluatePlan([
+      ...basePlan.slice(0, 2),
+      "Recommended `packageManager`: `pnpm@10.11.0`.",
+      "Publish-time proof retained in `npm-view-times.json`:\n\n- `pnpm@10.11.0`: 2026-05-01T12:00:00.000Z, eligible because it is older than 8 days.\n- `pnpm@10.22.0`: 2026-05-16T12:00:00.000Z, skipped because it is not older than 8 days.",
+      "Create or update project-root `.npmrc` with:\n\n```ini\nmin-release-age=8\nminimum-release-age=11520\n```",
+      "Ownership:\n\n- `min-release-age=8` is npm's relative age gate.\n- `minimum-release-age=11520` is pnpm coverage in `.npmrc` where supported.\n- `minimumReleaseAge: 11520` is pnpm project config coverage where supported.",
+      ...basePlan.slice(2),
+    ]);
+
+    expect(retainedProofListShape.assertions.find((assertion) => assertion.description === "Output proves selected pnpm toolchain age eligibility")).toMatchObject({ pass: true });
+    expect(retainedProofListShape.quality?.criteria.find((criterion) => criterion.id === "workflow-output-proves-selected-pnpm-toolchain-age-eligibility")).toMatchObject({ passed: true });
 
     const fixtureKeyShape = evaluatePlan([
       ...basePlan.slice(0, 2),
