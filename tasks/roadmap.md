@@ -16,6 +16,20 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Update: benchmark-agent-review Owner Table Label Tolerance 2026-05-18
+
+**Goal:** Fix the `benchmark-agent-review` benchmark quality evaluator so remediation table headers such as `Owner target / owner file` and `Exact owner target / files` pass when exact owner paths and validation checks are present, while broad owner targets still fail.
+
+**Acceptance Criteria:**
+- [x] Owner-label detection accepts slash-composed remediation table headers for owner target/file/surface combinations.
+- [x] The evaluator still requires exact known owner paths or scoped owner-plus-lookup evidence for owner-target credit.
+- [x] Broad owner targets and broad-only remediation remain failing cases.
+- [x] Focused layer1 coverage proves the newly accepted table-header forms and retained rejection cases.
+- [x] Focused validation, benchmark coverage, target verify, required skill audits, targeted search, Codex smoke benchmark, and whitespace checks pass.
+- [x] Results are recorded in `tasks/todo.md`, then intended changes are committed and pushed on `master`.
+
+**Result:** Updated on 2026-05-18. `tests/layer4/setups/packs/pack-workflows.setup.ts` now accepts remediation table headers with slash-composed owner columns such as `Owner target / owner file` and `Exact owner target / files` while still requiring exact known owner paths or scoped owner-plus-lookup evidence. Focused layer1 coverage in `tests/layer1/bench-setups.test.ts` proves the newly accepted forms and keeps broad-owner/broad-only remediation failures intact. Validation passed: focused layer1 setup/quality tests, benchmark coverage, `pnpm --dir tests verify --skill benchmark-agent-review`, install and skill scripts, targeted `rg`, `git diff --check`, and Codex smoke benchmark `benchmark-agent-review-codex-176e11dd` with 1/1 hard assertions, 98.3% output quality, and no threshold or critical failures. Recommended next command: `$benchmark-test-skill benchmark-agent-review`.
+
 ## Current Triage: benchmark-agent-review Codex Owner Table Labels 2026-05-18
 
 **Goal:** Investigate why the fresh `$benchmark-test-skill benchmark-agent-review` rerun produced Codex output-quality threshold and critical failures on owner-target and validation-specificity criteria.
@@ -114,10 +128,12 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Acceptance Criteria:**
 - [x] `pnpm bench --list-skills` confirms `update-packages` is known and reports custom coverage.
-- [ ] `pnpm verify --skill update-packages` passes or blocks benchmark execution with a recorded failure.
-- [ ] `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
-- [ ] `benchmark/test-update-packages-2026-05-18.md` records verify, benchmark, latency, cost, consistency, failed assertions, raw session evidence, and recommended next route.
-- [ ] Results are recorded in `tasks/todo.md`, generated evidence is refreshed if needed, then intended changes are committed and pushed on `master`.
+- [x] `pnpm verify --skill update-packages` passes or blocks benchmark execution with a recorded failure.
+- [x] `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [x] `benchmark/test-update-packages-2026-05-18.md` records verify, benchmark, latency, cost, consistency, failed assertions, raw session evidence, and recommended next route.
+- [x] Results are recorded in `tasks/todo.md`, generated evidence is refreshed if needed, then intended changes are committed and pushed on `master`.
+
+**Result:** Fresh rerun completed on 2026-05-18 with deterministic evaluated failures and partial Claude infrastructure blocks. `update-packages` is known with custom benchmark coverage via `tests/layer4/setups/tier23-global-workflows.setup.ts`, and verify passed with layer1 PASS in 3.5s plus layer2 SKIP because no target-specific layer2 tests matched. Claude session `update-packages-claude-5c4392a3` had one evaluated run, which failed both `Output proves selected pnpm toolchain age eligibility` and `Output preserves age-gate key semantics`, while two Claude runs were infrastructure-blocked by agent runner budget. Codex session `update-packages-codex-31ad8c8d` completed three evaluated runs with 1/3 hard assertion pass rate; runs #0 and #1 failed `Output preserves age-gate key semantics`. Report: `benchmark/test-update-packages-2026-05-18.md`. Recommended next skill: `$session-triage update-packages benchmark failure`.
 
 ## Current Targeted Update: benchmark-agent-review Benchmark Quality Owner Specificity Tolerance 2026-05-18
 
