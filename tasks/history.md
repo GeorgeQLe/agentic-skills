@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-05-18 — ship-end benchmark agent review
+
+- Reviewed retained `session-handoff.md` artifacts from Claude `ship-end-claude-0190fdda` and Codex `ship-end-codex-4fbde9d6`.
+- Scored the outputs as good to excellent, with median subjective score 90.5 and range 84-95.
+- Confirmed all outputs preserve fixture source-of-truth evidence, Step 1.2 next work, constrained validation claims, and meaningful residual risks.
+- Identified one remaining ergonomic gap: Codex outputs list both Claude and Codex route spellings instead of one active-runner final handoff.
+- Wrote `benchmark/review-ship-end-2026-05-18.md`.
+- Recommended next command: `$targeted-skill-builder ship-end benchmark single active-runner final handoff`.
+
 ## 2026-05-18 — ship-end benchmark runner route fix
 
 - Updated the Tier 1 `ship-end` benchmark setup so Claude requires `/run`, Codex requires `$run`, and the prompt explicitly uses fixture task files as the source of truth.
