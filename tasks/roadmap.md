@@ -16,6 +16,20 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Update: Prototype-First Product Workflow Gate 2026-05-18
+
+**Goal:** Add a prototype-first gate to product intake, specification, UI, planning, and execution skills so new SaaS/product work defaults to a clickable local/static prototype before database, auth, payments, analytics, deployment, admin, multi-tenant, or observability infrastructure.
+
+**Acceptance Criteria:**
+- [x] Relevant lessons and `tasks/prototype-first-saas-workflow-report.md` are reviewed.
+- [x] Existing-skill overlap is checked before creating any new skill.
+- [x] Mirrored `feature-interview`, `spec-interview`, `ui-interview`, `plan-phase`, and `run` contracts require a clickable prototype/default deferral gate for new product work.
+- [x] Benchmark fixtures assert prototype-first defaults, fake/fixture data boundaries, deferred infrastructure, and evidence needed before promotion.
+- [x] Focused layer1 tests, benchmark coverage, target verifies, required skill audits, generated showcase refresh, targeted searches, and whitespace validation pass.
+- [x] Results are recorded in `tasks/todo.md`, then intended changes are committed and pushed on `master`.
+
+**Result:** Updated on 2026-05-18. Product intake, specification, UI, phase planning, and run execution contracts now default new SaaS/product work to a clickable local/static prototype with fake, fixture, or in-memory data unless infrastructure is explicitly approved or required to test the core interaction. Benchmark coverage now asserts prototype-first defaults, deferred production infrastructure, and evidence before infrastructure promotion. Generated Skills Showcase assets and the benchmark results matrix were refreshed. Validation passed: focused layer1 setup/quality tests, benchmark coverage, target verifies for all five updated skills, install and skill audits, showcase data validation, targeted `rg`, and `git diff --check`. Recommended next command: `$benchmark-test-skill feature-interview`.
+
 ## Current Targeted Update: update-packages pnpm Fixture Evidence Tolerance 2026-05-18
 
 **Goal:** Fix the custom `update-packages` benchmark setup so fixture-based retained publish-time proof for the selected pnpm package-manager version passes without allowing mismatched or unverified pnpm versions.
@@ -29,15 +43,17 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Updated on 2026-05-18. The custom `update-packages` benchmark setup now supports predicate-based expected evidence for cases where regex alone is too loose or too brittle. `provesSelectedPnpmToolchainAgeEligibility` preserves existing accepted proof forms and also accepts retained `npm-view-times.json` fixture evidence only when the selected `packageManager` pnpm version matches the timestamp key. Focused layer1 coverage proves the failed Codex run #2 shape and rejects a mismatched fixture proof where `packageManager` selects `pnpm@10.22.0` but the retained timestamp is for `10.11.0`. Validation passed: focused layer1 setup/quality tests, benchmark coverage, target verify, install and skill scripts, targeted `rg`, `git diff --check`, and Codex smoke benchmark `update-packages-codex-120085b6` with 1/1 hard assertions. Generated Skills Showcase data was not refreshed because no tracked skill metadata/behavior or curated benchmark/review report changed. Recommended next command: `$benchmark-test-skill update-packages`.
 
-## Current Analysis: Prototype-First vs Complete SaaS Workflow Drag 2026-05-17
+## Current Analysis: Prototype-First vs Complete SaaS Workflow Drag 2026-05-18
 
 **Goal:** Analyze local Claude and Codex session history for evidence that attempts to build complete SaaS products too early introduce database, payments, analytics, deployment, and production-hardening work before clickable prototypes have calibrated taste and feel.
 
 **Acceptance Criteria:**
-- [ ] Full available Claude and Codex user-message history is parsed or unreadable sources are reported.
-- [ ] The report includes exact counts, date ranges, top projects, pattern examples, and a recommendation table.
-- [ ] Recommended skill/workflow amendments identify owner surfaces and validation expectations.
-- [ ] Results are recorded in `tasks/todo.md` with validation evidence.
+- [x] Full available Claude and Codex user-message history is parsed or unreadable sources are reported.
+- [x] The report includes exact counts, date ranges, top projects, pattern examples, and a recommendation table.
+- [x] Recommended skill/workflow amendments identify owner surfaces and validation expectations.
+- [x] Results are recorded in `tasks/todo.md` with validation evidence.
+
+**Result:** Analysis completed on 2026-05-18. Local Claude and Codex history contained 14,977 user messages across 5,654 sessions from 2025-12-10 through 2026-05-18. The report found 612 complete-SaaS/production messages versus 230 prototype-first messages, 432 infrastructure-only sessions versus 105 prototype-only sessions, and mixed-session ordering that more often introduced infrastructure before prototype language than the reverse. Report: `tasks/prototype-first-saas-workflow-report.md`. Recommended next command: `$targeted-skill-builder product workflow prototype-first gate before SaaS infrastructure`.
 
 ## Current Triage: update-packages pnpm Proof Fixture Evidence Failure 2026-05-18
 

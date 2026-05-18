@@ -5,6 +5,31 @@
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
+## Current Task — Prototype-First Product Workflow Gate 2026-05-18
+
+**Goal:** Add a prototype-first gate to product intake, specification, UI, planning, and execution skills so new SaaS/product work defaults to a clickable local/static prototype before database, auth, payments, analytics, deployment, admin, multi-tenant, or observability infrastructure.
+
+**Plan:**
+- [x] Review relevant lessons and the prototype-first SaaS workflow report.
+- [x] Search existing skills for product/prototype/SaaS overlap and decide whether to update existing skills or create a new skill.
+- [x] Update mirrored planning/execution contracts for `feature-interview`, `spec-interview`, `ui-interview`, `plan-phase`, and `run`.
+- [x] Update benchmark coverage fixtures to assert prototype-first defaults and infrastructure deferral.
+- [x] Run focused layer1 tests, benchmark coverage, target verifies, required skill audits, generated showcase refresh, targeted searches, and whitespace validation.
+- [x] Record validation results, commit, and push intended changes on `master`.
+
+## Review — Prototype-First Product Workflow Gate 2026-05-18
+
+- Decision: existing-skill update, not a new skill. Product intake and execution ownership already lives in `feature-interview`, `spec-interview`, `ui-interview`, `plan-phase`, and `run`.
+- Evidence used: `tasks/lessons.md`, `tasks/prototype-first-saas-workflow-report.md`, mirrored skill contracts, existing benchmark coverage setup files, and focused layer1 setup coverage.
+- Evidence intentionally skipped: broad additional session-history scans, because the supplied report already quantified the target pattern across Claude and Codex history.
+- Existing-skill overlap: `ux-variation` already mentions prototype budget, while the missing durable behavior was a shared product gate in intake/spec/UI/phase/run workflows.
+- Updated mirrored `feature-interview`, `spec-interview`, `ui-interview`, `plan-phase`, and `run` contracts to default new SaaS/product work to a clickable local/static prototype with fake, fixture, or in-memory data unless infrastructure is explicitly approved or required to test the core interaction.
+- Added benchmark quality coverage for prototype-first defaults, fake/fixture data boundaries, deferred database/auth/payment/analytics/deployment/admin/multi-tenant/observability work, and evidence required before infrastructure promotion.
+- Refreshed Skills Showcase generated data and benchmark results matrix after tracked skill behavior changed. Curated website copy was not manually changed because the public catalog descriptions for the affected skills still describe their broad workflow roles; the generated skill content now carries the updated behavior.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 bench-setups bench-quality`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill feature-interview`; `pnpm --dir tests verify --skill spec-interview`; `pnpm --dir tests verify --skill ui-interview`; `pnpm --dir tests verify --skill plan-phase`; `pnpm --dir tests verify --skill run`; `./install.sh`; `./scripts/skill-deps.sh --broken`; `./scripts/skill-versions.sh --missing`; `./scripts/skill-next-step-routing.sh --missing`; `node scripts/generate-skills-showcase-data.mjs`; `node scripts/generate-skills-showcase-github-data.mjs`; `scripts/validate-skills-showcase-data.sh`; targeted `rg`; `git diff --check`.
+- Reload note: after `./install.sh`, start a fresh Claude Code or Codex CLI/session if the updated skills are not visible yet.
+- **Recommended next command:** `$benchmark-test-skill feature-interview`
+
 ## Current Task — Targeted Update `update-packages` pnpm Fixture Evidence Tolerance 2026-05-18
 
 **Goal:** Fix the custom `update-packages` benchmark setup so fixture-based retained publish-time proof for the selected pnpm package-manager version passes without allowing mismatched or unverified pnpm versions.
@@ -52,16 +77,26 @@
 - Validation passed: required report field scan and `git diff --check`.
 - **Recommended next skill:** `$targeted-skill-builder update-packages benchmark pnpm fixture evidence tolerance`
 
-## Current Task — Analyze Prototype-First vs Complete SaaS Workflow Drag 2026-05-17
+## Current Task — Analyze Prototype-First vs Complete SaaS Workflow Drag 2026-05-18
 
 **Goal:** Use `$analyze-sessions` to quantify whether complete SaaS build defaults, including database storage, payments, and analytics, are slowing production before clickable prototype calibration.
 
 **Plan:**
-- [ ] Parse full available Claude and Codex user-message history, excluding system/developer/tool text.
-- [ ] Count SaaS-completeness, prototype-first, payments, database/storage, analytics, deployment, and calibration/taste patterns with real examples.
-- [ ] Identify skills and workflow surfaces that should enforce prototype-first checkpoints before production SaaS infrastructure.
-- [ ] Write a comprehensive report with recommended amendments and next route.
-- [ ] Validate the report and record results.
+- [x] Parse full available Claude and Codex user-message history, excluding system/developer/tool text.
+- [x] Count SaaS-completeness, prototype-first, payments, database/storage, analytics, deployment, and calibration/taste patterns with real examples.
+- [x] Identify skills and workflow surfaces that should enforce prototype-first checkpoints before production SaaS infrastructure.
+- [x] Write a comprehensive report with recommended amendments and next route.
+- [x] Validate the report and record results.
+
+## Review — Analyze Prototype-First vs Complete SaaS Workflow Drag 2026-05-18
+
+- Parsed 14,977 local user messages across 5,654 sessions from Claude and Codex history, dated 2025-12-10 through 2026-05-18.
+- Counted 612 complete-SaaS/production messages, 230 prototype-first messages, 193 database/storage messages, 100 payments/pricing messages, 109 analytics messages, and 523 deployment/production messages.
+- Session-level evidence showed 432 infrastructure-only sessions versus 105 prototype-only sessions; mixed sessions more often introduced infrastructure before prototype language than the reverse.
+- Report written: `tasks/prototype-first-saas-workflow-report.md`.
+- Recommendation: add prototype-first gates to `spec-interview`, `feature-interview`, `ui-interview`, `plan-phase`, and `run`, with focused tests proving infrastructure is deferred by default unless explicitly opted in.
+- Validation passed: report field scan for required counts/examples/recommendations/next route and `git diff --check`.
+- **Recommended next command:** `$targeted-skill-builder product workflow prototype-first gate before SaaS infrastructure`
 
 ## Current Task — Fresh Benchmark `update-packages` After Age-Gate Tolerance 2026-05-18
 
@@ -4382,3 +4417,15 @@ Implement only this step, validate it, then run `/ship` when done.
 - Validation passed: report field scan; `pnpm --dir tests bench:coverage`; `pnpm --dir tests exec vitest run --project layer1 benchmark-results-matrix skills-showcase-benchmark-demo`; `git diff --check`.
 - Validation note: `scripts/validate-skills-showcase-data.sh` regenerated proof data and reported stale files before commit, as expected.
 - **Recommended next command:** `$targeted-skill-builder update-packages major-upgrade risk handling`
+
+## Current Task — Benchmark `update-packages` 2026-05-18
+
+**Goal:** Run `$benchmark-test-skill update-packages` against the current repository state and write fresh dated deterministic benchmark evidence.
+
+**Plan:**
+- [x] Confirm `$benchmark-test-skill` is the active workflow and `update-packages` is only the benchmark target argument.
+- [x] Run `pnpm bench --list-skills` and confirm `update-packages` is known to the harness. `coverage=custom`, setup `tests/layer4/setups/tier23-global-workflows.setup.ts`.
+- [ ] Run `pnpm verify --skill update-packages`; stop before benchmark if verification fails.
+- [ ] If verify passes, run `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [ ] Write and validate `benchmark/test-update-packages-2026-05-18.md` with verify, benchmark, latency, cost, consistency, raw paths, failures, and recommended next route.
+- [ ] Record results here, then commit and push intended changes on `master`.

@@ -44,6 +44,7 @@ Interview the user to validate, refine, and complete an implementation specifica
      - **Data model**: what persists, what's ephemeral, migration path from current state
      - **API and contract surface**: routes, events, SDKs, schemas, external integrations, or CLI contracts
      - **Operational requirements**: security, privacy, permissions, performance, observability, and failure handling
+     - **Prototype-first gate** for new user-facing product, SaaS, marketplace, dashboard, internal tool, or product-experience work: whether the first useful artifact is a clickable local/static prototype with fake, fixture, or in-memory data, and which infrastructure is intentionally deferred.
    - Present the checkpoint with the first AskUserQuestion turn and immediately include 1 to 3 focused interview questions. Do not stop at the assumptions checkpoint unless the user explicitly asks to pause and review assumptions first.
    - If any `[inferred]` assumption is corrected, note the correction — these corrections are high-signal for downstream risk and must appear in the interview log.
 
@@ -57,6 +58,8 @@ Interview the user to validate, refine, and complete an implementation specifica
 
 4. **Cover all areas:**
    - Continue until you have thoroughly covered: implementation goals, technical architecture, data models, APIs/contracts, migrations, edge cases, security, performance, observability, test strategy, and scope boundaries.
+   - For new user-facing product work, establish a `Prototype Phase 0` before production architecture. Default to fixture/static/in-memory data and no auth, payments, analytics, persistent database, admin tooling, deployment, multi-tenancy, or production observability unless the user explicitly opts in or the core prototype cannot be tested without it.
+   - Capture a taste-calibration checkpoint in the spec: what users can click, what felt right or wrong after trying it, which workflow assumption the prototype tests, and the smallest infrastructure decision that would be justified after one accepted journey.
    - **Coverage checkpoint** — Before concluding, use AskUserQuestion to present a structured summary: list each area covered with the key decisions made and the evidence or reasoning that supported each decision. Then ask: "Does this cover everything? Any areas we should revisit or that I missed?"
 
 5. **Write outputs:**
@@ -72,6 +75,7 @@ Interview the user to validate, refine, and complete an implementation specifica
      - `## Open Questions`
      - `## Assumptions & Risks` (the checkpoint output)
      Additional topic-specific sections (e.g. `## Data Model`, `## Security`) may appear between Detailed Design and Edge Cases. Do not number sections.
+   - For new user-facing product work, include the prototype-first decision in `## Goals`, `## Non-Goals`, `## Detailed Design`, and `## Acceptance Criteria`: first clickable prototype scope, fake/fixture data boundary, deferred infrastructure list, and promotion criteria for any later database/auth/payment/analytics/deployment work.
    - Append an **Assumptions & Risks** section to the end of the spec listing: each checkpoint assumption that was confirmed, corrected, or left unresolved during the interview, its source tag, and the downstream risk if the assumption turns out to be wrong later. Flag any `[inferred]` assumptions that were never explicitly confirmed by the user.
    - Create an interview log file named `[topic]-interview.md` recording each turn of the interview including questions asked, options presented with pros/cons, and user selections. The log must include the Assumptions Checkpoint as presented, user corrections, and a summary of significant deviations from the original spec.
 
