@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-05-18 — update-packages one-based batch actionability tolerance
+
+- Calibrated the `update-packages` benchmark actionability matcher so strong one-based `Batch 1/2/3` plans receive quality credit alongside existing zero-based and lettered batch plans.
+- Kept the quality gate strict by requiring mutation or implementation command evidence, verification evidence, expected proof/artifact or `pnpm-lock.yaml` evidence, and stop gates before actionability passes.
+- Added focused layer1 coverage for a retained strong one-based batch shape while preserving weak batch-list negatives and the bare `/migrate` quality penalty.
+- Validation passed: install, skill dependency/version/routing audits, focused layer1 setup tests for `update-packages`, benchmark coverage, `pnpm --dir tests verify --skill update-packages`, targeted search, and whitespace validation.
+- Recommended next command: `$benchmark-test-skill update-packages`.
+
 ## 2026-05-18 — ship-end benchmark agent review
 
 - Reviewed retained `session-handoff.md` artifacts from Claude `ship-end-claude-0190fdda` and Codex `ship-end-codex-4fbde9d6`.
