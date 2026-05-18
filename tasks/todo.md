@@ -127,7 +127,7 @@
     - Add completion state that reveals terminal, artifact, and receipt/proof blocks only after the active agent response finishes.
     - Make reduced-motion mode render complete active-turn content immediately and avoid timers that would delay proof visibility.
     - Keep already completed turns fully expanded and avoid changing the revealed-depth behavior introduced in Step 42.2.
-- [ ] Step 42.4: Add transcript auto-scroll and stable benchmark/no-receipt proof rendering.
+- [x] Step 42.4: Add transcript auto-scroll and stable benchmark/no-receipt proof rendering.
   - Classification: automated
   - Files: modify `apps/skills-showcase/src/showcase/tui/TuiWorkflow.tsx`, modify `apps/skills-showcase/src/showcase/tui/workflow.css`
   - Notes: Scroll the active transcript turn into view during playback; keep benchmark receipt metadata available for benchmarked steps; preserve curated/no-receipt states for non-benchmarked steps.
@@ -141,6 +141,12 @@
   - Classification: automated
   - Files: modify `apps/skills-showcase/src/showcase/tui/workflow.css`
   - Notes: Keep workflow selectors and step controls visible above the transcript; prevent horizontal overflow, clipped proof blocks, and control/transcript overlap at mobile and desktop widths.
+  - Implementation plan:
+    - Audit the current transcript, control, benchmark strip, and notebook layout at desktop and mobile breakpoints before editing CSS.
+    - Keep workflow chips, benchmark strip, step controls, and counter above or adjacent to the transcript without covering transcript turns.
+    - Tighten grid/flex sizing, overflow containment, and wrapping for transcript cards, replay messages, terminal/proof blocks, receipt rows, and step controls.
+    - Preserve the Step 42.4 active-turn scroll anchoring and receipt data attributes while adjusting spacing.
+    - Use targeted visual checks during Step 42.7 for `/workflows` desktop and mobile; this step should focus on CSS layout stability, not playback state behavior.
 
 ### Green
 - [ ] Step 42.6: Write regression tests covering the persistent transcript behavior.
@@ -178,6 +184,20 @@
 - Step 42.1 completed on 2026-05-18.
 - Step 42.2 completed on 2026-05-18.
 - Step 42.3 completed on 2026-05-18.
+- Step 42.4 completed on 2026-05-18.
+
+### Step 42.4 Ship Manifest
+
+- **User goal:** Execute `$run` for Step 42.4, adding active transcript auto-scroll and stable benchmark/no-receipt proof rendering for the `/workflows` persistent transcript pilot.
+- **Changed files:** `apps/skills-showcase/src/showcase/tui/TuiWorkflow.tsx`; `apps/skills-showcase/src/showcase/tui/workflow.css`; `apps/skills-showcase/src/showcase/workflows.test.tsx`; `tasks/todo.md`; `tasks/history.md`.
+- **Per-file purpose:** `TuiWorkflow.tsx` adds stable transcript-turn refs/data attributes, playback-only smooth scrolling for the active turn, and receipt data markers keyed to original step index; `workflow.css` adds scroll anchoring, active-turn highlighting, and receipt containment for long proof metadata; `workflows.test.tsx` covers smooth-scroll behavior and reduced-motion bypass; `tasks/todo.md` records completion, validation, manifest, and the next-step plan; `tasks/history.md` records the shipped workflow refinement.
+- **User-goal mapping:** The active turn now follows viewport scroll during playback without affecting reduced-motion users, while benchmark receipt rows and curated no-receipt states remain rendered inside their original transcript turns with overflow containment.
+- **Tests run:** `pnpm --dir apps/skills-showcase test -- workflows.test.tsx` passed with 8 files and 95 tests; `pnpm --dir apps/skills-showcase typecheck` passed; `pnpm --dir apps/skills-showcase build` passed; `git diff --check` passed.
+- **Skipped tests:** Full app tests were not rerun because the focused workflows suite covers the changed component surface and the production build/typecheck covered integration. Generated Skills Showcase data validation was skipped because no generated data, `SKILL.md`, `PACK.md`, curated benchmark report, or curated review report changed. Browser visual checks remain planned for Step 42.7 after Step 42.5 finishes the responsive transcript layout.
+- **Adversarial review:** Diff-aware self-review checked whether scroll could run for reduced-motion users, whether manual step jumps would destructively hide later turns, whether receipt data stayed keyed by original step index, and whether long receipt paths could overflow their proof block. Finding fixed in the implementation: scroll is gated by `playing` and `reducedMotion`, and tests now prove the reduced-motion bypass.
+- **Residual risk:** The scroll behavior is covered in jsdom through `scrollIntoView` assertions, but real browser viewport positioning and mobile layout still need the planned Step 42.7 visual check after Step 42.5 CSS refinements.
+- **Rollback note:** Revert the Step 42.4 source and test changes to remove active-turn scroll anchoring and receipt containment while preserving the prior Step 42.3 staged reveal behavior.
+- **Next command:** `$run`
 
 ### Step 42.3 Ship Manifest
 
@@ -218,7 +238,7 @@
 - **Rollback note:** Revert the Step 42.1 commit to restore the single active replay card and remove `.tui-workflow__transcript`.
 - **Next command:** `$run`
 
-**Next work:** Step 42.3 — coordinate fake typing, proof-block reveal, and reduced-motion behavior for active turns.
+**Next work:** Step 42.5 — restyle `/workflows` for persistent transcript layout across desktop and mobile.
 **Recommended next command:** `$run`
 
 ## Benchmark: update-packages Fresh Run
