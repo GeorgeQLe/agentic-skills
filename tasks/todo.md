@@ -78,6 +78,46 @@
 - Related cleanup: pre-existing `ship-end` benchmark setup/report changes were validated separately and committed before this benchmark evidence so generated assets do not point at uncommitted raw evidence.
 - Recommended next skill: `$session-triage update-packages benchmark failure`
 
+## Interrupt Task — Targeted Update `ship-end` Benchmark Runner Route 2026-05-18
+
+**Goal:** Fix the `ship-end` benchmark setup so Claude uses `/run`, Codex uses `$run`, and the fixture prompt forces `tasks/todo.md` plus `tasks/history.md` as the handoff source of truth.
+
+**Plan:**
+- [x] Review lessons, the `ship-end` triage report, mirrored `ship-end` contracts, and current Tier 1 benchmark setup.
+- [x] Update `tests/layer4/setups/tier1-workflows.setup.ts` with runner-specific `ship-end` routes and fixture source-of-truth prompt text.
+- [x] Add focused layer1 coverage for Claude `/run`, Codex `$run`, missing `Step 1.2`, and recursive `/ship-end` rejection.
+- [x] Rerun focused, target, and both-agent benchmark validation; update curated benchmark evidence and generated data.
+
+## Review — Targeted Update `ship-end` Benchmark Runner Route 2026-05-18
+
+- Decision: existing benchmark setup update, not a new skill or `ship-end` skill-contract change.
+- Evidence used: `benchmark/triage-ship-end-2026-05-18-benchmark-failure.md`, raw `ship-end` benchmark artifacts, mirrored Claude/Codex `ship-end` contracts, current Tier 1 setup, and relevant lessons.
+- Evidence intentionally skipped: broad session history, because the failure was localized to one benchmark fixture and raw benchmark artifacts.
+- Existing-skill overlap: `ship-end` already owns session wrap-up; the gap was deterministic benchmark coverage drift.
+- Updated the `ship-end` fixture prompt to require fixture task files as source of truth, name both `tasks/todo.md` and `tasks/history.md`, and use runner-native final routing.
+- Updated hard assertion routes to require `/run` for Claude and `$run` for Codex.
+- Updated quality scoring to accept either `/run` or `$run` as runner-native `ship-end` next-route evidence.
+- Added focused layer1 coverage for the fixed route behavior and failure cases.
+- Final benchmark rerun passed: Claude session `ship-end-claude-0190fdda` and Codex session `ship-end-codex-4fbde9d6` both passed 3/3 hard assertions, had no infrastructure-blocked runs, and scored 100.0% output quality with no critical failures.
+- Report updated: `benchmark/test-ship-end-2026-05-18.md`.
+- Generated evidence refreshed: `docs/benchmark-results-matrix.md`, `docs/skills-showcase/assets/skills-data.js`, `docs/skills-showcase/assets/github-proof-data.js`, `apps/skills-showcase/public/assets/skills-data.js`, and `apps/skills-showcase/public/assets/github-proof-data.js`.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 bench-setups --testNamePattern ship-end`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill ship-end`; `pnpm --dir tests bench --skill ship-end --agent both --runs 3 --chunk-size 3 --pause 0`; `./install.sh`; `./scripts/skill-deps.sh --broken`; `./scripts/skill-versions.sh --missing`; `./scripts/skill-next-step-routing.sh --missing`; targeted `rg`; `git diff --check`.
+- Generated-data validator note: `scripts/validate-skills-showcase-data.sh` reported stale generated assets after the curated report changed and regenerated the assets; those generated assets are included in this shipping boundary.
+- Recommended next skill: `$benchmark-agent-review ship-end`
+
+### Ship-End Targeted Update Ship Manifest
+
+- **User goal:** Execute `$targeted-skill-builder ship-end benchmark runner route and fixture source-of-truth`, fixing the verified benchmark setup drift and proving it with deterministic rerun evidence.
+- **Changed files:** `tests/layer4/setups/tier1-workflows.setup.ts`; `tests/layer1/bench-setups.test.ts`; `benchmark/test-ship-end-2026-05-18.md`; `docs/benchmark-results-matrix.md`; `docs/skills-showcase/assets/skills-data.js`; `docs/skills-showcase/assets/github-proof-data.js`; `apps/skills-showcase/public/assets/skills-data.js`; `apps/skills-showcase/public/assets/github-proof-data.js`; `tasks/todo.md`; `tasks/history.md`.
+- **Per-file purpose:** The Tier 1 setup fixes the prompt, hard assertion route, and quality route expectations; the layer1 test guards the runner-specific route and fixture-grounding behavior; the benchmark report records the final clean both-agent rerun; generated assets expose the refreshed curated report data; task docs record completion, validation, manifest, and next route.
+- **User-goal mapping:** The benchmark false negative is removed, fixture-source evidence is enforced, and the final both-agent run proves `ship-end` now passes hard assertions and quality scoring.
+- **Tests run:** Focused layer1 `ship-end` setup test passed; benchmark coverage passed; target verify passed with layer1 PASS and layer2 SKIP; final both-agent benchmark passed with Claude 3/3 and Codex 3/3; install and skill hygiene scripts passed; targeted `rg` confirmed final report/session paths and route text; `git diff --check` passed.
+- **Skipped tests:** App build/tests were not run because no app source behavior changed; generated data validation/regeneration covered public asset freshness for benchmark evidence changes. Broader benchmark runs were not run because the fix targets only `ship-end`.
+- **Adversarial review:** Compared the final benchmark report to raw `report.md` summaries, verified both agents have no infrastructure blocks or critical quality failures, checked that `/ship-end` remains rejected in focused coverage, and confirmed the mirrored skill contracts did not need edits.
+- **Residual risk:** `scripts/validate-skills-showcase-data.sh` exits non-zero when regenerated assets differ from `HEAD`, so it served as a stale-data detector before this commit rather than a clean post-commit check. The generated files are included in the shipping boundary to resolve that staleness.
+- **Rollback note:** Revert the shipping commit to restore the previous `ship-end` benchmark fixture, curated report sessions, generated data, and task state.
+- **Next command:** `$benchmark-agent-review ship-end`
+
 ### Benchmark Ship Manifest
 
 - **User goal:** Execute `$run` for the next incomplete benchmark step: run the fresh both-agent `update-packages` benchmark after actionability threshold calibration, publish deterministic evidence, and prepare the next route.
