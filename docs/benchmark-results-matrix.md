@@ -41,9 +41,11 @@ This matrix tracks skills that already have persisted benchmark run data and gra
 | `session-triage` | Codex | `tests/benchmarks/runs/session-triage-codex-33b0cc9d/report.json` | 3 | 100% | 100.0% | `benchmark/review-session-triage-2026-05-13.md` | graded | Curated report: `benchmark/test-session-triage-2026-05-13.md`. Subjective review median score available. |
 | `ship` | Claude | `tests/benchmarks/runs/ship-claude-920245e6/report.json` | 3 | 100% | 100.0% | `benchmark/review-ship-2026-05-16.md` | graded | Curated report: `benchmark/test-ship-2026-05-16.md`. Subjective review median score available. |
 | `ship` | Codex | `tests/benchmarks/runs/ship-codex-898663d6/report.json` | 3 | 100% | 100.0% | `benchmark/review-ship-2026-05-16.md` | graded | Curated report: `benchmark/test-ship-2026-05-16.md`. Subjective review median score available. |
+| `ship-end` | Claude | `tests/benchmarks/runs/ship-end-claude-edad4640/report.json` | 3 | 0% | 73.8% | none | graded | — |
+| `ship-end` | Codex | `tests/benchmarks/runs/ship-end-codex-558a21dc/report.json` | 3 | 100% | 92.9% | none | graded | — |
 | `spec-interview` | Codex | `tests/benchmarks/runs/spec-interview-codex-40e3d74d/report.json` | 1 | 100% | 100.0% | none | graded | Curated report: `benchmark/test-spec-interview-2026-05-12.md`. One evaluated persisted run with deterministic quality scoring. |
-| `update-packages` | Claude | `tests/benchmarks/runs/update-packages-claude-aad65a0f/report.json` | 3 | 100% | 90.9% | `benchmark/review-update-packages-2026-05-18.md` | graded | Curated report: `benchmark/test-update-packages-2026-05-18.md`. Subjective review median score available. |
-| `update-packages` | Codex | `tests/benchmarks/runs/update-packages-codex-74cdb158/report.json` | 3 | 67% | 97.0% | `benchmark/review-update-packages-2026-05-18.md` | graded | Curated report: `benchmark/test-update-packages-2026-05-18.md`. Subjective review median score available. |
+| `update-packages` | Claude | `tests/benchmarks/runs/update-packages-claude-391a34fd/report.json` | 3 | 100% | 93.9% | `benchmark/review-update-packages-2026-05-18.md` | graded | Curated report: `benchmark/test-update-packages-2026-05-18.md`. Subjective review median score available. |
+| `update-packages` | Codex | `tests/benchmarks/runs/update-packages-codex-3784a689/report.json` | 3 | 100% | 100.0% | `benchmark/review-update-packages-2026-05-18.md` | graded | Curated report: `benchmark/test-update-packages-2026-05-18.md`. Subjective review median score available. |
 | `youtube-video-audit` | Codex | `tests/benchmarks/runs/youtube-video-audit-codex-288097bc/report.json` | 1 | 100% | not scored | none | partially graded | Hard assertion evidence exists; no quality score in the latest persisted evaluated report. |
 
 ## Incomplete Persisted Reports
@@ -56,7 +58,7 @@ This matrix tracks skills that already have persisted benchmark run data and gra
 | `feature-interview` | Claude | `tests/benchmarks/runs/feature-interview-claude-bd781522/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
 | `icon-handler` | Claude | `tests/benchmarks/runs/icon-handler-claude-47bab6aa/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
 | `roadmap` | Claude | `tests/benchmarks/runs/roadmap-claude-8c1ee4a6/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
-| `run` | Codex | `tests/benchmarks/runs/run-codex-51e60f7e/report.json` | blocked/incomplete | Report exists with zero total and evaluated runs. Do not count as benchmarked. Prefer the later evaluated report listed above. |
+| `run` | Codex | `tests/benchmarks/runs/run-codex-44925f9d/report.json` | blocked/incomplete | Report exists with zero total and evaluated runs. Do not count as benchmarked. Prefer the later evaluated report listed above. |
 | `spec-interview` | Claude | `tests/benchmarks/runs/spec-interview-claude-b83d0caa/report.json` | blocked/incomplete | Report exists with zero evaluated runs. |
 | `update-packages` | Claude | `tests/benchmarks/runs/update-packages-claude-4d9966e8/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
 | `youtube-video-audit` | Codex | `tests/benchmarks/runs/youtube-video-audit-codex-306e24a9/report.json` | blocked/incomplete | Report exists with zero total and evaluated runs. Do not count as benchmarked. Prefer the later evaluated report listed above. |
