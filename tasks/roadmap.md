@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Update: update-packages pnpm Latest Markdown-Negation Tolerance 2026-05-18
+
+**Goal:** Fix the `update-packages` benchmark setup so markdown-emphasized and concise negated `pnpm@latest` warnings pass while actual unqualified `pnpm@latest` recommendations still fail.
+
+**Acceptance Criteria:**
+- [x] The `update-packages` benchmark assertion accepts markdown-emphasized and concise warning language around `pnpm@latest`.
+- [x] The setup still rejects actual unqualified `pnpm@latest` recommendations and package-manager commands.
+- [x] Focused layer1 coverage proves both newly accepted warning forms and existing rejected cases.
+- [x] Focused validation, benchmark coverage, verify, Claude smoke benchmark, targeted searches, and whitespace checks pass.
+- [x] Results are recorded in `tasks/todo.md`, then intended changes are committed and pushed on `master`.
+
+**Result:** Updated on 2026-05-18. `UPDATE_PACKAGES_NO_UNQUALIFIED_PNPM_LATEST_PATTERN` now accepts markdown-emphasized warning language such as `do **not** use unqualified pnpm@latest` and concise `not pnpm@latest` warnings, while retaining failures for affirmative recommendations like `migrate to pnpm using pnpm@latest`, `corepack prepare pnpm@latest --activate`, and `packageManager: "pnpm@latest"`. Focused layer1 coverage proves the new accepted forms. Validation passed: focused layer1 setup/quality tests, benchmark coverage, `pnpm --dir tests verify --skill update-packages`, targeted `rg`, and `git diff --check`. Claude smoke benchmark `update-packages-claude-4cc7c2b0` passed 1/1 with 91.2% quality. Recommended next command: `$benchmark-test-skill update-packages`.
+
 ## Current Targeted Update: benchmark-agent-review Benchmark Quality Owner Specificity Tolerance 2026-05-18
 
 **Goal:** Align the `benchmark-agent-review` pack benchmark prompt and quality rubric so owner-specific remediation is tested without brittle literal-token false positives.
