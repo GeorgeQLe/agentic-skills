@@ -16,6 +16,32 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Benchmark: update-packages Fresh Rerun After pnpm Latest Tolerance 2026-05-18
+
+**Goal:** Run `$benchmark-test-skill update-packages` against the current repository state and publish deterministic both-agent benchmark evidence after the latest pnpm-related benchmark tolerance work.
+
+**Acceptance Criteria:**
+- [x] `pnpm bench --list-skills` confirms `update-packages` is known and reports custom coverage via `tests/layer4/setups/tier23-global-workflows.setup.ts`.
+- [x] `pnpm verify --skill update-packages` passed with layer1 PASS in 3.7s and layer2 SKIP because no target-specific layer2 tests matched.
+- [x] `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` ran only after verify passed.
+- [x] `benchmark/test-update-packages-2026-05-18.md` records verify, benchmark, latency, cost, consistency, failures, raw session evidence, and recommended next route.
+- [x] Results are recorded in `tasks/todo.md`, generated evidence is refreshed if needed, then intended changes are committed and pushed on `master`.
+
+**Result:** Fresh rerun completed on 2026-05-18 with a deterministic Claude failure and passing Codex evidence. `update-packages` is known with custom benchmark coverage via `tests/layer4/setups/tier23-global-workflows.setup.ts`, and verify passed with layer1 PASS in 3.7s plus layer2 SKIP because no target-specific layer2 tests matched. Claude session `update-packages-claude-dbd3972f` completed three evaluated runs with 2/3 hard assertion pass rate, no infrastructure blocks, one failed `Output avoids unqualified pnpm@latest` assertion, 96.8% output quality, one critical failure, p50 latency 56.7s, and $0.75 total estimated cost. Codex session `update-packages-codex-49aec343` completed three evaluated runs with 3/3 hard assertion pass rate, no infrastructure blocks, 100.0% output quality, p50 latency 84.5s, and $0.75 total estimated cost. Report: `benchmark/test-update-packages-2026-05-18.md`. Generated Skills Showcase data and benchmark results matrix were refreshed. Recommended next skill: `$session-triage update-packages benchmark failure`.
+
+## Current Benchmark: feature-interview Fresh Rerun 2026-05-18
+
+**Goal:** Run `$benchmark-test-skill feature-interview` against the current repository state and publish deterministic both-agent benchmark evidence.
+
+**Acceptance Criteria:**
+- [x] `pnpm bench --list-skills` confirms `feature-interview` is known and reports custom coverage via `tests/layer4/setups/tier1-workflows.setup.ts`.
+- [x] `pnpm verify --skill feature-interview` passed with layer1 PASS in 3.6s and layer2 SKIP because no target-specific layer2 tests matched.
+- [x] `pnpm bench --skill feature-interview --agent both --runs 3 --chunk-size 3 --pause 0` ran only after verify passed.
+- [x] `benchmark/test-feature-interview-2026-05-18.md` records verify, benchmark, latency, cost, consistency, failures, raw session evidence, and recommended next route.
+- [x] Results are recorded in `tasks/todo.md`, generated evidence is refreshed if needed, then intended changes are committed and pushed on `master`.
+
+**Result:** Fresh rerun completed on 2026-05-18 with mixed deterministic evidence and output-quality failures. `feature-interview` is known with custom benchmark coverage via `tests/layer4/setups/tier1-workflows.setup.ts`, and verify passed with layer1 PASS in 3.6s plus layer2 SKIP because no target-specific layer2 tests matched. Claude session `feature-interview-claude-3efd3354` completed one evaluated run with 0/1 hard assertion pass rate, two agent-runner budget blocks, 72.2% output quality, one threshold failure, one critical failure, p50 latency 48.6s, and $0.75 total estimated cost. Claude failed `Output recommends /roadmap`. Codex session `feature-interview-codex-bcc5f678` completed three evaluated runs with 3/3 hard assertion pass rate, no infrastructure blocks, 77.8% output quality, three threshold failures, three critical failures on `prototype-first-product-gate`, p50 latency 80.2s, and $0.75 total estimated cost. Report: `benchmark/test-feature-interview-2026-05-18.md`. Generated Skills Showcase data and benchmark results matrix were refreshed. Recommended next skill: `$session-triage feature-interview benchmark failure`.
+
 ## Current Triage: feature-interview Fresh Claude Prototype Gate Failure 2026-05-18
 
 **Goal:** Investigate the fresh `$benchmark-test-skill feature-interview` failure and classify whether the Claude `prototype-first-product-gate` quality failure is a skill-contract gap, benchmark harness defect, generated-output noncompliance, or infrastructure-only block.
