@@ -5,6 +5,41 @@
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
+## Current Task — Fresh Benchmark `update-packages` After pnpm Latest Tolerance 2026-05-18
+
+**Goal:** Run `$benchmark-test-skill update-packages` against the current repository state and publish deterministic both-agent benchmark evidence after the latest pnpm-related benchmark tolerance work.
+
+**Plan:**
+- [ ] Confirm `$benchmark-test-skill` is the active workflow and `update-packages` is only the benchmark target argument.
+- [ ] Run `pnpm bench --list-skills` and record `update-packages` coverage status.
+- [ ] Run `pnpm verify --skill update-packages`; stop before benchmark if verification fails.
+- [ ] Run `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` only after verify passes.
+- [ ] Write and validate `benchmark/test-update-packages-2026-05-18.md` with verify, benchmark, latency, cost, consistency, failures, raw paths, and recommended next route.
+- [ ] Refresh generated evidence if needed, record results, then commit and push intended changes on `master`.
+
+## Current Task — Triage `feature-interview` Fresh Benchmark Failure 2026-05-18
+
+**Goal:** Investigate the fresh `$benchmark-test-skill feature-interview` failure and classify whether the Claude `prototype-first-product-gate` quality failure is a skill-contract gap, benchmark harness defect, generated-output noncompliance, or infrastructure-only block.
+
+**Plan:**
+- [x] Inspect the fresh curated benchmark report and raw Claude/Codex `report.json` files.
+- [x] Inspect the retained Claude evaluated run artifact for the failed `prototype-first-product-gate` quality criterion.
+- [x] Compare mirrored `feature-interview` contracts with the benchmark setup and quality rubric.
+- [x] Write `benchmark/triage-feature-interview-2026-05-18-fresh-claude-prototype-gate.md` with verdict, root cause, responsible gap, recommended fix, validation plan, and next route.
+- [x] Validate the report fields, record results, then commit and push intended changes on `master`.
+
+## Review — Triage `feature-interview` Fresh Benchmark Failure 2026-05-18
+
+- Verification verdict: verified as generated-output noncompliance plus partial infrastructure blocking, not a `feature-interview` skill-contract gap and not a benchmark-rubric false negative.
+- Evidence inspected: fresh curated benchmark report, raw Claude/Codex report JSON, retained Claude run artifact, mirrored `feature-interview` contracts, Tier 1 benchmark setup, focused layer1 coverage, task notes, and relevant lessons.
+- Claude session `feature-interview-claude-e499a20d` had one evaluated hard-assertion pass, two agent-runner budget blocks, and one critical `prototype-first-product-gate` quality failure.
+- The retained Claude artifact included a prototype gate, fake/static data boundary, deferred infrastructure, and promotion criteria, but collapsed the fixture's requested table-first, board-first, and command-first route experiments into a single dashboard route.
+- Codex session `feature-interview-codex-e6208aac` completed 3/3 evaluated runs with 100.0% hard assertion pass rate and 100.0% output quality.
+- Root cause: one evaluated Claude output ignored an adequate route-experiment requirement. The mirrored skill contracts and benchmark setup already require route-based experiments when the source idea calls for them.
+- Report written at `benchmark/triage-feature-interview-2026-05-18-fresh-claude-prototype-gate.md`.
+- Validation passed: required report field scan and `git diff --check`.
+- **Recommended next command:** `$benchmark-test-skill feature-interview`
+
 ## Current Task — Prototype Phase and Route Experiment Workflow Tightening 2026-05-18
 
 **Goal:** Tighten the prototype-first workflow so new product and substantial feature work uses a separate prototype/experiment phase and, when useful, multiple clickable experiments on separate routes before production infrastructure is promoted.
