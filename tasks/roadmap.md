@@ -16,6 +16,17 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Benchmark: update-packages Fresh Rerun 2026-05-18
+
+**Goal:** Run `$benchmark-test-skill update-packages` against the current repository state and publish deterministic both-agent benchmark evidence.
+
+**Acceptance Criteria:**
+- [x] `pnpm bench --list-skills` confirms `update-packages` is known and reports custom coverage via `tests/layer4/setups/tier23-global-workflows.setup.ts`.
+- [x] `pnpm verify --skill update-packages` passed with layer1 PASS in 3.6s and layer2 SKIP because no target-specific layer2 tests matched.
+- [ ] `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [ ] `benchmark/test-update-packages-2026-05-18.md` records verify, benchmark, latency, cost, consistency, failures, raw session evidence, and recommended next route.
+- [ ] Results are recorded in `tasks/todo.md`, generated evidence is refreshed if needed, then intended changes are committed and pushed on `master`.
+
 ## Current Benchmark: feature-interview Fresh Rerun After Prototype Wording Tolerance 2026-05-18
 
 **Goal:** Run `$benchmark-test-skill feature-interview` against the current repository state and publish fresh deterministic both-agent benchmark evidence after the prototype phase wording tolerance update.
