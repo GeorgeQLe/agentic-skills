@@ -67,7 +67,7 @@
 **Subagent lanes:** none
 
 ### Implementation
-- [ ] Step 42.1: Replace the single active replay card with a persistent transcript model for the selected workflow.
+- [x] Step 42.1: Replace the single active replay card with a persistent transcript model for the selected workflow.
   - Classification: automated
   - Files: modify `apps/skills-showcase/src/showcase/tui/TuiWorkflow.tsx`
   - Notes: Render revealed workflow steps as transcript turns; keep completed turns fully expanded; remove the remounting active-step card key that causes the blinking carousel feel.
@@ -75,6 +75,12 @@
   - Classification: automated
   - Files: modify `apps/skills-showcase/src/showcase/tui/shared/useWorkflowPlayer.ts`
   - Notes: Track revealed transcript depth separately from active step focus; keep later revealed turns available when jumping to an earlier step; reset revealed depth when selecting another workflow or restarting.
+  - Implementation plan:
+    - Add a revealed-depth state value to `useWorkflowPlayer` that records the furthest step shown in the current workflow session.
+    - Make `nextStep` and autoplay advance both active focus and revealed depth.
+    - Make `goToStep` change only active focus when the target step is already revealed, without lowering revealed depth or hiding later turns.
+    - Reset active focus and revealed depth to the first turn on `selectWorkflow` and `restart`.
+    - Return the revealed-depth value to `TuiWorkflow` so the transcript can render all revealed turns while highlighting the focused step.
 - [ ] Step 42.3: Coordinate fake typing, proof-block reveal, and reduced-motion behavior for active turns.
   - Classification: automated
   - Files: modify `apps/skills-showcase/src/showcase/tui/TuiWorkflow.tsx`, modify `apps/skills-showcase/src/showcase/tui/shared/useTypewriter.ts`, modify `apps/skills-showcase/src/showcase/tui/shared/useWorkflowPlayer.ts`
@@ -121,6 +127,20 @@
 - Manual tasks: none for this phase.
 - Record tasks: none for this phase.
 - Recurring tasks: none for this phase.
+- Step 42.1 completed on 2026-05-18.
 
-**Next work:** Step 42.1 — replace the single active replay card with a persistent transcript model for the selected workflow.
+### Step 42.1 Ship Manifest
+
+- **User goal:** Execute `$run` for Step 42.1, replacing the single remounting `/workflows` active replay card with a persistent transcript model for revealed workflow steps.
+- **Changed files:** `apps/skills-showcase/src/showcase/tui/TuiWorkflow.tsx`; `apps/skills-showcase/src/showcase/tui/workflow.css`; `tasks/todo.md`; `tasks/history.md`.
+- **Per-file purpose:** `TuiWorkflow.tsx` now renders workflow steps `0..activeStep` as transcript turns with per-step receipt and benchmark badge state; `workflow.css` adds the transcript wrapper spacing needed by the new list; `tasks/todo.md` records completion, review, and the next-step plan; `tasks/history.md` records the shipped work.
+- **User-goal mapping:** The keyed single active card was removed, so forward playback keeps prior turns mounted and expanded instead of replacing the visible replay surface.
+- **Tests run:** `pnpm --dir apps/skills-showcase test -- workflows.test.tsx` passed; `pnpm --dir apps/skills-showcase test` passed; `pnpm --dir apps/skills-showcase typecheck` passed; `pnpm --dir apps/skills-showcase build` passed; `git diff --check` passed.
+- **Skipped tests:** Browser visual checks are deferred to Step 42.7, where the phase explicitly verifies desktop and mobile layout after the remaining player-state, reveal-cadence, scroll, and styling changes land. Generated Skills Showcase data validation was skipped because no generated data, `SKILL.md`, `PACK.md`, curated benchmark report, or curated review report changed.
+- **Adversarial review:** Diff-aware self-review checked whether per-step benchmark receipts still use each step index, whether old replay labels remain accessible for tests, whether previous turns stay mounted on forward progress, and whether the extra CSS file is justified. Finding: Step 42.1 still hides later turns when jumping back because player state only has `activeStep`; accepted as planned residual scope for Step 42.2.
+- **Residual risk:** Until Step 42.2, dot navigation to an earlier step still lowers the rendered transcript depth because `activeStep` is the only depth signal. This is visible to `/workflows` users who jump backward after advancing, and Step 42.2 is the explicit follow-up.
+- **Rollback note:** Revert the Step 42.1 commit to restore the single active replay card and remove `.tui-workflow__transcript`.
+- **Next command:** `$run`
+
+**Next work:** Step 42.2 — update workflow player state so step controls jump within an existing transcript session while workflow changes reset the session.
 **Recommended next command:** `$run`
