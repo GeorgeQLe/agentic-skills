@@ -190,13 +190,17 @@
 ### Execution
 - [x] Step B.1: Confirm benchmark command resolution and harness eligibility.
 - [x] Step B.2: Run verify gate for `update-packages`.
-- [ ] Step B.3: Run both-agent benchmark if verify passes.
-- [ ] Step B.4: Write and validate the dated benchmark report.
-- [ ] Step B.5: Commit and push intended benchmark/report changes.
+- [x] Step B.3: Run both-agent benchmark if verify passes.
+- [x] Step B.4: Write and validate the dated benchmark report.
+- [x] Step B.5: Commit and push intended benchmark/report changes.
 
 ### Review
 
 - Command resolution: `$benchmark-test-skill` resolved to `packs/agentic-skills-bench/codex/benchmark-test-skill/SKILL.md`; `update-packages` is the target skill argument.
 - Eligibility: `update-packages` is listed with `coverage=custom` and setup `tests/layer4/setups/tier23-global-workflows.setup.ts`.
-- Verify: `pnpm verify --skill update-packages` passed on 2026-05-18 with layer1 PASS in 3.7s and layer2 SKIP because no target-specific layer2 tests matched `update-packages`.
-- Next step plan: run `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` from `tests/`, then use the persisted `tests/benchmarks/runs/update-packages-*` report data to write `benchmark/test-update-packages-2026-05-18.md`.
+- Verify: `pnpm verify --skill update-packages` passed on 2026-05-18 with layer1 PASS in 4.0s and layer2 SKIP because no target-specific layer2 tests matched `update-packages`.
+- Benchmark: `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` completed with Claude session `59fa8392` and Codex session `2621e339`.
+- Results: Claude hard assertions passed 2/2 evaluated runs with 1 infrastructure-blocked run and 2 quality critical failures; Codex hard assertions passed 3/3 evaluated runs with no blocked runs and no quality failures.
+- Report: `benchmark/test-update-packages-2026-05-18.md`.
+- Ship: committed and pushed `25c2d4b` to `master`.
+- Recommended next skill: `$session-triage update-packages benchmark failure`.
