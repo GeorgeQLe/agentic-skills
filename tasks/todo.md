@@ -5,6 +5,32 @@
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
+## Current Task — Benchmark `feature-interview` Prototype-First Gate 2026-05-18
+
+**Goal:** Run `$benchmark-test-skill feature-interview` after the prototype-first product workflow gate update and publish deterministic both-agent benchmark evidence.
+
+**Plan:**
+- [x] Confirm `$benchmark-test-skill` is the active workflow and `feature-interview` is only the benchmark target argument.
+- [x] Run `pnpm bench --list-skills` and confirm `feature-interview` coverage status. `coverage=custom`, setup `tests/layer4/setups/tier1-workflows.setup.ts`.
+- [x] Run `pnpm verify --skill feature-interview`; layer1 PASS in 3.6s, layer2 SKIP because no target-specific layer2 tests matched.
+- [x] If verify passes, run `pnpm bench --skill feature-interview --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [x] Write and validate `benchmark/test-feature-interview-2026-05-18.md` with verify, benchmark, latency, cost, consistency, raw paths, failures, and recommended next route.
+- [x] Refresh generated evidence if needed, record results, then commit and push intended changes on `master`.
+
+## Review — Benchmark `feature-interview` Prototype-First Gate 2026-05-18
+
+- Command resolution: `$benchmark-test-skill` was the active workflow; `feature-interview` was treated only as the benchmark target argument.
+- Eligibility: `feature-interview` is known with custom benchmark coverage via `tests/layer4/setups/tier1-workflows.setup.ts`.
+- Verify passed: layer1 PASS in 3.6s with 1,211 tests across 15 files; layer2 SKIP because no target-specific layer2 tests matched `feature-interview`.
+- Benchmark ran with `pnpm bench --skill feature-interview --agent both --runs 3 --chunk-size 3 --pause 0`.
+- Claude session `feature-interview-claude-02d30038`: 0 evaluated runs and 3 infrastructure blocks from agent runner budget exceeded; $0.75 total estimated cost.
+- Codex session `feature-interview-codex-ed08cfc2`: 3/3 evaluated hard assertion pass rate, 0 infrastructure blocks, p50 latency 85.8s, p95 138.6s, p99 143.3s, 0.877 mean similarity, and $0.75 total estimated cost.
+- Codex output-quality score was 75.9%, with 1 threshold failure and 4 critical failures. Lowest-scoring criteria: `evidence-linked` 0.0% and `prototype-first-product-gate` 66.7%.
+- Report written at `benchmark/test-feature-interview-2026-05-18.md`.
+- Generated Skills Showcase data and benchmark results matrix were refreshed after the curated benchmark report changed.
+- Validation passed: report field scan; `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests exec vitest run --project layer1 benchmark-results-matrix skills-showcase-benchmark-demo`; `git diff --check`.
+- **Recommended next skill:** `$session-triage feature-interview benchmark failure`
+
 ## Current Task — Prototype-First Product Workflow Gate 2026-05-18
 
 **Goal:** Add a prototype-first gate to product intake, specification, UI, planning, and execution skills so new SaaS/product work defaults to a clickable local/static prototype before database, auth, payments, analytics, deployment, admin, multi-tenant, or observability infrastructure.
