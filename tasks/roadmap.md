@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Triage: feature-interview Latest Route and Prototype Gate Failure 2026-05-18
+
+**Goal:** Investigate the latest `$benchmark-test-skill feature-interview` failure and classify whether the Claude `/roadmap` assertion failure and both-agent `prototype-first-product-gate` quality failures are skill-contract gaps, benchmark harness defects, generated-output noncompliance, or infrastructure-only blocks.
+
+**Acceptance Criteria:**
+- [x] Latest curated benchmark report and raw Claude/Codex report JSON are inspected.
+- [x] Retained Claude and Codex run artifacts are inspected for the failed route assertion and quality criterion.
+- [x] Mirrored `feature-interview` contracts are compared with the benchmark setup, quality rubric, focused layer1 coverage, and relevant lessons.
+- [x] `benchmark/triage-feature-interview-2026-05-18-latest-route-and-gate.md` records verdict, root cause, responsible gap, recommended fix, validation plan, and next route.
+- [x] Results are recorded in `tasks/todo.md`, then intended changes are committed and pushed on `master`.
+
+**Result:** Triage verified a split failure. Claude session `feature-interview-claude-3efd3354` had one evaluated run, two infrastructure blocks, and a valid hard assertion failure because it ended with `/run` despite confirmed roadmap sequencing. Codex session `feature-interview-codex-bcc5f678` passed all hard assertions and semantically preserved route experiments, deferred infrastructure, fixture-backed prototype data, and promotion evidence. The Codex `prototype-first-product-gate` failures are best classified as a benchmark quality-evaluator false negative or over-narrow wording tolerance because the detector rejects valid `prototype-first phase` wording. Report: `benchmark/triage-feature-interview-2026-05-18-latest-route-and-gate.md`. Validation passed: required report field scan and `git diff --check`. Recommended next skill: `$targeted-skill-builder feature-interview benchmark prototype-first phase wording tolerance`.
+
 ## Current Benchmark: update-packages Fresh Rerun After pnpm Latest Tolerance 2026-05-18
 
 **Goal:** Run `$benchmark-test-skill update-packages` against the current repository state and publish deterministic both-agent benchmark evidence after the latest pnpm-related benchmark tolerance work.

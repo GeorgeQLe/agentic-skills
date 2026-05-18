@@ -5,6 +5,38 @@
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
+## Current Task — Triage `update-packages` Reject pnpm Latest Benchmark Failure 2026-05-18
+
+**Goal:** Investigate the latest `$benchmark-test-skill update-packages` Claude failure and classify whether the `Output avoids unqualified pnpm@latest` failure is a skill-contract gap, benchmark harness defect, generated-output noncompliance, or infrastructure-only block.
+
+**Plan:**
+- [ ] Inspect the fresh curated benchmark report and raw failed Claude run artifact.
+- [ ] Compare mirrored `update-packages` contracts with benchmark prompt, assertion helper, and focused layer1 coverage.
+- [ ] Write `benchmark/triage-update-packages-2026-05-18-pnpm-latest-reject-warning.md` with verdict, root cause, responsible gap, recommended fix, validation plan, and next route.
+- [x] Validate the report fields, record results, then commit and push intended changes on `master`.
+
+## Current Task — Triage `feature-interview` Latest Benchmark Failure 2026-05-18
+
+**Goal:** Investigate the latest `$benchmark-test-skill feature-interview` failure and classify whether the Claude `/roadmap` assertion failure and both-agent `prototype-first-product-gate` quality failures are skill-contract gaps, benchmark harness defects, generated-output noncompliance, or infrastructure-only blocks.
+
+**Plan:**
+- [x] Inspect the latest curated benchmark report and raw Claude/Codex `report.json` files.
+- [x] Inspect retained Claude and Codex run artifacts for the failed route assertion and quality criterion.
+- [x] Compare mirrored `feature-interview` contracts with the benchmark setup, quality rubric, focused layer1 coverage, and relevant lessons.
+- [x] Write `benchmark/triage-feature-interview-2026-05-18-latest-route-and-gate.md` with verdict, root cause, responsible gap, recommended fix, validation plan, and next route.
+- [ ] Validate the report fields, record results, then commit and push intended changes on `master`.
+
+## Review — Triage `feature-interview` Latest Benchmark Failure 2026-05-18
+
+- Verification verdict: partially verified.
+- Claude session `feature-interview-claude-3efd3354` had one evaluated run, two infrastructure blocks, failed hard assertion `Output recommends /roadmap`, and ended with `/run` despite confirmed roadmap sequencing.
+- Codex session `feature-interview-codex-bcc5f678` passed hard assertions in all three evaluated runs and preserved route experiments, deferred infrastructure, fixture-backed prototype data, and promotion evidence.
+- The Codex `prototype-first-product-gate` quality failures are best classified as a benchmark quality-evaluator false negative or over-narrow wording tolerance: the detector rejects semantically valid `prototype-first phase` wording.
+- Mirrored `feature-interview` contracts are substantively aligned; a small wording reinforcement may help, but the primary responsible gap is `tests/layer4/setups/tier1-workflows.setup.ts`.
+- Report written at `benchmark/triage-feature-interview-2026-05-18-latest-route-and-gate.md`.
+- Validation passed: required report field scan and `git diff --check`.
+- **Recommended next skill:** `$targeted-skill-builder feature-interview benchmark prototype-first phase wording tolerance`
+
 ## Current Task — Fresh Benchmark `feature-interview` 2026-05-18
 
 **Goal:** Run `$benchmark-test-skill feature-interview` against the current repository state and publish deterministic both-agent benchmark evidence.
