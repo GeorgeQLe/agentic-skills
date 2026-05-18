@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-05-18 — Interview questions should use product language
+
+- A `$feature-interview` follow-up asked about "sub-blocks" and reveal cadence in implementation terms, which made the design decision unclear.
+- Interview workflows should phrase UI behavior questions in the user's visible product language first, then optionally translate to implementation terms after the user confirms.
+- For animation and interaction decisions, ask what the user should see on screen rather than naming component states, render units, or internal timing mechanics.
+- If the user says they do not understand a question, restate it with a concrete screen example before continuing the interview.
+
 ## 2026-05-18 — Clean shipped investigations should not route to ship-end
 
 - A `$investigate` run can complete the fix, validate it, commit it, push it, and leave a clean tree with no unpushed commits, then still recommend `$ship-end`.
