@@ -2357,6 +2357,13 @@ Resolved all 10 findings from `/expert-review`:
 - Regenerated Skills Showcase GitHub proof assets after the review commit push so public proof metadata points at the latest remote freshness state.
 - Verified generated data freshness, Skills Showcase production build, and whitespace checks.
 
+## 2026-05-18 — Step 42.4 workflow transcript scroll and proof stability
+
+- Added playback-only active-turn smooth scrolling for the `/workflows` persistent transcript while bypassing scroll animation for reduced-motion users.
+- Added stable transcript turn and receipt data markers so benchmark receipts and curated no-receipt proof blocks stay keyed to original workflow steps.
+- Hardened receipt containment for long benchmark report and run-artifact paths, with focused regression coverage for scroll and reduced-motion behavior.
+- Verified with focused workflow tests, Skills Showcase typecheck, production build, and whitespace validation.
+
 ## 2026-05-17 — feature-interview benchmark route alignment
 
 - Updated the Tier 1 `feature-interview` benchmark fixture to route confirmed planning-destination interviews to `/roadmap` for Claude and `$roadmap` for Codex instead of direct spec-interview.
