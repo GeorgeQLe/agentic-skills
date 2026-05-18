@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-05-18 — ship-end benchmark runner route fix
+
+- Updated the Tier 1 `ship-end` benchmark setup so Claude requires `/run`, Codex requires `$run`, and the prompt explicitly uses fixture task files as the source of truth.
+- Added focused layer1 coverage for runner-specific handoffs, missing `Step 1.2`, and recursive `/ship-end` rejection.
+- Final rerun evidence: Claude session `ship-end-claude-0190fdda` and Codex session `ship-end-codex-4fbde9d6` both passed 3/3 hard assertions with no infrastructure blocks and 100.0% output quality.
+- Updated `benchmark/test-ship-end-2026-05-18.md` and refreshed generated benchmark/showcase assets.
+- Validation passed: focused layer1 setup test, benchmark coverage, target verify, both-agent benchmark rerun, install/skill hygiene scripts, targeted evidence scans, and whitespace check.
+- Recommended next skill: `$benchmark-agent-review ship-end`.
+
 ## 2026-05-18 — update-packages benchmark after batch-label tolerance
 
 - Ran `$benchmark-test-skill update-packages` after the batch-label actionability tolerance update.
