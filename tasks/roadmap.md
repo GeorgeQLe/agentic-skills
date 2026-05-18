@@ -16,6 +16,29 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Analysis: Prototype-First vs Complete SaaS Workflow Drag 2026-05-17
+
+**Goal:** Analyze local Claude and Codex session history for evidence that attempts to build complete SaaS products too early introduce database, payments, analytics, deployment, and production-hardening work before clickable prototypes have calibrated taste and feel.
+
+**Acceptance Criteria:**
+- [ ] Full available Claude and Codex user-message history is parsed or unreadable sources are reported.
+- [ ] The report includes exact counts, date ranges, top projects, pattern examples, and a recommendation table.
+- [ ] Recommended skill/workflow amendments identify owner surfaces and validation expectations.
+- [ ] Results are recorded in `tasks/todo.md` with validation evidence.
+
+## Current Triage: update-packages pnpm Proof Fixture Evidence Failure 2026-05-18
+
+**Goal:** Investigate the latest `$benchmark-test-skill update-packages` Codex failure and classify whether the failed pnpm toolchain-proof assertion is a skill-contract gap, benchmark harness defect, generated-output noncompliance, or infrastructure-only block.
+
+**Acceptance Criteria:**
+- [x] Latest curated benchmark report and raw Claude/Codex report JSON are inspected.
+- [x] Retained Codex run #2 `package-update-plan.md` evidence is inspected for the failed pnpm proof assertion.
+- [x] Mirrored `update-packages` contracts are compared with the benchmark prompt, current proof pattern, and focused layer1 coverage.
+- [x] `benchmark/triage-update-packages-2026-05-18-pnpm-proof-fixture-evidence.md` records verdict, root cause, responsible gap, recommended fix, validation plan, and next route.
+- [x] Results are recorded in `tasks/todo.md`, then intended changes are committed and pushed on `master`.
+
+**Result:** Triage verified the latest `update-packages` benchmark failure as a benchmark harness false negative with a separate fully blocked Claude lane, not a mirrored skill-contract failure. Claude session `update-packages-claude-29df606d` had no evaluated runs and three agent-runner budget blocks. Codex session `update-packages-codex-870b131b` completed three evaluated runs; run #2 failed only `Output proves selected pnpm toolchain age eligibility`. The retained artifact selected `pnpm@10.11.0`, cited fixture evidence from `npm-view-times.json` for `"10.11.0": "2026-05-01T12:00:00.000Z"`, stated the version is older than 8 days, and skipped `pnpm@10.22.0` as too new. Root cause: `UPDATE_PACKAGES_PNPM_TOOLCHAIN_PROOF_PATTERN` misses valid fixture evidence keyed by selected version when the selected package name and timestamp are not repeated in the currently expected adjacency shape. Report: `benchmark/triage-update-packages-2026-05-18-pnpm-proof-fixture-evidence.md`. Validation passed: required report field scan and `git diff --check`. Recommended next skill: `$targeted-skill-builder update-packages benchmark pnpm fixture evidence tolerance`.
+
 ## Current Benchmark: update-packages Fresh Rerun After Age-Gate Tolerance 2026-05-18
 
 **Goal:** Run `$benchmark-test-skill update-packages` after the benchmark pnpm proof and age-gate semantics tolerance fix and publish deterministic both-agent evidence.
