@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Benchmark: feature-interview Fresh Rerun After Prototype Wording Tolerance 2026-05-18
+
+**Goal:** Run `$benchmark-test-skill feature-interview` against the current repository state and publish fresh deterministic both-agent benchmark evidence after the prototype phase wording tolerance update.
+
+**Acceptance Criteria:**
+- [x] `pnpm bench --list-skills` confirms `feature-interview` is known and reports custom coverage via `tests/layer4/setups/tier1-workflows.setup.ts`.
+- [x] `pnpm verify --skill feature-interview` passed with layer1 PASS in 3.7s and layer2 SKIP because no target-specific layer2 tests matched.
+- [x] `pnpm bench --skill feature-interview --agent both --runs 3 --chunk-size 3 --pause 0` ran only after verify passed.
+- [x] `benchmark/test-feature-interview-2026-05-18.md` records verify, benchmark, latency, cost, consistency, failures, raw session evidence, and recommended next route.
+- [x] Results are recorded in `tasks/todo.md`, generated evidence is refreshed, then intended changes are committed and pushed on `master`.
+
+**Result:** Fresh rerun completed on 2026-05-18 with evaluated passing Codex evidence and a fully infrastructure-blocked Claude lane. `feature-interview` is known with custom benchmark coverage via `tests/layer4/setups/tier1-workflows.setup.ts`, and verify passed with layer1 PASS in 3.7s plus layer2 SKIP because no target-specific layer2 tests matched. Claude session `feature-interview-claude-bd781522` had 0 evaluated runs and 3 agent-runner budget blocks, so that lane is inconclusive infrastructure blockage rather than a skill failure. Codex session `feature-interview-codex-59a38b3c` completed three evaluated runs with 3/3 hard assertion pass rate, no infrastructure blocks, 100.0% output quality, p50 latency 87.1s, and $0.75 total estimated cost. Report: `benchmark/test-feature-interview-2026-05-18.md`. Generated Skills Showcase data and benchmark results matrix were refreshed. Recommended next skill: `$benchmark-agent-review feature-interview`.
+
 ## Current Targeted Update: update-packages pnpm Latest Reject-Warning Tolerance 2026-05-18
 
 **Goal:** Fix the custom `update-packages` benchmark setup so valid retained rejection language for unqualified `pnpm@latest` passes while actual unqualified usage still fails.
