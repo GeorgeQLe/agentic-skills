@@ -2363,6 +2363,13 @@ Resolved all 10 findings from `/expert-review`:
 - Updated `benchmark/test-feature-interview-2026-05-17.md`; both evaluated agent lanes passed hard assertions, while the output-quality summary still records file-reference critical failures.
 - Refreshed generated Skills Showcase data and `docs/benchmark-results-matrix.md` after the curated benchmark evidence changed.
 
+## 2026-05-18 — Step 42.1 workflow persistent transcript model
+
+- Replaced the `/workflows` TUI single keyed active replay card with a transcript list that renders all revealed steps through the current active step.
+- Preserved per-step user, agent, terminal, artifact, curated no-receipt, benchmark receipt, and benchmark badge rendering inside each transcript turn.
+- Added the minimal transcript wrapper spacing needed by the new list while leaving deeper player-state, reveal-cadence, auto-scroll, and responsive restyling work to the planned later Phase 42 steps.
+- Verified with focused workflow tests, full Skills Showcase tests, typecheck, production build, and whitespace validation.
+
 ## 2026-05-17 — Step 40.1 structured workflow replay data
 
 - Replaced tuple-based Skills Showcase workflow steps with named step objects carrying structured replay blocks for user prompt, agent response, terminal/proof output, artifact/result output, and receipt state.
