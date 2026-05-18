@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Benchmark: update-packages Fresh Rerun After Age-Gate Tolerance 2026-05-18
+
+**Goal:** Run `$benchmark-test-skill update-packages` after the benchmark pnpm proof and age-gate semantics tolerance fix and publish deterministic both-agent evidence.
+
+**Acceptance Criteria:**
+- [x] `pnpm bench --list-skills` confirms `update-packages` is known and reports custom coverage.
+- [x] `pnpm verify --skill update-packages` passes or blocks benchmark execution with a recorded failure.
+- [x] `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [x] `benchmark/test-update-packages-2026-05-18.md` records verify, benchmark, latency, cost, consistency, failures, raw session evidence, and recommended next route.
+- [x] Results are recorded in `tasks/todo.md`, generated evidence is refreshed if needed, then intended changes are committed and pushed on `master`.
+
+**Result:** Fresh rerun completed on 2026-05-18 with a deterministic Codex failure and fully blocked Claude lane. `update-packages` is known with custom benchmark coverage via `tests/layer4/setups/tier23-global-workflows.setup.ts`, and verify passed with layer1 PASS in 3.3s plus layer2 SKIP because no target-specific layer2 tests matched. Claude session `update-packages-claude-29df606d` had 0 evaluated runs and 3 agent-runner budget blocks. Codex session `update-packages-codex-870b131b` completed three evaluated runs with 2/3 hard assertion pass rate, 96.8% output quality, p50 latency 69.5s, and $0.75 total estimated cost. Failed assertion: Codex run #2 missed `Output proves selected pnpm toolchain age eligibility`. Report: `benchmark/test-update-packages-2026-05-18.md`. Generated Skills Showcase data and benchmark results matrix were refreshed; the matrix records the fully blocked Claude session as incomplete and keeps latest evaluated Claude evidence in the graded row. Recommended next skill: `$session-triage update-packages benchmark failure`.
+
 ## Current Targeted Update: update-packages Benchmark pnpm Proof and Age-Gate Semantics Tolerance 2026-05-18
 
 **Goal:** Fix the custom `update-packages` benchmark setup so valid retained Markdown shapes for pnpm package-manager proof and npm/pnpm age-gate ownership pass, while missing proof and reversed ownership still fail.
