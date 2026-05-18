@@ -10,10 +10,22 @@
 **Goal:** Investigate the latest `$benchmark-test-skill update-packages` Claude failure and classify whether the `Output avoids unqualified pnpm@latest` failure is a skill-contract gap, benchmark harness defect, generated-output noncompliance, or infrastructure-only block.
 
 **Plan:**
-- [ ] Inspect the fresh curated benchmark report and raw failed Claude run artifact.
-- [ ] Compare mirrored `update-packages` contracts with benchmark prompt, assertion helper, and focused layer1 coverage.
-- [ ] Write `benchmark/triage-update-packages-2026-05-18-pnpm-latest-reject-warning.md` with verdict, root cause, responsible gap, recommended fix, validation plan, and next route.
+- [x] Inspect the fresh curated benchmark report and raw failed Claude run artifact.
+- [x] Compare mirrored `update-packages` contracts with benchmark prompt, assertion helper, and focused layer1 coverage.
+- [x] Write `benchmark/triage-update-packages-2026-05-18-pnpm-latest-reject-warning.md` with verdict, root cause, responsible gap, recommended fix, validation plan, and next route.
 - [x] Validate the report fields, record results, then commit and push intended changes on `master`.
+
+## Review — Triage `update-packages` Reject pnpm Latest Benchmark Failure 2026-05-18
+
+- Verification verdict: verified as a benchmark harness false negative, not an `update-packages` skill-contract failure.
+- Claude session `update-packages-claude-dbd3972f` completed 3 evaluated runs with 2/3 hard assertion pass rate, no infrastructure blocks, and one failed assertion: `Output avoids unqualified pnpm@latest`.
+- The failed artifact selected explicit `packageManager` value `pnpm@10.11.0`, retained `npm view pnpm@10.11.0 time.version` evidence, and documented publish time `2026-05-01T12:00:00.000Z`.
+- The only `pnpm@latest` issue text was explicit rejection language: `Reject \`pnpm@latest\` — unqualified, unverifiable at lock time.`
+- Mirrored Codex and Claude `update-packages` contracts already require avoiding default `pnpm@latest`, using an age-eligible pinned pnpm version, and documenting proof.
+- Root cause: `lineOnlyWarnsAgainstPnpmLatest` in `tests/layer4/setups/tier23-global-workflows.setup.ts` accepts several warning forms but does not accept `reject` as safe warning/rejection language.
+- Report written at `benchmark/triage-update-packages-2026-05-18-pnpm-latest-reject-warning.md`.
+- Validation passed: required report field scan and `git diff --check`.
+- **Recommended next skill:** `$targeted-skill-builder update-packages benchmark pnpm latest reject-warning tolerance`
 
 ## Current Task — Triage `feature-interview` Latest Benchmark Failure 2026-05-18
 
