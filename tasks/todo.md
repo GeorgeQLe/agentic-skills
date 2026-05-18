@@ -6,6 +6,24 @@
 **Total phases:** 42
 **Last completed phase:** Phase 42 — Workflow Persistent Transcript Refinement
 
+## Interrupt Task — Workflow Demo User-Goal and Run Excerpts 2026-05-18
+
+**Goal:** Refine `/workflows` demo turns so each scenario starts from a concrete user goal and benchmark-backed turns show realistic retained run excerpts instead of only generic curated text.
+
+**Plan:**
+- [x] Update the workflow replay data contract to name the first message as the user's goal for the workflow step.
+- [x] Render persisted benchmark prompt/output excerpts inside benchmark-backed transcript turns when generated data provides them.
+- [x] Keep curated no-receipt states explicit for non-benchmarked steps.
+- [x] Add focused regression coverage and run targeted validation.
+
+## Review — Workflow Demo User-Goal and Run Excerpts 2026-05-18
+
+- Updated `/workflows` transcript turns so curated fallbacks start with `User goal` and goal-oriented copy instead of generic "Run this command" text.
+- Benchmark-backed turns now substitute persisted `workflowBenchmarks` demo prompt/output excerpts into the visible user and agent transcript messages when available, while retaining benchmark receipts and curated no-receipt states.
+- Focused test coverage now asserts the benchmark prompt and output excerpts render in the selected replay, and existing persistent transcript behavior remains covered.
+- Validation passed: `pnpm --dir apps/skills-showcase test -- workflows.test.tsx`; `pnpm --dir apps/skills-showcase typecheck`; `git diff --check`.
+- Skipped broader app build because this change is limited to React rendering/tests and typecheck passed; no generated showcase data changed.
+
 ## Interrupt Task — Agent Review `ship-end` Single Active-Runner Outputs 2026-05-18
 
 **Goal:** Review the latest persisted `ship-end` benchmark outputs after the single active-runner handoff fix.
