@@ -21,11 +21,13 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 **Goal:** Run `$benchmark-test-skill update-packages` against the current repository state and publish deterministic both-agent benchmark evidence after the benchmark actionability threshold update.
 
 **Acceptance Criteria:**
-- [ ] `pnpm bench --list-skills` confirms `update-packages` is known and reports its coverage status.
-- [ ] `pnpm verify --skill update-packages` passes before any benchmark run starts.
-- [ ] `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
-- [ ] `benchmark/test-update-packages-2026-05-18.md` records verify, benchmark, latency, cost, consistency, failures, raw session evidence, and recommended next route.
-- [ ] Results are recorded in `tasks/todo.md`, generated evidence is refreshed if needed, then intended changes are committed and pushed on `master`.
+- [x] `pnpm bench --list-skills` confirms `update-packages` is known and reports its coverage status.
+- [x] `pnpm verify --skill update-packages` passes before any benchmark run starts.
+- [x] `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [x] `benchmark/test-update-packages-2026-05-18.md` records verify, benchmark, latency, cost, consistency, failures, raw session evidence, and recommended next route.
+- [x] Results are recorded in `tasks/todo.md`, generated evidence is refreshed if needed, then intended changes are committed and pushed on `master`.
+
+**Result:** Fresh rerun after the actionability threshold update completed on 2026-05-18. `update-packages` is known with custom benchmark coverage via `tests/layer4/setups/tier23-global-workflows.setup.ts`, and the recorded verify gate passed with layer1 PASS plus layer2 SKIP because no target-specific layer2 tests matched. Claude session `update-packages-claude-5d66f365` completed two evaluated runs with 2/2 hard assertion pass rate, one agent-runner budget block, 93.2% output quality, one critical quality failure, p50 latency 53.9s, and $0.75 total estimated cost. Codex session `update-packages-codex-1ff2f8b0` completed three evaluated runs with 3/3 hard assertion pass rate, no infrastructure blocks, 100.0% output quality, no critical failures, p50 latency 77.2s, and $0.75 total estimated cost. Report: `benchmark/test-update-packages-2026-05-18.md`. Generated Skills Showcase data and benchmark results matrix were refreshed. Recommended next command: `$session-triage update-packages benchmark failure`.
 
 ## Current Benchmark: update-packages Fresh Rerun 2026-05-18
 

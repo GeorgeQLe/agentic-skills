@@ -14,8 +14,33 @@
 - [x] Confirm `benchmark-test-skill` is the active workflow and `update-packages` is only the benchmark target.
 - [x] Run `pnpm bench --list-skills` from `tests/` and confirm `update-packages` is known, not blocked, and note its coverage status.
 - [x] Run `pnpm verify --skill update-packages`; stop without benchmarking if verify fails.
-- [ ] Run `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` only after verify passes.
-- [ ] Write and validate `benchmark/test-update-packages-2026-05-18.md`, update this review section, refresh generated evidence if needed, then commit and push intended changes.
+- [x] Run `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` only after verify passes.
+- [x] Write and validate `benchmark/test-update-packages-2026-05-18.md`, update this review section, refresh generated evidence if needed, then commit and push intended changes.
+
+## Review — Benchmark `update-packages` After Actionability Threshold 2026-05-18
+
+- Command resolution: `$benchmark-test-skill` resolved to `packs/agentic-skills-bench/codex/benchmark-test-skill/SKILL.md`; `update-packages` is the target skill argument.
+- Eligibility: `update-packages` is listed with `coverage=custom` and setup `tests/layer4/setups/tier23-global-workflows.setup.ts`.
+- Verify gate evidence from the prior handoff remains valid for this run: `pnpm verify --skill update-packages` passed on 2026-05-18 with layer1 PASS and layer2 SKIP because no target-specific layer2 tests matched.
+- Benchmark: `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` completed on 2026-05-18 with Claude session `5d66f365` and Codex session `1ff2f8b0`.
+- Results: Claude hard assertions passed 2/2 evaluated runs with 1 infrastructure-blocked run, 93.2% output quality, and 1 quality critical failure; Codex hard assertions passed 3/3 evaluated runs with no blocked runs, 100.0% output quality, and no quality failures.
+- Report updated: `benchmark/test-update-packages-2026-05-18.md`.
+- Generated evidence refreshed: `docs/benchmark-results-matrix.md`, `docs/skills-showcase/assets/skills-data.js`, `docs/skills-showcase/assets/github-proof-data.js`, `apps/skills-showcase/public/assets/skills-data.js`, and `apps/skills-showcase/public/assets/github-proof-data.js`.
+- Validation passed: `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0`; `scripts/validate-skills-showcase-data.sh`; targeted `rg` for new raw sessions and next route; `git diff --check`.
+- Recommended next command: `$session-triage update-packages benchmark failure`.
+
+### Benchmark Ship Manifest
+
+- **User goal:** Execute `$run` for the next incomplete benchmark step: run the fresh both-agent `update-packages` benchmark after actionability threshold calibration, publish deterministic evidence, and prepare the next route.
+- **Changed files:** `benchmark/test-update-packages-2026-05-18.md`; `docs/benchmark-results-matrix.md`; `docs/skills-showcase/assets/skills-data.js`; `docs/skills-showcase/assets/github-proof-data.js`; `apps/skills-showcase/public/assets/skills-data.js`; `apps/skills-showcase/public/assets/github-proof-data.js`; `tasks/todo.md`; `tasks/history.md`.
+- **Per-file purpose:** The benchmark report records the new Claude/Codex run metrics and raw session paths; generated benchmark/showcase assets expose the refreshed curated report data; `tasks/todo.md` records completion, validation, manifest, and next route; `tasks/history.md` records the shipped benchmark evidence.
+- **User-goal mapping:** The benchmark command produced fresh persisted report data, the curated report and generated assets now reference those sessions, and task docs preserve the deterministic evidence needed for the next operator.
+- **Tests run:** `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` passed with Claude 2/2 evaluated and 1 infrastructure-blocked run plus Codex 3/3 evaluated; `scripts/validate-skills-showcase-data.sh` passed; targeted `rg` confirmed new raw session paths and next route; `git diff --check` passed.
+- **Skipped tests:** `pnpm verify --skill update-packages` was not rerun because the current interrupt task already recorded a passing verify gate immediately before this benchmark step, and the benchmark command itself ran after that gate. App build/tests were not run because no source behavior changed; generated data freshness validation covered the public data assets.
+- **Adversarial review:** Diff-aware self-review compared the new persisted `report.json` summaries against the curated Markdown report, checked infrastructure-blocked run numbering, verified generated matrix rows reference the new sessions, and preserved the failure-oriented next route because Claude still has a critical output-quality failure.
+- **Residual risk:** The dated report has been overwritten multiple times on 2026-05-18, so historical same-day benchmark snapshots are only available in git history and raw run directories. This is acceptable for the current curated-report convention but can obscure same-day trend comparison unless a later task splits reports by reason or timestamp.
+- **Rollback note:** Revert the shipping commit to restore the prior curated report sessions and generated matrix/assets.
+- **Next command:** `$session-triage update-packages benchmark failure`
 
 ## Interrupt Task — Targeted Update `update-packages` Benchmark Actionability Threshold 2026-05-18
 
@@ -92,7 +117,7 @@
     - Make `goToStep` change only active focus when the target step is already revealed, without lowering revealed depth or hiding later turns.
     - Reset active focus and revealed depth to the first turn on `selectWorkflow` and `restart`.
     - Return the revealed-depth value to `TuiWorkflow` so the transcript can render all revealed turns while highlighting the focused step.
-- [ ] Step 42.3: Coordinate fake typing, proof-block reveal, and reduced-motion behavior for active turns.
+- [x] Step 42.3: Coordinate fake typing, proof-block reveal, and reduced-motion behavior for active turns.
   - Classification: automated
   - Files: modify `apps/skills-showcase/src/showcase/tui/TuiWorkflow.tsx`, modify `apps/skills-showcase/src/showcase/tui/shared/useTypewriter.ts`, modify `apps/skills-showcase/src/showcase/tui/shared/useWorkflowPlayer.ts`
   - Notes: Show user command immediately; fake-type the agent response; reveal terminal, artifact, and receipt blocks after the agent response; bypass typing and animated scroll for reduced-motion users.
@@ -106,6 +131,12 @@
   - Classification: automated
   - Files: modify `apps/skills-showcase/src/showcase/tui/TuiWorkflow.tsx`, modify `apps/skills-showcase/src/showcase/tui/workflow.css`
   - Notes: Scroll the active transcript turn into view during playback; keep benchmark receipt metadata available for benchmarked steps; preserve curated/no-receipt states for non-benchmarked steps.
+  - Implementation plan:
+    - Add stable refs or data attributes for transcript turns and identify the active turn without changing the revealed-depth model from Steps 42.2-42.3.
+    - When playback advances and motion is allowed, scroll the active turn into view with a bounded smooth-scroll behavior that does not run for reduced-motion users.
+    - Keep manual step jumps predictable: focus/highlight the selected turn without deleting later revealed turns, and avoid scroll loops when the user is not playing.
+    - Review benchmark receipt rendering inside each turn to ensure benchmark rows still key by original step index and curated/no-receipt fallback states remain visible after the Step 42.3 staged reveal.
+    - Add any small CSS needed for stable active-turn anchoring and proof-block containment, leaving broader responsive layout restyling to Step 42.5.
 - [ ] Step 42.5: Restyle `/workflows` for persistent transcript layout across desktop and mobile.
   - Classification: automated
   - Files: modify `apps/skills-showcase/src/showcase/tui/workflow.css`
@@ -146,6 +177,20 @@
 - Recurring tasks: none for this phase.
 - Step 42.1 completed on 2026-05-18.
 - Step 42.2 completed on 2026-05-18.
+- Step 42.3 completed on 2026-05-18.
+
+### Step 42.3 Ship Manifest
+
+- **User goal:** Execute `$run` for Step 42.3, coordinating `/workflows` active-turn fake typing, proof-block reveal, and reduced-motion behavior.
+- **Changed files:** `apps/skills-showcase/src/showcase/tui/TuiWorkflow.tsx`; `apps/skills-showcase/src/showcase/tui/shared/useTypewriter.ts`; `apps/skills-showcase/src/showcase/tui/shared/useWorkflowPlayer.ts`; `tasks/todo.md`; `tasks/history.md`. Pre-existing benchmark/report/generated-data edits remain part of a separate shipping boundary and are not changed by the Step 42.3 implementation.
+- **Per-file purpose:** `TuiWorkflow.tsx` stages only the newest active transcript turn so the user message appears immediately, the agent response types in, and proof blocks reveal afterward; `useTypewriter.ts` supports disabled full-text rendering for reduced-motion users; `useWorkflowPlayer.ts` exposes reactive reduced-motion state and gates autoplay until the active turn is ready; `tasks/todo.md` records completion, validation, manifest, and next-step plan; `tasks/history.md` records the shipped workflow refinement.
+- **User-goal mapping:** The active transcript turn now follows the confirmed ChatGPT/Claude-style cadence, already revealed turns remain fully expanded when revisited, and reduced-motion users receive complete content without animation delays.
+- **Tests run:** `pnpm --dir apps/skills-showcase test -- workflows.test.tsx` passed with 8 files and 93 tests; `pnpm --dir apps/skills-showcase typecheck` passed; `pnpm --dir apps/skills-showcase build` passed; `git diff --check` passed.
+- **Skipped tests:** Full app test suite was not rerun because the focused workflows suite covers the changed surface, typecheck and Next build covered integration, and Step 42.7 remains the phase-wide validation and visual-check step. Generated Skills Showcase data validation was skipped for Step 42.3 because no generated data, `SKILL.md`, `PACK.md`, curated benchmark report, or curated review report changed as part of this workflow implementation.
+- **Adversarial review:** Diff-aware self-review checked whether proof blocks could reveal before typing completion, whether reduced-motion state updates trigger full rendering, whether autoplay could advance before the staged turn is ready, and whether clicking an already revealed earlier turn would hide proof again. Finding fixed: the first implementation staged every active turn; it now stages only the newest revealed active turn so earlier completed turns stay expanded.
+- **Residual risk:** Non-reduced-motion fake typing is validated through code review and build/type checks, but jsdom regression coverage for the live timer cadence is still planned for Step 42.6. Auto-scroll and layout proof remain explicit follow-up scope for Steps 42.4 and 42.5.
+- **Rollback note:** Revert the Step 42.3 source changes to restore immediate full active-turn rendering and timer-based workflow playback.
+- **Next command:** `$run`
 
 ### Step 42.2 Ship Manifest
 
@@ -199,8 +244,8 @@
 - Command resolution: `$benchmark-test-skill` resolved to `packs/agentic-skills-bench/codex/benchmark-test-skill/SKILL.md`; `update-packages` is the target skill argument.
 - Eligibility: `update-packages` is listed with `coverage=custom` and setup `tests/layer4/setups/tier23-global-workflows.setup.ts`.
 - Verify: `pnpm verify --skill update-packages` passed on 2026-05-18 with layer1 PASS in 4.0s and layer2 SKIP because no target-specific layer2 tests matched `update-packages`.
-- Benchmark: `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` completed with Claude session `59fa8392` and Codex session `2621e339`.
-- Results: Claude hard assertions passed 2/2 evaluated runs with 1 infrastructure-blocked run and 2 quality critical failures; Codex hard assertions passed 3/3 evaluated runs with no blocked runs and no quality failures.
+- Benchmark: latest `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` completed with Claude session `5d66f365` and Codex session `1ff2f8b0`.
+- Results: Claude hard assertions passed 2/2 evaluated runs with 1 infrastructure-blocked run and 1 quality critical failure; Codex hard assertions passed 3/3 evaluated runs with no blocked runs and no quality failures.
 - Report: `benchmark/test-update-packages-2026-05-18.md`.
-- Ship: committed and pushed `25c2d4b` to `master`.
-- Recommended next skill: `$session-triage update-packages benchmark failure`.
+- Latest ship: pending current `$run` commit and push to `master`.
+- Recommended next command: `$session-triage update-packages benchmark failure`.

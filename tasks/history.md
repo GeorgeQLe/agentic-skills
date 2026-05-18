@@ -1,5 +1,21 @@
 # Session History
 
+## 2026-05-18 — Step 42.3: workflow transcript reveal cadence
+
+- Coordinated `/workflows` persistent transcript replay so the newest active turn shows the user command immediately, fake-types the agent response, and reveals terminal/artifact/receipt proof blocks after typing completes.
+- Made reduced-motion handling reactive and complete-content-first, and gated autoplay until the active turn is ready.
+- Preserved already revealed turns as fully expanded when users jump back to earlier steps.
+- Validation passed: focused workflows test suite, typecheck, Next build, and whitespace check.
+- Recommended next command: `$run`.
+
+## 2026-05-18 — update-packages benchmark after actionability threshold
+
+- Ran `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` after the recorded verify gate.
+- Fresh evidence: Claude session `update-packages-claude-5d66f365` passed 2/2 evaluated hard assertions with 1 infrastructure-blocked run, 93.2% output quality, and 1 critical quality failure; Codex session `update-packages-codex-1ff2f8b0` passed 3/3 evaluated hard assertions with 100.0% output quality.
+- Updated `benchmark/test-update-packages-2026-05-18.md` and refreshed generated benchmark/showcase assets.
+- Validation passed: benchmark command, generated-data validator, targeted report/session scans, and whitespace check.
+- Recommended next command: `$session-triage update-packages benchmark failure`.
+
 ## 2026-05-18 — Workflow persistent transcript feature interview
 
 - Captured the `/workflows` persistent transcript refinement in `specs/workflow-persistent-transcript-feature-interview.md`.
