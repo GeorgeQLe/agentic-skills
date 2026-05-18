@@ -53,6 +53,29 @@
 - Validation passed: benchmark coverage, benchmark-results matrix tests, and `git diff --check`.
 - **Recommended next skill:** `$benchmark-agent-review update-packages`
 
+## Current Task — Agent Review `update-packages` 2026-05-18
+
+**Goal:** Review the latest persisted `update-packages` Claude and Codex benchmark outputs for subjective operator quality.
+
+**Plan:**
+- [x] Resolve latest Claude and Codex run directories from `benchmark/test-update-packages-2026-05-18.md`.
+- [x] Inspect retained `package-update-plan.md` artifacts and exclude infrastructure-blocked runs.
+- [x] Compare outputs against the `update-packages` skill contract and benchmark fixture facts.
+- [x] Write `benchmark/review-update-packages-2026-05-18.md` with source reports, score table, strengths, weaknesses, remediation, and next route.
+- [x] Refresh generated evidence if curated review evidence changes, validate, record results, then commit and push intended changes on `master`.
+
+## Review — Agent Review `update-packages` 2026-05-18
+
+- Reviewed six retained `package-update-plan.md` artifacts from Claude session `update-packages-claude-fa542bcd` and Codex session `update-packages-codex-03d220e0`; no runs were infrastructure-blocked.
+- Subjective verdict: good overall. Median score was 88/100 with range 82-90.
+- Strengths: all artifacts selected eligible dependency targets, skipped newer versions inside the 8-day window, avoided unqualified `pnpm@latest`, isolated React/Vitest major upgrades, included focused smokes and migration stop routes, and used runner-native `/run` or `$run` handoffs.
+- Main weakness: pnpm toolchain-version selection is sometimes asserted from toolchain knowledge or local environment rather than proven from retained registry/project-pin evidence before becoming a `packageManager` recommendation.
+- Secondary weakness: one Claude artifact wrote both required `.npmrc` literals but described the npm/pnpm age-gate key semantics imprecisely.
+- Report written at `benchmark/review-update-packages-2026-05-18.md`.
+- Generated Skills Showcase data and benchmark results matrix were refreshed after the curated review report changed.
+- Validation passed: review report field scan, benchmark-results matrix tests, showcase data freshness check, and `git diff --check`.
+- **Recommended next command:** `$targeted-skill-builder update-packages pnpm toolchain proof and age-gate semantics`
+
 ## Current Task — Fresh Benchmark `benchmark-agent-review` After Owner Specificity Tolerance 2026-05-18
 
 **Goal:** Run `$benchmark-test-skill benchmark-agent-review` after the owner-specificity benchmark tolerance update and publish deterministic both-agent benchmark evidence.
