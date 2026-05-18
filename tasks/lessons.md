@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-05-18 — Workflow demos should start from user value and real excerpts
+
+- A `/workflows` demo pass showed generic step commands and summaries even when benchmark run excerpts were available, making the scenario feel synthetic.
+- Workflow demos should lead with the user's goal for using the workflow before showing command execution details.
+- When persisted benchmark prompt/output excerpts exist, render those excerpts in the visible transcript instead of replacing them with generic curated copy.
+- Curated fallbacks are acceptable only for steps without retained run evidence, and they should clearly describe the user value rather than only the command.
+
 ## 2026-05-18 — Interview questions should use product language
 
 - A `$feature-interview` follow-up asked about "sub-blocks" and reveal cadence in implementation terms, which made the design decision unclear.

@@ -2548,6 +2548,12 @@ Resolved all 10 findings from `/expert-review`:
 - Added visible focus states for workflow chips, step circles, and playback controls while preserving existing playback and reduced-motion behavior.
 - Verified with Skills Showcase typecheck, focused app tests, production build, and whitespace validation.
 
+## 2026-05-18 — workflow demo user goals and run excerpts
+
+- Refined `/workflows` transcript turns so the first message is labeled as the user's goal and curated fallbacks describe the reason to use the step.
+- Benchmark-backed workflow turns now render persisted benchmark demo prompt/output excerpts in the visible transcript when run evidence is attached.
+- Updated focused Skills Showcase tests to assert the realistic prompt/output excerpt path, then verified with the focused app test run, app typecheck, and whitespace validation.
+
 ## 2026-05-17 — Step 40.5 workflow replay regression coverage
 
 - Added focused `TuiWorkflow` tests covering replay prompt/agent/terminal/artifact rendering, step-circle navigation, visible benchmark receipt metadata, and curated no-receipt states.
