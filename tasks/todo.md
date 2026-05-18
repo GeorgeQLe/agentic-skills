@@ -5,6 +5,31 @@
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
+## Current Task — Targeted Update `update-packages` Per-Batch Actionability 2026-05-18
+
+**Goal:** Tighten the `update-packages` skill and benchmark quality evaluator so dependency-update plans include exact per-batch mutation commands, verification commands, expected proof, and stop gates.
+
+**Plan:**
+- [x] Review relevant lessons, benchmark-agent review evidence, existing `update-packages` contracts, and custom benchmark setup coverage.
+- [x] Update mirrored Codex and Claude `update-packages` skill contracts with a batch execution checklist requirement and safer Vitest smoke-command guidance.
+- [x] Tighten the custom `update-packages` actionability quality pattern and add focused layer1 regression coverage.
+- [x] Run required validation, refresh Skills Showcase generated data, record results, then commit and push intended changes on `master`.
+
+## Review — Targeted Update `update-packages` Per-Batch Actionability 2026-05-18
+
+- Decision: existing-skill update plus benchmark quality tightening, not a new skill. `update-packages` already owns package-manager migration, age gates, batching, and verification behavior.
+- Evidence used: `tasks/lessons.md`, `benchmark/review-update-packages-2026-05-18.md`, mirrored `global/codex/update-packages/SKILL.md` and `global/claude/update-packages/SKILL.md`, custom Tier 2/3 setup, and focused layer1 coverage.
+- Evidence intentionally skipped: broad session history, because the current benchmark-agent review already verified the narrow recurring output-quality gap.
+- Existing-skill overlap: no duplicate skill needed; the smallest durable fix is to strengthen the existing update workflow contract and benchmark actionability rubric.
+- Updated both mirrored skill contracts to require a batch execution checklist with mutation command/edit, verification command, expected proof/artifact, and stop gate for each batch.
+- Added guidance to avoid Jest-only or version-uncertain test-runner flags during Vitest migrations unless support is verified against the selected version.
+- Tightened `tests/layer4/setups/tier23-global-workflows.setup.ts` so `workflow-actionability` also requires Batch 0/1/2-style per-batch proof.
+- Added focused layer1 coverage that accepts checklist-shaped retained plans and rejects broad plans that only provide generic verification commands.
+- Validation passed: `./install.sh`; `./scripts/skill-deps.sh --broken`; `./scripts/skill-versions.sh --missing`; `./scripts/skill-next-step-routing.sh --missing`; `pnpm --dir tests exec vitest run --project layer1 bench-setups`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill update-packages`; targeted `rg`.
+- Generated Skills Showcase data was refreshed because tracked skill contracts changed. `scripts/validate-skills-showcase-data.sh` regenerated the intended assets and reported them stale while uncommitted; rerun after commit/push to confirm the committed generated data is clean.
+- Reload note: after `./install.sh`, start a fresh Claude Code or Codex CLI/session if the changed skill is not visible yet.
+- **Recommended next skill:** `$benchmark-test-skill update-packages`
+
 ## Current Task — Targeted Update `update-packages` pnpm Latest Reject-Warning Tolerance 2026-05-18
 
 **Goal:** Fix the custom `update-packages` benchmark setup so valid retained rejection language for unqualified `pnpm@latest` passes while actual unqualified usage still fails.
@@ -4854,3 +4879,28 @@ Implement only this step, validate it, then run `/ship` when done.
 - Validation passed: report field scan; `pnpm --dir tests bench:coverage`; `pnpm --dir tests exec vitest run --project layer1 benchmark-results-matrix skills-showcase-benchmark-demo`; `git diff --check`.
 - Validation note: `scripts/validate-skills-showcase-data.sh` regenerated the intended benchmark/showcase asset changes and reported them as stale before commit; rerun after commit/push to confirm the committed assets are clean.
 - **Recommended next skill:** `$benchmark-agent-review feature-interview`
+
+## Current Task — Agent Review `feature-interview` Fresh Benchmark 2026-05-18
+
+**Goal:** Review the latest persisted `feature-interview` benchmark outputs for subjective operator quality.
+
+**Plan:**
+- [x] Resolve latest Claude and Codex run directories from `benchmark/test-feature-interview-2026-05-18.md`.
+- [x] Exclude infrastructure-blocked Claude runs and inspect retained Codex `specs/benchmark-reporting-feature-interview.md` artifacts.
+- [x] Grade each evaluated output against the agent-review rubric separately from deterministic benchmark metrics.
+- [x] Write `benchmark/review-feature-interview-2026-05-18.md` with scores, findings, remediation, and next route.
+- [x] Refresh generated evidence if curated review evidence changes, validate, record results, then commit and push intended changes on `master`.
+
+## Review — Agent Review `feature-interview` Fresh Benchmark 2026-05-18
+
+- Reviewed latest persisted benchmark outputs from `benchmark/test-feature-interview-2026-05-18.md`.
+- Source runs: `tests/benchmarks/runs/feature-interview-claude-bd781522/` and `tests/benchmarks/runs/feature-interview-codex-59a38b3c/`.
+- Excluded Claude runs 0, 1, and 2 because all were infrastructure-blocked by agent runner budget.
+- Reviewed three Codex retained `specs/benchmark-reporting-feature-interview.md` artifacts.
+- Deterministic context: Codex passed 3/3 hard assertions with 100.0% configured output quality; Claude had 0 evaluated runs.
+- Subjective verdict: excellent. The artifacts preserve the no-follow-up and roadmap-sequencing constraints, validate claims against sparse fixture evidence, define prototype-first route experiments, defer SaaS infrastructure, and route correctly to `$roadmap`.
+- Median subjective score: 94/100; range: 93-95.
+- No material evaluated-output remediation remains. The only limitation is missing Claude comparison evidence due to runner budget infrastructure blockage.
+- Report written: `benchmark/review-feature-interview-2026-05-18.md`.
+- **Next work:** none
+- **Recommended next command:** `$ship`
