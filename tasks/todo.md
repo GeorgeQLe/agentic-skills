@@ -5,6 +5,30 @@
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
+## Current Task — Targeted Update `feature-interview` Prototype-First Phase Wording Tolerance 2026-05-18
+
+**Goal:** Fix the `feature-interview` benchmark quality evaluator so valid retained prototype-first phase wording passes while shallow prototype/defer statements still fail.
+
+**Plan:**
+- [x] Review relevant lessons, latest triage report, current Tier 1 evaluator, and focused layer1 coverage.
+- [x] Update `tests/layer4/setups/tier1-workflows.setup.ts` to accept semantically valid prototype phase and nested experiment route wording.
+- [x] Add focused layer1 regression coverage for retained Codex-style `prototype-first phase` and nested `/experiments/benchmark-reporting/...` route shapes.
+- [x] Run focused layer1 tests, benchmark coverage, target verify, skill audits, install, targeted search, and whitespace validation.
+- [x] Record results, commit, and push intended changes on `master`.
+
+## Review — Targeted Update `feature-interview` Prototype-First Phase Wording Tolerance 2026-05-18
+
+- Decision: existing benchmark setup update, not a new skill. The latest triage localized the primary gap to `tests/layer4/setups/tier1-workflows.setup.ts`.
+- Evidence used: `tasks/lessons.md`, `benchmark/triage-feature-interview-2026-05-18-latest-route-and-gate.md`, retained Codex-style benchmark shapes from that triage, and focused layer1 coverage.
+- Evidence intentionally skipped: broad session history, because the immediate triage already verified the failure and no recurrence analysis was requested.
+- Existing-skill overlap: `feature-interview` already owns the prototype-first workflow; the durable fix is benchmark tolerance, not another planning skill.
+- Updated `prototypeFirstProductGateCriterion` to accept `prototype-first phase`, short prototype phase variants, and nested experiment paths such as `/experiments/benchmark-reporting/table-first`.
+- Added focused layer1 regression coverage for retained valid Codex-style wording while preserving the negative shallow prototype/defer case.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 bench-setups`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill feature-interview`; `./scripts/skill-deps.sh --broken`; `./scripts/skill-versions.sh --missing`; `./scripts/skill-next-step-routing.sh --missing`; `./install.sh`; targeted `rg`; `git diff --check`.
+- Generated Skills Showcase data was not refreshed because no tracked `SKILL.md`, `PACK.md`, curated benchmark report, or curated review report changed.
+- Reload note: after `./install.sh`, start a fresh Claude Code or Codex CLI/session if changed skills are not visible; this update did not change installed skill contracts.
+- **Recommended next command:** `$benchmark-test-skill feature-interview`
+
 ## Current Task — Triage `update-packages` Reject pnpm Latest Benchmark Failure 2026-05-18
 
 **Goal:** Investigate the latest `$benchmark-test-skill update-packages` Claude failure and classify whether the `Output avoids unqualified pnpm@latest` failure is a skill-contract gap, benchmark harness defect, generated-output noncompliance, or infrastructure-only block.

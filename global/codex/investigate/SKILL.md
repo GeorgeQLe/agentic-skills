@@ -49,6 +49,8 @@ Use this skill when the user reports a bug, error, unexpected behavior, or provi
 ## Default Shipping Contract
 
 - **Default next-step routing:** when reporting completion, include either `Recommended next skill: <command>` or the two-line pair `**Next work:** <specific task or "none">` and `**Recommended next command:** <one command or route>` so the next operator has a concrete handoff.
+- If the investigation applied a fix, validated it, committed it, pushed it, and confirmed the tree is clean with no unpushed commits, end with exactly `**Next work:** none` and `**Recommended next command:** none`.
+- Do not recommend `$ship-end` after a clean, already-pushed investigation unless there are pending docs, uncommitted changes, unpushed commits, deploy follow-up, unresolved wrap-up work, or a project task source explicitly points to `$ship-end`.
 - If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
 - Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
 - This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.

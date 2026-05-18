@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-05-18 — Clean shipped investigations should not route to ship-end
+
+- A `$investigate` run can complete the fix, validate it, commit it, push it, and leave a clean tree with no unpushed commits, then still recommend `$ship-end`.
+- Investigation workflows should treat a clean, already-pushed bug fix as terminal unless there is concrete pending documentation, uncommitted work, unpushed commits, deploy follow-up, unresolved wrap-up work, or a task source explicitly requests ship-end.
+- In that terminal state, the final handoff should say `**Next work:** none` and `**Recommended next command:** none`.
+- Benchmark coverage for mutation-capable debugging workflows should reject mechanical ship-end recommendations when the fixture state already proves there is nothing left to ship.
+
 ## 2026-05-18 — Prototype-first gates need separate phases and route experiments
 
 - The initial prototype-first workflow update added a `Prototype Phase 0` concept but left room for agents to stuff prototype scope, calibration, and later production infrastructure into one phase.
