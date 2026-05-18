@@ -6,6 +6,17 @@
 **Total phases:** 42
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
+## Interrupt Task — Benchmark `update-packages` After Actionability Threshold 2026-05-18
+
+**Goal:** Run `$benchmark-test-skill update-packages` against the current repository state and publish deterministic both-agent benchmark evidence after the benchmark actionability threshold update.
+
+**Plan:**
+- [ ] Confirm `benchmark-test-skill` is the active workflow and `update-packages` is only the benchmark target.
+- [ ] Run `pnpm bench --list-skills` from `tests/` and confirm `update-packages` is known, not blocked, and note its coverage status.
+- [ ] Run `pnpm verify --skill update-packages`; stop without benchmarking if verify fails.
+- [ ] Run `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` only after verify passes.
+- [ ] Write and validate `benchmark/test-update-packages-2026-05-18.md`, update this review section, refresh generated evidence if needed, then commit and push intended changes.
+
 ## Interrupt Task — Targeted Update `update-packages` Benchmark Actionability Threshold 2026-05-18
 
 **Goal:** Tighten the `update-packages` benchmark quality rubric so missing batch actionability and generic migrate routes materially lower output-quality results.
@@ -71,7 +82,7 @@
   - Classification: automated
   - Files: modify `apps/skills-showcase/src/showcase/tui/TuiWorkflow.tsx`
   - Notes: Render revealed workflow steps as transcript turns; keep completed turns fully expanded; remove the remounting active-step card key that causes the blinking carousel feel.
-- [ ] Step 42.2: Update workflow player state so step controls jump within an existing transcript session while workflow changes reset the session.
+- [x] Step 42.2: Update workflow player state so step controls jump within an existing transcript session while workflow changes reset the session.
   - Classification: automated
   - Files: modify `apps/skills-showcase/src/showcase/tui/shared/useWorkflowPlayer.ts`
   - Notes: Track revealed transcript depth separately from active step focus; keep later revealed turns available when jumping to an earlier step; reset revealed depth when selecting another workflow or restarting.
@@ -85,6 +96,12 @@
   - Classification: automated
   - Files: modify `apps/skills-showcase/src/showcase/tui/TuiWorkflow.tsx`, modify `apps/skills-showcase/src/showcase/tui/shared/useTypewriter.ts`, modify `apps/skills-showcase/src/showcase/tui/shared/useWorkflowPlayer.ts`
   - Notes: Show user command immediately; fake-type the agent response; reveal terminal, artifact, and receipt blocks after the agent response; bypass typing and animated scroll for reduced-motion users.
+  - Implementation plan:
+    - Inspect the existing typewriter hook and active workflow turn rendering to identify the smallest state needed for staged reveal.
+    - Wire the active transcript turn so the user command renders immediately and the agent response receives typed text only while motion is allowed.
+    - Add completion state that reveals terminal, artifact, and receipt/proof blocks only after the active agent response finishes.
+    - Make reduced-motion mode render complete active-turn content immediately and avoid timers that would delay proof visibility.
+    - Keep already completed turns fully expanded and avoid changing the revealed-depth behavior introduced in Step 42.2.
 - [ ] Step 42.4: Add transcript auto-scroll and stable benchmark/no-receipt proof rendering.
   - Classification: automated
   - Files: modify `apps/skills-showcase/src/showcase/tui/TuiWorkflow.tsx`, modify `apps/skills-showcase/src/showcase/tui/workflow.css`
@@ -128,6 +145,20 @@
 - Record tasks: none for this phase.
 - Recurring tasks: none for this phase.
 - Step 42.1 completed on 2026-05-18.
+- Step 42.2 completed on 2026-05-18.
+
+### Step 42.2 Ship Manifest
+
+- **User goal:** Execute `$run` for Step 42.2, updating `/workflows` player state so step controls jump within an existing transcript session while workflow changes reset the session.
+- **Changed files:** `apps/skills-showcase/src/showcase/tui/shared/useWorkflowPlayer.ts`; `apps/skills-showcase/src/showcase/tui/TuiWorkflow.tsx`; `apps/skills-showcase/src/showcase/workflows.test.tsx`; `tasks/todo.md`; `tasks/history.md`; pre-existing task-planning edits in `tasks/roadmap.md` and `tasks/todo.md` are preserved in the same shipping boundary.
+- **Per-file purpose:** `useWorkflowPlayer.ts` now tracks `revealedStep` separately from `activeStep`; `TuiWorkflow.tsx` renders transcript turns through `revealedStep` while highlighting `activeStep`; `workflows.test.tsx` covers the backward-jump transcript persistence regression; `tasks/todo.md` records completion, review, and the next-step plan; `tasks/history.md` records the shipped work; `tasks/roadmap.md` already contained the update-packages benchmark interrupt plan before this step and is not changed by the implementation.
+- **User-goal mapping:** Separating revealed transcript depth from active focus lets a user click an earlier step without destructively hiding later revealed turns, while `selectWorkflow` and `restart` reset both values to a fresh first-turn session.
+- **Tests run:** `pnpm --dir apps/skills-showcase test -- workflows.test.tsx` failed once because the new test used an ambiguous counter text query; fixed the test query and reran successfully with 8 files and 93 tests passing. `pnpm --dir apps/skills-showcase build` passed. `pnpm --dir apps/skills-showcase typecheck` initially failed when run concurrently with build because `.next/types/validator.ts` could not find generated `routes.js`; reran after build completed and it passed. `git diff --check` passed.
+- **Skipped tests:** Full app test suite was not rerun because the changed behavior is covered by the focused workflows suite, the build includes TypeScript validation, and Step 42.7 remains the planned phase-wide validation and visual-check step. Generated Skills Showcase data validation was skipped because no generated data, `SKILL.md`, `PACK.md`, curated benchmark report, or curated review report changed.
+- **Adversarial review:** Diff-aware self-review checked whether `revealedStep` resets on workflow switch and restart, whether next/autoplay advance transcript depth, whether backward navigation preserves later turns, and whether benchmark receipt lookup still keys by original step index. Finding fixed: the added regression test originally queried duplicate counter text from both legacy and TUI workflow surfaces; it now uses a broader count assertion while the behavior assertions target accessible replay labels.
+- **Residual risk:** Autoplay still wraps active focus from the last step to the first while keeping all turns revealed. That preserves the Step 42.2 no-destructive-rewind goal, but the final playback cadence and scroll behavior are still unfinished and are explicitly covered by Steps 42.3 and 42.4.
+- **Rollback note:** Revert the Step 42.2 commit to collapse transcript rendering back to `activeStep + 1` and remove the focused regression test.
+- **Next command:** `$run`
 
 ### Step 42.1 Ship Manifest
 
@@ -142,5 +173,28 @@
 - **Rollback note:** Revert the Step 42.1 commit to restore the single active replay card and remove `.tui-workflow__transcript`.
 - **Next command:** `$run`
 
-**Next work:** Step 42.2 — update workflow player state so step controls jump within an existing transcript session while workflow changes reset the session.
+**Next work:** Step 42.3 — coordinate fake typing, proof-block reveal, and reduced-motion behavior for active turns.
 **Recommended next command:** `$run`
+
+## Benchmark: update-packages Fresh Run
+
+**Goal:** Run `$benchmark-test-skill update-packages` for a fresh deterministic benchmark report dated 2026-05-18.
+
+**Scope:**
+- Confirm `update-packages` is known to the benchmark harness and note its coverage status.
+- Run `pnpm verify --skill update-packages`.
+- If verify passes, run `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0`.
+- Write `benchmark/test-update-packages-2026-05-18.md` from persisted benchmark output.
+- Validate that the report includes target, agent rows, pass-rate or blocked-run data, latency, cost, raw session path, and a literal recommended next route.
+
+### Execution
+- [x] Step B.1: Confirm benchmark command resolution and harness eligibility.
+- [ ] Step B.2: Run verify gate for `update-packages`.
+- [ ] Step B.3: Run both-agent benchmark if verify passes.
+- [ ] Step B.4: Write and validate the dated benchmark report.
+- [ ] Step B.5: Commit and push intended benchmark/report changes.
+
+### Review
+
+- Command resolution: `$benchmark-test-skill` resolved to `packs/agentic-skills-bench/codex/benchmark-test-skill/SKILL.md`; `update-packages` is the target skill argument.
+- Eligibility: `update-packages` is listed with `coverage=custom` and setup `tests/layer4/setups/tier23-global-workflows.setup.ts`.

@@ -2363,6 +2363,13 @@ Resolved all 10 findings from `/expert-review`:
 - Updated `benchmark/test-feature-interview-2026-05-17.md`; both evaluated agent lanes passed hard assertions, while the output-quality summary still records file-reference critical failures.
 - Refreshed generated Skills Showcase data and `docs/benchmark-results-matrix.md` after the curated benchmark evidence changed.
 
+## 2026-05-18 — Step 42.2 workflow transcript session state
+
+- Split `/workflows` TUI player state into active focus and revealed transcript depth so jumping back to an earlier step keeps later revealed transcript turns mounted.
+- Reset both active focus and revealed depth on workflow selection and restart, while next/autoplay advance revealed depth without destructive rewind.
+- Added focused regression coverage for backward step navigation preserving the already revealed Plan replay turn.
+- Verified with focused workflow tests, Skills Showcase typecheck, production build, and whitespace validation.
+
 ## 2026-05-18 — Step 42.1 workflow persistent transcript model
 
 - Replaced the `/workflows` TUI single keyed active replay card with a transcript list that renders all revealed steps through the current active step.
