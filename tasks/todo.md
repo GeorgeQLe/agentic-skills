@@ -4444,3 +4444,25 @@ Implement only this step, validate it, then run `/ship` when done.
 - Validation passed: report field scan; `pnpm --dir tests bench:coverage`; `pnpm --dir tests exec vitest run --project layer1 benchmark-results-matrix skills-showcase-benchmark-demo`; `git diff --check`.
 - Validation note: `scripts/validate-skills-showcase-data.sh` regenerated the intended benchmark/showcase asset changes and reported them as stale before commit; rerun after commit/push to confirm the committed assets are clean.
 - **Recommended next skill:** `$session-triage update-packages benchmark failure`
+
+## Current Task — Triage `update-packages` pnpm latest Parenthetical Negation Failure 2026-05-18
+
+**Goal:** Investigate the latest `$benchmark-test-skill update-packages` Claude failure and classify whether the `Output avoids unqualified pnpm@latest` failure is a skill-contract gap, benchmark harness defect, generated-output noncompliance, or infrastructure-only block.
+
+**Plan:**
+- [x] Inspect the fresh curated benchmark report and raw failed Claude run artifact.
+- [x] Compare mirrored `update-packages` contracts with benchmark prompt, assertion pattern, and focused layer1 coverage.
+- [x] Write `benchmark/triage-update-packages-2026-05-18-pnpm-latest-parenthetical.md` with verdict, root cause, responsible gap, recommended fix, validation plan, and next route.
+- [x] Validate the report fields, record results, then commit and push intended changes on `master`.
+
+## Review — Triage `update-packages` pnpm latest Parenthetical Negation Failure 2026-05-18
+
+- Verification verdict: verified as a benchmark harness false negative, not a mirrored `update-packages` skill-contract failure.
+- Evidence inspected: fresh curated benchmark report, raw Claude run #1 artifact, mirrored `update-packages` contracts, current `UPDATE_PACKAGES_NO_UNQUALIFIED_PNPM_LATEST_PATTERN`, focused layer1 coverage, and relevant lessons.
+- Claude session `update-packages-claude-c663452c` had one infrastructure block, one passing evaluated run, and one evaluated failure on `Output avoids unqualified pnpm@latest`; Codex session `update-packages-codex-ebca44af` passed 3/3.
+- The failed Claude artifact selected `pnpm@10.11.0`, cited `npm view pnpm@10.11.0 time.version` evidence from 2026-05-01, stated it clears the 8-day gate, skipped `pnpm@10.22.0` as too new, and set `packageManager` to `pnpm@10.11.0`.
+- The only `pnpm@latest` mentions were negated/contextual forms: stdout `(not pnpm@latest)` and artifact heading `no unqualified pnpm@latest`.
+- Root cause: the benchmark detector accepts some negated forms but misses valid parenthetical, backticked, and heading forms.
+- Report written at `benchmark/triage-update-packages-2026-05-18-pnpm-latest-parenthetical.md`.
+- Validation passed: required report field scan and `git diff --check`.
+- **Recommended next skill:** `$targeted-skill-builder update-packages benchmark pnpm latest parenthetical-negation tolerance`
