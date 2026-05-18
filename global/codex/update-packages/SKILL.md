@@ -25,7 +25,8 @@ Use this skill when a project needs dependency updates but should avoid newly pu
    - If `pnpm-lock.yaml` or `packageManager: "pnpm@..."` exists, use pnpm.
    - If only npm is present (`package-lock.json`, npm scripts, or `packageManager: "npm@..."`), migrate to pnpm when practical:
      - Add or update `packageManager` to a stable pnpm version already used by the repo/toolchain when discoverable.
-     - Do not default to `pnpm@latest`; use an existing repo/toolchain pnpm version or an explicitly age-eligible pnpm version, and document the choice.
+     - Do not default to `pnpm@latest`; use an existing repo-pinned pnpm version or an explicitly age-eligible pnpm version, and document the proof.
+     - Before recommending a new `packageManager: "pnpm@..."` value, prove the chosen pnpm version is older than 8 full days by using retained project evidence, an existing project pin, or registry publish-time evidence such as `npm view pnpm@<version> time.version`. If you only know a local/toolchain pnpm version but have not verified its publish time, mark it provisional and make the registry check a blocker before mutation instead of presenting it as final.
      - Generate `pnpm-lock.yaml` using pnpm.
      - Remove npm lockfile only after pnpm install/update succeeds and the repo does not explicitly require npm.
    - If npm must remain, record the reason and continue with npm commands without inventing a pnpm migration.
@@ -36,6 +37,7 @@ Use this skill when a project needs dependency updates but should avoid newly pu
    - Add npm's relative age gate: `min-release-age=8`.
    - Add pnpm's 8-day equivalent in minutes for pnpm versions/configurations that read `.npmrc`: `minimum-release-age=11520`.
    - If the active pnpm version uses `pnpm-workspace.yaml` or `pnpm config` for non-auth settings, also add or update `minimumReleaseAge: 11520` in the project `pnpm-workspace.yaml` or documented pnpm project config. Do this in addition to `.npmrc`, not instead of it, so npm and pnpm installs are both covered.
+   - When documenting the settings, keep their ownership clear: `min-release-age=8` is the npm relative-age guard, while `minimum-release-age=11520` and `minimumReleaseAge: 11520` are pnpm coverage for the same 8-day policy where supported.
    - Avoid overwriting private registry tokens, scoped registry lines, or unrelated project config.
    - If an existing config deliberately excludes packages from the age gate, keep only exclusions that are documented and necessary; otherwise remove or narrow exclusions before updating.
 
