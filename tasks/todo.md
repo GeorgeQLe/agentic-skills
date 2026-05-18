@@ -137,7 +137,7 @@
     - Keep manual step jumps predictable: focus/highlight the selected turn without deleting later revealed turns, and avoid scroll loops when the user is not playing.
     - Review benchmark receipt rendering inside each turn to ensure benchmark rows still key by original step index and curated/no-receipt fallback states remain visible after the Step 42.3 staged reveal.
     - Add any small CSS needed for stable active-turn anchoring and proof-block containment, leaving broader responsive layout restyling to Step 42.5.
-- [ ] Step 42.5: Restyle `/workflows` for persistent transcript layout across desktop and mobile.
+- [x] Step 42.5: Restyle `/workflows` for persistent transcript layout across desktop and mobile.
   - Classification: automated
   - Files: modify `apps/skills-showcase/src/showcase/tui/workflow.css`
   - Notes: Keep workflow selectors and step controls visible above the transcript; prevent horizontal overflow, clipped proof blocks, and control/transcript overlap at mobile and desktop widths.
@@ -153,6 +153,13 @@
   - Classification: automated
   - Files: modify `apps/skills-showcase/src/showcase/workflows.test.tsx`
   - Test cases: completed turns remain expanded after advancing; clicking an earlier step jumps to an existing turn without hiding later turns; workflow switching resets the transcript; benchmark receipts and curated no-receipt states render inside turns; reduced-motion shows complete content without typing delay.
+  - Implementation plan:
+    - Inspect the existing `TuiWorkflow replay pilot` tests and reuse the current `window.matchMedia`, `SKILLS_SHOWCASE_DATA`, and Testing Library patterns.
+    - Add behavior-focused assertions for transcript persistence after advancing and backward step jumps, avoiding CSS implementation details.
+    - Add a workflow-switch regression that verifies only the new workflow's first transcript turn is visible after changing chips.
+    - Add receipt coverage for benchmark-backed rows and curated/no-receipt fallback states inside transcript turns.
+    - Add a reduced-motion assertion that complete active-turn content and proof blocks render without waiting for fake typing timers.
+    - Run `pnpm --dir apps/skills-showcase test -- workflows.test.tsx`, then typecheck/build if the test changes expose source issues.
 - [ ] Step 42.7: Run validation and perform only concrete cleanup found by validation.
   - Classification: automated
   - Files: no planned source edits beyond fixes required by failed validation
@@ -185,6 +192,20 @@
 - Step 42.2 completed on 2026-05-18.
 - Step 42.3 completed on 2026-05-18.
 - Step 42.4 completed on 2026-05-18.
+- Step 42.5 completed on 2026-05-18.
+
+### Step 42.5 Ship Manifest
+
+- **User goal:** Execute `$run` for Step 42.5, restyling `/workflows` so the persistent transcript layout is stable across desktop and mobile widths.
+- **Changed files:** `apps/skills-showcase/src/showcase/tui/workflow.css`; `tasks/todo.md`; `tasks/history.md`.
+- **Per-file purpose:** `workflow.css` moves the workflow body from fixed flex proportions to a constrained grid, tightens transcript/proof/receipt containment, wraps controls predictably, and stacks the layout at tablet/mobile widths; `tasks/todo.md` records completion, validation, manifest, and the next-step plan; `tasks/history.md` records the shipped workflow refinement.
+- **User-goal mapping:** The CSS now keeps workflow chips, benchmark strip, step controls, counter, transcript turns, and notebook content from overlapping while preserving Step 42.4 active-turn scroll anchoring and receipt data attributes.
+- **Tests run:** `pnpm --dir apps/skills-showcase test -- workflows.test.tsx` passed with 8 files and 95 tests; `pnpm --dir apps/skills-showcase typecheck` passed; `pnpm --dir apps/skills-showcase build` passed; `git diff --check` passed.
+- **Skipped tests:** Full app tests were not rerun because this CSS-only change is scoped to `/workflows`, the focused workflow suite covers the relevant rendered surface, and typecheck/build covered integration. Generated Skills Showcase data validation was skipped because no generated data, `SKILL.md`, `PACK.md`, curated benchmark report, or curated review report changed. Browser visual checks remain planned for Step 42.7, which explicitly verifies desktop and mobile widths after Step 42.6 adds final regression coverage.
+- **Adversarial review:** Diff-aware self-review checked whether grid sizing could squeeze the notebook, whether mobile stacking still leaves controls above the transcript without overlap, whether long receipt rows and proof blocks keep overflow containment, and whether Step 42.4 data attributes/scroll behavior were untouched. No source behavior changes or additional fixes were needed.
+- **Residual risk:** CSS layout stability has not yet been inspected in a real browser viewport in this step; Step 42.7 remains the planned visual check for desktop and mobile overflow, clipped proof blocks, and control/transcript overlap.
+- **Rollback note:** Revert the Step 42.5 CSS and task/history commit to restore the prior flex-based workflow layout.
+- **Next command:** `$run`
 
 ### Step 42.4 Ship Manifest
 

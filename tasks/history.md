@@ -2400,6 +2400,13 @@ Resolved all 10 findings from `/expert-review`:
 - Ran `pnpm verify --skill update-packages` from `tests/`; layer1 passed in 3.7s and layer2 was skipped because no target-specific layer2 tests matched the skill.
 - Recorded the expected next step as the both-agent benchmark command.
 
+## 2026-05-18 — Step 42.5 workflow transcript responsive layout
+
+- Restyled the `/workflows` persistent transcript layout around a constrained grid so the transcript and notebook share desktop space without fixed flex overflow pressure.
+- Tightened transcript, replay message, terminal/proof, benchmark receipt, dot navigation, and playback-control containment for tablet and mobile widths.
+- Preserved the Step 42.4 active-turn scroll anchoring and benchmark receipt data attributes while keeping the change CSS-only.
+- Verified with focused workflow tests, typecheck, production build, and whitespace validation.
+
 ## 2026-05-18 — Step 42.1 workflow persistent transcript model
 
 - Replaced the `/workflows` TUI single keyed active replay card with a transcript list that renders all revealed steps through the current active step.
