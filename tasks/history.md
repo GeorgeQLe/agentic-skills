@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-05-18 — ship-end single active-runner benchmark handoff
+
+- Tightened the `ship-end` Tier 1 benchmark prompt so final handoffs must include exactly one active-runner next command and must not list alternate Claude/Codex routes.
+- Added a hard assertion plus critical quality criterion that rejects dual `/run` and `$run` final handoffs.
+- Added focused layer1 coverage proving single `$run` Codex handoffs pass while dual `Claude: /run` plus `Codex: $run` handoffs fail.
+- Reran the both-agent benchmark: Claude session `ship-end-claude-9bf5f843` and Codex session `ship-end-codex-d7d92d34` both passed 3/3 with no blocked runs and 100.0% output quality.
+- Recommended next command: `$benchmark-agent-review ship-end`.
+
 ## 2026-05-18 — update-packages one-based batch actionability tolerance
 
 - Calibrated the `update-packages` benchmark actionability matcher so strong one-based `Batch 1/2/3` plans receive quality credit alongside existing zero-based and lettered batch plans.

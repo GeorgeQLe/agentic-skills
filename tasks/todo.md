@@ -176,6 +176,44 @@
 - **Rollback note:** Revert the review commit to remove the subjective report and restore prior task state.
 - **Next command:** `$targeted-skill-builder ship-end benchmark single active-runner final handoff`
 
+## Interrupt Task — Targeted Update `ship-end` Single Active-Runner Handoff 2026-05-18
+
+**Goal:** Tighten the `ship-end` benchmark setup so final handoffs contain exactly one active-runner next command instead of listing both Claude and Codex routes.
+
+**Plan:**
+- [x] Review lessons, latest `ship-end` agent-review report, current Tier 1 setup, and focused layer1 coverage.
+- [x] Update `tests/layer4/setups/tier1-workflows.setup.ts` so the prompt, hard assertions, and quality rubric reject dual `/run` plus `$run` handoffs.
+- [x] Add focused layer1 coverage where a dual-route Codex handoff fails and a single `$run` Codex handoff passes.
+- [x] Run required targeted validation, record results, then commit and push intended changes on `master`.
+
+## Review — Targeted Update `ship-end` Single Active-Runner Handoff 2026-05-18
+
+- Decision: existing benchmark setup/rubric update, not a new skill or `ship-end` skill-contract change.
+- Evidence used: `tasks/lessons.md`, `benchmark/review-ship-end-2026-05-18.md`, current `ship-end` Tier 1 setup, raw fresh benchmark artifacts, and focused layer1 coverage.
+- Evidence intentionally skipped: broad session history, because the latest agent-review report isolated the repeatable gap to one benchmark fixture/rubric behavior.
+- Existing-skill overlap: `ship-end` already owns session wrap-up; the durable fix is benchmark enforcement of one active-runner final route.
+- Updated the `ship-end` benchmark prompt to require exactly one active-runner final command and forbid alternate runner routes.
+- Added the critical `single-active-runner-final-route` quality criterion and a hard assertion that rejects the inactive route in `ship-end` outputs.
+- Added focused layer1 coverage proving single `$run` Codex output passes while dual `Claude: /run` plus `Codex: $run` output fails.
+- Fresh benchmark rerun passed: Claude session `ship-end-claude-9bf5f843` and Codex session `ship-end-codex-d7d92d34` both passed 3/3 hard assertions, had no infrastructure-blocked runs, and scored 100.0% output quality with no critical failures.
+- Report updated: `benchmark/test-ship-end-2026-05-18.md`.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 bench-setups --testNamePattern ship-end`; `./install.sh`; `./scripts/skill-deps.sh --broken`; `./scripts/skill-versions.sh --missing`; `./scripts/skill-next-step-routing.sh --missing`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill ship-end`; `pnpm --dir tests bench --skill ship-end --agent both --runs 3 --chunk-size 3 --pause 0`; generated-data refresh commands; targeted `rg`; `git diff --check`.
+- Generated-data validator note: `scripts/validate-skills-showcase-data.sh` reported stale generated assets after the curated report changed and regenerated those assets; the generated files are included in this shipping boundary.
+- Recommended next command: `$benchmark-agent-review ship-end`
+
+### Ship-End Single Active-Runner Handoff Ship Manifest
+
+- **User goal:** Execute `$targeted-skill-builder ship-end benchmark single active-runner final handoff`, fixing the reviewed benchmark handoff ergonomics gap so final `ship-end` benchmark artifacts emit one active-runner next command.
+- **Changed files:** `tests/layer4/setups/tier1-workflows.setup.ts`; `tests/layer1/bench-setups.test.ts`; `benchmark/test-ship-end-2026-05-18.md`; `tasks/todo.md`; `tasks/history.md`; generated Skills Showcase benchmark evidence files after data refresh.
+- **Per-file purpose:** The Tier 1 setup tightens prompt, hard assertion, and quality scoring; the layer1 test guards single-route pass/fail behavior; the benchmark report records the fresh both-agent rerun; task docs record plan, validation, manifest, and next route; generated evidence keeps public benchmark data fresh.
+- **User-goal mapping:** The exact Codex dual-route weakness from agent review is now rejected by deterministic coverage, and the fresh Codex benchmark outputs prove the final handoff contains only `$run`.
+- **Tests run:** Focused layer1 `ship-end` setup test passed; install and skill dependency/version/routing audits passed; benchmark coverage passed; `ship-end` verify passed with layer1 PASS and layer2 SKIP; final both-agent benchmark passed with Claude 3/3 and Codex 3/3; generated Skills Showcase data was refreshed; targeted `rg` confirmed the new assertion, criterion, prompt, and raw-session evidence; `git diff --check` passed.
+- **Skipped tests:** App build/tests were not run because no app source behavior changed; generated-data validation covers public evidence freshness after the curated benchmark report update. Broader skill benchmarks were not run because the fix targets only `ship-end`.
+- **Adversarial review:** Checked the fresh raw artifacts for `Output uses single active-runner final route`, verified Codex retained handoffs end with only `$run`, and confirmed the fix stays in benchmark setup/rubric rather than changing the already-correct `ship-end` skill contract.
+- **Residual risk:** The quality summary table only lists the lowest scoring criteria, so the new all-passing criterion may not appear in the summarized report table; raw run JSON and focused layer1 coverage preserve explicit proof.
+- **Rollback note:** Revert the shipping commit to restore the prior dual-route-tolerant benchmark setup, test coverage, curated report sessions, generated data, and task state.
+- **Next command:** `$benchmark-agent-review ship-end`
+
 ### Benchmark Ship Manifest
 
 - **User goal:** Execute `$run` for the next incomplete benchmark step: run the fresh both-agent `update-packages` benchmark after actionability threshold calibration, publish deterministic evidence, and prepare the next route.

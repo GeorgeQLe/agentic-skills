@@ -1562,7 +1562,8 @@ describe("benchmark setup registry", () => {
     expect(setup).toBeDefined();
     expect(setup?.prompt).toContain("Use the fixture task files as the source of truth");
     expect(setup?.prompt).toContain("name both `tasks/todo.md` and `tasks/history.md`");
-    expect(setup?.prompt).toContain("`/run` when running as Claude and `$run` when running as Codex");
+    expect(setup?.prompt).toContain("exactly one command for the active runner");
+    expect(setup?.prompt).toContain("Do not list alternate runner routes in the final handoff");
 
     const writeHandoff = (workDir: string, route: string, nextWork = "- Complete `Step 1.2 next` from `tasks/todo.md`.") => {
       writeFileSync(
@@ -1611,9 +1612,15 @@ describe("benchmark setup registry", () => {
     expect(codexAssertions.find((assertion) => assertion.description === "Output recommends $run")).toMatchObject({
       pass: true,
     });
+    expect(codexAssertions.find((assertion) => assertion.description === "Output uses single active-runner final route")).toMatchObject({
+      pass: true,
+    });
 
     const quality = setup!.qualityEvaluator?.evaluate(readFileSync(resolve(claudeWorkDir, "session-handoff.md"), "utf8"));
     expect(quality?.criteria.find((criterion) => criterion.id === "actionable-next-route")).toMatchObject({
+      passed: true,
+    });
+    expect(quality?.criteria.find((criterion) => criterion.id === "single-active-runner-final-route")).toMatchObject({
       passed: true,
     });
 
@@ -1638,6 +1645,44 @@ describe("benchmark setup registry", () => {
     ).toMatchObject({
       pass: false,
     });
+
+    const dualRouteWorkDir = mkdtempSync(resolve(tmpdir(), "ship-end-dual-route-"));
+    writeFileSync(
+      resolve(dualRouteWorkDir, "session-handoff.md"),
+      [
+        "# Session Handoff",
+        "",
+        "## Completed Work",
+        "- Completed `Step 1.1` from `tasks/todo.md`.",
+        "- `tasks/history.md` records: Completed Step 1.1 with tests.",
+        "",
+        "## Validation Evidence",
+        "- The fixture history says Step 1.1 was completed with tests.",
+        "",
+        "## Remaining Risks",
+        "- No git inspection was run for this benchmark fixture.",
+        "",
+        "## Next Work",
+        "- Complete `Step 1.2 next` from `tasks/todo.md`.",
+        "",
+        "## Next Command",
+        "- Claude: `/run`",
+        "- Codex: `$run`",
+      ].join("\n"),
+    );
+    const dualAssertions = setup!.assertResult(
+      { stdout: "", stderr: "", exitCode: 0, workDir: dualRouteWorkDir, files: ["session-handoff.md"] },
+      { agent: "codex" },
+    );
+    expect(dualAssertions.find((assertion) => assertion.description === "Output recommends $run")).toMatchObject({
+      pass: true,
+    });
+    expect(dualAssertions.find((assertion) => assertion.description === "Output uses single active-runner final route")).toMatchObject({
+      pass: false,
+    });
+
+    const dualQuality = setup!.qualityEvaluator?.evaluate(readFileSync(resolve(dualRouteWorkDir, "session-handoff.md"), "utf8"));
+    expect(dualQuality?.criticalFailures).toContain("single-active-runner-final-route");
   });
 
   it("keeps the spec-interview benchmark route aligned with mirrored skill contracts", () => {
