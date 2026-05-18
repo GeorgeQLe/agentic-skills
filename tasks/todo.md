@@ -27,6 +27,31 @@
 - Validation passed: required report field scan and `git diff --check` for the triage report and task notes.
 - **Recommended next skill:** `$targeted-skill-builder feature-interview benchmark prototype gate quality tolerance`
 
+## Current Task — Targeted Update `update-packages` Benchmark pnpm latest Parenthetical Negation Tolerance 2026-05-18
+
+**Goal:** Fix the custom `update-packages` benchmark setup so valid parenthetical, backticked, and heading warnings about not using unqualified `pnpm@latest` pass while actual `pnpm@latest` recommendations still fail.
+
+**Plan:**
+- [x] Review relevant lessons, the pnpm latest parenthetical triage report, current detector, and focused layer1 coverage.
+- [x] Update `tests/layer4/setups/tier23-global-workflows.setup.ts` to classify each `pnpm@latest` line.
+- [x] Add focused layer1 coverage for the failed retained Claude shape plus parenthetical/heading warning forms.
+- [x] Run focused layer1 tests, benchmark coverage, target verify, required skill audits, targeted search, smoke benchmark, and whitespace validation.
+- [x] Record results, commit, and push intended changes on `master`.
+
+## Review — Targeted Update `update-packages` Benchmark pnpm latest Parenthetical Negation Tolerance 2026-05-18
+
+- Decision: existing benchmark setup update, not a new skill. The mirrored `update-packages` contracts already require avoiding default `pnpm@latest` and proving the selected pnpm package-manager version.
+- Evidence used: `tasks/lessons.md`, `benchmark/triage-update-packages-2026-05-18-pnpm-latest-parenthetical.md`, `tests/layer4/setups/tier23-global-workflows.setup.ts`, and `tests/layer1/bench-setups.test.ts`.
+- Evidence intentionally skipped: broad session history, because the triage localized the defect to one benchmark detector and retained run artifact.
+- Existing-skill overlap: no new skill needed; this is owned by the existing `update-packages` custom benchmark setup.
+- Updated the benchmark from the brittle `UPDATE_PACKAGES_NO_UNQUALIFIED_PNPM_LATEST_PATTERN` negative-lookahead to `avoidsUnqualifiedPnpmLatest`, which evaluates every line containing `pnpm@latest`.
+- The detector now accepts negated/contextual warning forms such as `(not pnpm@latest)`, `(not `pnpm@latest`)`, `no unqualified pnpm@latest`, and `no unqualified `pnpm@latest``.
+- Negative coverage still rejects actual unqualified recommendations such as `migrate to pnpm using pnpm@latest`, `corepack prepare pnpm@latest --activate`, and `packageManager: "pnpm@latest"`.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 bench-setups`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill update-packages`; `./scripts/skill-deps.sh --broken`; `./scripts/skill-versions.sh --missing`; `./scripts/skill-next-step-routing.sh --missing`; `./install.sh`; targeted `rg`; `git diff --check`; Codex smoke benchmark `update-packages-codex-49c65aa9` with 1/1 hard assertions.
+- Generated Skills Showcase data was not refreshed because no tracked `SKILL.md`, `PACK.md`, curated benchmark report, or curated review report changed.
+- Reload note: after `./install.sh`, start a fresh Claude Code or Codex CLI/session if updated skills are not visible yet.
+- **Recommended next command:** `$benchmark-test-skill update-packages`
+
 ## Current Task — Benchmark `feature-interview` Prototype-First Gate 2026-05-18
 
 **Goal:** Run `$benchmark-test-skill feature-interview` after the prototype-first product workflow gate update and publish deterministic both-agent benchmark evidence.

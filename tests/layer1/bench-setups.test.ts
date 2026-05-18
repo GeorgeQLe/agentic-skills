@@ -400,6 +400,10 @@ describe("benchmark setup registry", () => {
       "Never default to pnpm@latest; choose an age-eligible pinned version.",
       "We do **not** use unqualified `pnpm@latest` because pinning is required.",
       "Choose pnpm@9.15.0, not `pnpm@latest`.",
+      "pnpm@10.11.0 pinned with npm view evidence (not pnpm@latest).",
+      "pnpm@10.11.0 pinned with npm view evidence (not `pnpm@latest`).",
+      "### pnpm version selection (no unqualified pnpm@latest)",
+      "### pnpm version selection (no unqualified `pnpm@latest`)",
     ]) {
       const result = assertPnpmLatest(line);
       expect(result.assertion).toMatchObject({ pass: true });
@@ -417,6 +421,46 @@ describe("benchmark setup registry", () => {
       expect(result.criterion).toMatchObject({ passed: false });
       expect(result.criticalFailures).toContain("workflow-output-avoids-unqualified-pnpm-latest");
     }
+  });
+
+  it("accepts retained update-packages parenthetical pnpm latest warning", () => {
+    const setup = resolveBenchSetup("update-packages");
+    expect(setup).toBeDefined();
+
+    const workDir = mkdtempSync(resolve(tmpdir(), "update-packages-retained-pnpm-latest-"));
+    const retainedPlan = [
+      "# Package Update Plan",
+      "This package-update-plan.md records the npm to pnpm migration.",
+      "Age gate: only versions older than 8 days are eligible.",
+      "Wrote package-update-plan.md with pnpm@10.11.0 pinned with `npm view` evidence (not `pnpm@latest`).",
+      "### pnpm version selection (no unqualified `pnpm@latest`)",
+      "Chosen: pnpm 10.11.0.",
+      "Set `packageManager` to `pnpm@10.11.0`.",
+      "npm view pnpm@10.11.0 time.version returned 2026-05-01T12:00:00.000Z.",
+      "That is older than 8 days, so it is age-eligible.",
+      "Skip pnpm@10.22.0 because 2026-05-16 is inside the age gate.",
+      "Age-gate config: create `.npmrc` with npm's relative age gate `min-release-age=8` and pnpm coverage `minimum-release-age=11520`.",
+      "For modern pnpm project config, also use pnpm `minimumReleaseAge: 11520`.",
+      "Eligible versions older than 8 days: react 19.2.0, zod 3.25.76, vitest 3.2.4.",
+      "Skipped packages: react 19.3.0, zod 4.1.12, and vitest 4.0.0.",
+      "Major-upgrade risk handling: React 18 to 19 and Vitest 1 to 3 move in separate batches.",
+      "Compatibility checks: verify React renderer/framework peer compatibility and Vitest/Vite/TypeScript config compatibility.",
+      "Focused smoke checks: run the primary React render smoke test and Vitest config smoke test.",
+      "Stop condition: if React compatibility requires broad source migration, route to $migrate react.",
+      "Verification commands: pnpm install --frozen-lockfile, pnpm run build, pnpm run test.",
+      "Recommended next command: $run",
+    ].join("\n\n");
+    writeFileSync(resolve(workDir, "package-update-plan.md"), retainedPlan);
+
+    const assertions = setup!.assertResult(
+      { stdout: "", stderr: "", exitCode: 0, workDir, files: ["package-update-plan.md"] },
+      { agent: "codex" },
+    );
+    const quality = setup!.qualityEvaluator?.evaluate(retainedPlan);
+
+    expect(assertions.find((assertion) => assertion.description === "Output avoids unqualified pnpm@latest")).toMatchObject({ pass: true });
+    expect(quality?.criteria.find((criterion) => criterion.id === "workflow-output-avoids-unqualified-pnpm-latest")).toMatchObject({ passed: true });
+    expect(quality?.criticalFailures).not.toContain("workflow-output-avoids-unqualified-pnpm-latest");
   });
 
   it("scores update-packages pnpm toolchain proof and age-gate semantics", () => {
