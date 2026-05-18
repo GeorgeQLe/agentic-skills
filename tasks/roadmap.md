@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Update: update-packages Benchmark pnpm latest Parenthetical Negation Tolerance 2026-05-18
+
+**Goal:** Fix the custom `update-packages` benchmark setup so valid parenthetical, backticked, and heading warnings about not using unqualified `pnpm@latest` pass while actual `pnpm@latest` recommendations still fail.
+
+**Acceptance Criteria:**
+- [x] Relevant lessons, the pnpm latest parenthetical triage report, current detector, and focused layer1 coverage are reviewed.
+- [x] `tests/layer4/setups/tier23-global-workflows.setup.ts` classifies each `pnpm@latest` line instead of relying on a brittle negative-lookahead regex.
+- [x] Focused layer1 coverage accepts the failed retained parenthetical/heading warning shape and still rejects actual `pnpm@latest` recommendations.
+- [x] Focused layer1 tests, benchmark coverage, target verify, required skill audits, targeted search, smoke benchmark, and whitespace validation pass.
+- [x] Results are recorded in `tasks/todo.md`, then intended changes are committed and pushed on `master`.
+
+**Result:** Updated on 2026-05-18. The custom `update-packages` benchmark setup now uses `avoidsUnqualifiedPnpmLatest` to evaluate every line containing `pnpm@latest`, accepting negated/contextual forms such as `(not pnpm@latest)`, `(not `pnpm@latest`)`, and `no unqualified pnpm@latest` while preserving failures for real recommendations like `migrate to pnpm using pnpm@latest`, `corepack prepare pnpm@latest --activate`, and `packageManager: "pnpm@latest"`. Focused layer1 coverage includes the failed retained Claude shape and the new parenthetical/heading accepted forms. Validation passed: focused layer1 setup tests, benchmark coverage, target verify, install and skill scripts, targeted `rg`, `git diff --check`, and Codex smoke benchmark `update-packages-codex-49c65aa9` with 1/1 hard assertions. Generated Skills Showcase data was not refreshed because no tracked skill metadata/behavior or curated benchmark/review report changed. Recommended next command: `$benchmark-test-skill update-packages`.
+
 ## Current Triage: feature-interview Prototype Gate Benchmark Quality Failure 2026-05-18
 
 **Goal:** Investigate the fresh `$benchmark-test-skill feature-interview` quality failure and classify whether it is a skill-contract gap, benchmark harness defect, generated-output noncompliance, or infrastructure-only block.
