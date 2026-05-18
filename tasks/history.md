@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-05-18 — update-packages benchmark after batch-label tolerance
+
+- Ran `$benchmark-test-skill update-packages` after the batch-label actionability tolerance update.
+- Confirmed `update-packages` is known with custom benchmark coverage via `tests/layer4/setups/tier23-global-workflows.setup.ts`.
+- Verified with layer1 PASS in 14.9s and layer2 SKIP because no target-specific layer2 tests matched.
+- Ran `pnpm --dir tests bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0`: Claude session `update-packages-claude-fee787f2` passed 3/3 hard assertions with 93.9% output quality and one critical quality failure, while Codex session `update-packages-codex-ddecf851` passed 3/3 hard assertions with 100.0% output quality.
+- Updated `benchmark/test-update-packages-2026-05-18.md` and refreshed generated benchmark/showcase evidence.
+- Recommended next skill: `$session-triage update-packages benchmark failure`.
+
 ## 2026-05-18 — update-packages batch-label actionability tolerance
 
 - Calibrated the `update-packages` benchmark actionability matcher so strong `Batch A/B/C` plans receive quality credit alongside existing `Batch 0/1/2` plans.
