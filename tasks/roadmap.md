@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Triage: update-packages Benchmark Failure 2026-05-18
+
+**Goal:** Investigate the fresh `$benchmark-test-skill update-packages` Claude hard-assertion failures and identify the smallest verified fix.
+
+**Acceptance Criteria:**
+- [x] Latest benchmark report and persisted Claude/Codex run evidence are inspected.
+- [x] Mirrored `update-packages` contracts are compared with benchmark setup and quality-rubric expectations.
+- [x] Failure is classified as skill-contract failure, harness/rubric defect, generated-output noncompliance, infrastructure block, or one-off variance.
+- [x] `benchmark/triage-update-packages-2026-05-18-benchmark-failure.md` records verdict, root cause, responsible gap, recommended fix, validation plan, and next route.
+- [x] Results are recorded in `tasks/todo.md`, then intended changes are committed and pushed on `master`.
+
+**Result:** Triage verified the fresh benchmark failure as a benchmark harness false negative. Claude session `update-packages-claude-12d8fabf` failed two runs on `Output avoids unqualified pnpm@latest`, but the retained artifacts selected pinned pnpm versions and mentioned `pnpm@latest` only in negated warning language. The current regex accepts some warning forms but misses markdown-emphasized and concise negation such as `do **not** use unqualified pnpm@latest` and `not pnpm@latest`. Responsible gap: `tests/layer4/setups/tier23-global-workflows.setup.ts` and focused layer1 coverage in `tests/layer1/bench-setups.test.ts`. Report: `benchmark/triage-update-packages-2026-05-18-benchmark-failure.md`. Validation passed: required report field scan and `git diff --check`. Recommended next skill: `$targeted-skill-builder update-packages benchmark pnpm latest markdown-negation tolerance`.
+
 ## Current Benchmark: update-packages Fresh Rerun 2026-05-18
 
 **Goal:** Run `$benchmark-test-skill update-packages` after the pnpm latest benchmark-tolerance fix and publish fresh deterministic both-agent evidence.

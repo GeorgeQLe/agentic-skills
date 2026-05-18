@@ -5,6 +5,28 @@
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
+## Current Task — Triage `update-packages` Benchmark Failure 2026-05-18
+
+**Goal:** Investigate why the fresh `$benchmark-test-skill update-packages` rerun failed the Claude lane on `Output avoids unqualified pnpm@latest` and identify the smallest verified fix.
+
+**Plan:**
+- [x] Inspect the latest curated benchmark report and persisted Claude/Codex run evidence.
+- [x] Compare mirrored `update-packages` contracts with benchmark setup and quality-rubric expectations.
+- [x] Classify the failure as skill-contract gap, benchmark rubric/setup defect, generated-output noncompliance, infrastructure block, or one-off variance.
+- [x] Write `benchmark/triage-update-packages-2026-05-18-benchmark-failure.md` with verdict, root cause, recommended fix, validation plan, and next route.
+- [x] Validate the report fields, record results, then commit and push intended changes on `master`.
+
+## Review — Triage `update-packages` Benchmark Failure 2026-05-18
+
+- Verification verdict: verified as a benchmark harness false negative.
+- Evidence inspected: fresh curated benchmark report, raw Claude/Codex report JSON, retained Claude `package-update-plan.md` artifacts, mirrored `update-packages` contracts, custom benchmark setup, layer1 coverage, and relevant lessons.
+- Root cause: `UPDATE_PACKAGES_NO_UNQUALIFIED_PNPM_LATEST_PATTERN` accepts some negated warning language but misses valid markdown-emphasized and concise negation forms such as `do **not** use unqualified pnpm@latest` and `not pnpm@latest`.
+- The failed Claude artifacts selected pinned pnpm versions (`pnpm@9.12.3` and `pnpm@9.15.0`) and mentioned `pnpm@latest` only as a warning, not as a recommendation.
+- Responsible gap: `tests/layer4/setups/tier23-global-workflows.setup.ts` plus focused layer1 coverage in `tests/layer1/bench-setups.test.ts`.
+- Report written: `benchmark/triage-update-packages-2026-05-18-benchmark-failure.md`.
+- Validation passed: required report field scan and `git diff --check`.
+- **Recommended next skill:** `$targeted-skill-builder update-packages benchmark pnpm latest markdown-negation tolerance`
+
 ## Current Task — Fresh Benchmark `update-packages` 2026-05-18
 
 **Goal:** Run `$benchmark-test-skill update-packages` against the current repository state after the pnpm latest benchmark-tolerance fix and publish fresh deterministic both-agent evidence.
