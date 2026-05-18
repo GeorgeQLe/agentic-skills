@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Triage: update-packages Age-Gate Semantics Benchmark Failure 2026-05-18
+
+**Goal:** Investigate the fresh `$benchmark-test-skill update-packages` failure and classify whether the pnpm toolchain-proof and age-gate semantics failures are skill-contract gaps, benchmark harness defects, generated-output noncompliance, or infrastructure-only blocks.
+
+**Acceptance Criteria:**
+- [x] Latest curated benchmark report and raw Claude/Codex report JSON are inspected.
+- [x] Retained failed `package-update-plan.md` artifacts are inspected for the failed assertions.
+- [x] Mirrored `update-packages` contracts are compared with benchmark prompt, assertions, and quality criteria.
+- [x] `benchmark/triage-update-packages-2026-05-18-age-gate-semantics.md` records verdict, root cause, responsible gap, recommended fix, validation plan, and next route.
+- [x] Results are recorded in `tasks/todo.md`, then intended changes are committed and pushed on `master`.
+
+**Result:** Triage verified the fresh `update-packages` benchmark failure as a benchmark harness false negative with partial infrastructure blocks, not a mirrored skill-contract failure. Claude session `update-packages-claude-225f6efc` had one evaluated failed run and two agent-runner budget blocks; Codex session `update-packages-codex-fd2c4602` had three evaluated failed runs, all on age-gate semantics. Retained artifacts contained the intended pnpm publish-time proof, avoided unqualified `pnpm@latest`, and preserved the age-gate ownership semantics that `min-release-age=8` is npm while `minimum-release-age=11520` / `minimumReleaseAge: 11520` are pnpm coverage. Root cause: `UPDATE_PACKAGES_PNPM_TOOLCHAIN_PROOF_PATTERN` and `UPDATE_PACKAGES_AGE_GATE_SEMANTICS_PATTERN` in `tests/layer4/setups/tier23-global-workflows.setup.ts` are too syntax- and order-sensitive for valid Markdown artifact shapes. Report: `benchmark/triage-update-packages-2026-05-18-age-gate-semantics.md`. Validation passed: required report field scan and `git diff --check`. Recommended next skill: `$targeted-skill-builder update-packages benchmark pnpm proof and age-gate semantics tolerance`.
+
 ## Current Benchmark: update-packages Fresh Rerun 2026-05-18
 
 **Goal:** Run `$benchmark-test-skill update-packages` against the current repository state and publish deterministic both-agent benchmark evidence.

@@ -5,6 +5,29 @@
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
+## Current Task — Triage `update-packages` Benchmark Failure 2026-05-18
+
+**Goal:** Investigate the fresh `$benchmark-test-skill update-packages` failure and classify whether the pnpm toolchain-proof and age-gate semantics failures are skill-contract gaps, benchmark harness defects, generated-output noncompliance, or infrastructure-only blocks.
+
+**Plan:**
+- [x] Inspect the fresh curated benchmark report and raw Claude/Codex `report.json` files.
+- [x] Inspect retained failed `package-update-plan.md` artifacts for the failed Claude and Codex runs.
+- [x] Compare mirrored `update-packages` contracts with benchmark prompt, hard assertions, and quality criteria.
+- [x] Write `benchmark/triage-update-packages-2026-05-18-age-gate-semantics.md` with verdict, root cause, responsible gap, recommended fix, validation plan, and next route.
+- [x] Validate the report fields, record results, then commit and push intended changes on `master`.
+
+## Review — Triage `update-packages` Benchmark Failure 2026-05-18
+
+- Verification verdict: verified as a benchmark harness false negative with partial infrastructure blocks, not a mirrored `update-packages` skill-contract failure.
+- Evidence inspected: `benchmark/test-update-packages-2026-05-18.md`, raw Claude/Codex report JSON, retained failed `package-update-plan.md` artifacts, mirrored `update-packages` contracts, current custom benchmark regexes, focused layer1 coverage, and relevant lessons.
+- Claude session `update-packages-claude-225f6efc` had one evaluated failed run plus two runner-budget infrastructure blocks.
+- Codex session `update-packages-codex-fd2c4602` had three evaluated failed runs on `Output preserves age-gate key semantics`.
+- Retained failed artifacts include correct pnpm publish-time evidence and correct npm/pnpm age-gate ownership language, so this is not verified as a skill-contract failure.
+- Root cause: `UPDATE_PACKAGES_PNPM_TOOLCHAIN_PROOF_PATTERN` and `UPDATE_PACKAGES_AGE_GATE_SEMANTICS_PATTERN` are too brittle and miss valid orderings / bullet-list wording.
+- Report written at `benchmark/triage-update-packages-2026-05-18-age-gate-semantics.md`.
+- Validation passed: required report field scan and `git diff --check`.
+- **Recommended next skill:** `$targeted-skill-builder update-packages benchmark pnpm proof and age-gate semantics tolerance`
+
 ## Current Task — Fresh Benchmark `update-packages` 2026-05-18
 
 **Goal:** Run `$benchmark-test-skill update-packages` against the current repository state and publish deterministic both-agent benchmark evidence.
