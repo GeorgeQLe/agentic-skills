@@ -2043,6 +2043,34 @@ describe("benchmark setup registry", () => {
       passed: true,
     });
 
+    const ownerTargetOwnerFileTable = setup!.qualityEvaluator?.evaluate([
+      baseOutput,
+      "| Finding | Classification | Owner target / owner file | Proposed behavior change | Validation check | Route |",
+      "|---|---|---|---|---|---|",
+      "| Placeholder residual risks are accepted. | target-skill contract | `packs/agentic-skills-bench/codex/benchmark-agent-review/SKILL.md` and `packs/agentic-skills-bench/claude/benchmark-agent-review/SKILL.md` | Require retained artifact placeholder risks to name a remediation owner and proof. | Contract validation must fail unless output mentions `ship-manifest.md` placeholder text and includes owner target, proposed change, and validation check. | `$targeted-skill-builder benchmark-agent-review residual-risk-awareness output-quality gap` |",
+      "Recommended next command: $targeted-skill-builder benchmark-agent-review residual-risk-awareness output-quality gap",
+    ].join("\n"));
+    expect(ownerTargetOwnerFileTable?.criteria.find((criterion) => criterion.id === "benchmark-agent-review-remediation-owner-target")).toMatchObject({
+      passed: true,
+    });
+    expect(ownerTargetOwnerFileTable?.criteria.find((criterion) => criterion.id === "benchmark-agent-review-validation-specificity")).toMatchObject({
+      passed: true,
+    });
+
+    const exactOwnerTargetFilesTable = setup!.qualityEvaluator?.evaluate([
+      baseOutput,
+      "| Finding | Classification | Exact owner target / files | Proposed behavior change | Validation check | Route |",
+      "|---|---|---|---|---|---|",
+      "| Placeholder monitoring text is not operationalized. | retained-evidence gap | `packs/agentic-skills-bench/codex/benchmark-agent-review/SKILL.md`; `packs/agentic-skills-bench/claude/benchmark-agent-review/SKILL.md`; `tests/layer4/setups/packs/pack-workflows.setup.ts` | Require reviewers to inspect retained artifact text before grading. | Focused fixture assertion must require `ship-manifest.md`, `Residual Risks`, an exact owner file, and a validation check tied to rejecting placeholder output. | `$targeted-skill-builder benchmark-agent-review residual-risk-awareness output-quality gap` |",
+      "Recommended next command: $targeted-skill-builder benchmark-agent-review residual-risk-awareness output-quality gap",
+    ].join("\n"));
+    expect(exactOwnerTargetFilesTable?.criteria.find((criterion) => criterion.id === "benchmark-agent-review-remediation-owner-target")).toMatchObject({
+      passed: true,
+    });
+    expect(exactOwnerTargetFilesTable?.criteria.find((criterion) => criterion.id === "benchmark-agent-review-validation-specificity")).toMatchObject({
+      passed: true,
+    });
+
     const scopedOwnerWithLookup = setup!.qualityEvaluator?.evaluate([
       baseOutput,
       "Remediation table:",
