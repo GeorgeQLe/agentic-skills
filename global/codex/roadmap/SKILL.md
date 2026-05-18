@@ -95,6 +95,8 @@ Ask focused questions to align on roadmap decisions. Codex cadence is one primar
 - **Scope**: Should anything be deferred, dropped, or marked as stretch?
 - **Market fit** (when ICP/gap specs exist): Which phases directly address customer pain points or deal-blockers from gap analysis? Prioritise these unless technically impossible.
 - **Phase sizing**: Preference for many small phases vs. fewer larger ones?
+- **Prototype sequencing**: For new products or substantial new user-facing features without an accepted clickable journey, whether to prepend a separate Phase 0 for prototype experiments before production implementation. Do not fold prototype exploration, calibration, and production infrastructure into one phase unless the user explicitly asks for a single constrained spike.
+- **Experiment routes**: Which prototype variants or feature experiments should exist as separate clickable routes, such as `/experiments/<variant>` or project-native equivalents, so the user can compare alternatives side by side before consolidation.
 - **Manual tasks**: Any human-only external prerequisites (DNS/account setup, OAuth app creation, billing/approval, real-device or production browser verification with subjective sign-off)? Which phases do they block or follow? Do not classify repo edits, SDK wiring, CLI/API work, local tests, or audits as manual.
 - **Parallelization**: Which phase work can run independently, which modules or files are shared chokepoints, and where should work stay serial?
 - **Review needs**: Which phases need specialized review gates (correctness, tests, security, performance, docs/API conformance, UX)?
@@ -107,6 +109,8 @@ Continue until the user confirms the phase structure is complete.
 #### 4c. Write the Roadmap
 
 Write or update `tasks/roadmap.md` with the agreed phase structure (phases, goals, scope, acceptance criteria, parallelization strategy — NOT implementation steps). In State B, create the full roadmap. In State G, append or adjust only the new/changed future phase scope needed for the changed spec; do not rewrite completed phases except to add a short note that a later phase supersedes or extends prior work. Implementation detail is generated just-in-time by `$plan-phase` when a phase is started, not upfront.
+
+For new products or substantial new user-facing features without an accepted clickable journey, make the first roadmap item a distinct prototype/experiment phase. Prefer `Phase 0: Prototype Experiments` when the repository convention accepts phase 0; otherwise make Phase 1 the prototype phase and push production work later. This phase should build multiple clickable experiments on separate routes when there is meaningful uncertainty in workflow, layout, density, copy, navigation, or interaction model. Keep durable database/storage, auth, payments, analytics, deployment, admin tooling, multi-tenancy, and production observability out of the prototype phase unless explicitly approved or required to test the core interaction.
 
 If a phase has human-gated prerequisites, include a concise `**Manual Tasks:**` block with only those external prerequisites and `_(blocks: Step N.X)_` or `_(after: Step N.X)_` annotations when known. Split mixed work: human account/approval/credential steps belong in `**Manual Tasks:**`; code changes, repo configuration, CLI/API calls with available auth, tests, audits, and generated assets stay in Scope/Acceptance Criteria for `$plan-phase` to turn into `tasks/todo.md`.
 

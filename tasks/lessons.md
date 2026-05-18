@@ -1,5 +1,13 @@
 # Lessons
 
+## 2026-05-18 — Prototype-first gates need separate phases and route experiments
+
+- The initial prototype-first workflow update added a `Prototype Phase 0` concept but left room for agents to stuff prototype scope, calibration, and later production infrastructure into one phase.
+- Product and feature planning should separate prototype exploration from production implementation: add or prepend a distinct Phase 0 / experiment phase when no accepted clickable journey exists, then promote only justified infrastructure into later phases.
+- Feature prototyping should usually produce multiple small experiments, preferably on separate routes such as `/experiments/<variant>`, so users can click through alternatives side by side before consolidation.
+- Roadmap and plan-phase skills should distinguish "prototype experiments", "calibration/consolidation", and "production promotion" instead of treating "defer infra" as sufficient.
+- Benchmark fixtures for product planning should assert separate prototype phase structure and multi-route experiment planning, not only fake data and deferred infrastructure language.
+
 ## 2026-05-17 — Package update skills should persist installer age gates
 
 - An `$update-packages` run manually selected versions older than 8 days but did not make future package-manager installs enforce the same safety policy.

@@ -93,6 +93,8 @@ Use the AskUserQuestion tool to align on roadmap decisions. Ask one to three foc
 - **Scope**: Should anything be deferred, dropped, or marked as stretch?
 - **Market fit** (when ICP/gap specs exist): Which phases directly address customer pain points or deal-blockers from gap analysis? Prioritise these unless technically impossible. Surface tension between technical sequencing and market urgency.
 - **Phase sizing**: Preference for many small phases vs. fewer larger ones?
+- **Prototype sequencing**: For new products or substantial new user-facing features without an accepted clickable journey, whether to prepend a separate Phase 0 for prototype experiments before production implementation. Do not fold prototype exploration, calibration, and production infrastructure into one phase unless the user explicitly asks for a single constrained spike.
+- **Experiment routes**: Which prototype variants or feature experiments should exist as separate clickable routes, such as `/experiments/<variant>` or project-native equivalents, so the user can compare alternatives side by side before consolidation.
 - **Manual tasks**: Are there human-only external prerequisites (DNS/account setup, OAuth app creation, billing/approval, real-device or production browser verification with subjective sign-off)? Which phases do they block or follow? Do not classify repo edits, SDK wiring, CLI/API work, local tests, or audits as manual.
 - **Parallelization**: Which phase work can run independently, which modules or files are shared chokepoints, and where should work stay serial?
 - **Review needs**: Which phases need specialized review gates (correctness, tests, security, performance, docs/API conformance, UX)?
@@ -104,7 +106,11 @@ Continue until the user confirms the phase structure is complete.
 
 #### 4c. Write the Roadmap
 
-Write or update `tasks/roadmap.md` with the agreed phase structure. In State B, create the full roadmap. In State G, append or adjust only the new/changed future phase scope needed for the changed spec; do not rewrite completed phases except to add a short note that a later phase supersedes or extends prior work. Use this format:
+Write or update `tasks/roadmap.md` with the agreed phase structure. In State B, create the full roadmap. In State G, append or adjust only the new/changed future phase scope needed for the changed spec; do not rewrite completed phases except to add a short note that a later phase supersedes or extends prior work.
+
+For new products or substantial new user-facing features without an accepted clickable journey, make the first roadmap item a distinct prototype/experiment phase. Prefer `Phase 0: Prototype Experiments` when the repository convention accepts phase 0; otherwise make Phase 1 the prototype phase and push production work later. This phase should build multiple clickable experiments on separate routes when there is meaningful uncertainty in workflow, layout, density, copy, navigation, or interaction model. Keep durable database/storage, auth, payments, analytics, deployment, admin tooling, multi-tenancy, and production observability out of the prototype phase unless explicitly approved or required to test the core interaction.
+
+Use this format:
 
 ```markdown
 # Roadmap: [Project Name]

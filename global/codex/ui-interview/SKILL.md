@@ -41,7 +41,7 @@ When invoked with `--requirements-only` (or when the user says "just requirement
    - Cover at least:
      - Product and user context
      - Pages, routes, and entry points
-     - Prototype-first boundary for new product work: what the user should be able to click through first, what data can be fake, fixture-backed, or in-memory, and which infrastructure must be represented visually but not implemented yet.
+     - Prototype-first boundary for new product or substantial feature work: what the user should be able to click through first, whether multiple route-based experiments should be built, what data can be fake, fixture-backed, or in-memory, and which infrastructure must be represented visually but not implemented yet.
      - Primary tasks per page
      - Navigation model
      - Information hierarchy
@@ -62,7 +62,7 @@ When invoked with `--requirements-only` (or when the user says "just requirement
      - Global shell: header, sidebar, footer, navigation, account controls, notifications
      - Page inventory: every route, modal, drawer, overlay, and important empty state
      - Page purpose: user goal, task priority, and success condition
-     - Prototype calibration: first clickable journey, fixture/fake data boundaries, infrastructure-only states to mock rather than implement, and taste/feel questions the prototype must answer before database, auth, payment, analytics, deployment, admin, or multi-tenant work is planned.
+     - Prototype calibration: first clickable journey, route-based experiment set, fixture/fake data boundaries, infrastructure-only states to mock rather than implement, and taste/feel questions the prototype must answer before database, auth, payment, analytics, deployment, admin, or multi-tenant work is planned.
 
 4b. **Requirements gate (requirements-only mode)**
    - In requirements-only mode, stop here — do not proceed to layout anatomy, component inventory, or spatial decisions.
@@ -119,7 +119,7 @@ The UI specification must include:
 - Interaction states and accessibility requirements
 - Implementation notes tied to the existing stack
 - Open questions, risks, and explicit non-goals
-- For new product interfaces, a prototype-first section naming the first clickable journey, fake/fixture data, visually mocked infrastructure states, deferred production infrastructure, and the evidence required before implementation planning promotes any deferred infrastructure.
+- For new product interfaces or substantial feature interfaces, a prototype-first section naming the first clickable journey, experiment route map when multiple alternatives should be tested, fake/fixture data, visually mocked infrastructure states, deferred production infrastructure, and the evidence required before implementation planning promotes any deferred infrastructure.
 
 The interview log must include:
 

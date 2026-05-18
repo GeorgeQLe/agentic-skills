@@ -91,7 +91,9 @@ Define ordered steps beneath the existing Goal/Scope/Acceptance Criteria. The st
 
 For new user-facing product, SaaS, marketplace, dashboard, internal tool, or product-experience phases, apply a prototype-first planning gate before writing steps:
 
+- If there is no accepted clickable journey yet and the current roadmap phase combines prototype exploration with production implementation, stop and re-scope the current work into a distinct prototype/experiment phase before writing implementation steps. Prefer `Phase 0: Prototype Experiments` when the project convention allows it; otherwise make the next phase explicitly prototype-only and push production implementation later.
 - If the roadmap/spec does not explicitly approve durable database/storage, auth, payments, analytics, deployment, admin tooling, multi-tenancy, or production observability for the current phase, keep those items in a later "eventual production infrastructure" backlog and plan the current phase as a clickable local/static prototype with fake, fixture, or in-memory data.
+- For new feature prototypes or uncertain product surfaces, plan multiple small experiments on separate clickable routes such as `/experiments/<variant>` or project-native equivalents. Each route should test a distinct workflow, layout, density, copy, navigation, or interaction hypothesis without sharing hidden production infrastructure.
 - Include a calibration step before any infrastructure promotion: the user must be able to try one journey and record what felt wrong, slow, generic, too dense, too sparse, off-brand, or workflow-breaking.
 - Promote infrastructure into the current phase only when the phase is explicitly production hardening, the user has approved that infrastructure, or the core prototype cannot test the primary interaction without it. State the evidence in the phase notes.
 

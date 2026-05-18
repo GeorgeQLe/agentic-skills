@@ -181,6 +181,7 @@ When invoked with `--layout-mode` (or when the user says "layout mode", "layout 
 
 8. **Plan experimentation**
    - Recommend serial full buildout of all approved variants when the user is using layout-mode or explicitly wants to compare built interfaces. Do not recommend building a subset first unless the user asks for a smaller experiment.
+   - For prototype-stage product or feature work, prefer numerous small route-based experiments over one merged prototype when multiple workflows, layouts, densities, copy approaches, navigation models, or interaction patterns remain plausible. Name the route for each experiment, such as `/experiments/table-first`, `/experiments/command-first`, or the project's equivalent, and keep shared production infrastructure out of those routes unless explicitly approved.
    - After variants are built, recommend `$uat --variant-evaluation` before `$ui-consolidate`. Consolidation is premature until evaluation evidence exists or the user explicitly says they reviewed the variants and is ready to converge.
    - Define the cheapest useful validation method:
      - Static mockups for visual direction
@@ -222,7 +223,7 @@ The variation plan must include:
 - Evaluation criteria and selection method
 - Variation matrix
 - Detailed variation specifications
-- Prototype or implementation plan for each variation
+- Prototype or implementation plan for each variation, including separate experiment routes for prototype-stage alternatives
 - Experiment plan and evidence capture
 - Lock-in checklist for confirming the chosen interface
 - Risks, non-goals, and follow-up work
@@ -245,6 +246,7 @@ Use this variation format:
 - Button and link behavior: [primary actions, secondary actions, destinations]
 - Visual tone: [hierarchy, typography, color, media, motion]
 - Prototype scope: [smallest useful build]
+- Experiment route: [`/experiments/<variant>` or project-native equivalent when prototype-stage]
 - Strengths:
 - Risks:
 - Complexity: Low | Medium | High
