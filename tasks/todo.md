@@ -14,7 +14,20 @@
 - [x] Review relevant lessons, benchmark-agent review evidence, existing `update-packages` contracts, and custom benchmark setup coverage.
 - [x] Update `tests/layer4/setups/tier23-global-workflows.setup.ts` so `workflow-actionability` is critical for `update-packages` and target-specific migrate routes are quality-scored.
 - [x] Add focused layer1 coverage for retained weak Claude-style actionability and generic migrate routes.
-- [ ] Run required validation, record results, then commit and push intended changes on `master`.
+- [x] Run required validation, record results, then commit and push intended changes on `master`.
+
+## Review — Targeted Update `update-packages` Benchmark Actionability Threshold 2026-05-18
+
+- Decision: existing benchmark setup update, not a new skill or skill-contract change. The mirrored `update-packages` contracts already require per-batch mutation command/edit, verification command, expected proof/artifact, and stop gate.
+- Evidence used: `tasks/lessons.md`, `benchmark/review-update-packages-2026-05-18.md`, current `global/codex/update-packages/SKILL.md`, current Tier 2/3 setup, and focused layer1 coverage.
+- Evidence intentionally skipped: broad session history, because the benchmark-agent review already isolated the gap to deterministic quality-rubric calibration.
+- Existing-skill overlap: `update-packages` owns dependency update planning; the durable fix is benchmark quality calibration, not a duplicate workflow.
+- Updated `tests/layer4/setups/tier23-global-workflows.setup.ts` so `workflow-actionability` is critical for `update-packages`.
+- Added `workflow-targeted-migration-routes` quality scoring so bare `/migrate` or `$migrate` routes lose quality credit when a target package/tool is known.
+- Added focused layer1 coverage that keeps strong retained checklist shapes passing, marks weak retained Claude-style batch/actionability shapes as critical quality failures, and lowers quality for generic migrate routes.
+- Validation passed: `./install.sh`; `./scripts/skill-deps.sh --broken`; `./scripts/skill-versions.sh --missing`; `./scripts/skill-next-step-routing.sh --missing`; `pnpm --dir tests exec vitest run --project layer1 bench-setups`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill update-packages`; targeted `rg`; `git diff --check`.
+- Generated Skills Showcase data was not refreshed because no tracked `SKILL.md`, `PACK.md`, curated benchmark report, or curated review report changed.
+- **Recommended next command:** `$benchmark-test-skill update-packages`
 
 ## Phase 42: Workflow Persistent Transcript Refinement
 
