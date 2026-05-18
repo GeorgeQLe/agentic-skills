@@ -16,6 +16,18 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Triage: update-packages pnpm latest Parenthetical Negation Failure 2026-05-18
+
+**Goal:** Investigate the latest `$benchmark-test-skill update-packages` Claude failure and classify whether the `Output avoids unqualified pnpm@latest` failure is a skill-contract gap, benchmark harness defect, generated-output noncompliance, or infrastructure-only block.
+
+**Acceptance Criteria:**
+- [x] Fresh curated benchmark report and raw failed Claude run artifact are inspected.
+- [x] Mirrored `update-packages` contracts are compared with benchmark prompt, assertion pattern, and focused layer1 coverage.
+- [x] `benchmark/triage-update-packages-2026-05-18-pnpm-latest-parenthetical.md` records verdict, root cause, responsible gap, recommended fix, validation plan, and next route.
+- [x] Results are recorded in `tasks/todo.md`, then intended changes are committed and pushed on `master`.
+
+**Result:** Triage verified the latest `update-packages` benchmark failure as a benchmark harness false negative, not a mirrored skill-contract failure. Claude session `update-packages-claude-c663452c` had one infrastructure block, one passing evaluated run, and one evaluated failure on `Output avoids unqualified pnpm@latest`; Codex session `update-packages-codex-ebca44af` passed 3/3. The failed Claude artifact selected age-proven `pnpm@10.11.0`, cited `npm view pnpm@10.11.0 time.version` evidence from 2026-05-01, skipped `pnpm@10.22.0` as too new, and mentioned `pnpm@latest` only in negated/contextual forms such as `(not pnpm@latest)` and `no unqualified pnpm@latest`. Root cause: `UPDATE_PACKAGES_NO_UNQUALIFIED_PNPM_LATEST_PATTERN` accepts some warning language but misses valid parenthetical, backticked, and heading forms. Report: `benchmark/triage-update-packages-2026-05-18-pnpm-latest-parenthetical.md`. Recommended next skill: `$targeted-skill-builder update-packages benchmark pnpm latest parenthetical-negation tolerance`.
+
 ## Current Targeted Update: Prototype-First Product Workflow Gate 2026-05-18
 
 **Goal:** Add a prototype-first gate to product intake, specification, UI, planning, and execution skills so new SaaS/product work defaults to a clickable local/static prototype before database, auth, payments, analytics, deployment, admin, multi-tenant, or observability infrastructure.
