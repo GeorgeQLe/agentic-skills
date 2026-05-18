@@ -55,6 +55,27 @@
 - Validation passed: report field scan; `pnpm --dir tests bench:coverage`; `pnpm --dir tests exec vitest run --project layer1 benchmark-results-matrix skills-showcase-benchmark-demo`; `scripts/validate-skills-showcase-data.sh`; `git diff --check`.
 - **Recommended next skill:** `$session-triage update-packages benchmark failure`
 
+## Current Task — Triage `update-packages` Benchmark pnpm Latest Failure 2026-05-18
+
+**Goal:** Investigate why the fresh `$benchmark-test-skill update-packages` rerun failed `Output avoids unqualified pnpm@latest` and identify the smallest verified fix.
+
+**Plan:**
+- [x] Inspect the latest benchmark report and persisted Claude/Codex run JSON/output.
+- [x] Compare current mirrored `update-packages` contracts against the benchmark setup expectation.
+- [x] Check relevant lessons and classify the failure source.
+- [x] Write `benchmark/triage-update-packages-2026-05-18-pnpm-latest.md` with verdict, root cause, recommended fix, validation plan, and next route.
+- [x] Validate the report fields, record results, then commit and push intended changes on `master`.
+
+## Review — Triage `update-packages` Benchmark pnpm Latest Failure 2026-05-18
+
+- Verification verdict: verified as a benchmark harness/setup false negative, not as a proven `update-packages` skill-contract failure.
+- Evidence inspected: `benchmark/test-update-packages-2026-05-17.md`, raw Claude/Codex run JSON under `tests/benchmarks/runs/update-packages-*`, mirrored `update-packages` contracts, `tests/layer4/setups/tier23-global-workflows.setup.ts`, `tests/layer1/bench-setups.test.ts`, and `tasks/lessons.md`.
+- Root cause: the setup's `pnpm@latest` negative-lookahead regex fails valid warning language such as `do not use unqualified pnpm@latest` unless a narrow allowed phrase appears after the token.
+- Responsible gap: benchmark setup and layer1 coverage in `tests/layer4/setups/tier23-global-workflows.setup.ts` and `tests/layer1/bench-setups.test.ts`.
+- Report written to `benchmark/triage-update-packages-2026-05-18-pnpm-latest.md`.
+- Validation passed: required report field scan and `git diff --check`.
+- **Recommended next skill:** `$targeted-skill-builder update-packages benchmark pnpm latest negation tolerance`
+
 ## Current Task — Fresh Benchmark `benchmark-agent-review` Retained Artifact Evidence 2026-05-17
 
 **Goal:** Run `$benchmark-test-skill benchmark-agent-review` after the retained-artifact evidence fixture update and publish fresh deterministic both-agent benchmark evidence.
@@ -105,6 +126,17 @@
 - Generated Skills Showcase data was refreshed after the curated review report changed.
 - Validation passed: report field scan; `pnpm --dir tests bench:coverage`; `pnpm --dir tests exec vitest run --project layer1 benchmark-results-matrix skills-showcase-benchmark-demo`; `git diff --check`. Pre-commit `scripts/validate-skills-showcase-data.sh` regenerated intended asset changes and reported them as stale pending commit.
 - **Recommended next command:** `$targeted-skill-builder benchmark-agent-review remediation-owner validation specificity`
+
+## Current Task — Targeted Update `benchmark-agent-review` Remediation Owner Validation Specificity 2026-05-17
+
+**Goal:** Tighten `benchmark-agent-review` so retained-artifact reviews turn output-quality weaknesses into owner-specific, validation-ready remediation.
+
+**Plan:**
+- [ ] Review relevant lessons, latest `benchmark-agent-review` review report, mirrored skill contracts, and pack benchmark setup.
+- [ ] Update mirrored `benchmark-agent-review` contracts to require owner targets, proposed behavior changes, and concrete validation checks when material weaknesses are found.
+- [ ] Tighten the pack benchmark prompt and quality rubric for remediation owner-target and validation-check specificity.
+- [ ] Add focused layer1 coverage for strong and broad remediation examples.
+- [ ] Run focused validation, generated-data checks if needed, record results, then commit and push intended changes on `master`.
 
 ## Current Task — Targeted Update `benchmark-agent-review` Route Prompt Alignment 2026-05-17
 
