@@ -2370,6 +2370,13 @@ Resolved all 10 findings from `/expert-review`:
 - Added focused regression coverage for backward step navigation preserving the already revealed Plan replay turn.
 - Verified with focused workflow tests, Skills Showcase typecheck, production build, and whitespace validation.
 
+## 2026-05-18 — update-packages benchmark verify gate
+
+- Continued the `$benchmark-test-skill update-packages` fresh rerun after the actionability-threshold benchmark update.
+- Confirmed the benchmark command resolution remains `benchmark-test-skill` with `update-packages` as the target skill argument.
+- Ran `pnpm verify --skill update-packages` from `tests/`; layer1 passed in 3.7s and layer2 was skipped because no target-specific layer2 tests matched the skill.
+- Recorded the expected next step as the both-agent benchmark command.
+
 ## 2026-05-18 — Step 42.1 workflow persistent transcript model
 
 - Replaced the `/workflows` TUI single keyed active replay card with a transcript list that renders all revealed steps through the current active step.
