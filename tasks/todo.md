@@ -5,6 +5,29 @@
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
+## Current Task — Targeted Update `update-packages` pnpm Latest Reject-Warning Tolerance 2026-05-18
+
+**Goal:** Fix the custom `update-packages` benchmark setup so valid retained rejection language for unqualified `pnpm@latest` passes while actual unqualified usage still fails.
+
+**Plan:**
+- [x] Review relevant lessons, latest triage report, current Tier 2/3 evaluator, and focused layer1 coverage.
+- [x] Update `tests/layer4/setups/tier23-global-workflows.setup.ts` so `lineOnlyWarnsAgainstPnpmLatest` accepts explicit `reject` wording.
+- [x] Add focused layer1 regression coverage for the retained failed shape: `Reject \`pnpm@latest\` — unqualified, unverifiable at lock time.`
+- [x] Run focused layer1 tests, benchmark coverage, target verify, targeted search, and whitespace validation.
+- [x] Record results, commit, and push intended changes on `master`.
+
+## Review — Targeted Update `update-packages` pnpm Latest Reject-Warning Tolerance 2026-05-18
+
+- Decision: existing benchmark setup update, not a new skill or skill-contract change. The latest triage localized the gap to `lineOnlyWarnsAgainstPnpmLatest`.
+- Evidence used: `tasks/lessons.md`, `benchmark/triage-update-packages-2026-05-18-pnpm-latest-reject-warning.md`, the retained failed Claude artifact, current Tier 2/3 setup, and focused layer1 coverage.
+- Evidence intentionally skipped: broad session history, because the immediate triage already verified the failure and prior related triages document the recurrence pattern.
+- Existing-skill overlap: `update-packages` already owns the package-manager age-gate behavior; this fix only updates benchmark tolerance.
+- Updated `lineOnlyWarnsAgainstPnpmLatest` to treat explicit `reject` wording as safe warning/rejection language for lines containing `pnpm@latest`.
+- Added focused layer1 coverage for `Reject \`pnpm@latest\` — unqualified, unverifiable at lock time.` while preserving negative cases for `migrate to pnpm using pnpm@latest`, `corepack prepare pnpm@latest --activate`, and `packageManager: "pnpm@latest"`.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 bench-setups`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill update-packages`; targeted `rg`; `git diff --check`.
+- Generated Skills Showcase data was not refreshed because no tracked `SKILL.md`, `PACK.md`, curated benchmark report, or curated review report changed.
+- **Recommended next command:** `$benchmark-test-skill update-packages`
+
 ## Current Task — Targeted Update `feature-interview` Prototype-First Phase Wording Tolerance 2026-05-18
 
 **Goal:** Fix the `feature-interview` benchmark quality evaluator so valid retained prototype-first phase wording passes while shallow prototype/defer statements still fail.
@@ -28,6 +51,31 @@
 - Generated Skills Showcase data was not refreshed because no tracked `SKILL.md`, `PACK.md`, curated benchmark report, or curated review report changed.
 - Reload note: after `./install.sh`, start a fresh Claude Code or Codex CLI/session if changed skills are not visible; this update did not change installed skill contracts.
 - **Recommended next command:** `$benchmark-test-skill feature-interview`
+
+## Current Task — Targeted Update `investigate` Clean Shipped Routing 2026-05-18
+
+**Goal:** Update the Codex `$investigate` skill so a validated, committed, pushed, clean investigation does not recommend `$ship-end` when there is nothing left to ship or document.
+
+**Plan:**
+- [x] Review relevant lessons, the target `$investigate` contract, `$ship-end` no-op behavior, and existing benchmark coverage.
+- [x] Update `global/codex/investigate/SKILL.md` with the clean already-pushed terminal routing rule.
+- [x] Add benchmark quality coverage that rejects `$ship-end` for clean already-pushed investigation outputs and expects `none` routing.
+- [x] Refresh generated showcase data, run validation, record results, then commit and push intended changes on `master`.
+
+## Review — Targeted Update `investigate` Clean Shipped Routing 2026-05-18
+
+- Decision: existing-skill update, not a new skill. The target skill already owns investigation completion and default shipping behavior.
+- Evidence used: current prompt evidence, provided `$investigate` and `$ship-end` contracts, `tasks/lessons.md`, and existing Tier 1 benchmark coverage for `investigate`.
+- Evidence intentionally skipped: broad session-history scans, because the user provided the concrete gapphub session evidence and requested a narrow existing-skill update.
+- Existing-skill overlap: `$ship-end` already correctly no-ops on a clean tree; the gap was `$investigate` recommending it after the no-op preconditions were already satisfied.
+- Updated `global/codex/investigate/SKILL.md` so clean already-pushed investigations end with `**Next work:** none` and `**Recommended next command:** none`.
+- Added Tier 1 benchmark quality coverage that fails clean already-pushed investigation outputs if they recommend `$ship-end` or omit the required `none` routing.
+- Updated `tasks/lessons.md` with the correction pattern and refreshed generated Skills Showcase data after the tracked `SKILL.md` behavior change.
+- Validation passed: `./install.sh`; `./scripts/skill-deps.sh --broken`; `./scripts/skill-versions.sh --missing`; `./scripts/skill-next-step-routing.sh --missing`; `pnpm --dir tests exec vitest run --project layer1 bench-setups`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill investigate`; targeted `rg`; `git diff --check`.
+- Validation note: `scripts/validate-skills-showcase-data.sh` regenerated the intended showcase assets and reported them as stale while they were uncommitted; rerun after commit/push to confirm the committed generated data is clean.
+- Reload note: after `./install.sh`, start a fresh Claude Code or Codex CLI/session if the changed skill is not visible yet.
+- **Next work:** none
+- **Recommended next command:** none
 
 ## Current Task — Triage `update-packages` Reject pnpm Latest Benchmark Failure 2026-05-18
 

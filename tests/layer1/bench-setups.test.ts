@@ -114,6 +114,9 @@ describe("benchmark setup registry", () => {
     expect(resolveBenchSetup("investigate")?.qualityEvaluator?.rubric.criteria.map((criterion) => criterion.id)).toContain(
       "root-cause-specificity",
     );
+    expect(resolveBenchSetup("investigate")?.qualityEvaluator?.rubric.criteria.map((criterion) => criterion.id)).toContain(
+      "clean-shipped-no-ship-end",
+    );
     expect(resolveBenchSetup("benchmark-test-skill")?.qualityEvaluator?.rubric.criteria.map((criterion) => criterion.id)).toContain(
       "benchmark-evidence-reporting",
     );
@@ -1620,6 +1623,27 @@ describe("benchmark setup registry", () => {
       "- Auth: multiple user roles or private skill inventories are validated as necessary.",
       "- Database/storage: maintainers accept the row schema and need persistent edits or imported benchmark history.",
       "- Analytics: measured usage is needed after the workflow is accepted.",
+    ].join("\n"))).toMatchObject({
+      score: 1,
+    });
+    expect(prototypeGateCriterion?.evaluate([
+      "## Prototype-First Gate",
+      "",
+      "Roadmap impact: create a prototype-first benchmark reporting phase that sequences `/experiments/table-first`, `/experiments/board-first`, and `/experiments/command-first`, then evaluates which route should graduate into a fuller spec or implementation plan.",
+      "The first build artifact should be clickable local/static prototype routes with fake or fixture-backed data.",
+      "Deferred until one route is accepted: durable storage, auth, Stripe, analytics, deployment, admin tooling, multi-tenancy, production observability, and production reporting exports.",
+      "Promotion evidence for deferred infrastructure: a selected route, accepted core workflow, fixture fields that match real maintainer decisions, and clear evidence that persistent history or authenticated collaboration is needed for the next phase.",
+    ].join("\n"))).toMatchObject({
+      score: 1,
+    });
+    expect(prototypeGateCriterion?.evaluate([
+      "## Prototype-First Gate",
+      "",
+      "Recommended roadmap placement: prototype-first phase before any production SaaS infrastructure phase.",
+      "The next build artifact should use fake, fixture, or in-memory rows only.",
+      "Route-based experiments: `/experiments/benchmark-reporting/table-first`, `/experiments/benchmark-reporting/board-first`, and `/experiments/benchmark-reporting/command-first`.",
+      "The prototype should intentionally defer durable storage, auth, payments, analytics, deployment, admin tooling, multi-tenancy, production observability, and any external data ingestion.",
+      "Promotion criteria for production infrastructure: one route demonstrates a clear maintainer workflow, the fixture schema survives review, and maintainers can identify next actions for blocked skills.",
     ].join("\n"))).toMatchObject({
       score: 1,
     });

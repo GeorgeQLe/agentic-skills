@@ -16,6 +16,44 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Update: update-packages pnpm Latest Reject-Warning Tolerance 2026-05-18
+
+**Goal:** Fix the custom `update-packages` benchmark setup so valid retained rejection language for unqualified `pnpm@latest` passes while actual unqualified usage still fails.
+
+**Acceptance Criteria:**
+- [x] Relevant lessons, latest triage report, current Tier 2/3 evaluator, and focused layer1 coverage are reviewed.
+- [x] `tests/layer4/setups/tier23-global-workflows.setup.ts` accepts explicit `reject` wording in `lineOnlyWarnsAgainstPnpmLatest`.
+- [x] Focused layer1 regression coverage covers the retained failed shape `Reject \`pnpm@latest\` — unqualified, unverifiable at lock time.`
+- [x] Focused layer1 tests, benchmark coverage, target verify, targeted search, and whitespace validation pass.
+- [x] Results are recorded in `tasks/todo.md`, then intended changes are committed and pushed on `master`.
+
+**Result:** Updated on 2026-05-18. `lineOnlyWarnsAgainstPnpmLatest` now treats explicit `reject` wording as safe warning/rejection language for lines containing `pnpm@latest`, so the retained failed shape `Reject \`pnpm@latest\` — unqualified, unverifiable at lock time.` passes. Negative coverage still rejects actual unqualified usage such as `migrate to pnpm using pnpm@latest`, `corepack prepare pnpm@latest --activate`, and `packageManager: "pnpm@latest"`. Validation passed: focused layer1 setup tests, benchmark coverage, target verify, targeted `rg`, and `git diff --check`. Recommended next command: `$benchmark-test-skill update-packages`.
+
+## Current Targeted Update: feature-interview Prototype-First Phase Wording Tolerance 2026-05-18
+
+**Goal:** Fix the `feature-interview` benchmark quality evaluator so valid retained prototype-first phase wording passes while shallow prototype/defer statements still fail.
+
+**Acceptance Criteria:**
+- [x] Relevant lessons, latest triage report, current Tier 1 evaluator, and focused layer1 coverage are reviewed.
+- [x] `tests/layer4/setups/tier1-workflows.setup.ts` accepts semantically valid prototype phase and nested experiment route wording.
+- [x] Focused layer1 regression coverage covers retained Codex-style `prototype-first phase` and nested `/experiments/benchmark-reporting/...` route shapes.
+- [x] Focused layer1 tests, benchmark coverage, target verify, skill audits, install, targeted search, and whitespace validation pass.
+- [x] Results are recorded in `tasks/todo.md`, then intended changes are committed and pushed on `master`.
+
+**Result:** Updated on 2026-05-18. `prototypeFirstProductGateCriterion` now accepts `prototype-first phase`, short prototype phase variants, and nested experiment paths such as `/experiments/benchmark-reporting/table-first`, while the negative shallow prototype/defer case still fails. Focused layer1 regression coverage now includes retained valid Codex-style wording from the latest triage. Validation passed: focused layer1 setup tests, benchmark coverage, target verify, skill dependency/version/routing audits, install, targeted `rg`, and `git diff --check`. Recommended next command: `$benchmark-test-skill feature-interview`.
+
+## Current Targeted Update: investigate Clean Shipped Routing 2026-05-18
+
+**Goal:** Prevent `$investigate` from recommending `$ship-end` after it has already fixed, validated, committed, pushed, and confirmed a clean tree with no unpushed commits.
+
+**Acceptance Criteria:**
+- [x] The Codex `$investigate` Default Shipping Contract defines clean already-pushed investigation terminal routing as `Next work: none` and `Recommended next command: none`.
+- [x] The contract only permits `$ship-end` when pending docs, uncommitted changes, unpushed commits, deploy follow-up, unresolved wrap-up work, or an explicit task source points to ship-end.
+- [x] Tier 1 benchmark quality coverage rejects `$ship-end` for a clean already-pushed investigation fixture.
+- [x] Required skill validation, generated data refresh, and whitespace checks pass.
+
+**Result:** Updated on 2026-05-18. The Codex `$investigate` Default Shipping Contract now treats a fixed, validated, committed, pushed, clean tree with no unpushed commits as terminal and requires `Next work: none` plus `Recommended next command: none`. `$ship-end` is only allowed when there is concrete pending wrap-up work. Tier 1 benchmark quality coverage now rejects mechanical `$ship-end` routing for the clean already-pushed investigation fixture. Validation passed: install, skill dependency/version/routing audits, focused layer1 setup tests, benchmark coverage, target verify for `investigate`, generated data refresh, targeted search, and `git diff --check`. Recommended next command: none.
+
 ## Current Triage: update-packages Reject pnpm Latest Warning Failure 2026-05-18
 
 **Goal:** Investigate the latest `$benchmark-test-skill update-packages` Claude failure and classify whether the `Output avoids unqualified pnpm@latest` failure is a skill-contract gap, benchmark harness defect, generated-output noncompliance, or infrastructure-only block.
