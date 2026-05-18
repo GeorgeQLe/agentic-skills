@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-05-18 — ship-end benchmark failure triage
+
+- Triaged `benchmark/test-ship-end-2026-05-18.md` against raw Claude and Codex benchmark artifacts, the Tier 1 benchmark setup, and mirrored `ship-end` skill contracts.
+- Verified the failure as split root cause: the benchmark setup expects `$run` for Claude even though Claude `ship-end` uses `/run`, and the prompt does not explicitly require fixture-grounded runner-native routing.
+- Confirmed Codex passed 3/3 hard assertions, while Claude run 1 preserved `Step 1.2` and `/run` but still failed the stale `$run` assertion.
+- Wrote `benchmark/triage-ship-end-2026-05-18-benchmark-failure.md`.
+- Recommended next command: `$targeted-skill-builder ship-end benchmark runner route and fixture source-of-truth`.
+
 ## 2026-05-18 — ship-end benchmark partial Batch 41.1 run
 
 - Recomputed Phase 41 Batch 41.1 eligibility and confirmed `feature-interview`, `ship-end`, `targeted-skill-builder`, and `affected` are known to the benchmark harness with custom coverage.

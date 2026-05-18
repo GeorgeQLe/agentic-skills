@@ -138,6 +138,20 @@
 - Generated evidence refreshed and validated: `docs/benchmark-results-matrix.md`, `docs/skills-showcase/assets/skills-data.js`, `docs/skills-showcase/assets/github-proof-data.js`, `apps/skills-showcase/public/assets/skills-data.js`, and `apps/skills-showcase/public/assets/github-proof-data.js`.
 - Validation passed: `pnpm bench --list-skills`; `pnpm verify --skill ship-end`; `pnpm bench --skill ship-end --agent both --runs 3 --chunk-size 3 --pause 0`; `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests bench:coverage`.
 - Recommended next command: `$session-triage ship-end benchmark failure`.
+- Triage completed in `benchmark/triage-ship-end-2026-05-18-benchmark-failure.md`: verified split root cause. The benchmark setup incorrectly expects `$run` for Claude even though the Claude `ship-end` contract uses `/run`, and the prompt does not force fixture-grounded runner-native routing. Recommended next command: `$targeted-skill-builder ship-end benchmark runner route and fixture source-of-truth`.
+
+### Ship-End Benchmark Failure Triage Manifest
+
+- **User goal:** Triage the evaluated `$benchmark-test-skill ship-end` failure before continuing Phase 41 Batch 41.1.
+- **Changed files:** `benchmark/triage-ship-end-2026-05-18-benchmark-failure.md`; `tasks/todo.md`; `tasks/history.md`.
+- **Per-file purpose:** The triage report records evidence, verdict, root cause, responsible surface, recommended fix, and validation plan; `tasks/todo.md` updates the active phase review and next route; `tasks/history.md` records the triage result.
+- **User-goal mapping:** The failure is now classified with a narrow remediation route, so the next operator can fix the benchmark fixture before rerunning `ship-end` or continuing Batch 41.1.
+- **Tests run:** Targeted artifact inspection with `jq`; targeted setup/contract searches with `rg`; mirrored `ship-end` skill contract reads; `git diff --check`.
+- **Skipped tests:** No benchmark or layer1 tests were rerun because this triage intentionally produced an analysis report only. The recommended fix includes the targeted validation commands needed after modifying the benchmark setup.
+- **Adversarial review:** Compared raw failed Claude artifacts against the hard assertions, checked the passing Codex artifacts, compared `ship-end` against nearby runner-specific Tier 1 fixture patterns, and verified the mirrored Claude/Codex route convention difference.
+- **Residual risk:** The prompt ambiguity diagnosis is evidence-backed but not yet proven by rerun; after route drift is fixed, Claude may still need additional prompt or rubric tightening if it continues ignoring fixture `tasks/todo.md`.
+- **Rollback note:** Revert the triage commit to remove the report and restore the previous task review state.
+- **Next command:** `$targeted-skill-builder ship-end benchmark runner route and fixture source-of-truth`
 
 ### Batch 41.1 Partial Ship Manifest
 
