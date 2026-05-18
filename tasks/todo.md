@@ -5,6 +5,39 @@
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
+## Current Task — Fresh Benchmark `update-packages` 2026-05-18
+
+**Goal:** Run `$benchmark-test-skill update-packages` against the current repository state after the pnpm latest benchmark-tolerance fix and publish fresh deterministic both-agent evidence.
+
+**Plan:**
+- [ ] Confirm `$benchmark-test-skill` is the active workflow and `update-packages` is only the benchmark target argument.
+- [ ] Run `pnpm bench --list-skills` and record `update-packages` coverage status.
+- [ ] Run `pnpm verify --skill update-packages`; stop before bench if verification fails.
+- [ ] Run `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` only after verify passes.
+- [ ] Write and validate `benchmark/test-update-packages-2026-05-18.md` with verify, benchmark, latency, cost, consistency, raw paths, failures, and recommended next route.
+- [ ] Refresh generated evidence if curated benchmark evidence changes, validate, record results, then commit and push intended changes on `master`.
+
+## Current Task — Triage `benchmark-agent-review` Benchmark Quality Failure 2026-05-18
+
+**Goal:** Investigate why the fresh `$benchmark-test-skill benchmark-agent-review` rerun produced Codex output-quality threshold and critical failures despite 3/3 hard assertion pass rate.
+
+**Plan:**
+- [x] Inspect the fresh curated benchmark report and raw Codex report JSON.
+- [x] Inspect retained Codex generated outputs, benchmark quality criteria, and mirrored `benchmark-agent-review` contracts.
+- [x] Classify the failure as skill-contract gap, benchmark rubric/setup defect, generated-output noncompliance, infrastructure block, or one-off variance.
+- [x] Write `benchmark/triage-benchmark-agent-review-2026-05-18.md` with verdict, root cause, recommended fix, validation plan, and next route.
+- [x] Validate the report fields, record results, then commit and push intended changes on `master`.
+
+## Review — Triage `benchmark-agent-review` Benchmark Quality Failure 2026-05-18
+
+- Verification verdict: partially verified. The benchmark failure is real as a deterministic output-quality gate failure, but not as a pure skill-contract failure.
+- Evidence inspected: fresh curated report, raw Codex and Claude run JSON, retained Codex `pack-benchmark-output.md` artifacts, pack-local Codex and Claude `benchmark-agent-review` contracts, pack workflow setup, layer1 setup tests, latest 2026-05-17 review report, and relevant lessons.
+- Root cause: benchmark setup/rubric calibration gap with a secondary generated-output specificity weakness. The prompt asks for owner targets, but the quality criterion requires literal `SKILL.md`; the validation-specificity criterion also treats benign `update existing skill` wording as critical even when concrete validation checks exist.
+- Responsible gap: `tests/layer4/setups/packs/pack-workflows.setup.ts` plus focused layer1 coverage in `tests/layer1/bench-setups.test.ts`.
+- Report written: `benchmark/triage-benchmark-agent-review-2026-05-18.md`.
+- Validation passed: required report field scan and `git diff --check`.
+- **Recommended next skill:** `$targeted-skill-builder benchmark-agent-review benchmark quality owner specificity tolerance`
+
 ## Current Task — Fresh Benchmark `benchmark-agent-review` 2026-05-18
 
 **Goal:** Run `$benchmark-test-skill benchmark-agent-review` against the current repository state and publish fresh deterministic both-agent benchmark evidence.
