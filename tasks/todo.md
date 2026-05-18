@@ -5,6 +5,32 @@
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
+## Current Task — Targeted Update `feature-interview` Benchmark Prototype Gate Quality Tolerance 2026-05-18
+
+**Goal:** Fix the `feature-interview` benchmark quality evaluator so retained prototype-first outputs pass when they preserve the current fixture semantically and name valid promotion evidence, while shallow prototype deferrals still fail.
+
+**Plan:**
+- [x] Review `tasks/lessons.md`, the feature-interview triage report, current Tier 1 benchmark setup, and focused layer1 coverage.
+- [x] Update `tests/layer4/setups/tier1-workflows.setup.ts` to replace stale exact `Benchmark reports` evidence with semantic benchmark/coverage dashboard evidence.
+- [x] Broaden prototype-gate promotion evidence detection to accept retained per-item deferred-infrastructure promotion conditions.
+- [x] Add focused layer1 coverage for accepted semantic evidence, accepted retained promotion wording, missing evidence rejection, and shallow deferral rejection.
+- [x] Run focused validation, benchmark coverage, target verify, skill audits, Codex smoke benchmark, targeted search, and whitespace validation.
+- [x] Record results, commit, and push intended changes on `master`.
+
+## Review — Targeted Update `feature-interview` Benchmark Prototype Gate Quality Tolerance 2026-05-18
+
+- Decision: existing benchmark setup update, not a new skill. The verified gap was in `tests/layer4/setups/tier1-workflows.setup.ts`, not the mirrored `feature-interview` contracts.
+- Evidence used: `tasks/lessons.md`, `benchmark/triage-feature-interview-2026-05-18-prototype-gate-quality.md`, retained Codex run artifacts from `feature-interview-codex-ed08cfc2`, Tier 1 benchmark setup, and focused layer1 setup coverage.
+- Evidence intentionally skipped: broad session history and UI/product review, because the triage localized the issue to one benchmark evaluator.
+- Updated `featureInterviewEvidenceCriterion` so `feature-interview` quality checks require `custom`, `generic`, `blocked`, semantic benchmark/coverage dashboard wording, and fake/fixture data evidence instead of stale exact `Benchmark reports`.
+- Updated `prototypeFirstProductGateCriterion` to accept promotion-evidence headings and per-item infrastructure promotion conditions such as auth roles, accepted row schema, analytics need, or deployment review need.
+- Added focused layer1 regression coverage for the newly accepted semantic evidence and promotion wording, plus retained negative cases for missing evidence and shallow "defer later" gates.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 bench-setups bench-quality`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill feature-interview`; `./install.sh`; `./scripts/skill-deps.sh --broken`; `./scripts/skill-versions.sh --missing`; `./scripts/skill-next-step-routing.sh --missing`; targeted `rg`; `git diff --check`.
+- Codex smoke benchmark passed: `feature-interview-codex-66967a50`, 1/1 hard assertions, 100.0% output quality, 0 threshold failures, 0 critical failures, p50 latency 75.6s, total cost $0.25.
+- Generated Skills Showcase data was not refreshed because no tracked `SKILL.md`, `PACK.md`, curated benchmark report, or curated review report changed.
+- Reload note: after `./install.sh`, start a fresh Claude Code or Codex CLI/session if changed skills are not visible; this update did not change installed skill contracts.
+- **Recommended next command:** `$benchmark-test-skill feature-interview`
+
 ## Current Task — Triage `feature-interview` Prototype Gate Benchmark Failure 2026-05-18
 
 **Goal:** Investigate the fresh `$benchmark-test-skill feature-interview` quality failure and classify whether it is a skill-contract gap, benchmark harness defect, generated-output noncompliance, or infrastructure-only block.
