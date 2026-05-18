@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-05-18 — ship-end single active-runner benchmark agent review
+
+- Reviewed retained `session-handoff.md` artifacts from Claude `ship-end-claude-9bf5f843` and Codex `ship-end-codex-d7d92d34`.
+- Scored the outputs as excellent overall, with median subjective score 94 and range 89-95.
+- Confirmed all outputs preserve fixture source-of-truth evidence, Step 1.2 next work, constrained validation claims, no invented repository/deploy/service facts, and one active-runner final route.
+- Found no material remediation target; one Codex output is terse but still correct and actionable.
+- Wrote `benchmark/review-ship-end-2026-05-18.md`.
+- Recommended next command: `$ship`.
+
 ## 2026-05-18 — ship-end single active-runner benchmark handoff
 
 - Tightened the `ship-end` Tier 1 benchmark prompt so final handoffs must include exactly one active-runner next command and must not list alternate Claude/Codex routes.
