@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Update: benchmark-agent-review Benchmark Quality Owner Specificity Tolerance 2026-05-18
+
+**Goal:** Align the `benchmark-agent-review` pack benchmark prompt and quality rubric so owner-specific remediation is tested without brittle literal-token false positives.
+
+**Acceptance Criteria:**
+- [x] The `benchmark-agent-review` pack setup prompts exact owner files when known and scopes deterministic quality evaluation to `pack-benchmark-output.md`.
+- [x] Owner-target and validation-specificity quality checks accept exact file owners, scoped owner-plus-lookup notes, Markdown remediation tables, and benign `update existing skill` labels when concrete validation exists.
+- [x] Focused layer1 coverage proves exact owner paths pass, scoped owner lookup passes, broad owner targets lose credit, and broad-only remediation still fails.
+- [x] Focused validation, target verify, skill scripts, generated-data refresh, and Codex smoke benchmark pass or have documented caveats.
+- [x] Results are recorded in `tasks/todo.md`, then intended changes are committed and pushed on `master`.
+
+**Result:** Updated on 2026-05-18. `tests/layer4/setups/packs/pack-workflows.setup.ts` now asks the `benchmark-agent-review` pack benchmark to name exact owner files when known, evaluates quality from `pack-benchmark-output.md` instead of runner logs, accepts Markdown remediation-table owner headers, and uses contextual owner-target/validation-specificity criteria instead of brittle literal `SKILL.md` and broad forbidden-phrase checks. Focused layer1 coverage in `tests/layer1/bench-setups.test.ts` proves exact owner files, scoped owner-plus-lookup, broad owner failure, and benign `update existing skill` tolerance. Validation passed: focused layer1 tests, benchmark coverage, `pnpm --dir tests verify --skill benchmark-agent-review`, install and skill scripts, targeted `rg`, and `git diff --check`. Codex smoke benchmark `benchmark-agent-review-codex-24dddd8f` passed 1/1 with 100.0% output quality and no threshold or critical failures. Generated Skills Showcase data and benchmark matrix were refreshed; GitHub proof assets were left unstaged because an unrelated dirty `tests/layer4/setups/tier23-global-workflows.setup.ts` change would alter their fingerprint. Recommended next command: `$benchmark-test-skill benchmark-agent-review`.
+
 ## Current Triage: update-packages Benchmark Failure 2026-05-18
 
 **Goal:** Investigate the fresh `$benchmark-test-skill update-packages` Claude hard-assertion failures and identify the smallest verified fix.

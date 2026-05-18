@@ -5,6 +5,53 @@
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage
 **Last completed phase:** Phase 40 — Workflow Hybrid Replay Pilot
 
+## Current Task — Targeted Update `update-packages` pnpm Latest Markdown-Negation Tolerance 2026-05-18
+
+**Goal:** Fix the `update-packages` benchmark setup so markdown-emphasized and concise negated `pnpm@latest` warnings pass while actual unqualified `pnpm@latest` recommendations still fail.
+
+**Plan:**
+- [x] Review relevant lessons, triage report, current benchmark setup, and existing layer1 coverage.
+- [x] Update the `update-packages` benchmark assertion to tolerate markdown-emphasized and concise warning language.
+- [x] Add focused layer1 coverage for `do **not** use unqualified pnpm@latest` and `not pnpm@latest`.
+- [x] Run focused validation, benchmark coverage, verify, and a Claude smoke benchmark.
+- [ ] Record results, commit, and push intended changes on `master`.
+
+## Review — Targeted Update `update-packages` pnpm Latest Markdown-Negation Tolerance 2026-05-18
+
+- Decision: existing benchmark setup update, not a new skill and not an `update-packages` skill-contract change.
+- Evidence used: `tasks/lessons.md`, `benchmark/triage-update-packages-2026-05-18-benchmark-failure.md`, mirrored `update-packages` contracts, `tests/layer4/setups/tier23-global-workflows.setup.ts`, and focused layer1 setup coverage.
+- Existing-skill overlap: `update-packages` already owns package-manager selection policy; the defect was in benchmark evaluation semantics.
+- Updated `UPDATE_PACKAGES_NO_UNQUALIFIED_PNPM_LATEST_PATTERN` to accept markdown-emphasized warning language such as `do **not** use unqualified pnpm@latest` and concise `not pnpm@latest` warnings.
+- Added layer1 examples for those accepted warning forms while retaining existing rejection cases for `migrate to pnpm using pnpm@latest`, `corepack prepare pnpm@latest --activate`, and `packageManager: "pnpm@latest"`.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 bench-setups bench-quality`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill update-packages`; `pnpm --dir tests bench --skill update-packages --agent claude --runs 1 --chunk-size 1 --pause 0` (`update-packages-claude-4cc7c2b0`, 1/1 hard assertions, 91.2% quality); targeted `rg`; `git diff --check`.
+- Generated Skills Showcase data was not refreshed for this commit because no tracked `SKILL.md`, `PACK.md`, curated benchmark report, or curated review report changed.
+- **Recommended next command:** `$benchmark-test-skill update-packages`
+
+## Current Task — Targeted Update `benchmark-agent-review` Benchmark Quality Owner Specificity Tolerance 2026-05-18
+
+**Goal:** Align the `benchmark-agent-review` pack benchmark prompt and quality rubric so owner-specific remediation is tested without brittle literal-token false positives.
+
+**Plan:**
+- [x] Review relevant lessons, the 2026-05-18 triage report, current pack benchmark setup, and focused layer1 coverage.
+- [x] Update `tests/layer4/setups/packs/pack-workflows.setup.ts` to prompt exact owner files and scope quality scoring to `pack-benchmark-output.md`.
+- [x] Replace brittle owner/validation quality checks with contextual checks that accept exact file owners, scoped owner-plus-lookup notes, Markdown tables, and benign `update existing skill` labels when concrete validation exists.
+- [x] Add focused layer1 coverage for exact owner files, scoped owner-plus-lookup, broad owner target failure, and benign update-label tolerance.
+- [x] Run focused validation, target verify, Codex smoke benchmark, generated-data refresh, record results, then commit and push intended changes on `master`.
+
+## Review — Targeted Update `benchmark-agent-review` Benchmark Quality Owner Specificity Tolerance 2026-05-18
+
+- Decision: existing benchmark setup update, not a new skill. The pack-local `benchmark-agent-review` contracts already require implementation-ready owner targets and validation checks.
+- Evidence used: `tasks/lessons.md`, `benchmark/triage-benchmark-agent-review-2026-05-18.md`, pack-local Codex/Claude `benchmark-agent-review` contracts, `tests/layer4/setups/packs/pack-workflows.setup.ts`, and `tests/layer1/bench-setups.test.ts`.
+- Evidence intentionally skipped: broad session history, because the triage localized the issue to the benchmark setup/rubric.
+- Updated the benchmark prompt to ask for exact owner files when known, including the Codex/Claude `benchmark-agent-review/SKILL.md` files and `tests/layer4/setups/packs/pack-workflows.setup.ts` when the harness owns remediation.
+- Scoped deterministic quality evaluation to `pack-benchmark-output.md` so runner stderr/prompt text cannot trigger false positives.
+- Replaced brittle literal `SKILL.md`/forbidden-phrase checks with contextual owner-target and validation-specificity criteria.
+- Adjusted the fixture evidence facts to prioritize `ship-manifest.md` and residual-risk awareness, which are the material local evidence for this benchmark.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 bench-setups bench-quality`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill benchmark-agent-review`; `./install.sh`; `./scripts/skill-deps.sh --broken`; `./scripts/skill-versions.sh --missing`; `./scripts/skill-next-step-routing.sh --missing`; targeted `rg`; `git diff --check`.
+- Codex smoke benchmark passed after the final fix: `benchmark-agent-review-codex-24dddd8f`, 1/1 hard assertions, 100.0% output quality, 0 threshold failures, 0 critical failures.
+- Generated Skills Showcase data and benchmark results matrix were refreshed after persisted benchmark evidence changed. `scripts/validate-skills-showcase-data.sh` regenerated expected assets but also wanted GitHub proof fingerprint changes because unrelated `tests/layer4/setups/tier23-global-workflows.setup.ts` was dirty; proof assets were left unstaged to avoid coupling unrelated work.
+- **Recommended next command:** `$benchmark-test-skill benchmark-agent-review`
+
 ## Current Task — Triage `update-packages` Benchmark Failure 2026-05-18
 
 **Goal:** Investigate why the fresh `$benchmark-test-skill update-packages` rerun failed the Claude lane on `Output avoids unqualified pnpm@latest` and identify the smallest verified fix.
