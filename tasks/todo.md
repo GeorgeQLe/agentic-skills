@@ -118,6 +118,41 @@
 - **Rollback note:** Revert the shipping commit to restore the previous `ship-end` benchmark fixture, curated report sessions, generated data, and task state.
 - **Next command:** `$benchmark-agent-review ship-end`
 
+## Interrupt Task — Agent Review `ship-end` Benchmark Outputs 2026-05-18
+
+**Goal:** Review the latest persisted `ship-end` benchmark outputs for subjective operator quality after deterministic benchmark pass.
+
+**Plan:**
+- [x] Resolve latest Claude and Codex run directories from `benchmark/test-ship-end-2026-05-18.md`.
+- [x] Extract retained `session-handoff.md` artifacts and deterministic context from raw `run-*.json` files.
+- [x] Grade evaluated outputs against the agent-review rubric.
+- [x] Write `benchmark/review-ship-end-2026-05-18.md`, update task docs, validate, commit, and push intended changes.
+
+## Review — Agent Review `ship-end` Benchmark Outputs 2026-05-18
+
+- Source report: `benchmark/test-ship-end-2026-05-18.md`.
+- Reviewed runs: Claude `tests/benchmarks/runs/ship-end-claude-0190fdda/` and Codex `tests/benchmarks/runs/ship-end-codex-4fbde9d6/`.
+- Deterministic context: both agents passed 3/3 hard assertions, had no infrastructure-blocked runs, and scored 100.0% deterministic output quality.
+- Subjective verdict: good to excellent. Median score 90.5, range 84-95.
+- Common strengths: fixture source-of-truth preserved, Step 1.1 and Step 1.2 carried forward, validation claims constrained to task-recorded evidence, no invented deploy/git/service facts, and meaningful residual risk language.
+- Material weakness: all three Codex outputs list both `Claude: /run` and `Codex: $run` in the final Next Command section, which is less ergonomic than one active-runner final handoff.
+- Report written: `benchmark/review-ship-end-2026-05-18.md`.
+- Validation passed: targeted `jq` artifact extraction; targeted `rg` report-field and route checks; `git diff --check`.
+- Recommended next command: `$targeted-skill-builder ship-end benchmark single active-runner final handoff`
+
+### Ship-End Agent Review Ship Manifest
+
+- **User goal:** Execute `$benchmark-agent-review ship-end`, reviewing retained benchmark artifacts separately from deterministic pass/fail scoring and producing an implementation-ready remediation handoff.
+- **Changed files:** `benchmark/review-ship-end-2026-05-18.md`; `tasks/todo.md`; `tasks/history.md`.
+- **Per-file purpose:** The review report records subjective scores, strengths, weaknesses, and remediation; task docs record completion, validation, manifest, and next route.
+- **User-goal mapping:** The deterministic `ship-end` benchmark pass now has a subjective ergonomic review and a concrete next remediation for the remaining handoff-quality gap.
+- **Tests run:** Targeted `jq` extraction of retained artifacts and quality metadata; targeted `rg` report-field and route checks; `git diff --check`.
+- **Skipped tests:** No benchmark rerun was needed because the user requested review of the latest persisted outputs, and the source benchmark already passed with no infrastructure blocks. App tests/build were not run because only review/task documentation changed.
+- **Adversarial review:** Compared Claude and Codex retained artifacts against the review rubric, checked that deterministic 100.0% quality did not hide the dual-route ergonomic gap, and converted the only material weakness into a concrete owner/validation route.
+- **Residual risk:** Scores are subjective and based on one reviewer pass. The retained artifacts were fully available, so no artifact-evidence limitation remains.
+- **Rollback note:** Revert the review commit to remove the subjective report and restore prior task state.
+- **Next command:** `$targeted-skill-builder ship-end benchmark single active-runner final handoff`
+
 ### Benchmark Ship Manifest
 
 - **User goal:** Execute `$run` for the next incomplete benchmark step: run the fresh both-agent `update-packages` benchmark after actionability threshold calibration, publish deterministic evidence, and prepare the next route.
