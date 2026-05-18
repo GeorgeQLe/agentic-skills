@@ -648,7 +648,7 @@
 - [x] Step T.2: Inspect `benchmark/test-update-packages-2026-05-18.md` and raw Claude/Codex benchmark reports.
 - [x] Step T.3: Compare Claude failures against the benchmark quality criteria and prior `update-packages` lessons/reviews.
 - [x] Step T.4: Write and validate a dated triage report.
-- [ ] Step T.5: Commit and push intended triage artifacts.
+- [x] Step T.5: Commit and push intended triage artifacts.
 
 ### Review
 
