@@ -149,7 +149,7 @@
     - Use targeted visual checks during Step 42.7 for `/workflows` desktop and mobile; this step should focus on CSS layout stability, not playback state behavior.
 
 ### Green
-- [ ] Step 42.6: Write regression tests covering the persistent transcript behavior.
+- [x] Step 42.6: Write regression tests covering the persistent transcript behavior.
   - Classification: automated
   - Files: modify `apps/skills-showcase/src/showcase/workflows.test.tsx`
   - Test cases: completed turns remain expanded after advancing; clicking an earlier step jumps to an existing turn without hiding later turns; workflow switching resets the transcript; benchmark receipts and curated no-receipt states render inside turns; reduced-motion shows complete content without typing delay.
@@ -193,6 +193,20 @@
 - Step 42.3 completed on 2026-05-18.
 - Step 42.4 completed on 2026-05-18.
 - Step 42.5 completed on 2026-05-18.
+- Step 42.6 completed on 2026-05-18.
+
+### Step 42.6 Ship Manifest
+
+- **User goal:** Execute `$run` for Step 42.6, adding regression coverage for the `/workflows` persistent transcript behavior before final validation.
+- **Changed files:** `apps/skills-showcase/src/showcase/workflows.test.tsx`; `tasks/todo.md`; `tasks/history.md`. Pre-existing dirty edits in `tests/layer1/bench-setups.test.ts` and `tests/layer4/setups/tier23-global-workflows.setup.ts` are unrelated and intentionally excluded from this shipping boundary.
+- **Per-file purpose:** `workflows.test.tsx` adds behavior-focused assertions for completed-turn persistence after advancing, non-destructive backward jumps, workflow-switch transcript reset, benchmark receipt/no-receipt rendering inside turns, reduced-motion immediate proof visibility, and deterministic jsdom cleanup for timers/scroll mocks; `tasks/todo.md` records completion, validation, manifest, and next-step plan; `tasks/history.md` records the shipped workflow regression coverage.
+- **User-goal mapping:** The persistent transcript contract is now protected by regression tests for the interaction states named in the phase acceptance criteria, without coupling the assertions to CSS implementation details.
+- **Tests run:** `pnpm --dir apps/skills-showcase test -- workflows.test.tsx` passed with 8 files and 98 tests; `pnpm --dir apps/skills-showcase typecheck` passed; `pnpm --dir apps/skills-showcase build` passed; `git diff --check` passed.
+- **Skipped tests:** Full app tests remain planned for Step 42.7, which is the phase-wide validation step. Generated Skills Showcase data validation was skipped because no generated data, `SKILL.md`, `PACK.md`, curated benchmark report, or curated review report changed. Browser visual checks remain planned for Step 42.7 because this step only adds jsdom regression coverage.
+- **Adversarial review:** Diff-aware self-review checked that new tests exercise user-visible transcript behavior rather than styling internals, that fake timers are restored after use, that stale DOM from legacy `WorkflowsClient` tests cannot affect the TUI tests, and that jsdom-only `scrollIntoView` mocking does not mask the explicit smooth-scroll test. Initial focused test failures exposed missing test-environment setup and overly broad queries; those were fixed before validation passed.
+- **Residual risk:** The tests prove transcript behavior in jsdom, but they do not inspect real browser layout or animation positioning; Step 42.7 remains responsible for full app validation and desktop/mobile visual checks.
+- **Rollback note:** Revert the Step 42.6 test and task/history commit to remove this regression coverage while leaving the Step 42.1-42.5 implementation intact.
+- **Next command:** `$run`
 
 ### Step 42.5 Ship Manifest
 
