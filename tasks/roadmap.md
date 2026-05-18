@@ -29,6 +29,19 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Updated on 2026-05-18. The custom `update-packages` benchmark setup now uses `avoidsUnqualifiedPnpmLatest` to evaluate every line containing `pnpm@latest`, accepting negated/contextual forms such as `(not pnpm@latest)`, `(not `pnpm@latest`)`, and `no unqualified pnpm@latest` while preserving failures for real recommendations like `migrate to pnpm using pnpm@latest`, `corepack prepare pnpm@latest --activate`, and `packageManager: "pnpm@latest"`. Focused layer1 coverage includes the failed retained Claude shape and the new parenthetical/heading accepted forms. Validation passed: focused layer1 setup tests, benchmark coverage, target verify, install and skill scripts, targeted `rg`, `git diff --check`, and Codex smoke benchmark `update-packages-codex-49c65aa9` with 1/1 hard assertions. Generated Skills Showcase data was not refreshed because no tracked skill metadata/behavior or curated benchmark/review report changed. Recommended next command: `$benchmark-test-skill update-packages`.
 
+## Current Targeted Update: feature-interview Benchmark Prototype Gate Quality Tolerance 2026-05-18
+
+**Goal:** Fix the `feature-interview` benchmark quality evaluator so retained prototype-first outputs pass when they preserve the current fixture semantically and name valid promotion evidence, while shallow prototype deferrals still fail.
+
+**Acceptance Criteria:**
+- [x] `feature-interview` evidence quality accepts semantic benchmark/coverage dashboard evidence from the current fixture without requiring stale exact `Benchmark reports`.
+- [x] Prototype gate quality accepts retained promotion-evidence headings and per-item deferred-infrastructure promotion conditions.
+- [x] Missing evidence and shallow prototype deferrals still fail focused layer1 coverage.
+- [x] Focused layer1 tests, benchmark coverage, target verify, required skill audits, Codex smoke benchmark, targeted search, and whitespace validation pass.
+- [x] Results are recorded in `tasks/todo.md`, then intended changes are committed and pushed on `master`.
+
+**Result:** Updated on 2026-05-18. `tests/layer4/setups/tier1-workflows.setup.ts` now uses `featureInterviewEvidenceCriterion` for semantic fixture evidence: `custom`, `generic`, `blocked`, benchmark/coverage dashboard wording, and fake/fixture data evidence. `prototypeFirstProductGateCriterion` now accepts retained promotion-evidence headings and per-item deferred-infrastructure promotion conditions while still rejecting shallow "defer later" gates. Focused layer1 coverage in `tests/layer1/bench-setups.test.ts` proves the newly accepted shapes and retained negatives. Validation passed: focused layer1 setup/quality tests, benchmark coverage, target verify, install and skill scripts, targeted `rg`, `git diff --check`, and Codex smoke benchmark `feature-interview-codex-66967a50` with 1/1 hard assertions and 100.0% output quality. Recommended next command: `$benchmark-test-skill feature-interview`.
+
 ## Current Triage: feature-interview Prototype Gate Benchmark Quality Failure 2026-05-18
 
 **Goal:** Investigate the fresh `$benchmark-test-skill feature-interview` quality failure and classify whether it is a skill-contract gap, benchmark harness defect, generated-output noncompliance, or infrastructure-only block.

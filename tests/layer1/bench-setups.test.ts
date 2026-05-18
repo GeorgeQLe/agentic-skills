@@ -1513,6 +1513,46 @@ describe("benchmark setup registry", () => {
     ].join("\n"))).toMatchObject({
       score: 0,
     });
+
+    const evidenceCriterion = setup!.qualityEvaluator?.rubric.criteria.find((criterion) => criterion.id === "evidence-linked");
+    expect(evidenceCriterion?.evaluate([
+      "# Benchmark Reporting Dashboard Feature Interview",
+      "",
+      "The supplied idea asks for a SaaS dashboard where maintainers compare custom, generic, and blocked skill coverage.",
+      "The first artifact uses fake rows so the benchmark coverage dashboard workflow can be validated before infrastructure.",
+    ].join("\n"))).toMatchObject({
+      score: 1,
+    });
+    expect(evidenceCriterion?.evaluate([
+      "# Feature Interview",
+      "",
+      "The output mentions custom, generic, and blocked labels but never ties them to the dashboard concept or fake rows.",
+    ].join("\n"))).toMatchObject({
+      score: 0,
+    });
+
+    const prototypeGateCriterion = setup!.qualityEvaluator?.rubric.criteria.find((criterion) => criterion.id === "prototype-first-product-gate");
+    expect(prototypeGateCriterion?.evaluate([
+      "## Prototype-First Gate",
+      "",
+      "Decision: `clickable prototype`.",
+      "The next build artifact should be a local/static dashboard prototype with fake or fixture-backed skill rows.",
+      "Explicitly deferred until prototype acceptance: authentication, Stripe or billing, product analytics, durable database or storage, deployment, admin tooling, multi-tenancy, and production observability.",
+      "Evidence that would justify promoting a deferred item into a later phase:",
+      "- Auth: multiple user roles or private skill inventories are validated as necessary.",
+      "- Database/storage: maintainers accept the row schema and need persistent edits or imported benchmark history.",
+      "- Analytics: measured usage is needed after the workflow is accepted.",
+    ].join("\n"))).toMatchObject({
+      score: 1,
+    });
+    expect(prototypeGateCriterion?.evaluate([
+      "## Prototype-First Gate",
+      "",
+      "Decision: clickable prototype.",
+      "Use fake data and defer auth, database, analytics, and deployment until later.",
+    ].join("\n"))).toMatchObject({
+      score: 0,
+    });
   });
 
   it("keeps session-triage benchmark routing aligned with the no-skill-change branch", () => {
