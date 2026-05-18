@@ -324,6 +324,7 @@ describe("benchmark setup registry", () => {
     expect(quality?.criteria.find((criterion) => criterion.id === "workflow-output-proves-selected-pnpm-toolchain-age-eligibility")).toMatchObject({ passed: true });
     expect(quality?.criteria.find((criterion) => criterion.id === "workflow-output-preserves-age-gate-key-semantics")).toMatchObject({ passed: true });
     expect(quality?.criteria.find((criterion) => criterion.id === "workflow-next-route")).toMatchObject({ passed: true });
+    expect(quality?.criteria.find((criterion) => criterion.id === "workflow-targeted-migration-routes")).toMatchObject({ passed: true });
     expect(quality?.criteria.find((criterion) => criterion.id === "no-generic-or-external-overreach")).toMatchObject({ passed: true });
     expect(quality?.criticalFailures).not.toContain("no-generic-or-external-overreach");
   });
@@ -511,6 +512,7 @@ describe("benchmark setup registry", () => {
 
     expect(retainedHeadingShape?.criteria.find((criterion) => criterion.id === "workflow-artifact-reference")).toMatchObject({ passed: true });
     expect(retainedHeadingShape?.criteria.find((criterion) => criterion.id === "workflow-actionability")).toMatchObject({ passed: true });
+    expect(retainedHeadingShape?.criteria.find((criterion) => criterion.id === "workflow-targeted-migration-routes")).toMatchObject({ passed: true });
 
     const retainedFilenameShape = evaluateQuality([
       "# package-update-plan.md",
@@ -532,6 +534,7 @@ describe("benchmark setup registry", () => {
 
     expect(retainedFilenameShape?.criteria.find((criterion) => criterion.id === "workflow-artifact-reference")).toMatchObject({ passed: true });
     expect(retainedFilenameShape?.criteria.find((criterion) => criterion.id === "workflow-actionability")).toMatchObject({ passed: true });
+    expect(retainedFilenameShape?.criteria.find((criterion) => criterion.id === "workflow-targeted-migration-routes")).toMatchObject({ passed: true });
   });
 
   it("rejects update-packages quality without artifact naming or actionable validation evidence", () => {
@@ -556,6 +559,80 @@ describe("benchmark setup registry", () => {
 
     expect(quality?.criteria.find((criterion) => criterion.id === "workflow-artifact-reference")).toMatchObject({ passed: false });
     expect(quality?.criteria.find((criterion) => criterion.id === "workflow-actionability")).toMatchObject({ passed: false });
+    expect(quality?.criticalFailures).toContain("workflow-actionability");
+  });
+
+  it("marks retained update-packages actionability failures as critical quality failures", () => {
+    const setup = resolveBenchSetup("update-packages");
+    expect(setup).toBeDefined();
+
+    const workDir = mkdtempSync(resolve(tmpdir(), "update-packages-retained-actionability-failure-"));
+    writeFileSync(
+      resolve(workDir, "package-update-plan.md"),
+      [
+        "# Package Update Plan",
+        "This package-update-plan.md records the update plan.",
+        "Package-manager migration strategy: migrate to pnpm because no deployment notes require npm.",
+        "Set packageManager to pnpm@10.11.0 because npm view pnpm@10.11.0 time.version returned 2026-05-01T12:00:00.000Z, older than 8 days.",
+        "Age-gate config: create `.npmrc` with npm's relative age gate `min-release-age=8` and pnpm coverage `minimum-release-age=11520`.",
+        "For modern pnpm project config, also use pnpm `minimumReleaseAge: 11520`.",
+        "Eligible versions older than 8 days: react 19.2.0, zod 3.25.76, vitest 3.2.4.",
+        "Skipped packages: react 19.3.0, zod 4.1.12, and vitest 4.0.0.",
+        "Major-upgrade risk handling: React 18 to 19 and Vitest 1 to 3 move in separate batches.",
+        "### Batch Order",
+        "1. Batch A: bump zod to 3.25.76 and verify build plus tests still pass.",
+        "2. Batch B: bump Vitest 1 to 3 and review config.",
+        "3. Batch C: bump React 18 to 19 and review peers.",
+        "### Stop Condition",
+        "If any batch surfaces broad compatibility breakage, stop and route to /migrate.",
+        "## Verification Commands",
+        "pnpm install --frozen-lockfile",
+        "pnpm test",
+        "pnpm build",
+        "Recommended next command: /run",
+      ].join("\n\n"),
+    );
+
+    const quality = setup!.qualityEvaluator?.evaluate(readFileSync(resolve(workDir, "package-update-plan.md"), "utf8"));
+
+    expect(quality?.criteria.find((criterion) => criterion.id === "workflow-actionability")).toMatchObject({ passed: false });
+    expect(quality?.criteria.find((criterion) => criterion.id === "workflow-targeted-migration-routes")).toMatchObject({ passed: false });
+    expect(quality?.criticalFailures).toContain("workflow-actionability");
+    expect(quality?.passed).toBe(false);
+    expect(quality?.score).toBeLessThan(0.95);
+  });
+
+  it("reduces update-packages quality for bare migrate routes when a target is known", () => {
+    const setup = resolveBenchSetup("update-packages");
+    expect(setup).toBeDefined();
+
+    const workDir = mkdtempSync(resolve(tmpdir(), "update-packages-generic-migrate-route-"));
+    writeFileSync(
+      resolve(workDir, "package-update-plan.md"),
+      [
+        "# Package Update Plan",
+        "This package-update-plan.md records the update plan.",
+        "Package-manager migration strategy: migrate to pnpm.",
+        "Package-manager toolchain proof: set packageManager to pnpm@10.11.0 because npm view pnpm@10.11.0 time.version returned 2026-05-01T12:00:00.000Z, older than 8 days.",
+        "Age-gate config: create `.npmrc` with npm's relative age gate `min-release-age=8` and pnpm coverage `minimum-release-age=11520`.",
+        "For modern pnpm project config, also use pnpm `minimumReleaseAge: 11520`.",
+        "Eligible versions older than 8 days: react 19.2.0, zod 3.25.76, vitest 3.2.4.",
+        "Skipped packages: react 19.3.0, zod 4.1.12, and vitest 4.0.0.",
+        "Major-upgrade risk handling: React 18 to 19 and Vitest 1 to 3 move in separate batches.",
+        "Batch 0 package-manager migration: mutation command `pnpm install`; verification command `test -f pnpm-lock.yaml`; expected proof `packageManager` and `pnpm-lock.yaml`; do not proceed on red.",
+        "Batch 1 low-risk zod update: mutation command `pnpm add zod@3.25.76`; verification command `pnpm test`; expected proof selected package version; stop condition routes broad compatibility work to /migrate.",
+        "Batch 2 React 18 to 19: mutation command `pnpm add react@19.2.0`; verification command `pnpm build`; expected proof focused smoke-test output; stop condition routes broad compatibility work to /migrate.",
+        "Compatibility checks: verify React renderer/framework peer compatibility and Vitest/Vite/TypeScript config compatibility.",
+        "Focused smoke checks: run the primary React render smoke test and Vitest config smoke test.",
+        "Verification commands: pnpm install --frozen-lockfile, pnpm run build, pnpm run test.",
+        "Recommended next command: /run",
+      ].join("\n\n"),
+    );
+
+    const quality = setup!.qualityEvaluator?.evaluate(readFileSync(resolve(workDir, "package-update-plan.md"), "utf8"));
+
+    expect(quality?.criteria.find((criterion) => criterion.id === "workflow-actionability")).toMatchObject({ passed: true });
+    expect(quality?.criteria.find((criterion) => criterion.id === "workflow-targeted-migration-routes")).toMatchObject({ passed: false });
   });
 
   it("rejects update-packages plans without per-batch commands, proof, and stop gates", () => {
