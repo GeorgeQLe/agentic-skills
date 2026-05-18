@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Benchmark: benchmark-agent-review Fresh Rerun 2026-05-18
+
+**Goal:** Run `$benchmark-test-skill benchmark-agent-review` against the current repository state and publish fresh deterministic both-agent benchmark evidence.
+
+**Acceptance Criteria:**
+- [x] `pnpm bench --list-skills` confirms `benchmark-agent-review` is known and reports custom coverage.
+- [x] `pnpm verify --skill benchmark-agent-review` passes or blocks benchmark execution with a recorded failure.
+- [x] `pnpm bench --skill benchmark-agent-review --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [x] `benchmark/test-benchmark-agent-review-2026-05-18.md` records verify, benchmark, latency, cost, consistency, failed assertions, raw session evidence, infrastructure blocks, and recommended next route.
+- [x] Results are recorded in `tasks/todo.md`, generated evidence is refreshed, then intended changes are committed and pushed on `master`.
+
+**Result:** Fresh rerun completed on 2026-05-18. `benchmark-agent-review` is known with custom benchmark coverage via `tests/layer4/setups/packs/pack-workflows.setup.ts`, and verify passed with layer1 PASS in 3.4s plus layer2 SKIP because no target-specific layer2 tests matched. Claude session `benchmark-agent-review-claude-a06b0e93` completed two evaluated runs with 2/2 hard assertion pass rate, one infrastructure block for agent runner budget, 100.0% output quality, p50 latency 44.6s, and $0.75 total estimated cost. Codex session `benchmark-agent-review-codex-9c6219ef` completed three evaluated runs with 3/3 hard assertion pass rate, 81.1% output quality, p50 latency 69.2s, and $0.75 total estimated cost. No hard assertions failed, but Codex reported 2 output-quality threshold failures and 2 critical failures for remediation owner-target and validation-specificity criteria. Report: `benchmark/test-benchmark-agent-review-2026-05-18.md`. Generated Skills Showcase data and benchmark results matrix were refreshed after the curated benchmark report changed. Recommended next skill: `$session-triage benchmark-agent-review benchmark failure`.
+
 ## Current Targeted Update: benchmark-agent-review Owner Label Tolerance 2026-05-18
 
 **Goal:** Fix the `benchmark-agent-review` benchmark quality evaluator so remediation-ready Markdown owner labels pass while broad owner targets still fail.
