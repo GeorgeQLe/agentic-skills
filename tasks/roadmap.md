@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Benchmark: update-packages Fresh Rerun 2026-05-18
+
+**Goal:** Run `$benchmark-test-skill update-packages` against the current repository state and publish deterministic both-agent benchmark evidence.
+
+**Acceptance Criteria:**
+- [x] `pnpm bench --list-skills` confirms `update-packages` is known and reports its coverage status.
+- [x] `pnpm verify --skill update-packages` passes or blocks benchmark execution with a recorded failure.
+- [x] `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [x] `benchmark/test-update-packages-2026-05-18.md` records verify, benchmark, latency, cost, consistency, failures, raw session evidence, and recommended next route.
+- [x] Results are recorded in `tasks/todo.md`, generated evidence is refreshed if needed, then intended changes are committed and pushed on `master`.
+
+**Result:** Fresh rerun completed on 2026-05-18 with a deterministic both-agent failure and partial Claude infrastructure blocks. `update-packages` is known with custom benchmark coverage via `tests/layer4/setups/tier23-global-workflows.setup.ts`, and verify passed with layer1 PASS in 3.3s plus layer2 SKIP because no target-specific layer2 tests matched. Claude session `update-packages-claude-225f6efc` completed one evaluated run and had two agent-runner budget blocks, with 0/1 hard assertion pass rate, 75.0% output quality, p50 latency 57.1s, and $0.75 total estimated cost. Codex session `update-packages-codex-fd2c4602` completed three evaluated runs with 0/3 hard assertion pass rate, 89.7% output quality, p50 latency 68.0s, and $0.75 total estimated cost. Failed assertions covered pnpm toolchain proof and age-gate semantics for Claude, and age-gate semantics for all Codex runs. Report: `benchmark/test-update-packages-2026-05-18.md`. Generated Skills Showcase data and benchmark results matrix were refreshed. Recommended next skill: `$session-triage update-packages benchmark failure`.
+
 ## Current Targeted Update: benchmark-agent-review Owner Table Label Tolerance 2026-05-18
 
 **Goal:** Fix the `benchmark-agent-review` benchmark quality evaluator so remediation table headers such as `Owner target / owner file` and `Exact owner target / files` pass when exact owner paths and validation checks are present, while broad owner targets still fail.
