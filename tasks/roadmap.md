@@ -42,6 +42,19 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Agent review completed on 2026-05-18. Claude session `update-packages-claude-a767ae3e` had two evaluated retained `package-update-plan.md` artifacts and one infrastructure block, which was excluded from subjective scoring. Codex session `update-packages-codex-337a5d5e` had three evaluated retained `package-update-plan.md` artifacts. Subjective verdict: usable to excellent, median 88/100 with score range 76-95. All evaluated outputs preserved the fixture constraints, selected/skipped age-gated versions, pnpm migration safety, major-upgrade risk handling, and runner-native next routing. Remaining gap: Claude evaluated outputs lack explicit per-batch expected proof/artifact and target-specific migration routes while deterministic quality still reports 95.2% despite `workflow-actionability` scoring 0.0%. Report: `benchmark/review-update-packages-2026-05-18.md`. Recommended next command: `$targeted-skill-builder update-packages benchmark actionability threshold`.
 
+## Current Targeted Update: update-packages Benchmark Actionability Threshold 2026-05-18
+
+**Goal:** Tighten the `update-packages` benchmark quality rubric so missing batch actionability and generic migrate routes materially lower output-quality results.
+
+**Acceptance Criteria:**
+- [x] Relevant lessons, benchmark-agent review evidence, current mirrored `update-packages` contract, custom benchmark setup, and focused layer1 coverage are reviewed.
+- [x] `tests/layer4/setups/tier23-global-workflows.setup.ts` makes `workflow-actionability` critical for `update-packages`.
+- [x] `tests/layer4/setups/tier23-global-workflows.setup.ts` adds target-specific migrate-route quality scoring for `update-packages`.
+- [x] Focused layer1 coverage accepts strong batch checklist shapes and rejects retained weak actionability/generic migrate route shapes.
+- [x] Required validation passes, results are recorded in `tasks/todo.md`, then intended changes are committed and pushed on `master`.
+
+**Result:** Updated on 2026-05-18. The custom `update-packages` benchmark quality evaluator now treats missing batch actionability as a critical quality failure and separately scores target-specific migrate routes, so a plan with bare `/migrate` or `$migrate` does not receive full quality credit when a target package/tool is known. Focused layer1 coverage proves strong retained checklist plans still pass while weak Claude-style lettered batches and generic migrate routes lose quality. Validation passed: install, skill dependency/version/routing audits, focused layer1 setup tests, benchmark coverage, target verify, targeted search, and whitespace validation. Recommended next command: `$benchmark-test-skill update-packages`.
+
 ## Current Benchmark: feature-interview Fresh Rerun After Prototype Wording Tolerance 2026-05-18
 
 **Goal:** Run `$benchmark-test-skill feature-interview` against the current repository state and publish fresh deterministic both-agent benchmark evidence after the prototype phase wording tolerance update.
