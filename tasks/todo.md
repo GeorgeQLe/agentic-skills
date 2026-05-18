@@ -27,6 +27,43 @@
 - Generated Skills Showcase data was not refreshed for this commit because no tracked `SKILL.md`, `PACK.md`, curated benchmark report, or curated review report changed.
 - **Recommended next command:** `$benchmark-test-skill update-packages`
 
+## Current Task — Fresh Benchmark `update-packages` 2026-05-18
+
+**Goal:** Run `$benchmark-test-skill update-packages` against the current repository state and publish fresh deterministic both-agent evidence.
+
+**Plan:**
+- [x] Confirm `$benchmark-test-skill` is the active workflow and `update-packages` is only the benchmark target argument.
+- [x] Run `pnpm bench --list-skills` and record `update-packages` coverage status.
+- [ ] Run `pnpm verify --skill update-packages`; stop before bench if verification fails.
+- [ ] Run `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` only after verify passes.
+- [ ] Write and validate `benchmark/test-update-packages-2026-05-18.md` with verify, benchmark, latency, cost, consistency, raw paths, failures, and recommended next route.
+- [ ] Refresh generated evidence if curated benchmark evidence changes, validate, record results, then commit and push intended changes on `master`.
+
+## Current Task — Fresh Benchmark `benchmark-agent-review` After Owner Specificity Tolerance 2026-05-18
+
+**Goal:** Run `$benchmark-test-skill benchmark-agent-review` after the owner-specificity benchmark tolerance update and publish deterministic both-agent benchmark evidence.
+
+**Plan:**
+- [x] Confirm `$benchmark-test-skill` is the active workflow and `benchmark-agent-review` is only the benchmark target argument.
+- [x] Run `pnpm bench --list-skills` and record `benchmark-agent-review` coverage status.
+- [x] Run `pnpm verify --skill benchmark-agent-review`; stop before bench if verification fails.
+- [x] Run `pnpm bench --skill benchmark-agent-review --agent both --runs 3 --chunk-size 3 --pause 0` only after verify passes.
+- [x] Write and validate `benchmark/test-benchmark-agent-review-2026-05-18.md` with verify, benchmark, latency, cost, consistency, raw paths, failures, and recommended next route.
+- [ ] Refresh generated evidence if curated benchmark evidence changes, validate, record results, then commit and push intended changes on `master`.
+
+## Review — Fresh Benchmark `benchmark-agent-review` After Owner Specificity Tolerance 2026-05-18
+
+- Command resolution: `$benchmark-test-skill` was the active workflow; `benchmark-agent-review` was treated only as the benchmark target argument.
+- Eligibility: `benchmark-agent-review` is known with custom coverage via `tests/layer4/setups/packs/pack-workflows.setup.ts`.
+- Verify passed: layer1 PASS in 3.7s with 1,210 tests across 15 files; layer2 SKIP because no target-specific layer2 tests matched `benchmark-agent-review`.
+- Benchmark ran with `pnpm bench --skill benchmark-agent-review --agent both --runs 3 --chunk-size 3 --pause 0`.
+- Claude session `benchmark-agent-review-claude-f72e03c7`: 3/3 evaluated hard assertion pass rate, 0 infrastructure blocks, 81.7% output-quality score, p50 latency 45.4s, and $0.75 total estimated cost. The configured quality evaluator reported 2 threshold failures and 2 critical failures on owner-target and validation-specificity criteria.
+- Codex session `benchmark-agent-review-codex-089d4f4f`: 3/3 evaluated hard assertion pass rate, 0 infrastructure blocks, 98.9% output-quality score, p50 latency 59.1s, and $0.75 total estimated cost.
+- Failed assertions: none.
+- Report written at `benchmark/test-benchmark-agent-review-2026-05-18.md`.
+- Generated Skills Showcase data and benchmark results matrix were refreshed after the curated benchmark report changed. The validation script regenerated expected assets and reported them stale pending commit.
+- **Recommended next skill:** `$session-triage benchmark-agent-review benchmark failure`
+
 ## Current Task — Targeted Update `benchmark-agent-review` Benchmark Quality Owner Specificity Tolerance 2026-05-18
 
 **Goal:** Align the `benchmark-agent-review` pack benchmark prompt and quality rubric so owner-specific remediation is tested without brittle literal-token false positives.

@@ -29,6 +29,17 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Updated on 2026-05-18. `UPDATE_PACKAGES_NO_UNQUALIFIED_PNPM_LATEST_PATTERN` now accepts markdown-emphasized warning language such as `do **not** use unqualified pnpm@latest` and concise `not pnpm@latest` warnings, while retaining failures for affirmative recommendations like `migrate to pnpm using pnpm@latest`, `corepack prepare pnpm@latest --activate`, and `packageManager: "pnpm@latest"`. Focused layer1 coverage proves the new accepted forms. Validation passed: focused layer1 setup/quality tests, benchmark coverage, `pnpm --dir tests verify --skill update-packages`, targeted `rg`, and `git diff --check`. Claude smoke benchmark `update-packages-claude-4cc7c2b0` passed 1/1 with 91.2% quality. Recommended next command: `$benchmark-test-skill update-packages`.
 
+## Current Benchmark: update-packages Fresh Rerun 2026-05-18
+
+**Goal:** Run `$benchmark-test-skill update-packages` against the current repository state after the pnpm latest markdown-negation benchmark-tolerance fix and publish fresh deterministic both-agent evidence.
+
+**Acceptance Criteria:**
+- [x] `pnpm bench --list-skills` confirms `update-packages` is known and reports custom coverage.
+- [ ] `pnpm verify --skill update-packages` passes or blocks benchmark execution with a recorded failure.
+- [ ] `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` runs only after verify passes.
+- [ ] `benchmark/test-update-packages-2026-05-18.md` records verify, benchmark, latency, cost, consistency, failed assertions, raw session evidence, and recommended next route.
+- [ ] Results are recorded in `tasks/todo.md`, generated evidence is refreshed if needed, then intended changes are committed and pushed on `master`.
+
 ## Current Targeted Update: benchmark-agent-review Benchmark Quality Owner Specificity Tolerance 2026-05-18
 
 **Goal:** Align the `benchmark-agent-review` pack benchmark prompt and quality rubric so owner-specific remediation is tested without brittle literal-token false positives.
@@ -92,7 +103,7 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 - [x] `benchmark/test-benchmark-agent-review-2026-05-18.md` records fresh verify, benchmark, latency, cost, consistency, failed assertions, raw session evidence, and recommended next route.
 - [x] Results are recorded in `tasks/todo.md`, generated evidence is refreshed if needed, then intended changes are committed and pushed on `master`.
 
-**Result:** Fresh rerun completed on 2026-05-18. `benchmark-agent-review` is known with custom benchmark coverage via `tests/layer4/setups/packs/pack-workflows.setup.ts`, and verify passed with layer1 PASS in 3.5s plus layer2 SKIP because no target-specific layer2 tests matched. Claude session `benchmark-agent-review-claude-29400696` completed three evaluated runs with 3/3 hard assertion pass rate, 86.7% output quality, p50 latency 51.4s, and $0.75 total estimated cost. Codex session `benchmark-agent-review-codex-d0b564cf` completed three evaluated runs with 3/3 hard assertion pass rate, 82.2% output quality, p50 latency 48.1s, and $0.75 total estimated cost. No runs were infrastructure-blocked, and there were no failed hard assertions, but Codex reported 1 output-quality threshold failure and 1 critical failure for remediation specificity. Report: `benchmark/test-benchmark-agent-review-2026-05-18.md`. Validation passed: report field scan, benchmark coverage, benchmark-results matrix tests, showcase data freshness check, and `git diff --check`. Recommended next skill: `$session-triage benchmark-agent-review benchmark failure`.
+**Result:** Fresh rerun completed on 2026-05-18. `benchmark-agent-review` is known with custom benchmark coverage via `tests/layer4/setups/packs/pack-workflows.setup.ts`, and verify passed with layer1 PASS in 3.7s plus layer2 SKIP because no target-specific layer2 tests matched. Claude session `benchmark-agent-review-claude-f72e03c7` completed three evaluated runs with 3/3 hard assertion pass rate, 81.7% output quality, p50 latency 45.4s, and $0.75 total estimated cost. Codex session `benchmark-agent-review-codex-089d4f4f` completed three evaluated runs with 3/3 hard assertion pass rate, 98.9% output quality, p50 latency 59.1s, and $0.75 total estimated cost. No runs were infrastructure-blocked, and there were no failed hard assertions, but Claude reported 2 output-quality threshold failures and 2 critical failures for remediation owner-target and validation-specificity criteria. Report: `benchmark/test-benchmark-agent-review-2026-05-18.md`. Generated Skills Showcase data and benchmark results matrix were refreshed after the curated benchmark report changed. The validation script regenerated expected assets and reported them stale pending commit. Recommended next skill: `$session-triage benchmark-agent-review benchmark failure`.
 
 ## Current Targeted Update: update-packages Major-Upgrade Risk Handling 2026-05-17
 
