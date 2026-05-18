@@ -40,7 +40,7 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 - [x] `benchmark/review-update-packages-2026-05-18.md` records source evidence, scores, strengths, weaknesses, remediation, and next route.
 - [x] Results are recorded in `tasks/todo.md`, generated evidence is refreshed if needed, then intended changes are committed and pushed on `master`.
 
-**Result:** Agent review completed on 2026-05-18. Claude session `update-packages-claude-a767ae3e` had two evaluated retained `package-update-plan.md` artifacts and one infrastructure block, which was excluded from subjective scoring. Codex session `update-packages-codex-337a5d5e` had three evaluated retained `package-update-plan.md` artifacts. Subjective verdict: usable to excellent, median 90/100 with score range 76-96. All evaluated outputs preserved the fixture constraints, selected/skipped age-gated versions, pnpm migration safety, major-upgrade risk handling, and runner-native next routing. Remaining gap: Claude evaluated outputs lack explicit per-batch expected proof/artifact and target-specific migration routes while deterministic quality still reports 95.2% despite `workflow-actionability` scoring 0.0%. Report: `benchmark/review-update-packages-2026-05-18.md`. Recommended next command: `$targeted-skill-builder update-packages benchmark actionability threshold`.
+**Result:** Agent review completed on 2026-05-18. Claude session `update-packages-claude-a767ae3e` had two evaluated retained `package-update-plan.md` artifacts and one infrastructure block, which was excluded from subjective scoring. Codex session `update-packages-codex-337a5d5e` had three evaluated retained `package-update-plan.md` artifacts. Subjective verdict: usable to excellent, median 88/100 with score range 76-95. All evaluated outputs preserved the fixture constraints, selected/skipped age-gated versions, pnpm migration safety, major-upgrade risk handling, and runner-native next routing. Remaining gap: Claude evaluated outputs lack explicit per-batch expected proof/artifact and target-specific migration routes while deterministic quality still reports 95.2% despite `workflow-actionability` scoring 0.0%. Report: `benchmark/review-update-packages-2026-05-18.md`. Recommended next command: `$targeted-skill-builder update-packages benchmark actionability threshold`.
 
 ## Current Benchmark: feature-interview Fresh Rerun After Prototype Wording Tolerance 2026-05-18
 
@@ -1057,6 +1057,68 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 **Parallelization:** serial
 
 **Coordination Notes:** The likely edits concentrate in `TuiWorkflow.tsx`, `workflow.css`, and the workflow player/typewriter helpers, with shared layout and timing behavior. Keep implementation serial to avoid conflicting state/rendering changes; use review-only validation after the build if needed.
+
+> Test strategy: tests-after
+
+### Execution Profile
+**Parallel mode:** serial
+**Integration owner:** main agent
+**Conflict risk:** medium
+**Review gates:** correctness, tests, performance, UX
+
+**Subagent lanes:** none
+
+### Implementation
+- Step 42.1: Replace the single active replay card with a persistent transcript model for the selected workflow.
+  - Classification: automated
+  - Files: modify `apps/skills-showcase/src/showcase/tui/TuiWorkflow.tsx`
+  - Notes: Render revealed workflow steps as transcript turns; keep completed turns fully expanded; remove the remounting active-step card key that causes the blinking carousel feel.
+- Step 42.2: Update workflow player state so step controls jump within an existing transcript session while workflow changes reset the session.
+  - Classification: automated
+  - Files: modify `apps/skills-showcase/src/showcase/tui/shared/useWorkflowPlayer.ts`
+  - Notes: Track revealed transcript depth separately from active step focus; keep later revealed turns available when jumping to an earlier step; reset revealed depth when selecting another workflow or restarting.
+- Step 42.3: Coordinate fake typing, proof-block reveal, and reduced-motion behavior for active turns.
+  - Classification: automated
+  - Files: modify `apps/skills-showcase/src/showcase/tui/TuiWorkflow.tsx`, modify `apps/skills-showcase/src/showcase/tui/shared/useTypewriter.ts`, modify `apps/skills-showcase/src/showcase/tui/shared/useWorkflowPlayer.ts`
+  - Notes: Show user command immediately; fake-type the agent response; reveal terminal, artifact, and receipt blocks after the agent response; bypass typing and animated scroll for reduced-motion users.
+- Step 42.4: Add transcript auto-scroll and stable benchmark/no-receipt proof rendering.
+  - Classification: automated
+  - Files: modify `apps/skills-showcase/src/showcase/tui/TuiWorkflow.tsx`, modify `apps/skills-showcase/src/showcase/tui/workflow.css`
+  - Notes: Scroll the active transcript turn into view during playback; keep benchmark receipt metadata available for benchmarked steps; preserve curated/no-receipt states for non-benchmarked steps.
+- Step 42.5: Restyle `/workflows` for persistent transcript layout across desktop and mobile.
+  - Classification: automated
+  - Files: modify `apps/skills-showcase/src/showcase/tui/workflow.css`
+  - Notes: Keep workflow selectors and step controls visible above the transcript; prevent horizontal overflow, clipped proof blocks, and control/transcript overlap at mobile and desktop widths.
+
+### Green
+- Step 42.6: Write regression tests covering the persistent transcript behavior.
+  - Classification: automated
+  - Files: modify `apps/skills-showcase/src/showcase/workflows.test.tsx`
+  - Test cases: completed turns remain expanded after advancing; clicking an earlier step jumps to an existing turn without hiding later turns; workflow switching resets the transcript; benchmark receipts and curated no-receipt states render inside turns; reduced-motion shows complete content without typing delay.
+- Step 42.7: Run validation and perform only concrete cleanup found by validation.
+  - Classification: automated
+  - Files: no planned source edits beyond fixes required by failed validation
+  - Commands: `pnpm --dir apps/skills-showcase test`, `pnpm --dir apps/skills-showcase build`, `scripts/validate-skills-showcase-data.sh` if generated data changes, `git diff --check`
+  - Visual checks: verify `/workflows` at desktop and mobile widths for no horizontal overflow, clipped proof blocks, or overlapping transcript/controls.
+
+### Milestone: Phase 42 Workflow Persistent Transcript Refinement
+**Acceptance Criteria:**
+- [ ] `/workflows` no longer remounts the active replay as a blinking step card when advancing through steps.
+- [ ] Playback reveals each new workflow turn with the confirmed ChatGPT/Claude-style cadence.
+- [ ] Completed turns stay fully expanded, and the active turn is followed by viewport scroll during playback.
+- [ ] Step controls jump to existing turns without destructive rewind or hiding later turns.
+- [ ] Workflow switching starts a fresh transcript session.
+- [ ] Benchmark receipt rendering remains available for benchmarked steps, and non-benchmarked steps show clear curated/no-receipt states.
+- [ ] Reduced-motion users receive complete content without fake typing or animated scroll.
+- [ ] Desktop and mobile visual checks confirm no horizontal overflow, clipped proof blocks, or overlapping transcript/controls.
+- [ ] Existing Skills Showcase tests, typecheck/build, generated-data validation when needed, and whitespace checks pass.
+- [ ] All phase tests pass
+- [ ] No regressions in previous phase tests
+
+**On Completion**
+- Deviations from plan: pending
+- Tech debt / follow-ups: pending
+- Ready for next phase: no
 
 ## Current Benchmark: roadmap Fresh Rerun 2026-05-17
 
