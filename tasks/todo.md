@@ -6,6 +6,27 @@
 **Total phases:** 42
 **Last completed phase:** Phase 42 — Workflow Persistent Transcript Refinement
 
+## Interrupt Task — Triage `update-packages` Fresh Benchmark Failure 2026-05-18
+
+**Goal:** Investigate the fresh `$benchmark-test-skill update-packages` failure and classify whether the artifact/exit failures are skill-contract gaps, benchmark harness defects, generated-output noncompliance, or infrastructure-only blocks.
+
+**Plan:**
+- [x] Inspect the latest curated benchmark report and raw Claude/Codex run artifacts.
+- [x] Compare the mirrored `update-packages` contracts with benchmark setup assertions and retained outputs.
+- [x] Write `benchmark/triage-update-packages-2026-05-18-fresh-artifact-failure.md` with verdict, root cause, recommended fix, validation plan, and next route.
+- [x] Validate report fields and whitespace, update this review section, then commit and push intended changes.
+
+## Review — Triage `update-packages` Fresh Benchmark Failure 2026-05-18
+
+- Source report: `benchmark/test-update-packages-2026-05-18.md`.
+- Raw evidence inspected: Claude session `tests/benchmarks/runs/update-packages-claude-5adfd816/` and Codex session `tests/benchmarks/runs/update-packages-codex-06adb3a6/`.
+- Verdict: verified benchmark harness infrastructure-classification defect, not an `update-packages` skill-contract gap.
+- Key evidence: Claude run 0 exited 0, created `package-update-plan.md`, and passed all hard assertions; Claude run 1 exited 143 with no output; Claude run 2 reported `API Error: Unable to connect to API (ConnectionRefused)`; Codex runs logged repeated websocket/DNS/stream connection failures and produced no artifact.
+- Root cause: `classifyInfrastructureBlock` only catches rate/quota/budget/image failures and returns early on exit code 0, so Codex transport failures and timeout/API failures are counted as evaluated skill failures.
+- Report written: `benchmark/triage-update-packages-2026-05-18-fresh-artifact-failure.md`.
+- Validation passed: targeted `rg` confirmed required triage report sections and recommended route; `git diff --check` passed.
+- Recommended next skill: `$targeted-skill-builder update-packages benchmark infrastructure classification`
+
 ## Interrupt Task — Benchmark `update-packages` Fresh Run 2026-05-18
 
 **Goal:** Run `$benchmark-test-skill update-packages` against the current repository state and publish fresh deterministic both-agent benchmark evidence.
