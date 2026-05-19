@@ -784,6 +784,36 @@
 **Next work:** Step 42.5 — restyle `/workflows` for persistent transcript layout across desktop and mobile.
 **Recommended next command:** `$run`
 
+## Benchmark: update-packages Fresh Rerun 2026-05-19
+
+**Goal:** Run `$benchmark-test-skill update-packages` for a fresh deterministic benchmark report dated 2026-05-19.
+
+**Scope:**
+- Confirm `benchmark-test-skill` is the active workflow and `update-packages` is only the target skill argument.
+- Confirm `update-packages` is known to the benchmark harness and note its coverage status.
+- Run `pnpm verify --skill update-packages`; stop without benchmarking if verify fails.
+- If verify passes, run `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0`.
+- Write and validate `benchmark/test-update-packages-2026-05-19.md`, refresh generated evidence if needed, then commit and push intended changes.
+
+### Execution
+- [x] Step B.1: Confirm benchmark command resolution and harness eligibility.
+- [x] Step B.2: Run verify gate for `update-packages`.
+- [x] Step B.3: Run both-agent benchmark if verify passes.
+- [x] Step B.4: Write and validate the dated benchmark report.
+- [ ] Step B.5: Commit and push intended benchmark/report changes.
+
+### Review
+
+- Command resolution: `$benchmark-test-skill` resolved to `packs/agentic-skills-bench/codex/benchmark-test-skill/SKILL.md`; `update-packages` is the target skill argument.
+- Eligibility: `update-packages` is listed with `coverage=custom` and setup `tests/layer4/setups/tier23-global-workflows.setup.ts`.
+- Verify: `pnpm verify --skill update-packages` passed on 2026-05-19 with layer1 PASS in 3.0s and layer2 SKIP because no target-specific layer2 tests matched `update-packages`.
+- Benchmark: `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` completed with Claude session `f8355f37` and Codex session `1ed5350e`.
+- Results: Claude hard assertions passed 3/3 evaluated runs with no infrastructure blocks, 97.0% output quality, no threshold failures, and one critical quality failure. Codex hard assertions passed 3/3 evaluated runs with no infrastructure blocks, 100.0% output quality, and no quality failures.
+- Report: `benchmark/test-update-packages-2026-05-19.md`.
+- Generated evidence refreshed: `docs/benchmark-results-matrix.md`, `docs/skills-showcase/assets/skills-data.js`, `docs/skills-showcase/assets/github-proof-data.js`, `apps/skills-showcase/public/assets/skills-data.js`, and `apps/skills-showcase/public/assets/github-proof-data.js`.
+- Validation passed: `scripts/validate-skills-showcase-data.sh`; targeted `rg` confirmed report target, agent rows, latency/cost fields, raw session paths, and next route; `git diff --check`.
+- Recommended next skill: `$benchmark-agent-review update-packages`
+
 ## Benchmark: update-packages Fresh Run
 
 **Goal:** Run `$benchmark-test-skill update-packages` for a fresh deterministic benchmark report dated 2026-05-18.
