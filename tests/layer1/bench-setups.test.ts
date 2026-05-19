@@ -3663,6 +3663,14 @@ describe("layer4 setup helpers", () => {
     })).toBe("agent runner connection failure");
 
     expect(classifyInfrastructureBlock({
+      stdout: "API Error: The socket connection was closed unexpectedly. For more information, pass `verbose: true` in the second argument to fetch()",
+      stderr: "Warning: no stdin data received in 3s, proceeding without it.",
+      exitCode: 1,
+      workDir: "/tmp/bench-socket-closed",
+      files: ["npm-view-times.json", "package-lock-note.md", "package.json"],
+    })).toBe("agent runner connection failure");
+
+    expect(classifyInfrastructureBlock({
       stdout: "",
       stderr: [
         "failed to connect to websocket: IO error: failed to lookup address information",

@@ -71,6 +71,28 @@
 - Validation passed: targeted `rg` confirmed required triage report sections, retained socket-close evidence, validation plan, and next route; `git diff --check` passed.
 - Recommended next skill: `$targeted-skill-builder update-packages benchmark socket transport classification`
 
+## Interrupt Task — Targeted Update `update-packages` Socket Transport Classification 2026-05-19
+
+**Goal:** Fix the benchmark harness so live-agent socket-close transport failures are classified as infrastructure-blocked runs instead of evaluated `update-packages` skill failures.
+
+**Plan:**
+- [x] Review relevant lessons, latest triage report, current benchmark runner, and focused layer1 coverage location.
+- [x] Update the benchmark infrastructure classifier for retained socket-close API failures.
+- [x] Add focused layer1 coverage for the retained Claude socket-close failure shape.
+- [x] Run focused and target validation, record results, then commit and push intended changes on `master`.
+
+## Review — Targeted Update `update-packages` Socket Transport Classification 2026-05-19
+
+- Decision: existing benchmark harness update, not a new skill and not an `update-packages` skill-contract change.
+- Evidence used: `tasks/lessons.md`, `benchmark/triage-update-packages-2026-05-19-benchmark-failure.md`, raw retained failure shape from `tests/benchmarks/runs/update-packages-claude-dc9580ca/run-001.json`, `tests/harness/bench-runner.ts`, and `tests/layer1/bench-setups.test.ts`.
+- Evidence intentionally skipped: broad session history, because the latest triage and retained run JSON were sufficient to isolate the classifier gap.
+- Existing-skill overlap: `targeted-skill-builder` owns this narrow harness adjustment; no new skill is needed.
+- Updated `classifyInfrastructureBlock` to classify `socket connection was closed unexpectedly` as `agent runner connection failure`.
+- Added focused layer1 coverage for the retained Claude run shape that exited 1, produced no `package-update-plan.md`, and only reported the socket-close API error.
+- Validation passed: focused layer1 `bench-setups` infrastructure/update-packages tests; `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill update-packages`; targeted `rg`; `git diff --check`.
+- Generated Skills Showcase data was not refreshed because no tracked `SKILL.md`, `PACK.md`, curated benchmark report, or curated review report changed.
+- Recommended next command: `$benchmark-test-skill update-packages`
+
 ## Interrupt Task — Targeted Update `update-packages` Benchmark Infrastructure Classification 2026-05-18
 
 **Goal:** Fix the benchmark harness so live-agent transport failures, API connection failures, and runner timeouts are classified as infrastructure-blocked runs instead of evaluated `update-packages` skill failures.
