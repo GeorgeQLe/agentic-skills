@@ -494,11 +494,12 @@
 
 **Current Baseline:**
 - Benchmark coverage registry validates 156 tracked skills.
-- Persisted evaluated benchmark results currently cover 14 unique skill names.
-- Remaining without evaluated benchmark result rows: 138.
-- Remaining runnable, non-blocked skills: 132.
+- Persisted evaluated benchmark results currently cover 18 unique skill names.
+- Remaining without evaluated benchmark result rows: 134.
+- Remaining runnable, non-blocked skills: 128.
 - Coverage-blocked skills requiring fixture or policy work before execution: `delegate`, `deploy`, `install-agentic-skills`, `patch-exec-profile`, `release`, `uat-guide`.
-- Incomplete-only result needing retry: `affected` has a zero-evaluated-run persisted report and should not count as benchmarked until rerun successfully.
+- `affected` rerun completed 2026-05-19: both agents produced evaluated runs (Claude 0/1, Codex 0/3) with fixture-prompt routing and literal-match issues. See `benchmark/test-affected-2026-05-19.md`.
+- `targeted-skill-builder` benchmarked 2026-05-19: Claude infrastructure-blocked (budget), Codex 0/3 with 92.9% quality but route mismatch. See `benchmark/test-targeted-skill-builder-2026-05-19.md`.
 
 **Scope:**
 - Run `$benchmark-test-skill <skill>` for remaining runnable skills in small batches.
@@ -509,8 +510,8 @@
 
 **Acceptance Criteria:**
 - [ ] A generated or scripted queue identifies remaining skills from `tests/harness/bench-coverage.ts` minus evaluated rows in `docs/benchmark-results-matrix.md`.
-- [ ] Tier 1 remaining skills are benchmarked or explicitly triaged: `feature-interview`, `roadmap`, `ship-end`, `targeted-skill-builder`.
-- [ ] `affected` is rerun because its only persisted report is blocked/incomplete.
+- [x] Tier 1 remaining skills are benchmarked or explicitly triaged: `feature-interview` (graded 2026-05-18), `roadmap` (graded 2026-05-17), `ship-end` (graded 2026-05-18), `targeted-skill-builder` (benchmarked 2026-05-19, Codex graded with route triage needed, Claude budget-blocked).
+- [x] `affected` is rerun: both agents now have evaluated runs (2026-05-19). Fixture-prompt routing and literal-match issues triaged in `benchmark/test-affected-2026-05-19.md`.
 - [ ] Each completed benchmark has a curated report under `benchmark/test-<skill>-<YYYY-MM-DD>.md` and raw paths under `tests/benchmarks/runs/`.
 - [ ] Any failed benchmark is triaged before continuing broad execution if it indicates harness drift, shared setup drift, or skill-contract ambiguity.
 - [ ] `docs/benchmark-results-matrix.md` and Skills Showcase generated data are refreshed after each committed batch.
@@ -526,7 +527,7 @@
 **Subagent lanes:** none
 
 ### Batch Plan
-- [ ] Batch 41.1: Create/verify the remaining-results queue and run the first small batch: `feature-interview`, `ship-end`, `targeted-skill-builder`, and `affected`.
+- [x] Batch 41.1: Create/verify the remaining-results queue and run the first small batch: `feature-interview`, `ship-end`, `targeted-skill-builder`, and `affected`.
   - Classification: automated
   - Files: update benchmark reports under `benchmark/`, raw run outputs under `tests/benchmarks/runs/`, generated benchmark/showcase data, and task/history docs as results require.
   - Implementation plan:
@@ -555,6 +556,12 @@
 - Generated evidence refreshed and validated: `docs/benchmark-results-matrix.md`, `docs/skills-showcase/assets/skills-data.js`, `docs/skills-showcase/assets/github-proof-data.js`, `apps/skills-showcase/public/assets/skills-data.js`, and `apps/skills-showcase/public/assets/github-proof-data.js`.
 - Validation passed: `pnpm bench --list-skills`; `pnpm verify --skill ship-end`; `pnpm bench --skill ship-end --agent both --runs 3 --chunk-size 3 --pause 0`; `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests bench:coverage`.
 - Recommended next command: `$session-triage ship-end benchmark failure`.
+- Batch 41.1 resumed 2026-05-19 with `targeted-skill-builder` and `affected` benchmarks.
+- `targeted-skill-builder` verify passed (layer1 PASS 3.0s, layer2 SKIP). Benchmark: Claude all 3 runs infrastructure-blocked (budget exceeded at $0.25/run); Codex 0/3 pass rate, 92.9% quality, route mismatch (`$targeted-skill-builder` instead of `$run`). Report: `benchmark/test-targeted-skill-builder-2026-05-19.md`.
+- `affected` verify passed (layer1 PASS 3.3s, layer2 SKIP). Benchmark: Claude 0/1 evaluated (2 blocked), 68.2% quality; Codex 0/3, 40.9% quality. Both fail on route (`pnpm --filter` instead of `$run`) and Codex misses literal "affected packages" string. Report: `benchmark/test-affected-2026-05-19.md`.
+- Generated data refreshed: `docs/benchmark-results-matrix.md` now has 34 graded + 11 incomplete rows covering 18 unique skill names.
+- Validation passed: `pnpm --dir tests bench:coverage` (156 skills), `git diff --check` clean.
+- Batch 41.1 complete. Both new skills have fixture-prompt triage items before hard pass rates improve. Next: Batch 41.2 (`roadmap` triage) or Batch 41.3 (Tier 2 global skills).
 - Triage completed in `benchmark/triage-ship-end-2026-05-18-benchmark-failure.md`: verified split root cause. The benchmark setup incorrectly expects `$run` for Claude even though the Claude `ship-end` contract uses `/run`, and the prompt does not force fixture-grounded runner-native routing. Recommended next command: `$targeted-skill-builder ship-end benchmark runner route and fixture source-of-truth`.
 
 ### Ship-End Benchmark Failure Triage Manifest
