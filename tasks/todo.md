@@ -6,6 +6,30 @@
 **Total phases:** 42
 **Last completed phase:** Phase 42 — Workflow Persistent Transcript Refinement
 
+## Interrupt Task — Benchmark `update-packages` Fresh Run 2026-05-18
+
+**Goal:** Run `$benchmark-test-skill update-packages` against the current repository state and publish fresh deterministic both-agent benchmark evidence.
+
+**Plan:**
+- [x] Confirm `benchmark-test-skill` is the active workflow and `update-packages` is only the benchmark target.
+- [x] Run `pnpm bench --list-skills` from `tests/` and confirm `update-packages` is known, not blocked, and note its coverage status.
+- [x] Run `pnpm verify --skill update-packages`; stop without benchmarking if verify fails.
+- [x] Run `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` only after verify passes.
+- [x] Write and validate `benchmark/test-update-packages-2026-05-18.md`, refresh generated evidence if needed, update this review section, then commit and push intended changes.
+
+## Review — Benchmark `update-packages` Fresh Run 2026-05-18
+
+- Command resolution: `$benchmark-test-skill` resolved to `packs/agentic-skills-bench/codex/benchmark-test-skill/SKILL.md`; `update-packages` is the target skill argument.
+- Eligibility: `update-packages` is listed with `coverage=custom` and setup `tests/layer4/setups/tier23-global-workflows.setup.ts`.
+- Verify gate: `pnpm --dir tests verify --skill update-packages` passed on 2026-05-18 with layer1 PASS in 3.6s and layer2 SKIP because no target-specific layer2 tests matched.
+- Benchmark: `pnpm --dir tests bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` completed on 2026-05-18 with Claude session `5adfd816` and Codex session `06adb3a6`.
+- Results: Claude hard assertions passed 1/3 evaluated runs with no infrastructure-blocked runs, 43.9% output quality, 2 threshold failures, and 16 critical failures; Codex hard assertions passed 0/3 evaluated runs with no blocked runs, 63.6% output quality, 3 threshold failures, and 12 critical failures.
+- Failed assertions: Claude runs 1 and 2 failed command-exit and `package-update-plan.md` artifact assertions; Codex runs 0 and 1 failed `package-update-plan.md` artifact assertions, and Codex run 2 also failed command exit.
+- Report updated: `benchmark/test-update-packages-2026-05-18.md`.
+- Generated evidence refreshed: `docs/benchmark-results-matrix.md`, `docs/skills-showcase/assets/skills-data.js`, `docs/skills-showcase/assets/github-proof-data.js`, `apps/skills-showcase/public/assets/skills-data.js`, and `apps/skills-showcase/public/assets/github-proof-data.js`.
+- Validation passed: `pnpm --dir tests bench --list-skills`; `pnpm --dir tests verify --skill update-packages`; `pnpm --dir tests bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0`; `pnpm --dir tests bench:coverage`; `scripts/validate-skills-showcase-data.sh`; targeted `rg` confirmed report fields, raw session paths, latency, cost, and next route; `git diff --check`.
+- Recommended next skill: `$session-triage update-packages benchmark failure`
+
 ## Interrupt Task — Workflow Demo User-Goal and Run Excerpts 2026-05-18
 
 **Goal:** Refine `/workflows` demo turns so each scenario starts from a concrete user goal and benchmark-backed turns show realistic retained run excerpts instead of only generic curated text.
