@@ -1,20 +1,20 @@
 ---
-name: ux-variation
+name: ux-variations
 description: Interview and plan multiple UX and UI variations for a product, page, or flow, including onboarding, typical workflows, sharing, collaboration, return use, and interface alternatives users can compare before locking a direction — and concrete visual/layout UI variations with UAT before consolidation
 type: planning
 version: 1.0.0
 argument-hint: "[optional: app, page, flow, feature, or existing UI spec]"
 ---
 
-# UX Variation
+# UX Variations
 
-Invoke as `$ux-variation`.
+Invoke as `$ux-variations`.
 
 Use this skill when the user wants to explore multiple UX/UI directions before committing to a final experience. This skill interrogates the full user journey: onboarding, first success, typical workflows, sharing and collaboration, return use, notifications, handoffs, failure recovery, and the interface patterns that support those moments. It then creates variation plans for flows, layouts, navigation models, interaction patterns, component choices, content density, visual tone, and behavior so the user can compare, test, and lock one direction.
 
 Use `$ui-interview` first when the interface has not yet been specified page by page. Use this skill directly when a UI spec, current implementation, screenshot, prototype, or clear feature scope already exists.
 
-When invoked with `--layout-mode` (or when the user says "layout mode", "layout variations", or "UI variations"), this skill operates at the concrete component/layout level — it varies HOW the same content is presented visually, not WHAT the user flow is. Layout-mode takes a fixed content contract from `specs/ui-requirements-[topic].md` or equivalent and generates 2-5 concrete visual/spatial approaches. Each variation must be specified well enough to build as a lightweight implementation, then evaluated through `$uat --variant-evaluation` before `$ui-consolidate`.
+When invoked with `--layout-mode` (or when the user says "layout mode", "layout variations", or "UI variations"), this skill operates at the concrete component/layout level — it varies HOW the same content is presented visually, not WHAT the user flow is. Layout-mode takes a fixed content contract from `specs/ui-requirements-[topic].md` or equivalent and generates 2-5 concrete visual/spatial approaches. Each variation must be specified well enough to build as a lightweight implementation, then evaluated through `$uat --variant-evaluation` before `$consolidate-variations`.
 
 ## Workflow
 
@@ -182,7 +182,7 @@ When invoked with `--layout-mode` (or when the user says "layout mode", "layout 
 8. **Plan experimentation**
    - Recommend serial full buildout of all approved variants when the user is using layout-mode or explicitly wants to compare built interfaces. Do not recommend building a subset first unless the user asks for a smaller experiment.
    - For prototype-stage product or feature work, prefer numerous small route-based experiments over one merged prototype when multiple workflows, layouts, densities, copy approaches, navigation models, or interaction patterns remain plausible. Name the route for each experiment, such as `/experiments/table-first`, `/experiments/command-first`, or the project's equivalent, and keep shared production infrastructure out of those routes unless explicitly approved.
-   - After variants are built, recommend `$uat --variant-evaluation` before `$ui-consolidate`. Consolidation is premature until evaluation evidence exists or the user explicitly says they reviewed the variants and is ready to converge.
+   - After variants are built, recommend `$uat --variant-evaluation` before `$consolidate-variations`. Consolidation is premature until evaluation evidence exists or the user explicitly says they reviewed the variants and is ready to converge.
    - Define the cheapest useful validation method:
      - Static mockups for visual direction
      - Clickable prototype for navigation and flow
@@ -197,7 +197,7 @@ When invoked with `--layout-mode` (or when the user says "layout mode", "layout 
      - Side-by-side comparison questions
      - Evidence to capture
      - Tradeoffs to notice
-     - Readiness criteria for `$ui-consolidate`
+     - Readiness criteria for `$consolidate-variations`
 
 9. **Coverage checkpoint**
    - Before concluding, summarize the variants, the decision criteria, and the proposed experiment plan.
@@ -207,6 +207,12 @@ When invoked with `--layout-mode` (or when the user says "layout mode", "layout 
 
 - Write the variation plan to `specs/ux-variations-[topic].md`.
 - Write the interview log to `ux-variations-[topic]-interview.md`.
+
+### Alignment Page
+
+After writing deliverables, build a custom HTML alignment page at `docs/alignment/ux-variations-{topic}.html` and open it in the browser. The page should visualize the variation concepts, comparison matrix, and decision criteria in a format tailored to the specific variations produced. Archive any previous alignment page at that path first.
+
+Do not use a shared template or CSS framework — craft the page to fit the situation. The alignment page is a one-off communication artifact, not a reusable component.
 
 In layout-mode, write `specs/ui-layout-variations-[topic].md` and `ui-layout-variations-[topic]-interview.md`.
 
@@ -285,9 +291,9 @@ In layout-mode, use this variation format instead:
 - Complexity: Low | Medium | High
 ```
 
-After writing files in layout-mode, recommend `$run` to build each variation as a lightweight implementation, then `$uat --variant-evaluation` to guide hands-on review. Do not recommend `$ui-consolidate` until evaluation evidence exists or the user explicitly says they have reviewed variants and are ready to converge.
+After writing files in layout-mode, recommend `$run` to build each variation as a lightweight implementation, then `$uat --variant-evaluation` to guide hands-on review. Do not recommend `$consolidate-variations` until evaluation evidence exists or the user explicitly says they have reviewed variants and are ready to converge.
 
-After writing files in standard mode, recommend `$run` or `$roadmap` if the next step is building variants, `$uat` if humans should evaluate acceptance, or `$ui-interview` if the winning direction still lacks implementation-ready interface detail.
+After writing files in standard mode, recommend `$ui-interview` per variation to deepen interface detail, then `$prototype` to build each variation.
 
 ## Constraints
 
@@ -295,7 +301,7 @@ After writing files in standard mode, recommend `$run` or `$roadmap` if the next
 - Do not choose a winner for the user unless the evidence clearly supports it and the user asked for a recommendation.
 - Do not defer all decisions to testing. State a recommended variant or experiment when evidence is sufficient.
 - Do not ignore implementation cost. A compelling variation still needs a prototype path and selection criteria.
-- Do not route directly from built UI variants to `$ui-consolidate`; insert `$uat --variant-evaluation` unless the user explicitly confirms they have already evaluated the variants.
+- Do not route directly from built UI variants to `$consolidate-variations`; insert `$uat --variant-evaluation` unless the user explicitly confirms they have already evaluated the variants.
 - Do not enforce shared design constraints across variations. Each variation independently decides layout, density, color, navigation, and component choices. Only technical stack is shared unless the user explicitly locks a shared constraint.
 
 ## Archive-First Replacement Policy

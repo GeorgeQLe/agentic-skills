@@ -20,7 +20,7 @@ UAT is not dogfooding. Dogfood asks how the app owner can adopt the product into
 
 This is a human-run acceptance plan, not automated testing. Do not start servers, drive browsers, call APIs, create accounts, or perform the scenarios yourself.
 
-When invoked with `--variant-evaluation` (or when the user asks to test/review UI variants), create a hands-on evaluation plan for built UX/UI variants before `/ui-consolidate`. This mode helps the user try each variant in a comparable way and capture enough evidence to form a defensible consolidation opinion.
+When invoked with `--variant-evaluation` (or when the user asks to test/review UI variants), create a hands-on evaluation plan for built UX/UI variants before `/consolidate-variations`. This mode helps the user try each variant in a comparable way and capture enough evidence to form a defensible consolidation opinion.
 
 ## Workflow
 
@@ -46,9 +46,9 @@ When invoked with `--variant-evaluation` (or when the user asks to test/review U
    - Read `specs/ui-layout-variations-[topic].md`, `specs/ux-variations-[topic].md`, `specs/ui-requirements-[topic].md`, built variant routes/components, and any existing `research/uat-variant-evaluation-[topic].md`.
    - Identify each variant, its intended thesis, implementation location, and the target user task it should support.
    - Create comparable journeys that make the user perform the same core task in every variant, then capture variant-specific strengths, friction, confidence, and rejection signals.
-   - Include a side-by-side comparison matrix and a "Ready for `/ui-consolidate`?" checklist.
+   - Include a side-by-side comparison matrix and a "Ready for `/consolidate-variations`?" checklist.
    - Human execution still belongs in `tasks/manual-todo.md`; this skill writes the plan and manual tasks, but does not run the variants.
-   - After writing files, recommend `/ui-consolidate` only as the next step after the manual evaluation tasks are completed or when the user explicitly says they have already evaluated the variants.
+   - After writing files, recommend `/consolidate-variations` only as the next step after the manual evaluation tasks are completed or when the user explicitly says they have already evaluated the variants.
    - Stop after this branch. Do not generate generic target-user acceptance journeys unless the user also requested them.
 
 3. **Define acceptance perspective**
@@ -162,7 +162,7 @@ Use this variant evaluation format in `research/uat-variant-evaluation-[topic].m
 | Dimension | Variant A | Variant B | Variant C | Current preference | Evidence |
 |---|---|---|---|---|---|
 
-### Ready for `/ui-consolidate`?
+### Ready for `/consolidate-variations`?
 
 - [ ] Every built variant has been tried or explicitly skipped.
 - [ ] Evidence exists for each kept/rejected design element.
@@ -192,7 +192,7 @@ Use this item format in `tasks/manual-todo.md`:
 - Do not run or operate the product in this skill.
 - Do not start dev servers, launch browsers, use Playwright, call APIs, create accounts, or perform CLI workflows.
 - Do not mark journeys complete; only a human tester can do that after performing them.
-- Do not recommend `/ui-consolidate` before variant evaluation evidence exists, unless the user explicitly confirms they have already reviewed the variants and are ready to converge.
+- Do not recommend `/consolidate-variations` before variant evaluation evidence exists, unless the user explicitly confirms they have already reviewed the variants and are ready to converge.
 - Do not duplicate existing unchecked UAT or manual tasks. Reference existing items when they already cover the same journey.
 - Prefer evidence-backed target-user journeys over exhaustive feature coverage.
 - Keep dogfood and UAT separate: use `/dogfood` for owner/operator adoption into the builder's workflow; use `/uat` for target-user acceptance journeys.

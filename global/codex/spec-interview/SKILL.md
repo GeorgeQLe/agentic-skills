@@ -1,6 +1,6 @@
 ---
 name: spec-interview
-description: Interview to validate and complete a specification
+description: Post-prototype production deep dive — walks through consolidated prototype screen by screen to extract production specifications
 type: planning
 version: 1.0.0
 argument-hint: "[--ideas]"
@@ -10,55 +10,75 @@ argument-hint: "[--ideas]"
 
 Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
+## Prototype Gate
+
+Before starting the interview process, verify:
+
+1. A consolidated prototype exists at `prototypes/{topic}/consolidated/`. If missing, halt and recommend `$consolidate-variations` first.
+2. All research tasks from the `--post-prototype` pass are completed — check `tasks/todo.md` for unchecked items under `## Priority Documentation Todo` that reference post-prototype research. If unchecked post-prototype items remain, halt and recommend completing those first.
+
+If both gates pass, proceed with the interview.
+
 # Spec Interview
 
 Invoke as `$spec-interview`.
 
-Use this skill when the user has a concept brief, research-backed opportunity, draft spec, or feature description that needs to be turned into a complete implementation specification. For half-formed product ideas, run `$concept-exploration` before this skill.
+Use this skill when the user has a consolidated prototype and research context that needs to be turned into a complete production implementation specification. For half-formed product ideas, run `$concept-exploration` before this skill.
 
 ## Workflow
 
-1. Check `.agents/project.json` first. If it exists, use `project_type` and `enabled_packs` to choose the right research frame:
-   - `business-app` → use business research artifacts such as `research/icp.md`.
-   - `game` → use game artifacts such as `research/game-audience.md`, `research/game-fantasy.md`, and `research/game-core-loop.md`.
-   - `devtool` → use devtool artifacts such as `research/devtool-user-map.md`, `research/devtool-dx-journey.md`, and `research/devtool-integration-map.md`.
-   If project type is missing or mismatched, recommend `$pack recommend` or `$pack install <pack>` before doing domain-specific planning.
-2. For business-app projects, check if `research/concept-brief.md`, `research/icp.md`, and `research/journey-map.md` exist. Read them as source evidence — ground implementation decisions against the concept constraints, ICP, user journey, customer journey, technical sophistication, customer provisioning model, path to aha, conversion path, retention loop, and champion dynamics. If lifecycle evidence is missing and the `customer-lifecycle` pack is not enabled, recommend `$pack install customer-lifecycle` before `$journey-map`. Flag conflicts (e.g., "Journey map says the buyer needs a demo before sign-up — does this self-serve-only onboarding fit?"). Do not re-interview on concept, ICP, or journey topics already covered.
-3. Treat the existing spec or prompt as a draft, not a final decision record.
-4. **Surface a lightweight assumptions checkpoint before probing:**
-   - After reading the draft/prompt and research context but **before** asking deep probing questions, present a concise **Assumptions Checkpoint** — the few assumptions most likely to affect implementation direction.
+1. **Read consolidated prototype and research context:**
+   - Read the consolidated prototype directory at `prototypes/{topic}/consolidated/` as the primary input. Walk through every screen, component, and interaction in the prototype to understand the current state.
+   - Check `.agents/project.json` first. If it exists, use `project_type` and `enabled_packs` to choose the right research frame:
+     - `business-app` → use business research artifacts such as `research/icp.md`.
+     - `game` → use game artifacts such as `research/game-audience.md`, `research/game-fantasy.md`, and `research/game-core-loop.md`.
+     - `devtool` → use devtool artifacts such as `research/devtool-user-map.md`, `research/devtool-dx-journey.md`, and `research/devtool-integration-map.md`.
+   - If project type is missing or mismatched, recommend `$pack recommend` or `$pack install <pack>` before doing domain-specific planning.
+   - For business-app projects, check if `research/concept-brief.md`, `research/icp.md`, and `research/journey-map.md` exist. Read them as source evidence — ground implementation decisions against the concept constraints, ICP, user journey, customer journey, technical sophistication, customer provisioning model, path to aha, conversion path, retention loop, and champion dynamics. If lifecycle evidence is missing and the `customer-lifecycle` pack is not enabled, recommend `$pack install customer-lifecycle` before `$journey-map`. Flag conflicts (e.g., "Journey map says the buyer needs a demo before sign-up — does this self-serve-only onboarding fit?"). Do not re-interview on concept, ICP, or journey topics already covered.
+
+2. **Surface a prototype-grounded assumptions checkpoint before probing:**
+   - After reading the consolidated prototype and research context but **before** asking deep probing questions, present a concise **Assumptions Checkpoint** grounded in what the prototype reveals.
    - Tag each assumption with its source:
      - `[from spec]` — explicitly stated in the draft or spec document
      - `[from codebase]` — derived from reading existing code, config, or infrastructure
      - `[from research]` — derived from research docs (ICP, audience, journey maps)
+     - `[from prototype]` — derived from the consolidated prototype
      - `[inferred]` — not stated anywhere; you filled in a default or made a judgment call
    - Keep the checkpoint short enough to preserve interview momentum: normally 3 to 7 bullets, grouped only when useful. Do not dump a comprehensive manifest unless the user explicitly asks to review assumptions first.
    - Bias the checkpoint toward assumptions that are uncertain, risky, contradicted by evidence, or likely to change data/API/architecture choices. Omit obvious restatements that can be captured later in the spec.
-   - Consider these categories while selecting the checkpoint items, but do not force every category into the first turn:
-     - **Source context**: concept, ICP, journey, and spec inputs being used as product evidence
-     - **Implementation goal**: what concrete capability this spec will make buildable
-     - **Technical foundation**: stack, hosting, deployment model, existing infra to preserve or replace
-     - **Integration risk**: whether this work touches, replaces, or coexists with existing features — and what breaks if the assumption is wrong
-     - **Data model**: what persists, what's ephemeral, migration path from current state
-     - **API and contract surface**: routes, events, SDKs, schemas, external integrations, or CLI contracts
-     - **Operational requirements**: security, privacy, permissions, performance, observability, and failure handling
-     - **Prototype-first gate** for new user-facing product, SaaS, marketplace, dashboard, internal tool, product-experience work, or substantial new feature work: whether the first useful artifact is one clickable prototype or multiple route-based experiments with fake, fixture, or in-memory data, and which infrastructure is intentionally deferred.
+   - Focus the checkpoint on what the prototype assumes vs what production needs:
+     - What the prototype assumes about **data model** — what's fake/fixture vs what needs real persistence
+     - What the prototype assumes about **auth** — none? mock? real?
+     - What **fake data needs to become real** — hardcoded lists, mock APIs, placeholder content
+     - What **missing infrastructure** is needed — database, auth, payments, analytics, deployment
+     - What **error/empty states** the prototype skips vs what production needs
    - Immediately follow the checkpoint with one focused interview question. Do not stop at the assumptions checkpoint unless the user explicitly asks to pause and review assumptions first.
    - If any `[inferred]` assumption is corrected, note the correction — these corrections are high-signal for downstream risk and must appear in the interview log.
-5. Interview the user in depth to validate assumptions, resolve ambiguities, and close gaps.
-6. Codex interview cadence: ask one primary decision question per turn by default. Use short follow-up bullets only when they clarify the same decision, not to batch unrelated questions.
-7. If the session is already in Plan mode, `request_user_input` may present 2-3 real options for the current material decision. Otherwise ask one concise direct question in plain text.
-8. **Research and recommend by default.** Use web search, upstream research docs, and codebase analysis to gather evidence before asking the user. Assume the user has no insider knowledge unless they explicitly provide it. Present findings with data, define relevant terms, state a recommendation with reasoning, and ask the user to approve, adjust, or override based on hard constraints, proprietary facts, or corrections. Only present options without a recommendation when internal constraints, preferences, or missing facts make evidence insufficient. For each real choice:
-   - Explain the options with evidence
-   - Give a brief pros and cons comparison
-   - State a recommendation and why
-   - Explain how to mitigate the recommended option's downside when useful
-9. Continue until implementation goals, architecture, data models, APIs/contracts, migrations, edge cases, security, performance, observability, test strategy, and scope boundaries are all covered.
-   - For new user-facing product or substantial feature work, establish a separate prototype/experiment stage before production architecture. Prefer `Prototype Phase 0` in the spec when the roadmap can support it, and do not combine prototype experiments, calibration, and production infrastructure in one implementation phase unless the user explicitly asks for a constrained spike.
-   - Default prototype work to fixture/static/in-memory data and no auth, payments, analytics, persistent database, admin tooling, deployment, multi-tenancy, or production observability unless the user explicitly opts in or the core prototype cannot be tested without it.
-   - When there are multiple plausible workflows, layouts, density choices, information architectures, or interaction models, specify numerous small experiments on separate routes such as `/experiments/<variant>` or project-native equivalents. Each route should name the hypothesis it tests and the evidence needed before consolidation.
-   - Capture a taste-calibration checkpoint in the spec: what users can click, what felt right or wrong after trying it, which workflow assumption the prototype tests, and the smallest infrastructure decision that would be justified after one accepted journey.
-10. **Coverage checkpoint** — Before concluding, present a structured summary: list each area covered with key decisions made and the evidence/reasoning that supported each. Ask: "Does this cover everything? Any constraints, missing facts, or areas to revisit?"
+
+3. **Screen-by-screen prototype walkthrough:**
+   - Walk through each screen/page in the consolidated prototype. For each screen, probe:
+     - **Data model?** What entities, relationships, persistence does this screen need?
+     - **API calls?** What endpoints, payloads, error responses?
+     - **Auth?** What permissions, roles, access control apply to this screen?
+     - **Empty/error states?** What happens when data is missing, requests fail, or the user has no content yet?
+     - **Performance?** Loading states, pagination, caching needs?
+     - **Analytics?** What events should be tracked on this screen?
+   - Codex interview cadence: ask one primary decision question per turn by default. Use short follow-up bullets only when they clarify the same decision, not to batch unrelated questions.
+   - If the session is already in Plan mode, `request_user_input` may present 2-3 real options for the current material decision. Otherwise ask one concise direct question in plain text.
+   - **Research and recommend by default.** Use web search, upstream research docs, and codebase analysis to gather evidence before asking the user. Assume the user has no insider knowledge unless they explicitly provide it. Present findings with data, define relevant terms, state a recommendation with reasoning, and ask the user to approve, adjust, or override based on hard constraints, proprietary facts, or corrections. Only present options without a recommendation when internal constraints, preferences, or missing facts make evidence insufficient. For each real choice:
+     - Explain the options with evidence
+     - Give a brief pros and cons comparison
+     - State a recommendation and why
+     - Explain how to mitigate the recommended option's downside when useful
+
+4. **Iterative prototype updates:**
+   - When the interview reveals gaps in the prototype (missing screens, unclear flows, absent states), ask: "Should I update the prototype to add [gap]? This may warrant re-running upstream steps."
+   - The user decides per-update whether to update the prototype now or note it for production implementation only.
+   - If the user approves a prototype update, make the change and note it in the interview log before continuing.
+
+5. **Cover all areas:**
+   - Continue until implementation goals, architecture, data models, APIs/contracts, migrations, edge cases, security, performance, observability, test strategy, and scope boundaries are all covered.
+   - **Coverage checkpoint** — Before concluding, present a structured summary: list each area covered with key decisions made and the evidence/reasoning that supported each. Ask: "Does this cover everything? Any constraints, missing facts, or areas to revisit?"
 
 ## Deliverables
 
@@ -74,7 +94,6 @@ Use this skill when the user has a concept brief, research-backed opportunity, d
   - `## Open Questions`
   - `## Assumptions & Risks` (the checkpoint output)
   Additional topic-specific sections (e.g. `## Data Model`, `## Security`) may appear between Detailed Design and Edge Cases. Do not number sections.
-  For new user-facing product or substantial feature work, include the prototype-first decision in `## Goals`, `## Non-Goals`, `## Detailed Design`, and `## Acceptance Criteria`: separate prototype/experiment phase scope, experiment route map when multiple variants are useful, fake/fixture data boundary, deferred infrastructure list, calibration/consolidation criteria, and promotion criteria for any later database/auth/payment/analytics/deployment work.
 - Write an interview log to `[topic]-interview.md`
 
 The interview log should include:
@@ -87,11 +106,17 @@ The interview log should include:
 
 Append an **Assumptions & Risks** section to the end of the spec listing: each checkpoint assumption that was confirmed, corrected, or left unresolved during the interview, its source tag, and the downstream risk if the assumption turns out to be wrong later. Flag any `[inferred]` assumptions that were never explicitly confirmed by the user.
 
-After writing the files, tell the user the next step based on available context: for user-facing work with no journey map, run `$journey-map`; for user-facing work with a journey map but no experience variants, run `$ux-variation`; for user-facing work with a chosen experience plan but no UI spec, run `$ui-interview`; otherwise run `$roadmap` to sequence specs into phases and seed Phase 1 implementation. Treat `$roadmap` as the default next route after a completed or updated spec unless a missing research/design gate is clearly higher priority. Do not invoke the next skill automatically — the user may want to run multiple planning sessions first.
+### Alignment Page
 
-If the interview identifies follow-up work that is itself a named skill, recommend invoking that skill directly instead of phrasing it as another `$spec-interview` run. For example: say "run `$icp` and `$monetization`, then `$roadmap`" rather than "run `$spec-interview` for `$icp` and `$monetization`." This applies to research and planning skills such as `$icp`, `$monetization`, `$metrics`, `$positioning`, and `$competitive-analysis`.
+After writing deliverables, build a custom HTML alignment page at `docs/alignment/spec-interview-{topic}.html` and open it in the browser. The page should visualize the spec's architecture, data model, API surface, and key decisions in a format tailored to the specific spec produced. Archive any previous alignment page at that path first.
+
+Do not use a shared template or CSS framework — craft the page to fit the situation.
 
 ## Next-Step Routing
+
+After writing the files, tell the user the next step based on available context: if research artifacts are stale or missing, run `$research-roadmap --post-spec`; otherwise run `$roadmap` to sequence specs into phases and seed Phase 1 implementation. Treat `$research-roadmap --post-spec` as the primary next route after a completed or updated spec when research gaps exist, and `$roadmap` as the default when research is current. Do not invoke the next skill automatically — the user may want to run multiple planning sessions first.
+
+If the interview identifies follow-up work that is itself a named skill, recommend invoking that skill directly instead of phrasing it as another `$spec-interview` run. For example: say "run `$icp` and `$monetization`, then `$roadmap`" rather than "run `$spec-interview` for `$icp` and `$monetization`." This applies to research and planning skills such as `$icp`, `$monetization`, `$metrics`, `$positioning`, and `$competitive-analysis`.
 
 Before handing back, identify the next concrete work item from project state, then recommend the executor and invocation.
 
@@ -102,7 +127,7 @@ Output exactly two lines beyond the normal report:
 
 Rules:
 
-- Make the next work item primary. For user-facing completed specs, prefer missing journey, UX variation, and UI interview work before roadmap. If follow-up research skills were identified, name those first. Use roadmap only when product, journey, UX, and UI planning are complete enough for implementation sequencing or the work has no meaningful human-facing interface.
+- Make the next work item primary. If follow-up research skills were identified, name those first. Use `$research-roadmap --post-spec` when research gaps were surfaced during the interview. Use `$roadmap` when research is current and the spec is ready for implementation sequencing.
 - Use `./scripts/agent-mode.sh` only to choose command text. If it is missing, unset, or non-zero, infer routing from the current invocation and task type instead of asking the user to select a mode by default.
 - Inference defaults:
   - Codex skill invocation (`$spec-interview`, `$roadmap`) → recommend the matching `$...` command.

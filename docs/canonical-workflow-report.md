@@ -89,8 +89,9 @@ Not every project has every file. Missing files route the workflow:
 - No concept brief, no ICP, and no specs in an idea-only project: run `concept-exploration`.
 - No journey map: run `journey-map` after ICP/competitive context.
 - No specs: run `spec-interview` after journey context.
-- Specs but no UX/UI planning: run `ux-variation`, then `ui-interview`.
-- Specs plus UX/UI planning but no roadmap: run `roadmap`.
+- Specs but no UX/UI planning: run `ux-variations`, then `ui-interview`, then `prototype`.
+- UX/UI planning but no prototype: run `prototype`, then `uat --variant-evaluation`, then `consolidate-variations`, then `research-roadmap --post-prototype`, then `spec-interview`, then `research-roadmap --post-spec`.
+- Specs plus UX/UI/prototype planning but no roadmap: run `roadmap`.
 - Roadmap but no executable current phase: run `plan-phase`.
 - Current phase with unchecked steps: run `run`.
 - Finished work or dirty tree: run `ship`.
@@ -129,7 +130,7 @@ The state machine is:
 | State | Condition | Canonical behavior |
 | --- | --- | --- |
 | No specs | no `specs/` and no `spec.md` | queue `spec-interview` after required journey context |
-| Specs, missing design gate | user-facing specs exist, but journey, UX variation, or UI spec is missing | queue `journey-map`, `ux-variation`, or `ui-interview` |
+| Specs, missing design gate | user-facing specs exist, but journey, UX variation, UI spec, or prototype is missing | queue `journey-map`, `ux-variations`, `ui-interview`, or `prototype` |
 | Specs, no roadmap | specs and required design planning exist, no usable `tasks/roadmap.md` | interview and write roadmap |
 | Work in progress | roadmap exists with unchecked phases | classify pipeline issues |
 | All complete | all phases checked | queue `research-roadmap` |
@@ -180,9 +181,14 @@ Claude:
 /monetization
 /gtm
 /growth-model
-/spec-interview
-/ux-variation
+/ux-variations
 /ui-interview
+/prototype
+/uat --variant-evaluation
+/consolidate-variations
+/research-roadmap --post-prototype
+/spec-interview
+/research-roadmap --post-spec
 /roadmap
 /run
 /ship
@@ -206,9 +212,14 @@ $metrics
 $monetization
 $gtm
 $growth-model
-$spec-interview
-$ux-variation
+$ux-variations
 $ui-interview
+$prototype
+$uat --variant-evaluation
+$consolidate-variations
+$research-roadmap --post-prototype
+$spec-interview
+$research-roadmap --post-spec
 $roadmap
 $run
 $ship-end
@@ -232,9 +243,14 @@ scripts/pack.sh set-mode hybrid
 /monetization
 /gtm
 /growth-model
-/spec-interview
-/ux-variation
+/ux-variations
 /ui-interview
+/prototype
+/uat --variant-evaluation
+/consolidate-variations
+/research-roadmap --post-prototype
+/spec-interview
+/research-roadmap --post-spec
 /roadmap
 /delegate $run
 /ship-end
@@ -246,9 +262,14 @@ Canonical behavior:
 1. `concept-exploration` turns the raw idea into `research/concept-brief.md`.
 2. `pack` designates the project type and installs local pack skills. For business/product concepts, install `business-discovery`.
 3. Business-app research runs `icp`, `competitive-analysis`, `value-prop-canvas`, `positioning`, `lean-canvas`, then `journey-map` (with optional `hook-model` for consumer/PLG), followed by `metrics`, `monetization`, `gtm`, and `growth-model` so the customer lifecycle and business model are known before specs.
-4. `spec-interview` turns the journey-backed opportunity into a decision-complete implementation spec under `specs/`.
-5. For user-facing work, `ux-variation` compares experience directions and `ui-interview` locks buildable interface detail.
-6. `roadmap` sequences specs into phases and seeds Phase 1 with `plan-phase`.
+4. For user-facing work, `ux-variations` compares experience directions and `ui-interview` locks buildable interface detail per variation.
+5. `prototype` builds tangible, runnable prototypes from the UX variation and UI specs.
+6. `uat --variant-evaluation` validates built variants with acceptance criteria and evidence capture.
+7. `consolidate-variations` converges evaluated variants into a final implementation-ready UI spec.
+8. `research-roadmap --post-prototype` updates research and documentation health after prototype evidence.
+9. `spec-interview` turns the consolidated prototype into a decision-complete implementation spec under `specs/`.
+10. `research-roadmap --post-spec` updates research health after spec completion.
+11. `roadmap` sequences specs into phases and seeds Phase 1 with `plan-phase`.
 7. Execution proceeds through the mode-specific loop.
 
 Do not skip `concept-exploration`, `journey-map`, or `spec-interview` for non-trivial user-facing ideas. The current workflow assumes a concept brief, journey context, and specs are the boundary between raw ideation and implementation planning.
@@ -590,13 +611,13 @@ Am I switching sessions or CLIs?
 The canonical workflow is now:
 
 ```text
-concept-exploration -> pack -> icp -> competitive-analysis -> value-prop-canvas -> positioning -> lean-canvas -> journey-map -> hook-model -> metrics -> monetization -> gtm -> growth-model -> spec-interview -> ux-variation -> ui-interview -> roadmap -> plan-phase -> run/delegate -> ship -> ship-end -> pmf-assessment (post-launch)
+concept-exploration -> pack -> icp -> competitive-analysis -> value-prop-canvas -> positioning -> lean-canvas -> journey-map -> hook-model -> metrics -> monetization -> gtm -> growth-model -> ux-variations -> ui-interview -> prototype -> uat --variant-evaluation -> consolidate-variations -> research-roadmap --post-prototype -> spec-interview -> research-roadmap --post-spec -> roadmap -> plan-phase -> run/delegate -> ship -> ship-end -> pmf-assessment
 ```
 
 For UI layout variation work, the variant-specific path is:
 
 ```text
-ui-interview --requirements-only -> ux-variation --layout-mode -> run/delegate to build variants -> uat --variant-evaluation -> ui-consolidate -> design-system or roadmap/run
+ui-interview --requirements-only -> ux-variations --layout-mode -> run/delegate to build variants -> prototype -> uat --variant-evaluation -> consolidate-variations -> design-system or roadmap/run
 ```
 
 with three valid execution modes:

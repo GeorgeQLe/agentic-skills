@@ -10,13 +10,13 @@ argument-hint: "[spec path | --scan | --update]"
 
 Invoke as `/design-system`.
 
-Use this skill after `/ui-consolidate` to lock design decisions into machine-readable tokens before implementation begins. It bridges the gap between prose UI specs and code — without it, agents interpret "dark surface with primary accent" differently each session, causing UI consistency drift.
+Use this skill after `/consolidate-variations` to lock design decisions into machine-readable tokens before implementation begins. It bridges the gap between prose UI specs and code — without it, agents interpret "dark surface with primary accent" differently each session, causing UI consistency drift.
 
 Also use this skill retroactively on an existing codebase (`--scan`) to generate a DESIGN.md from tokens already in use.
 
 ## Modes
 
-- **Default**: reads `specs/ui-final-*.md` (or a user-provided spec path) and extracts tokens.
+- **Default**: reads `specs/ui-final-*.md` or `prototypes/*/consolidated/` (or a user-provided spec path) and extracts tokens.
 - **`--scan`**: scans the codebase for CSS custom properties, Tailwind config, theme files, and component patterns to reverse-engineer a DESIGN.md.
 - **`--update`**: reads an existing `DESIGN.md` alongside new spec changes and produces an updated version.
 

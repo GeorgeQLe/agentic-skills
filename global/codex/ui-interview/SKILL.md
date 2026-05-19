@@ -12,9 +12,9 @@ Invoke as `$ui-interview`.
 
 Use this skill when the user needs to turn a rough product idea, feature, page, wireframe, screenshot, or existing app surface into a detailed implementation-ready UI specification. This skill focuses on the interface itself: pages, regions, components, buttons, links, labels, spacing, element size, visual hierarchy, state, responsive layout, and accessibility.
 
-Use `$ux-variation` after this skill when the user wants multiple experience concepts or interface variants to compare before locking the final direction.
+Use `$ux-variations` after this skill when the user wants multiple experience concepts or interface variants to compare before locking the final direction.
 
-When invoked with `--requirements-only` (or when the user says "just requirements", "requirements only", or "content requirements"), this skill stops after establishing what the page needs — data, actions, states, and constraints — without committing to any layout, component, or spatial decisions. This mode feeds directly into `$ux-variation --layout-mode` to explore multiple concrete visual approaches for the same content contract.
+When invoked with `--requirements-only` (or when the user says "just requirements", "requirements only", or "content requirements"), this skill stops after establishing what the page needs — data, actions, states, and constraints — without committing to any layout, component, or spatial decisions. This mode feeds directly into `$ux-variations --layout-mode` to explore multiple concrete visual approaches for the same content contract.
 
 ## Workflow
 
@@ -75,7 +75,7 @@ When invoked with `--requirements-only` (or when the user says "just requirement
      - Relationships between data elements: parent-child, peer, reference, aggregate
    - Present a **Content Requirements Manifest** summarizing all pages, then ask the user to confirm before writing deliverables.
    - Write `specs/ui-requirements-[topic].md` and `ui-requirements-[topic]-interview.md`.
-   - After writing files, recommend `$ux-variation --layout-mode` to explore multiple visual approaches for these requirements, or `$ui-interview` without the flag to proceed directly to a single deep UI specification.
+   - After writing files, recommend `$ux-variations --layout-mode` to explore multiple visual approaches for these requirements, or `$ui-interview` without the flag to proceed directly to a single deep UI specification.
    - Stop. Do not continue to step 5 or beyond.
 
      - Layout anatomy: top-to-bottom and left-to-right regions, alignment, density, scroll behavior
@@ -129,9 +129,9 @@ The interview log must include:
 - User responses and final decisions
 - Notable changes from the initial draft, current implementation, or artifact
 
-After writing files, recommend `$ux-variation` if variants are needed before implementation, or `$roadmap` if the interface is ready to sequence into work.
+After writing files, recommend `$ux-variations` if variants are needed before implementation, or `$roadmap` if the interface is ready to sequence into work.
 
-In requirements-only mode, recommend `$ux-variation --layout-mode`, not `$roadmap`, because the content contract still needs concrete visual alternatives before implementation sequencing.
+In requirements-only mode, recommend `$ux-variations --layout-mode`, not `$roadmap`, because the content contract still needs concrete visual alternatives before implementation sequencing.
 
 ## Constraints
 
