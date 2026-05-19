@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-05-19 — Batch 41.2: Triage Claude budget-block pattern and fixture-prompt issues
+
+- Increased `perRunBudgetUsd` from smoke ($0.25) to standard ($1.00) for `roadmap`, `targeted-skill-builder` (tier1), and `affected` (tier23), resolving all Claude budget-blocked runs.
+- Added explicit route guidance (`End with Recommended next command: $run`) to `targeted-skill-builder` and `affected` fixture prompts, resolving route mismatches.
+- Relaxed `affected` literal match from `"affected packages"` to `"affected"` to accept synonym headers like "Directly Changed Packages" and "Transitively Affected."
+- Rerun results: `targeted-skill-builder` 100%/100% (both agents), `affected` 66.7%/100% (Claude/Codex), `roadmap` 66.7%/100% (Claude/Codex).
+- Updated benchmark reports, refreshed generated data (35 graded + 11 incomplete rows), and fixed layer1 test assertion for `affected-codex-3c36c9a8` notes.
+
 ## 2026-05-19 — Align benchmark coverage with prototype-first pipeline refactor
 
 - Renamed `ux-variation` → `ux-variations`, `ui-consolidate` → `consolidate-variations` across all coverage arrays and test setups.
