@@ -50,6 +50,27 @@
 - Validation passed: targeted report-field `rg`; generated data refresh; `scripts/validate-skills-showcase-data.sh`; `git diff --check`.
 - Recommended next skill: `$session-triage update-packages benchmark failure`
 
+## Interrupt Task — Triage `update-packages` Benchmark Failure 2026-05-19
+
+**Goal:** Investigate the latest `$benchmark-test-skill update-packages` failure and classify whether the Claude hard assertion and quality failures are skill-contract gaps, benchmark harness defects, generated-output noncompliance, or infrastructure-only blocks.
+
+**Plan:**
+- [x] Inspect the latest curated benchmark report and raw Claude/Codex run artifacts.
+- [x] Compare mirrored `update-packages` contracts with the benchmark setup assertions and quality rubric.
+- [x] Write `benchmark/triage-update-packages-2026-05-19-benchmark-failure.md` with verdict, root cause, recommended fix, validation plan, and next route.
+- [x] Validate report fields and whitespace, update this review section, then commit and push intended changes.
+
+## Review — Triage `update-packages` Benchmark Failure 2026-05-19
+
+- Source report: `benchmark/test-update-packages-2026-05-19.md`.
+- Raw evidence inspected: Claude session `tests/benchmarks/runs/update-packages-claude-dc9580ca/`, Codex session `tests/benchmarks/runs/update-packages-codex-f04f15cc/`, current `tests/harness/bench-runner.ts`, mirrored `update-packages` contracts, prior related triage, and relevant lessons.
+- Verdict: verified benchmark harness infrastructure-classification defect for the evaluated hard failure, with a separate noncritical generated-output quality gap in the passing Claude artifact.
+- Key evidence: Claude run 1 exited 1, produced no `package-update-plan.md`, and stdout was only `API Error: The socket connection was closed unexpectedly...`; the current infrastructure classifier does not include that socket-close phrase.
+- Additional evidence: Claude run 0 passed all hard assertions and scored 95.5% quality but used a bare `/migrate` stop route, which is generated-output noncompliance with the existing targeted migrate route contract but not the cause of the hard benchmark failure.
+- Report written: `benchmark/triage-update-packages-2026-05-19-benchmark-failure.md`.
+- Validation passed: targeted `rg` confirmed required triage report sections, retained socket-close evidence, validation plan, and next route; `git diff --check` passed.
+- Recommended next skill: `$targeted-skill-builder update-packages benchmark socket transport classification`
+
 ## Interrupt Task — Targeted Update `update-packages` Benchmark Infrastructure Classification 2026-05-18
 
 **Goal:** Fix the benchmark harness so live-agent transport failures, API connection failures, and runner timeouts are classified as infrastructure-blocked runs instead of evaluated `update-packages` skill failures.
