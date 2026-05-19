@@ -6,6 +6,40 @@
 **Total phases:** 42
 **Last completed phase:** Phase 42 — Workflow Persistent Transcript Refinement
 
+## Current Task — Create `skill-interview` 2026-05-18
+
+**Goal:** Add a mirrored `skill-interview` planning skill that interviews the user about the desired characteristics of a new skill before routing to skill creation.
+
+**Plan:**
+- [ ] Review `spec-interview`, skill creation conventions, benchmark coverage registration, and current worktree state.
+- [ ] Create Codex and Claude `skill-interview` skill contracts with clear interview workflow, outputs, constraints, and next-step routing.
+- [ ] Add custom benchmark coverage and setup wiring for `skill-interview`.
+- [ ] Refresh generated Skills Showcase data, run required validation, record review results, then commit and push intended changes.
+
+## Interrupt Task — Targeted Update `update-packages` Benchmark Infrastructure Classification 2026-05-18
+
+**Goal:** Fix the benchmark harness so live-agent transport failures, API connection failures, and runner timeouts are classified as infrastructure-blocked runs instead of evaluated `update-packages` skill failures.
+
+**Plan:**
+- [x] Review relevant lessons, latest triage report, current benchmark runner, and focused layer1 coverage location.
+- [x] Update the spawned runner timeout path and benchmark infrastructure classifier.
+- [x] Add focused layer1 coverage for retained timeout/API/websocket failure shapes.
+- [x] Run focused and target validation, record results, then commit and push intended changes on `master`.
+
+## Review — Targeted Update `update-packages` Benchmark Infrastructure Classification 2026-05-18
+
+- Decision: benchmark harness update, not a new skill and not an `update-packages` skill-contract change.
+- Evidence used: `tasks/lessons.md`, `benchmark/triage-update-packages-2026-05-18-fresh-artifact-failure.md`, raw retained failure strings from `update-packages-claude-5adfd816` and `update-packages-codex-06adb3a6`, `tests/harness/runner.ts`, `tests/harness/bench-runner.ts`, and layer1 setup tests.
+- Evidence intentionally skipped: broad session history, because the latest triage and raw benchmark artifacts were enough to isolate the harness classifier gap.
+- Existing-skill overlap: `targeted-skill-builder` owns this narrow harness adjustment; no new skill is needed.
+- Updated `runSpawnedCommand` to append an explicit timeout marker before terminating a child process.
+- Updated `classifyInfrastructureBlock` to classify runner timeouts plus API/websocket/DNS/stream transport failures as infrastructure blocks, including Codex zero-exit transport failures, while preserving the existing rule that successful outputs merely mentioning rate limits are not blocked.
+- Added focused layer1 coverage for retained timeout, API connection refusal, and Codex websocket/DNS transport failure shapes.
+- Validation passed: focused layer1 `bench-setups` infrastructure/update-packages tests; layer1 `bench-report`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill update-packages`; targeted `rg`; `git diff --check`.
+- Generated Skills Showcase data was not refreshed because no tracked `SKILL.md`, `PACK.md`, curated benchmark report, or curated review report changed.
+- Note: an unrelated `tasks/roadmap.md` `skill-interview` change was present and intentionally left unstaged.
+- Recommended next command: `$benchmark-test-skill update-packages`
+
 ## Interrupt Task — Triage `update-packages` Fresh Benchmark Failure 2026-05-18
 
 **Goal:** Investigate the fresh `$benchmark-test-skill update-packages` failure and classify whether the artifact/exit failures are skill-contract gaps, benchmark harness defects, generated-output noncompliance, or infrastructure-only blocks.
