@@ -12,7 +12,7 @@ Before telling the user to run a skill from another project-local pack, check `.
 
 # Feature Interview
 
-Use this skill when the user has a feature idea, brainstorm suggestion, research gap, bug-shaped improvement, or implementation direction that needs evidence-backed alignment before deciding whether to write or update research docs, journey docs, specs, roadmap entries, task queues, or route directly to another planning skill.
+Use this skill when the user has a feature idea, brainstorm suggestion, research gap, bug-shaped improvement, or implementation direction that needs evidence-backed alignment before deciding whether to write or update research docs, journey docs, specs, roadmap entries, task queues, or route directly to another planning skill. This skill is also the primary entry point for post-ship feature work, where scope determines the re-entry depth into the pipeline.
 
 This is narrower than `/spec-interview`: it performs the same assumption surfacing and user interrogation needed for human/agent alignment, but it does not assume the output must be a full new implementation spec. It borrows `/investigate`'s evidence discipline for claims, codebase fit, and technical gotchas, but it does not fix bugs or implement the feature.
 
@@ -72,6 +72,10 @@ This is narrower than `/spec-interview`: it performs the same assumption surfaci
    - Journey/workflow placement to record.
    - Scope to include now and explicitly defer.
    - For user-facing product or feature work, confirm the prototype-first decision: what users can click through first, whether multiple experiments should live on separate routes, what data can be fake or fixture-backed, which infrastructure is intentionally deferred, and what evidence would justify promoting one deferred infrastructure item into a later production phase.
+   - Scope triage for post-ship features:
+     - Small (config, copy, toggle) → `/spec-interview` + `/run` directly
+     - Medium (new component, screen, workflow) → single-variation mini-prototype (`/prototype --variant 1`)
+     - Large (new product area, major redesign) → full pipeline starting at `/ux-variations`
    - Priority decision: user-confirmed priority, dependencies, and whether the feature should interrupt, follow, or remain parked relative to current roadmap/todo work.
    - Roadmap/task impact and recommended next command.
    Ask: "Does this destination, priority, and scope match what you want?"
@@ -99,6 +103,10 @@ Always write an interview log to `specs/[topic]-feature-interview.md` (or `docs/
 - Planning Destination + Priority Checkpoint and confirmed decision.
 - The exact next command for sequencing.
 
+### Alignment Page
+
+After writing deliverables, build a custom HTML alignment page at `docs/alignment/feature-interview-{topic}.html` and open it in the browser. Archive any previous alignment page at that path first. Do not use a shared template or CSS framework.
+
 When replacing or substantively rewriting an existing canonical research/spec document (`research/**/*.md`, `specs/**/*.md`, or `docs/specifications/**/*.md`), copy the current file to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-relative-path>` before editing it.
 
 ## Next-Step Routing
@@ -107,8 +115,8 @@ After writing deliverables, route tightly into the task pipeline:
 
 - If a new or updated spec is ready for sequencing, recommend `/roadmap` so it can extend/build the roadmap and seed `/plan-phase`.
 - If research or journey documentation changed but the spec is not ready, recommend the named research/design skill or `/feature-interview` follow-up with the remaining question.
-- If user-facing work still lacks journey, UX variation, or UI detail, recommend `/journey-map`, `/ux-variation`, or `/ui-interview` before `/roadmap`.
-- If the feature is already sequenced, recommend the concrete executor (`/plan-phase N`, `/run`, `/ship`, or `/guide`) rather than another interview.
+- If user-facing work still lacks journey, UX variation, or UI detail, recommend `/journey-map`, `/ux-variations`, or `/ui-interview` before `/roadmap`.
+- If the feature is already sequenced, recommend the concrete executor (`/plan-phase N`, `/run`, `/ship`, `/prototype`, or `/guide`) rather than another interview.
 - If research is missing, recommend the named research skill and explain what evidence it must produce before returning to `/feature-interview` or `/roadmap`.
 - If the idea is duplicate or parked, recommend `/brainstorm` only when the user wants a different candidate; otherwise recommend the existing tracked work.
 

@@ -327,15 +327,20 @@ If you are used to this Claude Code rhythm:
 11. `$monetization`
 12. `$gtm`
 13. `$growth-model`
-14. `$spec-interview`
-15. `$ux-variation`
-16. `$ui-interview`
-17. `$roadmap`
-18. `$plan-phase` (seeded by `$roadmap`; rerun only for later phases)
-19. `$run`
-20. `$ship`
-21. `$ship-end` when wrapping an off-script or partial session
-22. `$pmf-assessment` (post-launch)
+14. `$ux-variations`
+15. `$ui-interview`
+16. `$prototype`
+17. `$uat --variant-evaluation`
+18. `$consolidate-variations`
+19. `$research-roadmap --post-prototype`
+20. `$spec-interview`
+21. `$research-roadmap --post-spec`
+22. `$roadmap`
+23. `$plan-phase` (seeded by `$roadmap`; rerun only for later phases)
+24. `$run`
+25. `$ship`
+26. `$ship-end` when wrapping an off-script or partial session
+27. `$pmf-assessment` (post-launch)
 
 The closest Codex translation is:
 
@@ -352,16 +357,21 @@ The closest Codex translation is:
 11. `$monetization`
 12. `$gtm`
 13. `$growth-model`
-14. `$spec-interview`
-15. `$ux-variation`
-16. `$ui-interview`
-17. `$roadmap`
-18. `$plan-phase` (seeded by `$roadmap`; rerun only for later phases)
-19. `$run` to present the plan, execute the work, ship it, and refresh `tasks/todo.md`
-20. repeat `$run` for the next planned step
-21. use `$ship` only if finished work needs manual packaging
-22. use `$ship-end` to wrap an interrupted or partial session
-23. `$pmf-assessment` (post-launch)
+14. `$ux-variations`
+15. `$ui-interview`
+16. `$prototype`
+17. `$uat --variant-evaluation`
+18. `$consolidate-variations`
+19. `$research-roadmap --post-prototype`
+20. `$spec-interview`
+21. `$research-roadmap --post-spec`
+22. `$roadmap`
+23. `$plan-phase` (seeded by `$roadmap`; rerun only for later phases)
+24. `$run` to present the plan, execute the work, ship it, and refresh `tasks/todo.md`
+25. repeat `$run` for the next planned step
+26. use `$ship` only if finished work needs manual packaging
+27. use `$ship-end` to wrap an interrupted or partial session
+28. `$pmf-assessment` (post-launch)
 
 The main manual additions are still plain-chat approval and the lack of a skill-controlled plan-mode boundary.
 

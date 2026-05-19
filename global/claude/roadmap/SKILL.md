@@ -45,7 +45,7 @@ Record existence, content summary, and last-modified timestamps for:
 - `tasks/phases/` — archived phase files
 - `tasks/lessons.md` — accumulated lessons
 - `specs/` or `spec.md` — specifications
-- `specs/ux-variations-*.md` — UX variation plans for user-facing work
+- `specs/ux-variationss-*.md` — UX variation plans for user-facing work
 - `specs/ui-*.md` — implementation-ready UI specifications for user-facing work
 - `research/journey-map.md` — user/customer journey context for user-facing work
 
@@ -62,7 +62,7 @@ Route behavior based on the current pipeline state:
 |-------|-----------|----------|
 | A0 — No specs, missing journey | User-facing business-app work has no specs and no `research/journey-map.md` | Queue `/journey-map`. Done (skip to step 7). |
 | A — No specs | No `specs/` files, no `spec.md`, and journey is complete or not applicable | Queue `/feature-interview` when an idea/research gap exists and the planning destination is not confirmed; queue `/spec-interview` only when the user already selected full-spec creation. Done (skip to step 7). |
-| B0 — Specs, missing design gate | User-facing specs exist, but `research/journey-map.md`, `specs/ux-variations-*.md`, or `specs/ui-*.md` is missing | Queue the missing journey/UX/UI planning item. Done (skip to step 7). |
+| B0 — Specs, missing design gate | User-facing specs exist, but `research/journey-map.md`, `specs/ux-variationss-*.md`, `specs/ui-*.md`, consolidated prototype at `prototypes/*/consolidated/`, or production spec is missing | Queue the missing planning item. Done (skip to step 7). |
 | B — Specs, no roadmap | Specs exist and required journey/UX/UI planning is complete or not applicable, `tasks/roadmap.md` missing or empty | Go to step 4 (build roadmap), then continue to step 5. |
 | C — Work in progress | `tasks/roadmap.md` exists, unchecked phases remain | Skip to step 5 (classify issues). |
 | G — Roadmap extension needed | `tasks/roadmap.md` exists, all phases are checked, and a substantive spec exists that is newer than the roadmap or is not represented in any completed phase | Go to step 4 in extension mode: interview only for the new/changed spec scope, append the agreed next phase(s), then seed the first new phase with `/plan-phase N`. Do not queue `/roadmap`. |
@@ -93,8 +93,6 @@ Use the AskUserQuestion tool to align on roadmap decisions. Ask one to three foc
 - **Scope**: Should anything be deferred, dropped, or marked as stretch?
 - **Market fit** (when ICP/gap specs exist): Which phases directly address customer pain points or deal-blockers from gap analysis? Prioritise these unless technically impossible. Surface tension between technical sequencing and market urgency.
 - **Phase sizing**: Preference for many small phases vs. fewer larger ones?
-- **Prototype sequencing**: For new products or substantial new user-facing features without an accepted clickable journey, whether to prepend a separate Phase 0 for prototype experiments before production implementation. Do not fold prototype exploration, calibration, and production infrastructure into one phase unless the user explicitly asks for a single constrained spike.
-- **Experiment routes**: Which prototype variants or feature experiments should exist as separate clickable routes, such as `/experiments/<variant>` or project-native equivalents, so the user can compare alternatives side by side before consolidation.
 - **Manual tasks**: Are there human-only external prerequisites (DNS/account setup, OAuth app creation, billing/approval, real-device or production browser verification with subjective sign-off)? Which phases do they block or follow? Do not classify repo edits, SDK wiring, CLI/API work, local tests, or audits as manual.
 - **Parallelization**: Which phase work can run independently, which modules or files are shared chokepoints, and where should work stay serial?
 - **Review needs**: Which phases need specialized review gates (correctness, tests, security, performance, docs/API conformance, UX)?
@@ -107,8 +105,6 @@ Continue until the user confirms the phase structure is complete.
 #### 4c. Write the Roadmap
 
 Write or update `tasks/roadmap.md` with the agreed phase structure. In State B, create the full roadmap. In State G, append or adjust only the new/changed future phase scope needed for the changed spec; do not rewrite completed phases except to add a short note that a later phase supersedes or extends prior work.
-
-For new products or substantial new user-facing features without an accepted clickable journey, make the first roadmap item a distinct prototype/experiment phase. Prefer `Phase 0: Prototype Experiments` when the repository convention accepts phase 0; otherwise make Phase 1 the prototype phase and push production work later. This phase should build multiple clickable experiments on separate routes when there is meaningful uncertainty in workflow, layout, density, copy, navigation, or interaction model. Keep durable database/storage, auth, payments, analytics, deployment, admin tooling, multi-tenancy, and production observability out of the prototype phase unless explicitly approved or required to test the core interaction.
 
 Use this format:
 
@@ -223,13 +219,13 @@ Specs have been modified more recently than the roadmap, suggesting the plan may
 User-facing specs exist, but one or more required design-planning artifacts are missing:
 
 - `research/journey-map.md` — run `/journey-map` first to define discovery, onboarding, aha, conversion, retention, and advocacy.
-- `specs/ux-variations-*.md` — run `/ux-variation` after journey/spec context to compare onboarding, workflow, sharing, return-use, and UI variants.
+- `specs/ux-variationss-*.md` — run `/ux-variations` after journey/spec context to compare onboarding, workflow, sharing, return-use, and UI variants.
 - `specs/ui-*.md` — run `/ui-interview` after UX variation to lock buildable screen-level detail.
 
 Only flag this for user-facing product work. Skip for pure backend, CLI, library, infrastructure, or internal automation specs unless they include a meaningful human workflow or interface.
 
 #### 12. Missing Roadmap (internal consistency fallback)
-Specs exist in `specs/` (or `spec.md`) but `tasks/roadmap.md` does not exist. Do not queue `/roadmap` for this. This means State B was misclassified or the roadmap disappeared during the run. Re-enter State B in the same run, build the roadmap through step 4, then seed `/plan-phase 1`. If the roadmap cannot be built because required input is missing, queue the missing upstream input skill (`/spec-interview`, `/journey-map`, `/ux-variation`, or `/ui-interview`) with evidence.
+Specs exist in `specs/` (or `spec.md`) but `tasks/roadmap.md` does not exist. Do not queue `/roadmap` for this. This means State B was misclassified or the roadmap disappeared during the run. Re-enter State B in the same run, build the roadmap through step 4, then seed `/plan-phase 1`. If the roadmap cannot be built because required input is missing, queue the missing upstream input skill (`/spec-interview`, `/journey-map`, `/ux-variations`, or `/ui-interview`) with evidence.
 
 #### 13. Lessons Not Reviewed
 `tasks/lessons.md` was updated more recently than the current phase's implementation steps were written, suggesting new lessons may apply to in-progress work.
@@ -278,7 +274,7 @@ Rules:
 8. Use checked boxes only when an issue is already resolved.
 9. Never write `/roadmap` into `## Priority Task Queue`. If an issue appears to require `/roadmap`, resolve the underlying state in this run:
    - specs missing: queue `/feature-interview` for idea triage, `/spec-interview` when full spec creation is already confirmed, or the relevant upstream planning command
-   - user-facing design gate missing: queue `/journey-map`, `/ux-variation`, or `/ui-interview`
+   - user-facing design gate missing: queue `/journey-map`, `/ux-variations`, or `/ui-interview`
    - specs exist but roadmap missing: build `tasks/roadmap.md` through State B and seed `/plan-phase 1`
    - existing queue already contains `/roadmap`: replace it with `/reconcile-dev-docs fix tasks` because the queue is stale/self-referential
 
@@ -322,7 +318,7 @@ For missing journey/UX/UI planning:
 
 ```md
 - [ ] `/journey-map` - create `research/journey-map.md` before roadmap because user-facing specs need lifecycle context.
-- [ ] `/ux-variation` - create `specs/ux-variations-[topic].md` before roadmap because user-facing specs need experience alternatives.
+- [ ] `/ux-variations` - create `specs/ux-variationss-[topic].md` before roadmap because user-facing specs need experience alternatives.
 - [ ] `/ui-interview` - create `specs/ui-[topic].md` before roadmap because the selected experience needs implementation-ready interface detail.
 ```
 
@@ -415,7 +411,7 @@ Output exactly two lines beyond the normal report:
 Rules:
 
 - Make the next work item primary. Derive it from the roadmap state, the first unchecked priority-queue item, the next unplanned phase, advisory queues, or the absence of remaining work. Do not use agent mode itself as the next work item.
-- Never recommend `/roadmap` as the next command from a `/roadmap` run. This skill is the scanner/router; once it has updated the queue, the next command must be the first queued actionable skill (`/feature-interview`, `/spec-interview`, `/journey-map`, `/ux-variation`, `/ui-interview`, `/research-roadmap`, `/plan-phase N`, `/ship-end --no-deploy`, `/reconcile-dev-docs fix tasks`, `/run`, `/guide`, or `none`). If the first unchecked item itself says `/roadmap`, treat that as a stale/self-referential queue item and route to `/reconcile-dev-docs fix tasks` with evidence.
+- Never recommend `/roadmap` as the next command from a `/roadmap` run. This skill is the scanner/router; once it has updated the queue, the next command must be the first queued actionable skill (`/feature-interview`, `/spec-interview`, `/journey-map`, `/ux-variations`, `/ui-interview`, `/prototype`, `/consolidate-variations`, `/research-roadmap`, `/plan-phase N`, `/ship-end --no-deploy`, `/reconcile-dev-docs fix tasks`, `/run`, `/guide`, or `none`). If the first unchecked item itself says `/roadmap`, treat that as a stale/self-referential queue item and route to `/reconcile-dev-docs fix tasks` with evidence.
 - Use `./scripts/agent-mode.sh` only to choose command text. If it is missing, unset, or non-zero, infer routing from the current invocation and task type instead of asking the user to select a mode by default.
 - Inference defaults:
   - Claude slash invocation (`/roadmap`, `/plan-phase`, `/run`, `/delegate`) or orchestration-heavy work → recommend the matching `/...` route.

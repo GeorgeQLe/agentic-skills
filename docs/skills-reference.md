@@ -103,8 +103,9 @@ Global skills are safe across business apps, games, devtools, libraries, service
 | `feature-interview` | Interview a feature idea with evidence-backed alignment, then decide whether to update docs, specs, roadmap, or tasks |
 | `spec-interview` | Interview to validate and complete an implementation specification |
 | `ui-interview` | Interview page by page to define implementation-ready UI detail |
-| `ux-variation` | Plan and compare onboarding, workflow, sharing, return-use, and UI variants before locking an experience |
-| `ui-consolidate` | Converge evaluated UI variants into a final implementation-ready UI spec |
+| `ux-variations` | Plan and compare onboarding, workflow, sharing, return-use, and UI variants before locking an experience |
+| `consolidate-variations` | Converge evaluated UI variants into a final implementation-ready UI spec |
+| `prototype` | Build tangible, runnable prototypes from UX variation and UI specs |
 | `plan-phase` | Decompose a single roadmap phase into implementation steps, tests, and file-level detail |
 | `reconcile-dev-docs` | Reconcile roadmap, todo, history, phase archives, specs, and git evidence |
 | `regression-check` | Run a comprehensive health check after a phase or major change |

@@ -1,18 +1,18 @@
 ---
-name: ui-consolidate
+name: consolidate-variations
 description: Compare multiple built UI variations, interview the user on what works and what doesn't, cherry-pick best elements, resolve conflicts, and produce a final consolidated implementation-ready UI specification
 type: planning
 version: 1.0.0
 argument-hint: "[optional: topic, page, or path to variation specs]"
 ---
 
-# UI Consolidate
+# Consolidate Variations
 
-Invoke as `/ui-consolidate`.
+Invoke as `/consolidate-variations`.
 
-Use this skill after the user has built and evaluated multiple UI layout variations (typically generated via `/ux-variation --layout-mode`, built via `/run`, and evaluated via `/uat --variant-evaluation`). This skill compares the variations, interviews the user on what works and what doesn't in each one, cherry-picks the best elements, resolves conflicts where preferred choices are incompatible, and produces a single consolidated implementation-ready UI specification.
+Use this skill after the user has built and evaluated multiple UI layout variations (typically generated via `/ux-variations --layout-mode`, built via `/run`, and evaluated via `/uat --variant-evaluation`). This skill compares the variations, interviews the user on what works and what doesn't in each one, cherry-picks the best elements, resolves conflicts where preferred choices are incompatible, and produces a single consolidated implementation-ready UI specification.
 
-Users with manually built variations (not from the `/ux-variation` pipeline) can also use this skill directly, but consolidation should not happen before the user has reviewed the variants and captured evidence.
+Users with manually built variations (not from the `/ux-variations` pipeline) can also use this skill directly, but consolidation should not happen before the user has reviewed the variants and captured evidence.
 
 ## Workflow
 
@@ -65,8 +65,9 @@ Users with manually built variations (not from the `/ux-variation` pipeline) can
      - Use AskUserQuestion to resolve
    - Continue until every row in the matrix has a winner and all conflicts are resolved.
 
-6. **Draft consolidated spec**
-   - Present the proposed final design as a structured summary:
+6. **Build consolidated prototype**
+   - Merge the best elements from variation prototypes into a single runnable artifact at `prototypes/{topic}/consolidated/`.
+   - The consolidated prototype must reflect:
      - Layout skeleton (regions, proportions, scroll behavior)
      - Primary content pattern (how items are displayed)
      - Detail view pattern (how full item details are accessed)
@@ -75,7 +76,7 @@ Users with manually built variations (not from the `/ux-variation` pipeline) can
      - Density and spacing approach
      - Responsive behavior at mobile, tablet, and desktop breakpoints
      - States rendering (empty, loading, error, partial, offline)
-   - Use AskUserQuestion to confirm the consolidated design before writing deliverables.
+   - Use AskUserQuestion to confirm the consolidated design before building the prototype.
 
 7. **Coverage checkpoint**
    - Verify every content requirement from `specs/ui-requirements-[topic].md` has a UI home in the consolidated spec.
@@ -85,8 +86,14 @@ Users with manually built variations (not from the `/ux-variation` pipeline) can
 
 ## Deliverables
 
-- Write the consolidated UI specification to `specs/ui-final-[topic].md`.
-- Write the consolidation interview log to `ui-consolidate-[topic]-interview.md`.
+- Write the consolidated prototype to `prototypes/{topic}/consolidated/`.
+- Write the consolidation interview log to `consolidate-variations-[topic]-interview.md`.
+
+### Alignment Page
+
+After writing deliverables, build a custom HTML alignment page at `docs/alignment/consolidate-variations-{topic}.html` and open it in the browser. The page should visualize the variation concepts, comparison matrix, and decision criteria in a format tailored to the specific variations produced. Archive any previous alignment page at that path first.
+
+Do not use a shared template or CSS framework — craft the page to fit the situation. The alignment page is a one-off communication artifact, not a reusable component.
 
 The consolidated UI specification must include:
 
@@ -109,7 +116,7 @@ The consolidated UI specification must include:
 
 The interview log must include the variation inventory, evidence gate result, per-variation interview responses (keep/reject/neutral), consolidation matrix, conflict resolutions, draft review, coverage checkpoint results, and all user responses.
 
-After writing files, recommend `/design-system` to lock visual tokens into a machine-readable `DESIGN.md` before implementation begins. If the user wants to skip token extraction, recommend `/run` or `/roadmap` for final implementation, or `/ui-interview` (full mode) if individual pages need deeper specification beyond what the consolidated layout covers.
+After writing files, recommend `/research-roadmap --post-prototype` to assess next steps.
 
 ## Constraints
 

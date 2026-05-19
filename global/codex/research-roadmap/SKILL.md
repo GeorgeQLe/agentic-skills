@@ -19,6 +19,18 @@ Do not run the queued research skills from this skill. The job here is to mainta
 
 ## Process
 
+### 0. Parse Mode Arguments
+
+Parse `$ARGUMENTS` for mode flags:
+
+- `--post-prototype`: Post-prototype research refresh mode
+- `--post-spec`: Post-spec research refresh mode
+- No flags: default documentation queue mode (existing behavior)
+
+If `--post-prototype` is present, skip to the Post-Prototype Process below.
+If `--post-spec` is present, skip to the Post-Spec Process below.
+Otherwise, continue with the standard process starting at step 1.
+
 ### 1. Resolve Project Pack
 
 1. Read `.agents/project.json` if it exists.
@@ -111,7 +123,7 @@ Also include documentation-producing non-research skills when their outputs are 
 | --- | --- |
 | `$concept-exploration` | `research/concept-brief.md` or `research/{app}/concept-brief.md` |
 | `$spec-interview` | `specs/*.md` |
-| `$ux-variation` | `specs/ux-variations-*.md` |
+| `$ux-variations` | `specs/ux-variations-*.md` |
 | `$ui-interview` | `specs/ui-*.md` |
 | `$scale-audit` | `specs/scale-audit.md` |
 | `$roadmap` | `tasks/roadmap.md`, `tasks/todo.md` |
@@ -193,9 +205,11 @@ $concept-exploration
   -> $positioning
   -> $journey-map
     -> $spec-interview
-      -> $ux-variation
+      -> $ux-variations
         -> $ui-interview
-          -> $roadmap
+          -> $prototype
+            -> $consolidate-variations
+              -> $roadmap
     -> $metrics
   -> $gtm
   -> $monetization
@@ -347,6 +361,53 @@ Rules:
 - Do not emit `Recommended next command: none` unless the latest user request explicitly asks to pause, park, archive, or wait.
 - If documentation is current and no advisory item is promotable, route to new-phase discovery: `**Next work:** discover candidate next phase or explicitly park the project` and `**Recommended next command:** $brainstorm`.
 - Use `$feature-interview` instead of `$brainstorm` when the project already has a concrete unspecced idea selected but still needs planning-destination triage. Use `$spec-interview` only when full-spec creation is already confirmed.
+
+## Post-Prototype Process (`--post-prototype`)
+
+### Gate
+
+A consolidated prototype must exist at `prototypes/{topic}/consolidated/`. If missing, halt and recommend `$consolidate-variations` first.
+
+### Scan
+
+1. Read the consolidated prototype directory to understand what was built.
+2. Read all research docs: `research/concept-brief.md`, `research/icp.md`, `research/competitive-analysis.md`, `research/journey-map.md`, and any other `research/*.md` files.
+3. For each research document, compare against the consolidated prototype:
+   - **User flows**: Does the prototype's flow match the journey map's discovery -> onboarding -> aha -> conversion -> retention path?
+   - **Onboarding**: Does the prototype's first-run experience match ICP expectations for technical sophistication and time-to-value?
+   - **Density and copy**: Does the prototype's information density and copy tone match ICP communication preferences?
+   - **Interactions**: Do the prototype's interaction patterns match journey-map touchpoints and competitive differentiation?
+   - **Differentiation**: Does the prototype demonstrate the competitive advantages identified in competitive analysis?
+4. Flag research documents that are contradicted or made stale by prototype decisions.
+
+### Output
+
+Populate `tasks/todo.md` `## Priority Documentation Todo` with research skills that need re-running, using the same format as the standard process. Each item must explain what the prototype revealed that contradicts or supersedes the current research document.
+
+**Next step:** first unchecked queued item in `tasks/todo.md`.
+
+## Post-Spec Process (`--post-spec`)
+
+### Gate
+
+A production spec must exist at `specs/{topic}.md`. If missing, halt and recommend `$spec-interview` first.
+
+### Scan
+
+1. Read the production spec to understand implementation constraints.
+2. Read all research docs.
+3. For each research document, compare against spec constraints:
+   - **Auth model**: Does the research assume an auth model that the spec changed?
+   - **Data model**: Does the research assume data structures that the spec redesigned?
+   - **Performance**: Does the research assume performance characteristics that the spec's architecture contradicts?
+   - **Deployment**: Does the research assume a deployment model that the spec changed?
+4. Flag research documents that are invalidated by spec constraints.
+
+### Output
+
+Populate `tasks/todo.md` `## Priority Documentation Todo` with research skills that need re-running. Each item must explain what spec constraint invalidates the current research document.
+
+**Next step:** first unchecked queued item in `tasks/todo.md`.
 
 ## Constraints
 

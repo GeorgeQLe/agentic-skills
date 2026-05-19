@@ -48,4 +48,4 @@ Create the stage-level onboarding plan that expands `research/journey-map.md`.
 
 - Stay stage-specific; do not rewrite the whole journey map.
 - Make onboarding steps concrete enough to drive specs, UX variations, and instrumentation.
-- End with `## Next Steps`, preferring `$conversion-map`, `$lifecycle-metrics`, `$ux-variation`, or `$spec-interview` as context dictates.
+- End with `## Next Steps`, preferring `$conversion-map`, `$lifecycle-metrics`, `$ux-variations`, or `$spec-interview` as context dictates.

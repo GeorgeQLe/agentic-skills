@@ -36,7 +36,7 @@ Create or update the canonical lifecycle overview. This is the top-level map for
 - `research/journey-map.md` (or `research/{app}/journey-map.md`) — canonical lifecycle overview with links or references to deeper stage docs when they exist.
 - `research/journey-map-interview.md` (or `research/{app}/journey-map-interview.md`) — raw interview log and decisions.
 
-The output file must end with `## Next Steps` using "Pick one:" framing. Prefer the first missing deeper lifecycle map in this order: `/onboarding-map`, `/conversion-map`, `/transaction-map`, `/retention-map`, `/expansion-map`, `/lifecycle-metrics`; then route to `/spec-interview`, `/ux-variation`, `/metrics`, `/gtm`, or `/roadmap` when those are the better next step.
+The output file must end with `## Next Steps` using "Pick one:" framing. Prefer the first missing deeper lifecycle map in this order: `/onboarding-map`, `/conversion-map`, `/transaction-map`, `/retention-map`, `/expansion-map`, `/lifecycle-metrics`; then route to `/spec-interview`, `/ux-variations`, `/metrics`, `/gtm`, or `/roadmap` when those are the better next step.
 
 ## Output Shape
 
