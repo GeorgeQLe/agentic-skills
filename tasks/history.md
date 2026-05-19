@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-05-19 — Align benchmark coverage with prototype-first pipeline refactor
+
+- Renamed `ux-variation` → `ux-variations`, `ui-consolidate` → `consolidate-variations` across all coverage arrays and test setups.
+- Added `prototype` skill benchmark setup with hub page output, variation fixtures, and `$uat --variant-evaluation` routing.
+- Removed `prototypeFirstProductGateCriterion` from tier1 setups — prototype work is now an explicit upstream skill, not a downstream gate criterion.
+- Updated `spec-interview` routing to `$research-roadmap --post-spec` and tier1 prompts/fixtures to reference consolidated prototypes instead of Phase 0 language.
+- Fixed stale references in `codex-interview-cadence.test.ts` and `bench-setups.test.ts`.
+- Coverage matrix valid (156 skills), all layer1 tests passing (1221 tests).
+- Recommended next command: `/run`.
+
 ## 2026-05-18 — ship-end single active-runner benchmark agent review
 
 - Reviewed retained `session-handoff.md` artifacts from Claude `ship-end-claude-9bf5f843` and Codex `ship-end-codex-d7d92d34`.
