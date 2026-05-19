@@ -26,6 +26,31 @@
 - Note: the skill audit scripts require a modern Bash; macOS `/bin/bash` failed on associative-array and `mapfile` usage, so validation used `/opt/homebrew/bin/bash`.
 - Recommended next command: `$skill-interview <skill-name-or-topic>`
 
+## Interrupt Task — Align Benchmark Coverage with Prototype-First Pipeline Refactor 2026-05-19
+
+**Goal:** Update benchmark coverage matrix and test setups to reflect the prototype-first pipeline refactor (d84f6fe) which renamed `ux-variation` → `ux-variations`, `ui-consolidate` → `consolidate-variations`, and added a new `prototype` skill.
+
+**Plan:**
+- [x] Rename `ux-variation` → `ux-variations` and `ui-consolidate` → `consolidate-variations` in all coverage arrays and test setups.
+- [x] Add `prototype` skill with hub page output, fixture files, and `$uat --variant-evaluation` routing.
+- [x] Remove `prototypeFirstProductGateCriterion` from tier1 setups (prototype work is now an explicit upstream skill).
+- [x] Update `spec-interview` routing from `$roadmap` → `$research-roadmap --post-spec` and align test assertions.
+- [x] Update tier1 prompts/fixtures for `roadmap`, `plan-phase`, `feature-interview` to reference consolidated prototypes.
+- [x] Fix stale references in `codex-interview-cadence.test.ts` and `bench-setups.test.ts`.
+- [x] Run coverage validator, stale reference check, and layer1 tests.
+
+## Review — Align Benchmark Coverage with Prototype-First Pipeline Refactor 2026-05-19
+
+- Renamed entries across `bench-coverage.ts` (both arrays), `tier23-global-workflows.setup.ts`, `tier1-workflows.setup.ts`, `bench-setups.test.ts`, and `codex-interview-cadence.test.ts`.
+- Added `prototype` skill definition in tier23 setup with hub page output, variation fixture files, and `$uat --variant-evaluation` routing.
+- Removed `prototypeFirstProductGateCriterion` (34-line evaluator + 5 references) — prototype work is now an explicit upstream skill, not a gate criterion on downstream tier1 skills.
+- Updated `spec-interview` setup to use consolidated prototype as primary input and route to `$research-roadmap --post-spec`.
+- Updated tier1 `roadmap`, `plan-phase`, and `feature-interview` prompts/fixtures to remove Phase 0 language and reference consolidated prototypes.
+- Removed prototype gate test assertions from `bench-setups.test.ts` and updated spec-interview route alignment test.
+- Validation passed: `pnpm --dir tests bench:coverage` (156 skills); `pnpm --dir tests test -- --grep "bench-setups|codex-interview"` (1221 tests); no stale `ux-variation`/`ui-consolidate` references in `.ts` files; no dangling `prototypeFirstProductGateCriterion` references.
+- Generated Skills Showcase data was not refreshed because no tracked `SKILL.md` or `PACK.md` changed.
+- Recommended next command: `/run`
+
 ## Interrupt Task — Benchmark `update-packages` 2026-05-19
 
 **Goal:** Run `$benchmark-test-skill update-packages` against the current repository state and publish deterministic both-agent benchmark evidence.
@@ -468,7 +493,7 @@
 **Source:** `docs/benchmark-results-matrix.md`, `tests/harness/bench-coverage.ts`, `benchmark/test-*.md`, and the 2026-05-11 benchmark lessons distinguishing setup coverage from persisted evaluated results.
 
 **Current Baseline:**
-- Benchmark coverage registry validates 152 tracked skills.
+- Benchmark coverage registry validates 156 tracked skills.
 - Persisted evaluated benchmark results currently cover 14 unique skill names.
 - Remaining without evaluated benchmark result rows: 138.
 - Remaining runnable, non-blocked skills: 132.
