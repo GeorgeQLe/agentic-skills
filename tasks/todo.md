@@ -800,7 +800,7 @@
 - [x] Step B.2: Run verify gate for `update-packages`.
 - [x] Step B.3: Run both-agent benchmark if verify passes.
 - [x] Step B.4: Write and validate the dated benchmark report.
-- [ ] Step B.5: Commit and push intended benchmark/report changes.
+- [x] Step B.5: Commit and push intended benchmark/report changes.
 
 ### Review
 
@@ -812,6 +812,7 @@
 - Report: `benchmark/test-update-packages-2026-05-19.md`.
 - Generated evidence refreshed: `docs/benchmark-results-matrix.md`, `docs/skills-showcase/assets/skills-data.js`, `docs/skills-showcase/assets/github-proof-data.js`, `apps/skills-showcase/public/assets/skills-data.js`, and `apps/skills-showcase/public/assets/github-proof-data.js`.
 - Validation passed: `scripts/validate-skills-showcase-data.sh`; targeted `rg` confirmed report target, agent rows, latency/cost fields, raw session paths, and next route; `git diff --check`.
+- Shipped: committed and pushed to `master` in `9ecb545`.
 - Recommended next skill: `$benchmark-agent-review update-packages`
 
 ## Benchmark: update-packages Fresh Run
