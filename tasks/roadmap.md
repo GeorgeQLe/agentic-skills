@@ -16,6 +16,18 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Update: Benchmark Repeated False-Negative Generalization Gate 2026-05-19
+
+**Goal:** Add a durable benchmark workflow gate that prevents repeated same-family benchmark false negatives from being patched one wording variant at a time.
+
+**Acceptance Criteria:**
+- [x] Mirrored `session-triage` contracts require checking recent same-skill benchmark triage reports for repeated same-family false negatives before recommending another narrow tolerance patch.
+- [x] Mirrored `benchmark-test-skill` contracts route repeated false-negative families toward generalized rubric/harness remediation instead of blind reruns.
+- [x] Layer1 contract coverage proves the new generalization gate is present in both Claude and Codex benchmark workflow contracts.
+- [x] Task review notes record validation and intended changes are committed and pushed on `master`.
+
+**Result:** Added a repeated false-negative generalization gate to mirrored `session-triage` and `benchmark-test-skill` contracts. Benchmark triage now checks recent same-skill triage reports and routes two-or-more same-family benchmark false negatives to a family-level rubric, semantic evaluator, fixture-family, or infrastructure-classifier fix. Benchmark-test-skill now avoids blind reruns once that pattern is visible and routes to targeted generalization work instead. Layer1 contract coverage guards both behavior surfaces. Validation passed: install, skill dependency/version/routing audits, focused layer1 contract tests, benchmark coverage, target verifies for `benchmark-test-skill` and `session-triage`, generated Skills Showcase data validation, targeted search, and `git diff --check`.
+
 ## Current Skill Creation: skill-interview 2026-05-18
 
 **Goal:** Add a mirrored `skill-interview` planning skill that interrogates the user about the characteristics of a desired skill before skill creation.

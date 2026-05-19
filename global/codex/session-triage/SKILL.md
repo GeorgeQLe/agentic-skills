@@ -54,11 +54,13 @@ Use `$analyze-sessions` instead when the user wants broad cross-session trends, 
    - Identify whether the cause is a missing trigger, ambiguous trigger, missing evidence gate, insufficient scope resolution, weak output contract, bad next-step routing, missing validation, missing safety constraint, stale mirrored contract, repo instruction conflict, or agent noncompliance with an adequate contract.
    - Compare Claude and Codex skill versions when both exist and flag mirrored drift.
    - Check `tasks/lessons.md` when working in `agentic-skills`; reuse existing lessons or recommend a new lesson when the pattern is novel.
+   - For benchmark failures, check recent same-skill `benchmark/triage-<skill>-*.md` reports and `tasks/lessons.md` before recommending a narrow tolerance patch. If two or more recent reports classify the same family of valid outputs as benchmark false negatives, stop patching individual phrasings and route to a generalized rubric, semantic evaluator, fixture-family, or infrastructure-classifier fix that covers the family.
 
 6. Recommend the smallest durable fix:
    - Name exact skill file(s), instruction file(s), or docs to change.
    - Provide concrete rule text or workflow-step wording when a skill-contract change is justified.
    - Include validation checks that prove the revised behavior prevents the issue, such as targeted `rg` checks, mirrored contract checks, version checks, replay of the decision path, or the failing test/log command.
+   - For repeated benchmark false-negative families, the recommended fix must name the owning harness or setup file, the family-level behavior to recognize or reject, positive and negative fixture shapes to add, and a validation command such as focused layer1 setup tests plus `pnpm --dir tests verify --skill <skill>`.
    - Route verified skill changes to `$targeted-skill-builder` for a narrow update or `$create-agentic-skill` for a new repo-managed skill.
 
 ## Output

@@ -56,6 +56,13 @@ describe("benchmark coverage contract", () => {
       expect(content, `${contract.path} unknown skill stop`).toContain("Do not run `pnpm verify` or `pnpm bench` for unknown skills.");
       expect(content, `${contract.path} both-agent default`).toContain("Use `--agent both` by default.");
       expect(content, `${contract.path} infrastructure blocked`).toContain("infrastructure-blocked runs, not skill failures");
+      expect(content, `${contract.path} repeated false-negative route`).toContain(
+        "repeated same-family benchmark false negatives",
+      );
+      expect(content, `${contract.path} generalization route`).toContain(
+        "benchmark repeated false-negative generalization",
+      );
+      expect(content, `${contract.path} blind rerun guard`).toContain("do not recommend another blind rerun");
       expect(content, `${contract.path} report verification`).toContain("After writing the report, verify the file exists");
       expect(content, `${contract.path} final route output`).toContain("Do not omit the final next-step route.");
       expect(content, `${contract.path} custom coverage route`).toContain(contract.customCoverageRoute);
@@ -68,6 +75,36 @@ describe("benchmark coverage contract", () => {
       expect(content, `${contract.path} subjective review gate`).toContain(
         "subjective output-quality review or remediation planning has not yet been performed",
       );
+    }
+  });
+
+  it("lints session-triage contracts for repeated benchmark false-negative generalization", () => {
+    const skillContracts = [
+      {
+        path: "global/claude/session-triage/SKILL.md",
+        route: "/targeted-skill-builder",
+      },
+      {
+        path: "global/codex/session-triage/SKILL.md",
+        route: "$targeted-skill-builder",
+      },
+    ];
+
+    for (const contract of skillContracts) {
+      const content = readFileSync(resolve(REPO_ROOT, contract.path), "utf8");
+
+      expect(content, `${contract.path} recent triage check`).toContain(
+        "check recent same-skill `benchmark/triage-<skill>-*.md` reports",
+      );
+      expect(content, `${contract.path} repeated family threshold`).toContain(
+        "two or more recent reports classify the same family",
+      );
+      expect(content, `${contract.path} one-off patch guard`).toContain("stop patching individual phrasings");
+      expect(content, `${contract.path} generalized fix`).toContain(
+        "generalized rubric, semantic evaluator, fixture-family, or infrastructure-classifier fix",
+      );
+      expect(content, `${contract.path} family validation`).toContain("positive and negative fixture shapes");
+      expect(content, `${contract.path} targeted route`).toContain(contract.route);
     }
   });
 
