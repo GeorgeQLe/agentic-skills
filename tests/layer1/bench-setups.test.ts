@@ -1750,8 +1750,8 @@ describe("benchmark setup registry", () => {
     const codexSkill = readFileSync(resolve(TESTS_ROOT, "../global/codex/spec-interview/SKILL.md"), "utf8");
     const claudeSkill = readFileSync(resolve(TESTS_ROOT, "../global/claude/spec-interview/SKILL.md"), "utf8");
 
-    expect(codexSkill).toContain("Treat `$roadmap` as the default next route after a completed or updated spec");
-    expect(claudeSkill).toContain("Treat `/roadmap` as the default next route after a completed or updated spec");
+    expect(codexSkill).toContain("Treat `$research-roadmap --post-spec` as the primary next route after a completed or updated spec when research gaps exist");
+    expect(claudeSkill).toContain("Treat `/research-roadmap --post-spec` as the primary next route after a completed or updated spec when research gaps exist");
 
     const workDir = mkdtempSync(resolve(tmpdir(), "spec-interview-route-"));
     mkdirSync(resolve(workDir, "specs"), { recursive: true });
@@ -1776,7 +1776,7 @@ describe("benchmark setup registry", () => {
         "Benchmark coverage status is informational.",
         "",
         "## Next command",
-        "`$roadmap`",
+        "`$research-roadmap --post-spec`",
       ].join("\n"),
     );
 
@@ -1788,12 +1788,12 @@ describe("benchmark setup registry", () => {
       files: ["specs/benchmark-reporting.md"],
     });
 
-    expect(assertions.find((assertion) => assertion.description === "Output recommends $roadmap")).toMatchObject({
+    expect(assertions.find((assertion) => assertion.description === "Output recommends $research-roadmap --post-spec")).toMatchObject({
       pass: true,
     });
     expect(assertions.some((assertion) => assertion.description === "Output recommends $plan-phase")).toBe(false);
     const nextRouteCriterion = setup!.qualityEvaluator?.rubric.criteria.find((criterion) => criterion.id === "actionable-next-route");
-    expect(nextRouteCriterion?.evaluate("## Next command\n`$roadmap`")).toMatchObject({
+    expect(nextRouteCriterion?.evaluate("## Next command\n`$research-roadmap --post-spec`")).toMatchObject({
       score: 1,
     });
     expect(nextRouteCriterion?.evaluate("## Next command\n`$plan-phase`")).toMatchObject({
@@ -1985,50 +1985,6 @@ describe("benchmark setup registry", () => {
       score: 0,
     });
 
-    const prototypeGateCriterion = setup!.qualityEvaluator?.rubric.criteria.find((criterion) => criterion.id === "prototype-first-product-gate");
-    expect(prototypeGateCriterion?.evaluate([
-      "## Prototype-First Gate",
-      "",
-      "Decision: `multiple route experiments` in a separate Prototype Phase 0.",
-      "The next build artifact should be a local/static dashboard prototype with fake or fixture-backed skill rows.",
-      "Experiment routes: `/experiments/table-first`, `/experiments/board-first`, and `/experiments/command-first`.",
-      "Explicitly deferred until prototype acceptance: authentication, Stripe or billing, product analytics, durable database or storage, deployment, admin tooling, multi-tenancy, and production observability.",
-      "Evidence that would justify promoting a deferred item into a later phase:",
-      "- Auth: multiple user roles or private skill inventories are validated as necessary.",
-      "- Database/storage: maintainers accept the row schema and need persistent edits or imported benchmark history.",
-      "- Analytics: measured usage is needed after the workflow is accepted.",
-    ].join("\n"))).toMatchObject({
-      score: 1,
-    });
-    expect(prototypeGateCriterion?.evaluate([
-      "## Prototype-First Gate",
-      "",
-      "Roadmap impact: create a prototype-first benchmark reporting phase that sequences `/experiments/table-first`, `/experiments/board-first`, and `/experiments/command-first`, then evaluates which route should graduate into a fuller spec or implementation plan.",
-      "The first build artifact should be clickable local/static prototype routes with fake or fixture-backed data.",
-      "Deferred until one route is accepted: durable storage, auth, Stripe, analytics, deployment, admin tooling, multi-tenancy, production observability, and production reporting exports.",
-      "Promotion evidence for deferred infrastructure: a selected route, accepted core workflow, fixture fields that match real maintainer decisions, and clear evidence that persistent history or authenticated collaboration is needed for the next phase.",
-    ].join("\n"))).toMatchObject({
-      score: 1,
-    });
-    expect(prototypeGateCriterion?.evaluate([
-      "## Prototype-First Gate",
-      "",
-      "Recommended roadmap placement: prototype-first phase before any production SaaS infrastructure phase.",
-      "The next build artifact should use fake, fixture, or in-memory rows only.",
-      "Route-based experiments: `/experiments/benchmark-reporting/table-first`, `/experiments/benchmark-reporting/board-first`, and `/experiments/benchmark-reporting/command-first`.",
-      "The prototype should intentionally defer durable storage, auth, payments, analytics, deployment, admin tooling, multi-tenancy, production observability, and any external data ingestion.",
-      "Promotion criteria for production infrastructure: one route demonstrates a clear maintainer workflow, the fixture schema survives review, and maintainers can identify next actions for blocked skills.",
-    ].join("\n"))).toMatchObject({
-      score: 1,
-    });
-    expect(prototypeGateCriterion?.evaluate([
-      "## Prototype-First Gate",
-      "",
-      "Decision: clickable prototype.",
-      "Use fake data and defer auth, database, analytics, and deployment until later.",
-    ].join("\n"))).toMatchObject({
-      score: 0,
-    });
   });
 
   it("keeps session-triage benchmark routing aligned with the no-skill-change branch", () => {
@@ -3112,9 +3068,10 @@ describe("benchmark coverage matrix", () => {
       "spec-drift",
       "trace",
       "uat",
-      "ui-consolidate",
+      "consolidate-variations",
+      "prototype",
       "ui-interview",
-      "ux-variation",
+      "ux-variations",
     ];
     const expectedBlockedSkills = [
       "delegate",
