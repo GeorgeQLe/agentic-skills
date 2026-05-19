@@ -784,6 +784,32 @@
 **Next work:** Step 42.5 — restyle `/workflows` for persistent transcript layout across desktop and mobile.
 **Recommended next command:** `$run`
 
+## Targeted Skill Builder: update-packages Benchmark Lockfile Migration Ordering 2026-05-19
+
+**Goal:** Execute `$targeted-skill-builder update-packages benchmark lockfile migration ordering` from the agent-review remediation report.
+
+**Scope:**
+- Read relevant lessons and review evidence for the lockfile migration ordering gap.
+- Confirm the fix belongs in the `update-packages` benchmark rubric rather than the mirrored skill contract.
+- Add deterministic quality coverage that rejects removing `package-lock.json` before `pnpm import` or a successful pnpm install.
+- Preserve retained positive actionability shapes and make bare known-target migrate routes critical quality failures.
+- Run focused and target validation, then commit and push intended changes.
+
+### Execution
+- [x] Step T.1: Read relevant lessons, review evidence, and current benchmark setup.
+- [x] Step T.2: Add the lockfile migration ordering quality criterion and focused tests.
+- [x] Step T.3: Run focused benchmark setup tests and target validation.
+- [x] Step T.4: Commit and push intended benchmark-rubric changes.
+
+### Review
+
+- Decision: existing benchmark-rubric update, not a new skill and not a mirrored `update-packages` contract change. The skill contracts already require deleting npm lockfiles only after pnpm install/update succeeds.
+- Changed `tests/layer4/setups/tier23-global-workflows.setup.ts` to add critical `workflow-lockfile-migration-ordering` scoring for `update-packages` artifacts and make target-specific migrate routing a critical quality criterion.
+- Changed `tests/layer1/bench-setups.test.ts` with a negative case for `rm package-lock.json && pnpm import && pnpm install`, a positive safe-order case using `pnpm import && pnpm install` before removing `package-lock.json`, and critical-failure coverage for bare migrate routes.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 bench-setups`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill update-packages`.
+- Generated showcase data was not refreshed because no `SKILL.md`, `PACK.md`, curated benchmark/review report, or showcase source changed.
+- Recommended next command: `$benchmark-test-skill update-packages`
+
 ## Agent Review: update-packages Fresh Rerun 2026-05-19
 
 **Goal:** Run `$benchmark-agent-review update-packages` against the latest persisted Claude/Codex benchmark outputs from `benchmark/test-update-packages-2026-05-19.md`.
