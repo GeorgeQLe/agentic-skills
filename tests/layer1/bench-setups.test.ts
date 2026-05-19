@@ -17,6 +17,7 @@ import {
   supportedBenchSkillRows,
   supportedBenchSkills,
 } from "../harness/bench-setups.js";
+import { classifyInfrastructureBlock } from "../harness/bench-runner.js";
 import { assertFileCreated } from "../layer4/setup-helpers/artifacts.js";
 import { BENCH_BUDGETS_USD, BENCH_TIMEOUTS_MS } from "../layer4/setup-helpers/budgets.js";
 import {
@@ -3642,6 +3643,44 @@ describe("layer4 setup helpers", () => {
       standard: 300_000,
       focused: 240_000,
     });
+  });
+
+  it("classifies live-agent transport and timeout failures as infrastructure blocks", () => {
+    expect(classifyInfrastructureBlock({
+      stdout: "",
+      stderr: "Agent runner timed out after 300000ms.",
+      exitCode: 143,
+      workDir: "/tmp/bench-timeout",
+      files: [],
+    })).toBe("agent runner timeout");
+
+    expect(classifyInfrastructureBlock({
+      stdout: "API Error: Unable to connect to API (ConnectionRefused)",
+      stderr: "",
+      exitCode: 1,
+      workDir: "/tmp/bench-api-refused",
+      files: [],
+    })).toBe("agent runner connection failure");
+
+    expect(classifyInfrastructureBlock({
+      stdout: "",
+      stderr: [
+        "failed to connect to websocket: IO error: failed to lookup address information",
+        "worker quit with fatal: Transport channel closed",
+        "http/request failed: error sending request for url (https://chatgpt.com/backend-api/wham/apps)",
+      ].join("\n"),
+      exitCode: 0,
+      workDir: "/tmp/bench-codex-websocket",
+      files: [],
+    })).toBe("agent runner connection failure");
+
+    expect(classifyInfrastructureBlock({
+      stdout: "Wrote `package-update-plan.md` with selected versions.",
+      stderr: "",
+      exitCode: 0,
+      workDir: "/tmp/bench-success",
+      files: ["package-update-plan.md"],
+    })).toBeUndefined();
   });
 
   it("asserts benchmark report expectations", () => {
