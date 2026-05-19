@@ -873,6 +873,28 @@
 - Shipped: committed and pushed to `master` in `9ecb545`.
 - Recommended next skill: `$benchmark-agent-review update-packages`
 
+## Targeted Skill Builder: Benchmark Repeated False-Negative Generalization Gate 2026-05-19
+
+**Goal:** Execute `$targeted-skill-builder benchmark repeated false-negative generalization gate`.
+
+### Plan
+- [x] Read relevant lessons and existing benchmark workflow contracts.
+- [x] Decide whether the fix is a new skill or an existing workflow update.
+- [x] Update the smallest owner contracts and layer1 coverage.
+- [x] Run required validation.
+- [x] Record review notes, then commit and push intended changes.
+
+### Review
+
+- Decision: existing workflow update, not a new skill. The owner surfaces are mirrored `session-triage` for incident diagnosis and mirrored `benchmark-test-skill` for benchmark next-step routing.
+- Evidence used: current `$analyze-sessions` summary, `tasks/lessons.md` benchmark routing lessons, existing `session-triage` and `benchmark-test-skill` contracts, and focused layer1 benchmark contract tests.
+- Evidence intentionally skipped: no broad session-history rescan; recurrence was already established by the immediately preceding `$analyze-sessions` report and the request named the concrete gap.
+- Changed contracts: `global/codex/session-triage/SKILL.md`, `global/claude/session-triage/SKILL.md`, `packs/agentic-skills-bench/codex/benchmark-test-skill/SKILL.md`, and `packs/agentic-skills-bench/claude/benchmark-test-skill/SKILL.md`.
+- Changed tests/data: `tests/layer1/bench-coverage.test.ts` now lints the recurrence gate; generated Skills Showcase data and `docs/benchmark-results-matrix.md` were refreshed because tracked skill behavior changed.
+- Validation passed: `./install.sh`; `./scripts/skill-deps.sh --broken`; `./scripts/skill-versions.sh --missing`; `./scripts/skill-next-step-routing.sh --missing`; `pnpm --dir tests exec vitest run --project layer1 bench-coverage --project layer1 bench-setups --testNamePattern "benchmark-test-skill|session-triage|false-negative|false negative"`; `pnpm --dir tests bench:coverage`; `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests verify --skill benchmark-test-skill`; `pnpm --dir tests verify --skill session-triage`; targeted `rg`; `git diff --check`.
+- Layer2 note: both target verifies reported layer2 SKIP because no target-specific layer2 tests matched `benchmark-test-skill` or `session-triage`.
+- Recommended next command: `$ship`
+
 ## Benchmark: update-packages Fresh Run
 
 **Goal:** Run `$benchmark-test-skill update-packages` for a fresh deterministic benchmark report dated 2026-05-18.

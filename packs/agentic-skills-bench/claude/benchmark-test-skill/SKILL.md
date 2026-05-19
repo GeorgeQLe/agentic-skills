@@ -78,6 +78,7 @@ pnpm bench --skill <SKILL> --agent both --runs 3 --chunk-size 3 --pause 0
 - The expected budget is about $1 per run for the current design-system variant; report actual cost from the benchmark output when available.
 - The bench system persists raw data to `tests/benchmarks/runs/<skill>-<agent>-<sessionId>/` and generates `report.json`.
 - Treat rate limits, quota exhaustion, and similar runner-capacity errors as infrastructure-blocked runs, not skill failures. Report them separately from evaluated pass rate.
+- If recent same-skill benchmark reports or triage reports show repeated same-family benchmark false negatives, do not recommend another blind rerun as the next step. Report the recurrence and route to `/targeted-skill-builder <SKILL> benchmark repeated false-negative generalization` so the harness/setup gets a family-level semantic evaluator, fixture set, or infrastructure classifier instead of another one-off tolerance patch.
 
 ### Step 4 - Report
 
@@ -133,6 +134,8 @@ If the skill only has generic smoke benchmark coverage or otherwise lacks custom
 If the skill fails verification, hard benchmark assertions, or configured quality thresholds, recommend `/session-triage <skill> benchmark failure`.
 
 If benchmark runs are blocked only by rate limits or quota exhaustion, recommend re-running `/benchmark-test-skill <skill>` after the reset instead of treating the skill as failed.
+
+If the failure pattern has already been triaged as a repeated same-family benchmark false negative, recommend `/targeted-skill-builder <skill> benchmark repeated false-negative generalization` instead of another `/benchmark-test-skill <skill>` rerun.
 
 If evaluated benchmark runs completed and subjective output-quality review or remediation planning has not yet been performed, recommend `/benchmark-agent-review <skill>` as the next separate step.
 
