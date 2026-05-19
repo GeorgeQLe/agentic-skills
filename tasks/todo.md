@@ -11,10 +11,31 @@
 **Goal:** Add a mirrored `skill-interview` planning skill that interviews the user about the desired characteristics of a new skill before routing to skill creation.
 
 **Plan:**
-- [ ] Review `spec-interview`, skill creation conventions, benchmark coverage registration, and current worktree state.
-- [ ] Create Codex and Claude `skill-interview` skill contracts with clear interview workflow, outputs, constraints, and next-step routing.
-- [ ] Add custom benchmark coverage and setup wiring for `skill-interview`.
-- [ ] Refresh generated Skills Showcase data, run required validation, record review results, then commit and push intended changes.
+- [x] Review `spec-interview`, skill creation conventions, benchmark coverage registration, and current worktree state.
+- [x] Create Codex and Claude `skill-interview` skill contracts with clear interview workflow, outputs, constraints, and next-step routing.
+- [x] Add custom benchmark coverage and setup wiring for `skill-interview`.
+- [x] Refresh generated Skills Showcase data, run required validation, record review results, then commit and push intended changes.
+
+## Review — Create `skill-interview` 2026-05-18
+
+- Added mirrored skill files: `global/codex/skill-interview/SKILL.md` and `global/claude/skill-interview/SKILL.md`.
+- The new planning contract covers target skill identity, overlapping-skill evidence gathering, assumptions checkpoint, one-decision interview cadence, complete skill characteristics, coverage checkpoint, skill brief deliverables, and next-step routing.
+- Registered custom benchmark coverage in `tests/harness/bench-coverage.ts`, `tests/harness/bench-setups.ts`, and `tests/layer4/setups/tier1-workflows.setup.ts`.
+- Generated Skills Showcase data was refreshed and validated after adding tracked skill files.
+- Validation passed: `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill skill-interview`; `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken`; `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`; `/opt/homebrew/bin/bash ./scripts/skill-next-step-routing.sh --missing`; targeted `rg`; `git diff --check`.
+- Note: the skill audit scripts require a modern Bash; macOS `/bin/bash` failed on associative-array and `mapfile` usage, so validation used `/opt/homebrew/bin/bash`.
+- Recommended next command: `$skill-interview <skill-name-or-topic>`
+
+## Interrupt Task — Benchmark `update-packages` 2026-05-19
+
+**Goal:** Run `$benchmark-test-skill update-packages` against the current repository state and publish deterministic both-agent benchmark evidence.
+
+**Plan:**
+- [x] Confirm `benchmark-test-skill` is the active workflow and `update-packages` is only the benchmark target.
+- [x] Run `pnpm bench --list-skills` from `tests/` and confirm `update-packages` is known, not blocked, and note its coverage status.
+- [ ] Run `pnpm verify --skill update-packages`; stop without benchmarking if verify fails.
+- [ ] Run `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` only after verify passes.
+- [ ] Write and validate `benchmark/test-update-packages-2026-05-19.md`, refresh generated evidence if needed, update this review section, then commit and push intended changes.
 
 ## Interrupt Task — Targeted Update `update-packages` Benchmark Infrastructure Classification 2026-05-18
 

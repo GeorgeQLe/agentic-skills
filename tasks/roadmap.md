@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Skill Creation: skill-interview 2026-05-18
+
+**Goal:** Add a mirrored `skill-interview` planning skill that interrogates the user about the characteristics of a desired skill before skill creation.
+
+**Acceptance Criteria:**
+- [x] `global/codex/skill-interview/SKILL.md` defines a Codex planning workflow with assumptions checkpoint, one-question interview cadence, coverage checkpoint, deliverables, constraints, and next-step routing.
+- [x] `global/claude/skill-interview/SKILL.md` mirrors the same workflow with Claude command syntax and AskUserQuestion expectations.
+- [x] `tests/harness/bench-coverage.ts`, `tests/harness/bench-setups.ts`, and `tests/layer4/setups/tier1-workflows.setup.ts` register deterministic benchmark coverage for `skill-interview`.
+- [x] Skills Showcase generated data is refreshed because tracked `SKILL.md` files were added.
+- [x] Validation passes and intended changes are committed and pushed on the repository primary branch.
+
+**Result:** Added mirrored `skill-interview` planning contracts for Codex and Claude. The skill interviews the user on skill characteristics, checks overlapping skills and lessons before probing, writes a creation-ready skill brief plus interview log, and routes to `$create-agentic-skill`, `$create-local-skill`, `$targeted-skill-builder`, or pack-local creation as appropriate. Benchmark coverage is registered through the Tier 1 workflow setup with a deterministic skill-brief fixture. Validation passed: generated Skills Showcase data refresh and validation, `pnpm --dir tests bench:coverage`, `pnpm --dir tests verify --skill skill-interview`, skill dependency/version/routing audits under Homebrew Bash, targeted `rg`, and `git diff --check`.
+
 ## Current Benchmark: update-packages Fresh Rerun After Actionability Threshold 2026-05-18
 
 **Goal:** Run `$benchmark-test-skill update-packages` against the current repository state and publish deterministic both-agent benchmark evidence after the benchmark actionability threshold update.
