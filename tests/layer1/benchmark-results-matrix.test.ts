@@ -14,7 +14,7 @@ describe("benchmark results matrix", () => {
       /\| `ship` \| Codex \| `tests\/benchmarks\/runs\/ship-codex-[^/]+\/report\.json` \| 3 \| 100% \| 100\.0% \| `benchmark\/review-ship-2026-05-16\.md` \| graded \|/,
     );
     expect(matrix).toContain(
-      "| `affected` | Codex | `tests/benchmarks/runs/affected-codex-3c36c9a8/report.json` | blocked/incomplete | Report exists with zero total and evaluated runs. Do not count as benchmarked. |",
+      "| `affected` | Codex | `tests/benchmarks/runs/affected-codex-3c36c9a8/report.json` | blocked/incomplete | Report exists with zero total and evaluated runs. Do not count as benchmarked. Prefer the later evaluated report listed above. |",
     );
     expect(matrix).toContain("## Safe Git-Fixture Skills");
     expect(matrix).toContain(
