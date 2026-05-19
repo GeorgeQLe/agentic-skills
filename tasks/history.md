@@ -2604,3 +2604,13 @@ Resolved all 10 findings from `/expert-review`:
 - Updated the `roadmap` Tier 1 benchmark quality rubric to require the broader `benchmark coverage` concept plus `CLI status output`, instead of requiring the exact source phrase `benchmark coverage reporting`.
 - Added focused layer1 coverage proving `Benchmark Coverage Model` satisfies `evidence-linked` while generic reporting text still fails.
 - Verified with focused `bench-setups` layer1 coverage, `pnpm --dir tests verify --skill roadmap`, benchmark coverage validation, install/skill integrity checks, Codex smoke `roadmap-codex-e5be3958`, and whitespace validation.
+
+## 2026-05-19 — Batch 41.1 benchmark execution (targeted-skill-builder, affected)
+
+- Completed Batch 41.1: benchmarked `targeted-skill-builder` and `affected` with both agents (3 runs each, smoke budget).
+- `targeted-skill-builder`: Claude all 3 runs infrastructure-blocked (agent runner budget exceeded at $0.25/run); Codex 0/3 hard pass, 92.9% output quality, route mismatch (`$targeted-skill-builder` instead of expected `$run`). Report: `benchmark/test-targeted-skill-builder-2026-05-19.md`.
+- `affected`: Claude 0/1 evaluated (2 blocked), 68.2% quality; Codex 0/3 evaluated, 40.9% quality. Both agents fail on route expectation (produce `pnpm --filter` commands instead of `$run`) and Codex misses literal "affected packages" string. Report: `benchmark/test-affected-2026-05-19.md`.
+- `feature-interview` and `ship-end` confirmed already graded from prior batches, skipped.
+- Refreshed generated data: `docs/benchmark-results-matrix.md` now has 34 graded + 11 incomplete rows covering 18 unique skill names.
+- All Batch 41.1 acceptance criteria checked off. Validation passed: `pnpm --dir tests bench:coverage` (156 skills), `git diff --check` clean.
+- Both new skills have fixture-prompt triage items (route expectation clarity, literal string matching) before hard pass rates can improve.

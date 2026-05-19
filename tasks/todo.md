@@ -509,14 +509,14 @@
 - Do not attempt blocked skills as live benchmarks until their next-command remediation creates a safe fixture or Codex-runnable contract.
 
 **Acceptance Criteria:**
-- [ ] A generated or scripted queue identifies remaining skills from `tests/harness/bench-coverage.ts` minus evaluated rows in `docs/benchmark-results-matrix.md`.
+- [x] A generated or scripted queue identifies remaining skills from `tests/harness/bench-coverage.ts` minus evaluated rows in `docs/benchmark-results-matrix.md`. Computed via `pnpm --dir tests bench:coverage` (156 skills) minus graded rows in matrix (18 unique skill names).
 - [x] Tier 1 remaining skills are benchmarked or explicitly triaged: `feature-interview` (graded 2026-05-18), `roadmap` (graded 2026-05-17), `ship-end` (graded 2026-05-18), `targeted-skill-builder` (benchmarked 2026-05-19, Codex graded with route triage needed, Claude budget-blocked).
 - [x] `affected` is rerun: both agents now have evaluated runs (2026-05-19). Fixture-prompt routing and literal-match issues triaged in `benchmark/test-affected-2026-05-19.md`.
-- [ ] Each completed benchmark has a curated report under `benchmark/test-<skill>-<YYYY-MM-DD>.md` and raw paths under `tests/benchmarks/runs/`.
-- [ ] Any failed benchmark is triaged before continuing broad execution if it indicates harness drift, shared setup drift, or skill-contract ambiguity.
-- [ ] `docs/benchmark-results-matrix.md` and Skills Showcase generated data are refreshed after each committed batch.
-- [ ] `pnpm --dir tests bench:coverage`, benchmark-results matrix validation, generated showcase validation, and `git diff --check` pass before shipping each batch.
-- [ ] Coverage-blocked skills have documented next remediation commands, not attempted live-run failures.
+- [x] Each completed benchmark has a curated report under `benchmark/test-<skill>-<YYYY-MM-DD>.md` and raw paths under `tests/benchmarks/runs/`. Reports: `test-targeted-skill-builder-2026-05-19.md`, `test-affected-2026-05-19.md`.
+- [x] Any failed benchmark is triaged before continuing broad execution if it indicates harness drift, shared setup drift, or skill-contract ambiguity. Both skills have fixture-prompt triage (route expectation, literal-match) documented in their reports — these are prompt clarity issues, not harness drift.
+- [x] `docs/benchmark-results-matrix.md` and Skills Showcase generated data are refreshed after each committed batch. Matrix: 34 graded + 11 incomplete rows.
+- [x] `pnpm --dir tests bench:coverage`, benchmark-results matrix validation, generated showcase validation, and `git diff --check` pass before shipping each batch.
+- [x] Coverage-blocked skills have documented next remediation commands, not attempted live-run failures. All 6 blocked skills (`delegate`, `deploy`, `install-agentic-skills`, `patch-exec-profile`, `release`, `uat-guide`) have `next=` commands in bench-coverage.
 
 ### Execution Profile
 **Parallel mode:** serial
@@ -536,7 +536,19 @@
     - Run each benchmark with conservative runner settings, pausing if a shared harness failure, runner-capacity issue, or ambiguous skill-contract failure appears.
     - Write or update each dated `benchmark/test-<skill>-<YYYY-MM-DD>.md` with verify evidence, benchmark results, raw session paths, failures/blocks, and recommended next route.
     - Refresh generated Skills Showcase data and `docs/benchmark-results-matrix.md` after curated benchmark evidence changes, then validate with benchmark coverage, generated-data validation, and whitespace checks.
-- [ ] Batch 41.2: Resolve or triage `roadmap`, which currently has evaluated Codex failures and Claude infrastructure blocks from `benchmark/test-roadmap-2026-05-17.md`.
+- [ ] Batch 41.2: Triage and resolve the Claude budget-block pattern across `roadmap`, `targeted-skill-builder`, and `affected` — all three have Claude runs infrastructure-blocked at smoke budget ($0.25/run). Either increase `perRunBudgetUsd` in their setup definitions or document smoke budget as the expected Claude limitation for complex workflow skills. `roadmap` Codex already passes 100%/100%; no Codex failures remain.
+  - Classification: automated
+  - Files: `tests/layer4/setups/tier1-workflows.setup.ts` (targeted-skill-builder, roadmap budget), `tests/layer4/setups/tier23-global-workflows.setup.ts` (affected budget), benchmark reports under `benchmark/`, generated data, task docs.
+  - Implementation plan:
+    - Review the three Claude-blocked skills and determine whether `BENCH_BUDGETS_USD.standard` (likely higher) would resolve the blocks.
+    - For `targeted-skill-builder`: also address the route-mismatch triage — either add `$targeted-skill-builder` as a valid alternative route or clarify the prompt.
+    - For `affected`: address both the route expectation and the "affected packages" literal match — either tighten the prompt or relax the assertion.
+    - Rerun benchmarks for any skills with fixture changes, verify pass rates improve.
+    - Refresh generated data and validate.
+  - Acceptance criteria:
+    - Claude budget-block pattern is resolved or explicitly documented as expected.
+    - At least one fixture-prompt fix is applied and validated.
+    - Reports updated and generated data refreshed.
 - [ ] Batch 41.3: Run Tier 2 global skills in groups of 5-10, pausing after any shared harness failure pattern.
 - [ ] Batch 41.4: Run git-fixture skills `commit-and-push-by-feature` and `sync` only after explicit permission for disposable GitHub fixture operations.
 - [ ] Batch 41.5: Run pack-local skills by pack family, starting with packs that feed public showcase/workflow proof.
