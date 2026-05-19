@@ -16,6 +16,18 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Update: Benchmark Workflow Layer2 Fixture Coverage 2026-05-19
+
+**Goal:** Add target-specific layer2 fixture coverage for benchmark workflow skills so `verify --skill benchmark-test-skill` and `verify --skill session-triage` no longer skip layer2.
+
+**Acceptance Criteria:**
+- [x] `tests/layer2/` includes deterministic coverage for `benchmark-test-skill` command/report routing behavior.
+- [x] `tests/layer2/` includes deterministic coverage for `session-triage` benchmark false-negative generalization behavior.
+- [x] `pnpm --dir tests verify --skill benchmark-test-skill` and `pnpm --dir tests verify --skill session-triage` pass with layer2 PASS.
+- [x] Task review notes record validation and intended changes are committed and pushed on `master`.
+
+**Result:** Added `tests/layer2/benchmark-test-skill-session-triage.test.ts` with deterministic fixture coverage for both benchmark workflow skills. The benchmark-test-skill fixture proves repeated same-family benchmark false negatives route to generalized remediation while ordinary benchmark failures still route to session-triage. The session-triage fixture proves recurrence evidence triggers family-level remediation and absent recurrence stays on the ordinary benchmark-failure path. Target verifies now pass layer2 for both skills. Validation passed: focused layer2 filters, target verifies, install, skill dependency/version/routing audits, benchmark coverage, targeted search, and `git diff --check`.
+
 ## Current Targeted Update: Benchmark Repeated False-Negative Generalization Gate 2026-05-19
 
 **Goal:** Add a durable benchmark workflow gate that prevents repeated same-family benchmark false negatives from being patched one wording variant at a time.

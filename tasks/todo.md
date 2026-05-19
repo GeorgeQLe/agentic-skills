@@ -873,6 +873,27 @@
 - Shipped: committed and pushed to `master` in `9ecb545`.
 - Recommended next skill: `$benchmark-agent-review update-packages`
 
+## Targeted Skill Builder: Benchmark Workflow Layer2 Fixture Coverage 2026-05-19
+
+**Goal:** Execute `$targeted-skill-builder benchmark workflow layer2 fixture coverage`.
+
+### Plan
+- [x] Review layer2 harness patterns and relevant lessons.
+- [x] Add focused layer2 fixture tests for `benchmark-test-skill` and `session-triage`.
+- [x] Run targeted verifies and required validation.
+- [x] Record review notes, then commit and push intended changes.
+
+### Review
+
+- Decision: test coverage update, not a new skill and not a skill-contract change.
+- Evidence used: current question about layer2 skips, `tests/verify.ts` target filtering behavior, existing layer2 tests, relevant benchmark routing lessons, and the just-added repeated false-negative generalization contracts.
+- Existing coverage finding: layer1 already had static contract coverage and layer4 has benchmark setups; layer2 lacked target-matching files for `benchmark-test-skill` and `session-triage`, causing `verify --skill` to report SKIP.
+- Added `tests/layer2/benchmark-test-skill-session-triage.test.ts` with deterministic fixtures for benchmark-test-skill next-route behavior and session-triage repeated false-negative generalization behavior.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer2 benchmark-test-skill`; `pnpm --dir tests exec vitest run --project layer2 session-triage`; `pnpm --dir tests verify --skill benchmark-test-skill`; `pnpm --dir tests verify --skill session-triage`; `./install.sh`; `./scripts/skill-deps.sh --broken`; `./scripts/skill-versions.sh --missing`; `./scripts/skill-next-step-routing.sh --missing`; `pnpm --dir tests bench:coverage`; targeted `rg`; `git diff --check`.
+- Target verify result: both `benchmark-test-skill` and `session-triage` now pass layer1 and layer2; no layer2 SKIP remains for these two skills.
+- Generated showcase data: not refreshed because no tracked `SKILL.md`, `PACK.md`, curated benchmark/review report, or showcase source changed.
+- Recommended next command: `$ship`
+
 ## Targeted Skill Builder: Benchmark Repeated False-Negative Generalization Gate 2026-05-19
 
 **Goal:** Execute `$targeted-skill-builder benchmark repeated false-negative generalization gate`.
