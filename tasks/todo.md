@@ -33,9 +33,22 @@
 **Plan:**
 - [x] Confirm `benchmark-test-skill` is the active workflow and `update-packages` is only the benchmark target.
 - [x] Run `pnpm bench --list-skills` from `tests/` and confirm `update-packages` is known, not blocked, and note its coverage status.
-- [ ] Run `pnpm verify --skill update-packages`; stop without benchmarking if verify fails.
-- [ ] Run `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` only after verify passes.
-- [ ] Write and validate `benchmark/test-update-packages-2026-05-19.md`, refresh generated evidence if needed, update this review section, then commit and push intended changes.
+- [x] Run `pnpm verify --skill update-packages`; stop without benchmarking if verify fails.
+- [x] Run `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` only after verify passes.
+- [x] Write and validate `benchmark/test-update-packages-2026-05-19.md`, refresh generated evidence if needed, update this review section, then commit and push intended changes.
+
+## Review — Benchmark `update-packages` 2026-05-19
+
+- Command resolution: `$benchmark-test-skill` resolved to `packs/agentic-skills-bench/codex/benchmark-test-skill/SKILL.md`; `update-packages` is the target skill argument.
+- Eligibility: `update-packages` is listed with `coverage=custom` and setup `tests/layer4/setups/tier23-global-workflows.setup.ts`.
+- Verify gate: `pnpm --dir tests verify --skill update-packages` passed on 2026-05-19 with layer1 PASS in 3.0s and layer2 SKIP because no target-specific layer2 tests matched.
+- Benchmark: `pnpm --dir tests bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` completed on 2026-05-19 with Claude session `dc9580ca` and Codex session `f04f15cc`.
+- Results: Claude hard assertions passed 1/2 evaluated runs with one infrastructure-blocked timeout, 56.8% output quality, one threshold failure, and eight critical failures. Codex hard assertions passed 2/2 evaluated runs with one infrastructure-blocked timeout, 100.0% output quality, and no quality failures.
+- Failed assertions: Claude run 1 failed `Agent command exited successfully` and `package-update-plan.md created in project root`.
+- Report written: `benchmark/test-update-packages-2026-05-19.md`.
+- Generated evidence refreshed: `docs/benchmark-results-matrix.md`, `docs/skills-showcase/assets/skills-data.js`, `docs/skills-showcase/assets/github-proof-data.js`, `apps/skills-showcase/public/assets/skills-data.js`, and `apps/skills-showcase/public/assets/github-proof-data.js`.
+- Validation passed: targeted report-field `rg`; generated data refresh; `scripts/validate-skills-showcase-data.sh`; `git diff --check`.
+- Recommended next skill: `$session-triage update-packages benchmark failure`
 
 ## Interrupt Task — Targeted Update `update-packages` Benchmark Infrastructure Classification 2026-05-18
 
