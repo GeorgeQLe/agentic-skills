@@ -784,6 +784,37 @@
 **Next work:** Step 42.5 — restyle `/workflows` for persistent transcript layout across desktop and mobile.
 **Recommended next command:** `$run`
 
+## Agent Review: update-packages Fresh Rerun 2026-05-19
+
+**Goal:** Run `$benchmark-agent-review update-packages` against the latest persisted Claude/Codex benchmark outputs from `benchmark/test-update-packages-2026-05-19.md`.
+
+**Scope:**
+- Resolve the latest curated benchmark report and raw run directories.
+- Extract retained generated artifacts from evaluated Claude and Codex runs.
+- Score each evaluated output against the agent-review rubric, excluding infrastructure-blocked runs.
+- Write `benchmark/review-update-packages-2026-05-19.md` with strengths, weaknesses, remediation targets, and next route.
+- Refresh generated evidence if needed, validate, then commit and push intended changes.
+
+### Execution
+- [x] Step R.1: Resolve benchmark report and raw run directories.
+- [x] Step R.2: Extract retained generated artifacts and deterministic context.
+- [x] Step R.3: Grade evaluated outputs and write the review report.
+- [x] Step R.4: Refresh generated evidence and validate.
+- [ ] Step R.5: Commit and push intended review changes.
+
+### Review
+
+- Source report: `benchmark/test-update-packages-2026-05-19.md`.
+- Reviewed runs: Claude `tests/benchmarks/runs/update-packages-claude-f8355f37/` and Codex `tests/benchmarks/runs/update-packages-codex-1ed5350e/`.
+- Deterministic context: both agents passed 3/3 hard assertions with no infrastructure blocks. Claude deterministic quality was 97.0% with one critical quality failure; Codex deterministic quality was 100.0%.
+- Subjective verdict: mostly excellent; median score 93, range 72-95.
+- Common strengths: retained age-gate evidence, age-eligible package selections, skipped fresh package versions, package-manager pin proof, major-upgrade batching, focused smoke checks, and runner-native `/run` or `$run` handoffs.
+- Material weakness: Claude run 2 is only usable because it recommends removing `package-lock.json` before `pnpm import` and uses bare `/migrate` for known React/Vitest compatibility risks.
+- Report written: `benchmark/review-update-packages-2026-05-19.md`.
+- Generated evidence refreshed: `docs/benchmark-results-matrix.md`, `docs/skills-showcase/assets/skills-data.js`, `docs/skills-showcase/assets/github-proof-data.js`, `apps/skills-showcase/public/assets/skills-data.js`, and `apps/skills-showcase/public/assets/github-proof-data.js`.
+- Validation passed: `scripts/validate-skills-showcase-data.sh`; targeted `rg` confirmed report source, run directories, score summary, remediation table, and next route; `git diff --check`.
+- Recommended next command: `$targeted-skill-builder update-packages benchmark lockfile migration ordering`
+
 ## Benchmark: update-packages Fresh Rerun 2026-05-19
 
 **Goal:** Run `$benchmark-test-skill update-packages` for a fresh deterministic benchmark report dated 2026-05-19.
