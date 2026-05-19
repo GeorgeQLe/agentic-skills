@@ -800,7 +800,7 @@
 - [x] Step R.2: Extract retained generated artifacts and deterministic context.
 - [x] Step R.3: Grade evaluated outputs and write the review report.
 - [x] Step R.4: Refresh generated evidence and validate.
-- [ ] Step R.5: Commit and push intended review changes.
+- [x] Step R.5: Commit and push intended review changes.
 
 ### Review
 
@@ -813,6 +813,7 @@
 - Report written: `benchmark/review-update-packages-2026-05-19.md`.
 - Generated evidence refreshed: `docs/benchmark-results-matrix.md`, `docs/skills-showcase/assets/skills-data.js`, `docs/skills-showcase/assets/github-proof-data.js`, `apps/skills-showcase/public/assets/skills-data.js`, and `apps/skills-showcase/public/assets/github-proof-data.js`.
 - Validation passed: `scripts/validate-skills-showcase-data.sh`; targeted `rg` confirmed report source, run directories, score summary, remediation table, and next route; `git diff --check`.
+- Shipped: committed and pushed to `master` in `b5ba0d6`.
 - Recommended next command: `$targeted-skill-builder update-packages benchmark lockfile migration ordering`
 
 ## Benchmark: update-packages Fresh Rerun 2026-05-19
