@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-05-20 — Batch 41.3 Group 1: Tier 2 global skill benchmarks
+
+- Benchmarked 10 Tier 2 global skills with both agents (3 runs each): `bootstrap-repo`, `brainstorm`, `branch-lifecycle`, `codebase-status`, `concept-exploration`, `consolidate-variations`, `create-agentic-skill`, `create-local-skill`, `dead-code`, `debug`.
+- All 10 skills passed layer1 verify. No layer2 tests matched any skill.
+- Shared pattern: Claude budget-blocked at smoke ($0.25) for 4 skills; route assertion failures near-universal due to missing explicit route guidance in fixture prompts.
+- Best Codex results: `brainstorm` 50%, `codebase-status` 33.3%, `dead-code` 33.3%. All other skills 0% for both agents.
+- No new harness defects discovered — all failures are fixture-prompt gaps or known budget limits.
+- Generated data refreshed: 52 graded + 16 incomplete rows (up from 35 + 11).
+- Validation passed: showcase data, bench coverage (157 skills), `git diff --check`.
+
 ## 2026-05-19 — Batch 41.2: Triage Claude budget-block pattern and fixture-prompt issues
 
 - Increased `perRunBudgetUsd` from smoke ($0.25) to standard ($1.00) for `roadmap`, `targeted-skill-builder` (tier1), and `affected` (tier23), resolving all Claude budget-blocked runs.

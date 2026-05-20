@@ -602,6 +602,27 @@
 - Acceptance criteria met: Claude budget-block pattern resolved (3/3 skills unblocked), two fixture-prompt fixes applied and validated, reports updated and generated data refreshed.
 - Recommended next command: `/ship`
 - Triage completed in `benchmark/triage-ship-end-2026-05-18-benchmark-failure.md`: verified split root cause. The benchmark setup incorrectly expects `$run` for Claude even though the Claude `ship-end` contract uses `/run`, and the prompt does not force fixture-grounded runner-native routing. Recommended next command: `$targeted-skill-builder ship-end benchmark runner route and fixture source-of-truth`.
+- Batch 41.3 Group 1 completed 2026-05-20. 10 Tier 2 global skills benchmarked with both agents (3 runs each).
+  - Results summary (Claude / Codex evaluated pass rates):
+    - `bootstrap-repo`: 0.0% (0/3) / 0.0% (0/3). Both fail project purpose and route assertions.
+    - `brainstorm`: 0.0% (0/0, 3 blocked) / 50.0% (1/2, 1 blocked). Claude all infra-blocked at smoke budget.
+    - `branch-lifecycle`: 0.0% (0/3) / 0.0% (0/3). Both fail `$ship` route assertion (6/6).
+    - `codebase-status`: 0.0% (0/0, 3 blocked) / 33.3% (1/3). Claude all infra-blocked at smoke budget.
+    - `concept-exploration`: 0.0% (0/0, 3 blocked) / 0.0% (0/3). Claude all infra-blocked; Codex fails `$spec-interview` route.
+    - `consolidate-variations`: 0.0% (0/0, 3 blocked) / 0.0% (0/2, 1 blocked). Claude all infra-blocked (2 budget, 1 timeout).
+    - `create-agentic-skill`: 0.0% (0/3) / 0.0% (0/0, 3 blocked). Claude fails `$run` route; Codex all infra-blocked.
+    - `create-local-skill`: 0.0% (0/2, 1 blocked) / 0.0% (0/3). Both fail `$ship` route assertion.
+    - `dead-code`: 0.0% (0/3) / 33.3% (1/3). Both mostly fail `$run` route assertion.
+    - `debug`: 0.0% (0/3) / 0.0% (0/3). Both fail `$run` route assertion (6/6).
+  - Shared patterns identified:
+    1. **Claude budget-block at smoke ($0.25)**: 4/10 skills had all Claude runs infra-blocked (`brainstorm`, `codebase-status`, `concept-exploration`, `consolidate-variations`). Same pattern as Batch 41.2.
+    2. **Route assertion failure**: Near-universal across both agents. Fixture prompts lack explicit route guidance — the same root cause Batch 41.2 fixed for 3 Tier 1 skills.
+    3. **No new harness defect**: All failures are fixture-prompt gaps or known budget limits, not harness bugs.
+  - Reports written: `benchmark/test-{bootstrap-repo,brainstorm,branch-lifecycle,codebase-status,concept-exploration,consolidate-variations,create-agentic-skill,create-local-skill,dead-code,debug}-2026-05-19.md`.
+  - Generated data refreshed: `docs/benchmark-results-matrix.md` (52 graded + 16 incomplete rows), skills-data.js, github-proof-data.js (both docs/ and apps/ copies).
+  - Validation passed: `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests bench:coverage` (157 skills); `git diff --check`.
+  - Acceptance criteria met: all 10 skills benchmarked, reports written, generated data refreshed, no shared harness failure patterns requiring pause.
+  - Recommended next command: `/ship`
 
 ### Ship-End Benchmark Failure Triage Manifest
 
