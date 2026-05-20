@@ -11,10 +11,10 @@
 **Goal:** Run the second group of 11 Tier 2 global skills with both agents (3 runs each), continuing Batch 41.3.
 
 **Plan:**
-- [ ] Verify and benchmark `decommission`, `dogfood`, `expert-review`, `guide`, `handoff`, `hygiene`, `migrate`, `mono-plan`, `pack`, `prototype`, `provision-agentic-config` (11 skills).
-- [ ] For each skill: run `pnpm verify --skill <skill>`, then `pnpm bench --skill <skill> --agent both --runs 3 --chunk-size 3 --pause 0`.
-- [ ] Write `benchmark/test-<skill>-2026-05-20.md` with verify evidence, results, raw session paths.
-- [ ] After the group: refresh generated data, validate, commit and push.
+- [x] Verify and benchmark `decommission`, `dogfood`, `expert-review`, `guide`, `handoff`, `hygiene`, `migrate`, `mono-plan`, `pack`, `prototype`, `provision-agentic-config` (11 skills).
+- [x] For each skill: run `pnpm verify --skill <skill>`, then `pnpm bench --skill <skill> --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [x] Write `benchmark/test-<skill>-2026-05-20.md` with verify evidence, results, raw session paths.
+- [x] After the group: refresh generated data, validate, commit and push.
 - [ ] Pause if any shared harness failure pattern emerges beyond the known budget-block and route-assertion gaps.
 
 **Context from Group 1:**
@@ -44,6 +44,16 @@
 
 ### Ship-one-step handoff
 Implement only this step, validate it, then run `/ship` when done.
+
+## Review — Batch 41.3 Group 2: Tier 2 Global Skill Benchmarks 2026-05-20
+
+- Benchmarked 11 Tier 2 global skills with both agents (3 runs each): `decommission`, `dogfood`, `expert-review`, `guide`, `handoff`, `hygiene`, `migrate`, `mono-plan`, `pack`, `prototype`, `provision-agentic-config`.
+- Results: Claude 0% pass rate across all 11 skills (budget-blocked on 7 runs total across `dogfood`, `expert-review`, `guide`, `migrate`, `provision-agentic-config`). Codex had partial passes on 1 skill (`expert-review` 66.7%).
+- Shared patterns match Group 1: Claude budget-block at smoke $0.25; route assertion failures near-universal; fixture prompts lack explicit route guidance. `prototype` and `mono-plan` had the most assertion failures beyond route (domain-specific assertions).
+- Generated data refreshed: 74 graded + 17 incomplete rows (up from 52 + 16).
+- Validation passed: `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests bench:coverage` (157 skills); `git diff --check`.
+- 11 new benchmark report files written under `benchmark/`.
+
 
 ## Previous Task — Create `skill-interview` 2026-05-18
 
