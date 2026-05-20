@@ -6,7 +6,46 @@
 **Total phases:** 42
 **Last completed phase:** Phase 42 — Workflow Persistent Transcript Refinement
 
-## Current Task — Create `skill-interview` 2026-05-18
+## Current Task — Batch 41.3 Group 2: Tier 2 Global Skill Benchmarks 2026-05-20
+
+**Goal:** Run the second group of 11 Tier 2 global skills with both agents (3 runs each), continuing Batch 41.3.
+
+**Plan:**
+- [ ] Verify and benchmark `decommission`, `dogfood`, `expert-review`, `guide`, `handoff`, `hygiene`, `migrate`, `mono-plan`, `pack`, `prototype`, `provision-agentic-config` (11 skills).
+- [ ] For each skill: run `pnpm verify --skill <skill>`, then `pnpm bench --skill <skill> --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [ ] Write `benchmark/test-<skill>-2026-05-20.md` with verify evidence, results, raw session paths.
+- [ ] After the group: refresh generated data, validate, commit and push.
+- [ ] Pause if any shared harness failure pattern emerges beyond the known budget-block and route-assertion gaps.
+
+**Context from Group 1:**
+- Claude budget-blocked at smoke ($0.25) for 4/10 skills. Expect similar for Group 2 — do NOT increase budgets in this batch, just record.
+- Route assertion failures near-universal due to missing explicit route guidance in fixture prompts. Same root cause — record but do not fix in this batch.
+- Use `--timeout 600000` on all bench commands to prevent background task timeouts.
+
+**Files to modify:**
+- `benchmark/test-<skill>-2026-05-20.md` — one per benchmarked skill (up to 11 new files)
+- `docs/benchmark-results-matrix.md` — regenerated
+- `docs/skills-showcase/assets/skills-data.js` — regenerated
+- `apps/skills-showcase/public/assets/skills-data.js` — regenerated
+- `docs/skills-showcase/assets/github-proof-data.js` — regenerated
+- `apps/skills-showcase/public/assets/github-proof-data.js` — regenerated
+- `tasks/todo.md` — progress tracking
+- `tasks/history.md` — session record
+
+### Execution Profile
+- **Parallel mode:** serial
+- **Integration owner:** main agent
+- **Conflict risk:** medium (benchmark runner capacity, generated data, task docs are shared resources)
+
+### Acceptance criteria
+- All 11 skills benchmarked with both agents (3 runs each).
+- Reports written and generated data refreshed.
+- No shared harness failure patterns unaddressed beyond known budget-block and route-assertion gaps.
+
+### Ship-one-step handoff
+Implement only this step, validate it, then run `/ship` when done.
+
+## Previous Task — Create `skill-interview` 2026-05-18
 
 **Goal:** Add a mirrored `skill-interview` planning skill that interviews the user about the desired characteristics of a new skill before routing to skill creation.
 
