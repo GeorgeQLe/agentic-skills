@@ -550,6 +550,19 @@
     - At least one fixture-prompt fix is applied and validated.
     - Reports updated and generated data refreshed.
 - [ ] Batch 41.3: Run Tier 2 global skills in groups of 5-10, pausing after any shared harness failure pattern.
+  - Classification: automated
+  - Files: benchmark reports under `benchmark/`, raw run outputs under `tests/benchmarks/runs/`, generated benchmark/showcase data, task docs.
+  - Implementation plan:
+    - 32 unbenchmarked tier23 global skills remain: `bootstrap-repo`, `brainstorm`, `branch-lifecycle`, `codebase-status`, `concept-exploration`, `consolidate-variations`, `create-agentic-skill`, `create-local-skill`, `dead-code`, `debug`, `decommission`, `dogfood`, `expert-review`, `guide`, `handoff`, `hygiene`, `migrate`, `mono-plan`, `pack`, `prototype`, `provision-agentic-config`, `reconcile-dev-docs`, `regression-check`, `research-roadmap`, `scaffold`, `skills`, `slim-audit`, `spec-drift`, `trace`, `uat`, `ui-interview`, `ux-variations`.
+    - Run in groups of 5-10 alphabetically. First group: `bootstrap-repo`, `brainstorm`, `branch-lifecycle`, `codebase-status`, `concept-exploration`, `consolidate-variations`, `create-agentic-skill`, `create-local-skill`, `dead-code`, `debug`.
+    - For each skill in the group: run `pnpm verify --skill <skill>`, then `pnpm bench --skill <skill> --agent both --runs 3 --chunk-size 3 --pause 0`.
+    - Write dated `benchmark/test-<skill>-2026-05-19.md` for each completed skill.
+    - After each group: refresh generated data (`node scripts/generate-skills-showcase-data.mjs`, `node scripts/generate-skills-showcase-github-data.mjs`, `scripts/validate-skills-showcase-data.sh`), run `pnpm --dir tests bench:coverage`, validate with `git diff --check`.
+    - Pause after any shared harness failure pattern (e.g., budget exhaustion, transport failures across multiple skills).
+  - Acceptance criteria:
+    - First group of 10 skills benchmarked with both agents.
+    - Reports written and generated data refreshed.
+    - No shared harness failure patterns unaddressed.
 - [ ] Batch 41.4: Run git-fixture skills `commit-and-push-by-feature` and `sync` only after explicit permission for disposable GitHub fixture operations.
 - [ ] Batch 41.5: Run pack-local skills by pack family, starting with packs that feed public showcase/workflow proof.
 - [ ] Batch 41.6: Address blocked skills through their remediation routes, then benchmark only after safe fixtures exist.
