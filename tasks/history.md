@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-05-21 — Batch 41.3-rerun Group 2: Re-benchmark 11 Tier 2 global skills post-fixture-remediation
+
+- Re-benchmarked 11 Tier 2 global skills with both agents (3 runs each) after Phase 43 fixture remediation.
+- 7/11 skills improved pass rates; 5/11 now 100% on both agents: `decommission`, `expert-review`, `guide`, `pack`, `migrate` (Claude only).
+- Route assertion near-universal improvement. Most remaining failures are content/assertion-specificity issues.
+- Skills still at 0%/0%: `prototype` (complex multi-artifact), `provision-agentic-config` (content assertions).
+- Generated data refreshed: 137 graded + 17 incomplete rows, 158 benchmark coverage.
+- Total cost: $66 (11 skills × 2 agents × 3 runs × $1/run).
+
 ## 2026-05-21 — Ship Step 43.6 re-benchmark results and plan Batch 41.3 re-benchmarks
 
 - Shipped Step 43.6 benchmark reports, refreshed showcase data and benchmark matrix.

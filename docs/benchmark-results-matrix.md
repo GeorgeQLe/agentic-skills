@@ -113,7 +113,7 @@ This matrix tracks skills that already have persisted benchmark run data and gra
 | `prototype` | Claude | `tests/benchmarks/runs/prototype-claude-8d14421c/report.json` | 3 | 0% | 39.4% | none | graded | Curated report: `benchmark/test-prototype-2026-05-20.md`. |
 | `prototype` | Codex | `tests/benchmarks/runs/prototype-codex-e01a2224/report.json` | 3 | 0% | 53.0% | none | graded | Curated report: `benchmark/test-prototype-2026-05-20.md`. |
 | `provision-agentic-config` | Claude | `tests/benchmarks/runs/provision-agentic-config-claude-56ba7b62/report.json` | 3 | 0% | 53.8% | none | graded | Curated report: `benchmark/test-provision-agentic-config-2026-05-20.md`. |
-| `provision-agentic-config` | Codex | `tests/benchmarks/runs/provision-agentic-config-codex-b214cc67/report.json` | 3 | 0% | 40.2% | none | graded | Curated report: `benchmark/test-provision-agentic-config-2026-05-20.md`. |
+| `provision-agentic-config` | Codex | `tests/benchmarks/runs/provision-agentic-config-codex-b9e872bb/report.json` | 3 | 0% | 56.8% | none | graded | Curated report: `benchmark/test-provision-agentic-config-2026-05-20.md`. |
 | `reconcile-dev-docs` | Claude | `tests/benchmarks/runs/reconcile-dev-docs-claude-39cc2c1e/report.json` | 3 | 0% | 61.4% | none | graded | Curated report: `benchmark/test-reconcile-dev-docs-2026-05-20.md`. |
 | `reconcile-dev-docs` | Codex | `tests/benchmarks/runs/reconcile-dev-docs-codex-c33e4cc6/report.json` | 3 | 0% | 70.5% | none | graded | Curated report: `benchmark/test-reconcile-dev-docs-2026-05-20.md`. |
 | `regression-check` | Claude | `tests/benchmarks/runs/regression-check-claude-9ee4e439/report.json` | 3 | 0% | 43.2% | none | graded | Curated report: `benchmark/test-regression-check-2026-05-20.md`. |
