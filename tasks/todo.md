@@ -12,6 +12,20 @@
 - [ ] Review `tasks/recurring-todo.md`: 2 unchecked recurring items — promote only if due and requiring execution work.
 - [ ] `/research-roadmap` — All 43 roadmap phases are complete. Run documentation health scan after Phase 41 remaining batches finish.
 
+## Ship Review — 2026-05-21 CLI Route Normalization Hardening
+
+- User goal: harden mirrored skills so final handoffs recommend commands for the active CLI instead of copying stale slash/dollar examples from task docs.
+- Changed files: `global/codex/run/SKILL.md`, `global/codex/ship/SKILL.md`, `global/claude/run/SKILL.md`, `global/claude/ship/SKILL.md`, `tests/layer1/bench-setups.test.ts`, `tasks/lessons.md`, and generated Skills Showcase assets/matrix.
+- Per-file purpose: Codex contracts now normalize copied `/...` global routes to `$...`; Claude contracts normalize copied `$...` global routes to `/...`; layer1 coverage locks the mirrored contract text; lessons records the correction.
+- User-goal mapping: the specific `/run` vs `$run` failure is now covered by both contract language and a regression test.
+- Tests run: `pnpm --dir tests exec vitest run --project layer1 bench-setups --testNamePattern "normalize copied task routes"`; `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests bench:coverage`.
+- Skipped tests: full layer1 suite not rerun because the change is narrow contract text plus one focused layer1 assertion; Skills Showcase app build not rerun because runtime app code did not change.
+- Adversarial review: task docs can still contain slash examples from Claude-authored plans, so the contract explicitly says those are task identifiers rather than final command text.
+- Correction enforcement: `tasks/lessons.md` was updated for the current user correction, and `tests/layer1/bench-setups.test.ts` now fails if the mirrored normalization rule is removed.
+- Residual risk: many individual pack skills still have generic next-step language; this hardening covers the high-traffic global `run`/`ship` paths where the observed failure occurred.
+- Rollback note: revert the hardening commit to restore the previous route-selection behavior.
+- Next command: `$run`
+
 ## Current Task — Batch 41.3 Re-benchmarks Group 1: Re-run Tier 2 Global Skills Post-Fixture-Remediation 2026-05-21
 
 **Goal:** Re-benchmark the first 11 Tier 2 global skills that were benchmarked pre-fixture-remediation (Phase 43 Step 43.2 added route guidance to all 32 fixture prompts). These skills previously scored 0% or near-0% pass rates due to missing route guidance. Re-running validates the fixture fixes lift pass rates.

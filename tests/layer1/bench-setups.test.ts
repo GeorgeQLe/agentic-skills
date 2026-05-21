@@ -1615,6 +1615,49 @@ describe("benchmark setup registry", () => {
     expect(missingValidationQuality?.criticalFailures).toContain("validation-evidence");
   });
 
+  it("requires run and ship skill contracts to normalize copied task routes for the active CLI", () => {
+    const contracts = [
+      {
+        path: "global/codex/run/SKILL.md",
+        native: "Codex syntax",
+        copied: "Claude slash commands",
+        example: "/run",
+        converted: "$...",
+      },
+      {
+        path: "global/codex/ship/SKILL.md",
+        native: "Codex syntax",
+        copied: "Claude slash commands",
+        example: "/run",
+        converted: "$...",
+      },
+      {
+        path: "global/claude/run/SKILL.md",
+        native: "Claude syntax",
+        copied: "Codex dollar commands",
+        example: "$run",
+        converted: "/...",
+      },
+      {
+        path: "global/claude/ship/SKILL.md",
+        native: "Claude syntax",
+        copied: "Codex dollar commands",
+        example: "$run",
+        converted: "/...",
+      },
+    ];
+
+    for (const contract of contracts) {
+      const content = readFileSync(resolve(TESTS_ROOT, "..", contract.path), "utf8");
+      expect(content, `${contract.path} has normalization rule`).toContain("Normalize copied task routes");
+      expect(content, `${contract.path} names active CLI syntax`).toContain(contract.native);
+      expect(content, `${contract.path} names opposite syntax`).toContain(contract.copied);
+      expect(content, `${contract.path} includes source example`).toContain(contract.example);
+      expect(content, `${contract.path} states final conversion`).toContain(contract.converted);
+      expect(content, `${contract.path} treats task docs as identifiers`).toContain("treat them as task identifiers, not final command text");
+    }
+  });
+
   it("uses fixture-grounded runner-specific route assertions for the ship-end workflow setup", () => {
     const setup = resolveBenchSetup("ship-end");
     expect(setup).toBeDefined();

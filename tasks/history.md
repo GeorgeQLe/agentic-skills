@@ -2738,3 +2738,10 @@ Resolved all 10 findings from `/expert-review`:
 - Stabilized the GitHub proof generator by excluding volatile public GitHub `pushed_at` metadata from committed proof data.
 - Verified generated data freshness, benchmark coverage, focused layer1 showcase benchmark tests, Skills Showcase production build, and whitespace checks.
 - Pushed the result directly on `master`.
+
+## 2026-05-21 — CLI route normalization hardening
+
+- Hardened mirrored `run` and `ship` skill contracts so final handoffs normalize copied task routes to the active CLI: Codex `$...`, Claude `/...`.
+- Added focused layer1 coverage proving the normalization rule exists in all four high-traffic contracts.
+- Recorded the `/run` vs `$run` correction in `tasks/lessons.md`.
+- Refreshed Skills Showcase generated data after the tracked `SKILL.md` behavior changes.

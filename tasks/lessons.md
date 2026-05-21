@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-05-21 — Final handoffs must render routes for the active CLI
+
+- A Codex `$ship` handoff copied `/run` from `tasks/todo.md` into the final `Recommended next command`, even though Codex users need `$run`.
+- Treat routes in task docs, benchmark reports, and prior handoffs as task identifiers, not final command text.
+- Before final output, normalize global skill commands to the active CLI: Codex uses `$...`; Claude uses `/...`.
+- Preserve explicit cross-runner handoffs such as `/delegate $ship`, but do not let stale slash or dollar examples bleed into same-runner final recommendations.
+
 ## 2026-05-21 — Never paste resolved secrets into docs or handoffs
 
 - A kanban validation handoff once copied the resolved `POKETOWORK_DATABASE_URL` value into `docs/kanban-test-results.md` instead of leaving an env-var placeholder.
