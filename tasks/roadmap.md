@@ -16,6 +16,20 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Update: Concept Exploration Slugged Briefs 2026-05-21
+
+**Goal:** Update mirrored `concept-exploration` skills so concept briefs use normalized concept slugs whenever a concept identity is known or emerges, avoiding ambiguous `research/concept-brief.md` overwrites across related concepts.
+
+**Acceptance Criteria:**
+- [x] `global/codex/concept-exploration/SKILL.md` resolves concept identity and slug during context resolution and coverage checkpoint.
+- [x] `global/claude/concept-exploration/SKILL.md` mirrors the slugged output, pivot, and archive behavior with Claude route syntax.
+- [x] Generic `research/concept-brief.md` is reserved for a single unambiguous project-level concept; related or potentially multiple concepts use `concept-brief-{slug}.md` and `concept-brief-{slug}-interview.md`.
+- [x] Pivoted concepts write to their own slugged brief while preserving the original prompt concept as a separate future or related concept.
+- [x] Benchmark coverage/setup validates slugged concept output behavior, including a Poketo Work to Poketo Core pivot fixture.
+- [x] Required validation passes, review notes are recorded, and intended changes are committed and pushed on `master`.
+
+**Result:** Updated mirrored `concept-exploration` contracts on 2026-05-21. The skill now resolves concept identity and a normalized slug, reserves generic concept brief filenames for a single unambiguous project-level concept, writes slugged paths for known identities, multi-concept repos, and pivots, and preserves the initial concept as a related or future concept when the interview pivots. The Tier 2/3 benchmark fixture now exercises the Poketo Work to Poketo Core pivot and requires `research/concept-brief-poketo-core.md` plus the matching interview log. Validation passed: install, modern-Bash skill audits, benchmark coverage, focused `concept-exploration` verify, generated Skills Showcase refresh/validation, targeted `rg`, and `git diff --check`.
+
 ## Current Targeted Update: Codex Desk-Flip Parity 2026-05-21
 
 **Goal:** Add the missing Codex mirror for the existing Claude `desk-flip` skill and make route expectations agent-specific.

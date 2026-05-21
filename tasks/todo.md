@@ -8,7 +8,7 @@
 
 ## Priority Task Queue
 
-- [ ] `$targeted-skill-builder concept-exploration slugged briefs` — update mirrored `concept-exploration` skills so known or emerging concept identities write slugged research briefs instead of conflating related concepts in generic `concept-brief.md`.
+- [x] `$targeted-skill-builder concept-exploration slugged briefs` — update mirrored `concept-exploration` skills so known or emerging concept identities write slugged research briefs instead of conflating related concepts in generic `concept-brief.md`.
 - [x] Add Codex parity for `desk-flip`: create `global/codex/desk-flip/SKILL.md`, adjust benchmark route expectations, refresh generated skill data, validate, then commit and push.
 - [ ] `/run` — Resume Phase 41 Batch 41.3 re-benchmarks: re-run the 33 Tier 2 global skills that were benchmarked pre-fixture-remediation with near-zero pass rates (Phase 43 added route guidance to all 32 fixture prompts and increased budgets). Current graded count: 69 unique skills / 158 total. Batch 41.5 pack-local groups also have remaining families.
 - [ ] Review `tasks/recurring-todo.md`: 2 unchecked recurring items — promote only if due and requiring execution work.
@@ -24,11 +24,11 @@
 - Existing benchmark fixture checks a non-canonical `specs/concept-brief.md` path and does not cover multi-concept ambiguity.
 
 **Plan:**
-- [ ] Add concept identity/slug resolution rules to the Codex and Claude `concept-exploration` contracts.
-- [ ] Specify scoped output paths, generic-file reservation, pivot handling, and archive behavior for slugged files.
-- [ ] Update deterministic benchmark coverage/setup to require slugged output paths for a Poketo Work to Poketo Core pivot fixture.
-- [ ] Refresh generated skill data, run required validation, and record results.
-- [ ] Commit and push intended changes on `master`.
+- [x] Add concept identity/slug resolution rules to the Codex and Claude `concept-exploration` contracts.
+- [x] Specify scoped output paths, generic-file reservation, pivot handling, and archive behavior for slugged files.
+- [x] Update deterministic benchmark coverage/setup to require slugged output paths for a Poketo Work to Poketo Core pivot fixture.
+- [x] Refresh generated skill data, run required validation, and record results.
+- [x] Commit and push intended changes on `master`.
 
 **Files:**
 - `global/codex/concept-exploration/SKILL.md`
@@ -37,6 +37,17 @@
 - `tests/layer4/setups/tier23-global-workflows.setup.ts`
 - Generated Skills Showcase data files if refreshed by scripts.
 - `tasks/roadmap.md` and `tasks/todo.md`
+
+### Review
+
+- Decision: existing-skill update. The workflow gap belongs inside `concept-exploration`; no new skill was needed.
+- Evidence used: user correction from the Poketo v3 session, current mirrored `concept-exploration` contracts, current Tier 2/3 benchmark fixture, and benchmark coverage metadata.
+- Evidence intentionally skipped: broad session-history scanning, because the provided correction and target files were enough.
+- Existing-skill overlap: `concept-exploration` owns pre-ICP concept briefs; downstream research/spec skills consume the output but do not own concept identity resolution.
+- Changed files: mirrored `concept-exploration` skills, `tests/harness/bench-coverage.ts`, `tests/layer4/setups/tier23-global-workflows.setup.ts`, generated Skills Showcase assets/matrix, and task docs.
+- Validation passed: `./install.sh`; `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken`; `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`; `/opt/homebrew/bin/bash ./scripts/skill-next-step-routing.sh --missing`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill concept-exploration`; `node scripts/generate-skills-showcase-data.mjs`; `node scripts/generate-skills-showcase-github-data.mjs`; `scripts/validate-skills-showcase-data.sh`; targeted `rg`; `git diff --check`.
+- Skipped/limited: the same three audit scripts fail under macOS system Bash because they require modern Bash features, then pass under Homebrew Bash. `verify --skill concept-exploration` skipped layer2 because no target-specific layer2 tests match this skill.
+- Next command: `$benchmark-test-skill concept-exploration`
 
 ## Current Task — Codex Desk-Flip Parity 2026-05-21
 
