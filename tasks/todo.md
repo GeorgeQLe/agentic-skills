@@ -121,7 +121,7 @@ These are **quality criteria (not hard assertions)**, so they don't cause test f
 
 ### Phase 43 Next Steps
 
-- [ ] Step 43.2: Add explicit route guidance text to all 32 global fixture prompts
+- [x] Step 43.2: Add explicit route guidance text to all 32 global fixture prompts
 - [ ] Step 43.3: Re-run a sample of fixed fixtures to validate route assertions pass
 - [ ] Step 43.4: (Optional) Calibrate pack-local domain quality criteria if score improvement is desired
 
@@ -130,11 +130,11 @@ These are **quality criteria (not hard assertions)**, so they don't cause test f
 **Goal:** Add explicit route guidance text to all 32 global fixture prompts that are missing it, so agents produce the expected route string and pass the `assertRecommendedRoute` assertion.
 
 **Plan:**
-- [ ] Edit `tests/layer4/setups/tier23-global-workflows.setup.ts` — for each of the 32 skills listed in the Step 43.1 audit table, append route guidance to the prompt string.
-- [ ] The pattern is: append ` End with \`Recommended next command: <route>\`.` to the end of each prompt, where `<route>` is the skill's `recommendedRoute` value.
-- [ ] Run `pnpm --dir tests typecheck` to confirm no type errors introduced.
-- [ ] Run `pnpm --dir tests test -- --run tests/layer1/bench-setups.test.ts` to confirm layer1 fixture tests still pass.
-- [ ] Mark Step 43.2 complete and commit.
+- [x] Edit `tests/layer4/setups/tier23-global-workflows.setup.ts` — for each of the 32 skills listed in the Step 43.1 audit table, append route guidance to the prompt string.
+- [x] The pattern is: append ` End with \`Recommended next command: <route>\`.` to the end of each prompt, where `<route>` is the skill's `recommendedRoute` value.
+- [x] Run `pnpm --dir tests typecheck` to confirm no type errors introduced (pre-existing verify.ts errors only).
+- [x] Run layer1 bench-setups tests — 15 files, 1221 tests pass.
+- [x] Mark Step 43.2 complete and commit.
 
 **Technical details:**
 - File to modify: `tests/layer4/setups/tier23-global-workflows.setup.ts` (lines 366-895)
