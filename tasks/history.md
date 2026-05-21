@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-05-20 — Batch 41.5 Group 1: Pack-local skill benchmarks
+
+- Benchmarked 10 pack-local skills with both agents (3 runs each): `assumption-tracker`, `benchmark-agent-review`, `brainstorm-kanban`, `burn-rate`, `clone-spec-store`, `cohort-review`, `competitive-analysis`, `content-programming`, `conversion-map`, `creator-evidence-schema`.
+- Both Claude and Codex achieved 100% hard assertion pass rate across all 10 skills — a significant improvement over Tier 2 global skills (which had 0% Claude pass rate).
+- Codex had 1 infrastructure-blocked run on `creator-evidence-schema` (agent runner timeout).
+- Output quality ranged from 69.2% to 100%. Domain-specific criteria (`business-ops-context`, `customer-lifecycle-context`, `creator-media-context`) scored 0% for both agents.
+- Generated data refreshed: 112 graded + 17 incomplete rows (up from 96 + 17).
+- Validation passed: showcase data, bench coverage (158 skills), whitespace check.
+
 ## 2026-05-20 — Batch 41.3 Group 3: Tier 2 global skill benchmarks
 
 - Benchmarked 11 Tier 2 global skills with both agents (3 runs each): `reconcile-dev-docs`, `regression-check`, `research-roadmap`, `scaffold`, `skills`, `slim-audit`, `spec-drift`, `trace`, `uat`, `ui-interview`, `ux-variations`.

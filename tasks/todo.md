@@ -11,11 +11,11 @@
 **Goal:** Run the first group of pack-local skills with both agents (3 runs each), starting packs that feed public showcase/workflow proof. Batch 41.4 (git-fixture skills `commit-and-push-by-feature`, `sync`) is deferred pending explicit user permission for disposable GitHub fixture operations.
 
 **Plan:**
-- [ ] Identify the first group of ~10 pack-local skills to benchmark, prioritizing packs with showcase/workflow proof.
-- [ ] For each skill: run `pnpm verify --skill <skill>`, then `pnpm bench --skill <skill> --agent both --runs 3 --chunk-size 3 --pause 0`.
-- [ ] Write `benchmark/test-<skill>-2026-05-20.md` with verify evidence, results, raw session paths.
-- [ ] After the group: refresh generated data, validate, commit and push.
-- [ ] Pause if any shared harness failure pattern emerges beyond the known budget-block and route-assertion gaps.
+- [x] Identify the first group of ~10 pack-local skills to benchmark, prioritizing packs with showcase/workflow proof.
+- [x] For each skill: run `pnpm verify --skill <skill>`, then `pnpm bench --skill <skill> --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [x] Write `benchmark/test-<skill>-2026-05-20.md` with verify evidence, results, raw session paths.
+- [x] After the group: refresh generated data, validate, commit and push.
+- [x] Pause if any shared harness failure pattern emerges beyond the known budget-block and route-assertion gaps.
 
 **Context from Batch 41.3:**
 - 96 graded + 17 incomplete rows currently in the matrix (33 tier23 global skills benchmarked across 3 groups).
@@ -49,6 +49,18 @@
 
 ### Ship-one-step handoff
 Implement only this step, validate it, then run `/ship` when done.
+
+## Review — Batch 41.5 Group 1: Pack-Local Skill Benchmarks 2026-05-20
+
+- Benchmarked 10 pack-local skills with both agents (3 runs each): `assumption-tracker`, `benchmark-agent-review`, `brainstorm-kanban`, `burn-rate`, `clone-spec-store`, `cohort-review`, `competitive-analysis`, `content-programming`, `conversion-map`, `creator-evidence-schema`.
+- Results: Both Claude and Codex achieved 100% hard assertion pass rate across all 10 skills. No budget-blocks for Claude.
+- Codex had 1 infrastructure-blocked run on `creator-evidence-schema` (agent runner timeout); 2/2 evaluated runs still passed.
+- Output quality ranged from 69.2% (`burn-rate` Claude) to 100% (`benchmark-agent-review` Codex). Domain-specific criteria (`business-ops-context`, `customer-lifecycle-context`, `creator-media-context`) consistently scored 0% for both agents — same pattern as global skills with domain criteria.
+- `pack-workflow-traits` and `pack-fixture-evidence` were the most variable quality criteria across skills.
+- Generated data refreshed: 112 graded + 17 incomplete rows (up from 96 + 17).
+- Validation passed: `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests bench:coverage` (158 skills); `git diff --check`.
+- 10 new benchmark report files written under `benchmark/`.
+- No new shared harness failure patterns beyond known domain-criteria gaps.
 
 ## Completed Task — Batch 41.3 Group 2: Tier 2 Global Skill Benchmarks 2026-05-20
 
