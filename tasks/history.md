@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-05-20 — Bump benchmark budget to standard and add Codex budget enforcement
+
+- Bumped default benchmark budget from smoke ($0.25) to standard ($1.00) across all setup factories (generic, tier23, tier1, pack).
+- Timeout also bumped from 180s to 300s to match the standard tier.
+- Added Codex budget enforcement: `runCodex` now injects budget instruction into Codex prompt since `codex exec` lacks a native `--max-budget-usd` flag.
+- Root cause: Claude was budget-blocked on complex skills at $0.25; Codex had no budget enforcement at all, making comparisons apples-to-oranges.
+- All 1221 layer1 tests pass.
+
 ## 2026-05-20 — Batch 41.3 Group 2: Tier 2 global skill benchmarks
 
 - Benchmarked 11 Tier 2 global skills with both agents (3 runs each): `decommission`, `dogfood`, `expert-review`, `guide`, `handoff`, `hygiene`, `migrate`, `mono-plan`, `pack`, `prototype`, `provision-agentic-config`.

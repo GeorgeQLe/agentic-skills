@@ -22,7 +22,7 @@ All 11 skills benchmarked, reports written, generated data refreshed (74 graded 
 - [ ] Pause if any shared harness failure pattern emerges beyond the known budget-block and route-assertion gaps.
 
 **Context from Groups 1 and 2:**
-- Claude budget-blocked at smoke ($0.25) for 6/21 skills so far. Expect similar for Group 3 — do NOT increase budgets in this batch, just record.
+- Budget bumped from smoke ($0.25) to standard ($1.00) after Group 2. Claude budget-blocks should no longer occur. Codex now receives a budget instruction in its prompt for parity.
 - Route assertion failures near-universal due to missing explicit route guidance in fixture prompts. Same root cause — record but do not fix in this batch.
 - `--timeout` flag is NOT supported by `bench.ts` — do not pass it.
 
