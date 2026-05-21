@@ -8,9 +8,36 @@
 
 ## Priority Task Queue
 
+- [x] Add Codex parity for `desk-flip`: create `global/codex/desk-flip/SKILL.md`, adjust benchmark route expectations, refresh generated skill data, validate, then commit and push.
 - [ ] `/run` — Resume Phase 41 Batch 41.3 re-benchmarks: re-run the 33 Tier 2 global skills that were benchmarked pre-fixture-remediation with near-zero pass rates (Phase 43 added route guidance to all 32 fixture prompts and increased budgets). Current graded count: 69 unique skills / 158 total. Batch 41.5 pack-local groups also have remaining families.
 - [ ] Review `tasks/recurring-todo.md`: 2 unchecked recurring items — promote only if due and requiring execution work.
 - [ ] `/research-roadmap` — All 43 roadmap phases are complete. Run documentation health scan after Phase 41 remaining batches finish.
+
+## Current Task — Codex Desk-Flip Parity 2026-05-21
+
+**Goal:** Make `desk-flip` available to Codex with behavior parity against the existing Claude skill.
+
+**Plan:**
+- [x] Create `global/codex/desk-flip/SKILL.md` from the Claude workflow with Codex-specific invocation and `$bootstrap-repo` routing.
+- [x] Update deterministic benchmark setup so route assertions are agent-specific for `desk-flip`.
+- [x] Refresh generated Skills Showcase data.
+- [x] Validate with coverage/discovery checks, focused `desk-flip` verification, showcase validation, and `git diff --check`.
+- [x] Record results, then commit and push intended changes.
+
+**Files:**
+- `global/codex/desk-flip/SKILL.md`
+- `tests/layer4/setups/tier23-global-workflows.setup.ts`
+- Generated Skills Showcase data files if refreshed by scripts.
+- `tasks/roadmap.md` and `tasks/todo.md`
+
+### Review
+
+- User goal: make `desk-flip` available to Codex and preserve parity with the existing Claude skill.
+- Changed files: `global/codex/desk-flip/SKILL.md`, `tests/layer4/setups/tier23-global-workflows.setup.ts`, generated Skills Showcase/proof/matrix files, `tasks/roadmap.md`, and `tasks/todo.md`.
+- Result: Codex now has `$desk-flip`; Claude keeps `/desk-flip`. Final route expectations are runner-specific: Claude `/bootstrap-repo`, Codex `$bootstrap-repo`.
+- Tests run: `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill desk-flip`; `node scripts/generate-skills-showcase-data.mjs`; `node scripts/generate-skills-showcase-github-data.mjs`; `scripts/validate-skills-showcase-data.sh`; `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken`; `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`; `/opt/homebrew/bin/bash ./scripts/skill-next-step-routing.sh --missing`; `./install.sh`; targeted `rg`; `git diff --check`.
+- Skipped/limited: `verify --skill desk-flip` skipped layer2 because no target-specific layer2 tests match `desk-flip`.
+- Next command: `$desk-flip <project-path>`
 
 ## Ship Review — 2026-05-21 CLI Route Normalization Hardening
 

@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Update: Codex Desk-Flip Parity 2026-05-21
+
+**Goal:** Add the missing Codex mirror for the existing Claude `desk-flip` skill and make route expectations agent-specific.
+
+**Acceptance Criteria:**
+- [x] `global/codex/desk-flip/SKILL.md` exists with the same desk-flip workflow as `global/claude/desk-flip/SKILL.md`, adjusted only for Codex invocation and `$bootstrap-repo` handoff syntax.
+- [x] Existing Claude `desk-flip` behavior remains unchanged except for any parity-safe wording if needed.
+- [x] Benchmark setup for `desk-flip` accepts Claude `/bootstrap-repo` and Codex `$bootstrap-repo` handoffs.
+- [x] Skill discovery, benchmark coverage, showcase data validation, and whitespace checks pass.
+- [x] Intended changes are committed and pushed on the repository primary branch.
+
+**Result:** Codex `desk-flip` parity was added on 2026-05-21. The new Codex contract mirrors the Claude autopsy/report workflow, reads Codex-relevant `AGENTS.md` when present, writes only `desk-flip-report.md`, and routes final handoff to `$bootstrap-repo`. The deterministic Tier 2/3 benchmark fixture now expects `/bootstrap-repo` for Claude and `$bootstrap-repo` for Codex. Validation passed: `pnpm --dir tests bench:coverage`, `pnpm --dir tests verify --skill desk-flip` (layer1 PASS, layer2 SKIP due no target-specific layer2), generated Skills Showcase refresh/validation, Homebrew Bash skill dependency/version/routing audits, `./install.sh`, targeted route checks, and `git diff --check`.
+
 ## Current Targeted Update: Benchmark Workflow Layer2 Fixture Coverage 2026-05-19
 
 **Goal:** Add target-specific layer2 fixture coverage for benchmark workflow skills so `verify --skill benchmark-test-skill` and `verify --skill session-triage` no longer skip layer2.

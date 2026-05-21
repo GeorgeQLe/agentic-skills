@@ -68,9 +68,9 @@ This matrix tracks skills that already have persisted benchmark run data and gra
 | `creator-presence-dossier` | Codex | `tests/benchmarks/runs/creator-presence-dossier-codex-4b9a789d/report.json` | 3 | 100% | 96.7% | none | graded | Curated report: `benchmark/test-creator-presence-dossier-2026-05-20.md`. |
 | `customer-feedback` | Claude | `tests/benchmarks/runs/customer-feedback-claude-62e8d54b/report.json` | 3 | 100% | 87.5% | none | graded | Curated report: `benchmark/test-customer-feedback-2026-05-20.md`. |
 | `customer-feedback` | Codex | `tests/benchmarks/runs/customer-feedback-codex-7d328c09/report.json` | 3 | 100% | 87.5% | none | graded | Curated report: `benchmark/test-customer-feedback-2026-05-20.md`. |
-| `dead-code` | Claude | `tests/benchmarks/runs/dead-code-claude-79d2f0f1/report.json` | 3 | 0% | 68.2% | none | graded | Curated report: `benchmark/test-dead-code-2026-05-19.md`. |
-| `dead-code` | Codex | `tests/benchmarks/runs/dead-code-codex-b9ac78b0/report.json` | 3 | 33% | 76.5% | none | graded | Curated report: `benchmark/test-dead-code-2026-05-19.md`. |
-| `debug` | Claude | `tests/benchmarks/runs/debug-claude-e2db2036/report.json` | 1 | 100% | 84.1% | none | graded | Curated report: `benchmark/test-debug-2026-05-19.md`. One evaluated persisted run with deterministic quality scoring. |
+| `dead-code` | Claude | `tests/benchmarks/runs/dead-code-claude-464b8174/report.json` | 3 | 100% | 87.1% | none | graded | Curated report: `benchmark/test-dead-code-2026-05-19.md`. |
+| `dead-code` | Codex | `tests/benchmarks/runs/dead-code-codex-a707165b/report.json` | 3 | 100% | 88.6% | none | graded | Curated report: `benchmark/test-dead-code-2026-05-19.md`. |
+| `debug` | Claude | `tests/benchmarks/runs/debug-claude-defe8c74/report.json` | 3 | 100% | 84.1% | none | graded | Curated report: `benchmark/test-debug-2026-05-19.md`. |
 | `debug` | Codex | `tests/benchmarks/runs/debug-codex-c0adf036/report.json` | 1 | 100% | 86.4% | none | graded | Curated report: `benchmark/test-debug-2026-05-19.md`. One evaluated persisted run with deterministic quality scoring. |
 | `decommission` | Claude | `tests/benchmarks/runs/decommission-claude-5690f4bb/report.json` | 3 | 0% | 68.9% | none | graded | Curated report: `benchmark/test-decommission-2026-05-20.md`. |
 | `decommission` | Codex | `tests/benchmarks/runs/decommission-codex-5f3fe58c/report.json` | 3 | 0% | 68.2% | none | graded | Curated report: `benchmark/test-decommission-2026-05-20.md`. |
@@ -170,7 +170,7 @@ This matrix tracks skills that already have persisted benchmark run data and gra
 | `icon-handler` | Claude | `tests/benchmarks/runs/icon-handler-claude-47bab6aa/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
 | `provision-agentic-config` | Claude | `tests/benchmarks/runs/provision-agentic-config-claude-51d425e8/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
 | `roadmap` | Claude | `tests/benchmarks/runs/roadmap-claude-8c1ee4a6/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
-| `run` | Codex | `tests/benchmarks/runs/run-codex-378071e4/report.json` | blocked/incomplete | Report exists with zero total and evaluated runs. Do not count as benchmarked. Prefer the later evaluated report listed above. |
+| `run` | Codex | `tests/benchmarks/runs/run-codex-76920c80/report.json` | blocked/incomplete | Report exists with zero total and evaluated runs. Do not count as benchmarked. Prefer the later evaluated report listed above. |
 | `spec-interview` | Claude | `tests/benchmarks/runs/spec-interview-claude-b83d0caa/report.json` | blocked/incomplete | Report exists with zero evaluated runs. |
 | `targeted-skill-builder` | Claude | `tests/benchmarks/runs/targeted-skill-builder-claude-3b4f2b62/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
 | `update-packages` | Claude | `tests/benchmarks/runs/update-packages-claude-4d9966e8/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
