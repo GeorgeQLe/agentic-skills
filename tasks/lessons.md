@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-05-21 — Never paste resolved secrets into docs or handoffs
+
+- A kanban validation handoff once copied the resolved `POKETOWORK_DATABASE_URL` value into `docs/kanban-test-results.md` instead of leaving an env-var placeholder.
+- When documenting setup commands, write placeholder syntax such as `export NAME="$NAME"` or `export NAME="<set locally>"`; never expand, echo, or paste current secret values from env files, shell context, command output, or model-visible context.
+- Before committing documentation that mentions credentials, run a targeted secret scan for URL credentials, `DATABASE_URL`, provider token prefixes, and password-like query params.
+- If a secret reaches git history, report the exact commit and path without repeating the secret, rotate the credential, and decide whether repository history needs to be rewritten.
+
 ## 2026-05-18 — Workflow demos should start from user value and real excerpts
 
 - A `/workflows` demo pass showed generic step commands and summaries even when benchmark run excerpts were available, making the scenario feel synthetic.
