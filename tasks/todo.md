@@ -1,10 +1,16 @@
 # Active Phase
 
 **Project:** Claude Skills / agentic-skills
-**Status:** Phase 43 started; Phase 41 benchmark coverage lane paused for fixture remediation.
-**Current phase:** Phase 43 — Benchmark Fixture Remediation for Route Assertions and Domain Criteria
+**Status:** Phase 43 complete. Phase 41 benchmark coverage lane resumed — fixture remediation done.
+**Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage (resumed)
 **Total phases:** 43
-**Last completed phase:** Phase 42 — Workflow Persistent Transcript Refinement
+**Last completed phase:** Phase 43 — Benchmark Fixture Remediation for Route Assertions and Domain Criteria
+
+## Priority Task Queue
+
+- [ ] `/run` — Resume Phase 41 Batch 41.3 re-benchmarks: re-run the 33 Tier 2 global skills that were benchmarked pre-fixture-remediation with near-zero pass rates (Phase 43 added route guidance to all 32 fixture prompts and increased budgets). Current graded count: 69 unique skills / 158 total. Batch 41.5 pack-local groups also have remaining families.
+- [ ] Review `tasks/recurring-todo.md`: 2 unchecked recurring items — promote only if due and requiring execution work.
+- [ ] `/research-roadmap` — All 43 roadmap phases are complete. Run documentation health scan after Phase 41 remaining batches finish.
 
 ## Completed Task — Step 43.1: Audit Route Assertion Failures Across Tier 2 Global Skill Fixtures 2026-05-20
 
