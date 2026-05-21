@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workflow Refactor Proposal — Prototype-First Pipeline</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2333;
+    --border: #30363d;
+    --text: #c9d1d9;
+    --text-muted: #8b949e;
+    --accent: #58a6ff;
+    --green: #3fb950;
+    --red: #f85149;
+    --orange: #d29922;
+    --purple: #bc8cff;
+    --pink: #f778ba;
+    --cyan: #39d2c0;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+  }
+  .container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+
+  /* Header */
+  header {
+    text-align: center;
+    padding: 3rem 0 2rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 3rem;
+  }
+  header h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, var(--accent), var(--purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  header p { color: var(--text-muted); font-size: 1.1rem; }
+
+  /* Nav */
+  nav {
+    position: sticky;
+    top: 0;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+    padding: 0.75rem 0;
+    z-index: 100;
+    margin-bottom: 2rem;
+  }
+  nav .container {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    padding: 0 2rem;
+    justify-content: center;
+  }
+  nav a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+  nav a:hover { color: var(--accent); }
+
+  /* Sections */
+  section { margin-bottom: 3rem; }
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+    color: var(--accent);
+  }
+  h3 { font-size: 1.15rem; margin: 1.5rem 0 0.75rem; color: var(--text); }
+  h4 { font-size: 1rem; margin: 1rem 0 0.5rem; color: var(--text-muted); }
+
+  /* Pipeline diagram */
+  .pipeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin: 1.5rem 0;
+  }
+  .pipeline-step {
+    display: flex;
+    align-items: stretch;
+    gap: 1rem;
+  }
+  .pipeline-line {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 40px;
+    flex-shrink: 0;
+  }
+  .pipeline-dot {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 3px solid var(--bg);
+    box-shadow: 0 0 0 2px var(--accent);
+    flex-shrink: 0;
+    margin-top: 1.1rem;
+  }
+  .pipeline-dot.new { background: var(--green); box-shadow: 0 0 0 2px var(--green); }
+  .pipeline-dot.changed { background: var(--orange); box-shadow: 0 0 0 2px var(--orange); }
+  .pipeline-dot.fork { background: var(--purple); box-shadow: 0 0 0 2px var(--purple); }
+  .pipeline-connector {
+    width: 2px;
+    flex-grow: 1;
+    background: var(--border);
+    min-height: 8px;
+  }
+  .pipeline-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    flex-grow: 1;
+    margin: 0.25rem 0;
+  }
+  .pipeline-card h4 {
+    margin: 0 0 0.25rem;
+    color: var(--text);
+    font-size: 1rem;
+  }
+  .pipeline-card p { color: var(--text-muted); font-size: 0.9rem; margin: 0; }
+  .pipeline-card .badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.15rem 0.5rem;
+    border-radius: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+  }
+  .badge-new { background: rgba(63,185,80,0.15); color: var(--green); }
+  .badge-changed { background: rgba(210,153,34,0.15); color: var(--orange); }
+  .badge-unchanged { background: rgba(139,148,158,0.15); color: var(--text-muted); }
+  .badge-renamed { background: rgba(188,140,255,0.15); color: var(--purple); }
+
+  /* Skill cards */
+  .skill-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin: 1rem 0;
+  }
+  .skill-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    transition: border-color 0.2s;
+  }
+  .skill-card:hover { border-color: var(--accent); }
+  .skill-card h3 {
+    margin: 0 0 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .skill-card .mono {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    color: var(--accent);
+    font-size: 1.05rem;
+  }
+  .skill-card .detail-grid {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 0.4rem 1rem;
+    font-size: 0.9rem;
+  }
+  .skill-card .label { color: var(--text-muted); font-weight: 500; }
+  .skill-card .value { color: var(--text); }
+  .skill-card ul { margin: 0.5rem 0 0 1.25rem; font-size: 0.9rem; }
+  .skill-card li { margin-bottom: 0.25rem; }
+
+  /* Change table */
+  .change-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .change-table th, .change-table td {
+    text-align: left;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .change-table th {
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .change-table tr:hover td { background: var(--surface2); }
+  .change-table code {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.85rem;
+    color: var(--accent);
+  }
+  .change-table .arrow { color: var(--text-muted); margin: 0 0.5rem; }
+
+  /* Comparison */
+  .comparison {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin: 1rem 0;
+  }
+  .comparison-side {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+  }
+  .comparison-side h3 {
+    margin: 0 0 1rem;
+    font-size: 1rem;
+  }
+  .comparison-side.before h3 { color: var(--red); }
+  .comparison-side.after h3 { color: var(--green); }
+  .comparison-side ol { margin: 0 0 0 1.25rem; font-size: 0.9rem; }
+  .comparison-side li { margin-bottom: 0.5rem; }
+
+  /* Framework section */
+  .framework-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+  }
+  .framework-box code {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 0.85rem;
+    background: var(--surface2);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    color: var(--cyan);
+  }
+
+  /* Key decisions */
+  .decisions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+  .decision {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem;
+  }
+  .decision h4 {
+    color: var(--accent);
+    margin: 0 0 0.5rem;
+    font-size: 0.95rem;
+  }
+  .decision p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin: 0;
+  }
+  .decision .verdict {
+    color: var(--green);
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    display: block;
+  }
+
+  /* Phase diagram */
+  .phase-row {
+    display: flex;
+    gap: 0.5rem;
+    margin: 0.5rem 0;
+    align-items: center;
+  }
+  .phase-label {
+    width: 100px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .phase-bar {
+    height: 32px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    padding: 0 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--bg);
+  }
+
+  /* Example flow */
+  .example-flow {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+  }
+  .example-flow h4 { color: var(--purple); margin: 0 0 1rem; }
+  .flow-step {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+    align-items: flex-start;
+  }
+  .flow-step .step-num {
+    background: var(--surface2);
+    color: var(--accent);
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .flow-step .step-content {
+    padding-top: 0.2rem;
+  }
+  .flow-step .cmd {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    color: var(--cyan);
+    font-size: 0.85rem;
+  }
+  .flow-step .desc { color: var(--text-muted); font-size: 0.85rem; }
+
+  /* Footer */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem 0;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+
+  @media (max-width: 768px) {
+    .comparison, .decisions { grid-template-columns: 1fr; }
+    nav .container { justify-content: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <h1>Prototype-First Workflow Refactor</h1>
+    <p>Proposal to restructure the agentic-skills pipeline around tangible prototypes and alignment artifacts</p>
+    <p style="margin-top: 0.5rem; font-size: 0.85rem;">Proposed 2026-05-18</p>
+  </div>
+</header>
+
+<nav>
+  <div class="container">
+    <a href="#overview">Overview</a>
+    <a href="#pipeline">New Pipeline</a>
+    <a href="#comparison">Before / After</a>
+    <a href="#changes">Change Summary</a>
+    <a href="#new-skills">New Skills</a>
+    <a href="#modified-skills">Modified Skills</a>
+    <a href="#framework">Alignment & Gates</a>
+    <a href="#decisions">Key Decisions</a>
+    <a href="#examples">Example Flows</a>
+    <a href="#gotchas">Gotchas</a>
+    <a href="#migration">Migration Plan</a>
+  </div>
+</nav>
+
+<div class="container">
+
+<!-- OVERVIEW -->
+<section id="overview">
+  <h2>Overview</h2>
+  <p>This refactor enforces a <strong>prototype-first gate</strong> across the entire skill pipeline. No production spec is written until a tangible, runnable prototype has been built, explored in variations, evaluated, and consolidated. The prototype IS the alignment artifact — spec-interview becomes a post-prototype production deep dive.</p>
+
+  <h3>Core Principles</h3>
+  <div class="decisions" style="grid-template-columns: 1fr 1fr 1fr;">
+    <div class="decision">
+      <h4>Prototype Before Spec</h4>
+      <p>Build something tangible before writing production specifications. The prototype surfaces requirements that interviews alone miss.</p>
+    </div>
+    <div class="decision">
+      <h4>Universal Prototyping</h4>
+      <p>Not just UI. CLI tools get a working basic CLI, APIs get endpoints with fixtures, infra gets a minimal working setup. Every project type gets a tangible demo.</p>
+    </div>
+    <div class="decision">
+      <h4>Alignment Pages</h4>
+      <p>Every interview/planning skill builds a custom HTML alignment page. No templates — each agent crafts the page to fit the situation. Temporary artifacts ensuring agent-user alignment before proceeding.</p>
+    </div>
+  </div>
+</section>
+
+<!-- PIPELINE -->
+<section id="pipeline">
+  <h2>New Pipeline</h2>
+  <p>The complete skill pipeline from ideation to shipped product, with prototype gate enforced before production spec work.</p>
+
+  <div class="pipeline">
+    <!-- Step 1: concept-exploration -->
+    <div class="pipeline-step">
+      <div class="pipeline-line">
+        <div class="pipeline-dot"></div>
+        <div class="pipeline-connector"></div>
+      </div>
+      <div class="pipeline-card">
+        <h4><span class="badge badge-unchanged">Unchanged</span> /concept-exploration</h4>
+        <p>Shape a rough idea into a concept brief. Entry point for new products.</p>
+      </div>
+    </div>
+
+    <!-- Step 2: icp -->
+    <div class="pipeline-step">
+      <div class="pipeline-line">
+        <div class="pipeline-dot"></div>
+        <div class="pipeline-connector"></div>
+      </div>
+      <div class="pipeline-card">
+        <h4><span class="badge badge-unchanged">Unchanged</span> /icp</h4>
+        <p>Define ideal customer profile. Who is this for?</p>
+      </div>
+    </div>
+
+    <!-- Step 3: competitive-analysis -->
+    <div class="pipeline-step">
+      <div class="pipeline-line">
+        <div class="pipeline-dot"></div>
+        <div class="pipeline-connector"></div>
+      </div>
+      <div class="pipeline-card">
+        <h4><span class="badge badge-unchanged">Unchanged</span> /competitive-analysis</h4>
+        <p>Research existing solutions and positioning gaps.</p>
+      </div>
+    </div>
+
+    <!-- Step 4: journey-map -->
+    <div class="pipeline-step">
+      <div class="pipeline-line">
+        <div class="pipeline-dot"></div>
+        <div class="pipeline-connector"></div>
+      </div>
+      <div class="pipeline-card">
+        <h4><span class="badge badge-unchanged">Unchanged</span> /journey-map</h4>
+        <p>Map the user lifecycle: discovery, onboarding, aha moment, conversion, retention, advocacy.</p>
+      </div>
+    </div>
+
+    <!-- Step 5: ux-variations -->
+    <div class="pipeline-step">
+      <div class="pipeline-line">
+        <div class="pipeline-dot changed"></div>
+        <div class="pipeline-connector"></div>
+      </div>
+      <div class="pipeline-card">
+        <h4><span class="badge badge-renamed">Renamed</span> /ux-variations</h4>
+        <p>Plan 3-5 distinct UX/workflow variations. Formerly <code>ux-variation</code> (singular). Outputs variation spec with archetypes, each representing a meaningfully different approach. <strong>Outputs alignment HTML page</strong>.</p>
+      </div>
+    </div>
+
+    <!-- Step 6: ui-interview (per variation) -->
+    <div class="pipeline-step">
+      <div class="pipeline-line">
+        <div class="pipeline-dot changed"></div>
+        <div class="pipeline-connector"></div>
+      </div>
+      <div class="pipeline-card">
+        <h4><span class="badge badge-changed">Changed</span> /ui-interview <span style="color: var(--text-muted); font-size: 0.85rem;">(per variation)</span></h4>
+        <p>Run for each variation to define page-level UI detail: layout, components, controls, states, responsive behavior. Each variation gets its own UI spec. <strong>Outputs alignment HTML page</strong> per variation.</p>
+      </div>
+    </div>
+
+    <!-- PROTOTYPE GATE -->
+    <div class="pipeline-step">
+      <div class="pipeline-line">
+        <div class="pipeline-dot new"></div>
+        <div class="pipeline-connector"></div>
+      </div>
+      <div class="pipeline-card" style="border-color: var(--green); background: rgba(63,185,80,0.05);">
+        <h4><span class="badge badge-new">New</span> /prototype</h4>
+        <p><strong>PROTOTYPE GATE</strong> — Build tangible, runnable prototypes of each variation. For UI: clickable HTML/CSS with fake data and a hub page. For CLI: basic working CLI demoing the concept. For APIs: endpoints with fixture data. For infra: minimal working setup. Creates all variations with a comparison hub.</p>
+      </div>
+    </div>
+
+    <!-- Step 8: uat -->
+    <div class="pipeline-step">
+      <div class="pipeline-line">
+        <div class="pipeline-dot"></div>
+        <div class="pipeline-connector"></div>
+      </div>
+      <div class="pipeline-card">
+        <h4><span class="badge badge-unchanged">Unchanged</span> /uat --variant-evaluation</h4>
+        <p>Evaluate each built prototype variation. Capture what works, what doesn't, what feels wrong. Evidence-driven assessment.</p>
+      </div>
+    </div>
+
+    <!-- Step 9: consolidate-variations -->
+    <div class="pipeline-step">
+      <div class="pipeline-line">
+        <div class="pipeline-dot changed"></div>
+        <div class="pipeline-connector"></div>
+      </div>
+      <div class="pipeline-card" style="border-color: var(--orange);">
+        <h4><span class="badge badge-renamed">Renamed</span> <span class="badge badge-changed">Changed</span> /consolidate-variations</h4>
+        <p>Formerly <code>ui-consolidate</code>. Cherry-picks best elements from evaluated prototypes, resolves conflicts, and <strong>builds a single consolidated clickable prototype</strong> (not a spec document). The merged prototype is the deliverable — spec-interview will extract the production spec from it.</p>
+      </div>
+    </div>
+
+    <!-- Step 10: research-roadmap (post-prototype pass) -->
+    <div class="pipeline-step">
+      <div class="pipeline-line">
+        <div class="pipeline-dot changed"></div>
+        <div class="pipeline-connector"></div>
+      </div>
+      <div class="pipeline-card" style="border-color: var(--cyan);">
+        <h4><span class="badge badge-changed">Changed</span> /research-roadmap --post-prototype</h4>
+        <p><strong>Research refresh pass 1.</strong> Scans all research docs (ICP, competitive analysis, journey map, positioning, etc.) against the consolidated prototype. Flags docs that are stale or contradicted by prototype findings. Queues updates — e.g., "journey map onboarding stage doesn't match the prototype's onboarding flow." Execute queued research updates before proceeding.</p>
+      </div>
+    </div>
+
+    <!-- Step 11: spec-interview -->
+    <div class="pipeline-step">
+      <div class="pipeline-line">
+        <div class="pipeline-dot changed"></div>
+        <div class="pipeline-connector"></div>
+      </div>
+      <div class="pipeline-card" style="border-color: var(--orange);">
+        <h4><span class="badge badge-changed">Changed</span> /spec-interview <span style="color: var(--text-muted); font-size: 0.85rem;">(post-prototype)</span></h4>
+        <p><strong>Major role change.</strong> Now a post-prototype production deep dive. Walks through the consolidated prototype screen-by-screen asking: "What's the real data model? What API calls? Auth? Error states? Edge cases?" Can iteratively update the prototype when gaps are discovered. <strong>Outputs alignment HTML page</strong>.</p>
+      </div>
+    </div>
+
+    <!-- Step 12: research-roadmap (post-spec pass) -->
+    <div class="pipeline-step">
+      <div class="pipeline-line">
+        <div class="pipeline-dot changed"></div>
+        <div class="pipeline-connector"></div>
+      </div>
+      <div class="pipeline-card" style="border-color: var(--cyan);">
+        <h4><span class="badge badge-changed">Changed</span> /research-roadmap --post-spec</h4>
+        <p><strong>Research refresh pass 2.</strong> Scans research docs against the production spec. Spec-interview often surfaces new constraints (data model realities, API limitations, auth requirements) that invalidate earlier research assumptions. Flags and queues updates so roadmap has fully current research context.</p>
+      </div>
+    </div>
+
+    <!-- Step 13: roadmap -->
+    <div class="pipeline-step">
+      <div class="pipeline-line">
+        <div class="pipeline-dot"></div>
+        <div class="pipeline-connector"></div>
+      </div>
+      <div class="pipeline-card">
+        <h4><span class="badge badge-changed">Changed</span> /roadmap</h4>
+        <p>Gate updated: requires consolidated prototype + production spec + <strong>refreshed research docs</strong> before sequencing. No longer needs to enforce prototype phase — that's already done upstream. Research docs now fully informed by prototype learnings and production spec constraints.</p>
+      </div>
+    </div>
+
+    <!-- Step 14: plan-phase -->
+    <div class="pipeline-step">
+      <div class="pipeline-line">
+        <div class="pipeline-dot"></div>
+        <div class="pipeline-connector"></div>
+      </div>
+      <div class="pipeline-card">
+        <h4><span class="badge badge-changed">Changed</span> /plan-phase</h4>
+        <p>Gate updated: prototype phase is now upstream. Plan-phase no longer needs to enforce Phase 0 prototype logic — it focuses purely on production implementation decomposition.</p>
+      </div>
+    </div>
+
+    <!-- Step 13: run -->
+    <div class="pipeline-step">
+      <div class="pipeline-line">
+        <div class="pipeline-dot"></div>
+        <div class="pipeline-connector"></div>
+      </div>
+      <div class="pipeline-card">
+        <h4><span class="badge badge-unchanged">Unchanged</span> /run</h4>
+        <p>Execute the next step from tasks/todo.md.</p>
+      </div>
+    </div>
+
+    <!-- Step 14: ship -->
+    <div class="pipeline-step">
+      <div class="pipeline-line">
+        <div class="pipeline-dot"></div>
+        <div class="pipeline-connector"></div>
+      </div>
+      <div class="pipeline-card">
+        <h4><span class="badge badge-unchanged">Unchanged</span> /ship</h4>
+        <p>Commit, push, deploy. Update docs.</p>
+      </div>
+    </div>
+
+    <!-- Step 15: fork -->
+    <div class="pipeline-step">
+      <div class="pipeline-line">
+        <div class="pipeline-dot fork"></div>
+      </div>
+      <div class="pipeline-card" style="border-color: var(--purple);">
+        <h4><span class="badge badge-changed">Changed</span> Forked Path</h4>
+        <p><strong>/feature-interview</strong> (scope triage: small → spec+implement, medium → single prototype, large → full pipeline), <strong>/brainstorm</strong> (generate new ideas), or loop back to explore more features on the shipped product.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARISON -->
+<section id="comparison">
+  <h2>Before / After</h2>
+  <div class="comparison">
+    <div class="comparison-side before">
+      <h3>Current Pipeline</h3>
+      <ol>
+        <li><code>/concept-exploration</code></li>
+        <li><code>/feature-interview</code> (triage + evidence)</li>
+        <li><code>/spec-interview</code> (full spec upfront)</li>
+        <li><code>/journey-map</code></li>
+        <li><code>/ux-variation</code> (plan variations)</li>
+        <li>Build variants via <code>/run</code></li>
+        <li><code>/uat --variant-evaluation</code></li>
+        <li><code>/ui-consolidate</code> (spec document)</li>
+        <li><code>/roadmap</code></li>
+        <li><code>/plan-phase</code> (enforces Phase 0 prototype)</li>
+        <li><code>/run</code> + <code>/ship</code></li>
+      </ol>
+      <p style="margin-top: 1rem; color: var(--red); font-size: 0.85rem;">Problem: Spec written before anything tangible exists. Prototype gate buried inside plan-phase. No alignment artifacts.</p>
+    </div>
+    <div class="comparison-side after">
+      <h3>Proposed Pipeline</h3>
+      <ol>
+        <li><code>/concept-exploration</code> + alignment page</li>
+        <li><code>/icp</code> + alignment page</li>
+        <li><code>/competitive-analysis</code> + alignment page</li>
+        <li><code>/journey-map</code> + alignment page</li>
+        <li><code>/ux-variations</code> + alignment page</li>
+        <li><code>/ui-interview</code> per variation + alignment pages</li>
+        <li><strong><code>/prototype</code> (build all variations)</strong></li>
+        <li><code>/uat --variant-evaluation</code></li>
+        <li><strong><code>/consolidate-variations</code> (merged prototype)</strong></li>
+        <li><strong><code>/research-roadmap --post-prototype</code> (refresh research)</strong></li>
+        <li><strong><code>/spec-interview</code> (post-prototype deep dive)</strong></li>
+        <li><strong><code>/research-roadmap --post-spec</code> (refresh research again)</strong></li>
+        <li><code>/roadmap</code> → <code>/plan-phase</code> → <code>/run</code> → <code>/ship</code></li>
+        <li>Fork: <code>/feature-interview</code> (scope-based triage), <code>/brainstorm</code></li>
+      </ol>
+      <p style="margin-top: 1rem; color: var(--green); font-size: 0.85rem;">Prototype is built and evaluated before any production spec. Every step produces alignment HTML. Spec is a production deep-dive on proven UI.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CHANGE SUMMARY -->
+<section id="changes">
+  <h2>Change Summary</h2>
+  <table class="change-table">
+    <thead>
+      <tr>
+        <th>Skill</th>
+        <th>Change Type</th>
+        <th>Summary</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>ux-variation</code> <span class="arrow">→</span> <code>ux-variations</code></td>
+        <td><span class="badge badge-renamed">Renamed</span></td>
+        <td>Pluralized to reflect multiple variations output. Add alignment HTML generation via shared framework.</td>
+      </tr>
+      <tr>
+        <td><code>ui-consolidate</code> <span class="arrow">→</span> <code>consolidate-variations</code></td>
+        <td><span class="badge badge-renamed">Renamed</span> <span class="badge badge-changed">Changed</span></td>
+        <td>Renamed. Now outputs a consolidated clickable prototype instead of a spec document. Spec responsibility moves to spec-interview.</td>
+      </tr>
+      <tr>
+        <td><code>spec-interview</code></td>
+        <td><span class="badge badge-changed">Changed</span></td>
+        <td>Becomes post-prototype production deep dive. Takes consolidated prototype as input. Screen-by-screen interrogation. Can iteratively update prototype. No longer the first spec step.</td>
+      </tr>
+      <tr>
+        <td><code>feature-interview</code></td>
+        <td><span class="badge badge-changed">Changed</span></td>
+        <td>Now sits post-ship in the pipeline. Triages feature scope: small → spec+implement, medium → single prototype variation, large → full pipeline restart.</td>
+      </tr>
+      <tr>
+        <td><code>ui-interview</code></td>
+        <td><span class="badge badge-changed">Changed</span></td>
+        <td>Now runs per-variation before prototype build. Add alignment HTML output. No longer a single-pass spec tool.</td>
+      </tr>
+      <tr>
+        <td><code>roadmap</code></td>
+        <td><span class="badge badge-changed">Changed</span></td>
+        <td>Gate updated to require consolidated prototype + production spec. Remove Phase 0 prototype enforcement (now upstream).</td>
+      </tr>
+      <tr>
+        <td><code>plan-phase</code></td>
+        <td><span class="badge badge-changed">Changed</span></td>
+        <td>Remove Phase 0 / prototype-first logic. Focus purely on production implementation decomposition.</td>
+      </tr>
+      <tr>
+        <td><code>/prototype</code></td>
+        <td><span class="badge badge-new">New</span></td>
+        <td>New skill. Builds tangible runnable prototypes of each variation. Universal: HTML for UI, working CLI for tools, endpoints for APIs, minimal setup for infra. Creates comparison hub. <strong>Heavily relies on research docs</strong> (ICP, competitive analysis, journey map) to inform prototype content and flows.</td>
+      </tr>
+      <tr>
+        <td><code>research-roadmap</code></td>
+        <td><span class="badge badge-changed">Changed</span></td>
+        <td>Two new modes: <code>--post-prototype</code> (after consolidate-variations) and <code>--post-spec</code> (after spec-interview). Scans research docs against prototype/spec findings, flags stale or contradicted docs, queues updates so roadmap has fully current research context.</td>
+      </tr>
+      <tr>
+        <td>Alignment Pages</td>
+        <td><span class="badge badge-new">New Convention</span></td>
+        <td>Every interview/planning skill now builds a custom HTML alignment page opened in the user's browser. No shared template or CSS — each agent crafts the page to fit the situation. Stored at <code>docs/alignment/</code>, temporary until alignment confirmed.</td>
+      </tr>
+      <tr>
+        <td><code>concept-exploration</code></td>
+        <td><span class="badge badge-changed">Changed</span></td>
+        <td>Add alignment HTML output.</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- NEW SKILLS -->
+<section id="new-skills">
+  <h2>New Skills & Components</h2>
+
+  <div class="skill-grid">
+    <!-- /prototype -->
+    <div class="skill-card" style="border-color: var(--green);">
+      <h3><span class="mono">/prototype</span> <span class="badge badge-new" style="font-size: 0.75rem;">New Skill</span></h3>
+      <div class="detail-grid">
+        <span class="label">Purpose</span>
+        <span class="value">Build tangible, runnable prototypes of each UX variation</span>
+        <span class="label">Input</span>
+        <span class="value"><code>specs/ux-variations-*.md</code> + <code>specs/ui-*.md</code> (per variation) + <strong>research docs</strong> (<code>research/concept-brief.md</code>, <code>research/icp.md</code>, <code>research/competitive-analysis.md</code>, <code>research/journey-map.md</code>)</span>
+        <span class="label">Output</span>
+        <span class="value">Runnable prototypes in <code>prototypes/{topic}/</code> with a hub page for comparison</span>
+        <span class="label">Gate</span>
+        <span class="value">Requires ux-variations spec + ui-interview output for at least one variation</span>
+        <span class="label">Next step</span>
+        <span class="value"><code>/uat --variant-evaluation</code></span>
+      </div>
+      <h4>Behavior by project type:</h4>
+      <ul>
+        <li><strong>UI projects:</strong> Static HTML/CSS pages with fake data, clickable navigation, hub page linking all variations</li>
+        <li><strong>CLI tools:</strong> Basic working CLI scripts with fixture data that demo each variation's workflow</li>
+        <li><strong>APIs:</strong> Endpoint stubs with fixture responses, Postman/curl examples</li>
+        <li><strong>Infrastructure:</strong> Minimal working setup (docker-compose, config files) that demonstrates the concept</li>
+      </ul>
+      <h4>Key features:</h4>
+      <ul>
+        <li>Builds all variations in one invocation by default</li>
+        <li>Creates comparison hub page with side-by-side navigation</li>
+        <li>Supports <code>--variant N</code> flag to build/rebuild a single variation</li>
+        <li>Feature-interview can trigger mini-prototype cycles on existing prototypes</li>
+        <li>No backend, no auth, no real data — purely demonstrative</li>
+        <li><strong>Heavily informed by research docs:</strong> ICP drives persona-appropriate copy/density, competitive analysis informs differentiation, journey map shapes the flow between screens, concept brief grounds the prototype in validated assumptions</li>
+      </ul>
+    </div>
+
+    <!-- Alignment Pages -->
+    <div class="skill-card" style="border-color: var(--green);">
+      <h3><span class="mono">Alignment Pages</span> <span class="badge badge-new" style="font-size: 0.75rem;">New Convention</span></h3>
+      <div class="detail-grid">
+        <span class="label">What</span>
+        <span class="value">Every interview/planning skill outputs a custom-built HTML page for user alignment review</span>
+        <span class="label">Location</span>
+        <span class="value"><code>docs/alignment/{skill}-{topic}.html</code> (temporary, archived or deleted after alignment confirmed)</span>
+        <span class="label">Produced by</span>
+        <span class="value">All interview skills: concept-exploration, ux-variations, ui-interview, spec-interview, consolidate-variations, feature-interview</span>
+      </div>
+      <h4>Key principles:</h4>
+      <ul>
+        <li><strong>Custom-built, not templated:</strong> Each agent crafts the HTML page to fit the situation. There is no shared template or CSS library — the agent decides what layout, structure, and visual approach best communicates the skill's output.</li>
+        <li><strong>Situation-appropriate:</strong> A concept exploration page might be a simple overview with cards. A ux-variations page might show side-by-side comparisons. A spec-interview page might walk through screens with annotated production concerns. The format follows the content.</li>
+        <li><strong>Temporary artifacts:</strong> Alignment pages exist to ensure agent-user alignment before proceeding. They are archived or deleted once the user confirms alignment and the pipeline moves forward.</li>
+        <li><strong>Opened in browser:</strong> The agent opens the page in the user's browser after building it, so they can review visually.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- MODIFIED SKILLS -->
+<section id="modified-skills">
+  <h2>Modified Skills — Detailed Changes</h2>
+
+  <div class="skill-grid">
+    <!-- spec-interview -->
+    <div class="skill-card" style="border-color: var(--orange);">
+      <h3><span class="mono">/spec-interview</span> <span class="badge badge-changed" style="font-size: 0.75rem;">Major Change</span></h3>
+      <h4>What changes:</h4>
+      <ul>
+        <li><strong>Position in pipeline:</strong> Moves from pre-prototype (step 3) to post-prototype (step 10). Now sits after <code>/consolidate-variations</code>.</li>
+        <li><strong>Input:</strong> Takes the consolidated clickable prototype as primary input, not a concept brief or draft spec.</li>
+        <li><strong>Interview mode:</strong> Screen-by-screen walkthrough of the prototype. For each screen/page asks:
+          <ul>
+            <li>What's the real data model behind this?</li>
+            <li>What API calls does this screen make?</li>
+            <li>What authentication/authorization applies?</li>
+            <li>What happens when the data is empty? When a request fails? When the user has no permission?</li>
+            <li>What are the performance requirements?</li>
+            <li>What analytics/tracking is needed?</li>
+          </ul>
+        </li>
+        <li><strong>Iterative prototype updates:</strong> When the interview reveals gaps ("this screen needs an error state we didn't prototype"), spec-interview can trigger prototype updates before finalizing.</li>
+        <li><strong>Output:</strong> Full production spec (<code>specs/[topic].md</code>) + alignment HTML page. The spec references the prototype as source of truth for visual/interaction decisions.</li>
+      </ul>
+      <h4>What stays the same:</h4>
+      <ul>
+        <li>Canonical spec sections (Overview, Goals, Non-Goals, Detailed Design, Edge Cases, Test Plan, Acceptance Criteria)</li>
+        <li>Interview logging with deviation tracking</li>
+        <li><code>--ideas</code> flag for batch processing</li>
+      </ul>
+    </div>
+
+    <!-- feature-interview -->
+    <div class="skill-card" style="border-color: var(--orange);">
+      <h3><span class="mono">/feature-interview</span> <span class="badge badge-changed" style="font-size: 0.75rem;">Changed</span></h3>
+      <h4>What changes:</h4>
+      <ul>
+        <li><strong>Position in pipeline:</strong> Moves to post-ship. No longer the second step — it's for adding features to an existing shipped product.</li>
+        <li><strong>Scope triage:</strong> Feature-interview now triages the scope of the proposed feature:
+          <ul>
+            <li><strong>Small</strong> (config change, copy update, simple toggle): routes to spec + implement directly</li>
+            <li><strong>Medium</strong> (new component, new screen, workflow change): routes to a single-variation mini-prototype cycle</li>
+            <li><strong>Large</strong> (new product area, major workflow redesign): routes to full pipeline (ux-variations → ui-interview → prototype → etc.)</li>
+          </ul>
+        </li>
+        <li><strong>Mini-prototype support:</strong> For medium features, can trigger a focused prototype of just that feature in the context of the existing product.</li>
+      </ul>
+      <h4>What stays the same:</h4>
+      <ul>
+        <li>Evidence-backed triage (validates against code, docs, git history)</li>
+        <li>Interview logging</li>
+        <li>Routing to appropriate next skill</li>
+      </ul>
+    </div>
+
+    <!-- ux-variations -->
+    <div class="skill-card" style="border-color: var(--purple);">
+      <h3><span class="mono">/ux-variations</span> <span class="badge badge-renamed" style="font-size: 0.75rem;">Renamed</span></h3>
+      <h4>What changes:</h4>
+      <ul>
+        <li><strong>Name:</strong> <code>ux-variation</code> → <code>ux-variations</code> (plural)</li>
+        <li><strong>Output:</strong> Now also generates an HTML alignment page</li>
+        <li><strong>Next step routing:</strong> Updated to route to <code>/ui-interview</code> (per variation) → <code>/prototype</code> instead of <code>/run</code></li>
+      </ul>
+      <h4>What stays the same:</h4>
+      <ul>
+        <li>3-5 distinct variation archetypes</li>
+        <li><code>--layout-mode</code> for visual/spatial variations</li>
+        <li>Interview-based exploration of onboarding, workflows, sharing, return-use, etc.</li>
+      </ul>
+    </div>
+
+    <!-- consolidate-variations -->
+    <div class="skill-card" style="border-color: var(--orange);">
+      <h3><span class="mono">/consolidate-variations</span> <span class="badge badge-renamed" style="font-size: 0.75rem;">Renamed</span> <span class="badge badge-changed" style="font-size: 0.75rem;">Changed</span></h3>
+      <h4>What changes:</h4>
+      <ul>
+        <li><strong>Name:</strong> <code>ui-consolidate</code> → <code>consolidate-variations</code></li>
+        <li><strong>Output:</strong> Now builds a <strong>consolidated clickable prototype</strong> instead of a spec document. Merges the best elements from evaluated prototype variations into a single runnable artifact.</li>
+        <li><strong>Process:</strong> Same per-variation interview (keep/reject/neutral), cross-variation synthesis, conflict resolution — but the deliverable is a built prototype, not a document.</li>
+        <li><strong>Next step:</strong> Routes to <code>/spec-interview</code> (which will extract the production spec from this prototype)</li>
+      </ul>
+    </div>
+
+    <!-- roadmap -->
+    <div class="skill-card">
+      <h3><span class="mono">/roadmap</span> <span class="badge badge-changed" style="font-size: 0.75rem;">Changed</span></h3>
+      <h4>What changes:</h4>
+      <ul>
+        <li><strong>Gate update:</strong> Now requires consolidated prototype + production spec + refreshed research docs (both --post-prototype and --post-spec passes) before creating a roadmap</li>
+        <li><strong>Remove:</strong> Phase 0 / prototype-first enforcement logic — this is now handled by the upstream prototype gate</li>
+        <li><strong>State machine:</strong> Update states B0 (missing design gates) to check for prototype + spec instead of just spec</li>
+      </ul>
+    </div>
+
+    <!-- plan-phase -->
+    <div class="skill-card">
+      <h3><span class="mono">/plan-phase</span> <span class="badge badge-changed" style="font-size: 0.75rem;">Changed</span></h3>
+      <h4>What changes:</h4>
+      <ul>
+        <li><strong>Remove:</strong> Phase 0 / prototype-first logic, fixture-data enforcement, infrastructure deferral logic — all now upstream</li>
+        <li><strong>Focus:</strong> Purely on production implementation decomposition. Every phase it plans is a production phase.</li>
+        <li><strong>Reference:</strong> Can reference the consolidated prototype as a visual spec alongside the written spec</li>
+      </ul>
+    </div>
+
+    <!-- research-roadmap -->
+    <div class="skill-card" style="border-color: var(--orange);">
+      <h3><span class="mono">/research-roadmap</span> <span class="badge badge-changed" style="font-size: 0.75rem;">Changed</span></h3>
+      <h4>What changes:</h4>
+      <ul>
+        <li><strong>New mode: <code>--post-prototype</code></strong> — After consolidate-variations. Scans all research docs against the consolidated prototype. Flags docs where prototype findings contradict or supersede earlier research (e.g., "journey map onboarding stage doesn't match the prototype's actual onboarding flow," "ICP assumed technical users but prototype feedback shows non-technical users engage more").</li>
+        <li><strong>New mode: <code>--post-spec</code></strong> — After spec-interview. Scans research docs against production spec constraints. Flags docs invalidated by production realities (e.g., "competitive analysis positioned us on real-time, but spec shows we'll use batch processing," "positioning doc claims instant setup but spec requires OAuth config").</li>
+        <li><strong>Both passes must complete</strong> before /roadmap will proceed. Ensures roadmap is built on fully current, prototype-validated, spec-validated research.</li>
+      </ul>
+      <h4>What stays the same:</h4>
+      <ul>
+        <li>Default mode (no flags) still scans general research health and queues missing/stale docs</li>
+        <li>Queue format (Priority Documentation Todo in tasks/todo.md)</li>
+        <li>Staleness heuristics and dependency chain awareness</li>
+      </ul>
+    </div>
+
+    <!-- concept-exploration, ui-interview -->
+    <div class="skill-card">
+      <h3><span class="mono">/concept-exploration</span>, <span class="mono">/ui-interview</span> <span class="badge badge-changed" style="font-size: 0.75rem;">Minor</span></h3>
+      <h4>What changes:</h4>
+      <ul>
+        <li>Add alignment HTML output</li>
+        <li><code>/ui-interview</code>: clarified that it runs per-variation in the prototype pipeline</li>
+        <li>Updated next-step routing to reflect new pipeline order</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ALIGNMENT PAGES & GATES -->
+<section id="framework">
+  <h2>Alignment Pages & Pipeline Gates</h2>
+
+  <div class="framework-box">
+    <h3>Alignment Pages</h3>
+    <p style="margin: 0.75rem 0;">Every interview/planning skill builds a <strong>custom HTML page</strong> and opens it in the user's browser for alignment review. There is no shared template or CSS library — each agent crafts the page to fit the situation.</p>
+
+    <h4>Convention, not framework</h4>
+    <p style="margin: 0.5rem 0; font-size: 0.9rem;">The alignment page is whatever HTML best communicates the skill's output. A concept exploration might produce a simple overview with cards. A ux-variations skill might produce side-by-side comparisons. A spec-interview might annotate prototype screenshots with production concerns. The agent decides the format based on what the user needs to evaluate.</p>
+
+    <h4>Lifecycle</h4>
+    <p style="margin: 0.5rem 0; font-size: 0.9rem;">Alignment pages are stored at <code>docs/alignment/{skill}-{topic}.html</code>. They are temporary — when the next skill in the pipeline runs, it archives the previous skill's alignment page to <code>docs/history/archive/</code>. Only the current skill's alignment page exists at any time. <code>/hygiene</code> also flags stale alignment pages during audits. They are NOT the deliverable; the deliverable is the skill's primary output (spec, variation plan, prototype, etc.).</p>
+  </div>
+
+  <div class="framework-box">
+    <h3>Pipeline Gates</h3>
+    <p style="margin: 0.75rem 0; font-size: 0.9rem;">Each skill validates its prerequisites before running. These gates are enforced within each skill's own SKILL.md instructions:</p>
+    <ul style="font-size: 0.9rem; margin-left: 1.25rem;">
+      <li><code>/ux-variations</code> requires: journey-map exists</li>
+      <li><code>/prototype</code> requires: ux-variations spec + at least one ui-interview output</li>
+      <li><code>/consolidate-variations</code> requires: built prototypes + UAT evaluation evidence OR explicit user override</li>
+      <li><code>/research-roadmap --post-prototype</code> requires: consolidated prototype exists. Populates <code>tasks/todo.md</code> with stale research skills (e.g., <code>/icp</code>) that need re-running.</li>
+      <li><code>/spec-interview</code> requires: consolidated prototype exists + all research tasks queued by <code>--post-prototype</code> pass are completed</li>
+      <li><code>/research-roadmap --post-spec</code> requires: production spec exists. Populates <code>tasks/todo.md</code> with research skills invalidated by production constraints.</li>
+      <li><code>/roadmap</code> requires: production spec + all research tasks queued by both passes are completed</li>
+    </ul>
+  </div>
+</section>
+
+<!-- KEY DECISIONS -->
+<section id="decisions">
+  <h2>Key Decisions</h2>
+  <div class="decisions">
+    <div class="decision">
+      <h4>Where does the prototype gate sit?</h4>
+      <p>After ux-variations + ui-interview (per variation), before UAT. Prototype is the tangible realization of planned variations.</p>
+      <span class="verdict">After variation planning, before evaluation</span>
+    </div>
+    <div class="decision">
+      <h4>What does spec-interview become?</h4>
+      <p>Post-prototype production deep dive. Walks through consolidated prototype screen-by-screen. Can trigger prototype updates for discovered gaps.</p>
+      <span class="verdict">Post-prototype, screen-by-screen, iterative</span>
+    </div>
+    <div class="decision">
+      <h4>How are prototypes built?</h4>
+      <p>Dedicated /prototype skill reads variation specs and builds all variations. Universal: adapts to project type (HTML, CLI, API, infra).</p>
+      <span class="verdict">New /prototype skill, universal, all-at-once</span>
+    </div>
+    <div class="decision">
+      <h4>What does consolidate-variations output?</h4>
+      <p>A merged clickable prototype (not a spec). spec-interview extracts the production spec from the consolidated prototype.</p>
+      <span class="verdict">Consolidated prototype only, spec comes later</span>
+    </div>
+    <div class="decision">
+      <h4>How do alignment pages work?</h4>
+      <p>Each agent builds custom HTML appropriate to the situation. No shared template or CSS library. The agent decides what layout and structure best communicates the skill's output. Temporary artifacts for alignment verification.</p>
+      <span class="verdict">Custom-built HTML, no templates</span>
+    </div>
+    <div class="decision">
+      <h4>Is prototyping UI-only?</h4>
+      <p>No. Universal prototyping: CLI tools get a working CLI, APIs get fixture endpoints, infra gets minimal setups. The key is tangible, runnable demos.</p>
+      <span class="verdict">Universal — every project type gets tangible demos</span>
+    </div>
+    <div class="decision">
+      <h4>Where does feature-interview sit?</h4>
+      <p>Post-ship. Triages scope: small features skip to spec+implement, medium get mini-prototypes, large restart the full pipeline.</p>
+      <span class="verdict">Post-ship with scope-based triage</span>
+    </div>
+    <div class="decision">
+      <h4>When do research docs get refreshed?</h4>
+      <p>Two passes via research-roadmap: once after prototype consolidation (prototype learnings may invalidate ICP/journey assumptions) and once after spec-interview (production constraints may change positioning/competitive analysis). Both must complete before roadmap.</p>
+      <span class="verdict">Two passes: --post-prototype and --post-spec</span>
+    </div>
+    <div class="decision">
+      <h4>Does /prototype use research docs?</h4>
+      <p>Heavily. ICP drives persona-appropriate content and density. Competitive analysis informs differentiation in the prototype. Journey map shapes screen-to-screen flows. Concept brief grounds assumptions.</p>
+      <span class="verdict">Yes, research docs are primary inputs alongside variation specs</span>
+    </div>
+    <div class="decision">
+      <h4>Can spec-interview update the prototype?</h4>
+      <p>Yes. When the production deep-dive reveals gaps (missing error states, missing screens), spec-interview triggers prototype updates before finalizing the spec.</p>
+      <span class="verdict">Yes, iterative updates during spec interview</span>
+    </div>
+  </div>
+</section>
+
+<!-- EXAMPLE FLOWS -->
+<section id="examples">
+  <h2>Example Flows</h2>
+
+  <!-- UI Product -->
+  <div class="example-flow">
+    <h4>Flow 1: New SaaS Dashboard Product</h4>
+    <div class="flow-step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <span class="cmd">/concept-exploration</span>
+        <span class="desc">— Shape the idea into a concept brief. Alignment HTML generated.</span>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <span class="cmd">/icp</span>
+        <span class="desc">— Define target user. Alignment HTML generated.</span>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <span class="cmd">/competitive-analysis</span>
+        <span class="desc">— Research existing solutions.</span>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <span class="cmd">/journey-map</span>
+        <span class="desc">— Map user lifecycle stages.</span>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">5</div>
+      <div class="step-content">
+        <span class="cmd">/ux-variations</span>
+        <span class="desc">— Plan 5 dashboard UX approaches (task-first, data-dense, guided, etc.). Alignment HTML with all 5 described.</span>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">6</div>
+      <div class="step-content">
+        <span class="cmd">/ui-interview</span> <span class="desc">(x5)</span>
+        <span class="desc">— Detail each variation's pages, components, layout, states. 5 alignment HTML pages.</span>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">7</div>
+      <div class="step-content">
+        <span class="cmd">/prototype</span>
+        <span class="desc">— Build 5 clickable HTML dashboards with fake data. Hub page for comparison.</span>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">8</div>
+      <div class="step-content">
+        <span class="cmd">/uat --variant-evaluation</span>
+        <span class="desc">— Evaluate each prototype. Record what works, what doesn't.</span>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">9</div>
+      <div class="step-content">
+        <span class="cmd">/consolidate-variations</span>
+        <span class="desc">— Merge best elements into single consolidated prototype. Cherry-pick from variations 2 and 4, resolve layout conflict.</span>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">10</div>
+      <div class="step-content">
+        <span class="cmd">/research-roadmap --post-prototype</span>
+        <span class="desc">— Scan research docs. Flags: "ICP assumed power users, but prototype evaluation shows casual users preferred the guided variant." Update ICP and journey map.</span>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">11</div>
+      <div class="step-content">
+        <span class="cmd">/spec-interview</span>
+        <span class="desc">— Walk through consolidated prototype screen-by-screen. "This chart — what's the data model? Real-time or batch? What when data is stale?" Discover missing error state → update prototype → finalize spec.</span>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">12</div>
+      <div class="step-content">
+        <span class="cmd">/research-roadmap --post-spec</span>
+        <span class="desc">— Scan research docs again. Flags: "Competitive analysis positioned us on real-time dashboards, but spec chose batch processing for cost reasons." Update positioning doc.</span>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">13</div>
+      <div class="step-content">
+        <span class="cmd">/roadmap → /plan-phase → /run → /ship</span>
+        <span class="desc">— Build the production version with fully current research. No Phase 0 needed — prototype already done.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLI Tool -->
+  <div class="example-flow">
+    <h4>Flow 2: CLI Tool</h4>
+    <div class="flow-step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <span class="cmd">/concept-exploration</span>
+        <span class="desc">— "A CLI for managing k8s configs across environments."</span>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <span class="cmd">/journey-map</span>
+        <span class="desc">— Map the developer workflow: install, configure, sync, deploy, troubleshoot.</span>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <span class="cmd">/ux-variations</span>
+        <span class="desc">— 3 CLI approaches: (1) imperative commands, (2) declarative YAML-first, (3) interactive TUI wizard.</span>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <span class="cmd">/prototype</span>
+        <span class="desc">— Build 3 basic working CLI scripts with fixture configs. Each demos the core workflow differently. No real k8s calls.</span>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">5</div>
+      <div class="step-content">
+        <span class="cmd">/uat → /consolidate-variations</span>
+        <span class="desc">— Evaluate CLIs. Merge: imperative commands with declarative config files, skip TUI wizard.</span>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">6</div>
+      <div class="step-content">
+        <span class="cmd">/spec-interview</span>
+        <span class="desc">— Walk through each command: "What's the config schema? How do we handle merge conflicts between environments? What when k8s API is unreachable?"</span>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">7</div>
+      <div class="step-content">
+        <span class="cmd">/roadmap → /run → /ship</span>
+        <span class="desc">— Build production CLI.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Post-ship feature -->
+  <div class="example-flow">
+    <h4>Flow 3: Post-Ship Feature Addition</h4>
+    <div class="flow-step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <span class="cmd">/feature-interview "add export to CSV"</span>
+        <span class="desc">— Triage: small feature (single button + download). Scope: skip prototype, go direct to spec+implement.</span>
+      </div>
+    </div>
+    <div class="flow-step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <span class="cmd">/spec-interview → /run → /ship</span>
+        <span class="desc">— Quick spec, implement, ship. No prototype needed for a button.</span>
+      </div>
+    </div>
+    <p style="margin-top: 1rem; color: var(--text-muted); font-size: 0.85rem;">vs.</p>
+    <div class="flow-step" style="margin-top: 0.75rem;">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <span class="cmd">/feature-interview "add real-time collaboration"</span>
+        <span class="desc">— Triage: large feature. Routes to full pipeline: ux-variations → ui-interview → prototype → uat → consolidate → spec → roadmap → etc.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GOTCHAS & MITIGATIONS -->
+<section id="gotchas">
+  <h2>Gotchas & Mitigations</h2>
+  <div class="skill-grid">
+    <div class="skill-card">
+      <h3 style="color: var(--orange);">Skill Renaming Breaks Existing Projects</h3>
+      <p style="font-size: 0.9rem;"><strong>Risk:</strong> Renaming <code>ux-variation</code> → <code>ux-variations</code> and <code>ui-consolidate</code> → <code>consolidate-variations</code> breaks existing references in roadmaps, specs, interview logs, and next-step routing.</p>
+      <p style="font-size: 0.9rem; margin-top: 0.5rem;"><strong>Mitigation:</strong> Clean break. No aliases or redirects. <code>/hygiene</code> handles cleanup — it flags stale references to old skill names during audits. Existing projects run <code>/hygiene --fix</code> to update references.</p>
+    </div>
+    <div class="skill-card">
+      <h3 style="color: var(--orange);">Research Refresh Can Stall the Pipeline</h3>
+      <p style="font-size: 0.9rem;"><strong>Risk:</strong> <code>research-roadmap --post-prototype</code> might queue heavy research rewrites (e.g., re-run <code>/icp</code>) that block spec-interview.</p>
+      <p style="font-size: 0.9rem; margin-top: 0.5rem;"><strong>Mitigation:</strong> research-roadmap populates <code>tasks/todo.md</code> with the stale research skills that need re-running. spec-interview's gate checks that all queued research tasks are completed. The user runs each queued research skill, then proceeds. This is intentionally blocking — spec-interview should work from current research, not stale assumptions.</p>
+    </div>
+    <div class="skill-card">
+      <h3 style="color: var(--orange);">Spec-Interview Prototype Updates Create Loop Risk</h3>
+      <p style="font-size: 0.9rem;"><strong>Risk:</strong> spec-interview updates the prototype → does this retrigger research-roadmap --post-prototype → which might queue more research → infinite loop?</p>
+      <p style="font-size: 0.9rem; margin-top: 0.5rem;"><strong>Mitigation:</strong> User decides per-update. Each time spec-interview wants to update the prototype, it asks the user via <code>AskUserQuestion</code> whether this change warrants re-running upstream steps. Most additive changes (new error states, missing screens) won't need it. Fundamental changes (scrapping a whole screen) might.</p>
+    </div>
+    <div class="skill-card">
+      <h3 style="color: var(--orange);">Non-UI Prototype Scope Is Fuzzy</h3>
+      <p style="font-size: 0.9rem;"><strong>Risk:</strong> For CLI/API/infra projects, the line between "prototype" and "actual implementation" is blurry.</p>
+      <p style="font-size: 0.9rem; margin-top: 0.5rem;"><strong>Mitigation:</strong> Scope rule: prototype demonstrates exactly <strong>one core user workflow</strong> end-to-end with fixture data. For CLI: one command chain. For API: one request flow. For infra: one setup-to-verify cycle. Scope, not fidelity — the prototype proves the concept works, not that it handles every edge case.</p>
+    </div>
+    <div class="skill-card">
+      <h3 style="color: var(--orange);">Alignment Page Accumulation</h3>
+      <p style="font-size: 0.9rem;"><strong>Risk:</strong> A full pipeline run produces 8-10 HTML files in <code>docs/alignment/</code>.</p>
+      <p style="font-size: 0.9rem; margin-top: 0.5rem;"><strong>Mitigation:</strong> Two-layer cleanup. (1) When a skill runs, it archives the previous skill's alignment page to <code>docs/history/archive/</code>. Only the current alignment page exists at any time. (2) <code>/hygiene</code> flags any stale alignment pages during audits.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MIGRATION PLAN -->
+<section id="migration">
+  <h2>Migration Plan</h2>
+  <p>The refactor touches 9 existing skills, adds 1 new skill, and establishes 1 new convention. Suggested implementation order:</p>
+
+  <div class="pipeline">
+    <div class="pipeline-step">
+      <div class="pipeline-line">
+        <div class="pipeline-dot new"></div>
+        <div class="pipeline-connector"></div>
+      </div>
+      <div class="pipeline-card">
+        <h4>Phase 1: /prototype Skill & Alignment Convention</h4>
+        <p>Create the new <code>/prototype</code> skill with behavior for each project type (UI, CLI, API, infra). Establish the alignment page convention — add instructions to each interview skill's SKILL.md to build and open a custom HTML alignment page.</p>
+      </div>
+    </div>
+
+    <div class="pipeline-step">
+      <div class="pipeline-line">
+        <div class="pipeline-dot new"></div>
+        <div class="pipeline-connector"></div>
+      </div>
+      <div class="pipeline-card">
+        <h4>Phase 2: Research-Roadmap Modes</h4>
+        <p>Add <code>--post-prototype</code> and <code>--post-spec</code> modes to research-roadmap. Update staleness heuristics to compare research docs against prototype findings and production spec constraints.</p>
+      </div>
+    </div>
+
+    <div class="pipeline-step">
+      <div class="pipeline-line">
+        <div class="pipeline-dot changed"></div>
+        <div class="pipeline-connector"></div>
+      </div>
+      <div class="pipeline-card">
+        <h4>Phase 3: Rename & Refactor Core Skills</h4>
+        <p>Rename <code>ux-variation</code> → <code>ux-variations</code> and <code>ui-consolidate</code> → <code>consolidate-variations</code>. Update consolidate-variations to output a consolidated prototype instead of a spec document. Add alignment page instructions to all renamed/refactored skills.</p>
+      </div>
+    </div>
+
+    <div class="pipeline-step">
+      <div class="pipeline-line">
+        <div class="pipeline-dot changed"></div>
+        <div class="pipeline-connector"></div>
+      </div>
+      <div class="pipeline-card">
+        <h4>Phase 4: Spec-Interview Transformation</h4>
+        <p>Major rewrite of spec-interview: post-prototype mode, screen-by-screen walkthrough, iterative prototype updates. Update gate to require consolidated prototype.</p>
+      </div>
+    </div>
+
+    <div class="pipeline-step">
+      <div class="pipeline-line">
+        <div class="pipeline-dot changed"></div>
+        <div class="pipeline-connector"></div>
+      </div>
+      <div class="pipeline-card">
+        <h4>Phase 5: Feature-Interview & Pipeline Wiring</h4>
+        <p>Update feature-interview with scope triage (small/medium/large). Update roadmap and plan-phase to remove Phase 0 logic. Update all next-step routing across all skills. Update <code>docs/skill-next-step-contracts.md</code> and workflow documentation.</p>
+      </div>
+    </div>
+
+    <div class="pipeline-step">
+      <div class="pipeline-line">
+        <div class="pipeline-dot"></div>
+      </div>
+      <div class="pipeline-card">
+        <h4>Phase 6: Documentation & Testing</h4>
+        <p>Update <code>docs/canonical-workflow-report.md</code>, <code>docs/pack-workflow-matrix.md</code>, <code>docs/skill-next-step-contracts.md</code>. Run benchmark tests against modified skills. Update CLAUDE.md workflow section.</p>
+      </div>
+    </div>
+
+    <div class="pipeline-step">
+      <div class="pipeline-line">
+        <div class="pipeline-dot fork"></div>
+      </div>
+      <div class="pipeline-card" style="border-color: var(--purple);">
+        <h4>Phase 7: Extend Convention to Domain Packs</h4>
+        <p>After core workflow skills are stable, roll out the interrogation + alignment page convention to domain-specific packs. Prioritized by impact:</p>
+        <div style="margin-top: 0.75rem;">
+          <p style="font-size: 0.9rem; margin-bottom: 0.5rem;"><span class="badge badge-new" style="background: rgba(63,185,80,0.15); color: var(--green);">High Priority</span></p>
+          <ul style="font-size: 0.85rem; margin: 0 0 0.75rem 1.25rem;">
+            <li><strong>Game pack</strong> — 6 research skills (audience, comparables, fantasy, genre-map, core-loop, launch). Narrative-heavy evidence benefits from visual alignment pages for playtest results and competitive genre mapping.</li>
+            <li><strong>Devtool pack</strong> — 4 research skills (positioning, user-map, adoption, dx-journey). Developer audience alignment needs visual journey maps and positioning decisions.</li>
+            <li><strong>YouTube Ops</strong> — 12 research skills (audits, competitive research, benchmarks, search positioning). Visual comparison tables for competitive research and channel strategy.</li>
+            <li><strong>Business Growth</strong> — 6 research skills (hook-model, growth-model, metrics, GTM, monetization, PMF assessment). Visual alignment for GTM strategy and monetization decisions.</li>
+          </ul>
+          <p style="font-size: 0.9rem; margin-bottom: 0.5rem;"><span class="badge badge-changed" style="background: rgba(210,153,34,0.15); color: var(--orange);">Medium Priority</span></p>
+          <ul style="font-size: 0.85rem; margin: 0 0 0.75rem 1.25rem;">
+            <li><strong>Creator Foundation</strong> — 7 research skills (positioning, content programming, series spec, presence dossier). Cross-platform creator strategy alignment.</li>
+            <li><strong>Alignment Loop</strong> — 3 planning skills (taste-calibration, destination-doc, vertical-slice-splitter). Lightweight taste-and-intent calibration pages.</li>
+          </ul>
+          <p style="font-size: 0.9rem; margin-bottom: 0.5rem;"><span class="badge badge-unchanged" style="background: rgba(139,148,158,0.15); color: var(--text-muted);">Low Priority</span></p>
+          <ul style="font-size: 0.85rem; margin: 0 0 0 1.25rem;">
+            <li><strong>Business Discovery, Customer Lifecycle, Business Ops</strong> — Already have strong approval gates and evidence conventions. Just need the alignment HTML page addition on top of existing interrogation patterns.</li>
+          </ul>
+          <p style="font-size: 0.85rem; margin-top: 0.75rem; color: var(--text-muted);"><strong>Skip:</strong> Monorepo, Code Quality, Kanban variants, compatibility aliases — execution/overlay packs, not interview-driven.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<footer>
+  <div class="container">
+    <p>Prototype-First Workflow Refactor Proposal — Generated 2026-05-18</p>
+    <p style="margin-top: 0.25rem;">agentic-skills pipeline restructure</p>
+  </div>
+</footer>
+
+</body>
+</html>
