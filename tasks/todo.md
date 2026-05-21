@@ -124,7 +124,7 @@ These are **quality criteria (not hard assertions)**, so they don't cause test f
 - [x] Step 43.2: Add explicit route guidance text to all 32 global fixture prompts
 - [x] Step 43.3: Re-run a sample of fixed fixtures to validate route assertions pass
 - [x] Step 43.4: Audit domain-specific quality criteria across pack-local skill fixtures (completed in Step 43.1 audit)
-- [ ] Step 43.5: Fix domain-specific quality criteria in pack-local skill fixtures
+- [x] Step 43.5: Fix domain-specific quality criteria in pack-local skill fixtures
 - [ ] Step 43.6: Re-benchmark a representative sample of pack-local skills
 - [ ] Step 43.7: Refresh generated data and validate
 
@@ -139,12 +139,12 @@ These are **quality criteria (not hard assertions)**, so they don't cause test f
 - The fix is to enrich fixture prompts with domain-specific context that naturally elicits the expected terms in output.
 
 **Plan:**
-- [ ] Read `tests/layer4/setups/packs/pack-workflows.setup.ts` to understand current fixture prompt patterns.
-- [ ] Read the `packFamilyContexts` definition to see exact fact/trait terms per family.
-- [ ] For each pack family, add a domain-context sentence to fixture prompts that naturally seeds the expected fact and trait terms. Example: for `business-ops` (facts: risk, validation; traits: owner, metric, cadence), add "The project has risk items needing validation, with clear metric owners and cadence tracking."
-- [ ] Ensure enrichments are natural and don't feel like keyword stuffing — the sentence should provide realistic scenario context.
-- [ ] Run layer1 tests: `pnpm --dir tests test -- --testPathPattern bench-setups` to confirm no regressions.
-- [ ] Mark Step 43.5 complete and commit.
+- [x] Read `tests/layer4/setups/packs/pack-workflows.setup.ts` to understand current fixture prompt patterns.
+- [x] Read the `packFamilyContexts` definition to see exact fact/trait terms per family.
+- [x] For each pack family, add a domain-context sentence to fixture prompts that naturally seeds the expected fact and trait terms. Example: for `business-ops` (facts: risk, validation; traits: owner, metric, cadence), add "The project has risk items needing validation, with clear metric owners and cadence tracking."
+- [x] Ensure enrichments are natural and don't feel like keyword stuffing — the sentence should provide realistic scenario context.
+- [x] Run layer1 tests: `pnpm --dir tests test -- --testPathPattern bench-setups` to confirm no regressions.
+- [x] Mark Step 43.5 complete and commit.
 
 **Files to modify:**
 - `tests/layer4/setups/packs/pack-workflows.setup.ts` — enrich fixture prompts with domain context

@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-05-21 — Phase 43, Step 43.5: Fix domain-specific quality criteria in pack fixtures
+
+- Added `domainContextLine` and `domainContextFixtureSection` helpers to `pack-workflows.setup.ts`.
+- All 16 pack families now seed domain vocabulary in two places: the agent prompt (domain context line) and the `pack-input.md` fixture (Domain Context section with key concerns and practical dimensions).
+- Covers all ~80 pack-local fixtures generically via the `packFamilyContexts` map.
+- Layer1: 15 files, 1221 tests pass — no regressions.
+
 ## 2026-05-20 — Phase 43, Step 43.1: Audit route assertion failures
 
 - Audited all 37 global skill fixtures for route assertion failures.
