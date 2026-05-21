@@ -128,46 +128,53 @@ These are **quality criteria (not hard assertions)**, so they don't cause test f
 - [ ] Step 43.6: Re-benchmark a representative sample of pack-local skills
 - [ ] Step 43.7: Refresh generated data and validate
 
-## Current Task — Step 43.5: Fix Domain-Specific Quality Criteria in Pack-Local Skill Fixtures 2026-05-21
+## Current Task — Step 43.6: Re-benchmark a Representative Sample of Pack-Local Skills 2026-05-21
 
-**Goal:** Enrich pack-local fixture prompts with domain context so agents naturally produce output containing the expected fact and trait terms, improving quality scores from 0% to meaningful levels.
+**Goal:** Re-benchmark 5 previously-low-scoring pack-local skills to validate that the domain-context enrichment from Step 43.5 improves quality scores. These skills previously scored 0% on domain criteria (`pack-family-context` facts and `pack-workflow-traits`).
 
-**Background (from Step 43.1 audit):**
-- The quality evaluator creates two criteria per pack family: `requiredFactCoverageCriterion` (checks fact terms) and `referenceTraitCriterion` (checks trait terms).
-- These are quality criteria (weight 1, non-critical), not hard assertions — they don't cause test failures but inflate failure noise in reports.
-- 16 pack families with 80 fixtures total. Most score 0% on domain criteria because fixture prompts don't seed domain vocabulary.
-- The fix is to enrich fixture prompts with domain-specific context that naturally elicits the expected terms in output.
+**Background:**
+- Step 43.5 added `domainContextLine` (prompt) and `domainContextFixtureSection` (pack-input.md) helpers that seed pack-family vocabulary into all 80 fixtures.
+- Before enrichment, 12+ skills scored 0% on domain-specific quality criteria. The enrichment should lift these scores.
+- The benchmark-test-skill command runs layer1 verify, then 3 runs per agent (Claude + Codex) with the layer4 pack-workflows setup.
+
+**Selected skills (5 skills across 5 different pack families):**
+1. `burn-rate` (business-ops) — facts: risk, validation; traits: owner, metric, cadence — scored 69.2% quality, 0% traits
+2. `content-programming` (creator-foundation) — facts: evidence, audience; traits: creator, platform, provenance — scored 80.8% quality, 0% traits
+3. `conversion-map` (customer-lifecycle) — facts: journey, activation; traits: onboarding, conversion, retention — scored 85.0% quality, 0% traits
+4. `devtool-adoption` (devtool) — facts: developer, validation; traits: install, workflow, adoption — scored 87.5% quality, 0% traits
+5. `destination-doc` (alignment-loop) — facts: evidence, assumption; traits: adversarial, scope, decision — scored 95.0% quality, 50% traits
 
 **Plan:**
-- [x] Read `tests/layer4/setups/packs/pack-workflows.setup.ts` to understand current fixture prompt patterns.
-- [x] Read the `packFamilyContexts` definition to see exact fact/trait terms per family.
-- [x] For each pack family, add a domain-context sentence to fixture prompts that naturally seeds the expected fact and trait terms. Example: for `business-ops` (facts: risk, validation; traits: owner, metric, cadence), add "The project has risk items needing validation, with clear metric owners and cadence tracking."
-- [x] Ensure enrichments are natural and don't feel like keyword stuffing — the sentence should provide realistic scenario context.
-- [x] Run layer1 tests: `pnpm --dir tests test -- --testPathPattern bench-setups` to confirm no regressions.
-- [x] Mark Step 43.5 complete and commit.
+- [ ] Run `/benchmark-test-skill burn-rate` — write report to `benchmark/test-burn-rate-2026-05-21.md`
+- [ ] Run `/benchmark-test-skill content-programming` — write report to `benchmark/test-content-programming-2026-05-21.md`
+- [ ] Run `/benchmark-test-skill conversion-map` — write report to `benchmark/test-conversion-map-2026-05-21.md`
+- [ ] Run `/benchmark-test-skill devtool-adoption` — write report to `benchmark/test-devtool-adoption-2026-05-21.md`
+- [ ] Run `/benchmark-test-skill destination-doc` — write report to `benchmark/test-destination-doc-2026-05-21.md`
+- [ ] Compare domain-criteria scores before vs after enrichment for each skill.
+- [ ] Mark Step 43.6 complete and commit.
 
-**Files to modify:**
-- `tests/layer4/setups/packs/pack-workflows.setup.ts` — enrich fixture prompts with domain context
-
-**Technical details:**
-- The `packFamilyContexts` map is defined in a setup helper; each entry has `requiredFacts` and `referenceTraits` arrays.
-- Fixture prompts are template strings in the `packWorkflowFixtures` array.
-- The approach is analogous to Step 43.2 (route guidance) — mechanical enrichment of existing prompts.
+**Files:**
+- `benchmark/test-burn-rate-2026-05-21.md` — new benchmark report
+- `benchmark/test-content-programming-2026-05-21.md` — new benchmark report
+- `benchmark/test-conversion-map-2026-05-21.md` — new benchmark report
+- `benchmark/test-devtool-adoption-2026-05-21.md` — new benchmark report
+- `benchmark/test-destination-doc-2026-05-21.md` — new benchmark report
 
 ### Execution Profile
-- **Parallel mode:** serial
+- **Parallel mode:** serial (each benchmark run is sequential; agent runners are external)
 - **Integration owner:** main agent
-- **Conflict risk:** medium (shared pack setup file)
+- **Conflict risk:** low (new files only, no shared file edits)
 
 ### Acceptance criteria
-- All 80 pack-local fixture prompts reviewed; those lacking domain context enriched.
-- Layer1 tests pass after changes.
-- Step 43.5 checked off in `tasks/todo.md`.
+- All 5 benchmark reports written with current-date results.
+- Domain-criteria scores improved from 0% baseline for at least 4 of 5 skills.
+- No regressions in hard assertion pass rates (should remain 100%).
+- Step 43.6 checked off in `tasks/todo.md`.
 
 ### Ship-one-step handoff
 Implement only this step, validate it, then run `/ship` when done.
 
-**Next work:** Fix domain-specific quality criteria in pack-local skill fixtures
+**Next work:** Re-benchmark a representative sample of pack-local skills
 **Recommended next command:** /run
 
 ## Completed Task — Step 43.2: Add Explicit Route Guidance to 32 Global Fixture Prompts 2026-05-20
