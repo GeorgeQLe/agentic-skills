@@ -29,6 +29,19 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Updated on 2026-05-21. Alignment-page contracts now use root `alignment/` review HTML with archive-first replacement into `docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/...`, and skills report best-effort browser-open status. Codex `$prototype` parity was restored, including an OpenAI manifest, and the alignment-loop `destination-doc` durable output now has a Codex mirror plus HTML review page output. Hygiene and bootstrap reset now recognize `alignment/` as a generated browser-review artifact root. Focused validation passed before commit; showcase validation will be rerun after commit once generated assets are no longer dirty.
 
+## Current Targeted Update: Repository-Wide Alignment Page Contract 2026-05-21
+
+**Goal:** Extend the root `alignment/` HTML review-page contract to every skill that writes durable planning, research, spec, task, prototype, report, or document outputs, including early research-pack skills such as `$icp`.
+
+**Acceptance Criteria:**
+- [x] Correction captured in `tasks/lessons.md`.
+- [x] Repository-wide audit finds output-writing skills without `alignment/*.html` contracts.
+- [x] Missing contracts are added across global and pack-local Claude/Codex skills, while no-file skills such as `taste-calibration` remain exempt.
+- [x] Validation passes and generated metadata is refreshed if needed.
+- [x] Intended changes are committed and pushed on `master`.
+
+**Result:** Updated on 2026-05-21 after user correction. The alignment-page contract now covers every global and pack-local skill except the explicit no-file `taste-calibration` skill. The contract is conditional on writing durable deliverables and requires root `alignment/{skill}-{topic}.html`, archive-first replacement under `docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/...`, browser-open attempts, and reporting whether the open succeeded or was blocked. Focused validation passed before commit; showcase validation will be rerun after commit once generated assets are no longer dirty.
+
 ## Current Targeted Update: Concept Bootstrap Gate and Scaffold Placement 2026-05-21
 
 **Goal:** Make `concept-exploration` route to `bootstrap-repo` only before repository readiness, and clarify `scaffold` as a post-roadmap/plan-phase implementation structure step for normal product work.

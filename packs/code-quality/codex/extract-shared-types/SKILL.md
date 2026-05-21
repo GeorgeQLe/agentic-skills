@@ -55,6 +55,10 @@ When reporting completion, include:
 - Verification commands run and their results.
 - Any skipped candidates with the reason they were runtime-coupled or public-API-sensitive.
 
+## Alignment Page
+
+When this skill writes or updates durable planning, research, spec, task, prototype, report, or document deliverables, also build a custom HTML alignment page at `alignment/extract-shared-types-{topic}.html`. Use a normalized topic slug from the app, feature, research subject, report subject, or output filename. If the skill writes multiple scoped deliverables in one run, either write one alignment page per scope or one overview page that links each scope. Before replacing an existing alignment page, archive it to `docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/extract-shared-types-{topic}.html`. Attempt to open the resulting HTML page in the browser and report whether the browser open succeeded or was blocked. A blocked browser-open attempt does not make the skill fail when the files were written correctly.
+
 ## Next-Skill Routing
 
 In the final response, include `Recommended next skill: <command>` using these rules:

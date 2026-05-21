@@ -36,6 +36,10 @@ Audit and fill missing lane metadata in the `### Execution Profile` blocks of `t
    - The phase includes a consolidation/PR review step after write lanes and before final validation or shipping. If it is missing, surface it and stop; do not invent new implementation steps.
 6. **Write the patched profile back to `tasks/todo.md`.** Do not commit. Do not push. `/ship` owns shipping.
 
+## Alignment Page
+
+When this skill writes or updates durable planning, research, spec, task, prototype, report, or document deliverables, also build a custom HTML alignment page at `alignment/patch-exec-profile-{topic}.html`. Use a normalized topic slug from the app, feature, research subject, report subject, or output filename. If the skill writes multiple scoped deliverables in one run, either write one alignment page per scope or one overview page that links each scope. Before replacing an existing alignment page, archive it to `docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/patch-exec-profile-{topic}.html`. Attempt to open the resulting HTML page in the browser and report whether the browser open succeeded or was blocked. A blocked browser-open attempt does not make the skill fail when the files were written correctly.
+
 ## Constraints
 
 - Do not modify anything outside `### Execution Profile` blocks.

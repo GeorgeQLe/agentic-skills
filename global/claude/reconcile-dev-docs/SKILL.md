@@ -140,6 +140,10 @@ Report the same sections plus:
 - Do not uncheck completed work automatically. Report unsupported completion claims unless the user approves the correction.
 - Treat `tasks/roadmap.md` as the strategic source of truth, `tasks/todo.md` as the active execution contract, `tasks/manual-todo.md` as human-only external step-linked work, `tasks/record-todo.md` and `tasks/recurring-todo.md` as advisory surfaces, and `tasks/history.md` as append-only evidence.
 
+## Alignment Page
+
+When this skill writes or updates durable planning, research, spec, task, prototype, report, or document deliverables, also build a custom HTML alignment page at `alignment/reconcile-dev-docs-{topic}.html`. Use a normalized topic slug from the app, feature, research subject, report subject, or output filename. If the skill writes multiple scoped deliverables in one run, either write one alignment page per scope or one overview page that links each scope. Before replacing an existing alignment page, archive it to `docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/reconcile-dev-docs-{topic}.html`. Attempt to open the resulting HTML page in the browser and report whether the browser open succeeded or was blocked. A blocked browser-open attempt does not make the skill fail when the files were written correctly.
+
 ## Archive-First Replacement Policy
 
 - Before replacing or substantively rewriting an existing canonical research/spec document (`research/**/*.md`, `specs/**/*.md`, or `docs/specifications/**/*.md`), copy the current file to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-relative-path>`.

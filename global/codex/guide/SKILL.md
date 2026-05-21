@@ -48,6 +48,10 @@ specific implementation skill instead of producing click instructions.
 6. **Offer to check off:**
    - When the user confirms completion, mark the item done in `tasks/manual-todo.md`.
 
+## Alignment Page
+
+When this skill writes or updates durable planning, research, spec, task, prototype, report, or document deliverables, also build a custom HTML alignment page at `alignment/guide-{topic}.html`. Use a normalized topic slug from the app, feature, research subject, report subject, or output filename. If the skill writes multiple scoped deliverables in one run, either write one alignment page per scope or one overview page that links each scope. Before replacing an existing alignment page, archive it to `docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/guide-{topic}.html`. Attempt to open the resulting HTML page in the browser and report whether the browser open succeeded or was blocked. A blocked browser-open attempt does not make the skill fail when the files were written correctly.
+
 ## Constraints
 
 - Always web search — never produce instructions from memory alone.

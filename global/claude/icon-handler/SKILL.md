@@ -142,6 +142,10 @@ In fix mode, include the same report plus changed files, validation, and next co
 - Do not touch unrelated visual branding, OG images, logos, or marketing copy unless the user explicitly asks.
 - Prefer project-local tooling. Do not install image conversion dependencies without explicit approval.
 
+## Alignment Page
+
+When this skill writes or updates durable planning, research, spec, task, prototype, report, or document deliverables, also build a custom HTML alignment page at `alignment/icon-handler-{topic}.html`. Use a normalized topic slug from the app, feature, research subject, report subject, or output filename. If the skill writes multiple scoped deliverables in one run, either write one alignment page per scope or one overview page that links each scope. Before replacing an existing alignment page, archive it to `docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/icon-handler-{topic}.html`. Attempt to open the resulting HTML page in the browser and report whether the browser open succeeded or was blocked. A blocked browser-open attempt does not make the skill fail when the files were written correctly.
+
 ## Default Shipping Contract
 
 - **Next work:** if audit finds issues and approval is missing, the next work is "approve `/icon-handler fix <asset>`".

@@ -114,6 +114,10 @@ Print a concise benchmark summary:
 
 The Markdown report and the final assistant response must both include a literal next-route label accepted by the harness, such as `Recommended next skill: /benchmark-agent-review <skill>` or `Recommended next command: /ship`.
 
+## Alignment Page
+
+When this skill writes or updates durable planning, research, spec, task, prototype, report, or document deliverables, also build a custom HTML alignment page at `alignment/benchmark-test-skill-{topic}.html`. Use a normalized topic slug from the app, feature, research subject, report subject, or output filename. If the skill writes multiple scoped deliverables in one run, either write one alignment page per scope or one overview page that links each scope. Before replacing an existing alignment page, archive it to `docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/benchmark-test-skill-{topic}.html`. Attempt to open the resulting HTML page in the browser and report whether the browser open succeeded or was blocked. A blocked browser-open attempt does not make the skill fail when the files were written correctly.
+
 ## Constraints
 
 - Do not audit or benchmark the app, website, docs, or product surface unless the user explicitly asks for a separate website/product benchmark workflow.

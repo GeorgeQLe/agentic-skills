@@ -92,6 +92,10 @@ Desk-flipped: <project name>
 - Do not delete, archive, or rename anything in the old repo during desk-flip. Only the downstream `$bootstrap-repo --reset-existing` step may perform archival after the user chooses that route.
 - If the project has no specs, docs, or meaningful git history, produce the report anyway but note the thin evidence in each section.
 
+## Alignment Page
+
+When this skill writes or updates durable planning, research, spec, task, prototype, report, or document deliverables, also build a custom HTML alignment page at `alignment/desk-flip-{topic}.html`. Use a normalized topic slug from the app, feature, research subject, report subject, or output filename. If the skill writes multiple scoped deliverables in one run, either write one alignment page per scope or one overview page that links each scope. Before replacing an existing alignment page, archive it to `docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/desk-flip-{topic}.html`. Attempt to open the resulting HTML page in the browser and report whether the browser open succeeded or was blocked. A blocked browser-open attempt does not make the skill fail when the files were written correctly.
+
 ## Default Shipping Contract
 
 - This skill does not commit or push. The only side effect is `desk-flip-report.md` written to the project root.

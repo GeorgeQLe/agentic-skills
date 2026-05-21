@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-05-21 — Alignment page changes need all durable planning skills, not only prototype path
+
+- A root `alignment/` migration updated the named prototype-first path but missed upstream research skills such as `icp`, so users still saw no automatic alignment review page after earlier alignment steps.
+- When changing a cross-cutting output contract, audit every skill that writes durable planning, research, spec, interview, or decision artifacts across global skills and enabled packs, not just the skills named in the immediate plan.
+- Validate the contract with repository-wide checks that find output-writing skills lacking `alignment/*.html`, archive-first replacement, and browser-open reporting; do not rely on a hand-picked skill list.
+- Treat research-pack skills like ICP, competitive analysis, journey mapping, and other early alignment outputs as first-class alignment-page producers unless they explicitly document no-file or human-only behavior.
+
 ## 2026-05-21 — Concept routes bootstrap only before repo readiness
 
 - Concept exploration was clear about being pre-ICP, but its next-step rules did not distinguish an unbootstrapped idea from an already initialized repo.

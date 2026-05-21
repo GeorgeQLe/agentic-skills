@@ -24,6 +24,10 @@ Refresh global skill symlinks for both Claude and Codex from this `agentic-skill
    - If a project already has `.agents/project.json`, use `/pack refresh` after this global install to recreate local pack links.
 4. If the active session still cannot see a newly installed skill, tell the user to start a fresh Claude Code or Codex session.
 
+## Alignment Page
+
+When this skill writes or updates durable planning, research, spec, task, prototype, report, or document deliverables, also build a custom HTML alignment page at `alignment/install-agentic-skills-{topic}.html`. Use a normalized topic slug from the app, feature, research subject, report subject, or output filename. If the skill writes multiple scoped deliverables in one run, either write one alignment page per scope or one overview page that links each scope. Before replacing an existing alignment page, archive it to `docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/install-agentic-skills-{topic}.html`. Attempt to open the resulting HTML page in the browser and report whether the browser open succeeded or was blocked. A blocked browser-open attempt does not make the skill fail when the files were written correctly.
+
 ## Constraints
 
 - Delegate global installation to `scripts/install-agentic-skills.sh`; do not recreate symlink logic by hand.

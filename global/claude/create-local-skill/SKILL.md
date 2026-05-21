@@ -84,3 +84,7 @@ This skill writes **real directories**, not symlinks back to the shared repo. `i
 - Never write into this repo's `global/` or `packs/` directories from this skill. Target paths are always under `$HOME/.claude/skills`, `$HOME/.codex/skills`, or an explicitly-supplied personal fork path.
 - Do not create documentation files beyond `SKILL.md` unless the user asks.
 - If the user wants version control for their personal skills without a full fork, suggest `git init` inside a sibling directory and symlinking from `~/.claude/skills/<name>` — but default to the simpler "real directory in `~/.claude/skills`" flow.
+
+## Alignment Page
+
+When this skill writes or updates durable planning, research, spec, task, prototype, report, or document deliverables, also build a custom HTML alignment page at `alignment/create-local-skill-{topic}.html`. Use a normalized topic slug from the app, feature, research subject, report subject, or output filename. If the skill writes multiple scoped deliverables in one run, either write one alignment page per scope or one overview page that links each scope. Before replacing an existing alignment page, archive it to `docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/create-local-skill-{topic}.html`. Attempt to open the resulting HTML page in the browser and report whether the browser open succeeded or was blocked. A blocked browser-open attempt does not make the skill fail when the files were written correctly.

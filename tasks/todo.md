@@ -8,6 +8,7 @@
 
 ## Priority Task Queue
 
+- [x] `$targeted-skill-builder all durable skills alignment pages` — extend root `alignment/` HTML review-page contract to every durable output-writing skill, validate, then commit and push.
 - [x] `$targeted-skill-builder alignment html output root` — move alignment review pages to root `alignment/`, restore Codex `$prototype`, update hygiene/bootstrap awareness, validate, then commit and push.
 - [x] `$targeted-skill-builder concept-exploration bootstrap gate and scaffold placement` — route unbootstrapped concepts to bootstrap, bootstrapped concepts to ICP, and keep scaffold downstream of roadmap/plan-phase.
 - [x] `$targeted-skill-builder bootstrap-repo product reset research-first routing` — route product resets from high-level concept to ICP/competitive/journey before UX/UI/prototype work.
@@ -18,6 +19,37 @@
 - [ ] `$run` — Resume Phase 41 Batch 41.3 re-benchmarks: re-run the 33 Tier 2 global skills that were benchmarked pre-fixture-remediation with near-zero pass rates (Phase 43 added route guidance to all 32 fixture prompts and increased budgets). Current graded count: 69 unique skills / 158 total. Batch 41.5 pack-local groups also have remaining families.
 - [ ] Review `tasks/recurring-todo.md`: 2 unchecked recurring items — promote only if due and requiring execution work.
 - [ ] `$research-roadmap` — All 43 roadmap phases are complete. Run documentation health scan after Phase 41 remaining batches finish.
+
+## Current Task — Repository-Wide Alignment Page Contract 2026-05-21
+
+**Goal:** Fix the missed upstream research path by making every durable output-writing skill produce a root `alignment/` HTML review artifact when it writes or updates planning, research, spec, task, prototype, report, or document deliverables.
+
+**Evidence:**
+- User correction: `$icp` did not generate an alignment page automatically after the prior alignment HTML migration.
+- Repository scan showed most pack research skills lacked `alignment/*.html` contracts even though they write `research/` or `specs/` outputs.
+- The prior fix was too narrow: it covered the prototype-first path and a few alignment-loop contracts, not every durable alignment producer.
+
+**Plan:**
+- [x] Record the correction in `tasks/lessons.md`.
+- [x] Scan `global/**/SKILL.md` and `packs/**/SKILL.md` for durable output patterns missing `alignment/*.html`.
+- [x] Add a conditional `## Alignment Page` contract to every missing durable output-writing skill.
+- [x] Run validation and refresh generated metadata if required.
+- [x] Commit and push intended changes on `master`.
+
+**Files:**
+- `global/**/SKILL.md`
+- `packs/**/SKILL.md`
+- `tasks/lessons.md`, `tasks/roadmap.md`, and `tasks/todo.md`
+
+### Review
+
+- Added the correction to `tasks/lessons.md`: cross-cutting alignment-page changes must audit all durable planning/research/spec output skills, not only the prototype path.
+- Added a conditional `## Alignment Page` contract across global and pack-local skills. The clause applies when a skill writes durable planning, research, spec, task, prototype, report, or document deliverables, and requires `alignment/{skill}-{topic}.html`, archive-first replacement under `docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/...`, a browser-open attempt, and final reporting of success or blockage.
+- Confirmed repository-wide coverage: every `global/**/SKILL.md` and `packs/**/SKILL.md` now mentions `alignment/*.html` except `packs/alignment-loop/claude/taste-calibration/SKILL.md`, which remains no-file by design.
+- Refreshed Skills Showcase generated data.
+- Validation passed: no active `docs/alignment` references outside archived benchmark run output; repository-wide alignment coverage check; `pnpm --dir tests test -- --grep "bench-setups|tier23|frontmatter|skills-reference"`; `pnpm --dir tests bench:coverage`; `git diff --check`; `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken`; `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`; `/opt/homebrew/bin/bash ./scripts/skill-next-step-routing.sh --missing`.
+- Note: `scripts/validate-skills-showcase-data.sh` regenerated expected generated assets and reported them as stale before commit; rerun after commit should validate a clean tree.
+- Recommended next command: none.
 
 ## Current Task — Alignment HTML Output Root 2026-05-21
 
