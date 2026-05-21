@@ -1,6 +1,6 @@
 ---
 name: desk-flip
-description: Autopsy a stuck project, extract salvageable artifacts, and route to a fresh start via /bootstrap-repo
+description: Autopsy a stuck project, extract salvageable artifacts, and route to a fresh start via /bootstrap-repo reset or new-repo bootstrap
 type: execution
 version: 1.0.0
 argument-hint: "<project-path>"
@@ -8,7 +8,7 @@ argument-hint: "<project-path>"
 
 # Desk Flip
 
-Autopsy a stuck project, extract salvageable artifacts (lessons, valid specs, non-code assets), and route the user to a fresh start in a new repo via `/bootstrap-repo`.
+Autopsy a stuck project, extract salvageable artifacts (lessons, valid specs, non-code assets), and route the user to a fresh start either in a new repo or by resetting the existing repo with `/bootstrap-repo --reset-existing`.
 
 This skill always desk-flips. If the user invoked it, the decision to restart is already made — do not offer incremental migration or attempt to fix the old project in place.
 
@@ -55,10 +55,17 @@ This skill always desk-flips. If the user invoked it, the decision to restart is
    A condensed brief suitable as input to /bootstrap-repo.
    ```
 
-5. **Present and route.**
+5. **Choose the fresh-start path.**
+   - If the user explicitly wants a new repository, route to `/bootstrap-repo <condensed brief>`.
+   - If the user wants to keep the existing repository, or the current repo name, remotes, issues, deployment linkage, or local tooling are valuable, route to `/bootstrap-repo --reset-existing <condensed brief>`.
+   - For in-place reset, state that `/bootstrap-repo --reset-existing` must archive the old implementation under `archive/` before writing the fresh bootstrap docs. It must not delete the old code outright.
+   - The archive should preserve old implementation evidence without treating it as reusable foundation code. The fresh start should continue only from the report, valid specs, valid docs, non-code assets, and lessons.
+
+6. **Present and route.**
    - Show the user a terminal summary of the report.
-   - Recommend the user create a new repo and run `/bootstrap-repo` with the recommended bootstrap input from the report.
+   - Recommend the appropriate `/bootstrap-repo` command with the recommended bootstrap input from the report.
    - Do NOT create the new repo or run `/bootstrap-repo` — the user does this.
+   - After bootstrap, route product/app restarts into the alignment-first workflow: `/ui-interview --requirements-only` to define the content/data/action contract, `/ux-variations --layout-mode` to explore alternatives, `/run` or the applicable prototype-building step to build variants, `/uat --variant-evaluation`, then `/consolidate-variations` before `/spec-interview` or `/roadmap`.
 
 ## Output Format
 
@@ -69,21 +76,22 @@ Desk-flipped: <project name>
 - Assets found: <count>
 - Lessons captured: <count>
 
-**Next work:** Create a new repo for the fresh start
-**Recommended next command:** /bootstrap-repo <condensed brief from report>
+**Next work:** Reset the existing repo by archiving old implementation files, or create a new repo if the user prefers a separate fresh start
+**Recommended next command:** /bootstrap-repo --reset-existing <condensed brief from report>
 ```
 
 ## Constraints
 
-- **Read-only on the old project** — no modifications to existing files, no archival, no branch creation. The only file written is `desk-flip-report.md`.
+- **Read-only during desk-flip** — no modifications to existing files, no archival, no branch creation. The only file written by this skill is `desk-flip-report.md`.
 - Do not carry forward code, dependencies, or infrastructure from the old project.
 - Do not create the new repo or invoke `/bootstrap-repo` — the user handles that transition.
 - Do not commit or push (the report is informational, not a meaningful mutation to ship).
-- Do not delete, archive, or rename anything in the old repo.
+- Do not delete, archive, or rename anything in the old repo during desk-flip. Only the downstream `/bootstrap-repo --reset-existing` step may perform archival after the user chooses that route.
 - If the project has no specs, docs, or meaningful git history, produce the report anyway but note the thin evidence in each section.
 
 
 ## Default Shipping Contract
 
 - This skill does NOT commit or push. The only side effect is `desk-flip-report.md` written to the project root.
-- **Default next-step routing:** when reporting completion, include the two-line pair `**Next work:** <specific task>` and `**Recommended next command:** /bootstrap-repo <brief>` so the user has a concrete handoff.
+- **Default next-step routing:** when reporting completion, include the two-line pair `**Next work:** <specific task>` and `**Recommended next command:** /bootstrap-repo --reset-existing <brief>` for in-place restarts, or `/bootstrap-repo <brief>` only when a separate new repo is explicitly the right path.
+- **Post-bootstrap route:** include in the report that the fresh project should proceed to `/ui-interview --requirements-only` before prototype/implementation work unless the user already has a current accepted requirements artifact.

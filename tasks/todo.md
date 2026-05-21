@@ -8,11 +8,46 @@
 
 ## Priority Task Queue
 
+- [x] `$targeted-skill-builder desk-flip reset/archive alignment-first routing` — update desk-flip/bootstrap handoff so stale existing codebases are archived before bootstrap, then route to UI/content alignment before prototype work.
 - [x] `$targeted-skill-builder concept-exploration slugged briefs` — update mirrored `concept-exploration` skills so known or emerging concept identities write slugged research briefs instead of conflating related concepts in generic `concept-brief.md`.
 - [x] Add Codex parity for `desk-flip`: create `global/codex/desk-flip/SKILL.md`, adjust benchmark route expectations, refresh generated skill data, validate, then commit and push.
 - [ ] `/run` — Resume Phase 41 Batch 41.3 re-benchmarks: re-run the 33 Tier 2 global skills that were benchmarked pre-fixture-remediation with near-zero pass rates (Phase 43 added route guidance to all 32 fixture prompts and increased budgets). Current graded count: 69 unique skills / 158 total. Batch 41.5 pack-local groups also have remaining families.
 - [ ] Review `tasks/recurring-todo.md`: 2 unchecked recurring items — promote only if due and requiring execution work.
 - [ ] `/research-roadmap` — All 43 roadmap phases are complete. Run documentation health scan after Phase 41 remaining batches finish.
+
+## Current Task — Desk-Flip Reset/Archive and Alignment-First Routing 2026-05-21
+
+**Goal:** Fix the desk-flip handoff so a stale existing codebase can be reset in place by archiving old implementation files before bootstrap, then route into the alignment-first and prototype-second workflow instead of jumping straight from bootstrap to implementation planning.
+
+**Evidence:**
+- User correction: current `desk-flip` routes only to `bootstrap-repo`, but `bootstrap-repo` does not handle resetting an existing codebase.
+- Current `desk-flip` says create a new repo and forbids archival, which misses the common in-place restart workflow.
+- Current `bootstrap-repo` only creates/updates README and agent docs and explicitly limits modifications to those files.
+- The current product workflow expects alignment artifacts before prototypes: requirements/UI alignment, UX variations, variant evaluation, consolidation, then post-prototype research/spec planning.
+
+**Plan:**
+- [x] Update mirrored `desk-flip` contracts to recommend either a new repo or an in-place reset/bootstrap path, with old implementation archived under `archive/`.
+- [x] Update `bootstrap-repo` to support explicit reset mode for stale non-empty repos, including archive exclusions, manifesting, and post-bootstrap alignment routing.
+- [x] Update deterministic benchmark setup and focused coverage for the new desk-flip/bootstrap route expectations.
+- [x] Refresh generated skill data if tracked skill metadata/content changes require it, run focused validation, and record results.
+- [ ] Commit and push intended changes on `master`.
+
+**Files:**
+- `global/codex/desk-flip/SKILL.md`
+- `global/claude/desk-flip/SKILL.md`
+- `global/codex/bootstrap-repo/SKILL.md`
+- `tests/layer4/setups/tier23-global-workflows.setup.ts`
+- `tasks/roadmap.md` and `tasks/todo.md`
+
+### Review
+
+- Changed mirrored `desk-flip` contracts so in-place restarts route to `$bootstrap-repo --reset-existing` or `/bootstrap-repo --reset-existing`, while still allowing a new-repo bootstrap when explicitly preferred.
+- Added reset mode to mirrored `bootstrap-repo` contracts: archive stale implementation files under `archive/YYYY-MM-DD-HHMMSS/`, preserve `.git`, agent config, `desk-flip-report.md`, valid salvage artifacts, and write an archive manifest.
+- Added post-bootstrap alignment routing: product/app restarts go to requirements alignment first (`$ui-interview --requirements-only` or `/ui-interview --requirements-only`), then UX variations, variant/prototype build, UAT, consolidation, post-prototype research, and production spec/roadmap.
+- Updated Tier 2/3 benchmark fixtures so `desk-flip` expects reset/archive bootstrap for same-repo restarts and `bootstrap-repo` product bootstraps route to alignment-first work.
+- Validation passed: `pnpm --dir tests verify --skill desk-flip`; `pnpm --dir tests verify --skill bootstrap-repo`; `node scripts/generate-skills-showcase-data.mjs`; `node scripts/generate-skills-showcase-github-data.mjs`; `pnpm --dir tests bench:coverage`; `scripts/validate-skills-showcase-data.sh`; `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken`; `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`; `/opt/homebrew/bin/bash ./scripts/skill-next-step-routing.sh --missing`.
+- Skipped/limited: both focused verifies skipped layer2 because no target-specific layer2 tests match these skills.
+- Next command: `$bootstrap-repo --reset-existing <brief from desk-flip-report.md>`
 
 ## Current Task — Concept Exploration Slugged Briefs 2026-05-21
 

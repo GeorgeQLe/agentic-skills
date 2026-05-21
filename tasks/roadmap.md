@@ -16,6 +16,20 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Update: Desk-Flip Reset/Archive and Alignment-First Routing 2026-05-21
+
+**Goal:** Fix stale-project restart routing so `desk-flip` can hand off to an in-place reset/bootstrap path that archives old implementation files, then routes to alignment-first and prototype-second workflow steps.
+
+**Acceptance Criteria:**
+- [x] Mirrored `desk-flip` contracts no longer imply that a new repo is the only fresh-start path.
+- [x] `desk-flip` final handoff distinguishes new-repo bootstrap from in-place reset/bootstrap and includes the active runner's command syntax.
+- [x] `bootstrap-repo` has an explicit reset mode for non-empty stale repos that archives old implementation files under `archive/` before writing fresh bootstrap docs.
+- [x] `bootstrap-repo` reset mode preserves source-of-truth artifacts such as `desk-flip-report.md`, salvageable specs/docs/assets, `.git`, agent config inputs, and archive manifests.
+- [x] Post-bootstrap routing sends product/app restarts into alignment-first work (`$ui-interview --requirements-only` or runner equivalent), then UX variations/prototype flow, instead of straight implementation planning.
+- [ ] Focused benchmark coverage and validation pass, review notes are recorded, and intended changes are committed and pushed on `master`.
+
+**Result:** Updated mirrored `desk-flip` and `bootstrap-repo` contracts on 2026-05-21. `desk-flip` now routes same-repo restarts to reset/archive bootstrap (`$bootstrap-repo --reset-existing` for Codex and `/bootstrap-repo --reset-existing` for Claude) while keeping new-repo bootstrap available when explicitly preferred. `bootstrap-repo` reset mode archives stale implementation files under `archive/YYYY-MM-DD-HHMMSS/`, writes `MANIFEST.md`, preserves git metadata, agent config, desk-flip report, and valid salvage artifacts, then routes product/app restarts to alignment-first requirements work before UX variations, prototypes, UAT, consolidation, and production spec/roadmap. Focused validation passed for `desk-flip` and `bootstrap-repo`, benchmark coverage, generated showcase freshness, and skill dependency/version/routing audits.
+
 ## Current Targeted Update: Concept Exploration Slugged Briefs 2026-05-21
 
 **Goal:** Update mirrored `concept-exploration` skills so concept briefs use normalized concept slugs whenever a concept identity is known or emerges, avoiding ambiguous `research/concept-brief.md` overwrites across related concepts.

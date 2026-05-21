@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-05-21 — Desk-flip handoffs need reset/archive and alignment routing
+
+- A `desk-flip` restart route sent users to `bootstrap-repo`, but `bootstrap-repo` only handled README/agent docs and did not reset an existing stale codebase.
+- Fresh-start workflows must distinguish new-repo bootstrap from in-place reset. For in-place restarts, archive stale implementation files under `archive/` with a manifest before writing fresh bootstrap docs.
+- After bootstrap for product/app restarts, route to alignment-first requirements work (`$ui-interview --requirements-only` or runner equivalent) before UX variations, prototypes, UAT, consolidation, and production specs.
+- Do not let a bootstrap handoff skip directly to implementation planning when requirements, layout direction, or prototype evidence are not accepted yet.
+
 ## 2026-05-21 — Final handoffs must render routes for the active CLI
 
 - A Codex `$ship` handoff copied `/run` from `tasks/todo.md` into the final `Recommended next command`, even though Codex users need `$run`.
