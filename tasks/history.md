@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-05-21 — Batch 41.5 Group 2: Pack-local skill benchmarks
+
+- Benchmarked 10 pack-local skills with both agents (3 runs each): `creator-metrics-review`, `creator-platform-capability-matrix`, `creator-positioning`, `creator-presence-dossier`, `customer-feedback`, `destination-doc`, `devtool-adoption`, `devtool-docs-audit`, `devtool-dx-journey`, `devtool-integration-map`.
+- Claude 100% hard assertion pass rate across all 10 skills. Codex 100% on 9/10; `creator-platform-capability-matrix` 66.7% (1 Codex exit failure).
+- Infrastructure blocks: `devtool-docs-audit` (2 timeouts per agent), `devtool-integration-map` (1 Codex timeout).
+- Generated data refreshed: 133 graded + 17 incomplete rows (up from 112 + 17).
+- Validation passed: benchmark coverage (158 skills), showcase data fresh, `git diff --check` clean.
+
 ## 2026-05-21 — Phase 43, Step 43.5: Fix domain-specific quality criteria in pack fixtures
 
 - Added `domainContextLine` and `domainContextFixtureSection` helpers to `pack-workflows.setup.ts`.

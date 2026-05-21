@@ -205,15 +205,15 @@ Step 43.3 complete. Step 43.4 (optional calibration) is next if desired.
 **Next work:** (Optional) Calibrate pack-local domain quality criteria
 **Recommended next command:** /ship
 
-## Deferred Task — Batch 41.5 Group 2: Pack-Local Skill Benchmarks 2026-05-20
+## Completed Task — Batch 41.5 Group 2: Pack-Local Skill Benchmarks 2026-05-20
 
 **Goal:** Run the second group of ~10 pack-local skills with both agents (3 runs each), continuing alphabetically through pack families.
 
 **Plan:**
-- [ ] For each skill: run `pnpm verify --skill <skill>`, then `pnpm bench --skill <skill> --agent both --runs 3 --chunk-size 3 --pause 0`.
-- [ ] Write `benchmark/test-<skill>-2026-05-20.md` with verify evidence, results, raw session paths.
-- [ ] After the group: refresh generated data, validate, commit and push.
-- [ ] Pause if any shared harness failure pattern emerges beyond the known quality rubric calibration gaps.
+- [x] For each skill: run `pnpm verify --skill <skill>`, then `pnpm bench --skill <skill> --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [x] Write `benchmark/test-<skill>-2026-05-20.md` with verify evidence, results, raw session paths.
+- [x] After the group: refresh generated data, validate, commit and push.
+- [x] Pause if any shared harness failure pattern emerges beyond the known quality rubric calibration gaps.
 
 **Context from Batch 41.5 Group 1:**
 - 112 graded + 17 incomplete rows currently in the matrix (10 pack-local skills benchmarked in Group 1).
@@ -248,6 +248,18 @@ Step 43.3 complete. Step 43.4 (optional calibration) is next if desired.
 
 ### Ship-one-step handoff
 Implement only this step, validate it, then run `/ship` when done.
+
+## Review — Batch 41.5 Group 2: Pack-Local Skill Benchmarks 2026-05-20
+
+- Benchmarked 10 pack-local skills with both agents (3 runs each): `creator-metrics-review`, `creator-platform-capability-matrix`, `creator-positioning`, `creator-presence-dossier`, `customer-feedback`, `destination-doc`, `devtool-adoption`, `devtool-docs-audit`, `devtool-dx-journey`, `devtool-integration-map`.
+- Results: Claude achieved 100% hard assertion pass rate across all 10 skills. Codex achieved 100% on 9/10 skills; `creator-platform-capability-matrix` had 66.7% (2/3) due to 1 Codex run exiting with code 1.
+- Infrastructure blocks: `devtool-docs-audit` had 2 blocked runs per agent (runner timeouts); `devtool-integration-map` had 1 blocked Codex run (runner timeout). All evaluated runs still passed.
+- Output quality ranged from 75.8% (`creator-positioning` Claude) to 100.0% (`devtool-integration-map` both agents). Domain-specific criteria (`creator-media-context`, `business-discovery-context`, `devtool-context`) consistently scored 0% for Claude — same pattern as Group 1 with domain criteria.
+- `pack-workflow-traits` and `pack-fixture-evidence` remained the most variable quality criteria across skills, consistent with Group 1 findings.
+- Generated data refreshed: 133 graded + 17 incomplete rows (up from 112 + 17).
+- Validation passed: `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests bench:coverage` (158 skills); `git diff --check`.
+- 10 new benchmark report files written under `benchmark/`.
+- No new shared harness failure patterns beyond known domain-criteria and runner-timeout gaps.
 
 ## Completed Task — Batch 41.5 Group 1: Pack-Local Skill Benchmarks 2026-05-20
 
