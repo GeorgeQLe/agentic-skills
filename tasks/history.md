@@ -2754,3 +2754,11 @@ Resolved all 10 findings from `/expert-review`:
 - 3 remaining failures are content/assertion-specificity issues, not route gaps.
 - Reports written: `benchmark/test-<skill>-2026-05-21.md` for all 10 skills.
 - Generated data refreshed: 137 graded + 17 incomplete rows, 158 benchmark coverage.
+
+## 2026-05-21: Batch 41.3-rerun Group 1 (session 2) — Re-benchmark 11 Tier 2 Global Skills + Skill Updates
+
+- Re-benchmarked all 11 Group 1 Tier 2 global skills with remediated fixtures: `bootstrap-repo`, `brainstorm`, `branch-lifecycle`, `codebase-status`, `concept-exploration`, `consolidate-variations`, `create-agentic-skill`, `create-local-skill`, `dead-code`, `debug`, `decommission`.
+- 7/11 skills improved to 100% pass rate on both agents. 2 skills (bootstrap-repo, consolidate-variations) remain at 0% due to fixture-specific hard assertion failures unrelated to route guidance.
+- Also shipped: bootstrap-repo archive-docs reset mode, desk-flip alignment-first routing, concept-exploration slugged briefs, and codex desk-flip parity (from prior sessions' uncommitted work).
+- Layer1: 15 files, 1222 tests pass. Generated data refreshed.
+- Shipped in commit `66e96c0`.

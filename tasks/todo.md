@@ -8,7 +8,7 @@
 
 ## Priority Task Queue
 
-- [x] `$targeted-skill-builder bootstrap-repo archive docs preserve concept only` — tighten reset mode so old docs/research/specs are archived and active root keeps only the high-level concept.
+- [x] `$targeted-skill-builder bootstrap-repo archive docs preserve concept only` — tighten reset mode so old docs/research/specs are archived and active root keeps only the high-level concept. (Shipped in `66e96c0`.)
 - [x] `$targeted-skill-builder desk-flip reset/archive alignment-first routing` — update desk-flip/bootstrap handoff so stale existing codebases are archived before bootstrap, then route to UI/content alignment before prototype work.
 - [x] `$targeted-skill-builder concept-exploration slugged briefs` — update mirrored `concept-exploration` skills so known or emerging concept identities write slugged research briefs instead of conflating related concepts in generic `concept-brief.md`.
 - [x] Add Codex parity for `desk-flip`: create `global/codex/desk-flip/SKILL.md`, adjust benchmark route expectations, refresh generated skill data, validate, then commit and push.
@@ -16,29 +16,64 @@
 - [ ] Review `tasks/recurring-todo.md`: 2 unchecked recurring items — promote only if due and requiring execution work.
 - [ ] `$research-roadmap` — All 43 roadmap phases are complete. Run documentation health scan after Phase 41 remaining batches finish.
 
-## Current Task — Bootstrap Reset Archives Docs and Preserves Concept Only 2026-05-21
+## Current Task — Batch 41.3 Re-benchmarks Group 2: Re-run Tier 2 Global Skills Post-Fixture-Remediation 2026-05-21
 
-**Goal:** Update reset mode so old docs, research, specs, and task docs are archived with the stale codebase. The active reset repo should keep only the high-level concept as the starting point, so research and alignment restart cleanly.
+**Goal:** Re-benchmark the next 11 Tier 2 global skills that were benchmarked pre-fixture-remediation on 2026-05-20. Phase 43 Step 43.2 added route guidance to all 32 fixture prompts. Group 1 re-run (11 skills) showed 7/11 improving to 100% for both agents.
 
-**Evidence:**
-- User correction: `bootstrap-repo` should archive all docs as well so research starts essentially from scratch.
-- Current reset contract preserves valid salvage docs/assets as active artifacts, which risks carrying stale assumptions into the fresh workflow.
-- The intended alignment-first flow should use the high-level concept as input, then rebuild requirements, research, variations, prototypes, and production specs from there.
+**Background:**
+- Group 1 re-run completed: 7/11 skills at 100% both agents, 2 at 0% (fixture-specific issues), 2 partial.
+- These are the Group 2 original skills (minus decommission, already re-run in Group 1).
+- 22 skills remain total (10 in this group + 11 in Group 3 re-run + 1 desk-flip new).
+
+**Selected skills (Group 2 — 10 skills):**
+1. `dogfood`
+2. `expert-review`
+3. `guide`
+4. `handoff`
+5. `hygiene`
+6. `migrate`
+7. `mono-plan`
+8. `pack`
+9. `prototype`
+10. `provision-agentic-config`
 
 **Plan:**
-- [x] Update mirrored `bootstrap-repo` reset mode to archive docs/research/specs/tasks and preserve only a concise high-level concept artifact.
-- [x] Update mirrored `desk-flip` handoff wording so the bootstrap input is the only active concept seed, not old docs.
-- [x] Update benchmark fixture expectations to catch concept-only reset language.
-- [x] Refresh generated skill data and run focused validation.
-- [ ] Commit and push intended changes on `master`.
+- [ ] For each of the 10 skills: run `pnpm verify --skill <skill>`, then `pnpm bench --skill <skill> --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [ ] Write dated `benchmark/test-<skill>-2026-05-21.md` for each skill.
+- [ ] After all 10: refresh generated data and validate.
+- [ ] Commit and push.
 
 **Files:**
-- `global/codex/bootstrap-repo/SKILL.md`
-- `global/claude/bootstrap-repo/SKILL.md`
-- `global/codex/desk-flip/SKILL.md`
-- `global/claude/desk-flip/SKILL.md`
-- `tests/layer4/setups/tier23-global-workflows.setup.ts`
-- `tasks/lessons.md`, `tasks/roadmap.md`, and `tasks/todo.md`
+- `benchmark/test-dogfood-2026-05-21.md` — updated benchmark report
+- `benchmark/test-expert-review-2026-05-21.md` — updated benchmark report
+- `benchmark/test-guide-2026-05-21.md` — updated benchmark report
+- `benchmark/test-handoff-2026-05-21.md` — updated benchmark report
+- `benchmark/test-hygiene-2026-05-21.md` — updated benchmark report
+- `benchmark/test-migrate-2026-05-21.md` — updated benchmark report
+- `benchmark/test-mono-plan-2026-05-21.md` — updated benchmark report
+- `benchmark/test-pack-2026-05-21.md` — updated benchmark report
+- `benchmark/test-prototype-2026-05-21.md` — updated benchmark report
+- `benchmark/test-provision-agentic-config-2026-05-21.md` — updated benchmark report
+- `docs/benchmark-results-matrix.md` — regenerated
+- `docs/skills-showcase/assets/skills-data.js` — regenerated
+- `apps/skills-showcase/public/assets/skills-data.js` — regenerated
+
+### Execution Profile
+- **Parallel mode:** serial (each benchmark run is sequential)
+- **Integration owner:** main agent
+- **Conflict risk:** low (new/updated benchmark reports only)
+
+### Acceptance criteria
+- All 10 benchmark reports written with current-date results.
+- Pass rates improved from 0% baseline for majority of skills (route guidance fix).
+- No regressions in previously-passing quality scores.
+- Generated data refreshed and validated.
+
+### Ship-one-step handoff
+Implement only this step, validate it, then run `/ship` when done.
+
+**Next work:** Re-benchmark Batch 41.3 Group 2 (10 Tier 2 global skills post-fixture-remediation)
+**Recommended next command:** /run
 
 ### Review
 
