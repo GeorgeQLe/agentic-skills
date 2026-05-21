@@ -10,44 +10,22 @@
 
 All 11 skills benchmarked, reports written, generated data refreshed (74 graded + 17 incomplete rows). Same shared patterns as Groups 1: Claude budget-blocked at smoke ($0.25), route assertion failures near-universal. No new harness defects.
 
-## Current Task — Batch 41.3 Group 3: Tier 2 Global Skill Benchmarks 2026-05-20
+## Completed Task — Batch 41.3 Group 3: Tier 2 Global Skill Benchmarks 2026-05-20
 
-**Goal:** Run the final group of 11 Tier 2 global skills with both agents (3 runs each), completing Batch 41.3.
+All 11 skills benchmarked, reports written, generated data refreshed (96 graded + 17 incomplete rows, up from 74 + 17). No budget-blocks at standard ($1.00). Codex had full passes on `spec-drift` (100%) and `uat` (100%), partial pass on `skills` (33.3%). Claude 0% across all 11 skills. No new harness defects.
 
-**Plan:**
-- [ ] Verify and benchmark `reconcile-dev-docs`, `regression-check`, `research-roadmap`, `scaffold`, `skills`, `slim-audit`, `spec-drift`, `trace`, `uat`, `ui-interview`, `ux-variations` (11 skills).
-- [ ] For each skill: run `pnpm verify --skill <skill>`, then `pnpm bench --skill <skill> --agent both --runs 3 --chunk-size 3 --pause 0`.
-- [ ] Write `benchmark/test-<skill>-2026-05-20.md` with verify evidence, results, raw session paths.
-- [ ] After the group: refresh generated data, validate, commit and push.
-- [ ] Pause if any shared harness failure pattern emerges beyond the known budget-block and route-assertion gaps.
+## Review — Batch 41.3 Group 3: Tier 2 Global Skill Benchmarks 2026-05-20
 
-**Context from Groups 1 and 2:**
-- Budget bumped from smoke ($0.25) to standard ($1.00) after Group 2. Claude budget-blocks should no longer occur. Codex now receives a budget instruction in its prompt for parity.
-- Route assertion failures near-universal due to missing explicit route guidance in fixture prompts. Same root cause — record but do not fix in this batch.
-- `--timeout` flag is NOT supported by `bench.ts` — do not pass it.
-
-**Files to modify:**
-- `benchmark/test-<skill>-2026-05-20.md` — one per benchmarked skill (up to 11 new files)
-- `docs/benchmark-results-matrix.md` — regenerated
-- `docs/skills-showcase/assets/skills-data.js` — regenerated
-- `apps/skills-showcase/public/assets/skills-data.js` — regenerated
-- `docs/skills-showcase/assets/github-proof-data.js` — regenerated
-- `apps/skills-showcase/public/assets/github-proof-data.js` — regenerated
-- `tasks/todo.md` — progress tracking
-- `tasks/history.md` — session record
-
-### Execution Profile
-- **Parallel mode:** serial
-- **Integration owner:** main agent
-- **Conflict risk:** medium (benchmark runner capacity, generated data, task docs are shared resources)
-
-### Acceptance criteria
-- All 11 skills benchmarked with both agents (3 runs each).
-- Reports written and generated data refreshed.
-- No shared harness failure patterns unaddressed beyond known budget-block and route-assertion gaps.
-
-### Ship-one-step handoff
-Implement only this step, validate it, then run `/ship` when done.
+- Benchmarked 11 Tier 2 global skills with both agents (3 runs each): `reconcile-dev-docs`, `regression-check`, `research-roadmap`, `scaffold`, `skills`, `slim-audit`, `spec-drift`, `trace`, `uat`, `ui-interview`, `ux-variations`.
+- Results: Claude 0% pass rate across all 11 skills (no budget-blocks at standard $1.00). Codex had full passes on 2 skills (`spec-drift` 100%, `uat` 100%) and partial pass on 1 skill (`skills` 33.3%).
+- Budget bump from smoke to standard ($1.00) eliminated all Claude budget-blocks. Route assertion failures remain near-universal — same root cause as Groups 1 and 2.
+- `ux-variations` had the most domain-specific assertion failures for both agents (layout variations, alternatives). `slim-audit` also had elevated domain-specific failures.
+- Generated data refreshed: 96 graded + 17 incomplete rows (up from 74 + 17).
+- Pre-existing `quiz-me` coverage gap: new skill added by another session without benchmark registration. Fixed by adding `quiz-me` to `BENCH_COVERAGE_SKILLS` and `TIER23_GLOBAL_BLOCKED_SKILLS` (interactive skill requiring AskUserQuestion).
+- `scaffold` and `skills` verify reported layer1 FAIL due to pre-existing `quiz-me` gap; fixed before final validation.
+- Validation passed: `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests bench:coverage` (158 skills); `git diff --check`.
+- 11 new benchmark report files written under `benchmark/`.
+- Batch 41.3 complete: all 33 Tier 2 global skills benchmarked across Groups 1-3.
 
 ## Review — Batch 41.3 Group 2: Tier 2 Global Skill Benchmarks 2026-05-20
 
@@ -602,7 +580,7 @@ Implement only this step, validate it, then run `/ship` when done.
     - Claude budget-block pattern is resolved or explicitly documented as expected.
     - At least one fixture-prompt fix is applied and validated.
     - Reports updated and generated data refreshed.
-- [ ] Batch 41.3: Run Tier 2 global skills in groups of 5-10, pausing after any shared harness failure pattern.
+- [x] Batch 41.3: Run Tier 2 global skills in groups of 5-10, pausing after any shared harness failure pattern.
   - Classification: automated
   - Files: benchmark reports under `benchmark/`, raw run outputs under `tests/benchmarks/runs/`, generated benchmark/showcase data, task docs.
   - Implementation plan:
