@@ -1,5 +1,11 @@
 # Session History
 
+## 2026-05-21 — Phase 43 complete: Benchmark Fixture Remediation
+
+- Phase 43 all 7 steps complete. Archived to `tasks/phases/phase-43.md`.
+- Step 43.7 (refresh generated data): showcase data fresh, 133 graded + 17 incomplete, 158 benchmark coverage, `git diff --check` clean.
+- Phase 43 was the last numbered phase; only deferred/future work remains in the roadmap.
+
 ## 2026-05-21 — Step 43.6: Re-benchmark pack-local skills after domain enrichment
 
 - Re-benchmarked 5 previously-low-scoring pack-local skills to validate Step 43.5's domain-context enrichment.
