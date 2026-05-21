@@ -39,7 +39,7 @@ This matrix tracks skills that already have persisted benchmark run data and gra
 | `clone-spec-store` | Claude | `tests/benchmarks/runs/clone-spec-store-claude-5682f7cd/report.json` | 3 | 100% | 85.8% | none | graded | Curated report: `benchmark/test-clone-spec-store-2026-05-20.md`. |
 | `clone-spec-store` | Codex | `tests/benchmarks/runs/clone-spec-store-codex-fcfaf846/report.json` | 3 | 100% | 75.8% | none | graded | Curated report: `benchmark/test-clone-spec-store-2026-05-20.md`. |
 | `codebase-status` | Claude | `tests/benchmarks/runs/codebase-status-claude-6a202762/report.json` | 3 | 0% | 56.1% | none | graded | Curated report: `benchmark/test-codebase-status-2026-05-19.md`. |
-| `codebase-status` | Codex | `tests/benchmarks/runs/codebase-status-codex-8575035e/report.json` | 3 | 33% | 72.0% | none | graded | Curated report: `benchmark/test-codebase-status-2026-05-19.md`. |
+| `codebase-status` | Codex | `tests/benchmarks/runs/codebase-status-codex-57d24257/report.json` | 3 | 100% | 90.2% | none | graded | Curated report: `benchmark/test-codebase-status-2026-05-19.md`. |
 | `cohort-review` | Claude | `tests/benchmarks/runs/cohort-review-claude-543183b4/report.json` | 3 | 100% | 80.0% | none | graded | Curated report: `benchmark/test-cohort-review-2026-05-20.md`. |
 | `cohort-review` | Codex | `tests/benchmarks/runs/cohort-review-codex-af9a6bd7/report.json` | 3 | 100% | 70.0% | none | graded | Curated report: `benchmark/test-cohort-review-2026-05-20.md`. |
 | `competitive-analysis` | Claude | `tests/benchmarks/runs/competitive-analysis-claude-d0b6bc77/report.json` | 3 | 100% | 91.7% | none | graded | Curated report: `benchmark/test-competitive-analysis-2026-05-20.md`. |
