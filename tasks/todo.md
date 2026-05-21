@@ -6,21 +6,25 @@
 **Total phases:** 42
 **Last completed phase:** Phase 42 — Workflow Persistent Transcript Refinement
 
-## Current Task — Batch 41.3 Group 2: Tier 2 Global Skill Benchmarks 2026-05-20
+## Completed Task — Batch 41.3 Group 2: Tier 2 Global Skill Benchmarks 2026-05-20
 
-**Goal:** Run the second group of 11 Tier 2 global skills with both agents (3 runs each), continuing Batch 41.3.
+All 11 skills benchmarked, reports written, generated data refreshed (74 graded + 17 incomplete rows). Same shared patterns as Groups 1: Claude budget-blocked at smoke ($0.25), route assertion failures near-universal. No new harness defects.
+
+## Current Task — Batch 41.3 Group 3: Tier 2 Global Skill Benchmarks 2026-05-20
+
+**Goal:** Run the final group of 11 Tier 2 global skills with both agents (3 runs each), completing Batch 41.3.
 
 **Plan:**
-- [x] Verify and benchmark `decommission`, `dogfood`, `expert-review`, `guide`, `handoff`, `hygiene`, `migrate`, `mono-plan`, `pack`, `prototype`, `provision-agentic-config` (11 skills).
-- [x] For each skill: run `pnpm verify --skill <skill>`, then `pnpm bench --skill <skill> --agent both --runs 3 --chunk-size 3 --pause 0`.
-- [x] Write `benchmark/test-<skill>-2026-05-20.md` with verify evidence, results, raw session paths.
-- [x] After the group: refresh generated data, validate, commit and push.
-- [x] Pause if any shared harness failure pattern emerges beyond the known budget-block and route-assertion gaps. No new patterns — same budget-block and route-assertion gaps as Group 1.
+- [ ] Verify and benchmark `reconcile-dev-docs`, `regression-check`, `research-roadmap`, `scaffold`, `skills`, `slim-audit`, `spec-drift`, `trace`, `uat`, `ui-interview`, `ux-variations` (11 skills).
+- [ ] For each skill: run `pnpm verify --skill <skill>`, then `pnpm bench --skill <skill> --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [ ] Write `benchmark/test-<skill>-2026-05-20.md` with verify evidence, results, raw session paths.
+- [ ] After the group: refresh generated data, validate, commit and push.
+- [ ] Pause if any shared harness failure pattern emerges beyond the known budget-block and route-assertion gaps.
 
-**Context from Group 1:**
-- Claude budget-blocked at smoke ($0.25) for 4/10 skills. Expect similar for Group 2 — do NOT increase budgets in this batch, just record.
+**Context from Groups 1 and 2:**
+- Claude budget-blocked at smoke ($0.25) for 6/21 skills so far. Expect similar for Group 3 — do NOT increase budgets in this batch, just record.
 - Route assertion failures near-universal due to missing explicit route guidance in fixture prompts. Same root cause — record but do not fix in this batch.
-- Use `--timeout 600000` on all bench commands to prevent background task timeouts.
+- `--timeout` flag is NOT supported by `bench.ts` — do not pass it.
 
 **Files to modify:**
 - `benchmark/test-<skill>-2026-05-20.md` — one per benchmarked skill (up to 11 new files)
