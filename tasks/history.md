@@ -2685,3 +2685,10 @@ Resolved all 10 findings from `/expert-review`:
 - For prompts with trailing constraints (scaffold, bootstrap-repo, create-local-skill, ux-variations, quiz-me), placed route guidance before the trailing instruction.
 - Did not modify the 5 already-passing fixtures (affected, analyze-sessions, desk-flip, icon-handler, update-packages).
 - Validation: layer1 bench-setups 15 files / 1221 tests pass. Pre-existing typecheck errors in verify.ts only.
+
+## 2026-05-21 — Phase 43 Step 43.3: Re-run sample fixtures to validate route assertions pass
+
+- Benchmarked 5 representative skills (debug, branch-lifecycle, brainstorm, scaffold, uat) with both agents (10 runs total).
+- `workflow-next-route` (assertRecommendedRoute) passes 100% across all 10 runs — route guidance from Step 43.2 is validated.
+- 3 overall run failures from pre-existing content assertions (salvage, tradeoffs, variant evaluation), not route-related.
+- Total cost: ~$10.
