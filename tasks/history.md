@@ -2745,3 +2745,12 @@ Resolved all 10 findings from `/expert-review`:
 - Added focused layer1 coverage proving the normalization rule exists in all four high-traffic contracts.
 - Recorded the `/run` vs `$run` correction in `tasks/lessons.md`.
 - Refreshed Skills Showcase generated data after the tracked `SKILL.md` behavior changes.
+
+## 2026-05-21: Batch 41.3-rerun Group 1 — Re-benchmark 10 Tier 2 Global Skills Post-Fixture-Remediation
+
+- Re-benchmarked 10 Tier 2 global skills with remediated fixtures (Phase 43 route guidance): `bootstrap-repo`, `brainstorm`, `branch-lifecycle`, `codebase-status`, `concept-exploration`, `consolidate-variations`, `create-agentic-skill`, `create-local-skill`, `dead-code`, `debug`.
+- 7/10 skills improved pass rates; 5/10 now pass 100% on both agents.
+- Route assertions improved from near-zero to near-universal compliance.
+- 3 remaining failures are content/assertion-specificity issues, not route gaps.
+- Reports written: `benchmark/test-<skill>-2026-05-21.md` for all 10 skills.
+- Generated data refreshed: 137 graded + 17 incomplete rows, 158 benchmark coverage.

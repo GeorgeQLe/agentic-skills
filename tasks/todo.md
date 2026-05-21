@@ -8,10 +8,35 @@
 
 ## Priority Task Queue
 
+- [ ] `$targeted-skill-builder concept-exploration slugged briefs` — update mirrored `concept-exploration` skills so known or emerging concept identities write slugged research briefs instead of conflating related concepts in generic `concept-brief.md`.
 - [x] Add Codex parity for `desk-flip`: create `global/codex/desk-flip/SKILL.md`, adjust benchmark route expectations, refresh generated skill data, validate, then commit and push.
 - [ ] `/run` — Resume Phase 41 Batch 41.3 re-benchmarks: re-run the 33 Tier 2 global skills that were benchmarked pre-fixture-remediation with near-zero pass rates (Phase 43 added route guidance to all 32 fixture prompts and increased budgets). Current graded count: 69 unique skills / 158 total. Batch 41.5 pack-local groups also have remaining families.
 - [ ] Review `tasks/recurring-todo.md`: 2 unchecked recurring items — promote only if due and requiring execution work.
 - [ ] `/research-roadmap` — All 43 roadmap phases are complete. Run documentation health scan after Phase 41 remaining batches finish.
+
+## Current Task — Concept Exploration Slugged Briefs 2026-05-21
+
+**Goal:** Prevent `concept-exploration` from overwriting or conflating separate related concept threads by using normalized concept slugs in output filenames whenever identity is known or emerges.
+
+**Evidence:**
+- User correction: a Poketo v3 session started with `poketo.work` and pivoted to Poketo Core, but the skill wrote generic `research/concept-brief.md`.
+- Current mirrored contracts only list `research/concept-brief.md` and `research/{app}/concept-brief.md`.
+- Existing benchmark fixture checks a non-canonical `specs/concept-brief.md` path and does not cover multi-concept ambiguity.
+
+**Plan:**
+- [ ] Add concept identity/slug resolution rules to the Codex and Claude `concept-exploration` contracts.
+- [ ] Specify scoped output paths, generic-file reservation, pivot handling, and archive behavior for slugged files.
+- [ ] Update deterministic benchmark coverage/setup to require slugged output paths for a Poketo Work to Poketo Core pivot fixture.
+- [ ] Refresh generated skill data, run required validation, and record results.
+- [ ] Commit and push intended changes on `master`.
+
+**Files:**
+- `global/codex/concept-exploration/SKILL.md`
+- `global/claude/concept-exploration/SKILL.md`
+- `tests/harness/bench-coverage.ts`
+- `tests/layer4/setups/tier23-global-workflows.setup.ts`
+- Generated Skills Showcase data files if refreshed by scripts.
+- `tasks/roadmap.md` and `tasks/todo.md`
 
 ## Current Task — Codex Desk-Flip Parity 2026-05-21
 
@@ -1037,6 +1062,22 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
   - Progress:
     - [x] Group 1 (10 skills): `bootstrap-repo`, `brainstorm`, `branch-lifecycle`, `codebase-status`, `concept-exploration`, `consolidate-variations`, `create-agentic-skill`, `create-local-skill`, `dead-code`, `debug`. Completed 2026-05-21.
     - [ ] Group 2 (11 skills): `decommission`, `dogfood`, `expert-review`, `guide`, `handoff`, `hygiene`, `migrate`, `mono-plan`, `pack`, `prototype`, `provision-agentic-config`.
+      - Implementation plan:
+        - For each of the 11 skills, run `pnpm --dir tests bench --skill <skill> --agent both --runs 3 --chunk-size 3 --pause 0`.
+        - Write `benchmark/test-<skill>-2026-05-21.md` for each skill using the same report format as Group 1 (include Benchmark Summary, Failed Assertions, Output Quality, Infrastructure Blocked Runs, Raw Sessions, Comparison with Pre-Remediation, Next Route sections).
+        - Pre-remediation results for comparison are in `tasks/todo.md` Batch 41.3 Group 2 review section (lines ~999-1020).
+        - After all 11 skills: `git add` reports, regenerate data (`node scripts/generate-skills-showcase-data.mjs`, `node scripts/generate-skills-showcase-github-data.mjs`), validate (`scripts/validate-skills-showcase-data.sh`, `pnpm --dir tests bench:coverage`, `git diff --check`).
+        - Update `tasks/todo.md` review section with Group 2 re-benchmark results.
+        - Update `tasks/history.md` with Group 2 entry.
+        - Commit and push all changes.
+      - Files: `benchmark/test-{decommission,dogfood,expert-review,guide,handoff,hygiene,migrate,mono-plan,pack,prototype,provision-agentic-config}-2026-05-21.md`, `docs/benchmark-results-matrix.md`, generated showcase data (4 files), `tasks/todo.md`, `tasks/history.md`.
+      - Acceptance criteria:
+        - All 11 skills re-benchmarked with both agents (3 runs each).
+        - Reports written with comparison to pre-remediation baselines.
+        - Route assertion pass rates improved from near-zero baseline.
+        - Generated data refreshed and validated.
+        - Committed and pushed to master.
+      - Ship-one-step handoff: implement only this group, validate, then run `/ship` when done.
     - [ ] Group 3 (12 skills): `reconcile-dev-docs`, `regression-check`, `research-roadmap`, `scaffold`, `skills`, `slim-audit`, `spec-drift`, `trace`, `uat`, `ui-interview`, `ux-variations`.
 - [ ] Batch 41.4: Run git-fixture skills `commit-and-push-by-feature` and `sync` only after explicit permission for disposable GitHub fixture operations.
 - [ ] Batch 41.5: Run pack-local skills by pack family, starting with packs that feed public showcase/workflow proof.
