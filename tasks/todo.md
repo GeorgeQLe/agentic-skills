@@ -15,7 +15,7 @@
 - [x] For each skill: run `pnpm verify --skill <skill>`, then `pnpm bench --skill <skill> --agent both --runs 3 --chunk-size 3 --pause 0`.
 - [x] Write `benchmark/test-<skill>-2026-05-20.md` with verify evidence, results, raw session paths.
 - [x] After the group: refresh generated data, validate, commit and push.
-- [ ] Pause if any shared harness failure pattern emerges beyond the known budget-block and route-assertion gaps.
+- [x] Pause if any shared harness failure pattern emerges beyond the known budget-block and route-assertion gaps. No new patterns — same budget-block and route-assertion gaps as Group 1.
 
 **Context from Group 1:**
 - Claude budget-blocked at smoke ($0.25) for 4/10 skills. Expect similar for Group 2 — do NOT increase budgets in this batch, just record.
@@ -671,6 +671,28 @@ Implement only this step, validate it, then run `/ship` when done.
   - Generated data refreshed: `docs/benchmark-results-matrix.md` (52 graded + 16 incomplete rows), skills-data.js, github-proof-data.js (both docs/ and apps/ copies).
   - Validation passed: `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests bench:coverage` (157 skills); `git diff --check`.
   - Acceptance criteria met: all 10 skills benchmarked, reports written, generated data refreshed, no shared harness failure patterns requiring pause.
+  - Recommended next command: `/ship`
+- Batch 41.3 Group 2 completed 2026-05-20. 11 Tier 2 global skills benchmarked with both agents (3 runs each).
+  - Results summary (Claude / Codex evaluated pass rates):
+    - `decommission`: 0.0% (0/3) / 0.0% (0/3). Both fail `$run` route assertion (6/6).
+    - `dogfood`: 0.0% (0/2, 1 blocked) / 33.3% (1/3). Claude 1 run budget-blocked. Codex 1 pass.
+    - `expert-review`: 0.0% (0/1, 2 blocked) / 66.7% (2/3). Claude 2 runs budget-blocked. Codex best performer.
+    - `guide`: 0.0% (0/2, 1 blocked) / 0.0% (0/3). Claude 1 run budget-blocked. Both fail route assertion.
+    - `handoff`: 0.0% (0/3) / 0.0% (0/3). Both fail route assertion.
+    - `hygiene`: 0.0% (0/3) / 0.0% (0/3). Both fail multiple assertions.
+    - `migrate`: 0.0% (0/2, 1 blocked) / 0.0% (0/3). Claude 1 run budget-blocked. Both fail route assertion.
+    - `mono-plan`: 0.0% (0/3) / 0.0% (0/3). Both fail package boundaries, safe lanes, and route assertions.
+    - `pack`: 0.0% (0/3) / 0.0% (0/3). Both fail `$run` route assertion (6/6).
+    - `prototype`: 0.0% (0/2, 1 blocked) / 0.0% (0/3). Both fail hub page, clickable, and route assertions. Claude 1 run budget-blocked.
+    - `provision-agentic-config`: 0.0% (0/0, 3 blocked) / 0.0% (0/3). Claude all infra-blocked at smoke budget. Codex fails orchestration rules, monorepo safety, and route.
+  - Shared patterns (same as Group 1):
+    1. **Claude budget-block at smoke ($0.25)**: `provision-agentic-config` (all 3), `prototype` (1 run). Same pattern as Groups 1 and Batch 41.2.
+    2. **Route assertion failure**: Near-universal. Fixture prompts lack explicit route guidance.
+    3. **No new harness defect**: All failures are fixture-prompt gaps or known budget limits.
+  - Reports written: `benchmark/test-{decommission,dogfood,expert-review,guide,handoff,hygiene,migrate,mono-plan,pack,prototype,provision-agentic-config}-2026-05-20.md`.
+  - Generated data refreshed: `docs/benchmark-results-matrix.md` (74 graded + 17 incomplete rows), skills-data.js, github-proof-data.js (both docs/ and apps/ copies).
+  - Validation passed: `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests bench:coverage` (157 skills); `git diff --check`.
+  - Acceptance criteria met: all 11 skills benchmarked, reports written, generated data refreshed, no shared harness failure patterns requiring pause.
   - Recommended next command: `/ship`
 
 ### Ship-End Benchmark Failure Triage Manifest

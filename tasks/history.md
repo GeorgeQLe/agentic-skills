@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-05-20 — Batch 41.3 Group 2: Tier 2 global skill benchmarks
+
+- Benchmarked 11 Tier 2 global skills with both agents (3 runs each): `decommission`, `dogfood`, `expert-review`, `guide`, `handoff`, `hygiene`, `migrate`, `mono-plan`, `pack`, `prototype`, `provision-agentic-config`.
+- All 11 skills passed layer1 verify. No layer2 tests matched any skill.
+- Shared patterns same as Group 1: Claude budget-blocked at smoke ($0.25) for 2 skills (`provision-agentic-config` all 3, `prototype` 1 run; also partial blocks on `dogfood`, `expert-review`, `guide`, `migrate`); route assertion failures near-universal.
+- Best Codex results: `expert-review` 66.7% (2/3), `dogfood` 33.3% (1/3). All other skills 0% for both agents.
+- No new harness defects discovered.
+- Generated data refreshed: 74 graded + 17 incomplete rows (up from 52 + 16).
+
 ## 2026-05-20 — Batch 41.3 Group 1: Tier 2 global skill benchmarks
 
 - Benchmarked 10 Tier 2 global skills with both agents (3 runs each): `bootstrap-repo`, `brainstorm`, `branch-lifecycle`, `codebase-status`, `concept-exploration`, `consolidate-variations`, `create-agentic-skill`, `create-local-skill`, `dead-code`, `debug`.
