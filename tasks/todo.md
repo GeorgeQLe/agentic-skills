@@ -145,13 +145,13 @@ These are **quality criteria (not hard assertions)**, so they don't cause test f
 5. `destination-doc` (alignment-loop) — facts: evidence, assumption; traits: adversarial, scope, decision — scored 95.0% quality, 50% traits
 
 **Plan:**
-- [ ] Run `/benchmark-test-skill burn-rate` — write report to `benchmark/test-burn-rate-2026-05-21.md`
-- [ ] Run `/benchmark-test-skill content-programming` — write report to `benchmark/test-content-programming-2026-05-21.md`
-- [ ] Run `/benchmark-test-skill conversion-map` — write report to `benchmark/test-conversion-map-2026-05-21.md`
-- [ ] Run `/benchmark-test-skill devtool-adoption` — write report to `benchmark/test-devtool-adoption-2026-05-21.md`
-- [ ] Run `/benchmark-test-skill destination-doc` — write report to `benchmark/test-destination-doc-2026-05-21.md`
-- [ ] Compare domain-criteria scores before vs after enrichment for each skill.
-- [ ] Mark Step 43.6 complete and commit.
+- [x] Run `/benchmark-test-skill burn-rate` — write report to `benchmark/test-burn-rate-2026-05-21.md` ✓ domain 0%→100%
+- [x] Run `/benchmark-test-skill content-programming` — write report to `benchmark/test-content-programming-2026-05-21.md` ✓ domain 0%→100%
+- [x] Run `/benchmark-test-skill conversion-map` — write report to `benchmark/test-conversion-map-2026-05-21.md` ✓ domain 0%→100%
+- [x] Run `/benchmark-test-skill devtool-adoption` — write report to `benchmark/test-devtool-adoption-2026-05-21.md` ✓ domain 0%→100%
+- [x] Run `/benchmark-test-skill destination-doc` — write report to `benchmark/test-destination-doc-2026-05-21.md` ✓ domain 0%→100%
+- [x] Compare domain-criteria scores before vs after enrichment for each skill. ✓ 5/5 improved from 0% to 100%
+- [x] Mark Step 43.6 complete and commit.
 
 **Files:**
 - `benchmark/test-burn-rate-2026-05-21.md` — new benchmark report

@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-05-21 — Step 43.6: Re-benchmark pack-local skills after domain enrichment
+
+- Re-benchmarked 5 previously-low-scoring pack-local skills to validate Step 43.5's domain-context enrichment.
+- All 5 domain-specific criteria improved from 0% to 100%: `business-ops-context` (burn-rate), `creator-media-context` (content-programming), `customer-lifecycle-context` (conversion-map), `devtool-context` (devtool-adoption), `alignment-loop-context` (destination-doc).
+- Hard assertion pass rate: 100% across all 5 skills, both agents (no regressions).
+- Overall quality improvements: burn-rate 69.2%→93.3% (Claude), 75.8%→100% (Codex); content-programming 80.8%→84.6% (Claude), up to 94.9% (Codex); conversion-map 85.0%→100%; devtool-adoption 87.5%→100%; destination-doc 95.0%→100%.
+- 1 Codex infrastructure-blocked run on destination-doc (agent runner timeout), not a skill failure.
+- Total cost: $30 (5 skills × 2 agents × 3 runs × $1/run).
+- Refreshed generated data: 133 graded + 17 incomplete rows (scores updated, row count unchanged).
+
 ## 2026-05-21 — Batch 41.5 Group 2: Pack-local skill benchmarks
 
 - Benchmarked 10 pack-local skills with both agents (3 runs each): `creator-metrics-review`, `creator-platform-capability-matrix`, `creator-positioning`, `creator-presence-dossier`, `customer-feedback`, `destination-doc`, `devtool-adoption`, `devtool-docs-audit`, `devtool-dx-journey`, `devtool-integration-map`.
