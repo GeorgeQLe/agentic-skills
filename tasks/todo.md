@@ -131,8 +131,8 @@ These are **quality criteria (not hard assertions)**, so they don't cause test f
 - [x] Step 43.3: Re-run a sample of fixed fixtures to validate route assertions pass
 - [x] Step 43.4: Audit domain-specific quality criteria across pack-local skill fixtures (completed in Step 43.1 audit)
 - [x] Step 43.5: Fix domain-specific quality criteria in pack-local skill fixtures
-- [ ] Step 43.6: Re-benchmark a representative sample of pack-local skills
-- [ ] Step 43.7: Refresh generated data and validate
+- [x] Step 43.6: Re-benchmark a representative sample of pack-local skills ✓ 5/5 domain criteria 0%→100%
+- [x] Step 43.7: Refresh generated data and validate ✓ 133 graded, 158 coverage, showcase fresh
 
 ## Current Task — Step 43.6: Re-benchmark a Representative Sample of Pack-Local Skills 2026-05-21
 

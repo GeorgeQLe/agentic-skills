@@ -4350,41 +4350,41 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 **Review gates:** fixture audit, re-benchmark validation
 
 ### Implementation
-- [ ] Step 43.1: Audit route assertion failures across Tier 2 global skill fixtures.
+- [x] Step 43.1: Audit route assertion failures across Tier 2 global skill fixtures.
   - Classification: automated
   - Files: read `tests/layer4/setups/tier23-global-workflows.setup.ts`
   - Catalog which fixture prompts lack route guidance and what the expected route should be per skill.
-- [ ] Step 43.2: Add explicit route guidance to Tier 2 global skill fixture prompts.
+- [x] Step 43.2: Add explicit route guidance to Tier 2 global skill fixture prompts.
   - Classification: automated
   - Files: modify `tests/layer4/setups/tier23-global-workflows.setup.ts`
   - Add clear next-step route expectations to each fixture prompt so agents produce `$run` or the skill-specific route.
-- [ ] Step 43.3: Re-benchmark a representative sample of Tier 2 global skills.
+- [x] Step 43.3: Re-benchmark a representative sample of Tier 2 global skills.
   - Classification: automated
   - Pick ~5 previously-failing skills and run `pnpm bench --skill <skill> --agent both --runs 3 --chunk-size 3 --pause 0`.
   - Write updated benchmark reports.
-- [ ] Step 43.4: Audit domain-specific quality criteria across pack-local skill fixtures.
+- [x] Step 43.4: Audit domain-specific quality criteria across pack-local skill fixtures.
   - Classification: automated
   - Files: read `tests/layer4/setups/packs/pack-workflows.setup.ts`
   - Catalog which domain criteria score 0% and whether the fix is fixture enrichment or rubric loosening.
-- [ ] Step 43.5: Fix domain-specific quality criteria in pack-local skill fixtures.
+- [x] Step 43.5: Fix domain-specific quality criteria in pack-local skill fixtures.
   - Classification: automated
   - Files: modify `tests/layer4/setups/packs/pack-workflows.setup.ts`
   - Enrich fixture prompts with domain context or adjust rubric criteria thresholds.
-- [ ] Step 43.6: Re-benchmark a representative sample of pack-local skills.
+- [x] Step 43.6: Re-benchmark a representative sample of pack-local skills.
   - Classification: automated
   - Pick ~5 previously-low-scoring skills and re-benchmark.
   - Write updated benchmark reports.
-- [ ] Step 43.7: Refresh generated data and validate.
+- [x] Step 43.7: Refresh generated data and validate.
   - Classification: automated
   - Files: regenerate `docs/benchmark-results-matrix.md`, `docs/skills-showcase/assets/skills-data.js`, `apps/skills-showcase/public/assets/skills-data.js`
   - Run `scripts/validate-skills-showcase-data.sh`, `pnpm --dir tests bench:coverage`, `git diff --check`.
 
 ### Milestone: Phase 43 Benchmark Fixture Remediation
 **Acceptance Criteria:**
-- [ ] Route assertion fix applied and validated with representative re-benchmarks.
-- [ ] Domain criteria fix applied and validated with representative re-benchmarks.
-- [ ] Generated data refreshed and all validation passes.
-- [ ] No regressions in previously-passing skills.
+- [x] Route assertion fix applied and validated with representative re-benchmarks.
+- [x] Domain criteria fix applied and validated with representative re-benchmarks.
+- [x] Generated data refreshed and all validation passes.
+- [x] No regressions in previously-passing skills.
 
 ---
 
