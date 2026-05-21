@@ -8,6 +8,7 @@
 
 ## Priority Task Queue
 
+- [x] `$targeted-skill-builder run ship alignment exemption` — remove alignment-page requirements from run/ship loop skills, validate, then commit and push.
 - [x] `$targeted-skill-builder all durable skills alignment pages` — extend root `alignment/` HTML review-page contract to every durable output-writing skill, validate, then commit and push.
 - [x] `$targeted-skill-builder alignment html output root` — move alignment review pages to root `alignment/`, restore Codex `$prototype`, update hygiene/bootstrap awareness, validate, then commit and push.
 - [x] `$targeted-skill-builder concept-exploration bootstrap gate and scaffold placement` — route unbootstrapped concepts to bootstrap, bootstrapped concepts to ICP, and keep scaffold downstream of roadmap/plan-phase.
@@ -19,6 +20,36 @@
 - [ ] `$run` — Resume Phase 41 Batch 41.3 re-benchmarks: re-run the 33 Tier 2 global skills that were benchmarked pre-fixture-remediation with near-zero pass rates (Phase 43 added route guidance to all 32 fixture prompts and increased budgets). Current graded count: 69 unique skills / 158 total. Batch 41.5 pack-local groups also have remaining families.
 - [ ] Review `tasks/recurring-todo.md`: 2 unchecked recurring items — promote only if due and requiring execution work.
 - [ ] `$research-roadmap` — All 43 roadmap phases are complete. Run documentation health scan after Phase 41 remaining batches finish.
+
+## Current Task — Run Ship Alignment Exemption 2026-05-21
+
+**Goal:** Remove the repo-wide alignment-page clause from operational run/ship loops.
+
+**Evidence:**
+- User correction: run/ship loops do not need alignment pages.
+- The previous repo-wide pass overcorrected by adding `alignment/*.html` requirements to global `$run`, `$ship`, `$ship-end`, kanban run/ship mirrors, and monorepo run/ship loops.
+
+**Plan:**
+- [x] Record the correction in `tasks/lessons.md`.
+- [x] Identify global, kanban, and monorepo run/ship loop skill files.
+- [x] Remove `## Alignment Page` sections from those loop skills only.
+- [x] Validate no run/ship loop still mentions `alignment/*.html`.
+- [x] Run tests, skill integrity scripts, and generated-data validation.
+- [x] Commit and push intended changes on `master`.
+
+**Files:**
+- `global/{claude,codex}/{run,ship,ship-end}/SKILL.md`
+- `packs/*-kanban/{claude,codex}/{run-kanban,ship-kanban,ship-end-kanban}/SKILL.md`
+- `packs/monorepo/{claude,codex}/{mono-run,mono-ship}/SKILL.md`
+- `tasks/lessons.md`, `tasks/roadmap.md`, and `tasks/todo.md`
+
+### Review
+
+- Removed alignment-page clauses from 34 operational loop skill files: global run/ship/ship-end, business/devtool/game/poketowork kanban run/ship/ship-end, and monorepo mono-run/mono-ship mirrors.
+- Preserved alignment-page requirements for planning, research, spec, interview, prototype, report, and decision-producing skills.
+- Validation passed: no run/ship loop files mention `alignment/*.html`; repository-wide coverage check passes when run/ship loops and no-file `taste-calibration` are treated as exceptions; `pnpm --dir tests test -- --grep "bench-setups|tier23|frontmatter|skills-reference"`; `pnpm --dir tests bench:coverage`; `git diff --check`; `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken`; `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`; `/opt/homebrew/bin/bash ./scripts/skill-next-step-routing.sh --missing`.
+- Note: `scripts/validate-skills-showcase-data.sh` regenerated expected generated assets and reported them as stale before commit; rerun after commit should validate a clean tree.
+- Recommended next command: none.
 
 ## Current Task — Repository-Wide Alignment Page Contract 2026-05-21
 

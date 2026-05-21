@@ -42,6 +42,17 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Updated on 2026-05-21 after user correction. The alignment-page contract now covers every global and pack-local skill except the explicit no-file `taste-calibration` skill. The contract is conditional on writing durable deliverables and requires root `alignment/{skill}-{topic}.html`, archive-first replacement under `docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/...`, browser-open attempts, and reporting whether the open succeeded or was blocked. Focused validation passed before commit; showcase validation will be rerun after commit once generated assets are no longer dirty.
 
+## Current Targeted Update: Run Ship Alignment Exemption 2026-05-21
+
+**Goal:** Remove alignment-page requirements from run/ship loop skills while preserving the contract for planning, research, spec, interview, prototype, and decision skills.
+
+**Acceptance Criteria:**
+- [x] Correction captured in `tasks/lessons.md`.
+- [x] Global run/ship/ship-end, kanban run/ship/ship-end, and monorepo mono-run/mono-ship skills no longer mention `alignment/*.html`.
+- [x] Repository-wide alignment coverage check treats run/ship loops plus explicit no-file `taste-calibration` as exceptions.
+- [x] Validation passes and generated metadata is refreshed if needed.
+- [x] Intended changes are committed and pushed on `master`.
+
 ## Current Targeted Update: Concept Bootstrap Gate and Scaffold Placement 2026-05-21
 
 **Goal:** Make `concept-exploration` route to `bootstrap-repo` only before repository readiness, and clarify `scaffold` as a post-roadmap/plan-phase implementation structure step for normal product work.

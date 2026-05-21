@@ -7,6 +7,13 @@
 - Validate the contract with repository-wide checks that find output-writing skills lacking `alignment/*.html`, archive-first replacement, and browser-open reporting; do not rely on a hand-picked skill list.
 - Treat research-pack skills like ICP, competitive analysis, journey mapping, and other early alignment outputs as first-class alignment-page producers unless they explicitly document no-file or human-only behavior.
 
+## 2026-05-21 — Run/ship loops are not alignment-page producers
+
+- A repo-wide alignment-page contract pass overcorrected and added HTML review-page output to execution/shipping loop skills.
+- `$run`, `$ship`, `$ship-end`, kanban run/ship loops, and monorepo run/ship loops should stay operational: execute, validate, package, commit, push, and route without generating alignment review pages.
+- Cross-cutting alignment-page audits must exempt execution/shipping loop skills by role, even when those skills write task docs, reports, generated assets, or commits as part of shipping.
+- Keep alignment pages for planning, research, spec, interview, prototype, and decision artifacts; do not require them for routine execution/shipping orchestration.
+
 ## 2026-05-21 — Concept routes bootstrap only before repo readiness
 
 - Concept exploration was clear about being pre-ICP, but its next-step rules did not distinguish an unbootstrapped idea from an already initialized repo.
