@@ -125,55 +125,57 @@ These are **quality criteria (not hard assertions)**, so they don't cause test f
 - [ ] Step 43.3: Re-run a sample of fixed fixtures to validate route assertions pass
 - [ ] Step 43.4: (Optional) Calibrate pack-local domain quality criteria if score improvement is desired
 
-## Current Task — Step 43.2: Add Explicit Route Guidance to 32 Global Fixture Prompts 2026-05-20
+## Completed Task — Step 43.2: Add Explicit Route Guidance to 32 Global Fixture Prompts 2026-05-20
 
-**Goal:** Add explicit route guidance text to all 32 global fixture prompts that are missing it, so agents produce the expected route string and pass the `assertRecommendedRoute` assertion.
+**Result:** All 32 prompts updated with explicit route guidance. Layer1 15 files / 1221 tests pass. Committed and pushed (`be0a7e8`).
+
+## Current Task — Step 43.3: Re-run Sample Fixtures to Validate Route Assertions Pass 2026-05-20
+
+**Goal:** Run a representative sample of the 32 fixed fixtures through the benchmark harness to confirm `assertRecommendedRoute` now passes with both agents (Claude and Codex).
 
 **Plan:**
-- [x] Edit `tests/layer4/setups/tier23-global-workflows.setup.ts` — for each of the 32 skills listed in the Step 43.1 audit table, append route guidance to the prompt string.
-- [x] The pattern is: append ` End with \`Recommended next command: <route>\`.` to the end of each prompt, where `<route>` is the skill's `recommendedRoute` value.
-- [x] Run `pnpm --dir tests typecheck` to confirm no type errors introduced (pre-existing verify.ts errors only).
-- [x] Run layer1 bench-setups tests — 15 files, 1221 tests pass.
-- [x] Mark Step 43.2 complete and commit.
+- [ ] Pick a sample of 4-5 skills covering different route values: one `$run` skill (e.g., `debug`), one `$ship` skill (e.g., `branch-lifecycle`), one unique route (e.g., `brainstorm` → `$feature-interview`), one with trailing constraint (e.g., `scaffold`), and optionally one more unique route (e.g., `uat` → `$consolidate-variations`).
+- [ ] For each sample skill, run `pnpm bench --skill <skill> --agent both --runs 1 --chunk-size 1 --pause 0` from the `tests/` directory.
+- [ ] Check that the `assertRecommendedRoute` assertion passes for each run. Record pass/fail results.
+- [ ] If any route assertion still fails, diagnose and fix the prompt. Re-run to confirm.
+- [ ] Write a brief validation summary in this section.
+- [ ] Mark Step 43.3 complete and commit.
 
 **Technical details:**
-- File to modify: `tests/layer4/setups/tier23-global-workflows.setup.ts` (lines 366-895)
-- The 32 prompts all end with phrases like "...and Next command." or "...and Next command. Do not install dependencies."
-- For skills with trailing instructions after "Next command" (e.g., `scaffold` has "Do not install dependencies."), place the route guidance before the trailing constraint.
-- Use the Codex-style `$` prefix for all single-route skills (matching their `recommendedRoute` value).
-- Do NOT modify the 5 skills that already have explicit route text (affected, analyze-sessions, desk-flip, icon-handler, update-packages).
+- The `bench` command lives in `tests/` and runs against `tests/layer4/setups/tier23-global-workflows.setup.ts`.
+- `assertRecommendedRoute` does `content.includes(command)` — it checks the literal route string appears anywhere in the generated output.
+- Budget: `BENCH_BUDGETS_USD.standard` per run (likely $0.25). Sample of 5 skills × 2 agents × 1 run = ~10 bench runs.
+- The `--timeout` flag is NOT supported by `bench.ts` — do not pass it.
 
-**Route mapping (from Step 43.1 audit):**
+**Sample skills (covering route diversity):**
 
-| Route | Skills (count) |
-|-------|---------------|
-| `$run` | bootstrap-repo, codebase-status, create-agentic-skill, dead-code, debug, decommission, expert-review, guide, handoff, hygiene, migrate, mono-plan, pack, provision-agentic-config, research-roadmap, scaffold, skills, slim-audit, spec-drift, trace, ui-interview (21) |
-| `$ship` | branch-lifecycle, create-local-skill, reconcile-dev-docs, regression-check (4) |
-| `$feature-interview` | brainstorm (1) |
-| `$spec-interview` | concept-exploration (1) |
-| `$uat` | dogfood (1) |
-| `$uat --variant-evaluation` | prototype (1) |
-| `$consolidate-variations` | uat (1) |
-| `$research-roadmap --post-prototype` | consolidate-variations (1) |
-| `$ui-interview` | ux-variations (1) |
+| Skill | Expected route | Why sampled |
+|-------|---------------|-------------|
+| `debug` | `$run` | Representative of the 21 `$run` skills |
+| `branch-lifecycle` | `$ship` | Representative of the 4 `$ship` skills |
+| `brainstorm` | `$feature-interview` | Unique route |
+| `scaffold` | `$run` | Has trailing constraint ("Do not install dependencies.") |
+| `uat` | `$consolidate-variations` | Unique route with compound command |
 
 **Files to modify:**
-- `tests/layer4/setups/tier23-global-workflows.setup.ts` — 32 prompt string edits
-- `tasks/todo.md` — progress tracking
+- `tasks/todo.md` — progress tracking and validation summary
 
 ### Execution Profile
 - **Parallel mode:** serial
 - **Integration owner:** main agent
-- **Conflict risk:** low (single fixture file, mechanical edits)
+- **Conflict risk:** none (read-only benchmark runs, no source changes expected unless a fix is needed)
 
 ### Acceptance criteria
-- All 32 prompts include explicit route guidance matching their `recommendedRoute` value.
-- `pnpm --dir tests typecheck` passes.
-- Layer1 bench-setups tests pass.
-- Step 43.2 checked off in `tasks/todo.md`.
+- At least 4 sample skills benchmarked with both agents.
+- `assertRecommendedRoute` passes for the majority of runs (agent infrastructure failures like budget exceeded are acceptable, but route assertion failures are not).
+- Validation summary recorded.
+- Step 43.3 checked off in `tasks/todo.md`.
 
 ### Ship-one-step handoff
 Implement only this step, validate it, then run `/ship` when done.
+
+**Next work:** Re-run sample fixtures to validate route assertions pass
+**Recommended next command:** /run
 
 ## Deferred Task — Batch 41.5 Group 2: Pack-Local Skill Benchmarks 2026-05-20
 
