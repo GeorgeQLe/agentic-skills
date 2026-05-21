@@ -33,11 +33,12 @@ This matrix tracks skills that already have persisted benchmark run data and gra
 | `brainstorm-kanban` | Claude | `tests/benchmarks/runs/brainstorm-kanban-claude-664c7766/report.json` | 3 | 100% | 90.8% | none | graded | Curated report: `benchmark/test-brainstorm-kanban-2026-05-20.md`. |
 | `brainstorm-kanban` | Codex | `tests/benchmarks/runs/brainstorm-kanban-codex-9fc01465/report.json` | 3 | 100% | 81.7% | none | graded | Curated report: `benchmark/test-brainstorm-kanban-2026-05-20.md`. |
 | `branch-lifecycle` | Claude | `tests/benchmarks/runs/branch-lifecycle-claude-c2381c3d/report.json` | 3 | 100% | 84.1% | none | graded | Curated report: `benchmark/test-branch-lifecycle-2026-05-19.md`. |
-| `branch-lifecycle` | Codex | `tests/benchmarks/runs/branch-lifecycle-codex-fe3661fd/report.json` | 1 | 0% | 56.8% | none | graded | Curated report: `benchmark/test-branch-lifecycle-2026-05-19.md`. One evaluated persisted run with deterministic quality scoring. |
+| `branch-lifecycle` | Codex | `tests/benchmarks/runs/branch-lifecycle-codex-f92d87ec/report.json` | 3 | 67% | 75.8% | none | graded | Curated report: `benchmark/test-branch-lifecycle-2026-05-19.md`. |
 | `burn-rate` | Claude | `tests/benchmarks/runs/burn-rate-claude-e5a4571d/report.json` | 3 | 100% | 93.3% | none | graded | Curated report: `benchmark/test-burn-rate-2026-05-21.md`. |
 | `burn-rate` | Codex | `tests/benchmarks/runs/burn-rate-codex-c21c704a/report.json` | 3 | 100% | 100.0% | none | graded | Curated report: `benchmark/test-burn-rate-2026-05-21.md`. |
 | `clone-spec-store` | Claude | `tests/benchmarks/runs/clone-spec-store-claude-5682f7cd/report.json` | 3 | 100% | 85.8% | none | graded | Curated report: `benchmark/test-clone-spec-store-2026-05-20.md`. |
 | `clone-spec-store` | Codex | `tests/benchmarks/runs/clone-spec-store-codex-fcfaf846/report.json` | 3 | 100% | 75.8% | none | graded | Curated report: `benchmark/test-clone-spec-store-2026-05-20.md`. |
+| `codebase-status` | Claude | `tests/benchmarks/runs/codebase-status-claude-6a202762/report.json` | 3 | 0% | 56.1% | none | graded | Curated report: `benchmark/test-codebase-status-2026-05-19.md`. |
 | `codebase-status` | Codex | `tests/benchmarks/runs/codebase-status-codex-8575035e/report.json` | 3 | 33% | 72.0% | none | graded | Curated report: `benchmark/test-codebase-status-2026-05-19.md`. |
 | `cohort-review` | Claude | `tests/benchmarks/runs/cohort-review-claude-543183b4/report.json` | 3 | 100% | 80.0% | none | graded | Curated report: `benchmark/test-cohort-review-2026-05-20.md`. |
 | `cohort-review` | Codex | `tests/benchmarks/runs/cohort-review-codex-af9a6bd7/report.json` | 3 | 100% | 70.0% | none | graded | Curated report: `benchmark/test-cohort-review-2026-05-20.md`. |
@@ -158,7 +159,7 @@ This matrix tracks skills that already have persisted benchmark run data and gra
 | `analyze-sessions` | Claude | `tests/benchmarks/runs/analyze-sessions-claude-00d0ff13/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
 | `benchmark-test-skill` | Codex | `tests/benchmarks/runs/benchmark-test-skill-codex-8a1dccd0/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
 | `brainstorm` | Claude | `tests/benchmarks/runs/brainstorm-claude-dcb97159/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
-| `codebase-status` | Claude | `tests/benchmarks/runs/codebase-status-claude-c4d0b304/report.json` | blocked/incomplete | Report exists with zero evaluated runs. |
+| `codebase-status` | Claude | `tests/benchmarks/runs/codebase-status-claude-c4d0b304/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
 | `concept-exploration` | Claude | `tests/benchmarks/runs/concept-exploration-claude-b341068b/report.json` | blocked/incomplete | Report exists with zero evaluated runs. |
 | `consolidate-variations` | Claude | `tests/benchmarks/runs/consolidate-variations-claude-b5ffa772/report.json` | blocked/incomplete | Report exists with zero evaluated runs. |
 | `create-agentic-skill` | Codex | `tests/benchmarks/runs/create-agentic-skill-codex-cc806349/report.json` | blocked/incomplete | Report exists with zero evaluated runs. |
@@ -166,7 +167,7 @@ This matrix tracks skills that already have persisted benchmark run data and gra
 | `icon-handler` | Claude | `tests/benchmarks/runs/icon-handler-claude-47bab6aa/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
 | `provision-agentic-config` | Claude | `tests/benchmarks/runs/provision-agentic-config-claude-51d425e8/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
 | `roadmap` | Claude | `tests/benchmarks/runs/roadmap-claude-8c1ee4a6/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
-| `run` | Codex | `tests/benchmarks/runs/run-codex-73465d1a/report.json` | blocked/incomplete | Report exists with zero total and evaluated runs. Do not count as benchmarked. Prefer the later evaluated report listed above. |
+| `run` | Codex | `tests/benchmarks/runs/run-codex-f33051ee/report.json` | blocked/incomplete | Report exists with zero total and evaluated runs. Do not count as benchmarked. Prefer the later evaluated report listed above. |
 | `spec-interview` | Claude | `tests/benchmarks/runs/spec-interview-claude-b83d0caa/report.json` | blocked/incomplete | Report exists with zero evaluated runs. |
 | `targeted-skill-builder` | Claude | `tests/benchmarks/runs/targeted-skill-builder-claude-3b4f2b62/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
 | `update-packages` | Claude | `tests/benchmarks/runs/update-packages-claude-4d9966e8/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |

@@ -178,7 +178,10 @@ async function publicGithubMetadata(repositoryUrl) {
       stars: Number.isInteger(json.stargazers_count) ? json.stargazers_count : null,
       forks: Number.isInteger(json.forks_count) ? json.forks_count : null,
       openIssues: Number.isInteger(json.open_issues_count) ? json.open_issues_count : null,
-      pushedAt: json.pushed_at || null,
+      freshnessPolicy: {
+        status: "volatile-fields-excluded",
+        reason: "GitHub pushed_at changes after every repository push, so it is excluded from committed proof data."
+      },
       url: json.html_url || repositoryUrl
     };
   } catch (error) {
