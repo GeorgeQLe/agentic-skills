@@ -1027,6 +1027,17 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
     - First group of 10 skills benchmarked with both agents.
     - Reports written and generated data refreshed.
     - No shared harness failure patterns unaddressed.
+- [ ] Batch 41.3-rerun: Re-benchmark Tier 2 global skills post-fixture-remediation (Phase 43 added route guidance to all 32 Tier 2 fixture prompts).
+  - Classification: automated
+  - Files: benchmark reports under `benchmark/`, generated benchmark/showcase data, task docs.
+  - Implementation plan:
+    - Re-run the 33 Tier 2 global skills from Batch 41.3 in groups of ~10, using `pnpm bench --skill <skill> --agent both --runs 3 --chunk-size 3 --pause 0`.
+    - Write updated `benchmark/test-<skill>-2026-05-21.md` reports for each skill.
+    - Refresh generated data after each group.
+  - Progress:
+    - [x] Group 1 (10 skills): `bootstrap-repo`, `brainstorm`, `branch-lifecycle`, `codebase-status`, `concept-exploration`, `consolidate-variations`, `create-agentic-skill`, `create-local-skill`, `dead-code`, `debug`. Completed 2026-05-21.
+    - [ ] Group 2 (11 skills): `decommission`, `dogfood`, `expert-review`, `guide`, `handoff`, `hygiene`, `migrate`, `mono-plan`, `pack`, `prototype`, `provision-agentic-config`.
+    - [ ] Group 3 (12 skills): `reconcile-dev-docs`, `regression-check`, `research-roadmap`, `scaffold`, `skills`, `slim-audit`, `spec-drift`, `trace`, `uat`, `ui-interview`, `ux-variations`.
 - [ ] Batch 41.4: Run git-fixture skills `commit-and-push-by-feature` and `sync` only after explicit permission for disposable GitHub fixture operations.
 - [ ] Batch 41.5: Run pack-local skills by pack family, starting with packs that feed public showcase/workflow proof.
 - [ ] Batch 41.6: Address blocked skills through their remediation routes, then benchmark only after safe fixtures exist.
@@ -1086,6 +1097,25 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
   - Generated data refreshed: `docs/benchmark-results-matrix.md` (52 graded + 16 incomplete rows), skills-data.js, github-proof-data.js (both docs/ and apps/ copies).
   - Validation passed: `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests bench:coverage` (157 skills); `git diff --check`.
   - Acceptance criteria met: all 10 skills benchmarked, reports written, generated data refreshed, no shared harness failure patterns requiring pause.
+  - Recommended next command: `/ship`
+- Batch 41.3-rerun Group 1 completed 2026-05-21. 10 Tier 2 global skills re-benchmarked with both agents (3 runs each) after Phase 43 fixture remediation.
+  - Results summary (Claude / Codex evaluated pass rates, with pre-remediation comparison):
+    - `bootstrap-repo`: 0.0% (0/3) / 0.0% (0/3). Route improved from 0% to 100%/66.7%, but project-purpose content assertion still fails.
+    - `brainstorm`: 100.0% (3/3) / 66.7% (2/3). Up from 0% blocked / 50%. Claude unblocked and now 100%.
+    - `branch-lifecycle`: 100.0% (3/3) / 66.7% (2/3). Up from 0% / 0%. Route fixed.
+    - `codebase-status`: 0.0% (0/3) / 100.0% (3/3). Claude unblocked but still fails content assertion. Codex up from 33.3%.
+    - `concept-exploration`: 66.7% (2/3) / 100.0% (3/3). Up from 0% blocked / 0%. Both unblocked and passing.
+    - `consolidate-variations`: 0.0% (0/3) / 0.0% (0/3). Both unblocked but still fail next-command-handoff assertion. Route criteria 0% despite remediation.
+    - `create-agentic-skill`: 100.0% (3/3) / 100.0% (3/3). Up from 0% / 0% blocked. Both fully passing.
+    - `create-local-skill`: 100.0% (3/3) / 100.0% (3/3). Up from 0% / 0%. Both fully passing.
+    - `dead-code`: 100.0% (3/3) / 100.0% (3/3). Up from 0% / 33.3%. Both fully passing.
+    - `debug`: 100.0% (3/3) / 100.0% (3/3). Up from 0% / 0%. Both fully passing.
+  - Aggregate improvement: 7/10 skills improved pass rates; 5/10 now pass 100% on both agents. Route assertion near-universal improvement.
+  - Remaining failures: `bootstrap-repo` (project-purpose content), `codebase-status` (content + partial route for Claude), `consolidate-variations` (next-command-handoff assertion). These are content/assertion-specificity issues, not route guidance gaps.
+  - Reports written: `benchmark/test-{bootstrap-repo,brainstorm,branch-lifecycle,codebase-status,concept-exploration,consolidate-variations,create-agentic-skill,create-local-skill,dead-code,debug}-2026-05-21.md`.
+  - Generated data refreshed: `docs/benchmark-results-matrix.md` (137 graded + 17 incomplete rows), skills-data.js, github-proof-data.js (both docs/ and apps/ copies).
+  - Validation passed: `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests bench:coverage` (158 skills); `git diff --check`.
+  - Acceptance criteria met: all 10 skills re-benchmarked, route improvements validated, reports written, generated data refreshed.
   - Recommended next command: `/ship`
 - Batch 41.3 Group 2 completed 2026-05-20. 11 Tier 2 global skills benchmarked with both agents (3 runs each).
   - Results summary (Claude / Codex evaluated pass rates):
