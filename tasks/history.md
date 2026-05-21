@@ -2677,3 +2677,11 @@ Resolved all 10 findings from `/expert-review`:
 - Refreshed generated data: `docs/benchmark-results-matrix.md` now has 34 graded + 11 incomplete rows covering 18 unique skill names.
 - All Batch 41.1 acceptance criteria checked off. Validation passed: `pnpm --dir tests bench:coverage` (156 skills), `git diff --check` clean.
 - Both new skills have fixture-prompt triage items (route expectation clarity, literal string matching) before hard pass rates can improve.
+
+## 2026-05-20 — Phase 43 Step 43.2: Add explicit route guidance to 32 global fixture prompts
+
+- Appended `End with \`Recommended next command: <route>\`.` to all 32 global fixture prompts that were missing explicit route guidance.
+- Route distribution: 21× `$run`, 4× `$ship`, 1× `$feature-interview`, 1× `$spec-interview`, 1× `$uat`, 1× `$uat --variant-evaluation`, 1× `$consolidate-variations`, 1× `$research-roadmap --post-prototype`, 1× `$ui-interview`.
+- For prompts with trailing constraints (scaffold, bootstrap-repo, create-local-skill, ux-variations, quiz-me), placed route guidance before the trailing instruction.
+- Did not modify the 5 already-passing fixtures (affected, analyze-sessions, desk-flip, icon-handler, update-packages).
+- Validation: layer1 bench-setups 15 files / 1221 tests pass. Pre-existing typecheck errors in verify.ts only.
