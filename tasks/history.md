@@ -1,5 +1,16 @@
 # Session History
 
+## 2026-05-20 — Batch 41.3 Group 3: Tier 2 global skill benchmarks
+
+- Benchmarked 11 Tier 2 global skills with both agents (3 runs each): `reconcile-dev-docs`, `regression-check`, `research-roadmap`, `scaffold`, `skills`, `slim-audit`, `spec-drift`, `trace`, `uat`, `ui-interview`, `ux-variations`.
+- All 11 skills passed layer1 verify. No layer2 tests matched any skill.
+- No budget-blocks at standard ($1.00) — the budget bump from Group 2 eliminated all Claude budget-blocks.
+- Best Codex results: `spec-drift` 100% (3/3), `uat` 100% (3/3), `skills` 33.3% (1/3). Claude 0% across all 11 skills.
+- Route assertion failures remain near-universal. `ux-variations` and `slim-audit` had elevated domain-specific assertion failures for both agents.
+- Generated data refreshed: 96 graded + 17 incomplete rows (up from 74 + 17).
+- Validation passed: showcase data fresh, bench coverage (158 skills), `git diff --check` clean.
+- Batch 41.3 complete: all 33 Tier 2 global skills benchmarked across Groups 1-3.
+
 ## 2026-05-20 — Bump benchmark budget to standard and add Codex budget enforcement
 
 - Bumped default benchmark budget from smoke ($0.25) to standard ($1.00) across all setup factories (generic, tier23, tier1, pack).
