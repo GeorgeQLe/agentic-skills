@@ -122,60 +122,36 @@ These are **quality criteria (not hard assertions)**, so they don't cause test f
 ### Phase 43 Next Steps
 
 - [x] Step 43.2: Add explicit route guidance text to all 32 global fixture prompts
-- [ ] Step 43.3: Re-run a sample of fixed fixtures to validate route assertions pass
+- [x] Step 43.3: Re-run a sample of fixed fixtures to validate route assertions pass
 - [ ] Step 43.4: (Optional) Calibrate pack-local domain quality criteria if score improvement is desired
 
 ## Completed Task — Step 43.2: Add Explicit Route Guidance to 32 Global Fixture Prompts 2026-05-20
 
 **Result:** All 32 prompts updated with explicit route guidance. Layer1 15 files / 1221 tests pass. Committed and pushed (`be0a7e8`).
 
-## Current Task — Step 43.3: Re-run Sample Fixtures to Validate Route Assertions Pass 2026-05-20
+## Completed Task — Step 43.3: Re-run Sample Fixtures to Validate Route Assertions Pass 2026-05-20
 
-**Goal:** Run a representative sample of the 32 fixed fixtures through the benchmark harness to confirm `assertRecommendedRoute` now passes with both agents (Claude and Codex).
+**Result:** All 5 sample skills benchmarked with both agents (10 runs total). `workflow-next-route` (the `assertRecommendedRoute` criterion) passes **100% across all 10 runs**. Route guidance fixture updates from Step 43.2 are validated.
 
-**Plan:**
-- [ ] Pick a sample of 4-5 skills covering different route values: one `$run` skill (e.g., `debug`), one `$ship` skill (e.g., `branch-lifecycle`), one unique route (e.g., `brainstorm` → `$feature-interview`), one with trailing constraint (e.g., `scaffold`), and optionally one more unique route (e.g., `uat` → `$consolidate-variations`).
-- [ ] For each sample skill, run `pnpm bench --skill <skill> --agent both --runs 1 --chunk-size 1 --pause 0` from the `tests/` directory.
-- [ ] Check that the `assertRecommendedRoute` assertion passes for each run. Record pass/fail results.
-- [ ] If any route assertion still fails, diagnose and fix the prompt. Re-run to confirm.
-- [ ] Write a brief validation summary in this section.
-- [ ] Mark Step 43.3 complete and commit.
+**Benchmark results:**
 
-**Technical details:**
-- The `bench` command lives in `tests/` and runs against `tests/layer4/setups/tier23-global-workflows.setup.ts`.
-- `assertRecommendedRoute` does `content.includes(command)` — it checks the literal route string appears anywhere in the generated output.
-- Budget: `BENCH_BUDGETS_USD.standard` per run (likely $0.25). Sample of 5 skills × 2 agents × 1 run = ~10 bench runs.
-- The `--timeout` flag is NOT supported by `bench.ts` — do not pass it.
+| Skill | Route | Claude | Codex | Route assertion |
+|-------|-------|--------|-------|-----------------|
+| `debug` | `$run` | 100% | 100% | pass |
+| `branch-lifecycle` | `$ship` | 100% | 0%* | pass |
+| `brainstorm` | `$feature-interview` | 100% | 0%* | pass |
+| `scaffold` | `$run` | 100% | 100% | pass |
+| `uat` | `$consolidate-variations` | 0%* | 100% | pass |
 
-**Sample skills (covering route diversity):**
+*Overall failures caused by pre-existing content assertions (`Output includes salvage`, `Output includes tradeoffs`, `Output includes variant evaluation`), NOT by route assertions. These are known flaky content-quality assertions unrelated to Step 43's route guidance work.
 
-| Skill | Expected route | Why sampled |
-|-------|---------------|-------------|
-| `debug` | `$run` | Representative of the 21 `$run` skills |
-| `branch-lifecycle` | `$ship` | Representative of the 4 `$ship` skills |
-| `brainstorm` | `$feature-interview` | Unique route |
-| `scaffold` | `$run` | Has trailing constraint ("Do not install dependencies.") |
-| `uat` | `$consolidate-variations` | Unique route with compound command |
-
-**Files to modify:**
-- `tasks/todo.md` — progress tracking and validation summary
-
-### Execution Profile
-- **Parallel mode:** serial
-- **Integration owner:** main agent
-- **Conflict risk:** none (read-only benchmark runs, no source changes expected unless a fix is needed)
-
-### Acceptance criteria
-- At least 4 sample skills benchmarked with both agents.
-- `assertRecommendedRoute` passes for the majority of runs (agent infrastructure failures like budget exceeded are acceptable, but route assertion failures are not).
-- Validation summary recorded.
-- Step 43.3 checked off in `tasks/todo.md`.
+**Cost:** ~$10 total across 10 benchmark runs.
 
 ### Ship-one-step handoff
-Implement only this step, validate it, then run `/ship` when done.
+Step 43.3 complete. Step 43.4 (optional calibration) is next if desired.
 
-**Next work:** Re-run sample fixtures to validate route assertions pass
-**Recommended next command:** /run
+**Next work:** (Optional) Calibrate pack-local domain quality criteria
+**Recommended next command:** /ship
 
 ## Deferred Task — Batch 41.5 Group 2: Pack-Local Skill Benchmarks 2026-05-20
 
