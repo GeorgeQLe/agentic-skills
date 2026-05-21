@@ -12,6 +12,17 @@
 - [ ] Review `tasks/recurring-todo.md`: 2 unchecked recurring items — promote only if due and requiring execution work.
 - [ ] `/research-roadmap` — All 43 roadmap phases are complete. Run documentation health scan after Phase 41 remaining batches finish.
 
+## Ship Review — 2026-05-21 Phase 43 Generated Data
+
+- Boundary: refreshed Skills Showcase generated proof data and benchmark matrix after Phase 43 completion; no skill-contract source changes in this ship payload.
+- Files shipped: `docs/benchmark-results-matrix.md`, `docs/skills-showcase/assets/github-proof-data.js`, and `apps/skills-showcase/public/assets/github-proof-data.js`.
+- Validation passed: `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests test -- --run tests/layer1/skills-showcase-benchmark-demo.test.ts`; `pnpm --dir apps/skills-showcase build`; `git diff --check`.
+- Adversarial review: the first freshness check failed because generated GitHub proof metadata and benchmark matrix pointers were stale; rerunning the generators produced a stable validator pass before commit.
+- Correction enforcement: secret-handling remediation from the Neon token incident was already captured and shipped before this benchmark-data boundary; sanitized history was verified before this `$ship`.
+- Residual risk: GitHub proof metadata includes repository push timestamps, so it can change again after pushing this commit and may require a follow-up generated-data refresh.
+- Rollback: revert the ship commit if the generated metadata needs to be restored.
+- Recommended next command: `/run`
+
 ## Completed Task — Step 43.1: Audit Route Assertion Failures Across Tier 2 Global Skill Fixtures 2026-05-20
 
 **Goal:** Catalog which fixture prompts need route guidance and what the expected route should be for each skill.

@@ -32,7 +32,7 @@ This matrix tracks skills that already have persisted benchmark run data and gra
 | `brainstorm` | Codex | `tests/benchmarks/runs/brainstorm-codex-a2ae5fb6/report.json` | 3 | 67% | 78.0% | none | graded | Curated report: `benchmark/test-brainstorm-2026-05-19.md`. |
 | `brainstorm-kanban` | Claude | `tests/benchmarks/runs/brainstorm-kanban-claude-664c7766/report.json` | 3 | 100% | 90.8% | none | graded | Curated report: `benchmark/test-brainstorm-kanban-2026-05-20.md`. |
 | `brainstorm-kanban` | Codex | `tests/benchmarks/runs/brainstorm-kanban-codex-9fc01465/report.json` | 3 | 100% | 81.7% | none | graded | Curated report: `benchmark/test-brainstorm-kanban-2026-05-20.md`. |
-| `branch-lifecycle` | Claude | `tests/benchmarks/runs/branch-lifecycle-claude-9341a3ab/report.json` | 1 | 100% | 84.1% | none | graded | Curated report: `benchmark/test-branch-lifecycle-2026-05-19.md`. One evaluated persisted run with deterministic quality scoring. |
+| `branch-lifecycle` | Claude | `tests/benchmarks/runs/branch-lifecycle-claude-c2381c3d/report.json` | 3 | 100% | 84.1% | none | graded | Curated report: `benchmark/test-branch-lifecycle-2026-05-19.md`. |
 | `branch-lifecycle` | Codex | `tests/benchmarks/runs/branch-lifecycle-codex-fe3661fd/report.json` | 1 | 0% | 56.8% | none | graded | Curated report: `benchmark/test-branch-lifecycle-2026-05-19.md`. One evaluated persisted run with deterministic quality scoring. |
 | `burn-rate` | Claude | `tests/benchmarks/runs/burn-rate-claude-e5a4571d/report.json` | 3 | 100% | 93.3% | none | graded | Curated report: `benchmark/test-burn-rate-2026-05-21.md`. |
 | `burn-rate` | Codex | `tests/benchmarks/runs/burn-rate-codex-c21c704a/report.json` | 3 | 100% | 100.0% | none | graded | Curated report: `benchmark/test-burn-rate-2026-05-21.md`. |
@@ -166,7 +166,7 @@ This matrix tracks skills that already have persisted benchmark run data and gra
 | `icon-handler` | Claude | `tests/benchmarks/runs/icon-handler-claude-47bab6aa/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
 | `provision-agentic-config` | Claude | `tests/benchmarks/runs/provision-agentic-config-claude-51d425e8/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
 | `roadmap` | Claude | `tests/benchmarks/runs/roadmap-claude-8c1ee4a6/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
-| `run` | Codex | `tests/benchmarks/runs/run-codex-eb310a77/report.json` | blocked/incomplete | Report exists with zero total and evaluated runs. Do not count as benchmarked. Prefer the later evaluated report listed above. |
+| `run` | Codex | `tests/benchmarks/runs/run-codex-73465d1a/report.json` | blocked/incomplete | Report exists with zero total and evaluated runs. Do not count as benchmarked. Prefer the later evaluated report listed above. |
 | `spec-interview` | Claude | `tests/benchmarks/runs/spec-interview-claude-b83d0caa/report.json` | blocked/incomplete | Report exists with zero evaluated runs. |
 | `targeted-skill-builder` | Claude | `tests/benchmarks/runs/targeted-skill-builder-claude-3b4f2b62/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
 | `update-packages` | Claude | `tests/benchmarks/runs/update-packages-claude-4d9966e8/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |

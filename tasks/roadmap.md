@@ -4313,7 +4313,7 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - **2026-05-19 — Agent review `update-packages` fresh rerun:** Review the latest persisted Claude/Codex `update-packages` benchmark outputs, score retained artifacts for operator ergonomics, write the dated review report, refresh generated evidence, validate, commit, and push.
 - **2026-05-19 — Targeted `update-packages` benchmark lockfile ordering fix:** Tighten the benchmark quality rubric so unsafe npm-to-pnpm lockfile deletion order is rejected, while preserving retained positive batch-actionability shapes.
 
-## Phase 43: Benchmark Fixture Remediation — Route Assertions & Domain Criteria
+## Phase 43: Benchmark Fixture Remediation — Route Assertions & Domain Criteria ✓
 
 **Goal:** Fix the two systemic benchmark failure patterns discovered during Batches 41.3 and 41.5 so passing skills actually pass and quality scores reflect real agent capability rather than fixture/rubric gaps.
 
@@ -4335,11 +4335,11 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - Do not fix individual skill-specific assertion failures that aren't part of the two systemic patterns.
 
 **Acceptance Criteria:**
-- [ ] Route assertion fix: fixture prompts in `tier23-global-workflows.setup.ts` include explicit route guidance.
-- [ ] Route assertion validation: a representative sample of previously-failing Tier 2 global skills now pass hard assertions for both agents.
-- [ ] Domain criteria fix: fixture prompts in `pack-workflows.setup.ts` include domain context, or domain rubric criteria are loosened to match fixture capabilities.
-- [ ] Domain criteria validation: a representative sample of pack-local skills score >0% on previously-failing domain criteria.
-- [ ] Generated data refreshed and all validation passes after fixes.
+- [x] Route assertion fix: fixture prompts in `tier23-global-workflows.setup.ts` include explicit route guidance.
+- [x] Route assertion validation: a representative sample of previously-failing Tier 2 global skills now pass hard assertions for both agents.
+- [x] Domain criteria fix: fixture prompts in `pack-workflows.setup.ts` include domain context, or domain rubric criteria are loosened to match fixture capabilities.
+- [x] Domain criteria validation: a representative sample of pack-local skills score >0% on previously-failing domain criteria.
+- [x] Generated data refreshed and all validation passes after fixes.
 
 **Parallelization:** serial (fixture changes affect shared setup files; re-benchmarks must run after fixes)
 

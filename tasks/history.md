@@ -2723,3 +2723,10 @@ Resolved all 10 findings from `/expert-review`:
 - `workflow-next-route` (assertRecommendedRoute) passes 100% across all 10 runs — route guidance from Step 43.2 is validated.
 - 3 overall run failures from pre-existing content assertions (salvage, tradeoffs, variant evaluation), not route-related.
 - Total cost: ~$10.
+
+## 2026-05-21 — Ship Phase 43 generated benchmark/showcase data
+
+- Refreshed the Skills Showcase GitHub proof assets and benchmark results matrix after the Phase 43 completion commits.
+- Corrected stale generated rows for the latest `branch-lifecycle` Claude report and `run` Codex blocked/incomplete report.
+- Verified generated data freshness, benchmark coverage, focused layer1 showcase benchmark tests, Skills Showcase production build, and whitespace checks.
+- Pushed the result directly on `master`.
