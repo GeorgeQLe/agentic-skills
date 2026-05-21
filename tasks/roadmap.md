@@ -2,7 +2,7 @@
 
 > Generated from: tasks/roadmap.md (existing), specs/board-flag-kanban-search.md, tasks/ideas.md, tasks/history.md
 > Date: 2026-03-27 (last updated 2026-05-17)
-> Total Phases: 42 (40 complete, 2 planned)
+> Total Phases: 43 (40 complete, 3 planned)
 
 ## Summary
 
@@ -4312,6 +4312,81 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - **2026-05-19 — Benchmark `update-packages` fresh rerun:** Run `$benchmark-test-skill update-packages` against the current repository state after the socket transport classification follow-up, write the dated deterministic both-agent benchmark report, refresh generated evidence if needed, validate, commit, and push.
 - **2026-05-19 — Agent review `update-packages` fresh rerun:** Review the latest persisted Claude/Codex `update-packages` benchmark outputs, score retained artifacts for operator ergonomics, write the dated review report, refresh generated evidence, validate, commit, and push.
 - **2026-05-19 — Targeted `update-packages` benchmark lockfile ordering fix:** Tighten the benchmark quality rubric so unsafe npm-to-pnpm lockfile deletion order is rejected, while preserving retained positive batch-actionability shapes.
+
+## Phase 43: Benchmark Fixture Remediation — Route Assertions & Domain Criteria
+
+**Goal:** Fix the two systemic benchmark failure patterns discovered during Batches 41.3 and 41.5 so passing skills actually pass and quality scores reflect real agent capability rather than fixture/rubric gaps.
+
+**Source:** Benchmark results from Batches 41.3 Groups 1-3 (33 Tier 2 global skills, Claude 0% pass rate) and Batch 41.5 Group 1 (10 pack-local skills, 100% pass rate but domain criteria scoring 0%).
+
+**Problem Statement:**
+1. **Route assertion failures (high impact):** Tier 2 global skills have near-universal `Output recommends $run` assertion failures because fixture prompts lack explicit route guidance. This is the single root cause behind Claude's 0% pass rate across 33 global skills. Codex passes on a few skills where it happens to produce the expected route.
+2. **Domain-specific quality criteria (medium impact):** Pack-local skills score 0% on domain criteria like `business-ops-context`, `customer-lifecycle-context`, `creator-media-context`, and `business-discovery-context`. The fixture prompts don't provide enough domain context for agents to satisfy these criteria, or the rubric expectations are too narrow.
+
+**Scope:**
+- Update fixture prompts in `tests/layer4/setups/tier23-global-workflows.setup.ts` to include explicit next-step route expectations so agents know to recommend `$run`.
+- Update fixture prompts in `tests/layer4/setups/packs/pack-workflows.setup.ts` to include domain context or loosen domain-specific quality rubric criteria to match what agents can reasonably produce from the fixture alone.
+- Re-benchmark a representative sample of affected skills after each fix category to validate improvement.
+- Do not change skill contracts (SKILL.md files) — this is a test fixture/rubric issue, not a skill behavior issue.
+
+**Non-Goals:**
+- Do not re-benchmark all 158 skills — pick a representative sample per fix category.
+- Do not change the benchmark harness infrastructure or evaluator logic.
+- Do not fix individual skill-specific assertion failures that aren't part of the two systemic patterns.
+
+**Acceptance Criteria:**
+- [ ] Route assertion fix: fixture prompts in `tier23-global-workflows.setup.ts` include explicit route guidance.
+- [ ] Route assertion validation: a representative sample of previously-failing Tier 2 global skills now pass hard assertions for both agents.
+- [ ] Domain criteria fix: fixture prompts in `pack-workflows.setup.ts` include domain context, or domain rubric criteria are loosened to match fixture capabilities.
+- [ ] Domain criteria validation: a representative sample of pack-local skills score >0% on previously-failing domain criteria.
+- [ ] Generated data refreshed and all validation passes after fixes.
+
+**Parallelization:** serial (fixture changes affect shared setup files; re-benchmarks must run after fixes)
+
+### Execution Profile
+**Parallel mode:** serial
+**Integration owner:** main agent
+**Conflict risk:** high (shared setup files used by all benchmarks)
+**Review gates:** fixture audit, re-benchmark validation
+
+### Implementation
+- [ ] Step 43.1: Audit route assertion failures across Tier 2 global skill fixtures.
+  - Classification: automated
+  - Files: read `tests/layer4/setups/tier23-global-workflows.setup.ts`
+  - Catalog which fixture prompts lack route guidance and what the expected route should be per skill.
+- [ ] Step 43.2: Add explicit route guidance to Tier 2 global skill fixture prompts.
+  - Classification: automated
+  - Files: modify `tests/layer4/setups/tier23-global-workflows.setup.ts`
+  - Add clear next-step route expectations to each fixture prompt so agents produce `$run` or the skill-specific route.
+- [ ] Step 43.3: Re-benchmark a representative sample of Tier 2 global skills.
+  - Classification: automated
+  - Pick ~5 previously-failing skills and run `pnpm bench --skill <skill> --agent both --runs 3 --chunk-size 3 --pause 0`.
+  - Write updated benchmark reports.
+- [ ] Step 43.4: Audit domain-specific quality criteria across pack-local skill fixtures.
+  - Classification: automated
+  - Files: read `tests/layer4/setups/packs/pack-workflows.setup.ts`
+  - Catalog which domain criteria score 0% and whether the fix is fixture enrichment or rubric loosening.
+- [ ] Step 43.5: Fix domain-specific quality criteria in pack-local skill fixtures.
+  - Classification: automated
+  - Files: modify `tests/layer4/setups/packs/pack-workflows.setup.ts`
+  - Enrich fixture prompts with domain context or adjust rubric criteria thresholds.
+- [ ] Step 43.6: Re-benchmark a representative sample of pack-local skills.
+  - Classification: automated
+  - Pick ~5 previously-low-scoring skills and re-benchmark.
+  - Write updated benchmark reports.
+- [ ] Step 43.7: Refresh generated data and validate.
+  - Classification: automated
+  - Files: regenerate `docs/benchmark-results-matrix.md`, `docs/skills-showcase/assets/skills-data.js`, `apps/skills-showcase/public/assets/skills-data.js`
+  - Run `scripts/validate-skills-showcase-data.sh`, `pnpm --dir tests bench:coverage`, `git diff --check`.
+
+### Milestone: Phase 43 Benchmark Fixture Remediation
+**Acceptance Criteria:**
+- [ ] Route assertion fix applied and validated with representative re-benchmarks.
+- [ ] Domain criteria fix applied and validated with representative re-benchmarks.
+- [ ] Generated data refreshed and all validation passes.
+- [ ] No regressions in previously-passing skills.
+
+---
 
 ## Deferred / Future Work
 - **Kanban analytics** — cycle time, throughput, WIP limits via `/kanban-stats` skill (from original backlog)
