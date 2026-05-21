@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Update: Concept Bootstrap Gate and Scaffold Placement 2026-05-21
+
+**Goal:** Make `concept-exploration` route to `bootstrap-repo` only before repository readiness, and clarify `scaffold` as a post-roadmap/plan-phase implementation structure step for normal product work.
+
+**Acceptance Criteria:**
+- [x] Mirrored `concept-exploration` contracts detect whether a repo is bootstrapped by meaningful README plus agent workflow docs.
+- [x] Unbootstrapped concepts route to `$bootstrap-repo` or `/bootstrap-repo` before ICP.
+- [x] Bootstrapped concepts continue to route to ICP or pack-install prerequisites.
+- [x] Mirrored `scaffold` contracts place scaffolding after research, prototype consolidation, production spec, roadmap, and plan-phase unless the user explicitly asks for an early minimal shell.
+- [ ] Tier 2/3 fixture expectations and validation pass, review notes are recorded, and intended changes are committed and pushed on `master`.
+
+**Result:** Updated mirrored `concept-exploration` and `scaffold` contracts on 2026-05-21. Concept exploration now routes ready but unbootstrapped ideas to bootstrap first, then routes bootstrapped repos to ICP or pack prerequisites. Scaffold now sits after research/prototype/spec/roadmap/plan-phase for normal product work, with an explicit early-shell exception only when the user asks for it. Tier 2/3 fixtures now expect `$icp` for a bootstrapped concept and scaffold placement language. Focused validation passed.
+
 ## Current Targeted Update: Bootstrap Product Reset Research-First Routing 2026-05-21
 
 **Goal:** Route product/app reset bootstraps from the high-level concept through market and lifecycle alignment before UX/UI/prototype work.

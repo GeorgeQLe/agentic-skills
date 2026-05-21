@@ -8,6 +8,7 @@
 
 ## Priority Task Queue
 
+- [x] `$targeted-skill-builder concept-exploration bootstrap gate and scaffold placement` — route unbootstrapped concepts to bootstrap, bootstrapped concepts to ICP, and keep scaffold downstream of roadmap/plan-phase.
 - [x] `$targeted-skill-builder bootstrap-repo product reset research-first routing` — route product resets from high-level concept to ICP/competitive/journey before UX/UI/prototype work.
 - [x] `$targeted-skill-builder bootstrap-repo archive docs preserve concept only` — tighten reset mode so old docs/research/specs are archived and active root keeps only the high-level concept. (Shipped in `66e96c0`.)
 - [x] `$targeted-skill-builder desk-flip reset/archive alignment-first routing` — update desk-flip/bootstrap handoff so stale existing codebases are archived before bootstrap, then route to UI/content alignment before prototype work.
@@ -16,6 +17,40 @@
 - [ ] `$run` — Resume Phase 41 Batch 41.3 re-benchmarks: re-run the 33 Tier 2 global skills that were benchmarked pre-fixture-remediation with near-zero pass rates (Phase 43 added route guidance to all 32 fixture prompts and increased budgets). Current graded count: 69 unique skills / 158 total. Batch 41.5 pack-local groups also have remaining families.
 - [ ] Review `tasks/recurring-todo.md`: 2 unchecked recurring items — promote only if due and requiring execution work.
 - [ ] `$research-roadmap` — All 43 roadmap phases are complete. Run documentation health scan after Phase 41 remaining batches finish.
+
+## Current Task — Concept Bootstrap Gate and Scaffold Placement 2026-05-21
+
+**Goal:** Make `concept-exploration` route unbootstrapped concepts to `bootstrap-repo`, keep bootstrapped repos on the research-first path, and clarify that `scaffold` normally happens after roadmap/plan-phase identifies the implementation target.
+
+**Evidence:**
+- User asked whether concept exploration should route to bootstrap before ICP and where scaffold fits.
+- Current concept contracts route based on pack availability but do not check whether repository bootstrap has happened.
+- Current scaffold contracts describe how to create packages/apps but not where scaffolding belongs in the product workflow.
+
+**Plan:**
+- [x] Add bootstrapped/unbootstrapped repo detection to mirrored `concept-exploration` contracts.
+- [x] Route unbootstrapped concepts to `$bootstrap-repo` or `/bootstrap-repo`; keep bootstrapped concepts on `$icp` or pack install routes.
+- [x] Add scaffold placement guidance to mirrored `scaffold` contracts.
+- [x] Update Tier 2/3 fixture expectations for concept and scaffold routing.
+- [x] Run focused validation and commit/push intended changes.
+
+**Files:**
+- `global/codex/concept-exploration/SKILL.md`
+- `global/claude/concept-exploration/SKILL.md`
+- `global/codex/scaffold/SKILL.md`
+- `global/claude/scaffold/SKILL.md`
+- `tests/layer4/setups/tier23-global-workflows.setup.ts`
+- `tasks/lessons.md`, `tasks/roadmap.md`, and `tasks/todo.md`
+
+### Review
+
+- Mirrored `concept-exploration` now checks whether the repo is bootstrapped by meaningful README plus `AGENTS.md` or `CLAUDE.md`.
+- Unbootstrapped ready concepts route to `$bootstrap-repo <high-level concept summary>` or `/bootstrap-repo <high-level concept summary>` before ICP.
+- Bootstrapped concepts continue to route to research prerequisites: pack install, `$icp`, or `/icp`.
+- Mirrored `scaffold` now states normal product scaffolding happens after research, prototype consolidation, production spec, roadmap, and plan-phase identify a new app/package root; early scaffolding is allowed only by explicit user request and should route back to research.
+- Validation passed: `pnpm --dir tests verify --skill concept-exploration`; `pnpm --dir tests verify --skill scaffold`; `pnpm --dir tests bench:coverage`; `/opt/homebrew/bin/bash ./scripts/skill-next-step-routing.sh --missing`; `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken`; `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`; `node scripts/generate-skills-showcase-data.mjs`; `node scripts/generate-skills-showcase-github-data.mjs`; `scripts/validate-skills-showcase-data.sh`; `git diff --check`.
+- Skipped/limited: focused verifies skipped layer2 because no target-specific layer2 tests match these skills.
+- Next command: `$bootstrap-repo <concept>` for unbootstrapped ideas; `$icp <concept>` for bootstrapped repos.
 
 ## Current Task — Bootstrap Product Reset Research-First Routing 2026-05-21
 

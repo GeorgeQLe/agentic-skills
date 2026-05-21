@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-05-21 — Concept routes bootstrap only before repo readiness
+
+- Concept exploration was clear about being pre-ICP, but its next-step rules did not distinguish an unbootstrapped idea from an already initialized repo.
+- Route `$concept-exploration` to `$bootstrap-repo` only when the concept is ready and the repo lacks meaningful README plus agent workflow docs, or the user is shaping an idea outside a project repo.
+- In an already bootstrapped repo, route concept exploration to `$icp` or the required research-pack install, not to `$bootstrap-repo`.
+- Keep `$scaffold` downstream of roadmap/plan-phase for normal product work; use it early only when the user explicitly asks for a minimal app/package shell before research.
+
 ## 2026-05-21 — Fresh product resets need market alignment before UI alignment
 
 - A reset/bootstrap workflow routed product restarts from the high-level concept directly to `$ui-interview --requirements-only`, skipping ICP, competitive landscape, and journey mapping.
