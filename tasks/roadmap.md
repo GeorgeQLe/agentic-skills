@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Update: Bootstrap Reset Archives Docs and Preserves Concept Only 2026-05-21
+
+**Goal:** Tighten `bootstrap-repo --reset-existing` so stale docs/research/specs are archived with old code, leaving only the high-level concept as the active seed for fresh alignment and research.
+
+**Acceptance Criteria:**
+- [x] Mirrored `bootstrap-repo` contracts require reset mode to archive docs, research, specs, tasks, implementation notes, design docs, and other stale planning artifacts.
+- [x] Reset mode preserves only a concise high-level concept artifact in the active root, derived from the bootstrap brief or `desk-flip-report.md`.
+- [x] Desk-flip handoff makes clear that old docs are historical/archive evidence, not active source-of-truth inputs.
+- [x] Benchmark coverage expects concept-only reset language and alignment-first routing.
+- [ ] Validation passes, review notes are recorded, and intended changes are committed and pushed on `master`.
+
+**Result:** Updated mirrored `bootstrap-repo` and `desk-flip` contracts on 2026-05-21. Reset mode now archives old docs/research/specs/tasks and stale planning artifacts with the implementation, keeps only one high-level concept seed active, and routes alignment/research from that concept rather than old source-of-truth docs. Tier 2/3 benchmark fixtures now require high-level concept language for `bootstrap-repo` and `desk-flip`. Focused validation passed for both skills, benchmark coverage, generated data freshness, and skill dependency/version/routing audits.
+
 ## Current Targeted Update: Desk-Flip Reset/Archive and Alignment-First Routing 2026-05-21
 
 **Goal:** Fix stale-project restart routing so `desk-flip` can hand off to an in-place reset/bootstrap path that archives old implementation files, then routes to alignment-first and prototype-second workflow steps.

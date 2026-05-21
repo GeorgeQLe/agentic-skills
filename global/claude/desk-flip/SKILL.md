@@ -59,13 +59,13 @@ This skill always desk-flips. If the user invoked it, the decision to restart is
    - If the user explicitly wants a new repository, route to `/bootstrap-repo <condensed brief>`.
    - If the user wants to keep the existing repository, or the current repo name, remotes, issues, deployment linkage, or local tooling are valuable, route to `/bootstrap-repo --reset-existing <condensed brief>`.
    - For in-place reset, state that `/bootstrap-repo --reset-existing` must archive the old implementation under `archive/` before writing the fresh bootstrap docs. It must not delete the old code outright.
-   - The archive should preserve old implementation evidence without treating it as reusable foundation code. The fresh start should continue only from the report, valid specs, valid docs, non-code assets, and lessons.
+   - The archive should preserve old implementation and documentation evidence without treating it as reusable foundation code or active source-of-truth docs. The fresh start should continue only from a high-level concept seed derived from the report, plus lessons captured in the report.
 
 6. **Present and route.**
    - Show the user a terminal summary of the report.
    - Recommend the appropriate `/bootstrap-repo` command with the recommended bootstrap input from the report.
    - Do NOT create the new repo or run `/bootstrap-repo` — the user does this.
-   - After bootstrap, route product/app restarts into the alignment-first workflow: `/ui-interview --requirements-only` to define the content/data/action contract, `/ux-variations --layout-mode` to explore alternatives, `/run` or the applicable prototype-building step to build variants, `/uat --variant-evaluation`, then `/consolidate-variations` before `/spec-interview` or `/roadmap`.
+   - After bootstrap, route product/app restarts into the alignment-first workflow using the high-level concept seed as input: `/ui-interview --requirements-only` to define the content/data/action contract, `/ux-variations --layout-mode` to explore alternatives, `/run` or the applicable prototype-building step to build variants, `/uat --variant-evaluation`, then `/consolidate-variations` before `/spec-interview` or `/roadmap`.
 
 ## Output Format
 
@@ -83,7 +83,7 @@ Desk-flipped: <project name>
 ## Constraints
 
 - **Read-only during desk-flip** — no modifications to existing files, no archival, no branch creation. The only file written by this skill is `desk-flip-report.md`.
-- Do not carry forward code, dependencies, or infrastructure from the old project.
+- Do not carry forward code, dependencies, infrastructure, old research, old specs, or old task docs from the old project as active files.
 - Do not create the new repo or invoke `/bootstrap-repo` — the user handles that transition.
 - Do not commit or push (the report is informational, not a meaningful mutation to ship).
 - Do not delete, archive, or rename anything in the old repo during desk-flip. Only the downstream `/bootstrap-repo --reset-existing` step may perform archival after the user chooses that route.
@@ -94,4 +94,4 @@ Desk-flipped: <project name>
 
 - This skill does NOT commit or push. The only side effect is `desk-flip-report.md` written to the project root.
 - **Default next-step routing:** when reporting completion, include the two-line pair `**Next work:** <specific task>` and `**Recommended next command:** /bootstrap-repo --reset-existing <brief>` for in-place restarts, or `/bootstrap-repo <brief>` only when a separate new repo is explicitly the right path.
-- **Post-bootstrap route:** include in the report that the fresh project should proceed to `/ui-interview --requirements-only` before prototype/implementation work unless the user already has a current accepted requirements artifact.
+- **Post-bootstrap route:** include in the report that the fresh project should proceed from the high-level concept seed to `/ui-interview --requirements-only` before prototype/implementation work.

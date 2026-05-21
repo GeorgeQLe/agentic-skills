@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-05-21 — Reset mode should preserve concept, not stale docs
+
+- A reset/bootstrap workflow initially preserved valid salvage docs as active files, but the user clarified that old docs should be archived too so research starts from scratch.
+- In-place fresh starts should keep only a concise high-level concept artifact active; archive old docs, research, specs, task files, implementation notes, and design docs with the stale codebase.
+- Salvage docs may be referenced in the archive manifest or desk-flip report for historical context, but downstream alignment and research should rebuild from the high-level concept rather than treating old documents as source of truth.
+- When routing to alignment-first workflows after reset, make the concept seed the input to `$ui-interview --requirements-only`, not a pile of old research/spec artifacts.
+
 ## 2026-05-21 — Desk-flip handoffs need reset/archive and alignment routing
 
 - A `desk-flip` restart route sent users to `bootstrap-repo`, but `bootstrap-repo` only handled README/agent docs and did not reset an existing stale codebase.

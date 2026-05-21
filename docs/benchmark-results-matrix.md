@@ -72,8 +72,8 @@ This matrix tracks skills that already have persisted benchmark run data and gra
 | `dead-code` | Codex | `tests/benchmarks/runs/dead-code-codex-93273c76/report.json` | 3 | 100% | 88.6% | none | graded | Curated report: `benchmark/test-dead-code-2026-05-21.md`. |
 | `debug` | Claude | `tests/benchmarks/runs/debug-claude-01d463f3/report.json` | 3 | 100% | 84.1% | none | graded | Curated report: `benchmark/test-debug-2026-05-21.md`. |
 | `debug` | Codex | `tests/benchmarks/runs/debug-codex-a68f03d1/report.json` | 3 | 100% | 84.8% | none | graded | Curated report: `benchmark/test-debug-2026-05-21.md`. |
-| `decommission` | Claude | `tests/benchmarks/runs/decommission-claude-11f31edb/report.json` | 3 | 100% | 86.4% | none | graded | Curated report: `benchmark/test-decommission-2026-05-20.md`. |
-| `decommission` | Codex | `tests/benchmarks/runs/decommission-codex-98016876/report.json` | 3 | 100% | 86.4% | none | graded | Curated report: `benchmark/test-decommission-2026-05-20.md`. |
+| `decommission` | Claude | `tests/benchmarks/runs/decommission-claude-11f31edb/report.json` | 3 | 100% | 86.4% | none | graded | Curated report: `benchmark/test-decommission-2026-05-21.md`. |
+| `decommission` | Codex | `tests/benchmarks/runs/decommission-codex-98016876/report.json` | 3 | 100% | 86.4% | none | graded | Curated report: `benchmark/test-decommission-2026-05-21.md`. |
 | `design-system` | Claude | `tests/benchmarks/runs/design-system-claude-e4785f5a/report.json` | 5 | 100% | 90.9% | none | graded | Curated report: `benchmark/test-design-system-2026-05-10.md`. |
 | `design-system` | Codex | `tests/benchmarks/runs/design-system-codex-43b808d6/report.json` | 1 | 100% | 90.9% | none | graded | Curated report: `benchmark/test-design-system-2026-05-10.md`. One evaluated persisted run with deterministic quality scoring. |
 | `desk-flip` | Claude | `tests/benchmarks/runs/desk-flip-claude-d0377a90/report.json` | 1 | 100% | 93.2% | `benchmark/review-desk-flip-2026-05-20.md` | graded | Curated report: `benchmark/test-desk-flip-2026-05-20.md`. One evaluated persisted run with deterministic quality scoring. Subjective review median score available. |
@@ -90,12 +90,12 @@ This matrix tracks skills that already have persisted benchmark run data and gra
 | `devtool-integration-map` | Codex | `tests/benchmarks/runs/devtool-integration-map-codex-1ac7ce18/report.json` | 2 | 100% | 100.0% | none | graded | Curated report: `benchmark/test-devtool-integration-map-2026-05-20.md`. |
 | `dogfood` | Claude | `tests/benchmarks/runs/dogfood-claude-6497e7a4/report.json` | 3 | 0% | 59.1% | none | graded | Curated report: `benchmark/test-dogfood-2026-05-20.md`. |
 | `dogfood` | Codex | `tests/benchmarks/runs/dogfood-codex-dab8e72c/report.json` | 3 | 33% | 71.2% | none | graded | Curated report: `benchmark/test-dogfood-2026-05-20.md`. |
-| `expert-review` | Claude | `tests/benchmarks/runs/expert-review-claude-3504c2d1/report.json` | 1 | 0% | 65.9% | none | graded | Curated report: `benchmark/test-expert-review-2026-05-20.md`. One evaluated persisted run with deterministic quality scoring. |
-| `expert-review` | Codex | `tests/benchmarks/runs/expert-review-codex-1a5ca281/report.json` | 3 | 67% | 79.5% | none | graded | Curated report: `benchmark/test-expert-review-2026-05-20.md`. |
+| `expert-review` | Claude | `tests/benchmarks/runs/expert-review-claude-f5a806b8/report.json` | 3 | 100% | 84.8% | none | graded | Curated report: `benchmark/test-expert-review-2026-05-20.md`. |
+| `expert-review` | Codex | `tests/benchmarks/runs/expert-review-codex-f5f227c5/report.json` | 3 | 100% | 87.9% | none | graded | Curated report: `benchmark/test-expert-review-2026-05-20.md`. |
 | `feature-interview` | Claude | `tests/benchmarks/runs/feature-interview-claude-3efd3354/report.json` | 1 | 0% | 72.2% | `benchmark/review-feature-interview-2026-05-18.md` | graded | Curated report: `benchmark/test-feature-interview-2026-05-18.md`. One evaluated persisted run with deterministic quality scoring. Subjective review median score available. |
 | `feature-interview` | Codex | `tests/benchmarks/runs/feature-interview-codex-59a38b3c/report.json` | 3 | 100% | 100.0% | `benchmark/review-feature-interview-2026-05-18.md` | graded | Curated report: `benchmark/test-feature-interview-2026-05-18.md`. Subjective review median score available. |
-| `guide` | Claude | `tests/benchmarks/runs/guide-claude-0b385a02/report.json` | 2 | 0% | 68.2% | none | graded | Curated report: `benchmark/test-guide-2026-05-20.md`. |
-| `guide` | Codex | `tests/benchmarks/runs/guide-codex-9a9fe381/report.json` | 3 | 0% | 68.2% | none | graded | Curated report: `benchmark/test-guide-2026-05-20.md`. |
+| `guide` | Claude | `tests/benchmarks/runs/guide-claude-f3d5d387/report.json` | 3 | 100% | 86.4% | none | graded | Curated report: `benchmark/test-guide-2026-05-20.md`. |
+| `guide` | Codex | `tests/benchmarks/runs/guide-codex-81c94d31/report.json` | 3 | 100% | 86.4% | none | graded | Curated report: `benchmark/test-guide-2026-05-20.md`. |
 | `handoff` | Claude | `tests/benchmarks/runs/handoff-claude-3e315c1b/report.json` | 3 | 0% | 68.2% | none | graded | Curated report: `benchmark/test-handoff-2026-05-20.md`. |
 | `handoff` | Codex | `tests/benchmarks/runs/handoff-codex-32ac73e9/report.json` | 3 | 0% | 73.5% | none | graded | Curated report: `benchmark/test-handoff-2026-05-20.md`. |
 | `hygiene` | Claude | `tests/benchmarks/runs/hygiene-claude-7d96d2f7/report.json` | 3 | 0% | 40.2% | none | graded | Curated report: `benchmark/test-hygiene-2026-05-20.md`. |
@@ -170,7 +170,7 @@ This matrix tracks skills that already have persisted benchmark run data and gra
 | `icon-handler` | Claude | `tests/benchmarks/runs/icon-handler-claude-47bab6aa/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
 | `provision-agentic-config` | Claude | `tests/benchmarks/runs/provision-agentic-config-claude-51d425e8/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
 | `roadmap` | Claude | `tests/benchmarks/runs/roadmap-claude-8c1ee4a6/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
-| `run` | Codex | `tests/benchmarks/runs/run-codex-72e39bd1/report.json` | blocked/incomplete | Report exists with zero total and evaluated runs. Do not count as benchmarked. Prefer the later evaluated report listed above. |
+| `run` | Codex | `tests/benchmarks/runs/run-codex-8f8e9fab/report.json` | blocked/incomplete | Report exists with zero total and evaluated runs. Do not count as benchmarked. Prefer the later evaluated report listed above. |
 | `spec-interview` | Claude | `tests/benchmarks/runs/spec-interview-claude-b83d0caa/report.json` | blocked/incomplete | Report exists with zero evaluated runs. |
 | `targeted-skill-builder` | Claude | `tests/benchmarks/runs/targeted-skill-builder-claude-3b4f2b62/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
 | `update-packages` | Claude | `tests/benchmarks/runs/update-packages-claude-4d9966e8/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |

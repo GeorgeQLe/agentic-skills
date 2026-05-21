@@ -8,7 +8,7 @@ argument-hint: "<project brief>"
 
 # Bootstrap Repo
 
-Initialize a repository with a useful `README.md` and the standard agent workflow docs. When invoked with `--reset-existing`, first archive stale implementation files from a non-empty stuck repo so the fresh start is not built on old code by accident.
+Initialize a repository with a useful `README.md` and the standard agent workflow docs. When invoked with `--reset-existing`, first archive stale implementation and documentation files from a non-empty stuck repo so the fresh start is not built on old code or old assumptions by accident.
 
 ## Process
 
@@ -22,14 +22,16 @@ Initialize a repository with a useful `README.md` and the standard agent workflo
    - Preserve discovered commands and facts. Do not invent dependency managers, deployment targets, or product claims.
 
 3. **Reset existing stale repo when explicitly requested:**
-   - Only perform this step when reset mode is explicit. Never archive or move implementation files during ordinary bootstrap.
-   - Confirm the repo is non-empty and contains stale implementation files or stale generated app structure. If it is already empty or freshly initialized, skip archival and note why.
-   - Create `archive/YYYY-MM-DD-HHMMSS/` and move stale implementation files/directories there before writing fresh bootstrap docs.
-   - Do not archive `.git/`, `.agents/`, `archive/`, `desk-flip-report.md`, valid salvage docs named in the desk-flip report, valid non-code assets named in the desk-flip report, or root agent config files needed for the current session.
-   - Preserve a manifest at `archive/YYYY-MM-DD-HHMMSS/MANIFEST.md` listing every moved path, every intentionally preserved path, and the source report/brief that justified the reset.
+   - Only perform this step when reset mode is explicit. Never archive or move files during ordinary bootstrap.
+   - Confirm the repo is non-empty and contains stale implementation, docs, research, specs, task files, design notes, or generated app structure. If it is already empty or freshly initialized, skip archival and note why.
+   - Create `archive/YYYY-MM-DD-HHMMSS/` and move stale implementation and documentation files/directories there before writing fresh bootstrap docs.
+   - Archive old docs by default, including `docs/`, `research/`, `specs/`, `tasks/`, planning reports, implementation notes, design docs, old README content, and prior roadmap/todo/history files. These may remain useful as historical evidence in the archive, but they must not stay active as source-of-truth inputs.
+   - Do not archive `.git/`, `.agents/`, `archive/`, `desk-flip-report.md`, root agent config files needed for the current session, or the newly written high-level concept artifact.
+   - Preserve exactly one active concept seed, such as `concept.md` or `README.md` `## Concept`, derived from the bootstrap brief or `desk-flip-report.md`. Keep it high level: product name, target user, core problem, value proposition, non-goals, and open questions. Do not preserve old research/spec detail as active files.
+   - Preserve a manifest at `archive/YYYY-MM-DD-HHMMSS/MANIFEST.md` listing every moved path, every intentionally preserved path, and the high-level concept source that justified the reset.
    - Prefer `git mv` for tracked paths so history remains understandable. Use ordinary moves only for untracked paths.
    - Do not delete old files outright. If a path cannot be moved safely, stop and report the blocker instead of partially resetting further.
-   - After archival, the root should contain only the fresh-start sources of truth: git metadata, agent config, the archive directory, desk-flip report, validated salvage artifacts, and any newly written bootstrap docs.
+   - After archival, the root should contain only the fresh-start sources of truth: git metadata, agent config, the archive directory, `desk-flip-report.md`, the high-level concept artifact, and any newly written bootstrap docs. Old docs/research/specs belong in the archive.
 
 4. **Create or update `README.md`:**
    - If `README.md` is absent, empty, or placeholder-like, write a concise README with:
@@ -50,10 +52,10 @@ Initialize a repository with a useful `README.md` and the standard agent workflo
    - Check that `README.md`, `CLAUDE.md`, and `AGENTS.md` exist.
    - Confirm the corresponding workflow orchestration block appears exactly once in each of `CLAUDE.md` and `AGENTS.md`.
    - Report whether the monorepo safety block was included or skipped by `/provision-agentic-config`.
-   - In reset mode, check that `archive/YYYY-MM-DD-HHMMSS/MANIFEST.md` exists and lists moved and preserved paths.
+   - In reset mode, check that `archive/YYYY-MM-DD-HHMMSS/MANIFEST.md` exists and lists moved and preserved paths, and verify old docs/research/specs/tasks were archived rather than left active.
 
 7. **Route alignment-first after bootstrap:**
-   - If this is a product, app, SaaS, dashboard, internal tool, marketplace, website, or other user-facing restart, recommend `/ui-interview --requirements-only <topic>` as the next command unless a current accepted requirements artifact already exists.
+   - If this is a product, app, SaaS, dashboard, internal tool, marketplace, website, or other user-facing restart, recommend `/ui-interview --requirements-only <topic>` as the next command with the high-level concept artifact as its input.
    - If current requirements exist but visual or workflow direction is still open, recommend `/ux-variations --layout-mode <topic>`.
    - Only route directly to `/roadmap` or `/run` when the project is non-UI/non-product work or already has accepted alignment artifacts and a consolidated prototype.
    - The intended product sequence after reset is: `/ui-interview --requirements-only` -> `/ux-variations --layout-mode` -> build variants via `/run` or the applicable prototype-building route -> `/uat --variant-evaluation` -> `/consolidate-variations` -> `/research-roadmap --post-prototype` -> `/spec-interview` or `/roadmap`.
@@ -64,6 +66,7 @@ Initialize a repository with a useful `README.md` and the standard agent workflo
 Bootstrapped repository
 - README.md: [created | updated | preserved], source: [arguments | prompts | existing content]
 - Reset archive: [created archive/YYYY-MM-DD-HHMMSS | skipped (<reason>)]
+- Active concept seed: [concept.md | README.md ## Concept | other]
 - CLAUDE.md: [created | updated | unchanged], corresponding workflow block appears once
 - AGENTS.md: [created | updated | unchanged], corresponding workflow block appears once
 - Monorepo safety block: [included (<heuristic>) | skipped]
@@ -77,7 +80,8 @@ Bootstrapped repository
 - Do not invent setup, test, deploy, or architecture details that are not in the brief or repository.
 - Keep the README concise and useful for a new contributor.
 - Do not modify files other than `README.md`, `CLAUDE.md`, and `AGENTS.md` unless the user explicitly asks or invokes reset mode.
-- Reset mode may move stale files into `archive/YYYY-MM-DD-HHMMSS/` and write that archive's `MANIFEST.md`; it may not delete files outright.
+- Reset mode may move stale files, including old docs/research/specs/tasks, into `archive/YYYY-MM-DD-HHMMSS/` and write that archive's `MANIFEST.md`; it may not delete files outright.
+- In reset mode, do not preserve old docs as active files just because they were marked salvageable. Use them only as archived historical evidence; active research and requirements restart from the high-level concept.
 - Do not create, modify, or suggest GitHub Actions workflows.
 
 
