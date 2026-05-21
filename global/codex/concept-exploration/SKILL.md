@@ -93,6 +93,10 @@ The `## Next Steps` section must recommend exactly one primary command:
 
 Include 1-3 other options only when they are materially useful.
 
+### Alignment Page
+
+After writing deliverables, build a custom HTML alignment page at `alignment/concept-exploration-{topic}.html`. Archive any previous alignment page at that path first to `docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/...`. Attempt to open the HTML page in the browser and report whether the browser open succeeded or was blocked. Do not use a shared template or CSS framework -- craft the page to fit the situation.
+
 ## Constraints
 
 - Keep the skill short and pre-research.

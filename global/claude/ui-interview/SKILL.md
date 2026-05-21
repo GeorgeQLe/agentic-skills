@@ -92,7 +92,7 @@ After writing files, recommend `/ux-variationss` if variants are needed before i
 
 ### Alignment Page
 
-After writing deliverables, build a custom HTML alignment page at `docs/alignment/ui-interview-{topic}.html` and open it in the browser. Archive any previous alignment page at that path first. Do not use a shared template or CSS framework -- craft the page to fit the situation.
+After writing deliverables, build a custom HTML alignment page at `alignment/ui-interview-{topic}.html` and attempt to open it in the browser and report whether the browser open succeeded or was blocked. Archive any previous alignment page at that path first to `docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/...`. Do not use a shared template or CSS framework -- craft the page to fit the situation.
 
 ## Constraints
 

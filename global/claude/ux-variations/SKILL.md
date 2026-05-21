@@ -123,7 +123,7 @@ When invoked with `--layout-mode` (or when the user says "layout mode", "layout 
 
 ### Alignment Page
 
-After writing deliverables, build a custom HTML alignment page at `docs/alignment/ux-variations-{topic}.html` and open it in the browser. The page should visualize the variation concepts, comparison matrix, and decision criteria in a format tailored to the specific variations produced. Archive any previous alignment page at that path first.
+After writing deliverables, build a custom HTML alignment page at `alignment/ux-variations-{topic}.html` and attempt to open it in the browser and report whether the browser open succeeded or was blocked. The page should visualize the variation concepts, comparison matrix, and decision criteria in a format tailored to the specific variations produced. Archive any previous alignment page at that path first to `docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/...`.
 
 Do not use a shared template or CSS framework — craft the page to fit the situation. The alignment page is a one-off communication artifact, not a reusable component.
 

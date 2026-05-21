@@ -8,7 +8,7 @@ argument-hint: "[optional: topic, --variant N]"
 
 # Prototype
 
-Invoke as `/prototype`.
+Invoke as `$prototype`.
 
 Build tangible, runnable prototypes before production spec work begins. This skill creates the first concrete artifact users can interact with, grounded in research and UX variation planning. Prototypes are cheap, disposable, and designed for evaluation — not production readiness. The goal is to give humans something to click, run, or curl so they can form opinions before committing to a direction.
 
@@ -22,8 +22,8 @@ Before proceeding, verify the following files exist:
 If either is missing, halt with a clear message:
 
 > Prototyping requires UX variation planning and UI specification. Missing prerequisites:
-> - `specs/ux-variations-*.md` — run `/ux-variations` to create variation concepts.
-> - `specs/ui-*.md` — run `/ui-interview` to define the interface specification.
+> - `specs/ux-variations-*.md` — run `$ux-variations` to create variation concepts.
+> - `specs/ui-*.md` — run `$ui-interview` to define the interface specification.
 
 Do not proceed past this gate until both prerequisites exist.
 
@@ -152,7 +152,7 @@ prototypes/{topic}/
 
 After prototypes are built, recommend:
 
-> Recommended next command: `/uat --variant-evaluation`
+> Recommended next command: `$uat --variant-evaluation`
 
 The user should interact with each prototype variation hands-on before consolidating. UAT variant evaluation provides a structured comparison framework to capture evidence for each variation's strengths, friction points, and rejection signals.
 

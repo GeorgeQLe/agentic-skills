@@ -18,8 +18,9 @@ Classify files by path before checking headings:
 | Ops docs | `sync.md`, `deploy.md`, `tasks/deploy.md`, `tasks/deploys.md` | Strict where headings are named below |
 | Agent/project docs | `CLAUDE.md`, `AGENTS.md`, `.agents/project.json`, `README.md` | Structural only |
 | Skill-library docs | `SKILL.md`, `PACK.md`, `docs/skills-reference.md` | Use the existing skill and skills-reference checks first |
+| Alignment review pages | `alignment/*.html` | Generated browser-review artifacts; placement-only check |
 
-Skip strict template checks for `docs/history/archive/**`. Treat unknown hand-written Markdown as Info unless a path or heading clearly identifies it as a generated workflow document.
+Skip strict template checks for `docs/history/archive/**`. Treat `alignment/*.html` as canonical generated HTML review artifacts, not Markdown documentation. Treat unknown hand-written Markdown as Info unless a path or heading clearly identifies it as a generated workflow document.
 
 ## Universal Checks
 
@@ -30,7 +31,7 @@ Skip strict template checks for `docs/history/archive/**`. Treat unknown hand-wr
 - Checkable workflow docs use `- [ ]` or `- [x]` for actionable items.
 - Non-ledger research/spec/task artifacts should include a metadata quote block when the family template requires it.
 - Main research/spec docs end with `## Next Steps`, or explicitly state why no next step exists.
-- Canonical roots are `tasks/`, `specs/`, and `research/`. `docs/specifications/` is a fallback spec location only.
+- Canonical roots are `tasks/`, `specs/`, `research/`, and generated HTML review pages under `alignment/`. `docs/specifications/` is a fallback spec location only.
 - New `docs/plan.md` or `docs/phases/` planning artifacts are legacy drift because current workflows write plans under `tasks/`.
 
 ## Task Pipeline Templates

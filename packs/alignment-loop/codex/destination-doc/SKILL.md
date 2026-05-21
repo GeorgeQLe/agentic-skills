@@ -60,4 +60,4 @@ Commit and push the destination doc.
 
 ## Next-Skill Routing
 
-After writing: "Run `/vertical-slice-splitter research/destination-[topic].md` to split into issue cards."
+After writing: "Run `$vertical-slice-splitter research/destination-[topic].md` to split into issue cards."

@@ -129,6 +129,10 @@ The interview log must include:
 - User responses and final decisions
 - Notable changes from the initial draft, current implementation, or artifact
 
+### Alignment Page
+
+After writing deliverables, build a custom HTML alignment page at `alignment/ui-interview-{topic}.html`. Archive any previous alignment page at that path first to `docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/...`. Attempt to open the HTML page in the browser and report whether the browser open succeeded or was blocked. Do not use a shared template or CSS framework -- craft the page to fit the situation.
+
 After writing files, recommend `$ux-variations` if variants are needed before implementation, or `$roadmap` if the interface is ready to sequence into work.
 
 In requirements-only mode, recommend `$ux-variations --layout-mode`, not `$roadmap`, because the content contract still needs concrete visual alternatives before implementation sequencing.

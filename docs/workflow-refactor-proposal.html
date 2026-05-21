@@ -730,7 +730,7 @@
       <tr>
         <td>Alignment Pages</td>
         <td><span class="badge badge-new">New Convention</span></td>
-        <td>Every interview/planning skill now builds a custom HTML alignment page opened in the user's browser. No shared template or CSS — each agent crafts the page to fit the situation. Stored at <code>docs/alignment/</code>, temporary until alignment confirmed.</td>
+        <td>Every interview/planning skill now builds a custom HTML alignment page opened in the user's browser. No shared template or CSS — each agent crafts the page to fit the situation. Stored at <code>alignment/</code>, temporary until alignment confirmed.</td>
       </tr>
       <tr>
         <td><code>concept-exploration</code></td>
@@ -786,7 +786,7 @@
         <span class="label">What</span>
         <span class="value">Every interview/planning skill outputs a custom-built HTML page for user alignment review</span>
         <span class="label">Location</span>
-        <span class="value"><code>docs/alignment/{skill}-{topic}.html</code> (temporary, archived or deleted after alignment confirmed)</span>
+        <span class="value"><code>alignment/{skill}-{topic}.html</code> (temporary, archived or deleted after alignment confirmed)</span>
         <span class="label">Produced by</span>
         <span class="value">All interview skills: concept-exploration, ux-variations, ui-interview, spec-interview, consolidate-variations, feature-interview</span>
       </div>
@@ -950,7 +950,7 @@
     <p style="margin: 0.5rem 0; font-size: 0.9rem;">The alignment page is whatever HTML best communicates the skill's output. A concept exploration might produce a simple overview with cards. A ux-variations skill might produce side-by-side comparisons. A spec-interview might annotate prototype screenshots with production concerns. The agent decides the format based on what the user needs to evaluate.</p>
 
     <h4>Lifecycle</h4>
-    <p style="margin: 0.5rem 0; font-size: 0.9rem;">Alignment pages are stored at <code>docs/alignment/{skill}-{topic}.html</code>. They are temporary — when the next skill in the pipeline runs, it archives the previous skill's alignment page to <code>docs/history/archive/</code>. Only the current skill's alignment page exists at any time. <code>/hygiene</code> also flags stale alignment pages during audits. They are NOT the deliverable; the deliverable is the skill's primary output (spec, variation plan, prototype, etc.).</p>
+    <p style="margin: 0.5rem 0; font-size: 0.9rem;">Alignment pages are stored at <code>alignment/{skill}-{topic}.html</code>. They are temporary — when the next skill in the pipeline runs, it archives the previous skill's alignment page to <code>docs/history/archive/</code>. Only the current skill's alignment page exists at any time. <code>/hygiene</code> also flags stale alignment pages during audits. They are NOT the deliverable; the deliverable is the skill's primary output (spec, variation plan, prototype, etc.).</p>
   </div>
 
   <div class="framework-box">
@@ -1233,7 +1233,7 @@
     </div>
     <div class="skill-card">
       <h3 style="color: var(--orange);">Alignment Page Accumulation</h3>
-      <p style="font-size: 0.9rem;"><strong>Risk:</strong> A full pipeline run produces 8-10 HTML files in <code>docs/alignment/</code>.</p>
+      <p style="font-size: 0.9rem;"><strong>Risk:</strong> A full pipeline run produces 8-10 HTML files in <code>alignment/</code>.</p>
       <p style="font-size: 0.9rem; margin-top: 0.5rem;"><strong>Mitigation:</strong> Two-layer cleanup. (1) When a skill runs, it archives the previous skill's alignment page to <code>docs/history/archive/</code>. Only the current alignment page exists at any time. (2) <code>/hygiene</code> flags any stale alignment pages during audits.</p>
     </div>
   </div>

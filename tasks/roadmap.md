@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Update: Alignment HTML Output Root 2026-05-21
+
+**Goal:** Move alignment-first and prototype-first review HTML artifacts to root `alignment/`, archive replaced pages under `docs/history/archive/`, restore Codex `$prototype` parity, and make browser-opening best-effort but explicit.
+
+**Acceptance Criteria:**
+- [x] Mirrored alignment/prototype skills write review pages to `alignment/{skill}-{topic}.html` and archive replaced pages to `docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/...`.
+- [x] Codex has `global/codex/prototype/SKILL.md` matching the Claude prototype contract translated to `$prototype`.
+- [x] Hygiene and bootstrap reset contracts recognize root `alignment/` as the canonical generated browser-review artifact root.
+- [x] Targeted text checks and repository tests pass.
+- [x] Results are recorded in `tasks/todo.md`, then intended changes are committed and pushed on `master`.
+
+**Result:** Updated on 2026-05-21. Alignment-page contracts now use root `alignment/` review HTML with archive-first replacement into `docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/...`, and skills report best-effort browser-open status. Codex `$prototype` parity was restored, including an OpenAI manifest, and the alignment-loop `destination-doc` durable output now has a Codex mirror plus HTML review page output. Hygiene and bootstrap reset now recognize `alignment/` as a generated browser-review artifact root. Focused validation passed before commit; showcase validation will be rerun after commit once generated assets are no longer dirty.
+
 ## Current Targeted Update: Concept Bootstrap Gate and Scaffold Placement 2026-05-21
 
 **Goal:** Make `concept-exploration` route to `bootstrap-repo` only before repository readiness, and clarify `scaffold` as a post-roadmap/plan-phase implementation structure step for normal product work.

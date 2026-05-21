@@ -108,7 +108,7 @@ Append an **Assumptions & Risks** section to the end of the spec listing: each c
 
 ### Alignment Page
 
-After writing deliverables, build a custom HTML alignment page at `docs/alignment/spec-interview-{topic}.html` and open it in the browser. The page should visualize the spec's architecture, data model, API surface, and key decisions in a format tailored to the specific spec produced. Archive any previous alignment page at that path first.
+After writing deliverables, build a custom HTML alignment page at `alignment/spec-interview-{topic}.html` and attempt to open it in the browser and report whether the browser open succeeded or was blocked. The page should visualize the spec's architecture, data model, API surface, and key decisions in a format tailored to the specific spec produced. Archive any previous alignment page at that path first to `docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/...`.
 
 Do not use a shared template or CSS framework — craft the page to fit the situation.
 

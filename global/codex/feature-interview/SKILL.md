@@ -103,6 +103,10 @@ Always write an interview log to `specs/[topic]-feature-interview.md` (or `docs/
 
 When replacing or substantively rewriting an existing canonical research/spec document (`research/**/*.md`, `specs/**/*.md`, or `docs/specifications/**/*.md`), copy the current file to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-relative-path>` before editing it.
 
+### Alignment Page
+
+After writing deliverables, build a custom HTML alignment page at `alignment/feature-interview-{topic}.html`. Archive any previous alignment page at that path first to `docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/...`. Attempt to open the HTML page in the browser and report whether the browser open succeeded or was blocked. Do not use a shared template or CSS framework.
+
 ## Next-Step Routing
 
 After writing deliverables, route tightly into the task pipeline:

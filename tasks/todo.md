@@ -8,6 +8,7 @@
 
 ## Priority Task Queue
 
+- [x] `$targeted-skill-builder alignment html output root` — move alignment review pages to root `alignment/`, restore Codex `$prototype`, update hygiene/bootstrap awareness, validate, then commit and push.
 - [x] `$targeted-skill-builder concept-exploration bootstrap gate and scaffold placement` — route unbootstrapped concepts to bootstrap, bootstrapped concepts to ICP, and keep scaffold downstream of roadmap/plan-phase.
 - [x] `$targeted-skill-builder bootstrap-repo product reset research-first routing` — route product resets from high-level concept to ICP/competitive/journey before UX/UI/prototype work.
 - [x] `$targeted-skill-builder bootstrap-repo archive docs preserve concept only` — tighten reset mode so old docs/research/specs are archived and active root keeps only the high-level concept. (Shipped in `66e96c0`.)
@@ -17,6 +18,43 @@
 - [ ] `$run` — Resume Phase 41 Batch 41.3 re-benchmarks: re-run the 33 Tier 2 global skills that were benchmarked pre-fixture-remediation with near-zero pass rates (Phase 43 added route guidance to all 32 fixture prompts and increased budgets). Current graded count: 69 unique skills / 158 total. Batch 41.5 pack-local groups also have remaining families.
 - [ ] Review `tasks/recurring-todo.md`: 2 unchecked recurring items — promote only if due and requiring execution work.
 - [ ] `$research-roadmap` — All 43 roadmap phases are complete. Run documentation health scan after Phase 41 remaining batches finish.
+
+## Current Task — Alignment HTML Output Root 2026-05-21
+
+**Goal:** Update alignment-first/prototype-first skill contracts so review HTML is written under repository-root `alignment/`, replaced review pages are archived under `docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/...`, and skills attempt to open the resulting page in a browser while reporting success or blockage.
+
+**Evidence:**
+- Prior plan identified stale `docs/alignment/` contracts in mirrored alignment skills.
+- Claude has a `prototype` skill contract while Codex is missing `global/codex/prototype/SKILL.md` despite docs/tests referencing `$prototype`.
+- Hygiene currently treats canonical generated documentation roots as `tasks/`, `specs/`, `research/`, and fallback `docs/specifications/`, but does not mention root `alignment/`.
+
+**Plan:**
+- [x] Update mirrored alignment-page skill contracts for root `alignment/` output, archive-first replacement, and browser-open reporting.
+- [x] Add Codex `$prototype` from the Claude contract, translated to Codex routing and browser-open behavior.
+- [x] Update alignment-loop durable output where applicable, leaving `taste-calibration` no-file by design.
+- [x] Update hygiene/bootstrap docs awareness for `alignment/`.
+- [x] Run targeted checks and repository validation.
+- [x] Record review, commit, and push intended changes on `master`.
+
+**Files:**
+- `global/codex/{concept-exploration,feature-interview,ui-interview,ux-variations,prototype,consolidate-variations,spec-interview}/SKILL.md`
+- `global/claude/{concept-exploration,feature-interview,ui-interview,ux-variations,prototype,consolidate-variations,spec-interview}/SKILL.md`
+- `packs/alignment-loop/{codex,claude}/destination-doc/SKILL.md`
+- `global/codex/hygiene/SKILL.md`
+- `global/codex/hygiene/references/documentation-templates.md`
+- `global/codex/bootstrap-repo/SKILL.md`
+- `tasks/roadmap.md` and `tasks/todo.md`
+
+### Review
+
+- Mirrored alignment-page contracts now write review HTML to root `alignment/{skill}-{topic}.html`, archive replaced pages under `docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/...`, and require reporting whether the browser-open attempt succeeded or was blocked.
+- Added Codex `$prototype` parity at `global/codex/prototype/SKILL.md` with a Codex OpenAI manifest. Both prototype mirrors now attempt to open `prototypes/{topic}/index.html` after writing the hub and route to variant-evaluation UAT.
+- Added Codex `packs/alignment-loop/codex/destination-doc/SKILL.md` and updated the Claude destination-doc contract so durable alignment includes `alignment/destination-doc-[topic].html`; `taste-calibration` remains no-file by design.
+- Updated mirrored hygiene docs and bootstrap reset contracts so root `alignment/` is an allowed generated browser-review artifact root and is archived during explicit reset mode.
+- Refreshed Skills Showcase generated data and the benchmark results matrix.
+- Validation passed: no active `docs/alignment` references outside archived benchmark run output; intended alignment skills mention `alignment/*.html` and browser-open reporting; Codex/Claude prototype mirrors exist; `pnpm --dir tests test -- --grep "bench-setups|tier23|frontmatter|skills-reference"`; `pnpm --dir tests bench:coverage`; `git diff --check`; `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken`; `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`; `/opt/homebrew/bin/bash ./scripts/skill-next-step-routing.sh --missing`.
+- Note: `scripts/validate-skills-showcase-data.sh` regenerated expected generated assets and reported them as stale before commit; rerun after commit should validate a clean tree.
+- Recommended next command: `$uat --variant-evaluation` after prototype variants are built.
 
 ## Current Task — Concept Bootstrap Gate and Scaffold Placement 2026-05-21
 
