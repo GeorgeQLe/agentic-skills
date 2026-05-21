@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-05-20 — Phase 43, Step 43.1: Audit route assertion failures
+
+- Audited all 37 global skill fixtures for route assertion failures.
+- Found 32 of 37 fixtures missing explicit route guidance in their prompts — root cause of 0% pass rate across Tier 2 global skills.
+- 5 fixtures already have explicit route text (affected, analyze-sessions, desk-flip, icon-handler, update-packages).
+- Cataloged 16 pack-family domain criteria patterns (quality-only, not hard assertions).
+- Wrote full audit table in `tasks/todo.md` under Phase 43.
+
 ## 2026-05-20 — Batch 41.5 Group 1: Pack-local skill benchmarks
 
 - Benchmarked 10 pack-local skills with both agents (3 runs each): `assumption-tracker`, `benchmark-agent-review`, `brainstorm-kanban`, `burn-rate`, `clone-spec-store`, `cohort-review`, `competitive-analysis`, `content-programming`, `conversion-map`, `creator-evidence-schema`.

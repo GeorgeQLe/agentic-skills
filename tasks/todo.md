@@ -125,6 +125,56 @@ These are **quality criteria (not hard assertions)**, so they don't cause test f
 - [ ] Step 43.3: Re-run a sample of fixed fixtures to validate route assertions pass
 - [ ] Step 43.4: (Optional) Calibrate pack-local domain quality criteria if score improvement is desired
 
+## Current Task — Step 43.2: Add Explicit Route Guidance to 32 Global Fixture Prompts 2026-05-20
+
+**Goal:** Add explicit route guidance text to all 32 global fixture prompts that are missing it, so agents produce the expected route string and pass the `assertRecommendedRoute` assertion.
+
+**Plan:**
+- [ ] Edit `tests/layer4/setups/tier23-global-workflows.setup.ts` — for each of the 32 skills listed in the Step 43.1 audit table, append route guidance to the prompt string.
+- [ ] The pattern is: append ` End with \`Recommended next command: <route>\`.` to the end of each prompt, where `<route>` is the skill's `recommendedRoute` value.
+- [ ] Run `pnpm --dir tests typecheck` to confirm no type errors introduced.
+- [ ] Run `pnpm --dir tests test -- --run tests/layer1/bench-setups.test.ts` to confirm layer1 fixture tests still pass.
+- [ ] Mark Step 43.2 complete and commit.
+
+**Technical details:**
+- File to modify: `tests/layer4/setups/tier23-global-workflows.setup.ts` (lines 366-895)
+- The 32 prompts all end with phrases like "...and Next command." or "...and Next command. Do not install dependencies."
+- For skills with trailing instructions after "Next command" (e.g., `scaffold` has "Do not install dependencies."), place the route guidance before the trailing constraint.
+- Use the Codex-style `$` prefix for all single-route skills (matching their `recommendedRoute` value).
+- Do NOT modify the 5 skills that already have explicit route text (affected, analyze-sessions, desk-flip, icon-handler, update-packages).
+
+**Route mapping (from Step 43.1 audit):**
+
+| Route | Skills (count) |
+|-------|---------------|
+| `$run` | bootstrap-repo, codebase-status, create-agentic-skill, dead-code, debug, decommission, expert-review, guide, handoff, hygiene, migrate, mono-plan, pack, provision-agentic-config, research-roadmap, scaffold, skills, slim-audit, spec-drift, trace, ui-interview (21) |
+| `$ship` | branch-lifecycle, create-local-skill, reconcile-dev-docs, regression-check (4) |
+| `$feature-interview` | brainstorm (1) |
+| `$spec-interview` | concept-exploration (1) |
+| `$uat` | dogfood (1) |
+| `$uat --variant-evaluation` | prototype (1) |
+| `$consolidate-variations` | uat (1) |
+| `$research-roadmap --post-prototype` | consolidate-variations (1) |
+| `$ui-interview` | ux-variations (1) |
+
+**Files to modify:**
+- `tests/layer4/setups/tier23-global-workflows.setup.ts` — 32 prompt string edits
+- `tasks/todo.md` — progress tracking
+
+### Execution Profile
+- **Parallel mode:** serial
+- **Integration owner:** main agent
+- **Conflict risk:** low (single fixture file, mechanical edits)
+
+### Acceptance criteria
+- All 32 prompts include explicit route guidance matching their `recommendedRoute` value.
+- `pnpm --dir tests typecheck` passes.
+- Layer1 bench-setups tests pass.
+- Step 43.2 checked off in `tasks/todo.md`.
+
+### Ship-one-step handoff
+Implement only this step, validate it, then run `/ship` when done.
+
 ## Deferred Task — Batch 41.5 Group 2: Pack-Local Skill Benchmarks 2026-05-20
 
 **Goal:** Run the second group of ~10 pack-local skills with both agents (3 runs each), continuing alphabetically through pack families.
