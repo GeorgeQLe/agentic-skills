@@ -10,6 +10,8 @@ argument-hint: <type> <name> (e.g. "package utils" or "app admin-dashboard")
 
 Generate a new package or app in the monorepo that follows the project's established conventions and patterns.
 
+For product/app workflows, `/scaffold` is normally downstream of research, prototype consolidation, production specification, roadmap, and phase planning. Use it when `/roadmap` or `/plan-phase` identifies that the next implementation step needs a new app/package root. Do not route from `/concept-exploration`, `/bootstrap-repo`, `/icp`, `/competitive-analysis`, `/journey-map`, `/ux-variations`, or `/ui-interview` directly to `/scaffold` unless the user explicitly asks to create a minimal shell first.
+
 ## Process
 
 1. **Parse the input** from `$ARGUMENTS`:
@@ -71,6 +73,12 @@ Generate a new package or app in the monorepo that follows the project's establi
 ### Next Steps
 - What the user should do next (add dependencies, implement features, wire up routes, etc.)
 
+## Next-Step Routing
+
+- If the scaffold was created as part of an active roadmap/phase, recommend `/run` to continue the current implementation step.
+- If the user explicitly requested an early shell before research, keep the next route on the research-first product workflow: `/icp` when the concept is ready and business-discovery is enabled, otherwise `/pack install business-discovery`.
+- If the scaffold is for a non-product package with no pending roadmap item, recommend `/roadmap` or `/plan-phase` only when implementation sequencing is missing.
+
 ## Constraints
 - Always use an existing package/app as the reference template — do not invent conventions.
 - Do not install domain packs globally; use project-local pack symlinks.
@@ -79,6 +87,7 @@ Generate a new package or app in the monorepo that follows the project's establi
 - Do not add unnecessary boilerplate — keep the scaffold minimal and consistent with existing packages.
 - If the project does not appear to be a monorepo, inform the user and ask how to proceed.
 - Do not install external dependencies beyond what the template uses.
+- Do not treat scaffolding as product validation. It creates structure only; ICP, market, journey, UX, UI, and prototype decisions belong to their upstream skills.
 
 
 ## Default Shipping Contract

@@ -15,6 +15,7 @@ Use this skill when the user has a half-formed idea and needs it cleaned up enou
 1. **Resolve context**
    - Read `.agents/project.json` if it exists.
    - Read README, CLAUDE.md, AGENTS.md, existing `research/`, `specs/`, and task docs when present.
+   - Determine whether the current directory is already a bootstrapped project. Treat it as bootstrapped when it has meaningful `README.md` plus `AGENTS.md` or `CLAUDE.md`; treat it as unbootstrapped when those are missing, placeholder-only, or the user is describing an idea outside any project repo.
    - If `$ARGUMENTS` contains a rough idea, use it as the starting draft.
    - If `$ARGUMENTS` names an app that matches `research/{app}/`, use app-scoped output paths. Otherwise use top-level `research/`.
    - Determine the concept identity and a normalized concept slug as soon as either is known from `$ARGUMENTS`, repo context, or the interview. Normalize by lowercasing, removing URL suffix noise, replacing non-alphanumeric runs with `-`, trimming leading/trailing `-`, and dropping only project-wide brand prefixes when the remaining word is the actual scoped concept (for example, `poketo.work` -> `work`; `Poketo Core` -> `poketo-core`).
@@ -82,6 +83,7 @@ The `## ICP Readiness` section must state whether the concept is ready for `/icp
 
 The `## Next Steps` section must recommend exactly one primary command:
 
+- If the concept is ready but the repo is not bootstrapped: `/bootstrap-repo <high-level concept summary>`. Bootstrap owns README, agent workflow docs, project setup, and any reset/archive work before research starts.
 - If the concept appears to be a business app or user-facing product and the business discovery lane is not enabled: `/pack install business-discovery`
 - If the concept already has ICP/market evidence but needs journey, onboarding, conversion, or retention planning: `/pack install customer-lifecycle`
 - If `business-discovery` or the compatibility `business-app` alias is enabled: `/icp`
@@ -97,6 +99,7 @@ After writing deliverables, build a custom HTML alignment page at `docs/alignmen
 
 - Keep the skill short and pre-research.
 - Do not write specs, UX variants, UI specs, roadmap phases, or implementation tasks.
+- Do not recommend `/scaffold` unless the user explicitly asks to create a package/app shell before research; normal product flow scaffolds after research, prototype consolidation, spec, roadmap, and phase planning identify the first implementation target.
 - Do not update `tasks/todo.md`.
 - New files do not need archive snapshots. Before replacing an existing concept brief, including slugged briefs, archive it to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-relative-path>`.
 
