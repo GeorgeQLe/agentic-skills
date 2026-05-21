@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-05-21 — Fresh product resets need market alignment before UI alignment
+
+- A reset/bootstrap workflow routed product restarts from the high-level concept directly to `$ui-interview --requirements-only`, skipping ICP, competitive landscape, and journey mapping.
+- When old docs/research are intentionally archived, the next active step should rebuild market and lifecycle alignment before UI requirements: `$icp` -> `$competitive-analysis` -> `$journey-map` -> `$ux-variations` -> `$ui-interview` -> prototype work.
+- If the required research packs are not enabled in the fresh repo, route first to `$pack install business-discovery` and `$pack install customer-lifecycle`, then continue the research sequence.
+- UI requirements should be downstream of ICP/journey evidence for product/app restarts, not the first default artifact after bootstrap.
+
 ## 2026-05-21 — Reset mode should preserve concept, not stale docs
 
 - A reset/bootstrap workflow initially preserved valid salvage docs as active files, but the user clarified that old docs should be archived too so research starts from scratch.

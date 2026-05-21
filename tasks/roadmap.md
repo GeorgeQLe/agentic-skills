@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Update: Bootstrap Product Reset Research-First Routing 2026-05-21
+
+**Goal:** Route product/app reset bootstraps from the high-level concept through market and lifecycle alignment before UX/UI/prototype work.
+
+**Acceptance Criteria:**
+- [x] Mirrored `bootstrap-repo` contracts recommend `$icp`/`/icp` first for product/app resets when required packs are available.
+- [x] If `business-discovery` or `customer-lifecycle` packs are not enabled, bootstrap recommends installing/enabling those packs before the research sequence.
+- [x] Mirrored `desk-flip` contracts describe the research-first sequence from high-level concept: ICP -> competitive analysis -> journey map -> UX variations -> UI interview -> prototype.
+- [x] Tier 2/3 fixture expectations validate research-first routing rather than direct UI requirements routing.
+- [ ] Validation passes, review notes are recorded, and intended changes are committed and pushed on `master`.
+
+**Result:** Updated mirrored `bootstrap-repo` and `desk-flip` contracts on 2026-05-21 so product/app resets route from high-level concept into research-first alignment: ICP, competitive analysis, journey map, UX variations, UI interview, prototype/variant build, UAT, consolidation, and post-prototype planning. Added pack-install fallback language for `business-discovery` and `customer-lifecycle`. Tier 2/3 fixtures now expect `$icp` routing and ICP/competitive/journey language instead of direct UI requirements routing. Focused validation passed.
+
 ## Current Targeted Update: Bootstrap Reset Archives Docs and Preserves Concept Only 2026-05-21
 
 **Goal:** Tighten `bootstrap-repo --reset-existing` so stale docs/research/specs are archived with old code, leaving only the high-level concept as the active seed for fresh alignment and research.

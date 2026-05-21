@@ -8,6 +8,7 @@
 
 ## Priority Task Queue
 
+- [x] `$targeted-skill-builder bootstrap-repo product reset research-first routing` — route product resets from high-level concept to ICP/competitive/journey before UX/UI/prototype work.
 - [x] `$targeted-skill-builder bootstrap-repo archive docs preserve concept only` — tighten reset mode so old docs/research/specs are archived and active root keeps only the high-level concept. (Shipped in `66e96c0`.)
 - [x] `$targeted-skill-builder desk-flip reset/archive alignment-first routing` — update desk-flip/bootstrap handoff so stale existing codebases are archived before bootstrap, then route to UI/content alignment before prototype work.
 - [x] `$targeted-skill-builder concept-exploration slugged briefs` — update mirrored `concept-exploration` skills so known or emerging concept identities write slugged research briefs instead of conflating related concepts in generic `concept-brief.md`.
@@ -15,6 +16,39 @@
 - [ ] `$run` — Resume Phase 41 Batch 41.3 re-benchmarks: re-run the 33 Tier 2 global skills that were benchmarked pre-fixture-remediation with near-zero pass rates (Phase 43 added route guidance to all 32 fixture prompts and increased budgets). Current graded count: 69 unique skills / 158 total. Batch 41.5 pack-local groups also have remaining families.
 - [ ] Review `tasks/recurring-todo.md`: 2 unchecked recurring items — promote only if due and requiring execution work.
 - [ ] `$research-roadmap` — All 43 roadmap phases are complete. Run documentation health scan after Phase 41 remaining batches finish.
+
+## Current Task — Bootstrap Product Reset Research-First Routing 2026-05-21
+
+**Goal:** Change fresh product/app reset routing so the high-level concept goes through market and lifecycle alignment before UI alignment and prototype work.
+
+**Evidence:**
+- User correction: after archiving old docs, defaulting to `ui-interview` still skips ICP, competitive analysis, and journey mapping.
+- Current `research-roadmap` dependency order already places `$icp`, `$competitive-analysis`, and `$journey-map` before `$ux-variations`, `$ui-interview`, and prototype.
+- `icp` and `competitive-analysis` live in the `business-discovery` pack; `journey-map` lives in the `customer-lifecycle` pack, so bootstrap routing needs a pack-install fallback.
+
+- [x] Update mirrored `bootstrap-repo` post-reset route to recommend research-first alignment for product/app restarts.
+- [x] Update mirrored `desk-flip` handoff to describe the same sequence from high-level concept.
+- [x] Update Tier 2/3 fixture expectations away from direct `ui-interview`.
+- [x] Run focused validation and record results.
+- [ ] Commit and push intended changes on `master`.
+
+**Files:**
+- `global/codex/bootstrap-repo/SKILL.md`
+- `global/claude/bootstrap-repo/SKILL.md`
+- `global/codex/desk-flip/SKILL.md`
+- `global/claude/desk-flip/SKILL.md`
+- `tests/layer4/setups/tier23-global-workflows.setup.ts`
+- `tasks/lessons.md`, `tasks/roadmap.md`, and `tasks/todo.md`
+
+### Review
+
+- Changed mirrored `bootstrap-repo` product/app reset routing from direct UI requirements to research-first alignment.
+- New default sequence from a high-level concept: `$icp` -> `$competitive-analysis` -> `$journey-map` -> `$ux-variations` -> `$ui-interview` -> prototype/variant build -> `$uat --variant-evaluation` -> `$consolidate-variations` -> post-prototype planning.
+- Added pack fallback language: install/enable `business-discovery` before `$icp` and `customer-lifecycle` before `$journey-map` when missing.
+- Changed mirrored `desk-flip` handoff wording and Tier 2/3 fixtures to expect ICP/competitive/journey language rather than direct `ui-interview` routing.
+- Validation passed: `pnpm --dir tests verify --skill bootstrap-repo`; `pnpm --dir tests verify --skill desk-flip`; `pnpm --dir tests bench:coverage`; `/opt/homebrew/bin/bash ./scripts/skill-next-step-routing.sh --missing`; `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken`; `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`; `node scripts/generate-skills-showcase-data.mjs`; `scripts/validate-skills-showcase-data.sh`; `git diff --check`.
+- Skipped/limited: focused verifies skipped layer2 because no target-specific layer2 tests match these skills.
+- Next command: `$icp <high-level concept>` or `$pack install business-discovery` if the pack is not enabled.
 
 ## Current Task — Batch 41.3 Re-benchmarks Group 2: Re-run Tier 2 Global Skills Post-Fixture-Remediation 2026-05-21
 

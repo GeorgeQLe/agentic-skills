@@ -67,7 +67,8 @@ This skill always desk-flips. If the user invoked it, the decision to restart is
    - Show the user a terminal summary of the report.
    - Recommend the appropriate `$bootstrap-repo` command with the recommended bootstrap input from the report.
    - Do not create the new repo or run `$bootstrap-repo`; the user does this.
-   - After bootstrap, route product/app restarts into the alignment-first workflow using the high-level concept seed as input: `$ui-interview --requirements-only` to define the content/data/action contract, `$ux-variations --layout-mode` to explore alternatives, `$run` or the applicable prototype-building step to build variants, `$uat --variant-evaluation`, then `$consolidate-variations` before `$spec-interview` or `$roadmap`.
+   - After bootstrap, route product/app restarts into the research-first alignment workflow using the high-level concept seed as input: `$icp` to define who this is for, `$competitive-analysis` to map the market, `$journey-map` to map lifecycle and task flow, `$ux-variations` to explore experience directions, `$ui-interview` to specify interface details, then prototype work, `$uat --variant-evaluation`, and `$consolidate-variations` before `$spec-interview` or `$roadmap`.
+   - If the business-discovery or customer-lifecycle packs are not enabled in the fresh repo, recommend `$pack install business-discovery` and `$pack install customer-lifecycle` before the research sequence.
 
 ## Output
 
@@ -95,4 +96,4 @@ Desk-flipped: <project name>
 
 - This skill does not commit or push. The only side effect is `desk-flip-report.md` written to the project root.
 - **Default next-step routing:** when reporting completion, include the two-line pair `**Next work:** <specific task>` and `**Recommended next command:** $bootstrap-repo --reset-existing <brief>` for in-place restarts, or `$bootstrap-repo <brief>` only when a separate new repo is explicitly the right path.
-- **Post-bootstrap route:** include in the report that the fresh project should proceed from the high-level concept seed to `$ui-interview --requirements-only` before prototype/implementation work.
+- **Post-bootstrap route:** include in the report that the fresh project should proceed from the high-level concept seed to `$icp`, then `$competitive-analysis`, `$journey-map`, `$ux-variations`, `$ui-interview`, and prototype work. Mention `$pack install business-discovery` or `$pack install customer-lifecycle` first if those packs are not enabled.
