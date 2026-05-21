@@ -6,7 +6,51 @@
 **Total phases:** 42
 **Last completed phase:** Phase 42 — Workflow Persistent Transcript Refinement
 
-## Current Task — Batch 41.5 Group 1: Pack-Local Skill Benchmarks 2026-05-20
+## Current Task — Batch 41.5 Group 2: Pack-Local Skill Benchmarks 2026-05-20
+
+**Goal:** Run the second group of ~10 pack-local skills with both agents (3 runs each), continuing alphabetically through pack families.
+
+**Plan:**
+- [ ] For each skill: run `pnpm verify --skill <skill>`, then `pnpm bench --skill <skill> --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [ ] Write `benchmark/test-<skill>-2026-05-20.md` with verify evidence, results, raw session paths.
+- [ ] After the group: refresh generated data, validate, commit and push.
+- [ ] Pause if any shared harness failure pattern emerges beyond the known quality rubric calibration gaps.
+
+**Context from Batch 41.5 Group 1:**
+- 112 graded + 17 incomplete rows currently in the matrix (10 pack-local skills benchmarked in Group 1).
+- All 10 Group 1 skills passed 100% hard assertions for both agents — significantly better than tier23 global skills.
+- Common quality pattern: `pack-workflow-traits` and `pack-fixture-evidence` are the weakest criteria. These are quality rubric calibration items, not skill-contract failures. Record but do not fix in this batch.
+- `--timeout` flag is NOT supported by `bench.ts` — do not pass it.
+- Pack-local skills use `tests/layer4/setups/packs/pack-workflows.setup.ts` for setup.
+- One infrastructure block in Group 1 (Codex `competitive-analysis` connection failure) — monitor but not a pattern.
+
+**Candidate second group (next ~10 alphabetically):**
+`creator-metrics-review`, `creator-platform-capability-matrix`, `creator-positioning`, `creator-presence-dossier`, `customer-feedback`, `destination-doc`, `devtool-adoption`, `devtool-docs-audit`, `devtool-dx-journey`, `devtool-integration-map`.
+
+**Files to modify:**
+- `benchmark/test-<skill>-2026-05-20.md` — one per benchmarked skill (up to 10 new files)
+- `docs/benchmark-results-matrix.md` — regenerated
+- `docs/skills-showcase/assets/skills-data.js` — regenerated
+- `apps/skills-showcase/public/assets/skills-data.js` — regenerated
+- `docs/skills-showcase/assets/github-proof-data.js` — regenerated
+- `apps/skills-showcase/public/assets/github-proof-data.js` — regenerated
+- `tasks/todo.md` — progress tracking
+- `tasks/history.md` — session record
+
+### Execution Profile
+- **Parallel mode:** serial
+- **Integration owner:** main agent
+- **Conflict risk:** medium (benchmark runner capacity, generated data, task docs are shared resources)
+
+### Acceptance criteria
+- Second group of ~10 pack-local skills benchmarked with both agents (3 runs each).
+- Reports written and generated data refreshed.
+- No shared harness failure patterns unaddressed beyond known quality rubric calibration gaps.
+
+### Ship-one-step handoff
+Implement only this step, validate it, then run `/ship` when done.
+
+## Completed Task — Batch 41.5 Group 1: Pack-Local Skill Benchmarks 2026-05-20
 
 **Goal:** Run the first group of pack-local skills with both agents (3 runs each), starting packs that feed public showcase/workflow proof. Batch 41.4 (git-fixture skills `commit-and-push-by-feature`, `sync`) is deferred pending explicit user permission for disposable GitHub fixture operations.
 
