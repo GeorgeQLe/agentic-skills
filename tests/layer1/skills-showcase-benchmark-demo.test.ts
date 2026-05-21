@@ -63,7 +63,7 @@ describe("skills showcase benchmark demos", () => {
       (skill) => skill.name === "content-programming" && skill.platform === "codex",
     );
 
-    expect(contentProgramming?.benchmarkEvidence?.reportPath).toBe("benchmark/test-content-programming-2026-05-20.md");
+    expect(contentProgramming?.benchmarkEvidence?.reportPath).toBe("benchmark/test-content-programming-2026-05-21.md");
     expect(contentProgramming?.benchmarkEvidence?.agents.map((agent) => agent.agent)).toEqual(["claude", "codex"]);
     expect(contentProgramming?.benchmarkEvidence?.quality?.map((entry) => entry.agent)).toEqual(["claude", "codex"]);
     expect(contentProgramming?.benchmarkEvidence?.subjectiveReview).toMatchObject({
