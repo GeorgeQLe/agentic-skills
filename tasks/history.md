@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-05-21 — Ship Step 43.6 re-benchmark results and plan Batch 41.3 re-benchmarks
+
+- Shipped Step 43.6 benchmark reports, refreshed showcase data and benchmark matrix.
+- Fixed stale showcase demo test (`content-programming` date 2026-05-14 → 2026-05-21).
+- Checked off Phase 43 acceptance criteria and marked phase complete in roadmap.
+- Planned Batch 41.3 Re-benchmarks Group 1: 11 Tier 2 global skills to re-run post-fixture-remediation.
+
 ## 2026-05-21 — Phase 43 complete: Benchmark Fixture Remediation
 
 - Phase 43 all 7 steps complete. Archived to `tasks/phases/phase-43.md`.
@@ -2728,5 +2735,6 @@ Resolved all 10 findings from `/expert-review`:
 
 - Refreshed the Skills Showcase GitHub proof assets and benchmark results matrix after the Phase 43 completion commits.
 - Corrected stale generated rows for the latest `branch-lifecycle` Claude report and `run` Codex blocked/incomplete report.
+- Stabilized the GitHub proof generator by excluding volatile public GitHub `pushed_at` metadata from committed proof data.
 - Verified generated data freshness, benchmark coverage, focused layer1 showcase benchmark tests, Skills Showcase production build, and whitespace checks.
 - Pushed the result directly on `master`.

@@ -12,14 +12,78 @@
 - [ ] Review `tasks/recurring-todo.md`: 2 unchecked recurring items — promote only if due and requiring execution work.
 - [ ] `/research-roadmap` — All 43 roadmap phases are complete. Run documentation health scan after Phase 41 remaining batches finish.
 
+## Current Task — Batch 41.3 Re-benchmarks Group 1: Re-run Tier 2 Global Skills Post-Fixture-Remediation 2026-05-21
+
+**Goal:** Re-benchmark the first 11 Tier 2 global skills that were benchmarked pre-fixture-remediation (Phase 43 Step 43.2 added route guidance to all 32 fixture prompts). These skills previously scored 0% or near-0% pass rates due to missing route guidance. Re-running validates the fixture fixes lift pass rates.
+
+**Background:**
+- Batch 41.3 Groups 1-3 benchmarked all 33 Tier 2 global skills on 2026-05-20. Claude scored 0% across all skills; Codex had near-zero pass rates with a few exceptions.
+- Phase 43 Step 43.2 added `End with \`Recommended next command: $<route>\`.` to all 32 fixture prompts missing route guidance.
+- Phase 43 Step 43.3 validated the fix with a sample of 5 re-benchmarked skills — all improved to 100% pass rate.
+- This batch re-runs the remaining un-re-benchmarked skills to update their reports and graded scores.
+
+**Selected skills (Group 1 — first 11 alphabetically):**
+1. `bootstrap-repo`
+2. `brainstorm`
+3. `branch-lifecycle`
+4. `codebase-status`
+5. `concept-exploration`
+6. `consolidate-variations`
+7. `create-agentic-skill`
+8. `create-local-skill`
+9. `dead-code`
+10. `debug`
+11. `decommission`
+
+**Plan:**
+- [ ] For each of the 11 skills: run `pnpm verify --skill <skill>`, then `pnpm bench --skill <skill> --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [ ] Write dated `benchmark/test-<skill>-2026-05-21.md` for each skill.
+- [ ] After all 11: refresh generated data and validate.
+- [ ] Commit and push.
+
+**Files:**
+- `benchmark/test-bootstrap-repo-2026-05-21.md` — updated benchmark report
+- `benchmark/test-brainstorm-2026-05-21.md` — updated benchmark report
+- `benchmark/test-branch-lifecycle-2026-05-21.md` — updated benchmark report
+- `benchmark/test-codebase-status-2026-05-21.md` — updated benchmark report
+- `benchmark/test-concept-exploration-2026-05-21.md` — updated benchmark report
+- `benchmark/test-consolidate-variations-2026-05-21.md` — updated benchmark report
+- `benchmark/test-create-agentic-skill-2026-05-21.md` — updated benchmark report
+- `benchmark/test-create-local-skill-2026-05-21.md` — updated benchmark report
+- `benchmark/test-dead-code-2026-05-21.md` — updated benchmark report
+- `benchmark/test-debug-2026-05-21.md` — updated benchmark report
+- `benchmark/test-decommission-2026-05-21.md` — updated benchmark report
+- `docs/benchmark-results-matrix.md` — regenerated
+- `docs/skills-showcase/assets/skills-data.js` — regenerated
+- `apps/skills-showcase/public/assets/skills-data.js` — regenerated
+
+### Execution Profile
+- **Parallel mode:** serial (each benchmark run is sequential)
+- **Integration owner:** main agent
+- **Conflict risk:** low (new/updated benchmark reports only)
+
+### Acceptance criteria
+- All 11 benchmark reports written with current-date results.
+- Pass rates improved from 0% baseline for majority of skills (route guidance fix).
+- No regressions in previously-passing quality scores.
+- Generated data refreshed and validated.
+
+### Ship-one-step handoff
+Implement only this step, validate it, then run `/ship` when done.
+
+**Next work:** Re-benchmark Batch 41.3 Group 1 (11 Tier 2 global skills post-fixture-remediation)
+**Recommended next command:** /run
+
+---
+
 ## Ship Review — 2026-05-21 Phase 43 Generated Data
 
-- Boundary: refreshed Skills Showcase generated proof data and benchmark matrix after Phase 43 completion; no skill-contract source changes in this ship payload.
-- Files shipped: `docs/benchmark-results-matrix.md`, `docs/skills-showcase/assets/github-proof-data.js`, and `apps/skills-showcase/public/assets/github-proof-data.js`.
+- Boundary: refreshed Skills Showcase generated proof data and benchmark matrix after Phase 43 completion; also stabilized the GitHub proof generator so committed data does not become stale after every repository push.
+- Files shipped: `scripts/generate-skills-showcase-github-data.mjs`, `docs/benchmark-results-matrix.md`, `docs/skills-showcase/assets/github-proof-data.js`, and `apps/skills-showcase/public/assets/github-proof-data.js`.
 - Validation passed: `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests test -- --run tests/layer1/skills-showcase-benchmark-demo.test.ts`; `pnpm --dir apps/skills-showcase build`; `git diff --check`.
 - Adversarial review: the first freshness check failed because generated GitHub proof metadata and benchmark matrix pointers were stale; rerunning the generators produced a stable validator pass before commit.
 - Correction enforcement: secret-handling remediation from the Neon token incident was already captured and shipped before this benchmark-data boundary; sanitized history was verified before this `$ship`.
-- Residual risk: GitHub proof metadata includes repository push timestamps, so it can change again after pushing this commit and may require a follow-up generated-data refresh.
+- Residual risk: public GitHub star/fork/open issue counts are still live enrichment fields; if they change between validation and ship, the validator can still require a generated-data refresh.
 - Rollback: revert the ship commit if the generated metadata needs to be restored.
 - Recommended next command: `/run`
 
