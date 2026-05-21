@@ -130,7 +130,7 @@ Use this item format in `tasks/manual-todo.md`:
 - Do not duplicate existing unchecked dogfood/manual tasks. Reference existing items when they already cover the same scenario.
 - Prefer evidence-backed owner/operator adoption scenarios over exhaustive coverage.
 - Keep dogfood and UAT separate: use `/dogfood` for owner/operator adoption into the builder's workflow; use `/uat` for target-user acceptance journeys.
-- If no credible user journey, story, spec, or product surface can be found, stop and recommend `/spec-interview`, `/journey-map`, or the relevant pack research skill.
+- If no credible user journey, story, spec, or product surface can be found, stop and recommend `/spec-interview`, `/journey-map`, or the relevant pack research skill. For `/journey-map` and other pack-based skills, apply the Pack Availability Guard — if the target skill's pack is not in `.agents/project.json` `enabled_packs`, recommend `/pack install <pack>` before the skill.
 
 ## Archive-First Replacement Policy
 

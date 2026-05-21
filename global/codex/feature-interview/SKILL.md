@@ -109,7 +109,7 @@ After writing deliverables, route tightly into the task pipeline:
 
 - If a new or updated spec is ready for sequencing, recommend `$roadmap` so it can extend/build the roadmap and seed `$plan-phase`.
 - If research or journey documentation changed but the spec is not ready, recommend the named research/design skill or `$feature-interview` follow-up with the remaining question.
-- If user-facing work still lacks journey, UX variation, or UI detail, recommend `$journey-map`, `$ux-variations`, or `$ui-interview` before `$roadmap`.
+- If user-facing work still lacks journey, UX variation, or UI detail, recommend `$journey-map`, `$ux-variations`, or `$ui-interview` before `$roadmap`. For these pack-based skills, apply the Pack Availability Guard — if the target skill's pack is not in `.agents/project.json` `enabled_packs`, recommend `$pack install <pack>` before the skill.
 - If the feature is already sequenced, recommend the concrete executor (`$plan-phase N`, `$run`, `$ship`, or `$guide`) rather than another interview.
 - If research is missing, recommend the named research skill and explain what evidence it must produce before returning to `$feature-interview` or `$roadmap`.
 - If the idea is duplicate or parked, recommend `$brainstorm` only when the user wants a different candidate; otherwise recommend the existing tracked work.

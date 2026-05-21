@@ -194,7 +194,7 @@ Order immediately actionable todo items so the user can complete documentation w
 8. Missing or stale roadmap/task docs.
 9. Reconciliation items when conflicting docs are detected.
 
-Within research items, use this dependency order when relevant:
+Within research items, use this dependency order when relevant. When emitting queued commands for pack-based skills, apply the Pack Availability Guard — if the target skill's pack is not in `.agents/project.json` `enabled_packs`, queue `/pack install <pack>` before the skill:
 
 ```
 /concept-exploration

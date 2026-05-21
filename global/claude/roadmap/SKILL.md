@@ -222,6 +222,8 @@ User-facing specs exist, but one or more required design-planning artifacts are 
 - `specs/ux-variationss-*.md` — run `/ux-variations` after journey/spec context to compare onboarding, workflow, sharing, return-use, and UI variants.
 - `specs/ui-*.md` — run `/ui-interview` after UX variation to lock buildable screen-level detail.
 
+For `/journey-map` (customer-lifecycle pack), `/ux-variations`, and `/ui-interview`, apply the Pack Availability Guard — if the target skill's pack is not in `.agents/project.json` `enabled_packs`, recommend `/pack install <pack>` before the skill.
+
 Only flag this for user-facing product work. Skip for pure backend, CLI, library, infrastructure, or internal automation specs unless they include a meaningful human workflow or interface.
 
 #### 12. Missing Roadmap (internal consistency fallback)
