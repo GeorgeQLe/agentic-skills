@@ -7,7 +7,7 @@ Install this pack when a project needs ICP discovery, enterprise buyer mapping, 
 Default flow:
 
 ```text
-icp -> competitive-analysis -> value-prop-canvas -> positioning -> lean-canvas
+icp -> competitive-analysis -> journey-map -> value-prop-canvas -> positioning -> lean-canvas
 ```
 
 Skills:

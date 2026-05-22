@@ -29,6 +29,19 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Updated on 2026-05-22. Approval-gated durable-output skills now build an `alignment/{skill}-{topic}.html` preview before asking for canonical artifact approval, ask the user to review, question, or request adjustments, and suppress downstream routing until approved files are written. Non-approval durable-output runs keep the existing alignment-page behavior. Generated Skills Showcase metadata was refreshed; focused validation and post-commit showcase validation passed.
 
+## Current Targeted Update: Competitive Analysis Journey-First Routing 2026-05-22
+
+**Goal:** Align business-discovery routing with the current alignment-first, prototype-first product workflow by sending standard competitive-analysis output to journey mapping before value-prop-canvas when both are missing.
+
+**Acceptance Criteria:**
+- [x] User claim is validated against mirrored skill contracts, route-contract docs, canonical workflow docs, and recent git history.
+- [x] Mirrored competitive-analysis contracts recommend `$journey-map` or `/journey-map` before value-prop-canvas in standard mode when journey context is missing.
+- [x] Canonical workflow docs and business-discovery pack flow no longer place value-prop-canvas before journey-map in the main product discovery sequence.
+- [x] Focused route tests cover the competitive-analysis standard-mode ordering.
+- [ ] Generated Skills Showcase metadata is refreshed if needed, validation passes, review notes are recorded, and intended changes are committed and pushed on `master`.
+
+**Result:** Updated on 2026-05-22. The user's hypothesis was confirmed: standard competitive-analysis still routed to value-prop-canvas before journey-map in mirrored contracts and canonical docs. The route now prefers journey mapping before value-prop work when journey context is missing, and the canonical business workflow now follows concept -> ICP -> competitive analysis -> journey map -> value-prop-canvas -> positioning -> lean canvas -> prototype path. Focused validation passed; final clean-tree validation will run after commit.
+
 ## Current Targeted Update: Alignment HTML Output Root 2026-05-21
 
 **Goal:** Move alignment-first and prototype-first review HTML artifacts to root `alignment/`, archive replaced pages under `docs/history/archive/`, restore Codex `$prototype` parity, and make browser-opening best-effort but explicit.

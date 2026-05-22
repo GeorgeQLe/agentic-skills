@@ -318,10 +318,10 @@ If you are used to this Claude Code rhythm:
 2. `$pack install business-discovery` for business/product concepts
 3. `$icp`
 4. `$competitive-analysis`
-5. `$value-prop-canvas`
-6. `$positioning`
-7. `$lean-canvas`
-8. `$journey-map`
+5. `$journey-map`
+6. `$value-prop-canvas`
+7. `$positioning`
+8. `$lean-canvas`
 9. `$hook-model` (consumer/PLG; skip to `$metrics` for B2B)
 10. `$metrics`
 11. `$monetization`
@@ -348,10 +348,10 @@ The closest Codex translation is:
 2. `$pack install business-discovery` for business/product concepts
 3. `$icp`
 4. `$competitive-analysis`
-5. `$value-prop-canvas`
-6. `$positioning`
-7. `$lean-canvas`
-8. `$journey-map`
+5. `$journey-map`
+6. `$value-prop-canvas`
+7. `$positioning`
+8. `$lean-canvas`
 9. `$hook-model` (consumer/PLG; skip to `$metrics` for B2B)
 10. `$metrics`
 11. `$monetization`

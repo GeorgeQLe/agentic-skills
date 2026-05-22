@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-05-22 — Competitive analysis should route to journey before value prop in prototype-first product flow
+
+- A legacy business-discovery sequence routed standard competitive analysis to `value-prop-canvas` before `journey-map`, even after the product restart workflow had moved to ICP -> competitive analysis -> journey map -> UX/UI/prototype.
+- In an alignment-first, prototype-first product workflow, competitive gaps need customer/user journey placement before solution-value mapping; otherwise value-prop-canvas can optimize abstract claims before the path to aha, conversion, and retention is understood.
+- When changing canonical sequence order, update mirrored skill contracts, pack flow docs, workflow docs, route-contract summaries, generated showcase data, and focused route tests together.
+- Treat older canonical workflow reports as executable routing evidence; stale summary docs can reintroduce old ordering even after individual skill contracts are fixed.
+
 ## 2026-05-22 — Approval-gated research needs alignment preview before approval
 
 - A repo-wide alignment-page contract made durable output skills create `alignment/*.html` only after writing or updating canonical deliverables, but many research skills stop for approval before those writes.

@@ -91,8 +91,8 @@ Only after user validates, write the output files.
 
 **Standard mode next steps:** `## Next Steps` section with a **Recommended** item and **Other options** (2–4 alternatives). Choose the recommended item by the first matching condition:
 
-1. IF no `research/value-prop.md`: `$value-prop-canvas` — validate solution-customer fit using competitive gaps to sharpen the value map
-2. IF no `research/journey-map.md`: `$journey-map` — map the customer and user journey before spec decisions, using competitive gaps as inspiration
+1. IF no `research/journey-map.md`: `$journey-map` — map the customer and user journey before solution-value decisions, using competitive gaps as inspiration
+2. IF no `research/value-prop.md`: `$value-prop-canvas` — validate solution-customer fit using journey-placed competitive gaps to sharpen the value map
 3. IF no `specs/` directory or it's empty: `$spec-interview [top journey-backed market gap or positioning opportunity]` — spec the strongest opportunity after journey context exists
 4. IF no `research/gtm.md`: `$gtm` — build go-to-market plan leveraging competitive gaps
 5. IF codebase exists and no `research/mvp-gap.md`: `$mvp-gap` — check if the codebase exploits the gaps found

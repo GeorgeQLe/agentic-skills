@@ -172,10 +172,10 @@ Claude:
 /pack
 /icp
 /competitive-analysis
+/journey-map
 /value-prop-canvas
 /positioning
 /lean-canvas
-/journey-map
 /hook-model           # consumer/PLG; skip to /metrics for B2B
 /metrics
 /monetization
@@ -203,10 +203,10 @@ $concept-exploration
 $pack
 $icp
 $competitive-analysis
+$journey-map
 $value-prop-canvas
 $positioning
 $lean-canvas
-$journey-map
 $hook-model           # consumer/PLG; skip to $metrics for B2B
 $metrics
 $monetization
@@ -234,10 +234,10 @@ Hybrid:
 scripts/pack.sh set-mode hybrid
 /icp
 /competitive-analysis
+/journey-map
 /value-prop-canvas
 /positioning
 /lean-canvas
-/journey-map
 /hook-model (consumer/PLG) or skip to /metrics (B2B)
 /metrics
 /monetization
@@ -261,7 +261,7 @@ Canonical behavior:
 
 1. `concept-exploration` turns the raw idea into `research/concept-brief.md`.
 2. `pack` designates the project type and installs local pack skills. For business/product concepts, install `business-discovery`.
-3. Business-app research runs `icp`, `competitive-analysis`, `value-prop-canvas`, `positioning`, `lean-canvas`, then `journey-map` (with optional `hook-model` for consumer/PLG), followed by `metrics`, `monetization`, `gtm`, and `growth-model` so the customer lifecycle and business model are known before specs.
+3. Business-app research runs `icp`, `competitive-analysis`, `journey-map`, `value-prop-canvas`, `positioning`, then `lean-canvas` (with optional `hook-model` for consumer/PLG), followed by `metrics`, `monetization`, `gtm`, and `growth-model` so the customer lifecycle and business model are known before specs.
 4. For user-facing work, `ux-variations` compares experience directions and `ui-interview` locks buildable interface detail per variation.
 5. `prototype` builds tangible, runnable prototypes from the UX variation and UI specs.
 6. `uat --variant-evaluation` validates built variants with acceptance criteria and evidence capture.
@@ -611,7 +611,7 @@ Am I switching sessions or CLIs?
 The canonical workflow is now:
 
 ```text
-concept-exploration -> pack -> icp -> competitive-analysis -> value-prop-canvas -> positioning -> lean-canvas -> journey-map -> hook-model -> metrics -> monetization -> gtm -> growth-model -> ux-variations -> ui-interview -> prototype -> uat --variant-evaluation -> consolidate-variations -> research-roadmap --post-prototype -> spec-interview -> research-roadmap --post-spec -> roadmap -> plan-phase -> run/delegate -> ship -> ship-end -> pmf-assessment
+concept-exploration -> pack -> icp -> competitive-analysis -> journey-map -> value-prop-canvas -> positioning -> lean-canvas -> hook-model -> metrics -> monetization -> gtm -> growth-model -> ux-variations -> ui-interview -> prototype -> uat --variant-evaluation -> consolidate-variations -> research-roadmap --post-prototype -> spec-interview -> research-roadmap --post-spec -> roadmap -> plan-phase -> run/delegate -> ship -> ship-end -> pmf-assessment
 ```
 
 For UI layout variation work, the variant-specific path is:

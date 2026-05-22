@@ -195,8 +195,8 @@ Before writing, check which files exist to populate the `## Next Steps` section 
 
 **Standard mode:**
 - RECOMMEND the first matching item:
-  1. IF no `research/value-prop.md`: `/value-prop-canvas` — Validate solution-customer fit using competitive gaps to sharpen the value map
-  2. IF no `research/journey-map.md`: `/journey-map` — Map the customer and user journey before spec decisions, using competitive gaps as inspiration
+  1. IF no `research/journey-map.md`: `/journey-map` — Map the customer and user journey before solution-value decisions, using competitive gaps as inspiration
+  2. IF no `research/value-prop.md`: `/value-prop-canvas` — Validate solution-customer fit using journey-placed competitive gaps to sharpen the value map
   3. IF no `specs/` directory or it's empty: `/spec-interview [top journey-backed market gap or positioning opportunity]` — Spec features that exploit the most important market gap after journey context exists
   4. IF no `research/gtm.md`: `/gtm` — Build a GTM plan using the channel and positioning insights
   5. IF codebase exists and no `research/mvp-gap.md`: `/mvp-gap` — Evaluate codebase against ICP and competitive landscape

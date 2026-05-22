@@ -1979,3 +1979,40 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
 - Validation passed: targeted stale-contract search found no old report-only or old alignment-page phrasing; `pnpm --dir tests test -- --grep "bench-setups|tier23|frontmatter|skills-reference"`; `pnpm --dir tests bench:coverage`; `/opt/homebrew/bin/bash ./scripts/skill-next-step-routing.sh --missing`; `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken`; `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`; `git diff --check`.
 - Post-commit validation passed: `scripts/validate-skills-showcase-data.sh`.
 - Commit: `28bd7ca` (`fix: add approval alignment previews`).
+
+## Current Task — Competitive Analysis Journey-First Routing 2026-05-22
+
+**Goal:** Investigate and fix whether standard `$competitive-analysis` should route to `$journey-map` before `$value-prop-canvas` in the alignment-first, prototype-first product workflow.
+
+**Evidence:**
+- User hypothesis: routing competitive analysis to value-prop-canvas before journey-map is wrong for the current alignment-first, prototype-first workflow.
+- Current mirrored competitive-analysis contracts recommend `value-prop-canvas` before `journey-map` when both outputs are missing.
+- Newer reset/bootstrap workflow evidence already establishes the intended product sequence as ICP -> competitive analysis -> journey map -> UX variations -> UI interview -> prototype.
+
+**Plan:**
+- [x] Validate the claim against mirrored skill contracts, workflow docs, and route-contract summaries.
+- [x] Update competitive-analysis routing so standard mode prioritizes missing journey-map before value-prop-canvas.
+- [x] Update canonical workflow docs and next-step contract summaries to match.
+- [x] Add or update focused tests that reject value-prop-first routing for competitive-analysis.
+- [x] Refresh generated showcase data if skill docs change.
+- [ ] Record review notes, validate, then commit and push intended changes on `master`.
+
+**Files:**
+- `packs/business-discovery/{codex,claude}/competitive-analysis/SKILL.md`
+- `docs/skill-next-step-contracts.md`
+- `docs/codex-workflow.md`
+- `docs/canonical-workflow-report.md`
+- `packs/business-discovery/PACK.md`
+- `tests/**`
+- `tasks/lessons.md`, `tasks/roadmap.md`, and `tasks/todo.md`
+
+### Review
+
+- Strategy used: General investigation; no UI/data pivot.
+- User claim validated: confirmed. Mirrored `competitive-analysis` contracts, `docs/skill-next-step-contracts.md`, `docs/codex-workflow.md`, `docs/canonical-workflow-report.md`, and `packs/business-discovery/PACK.md` all placed `value-prop-canvas` before `journey-map`.
+- Root cause: older business-discovery routing survived the later alignment-first/prototype-first workflow update. The newer reset/bootstrap route already says ICP -> competitive analysis -> journey map -> UX/UI/prototype, but competitive-analysis standard mode was not updated.
+- Fix applied: standard competitive-analysis now recommends `$journey-map` or `/journey-map` before value-prop-canvas when journey context is missing; canonical workflow docs and pack flow now use journey-first ordering.
+- Prevention: added `tests/layer1/competitive-analysis-routing.test.ts` to assert journey-map appears before value-prop-canvas in the mirrored contracts and route summary.
+- Alignment preview: wrote and successfully opened `alignment/investigate-competitive-analysis-routing.html`.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 competitive-analysis-routing`; `pnpm --dir tests exec vitest run --project layer1 bench-setups -- -t competitive-analysis`; `pnpm --dir tests verify --skill competitive-analysis`; `pnpm --dir tests bench:coverage`; `/opt/homebrew/bin/bash ./scripts/skill-next-step-routing.sh --missing`; `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken`; `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`; `git diff --check`.
+- Showcase validation note: `scripts/validate-skills-showcase-data.sh` regenerated expected assets and reported them stale before commit; rerun after commit should validate the clean generated outputs.
