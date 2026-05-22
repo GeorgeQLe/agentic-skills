@@ -2793,3 +2793,11 @@ Resolved all 10 findings from `/expert-review`:
 - Replaced brittle shorthand phrase assertions with substantive policy-section evidence checks, added a deterministic `pnpm-workspace.yaml` monorepo signal, allowed canonical shared-lockfile wording, and accepted the provisioning skill's next-command handoff from stdout.
 - Added focused layer1 coverage proving canonical policy outputs pass, shorthand-only echoes fail, the fixture creates the monorepo signal, and stdout handoff routing is accepted.
 - Reran `provision-agentic-config` benchmarks: Codex 3/3 at 95.3% output quality; Claude 2/3 at 93.7% output quality with one residual direct-to-primary shipping-policy omission.
+
+### Batch 41.3-rerun Group 3 (partial) — 2026-05-22
+
+- Re-benchmarked 9 of 11 Group 3 Tier 2 global skills post-fixture-remediation.
+- Major improvements: 6 skills at 100%/100% (reconcile-dev-docs, scaffold, skills, spec-drift, trace + codex on regression-check/research-roadmap/uat).
+- `slim-audit` Claude still at 0% (fails "Output includes simplification opportunities" consistently).
+- Remaining: `ui-interview` and `ux-variations` not yet re-run (session interrupted).
+- Shipped in `3f8d533`.

@@ -1379,6 +1379,23 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
         - `spec-drift`: 0%→100% / 100%→100%
         - `trace`: 0%→100% / 0%→100%
         - `uat`: 0%→66.7% / 100%→100%
+      - **Next step implementation plan (Group 3 completion):**
+        - Run `pnpm --dir tests bench --skill ui-interview --agent both --runs 3 --chunk-size 3 --pause 0`.
+        - Run `pnpm --dir tests bench --skill ux-variations --agent both --runs 3 --chunk-size 3 --pause 0`.
+        - Write `benchmark/test-ui-interview-2026-05-21.md` and `benchmark/test-ux-variations-2026-05-21.md` using the same report format as the 9 completed Group 3 skills.
+        - Pre-remediation baselines for comparison: `ui-interview` Claude 0% (71.1% quality) / Codex 0% (83.8% quality); `ux-variations` Claude 0% (50.8%) / Codex 0% (50.8%).
+        - After both skills: `node scripts/generate-skills-showcase-data.mjs`, `node scripts/generate-skills-showcase-github-data.mjs`, `scripts/validate-skills-showcase-data.sh`, `pnpm --dir tests bench:coverage`.
+        - Mark Group 3 complete in this file, check off Batch 41.3-rerun if all groups done.
+        - Update `tasks/history.md` with Group 3 completion entry.
+        - Commit and push all changes on `master`.
+      - Files: `benchmark/test-ui-interview-2026-05-21.md`, `benchmark/test-ux-variations-2026-05-21.md`, `docs/benchmark-results-matrix.md`, generated showcase data (4 files), `tasks/todo.md`, `tasks/history.md`.
+      - Execution profile: serial (benchmark runner is shared resource).
+      - Acceptance criteria:
+        - Both skills re-benchmarked with both agents (3 runs each).
+        - Reports written with comparison to pre-remediation 2026-05-20 baselines.
+        - Generated data refreshed and validation passes.
+        - Committed and pushed to `master`.
+      - Ship-one-step handoff: implement only this step, validate, then run `/ship` when done.
 - [ ] Batch 41.4: Run git-fixture skills `commit-and-push-by-feature` and `sync` only after explicit permission for disposable GitHub fixture operations.
 - [ ] Batch 41.5: Run pack-local skills by pack family, starting with packs that feed public showcase/workflow proof.
 - [ ] Batch 41.6: Address blocked skills through their remediation routes, then benchmark only after safe fixtures exist.
