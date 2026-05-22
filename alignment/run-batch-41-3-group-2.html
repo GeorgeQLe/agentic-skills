@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Batch 41.3 Group 2 Benchmark Alignment</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #182026;
+        --muted: #55616b;
+        --line: #c9d4dc;
+        --panel: #f7f9fa;
+        --pass: #116a3a;
+        --warn: #8a5200;
+        --fail: #9b1c31;
+      }
+      body {
+        margin: 0;
+        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: var(--ink);
+        background: #ffffff;
+      }
+      main {
+        max-width: 1120px;
+        margin: 0 auto;
+        padding: 40px 24px 56px;
+      }
+      h1 {
+        margin: 0 0 8px;
+        font-size: 34px;
+        line-height: 1.1;
+      }
+      p {
+        color: var(--muted);
+        line-height: 1.55;
+      }
+      section {
+        margin-top: 28px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+      }
+      th,
+      td {
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--line);
+        text-align: left;
+        vertical-align: top;
+      }
+      th {
+        background: var(--panel);
+        color: #27323a;
+        font-weight: 700;
+      }
+      .status-pass {
+        color: var(--pass);
+        font-weight: 700;
+      }
+      .status-warn {
+        color: var(--warn);
+        font-weight: 700;
+      }
+      .status-fail {
+        color: var(--fail);
+        font-weight: 700;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 16px;
+      }
+      .panel {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 16px;
+        background: var(--panel);
+      }
+      code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.95em;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Batch 41.3 Group 2 Benchmark Alignment</h1>
+      <p>
+        This page summarizes the May 21, 2026 rerun of 10 Tier 2 global skills
+        after fixture route remediation. It links the execution outcome back to
+        the reports, generated benchmark data, validation, and next triage route.
+      </p>
+
+      <section class="grid" aria-label="Run summary">
+        <div class="panel">
+          <strong>Scope</strong>
+          <p>10 global skills, both agents, 3 runs per agent where not infrastructure-blocked.</p>
+        </div>
+        <div class="panel">
+          <strong>Result</strong>
+          <p>7 skills improved above 0% for at least one runner; 3 remain priority triage targets.</p>
+        </div>
+        <div class="panel">
+          <strong>Validation</strong>
+          <p>Verify gates, benchmark runs, generated-data freshness, benchmark coverage, routing test, and whitespace checks passed.</p>
+        </div>
+      </section>
+
+      <section>
+        <h2>Skill Results</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Skill</th>
+              <th>Claude</th>
+              <th>Codex</th>
+              <th>Follow-up</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td><code>dogfood</code></td><td class="status-fail">0/3</td><td class="status-pass">3/3</td><td>Claude owner-scenario/manual-check assertions.</td></tr>
+            <tr><td><code>expert-review</code></td><td class="status-pass">3/3</td><td class="status-pass">3/3</td><td>No immediate triage.</td></tr>
+            <tr><td><code>guide</code></td><td class="status-warn">2/3</td><td class="status-pass">3/3</td><td>One Claude artifact assertion miss.</td></tr>
+            <tr><td><code>handoff</code></td><td class="status-fail">0/3</td><td class="status-pass">3/3</td><td>Claude handoff artifact expectations.</td></tr>
+            <tr><td><code>hygiene</code></td><td class="status-fail">0/3</td><td class="status-pass">1/1, 2 blocked</td><td>Claude artifact expectations and Codex timeouts.</td></tr>
+            <tr><td><code>migrate</code></td><td class="status-fail">0/3</td><td class="status-fail">0/0, 3 blocked</td><td>Priority triage: migration-plan artifact and runner timeout.</td></tr>
+            <tr><td><code>mono-plan</code></td><td class="status-fail">0/3</td><td class="status-warn">1/2, 1 blocked</td><td>Claude artifact expectations and Codex partial pass.</td></tr>
+            <tr><td><code>pack</code></td><td class="status-fail">0/3</td><td class="status-pass">3/3</td><td>Claude artifact expectations.</td></tr>
+            <tr><td><code>prototype</code></td><td class="status-fail">0/3</td><td class="status-fail">0/1, 2 blocked</td><td>Priority triage: hub/clickable/fake-data expectations.</td></tr>
+            <tr><td><code>provision-agentic-config</code></td><td class="status-fail">0/3</td><td class="status-fail">0/3</td><td>Priority triage: orchestration and monorepo safety assertions.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>Shipping Boundary</h2>
+        <p>
+          The committed boundary should include the 10 report updates, generated
+          benchmark/showcase assets, the routing-graph performance fix, and
+          task/history notes. The next recommended command is
+          <code>$session-triage provision-agentic-config benchmark failure</code>.
+        </p>
+      </section>
+    </main>
+  </body>
+</html>

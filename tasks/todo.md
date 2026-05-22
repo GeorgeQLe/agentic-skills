@@ -208,9 +208,9 @@
 10. `provision-agentic-config`
 
 **Plan:**
-- [ ] For each of the 10 skills: run `pnpm verify --skill <skill>`, then `pnpm bench --skill <skill> --agent both --runs 3 --chunk-size 3 --pause 0`.
-- [ ] Write dated `benchmark/test-<skill>-2026-05-21.md` for each skill.
-- [ ] After all 10: refresh generated data and validate.
+- [x] For each of the 10 skills: run `pnpm verify --skill <skill>`, then `pnpm bench --skill <skill> --agent both --runs 3 --chunk-size 3 --pause 0`.
+- [x] Write dated `benchmark/test-<skill>-2026-05-21.md` for each skill.
+- [x] After all 10: refresh generated data and validate.
 - [ ] Commit and push.
 
 **Files:**
@@ -226,7 +226,11 @@
 - `benchmark/test-provision-agentic-config-2026-05-21.md` — updated benchmark report
 - `docs/benchmark-results-matrix.md` — regenerated
 - `docs/skills-showcase/assets/skills-data.js` — regenerated
+- `docs/skills-showcase/assets/github-proof-data.js` — regenerated
 - `apps/skills-showcase/public/assets/skills-data.js` — regenerated
+- `apps/skills-showcase/public/assets/github-proof-data.js` — regenerated
+- `tests/layer1/routing-graph.test.ts` — optimized repeated routing-reference lookup after verify timeout
+- `alignment/run-batch-41-3-group-2.html` — run alignment review page
 
 ### Execution Profile
 - **Parallel mode:** serial (each benchmark run is sequential)
@@ -247,13 +251,37 @@ Implement only this step, validate it, then run `/ship` when done.
 
 ### Review
 
-- Changed mirrored `bootstrap-repo` reset mode to archive old documentation by default: `docs/`, `research/`, `specs/`, `tasks/`, planning reports, design docs, implementation notes, old README content, and prior roadmap/todo/history files.
-- Active reset repos now preserve exactly one high-level concept seed, derived from the bootstrap brief or `desk-flip-report.md`; old docs remain archive evidence only.
-- Changed mirrored `desk-flip` wording so old research/spec/task docs are not carried forward as active files and the alignment-first route starts from the concept seed.
-- Updated Tier 2/3 fixtures to require high-level concept language for `bootstrap-repo` and `desk-flip`.
-- Validation passed: `pnpm --dir tests verify --skill bootstrap-repo`; `pnpm --dir tests verify --skill desk-flip`; `pnpm --dir tests bench:coverage`; `node scripts/generate-skills-showcase-data.mjs`; `node scripts/generate-skills-showcase-github-data.mjs`; `scripts/validate-skills-showcase-data.sh`; `/opt/homebrew/bin/bash ./scripts/skill-next-step-routing.sh --missing`; `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken`; `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`.
-- Skipped/limited: focused verifies skipped layer2 because no target-specific layer2 tests match these skills.
-- Next command: `$bootstrap-repo --reset-existing <high-level concept>`
+- Completed Batch 41.3 Group 2 re-benchmarks for all 10 selected Tier 2 global skills after fixture remediation.
+- Verify passed for all 10 skills. Each verify had layer1 PASS and layer2 SKIP because no target-specific layer2 tests matched the selected skill.
+- Benchmark reports updated with current run IDs:
+  - `dogfood`: Claude 0/3, Codex 3/3.
+  - `expert-review`: Claude 3/3, Codex 3/3.
+  - `guide`: Claude 2/3, Codex 3/3.
+  - `handoff`: Claude 0/3, Codex 3/3.
+  - `hygiene`: Claude 0/3, Codex 1/1 with 2 infrastructure blocks.
+  - `migrate`: Claude 0/3, Codex 0/0 with 3 infrastructure blocks.
+  - `mono-plan`: Claude 0/3, Codex 1/2 with 1 infrastructure block.
+  - `pack`: Claude 0/3, Codex 3/3.
+  - `prototype`: Claude 0/3, Codex 0/1 with 2 infrastructure blocks.
+  - `provision-agentic-config`: Claude 0/3, Codex 0/3.
+- Majority result: 7/10 skills improved above 0% for at least one runner (`dogfood`, `expert-review`, `guide`, `handoff`, `hygiene`, `mono-plan`, and `pack`), while `migrate`, `prototype`, and `provision-agentic-config` need targeted triage. Several Claude runs still show near-instant 0% failures for artifact expectations, and several Codex runs were infrastructure-blocked by runner timeouts.
+- During `provision-agentic-config` verify, `tests/layer1/routing-graph.test.ts` timed out while recomputing full pack/global skill indexes inside each generated assertion. The fix hoists those lookup sets once per test file; the same routing test then completed in 1.8s and `provision-agentic-config` verify passed in 1.9s.
+- Generated benchmark/showcase data refreshed: `docs/benchmark-results-matrix.md`, `docs/skills-showcase/assets/skills-data.js`, `docs/skills-showcase/assets/github-proof-data.js`, `apps/skills-showcase/public/assets/skills-data.js`, and `apps/skills-showcase/public/assets/github-proof-data.js`.
+- Alignment page written to `alignment/run-batch-41-3-group-2.html`; browser open succeeded with `open alignment/run-batch-41-3-group-2.html`.
+- Validation passed: `pnpm --dir tests test -- --run layer1/routing-graph.test.ts`; `pnpm --dir tests verify --skill dogfood`; `pnpm --dir tests verify --skill expert-review`; `pnpm --dir tests verify --skill guide`; `pnpm --dir tests verify --skill handoff`; `pnpm --dir tests verify --skill hygiene`; `pnpm --dir tests verify --skill migrate`; `pnpm --dir tests verify --skill mono-plan`; `pnpm --dir tests verify --skill pack`; `pnpm --dir tests verify --skill prototype`; `pnpm --dir tests verify --skill provision-agentic-config`; `pnpm --dir tests bench --skill <skill> --agent both --runs 3 --chunk-size 3 --pause 0` for all 10 skills; `node scripts/generate-skills-showcase-data.mjs`; `node scripts/generate-skills-showcase-github-data.mjs`; `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests bench:coverage`; `git diff --check`.
+- Skipped/limited: no layer2 target-specific tests matched these skills; this is recorded by the verify command output and did not block custom layer4 benchmark execution.
+- Ship manifest:
+  - User goal: execute `$run` for the next incomplete Phase 41 step, Batch 41.3 Group 2 re-benchmarks.
+  - Changed files: 10 dated benchmark reports, benchmark/showcase generated data, `tests/layer1/routing-graph.test.ts`, `alignment/run-batch-41-3-group-2.html`, `tasks/todo.md`, and `tasks/history.md`.
+  - Per-file purpose: reports record current benchmark evidence; generated data updates public benchmark matrices; routing test fix removes repeated filesystem scans; alignment page gives browser-reviewable execution context; task/history files record execution and shipping context.
+  - User-goal mapping: every changed file either records the requested re-benchmark evidence, keeps generated views in sync with that evidence, or fixes validation required to complete the benchmark step.
+  - Tests run: commands listed above; all completed successfully after the routing test performance fix.
+  - Skipped tests: full live-agent suites beyond the 10 requested benchmark runs were not run because the selected step scopes only these 10 skills.
+  - Adversarial review: diff-aware self-review checked for stale run IDs, generated-data freshness, missing infrastructure-block reporting, and accidental skill-contract changes. Finding fixed: report generation initially omitted infrastructure-block rows and displayed unavailable output-quality fields poorly for all-blocked lanes; reports were regenerated with explicit block rows and `n/a` fields.
+  - Residual risk: benchmark pass rates are still low for several skills and some Codex runs were infrastructure-blocked; next triage should start with `migrate`, `prototype`, or `provision-agentic-config` because both runners remain at 0% evaluated pass rate or blocked evidence.
+  - Rollback note: revert this commit to restore prior reports/generated matrices and the previous routing test implementation.
+  - Next command: `$session-triage provision-agentic-config benchmark failure`.
+- Next command: `$session-triage provision-agentic-config benchmark failure`
 
 ## Current Task — Desk-Flip Reset/Archive and Alignment-First Routing 2026-05-21
 

@@ -2771,3 +2771,11 @@ Resolved all 10 findings from `/expert-review`:
 - Also shipped: bootstrap-repo archive-docs reset mode, desk-flip alignment-first routing, concept-exploration slugged briefs, and codex desk-flip parity (from prior sessions' uncommitted work).
 - Layer1: 15 files, 1222 tests pass. Generated data refreshed.
 - Shipped in commit `66e96c0`.
+
+## 2026-05-21: Batch 41.3-rerun Group 2 — Re-benchmark 10 Tier 2 Global Skills
+
+- Re-benchmarked Group 2 Tier 2 global skills after fixture remediation: `dogfood`, `expert-review`, `guide`, `handoff`, `hygiene`, `migrate`, `mono-plan`, `pack`, `prototype`, and `provision-agentic-config`.
+- Current hard-pass results: `expert-review` 100% both agents; `dogfood`, `guide`, `handoff`, `hygiene`, `mono-plan`, and `pack` improved for at least one runner; `migrate`, `prototype`, and `provision-agentic-config` still need targeted triage.
+- Recorded infrastructure-blocked Codex lanes for `hygiene`, `migrate`, `mono-plan`, and `prototype`; no benchmark report hides blocked runs.
+- Fixed a validation harness performance issue in `tests/layer1/routing-graph.test.ts` by hoisting repeated pack/global skill lookups out of generated assertions. The routing suite dropped from a timeout to 1.8s.
+- Refreshed generated benchmark/showcase data and validated with showcase freshness, benchmark coverage, routing test, all 10 verify gates, all 10 both-agent benchmark runs, and whitespace checks.
