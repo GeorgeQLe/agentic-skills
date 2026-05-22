@@ -2786,3 +2786,10 @@ Resolved all 10 findings from `/expert-review`:
 - Reconciled `tasks/todo.md` after the completed and shipped Group 2 benchmark work.
 - Marked the priority queue `$run` item complete and preserved the next triage route: `$session-triage provision-agentic-config benchmark failure`.
 - No source, benchmark, or generated asset changes were needed; this was documentation/task-state bookkeeping only.
+
+## 2026-05-22 — provision-agentic-config benchmark fixture remediation
+
+- Fixed the `provision-agentic-config` Tier 2 benchmark fixture false negative diagnosed in `benchmark/triage-provision-agentic-config-2026-05-22.md`.
+- Replaced brittle shorthand phrase assertions with substantive policy-section evidence checks, added a deterministic `pnpm-workspace.yaml` monorepo signal, and allowed canonical shared-lockfile wording.
+- Added focused layer1 coverage proving canonical policy outputs pass, shorthand-only echoes fail, and the fixture creates the monorepo signal.
+- Reran `provision-agentic-config` both-agent benchmark: Claude 3/3 at 93.4% output quality; Codex 3/3 at 94.4% output quality.

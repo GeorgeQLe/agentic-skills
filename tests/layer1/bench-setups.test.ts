@@ -3163,6 +3163,118 @@ describe("benchmark coverage matrix", () => {
     });
   });
 
+  it("accepts canonical provision-agentic-config policy headings instead of shorthand prompt echoes", () => {
+    const setup = resolveBenchSetup("provision-agentic-config");
+    expect(setup).toBeDefined();
+
+    const workDir = mkdtempSync(resolve(tmpdir(), "provision-agentic-config-"));
+    const artifact = [
+      "## Workflow Orchestration",
+      "",
+      "### 4. Verification Before Done",
+      "- Run benchmark coverage validation before shipping.",
+      "",
+      "### 7. Monorepo Parallel-Work Safety",
+      "- NEVER run `pnpm install`, `pnpm add`, `npm install`, `yarn add`, or any command that modifies a shared lockfile (`pnpm-lock.yaml`, `package-lock.json`, `yarn.lock`) when running as one of multiple parallel agents in a monorepo",
+      "",
+      "## Core Principles",
+      "- **Direct-To-Primary Git Flow**: Default to committing and pushing sequential work on the repository primary branch.",
+      "- **No GitHub Actions**: Do not create, modify, or suggest GitHub Actions workflows unless explicitly asked.",
+      "",
+      "Recommended next command: $run",
+      "",
+    ].join("\n");
+    writeFileSync(resolve(workDir, "AGENTS.md"), artifact);
+
+    const assertions = setup!.assertResult({
+      stdout: "",
+      stderr: "",
+      exitCode: 0,
+      workDir,
+      files: ["AGENTS.md"],
+    });
+
+    expect(assertions.filter((assertion) => !assertion.pass)).toEqual([]);
+    expect(setup!.qualityEvaluator?.evaluate(artifact).passed).toBe(true);
+  });
+
+  it("creates a monorepo signal for the provision-agentic-config monorepo safety fixture", () => {
+    const setup = resolveBenchSetup("provision-agentic-config");
+    expect(setup).toBeDefined();
+
+    const workDir = mkdtempSync(resolve(tmpdir(), "provision-agentic-config-fixture-"));
+    setup!.setupProject(workDir);
+
+    expect(readFileSync(resolve(workDir, "pnpm-workspace.yaml"), "utf8")).toContain("packages:");
+    expect(readFileSync(resolve(workDir, "workflow.md"), "utf8")).toContain("benchmark coverage validation");
+  });
+
+  it("accepts provision-agentic-config next-command handoff in stdout", () => {
+    const setup = resolveBenchSetup("provision-agentic-config");
+    expect(setup).toBeDefined();
+
+    const workDir = mkdtempSync(resolve(tmpdir(), "provision-agentic-config-stdout-"));
+    const artifact = [
+      "## Workflow Orchestration",
+      "### 4. Verification Before Done",
+      "## Core Principles",
+      "- **Direct-To-Primary Git Flow**: Ship on the primary branch.",
+      "- **No GitHub Actions**: Do not create workflows.",
+      "### 7. Monorepo Parallel-Work Safety",
+      "Respect shared lockfiles such as `package-lock.json`.",
+      "## Shipping",
+      "Run verification before shipping.",
+      "",
+    ].join("\n");
+    writeFileSync(resolve(workDir, "AGENTS.md"), artifact);
+
+    const assertions = setup!.assertResult({
+      stdout: "Installed workflow orchestration into ./AGENTS.md\nRecommended next command: $run",
+      stderr: "",
+      exitCode: 0,
+      workDir,
+      files: ["AGENTS.md"],
+    });
+
+    expect(assertions.filter((assertion) => !assertion.pass)).toEqual([]);
+  });
+
+  it("rejects provision-agentic-config outputs that only echo shorthand fixture phrases", () => {
+    const setup = resolveBenchSetup("provision-agentic-config");
+    expect(setup).toBeDefined();
+
+    const workDir = mkdtempSync(resolve(tmpdir(), "provision-agentic-config-shorthand-"));
+    const artifact = [
+      "orchestration rules",
+      "verification",
+      "shipping",
+      "monorepo safety",
+      "No GitHub Actions",
+      "benchmark coverage",
+      "",
+      "Recommended next command: $run",
+      "",
+    ].join("\n");
+    writeFileSync(resolve(workDir, "AGENTS.md"), artifact);
+
+    const assertions = setup!.assertResult({
+      stdout: "",
+      stderr: "",
+      exitCode: 0,
+      workDir,
+      files: ["AGENTS.md"],
+    });
+
+    expect(assertions.filter((assertion) => !assertion.pass).map((assertion) => assertion.description)).toEqual(
+      expect.arrayContaining([
+        "Output includes an orchestration policy section",
+        "Output includes a monorepo safety policy section",
+        "Output preserves primary-branch shipping policy",
+      ]),
+    );
+    expect(setup!.qualityEvaluator?.evaluate(artifact).passed).toBe(false);
+  });
+
   it("fails when a repository skill is missing from the matrix", () => {
     const rows = benchmarkCoverageMatrix().filter((row) => row.skill !== "run");
     const result = validateBenchmarkCoverage(rows, discoverRepositorySkills());

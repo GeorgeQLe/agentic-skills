@@ -1995,7 +1995,7 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
 - [x] Update canonical workflow docs and next-step contract summaries to match.
 - [x] Add or update focused tests that reject value-prop-first routing for competitive-analysis.
 - [x] Refresh generated showcase data if skill docs change.
-- [ ] Record review notes, validate, then commit and push intended changes on `master`.
+- [x] Record review notes, validate, then commit and push intended changes on `master`.
 
 **Files:**
 - `packs/business-discovery/{codex,claude}/competitive-analysis/SKILL.md`
@@ -2016,3 +2016,41 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
 - Alignment preview: wrote and successfully opened `alignment/investigate-competitive-analysis-routing.html`.
 - Validation passed: `pnpm --dir tests exec vitest run --project layer1 competitive-analysis-routing`; `pnpm --dir tests exec vitest run --project layer1 bench-setups -- -t competitive-analysis`; `pnpm --dir tests verify --skill competitive-analysis`; `pnpm --dir tests bench:coverage`; `/opt/homebrew/bin/bash ./scripts/skill-next-step-routing.sh --missing`; `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken`; `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`; `git diff --check`.
 - Showcase validation note: `scripts/validate-skills-showcase-data.sh` regenerated expected assets and reported them stale before commit; rerun after commit should validate the clean generated outputs.
+- Committed and pushed as `6ee5a6f` (`fix: route competitive analysis through journey mapping`) plus `d1e5124` (`docs: refresh showcase generated proof data`).
+
+## Current Task — Provision Agentic Config Benchmark Fixture False Negative 2026-05-22
+
+**Goal:** Fix the `provision-agentic-config` benchmark fixture false negative and prove the corrected fixture scores retained policy-output shapes correctly.
+
+**Evidence:**
+- `benchmark/triage-provision-agentic-config-2026-05-22.md` diagnosed the issue as a benchmark false negative, not a skill-contract bug.
+- The retained benchmark artifacts used canonical headings such as `Workflow Orchestration` and `Monorepo Parallel-Work Safety`, while the fixture expected shorthand phrases such as `orchestration rules` and `monorepo safety`.
+- The original fixture asked for monorepo safety but did not create a monorepo signal, while the skill contract conditionally includes monorepo safety only when monorepo heuristics match.
+
+**Plan:**
+- [x] Inspect uncommitted diffs and compare them to the triage report.
+- [x] Verify whether the patch belongs in benchmark setup/tests rather than the skill contracts.
+- [x] Tighten the patch so hard assertions use substantive policy sections and evidence, not generic prompt words.
+- [x] Add a deterministic monorepo signal so monorepo safety is legitimately expected.
+- [x] Run focused validation, benchmark coverage, and both-agent benchmark rerun.
+- [ ] Record review notes, then commit and push intended changes on `master`.
+
+**Files:**
+- `tests/layer4/setups/tier23-global-workflows.setup.ts`
+- `tests/layer1/bench-setups.test.ts`
+- `benchmark/test-provision-agentic-config-2026-05-22.md`
+- `docs/benchmark-results-matrix.md`
+- generated Skills Showcase assets
+- `alignment/targeted-skill-builder-provision-agentic-config-fixture.html`
+- `tasks/roadmap.md`, `tasks/todo.md`
+
+### Review
+
+- Decision: existing benchmark setup update. No `provision-agentic-config` skill contract change was needed.
+- Existing-skill overlap: `session-triage` already diagnosed the failure; `targeted-skill-builder` owned the narrow fixture remediation.
+- Fix applied: `provision-agentic-config` fixture now checks substantive policy sections and evidence instead of shorthand prompt phrases, allows `package-lock.json` because the canonical monorepo safety policy names shared lockfiles, and creates `pnpm-workspace.yaml` so monorepo safety is in scope.
+- Prevention: added focused layer1 tests proving canonical policy outputs pass, shorthand-only echoes fail, and the fixture includes the monorepo signal.
+- Benchmark result: after remediation, both agents passed 3/3 with no infrastructure blocks, no threshold failures, and no critical failures. Claude session `31066d9f`: 100.0% hard pass, 93.4% output quality. Codex session `1ef8828f`: 100.0% hard pass, 94.4% output quality.
+- Alignment preview: wrote and successfully opened `alignment/targeted-skill-builder-provision-agentic-config-fixture.html`.
+- Validation passed: `pnpm --dir tests test -- --run layer1/bench-setups.test.ts --testNamePattern "provision-agentic-config"`; `pnpm --dir tests verify --skill provision-agentic-config`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests bench --skill provision-agentic-config --agent both --runs 3 --chunk-size 3 --pause 0`; `./install.sh`; `./scripts/skill-deps.sh --broken`; `./scripts/skill-versions.sh --missing`; `./scripts/skill-next-step-routing.sh --missing`; `node scripts/generate-skills-showcase-data.mjs`; `node scripts/generate-skills-showcase-github-data.mjs`; `git diff --check`.
+- Showcase validation note: `scripts/validate-skills-showcase-data.sh` regenerated expected assets and reported them stale before staging because generated assets changed; rerun after staging should validate the clean generated outputs.

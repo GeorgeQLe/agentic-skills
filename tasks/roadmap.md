@@ -42,6 +42,19 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Updated on 2026-05-22. The user's hypothesis was confirmed: standard competitive-analysis still routed to value-prop-canvas before journey-map in mirrored contracts and canonical docs. The route now prefers journey mapping before value-prop work when journey context is missing, and the canonical business workflow now follows concept -> ICP -> competitive analysis -> journey map -> value-prop-canvas -> positioning -> lean canvas -> prototype path. Focused validation passed; final clean-tree validation will run after commit.
 
+## Current Targeted Update: Provision Agentic Config Benchmark Fixture False Negative 2026-05-22
+
+**Goal:** Ship the benchmark fixture remediation for `provision-agentic-config` so retained outputs with substantive policy sections are scored correctly.
+
+**Acceptance Criteria:**
+- [x] Uncommitted fixture edits are validated against `benchmark/triage-provision-agentic-config-2026-05-22.md`.
+- [x] Benchmark setup checks substantive policy sections and evidence instead of shorthand prompt echoes.
+- [x] Fixture includes a monorepo signal so monorepo safety is legitimately expected.
+- [x] Layer1 coverage proves canonical policy headings pass, shorthand-only outputs fail, and the fixture creates the monorepo signal.
+- [x] Focused verification, benchmark coverage, and whitespace checks pass; results are recorded; intended changes are committed and pushed on `master`.
+
+**Result:** Updated on 2026-05-22. The `provision-agentic-config` benchmark fixture now evaluates substantive policy sections instead of brittle shorthand prompt phrases, creates `pnpm-workspace.yaml` so monorepo safety is in scope, and allows the canonical shared-lockfile wording. Focused layer1 coverage locks canonical-pass and shorthand-only-fail behavior. The corrected benchmark rerun passed for both agents: Claude 3/3 at 93.4% output quality and Codex 3/3 at 94.4% output quality.
+
 ## Current Targeted Update: Alignment HTML Output Root 2026-05-21
 
 **Goal:** Move alignment-first and prototype-first review HTML artifacts to root `alignment/`, archive replaced pages under `docs/history/archive/`, restore Codex `$prototype` parity, and make browser-opening best-effort but explicit.
