@@ -2790,6 +2790,6 @@ Resolved all 10 findings from `/expert-review`:
 ## 2026-05-22 — provision-agentic-config benchmark fixture remediation
 
 - Fixed the `provision-agentic-config` Tier 2 benchmark fixture false negative diagnosed in `benchmark/triage-provision-agentic-config-2026-05-22.md`.
-- Replaced brittle shorthand phrase assertions with substantive policy-section evidence checks, added a deterministic `pnpm-workspace.yaml` monorepo signal, and allowed canonical shared-lockfile wording.
-- Added focused layer1 coverage proving canonical policy outputs pass, shorthand-only echoes fail, and the fixture creates the monorepo signal.
-- Reran `provision-agentic-config` both-agent benchmark: Claude 3/3 at 93.4% output quality; Codex 3/3 at 94.4% output quality.
+- Replaced brittle shorthand phrase assertions with substantive policy-section evidence checks, added a deterministic `pnpm-workspace.yaml` monorepo signal, allowed canonical shared-lockfile wording, and accepted the provisioning skill's next-command handoff from stdout.
+- Added focused layer1 coverage proving canonical policy outputs pass, shorthand-only echoes fail, the fixture creates the monorepo signal, and stdout handoff routing is accepted.
+- Reran `provision-agentic-config` benchmarks: Codex 3/3 at 95.3% output quality; Claude 2/3 at 93.7% output quality with one residual direct-to-primary shipping-policy omission.

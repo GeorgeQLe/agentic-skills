@@ -53,7 +53,7 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 - [x] Layer1 coverage proves canonical policy headings pass, shorthand-only outputs fail, and the fixture creates the monorepo signal.
 - [x] Focused verification, benchmark coverage, and whitespace checks pass; results are recorded; intended changes are committed and pushed on `master`.
 
-**Result:** Updated on 2026-05-22. The `provision-agentic-config` benchmark fixture now evaluates substantive policy sections instead of brittle shorthand prompt phrases, creates `pnpm-workspace.yaml` so monorepo safety is in scope, and allows the canonical shared-lockfile wording. Focused layer1 coverage locks canonical-pass and shorthand-only-fail behavior. The corrected benchmark rerun passed for both agents: Claude 3/3 at 93.4% output quality and Codex 3/3 at 94.4% output quality.
+**Result:** Updated on 2026-05-22. The `provision-agentic-config` benchmark fixture now evaluates substantive policy sections instead of brittle shorthand prompt phrases, creates `pnpm-workspace.yaml` so monorepo safety is in scope, allows the canonical shared-lockfile wording, and accepts the provisioning skill's next-command handoff from stdout. Focused layer1 coverage locks canonical-pass, shorthand-only-fail, monorepo-signal, and stdout-handoff behavior. Latest rerun evidence: Codex 3/3 at 95.3% output quality; Claude 2/3 at 93.7% output quality, with the remaining failed run omitting direct-to-primary shipping policy.
 
 ## Current Targeted Update: Alignment HTML Output Root 2026-05-21
 
