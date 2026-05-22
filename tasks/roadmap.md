@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Update: Approval-Gated Research Alignment Previews 2026-05-22
+
+**Goal:** Make approval-gated research, planning, spec, report, and document skills build a user-consumable alignment HTML preview before asking the user to approve canonical artifact writes.
+
+**Acceptance Criteria:**
+- [x] Correction and investigation evidence are captured in `tasks/lessons.md` and `tasks/todo.md`.
+- [x] Approval-gated skills treat `alignment/{skill}-{topic}.html` as a pre-approval preview artifact, not a canonical synthesized deliverable.
+- [x] Approval requests point users to the alignment page, summarize recommended output/file changes, ask for questions or requested adjustments, and only approve/write canonical files after the user confirms.
+- [x] Non-approval skills keep the existing durable-output alignment-page behavior.
+- [x] Validation passes, generated metadata is refreshed if needed, and intended changes are committed and pushed on `master` without mixing unrelated dirty work.
+
+**Result:** Updated on 2026-05-22. Approval-gated durable-output skills now build an `alignment/{skill}-{topic}.html` preview before asking for canonical artifact approval, ask the user to review, question, or request adjustments, and suppress downstream routing until approved files are written. Non-approval durable-output runs keep the existing alignment-page behavior. Generated Skills Showcase metadata was refreshed; focused validation and post-commit showcase validation passed.
+
 ## Current Targeted Update: Alignment HTML Output Root 2026-05-21
 
 **Goal:** Move alignment-first and prototype-first review HTML artifacts to root `alignment/`, archive replaced pages under `docs/history/archive/`, restore Codex `$prototype` parity, and make browser-opening best-effort but explicit.

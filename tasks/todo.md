@@ -1947,3 +1947,35 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
 - Validation passed: `pnpm --dir tests exec vitest run --project layer1 bench-setups`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill update-packages`.
 - Generated showcase data: not refreshed because no `SKILL.md`, `PACK.md`, curated benchmark/review report, or showcase source changed.
 - Recommended next command: `$benchmark-test-skill update-packages`.
+
+## Current Task — Approval-Gated Research Alignment Previews 2026-05-22
+
+**Goal:** Investigate research and adjacent output-writing skills whose approval gates currently ask users to approve from chat text, then update the contract so they build an alignment HTML preview before approval.
+
+**Evidence:**
+- User report: a lot of research skills should build the alignment page first, especially skills with approval gates.
+- Current pattern: many pack skills say `Default to report-only` and `Do not write or overwrite synthesized deliverables until the user explicitly approves`, while the alignment-page clause says it runs only when the skill writes durable deliverables.
+- Resulting gap: users can be asked to approve canonical research/spec/report writes before seeing the browser-consumable alignment page.
+
+**Plan:**
+- [x] Review lessons, task docs, and approval/alignment clauses.
+- [x] Identify approval-gated skills and confirm the contract conflict.
+- [x] Update skill contracts so alignment pages are preview artifacts built before approval.
+- [x] Validate targeted contract coverage and whitespace.
+- [x] Record review notes, then commit and push only intended files.
+
+**Files:**
+- `global/**/SKILL.md`
+- `packs/**/SKILL.md`
+- `tasks/lessons.md`, `tasks/roadmap.md`, and `tasks/todo.md`
+
+### Review
+
+- Confirmed the issue: report-first approval gates told agents to stop before writing synthesized deliverables, while the alignment-page clause only ran after durable deliverable writes.
+- Updated the shared alignment-page contract across durable-output skills so approval-gated runs build `alignment/{skill}-{topic}.html` as a pre-approval review preview, point the user to it, ask for questions or adjustments, and write canonical files only after approval.
+- Updated report-first approval gates so approval stops include the alignment preview and no downstream routing.
+- Preserved the existing behavior for non-approval durable output writes.
+- Refreshed Skills Showcase generated data and benchmark matrix.
+- Validation passed: targeted stale-contract search found no old report-only or old alignment-page phrasing; `pnpm --dir tests test -- --grep "bench-setups|tier23|frontmatter|skills-reference"`; `pnpm --dir tests bench:coverage`; `/opt/homebrew/bin/bash ./scripts/skill-next-step-routing.sh --missing`; `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken`; `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`; `git diff --check`.
+- Post-commit validation passed: `scripts/validate-skills-showcase-data.sh`.
+- Commit: `28bd7ca` (`fix: add approval alignment previews`).

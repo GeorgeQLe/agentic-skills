@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-05-22 — Approval-gated research needs alignment preview before approval
+
+- A repo-wide alignment-page contract made durable output skills create `alignment/*.html` only after writing or updating canonical deliverables, but many research skills stop for approval before those writes.
+- Approval-gated research, planning, spec, report, and document skills should treat the alignment page as a pre-approval preview artifact: build it, attempt to open it, point the user at it, ask for questions or adjustments, then write canonical files only after approval.
+- Keep the approval gate on synthesized Markdown/spec/research/report outputs; do not classify the temporary/browser review page as the canonical artifact that requires prior approval.
+- When fixing cross-cutting approval flows, audit both the approval-gate language and the alignment-page language so the two instructions do not contradict each other.
+
 ## 2026-05-21 — Alignment page changes need all durable planning skills, not only prototype path
 
 - A root `alignment/` migration updated the named prototype-first path but missed upstream research skills such as `icp`, so users still saw no automatic alignment review page after earlier alignment steps.
