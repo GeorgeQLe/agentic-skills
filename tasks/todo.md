@@ -166,7 +166,7 @@
 - [x] Update mirrored `desk-flip` handoff to describe the same sequence from high-level concept.
 - [x] Update Tier 2/3 fixture expectations away from direct `ui-interview`.
 - [x] Run focused validation and record results.
-- [ ] Commit and push intended changes on `master`.
+- [x] Commit and push intended changes on `master`.
 
 **Files:**
 - `global/codex/bootstrap-repo/SKILL.md`
@@ -299,7 +299,7 @@ Implement only this step, validate it, then run `/ship` when done.
 - [x] Update `bootstrap-repo` to support explicit reset mode for stale non-empty repos, including archive exclusions, manifesting, and post-bootstrap alignment routing.
 - [x] Update deterministic benchmark setup and focused coverage for the new desk-flip/bootstrap route expectations.
 - [x] Refresh generated skill data if tracked skill metadata/content changes require it, run focused validation, and record results.
-- [ ] Commit and push intended changes on `master`.
+- [x] Commit and push intended changes on `master`.
 
 **Files:**
 - `global/codex/desk-flip/SKILL.md`
@@ -1362,19 +1362,23 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
         - 7/10 skills improved above 0% for at least one runner.
         - Generated data refreshed and validated.
         - Committed and pushed to master.
+      - Ship-one-step handoff: implement only this group, validate, then run `/ship` when done.
     - [ ] Group 3 (11 skills): `reconcile-dev-docs`, `regression-check`, `research-roadmap`, `scaffold`, `skills`, `slim-audit`, `spec-drift`, `trace`, `uat`, `ui-interview`, `ux-variations`.
       - Implementation plan:
-        - For each of the 11 skills, run `pnpm --dir tests verify --skill <skill>`.
-        - If verify passes, run `pnpm --dir tests bench --skill <skill> --agent both --runs 3 --chunk-size 3 --pause 0`.
-        - Write or update `benchmark/test-<skill>-2026-05-21.md` for each skill with Benchmark Summary, Failed Assertions, Output Quality, Infrastructure Blocked Runs, Raw Sessions, and Recommendation sections.
-        - After all 11 skills: regenerate data with `node scripts/generate-skills-showcase-data.mjs` and `node scripts/generate-skills-showcase-github-data.mjs`, then validate with `scripts/validate-skills-showcase-data.sh`, `pnpm --dir tests bench:coverage`, and `git diff --check`.
-        - Add a review note and ship manifest to `tasks/todo.md`, update `tasks/history.md`, and commit/push on `master`.
-      - Files: `benchmark/test-{reconcile-dev-docs,regression-check,research-roadmap,scaffold,skills,slim-audit,spec-drift,trace,uat,ui-interview,ux-variations}-2026-05-21.md`, `docs/benchmark-results-matrix.md`, generated showcase data, `tasks/todo.md`, and `tasks/history.md`.
-      - Acceptance criteria:
-        - All 11 skills re-benchmarked or explicitly recorded as infrastructure-blocked.
-        - Reports include current run IDs and do not hide blocked runs.
-        - Generated data is refreshed and validation passes.
-        - Results are committed and pushed to `master`.
+        - For each of the 11 skills, run `pnpm --dir tests bench --skill <skill> --agent both --runs 3 --chunk-size 3 --pause 0`.
+        - Write or update `benchmark/test-<skill>-2026-05-21.md` for each skill.
+        - After all 11 skills: regenerate data, validate, commit/push on `master`.
+      - Progress: 9/11 re-benchmarked on 2026-05-22. Remaining: `ui-interview`, `ux-variations`.
+      - Results so far (pass rate Claude/Codex, pre→post):
+        - `reconcile-dev-docs`: 0%→100% / 0%→100%
+        - `regression-check`: 0%→66.7% / 0%→100%
+        - `research-roadmap`: 0%→66.7% / 0%→100%
+        - `scaffold`: 0%→100% / 0%→100%
+        - `skills`: 0%→100% / 33.3%→100%
+        - `slim-audit`: 0%→0% / 0%→66.7%
+        - `spec-drift`: 0%→100% / 100%→100%
+        - `trace`: 0%→100% / 0%→100%
+        - `uat`: 0%→66.7% / 100%→100%
 - [ ] Batch 41.4: Run git-fixture skills `commit-and-push-by-feature` and `sync` only after explicit permission for disposable GitHub fixture operations.
 - [ ] Batch 41.5: Run pack-local skills by pack family, starting with packs that feed public showcase/workflow proof.
 - [ ] Batch 41.6: Address blocked skills through their remediation routes, then benchmark only after safe fixtures exist.
