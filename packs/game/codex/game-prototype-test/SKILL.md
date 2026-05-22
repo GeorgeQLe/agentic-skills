@@ -2,7 +2,7 @@
 name: game-prototype-test
 description: Use only for video game projects; design playable prototype tests and success criteria for fun, clarity, and replay
 type: planning
-version: 1.0.0
+version: v0.0
 ---
 
 # Game Prototype Test

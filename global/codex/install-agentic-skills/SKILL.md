@@ -2,7 +2,7 @@
 name: install-agentic-skills
 description: Refresh this agentic-skills checkout into local Claude and Codex skill directories by running the repository install script, verify global skill links, uninstall repo-managed links when requested, and route project-local pack setup to the pack skill. Use when Codex needs to make all global agentic-skills skills available on the current machine, repair stale symlinks, confirm installation status, or explain how to install packs for a project.
 type: ops
-version: 1.0.0
+version: v0.0
 argument-hint: "[install|status|--uninstall]"
 ---
 

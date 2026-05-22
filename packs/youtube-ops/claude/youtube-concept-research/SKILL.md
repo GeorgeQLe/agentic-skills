@@ -2,7 +2,7 @@
 name: youtube-concept-research
 description: Research a proposed YouTube video concept against successful direct and adjacent content, then extract evidence-backed lessons, concept variants, packaging directions, and differentiated execution guidance
 type: research
-version: 1.0.0
+version: v0.0
 argument-hint: "\"<video concept>\" [--channel <slug>] [--comparables N] [--angle search|browse|packaging|retention|format|all]"
 ---
 

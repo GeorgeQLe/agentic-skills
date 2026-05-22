@@ -2,7 +2,7 @@
 name: game-workflow
 description: Use only for video game projects; route research, validation, roadmap, metrics, and launch work through the game pack
 type: planning
-version: 1.0.0
+version: v0.0
 ---
 
 # Game Workflow

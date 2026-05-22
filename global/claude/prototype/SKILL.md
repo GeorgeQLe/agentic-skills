@@ -2,7 +2,7 @@
 name: prototype
 description: Build tangible, runnable prototypes from UX variation and UI specs — static HTML/CSS for UI projects, runnable scripts for CLI, endpoint stubs for API, or minimal configs for infra
 type: execution
-version: 1.0.0
+version: v0.0
 argument-hint: "[optional: topic, --variant N]"
 ---
 

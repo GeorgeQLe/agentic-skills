@@ -2,7 +2,7 @@
 name: taste-calibration
 description: One-question-at-a-time questioning to calibrate operator-agent alignment on intent, taste, and boundaries
 type: planning
-version: 1.0.0
+version: v0.0
 argument-hint: "[rough idea, problem, or partial spec]"
 ---
 

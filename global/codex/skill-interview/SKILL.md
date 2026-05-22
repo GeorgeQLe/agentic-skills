@@ -2,7 +2,7 @@
 name: skill-interview
 description: Interview the user to define the characteristics of a skill they want created
 type: planning
-version: 1.0.0
+version: v0.0
 argument-hint: "[skill-name-or-topic]"
 ---
 

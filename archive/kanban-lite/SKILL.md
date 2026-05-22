@@ -1,5 +1,6 @@
 ---
 name: kanban-lite
+version: v0.0
 description: Lightweight local kanban boards stored in SQLite — track tasks, view board state, create/update/move cards. Syncs across machines via git.
 allowed-tools: Bash(node *)
 ---

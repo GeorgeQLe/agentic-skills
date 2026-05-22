@@ -2,7 +2,7 @@
 name: journey-map
 description: Map the full user and customer lifecycle from trigger and discovery through onboarding, aha, conversion, retention, expansion, and advocacy
 type: analysis
-version: 2.0.0
+version: v0.0
 argument-hint: "[optional: app, use case, persona, or lifecycle stage]"
 ---
 

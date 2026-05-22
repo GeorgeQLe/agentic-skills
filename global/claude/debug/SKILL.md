@@ -2,7 +2,7 @@
 name: debug
 description: Investigate a problem, log it to the debug changelog, cross-check past issues, and suggest a non-duplicate fix
 type: debugging
-version: 1.0.0
+version: v0.0
 argument-hint: <error message, bug description, or symptom>
 ---
 

@@ -2,7 +2,7 @@
 name: lean-canvas
 description: One-page Lean Canvas business model synthesis (Ash Maurya)
 type: research
-version: 1.0.0
+version: v0.0
 argument-hint: "[optional: focus area e.g. \"revenue model\", \"channels\"]"
 ---
 

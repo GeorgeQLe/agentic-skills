@@ -2,7 +2,7 @@
 name: landing-copy
 description: Generate or audit landing page copy grounded in upstream research — hero, benefits, social proof, pricing, FAQ, and CTAs
 type: research
-version: 1.0.0
+version: v0.0
 argument-hint: "[generate|audit] [optional: focus section e.g. \"hero\", \"pricing\", \"FAQ\"]"
 ---
 

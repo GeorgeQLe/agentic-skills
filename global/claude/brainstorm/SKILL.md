@@ -2,7 +2,7 @@
 name: brainstorm
 description: Evaluate the codebase and suggest ideas to explore with /feature-interview
 type: planning
-version: 1.1.0
+version: v0.0
 argument-hint: "[optional: focus area]"
 ---
 

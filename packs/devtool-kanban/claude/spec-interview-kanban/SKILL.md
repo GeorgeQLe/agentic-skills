@@ -2,7 +2,7 @@
 name: spec-interview-kanban
 description: PoketoWork kanban variant of spec-interview — write a spec and update or create the matching card
 type: planning
-version: 1.0.0
+version: v0.0
 argument-hint: "[topic or draft spec]"
 allowed-tools: Bash(poketo *)
 ---

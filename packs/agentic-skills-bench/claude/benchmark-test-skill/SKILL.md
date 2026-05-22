@@ -2,7 +2,7 @@
 name: benchmark-test-skill
 description: Run verify and benchmark tests for one agentic-skills skill, producing pass-rate, latency, cost, and consistency metrics
 type: execution
-version: 1.0.0
+version: v0.0
 argument-hint: "<skill name>"
 ---
 

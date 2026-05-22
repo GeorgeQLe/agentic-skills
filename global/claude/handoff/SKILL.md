@@ -2,7 +2,7 @@
 name: handoff
 description: Generate a project-level context snapshot for resuming work in a fresh session
 type: shipping
-version: 1.0.0
+version: v0.0
 argument-hint: "[focus area] [--target=codex]"
 ---
 

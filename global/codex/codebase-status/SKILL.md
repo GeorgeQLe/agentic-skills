@@ -2,7 +2,7 @@
 name: codebase-status
 description: Report what a repository is, what recent conversation history says about it, current application status, and outstanding work
 type: analysis
-version: 1.0.0
+version: v0.0
 argument-hint: "[optional repo path, focus, or --no-history]"
 ---
 

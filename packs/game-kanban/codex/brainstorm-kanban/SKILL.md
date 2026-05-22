@@ -2,7 +2,7 @@
 name: brainstorm-kanban
 description: PoketoWork kanban variant of brainstorm — generate ideas and create Backlog cards
 type: planning
-version: 1.0.0
+version: v0.0
 argument-hint: "[optional focus area]"
 allowed-tools: Bash(poketo *)
 ---

@@ -2,7 +2,7 @@
 name: mono-run
 description: Augment the standard run lifecycle with monorepo detection, lane-spec generation, guard validation, and package-scoped dispatch
 type: execution
-version: 1.0.0
+version: v0.0
 argument-hint: "[--phase] [--pipeline]"
 ---
 

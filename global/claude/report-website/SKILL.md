@@ -2,7 +2,7 @@
 name: report-website
 description: Convert one Markdown report or a collection of documented Markdown outputs into clean JSX routes for a polished, readable frontend website
 type: execution
-version: 1.1.0
+version: v0.0
 argument-hint: "<report.md|directory|--all-output-docs> [base route]"
 ---
 

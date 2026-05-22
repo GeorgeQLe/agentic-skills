@@ -2,7 +2,7 @@
 name: analyze-sessions
 description: Analyze Claude Code and Codex session history for cross-session trends, recurring patterns, and automation opportunities
 type: analysis
-version: 1.4.0
+version: v0.0
 argument-hint: "[history file, session directory, repo path, date range, or trend question]"
 ---
 

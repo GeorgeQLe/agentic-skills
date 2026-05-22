@@ -2,7 +2,7 @@
 name: youtube-format-research
 description: Break down a YouTube video's format, visual system, pacing, editing grammar, motion, audio, and Remotion-ready production patterns
 type: research
-version: 1.0.0
+version: v0.0
 argument-hint: "<video URL or ID> [--target remotion|script|style-guide] [--compare <video URL or ID...>]"
 ---
 

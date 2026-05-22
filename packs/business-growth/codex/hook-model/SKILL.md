@@ -1,7 +1,7 @@
 ---
 name: hook-model
 type: research
-version: 1.0.0
+version: v0.0
 description: Nir Eyal engagement loop design — trigger, action, variable reward, investment
 argument-hint: "[optional: specific engagement loop or user behavior to focus on]"
 ---

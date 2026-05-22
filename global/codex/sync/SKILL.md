@@ -2,7 +2,7 @@
 name: sync
 description: Pull latest changes from remote and report status
 type: shipping
-version: 1.0.0
+version: v0.0
 ---
 
 # Sync

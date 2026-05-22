@@ -2,7 +2,7 @@
 name: spin-off
 description: Extract a bounded part of the invoking codebase into a new GitHub repository with private and public-OSS readiness gates
 type: execution
-version: 0.1.0
+version: v0.0
 argument-hint: "<target-path-or-symbol> --name <repo-name> [--visibility private|public-oss] [--owner <github-owner>]"
 ---
 

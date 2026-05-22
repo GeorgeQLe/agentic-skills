@@ -1,7 +1,7 @@
 ---
 name: pmf-assessment
 type: research
-version: 1.0.0
+version: v0.0
 description: Sean Ellis PMF survey design + qualitative signal analysis for post-launch fit measurement
 argument-hint: "[optional: specific signal or segment to focus on]"
 ---

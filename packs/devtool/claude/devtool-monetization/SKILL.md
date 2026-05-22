@@ -2,7 +2,7 @@
 name: devtool-monetization
 description: Use only for developer-facing products; design pricing, packaging, limits, open-source strategy, and team conversion
 type: research
-version: 1.0.0
+version: v0.0
 ---
 
 # Devtool Monetization

@@ -2,7 +2,7 @@
 name: video-build
 description: Transform an approved video script into a Remotion build specification with scaffolded project directory, compositions, scene components, and render config
 type: planning
-version: 1.0.0
+version: v0.0
 argument-hint: "<script-path-or-slug> [--style minimal|motion-heavy|kinetic-text] [--fps 30|60] [--resolution 1080p|4k]"
 ---
 

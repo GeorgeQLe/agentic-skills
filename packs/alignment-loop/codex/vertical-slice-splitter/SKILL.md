@@ -2,7 +2,7 @@
 name: vertical-slice-splitter
 description: Decompose a destination doc or spec into vertical-slice issue cards with a dependency DAG
 type: planning
-version: 1.0.0
+version: v0.0
 ---
 
 # Vertical Slice Splitter

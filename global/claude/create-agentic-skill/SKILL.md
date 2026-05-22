@@ -2,7 +2,7 @@
 name: create-agentic-skill
 description: Create or update a repo-managed skill inside this agentic-skills checkout under global/claude and optionally global/codex, then validate, commit, and push it
 type: execution
-version: 0.1.0
+version: v0.0
 argument-hint: <skill-name> [description] [--claude-only|--codex-only|--mirror]
 ---
 

@@ -2,7 +2,7 @@
 name: youtube-video-audit
 description: Audit one YouTube video in depth using public metadata, transcript/content evidence, release timing, comments, and optional owner analytics
 type: research
-version: 1.0.0
+version: v0.0
 argument-hint: "<video URL or ID> [--owner-analytics <path>] [--comments N] [--compare-channel <slug>]"
 ---
 

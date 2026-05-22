@@ -2,7 +2,7 @@
 name: feature-interview
 description: Interview a feature idea with evidence-backed alignment, then decide whether to create/update docs, specs, roadmap, or tasks
 type: planning
-version: 1.1.0
+version: v0.0
 argument-hint: "[feature idea or tasks/ideas.md entry]"
 ---
 

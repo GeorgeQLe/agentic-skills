@@ -2,7 +2,7 @@
 name: game-core-loop
 description: Use only for video game projects; analyze moment-to-moment, session, progression, and retention loops
 type: analysis
-version: 1.0.0
+version: v0.0
 ---
 
 # Game Core Loop

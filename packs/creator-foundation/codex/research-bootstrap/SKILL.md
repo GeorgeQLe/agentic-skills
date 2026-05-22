@@ -2,7 +2,7 @@
 name: research-bootstrap
 description: Create the standard creator-media research directory structure in the current project, with platform directories, data roots, archive paths, and README index files
 type: execution
-version: 1.0.0
+version: v0.0
 argument-hint: "[--platforms youtube,tiktok,...] [--handle <slug>]"
 ---
 

@@ -2,7 +2,7 @@
 name: experiment
 description: Design lean validation experiments — hypothesis, method, success criteria, sample size, timeline, and decision rules
 type: planning
-version: 1.0.0
+version: v0.0
 argument-hint: <hypothesis or assumption to test>
 ---
 

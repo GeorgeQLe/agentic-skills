@@ -2,7 +2,7 @@
 name: deploy
 description: Deploy the project to a target environment (defaults to staging) with deployment history tracking
 type: shipping
-version: 2.0.0
+version: v0.0
 argument-hint: "[staging|production] [--status]"
 ---
 

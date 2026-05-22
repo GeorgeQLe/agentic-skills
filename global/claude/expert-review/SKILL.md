@@ -2,7 +2,7 @@
 name: expert-review
 description: Conduct a thorough project-wide code review as an expert panel, cross-referencing specs, changelogs, and design documents
 type: review
-version: 1.1.0
+version: v0.0
 argument-hint: "[optional: specific directory or file path to scope the review]"
 ---
 

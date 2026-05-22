@@ -2,7 +2,7 @@
 name: patch-exec-profile
 description: Audit and fill missing lane metadata (Mode, Depends on, Owns, Branch) in agent-team and implementation-safe execution profiles in tasks/todo.md
 type: execution
-version: 1.0.0
+version: v0.0
 ---
 
 # Patch Exec Profile

@@ -2,7 +2,7 @@
 name: spec-interview
 description: Post-prototype production deep dive — walks through consolidated prototype screen by screen to extract production specifications
 type: planning
-version: 1.0.0
+version: v0.0
 argument-hint: "[optional-topic-override] [--ideas]"
 ---
 

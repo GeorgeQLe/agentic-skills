@@ -2,7 +2,7 @@
 name: mono-plan
 description: Detect monorepo structure, identify shared chokepoints, and generate safe parallel lane specs aligned to package boundaries
 type: planning
-version: 1.0.0
+version: v0.0
 ---
 
 # Mono Plan

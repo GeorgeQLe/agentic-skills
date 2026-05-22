@@ -2,7 +2,7 @@
 name: youtube-competitive-research
 description: Analyze why an external YouTube video performed well and extract evidence-backed competitive lessons, positioning gaps, and adaptation opportunities
 type: research
-version: 1.0.0
+version: v0.0
 argument-hint: "<video URL or ID...> [--primary-channel <slug>] [--comments N] [--angle packaging|topic|retention|positioning]"
 ---
 

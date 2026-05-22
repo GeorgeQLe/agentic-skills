@@ -2,7 +2,7 @@
 name: scaffold
 description: Generate a new package or app in the monorepo following established project conventions
 type: execution
-version: 1.0.0
+version: v0.0
 ---
 
 # Scaffold

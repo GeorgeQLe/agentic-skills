@@ -2,7 +2,7 @@
 name: plan-phase
 description: Decompose a single roadmap phase into implementation steps, tests, and file-level detail
 type: planning
-version: 2.0.0
+version: v0.0
 argument-hint: "[phase-number] [--no-tdd]"
 ---
 

@@ -2,7 +2,7 @@
 name: risk-register
 description: Broad risk assessment — key-person, technical, regulatory, competitive, financial, and execution risks beyond product/market
 type: analysis
-version: 1.0.0
+version: v0.0
 argument-hint: "[optional: focus area e.g. \"technical\", \"regulatory\", \"financial\"]"
 ---
 

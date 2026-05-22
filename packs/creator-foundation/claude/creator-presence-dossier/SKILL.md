@@ -2,7 +2,7 @@
 name: creator-presence-dossier
 description: Build a repo-backed Markdown dossier of a creator's public professional presence, career arc, proof assets, platform roles, and next strategy route
 type: research
-version: 1.0.0
+version: v0.0
 argument-hint: "[creator or project slug]"
 ---
 

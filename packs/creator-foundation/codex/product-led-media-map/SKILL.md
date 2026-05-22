@@ -2,7 +2,7 @@
 name: product-led-media-map
 description: Map a product or company into founder-led YouTube media themes, proof assets, demos, trust moments, and content roles
 type: research
-version: 1.0.0
+version: v0.0
 argument-hint: "[product or channel slug]"
 ---
 

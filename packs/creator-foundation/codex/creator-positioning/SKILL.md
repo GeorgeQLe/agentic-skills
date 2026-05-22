@@ -2,7 +2,7 @@
 name: creator-positioning
 description: Define a creator or founder-media channel's audience promise, category, differentiated wedge, proof, and anti-positioning
 type: research
-version: 1.0.0
+version: v0.0
 argument-hint: "[channel slug or audit path]"
 ---
 

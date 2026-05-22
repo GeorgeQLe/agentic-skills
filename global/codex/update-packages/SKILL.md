@@ -2,7 +2,7 @@
 name: update-packages
 description: Update project dependencies to the latest version that is more than 8 days old, preferring pnpm over npm and enforcing installer age gates
 type: execution
-version: 0.2.1
+version: v0.0
 argument-hint: "[package names, workspace scope, or --all]"
 ---
 

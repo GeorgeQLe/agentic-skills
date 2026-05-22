@@ -2,7 +2,7 @@
 name: dead-code
 description: Scan for unused exports, unreachable code, orphaned files, and stale dependencies
 type: analysis
-version: 1.0.0
+version: v0.0
 ---
 
 # Dead Code

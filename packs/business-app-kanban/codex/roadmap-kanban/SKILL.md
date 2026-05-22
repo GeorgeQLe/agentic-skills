@@ -2,7 +2,7 @@
 name: roadmap-kanban
 description: PoketoWork kanban variant of roadmap — sync roadmap phases and current steps to cards
 type: planning
-version: 1.0.0
+version: v0.0
 argument-hint: "[--existing] [path-to-spec]"
 allowed-tools: Bash(poketo *)
 ---

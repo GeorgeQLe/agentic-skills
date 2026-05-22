@@ -2,7 +2,7 @@
 name: youtube-vid-research
 description: Research one or more external YouTube videos for context, claims, structure, examples, terminology, and transferable takeaways
 type: research
-version: 1.0.0
+version: v0.0
 argument-hint: "<video URL or ID...> [--focus context|claims|summary|references] [--compare-channel <slug>]"
 ---
 

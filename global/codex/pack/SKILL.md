@@ -2,7 +2,7 @@
 name: pack
 description: Manage project-local skill packs and project designation without installing domain skills globally
 type: ops
-version: 1.2.0
+version: v0.0
 argument-hint: "[list|status|recommend|install <pack>|remove <pack>|refresh] or no args for guided setup"
 ---
 

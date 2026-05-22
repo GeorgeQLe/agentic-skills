@@ -2,7 +2,7 @@
 name: concept-exploration
 description: Shape a rough product or project idea into an actionable concept brief before ICP, market research, specifications, UX, UI, or implementation planning
 type: planning
-version: 1.0.0
+version: v0.0
 argument-hint: "[optional rough idea, product thought, or app scope]"
 ---
 

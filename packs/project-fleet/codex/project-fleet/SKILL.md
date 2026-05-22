@@ -2,7 +2,7 @@
 name: project-fleet
 description: Orchestrate a central control repository that plans, provisions, tracks, and advances many related downstream repositories or work items with guarded batches, blocker handling, and productive fallback work.
 type: orchestration
-version: 1.0.0
+version: v0.0
 argument-hint: "[--status] [--plan] [--execute]"
 ---
 

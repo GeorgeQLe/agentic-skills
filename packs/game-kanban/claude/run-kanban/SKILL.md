@@ -2,7 +2,7 @@
 name: run-kanban
 description: PoketoWork kanban variant of run — move the active step through In Progress and Done
 type: execution
-version: 1.0.0
+version: v0.0
 argument-hint: "[--phase]"
 allowed-tools: Bash(poketo *)
 ---

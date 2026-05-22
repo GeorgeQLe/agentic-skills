@@ -2,7 +2,7 @@
 name: desk-flip
 description: Autopsy a stuck project, extract salvageable artifacts, and route to a fresh start via /bootstrap-repo reset or new-repo bootstrap
 type: execution
-version: 1.0.0
+version: v0.0
 argument-hint: "<project-path>"
 ---
 

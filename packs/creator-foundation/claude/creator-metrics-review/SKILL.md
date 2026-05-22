@@ -2,7 +2,7 @@
 name: creator-metrics-review
 description: Review creator-media performance over time using raw YouTube evidence, portfolio metrics, programming goals, and explicit follow-up decisions
 type: research
-version: 1.0.0
+version: v0.0
 argument-hint: "[channel slug] [--period monthly|quarterly]"
 ---
 

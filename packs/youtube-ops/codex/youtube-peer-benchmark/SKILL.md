@@ -2,7 +2,7 @@
 name: youtube-peer-benchmark
 description: Compare a channel against peer channels using evidence-backed portfolio, positioning, packaging, and performance benchmarks
 type: research
-version: 1.0.0
+version: v0.0
 argument-hint: "<primary channel> <peer channel...> [--count N]"
 ---
 

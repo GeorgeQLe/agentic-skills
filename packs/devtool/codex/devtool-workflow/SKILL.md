@@ -2,7 +2,7 @@
 name: devtool-workflow
 description: Use only for developer-facing tools, libraries, SDKs, CLIs, APIs, and infrastructure products
 type: planning
-version: 1.0.0
+version: v0.0
 ---
 
 # Devtool Workflow

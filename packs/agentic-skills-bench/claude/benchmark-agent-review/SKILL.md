@@ -2,7 +2,7 @@
 name: benchmark-agent-review
 description: Review persisted benchmark run outputs with one or more agent graders and report subjective ergonomic quality separately from deterministic benchmark scores
 type: analysis
-version: 0.1.0
+version: v0.0
 argument-hint: "<skill name or run path> [--reviewers codex,claude] [--runs N]"
 ---
 

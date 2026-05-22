@@ -2,7 +2,7 @@
 name: icon-handler
 description: Audit and apply project-root icon assets to favicon, app icon, Apple touch icon, and manifest surfaces
 type: execution
-version: 1.0.0
+version: v0.0
 argument-hint: "[audit|fix] [asset filename]"
 ---
 

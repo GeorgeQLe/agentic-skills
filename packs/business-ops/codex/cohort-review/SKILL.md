@@ -2,7 +2,7 @@
 name: cohort-review
 description: Post-launch metrics & funnel analysis — cohort retention, channel performance, and progress against targets from $metrics
 type: analysis
-version: 1.1.0
+version: v0.0
 argument-hint: "[file path to data, pasted data, or empty to be prompted]"
 ---
 

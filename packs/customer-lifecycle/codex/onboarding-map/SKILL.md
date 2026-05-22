@@ -2,7 +2,7 @@
 name: onboarding-map
 description: Plan signup, setup, activation, first success, onboarding drop-offs, and time-to-value for each lifecycle persona
 type: analysis
-version: 1.0.0
+version: v0.0
 argument-hint: "[optional: app, persona, or onboarding segment]"
 ---
 

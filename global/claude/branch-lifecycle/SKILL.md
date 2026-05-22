@@ -2,7 +2,7 @@
 name: branch-lifecycle
 description: "Evaluate feature branches and decide whether to merge, salvage, keep open, or delete based on branch health, PR status, and stale-branch heuristics"
 type: ops
-version: 1.0.0
+version: v0.0
 argument-hint: "[--force] [list | pr [branch...] | review <branch-or-pr> | merge <branch-or-pr> | salvage <branch-or-pr> [--onto <base>] [--commits <sha,...>] | cleanup]"
 ---
 

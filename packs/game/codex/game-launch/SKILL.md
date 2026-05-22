@@ -2,7 +2,7 @@
 name: game-launch
 description: Use only for video game projects; plan Steam launch, festivals, creator outreach, demo timing, community, and wishlist targets
 type: research
-version: 1.0.0
+version: v0.0
 ---
 
 # Game Launch

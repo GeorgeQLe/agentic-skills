@@ -2,7 +2,7 @@
 name: session-triage
 description: Investigate one immediate session, correction, repo incident, or skill failure and recommend a verified fix
 type: analysis
-version: 0.1.0
+version: v0.0
 argument-hint: "[session id/file, repo path, skill name/path, correction text, or issue description]"
 ---
 

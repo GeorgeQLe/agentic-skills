@@ -2,7 +2,7 @@
 name: ship-end-kanban
 description: PoketoWork kanban variant of ship-end — close the active session card after wrapping up
 type: shipping
-version: 1.0.0
+version: v0.0
 argument-hint: "[--no-deploy]"
 allowed-tools: Bash(poketo *)
 ---

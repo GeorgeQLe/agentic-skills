@@ -2,7 +2,7 @@
 name: investigate
 description: Validate user claims against codebase and git history, trace to root cause, and propose a fix
 type: debugging
-version: 1.2.0
+version: v0.0
 argument-hint: <error, bug description, user observations, or issue URL> [--ui] [--data] [--plan]
 ---
 

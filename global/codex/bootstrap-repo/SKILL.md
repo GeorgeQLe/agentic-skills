@@ -2,7 +2,7 @@
 name: bootstrap-repo
 description: Initialize or reset a repository README and agent workflow docs from a short project brief
 type: execution
-version: 1.0.0
+version: v0.0
 argument-hint: "<project brief>"
 ---
 

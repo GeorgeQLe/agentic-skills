@@ -2,7 +2,7 @@
 name: youtube-peer-benchmark
 description: Benchmark a YouTube channel against peers — discover comparable creators, pull real metrics via yt-dlp, compare performance at equivalent stages, and diagnose whether the gap is quality, volume, format, or conversion
 type: research
-version: 2.0.0
+version: v0.0
 argument-hint: "<channel URL or handle> [--niche 'keyword phrase'] [--peers @handle1,@handle2] [--count N]"
 ---
 

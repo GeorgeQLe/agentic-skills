@@ -2,7 +2,7 @@
 name: youtube-channel-audit
 description: Run an evidence-first YouTube channel audit that captures raw metadata/transcripts, performance fields, portfolio roles, and repeated content patterns
 type: research
-version: 1.0.0
+version: v0.0
 argument-hint: "<channel URL or handle> [--count N]"
 ---
 

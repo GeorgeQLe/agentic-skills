@@ -2,7 +2,7 @@
 name: mono-detect
 description: Detect pnpm workspace structure, optional Turborepo overlay, package metadata, and internal dependency graph for monorepo-aware skills
 type: analysis
-version: 1.0.0
+version: v0.0
 argument-hint: "[optional: repository root]"
 ---
 

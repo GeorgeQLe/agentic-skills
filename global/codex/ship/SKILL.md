@@ -2,7 +2,7 @@
 name: ship
 description: "Ship already-finished work, optionally deploy it, and prepare the next step"
 type: shipping
-version: 1.0.0
+version: v0.0
 argument-hint: "[--no-plan] [--no-deploy]"
 ---
 

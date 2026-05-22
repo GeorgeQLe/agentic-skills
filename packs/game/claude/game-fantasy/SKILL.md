@@ -2,7 +2,7 @@
 name: game-fantasy
 description: Use only for video game projects; define the emotional promise, player fantasy, vibe references, and hook
 type: research
-version: 1.0.0
+version: v0.0
 ---
 
 # Game Fantasy

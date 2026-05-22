@@ -2,7 +2,7 @@
 name: series-spec
 description: Specify a repeatable YouTube series format with audience job, episode shape, evidence requirements, packaging rules, and success metrics
 type: planning
-version: 1.0.0
+version: v0.0
 argument-hint: "<series idea or programming path>"
 ---
 

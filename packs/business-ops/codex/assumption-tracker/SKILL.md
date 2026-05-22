@@ -2,7 +2,7 @@
 name: assumption-tracker
 description: Extract and risk-rank assumptions from research docs — living register of what to validate first
 type: analysis
-version: 1.0.0
+version: v0.0
 argument-hint: "[optional: focus area e.g. \"pricing\", \"ICP\", \"channel\"]"
 ---
 

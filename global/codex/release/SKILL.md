@@ -2,7 +2,7 @@
 name: release
 description: Version bump, generate changelog, tag, and prepare a release
 type: shipping
-version: 1.0.0
+version: v0.0
 ---
 
 # Release

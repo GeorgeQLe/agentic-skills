@@ -2,7 +2,7 @@
 name: release
 description: Version bump, generate changelog, tag, and prepare a release
 type: shipping
-version: 1.0.0
+version: v0.0
 argument-hint: "[patch|minor|major] or [specific version like 1.2.3]"
 ---
 

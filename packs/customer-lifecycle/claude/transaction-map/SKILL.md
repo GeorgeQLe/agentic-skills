@@ -2,7 +2,7 @@
 name: transaction-map
 description: Plan purchase, checkout, payment, fulfillment, receipt, refund, dispute, and trust-state flows
 type: analysis
-version: 1.0.0
+version: v0.0
 argument-hint: "[optional: app, transaction type, or payment scenario]"
 ---
 

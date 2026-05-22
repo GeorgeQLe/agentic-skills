@@ -2,7 +2,7 @@
 name: devtool-positioning
 description: Use only for developer-facing products; position against alternatives by workflow, ecosystem, trust, and switching cost
 type: research
-version: 1.0.0
+version: v0.0
 ---
 
 # Devtool Positioning

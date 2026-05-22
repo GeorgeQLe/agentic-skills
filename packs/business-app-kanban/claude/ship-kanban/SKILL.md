@@ -2,7 +2,7 @@
 name: ship-kanban
 description: PoketoWork kanban variant of ship — package finished work and update the matching card
 type: shipping
-version: 1.0.0
+version: v0.0
 argument-hint: "[--no-plan] [--no-deploy]"
 allowed-tools: Bash(poketo *)
 ---

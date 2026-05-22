@@ -2,7 +2,7 @@
 name: delegate
 description: Live in-session delegation from Claude to Codex via the approval/delegation packet contract
 type: shipping
-version: 1.0.0
+version: v0.0
 argument-hint: "[target-skill] [--allow-dirty <glob>] [--inline-fallback]"
 ---
 

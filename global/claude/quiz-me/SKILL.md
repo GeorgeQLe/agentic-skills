@@ -2,7 +2,7 @@
 name: quiz-me
 description: Adversarial one-question-at-a-time questioning to verify deep reading comprehension of alignment pages, specs, or any document
 type: evaluation
-version: 1.0.0
+version: v0.0
 argument-hint: "[file-path-or-glob]"
 ---
 

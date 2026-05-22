@@ -2,7 +2,7 @@
 name: uat-guide
 description: Expand a UAT journey into click-by-click tester instructions, then update the result log on completion
 type: analysis
-version: 1.0.0
+version: v0.0
 argument-hint: "[optional: journey number, journey name, or 'next']"
 ---
 

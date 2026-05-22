@@ -2,7 +2,7 @@
 name: value-prop-canvas
 description: Strategyzer-style jobs/pains/gains to features/relievers/creators fit validation
 type: research
-version: 1.0.0
+version: v0.0
 argument-hint: "[optional: specific job or segment to focus on]"
 ---
 

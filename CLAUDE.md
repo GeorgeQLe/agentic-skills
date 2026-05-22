@@ -52,6 +52,12 @@
 - Check `packs/*/claude/<command>/SKILL.md` and pack metadata such as `packs/*/PACK.md`; project-local pack skills may exist in this repository even when they are not visible in the active session list.
 - In this repository, `/benchmark-test-skill` lives under `packs/agentic-skills-bench/claude/benchmark-test-skill/SKILL.md`, and `design-system` is its target skill argument.
 
+### 9. Skill Versioning
+- Every SKILL.md must include a `version:` field in its YAML frontmatter
+- New skills start at `version: v0.0`
+- Bump the decimal (e.g. `v0.0` → `v0.1`) for non-refactor changes — adjustments, tweaks, behavioral updates
+- Refactors or full overhauls of a skill do NOT bump the version; only substantive behavior/output changes do
+
 ## Task Management
 
 1. **Plan First**: Write plan to `tasks/roadmap.md` (full plan) and `tasks/todo.md` (current phase) with checkable items

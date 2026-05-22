@@ -2,7 +2,7 @@
 name: devtool-dx-journey
 description: Use only for developer-facing products; analyze install, quickstart, first success, debugging, and production adoption journeys
 type: analysis
-version: 1.0.0
+version: v0.0
 ---
 
 # Devtool DX Journey

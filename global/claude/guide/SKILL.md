@@ -2,7 +2,7 @@
 name: guide
 description: Click-by-click instructions for manual blockers — DNS, OAuth, signups, and other GUI-dependent tasks
 type: analysis
-version: 1.0.0
+version: v0.0
 argument-hint: "[optional: task description or manual-todo item text]"
 ---
 

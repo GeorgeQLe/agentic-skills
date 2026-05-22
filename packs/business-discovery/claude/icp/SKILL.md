@@ -2,7 +2,7 @@
 name: icp
 description: Research-driven ICP discovery — web search + codebase analysis to identify multiple ICPs, pain points, value props, and cross-ICP prioritization
 type: research
-version: 3.5.0
+version: v0.0
 argument-hint: <spec file path, concept/idea, or empty to use concept brief>
 ---
 

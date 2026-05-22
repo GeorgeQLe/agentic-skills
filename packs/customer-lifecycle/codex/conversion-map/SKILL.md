@@ -2,7 +2,7 @@
 name: conversion-map
 description: Plan evaluation, trial, pricing decision, objections, buyer roles, and conversion triggers
 type: analysis
-version: 1.0.0
+version: v0.0
 argument-hint: "[optional: app, segment, or conversion motion]"
 ---
 

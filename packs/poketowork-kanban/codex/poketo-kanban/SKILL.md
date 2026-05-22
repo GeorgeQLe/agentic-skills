@@ -2,7 +2,7 @@
 name: poketo-kanban
 description: Manage Poketo kanban boards — list boards, view board state, create/update/move cards, manage lists. Use when the user wants to track tasks, view project status, or manage work items.
 type: ops
-version: 1.1.0
+version: v0.0
 argument-hint: "<subcommand> [options] [--archive]"
 allowed-tools: Bash(poketo *)
 ---

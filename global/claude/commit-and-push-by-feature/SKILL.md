@@ -2,7 +2,7 @@
 name: commit-and-push-by-feature
 description: Commit and push all changes to GitHub grouped by logical feature/function buckets with conventional commit messages
 type: shipping
-version: 1.0.0
+version: v0.0
 argument-hint:
 ---
 

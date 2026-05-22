@@ -1,7 +1,7 @@
 ---
 name: growth-model
 type: research
-version: 1.0.0
+version: v0.0
 description: Reforge-style growth loop design — acquisition, retention, and monetization loops
 argument-hint: "[optional: specific loop type e.g. \"viral\", \"content\", \"paid\"]"
 ---

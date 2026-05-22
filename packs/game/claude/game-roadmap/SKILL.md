@@ -2,7 +2,7 @@
 name: game-roadmap
 description: Use only for video game projects; sequence prototype, vertical slice, demo, store page, festival, launch, and post-launch milestones
 type: planning
-version: 1.0.0
+version: v0.0
 ---
 
 # Game Roadmap

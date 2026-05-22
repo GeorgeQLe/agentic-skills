@@ -2,7 +2,7 @@
 name: clone-spec-store
 description: Build a canonical lawful-functional-parity spec store for N software ideas in any domain, then use portfolio gates to seed only implementation-ready or explicit scaffold-only downstream repos.
 type: planning
-version: 1.0.0
+version: v0.0
 argument-hint: "[--domain <label>] [--count <N>] [--owner <github-owner>] [--repo-slug-suffix <suffix>]"
 ---
 

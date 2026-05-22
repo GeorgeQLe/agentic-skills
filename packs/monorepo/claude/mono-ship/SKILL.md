@@ -2,7 +2,7 @@
 name: mono-ship
 description: Augment the standard ship lifecycle with monorepo package-scoped and transitive-dependent validation
 type: shipping
-version: 1.0.0
+version: v0.0
 argument-hint: "[--pipeline]"
 ---
 

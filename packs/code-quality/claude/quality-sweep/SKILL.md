@@ -2,7 +2,7 @@
 name: quality-sweep
 description: Audit and implement behavior-preserving cleanup across types, dead code, dependencies, errors, and comments
 type: execution
-version: 1.0.0
+version: v0.0
 argument-hint: "[audit|fix|full] [optional: package, app, directory, or domain]"
 ---
 

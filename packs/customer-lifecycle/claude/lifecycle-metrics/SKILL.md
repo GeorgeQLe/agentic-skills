@@ -2,7 +2,7 @@
 name: lifecycle-metrics
 description: Define stage metrics, instrumentation needs, and evidence gaps across onboarding, conversion, transaction, retention, and expansion
 type: analysis
-version: 1.0.0
+version: v0.0
 argument-hint: "[optional: app or lifecycle stage]"
 ---
 

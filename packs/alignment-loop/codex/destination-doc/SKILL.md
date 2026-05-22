@@ -2,7 +2,7 @@
 name: destination-doc
 description: Serialize taste-calibration alignment into a lightweight destination document
 type: planning
-version: 1.0.0
+version: v0.0
 argument-hint: "[optional topic override]"
 ---
 

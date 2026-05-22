@@ -2,7 +2,7 @@
 name: skills
 description: Browse and search all available skills, grouped by workflow stage or activity type
 type: ops
-version: 1.1.0
+version: v0.0
 argument-hint: "[list | types | search <keyword>]"
 ---
 

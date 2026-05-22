@@ -2,7 +2,7 @@
 name: youtube-description-optimizer
 description: Audit, draft, or template YouTube descriptions and metadata for promise-match, search clarity, CTA hierarchy, links, chapters, hashtags, and upload readiness
 type: research
-version: 1.0.0
+version: v0.0
 argument-hint: "<video URL | video ID | script/outline path | channel slug> [--mode audit|draft|template] [--series <name>] [--compare-channel <slug>]"
 ---
 

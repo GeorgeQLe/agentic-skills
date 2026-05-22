@@ -2,7 +2,7 @@
 name: targeted-skill-builder
 description: Build or update one specific skill from a concrete workflow gap, correction, or repeated bad recommendation
 type: execution
-version: 1.0.0
+version: v0.0
 argument-hint: "[workflow gap, correction, skill name, or capability request]"
 ---
 

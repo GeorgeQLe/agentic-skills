@@ -2,7 +2,7 @@
 name: consolidate-variations
 description: Compare multiple built UI variations after UAT evidence, interview the user on what works and what does not, resolve conflicts, and produce a final implementation-ready UI specification
 type: planning
-version: 1.0.0
+version: v0.0
 argument-hint: "[optional: topic, page, or path to variation specs]"
 ---
 

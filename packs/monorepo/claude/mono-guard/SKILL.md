@@ -2,7 +2,7 @@
 name: mono-guard
 description: Validate monorepo lane specs before dispatch and verify integrated changes stay inside declared lane boundaries
 type: analysis
-version: 1.0.0
+version: v0.0
 argument-hint: "[--post-integration] [optional: lane-specs.json]"
 ---
 

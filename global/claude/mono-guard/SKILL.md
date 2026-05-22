@@ -2,7 +2,7 @@
 name: mono-guard
 description: Pre-flight validation of execution profile lane boundaries against monorepo structure — prevents dispatch of unsafe parallel configurations
 type: analysis
-version: 1.0.0
+version: v0.0
 argument-hint: "[--post-integration] [optional: path to todo.md]"
 ---
 
