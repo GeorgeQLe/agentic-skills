@@ -53,7 +53,19 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 - [x] Layer1 coverage proves canonical policy headings pass, shorthand-only outputs fail, and the fixture creates the monorepo signal.
 - [x] Focused verification, benchmark coverage, and whitespace checks pass; results are recorded; intended changes are committed and pushed on `master`.
 
-**Result:** Updated on 2026-05-22. The `provision-agentic-config` benchmark fixture now evaluates substantive policy sections instead of brittle shorthand prompt phrases, creates `pnpm-workspace.yaml` so monorepo safety is in scope, allows the canonical shared-lockfile wording, and accepts the provisioning skill's next-command handoff from stdout. Focused layer1 coverage locks canonical-pass, shorthand-only-fail, monorepo-signal, and stdout-handoff behavior. Latest rerun evidence: Codex 3/3 at 95.3% output quality; Claude 2/3 at 93.7% output quality, with the remaining failed run omitting direct-to-primary shipping policy.
+**Result:** Updated on 2026-05-22. The `provision-agentic-config` benchmark fixture now evaluates substantive policy sections instead of brittle shorthand prompt phrases, creates `pnpm-workspace.yaml` so monorepo safety is in scope, allows the canonical shared-lockfile wording, and accepts the provisioning skill's next-command handoff from stdout. Focused layer1 coverage locks canonical-pass, shorthand-only-fail, monorepo-signal, and stdout-handoff behavior. Latest persisted rerun evidence: Codex 3/3 at 95.3% output quality; Claude 3/3 at 93.4% output quality.
+
+## Current Targeted Update: Provision Agentic Config Benchmark Agent Review 2026-05-22
+
+**Goal:** Review the latest retained `provision-agentic-config` benchmark outputs for subjective ergonomic quality after deterministic pass evidence exists.
+
+**Acceptance Criteria:**
+- [x] Latest Claude and Codex run reports are resolved from persisted benchmark evidence.
+- [x] Retained generated `AGENTS.md` artifacts are reviewed separately from deterministic pass/fail scoring.
+- [x] Agent-review scores, common findings, remediation handoff, and definitive next route are written to a dated benchmark review report.
+- [x] Alignment preview is verified, task notes are updated, and intended changes are committed and pushed on `master`.
+
+**Result:** Updated on 2026-05-22. The review finds the retained outputs good but not excellent: policy content and `$run` routing are strong, while artifact-reference ergonomics need tightening so final handoffs use repo-relative artifact paths and avoid benchmark temp paths. Wrote the dated review report and alignment preview; validation passed.
 
 ## Current Targeted Update: Alignment HTML Output Root 2026-05-21
 

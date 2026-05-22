@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Benchmark Agent Review - provision-agentic-config</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #202124;
+      --muted: #5f6368;
+      --line: #dadce0;
+      --panel: #f8fafd;
+      --accent: #0b57d0;
+      --good: #137333;
+      --warn: #b06000;
+      --bg: #ffffff;
+    }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.45;
+    }
+    main {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 32px 24px 48px;
+    }
+    header {
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 18px;
+      margin-bottom: 24px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 30px;
+      letter-spacing: 0;
+    }
+    h2 {
+      margin: 28px 0 10px;
+      font-size: 20px;
+    }
+    p {
+      margin: 8px 0;
+    }
+    .meta, .muted {
+      color: var(--muted);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+      margin: 16px 0 20px;
+    }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+    }
+    .metric {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: #eef3fb;
+    }
+    code {
+      background: #eef3fb;
+      padding: 1px 4px;
+      border-radius: 4px;
+      font-family: Menlo, Consolas, monospace;
+      font-size: 0.95em;
+    }
+    .good {
+      color: var(--good);
+      font-weight: 700;
+    }
+    .warn {
+      color: var(--warn);
+      font-weight: 700;
+    }
+    ul {
+      padding-left: 22px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Benchmark Agent Review: provision-agentic-config</h1>
+      <p class="meta">Review preview for <code>benchmark/review-provision-agentic-config-2026-05-22.md</code></p>
+    </header>
+
+    <section class="grid" aria-label="summary metrics">
+      <div class="panel">
+        <div class="metric">100%</div>
+        <p>Claude hard pass rate, 3/3 evaluated</p>
+      </div>
+      <div class="panel">
+        <div class="metric">100%</div>
+        <p>Codex hard pass rate, 3/3 evaluated</p>
+      </div>
+      <div class="panel">
+        <div class="metric">86.5</div>
+        <p>Median subjective score</p>
+      </div>
+      <div class="panel">
+        <div class="metric">84-89</div>
+        <p>Subjective score range</p>
+      </div>
+    </section>
+
+    <h2>Verdict</h2>
+    <p><span class="good">Good.</span> The retained <code>AGENTS.md</code> outputs are useful and mostly ergonomic. They include orchestration, verification, task management, direct-to-primary shipping, monorepo safety, no-GitHub-Actions guidance, and the correct <code>$run</code> handoff.</p>
+    <p><span class="warn">Not excellent.</span> Artifact-reference ergonomics are consistently weak. Some handoffs name only <code>AGENTS.md</code>; Codex runs sometimes surface benchmark temp paths that are not useful outside the sandbox.</p>
+
+    <h2>Score Table</h2>
+    <table>
+      <thead>
+        <tr><th>Runner</th><th>Runs</th><th>Subjective Scores</th><th>Grade</th><th>Primary Note</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Claude</td><td>0, 1, 2</td><td>88, 86, 84</td><td>Good</td><td>Strong policy content; artifact references are generic.</td></tr>
+        <tr><td>Codex</td><td>0, 1, 2</td><td>89, 84, 87</td><td>Good</td><td>Correct route and policy blocks; temp artifact paths weaken handoff quality.</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Strengths</h2>
+    <ul>
+      <li>Each run clearly provisions <code>AGENTS.md</code> from <code>workflow.md</code>.</li>
+      <li>The policy sections are concrete enough for a next operator to follow.</li>
+      <li>All outputs avoid GitHub Actions drift and end with <code>Recommended next command: $run</code>.</li>
+    </ul>
+
+    <h2>Remediation</h2>
+    <table>
+      <thead>
+        <tr><th>Finding</th><th>Owner</th><th>Change</th><th>Proof</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Handoffs do not consistently identify the artifact with a repo-relative path.</td>
+          <td><code>global/codex/provision-agentic-config/SKILL.md</code> and Claude mirror</td>
+          <td>Require <code>./AGENTS.md</code> or <code>./CLAUDE.md</code> in final output and reject temp fixture paths.</td>
+          <td>Focused benchmark/rubric check for repo-relative artifact references and no <code>/private/var</code> or <code>/tmp</code> links.</td>
+        </tr>
+        <tr>
+          <td>Generated artifacts do not always include a concise source/verification note.</td>
+          <td>Provisioning skill artifact contract</td>
+          <td>Add a small source and verification note naming <code>workflow.md</code> and benchmark coverage validation when present.</td>
+          <td>Focused rerun confirms retained <code>AGENTS.md</code> includes source and verification evidence.</td>
+        </tr>
+        <tr>
+          <td>The deterministic artifact-reference rubric could distinguish missing paths from temp paths.</td>
+          <td><code>tests/layer4/setups/tier23-global-workflows.setup.ts</code></td>
+          <td>Score repo-relative paths highest, temp paths separately, and missing artifact references lowest.</td>
+          <td><code>pnpm --dir tests exec vitest run --project layer1 bench-setups -- -t provision-agentic-config</code></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>Next Work</h2>
+    <p><code>$targeted-skill-builder provision-agentic-config repo-relative artifact handoff</code></p>
+  </main>
+</body>
+</html>

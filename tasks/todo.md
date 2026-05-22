@@ -2050,6 +2050,28 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
 - Existing-skill overlap: `session-triage` already diagnosed the failure; `targeted-skill-builder` owned the narrow fixture remediation.
 - Fix applied: `provision-agentic-config` fixture now checks substantive policy sections and evidence instead of shorthand prompt phrases, allows `package-lock.json` because the canonical monorepo safety policy names shared lockfiles, creates `pnpm-workspace.yaml` so monorepo safety is in scope, and accepts the provisioning skill's next-command handoff from stdout.
 - Prevention: added focused layer1 tests proving canonical policy outputs pass, shorthand-only echoes fail, the fixture includes the monorepo signal, and stdout handoff routing is accepted.
-- Benchmark result: Codex passed 3/3 with no infrastructure blocks, no threshold failures, and no critical failures. Claude improved from the old 0/3 fixture false negative to 2/3; the remaining failure omitted direct-to-primary shipping policy and is residual output variance rather than the original fixture mismatch. Latest sessions: Claude `d88a2f10` at 66.7% hard pass, 93.7% output quality; Codex `5fbace33` at 100.0% hard pass, 95.3% output quality.
+- Benchmark result: the latest persisted both-agent rerun passed for both runners with no infrastructure blocks, no threshold failures, and no critical failures. Latest sessions: Claude `31066d9f` at 100.0% hard pass, 93.4% output quality; Codex `5fbace33` at 100.0% hard pass, 95.3% output quality.
 - Alignment preview: wrote and successfully opened `alignment/targeted-skill-builder-provision-agentic-config-fixture.html`.
 - Validation passed: `pnpm --dir tests exec vitest run --project layer1 bench-setups -- -t provision-agentic-config`; `pnpm --dir tests verify --skill provision-agentic-config`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests bench --skill provision-agentic-config --agent both --runs 3 --chunk-size 3 --pause 0`; `pnpm --dir tests bench --skill provision-agentic-config --agent claude --runs 3 --chunk-size 3 --pause 0`; `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken`; `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`; `/opt/homebrew/bin/bash ./scripts/skill-next-step-routing.sh --missing`; `node scripts/generate-skills-showcase-data.mjs`; `node scripts/generate-skills-showcase-github-data.mjs`; `git diff --check`.
+
+## Current Task — Provision Agentic Config Benchmark Agent Review 2026-05-22
+
+**Goal:** Review the retained `provision-agentic-config` benchmark outputs for subjective ergonomic quality after the deterministic benchmark passed.
+
+**Plan:**
+- [x] Resolve the latest persisted Claude and Codex run evidence.
+- [x] Extract retained `AGENTS.md` artifacts, stdout handoffs, hard assertions, and deterministic quality scores.
+- [x] Score each evaluated run against the agent-review rubric.
+- [x] Write the benchmark review report and required alignment preview.
+- [x] Verify artifacts, then commit and push intended changes on `master`.
+
+### Review
+
+- Source runs reviewed: Claude `tests/benchmarks/runs/provision-agentic-config-claude-31066d9f/`; Codex `tests/benchmarks/runs/provision-agentic-config-codex-5fbace33/`.
+- Hard assertion context: both runners passed 3/3 with 0 infrastructure blocks. Deterministic output quality was 93.4% for Claude and 95.3% for Codex.
+- Subjective verdict: good. The retained `AGENTS.md` outputs are useful and include the required orchestration, verification, shipping, monorepo safety, no-GitHub-Actions, and `$run` handoff content.
+- Material weakness: artifact-reference ergonomics. Handoffs should consistently point to repo-relative `./AGENTS.md` or `./CLAUDE.md` and avoid surfacing benchmark temp paths.
+- Artifacts written: `benchmark/review-provision-agentic-config-2026-05-22.md` and `alignment/benchmark-agent-review-provision-agentic-config.html`.
+- Alignment preview: opened successfully with `open alignment/benchmark-agent-review-provision-agentic-config.html`.
+- Validation passed: `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests bench:coverage`; `git diff --check`.
+- Recommended next command: `$targeted-skill-builder provision-agentic-config repo-relative artifact handoff`.
