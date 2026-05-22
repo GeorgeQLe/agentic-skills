@@ -2780,3 +2780,9 @@ Resolved all 10 findings from `/expert-review`:
 - Fixed a validation harness performance issue in `tests/layer1/routing-graph.test.ts` by hoisting repeated pack/global skill lookups out of generated assertions. The routing suite dropped from a timeout to 1.8s.
 - Refreshed generated benchmark/showcase data and validated with showcase freshness, benchmark coverage, routing test, all 10 verify gates, all 10 both-agent benchmark runs, and whitespace checks.
 - Shipped in commits `bc17fee` and `3e4bd78`, with a final task-state commit to record completion.
+
+## 2026-05-21: Batch 41.3 Group 2 task-state reconciliation
+
+- Reconciled `tasks/todo.md` after the completed and shipped Group 2 benchmark work.
+- Marked the priority queue `$run` item complete and preserved the next triage route: `$session-triage provision-agentic-config benchmark failure`.
+- No source, benchmark, or generated asset changes were needed; this was documentation/task-state bookkeeping only.

@@ -1,7 +1,7 @@
 # Active Phase
 
 **Project:** Claude Skills / agentic-skills
-**Status:** Phase 43 complete. Phase 41 benchmark coverage lane resumed — fixture remediation done.
+**Status:** Phase 43 complete. Phase 41 benchmark coverage lane resumed — Batch 41.3 Group 2 complete.
 **Current phase:** Phase 41 — Remaining Skill Benchmark Result Coverage (resumed)
 **Total phases:** 43
 **Last completed phase:** Phase 43 — Benchmark Fixture Remediation for Route Assertions and Domain Criteria
@@ -17,7 +17,7 @@
 - [x] `$targeted-skill-builder desk-flip reset/archive alignment-first routing` — update desk-flip/bootstrap handoff so stale existing codebases are archived before bootstrap, then route to UI/content alignment before prototype work.
 - [x] `$targeted-skill-builder concept-exploration slugged briefs` — update mirrored `concept-exploration` skills so known or emerging concept identities write slugged research briefs instead of conflating related concepts in generic `concept-brief.md`.
 - [x] Add Codex parity for `desk-flip`: create `global/codex/desk-flip/SKILL.md`, adjust benchmark route expectations, refresh generated skill data, validate, then commit and push.
-- [ ] `$run` — Resume Phase 41 Batch 41.3 re-benchmarks: re-run the 33 Tier 2 global skills that were benchmarked pre-fixture-remediation with near-zero pass rates (Phase 43 added route guidance to all 32 fixture prompts and increased budgets). Current graded count: 69 unique skills / 158 total. Batch 41.5 pack-local groups also have remaining families.
+- [x] `$run` — Resume Phase 41 Batch 41.3 re-benchmarks: re-run the 33 Tier 2 global skills that were benchmarked pre-fixture-remediation with near-zero pass rates (Phase 43 added route guidance to all 32 fixture prompts and increased budgets). Current graded count: 69 unique skills / 158 total. Batch 41.5 pack-local groups also have remaining families. Batch 41.3 Group 2 shipped in `bc17fee` and `3e4bd78`; next triage should start with `provision-agentic-config`, `migrate`, or `prototype`.
 - [ ] Review `tasks/recurring-todo.md`: 2 unchecked recurring items — promote only if due and requiring execution work.
 - [ ] `$research-roadmap` — All 43 roadmap phases are complete. Run documentation health scan after Phase 41 remaining batches finish.
 
@@ -281,7 +281,7 @@ Implement only this step, validate it, then run `/ship` when done.
   - Residual risk: benchmark pass rates are still low for several skills and some Codex runs were infrastructure-blocked; next triage should start with `migrate`, `prototype`, or `provision-agentic-config` because both runners remain at 0% evaluated pass rate or blocked evidence.
   - Rollback note: revert this commit to restore prior reports/generated matrices and the previous routing test implementation.
   - Next command: `$session-triage provision-agentic-config benchmark failure`.
-- Shipped in commits `bc17fee` and `3e4bd78`; final task-state commit follows.
+- Shipped in commits `bc17fee` and `3e4bd78`; this task-state reconciliation marks the priority queue item complete.
 - Next command: `$session-triage provision-agentic-config benchmark failure`
 
 ## Current Task — Desk-Flip Reset/Archive and Alignment-First Routing 2026-05-21
