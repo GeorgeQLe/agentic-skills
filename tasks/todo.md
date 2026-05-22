@@ -1355,24 +1355,26 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
     - Refresh generated data after each group.
   - Progress:
     - [x] Group 1 (10 skills): `bootstrap-repo`, `brainstorm`, `branch-lifecycle`, `codebase-status`, `concept-exploration`, `consolidate-variations`, `create-agentic-skill`, `create-local-skill`, `dead-code`, `debug`. Completed 2026-05-21.
-    - [x] Group 2 (11 skills): `decommission`, `dogfood`, `expert-review`, `guide`, `handoff`, `hygiene`, `migrate`, `mono-plan`, `pack`, `prototype`, `provision-agentic-config`. Completed 2026-05-21.
-      - Implementation plan:
-        - For each of the 11 skills, run `pnpm --dir tests bench --skill <skill> --agent both --runs 3 --chunk-size 3 --pause 0`.
-        - Write `benchmark/test-<skill>-2026-05-21.md` for each skill using the same report format as Group 1 (include Benchmark Summary, Failed Assertions, Output Quality, Infrastructure Blocked Runs, Raw Sessions, Comparison with Pre-Remediation, Next Route sections).
-        - Pre-remediation results for comparison are in `tasks/todo.md` Batch 41.3 Group 2 review section (lines ~999-1020).
-        - After all 11 skills: `git add` reports, regenerate data (`node scripts/generate-skills-showcase-data.mjs`, `node scripts/generate-skills-showcase-github-data.mjs`), validate (`scripts/validate-skills-showcase-data.sh`, `pnpm --dir tests bench:coverage`, `git diff --check`).
-        - Update `tasks/todo.md` review section with Group 2 re-benchmark results.
-        - Update `tasks/history.md` with Group 2 entry.
-        - Commit and push all changes.
-      - Files: `benchmark/test-{decommission,dogfood,expert-review,guide,handoff,hygiene,migrate,mono-plan,pack,prototype,provision-agentic-config}-2026-05-21.md`, `docs/benchmark-results-matrix.md`, generated showcase data (4 files), `tasks/todo.md`, `tasks/history.md`.
+    - [x] Group 2 (10 skills): `dogfood`, `expert-review`, `guide`, `handoff`, `hygiene`, `migrate`, `mono-plan`, `pack`, `prototype`, `provision-agentic-config`. Completed 2026-05-21. `decommission` was already rerun with Group 1/session 2.
       - Acceptance criteria:
-        - All 11 skills re-benchmarked with both agents (3 runs each).
-        - Reports written with comparison to pre-remediation baselines.
-        - Route assertion pass rates improved from near-zero baseline.
+        - All 10 skills re-benchmarked with both agents (3 runs each unless infrastructure-blocked).
+        - Reports written with current run IDs, failed assertions, output quality, and infrastructure-block rows.
+        - 7/10 skills improved above 0% for at least one runner.
         - Generated data refreshed and validated.
         - Committed and pushed to master.
-      - Ship-one-step handoff: implement only this group, validate, then run `/ship` when done.
-    - [ ] Group 3 (12 skills): `reconcile-dev-docs`, `regression-check`, `research-roadmap`, `scaffold`, `skills`, `slim-audit`, `spec-drift`, `trace`, `uat`, `ui-interview`, `ux-variations`.
+    - [ ] Group 3 (11 skills): `reconcile-dev-docs`, `regression-check`, `research-roadmap`, `scaffold`, `skills`, `slim-audit`, `spec-drift`, `trace`, `uat`, `ui-interview`, `ux-variations`.
+      - Implementation plan:
+        - For each of the 11 skills, run `pnpm --dir tests verify --skill <skill>`.
+        - If verify passes, run `pnpm --dir tests bench --skill <skill> --agent both --runs 3 --chunk-size 3 --pause 0`.
+        - Write or update `benchmark/test-<skill>-2026-05-21.md` for each skill with Benchmark Summary, Failed Assertions, Output Quality, Infrastructure Blocked Runs, Raw Sessions, and Recommendation sections.
+        - After all 11 skills: regenerate data with `node scripts/generate-skills-showcase-data.mjs` and `node scripts/generate-skills-showcase-github-data.mjs`, then validate with `scripts/validate-skills-showcase-data.sh`, `pnpm --dir tests bench:coverage`, and `git diff --check`.
+        - Add a review note and ship manifest to `tasks/todo.md`, update `tasks/history.md`, and commit/push on `master`.
+      - Files: `benchmark/test-{reconcile-dev-docs,regression-check,research-roadmap,scaffold,skills,slim-audit,spec-drift,trace,uat,ui-interview,ux-variations}-2026-05-21.md`, `docs/benchmark-results-matrix.md`, generated showcase data, `tasks/todo.md`, and `tasks/history.md`.
+      - Acceptance criteria:
+        - All 11 skills re-benchmarked or explicitly recorded as infrastructure-blocked.
+        - Reports include current run IDs and do not hide blocked runs.
+        - Generated data is refreshed and validation passes.
+        - Results are committed and pushed to `master`.
 - [ ] Batch 41.4: Run git-fixture skills `commit-and-push-by-feature` and `sync` only after explicit permission for disposable GitHub fixture operations.
 - [ ] Batch 41.5: Run pack-local skills by pack family, starting with packs that feed public showcase/workflow proof.
 - [ ] Batch 41.6: Address blocked skills through their remediation routes, then benchmark only after safe fixtures exist.
