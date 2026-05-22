@@ -2075,3 +2075,26 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
 - Alignment preview: opened successfully with `open alignment/benchmark-agent-review-provision-agentic-config.html`.
 - Validation passed: `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests bench:coverage`; `git diff --check`.
 - Recommended next command: `$targeted-skill-builder provision-agentic-config repo-relative artifact handoff`.
+
+## Current Task — Provision Agentic Config Repo-Relative Handoff 2026-05-22
+
+**Goal:** Implement the benchmark review remediation so `provision-agentic-config` handoffs and retained artifacts use repo-relative artifact references instead of benchmark temp paths.
+
+**Plan:**
+- [x] Review relevant lessons and the benchmark review remediation table.
+- [x] Inspect mirrored `provision-agentic-config` contracts and the benchmark setup/rubric.
+- [x] Update the existing skill contracts rather than creating a duplicate skill.
+- [x] Add focused benchmark checks for repo-relative artifact references and temp-path rejection.
+- [x] Run full validation, refresh generated showcase data, then commit and push intended changes on `master`.
+
+### Review
+
+- Decision: existing-skill update.
+- Evidence used: `benchmark/review-provision-agentic-config-2026-05-22.md`, `tasks/lessons.md`, mirrored skill contracts, and focused benchmark setup/tests.
+- Evidence intentionally skipped: broad session-history scan, because the review report already contained the concrete owner surfaces and desired behavior.
+- Existing-skill overlap: `global/codex/provision-agentic-config/SKILL.md` and `global/claude/provision-agentic-config/SKILL.md` own the behavior; no new skill is warranted.
+- Changes made: mirrored contracts now require repo-relative final-output paths and prohibit temp harness paths in user-facing artifact locations; newly created target files get a concise source/verification note. The benchmark setup now rejects temp-path stdout handoffs and scores artifact references against a repo-relative `AGENTS.md` pattern.
+- Alignment preview: wrote `alignment/targeted-skill-builder-provision-agentic-config-repo-relative-artifact-handoff.html`.
+- Alignment preview open: succeeded.
+- Validation passed: `./install.sh`; `./scripts/skill-deps.sh --broken`; `./scripts/skill-versions.sh --missing`; `./scripts/skill-next-step-routing.sh --missing`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests exec vitest run --project layer1 bench-setups -- -t provision-agentic-config`; `pnpm --dir tests verify --skill provision-agentic-config`; `node scripts/generate-skills-showcase-data.mjs`; `node scripts/generate-skills-showcase-github-data.mjs`; `git diff --check`.
+- Showcase validation note: `scripts/validate-skills-showcase-data.sh` regenerated expected assets and reported them stale before commit; rerun after commit should pass on the clean generated outputs.

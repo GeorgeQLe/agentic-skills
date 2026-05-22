@@ -3169,6 +3169,8 @@ describe("benchmark coverage matrix", () => {
 
     const workDir = mkdtempSync(resolve(tmpdir(), "provision-agentic-config-"));
     const artifact = [
+      "Provisioned artifact: ./AGENTS.md. Source: workflow.md. Verification: block appears exactly once; benchmark coverage validation preserved.",
+      "",
       "## Workflow Orchestration",
       "",
       "### 4. Verification Before Done",
@@ -3196,6 +3198,9 @@ describe("benchmark coverage matrix", () => {
 
     expect(assertions.filter((assertion) => !assertion.pass)).toEqual([]);
     expect(setup!.qualityEvaluator?.evaluate(artifact).passed).toBe(true);
+    expect(setup!.qualityEvaluator?.evaluate(artifact).criteria.find((criterion) => criterion.id === "workflow-artifact-reference")).toMatchObject({
+      passed: true,
+    });
   });
 
   it("creates a monorepo signal for the provision-agentic-config monorepo safety fixture", () => {
@@ -3237,6 +3242,68 @@ describe("benchmark coverage matrix", () => {
     });
 
     expect(assertions.filter((assertion) => !assertion.pass)).toEqual([]);
+  });
+
+  it("rejects provision-agentic-config handoffs that expose temp artifact paths", () => {
+    const setup = resolveBenchSetup("provision-agentic-config");
+    expect(setup).toBeDefined();
+
+    const workDir = mkdtempSync(resolve(tmpdir(), "provision-agentic-config-temp-path-"));
+    const artifact = [
+      "Provisioned artifact: ./AGENTS.md. Source: workflow.md. Verification: block appears exactly once.",
+      "## Workflow Orchestration",
+      "### 4. Verification Before Done",
+      "## Core Principles",
+      "- **Direct-To-Primary Git Flow**: Ship on the primary branch.",
+      "- **No GitHub Actions**: Do not create workflows.",
+      "### 7. Monorepo Parallel-Work Safety",
+      "Respect shared lockfiles such as `package-lock.json`.",
+      "## Shipping",
+      "Run verification before shipping.",
+      "Recommended next command: $run",
+      "",
+    ].join("\n");
+    writeFileSync(resolve(workDir, "AGENTS.md"), artifact);
+
+    const assertions = setup!.assertResult({
+      stdout: "Created [AGENTS.md](/private/var/folders/n1/example/skill-test/AGENTS.md)\nRecommended next command: $run",
+      stderr: "",
+      exitCode: 0,
+      workDir,
+      files: ["AGENTS.md"],
+    });
+
+    expect(assertions.filter((assertion) => !assertion.pass).map((assertion) => assertion.description)).toEqual(
+      expect.arrayContaining([expect.stringContaining("Stdout avoids forbidden pattern")]),
+    );
+  });
+
+  it("scores provision-agentic-config artifact references only when repo-relative", () => {
+    const setup = resolveBenchSetup("provision-agentic-config");
+    expect(setup?.qualityEvaluator).toBeDefined();
+
+    const repoRelativeArtifact = [
+      "Provisioned artifact: ./AGENTS.md. Source: workflow.md. Verification: block appears exactly once.",
+      "## Workflow Orchestration",
+      "verification",
+      "shipping",
+      "### 7. Monorepo Parallel-Work Safety",
+      "## Core Principles",
+      "- Direct-To-Primary Git Flow",
+      "- No GitHub Actions",
+      "Recommended next command: $run",
+    ].join("\n");
+    const tempPathArtifact = repoRelativeArtifact.replace(
+      "Provisioned artifact: ./AGENTS.md.",
+      "Provisioned artifact: /private/var/folders/n1/example/AGENTS.md.",
+    );
+
+    expect(setup!.qualityEvaluator!.evaluate(repoRelativeArtifact).criteria.find((criterion) => criterion.id === "workflow-artifact-reference")).toMatchObject({
+      passed: true,
+    });
+    expect(setup!.qualityEvaluator!.evaluate(tempPathArtifact).criteria.find((criterion) => criterion.id === "workflow-artifact-reference")).toMatchObject({
+      passed: false,
+    });
   });
 
   it("rejects provision-agentic-config outputs that only echo shorthand fixture phrases", () => {

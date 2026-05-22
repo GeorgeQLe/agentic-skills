@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Targeted Skill Builder - Provision Agentic Config Handoff</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #202124;
+      --muted: #5f6368;
+      --line: #dadce0;
+      --panel: #f8fafd;
+      --accent: #0b57d0;
+      --ok: #137333;
+      --warn: #b06000;
+    }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--ink);
+      background: #fff;
+      line-height: 1.45;
+    }
+    main {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 32px 24px 48px;
+    }
+    header {
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 24px;
+      padding-bottom: 18px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 30px;
+      letter-spacing: 0;
+    }
+    h2 {
+      margin: 28px 0 10px;
+      font-size: 20px;
+    }
+    .muted {
+      color: var(--muted);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+      margin: 16px 0 22px;
+    }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+    }
+    .status {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ok);
+      text-transform: uppercase;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: 8px;
+      vertical-align: top;
+      text-align: left;
+    }
+    th {
+      background: #eef3fb;
+    }
+    code {
+      background: #eef3fb;
+      border-radius: 4px;
+      padding: 1px 4px;
+      font-family: Menlo, Consolas, monospace;
+      font-size: 0.95em;
+    }
+    ul {
+      padding-left: 22px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Provision Agentic Config: Repo-Relative Artifact Handoff</h1>
+      <p class="muted">Alignment preview for a targeted update to the mirrored skill contracts and benchmark checks.</p>
+    </header>
+
+    <section class="grid">
+      <div class="panel">
+        <div class="status">Decision</div>
+        <p>Update existing skill, not create a new skill.</p>
+      </div>
+      <div class="panel">
+        <div class="status">Target</div>
+        <p><code>provision-agentic-config</code> Codex and Claude contracts.</p>
+      </div>
+      <div class="panel">
+        <div class="status">Validation</div>
+        <p>Focused layer1 benchmark setup tests now cover repo-relative and temp-path handoffs.</p>
+      </div>
+    </section>
+
+    <h2>Problem</h2>
+    <p>The benchmark review found good policy artifacts but weak artifact-reference ergonomics. Some handoffs named only <code>AGENTS.md</code>, and Codex benchmark runs exposed temp fixture paths such as <code>/private/var/...</code> as artifact locations.</p>
+
+    <h2>Planned Change</h2>
+    <ul>
+      <li>Require final output to use repo-relative paths exactly like <code>./CLAUDE.md</code> and <code>./AGENTS.md</code>.</li>
+      <li>For newly created target files, add a concise source/verification note that names the repo-relative artifact and <code>workflow.md</code>.</li>
+      <li>Reject benchmark stdout handoffs that expose temp artifact paths.</li>
+      <li>Score <code>workflow-artifact-reference</code> only when the retained artifact has a repo-relative <code>AGENTS.md</code> reference.</li>
+    </ul>
+
+    <h2>Changed Surfaces</h2>
+    <table>
+      <thead>
+        <tr><th>Surface</th><th>Purpose</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>global/codex/provision-agentic-config/SKILL.md</code></td><td>Codex contract for repo-relative reporting and source notes.</td></tr>
+        <tr><td><code>global/claude/provision-agentic-config/SKILL.md</code></td><td>Claude mirror contract for the same behavior.</td></tr>
+        <tr><td><code>tests/layer4/setups/tier23-global-workflows.setup.ts</code></td><td>Benchmark assertion and quality rubric for repo-relative artifact references.</td></tr>
+        <tr><td><code>tests/layer1/bench-setups.test.ts</code></td><td>Regression tests for accepted repo-relative references and rejected temp paths.</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Expected Handoff</h2>
+    <p><code>Installed workflow orchestration into ./CLAUDE.md and ./AGENTS.md</code></p>
+    <p class="muted">The final output should not expose harness paths under <code>/tmp</code>, <code>/private/var</code>, or <code>/var/folders</code>.</p>
+  </main>
+</body>
+</html>

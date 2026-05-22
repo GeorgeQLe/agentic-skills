@@ -67,6 +67,19 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Updated on 2026-05-22. The review finds the retained outputs good but not excellent: policy content and `$run` routing are strong, while artifact-reference ergonomics need tightening so final handoffs use repo-relative artifact paths and avoid benchmark temp paths. Wrote the dated review report and alignment preview; validation passed.
 
+## Current Targeted Update: Provision Agentic Config Repo-Relative Handoff 2026-05-22
+
+**Goal:** Implement the benchmark-review remediation for `provision-agentic-config` by making final artifact handoffs repo-relative and preventing benchmark temp paths from being surfaced as user-facing artifact locations.
+
+**Acceptance Criteria:**
+- [x] Mirrored `provision-agentic-config` contracts require `./CLAUDE.md` and `./AGENTS.md` in final output and prohibit temp harness paths.
+- [x] Newly created or previously provision-noted target files include a concise repo-relative source/verification note.
+- [x] Benchmark setup rejects stdout handoffs containing `/tmp`, `/private/var`, or `/var/folders` artifact links.
+- [x] Focused layer1 tests cover accepted repo-relative references and rejected temp-path references.
+- [x] Validation passes, generated showcase data is refreshed, and intended changes are committed and pushed on `master`.
+
+**Result:** Updated on 2026-05-22. The focused contract/rubric patch is implemented: final handoffs must use repo-relative paths, newly created target files get source/verification notes, and the benchmark rejects temp-path artifact handoffs. Focused setup tests and skill verification pass; generated showcase data was refreshed.
+
 ## Current Targeted Update: Alignment HTML Output Root 2026-05-21
 
 **Goal:** Move alignment-first and prototype-first review HTML artifacts to root `alignment/`, archive replaced pages under `docs/history/archive/`, restore Codex `$prototype` parity, and make browser-opening best-effort but explicit.

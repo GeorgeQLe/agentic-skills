@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-05-22 — Benchmark review handoffs are not remediation completion
+
+- A `$benchmark-agent-review provision-agentic-config` run documented the main remediation and recommended `$targeted-skill-builder`, but the follow-up answer needed to state plainly that the remediation itself had not been implemented.
+- After any review workflow that names a definitive remediation route, distinguish "review/report complete" from "owner contract/rubric remediation complete" in the final handoff.
+- If the user asks whether the main remediation is done, answer from repository changes, not from the existence of a remediation table or next command.
+- When the user immediately invokes the recommended remediation, implement the owner skill contract and validation checks rather than re-summarizing the review.
+
 ## 2026-05-22 — Competitive analysis should route to journey before value prop in prototype-first product flow
 
 - A legacy business-discovery sequence routed standard competitive analysis to `value-prop-canvas` before `journey-map`, even after the product restart workflow had moved to ICP -> competitive analysis -> journey map -> UX/UI/prototype.
