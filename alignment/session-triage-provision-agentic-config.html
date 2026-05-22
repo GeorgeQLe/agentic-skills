@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Session Triage: provision-agentic-config Benchmark Failure</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #17202a;
+      --muted: #5d6d7e;
+      --line: #d6dbdf;
+      --paper: #ffffff;
+      --bg: #f4f6f7;
+      --accent: #0f766e;
+      --warn: #9a3412;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+      color: var(--ink);
+      background: var(--bg);
+    }
+    main {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: 40px 24px 56px;
+    }
+    header {
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 24px;
+      padding-bottom: 18px;
+    }
+    h1 {
+      margin: 0 0 8px;
+      font-size: 32px;
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+    h2 {
+      margin: 28px 0 10px;
+      font-size: 19px;
+      letter-spacing: 0;
+    }
+    p, li { font-size: 15px; }
+    .meta {
+      color: var(--muted);
+      font-size: 14px;
+      margin: 0;
+    }
+    .panel {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      margin: 16px 0;
+    }
+    .verdict {
+      border-left: 4px solid var(--warn);
+    }
+    code {
+      background: #eef2f3;
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.95em;
+    }
+    ul { padding-left: 22px; }
+    a { color: var(--accent); }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Session Triage: provision-agentic-config Benchmark Failure</h1>
+      <p class="meta">Generated 2026-05-22 for <code>benchmark/triage-provision-agentic-config-2026-05-22.md</code></p>
+    </header>
+
+    <section class="panel verdict">
+      <h2>Verdict</h2>
+      <p><strong>Partially verified.</strong> The benchmark failure is real, but the retained artifacts show a benchmark false negative rather than a verified skill-output defect.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Evidence</h2>
+      <ul>
+        <li>Both agents exited successfully and wrote <code>AGENTS.md</code>.</li>
+        <li>Retained artifacts include <code>## Workflow Orchestration</code>, <code>### 4. Verification Before Done</code>, <code>### 7. Monorepo Parallel-Work Safety</code>, shipping rules, no-GitHub-Actions guidance, and <code>Recommended next command: $run</code>.</li>
+        <li>The fixture expected literal shorthand phrases <code>orchestration rules</code> and <code>monorepo safety</code>, which are not the canonical headings required by the skill contract.</li>
+      </ul>
+    </section>
+
+    <section class="panel">
+      <h2>Root Cause</h2>
+      <p>The benchmark setup reuses shorthand prompt terms as exact artifact assertions and quality facts. The generated policy block uses canonical section names, so correct outputs fail phrase-level checks.</p>
+      <p>A secondary quality false positive flags <code>package-lock.json</code>, even though the required monorepo safety block legitimately names shared lockfiles.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Recommended Fix</h2>
+      <p>Route to <code>$targeted-skill-builder provision-agentic-config benchmark fixture false negative</code>.</p>
+      <ul>
+        <li>Update <code>tests/layer4/setups/tier23-global-workflows.setup.ts</code> to assert canonical headings and evidence patterns.</li>
+        <li>Allow <code>package-lock.json</code> for this fixture.</li>
+        <li>Add focused layer1 coverage proving canonical policy sections pass and shorthand-only echoes fail.</li>
+      </ul>
+    </section>
+  </main>
+</body>
+</html>
