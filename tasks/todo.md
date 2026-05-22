@@ -211,7 +211,7 @@
 - [x] For each of the 10 skills: run `pnpm verify --skill <skill>`, then `pnpm bench --skill <skill> --agent both --runs 3 --chunk-size 3 --pause 0`.
 - [x] Write dated `benchmark/test-<skill>-2026-05-21.md` for each skill.
 - [x] After all 10: refresh generated data and validate.
-- [ ] Commit and push.
+- [x] Commit and push.
 
 **Files:**
 - `benchmark/test-dogfood-2026-05-21.md` — updated benchmark report
@@ -281,6 +281,7 @@ Implement only this step, validate it, then run `/ship` when done.
   - Residual risk: benchmark pass rates are still low for several skills and some Codex runs were infrastructure-blocked; next triage should start with `migrate`, `prototype`, or `provision-agentic-config` because both runners remain at 0% evaluated pass rate or blocked evidence.
   - Rollback note: revert this commit to restore prior reports/generated matrices and the previous routing test implementation.
   - Next command: `$session-triage provision-agentic-config benchmark failure`.
+- Shipped in commits `bc17fee` and `3e4bd78`; final task-state commit follows.
 - Next command: `$session-triage provision-agentic-config benchmark failure`
 
 ## Current Task — Desk-Flip Reset/Archive and Alignment-First Routing 2026-05-21

@@ -2779,3 +2779,4 @@ Resolved all 10 findings from `/expert-review`:
 - Recorded infrastructure-blocked Codex lanes for `hygiene`, `migrate`, `mono-plan`, and `prototype`; no benchmark report hides blocked runs.
 - Fixed a validation harness performance issue in `tests/layer1/routing-graph.test.ts` by hoisting repeated pack/global skill lookups out of generated assertions. The routing suite dropped from a timeout to 1.8s.
 - Refreshed generated benchmark/showcase data and validated with showcase freshness, benchmark coverage, routing test, all 10 verify gates, all 10 both-agent benchmark runs, and whitespace checks.
+- Shipped in commits `bc17fee` and `3e4bd78`, with a final task-state commit to record completion.
