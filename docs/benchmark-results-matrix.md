@@ -112,7 +112,7 @@ This matrix tracks skills that already have persisted benchmark run data and gra
 | `plan-phase` | Codex | `tests/benchmarks/runs/plan-phase-codex-0ea4e69c/report.json` | 1 | 100% | not scored | none | partially graded | Hard assertion evidence exists; no quality score in the latest persisted evaluated report. |
 | `prototype` | Claude | `tests/benchmarks/runs/prototype-claude-0e2ae4e0/report.json` | 3 | 0% | 18.2% | none | graded | Curated report: `benchmark/test-prototype-2026-05-21.md`. |
 | `prototype` | Codex | `tests/benchmarks/runs/prototype-codex-989a24c4/report.json` | 1 | 0% | 59.1% | none | graded | Curated report: `benchmark/test-prototype-2026-05-21.md`. One evaluated persisted run with deterministic quality scoring. |
-| `provision-agentic-config` | Claude | `tests/benchmarks/runs/provision-agentic-config-claude-ed43797d/report.json` | 3 | 67% | 92.1% | none | graded | Curated report: `benchmark/test-provision-agentic-config-2026-05-21.md`. |
+| `provision-agentic-config` | Claude | `tests/benchmarks/runs/provision-agentic-config-claude-ca156cbf/report.json` | 3 | 100% | 95.6% | none | graded | Curated report: `benchmark/test-provision-agentic-config-2026-05-21.md`. |
 | `provision-agentic-config` | Codex | `tests/benchmarks/runs/provision-agentic-config-codex-5c084e7e/report.json` | 3 | 67% | 91.3% | none | graded | Curated report: `benchmark/test-provision-agentic-config-2026-05-21.md`. |
 | `reconcile-dev-docs` | Claude | `tests/benchmarks/runs/reconcile-dev-docs-claude-39cc2c1e/report.json` | 3 | 0% | 61.4% | none | graded | Curated report: `benchmark/test-reconcile-dev-docs-2026-05-20.md`. |
 | `reconcile-dev-docs` | Codex | `tests/benchmarks/runs/reconcile-dev-docs-codex-c33e4cc6/report.json` | 3 | 0% | 70.5% | none | graded | Curated report: `benchmark/test-reconcile-dev-docs-2026-05-20.md`. |
@@ -171,7 +171,7 @@ This matrix tracks skills that already have persisted benchmark run data and gra
 | `migrate` | Codex | `tests/benchmarks/runs/migrate-codex-ade9693c/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
 | `provision-agentic-config` | Claude | `tests/benchmarks/runs/provision-agentic-config-claude-51d425e8/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
 | `roadmap` | Claude | `tests/benchmarks/runs/roadmap-claude-8c1ee4a6/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
-| `run` | Codex | `tests/benchmarks/runs/run-codex-2a12c2a7/report.json` | blocked/incomplete | Report exists with zero total and evaluated runs. Do not count as benchmarked. Prefer the later evaluated report listed above. |
+| `run` | Codex | `tests/benchmarks/runs/run-codex-19f9da28/report.json` | blocked/incomplete | Report exists with zero total and evaluated runs. Do not count as benchmarked. Prefer the later evaluated report listed above. |
 | `spec-interview` | Claude | `tests/benchmarks/runs/spec-interview-claude-b83d0caa/report.json` | blocked/incomplete | Report exists with zero evaluated runs. |
 | `targeted-skill-builder` | Claude | `tests/benchmarks/runs/targeted-skill-builder-claude-3b4f2b62/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
 | `update-packages` | Claude | `tests/benchmarks/runs/update-packages-claude-4d9966e8/report.json` | blocked/incomplete | Prefer the later evaluated report listed above. |
