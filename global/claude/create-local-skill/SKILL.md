@@ -33,7 +33,7 @@ This skill writes **real directories**, not symlinks back to the shared repo. `i
    name: <name>
    description: <description>
    type: <type>
-   version: 0.1.0
+   version: v0.0
    ---
 
    # <Title>

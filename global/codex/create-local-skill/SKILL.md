@@ -32,7 +32,7 @@ Scaffold a new **user-local** skill directly into `~/.codex/skills/<name>/` (and
    name: <name>
    description: <description>
    type: <type>
-   version: 0.1.0
+   version: v0.0
    ---
 
    # <Title>
