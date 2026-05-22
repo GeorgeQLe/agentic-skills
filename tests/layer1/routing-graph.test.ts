@@ -29,6 +29,37 @@ const packDirs = globSync("*/", { cwd: PACKS_DIR }).map((d) =>
   resolve(PACKS_DIR, d),
 );
 
+const globalPackSkills = globSync("**/SKILL.md", { cwd: PACKS_DIR });
+const allPackSkillNames = new Set(
+  globalPackSkills.map((s) => {
+    const parts = s.split("/");
+    return parts[parts.length - 2];
+  }),
+);
+
+// Also check user-local skills (these are global skills installed
+// outside of packs, referenced via slash commands)
+const GLOBAL_DIR = resolve(PACKS_DIR, "../global");
+const globalCoreSkills = globSync("**/SKILL.md", { cwd: GLOBAL_DIR });
+const globalCoreNames = new Set(
+  globalCoreSkills.map((s) => {
+    const parts = s.split("/");
+    return parts[parts.length - 2];
+  }),
+);
+
+// User-local skills (~/.claude/skills) can't be checked at test
+// time, so we maintain an allowlist of known external skill names
+const knownExternalSkills = new Set([
+  "regression-check",
+  "ship",
+  "run",
+  "spec-interview",
+  "feature-interview",
+  "brainstorm",
+  "roadmap",
+]);
+
 describe("Next-Skill routing references", () => {
   for (const packDir of packDirs) {
     const packName = packDir.split("/").pop()!;
@@ -52,37 +83,6 @@ describe("Next-Skill routing references", () => {
 
       for (const ref of refs) {
         it(`${rel} references /${ref} which should exist in pack or globally`, () => {
-          const globalPackSkills = globSync("**/SKILL.md", { cwd: PACKS_DIR });
-          const allPackSkillNames = new Set(
-            globalPackSkills.map((s) => {
-              const parts = s.split("/");
-              return parts[parts.length - 2];
-            }),
-          );
-
-          // Also check user-local skills (these are global skills installed
-          // outside of packs, referenced via slash commands)
-          const GLOBAL_DIR = resolve(PACKS_DIR, "../global");
-          const globalCoreSkills = globSync("**/SKILL.md", { cwd: GLOBAL_DIR });
-          const globalCoreNames = new Set(
-            globalCoreSkills.map((s) => {
-              const parts = s.split("/");
-              return parts[parts.length - 2];
-            }),
-          );
-
-          // User-local skills (~/.claude/skills) can't be checked at test
-          // time, so we maintain an allowlist of known external skill names
-          const knownExternalSkills = new Set([
-            "regression-check",
-            "ship",
-            "run",
-            "spec-interview",
-            "feature-interview",
-            "brainstorm",
-            "roadmap",
-          ]);
-
           const existsInPack = skillNames.has(ref);
           const existsGlobally = allPackSkillNames.has(ref);
           const existsInCore = globalCoreNames.has(ref);
