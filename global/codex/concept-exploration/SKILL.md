@@ -2,7 +2,7 @@
 name: concept-exploration
 description: Shape a rough product or project idea into an actionable concept brief before ICP, market research, specifications, UX, UI, or implementation planning
 type: planning
-version: v0.0
+version: v0.1
 argument-hint: "[optional rough idea, product thought, or app scope]"
 ---
 
@@ -85,10 +85,9 @@ The `## ICP Readiness` section must state whether the concept is ready for `$icp
 
 The `## Next Steps` section must recommend exactly one primary command:
 
-- If the concept is ready but the repo is not bootstrapped: `$bootstrap-repo <high-level concept summary>`. Bootstrap owns README, agent workflow docs, project setup, and any reset/archive work before research starts.
-- If the concept appears to be a business app or user-facing product and the business discovery lane is not enabled: `$pack install business-discovery`
-- If the concept already has ICP/market evidence but needs journey, onboarding, conversion, or retention planning: `$pack install customer-lifecycle`
+- If the concept appears to be a business app or user-facing product and the business discovery lane is not enabled: `$pack install business-discovery` — this installs the research skills (ICP, competitive analysis, value prop, positioning, lean canvas) needed before any repo bootstrapping or development.
 - If `business-discovery` or the compatibility `business-app` alias is enabled: `$icp`
+- If the concept already has ICP/market evidence but needs journey, onboarding, conversion, or retention planning: `$pack install customer-lifecycle`
 - If project type is unclear: `$pack recommend`
 
 Include 1-3 other options only when they are materially useful.

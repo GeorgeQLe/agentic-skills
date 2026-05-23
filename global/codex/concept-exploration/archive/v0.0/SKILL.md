@@ -2,15 +2,17 @@
 name: concept-exploration
 description: Shape a rough product or project idea into an actionable concept brief before ICP, market research, specifications, UX, UI, or implementation planning
 type: planning
-version: v0.1
+version: v0.0
 argument-hint: "[optional rough idea, product thought, or app scope]"
 ---
 
 # Concept Exploration
 
+Invoke as `$concept-exploration`.
+
 Use this skill when the user has a half-formed idea and needs it cleaned up enough to enter the normal research and planning workflow. This skill is intentionally pre-ICP: it clarifies the concept, problem hypothesis, beneficiary hypothesis, value wedge, constraints, non-goals, and unknowns, but does not select an ICP, analyze competitors, define UX/UI, choose architecture, or write implementation specs.
 
-## Process
+## Workflow
 
 1. **Resolve context**
    - Read `.agents/project.json` if it exists.
@@ -42,7 +44,7 @@ Use this skill when the user has a half-formed idea and needs it cleaned up enou
    - Ask the user to confirm, correct, or flag assumptions before writing.
 
 4. **Interview until concept-ready**
-   - Ask 1 to 3 focused questions per turn.
+   - Codex interview cadence is one primary decision question per turn by default. Use short follow-up bullets only when they clarify the same decision, not to batch unrelated questions.
    - Resolve only concept-level ambiguity:
      - what problem exists
      - who might care
@@ -79,14 +81,14 @@ The concept brief must include:
 - `## ICP Readiness`
 - `## Next Steps`
 
-The `## ICP Readiness` section must state whether the concept is ready for `/icp`, what inputs `/icp` should use, and which assumptions should be tested first.
+The `## ICP Readiness` section must state whether the concept is ready for `$icp`, what inputs `$icp` should use, and which assumptions should be tested first.
 
 The `## Next Steps` section must recommend exactly one primary command:
 
-- If the concept appears to be a business app or user-facing product and the business discovery lane is not enabled: `/pack install business-discovery` — this installs the research skills (ICP, competitive analysis, value prop, positioning, lean canvas) needed before any repo bootstrapping or development.
-- If `business-discovery` or the compatibility `business-app` alias is enabled: `/icp`
-- If the concept already has ICP/market evidence but needs journey, onboarding, conversion, or retention planning: `/pack install customer-lifecycle`
-- If project type is unclear: `/pack recommend`
+- If the concept appears to be a business app or user-facing product and the business discovery lane is not enabled: `$pack install business-discovery` — this installs the research skills (ICP, competitive analysis, value prop, positioning, lean canvas) needed before any repo bootstrapping or development.
+- If `business-discovery` or the compatibility `business-app` alias is enabled: `$icp`
+- If the concept already has ICP/market evidence but needs journey, onboarding, conversion, or retention planning: `$pack install customer-lifecycle`
+- If project type is unclear: `$pack recommend`
 
 Include 1-3 other options only when they are materially useful.
 
@@ -110,7 +112,7 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 
 - Keep the skill short and pre-research.
 - Do not write specs, UX variants, UI specs, roadmap phases, or implementation tasks.
-- Do not recommend `/scaffold` unless the user explicitly asks to create a package/app shell before research; normal product flow scaffolds after research, prototype consolidation, spec, roadmap, and phase planning identify the first implementation target.
+- Do not recommend `$scaffold` unless the user explicitly asks to create a package/app shell before research; normal product flow scaffolds after research, prototype consolidation, spec, roadmap, and phase planning identify the first implementation target.
 - Do not update `tasks/todo.md`.
 - New files do not need archive snapshots. Before replacing an existing concept brief, including slugged briefs, archive it to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-relative-path>`.
 
