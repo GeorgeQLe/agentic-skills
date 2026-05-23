@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-05-23 — Add compile-central-alignment skill
+
+- Created `compile-central-alignment` utility skill (Claude + Codex mirrors) that generates `alignment/index.html` as a browsable table of contents for all alignment pages in any repo.
+- Added benchmark coverage row to `tests/harness/bench-coverage.ts` (159 skills, validates clean).
+- Added deterministic test setup in `tests/layer4/setups/tier23-global-workflows.setup.ts` with two fixture HTML files.
+- Regenerated and validated showcase data.
+- Committed and pushed on `master` (`a371107`).
+
 ## 2026-05-21 — Batch 41.3-rerun Group 2: Re-benchmark 11 Tier 2 global skills post-fixture-remediation
 
 - Re-benchmarked 11 Tier 2 global skills with both agents (3 runs each) after Phase 43 fixture remediation.
