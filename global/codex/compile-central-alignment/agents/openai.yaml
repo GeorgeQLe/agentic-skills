@@ -1,0 +1,7 @@
+interface:
+  display_name: "Compile Central Alignment"
+  short_description: "Generate alignment page index"
+  default_prompt: "Use $compile-central-alignment to generate a central index of all alignment pages."
+
+policy:
+  allow_implicit_invocation: true
