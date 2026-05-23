@@ -2,7 +2,7 @@
 name: competitive-analysis
 description: Research competitors via web search — map the landscape, GTM strategies, strengths, weaknesses, and market gaps
 type: research
-version: v0.1
+version: v0.0
 argument-hint: "[concept | optional: product category or specific competitors to investigate]"
 ---
 
@@ -91,7 +91,7 @@ Only after user validates, write the output files.
 
 **Standard mode next steps:** `## Next Steps` section with a **Recommended** item and **Other options** (2–4 alternatives). Choose the recommended item by the first matching condition:
 
-1. IF no `research/journey-map.md`: check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if not enabled, `$pack install customer-lifecycle`; if enabled, `$journey-map` — map the customer and user journey before solution-value decisions, using competitive gaps as inspiration
+1. IF no `research/journey-map.md`: `$journey-map` — map the customer and user journey before solution-value decisions, using competitive gaps as inspiration
 2. IF no `research/value-prop.md`: `$value-prop-canvas` — validate solution-customer fit using journey-placed competitive gaps to sharpen the value map
 3. IF no `specs/` directory or it's empty: `$spec-interview [top journey-backed market gap or positioning opportunity]` — spec the strongest opportunity after journey context exists
 4. IF no `research/gtm.md`: `$gtm` — build go-to-market plan leveraging competitive gaps
@@ -105,7 +105,7 @@ Use this format in the output:
 
 Other options:
 - `$value-prop-canvas` — validate solution-customer fit before positioning decisions (if no `research/value-prop.md` and not recommended)
-- `$journey-map` — map the customer journey to find where competitors fall short (if no `research/journey-map.md` and not recommended; check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if not enabled, recommend `$pack install customer-lifecycle` instead)
+- `$journey-map` — map the customer journey to find where competitors fall short (if no `research/journey-map.md` and not recommended)
 - `$spec-interview [riskiest competitive assumption or top journey-backed market gap]` — validate the most important unresolved competitive assumption with a targeted interview (if not recommended and journey context exists)
 - `$gtm` — build go-to-market plan leveraging competitive gaps (if no `research/gtm.md` and not recommended)
 - `$mvp-gap` — check if the codebase exploits the gaps found (if codebase exists, no `research/mvp-gap.md` exists, and not recommended)
