@@ -91,32 +91,19 @@ Users with manually built variations (not from the `/ux-variations` pipeline) ca
 
 ### Alignment Page
 
-After writing deliverables, build a custom HTML alignment page at `alignment/consolidate-variations-{topic}.html` and attempt to open it in the browser and report whether the browser open succeeded or was blocked. The page should visualize the variation concepts, comparison matrix, and decision criteria in a format tailored to the specific variations produced. Archive any previous alignment page at that path first to `docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/...`.
+When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page at `alignment/consolidate-variations-{topic}.html`. Use a normalized topic slug derived from the app, feature, research subject, report subject, or output filename.
 
-Do not use a shared template or CSS framework — craft the page to fit the situation. The alignment page is a one-off communication artifact, not a reusable component.
+**Full content requirement.** The alignment page must contain the complete content of every proposed markdown deliverable -- every section, every finding, every detail, every list item. It is a thorough interactive review document, not a summary. Render the full deliverable content in clean, readable HTML with appropriate hierarchy, styling, and navigation. If the skill writes multiple scoped deliverables in one run, build one alignment page that contains all deliverables with anchor-linked navigation.
 
-The consolidated UI specification must include:
+**Interactive Q&A section.** At the bottom of the page, add a "Decisions & Clarifications" section containing multiple-choice questions for every decision, ambiguity, or clarification the agent needs from the user before finalizing. Each question must use radio-button inputs. Generate questions based on what genuinely needs user input -- do not add filler questions.
 
-- **Source attribution**: which variation each design decision came from
-- **UAT/evaluation evidence summary**
-- **Consolidation matrix**: the full matrix with winners and rationale
-- **Conflict resolutions**: each conflict, options considered, and resolution chosen
-- **Design specification**:
-  - Layout skeleton with regions and proportions
-  - Primary content component and item anatomy
-  - Detail view pattern and trigger
-  - Navigation pattern, placement, and active-state behavior
-  - Action inventory with placement and priority
-  - Content-to-component mapping (every content requirement → UI component)
-  - Spatial rules (gaps, padding, max-widths, fixed vs fluid dimensions)
-  - Responsive behavior at mobile (≤640px), tablet (≤1024px), and desktop (>1024px)
-  - States rendering for every identified state
-  - Accessibility requirements (keyboard order, focus management, labels, contrast)
-- **Implementation plan**: file list, creation order, estimated build time, and key decisions for the implementer
+**Answer compilation.** Include a "Compile Answers" button that: remains disabled until every question is answered and shows a count of remaining unanswered questions; when clicked while questions remain unanswered, scrolls the viewport to the first unanswered question instead of compiling; when all questions are answered, generates a structured YAML block of all Q&A pairs and displays it in a read-only, click-to-copy textarea.
 
-The interview log must include the variation inventory, evidence gate result, per-variation interview responses (keep/reject/neutral), consolidation matrix, conflict resolutions, draft review, coverage checkpoint results, and all user responses.
+**Diff highlighting on updates.** When the agent updates an existing alignment page after receiving compiled answers, highlight what changed since the previous version. The agent chooses inline annotation or side-by-side layout per situation.
 
-After writing files, recommend `/research-roadmap --post-prototype` to assess next steps.
+**Archiving.** Before replacing an existing alignment page, archive it to `docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/consolidate-variations-{topic}.html`.
+
+**Browser open.** Attempt to open the resulting HTML page in the browser and report whether the open succeeded or was blocked. A blocked browser-open attempt does not make the skill fail when the files were written correctly.
 
 ## Constraints
 
