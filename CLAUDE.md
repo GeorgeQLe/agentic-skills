@@ -61,6 +61,24 @@
 - Maintain a `CHANGELOG.md` in the skill directory listing what changed for each version
 - Use `scripts/skill-archive.sh <skill-dir>` to automate the archive step before bumping
 
+### 10. Windows/WSL File Opening
+- On Windows machines running WSL, convert Linux paths before opening files from shell commands:
+
+```bash
+WIN_PATH=$(wslpath -w "$FILE_PATH")
+cmd.exe /c start "" "$WIN_PATH"
+```
+
+- Use WSL detection so this path only runs inside WSL:
+
+```bash
+if grep -qi microsoft /proc/version 2>/dev/null; then
+  cmd.exe /c start "" "$(wslpath -w "$FILE_PATH")"
+fi
+```
+
+- The `cmd.exe` UNC warning (`UNC paths are not supported. Defaulting to Windows directory.`) is cosmetic; the file still opens correctly.
+
 ## Task Management
 
 1. **Plan First**: Write plan to `tasks/roadmap.md` (full plan) and `tasks/todo.md` (current phase) with checkable items
