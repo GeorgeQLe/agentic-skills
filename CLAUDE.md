@@ -57,6 +57,9 @@
 - New skills start at `version: v0.0`
 - Bump the decimal (e.g. `v0.0` → `v0.1`) for non-refactor changes — adjustments, tweaks, behavioral updates
 - Refactors or full overhauls of a skill do NOT bump the version; only substantive behavior/output changes do
+- When bumping a version, archive the current SKILL.md to `archive/<old-version>/SKILL.md` in the same commit
+- Maintain a `CHANGELOG.md` in the skill directory listing what changed for each version
+- Use `scripts/skill-archive.sh <skill-dir>` to automate the archive step before bumping
 
 ## Task Management
 

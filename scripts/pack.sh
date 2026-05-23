@@ -24,6 +24,8 @@ Commands:
   install <pack...> Enable one or more packs in the current project via local skill symlinks
   remove <pack...>  Remove one or more pack's local skill symlinks from the current project
   refresh           Recreate local symlinks for packs in .agents/project.json
+  pin <skill> <ver> Pin a pack skill to an archived version (e.g., pin devtool-adoption v0.0)
+  unpin <skill>     Revert a pinned skill to the latest version
   set-mode <mode>   Set .agents/project.json.agent_mode to claude-only, codex-only,
                     hybrid, or unset (clears the field)
 
@@ -195,9 +197,10 @@ read_enabled_packs() {
 write_project_file() {
   local project_type="$1"
   shift
-  local project_scopes notes
+  local project_scopes notes pinned_versions
   project_scopes="$(project_json_value project_scopes)"
   notes="$(project_json_value notes)"
+  pinned_versions="$(read_pinned_versions)"
 
   mkdir -p "$(dirname "$PROJECT_FILE")"
   {
@@ -222,6 +225,9 @@ write_project_file() {
       printf '  "agent_mode": "%s"' "$PROJECT_AGENT_MODE"
     else
       printf '  "skill_pack_version": 1'
+    fi
+    if [[ -n "$pinned_versions" ]]; then
+      printf ',\n  "pinned_versions": %s' "$pinned_versions"
     fi
     if [[ -n "$project_scopes" ]]; then
       printf ',\n  "project_scopes": %s' "$project_scopes"
@@ -260,6 +266,19 @@ project_json_value() {
   local key="$1"
   if [[ -f "$PROJECT_FILE" ]] && command -v jq >/dev/null 2>&1; then
     jq -c --arg key "$key" '.[$key] // empty' "$PROJECT_FILE" 2>/dev/null || true
+  fi
+}
+
+read_pinned_versions() {
+  if [[ -f "$PROJECT_FILE" ]] && command -v jq >/dev/null 2>&1; then
+    jq -c '.pinned_versions // empty' "$PROJECT_FILE" 2>/dev/null || true
+  fi
+}
+
+get_pinned_version() {
+  local skill="$1"
+  if [[ -f "$PROJECT_FILE" ]] && command -v jq >/dev/null 2>&1; then
+    jq -r --arg s "$skill" '.pinned_versions[$s] // empty' "$PROJECT_FILE" 2>/dev/null || true
   fi
 }
 
@@ -306,8 +325,25 @@ link_one_tool() {
     local name
     name="$(basename "$skill_dir")"
     local target="$target_root/$name"
-    if sync_skill_link "$skill_dir" "$target"; then
-      echo "Linked .$tool/skills/$name -> $skill_dir"
+    local effective_source="$skill_dir"
+
+    local pinned
+    pinned="$(get_pinned_version "$name")"
+    if [[ -n "$pinned" ]]; then
+      local archive_path="$skill_dir/archive/$pinned"
+      if [[ -d "$archive_path" && -f "$archive_path/SKILL.md" ]]; then
+        effective_source="$archive_path"
+      else
+        echo "WARNING: pin $name=$pinned but $archive_path/SKILL.md not found, using current" >&2
+      fi
+    fi
+
+    if sync_skill_link "$effective_source" "$target"; then
+      if [[ -n "$pinned" && "$effective_source" != "$skill_dir" ]]; then
+        echo "Linked .$tool/skills/$name -> $effective_source (pinned $pinned)"
+      else
+        echo "Linked .$tool/skills/$name -> $effective_source"
+      fi
     fi
   done
 }
@@ -429,6 +465,97 @@ recommend() {
   fi
 }
 
+find_pack_for_skill() {
+  local skill="$1"
+  local pack
+  for pack_dir in "$PACKS_DIR"/*/; do
+    [[ -d "$pack_dir" ]] || continue
+    pack="$(basename "$pack_dir")"
+    for tool in claude codex; do
+      if [[ -d "$PACKS_DIR/$pack/$tool/$skill" ]]; then
+        echo "$pack"
+        return 0
+      fi
+    done
+  done
+  return 1
+}
+
+pin_skill() {
+  local skill="${1:-}"
+  local version="${2:-}"
+  [[ -n "$skill" ]] || die "pin requires a skill name"
+  [[ -n "$version" ]] || die "pin requires a version (e.g., v0.0)"
+
+  local pack
+  pack="$(find_pack_for_skill "$skill")" || die "Skill '$skill' not found in any pack"
+
+  local found=false
+  for tool in claude codex; do
+    local archive_path="$PACKS_DIR/$pack/$tool/$skill/archive/$version/SKILL.md"
+    if [[ -f "$archive_path" ]]; then
+      found=true
+      break
+    fi
+  done
+  $found || die "No archive/$version/SKILL.md found for skill '$skill' in pack '$pack'"
+
+  if command -v jq >/dev/null 2>&1 && [[ -f "$PROJECT_FILE" ]]; then
+    local tmp
+    tmp="$(jq --arg s "$skill" --arg v "$version" '.pinned_versions[$s] = $v' "$PROJECT_FILE")"
+    echo "$tmp" > "$PROJECT_FILE"
+  else
+    [[ -f "$PROJECT_FILE" ]] || die "No .agents/project.json found; install a pack first"
+    die "jq is required for pin/unpin"
+  fi
+
+  for tool in claude codex; do
+    local skill_dir="$PACKS_DIR/$pack/$tool/$skill"
+    local target_root="$PROJECT_ROOT/.$tool/skills"
+    local target="$target_root/$(basename "$skill_dir")"
+    local archive_source="$skill_dir/archive/$version"
+    [[ -d "$archive_source" ]] || continue
+    [[ -d "$target_root" ]] || continue
+    if [[ -L "$target" ]]; then
+      rm "$target"
+    fi
+    ln -sfn "$archive_source" "$target"
+    echo "Pinned .$tool/skills/$skill -> $archive_source"
+  done
+  echo "Pinned $skill to $version"
+}
+
+unpin_skill() {
+  local skill="${1:-}"
+  [[ -n "$skill" ]] || die "unpin requires a skill name"
+
+  local pack
+  pack="$(find_pack_for_skill "$skill")" || die "Skill '$skill' not found in any pack"
+
+  if command -v jq >/dev/null 2>&1 && [[ -f "$PROJECT_FILE" ]]; then
+    local tmp
+    tmp="$(jq --arg s "$skill" 'if .pinned_versions then .pinned_versions |= del(.[$s]) | if (.pinned_versions | length) == 0 then del(.pinned_versions) else . end else . end' "$PROJECT_FILE")"
+    echo "$tmp" > "$PROJECT_FILE"
+  else
+    [[ -f "$PROJECT_FILE" ]] || die "No .agents/project.json found"
+    die "jq is required for pin/unpin"
+  fi
+
+  for tool in claude codex; do
+    local skill_dir="$PACKS_DIR/$pack/$tool/$skill"
+    local target_root="$PROJECT_ROOT/.$tool/skills"
+    local target="$target_root/$(basename "$skill_dir")"
+    [[ -d "$skill_dir" ]] || continue
+    [[ -d "$target_root" ]] || continue
+    if [[ -L "$target" ]]; then
+      rm "$target"
+    fi
+    ln -sfn "$skill_dir" "$target"
+    echo "Unpinned .$tool/skills/$skill -> $skill_dir"
+  done
+  echo "Unpinned $skill (reverted to latest)"
+}
+
 refresh() {
   read_lines_into_packs < <(read_enabled_packs)
   [[ "${#packs[@]}" -gt 0 ]] || die "No enabled packs in .agents/project.json"
@@ -467,6 +594,16 @@ case "$cmd" in
     acquire_project_lock "$@"
     refresh
     print_session_reload_notice
+    ;;
+  pin)
+    acquire_project_lock "$@"
+    shift
+    pin_skill "${1:-}" "${2:-}"
+    ;;
+  unpin)
+    acquire_project_lock "$@"
+    shift
+    unpin_skill "${1:-}"
     ;;
   set-mode)
     acquire_project_lock "$@"

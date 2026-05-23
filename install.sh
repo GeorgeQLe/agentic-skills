@@ -21,9 +21,42 @@ if [[ "${1:-}" == "--help" || "${1:-}" == "-h" ]]; then
 fi
 
 UNINSTALL=false
-if [[ "${1:-}" == "--uninstall" ]]; then
-  UNINSTALL=true
-fi
+PINS=()
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --uninstall) UNINSTALL=true; shift ;;
+    --pin)
+      shift
+      [[ $# -gt 0 ]] || { echo "ERROR: --pin requires skill=version argument" >&2; exit 1; }
+      PINS+=("$1")
+      shift
+      ;;
+    *) shift ;;
+  esac
+done
+
+SKILL_PINS_FILE="$HOME/.claude/skill-pins.json"
+
+read_skill_pin() {
+  local skill="$1"
+  if [[ -f "$SKILL_PINS_FILE" ]] && command -v jq >/dev/null 2>&1; then
+    jq -r --arg s "$skill" '.[$s] // empty' "$SKILL_PINS_FILE" 2>/dev/null || true
+  fi
+}
+
+write_skill_pin() {
+  local skill="$1"
+  local version="$2"
+  mkdir -p "$(dirname "$SKILL_PINS_FILE")"
+  if [[ -f "$SKILL_PINS_FILE" ]] && command -v jq >/dev/null 2>&1; then
+    local tmp
+    tmp="$(jq --arg s "$skill" --arg v "$version" '.[$s] = $v' "$SKILL_PINS_FILE")"
+    echo "$tmp" > "$SKILL_PINS_FILE"
+  else
+    printf '{ "%s": "%s" }\n' "$skill" "$version" > "$SKILL_PINS_FILE"
+  fi
+}
 
 remove_repo_link() {
   local link="$1"
@@ -94,9 +127,25 @@ install_tree() {
     skill_dir="${skill_dir%/}"
     name="$(basename "$skill_dir")"
     target="$target_root/$name"
+    local effective_source="$skill_dir"
 
-    if sync_skill_link "$skill_dir" "$target"; then
-      echo "Installed $label: $name"
+    local pinned
+    pinned="$(read_skill_pin "$name")"
+    if [[ -n "$pinned" ]]; then
+      local archive_path="$skill_dir/archive/$pinned"
+      if [[ -d "$archive_path" && -f "$archive_path/SKILL.md" ]]; then
+        effective_source="$archive_path"
+      else
+        echo "WARNING: pin $name=$pinned but $archive_path/SKILL.md not found, using current" >&2
+      fi
+    fi
+
+    if sync_skill_link "$effective_source" "$target"; then
+      if [[ -n "$pinned" && "$effective_source" != "$skill_dir" ]]; then
+        echo "Installed $label: $name (pinned $pinned)"
+      else
+        echo "Installed $label: $name"
+      fi
       count=$((count + 1))
     else
       local status=$?
@@ -130,6 +179,17 @@ fi
 mkdir -p "$CLAUDE_SKILLS_DIR" "$CODEX_SKILLS_DIR"
 remove_stale_repo_links "$CLAUDE_SKILLS_DIR"
 remove_stale_repo_links "$CODEX_SKILLS_DIR"
+
+for pin_entry in "${PINS[@]+"${PINS[@]}"}"; do
+  if [[ "$pin_entry" =~ ^([^=]+)=(.+)$ ]]; then
+    pin_skill="${BASH_REMATCH[1]}"
+    pin_version="${BASH_REMATCH[2]}"
+    write_skill_pin "$pin_skill" "$pin_version"
+    echo "Pinned global skill $pin_skill to $pin_version"
+  else
+    echo "WARNING: invalid --pin format '$pin_entry', expected skill=version" >&2
+  fi
+done
 
 install_tree "$SCRIPT_DIR/global/claude" "$CLAUDE_SKILLS_DIR" "Claude core" count_claude_core skipped_claude_core
 install_tree "$SCRIPT_DIR/global/codex" "$CODEX_SKILLS_DIR" "Codex core" count_codex_core skipped_codex_core

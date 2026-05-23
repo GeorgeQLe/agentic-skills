@@ -1,44 +1,136 @@
 # Skill Versioning
 
-Skills use [semantic versioning](https://semver.org/) to track changes. The version lives in each skill's `SKILL.md` frontmatter:
+Skills use a `v0.0` decimal convention to track changes. The version lives in each skill's `SKILL.md` frontmatter:
 
 ```yaml
 ---
 name: my-skill
 description: Does something useful
-version: 1.2.0
+version: v0.0
 ---
 ```
 
-## When to bump
+## Convention
 
-| Change type | Bump | Example |
-|---|---|---|
-| **Breaking** — removes flags, changes output format, renames arguments | Major (`2.0.0`) | Removing `--no-plan` flag from `/ship` |
-| **New feature** — adds capability without breaking existing behavior | Minor (`1.1.0`) | Adding `--dry-run` flag to `/deploy` |
-| **Bug fix** — corrects behavior without changing the interface | Patch (`1.0.1`) | Fixing typo in prompt template |
+- New skills start at `version: v0.0`
+- Bump the decimal (e.g. `v0.0` → `v0.1`) for non-refactor changes — adjustments, tweaks, behavioral updates
+- Refactors or full overhauls do NOT bump the version; only substantive behavior/output changes do
+- Bump in the same commit that changes the skill
 
-## Rules
+## Archive on Bump
 
-1. All new skills start at `1.0.0`.
-2. Bump the version in the same commit that changes the skill.
-3. Only bump once per commit, even if multiple things change — use the highest applicable level.
-4. Codex skill mirrors are versioned separately if needed.
-5. Version audits scan `global/` and `packs/`.
+When bumping a version, archive the current `SKILL.md` before overwriting it:
 
-## Auditing versions
+1. Copy the current `SKILL.md` to `archive/<old-version>/SKILL.md` in the skill directory
+2. Update the `version:` field in `SKILL.md`
+3. Update `CHANGELOG.md`
+4. Commit all three changes together
 
-Run the version audit script to check all skills:
+Use the convenience script to automate the archive step:
 
 ```bash
-# Table of all skills and their versions
-bash scripts/skill-versions.sh
-
-# JSON output
-bash scripts/skill-versions.sh --json
-
-# Show only skills missing a version field
-bash scripts/skill-versions.sh --missing
+bash scripts/skill-archive.sh global/claude/ship
 ```
 
-The script exits `0` if all skills are versioned, `1` if any are missing.
+This reads the current version, creates `archive/<version>/SKILL.md`, and prints confirmation. Then bump the version and update the changelog manually.
+
+## Directory Structure
+
+Each skill directory can contain an `archive/` subdirectory with snapshots of prior versions:
+
+```text
+global/claude/ship/
+  SKILL.md              # current version (e.g., v0.1)
+  CHANGELOG.md          # reverse-chronological changes
+  archive/
+    v0.0/SKILL.md       # snapshot at v0.0
+
+packs/devtool/claude/devtool-adoption/
+  SKILL.md
+  CHANGELOG.md
+  archive/
+    v0.0/SKILL.md
+```
+
+The repo-root `archive/` directory is unrelated — it holds fully deprecated packs.
+
+## Changelog
+
+Each skill that has been bumped must have a `CHANGELOG.md` in its directory with reverse-chronological entries:
+
+```markdown
+# Changelog
+
+## v0.1
+
+- Added --dry-run flag
+- Improved error messages for missing arguments
+
+## v0.0
+
+- Initial version
+```
+
+Each archived version must have a corresponding heading in the changelog.
+
+## Version Pinning
+
+Skills can be pinned to an archived version so that an older snapshot is used instead of the current `SKILL.md`.
+
+### Pack skills (`pack.sh`)
+
+```bash
+scripts/pack.sh pin <skill> <version>    # pin a pack skill to an archived version
+scripts/pack.sh unpin <skill>            # revert to latest
+```
+
+Pin state is stored in `.agents/project.json` under `pinned_versions`:
+
+```json
+{
+  "project_type": "devtool",
+  "enabled_packs": ["devtool"],
+  "skill_pack_version": 1,
+  "pinned_versions": { "devtool-adoption": "v0.0" }
+}
+```
+
+When a skill is pinned, `pack.sh install/refresh` symlinks to `archive/<version>/` instead of the skill root.
+
+### Global skills (`install.sh`)
+
+```bash
+./install.sh --pin ship=v0.0
+```
+
+Pin state is stored in `~/.claude/skill-pins.json`:
+
+```json
+{ "ship": "v0.0" }
+```
+
+When a global skill is pinned, `install.sh` symlinks to the `archive/<version>/` subdirectory.
+
+## Auditing
+
+### Version audit
+
+```bash
+bash scripts/skill-versions.sh           # table of all skills and versions
+bash scripts/skill-versions.sh --json     # JSON output
+bash scripts/skill-versions.sh --missing  # skills missing a version field
+```
+
+### Archive audit
+
+```bash
+bash scripts/skill-archive-audit.sh           # table output
+bash scripts/skill-archive-audit.sh --json    # JSON output
+bash scripts/skill-archive-audit.sh --strict  # exit 1 on any violation
+```
+
+The archive audit checks:
+1. Every `archive/<version>/SKILL.md` has a `version:` field matching its directory name
+2. Any skill at `v0.1`+ has corresponding archive entries for prior versions
+3. If `archive/` has entries, `CHANGELOG.md` must exist
+4. Each archived version has a heading in `CHANGELOG.md`

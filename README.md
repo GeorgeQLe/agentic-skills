@@ -347,6 +347,29 @@ scripts/pack.sh install business-ops
 
 Creator-media and YouTube work is similarly split between `creator-foundation`, `youtube-ops`, and `remotion`. Fleet/portfolio work moved from global core into `project-fleet`.
 
+## Version Pinning
+
+Skills can be pinned to an archived version. When a skill's version is bumped, the old `SKILL.md` is archived to `archive/<version>/SKILL.md` within the skill directory.
+
+```bash
+# Archive current version before bumping
+bash scripts/skill-archive.sh global/claude/ship
+
+# Pin a pack skill to an archived version
+scripts/pack.sh pin devtool-adoption v0.0
+scripts/pack.sh unpin devtool-adoption
+
+# Pin a global skill during install
+./install.sh --pin ship=v0.0
+
+# Audit archive integrity
+bash scripts/skill-archive-audit.sh
+bash scripts/skill-archive-audit.sh --json
+bash scripts/skill-archive-audit.sh --strict
+```
+
+See [`docs/skill-versioning.md`](docs/skill-versioning.md) for the full versioning convention.
+
 ## Validation
 
 ```bash
