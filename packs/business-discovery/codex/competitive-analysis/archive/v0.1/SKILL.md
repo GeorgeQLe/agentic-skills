@@ -2,7 +2,7 @@
 name: competitive-analysis
 description: Research competitors via web search — map the landscape, GTM strategies, strengths, weaknesses, and market gaps
 type: research
-version: v0.2
+version: v0.1
 argument-hint: "[concept | optional: product category or specific competitors to investigate]"
 ---
 
@@ -70,15 +70,15 @@ Synthesise: underserved segments, feature gaps, pricing gaps, UX gaps, integrati
 
 Synthesise market gaps into: **Market State** (Virgin/Sparse/Crowded), **Incumbent Quality** (Dominant-and-loved / Dominant-but-resented / Fragmented-and-mediocre / Emerging-and-unproven), **Gap Quality** (Clear unmet need / Underserved segment / UX/approach gap / Minor improvement / No meaningful gap), **Verdict** (Proceed to ICP / Pivot concept / Abandon). If the session is already in Plan mode, prefer `request_user_input`; otherwise ask in plain text before continuing.
 
-### 5. Identify Market Gaps & White Space
+### 5. Analyse Positioning Opportunities
 
-**Standard mode:** Underserved segments, feature/capability gaps, pricing gaps, 2-3 white-space opportunities, competitor lessons (do's and don'ts).
+**Standard mode:** Where we fit, differentiation angles, competitor lessons, GTM strategy fit, 2-3 angles we could own.
 
-**Concept-validation mode:** Frame as hypothetical — segments the concept could serve that competitors miss, capability gaps, competitor lessons. Positioning recommendations belong in `$positioning`.
+**Concept-validation mode:** Frame as hypothetical — "if you built this": where it would fit, differentiation angles, competitor lessons, GTM fit.
 
 ### 6. Present Findings & Validate
 
-**Checkpoint 2 — Present full analysis before writing.** Show: landscape summary, key competitors, market gaps and white-space opportunities, observable GTM patterns, lessons from competitors. Ask: "Which gaps or assumptions need stronger evidence? Any gaps I missed or got wrong?" Continue until all details are nailed down.
+**Checkpoint 2 — Present full analysis before writing.** Show: landscape summary, key competitors, market gaps, recommended positioning, GTM insights. Ask: "Which gaps, positioning claims, or assumptions need stronger evidence? Any product-specific constraints or facts I should factor in?" Continue until all details are nailed down.
 
 ### 7. Write Output
 
@@ -86,7 +86,7 @@ Only after user validates, write the output files.
 
 ## Deliverables
 
-- `research/competitive-analysis.md` (or `research/{app}/competitive-analysis.md`) — Full competitive landscape: summary, competitor profiles, observable GTM patterns, market gaps, competitive positioning (gaps identified, lessons), signals for downstream research, next steps. In concept-validation mode, includes `## Gap Assessment` section (Market State, Incumbent Quality, Gap Quality, Verdict).
+- `research/competitive-analysis.md` (or `research/{app}/competitive-analysis.md`) — Full competitive landscape: summary, competitor profiles, GTM analysis, market gaps, positioning recommendations, next steps. In concept-validation mode, includes `## Gap Assessment` section (Market State, Incumbent Quality, Gap Quality, Verdict).
 - `research/competitive-analysis-search-log.md` (or `research/{app}/competitive-analysis-search-log.md`) — Raw research log: every query, findings, source attribution, reasoning
 
 **Standard mode next steps:** `## Next Steps` section with a **Recommended** item and **Other options** (2–4 alternatives). Choose the recommended item by the first matching condition:
@@ -141,7 +141,7 @@ When this skill produces follow-up work, file it by execution semantics:
 - Use web search extensively — every competitor must come from a search result.
 - Cite sources for competitor facts.
 - Be honest about uncertainty.
-- Stay in analysis mode — no product changes, architecture, or positioning recommendations. Positioning belongs in `$positioning`.
+- Stay in analysis mode — no product changes or architecture.
 - Focus on actionable insights over raw lists.
 - Do not overwrite existing `research/competitive-analysis.md` (or `research/{app}/competitive-analysis.md`) without asking.
 - Prefer recent sources (last 12 months).
@@ -166,7 +166,7 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 
 **Required inline questions.** Each gate must contain at least one required inline question placed directly under the content it governs, inside a visually distinct question block. Each question must use radio-button inputs and include two standing options after the skill-generated choices: "Other / None of the above" backed by a multi-line text box for free-form input, and "Need clarification" backed by an optional notes box where the user can explain what is unclear. When any radio option other than "Other" or "Need clarification" is selected, show an optional "Additional notes" text box beneath it so the user can qualify their choice. Generate questions based on what genuinely needs user input -- do not add filler questions. Do not create a separate bottom "Decisions & Clarifications" section.
 
-**Gate YAML contract.** At the bottom of the page, include a "Compile Answers" button that aggregates answers from all inline gate questions throughout the page, including free-text notes. The button remains disabled until every required question has a selection, shows a count of remaining unanswered questions, and scrolls to the first unanswered question if clicked early. When every question is answered, generate a structured YAML block with one item per gate answer using this stable shape: `section`, `gate_type`, `status` (`answered`, `other`, or `needs-clarification`), `answer`, optional `notes`, and optional `target_artifact` or `target_path` when the gate controls file output. After successful compilation, automatically attempt to copy the YAML to the clipboard with the Clipboard API, display copy status, and display the YAML in a read-only textarea with an explicit "Copy YAML" button. The copy button must retry clipboard copy when supported and fall back to selecting the textarea contents when clipboard access is unavailable or blocked.
+**Gate YAML contract.** At the bottom of the page, include a "Compile Answers" button that aggregates answers from all inline gate questions throughout the page, including free-text notes. The button remains disabled until every required question has a selection, shows a count of remaining unanswered questions, and scrolls to the first unanswered question if clicked early. When every question is answered, generate a structured YAML block with one item per gate answer using this stable shape: `section`, `gate_type`, `status` (`answered`, `other`, or `needs-clarification`), `answer`, optional `notes`, and optional `target_artifact` or `target_path` when the gate controls file output. Display the YAML in a read-only, click-to-copy textarea.
 
 **Pre-approval stop.** Before user approval, the next action is review of the HTML alignment page, not downstream routing. Ask the user to review the page and provide the compiled YAML answers. Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language until after compiled YAML has been provided and the approved artifacts have been written or updated.
 

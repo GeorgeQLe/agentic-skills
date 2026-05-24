@@ -2,7 +2,7 @@
 name: competitive-analysis
 description: Research competitors via web search — map the landscape, GTM strategies, strengths, weaknesses, and market gaps
 type: research
-version: v0.2
+version: v0.1
 argument-hint: "[concept | optional: product category or specific competitors to investigate]"
 ---
 

@@ -2,7 +2,7 @@
 name: enterprise-icp
 description: Enterprise multi-stakeholder discovery — map personas, deal-killers, and the evaluation-to-renewal lifecycle
 type: research
-version: v0.1
+version: v0.0
 argument-hint: "[optional: target industry or market segment]"
 ---
 
