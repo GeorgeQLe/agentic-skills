@@ -45,7 +45,7 @@ Record existence, content summary, and last-modified timestamps for:
 - `tasks/phases/` — archived phase files
 - `tasks/lessons.md` — accumulated lessons
 - `specs/` or `spec.md` — specifications
-- `specs/ux-variationss-*.md` — UX variation plans for user-facing work
+- `specs/ux-variations-*.md` — UX variation plans for user-facing work
 - `specs/ui-*.md` — implementation-ready UI specifications for user-facing work
 - `research/journey-map.md` — user/customer journey context for user-facing work
 
@@ -62,7 +62,7 @@ Route behavior based on the current pipeline state:
 |-------|-----------|----------|
 | A0 — No specs, missing journey | User-facing business-app work has no specs and no `research/journey-map.md` | Queue `/journey-map`. Done (skip to step 7). |
 | A — No specs | No `specs/` files, no `spec.md`, and journey is complete or not applicable | Queue `/feature-interview` when an idea/research gap exists and the planning destination is not confirmed; queue `/spec-interview` only when the user already selected full-spec creation. Done (skip to step 7). |
-| B0 — Specs, missing design gate | User-facing specs exist, but `research/journey-map.md`, `specs/ux-variationss-*.md`, `specs/ui-*.md`, consolidated prototype at `prototypes/*/consolidated/`, or production spec is missing | Queue the missing planning item. Done (skip to step 7). |
+| B0 — Specs, missing design gate | User-facing specs exist, but `research/journey-map.md`, `specs/ux-variations-*.md`, `specs/ui-*.md`, consolidated prototype at `prototypes/*/consolidated/`, or production spec is missing | Queue the missing planning item. Done (skip to step 7). |
 | B — Specs, no roadmap | Specs exist and required journey/UX/UI planning is complete or not applicable, `tasks/roadmap.md` missing or empty | Go to step 4 (build roadmap), then continue to step 5. |
 | C — Work in progress | `tasks/roadmap.md` exists, unchecked phases remain | Skip to step 5 (classify issues). |
 | G — Roadmap extension needed | `tasks/roadmap.md` exists, all phases are checked, and a substantive spec exists that is newer than the roadmap or is not represented in any completed phase | Go to step 4 in extension mode: interview only for the new/changed spec scope, append the agreed next phase(s), then seed the first new phase with `/plan-phase N`. Do not queue `/roadmap`. |
@@ -219,7 +219,7 @@ Specs have been modified more recently than the roadmap, suggesting the plan may
 User-facing specs exist, but one or more required design-planning artifacts are missing:
 
 - `research/journey-map.md` — run `/journey-map` first to define discovery, onboarding, aha, conversion, retention, and advocacy.
-- `specs/ux-variationss-*.md` — run `/ux-variations` after journey/spec context to compare onboarding, workflow, sharing, return-use, and UI variants.
+- `specs/ux-variations-*.md` — run `/ux-variations` after journey/spec context to compare onboarding, workflow, sharing, return-use, and UI variants.
 - `specs/ui-*.md` — run `/ui-interview` after UX variation to lock buildable screen-level detail.
 
 For `/journey-map` (customer-lifecycle pack), `/ux-variations`, and `/ui-interview`, apply the Pack Availability Guard — if the target skill's pack is not in `.agents/project.json` `enabled_packs`, recommend `/pack install <pack>` before the skill.
@@ -320,7 +320,7 @@ For missing journey/UX/UI planning:
 
 ```md
 - [ ] `/journey-map` - create `research/journey-map.md` before roadmap because user-facing specs need lifecycle context.
-- [ ] `/ux-variations` - create `specs/ux-variationss-[topic].md` before roadmap because user-facing specs need experience alternatives.
+- [ ] `/ux-variations` - create `specs/ux-variations-[topic].md` before roadmap because user-facing specs need experience alternatives.
 - [ ] `/ui-interview` - create `specs/ui-[topic].md` before roadmap because the selected experience needs implementation-ready interface detail.
 ```
 

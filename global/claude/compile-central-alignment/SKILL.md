@@ -28,9 +28,10 @@ Generate a browsable `alignment/index.html` that links to every alignment page i
 
 4. **Generate `alignment/index.html`:**
    - Self-contained HTML, no external dependencies.
-   - Visual style matching existing alignment pages (same CSS variables, fonts, layout):
-     - `--ink: #202124`, `--muted: #5f6368`, `--line: #dadce0`, `--panel: #f8fafd`, `--accent: #0b57d0`, `--bg: #ffffff`
-     - `font-family: Arial, Helvetica, sans-serif`, `max-width: 1080px`, `line-height: 1.45`
+   - Visual style matching existing alignment pages (dark-mode, same CSS variables, fonts, layout):
+     - `--bg: #0d1117; --surface: #161b22; --border: #30363d; --text: #c9d1d9; --text-muted: #8b949e; --accent: #58a6ff; --panel: #161b22;`
+     - `font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif`, `max-width: 1080px`, `line-height: 1.45`
+     - `body { background: var(--bg); color: var(--text); }`
    - Page header: `<h1>Alignment Pages</h1>` with page count and generation timestamp in a `<p class="meta">`.
    - Text filter input: an `<input>` that live-filters the card grid by title, description, and date as the user types. Inline `<script>` — no external JS.
    - Card grid: responsive CSS grid (`repeat(auto-fill, minmax(300px, 1fr))`), each card is a `.panel` link block containing:
