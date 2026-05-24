@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-05-23 — Add alignment page skip list for utility/ops skills
+
+- Created `scripts/alignment-skip-list.txt` with 28 skills that should not have alignment pages (execution/shipping, infrastructure/config, planning, and meta skills).
+- Updated `scripts/upgrade-alignment-page.sh` to read the skip list and exclude matching skills from future alignment page upgrades.
+- Created `scripts/strip-alignment-page.sh` to remove alignment sections from skip-listed skills.
+- Stripped alignment page sections from 30 SKILL.md files (16 claude + 14 codex), removing 481 lines of unnecessary alignment page boilerplate from utility/ops skills.
+
 ## 2026-05-23 — Add compile-central-alignment skill
 
 - Created `compile-central-alignment` utility skill (Claude + Codex mirrors) that generates `alignment/index.html` as a browsable table of contents for all alignment pages in any repo.
