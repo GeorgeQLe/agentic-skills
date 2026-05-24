@@ -24,7 +24,7 @@ describe("SKILL.md frontmatter", () => {
 
     it(`${rel} has valid version format`, () => {
       const meta = parseFrontmatter(filePath);
-      expect(meta.version).toMatch(/^\d+\.\d+\.\d+$/);
+      expect(meta.version).toMatch(/^v\d+\.\d+$/);
     });
 
     it(`${rel} has non-empty name and description`, () => {

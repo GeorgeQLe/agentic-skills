@@ -16,6 +16,20 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Update: Benchmark Failure Investigation 2026-05-24
+
+**Goal:** Fix benchmark/showcase validation failures surfaced after the alignment-first, prototype-second workflow refactor without weakening the new alignment gates.
+
+**Acceptance Criteria:**
+- [x] User hypothesis is validated against focused alignment tests, benchmark/showcase tests, and current generated data.
+- [x] Frontmatter checks accept the repository's documented `v0.x` skill version format.
+- [x] Pack output-path checks ignore archived skill versions so retained history is not treated as active skill behavior.
+- [x] Showcase benchmark demo parsing supports current `## Raw Sessions` list sections.
+- [x] Generated showcase data and benchmark results matrix are refreshed.
+- [x] Broader validation passes or sandbox-only blockers are documented, and intended changes are committed and pushed on `master`.
+
+**Result:** Updated on 2026-05-24. The alignment/refactor-specific tests passed, but surrounding benchmark/showcase checks had stale assumptions about versioning, archives, raw-session report shape, and current retained benchmark rows. The harness now accepts `v0.x` skill versions, ignores archived skill copies for active output-path conflicts, parses current raw-session sections for showcase demos, and generated benchmark/showcase data is refreshed. Full layer1 tests and benchmark coverage passed; existing skill-dependency audit noise remains unrelated.
+
 ## Current Targeted Update: Approval-Gated Research Alignment Previews 2026-05-22
 
 **Goal:** Make approval-gated research, planning, spec, report, and document skills build a user-consumable alignment HTML preview before asking the user to approve canonical artifact writes.
@@ -4570,6 +4584,7 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 ---
 
 ## Deferred / Future Work
+- **Investigate alignment YAML clipboard UX (2026-05-24)** — tighten the `$investigate` alignment-page contract so compiled YAML is copied automatically when possible and always has an explicit copy-to-clipboard control; validate with focused layer1 contract tests.
 - **Kanban analytics** — cycle time, throughput, WIP limits via `/kanban-stats` skill (from original backlog)
 - **Two-way Neon ↔ poketowork UI sync** — webhook on git push (from original backlog)
 - **Kanban card labels** — tags/labels field for filtering by type (deferred to after Phase 8)

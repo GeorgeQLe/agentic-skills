@@ -35,6 +35,12 @@ This matrix tracks skills that already have persisted benchmark run data and gra
 | `uat` | Claude | `tests/benchmarks/runs/uat-claude-5bc5e5b3/report.json` | 3 | 67% | 63.6% | none | graded | Curated report: `benchmark/test-uat-2026-05-21.md`. |
 | `uat` | Codex | `tests/benchmarks/runs/uat-codex-d13deaa2/report.json` | 3 | 100% | 86.4% | none | graded | Curated report: `benchmark/test-uat-2026-05-21.md`. |
 
+## Incomplete Persisted Reports
+
+| Skill | Agent | Raw Report | Status | Notes |
+|---|---|---|---|---|
+| `run` | Codex | `tests/benchmarks/runs/run-codex-0ec2498e/report.json` | blocked/incomplete | Report exists with zero total and evaluated runs. Do not count as benchmarked. |
+
 ## Coverage Gaps
 
 - Most repository skills have custom benchmark setup coverage but do not yet have persisted evaluated benchmark data and grades.

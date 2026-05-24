@@ -8,6 +8,7 @@
 
 ## Priority Task Queue
 
+- [x] `$investigate benchmark failures alignment-first prototype-second workflow` — triage benchmark/showcase failures after the alignment-first workflow refactor, fix stale harness expectations, refresh generated data, validate, then commit and push.
 - [x] `$targeted-skill-builder run ship alignment exemption` — remove alignment-page requirements from run/ship loop skills, validate, then commit and push.
 - [x] `$targeted-skill-builder all durable skills alignment pages` — extend root `alignment/` HTML review-page contract to every durable output-writing skill, validate, then commit and push.
 - [x] `$targeted-skill-builder alignment html output root` — move alignment review pages to root `alignment/`, restore Codex `$prototype`, update hygiene/bootstrap awareness, validate, then commit and push.
@@ -20,6 +21,38 @@
 - [x] `$run` — Resume Phase 41 Batch 41.3 re-benchmarks: re-run the 33 Tier 2 global skills that were benchmarked pre-fixture-remediation with near-zero pass rates (Phase 43 added route guidance to all 32 fixture prompts and increased budgets). Current graded count: 69 unique skills / 158 total. Batch 41.5 pack-local groups also have remaining families. Batch 41.3 Group 2 shipped in `bc17fee` and `3e4bd78`; next triage should start with `provision-agentic-config`, `migrate`, or `prototype`.
 - [ ] Review `tasks/recurring-todo.md`: 2 unchecked recurring items — promote only if due and requiring execution work.
 - [ ] `$research-roadmap` — All 43 roadmap phases are complete. Run documentation health scan after Phase 41 remaining batches finish.
+
+## Current Task — Benchmark Failure Investigation 2026-05-24
+
+**Goal:** Investigate reported benchmark failures suspected to be related to the alignment-first, prototype-second workflow refactor.
+
+**User claim validation:**
+- Partially correct: focused alignment/refactor tests passed, so the core alignment-first contract was not failing directly.
+- Confirmed adjacent failures: benchmark/showcase layer1 checks still assumed older semver skill versions, treated archived skill copies as active pack outputs, expected stale `ship`/`affected` matrix rows, and could not parse current `## Raw Sessions` list-style benchmark reports for showcase demos.
+- Sandbox-only failures: nested `pnpm` and `git init` subprocess checks failed with `EPERM` under the default sandbox and require escalated validation rather than source changes.
+
+**Plan:**
+- [x] Reproduce focused benchmark/showcase failures.
+- [x] Confirm alignment-specific gates still pass.
+- [x] Update tests for `v0.x` skill versions and archive-aware output-path conflict checks.
+- [x] Update showcase data parsing for current raw-session report sections.
+- [x] Refresh generated showcase and benchmark matrix assets.
+- [x] Run broader validation, record results, commit, and push intended changes.
+
+**Files:**
+- `scripts/generate-skills-showcase-data.mjs`
+- `tests/layer1/frontmatter.test.ts`
+- `tests/layer1/output-paths.test.ts`
+- `tests/layer1/benchmark-results-matrix.test.ts`
+- `tests/layer1/skills-showcase-benchmark-demo.test.ts`
+- Generated showcase assets and `docs/benchmark-results-matrix.md`
+
+### Review
+
+- Root cause: the focused alignment-first/prototype-second contracts were valid, but adjacent benchmark/showcase validation was stale against the refactor. The failures came from old semver assertions, archive directories being treated as active skill files, generated benchmark matrix expectations pinned to old rows, and raw-session parsing that missed current `## Raw Sessions` list sections.
+- Fixes: updated layer1 frontmatter and output-path checks, taught `scripts/generate-skills-showcase-data.mjs` to parse list-style raw sessions for benchmark demos, refreshed generated showcase assets and `docs/benchmark-results-matrix.md`, and aligned stale matrix/demo assertions with current retained evidence.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 layer1/frontmatter.test.ts layer1/output-paths.test.ts layer1/benchmark-results-matrix.test.ts layer1/skills-showcase-benchmark-demo.test.ts layer1/alignment-gates.test.ts layer1/research-approval-gate.test.ts layer1/competitive-analysis-routing.test.ts`; `pnpm --dir tests test` (escalated for subprocess checks); `pnpm --dir tests bench:coverage` (escalated for tsx IPC); `bash ./scripts/skill-versions.sh --missing`; `bash ./scripts/skill-next-step-routing.sh --missing`; `git diff --check`.
+- Known unrelated validation noise: `bash ./scripts/skill-deps.sh --broken` still reports existing missing references for `handoff`, `mono-detect`, `provision-agentic-config`, `report-website`, `session-triage`, and `ship`. `scripts/validate-skills-showcase-data.sh` reports generated assets as stale before commit because the intended generated files are dirty; rerun after commit should pass if no generator drift remains.
 
 ## Current Task — Run Ship Alignment Exemption 2026-05-21
 
@@ -1999,6 +2032,34 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
 - Refreshed Skills Showcase generated data and benchmark matrix.
 - Validation passed: targeted stale-contract search found no old report-only or old alignment-page phrasing; `pnpm --dir tests test -- --grep "bench-setups|tier23|frontmatter|skills-reference"`; `pnpm --dir tests bench:coverage`; `/opt/homebrew/bin/bash ./scripts/skill-next-step-routing.sh --missing`; `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken`; `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`; `git diff --check`.
 - Post-commit validation passed: `scripts/validate-skills-showcase-data.sh`.
+## Current Task — Investigate Alignment YAML Clipboard UX 2026-05-24
+
+**Goal:** Make `$investigate` HTML alignment pages easier to use after answer compilation by copying the compiled YAML automatically when possible and providing an explicit copy button.
+
+**Plan:**
+- [x] Validate the current alignment-page contract and generated contract tests.
+- [x] Update the `$investigate` alignment-page instructions with a clipboard contract and version archive.
+- [x] Add focused regression coverage for automatic copy and explicit copy-button requirements.
+- [x] Run focused validation and record review notes.
+- [ ] Commit and push intended changes on `master`, unless unrelated work blocks a clean ship.
+
+**Files:**
+- `global/codex/investigate/SKILL.md`
+- `global/codex/investigate/archive/v0.0/SKILL.md`
+- `global/codex/investigate/CHANGELOG.md`
+- `tests/layer1/alignment-gates.test.ts`
+- `tasks/roadmap.md`, `tasks/todo.md`
+
+### Review
+
+- Strategy used: General investigation; no UI/data pivot.
+- User claim validated: confirmed as a contract gap. The alignment-page contract only required displaying YAML in a read-only/click-to-copy textarea, so generated pages could omit automatic clipboard copy and a visible copy button.
+- Root cause: `$investigate` inherited the older alignment YAML contract language, which optimized for readable output but did not specify clipboard behavior after compile.
+- Fix applied: bumped `global/codex/investigate/SKILL.md` to `v0.1`, archived `v0.0`, added `CHANGELOG.md`, and updated the shared alignment-upgrade script language to require automatic clipboard copy, status display, an explicit `Copy YAML` button, and textarea-selection fallback.
+- Prevention: added a focused `tests/layer1/alignment-gates.test.ts` assertion for automatic copy, copy button, and fallback behavior.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 alignment-gates`; `./scripts/skill-versions.sh --missing`; `git diff --check`.
+- Shipping blocked: repository already has a broad dirty tree from other work, including many unrelated skill/showcase files and uncommitted generated assets. Commit/push should happen after that batch is reconciled or explicitly included.
+
 - Commit: `28bd7ca` (`fix: add approval alignment previews`).
 
 ## Current Task — Competitive Analysis Journey-First Routing 2026-05-22

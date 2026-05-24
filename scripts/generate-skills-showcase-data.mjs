@@ -176,6 +176,15 @@ function buildBenchmarkDemo(report) {
   return null;
 }
 
+function parseRawSessionList(text) {
+  const section = text.match(/## Raw Sessions\s+([\s\S]*?)(?:\n## |\n# |$)/i)?.[1] || "";
+  const sessions = new Map();
+  for (const match of section.matchAll(/-\s*(Claude|Codex):\s*`([^`]+)`/gi)) {
+    sessions.set(match[1].toLowerCase(), match[2]);
+  }
+  return sessions;
+}
+
 function parseBenchmarkReport(relativePath) {
   const text = readText(relativePath);
   const pathMatch = relativePath.match(/^benchmark\/test-(.+)-(\d{4}-\d{2}-\d{2})\.md$/);
@@ -186,10 +195,15 @@ function parseBenchmarkReport(relativePath) {
   const coverage = ((text.match(/\*\*Coverage:\*\*\s*([^\n]+)/) || [])[1] || "").trim() || null;
   const verifyPassed = /\|\s*layer1\s*\|\s*PASS\s*\|/i.test(text);
   const layer2Skipped = /\|\s*layer2\s*\|\s*SKIP\s*\|/i.test(text);
+  const rawSessions = parseRawSessionList(text);
   const agents = [];
   for (const row of parseMarkdownTableRows(text, "Benchmark Summary")) {
     const agent = String(row.agent || "").toLowerCase();
     if (agent !== "claude" && agent !== "codex") continue;
+    const rawSessionPath =
+      String(row["raw session"] || row["raw session path"] || "").replace(/^`|`$/g, "") ||
+      rawSessions.get(agent) ||
+      "";
     agents.push({
       agent,
       passRate: row["evaluated pass rate"] || row["pass rate"] || "",
@@ -203,7 +217,7 @@ function parseBenchmarkReport(relativePath) {
       totalCost: row["total cost"] || "",
       meanPairwiseSimilarity: row.consistency || row["mean pairwise similarity"] || "",
       outliers: row.outliers || "",
-      rawSessionPath: String(row["raw session"] || row["raw session path"] || "").replace(/^`|`$/g, "")
+      rawSessionPath
     });
   }
 

@@ -23,9 +23,10 @@ const packDirs = globSync("*/", { cwd: PACKS_DIR }).map((d) => d.replace(/\/$/, 
 describe("Output path conflicts", () => {
   for (const packName of packDirs) {
     const packDir = resolve(PACKS_DIR, packName);
-    const skillFiles = globSync("**/SKILL.md", { cwd: packDir }).map((rel) =>
-      resolve(packDir, rel),
-    );
+    const skillFiles = globSync("**/SKILL.md", {
+      cwd: packDir,
+      ignore: ["**/archive/**"],
+    }).map((rel) => resolve(packDir, rel));
 
     // Group by tool (claude/codex) — claude and codex variants of the same
     // skill writing to the same path is expected, not a conflict.
