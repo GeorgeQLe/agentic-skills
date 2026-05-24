@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cost Implications: Alignment-First, Prototype-First Workflow</title>
+<style>
+:root { --bg: #0d1117; --surface: #161b22; --border: #30363d; --text: #c9d1d9; --text-muted: #8b949e; --accent: #58a6ff; --green: #3fb950; --red: #f85149; --orange: #d29922; --purple: #bc8cff; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; padding: 2rem; max-width: 1100px; margin: 0 auto; }
+h1 { font-size: 1.8rem; margin-bottom: 0.5rem; color: #fff; }
+h2 { font-size: 1.4rem; margin: 2rem 0 1rem; color: var(--accent); border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+h3 { font-size: 1.1rem; margin: 1.5rem 0 0.75rem; color: var(--purple); }
+p, li { margin-bottom: 0.5rem; }
+ul { padding-left: 1.5rem; }
+.subtitle { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 2rem; }
+nav { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.5rem; margin-bottom: 2rem; }
+nav a { color: var(--accent); text-decoration: none; display: block; padding: 0.2rem 0; font-size: 0.9rem; }
+nav a:hover { text-decoration: underline; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin-bottom: 1.5rem; }
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+.stat { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; text-align: center; }
+.stat .number { font-size: 2rem; font-weight: 700; color: var(--accent); }
+.stat .label { font-size: 0.85rem; color: var(--text-muted); }
+table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+th, td { padding: 0.6rem 0.8rem; border: 1px solid var(--border); text-align: left; }
+th { background: var(--surface); color: var(--accent); font-weight: 600; }
+tr:nth-child(even) { background: rgba(22,27,34,0.5); }
+.cost-up { color: var(--red); font-weight: 600; }
+.cost-down { color: var(--green); font-weight: 600; }
+.cost-neutral { color: var(--orange); font-weight: 600; }
+.verdict { background: var(--surface); border-left: 4px solid var(--accent); padding: 1.5rem; margin: 1.5rem 0; border-radius: 0 8px 8px 0; }
+.question-block { background: #1c2333; border: 2px solid var(--purple); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0; }
+.question-block h4 { color: var(--purple); margin-bottom: 1rem; font-size: 0.95rem; }
+.question-block label { display: block; padding: 0.4rem 0; cursor: pointer; font-size: 0.9rem; }
+.question-block input[type="radio"] { margin-right: 0.5rem; accent-color: var(--purple); }
+.question-block textarea { width: 100%; background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 4px; padding: 0.5rem; margin-top: 0.5rem; font-family: inherit; font-size: 0.85rem; resize: vertical; display: none; }
+.question-block textarea.visible { display: block; }
+.compile-section { text-align: center; margin: 2rem 0; }
+.compile-btn { background: var(--purple); color: #fff; border: none; padding: 0.8rem 2rem; border-radius: 6px; font-size: 1rem; cursor: pointer; font-weight: 600; }
+.compile-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.compile-btn:hover:not(:disabled) { filter: brightness(1.15); }
+.compile-output { width: 100%; min-height: 200px; background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 1rem; font-family: monospace; font-size: 0.85rem; margin-top: 1rem; display: none; cursor: pointer; }
+.remaining-count { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.5rem; }
+.tag { display: inline-block; padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
+.tag-up { background: rgba(248,81,73,0.15); color: var(--red); }
+.tag-down { background: rgba(63,185,80,0.15); color: var(--green); }
+.tag-watch { background: rgba(210,153,34,0.15); color: var(--orange); }
+</style>
+</head>
+<body>
+
+<h1>Cost Implications: Alignment-First, Prototype-First Workflow</h1>
+<p class="subtitle">analyze-sessions report &mdash; 2026-05-24 &mdash; Based on 9,482 Claude + 1,750 Codex history entries across 3,344 sessions</p>
+
+<nav>
+<strong>Contents</strong>
+<a href="#overview">1. Overview &amp; Key Numbers</a>
+<a href="#investment">2. Investment Cost: Building the Contract</a>
+<a href="#per-session">3. Per-Session Cost Changes</a>
+<a href="#overcorrection">4. Overcorrection Tax</a>
+<a href="#prototype">5. Prototype-First: Unrealized Investment</a>
+<a href="#projections">6. Forward Projections</a>
+<a href="#verdict">7. Verdict &amp; Recommendations</a>
+</nav>
+
+<h2 id="overview">1. Overview &amp; Key Numbers</h2>
+
+<div class="stat-grid">
+<div class="stat"><div class="number">38</div><div class="label">Alignment/prototype commits (of 1,309 total)</div></div>
+<div class="stat"><div class="number">310+</div><div class="label">Skill files modified for alignment contract</div></div>
+<div class="stat"><div class="number">5</div><div class="label">Lessons-md corrections from alignment drift</div></div>
+<div class="stat"><div class="number">30</div><div class="label">Skills on alignment skip list (overcorrection fix)</div></div>
+</div>
+
+<div class="card">
+<p>The alignment-first workflow was introduced <strong>May 22, 2026</strong> with the directive that every skill producing durable deliverables must output an HTML alignment page for browser-based review before the user approves canonical file writes. The prototype-first gate was introduced <strong>May 18, 2026</strong> to ensure product/feature work produces clickable prototypes before production infrastructure.</p>
+<p>Together, these represent a fundamental shift in how skills operate: from inline conversational iteration to structured preview-approve-write cycles.</p>
+</div>
+
+<h2 id="investment">2. Investment Cost: Building the Contract</h2>
+
+<h3>2.1 Direct Development Overhead</h3>
+
+<table>
+<tr><th>Activity</th><th>Scale</th><th>Cost Signal</th></tr>
+<tr><td>Initial alignment page contract design</td><td>3+ sessions, ~15 messages</td><td class="cost-up">Medium</td></tr>
+<tr><td>Cross-cutting upgrade (<code>5f11f2f</code>): add alignment page to all skills</td><td>310 files, 4,222 insertions</td><td class="cost-up">High</td></tr>
+<tr><td>Inline question migration (<code>d805201</code>): move questions from bottom section to inline</td><td>313 files, 634 insertions</td><td class="cost-up">Medium</td></tr>
+<tr><td>Skip list creation + strip operation (<code>1aa1191</code> + <code>3b0b98d</code>)</td><td>30 files stripped, 480 deletions + scripts</td><td class="cost-up">Medium</td></tr>
+<tr><td>Browser-open WSL debugging</td><td>3-4 turns in first session</td><td class="cost-neutral">Low (one-time)</td></tr>
+<tr><td>Tooling scripts (upgrade, verify, strip, archive)</td><td>4 scripts, 3 now deprecated</td><td class="cost-up">Low</td></tr>
+<tr><td>Benchmark fixture remediation (route assertions)</td><td>32 of 37 fixtures needed updates, full Phase 43</td><td class="cost-up">High</td></tr>
+</table>
+
+<p><strong>Total investment commits:</strong> 38 of 1,309 total commits (<strong>2.9%</strong> of all project commits) are alignment/prototype infrastructure. Since May 18, 17 of 126 commits (13.5%) have been alignment-related &mdash; a heavy recent concentration.</p>
+
+<h3>2.2 Indirect Costs</h3>
+<ul>
+<li><strong>Lessons churn:</strong> 5 entries in <code>tasks/lessons.md</code> were written to correct alignment workflow drift, each representing a user interruption and correction cycle.</li>
+<li><strong>Routing regressions:</strong> The competitive-analysis routing order was wrong because an old canonical sequence doc overrode the new prototype-first order &mdash; a cost of having routing logic spread across multiple skill contracts.</li>
+<li><strong>Benchmark invalidation:</strong> The alignment page and route-contract changes invalidated benchmark fixtures, requiring a full re-benchmark campaign across 3 groups. Budget was bumped from $0.25 (smoke) to $1.00 (standard) per run to avoid infrastructure blocks.</li>
+</ul>
+
+<div class="question-block" data-section="Investment Cost">
+<h4>Q1: Was the cross-cutting 310-file upgrade the right approach, or should alignment pages have been added incrementally per-skill as each skill was touched?</h4>
+<label><input type="radio" name="q1" value="batch" onchange="handleRadio(this)"> Batch upgrade was correct &mdash; consistency matters more than incremental cost</label>
+<label><input type="radio" name="q1" value="incremental" onchange="handleRadio(this)"> Should have been incremental &mdash; the overcorrection tax proves batch was premature</label>
+<label><input type="radio" name="q1" value="hybrid" onchange="handleRadio(this)"> Hybrid &mdash; batch for research/planning skills, incremental for everything else</label>
+<label><input type="radio" name="q1" value="other" onchange="handleRadio(this)"> Other / None of the above</label>
+<textarea class="other-input" placeholder="Your input..."></textarea>
+<label><input type="radio" name="q1" value="clarify" onchange="handleRadio(this)"> Need clarification</label>
+<textarea class="clarify-input" placeholder="What's unclear?"></textarea>
+<textarea class="notes-input" placeholder="Additional notes (optional)"></textarea>
+</div>
+
+<h2 id="per-session">3. Per-Session Cost Changes</h2>
+
+<h3>3.1 Turn Count: Before vs After</h3>
+
+<table>
+<tr><th>Skill</th><th>Pre-Alignment Avg Turns</th><th>Post-Alignment Turns</th><th>Delta</th><th>Sample Size</th></tr>
+<tr><td><code>/icp</code></td><td>8.6</td><td>5.0</td><td class="cost-down">-42%</td><td>16 pre / 1 post</td></tr>
+<tr><td><code>/concept-exploration</code></td><td>2.7</td><td>5.5</td><td class="cost-up">+104%</td><td>Many pre / 2 post</td></tr>
+<tr><td><code>/competitive-analysis</code></td><td>7.3</td><td>&mdash;</td><td>&mdash;</td><td>7 pre / 0 post</td></tr>
+<tr><td><code>/journey-map</code></td><td>8.0</td><td>&mdash;</td><td>&mdash;</td><td>6 pre / 0 post</td></tr>
+</table>
+
+<p><span class="tag tag-watch">Caution</span> Only 3 post-alignment research sessions exist (2 days of data). The ICP turn reduction is directionally encouraging but statistically meaningless at N=1. The concept-exploration increase likely reflects richer output scope, not workflow overhead.</p>
+
+<h3>3.2 Output Size Inflation</h3>
+
+<table>
+<tr><th>Metric</th><th>Pre-Alignment</th><th>Post-Alignment</th><th>Change</th></tr>
+<tr><td>ICP alignment page size</td><td>N/A (markdown only)</td><td>57 KB HTML</td><td class="cost-up">New artifact</td></tr>
+<tr><td>Average alignment page size</td><td>N/A</td><td>~14 KB</td><td class="cost-up">New artifact</td></tr>
+<tr><td>Deliverables per skill run</td><td>1 (markdown research)</td><td>2 (alignment HTML + markdown)</td><td class="cost-up">2x artifacts</td></tr>
+</table>
+
+<p>Each skill run now generates both an alignment HTML page (for browser review) and the canonical markdown deliverable. The HTML generation adds token output cost proportional to the page size. A 57 KB page at ~4 chars/token is roughly <strong>14,000 extra output tokens per ICP run</strong>.</p>
+
+<h3>3.3 Where Costs Shift (Not Just Grow)</h3>
+<div class="card">
+<p><span class="tag tag-down">Savings</span> <strong>Async review eliminates idle LLM context.</strong> When the user reviews an alignment page in their browser, zero LLM tokens are consumed. Pre-alignment, every feedback round required the model to hold conversation context while the user thought. On an 8.6-turn ICP session with 2-minute think times, that's ~17 minutes of context-window occupancy eliminated per session.</p>
+<p><span class="tag tag-down">Savings</span> <strong>Batched feedback reduces round trips.</strong> The compile-answers YAML captures all feedback in one structured payload instead of 3-5 incremental correction messages.</p>
+<p><span class="tag tag-up">Cost</span> <strong>HTML generation adds ~14K output tokens per research skill run.</strong> At Opus pricing (~$75/M output tokens), that's roughly $1.05 per alignment page. At Sonnet pricing (~$15/M), it's ~$0.21.</p>
+<p><span class="tag tag-up">Cost</span> <strong>Every skill contract now includes ~16 lines of alignment page instructions</strong> in its SKILL.md, which are loaded into context for every invocation &mdash; even when no alignment page is ultimately needed (e.g., a quick re-run of a previously approved deliverable).</p>
+</div>
+
+<div class="question-block" data-section="Per-Session Cost">
+<h4>Q2: The 14K extra output tokens per alignment page (~$1.05 at Opus) &mdash; is this an acceptable cost for structured browser review, or should alignment pages use a cheaper model?</h4>
+<label><input type="radio" name="q2" value="acceptable" onchange="handleRadio(this)"> Acceptable &mdash; the review quality justifies the cost</label>
+<label><input type="radio" name="q2" value="cheaper-model" onchange="handleRadio(this)"> Generate alignment pages with Sonnet/Haiku to reduce cost</label>
+<label><input type="radio" name="q2" value="simpler-pages" onchange="handleRadio(this)"> Keep Opus but simplify pages &mdash; less CSS/JS, more content density</label>
+<label><input type="radio" name="q2" value="other" onchange="handleRadio(this)"> Other / None of the above</label>
+<textarea class="other-input" placeholder="Your input..."></textarea>
+<label><input type="radio" name="q2" value="clarify" onchange="handleRadio(this)"> Need clarification</label>
+<textarea class="clarify-input" placeholder="What's unclear?"></textarea>
+<textarea class="notes-input" placeholder="Additional notes (optional)"></textarea>
+</div>
+
+<h2 id="overcorrection">4. Overcorrection Tax</h2>
+
+<p>The single most visible cost of the alignment workflow is the <strong>overcorrection-remediation cycle</strong>. This is the pattern:</p>
+
+<div class="card">
+<table>
+<tr><th>Step</th><th>Commit</th><th>What Happened</th><th>Files</th></tr>
+<tr><td>1. Require everywhere</td><td><code>a839142</code></td><td>Added alignment pages to all skills including run/ship loops</td><td>~310</td></tr>
+<tr><td>2. Discover overcorrection</td><td>&mdash;</td><td>User corrected: "Run/ship loops are not alignment-page producers"</td><td>&mdash;</td></tr>
+<tr><td>3. Build skip list</td><td><code>1aa1191</code></td><td>Created 30-skill skip list + strip script</td><td>3</td></tr>
+<tr><td>4. Strip exempted skills</td><td><code>3b0b98d</code></td><td>Removed alignment sections from 30 skip-listed skills</td><td>30</td></tr>
+<tr><td>5. Deprecate tooling</td><td><code>4deed8f</code></td><td>Archived 3 scripts that were only needed for the overcorrection fix</td><td>3+</td></tr>
+</table>
+</div>
+
+<p>This cycle consumed <strong>4 commits and at least 2 full sessions</strong> to fix a problem that wouldn't have existed if the initial rollout had distinguished research/planning skills from execution/shipping skills. The lesson is documented in <code>tasks/lessons.md</code> (2026-05-21).</p>
+
+<p><strong>Pattern cost estimate:</strong> Each overcorrection cycle costs roughly 1-2 sessions of remediation work (~10-20 messages) plus the original overcorrection session. With 5 documented corrections in lessons.md, the alignment workflow has generated roughly <strong>50-100 extra messages</strong> in correction overhead across 6 days.</p>
+
+<div class="question-block" data-section="Overcorrection Tax">
+<h4>Q3: Should future cross-cutting contract changes require a pre-flight classification step (research vs execution vs utility) before batch application?</h4>
+<label><input type="radio" name="q3" value="yes-gate" onchange="handleRadio(this)"> Yes &mdash; add a mandatory classification gate before any batch skill update</label>
+<label><input type="radio" name="q3" value="skip-list-first" onchange="handleRadio(this)"> Just maintain the skip list &mdash; check it before batch operations</label>
+<label><input type="radio" name="q3" value="incremental-only" onchange="handleRadio(this)"> Stop doing batch updates entirely &mdash; only update skills when individually touched</label>
+<label><input type="radio" name="q3" value="other" onchange="handleRadio(this)"> Other / None of the above</label>
+<textarea class="other-input" placeholder="Your input..."></textarea>
+<label><input type="radio" name="q3" value="clarify" onchange="handleRadio(this)"> Need clarification</label>
+<textarea class="clarify-input" placeholder="What's unclear?"></textarea>
+<textarea class="notes-input" placeholder="Additional notes (optional)"></textarea>
+</div>
+
+<h2 id="prototype">5. Prototype-First: Unrealized Investment</h2>
+
+<div class="card">
+<p><span class="tag tag-watch">Warning</span> <strong>Zero <code>/prototype</code> invocations found in either history file.</strong></p>
+<p>The prototype-first gate was introduced on May 18 with a clear lesson: "Product and feature planning should separate prototype exploration from production implementation." But in the 6 days since:</p>
+<ul>
+<li>The prototype skill exists in the session skill list but has never been invoked</li>
+<li>Infrastructure-only sessions outnumber prototype-only sessions <strong>4.1:1</strong> (432 vs 105)</li>
+<li>Infrastructure-before-prototype sessions lead prototype-before-infrastructure <strong>23 to 16</strong></li>
+<li>The prototype-first report itself noted a <strong>2.7:1 ratio</strong> of production terms to prototype terms across all history</li>
+</ul>
+</div>
+
+<h3>5.1 Cost of Unrealized Investment</h3>
+<ul>
+<li><strong>Contract development cost:</strong> Multiple commits, lessons entries, and benchmark fixture updates for a gate that hasn't been exercised yet</li>
+<li><strong>Opportunity cost:</strong> Research skills now route toward prototype as a next step, but users aren't following that route &mdash; the routing instructions consume context tokens without changing behavior</li>
+<li><strong>Risk:</strong> When <code>/prototype</code> is eventually used, the accumulated contract expectations may not match real usage patterns, triggering another overcorrection cycle</li>
+</ul>
+
+<div class="question-block" data-section="Prototype-First">
+<h4>Q4: The prototype-first gate has been in place for 6 days with zero invocations. What's the right response?</h4>
+<label><input type="radio" name="q4" value="patience" onchange="handleRadio(this)"> Be patient &mdash; the workflow is new, usage will come as projects reach that stage</label>
+<label><input type="radio" name="q4" value="force" onchange="handleRadio(this)"> Force a test &mdash; run /prototype on an active project to validate the contract end-to-end</label>
+<label><input type="radio" name="q4" value="simplify" onchange="handleRadio(this)"> Simplify &mdash; the prototype gate is over-engineered, reduce it to a lightweight check</label>
+<label><input type="radio" name="q4" value="other" onchange="handleRadio(this)"> Other / None of the above</label>
+<textarea class="other-input" placeholder="Your input..."></textarea>
+<label><input type="radio" name="q4" value="clarify" onchange="handleRadio(this)"> Need clarification</label>
+<textarea class="clarify-input" placeholder="What's unclear?"></textarea>
+<textarea class="notes-input" placeholder="Additional notes (optional)"></textarea>
+</div>
+
+<h2 id="projections">6. Forward Projections</h2>
+
+<h3>6.1 Steady-State Per-Skill Cost Model</h3>
+
+<table>
+<tr><th>Component</th><th>Pre-Alignment</th><th>Post-Alignment</th><th>Net</th></tr>
+<tr><td>Turns per research session</td><td>~8 turns</td><td>~5 turns (projected)</td><td class="cost-down">-3 turns</td></tr>
+<tr><td>Output tokens per run</td><td>~5K tokens</td><td>~19K tokens (research + HTML)</td><td class="cost-up">+14K tokens</td></tr>
+<tr><td>User correction messages</td><td>~2-3 inline</td><td>~1 compiled YAML</td><td class="cost-down">-1-2 messages</td></tr>
+<tr><td>Context tokens for alignment contract</td><td>0</td><td>~400 tokens (16 lines in SKILL.md)</td><td class="cost-up">+400 per invocation</td></tr>
+<tr><td>Async review (no LLM cost)</td><td>0 min</td><td>~5-10 min</td><td class="cost-down">Saves idle context</td></tr>
+</table>
+
+<h3>6.2 Break-Even Analysis</h3>
+
+<div class="card">
+<p>The alignment page adds ~14K output tokens (~$1.05 at Opus) but saves ~3 turns of back-and-forth. Each saved turn avoids roughly:</p>
+<ul>
+<li>~2K input tokens (user message + context re-read): ~$0.30</li>
+<li>~3K output tokens (model response): ~$0.23</li>
+<li>Total per saved turn: ~$0.53</li>
+</ul>
+<p>At 3 saved turns: <strong>$1.59 saved</strong> vs <strong>$1.05 spent</strong> on HTML generation = <strong>net savings of ~$0.54 per research session at Opus pricing</strong>.</p>
+<p>At Sonnet pricing, the alignment page costs ~$0.21 and saves ~$0.30 per avoided turn = <strong>net savings of ~$0.69 per session</strong>.</p>
+<p><span class="tag tag-down">Positive ROI</span> The alignment page pays for itself if it saves 2+ turns of inline iteration. The early ICP data (8.6 → 5 turns) suggests 3+ turns saved, putting this above break-even.</p>
+</div>
+
+<h3>6.3 Amortized Infrastructure Cost</h3>
+
+<div class="card">
+<p>The one-time infrastructure investment (38 commits, 310+ file modifications, 5 correction cycles, benchmark re-runs) is a sunk cost. To amortize it:</p>
+<ul>
+<li>At ~$0.54 savings per research session, the infrastructure investment (estimated at ~$50-100 in session costs) breaks even after <strong>~90-185 research skill sessions</strong></li>
+<li>Historical rate: ~29 research sessions over the pre-alignment period (~5 months) = ~6/month</li>
+<li>Break-even timeline: <strong>15-31 months</strong> at current research session rate</li>
+<li>If research session frequency increases (more projects, more users): break-even accelerates proportionally</li>
+</ul>
+</div>
+
+<div class="question-block" data-section="Projections">
+<h4>Q5: The infrastructure investment takes 15-31 months to break even at current research session rates. Is this acceptable given the qualitative benefits (structured review, async feedback)?</h4>
+<label><input type="radio" name="q5" value="acceptable" onchange="handleRadio(this)"> Yes &mdash; the quality-of-review improvement justifies long payback</label>
+<label><input type="radio" name="q5" value="accelerate" onchange="handleRadio(this)"> Need to accelerate &mdash; increase research skill usage or extend alignment to more skill types</label>
+<label><input type="radio" name="q5" value="reduce-infra" onchange="handleRadio(this)"> Reduce future infrastructure cost &mdash; stop batch updates, only evolve alignment contract incrementally</label>
+<label><input type="radio" name="q5" value="other" onchange="handleRadio(this)"> Other / None of the above</label>
+<textarea class="other-input" placeholder="Your input..."></textarea>
+<label><input type="radio" name="q5" value="clarify" onchange="handleRadio(this)"> Need clarification</label>
+<textarea class="clarify-input" placeholder="What's unclear?"></textarea>
+<textarea class="notes-input" placeholder="Additional notes (optional)"></textarea>
+</div>
+
+<h2 id="verdict">7. Verdict &amp; Recommendations</h2>
+
+<div class="verdict">
+<h3>Summary</h3>
+<p>The alignment-first workflow is <strong>directionally positive on per-session cost</strong> but carries a <strong>heavy infrastructure investment</strong> that takes over a year to amortize at current usage rates. The biggest cost driver is not the alignment pages themselves but the <strong>overcorrection-remediation cycles</strong> from batch contract changes.</p>
+
+<h3>Key Findings</h3>
+<ul>
+<li><span class="tag tag-down">Positive</span> Per-session turn reduction (~42% for ICP, N=1) suggests alignment pages reduce inline iteration cost</li>
+<li><span class="tag tag-down">Positive</span> Async browser review eliminates LLM idle-context cost during user think time</li>
+<li><span class="tag tag-down">Positive</span> Compiled YAML feedback replaces 2-3 incremental correction messages</li>
+<li><span class="tag tag-up">Negative</span> 14K extra output tokens per alignment page ($1.05 at Opus)</li>
+<li><span class="tag tag-up">Negative</span> 38 infrastructure commits (2.9% of all commits) for a 2-day-old workflow</li>
+<li><span class="tag tag-up">Negative</span> 5 documented overcorrection cycles consuming ~50-100 extra messages</li>
+<li><span class="tag tag-watch">Unknown</span> Prototype-first gate: zero invocations in 6 days, untested contract</li>
+</ul>
+
+<h3>Recommendations</h3>
+<table>
+<tr><th>#</th><th>Action</th><th>Type</th><th>Impact</th></tr>
+<tr><td>1</td><td>Freeze alignment contract changes for 2-4 weeks to accumulate real usage data</td><td>Standing instruction</td><td class="cost-down">Avoids further overcorrection tax</td></tr>
+<tr><td>2</td><td>Track turns-per-session for research skills to validate the break-even hypothesis</td><td>Skill enhancement</td><td class="cost-neutral">Data collection</td></tr>
+<tr><td>3</td><td>Run <code>/prototype</code> on one active project to exercise the untested contract</td><td>Manual test</td><td class="cost-neutral">Risk reduction</td></tr>
+<tr><td>4</td><td>Consider generating alignment HTML with Sonnet subagent to reduce output cost by ~80%</td><td>Architecture</td><td class="cost-down">$0.84 saved per page</td></tr>
+<tr><td>5</td><td>Add skill-type classification (research/execution/utility) to SKILL.md frontmatter to prevent future overcorrection</td><td>Convention</td><td class="cost-down">Prevents batch mistakes</td></tr>
+</table>
+</div>
+
+<div class="question-block" data-section="Recommendations">
+<h4>Q6: Which recommendations should be prioritized?</h4>
+<label><input type="radio" name="q6" value="freeze" onchange="handleRadio(this)"> Freeze contract changes (#1) &mdash; stop the bleeding first</label>
+<label><input type="radio" name="q6" value="data" onchange="handleRadio(this)"> Track usage data (#2) &mdash; need evidence before any other decision</label>
+<label><input type="radio" name="q6" value="test-prototype" onchange="handleRadio(this)"> Test prototype (#3) &mdash; validate the untested half of the workflow</label>
+<label><input type="radio" name="q6" value="other" onchange="handleRadio(this)"> Other / None of the above</label>
+<textarea class="other-input" placeholder="Your input..."></textarea>
+<label><input type="radio" name="q6" value="clarify" onchange="handleRadio(this)"> Need clarification</label>
+<textarea class="clarify-input" placeholder="What's unclear?"></textarea>
+<textarea class="notes-input" placeholder="Additional notes (optional)"></textarea>
+</div>
+
+<div class="compile-section">
+<button class="compile-btn" id="compileBtn" onclick="compileAnswers()" disabled>Compile Answers</button>
+<p class="remaining-count" id="remainingCount">6 questions remaining</p>
+<textarea class="compile-output" id="compileOutput" readonly onclick="this.select()"></textarea>
+</div>
+
+<script>
+function handleRadio(radio) {
+  const block = radio.closest('.question-block');
+  block.querySelectorAll('textarea').forEach(t => { t.classList.remove('visible'); });
+  if (radio.value === 'other') {
+    block.querySelector('.other-input').classList.add('visible');
+  } else if (radio.value === 'clarify') {
+    block.querySelector('.clarify-input').classList.add('visible');
+  }
+  const notesTA = block.querySelector('.notes-input');
+  if (radio.value !== 'other' && radio.value !== 'clarify') {
+    notesTA.classList.add('visible');
+  }
+  updateCount();
+}
+
+function updateCount() {
+  const total = document.querySelectorAll('.question-block').length;
+  let answered = 0;
+  document.querySelectorAll('.question-block').forEach(b => {
+    if (b.querySelector('input[type="radio"]:checked')) answered++;
+  });
+  const remaining = total - answered;
+  document.getElementById('remainingCount').textContent = remaining === 0 ? 'All questions answered' : remaining + ' question' + (remaining !== 1 ? 's' : '') + ' remaining';
+  document.getElementById('compileBtn').disabled = remaining > 0;
+}
+
+function compileAnswers() {
+  const blocks = document.querySelectorAll('.question-block');
+  let unanswered = null;
+  blocks.forEach(b => { if (!b.querySelector('input[type="radio"]:checked') && !unanswered) unanswered = b; });
+  if (unanswered) { unanswered.scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
+
+  let yaml = 'compiled_answers:\n  report: "analyze-sessions-alignment-workflow-cost"\n  date: "2026-05-24"\n  sections:\n';
+  blocks.forEach(b => {
+    const section = b.dataset.section;
+    const question = b.querySelector('h4').textContent;
+    const checked = b.querySelector('input[type="radio"]:checked');
+    const value = checked.value;
+    let status = 'answered';
+    let notes = '';
+    if (value === 'other') { status = 'other'; notes = b.querySelector('.other-input').value || ''; }
+    else if (value === 'clarify') { status = 'needs-clarification'; notes = b.querySelector('.clarify-input').value || ''; }
+    else { notes = b.querySelector('.notes-input').value || ''; }
+    const label = checked.closest('label').textContent.trim();
+    yaml += '    - section: "' + section + '"\n';
+    yaml += '      question: "' + question.replace(/"/g, '\\"') + '"\n';
+    yaml += '      selection: "' + label.replace(/"/g, '\\"') + '"\n';
+    yaml += '      value: "' + value + '"\n';
+    yaml += '      status: "' + status + '"\n';
+    if (notes) yaml += '      notes: "' + notes.replace(/"/g, '\\"').replace(/\n/g, '\\n') + '"\n';
+  });
+
+  const output = document.getElementById('compileOutput');
+  output.value = yaml;
+  output.style.display = 'block';
+}
+
+updateCount();
+</script>
+
+</body>
+</html>
