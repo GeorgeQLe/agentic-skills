@@ -7,8 +7,20 @@ DRY_RUN=false
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$REPO_ROOT"
 
+SKIP_LIST="$REPO_ROOT/scripts/alignment-skip-list.txt"
+declare -A skip_skills=()
+if [[ -f "$SKIP_LIST" ]]; then
+  while IFS= read -r line; do
+    line="${line%%#*}"
+    line="${line// /}"
+    [[ -z "$line" ]] && continue
+    skip_skills["$line"]=1
+  done < "$SKIP_LIST"
+fi
+
 replaced=0
 skipped=0
+skip_filtered=0
 warnings=()
 
 generate_new_section() {
@@ -36,6 +48,11 @@ BLOCK
 
 while IFS= read -r file; do
   skill_name="$(basename "$(dirname "$file")")"
+
+  if [[ -n "${skip_skills[$skill_name]+x}" ]]; then
+    skip_filtered=$((skip_filtered + 1))
+    continue
+  fi
 
   # Detect heading level
   if grep -q "^## Alignment Page$" "$file"; then
@@ -147,7 +164,8 @@ done < <(find . -name "SKILL.md" \( -path "*/claude/*" -o -path "*/codex/*" \) |
 
 echo ""
 echo "Replaced: $replaced"
-echo "Skipped: $skipped"
+echo "Skipped (no heading): $skipped"
+echo "Skipped (skip-list): $skip_filtered"
 if [[ ${#warnings[@]} -gt 0 ]]; then
   echo "Warnings:"
   for w in "${warnings[@]}"; do

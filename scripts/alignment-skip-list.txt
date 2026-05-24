@@ -1,0 +1,44 @@
+# Skills that should NOT have alignment pages.
+# These are execution, infrastructure, or utility skills that don't produce
+# durable deliverables requiring interactive user review.
+#
+# One skill name per line. Lines starting with # are comments.
+# Skill names match the directory basename (e.g. "provision-agentic-config").
+
+# Execution / shipping orchestrators
+run
+ship
+ship-end
+sync
+commit-and-push-by-feature
+deploy
+scaffold
+bootstrap-repo
+
+# Infrastructure / config utilities
+provision-agentic-config
+install-agentic-skills
+pack
+skills
+compile-central-alignment
+patch-exec-profile
+create-agentic-skill
+create-local-skill
+update-packages
+
+# Planning tools (output goes to tasks/ files, reviewed directly)
+roadmap
+plan-phase
+
+# Interactive / meta skills
+quiz-me
+hygiene
+
+# Pack equivalents
+run-kanban
+ship-kanban
+ship-end-kanban
+mono-run
+mono-ship
+taste-calibration
+destination-doc
