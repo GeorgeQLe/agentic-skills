@@ -18,7 +18,7 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 ## Current Targeted Update: Benchmark Failure Investigation 2026-05-24
 
-**Goal:** Fix benchmark/showcase validation failures surfaced after the alignment-first, prototype-second workflow refactor without weakening the new alignment gates.
+**Goal:** Fix benchmark/showcase validation failures surfaced after the AFPS (alignment-first, prototype-second) workflow refactor without weakening the new alignment gates.
 
 **Acceptance Criteria:**
 - [x] User hypothesis is validated against focused alignment tests, benchmark/showcase tests, and current generated data.
@@ -45,7 +45,7 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 ## Current Targeted Update: Competitive Analysis Journey-First Routing 2026-05-22
 
-**Goal:** Align business-discovery routing with the current alignment-first, prototype-first product workflow by sending standard competitive-analysis output to journey mapping before value-prop-canvas when both are missing.
+**Goal:** Align business-discovery routing with the current AFPS product workflow by sending standard competitive-analysis output to journey mapping before value-prop-canvas when both are missing.
 
 **Acceptance Criteria:**
 - [x] User claim is validated against mirrored skill contracts, route-contract docs, canonical workflow docs, and recent git history.
@@ -96,7 +96,7 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 ## Current Targeted Update: Alignment HTML Output Root 2026-05-21
 
-**Goal:** Move alignment-first and prototype-first review HTML artifacts to root `alignment/`, archive replaced pages under `docs/history/archive/`, restore Codex `$prototype` parity, and make browser-opening best-effort but explicit.
+**Goal:** Move AFPS review HTML artifacts to root `alignment/`, archive replaced pages under `docs/history/archive/`, restore Codex `$prototype` parity, and make browser-opening best-effort but explicit.
 
 **Acceptance Criteria:**
 - [x] Mirrored alignment/prototype skills write review pages to `alignment/{skill}-{topic}.html` and archive replaced pages to `docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/...`.
@@ -165,24 +165,24 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 - [x] Mirrored `bootstrap-repo` contracts require reset mode to archive docs, research, specs, tasks, implementation notes, design docs, and other stale planning artifacts.
 - [x] Reset mode preserves only a concise high-level concept artifact in the active root, derived from the bootstrap brief or `desk-flip-report.md`.
 - [x] Desk-flip handoff makes clear that old docs are historical/archive evidence, not active source-of-truth inputs.
-- [x] Benchmark coverage expects concept-only reset language and alignment-first routing.
+- [x] Benchmark coverage expects concept-only reset language and AFPS routing.
 - [ ] Validation passes, review notes are recorded, and intended changes are committed and pushed on `master`.
 
 **Result:** Updated mirrored `bootstrap-repo` and `desk-flip` contracts on 2026-05-21. Reset mode now archives old docs/research/specs/tasks and stale planning artifacts with the implementation, keeps only one high-level concept seed active, and routes alignment/research from that concept rather than old source-of-truth docs. Tier 2/3 benchmark fixtures now require high-level concept language for `bootstrap-repo` and `desk-flip`. Focused validation passed for both skills, benchmark coverage, generated data freshness, and skill dependency/version/routing audits.
 
 ## Current Targeted Update: Desk-Flip Reset/Archive and Alignment-First Routing 2026-05-21
 
-**Goal:** Fix stale-project restart routing so `desk-flip` can hand off to an in-place reset/bootstrap path that archives old implementation files, then routes to alignment-first and prototype-second workflow steps.
+**Goal:** Fix stale-project restart routing so `desk-flip` can hand off to an in-place reset/bootstrap path that archives old implementation files, then routes to AFPS workflow steps.
 
 **Acceptance Criteria:**
 - [x] Mirrored `desk-flip` contracts no longer imply that a new repo is the only fresh-start path.
 - [x] `desk-flip` final handoff distinguishes new-repo bootstrap from in-place reset/bootstrap and includes the active runner's command syntax.
 - [x] `bootstrap-repo` has an explicit reset mode for non-empty stale repos that archives old implementation files under `archive/` before writing fresh bootstrap docs.
 - [x] `bootstrap-repo` reset mode preserves source-of-truth artifacts such as `desk-flip-report.md`, salvageable specs/docs/assets, `.git`, agent config inputs, and archive manifests.
-- [x] Post-bootstrap routing sends product/app restarts into alignment-first work (`$ui-interview --requirements-only` or runner equivalent), then UX variations/prototype flow, instead of straight implementation planning.
+- [x] Post-bootstrap routing sends product/app restarts into AFPS work (`$ui-interview --requirements-only` or runner equivalent), then UX variations/prototype flow, instead of straight implementation planning.
 - [ ] Focused benchmark coverage and validation pass, review notes are recorded, and intended changes are committed and pushed on `master`.
 
-**Result:** Updated mirrored `desk-flip` and `bootstrap-repo` contracts on 2026-05-21. `desk-flip` now routes same-repo restarts to reset/archive bootstrap (`$bootstrap-repo --reset-existing` for Codex and `/bootstrap-repo --reset-existing` for Claude) while keeping new-repo bootstrap available when explicitly preferred. `bootstrap-repo` reset mode archives stale implementation files under `archive/YYYY-MM-DD-HHMMSS/`, writes `MANIFEST.md`, preserves git metadata, agent config, desk-flip report, and valid salvage artifacts, then routes product/app restarts to alignment-first requirements work before UX variations, prototypes, UAT, consolidation, and production spec/roadmap. Focused validation passed for `desk-flip` and `bootstrap-repo`, benchmark coverage, generated showcase freshness, and skill dependency/version/routing audits.
+**Result:** Updated mirrored `desk-flip` and `bootstrap-repo` contracts on 2026-05-21. `desk-flip` now routes same-repo restarts to reset/archive bootstrap (`$bootstrap-repo --reset-existing` for Codex and `/bootstrap-repo --reset-existing` for Claude) while keeping new-repo bootstrap available when explicitly preferred. `bootstrap-repo` reset mode archives stale implementation files under `archive/YYYY-MM-DD-HHMMSS/`, writes `MANIFEST.md`, preserves git metadata, agent config, desk-flip report, and valid salvage artifacts, then routes product/app restarts to AFPS requirements work before UX variations, prototypes, UAT, consolidation, and production spec/roadmap. Focused validation passed for `desk-flip` and `bootstrap-repo`, benchmark coverage, generated showcase freshness, and skill dependency/version/routing audits.
 
 ## Current Targeted Update: Concept Exploration Slugged Briefs 2026-05-21
 
@@ -4584,7 +4584,7 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 ---
 
 ## Deferred / Future Work
-- **Investigate alignment YAML clipboard UX (2026-05-24)** — tighten the `$investigate` alignment-page contract so compiled YAML is copied automatically when possible and always has an explicit copy-to-clipboard control; validate with focused layer1 contract tests.
+- **Alignment YAML clipboard UX (2026-05-24)** — tighten every active HTML alignment-page contract so compiled YAML is copied automatically when possible and always has an explicit copy-to-clipboard control; validate with broad layer1 contract tests.
 - **Kanban analytics** — cycle time, throughput, WIP limits via `/kanban-stats` skill (from original backlog)
 - **Two-way Neon ↔ poketowork UI sync** — webhook on git push (from original backlog)
 - **Kanban card labels** — tags/labels field for filtering by type (deferred to after Phase 8)

@@ -8,14 +8,14 @@
 
 ## Priority Task Queue
 
-- [x] `$investigate benchmark failures alignment-first prototype-second workflow` — triage benchmark/showcase failures after the alignment-first workflow refactor, fix stale harness expectations, refresh generated data, validate, then commit and push.
+- [x] `$investigate benchmark failures alignment-first prototype-second workflow` — triage benchmark/showcase failures after the AFPS (alignment-first, prototype-second) workflow refactor, fix stale harness expectations, refresh generated data, validate, then commit and push.
 - [x] `$targeted-skill-builder run ship alignment exemption` — remove alignment-page requirements from run/ship loop skills, validate, then commit and push.
 - [x] `$targeted-skill-builder all durable skills alignment pages` — extend root `alignment/` HTML review-page contract to every durable output-writing skill, validate, then commit and push.
 - [x] `$targeted-skill-builder alignment html output root` — move alignment review pages to root `alignment/`, restore Codex `$prototype`, update hygiene/bootstrap awareness, validate, then commit and push.
 - [x] `$targeted-skill-builder concept-exploration bootstrap gate and scaffold placement` — route unbootstrapped concepts to bootstrap, bootstrapped concepts to ICP, and keep scaffold downstream of roadmap/plan-phase.
 - [x] `$targeted-skill-builder bootstrap-repo product reset research-first routing` — route product resets from high-level concept to ICP/competitive/journey before UX/UI/prototype work.
 - [x] `$targeted-skill-builder bootstrap-repo archive docs preserve concept only` — tighten reset mode so old docs/research/specs are archived and active root keeps only the high-level concept. (Shipped in `66e96c0`.)
-- [x] `$targeted-skill-builder desk-flip reset/archive alignment-first routing` — update desk-flip/bootstrap handoff so stale existing codebases are archived before bootstrap, then route to UI/content alignment before prototype work.
+- [x] `$targeted-skill-builder desk-flip reset/archive AFPS routing` — update desk-flip/bootstrap handoff so stale existing codebases are archived before bootstrap, then route to UI/content alignment before prototype work.
 - [x] `$targeted-skill-builder concept-exploration slugged briefs` — update mirrored `concept-exploration` skills so known or emerging concept identities write slugged research briefs instead of conflating related concepts in generic `concept-brief.md`.
 - [x] Add Codex parity for `desk-flip`: create `global/codex/desk-flip/SKILL.md`, adjust benchmark route expectations, refresh generated skill data, validate, then commit and push.
 - [x] `$run` — Resume Phase 41 Batch 41.3 re-benchmarks: re-run the 33 Tier 2 global skills that were benchmarked pre-fixture-remediation with near-zero pass rates (Phase 43 added route guidance to all 32 fixture prompts and increased budgets). Current graded count: 69 unique skills / 158 total. Batch 41.5 pack-local groups also have remaining families. Batch 41.3 Group 2 shipped in `bc17fee` and `3e4bd78`; next triage should start with `provision-agentic-config`, `migrate`, or `prototype`.
@@ -24,10 +24,10 @@
 
 ## Current Task — Benchmark Failure Investigation 2026-05-24
 
-**Goal:** Investigate reported benchmark failures suspected to be related to the alignment-first, prototype-second workflow refactor.
+**Goal:** Investigate reported benchmark failures suspected to be related to the AFPS workflow refactor.
 
 **User claim validation:**
-- Partially correct: focused alignment/refactor tests passed, so the core alignment-first contract was not failing directly.
+- Partially correct: focused alignment/refactor tests passed, so the core AFPS contract was not failing directly.
 - Confirmed adjacent failures: benchmark/showcase layer1 checks still assumed older semver skill versions, treated archived skill copies as active pack outputs, expected stale `ship`/`affected` matrix rows, and could not parse current `## Raw Sessions` list-style benchmark reports for showcase demos.
 - Sandbox-only failures: nested `pnpm` and `git init` subprocess checks failed with `EPERM` under the default sandbox and require escalated validation rather than source changes.
 
@@ -49,7 +49,7 @@
 
 ### Review
 
-- Root cause: the focused alignment-first/prototype-second contracts were valid, but adjacent benchmark/showcase validation was stale against the refactor. The failures came from old semver assertions, archive directories being treated as active skill files, generated benchmark matrix expectations pinned to old rows, and raw-session parsing that missed current `## Raw Sessions` list sections.
+- Root cause: the focused AFPS contracts were valid, but adjacent benchmark/showcase validation was stale against the refactor. The failures came from old semver assertions, archive directories being treated as active skill files, generated benchmark matrix expectations pinned to old rows, and raw-session parsing that missed current `## Raw Sessions` list sections.
 - Fixes: updated layer1 frontmatter and output-path checks, taught `scripts/generate-skills-showcase-data.mjs` to parse list-style raw sessions for benchmark demos, refreshed generated showcase assets and `docs/benchmark-results-matrix.md`, and aligned stale matrix/demo assertions with current retained evidence.
 - Validation passed: `pnpm --dir tests exec vitest run --project layer1 layer1/frontmatter.test.ts layer1/output-paths.test.ts layer1/benchmark-results-matrix.test.ts layer1/skills-showcase-benchmark-demo.test.ts layer1/alignment-gates.test.ts layer1/research-approval-gate.test.ts layer1/competitive-analysis-routing.test.ts`; `pnpm --dir tests test` (escalated for subprocess checks); `pnpm --dir tests bench:coverage` (escalated for tsx IPC); `bash ./scripts/skill-versions.sh --missing`; `bash ./scripts/skill-next-step-routing.sh --missing`; `git diff --check`.
 - Known unrelated validation noise: `bash ./scripts/skill-deps.sh --broken` still reports existing missing references for `handoff`, `mono-detect`, `provision-agentic-config`, `report-website`, `session-triage`, and `ship`. `scripts/validate-skills-showcase-data.sh` reports generated assets as stale before commit because the intended generated files are dirty; rerun after commit should pass if no generator drift remains.
@@ -117,7 +117,7 @@
 
 ## Current Task — Alignment HTML Output Root 2026-05-21
 
-**Goal:** Update alignment-first/prototype-first skill contracts so review HTML is written under repository-root `alignment/`, replaced review pages are archived under `docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/...`, and skills attempt to open the resulting page in a browser while reporting success or blockage.
+**Goal:** Update AFPS skill contracts so review HTML is written under repository-root `alignment/`, replaced review pages are archived under `docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/...`, and skills attempt to open the resulting page in a browser while reporting success or blockage.
 
 **Evidence:**
 - Prior plan identified stale `docs/alignment/` contracts in mirrored alignment skills.
@@ -319,7 +319,7 @@ Implement only this step, validate it, then run `/ship` when done.
 
 ## Current Task — Desk-Flip Reset/Archive and Alignment-First Routing 2026-05-21
 
-**Goal:** Fix the desk-flip handoff so a stale existing codebase can be reset in place by archiving old implementation files before bootstrap, then route into the alignment-first and prototype-second workflow instead of jumping straight from bootstrap to implementation planning.
+**Goal:** Fix the desk-flip handoff so a stale existing codebase can be reset in place by archiving old implementation files before bootstrap, then route into the AFPS workflow instead of jumping straight from bootstrap to implementation planning.
 
 **Evidence:**
 - User correction: current `desk-flip` routes only to `bootstrap-repo`, but `bootstrap-repo` does not handle resetting an existing codebase.
@@ -346,7 +346,7 @@ Implement only this step, validate it, then run `/ship` when done.
 - Changed mirrored `desk-flip` contracts so in-place restarts route to `$bootstrap-repo --reset-existing` or `/bootstrap-repo --reset-existing`, while still allowing a new-repo bootstrap when explicitly preferred.
 - Added reset mode to mirrored `bootstrap-repo` contracts: archive stale implementation files under `archive/YYYY-MM-DD-HHMMSS/`, preserve `.git`, agent config, `desk-flip-report.md`, valid salvage artifacts, and write an archive manifest.
 - Added post-bootstrap alignment routing: product/app restarts go to requirements alignment first (`$ui-interview --requirements-only` or `/ui-interview --requirements-only`), then UX variations, variant/prototype build, UAT, consolidation, post-prototype research, and production spec/roadmap.
-- Updated Tier 2/3 benchmark fixtures so `desk-flip` expects reset/archive bootstrap for same-repo restarts and `bootstrap-repo` product bootstraps route to alignment-first work.
+- Updated Tier 2/3 benchmark fixtures so `desk-flip` expects reset/archive bootstrap for same-repo restarts and `bootstrap-repo` product bootstraps route to AFPS work.
 - Validation passed: `pnpm --dir tests verify --skill desk-flip`; `pnpm --dir tests verify --skill bootstrap-repo`; `node scripts/generate-skills-showcase-data.mjs`; `node scripts/generate-skills-showcase-github-data.mjs`; `pnpm --dir tests bench:coverage`; `scripts/validate-skills-showcase-data.sh`; `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken`; `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`; `/opt/homebrew/bin/bash ./scripts/skill-next-step-routing.sh --missing`.
 - Skipped/limited: both focused verifies skipped layer2 because no target-specific layer2 tests match these skills.
 - Next command: `$bootstrap-repo --reset-existing <brief from desk-flip-report.md>`
@@ -2032,42 +2032,42 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
 - Refreshed Skills Showcase generated data and benchmark matrix.
 - Validation passed: targeted stale-contract search found no old report-only or old alignment-page phrasing; `pnpm --dir tests test -- --grep "bench-setups|tier23|frontmatter|skills-reference"`; `pnpm --dir tests bench:coverage`; `/opt/homebrew/bin/bash ./scripts/skill-next-step-routing.sh --missing`; `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken`; `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`; `git diff --check`.
 - Post-commit validation passed: `scripts/validate-skills-showcase-data.sh`.
-## Current Task — Investigate Alignment YAML Clipboard UX 2026-05-24
+## Current Task — Alignment YAML Clipboard UX 2026-05-24
 
-**Goal:** Make `$investigate` HTML alignment pages easier to use after answer compilation by copying the compiled YAML automatically when possible and providing an explicit copy button.
+**Goal:** Make all HTML alignment pages easier to use after answer compilation by copying the compiled YAML automatically when possible and providing an explicit copy button.
 
 **Plan:**
 - [x] Validate the current alignment-page contract and generated contract tests.
-- [x] Update the `$investigate` alignment-page instructions with a clipboard contract and version archive.
-- [x] Add focused regression coverage for automatic copy and explicit copy-button requirements.
+- [x] Update active alignment-page instructions with a clipboard contract.
+- [x] Add broad regression coverage for automatic copy and explicit copy-button requirements.
 - [x] Run focused validation and record review notes.
 - [ ] Commit and push intended changes on `master`, unless unrelated work blocks a clean ship.
 
 **Files:**
-- `global/codex/investigate/SKILL.md`
-- `global/codex/investigate/archive/v0.0/SKILL.md`
-- `global/codex/investigate/CHANGELOG.md`
+- `global/**/SKILL.md`
+- `packs/**/SKILL.md`
+- `scripts/upgrade-alignment-page.mjs`
 - `tests/layer1/alignment-gates.test.ts`
-- `tasks/roadmap.md`, `tasks/todo.md`
+- `tasks/lessons.md`, `tasks/roadmap.md`, `tasks/todo.md`
 
 ### Review
 
 - Strategy used: General investigation; no UI/data pivot.
-- User claim validated: confirmed as a contract gap. The alignment-page contract only required displaying YAML in a read-only/click-to-copy textarea, so generated pages could omit automatic clipboard copy and a visible copy button.
-- Root cause: `$investigate` inherited the older alignment YAML contract language, which optimized for readable output but did not specify clipboard behavior after compile.
-- Fix applied: bumped `global/codex/investigate/SKILL.md` to `v0.1`, archived `v0.0`, added `CHANGELOG.md`, and updated the shared alignment-upgrade script language to require automatic clipboard copy, status display, an explicit `Copy YAML` button, and textarea-selection fallback.
-- Prevention: added a focused `tests/layer1/alignment-gates.test.ts` assertion for automatic copy, copy button, and fallback behavior.
-- Validation passed: `pnpm --dir tests exec vitest run --project layer1 alignment-gates`; `./scripts/skill-versions.sh --missing`; `git diff --check`.
+- User claim validated: confirmed as a global contract gap. Active alignment-page contracts only required displaying YAML in a read-only/click-to-copy textarea, so generated pages could omit automatic clipboard copy and a visible copy button.
+- Root cause: the repeated alignment YAML contract language optimized for readable output but did not specify clipboard behavior after compile.
+- Fix applied: updated active global and pack `SKILL.md` alignment-page contracts plus the shared alignment-upgrade script language to require automatic clipboard copy, status display, an explicit `Copy YAML` button, and textarea-selection fallback.
+- Prevention: broadened `tests/layer1/alignment-gates.test.ts` to scan every active alignment-page skill and reject the old click-to-copy-only sentence.
+- Validation passed: active-skill search found no old `Display the YAML in a read-only, click-to-copy textarea.` contracts; `pnpm --dir tests exec vitest run --project layer1 alignment-gates`; `./scripts/skill-versions.sh --missing`; `git diff --check`.
 - Shipping blocked: repository already has a broad dirty tree from other work, including many unrelated skill/showcase files and uncommitted generated assets. Commit/push should happen after that batch is reconciled or explicitly included.
 
 - Commit: `28bd7ca` (`fix: add approval alignment previews`).
 
 ## Current Task — Competitive Analysis Journey-First Routing 2026-05-22
 
-**Goal:** Investigate and fix whether standard `$competitive-analysis` should route to `$journey-map` before `$value-prop-canvas` in the alignment-first, prototype-first product workflow.
+**Goal:** Investigate and fix whether standard `$competitive-analysis` should route to `$journey-map` before `$value-prop-canvas` in the AFPS product workflow.
 
 **Evidence:**
-- User hypothesis: routing competitive analysis to value-prop-canvas before journey-map is wrong for the current alignment-first, prototype-first workflow.
+- User hypothesis: routing competitive analysis to value-prop-canvas before journey-map is wrong for the current AFPS workflow.
 - Current mirrored competitive-analysis contracts recommend `value-prop-canvas` before `journey-map` when both outputs are missing.
 - Newer reset/bootstrap workflow evidence already establishes the intended product sequence as ICP -> competitive analysis -> journey map -> UX variations -> UI interview -> prototype.
 
@@ -2092,7 +2092,7 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
 
 - Strategy used: General investigation; no UI/data pivot.
 - User claim validated: confirmed. Mirrored `competitive-analysis` contracts, `docs/skill-next-step-contracts.md`, `docs/codex-workflow.md`, `docs/canonical-workflow-report.md`, and `packs/business-discovery/PACK.md` all placed `value-prop-canvas` before `journey-map`.
-- Root cause: older business-discovery routing survived the later alignment-first/prototype-first workflow update. The newer reset/bootstrap route already says ICP -> competitive analysis -> journey map -> UX/UI/prototype, but competitive-analysis standard mode was not updated.
+- Root cause: older business-discovery routing survived the later AFPS workflow update. The newer reset/bootstrap route already says ICP -> competitive analysis -> journey map -> UX/UI/prototype, but competitive-analysis standard mode was not updated.
 - Fix applied: standard competitive-analysis now recommends `$journey-map` or `/journey-map` before value-prop-canvas when journey context is missing; canonical workflow docs and pack flow now use journey-first ordering.
 - Prevention: added `tests/layer1/competitive-analysis-routing.test.ts` to assert journey-map appears before value-prop-canvas in the mirrored contracts and route summary.
 - Alignment preview: wrote and successfully opened `alignment/investigate-competitive-analysis-routing.html`.

@@ -6,7 +6,7 @@
 
 ## Executive Summary
 
-The canonical workflow is now a file-backed, mode-routed planning and execution system shared by Claude Code and Codex. The source of truth is no longer chat history or a single monolithic todo. It is the task pipeline:
+The canonical workflow is now a file-backed, mode-routed planning and execution system shared by Claude Code and Codex, following an AFPS (alignment-first, prototype-second) approach where market alignment and clickable prototypes precede production infrastructure. The source of truth is no longer chat history or a single monolithic todo. It is the task pipeline:
 
 - `specs/*.md` captures decision-complete feature intent.
 - `tasks/roadmap.md` captures strategic phased sequencing.

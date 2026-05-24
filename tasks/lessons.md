@@ -10,7 +10,7 @@
 ## 2026-05-22 — Competitive analysis should route to journey before value prop in prototype-first product flow
 
 - A legacy business-discovery sequence routed standard competitive analysis to `value-prop-canvas` before `journey-map`, even after the product restart workflow had moved to ICP -> competitive analysis -> journey map -> UX/UI/prototype.
-- In an alignment-first, prototype-first product workflow, competitive gaps need customer/user journey placement before solution-value mapping; otherwise value-prop-canvas can optimize abstract claims before the path to aha, conversion, and retention is understood.
+- In an AFPS (alignment-first, prototype-second) product workflow, competitive gaps need customer/user journey placement before solution-value mapping; otherwise value-prop-canvas can optimize abstract claims before the path to aha, conversion, and retention is understood.
 - When changing canonical sequence order, update mirrored skill contracts, pack flow docs, workflow docs, route-contract summaries, generated showcase data, and focused route tests together.
 - Treat older canonical workflow reports as executable routing evidence; stale summary docs can reintroduce old ordering even after individual skill contracts are fixed.
 
@@ -54,13 +54,13 @@
 - A reset/bootstrap workflow initially preserved valid salvage docs as active files, but the user clarified that old docs should be archived too so research starts from scratch.
 - In-place fresh starts should keep only a concise high-level concept artifact active; archive old docs, research, specs, task files, implementation notes, and design docs with the stale codebase.
 - Salvage docs may be referenced in the archive manifest or desk-flip report for historical context, but downstream alignment and research should rebuild from the high-level concept rather than treating old documents as source of truth.
-- When routing to alignment-first workflows after reset, make the concept seed the input to `$ui-interview --requirements-only`, not a pile of old research/spec artifacts.
+- When routing to AFPS workflows after reset, make the concept seed the input to `$ui-interview --requirements-only`, not a pile of old research/spec artifacts.
 
 ## 2026-05-21 — Desk-flip handoffs need reset/archive and alignment routing
 
 - A `desk-flip` restart route sent users to `bootstrap-repo`, but `bootstrap-repo` only handled README/agent docs and did not reset an existing stale codebase.
 - Fresh-start workflows must distinguish new-repo bootstrap from in-place reset. For in-place restarts, archive stale implementation files under `archive/` with a manifest before writing fresh bootstrap docs.
-- After bootstrap for product/app restarts, route to alignment-first requirements work (`$ui-interview --requirements-only` or runner equivalent) before UX variations, prototypes, UAT, consolidation, and production specs.
+- After bootstrap for product/app restarts, route to AFPS requirements work (`$ui-interview --requirements-only` or runner equivalent) before UX variations, prototypes, UAT, consolidation, and production specs.
 - Do not let a bootstrap handoff skip directly to implementation planning when requirements, layout direction, or prototype evidence are not accepted yet.
 
 ## 2026-05-21 — Final handoffs must render routes for the active CLI
@@ -297,6 +297,13 @@
 - When next work requires human-only browser/OS interaction, real device access, authenticated dashboards without a reliable CLI/API path, or explicit sign-off, record it in `tasks/manual-todo.md` as a blocking manual task when it blocks the next automated step.
 - The recommended next route should be `$guide`, a Claude-guided manual step, or an explicit manual-blocker handoff, not `/run` or `$run`.
 - Keep the next work item primary; command routing should serve the work classification rather than mechanically matching the current skill invocation.
+
+## 2026-05-24 — Apply alignment UX fixes to the shared contract, not one skill
+
+- A request about "the html alignment pages" was incorrectly scoped to `$investigate` because the user invoked that skill for the investigation.
+- When a bug or UX gap is in repeated alignment-page boilerplate, search all active `SKILL.md` alignment contracts and update the shared/template source plus every active copy.
+- Add regression coverage that scans every active alignment-page skill, not only the skill used to report the issue.
+- Treat archived skill versions as historical evidence; do not mutate them for current behavior fixes.
 
 ## 2026-05-04 — Exhausted queues route to discovery, not none
 

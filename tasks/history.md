@@ -2783,7 +2783,7 @@ Resolved all 10 findings from `/expert-review`:
 
 - Re-benchmarked all 11 Group 1 Tier 2 global skills with remediated fixtures: `bootstrap-repo`, `brainstorm`, `branch-lifecycle`, `codebase-status`, `concept-exploration`, `consolidate-variations`, `create-agentic-skill`, `create-local-skill`, `dead-code`, `debug`, `decommission`.
 - 7/11 skills improved to 100% pass rate on both agents. 2 skills (bootstrap-repo, consolidate-variations) remain at 0% due to fixture-specific hard assertion failures unrelated to route guidance.
-- Also shipped: bootstrap-repo archive-docs reset mode, desk-flip alignment-first routing, concept-exploration slugged briefs, and codex desk-flip parity (from prior sessions' uncommitted work).
+- Also shipped: bootstrap-repo archive-docs reset mode, desk-flip AFPS (alignment-first, prototype-second) routing, concept-exploration slugged briefs, and codex desk-flip parity (from prior sessions' uncommitted work).
 - Layer1: 15 files, 1222 tests pass. Generated data refreshed.
 - Shipped in commit `66e96c0`.
 
