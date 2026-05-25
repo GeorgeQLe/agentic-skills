@@ -43,7 +43,7 @@ When app scope `{app}` is active:
 
 ### 1. Load Context
 
-- Read `research/icp.md` (or `research/{app}/icp.md`) — customer profile, user profile(s), current-state journey, pain map, market landscape, value prop
+- Read `research/icp.md` (or `research/{app}/icp.md`) — customer profile, user profile(s), current-state journey, pain map, current alternatives, stated value drivers
 - Read `research/enterprise-icp.md` (or `research/{app}/enterprise-icp.md`) if it exists (for awareness, not primary evaluation)
 - Read `research/metrics.md` (or `research/{app}/metrics.md`) if it exists — check if defined metrics can actually be measured (instrumentation gaps are MVP gaps)
 - Read CLAUDE.md, README, package config for project conventions
@@ -85,7 +85,7 @@ If `research/journey-map.md` (or `research/{app}/journey-map.md`) exists, map ea
 - Which integrations are required vs. nice-to-have for replacing the current workflow?
 
 #### Competitive Differentiation
-- Does the product deliver the value prop from `research/icp.md`?
+- Does the product deliver the stated value drivers from `research/icp.md`?
 - Where does it fall short of the claimed wedge?
 - Would the ICP actually switch from their current alternative to this?
 

@@ -50,7 +50,7 @@ When app scope `{app}` is active:
    - **Customer Journey Coverage** — Discovery, evaluation, trial, purchase, provisioning, onboarding
    - **Table-Stakes Gaps** — Auth, error handling, data export, accessibility, docs, notifications
    - **Integration Gaps** — Required integrations from the ICP's current workflow
-   - **Competitive Differentiation** — Does it deliver the claimed value prop?
+   - **Competitive Differentiation** — Does it deliver the stated value drivers?
    - **Spec Validation** — For each gap, check `specs/` for existing coverage: "Spec exists — ready to build", "Spec exists — needs expansion", or no spec (suggest `$spec-interview`).
    - **Metrics Tie-In** — If `research/metrics.md` exists, identify which metric(s) indicate each gap is closed. Flag gaps with no closure metric as instrumentation gaps.
 3. Tag each gap: `blocks-first-sale`, `blocks-retention`, or `nice-to-have`. Estimate effort (S/M/L).
