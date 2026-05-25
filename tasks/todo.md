@@ -25,6 +25,24 @@
 - [ ] Review `tasks/recurring-todo.md`: 2 unchecked recurring items — promote only if due and requiring execution work.
 - [ ] `$research-roadmap` — All 43 roadmap phases are complete. Run documentation health scan after Phase 41 remaining batches finish.
 
+## Current Task — Benchmark Setup Audit Fix 2026-05-25
+
+**Goal:** Fix benchmark setup validation drift by making generated benchmark evidence tests stable across regenerated run-session hashes and tightening custom setup registry coverage checks.
+
+**Plan:**
+- [x] Inspect the benchmark results matrix test, benchmark setup registry, coverage matrix, generated matrix, and current task docs.
+- [x] Replace the hash-pinned incomplete `run` report assertion with the stable `run-codex-[^/]+/report.json` contract.
+- [x] Add layer1 assertions that every custom coverage row points to an existing setup file and resolves to a registered setup, with only intentional setup aliases outside the coverage matrix.
+- [x] Run focused benchmark setup and matrix checks plus integrity scripts.
+- [ ] Commit and push intended benchmark/test/task-doc changes on `master` without touching unrelated Skills Showcase edits.
+
+### Review
+
+- Replaced the generated benchmark matrix assertion for the incomplete `run` report with a stable `run-codex-[^/]+/report.json` regex while preserving the `blocked/incomplete` and zero-run note contract.
+- Added benchmark setup registry checks that every custom coverage row has an existing setup file and a registered setup object, and that custom setup registrations do not drift outside the coverage matrix except intentional aliases.
+- Fixed setup drift uncovered by the new audit: registered the safe git fixtures for `commit-and-push-by-feature` and `sync`, and added the missing grouped `report-website` workflow setup.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 layer1/benchmark-results-matrix.test.ts layer1/bench-setups.test.ts`; `pnpm --dir tests exec vitest run --project layer1 layer1/alignment-gates.test.ts`; `pnpm --dir tests bench:coverage`; `bash scripts/skill-versions.sh --missing`; `bash scripts/skill-next-step-routing.sh --missing`; `git diff --check`.
+
 ## Current Task — Research Quality Alignment Contract 2026-05-25
 
 **Goal:** Tighten alignment-page contracts so research skills produce stronger research first, then render it into HTML without dropping evidence, caveats, assumptions, alternatives, source gaps, or decision rationale.

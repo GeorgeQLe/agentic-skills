@@ -56,6 +56,30 @@ describe("benchmark setup registry", () => {
     });
   });
 
+  it("resolves every custom coverage row to an existing setup file and registered setup", () => {
+    for (const row of benchmarkCoverageMatrix().filter((coverage) => coverage.coverage_status === "custom")) {
+      expect(row.setup_path, `${row.skill} setup path`).toBeDefined();
+      expect(existsSync(resolve(TESTS_ROOT, "..", row.setup_path ?? "")), `${row.skill} setup file`).toBe(true);
+      expect(resolveBenchSetup(row.skill), `${row.skill} registered setup`).toBeDefined();
+    }
+  });
+
+  it("does not leave custom setup registrations outside the coverage matrix except aliases", () => {
+    const coveredCustomSkills = new Set(
+      benchmarkCoverageMatrix()
+        .filter((row) => row.coverage_status === "custom")
+        .map((row) => row.skill),
+    );
+    const intentionalAliases = new Set(["design-system-draftstonk"]);
+
+    for (const setupSkill of Object.keys(CUSTOM_BENCH_SETUPS)) {
+      expect(
+        coveredCustomSkills.has(setupSkill) || intentionalAliases.has(setupSkill),
+        `${setupSkill} custom setup coverage`,
+      ).toBe(true);
+    }
+  });
+
   it("uses custom setup for Tier 1 workflow skills", () => {
     const setup = resolveBenchSetup("run");
     const target = resolveBenchTarget("run");
