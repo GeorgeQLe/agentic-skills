@@ -1,182 +1,107 @@
 # Canonical Agentic Workflow Report
 
-> Date: 2026-04-19 (refreshed 2026-04-22)
-> Scope: current `agentic-skills` workflow as implemented through Phase 11 (completed 2026-04-19). Authoritative operating-model reference: `docs/operating-modes.md`.
-> Evidence: `tasks/todo.md`, `tasks/history.md`, `docs/operating-modes.md`, `docs/codex-workflow.md`, `README.md`, `CLAUDE.md`, `global/{claude,codex}/*/SKILL.md`, and recent git history.
+> Date: 2026-05-24
+> Scope: current `agentic-skills` workflow contracts and workflow documentation as of the AFPS alignment/prototype routing updates. This report is an audit snapshot, not a new skill contract.
+> Authoritative operating-model reference: `docs/operating-modes.md`.
+> Evidence sources: `README.md`, `docs/operating-modes.md`, `docs/packs.md`, `docs/skills-reference.md`, `docs/pack-workflow-matrix.md`, `docs/codex-workflow.md`, `docs/skill-next-step-contracts.md`, `global/{claude,codex}/*/SKILL.md`, `packs/*/{claude,codex}/*/SKILL.md`, `tasks/roadmap.md`, `tasks/todo.md`, and `tasks/lessons.md`.
 
 ## Executive Summary
 
-The canonical workflow is now a file-backed, mode-routed planning and execution system shared by Claude Code and Codex, following an AFPS (alignment-first, prototype-second) approach where market alignment and clickable prototypes precede production infrastructure. The source of truth is no longer chat history or a single monolithic todo. It is the task pipeline:
+The canonical workflow is a file-backed, pack-routed planning and execution system shared by Claude Code and Codex. Its current product stance is AFPS: alignment first, prototype second, production specification third, implementation after the production spec is sequenced into phases.
 
-- `specs/*.md` captures decision-complete feature intent.
-- `tasks/roadmap.md` captures strategic phased sequencing.
-- `tasks/todo.md` captures the active phase and the next executable step.
-- `tasks/manual-todo.md` captures human-only blockers.
-- `tasks/record-todo.md` and `tasks/recurring-todo.md` capture advisory non-blocking work.
+The report previously described the workflow as implemented through a completed Phase 11 snapshot. That framing is stale. Phase 11 remains important history for the three-mode operating model, but the current workflow has since changed around business pack routing, prototype gates, research-refresh gates, and feature-addition routing.
+
+The durable source of truth remains the repository task and planning surface:
+
+- `research/*.md` captures concept, market, customer, lifecycle, and operating evidence.
+- `specs/ux-variations-*.md` captures UX alternatives before implementation is locked.
+- `specs/ui-*.md` and `specs/ui-requirements-*.md` capture screen and content requirements for prototypes.
+- `prototypes/{topic}/variation-N/` captures cheap built variants.
+- `research/uat-variant-evaluation-*.md` captures comparable hands-on variant evidence.
+- `prototypes/{topic}/consolidated/` captures the chosen prototype direction after consolidation.
+- `specs/{topic}.md` captures the production implementation specification after the consolidated prototype and post-prototype research refresh.
+- `tasks/roadmap.md` captures phased strategy.
+- `tasks/todo.md` captures the current queue and active execution contract.
+- `tasks/manual-todo.md`, `tasks/record-todo.md`, and `tasks/recurring-todo.md` capture human-only, condition-gated, and cadence-based work.
 - `tasks/history.md` captures completed work as append-only evidence.
-- `tasks/phases/phase-N.md` archives completed phase execution contracts.
-- `tasks/approved-plan.md` mirrors safe cross-CLI approval state.
+- `alignment/*.html` captures full-depth interactive review pages for durable planning, research, report, spec, prototype, and document outputs.
 
-The canonical entry path depends on what exists in the directory:
-
-| Starting point | Canonical first move | Next move |
-| --- | --- | --- |
-| Fresh directory + rough idea | `/concept-exploration` or `$concept-exploration`, then `/pack install business-discovery` or `$pack install business-discovery` when applicable | `/icp` or `$icp` |
-| Existing spec | `/roadmap` or `$roadmap` | auto-seed Phase 1 with `/plan-phase 1` or `$plan-phase 1` |
-| Existing codebase | `/pack` or `$pack`, then `/roadmap` or `$roadmap` | resolve queued pipeline issues or create specs |
-| Existing active session | read `tasks/todo.md`, `tasks/roadmap.md`, `tasks/history.md`, git status | `/run`, `$run`, `/delegate $run`, or `/ship` depending on mode and state |
-
-The operating model is plural by default:
-
-- `claude-only`: Claude plans, executes, ships, and wraps.
-- `codex-only`: Codex plans, executes, ships, and wraps.
-- `hybrid`: Claude orchestrates; Codex executes via `/delegate` and the shared approval packet.
-
-The mode signal exists today: `.agents/project.json.agent_mode`, overridden by `SKILLS_AGENT_MODE`, resolved by `scripts/agent-mode.sh`. Next-step routing is wired across the planning and execution skills.
-
-## What Is Canonical Now
-
-### 1. Start by designating the project
-
-From a project directory, use the pack flow before deep planning:
-
-```bash
-/pack
-```
-
-or:
-
-```bash
-$pack
-```
-
-The pack flow reads or creates `.agents/project.json`, infers or confirms project type, and installs project-local skills under `.claude/skills` and `.codex/skills`. Global skills remain domain-neutral; business-app, game, devtool, code-quality, and kanban workflows are project-local opt-ins.
-
-For scripted setup:
-
-```bash
-scripts/pack.sh recommend
-scripts/pack.sh install business-discovery
-scripts/pack.sh install game
-scripts/pack.sh install devtool
-scripts/pack.sh install code-quality
-scripts/pack.sh install business-app-kanban
-scripts/pack.sh set-mode hybrid
-```
-
-Use `scripts/pack.sh set-mode <claude-only|codex-only|hybrid|unset>` when you know the desired operating mode. If the mode is unset, skills should keep the concrete next work item primary and infer the command route from invocation and task type.
-
-### 2. Keep project state in files
-
-The workflow assumes a fresh session can resume from files. The minimum context set is:
+The canonical product path is:
 
 ```text
-CLAUDE.md or AGENTS.md
-README.md
-.agents/project.json
-tasks/roadmap.md
-tasks/todo.md
-tasks/history.md
-tasks/manual-todo.md
-tasks/record-todo.md
-tasks/recurring-todo.md
-tasks/handoff.md
-specs/*.md
+concept-exploration
+  -> pack selection
+  -> icp
+  -> competitive-analysis
+  -> journey-map
+  -> value / positioning / growth / operating research as needed
+  -> ux-variations
+  -> ui-interview
+  -> prototype
+  -> uat --variant-evaluation
+  -> consolidate-variations
+  -> research-roadmap --post-prototype
+  -> spec-interview
+  -> research-roadmap --post-spec
+  -> roadmap
+  -> plan-phase
+  -> run / delegate
+  -> ship / ship-end
 ```
 
-Not every project has every file. Missing files route the workflow:
+## Current Routing Model
 
-- No concept brief, no ICP, and no specs in an idea-only project: run `concept-exploration`.
-- No journey map: run `journey-map` after ICP/competitive context.
-- No specs: run `spec-interview` after journey context.
-- Specs but no UX/UI planning: run `ux-variations`, then `ui-interview`, then `prototype`.
-- UX/UI planning but no prototype: run `prototype`, then `uat --variant-evaluation`, then `consolidate-variations`, then `research-roadmap --post-prototype`, then `spec-interview`, then `research-roadmap --post-spec`.
-- Specs plus UX/UI/prototype planning but no roadmap: run `roadmap`.
-- Roadmap but no executable current phase: run `plan-phase`.
-- Current phase with unchecked steps: run `run`.
-- Finished work or dirty tree: run `ship`.
-- Interrupted session: run `handoff` or read `tasks/handoff.md`.
+### Project Designation And Packs
 
-### 3. Separate strategy from execution detail
+Projects are designated through `pack`, which reads and writes `.agents/project.json`, sets `project_type`, tracks `enabled_packs`, and can set the optional `agent_mode`.
 
-`tasks/roadmap.md` is the strategic plan. It owns:
+The current business routing model is lane-based:
 
-- phase goals
-- scope
-- acceptance criteria
-- manual task declarations
-- strategic parallelization mode
-- coordination notes
-- deferred work
-
-`tasks/todo.md` is the active execution contract. It owns:
-
-- one active phase
-- test strategy
-- execution profile
-- ordered implementation steps
-- active step plan
-- milestone criteria
-- immediate blockers and notes
-
-Implementation detail is generated just-in-time by `plan-phase`, not upfront for every roadmap phase. This is now a core invariant.
-
-### 4. Use `roadmap` as the pipeline manager
-
-`/roadmap` and `$roadmap` are not generic brainstorming commands. They scan pipeline state and choose the right next queue item.
-
-The state machine is:
-
-| State | Condition | Canonical behavior |
+| Lane | Pack | Primary purpose |
 | --- | --- | --- |
-| No specs | no `specs/` and no `spec.md` | queue `spec-interview` after required journey context |
-| Specs, missing design gate | user-facing specs exist, but journey, UX variation, UI spec, or prototype is missing | queue `journey-map`, `ux-variations`, `ui-interview`, or `prototype` |
-| Specs, no roadmap | specs and required design planning exist, no usable `tasks/roadmap.md` | interview and write roadmap |
-| Work in progress | roadmap exists with unchecked phases | classify pipeline issues |
-| All complete | all phases checked | queue `research-roadmap` |
+| Discovery | `business-discovery` | ICP, competitive analysis, customer feedback, value proposition, positioning, lean canvas |
+| Customer lifecycle | `customer-lifecycle` | Journey, onboarding, conversion, transaction, retention, expansion, lifecycle metrics |
+| Growth | `business-growth` | Hook model, growth model, metrics, GTM, monetization, landing copy, experiments, PMF |
+| Operations | `business-ops` | Assumptions, risk, runway, cohorts, retros, investor updates, platform strategy, research reconciliation |
 
-When `roadmap` creates a new roadmap, it immediately invokes `plan-phase 1` so the project lands on actionable work instead of an undecomposed plan.
+`business-app` is now a compatibility alias that installs the four business lanes. It should not be described as the primary pack for normal work. Prefer the narrow lane that matches the current job, then add downstream lanes as evidence becomes ready.
 
-### 5. Use `plan-phase` to create an executable contract
+Kanban execution remains separate. `business-app-kanban` is an opt-in board-aware execution variant and should be paired with the relevant business lane; it is not a substitute for discovery, lifecycle, growth, or ops research.
 
-`/plan-phase` and `$plan-phase` decompose exactly one roadmap phase. They write:
+### Operating Modes
 
-- `> Test strategy: tdd|tests-after|none`
-- `### Execution Profile`
-- `### Tests First`, `### Implementation`, and `### Green` as appropriate
-- file-level task detail
-- manual, record, and recurring task outputs when applicable
+The operating modes are unchanged:
 
-Execution profiles are canonical:
+| Mode | Orchestrator | Executor |
+| --- | --- | --- |
+| `claude-only` | Claude | Claude |
+| `codex-only` | Codex | Codex |
+| `hybrid` | Claude | Codex through `/delegate` and the approval packet |
 
-| Profile | Meaning |
-| --- | --- |
-| `serial` | main agent does all work |
-| `research-only` | read-only subagents can gather context; main agent implements |
-| `review-only` | main agent implements; subagents review |
-| `implementation-safe` | write subagents may edit disjoint owned paths only |
-| `agent-team` | use isolated worktrees or a dedicated agent team; do not run in one shared local tree |
+`scripts/agent-mode.sh` remains the resolver. `SKILLS_AGENT_MODE` overrides `.agents/project.json.agent_mode`; unset mode is valid and skills infer command syntax from the active invocation.
 
-The main agent always owns task docs, history, commits, deploy handoff, and integration.
+The approval-packet contract remains scoped to cross-CLI execution and handoff. `.agents/approved-plan.json` is local and machine-readable. `tasks/approved-plan.md` is the sanitized committed mirror.
 
 ## Canonical Workflows By Starting Point
 
-### Fresh Directory With Only An Idea
+### Fresh Directory Or Rough Product Idea
 
-Use this when there is no codebase contract and no spec.
+Use this when there is no decision-complete codebase contract.
 
-Claude:
+Claude route:
 
 ```bash
 /concept-exploration
 /pack
+/pack install business-discovery        # when the discovery lane is missing
 /icp
 /competitive-analysis
+/pack install customer-lifecycle        # when lifecycle mapping is missing
 /journey-map
-/value-prop-canvas
-/positioning
-/lean-canvas
-/hook-model           # consumer/PLG; skip to /metrics for B2B
+/value-prop-canvas                      # when value framing is needed
+/positioning                            # when market narrative is needed
+/lean-canvas                            # when business-model synthesis is needed
+/pack install business-growth           # when GTM/growth/pricing work is needed
 /metrics
 /monetization
 /gtm
@@ -190,24 +115,25 @@ Claude:
 /spec-interview
 /research-roadmap --post-spec
 /roadmap
+/plan-phase 1
 /run
-/ship
 /ship-end
-/pmf-assessment       # post-launch
 ```
 
-Codex:
+Codex route:
 
 ```bash
 $concept-exploration
 $pack
+$pack install business-discovery
 $icp
 $competitive-analysis
+$pack install customer-lifecycle
 $journey-map
 $value-prop-canvas
 $positioning
 $lean-canvas
-$hook-model           # consumer/PLG; skip to $metrics for B2B
+$pack install business-growth
 $metrics
 $monetization
 $gtm
@@ -221,411 +147,217 @@ $research-roadmap --post-prototype
 $spec-interview
 $research-roadmap --post-spec
 $roadmap
+$plan-phase 1
 $run
 $ship-end
-$pmf-assessment       # post-launch
 ```
 
-Hybrid:
+This is an ordered default, not a mandate to run every optional business skill. Skip value, positioning, growth, or ops skills when the evidence is already sufficient or the product does not need that lane yet. Do not skip ICP, competitive analysis, journey mapping, UX/UI planning, prototype evaluation, consolidation, or the production spec for non-trivial user-facing product work.
 
-```bash
-/concept-exploration
-/pack
-scripts/pack.sh set-mode hybrid
-/icp
-/competitive-analysis
-/journey-map
-/value-prop-canvas
-/positioning
-/lean-canvas
-/hook-model (consumer/PLG) or skip to /metrics (B2B)
-/metrics
-/monetization
-/gtm
-/growth-model
-/ux-variations
-/ui-interview
-/prototype
-/uat --variant-evaluation
-/consolidate-variations
-/research-roadmap --post-prototype
-/spec-interview
-/research-roadmap --post-spec
-/roadmap
-/delegate $run
-/ship-end
-/pmf-assessment (post-launch)
-```
+### Existing Codebase With No Current Docs
 
-Canonical behavior:
+Use `pack` first to designate the project. Then run the lightest evidence-producing path that fits the codebase:
 
-1. `concept-exploration` turns the raw idea into `research/concept-brief.md`.
-2. `pack` designates the project type and installs local pack skills. For business/product concepts, install `business-discovery`.
-3. Business-app research runs `icp`, `competitive-analysis`, `journey-map`, `value-prop-canvas`, `positioning`, then `lean-canvas` (with optional `hook-model` for consumer/PLG), followed by `metrics`, `monetization`, `gtm`, and `growth-model` so the customer lifecycle and business model are known before specs.
-4. For user-facing work, `ux-variations` compares experience directions and `ui-interview` locks buildable interface detail per variation.
-5. `prototype` builds tangible, runnable prototypes from the UX variation and UI specs.
-6. `uat --variant-evaluation` validates built variants with acceptance criteria and evidence capture.
-7. `consolidate-variations` converges evaluated variants into a final implementation-ready UI spec.
-8. `research-roadmap --post-prototype` updates research and documentation health after prototype evidence.
-9. `spec-interview` turns the consolidated prototype into a decision-complete implementation spec under `specs/`.
-10. `research-roadmap --post-spec` updates research health after spec completion.
-11. `roadmap` sequences specs into phases and seeds Phase 1 with `plan-phase`.
-7. Execution proceeds through the mode-specific loop.
+- If the product concept is unclear, use `concept-exploration`.
+- If there is product direction but no market evidence, use `business-discovery` and start with `icp`.
+- If there is market evidence but no user/customer path, install or enable `customer-lifecycle` and run `journey-map`.
+- If the implementation already exists but specs are stale, use `spec-drift` or `reconcile-dev-docs` before mutating plans.
+- If a stale project should restart, use `desk-flip` and `bootstrap-repo --reset-existing` so old docs and code are archived before fresh alignment begins.
 
-Do not skip `concept-exploration`, `journey-map`, or `spec-interview` for non-trivial user-facing ideas. The current workflow assumes a concept brief, journey context, and specs are the boundary between raw ideation and implementation planning.
+### Existing Spec Or Planned Feature
 
-### Fresh Directory With An Existing Spec
+The current `roadmap` contract distinguishes unresolved ideas from confirmed full-spec creation:
 
-Use this when `specs/*.md`, `spec.md`, or a user-provided spec already exists.
-
-Claude:
-
-```bash
-/pack
-/roadmap path/to/spec.md
-/run
-/ship
-```
-
-Codex:
-
-```bash
-$pack
-$roadmap path/to/spec.md
-$run
-```
-
-Hybrid:
-
-```bash
-/pack
-scripts/pack.sh set-mode hybrid
-/roadmap path/to/spec.md
-/delegate $run
-```
-
-Canonical behavior:
-
-1. Confirm project type and packs.
-2. Run `roadmap`; it interviews on sequencing, MVP, manual tasks, parallelization, and review gates.
-3. `roadmap` writes `tasks/roadmap.md`.
-4. `roadmap` invokes `plan-phase 1`.
-5. Execute only the next step unless `--phase` is explicitly chosen.
-
-If the spec is stale or contradicted by the codebase, use `spec-drift` before turning it into execution work.
-
-### Existing Codebase With No Current Workflow Files
-
-Use this when the repo exists but has no usable `tasks/` pipeline.
-
-Claude:
-
-```bash
-/pack
-/roadmap
-```
-
-Codex:
-
-```bash
-$pack
-$roadmap
-```
-
-Canonical behavior:
-
-1. `pack` infers project type from repository signals.
-2. `roadmap` scans README, existing specs, ideas, tasks, git history, and code shape.
-3. If no specs exist, `roadmap` queues `spec-interview`.
-4. If specs exist, `roadmap` builds or updates the phase plan.
-5. If old-style task docs exist, `run` or `ship` migrates split roadmap/todo shape before proceeding.
-
-If the codebase is mature but undocumented, a common sequence is:
-
-```bash
-/hygiene
-/research-roadmap
-/spec-interview
-/roadmap
-```
-
-or the Codex equivalents.
-
-### Existing Codebase With Active Workflow Files
-
-Use this when `tasks/roadmap.md` and `tasks/todo.md` already exist.
-
-First read:
-
-```text
-tasks/todo.md
-tasks/roadmap.md
-tasks/history.md
-git status
-git log --oneline -10
-```
-
-Then route:
-
-| State | Canonical next command |
+| State | Current behavior |
 | --- | --- |
-| dirty tree with finished work | `/ship` or `$ship` |
-| unchecked current step | `/run`, `$run`, or `/delegate $run` |
-| current phase complete | `/ship` or `$ship` to archive and advance |
-| docs contradict git/code | `/reconcile-dev-docs audit` or `$reconcile-dev-docs audit` |
-| spec likely stale | `/spec-drift` or `$spec-drift` |
-| no remaining roadmap work | `/research-roadmap` or `$research-roadmap` |
+| No specs and missing journey for user-facing work | Queue `journey-map` first. |
+| No specs, unresolved idea, unclear destination | Queue `feature-interview`. |
+| No specs, user already selected full production spec creation | Queue `spec-interview`. |
+| Specs exist but UX/UI/prototype gate is incomplete | Queue the missing gate: `journey-map`, `ux-variations`, `ui-interview`, `prototype`, `uat --variant-evaluation`, `consolidate-variations`, or post-prototype refresh. |
+| Production spec exists, roadmap missing | Build or update `tasks/roadmap.md`, then seed `plan-phase`. |
+| All roadmap phases complete | Queue `research-roadmap`, then route to `brainstorm` unless a concrete idea is selected. |
 
-## Mode-Specific Execution Loops
+`spec-interview` is no longer the broad default for every unspecced thought. It is the production-spec deep dive after a consolidated prototype exists, or after the user explicitly chooses full-spec creation for a scope that already has the necessary upstream evidence.
 
-### Claude-Only
+### Post-Spec Additions
 
-Use this when Codex is unavailable.
+After a production spec exists, feature additions should route through `feature-interview` by default. The purpose is to decide whether the addition updates the existing spec, becomes a smaller add-on spec, or should be parked. This preserves the parent spec as the baseline contract and avoids reflexively re-running a full `spec-interview` for every incremental feature.
 
-Canonical loop:
+Use `spec-interview` again only when the selected follow-up truly requires a full production-spec pass and the prototype/research gates are already satisfied.
 
-```bash
-/spec-interview
-/roadmap
-/run
-/ship
-/ship-end
-```
+## Prototype-Gated Product Specification
 
-Important boundaries:
+The current product-spec path is gated by built and reviewed prototypes:
 
-- `/run` is execution-only in Claude.
-- `/run` gets approval through plan mode before writing code.
-- `/run` marks the completed step but does not commit or push.
-- `/ship` validates, updates history, commits, pushes, optionally deploys, writes the next plan, enters plan mode, and stops before the next implementation.
-- `/ship-end` wraps a partial or ending session.
+1. `ux-variations` creates multiple UX/UI directions from research and journey evidence.
+2. `ui-interview` or layout/UI requirement artifacts make those directions buildable.
+3. `prototype` builds runnable disposable artifacts in `prototypes/{topic}/variation-N/`.
+4. `uat --variant-evaluation` creates the human-run comparison plan and evidence capture.
+5. `consolidate-variations` compares reviewed variants, interviews the user on keep/reject decisions, resolves conflicts, and builds `prototypes/{topic}/consolidated/`.
+6. `research-roadmap --post-prototype` checks whether prototype decisions stale or contradict research.
+7. `spec-interview` walks the consolidated prototype screen by screen and produces `specs/{topic}.md`.
+8. `research-roadmap --post-spec` checks whether production-spec decisions stale or contradict research.
+9. `roadmap` sequences the spec into phases.
 
-Claude Code remains the strongest mode for plan-mode approval and clear-context handoffs.
+The production spec should be decision-complete enough to implement. The prototype remains disposable evidence, not production code.
 
-### Codex-Only
+## Task Pipeline Contracts
 
-Use this when Claude is unavailable.
+### Roadmap
 
-Canonical loop:
+`roadmap` is a task-pipeline manager, not a brainstorming shortcut. It scans `tasks/`, `specs/`, `research/`, git status, manual work, records, recurring work, and ideas. It either writes/updates a roadmap or writes a priority queue.
 
-```bash
-$spec-interview
-$roadmap
-$run
-$ship-end
-```
+Important current invariants:
 
-Important boundaries:
+- It queues `feature-interview` for unresolved ideas and unspecced gaps unless full-spec creation is already selected.
+- It applies pack availability guards before recommending pack-local skills such as `journey-map`.
+- It does not queue itself for a missing roadmap when it can build or extend the roadmap in the same run.
+- When it writes a roadmap, it immediately seeds the first relevant phase with `plan-phase`.
+- It keeps implementation detail out of `tasks/roadmap.md`; detailed steps belong in `tasks/todo.md`.
 
-- `$run` is the normal execute-and-ship loop in Codex.
-- `$run` asks one plain-text approval question unless it is consuming an approved packet.
-- `$run` implements, validates, updates task docs/history, commits, pushes, optionally deploys, and prepares the next step.
-- `$ship` is compatibility/manual cleanup when work already exists in the tree.
-- Codex cannot force Claude-style plan mode or clear-context handoff from a skill, so `tasks/todo.md` carries the contract.
+### Plan Phase
 
-For substantial work in Codex, the practical high-quality pattern remains:
+`plan-phase` decomposes exactly one roadmap phase. It writes the active execution contract in `tasks/todo.md`, including test strategy, execution profile, file-level work, manual blockers, and completion criteria. Later phases stay strategic until they become current.
 
-1. planning thread writes files
-2. user approval
-3. fresh execution thread reads files
-4. `$run` executes and ships
+Execution profiles remain:
 
-### Hybrid
+| Profile | Meaning |
+| --- | --- |
+| `serial` | Main agent owns all work. |
+| `research-only` | Parallel reads are useful; implementation stays integrated. |
+| `review-only` | Main build is serial; reviewers inspect after. |
+| `implementation-safe` | Write lanes can be separated by owned paths. |
+| `agent-team` | Branch-backed parallel write lanes with consolidation/PR review. |
 
-Use this when both Claude and Codex are available.
+### Run, Ship, And Ship-End
 
-Canonical loop as implemented today:
+`run`, `ship`, and `ship-end` are operational loops. They execute, validate, update docs, commit, push, and route. They are intentionally exempt from the durable alignment-page requirement, even though they may mutate task docs as part of shipping.
 
-```bash
-/spec-interview
-/roadmap
-/delegate $run
-```
+## Alignment Review Pages
 
-Async variant:
+Durable planning, research, spec, prototype, report, and decision-producing skills now create root-level `alignment/*.html` pages. These pages are full-depth review artifacts, not short summaries.
 
-```bash
-/handoff --target=codex
-$run --execute-approved
-```
+The current page contract includes:
 
-Role split:
+- dark-mode review UI;
+- complete content of proposed deliverables;
+- evidence coverage;
+- assumptions and confidence;
+- scope and non-goals where relevant;
+- proposed file changes;
+- coverage checkpoints;
+- required radio questions with `Other / None of the above` and `Need clarification`;
+- disabled-until-complete compile-answer behavior;
+- structured YAML output with `section`, `gate_type`, `status`, `answer`, optional `notes`, and optional target path fields;
+- copy-to-clipboard with fallback selection;
+- archive-first replacement under `docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/`;
+- best-effort browser-open reporting.
 
-- Claude orchestrates: interviews, specs, roadmap, phase planning, tradeoffs, approval packet production.
-- Codex executes: implementation, validation, task updates, shipping.
+Approval-gated research and planning skills should build the alignment page before canonical Markdown is written, ask the user to review it, and suppress downstream routing until approval is received.
 
-The shared approval packet is the contract:
+## Current Audit Findings
 
-- `.agents/approved-plan.json`: machine-readable source of truth, gitignored, local to the developer.
-- `tasks/approved-plan.md`: committed sanitized mirror.
-- `specs/approved-plan.schema.json`: schema.
-- `scripts/approved-plan.sh`: lifecycle helper.
+### Finding 1: The Old Report Used Stale Phase 11 Framing
 
-Packet lifecycle:
+The prior report dated 2026-04-19 and refreshed 2026-04-22 described Phase 11 as the current implementation horizon. That is now only historical context. Later workflow changes introduced lane-based business packs, approval-gated alignment previews, run/ship alignment exemptions, prototype-gated spec work, and revised post-spec feature routing.
 
-```text
-draft -> approved -> consumed | stale | superseded | uncertain
-```
+**Resolution in this report:** metadata and narrative now describe the current workflow as of 2026-05-24 and treat Phase 11 as the origin of the operating-mode model, not the whole current workflow.
 
-Only `approved` packets are executable. `$run --execute-approved` checks:
+### Finding 2: Business-Pack Language Drifted Toward The Compatibility Alias
 
-1. lifecycle is `approved`
-2. git HEAD matches
-3. `tasks/todo.md` hash matches
-4. dirty tree is clean or allowed
-5. no new blocking manual task appeared
-6. TTL has not expired
+The old report described `business-app` as a normal project-local opt-in. Current docs and pack contracts split business work into `business-discovery`, `customer-lifecycle`, `business-growth`, and `business-ops`; `business-app` remains a compatibility alias.
 
-`/delegate` never blind-retries. If Codex may have started but outcome is unclear, the packet becomes `uncertain` and the user must inspect, discard, or continue inline.
+**Resolution in this report:** the pack model now centers the narrow lanes and labels `business-app` as compatibility-only.
 
-## Fresh Session Resume Rules
+### Finding 3: No-Spec Routing Needed Feature-Interview Precision
 
-From Claude:
+Older text said no specs should route to `spec-interview` after journey context. The current `roadmap` contract says unresolved ideas or gaps route to `feature-interview`; `spec-interview` is used only when full-spec creation is already selected.
 
-```bash
-/handoff
-```
+**Resolution in this report:** no-spec routing now distinguishes unresolved idea triage from confirmed full-spec creation.
 
-From Codex:
+### Finding 4: Product Spec Work Must Respect The Prototype Gate
 
-```bash
-$handoff
-```
+The old report had pieces of the prototype path but still treated spec creation too broadly. Current contracts place `spec-interview` after consolidated prototype evidence and post-prototype research refresh.
 
-For cross-CLI async execution from Claude to Codex:
+**Resolution in this report:** the product-spec path is explicitly prototype-gated.
 
-```bash
-/handoff --target=codex
-```
+### Finding 5: Post-Spec Feature Additions Belong In Feature-Interview
 
-Resume checklist:
+`tasks/lessons.md` records the 2026-05-24 correction that post-spec additions should use `feature-interview` to update an existing spec or create a small add-on spec, rather than defaulting back to a full `spec-interview`.
 
-1. Read `tasks/handoff.md` if present.
-2. Read `tasks/todo.md` for the active step.
-3. Read `tasks/roadmap.md` for phase context.
-4. Read `tasks/history.md` for what already shipped.
-5. Run `git status`.
-6. If using hybrid async handoff, run `$run --execute-approved` in Codex.
+**Resolution in this report:** post-spec addition routing is now part of the canonical model.
 
-Do not rely on previous chat context when the files carry the workflow state.
+### Finding 6: Consolidate-Variations Contract Has Tension Around Output Shape
 
-## Human And Advisory Task Handling
+The current `consolidate-variations` contract says the skill produces a consolidated prototype and an interview log, and its description says it produces a final implementation-ready UI specification. The workflow later relies on `spec-interview` to turn the consolidated prototype into the production implementation spec. That can be read two ways:
 
-`tasks/manual-todo.md` is for human-only work. Items can block automated execution with:
+- consolidation writes an implementation-ready UI specification for the final design surface; or
+- consolidation writes a consolidated prototype and evidence log, while production implementation details wait for `spec-interview`.
+
+**Audit note:** this task does not patch skill contracts. The ambiguity should be handled as a future skill-contract cleanup if it causes agents to skip `spec-interview` or treat the consolidated prototype as the production spec.
+
+## Canonical Decision Rules
+
+- Start with `concept-exploration` for raw ideas.
+- Install narrow packs, not broad aliases, unless compatibility or context loading makes the alias desirable.
+- For business products, run ICP and competitive analysis before journey mapping; run journey mapping before UX/UI and prototype work.
+- Treat optional value, positioning, growth, monetization, and ops work as evidence lanes selected by risk and product type.
+- Do not move non-trivial user-facing product work from idea directly to production spec or roadmap.
+- Build and evaluate prototypes before production spec creation.
+- Use `feature-interview` for unresolved ideas, post-spec additions, and destination triage.
+- Use `spec-interview` for confirmed full production spec work after upstream evidence and prototype gates are satisfied.
+- Use `roadmap` to sequence specs into phases; use `plan-phase` to produce one active execution contract.
+- Keep run/ship loops operational and alignment-page-free.
+- Commit and push intended repository mutations unless the user explicitly says not to, while preserving unrelated dirty work.
+
+## Current End-To-End Sequence
 
 ```text
-_(blocks: Step N.X)_
+concept-exploration
+  -> pack recommend/install
+  -> business-discovery: icp -> competitive-analysis
+  -> customer-lifecycle: journey-map
+  -> optional business-discovery/growth/ops evidence lanes
+  -> ux-variations
+  -> ui-interview
+  -> prototype
+  -> uat --variant-evaluation
+  -> consolidate-variations
+  -> research-roadmap --post-prototype
+  -> spec-interview
+  -> research-roadmap --post-spec
+  -> roadmap
+  -> plan-phase
+  -> run or delegate
+  -> ship
+  -> ship-end
 ```
 
-or follow a completed automated step with:
+For existing specs with smaller additions:
 
 ```text
-_(after: Step N.X)_
+feature-interview
+  -> update existing spec or create add-on spec
+  -> research-roadmap --post-spec when research may be stale
+  -> roadmap extension
+  -> plan-phase
+  -> run / ship
 ```
 
-Blocking manual tasks stop `run` before implementation unless the user explicitly overrides them.
-
-`tasks/record-todo.md` is for non-blocking condition-gated records or measurements. `tasks/recurring-todo.md` is for cadence-based operational or research work. They are advisory by default and must be promoted into `tasks/todo.md` before an agent executes them as build work.
-
-## Shipping And Deploy Rules
-
-Shipping is direct-to-primary by default:
-
-- commit to `main` or `master`
-- push before stopping
-- do not continue feature-branch workflows unless explicitly requested, except for temporary `agent-team` lane branches that exist for parallel isolation and PR review
-- do not commit secrets
-- do not rewrite history
-
-Deploy is opt-in by contract:
-
-- deploy only if `deploy.md` or `tasks/deploy.md` exists
-- never infer deployment from GitHub Actions
-- never deploy production without explicit confirmation
-- if AWS SSO auth is uncertain, check live identity before running `aws sso login`
-
-Claude:
-
-- `/run` does not commit or push.
-- `/ship` owns commit/push/deploy/next-plan.
-
-Codex:
-
-- `$run` executes and ships by default.
-- `$ship` packages already-finished work.
-
-## Current Gaps And Active Work
-
-Phase 11 completed 2026-04-19 (see `tasks/roadmap.md:25,33`). Steps 7–11 all shipped:
-
-1. Step 7 — next-step routing across planning/execution skills: done.
-2. Step 8 — degraded-path audit table in `docs/operating-modes.md`: done.
-3. Step 9 — pack emphasis split by CLI role: done.
-4. Step 10 — pack-aware `$run` routing on Codex: done.
-5. Step 11 — `docs/operating-modes.md` as the authoritative reference: done.
-
-For the current state of the operating model (mode signal, packet contract, delegation, degraded-path matrix), read `docs/operating-modes.md`. For remaining drift or follow-up items, see the live queue in `tasks/todo.md` and recent entries in `tasks/history.md`.
-
-## Recommended Canonical Decision Tree
-
-Use this as the high-level workflow router:
+For completed implementation queues with no active documentation issue:
 
 ```text
-Do I have a concept brief, ICP, existing product, or existing spec?
-  no  -> /concept-exploration or $concept-exploration
-  yes -> continue
-
-Do I have a project designation?
-  no  -> /pack or $pack
-  yes -> continue
-
-Do I have a decision-complete spec?
-  no  -> /spec-interview or $spec-interview
-  yes -> continue
-
-Do I have tasks/roadmap.md?
-  no  -> /roadmap or $roadmap
-  yes -> continue
-
-Does the current roadmap phase have implementation steps?
-  no  -> /plan-phase or $plan-phase
-  yes -> continue
-
-Is there finished dirty work?
-  yes -> /ship or $ship
-  no  -> continue
-
-Which mode am I in?
-  claude-only -> /run, then /ship
-  codex-only  -> $run
-  hybrid      -> /delegate $run
-  unset       -> choose one of the three explicitly
-
-Am I switching sessions or CLIs?
-  same CLI -> /handoff or $handoff if context needs compression
-  Claude to Codex async -> /handoff --target=codex, then $run --execute-approved
+research-roadmap
+  -> first unchecked documentation item, if any
+  -> brainstorm when documentation is current and no concrete idea is selected
 ```
 
-## Bottom Line
+## Confidence And Open Questions
 
-The canonical workflow is now:
+Confidence is high that this report reflects the current stated contracts because the same routing appears in `roadmap`, `research-roadmap`, `prototype`, `uat`, `consolidate-variations`, `spec-interview`, `feature-interview`, pack docs, and recent lessons.
 
-```text
-concept-exploration -> pack -> icp -> competitive-analysis -> journey-map -> value-prop-canvas -> positioning -> lean-canvas -> hook-model -> metrics -> monetization -> gtm -> growth-model -> ux-variations -> ui-interview -> prototype -> uat --variant-evaluation -> consolidate-variations -> research-roadmap --post-prototype -> spec-interview -> research-roadmap --post-spec -> roadmap -> plan-phase -> run/delegate -> ship -> ship-end -> pmf-assessment
-```
+Open questions:
 
-For UI layout variation work, the variant-specific path is:
-
-```text
-ui-interview --requirements-only -> ux-variations --layout-mode -> run/delegate to build variants -> prototype -> uat --variant-evaluation -> consolidate-variations -> design-system or roadmap/run
-```
-
-with three valid execution modes:
-
-```text
-claude-only: Claude does all of it
-codex-only: Codex does all of it
-hybrid: Claude plans, Codex executes through an approved packet
-```
-
-The durable contract is the file system. Specs define intent, roadmap defines strategy, todo defines executable work, history records evidence, and the approval packet safely bridges Claude and Codex.
+- Whether `consolidate-variations` should explicitly write a Markdown UI spec in addition to the consolidated prototype and interview log.
+- Whether docs should standardize the exact optional order among `value-prop-canvas`, `positioning`, `lean-canvas`, `metrics`, `monetization`, `gtm`, and `growth-model` by product type.
+- Whether `business-app` compatibility alias language should be further reduced in user-facing docs to prevent broad-pack defaulting.

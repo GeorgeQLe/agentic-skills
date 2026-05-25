@@ -1,0 +1,756 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Canonical Workflow Report Alignment Review</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --text-muted: #8b949e;
+      --accent: #58a6ff;
+      --green: #3fb950;
+      --red: #f85149;
+      --orange: #d29922;
+      --purple: #bc8cff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .layout {
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+    nav {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: auto;
+      padding: 24px;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+    }
+    nav h1 {
+      margin: 0 0 16px;
+      color: #fff;
+      font-size: 18px;
+      line-height: 1.25;
+    }
+    nav ol {
+      margin: 0;
+      padding-left: 20px;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+    nav li { margin: 8px 0; }
+    main {
+      width: min(1120px, 100%);
+      padding: 40px 32px 80px;
+    }
+    section {
+      margin: 0 0 40px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    h1, h2, h3, h4 { color: #fff; line-height: 1.2; }
+    h2 { color: var(--accent); margin-top: 0; }
+    h3 { margin-top: 28px; }
+    blockquote {
+      margin: 16px 0;
+      padding: 12px 16px;
+      border-left: 3px solid var(--accent);
+      background: var(--surface);
+      color: var(--text-muted);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      vertical-align: top;
+    }
+    th {
+      background: var(--surface);
+      color: #fff;
+      text-align: left;
+    }
+    code, pre {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    }
+    code {
+      padding: 1px 4px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: var(--surface);
+      color: #fff;
+    }
+    pre {
+      overflow: auto;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #010409;
+      color: #fff;
+    }
+    .gate {
+      margin-top: 24px;
+      padding: 18px;
+      border: 1px solid var(--purple);
+      border-radius: 8px;
+      background: var(--surface);
+    }
+    .gate h3 {
+      margin-top: 0;
+      color: var(--purple);
+    }
+    .question {
+      margin-top: 14px;
+      padding: 16px;
+      border: 1px solid #35415f;
+      border-radius: 8px;
+      background: #1c2333;
+    }
+    .question legend {
+      margin-bottom: 10px;
+      color: #fff;
+      font-weight: 700;
+    }
+    .question label {
+      display: block;
+      margin: 10px 0;
+    }
+    textarea {
+      width: 100%;
+      min-height: 78px;
+      margin-top: 8px;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #010409;
+      color: var(--text);
+      font: inherit;
+    }
+    .conditional { display: none; margin-left: 24px; }
+    .compile {
+      position: sticky;
+      bottom: 0;
+      margin-top: 32px;
+      padding: 18px;
+      border: 1px solid var(--border);
+      border-radius: 8px 8px 0 0;
+      background: rgba(22, 27, 34, 0.96);
+      backdrop-filter: blur(8px);
+    }
+    button {
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--accent);
+      color: #07111f;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    button:disabled {
+      cursor: not-allowed;
+      background: var(--surface);
+      color: var(--text-muted);
+    }
+    .status { margin-left: 12px; color: var(--text-muted); }
+    .pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+    @media (max-width: 860px) {
+      .layout { display: block; }
+      nav { position: static; height: auto; }
+      main { padding: 24px 16px 80px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <nav>
+      <h1>Canonical Workflow Report</h1>
+      <ol>
+        <li><a href="#executive-summary">Executive Summary</a></li>
+        <li><a href="#routing-model">Current Routing Model</a></li>
+        <li><a href="#starting-points">Workflows By Starting Point</a></li>
+        <li><a href="#prototype-gate">Prototype-Gated Product Specification</a></li>
+        <li><a href="#task-pipeline">Task Pipeline Contracts</a></li>
+        <li><a href="#alignment-pages">Alignment Review Pages</a></li>
+        <li><a href="#audit-findings">Current Audit Findings</a></li>
+        <li><a href="#decision-rules">Canonical Decision Rules</a></li>
+        <li><a href="#sequence">Current End-To-End Sequence</a></li>
+        <li><a href="#confidence">Confidence And Open Questions</a></li>
+        <li><a href="#review-gates">Review Gates</a></li>
+      </ol>
+    </nav>
+    <main>
+      <section id="executive-summary">
+        <h1>Canonical Agentic Workflow Report</h1>
+        <blockquote>
+          <p><strong>Date:</strong> 2026-05-24</p>
+          <p><strong>Scope:</strong> current <code>agentic-skills</code> workflow contracts and workflow documentation as of the AFPS alignment/prototype routing updates. This report is an audit snapshot, not a new skill contract.</p>
+          <p><strong>Authoritative operating-model reference:</strong> <code>docs/operating-modes.md</code>.</p>
+          <p><strong>Evidence sources:</strong> <code>README.md</code>, <code>docs/operating-modes.md</code>, <code>docs/packs.md</code>, <code>docs/skills-reference.md</code>, <code>docs/pack-workflow-matrix.md</code>, <code>docs/codex-workflow.md</code>, <code>docs/skill-next-step-contracts.md</code>, <code>global/{claude,codex}/*/SKILL.md</code>, <code>packs/*/{claude,codex}/*/SKILL.md</code>, <code>tasks/roadmap.md</code>, <code>tasks/todo.md</code>, and <code>tasks/lessons.md</code>.</p>
+        </blockquote>
+        <h2>Executive Summary</h2>
+        <p>The canonical workflow is a file-backed, pack-routed planning and execution system shared by Claude Code and Codex. Its current product stance is AFPS: alignment first, prototype second, production specification third, implementation after the production spec is sequenced into phases.</p>
+        <p>The report previously described the workflow as implemented through a completed Phase 11 snapshot. That framing is stale. Phase 11 remains important history for the three-mode operating model, but the current workflow has since changed around business pack routing, prototype gates, research-refresh gates, and feature-addition routing.</p>
+        <p>The durable source of truth remains the repository task and planning surface:</p>
+        <ul>
+          <li><code>research/*.md</code> captures concept, market, customer, lifecycle, and operating evidence.</li>
+          <li><code>specs/ux-variations-*.md</code> captures UX alternatives before implementation is locked.</li>
+          <li><code>specs/ui-*.md</code> and <code>specs/ui-requirements-*.md</code> capture screen and content requirements for prototypes.</li>
+          <li><code>prototypes/{topic}/variation-N/</code> captures cheap built variants.</li>
+          <li><code>research/uat-variant-evaluation-*.md</code> captures comparable hands-on variant evidence.</li>
+          <li><code>prototypes/{topic}/consolidated/</code> captures the chosen prototype direction after consolidation.</li>
+          <li><code>specs/{topic}.md</code> captures the production implementation specification after the consolidated prototype and post-prototype research refresh.</li>
+          <li><code>tasks/roadmap.md</code> captures phased strategy.</li>
+          <li><code>tasks/todo.md</code> captures the current queue and active execution contract.</li>
+          <li><code>tasks/manual-todo.md</code>, <code>tasks/record-todo.md</code>, and <code>tasks/recurring-todo.md</code> capture human-only, condition-gated, and cadence-based work.</li>
+          <li><code>tasks/history.md</code> captures completed work as append-only evidence.</li>
+          <li><code>alignment/*.html</code> captures full-depth interactive review pages for durable planning, research, report, spec, prototype, and document outputs.</li>
+        </ul>
+        <p>The canonical product path is:</p>
+        <pre><code>concept-exploration
+  -&gt; pack selection
+  -&gt; icp
+  -&gt; competitive-analysis
+  -&gt; journey-map
+  -&gt; value / positioning / growth / operating research as needed
+  -&gt; ux-variations
+  -&gt; ui-interview
+  -&gt; prototype
+  -&gt; uat --variant-evaluation
+  -&gt; consolidate-variations
+  -&gt; research-roadmap --post-prototype
+  -&gt; spec-interview
+  -&gt; research-roadmap --post-spec
+  -&gt; roadmap
+  -&gt; plan-phase
+  -&gt; run / delegate
+  -&gt; ship / ship-end</code></pre>
+      </section>
+
+      <section id="routing-model">
+        <h2>Current Routing Model</h2>
+        <h3>Project Designation And Packs</h3>
+        <p>Projects are designated through <code>pack</code>, which reads and writes <code>.agents/project.json</code>, sets <code>project_type</code>, tracks <code>enabled_packs</code>, and can set the optional <code>agent_mode</code>.</p>
+        <p>The current business routing model is lane-based:</p>
+        <table>
+          <thead><tr><th>Lane</th><th>Pack</th><th>Primary purpose</th></tr></thead>
+          <tbody>
+            <tr><td>Discovery</td><td><code>business-discovery</code></td><td>ICP, competitive analysis, customer feedback, value proposition, positioning, lean canvas</td></tr>
+            <tr><td>Customer lifecycle</td><td><code>customer-lifecycle</code></td><td>Journey, onboarding, conversion, transaction, retention, expansion, lifecycle metrics</td></tr>
+            <tr><td>Growth</td><td><code>business-growth</code></td><td>Hook model, growth model, metrics, GTM, monetization, landing copy, experiments, PMF</td></tr>
+            <tr><td>Operations</td><td><code>business-ops</code></td><td>Assumptions, risk, runway, cohorts, retros, investor updates, platform strategy, research reconciliation</td></tr>
+          </tbody>
+        </table>
+        <p><code>business-app</code> is now a compatibility alias that installs the four business lanes. It should not be described as the primary pack for normal work. Prefer the narrow lane that matches the current job, then add downstream lanes as evidence becomes ready.</p>
+        <p>Kanban execution remains separate. <code>business-app-kanban</code> is an opt-in board-aware execution variant and should be paired with the relevant business lane; it is not a substitute for discovery, lifecycle, growth, or ops research.</p>
+        <h3>Operating Modes</h3>
+        <table>
+          <thead><tr><th>Mode</th><th>Orchestrator</th><th>Executor</th></tr></thead>
+          <tbody>
+            <tr><td><code>claude-only</code></td><td>Claude</td><td>Claude</td></tr>
+            <tr><td><code>codex-only</code></td><td>Codex</td><td>Codex</td></tr>
+            <tr><td><code>hybrid</code></td><td>Claude</td><td>Codex through <code>/delegate</code> and the approval packet</td></tr>
+          </tbody>
+        </table>
+        <p><code>scripts/agent-mode.sh</code> remains the resolver. <code>SKILLS_AGENT_MODE</code> overrides <code>.agents/project.json.agent_mode</code>; unset mode is valid and skills infer command syntax from the active invocation.</p>
+        <p>The approval-packet contract remains scoped to cross-CLI execution and handoff. <code>.agents/approved-plan.json</code> is local and machine-readable. <code>tasks/approved-plan.md</code> is the sanitized committed mirror.</p>
+      </section>
+
+      <section id="starting-points">
+        <h2>Canonical Workflows By Starting Point</h2>
+        <h3>Fresh Directory Or Rough Product Idea</h3>
+        <p>Use this when there is no decision-complete codebase contract.</p>
+        <p>Claude route:</p>
+        <pre><code>/concept-exploration
+/pack
+/pack install business-discovery        # when the discovery lane is missing
+/icp
+/competitive-analysis
+/pack install customer-lifecycle        # when lifecycle mapping is missing
+/journey-map
+/value-prop-canvas                      # when value framing is needed
+/positioning                            # when market narrative is needed
+/lean-canvas                            # when business-model synthesis is needed
+/pack install business-growth           # when GTM/growth/pricing work is needed
+/metrics
+/monetization
+/gtm
+/growth-model
+/ux-variations
+/ui-interview
+/prototype
+/uat --variant-evaluation
+/consolidate-variations
+/research-roadmap --post-prototype
+/spec-interview
+/research-roadmap --post-spec
+/roadmap
+/plan-phase 1
+/run
+/ship-end</code></pre>
+        <p>Codex route:</p>
+        <pre><code>$concept-exploration
+$pack
+$pack install business-discovery
+$icp
+$competitive-analysis
+$pack install customer-lifecycle
+$journey-map
+$value-prop-canvas
+$positioning
+$lean-canvas
+$pack install business-growth
+$metrics
+$monetization
+$gtm
+$growth-model
+$ux-variations
+$ui-interview
+$prototype
+$uat --variant-evaluation
+$consolidate-variations
+$research-roadmap --post-prototype
+$spec-interview
+$research-roadmap --post-spec
+$roadmap
+$plan-phase 1
+$run
+$ship-end</code></pre>
+        <p>This is an ordered default, not a mandate to run every optional business skill. Skip value, positioning, growth, or ops skills when the evidence is already sufficient or the product does not need that lane yet. Do not skip ICP, competitive analysis, journey mapping, UX/UI planning, prototype evaluation, consolidation, or the production spec for non-trivial user-facing product work.</p>
+        <h3>Existing Codebase With No Current Docs</h3>
+        <p>Use <code>pack</code> first to designate the project. Then run the lightest evidence-producing path that fits the codebase:</p>
+        <ul>
+          <li>If the product concept is unclear, use <code>concept-exploration</code>.</li>
+          <li>If there is product direction but no market evidence, use <code>business-discovery</code> and start with <code>icp</code>.</li>
+          <li>If there is market evidence but no user/customer path, install or enable <code>customer-lifecycle</code> and run <code>journey-map</code>.</li>
+          <li>If the implementation already exists but specs are stale, use <code>spec-drift</code> or <code>reconcile-dev-docs</code> before mutating plans.</li>
+          <li>If a stale project should restart, use <code>desk-flip</code> and <code>bootstrap-repo --reset-existing</code> so old docs and code are archived before fresh alignment begins.</li>
+        </ul>
+        <h3>Existing Spec Or Planned Feature</h3>
+        <p>The current <code>roadmap</code> contract distinguishes unresolved ideas from confirmed full-spec creation:</p>
+        <table>
+          <thead><tr><th>State</th><th>Current behavior</th></tr></thead>
+          <tbody>
+            <tr><td>No specs and missing journey for user-facing work</td><td>Queue <code>journey-map</code> first.</td></tr>
+            <tr><td>No specs, unresolved idea, unclear destination</td><td>Queue <code>feature-interview</code>.</td></tr>
+            <tr><td>No specs, user already selected full production spec creation</td><td>Queue <code>spec-interview</code>.</td></tr>
+            <tr><td>Specs exist but UX/UI/prototype gate is incomplete</td><td>Queue the missing gate: <code>journey-map</code>, <code>ux-variations</code>, <code>ui-interview</code>, <code>prototype</code>, <code>uat --variant-evaluation</code>, <code>consolidate-variations</code>, or post-prototype refresh.</td></tr>
+            <tr><td>Production spec exists, roadmap missing</td><td>Build or update <code>tasks/roadmap.md</code>, then seed <code>plan-phase</code>.</td></tr>
+            <tr><td>All roadmap phases complete</td><td>Queue <code>research-roadmap</code>, then route to <code>brainstorm</code> unless a concrete idea is selected.</td></tr>
+          </tbody>
+        </table>
+        <p><code>spec-interview</code> is no longer the broad default for every unspecced thought. It is the production-spec deep dive after a consolidated prototype exists, or after the user explicitly chooses full-spec creation for a scope that already has the necessary upstream evidence.</p>
+        <h3>Post-Spec Additions</h3>
+        <p>After a production spec exists, feature additions should route through <code>feature-interview</code> by default. The purpose is to decide whether the addition updates the existing spec, becomes a smaller add-on spec, or should be parked. This preserves the parent spec as the baseline contract and avoids reflexively re-running a full <code>spec-interview</code> for every incremental feature.</p>
+        <p>Use <code>spec-interview</code> again only when the selected follow-up truly requires a full production-spec pass and the prototype/research gates are already satisfied.</p>
+      </section>
+
+      <section id="prototype-gate">
+        <h2>Prototype-Gated Product Specification</h2>
+        <p>The current product-spec path is gated by built and reviewed prototypes:</p>
+        <ol>
+          <li><code>ux-variations</code> creates multiple UX/UI directions from research and journey evidence.</li>
+          <li><code>ui-interview</code> or layout/UI requirement artifacts make those directions buildable.</li>
+          <li><code>prototype</code> builds runnable disposable artifacts in <code>prototypes/{topic}/variation-N/</code>.</li>
+          <li><code>uat --variant-evaluation</code> creates the human-run comparison plan and evidence capture.</li>
+          <li><code>consolidate-variations</code> compares reviewed variants, interviews the user on keep/reject decisions, resolves conflicts, and builds <code>prototypes/{topic}/consolidated/</code>.</li>
+          <li><code>research-roadmap --post-prototype</code> checks whether prototype decisions stale or contradict research.</li>
+          <li><code>spec-interview</code> walks the consolidated prototype screen by screen and produces <code>specs/{topic}.md</code>.</li>
+          <li><code>research-roadmap --post-spec</code> checks whether production-spec decisions stale or contradict research.</li>
+          <li><code>roadmap</code> sequences the spec into phases.</li>
+        </ol>
+        <p>The production spec should be decision-complete enough to implement. The prototype remains disposable evidence, not production code.</p>
+      </section>
+
+      <section id="task-pipeline">
+        <h2>Task Pipeline Contracts</h2>
+        <h3>Roadmap</h3>
+        <p><code>roadmap</code> is a task-pipeline manager, not a brainstorming shortcut. It scans <code>tasks/</code>, <code>specs/</code>, <code>research/</code>, git status, manual work, records, recurring work, and ideas. It either writes/updates a roadmap or writes a priority queue.</p>
+        <p>Important current invariants:</p>
+        <ul>
+          <li>It queues <code>feature-interview</code> for unresolved ideas and unspecced gaps unless full-spec creation is already selected.</li>
+          <li>It applies pack availability guards before recommending pack-local skills such as <code>journey-map</code>.</li>
+          <li>It does not queue itself for a missing roadmap when it can build or extend the roadmap in the same run.</li>
+          <li>When it writes a roadmap, it immediately seeds the first relevant phase with <code>plan-phase</code>.</li>
+          <li>It keeps implementation detail out of <code>tasks/roadmap.md</code>; detailed steps belong in <code>tasks/todo.md</code>.</li>
+        </ul>
+        <h3>Plan Phase</h3>
+        <p><code>plan-phase</code> decomposes exactly one roadmap phase. It writes the active execution contract in <code>tasks/todo.md</code>, including test strategy, execution profile, file-level work, manual blockers, and completion criteria. Later phases stay strategic until they become current.</p>
+        <table>
+          <thead><tr><th>Profile</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td><code>serial</code></td><td>Main agent owns all work.</td></tr>
+            <tr><td><code>research-only</code></td><td>Parallel reads are useful; implementation stays integrated.</td></tr>
+            <tr><td><code>review-only</code></td><td>Main build is serial; reviewers inspect after.</td></tr>
+            <tr><td><code>implementation-safe</code></td><td>Write lanes can be separated by owned paths.</td></tr>
+            <tr><td><code>agent-team</code></td><td>Branch-backed parallel write lanes with consolidation/PR review.</td></tr>
+          </tbody>
+        </table>
+        <h3>Run, Ship, And Ship-End</h3>
+        <p><code>run</code>, <code>ship</code>, and <code>ship-end</code> are operational loops. They execute, validate, update docs, commit, push, and route. They are intentionally exempt from the durable alignment-page requirement, even though they may mutate task docs as part of shipping.</p>
+      </section>
+
+      <section id="alignment-pages">
+        <h2>Alignment Review Pages</h2>
+        <p>Durable planning, research, spec, prototype, report, and decision-producing skills now create root-level <code>alignment/*.html</code> pages. These pages are full-depth review artifacts, not short summaries.</p>
+        <p>The current page contract includes:</p>
+        <ul>
+          <li>dark-mode review UI;</li>
+          <li>complete content of proposed deliverables;</li>
+          <li>evidence coverage;</li>
+          <li>assumptions and confidence;</li>
+          <li>scope and non-goals where relevant;</li>
+          <li>proposed file changes;</li>
+          <li>coverage checkpoints;</li>
+          <li>required radio questions with <code>Other / None of the above</code> and <code>Need clarification</code>;</li>
+          <li>disabled-until-complete compile-answer behavior;</li>
+          <li>structured YAML output with <code>section</code>, <code>gate_type</code>, <code>status</code>, <code>answer</code>, optional <code>notes</code>, and optional target path fields;</li>
+          <li>copy-to-clipboard with fallback selection;</li>
+          <li>archive-first replacement under <code>docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/</code>;</li>
+          <li>best-effort browser-open reporting.</li>
+        </ul>
+        <p>Approval-gated research and planning skills should build the alignment page before canonical Markdown is written, ask the user to review it, and suppress downstream routing until approval is received.</p>
+      </section>
+
+      <section id="audit-findings">
+        <h2>Current Audit Findings</h2>
+        <h3>Finding 1: The Old Report Used Stale Phase 11 Framing</h3>
+        <p>The prior report dated 2026-04-19 and refreshed 2026-04-22 described Phase 11 as the current implementation horizon. That is now only historical context. Later workflow changes introduced lane-based business packs, approval-gated alignment previews, run/ship alignment exemptions, prototype-gated spec work, and revised post-spec feature routing.</p>
+        <p><strong>Resolution in this report:</strong> metadata and narrative now describe the current workflow as of 2026-05-24 and treat Phase 11 as the origin of the operating-mode model, not the whole current workflow.</p>
+        <h3>Finding 2: Business-Pack Language Drifted Toward The Compatibility Alias</h3>
+        <p>The old report described <code>business-app</code> as a normal project-local opt-in. Current docs and pack contracts split business work into <code>business-discovery</code>, <code>customer-lifecycle</code>, <code>business-growth</code>, and <code>business-ops</code>; <code>business-app</code> remains a compatibility alias.</p>
+        <p><strong>Resolution in this report:</strong> the pack model now centers the narrow lanes and labels <code>business-app</code> as compatibility-only.</p>
+        <h3>Finding 3: No-Spec Routing Needed Feature-Interview Precision</h3>
+        <p>Older text said no specs should route to <code>spec-interview</code> after journey context. The current <code>roadmap</code> contract says unresolved ideas or gaps route to <code>feature-interview</code>; <code>spec-interview</code> is used only when full-spec creation is already selected.</p>
+        <p><strong>Resolution in this report:</strong> no-spec routing now distinguishes unresolved idea triage from confirmed full-spec creation.</p>
+        <h3>Finding 4: Product Spec Work Must Respect The Prototype Gate</h3>
+        <p>The old report had pieces of the prototype path but still treated spec creation too broadly. Current contracts place <code>spec-interview</code> after consolidated prototype evidence and post-prototype research refresh.</p>
+        <p><strong>Resolution in this report:</strong> the product-spec path is explicitly prototype-gated.</p>
+        <h3>Finding 5: Post-Spec Feature Additions Belong In Feature-Interview</h3>
+        <p><code>tasks/lessons.md</code> records the 2026-05-24 correction that post-spec additions should use <code>feature-interview</code> to update an existing spec or create a small add-on spec, rather than defaulting back to a full <code>spec-interview</code>.</p>
+        <p><strong>Resolution in this report:</strong> post-spec addition routing is now part of the canonical model.</p>
+        <h3>Finding 6: Consolidate-Variations Contract Has Tension Around Output Shape</h3>
+        <p>The current <code>consolidate-variations</code> contract says the skill produces a consolidated prototype and an interview log, and its description says it produces a final implementation-ready UI specification. The workflow later relies on <code>spec-interview</code> to turn the consolidated prototype into the production implementation spec. That can be read two ways:</p>
+        <ul>
+          <li>consolidation writes an implementation-ready UI specification for the final design surface; or</li>
+          <li>consolidation writes a consolidated prototype and evidence log, while production implementation details wait for <code>spec-interview</code>.</li>
+        </ul>
+        <p><strong>Audit note:</strong> this task does not patch skill contracts. The ambiguity should be handled as a future skill-contract cleanup if it causes agents to skip <code>spec-interview</code> or treat the consolidated prototype as the production spec.</p>
+      </section>
+
+      <section id="decision-rules">
+        <h2>Canonical Decision Rules</h2>
+        <ul>
+          <li>Start with <code>concept-exploration</code> for raw ideas.</li>
+          <li>Install narrow packs, not broad aliases, unless compatibility or context loading makes the alias desirable.</li>
+          <li>For business products, run ICP and competitive analysis before journey mapping; run journey mapping before UX/UI and prototype work.</li>
+          <li>Treat optional value, positioning, growth, monetization, and ops work as evidence lanes selected by risk and product type.</li>
+          <li>Do not move non-trivial user-facing product work from idea directly to production spec or roadmap.</li>
+          <li>Build and evaluate prototypes before production spec creation.</li>
+          <li>Use <code>feature-interview</code> for unresolved ideas, post-spec additions, and destination triage.</li>
+          <li>Use <code>spec-interview</code> for confirmed full production spec work after upstream evidence and prototype gates are satisfied.</li>
+          <li>Use <code>roadmap</code> to sequence specs into phases; use <code>plan-phase</code> to produce one active execution contract.</li>
+          <li>Keep run/ship loops operational and alignment-page-free.</li>
+          <li>Commit and push intended repository mutations unless the user explicitly says not to, while preserving unrelated dirty work.</li>
+        </ul>
+      </section>
+
+      <section id="sequence">
+        <h2>Current End-To-End Sequence</h2>
+        <pre><code>concept-exploration
+  -&gt; pack recommend/install
+  -&gt; business-discovery: icp -&gt; competitive-analysis
+  -&gt; customer-lifecycle: journey-map
+  -&gt; optional business-discovery/growth/ops evidence lanes
+  -&gt; ux-variations
+  -&gt; ui-interview
+  -&gt; prototype
+  -&gt; uat --variant-evaluation
+  -&gt; consolidate-variations
+  -&gt; research-roadmap --post-prototype
+  -&gt; spec-interview
+  -&gt; research-roadmap --post-spec
+  -&gt; roadmap
+  -&gt; plan-phase
+  -&gt; run or delegate
+  -&gt; ship
+  -&gt; ship-end</code></pre>
+        <p>For existing specs with smaller additions:</p>
+        <pre><code>feature-interview
+  -&gt; update existing spec or create add-on spec
+  -&gt; research-roadmap --post-spec when research may be stale
+  -&gt; roadmap extension
+  -&gt; plan-phase
+  -&gt; run / ship</code></pre>
+        <p>For completed implementation queues with no active documentation issue:</p>
+        <pre><code>research-roadmap
+  -&gt; first unchecked documentation item, if any
+  -&gt; brainstorm when documentation is current and no concrete idea is selected</code></pre>
+      </section>
+
+      <section id="confidence">
+        <h2>Confidence And Open Questions</h2>
+        <p>Confidence is high that this report reflects the current stated contracts because the same routing appears in <code>roadmap</code>, <code>research-roadmap</code>, <code>prototype</code>, <code>uat</code>, <code>consolidate-variations</code>, <code>spec-interview</code>, <code>feature-interview</code>, pack docs, and recent lessons.</p>
+        <p>Open questions:</p>
+        <ul>
+          <li>Whether <code>consolidate-variations</code> should explicitly write a Markdown UI spec in addition to the consolidated prototype and interview log.</li>
+          <li>Whether docs should standardize the exact optional order among <code>value-prop-canvas</code>, <code>positioning</code>, <code>lean-canvas</code>, <code>metrics</code>, <code>monetization</code>, <code>gtm</code>, and <code>growth-model</code> by product type.</li>
+          <li>Whether <code>business-app</code> compatibility alias language should be further reduced in user-facing docs to prevent broad-pack defaulting.</li>
+        </ul>
+      </section>
+
+      <section id="review-gates">
+        <h2>Review Gates</h2>
+        <div class="gate" data-gate="evidence_coverage">
+          <h3>Evidence Coverage</h3>
+          <p>Evidence reviewed spans the current report, pack documentation, operating-mode docs, route contracts, workflow docs, current global skill contracts, current pack skill contracts, task docs, and lessons. The report is strongest where multiple contracts agree: lane-based business packs, prototype-gated production specs, roadmap no-spec routing, and post-spec feature-interview routing.</p>
+          <div class="question" data-section="Evidence Coverage" data-gate-type="evidence_coverage">
+            <fieldset>
+              <legend>Does the evidence coverage justify refreshing the canonical workflow report?</legend>
+              <label><input type="radio" name="q1" value="Approve evidence coverage"> Approve evidence coverage</label>
+              <label><input type="radio" name="q1" value="Request additional source review"> Request additional source review</label>
+              <label><input type="radio" name="q1" value="Other / None of the above" data-special="other"> Other / None of the above</label>
+              <div class="conditional other"><textarea placeholder="Describe the evidence source or coverage change needed"></textarea></div>
+              <label><input type="radio" name="q1" value="Need clarification" data-special="clarify"> Need clarification</label>
+              <div class="conditional clarify"><textarea placeholder="What is unclear about the evidence coverage?"></textarea></div>
+              <div class="conditional notes"><textarea placeholder="Additional notes"></textarea></div>
+            </fieldset>
+          </div>
+        </div>
+
+        <div class="gate" data-gate="assumptions_confidence">
+          <h3>Assumptions And Confidence</h3>
+          <p>Assumption: the task is documentation-only and should not change skill contracts. Confidence is high for routing changes already present in current skill contracts. Confidence is medium for optional ordering among business value/growth skills because the docs intentionally allow product-specific selection.</p>
+          <div class="question" data-section="Assumptions And Confidence" data-gate-type="assumptions_confidence">
+            <fieldset>
+              <legend>How should this report treat the remaining ambiguity?</legend>
+              <label><input type="radio" name="q2" value="Keep ambiguity documented as audit finding"> Keep ambiguity documented as audit finding</label>
+              <label><input type="radio" name="q2" value="Require follow-up skill-contract cleanup"> Require follow-up skill-contract cleanup</label>
+              <label><input type="radio" name="q2" value="Other / None of the above" data-special="other"> Other / None of the above</label>
+              <div class="conditional other"><textarea placeholder="Describe the preferred treatment"></textarea></div>
+              <label><input type="radio" name="q2" value="Need clarification" data-special="clarify"> Need clarification</label>
+              <div class="conditional clarify"><textarea placeholder="What is unclear about the assumptions?"></textarea></div>
+              <div class="conditional notes"><textarea placeholder="Additional notes"></textarea></div>
+            </fieldset>
+          </div>
+        </div>
+
+        <div class="gate" data-gate="scope_non_goals">
+          <h3>Scope And Non-Goals</h3>
+          <p>Scope: update only the canonical report, this alignment page, and task tracking. Non-goals: patching <code>consolidate-variations</code>, changing pack contracts, regenerating showcase assets unless validation requires it, or touching unrelated dirty Skills Showcase source files.</p>
+          <div class="question" data-section="Scope And Non-Goals" data-gate-type="scope_non_goals">
+            <fieldset>
+              <legend>Is this documentation-only scope correct?</legend>
+              <label><input type="radio" name="q3" value="Approve documentation-only scope"> Approve documentation-only scope</label>
+              <label><input type="radio" name="q3" value="Expand scope after this report ships"> Expand scope after this report ships</label>
+              <label><input type="radio" name="q3" value="Other / None of the above" data-special="other"> Other / None of the above</label>
+              <div class="conditional other"><textarea placeholder="Describe the scope change"></textarea></div>
+              <label><input type="radio" name="q3" value="Need clarification" data-special="clarify"> Need clarification</label>
+              <div class="conditional clarify"><textarea placeholder="What is unclear about scope?"></textarea></div>
+              <div class="conditional notes"><textarea placeholder="Additional notes"></textarea></div>
+            </fieldset>
+          </div>
+        </div>
+
+        <div class="gate" data-gate="recommended_path">
+          <h3>Recommended Path</h3>
+          <p>Recommended path: accept this report as the current canonical workflow snapshot, then handle the consolidate-variations output-shape ambiguity as a separate targeted skill-contract cleanup only if it causes routing failures or repeated confusion.</p>
+          <div class="question" data-section="Recommended Path" data-gate-type="recommended_path">
+            <fieldset>
+              <legend>Which path should be treated as approved after review?</legend>
+              <label><input type="radio" name="q4" value="Accept the report as current canonical workflow snapshot"> Accept the report as current canonical workflow snapshot</label>
+              <label><input type="radio" name="q4" value="Revise the report before accepting"> Revise the report before accepting</label>
+              <label><input type="radio" name="q4" value="Other / None of the above" data-special="other"> Other / None of the above</label>
+              <div class="conditional other"><textarea placeholder="Describe the approved path"></textarea></div>
+              <label><input type="radio" name="q4" value="Need clarification" data-special="clarify"> Need clarification</label>
+              <div class="conditional clarify"><textarea placeholder="What is unclear about the recommended path?"></textarea></div>
+              <div class="conditional notes"><textarea placeholder="Additional notes"></textarea></div>
+            </fieldset>
+          </div>
+        </div>
+
+        <div class="gate" data-gate="proposed_file_changes">
+          <h3>Proposed File Changes</h3>
+          <p>Target artifacts: <code>docs/canonical-workflow-report.md</code>, <code>alignment/canonical-workflow-report.html</code>, <code>tasks/todo.md</code>, and <code>tasks/roadmap.md</code>. Existing unrelated dirty files under <code>apps/skills-showcase/</code> are outside this change.</p>
+          <div class="question" data-section="Proposed File Changes" data-gate-type="proposed_file_changes" data-target-path="docs/canonical-workflow-report.md, alignment/canonical-workflow-report.html, tasks/todo.md, tasks/roadmap.md">
+            <fieldset>
+              <legend>Are these the correct file destinations for this report refresh?</legend>
+              <label><input type="radio" name="q5" value="Approve proposed file changes"> Approve proposed file changes</label>
+              <label><input type="radio" name="q5" value="Do not update task docs"> Do not update task docs</label>
+              <label><input type="radio" name="q5" value="Other / None of the above" data-special="other"> Other / None of the above</label>
+              <div class="conditional other"><textarea placeholder="Describe target path changes"></textarea></div>
+              <label><input type="radio" name="q5" value="Need clarification" data-special="clarify"> Need clarification</label>
+              <div class="conditional clarify"><textarea placeholder="What is unclear about file destinations?"></textarea></div>
+              <div class="conditional notes"><textarea placeholder="Additional notes"></textarea></div>
+            </fieldset>
+          </div>
+        </div>
+
+        <div class="gate" data-gate="coverage_checkpoint">
+          <h3>Coverage Checkpoint</h3>
+          <p>Coverage checklist: Phase 11 stale framing removed; business pack alias corrected; no-spec routing corrected; prototype-gated product spec sequence included; post-spec feature addition routing included; consolidate-variations ambiguity captured as an audit finding.</p>
+          <div class="question" data-section="Coverage Checkpoint" data-gate-type="coverage_checkpoint">
+            <fieldset>
+              <legend>Does the report cover the required workflow corrections?</legend>
+              <label><input type="radio" name="q6" value="Coverage is complete"> Coverage is complete</label>
+              <label><input type="radio" name="q6" value="Coverage needs one or more additions"> Coverage needs one or more additions</label>
+              <label><input type="radio" name="q6" value="Other / None of the above" data-special="other"> Other / None of the above</label>
+              <div class="conditional other"><textarea placeholder="Describe missing coverage"></textarea></div>
+              <label><input type="radio" name="q6" value="Need clarification" data-special="clarify"> Need clarification</label>
+              <div class="conditional clarify"><textarea placeholder="What is unclear about coverage?"></textarea></div>
+              <div class="conditional notes"><textarea placeholder="Additional notes"></textarea></div>
+            </fieldset>
+          </div>
+        </div>
+
+        <div class="gate" data-gate="post_approval_route">
+          <h3>Post-Approval Route Gate</h3>
+          <p>After approval and shipping, the next active repository work remains the existing benchmark coverage lane or the documentation health scan already tracked in <code>tasks/todo.md</code>. This page intentionally avoids changing those priorities.</p>
+          <div class="question" data-section="Post-Approval Route" data-gate-type="post_approval_route">
+            <fieldset>
+              <legend>What should happen after this report refresh is accepted?</legend>
+              <label><input type="radio" name="q7" value="Return to existing tracked priority queue"> Return to existing tracked priority queue</label>
+              <label><input type="radio" name="q7" value="Open a follow-up cleanup for consolidate-variations wording"> Open a follow-up cleanup for consolidate-variations wording</label>
+              <label><input type="radio" name="q7" value="Other / None of the above" data-special="other"> Other / None of the above</label>
+              <div class="conditional other"><textarea placeholder="Describe the post-approval route"></textarea></div>
+              <label><input type="radio" name="q7" value="Need clarification" data-special="clarify"> Need clarification</label>
+              <div class="conditional clarify"><textarea placeholder="What is unclear about the post-approval route?"></textarea></div>
+              <div class="conditional notes"><textarea placeholder="Additional notes"></textarea></div>
+            </fieldset>
+          </div>
+        </div>
+      </section>
+
+      <div class="compile">
+        <button id="compile" type="button" disabled>Compile Answers</button>
+        <span id="remaining" class="status"></span>
+        <p id="copy-status" class="status"></p>
+        <textarea id="yaml" readonly placeholder="Compiled YAML will appear here after all required questions are answered."></textarea>
+        <p><button id="copy" type="button" disabled>Copy YAML</button></p>
+      </div>
+    </main>
+  </div>
+  <script>
+    const questions = [...document.querySelectorAll('.question')];
+    const compileButton = document.getElementById('compile');
+    const copyButton = document.getElementById('copy');
+    const remaining = document.getElementById('remaining');
+    const yamlBox = document.getElementById('yaml');
+    const copyStatus = document.getElementById('copy-status');
+
+    function selected(question) {
+      return question.querySelector('input[type="radio"]:checked');
+    }
+
+    function updateVisibility(question) {
+      const current = selected(question);
+      question.querySelectorAll('.conditional').forEach((el) => { el.style.display = 'none'; });
+      if (!current) return;
+      if (current.dataset.special === 'other') {
+        question.querySelector('.conditional.other').style.display = 'block';
+      } else if (current.dataset.special === 'clarify') {
+        question.querySelector('.conditional.clarify').style.display = 'block';
+      } else {
+        question.querySelector('.conditional.notes').style.display = 'block';
+      }
+    }
+
+    function refreshState() {
+      questions.forEach(updateVisibility);
+      const missing = questions.filter((question) => !selected(question));
+      compileButton.disabled = missing.length > 0;
+      remaining.textContent = missing.length ? `${missing.length} required question(s) remaining` : 'All required questions answered';
+    }
+
+    function yamlEscape(value) {
+      const text = (value || '').trim();
+      if (!text) return '""';
+      return JSON.stringify(text);
+    }
+
+    function notesFor(question, current) {
+      if (current.dataset.special === 'other') {
+        return question.querySelector('.conditional.other textarea').value;
+      }
+      if (current.dataset.special === 'clarify') {
+        return question.querySelector('.conditional.clarify textarea').value;
+      }
+      return question.querySelector('.conditional.notes textarea').value;
+    }
+
+    function compileYaml() {
+      const firstMissing = questions.find((question) => !selected(question));
+      if (firstMissing) {
+        firstMissing.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+      const lines = ['answers:'];
+      questions.forEach((question) => {
+        const current = selected(question);
+        const section = question.dataset.section;
+        const gateType = question.dataset.gateType;
+        const status = current.dataset.special === 'other' ? 'other' : current.dataset.special === 'clarify' ? 'needs-clarification' : 'answered';
+        const notes = notesFor(question, current);
+        lines.push(`  - section: ${yamlEscape(section)}`);
+        lines.push(`    gate_type: ${yamlEscape(gateType)}`);
+        lines.push(`    status: ${yamlEscape(status)}`);
+        lines.push(`    answer: ${yamlEscape(current.value)}`);
+        if (notes.trim()) lines.push(`    notes: ${yamlEscape(notes)}`);
+        if (question.dataset.targetPath) lines.push(`    target_path: ${yamlEscape(question.dataset.targetPath)}`);
+      });
+      const yaml = lines.join('\n');
+      yamlBox.value = yaml;
+      copyButton.disabled = false;
+      copyYaml();
+    }
+
+    async function copyYaml() {
+      if (!yamlBox.value.trim()) return;
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(yamlBox.value);
+          copyStatus.textContent = 'YAML copied to clipboard.';
+          return;
+        }
+        throw new Error('Clipboard API unavailable');
+      } catch (error) {
+        yamlBox.focus();
+        yamlBox.select();
+        copyStatus.textContent = 'Clipboard copy unavailable; YAML selected for manual copy.';
+      }
+    }
+
+    document.addEventListener('change', (event) => {
+      if (event.target.matches('input[type="radio"]')) refreshState();
+    });
+    compileButton.addEventListener('click', compileYaml);
+    copyButton.addEventListener('click', copyYaml);
+    refreshState();
+  </script>
+</body>
+</html>

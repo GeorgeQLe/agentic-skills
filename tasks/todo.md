@@ -8,6 +8,7 @@
 
 ## Priority Task Queue
 
+- [x] Refresh `docs/canonical-workflow-report.md` and create `alignment/canonical-workflow-report.html` — audit the canonical workflow report against current pack routing, AFPS/prototype gates, roadmap no-spec routing, and post-spec feature routing; validate targeted stale-claim checks; commit and push only intended documentation changes.
 - [x] `$investigate benchmark failures alignment-first prototype-second workflow` — triage benchmark/showcase failures after the AFPS (alignment-first, prototype-second) workflow refactor, fix stale harness expectations, refresh generated data, validate, then commit and push.
 - [x] `$targeted-skill-builder run ship alignment exemption` — remove alignment-page requirements from run/ship loop skills, validate, then commit and push.
 - [x] `$targeted-skill-builder all durable skills alignment pages` — extend root `alignment/` HTML review-page contract to every durable output-writing skill, validate, then commit and push.
@@ -21,6 +22,31 @@
 - [x] `$run` — Resume Phase 41 Batch 41.3 re-benchmarks: re-run the 33 Tier 2 global skills that were benchmarked pre-fixture-remediation with near-zero pass rates (Phase 43 added route guidance to all 32 fixture prompts and increased budgets). Current graded count: 69 unique skills / 158 total. Batch 41.5 pack-local groups also have remaining families. Batch 41.3 Group 2 shipped in `bc17fee` and `3e4bd78`; next triage should start with `provision-agentic-config`, `migrate`, or `prototype`.
 - [ ] Review `tasks/recurring-todo.md`: 2 unchecked recurring items — promote only if due and requiring execution work.
 - [ ] `$research-roadmap` — All 43 roadmap phases are complete. Run documentation health scan after Phase 41 remaining batches finish.
+
+## Current Task — Canonical Workflow Report Refresh 2026-05-24
+
+**Goal:** Refresh `docs/canonical-workflow-report.md` against current skill contracts and provide a full-depth interactive alignment review page.
+
+**Plan:**
+- [x] Inspect current report, pack docs, workflow skill contracts, task docs, and git status.
+- [x] Update the canonical report with current pack lanes, AFPS sequence, roadmap no-spec routing, prototype gate, post-spec feature routing, and audit findings.
+- [x] Create `alignment/canonical-workflow-report.html` with the complete report content, gates, required radio questions, and YAML compile behavior.
+- [x] Run targeted stale-claim checks plus low-cost repository sanity checks.
+- [x] Review the diff, commit, and push only intended documentation/task changes.
+
+**Files:**
+- `docs/canonical-workflow-report.md`
+- `alignment/canonical-workflow-report.html`
+- `tasks/todo.md`
+- `tasks/roadmap.md`
+
+### Review
+
+- Refreshed `docs/canonical-workflow-report.md` to remove stale Phase 11-as-current framing, center narrow business pack lanes, document current no-spec `$feature-interview` routing, include the prototype-gated spec sequence, and route post-spec additions through `$feature-interview`.
+- Added `alignment/canonical-workflow-report.html` with the complete report content, dark-mode section navigation, review gates, required radio questions, and compile-answer YAML behavior.
+- Captured the current `consolidate-variations` output-shape ambiguity as an audit finding only; no skill contracts were changed.
+- Validation passed: targeted stale-claim `rg`; positive routing/content `rg`; `bash scripts/skill-versions.sh --missing`; `scripts/validate-skills-showcase-data.sh`; alignment-page control `rg`; `git diff --check`.
+- The first browser-open attempt put `wslpath` inside PowerShell and failed; the corrected WSL-to-PowerShell attempt was blocked by the WSL bridge with `UtilBindVsockAnyPort: socket failed 1`. The HTML file was written correctly.
 
 ## Current Task — Benchmark Failure Investigation 2026-05-24
 

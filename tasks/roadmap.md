@@ -30,6 +30,22 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Updated on 2026-05-24. The alignment/refactor-specific tests passed, but surrounding benchmark/showcase checks had stale assumptions about versioning, archives, raw-session report shape, and current retained benchmark rows. The harness now accepts `v0.x` skill versions, ignores archived skill copies for active output-path conflicts, parses current raw-session sections for showcase demos, and generated benchmark/showcase data is refreshed. Full layer1 tests and benchmark coverage passed; existing skill-dependency audit noise remains unrelated.
 
+## Current Targeted Update: Canonical Workflow Report Refresh 2026-05-24
+
+**Goal:** Audit and refresh the canonical workflow report against current skill contracts, then provide a full-depth interactive alignment review page.
+
+**Acceptance Criteria:**
+- [x] `docs/canonical-workflow-report.md` reflects current business pack lanes, not stale broad `business-app` primary-pack guidance.
+- [x] The early product sequence reflects concept exploration, pack selection, ICP, competitive analysis, journey mapping, value/positioning/growth work, UX/UI planning, prototype, UAT, consolidation, post-prototype research refresh, spec interview, post-spec research refresh, roadmap, and execution.
+- [x] Roadmap no-spec routing prefers `$feature-interview` for unresolved ideas/gaps and reserves `$spec-interview` for confirmed full-spec creation.
+- [x] Product spec work reflects the consolidated prototype gate before production spec creation.
+- [x] Post-spec additions route through `$feature-interview` for existing-spec updates or smaller add-on specs.
+- [x] The report documents current skill-contract ambiguities as findings without patching skill files.
+- [x] `alignment/canonical-workflow-report.html` renders the complete updated report with review gates and compile-answer YAML behavior.
+- [x] Targeted stale-claim checks and low-cost sanity checks pass, and intended changes are committed and pushed on `master`.
+
+**Result:** Updated on 2026-05-24. The canonical workflow report now reflects current pack lanes and AFPS routing, including prototype-gated production spec work, `$feature-interview` as the unresolved/post-spec addition route, and `$spec-interview` only for confirmed full production spec work. Added the full-depth alignment review page at `alignment/canonical-workflow-report.html`. Showcase generated proof-data fingerprints were refreshed because validation required them. Browser open was attempted but blocked by the WSL bridge.
+
 ## Current Targeted Update: Approval-Gated Research Alignment Previews 2026-05-22
 
 **Goal:** Make approval-gated research, planning, spec, report, and document skills build a user-consumable alignment HTML preview before asking the user to approve canonical artifact writes.
