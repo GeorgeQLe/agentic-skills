@@ -56,6 +56,19 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Updated on 2026-05-25. Parsed 11,407 local Claude/Codex user-history records and built the split-path workflow review page at `alignment/analyze-sessions-split-path-product-research-workflow.html`. The audit finds branch discovery is valuable but branch commitment needs a shared governor: screen all plausible branches at triage depth, deepen one primary branch by default, allow a second branch only for true separate product-line or materially distinct ICP/problem cases, and park/merge/kill/route the rest through explicit branch verdicts. Browser open was attempted but blocked by missing local browser handlers and the WSL bridge.
 
+## Current Targeted Update: Provision Agentic Config WSL Browser Open Fallback 2026-05-25
+
+**Goal:** Ensure newly provisioned `CLAUDE.md` and `AGENTS.md` files include the verified PowerShell `file://wsl.localhost` browser-opening fallback for WSL HTML files, and bring this repository's root `CLAUDE.md` into parity with `AGENTS.md`.
+
+**Acceptance Criteria:**
+- [x] Mirrored `provision-agentic-config` skills are archived, version-bumped, and changelogs updated.
+- [x] The generated Claude and AGENTS blocks include Windows/WSL file opening guidance with the PowerShell `file://wsl.localhost/<distro>/...` fallback.
+- [x] Root `CLAUDE.md` includes the same browser-opening fallback already present in root `AGENTS.md`.
+- [x] Focused validation passes, including version, routing, content, and whitespace checks.
+- [x] Intended changes are committed and pushed on `master`.
+
+**Result:** Updated on 2026-05-25. Mirrored `provision-agentic-config` skills now generate both `CLAUDE.md` and `AGENTS.md` with Windows/WSL browser-opening guidance, including the PowerShell `file://wsl.localhost/<distro>/...` fallback for HTML files when UNC launch fails. Root `CLAUDE.md` was brought into parity with root `AGENTS.md`. Focused version, routing, provision benchmark setup, content, generated-data, and whitespace checks passed.
+
 **Goal:** Make benchmark tests actually evaluate generated HTML alignment pages instead of only the primary Markdown/text artifact.
 
 **Acceptance Criteria:**

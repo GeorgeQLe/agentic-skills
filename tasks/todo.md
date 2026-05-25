@@ -8,6 +8,7 @@
 
 ## Priority Task Queue
 
+- [x] `$targeted-skill-builder provision-agentic-config WSL browser open fallback` — update provisioned `CLAUDE.md`/`AGENTS.md` blocks and root `CLAUDE.md` so HTML files open through PowerShell `file://wsl.localhost` when UNC launch fails.
 - [ ] `$analyze-sessions split-path product research workflow` — investigate prior conversations where research surfaces multiple ICP/product-line/pivot options, then recommend how skills should handle branching without bogging down in 4-8 variation evaluations.
 - [x] `$targeted-skill-builder ICP WTP signals` — incorporate willingness-to-pay evidence into mirrored ICP skills as bounded customer-discovery signal capture, then archive/version, validate, commit, and push.
 - [ ] `$analyze-sessions cross-skill output understanding audit` — analyze local Claude/Codex history to scrutinize whether skill outputs across all skills, especially HTML alignment pages and final handoffs, improve user-agent understanding or add avoidable process drag.
@@ -78,6 +79,38 @@
 - Verification passed: targeted `rg` checks confirmed dark-mode variables, required standing options, branch manifest, gate metadata, Compile Answers, and Clipboard API use; `git diff --check` passed.
 - Browser open was attempted. `xdg-open` was blocked because no browser handler is installed; WSL `cmd.exe /c start` was blocked by `UtilBindVsockAnyPort: socket failed 1`.
 - Pre-approval stop is active: review the HTML page and provide compiled YAML before downstream remediation routing or skill-contract changes.
+
+## Current Task — Provision Agentic Config WSL Browser Open Fallback 2026-05-25
+
+**Goal:** Update the provisioning skill so generated `CLAUDE.md` and `AGENTS.md` include the verified PowerShell `file://wsl.localhost` browser fallback for HTML files, and update this repo's root `CLAUDE.md` to match root `AGENTS.md`.
+
+**Plan:**
+- [x] Locate active mirrored `provision-agentic-config` contracts and existing Windows/WSL guidance.
+- [x] Archive active v0.0 skill files before bumping versions.
+- [x] Add the Windows/WSL browser-opening section to both generated Claude and AGENTS blocks.
+- [x] Update root `CLAUDE.md` with the same fallback guidance already added to root `AGENTS.md`.
+- [x] Run focused version, routing, content, and whitespace checks.
+- [x] Commit and push intended changes on `master`.
+
+**Files:**
+- `global/codex/provision-agentic-config/SKILL.md`
+- `global/claude/provision-agentic-config/SKILL.md`
+- `global/codex/provision-agentic-config/archive/v0.0/SKILL.md`
+- `global/claude/provision-agentic-config/archive/v0.0/SKILL.md`
+- `global/codex/provision-agentic-config/CHANGELOG.md`
+- `global/claude/provision-agentic-config/CHANGELOG.md`
+- `CLAUDE.md`
+- `tasks/todo.md`
+
+### Review
+
+- Archived active mirrored v0.0 `provision-agentic-config` skills to `archive/v0.0/SKILL.md`, bumped active Codex and Claude skills to v0.1, and added changelogs.
+- Added `## Windows/WSL File Opening` to both generated blocks in both mirrored provisioning contracts, covering `wslpath -w`, PowerShell `file://wsl.localhost/<distro>/...` HTML browser fallback, WSL detection, the cosmetic UNC warning, and the `UtilBindVsockAnyPort` retry rule.
+- Updated root `CLAUDE.md` to match the root `AGENTS.md` Windows/WSL browser fallback guidance.
+- Adjusted the provision skill's outer Markdown fences to four-backtick fences so the generated blocks can include nested shell code fences cleanly.
+- Regenerated Skills Showcase data and GitHub proof data after active skill behavior changed.
+- Validation passed: `bash scripts/skill-versions.sh --missing`; `bash scripts/skill-next-step-routing.sh --missing`; targeted `rg` checks for version and WSL fallback content; `pnpm --dir tests exec vitest run --project layer1 layer1/bench-setups.test.ts`; `git diff --check`.
+- `scripts/validate-skills-showcase-data.sh` regenerated assets and reported them stale before commit, which is expected after the active `SKILL.md` changes.
 
 ## Current Task — Cross-Skill Output Understanding Audit 2026-05-25
 

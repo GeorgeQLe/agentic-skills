@@ -2,7 +2,7 @@
 name: provision-agentic-config
 description: Provision workflow orchestration and agent conventions into project CLAUDE.md and AGENTS.md
 type: ops
-version: v0.1
+version: v0.0
 ---
 
 # Install Workflow Orchestration
@@ -30,7 +30,7 @@ Use this skill when the user wants the repository's `CLAUDE.md` and `AGENTS.md` 
 
 ## Required Claude Block
 
-````md
+```md
 ## Workflow Orchestration
 
 ### 1. Plan Mode Default
@@ -88,38 +88,11 @@ Use this skill when the user wants the repository's `CLAUDE.md` and `AGENTS.md` 
 - **Direct-To-Primary Git Flow**: Default to committing and pushing sequential work on the repository primary branch (`main` when present, otherwise `master`). Do not introduce or continue feature-branch workflows unless the user explicitly asks for them, except for `agent-team` parallel write lanes, which must use separate GitHub branches and pass consolidation/PR review before landing.
 - **Always Ship Mutations**: If a task creates or modifies tracked files, finish by committing and pushing all intended changes before stopping unless the user explicitly says not to. Do not leave a dirty tracked tree or unpushed commits behind.
 - **No GitHub Actions**: Do not create, modify, or suggest GitHub Actions workflows unless the user explicitly asks for GitHub Actions. This project does not use GitHub Actions for CI/CD by default.
-
-## Windows/WSL File Opening
-- On Windows machines running WSL, convert Linux paths before opening files from shell commands:
-
-```bash
-WIN_PATH=$(wslpath -w "$FILE_PATH")
-cmd.exe /c start "" "$WIN_PATH"
 ```
-
-- For HTML files that should open in the Windows browser, prefer a WSL file URI through the Windows PowerShell binary when `cmd.exe /c start` or UNC paths fail:
-
-```bash
-DISTRO=${WSL_DISTRO_NAME:-Ubuntu}
-URI="file://wsl.localhost/${DISTRO}${FILE_PATH}"
-/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe -NoProfile -Command "Start-Process '$URI'"
-```
-
-- Use WSL detection so this path only runs inside WSL:
-
-```bash
-if grep -qi microsoft /proc/version 2>/dev/null; then
-  cmd.exe /c start "" "$(wslpath -w "$FILE_PATH")"
-fi
-```
-
-- The `cmd.exe` UNC warning (`UNC paths are not supported. Defaulting to Windows directory.`) is cosmetic; the file still opens correctly.
-- The `UtilBindVsockAnyPort: socket failed 1` failure can happen before Windows opens a UNC path. For browser-targeted HTML pages, retry with the `file://wsl.localhost/<distro>/...` PowerShell URI before using editor fallbacks.
-````
 
 ## Required AGENTS Block
 
-````md
+```md
 ## Workflow Orchestration
 
 ### 1. Plan Mode Default
@@ -177,34 +150,7 @@ fi
 - **Direct-To-Primary Git Flow**: Default to committing and pushing sequential work on the repository primary branch (`main` when present, otherwise `master`). Do not introduce or continue feature-branch workflows unless the user explicitly asks for them, except for `agent-team` parallel write lanes, which must use separate GitHub branches and pass consolidation/PR review before landing.
 - **Always Ship Mutations**: If a task creates or modifies tracked files, finish by committing and pushing all intended changes before stopping unless the user explicitly says not to. Do not leave a dirty tracked tree or unpushed commits behind.
 - **No GitHub Actions**: Do not create, modify, or suggest GitHub Actions workflows unless the user explicitly asks for GitHub Actions. This project does not use GitHub Actions for CI/CD by default.
-
-## Windows/WSL File Opening
-- On Windows machines running WSL, convert Linux paths before opening files from shell commands:
-
-```bash
-WIN_PATH=$(wslpath -w "$FILE_PATH")
-cmd.exe /c start "" "$WIN_PATH"
 ```
-
-- For HTML files that should open in the Windows browser, prefer a WSL file URI through the Windows PowerShell binary when `cmd.exe /c start` or UNC paths fail:
-
-```bash
-DISTRO=${WSL_DISTRO_NAME:-Ubuntu}
-URI="file://wsl.localhost/${DISTRO}${FILE_PATH}"
-/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe -NoProfile -Command "Start-Process '$URI'"
-```
-
-- Use WSL detection so this path only runs inside WSL:
-
-```bash
-if grep -qi microsoft /proc/version 2>/dev/null; then
-  cmd.exe /c start "" "$(wslpath -w "$FILE_PATH")"
-fi
-```
-
-- The `cmd.exe` UNC warning (`UNC paths are not supported. Defaulting to Windows directory.`) is cosmetic; the file still opens correctly.
-- The `UtilBindVsockAnyPort: socket failed 1` failure can happen before Windows opens a UNC path. For browser-targeted HTML pages, retry with the `file://wsl.localhost/<distro>/...` PowerShell URI before using editor fallbacks.
-````
 
 5. **Conditionally add Monorepo Parallel-Work Safety:**
 
