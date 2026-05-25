@@ -16,7 +16,7 @@ compatibility alias = old broad name kept for existing commands
 
 | Workflow | Start with | Then add | Leads into | Command |
 | --- | --- | --- | --- | --- |
-| Business/product discovery | `business-discovery` | `customer-lifecycle` when ICP, positioning, or market evidence is ready | `business-growth`, then `business-ops` | `scripts/pack.sh install business-discovery` |
+| Business/product discovery | `business-discovery` | `customer-lifecycle` after ICP and competitive analysis so journey evidence can precede positioning | `business-growth`, then `business-ops` | `scripts/pack.sh install business-discovery` |
 | Customer lifecycle planning | `customer-lifecycle` | `business-discovery` if ICP or market evidence is missing; `business-growth` when lifecycle evidence is ready for GTM/pricing/experiments | `business-growth`, then `business-ops` | `scripts/pack.sh install customer-lifecycle` |
 | Business GTM/growth | `business-growth` | `business-discovery` if ICP/positioning evidence is missing; `customer-lifecycle` if journey/onboarding/conversion evidence is missing | `business-ops` for metrics review, risk, runway, and stakeholder reporting | `scripts/pack.sh install business-growth` |
 | Business operations | `business-ops` | `business-discovery` for upstream customer/market evidence; `customer-lifecycle` for journey evidence; `business-growth` for GTM, metrics, experiments, and PMF | ongoing operating review | `scripts/pack.sh install business-ops` |
@@ -44,6 +44,8 @@ Business app:
 ```text
 business-discovery -> customer-lifecycle -> business-growth -> business-ops
 ```
+
+Default business-product route: `icp -> competitive-analysis -> journey-map -> positioning -> ux-variations -> ui-interview -> prototype -> uat -> consolidate-variations -> research-roadmap -> spec-interview -> roadmap`. `value-prop-canvas` and `lean-canvas` remain available as optional risk-driven detours, not required chain links.
 
 Creator/media:
 

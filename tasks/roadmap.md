@@ -72,6 +72,21 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Updated on 2026-05-22. The user's hypothesis was confirmed: standard competitive-analysis still routed to value-prop-canvas before journey-map in mirrored contracts and canonical docs. The route now prefers journey mapping before value-prop work when journey context is missing, and the canonical business workflow now follows concept -> ICP -> competitive analysis -> journey map -> value-prop-canvas -> positioning -> lean canvas -> prototype path. Focused validation passed; final clean-tree validation will run after commit.
 
+## Current Targeted Update: AFPS Routing Cleanup 2026-05-25
+
+**Goal:** Update the default business-product route to `icp -> competitive-analysis -> journey-map -> positioning -> ux-variations -> ui-interview -> prototype -> uat -> consolidate-variations -> research-roadmap -> spec-interview -> roadmap`.
+
+**Acceptance Criteria:**
+- [x] Mirrored business-discovery contracts make `value-prop-canvas` and `lean-canvas` optional detours, not default blockers.
+- [x] Mirrored `positioning` contracts prefer ICP + competitive analysis + journey evidence and route to `ux-variations` by default.
+- [x] Mirrored `journey-map` contracts route to `positioning` before UX work when positioning is missing.
+- [x] Mirrored `research-roadmap` contracts order business-app documentation through journey, positioning, UX/UI, prototype, UAT, consolidation, post-prototype research refresh, spec interview, then roadmap.
+- [x] Canonical workflow docs and pack docs reflect the same route and keep the customer-lifecycle pack install guard before `journey-map`.
+- [x] Focused layer1 tests assert the required ordering and optional-detour behavior.
+- [x] Validation passes and intended changes are committed and pushed on `master`.
+
+**Result:** Updated on 2026-05-25. AFPS business-product routing now defaults to ICP -> competitive analysis -> journey map -> positioning -> UX variations -> UI interview -> prototype -> UAT -> consolidation -> post-prototype research refresh -> spec interview -> roadmap. Mirrored skills were archived and version-bumped; value-prop-canvas and lean-canvas remain available as optional risk-driven detours. Focused routing tests and required skill validation passed.
+
 ## Current Targeted Update: Provision Agentic Config Benchmark Fixture False Negative 2026-05-22
 
 **Goal:** Ship the benchmark fixture remediation for `provision-agentic-config` so retained outputs with substantive policy sections are scored correctly.

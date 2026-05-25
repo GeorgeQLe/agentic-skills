@@ -8,6 +8,7 @@
 
 ## Priority Task Queue
 
+- [x] `$targeted-skill-builder AFPS routing cleanup` — update business-product routing so the default AFPS path is ICP -> competitive analysis -> journey map -> positioning -> UX variations -> UI interview -> prototype -> UAT -> consolidation -> research roadmap -> spec interview -> roadmap, while keeping value-prop-canvas and lean-canvas as optional risk-driven detours.
 - [x] Refresh `docs/canonical-workflow-report.md` and create `alignment/canonical-workflow-report.html` — audit the canonical workflow report against current pack routing, AFPS/prototype gates, roadmap no-spec routing, and post-spec feature routing; validate targeted stale-claim checks; commit and push only intended documentation changes.
 - [x] `$investigate benchmark failures alignment-first prototype-second workflow` — triage benchmark/showcase failures after the AFPS (alignment-first, prototype-second) workflow refactor, fix stale harness expectations, refresh generated data, validate, then commit and push.
 - [x] `$targeted-skill-builder run ship alignment exemption` — remove alignment-page requirements from run/ship loop skills, validate, then commit and push.
@@ -22,6 +23,36 @@
 - [x] `$run` — Resume Phase 41 Batch 41.3 re-benchmarks: re-run the 33 Tier 2 global skills that were benchmarked pre-fixture-remediation with near-zero pass rates (Phase 43 added route guidance to all 32 fixture prompts and increased budgets). Current graded count: 69 unique skills / 158 total. Batch 41.5 pack-local groups also have remaining families. Batch 41.3 Group 2 shipped in `bc17fee` and `3e4bd78`; next triage should start with `provision-agentic-config`, `migrate`, or `prototype`.
 - [ ] Review `tasks/recurring-todo.md`: 2 unchecked recurring items — promote only if due and requiring execution work.
 - [ ] `$research-roadmap` — All 43 roadmap phases are complete. Run documentation health scan after Phase 41 remaining batches finish.
+
+## Current Task — AFPS Routing Cleanup 2026-05-25
+
+**Goal:** Make the default business-product route `icp -> competitive-analysis -> journey-map -> positioning -> ux-variations -> ui-interview -> prototype -> uat -> consolidate-variations -> research-roadmap -> spec-interview -> roadmap`, with `value-prop-canvas` and `lean-canvas` available only as optional risk-driven detours.
+
+**Plan:**
+- [x] Inspect current mirrored routing contracts, workflow docs, and layer1 tests.
+- [x] Archive and bump changed `SKILL.md` files before substantive routing edits.
+- [x] Update business-discovery, customer-lifecycle, and research-roadmap routing language.
+- [x] Update canonical workflow docs and business-discovery pack docs.
+- [x] Add focused layer1 route coverage for required ordering and optional detours.
+- [x] Run focused tests plus skill version/routing validation and whitespace checks.
+- [x] Commit and push intended routing, docs, test, changelog, and task changes on `master`.
+
+**Files:**
+- `packs/business-discovery/{codex,claude}/{competitive-analysis,positioning,value-prop-canvas,lean-canvas}/SKILL.md`
+- `packs/customer-lifecycle/{codex,claude}/journey-map/SKILL.md`
+- `global/{codex,claude}/research-roadmap/SKILL.md`
+- `docs/canonical-workflow-report.md`, `docs/skill-next-step-contracts.md`, `docs/pack-workflow-matrix.md`, `docs/codex-workflow.md`, `packs/business-discovery/PACK.md`
+- `tests/layer1/*routing*.test.ts`
+- `tasks/todo.md`, `tasks/roadmap.md`
+
+### Review
+
+- Updated mirrored AFPS routing so competitive analysis routes to journey-map, positioning, and UX variations before production spec work, with the customer-lifecycle pack install guard preserved.
+- Updated positioning to require journey evidence by default before canonical `research/positioning.md`, while allowing only provisional early positioning when explicitly requested.
+- Reframed value-prop-canvas and lean-canvas as optional detours for contested solution-fit evidence and material business-model risk.
+- Updated journey-map and research-roadmap default ordering so UX/prototype/UAT/consolidation gates precede spec-interview and roadmap.
+- Updated canonical workflow docs, pack docs, and route-contract docs to match the route.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 layer1/competitive-analysis-routing.test.ts`; `bash scripts/skill-versions.sh --missing`; `bash scripts/skill-next-step-routing.sh --missing`; `git diff --check`.
 
 ## Current Task — Canonical Workflow Report Refresh 2026-05-24
 

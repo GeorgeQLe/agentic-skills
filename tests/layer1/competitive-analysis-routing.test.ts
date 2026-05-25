@@ -70,4 +70,98 @@ describe("competitive-analysis routing", () => {
       expect(firstIndex, `${check.path} should route to journey-map before value-prop-canvas`).toBeLessThan(secondIndex);
     }
   });
+
+  it("keeps AFPS route order journey-map before positioning before ux-variations", () => {
+    const checks = [
+      {
+        path: resolve(TESTS_ROOT, "../packs/business-discovery/codex/competitive-analysis/SKILL.md"),
+        first: "$journey-map",
+        second: "$positioning",
+        third: "$ux-variations",
+      },
+      {
+        path: resolve(TESTS_ROOT, "../packs/business-discovery/claude/competitive-analysis/SKILL.md"),
+        first: "/journey-map",
+        second: "/positioning",
+        third: "/ux-variations",
+      },
+      {
+        path: resolve(TESTS_ROOT, "../docs/skill-next-step-contracts.md"),
+        first: "journey-map",
+        second: "positioning",
+        third: "ux-variations",
+      },
+      {
+        path: resolve(TESTS_ROOT, "../packs/business-discovery/PACK.md"),
+        first: "journey-map",
+        second: "positioning",
+        third: "ux-variations",
+      },
+    ];
+
+    for (const check of checks) {
+      const content = readFileSync(check.path, "utf8");
+      const routeBlock =
+        content.match(/Standard mode next steps:[\s\S]*?(?=\n\*\*Concept-validation mode next steps:)/)?.[0] ??
+        content.match(/- RECOMMEND the first matching item:[\s\S]*?(?=\nAny `\/spec-interview` recommendation)/)?.[0] ??
+        content.match(/Default AFPS business-product route:[\s\S]*?\n/)?.[0] ??
+        content.match(/Default flow:[\s\S]*?```text[\s\S]*?```/)?.[0] ??
+        content;
+      const firstIndex = routeBlock.indexOf(check.first);
+      const secondIndex = routeBlock.indexOf(check.second);
+      const thirdIndex = routeBlock.indexOf(check.third);
+      expect(firstIndex, `${check.path} should mention ${check.first}`).toBeGreaterThanOrEqual(0);
+      expect(secondIndex, `${check.path} should mention ${check.second}`).toBeGreaterThanOrEqual(0);
+      expect(thirdIndex, `${check.path} should mention ${check.third}`).toBeGreaterThanOrEqual(0);
+      expect(firstIndex, `${check.path} should route journey-map before positioning`).toBeLessThan(secondIndex);
+      expect(secondIndex, `${check.path} should route positioning before ux-variations`).toBeLessThan(thirdIndex);
+    }
+  });
+
+  it("keeps value-prop-canvas and lean-canvas optional detours instead of default route blockers", () => {
+    const checks = [
+      resolve(TESTS_ROOT, "../packs/business-discovery/PACK.md"),
+      resolve(TESTS_ROOT, "../docs/skill-next-step-contracts.md"),
+      resolve(TESTS_ROOT, "../packs/business-discovery/codex/value-prop-canvas/SKILL.md"),
+      resolve(TESTS_ROOT, "../packs/business-discovery/codex/lean-canvas/SKILL.md"),
+      resolve(TESTS_ROOT, "../packs/business-discovery/claude/value-prop-canvas/SKILL.md"),
+      resolve(TESTS_ROOT, "../packs/business-discovery/claude/lean-canvas/SKILL.md"),
+    ];
+
+    for (const path of checks) {
+      const content = readFileSync(path, "utf8");
+      expect(content, `${path} should call value-prop-canvas/lean-canvas optional`).toMatch(/optional/i);
+      expect(content, `${path} should not describe optional detours as default blockers`).not.toMatch(
+        /journey-map\s*->\s*value-prop-canvas\s*->\s*positioning\s*->\s*lean-canvas/i,
+      );
+    }
+  });
+
+  it("keeps research-roadmap from routing positioning before journey or spec-interview before UX/prototype gates", () => {
+    const checks = [
+      resolve(TESTS_ROOT, "../global/codex/research-roadmap/SKILL.md"),
+      resolve(TESTS_ROOT, "../global/claude/research-roadmap/SKILL.md"),
+    ];
+
+    for (const path of checks) {
+      const content = readFileSync(path, "utf8");
+      const orderBlock = content.match(/Within research items[\s\S]*?```[\s\S]*?```/)?.[0] ?? "";
+      const journeyIndex = orderBlock.indexOf("journey-map");
+      const positioningIndex = orderBlock.indexOf("positioning");
+      const uxIndex = orderBlock.indexOf("ux-variations");
+      const prototypeIndex = orderBlock.indexOf("prototype");
+      const specIndex = orderBlock.indexOf("spec-interview");
+
+      expect(orderBlock, `${path} should expose research dependency order`).toBeTruthy();
+      expect(journeyIndex, `${path} order should mention journey-map`).toBeGreaterThanOrEqual(0);
+      expect(positioningIndex, `${path} order should mention positioning`).toBeGreaterThanOrEqual(0);
+      expect(uxIndex, `${path} order should mention ux-variations`).toBeGreaterThanOrEqual(0);
+      expect(prototypeIndex, `${path} order should mention prototype`).toBeGreaterThanOrEqual(0);
+      expect(specIndex, `${path} order should mention spec-interview`).toBeGreaterThanOrEqual(0);
+      expect(journeyIndex, `${path} should place journey-map before positioning`).toBeLessThan(positioningIndex);
+      expect(positioningIndex, `${path} should place positioning before ux-variations`).toBeLessThan(uxIndex);
+      expect(uxIndex, `${path} should place ux-variations before spec-interview`).toBeLessThan(specIndex);
+      expect(prototypeIndex, `${path} should place prototype before spec-interview`).toBeLessThan(specIndex);
+    }
+  });
 });

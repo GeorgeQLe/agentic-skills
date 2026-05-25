@@ -2,7 +2,7 @@
 name: value-prop-canvas
 description: Strategyzer-style jobs/pains/gains to features/relievers/creators fit validation
 type: research
-version: v0.1
+version: v0.0
 argument-hint: "[optional: specific job or segment to focus on]"
 ---
 
@@ -22,7 +22,7 @@ Do not write or overwrite synthesized deliverables until the user explicitly app
 
 When stopping for approval, build and attempt to open the alignment preview page first, then ask the user to review it and approve, question, or request adjustments. Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language. The approval request itself is the next action. Only emit next-skill routing after the approved artifact has been written or updated.
 
-Develops a Strategyzer-style Value Proposition Canvas that maps Customer Profile (jobs, pains, gains) against Value Map (products/services, pain relievers, gain creators) to validate solution-customer fit. This is an optional AFPS detour when solution-customer fit is weak, disputed, or needs explicit scoring before positioning, UX, or spec work; it is not part of the default business-product route.
+Develops a Strategyzer-style Value Proposition Canvas that maps Customer Profile (jobs, pains, gains) against Value Map (products/services, pain relievers, gain creators) to validate solution-customer fit. This runs after ICP discovery and before positioning — it bridges "who is the customer" to "does our solution actually fit their needs."
 
 Default stance: assume the user has no insider knowledge of the market. The VPC recommendation must stand on research, customer evidence, and codebase reality before asking for user input. Ask for corrections, proprietary differentiators, and hard constraints, not intuition.
 
@@ -31,8 +31,6 @@ Default stance: assume the user has no insider knowledge of the market. The VPC 
 - **Hard**: `research/icp.md` (or `research/{app}/icp.md`) must exist. If not, tell the user to run `$icp` first and stop.
 - **Soft**: Read these if they exist:
   - `research/competitive-analysis.md` — competitor landscape and alternative solutions
-  - `research/journey-map.md` — where jobs, pains, gains, and aha moments occur in the user/customer lifecycle
-  - `research/positioning.md` — market framing to avoid contradicting accepted positioning
   - `research/concept-brief.md` — product concept and hypothesis
 
 ## Process
@@ -130,13 +128,12 @@ Include a **Recommended** item (the single highest-impact next step given curren
 
 ## Next Steps
 
-**Recommended:** `$positioning` — return to the default AFPS route by framing validated fit in the market
+**Recommended:** `$positioning` — solution-customer fit validated; positioning determines how to frame this value in the market
 
 Other options:
 - IF gaps identified: `$spec-interview [top gap]` — Spec out a solution for the highest-priority gap
 - IF no `research/competitive-analysis.md`: `$competitive-analysis` — Understand how alternatives address the same jobs
-- IF `research/positioning.md` exists: `$ux-variations [validated fit direction]` — return to the prototype path
-- IF business model, revenue, channel, cost, or defensibility risk remains material: `$lean-canvas` — optional synthesis now that fit is validated
+- IF `research/positioning.md` exists: `$lean-canvas` — Build the business model now that fit is validated
 
 ### 8. Write Output
 

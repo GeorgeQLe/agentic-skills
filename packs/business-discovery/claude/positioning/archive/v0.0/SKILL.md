@@ -2,7 +2,7 @@
 name: positioning
 description: Strategic positioning (April Dunford style) — competitive alternatives, unique attributes, value, target segment, market category
 type: research
-version: v0.1
+version: v0.0
 argument-hint: "[optional: focus area e.g. \"category\", \"vs competitor X\"]"
 ---
 
@@ -26,7 +26,6 @@ Develops rigorous product positioning using the "Obviously Awesome" methodology 
 
 - **Hard**: `research/icp.md` (or `research/{app}/icp.md`) must exist. If not, tell the user to run `/icp` first and stop.
 - **Hard**: `research/competitive-analysis.md` (or `research/{app}/competitive-analysis.md`) must exist. If not, tell the user to run `/competitive-analysis` first and stop.
-- **Strong default**: `research/journey-map.md` (or `research/{app}/journey-map.md`) should exist before writing canonical positioning. If missing, recommend `/journey-map` first unless the user explicitly needs a provisional category/alternatives hypothesis. Early positioning may be discussed as provisional working notes, but do not write canonical `research/positioning.md` without clear user approval to proceed without journey evidence.
 - **Soft**: Read these if they exist:
   - `research/journey-map.md` — where value is delivered, the aha moment
   - `research/customer-feedback.md` — real customer language about what makes the product different
@@ -152,11 +151,9 @@ Present the full positioning framework and statement to the user. Ask:
 
 Include 3–5 applicable items with "Pick one:" framing:
 
-- ALWAYS: `/ux-variations [positioning-backed product direction]` — Explore prototype directions now that ICP, competitive, journey, and positioning evidence are aligned
-- IF no `research/journey-map.md`: `/journey-map` — Map the customer journey before writing canonical positioning
-- IF solution-customer fit is weak, disputed, or needs explicit scoring: `/value-prop-canvas` — Optional detour to validate contested fit before UX or spec work
-- IF revenue, channels, cost, defensibility, or unfair-advantage assumptions are material risks: `/lean-canvas` — Optional business-model synthesis before growth or ops work
-- IF no `research/gtm.md`: `/gtm` — Build go-to-market plan grounded in this positioning
+- ALWAYS: `/lean-canvas` — Synthesize positioning + upstream research into a one-page business model before GTM
+- IF no `research/journey-map.md`: `/journey-map` — Map the customer journey to ground the business model in reality
+- IF no `research/gtm.md`: `/gtm` — Build go-to-market plan grounded in this positioning (after lean canvas)
 - IF `research/gtm.md` exists: `/gtm` — Refresh messaging framework to align with positioning
 - IF no `research/monetization.md`: `/monetization` — Positioning informs pricing — "premium" vs "value" positioning changes price expectations
 - IF codebase exists: `/mvp-gap` — Check if the product delivers on the positioning promise

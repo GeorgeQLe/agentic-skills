@@ -1,5 +1,10 @@
 # competitive-analysis changelog (codex)
 
+## v0.4
+
+- Route standard AFPS output from competitive analysis to journey map, positioning, and UX variations before production spec work.
+- Keep value-prop-canvas as an optional detour only for contested solution-customer fit evidence.
+
 ## v0.3
 
 - Clarify standard-mode missing-journey routing so agents recommend `$pack install customer-lifecycle` before `$journey-map` when the `customer-lifecycle` pack is not enabled

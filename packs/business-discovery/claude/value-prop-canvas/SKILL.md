@@ -2,7 +2,7 @@
 name: value-prop-canvas
 description: Strategyzer-style jobs/pains/gains to features/relievers/creators fit validation
 type: research
-version: v0.0
+version: v0.1
 argument-hint: "[optional: specific job or segment to focus on]"
 ---
 
@@ -20,13 +20,15 @@ Do not write or overwrite synthesized deliverables until the user explicitly app
 
 When stopping for approval, build and attempt to open the alignment preview page first, then ask the user to review it and approve, question, or request adjustments. Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language. The approval request itself is the next action. Only emit next-skill routing after the approved artifact has been written or updated.
 
-Develops a Strategyzer-style Value Proposition Canvas that maps Customer Profile (jobs, pains, gains) against Value Map (products/services, pain relievers, gain creators) to validate solution-customer fit. This runs after ICP discovery and before positioning — it bridges "who is the customer" to "does our solution actually fit their needs."
+Develops a Strategyzer-style Value Proposition Canvas that maps Customer Profile (jobs, pains, gains) against Value Map (products/services, pain relievers, gain creators) to validate solution-customer fit. This is an optional AFPS detour when solution-customer fit is weak, disputed, or needs explicit scoring before positioning, UX, or spec work; it is not part of the default business-product route.
 
 ## Prerequisites
 
 - **Hard**: `research/icp.md` (or `research/{app}/icp.md`) must exist. If not, tell the user to run `/icp` first and stop.
 - **Soft**: Read these if they exist:
   - `research/competitive-analysis.md` — competitor landscape and alternative solutions
+  - `research/journey-map.md` — where jobs, pains, gains, and aha moments occur in the user/customer lifecycle
+  - `research/positioning.md` — market framing to avoid contradicting accepted positioning
   - `research/concept-brief.md` — product concept and hypothesis
 
 ## Process
@@ -122,10 +124,11 @@ Prioritize by ICP segment importance — gaps in critical jobs matter more than 
 
 Include 3-5 applicable items with "Pick one:" framing:
 
-- ALWAYS: `/positioning` — Position the product based on validated fit strengths
+- ALWAYS: `/positioning` — Return to the default AFPS route by framing validated fit in the market
 - IF gaps identified: `/spec-interview [top gap]` — Spec out a solution for the highest-priority gap
 - IF no `research/competitive-analysis.md`: `/competitive-analysis` — Understand how alternatives address the same jobs
-- IF `research/positioning.md` exists: `/lean-canvas` — Build the business model now that fit is validated
+- IF `research/positioning.md` exists: `/ux-variations [validated fit direction]` — Return to the prototype path
+- IF business model, revenue, channel, cost, or defensibility risk remains material: `/lean-canvas` — Optional synthesis now that fit is validated
 
 ### 8. Write Output
 

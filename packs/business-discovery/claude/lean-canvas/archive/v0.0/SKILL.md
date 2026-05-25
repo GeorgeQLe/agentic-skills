@@ -2,7 +2,7 @@
 name: lean-canvas
 description: One-page Lean Canvas business model synthesis (Ash Maurya)
 type: research
-version: v0.1
+version: v0.0
 argument-hint: "[optional: focus area e.g. \"revenue model\", \"channels\"]"
 ---
 
@@ -20,14 +20,13 @@ Do not write or overwrite synthesized deliverables until the user explicitly app
 
 When stopping for approval, build and attempt to open the alignment preview page first, then ask the user to review it and approve, question, or request adjustments. Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language. The approval request itself is the next action. Only emit next-skill routing after the approved artifact has been written or updated.
 
-Synthesizes upstream research into a one-page Lean Canvas (Ash Maurya methodology). This is an optional AFPS detour for business-model synthesis when revenue, channels, cost, defensibility, or unfair-advantage assumptions are material risks. It pulls from ICP, competitive analysis, journey, positioning, and value proposition research to create a cohesive business model hypothesis. Revenue Streams and Cost Structure are marked as hypotheses to be validated by `/monetization`.
+Synthesizes all upstream research into a one-page Lean Canvas (Ash Maurya methodology). This is a business-model synthesis skill — it pulls from ICP, competitive analysis, positioning, and value proposition research to create a cohesive business model hypothesis. Revenue Streams and Cost Structure are marked as hypotheses to be validated by `/monetization`.
 
 ## Prerequisites
 
 - **Hard**: `research/icp.md` (or `research/{app}/icp.md`) must exist. If not, tell the user to run `/icp` first and stop.
 - **Soft**: Read these if they exist:
   - `research/competitive-analysis.md` — competitor landscape, channel insights, business model patterns
-  - `research/journey-map.md` — lifecycle moments where value, conversion, and retention occur
   - `research/positioning.md` — unique value proposition, market category, competitive alternatives
   - `research/value-prop.md` — value propositions mapped to customer segments
   - `research/concept-brief.md` — product concept, solution approach, feature set
@@ -96,11 +95,10 @@ Use AskUserQuestion:
 
 Include 3-5 applicable items with "Pick one:" framing:
 
-- ALWAYS: `/ux-variations [business-model-informed product direction]` — Return to the default AFPS prototype path after resolving material business-model assumptions
+- ALWAYS: `/journey-map` — Map the customer journey through this business model
 - IF Revenue/Cost hypotheses need validation: `/monetization` — Validate revenue model and cost structure hypotheses
 - IF riskiest hypothesis identified: `/spec-interview [riskiest hypothesis]` — Spec out the riskiest assumption for testing
 - IF no `research/positioning.md`: `/positioning` — Establish strategic positioning to strengthen UVP and Unfair Advantage sections
-- IF no `research/journey-map.md`: `/journey-map` — Map the customer journey before continuing UX, growth, or spec work
 - IF codebase exists: `/mvp-gap` — Check if the product delivers on the canvas promises
 
 ### 6. Write Output

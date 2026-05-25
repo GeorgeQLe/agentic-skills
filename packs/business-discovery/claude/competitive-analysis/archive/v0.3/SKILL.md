@@ -2,7 +2,7 @@
 name: competitive-analysis
 description: Research competitors via web search — map the landscape, GTM strategies, strengths, weaknesses, and market gaps
 type: research
-version: v0.4
+version: v0.3
 argument-hint: "[concept | optional: product category or specific competitors to investigate]"
 ---
 
@@ -195,13 +195,11 @@ Before writing, check which files exist to populate the `## Next Steps` section 
 **Standard mode:**
 - RECOMMEND the first matching item:
   1. IF no `research/journey-map.md`: check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if `customer-lifecycle` is not enabled, recommend `/pack install customer-lifecycle` first; if `customer-lifecycle` is enabled, recommend `/journey-map` — Map the customer and user journey before solution-value decisions, using competitive gaps as inspiration
-  2. IF no `research/positioning.md`: `/positioning` — Frame the market category and alternatives after journey evidence shows where value is delivered
-  3. IF no `specs/ux-variations-*.md`: `/ux-variations [top journey-backed market gap or positioning opportunity]` — Explore experience directions before production specification
-  4. IF no `research/value-prop.md` AND solution-customer fit is weak, disputed, or needs explicit fit scoring: `/value-prop-canvas` — Validate contested solution-fit evidence as an optional detour
-  5. IF no `research/gtm.md`: `/gtm` — Build a GTM plan using the channel and positioning insights
-  6. IF codebase exists and no `research/mvp-gap.md`: `/mvp-gap` — Evaluate codebase against ICP and competitive landscape
+  2. IF no `research/value-prop.md`: `/value-prop-canvas` — Validate solution-customer fit using journey-placed competitive gaps to sharpen the value map
+  3. IF no `specs/` directory or it's empty: `/spec-interview [top journey-backed market gap or positioning opportunity]` — Spec features that exploit the most important market gap after journey context exists
+  4. IF no `research/gtm.md`: `/gtm` — Build a GTM plan using the channel and positioning insights
+  5. IF codebase exists and no `research/mvp-gap.md`: `/mvp-gap` — Evaluate codebase against ICP and competitive landscape
 - Include `/brainstorm` only as an "Other option" when the analysis found multiple plausible market gaps and the product direction is still unclear. Do not recommend brainstorm just because competitive whitespace exists.
-- Include `/value-prop-canvas` only as an "Other option" when solution-customer fit is weak, disputed, or needs explicit fit scoring before positioning/spec work. It is not part of the default route.
 
 Any `/spec-interview` recommendation must include a concrete target from the analysis, not a bare command. Use the top market gap, riskiest competitive assumption, or strongest positioning opportunity as the bracketed topic.
 

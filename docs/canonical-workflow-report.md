@@ -34,7 +34,7 @@ concept-exploration
   -> icp
   -> competitive-analysis
   -> journey-map
-  -> value / positioning / growth / operating research as needed
+  -> positioning
   -> ux-variations
   -> ui-interview
   -> prototype
@@ -59,7 +59,7 @@ The current business routing model is lane-based:
 
 | Lane | Pack | Primary purpose |
 | --- | --- | --- |
-| Discovery | `business-discovery` | ICP, competitive analysis, customer feedback, value proposition, positioning, lean canvas |
+| Discovery | `business-discovery` | ICP, competitive analysis, customer feedback, positioning, optional value proposition and lean canvas detours |
 | Customer lifecycle | `customer-lifecycle` | Journey, onboarding, conversion, transaction, retention, expansion, lifecycle metrics |
 | Growth | `business-growth` | Hook model, growth model, metrics, GTM, monetization, landing copy, experiments, PMF |
 | Operations | `business-ops` | Assumptions, risk, runway, cohorts, retros, investor updates, platform strategy, research reconciliation |
@@ -98,9 +98,9 @@ Claude route:
 /competitive-analysis
 /pack install customer-lifecycle        # when lifecycle mapping is missing
 /journey-map
-/value-prop-canvas                      # when value framing is needed
-/positioning                            # when market narrative is needed
-/lean-canvas                            # when business-model synthesis is needed
+/positioning                            # market category and alternatives after journey evidence
+/value-prop-canvas                      # optional: contested solution-fit evidence
+/lean-canvas                            # optional: material business-model risk
 /pack install business-growth           # when GTM/growth/pricing work is needed
 /metrics
 /monetization
@@ -130,9 +130,9 @@ $icp
 $competitive-analysis
 $pack install customer-lifecycle
 $journey-map
-$value-prop-canvas
 $positioning
-$lean-canvas
+$value-prop-canvas                      # optional: contested solution-fit evidence
+$lean-canvas                            # optional: material business-model risk
 $pack install business-growth
 $metrics
 $monetization

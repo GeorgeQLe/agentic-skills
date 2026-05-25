@@ -2,23 +2,23 @@
 name: journey-map
 description: Map the full user and customer lifecycle from trigger and discovery through onboarding, aha, conversion, retention, expansion, and advocacy
 type: analysis
-version: v0.1
+version: v0.0
 argument-hint: "[optional: app, use case, persona, or lifecycle stage]"
 ---
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # Journey Map — Lifecycle Overview
 
+Invoke as `$journey-map`.
 
-
-Create or update the canonical lifecycle overview. This is the top-level map for user task journeys and the customer relationship lifecycle; deeper stage docs belong in `/onboarding-map`, `/conversion-map`, `/transaction-map`, `/retention-map`, `/expansion-map`, and `/lifecycle-metrics`.
+Create or update the canonical lifecycle overview. This is the top-level map for user task journeys and the customer relationship lifecycle; deeper stage docs belong in `$onboarding-map`, `$conversion-map`, `$transaction-map`, `$retention-map`, `$expansion-map`, and `$lifecycle-metrics`.
 
 ## Prerequisites
 
-- `research/icp.md` (or `research/{app}/icp.md` in monorepo mode) must exist — run `/icp` first.
+- `research/icp.md` (or `research/{app}/icp.md` in monorepo mode) must exist — run `$icp` first.
 - Specs, competitive analysis, enterprise ICP, customer feedback, and codebase evidence are supporting context when present.
 
 ## Workflow
@@ -36,7 +36,7 @@ Create or update the canonical lifecycle overview. This is the top-level map for
 - `research/journey-map.md` (or `research/{app}/journey-map.md`) — canonical lifecycle overview with links or references to deeper stage docs when they exist.
 - `research/journey-map-interview.md` (or `research/{app}/journey-map-interview.md`) — raw interview log and decisions.
 
-The output file must end with `## Next Steps` using "Pick one:" framing. Default AFPS routing after the overview is `/positioning` when `research/positioning.md` is missing, because positioning should use ICP, competitive analysis, and journey evidence. Then route to `/ux-variations`, `/ui-interview`, prototype work, `/uat --variant-evaluation`, `/consolidate-variations`, `/research-roadmap --post-prototype`, `/spec-interview`, and `/roadmap` as evidence becomes available. Recommend deeper lifecycle maps (`/onboarding-map`, `/conversion-map`, `/transaction-map`, `/retention-map`, `/expansion-map`, `/lifecycle-metrics`) only when the overview exposes a specific stage risk that needs detail before positioning or UX work.
+The output file must end with `## Next Steps` using "Pick one:" framing. Prefer the first missing deeper lifecycle map in this order: `$onboarding-map`, `$conversion-map`, `$transaction-map`, `$retention-map`, `$expansion-map`, `$lifecycle-metrics`; then route to `$spec-interview`, `$ux-variations`, `$metrics`, `$gtm`, or `$roadmap` when those are the better next step.
 
 ## Output Shape
 

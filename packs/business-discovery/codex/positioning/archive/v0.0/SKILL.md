@@ -2,15 +2,17 @@
 name: positioning
 description: Strategic positioning (April Dunford style) — competitive alternatives, unique attributes, value, target segment, market category
 type: research
-version: v0.1
+version: v0.0
 argument-hint: "[optional: focus area e.g. \"category\", \"vs competitor X\"]"
 ---
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # Positioning — Strategic Product Positioning
+
+Invoke as `$positioning`.
 
 ## Report-First Approval Gate
 
@@ -22,11 +24,12 @@ When stopping for approval, build and attempt to open the alignment preview page
 
 Develops rigorous product positioning using the "Obviously Awesome" methodology (April Dunford). Determines competitive alternatives, unique attributes, customer value, target segment, and market category. Positioning is upstream of messaging — it determines *how you frame the product category itself*.
 
+Default stance: assume the user has no insider knowledge of the market. The positioning recommendation must stand on research, customer evidence, and codebase reality before asking for user input. Ask for corrections, proprietary differentiators, and hard constraints, not intuition.
+
 ## Prerequisites
 
-- **Hard**: `research/icp.md` (or `research/{app}/icp.md`) must exist. If not, tell the user to run `/icp` first and stop.
-- **Hard**: `research/competitive-analysis.md` (or `research/{app}/competitive-analysis.md`) must exist. If not, tell the user to run `/competitive-analysis` first and stop.
-- **Strong default**: `research/journey-map.md` (or `research/{app}/journey-map.md`) should exist before writing canonical positioning. If missing, recommend `/journey-map` first unless the user explicitly needs a provisional category/alternatives hypothesis. Early positioning may be discussed as provisional working notes, but do not write canonical `research/positioning.md` without clear user approval to proceed without journey evidence.
+- **Hard**: `research/icp.md` (or `research/{app}/icp.md`) must exist. If not, tell the user to run `$icp` first and stop.
+- **Hard**: `research/competitive-analysis.md` (or `research/{app}/competitive-analysis.md`) must exist. If not, tell the user to run `$competitive-analysis` first and stop.
 - **Soft**: Read these if they exist:
   - `research/journey-map.md` — where value is delivered, the aha moment
   - `research/customer-feedback.md` — real customer language about what makes the product different
@@ -39,7 +42,7 @@ Develops rigorous product positioning using the "Obviously Awesome" methodology 
 Before checking prerequisites, determine the app scope:
 
 1. If `$ARGUMENTS` specifies an app name matching a subdirectory of `research/`, use it.
-2. If `research/` contains subdirectories (excluding files), list them and ask the user which app to target. If only one subdirectory exists, use it automatically.
+2. If `research/` contains subdirectories (excluding files), list them and ask the user which app to target. If the session is already in Plan mode and there are 2-3 concrete choices, prefer `request_user_input`; otherwise ask in plain text. If only one subdirectory exists, use it automatically.
 3. If no subdirectories exist, proceed with flat structure (single-product mode).
 
 When app scope `{app}` is active:
@@ -70,8 +73,8 @@ NOT just direct competitors. Include:
 - **DIY/manual workarounds** — spreadsheets, manual processes, hiring someone
 - **Do nothing** — the status quo (this is often the real competitor)
 
-Use AskUserQuestion to present and validate:
-- "Here are the competitive alternatives I see. What would your best customers actually use if your product disappeared tomorrow?"
+Present and validate with the user. If the session is already in Plan mode and there are 2-3 concrete choices, prefer `request_user_input`; otherwise ask in plain text:
+- "Here are the competitive alternatives the evidence suggests. Which, if any, are factually wrong, missing, or mis-prioritized for this product?"
 
 ### 4. Step 2 — Unique Attributes (What Do You Have That Alternatives Don't?)
 
@@ -84,8 +87,8 @@ For each competitive alternative, identify what's genuinely different about this
 
 **Be ruthless.** Only include attributes that are truly unique, not "we also do X." If competitors also have it, it's table stakes, not positioning.
 
-Use AskUserQuestion:
-- "Are these genuinely unique? Would your most discerning customer agree these are different?"
+If the session is already in Plan mode, prefer `request_user_input`; otherwise ask in plain text:
+- "Which of these attributes are unsupported, overstated, or missing a proprietary differentiator I should include?"
 
 ### 5. Step 3 — Value (What Does Uniqueness Enable for Customers?)
 
@@ -102,8 +105,8 @@ Value categories:
 - **Unlocks capability** — enables something previously impossible
 - **Improves quality** — better outcomes than alternatives
 
-Use AskUserQuestion:
-- "Is this the value your customers actually experience, or the value you hope they'll experience?"
+If the session is already in Plan mode, prefer `request_user_input`; otherwise ask in plain text:
+- "Which value claims are strongest, and which need better evidence or should be removed?"
 
 ### 6. Step 4 — Target Segment (Who Cares Most About This Value?)
 
@@ -113,8 +116,8 @@ From the ICP analysis, identify the segment that values these unique attributes 
 - Who would be most disappointed if the product disappeared?
 - Who gets the most value from what makes you different (not just from the category)?
 
-Use AskUserQuestion:
-- "This is the segment I'd position for. Does this feel right, or is there a segment that values your uniqueness even more?"
+If the session is already in Plan mode, prefer `request_user_input`; otherwise ask in plain text:
+- "This is the segment the evidence supports. Which commercial constraints, missing segments, or product realities should change this recommendation?"
 
 ### 7. Step 5 — Market Category (What Context Makes Your Value Obvious?)
 
@@ -144,22 +147,26 @@ Combine all five steps into a positioning statement:
 **[product name]** [key differentiator]
 
 Present the full positioning framework and statement to the user. Ask:
-- "Does this positioning feel true to what your best customers experience?"
+- "Which parts of this positioning need stronger evidence, better wording, or adjustment for product realities?"
 - "Would this change how you describe the product on your homepage?"
 - "Ready to write this to `research/positioning.md`?"
 
 ### 9. Populate Next Steps
 
-Include 3–5 applicable items with "Pick one:" framing:
+Include a **Recommended** item (the single highest-impact next step given current project state) with a one-line reason, followed by **Other options** (2–4 alternatives). Use this format in the output:
 
-- ALWAYS: `/ux-variations [positioning-backed product direction]` — Explore prototype directions now that ICP, competitive, journey, and positioning evidence are aligned
-- IF no `research/journey-map.md`: `/journey-map` — Map the customer journey before writing canonical positioning
-- IF solution-customer fit is weak, disputed, or needs explicit scoring: `/value-prop-canvas` — Optional detour to validate contested fit before UX or spec work
-- IF revenue, channels, cost, defensibility, or unfair-advantage assumptions are material risks: `/lean-canvas` — Optional business-model synthesis before growth or ops work
-- IF no `research/gtm.md`: `/gtm` — Build go-to-market plan grounded in this positioning
-- IF `research/gtm.md` exists: `/gtm` — Refresh messaging framework to align with positioning
-- IF no `research/monetization.md`: `/monetization` — Positioning informs pricing — "premium" vs "value" positioning changes price expectations
-- IF codebase exists: `/mvp-gap` — Check if the product delivers on the positioning promise
+## Next Steps
+
+**Recommended:** `$lean-canvas` — synthesize positioning + upstream research into a one-page business model before GTM planning
+
+Other options:
+- IF no `research/journey-map.md`: `$journey-map` — map the customer journey to ground the business model in reality
+- IF no `research/gtm.md`: `$gtm` — Build go-to-market plan grounded in this positioning
+- IF `research/gtm.md` exists: `$gtm` — Refresh messaging framework to align with positioning
+- IF no `research/monetization.md`: `$monetization` — Positioning informs pricing — "premium" vs "value" positioning changes price expectations
+- IF codebase exists: `$mvp-gap` — Check if the product delivers on the positioning promise
+
+The recommendation (`$lean-canvas`) is always applicable — a business model synthesis grounds GTM planning.
 
 ### 10. Write Output
 
@@ -180,7 +187,7 @@ For each existing downstream document:
 **Classify the impact**:
 - **None**: No downstream docs exist, or no conflicts. Skip display.
 - **Minor** (1–2 small conflicts): Display inline.
-- **Major** (3+ conflicts OR market category changed, primary alternative shifted, value framing changed): Display and recommend `/reconcile-research`.
+- **Major** (3+ conflicts OR market category changed, primary alternative shifted, value framing changed): Display and recommend `$reconcile-research`.
 
 ## Output
 
@@ -291,12 +298,14 @@ What this product has that alternatives genuinely don't:
    - **Now**: [what positioning says instead]
 
 [For Major only:]
-> **Recommended action**: Run `/reconcile-research` to audit and fix all affected downstream documents.
+> **Recommended action**: Run `$reconcile-research` to audit and fix all affected downstream documents.
 
 ## Next Steps
 
-Pick one:
-- [conditional items from step 9]
+**Recommended:** `$gtm` — [one-line reason based on whether gtm.md exists or needs refresh]
+
+Other options:
+- [conditional items from step 9 — only include items whose conditions are met]
 ```
 
 ### `research/positioning-search-log.md` (or `research/{app}/positioning-search-log.md`)
@@ -320,7 +329,7 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Customer-grounded.** Every positioning decision must connect to real customer behavior or research evidence, not aspirational branding.
 - **Be honest about uniqueness.** If nothing is truly unique, say so — that's a critical finding. Don't manufacture differentiation.
 - **Present before writing.** Never write output files until the positioning has been presented and validated.
-- **Positioning ≠ messaging.** This skill produces the strategic foundation. Messaging (the actual copy and taglines) is `/gtm`'s job.
+- **Positioning ≠ messaging.** This skill produces the strategic foundation. Messaging (the actual copy and taglines) is `$gtm`'s job.
 - **Do not overwrite existing `research/positioning.md`** without asking the user first.
 - **One positioning per product.** Don't try to position differently for different segments — pick the best-fit segment and position for them.
 

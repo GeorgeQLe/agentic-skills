@@ -2,7 +2,7 @@
 name: research-roadmap
 description: Scan research and documentation health, then maintain a priority documentation queue
 type: planning
-version: v0.1
+version: v0.0
 ---
 
 ## Pack Availability Guard
@@ -72,8 +72,8 @@ Business-app research outputs:
 | --- | --- |
 | `$icp` | `research/icp.md` |
 | `$competitive-analysis` | `research/competitive-analysis.md` |
-| `$journey-map` | `research/journey-map.md` |
 | `$positioning` | `research/positioning.md` |
+| `$journey-map` | `research/journey-map.md` |
 | `$metrics` | `research/metrics.md` |
 | `$gtm` | `research/gtm.md` |
 | `$monetization` | `research/monetization.md` |
@@ -202,16 +202,14 @@ Within research items, use this dependency order when relevant. When emitting qu
 $concept-exploration
   -> $icp
   -> $competitive-analysis
-  -> $journey-map
   -> $positioning
-    -> $ux-variations
-      -> $ui-interview
-        -> $prototype
-          -> $uat --variant-evaluation
+  -> $journey-map
+    -> $spec-interview
+      -> $ux-variations
+        -> $ui-interview
+          -> $prototype
             -> $consolidate-variations
-              -> $research-roadmap --post-prototype
-                -> $spec-interview
-                  -> $roadmap
+              -> $roadmap
     -> $metrics
   -> $gtm
   -> $monetization

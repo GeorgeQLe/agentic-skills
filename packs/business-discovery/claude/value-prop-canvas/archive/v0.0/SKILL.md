@@ -2,17 +2,15 @@
 name: value-prop-canvas
 description: Strategyzer-style jobs/pains/gains to features/relievers/creators fit validation
 type: research
-version: v0.1
+version: v0.0
 argument-hint: "[optional: specific job or segment to focus on]"
 ---
 
 ## Pack Availability Guard
 
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 # Value Proposition Canvas — Solution-Customer Fit Validation
-
-Invoke as `$value-prop-canvas`.
 
 ## Report-First Approval Gate
 
@@ -22,17 +20,13 @@ Do not write or overwrite synthesized deliverables until the user explicitly app
 
 When stopping for approval, build and attempt to open the alignment preview page first, then ask the user to review it and approve, question, or request adjustments. Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language. The approval request itself is the next action. Only emit next-skill routing after the approved artifact has been written or updated.
 
-Develops a Strategyzer-style Value Proposition Canvas that maps Customer Profile (jobs, pains, gains) against Value Map (products/services, pain relievers, gain creators) to validate solution-customer fit. This is an optional AFPS detour when solution-customer fit is weak, disputed, or needs explicit scoring before positioning, UX, or spec work; it is not part of the default business-product route.
-
-Default stance: assume the user has no insider knowledge of the market. The VPC recommendation must stand on research, customer evidence, and codebase reality before asking for user input. Ask for corrections, proprietary differentiators, and hard constraints, not intuition.
+Develops a Strategyzer-style Value Proposition Canvas that maps Customer Profile (jobs, pains, gains) against Value Map (products/services, pain relievers, gain creators) to validate solution-customer fit. This runs after ICP discovery and before positioning — it bridges "who is the customer" to "does our solution actually fit their needs."
 
 ## Prerequisites
 
-- **Hard**: `research/icp.md` (or `research/{app}/icp.md`) must exist. If not, tell the user to run `$icp` first and stop.
+- **Hard**: `research/icp.md` (or `research/{app}/icp.md`) must exist. If not, tell the user to run `/icp` first and stop.
 - **Soft**: Read these if they exist:
   - `research/competitive-analysis.md` — competitor landscape and alternative solutions
-  - `research/journey-map.md` — where jobs, pains, gains, and aha moments occur in the user/customer lifecycle
-  - `research/positioning.md` — market framing to avoid contradicting accepted positioning
   - `research/concept-brief.md` — product concept and hypothesis
 
 ## Process
@@ -42,7 +36,7 @@ Default stance: assume the user has no insider knowledge of the market. The VPC 
 Before checking prerequisites, determine the app scope:
 
 1. If `$ARGUMENTS` specifies an app name matching a subdirectory of `research/`, use it.
-2. If `research/` contains subdirectories (excluding files), list them and ask the user which app to target. If the session is already in Plan mode and there are 2-3 concrete choices, prefer `request_user_input`; otherwise ask in plain text. If only one subdirectory exists, use it automatically.
+2. If `research/` contains subdirectories (excluding files), list them and ask the user which app to target. If only one subdirectory exists, use it automatically.
 3. If no subdirectories exist, proceed with flat structure (single-product mode).
 
 When app scope `{app}` is active:
@@ -84,7 +78,7 @@ Rank each job by importance (critical / important / nice-to-have).
 - Outcomes and benefits they want
 - Rank by relevance: required / expected / desired / unexpected
 
-If the session is already in Plan mode and there are 2-3 concrete choices, prefer `request_user_input`; otherwise ask in plain text:
+Use AskUserQuestion to present and validate:
 - "Here's the Customer Profile I've built from ICP research. Which jobs, pains, or gains are missing, overstated, or mis-ranked?"
 
 ### 4. Build Value Map
@@ -97,7 +91,7 @@ Map the product's features and services to pain relievers and gain creators:
 
 **Gain Creators** — for each: which specific gain does it create? How significantly?
 
-If the session is already in Plan mode and there are 2-3 concrete choices, prefer `request_user_input`; otherwise ask in plain text:
+Use AskUserQuestion:
 - "Does this Value Map accurately reflect what the product does? Any features missing or claims overstated?"
 
 ### 5. Score Fit
@@ -110,7 +104,7 @@ For each customer job, evaluate how well the Value Map addresses it:
 
 Flag all jobs with **No Fit** or **Gap** as risks requiring attention.
 
-If the session is already in Plan mode and there are 2-3 concrete choices, prefer `request_user_input`; otherwise ask in plain text:
+Use AskUserQuestion:
 - "Do these fit scores reflect reality? Are there fits I'm overrating or gaps I'm missing?"
 
 ### 6. Identify Gaps & Risks
@@ -126,17 +120,12 @@ Prioritize by ICP segment importance — gaps in critical jobs matter more than 
 
 ### 7. Populate Next Steps
 
-Include a **Recommended** item (the single highest-impact next step given current project state) with a one-line reason, followed by **Other options** (2-4 alternatives). Use this format in the output:
+Include 3-5 applicable items with "Pick one:" framing:
 
-## Next Steps
-
-**Recommended:** `$positioning` — return to the default AFPS route by framing validated fit in the market
-
-Other options:
-- IF gaps identified: `$spec-interview [top gap]` — Spec out a solution for the highest-priority gap
-- IF no `research/competitive-analysis.md`: `$competitive-analysis` — Understand how alternatives address the same jobs
-- IF `research/positioning.md` exists: `$ux-variations [validated fit direction]` — return to the prototype path
-- IF business model, revenue, channel, cost, or defensibility risk remains material: `$lean-canvas` — optional synthesis now that fit is validated
+- ALWAYS: `/positioning` — Position the product based on validated fit strengths
+- IF gaps identified: `/spec-interview [top gap]` — Spec out a solution for the highest-priority gap
+- IF no `research/competitive-analysis.md`: `/competitive-analysis` — Understand how alternatives address the same jobs
+- IF `research/positioning.md` exists: `/lean-canvas` — Build the business model now that fit is validated
 
 ### 8. Write Output
 
@@ -158,7 +147,7 @@ For each existing downstream document:
 **Classify the impact**:
 - **None**: No downstream docs exist, or no conflicts. Skip display.
 - **Minor** (1-2 small conflicts): Display inline.
-- **Major** (3+ conflicts OR fit scores changed significantly, new gaps identified, customer profile substantially revised): Display and recommend `$reconcile-research`.
+- **Major** (3+ conflicts OR fit scores changed significantly, new gaps identified, customer profile substantially revised): Display and recommend `/reconcile-research`.
 
 ## Output
 
@@ -250,13 +239,11 @@ For each existing downstream document:
    - **Now**: [what VPC findings say instead]
 
 [For Major only:]
-> **Recommended action**: Run `$reconcile-research` to audit and fix all affected downstream documents.
+> **Recommended action**: Run `/reconcile-research` to audit and fix all affected downstream documents.
 
 ## Next Steps
 
-**Recommended:** `$positioning` — solution-customer fit validated; positioning determines how to frame this value in the market
-
-Other options:
+Pick one:
 - [conditional items from step 7]
 ```
 

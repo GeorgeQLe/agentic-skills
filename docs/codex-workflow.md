@@ -319,28 +319,23 @@ If you are used to this Claude Code rhythm:
 3. `$icp`
 4. `$competitive-analysis`
 5. `$journey-map`
-6. `$value-prop-canvas`
-7. `$positioning`
-8. `$lean-canvas`
-9. `$hook-model` (consumer/PLG; skip to `$metrics` for B2B)
-10. `$metrics`
-11. `$monetization`
-12. `$gtm`
-13. `$growth-model`
-14. `$ux-variations`
-15. `$ui-interview`
-16. `$prototype`
-17. `$uat --variant-evaluation`
-18. `$consolidate-variations`
-19. `$research-roadmap --post-prototype`
-20. `$spec-interview`
-21. `$research-roadmap --post-spec`
-22. `$roadmap`
-23. `$plan-phase` (seeded by `$roadmap`; rerun only for later phases)
-24. `$run`
-25. `$ship`
-26. `$ship-end` when wrapping an off-script or partial session
-27. `$pmf-assessment` (post-launch)
+6. `$positioning`
+7. `$ux-variations`
+8. `$ui-interview`
+9. `$prototype`
+10. `$uat --variant-evaluation`
+11. `$consolidate-variations`
+12. `$research-roadmap --post-prototype`
+13. `$spec-interview`
+14. `$research-roadmap --post-spec`
+15. `$roadmap`
+16. `$plan-phase` (seeded by `$roadmap`; rerun only for later phases)
+17. `$run`
+18. `$ship`
+19. `$ship-end` when wrapping an off-script or partial session
+20. `$pmf-assessment` (post-launch)
+
+Optional detours: `$value-prop-canvas` when solution-customer fit is weak, disputed, or needs explicit scoring; `$lean-canvas` when revenue, channels, cost, defensibility, or unfair-advantage assumptions are material risks; growth skills such as `$hook-model`, `$metrics`, `$monetization`, `$gtm`, and `$growth-model` when the project is ready for growth/pricing work.
 
 The closest Codex translation is:
 
@@ -349,28 +344,21 @@ The closest Codex translation is:
 3. `$icp`
 4. `$competitive-analysis`
 5. `$journey-map`
-6. `$value-prop-canvas`
-7. `$positioning`
-8. `$lean-canvas`
-9. `$hook-model` (consumer/PLG; skip to `$metrics` for B2B)
-10. `$metrics`
-11. `$monetization`
-12. `$gtm`
-13. `$growth-model`
-14. `$ux-variations`
-15. `$ui-interview`
-16. `$prototype`
-17. `$uat --variant-evaluation`
-18. `$consolidate-variations`
-19. `$research-roadmap --post-prototype`
-20. `$spec-interview`
-21. `$research-roadmap --post-spec`
-22. `$roadmap`
-23. `$plan-phase` (seeded by `$roadmap`; rerun only for later phases)
-24. `$run` to present the plan, execute the work, ship it, and refresh `tasks/todo.md`
-25. repeat `$run` for the next planned step
-26. use `$ship` only if finished work needs manual packaging
-27. use `$ship-end` to wrap an interrupted or partial session
+6. `$positioning`
+7. `$ux-variations`
+8. `$ui-interview`
+9. `$prototype`
+10. `$uat --variant-evaluation`
+11. `$consolidate-variations`
+12. `$research-roadmap --post-prototype`
+13. `$spec-interview`
+14. `$research-roadmap --post-spec`
+15. `$roadmap`
+16. `$plan-phase` (seeded by `$roadmap`; rerun only for later phases)
+17. `$run` to present the plan, execute the work, ship it, and refresh `tasks/todo.md`
+18. repeat `$run` for the next planned step
+19. use `$ship` only if finished work needs manual packaging
+20. use `$ship-end` to wrap an interrupted or partial session
 28. `$pmf-assessment` (post-launch)
 
 The main manual additions are still plain-chat approval and the lack of a skill-controlled plan-mode boundary.

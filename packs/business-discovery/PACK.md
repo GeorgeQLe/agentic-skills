@@ -2,15 +2,17 @@
 
 Project-local workflows for early business and product discovery.
 
-Install this pack when a project needs ICP discovery, enterprise buyer mapping, competitive analysis, customer feedback synthesis, value proposition work, positioning, or lean canvas synthesis.
+Install this pack when a project needs ICP discovery, enterprise buyer mapping, competitive analysis, customer feedback synthesis, positioning, or optional value proposition / lean canvas synthesis.
 
 Default flow:
 
 ```text
-icp -> competitive-analysis -> journey-map -> value-prop-canvas -> positioning -> lean-canvas
+icp -> competitive-analysis -> journey-map -> positioning -> ux-variations
 ```
 
 `journey-map` is provided by the `customer-lifecycle` pack. Install `customer-lifecycle` before continuing past competitive analysis when that pack is not already enabled.
+
+`value-prop-canvas` and `lean-canvas` are optional detours, not default blockers. Use `value-prop-canvas` when solution-customer fit is weak, disputed, or needs explicit fit scoring. Use `lean-canvas` when revenue, channels, cost, defensibility, or unfair-advantage assumptions are material risks.
 
 Skills:
 
