@@ -18,6 +18,19 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 ## Current Targeted Update: Benchmark HTML Alignment Page Evaluation 2026-05-25
 
+## Current Targeted Update: Cross-Skill Output Understanding Audit 2026-05-25
+
+**Goal:** Use `$analyze-sessions` to scrutinize whether outputs across all skills improve user-agent understanding, with particular attention to HTML alignment pages, final handoffs, route-command clarity, and recurring user corrections.
+
+**Acceptance Criteria:**
+- [x] Full available Claude and Codex user history is parsed for cross-skill patterns, not just one named skill.
+- [x] The audit distinguishes evidence-backed findings from inference and assumptions.
+- [x] Output quality patterns cover alignment pages, final handoffs, approval gates, routing commands, task-doc updates, and skill-specific misunderstandings where history supports them.
+- [x] `alignment/analyze-sessions-cross-skill-output-understanding-audit.html` renders the full report with evidence matrix, confidence/assumption register, and required review gates.
+- [x] The HTML review page is verified, browser open is attempted, and downstream routing is withheld until compiled YAML approval.
+
+**Result:** Updated on 2026-05-25. Parsed 11,386 local user-history records across Claude and Codex and built the cross-skill review page at `alignment/analyze-sessions-cross-skill-output-understanding-audit.html`. The audit finds alignment pages are improving understanding when they preserve full decision context and inline decision gates, but cross-skill output quality still needs tighter scope control, research freshness/date context, route handoff validation, and operational-loop approval exemptions. Browser open was attempted but blocked by missing local browser handlers and the WSL bridge.
+
 **Goal:** Make benchmark tests actually evaluate generated HTML alignment pages instead of only the primary Markdown/text artifact.
 
 **Acceptance Criteria:**

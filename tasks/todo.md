@@ -8,6 +8,7 @@
 
 ## Priority Task Queue
 
+- [ ] `$analyze-sessions cross-skill output understanding audit` — analyze local Claude/Codex history to scrutinize whether skill outputs across all skills, especially HTML alignment pages and final handoffs, improve user-agent understanding or add avoidable process drag.
 - [x] `$investigate benchmark html alignment page evaluation` — confirm whether benchmark tests evaluate generated alignment HTML pages, then add multi-artifact HTML evaluation coverage for the `investigate` benchmark fixture.
 - [ ] `$targeted-skill-builder research quality alignment contract` — make alignment-page contracts preserve research evidence, uncertainty, reasoning, source coverage, and decision context before HTML presentation.
 - [x] `$targeted-skill-builder AFPS routing cleanup` — update business-product routing so the default AFPS path is ICP -> competitive analysis -> journey map -> positioning -> UX variations -> UI interview -> prototype -> UAT -> consolidation -> research roadmap -> spec interview -> roadmap, while keeping value-prop-canvas and lean-canvas as optional risk-driven detours.
@@ -25,6 +26,33 @@
 - [x] `$run` — Resume Phase 41 Batch 41.3 re-benchmarks: re-run the 33 Tier 2 global skills that were benchmarked pre-fixture-remediation with near-zero pass rates (Phase 43 added route guidance to all 32 fixture prompts and increased budgets). Current graded count: 69 unique skills / 158 total. Batch 41.5 pack-local groups also have remaining families. Batch 41.3 Group 2 shipped in `bc17fee` and `3e4bd78`; next triage should start with `provision-agentic-config`, `migrate`, or `prototype`.
 - [ ] Review `tasks/recurring-todo.md`: 2 unchecked recurring items — promote only if due and requiring execution work.
 - [ ] `$research-roadmap` — All 43 roadmap phases are complete. Run documentation health scan after Phase 41 remaining batches finish.
+
+## Current Task — Cross-Skill Output Understanding Audit 2026-05-25
+
+**Goal:** Run `$analyze-sessions` across available local history and scrutinize whether outputs across all skills, especially HTML alignment pages and final handoffs, are producing better understanding between user and agent.
+
+**Plan:**
+- [x] Inspect the active `$analyze-sessions` contract and current task state.
+- [x] Parse full available Claude and Codex user history, including Codex rich session metadata where readable.
+- [x] Identify repeated output corrections, alignment-page praise/friction, final-handoff misunderstandings, route-command mismatches, and skill-specific output patterns across all detected skills.
+- [x] Produce a full-depth `alignment/analyze-sessions-cross-skill-output-understanding-audit.html` review page with evidence, assumptions, recommendations, and approval gates.
+- [x] Verify the HTML contains required gates/compile behavior, attempt browser open, and stop for user YAML approval before downstream routing.
+
+**Files:**
+- `alignment/analyze-sessions-cross-skill-output-understanding-audit.html`
+- `tasks/todo.md`
+- `tasks/roadmap.md`
+
+### Review
+
+- Parsed 11,386 user records across 3,390 sessions: 9,549 Claude records across 2,826 sessions from 2025-12-13 to 2026-05-25, and 1,837 Codex records across 564 sessions from 2026-01-08 to 2026-05-25.
+- The audit covers all observed skills and skill-output patterns, not just `$analyze-sessions`.
+- Key finding: alignment pages are net-positive for understanding when they preserve full decision context and place questions inline, but broad application creates process drag for execution/config/scaffold surfaces.
+- Key finding: the strongest remaining failure modes are thin research-to-HTML translation, stale or undated research stats, route/handoff drift, and approval-gate friction in operational loops.
+- Wrote `alignment/analyze-sessions-cross-skill-output-understanding-audit.html` with overview stats, evidence matrix, confidence/assumption handling, alternatives, source gaps, recommendations, and required inline gates with YAML compile/copy behavior.
+- Verification passed: targeted `rg` checks confirmed dark-mode variables, required standing options, gate metadata, Compile Answers, Clipboard API use, and cited evidence patterns; `git diff --check` passed.
+- Browser open was attempted. `xdg-open` was blocked because no browser handler is installed; WSL `cmd.exe /c start` was blocked by `UtilBindVsockAnyPort: socket failed 1`.
+- Pre-approval stop is active: review the HTML page and provide compiled YAML before downstream remediation routing or canonical report creation.
 
 ## Current Task — Benchmark HTML Alignment Page Evaluation 2026-05-25
 

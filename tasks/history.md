@@ -1,5 +1,11 @@
 # Session History
 
+## 2026-05-25 — Fix pack flap transparency in SealedPack prototype
+
+- Split combined gradient+shimmer divs in `SealedPack.tsx` into two stacked layers so the `shimmer-foil` CSS class no longer replaces the opaque Tailwind gradient with transparent bands.
+- Affected both the bottom half (line 84) and top flap (line 144) of the sealed pack component.
+- Verification: `npx tsc --noEmit` passed clean.
+
 ## 2026-05-24 — Tighten research skill lanes + add cross-reference signals
 
 - Narrowed ICP, Enterprise ICP, and Competitive Analysis skills to their core research lanes in the `business-discovery` pack (both claude and codex variants).
