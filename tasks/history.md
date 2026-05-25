@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-05-24 — Tighten research skill lanes + add cross-reference signals
+
+- Narrowed ICP, Enterprise ICP, and Competitive Analysis skills to their core research lanes in the `business-discovery` pack (both claude and codex variants).
+- ICP: renamed Market Landscape → Current Alternatives (User Perspective), Value Proposition → Stated Value Drivers, Acquisition & Conversion Model → Discovery & Evaluation Behavior. Stripped GTM/channel/budget analysis.
+- Enterprise ICP: renamed Lifecycle → Enterprise Buying Stages, Enterprise Value Prop → Enterprise Requirements Delta, Budget & Procurement → Procurement Reality, Land-and-Expand Strategy → Land-and-Expand Patterns (Observed).
+- Competitive Analysis: renamed Analyse Positioning Opportunities → Identify Market Gaps & White Space, Go-to-Market Strategy → Observable GTM Patterns. Removed Recommended Positioning / Where We Fit output sections.
+- Added structured "Signals for Downstream Research" appendix to all three skills, routing unvalidated observations to downstream skills (/competitive-analysis, /positioning, /monetization, /gtm, /journey-map, /value-prop-canvas).
+- Bumped versions: ICP v0.0→v0.1, Enterprise ICP v0.0→v0.1, Competitive Analysis v0.1→v0.2.
+- Also committed pre-existing batch Gate YAML clipboard enhancement across 275 skill files.
+
 ## 2026-05-23 — Add alignment page skip list for utility/ops skills
 
 - Created `scripts/alignment-skip-list.txt` with 28 skills that should not have alignment pages (execution/shipping, infrastructure/config, planning, and meta skills).
