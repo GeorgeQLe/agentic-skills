@@ -8,6 +8,7 @@
 
 ## Priority Task Queue
 
+- [ ] `$targeted-skill-builder research quality alignment contract` — make alignment-page contracts preserve research evidence, uncertainty, reasoning, source coverage, and decision context before HTML presentation.
 - [x] `$targeted-skill-builder AFPS routing cleanup` — update business-product routing so the default AFPS path is ICP -> competitive analysis -> journey map -> positioning -> UX variations -> UI interview -> prototype -> UAT -> consolidation -> research roadmap -> spec interview -> roadmap, while keeping value-prop-canvas and lean-canvas as optional risk-driven detours.
 - [x] Refresh `docs/canonical-workflow-report.md` and create `alignment/canonical-workflow-report.html` — audit the canonical workflow report against current pack routing, AFPS/prototype gates, roadmap no-spec routing, and post-spec feature routing; validate targeted stale-claim checks; commit and push only intended documentation changes.
 - [x] `$investigate benchmark failures alignment-first prototype-second workflow` — triage benchmark/showcase failures after the AFPS (alignment-first, prototype-second) workflow refactor, fix stale harness expectations, refresh generated data, validate, then commit and push.
@@ -23,6 +24,35 @@
 - [x] `$run` — Resume Phase 41 Batch 41.3 re-benchmarks: re-run the 33 Tier 2 global skills that were benchmarked pre-fixture-remediation with near-zero pass rates (Phase 43 added route guidance to all 32 fixture prompts and increased budgets). Current graded count: 69 unique skills / 158 total. Batch 41.5 pack-local groups also have remaining families. Batch 41.3 Group 2 shipped in `bc17fee` and `3e4bd78`; next triage should start with `provision-agentic-config`, `migrate`, or `prototype`.
 - [ ] Review `tasks/recurring-todo.md`: 2 unchecked recurring items — promote only if due and requiring execution work.
 - [ ] `$research-roadmap` — All 43 roadmap phases are complete. Run documentation health scan after Phase 41 remaining batches finish.
+
+## Current Task — Research Quality Alignment Contract 2026-05-25
+
+**Goal:** Tighten alignment-page contracts so research skills produce stronger research first, then render it into HTML without dropping evidence, caveats, assumptions, alternatives, source gaps, or decision rationale.
+
+**Plan:**
+- [x] Inspect the current alignment upgrade script, active research skills, versioning helper, and layer1 alignment-gate tests.
+- [x] Update the shared alignment-page contract with research quality, no-context-loss, evidence matrix, confidence/assumption, source coverage, repo evidence, and research completeness gate requirements.
+- [x] Add skill-specific research translation rules for ICP, competitive analysis, journey map, positioning, customer feedback, research-roadmap, and generic type: research pack skills.
+- [x] Run the upgrade script across active skills, archive old active `SKILL.md` versions, bump versions, and update changelogs for changed skills.
+- [x] Capture the correction in `tasks/lessons.md`.
+- [x] Update layer1 tests for the research-quality contract and run focused verification.
+- [ ] Commit and push intended changes on `master` without touching unrelated dirty Skills Showcase work.
+
+**Files:**
+- `scripts/upgrade-alignment-page.mjs`
+- `global/**/SKILL.md`, `packs/**/SKILL.md`
+- `tests/layer1/alignment-gates.test.ts`
+- `tasks/todo.md`, `tasks/roadmap.md`, `tasks/lessons.md`
+
+### Review
+
+- Added the shared research-quality alignment contract to `scripts/upgrade-alignment-page.mjs`: claims/evidence/inference/assumptions/decision-impact separation, no-context-loss translation, evidence matrix, confidence/assumption register, alternatives, lower-confidence findings, source gaps, downstream implications, research completeness questions, web source coverage categories, and repo file/path evidence.
+- Added skill-specific research translation language for ICP, competitive analysis, journey map, positioning, customer feedback, and research-roadmap, plus generic research-pack translation language.
+- Regenerated 278 active alignment-producing skills, skipped archived skill versions, archived each changed active `SKILL.md`, bumped active versions, and created or updated per-skill `CHANGELOG.md` files.
+- Added layer1 assertions for research-quality alignment contracts, source coverage expectations, repo evidence expectations, and targeted skill-specific translation clauses.
+- Validation passed: `node scripts/upgrade-alignment-page.mjs --dry-run --all`; `pnpm --dir tests exec vitest run --project layer1 layer1/alignment-gates.test.ts`; `bash scripts/skill-versions.sh --missing`; `bash scripts/skill-next-step-routing.sh --missing`; `git diff --check`.
+- Targeted `pnpm --dir tests exec tsx verify.ts --skill {competitive-analysis,journey-map,research-roadmap} --layers 2` required escalation for `tsx` IPC and then reported SKIP because no layer2 tests match those skill filters.
+- Known unrelated blocker: the broader `pnpm --dir tests test:layer1 -- alignment-gates` and `pnpm --dir tests verify --skill competitive-analysis` wrappers fail before this change's target checks on `layer1/benchmark-results-matrix.test.ts`, which still expects `tests/benchmarks/runs/run-codex-0ab55727/report.json` while the generated matrix contains `run-codex-0ec2498e`.
 
 ## Current Task — AFPS Routing Cleanup 2026-05-25
 

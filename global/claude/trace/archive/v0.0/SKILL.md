@@ -1,0 +1,138 @@
+---
+name: trace
+description: Follow a request end-to-end through the stack from route to database
+type: review
+version: v0.0
+argument-hint: <route, endpoint, or feature to trace, e.g. "/api/products" or "user login flow">
+---
+
+# Trace
+
+Follow a request or feature flow end-to-end through the application stack, mapping every layer from the entry point to the database and back.
+
+## Process
+
+1. **Identify the entry point** from `$ARGUMENTS`:
+   - API route or page route → find the route handler or page component.
+   - Feature name → identify the primary user action and its entry point.
+   - tRPC procedure → find the router definition.
+   - If unclear, ask the user for specifics.
+
+2. **Read `CLAUDE.md`** for project conventions and architecture.
+
+3. **Trace forward through the stack:**
+
+   **Layer 1 — Entry Point:**
+   - Route handler, page component, or API endpoint.
+   - What middleware runs before it (auth, rate limiting, etc.).
+   - What parameters/inputs it receives.
+
+   **Layer 2 — Business Logic:**
+   - Service functions, tRPC procedures, or server actions called.
+   - Validation and transformation logic.
+   - Authorization checks.
+
+   **Layer 3 — Data Access:**
+   - Database queries (Drizzle, Prisma, raw SQL).
+   - External API calls.
+   - Cache reads/writes.
+   - What tables/collections are touched.
+
+   **Layer 4 — Response:**
+   - How the response is constructed.
+   - What data is returned to the client.
+   - Error handling at each layer.
+
+4. **Map the data flow:**
+   - What types are used at each boundary.
+   - Where data is transformed or mapped.
+   - Where validation happens.
+   - Where errors are caught and how they propagate.
+
+5. **Identify concerns:**
+   - N+1 queries or redundant data fetches.
+   - Missing error handling at layer boundaries.
+   - Auth/authz gaps.
+   - Type mismatches between layers.
+   - Performance bottlenecks (large queries, missing indexes, unnecessary joins).
+
+## Output Format
+
+### Trace: [route/feature name]
+
+```
+[Entry] → [Middleware] → [Handler] → [Service] → [DB Query] → [Response]
+file.ts:10   auth.ts:5    route.ts:20  svc.ts:45   db.ts:30     route.ts:25
+```
+
+### Layer-by-Layer
+
+#### 1. Entry Point
+- **File**: `app/api/route.ts:10`
+- **Method**: GET/POST
+- **Middleware**: auth, rate-limit
+- **Input**: params, body, query
+
+#### 2. Business Logic
+- **File**: `services/foo.ts:45`
+- **Called by**: route handler
+- **Validates**: [what]
+- **Calls**: [what functions/services]
+
+#### 3. Data Access
+- **File**: `db/queries/foo.ts:30`
+- **Table(s)**: `products`, `categories`
+- **Query type**: SELECT with JOIN
+- **Indexes used**: [if identifiable]
+
+#### 4. Response
+- **Shape**: `{ data: Product[], count: number }`
+- **Error cases**: 401, 404, 500
+
+### Data Flow
+```
+Input (params) → validated → service call → DB query → transform → response
+```
+
+### Concerns Found
+- [Any issues identified during the trace]
+
+## Constraints
+- Follow the actual code path — do not guess or assume based on naming conventions.
+- Read each file in the chain; do not skip layers.
+- Keep the output focused on the specific route/feature — do not map the entire application.
+- If a layer uses dynamic dispatch or plugin patterns that make the path ambiguous, note the ambiguity.
+- Do not modify any code — this is a read-only analysis.
+
+
+## Alignment Page
+
+When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page at `alignment/trace-{topic}.html`. Use a normalized topic slug derived from the app, feature, research subject, report subject, or output filename.
+
+**Full content requirement.** The alignment page must contain the complete content of every proposed markdown deliverable -- every section, every finding, every detail, every list item. It is a thorough interactive review document, not a summary. Render the full deliverable content in clean, readable HTML with appropriate hierarchy, styling, and navigation. If the skill writes multiple scoped deliverables in one run, build one alignment page that contains all deliverables with anchor-linked navigation. Durable tracker artifacts, such as `research/assumption-tracker.md`, remain canonical markdown outputs but must also be fully rendered into the alignment page before approval.
+
+**Dark-mode styling.** Use a dark color scheme by default. Base CSS variables: `--bg: #0d1117; --surface: #161b22; --border: #30363d; --text: #c9d1d9; --text-muted: #8b949e; --accent: #58a6ff; --green: #3fb950; --red: #f85149; --orange: #d29922; --purple: #bc8cff;`. Apply `background: var(--bg); color: var(--text);` on body. Use `--surface` for cards, nav, and table headers. Use `--border` for all borders. Use `--purple` for question blocks and gate headings. Use `--accent` for links and section headings. Keep headings `color: #fff` or `var(--accent)` for hierarchy. Question block backgrounds should use `#1c2333`.
+
+**Alignment gates.** Treat gates as explicit review sections inside the HTML page. A gate blocks finalization until its required inline questions are answered and compiled into YAML. Include every gate that applies to the skill output, and include these gate types whenever relevant: evidence coverage, assumptions/confidence, scope/non-goals, candidate/verdict decisions, artifact destination, proposed file changes, coverage checkpoint, and post-approval route.
+
+**Report-only research gates.** For report-only or pre-approval research skills, the alignment page must explicitly contain evidence coverage, assumptions/confidence, recommended path, proposed file changes, and approval gates before any canonical research, spec, or task file is created or updated.
+
+
+**Required inline questions.** Each gate must contain at least one required inline question placed directly under the content it governs, inside a visually distinct question block. Each question must use radio-button inputs and include two standing options after the skill-generated choices: "Other / None of the above" backed by a multi-line text box for free-form input, and "Need clarification" backed by an optional notes box where the user can explain what is unclear. When any radio option other than "Other" or "Need clarification" is selected, show an optional "Additional notes" text box beneath it so the user can qualify their choice. Generate questions based on what genuinely needs user input -- do not add filler questions. Do not create a separate bottom "Decisions & Clarifications" section.
+
+**Gate YAML contract.** At the bottom of the page, include a "Compile Answers" button that aggregates answers from all inline gate questions throughout the page, including free-text notes. The button remains disabled until every required question has a selection, shows a count of remaining unanswered questions, and scrolls to the first unanswered question if clicked early. When every question is answered, generate a structured YAML block with one item per gate answer using this stable shape: `section`, `gate_type`, `status` (`answered`, `other`, or `needs-clarification`), `answer`, optional `notes`, and optional `target_artifact` or `target_path` when the gate controls file output. After successful compilation, automatically attempt to copy the YAML to the clipboard with the Clipboard API, display copy status, and display the YAML in a read-only textarea with an explicit "Copy YAML" button. The copy button must retry clipboard copy when supported and fall back to selecting the textarea contents when clipboard access is unavailable or blocked.
+
+**Pre-approval stop.** Before user approval, the next action is review of the HTML alignment page, not downstream routing. Ask the user to review the page and provide the compiled YAML answers. Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language until after compiled YAML has been provided and the approved artifacts have been written or updated.
+
+**Diff highlighting on updates.** When the agent updates an existing alignment page after receiving compiled answers, highlight what changed since the previous version. The agent chooses inline annotation or side-by-side layout per situation.
+
+**Archiving.** Before replacing an existing alignment page, archive it to `docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/trace-{topic}.html`.
+
+**Browser open.** Attempt to open the resulting HTML page in the browser and report whether the open succeeded or was blocked. A blocked browser-open attempt does not make the skill fail when the files were written correctly.
+
+## Default Shipping Contract
+
+- **Default next-step routing:** when reporting completion, include either `Recommended next skill: <command>` or the two-line pair `**Next work:** <specific task or "none">` and `**Recommended next command:** <one command or route>` so the next operator has a concrete handoff.
+- If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
+- Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
+- This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.

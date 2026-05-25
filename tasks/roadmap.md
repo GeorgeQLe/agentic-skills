@@ -87,6 +87,21 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Updated on 2026-05-25. AFPS business-product routing now defaults to ICP -> competitive analysis -> journey map -> positioning -> UX variations -> UI interview -> prototype -> UAT -> consolidation -> post-prototype research refresh -> spec interview -> roadmap. Mirrored skills were archived and version-bumped; value-prop-canvas and lean-canvas remain available as optional risk-driven detours. Focused routing tests and required skill validation passed.
 
+## Current Targeted Update: Research Quality Alignment Contract 2026-05-25
+
+**Goal:** Make research-producing alignment pages preserve research quality and decision context, not only polished HTML presentation.
+
+**Acceptance Criteria:**
+- [x] Shared alignment-page language requires claims, evidence, inference, assumptions, and decision impact before HTML translation.
+- [x] HTML pages for research outputs include an evidence matrix, confidence/assumption register, alternatives considered, lower-confidence or rejected findings, source coverage gaps, and downstream implications.
+- [x] The full-content rule is tightened into a no-context-loss rule covering facts, sources, caveats, and decision rationale from proposed deliverables and search/interview logs.
+- [x] Research completeness gates ask inline questions about evidence sufficiency, claims needing more support, and missing context that could change the recommendation.
+- [x] Web-research skills require source coverage by category; repo/codebase research skills require file/path evidence and observed-fact versus inference separation.
+- [x] Active changed skills are archived, version-bumped, and changelogs updated; archived skill versions are not mutated.
+- [x] Layer1 tests and focused skill verification pass.
+
+**Result:** Updated on 2026-05-25. Alignment-page contracts now require research outputs to preserve claims, evidence, inference, assumptions, confidence, rejected findings, source gaps, and decision impact in the HTML review page. Active alignment-producing skills were archived and version-bumped; focused alignment validation, skill version audit, routing audit, and whitespace checks passed. Broader test wrappers remain blocked by an unrelated benchmark-results matrix fixture mismatch.
+
 ## Current Targeted Update: Provision Agentic Config Benchmark Fixture False Negative 2026-05-22
 
 **Goal:** Ship the benchmark fixture remediation for `provision-agentic-config` so retained outputs with substantive policy sections are scored correctly.

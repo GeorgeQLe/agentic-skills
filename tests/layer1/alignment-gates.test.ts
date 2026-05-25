@@ -47,6 +47,29 @@ const coreSkills = [
 
 const skippedSkills = ["run", "ship", "ship-end", "sync", "roadmap", "plan-phase"];
 
+const researchQualitySkills = [
+  "global/claude/analyze-sessions/SKILL.md",
+  "global/codex/analyze-sessions/SKILL.md",
+  "global/claude/research-roadmap/SKILL.md",
+  "global/codex/research-roadmap/SKILL.md",
+  "packs/business-discovery/claude/icp/SKILL.md",
+  "packs/business-discovery/codex/icp/SKILL.md",
+  "packs/business-discovery/claude/competitive-analysis/SKILL.md",
+  "packs/business-discovery/codex/competitive-analysis/SKILL.md",
+  "packs/business-discovery/claude/customer-feedback/SKILL.md",
+  "packs/business-discovery/codex/customer-feedback/SKILL.md",
+  "packs/business-discovery/claude/positioning/SKILL.md",
+  "packs/business-discovery/codex/positioning/SKILL.md",
+  "packs/customer-lifecycle/claude/journey-map/SKILL.md",
+  "packs/customer-lifecycle/codex/journey-map/SKILL.md",
+  "packs/devtool/claude/devtool-user-map/SKILL.md",
+  "packs/devtool/codex/devtool-user-map/SKILL.md",
+  "packs/game/claude/game-comparables/SKILL.md",
+  "packs/game/codex/game-comparables/SKILL.md",
+  "packs/youtube-ops/claude/youtube-competitive-research/SKILL.md",
+  "packs/youtube-ops/codex/youtube-competitive-research/SKILL.md",
+];
+
 function read(path: string) {
   return readFileSync(resolve(ROOT, path), "utf8");
 }
@@ -99,11 +122,44 @@ describe("alignment page gate contract", () => {
     }
   });
 
+  it("requires research output pages to preserve evidence, uncertainty, and decision context", () => {
+    for (const path of researchQualitySkills) {
+      const content = read(path);
+      expect(content, `${path} research quality contract`).toContain("**Research quality contract.**");
+      expect(content, `${path} claim/evidence/inference split`).toContain("`claims` (what the report concludes), `evidence`");
+      expect(content, `${path} no context loss`).toContain("**No context loss rule.**");
+      expect(content, `${path} evidence matrix`).toContain("evidence matrix");
+      expect(content, `${path} confidence register`).toContain("confidence/assumption register");
+      expect(content, `${path} rejected findings`).toContain("rejected or lower-confidence findings");
+      expect(content, `${path} source gaps`).toContain("source coverage gaps");
+      expect(content, `${path} downstream implications`).toContain("downstream implications");
+      expect(content, `${path} research completeness gate`).toContain("**Research completeness gate.**");
+      expect(content, `${path} evidence sufficiency question`).toContain("whether the evidence is sufficient for the recommendation");
+    }
+  });
+
+  it("requires source coverage categories for web research and file evidence for repo research", () => {
+    for (const path of researchQualitySkills) {
+      const content = read(path);
+      expect(content, `${path} source coverage expectations`).toContain("**Source coverage expectations.**");
+      expect(content, `${path} web source categories`).toContain("competitors, pricing, user sentiment, positioning, integrations, and recent activity");
+      expect(content, `${path} repo evidence`).toContain("file/path evidence");
+      expect(content, `${path} fact inference distinction`).toContain("distinguish observed code facts from inferred product, workflow, or user conclusions");
+    }
+  });
+
   it("preserves skill-specific gate language", () => {
     expect(read("global/codex/concept-exploration/SKILL.md")).toContain("Concept Assumptions Manifest as a first-class assumptions/confidence gate");
     expect(read("global/codex/feature-interview/SKILL.md")).toContain("Render the evidence brief, claim verdicts, assumptions, planning destination");
     expect(read("global/codex/ui-interview/SKILL.md")).toContain("Render surfaced assumptions, the UI or content requirements manifest");
     expect(read("global/codex/ux-variations/SKILL.md")).toContain("Render surfaced assumptions, variation manifest, concept selection");
+    expect(read("packs/business-discovery/codex/icp/SKILL.md")).toContain("**ICP research translation.**");
+    expect(read("packs/business-discovery/codex/competitive-analysis/SKILL.md")).toContain("**Competitive research translation.**");
+    expect(read("packs/customer-lifecycle/codex/journey-map/SKILL.md")).toContain("**Journey research translation.**");
+    expect(read("packs/business-discovery/codex/positioning/SKILL.md")).toContain("**Positioning research translation.**");
+    expect(read("packs/business-discovery/codex/customer-feedback/SKILL.md")).toContain("**Customer-feedback research translation.**");
+    expect(read("global/codex/research-roadmap/SKILL.md")).toContain("**Research-roadmap translation.**");
+    expect(read("packs/devtool/codex/devtool-user-map/SKILL.md")).toContain("**Research-pack translation.**");
   });
 
   it("requires every active alignment page to copy compiled YAML ergonomically", () => {

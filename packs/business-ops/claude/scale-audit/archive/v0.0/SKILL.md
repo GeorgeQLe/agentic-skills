@@ -1,0 +1,232 @@
+---
+name: scale-audit
+description: Evaluate codebase against enterprise ICP for production readiness, compliance, and multi-stakeholder journey coverage
+type: analysis
+version: v0.0
+argument-hint: "[optional: path-to-enterprise-icp-spec]"
+---
+
+## Pack Availability Guard
+
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+
+# Scale Audit — Enterprise Production Readiness
+
+Automated analysis that evaluates the current codebase against the enterprise discovery in `research/enterprise-icp.md`. Identifies what's missing for enterprise deals — per-stakeholder journey coverage, compliance, infrastructure, and operational readiness. No interview — this is the agent doing the work.
+
+## Prerequisites
+
+`research/enterprise-icp.md` (or `research/{app}/enterprise-icp.md`) must exist. If it doesn't, tell the user to run `/enterprise-icp` first and stop.
+
+## Process
+
+### 0. App Scope Resolution (Monorepo Support)
+
+Before checking prerequisites, determine the app scope:
+
+1. If `$ARGUMENTS` specifies an app name matching a subdirectory of `research/`, use it.
+2. If `research/` contains subdirectories (excluding files), list them and ask the user which app to target. If only one subdirectory exists, use it automatically.
+3. If no subdirectories exist, proceed with flat structure (single-product mode).
+
+When app scope `{app}` is active:
+- Read/write research from `research/{app}/` instead of `research/`
+- Read/write specs from `specs/{app}/` instead of `specs/`
+- Also read `research/icp.md` (cross-app overview) for broader context
+
+### 1. Load Context
+
+- Read `research/enterprise-icp.md` (or `research/{app}/enterprise-icp.md`) — stakeholder map, per-persona journeys, deal-killers, lifecycle, onboarding matrix
+- Read `research/icp.md` (or `research/{app}/icp.md`) if it exists — carry forward startup context
+- Read `research/mvp-gap.md` (or `research/{app}/mvp-gap.md`) if it exists — note unresolved startup gaps that become more critical at enterprise scale
+- Read CLAUDE.md, README, package config, existing specs
+- Read `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, and `tasks/recurring-todo.md` (if they exist) for work in progress or advisory records
+
+### 2. Analyse the Codebase
+
+Read source files thoroughly — auth system, data layer, API design, infrastructure config (Docker, k8s, terraform, CI/CD), monitoring/logging setup, environment configuration, security implementation. Build a complete picture of production readiness.
+
+### 3. Evaluate Against Enterprise ICP
+
+#### Per-Persona Journey Coverage
+For each stakeholder identified in `research/enterprise-icp.md`:
+- **End users**: Can they complete their core workflows? Does the UX scale to enterprise complexity?
+- **Team admin**: Is there an admin panel? Seat management? Permission configuration? Usage analytics?
+- **IT / Security**: Can they complete a security review? Are audit logs available? Is SSO configurable? Can they answer a vendor security questionnaire?
+- **Procurement**: Is there an enterprise pricing page? Contract-friendly terms? Volume licensing?
+- **Executive sponsor**: Is there ROI reporting? Usage dashboards? Success metrics?
+
+#### Onboarding Gap Analysis
+For each onboarding path from `research/enterprise-icp.md`:
+- Self-serve: Does it exist? Is it frictionless?
+- Team: Can an admin onboard a team? Bulk invite? Role assignment?
+- SSO-provisioned: Is SCIM supported? JIT provisioning? Auto-deprovisioning?
+- Migration: Data import tools? Competitor mapping? Migration guides?
+- Training: In-app guidance? Documentation? API reference?
+
+#### Compliance Readiness
+- **SOC 2**: Audit logging, access controls, change management, incident response procedures
+- **GDPR**: Data deletion/export, consent management, data processing records, DPA template
+- **HIPAA** (if applicable): BAA template, PHI handling, encryption, access audit trail
+- **General security**: Encryption at rest and in transit, secrets management, vulnerability scanning, dependency auditing
+
+#### Infrastructure Readiness
+- **Multi-tenancy**: Data isolation model (shared DB with tenant ID? Separate schemas? Separate DBs?)
+- **Horizontal scaling**: Can the system scale to enterprise load? Connection pooling? Queue-based processing?
+- **Disaster recovery**: Backup strategy, recovery time objectives, failover capability
+- **Observability**: Structured logging, metrics collection, distributed tracing, alerting
+- **CI/CD maturity**: Automated testing, staging environment, deployment rollback, feature flags
+- **Environment parity**: Dev/staging/production consistency
+
+#### Operational Readiness
+- **Incident response**: Runbooks, on-call setup, status page, incident communication
+- **SLA monitoring**: Uptime tracking, latency monitoring, error rate dashboards
+- **Support workflow**: Ticketing, escalation paths, customer communication channels
+- **Customer success**: Health scoring, usage analytics, renewal tracking
+
+#### Unresolved Startup Gaps
+If `research/mvp-gap.md` exists, check each unresolved gap:
+- Is it still unresolved?
+- Does it become more critical at enterprise scale?
+- Flag any startup gaps that are now enterprise deal-killers.
+
+### 4. Prioritise
+
+Tag each gap with:
+- **`hard-blocker`** — No enterprise deal closes without this. Non-negotiable.
+- **`soft-blocker`** — Most enterprise deals will require this. Can sometimes be worked around in early deals.
+- **`differentiator`** — Not required but gives competitive advantage in enterprise sales.
+
+Estimate effort for each: S / M / L / XL.
+
+### 5. Populate Next Steps
+
+Before writing, check which files exist to populate the `## Next Steps` section contextually. Include a **Recommended** item and 2–4 other applicable options. Choose the recommendation by the first matching condition:
+
+1. IF any `hard-blocker` lacks a full implementation spec: `/spec-interview [top blocker]` — spec the highest-priority enterprise hard-blocker from `specs/scale-audit.md`.
+2. IF enterprise stakeholder journey context is missing: `/journey-map enterprise` — map enterprise stakeholder journeys before sequencing build work.
+3. IF startup gaps escalated and `research/mvp-gap.md` is missing or stale: `/mvp-gap` — re-evaluate startup readiness first.
+4. IF enterprise SLA or compliance gaps lack closure metrics: `/metrics` — define metrics covering enterprise SLAs.
+5. OTHERWISE: `/roadmap` — sequence the already-specced enterprise work into implementation phases.
+
+Only recommend `/roadmap` as the primary next step when every hard-blocker already has a full spec or is already tracked in `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, or `tasks/recurring-todo.md`.
+
+## Output
+
+### `specs/scale-audit.md` (or `specs/{app}/scale-audit.md`)
+
+```markdown
+# Enterprise Scale Audit
+
+> Evaluated against: research/enterprise-icp.md (or research/{app}/enterprise-icp.md)
+> Date: [current date]
+> Codebase state: [brief summary of what exists]
+
+## Summary
+[2-3 sentences: overall enterprise readiness and most critical gaps]
+
+## Hard Blockers
+- **[Gap title]** — [What's missing, which stakeholder it blocks, and why]. Effort: S/M/L/XL
+  _Start with:_ `/spec-interview [topic]`
+- ...
+
+## Soft Blockers
+- **[Gap title]** — [What's missing and impact]. Effort: S/M/L/XL
+  _Start with:_ `/spec-interview [topic]`
+- ...
+
+## Differentiators
+- **[Gap title]** — [What's missing and competitive advantage]. Effort: S/M/L/XL
+  _Start with:_ `/spec-interview [topic]`
+- ...
+
+## Stakeholder Coverage Matrix
+| Stakeholder | Journey Covered? | Key Gaps |
+|-------------|-----------------|----------|
+| End users   | Partial/Yes/No  | ...      |
+| Team admin  | Partial/Yes/No  | ...      |
+| IT/Security | Partial/Yes/No  | ...      |
+| Procurement | Partial/Yes/No  | ...      |
+| Exec sponsor| Partial/Yes/No  | ...      |
+
+## Compliance Matrix
+| Standard | Status | Key Gaps |
+|----------|--------|----------|
+| SOC 2    | Not started/Partial/Ready | ... |
+| GDPR     | Not started/Partial/Ready | ... |
+| HIPAA    | N/A/Not started/Partial/Ready | ... |
+
+## Recommended Build Sequence
+[Ordered list: hard blockers first, then soft blockers, then differentiators.
+ Within each tier, order by: most deals unblocked per unit of effort.
+ Note dependencies — what must exist before other things can be built.]
+
+## Unresolved Startup Gaps (Escalated)
+[Gaps from research/mvp-gap.md that are now more critical at enterprise scale]
+
+## Next Steps
+
+**Recommended:** [first matching command from step 5] — [reason grounded in this audit]
+
+Other options:
+- [conditional items from step 5 — only include items whose conditions are met]
+```
+
+## Task Classification
+
+When this skill produces follow-up work, file it by execution semantics:
+
+- Immediately actionable implementation or documentation work goes in `tasks/todo.md`.
+- Human-only external actions tied to automated steps go in `tasks/manual-todo.md` with `_(blocks: Step N.X)_` or `_(after: Step N.X)_`; repo edits, SDK wiring, generated assets, local commands, tests, audits, and authenticated CLI/API work stay in `tasks/todo.md`.
+- One-time condition-gated records, baselines, or future measurements go in `tasks/record-todo.md` with source, condition, non-blocking reason, evidence, and promotion rule.
+- Cadence-based reviews, playtests, adoption checks, investor updates, retros, or docs-health checks go in `tasks/recurring-todo.md` with cadence, owner/agent, next due, evidence path, and escalation conditions.
+- Do not put non-blocking records or recurring obligations in `tasks/todo.md` unless they have been explicitly promoted into current execution work.
+
+## Constraints
+
+- **Do not make code changes.** Analysis only.
+- **Every gap must cite evidence** — missing middleware, absent SCIM endpoint, no audit log table, etc.
+- **Distinguish "first enterprise deal" from "100th enterprise deal."** Early enterprise sales can tolerate workarounds; at scale they can't. Be clear about which gaps matter when.
+- **Include `/spec-interview` prompts** for each gap that lacks a full spec so the user can immediately spec the blocker.
+- **Do not duplicate work already tracked** in `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, or `tasks/recurring-todo.md`.
+- **If the codebase is minimal**, be honest about it — don't fabricate detailed infrastructure gaps for a prototype.
+
+## Alignment Page
+
+When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page at `alignment/scale-audit-{topic}.html`. Use a normalized topic slug derived from the app, feature, research subject, report subject, or output filename.
+
+**Full content requirement.** The alignment page must contain the complete content of every proposed markdown deliverable -- every section, every finding, every detail, every list item. It is a thorough interactive review document, not a summary. Render the full deliverable content in clean, readable HTML with appropriate hierarchy, styling, and navigation. If the skill writes multiple scoped deliverables in one run, build one alignment page that contains all deliverables with anchor-linked navigation. Durable tracker artifacts, such as `research/assumption-tracker.md`, remain canonical markdown outputs but must also be fully rendered into the alignment page before approval.
+
+**Dark-mode styling.** Use a dark color scheme by default. Base CSS variables: `--bg: #0d1117; --surface: #161b22; --border: #30363d; --text: #c9d1d9; --text-muted: #8b949e; --accent: #58a6ff; --green: #3fb950; --red: #f85149; --orange: #d29922; --purple: #bc8cff;`. Apply `background: var(--bg); color: var(--text);` on body. Use `--surface` for cards, nav, and table headers. Use `--border` for all borders. Use `--purple` for question blocks and gate headings. Use `--accent` for links and section headings. Keep headings `color: #fff` or `var(--accent)` for hierarchy. Question block backgrounds should use `#1c2333`.
+
+**Alignment gates.** Treat gates as explicit review sections inside the HTML page. A gate blocks finalization until its required inline questions are answered and compiled into YAML. Include every gate that applies to the skill output, and include these gate types whenever relevant: evidence coverage, assumptions/confidence, scope/non-goals, candidate/verdict decisions, artifact destination, proposed file changes, coverage checkpoint, and post-approval route.
+
+**Report-only research gates.** For report-only or pre-approval research skills, the alignment page must explicitly contain evidence coverage, assumptions/confidence, recommended path, proposed file changes, and approval gates before any canonical research, spec, or task file is created or updated.
+
+
+**Required inline questions.** Each gate must contain at least one required inline question placed directly under the content it governs, inside a visually distinct question block. Each question must use radio-button inputs and include two standing options after the skill-generated choices: "Other / None of the above" backed by a multi-line text box for free-form input, and "Need clarification" backed by an optional notes box where the user can explain what is unclear. When any radio option other than "Other" or "Need clarification" is selected, show an optional "Additional notes" text box beneath it so the user can qualify their choice. Generate questions based on what genuinely needs user input -- do not add filler questions. Do not create a separate bottom "Decisions & Clarifications" section.
+
+**Gate YAML contract.** At the bottom of the page, include a "Compile Answers" button that aggregates answers from all inline gate questions throughout the page, including free-text notes. The button remains disabled until every required question has a selection, shows a count of remaining unanswered questions, and scrolls to the first unanswered question if clicked early. When every question is answered, generate a structured YAML block with one item per gate answer using this stable shape: `section`, `gate_type`, `status` (`answered`, `other`, or `needs-clarification`), `answer`, optional `notes`, and optional `target_artifact` or `target_path` when the gate controls file output. After successful compilation, automatically attempt to copy the YAML to the clipboard with the Clipboard API, display copy status, and display the YAML in a read-only textarea with an explicit "Copy YAML" button. The copy button must retry clipboard copy when supported and fall back to selecting the textarea contents when clipboard access is unavailable or blocked.
+
+**Pre-approval stop.** Before user approval, the next action is review of the HTML alignment page, not downstream routing. Ask the user to review the page and provide the compiled YAML answers. Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language until after compiled YAML has been provided and the approved artifacts have been written or updated.
+
+**Diff highlighting on updates.** When the agent updates an existing alignment page after receiving compiled answers, highlight what changed since the previous version. The agent chooses inline annotation or side-by-side layout per situation.
+
+**Archiving.** Before replacing an existing alignment page, archive it to `docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/scale-audit-{topic}.html`.
+
+**Browser open.** Attempt to open the resulting HTML page in the browser and report whether the open succeeded or was blocked. A blocked browser-open attempt does not make the skill fail when the files were written correctly.
+
+## Archive-First Replacement Policy
+
+- Before replacing or substantively rewriting an existing canonical research/spec document (`research/**/*.md`, `specs/**/*.md`, or `docs/specifications/**/*.md`), copy the current file to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-relative-path>`.
+- Preserve the archived snapshot exactly as it existed before the change; do not edit the archived copy after creating it.
+- After the archive snapshot exists, write the updated document to the original canonical path.
+- Report both the archive path and the updated canonical path in the final output.
+- New files do not need archive snapshots. Append-only updates do not need archive snapshots unless an existing section is regenerated or rewritten.
+- Keep any existing user approval requirement before overwriting or replacing a document; archiving does not replace asking when the skill already requires approval.
+
+## Default Shipping Contract
+
+- **Default next-step routing:** when reporting completion, include either `Recommended next skill: <command>` or the two-line pair `**Next work:** <specific task or "none">` and `**Recommended next command:** <one command or route>` so the next operator has a concrete handoff.
+- If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
+- Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
+- This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.

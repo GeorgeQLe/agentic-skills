@@ -1,0 +1,167 @@
+---
+name: benchmark-test-skill
+description: Run verify and benchmark tests for one agentic-skills skill, producing pass-rate, latency, cost, and consistency metrics
+type: execution
+version: v0.0
+argument-hint: "<skill name>"
+---
+
+# Benchmark Test Skill
+
+Invoke as `/benchmark-test-skill <skill>`.
+
+Use this skill when the user wants to benchmark-test a skill defined in this repository. The trailing argument is the skill under test, not a mode for that skill. For example, `/benchmark-test-skill design-system` tests the `design-system` skill with the harness; it does not run `design-system` against the current app or website.
+
+This skill runs the agentic-skills test harness verification gate followed by the benchmark extension for a single skill. By default, benchmark both Claude and Codex runners and report them separately.
+
+This skill produces deterministic benchmark evidence only. It should hand off to `/benchmark-agent-review <skill>` as a separate step when the user needs subjective ergonomic judgment or remediation planning for the generated skill outputs.
+
+## Input
+
+- Required: one skill name, such as `design-system`.
+- If no skill name is provided, ask the user which skill to benchmark-test.
+- When invoked as `/benchmark-test-skill <skill>`, resolve `benchmark-test-skill` as the active command first, including this project-local pack path, before treating the trailing argument as the skill under test.
+- Do not reinterpret the trailing argument as the active workflow unless the benchmark-test-skill command cannot be found after checking project-local packs.
+
+## Execution
+
+Run commands from `/Users/georgele/projects/tools/agentic-skills/tests`.
+
+### Step 0 - Command Resolution Guard
+
+Confirm the active workflow is this `packs/agentic-skills-bench` skill. The requested target skill is data for the benchmark harness, not a command to execute directly.
+
+- For command-like invocations, preserve the leading command and route by the pack command first.
+- If a target such as `design-system`, `run`, or `ship` is provided, never run that skill directly as the benchmark action.
+- If command resolution is ambiguous, stop and report the ambiguity instead of running the target skill.
+
+### Step 1 - Eligibility Preflight
+
+Before running verify, check whether the requested skill is a repository skill known to the benchmark harness:
+
+```bash
+pnpm bench --list-skills
+```
+
+- If `<SKILL>` is not listed, stop immediately and report `unknown skill: <SKILL>`.
+- List the known repository skills from the command output.
+- Do not run `pnpm verify` or `pnpm bench` for unknown skills.
+- Read and report the listed coverage status for `<SKILL>`: `custom`, `generic`, or `blocked`.
+- Skills with custom layer4 setups use skill-specific fixtures and hard assertions. Some setups also include deterministic output-quality rubrics.
+- Skills without custom layer4 setups use the harness generic smoke benchmark. Treat that as invocation/compliance evidence, not deep domain-quality evidence.
+- If the row is `blocked`, stop before verify and bench. Report the blocked reason and next command from the list output.
+- If the row is `generic`, continue only as generic smoke evidence and route missing custom coverage to `/targeted-skill-builder <SKILL> benchmark coverage`.
+
+### Step 2 - Verify
+
+```bash
+pnpm verify --skill <SKILL>
+```
+
+- Expect layer1 to pass and layer2 to pass when target-specific tests exist.
+- Treat layer1 as the static harness-contract gate, including basic benchmark setup alignment checks such as expected next-route handoffs, runner command conventions, output file expectations, and quality-rubric facts against the current skill contract.
+- If layer1 fails because a benchmark setup is misaligned with the skill contract, classify it as a harness/benchmark coverage defect and route to `/targeted-skill-builder <SKILL> benchmark failure`; do not spend agent budget on `pnpm bench`.
+- If layer2 reports no tests matched `<SKILL>`, treat that layer as skipped and continue to the benchmark step. Record the skip clearly because generic benchmark coverage is weaker than target-specific layer2 verification.
+- Record pass/fail and wall time per layer.
+- If verify fails, stop and report the failure. Do not run the benchmark step.
+
+### Step 3 - Bench
+
+Run only if verify passes:
+
+```bash
+pnpm bench --skill <SKILL> --agent both --runs 3 --chunk-size 3 --pause 0
+```
+
+- Use 3 iterations by default.
+- Use `--agent both` by default. Only use `--agent claude` or `--agent codex` when the user explicitly asks to isolate one runner.
+- The expected budget is about $1 per run for the current design-system variant; report actual cost from the benchmark output when available.
+- The bench system persists raw data to `tests/benchmarks/runs/<skill>-<agent>-<sessionId>/` and generates `report.json`.
+- Treat rate limits, quota exhaustion, and similar runner-capacity errors as infrastructure-blocked runs, not skill failures. Report them separately from evaluated pass rate.
+- If recent same-skill benchmark reports or triage reports show repeated same-family benchmark false negatives, do not recommend another blind rerun as the next step. Report the recurrence and route to `/targeted-skill-builder <SKILL> benchmark repeated false-negative generalization` so the harness/setup gets a family-level semantic evaluator, fixture set, or infrastructure classifier instead of another one-off tolerance patch.
+
+### Step 4 - Report
+
+Write results to `benchmark/test-<SKILL>-<YYYY-MM-DD>.md` at the repository root. Use the current date.
+
+Populate the report from `report.json` and verify the output includes:
+
+- verify table with layer status and wall time
+- agent name, evaluated pass rate, blocked-run count, and Wilson 95% confidence interval
+- failed assertions, if any
+- output-quality score summary when the setup defines a quality evaluator, including threshold failures, critical failures, and lowest-scoring criteria when present
+- infrastructure-blocked runs, if any
+- latency p50, p95, and p99
+- cost per run and total cost
+- mean pairwise similarity and outlier count
+- raw session path
+- recommended next route, using a literal label such as `Recommended next command:` or `Recommended next skill:`
+
+After writing the report, verify the file exists and contains the benchmark target, agent rows, pass-rate or blocked-run data, latency, cost, and raw session path. If any required report field is missing, treat the workflow as incomplete and fix the report before marking the benchmark done.
+
+## Output
+
+Print a concise benchmark summary:
+
+- verify pass/fail
+- hard assertion pass rate
+- output-quality score when present, labeled as an additional rubric score rather than a statistical confidence measure
+- infrastructure-blocked count, if any
+- p50 latency
+- total cost
+- report path
+- next review handoff when subjective output-quality judgment or remediation planning is still needed
+
+The Markdown report and the final assistant response must both include a literal next-route label accepted by the harness, such as `Recommended next skill: /benchmark-agent-review <skill>` or `Recommended next command: /ship`.
+
+## Alignment Page
+
+When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page at `alignment/benchmark-test-skill-{topic}.html`. Use a normalized topic slug derived from the app, feature, research subject, report subject, or output filename.
+
+**Full content requirement.** The alignment page must contain the complete content of every proposed markdown deliverable -- every section, every finding, every detail, every list item. It is a thorough interactive review document, not a summary. Render the full deliverable content in clean, readable HTML with appropriate hierarchy, styling, and navigation. If the skill writes multiple scoped deliverables in one run, build one alignment page that contains all deliverables with anchor-linked navigation. Durable tracker artifacts, such as `research/assumption-tracker.md`, remain canonical markdown outputs but must also be fully rendered into the alignment page before approval.
+
+**Dark-mode styling.** Use a dark color scheme by default. Base CSS variables: `--bg: #0d1117; --surface: #161b22; --border: #30363d; --text: #c9d1d9; --text-muted: #8b949e; --accent: #58a6ff; --green: #3fb950; --red: #f85149; --orange: #d29922; --purple: #bc8cff;`. Apply `background: var(--bg); color: var(--text);` on body. Use `--surface` for cards, nav, and table headers. Use `--border` for all borders. Use `--purple` for question blocks and gate headings. Use `--accent` for links and section headings. Keep headings `color: #fff` or `var(--accent)` for hierarchy. Question block backgrounds should use `#1c2333`.
+
+**Alignment gates.** Treat gates as explicit review sections inside the HTML page. A gate blocks finalization until its required inline questions are answered and compiled into YAML. Include every gate that applies to the skill output, and include these gate types whenever relevant: evidence coverage, assumptions/confidence, scope/non-goals, candidate/verdict decisions, artifact destination, proposed file changes, coverage checkpoint, and post-approval route.
+
+**Report-only research gates.** For report-only or pre-approval research skills, the alignment page must explicitly contain evidence coverage, assumptions/confidence, recommended path, proposed file changes, and approval gates before any canonical research, spec, or task file is created or updated.
+
+
+**Required inline questions.** Each gate must contain at least one required inline question placed directly under the content it governs, inside a visually distinct question block. Each question must use radio-button inputs and include two standing options after the skill-generated choices: "Other / None of the above" backed by a multi-line text box for free-form input, and "Need clarification" backed by an optional notes box where the user can explain what is unclear. When any radio option other than "Other" or "Need clarification" is selected, show an optional "Additional notes" text box beneath it so the user can qualify their choice. Generate questions based on what genuinely needs user input -- do not add filler questions. Do not create a separate bottom "Decisions & Clarifications" section.
+
+**Gate YAML contract.** At the bottom of the page, include a "Compile Answers" button that aggregates answers from all inline gate questions throughout the page, including free-text notes. The button remains disabled until every required question has a selection, shows a count of remaining unanswered questions, and scrolls to the first unanswered question if clicked early. When every question is answered, generate a structured YAML block with one item per gate answer using this stable shape: `section`, `gate_type`, `status` (`answered`, `other`, or `needs-clarification`), `answer`, optional `notes`, and optional `target_artifact` or `target_path` when the gate controls file output. After successful compilation, automatically attempt to copy the YAML to the clipboard with the Clipboard API, display copy status, and display the YAML in a read-only textarea with an explicit "Copy YAML" button. The copy button must retry clipboard copy when supported and fall back to selecting the textarea contents when clipboard access is unavailable or blocked.
+
+**Pre-approval stop.** Before user approval, the next action is review of the HTML alignment page, not downstream routing. Ask the user to review the page and provide the compiled YAML answers. Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language until after compiled YAML has been provided and the approved artifacts have been written or updated.
+
+**Diff highlighting on updates.** When the agent updates an existing alignment page after receiving compiled answers, highlight what changed since the previous version. The agent chooses inline annotation or side-by-side layout per situation.
+
+**Archiving.** Before replacing an existing alignment page, archive it to `docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/benchmark-test-skill-{topic}.html`.
+
+**Browser open.** Attempt to open the resulting HTML page in the browser and report whether the open succeeded or was blocked. A blocked browser-open attempt does not make the skill fail when the files were written correctly.
+
+## Constraints
+
+- Do not audit or benchmark the app, website, docs, or product surface unless the user explicitly asks for a separate website/product benchmark workflow.
+- Do not run `pnpm bench` when `pnpm verify` fails.
+- Do not fabricate benchmark metrics. Use the command output and `report.json`.
+- Do not present quality score as a replacement for hard assertion pass rate, or present a small benchmark run as statistically definitive.
+- Do not omit the final next-step route. Completion output must include either `Recommended next skill: <command>` or the two-line pair `**Next work:** <specific task or "none">` and `**Recommended next command:** <one command or route>`.
+- Do not create or modify GitHub Actions workflows.
+
+## Next-Step Routing
+
+If the skill is unknown to the repository, recommend checking the skill name or creating the skill first with `/create-agentic-skill`.
+
+If the skill has blocked benchmark coverage, recommend the row's `next_command`.
+
+If the skill only has generic smoke benchmark coverage or otherwise lacks custom domain-quality assertions, recommend `/targeted-skill-builder <skill> benchmark coverage`.
+
+If the skill fails verification, hard benchmark assertions, or configured quality thresholds, recommend `/session-triage <skill> benchmark failure`.
+
+If benchmark runs are blocked only by rate limits or quota exhaustion, recommend re-running `/benchmark-test-skill <skill>` after the reset instead of treating the skill as failed.
+
+If the failure pattern has already been triaged as a repeated same-family benchmark false negative, recommend `/targeted-skill-builder <skill> benchmark repeated false-negative generalization` instead of another `/benchmark-test-skill <skill>` rerun.
+
+If evaluated benchmark runs completed and subjective output-quality review or remediation planning has not yet been performed, recommend `/benchmark-agent-review <skill>` as the next separate step.
+
+If the skill passes, the report is written, and no subjective review is needed or the separate `/benchmark-agent-review <skill>` step has already been completed, recommend `/ship`.

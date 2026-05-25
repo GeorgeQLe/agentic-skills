@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-05-25 — Alignment-page feedback includes research quality, not only HTML UX
+
+- Alignment-page corrections can be about the substance of research, not just whether the HTML review page exists or has usable controls.
+- Research skills should preserve claims, evidence, inference, assumptions, confidence, alternatives, rejected findings, source gaps, and decision impact from the research process into the alignment page.
+- When updating alignment contracts, require no context loss from proposed deliverables, search logs, interview logs, and approval notes; every fact, source, caveat, and rationale must be rendered or explicitly linked.
+- Validation should assert research-quality gates directly so future passes do not improve presentation while thinning the underlying analysis.
+
 ## 2026-05-24 — Feature interview is the post-spec add-on path
 
 - A workflow review framed `$feature-interview` too much as a post-ship or pre-spec triage step, but the user clarified it is also the normal post-spec route for additions.
