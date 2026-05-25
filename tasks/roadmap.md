@@ -42,6 +42,20 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Updated on 2026-05-25. Parsed 11,386 local user-history records across Claude and Codex and built the cross-skill review page at `alignment/analyze-sessions-cross-skill-output-understanding-audit.html`. The audit finds alignment pages are improving understanding when they preserve full decision context and inline decision gates, but cross-skill output quality still needs tighter scope control, research freshness/date context, route handoff validation, and operational-loop approval exemptions. Browser open was attempted but blocked by missing local browser handlers and the WSL bridge.
 
+## Current Targeted Update: Split-Path Product Research Workflow Analysis 2026-05-25
+
+**Goal:** Investigate previous Claude and Codex conversations for recurring cases where research surfaces multiple plausible ICP, product-line, pivot, or problem-focus branches, then recommend how workflow skills should handle branches without bogging down in full-depth evaluation of every variation.
+
+**Acceptance Criteria:**
+- [x] Full available Claude and Codex user history is parsed for split-path workflow evidence, not only the current repo task logs.
+- [x] Findings separate observed evidence from inference and include real examples from prior conversations.
+- [x] Recommendation covers when to keep, prune, park, merge, compare, or split branches across existing product-discovery skills.
+- [x] The report identifies the likely owner surface for any durable workflow change and the expected validation shape.
+- [x] `alignment/analyze-sessions-split-path-product-research-workflow.html` renders the full report with evidence matrix, assumptions/confidence, recommended path, proposed file changes, and approval gates.
+- [x] The HTML review page is verified, browser open is attempted, and downstream routing is withheld until compiled YAML approval.
+
+**Result:** Updated on 2026-05-25. Parsed 11,407 local Claude/Codex user-history records and built the split-path workflow review page at `alignment/analyze-sessions-split-path-product-research-workflow.html`. The audit finds branch discovery is valuable but branch commitment needs a shared governor: screen all plausible branches at triage depth, deepen one primary branch by default, allow a second branch only for true separate product-line or materially distinct ICP/problem cases, and park/merge/kill/route the rest through explicit branch verdicts. Browser open was attempted but blocked by missing local browser handlers and the WSL bridge.
+
 **Goal:** Make benchmark tests actually evaluate generated HTML alignment pages instead of only the primary Markdown/text artifact.
 
 **Acceptance Criteria:**

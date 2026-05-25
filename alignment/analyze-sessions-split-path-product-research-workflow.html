@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Split-Path Product Research Workflow Analysis</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --text-muted: #8b949e;
+      --accent: #58a6ff;
+      --green: #3fb950;
+      --red: #f85149;
+      --orange: #d29922;
+      --purple: #bc8cff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 15px/1.55 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    a { color: var(--accent); }
+    header, main { max-width: 1180px; margin: 0 auto; padding: 28px; }
+    header { padding-top: 44px; }
+    h1, h2, h3 { color: #fff; line-height: 1.2; }
+    h1 { font-size: 34px; margin: 0 0 12px; }
+    h2 { color: var(--accent); margin-top: 36px; border-top: 1px solid var(--border); padding-top: 24px; }
+    h3 { margin-top: 24px; }
+    .lede { color: var(--text-muted); font-size: 17px; max-width: 920px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; }
+    .card, .gate, table, .code, textarea {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+    .card { padding: 16px; }
+    .metric { font-size: 26px; color: #fff; font-weight: 700; }
+    .muted { color: var(--text-muted); }
+    table { width: 100%; border-collapse: collapse; overflow: hidden; }
+    th, td { border: 1px solid var(--border); padding: 10px 12px; vertical-align: top; }
+    th { background: var(--surface); color: #fff; text-align: left; }
+    .tag { display: inline-block; border: 1px solid var(--border); border-radius: 999px; padding: 2px 8px; margin: 2px 4px 2px 0; color: var(--text-muted); }
+    .claim { color: var(--green); font-weight: 700; }
+    .risk { color: var(--orange); font-weight: 700; }
+    .reject { color: var(--red); font-weight: 700; }
+    blockquote { margin: 10px 0; padding-left: 14px; border-left: 3px solid var(--purple); color: var(--text); }
+    .gate { margin: 24px 0; padding: 18px; border-color: var(--purple); }
+    .gate h3 { color: var(--purple); margin-top: 0; }
+    .question { background: #1c2333; border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-top: 12px; }
+    .question label { display: block; margin: 8px 0; }
+    .notes { display: none; margin: 6px 0 10px 24px; }
+    .notes textarea, #yaml-output { width: 100%; min-height: 80px; color: var(--text); padding: 10px; }
+    .controls { position: sticky; bottom: 0; background: rgba(13,17,23,.94); border-top: 1px solid var(--border); padding: 16px 28px; display: flex; gap: 12px; align-items: center; }
+    button { background: var(--accent); color: #06111f; border: 0; border-radius: 6px; padding: 10px 14px; font-weight: 700; cursor: pointer; }
+    button:disabled { opacity: .45; cursor: not-allowed; }
+    nav { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+    nav a { border: 1px solid var(--border); border-radius: 999px; padding: 6px 10px; text-decoration: none; }
+    .code { padding: 12px; white-space: pre-wrap; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: #fff; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Split-Path Product Research Workflow Analysis</h1>
+    <p class="lede">Report-only `$analyze-sessions` output for deciding how product research skills should handle branching ICPs, product lines, pivots, and problem-focus splits without forcing every downstream skill to evaluate every option in full depth.</p>
+    <nav>
+      <a href="#overview">Overview</a>
+      <a href="#evidence">Evidence Matrix</a>
+      <a href="#recommendation">Recommendation</a>
+      <a href="#model">Branch Model</a>
+      <a href="#ownership">Owner Surface</a>
+      <a href="#gates">Review Gates</a>
+    </nav>
+  </header>
+  <main>
+    <section id="overview">
+      <h2>Overview Stats</h2>
+      <div class="grid">
+        <div class="card"><div class="metric">11,407</div><div>Total local user-history records parsed</div></div>
+        <div class="card"><div class="metric">3,400</div><div>Distinct sessions across Claude and Codex prompt history</div></div>
+        <div class="card"><div class="metric">185</div><div>Records matching split-path plus product/research/friction criteria</div></div>
+        <div class="card"><div class="metric">2025-12-13 to 2026-05-25</div><div>Date range in parsed prompt histories</div></div>
+      </div>
+      <h3>Category Counts</h3>
+      <table>
+        <thead><tr><th>Category</th><th>Count</th><th>What It Captures</th></tr></thead>
+        <tbody>
+          <tr><td>Product-line expansion</td><td>35</td><td>Multiple apps, product portfolios, adjacent vertical/horizontal expansion, separate products for different customer bases.</td></tr>
+          <tr><td>Branch decision pressure</td><td>83</td><td>Prompts asking for recommended build sequence, selected ICP impact, branch choices, separate products, or narrowing after divergence.</td></tr>
+          <tr><td>Multi-artifact expansion</td><td>16</td><td>Requests that naturally multiply output artifacts, including many variants, many apps, or matrixed journey maps.</td></tr>
+          <tr><td>Approval or stale-question friction</td><td>40</td><td>Alignment page labels, stale questions, premature route decisions, or branch decisions changing earlier gate answers.</td></tr>
+          <tr><td>Explicit research-lane breadth concern</td><td>2</td><td>Direct concerns that ICP/concept exploration were doing surface-level strategy across too many lanes.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="evidence">
+      <h2>Evidence Matrix</h2>
+      <table>
+        <thead><tr><th>Claim</th><th>Evidence</th><th>Inference</th><th>Confidence</th><th>Decision Impact</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="claim">The workflow repeatedly surfaces more plausible branches than a single downstream skill can evaluate cleanly.</td>
+            <td>35 product-line expansion records and 83 branch decision records. Example, 2026-05-24 `calcllm`: <blockquote>I want you to double check the recommended build sequence, there's a bit of divergence between startup cto and the platform eng lead... two separate products...</blockquote></td>
+            <td>Branching is not rare edge behavior; it is a recurring product-discovery shape where one research pass exposes divergent ICP/problem/product options.</td>
+            <td>High</td>
+            <td>The workflow should explicitly triage branches before deep per-skill fan-out.</td>
+          </tr>
+          <tr>
+            <td class="claim">Full-depth downstream artifacts can multiply too quickly when branches are matrixed by ICP, problem, buyer/user, or product line.</td>
+            <td>2026-05-25 `calcllm`: <blockquote>I want us to have clean splits between the two problems and the two ICPs. So there should be 8 journey maps: customer + user map for each of the two problems that the two ICPs experience.</blockquote></td>
+            <td>Clean splits are sometimes correct, but the workflow needs a deliberate fan-out threshold so the agent does not accidentally turn every candidate into full research depth.</td>
+            <td>High</td>
+            <td>Add a branch manifest and artifact budget before creating many canonical outputs.</td>
+          </tr>
+          <tr>
+            <td class="claim">The user wants product-line thinking, not just single-product ICP selection.</td>
+            <td>2026-04-04 `claude-skills`: <blockquote>is there platform or product line skill that we have?... aggressively run a bunch of experiments in parallel... multiple apps under a single brand... vertical... horizontal...</blockquote> 2026-05-07 `lexcorp/war-room`: request for one thousand apps as distribution and product-line expansion.</td>
+            <td>Some branching belongs above ICP in a portfolio strategy lane, while ordinary ICP should not pretend to solve portfolio strategy in passing.</td>
+            <td>High</td>
+            <td>Route broad portfolio questions to `platform-strategy`; keep `icp` focused on segment fit and only emit product-line signals as candidates.</td>
+          </tr>
+          <tr>
+            <td class="claim">Current skill contracts contain useful pieces but no unified branch governor.</td>
+            <td>`icp` identifies 2-5 ICP candidates and does cross-ICP analysis. `platform-strategy` clusters 4-8 candidates and scores expansion vectors. `ux-variations` creates 5 UI variations and routes to UAT/consolidation. `feature-interview` can park or split scoped feature work.</td>
+            <td>The system already has specialized branch handlers, but product research lacks a common rule for when to summarize, park, split, or deepen branches.</td>
+            <td>High</td>
+            <td>Patch shared research/AFPS contracts rather than create a broad new mega-skill as the first move.</td>
+          </tr>
+          <tr>
+            <td class="claim">Research-lane sprawl is already noticed by the user.</td>
+            <td>2026-05-24 `agentic-skills`: <blockquote>should have each research skill solely focused on its research lane as opposed to have a more exhaustive breadth of research?... ICP has a lot of product strategy, competitive analysis, and monetization strategy in it although surface level.</blockquote></td>
+            <td>A branch model should reduce shallow cross-lane analysis by making each skill state what branch evidence it owns and what it only routes downstream.</td>
+            <td>High</td>
+            <td>Define branch evidence handoff fields instead of asking every skill to solve every adjacent question.</td>
+          </tr>
+          <tr>
+            <td class="claim">Alignment gates can go stale when branch decisions change after the page was generated.</td>
+            <td>2026-05-24 `calcllm`: user asked to validate alignment-page answers against a new direction after deciding platform engineering should be primary and startup CTO a separate product-line branch.</td>
+            <td>Branch-changing approvals should trigger a gate freshness check and update branch labels before applying YAML answers.</td>
+            <td>Medium-high</td>
+            <td>Alignment pages need an explicit branch/verdict gate and stale-answer warning for branch-sensitive decisions.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="recommendation">
+      <h2>Recommended Path</h2>
+      <div class="card">
+        <p><strong>Recommendation:</strong> adopt a two-stage branch funnel across product research skills.</p>
+        <p><strong>Stage 1: Branch Triage.</strong> Research skills may surface several candidates, but they should only evaluate all candidates at screening depth. Screening depth means enough evidence to classify the branch, score confidence, note why it might matter, and decide whether it is primary, secondary, parked, merged, killed, or routed to a specialist skill.</p>
+        <p><strong>Stage 2: Focused Deepening.</strong> By default, only the top one branch becomes the canonical downstream path. A second branch can be deepened only when evidence shows it is a distinct product line, a materially different ICP/problem pair, or the user explicitly approves parallel work. Branches three and beyond should be parked with evidence and revisit conditions, not fully researched by default.</p>
+      </div>
+      <h3>Decision Rule</h3>
+      <table>
+        <thead><tr><th>Branch Verdict</th><th>When to Use</th><th>Next Action</th></tr></thead>
+        <tbody>
+          <tr><td>Primary</td><td>Highest evidence-backed value/accessibility fit and clear near-term product thesis.</td><td>Continue the normal AFPS path: ICP, competitive analysis, journey, positioning, UX/UI, prototype, UAT, consolidation, research refresh, spec, roadmap.</td></tr>
+          <tr><td>Secondary deep branch</td><td>Materially distinct product line or ICP/problem pair with strong evidence and high strategic value.</td><td>Create app/product-scoped research path and require user approval before full fan-out.</td></tr>
+          <tr><td>Parked</td><td>Interesting but lower confidence, later-stage, resource-constrained, or dependent on validation from the primary branch.</td><td>Record in a branch backlog with evidence, revisit trigger, owner skill, and no downstream artifact fan-out.</td></tr>
+          <tr><td>Merged</td><td>Two branches differ in messaging, tiering, or packaging but share the same core problem/user workflow.</td><td>Fold into one canonical branch and route packaging/positioning details downstream.</td></tr>
+          <tr><td>Killed</td><td>Weak WTP, poor accessibility, no meaningful gap, high cost without strategic payoff, or outside scope.</td><td>Document exclusion rationale in the alignment page and search log.</td></tr>
+          <tr><td>Specialist route</td><td>Question is clearly portfolio expansion, UX variation, feature add-on, monetization, or GTM rather than the current skill's lane.</td><td>Route to the relevant owner after approval: `platform-strategy`, `ux-variations`, `feature-interview`, `monetization`, or similar pack skill.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="model">
+      <h2>Branch Manifest Model</h2>
+      <p>Each research-producing skill that can surface branches should produce a compact branch manifest in the alignment page and, after approval, in the relevant canonical artifact or search log. This avoids hiding branch decisions in prose.</p>
+      <div class="code">branch_manifest:
+  scope: "ICP | problem | product_line | UX_variation | feature | portfolio"
+  artifact_budget:
+    default_deep_branches: 1
+    max_deep_branches_without_explicit_approval: 2
+  branches:
+    - id: "platform-engineering"
+      label: "Platform engineering leaders"
+      branch_type: "ICP/problem pair"
+      verdict: "primary"
+      evidence_strength: "high"
+      confidence: "medium-high"
+      why_not_others: "Higher WTP and clearer workflow urgency than startup CTO."
+      downstream_owner: "competitive-analysis -> journey-map"
+      next_evidence_needed: "Journey-level proof of current workflow cost."
+    - id: "startup-cto"
+      label: "Startup CTO product-line branch"
+      branch_type: "separate product line"
+      verdict: "secondary_deep_branch"
+      evidence_strength: "medium"
+      confidence: "medium"
+      downstream_owner: "platform-strategy or app-scoped ICP"
+      revisit_trigger: "Primary platform product validates core cost-of-agentic-velocity wedge."</div>
+      <h3>Why This Is More Elegant Than Full Fan-Out</h3>
+      <p>The elegant part is not suppressing branch thinking; it is separating branch discovery from branch commitment. A skill can be honest about 4-8 plausible branches while committing full research depth only where evidence or user approval justifies it. This preserves strategic optionality without turning every run into a sprawling portfolio exercise.</p>
+    </section>
+
+    <section id="ownership">
+      <h2>Likely Owner Surface</h2>
+      <table>
+        <thead><tr><th>Surface</th><th>Change</th><th>Validation Expectation</th></tr></thead>
+        <tbody>
+          <tr><td>Shared research/alignment contract</td><td>Add branch manifest, artifact budget, branch verdict gate, and stale-branch-answer check to research-producing skills.</td><td>Layer1 alignment-gates test asserts branch manifest and branch verdict gate language for research skills.</td></tr>
+          <tr><td>`packs/business-discovery/*/icp`</td><td>Keep 2-5 candidate discovery, but cap full-depth downstream recommendation to one primary branch unless a secondary branch meets explicit separate-product criteria.</td><td>Focused contract test or `rg` validation for primary/secondary/parked/merged/killed verdicts and artifact budget.</td></tr>
+          <tr><td>`packs/business-ops/*/platform-strategy`</td><td>Make it the explicit owner for portfolio-scale or 4-8 product-line exploration, with branch backlog output and validation experiments for top 2-3 only.</td><td>Benchmark/setup expectation that portfolio exploration routes to validation experiments, not immediate specs for all candidates.</td></tr>
+          <tr><td>`global/*/concept-exploration`</td><td>When a rough idea contains multiple concepts, write separate slugged briefs only for true separate concepts; otherwise emit a branch manifest and route to ICP.</td><td>Contract check for pivot/multi-concept handling and branch manifest handoff.</td></tr>
+          <tr><td>`global/*/ux-variations`</td><td>Keep UX variants separate from business/product-line branches; only run after product branch is chosen or explicitly scoped per branch.</td><td>Route test prevents UX variations from becoming product-line triage.</td></tr>
+        </tbody>
+      </table>
+      <h3>Rejected Alternatives</h3>
+      <p><span class="reject">Rejected:</span> Let every research skill evaluate every surfaced branch in full. This directly matches the bog-down failure mode and creates combinatorial artifact growth.</p>
+      <p><span class="reject">Rejected:</span> Force the user to choose one branch before any research. The history shows research itself often reveals the branch shape, so this would remove useful discovery.</p>
+      <p><span class="reject">Rejected:</span> Create a single new mega-skill for all branch decisions. Existing `icp`, `platform-strategy`, `feature-interview`, and `ux-variations` already own specialized branches; the gap is a common branch-governance contract.</p>
+      <p><span class="risk">Lower-confidence option:</span> A dedicated `$branch-strategy` skill could be useful later if branch manifests become frequent standalone artifacts. Current evidence supports contract remediation first.</p>
+    </section>
+
+    <section id="gates">
+      <h2>Review Gates</h2>
+      <div class="gate" data-section="Evidence Coverage" data-gate-type="evidence_coverage">
+        <h3>Evidence Coverage Gate</h3>
+        <p>The report uses full local Claude/Codex prompt histories plus current skill contracts. It does not include assistant outputs from every rich rollout except as represented in prompt history and repo artifacts.</p>
+        <div class="question" data-question="evidence_sufficient">
+          <strong>Is this evidence base sufficient to approve the recommendation direction?</strong>
+          <label><input type="radio" name="evidence_sufficient" value="sufficient"> Sufficient for workflow recommendation</label>
+          <label><input type="radio" name="evidence_sufficient" value="needs_more_history"> Needs deeper rich-session assistant-output review</label>
+          <label><input type="radio" name="evidence_sufficient" value="other"> Other / None of the above</label>
+          <div class="notes"><textarea placeholder="Describe the evidence you want added."></textarea></div>
+          <label><input type="radio" name="evidence_sufficient" value="clarification"> Need clarification</label>
+          <div class="notes"><textarea placeholder="What is unclear?"></textarea></div>
+        </div>
+      </div>
+
+      <div class="gate" data-section="Assumptions & Confidence" data-gate-type="assumptions_confidence">
+        <h3>Assumptions & Confidence Gate</h3>
+        <p>Key assumption: the primary pain is not that branches exist, but that branch discovery and branch commitment are not separated strongly enough in skill contracts.</p>
+        <div class="question" data-question="assumption_acceptance">
+          <strong>Which assumption should guide remediation?</strong>
+          <label><input type="radio" name="assumption_acceptance" value="separate_discovery_commitment"> Separate branch discovery from branch commitment</label>
+          <label><input type="radio" name="assumption_acceptance" value="reduce_branching"> Reduce branch surfacing inside research skills</label>
+          <label><input type="radio" name="assumption_acceptance" value="other"> Other / None of the above</label>
+          <div class="notes"><textarea placeholder="State the preferred assumption."></textarea></div>
+          <label><input type="radio" name="assumption_acceptance" value="clarification"> Need clarification</label>
+          <div class="notes"><textarea placeholder="What is unclear?"></textarea></div>
+        </div>
+      </div>
+
+      <div class="gate" data-section="Recommended Path" data-gate-type="recommended_path">
+        <h3>Recommended Path Gate</h3>
+        <p>The proposed durable change is a shared branch manifest and artifact-budget contract, with `icp` and `platform-strategy` as the first owner surfaces.</p>
+        <div class="question" data-question="path_choice">
+          <strong>Which remediation path do you approve?</strong>
+          <label><input type="radio" name="path_choice" value="shared_contract_first"> Shared branch-governance contract first</label>
+          <label><input type="radio" name="path_choice" value="new_skill_first"> Create a dedicated branch/product-line strategy skill first</label>
+          <label><input type="radio" name="path_choice" value="other"> Other / None of the above</label>
+          <div class="notes"><textarea placeholder="Describe the desired path."></textarea></div>
+          <label><input type="radio" name="path_choice" value="clarification"> Need clarification</label>
+          <div class="notes"><textarea placeholder="What is unclear?"></textarea></div>
+        </div>
+      </div>
+
+      <div class="gate" data-section="Proposed File Changes" data-gate-type="proposed_file_changes" data-target-path="global/codex/targeted-skill-builder or shared alignment/research contracts">
+        <h3>Proposed File Changes Gate</h3>
+        <p>No canonical skill files have been changed by this report. If approved, likely changes should be routed through targeted remediation and include mirrored Codex/Claude skill contracts, archives, changelogs, and layer1 checks.</p>
+        <div class="question" data-question="file_change_scope">
+          <strong>What file-change scope should follow this report?</strong>
+          <label><input type="radio" name="file_change_scope" value="icp_platform_strategy_shared"> Patch shared research contract plus ICP and platform-strategy</label>
+          <label><input type="radio" name="file_change_scope" value="all_product_research"> Patch all product research skills that can surface branches</label>
+          <label><input type="radio" name="file_change_scope" value="other"> Other / None of the above</label>
+          <div class="notes"><textarea placeholder="Describe the exact scope."></textarea></div>
+          <label><input type="radio" name="file_change_scope" value="clarification"> Need clarification</label>
+          <div class="notes"><textarea placeholder="What is unclear?"></textarea></div>
+        </div>
+      </div>
+
+      <div class="gate" data-section="Approval" data-gate-type="approval">
+        <h3>Approval Gate</h3>
+        <p>Approval is required before downstream remediation routing or canonical skill edits.</p>
+        <div class="question" data-question="approval_status">
+          <strong>Approve this report's recommendation for downstream remediation?</strong>
+          <label><input type="radio" name="approval_status" value="approved"> Approved</label>
+          <label><input type="radio" name="approval_status" value="revise_first"> Revise report first</label>
+          <label><input type="radio" name="approval_status" value="other"> Other / None of the above</label>
+          <div class="notes"><textarea placeholder="Describe the approval condition."></textarea></div>
+          <label><input type="radio" name="approval_status" value="clarification"> Need clarification</label>
+          <div class="notes"><textarea placeholder="What is unclear?"></textarea></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="controls">
+    <button id="compile" disabled>Compile Answers</button>
+    <button id="copy" disabled>Copy YAML</button>
+    <span id="status" class="muted"></span>
+  </div>
+  <main>
+    <h2>Compiled YAML</h2>
+    <textarea id="yaml-output" readonly></textarea>
+  </main>
+
+  <script>
+    const questions = Array.from(document.querySelectorAll('.question'));
+    const compile = document.getElementById('compile');
+    const copy = document.getElementById('copy');
+    const status = document.getElementById('status');
+    const output = document.getElementById('yaml-output');
+
+    function updateNotes() {
+      questions.forEach(q => {
+        q.querySelectorAll('.notes').forEach(n => n.style.display = 'none');
+        const checked = q.querySelector('input[type="radio"]:checked');
+        if (!checked) return;
+        const label = checked.closest('label');
+        const notes = label && label.nextElementSibling && label.nextElementSibling.classList.contains('notes') ? label.nextElementSibling : null;
+        if (notes) notes.style.display = 'block';
+      });
+    }
+    function remaining() {
+      return questions.filter(q => !q.querySelector('input[type="radio"]:checked'));
+    }
+    function updateState() {
+      updateNotes();
+      const left = remaining();
+      compile.disabled = left.length > 0;
+      status.textContent = left.length ? `${left.length} required question(s) remaining` : 'All required questions answered';
+    }
+    function yamlEscape(value) {
+      return String(value || '').replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, '\\n');
+    }
+    async function copyYaml() {
+      if (!output.value) return;
+      try {
+        await navigator.clipboard.writeText(output.value);
+        status.textContent = 'YAML copied to clipboard';
+      } catch (error) {
+        output.focus();
+        output.select();
+        status.textContent = 'Clipboard blocked; YAML selected for manual copy';
+      }
+    }
+    function compileYaml() {
+      const left = remaining();
+      if (left.length) {
+        left[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        updateState();
+        return;
+      }
+      const items = questions.map(q => {
+        const gate = q.closest('.gate');
+        const checked = q.querySelector('input[type="radio"]:checked');
+        const notesBox = checked.closest('label').nextElementSibling && checked.closest('label').nextElementSibling.classList.contains('notes')
+          ? checked.closest('label').nextElementSibling.querySelector('textarea')
+          : null;
+        const statusValue = checked.value === 'other' ? 'other' : checked.value === 'clarification' ? 'needs-clarification' : 'answered';
+        const lines = [
+          `- section: "${yamlEscape(gate.dataset.section)}"`,
+          `  gate_type: ${gate.dataset.gateType}`,
+          `  status: ${statusValue}`,
+          `  answer: "${yamlEscape(checked.value)}"`
+        ];
+        if (notesBox && notesBox.value.trim()) lines.push(`  notes: "${yamlEscape(notesBox.value.trim())}"`);
+        if (gate.dataset.targetPath) lines.push(`  target_path: "${yamlEscape(gate.dataset.targetPath)}"`);
+        return lines.join('\n');
+      });
+      output.value = items.join('\n\n') + '\n';
+      copy.disabled = false;
+      copyYaml();
+    }
+    document.addEventListener('change', updateState);
+    compile.addEventListener('click', compileYaml);
+    copy.addEventListener('click', copyYaml);
+    updateState();
+  </script>
+</body>
+</html>

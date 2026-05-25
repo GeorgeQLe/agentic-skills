@@ -8,6 +8,7 @@
 
 ## Priority Task Queue
 
+- [ ] `$analyze-sessions split-path product research workflow` — investigate prior conversations where research surfaces multiple ICP/product-line/pivot options, then recommend how skills should handle branching without bogging down in 4-8 variation evaluations.
 - [x] `$targeted-skill-builder ICP WTP signals` — incorporate willingness-to-pay evidence into mirrored ICP skills as bounded customer-discovery signal capture, then archive/version, validate, commit, and push.
 - [ ] `$analyze-sessions cross-skill output understanding audit` — analyze local Claude/Codex history to scrutinize whether skill outputs across all skills, especially HTML alignment pages and final handoffs, improve user-agent understanding or add avoidable process drag.
 - [x] `$investigate benchmark html alignment page evaluation` — confirm whether benchmark tests evaluate generated alignment HTML pages, then add multi-artifact HTML evaluation coverage for the `investigate` benchmark fixture.
@@ -49,6 +50,34 @@
 - Validation passed: `./scripts/skill-versions.sh --missing`; `./scripts/skill-next-step-routing.sh --missing`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests exec vitest run --project layer1 layer1/bench-setups.test.ts`; targeted `rg` checks for WTP/version content; `git diff --check`; escalated `./install.sh`.
 - Known unrelated validation noise remains: `./scripts/skill-deps.sh --broken` reports existing broken references in `handoff`, `mono-detect`, `provision-agentic-config`, `report-website`, `session-triage`, `ship`, and archived `v0.0`.
 - `scripts/validate-skills-showcase-data.sh` regenerated assets and reported them dirty/stale until the generated files are committed, which is expected for this skill metadata change.
+
+## Current Task — Split-Path Product Research Workflow Analysis 2026-05-25
+
+**Goal:** Use `$analyze-sessions` to investigate prior conversations where research surfaces multiple possible ICPs, product lines, pivots, or problem-focus branches, then recommend a workflow pattern that keeps exploration useful without forcing every skill to evaluate 4-8 options in full depth.
+
+**Plan:**
+- [x] Document the analysis plan in task trackers.
+- [x] Parse full available Claude and Codex user history for split-path, pivot, ICP, product-line, variation, branch, and ranking signals.
+- [x] Compare evidence from product-discovery skills, alignment-page friction, routing corrections, and benchmark/workflow discussions.
+- [x] Recommend a branch-handling model with thresholds for keep/prune/park/merge decisions and ownership across existing or new skills.
+- [x] Create `alignment/analyze-sessions-split-path-product-research-workflow.html` with full evidence, assumptions, recommendation, proposed changes, and approval gates.
+- [x] Verify required alignment-page controls, attempt browser open, and stop for compiled YAML approval before downstream remediation routing.
+
+**Files:**
+- `alignment/analyze-sessions-split-path-product-research-workflow.html`
+- `tasks/todo.md`
+- `tasks/roadmap.md`
+
+### Review
+
+- Parsed 11,407 local user-history records across 3,400 sessions from 2025-12-13 to 2026-05-25.
+- Found 185 records matching split-path plus product/research/friction criteria: 35 product-line expansion records, 83 branch-decision records, 16 multi-artifact expansion records, 40 approval/stale-question friction records, and 2 explicit research-lane breadth concerns.
+- The analysis finds the recurring problem is not branch discovery itself; it is missing separation between branch discovery and branch commitment. Current contracts already have partial owners: `icp` for 2-5 ICP candidates, `platform-strategy` for 4-8 expansion candidates, `ux-variations` for UI variants, and `feature-interview` for scoped add-on/park/split decisions.
+- Recommended a two-stage branch funnel: screen all plausible branches at triage depth, then deepen one primary branch by default; allow a second deep branch only when it is a true separate product line or materially distinct ICP/problem pair; park, merge, kill, or specialist-route remaining branches with explicit evidence and revisit triggers.
+- Wrote `alignment/analyze-sessions-split-path-product-research-workflow.html` with overview stats, evidence matrix, confidence/assumption handling, rejected alternatives, branch manifest model, owner-surface recommendation, and required inline gates with YAML compile/copy behavior.
+- Verification passed: targeted `rg` checks confirmed dark-mode variables, required standing options, branch manifest, gate metadata, Compile Answers, and Clipboard API use; `git diff --check` passed.
+- Browser open was attempted. `xdg-open` was blocked because no browser handler is installed; WSL `cmd.exe /c start` was blocked by `UtilBindVsockAnyPort: socket failed 1`.
+- Pre-approval stop is active: review the HTML page and provide compiled YAML before downstream remediation routing or skill-contract changes.
 
 ## Current Task — Cross-Skill Output Understanding Audit 2026-05-25
 
