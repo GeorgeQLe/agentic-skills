@@ -39,7 +39,7 @@ This matrix tracks skills that already have persisted benchmark run data and gra
 
 | Skill | Agent | Raw Report | Status | Notes |
 |---|---|---|---|---|
-| `run` | Codex | `tests/benchmarks/runs/run-codex-0ec2498e/report.json` | blocked/incomplete | Report exists with zero total and evaluated runs. Do not count as benchmarked. |
+| `run` | Codex | `tests/benchmarks/runs/run-codex-6bd7eedd/report.json` | blocked/incomplete | Report exists with zero total and evaluated runs. Do not count as benchmarked. |
 
 ## Coverage Gaps
 

@@ -16,6 +16,17 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Update: ICP Willingness-to-Pay Signals 2026-05-25
+
+**Goal:** Incorporate willingness-to-pay (WTP) evidence into the mirrored ICP skills as a bounded discovery signal, without turning ICP research into pricing strategy or monetization design.
+
+**Acceptance Criteria:**
+- [x] Mirrored Codex and Claude `icp` skills gather WTP evidence during broad and candidate-specific research.
+- [x] ICP outputs include WTP signal strength, budget owner/context, paid alternatives, switching-cost evidence, and pricing sensitivity cues as problem-space evidence.
+- [x] Value scoring uses WTP quality and economic urgency, not only generic budget signals.
+- [x] WTP observations are routed to monetization as raw downstream signals, while pricing recommendations remain out of ICP scope.
+- [x] Skills are archived, version-bumped, changelogs updated, focused validation passes, and intended changes are committed and pushed on `master`.
+
 ## Current Targeted Update: Benchmark HTML Alignment Page Evaluation 2026-05-25
 
 ## Current Targeted Update: Cross-Skill Output Understanding Audit 2026-05-25

@@ -8,6 +8,7 @@
 
 ## Priority Task Queue
 
+- [x] `$targeted-skill-builder ICP WTP signals` — incorporate willingness-to-pay evidence into mirrored ICP skills as bounded customer-discovery signal capture, then archive/version, validate, commit, and push.
 - [ ] `$analyze-sessions cross-skill output understanding audit` — analyze local Claude/Codex history to scrutinize whether skill outputs across all skills, especially HTML alignment pages and final handoffs, improve user-agent understanding or add avoidable process drag.
 - [x] `$investigate benchmark html alignment page evaluation` — confirm whether benchmark tests evaluate generated alignment HTML pages, then add multi-artifact HTML evaluation coverage for the `investigate` benchmark fixture.
 - [ ] `$targeted-skill-builder research quality alignment contract` — make alignment-page contracts preserve research evidence, uncertainty, reasoning, source coverage, and decision context before HTML presentation.
@@ -26,6 +27,28 @@
 - [x] `$run` — Resume Phase 41 Batch 41.3 re-benchmarks: re-run the 33 Tier 2 global skills that were benchmarked pre-fixture-remediation with near-zero pass rates (Phase 43 added route guidance to all 32 fixture prompts and increased budgets). Current graded count: 69 unique skills / 158 total. Batch 41.5 pack-local groups also have remaining families. Batch 41.3 Group 2 shipped in `bc17fee` and `3e4bd78`; next triage should start with `provision-agentic-config`, `migrate`, or `prototype`.
 - [ ] Review `tasks/recurring-todo.md`: 2 unchecked recurring items — promote only if due and requiring execution work.
 - [ ] `$research-roadmap` — All 43 roadmap phases are complete. Run documentation health scan after Phase 41 remaining batches finish.
+
+## Current Task — ICP Willingness-to-Pay Signals 2026-05-25
+
+**Goal:** Update the mirrored business-discovery ICP skills so WTP is captured and scored as customer evidence, while keeping pricing strategy in downstream monetization.
+
+**Plan:**
+- [x] Locate mirrored ICP skills, archives, changelogs, and current task docs.
+- [x] Archive current v0.2 ICP skill files before bumping versions.
+- [x] Add WTP research queries, candidate evidence fields, scoring factors, output sections, downstream signals, and constraints to Codex and Claude ICP skills.
+- [x] Update changelogs and benchmark setup coverage.
+- [x] Run focused validation for versioning, routing, content, and whitespace; refresh generated showcase data if required.
+- [x] Commit and push intended changes on `master`.
+
+### Review
+
+- Archived mirrored ICP v0.2 skill files to `archive/v0.2/SKILL.md`, bumped active Codex and Claude ICP skills to v0.3, and updated both changelogs.
+- Added WTP signal capture as bounded ICP evidence: broad research query strategy, candidate evaluation field, stated value driver subsection, scoring rationale, constraints, and monetization handoff.
+- Updated the business-discovery pack workflow fixture so ICP benchmark setup coverage expects willingness-to-pay evidence.
+- Regenerated Skills Showcase data and GitHub proof data because tracked `SKILL.md` behavior changed.
+- Validation passed: `./scripts/skill-versions.sh --missing`; `./scripts/skill-next-step-routing.sh --missing`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests exec vitest run --project layer1 layer1/bench-setups.test.ts`; targeted `rg` checks for WTP/version content; `git diff --check`; escalated `./install.sh`.
+- Known unrelated validation noise remains: `./scripts/skill-deps.sh --broken` reports existing broken references in `handoff`, `mono-detect`, `provision-agentic-config`, `report-website`, `session-triage`, `ship`, and archived `v0.0`.
+- `scripts/validate-skills-showcase-data.sh` regenerated assets and reported them dirty/stale until the generated files are committed, which is expected for this skill metadata change.
 
 ## Current Task — Cross-Skill Output Understanding Audit 2026-05-25
 

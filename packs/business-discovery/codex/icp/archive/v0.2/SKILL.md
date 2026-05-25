@@ -2,7 +2,7 @@
 name: icp
 description: Research-driven ICP discovery — web search + codebase analysis to identify multiple ICPs, pain points, value props, and cross-ICP prioritization
 type: research
-version: v0.3
+version: v0.2
 argument-hint: <spec file path, concept/idea, or empty to use concept brief>
 ---
 
@@ -33,8 +33,8 @@ Default stance: assume the user has no insider knowledge of the market. Explain 
    - Read codebase if it exists. Read existing research for background.
    - **Detect monorepo** (`turbo.json`, `pnpm-workspace.yaml`, `lerna.json`, `nx.json`, or `package.json` workspaces) — if multiple distinct user-facing products exist, run the full ICP process per app and produce `research/{app-name}/icp.md` per app plus a unified `research/icp.md`.
    - **Migrate old convention:** If `research/icp-{app}.md` files exist (old naming), offer to move them to `research/{app}/icp.md` (and corresponding search logs to `research/{app}/icp-search-log.md`). Create the subdirectories as needed.
-2. **Broad market research**: WebSearch with 8–12 query strategies (personas, pain points, segments, trends, competitors, forums, job postings, industry reports, business model, willingness-to-pay signals). Log all queries and findings. **Classify the business model** into one or more of: B2B SaaS (PLG), B2B SaaS (SLG), B2C, B2C subscription, marketplace/platform, B2B2C, D2C, open-source/open-core, API/developer-first. Document classification with evidence in search log — this gates which sub-sections appear in the Discovery & Evaluation Behavior section.
-3. **Identify 2–5 ICP candidates** from research evidence — note who they are, pain evidence, accessibility, value potential, and WTP signal strength.
+2. **Broad market research**: WebSearch with 8–12 query strategies (personas, pain points, segments, trends, competitors, forums, job postings, industry reports, business model). Log all queries and findings. **Classify the business model** into one or more of: B2B SaaS (PLG), B2B SaaS (SLG), B2C, B2C subscription, marketplace/platform, B2B2C, D2C, open-source/open-core, API/developer-first. Document classification with evidence in search log — this gates which sub-sections appear in the Discovery & Evaluation Behavior section.
+3. **Identify 2–5 ICP candidates** from research evidence — note who they are, pain evidence, accessibility, and value potential.
 4. **Checkpoint 1 — Present candidates to user.** Show ICP candidates with rationale — cite pain evidence found, accessibility signals, and value delivery reasoning from search findings for each candidate. Ask: "Do any surprise you? Any segment I'm missing?" Incorporate feedback before proceeding.
 5. **Deep research per ICP**: Targeted WebSearch to fill the 9-section framework for each candidate:
    - **Customer Profile** — buyer persona, budget, discovery channels. Include **Geographic Focus** (only if the product has regulatory, language, or market-specific constraints — initial target region, why, expansion sequence), **Named Accounts** (B2B: 5–10 real companies that fit, with name, size, industry, and why they fit), and **Business Model & Go-to-Market Motion** (model type with evidence, primary motion PLG/SLG/community/partner/hybrid, buyer-user relationship)
@@ -44,10 +44,10 @@ Default stance: assume the user has no insider knowledge of the market. Explain 
    - **Pain Map** — breakdowns, severity, frequency
    - **Current Alternatives (User Perspective)** — what users say they currently use or have tried, in their own words
    - **Market Sizing** — TAM/SAM/SOM via bottom-up (company counts × deal size) and top-down (industry reports, competitor revenue). Flag confidence level.
-   - **Stated Value Drivers** — what customers say matters in their own language, the "aha moment" as they describe it. Include **Willingness-to-Pay Signals** as a bounded evidence subsection: paid alternatives, budget owner/context, current spend or time-cost proxy, switching-cost tolerance, economic urgency, and pricing sensitivity cues. Do not recommend prices, packages, or monetization strategy here.
+   - **Stated Value Drivers** — what customers say matters in their own language, the "aha moment" as they describe it
    - **Customer ↔ User Dynamics** — post-purchase buyer-user relationship (provisioning, onboarding, admin vs end-user dynamics). For B2B, detailed buying process and DMU live in Discovery & Evaluation Behavior; this section focuses on the post-purchase relationship.
    - **Discovery & Evaluation Behavior** — how this persona found, evaluated, and chose solutions. Capture behavioural signals only (where they searched, who they asked, what they compared). Populate section 10.
-6. **Checkpoint 2 — Present scoring matrix and primary ICP selection.** Show Value x Accessibility scores. The value rationale must explicitly distinguish pain intensity from WTP quality: active spend on alternatives, clear budget owner/context, high cost of inaction, tolerance for switching costs, and urgency tied to measurable economic outcomes count as strong WTP evidence; verbal interest without budget, free-only behavior, unclear owner, or price sensitivity that outweighs pain count as weak WTP evidence. Ask: "Which constraints, missing segments, or weak evidence should change this ranking?" Incorporate feedback.
+6. **Checkpoint 2 — Present scoring matrix and primary ICP selection.** Show Value x Accessibility scores. Ask: "Which constraints, missing segments, or weak evidence should change this ranking?" Incorporate feedback.
 7. **Cross-ICP analysis**: Shared pains, conflicts, product line recs, build sequence, lowest-hanging-fruit x most-value prioritization, discovery & evaluation comparison (how discovery and evaluation behavior differs across ICPs; do different ICPs find and choose solutions through different paths?).
 8. **Checkpoint 3 — Present cross-ICP analysis and build sequence.** Show shared pains with source data, conflicts with specific examples, and build sequence rationale grounded in the scoring matrix. Ask: "Does this sequencing make sense?" Incorporate feedback.
 9. **Final review**: Present complete findings summary. Ask: "Ready to write? Anything to adjust?" Only write after user confirms.
@@ -56,7 +56,7 @@ Default stance: assume the user has no insider knowledge of the market. Explain 
 
 ## Deliverables
 
-- `research/icp.md` — Primary ICP in canonical 9 top-level `##` sections (Customer Profile, User Profile(s), Trigger Events, Current State Journey, Pain Map, Current Alternatives (User Perspective), Market Sizing, Stated Value Drivers, Customer ↔ User Dynamics). Include WTP evidence as a subsection inside `## Stated Value Drivers`, not as a new top-level parser-breaking section. Then supplementary `## Discovery & Evaluation Behavior` (section 10: how they find solutions, how they evaluate, how they choose), then `## Additional ICPs` (condensed 9-section + condensed discovery & evaluation per ICP, including condensed WTP evidence), then `## Cross-ICP Analysis` (prioritization matrix, shared pains, conflicts, product line recs, build sequence, discovery & evaluation comparison), then `## Signals for Downstream Research` (unvalidated observations routed to /competitive-analysis, /positioning, /monetization, /gtm)
+- `research/icp.md` — Primary ICP in canonical 9 top-level `##` sections (Customer Profile, User Profile(s), Trigger Events, Current State Journey, Pain Map, Current Alternatives (User Perspective), Market Sizing, Stated Value Drivers, Customer ↔ User Dynamics), then supplementary `## Discovery & Evaluation Behavior` (section 10: how they find solutions, how they evaluate, how they choose), then `## Additional ICPs` (condensed 9-section + condensed discovery & evaluation per ICP), then `## Cross-ICP Analysis` (prioritization matrix, shared pains, conflicts, product line recs, build sequence, discovery & evaluation comparison), then `## Signals for Downstream Research` (unvalidated observations routed to /competitive-analysis, /positioning, /monetization, /gtm)
 - `research/icp-search-log.md` — Raw research log: every query, findings, evidence, scoring rationale
 - **Monorepo**: `research/{app-name}/icp.md` + `research/{app-name}/icp-search-log.md` per app, plus unified `research/icp.md` cross-referencing all app-level ICPs with top-level prioritization
 
@@ -90,7 +90,6 @@ When this skill produces follow-up work, file it by execution semantics:
 - Evidence-based — every claim must trace to research logged in `research/icp-search-log.md`.
 - Primary ICP must use canonical 9 `##` headers for downstream compatibility (`$spec-interview`, `$mvp-gap`, `$roadmap`, `$journey-map`). The renamed sections (`Current Alternatives (User Perspective)`, `Stated Value Drivers`) replace the former `Market Landscape` and `Value Proposition` headers. Section 10 (`## Discovery & Evaluation Behavior`) is supplementary and does not affect downstream parsing.
 - Section 10 captures behavioural signals only — how personas find, evaluate, and choose solutions. Do not include GTM strategy, channel analysis, budget authority, procurement process, or pricing expectations — those belong in downstream skills (`$gtm`, `$monetization`, `$enterprise-icp`).
-- WTP belongs in ICP only as evidence of segment fit and urgency: budget ownership, paid alternatives, current spend/time-cost proxies, switching-cost tolerance, economic urgency, and price sensitivity cues. Do not convert WTP evidence into pricing recommendations, packaging, discounting, ARPA targets, or monetization strategy; route those raw signals to `$monetization`.
 - Minimum 8 WebSearch queries before identifying candidates, 2–3 per candidate after.
 - Do not overwrite existing `research/icp.md` without asking.
 - Present before writing — never write output until findings are validated through checkpoints.

@@ -2,7 +2,7 @@
 name: icp
 description: Research-driven ICP discovery — web search + codebase analysis to identify multiple ICPs, pain points, value props, and cross-ICP prioritization
 type: research
-version: v0.3
+version: v0.2
 argument-hint: <spec file path, concept/idea, or empty to use concept brief>
 ---
 
@@ -78,7 +78,6 @@ Query strategies (adapt to the specific domain):
 11. **Geographic/regulatory searches** (if the domain has regional constraints) — "[category] by region", "[domain] regulations by country", "[category] adoption [region]"
 12. **Named account searches** (B2B) — "[competitor] customer list", "companies using [incumbent]", "[industry] companies that [trigger event]", "[category] case studies"
 13. **Business model searches** — "[category] business model", "[product] PLG vs sales-led", "[category] B2B vs B2C", "[category] marketplace", "[category] go-to-market motion"
-14. **Willingness-to-pay signal searches** — "[category] pricing complaints", "[category] budget", "[category] ROI", "[category] cost of manual process", "[competitor] pricing reviews", "[category] switching cost"
 
 Use WebFetch to pull in particularly relevant pages for deeper analysis when search snippets aren't enough.
 
@@ -91,7 +90,6 @@ From the research evidence, cluster findings into **2–5 distinct ICP candidate
 - What pain evidence exists
 - How accessible they are (can we reach them?)
 - How much value we could deliver
-- How strong the WTP signal is: paid alternatives, budget owner/context, current spend or time-cost proxy, switching-cost tolerance, economic urgency, and pricing sensitivity cues
 
 **Checkpoint 1 — Present candidates to the user.** Use the AskUserQuestion tool to show the ICP candidates with a brief rationale for each — cite the pain evidence found, accessibility signals, and value delivery reasoning from your search findings for each candidate. Then ask:
 - "Do any of these surprise you? Is there a segment I'm missing?"
@@ -113,7 +111,7 @@ For each validated ICP candidate, run **targeted searches** to fill the 9-sectio
 - **Pain Map** — where the current state breaks down, severity, frequency
 - **Current Alternatives (User Perspective)** — what users say they currently use or have tried, in their own words. Capture tool/process names without analysing competitors
 - **Market Sizing** — TAM (total addressable market), SAM (serviceable), SOM (obtainable). Search for "[category] market size", "[category] TAM", "[category] number of companies". Use company counts, average deal size signals, and segment data to build bottom-up estimates. Flag confidence level (strong data vs. rough extrapolation).
-- **Stated Value Drivers** — what customers say matters to them in their own language; the "aha moment" as users describe it, not strategic positioning. Include **Willingness-to-Pay Signals** as a bounded evidence subsection: paid alternatives, budget owner/context, current spend or time-cost proxy, switching-cost tolerance, economic urgency, and pricing sensitivity cues. Do not recommend prices, packages, or monetization strategy here.
+- **Stated Value Drivers** — what customers say matters to them in their own language; the "aha moment" as users describe it, not strategic positioning
 - **Customer ↔ User Dynamics** — post-purchase buyer-user relationship: provisioning, onboarding, admin vs end-user dynamics. For B2B, the detailed buying process and decision-making unit live in `## Discovery & Evaluation Behavior`; this section focuses on the post-purchase relationship.
 - **Discovery & Evaluation Behavior** — how this persona found, evaluated, and chose solutions. Capture behavioural signals only (where they searched, who they asked, what they compared) — not channel strategy or GTM analysis. Use findings to populate section 10.
 
@@ -123,7 +121,7 @@ Build a **Value x Accessibility** scoring matrix:
 
 **Value score** (how much we can help):
 - Pain severity and frequency
-- Willingness to pay quality: active spend on alternatives, clear budget owner/context, high cost of inaction, tolerance for switching costs, urgency tied to measurable economic outcomes
+- Willingness to pay (budget signals)
 - Size of the segment
 - Alignment with what we've built (if codebase exists)
 
@@ -265,11 +263,6 @@ Structure — the **Primary ICP** fills the canonical top-level sections:
 ## Stated Value Drivers
 [What customers say matters — their language for the value they need, the "aha moment" as they describe it]
 
-### Willingness-to-Pay Signals
-[Evidence only: current paid alternatives, current spend or time-cost proxy, budget owner/context, switching-cost tolerance,
-economic urgency, procurement or subscription constraints, and pricing sensitivity cues.
-Do not recommend pricing or packaging; route raw signals to monetization.]
-
 ## Customer ↔ User Dynamics
 [Post-purchase buyer-user relationship: provisioning, onboarding, admin vs end-user dynamics.
  For B2B, the detailed buying process and DMU live in Discovery & Evaluation Behavior below;
@@ -309,8 +302,6 @@ Do not recommend pricing or packaging; route raw signals to monetization.]
 ...
 #### Stated Value Drivers
 ...
-#### Willingness-to-Pay Signals
-...
 #### Customer ↔ User Dynamics
 ...
 #### Discovery & Evaluation Behavior
@@ -325,8 +316,6 @@ Do not recommend pricing or packaging; route raw signals to monetization.]
 | ICP | Value Score | Accessibility Score | Combined | Rationale |
 |-----|------------|-------------------|----------|-----------|
 | ... | | | | |
-
-Scoring rationale must explicitly distinguish pain intensity from WTP quality. Strong WTP evidence includes active spend on alternatives, clear budget owner/context, high cost of inaction, tolerance for switching costs, and urgency tied to measurable economic outcomes. Weak WTP evidence includes verbal interest without budget, free-only behavior, unclear owner, or price sensitivity that outweighs pain.
 
 ### Shared Pain Points
 [Pains that appear across multiple ICPs]
@@ -381,9 +370,7 @@ Pick one:
 - [signal]: how users describe the problem in their own words
 
 ### → /monetization
-- [signal]: budget ownership/context and willingness-to-pay evidence
-- [signal]: current paid alternatives, spend proxies, or time-cost proxies
-- [signal]: switching-cost tolerance and cost-of-inaction language
+- [signal]: budget signals or willingness-to-pay mentions
 - [signal]: pricing sensitivity cues from user conversations
 - [signal]: how users describe cost of current alternatives
 
@@ -428,7 +415,6 @@ When this skill produces follow-up work, file it by execution semantics:
 - **In existing-project mode**, note misalignments between what's built and what the ICP research suggests, but do not prescribe fixes — that's `/mvp-gap`'s job.
 - **Primary ICP must use the canonical 9 top-level `##` sections** — downstream skills (`/spec-interview`, `/mvp-gap`, `/roadmap`, `/journey-map`, `/competitive-analysis`) parse these exact headers. The renamed sections (`Current Alternatives (User Perspective)`, `Stated Value Drivers`) replace the former `Market Landscape` and `Value Proposition` headers. Section 10 (`## Discovery & Evaluation Behavior`) is supplementary and does not affect downstream parsing.
 - **Section 10 captures behavioural signals only** — how personas find, evaluate, and choose solutions. Do not include GTM strategy, channel analysis, budget authority, procurement process, or pricing expectations — those belong in downstream skills (`/gtm`, `/monetization`, `/enterprise-icp`).
-- **WTP is evidence, not pricing strategy.** Capture budget ownership, paid alternatives, current spend/time-cost proxies, switching-cost tolerance, economic urgency, and price sensitivity cues only as segment-fit and urgency evidence. Do not convert WTP evidence into pricing recommendations, packaging, discounting, ARPA targets, or monetization strategy; route those raw signals to `/monetization`.
 - **Do not overwrite existing `research/icp.md`** without asking the user first.
 - **Minimum research depth**: at least 8 WebSearch queries before identifying ICP candidates, then at least 2–3 targeted queries per candidate.
 - **Present before writing.** Never write output files until findings have been presented to the user and validated through the checkpoint questions. The user must see and approve the analysis before anything is written to disk.

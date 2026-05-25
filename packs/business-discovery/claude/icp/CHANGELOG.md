@@ -1,5 +1,14 @@
 # icp changelog (claude)
 
+## v0.3 - 2026-05-25
+
+- Added bounded willingness-to-pay signal capture to ICP research, candidate evaluation, scoring rationale, output template, and downstream monetization handoff.
+- Clarified that ICP records WTP evidence for segment fit and urgency without recommending prices, packaging, or monetization strategy.
+
+## v0.2 - 2026-05-25
+
+- Added research-quality alignment requirements covering claim/evidence/inference separation, no-context-loss HTML translation, evidence matrices, confidence/assumption registers, source coverage, and research completeness gates.
+
 ## v0.1
 
 - Tighten research lanes: rename Market Landscape → Current Alternatives (User Perspective), Value Proposition → Stated Value Drivers, Acquisition & Conversion Model → Discovery & Evaluation Behavior
@@ -9,7 +18,3 @@
 ## v0.0
 
 - Initial version
-
-## v0.2 - 2026-05-25
-
-- Added research-quality alignment requirements covering claim/evidence/inference separation, no-context-loss HTML translation, evidence matrices, confidence/assumption registers, source coverage, and research completeness gates.
