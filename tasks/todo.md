@@ -8,6 +8,7 @@
 
 ## Priority Task Queue
 
+- [x] `$investigate benchmark html alignment page evaluation` — confirm whether benchmark tests evaluate generated alignment HTML pages, then add multi-artifact HTML evaluation coverage for the `investigate` benchmark fixture.
 - [ ] `$targeted-skill-builder research quality alignment contract` — make alignment-page contracts preserve research evidence, uncertainty, reasoning, source coverage, and decision context before HTML presentation.
 - [x] `$targeted-skill-builder AFPS routing cleanup` — update business-product routing so the default AFPS path is ICP -> competitive analysis -> journey map -> positioning -> UX variations -> UI interview -> prototype -> UAT -> consolidation -> research roadmap -> spec interview -> roadmap, while keeping value-prop-canvas and lean-canvas as optional risk-driven detours.
 - [x] Refresh `docs/canonical-workflow-report.md` and create `alignment/canonical-workflow-report.html` — audit the canonical workflow report against current pack routing, AFPS/prototype gates, roadmap no-spec routing, and post-spec feature routing; validate targeted stale-claim checks; commit and push only intended documentation changes.
@@ -24,6 +25,28 @@
 - [x] `$run` — Resume Phase 41 Batch 41.3 re-benchmarks: re-run the 33 Tier 2 global skills that were benchmarked pre-fixture-remediation with near-zero pass rates (Phase 43 added route guidance to all 32 fixture prompts and increased budgets). Current graded count: 69 unique skills / 158 total. Batch 41.5 pack-local groups also have remaining families. Batch 41.3 Group 2 shipped in `bc17fee` and `3e4bd78`; next triage should start with `provision-agentic-config`, `migrate`, or `prototype`.
 - [ ] Review `tasks/recurring-todo.md`: 2 unchecked recurring items — promote only if due and requiring execution work.
 - [ ] `$research-roadmap` — All 43 roadmap phases are complete. Run documentation health scan after Phase 41 remaining batches finish.
+
+## Current Task — Benchmark HTML Alignment Page Evaluation 2026-05-25
+
+**Goal:** Determine whether benchmark tests properly evaluate generated HTML alignment pages and patch the harness/setup gap if they do not.
+
+**User claim validation:**
+- Confirmed: the benchmark runner's default artifact capture excluded `.html` files, and configured `qualityOutputPath` setups evaluated only one artifact.
+- Confirmed: the `investigate` benchmark setup asked for `investigation-report.md` only, so it did not exercise the skill's durable-output alignment-page contract.
+
+**Plan:**
+- [x] Inspect benchmark runner artifact capture, quality output selection, tier1 benchmark setups, and alignment gate tests.
+- [x] Add support for multiple configured quality artifacts and include HTML in default artifact retention.
+- [x] Update the `investigate` benchmark fixture to require `alignment/investigate-benchmark-html-evaluation.html`.
+- [x] Assert the generated HTML includes report content, gate metadata, standing radio options, dark-mode styling, Compile Answers, and YAML gate fields.
+- [x] Add focused runner coverage proving Markdown plus HTML artifacts are both persisted and quality-evaluated.
+- [x] Run focused verification and commit/push intended changes without touching unrelated Skills Showcase edits.
+
+### Review
+
+- Root cause: benchmark output-quality evaluation was single-artifact when `qualityOutputPath` was configured, and the fallback artifact collector filtered out HTML. That meant generated alignment pages could be absent, malformed, or unscored without failing benchmark quality checks.
+- Fix: added `qualityOutputPaths` to benchmark setup metadata, combined configured artifacts for quality scoring, retained `.html` artifacts by default, and made the `investigate` benchmark fixture require and score the generated alignment HTML page.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 layer1/runner.test.ts layer1/bench-setups.test.ts`; `pnpm --dir tests exec vitest run --project layer1 layer1/runner.test.ts layer1/bench-setups.test.ts layer1/bench-quality.test.ts`; `pnpm --dir tests bench:coverage`; `git diff --check`.
 
 ## Current Task — Benchmark Setup Audit Fix 2026-05-25
 

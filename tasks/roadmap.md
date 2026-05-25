@@ -16,6 +16,20 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Update: Benchmark HTML Alignment Page Evaluation 2026-05-25
+
+**Goal:** Make benchmark tests actually evaluate generated HTML alignment pages instead of only the primary Markdown/text artifact.
+
+**Acceptance Criteria:**
+- [x] Investigation validates whether current benchmark quality evaluation includes generated HTML alignment pages.
+- [x] The runner can persist and quality-evaluate multiple configured artifacts for one run.
+- [x] Default artifact retention includes `.html` files for later review.
+- [x] The `investigate` benchmark fixture requires an alignment HTML page and checks gate controls, standing radio options, dark-mode styling, report content, Compile Answers, and YAML gate fields.
+- [x] Focused layer1 verification, benchmark coverage validation, and whitespace checks pass.
+- [x] Intended changes are committed and pushed on `master` without touching unrelated Skills Showcase edits.
+
+**Result:** Updated on 2026-05-25. The claim was confirmed: existing benchmark setup quality evaluation could miss generated alignment pages. The harness now supports `qualityOutputPaths`, combines configured Markdown and HTML artifacts for scoring, retains `.html` artifacts by default, and the `investigate` fixture now requires and evaluates `alignment/investigate-benchmark-html-evaluation.html`. Focused layer1 verification, benchmark coverage validation, and whitespace checks passed.
+
 ## Current Targeted Update: Benchmark Failure Investigation 2026-05-24
 
 **Goal:** Fix benchmark/showcase validation failures surfaced after the AFPS (alignment-first, prototype-second) workflow refactor without weakening the new alignment gates.

@@ -332,6 +332,89 @@ describe("benchmark runner", () => {
     }
   });
 
+  it("evaluates quality against multiple configured artifacts including HTML", async () => {
+    const workDir = "/tmp/skill-test-quality-output-html";
+    const sessionDir = "benchmarks/runs/quality-output-html-codex-quality";
+    rmSync(sessionDir, { recursive: true, force: true });
+    rmSync(workDir, { recursive: true, force: true });
+    mkdirSync(sessionDir, { recursive: true });
+    mkdirSync(`${workDir}/alignment`, { recursive: true });
+
+    try {
+      const result = await runChunk(
+        {
+          skill: "quality-output-html",
+          prompt: "unused",
+          perRunBudgetUsd: 0.01,
+          timeoutMs: 1_000,
+          qualityOutputPath: "report.md",
+          qualityOutputPaths: ["alignment/report.html"],
+          setupProject() {},
+          assertResult() {
+            return [{ description: "successful assertion", pass: true }];
+          },
+          qualityEvaluator: createQualityEvaluator({
+            minimumScore: 1,
+            criteria: [
+              {
+                id: "markdown-and-html-evidence",
+                description: "Output includes configured Markdown and HTML artifacts",
+                weight: 1,
+                evaluate: qualityAssertions.requiredFacts(["markdown evidence", "Compile Answers"]),
+              },
+            ],
+          }),
+        },
+        {
+          skill: "quality-output-html",
+          sessionId: "quality",
+          createdAt: "2026-05-25T00:00:00.000Z",
+          updatedAt: "2026-05-25T00:00:00.000Z",
+          status: "running",
+          config: {
+            skill: "quality-output-html",
+            agent: "codex",
+            runs: 1,
+            chunkSize: 1,
+            pauseSeconds: 0,
+            maxBudgetUsd: 0.01,
+            perRunBudgetUsd: 0.01,
+            timeoutMs: 1_000,
+          },
+          completedRuns: 0,
+          totalEstimatedCostUsd: 0,
+          chunks: [],
+        },
+        0,
+        1,
+        async () => {
+          writeFileSync(`${workDir}/report.md`, "markdown evidence\n");
+          writeFileSync(`${workDir}/alignment/report.html`, "<html><body>Compile Answers</body></html>\n");
+          return {
+            stdout: "Created report.md and alignment/report.html",
+            stderr: "",
+            exitCode: 0,
+            workDir,
+            files: ["report.md", "alignment/report.html"],
+          };
+        },
+        () => workDir,
+      );
+
+      expect(result.runs[0]?.qualityResult).toMatchObject({
+        passed: true,
+        score: 1,
+      });
+      expect(result.runs[0]?.artifacts).toEqual({
+        "report.md": "markdown evidence\n",
+        "alignment/report.html": "<html><body>Compile Answers</body></html>\n",
+      });
+    } finally {
+      rmSync(sessionDir, { recursive: true, force: true });
+      rmSync(workDir, { recursive: true, force: true });
+    }
+  });
+
   it("persists bounded generated artifact content for later agent review", async () => {
     const workDir = "/tmp/skill-test-review-artifact";
     const sessionDir = "benchmarks/runs/review-artifact-codex-review";
