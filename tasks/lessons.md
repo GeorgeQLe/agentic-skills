@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-05-24 — Feature interview is the post-spec add-on path
+
+- A workflow review framed `$feature-interview` too much as a post-ship or pre-spec triage step, but the user clarified it is also the normal post-spec route for additions.
+- After a production spec exists, route feature additions through `$feature-interview` to either update the existing spec or create a smaller-scope add-on spec instead of defaulting back to full `$spec-interview`.
+- Post-spec feature triage should preserve the parent spec as the baseline contract and record exactly what the add-on changes, inherits, and leaves untouched.
+
 ## 2026-05-22 — Benchmark review handoffs are not remediation completion
 
 - A `$benchmark-agent-review provision-agentic-config` run documented the main remediation and recommended `$targeted-skill-builder`, but the follow-up answer needed to state plainly that the remediation itself had not been implemented.
