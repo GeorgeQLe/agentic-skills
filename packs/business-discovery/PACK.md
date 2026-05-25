@@ -10,6 +10,8 @@ Default flow:
 icp -> competitive-analysis -> journey-map -> value-prop-canvas -> positioning -> lean-canvas
 ```
 
+`journey-map` is provided by the `customer-lifecycle` pack. Install `customer-lifecycle` before continuing past competitive analysis when that pack is not already enabled.
+
 Skills:
 
 ```text

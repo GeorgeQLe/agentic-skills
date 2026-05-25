@@ -2,7 +2,7 @@
 name: competitive-analysis
 description: Research competitors via web search — map the landscape, GTM strategies, strengths, weaknesses, and market gaps
 type: research
-version: v0.3
+version: v0.2
 argument-hint: "[concept | optional: product category or specific competitors to investigate]"
 ---
 
@@ -194,7 +194,7 @@ Before writing, check which files exist to populate the `## Next Steps` section 
 
 **Standard mode:**
 - RECOMMEND the first matching item:
-  1. IF no `research/journey-map.md`: check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if `customer-lifecycle` is not enabled, recommend `/pack install customer-lifecycle` first; if `customer-lifecycle` is enabled, recommend `/journey-map` — Map the customer and user journey before solution-value decisions, using competitive gaps as inspiration
+  1. IF no `research/journey-map.md`: check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if not enabled, `/pack install customer-lifecycle`; if enabled, `/journey-map` — Map the customer and user journey before solution-value decisions, using competitive gaps as inspiration
   2. IF no `research/value-prop.md`: `/value-prop-canvas` — Validate solution-customer fit using journey-placed competitive gaps to sharpen the value map
   3. IF no `specs/` directory or it's empty: `/spec-interview [top journey-backed market gap or positioning opportunity]` — Spec features that exploit the most important market gap after journey context exists
   4. IF no `research/gtm.md`: `/gtm` — Build a GTM plan using the channel and positioning insights

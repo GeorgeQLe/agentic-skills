@@ -1,5 +1,10 @@
 # competitive-analysis changelog (claude)
 
+## v0.3
+
+- Clarify standard-mode missing-journey routing so agents recommend `/pack install customer-lifecycle` before `/journey-map` when the `customer-lifecycle` pack is not enabled
+- Keep cross-pack journey-map recommendations behind the same pack-availability guard
+
 ## v0.2
 
 - Tighten research lanes: rename Analyse Positioning Opportunities → Identify Market Gaps & White Space, Go-to-Market Strategy → Observable GTM Patterns, remove Recommended Positioning / Where We Fit from output
