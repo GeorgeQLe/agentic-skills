@@ -34,7 +34,7 @@
 - [x] Replace the hash-pinned incomplete `run` report assertion with the stable `run-codex-[^/]+/report.json` contract.
 - [x] Add layer1 assertions that every custom coverage row points to an existing setup file and resolves to a registered setup, with only intentional setup aliases outside the coverage matrix.
 - [x] Run focused benchmark setup and matrix checks plus integrity scripts.
-- [ ] Commit and push intended benchmark/test/task-doc changes on `master` without touching unrelated Skills Showcase edits.
+- [x] Commit and push intended benchmark/test/task-doc changes on `master` without touching unrelated Skills Showcase edits.
 
 ### Review
 
