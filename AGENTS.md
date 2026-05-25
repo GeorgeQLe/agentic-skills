@@ -69,6 +69,14 @@ WIN_PATH=$(wslpath -w "$FILE_PATH")
 cmd.exe /c start "" "$WIN_PATH"
 ```
 
+- For HTML files that should open in the Windows browser, prefer a WSL file URI through the Windows PowerShell binary when `cmd.exe /c start` or UNC paths fail:
+
+```bash
+DISTRO=${WSL_DISTRO_NAME:-Ubuntu}
+URI="file://wsl.localhost/${DISTRO}${FILE_PATH}"
+/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe -NoProfile -Command "Start-Process '$URI'"
+```
+
 - Use WSL detection so this path only runs inside WSL:
 
 ```bash
@@ -78,6 +86,7 @@ fi
 ```
 
 - The `cmd.exe` UNC warning (`UNC paths are not supported. Defaulting to Windows directory.`) is cosmetic; the file still opens correctly.
+- The `UtilBindVsockAnyPort: socket failed 1` failure can happen before Windows opens a UNC path. For browser-targeted HTML pages, retry with the `file://wsl.localhost/<distro>/...` PowerShell URI before using editor fallbacks.
 
 ## Task Management
 

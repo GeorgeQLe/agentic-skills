@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-05-25 — Open WSL HTML pages in Windows browsers with file URI PowerShell
+
+- A WSL browser-open attempt failed when using `cmd.exe /c start "" "$(wslpath -w "$FILE_PATH")"` and `powershell.exe Start-Process` against a UNC path, returning `UtilBindVsockAnyPort:309: socket failed 1`.
+- For HTML alignment pages under WSL, prefer invoking the Windows PowerShell binary directly and passing a browser-friendly WSL file URI: `/mnt/c/WINDOWS/System32/WindowsPowerShell/v1.0/powershell.exe -NoProfile -Command "Start-Process 'file://wsl.localhost/Ubuntu/path/to/file.html'"`.
+- If `wslpath -w` returns a `\\wsl.localhost\...` UNC path but Windows launch fails, do not conclude the file path is wrong; test a `file://wsl.localhost/<distro>/...` URI before falling back to VS Code.
+- When a user specifically asks to open in the browser, do not substitute `code <file>` as the final attempt unless browser launch is still blocked after the file URI approach.
+
 ## 2026-05-25 — Alignment-page feedback includes research quality, not only HTML UX
 
 - Alignment-page corrections can be about the substance of research, not just whether the HTML review page exists or has usable controls.
