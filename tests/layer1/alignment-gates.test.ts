@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { readFileSync } from "node:fs";
-import { resolve } from "node:path";
+import { readdirSync, readFileSync, statSync } from "node:fs";
+import { relative, resolve } from "node:path";
 
 const ROOT = resolve(import.meta.dirname, "../..");
 
@@ -51,6 +51,28 @@ function read(path: string) {
   return readFileSync(resolve(ROOT, path), "utf8");
 }
 
+function activeSkillFiles(dir: string, out: string[] = []) {
+  for (const entry of readdirSync(resolve(ROOT, dir))) {
+    const abs = resolve(ROOT, dir, entry);
+    const rel = relative(ROOT, abs);
+    const stat = statSync(abs);
+    if (stat.isDirectory()) {
+      if (entry === "archive" || entry === "node_modules" || entry === ".git") continue;
+      activeSkillFiles(rel, out);
+    } else if (stat.isFile() && entry === "SKILL.md") {
+      out.push(rel);
+    }
+  }
+  return out;
+}
+
+const activeAlignmentSkillFiles = [...activeSkillFiles("global"), ...activeSkillFiles("packs")]
+  .filter((path) => {
+    const content = read(path);
+    return content.includes("## Alignment Page") && content.includes("**Gate YAML contract.**");
+  })
+  .sort();
+
 describe("alignment page gate contract", () => {
   it("requires gate-based HTML review pages for core planning and research skills", () => {
     for (const path of coreSkills) {
@@ -84,11 +106,15 @@ describe("alignment page gate contract", () => {
     expect(read("global/codex/ux-variations/SKILL.md")).toContain("Render surfaced assumptions, variation manifest, concept selection");
   });
 
-  it("requires investigate alignment pages to copy compiled YAML ergonomically", () => {
-    const content = read("global/codex/investigate/SKILL.md");
-    expect(content).toContain("automatically attempt to copy the YAML to the clipboard");
-    expect(content).toContain('explicit "Copy YAML" button');
-    expect(content).toContain("fall back to selecting the textarea contents");
+  it("requires every active alignment page to copy compiled YAML ergonomically", () => {
+    expect(activeAlignmentSkillFiles.length).toBeGreaterThan(100);
+    for (const path of activeAlignmentSkillFiles) {
+      const content = read(path);
+      expect(content, `${path} automatic copy`).toContain("automatically attempt to copy the YAML to the clipboard");
+      expect(content, `${path} copy button`).toContain('explicit "Copy YAML" button');
+      expect(content, `${path} fallback`).toContain("fall back to selecting the textarea contents");
+      expect(content, `${path} old click-to-copy-only contract`).not.toContain("Display the YAML in a read-only, click-to-copy textarea.");
+    }
   });
 
   it("leaves skip-list skills excluded from alignment requirements", () => {
