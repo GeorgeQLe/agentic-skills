@@ -65,6 +65,29 @@ Use this skill when the user wants to inspect, recommend, install, remove, or re
 - Use `devtool` for SDKs, CLIs, APIs, libraries, infrastructure products, developer platforms, and documentation-first developer workflows.
 - Use `business-app-kanban`, `game-kanban`, or `devtool-kanban` only when the project intentionally uses PoketoWork boards.
 - Use `poketowork-kanban` only when the user wants the generic board-management utilities independent of a domain pack.
+- Use `exec-loop` for the plan-run-ship execution workflow (ship, run, ship-end).
+- Use `agent-work-admin` for roadmap management, phase planning, and spec-drift auditing.
+- Use `product-design` for UX exploration, prototyping, feature/spec/UI interviews, brainstorming, and design systems.
+- Use `code-review` for expert reviews, slim audits, dead-code scans, and regression checks.
+- Use `code-debug` for investigation, debugging, and request tracing.
+- Use `release-ops` for branch lifecycle management, deployment, and releases.
+- Use `product-testing` for UAT journeys and dogfooding.
+- Use `docs-health` for project hygiene auditing and dev-docs reconciliation.
+- Use `research-admin` for research and documentation queue management.
+- Use `skill-dev` for building, interviewing, and creating agentic skills.
+- Use `guided-walkthrough` for step-by-step guides and UAT walkthroughs.
+- Use `session-analytics` for session history analysis and incident triage.
+- Use `teardown` for project teardowns and decommissioning.
+- Use `code-maintenance` for migrations and package updates.
+- Use `gitops` for git sync and feature-based commit workflows.
+- Use `context-transfer` for session handoffs.
+- Use `agent-bridge` for delegating work to other agents.
+- Use `repo-maintenance` for bootstrapping new repos.
+- Use `website-polish` for icon and web asset handling.
+- Use `report-gen` for generating HTML report websites.
+- Use `knowledge-check` for quiz-style knowledge reviews.
+- Use `exec-profile` for execution profile patching.
+- Use `alignment-page-admin` for compiling central alignment pages.
 - Treat `monorepo`, `code-quality`, and `*-kanban` packs as overlays. Pair them with a domain pack unless the user explicitly wants only the overlay behavior.
 - For workflow ordering, lead-in recommendations, and overlay dependencies, read `docs/pack-workflow-matrix.md`.
 

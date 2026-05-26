@@ -28,6 +28,9 @@ scripts/pack.sh refresh
 - `mono-run`: augments the standard `/run` or `$run` lifecycle with monorepo detection, lane-spec generation, pre-flight guard checks, cross-cutting serial work, package-scoped worktree dispatch on separate GitHub branches, and consolidation/PR review when a phase is explicitly eligible.
 - `mono-guard`: validates lane-spec artifacts before dispatch and verifies actual changed files stay inside declared lane ownership and branch/PR review requirements after integration.
 - `mono-ship`: augments the standard `/ship` or `$ship` lifecycle with package-scoped validation and transitive-dependent validation before delegating to normal shipping.
+- `mono-plan`: safe lane decomposition planning across monorepo packages.
+- `affected`: identifies packages and tests affected by changes in the monorepo.
+- `scaffold`: generates a new package or app in the monorepo following established project conventions.
 
 ## Augmentation Injection Pattern
 
@@ -80,12 +83,13 @@ V1 does not include:
 - Multi-repository to monorepo migration.
 - Per-package task files.
 - GitHub Actions or CI integration.
-- Replacing the existing global `/mono-plan` or `/mono-guard` skills.
 
-## Relationship To Global Monorepo Skills
+## Monorepo Skills
 
-The global `/mono-plan` skill remains the planning authority for safe lane decomposition across monorepo packages. The pack-local `mono-run` consumes those execution-profile concepts and materializes lane specs for a project-local run.
+`/mono-plan` is the planning authority for safe lane decomposition across monorepo packages. `mono-run` consumes those execution-profile concepts and materializes lane specs for a project-local run.
 
-The global `/mono-guard` skill remains the behavioral compatibility reference for lane safety. The pack-local `mono-guard` provides project-local contracts and scripts for validating `.agents/lane-specs.json`, `.agents/monorepo.json`, and the integrated diff.
+`/mono-guard` provides contracts and scripts for validating `.agents/lane-specs.json`, `.agents/monorepo.json`, and the integrated diff.
+
+`/affected` identifies packages and tests affected by changes. `/scaffold` generates new packages following project conventions.
 
 **Primary role:** Both - Claude-orchestration for lane review and approval; Codex-execution for detection scripts, artifacts, validation, and shipping.

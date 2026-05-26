@@ -20,8 +20,10 @@ Discover and search installed global skills plus enabled project-local pack skil
 2. **Discover skills:**
    - Always scan global Claude skills in `global/claude/*/SKILL.md`.
    - If `.agents/project.json` exists, read `enabled_packs` and scan `packs/<pack>/claude/*/SKILL.md` for each enabled pack.
+   - Also scan all packs in `packs/*/claude/*/SKILL.md` to discover available-but-not-installed skills.
    - If `.claude/skills/*/SKILL.md` exists in the current project, include those local skills too.
    - Read the first 6 lines of each file to extract YAML frontmatter fields: `name`, `description`, `type`.
+   - Track which pack each skill belongs to (if any).
 
 3. **Group skills by workflow stage** using this static mapping:
 
@@ -29,28 +31,29 @@ Discover and search installed global skills plus enabled project-local pack skil
    discovered in step 2 should be printed, so domain and kanban entries appear
    only when the corresponding project-local pack is enabled or linked.
 
-   | Stage | Skills |
+   | Stage | Skills (pack in parentheses; no label = global) |
    |-------|--------|
    | Pack Management | `pack`, `pack list`, `pack status`, `pack recommend`, `pack install <pack>`, `pack remove <pack>` |
-   | Discovery & Market Fit | `icp`, `enterprise-icp` |
-   | Game Development | `game-workflow`, `game-audience`, `game-fantasy`, `game-genre-map`, `game-comparables`, `game-core-loop`, `game-prototype-test`, `game-store-page-test`, `game-playtest-metrics`, `game-roadmap`, `game-launch` |
-   | Devtool Development | `devtool-workflow`, `devtool-user-map`, `devtool-integration-map`, `devtool-dx-journey`, `devtool-adoption`, `devtool-positioning`, `devtool-monetization`, `devtool-docs-audit` |
-   | Planning | `brainstorm`, `brainstorm-kanban`, `concept-exploration`, `feature-interview`, `spec-interview`, `spec-interview --ideas`, `ui-interview`, `ux-variations`, `consolidate-variations`, `spec-interview-kanban`, `experiment` |
-   | Mapping | `journey-map`, `metrics` |
-   | Strategize | `roadmap`, `roadmap-kanban`, `competitive-analysis`, `platform-strategy`, `gtm`, `landing-copy`, `monetization`, `positioning`, `runway-model` |
-   | Evaluate | `dogfood`, `mvp-gap`, `scale-audit`, `customer-feedback`, `assumption-tracker`, `cohort-review`, `retro` |
-   | Research Health | `research-roadmap`, `reconcile-research`, `reconcile-dev-docs` |
-   | Detail | `plan-phase` |
-   | Execution | `run`, `run-kanban`, `guide` |
-   | Shipping | `ship`, `ship-end`, `ship-kanban`, `ship-end-kanban` |
-   | Code Quality | `expert-review`, `regression-check`, `dead-code` |
-   | Debugging | `investigate`, `debug`, `trace`, `session-triage` |
-   | Refactoring & Migration | `migrate`, `decommission`, `scaffold` |
-   | Monorepo | `affected` |
-   | Release & Deploy | `release`, `deploy` |
-   | Context & Session | `codebase-status`, `analyze-sessions`, `handoff`, `sync`, `investor-update` |
-   | Git Workflow | `branch-lifecycle` |
-   | Utility | `commit-and-push-by-feature`, `install-agentic-skills`, `targeted-skill-builder`, `provision-agentic-config`, `poketo-kanban`, `poketo-kanban --archive`, `sync-roadmap-kanban`, `skills`, `risk-register` |
+   | Discovery & Market Fit | `icp` (business-discovery), `enterprise-icp` (business-discovery) |
+   | Game Development | `game-workflow` (game), `game-audience` (game), `game-fantasy` (game), `game-genre-map` (game), `game-comparables` (game), `game-core-loop` (game), `game-prototype-test` (game), `game-store-page-test` (game), `game-playtest-metrics` (game), `game-roadmap` (game), `game-launch` (game) |
+   | Devtool Development | `devtool-workflow` (devtool), `devtool-user-map` (devtool), `devtool-integration-map` (devtool), `devtool-dx-journey` (devtool), `devtool-adoption` (devtool), `devtool-positioning` (devtool), `devtool-monetization` (devtool), `devtool-docs-audit` (devtool) |
+   | Planning | `concept-exploration`, `brainstorm` (product-design), `brainstorm-kanban` (business-app-kanban), `feature-interview` (product-design), `spec-interview` (product-design), `spec-interview --ideas` (product-design), `ui-interview` (product-design), `ux-variations` (product-design), `consolidate-variations` (product-design), `spec-interview-kanban` (business-app-kanban), `experiment` (business-growth) |
+   | Mapping | `journey-map` (customer-lifecycle), `metrics` (business-ops) |
+   | Strategize | `roadmap` (agent-work-admin), `roadmap-kanban` (business-app-kanban), `competitive-analysis` (business-discovery), `platform-strategy` (business-growth), `gtm` (business-growth), `landing-copy` (business-growth), `monetization` (business-growth), `positioning` (business-discovery), `runway-model` (business-ops) |
+   | Evaluate | `dogfood` (product-testing), `mvp-gap` (business-discovery), `scale-audit` (business-ops), `customer-feedback` (customer-lifecycle), `assumption-tracker` (business-discovery), `cohort-review` (customer-lifecycle), `retro` (business-ops) |
+   | Research Health | `research-roadmap` (research-admin), `reconcile-research` (business-discovery), `reconcile-dev-docs` (docs-health) |
+   | Detail | `plan-phase` (agent-work-admin) |
+   | Execution | `run` (exec-loop), `run-kanban` (business-app-kanban), `guide` (guided-walkthrough) |
+   | Shipping | `ship` (exec-loop), `ship-end` (exec-loop), `ship-kanban` (business-app-kanban), `ship-end-kanban` (business-app-kanban) |
+   | Code Quality | `expert-review` (code-review), `regression-check` (code-review), `dead-code` (code-review), `slim-audit` (code-review) |
+   | Debugging | `investigate` (code-debug), `debug` (code-debug), `trace` (code-debug), `session-triage` (session-analytics) |
+   | Refactoring & Migration | `migrate` (code-maintenance), `decommission` (teardown), `scaffold` (monorepo) |
+   | Monorepo | `affected` (monorepo), `mono-plan` (monorepo), `mono-guard` (monorepo) |
+   | Release & Deploy | `release` (release-ops), `deploy` (release-ops), `branch-lifecycle` (release-ops) |
+   | Context & Session | `codebase-status`, `analyze-sessions` (session-analytics), `handoff` (context-transfer), `sync` (gitops), `investor-update` (business-ops) |
+   | Skill Development | `targeted-skill-builder` (skill-dev), `skill-interview` (skill-dev), `create-agentic-skill` (skill-dev), `create-local-skill` (skill-dev) |
+   | Testing | `uat` (product-testing), `uat-guide` (guided-walkthrough), `quiz-me` (knowledge-check) |
+   | Utility | `commit-and-push-by-feature` (gitops), `install-agentic-skills`, `provision-agentic-config`, `skills`, `bootstrap-repo` (repo-maintenance), `desk-flip` (teardown), `compile-central-alignment` (alignment-page-admin), `patch-exec-profile` (exec-profile), `delegate` (agent-bridge), `report-website` (report-gen), `icon-handler` (website-polish), `design-system` (product-design), `prototype` (product-design), `spec-drift` (agent-work-admin), `hygiene` (docs-health), `update-packages` (code-maintenance) |
 
    Skills not found in the mapping go into an **Other** group at the end.
 
@@ -76,11 +79,10 @@ Discover and search installed global skills plus enabled project-local pack skil
 
 6. **Output results:**
    - Print each non-empty group as a `## Group Name` heading.
-   - Under each heading, list skills as `/<name> — <description>`.
-   - In type mode, append the type tag: `/<name> — <description>  [type]`.
-   - In list mode (stage grouping), append the type tag: `/<name> — <description>  [type]`.
+   - Under each heading, list installed/global skills as `/<name> — <description>  [type]`.
+   - For available-but-not-installed pack skills, list as `/<name> — <description>  [type]  ⚠ requires \`/pack install <pack>\``.
    - Omit groups that have no skills (after filtering in search mode).
-   - At the bottom, print a total count: `**N skills** found` (or `**N skills** matching "<keyword>"`).
+   - At the bottom, print a total count: `**N skills** installed, **M skills** available via packs` (or `**N skills** matching "<keyword>"`).
 
 ## Output Format
 
@@ -126,7 +128,4 @@ Discover and search installed global skills plus enabled project-local pack skil
 
 ## Default Shipping Contract
 
-- **Default next-step routing:** when reporting completion, include either `Recommended next skill: <command>` or the two-line pair `**Next work:** <specific task or "none">` and `**Recommended next command:** <one command or route>` so the next operator has a concrete handoff.
-- If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
-- Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
-- This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.
+Follow the shared shipping contract convention in CLAUDE.md.
