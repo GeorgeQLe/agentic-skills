@@ -1,5 +1,11 @@
 # Session History
 
+## 2026-05-26 — Widen edge hit area in routing map + ship prior showcase/routing-map work
+
+- Added invisible 16px-wide hit paths behind each visible edge in `docs/skill-routing-map.html` for easier hover/click detection — visible paths set to `pointer-events: none`, all event handlers moved to the transparent hit path.
+- Updated `applyFilters` to hide/show both visible and hit paths when toggling pack visibility.
+- Shipped prior uncommitted work: SealedPack card animation rework (full-height card behind bottom half, spring bounce, click-to-open) and routing map layout overhaul (drag-to-pan viewport, edge selection with zoom, colored typed edges, port spreading, increased spacing).
+
 ## 2026-05-25 — Fix card reset after drawer close + install exec-loop pack
 
 - Fixed SealedPack card not resetting after bottom sheet drawer closes: added `isDrawerOpen` prop driven by `openPack` state, replaced broken `useEffect` on `isOpened` with one that detects drawer close transition and spring-animates card back to rest.
