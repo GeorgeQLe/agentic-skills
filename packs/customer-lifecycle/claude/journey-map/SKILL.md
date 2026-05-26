@@ -36,7 +36,18 @@ Create or update the canonical lifecycle overview. This is the top-level map for
 - `research/journey-map.md` (or `research/{app}/journey-map.md`) — canonical lifecycle overview with links or references to deeper stage docs when they exist.
 - `research/journey-map-interview.md` (or `research/{app}/journey-map-interview.md`) — raw interview log and decisions.
 
-The output file must end with `## Next Steps` using "Pick one:" framing. Default AFPS routing after the overview is `/positioning` when `research/positioning.md` is missing, because positioning should use ICP, competitive analysis, and journey evidence. Then route to `/ux-variations`, `/ui-interview`, prototype work, `/uat --variant-evaluation`, `/consolidate-variations`, `/research-roadmap --post-prototype`, `/spec-interview`, and `/roadmap` as evidence becomes available. Recommend deeper lifecycle maps (`/onboarding-map`, `/conversion-map`, `/transaction-map`, `/retention-map`, `/expansion-map`, `/lifecycle-metrics`) only when the overview exposes a specific stage risk that needs detail before positioning or UX work.
+The output file must end with `## Next Steps` using "Pick one:" framing. Follow the Next-Step Routing contract below to decide the recommendation.
+
+## Next-Step Routing
+
+Priority-ordered decision tree — recommend the **first** match:
+
+1. **Positioning missing** (`research/positioning.md` does not exist) → recommend `/positioning` (business-discovery pack). Positioning needs ICP, competitive analysis, and journey evidence, so it is the natural next step.
+2. **Positioning done, UX variations missing** → recommend `/ux-variations` (product-design pack).
+3. **Specific stage risk** — the overview exposed a lifecycle-stage risk that must be resolved before positioning or UX work can proceed → recommend the relevant lifecycle map (`/onboarding-map`, `/conversion-map`, `/transaction-map`, `/retention-map`, `/expansion-map`, or `/lifecycle-metrics`). Cite the risk and explain why it blocks the next AFPS step.
+4. **Never** recommend `/spec-interview` from this skill — it is many steps downstream in the AFPS chain.
+
+Cross-pack notes: `/positioning` lives in the `business-discovery` pack; `/ux-variations` lives in the `product-design` pack. Check `.agents/project.json` `enabled_packs` and recommend `/pack install <pack>` when the target pack is not enabled.
 
 ## Output Shape
 
