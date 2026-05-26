@@ -1,380 +1,658 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Split-Path Product Research Workflow Analysis</title>
-  <style>
-    :root {
-      --bg: #0d1117;
-      --surface: #161b22;
-      --border: #30363d;
-      --text: #c9d1d9;
-      --text-muted: #8b949e;
-      --accent: #58a6ff;
-      --green: #3fb950;
-      --red: #f85149;
-      --orange: #d29922;
-      --purple: #bc8cff;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      font: 15px/1.55 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
-    a { color: var(--accent); }
-    header, main { max-width: 1180px; margin: 0 auto; padding: 28px; }
-    header { padding-top: 44px; }
-    h1, h2, h3 { color: #fff; line-height: 1.2; }
-    h1 { font-size: 34px; margin: 0 0 12px; }
-    h2 { color: var(--accent); margin-top: 36px; border-top: 1px solid var(--border); padding-top: 24px; }
-    h3 { margin-top: 24px; }
-    .lede { color: var(--text-muted); font-size: 17px; max-width: 920px; }
-    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; }
-    .card, .gate, table, .code, textarea {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-    }
-    .card { padding: 16px; }
-    .metric { font-size: 26px; color: #fff; font-weight: 700; }
-    .muted { color: var(--text-muted); }
-    table { width: 100%; border-collapse: collapse; overflow: hidden; }
-    th, td { border: 1px solid var(--border); padding: 10px 12px; vertical-align: top; }
-    th { background: var(--surface); color: #fff; text-align: left; }
-    .tag { display: inline-block; border: 1px solid var(--border); border-radius: 999px; padding: 2px 8px; margin: 2px 4px 2px 0; color: var(--text-muted); }
-    .claim { color: var(--green); font-weight: 700; }
-    .risk { color: var(--orange); font-weight: 700; }
-    .reject { color: var(--red); font-weight: 700; }
-    blockquote { margin: 10px 0; padding-left: 14px; border-left: 3px solid var(--purple); color: var(--text); }
-    .gate { margin: 24px 0; padding: 18px; border-color: var(--purple); }
-    .gate h3 { color: var(--purple); margin-top: 0; }
-    .question { background: #1c2333; border: 1px solid var(--border); border-radius: 8px; padding: 14px; margin-top: 12px; }
-    .question label { display: block; margin: 8px 0; }
-    .notes { display: none; margin: 6px 0 10px 24px; }
-    .notes textarea, #yaml-output { width: 100%; min-height: 80px; color: var(--text); padding: 10px; }
-    .controls { position: sticky; bottom: 0; background: rgba(13,17,23,.94); border-top: 1px solid var(--border); padding: 16px 28px; display: flex; gap: 12px; align-items: center; }
-    button { background: var(--accent); color: #06111f; border: 0; border-radius: 6px; padding: 10px 14px; font-weight: 700; cursor: pointer; }
-    button:disabled { opacity: .45; cursor: not-allowed; }
-    nav { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
-    nav a { border: 1px solid var(--border); border-radius: 999px; padding: 6px 10px; text-decoration: none; }
-    .code { padding: 12px; white-space: pre-wrap; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: #fff; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Analyze Sessions: Split-Path Product Research Workflow</title>
+<style>
+:root {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --border: #30363d;
+  --text: #c9d1d9;
+  --text-muted: #8b949e;
+  --accent: #58a6ff;
+  --green: #3fb950;
+  --red: #f85149;
+  --orange: #d29922;
+  --purple: #bc8cff;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; line-height: 1.6; padding: 2rem; max-width: 1200px; margin: 0 auto; }
+h1 { color: #fff; font-size: 1.8rem; margin-bottom: 0.5rem; border-bottom: 2px solid var(--accent); padding-bottom: 0.5rem; }
+h2 { color: var(--accent); font-size: 1.4rem; margin: 2rem 0 1rem; }
+h3 { color: #fff; font-size: 1.15rem; margin: 1.5rem 0 0.75rem; }
+h4 { color: var(--text); font-size: 1rem; margin: 1rem 0 0.5rem; }
+p, li { margin-bottom: 0.5rem; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+code { background: var(--surface); padding: 0.15em 0.4em; border-radius: 3px; font-size: 0.9em; color: var(--orange); }
+pre { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 1rem; overflow-x: auto; margin: 1rem 0; font-size: 0.85rem; }
+
+nav { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; margin: 1.5rem 0; }
+nav h3 { margin-top: 0; color: var(--accent); }
+nav ul { list-style: none; padding: 0; columns: 2; }
+nav li { margin-bottom: 0.3rem; }
+nav a { font-size: 0.9rem; }
+
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; margin: 1rem 0; }
+.stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1rem 0; }
+.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; text-align: center; }
+.stat-card .number { font-size: 2rem; font-weight: bold; color: #fff; }
+.stat-card .label { color: var(--text-muted); font-size: 0.85rem; }
+.stat-card.green .number { color: var(--green); }
+.stat-card.orange .number { color: var(--orange); }
+.stat-card.red .number { color: var(--red); }
+.stat-card.accent .number { color: var(--accent); }
+.stat-card.purple .number { color: var(--purple); }
+
+table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+th { background: var(--surface); color: #fff; text-align: left; padding: 0.6rem 0.8rem; border: 1px solid var(--border); }
+td { padding: 0.6rem 0.8rem; border: 1px solid var(--border); vertical-align: top; }
+tr:hover td { background: rgba(88,166,255,0.05); }
+
+.badge { display: inline-block; padding: 0.15em 0.5em; border-radius: 12px; font-size: 0.8rem; font-weight: 600; }
+.badge-green { background: rgba(63,185,80,0.15); color: var(--green); }
+.badge-orange { background: rgba(210,153,34,0.15); color: var(--orange); }
+.badge-red { background: rgba(248,81,73,0.15); color: var(--red); }
+.badge-blue { background: rgba(88,166,255,0.15); color: var(--accent); }
+.badge-purple { background: rgba(188,140,255,0.15); color: var(--purple); }
+
+.question-block { background: #1c2333; border: 1px solid var(--purple); border-radius: 8px; padding: 1.25rem; margin: 1.25rem 0; }
+.question-block h4 { color: var(--purple); margin-top: 0; }
+.question-block label { display: block; padding: 0.4rem 0; cursor: pointer; }
+.question-block input[type="radio"] { margin-right: 0.5rem; accent-color: var(--purple); }
+.question-block textarea { width: 100%; background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 4px; padding: 0.5rem; margin-top: 0.5rem; resize: vertical; min-height: 60px; font-family: inherit; display: none; }
+.question-block textarea.visible { display: block; }
+.question-block .notes-box { display: none; margin-top: 0.5rem; }
+.question-block .notes-box.visible { display: block; }
+
+.flow-diagram { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin: 1rem 0; font-family: monospace; font-size: 0.85rem; line-height: 1.8; overflow-x: auto; }
+.flow-step { color: var(--accent); font-weight: bold; }
+.flow-arrow { color: var(--text-muted); }
+.flow-note { color: var(--orange); font-style: italic; }
+.flow-problem { color: var(--red); }
+
+.evidence { border-left: 3px solid var(--accent); padding-left: 1rem; margin: 0.75rem 0; color: var(--text-muted); font-size: 0.9rem; }
+.evidence strong { color: var(--text); }
+
+.gate { border-top: 2px solid var(--purple); padding-top: 1rem; margin-top: 2rem; }
+.gate h3 { color: var(--purple); }
+
+#compile-btn { background: var(--purple); color: #fff; border: none; padding: 0.75rem 1.5rem; border-radius: 6px; font-size: 1rem; cursor: pointer; margin: 1rem 0; }
+#compile-btn:hover { opacity: 0.9; }
+#compile-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+#remaining-count { color: var(--orange); font-size: 0.9rem; margin-left: 0.5rem; }
+#yaml-output { display: none; margin-top: 1rem; }
+#yaml-output textarea { width: 100%; min-height: 300px; background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 1rem; font-family: monospace; font-size: 0.85rem; }
+#copy-btn { background: var(--accent); color: #fff; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; margin-top: 0.5rem; }
+#copy-status { color: var(--green); font-size: 0.9rem; margin-left: 0.5rem; display: none; }
+</style>
 </head>
 <body>
-  <header>
-    <h1>Split-Path Product Research Workflow Analysis</h1>
-    <p class="lede">Report-only `$analyze-sessions` output for deciding how product research skills should handle branching ICPs, product lines, pivots, and problem-focus splits without forcing every downstream skill to evaluate every option in full depth.</p>
-    <nav>
-      <a href="#overview">Overview</a>
-      <a href="#evidence">Evidence Matrix</a>
-      <a href="#recommendation">Recommendation</a>
-      <a href="#model">Branch Model</a>
-      <a href="#ownership">Owner Surface</a>
-      <a href="#gates">Review Gates</a>
-    </nav>
-  </header>
-  <main>
-    <section id="overview">
-      <h2>Overview Stats</h2>
-      <div class="grid">
-        <div class="card"><div class="metric">11,407</div><div>Total local user-history records parsed</div></div>
-        <div class="card"><div class="metric">3,400</div><div>Distinct sessions across Claude and Codex prompt history</div></div>
-        <div class="card"><div class="metric">185</div><div>Records matching split-path plus product/research/friction criteria</div></div>
-        <div class="card"><div class="metric">2025-12-13 to 2026-05-25</div><div>Date range in parsed prompt histories</div></div>
-      </div>
-      <h3>Category Counts</h3>
-      <table>
-        <thead><tr><th>Category</th><th>Count</th><th>What It Captures</th></tr></thead>
-        <tbody>
-          <tr><td>Product-line expansion</td><td>35</td><td>Multiple apps, product portfolios, adjacent vertical/horizontal expansion, separate products for different customer bases.</td></tr>
-          <tr><td>Branch decision pressure</td><td>83</td><td>Prompts asking for recommended build sequence, selected ICP impact, branch choices, separate products, or narrowing after divergence.</td></tr>
-          <tr><td>Multi-artifact expansion</td><td>16</td><td>Requests that naturally multiply output artifacts, including many variants, many apps, or matrixed journey maps.</td></tr>
-          <tr><td>Approval or stale-question friction</td><td>40</td><td>Alignment page labels, stale questions, premature route decisions, or branch decisions changing earlier gate answers.</td></tr>
-          <tr><td>Explicit research-lane breadth concern</td><td>2</td><td>Direct concerns that ICP/concept exploration were doing surface-level strategy across too many lanes.</td></tr>
-        </tbody>
-      </table>
-    </section>
 
-    <section id="evidence">
-      <h2>Evidence Matrix</h2>
-      <table>
-        <thead><tr><th>Claim</th><th>Evidence</th><th>Inference</th><th>Confidence</th><th>Decision Impact</th></tr></thead>
-        <tbody>
-          <tr>
-            <td class="claim">The workflow repeatedly surfaces more plausible branches than a single downstream skill can evaluate cleanly.</td>
-            <td>35 product-line expansion records and 83 branch decision records. Example, 2026-05-24 `calcllm`: <blockquote>I want you to double check the recommended build sequence, there's a bit of divergence between startup cto and the platform eng lead... two separate products...</blockquote></td>
-            <td>Branching is not rare edge behavior; it is a recurring product-discovery shape where one research pass exposes divergent ICP/problem/product options.</td>
-            <td>High</td>
-            <td>The workflow should explicitly triage branches before deep per-skill fan-out.</td>
-          </tr>
-          <tr>
-            <td class="claim">Full-depth downstream artifacts can multiply too quickly when branches are matrixed by ICP, problem, buyer/user, or product line.</td>
-            <td>2026-05-25 `calcllm`: <blockquote>I want us to have clean splits between the two problems and the two ICPs. So there should be 8 journey maps: customer + user map for each of the two problems that the two ICPs experience.</blockquote></td>
-            <td>Clean splits are sometimes correct, but the workflow needs a deliberate fan-out threshold so the agent does not accidentally turn every candidate into full research depth.</td>
-            <td>High</td>
-            <td>Add a branch manifest and artifact budget before creating many canonical outputs.</td>
-          </tr>
-          <tr>
-            <td class="claim">The user wants product-line thinking, not just single-product ICP selection.</td>
-            <td>2026-04-04 `claude-skills`: <blockquote>is there platform or product line skill that we have?... aggressively run a bunch of experiments in parallel... multiple apps under a single brand... vertical... horizontal...</blockquote> 2026-05-07 `lexcorp/war-room`: request for one thousand apps as distribution and product-line expansion.</td>
-            <td>Some branching belongs above ICP in a portfolio strategy lane, while ordinary ICP should not pretend to solve portfolio strategy in passing.</td>
-            <td>High</td>
-            <td>Route broad portfolio questions to `platform-strategy`; keep `icp` focused on segment fit and only emit product-line signals as candidates.</td>
-          </tr>
-          <tr>
-            <td class="claim">Current skill contracts contain useful pieces but no unified branch governor.</td>
-            <td>`icp` identifies 2-5 ICP candidates and does cross-ICP analysis. `platform-strategy` clusters 4-8 candidates and scores expansion vectors. `ux-variations` creates 5 UI variations and routes to UAT/consolidation. `feature-interview` can park or split scoped feature work.</td>
-            <td>The system already has specialized branch handlers, but product research lacks a common rule for when to summarize, park, split, or deepen branches.</td>
-            <td>High</td>
-            <td>Patch shared research/AFPS contracts rather than create a broad new mega-skill as the first move.</td>
-          </tr>
-          <tr>
-            <td class="claim">Research-lane sprawl is already noticed by the user.</td>
-            <td>2026-05-24 `agentic-skills`: <blockquote>should have each research skill solely focused on its research lane as opposed to have a more exhaustive breadth of research?... ICP has a lot of product strategy, competitive analysis, and monetization strategy in it although surface level.</blockquote></td>
-            <td>A branch model should reduce shallow cross-lane analysis by making each skill state what branch evidence it owns and what it only routes downstream.</td>
-            <td>High</td>
-            <td>Define branch evidence handoff fields instead of asking every skill to solve every adjacent question.</td>
-          </tr>
-          <tr>
-            <td class="claim">Alignment gates can go stale when branch decisions change after the page was generated.</td>
-            <td>2026-05-24 `calcllm`: user asked to validate alignment-page answers against a new direction after deciding platform engineering should be primary and startup CTO a separate product-line branch.</td>
-            <td>Branch-changing approvals should trigger a gate freshness check and update branch labels before applying YAML answers.</td>
-            <td>Medium-high</td>
-            <td>Alignment pages need an explicit branch/verdict gate and stale-answer warning for branch-sensitive decisions.</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
+<h1>Split-Path Product Research Workflow</h1>
+<p style="color:var(--text-muted)">Analysis date: 2026-05-26 &middot; Source: <code>~/.claude/history.jsonl</code> (9,641 records), <code>~/.codex/history.jsonl</code> (1,866 records) &middot; Date range: 2025-12-13 to 2026-05-26</p>
 
-    <section id="recommendation">
-      <h2>Recommended Path</h2>
-      <div class="card">
-        <p><strong>Recommendation:</strong> adopt a two-stage branch funnel across product research skills.</p>
-        <p><strong>Stage 1: Branch Triage.</strong> Research skills may surface several candidates, but they should only evaluate all candidates at screening depth. Screening depth means enough evidence to classify the branch, score confidence, note why it might matter, and decide whether it is primary, secondary, parked, merged, killed, or routed to a specialist skill.</p>
-        <p><strong>Stage 2: Focused Deepening.</strong> By default, only the top one branch becomes the canonical downstream path. A second branch can be deepened only when evidence shows it is a distinct product line, a materially different ICP/problem pair, or the user explicitly approves parallel work. Branches three and beyond should be parked with evidence and revisit conditions, not fully researched by default.</p>
-      </div>
-      <h3>Decision Rule</h3>
-      <table>
-        <thead><tr><th>Branch Verdict</th><th>When to Use</th><th>Next Action</th></tr></thead>
-        <tbody>
-          <tr><td>Primary</td><td>Highest evidence-backed value/accessibility fit and clear near-term product thesis.</td><td>Continue the normal AFPS path: ICP, competitive analysis, journey, positioning, UX/UI, prototype, UAT, consolidation, research refresh, spec, roadmap.</td></tr>
-          <tr><td>Secondary deep branch</td><td>Materially distinct product line or ICP/problem pair with strong evidence and high strategic value.</td><td>Create app/product-scoped research path and require user approval before full fan-out.</td></tr>
-          <tr><td>Parked</td><td>Interesting but lower confidence, later-stage, resource-constrained, or dependent on validation from the primary branch.</td><td>Record in a branch backlog with evidence, revisit trigger, owner skill, and no downstream artifact fan-out.</td></tr>
-          <tr><td>Merged</td><td>Two branches differ in messaging, tiering, or packaging but share the same core problem/user workflow.</td><td>Fold into one canonical branch and route packaging/positioning details downstream.</td></tr>
-          <tr><td>Killed</td><td>Weak WTP, poor accessibility, no meaningful gap, high cost without strategic payoff, or outside scope.</td><td>Document exclusion rationale in the alignment page and search log.</td></tr>
-          <tr><td>Specialist route</td><td>Question is clearly portfolio expansion, UX variation, feature add-on, monetization, or GTM rather than the current skill's lane.</td><td>Route to the relevant owner after approval: `platform-strategy`, `ux-variations`, `feature-interview`, `monetization`, or similar pack skill.</td></tr>
-        </tbody>
-      </table>
-    </section>
+<nav>
+<h3>Contents</h3>
+<ul>
+<li><a href="#overview">Overview Stats</a></li>
+<li><a href="#source-comparison">Source Comparison</a></li>
+<li><a href="#split-path">Split-Path Evidence</a></li>
+<li><a href="#phase-flow">Phase Flow Analysis</a></li>
+<li><a href="#fragmentation">Fragmentation Patterns</a></li>
+<li><a href="#evidence-matrix">Evidence Matrix</a></li>
+<li><a href="#recommendations">Recommendations</a></li>
+<li><a href="#confidence">Confidence &amp; Assumptions</a></li>
+<li><a href="#gate-evidence">Gate: Evidence Coverage</a></li>
+<li><a href="#gate-scope">Gate: Scope &amp; Non-Goals</a></li>
+<li><a href="#gate-route">Gate: Recommended Route</a></li>
+<li><a href="#gate-artifacts">Gate: Proposed Artifact Changes</a></li>
+<li><a href="#compile">Compile Answers</a></li>
+</ul>
+</nav>
 
-    <section id="model">
-      <h2>Branch Manifest Model</h2>
-      <p>Each research-producing skill that can surface branches should produce a compact branch manifest in the alignment page and, after approval, in the relevant canonical artifact or search log. This avoids hiding branch decisions in prose.</p>
-      <div class="code">branch_manifest:
-  scope: "ICP | problem | product_line | UX_variation | feature | portfolio"
-  artifact_budget:
-    default_deep_branches: 1
-    max_deep_branches_without_explicit_approval: 2
-  branches:
-    - id: "platform-engineering"
-      label: "Platform engineering leaders"
-      branch_type: "ICP/problem pair"
-      verdict: "primary"
-      evidence_strength: "high"
-      confidence: "medium-high"
-      why_not_others: "Higher WTP and clearer workflow urgency than startup CTO."
-      downstream_owner: "competitive-analysis -> journey-map"
-      next_evidence_needed: "Journey-level proof of current workflow cost."
-    - id: "startup-cto"
-      label: "Startup CTO product-line branch"
-      branch_type: "separate product line"
-      verdict: "secondary_deep_branch"
-      evidence_strength: "medium"
-      confidence: "medium"
-      downstream_owner: "platform-strategy or app-scoped ICP"
-      revisit_trigger: "Primary platform product validates core cost-of-agentic-velocity wedge."</div>
-      <h3>Why This Is More Elegant Than Full Fan-Out</h3>
-      <p>The elegant part is not suppressing branch thinking; it is separating branch discovery from branch commitment. A skill can be honest about 4-8 plausible branches while committing full research depth only where evidence or user approval justifies it. This preserves strategic optionality without turning every run into a sprawling portfolio exercise.</p>
-    </section>
+<!-- ======================== OVERVIEW ======================== -->
+<h2 id="overview">Overview Stats</h2>
 
-    <section id="ownership">
-      <h2>Likely Owner Surface</h2>
-      <table>
-        <thead><tr><th>Surface</th><th>Change</th><th>Validation Expectation</th></tr></thead>
-        <tbody>
-          <tr><td>Shared research/alignment contract</td><td>Add branch manifest, artifact budget, branch verdict gate, and stale-branch-answer check to research-producing skills.</td><td>Layer1 alignment-gates test asserts branch manifest and branch verdict gate language for research skills.</td></tr>
-          <tr><td>`packs/business-discovery/*/icp`</td><td>Keep 2-5 candidate discovery, but cap full-depth downstream recommendation to one primary branch unless a secondary branch meets explicit separate-product criteria.</td><td>Focused contract test or `rg` validation for primary/secondary/parked/merged/killed verdicts and artifact budget.</td></tr>
-          <tr><td>`packs/business-ops/*/platform-strategy`</td><td>Make it the explicit owner for portfolio-scale or 4-8 product-line exploration, with branch backlog output and validation experiments for top 2-3 only.</td><td>Benchmark/setup expectation that portfolio exploration routes to validation experiments, not immediate specs for all candidates.</td></tr>
-          <tr><td>`global/*/concept-exploration`</td><td>When a rough idea contains multiple concepts, write separate slugged briefs only for true separate concepts; otherwise emit a branch manifest and route to ICP.</td><td>Contract check for pivot/multi-concept handling and branch manifest handoff.</td></tr>
-          <tr><td>`global/*/ux-variations`</td><td>Keep UX variants separate from business/product-line branches; only run after product branch is chosen or explicitly scoped per branch.</td><td>Route test prevents UX variations from becoming product-line triage.</td></tr>
-        </tbody>
-      </table>
-      <h3>Rejected Alternatives</h3>
-      <p><span class="reject">Rejected:</span> Let every research skill evaluate every surfaced branch in full. This directly matches the bog-down failure mode and creates combinatorial artifact growth.</p>
-      <p><span class="reject">Rejected:</span> Force the user to choose one branch before any research. The history shows research itself often reveals the branch shape, so this would remove useful discovery.</p>
-      <p><span class="reject">Rejected:</span> Create a single new mega-skill for all branch decisions. Existing `icp`, `platform-strategy`, `feature-interview`, and `ux-variations` already own specialized branches; the gap is a common branch-governance contract.</p>
-      <p><span class="risk">Lower-confidence option:</span> A dedicated `$branch-strategy` skill could be useful later if branch manifests become frequent standalone artifacts. Current evidence supports contract remediation first.</p>
-    </section>
+<div class="stat-grid">
+  <div class="stat-card accent"><div class="number">1,709</div><div class="label">Research-related messages (Claude + Codex)</div></div>
+  <div class="stat-card purple"><div class="number">121</div><div class="label">Sessions with research skill invocations</div></div>
+  <div class="stat-card orange"><div class="number">20+</div><div class="label">Projects with research activity</div></div>
+  <div class="stat-card green"><div class="number">6</div><div class="label">Projects that completed all 4 research phases</div></div>
+  <div class="stat-card red"><div class="number">70%</div><div class="label">Projects that did NOT complete all phases</div></div>
+</div>
 
-    <section id="gates">
-      <h2>Review Gates</h2>
-      <div class="gate" data-section="Evidence Coverage" data-gate-type="evidence_coverage">
-        <h3>Evidence Coverage Gate</h3>
-        <p>The report uses full local Claude/Codex prompt histories plus current skill contracts. It does not include assistant outputs from every rich rollout except as represented in prompt history and repo artifacts.</p>
-        <div class="question" data-question="evidence_sufficient">
-          <strong>Is this evidence base sufficient to approve the recommendation direction?</strong>
-          <label><input type="radio" name="evidence_sufficient" value="sufficient"> Sufficient for workflow recommendation</label>
-          <label><input type="radio" name="evidence_sufficient" value="needs_more_history"> Needs deeper rich-session assistant-output review</label>
-          <label><input type="radio" name="evidence_sufficient" value="other"> Other / None of the above</label>
-          <div class="notes"><textarea placeholder="Describe the evidence you want added."></textarea></div>
-          <label><input type="radio" name="evidence_sufficient" value="clarification"> Need clarification</label>
-          <div class="notes"><textarea placeholder="What is unclear?"></textarea></div>
-        </div>
-      </div>
+<h3>Top Projects by Research Volume</h3>
+<table>
+<tr><th>Project</th><th>Messages</th><th>Research Sessions</th><th>Phases Completed</th><th>Span</th></tr>
+<tr><td><code>web/dev/b4</code></td><td>34</td><td>13</td><td><span class="badge badge-green">4/4</span></td><td>Mar 20 &ndash; Apr 13 (24d)</td></tr>
+<tr><td><code>web/dev/loadoutworks</code></td><td>165</td><td>11</td><td><span class="badge badge-green">4/4</span></td><td>Mar 18 &ndash; Apr 5 (18d)</td></tr>
+<tr><td><code>web/dev/calcllm</code></td><td>33</td><td>10</td><td><span class="badge badge-green">4/4</span></td><td>Mar 27 &ndash; May 26 (60d)</td></tr>
+<tr><td><code>web/dev/bismarck-ai/v0.4</code></td><td>23</td><td>8</td><td><span class="badge badge-green">4/4</span></td><td>Mar 14 &ndash; Mar 28 (14d)</td></tr>
+<tr><td><code>poke/dev/poke-productivity-suite</code></td><td>17</td><td>6</td><td><span class="badge badge-green">4/4</span></td><td>Mar 12 &ndash; Apr 4 (23d)</td></tr>
+<tr><td><code>engines/metternich</code></td><td>varies</td><td>5</td><td><span class="badge badge-green">4/4</span></td><td>Mar 28 &ndash; Apr 4 (7d)</td></tr>
+<tr><td><code>web/dev/gblock-party-redux</code></td><td>varies</td><td>3</td><td><span class="badge badge-orange">3/4</span> no strategy</td><td>May 23 &ndash; May 25 (2d)</td></tr>
+<tr><td><code>web/dev/rewalkthrough</code></td><td>varies</td><td>4</td><td><span class="badge badge-orange">3/4</span> no competitive</td><td>May 6 &ndash; May 10 (4d)</td></tr>
+<tr><td><code>games/dev/trail-break</code></td><td>varies</td><td>2</td><td><span class="badge badge-red">2/4</span></td><td>May 24 &ndash; May 25 (1d)</td></tr>
+</table>
 
-      <div class="gate" data-section="Assumptions & Confidence" data-gate-type="assumptions_confidence">
-        <h3>Assumptions & Confidence Gate</h3>
-        <p>Key assumption: the primary pain is not that branches exist, but that branch discovery and branch commitment are not separated strongly enough in skill contracts.</p>
-        <div class="question" data-question="assumption_acceptance">
-          <strong>Which assumption should guide remediation?</strong>
-          <label><input type="radio" name="assumption_acceptance" value="separate_discovery_commitment"> Separate branch discovery from branch commitment</label>
-          <label><input type="radio" name="assumption_acceptance" value="reduce_branching"> Reduce branch surfacing inside research skills</label>
-          <label><input type="radio" name="assumption_acceptance" value="other"> Other / None of the above</label>
-          <div class="notes"><textarea placeholder="State the preferred assumption."></textarea></div>
-          <label><input type="radio" name="assumption_acceptance" value="clarification"> Need clarification</label>
-          <div class="notes"><textarea placeholder="What is unclear?"></textarea></div>
-        </div>
-      </div>
+<!-- ======================== SOURCE COMPARISON ======================== -->
+<h2 id="source-comparison">Source Comparison: Claude vs. Codex</h2>
 
-      <div class="gate" data-section="Recommended Path" data-gate-type="recommended_path">
-        <h3>Recommended Path Gate</h3>
-        <p>The proposed durable change is a shared branch manifest and artifact-budget contract, with `icp` and `platform-strategy` as the first owner surfaces.</p>
-        <div class="question" data-question="path_choice">
-          <strong>Which remediation path do you approve?</strong>
-          <label><input type="radio" name="path_choice" value="shared_contract_first"> Shared branch-governance contract first</label>
-          <label><input type="radio" name="path_choice" value="new_skill_first"> Create a dedicated branch/product-line strategy skill first</label>
-          <label><input type="radio" name="path_choice" value="other"> Other / None of the above</label>
-          <div class="notes"><textarea placeholder="Describe the desired path."></textarea></div>
-          <label><input type="radio" name="path_choice" value="clarification"> Need clarification</label>
-          <div class="notes"><textarea placeholder="What is unclear?"></textarea></div>
-        </div>
-      </div>
+<div class="stat-grid">
+  <div class="stat-card"><div class="number">9,641</div><div class="label">Claude total messages</div></div>
+  <div class="stat-card"><div class="number">1,866</div><div class="label">Codex total messages</div></div>
+  <div class="stat-card"><div class="number">1,398</div><div class="label">Claude research messages</div></div>
+  <div class="stat-card"><div class="number">311</div><div class="label">Codex research messages</div></div>
+</div>
 
-      <div class="gate" data-section="Proposed File Changes" data-gate-type="proposed_file_changes" data-target-path="global/codex/targeted-skill-builder or shared alignment/research contracts">
-        <h3>Proposed File Changes Gate</h3>
-        <p>No canonical skill files have been changed by this report. If approved, likely changes should be routed through targeted remediation and include mirrored Codex/Claude skill contracts, archives, changelogs, and layer1 checks.</p>
-        <div class="question" data-question="file_change_scope">
-          <strong>What file-change scope should follow this report?</strong>
-          <label><input type="radio" name="file_change_scope" value="icp_platform_strategy_shared"> Patch shared research contract plus ICP and platform-strategy</label>
-          <label><input type="radio" name="file_change_scope" value="all_product_research"> Patch all product research skills that can surface branches</label>
-          <label><input type="radio" name="file_change_scope" value="other"> Other / None of the above</label>
-          <div class="notes"><textarea placeholder="Describe the exact scope."></textarea></div>
-          <label><input type="radio" name="file_change_scope" value="clarification"> Need clarification</label>
-          <div class="notes"><textarea placeholder="What is unclear?"></textarea></div>
-        </div>
-      </div>
+<h3>Research Keyword Ownership</h3>
+<table>
+<tr><th>Keyword</th><th>Claude</th><th>Codex</th><th>Bias</th></tr>
+<tr><td>spec</td><td>771</td><td>141</td><td><span class="badge badge-blue">Claude</span></td></tr>
+<tr><td>product</td><td>133</td><td>35</td><td><span class="badge badge-blue">Claude</span></td></tr>
+<tr><td>interview</td><td>66</td><td>23</td><td><span class="badge badge-blue">Claude</span></td></tr>
+<tr><td>icp</td><td>65</td><td>18</td><td><span class="badge badge-blue">Claude</span></td></tr>
+<tr><td>research</td><td>47</td><td>32</td><td><span class="badge badge-purple">Mixed</span></td></tr>
+<tr><td>competitive</td><td>21</td><td>11</td><td><span class="badge badge-purple">Mixed</span></td></tr>
+<tr><td>gtm</td><td>6</td><td>7</td><td><span class="badge badge-purple">Mixed</span></td></tr>
+<tr><td>monetization</td><td>12</td><td>8</td><td><span class="badge badge-purple">Mixed</span></td></tr>
+</table>
 
-      <div class="gate" data-section="Approval" data-gate-type="approval">
-        <h3>Approval Gate</h3>
-        <p>Approval is required before downstream remediation routing or canonical skill edits.</p>
-        <div class="question" data-question="approval_status">
-          <strong>Approve this report's recommendation for downstream remediation?</strong>
-          <label><input type="radio" name="approval_status" value="approved"> Approved</label>
-          <label><input type="radio" name="approval_status" value="revise_first"> Revise report first</label>
-          <label><input type="radio" name="approval_status" value="other"> Other / None of the above</label>
-          <div class="notes"><textarea placeholder="Describe the approval condition."></textarea></div>
-          <label><input type="radio" name="approval_status" value="clarification"> Need clarification</label>
-          <div class="notes"><textarea placeholder="What is unclear?"></textarea></div>
-        </div>
-      </div>
-    </section>
-  </main>
+<div class="evidence">
+<strong>Observation:</strong> Product research execution (skill invocations, artifact creation) is almost entirely Claude-driven. Codex handles meta-workflow discussion &mdash; skill routing decisions, research quality feedback, and skill development. The <code>gtm</code> and <code>monetization</code> keywords show roughly even distribution, suggesting growth-phase work may naturally migrate to Codex for autonomous execution.
+</div>
 
-  <div class="controls">
-    <button id="compile" disabled>Compile Answers</button>
-    <button id="copy" disabled>Copy YAML</button>
-    <span id="status" class="muted"></span>
-  </div>
-  <main>
-    <h2>Compiled YAML</h2>
-    <textarea id="yaml-output" readonly></textarea>
-  </main>
+<!-- ======================== SPLIT-PATH EVIDENCE ======================== -->
+<h2 id="split-path">Split-Path Evidence</h2>
 
-  <script>
-    const questions = Array.from(document.querySelectorAll('.question'));
-    const compile = document.getElementById('compile');
-    const copy = document.getElementById('copy');
-    const status = document.getElementById('status');
-    const output = document.getElementById('yaml-output');
+<p>The core finding: product research workflows split across <strong>multiple sessions, multiple days, and multiple packs</strong> with no durable state or progress tracker between sessions. Each session starts fresh, frequently repeating work or losing context from prior sessions.</p>
 
-    function updateNotes() {
-      questions.forEach(q => {
-        q.querySelectorAll('.notes').forEach(n => n.style.display = 'none');
-        const checked = q.querySelector('input[type="radio"]:checked');
-        if (!checked) return;
-        const label = checked.closest('label');
-        const notes = label && label.nextElementSibling && label.nextElementSibling.classList.contains('notes') ? label.nextElementSibling : null;
-        if (notes) notes.style.display = 'block';
-      });
+<h3>Fragmentation Signatures</h3>
+
+<div class="card">
+<h4>1. Multi-Session Scatter</h4>
+<p>Projects average <strong>5&ndash;13 research sessions</strong> to reach full phase coverage. The 6 projects that completed all 4 phases needed:</p>
+<table>
+<tr><th>Project</th><th>Sessions</th><th>Calendar Days</th><th>Sessions/Phase</th></tr>
+<tr><td>web/dev/b4</td><td>13</td><td>24</td><td>3.25</td></tr>
+<tr><td>web/dev/loadoutworks</td><td>11</td><td>18</td><td>2.75</td></tr>
+<tr><td>web/dev/calcllm</td><td>10</td><td>60</td><td>2.50</td></tr>
+<tr><td>web/dev/bismarck-ai/v0.4</td><td>8</td><td>14</td><td>2.00</td></tr>
+<tr><td>poke/dev/poke-productivity-suite</td><td>6</td><td>23</td><td>1.50</td></tr>
+<tr><td>engines/metternich</td><td>5</td><td>7</td><td>1.25</td></tr>
+</table>
+<div class="evidence"><strong>Evidence:</strong> Session history grouped by <code>sessionId</code> and <code>project</code>. Each session boundary means context loss.</div>
+</div>
+
+<div class="card">
+<h4>2. Phase Regression</h4>
+<p>8 observed regressions where later-phase work dropped back to earlier phases:</p>
+<ul>
+<li><span class="badge badge-red">5x</span> strategy &rarr; validation (GTM/roadmap work triggering ICP re-runs)</li>
+<li><span class="badge badge-orange">2x</span> validation &rarr; discovery (ICP work triggering concept re-exploration)</li>
+<li><span class="badge badge-orange">1x</span> competitive &rarr; validation (competitive-analysis findings triggering ICP rework)</li>
+</ul>
+<div class="evidence"><strong>Evidence:</strong> Phase transition analysis across 121 research sessions. Regressions indicate that downstream skills surface findings that invalidate upstream assumptions.</div>
+</div>
+
+<div class="card">
+<h4>3. Build/Research Interleaving</h4>
+<p>The heaviest transition pattern is <strong>build &harr; research</strong>, not research &rarr; research:</p>
+<ul>
+<li>validation &rarr; build: <strong>35x</strong> &middot; build &rarr; validation: <strong>27x</strong></li>
+<li>strategy &rarr; build: <strong>27x</strong> &middot; build &rarr; strategy: <strong>27x</strong></li>
+<li>competitive &rarr; build: <strong>11x</strong> &middot; build &rarr; competitive: <strong>10x</strong></li>
+</ul>
+<p>Research and building constantly interleave. The user does not complete a full research pipeline before building &mdash; they interleave research as it becomes relevant during implementation.</p>
+<div class="evidence"><strong>Evidence:</strong> Phase transition counts from command sequence analysis. <code>/ship</code> is the #1 command at 848 invocations; research skills appear interspersed between shipping cycles.</div>
+</div>
+
+<div class="card">
+<h4>4. Repeated Same-Session Retries</h4>
+<ul>
+<li><code>/plan-interview &rarr; /plan-interview</code>: <strong>7x</strong> in same session (retry pattern)</li>
+<li><code>/concept-exploration &rarr; /concept-exploration</code>: <strong>3x</strong></li>
+<li><code>/spec-drift &rarr; /spec-drift</code>: <strong>3x</strong></li>
+</ul>
+<div class="evidence"><strong>Evidence:</strong> Single-session command sequences. Same skill invoked 2+ times suggests the first run didn't produce satisfactory output, or the user refined the prompt.</div>
+</div>
+
+<!-- ======================== PHASE FLOW ======================== -->
+<h2 id="phase-flow">Phase Flow Analysis</h2>
+
+<h3>Intended Flow (from pack default flows)</h3>
+<div class="flow-diagram">
+<span class="flow-step">concept-exploration</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">icp</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">competitive-analysis</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">journey-map</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">positioning</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">ux-variations</span>
+<br><span class="flow-note">(business-discovery default)</span>
+<br><br>
+<span class="flow-step">journey-map</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">onboarding-map</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">conversion-map</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">transaction-map</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">retention-map</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">expansion-map</span>
+<br><span class="flow-note">(customer-lifecycle default)</span>
+<br><br>
+<span class="flow-step">hook-model</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">metrics</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">monetization</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">gtm</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">landing-copy</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">experiment</span>
+<br><span class="flow-note">(business-growth default)</span>
+</div>
+
+<h3>Observed Flow (from session data)</h3>
+<div class="flow-diagram">
+<span class="flow-problem">Session 1:</span> <span class="flow-step">concept-exploration</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">pack install</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">concept-exploration</span> <span class="flow-note">(retry)</span>
+<br>
+<span class="flow-problem">Session 2:</span> <span class="flow-step">icp</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">/clear</span>
+<br>
+<span class="flow-problem">Session 3:</span> <span class="flow-step">competitive-analysis</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">/clear</span>
+<br>
+<span class="flow-problem">Session 4:</span> <span class="flow-step">journey-map</span>
+<br>
+<span class="flow-problem">Session 5:</span> <span class="flow-step">roadmap</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">ship</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">icp</span> <span class="flow-note">(regression)</span>
+<br><br>
+<span class="flow-note">Typical pattern from gblock-party-redux, calcllm, rewalkthrough (May 2026)</span>
+</div>
+
+<h3>Top Single-Session Sequences</h3>
+<table>
+<tr><th>Count</th><th>Sequence</th><th>Assessment</th></tr>
+<tr><td>7</td><td><code>/plan-interview &rarr; /plan-interview</code></td><td><span class="badge badge-red">Retry</span> First run unsatisfactory</td></tr>
+<tr><td>3</td><td><code>/icp &rarr; /competitive-analysis</code></td><td><span class="badge badge-green">Golden path</span> Intended flow</td></tr>
+<tr><td>3</td><td><code>/spec-drift &rarr; /spec-drift</code></td><td><span class="badge badge-red">Retry</span></td></tr>
+<tr><td>3</td><td><code>/concept-exploration &rarr; /concept-exploration</code></td><td><span class="badge badge-red">Retry</span></td></tr>
+<tr><td>2</td><td><code>/positioning &rarr; /gtm</code></td><td><span class="badge badge-green">Golden path</span></td></tr>
+<tr><td>1</td><td><code>/icp &rarr; /plan-interview &rarr; /roadmap</code></td><td><span class="badge badge-green">Golden path</span></td></tr>
+<tr><td>1</td><td><code>/journey-map &rarr; /gtm &rarr; /monetization</code></td><td><span class="badge badge-green">Golden path</span></td></tr>
+</table>
+
+<!-- ======================== FRAGMENTATION ======================== -->
+<h2 id="fragmentation">Fragmentation Patterns</h2>
+
+<h3>Why Research Splits Across Sessions</h3>
+
+<div class="card">
+<h4>Pattern A: Pack Not Installed</h4>
+<p>User runs <code>/concept-exploration</code>, gets told to install <code>business-discovery</code> pack, does <code>/pack install</code>, then re-runs the next skill in a new session because <code>/clear</code> was used or context was lost.</p>
+<div class="evidence"><strong>Evidence:</strong> <code>gblock-party-redux</code> (May 23): <code>/concept-exploration &rarr; /concept-exploration &rarr; /concept-exploration &rarr; /pack &rarr; /clear</code>. Three concept-exploration retries and a pack install in one session, then ICP in a separate session two days later.</div>
+</div>
+
+<div class="card">
+<h4>Pattern B: Alignment Page Review Gap</h4>
+<p>Skills produce alignment pages that require user review and YAML compilation. The user reviews asynchronously, sometimes hours or days later, in a new session. The new session has no memory of what was approved or what the next step should be.</p>
+<div class="evidence"><strong>Evidence:</strong> <code>calcllm</code>: concept-exploration on May 22, ICP on May 23, competitive-analysis on May 24, journey-map on May 25 &mdash; each a separate session with a day gap.</div>
+</div>
+
+<div class="card">
+<h4>Pattern C: Build Interruption</h4>
+<p>Research gets interrupted by urgent build/ship work. When user returns to research, context of where they left off is gone. They may re-run a phase or skip ahead without checking what was already completed.</p>
+<div class="evidence"><strong>Evidence:</strong> <code>web/dev/b4</code>: 13 research sessions over 24 days, with <code>/ship</code> interleaved 15+ times. Research phases overlap and repeat.</div>
+</div>
+
+<div class="card">
+<h4>Pattern D: Cross-Pack Boundary</h4>
+<p>The research workflow spans 4 packs: <code>concept-exploration</code> (global), <code>business-discovery</code>, <code>customer-lifecycle</code>, <code>business-growth</code>. Each pack must be installed separately. Routing recommendations say "install X pack first" but don't carry forward what work was already done.</p>
+<div class="evidence"><strong>Evidence:</strong> Codex message (May 25): "we need to make sure that competitive analysis routes to recommend running: pack install customer-lifecycle, then journey-map". The user is manually managing cross-pack routing because skill routing doesn't track prior state.</div>
+</div>
+
+<!-- ======================== EVIDENCE MATRIX ======================== -->
+<h2 id="evidence-matrix">Evidence Matrix</h2>
+
+<table>
+<tr><th>Claim</th><th>Source</th><th>Evidence</th><th>Confidence</th><th>Assumption</th><th>Decision Impact</th></tr>
+<tr>
+<td>Research workflows are fragmented across 5&ndash;13 sessions per project</td>
+<td>Claude history.jsonl</td>
+<td>Session-project grouping shows 6 projects with 5+ research sessions each</td>
+<td><span class="badge badge-green">High</span></td>
+<td>None &mdash; directly measured</td>
+<td>Quantifies the split-path problem. If acceptable, no action needed.</td>
+</tr>
+<tr>
+<td>Only 30% of projects complete all 4 research phases</td>
+<td>Claude history.jsonl</td>
+<td>6 of 20+ projects with research activity reached all 4 phases (discovery, validation, competitive, strategy)</td>
+<td><span class="badge badge-green">High</span></td>
+<td>Some projects may intentionally skip phases</td>
+<td>Determines whether a progress tracker is needed or if incomplete coverage is by design.</td>
+</tr>
+<tr>
+<td>Phase regressions happen because downstream skills invalidate upstream assumptions</td>
+<td>Session sequences + skill SKILL.md routing</td>
+<td>8 observed regressions; ICP and competitive-analysis skills explicitly say "IF downstream impact is Major: prepend /reconcile-research"</td>
+<td><span class="badge badge-orange">Medium</span></td>
+<td>Regressions could also be user-initiated pivots, not skill-driven</td>
+<td>If regressions are skill-driven, reconcile-research should be stronger. If user-driven, no fix needed.</td>
+</tr>
+<tr>
+<td>Build/research interleaving is the dominant workflow, not linear research-then-build</td>
+<td>Phase transition counts</td>
+<td>build &harr; validation: 62 transitions; build &harr; strategy: 54 transitions. More than research &rarr; research transitions.</td>
+<td><span class="badge badge-green">High</span></td>
+<td>None &mdash; directly measured</td>
+<td>Any "research pipeline" solution must accommodate interleaved building, not enforce a linear flow.</td>
+</tr>
+<tr>
+<td>Same-session retries indicate first-run quality issues</td>
+<td>Session command sequences</td>
+<td>/plan-interview retried 7x; /concept-exploration retried 3x; /spec-drift retried 3x</td>
+<td><span class="badge badge-orange">Medium</span></td>
+<td>Retries could be prompt refinement, not quality failure</td>
+<td>If quality-driven, skill output needs improvement. If prompt-driven, input handling needs improvement.</td>
+</tr>
+<tr>
+<td>Cross-pack routing is manually managed by the user</td>
+<td>Codex history (May 25)</td>
+<td>"we need to make sure that competitive analysis routes to recommend running: pack install customer-lifecycle, then journey-map"</td>
+<td><span class="badge badge-green">High</span></td>
+<td>None &mdash; explicit user statement</td>
+<td>Skills must auto-detect installed packs and route accordingly, or a meta-orchestrator is needed.</td>
+</tr>
+<tr>
+<td>Research execution is Claude-biased; Codex handles meta-workflow</td>
+<td>Keyword analysis across both histories</td>
+<td>Claude: 1,398 research messages; Codex: 311. All major research keywords show Claude bias except gtm/monetization.</td>
+<td><span class="badge badge-green">High</span></td>
+<td>Codex history may be less complete (fewer records overall)</td>
+<td>Automation investments should target Claude-side skill quality first.</td>
+</tr>
+</table>
+
+<!-- ======================== RECOMMENDATIONS ======================== -->
+<h2 id="recommendations">Recommendations</h2>
+
+<table>
+<tr><th>Pattern</th><th>Frequency</th><th>Type</th><th>Recommendation</th><th>Avoided Manual Prompts</th></tr>
+<tr>
+<td>Multi-session research fragmentation</td>
+<td>20+ projects</td>
+<td><span class="badge badge-purple">Standing instruction / Convention</span></td>
+<td><strong>Research Progress Manifest:</strong> Each research skill writes a <code>research/.progress.yaml</code> file recording completed phases, pending phases, last skill run, and next recommended skill. Skills read this on startup to know where the project left off.</td>
+<td>~40 "where was I" prompts across projects</td>
+</tr>
+<tr>
+<td>Cross-pack routing gaps</td>
+<td>Every project using 2+ business packs</td>
+<td><span class="badge badge-blue">Skill enhancement</span></td>
+<td><strong>Auto-detect installed packs in routing:</strong> Business-discovery skills should read <code>.agents/project.json</code> <code>enabled_packs</code> and only recommend installed skills. If the next skill needs an uninstalled pack, auto-prompt <code>/pack install</code> instead of silently recommending a broken route.</td>
+<td>~15 failed route-follows per project</td>
+</tr>
+<tr>
+<td>Phase regressions (strategy &rarr; validation)</td>
+<td>8 observed</td>
+<td><span class="badge badge-blue">Skill enhancement</span></td>
+<td><strong>Reconcile-before-regress gate:</strong> When a downstream skill detects upstream-invalidating findings, it should run <code>/reconcile-research</code> automatically before re-routing to the earlier phase, preserving work already done.</td>
+<td>~8 redundant phase re-runs</td>
+</tr>
+<tr>
+<td>Same-session retries</td>
+<td>13 observed (7+3+3)</td>
+<td><span class="badge badge-blue">Skill enhancement</span></td>
+<td><strong>Retry-aware input handling:</strong> When a skill is invoked immediately after itself in the same session, treat the second invocation as a refinement. Read the prior output (alignment page or research file) and ask what to change, rather than starting fresh.</td>
+<td>~13 full re-runs saved</td>
+</tr>
+<tr>
+<td>Build/research interleaving</td>
+<td>116 transitions</td>
+<td><span class="badge badge-purple">Standing instruction</span></td>
+<td><strong>Accept interleaving as the norm:</strong> Do not design research workflows that require completing all research before building. The progress manifest must support "paused at phase X, build in progress, resume research when ready."</td>
+<td>N/A (design principle, not automation)</td>
+</tr>
+</table>
+
+<h3>Highest-Impact Automations</h3>
+<ol>
+<li><strong>Research Progress Manifest</strong> (<code>research/.progress.yaml</code>) &mdash; eliminates "where was I" across all projects. ~40 prompts saved.</li>
+<li><strong>Cross-pack auto-routing</strong> &mdash; skills detect installed packs and route correctly or prompt install. ~15 prompts saved per project.</li>
+<li><strong>Retry-aware skill re-invocation</strong> &mdash; second invocation = refinement, not fresh start. ~13 full re-runs saved.</li>
+<li><strong>Reconcile-before-regress gate</strong> &mdash; prevents redundant upstream phase re-runs. ~8 re-runs saved.</li>
+<li><strong>Alignment page state persistence</strong> &mdash; compiled YAML answers stored in <code>research/.approvals/</code> so the next session knows what was approved.</li>
+</ol>
+
+<!-- ======================== CONFIDENCE ======================== -->
+<h2 id="confidence">Confidence &amp; Assumption Register</h2>
+
+<table>
+<tr><th>Conclusion</th><th>Status</th><th>What Would Change It</th></tr>
+<tr><td>Research workflows are fragmented</td><td><span class="badge badge-green">Evidence-backed</span></td><td>Evidence that fragmentation is intentional (e.g., user prefers short sessions)</td></tr>
+<tr><td>30% completion rate is a problem</td><td><span class="badge badge-orange">Provisional</span></td><td>Knowing whether incomplete projects were abandoned intentionally or simply never finished research</td></tr>
+<tr><td>Progress manifest would reduce friction</td><td><span class="badge badge-orange">Provisional</span></td><td>User testing showing whether the manifest is actually read on session start</td></tr>
+<tr><td>Regressions are skill-driven, not user-driven</td><td><span class="badge badge-orange">Provisional</span></td><td>Examining specific regression sessions to see if the user or the skill initiated the backward step</td></tr>
+<tr><td>Cross-pack routing is the primary friction source</td><td><span class="badge badge-green">Evidence-backed</span></td><td>User explicitly stated this in Codex (May 25)</td></tr>
+<tr><td>Build/research interleaving is the natural workflow</td><td><span class="badge badge-green">Evidence-backed</span></td><td>Nothing &mdash; this is a measured behavioral fact</td></tr>
+</table>
+
+<!-- ======================== GATES ======================== -->
+
+<div class="gate" id="gate-evidence">
+<h3>Gate: Evidence Coverage</h3>
+
+<div class="question-block" data-gate="evidence-coverage" data-section="Evidence Coverage">
+<h4>Q1: Is the evidence sufficient for the split-path diagnosis?</h4>
+<label><input type="radio" name="q1" value="yes" onchange="handleRadio(this)"> Yes, the session data clearly shows fragmentation</label>
+<label><input type="radio" name="q1" value="partial" onchange="handleRadio(this)"> Partially &mdash; I'd want to see specific session transcripts</label>
+<label><input type="radio" name="q1" value="other" onchange="handleRadio(this)"> Other / None of the above</label>
+<textarea class="other-text" placeholder="Describe what additional evidence you'd want..."></textarea>
+<label><input type="radio" name="q1" value="clarify" onchange="handleRadio(this)"> Need clarification</label>
+<textarea class="clarify-text" placeholder="What needs clarification?"></textarea>
+<div class="notes-box"><label>Additional notes:</label><textarea class="additional-notes" placeholder="Optional notes on your selection..."></textarea></div>
+</div>
+
+<div class="question-block" data-gate="evidence-coverage" data-section="Evidence Coverage">
+<h4>Q2: Which claims need more support before acting on recommendations?</h4>
+<label><input type="radio" name="q2" value="none" onchange="handleRadio(this)"> None &mdash; ready to act on all recommendations</label>
+<label><input type="radio" name="q2" value="regressions" onchange="handleRadio(this)"> Phase regressions &mdash; need to confirm if skill-driven or user-driven</label>
+<label><input type="radio" name="q2" value="retries" onchange="handleRadio(this)"> Same-session retries &mdash; need to confirm quality vs. prompt refinement</label>
+<label><input type="radio" name="q2" value="other" onchange="handleRadio(this)"> Other / None of the above</label>
+<textarea class="other-text" placeholder="Which claims need more evidence?"></textarea>
+<label><input type="radio" name="q2" value="clarify" onchange="handleRadio(this)"> Need clarification</label>
+<textarea class="clarify-text" placeholder="What needs clarification?"></textarea>
+<div class="notes-box"><label>Additional notes:</label><textarea class="additional-notes" placeholder="Optional notes on your selection..."></textarea></div>
+</div>
+</div>
+
+<div class="gate" id="gate-scope">
+<h3>Gate: Scope &amp; Non-Goals</h3>
+
+<div class="question-block" data-gate="scope" data-section="Scope &amp; Non-Goals">
+<h4>Q3: Should the progress manifest track state across ALL research skills, or just the business discovery pipeline?</h4>
+<label><input type="radio" name="q3" value="all" onchange="handleRadio(this)"> All research skills (concept-exploration, business-discovery, customer-lifecycle, business-growth, business-ops, product-design)</label>
+<label><input type="radio" name="q3" value="business-only" onchange="handleRadio(this)"> Business pipeline only (concept-exploration &rarr; business-discovery &rarr; customer-lifecycle &rarr; business-growth)</label>
+<label><input type="radio" name="q3" value="other" onchange="handleRadio(this)"> Other / None of the above</label>
+<textarea class="other-text" placeholder="What scope do you prefer?"></textarea>
+<label><input type="radio" name="q3" value="clarify" onchange="handleRadio(this)"> Need clarification</label>
+<textarea class="clarify-text" placeholder="What needs clarification?"></textarea>
+<div class="notes-box"><label>Additional notes:</label><textarea class="additional-notes" placeholder="Optional notes on your selection..."></textarea></div>
+</div>
+
+<div class="question-block" data-gate="scope" data-section="Scope &amp; Non-Goals">
+<h4>Q4: Is the 30% phase-completion rate a problem to solve, or is incomplete research acceptable for some projects?</h4>
+<label><input type="radio" name="q4" value="problem" onchange="handleRadio(this)"> It's a problem &mdash; every project that starts research should be guided to completion</label>
+<label><input type="radio" name="q4" value="acceptable" onchange="handleRadio(this)"> Some projects intentionally skip phases &mdash; track but don't enforce</label>
+<label><input type="radio" name="q4" value="other" onchange="handleRadio(this)"> Other / None of the above</label>
+<textarea class="other-text" placeholder="Your preferred approach..."></textarea>
+<label><input type="radio" name="q4" value="clarify" onchange="handleRadio(this)"> Need clarification</label>
+<textarea class="clarify-text" placeholder="What needs clarification?"></textarea>
+<div class="notes-box"><label>Additional notes:</label><textarea class="additional-notes" placeholder="Optional notes on your selection..."></textarea></div>
+</div>
+</div>
+
+<div class="gate" id="gate-route">
+<h3>Gate: Recommended Route</h3>
+
+<div class="question-block" data-gate="recommended-route" data-section="Recommended Route">
+<h4>Q5: Which recommendation should be prioritized first?</h4>
+<label><input type="radio" name="q5" value="progress-manifest" onchange="handleRadio(this)"> Research Progress Manifest (<code>research/.progress.yaml</code>) &mdash; highest impact, cross-cutting</label>
+<label><input type="radio" name="q5" value="cross-pack-routing" onchange="handleRadio(this)"> Cross-pack auto-routing &mdash; fix the immediate pack-install friction</label>
+<label><input type="radio" name="q5" value="retry-aware" onchange="handleRadio(this)"> Retry-aware re-invocation &mdash; improve single-session quality</label>
+<label><input type="radio" name="q5" value="other" onchange="handleRadio(this)"> Other / None of the above</label>
+<textarea class="other-text" placeholder="What should be prioritized?"></textarea>
+<label><input type="radio" name="q5" value="clarify" onchange="handleRadio(this)"> Need clarification</label>
+<textarea class="clarify-text" placeholder="What needs clarification?"></textarea>
+<div class="notes-box"><label>Additional notes:</label><textarea class="additional-notes" placeholder="Optional notes on your selection..."></textarea></div>
+</div>
+
+<div class="question-block" data-gate="recommended-route" data-section="Recommended Route">
+<h4>Q6: Should the fix be implemented as skill-level changes (each skill reads/writes progress) or as a new orchestrator skill?</h4>
+<label><input type="radio" name="q6" value="skill-level" onchange="handleRadio(this)"> Skill-level &mdash; each research skill reads/writes <code>research/.progress.yaml</code> via a shared convention in CLAUDE.md</label>
+<label><input type="radio" name="q6" value="orchestrator" onchange="handleRadio(this)"> New orchestrator skill &mdash; a <code>/research-flow</code> skill that manages state and dispatches to individual skills</label>
+<label><input type="radio" name="q6" value="other" onchange="handleRadio(this)"> Other / None of the above</label>
+<textarea class="other-text" placeholder="Your preferred approach..."></textarea>
+<label><input type="radio" name="q6" value="clarify" onchange="handleRadio(this)"> Need clarification</label>
+<textarea class="clarify-text" placeholder="What needs clarification?"></textarea>
+<div class="notes-box"><label>Additional notes:</label><textarea class="additional-notes" placeholder="Optional notes on your selection..."></textarea></div>
+</div>
+</div>
+
+<div class="gate" id="gate-artifacts">
+<h3>Gate: Proposed Artifact Changes</h3>
+
+<div class="question-block" data-gate="artifact-destination" data-section="Proposed Artifact Changes">
+<h4>Q7: Should the progress manifest and approval persistence live in the project repo or in a central location?</h4>
+<label><input type="radio" name="q7" value="project-repo" onchange="handleRadio(this)"> Project repo &mdash; <code>research/.progress.yaml</code> and <code>research/.approvals/</code> tracked per project</label>
+<label><input type="radio" name="q7" value="central" onchange="handleRadio(this)"> Central &mdash; <code>~/.claude/research-state/</code> keyed by project path</label>
+<label><input type="radio" name="q7" value="other" onchange="handleRadio(this)"> Other / None of the above</label>
+<textarea class="other-text" placeholder="Where should state live?"></textarea>
+<label><input type="radio" name="q7" value="clarify" onchange="handleRadio(this)"> Need clarification</label>
+<textarea class="clarify-text" placeholder="What needs clarification?"></textarea>
+<div class="notes-box"><label>Additional notes:</label><textarea class="additional-notes" placeholder="Optional notes on your selection..."></textarea></div>
+</div>
+
+<div class="question-block" data-gate="artifact-destination" data-section="Proposed Artifact Changes">
+<h4>Q8: Should this analysis result in immediate skill changes, or just a documented recommendation?</h4>
+<label><input type="radio" name="q8" value="immediate" onchange="handleRadio(this)"> Immediate &mdash; route to <code>/targeted-skill-builder</code> to implement the progress manifest convention</label>
+<label><input type="radio" name="q8" value="documented" onchange="handleRadio(this)"> Documented &mdash; write the recommendation to <code>tasks/roadmap.md</code> for future implementation</label>
+<label><input type="radio" name="q8" value="other" onchange="handleRadio(this)"> Other / None of the above</label>
+<textarea class="other-text" placeholder="Your preferred approach..."></textarea>
+<label><input type="radio" name="q8" value="clarify" onchange="handleRadio(this)"> Need clarification</label>
+<textarea class="clarify-text" placeholder="What needs clarification?"></textarea>
+<div class="notes-box"><label>Additional notes:</label><textarea class="additional-notes" placeholder="Optional notes on your selection..."></textarea></div>
+</div>
+</div>
+
+<!-- ======================== COMPILE ======================== -->
+<h2 id="compile">Compile Answers</h2>
+
+<button id="compile-btn" disabled onclick="compileAnswers()">Compile Answers</button>
+<span id="remaining-count">8 questions remaining</span>
+
+<div id="yaml-output">
+<textarea id="yaml-text" readonly></textarea>
+<button id="copy-btn" onclick="copyYaml()">Copy YAML</button>
+<span id="copy-status">Copied!</span>
+</div>
+
+<script>
+function handleRadio(radio) {
+  const block = radio.closest('.question-block');
+  const otherTa = block.querySelector('.other-text');
+  const clarifyTa = block.querySelector('.clarify-text');
+  const notesBox = block.querySelector('.notes-box');
+
+  otherTa.classList.toggle('visible', radio.value === 'other');
+  clarifyTa.classList.toggle('visible', radio.value === 'clarify');
+  notesBox.classList.toggle('visible', radio.value !== 'other' && radio.value !== 'clarify');
+
+  updateCount();
+}
+
+function updateCount() {
+  const blocks = document.querySelectorAll('.question-block');
+  let remaining = 0;
+  blocks.forEach(b => {
+    const checked = b.querySelector('input[type="radio"]:checked');
+    if (!checked) remaining++;
+  });
+  const btn = document.getElementById('compile-btn');
+  const span = document.getElementById('remaining-count');
+  btn.disabled = remaining > 0;
+  if (remaining > 0) {
+    span.textContent = remaining + ' question' + (remaining > 1 ? 's' : '') + ' remaining';
+    span.style.color = 'var(--orange)';
+  } else {
+    span.textContent = 'All questions answered';
+    span.style.color = 'var(--green)';
+  }
+}
+
+function compileAnswers() {
+  const blocks = document.querySelectorAll('.question-block');
+  let answered = 0;
+  let total = blocks.length;
+  blocks.forEach(b => {
+    if (b.querySelector('input[type="radio"]:checked')) answered++;
+  });
+  if (answered < total) {
+    const first = Array.from(blocks).find(b => !b.querySelector('input[type="radio"]:checked'));
+    if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+
+  let yaml = 'gates:\n';
+  blocks.forEach((b, i) => {
+    const radio = b.querySelector('input[type="radio"]:checked');
+    const gate = b.dataset.gate;
+    const section = b.dataset.section;
+    const q = b.querySelector('h4').textContent.replace(/^Q\d+:\s*/, '');
+    let status = 'answered';
+    let answer = radio.value;
+    let notes = '';
+
+    if (radio.value === 'other') {
+      status = 'other';
+      notes = b.querySelector('.other-text').value.trim();
+    } else if (radio.value === 'clarify') {
+      status = 'needs-clarification';
+      notes = b.querySelector('.clarify-text').value.trim();
+    } else {
+      const additionalNotes = b.querySelector('.additional-notes');
+      if (additionalNotes) notes = additionalNotes.value.trim();
     }
-    function remaining() {
-      return questions.filter(q => !q.querySelector('input[type="radio"]:checked'));
-    }
-    function updateState() {
-      updateNotes();
-      const left = remaining();
-      compile.disabled = left.length > 0;
-      status.textContent = left.length ? `${left.length} required question(s) remaining` : 'All required questions answered';
-    }
-    function yamlEscape(value) {
-      return String(value || '').replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, '\\n');
-    }
-    async function copyYaml() {
-      if (!output.value) return;
-      try {
-        await navigator.clipboard.writeText(output.value);
-        status.textContent = 'YAML copied to clipboard';
-      } catch (error) {
-        output.focus();
-        output.select();
-        status.textContent = 'Clipboard blocked; YAML selected for manual copy';
-      }
-    }
-    function compileYaml() {
-      const left = remaining();
-      if (left.length) {
-        left[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
-        updateState();
-        return;
-      }
-      const items = questions.map(q => {
-        const gate = q.closest('.gate');
-        const checked = q.querySelector('input[type="radio"]:checked');
-        const notesBox = checked.closest('label').nextElementSibling && checked.closest('label').nextElementSibling.classList.contains('notes')
-          ? checked.closest('label').nextElementSibling.querySelector('textarea')
-          : null;
-        const statusValue = checked.value === 'other' ? 'other' : checked.value === 'clarification' ? 'needs-clarification' : 'answered';
-        const lines = [
-          `- section: "${yamlEscape(gate.dataset.section)}"`,
-          `  gate_type: ${gate.dataset.gateType}`,
-          `  status: ${statusValue}`,
-          `  answer: "${yamlEscape(checked.value)}"`
-        ];
-        if (notesBox && notesBox.value.trim()) lines.push(`  notes: "${yamlEscape(notesBox.value.trim())}"`);
-        if (gate.dataset.targetPath) lines.push(`  target_path: "${yamlEscape(gate.dataset.targetPath)}"`);
-        return lines.join('\n');
-      });
-      output.value = items.join('\n\n') + '\n';
-      copy.disabled = false;
-      copyYaml();
-    }
-    document.addEventListener('change', updateState);
-    compile.addEventListener('click', compileYaml);
-    copy.addEventListener('click', copyYaml);
-    updateState();
-  </script>
+
+    yaml += '  - section: "' + section + '"\n';
+    yaml += '    gate_type: "' + gate + '"\n';
+    yaml += '    status: "' + status + '"\n';
+    yaml += '    answer: "' + answer + '"\n';
+    if (notes) yaml += '    notes: "' + notes.replace(/"/g, '\\"').replace(/\n/g, '\\n') + '"\n';
+  });
+
+  const yamlOutput = document.getElementById('yaml-output');
+  const yamlText = document.getElementById('yaml-text');
+  yamlText.value = yaml;
+  yamlOutput.style.display = 'block';
+
+  try {
+    navigator.clipboard.writeText(yaml).then(() => {
+      showCopyStatus();
+    }).catch(() => {
+      yamlText.select();
+    });
+  } catch(e) {
+    yamlText.select();
+  }
+}
+
+function copyYaml() {
+  const yamlText = document.getElementById('yaml-text');
+  try {
+    navigator.clipboard.writeText(yamlText.value).then(() => {
+      showCopyStatus();
+    }).catch(() => {
+      yamlText.select();
+      document.execCommand('copy');
+      showCopyStatus();
+    });
+  } catch(e) {
+    yamlText.select();
+    document.execCommand('copy');
+    showCopyStatus();
+  }
+}
+
+function showCopyStatus() {
+  const status = document.getElementById('copy-status');
+  status.style.display = 'inline';
+  setTimeout(() => { status.style.display = 'none'; }, 2000);
+}
+
+updateCount();
+</script>
+
 </body>
 </html>

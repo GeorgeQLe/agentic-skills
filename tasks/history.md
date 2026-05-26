@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-05-26 — Ship uncommitted run→exec, pack-install guards, showcase UI, and research quality work
+
+- Completed run→exec rename residuals across docs, skills, tests, kanban packs (run-kanban→exec-kanban), and monorepo (mono-run→mono-exec).
+- Added `pack.sh which` command for missing skill resolution; updated CLAUDE.md, pack skill, and provision-agentic-config.
+- Bumped 12 research skill versions with pack-install guards for cross-pack routing (business-discovery, business-growth, business-ops, customer-lifecycle, product-design).
+- Fixed showcase preview card bottom corners popping during layoutId animation (rounded-t-lg→rounded-lg in SealedPack.tsx).
+- Updated alignment pages, task tracking, generated data, test expectations, and benchmark setups.
+
 ## 2026-05-26 — Rename exec-loop run command to exec
 
 - Renamed active exec-loop execution skills from `run` to `exec` for Claude and Codex to avoid collision with Claude's default `/run` command surface.

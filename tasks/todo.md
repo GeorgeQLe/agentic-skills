@@ -251,7 +251,7 @@
 - [x] Run the upgrade script across active skills, archive old active `SKILL.md` versions, bump versions, and update changelogs for changed skills.
 - [x] Capture the correction in `tasks/lessons.md`.
 - [x] Update layer1 tests for the research-quality contract and run focused verification.
-- [ ] Commit and push intended changes on `master` without touching unrelated dirty Skills Showcase work.
+- [x] Commit and push intended changes on `master` without touching unrelated dirty Skills Showcase work.
 
 **Files:**
 - `scripts/upgrade-alignment-page.mjs`
