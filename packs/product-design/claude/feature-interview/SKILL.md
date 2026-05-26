@@ -38,7 +38,7 @@ This is narrower than `/spec-interview`: it performs the same assumption surfaci
    - Identify whether research docs, journey docs, specs, roadmap, or task queues need a durable update if the feature proceeds.
 4. Match the feature against existing planning artifacts:
    - Identify whether it is already fully represented in a spec, partially represented in a spec, only present as an idea/research gap, or already sequenced in the roadmap.
-   - If it duplicates planned work, stop and recommend the existing route (`/roadmap` (requires agent-work-admin pack), `/plan-phase N` (requires agent-work-admin pack), `/run` (requires exec-loop pack), or `/ship` (requires exec-loop pack)) with evidence.
+   - If it duplicates planned work, stop and recommend the existing route (`/roadmap` (requires agent-work-admin pack), `/plan-phase N` (requires agent-work-admin pack), `/exec` (requires exec-loop pack), or `/ship` (requires exec-loop pack)) with evidence.
 5. Present a **Feature Evidence Brief + Assumptions Manifest** before probing:
    - Evidence sources: files, docs, research artifacts, task docs, and git history consulted.
    - Claim validation: verdict for each factual claim or hypothesis, with concise evidence.
@@ -73,7 +73,7 @@ This is narrower than `/spec-interview`: it performs the same assumption surfaci
    - Scope to include now and explicitly defer.
    - For user-facing product or feature work, confirm the prototype-first decision: what users can click through first, whether multiple experiments should live on separate routes, what data can be fake or fixture-backed, which infrastructure is intentionally deferred, and what evidence would justify promoting one deferred infrastructure item into a later production phase.
    - Scope triage for post-ship features:
-     - Small (config, copy, toggle) → `/spec-interview` + `/run` directly
+     - Small (config, copy, toggle) → `/spec-interview` + `/exec` directly
      - Medium (new component, screen, workflow) → single-variation mini-prototype (`/prototype --variant 1`)
      - Large (new product area, major redesign) → full pipeline starting at `/ux-variations`
    - Priority decision: user-confirmed priority, dependencies, and whether the feature should interrupt, follow, or remain parked relative to current roadmap/todo work.
@@ -113,7 +113,7 @@ Follow the shared Alignment Page convention in CLAUDE.md. Output: `alignment/fea
 - Do not update roadmap or task sequencing until the planning destination and priority are confirmed by the user.
 - Do not produce a full implementation spec unless the interview proves a new or rewritten spec is the right destination.
 - Do not route brainstorm ideas directly to `/spec-interview`; use `/feature-interview` for triage unless the user explicitly asks for a full spec.
-- Do not implement fixes or feature code from this skill. If the evidence pass uncovers a bug, route to `/investigate` (requires code-debug pack); if it uncovers buildable planned work, route through `/roadmap` (requires agent-work-admin pack), `/plan-phase` (requires agent-work-admin pack), or `/run` (requires exec-loop pack).
+- Do not implement fixes or feature code from this skill. If the evidence pass uncovers a bug, route to `/investigate` (requires code-debug pack); if it uncovers buildable planned work, route through `/roadmap` (requires agent-work-admin pack), `/plan-phase` (requires agent-work-admin pack), or `/exec` (requires exec-loop pack).
 - When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, prepend `/pack install <pack-name>` to the recommendation.
 
 ## Default Shipping Contract

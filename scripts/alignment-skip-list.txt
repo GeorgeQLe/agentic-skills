@@ -35,10 +35,10 @@ quiz-me
 hygiene
 
 # Pack equivalents
-run-kanban
+exec-kanban
 ship-kanban
 ship-end-kanban
-mono-run
+mono-exec
 mono-ship
 taste-calibration
 destination-doc

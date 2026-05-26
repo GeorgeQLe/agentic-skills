@@ -1,7 +1,0 @@
-interface:
-  display_name: "Mono Run"
-  short_description: "Run monorepo work with branch-backed lane dispatch"
-  default_prompt: "Use $mono-run to add monorepo detection, lane specs, guard validation, branch-backed package dispatch, and PR review around the standard $run flow."
-
-policy:
-  allow_implicit_invocation: true

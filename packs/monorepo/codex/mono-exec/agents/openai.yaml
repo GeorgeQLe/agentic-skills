@@ -1,0 +1,7 @@
+interface:
+  display_name: "Mono Exec"
+  short_description: "Execute monorepo work with branch-backed lane dispatch"
+  default_prompt: "Use $mono-exec to add monorepo detection, lane specs, guard validation, branch-backed package dispatch, and PR review around the standard $exec flow."
+
+policy:
+  allow_implicit_invocation: true

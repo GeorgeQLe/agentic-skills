@@ -292,10 +292,10 @@ scripts/pack.sh install monorepo
 ```
 
 ```text
-mono-detect, mono-run, mono-guard, mono-ship
+mono-detect, mono-exec, mono-guard, mono-ship
 ```
 
-The monorepo pack uses an augmentation injection pattern: it adds workspace detection, lane-spec generation, branch-backed package dispatch, consolidation/PR review, boundary checks, package-scoped validation, and transitive-dependent validation around the existing `exec` and `ship` skills. This differs from `*-kanban` packs, which intentionally provide workflow variants such as `run-kanban` and `ship-kanban`.
+The monorepo pack uses an augmentation injection pattern: it adds workspace detection, lane-spec generation, branch-backed package dispatch, consolidation/PR review, boundary checks, package-scoped validation, and transitive-dependent validation around the existing `exec` and `ship` skills. This differs from `*-kanban` packs, which intentionally provide workflow variants such as `exec-kanban` and `ship-kanban`.
 
 Lane dispatch uses a JSON + Markdown mirror:
 
@@ -329,7 +329,7 @@ These packs add:
 
 ```text
 brainstorm-kanban, spec-interview-kanban, roadmap-kanban,
-run-kanban, ship-kanban, ship-end-kanban
+exec-kanban, ship-kanban, ship-end-kanban
 ```
 
 The generic `poketowork-kanban` pack contains board-management utilities such as `poketo-kanban` and `sync-roadmap-kanban`.

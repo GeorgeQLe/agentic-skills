@@ -10,7 +10,7 @@ argument-hint: "[target-skill] [--allow-dirty <glob>] [--inline-fallback]"
 
 Delegate the next step's execution to Codex **live, inside the current Claude session**. Produces an `approved` packet via the shared contract (same helpers `/handoff --target=codex` uses), then invokes Codex synchronously with `codex exec "<target-skill> --execute-approved"`. Claude stays the orchestrator; Codex executes; Claude resumes once Codex returns.
 
-Unlike `/handoff --target=codex` (async — user resumes later), `/delegate` is live cross-CLI transport. The target skill defaults to `$run`; other executor skills (e.g. `$ship`) may be named but `$run` is the primary use case.
+Unlike `/handoff --target=codex` (async — user resumes later), `/delegate` is live cross-CLI transport. The target skill defaults to `$exec`; other executor skills (e.g. `$ship`) may be named but `$exec` is the primary use case.
 
 ## Mode requirement
 
@@ -25,7 +25,7 @@ Unlike `/handoff --target=codex` (async — user resumes later), `/delegate` is 
 1. **Resolve agent mode** via `./scripts/agent-mode.sh`. If the effective mode is anything other than `hybrid`, exit non-zero with a `mode-mismatch:` message naming the resolved mode. Do not touch the packet.
 
 2. **Parse arguments** from `$ARGUMENTS`:
-   - First positional token (if any) is the target skill; defaults to `$run`.
+   - First positional token (if any) is the target skill; defaults to `$exec`.
    - Collect repeatable `--allow-dirty <glob>` flags (shell-glob semantics, same as `scripts/approved-plan.sh check`). Note: back-to-back hybrid cycles rewrite the `tasks/approved-plan.md` mirror on each `consume`; commit it between cycles, or pass `--allow-dirty tasks/approved-plan.md` so the next `draft` tolerates the uncommitted mirror.
    - `--inline-fallback` auto-selects inline Claude execution in the pre-start-failure branch without prompting.
 
@@ -43,13 +43,13 @@ Unlike `/handoff --target=codex` (async — user resumes later), `/delegate` is 
 5. **Invoke Codex synchronously**:
    - Record a start-marker timestamp (ISO-8601 UTC) before the exec call so the fallback matrix can classify outcomes.
    - Shell out to `codex exec "<target-skill> --execute-approved"`. Capture stdout, stderr, and the exit code.
-   - The Step 4 consumer (`$run --execute-approved`) is what actually runs `scripts/approved-plan.sh check && consume` inside Codex. `/delegate` is transport only.
+   - The Step 4 consumer (`$exec --execute-approved`) is what actually runs `scripts/approved-plan.sh check && consume` inside Codex. `/delegate` is transport only.
 
 6. **Classify via the safe-fallback matrix — never blind-retry**:
 
    - **Pre-start failure** — `codex` binary not found, auth failure, or the start marker was never printed by Codex before exit:
      - Packet stays at `approved` (no writer ran).
-     - Offer two options: (a) run inline in Claude (same session, no CLI boundary), or (b) keep the packet `approved` for later manual `$run --execute-approved` in Codex.
+     - Offer two options: (a) run inline in Claude (same session, no CLI boundary), or (b) keep the packet `approved` for later manual `$exec --execute-approved` in Codex.
      - If `--inline-fallback` was passed, auto-select (a) without prompting.
      - Under an `agent-team` execution profile, inline fallback is a **downgrade** requiring explicit interactive confirmation unless `--inline-fallback` is already on the command line.
 

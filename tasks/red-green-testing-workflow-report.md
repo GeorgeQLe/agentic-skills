@@ -41,10 +41,10 @@ False positives were not rare enough to ignore. The clearest cases:
 
 | Evidence | False-Positive Cause | Follow-Up |
 | --- | --- | --- |
-| `benchmark/test-ship-2026-05-11.md` | The `ship` setup expected `$run` for both runners even though Claude uses slash commands and Codex uses dollar commands. | Runner-specific route assertions were added. |
+| `benchmark/test-ship-2026-05-11.md` | The `ship` setup expected `$exec` for both runners even though Claude uses slash commands and Codex uses dollar commands. | Runner-specific route assertions were added. |
 | `benchmark/triage-benchmark-test-skill-2026-05-12.md` | `assertNextCommand` rejected contract-valid labels such as `Recommended next skill` and the quality target could penalize chat summaries instead of generated artifacts. | Route assertion and quality-output targeting needed reform. |
 | `benchmark/triage-benchmark-test-skill-2026-05-13.md` | The assertion required exact metric table rows that the prompt did not explicitly require. | Prompt specificity needed to match assertion strictness. |
-| `benchmark/triage-content-programming-2026-05-14.md` | The prompt asked for "a Next command line" while the assertion accepted only stricter labels; the generic pack rubric expected `$run` even though `content-programming` routes to `series-spec`. | Pack benchmark next-route coverage was repaired. |
+| `benchmark/triage-content-programming-2026-05-14.md` | The prompt asked for "a Next command line" while the assertion accepted only stricter labels; the generic pack rubric expected `$exec` even though `content-programming` routes to `series-spec`. | Pack benchmark next-route coverage was repaired. |
 | `benchmark/triage-content-programming-2026-05-14-quality.md` | The quality rubric required the exact token `local-fixture` even when the output cited the actual fixture files and facts. | Rubric changed toward concrete fixture references instead of marker tokens. |
 | `benchmark/triage-icon-handler-2026-05-13.md` | The fixture used invalid `.png` bytes, triggering image-processing failure before the skill could run. | Fixture was changed away from invalid image placeholder behavior. |
 | `benchmark/triage-icon-handler-2026-05-14-image.md` | A runner/API image-processing error was counted as an evaluated skill failure. | Runner classification was updated to mark it infrastructure-blocked. |

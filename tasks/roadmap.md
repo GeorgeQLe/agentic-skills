@@ -29,6 +29,19 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Updated on 2026-05-26. The exec-loop execution command is now `/exec` for Claude and `$exec` for Codex. Previous v0.0 `run` contracts are archived, active skills are bumped to v0.1 with changelogs, routing/docs/benchmark coverage references are updated, and generated Skills Showcase metadata was refreshed. Focused validation passed; the broader benchmark setup suite still has unrelated legacy `$run`/`global/...` expectations to clean up separately.
 
+## Current Targeted Update: Rename Old Run References To Exec 2026-05-26
+
+**Goal:** Finish the command-surface migration by replacing active execution-skill references to `/run`, `$run`, `run-kanban`, and `mono-run` with `/exec`, `$exec`, `exec-kanban`, and `mono-exec`, while preserving ordinary verb usage and historical benchmark run artifacts.
+
+**Acceptance Criteria:**
+- [x] Active `SKILL.md` files no longer contain old execution command tokens outside archives.
+- [x] Kanban wrapper skills are renamed from `run-kanban` to `exec-kanban`, archived, version-bumped, and given changelogs.
+- [x] Monorepo wrapper skills are renamed from `mono-run` to `mono-exec`, archived, version-bumped, and given changelogs.
+- [x] Pack metadata, docs, benchmark coverage/setup surfaces, manifests, and generated showcase data use the renamed command surfaces.
+- [x] Validation passes or unrelated pre-existing failures are documented.
+
+**Result:** Updated on 2026-05-26. Active execution-wrapper commands now use `exec-kanban` and `mono-exec`, with previous v0.0 contracts archived and active wrappers bumped to v0.1. Command references, metadata, benchmark coverage/setup fixtures, and generated Skills Showcase assets were refreshed. Focused validation passed; the next-step routing script still reports unrelated existing missing routing contracts.
+
 ## Current Targeted Update: ICP Willingness-to-Pay Signals 2026-05-25
 
 **Goal:** Incorporate willingness-to-pay (WTP) evidence into the mirrored ICP skills as a bounded discovery signal, without turning ICP research into pricing strategy or monetization design.
@@ -203,7 +216,7 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 - [x] Agent-review scores, common findings, remediation handoff, and definitive next route are written to a dated benchmark review report.
 - [x] Alignment preview is verified, task notes are updated, and intended changes are committed and pushed on `master`.
 
-**Result:** Updated on 2026-05-22. The review finds the retained outputs good but not excellent: policy content and `$run` routing are strong, while artifact-reference ergonomics need tightening so final handoffs use repo-relative artifact paths and avoid benchmark temp paths. Wrote the dated review report and alignment preview; validation passed.
+**Result:** Updated on 2026-05-22. The review finds the retained outputs good but not excellent: policy content and `$exec` routing are strong, while artifact-reference ergonomics need tightening so final handoffs use repo-relative artifact paths and avoid benchmark temp paths. Wrote the dated review report and alignment preview; validation passed.
 
 ## Current Targeted Update: Provision Agentic Config Repo-Relative Handoff 2026-05-22
 
@@ -250,7 +263,7 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Acceptance Criteria:**
 - [x] Correction captured in `tasks/lessons.md`.
-- [x] Global run/ship/ship-end, kanban run/ship/ship-end, and monorepo mono-run/mono-ship skills no longer mention `alignment/*.html`.
+- [x] Global run/ship/ship-end, kanban run/ship/ship-end, and monorepo mono-exec/mono-ship skills no longer mention `alignment/*.html`.
 - [x] Repository-wide alignment coverage check treats run/ship loops plus explicit no-file `taste-calibration` as exceptions.
 - [x] Validation passes and generated metadata is refreshed if needed.
 - [x] Intended changes are committed and pushed on `master`.
@@ -511,7 +524,7 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 - [x] `benchmark/triage-feature-interview-2026-05-18-latest-route-and-gate.md` records verdict, root cause, responsible gap, recommended fix, validation plan, and next route.
 - [x] Results are recorded in `tasks/todo.md`, then intended changes are committed and pushed on `master`.
 
-**Result:** Triage verified a split failure. Claude session `feature-interview-claude-3efd3354` had one evaluated run, two infrastructure blocks, and a valid hard assertion failure because it ended with `/run` despite confirmed roadmap sequencing. Codex session `feature-interview-codex-bcc5f678` passed all hard assertions and semantically preserved route experiments, deferred infrastructure, fixture-backed prototype data, and promotion evidence. The Codex `prototype-first-product-gate` failures are best classified as a benchmark quality-evaluator false negative or over-narrow wording tolerance because the detector rejects valid `prototype-first phase` wording. Report: `benchmark/triage-feature-interview-2026-05-18-latest-route-and-gate.md`. Validation passed: required report field scan and `git diff --check`. Recommended next skill: `$targeted-skill-builder feature-interview benchmark prototype-first phase wording tolerance`.
+**Result:** Triage verified a split failure. Claude session `feature-interview-claude-3efd3354` had one evaluated run, two infrastructure blocks, and a valid hard assertion failure because it ended with `/exec` despite confirmed roadmap sequencing. Codex session `feature-interview-codex-bcc5f678` passed all hard assertions and semantically preserved route experiments, deferred infrastructure, fixture-backed prototype data, and promotion evidence. The Codex `prototype-first-product-gate` failures are best classified as a benchmark quality-evaluator false negative or over-narrow wording tolerance because the detector rejects valid `prototype-first phase` wording. Report: `benchmark/triage-feature-interview-2026-05-18-latest-route-and-gate.md`. Validation passed: required report field scan and `git diff --check`. Recommended next skill: `$targeted-skill-builder feature-interview benchmark prototype-first phase wording tolerance`.
 
 ## Current Benchmark: update-packages Fresh Rerun After pnpm Latest Tolerance 2026-05-18
 
@@ -563,7 +576,7 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 - [x] Benchmark fixture quality coverage requires separate prototype/experiment phase evidence and route-based experiment evidence.
 - [x] Focused layer1, benchmark coverage, target verifies, and whitespace validation pass.
 
-**Result:** Updated on 2026-05-18. Product and substantial feature workflows now prefer a separate prototype/experiment phase before production implementation, with multiple clickable experiment routes such as `/experiments/<variant>` when workflow, layout, density, copy, navigation, or interaction assumptions are uncertain. Durable database/storage, auth, payments, analytics, deployment, admin tooling, multi-tenancy, and production observability remain deferred until explicit approval or calibration evidence justifies promotion. Validation passed: focused layer1 bench setup tests, benchmark coverage, target verifies for roadmap/plan-phase/feature-interview/spec-interview/ui-interview/ux-variation/run, and `git diff --check`. Recommended next command: `$benchmark-test-skill roadmap`.
+**Result:** Updated on 2026-05-18. Product and substantial feature workflows now prefer a separate prototype/experiment phase before production implementation, with multiple clickable experiment routes such as `/experiments/<variant>` when workflow, layout, density, copy, navigation, or interaction assumptions are uncertain. Durable database/storage, auth, payments, analytics, deployment, admin tooling, multi-tenancy, and production observability remain deferred until explicit approval or calibration evidence justifies promotion. Validation passed: focused layer1 bench setup tests, benchmark coverage, target verifies for roadmap/plan-phase/feature-interview/spec-interview/ui-interview/ux-variation/exec, and `git diff --check`. Recommended next command: `$benchmark-test-skill roadmap`.
 
 ## Current Benchmark: feature-interview Fresh Rerun After Prototype Gate Tolerance 2026-05-18
 
@@ -1157,7 +1170,7 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Acceptance Criteria:**
 - [x] `update-packages` benchmark prompt requires package-manager shell commands inside `package-update-plan.md`, not as the final handoff.
-- [x] The setup expects `/run` for Claude and `$run` for Codex.
+- [x] The setup expects `/exec` for Claude and `$exec` for Codex.
 - [x] `package-lock.json` is allowed only when the setup fixture explicitly provides it.
 - [x] Focused layer1 tests cover accepted runner routes, rejected shell-command handoff, age-gate facts, and fixture-backed `package-lock.json`.
 - [x] Validation passes and results are recorded in `tasks/todo.md`; intended changes are committed and pushed on `master`.
@@ -1358,7 +1371,7 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 - [x] `benchmark/triage-roadmap-2026-05-17-fresh.md` records verdict, root cause, recommended fix, validation plan, and next route.
 - [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
 
-**Result:** Verified benchmark harness setup defect on 2026-05-17, not a `roadmap` skill behavior failure. Claude was fully infrastructure-blocked by runner budget. Codex generated roadmap artifacts that route to `$plan-phase 1`, matching the new-roadmap seeding contract, but `tests/layer4/setups/tier1-workflows.setup.ts` expects `$run` while using a roadmap-only prompt and only asserting `tasks/roadmap.md`. Report: `benchmark/triage-roadmap-2026-05-17-fresh.md`. Recommended next skill: `$targeted-skill-builder roadmap benchmark route alignment`.
+**Result:** Verified benchmark harness setup defect on 2026-05-17, not a `roadmap` skill behavior failure. Claude was fully infrastructure-blocked by runner budget. Codex generated roadmap artifacts that route to `$plan-phase 1`, matching the new-roadmap seeding contract, but `tests/layer4/setups/tier1-workflows.setup.ts` expects `$exec` while using a roadmap-only prompt and only asserting `tasks/roadmap.md`. Report: `benchmark/triage-roadmap-2026-05-17-fresh.md`. Recommended next skill: `$targeted-skill-builder roadmap benchmark route alignment`.
 
 ## Phase 41: Remaining Skill Benchmark Result Coverage
 
@@ -1513,7 +1526,7 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 - [x] `benchmark/test-roadmap-2026-05-17.md` records fresh verify, benchmark, latency, cost, consistency, and raw session evidence.
 - [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
 
-**Result:** Benchmark failure on 2026-05-17. `roadmap` is known with custom benchmark coverage via `tests/layer4/setups/tier1-workflows.setup.ts`, and verify passed with layer1 PASS in 3.6s plus layer2 SKIP because no target-specific layer2 tests matched. The both-agent benchmark ran. Claude session `roadmap-claude-ceadee35` was fully infrastructure-blocked by `agent runner budget exceeded` (3 blocked runs, 0 evaluated, $0.75). Codex session `roadmap-codex-43f41fa9` completed three evaluated runs with 0/3 hard assertion pass rate, 78.6% output quality, p50 latency 44.3s, and $0.75 total estimated cost; every run failed `Output recommends $run`. Report: `benchmark/test-roadmap-2026-05-17.md`. Recommended next skill: `$session-triage roadmap benchmark failure`.
+**Result:** Benchmark failure on 2026-05-17. `roadmap` is known with custom benchmark coverage via `tests/layer4/setups/tier1-workflows.setup.ts`, and verify passed with layer1 PASS in 3.6s plus layer2 SKIP because no target-specific layer2 tests matched. The both-agent benchmark ran. Claude session `roadmap-claude-ceadee35` was fully infrastructure-blocked by `agent runner budget exceeded` (3 blocked runs, 0 evaluated, $0.75). Codex session `roadmap-codex-43f41fa9` completed three evaluated runs with 0/3 hard assertion pass rate, 78.6% output quality, p50 latency 44.3s, and $0.75 total estimated cost; every run failed `Output recommends $exec`. Report: `benchmark/test-roadmap-2026-05-17.md`. Recommended next skill: `$session-triage roadmap benchmark failure`.
 
 ## Current Agent Review: ship Fresh Benchmark 2026-05-16
 
@@ -1871,7 +1884,7 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 ## Current Targeted Update: content-programming Benchmark Next-Route Coverage
 
-**Goal:** Fix the `content-programming` pack benchmark setup so it tests the actual accepted handoff labels and runner-specific `series-spec` successor instead of generic `$run` routing.
+**Goal:** Fix the `content-programming` pack benchmark setup so it tests the actual accepted handoff labels and runner-specific `series-spec` successor instead of generic `$exec` routing.
 
 **Acceptance Criteria:**
 - [x] The fix is scoped to benchmark harness coverage, not mirrored `content-programming` skill contracts.
@@ -1880,7 +1893,7 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 - [x] Layer1 regression coverage protects the prompt, hard assertion, and quality behavior.
 - [x] Required validation passes and results are recorded in `tasks/todo.md`.
 
-**Result:** Completed on 2026-05-14. Updated the pack benchmark harness instead of mirrored `content-programming` contracts. Pack prompts now require accepted handoff labels, route quality no longer defaults unknown pack skills to `$run`, and `content-programming` has runner-specific `series-spec` expectations for Claude and Codex. Added layer1 regression coverage for prompt wording, route assertions, and quality scoring. Validation passed with install/skill integrity/routing checks, benchmark coverage, focused layer1, `content-programming` verify, both-agent one-run benchmark smoke, targeted `rg`, and whitespace checks. Recommended next command: `$benchmark-test-skill content-programming`.
+**Result:** Completed on 2026-05-14. Updated the pack benchmark harness instead of mirrored `content-programming` contracts. Pack prompts now require accepted handoff labels, route quality no longer defaults unknown pack skills to `$exec`, and `content-programming` has runner-specific `series-spec` expectations for Claude and Codex. Added layer1 regression coverage for prompt wording, route assertions, and quality scoring. Validation passed with install/skill integrity/routing checks, benchmark coverage, focused layer1, `content-programming` verify, both-agent one-run benchmark smoke, targeted `rg`, and whitespace checks. Recommended next command: `$benchmark-test-skill content-programming`.
 
 ## Current Benchmark: content-programming Fresh Rerun 2026-05-14
 
@@ -1957,7 +1970,7 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 - [x] `benchmark/triage-content-programming-2026-05-14.md` records verdict, root cause, responsible gap, validation plan, and next route.
 - [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
 
-**Result:** Completed on 2026-05-14. The benchmark failure is verified. Claude session `20ea1edd` failed 0/3 only on `Output includes next command handoff`; all content, artifact, pack, skill, and workflow assertions passed. Codex session `cb044e72` passed 3/3. The responsible gap is the benchmark harness: the generic pack prompt asks for "a Next command line" while the hard assertion requires a stricter accepted label, and the quality evaluator defaults the expected pack route to `$run` even though mirrored `content-programming` contracts route to `/series-spec` or `$series-spec` after writing. Report validation passed and `git diff --check` passed. Report: `benchmark/triage-content-programming-2026-05-14.md`. Recommended next skill: `$targeted-skill-builder content-programming benchmark next-route coverage`.
+**Result:** Completed on 2026-05-14. The benchmark failure is verified. Claude session `20ea1edd` failed 0/3 only on `Output includes next command handoff`; all content, artifact, pack, skill, and workflow assertions passed. Codex session `cb044e72` passed 3/3. The responsible gap is the benchmark harness: the generic pack prompt asks for "a Next command line" while the hard assertion requires a stricter accepted label, and the quality evaluator defaults the expected pack route to `$exec` even though mirrored `content-programming` contracts route to `/series-spec` or `$series-spec` after writing. Report validation passed and `git diff --check` passed. Report: `benchmark/triage-content-programming-2026-05-14.md`. Recommended next skill: `$targeted-skill-builder content-programming benchmark next-route coverage`.
 
 ## Current Fix: Showcase Data For `icon-handler` Benchmark Evidence
 
@@ -2232,7 +2245,7 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 - [x] `benchmark/review-session-triage-2026-05-13.md` records scores, findings, remediation, and next route.
 - [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
 
-**Result:** Agent review completed on 2026-05-13. Reviewed `session-triage-claude-4cfa1e99` and `session-triage-codex-f8e827fb`, covering 6 evaluated outputs. Deterministic benchmark context was clean: both runners passed 3/3 hard assertions with 100.0% quality and no infrastructure blocks. Subjective median score was 82.5 with range 80-94. Outputs were generally good, with strong evidence-bounded incident triage, but several over-routed to `$targeted-skill-builder` despite identifying an adequate existing `$run` contract and likely one-off agent noncompliance. Report: `benchmark/review-session-triage-2026-05-13.md`. Recommended next command: `$targeted-skill-builder session-triage benchmark over-remediation rubric`.
+**Result:** Agent review completed on 2026-05-13. Reviewed `session-triage-claude-4cfa1e99` and `session-triage-codex-f8e827fb`, covering 6 evaluated outputs. Deterministic benchmark context was clean: both runners passed 3/3 hard assertions with 100.0% quality and no infrastructure blocks. Subjective median score was 82.5 with range 80-94. Outputs were generally good, with strong evidence-bounded incident triage, but several over-routed to `$targeted-skill-builder` despite identifying an adequate existing `$exec` contract and likely one-off agent noncompliance. Report: `benchmark/review-session-triage-2026-05-13.md`. Recommended next command: `$targeted-skill-builder session-triage benchmark over-remediation rubric`.
 
 ## Current Benchmark: session-triage Fresh Rerun 2026-05-13
 
@@ -2411,20 +2424,20 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 - [x] `benchmark/review-session-triage-2026-05-13.md` records source reports, run indexes, scores, findings, remediation, and next route.
 - [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
 
-**Result:** Complete. Reviewed `session-triage-claude-e5f0772b` and `session-triage-codex-374ad6f0`, covering 6 evaluated outputs and excluding no infrastructure-blocked runs. Deterministic benchmark context remained clean on hard assertions: both runners passed 3/3. Subjective median score was 78 with range 74-94. The best outputs were evidence-bound and routed to operational validation, but several over-remediated by recommending `$targeted-skill-builder` or `$run` contract edits even after identifying an adequate existing `$run` contract and likely one-off noncompliance. Report: `benchmark/review-session-triage-2026-05-13.md`. Recommended next command: `$targeted-skill-builder session-triage benchmark over-remediation rubric`.
+**Result:** Complete. Reviewed `session-triage-claude-e5f0772b` and `session-triage-codex-374ad6f0`, covering 6 evaluated outputs and excluding no infrastructure-blocked runs. Deterministic benchmark context remained clean on hard assertions: both runners passed 3/3. Subjective median score was 78 with range 74-94. The best outputs were evidence-bound and routed to operational validation, but several over-remediated by recommending `$targeted-skill-builder` or `$exec` contract edits even after identifying an adequate existing `$exec` contract and likely one-off noncompliance. Report: `benchmark/review-session-triage-2026-05-13.md`. Recommended next command: `$targeted-skill-builder session-triage benchmark over-remediation rubric`.
 
 ## Current Fix: session-triage Evidence-Gate Over-Remediation Rubric
 
-**Goal:** Tighten the `session-triage` benchmark rubric so reports that identify adequate existing contracts do not get full credit for re-labeling one-off noncompliance as a new `$run` evidence-gate or contract-change task.
+**Goal:** Tighten the `session-triage` benchmark rubric so reports that identify adequate existing contracts do not get full credit for re-labeling one-off noncompliance as a new `$exec` evidence-gate or contract-change task.
 
 **Acceptance Criteria:**
 - [x] The fix is scoped to the benchmark fixture/rubric and layer1 setup tests, not the `session-triage` skill contract.
 - [x] The `no-over-remediation-route` quality criterion penalizes evidence-gate or contract-change recommendations when the output also says the existing rule is adequate.
-- [x] Layer1 regression coverage rejects `$run` evidence-gate over-remediation while preserving accepted operational `$run` routing.
+- [x] Layer1 regression coverage rejects `$exec` evidence-gate over-remediation while preserving accepted operational `$exec` routing.
 - [x] Targeted and required validation pass, including showcase data refresh/validation.
 - [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
 
-**Result:** Completed on 2026-05-13. Updated `tests/layer4/setups/tier1-workflows.setup.ts` so `no-over-remediation-route` fails outputs that call for skill or contract changes, including `$run` evidence-gate changes, after framing the incident as one-off noncompliance or an adequate existing contract. Updated `tests/layer1/bench-setups.test.ts` with regression cases proving evidence-gate over-remediation fails while operational `$run` routing passes. Regenerated Skills Showcase data and benchmark matrix artifacts. Validation passed with focused layer1 setup/quality tests, install/link checks, benchmark coverage, target verify, showcase generation/validation, targeted `rg`, and whitespace validation. Recommended next command: `$benchmark-test-skill session-triage`.
+**Result:** Completed on 2026-05-13. Updated `tests/layer4/setups/tier1-workflows.setup.ts` so `no-over-remediation-route` fails outputs that call for skill or contract changes, including `$exec` evidence-gate changes, after framing the incident as one-off noncompliance or an adequate existing contract. Updated `tests/layer1/bench-setups.test.ts` with regression cases proving evidence-gate over-remediation fails while operational `$exec` routing passes. Regenerated Skills Showcase data and benchmark matrix artifacts. Validation passed with focused layer1 setup/quality tests, install/link checks, benchmark coverage, target verify, showcase generation/validation, targeted `rg`, and whitespace validation. Recommended next command: `$benchmark-test-skill session-triage`.
 
 ## Current Benchmark Rerun: benchmark-test-skill Self Benchmark
 
@@ -2575,7 +2588,7 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 - [x] `benchmark/test-ship-2026-05-11.md` records verify, benchmark, latency, cost, consistency, and raw session evidence.
 - [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
 
-**Result:** Benchmark completed on 2026-05-11. `ship` is a known custom benchmark target using `tests/layer4/setups/tier1-workflows.setup.ts`. Verify passed with layer1 in 8.2s across 1,253 tests; layer2 was skipped because no target-specific layer2 tests matched `ship`. The both-agent benchmark completed with no infrastructure-blocked runs: Claude failed 0/3 hard assertions because every run omitted the expected actionable `$run` handoff, while Codex passed 3/3. Output-quality scores were 71.4% for Claude and 78.6% for Codex. See `benchmark/test-ship-2026-05-11.md`. Recommended next command: `$session-triage ship benchmark failure`.
+**Result:** Benchmark completed on 2026-05-11. `ship` is a known custom benchmark target using `tests/layer4/setups/tier1-workflows.setup.ts`. Verify passed with layer1 in 8.2s across 1,253 tests; layer2 was skipped because no target-specific layer2 tests matched `ship`. The both-agent benchmark completed with no infrastructure-blocked runs: Claude failed 0/3 hard assertions because every run omitted the expected actionable `$exec` handoff, while Codex passed 3/3. Output-quality scores were 71.4% for Claude and 78.6% for Codex. See `benchmark/test-ship-2026-05-11.md`. Recommended next command: `$session-triage ship benchmark failure`.
 
 ## Current Triage: benchmark-agent-review Remediation Handoff
 
@@ -2627,7 +2640,7 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 - [x] Standard skill validation, showcase data refresh, targeted checks, and whitespace validation pass.
 - [x] Results are recorded in `tasks/todo.md`, then committed and pushed on `master`.
 
-**Result:** Completed on 2026-05-11. The mirrored `ship` contracts now forbid routine self-routing after successful shipping and route completed ship runs to `$run`/`/run` or another concrete next route, with retry exceptions only for incomplete shipping. Layer1 contract lint coverage was added, and the focused Codex `ship` benchmark passed 3/3 with no infrastructure-blocked runs.
+**Result:** Completed on 2026-05-11. The mirrored `ship` contracts now forbid routine self-routing after successful shipping and route completed ship runs to `$exec`/`/exec` or another concrete next route, with retry exceptions only for incomplete shipping. Layer1 contract lint coverage was added, and the focused Codex `ship` benchmark passed 3/3 with no infrastructure-blocked runs.
 
 ## Current Skill Update: Benchmark Contract Lint and Routing
 
@@ -3057,8 +3070,8 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 - [x] No regressions in previous phase tests.
 
 **On Completion**
-- Deviations from plan: Validation exposed one over-specific `investigate` benchmark assertion that required the literal `$run` route even though the fixture asks for a diagnostic report and concrete next command without source edits. The setup now requires an actionable next-command handoff but does not force `$run` for this diagnostic-only fixture.
-- Tech debt / follow-ups: None for Phase 36. Representative one-run samples passed with quality scores for `run`, `investigate`, `design-system`, and `run-kanban`; broader multi-run statistical confidence remains outside this phase's scope.
+- Deviations from plan: Validation exposed one over-specific `investigate` benchmark assertion that required the literal `$exec` route even though the fixture asks for a diagnostic report and concrete next command without source edits. The setup now requires an actionable next-command handoff but does not force `$exec` for this diagnostic-only fixture.
+- Tech debt / follow-ups: None for Phase 36. Representative one-run samples passed with quality scores for `run`, `investigate`, `design-system`, and `exec-kanban`; broader multi-run statistical confidence remains outside this phase's scope.
 - Ready for next phase: Yes. The current roadmap queue is complete; route next work through discovery.
 
 ---
@@ -3319,7 +3332,7 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 - Step 32.4: Add stale-data validation and tests.
   - Files: add `scripts/validate-skills-showcase-data.sh`, add `tests/layer1/skills-showcase-data.test.ts` if script-level coverage is needed
 - Step 32.5: Update skill mutation contracts to maintain the website after skill changes.
-  - Files: modify `global/codex/create-agentic-skill/SKILL.md`, `global/claude/create-agentic-skill/SKILL.md`, `global/codex/targeted-skill-builder/SKILL.md`, `global/claude/targeted-skill-builder/SKILL.md`, `global/codex/run/SKILL.md`, `global/claude/run/SKILL.md`, `global/codex/ship/SKILL.md`, `global/claude/ship/SKILL.md`, `docs/skills-reference.md`
+  - Files: modify `global/codex/create-agentic-skill/SKILL.md`, `global/claude/create-agentic-skill/SKILL.md`, `global/codex/targeted-skill-builder/SKILL.md`, `global/claude/targeted-skill-builder/SKILL.md`, `global/codex/exec/SKILL.md`, `global/claude/exec/SKILL.md`, `global/codex/ship/SKILL.md`, `global/claude/ship/SKILL.md`, `docs/skills-reference.md`
 - Step 32.6: Validate and record the phase.
   - Files: modify `tasks/todo.md`, `tasks/history.md`
 
@@ -3437,7 +3450,7 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 - Step 31.2: Update root agent guidance and mirrored planning contracts.
   - Files: modify `AGENTS.md`, `CLAUDE.md`, `global/codex/plan-phase/SKILL.md`, `global/claude/plan-phase/SKILL.md`
 - Step 31.3: Update execution and monorepo parallel contracts.
-  - Files: modify `global/codex/run/SKILL.md`, `global/claude/run/SKILL.md`, `global/codex/mono-plan/SKILL.md`, `global/claude/mono-plan/SKILL.md`, `packs/monorepo/codex/mono-run/SKILL.md`, `packs/monorepo/claude/mono-run/SKILL.md`, `docs/skills-reference.md`
+  - Files: modify `global/codex/exec/SKILL.md`, `global/claude/exec/SKILL.md`, `global/codex/mono-plan/SKILL.md`, `global/claude/mono-plan/SKILL.md`, `packs/monorepo/codex/mono-exec/SKILL.md`, `packs/monorepo/claude/mono-exec/SKILL.md`, `docs/skills-reference.md`
 - Step 31.4: Validate focused behavior and ship.
   - Files: modify `tasks/todo.md`, `tasks/history.md`
 
@@ -3605,7 +3618,7 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Scope:**
 - Add a shared quality-gate contract for mutation/shipping skills that requires changed files, user-goal mapping, tests run, skipped tests, residual risk, and next command.
-- Harden `$run`, `$ship`, `$ship-end`, and `$commit-and-push-by-feature` so non-trivial source mutations require a diff-aware ship manifest and cannot rely on doc-only verification.
+- Harden `$exec`, `$ship`, `$ship-end`, and `$commit-and-push-by-feature` so non-trivial source mutations require a diff-aware ship manifest and cannot rely on doc-only verification.
 - Promote targeted `quality-sweep audit` or equivalent adversarial review into the default pre-ship path for non-trivial code changes.
 - Add a lightweight local validation script that can check generated ship manifests or final-response drafts for required quality-gate fields.
 - Document how user corrections flow from `tasks/lessons.md` into relevant skill/test updates when a correction exposes a repeatable workflow failure.
@@ -3613,14 +3626,14 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Acceptance Criteria:**
 - [x] A reusable quality-gate contract exists and is referenced by the global mutation/shipping skills.
-- [x] `$run`, `$ship`, `$ship-end`, and `$commit-and-push-by-feature` require a ship manifest for non-trivial source changes.
+- [x] `$exec`, `$ship`, `$ship-end`, and `$commit-and-push-by-feature` require a ship manifest for non-trivial source changes.
 - [x] The ship manifest requires changed files, per-file purpose, user-goal mapping, tests run, skipped tests, residual risk, and next command.
 - [x] Non-trivial source changes require targeted `quality-sweep audit`, `expert-review`, or an explicitly justified equivalent adversarial review before commit/push.
 - [x] A validation script detects missing required ship-manifest fields and passes on a complete fixture.
 - [x] User-correction handling requires updating `tasks/lessons.md` and, when applicable, the relevant skill or validation check.
 - [x] Validation passes with targeted contract scans, script fixture checks, skill dependency/version/routing audits, and `git diff --check`.
 
-**Completed:** 2026-05-04. Added the reusable `docs/quality-gate-contract.md`, the dependency-light `scripts/ship-quality-gate.sh` validator with complete and incomplete fixtures, and hardened `$run`, `$ship`, `$ship-end`, and `$commit-and-push-by-feature` so non-trivial source mutations require a diff-aware ship manifest, adversarial review, executable-verification distinction, and correction-enforcement evidence. Validation passed with focused fixture checks, targeted contract scans, skill dependency/version/routing audits, and `git diff --check`.
+**Completed:** 2026-05-04. Added the reusable `docs/quality-gate-contract.md`, the dependency-light `scripts/ship-quality-gate.sh` validator with complete and incomplete fixtures, and hardened `$exec`, `$ship`, `$ship-end`, and `$commit-and-push-by-feature` so non-trivial source mutations require a diff-aware ship manifest, adversarial review, executable-verification distinction, and correction-enforcement evidence. Validation passed with focused fixture checks, targeted contract scans, skill dependency/version/routing audits, and `git diff --check`.
 
 **Parallelization:** review-only
 **Coordination Notes:** Keep implementation serial because the phase touches shared global workflow skills and validation scripts. Use review-only lanes for adversarial contract review after the main edits are drafted.
@@ -3655,13 +3668,13 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
   - Keep it dependency-light and shell-compatible with existing repository scripts.
 - Step 21.3: Harden global execution and shipping skill contracts.
   - Classification: automated
-  - Files: modify `global/codex/run/SKILL.md`, modify `global/codex/ship/SKILL.md`, modify `global/codex/ship-end/SKILL.md`, modify `global/codex/commit-and-push-by-feature/SKILL.md`
+  - Files: modify `global/codex/exec/SKILL.md`, modify `global/codex/ship/SKILL.md`, modify `global/codex/ship-end/SKILL.md`, modify `global/codex/commit-and-push-by-feature/SKILL.md`
   - Require ship manifest generation for non-trivial source mutations before commit/push.
   - Require targeted `quality-sweep audit`, `expert-review`, or an explicitly justified equivalent adversarial review for non-trivial code changes.
   - Require final responses to distinguish executable verification from doc-only/task-only checks.
 - Step 21.4: Add user-correction enforcement guidance.
   - Classification: automated
-  - Files: modify `global/codex/run/SKILL.md`, modify `global/codex/ship/SKILL.md`, modify `global/codex/ship-end/SKILL.md`, modify `global/codex/commit-and-push-by-feature/SKILL.md`, modify `docs/quality-gate-contract.md`
+  - Files: modify `global/codex/exec/SKILL.md`, modify `global/codex/ship/SKILL.md`, modify `global/codex/ship-end/SKILL.md`, modify `global/codex/commit-and-push-by-feature/SKILL.md`, modify `docs/quality-gate-contract.md`
   - Require corrections to update `tasks/lessons.md`.
   - Require a relevant skill or validation script update when the correction exposes a repeatable workflow failure.
   - Require explicit "not applicable" rationale when no skill/test update is made.
@@ -3682,7 +3695,7 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 ### Milestone: Quality Gate Hardening
 **Acceptance Criteria:**
 - [x] A reusable quality-gate contract exists and is referenced by the global mutation/shipping skills.
-- [x] `$run`, `$ship`, `$ship-end`, and `$commit-and-push-by-feature` require a ship manifest for non-trivial source changes.
+- [x] `$exec`, `$ship`, `$ship-end`, and `$commit-and-push-by-feature` require a ship manifest for non-trivial source changes.
 - [x] The ship manifest requires changed files, per-file purpose, user-goal mapping, tests run, skipped tests, residual risk, and next command.
 - [x] Non-trivial source changes require targeted `quality-sweep audit`, `expert-review`, or an explicitly justified equivalent adversarial review before commit/push.
 - [x] A validation script detects missing required ship-manifest fields and passes on a complete fixture.
@@ -3807,10 +3820,10 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 ### Highlights
 
 - **Mode signal + resolver.** `scripts/agent-mode.sh` resolves the effective mode via precedence `SKILLS_AGENT_MODE` env > `.agents/project.json.agent_mode` > unset. Writer: `scripts/pack.sh set-mode`.
-- **Approval packet.** `specs/approved-plan.schema.json` defines the shared cross-CLI contract. `scripts/approved-plan.sh` implements the full lifecycle (`draft → approved → consumed | stale | superseded | uncertain`) with atomic transitions and six freshness checks (`consume` at the Codex boundary via `$run --execute-approved`).
+- **Approval packet.** `specs/approved-plan.schema.json` defines the shared cross-CLI contract. `scripts/approved-plan.sh` implements the full lifecycle (`draft → approved → consumed | stale | superseded | uncertain`) with atomic transitions and six freshness checks (`consume` at the Codex boundary via `$exec --execute-approved`).
 - **In-session delegation.** `/delegate` (Claude) provides the hybrid-only bridge: drafts + approves a packet and invokes `codex exec "<target> --execute-approved"` with explicit pre-start / success / ambiguous safe-fallback branches and a `mark-uncertain` escape hatch. Never blind-retries cross-CLI. `/handoff --target=codex` covers the async case.
 - **Next-step routing.** 12 planning/execution skills (6 Claude + 6 Codex) carry a shared "Next-Step Routing" block that emits Next work plus Recommended next command. `hybrid` on Claude recommends `/delegate`; `hybrid` on Codex recommends returning to Claude (Claude orchestrates).
-- **Pack emphasis.** `docs/operating-modes.md` § "Pack emphasis" tags every global skill and pack with a primary role (`Claude-orchestration` / `Codex-execution` / `Both`). Codex `$run` uses pack-aware routing to substitute `-kanban` variants when an enabled pack ships them.
+- **Pack emphasis.** `docs/operating-modes.md` § "Pack emphasis" tags every global skill and pack with a primary role (`Claude-orchestration` / `Codex-execution` / `Both`). Codex `$exec` uses pack-aware routing to substitute `-kanban` variants when an enabled pack ships them.
 - **Degraded-path audit.** 19-row table in `docs/operating-modes.md` § "Degraded-path audit" covers every cross-CLI touchpoint with an explicit fallback or mode constraint.
 - **Authoritative reference.** `docs/operating-modes.md` (~280 lines) is the single source of truth: mode-signal resolution, approval packet (fields / lifecycle / safety / freshness), degraded-path audit, pack emphasis, and a migration guide from the parity-mirror model.
 
@@ -3820,7 +3833,7 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 
 **Step 12 (tail, 2026-04-19):** Both Verify gaps closed. `scripts/approved-plan.sh mark-stale` now rejects every non-`approved` source state with a consistent single-line reason (parity with `mark-uncertain`). `docs/operating-modes.md` § "Degraded-path audit" + `global/claude/delegate/SKILL.md` step 2 document the hybrid back-to-back mirror-commit prerequisite. No mechanism redesign, no schema change.
 
-**Step 13 (tail, 2026-04-19):** Both Step 8 `jq`-dependency gaps closed. `global/claude/handoff/SKILL.md` step 5 preamble and `global/codex/run/SKILL.md` step 6c both now declare `jq` a hard dependency and cite the exact `require_jq_write` failure text from `scripts/approved-plan.sh:21`. `docs/operating-modes.md` audit table's two `⚠ gap — follow-up` cells updated to cite the new declarations; § "Gaps surfaced by Step 8" preserved as audit trail with a dated resolution line. Doc-only.
+**Step 13 (tail, 2026-04-19):** Both Step 8 `jq`-dependency gaps closed. `global/claude/handoff/SKILL.md` step 5 preamble and `global/codex/exec/SKILL.md` step 6c both now declare `jq` a hard dependency and cite the exact `require_jq_write` failure text from `scripts/approved-plan.sh:21`. `docs/operating-modes.md` audit table's two `⚠ gap — follow-up` cells updated to cite the new declarations; § "Gaps surfaced by Step 8" preserved as audit trail with a dated resolution line. Doc-only.
 
 ---
 
@@ -3849,8 +3862,8 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
    - After building the phased plan, move specced Backlog cards to the Todo list
    - Create Todo cards for any roadmap phases/steps that don't have cards yet
 
-4. **`run-kanban`** (Claude + Codex)
-   - Full copy of `/run` with kanban ops added
+4. **`exec-kanban`** (Claude + Codex)
+   - Full copy of `/exec` with kanban ops added
    - At session start, move the current step's card from Todo to In Progress
    - Cross-device conflict detection: scan In Progress for cards from other hostnames, warn on overlap
    - After step completion, update the card (mark progress, add notes)
@@ -3886,7 +3899,7 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 
 3. **Progress tracking**
    - Update card `progress` field as agents complete sub-tasks within a step
-   - `/run-kanban` updates progress percentage based on step completion within the phase
+   - `/exec-kanban` updates progress percentage based on step completion within the phase
 
 ### Milestone
 - [x] Agent recommends next task based on board state and project priorities
@@ -4388,14 +4401,14 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 
 ## Phase 26: Monorepo Pack V1 ✓
 
-**Goal:** Create a new `monorepo` pack that makes the skill library monorepo-aware using an augmentation injection pattern. V1 ships four skills (mono-detect, mono-run, mono-ship, mono-guard) targeting pnpm workspaces + Turborepo, with a structured lane-spec artifact for parallel agent-team dispatch.
+**Goal:** Create a new `monorepo` pack that makes the skill library monorepo-aware using an augmentation injection pattern. V1 ships four skills (mono-detect, mono-exec, mono-ship, mono-guard) targeting pnpm workspaces + Turborepo, with a structured lane-spec artifact for parallel agent-team dispatch.
 
 **Source Spec:** `specs/monorepo-execution-controller.md`
 
 **Scope:**
 - Create the `packs/monorepo/` pack structure with mirrored Claude/Codex skills.
 - `mono-detect`: Workspace detection via `pnpm-workspace.yaml` and `turbo.json`, package graph output to `.agents/monorepo.json`.
-- `mono-run`: Augmented `/run` with lane-spec generation, `/mono-guard` pre-flight, parallel worktree dispatch for package-scoped steps, serial execution for cross-cutting steps, stop-all-lanes failure semantics.
+- `mono-exec`: Augmented `/exec` with lane-spec generation, `/mono-guard` pre-flight, parallel worktree dispatch for package-scoped steps, serial execution for cross-cutting steps, stop-all-lanes failure semantics.
 - `mono-ship`: Augmented `/ship` with package-scoped and transitive-dependent test/lint/build validation before shipping.
 - `mono-guard`: Pack-local boundary enforcement consuming the lane-spec artifact for pre-flight and post-integration validation.
 - Structured lane-spec artifact: `.agents/lane-specs.json` (machine-readable) + `tasks/lane-specs.md` (committed Markdown mirror) with lifecycle `draft → approved → dispatched → integrated | failed`.
@@ -4406,8 +4419,8 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 
 **Acceptance Criteria:**
 - [x] `mono-detect` correctly identifies pnpm workspaces and Turborepo, outputs `.agents/monorepo.json` with package list and dependency graph.
-- [x] `mono-run` generates lane specs from roadmap execution profiles, runs `/mono-guard` pre-flight, dispatches parallel worktree agents for package-scoped steps, and runs cross-cutting steps serially.
-- [x] `mono-run` stops all lanes on any lane failure and preserves worktree state.
+- [x] `mono-exec` generates lane specs from roadmap execution profiles, runs `/mono-guard` pre-flight, dispatches parallel worktree agents for package-scoped steps, and runs cross-cutting steps serially.
+- [x] `mono-exec` stops all lanes on any lane failure and preserves worktree state.
 - [x] `mono-ship` runs package-scoped and transitive-dependent tests/lint/build before delegating to `/ship`.
 - [x] `mono-guard` validates lane-spec disjointness pre-flight and boundary compliance post-integration.
 - [x] Lane-spec artifact follows JSON + Markdown mirror pattern with lifecycle tracking.
@@ -4418,7 +4431,7 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - [x] All phase tests pass.
 - [x] No regressions in previous phase tests.
 
-**Completed:** 2026-05-04. Added the monorepo pack V1 with mirrored Claude/Codex `mono-detect`, `mono-run`, `mono-ship`, and `mono-guard` skills, Codex metadata, detection and lane-spec validation scripts, pack validation script, committed fixtures, and discovery docs. Final focused validation passed with fixture-backed `monorepo-validate.sh`, direct lane-spec positive/negative checks, direct `mono-detect.sh` fixture runs, targeted contract scans, layer1 tests, skill dependency/version/routing audits, `git diff --check`, and the ship quality gate.
+**Completed:** 2026-05-04. Added the monorepo pack V1 with mirrored Claude/Codex `mono-detect`, `mono-exec`, `mono-ship`, and `mono-guard` skills, Codex metadata, detection and lane-spec validation scripts, pack validation script, committed fixtures, and discovery docs. Final focused validation passed with fixture-backed `monorepo-validate.sh`, direct lane-spec positive/negative checks, direct `mono-detect.sh` fixture runs, targeted contract scans, layer1 tests, skill dependency/version/routing audits, `git diff --check`, and the ship quality gate.
 
 **Parallelization:** serial
 **Coordination Notes:** Keep serial because this creates a new pack with interdependent skills (detect → guard → run → ship). The lane-spec artifact design must be settled before run/guard can reference it. The pack also touches shared docs (README, skills-reference, packs.md).
@@ -4533,7 +4546,7 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 **Acceptance Criteria:**
 - [x] `/workflows` renders a hybrid replay panel as the primary selected-step surface.
 - [x] Step circles change the active replay state and expose user prompt/command, agent response, artifact/result, and proof content for each step.
-- [x] Benchmarked steps show visible pass-rate, quality, agent/run metadata, and report/run artifact paths without requiring a collapsed details panel.
+- [x] Benchmarked steps show visible pass-rate, quality, agent/exec metadata, and report/exec artifact paths without requiring a collapsed details panel.
 - [x] Non-benchmarked steps render curated scenario transcript content and a clear no-receipt state.
 - [x] The implementation uses structured replay data rather than adding more positional fields to `WorkflowStep`.
 - [x] Mobile layouts constrain chat, command, report path, and benchmark output blocks without horizontal page overflow.
@@ -4597,7 +4610,7 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 **Acceptance Criteria:**
 - [x] `/workflows` renders a hybrid replay panel as the primary selected-step surface.
 - [x] Step circles change the active replay state and expose user prompt/command, agent response, artifact/result, and proof content for each step.
-- [x] Benchmarked steps show visible pass-rate, quality, agent/run metadata, and report/run artifact paths without requiring a collapsed details panel.
+- [x] Benchmarked steps show visible pass-rate, quality, agent/exec metadata, and report/exec artifact paths without requiring a collapsed details panel.
 - [x] Non-benchmarked steps render curated scenario transcript content and a clear no-receipt state.
 - [x] The implementation uses structured replay data rather than adding more positional fields to `WorkflowStep`.
 - [x] Mobile layouts constrain chat, command, report path, and benchmark output blocks without horizontal page overflow.
@@ -4625,7 +4638,7 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - **2026-05-14 — Tighten `icon-handler` benchmark route clarity:** Update the custom benchmark prompt/rubric so build commands remain verification commands and the final next route must be `/icon-handler fix ...` for Claude or `$icon-handler fix ...` for Codex. Result: added final-route evaluator coverage, switched the source fixture to SVG to avoid Claude image ingestion, and passed Claude/Codex smoke benchmarks. Recommended next command: `$benchmark-test-skill icon-handler`.
 - **2026-05-16 — Benchmark `ship`:** Run `$benchmark-test-skill ship` through eligibility, verify, both-agent benchmark, dated report generation, validation, commit, and push. Result: verify passed; both Claude and Codex completed 3 evaluated runs with 3/3 hard assertions passing and no infrastructure blocks, but both had deterministic quality critical failures on `evidence-linked`. Report: `benchmark/test-ship-2026-05-16.md`. Recommended next skill: `$session-triage ship benchmark failure`.
 - **2026-05-17 — Benchmark `update-packages`:** Run `$benchmark-test-skill update-packages` through eligibility, verify, both-agent benchmark, dated report generation, validation, commit, and push. Target skill has custom coverage through `tests/layer4/setups/tier23-global-workflows.setup.ts`.
-- **2026-05-17 — Triage `update-packages` benchmark failure:** Investigate the failed both-agent benchmark, classify contract versus harness versus runner causes, write a dated triage report, validate, commit, and push. Focus on `$run` route failures, age-gate evidence, stale-run contract version, and fixture false positives around `package-lock.json`.
+- **2026-05-17 — Triage `update-packages` benchmark failure:** Investigate the failed both-agent benchmark, classify contract versus harness versus runner causes, write a dated triage report, validate, commit, and push. Focus on `$exec` route failures, age-gate evidence, stale-run contract version, and fixture false positives around `package-lock.json`.
 - **2026-05-18 — Benchmark `update-packages` fresh run:** Run `$benchmark-test-skill update-packages` through eligibility, verify, both-agent benchmark, dated report generation, validation, commit, and push. Target skill has custom coverage through `tests/layer4/setups/tier23-global-workflows.setup.ts`.
 - **2026-05-18 — Benchmark `update-packages` fresh rerun:** Run `$benchmark-test-skill update-packages` again against the current repository state, write/update the dated deterministic both-agent benchmark report, refresh generated evidence if needed, validate, commit, and push.
 - **2026-05-19 — Benchmark `update-packages` fresh rerun:** Run `$benchmark-test-skill update-packages` against the current repository state after the socket transport classification follow-up, write the dated deterministic both-agent benchmark report, refresh generated evidence if needed, validate, commit, and push.
@@ -4639,11 +4652,11 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 **Source:** Benchmark results from Batches 41.3 Groups 1-3 (33 Tier 2 global skills, Claude 0% pass rate) and Batch 41.5 Group 1 (10 pack-local skills, 100% pass rate but domain criteria scoring 0%).
 
 **Problem Statement:**
-1. **Route assertion failures (high impact):** Tier 2 global skills have near-universal `Output recommends $run` assertion failures because fixture prompts lack explicit route guidance. This is the single root cause behind Claude's 0% pass rate across 33 global skills. Codex passes on a few skills where it happens to produce the expected route.
+1. **Route assertion failures (high impact):** Tier 2 global skills have near-universal `Output recommends $exec` assertion failures because fixture prompts lack explicit route guidance. This is the single root cause behind Claude's 0% pass rate across 33 global skills. Codex passes on a few skills where it happens to produce the expected route.
 2. **Domain-specific quality criteria (medium impact):** Pack-local skills score 0% on domain criteria like `business-ops-context`, `customer-lifecycle-context`, `creator-media-context`, and `business-discovery-context`. The fixture prompts don't provide enough domain context for agents to satisfy these criteria, or the rubric expectations are too narrow.
 
 **Scope:**
-- Update fixture prompts in `tests/layer4/setups/tier23-global-workflows.setup.ts` to include explicit next-step route expectations so agents know to recommend `$run`.
+- Update fixture prompts in `tests/layer4/setups/tier23-global-workflows.setup.ts` to include explicit next-step route expectations so agents know to recommend `$exec`.
 - Update fixture prompts in `tests/layer4/setups/packs/pack-workflows.setup.ts` to include domain context or loosen domain-specific quality rubric criteria to match what agents can reasonably produce from the fixture alone.
 - Re-benchmark a representative sample of affected skills after each fix category to validate improvement.
 - Do not change skill contracts (SKILL.md files) — this is a test fixture/rubric issue, not a skill behavior issue.
@@ -4676,7 +4689,7 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 - [x] Step 43.2: Add explicit route guidance to Tier 2 global skill fixture prompts.
   - Classification: automated
   - Files: modify `tests/layer4/setups/tier23-global-workflows.setup.ts`
-  - Add clear next-step route expectations to each fixture prompt so agents produce `$run` or the skill-specific route.
+  - Add clear next-step route expectations to each fixture prompt so agents produce `$exec` or the skill-specific route.
 - [x] Step 43.3: Re-benchmark a representative sample of Tier 2 global skills.
   - Classification: automated
   - Pick ~5 previously-failing skills and run `pnpm bench --skill <skill> --agent both --runs 3 --chunk-size 3 --pause 0`.

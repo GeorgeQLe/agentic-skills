@@ -7,7 +7,7 @@ version: v0.0
 
 # Patch Exec Profile
 
-Audit and fill missing lane metadata in the `### Execution Profile` blocks of `tasks/todo.md`. This skill is invoked just-in-time — typically auto-invoked by `/run` when an `agent-team` phase has incomplete lane specs. Without complete `Mode`, `Depends on`, and (for write lanes) `Owns` / `Must not edit` / `Branch` values, `/run` cannot build the lane DAG, push branch-backed lane work, open PRs, or enforce write-boundary integration.
+Audit and fill missing lane metadata in the `### Execution Profile` blocks of `tasks/todo.md`. This skill is invoked just-in-time — typically auto-invoked by `/exec` when an `agent-team` phase has incomplete lane specs. Without complete `Mode`, `Depends on`, and (for write lanes) `Owns` / `Must not edit` / `Branch` values, `/exec` cannot build the lane DAG, push branch-backed lane work, open PRs, or enforce write-boundary integration.
 
 ## Prerequisites
 
@@ -55,5 +55,5 @@ Report concisely:
 
 ## Next-Step Routing
 
-- **Next work:** resume the original executor (typically `/run`) against the patched profile.
-- **Recommended next command:** `/run` (or whatever invoked this skill).
+- **Next work:** resume the original executor (typically `/exec`) against the patched profile.
+- **Recommended next command:** `/exec` (or whatever invoked this skill).

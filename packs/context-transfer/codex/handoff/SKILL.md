@@ -36,7 +36,7 @@ The handoff document includes:
 - Keep it under 100 lines.
 - Do not commit the handoff automatically.
 - Warn if there are uncommitted changes.
-- `$handoff` writes a prose handoff document only; it does not produce `.agents/approved-plan.json` or `tasks/approved-plan.md`. Approval packets are produced by Claude-side `/handoff --target=codex`. In `codex-only` mode, cross-session resume is prose-only — for packet-gated resume, run a one-shot Claude `/handoff --target=codex` and consume with `$run --execute-approved`.
+- `$handoff` writes a prose handoff document only; it does not produce `.agents/approved-plan.json` or `tasks/approved-plan.md`. Approval packets are produced by Claude-side `/handoff --target=codex`. In `codex-only` mode, cross-session resume is prose-only — for packet-gated resume, run a one-shot Claude `/handoff --target=codex` and consume with `$exec --execute-approved`.
 
 
 ## Alignment Page

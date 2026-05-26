@@ -54,7 +54,7 @@ This is read-only status synthesis. It does not replace `/roadmap`: `roadmap` ma
    - Mismatches between conversation history, task docs, git history, and code reality.
    - Confidence level for each major conclusion: high, medium, or low, with evidence.
 8. Recommend next route (check whether each skill's pack is installed; if not, recommend `/pack install <pack>` first):
-   - `/run` when the next task is already clear and executable. _(exec-loop pack)_
+   - `/exec` when the next task is already clear and executable. _(exec-loop pack)_
    - `/roadmap` when specs exist but sequencing or task queue health needs updating. _(agent-work-admin pack)_
    - `/feature-interview` when the next idea/direction is not yet represented in specs or tasks. _(product-design pack)_
    - `/reconcile-dev-docs audit` or `/reconcile-dev-docs fix tasks` when task docs contradict git/code reality. _(docs-health pack)_

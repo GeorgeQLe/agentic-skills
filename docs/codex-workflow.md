@@ -125,7 +125,7 @@ In this document, Codex skill invocations use the native `$skill` form.
 - none in the writing step itself
 - the user should usually stop after this and start a fresh implementation thread
 
-### `$run`
+### `$exec`
 
 **Claude Code**
 - identify next step
@@ -145,11 +145,11 @@ In this document, Codex skill invocations use the native `$skill` form.
 
 **Manual gap**
 - no `EnterPlanMode`
-- no automatic clear-context approval gate; `$run` treats invocation as approval for the next planned step
+- no automatic clear-context approval gate; `$exec` treats invocation as approval for the next planned step
 - no automatic clear-context transition
 
 **Recommended Codex usage**
-- use `$run` as the default execute-and-ship loop in Codex
+- use `$exec` as the default execute-and-ship loop in Codex
 - use a fresh thread only when the work is intentionally being split across sessions
 
 ### `$ship`
@@ -209,7 +209,7 @@ This skill ports well because it already depends on repo state more than tool st
   1. planning/compression
   2. fresh-thread execution
 
-### `$run-kanban`
+### `$exec-kanban`
 
 **Claude Code**
 - move card into progress
@@ -231,7 +231,7 @@ This skill ports well because it already depends on repo state more than tool st
 - no skill-controlled plan-mode boundary
 
 **Recommended Codex usage**
-- use `$run-kanban` as the default kanban execution loop in Codex when a kanban variant pack is explicitly installed
+- use `$exec-kanban` as the default kanban execution loop in Codex when a kanban variant pack is explicitly installed
 
 ### `$ship-kanban` and `$ship-end-kanban`
 
@@ -258,15 +258,15 @@ These are the main workflow features that Claude Code has and Codex currently do
 
 The manual replacements are:
 
-- plan visibility plus implicit approval for routine `$run` execution
+- plan visibility plus implicit approval for routine `$exec` execution
 - executing in-thread after the plan is presented
 - treating `tasks/todo.md` as the execution handoff artifact
 
 ## Recommended Operating Rules
 
-### 1. `$run` uses implicit approval
+### 1. `$exec` uses implicit approval
 
-Codex should still present the plan before implementation, then proceed by default for `$run`. Ask explicitly only for separate safety decisions such as destructive commands, production deploys, paid/external account actions, credential or secret handling beyond the project contract, execution-profile downgrades, blockers, or material scope changes.
+Codex should still present the plan before implementation, then proceed by default for `$exec`. Ask explicitly only for separate safety decisions such as destructive commands, production deploys, paid/external account actions, credential or secret handling beyond the project contract, execution-profile downgrades, blockers, or material scope changes.
 
 ### 2. `tasks/todo.md` must be execution-ready
 
@@ -285,11 +285,11 @@ Deferred task surfaces are advisory by default:
 
 - `tasks/record-todo.md` holds one-time records that should happen when a condition becomes true, such as baseline measurements after production aggregate access exists.
 - `tasks/recurring-todo.md` holds repeated operational, research, or maintenance checks with a cadence and evidence path.
-- `$run`, `$ship`, and kanban sync wrappers must not select these files as next executable work unless an item has first been promoted into `tasks/todo.md`.
+- `$exec`, `$ship`, and kanban sync wrappers must not select these files as next executable work unless an item has first been promoted into `tasks/todo.md`.
 
 ### 3. Fresh threads are optional, not required
 
-Use a fresh thread when the work is intentionally being split across sessions or the context has become noisy. Otherwise, `$run` can execute and ship in-thread.
+Use a fresh thread when the work is intentionally being split across sessions or the context has become noisy. Otherwise, `$exec` can execute and ship in-thread.
 
 ### 4. Execution threads should read minimal context
 
@@ -330,7 +330,7 @@ If you are used to this Claude Code rhythm:
 14. `$research-roadmap --post-spec`
 15. `$roadmap`
 16. `$plan-phase` (seeded by `$roadmap`; rerun only for later phases)
-17. `$run`
+17. `$exec`
 18. `$ship`
 19. `$ship-end` when wrapping an off-script or partial session
 20. `$pmf-assessment` (post-launch)
@@ -355,8 +355,8 @@ The closest Codex translation is:
 14. `$research-roadmap --post-spec`
 15. `$roadmap`
 16. `$plan-phase` (seeded by `$roadmap`; rerun only for later phases)
-17. `$run` to present the plan, execute the work, ship it, and refresh `tasks/todo.md`
-18. repeat `$run` for the next planned step
+17. `$exec` to present the plan, execute the work, ship it, and refresh `tasks/todo.md`
+18. repeat `$exec` for the next planned step
 19. use `$ship` only if finished work needs manual packaging
 20. use `$ship-end` to wrap an interrupted or partial session
 28. `$pmf-assessment` (post-launch)
@@ -367,10 +367,10 @@ The main manual additions are still plain-chat approval and the lack of a skill-
 
 Claude Code keeps part of the workflow state in the tool.
 
-Codex should keep the workflow state in repo files and prefer in-thread execution for the normal `$run` loop, using fresh threads when sessions are intentionally split or context has become noisy.
+Codex should keep the workflow state in repo files and prefer in-thread execution for the normal `$exec` loop, using fresh threads when sessions are intentionally split or context has become noisy.
 
 Do not aim for fake parity. The Codex workflow should be optimized for:
 
 - explicit handoff artifacts when work crosses sessions
 - compact execution context
-- plan visibility before implementation, with implicit approval for normal `$run` execution
+- plan visibility before implementation, with implicit approval for normal `$exec` execution

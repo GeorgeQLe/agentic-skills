@@ -91,7 +91,7 @@ After presenting findings, write actionable cleanup items to `tasks/todo.md`. If
    ```
 3. Do **not** add "Needs Investigation" items — only "Safe to Remove" items belong in todo.
 4. If `tasks/todo.md` already has a `## Dead Code Cleanup` section, replace it with the fresh scan results.
-5. Tell the user how many items were added and suggest `/run` to execute the cleanup.
+5. Tell the user how many items were added and suggest `/exec` to execute the cleanup.
 
 ## Constraints
 - Use subagents to parallelize scanning across packages in a monorepo.

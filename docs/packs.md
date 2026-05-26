@@ -136,17 +136,17 @@ scripts/pack.sh install monorepo
 Skills:
 
 ```text
-mono-detect, mono-run, mono-guard, mono-ship
+mono-detect, mono-exec, mono-guard, mono-ship
 ```
 
-The pack uses an augmentation injection pattern. Its skills add pre/post behavior around the global `run` and `ship` contracts instead of replacing them:
+The pack uses an augmentation injection pattern. Its skills add pre/post behavior around the global `exec` and `ship` contracts instead of replacing them:
 
 - `mono-detect` writes `.agents/monorepo.json` with workspace packages, package paths, package scripts, dependency graph, and Turborepo awareness.
-- `mono-run` injects monorepo detection, lane-spec generation, guard pre-flight checks, serial cross-cutting work, and package-scoped dispatch around standard `run`.
+- `mono-exec` injects monorepo detection, lane-spec generation, guard pre-flight checks, serial cross-cutting work, and package-scoped dispatch around standard `run`.
 - `mono-guard` validates lane specs before dispatch and checks integrated diffs against declared ownership after dispatch.
 - `mono-ship` injects package-scoped test/lint/build and transitive-dependent validation before delegating to standard `ship`.
 
-This differs from the `*-kanban` duplication pattern. Kanban packs intentionally provide alternate command variants such as `run-kanban`, `ship-kanban`, and `ship-end-kanban`; the monorepo pack keeps the global lifecycle skills authoritative and makes them workspace-aware through pre/post steps.
+This differs from the `*-kanban` duplication pattern. Kanban packs intentionally provide alternate command variants such as `exec-kanban`, `ship-kanban`, and `ship-end-kanban`; the monorepo pack keeps the global lifecycle skills authoritative and makes them workspace-aware through pre/post steps.
 
 Lane dispatch uses two artifacts:
 

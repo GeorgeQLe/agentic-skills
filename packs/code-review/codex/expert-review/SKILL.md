@@ -51,7 +51,7 @@ Report findings grouped by severity:
 
 ## Follow-Through
 
-After presenting findings, write Critical and High implementation fixes to `tasks/todo.md` under a `## Code Review Fixes` heading (append or replace existing section). One checkbox per finding with file:line and recommended fix. Do not add Medium/Low items. If a Critical/High observation is a non-blocking future validation or condition-gated measurement rather than a fix, write it to `tasks/record-todo.md` with source, condition, non-blocking reason, evidence, and promotion rule. Suggest `$run` or `$investigate` to start fixing concrete work.
+After presenting findings, write Critical and High implementation fixes to `tasks/todo.md` under a `## Code Review Fixes` heading (append or replace existing section). One checkbox per finding with file:line and recommended fix. Do not add Medium/Low items. If a Critical/High observation is a non-blocking future validation or condition-gated measurement rather than a fix, write it to `tasks/record-todo.md` with source, condition, non-blocking reason, evidence, and promotion rule. Suggest `$exec` or `$investigate` to start fixing concrete work.
 
 ## Constraints
 

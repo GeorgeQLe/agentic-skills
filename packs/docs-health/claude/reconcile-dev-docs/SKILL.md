@@ -88,7 +88,7 @@ In `fix` mode, apply only unambiguous development-doc changes:
 - Move the next roadmap phase into `tasks/todo.md` only when the current phase is clearly complete.
 - Move clearly misclassified non-blocking condition-gated records from `tasks/todo.md` or `tasks/manual-todo.md` into `tasks/record-todo.md`.
 - Move clearly misclassified cadence-based obligations from `tasks/todo.md` or `tasks/manual-todo.md` into `tasks/recurring-todo.md`.
-- Move clearly misclassified agent-executable work from `tasks/manual-todo.md` into `tasks/todo.md` with enough file/command detail for `/run`.
+- Move clearly misclassified agent-executable work from `tasks/manual-todo.md` into `tasks/todo.md` with enough file/command detail for `/exec`.
 - Add unresolved contradictions to `tasks/todo.md` under `## Development Docs Reconciliation`.
 - Archive existing `specs/` or `docs/specifications/` files before replacing or substantively rewriting them.
 - Write `tasks/reconciliation-report.md` with resolved, deferred, and remaining findings.

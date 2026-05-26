@@ -50,4 +50,4 @@ Follow the shared Alignment Page convention in CLAUDE.md. Output: `alignment/lif
 
 - Do not duplicate the full `$metrics` framework; link unresolved targets to `$metrics`.
 - Put future, non-blocking measurements in `tasks/record-todo.md` when the skill is executed.
-- End with `## Next Steps`, preferring `$metrics`, `$roadmap`, `$run`, or `$cohort-review` as context dictates.
+- End with `## Next Steps`, preferring `$metrics`, `$roadmap`, `$exec`, or `$cohort-review` as context dictates.

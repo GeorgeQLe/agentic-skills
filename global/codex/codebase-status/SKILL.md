@@ -54,7 +54,7 @@ This is read-only status synthesis. It does not replace `$roadmap`: `roadmap` ma
    - Mismatches between conversation history, task docs, git history, and code reality.
    - Confidence level for each major conclusion: high, medium, or low, with evidence.
 8. Recommend next route:
-   - `$run` when the next task is already clear and executable.
+   - `$exec` when the next task is already clear and executable.
    - `$roadmap` when specs exist but sequencing or task queue health needs updating.
    - `$feature-interview` when the next idea/direction is not yet represented in specs or tasks.
    - `$reconcile-dev-docs audit` or `$reconcile-dev-docs fix tasks` when task docs contradict git/code reality.

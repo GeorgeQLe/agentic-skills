@@ -42,7 +42,7 @@ Generate a self-contained context document that captures exactly where you left 
    3. Derive `phase` / `step` / `title` from `tasks/todo.md`. Read the **first unchecked** `- [ ]` under the `### Active Step Plan` block; if no such block exists, fall back to the first unchecked `- [ ]` under the current `## Phase N` header. Parse the `Phase N` and `Step N.X` tokens out of the surrounding context; use the checkbox line's text (stripped of `- [ ] **Step N.X** — `) as `title`.
    4. Call `./scripts/approved-plan.sh draft --phase "Phase N" --step "Step N.X" --title "<title>"` plus any `--allow-dirty <glob>` flags the user supplied. Surface the helper's single-line failure reason verbatim if it fails.
    5. Pretty-print the drafted packet with `jq . .agents/approved-plan.json`, then ask exactly one concise question: *"Approve this packet for Codex execution?"*. On yes → `./scripts/approved-plan.sh approve`. On no → leave the packet at `draft` and tell the user they can approve it later with `./scripts/approved-plan.sh approve` or discard it with `./scripts/approved-plan.sh supersede`.
-   6. When writing `tasks/handoff.md` in the next step, add a **Cross-CLI handoff** section naming `.agents/approved-plan.json` (JSON, gitignored), `tasks/approved-plan.md` (committable mirror), and the resume command: `$run --execute-approved` (Codex).
+   6. When writing `tasks/handoff.md` in the next step, add a **Cross-CLI handoff** section naming `.agents/approved-plan.json` (JSON, gitignored), `tasks/approved-plan.md` (committable mirror), and the resume command: `$exec --execute-approved` (Codex).
 
 6. **Write the handoff to `tasks/handoff.md`:**
 

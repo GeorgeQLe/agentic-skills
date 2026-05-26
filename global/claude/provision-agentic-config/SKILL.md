@@ -71,6 +71,11 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
    - Zero context switching required from the user
    - Go fix failing tests without being told how
 
+   ### Missing Skill Fallback
+   - When a skill invocation fails because the skill is not found, run `scripts/pack.sh which <skill-name>` to check if the skill exists in an available pack.
+   - If found in an uninstalled pack, recommend `/pack install <pack>` and note that a new session is needed.
+   - If not found in any pack, suggest `/skills` or `/skills search <keyword>`.
+
    ## Task Management
 
    1. **Plan First**: Write plan to `tasks/roadmap.md` (full plan) and `tasks/todo.md` (current phase) with checkable items
@@ -85,7 +90,7 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
    - **No Laziness**: Find root causes. No temporary fixes. Senior developer standards.
    - **Minimal Impact**: Changes should only touch what's necessary. Avoid introducing bugs.
    - **Direct-To-Primary Git Flow**: Default to committing and pushing sequential work on the repository primary branch (`main` when present, otherwise `master`). Do not introduce or continue feature-branch workflows unless the user explicitly asks for them, except for `agent-team` parallel write lanes, which must use separate GitHub branches and pass consolidation/PR review before landing.
-   - **Always Ship Mutations**: If a task creates or modifies tracked files, finish by committing and pushing all intended changes before stopping unless the user explicitly says not to. Exception: direct Claude `/run` is execution-only and hands a dirty tracked tree to `/ship`. After shipping, if `tasks/todo.md` has remaining steps, run `/ship` to handle planning and the approval cycle.
+   - **Always Ship Mutations**: If a task creates or modifies tracked files, finish by committing and pushing all intended changes before stopping unless the user explicitly says not to. Exception: direct Claude `/exec` is execution-only and hands a dirty tracked tree to `/ship`. After shipping, if `tasks/todo.md` has remaining steps, run `/ship` to handle planning and the approval cycle.
    - **No GitHub Actions**: Do not create, modify, or suggest GitHub Actions workflows unless the user explicitly asks for GitHub Actions. This project does not use GitHub Actions for CI/CD by default.
 
    ## Windows/WSL File Opening
@@ -160,6 +165,11 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
    - Zero context switching required from the user
    - Go fix failing tests without being told how
 
+   ### Missing Skill Fallback
+   - When a skill invocation fails because the skill is not found, run `scripts/pack.sh which <skill-name>` to check if the skill exists in an available pack.
+   - If found in an uninstalled pack, recommend `/pack install <pack>` and note that a new session is needed.
+   - If not found in any pack, suggest `/skills` or `/skills search <keyword>`.
+
    ## Task Management
 
    1. **Plan First**: Write plan to `tasks/roadmap.md` (full plan) and `tasks/todo.md` (current phase) with checkable items
@@ -174,7 +184,7 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
    - **No Laziness**: Find root causes. No temporary fixes. Senior developer standards.
    - **Minimal Impact**: Changes should only touch what's necessary. Avoid introducing bugs.
    - **Direct-To-Primary Git Flow**: Default to committing and pushing sequential work on the repository primary branch (`main` when present, otherwise `master`). Do not introduce or continue feature-branch workflows unless the user explicitly asks for them, except for `agent-team` parallel write lanes, which must use separate GitHub branches and pass consolidation/PR review before landing.
-   - **Always Ship Mutations**: If a task creates or modifies tracked files, finish by committing and pushing all intended changes before stopping unless the user explicitly says not to. Codex `$run` ships by default (validates, commits, pushes, plans next) — use `$ship` only to package existing work or unpushed commits.
+   - **Always Ship Mutations**: If a task creates or modifies tracked files, finish by committing and pushing all intended changes before stopping unless the user explicitly says not to. Codex `$exec` ships by default (validates, commits, pushes, plans next) — use `$ship` only to package existing work or unpushed commits.
    - **No GitHub Actions**: Do not create, modify, or suggest GitHub Actions workflows unless the user explicitly asks for GitHub Actions. This project does not use GitHub Actions for CI/CD by default.
 
    ## Windows/WSL File Opening

@@ -43,4 +43,4 @@ Revert the validator script and fixture directory if the manifest contract chang
 
 ## Next Command
 
-`$run`
+`$exec`

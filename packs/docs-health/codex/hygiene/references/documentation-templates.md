@@ -64,7 +64,7 @@ Required:
 - Every unchecked item includes `_(blocks: Step N.X)_` or `_(after: Step N.X)_`.
 - No agent-executable repo/code/config/test/audit/CLI/API work.
 
-Missing blocker/after annotations are Errors because `$run` and `$ship` use them to avoid executing blocked work. Agent-executable work in `tasks/manual-todo.md` is also an Error because it hides runnable work from the execution queue.
+Missing blocker/after annotations are Errors because `$exec` and `$ship` use them to avoid executing blocked work. Agent-executable work in `tasks/manual-todo.md` is also an Error because it hides runnable work from the execution queue.
 
 ### `tasks/record-todo.md`
 

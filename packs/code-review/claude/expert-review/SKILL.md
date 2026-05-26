@@ -87,7 +87,7 @@ After presenting findings, write Critical and High implementation fixes to `task
    ```
 3. Do **not** add Medium, Low, or Positive observations — only Critical and High are actionable todos.
 4. If `tasks/todo.md` already has a `## Code Review Fixes` section, replace it with the fresh review results.
-5. Tell the user how many items were added and suggest `/run` or `/investigate` to start fixing.
+5. Tell the user how many items were added and suggest `/exec` or `/investigate` to start fixing.
 
 ## Constraints
 - Be specific — always include file paths and line numbers.

@@ -3,7 +3,7 @@ name: pack
 description: Manage project-local skill packs and project designation without installing domain skills globally
 type: ops
 version: v0.0
-argument-hint: "[list|status|recommend|install <pack>|remove <pack>|refresh] or no args for guided setup"
+argument-hint: "[list|status|recommend|install <pack>|remove <pack>|refresh|which <skill>] or no args for guided setup"
 ---
 
 # Pack
@@ -33,6 +33,7 @@ Use this skill when the user wants to inspect, recommend, install, remove, or re
    - `scripts/pack.sh install <pack>`
    - `scripts/pack.sh remove <pack>`
    - `scripts/pack.sh refresh`
+   - `scripts/pack.sh which <skill>`
    The launcher is intentionally located at `scripts/pack.sh` under this skill directory and forwards to the repository-level pack manager.
 4. For `install`, `remove`, `refresh`, and guided setup installs, report:
    - `.agents/project.json` project type and enabled packs
@@ -65,7 +66,7 @@ Use this skill when the user wants to inspect, recommend, install, remove, or re
 - Use `devtool` for SDKs, CLIs, APIs, libraries, infrastructure products, developer platforms, and documentation-first developer workflows.
 - Use `business-app-kanban`, `game-kanban`, or `devtool-kanban` only when the project intentionally uses PoketoWork boards.
 - Use `poketowork-kanban` only when the user wants the generic board-management utilities independent of a domain pack.
-- Use `exec-loop` for the plan-run-ship execution workflow (ship, run, ship-end).
+- Use `exec-loop` for the plan-exec-ship execution workflow (ship, run, ship-end).
 - Use `agent-work-admin` for roadmap management, phase planning, and spec-drift auditing.
 - Use `product-design` for UX exploration, prototyping, feature/spec/UI interviews, brainstorming, and design systems.
 - Use `code-review` for expert reviews, slim audits, dead-code scans, and regression checks.
@@ -124,6 +125,15 @@ Use one repo-level `.agents/project.json` with a primary default plus scoped ove
 ```
 
 When a task clearly names a scoped path, route to that scope's `project_type` and packs. When no scope matches, use the top-level `project_type` as the default.
+
+## Missing Skill Resolution
+
+When a user invokes a skill that is not found in the current session:
+
+1. Run `scripts/pack.sh which <skill-name>` to check if the skill exists in any pack.
+2. If found in an **uninstalled pack**: tell the user which pack provides the skill, recommend `/pack install <pack>`, and note that a new session is needed after installing.
+3. If found in an **installed pack**: the skill should already be available — suggest starting a fresh session to pick up the links.
+4. If **not found in any pack**: suggest `/skills` to browse available skills or `/skills search <keyword>` to search.
 
 ## Constraints
 

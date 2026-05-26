@@ -28,7 +28,7 @@ scripts/pack.sh status
 
 Project designation is stored in `.agents/project.json`.
 
-`scripts/pack.sh list-packs` is an internal subcommand used by Codex `$run` routing (see `global/codex/run/SKILL.md`). It prints enabled packs from `.agents/project.json` one per line with no decoration, distinct from the human-facing `list` which enumerates all available packs. Prefer `list` or `status` for interactive use.
+`scripts/pack.sh list-packs` is an internal subcommand used by Codex `$exec` routing (see `global/codex/exec/SKILL.md`). It prints enabled packs from `.agents/project.json` one per line with no decoration, distinct from the human-facing `list` which enumerates all available packs. Prefer `list` or `status` for interactive use.
 
 `refresh` recreates project-local symlinks from `.agents/project.json`; it does not reload an active Claude Code or Codex process. Start a fresh CLI session after pack changes if the changed skills are not visible.
 
@@ -277,18 +277,18 @@ scripts/pack.sh install monorepo
 Skills:
 
 ```text
-mono-detect, mono-run, mono-guard, mono-ship
+mono-detect, mono-exec, mono-guard, mono-ship
 ```
 
 Default flow:
 
 ```text
-mono-detect -> mono-run -> mono-guard -> mono-ship
+mono-detect -> mono-exec -> mono-guard -> mono-ship
 ```
 
-`mono-detect` writes `.agents/monorepo.json` with workspace packages, package paths, dependency graph, script inventory, and Turborepo awareness. `mono-run` augments standard `run` with lane-spec generation, `mono-guard` pre-flight checks, serial cross-cutting work, package-scoped dispatch on separate GitHub branches, and consolidation/PR review before integration. `mono-guard` validates lane specs before dispatch and audits integrated diffs against declared boundaries and PR-review evidence. `mono-ship` augments standard `ship` with package-scoped test/lint/build and transitive-dependent validation before delegating to normal shipping.
+`mono-detect` writes `.agents/monorepo.json` with workspace packages, package paths, dependency graph, script inventory, and Turborepo awareness. `mono-exec` augments standard `run` with lane-spec generation, `mono-guard` pre-flight checks, serial cross-cutting work, package-scoped dispatch on separate GitHub branches, and consolidation/PR review before integration. `mono-guard` validates lane specs before dispatch and audits integrated diffs against declared boundaries and PR-review evidence. `mono-ship` augments standard `ship` with package-scoped test/lint/build and transitive-dependent validation before delegating to normal shipping.
 
-The pack uses an augmentation injection pattern rather than a duplication pattern. The global `run` and `ship` skills remain the source of truth for task selection, validation policy, history updates, commit/push, deploy handling, and final next-step routing. By contrast, `*-kanban` packs provide explicit workflow variants such as `run-kanban`, `ship-kanban`, and `ship-end-kanban`.
+The pack uses an augmentation injection pattern rather than a duplication pattern. The global `exec` and `ship` skills remain the source of truth for task selection, validation policy, history updates, commit/push, deploy handling, and final next-step routing. By contrast, `*-kanban` packs provide explicit workflow variants such as `exec-kanban`, `ship-kanban`, and `ship-end-kanban`.
 
 Lane dispatch uses `.agents/lane-specs.json` as the machine-readable artifact and `tasks/lane-specs.md` as the committed Markdown mirror. Lifecycle values are `draft`, `approved`, `dispatched`, `integrated`, and `failed`; package lanes declare `packages`, `owns`, `must_not_edit`, `depends_on`, `mode`, and `branch`. For `agent-team` work, each write lane must push its non-primary GitHub branch and provide commit SHA, validation evidence, and PR URL before the consolidation/PR review gate approves integration.
 
@@ -417,7 +417,7 @@ Skills:
 
 ```text
 brainstorm-kanban, spec-interview-kanban, roadmap-kanban,
-run-kanban, ship-kanban, ship-end-kanban
+exec-kanban, ship-kanban, ship-end-kanban
 ```
 
 For direct board-management utilities, install:

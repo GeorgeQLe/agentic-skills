@@ -51,7 +51,7 @@
 ## 2026-05-21 — Run/ship loops are not alignment-page producers
 
 - A repo-wide alignment-page contract pass overcorrected and added HTML review-page output to execution/shipping loop skills.
-- `$run`, `$ship`, `$ship-end`, kanban run/ship loops, and monorepo run/ship loops should stay operational: execute, validate, package, commit, push, and route without generating alignment review pages.
+- `$exec`, `$ship`, `$ship-end`, kanban run/ship loops, and monorepo run/ship loops should stay operational: execute, validate, package, commit, push, and route without generating alignment review pages.
 - Cross-cutting alignment-page audits must exempt execution/shipping loop skills by role, even when those skills write task docs, reports, generated assets, or commits as part of shipping.
 - Keep alignment pages for planning, research, spec, interview, prototype, and decision artifacts; do not require them for routine execution/shipping orchestration.
 
@@ -85,7 +85,7 @@
 
 ## 2026-05-21 — Final handoffs must render routes for the active CLI
 
-- A Codex `$ship` handoff copied `/run` from `tasks/todo.md` into the final `Recommended next command`, even though Codex users need `$run`.
+- A Codex `$ship` handoff copied `/exec` from `tasks/todo.md` into the final `Recommended next command`, even though Codex users need `$exec`.
 - Treat routes in task docs, benchmark reports, and prior handoffs as task identifiers, not final command text.
 - Before final output, normalize global skill commands to the active CLI: Codex uses `$...`; Claude uses `/...`.
 - Preserve explicit cross-runner handoffs such as `/delegate $ship`, but do not let stale slash or dollar examples bleed into same-runner final recommendations.
@@ -233,8 +233,8 @@
 
 ## 2026-05-11 — Benchmarks must respect Claude slash and Codex dollar route conventions
 
-- A `ship` benchmark initially treated Claude failure as a skill failure because the setup expected `$run` for both Claude and Codex.
-- When a benchmark runs both agents, hard assertions and quality rubrics must use the corresponding route convention for the runner: slash commands for Claude (`/run`, `/ship`) and dollar commands for Codex (`$run`, `$ship`).
+- A `ship` benchmark initially treated Claude failure as a skill failure because the setup expected `$exec` for both Claude and Codex.
+- When a benchmark runs both agents, hard assertions and quality rubrics must use the corresponding route convention for the runner: slash commands for Claude (`/exec`, `/ship`) and dollar commands for Codex (`$exec`, `$ship`).
 - Before diagnosing a mirrored skill as failed, compare the benchmark setup against both `global/claude/<skill>/SKILL.md` and `global/codex/<skill>/SKILL.md`; a mismatch in the harness is a test bug, not proof of a skill-contract bug.
 - Add deterministic layer1 coverage for runner-specific route expectations whenever a shared setup supports both agents.
 
@@ -313,9 +313,9 @@
 
 ## 2026-05-04 — Human-only blockers should not route back to run
 
-- A handoff identified a manual overlay playtest as next work but still recommended `/run`, which made an external human-only validation look agent-executable.
+- A handoff identified a manual overlay playtest as next work but still recommended `/exec`, which made an external human-only validation look agent-executable.
 - When next work requires human-only browser/OS interaction, real device access, authenticated dashboards without a reliable CLI/API path, or explicit sign-off, record it in `tasks/manual-todo.md` as a blocking manual task when it blocks the next automated step.
-- The recommended next route should be `$guide`, a Claude-guided manual step, or an explicit manual-blocker handoff, not `/run` or `$run`.
+- The recommended next route should be `$guide`, a Claude-guided manual step, or an explicit manual-blocker handoff, not `/exec` or `$exec`.
 - Keep the next work item primary; command routing should serve the work classification rather than mechanically matching the current skill invocation.
 
 ## 2026-05-24 — Apply alignment UX fixes to the shared contract, not one skill
@@ -379,10 +379,10 @@
 - When one planning skill queues another one-shot scan, teach the caller to recognize the callee's completion surface before recommending it again.
 - For completed implementation roadmaps, route to the first unchecked documentation item when the documentation queue exists, and only queue research-roadmap when no current documentation queue/result exists.
 
-## 2026-04-30 — Codex `$run` plans are implicitly approved
+## 2026-04-30 — Codex `$exec` plans are implicitly approved
 
-- Session history showed the user consistently accepted `$run` plans with bare approvals (`y`, `yes`, `yes please`) and did not reject normal `$run` execution plans.
-- Treat a `$run` invocation as approval for the next planned step or scoped phase after presenting the plan. Do not add a second routine approval question.
+- Session history showed the user consistently accepted `$exec` plans with bare approvals (`y`, `yes`, `yes please`) and did not reject normal `$exec` execution plans.
+- Treat a `$exec` invocation as approval for the next planned step or scoped phase after presenting the plan. Do not add a second routine approval question.
 - Still ask explicitly for separate safety decisions: destructive commands, production deploys, paid/external account actions, credential or secret handling beyond the project contract, execution-profile downgrades, blockers, or material scope changes.
 
 ## 2026-04-17 — Check live AWS auth before SSO login
@@ -391,15 +391,15 @@
 - First verify current auth with `aws sts get-caller-identity --profile <profile>` or let the deploy command fail with a current credential error.
 - Only run `aws sso login --profile <profile>` after that live check proves credentials are missing or expired.
 
-## 2026-04-22 — `/run` must trust profile metadata over legacy step prose
+## 2026-04-22 — `/exec` must trust profile metadata over legacy step prose
 
-- `/run` auto-dispatches `agent-team` phases via isolated worktrees. Do not stop just because the profile says `agent-team` or because the phase/step body contains stale advisory text like *"do not implement in a single `/run`"* or *"use `/delegate`"*.
+- `/exec` auto-dispatches `agent-team` phases via isolated worktrees. Do not stop just because the profile says `agent-team` or because the phase/step body contains stale advisory text like *"do not implement in a single `/exec`"* or *"use `/delegate`"*.
 - That prose typically predates the agent-team dispatch feature. The current authority is the `### Execution Profile` block (after `/patch-exec-profile` fills it), not narrative embedded in the step description.
 - Only stop if `/patch-exec-profile` cannot resolve the profile (overlapping `Owns`, cyclic `Depends on`, missing lane specs that can't be inferred). `/delegate` is for Claude↔Codex handoff, not lane parallelism.
 
-## 2026-04-19 — Keep Claude `/run` execution-only and `/ship` handoffs bounded
+## 2026-04-19 — Keep Claude `/exec` execution-only and `/ship` handoffs bounded
 
-- Claude `/run` should execute exactly one approved step and then hand the dirty tree to `/ship`; it should not commit or push.
+- Claude `/exec` should execute exactly one approved step and then hand the dirty tree to `/ship`; it should not commit or push.
 - Claude `/ship` is not complete after writing the next-step plan. Unless `--no-plan` is set or a blocker is documented, it must enter plan mode so the user can clear context and implement.
 - Clear-context sessions launched by `/ship` plan mode are ship-one-step sessions. The plan handed to them must explicitly say to implement the approved step, validate, commit/push, deploy only with an explicit manual deploy contract, write the following step's plan, set/check `showClearContextOnPlanAccept` and `defaultMode: "acceptEdits"`, start the next approval UI with `EnterPlanMode` before `ExitPlanMode`, and stop before implementing it.
 - If Claude refuses `EnterPlanMode` because Auto mode or the active permission mode requires an explicit user request, do not try `ExitPlanMode`; stop and ask the user to explicitly request plan mode, such as `/plan <next step>`.

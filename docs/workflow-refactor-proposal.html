@@ -596,7 +596,7 @@
         <div class="pipeline-connector"></div>
       </div>
       <div class="pipeline-card">
-        <h4><span class="badge badge-unchanged">Unchanged</span> /run</h4>
+        <h4><span class="badge badge-unchanged">Unchanged</span> /exec</h4>
         <p>Execute the next step from tasks/todo.md.</p>
       </div>
     </div>
@@ -638,12 +638,12 @@
         <li><code>/spec-interview</code> (full spec upfront)</li>
         <li><code>/journey-map</code></li>
         <li><code>/ux-variation</code> (plan variations)</li>
-        <li>Build variants via <code>/run</code></li>
+        <li>Build variants via <code>/exec</code></li>
         <li><code>/uat --variant-evaluation</code></li>
         <li><code>/ui-consolidate</code> (spec document)</li>
         <li><code>/roadmap</code></li>
         <li><code>/plan-phase</code> (enforces Phase 0 prototype)</li>
-        <li><code>/run</code> + <code>/ship</code></li>
+        <li><code>/exec</code> + <code>/ship</code></li>
       </ol>
       <p style="margin-top: 1rem; color: var(--red); font-size: 0.85rem;">Problem: Spec written before anything tangible exists. Prototype gate buried inside plan-phase. No alignment artifacts.</p>
     </div>
@@ -662,7 +662,7 @@
         <li><strong><code>/research-roadmap --post-prototype</code> (refresh research)</strong></li>
         <li><strong><code>/spec-interview</code> (post-prototype deep dive)</strong></li>
         <li><strong><code>/research-roadmap --post-spec</code> (refresh research again)</strong></li>
-        <li><code>/roadmap</code> → <code>/plan-phase</code> → <code>/run</code> → <code>/ship</code></li>
+        <li><code>/roadmap</code> → <code>/plan-phase</code> → <code>/exec</code> → <code>/ship</code></li>
         <li>Fork: <code>/feature-interview</code> (scope-based triage), <code>/brainstorm</code></li>
       </ol>
       <p style="margin-top: 1rem; color: var(--green); font-size: 0.85rem;">Prototype is built and evaluated before any production spec. Every step produces alignment HTML. Spec is a production deep-dive on proven UI.</p>
@@ -864,7 +864,7 @@
       <ul>
         <li><strong>Name:</strong> <code>ux-variation</code> → <code>ux-variations</code> (plural)</li>
         <li><strong>Output:</strong> Now also generates an HTML alignment page</li>
-        <li><strong>Next step routing:</strong> Updated to route to <code>/ui-interview</code> (per variation) → <code>/prototype</code> instead of <code>/run</code></li>
+        <li><strong>Next step routing:</strong> Updated to route to <code>/ui-interview</code> (per variation) → <code>/prototype</code> instead of <code>/exec</code></li>
       </ul>
       <h4>What stays the same:</h4>
       <ul>
@@ -1119,7 +1119,7 @@
     <div class="flow-step">
       <div class="step-num">13</div>
       <div class="step-content">
-        <span class="cmd">/roadmap → /plan-phase → /run → /ship</span>
+        <span class="cmd">/roadmap → /plan-phase → /exec → /ship</span>
         <span class="desc">— Build the production version with fully current research. No Phase 0 needed — prototype already done.</span>
       </div>
     </div>
@@ -1173,7 +1173,7 @@
     <div class="flow-step">
       <div class="step-num">7</div>
       <div class="step-content">
-        <span class="cmd">/roadmap → /run → /ship</span>
+        <span class="cmd">/roadmap → /exec → /ship</span>
         <span class="desc">— Build production CLI.</span>
       </div>
     </div>
@@ -1192,7 +1192,7 @@
     <div class="flow-step">
       <div class="step-num">2</div>
       <div class="step-content">
-        <span class="cmd">/spec-interview → /run → /ship</span>
+        <span class="cmd">/spec-interview → /exec → /ship</span>
         <span class="desc">— Quick spec, implement, ship. No prototype needed for a button.</span>
       </div>
     </div>

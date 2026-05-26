@@ -14,4 +14,4 @@ Show that incomplete manifests fail validation.
 
 ## Next Command
 
-`$run`
+`$exec`

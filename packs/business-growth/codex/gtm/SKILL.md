@@ -130,13 +130,13 @@ Other options:
    - IF `specs/` exist and no `tasks/roadmap.md`: `$roadmap` — plan the build with launch milestones from above
    - IF no `research/metrics.md`: `$metrics` — define success metrics for the launch goals
    - IF open questions need research: `$experiment [top question]` — validate the most critical open question
-   - IF `tasks/roadmap.md` exists: `$run` — start executing — the GTM plan is set
+   - IF `tasks/roadmap.md` exists: `$exec` — start executing — the GTM plan is set
 
 **Other options** (include all applicable items not chosen as recommended):
 - IF `specs/` exist and no `tasks/roadmap.md`: `$roadmap` — Plan the build with launch milestones from above
 - IF no `research/metrics.md`: `$metrics` — Define success metrics for the launch goals
 - IF open questions need research: `$experiment [top question]` — Validate the most critical open question
-- IF `tasks/roadmap.md` exists: `$run` — Start executing — the GTM plan is set
+- IF `tasks/roadmap.md` exists: `$exec` — Start executing — the GTM plan is set
 - IF no `research/journey-map.md`: `$journey-map` — Map the customer journey to validate funnel assumptions
 - IF no `research/growth-model.md`: `$growth-model` — Design compounding growth loops to sustain GTM momentum
 - IF no `research/positioning.md`: `$positioning` — Define strategic positioning — messaging should flow from positioning

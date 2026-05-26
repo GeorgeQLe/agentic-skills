@@ -14,11 +14,11 @@ This pack-local `mono-guard` consumes `.agents/lane-specs.json` and `.agents/mon
 
 ## Augmentation Injection Pattern
 
-`mono-guard` is the pack's safety gate for the augmentation injection pattern. `mono-run` injects it before package-scoped dispatch, and `mono-ship` relies on its post-integration boundary checks before delegating to `/ship`. The skill augments existing run/ship workflows with monorepo lane enforcement rather than replacing their task selection, validation, history, commit, push, or deploy responsibilities.
+`mono-guard` is the pack's safety gate for the augmentation injection pattern. `mono-exec` injects it before package-scoped dispatch, and `mono-ship` relies on its post-integration boundary checks before delegating to `/ship`. The skill augments existing run/ship workflows with monorepo lane enforcement rather than replacing their task selection, validation, history, commit, push, or deploy responsibilities.
 
 ## Modes
 
-- **Pre-flight (default):** Validate `.agents/lane-specs.json` before `mono-run` dispatches package-scoped lanes.
+- **Pre-flight (default):** Validate `.agents/lane-specs.json` before `mono-exec` dispatches package-scoped lanes.
 - **Post-integration (`--post-integration`):** Verify actual changed files from the integrated diff stay inside declared lane ownership and do not include unsafe shared files.
 
 ## Inputs
@@ -27,7 +27,7 @@ This pack-local `mono-guard` consumes `.agents/lane-specs.json` and `.agents/mon
 - `.agents/monorepo.json`: workspace detection output from `mono-detect`, including packages and internal dependency graph.
 - `packs/monorepo/scripts/lane-spec-validate.sh`: schema and boundary validator for lane specs.
 
-If `.agents/monorepo.json` is missing or stale, run `mono-detect` first. If `.agents/lane-specs.json` is missing, stop and recommend generating lane specs through `mono-run`.
+If `.agents/monorepo.json` is missing or stale, run `mono-detect` first. If `.agents/lane-specs.json` is missing, stop and recommend generating lane specs through `mono-exec`.
 
 ## Pre-Flight Workflow
 
@@ -120,8 +120,8 @@ If `.agents/monorepo.json` is missing or stale, run `mono-detect` first. If `.ag
 
 ## Next-Step Routing
 
-- **PASS pre-flight:** `/mono-run` to dispatch the validated lanes.
-- **WARN pre-flight:** Review warnings, then `/mono-run` if accepted.
+- **PASS pre-flight:** `/mono-exec` to dispatch the validated lanes.
+- **WARN pre-flight:** Review warnings, then `/mono-exec` if accepted.
 - **FAIL pre-flight:** Fix or regenerate `.agents/lane-specs.json`, then rerun `/mono-guard`.
 - **PASS post-integration:** `/mono-ship` for package-scoped validation and shipping.
 - **WARN/FAIL post-integration:** Resolve boundary issues, then rerun `/mono-guard --post-integration`.

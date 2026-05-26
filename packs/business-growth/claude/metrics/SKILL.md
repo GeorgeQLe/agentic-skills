@@ -117,7 +117,7 @@ Other options:
 - IF instrumentation gaps and no specs for them: `/roadmap` — Sequence instrumentation for the top metric gap into the roadmap
 - IF no `tasks/roadmap.md`: `/roadmap` — Plan the build with instrumentation phases
 - IF no `research/gtm.md`: `/gtm` — Build a GTM plan — metrics define what launch success looks like
-- IF `tasks/roadmap.md` exists: `/run` — Start building and instrumenting
+- IF `tasks/roadmap.md` exists: `/exec` — Start building and instrumenting
 - IF product is live and no `research/customer-feedback.md`: `/customer-feedback` — Collect data to validate metric targets
 - IF product is live and real data exists: `/cohort-review` — Analyze actual performance against these targets
 - IF a baseline measurement depends on future production data or aggregate access and is not a launch gate: add it to `tasks/record-todo.md`, not `tasks/todo.md` or `tasks/manual-todo.md`

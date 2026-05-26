@@ -94,7 +94,7 @@ After presenting the health check results, if the verdict is "Issues found":
 3. Do **not** add pre-existing issues — only new regressions introduced by recent changes.
 4. If `tasks/todo.md` already has a `## Regression Fixes` section, replace it with the fresh results.
 5. If the verdict is "All clear", do not write anything to todo — just confirm the clean bill of health.
-6. Tell the user how many items were added and suggest `/investigate` or `/run` to start fixing.
+6. Tell the user how many items were added and suggest `/investigate` or `/exec` to start fixing.
 
 ## Constraints
 - Run checks in parallel where possible (type-check and lint can run simultaneously).

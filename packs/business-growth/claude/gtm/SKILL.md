@@ -2,7 +2,7 @@
 name: gtm
 description: Go-to-market planning — channel strategy, messaging, pricing, launch plan, and early traction tactics
 type: research
-version: v0.1
+version: v0.2
 argument-hint: "[optional: focus area e.g. \"pricing\", \"launch plan\"]"
 ---
 
@@ -114,12 +114,12 @@ Continue until the user confirms. Only then proceed to writing.
 Before writing, check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with "Pick one:" framing:
 
 - IF no `research/growth-model.md`: `/growth-model` — Design compounding growth loops to make the GTM strategy sustainable
-- IF `specs/` exist and no `tasks/roadmap.md`: `/roadmap` — Plan the build with launch milestones from above
+- IF `specs/` exist and no `tasks/roadmap.md`: check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `/pack install agent-work-admin` first; if `agent-work-admin` is enabled, recommend `/roadmap` — Plan the build with launch milestones from above
 - IF no `research/metrics.md`: `/metrics` — Define success metrics for the launch goals
 - IF open questions need research: `/experiment [top question]` — Validate the most critical open question
-- IF `tasks/roadmap.md` exists: `/run` — Start executing — the GTM plan is set
-- IF no `research/journey-map.md`: `/journey-map` — Map the customer journey to validate funnel assumptions
-- IF no `research/positioning.md`: `/positioning` — Define strategic positioning — messaging should flow from positioning
+- IF `tasks/roadmap.md` exists: `/exec` — Start executing — the GTM plan is set
+- IF no `research/journey-map.md`: check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if `customer-lifecycle` is not enabled, recommend `/pack install customer-lifecycle` first; if `customer-lifecycle` is enabled, recommend `/journey-map` — Map the customer journey to validate funnel assumptions
+- IF no `research/positioning.md`: check `.agents/project.json.enabled_packs` for `business-discovery` — if `business-discovery` is not enabled, recommend `/pack install business-discovery` first; if `business-discovery` is enabled, recommend `/positioning` — Define strategic positioning — messaging should flow from positioning
 
 **Impact-aware adjustments:**
 - IF downstream impact is **Major**: prepend `/reconcile-research — [N] conflicts found in downstream docs` as the first item

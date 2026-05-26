@@ -87,15 +87,15 @@ Generated: 2026-05-03T21:55:18-04:00
 
 ## Repeated Prompt Patterns
 - 1220x exact: /ship
-- 1014x exact: [$run](/users/georgele/projects/tools/agentic-skills/global/codex/run/skill.md)
+- 1014x exact: [$exec](/users/georgele/projects/tools/agentic-skills/global/codex/exec/skill.md)
 - 733x exact: /clear
 - 222x exact: /ship-end
 - 161x exact: /ship-then-plan
 - 160x exact: continue
 - 155x exact: yes please
 - 146x exact: commit and push
-- 141x exact: /run
-- 118x exact: [$run](/users/georgele/projects/tools/agentic-skills/codex/run/skill.md)
+- 141x exact: /exec
+- 118x exact: [$exec](/users/georgele/projects/tools/agentic-skills/codex/exec/skill.md)
 - 92x exact: /sync
 - 88x exact: /usage
 - 76x exact: update docs, commit and push

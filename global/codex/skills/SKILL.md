@@ -41,7 +41,7 @@ Discover and search installed global skills plus enabled project-local pack skil
    | Evaluate | `dogfood`, `mvp-gap`, `scale-audit`, `customer-feedback`, `assumption-tracker`, `cohort-review`, `retro` |
    | Research Health | `research-roadmap`, `reconcile-research`, `reconcile-dev-docs` |
    | Detail | `plan-phase` |
-   | Execution | `run`, `run-kanban` |
+   | Execution | `run`, `exec-kanban` |
    | Shipping | `ship`, `ship-end`, `ship-kanban`, `ship-end-kanban` |
    | Code Quality | `expert-review`, `regression-check`, `dead-code` |
    | Debugging | `investigate`, `debug`, `trace`, `session-triage` |

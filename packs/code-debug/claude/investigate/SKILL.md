@@ -138,7 +138,7 @@ _(Shown in inline mode)_
 _(Shown in plan mode — replaces "Fix Applied")_
 - Written to `tasks/todo.md` under `## Investigation Fix: [title]`
 - Number of steps and summary
-- Run `/run` to execute the fix steps sequentially
+- Run `/exec` to execute the fix steps sequentially
 
 ### Prevention
 - What test or check would have caught this earlier

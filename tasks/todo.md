@@ -8,7 +8,7 @@
 
 ## Priority Task Queue
 
-- [x] `$investigate exec-loop run rename` — rename the exec-loop `run` skill to `exec` for Claude and Codex to avoid collision with Claude's default `/run` surface; archive/version active skill contracts, update references, validate, commit, and push.
+- [x] `$investigate exec-loop run rename` — rename the exec-loop `run` skill to `exec` for Claude and Codex to avoid collision with Claude's default `/exec` surface; archive/version active skill contracts, update references, validate, commit, and push.
 - [x] `$targeted-skill-builder provision-agentic-config WSL browser open fallback` — update provisioned `CLAUDE.md`/`AGENTS.md` blocks and root `CLAUDE.md` so HTML files open through PowerShell `file://wsl.localhost` when UNC launch fails.
 - [ ] `$analyze-sessions split-path product research workflow` — investigate prior conversations where research surfaces multiple ICP/product-line/pivot options, then recommend how skills should handle branching without bogging down in 4-8 variation evaluations.
 - [x] `$targeted-skill-builder ICP WTP signals` — incorporate willingness-to-pay evidence into mirrored ICP skills as bounded customer-discovery signal capture, then archive/version, validate, commit, and push.
@@ -27,7 +27,7 @@
 - [x] `$targeted-skill-builder desk-flip reset/archive AFPS routing` — update desk-flip/bootstrap handoff so stale existing codebases are archived before bootstrap, then route to UI/content alignment before prototype work.
 - [x] `$targeted-skill-builder concept-exploration slugged briefs` — update mirrored `concept-exploration` skills so known or emerging concept identities write slugged research briefs instead of conflating related concepts in generic `concept-brief.md`.
 - [x] Add Codex parity for `desk-flip`: create `global/codex/desk-flip/SKILL.md`, adjust benchmark route expectations, refresh generated skill data, validate, then commit and push.
-- [x] `$run` — Resume Phase 41 Batch 41.3 re-benchmarks: re-run the 33 Tier 2 global skills that were benchmarked pre-fixture-remediation with near-zero pass rates (Phase 43 added route guidance to all 32 fixture prompts and increased budgets). Current graded count: 69 unique skills / 158 total. Batch 41.5 pack-local groups also have remaining families. Batch 41.3 Group 2 shipped in `bc17fee` and `3e4bd78`; next triage should start with `provision-agentic-config`, `migrate`, or `prototype`.
+- [x] `$exec` — Resume Phase 41 Batch 41.3 re-benchmarks: re-run the 33 Tier 2 global skills that were benchmarked pre-fixture-remediation with near-zero pass rates (Phase 43 added route guidance to all 32 fixture prompts and increased budgets). Current graded count: 69 unique skills / 158 total. Batch 41.5 pack-local groups also have remaining families. Batch 41.3 Group 2 shipped in `bc17fee` and `3e4bd78`; next triage should start with `provision-agentic-config`, `migrate`, or `prototype`.
 - [ ] Review `tasks/recurring-todo.md`: 2 unchecked recurring items — promote only if due and requiring execution work.
 - [ ] `$research-roadmap` — All 43 roadmap phases are complete. Run documentation health scan after Phase 41 remaining batches finish.
 
@@ -36,8 +36,8 @@
 **Goal:** Rename the exec-loop `run` command surface to `exec` for both Claude and Codex, preserving the same behavior while avoiding a likely collision with Claude's default `/run`.
 
 **User claim validation:**
-- Confirmed: active project-local exec-loop skills exist at `packs/exec-loop/claude/run/SKILL.md` and `packs/exec-loop/codex/run/SKILL.md`.
-- Confirmed: pack metadata and workflow docs advertise `run` as part of the plan-run-ship loop, so a directory-only rename would leave stale command guidance.
+- Confirmed: active project-local exec-loop skills exist at `packs/exec-loop/claude/exec/SKILL.md` and `packs/exec-loop/codex/exec/SKILL.md`.
+- Confirmed: pack metadata and workflow docs advertise `run` as part of the plan-exec-ship loop, so a directory-only rename would leave stale command guidance.
 - Not yet verified: whether Claude's built-in `/run` exists in the installed runtime; the local repo evidence is enough to remove this project's avoidable collision.
 
 **Plan:**
@@ -61,13 +61,35 @@
 
 ### Review
 
-- Confirmed the active exec-loop command lived at `packs/exec-loop/claude/run/SKILL.md` and `packs/exec-loop/codex/run/SKILL.md`; renamed both active command directories to `exec`.
+- Confirmed the active exec-loop command lived at `packs/exec-loop/claude/exec/SKILL.md` and `packs/exec-loop/codex/exec/SKILL.md`; renamed both active command directories to `exec`.
 - Archived the previous v0.0 contracts under each new `exec/archive/v0.0/SKILL.md`, bumped active skills to v0.1, and added changelogs.
 - Updated exec-loop routing references in `ship`, `ship-end`, `roadmap`, `plan-phase`, the approved-plan schema/script, README, canonical workflow docs, benchmark coverage metadata, and the Codex OpenAI manifest.
 - Regenerated Skills Showcase data and benchmark matrix assets.
 - Validation passed: `bash scripts/skill-versions.sh --missing`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests exec vitest run --project layer1 layer1/bench-coverage.test.ts`; `scripts/validate-skills-showcase-data.sh`; `git diff --check`.
 - Known unrelated validation noise remains: `bash scripts/skill-next-step-routing.sh --missing` still reports existing missing routing contracts in many unrelated skills.
-- Broader `layer1/bench-setups.test.ts` still contains older hard-coded `$run` and legacy `global/...` path expectations; this rename updated the coverage registry and focused guard, but a full benchmark-fixture expectation migration is a separate cleanup.
+- Broader `layer1/bench-setups.test.ts` still contains older hard-coded `$exec` and legacy `global/...` path expectations; this rename updated the coverage registry and focused guard, but a full benchmark-fixture expectation migration is a separate cleanup.
+
+## Current Task — Rename Old Run References To Exec 2026-05-26
+
+**Goal:** Finish the command-surface migration by updating active references tied to the old execution skill: `/run` -> `/exec`, `$run` -> `$exec`, `run-kanban` -> `exec-kanban`, and `mono-run` -> `mono-exec`, while preserving ordinary verb usage and historical benchmark run artifacts.
+
+**Plan:**
+- [x] Search active `SKILL.md` files for old command tokens, excluding archives.
+- [x] Archive active wrapper command skills before renaming.
+- [x] Rename active kanban and monorepo wrapper directories, frontmatter names, invocation text, and command guidance.
+- [x] Update metadata, manifests, validation fixtures, generated showcase data, and command indexes.
+- [x] Run focused reference checks and repository validation.
+- [ ] Record review notes, commit, and push intended changes on `master`.
+
+### Review
+
+- Renamed active kanban execution wrappers from `run-kanban` to `exec-kanban` across business-app, devtool, game, and Poketowork packs for both Claude and Codex.
+- Renamed active monorepo execution wrappers from `mono-run` to `mono-exec` for Claude and Codex, including the Codex OpenAI manifest.
+- Archived previous v0.0 wrapper contracts, bumped active wrappers to v0.1, and added changelogs.
+- Updated active command references, pack/docs/test metadata, benchmark coverage/setup expectations, and regenerated Skills Showcase data.
+- Preserved unrelated `run` usage such as `runway-model`, benchmark raw run directories, and ordinary verb phrases.
+- Validation passed: active `SKILL.md` command scan with remaining matches limited to intentional `runway-model`/benchmark run artifacts; `bash scripts/skill-versions.sh --missing`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests exec vitest run --project layer1 layer1/bench-setups.test.ts layer1/bench-coverage.test.ts`; `scripts/validate-skills-showcase-data.sh`; `git diff --check`.
+- Known unrelated validation noise remains: `bash scripts/skill-next-step-routing.sh --missing` reports existing missing routing contracts across unrelated skills.
 
 ## Current Task — ICP Willingness-to-Pay Signals 2026-05-25
 
@@ -340,7 +362,7 @@
 
 **Evidence:**
 - User correction: run/ship loops do not need alignment pages.
-- The previous repo-wide pass overcorrected by adding `alignment/*.html` requirements to global `$run`, `$ship`, `$ship-end`, kanban run/ship mirrors, and monorepo run/ship loops.
+- The previous repo-wide pass overcorrected by adding `alignment/*.html` requirements to global `$exec`, `$ship`, `$ship-end`, kanban run/ship mirrors, and monorepo run/ship loops.
 
 **Plan:**
 - [x] Record the correction in `tasks/lessons.md`.
@@ -352,13 +374,13 @@
 
 **Files:**
 - `global/{claude,codex}/{run,ship,ship-end}/SKILL.md`
-- `packs/*-kanban/{claude,codex}/{run-kanban,ship-kanban,ship-end-kanban}/SKILL.md`
-- `packs/monorepo/{claude,codex}/{mono-run,mono-ship}/SKILL.md`
+- `packs/*-kanban/{claude,codex}/{exec-kanban,ship-kanban,ship-end-kanban}/SKILL.md`
+- `packs/monorepo/{claude,codex}/{mono-exec,mono-ship}/SKILL.md`
 - `tasks/lessons.md`, `tasks/roadmap.md`, and `tasks/todo.md`
 
 ### Review
 
-- Removed alignment-page clauses from 34 operational loop skill files: global run/ship/ship-end, business/devtool/game/poketowork kanban run/ship/ship-end, and monorepo mono-run/mono-ship mirrors.
+- Removed alignment-page clauses from 34 operational loop skill files: global run/ship/ship-end, business/devtool/game/poketowork kanban run/ship/ship-end, and monorepo mono-exec/mono-ship mirrors.
 - Preserved alignment-page requirements for planning, research, spec, interview, prototype, report, and decision-producing skills.
 - Validation passed: no run/ship loop files mention `alignment/*.html`; repository-wide coverage check passes when run/ship loops and no-file `taste-calibration` are treated as exceptions; `pnpm --dir tests test -- --grep "bench-setups|tier23|frontmatter|skills-reference"`; `pnpm --dir tests bench:coverage`; `git diff --check`; `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken`; `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`; `/opt/homebrew/bin/bash ./scripts/skill-next-step-routing.sh --missing`.
 - Note: `scripts/validate-skills-showcase-data.sh` regenerated expected generated assets and reported them as stale before commit; rerun after commit should validate a clean tree.
@@ -560,7 +582,7 @@
 Implement only this step, validate it, then run `/ship` when done.
 
 **Next work:** Re-benchmark Batch 41.3 Group 2 (10 Tier 2 global skills post-fixture-remediation)
-**Recommended next command:** /run
+**Recommended next command:** /exec
 
 ### Review
 
@@ -584,7 +606,7 @@ Implement only this step, validate it, then run `/ship` when done.
 - Validation passed: `pnpm --dir tests test -- --run layer1/routing-graph.test.ts`; `pnpm --dir tests verify --skill dogfood`; `pnpm --dir tests verify --skill expert-review`; `pnpm --dir tests verify --skill guide`; `pnpm --dir tests verify --skill handoff`; `pnpm --dir tests verify --skill hygiene`; `pnpm --dir tests verify --skill migrate`; `pnpm --dir tests verify --skill mono-plan`; `pnpm --dir tests verify --skill pack`; `pnpm --dir tests verify --skill prototype`; `pnpm --dir tests verify --skill provision-agentic-config`; `pnpm --dir tests bench --skill <skill> --agent both --runs 3 --chunk-size 3 --pause 0` for all 10 skills; `node scripts/generate-skills-showcase-data.mjs`; `node scripts/generate-skills-showcase-github-data.mjs`; `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests bench:coverage`; `git diff --check`.
 - Skipped/limited: no layer2 target-specific tests matched these skills; this is recorded by the verify command output and did not block custom layer4 benchmark execution.
 - Ship manifest:
-  - User goal: execute `$run` for the next incomplete Phase 41 step, Batch 41.3 Group 2 re-benchmarks.
+  - User goal: execute `$exec` for the next incomplete Phase 41 step, Batch 41.3 Group 2 re-benchmarks.
   - Changed files: 10 dated benchmark reports, benchmark/showcase generated data, `tests/layer1/routing-graph.test.ts`, `alignment/run-batch-41-3-group-2.html`, `tasks/todo.md`, and `tasks/history.md`.
   - Per-file purpose: reports record current benchmark evidence; generated data updates public benchmark matrices; routing test fix removes repeated filesystem scans; alignment page gives browser-reviewable execution context; task/history files record execution and shipping context.
   - User-goal mapping: every changed file either records the requested re-benchmark evidence, keeps generated views in sync with that evidence, or fixes validation required to complete the benchmark step.
@@ -695,16 +717,16 @@ Implement only this step, validate it, then run `/ship` when done.
 ## Ship Review — 2026-05-21 CLI Route Normalization Hardening
 
 - User goal: harden mirrored skills so final handoffs recommend commands for the active CLI instead of copying stale slash/dollar examples from task docs.
-- Changed files: `global/codex/run/SKILL.md`, `global/codex/ship/SKILL.md`, `global/claude/run/SKILL.md`, `global/claude/ship/SKILL.md`, `tests/layer1/bench-setups.test.ts`, `tasks/lessons.md`, and generated Skills Showcase assets/matrix.
+- Changed files: `global/codex/exec/SKILL.md`, `global/codex/ship/SKILL.md`, `global/claude/exec/SKILL.md`, `global/claude/ship/SKILL.md`, `tests/layer1/bench-setups.test.ts`, `tasks/lessons.md`, and generated Skills Showcase assets/matrix.
 - Per-file purpose: Codex contracts now normalize copied `/...` global routes to `$...`; Claude contracts normalize copied `$...` global routes to `/...`; layer1 coverage locks the mirrored contract text; lessons records the correction.
-- User-goal mapping: the specific `/run` vs `$run` failure is now covered by both contract language and a regression test.
+- User-goal mapping: the specific `/exec` vs `$exec` failure is now covered by both contract language and a regression test.
 - Tests run: `pnpm --dir tests exec vitest run --project layer1 bench-setups --testNamePattern "normalize copied task routes"`; `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests bench:coverage`.
 - Skipped tests: full layer1 suite not rerun because the change is narrow contract text plus one focused layer1 assertion; Skills Showcase app build not rerun because runtime app code did not change.
 - Adversarial review: task docs can still contain slash examples from Claude-authored plans, so the contract explicitly says those are task identifiers rather than final command text.
 - Correction enforcement: `tasks/lessons.md` was updated for the current user correction, and `tests/layer1/bench-setups.test.ts` now fails if the mirrored normalization rule is removed.
 - Residual risk: many individual pack skills still have generic next-step language; this hardening covers the high-traffic global `run`/`ship` paths where the observed failure occurred.
 - Rollback note: revert the hardening commit to restore the previous route-selection behavior.
-- Next command: `$run`
+- Next command: `$exec`
 
 ## Completed Task — Batch 41.3 Re-benchmarks Group 1: Re-run Tier 2 Global Skills Post-Fixture-Remediation 2026-05-21
 
@@ -758,7 +780,7 @@ Implement only this step, validate it, then run `/ship` when done.
 - Correction enforcement: secret-handling remediation from the Neon token incident was already captured and shipped before this benchmark-data boundary; sanitized history was verified before this `$ship`.
 - Residual risk: public GitHub star/fork/open issue counts are still live enrichment fields; if they change between validation and ship, the validator can still require a generated-data refresh.
 - Rollback: revert the ship commit if the generated metadata needs to be restored.
-- Recommended next command: `/run`
+- Recommended next command: `/exec`
 
 ## Completed Task — Step 43.1: Audit Route Assertion Failures Across Tier 2 Global Skill Fixtures 2026-05-20
 
@@ -772,7 +794,7 @@ Implement only this step, validate it, then run `/ship` when done.
 
 ### Root Cause
 
-The default `assertRecommendedRoute` (in `tests/layer4/setup-helpers/routing.ts:20-25`) does `content.includes(command)` — it looks for the literal route string anywhere in the output. When the prompt says "...and Next command" without specifying *which* command, agents invent a route or omit it. The 5 fixtures that already pass use explicit guidance like `End with \`Recommended next command: $run\`.`
+The default `assertRecommendedRoute` (in `tests/layer4/setup-helpers/routing.ts:20-25`) does `content.includes(command)` — it looks for the literal route string anywhere in the output. When the prompt says "...and Next command" without specifying *which* command, agents invent a route or omit it. The 5 fixtures that already pass use explicit guidance like `End with \`Recommended next command: $exec\`.`
 
 ### Assertion Types
 
@@ -788,52 +810,52 @@ The default `assertRecommendedRoute` (in `tests/layer4/setup-helpers/routing.ts:
 
 | Skill | Route | Prompt guidance | Assertion type |
 |-------|-------|-----------------|----------------|
-| `affected` | `$run` | `End with \`Recommended next command: $run\`.` | default |
+| `affected` | `$exec` | `End with \`Recommended next command: $exec\`.` | default |
 | `analyze-sessions` | per-agent (`/targeted-skill-builder ...` / `$targeted-skill-builder ...`) | Full `Use exactly ...` for both runners | exact final |
 | `desk-flip` | `/bootstrap-repo` | `End with Next work and Recommended next command: /bootstrap-repo.` | default |
 | `icon-handler` | per-agent (`/icon-handler` / `$icon-handler`) | Full explicit guidance in prompt | final |
-| `update-packages` | per-agent (`/run` / `$run`) | Full `Use exactly ...` for both runners | final |
+| `update-packages` | per-agent (`/exec` / `$exec`) | Full `Use exactly ...` for both runners | final |
 
 #### Missing explicit route text (32 skills — all failing route assertion)
 
 | # | Skill | `recommendedRoute` | Prompt ends with | Fix needed |
 |---|-------|--------------------|------------------|------------|
-| 1 | `bootstrap-repo` | `$run` | "...and Next command" | Add `End with \`Recommended next command: $run\`.` |
+| 1 | `bootstrap-repo` | `$exec` | "...and Next command" | Add `End with \`Recommended next command: $exec\`.` |
 | 2 | `brainstorm` | `$feature-interview` | "...and Next command" | Add `End with \`Recommended next command: $feature-interview\`.` |
 | 3 | `branch-lifecycle` | `$ship` | "...and Next command" | Add `End with \`Recommended next command: $ship\`.` |
-| 4 | `codebase-status` | `$run` | "...and Next command" | Add `End with \`Recommended next command: $run\`.` |
+| 4 | `codebase-status` | `$exec` | "...and Next command" | Add `End with \`Recommended next command: $exec\`.` |
 | 5 | `concept-exploration` | `$spec-interview` | "...and Next command" | Add `End with \`Recommended next command: $spec-interview\`.` |
-| 6 | `create-agentic-skill` | `$run` | "...and Next command" | Add `End with \`Recommended next command: $run\`.` |
+| 6 | `create-agentic-skill` | `$exec` | "...and Next command" | Add `End with \`Recommended next command: $exec\`.` |
 | 7 | `create-local-skill` | `$ship` | "...and Next command" | Add `End with \`Recommended next command: $ship\`.` |
-| 8 | `dead-code` | `$run` | "...and Next command" | Add `End with \`Recommended next command: $run\`.` |
-| 9 | `debug` | `$run` | "...and Next command" | Add `End with \`Recommended next command: $run\`.` |
-| 10 | `decommission` | `$run` | "...and Next command" | Add `End with \`Recommended next command: $run\`.` |
+| 8 | `dead-code` | `$exec` | "...and Next command" | Add `End with \`Recommended next command: $exec\`.` |
+| 9 | `debug` | `$exec` | "...and Next command" | Add `End with \`Recommended next command: $exec\`.` |
+| 10 | `decommission` | `$exec` | "...and Next command" | Add `End with \`Recommended next command: $exec\`.` |
 | 11 | `dogfood` | `$uat` | "...and Next command" | Add `End with \`Recommended next command: $uat\`.` |
-| 12 | `expert-review` | `$run` | "...and Next command" | Add `End with \`Recommended next command: $run\`.` |
-| 13 | `guide` | `$run` | "...and Next command" | Add `End with \`Recommended next command: $run\`.` |
-| 14 | `handoff` | `$run` | "...and Next command" | Add `End with \`Recommended next command: $run\`.` |
-| 15 | `hygiene` | `$run` | "...and Next command" | Add `End with \`Recommended next command: $run\`.` |
-| 16 | `migrate` | `$run` | "...and Next command" | Add `End with \`Recommended next command: $run\`.` |
-| 17 | `mono-plan` | `$run` | "...and Next command" | Add `End with \`Recommended next command: $run\`.` |
-| 18 | `pack` | `$run` | "...and Next command" | Add `End with \`Recommended next command: $run\`.` |
-| 19 | `provision-agentic-config` | `$run` | "...and Next command" | Add `End with \`Recommended next command: $run\`.` |
+| 12 | `expert-review` | `$exec` | "...and Next command" | Add `End with \`Recommended next command: $exec\`.` |
+| 13 | `guide` | `$exec` | "...and Next command" | Add `End with \`Recommended next command: $exec\`.` |
+| 14 | `handoff` | `$exec` | "...and Next command" | Add `End with \`Recommended next command: $exec\`.` |
+| 15 | `hygiene` | `$exec` | "...and Next command" | Add `End with \`Recommended next command: $exec\`.` |
+| 16 | `migrate` | `$exec` | "...and Next command" | Add `End with \`Recommended next command: $exec\`.` |
+| 17 | `mono-plan` | `$exec` | "...and Next command" | Add `End with \`Recommended next command: $exec\`.` |
+| 18 | `pack` | `$exec` | "...and Next command" | Add `End with \`Recommended next command: $exec\`.` |
+| 19 | `provision-agentic-config` | `$exec` | "...and Next command" | Add `End with \`Recommended next command: $exec\`.` |
 | 20 | `prototype` | `$uat --variant-evaluation` | "...and Next command" | Add `End with \`Recommended next command: $uat --variant-evaluation\`.` |
 | 21 | `reconcile-dev-docs` | `$ship` | "...and Next command" | Add `End with \`Recommended next command: $ship\`.` |
 | 22 | `regression-check` | `$ship` | "...and Next command" | Add `End with \`Recommended next command: $ship\`.` |
-| 23 | `research-roadmap` | `$run` | "...and Next command" | Add `End with \`Recommended next command: $run\`.` |
-| 24 | `scaffold` | `$run` | "...and Next command" | Add `End with \`Recommended next command: $run\`.` |
-| 25 | `skills` | `$run` | "...and Next command" | Add `End with \`Recommended next command: $run\`.` |
-| 26 | `slim-audit` | `$run` | "...and Next command" | Add `End with \`Recommended next command: $run\`.` |
-| 27 | `spec-drift` | `$run` | "...and Next command" | Add `End with \`Recommended next command: $run\`.` |
-| 28 | `trace` | `$run` | "...and Next command" | Add `End with \`Recommended next command: $run\`.` |
-| 29 | `ui-interview` | `$run` | "...and Next command" | Add `End with \`Recommended next command: $run\`.` |
+| 23 | `research-roadmap` | `$exec` | "...and Next command" | Add `End with \`Recommended next command: $exec\`.` |
+| 24 | `scaffold` | `$exec` | "...and Next command" | Add `End with \`Recommended next command: $exec\`.` |
+| 25 | `skills` | `$exec` | "...and Next command" | Add `End with \`Recommended next command: $exec\`.` |
+| 26 | `slim-audit` | `$exec` | "...and Next command" | Add `End with \`Recommended next command: $exec\`.` |
+| 27 | `spec-drift` | `$exec` | "...and Next command" | Add `End with \`Recommended next command: $exec\`.` |
+| 28 | `trace` | `$exec` | "...and Next command" | Add `End with \`Recommended next command: $exec\`.` |
+| 29 | `ui-interview` | `$exec` | "...and Next command" | Add `End with \`Recommended next command: $exec\`.` |
 | 30 | `uat` | `$consolidate-variations` | "...and Next command" | Add `End with \`Recommended next command: $consolidate-variations\`.` |
 | 31 | `consolidate-variations` | `$research-roadmap --post-prototype` | "...and Next command" | Add `End with \`Recommended next command: $research-roadmap --post-prototype\`.` |
 | 32 | `ux-variations` | `$ui-interview` | "...and Next command" | Add `End with \`Recommended next command: $ui-interview\`.` |
 
 **Summary:** 32 of 37 global fixtures need explicit route guidance added to the prompt. All 32 use the default `assertRecommendedRoute` (literal string match). The fix is mechanical: append `End with \`Recommended next command: <route>\`.` to each prompt.
 
-**Route distribution:** 20 skills → `$run`, 3 → `$ship`, 1 → `$feature-interview`, 1 → `$spec-interview`, 1 → `$uat`, 1 → `$uat --variant-evaluation`, 1 → `$consolidate-variations`, 1 → `$research-roadmap --post-prototype`, 1 → `$ui-interview`, 1 → `$run` (skills), 1 → `$run` (slim-audit) — these overlap; net: 20× `$run`, 3× `$ship`, 9 unique non-run/ship routes.
+**Route distribution:** 20 skills → `$exec`, 3 → `$ship`, 1 → `$feature-interview`, 1 → `$spec-interview`, 1 → `$uat`, 1 → `$uat --variant-evaluation`, 1 → `$consolidate-variations`, 1 → `$research-roadmap --post-prototype`, 1 → `$ui-interview`, 1 → `$exec` (skills), 1 → `$exec` (slim-audit) — these overlap; net: 20× `$exec`, 3× `$ship`, 9 unique non-run/ship routes.
 
 ### Pack-Local Fixtures — Domain Criteria Audit
 
@@ -929,7 +951,7 @@ These are **quality criteria (not hard assertions)**, so they don't cause test f
 Implement only this step, validate it, then run `/ship` when done.
 
 **Next work:** Re-benchmark a representative sample of pack-local skills
-**Recommended next command:** /run
+**Recommended next command:** /exec
 
 ## Completed Task — Step 43.2: Add Explicit Route Guidance to 32 Global Fixture Prompts 2026-05-20
 
@@ -943,10 +965,10 @@ Implement only this step, validate it, then run `/ship` when done.
 
 | Skill | Route | Claude | Codex | Route assertion |
 |-------|-------|--------|-------|-----------------|
-| `debug` | `$run` | 100% | 100% | pass |
+| `debug` | `$exec` | 100% | 100% | pass |
 | `branch-lifecycle` | `$ship` | 100% | 0%* | pass |
 | `brainstorm` | `$feature-interview` | 100% | 0%* | pass |
-| `scaffold` | `$run` | 100% | 100% | pass |
+| `scaffold` | `$exec` | 100% | 100% | pass |
 | `uat` | `$consolidate-variations` | 0%* | 100% | pass |
 
 *Overall failures caused by pre-existing content assertions (`Output includes salvage`, `Output includes tradeoffs`, `Output includes variant evaluation`), NOT by route assertions. These are known flaky content-quality assertions unrelated to Step 43's route guidance work.
@@ -1145,7 +1167,7 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
 - Removed prototype gate test assertions from `bench-setups.test.ts` and updated spec-interview route alignment test.
 - Validation passed: `pnpm --dir tests bench:coverage` (156 skills); `pnpm --dir tests test -- --grep "bench-setups|codex-interview"` (1221 tests); no stale `ux-variation`/`ui-consolidate` references in `.ts` files; no dangling `prototypeFirstProductGateCriterion` references.
 - Generated Skills Showcase data was not refreshed because no tracked `SKILL.md` or `PACK.md` changed.
-- Recommended next command: `/run`
+- Recommended next command: `/exec`
 
 ## Interrupt Task — Benchmark `update-packages` 2026-05-19
 
@@ -1433,12 +1455,12 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
 
 ## Interrupt Task — Targeted Update `ship-end` Benchmark Runner Route 2026-05-18
 
-**Goal:** Fix the `ship-end` benchmark setup so Claude uses `/run`, Codex uses `$run`, and the fixture prompt forces `tasks/todo.md` plus `tasks/history.md` as the handoff source of truth.
+**Goal:** Fix the `ship-end` benchmark setup so Claude uses `/exec`, Codex uses `$exec`, and the fixture prompt forces `tasks/todo.md` plus `tasks/history.md` as the handoff source of truth.
 
 **Plan:**
 - [x] Review lessons, the `ship-end` triage report, mirrored `ship-end` contracts, and current Tier 1 benchmark setup.
 - [x] Update `tests/layer4/setups/tier1-workflows.setup.ts` with runner-specific `ship-end` routes and fixture source-of-truth prompt text.
-- [x] Add focused layer1 coverage for Claude `/run`, Codex `$run`, missing `Step 1.2`, and recursive `/ship-end` rejection.
+- [x] Add focused layer1 coverage for Claude `/exec`, Codex `$exec`, missing `Step 1.2`, and recursive `/ship-end` rejection.
 - [x] Rerun focused, target, and both-agent benchmark validation; update curated benchmark evidence and generated data.
 
 ## Review — Targeted Update `ship-end` Benchmark Runner Route 2026-05-18
@@ -1448,8 +1470,8 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
 - Evidence intentionally skipped: broad session history, because the failure was localized to one benchmark fixture and raw benchmark artifacts.
 - Existing-skill overlap: `ship-end` already owns session wrap-up; the gap was deterministic benchmark coverage drift.
 - Updated the `ship-end` fixture prompt to require fixture task files as source of truth, name both `tasks/todo.md` and `tasks/history.md`, and use runner-native final routing.
-- Updated hard assertion routes to require `/run` for Claude and `$run` for Codex.
-- Updated quality scoring to accept either `/run` or `$run` as runner-native `ship-end` next-route evidence.
+- Updated hard assertion routes to require `/exec` for Claude and `$exec` for Codex.
+- Updated quality scoring to accept either `/exec` or `$exec` as runner-native `ship-end` next-route evidence.
 - Added focused layer1 coverage for the fixed route behavior and failure cases.
 - Final benchmark rerun passed: Claude session `ship-end-claude-0190fdda` and Codex session `ship-end-codex-4fbde9d6` both passed 3/3 hard assertions, had no infrastructure-blocked runs, and scored 100.0% output quality with no critical failures.
 - Report updated: `benchmark/test-ship-end-2026-05-18.md`.
@@ -1488,7 +1510,7 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
 - Deterministic context: both agents passed 3/3 hard assertions, had no infrastructure-blocked runs, and scored 100.0% deterministic output quality.
 - Subjective verdict: good to excellent. Median score 90.5, range 84-95.
 - Common strengths: fixture source-of-truth preserved, Step 1.1 and Step 1.2 carried forward, validation claims constrained to task-recorded evidence, no invented deploy/git/service facts, and meaningful residual risk language.
-- Material weakness: all three Codex outputs list both `Claude: /run` and `Codex: $run` in the final Next Command section, which is less ergonomic than one active-runner final handoff.
+- Material weakness: all three Codex outputs list both `Claude: /exec` and `Codex: $exec` in the final Next Command section, which is less ergonomic than one active-runner final handoff.
 - Report written: `benchmark/review-ship-end-2026-05-18.md`.
 - Validation passed: targeted `jq` artifact extraction; targeted `rg` report-field and route checks; `git diff --check`.
 - Recommended next command: `$targeted-skill-builder ship-end benchmark single active-runner final handoff`
@@ -1512,8 +1534,8 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
 
 **Plan:**
 - [x] Review lessons, latest `ship-end` agent-review report, current Tier 1 setup, and focused layer1 coverage.
-- [x] Update `tests/layer4/setups/tier1-workflows.setup.ts` so the prompt, hard assertions, and quality rubric reject dual `/run` plus `$run` handoffs.
-- [x] Add focused layer1 coverage where a dual-route Codex handoff fails and a single `$run` Codex handoff passes.
+- [x] Update `tests/layer4/setups/tier1-workflows.setup.ts` so the prompt, hard assertions, and quality rubric reject dual `/exec` plus `$exec` handoffs.
+- [x] Add focused layer1 coverage where a dual-route Codex handoff fails and a single `$exec` Codex handoff passes.
 - [x] Run required targeted validation, record results, then commit and push intended changes on `master`.
 
 ## Review — Targeted Update `ship-end` Single Active-Runner Handoff 2026-05-18
@@ -1524,7 +1546,7 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
 - Existing-skill overlap: `ship-end` already owns session wrap-up; the durable fix is benchmark enforcement of one active-runner final route.
 - Updated the `ship-end` benchmark prompt to require exactly one active-runner final command and forbid alternate runner routes.
 - Added the critical `single-active-runner-final-route` quality criterion and a hard assertion that rejects the inactive route in `ship-end` outputs.
-- Added focused layer1 coverage proving single `$run` Codex output passes while dual `Claude: /run` plus `Codex: $run` output fails.
+- Added focused layer1 coverage proving single `$exec` Codex output passes while dual `Claude: /exec` plus `Codex: $exec` output fails.
 - Fresh benchmark rerun passed: Claude session `ship-end-claude-9bf5f843` and Codex session `ship-end-codex-d7d92d34` both passed 3/3 hard assertions, had no infrastructure-blocked runs, and scored 100.0% output quality with no critical failures.
 - Report updated: `benchmark/test-ship-end-2026-05-18.md`.
 - Validation passed: `pnpm --dir tests exec vitest run --project layer1 bench-setups --testNamePattern ship-end`; `./install.sh`; `./scripts/skill-deps.sh --broken`; `./scripts/skill-versions.sh --missing`; `./scripts/skill-next-step-routing.sh --missing`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill ship-end`; `pnpm --dir tests bench --skill ship-end --agent both --runs 3 --chunk-size 3 --pause 0`; generated-data refresh commands; targeted `rg`; `git diff --check`.
@@ -1536,17 +1558,17 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
 - **User goal:** Execute `$targeted-skill-builder ship-end benchmark single active-runner final handoff`, fixing the reviewed benchmark handoff ergonomics gap so final `ship-end` benchmark artifacts emit one active-runner next command.
 - **Changed files:** `tests/layer4/setups/tier1-workflows.setup.ts`; `tests/layer1/bench-setups.test.ts`; `benchmark/test-ship-end-2026-05-18.md`; `tasks/todo.md`; `tasks/history.md`; generated Skills Showcase benchmark evidence files after data refresh.
 - **Per-file purpose:** The Tier 1 setup tightens prompt, hard assertion, and quality scoring; the layer1 test guards single-route pass/fail behavior; the benchmark report records the fresh both-agent rerun; task docs record plan, validation, manifest, and next route; generated evidence keeps public benchmark data fresh.
-- **User-goal mapping:** The exact Codex dual-route weakness from agent review is now rejected by deterministic coverage, and the fresh Codex benchmark outputs prove the final handoff contains only `$run`.
+- **User-goal mapping:** The exact Codex dual-route weakness from agent review is now rejected by deterministic coverage, and the fresh Codex benchmark outputs prove the final handoff contains only `$exec`.
 - **Tests run:** Focused layer1 `ship-end` setup test passed; install and skill dependency/version/routing audits passed; benchmark coverage passed; `ship-end` verify passed with layer1 PASS and layer2 SKIP; final both-agent benchmark passed with Claude 3/3 and Codex 3/3; generated Skills Showcase data was refreshed; targeted `rg` confirmed the new assertion, criterion, prompt, and raw-session evidence; `git diff --check` passed.
 - **Skipped tests:** App build/tests were not run because no app source behavior changed; generated-data validation covers public evidence freshness after the curated benchmark report update. Broader skill benchmarks were not run because the fix targets only `ship-end`.
-- **Adversarial review:** Checked the fresh raw artifacts for `Output uses single active-runner final route`, verified Codex retained handoffs end with only `$run`, and confirmed the fix stays in benchmark setup/rubric rather than changing the already-correct `ship-end` skill contract.
+- **Adversarial review:** Checked the fresh raw artifacts for `Output uses single active-runner final route`, verified Codex retained handoffs end with only `$exec`, and confirmed the fix stays in benchmark setup/rubric rather than changing the already-correct `ship-end` skill contract.
 - **Residual risk:** The quality summary table only lists the lowest scoring criteria, so the new all-passing criterion may not appear in the summarized report table; raw run JSON and focused layer1 coverage preserve explicit proof.
 - **Rollback note:** Revert the shipping commit to restore the prior dual-route-tolerant benchmark setup, test coverage, curated report sessions, generated data, and task state.
 - **Next command:** `$benchmark-agent-review ship-end`
 
 ### Benchmark Ship Manifest
 
-- **User goal:** Execute `$run` for the next incomplete benchmark step: run the fresh both-agent `update-packages` benchmark after actionability threshold calibration, publish deterministic evidence, and prepare the next route.
+- **User goal:** Execute `$exec` for the next incomplete benchmark step: run the fresh both-agent `update-packages` benchmark after actionability threshold calibration, publish deterministic evidence, and prepare the next route.
 - **Changed files:** `tests/layer4/setups/tier23-global-workflows.setup.ts`; `tests/layer1/bench-setups.test.ts`; `benchmark/test-update-packages-2026-05-18.md`; `docs/benchmark-results-matrix.md`; `docs/skills-showcase/assets/skills-data.js`; `docs/skills-showcase/assets/github-proof-data.js`; `apps/skills-showcase/public/assets/skills-data.js`; `apps/skills-showcase/public/assets/github-proof-data.js`; `tasks/todo.md`; `tasks/history.md`.
 - **Per-file purpose:** The benchmark setup raises `update-packages` to the standard per-run budget and broadens retained evidence matchers; the layer1 test guards those budget and evidence shapes; the benchmark report records the final Claude/Codex run metrics and raw session paths; generated benchmark/showcase assets expose the refreshed curated report data; `tasks/todo.md` records completion, validation, manifest, and next route; `tasks/history.md` records the shipped benchmark evidence.
 - **User-goal mapping:** The benchmark command produced fresh persisted report data, the curated report and generated assets now reference those sessions, and task docs preserve the deterministic evidence needed for the next operator.
@@ -1632,7 +1654,7 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
     - Run each benchmark with conservative runner settings, pausing if a shared harness failure, runner-capacity issue, or ambiguous skill-contract failure appears.
     - Write or update each dated `benchmark/test-<skill>-<YYYY-MM-DD>.md` with verify evidence, benchmark results, raw session paths, failures/blocks, and recommended next route.
     - Refresh generated Skills Showcase data and `docs/benchmark-results-matrix.md` after curated benchmark evidence changes, then validate with benchmark coverage, generated-data validation, and whitespace checks.
-- [x] Batch 41.2: Triage and resolve the Claude budget-block pattern across `roadmap`, `targeted-skill-builder`, and `affected` — all three have Claude runs infrastructure-blocked at smoke budget ($0.25/run). Either increase `perRunBudgetUsd` in their setup definitions or document smoke budget as the expected Claude limitation for complex workflow skills. `roadmap` Codex already passes 100%/100%; no Codex failures remain.
+- [x] Batch 41.2: Triage and resolve the Claude budget-block pattern across `roadmap`, `targeted-skill-builder`, and `affected` — all three have Claude runs infrastructure-blocked at smoke budget ($0.25/exec). Either increase `perRunBudgetUsd` in their setup definitions or document smoke budget as the expected Claude limitation for complex workflow skills. `roadmap` Codex already passes 100%/100%; no Codex failures remain.
   - Classification: automated
   - Files: `tests/layer4/setups/tier1-workflows.setup.ts` (targeted-skill-builder, roadmap budget), `tests/layer4/setups/tier23-global-workflows.setup.ts` (affected budget), benchmark reports under `benchmark/`, generated data, task docs.
   - Implementation plan:
@@ -1728,14 +1750,14 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
 - Validation passed: `pnpm bench --list-skills`; `pnpm verify --skill ship-end`; `pnpm bench --skill ship-end --agent both --runs 3 --chunk-size 3 --pause 0`; `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests bench:coverage`.
 - Recommended next command: `$session-triage ship-end benchmark failure`.
 - Batch 41.1 resumed 2026-05-19 with `targeted-skill-builder` and `affected` benchmarks.
-- `targeted-skill-builder` verify passed (layer1 PASS 3.0s, layer2 SKIP). Benchmark: Claude all 3 runs infrastructure-blocked (budget exceeded at $0.25/run); Codex 0/3 pass rate, 92.9% quality, route mismatch (`$targeted-skill-builder` instead of `$run`). Report: `benchmark/test-targeted-skill-builder-2026-05-19.md`.
-- `affected` verify passed (layer1 PASS 3.3s, layer2 SKIP). Benchmark: Claude 0/1 evaluated (2 blocked), 68.2% quality; Codex 0/3, 40.9% quality. Both fail on route (`pnpm --filter` instead of `$run`) and Codex misses literal "affected packages" string. Report: `benchmark/test-affected-2026-05-19.md`.
+- `targeted-skill-builder` verify passed (layer1 PASS 3.0s, layer2 SKIP). Benchmark: Claude all 3 runs infrastructure-blocked (budget exceeded at $0.25/exec); Codex 0/3 pass rate, 92.9% quality, route mismatch (`$targeted-skill-builder` instead of `$exec`). Report: `benchmark/test-targeted-skill-builder-2026-05-19.md`.
+- `affected` verify passed (layer1 PASS 3.3s, layer2 SKIP). Benchmark: Claude 0/1 evaluated (2 blocked), 68.2% quality; Codex 0/3, 40.9% quality. Both fail on route (`pnpm --filter` instead of `$exec`) and Codex misses literal "affected packages" string. Report: `benchmark/test-affected-2026-05-19.md`.
 - Generated data refreshed: `docs/benchmark-results-matrix.md` now has 34 graded + 11 incomplete rows covering 18 unique skill names.
 - Validation passed: `pnpm --dir tests bench:coverage` (156 skills), `git diff --check` clean.
 - Batch 41.1 complete. Both new skills have fixture-prompt triage items before hard pass rates improve. Next: Batch 41.2 (`roadmap` triage) or Batch 41.3 (Tier 2 global skills).
 - Batch 41.2 completed 2026-05-19. Three fixes applied:
   1. Budget: increased `perRunBudgetUsd` to `BENCH_BUDGETS_USD.standard` ($1.00) for `roadmap`, `targeted-skill-builder` (tier1), and `affected` (tier23). Resolved all Claude budget-blocked runs.
-  2. Prompt routing: added `End with Recommended next command: $run` to `targeted-skill-builder` and `affected` fixture prompts. Resolved route mismatches.
+  2. Prompt routing: added `End with Recommended next command: $exec` to `targeted-skill-builder` and `affected` fixture prompts. Resolved route mismatches.
   3. Literal match relaxation: changed `affected` `expectedIncludes` from `"affected packages"` to `"affected"` to accept synonym headers.
 - Rerun results:
   - `targeted-skill-builder`: Claude 100% (3/3), Codex 100% (3/3). Quality: Claude 86.5%, Codex 87.9%. Both up from 0%.
@@ -1747,7 +1769,7 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
 - Validation passed: `pnpm verify --skill targeted-skill-builder`; `pnpm verify --skill affected`; `pnpm verify --skill roadmap`; `pnpm --dir tests bench:coverage` (156 skills); `scripts/validate-skills-showcase-data.sh`; layer1 (1231 passed); `git diff --check`.
 - Acceptance criteria met: Claude budget-block pattern resolved (3/3 skills unblocked), two fixture-prompt fixes applied and validated, reports updated and generated data refreshed.
 - Recommended next command: `/ship`
-- Triage completed in `benchmark/triage-ship-end-2026-05-18-benchmark-failure.md`: verified split root cause. The benchmark setup incorrectly expects `$run` for Claude even though the Claude `ship-end` contract uses `/run`, and the prompt does not force fixture-grounded runner-native routing. Recommended next command: `$targeted-skill-builder ship-end benchmark runner route and fixture source-of-truth`.
+- Triage completed in `benchmark/triage-ship-end-2026-05-18-benchmark-failure.md`: verified split root cause. The benchmark setup incorrectly expects `$exec` for Claude even though the Claude `ship-end` contract uses `/exec`, and the prompt does not force fixture-grounded runner-native routing. Recommended next command: `$targeted-skill-builder ship-end benchmark runner route and fixture source-of-truth`.
 - Batch 41.3 Group 1 completed 2026-05-20. 10 Tier 2 global skills benchmarked with both agents (3 runs each).
   - Results summary (Claude / Codex evaluated pass rates):
     - `bootstrap-repo`: 0.0% (0/3) / 0.0% (0/3). Both fail project purpose and route assertions.
@@ -1756,10 +1778,10 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
     - `codebase-status`: 0.0% (0/0, 3 blocked) / 33.3% (1/3). Claude all infra-blocked at smoke budget.
     - `concept-exploration`: 0.0% (0/0, 3 blocked) / 0.0% (0/3). Claude all infra-blocked; Codex fails `$spec-interview` route.
     - `consolidate-variations`: 0.0% (0/0, 3 blocked) / 0.0% (0/2, 1 blocked). Claude all infra-blocked (2 budget, 1 timeout).
-    - `create-agentic-skill`: 0.0% (0/3) / 0.0% (0/0, 3 blocked). Claude fails `$run` route; Codex all infra-blocked.
+    - `create-agentic-skill`: 0.0% (0/3) / 0.0% (0/0, 3 blocked). Claude fails `$exec` route; Codex all infra-blocked.
     - `create-local-skill`: 0.0% (0/2, 1 blocked) / 0.0% (0/3). Both fail `$ship` route assertion.
-    - `dead-code`: 0.0% (0/3) / 33.3% (1/3). Both mostly fail `$run` route assertion.
-    - `debug`: 0.0% (0/3) / 0.0% (0/3). Both fail `$run` route assertion (6/6).
+    - `dead-code`: 0.0% (0/3) / 33.3% (1/3). Both mostly fail `$exec` route assertion.
+    - `debug`: 0.0% (0/3) / 0.0% (0/3). Both fail `$exec` route assertion (6/6).
   - Shared patterns identified:
     1. **Claude budget-block at smoke ($0.25)**: 4/10 skills had all Claude runs infra-blocked (`brainstorm`, `codebase-status`, `concept-exploration`, `consolidate-variations`). Same pattern as Batch 41.2.
     2. **Route assertion failure**: Near-universal across both agents. Fixture prompts lack explicit route guidance — the same root cause Batch 41.2 fixed for 3 Tier 1 skills.
@@ -1810,7 +1832,7 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
   - Recommended next command: `/ship`
 - Batch 41.3 Group 2 completed 2026-05-20. 11 Tier 2 global skills benchmarked with both agents (3 runs each).
   - Results summary (Claude / Codex evaluated pass rates):
-    - `decommission`: 0.0% (0/3) / 0.0% (0/3). Both fail `$run` route assertion (6/6).
+    - `decommission`: 0.0% (0/3) / 0.0% (0/3). Both fail `$exec` route assertion (6/6).
     - `dogfood`: 0.0% (0/2, 1 blocked) / 33.3% (1/3). Claude 1 run budget-blocked. Codex 1 pass.
     - `expert-review`: 0.0% (0/1, 2 blocked) / 66.7% (2/3). Claude 2 runs budget-blocked. Codex best performer.
     - `guide`: 0.0% (0/2, 1 blocked) / 0.0% (0/3). Claude 1 run budget-blocked. Both fail route assertion.
@@ -1818,7 +1840,7 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
     - `hygiene`: 0.0% (0/3) / 0.0% (0/3). Both fail multiple assertions.
     - `migrate`: 0.0% (0/2, 1 blocked) / 0.0% (0/3). Claude 1 run budget-blocked. Both fail route assertion.
     - `mono-plan`: 0.0% (0/3) / 0.0% (0/3). Both fail package boundaries, safe lanes, and route assertions.
-    - `pack`: 0.0% (0/3) / 0.0% (0/3). Both fail `$run` route assertion (6/6).
+    - `pack`: 0.0% (0/3) / 0.0% (0/3). Both fail `$exec` route assertion (6/6).
     - `prototype`: 0.0% (0/2, 1 blocked) / 0.0% (0/3). Both fail hub page, clickable, and route assertions. Claude 1 run budget-blocked.
     - `provision-agentic-config`: 0.0% (0/0, 3 blocked) / 0.0% (0/3). Claude all infra-blocked at smoke budget. Codex fails orchestration rules, monorepo safety, and route.
   - Shared patterns (same as Group 1):
@@ -1846,7 +1868,7 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
 
 ### Batch 41.1 Partial Ship Manifest
 
-- **User goal:** Execute `$run` for the next incomplete Phase 41 benchmark batch, publish deterministic benchmark evidence, and stop for triage if a benchmark failure indicates continuity, shared harness, or skill-contract ambiguity.
+- **User goal:** Execute `$exec` for the next incomplete Phase 41 benchmark batch, publish deterministic benchmark evidence, and stop for triage if a benchmark failure indicates continuity, shared harness, or skill-contract ambiguity.
 - **Changed files:** `tasks/todo.md`; `tasks/history.md`. Evidence referenced by this task state is already present in `benchmark/test-ship-end-2026-05-18.md`, `docs/benchmark-results-matrix.md`, and raw run directories.
 - **Per-file purpose:** `tasks/todo.md` records the partial batch result, stop reason, validation, manifest, and next route; `tasks/history.md` records the shipped benchmark evidence.
 - **User-goal mapping:** The run advanced Batch 41.1 by confirming the queue, publishing fresh `ship-end` benchmark evidence, and routing the failed evaluated result to triage before continuing broad benchmark execution.
@@ -1859,16 +1881,16 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
 
 ### Step 42.7 Ship Manifest
 
-- **User goal:** Execute `$run` for Step 42.7, completing phase-wide validation for the `/workflows` persistent transcript refinement and performing only concrete cleanup found by validation.
+- **User goal:** Execute `$exec` for Step 42.7, completing phase-wide validation for the `/workflows` persistent transcript refinement and performing only concrete cleanup found by validation.
 - **Changed files:** `apps/skills-showcase/public/assets/github-proof-data.js`; `docs/benchmark-results-matrix.md`; `docs/skills-showcase/assets/github-proof-data.js`; `tasks/todo.md`; `tasks/roadmap.md`; `tasks/phases/phase-42.md`; `tasks/history.md`. Pre-existing dirty edits in `tests/layer1/bench-setups.test.ts` and `tests/layer4/setups/tier23-global-workflows.setup.ts` are unrelated and intentionally excluded from this shipping boundary.
 - **Per-file purpose:** Generated proof/matrix assets were refreshed because validation found stale repository proof metadata and newer persisted benchmark-result pointers; `tasks/todo.md` records Phase 42 completion and promotes Phase 41 Batch 41.1 as the next active work; `tasks/roadmap.md` marks Phase 42 criteria complete; `tasks/phases/phase-42.md` archives the completed phase; `tasks/history.md` records the validation result.
-- **User-goal mapping:** The phase is now backed by executable app tests, production build evidence, generated-data validation, whitespace validation, and desktop/mobile visual checks before routing the next `$run` to benchmark coverage work.
+- **User-goal mapping:** The phase is now backed by executable app tests, production build evidence, generated-data validation, whitespace validation, and desktop/mobile visual checks before routing the next `$exec` to benchmark coverage work.
 - **Tests run:** `pnpm --dir apps/skills-showcase test` passed with 8 files and 98 tests; `pnpm --dir apps/skills-showcase build` passed; `scripts/validate-skills-showcase-data.sh` initially reported stale generated data, regenerated assets, then passed after the final history update; `git diff --check` passed after final task/doc edits; Safari desktop visual check passed for `/workflows`; Safari narrow mobile-width visual check passed for `/workflows`.
 - **Skipped tests:** A separate `pnpm --dir apps/skills-showcase typecheck` was not run because `next build` ran TypeScript successfully. Automated DOM `scrollWidth` assertion was not run because Safari's JavaScript-from-Apple-Events setting is disabled and the project has no Playwright/browser automation setup; manual Safari desktop and narrow-width checks covered the phase visual acceptance criterion. Broader repository tests were not run because Step 42.7 scope is the Skills Showcase `/workflows` phase and generated proof assets.
-- **Adversarial review:** Diff-aware self-review checked whether validation-only cleanup accidentally pulled unrelated benchmark setup edits into scope, whether generated proof data changes were mechanical outputs from the validator, whether Phase 42 acceptance criteria map to the prior implementation/test evidence, and whether Phase 41 Batch 41.1 is concrete enough for a fresh `$run`.
+- **Adversarial review:** Diff-aware self-review checked whether validation-only cleanup accidentally pulled unrelated benchmark setup edits into scope, whether generated proof data changes were mechanical outputs from the validator, whether Phase 42 acceptance criteria map to the prior implementation/test evidence, and whether Phase 41 Batch 41.1 is concrete enough for a fresh `$exec`.
 - **Residual risk:** Visual checks were manual rather than script-enforced, so a future CSS regression could still slip past if Step 42 source changes resume without browser automation. The next workflow should keep visual checks explicit until a Playwright-style viewport assertion exists.
 - **Rollback note:** Revert the Step 42.7 commit to restore the previous task state and generated proof/matrix pointers; source implementation commits for Steps 42.1-42.6 remain separate.
-- **Next command:** `$run`
+- **Next command:** `$exec`
 
 ## Completed Phase 42: Workflow Persistent Transcript Refinement
 
@@ -2004,7 +2026,7 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
 
 ### Step 42.6 Ship Manifest
 
-- **User goal:** Execute `$run` for Step 42.6, adding regression coverage for the `/workflows` persistent transcript behavior before final validation.
+- **User goal:** Execute `$exec` for Step 42.6, adding regression coverage for the `/workflows` persistent transcript behavior before final validation.
 - **Changed files:** `apps/skills-showcase/src/showcase/workflows.test.tsx`; `tasks/todo.md`; `tasks/history.md`. Pre-existing dirty edits in `tests/layer1/bench-setups.test.ts` and `tests/layer4/setups/tier23-global-workflows.setup.ts` are unrelated and intentionally excluded from this shipping boundary.
 - **Per-file purpose:** `workflows.test.tsx` adds behavior-focused assertions for completed-turn persistence after advancing, non-destructive backward jumps, workflow-switch transcript reset, benchmark receipt/no-receipt rendering inside turns, reduced-motion immediate proof visibility, and deterministic jsdom cleanup for timers/scroll mocks; `tasks/todo.md` records completion, validation, manifest, and next-step plan; `tasks/history.md` records the shipped workflow regression coverage.
 - **User-goal mapping:** The persistent transcript contract is now protected by regression tests for the interaction states named in the phase acceptance criteria, without coupling the assertions to CSS implementation details.
@@ -2013,11 +2035,11 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
 - **Adversarial review:** Diff-aware self-review checked that new tests exercise user-visible transcript behavior rather than styling internals, that fake timers are restored after use, that stale DOM from legacy `WorkflowsClient` tests cannot affect the TUI tests, and that jsdom-only `scrollIntoView` mocking does not mask the explicit smooth-scroll test. Initial focused test failures exposed missing test-environment setup and overly broad queries; those were fixed before validation passed.
 - **Residual risk:** The tests prove transcript behavior in jsdom, but they do not inspect real browser layout or animation positioning; Step 42.7 remains responsible for full app validation and desktop/mobile visual checks.
 - **Rollback note:** Revert the Step 42.6 test and task/history commit to remove this regression coverage while leaving the Step 42.1-42.5 implementation intact.
-- **Next command:** `$run`
+- **Next command:** `$exec`
 
 ### Step 42.5 Ship Manifest
 
-- **User goal:** Execute `$run` for Step 42.5, restyling `/workflows` so the persistent transcript layout is stable across desktop and mobile widths.
+- **User goal:** Execute `$exec` for Step 42.5, restyling `/workflows` so the persistent transcript layout is stable across desktop and mobile widths.
 - **Changed files:** `apps/skills-showcase/src/showcase/tui/workflow.css`; `tasks/todo.md`; `tasks/history.md`.
 - **Per-file purpose:** `workflow.css` moves the workflow body from fixed flex proportions to a constrained grid, tightens transcript/proof/receipt containment, wraps controls predictably, and stacks the layout at tablet/mobile widths; `tasks/todo.md` records completion, validation, manifest, and the next-step plan; `tasks/history.md` records the shipped workflow refinement.
 - **User-goal mapping:** The CSS now keeps workflow chips, benchmark strip, step controls, counter, transcript turns, and notebook content from overlapping while preserving Step 42.4 active-turn scroll anchoring and receipt data attributes.
@@ -2026,11 +2048,11 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
 - **Adversarial review:** Diff-aware self-review checked whether grid sizing could squeeze the notebook, whether mobile stacking still leaves controls above the transcript without overlap, whether long receipt rows and proof blocks keep overflow containment, and whether Step 42.4 data attributes/scroll behavior were untouched. No source behavior changes or additional fixes were needed.
 - **Residual risk:** CSS layout stability has not yet been inspected in a real browser viewport in this step; Step 42.7 remains the planned visual check for desktop and mobile overflow, clipped proof blocks, and control/transcript overlap.
 - **Rollback note:** Revert the Step 42.5 CSS and task/history commit to restore the prior flex-based workflow layout.
-- **Next command:** `$run`
+- **Next command:** `$exec`
 
 ### Step 42.4 Ship Manifest
 
-- **User goal:** Execute `$run` for Step 42.4, adding active transcript auto-scroll and stable benchmark/no-receipt proof rendering for the `/workflows` persistent transcript pilot.
+- **User goal:** Execute `$exec` for Step 42.4, adding active transcript auto-scroll and stable benchmark/no-receipt proof rendering for the `/workflows` persistent transcript pilot.
 - **Changed files:** `apps/skills-showcase/src/showcase/tui/TuiWorkflow.tsx`; `apps/skills-showcase/src/showcase/tui/workflow.css`; `apps/skills-showcase/src/showcase/workflows.test.tsx`; `tasks/todo.md`; `tasks/history.md`.
 - **Per-file purpose:** `TuiWorkflow.tsx` adds stable transcript-turn refs/data attributes, playback-only smooth scrolling for the active turn, and receipt data markers keyed to original step index; `workflow.css` adds scroll anchoring, active-turn highlighting, and receipt containment for long proof metadata; `workflows.test.tsx` covers smooth-scroll behavior and reduced-motion bypass; `tasks/todo.md` records completion, validation, manifest, and the next-step plan; `tasks/history.md` records the shipped workflow refinement.
 - **User-goal mapping:** The active turn now follows viewport scroll during playback without affecting reduced-motion users, while benchmark receipt rows and curated no-receipt states remain rendered inside their original transcript turns with overflow containment.
@@ -2039,11 +2061,11 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
 - **Adversarial review:** Diff-aware self-review checked whether scroll could run for reduced-motion users, whether manual step jumps would destructively hide later turns, whether receipt data stayed keyed by original step index, and whether long receipt paths could overflow their proof block. Finding fixed in the implementation: scroll is gated by `playing` and `reducedMotion`, and tests now prove the reduced-motion bypass.
 - **Residual risk:** The scroll behavior is covered in jsdom through `scrollIntoView` assertions, but real browser viewport positioning and mobile layout still need the planned Step 42.7 visual check after Step 42.5 CSS refinements.
 - **Rollback note:** Revert the Step 42.4 source and test changes to remove active-turn scroll anchoring and receipt containment while preserving the prior Step 42.3 staged reveal behavior.
-- **Next command:** `$run`
+- **Next command:** `$exec`
 
 ### Step 42.3 Ship Manifest
 
-- **User goal:** Execute `$run` for Step 42.3, coordinating `/workflows` active-turn fake typing, proof-block reveal, and reduced-motion behavior.
+- **User goal:** Execute `$exec` for Step 42.3, coordinating `/workflows` active-turn fake typing, proof-block reveal, and reduced-motion behavior.
 - **Changed files:** `apps/skills-showcase/src/showcase/tui/TuiWorkflow.tsx`; `apps/skills-showcase/src/showcase/tui/shared/useTypewriter.ts`; `apps/skills-showcase/src/showcase/tui/shared/useWorkflowPlayer.ts`; `tasks/todo.md`; `tasks/history.md`. Pre-existing benchmark/report/generated-data edits remain part of a separate shipping boundary and are not changed by the Step 42.3 implementation.
 - **Per-file purpose:** `TuiWorkflow.tsx` stages only the newest active transcript turn so the user message appears immediately, the agent response types in, and proof blocks reveal afterward; `useTypewriter.ts` supports disabled full-text rendering for reduced-motion users; `useWorkflowPlayer.ts` exposes reactive reduced-motion state and gates autoplay until the active turn is ready; `tasks/todo.md` records completion, validation, manifest, and next-step plan; `tasks/history.md` records the shipped workflow refinement.
 - **User-goal mapping:** The active transcript turn now follows the confirmed ChatGPT/Claude-style cadence, already revealed turns remain fully expanded when revisited, and reduced-motion users receive complete content without animation delays.
@@ -2052,11 +2074,11 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
 - **Adversarial review:** Diff-aware self-review checked whether proof blocks could reveal before typing completion, whether reduced-motion state updates trigger full rendering, whether autoplay could advance before the staged turn is ready, and whether clicking an already revealed earlier turn would hide proof again. Finding fixed: the first implementation staged every active turn; it now stages only the newest revealed active turn so earlier completed turns stay expanded.
 - **Residual risk:** Non-reduced-motion fake typing is validated through code review and build/type checks, but jsdom regression coverage for the live timer cadence is still planned for Step 42.6. Auto-scroll and layout proof remain explicit follow-up scope for Steps 42.4 and 42.5.
 - **Rollback note:** Revert the Step 42.3 source changes to restore immediate full active-turn rendering and timer-based workflow playback.
-- **Next command:** `$run`
+- **Next command:** `$exec`
 
 ### Step 42.2 Ship Manifest
 
-- **User goal:** Execute `$run` for Step 42.2, updating `/workflows` player state so step controls jump within an existing transcript session while workflow changes reset the session.
+- **User goal:** Execute `$exec` for Step 42.2, updating `/workflows` player state so step controls jump within an existing transcript session while workflow changes reset the session.
 - **Changed files:** `apps/skills-showcase/src/showcase/tui/shared/useWorkflowPlayer.ts`; `apps/skills-showcase/src/showcase/tui/TuiWorkflow.tsx`; `apps/skills-showcase/src/showcase/workflows.test.tsx`; `tasks/todo.md`; `tasks/history.md`; pre-existing task-planning edits in `tasks/roadmap.md` and `tasks/todo.md` are preserved in the same shipping boundary.
 - **Per-file purpose:** `useWorkflowPlayer.ts` now tracks `revealedStep` separately from `activeStep`; `TuiWorkflow.tsx` renders transcript turns through `revealedStep` while highlighting `activeStep`; `workflows.test.tsx` covers the backward-jump transcript persistence regression; `tasks/todo.md` records completion, review, and the next-step plan; `tasks/history.md` records the shipped work; `tasks/roadmap.md` already contained the update-packages benchmark interrupt plan before this step and is not changed by the implementation.
 - **User-goal mapping:** Separating revealed transcript depth from active focus lets a user click an earlier step without destructively hiding later revealed turns, while `selectWorkflow` and `restart` reset both values to a fresh first-turn session.
@@ -2065,11 +2087,11 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
 - **Adversarial review:** Diff-aware self-review checked whether `revealedStep` resets on workflow switch and restart, whether next/autoplay advance transcript depth, whether backward navigation preserves later turns, and whether benchmark receipt lookup still keys by original step index. Finding fixed: the added regression test originally queried duplicate counter text from both legacy and TUI workflow surfaces; it now uses a broader count assertion while the behavior assertions target accessible replay labels.
 - **Residual risk:** Autoplay still wraps active focus from the last step to the first while keeping all turns revealed. That preserves the Step 42.2 no-destructive-rewind goal, but the final playback cadence and scroll behavior are still unfinished and are explicitly covered by Steps 42.3 and 42.4.
 - **Rollback note:** Revert the Step 42.2 commit to collapse transcript rendering back to `activeStep + 1` and remove the focused regression test.
-- **Next command:** `$run`
+- **Next command:** `$exec`
 
 ### Step 42.1 Ship Manifest
 
-- **User goal:** Execute `$run` for Step 42.1, replacing the single remounting `/workflows` active replay card with a persistent transcript model for revealed workflow steps.
+- **User goal:** Execute `$exec` for Step 42.1, replacing the single remounting `/workflows` active replay card with a persistent transcript model for revealed workflow steps.
 - **Changed files:** `apps/skills-showcase/src/showcase/tui/TuiWorkflow.tsx`; `apps/skills-showcase/src/showcase/tui/workflow.css`; `tasks/todo.md`; `tasks/history.md`.
 - **Per-file purpose:** `TuiWorkflow.tsx` now renders workflow steps `0..activeStep` as transcript turns with per-step receipt and benchmark badge state; `workflow.css` adds the transcript wrapper spacing needed by the new list; `tasks/todo.md` records completion, review, and the next-step plan; `tasks/history.md` records the shipped work.
 - **User-goal mapping:** The keyed single active card was removed, so forward playback keeps prior turns mounted and expanded instead of replacing the visible replay surface.
@@ -2078,10 +2100,10 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
 - **Adversarial review:** Diff-aware self-review checked whether per-step benchmark receipts still use each step index, whether old replay labels remain accessible for tests, whether previous turns stay mounted on forward progress, and whether the extra CSS file is justified. Finding: Step 42.1 still hides later turns when jumping back because player state only has `activeStep`; accepted as planned residual scope for Step 42.2.
 - **Residual risk:** Until Step 42.2, dot navigation to an earlier step still lowers the rendered transcript depth because `activeStep` is the only depth signal. This is visible to `/workflows` users who jump backward after advancing, and Step 42.2 is the explicit follow-up.
 - **Rollback note:** Revert the Step 42.1 commit to restore the single active replay card and remove `.tui-workflow__transcript`.
-- **Next command:** `$run`
+- **Next command:** `$exec`
 
 **Next work:** Step 42.5 — restyle `/workflows` for persistent transcript layout across desktop and mobile.
-**Recommended next command:** `$run`
+**Recommended next command:** `$exec`
 
 ## Targeted Skill Builder: update-packages Benchmark Lockfile Migration Ordering 2026-05-19
 
@@ -2133,7 +2155,7 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
 - Reviewed runs: Claude `tests/benchmarks/runs/update-packages-claude-f8355f37/` and Codex `tests/benchmarks/runs/update-packages-codex-1ed5350e/`.
 - Deterministic context: both agents passed 3/3 hard assertions with no infrastructure blocks. Claude deterministic quality was 97.0% with one critical quality failure; Codex deterministic quality was 100.0%.
 - Subjective verdict: mostly excellent; median score 93, range 72-95.
-- Common strengths: retained age-gate evidence, age-eligible package selections, skipped fresh package versions, package-manager pin proof, major-upgrade batching, focused smoke checks, and runner-native `/run` or `$run` handoffs.
+- Common strengths: retained age-gate evidence, age-eligible package selections, skipped fresh package versions, package-manager pin proof, major-upgrade batching, focused smoke checks, and runner-native `/exec` or `$exec` handoffs.
 - Material weakness: Claude run 2 is only usable because it recommends removing `package-lock.json` before `pnpm import` and uses bare `/migrate` for known React/Vitest compatibility risks.
 - Report written: `benchmark/review-update-packages-2026-05-19.md`.
 - Generated evidence refreshed: `docs/benchmark-results-matrix.md`, `docs/skills-showcase/assets/skills-data.js`, `docs/skills-showcase/assets/github-proof-data.js`, `apps/skills-showcase/public/assets/skills-data.js`, and `apps/skills-showcase/public/assets/github-proof-data.js`.
@@ -2241,7 +2263,7 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
 - Benchmark: latest `pnpm bench --skill update-packages --agent both --runs 3 --chunk-size 3 --pause 0` completed with Claude session `3612131f` and Codex session `d942a073`.
 - Results: Claude hard assertions passed 3/3 evaluated runs with no infrastructure-blocked runs and 2 deterministic quality critical failures; Codex hard assertions passed 3/3 evaluated runs with no blocked runs and no quality failures.
 - Report: `benchmark/test-update-packages-2026-05-18.md`.
-- Latest ship: pending current `$run` commit and push to `master`.
+- Latest ship: pending current `$exec` commit and push to `master`.
 - Recommended next command: `$session-triage update-packages benchmark failure`.
 
 ## Triage: update-packages Benchmark Failure
@@ -2431,7 +2453,7 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
 
 - Source runs reviewed: Claude `tests/benchmarks/runs/provision-agentic-config-claude-31066d9f/`; Codex `tests/benchmarks/runs/provision-agentic-config-codex-5fbace33/`.
 - Hard assertion context: both runners passed 3/3 with 0 infrastructure blocks. Deterministic output quality was 93.4% for Claude and 95.3% for Codex.
-- Subjective verdict: good. The retained `AGENTS.md` outputs are useful and include the required orchestration, verification, shipping, monorepo safety, no-GitHub-Actions, and `$run` handoff content.
+- Subjective verdict: good. The retained `AGENTS.md` outputs are useful and include the required orchestration, verification, shipping, monorepo safety, no-GitHub-Actions, and `$exec` handoff content.
 - Material weakness: artifact-reference ergonomics. Handoffs should consistently point to repo-relative `./AGENTS.md` or `./CLAUDE.md` and avoid surfacing benchmark temp paths.
 - Artifacts written: `benchmark/review-provision-agentic-config-2026-05-22.md` and `alignment/benchmark-agent-review-provision-agentic-config.html`.
 - Alignment preview: opened successfully with `open alignment/benchmark-agent-review-provision-agentic-config.html`.

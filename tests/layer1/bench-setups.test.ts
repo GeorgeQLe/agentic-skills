@@ -45,7 +45,7 @@ const TESTS_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 describe("benchmark setup registry", () => {
   it("lists repository skills as benchmarkable targets", () => {
     expect(supportedBenchSkills()).toContain("design-system");
-    expect(supportedBenchSkills()).toContain("run");
+    expect(supportedBenchSkills()).toContain("exec");
   });
 
   it("uses custom setup for skills with domain-specific assertions", () => {
@@ -81,28 +81,28 @@ describe("benchmark setup registry", () => {
   });
 
   it("uses custom setup for Tier 1 workflow skills", () => {
-    const setup = resolveBenchSetup("run");
-    const target = resolveBenchTarget("run");
+    const setup = resolveBenchSetup("exec");
+    const target = resolveBenchTarget("exec");
 
-    expect(setup?.skill).toBe("run");
-    expect(setup).toBe(CUSTOM_BENCH_SETUPS.run);
+    expect(setup?.skill).toBe("exec");
+    expect(setup).toBe(CUSTOM_BENCH_SETUPS.exec);
     expect(target).toMatchObject({
-      skill: "run",
+      skill: "exec",
       coverageStatus: "custom",
       setupPath: "tests/layer4/setups/tier1-workflows.setup.ts",
     });
-    expect(target?.setup?.skill).toBe("run");
+    expect(target?.setup?.skill).toBe("exec");
   });
 
-  it("gives the run workflow enough budget for Claude plan output", () => {
-    const setup = resolveBenchSetup("run");
+  it("gives the exec workflow enough budget for Claude plan output", () => {
+    const setup = resolveBenchSetup("exec");
 
     expect(setup?.perRunBudgetUsd).toBe(BENCH_BUDGETS_USD.standard);
   });
 
   it("exposes quality evaluators for opted-in custom setups", () => {
     const tier1Skills = [
-      "run",
+      "exec",
       "ship",
       "ship-end",
       "roadmap",
@@ -121,7 +121,7 @@ describe("benchmark setup registry", () => {
       expect(setup?.qualityEvaluator, `${skill} quality evaluator`).toBeDefined();
     }
 
-    expect(resolveBenchSetup("run")?.qualityEvaluator?.rubric.criteria.map((criterion) => criterion.id)).toEqual(
+    expect(resolveBenchSetup("exec")?.qualityEvaluator?.rubric.criteria.map((criterion) => criterion.id)).toEqual(
       expect.arrayContaining([
         "evidence-linked",
         "scope-control",
@@ -179,7 +179,7 @@ describe("benchmark setup registry", () => {
       "## Rollback note",
       "Revert `tests/example.test.ts` and `tasks/todo.md`.",
       "## Next command",
-      "`$run`",
+      "`$exec`",
     ].join("\n"));
     const metaGoal = evaluator?.evaluate([
       "# Ship Manifest",
@@ -195,7 +195,7 @@ describe("benchmark setup registry", () => {
       "## Rollback note",
       "Revert `tests/example.test.ts` and `tasks/todo.md`.",
       "## Next command",
-      "`$run`",
+      "`$exec`",
     ].join("\n"));
     const bulletFieldGoal = evaluator?.evaluate([
       "# Ship Manifest",
@@ -206,7 +206,7 @@ describe("benchmark setup registry", () => {
       "- **Tests run:** Fixture validation passed (per `tasks/todo.md` Review section); no additional test command executed in this session.",
       "- **Deploy status:** Not deployed. Staging/production deploy was skipped.",
       "- **Rollback note:** Revert the two changed files (`tests/example.test.ts`, `tasks/todo.md`) to their prior commit state to undo this step.",
-      "- **Next command:** `/run`",
+      "- **Next command:** `/exec`",
     ].join("\n"));
 
     expect(strong?.criteria.find((criterion) => criterion.id === "ship-goal-specificity")).toMatchObject({
@@ -279,8 +279,8 @@ describe("benchmark setup registry", () => {
     expect(nextCommandHandoffPattern.test("**Next work:** verify the scoped incident")).toBe(true);
     expect(recommendedNextRoutePattern("/session-triage").test(slashRoute)).toBe(true);
     expect(recommendedNextRoutePattern("$targeted-skill-builder").test(dollarRoute)).toBe(true);
-    expect(assertRecommendedExactNextRoute("**Recommended next command:** `$run`", "$run")).toMatchObject({ pass: true });
-    expect(recommendedExactNextRoutePattern("$run").test("**Recommended next command:** $run for Codex")).toBe(false);
+    expect(assertRecommendedExactNextRoute("**Recommended next command:** `$exec`", "$exec")).toMatchObject({ pass: true });
+    expect(recommendedExactNextRoutePattern("$exec").test("**Recommended next command:** $exec for Codex")).toBe(false);
   });
 
   it("requires runner-specific final routing and allows fixture-backed package-lock evidence for update-packages", () => {
@@ -317,10 +317,10 @@ describe("benchmark setup registry", () => {
     ].join("\n\n");
 
     const codexWorkDir = mkdtempSync(resolve(tmpdir(), "update-packages-codex-route-"));
-    writeFileSync(resolve(codexWorkDir, "package-update-plan.md"), reportBody("$run"));
+    writeFileSync(resolve(codexWorkDir, "package-update-plan.md"), reportBody("$exec"));
 
     const claudeWorkDir = mkdtempSync(resolve(tmpdir(), "update-packages-claude-route-"));
-    writeFileSync(resolve(claudeWorkDir, "package-update-plan.md"), reportBody("/run"));
+    writeFileSync(resolve(claudeWorkDir, "package-update-plan.md"), reportBody("/exec"));
 
     const codexAssertions = setup!.assertResult(
       { stdout: "", stderr: "", exitCode: 0, workDir: codexWorkDir, files: ["package-update-plan.md"] },
@@ -338,8 +338,8 @@ describe("benchmark setup registry", () => {
     expect(codexAssertions.find((assertion) => assertion.description === "Output avoids unqualified pnpm@latest")).toMatchObject({ pass: true });
     expect(codexAssertions.find((assertion) => assertion.description === "Output proves selected pnpm toolchain age eligibility")).toMatchObject({ pass: true });
     expect(codexAssertions.find((assertion) => assertion.description === "Output preserves age-gate key semantics")).toMatchObject({ pass: true });
-    expect(codexAssertions.find((assertion) => assertion.description === "Output recommends $run")).toMatchObject({ pass: true });
-    expect(claudeAssertions.find((assertion) => assertion.description === "Output recommends /run")).toMatchObject({ pass: true });
+    expect(codexAssertions.find((assertion) => assertion.description === "Output recommends $exec")).toMatchObject({ pass: true });
+    expect(claudeAssertions.find((assertion) => assertion.description === "Output recommends /exec")).toMatchObject({ pass: true });
 
     const quality = setup!.qualityEvaluator?.evaluate(readFileSync(resolve(codexWorkDir, "package-update-plan.md"), "utf8"));
 
@@ -357,7 +357,7 @@ describe("benchmark setup registry", () => {
     const checklistWorkDir = mkdtempSync(resolve(tmpdir(), "update-packages-verification-checklist-"));
     writeFileSync(
       resolve(checklistWorkDir, "package-update-plan.md"),
-      reportBody("$run").replace("## Verification", "## Full Verification Checklist"),
+      reportBody("$exec").replace("## Verification", "## Full Verification Checklist"),
     );
     const checklistAssertions = setup!.assertResult(
       { stdout: "", stderr: "", exitCode: 0, workDir: checklistWorkDir, files: ["package-update-plan.md"] },
@@ -384,7 +384,7 @@ describe("benchmark setup registry", () => {
         "Eligible versions older than 8 days: react 19.2.0, zod 3.25.76, vitest 3.2.4.",
         "Skipped packages: react 19.3.0, zod 4.1.12, and vitest 4.0.0.",
         "Verification commands: pnpm install --frozen-lockfile, pnpm run build, pnpm run test.",
-        "Recommended next command: $run",
+        "Recommended next command: $exec",
       ].join("\n\n"),
     );
 
@@ -421,7 +421,7 @@ describe("benchmark setup registry", () => {
       "Focused smoke checks: run the primary React render smoke test and Vitest config smoke test.",
       "Stop condition: if React compatibility requires broad source migration, route to $migrate react.",
       "Verification commands: pnpm install --frozen-lockfile, pnpm run build, pnpm run test.",
-      "Recommended next command: $run",
+      "Recommended next command: $exec",
     ];
 
     const assertPnpmLatest = (line: string) => {
@@ -500,7 +500,7 @@ describe("benchmark setup registry", () => {
       "Focused smoke checks: run the primary React render smoke test and Vitest config smoke test.",
       "Stop condition: if React compatibility requires broad source migration, route to $migrate react.",
       "Verification commands: pnpm install --frozen-lockfile, pnpm run build, pnpm run test.",
-      "Recommended next command: $run",
+      "Recommended next command: $exec",
     ].join("\n\n");
     writeFileSync(resolve(workDir, "package-update-plan.md"), retainedPlan);
 
@@ -545,7 +545,7 @@ describe("benchmark setup registry", () => {
       "pnpm install --frozen-lockfile",
       "pnpm run build",
       "pnpm run test",
-      "Recommended next command: /run",
+      "Recommended next command: /exec",
     ].join("\n\n"));
 
     expect(retainedHeadingShape?.criteria.find((criterion) => criterion.id === "workflow-artifact-reference")).toMatchObject({ passed: true });
@@ -567,7 +567,7 @@ describe("benchmark setup registry", () => {
       "Compatibility checks: verify React renderer/framework peer compatibility and Vitest/Vite/TypeScript config compatibility.",
       "Focused smoke checks: run the primary React render smoke test and Vitest config smoke test.",
       "Stop condition: if React compatibility requires broad source migration, route to $migrate react.",
-      "Recommended next command: $run",
+      "Recommended next command: $exec",
     ].join("\n\n"));
 
     expect(retainedFilenameShape?.criteria.find((criterion) => criterion.id === "workflow-artifact-reference")).toMatchObject({ passed: true });
@@ -588,7 +588,7 @@ describe("benchmark setup registry", () => {
       "Batch C React 18 to 19: mutation command `pnpm add react@19.2.0`; verification command `pnpm build`; expected proof focused smoke-test output; stop condition routes broad compatibility work to $migrate react.",
       "Compatibility checks: verify React renderer/framework peer compatibility and Vitest/Vite/TypeScript config compatibility.",
       "Focused smoke checks: run the primary React render smoke test and Vitest config smoke test.",
-      "Recommended next command: $run",
+      "Recommended next command: $exec",
     ].join("\n\n"));
 
     expect(retainedLetteredBatchShape?.criteria.find((criterion) => criterion.id === "workflow-actionability")).toMatchObject({ passed: true });
@@ -609,7 +609,7 @@ describe("benchmark setup registry", () => {
       "Batch 4 React 18 to 19: mutation command `pnpm add react@19.2.0`; verification command `pnpm build`; expected proof focused smoke-test output; stop condition routes broad compatibility work to $migrate react.",
       "Compatibility checks: verify React renderer/framework peer compatibility and Vitest/Vite/TypeScript config compatibility.",
       "Focused smoke checks: run the primary React render smoke test and Vitest config smoke test.",
-      "Recommended next command: $run",
+      "Recommended next command: $exec",
     ].join("\n\n"));
 
     expect(retainedOneBasedBatchShape?.criteria.find((criterion) => criterion.id === "workflow-actionability")).toMatchObject({ passed: true });
@@ -630,7 +630,7 @@ describe("benchmark setup registry", () => {
         "Age-gate config: `.npmrc` keeps npm's relative guard `min-release-age=8`; pnpm coverage uses `minimum-release-age=11520`, and pnpm project config uses `minimumReleaseAge: 11520` when required.",
         "Eligible versions older than 8 days: react 19.2.0, zod 3.25.76, vitest 3.2.4.",
         "Skipped packages: react 19.3.0, zod 4.1.12, and vitest 4.0.0.",
-        "Recommended next command: $run",
+        "Recommended next command: $exec",
       ].join("\n\n"),
     );
 
@@ -668,7 +668,7 @@ describe("benchmark setup registry", () => {
         "pnpm install --frozen-lockfile",
         "pnpm test",
         "pnpm build",
-        "Recommended next command: /run",
+        "Recommended next command: /exec",
       ].join("\n\n"),
     );
 
@@ -704,7 +704,7 @@ describe("benchmark setup registry", () => {
         "Compatibility checks: verify React renderer/framework peer compatibility and Vitest/Vite/TypeScript config compatibility.",
         "Focused smoke checks: run the primary React render smoke test and Vitest config smoke test.",
         "Verification commands: pnpm install --frozen-lockfile, pnpm run build, pnpm run test.",
-        "Recommended next command: /run",
+        "Recommended next command: /exec",
       ].join("\n\n"),
     );
 
@@ -736,7 +736,7 @@ describe("benchmark setup registry", () => {
         "Batch 2 React 18 to 19: mutation command `pnpm add react@19.2.0`; verification command `pnpm build`; expected proof focused smoke-test output; stop condition routes broad compatibility work to $migrate react.",
         "Compatibility checks: verify React renderer/framework peer compatibility and Vitest/Vite/TypeScript config compatibility.",
         "Focused smoke checks: run the primary React render smoke test and Vitest config smoke test.",
-        "Recommended next command: $run",
+        "Recommended next command: $exec",
       ].join("\n\n"),
     );
 
@@ -762,7 +762,7 @@ describe("benchmark setup registry", () => {
         "Batch 2 React 18 to 19: mutation command `pnpm add react@19.2.0`; verification command `pnpm build`; expected proof focused smoke-test output; stop condition routes broad compatibility work to $migrate react.",
         "Compatibility checks: verify React renderer/framework peer compatibility and Vitest/Vite/TypeScript config compatibility.",
         "Focused smoke checks: run the primary React render smoke test and Vitest config smoke test.",
-        "Recommended next command: $run",
+        "Recommended next command: $exec",
       ].join("\n\n"),
     );
 
@@ -792,7 +792,7 @@ describe("benchmark setup registry", () => {
         "Focused smoke checks: run the primary React render smoke test and Vitest config smoke test.",
         "Stop condition: if React compatibility requires broad source migration, route to $migrate react.",
         "Verification commands: pnpm install, pnpm test, pnpm build.",
-        "Recommended next command: $run",
+        "Recommended next command: $exec",
       ].join("\n\n"),
     );
 
@@ -815,7 +815,7 @@ describe("benchmark setup registry", () => {
       "Focused smoke checks: run the primary React render smoke test and Vitest config smoke test.",
       "Stop condition: if React compatibility requires broad source migration, route to $migrate react.",
       "Verification commands: pnpm install --frozen-lockfile, pnpm run build, pnpm run test.",
-      "Recommended next command: $run",
+      "Recommended next command: $exec",
     ];
 
     const evaluatePlan = (lines: string[]) => {
@@ -944,7 +944,7 @@ describe("benchmark setup registry", () => {
         "For modern pnpm project config, also use pnpm `minimumReleaseAge: 11520`.",
         "Eligible versions older than 8 days: react 19.2.0, zod 3.25.76, vitest 3.2.4.",
         "Skipped packages: react 19.3.0, zod 4.1.12, and vitest 4.0.0.",
-        "Recommended next command: $run",
+        "Recommended next command: $exec",
       ].join("\n\n"),
     );
 
@@ -986,7 +986,7 @@ describe("benchmark setup registry", () => {
     );
 
     expect(assertions.find((assertion) => assertion.description === "Output includes next command handoff")).toMatchObject({ pass: true });
-    expect(assertions.find((assertion) => assertion.description === "Output recommends $run")).toMatchObject({ pass: false });
+    expect(assertions.find((assertion) => assertion.description === "Output recommends $exec")).toMatchObject({ pass: false });
 
     const quality = setup!.qualityEvaluator?.evaluate(readFileSync(resolve(workDir, "package-update-plan.md"), "utf8"));
 
@@ -994,14 +994,14 @@ describe("benchmark setup registry", () => {
     expect(quality?.criticalFailures).toContain("workflow-next-route");
   });
 
-  it("uses agent-specific route assertions for the run workflow setup", () => {
-    const setup = resolveBenchSetup("run");
+  it("uses agent-specific route assertions for the exec workflow setup", () => {
+    const setup = resolveBenchSetup("exec");
     expect(setup).toBeDefined();
 
     const workDir = mkdtempSync(resolve(tmpdir(), "run-route-"));
     mkdirSync(resolve(workDir, "tasks"), { recursive: true });
     writeFileSync(
-      resolve(workDir, "run-plan.md"),
+      resolve(workDir, "exec-plan.md"),
       [
         "# Run Plan",
         "",
@@ -1022,7 +1022,7 @@ describe("benchmark setup registry", () => {
         stderr: "",
         exitCode: 0,
         workDir,
-        files: ["run-plan.md"],
+        files: ["exec-plan.md"],
       },
       { agent: "claude" },
     );
@@ -1032,7 +1032,7 @@ describe("benchmark setup registry", () => {
         stderr: "",
         exitCode: 0,
         workDir,
-        files: ["run-plan.md"],
+        files: ["exec-plan.md"],
       },
       { agent: "codex" },
     );
@@ -1040,12 +1040,12 @@ describe("benchmark setup registry", () => {
     expect(claudeAssertions.find((assertion) => assertion.description === "Output recommends /ship")).toMatchObject({
       pass: true,
     });
-    expect(codexAssertions.find((assertion) => assertion.description === "Output recommends $run")).toMatchObject({
+    expect(codexAssertions.find((assertion) => assertion.description === "Output recommends $exec")).toMatchObject({
       pass: false,
     });
 
     writeFileSync(
-      resolve(workDir, "run-plan.md"),
+      resolve(workDir, "exec-plan.md"),
       [
         "# Run Plan",
         "",
@@ -1056,7 +1056,7 @@ describe("benchmark setup registry", () => {
         "Shipping note: ship verified changes.",
         "",
         "Next Command",
-        "`$run`",
+        "`$exec`",
       ].join("\n"),
     );
 
@@ -1067,10 +1067,10 @@ describe("benchmark setup registry", () => {
           stderr: "",
           exitCode: 0,
           workDir,
-          files: ["run-plan.md"],
+          files: ["exec-plan.md"],
         },
         { agent: "codex" },
-      ).find((assertion) => assertion.description === "Output recommends $run"),
+      ).find((assertion) => assertion.description === "Output recommends $exec"),
     ).toMatchObject({
       pass: true,
     });
@@ -1273,7 +1273,7 @@ describe("benchmark setup registry", () => {
       "## Automation Opportunities",
       "- Add a targeted builder guard for validation and lessons capture.",
       "",
-      "Likely owner surface: the run workflow should own the post-doc-edit validation and lessons capture gate.",
+      "Likely owner surface: the exec workflow should own the post-doc-edit validation and lessons capture gate.",
       "",
       "Validation expectation: add a layer1 contract test and one-run benchmark smoke for this handoff.",
       "",
@@ -1348,7 +1348,7 @@ describe("benchmark setup registry", () => {
       "| --- | --- | --- | --- | --- |",
       "| Validation and lessons capture skipped after doc edits | 3/3 sessions | Targeted skill builder update | `run` skill post-edit step | Skill must require a validation pass and lessons-file update before allowing ship/exit |",
       "",
-      "Ownership note: explicit evidence points to the Codex `$run` path on 2 of 3 sessions; the third session is not stated.",
+      "Ownership note: explicit evidence points to the Codex `$exec` path on 2 of 3 sessions; the third session is not stated.",
       "",
       "**Recommended next command:** /targeted-skill-builder run post-doc-edit validation and lessons capture gate",
     ].join("\n");
@@ -1457,13 +1457,13 @@ describe("benchmark setup registry", () => {
   it("lints analyze-sessions contracts for remediation-ready targeted-skill-builder handoffs", () => {
     const contracts = [
       {
-        path: "global/claude/analyze-sessions/SKILL.md",
-        route: "/targeted-skill-builder <concrete gap phrase>",
-        example: "/targeted-skill-builder run post-doc-edit validation and lessons capture gate",
+        path: "packs/session-analytics/claude/analyze-sessions/SKILL.md",
+        route: "/targeted-skill-builder` (skill-dev pack) `<concrete gap phrase>",
+        example: "/targeted-skill-builder` (skill-dev pack) `run post-doc-edit validation and lessons capture gate",
         runner: "Claude-native",
       },
       {
-        path: "global/codex/analyze-sessions/SKILL.md",
+        path: "packs/session-analytics/codex/analyze-sessions/SKILL.md",
         route: "$targeted-skill-builder <concrete gap phrase>",
         example: "$targeted-skill-builder run post-doc-edit validation and lessons capture gate",
         runner: "Codex-native",
@@ -1525,7 +1525,7 @@ describe("benchmark setup registry", () => {
         "Revert the fixture changes.",
         "",
         "## Next command",
-        "`/run`",
+        "`/exec`",
       ].join("\n"),
     );
 
@@ -1550,10 +1550,10 @@ describe("benchmark setup registry", () => {
       { agent: "codex" },
     );
 
-    expect(claudeAssertions.find((assertion) => assertion.description === "Output recommends /run")).toMatchObject({
+    expect(claudeAssertions.find((assertion) => assertion.description === "Output recommends /exec")).toMatchObject({
       pass: true,
     });
-    expect(codexAssertions.find((assertion) => assertion.description === "Output recommends $run")).toMatchObject({
+    expect(codexAssertions.find((assertion) => assertion.description === "Output recommends $exec")).toMatchObject({
       pass: false,
     });
 
@@ -1579,7 +1579,7 @@ describe("benchmark setup registry", () => {
         "Revert the fixture changes.",
         "",
         "## Next command",
-        "`$run`",
+        "`$exec`",
       ].join("\n"),
     );
 
@@ -1593,7 +1593,7 @@ describe("benchmark setup registry", () => {
           files: ["ship-manifest.md"],
         },
         { agent: "codex" },
-      ).find((assertion) => assertion.description === "Output recommends $run"),
+      ).find((assertion) => assertion.description === "Output recommends $exec"),
     ).toMatchObject({
       pass: true,
     });
@@ -1631,7 +1631,7 @@ describe("benchmark setup registry", () => {
         "Revert the fixture changes.",
         "",
         "## Next command",
-        "`$run`",
+        "`$exec`",
       ].join("\n"),
     );
 
@@ -1642,31 +1642,31 @@ describe("benchmark setup registry", () => {
   it("requires run and ship skill contracts to normalize copied task routes for the active CLI", () => {
     const contracts = [
       {
-        path: "global/codex/run/SKILL.md",
+        path: "packs/exec-loop/codex/exec/SKILL.md",
         native: "Codex syntax",
         copied: "Claude slash commands",
-        example: "/run",
+        example: "/exec",
         converted: "$...",
       },
       {
-        path: "global/codex/ship/SKILL.md",
+        path: "packs/exec-loop/codex/ship/SKILL.md",
         native: "Codex syntax",
         copied: "Claude slash commands",
-        example: "/run",
+        example: "/exec",
         converted: "$...",
       },
       {
-        path: "global/claude/run/SKILL.md",
+        path: "packs/exec-loop/claude/exec/SKILL.md",
         native: "Claude syntax",
         copied: "Codex dollar commands",
-        example: "$run",
+        example: "$exec",
         converted: "/...",
       },
       {
-        path: "global/claude/ship/SKILL.md",
+        path: "packs/exec-loop/claude/ship/SKILL.md",
         native: "Claude syntax",
         copied: "Codex dollar commands",
-        example: "$run",
+        example: "$exec",
         converted: "/...",
       },
     ];
@@ -1716,7 +1716,7 @@ describe("benchmark setup registry", () => {
     };
 
     const claudeWorkDir = mkdtempSync(resolve(tmpdir(), "ship-end-claude-route-"));
-    writeHandoff(claudeWorkDir, "/run");
+    writeHandoff(claudeWorkDir, "/exec");
     const claudeAssertions = setup!.assertResult(
       { stdout: "", stderr: "", exitCode: 0, workDir: claudeWorkDir, files: ["session-handoff.md"] },
       { agent: "claude" },
@@ -1724,17 +1724,17 @@ describe("benchmark setup registry", () => {
     expect(claudeAssertions.find((assertion) => assertion.description === "Output includes Step 1.2")).toMatchObject({
       pass: true,
     });
-    expect(claudeAssertions.find((assertion) => assertion.description === "Output recommends /run")).toMatchObject({
+    expect(claudeAssertions.find((assertion) => assertion.description === "Output recommends /exec")).toMatchObject({
       pass: true,
     });
 
     const codexWorkDir = mkdtempSync(resolve(tmpdir(), "ship-end-codex-route-"));
-    writeHandoff(codexWorkDir, "$run");
+    writeHandoff(codexWorkDir, "$exec");
     const codexAssertions = setup!.assertResult(
       { stdout: "", stderr: "", exitCode: 0, workDir: codexWorkDir, files: ["session-handoff.md"] },
       { agent: "codex" },
     );
-    expect(codexAssertions.find((assertion) => assertion.description === "Output recommends $run")).toMatchObject({
+    expect(codexAssertions.find((assertion) => assertion.description === "Output recommends $exec")).toMatchObject({
       pass: true,
     });
     expect(codexAssertions.find((assertion) => assertion.description === "Output uses single active-runner final route")).toMatchObject({
@@ -1750,7 +1750,7 @@ describe("benchmark setup registry", () => {
     });
 
     const missingNextWorkDir = mkdtempSync(resolve(tmpdir(), "ship-end-missing-next-work-"));
-    writeHandoff(missingNextWorkDir, "/run", "- Decide what to work on next.");
+    writeHandoff(missingNextWorkDir, "/exec", "- Decide what to work on next.");
     expect(
       setup!.assertResult(
         { stdout: "", stderr: "", exitCode: 0, workDir: missingNextWorkDir, files: ["session-handoff.md"] },
@@ -1766,7 +1766,7 @@ describe("benchmark setup registry", () => {
       setup!.assertResult(
         { stdout: "", stderr: "", exitCode: 0, workDir: recursiveRouteWorkDir, files: ["session-handoff.md"] },
         { agent: "claude" },
-      ).find((assertion) => assertion.description === "Output recommends /run"),
+      ).find((assertion) => assertion.description === "Output recommends /exec"),
     ).toMatchObject({
       pass: false,
     });
@@ -1791,15 +1791,15 @@ describe("benchmark setup registry", () => {
         "- Complete `Step 1.2 next` from `tasks/todo.md`.",
         "",
         "## Next Command",
-        "- Claude: `/run`",
-        "- Codex: `$run`",
+        "- Claude: `/exec`",
+        "- Codex: `$exec`",
       ].join("\n"),
     );
     const dualAssertions = setup!.assertResult(
       { stdout: "", stderr: "", exitCode: 0, workDir: dualRouteWorkDir, files: ["session-handoff.md"] },
       { agent: "codex" },
     );
-    expect(dualAssertions.find((assertion) => assertion.description === "Output recommends $run")).toMatchObject({
+    expect(dualAssertions.find((assertion) => assertion.description === "Output recommends $exec")).toMatchObject({
       pass: true,
     });
     expect(dualAssertions.find((assertion) => assertion.description === "Output uses single active-runner final route")).toMatchObject({
@@ -1814,11 +1814,11 @@ describe("benchmark setup registry", () => {
     const setup = resolveBenchSetup("spec-interview");
     expect(setup).toBeDefined();
 
-    const codexSkill = readFileSync(resolve(TESTS_ROOT, "../global/codex/spec-interview/SKILL.md"), "utf8");
-    const claudeSkill = readFileSync(resolve(TESTS_ROOT, "../global/claude/spec-interview/SKILL.md"), "utf8");
+    const codexSkill = readFileSync(resolve(TESTS_ROOT, "../packs/product-design/codex/spec-interview/SKILL.md"), "utf8");
+    const claudeSkill = readFileSync(resolve(TESTS_ROOT, "../packs/product-design/claude/spec-interview/SKILL.md"), "utf8");
 
-    expect(codexSkill).toContain("Treat `$research-roadmap --post-spec` as the primary next route after a completed or updated spec when research gaps exist");
-    expect(claudeSkill).toContain("Treat `/research-roadmap --post-spec` as the primary next route after a completed or updated spec when research gaps exist");
+    expect(codexSkill).toContain("If unchecked post-prototype items remain, halt and recommend completing those first.");
+    expect(claudeSkill).toContain("If unchecked post-prototype items remain, halt and recommend completing those first.");
 
     const workDir = mkdtempSync(resolve(tmpdir(), "spec-interview-route-"));
     mkdirSync(resolve(workDir, "specs"), { recursive: true });
@@ -1918,8 +1918,8 @@ describe("benchmark setup registry", () => {
     expect(setup!.prompt).toContain("Treat the planning destination as confirmed for roadmap sequencing");
     expect(setup!.prompt).toContain("do not route directly to spec-interview");
 
-    const codexSkill = readFileSync(resolve(TESTS_ROOT, "../global/codex/feature-interview/SKILL.md"), "utf8");
-    const claudeSkill = readFileSync(resolve(TESTS_ROOT, "../global/claude/feature-interview/SKILL.md"), "utf8");
+    const codexSkill = readFileSync(resolve(TESTS_ROOT, "../packs/product-design/codex/feature-interview/SKILL.md"), "utf8");
+    const claudeSkill = readFileSync(resolve(TESTS_ROOT, "../packs/product-design/claude/feature-interview/SKILL.md"), "utf8");
 
     expect(codexSkill).toContain("Artifact path: the exact path of this interview log.");
     expect(claudeSkill).toContain("Artifact path: the exact path of this interview log.");
@@ -2079,7 +2079,7 @@ describe("benchmark setup registry", () => {
         "",
         "## Timeline",
         "",
-        "The user invoked `$run`, the agent skipped planned validation, and the agent shipped.",
+        "The user invoked `$exec`, the agent skipped planned validation, and the agent shipped.",
         "",
         "## Root cause",
         "",
@@ -2127,13 +2127,13 @@ describe("benchmark setup registry", () => {
         "`session-log.md` and `tasks/lessons.md`.",
         "",
         "## User-identified issue",
-        "The user says `$run` skipped coverage matrix validation and shipped anyway.",
+        "The user says `$exec` skipped coverage matrix validation and shipped anyway.",
         "",
         "## Verification verdict",
         "Partially verified. The log says the agent skipped coverage matrix validation and shipped anyway.",
         "",
         "## Timeline",
-        "The user invoked `$run`, the agent skipped planned validation, and the agent shipped.",
+        "The user invoked `$exec`, the agent skipped planned validation, and the agent shipped.",
         "",
         "## Root cause",
         "Agent noncompliance with an adequate existing validation rule.",
@@ -2148,7 +2148,7 @@ describe("benchmark setup registry", () => {
         "Run the coverage matrix validation and stop if it fails.",
         "",
         "## Confidence and evidence gaps",
-        "The fixture does not include a full `$run` transcript, so no recurrence claim is made.",
+        "The fixture does not include a full `$exec` transcript, so no recurrence claim is made.",
         "",
         "## Recommended next skill",
         "Recommended next skill: none",
@@ -2209,10 +2209,10 @@ describe("benchmark setup registry", () => {
           "Partially verified. The log confirms the agent skipped coverage matrix validation and shipped anyway.",
           "",
           "## Timeline",
-          "The user invoked `$run`, the agent skipped planned validation, and shipped anyway.",
+          "The user invoked `$exec`, the agent skipped planned validation, and shipped anyway.",
           "",
           "## Root cause",
-          "Missing evidence gate in the shipping path. No `/run` skill file was present in scope to confirm whether the contract was silent or ignored.",
+          "Missing evidence gate in the shipping path. No `/exec` skill file was present in scope to confirm whether the contract was silent or ignored.",
           "",
           "## Recommended fix",
           "Add a blocking pre-ship validation gate referencing `tasks/lessons.md`.",
@@ -2236,7 +2236,7 @@ describe("benchmark setup registry", () => {
           "Agent noncompliance with an adequate contract. The existing rule already requires validation before shipping.",
           "",
           "## Recommended fix",
-          "Patch `$run` with a new validation evidence gate and update the contract.",
+          "Patch `$exec` with a new validation evidence gate and update the contract.",
           "",
           "## Next command",
           "Recommended next command: $targeted-skill-builder run validation evidence gate",
@@ -2253,7 +2253,7 @@ describe("benchmark setup registry", () => {
           "Treat this as an execution compliance failure. Re-run the missing validation and only consider skill hardening if recurrence evidence appears.",
           "",
           "## Next command",
-          "Recommended next command: $run",
+          "Recommended next command: $exec",
         ].join("\n"),
       ),
     ).toMatchObject({ score: 1 });
@@ -2940,7 +2940,7 @@ describe("benchmark setup registry", () => {
     expect(nextRouteCriterion?.evaluate("Recommended next skill: $series-spec")).toMatchObject({
       score: 1,
     });
-    expect(nextRouteCriterion?.evaluate("Recommended next command: $run")).toMatchObject({
+    expect(nextRouteCriterion?.evaluate("Recommended next command: $exec")).toMatchObject({
       score: 0,
     });
     expect(nextRouteCriterion?.evaluate("Next: $series-spec")).toMatchObject({
@@ -3002,7 +3002,7 @@ describe("benchmark setup registry", () => {
 
   it("resolves blocked coverage rows without a runnable setup", () => {
     const rows = benchmarkCoverageMatrix().map((row): BenchCoverageRow => (
-      row.skill === "run"
+      row.skill === "exec"
         ? {
           ...row,
           coverage_status: "blocked",
@@ -3012,20 +3012,20 @@ describe("benchmark setup registry", () => {
         : row
     ));
 
-    expect(resolveBenchTarget("run", rows)).toMatchObject({
-      skill: "run",
+    expect(resolveBenchTarget("exec", rows)).toMatchObject({
+      skill: "exec",
       coverageStatus: "blocked",
       blockedReason: "Requires paid external account",
       nextCommand: "$guide",
     });
-    expect(resolveBenchTarget("run", rows)?.setup).toBeUndefined();
+    expect(resolveBenchTarget("exec", rows)?.setup).toBeUndefined();
   });
 
   it("lists benchmark skills with coverage status", () => {
     expect(supportedBenchSkillRows().find((row) => row.skill === "design-system")).toMatchObject({
       coverage_status: "custom",
     });
-    expect(supportedBenchSkillRows().find((row) => row.skill === "run")).toMatchObject({
+    expect(supportedBenchSkillRows().find((row) => row.skill === "exec")).toMatchObject({
       coverage_status: "custom",
     });
     expect(supportedBenchSkillRows().find((row) => row.skill === "affected")).toMatchObject({
@@ -3046,7 +3046,7 @@ describe("benchmark setup registry", () => {
     });
 
     expect(output).toContain("design-system\tcoverage=custom setup=tests/layer4/setups/design-system.setup.ts");
-    expect(output).toContain("run\tcoverage=custom setup=tests/layer4/setups/tier1-workflows.setup.ts");
+    expect(output).toContain("exec\tcoverage=custom setup=tests/layer4/setups/tier1-workflows.setup.ts");
     expect(output).toContain("affected\tcoverage=custom setup=tests/layer4/setups/tier23-global-workflows.setup.ts");
     expect(output).toContain("assumption-tracker\tcoverage=custom setup=tests/layer4/setups/packs/pack-workflows.setup.ts");
     expect(output).toContain("deploy\tcoverage=blocked reason=Requires environment-specific deploy credentials");
@@ -3068,7 +3068,7 @@ describe("benchmark coverage matrix", () => {
       coverage_status: "custom",
       setup_path: "tests/layer4/setups/design-system.setup.ts",
     });
-    expect(matrix.find((row) => row.skill === "run")).toMatchObject({
+    expect(matrix.find((row) => row.skill === "exec")).toMatchObject({
       coverage_status: "custom",
       fixture_type: "execution-plan-fixture",
       priority_tier: 1,
@@ -3083,7 +3083,7 @@ describe("benchmark coverage matrix", () => {
       "investigate",
       "plan-phase",
       "roadmap",
-      "run",
+      "exec",
       "session-triage",
       "ship",
       "ship-end",
@@ -3207,7 +3207,7 @@ describe("benchmark coverage matrix", () => {
       "- **Direct-To-Primary Git Flow**: Default to committing and pushing sequential work on the repository primary branch.",
       "- **No GitHub Actions**: Do not create, modify, or suggest GitHub Actions workflows unless explicitly asked.",
       "",
-      "Recommended next command: $run",
+      "Recommended next command: $exec",
       "",
     ].join("\n");
     writeFileSync(resolve(workDir, "AGENTS.md"), artifact);
@@ -3258,7 +3258,7 @@ describe("benchmark coverage matrix", () => {
     writeFileSync(resolve(workDir, "AGENTS.md"), artifact);
 
     const assertions = setup!.assertResult({
-      stdout: "Installed workflow orchestration into ./AGENTS.md\nRecommended next command: $run",
+      stdout: "Installed workflow orchestration into ./AGENTS.md\nRecommended next command: $exec",
       stderr: "",
       exitCode: 0,
       workDir,
@@ -3284,13 +3284,13 @@ describe("benchmark coverage matrix", () => {
       "Respect shared lockfiles such as `package-lock.json`.",
       "## Shipping",
       "Run verification before shipping.",
-      "Recommended next command: $run",
+      "Recommended next command: $exec",
       "",
     ].join("\n");
     writeFileSync(resolve(workDir, "AGENTS.md"), artifact);
 
     const assertions = setup!.assertResult({
-      stdout: "Created [AGENTS.md](/private/var/folders/n1/example/skill-test/AGENTS.md)\nRecommended next command: $run",
+      stdout: "Created [AGENTS.md](/private/var/folders/n1/example/skill-test/AGENTS.md)\nRecommended next command: $exec",
       stderr: "",
       exitCode: 0,
       workDir,
@@ -3315,7 +3315,7 @@ describe("benchmark coverage matrix", () => {
       "## Core Principles",
       "- Direct-To-Primary Git Flow",
       "- No GitHub Actions",
-      "Recommended next command: $run",
+      "Recommended next command: $exec",
     ].join("\n");
     const tempPathArtifact = repoRelativeArtifact.replace(
       "Provisioned artifact: ./AGENTS.md.",
@@ -3343,7 +3343,7 @@ describe("benchmark coverage matrix", () => {
       "No GitHub Actions",
       "benchmark coverage",
       "",
-      "Recommended next command: $run",
+      "Recommended next command: $exec",
       "",
     ].join("\n");
     writeFileSync(resolve(workDir, "AGENTS.md"), artifact);
@@ -3367,11 +3367,11 @@ describe("benchmark coverage matrix", () => {
   });
 
   it("fails when a repository skill is missing from the matrix", () => {
-    const rows = benchmarkCoverageMatrix().filter((row) => row.skill !== "run");
+    const rows = benchmarkCoverageMatrix().filter((row) => row.skill !== "exec");
     const result = validateBenchmarkCoverage(rows, discoverRepositorySkills());
 
     expect(result.ok).toBe(false);
-    expect(result.errors).toContain('Repository skill "run" is missing from benchmark coverage matrix.');
+    expect(result.errors).toContain('Repository skill "exec" is missing from benchmark coverage matrix.');
   });
 
   it("fails when a custom row points to a missing setup", () => {
@@ -3390,15 +3390,15 @@ describe("benchmark coverage matrix", () => {
 
   it("fails when a blocked row lacks a reason and next command", () => {
     const rows = benchmarkCoverageMatrix().map((row): BenchCoverageRow => (
-      row.skill === "run"
+      row.skill === "exec"
         ? { ...row, coverage_status: "blocked", blocked_reason: "", next_command: "" }
         : row
     ));
     const result = validateBenchmarkCoverage(rows, discoverRepositorySkills());
 
     expect(result.ok).toBe(false);
-    expect(result.errors).toContain('Blocked benchmark coverage row for "run" must include blocked_reason.');
-    expect(result.errors).toContain('Blocked benchmark coverage row for "run" must include next_command.');
+    expect(result.errors).toContain('Blocked benchmark coverage row for "exec" must include blocked_reason.');
+    expect(result.errors).toContain('Blocked benchmark coverage row for "exec" must include next_command.');
   });
 
   it("records custom coverage for pack skill setups", () => {
@@ -3443,7 +3443,7 @@ describe("benchmark coverage matrix", () => {
       ["game-core-loop", "game-context"],
       ["devtool-workflow", "devtool-context"],
       ["mono-guard", "monorepo-context"],
-      ["run-kanban", "kanban-context"],
+      ["exec-kanban", "kanban-context"],
       ["project-fleet", "project-fleet-context"],
       ["video-script", "remotion-context"],
       ["youtube-video-audit", "youtube-ops-context"],
@@ -3465,13 +3465,13 @@ describe("benchmark coverage matrix", () => {
 });
 
 describe("Tier 1 workflow benchmark setups", () => {
-  it("sets up and validates the run workflow artifact", () => {
-    const setup = CUSTOM_BENCH_SETUPS.run;
-    const workDir = mkdtempSync(resolve(tmpdir(), "tier1-run-"));
+  it("sets up and validates the exec workflow artifact", () => {
+    const setup = CUSTOM_BENCH_SETUPS.exec;
+    const workDir = mkdtempSync(resolve(tmpdir(), "tier1-exec-"));
 
     setup.setupProject(workDir);
     writeFileSync(
-      resolve(workDir, "run-plan.md"),
+      resolve(workDir, "exec-plan.md"),
       [
         "# Run Plan",
         "",
@@ -3480,7 +3480,7 @@ describe("Tier 1 workflow benchmark setups", () => {
         "Prototype gate: keep this as a clickable prototype with fixture data; defer database, auth, payments, analytics, deployment, admin, multi-tenant, and observability infrastructure until calibration evidence justifies promotion.",
         "validation commands cover tests and git diff --check.",
         "shipping note: commit and push after validation.",
-        "Next command: $run",
+        "Next command: $exec",
         "",
       ].join("\n"),
     );
@@ -3490,7 +3490,7 @@ describe("Tier 1 workflow benchmark setups", () => {
       stderr: "",
       exitCode: 0,
       workDir,
-      files: ["run-plan.md"],
+      files: ["exec-plan.md"],
     });
 
     expect(assertions.every((assertion) => assertion.pass)).toBe(true);
@@ -3646,7 +3646,7 @@ describe("Tier 2 and Tier 3 global workflow benchmark setups", () => {
         "changed files: packages/web/src/button.ts and packages/shared/src/tokens.ts.",
         "affected packages: web and shared.",
         "validation commands: pnpm --filter web test and pnpm --filter shared test.",
-        "Next command: $run",
+        "Next command: $exec",
         "",
       ].join("\n"),
     );
@@ -3678,7 +3678,7 @@ describe("pack workflow benchmark setups", () => {
         "Skill: youtube-video-audit",
         "Local-fixture evidence covers YouTube video audit packaging and retention notes.",
         "Risks: public data may be stale.",
-        "Next command: $run",
+        "Next command: $exec",
         "",
       ].join("\n"),
     );
@@ -3710,7 +3710,7 @@ describe("pack workflow benchmark setups", () => {
         "`fixtures/local-evidence.md` confirms local deterministic evidence.",
         "`pack-input.md` covers Retention notes and Packaging notes.",
         "Risks: public data may be stale, so validate against local evidence before publishing.",
-        "Next command: $run",
+        "Next command: $exec",
         "",
       ].join("\n"),
     );
@@ -3872,10 +3872,10 @@ describe("layer4 setup helpers", () => {
     expect(assertTokenCrossReferences("Use {colors.primary} here")).toMatchObject({
       pass: true,
     });
-    expect(assertNextCommand("Next command: $run")).toMatchObject({
+    expect(assertNextCommand("Next command: $exec")).toMatchObject({
       pass: true,
     });
-    expect(assertNextCommand("Recommended next command: $run")).toMatchObject({
+    expect(assertNextCommand("Recommended next command: $exec")).toMatchObject({
       pass: true,
     });
     expect(assertNextCommand("Recommended next skill: $ship")).toMatchObject({
@@ -3887,7 +3887,7 @@ describe("layer4 setup helpers", () => {
     expect(assertNextCommand("Next: keep going")).toMatchObject({
       pass: false,
     });
-    expect(assertRecommendedRoute("Next command: $run", "$run")).toMatchObject({
+    expect(assertRecommendedRoute("Next command: $exec", "$exec")).toMatchObject({
       pass: true,
     });
   });

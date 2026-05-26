@@ -19,7 +19,7 @@ direct dev-doc audit instead.
 
 This skill is also not for agent-executable work. If the task is repo edits,
 SDK wiring, generated assets, local commands, tests, audits, or CLI/API work
-with available authentication, stop and route it to `$run`, `$ship`, or the
+with available authentication, stop and route it to `$exec`, `$ship`, or the
 specific implementation skill instead of producing click instructions.
 
 ## Workflow

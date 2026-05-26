@@ -61,7 +61,7 @@ const rubric: QualityRubric = {
       weight: 1,
       evaluate: qualityAssertions.requiredPatterns([
         /Next work:\s*\S/i,
-        /Recommended next command:\s*\$run/i,
+        /Recommended next command:\s*\$exec/i,
       ]),
     },
     {
@@ -168,7 +168,7 @@ describe("benchmark output quality evaluation", () => {
           id: "route",
           description: "Includes the next route",
           weight: 1,
-          route: "$run",
+          route: "$exec",
         }),
         forbiddenFabricationCriterion({
           id: "fabrication",
@@ -187,7 +187,7 @@ describe("benchmark output quality evaluation", () => {
       "tests/harness/bench-report.ts",
       "benchmark quality",
       "evidence validation scope",
-      "Recommended next skill: $run",
+      "Recommended next skill: $exec",
     ].join("\n"));
 
     expect(strong.passed).toBe(true);

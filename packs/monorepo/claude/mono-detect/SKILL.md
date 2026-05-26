@@ -10,11 +10,11 @@ argument-hint: "[optional: repository root]"
 
 Use this skill to detect a pnpm workspace monorepo and generate the `.agents/monorepo.json` artifact consumed by the monorepo pack.
 
-`mono-detect` is the foundation skill for `mono-run`, `mono-ship`, and `mono-guard`. Those skills use its output to inject monorepo-aware pre/post steps into the standard `/run` and `/ship` contracts without duplicating the global workflow.
+`mono-detect` is the foundation skill for `mono-exec`, `mono-ship`, and `mono-guard`. Those skills use its output to inject monorepo-aware pre/post steps into the standard `/exec` and `/ship` contracts without duplicating the global workflow.
 
 ## Augmentation Injection Pattern
 
-`mono-detect` is the pack's detection foundation for the augmentation injection pattern. It does not replace `/run`, `/ship`, or global monorepo planning skills; it supplies `.agents/monorepo.json` so `mono-run`, `mono-ship`, and `mono-guard` can inject monorepo-aware pre-flight and post-integration checks around those existing workflows.
+`mono-detect` is the pack's detection foundation for the augmentation injection pattern. It does not replace `/exec`, `/ship`, or global monorepo planning skills; it supplies `.agents/monorepo.json` so `mono-exec`, `mono-ship`, and `mono-guard` can inject monorepo-aware pre-flight and post-integration checks around those existing workflows.
 
 ## Workflow
 
@@ -39,7 +39,7 @@ Use this skill to detect a pnpm workspace monorepo and generate the `.agents/mon
 6. Report staleness behavior:
    - Mention that the artifact is regenerated when `pnpm-workspace.yaml`, `turbo.json`, or workspace `package.json` files are newer than `.agents/monorepo.json`.
 7. Route the next step:
-   - If detection passed and the user is preparing execution, recommend `/mono-run`.
+   - If detection passed and the user is preparing execution, recommend `/mono-exec`.
    - If detection passed and the user is checking lane safety, recommend `/mono-guard`.
    - If detection failed because this is not a pnpm monorepo, recommend `/mono-migrate` as the V2 advisory route.
 
@@ -60,7 +60,7 @@ Use this skill to detect a pnpm workspace monorepo and generate the `.agents/mon
 - Do not run package manager install/add commands.
 - Do not infer non-pnpm workspace managers in V1.
 - Do not modify `.agents/monorepo.json` manually; use `mono-detect.sh`.
-- Treat `mono-detect` as an augmentation foundation for `mono-run`, `mono-ship`, and `mono-guard`, not as a replacement for `/run`, `/ship`, or global monorepo planning skills.
+- Treat `mono-detect` as an augmentation foundation for `mono-exec`, `mono-ship`, and `mono-guard`, not as a replacement for `/exec`, `/ship`, or global monorepo planning skills.
 
 ## Alignment Page
 

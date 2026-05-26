@@ -63,7 +63,7 @@ Required:
 - Checkable manual tasks.
 - Every unchecked item includes `_(blocks: Step N.X)_` or `_(after: Step N.X)_`.
 
-Missing blocker/after annotations are Errors because `$run` and `$ship` use them to avoid executing blocked work.
+Missing blocker/after annotations are Errors because `$exec` and `$ship` use them to avoid executing blocked work.
 
 ### `tasks/record-todo.md`
 

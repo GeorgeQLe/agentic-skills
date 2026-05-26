@@ -12,15 +12,15 @@ This document is the authoritative reference for the three-mode operating model 
 
 ### `claude-only`
 
-Claude both plans and executes. Used when Codex is unavailable — no subscription, rate-limited, outage, or not installed locally. The execution loop is `/run` → `/ship` → `/ship-end`, all in Claude Code.
+Claude both plans and executes. Used when Codex is unavailable — no subscription, rate-limited, outage, or not installed locally. The execution loop is `/exec` → `/ship` → `/ship-end`, all in Claude Code.
 
 ### `codex-only`
 
-Codex both plans and executes. Used when Claude is unavailable for the same class of reasons. The execution loop is `$run` → `$ship` → `$ship-end`, all in a Codex session.
+Codex both plans and executes. Used when Claude is unavailable for the same class of reasons. The execution loop is `$exec` → `$ship` → `$ship-end`, all in a Codex session.
 
 ### `hybrid`
 
-Claude orchestrates — interviews, planning, framing, tradeoff surfacing — and Codex executes — implementation, reconciliation, shipping — via in-session delegation. The execution loop is `/spec-interview` → `/run` plans → `/delegate $run` → `$ship`. The delegation boundary is handled inside the Claude session; the user does not manually switch CLIs.
+Claude orchestrates — interviews, planning, framing, tradeoff surfacing — and Codex executes — implementation, reconciliation, shipping — via in-session delegation. The execution loop is `/spec-interview` → `/exec` plans → `/delegate $exec` → `$ship`. The delegation boundary is handled inside the Claude session; the user does not manually switch CLIs.
 
 ## Mode-signal resolution
 
@@ -48,7 +48,7 @@ Two sources combine to resolve the effective mode: the `SKILLS_AGENT_MODE` envir
 
 ## Approval packet
 
-Cross-CLI execution in `hybrid`, and cross-session handoff from `claude-only` or `hybrid` into a later Codex session, is mediated by a shared approval packet. `.agents/approved-plan.json` is the machine-readable source of truth (gitignored, developer-local). `tasks/approved-plan.md` is the sanitized human-readable mirror (committed). `$run --execute-approved`, `/handoff --target=codex`, and `/delegate` all consume this one contract rather than inventing their own "approved work" definition.
+Cross-CLI execution in `hybrid`, and cross-session handoff from `claude-only` or `hybrid` into a later Codex session, is mediated by a shared approval packet. `.agents/approved-plan.json` is the machine-readable source of truth (gitignored, developer-local). `tasks/approved-plan.md` is the sanitized human-readable mirror (committed). `$exec --execute-approved`, `/handoff --target=codex`, and `/delegate` all consume this one contract rather than inventing their own "approved work" definition.
 
 ### Fields
 
@@ -91,7 +91,7 @@ For exact types, regex patterns, and validator rules, read the schema file direc
 | --- | --- | --- |
 | `* → draft` (initial write) | `draft` | Producer (Claude-side `/handoff --target=codex`, `/delegate`) |
 | `draft → approved` | `approve` | Producer, after user approval |
-| `approved → consumed` | `consume` | Consumer (`$run --execute-approved`) on success |
+| `approved → consumed` | `consume` | Consumer (`$exec --execute-approved`) on success |
 | `approved → stale` | `mark-stale` (via `check` on failed freshness) | Consumer |
 | `approved → uncertain` | `mark-uncertain` | Consumer (`/delegate` transport ambiguity) |
 | `draft → superseded` / `approved → superseded` | `supersede` | Producer, discarding a prior packet |
@@ -124,7 +124,7 @@ On any failure the consumer transitions the packet to `stale` and re-prompts wit
 ## Out of Scope for This Document Today
 
 - `$continue` / `$resume-work` router on Codex
-- Additional `$run` flags (`--plan-only`, `--docs-only`, `--no-ship`)
+- Additional `$exec` flags (`--plan-only`, `--docs-only`, `--no-ship`)
 - Removing shipping skills from Claude
 - Reverse delegation (Codex → Claude)
 
@@ -141,18 +141,18 @@ This section enumerates every cross-tool touchpoint that ships today. One row pe
 | `global/claude/delegate/SKILL.md` | `hybrid`; Codex exec completes cleanly | Non-zero exit or timeout after start marker → transport ambiguous | § "Process" step 6 ambiguous branch: `mark-uncertain` + inspect/discard/continue prompt; never blind-retries |
 | `global/claude/handoff/SKILL.md` | `--target=codex`: mode ≠ `codex-only` | Step 5.1 aborts with `mode-mismatch:` — Claude is not the planner in `codex-only` | § "Process" step 5.1 — `requires mode claude-only or hybrid` |
 | `global/claude/handoff/SKILL.md` | `--target=codex`: `jq` on PATH for pretty-print (step 5.5) | `scripts/approved-plan.sh draft` dies first via `require_jq_write` with the install-hint error; packet is never drafted | § "Process" step 5 preamble — `jq` declared a hard dependency; failure text cited |
-| `global/codex/run/SKILL.md` | `--execute-approved`: mode ≠ `claude-only` | `scripts/approved-plan.sh check` prints `mode-mismatch` reason; skill stops with user error | § "Process" step 6c + § "Constraints" — `requires mode codex-only or hybrid` |
-| `global/codex/run/SKILL.md` | `--execute-approved`: `jq` on PATH for consume write path | `scripts/approved-plan.sh consume` dies via `require_jq_write` with `ERROR: jq required for write operations. Install with: brew install jq …` | § "Process" step 6c + § "Constraints" — `jq` declared a hard dependency; failure text cited |
+| `global/codex/exec/SKILL.md` | `--execute-approved`: mode ≠ `claude-only` | `scripts/approved-plan.sh check` prints `mode-mismatch` reason; skill stops with user error | § "Process" step 6c + § "Constraints" — `requires mode codex-only or hybrid` |
+| `global/codex/exec/SKILL.md` | `--execute-approved`: `jq` on PATH for consume write path | `scripts/approved-plan.sh consume` dies via `require_jq_write` with `ERROR: jq required for write operations. Install with: brew install jq …` | § "Process" step 6c + § "Constraints" — `jq` declared a hard dependency; failure text cited |
 | `global/claude/spec-interview/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Mode lookup missing, unset, or non-zero degrades to inferred command text | § "Next-Step Routing" infers from invocation and task type |
 | `global/claude/roadmap/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Mode lookup missing, unset, or non-zero degrades to inferred command text | § "Next-Step Routing" infers from invocation and task type |
 | `global/claude/plan-phase/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Mode lookup missing, unset, or non-zero degrades to inferred command text | § "Next-Step Routing" infers from invocation and task type |
-| `global/claude/run/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Mode lookup missing, unset, or non-zero degrades to inferred command text | § "Next-Step Routing" infers from invocation and task type |
+| `global/claude/exec/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Mode lookup missing, unset, or non-zero degrades to inferred command text | § "Next-Step Routing" infers from invocation and task type |
 | `global/claude/ship/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Mode lookup missing, unset, or non-zero degrades to inferred command text | § "Next-Step Routing" infers from invocation and task type |
 | `global/claude/ship-end/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Mode lookup missing, unset, or non-zero degrades to inferred command text | § "Next-Step Routing" infers from invocation and task type |
 | `global/codex/spec-interview/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Mode lookup missing, unset, or non-zero degrades to inferred command text | § "Next-Step Routing" infers from invocation and task type |
 | `global/codex/roadmap/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Mode lookup missing, unset, or non-zero degrades to inferred command text | § "Next-Step Routing" infers from invocation and task type |
 | `global/codex/plan-phase/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Mode lookup missing, unset, or non-zero degrades to inferred command text | § "Next-Step Routing" infers from invocation and task type |
-| `global/codex/run/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` (Next-Step Routing block, distinct from `--execute-approved` rows above) | Mode lookup missing, unset, or non-zero degrades to inferred command text | § "Next-Step Routing" infers from invocation and task type |
+| `global/codex/exec/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` (Next-Step Routing block, distinct from `--execute-approved` rows above) | Mode lookup missing, unset, or non-zero degrades to inferred command text | § "Next-Step Routing" infers from invocation and task type |
 | `global/codex/ship/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Mode lookup missing, unset, or non-zero degrades to inferred command text | § "Next-Step Routing" infers from invocation and task type |
 | `global/codex/ship-end/SKILL.md` | `any` mode resolved via `scripts/agent-mode.sh` | Mode lookup missing, unset, or non-zero degrades to inferred command text | § "Next-Step Routing" infers from invocation and task type |
 | `scripts/approved-plan.sh draft` | `hybrid` back-to-back cycles (prior `consume` rewrote `tasks/approved-plan.md`) | Next `draft` fails with `dirty path outside allowlist: tasks/approved-plan.md` | Commit the mirror between cycles (evidence of the prior consumed packet), or pass `--allow-dirty tasks/approved-plan.md` to the next `draft` |
@@ -166,7 +166,7 @@ Each gap below is logged for a follow-up step to close; Step 8 does not fix them
 **Closed in Step 13 (2026-04-19):** both `jq` gaps resolved by declaring `jq` a hard dependency in the two skills and naming the exact failure text users see (sourced verbatim from `scripts/approved-plan.sh:21` `require_jq_write`). No `jq`-free fallback was added — `jq` is trivially installable on every supported dev environment, and a second code path would duplicate JSON handling for no benefit. Original gap descriptions preserved below for audit.
 
 - ~~`global/claude/handoff/SKILL.md` `--target=codex`~~ — Resolved: step 5 preamble now declares `jq` required and cites the `require_jq_write` error that fires at draft time (before the 5.5 pretty-print is reached).
-- ~~`global/codex/run/SKILL.md` `--execute-approved`~~ — Resolved: step 6c now names the exact user-facing failure reason when `jq` is missing; § "Constraints" unchanged.
+- ~~`global/codex/exec/SKILL.md` `--execute-approved`~~ — Resolved: step 6c now names the exact user-facing failure reason when `jq` is missing; § "Constraints" unchanged.
 
 ## Pack emphasis
 
@@ -241,9 +241,9 @@ This section tags every global skill and every pack with a **primary CLI role** 
 | `monorepo` | Both | Workspace-aware detection, branch-backed lane specs, guardrails, and scoped shipping overlay |
 | `poketowork-kanban` | Both | Kanban orchestration skills + `run`/`ship`/`ship-end` execution variants; no base pack to inherit from |
 
-### Codex `$run` routing
+### Codex `$exec` routing
 
-Codex `$run` consumes this table at runtime. The "Next-Step Routing" block in `global/codex/run/SKILL.md` resolves enabled packs via `scripts/pack.sh list-packs` for command-text routing and, when an enabled pack (e.g., `business-app-kanban`) ships a matching `-kanban` variant, emits the kanban invocation in place of the global `$run` / `$ship` / `$ship-end`. Recommendation text only — the approval-packet contract and `$run --execute-approved` execution path are unchanged. Missing or malformed `.agents/project.json` falls back silently to the global default with a single-line inline comment. See `global/codex/run/SKILL.md` § "Pack-Aware Command Text" for the full resolver.
+Codex `$exec` consumes this table at runtime. The "Next-Step Routing" block in `global/codex/exec/SKILL.md` resolves enabled packs via `scripts/pack.sh list-packs` for command-text routing and, when an enabled pack (e.g., `business-app-kanban`) ships a matching `-kanban` variant, emits the kanban invocation in place of the global `$exec` / `$ship` / `$ship-end`. Recommendation text only — the approval-packet contract and `$exec --execute-approved` execution path are unchanged. Missing or malformed `.agents/project.json` falls back silently to the global default with a single-line inline comment. See `global/codex/exec/SKILL.md` § "Pack-Aware Command Text" for the full resolver.
 
 ## Migrating from the parity-mirror model
 
@@ -252,7 +252,7 @@ Before Phase 11, every skill existed in parallel under `global/claude/` and `glo
 - **Designate a mode.** Run `scripts/pack.sh set-mode <claude-only|codex-only|hybrid>` once per project. This writes `.agents/project.json.agent_mode`, which the resolver (`scripts/agent-mode.sh`) reads on every skill invocation. `scripts/pack.sh set-mode unset` clears the field — skills then keep the concrete next work item primary and infer the command route from invocation and task type. For a shell-scoped override (e.g., demoing a different mode), export `SKILLS_AGENT_MODE` instead of editing the file.
 - **Pick packs by role, not by CLI.** The `## Pack emphasis` tables above tag each pack as `Claude-orchestration`, `Codex-execution`, or `Both`. Enable packs via `pack.sh install` based on the work the project does (strategy framing vs refactor mutation vs kanban flow), not based on which CLI the developer happens to prefer. Parity-mirror skills in `global/` still work everywhere; pack emphasis just records intent.
 - **Use `/delegate` in hybrid.** The old workflow — "plan in Claude, switch terminals, paste the plan into Codex, run it" — collapses into `/delegate <target-skill>` inside the Claude session. `/delegate` produces an approval packet, prompts once, then synchronously invokes `codex exec`. No manual CLI switching.
-- **Use `/handoff --target=codex` for async handoffs.** When a human needs to resume work later in a separate Codex session (e.g., end of day, or cross-developer), `/handoff --target=codex` produces the same approval packet plus a `tasks/handoff.md` note. Codex resumes with `$run --execute-approved`. Used in both `claude-only` (planning in Claude, executing later in Codex) and `hybrid` (async variant of `/delegate`).
+- **Use `/handoff --target=codex` for async handoffs.** When a human needs to resume work later in a separate Codex session (e.g., end of day, or cross-developer), `/handoff --target=codex` produces the same approval packet plus a `tasks/handoff.md` note. Codex resumes with `$exec --execute-approved`. Used in both `claude-only` (planning in Claude, executing later in Codex) and `hybrid` (async variant of `/delegate`).
 - **Leave mode unset if you are unsure.** An absent `agent_mode` field is not a bug — the twelve Step-7 planning/execution skills keep the concrete next work item primary and infer the command route from invocation and task type. Declare a mode only once the project's steady-state workflow is clear.
 
 ## Gaps surfaced by Step 11

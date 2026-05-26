@@ -43,7 +43,7 @@ Discover and search installed global skills plus enabled project-local pack skil
    | Evaluate | `dogfood` (product-testing), `mvp-gap` (business-discovery), `scale-audit` (business-ops), `customer-feedback` (customer-lifecycle), `assumption-tracker` (business-discovery), `cohort-review` (customer-lifecycle), `retro` (business-ops) |
    | Research Health | `research-roadmap` (research-admin), `reconcile-research` (business-discovery), `reconcile-dev-docs` (docs-health) |
    | Detail | `plan-phase` (agent-work-admin) |
-   | Execution | `run` (exec-loop), `run-kanban` (business-app-kanban), `guide` (guided-walkthrough) |
+   | Execution | `run` (exec-loop), `exec-kanban` (business-app-kanban), `guide` (guided-walkthrough) |
    | Shipping | `ship` (exec-loop), `ship-end` (exec-loop), `ship-kanban` (business-app-kanban), `ship-end-kanban` (business-app-kanban) |
    | Code Quality | `expert-review` (code-review), `regression-check` (code-review), `dead-code` (code-review), `slim-audit` (code-review) |
    | Debugging | `investigate` (code-debug), `debug` (code-debug), `trace` (code-debug), `session-triage` (session-analytics) |

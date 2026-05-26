@@ -60,8 +60,8 @@ Initialize a repository with a useful `README.md` and the standard agent workflo
    - When required packs are available, recommend `/icp <concept>` as the next command. After `/icp`, the intended sequence is `/competitive-analysis` -> `/journey-map` -> `/ux-variations` -> `/ui-interview` -> prototype work.
    - If current, accepted `research/icp.md`, `research/competitive-analysis.md`, and `research/journey-map.md` already exist from the fresh reset, then recommend `/ux-variations <topic>`.
    - If UX variations already exist but interface details are missing, recommend `/ui-interview <topic>`.
-   - Only route directly to `/roadmap` or `/run` when the project is non-UI/non-product work or already has accepted alignment artifacts and a consolidated prototype.
-   - The intended product sequence after reset is: `/icp` -> `/competitive-analysis` -> `/journey-map` -> `/ux-variations` -> `/ui-interview` -> build variants/prototypes via `/run` or the applicable prototype-building route -> `/uat --variant-evaluation` -> `/consolidate-variations` -> `/research-roadmap --post-prototype` -> `/spec-interview` or `/roadmap`.
+   - Only route directly to `/roadmap` or `/exec` when the project is non-UI/non-product work or already has accepted alignment artifacts and a consolidated prototype.
+   - The intended product sequence after reset is: `/icp` -> `/competitive-analysis` -> `/journey-map` -> `/ux-variations` -> `/ui-interview` -> build variants/prototypes via `/exec` or the applicable prototype-building route -> `/uat --variant-evaluation` -> `/consolidate-variations` -> `/research-roadmap --post-prototype` -> `/spec-interview` or `/roadmap`.
 
 ## Output Format
 
@@ -74,7 +74,7 @@ Bootstrapped repository
 - AGENTS.md: [created | updated | unchanged], corresponding workflow block appears once
 - Monorepo safety block: [included (<heuristic>) | skipped]
 - Verification: [commands/checks run]
-- Recommended next command: [/pack install business-discovery | /pack install customer-lifecycle | /icp <concept> | /ux-variations <topic> | /ui-interview <topic> | /roadmap | /run]
+- Recommended next command: [/pack install business-discovery | /pack install customer-lifecycle | /icp <concept> | /ux-variations <topic> | /ui-interview <topic> | /roadmap | /exec]
 ```
 
 ## Constraints

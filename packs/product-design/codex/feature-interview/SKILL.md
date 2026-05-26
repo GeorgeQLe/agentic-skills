@@ -44,7 +44,7 @@ Use `$feature-interview` especially after a production spec already exists and t
    - Identify whether the repo is in a post-spec state: one or more credible `specs/*.md`, `spec.md`, or `docs/specifications/*.md` files already define the product or area this feature extends.
    - Identify whether the feature is already fully represented in an existing spec, partially represented in a spec, should become a scoped add-on spec, is only present as an idea/research gap, or is already sequenced in the roadmap.
    - In post-spec state, default to `update existing spec` or `new smaller-scope add-on spec` as the planning destination. Do not discard the existing spec baseline or route back to full `$spec-interview` unless the existing spec is stale, contradicted, or missing the product area needed to make the decision.
-   - If it duplicates planned work, stop and recommend the existing route (`$roadmap`, `$plan-phase N`, `$run`, or `$ship`) with evidence.
+   - If it duplicates planned work, stop and recommend the existing route (`$roadmap`, `$plan-phase N`, `$exec`, or `$ship`) with evidence.
 5. Present a **Feature Evidence Brief + Assumptions Manifest** before probing:
    - Evidence sources: files, docs, research artifacts, task docs, and git history consulted.
    - Claim validation: verdict for each factual claim or hypothesis, with concise evidence.
@@ -122,7 +122,7 @@ Follow the shared Alignment Page convention in CLAUDE.md. Output: `alignment/fea
 - Do not update roadmap or task sequencing until the planning destination and priority are confirmed by the user.
 - Do not produce a full implementation spec unless the interview proves a new or rewritten spec is the right destination.
 - Do not route brainstorm ideas directly to `$spec-interview`; use `$feature-interview` for triage unless the user explicitly asks for a full spec.
-- Do not implement fixes or feature code from this skill. If the evidence pass uncovers a bug, route to `$investigate`; if it uncovers buildable planned work, route through `$roadmap`, `$plan-phase`, or `$run`.
+- Do not implement fixes or feature code from this skill. If the evidence pass uncovers a bug, route to `$investigate`; if it uncovers buildable planned work, route through `$roadmap`, `$plan-phase`, or `$exec`.
 
 ## Default Shipping Contract
 

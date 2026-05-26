@@ -7,7 +7,7 @@ Install this pack when a project uses `pnpm-workspace.yaml` and may use Turborep
 Default flow:
 
 ```text
-mono-detect -> mono-run -> mono-guard -> mono-ship
+mono-detect -> mono-exec -> mono-guard -> mono-ship
 ```
 
 Install in a project with:
@@ -25,7 +25,7 @@ scripts/pack.sh refresh
 ## Skills
 
 - `mono-detect`: detects pnpm workspace structure, optional Turborepo overlay, package metadata, internal dependency graph, and writes `.agents/monorepo.json`.
-- `mono-run`: augments the standard `/run` or `$run` lifecycle with monorepo detection, lane-spec generation, pre-flight guard checks, cross-cutting serial work, package-scoped worktree dispatch on separate GitHub branches, and consolidation/PR review when a phase is explicitly eligible.
+- `mono-exec`: augments the standard `/exec` or `$exec` lifecycle with monorepo detection, lane-spec generation, pre-flight guard checks, cross-cutting serial work, package-scoped worktree dispatch on separate GitHub branches, and consolidation/PR review when a phase is explicitly eligible.
 - `mono-guard`: validates lane-spec artifacts before dispatch and verifies actual changed files stay inside declared lane ownership and branch/PR review requirements after integration.
 - `mono-ship`: augments the standard `/ship` or `$ship` lifecycle with package-scoped validation and transitive-dependent validation before delegating to normal shipping.
 - `mono-plan`: safe lane decomposition planning across monorepo packages.
@@ -86,7 +86,7 @@ V1 does not include:
 
 ## Monorepo Skills
 
-`/mono-plan` is the planning authority for safe lane decomposition across monorepo packages. `mono-run` consumes those execution-profile concepts and materializes lane specs for a project-local run.
+`/mono-plan` is the planning authority for safe lane decomposition across monorepo packages. `mono-exec` consumes those execution-profile concepts and materializes lane specs for a project-local run.
 
 `/mono-guard` provides contracts and scripts for validating `.agents/lane-specs.json`, `.agents/monorepo.json`, and the integrated diff.
 

@@ -31,13 +31,13 @@ $ ls .agents/
 ls: .agents/: No such file or directory
 ```
 
-**Mode-aware recommendation line** (quoted from `global/claude/run/SKILL.md:89`):
+**Mode-aware recommendation line** (quoted from `global/claude/exec/SKILL.md:89`):
 
 > `claude-only` → **Next:** run `/ship` — Codex is unavailable; stay in Claude.
 
 **Outcome:** ✓ resolver returns `claude-only`; no packet created or needed; recommendation stays in Claude. Cross-CLI plumbing never invoked, per `docs/operating-modes.md` § "Degraded-path audit" row for `global/claude/delegate/SKILL.md` (`claude-only` → mode-mismatch exit without packet touch).
 
-Plan → execute → ship loop for this mode: `/run` (plan + execute in Claude) → `/ship` (Claude commit/push) — never calls Codex, never writes `.agents/approved-plan.json`. Confirmed by scripts, by SKILL.md recommendation copy, and by `docs/operating-modes.md` § "Degraded-path audit" row citing `global/claude/delegate/SKILL.md` § "Mode requirement" (line 17).
+Plan → execute → ship loop for this mode: `/exec` (plan + execute in Claude) → `/ship` (Claude commit/push) — never calls Codex, never writes `.agents/approved-plan.json`. Confirmed by scripts, by SKILL.md recommendation copy, and by `docs/operating-modes.md` § "Degraded-path audit" row citing `global/claude/delegate/SKILL.md` § "Mode requirement" (line 17).
 
 ---
 
@@ -58,11 +58,11 @@ $ ls .agents/
 ls: .agents/: No such file or directory
 ```
 
-**Mode-aware recommendation line** (quoted from `global/codex/run/SKILL.md:116`):
+**Mode-aware recommendation line** (quoted from `global/codex/exec/SKILL.md:116`):
 
-> `codex-only` → **Next:** run `$run` for the next step — stay in Codex.
+> `codex-only` → **Next:** run `$exec` for the next step — stay in Codex.
 
-**Outcome:** ✓ resolver returns `codex-only`; no packet created. Plan → execute → ship loop runs as `$run` → `$ship` — Codex orchestrates and executes without round-tripping through Claude. Confirmed against `docs/operating-modes.md` § "Degraded-path audit" row for `global/codex/run/SKILL.md --execute-approved` (non-`claude-only` constraint).
+**Outcome:** ✓ resolver returns `codex-only`; no packet created. Plan → execute → ship loop runs as `$exec` → `$ship` — Codex orchestrates and executes without round-tripping through Claude. Confirmed against `docs/operating-modes.md` § "Degraded-path audit" row for `global/codex/exec/SKILL.md --execute-approved` (non-`claude-only` constraint).
 
 ---
 
@@ -103,7 +103,7 @@ $ bash scripts/approved-plan.sh status
 approved: Phase 11 / Verify — three-mode sample-workflow walkthrough (approved_at=2026-04-19T20:11:08Z)
 ```
 
-**Step 4 — `check` (Codex side, freshness gate in `$run --execute-approved`):**
+**Step 4 — `check` (Codex side, freshness gate in `$exec --execute-approved`):**
 
 ```
 $ bash scripts/approved-plan.sh check
