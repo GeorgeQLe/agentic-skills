@@ -51,7 +51,7 @@ When app scope `{app}` is active:
    - **Table-Stakes Gaps** — Auth, error handling, data export, accessibility, docs, notifications
    - **Integration Gaps** — Required integrations from the ICP's current workflow
    - **Competitive Differentiation** — Does it deliver the stated value drivers?
-   - **Spec Validation** — For each gap, check `specs/` for existing coverage: "Spec exists — ready to build", "Spec exists — needs expansion", or no spec (suggest `$spec-interview`).
+   - **Spec Validation** — For each gap, check `specs/` for existing coverage: "Spec exists — ready to build", "Spec exists — needs expansion", or no spec (suggest `$ux-variations`).
    - **Metrics Tie-In** — If `research/metrics.md` exists, identify which metric(s) indicate each gap is closed. Flag gaps with no closure metric as instrumentation gaps.
 3. Tag each gap: `blocks-first-sale`, `blocks-retention`, or `nice-to-have`. Estimate effort (S/M/L).
 4. If `research/gtm.md` exists, cross-reference build sequence against GTM launch gates. Flag conflicts and gaps deferrable to post-launch.
@@ -64,13 +64,13 @@ When app scope `{app}` is active:
 Each gap in the output should include:
 - _Journey stage:_ [stage from journey-map, or "N/A"]
 - _Closure metric:_ [metric from metrics.md, or "⚠ No metric defined"]
-- _Spec:_ [link to spec + status, or `$spec-interview [topic]`]
+- _Spec:_ [link to spec + status, or `$ux-variations [topic]`]
 
 The output file must include a `## Downstream Impact` section (only if conflicts found) and end with a `## Next Steps` section with a **Recommended** item and 2–4 other contextual options. Choose the recommendation by the first matching condition:
 
 1. IF downstream impact is **Major**: `$reconcile-research` — audit and fix affected downstream research documents.
-2. IF a `blocks-first-sale` gap lacks a full spec: `$spec-interview [top gap]` — turn the highest-priority gap from `research/mvp-gap.md` into an implementation spec.
-3. IF any other gap lacks a full spec: `$spec-interview [top gap]` — turn the highest-priority unspecced gap from `research/mvp-gap.md` into an implementation spec.
+2. IF a `blocks-first-sale` gap lacks a full spec: `$ux-variations [top gap]` — explore solution directions for the highest-priority gap from `research/mvp-gap.md`.
+3. IF any other gap lacks a full spec: `$ux-variations [top gap]` — explore solution directions for the highest-priority unspecced gap from `research/mvp-gap.md`.
 4. IF required context is missing: the corresponding research skill (`$journey-map`, `$competitive-analysis`, `$metrics`, or `$brainstorm` when creative alternatives could reduce high-effort gaps).
 5. OTHERWISE: `$roadmap` — sequence the existing specs into implementation phases.
 
@@ -96,7 +96,7 @@ When this skill produces follow-up work, file it by execution semantics:
 - Analysis only — do not make code changes.
 - Every gap must cite specific evidence from the codebase.
 - Prioritise by market impact, not technical interest.
-- Include `$spec-interview <topic>` prompts only for gaps lacking specs.
+- Include `$ux-variations <topic>` prompts only for gaps lacking specs.
 - `## Next Steps` must be the final section in the output file, with a recommended next step and 2–4 other contextual options.
 
 ## Alignment Page

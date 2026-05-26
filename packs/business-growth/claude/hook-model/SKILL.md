@@ -123,7 +123,7 @@ Use AskUserQuestion:
 Include 3-5 applicable items with "Pick one:" framing:
 
 - ALWAYS: `/metrics` — Define engagement and retention metrics grounded in these hook loops
-- OTHER: `/spec-interview [engagement mechanism]` — Spec out the highest-priority engagement mechanism
+- OTHER: `/roadmap` — Sequence the highest-priority engagement mechanism into the roadmap
 - IF no `research/monetization.md`: `/monetization` — Hook loops inform monetization timing — when to convert habitual users
 
 ### 7. Write Output

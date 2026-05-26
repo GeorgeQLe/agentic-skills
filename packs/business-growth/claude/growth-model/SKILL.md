@@ -120,7 +120,7 @@ Use AskUserQuestion:
 
 Before writing, check which files exist to populate the `## Next Steps` section contextually. Include 3-5 applicable items with "Pick one:" framing:
 
-- RECOMMEND: `/spec-interview [top growth mechanism]` — Spec the highest-impact growth mechanism for implementation
+- RECOMMEND: `/experiment [top growth hypothesis]` — Test the highest-impact growth mechanism before committing to build
 - IF `specs/` exist and `tasks/roadmap.md` exists: `/roadmap` — Update roadmap with growth loop implementation work
 - IF product is live or launching: `/experiment [growth hypothesis]` — Test the primary loop's weakest conversion hypothesis
 - IF no `research/hook-model.md`: `/hook-model` — Design engagement hooks that power the retention loop

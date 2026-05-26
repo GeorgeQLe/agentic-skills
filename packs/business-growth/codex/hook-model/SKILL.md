@@ -131,7 +131,7 @@ Include a **Recommended** item (the single highest-impact next step given curren
 **Recommended:** `$metrics` — define engagement and retention metrics grounded in these hook loops
 
 Other options:
-- `$spec-interview [engagement mechanism]` — Spec out the highest-priority engagement mechanism
+- `$roadmap` — Sequence the highest-priority engagement mechanism into the roadmap
 - IF no `research/monetization.md`: `$monetization` — Hook loops inform monetization timing — when to convert habitual users
 
 ### 7. Write Output

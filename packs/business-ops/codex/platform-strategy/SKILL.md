@@ -120,7 +120,7 @@ Other options:
 - `$competitive-analysis [adjacent category]` — research the competitive landscape for the top expansion candidate
 - `$icp [new audience]` — define the ICP for the new audience the top candidate targets
 - `$enterprise-icp` — map enterprise requirements if the expansion targets enterprise (if no `research/enterprise-icp.md`)
-- `$spec-interview [top candidate]` — spec the top candidate in detail
+- `$roadmap` — sequence the expansion into the build plan (if `specs/` exist for the candidate)
 - `$roadmap` — sequence the expansion into the build plan (if `specs/` exist)
 
 The recommendation (`$experiment [top candidate]`) is always applicable — platform expansion should be validated before built.

@@ -109,13 +109,11 @@ Other options:
 - `$positioning` — frame the market category and competitive alternatives after journey evidence exists (if no `research/positioning.md` and not recommended)
 - `$ux-variations [top journey-backed market gap or positioning opportunity]` — explore prototype directions before production specification (if positioning exists and not recommended)
 - `$value-prop-canvas` — optional detour only when solution-customer fit is weak, disputed, or needs explicit fit scoring before positioning/spec work
-- `$spec-interview [riskiest competitive assumption or top journey-backed market gap]` — validate the most important unresolved competitive assumption with a targeted interview (if not recommended and journey plus prototype evidence exists)
 - `$gtm` — build go-to-market plan leveraging competitive gaps (if no `research/gtm.md` and not recommended)
 - `$mvp-gap` — check if the codebase exploits the gaps found (if codebase exists, no `research/mvp-gap.md` exists, and not recommended)
 - `$brainstorm` — generate alternative solution ideas (only if the analysis found multiple plausible market gaps and product direction is still unclear)
 
 Only include items whose conditions are met. Do not recommend brainstorm just because competitive whitespace exists.
-Any `$spec-interview` recommendation must include a concrete target from the analysis, not a bare command. Use the top market gap, riskiest competitive assumption, or strongest positioning opportunity as the bracketed topic.
 
 **Concept-validation mode next steps:** Use the same Recommended + Other options format, but choose the recommendation from the validated `## Gap Assessment` verdict:
 

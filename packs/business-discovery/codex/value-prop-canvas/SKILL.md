@@ -133,7 +133,7 @@ Include a **Recommended** item (the single highest-impact next step given curren
 **Recommended:** `$positioning` — return to the default AFPS route by framing validated fit in the market
 
 Other options:
-- IF gaps identified: `$spec-interview [top gap]` — Spec out a solution for the highest-priority gap
+- IF gaps identified: `$positioning` — Define product positioning from gap evidence (if `research/positioning.md` missing), or `$ux-variations [top gap]` — Explore UX solutions for the highest-priority gap
 - IF no `research/competitive-analysis.md`: `$competitive-analysis` — Understand how alternatives address the same jobs
 - IF `research/positioning.md` exists: `$ux-variations [validated fit direction]` — return to the prototype path
 - IF business model, revenue, channel, cost, or defensibility risk remains material: `$lean-canvas` — optional synthesis now that fit is validated

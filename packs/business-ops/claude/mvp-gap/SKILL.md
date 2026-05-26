@@ -91,9 +91,9 @@ If `research/journey-map.md` (or `research/{app}/journey-map.md`) exists, map ea
 
 #### Spec Validation
 For each gap identified above, check if a spec already exists in `specs/` (or `specs/{app}/`):
-- If a spec covers the gap **fully**, mark the gap as "Spec exists — ready to build" and link the spec file instead of suggesting `/spec-interview`.
-- If a spec covers the gap **partially**, mark it as "Spec exists — needs expansion" and suggest `/spec-interview [topic]` to fill the remaining holes.
-- If no spec exists, suggest `/spec-interview [topic]` as before.
+- If a spec covers the gap **fully**, mark the gap as "Spec exists — ready to build" and link the spec file.
+- If a spec covers the gap **partially**, mark it as "Spec exists — needs expansion" and suggest `/ux-variations [topic]` to explore solution directions for the remaining holes.
+- If no spec exists, suggest `/ux-variations [topic]` to explore solution directions before speccing.
 
 #### Metrics Tie-In
 If `research/metrics.md` (or `research/{app}/metrics.md`) exists, identify for each gap:
@@ -120,8 +120,8 @@ If `research/gtm.md` (or `research/{app}/gtm.md`) exists:
 Before writing, check which files exist to populate the `## Next Steps` section contextually. Include a **Recommended** item and 2–4 other applicable options. Choose the recommendation by the first matching condition:
 
 - IF downstream impact is **Major**: `/reconcile-research` — audit and fix affected downstream research documents.
-- IF a `blocks-first-sale` gap lacks a full spec: `/spec-interview [top gap]` — turn the highest-priority gap from `research/mvp-gap.md` into an implementation spec.
-- IF any other gap lacks a full spec: `/spec-interview [top gap]` — turn the highest-priority unspecced gap from `research/mvp-gap.md` into an implementation spec.
+- IF a `blocks-first-sale` gap lacks a full spec: `/ux-variations [top gap]` — explore solution directions for the highest-priority gap from `research/mvp-gap.md`.
+- IF any other gap lacks a full spec: `/ux-variations [top gap]` — explore solution directions for the highest-priority unspecced gap from `research/mvp-gap.md`.
 - IF required context is missing: the corresponding research skill (`/journey-map`, `/competitive-analysis`, `/metrics`, or `/brainstorm` when creative alternatives could reduce high-effort gaps).
 - OTHERWISE: `/roadmap` — sequence the existing specs into implementation phases.
 
@@ -174,21 +174,21 @@ Display to the user with the written file confirmation.
 - **[Gap title]** — [What's missing and why it matters to the ICP]. Effort: S/M/L
   _Journey stage:_ [stage from journey-map, or "N/A" if no journey-map exists]
   _Closure metric:_ [metric from metrics.md, or "⚠ No metric defined" if none]
-  _Spec:_ [link to spec if exists + status, or `/spec-interview [topic]` if no spec]
+  _Spec:_ [link to spec if exists + status, or `/ux-variations [topic]` if no spec]
 - ...
 
 ## Blocks Retention
 - **[Gap title]** — [What's missing and why it matters]. Effort: S/M/L
   _Journey stage:_ [stage]
   _Closure metric:_ [metric or "⚠ No metric defined"]
-  _Spec:_ [spec link/status or `/spec-interview [topic]`]
+  _Spec:_ [spec link/status or `/ux-variations [topic]`]
 - ...
 
 ## Nice to Have
 - **[Gap title]** — [What's missing and why it matters]. Effort: S/M/L
   _Journey stage:_ [stage]
   _Closure metric:_ [metric or "⚠ No metric defined"]
-  _Spec:_ [spec link/status or `/spec-interview [topic]`]
+  _Spec:_ [spec link/status or `/ux-variations [topic]`]
 - ...
 
 ## Recommended Build Sequence
@@ -223,8 +223,8 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Do not make code changes.** Analysis only.
 - **Every gap must cite evidence** — a missing route, missing component, absent dependency, no billing integration, etc. No vague claims.
 - **Prioritise by market impact**, not technical interest. Things that block the first sale come before things that block the 10th.
-- **If no code exists yet**, report that clearly and suggest running `/spec-interview` to design the solution first. Do not fabricate gaps for a nonexistent codebase.
-- **Include `/spec-interview` prompts** only for gaps lacking full specs so the user can immediately start speccing a fix.
+- **If no code exists yet**, report that clearly and suggest running `/ux-variations` to explore solution directions first. Do not fabricate gaps for a nonexistent codebase.
+- **Include `/ux-variations` prompts** only for gaps lacking full specs so the user can immediately start exploring solutions.
 - **Do not duplicate work already tracked** in `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, or `tasks/recurring-todo.md` — note it as "in progress" or "advisory" instead.
 
 ## Alignment Page

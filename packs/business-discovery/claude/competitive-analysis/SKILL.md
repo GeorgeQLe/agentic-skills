@@ -203,8 +203,6 @@ Before writing, check which files exist to populate the `## Next Steps` section 
 - Include `/brainstorm` only as an "Other option" when the analysis found multiple plausible market gaps and the product direction is still unclear. Do not recommend brainstorm just because competitive whitespace exists.
 - Include `/value-prop-canvas` only as an "Other option" when solution-customer fit is weak, disputed, or needs explicit fit scoring before positioning/spec work. It is not part of the default route.
 
-Any `/spec-interview` recommendation must include a concrete target from the analysis, not a bare command. Use the top market gap, riskiest competitive assumption, or strongest positioning opportunity as the bracketed topic.
-
 **Impact-aware adjustments:**
 - IF downstream impact is **Major**: prepend `/reconcile-research — [N] conflicts found in downstream docs` as the first item
 - IF downstream impact is **Minor**: annotate relevant skill suggestions with "(stale — [brief description])"

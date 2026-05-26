@@ -67,7 +67,7 @@ The output file must end with a `## Next Steps` section based on which files exi
 **Recommended:** `$competitive-analysis` — maps the landscape your ICP operates in so positioning and GTM have competitive grounding
 
 Other options:
-- `$spec-interview` — validate the riskiest ICP assumption with a targeted interview (if `specs/` exist)
+- `$competitive-analysis` — Map the competitive landscape for this ICP's market (if no `research/competitive-analysis.md`)
 - `$journey-map` — map the current-state journey to find intervention points (if no `research/journey-map.md`)
 - `$mvp-gap` — check if the codebase delivers on the ICP's top pain point (if codebase exists)
 - `$brainstorm` — generate solution ideas grounded in the ICP research (if `research/competitive-analysis.md` exists)

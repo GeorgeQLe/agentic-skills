@@ -48,11 +48,11 @@ When app scope `{app}` is active:
 
 ## Deliverables
 
-- `specs/scale-audit.md` (or `specs/{app}/scale-audit.md`) — Gap analysis with stakeholder coverage matrix, compliance matrix, priority tags, and `$spec-interview` prompts for each unspecced gap
+- `specs/scale-audit.md` (or `specs/{app}/scale-audit.md`) — Gap analysis with stakeholder coverage matrix, compliance matrix, priority tags, and `$ux-variations` prompts for each unspecced gap
 
 The output file must end with a `## Next Steps` section containing a **Recommended** item and 2–4 other contextual options. Choose the recommendation by the first matching condition:
 
-1. IF any `hard-blocker` lacks a full implementation spec: `$spec-interview [top blocker]` — spec the highest-priority enterprise hard-blocker from `specs/scale-audit.md`.
+1. IF any `hard-blocker` lacks a full implementation spec: `$ux-variations [top blocker]` — explore solution directions for the highest-priority enterprise hard-blocker from `specs/scale-audit.md`.
 2. IF enterprise stakeholder journey context is missing: `$journey-map enterprise` — map enterprise stakeholder journeys before sequencing build work.
 3. IF startup gaps escalated and `research/mvp-gap.md` is missing or stale: `$mvp-gap` — re-evaluate startup readiness first.
 4. IF enterprise SLA or compliance gaps lack closure metrics: `$metrics` — define metrics covering enterprise SLAs.
@@ -75,7 +75,7 @@ When this skill produces follow-up work, file it by execution semantics:
 - Analysis only — do not make code changes.
 - Every gap must cite specific evidence.
 - Distinguish "first enterprise deal" from "100th enterprise deal."
-- Include `$spec-interview <topic>` prompts only for gaps lacking full specs.
+- Include `$ux-variations <topic>` prompts only for gaps lacking full specs.
 - `## Next Steps` must be the final section in the output file, with a recommended next step and 2–4 other contextual options.
 
 ## Alignment Page

@@ -126,7 +126,7 @@ Before writing, check which files exist to populate the `## Next Steps` section 
 
 ## Next Steps
 
-**Recommended:** `$spec-interview [top growth mechanism]` — spec the highest-impact growth mechanism for implementation
+**Recommended:** `$experiment [top growth hypothesis]` — Test the highest-impact growth mechanism before committing to build
 
 Other options:
 - IF `specs/` exist and `tasks/roadmap.md` exists: `$roadmap` — Update roadmap with growth loop implementation work
@@ -289,7 +289,7 @@ For each existing downstream document:
 
 ## Next Steps
 
-**Recommended:** `$spec-interview [top growth mechanism]` — spec the highest-impact growth mechanism for implementation
+**Recommended:** `$experiment [top growth hypothesis]` — Test the highest-impact growth mechanism before committing to build
 
 Other options:
 - [conditional items from step 7 — only include items whose conditions are met]

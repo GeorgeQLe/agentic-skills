@@ -116,7 +116,7 @@ Other options:
 - [2-4 applicable alternatives]
 ```
 
-- IF instrumentation gaps and no specs for them: `$spec-interview [topic]` — Spec instrumentation for the top metric gap
+- IF instrumentation gaps and no specs for them: `$roadmap` — Sequence instrumentation for the top metric gap into the roadmap
 - IF no `tasks/roadmap.md`: `$roadmap` — Plan the build with instrumentation phases
 - IF no `research/gtm.md`: `$gtm` — Build a GTM plan — metrics define what launch success looks like
 - IF `tasks/roadmap.md` exists: `$run` — Start building and instrumenting
@@ -237,7 +237,7 @@ Display to the user after showing the written file confirmation. This should be 
 |--------|---------------|--------|----------|
 | [metric] | [what needs to be built] | S/M/L | [High/Med/Low] |
 
-_Start with:_ `$spec-interview [instrumentation topic]` for high-priority gaps.
+_Start with:_ `$roadmap` — Sequence instrumentation for the top metric gap into the roadmap.
 
 ## Metric Dependencies
 [How metrics relate to each other — e.g., activation drives retention, retention drives LTV. Identify which metrics are leading vs. lagging indicators.]

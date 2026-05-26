@@ -149,14 +149,14 @@ Use AskUserQuestion:
 Include 3-5 applicable items with "Pick one:" framing, conditional on PMF strength:
 
 **Weak PMF:**
-- `/spec-interview [top user complaint]` — Deep-dive on the weakest area to understand what's broken
+- `/customer-feedback [top user complaint]` — Deep-dive on the weakest area to understand what's broken
 - `/icp` — Re-examine customer fit; you may be selling to the wrong segment
 - `/journey-map` — Map where users drop off to find the biggest gap
 
 **Moderate PMF:**
 - `/growth-model` — Model growth levers to strengthen engagement before scaling
 - `/hook-model` — Design habit loops around what's already working
-- `/spec-interview [most-requested feature]` — Double down on what "somewhat disappointed" users want more of
+- `/customer-feedback [most-requested feature]` — Deep-dive on what "somewhat disappointed" users want more of
 
 **Strong PMF:**
 - `/growth-model` — Model growth channels to scale what's working

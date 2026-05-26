@@ -52,4 +52,4 @@ Follow the shared Alignment Page convention in CLAUDE.md. Output: `alignment/tra
 
 - Keep the map provider-agnostic unless the codebase or specs already choose a payment provider.
 - Identify compliance, tax, or legal questions as gaps; do not invent policy.
-- End with `## Next Steps`, preferring `$retention-map`, `$spec-interview`, `$guide`, or `$lifecycle-metrics` as context dictates.
+- End with `## Next Steps`, preferring `$retention-map`, `$guide`, or `$lifecycle-metrics` as context dictates.

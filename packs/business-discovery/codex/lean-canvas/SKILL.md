@@ -106,7 +106,7 @@ Include a **Recommended** item (the single highest-impact next step given curren
 
 Other options:
 - IF Revenue/Cost hypotheses need validation: `$monetization` — Validate revenue model and cost structure hypotheses
-- IF riskiest hypothesis identified: `$spec-interview [riskiest hypothesis]` — Spec out the riskiest assumption for testing
+- IF riskiest hypothesis identified: `$experiment [riskiest hypothesis]` — Test the riskiest assumption with a structured experiment
 - IF no `research/positioning.md`: `$positioning` — Establish strategic positioning to strengthen UVP and Unfair Advantage sections
 - IF no `research/journey-map.md`: `$journey-map` — Map the customer journey before continuing UX, growth, or spec work
 

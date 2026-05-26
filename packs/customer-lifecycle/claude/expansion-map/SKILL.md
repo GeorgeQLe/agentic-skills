@@ -51,4 +51,4 @@ Follow the shared Alignment Page convention in CLAUDE.md. Output: `alignment/exp
 
 - Separate genuine expansion from ordinary retention.
 - For enterprise products, identify champion, buyer, admin, security, and procurement roles when relevant.
-- End with `## Next Steps`, preferring `/lifecycle-metrics`, `/monetization`, `/growth-model`, `/gtm`, or `/spec-interview` as context dictates.
+- End with `## Next Steps`, preferring `/lifecycle-metrics`, `/monetization`, `/growth-model`, `/gtm` as context dictates.

@@ -156,7 +156,7 @@ Include a **Recommended** item (the single highest-impact next step given curren
 
 ## Next Steps
 
-**Recommended:** `$spec-interview [top user complaint]` — deep-dive on the weakest area to understand what's broken
+**Recommended:** `$customer-feedback [top user complaint]` — deep-dive on the weakest area to understand what's broken
 
 Other options:
 - `$icp` — Re-examine customer fit; you may be selling to the wrong segment
@@ -170,7 +170,7 @@ Other options:
 
 Other options:
 - `$hook-model` — Design habit loops around what's already working
-- `$spec-interview [most-requested feature]` — Double down on what "somewhat disappointed" users want more of
+- `$customer-feedback [most-requested feature]` — Deep-dive on what "somewhat disappointed" users want more of
 
 **Strong PMF:**
 

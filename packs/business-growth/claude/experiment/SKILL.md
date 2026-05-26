@@ -117,7 +117,7 @@ Other options:
 
 - ALWAYS: Run the experiment (manual step — the plan tells you how)
 - For a newly designed experiment, do not list validation/invalidation commands as current top-level next steps; put those under `## Decision Rules` because they are only valid after results exist.
-- In `### If Validated`: include the next valid command, usually `/customer-feedback [results]` to log evidence, `/assumption-tracker` to mark the assumption validated, or `/roadmap` / `/spec-interview [validated opportunity]` if the result commits the team to build.
+- In `### If Validated`: include the next valid command, usually `/customer-feedback [results]` to log evidence, `/assumption-tracker` to mark the assumption validated, or `/roadmap` if the result commits the team to build.
 - In `### If Invalidated`: include `/assumption-tracker` to mark the assumption invalidated, plus `/brainstorm`, `/icp`, `/gtm`, or `/monetization` only when the failed assumption belongs to that domain.
 - In `### If Inconclusive`: include `/experiment [follow-up]` if the test needs another run, or `/customer-feedback` if qualitative evidence is the missing signal.
 - IF more assumptions remain untested after this design: `/experiment [next assumption]` — Design the next experiment

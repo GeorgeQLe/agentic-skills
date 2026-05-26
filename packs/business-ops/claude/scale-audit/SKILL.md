@@ -102,7 +102,7 @@ Estimate effort for each: S / M / L / XL.
 
 Before writing, check which files exist to populate the `## Next Steps` section contextually. Include a **Recommended** item and 2–4 other applicable options. Choose the recommendation by the first matching condition:
 
-1. IF any `hard-blocker` lacks a full implementation spec: `/spec-interview [top blocker]` — spec the highest-priority enterprise hard-blocker from `specs/scale-audit.md`.
+1. IF any `hard-blocker` lacks a full implementation spec: `/ux-variations [top blocker]` — explore solution directions for the highest-priority enterprise hard-blocker from `specs/scale-audit.md`.
 2. IF enterprise stakeholder journey context is missing: `/journey-map enterprise` — map enterprise stakeholder journeys before sequencing build work.
 3. IF startup gaps escalated and `research/mvp-gap.md` is missing or stale: `/mvp-gap` — re-evaluate startup readiness first.
 4. IF enterprise SLA or compliance gaps lack closure metrics: `/metrics` — define metrics covering enterprise SLAs.
@@ -126,17 +126,17 @@ Only recommend `/roadmap` as the primary next step when every hard-blocker alrea
 
 ## Hard Blockers
 - **[Gap title]** — [What's missing, which stakeholder it blocks, and why]. Effort: S/M/L/XL
-  _Start with:_ `/spec-interview [topic]`
+  _Start with:_ `/ux-variations [topic]`
 - ...
 
 ## Soft Blockers
 - **[Gap title]** — [What's missing and impact]. Effort: S/M/L/XL
-  _Start with:_ `/spec-interview [topic]`
+  _Start with:_ `/ux-variations [topic]`
 - ...
 
 ## Differentiators
 - **[Gap title]** — [What's missing and competitive advantage]. Effort: S/M/L/XL
-  _Start with:_ `/spec-interview [topic]`
+  _Start with:_ `/ux-variations [topic]`
 - ...
 
 ## Stakeholder Coverage Matrix
@@ -186,7 +186,7 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Do not make code changes.** Analysis only.
 - **Every gap must cite evidence** — missing middleware, absent SCIM endpoint, no audit log table, etc.
 - **Distinguish "first enterprise deal" from "100th enterprise deal."** Early enterprise sales can tolerate workarounds; at scale they can't. Be clear about which gaps matter when.
-- **Include `/spec-interview` prompts** for each gap that lacks a full spec so the user can immediately spec the blocker.
+- **Include `/ux-variations` prompts** for each gap that lacks a full spec so the user can immediately explore solution directions for the blocker.
 - **Do not duplicate work already tracked** in `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, or `tasks/recurring-todo.md`.
 - **If the codebase is minimal**, be honest about it — don't fabricate detailed infrastructure gaps for a prototype.
 

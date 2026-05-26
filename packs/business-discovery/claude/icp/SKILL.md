@@ -164,7 +164,7 @@ Incorporate feedback before proceeding.
 Before writing, check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with "Pick one:" framing:
 
 - ALWAYS: `/competitive-analysis` — Research competitors and market gaps for this ICP
-- IF no `specs/` directory or it's empty: `/spec-interview` — Design the solution for this ICP's pain points
+- IF no `specs/` directory or it's empty: `/competitive-analysis` — Map the competitive landscape for this ICP's market
 - IF `specs/` exist but no `research/journey-map.md`: `/journey-map` — Map how this ICP flows through the product
 - IF codebase exists: `/mvp-gap` — Evaluate what's built against this ICP
 - IF `research/competitive-analysis.md` exists: `/brainstorm` — Generate ideas from ICP needs + competitive gaps

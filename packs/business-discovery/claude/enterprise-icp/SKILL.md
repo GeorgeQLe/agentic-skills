@@ -153,7 +153,7 @@ Continue until the user confirms the findings are complete and accurate. Only th
 Before writing, check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with "Pick one:" framing:
 
 - IF codebase exists: `/scale-audit` — Evaluate enterprise readiness against stakeholder map and deal-killers
-- IF no enterprise feature specs in `specs/`: `/spec-interview enterprise [feature]` — Spec the top deal-killer that needs a spec
+- IF no enterprise feature specs in `specs/`: `/scale-audit` — Evaluate enterprise readiness against stakeholder map and deal-killers
 - IF `research/journey-map.md` exists but doesn't cover enterprise: `/journey-map enterprise` — Map enterprise stakeholder journeys
 - IF no `research/journey-map.md`: `/journey-map` — Map user and customer journeys first
 - IF `research/icp.md` exists but no `research/competitive-analysis.md`: `/competitive-analysis` — Research how competitors serve enterprise

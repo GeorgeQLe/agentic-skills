@@ -52,4 +52,4 @@ Follow the shared Alignment Page convention in CLAUDE.md. Output: `alignment/onb
 
 - Stay stage-specific; do not rewrite the whole journey map.
 - Make onboarding steps concrete enough to drive specs, UX variations, and instrumentation.
-- End with `## Next Steps`, preferring `$conversion-map`, `$lifecycle-metrics`, `$ux-variations`, or `$spec-interview` as context dictates.
+- End with `## Next Steps`, preferring `$conversion-map`, `$lifecycle-metrics`, `$ux-variations` as context dictates.

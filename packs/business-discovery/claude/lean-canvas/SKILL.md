@@ -98,7 +98,7 @@ Include 3-5 applicable items with "Pick one:" framing:
 
 - ALWAYS: `/ux-variations [business-model-informed product direction]` — Return to the default AFPS prototype path after resolving material business-model assumptions
 - IF Revenue/Cost hypotheses need validation: `/monetization` — Validate revenue model and cost structure hypotheses
-- IF riskiest hypothesis identified: `/spec-interview [riskiest hypothesis]` — Spec out the riskiest assumption for testing
+- IF riskiest hypothesis identified: `/experiment [riskiest hypothesis]` — Test the riskiest assumption with a structured experiment
 - IF no `research/positioning.md`: `/positioning` — Establish strategic positioning to strengthen UVP and Unfair Advantage sections
 - IF no `research/journey-map.md`: `/journey-map` — Map the customer journey before continuing UX, growth, or spec work
 - IF codebase exists: `/mvp-gap` — Check if the product delivers on the canvas promises

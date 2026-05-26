@@ -51,4 +51,4 @@ Follow the shared Alignment Page convention in CLAUDE.md. Output: `alignment/con
 ## Constraints
 
 - Keep conversion separate from payment mechanics; use `/transaction-map` for checkout, payments, fulfillment, refunds, and receipts.
-- End with `## Next Steps`, preferring `/transaction-map`, `/monetization`, `/gtm`, `/experiment`, or `/spec-interview` as context dictates.
+- End with `## Next Steps`, preferring `/transaction-map`, `/monetization`, `/gtm`, `/experiment` as context dictates.
