@@ -8,7 +8,7 @@ argument-hint: "[phase-number] [--no-tdd]"
 
 # Plan Phase
 
-Fill in the implementation detail for **one** phase of `tasks/roadmap.md`. This skill is invoked just-in-time — either manually, by `/roadmap` (to seed Phase 1), or by `/ship` (exec-loop pack) and `/run` (exec-loop pack) when a new phase begins. Implementation detail is generated when a phase starts, not upfront, because context from earlier phases informs later decisions.
+Fill in the implementation detail for **one** phase of `tasks/roadmap.md`. This skill is invoked just-in-time — either manually, by `/roadmap` (to seed Phase 1), or by `/ship` (exec-loop pack) and `/exec` (exec-loop pack) when a new phase begins. Implementation detail is generated when a phase starts, not upfront, because context from earlier phases informs later decisions.
 
 ## Prerequisites
 
@@ -84,7 +84,7 @@ Add this section before implementation steps:
 
 For `serial`, use `**Subagent lanes:** none`. For `research-only` and `review-only`, lanes must not have write mode. For `implementation-safe`, every write lane must have non-overlapping `Owns` paths and explicit `Must not edit` boundaries.
 
-For `agent-team` profiles, every lane **must** have `Mode:` and `Depends on:` filled in with concrete values (not placeholders). Write lanes must have disjoint `Owns:` paths, explicit `Must not edit:` boundaries, and deterministic `Branch:` values that are not `main` or `master` — `/run` (exec-loop pack) auto-dispatches agent-team lanes via isolated worktrees and uses those fields to build the lane DAG, push lane branches, open PRs, and enforce write-boundary integration. The phase steps must include a consolidation/PR review step after all write lanes complete and before final validation or shipping. If GitHub branch push or PR review is unavailable, downgrade to `implementation-safe`, `research-only`, or `serial`, or stop and document the blocker.
+For `agent-team` profiles, every lane **must** have `Mode:` and `Depends on:` filled in with concrete values (not placeholders). Write lanes must have disjoint `Owns:` paths, explicit `Must not edit:` boundaries, and deterministic `Branch:` values that are not `main` or `master` — `/exec` (exec-loop pack) auto-dispatches agent-team lanes via isolated worktrees and uses those fields to build the lane DAG, push lane branches, open PRs, and enforce write-boundary integration. The phase steps must include a consolidation/PR review step after all write lanes complete and before final validation or shipping. If GitHub branch push or PR review is unavailable, downgrade to `implementation-safe`, `research-only`, or `serial`, or stop and document the blocker.
 
 ### Break the Phase into Steps
 
@@ -299,7 +299,7 @@ Recurring tasks MUST NOT appear in `tasks/todo.md` unless the current run is exp
    ```markdown
    # Record Tasks — [Project Name]
 
-   > These tasks are non-blocking records or measurements. Do not execute them through `/run` (exec-loop pack) unless promoted to `tasks/todo.md`.
+   > These tasks are non-blocking records or measurements. Do not execute them through `/exec` (exec-loop pack) unless promoted to `tasks/todo.md`.
 
    - [ ] [task]
      - Source: [phase/spec/criterion]
@@ -317,7 +317,7 @@ Recurring tasks MUST NOT appear in `tasks/todo.md` unless the current run is exp
    ```markdown
    # Recurring Tasks — [Project Name]
 
-   > These tasks recur on a cadence. Do not execute them through `/run` (exec-loop pack) unless a due run is promoted to `tasks/todo.md`.
+   > These tasks recur on a cadence. Do not execute them through `/exec` (exec-loop pack) unless a due run is promoted to `tasks/todo.md`.
 
    - [ ] [task]
      - Cadence: [daily/weekly/monthly/quarterly/on release/etc.]
@@ -345,10 +345,10 @@ Rules:
 - Make the next work item primary. Derive it from the first executable step in `tasks/todo.md`, any matching blocker in `tasks/manual-todo.md`, or the phase's verification/setup gap. Do not use agent mode itself as the next work item.
 - Use `./scripts/agent-mode.sh` only to choose command text. If it is missing, unset, or non-zero, infer routing from the current invocation and task type instead of asking the user to select a mode by default.
 - Inference defaults:
-  - Hybrid execution handoff → recommend `/delegate` (agent-bridge pack) `$run`.
-  - Claude-only or orchestration-heavy work → recommend `/run` (exec-loop pack).
-  - Codex-only execution → recommend `$run`.
-  - External human-only manual work (browser/auth/DNS/service dashboard work with no reliable authenticated CLI/API path, paid account setup, real-device checks, or production smoke-test work needing human sign-off) → recommend `/guide` (guided-walkthrough pack) or a Claude-guided manual step rather than `/run` (exec-loop pack).
+  - Hybrid execution handoff → recommend `/delegate` (agent-bridge pack) `$exec`.
+  - Claude-only or orchestration-heavy work → recommend `/exec` (exec-loop pack).
+  - Codex-only execution → recommend `$exec`.
+  - External human-only manual work (browser/auth/DNS/service dashboard work with no reliable authenticated CLI/API path, paid account setup, real-device checks, or production smoke-test work needing human sign-off) → recommend `/guide` (guided-walkthrough pack) or a Claude-guided manual step rather than `/exec` (exec-loop pack).
   - Agent-executable work misfiled in `tasks/manual-todo.md`, task-doc bookkeeping, stale `tasks/manual-todo.md` cleanup, or reconciliation against repo/history reality → recommend `/reconcile-dev-docs fix tasks` (docs-health pack), promotion to `tasks/todo.md`, or a direct dev-doc audit, not `/guide` (guided-walkthrough pack).
 - Only present multiple commands when the ambiguity materially changes execution safety or there are equally valid next work items. Otherwise choose the best route and mention degraded mode lookup inline.
 
@@ -358,13 +358,13 @@ Rules:
 - **One phase per invocation.** Do not decompose multiple phases ahead of time.
 - **Require `tasks/roadmap.md`.** If it's missing, stop and direct the user to `/roadmap`.
 - **Preserve the roadmap's Goal, Scope, and Acceptance Criteria exactly.** Those are `/roadmap`'s decisions. This skill only adds implementation detail beneath them.
-- **Phase headers must use `## Phase N: [Title]` format** and steps must use `- Step N.X:` format — this is required by `/run` (exec-loop pack) and `/ship` (exec-loop pack).
+- **Phase headers must use `## Phase N: [Title]` format** and steps must use `- Step N.X:` format — this is required by `/exec` (exec-loop pack) and `/ship` (exec-loop pack).
 - Every milestone must have specific, checkable acceptance criteria — not vague statements like "works correctly" but concrete conditions like "POST /api/items returns 201 with valid payload and persists to database."
 - Every `tdd` phase must start with writing failing tests. `tests-after` phases write tests in the Green step.
 - Do not generate standalone cleanup/refactor steps that are conditional on validation finding drift. Fold those checks into the Green validation step and only create a separate follow-up when there is known concrete remediation work.
 - Do not include implementation code — describe what to build and what to test.
 - Note what already exists in the codebase vs. what needs to be created.
-- The `### Execution Profile` must be decision-complete enough for `/run` (exec-loop pack) to decide whether to use serial execution, read-only subagents, review subagents, or disjoint write subagents after the normal approval gate.
+- The `### Execution Profile` must be decision-complete enough for `/exec` (exec-loop pack) to decide whether to use serial execution, read-only subagents, review subagents, or disjoint write subagents after the normal approval gate.
 - Subagents must not own task docs, roadmap/history updates, shipping, or deploy steps. Those stay with the main agent.
 - Agent-team write lanes must not target `main` or `master`; each lane gets its own GitHub branch and must return branch, commit SHA, validation evidence, and PR URL before consolidation.
 - Manual tasks MUST NOT appear in `tasks/todo.md` — they go in `tasks/manual-todo.md` only.

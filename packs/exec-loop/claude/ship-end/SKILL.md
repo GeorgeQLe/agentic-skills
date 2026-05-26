@@ -75,10 +75,10 @@ Rules:
 - Make the next work item primary. Derive it from `tasks/todo.md`, `tasks/manual-todo.md`, deploy status, validation gaps, smoke-test gaps, outstanding session work, or the absence of any remaining work. Do not use agent mode itself as the next work item.
 - Use `./scripts/agent-mode.sh` only to choose command text. If it is missing, unset, or non-zero, infer routing from the current invocation and task type instead of asking the user to select a mode by default.
 - Inference defaults:
-  - Hybrid execution handoff → recommend `/delegate` (agent-bridge pack) `$run`.
-  - Claude-only or orchestration-heavy work → recommend `/run`.
-  - Codex-only execution → recommend `$run`.
-  - External human-only manual work (browser/auth/DNS/service dashboard work with no reliable authenticated CLI/API path, paid account setup, real-device checks, or production smoke-test work needing human sign-off) → recommend `/guide` (guided-walkthrough pack) or a Claude-guided manual step rather than `/run`.
+  - Hybrid execution handoff → recommend `/delegate` (agent-bridge pack) `$exec`.
+  - Claude-only or orchestration-heavy work → recommend `/exec`.
+  - Codex-only execution → recommend `$exec`.
+  - External human-only manual work (browser/auth/DNS/service dashboard work with no reliable authenticated CLI/API path, paid account setup, real-device checks, or production smoke-test work needing human sign-off) → recommend `/guide` (guided-walkthrough pack) or a Claude-guided manual step rather than `/exec`.
   - Agent-executable work misfiled in `tasks/manual-todo.md`, task-doc bookkeeping, stale `tasks/manual-todo.md` cleanup, or reconciliation against repo/history reality → recommend `/reconcile-dev-docs fix tasks` (docs-health pack), promotion to `tasks/todo.md`, or a direct dev-doc audit, not `/guide` (guided-walkthrough pack).
 - Only present multiple commands when the ambiguity materially changes execution safety or there are equally valid next work items. Otherwise choose the best route and mention degraded mode lookup inline.
 

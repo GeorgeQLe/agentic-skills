@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Update: Exec Loop Run Rename 2026-05-26
+
+**Goal:** Rename the exec-loop `run` skill to `exec` for Claude and Codex so the project-local command does not collide with Claude's default `/run` surface.
+
+**Acceptance Criteria:**
+- [x] User claim is validated against active exec-loop skill locations and references.
+- [x] Active Claude and Codex exec-loop skills move from `run` to `exec`, with frontmatter, invocation text, and command references updated.
+- [x] Prior v0.0 skill contracts are archived before the active skills are bumped to v0.1, with changelogs added.
+- [x] Pack metadata, workflow docs, tests, and generated showcase data no longer advertise `$run` or `/run` as the exec-loop command where `exec` is intended.
+- [x] Focused validation passes, review notes are recorded, and intended changes are committed and pushed on `master`.
+
+**Result:** Updated on 2026-05-26. The exec-loop execution command is now `/exec` for Claude and `$exec` for Codex. Previous v0.0 `run` contracts are archived, active skills are bumped to v0.1 with changelogs, routing/docs/benchmark coverage references are updated, and generated Skills Showcase metadata was refreshed. Focused validation passed; the broader benchmark setup suite still has unrelated legacy `$run`/`global/...` expectations to clean up separately.
+
 ## Current Targeted Update: ICP Willingness-to-Pay Signals 2026-05-25
 
 **Goal:** Incorporate willingness-to-pay (WTP) evidence into the mirrored ICP skills as a bounded discovery signal, without turning ICP research into pricing strategy or monetization design.

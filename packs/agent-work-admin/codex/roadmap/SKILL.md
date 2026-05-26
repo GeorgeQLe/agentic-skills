@@ -123,7 +123,7 @@ Use `serial` when work is tightly coupled or file ownership cannot be separated.
 
 After writing `tasks/roadmap.md`, immediately invoke `$plan-phase 1` for State B or `$plan-phase N` for the first newly appended State G phase to generate implementation detail. This produces `tasks/todo.md` and, when applicable, `tasks/manual-todo.md`, `tasks/record-todo.md`, or `tasks/recurring-todo.md`, so the user lands on an actionable starting point rather than an undecomposed roadmap.
 
-Do not decompose later phases — those are generated just-in-time when each phase begins (via `$ship` or `$run`).
+Do not decompose later phases — those are generated just-in-time when each phase begins (via `$ship` or `$exec`).
 
 After `$plan-phase` completes, continue to step 5 to scan the freshly-created or freshly-extended roadmap for any pipeline issues.
 
@@ -144,7 +144,7 @@ Uncommitted changes or unpushed commits exist. These must be resolved before tas
 `tasks/roadmap.md` was modified more recently than `tasks/todo.md`, suggesting the roadmap was updated but the current working document was not refreshed. Evidence: roadmap mtime vs todo mtime.
 
 #### 5. Missing Implementation Steps
-A roadmap phase has acceptance criteria but no implementation steps (no `### Tests First`, `### Implementation`, or `### Green` section). This phase needs `$plan-phase` before `$run` can execute it.
+A roadmap phase has acceptance criteria but no implementation steps (no `### Tests First`, `### Implementation`, or `### Green` section). This phase needs `$plan-phase` before `$exec` can execute it.
 
 #### 6. Orphaned Manual Tasks
 `tasks/manual-todo.md` references a phase that has already been completed or archived, but unchecked items remain. These need resolution or explicit deferral.
@@ -153,7 +153,7 @@ A roadmap phase has acceptance criteria but no implementation steps (no `### Tes
 `tasks/record-todo.md` contains unchecked items whose condition appears to be true. These are advisory by default. Queue promotion to `tasks/todo.md` only when the item is now concrete execution work; otherwise leave it in `tasks/record-todo.md` with updated evidence or revisit timing.
 
 #### 8. Due Recurring Tasks
-`tasks/recurring-todo.md` contains unchecked or active items whose `Next due` is today or earlier. These are advisory by default. Queue promotion to `tasks/todo.md` only when the due item requires real execution work; otherwise leave it in `tasks/recurring-todo.md` with updated run/evidence state.
+`tasks/recurring-todo.md` contains unchecked or active items whose `Next due` is today or earlier. These are advisory by default. Queue promotion to `tasks/todo.md` only when the due item requires real execution work; otherwise leave it in `tasks/recurring-todo.md` with updated exec/evidence state.
 
 #### 9. History Gap
 Work has been completed (checked-off steps in todo, archived phases) but `tasks/history.md` is missing, empty, or its last entry predates the most recent phase archive. Evidence: phase archive timestamps vs history mtime.
@@ -238,7 +238,7 @@ dashboard setup, signups, paid account approval, or production smoke checks that
 need a real account/device or human sign-off):
 
 ```md
-- [ ] Complete manual task: "[task description]" _(blocks: Step N.X)_ — resolve before `$run` can continue.
+- [ ] Complete manual task: "[task description]" _(blocks: Step N.X)_ — resolve before `$exec` can continue.
 ```
 
 Do not use this format for agent-executable work or for bookkeeping/documentation
@@ -273,7 +273,7 @@ For missing journey/UX/UI planning:
 If all pipeline checks pass:
 
 ```md
-- [x] Task pipeline is healthy; no issues found. Ready for `$run`.
+- [x] Task pipeline is healthy; no issues found. Ready for `$exec`.
 ```
 
 ### 8. Output to User
@@ -285,7 +285,7 @@ After editing, summarize:
 
 - Wrote/updated `tasks/todo.md`
 - Priority task items: N
-- Blocking issues: N (must resolve before `$run`)
+- Blocking issues: N (must resolve before `$exec`)
 - Advisory issues: N (should resolve soon)
 
 Next: start at the first unchecked item in `tasks/todo.md`.
@@ -344,7 +344,7 @@ If the pipeline is fully healthy:
 - Task pipeline is healthy
 - No blocking or advisory issues found
 
-Next: `$run` to continue execution.
+Next: `$exec` to continue execution.
 ```
 
 ## Next-Step Routing
@@ -359,12 +359,12 @@ Output exactly two lines beyond the normal report:
 Rules:
 
 - Make the next work item primary. Derive it from the roadmap state, the first unchecked priority-queue item, the next unplanned phase, advisory queues, or completion of the current queues. Do not use agent mode itself as the next work item.
-- Never recommend `$roadmap` as the next command from a `$roadmap` run. This skill is the scanner/router; once it has updated the queue, the next command must be the first queued actionable skill (`$feature-interview`, `$spec-interview`, `$journey-map`, `$ux-variations`, `$ui-interview`, `$prototype`, `$consolidate-variations`, `$research-roadmap`, `$plan-phase N`, `$ship-end --no-deploy`, `$reconcile-dev-docs fix tasks`, `$run`, `$guide`, or `$brainstorm`). If the first unchecked item itself says `$roadmap`, treat that as a stale/self-referential queue item and route to `$reconcile-dev-docs fix tasks` with evidence.
+- Never recommend `$roadmap` as the next command from a `$roadmap` run. This skill is the scanner/router; once it has updated the queue, the next command must be the first queued actionable skill (`$feature-interview`, `$spec-interview`, `$journey-map`, `$ux-variations`, `$ui-interview`, `$prototype`, `$consolidate-variations`, `$research-roadmap`, `$plan-phase N`, `$ship-end --no-deploy`, `$reconcile-dev-docs fix tasks`, `$exec`, `$guide`, or `$brainstorm`). If the first unchecked item itself says `$roadmap`, treat that as a stale/self-referential queue item and route to `$reconcile-dev-docs fix tasks` with evidence.
 - Do not emit `Recommended next command: none` unless the latest user request explicitly asks to pause, park, archive, or wait. If implementation phases, documentation work, and promotable advisory items are all exhausted, route to new-phase discovery: `**Next work:** discover candidate next phase or explicitly park the project` and `**Recommended next command:** $brainstorm`.
 - Use `./scripts/agent-mode.sh` only to choose command text. If it is missing, unset, or non-zero, infer routing from the current invocation and task type instead of asking the user to select a mode by default.
 - Inference defaults:
-  - Codex skill invocation (`$roadmap`, `$plan-phase`, `$run`, `$research-roadmap`) → recommend the matching `$...` command.
-  - Claude slash invocation (`/roadmap`, `/plan-phase`, `/run`, `/delegate`) or orchestration-heavy work → recommend the matching `/...` route.
+  - Codex skill invocation (`$roadmap`, `$plan-phase`, `$exec`, `$research-roadmap`) → recommend the matching `$...` command.
+  - Claude slash invocation (`/roadmap`, `/plan-phase`, `/exec`, `/delegate`) or orchestration-heavy work → recommend the matching `/...` route.
   - External manual work or browser-gathered evidence with no reliable authenticated CLI/API path (DNS/OAuth/service dashboards, auth setup, production smoke checks that need real account/device or human sign-off) → recommend `$guide` or a Claude-guided manual step.
   - Task-doc bookkeeping, stale `tasks/manual-todo.md` cleanup, or reconciliation against repo/history reality → recommend `$reconcile-dev-docs fix tasks` or a direct dev-doc audit, not `$guide`.
 - Only present multiple commands when the ambiguity materially changes execution safety or there are equally valid next work items. Otherwise choose the best route and mention degraded mode lookup inline.
@@ -373,7 +373,7 @@ Rules:
 
 - **Always interview for new roadmaps.** Do not produce a roadmap without user input on priorities and sequencing when building one from scratch (State B).
 - **Respect existing specs.** Do not modify files in `specs/` (or `spec.md`).
-- **Phase headers must use `## Phase N: [Title]` format** for `$run` compatibility.
+- **Phase headers must use `## Phase N: [Title]` format** for `$exec` compatibility.
 - **Do not include TDD steps or file-level implementation detail** — that's `$plan-phase`' job.
 - **`tasks/roadmap.md` is the source of truth.** Do not put roadmap content in CLAUDE.md or AGENTS.md.
 - This skill updates `tasks/todo.md` and `tasks/roadmap.md`; it must not run queued priority items. It may invoke `$plan-phase 1` only as the explicit Phase 1 seed described above.
@@ -384,7 +384,7 @@ Rules:
 - Do not treat `tasks/record-todo.md` or `tasks/recurring-todo.md` as execution queues. They are advisory surfaces unless an item is explicitly promoted into `tasks/todo.md`.
 - Do not create or modify source code.
 - Do not archive phases, advance the pipeline, or execute implementation steps.
-- Prefer actionable skill invocations (`$ship`, `$run`, `$plan-phase N`, `$research-roadmap`, `$brainstorm`) over vague guidance.
+- Prefer actionable skill invocations (`$ship`, `$exec`, `$plan-phase N`, `$research-roadmap`, `$brainstorm`) over vague guidance.
 
 ## Archive-First Replacement Policy
 

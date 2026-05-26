@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-05-26 — Rename exec-loop run command to exec
+
+- Renamed active exec-loop execution skills from `run` to `exec` for Claude and Codex to avoid collision with Claude's default `/run` command surface.
+- Archived v0.0 `run` contracts under the new `exec/archive/v0.0/` directories, bumped active skills to v0.1, and added changelogs.
+- Updated exec-loop routing references across `ship`, `ship-end`, `roadmap`, `plan-phase`, approved-plan docs/scripts, README, benchmark coverage metadata, and generated Skills Showcase data.
+- Validation: skill versions, benchmark coverage, focused layer1 coverage test, showcase data freshness, and whitespace diff checks passed. Existing next-step-routing audit noise remains unrelated.
+
 ## 2026-05-26 — Widen edge hit area in routing map + ship prior showcase/routing-map work
 
 - Added invisible 16px-wide hit paths behind each visible edge in `docs/skill-routing-map.html` for easier hover/click detection — visible paths set to `pointer-events: none`, all event handlers moved to the transparent hit path.

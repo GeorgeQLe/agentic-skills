@@ -9,7 +9,7 @@ version: v0.0
 
 Invoke as `$plan-phase`.
 
-Fill in the implementation detail for **one** phase of `tasks/roadmap.md`. This skill is invoked just-in-time — either manually, by `$roadmap` (to seed Phase 1), or by `$ship` and `$run` when a new phase begins. Implementation detail is generated when a phase starts, not upfront, because context from earlier phases informs later decisions.
+Fill in the implementation detail for **one** phase of `tasks/roadmap.md`. This skill is invoked just-in-time — either manually, by `$roadmap` (to seed Phase 1), or by `$ship` and `$exec` when a new phase begins. Implementation detail is generated when a phase starts, not upfront, because context from earlier phases informs later decisions.
 
 ## Prerequisites
 
@@ -306,7 +306,7 @@ Recurring tasks MUST NOT appear in `tasks/todo.md` unless the current run is exp
    ```markdown
    # Record Tasks — [Project Name]
 
-   > These tasks are non-blocking records or measurements. Do not execute them through `$run` unless promoted to `tasks/todo.md`.
+   > These tasks are non-blocking records or measurements. Do not execute them through `$exec` unless promoted to `tasks/todo.md`.
 
    - [ ] [task]
      - Source: [phase/spec/criterion]
@@ -324,7 +324,7 @@ Recurring tasks MUST NOT appear in `tasks/todo.md` unless the current run is exp
    ```markdown
    # Recurring Tasks — [Project Name]
 
-   > These tasks recur on a cadence. Do not execute them through `$run` unless a due run is promoted to `tasks/todo.md`.
+   > These tasks recur on a cadence. Do not execute them through `$exec` unless a due run is promoted to `tasks/todo.md`.
 
    - [ ] [task]
      - Cadence: [daily/weekly/monthly/quarterly/on release/etc.]
@@ -352,9 +352,9 @@ Rules:
 - Make the next work item primary. Derive it from the first executable step in `tasks/todo.md`, any matching blocker in `tasks/manual-todo.md`, or the phase's verification/setup gap. Do not use agent mode itself as the next work item.
 - Use `./scripts/agent-mode.sh` only to choose command text. If it is missing, unset, or non-zero, infer routing from the current invocation and task type instead of asking the user to select a mode by default.
 - Inference defaults:
-  - Codex skill invocation (`$plan-phase`, `$run`) → recommend the matching `$...` command.
-  - Claude slash invocation (`/plan-phase`, `/run`, `/delegate`) or orchestration-heavy work → recommend the matching `/...` route.
-  - External human-only manual work (browser/auth/DNS/service dashboard work with no reliable authenticated CLI/API path, paid account setup, real-device checks, or production smoke-test work needing human sign-off) → recommend `$guide` or a Claude-guided manual step rather than `$run`.
+  - Codex skill invocation (`$plan-phase`, `$exec`) → recommend the matching `$...` command.
+  - Claude slash invocation (`/plan-phase`, `/exec`, `/delegate`) or orchestration-heavy work → recommend the matching `/...` route.
+  - External human-only manual work (browser/auth/DNS/service dashboard work with no reliable authenticated CLI/API path, paid account setup, real-device checks, or production smoke-test work needing human sign-off) → recommend `$guide` or a Claude-guided manual step rather than `$exec`.
   - Agent-executable work misfiled in `tasks/manual-todo.md`, task-doc bookkeeping, stale `tasks/manual-todo.md` cleanup, or reconciliation against repo/history reality → recommend `$reconcile-dev-docs fix tasks`, promotion to `tasks/todo.md`, or a direct dev-doc audit, not `$guide`.
 - Only present multiple commands when the ambiguity materially changes execution safety or there are equally valid next work items. Otherwise choose the best route and mention degraded mode lookup inline.
 
@@ -363,13 +363,13 @@ Rules:
 - **One phase per invocation.** Do not decompose multiple phases ahead of time.
 - **Require `tasks/roadmap.md`.** If it's missing, stop and direct the user to `$roadmap`.
 - **Preserve the roadmap's Goal, Scope, and Acceptance Criteria exactly.** Those are `$roadmap`'s decisions. This skill only adds implementation detail beneath them.
-- **Phase headers must use `## Phase N: [Title]` format** and steps must use `- Step N.X:` format — this is required by `$run` and `$ship`.
+- **Phase headers must use `## Phase N: [Title]` format** and steps must use `- Step N.X:` format — this is required by `$exec` and `$ship`.
 - Every milestone must have specific, checkable acceptance criteria — not vague statements like "works correctly" but concrete conditions like "POST /api/items returns 201 with valid payload and persists to database."
 - Every `tdd` phase must start with writing failing tests. `tests-after` phases write tests in the Green step.
 - Do not generate standalone cleanup/refactor steps that are conditional on validation finding drift. Fold those checks into the Green validation step and only create a separate follow-up when there is known concrete remediation work.
 - Do not include implementation code — describe what to build and what to test.
 - Note what already exists in the codebase vs. what needs to be created.
-- The `### Execution Profile` must be decision-complete enough for `$run` to decide whether to use serial execution, read-only subagents, review subagents, or disjoint write subagents after presenting the plan and proceeding under implicit approval.
+- The `### Execution Profile` must be decision-complete enough for `$exec` to decide whether to use serial execution, read-only subagents, review subagents, or disjoint write subagents after presenting the plan and proceeding under implicit approval.
 - Subagents must not own task docs, roadmap/history updates, shipping, or deploy steps. Those stay with the main agent.
 - Agent-team write lanes must not target `main` or `master`; each lane gets its own GitHub branch and must return branch, commit SHA, validation evidence, and PR URL before consolidation.
 - Manual tasks MUST NOT appear in `tasks/todo.md` — they go in `tasks/manual-todo.md` only.

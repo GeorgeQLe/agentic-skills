@@ -1,7 +1,0 @@
-interface:
-  display_name: "Run"
-  short_description: "Execute, ship, and plan the next step"
-  default_prompt: "Use $run to execute the next incomplete step from the plan, ship it, and prepare the next step."
-
-policy:
-  allow_implicit_invocation: true

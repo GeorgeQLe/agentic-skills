@@ -116,7 +116,7 @@ Claude route:
 /research-roadmap --post-spec
 /roadmap
 /plan-phase 1
-/run
+/exec
 /ship-end
 ```
 
@@ -148,7 +148,7 @@ $spec-interview
 $research-roadmap --post-spec
 $roadmap
 $plan-phase 1
-$run
+$exec
 $ship-end
 ```
 
@@ -231,7 +231,7 @@ Execution profiles remain:
 
 ### Run, Ship, And Ship-End
 
-`run`, `ship`, and `ship-end` are operational loops. They execute, validate, update docs, commit, push, and route. They are intentionally exempt from the durable alignment-page requirement, even though they may mutate task docs as part of shipping.
+`exec`, `ship`, and `ship-end` are operational loops. They execute, validate, update docs, commit, push, and route. They are intentionally exempt from the durable alignment-page requirement, even though they may mutate task docs as part of shipping.
 
 ## Alignment Review Pages
 
@@ -259,7 +259,7 @@ Approval-gated research and planning skills should build the alignment page befo
 
 ### Finding 1: The Old Report Used Stale Phase 11 Framing
 
-The prior report dated 2026-04-19 and refreshed 2026-04-22 described Phase 11 as the current implementation horizon. That is now only historical context. Later workflow changes introduced lane-based business packs, approval-gated alignment previews, run/ship alignment exemptions, prototype-gated spec work, and revised post-spec feature routing.
+The prior report dated 2026-04-19 and refreshed 2026-04-22 described Phase 11 as the current implementation horizon. That is now only historical context. Later workflow changes introduced lane-based business packs, approval-gated alignment previews, exec/ship alignment exemptions, prototype-gated spec work, and revised post-spec feature routing.
 
 **Resolution in this report:** metadata and narrative now describe the current workflow as of 2026-05-24 and treat Phase 11 as the origin of the operating-mode model, not the whole current workflow.
 
@@ -307,7 +307,7 @@ The current `consolidate-variations` contract says the skill produces a consolid
 - Use `feature-interview` for unresolved ideas, post-spec additions, and destination triage.
 - Use `spec-interview` for confirmed full production spec work after upstream evidence and prototype gates are satisfied.
 - Use `roadmap` to sequence specs into phases; use `plan-phase` to produce one active execution contract.
-- Keep run/ship loops operational and alignment-page-free.
+- Keep exec/ship loops operational and alignment-page-free.
 - Commit and push intended repository mutations unless the user explicitly says not to, while preserving unrelated dirty work.
 
 ## Current End-To-End Sequence

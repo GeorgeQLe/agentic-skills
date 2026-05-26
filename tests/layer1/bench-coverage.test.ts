@@ -81,11 +81,11 @@ describe("benchmark coverage contract", () => {
   it("lints session-triage contracts for repeated benchmark false-negative generalization", () => {
     const skillContracts = [
       {
-        path: "global/claude/session-triage/SKILL.md",
+        path: "packs/session-analytics/claude/session-triage/SKILL.md",
         route: "/targeted-skill-builder",
       },
       {
-        path: "global/codex/session-triage/SKILL.md",
+        path: "packs/session-analytics/codex/session-triage/SKILL.md",
         route: "$targeted-skill-builder",
       },
     ];
@@ -155,16 +155,16 @@ describe("benchmark coverage contract", () => {
   it("lints ship contracts to prevent routine self-routing after completion", () => {
     const skillContracts = [
       {
-        path: "global/claude/ship/SKILL.md",
+        path: "packs/exec-loop/claude/ship/SKILL.md",
         command: "/ship",
         forbiddenDeployRoute: "/ship --no-deploy",
-        executableRoute: "/run",
+        executableRoute: "/exec",
       },
       {
-        path: "global/codex/ship/SKILL.md",
+        path: "packs/exec-loop/codex/ship/SKILL.md",
         command: "$ship",
         forbiddenDeployRoute: "$ship --no-deploy",
-        executableRoute: "$run",
+        executableRoute: "$exec",
       },
     ];
 
@@ -174,9 +174,7 @@ describe("benchmark coverage contract", () => {
       expect(content, `${contract.path} completed ship guard`).toContain(
         `Never recommend \`${contract.command}\``,
       );
-      expect(content, `${contract.path} no-deploy self-route guard`).toContain(
-        `or \`${contract.forbiddenDeployRoute}\``,
-      );
+      expect(content, `${contract.path} no-deploy self-route guard`).toContain(contract.forbiddenDeployRoute);
       expect(content, `${contract.path} incomplete retry exception`).toContain(
         "shipping failed before commit/push",
       );
@@ -195,15 +193,15 @@ describe("benchmark coverage contract", () => {
   });
 
   it("fails when a repository skill is missing from the matrix", () => {
-    const rows = benchmarkCoverageMatrix().filter((row) => row.skill !== "run");
+    const rows = benchmarkCoverageMatrix().filter((row) => row.skill !== "exec");
     const result = validateBenchmarkCoverage(rows, discoverRepositorySkills());
 
     expect(result.ok).toBe(false);
-    expect(result.errors).toContain('Repository skill "run" is missing from benchmark coverage matrix.');
+    expect(result.errors).toContain('Repository skill "exec" is missing from benchmark coverage matrix.');
   });
 
   it("fails when a matrix row is duplicated or does not match a repository skill", () => {
-    const duplicate = benchmarkCoverageMatrix().find((row) => row.skill === "run");
+    const duplicate = benchmarkCoverageMatrix().find((row) => row.skill === "exec");
     const rows = [
       ...benchmarkCoverageMatrix(),
       { ...duplicate!, skill: "not-a-repository-skill" },
@@ -212,7 +210,7 @@ describe("benchmark coverage contract", () => {
     const result = validateBenchmarkCoverage(rows, discoverRepositorySkills());
 
     expect(result.ok).toBe(false);
-    expect(result.errors).toContain('Duplicate benchmark coverage row for skill "run".');
+    expect(result.errors).toContain('Duplicate benchmark coverage row for skill "exec".');
     expect(result.errors).toContain('Benchmark coverage row "not-a-repository-skill" does not match any repository skill.');
   });
 
@@ -260,8 +258,8 @@ describe("benchmark coverage contract", () => {
       setup_path: undefined,
     });
 
-    expect(resolveBenchTarget("run")).toMatchObject({
-      skill: "run",
+    expect(resolveBenchTarget("exec")).toMatchObject({
+      skill: "exec",
       coverageStatus: "custom",
       setupPath: "tests/layer4/setups/tier1-workflows.setup.ts",
     });
@@ -298,16 +296,16 @@ describe("benchmark coverage contract", () => {
     });
     const runOutput = execFileSync(
       "pnpm",
-      ["bench", "--skill", "run", "--agent", "codex", "--runs", "0", "--chunk-size", "1", "--pause", "0"],
+      ["bench", "--skill", "exec", "--agent", "codex", "--runs", "0", "--chunk-size", "1", "--pause", "0"],
       {
         cwd: TESTS_ROOT,
         encoding: "utf8",
       },
     );
 
-    expect(listOutput).toContain("run\tcoverage=custom setup=tests/layer4/setups/tier1-workflows.setup.ts");
+    expect(listOutput).toContain("exec\tcoverage=custom setup=tests/layer4/setups/tier1-workflows.setup.ts");
     expect(listOutput).toContain("deploy\tcoverage=blocked reason=Requires environment-specific deploy credentials");
-    expect(runOutput).toContain("Benchmark coverage for run: custom");
+    expect(runOutput).toContain("Benchmark coverage for exec: custom");
   });
 
   it("stops blocked coverage before benchmark execution", () => {

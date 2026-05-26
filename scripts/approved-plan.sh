@@ -69,7 +69,7 @@ check_mode_compat() {
     mode="$("$PROJECT_ROOT/scripts/agent-mode.sh" || true)"
   fi
   if [[ "$mode" == "claude-only" ]]; then
-    fail "mode-mismatch: agent_mode=claude-only; \$run --execute-approved is a Codex-only affordance"
+    fail "mode-mismatch: agent_mode=claude-only; \$exec --execute-approved is a Codex-only affordance"
   fi
 }
 

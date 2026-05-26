@@ -53,7 +53,7 @@ scripts/pack.sh status
 scripts/pack.sh remove game
 ```
 
-`scripts/pack.sh list-packs` is an internal subcommand used by Codex `$run` routing (see `global/codex/run/SKILL.md`). It prints enabled packs from `.agents/project.json` one per line with no decoration, distinct from the human-facing `list` above; prefer `list` or `status` for interactive use.
+`scripts/pack.sh list-packs` is an internal subcommand used by Codex `$exec` routing (see `global/codex/exec/SKILL.md`). It prints enabled packs from `.agents/project.json` one per line with no decoration, distinct from the human-facing `list` above; prefer `list` or `status` for interactive use.
 
 Claude users can run `/pack` with no arguments, and Codex users can run `$pack` with no arguments. If `.agents/project.json` exists, the skill refreshes local links from that committed project designation. If it is missing, the assistant inspects the repository, recommends a pack, and asks before installing.
 
@@ -295,7 +295,7 @@ scripts/pack.sh install monorepo
 mono-detect, mono-run, mono-guard, mono-ship
 ```
 
-The monorepo pack uses an augmentation injection pattern: it adds workspace detection, lane-spec generation, branch-backed package dispatch, consolidation/PR review, boundary checks, package-scoped validation, and transitive-dependent validation around the existing `run` and `ship` skills. This differs from `*-kanban` packs, which intentionally provide workflow variants such as `run-kanban` and `ship-kanban`.
+The monorepo pack uses an augmentation injection pattern: it adds workspace detection, lane-spec generation, branch-backed package dispatch, consolidation/PR review, boundary checks, package-scoped validation, and transitive-dependent validation around the existing `exec` and `ship` skills. This differs from `*-kanban` packs, which intentionally provide workflow variants such as `run-kanban` and `ship-kanban`.
 
 Lane dispatch uses a JSON + Markdown mirror:
 

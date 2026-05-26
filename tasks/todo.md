@@ -8,6 +8,7 @@
 
 ## Priority Task Queue
 
+- [x] `$investigate exec-loop run rename` — rename the exec-loop `run` skill to `exec` for Claude and Codex to avoid collision with Claude's default `/run` surface; archive/version active skill contracts, update references, validate, commit, and push.
 - [x] `$targeted-skill-builder provision-agentic-config WSL browser open fallback` — update provisioned `CLAUDE.md`/`AGENTS.md` blocks and root `CLAUDE.md` so HTML files open through PowerShell `file://wsl.localhost` when UNC launch fails.
 - [ ] `$analyze-sessions split-path product research workflow` — investigate prior conversations where research surfaces multiple ICP/product-line/pivot options, then recommend how skills should handle branching without bogging down in 4-8 variation evaluations.
 - [x] `$targeted-skill-builder ICP WTP signals` — incorporate willingness-to-pay evidence into mirrored ICP skills as bounded customer-discovery signal capture, then archive/version, validate, commit, and push.
@@ -29,6 +30,44 @@
 - [x] `$run` — Resume Phase 41 Batch 41.3 re-benchmarks: re-run the 33 Tier 2 global skills that were benchmarked pre-fixture-remediation with near-zero pass rates (Phase 43 added route guidance to all 32 fixture prompts and increased budgets). Current graded count: 69 unique skills / 158 total. Batch 41.5 pack-local groups also have remaining families. Batch 41.3 Group 2 shipped in `bc17fee` and `3e4bd78`; next triage should start with `provision-agentic-config`, `migrate`, or `prototype`.
 - [ ] Review `tasks/recurring-todo.md`: 2 unchecked recurring items — promote only if due and requiring execution work.
 - [ ] `$research-roadmap` — All 43 roadmap phases are complete. Run documentation health scan after Phase 41 remaining batches finish.
+
+## Current Task — Exec Loop Run Rename 2026-05-26
+
+**Goal:** Rename the exec-loop `run` command surface to `exec` for both Claude and Codex, preserving the same behavior while avoiding a likely collision with Claude's default `/run`.
+
+**User claim validation:**
+- Confirmed: active project-local exec-loop skills exist at `packs/exec-loop/claude/run/SKILL.md` and `packs/exec-loop/codex/run/SKILL.md`.
+- Confirmed: pack metadata and workflow docs advertise `run` as part of the plan-run-ship loop, so a directory-only rename would leave stale command guidance.
+- Not yet verified: whether Claude's built-in `/run` exists in the installed runtime; the local repo evidence is enough to remove this project's avoidable collision.
+
+**Plan:**
+- [x] Inspect active exec-loop skill definitions, pack metadata, references, and current dirty worktree state.
+- [x] Archive the current v0.0 Claude and Codex `run` skill contracts.
+- [x] Rename active `run` skill directories to `exec`, bump frontmatter versions to v0.1, and update invocation/description text.
+- [x] Update pack metadata, documentation, tests, and command references that should now point to `$exec` or `/exec`.
+- [x] Refresh generated Skills Showcase data if active skill metadata changes require it.
+- [x] Run focused validation, record review notes, then commit and push intended changes on `master`.
+
+**Files:**
+- `packs/exec-loop/claude/exec/SKILL.md`
+- `packs/exec-loop/codex/exec/SKILL.md`
+- `packs/exec-loop/claude/exec/archive/v0.0/SKILL.md`
+- `packs/exec-loop/codex/exec/archive/v0.0/SKILL.md`
+- `packs/exec-loop/claude/exec/CHANGELOG.md`
+- `packs/exec-loop/codex/exec/CHANGELOG.md`
+- `packs/exec-loop/PACK.md`
+- `tasks/todo.md`
+- `tasks/roadmap.md`
+
+### Review
+
+- Confirmed the active exec-loop command lived at `packs/exec-loop/claude/run/SKILL.md` and `packs/exec-loop/codex/run/SKILL.md`; renamed both active command directories to `exec`.
+- Archived the previous v0.0 contracts under each new `exec/archive/v0.0/SKILL.md`, bumped active skills to v0.1, and added changelogs.
+- Updated exec-loop routing references in `ship`, `ship-end`, `roadmap`, `plan-phase`, the approved-plan schema/script, README, canonical workflow docs, benchmark coverage metadata, and the Codex OpenAI manifest.
+- Regenerated Skills Showcase data and benchmark matrix assets.
+- Validation passed: `bash scripts/skill-versions.sh --missing`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests exec vitest run --project layer1 layer1/bench-coverage.test.ts`; `scripts/validate-skills-showcase-data.sh`; `git diff --check`.
+- Known unrelated validation noise remains: `bash scripts/skill-next-step-routing.sh --missing` still reports existing missing routing contracts in many unrelated skills.
+- Broader `layer1/bench-setups.test.ts` still contains older hard-coded `$run` and legacy `global/...` path expectations; this rename updated the coverage registry and focused guard, but a full benchmark-fixture expectation migration is a separate cleanup.
 
 ## Current Task — ICP Willingness-to-Pay Signals 2026-05-25
 

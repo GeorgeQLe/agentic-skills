@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://github.com/legeorge4/agentic-skills/specs/approved-plan.schema.json",
   "title": "ApprovedPlanPacket",
-  "description": "Shared approval / delegation packet consumed by $run --execute-approved, /handoff --target=codex, and /delegate. Stored at .agents/approved-plan.json (gitignored, developer-local).",
+  "description": "Shared approval / delegation packet consumed by $exec --execute-approved, /handoff --target=codex, and /delegate. Stored at .agents/approved-plan.json (gitignored, developer-local).",
   "type": "object",
   "additionalProperties": false,
   "required": [
