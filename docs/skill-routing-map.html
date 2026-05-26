@@ -29,6 +29,10 @@
   --pack-testing: #f778ba;
   --pack-admin: #8b949e;
   --pack-research: #e3b341;
+
+  --edge-default: #8b949e;
+  --edge-conditional: #d29922;
+  --edge-detour: #bc8cff;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body {
@@ -36,13 +40,14 @@ body {
   background: var(--bg);
   color: var(--text);
   line-height: 1.5;
-  overflow-x: auto;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
 }
 
 /* Header */
 .header {
-  position: sticky;
-  left: 0;
   background: var(--bg);
   border-bottom: 1px solid var(--border);
   padding: 1rem 1.5rem;
@@ -67,8 +72,6 @@ body {
 
 /* Filters */
 .filters {
-  position: sticky;
-  left: 0;
   background: var(--surface);
   border-bottom: 1px solid var(--border);
   padding: 0.5rem 1.5rem;
@@ -103,6 +106,18 @@ body {
   cursor: pointer;
 }
 .btn-reset:hover { background: var(--surface); border-color: var(--accent); }
+
+/* Viewport (drag-to-pan scroll container) */
+.viewport {
+  flex: 1;
+  overflow: auto;
+  cursor: grab;
+  position: relative;
+}
+.viewport.dragging {
+  cursor: grabbing;
+  user-select: none;
+}
 
 /* Canvas */
 .canvas {
@@ -168,7 +183,7 @@ body {
 .edge-default { stroke-dasharray: none; }
 .edge-conditional { stroke-dasharray: 8,4; }
 .edge-detour { stroke-dasharray: 3,3; }
-.edge-highlight { stroke-width: 2.5 !important; }
+.edge-highlight { stroke-width: 3 !important; }
 .edge-dimmed { opacity: 0.08; }
 
 /* Tooltip */
@@ -239,8 +254,10 @@ body {
 
 <div class="filters" id="filters"></div>
 
+<div class="viewport" id="viewport">
 <div class="canvas" id="canvas">
   <svg id="edgeSvg"></svg>
+</div>
 </div>
 
 <div class="tooltip" id="tooltip"></div>
@@ -257,9 +274,9 @@ body {
   <div class="legend-row"><div class="legend-swatch" style="background:var(--pack-admin)"></div> agent-work-admin</div>
   <div class="legend-row"><div class="legend-swatch" style="background:var(--pack-research)"></div> research-admin</div>
   <div class="section-label">Edge Types</div>
-  <div class="legend-row"><div class="legend-line" style="background:var(--text-muted)"></div> Default route</div>
-  <div class="legend-row"><div class="legend-line" style="background:var(--text-muted);background:repeating-linear-gradient(90deg,var(--text-muted) 0 8px,transparent 8px 12px)"></div> Conditional</div>
-  <div class="legend-row"><div class="legend-line" style="background:repeating-linear-gradient(90deg,var(--text-muted) 0 3px,transparent 3px 6px)"></div> Detour</div>
+  <div class="legend-row"><div class="legend-line" style="background:var(--edge-default)"></div> Default route</div>
+  <div class="legend-row"><div class="legend-line" style="background:repeating-linear-gradient(90deg,var(--edge-conditional) 0 8px,transparent 8px 12px)"></div> Conditional</div>
+  <div class="legend-row"><div class="legend-line" style="background:repeating-linear-gradient(90deg,var(--edge-detour) 0 3px,transparent 3px 6px)"></div> Detour</div>
 </div>
 
 <script>
@@ -410,9 +427,9 @@ const EDGES = [
 
 const NODE_W = 150;
 const NODE_H = 52;
-const GAP_X = 30;
-const GAP_Y = 24;
-const LANE_PAD_TOP = 36;
+const GAP_X = 55;
+const GAP_Y = 50;
+const LANE_PAD_TOP = 44;
 const LEFT_PAD = 60;
 const TOP_PAD = 20;
 
@@ -459,6 +476,7 @@ const canvas = document.getElementById('canvas');
 const svg = document.getElementById('edgeSvg');
 const tooltip = document.getElementById('tooltip');
 const filtersEl = document.getElementById('filters');
+const viewport = document.getElementById('viewport');
 
 canvas.style.width = maxX + 'px';
 canvas.style.height = maxY + 'px';
@@ -506,10 +524,86 @@ NODES.forEach(n => {
     el.appendChild(tag);
   }
 
-  el.addEventListener('click', () => selectNode(n.id));
+  el.addEventListener('click', () => { if (!wasDrag) selectNode(n.id); });
   canvas.appendChild(el);
   nodeEls[n.id] = el;
 });
+
+// Per-type edge colors
+const EDGE_COLORS = {
+  default: 'var(--edge-default)',
+  conditional: 'var(--edge-conditional)',
+  detour: 'var(--edge-detour)',
+};
+
+// Per-type arrow markers (SVG markers don't inherit stroke color)
+const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+function createMarker(id, fillColor) {
+  const m = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
+  m.setAttribute('id', id);
+  m.setAttribute('viewBox', '0 0 10 10');
+  m.setAttribute('refX', '9');
+  m.setAttribute('refY', '5');
+  m.setAttribute('markerWidth', '6');
+  m.setAttribute('markerHeight', '6');
+  m.setAttribute('orient', 'auto-start-reverse');
+  const ap = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  ap.setAttribute('d', 'M 0 0 L 10 5 L 0 10 z');
+  ap.setAttribute('fill', fillColor);
+  m.appendChild(ap);
+  return m;
+}
+defs.appendChild(createMarker('arrow-default', 'var(--edge-default)'));
+defs.appendChild(createMarker('arrow-conditional', 'var(--edge-conditional)'));
+defs.appendChild(createMarker('arrow-detour', 'var(--edge-detour)'));
+defs.appendChild(createMarker('arrow-highlight', 'var(--accent)'));
+svg.prepend(defs);
+
+// Port spreading: pre-count cross-row connections per node side
+const PORT_MARGIN = 16;
+const bottomPorts = {};
+const topPorts = {};
+
+EDGES.forEach((e, i) => {
+  const fn = nodeMap[e.from];
+  const tn = nodeMap[e.to];
+  if (!fn || !tn || fn.row === tn.row) return;
+
+  if (fn.y < tn.y) {
+    if (!bottomPorts[e.from]) bottomPorts[e.from] = [];
+    bottomPorts[e.from].push(i);
+    if (!topPorts[e.to]) topPorts[e.to] = [];
+    topPorts[e.to].push(i);
+  } else {
+    if (!topPorts[e.from]) topPorts[e.from] = [];
+    topPorts[e.from].push(i);
+    if (!bottomPorts[e.to]) bottomPorts[e.to] = [];
+    bottomPorts[e.to].push(i);
+  }
+});
+
+// Sort ports by the other endpoint's x so they fan out logically
+function sortPorts(ports) {
+  Object.keys(ports).forEach(id => {
+    ports[id].sort((a, b) => {
+      const aOther = EDGES[a].from === id ? EDGES[a].to : EDGES[a].from;
+      const bOther = EDGES[b].from === id ? EDGES[b].to : EDGES[b].from;
+      return nodeMap[aOther].x - nodeMap[bOther].x;
+    });
+  });
+}
+sortPorts(bottomPorts);
+sortPorts(topPorts);
+
+function getPortX(nodeId, ports, edgeIdx) {
+  const node = nodeMap[nodeId];
+  const list = ports[nodeId];
+  if (!list || list.length <= 1) return node.x + NODE_W / 2;
+  const idx = list.indexOf(edgeIdx);
+  if (idx === -1) return node.x + NODE_W / 2;
+  const span = NODE_W - 2 * PORT_MARGIN;
+  return node.x + PORT_MARGIN + (idx / (list.length - 1)) * span;
+}
 
 // Render edges
 const edgeEls = [];
@@ -518,109 +612,136 @@ EDGES.forEach((e, i) => {
   const tn = nodeMap[e.to];
   if (!fn || !tn) return;
 
-  const x1 = fn.x + NODE_W / 2;
-  const y1 = fn.y + NODE_H;
-  const x2 = tn.x + NODE_W / 2;
-  const y2 = tn.y;
+  const color = EDGE_COLORS[e.type] || EDGE_COLORS.default;
+  const markerRef = `url(#arrow-${e.type || 'default'})`;
 
-  // For same-row edges, connect side-to-side
   let d;
   if (fn.row === tn.row) {
+    // Same-row: side-to-side with visible 20px arc
     const sx = fn.x < tn.x ? fn.x + NODE_W : fn.x;
     const sy = fn.y + NODE_H / 2;
     const ex = fn.x < tn.x ? tn.x : tn.x + NODE_W;
     const ey = tn.y + NODE_H / 2;
     const cpx = (sx + ex) / 2;
-    d = `M${sx},${sy} C${cpx},${sy} ${cpx},${ey} ${ex},${ey}`;
+    const hump = -20;
+    d = `M${sx},${sy} C${cpx},${sy + hump} ${cpx},${ey + hump} ${ex},${ey}`;
   } else {
-    // Cross-row: bottom to top with bezier
-    const cpOff = Math.abs(y2 - y1) * 0.4;
-    d = `M${x1},${y1} C${x1},${y1 + cpOff} ${x2},${y2 - cpOff} ${x2},${y2}`;
+    const goingDown = fn.y < tn.y;
+    let x1, y1, x2, y2;
+
+    if (goingDown) {
+      x1 = getPortX(e.from, bottomPorts, i);
+      y1 = fn.y + NODE_H;
+      x2 = getPortX(e.to, topPorts, i);
+      y2 = tn.y;
+    } else {
+      x1 = getPortX(e.from, topPorts, i);
+      y1 = fn.y;
+      x2 = getPortX(e.to, bottomPorts, i);
+      y2 = tn.y + NODE_H;
+    }
+
+    const dy = Math.abs(y2 - y1);
+    const cpOff = dy * 0.4;
+    const hBias = (x2 - x1) * 0.15;
+
+    if (goingDown) {
+      d = `M${x1},${y1} C${x1 + hBias},${y1 + cpOff} ${x2 - hBias},${y2 - cpOff} ${x2},${y2}`;
+    } else {
+      d = `M${x1},${y1} C${x1 + hBias},${y1 - cpOff} ${x2 - hBias},${y2 + cpOff} ${x2},${y2}`;
+    }
   }
 
   const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
   path.setAttribute('d', d);
   path.setAttribute('fill', 'none');
-  path.setAttribute('stroke', 'var(--text-muted)');
-  path.setAttribute('stroke-width', '1.5');
-  path.setAttribute('marker-end', 'url(#arrow)');
+  path.setAttribute('stroke', color);
+  path.setAttribute('stroke-width', '2');
+  path.setAttribute('marker-end', markerRef);
+  path.style.pointerEvents = 'none';
 
   if (e.type === 'conditional') path.classList.add('edge-conditional');
   else if (e.type === 'detour') path.classList.add('edge-detour');
   else path.classList.add('edge-default');
 
   path.dataset.idx = i;
-  path.style.pointerEvents = 'stroke';
-  path.style.cursor = 'pointer';
 
-  path.addEventListener('mouseenter', (ev) => {
-    tooltip.textContent = e.condition;
+  const hitPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  hitPath.setAttribute('d', d);
+  hitPath.setAttribute('fill', 'none');
+  hitPath.setAttribute('stroke', 'transparent');
+  hitPath.setAttribute('stroke-width', '16');
+  hitPath.style.pointerEvents = 'stroke';
+  hitPath.style.cursor = 'pointer';
+
+  hitPath.addEventListener('mouseenter', (ev) => {
+    tooltip.textContent = `[${e.type}] ${e.condition}`;
     tooltip.style.display = 'block';
     tooltip.style.left = ev.clientX + 12 + 'px';
     tooltip.style.top = ev.clientY - 10 + 'px';
     path.setAttribute('stroke', 'var(--accent)');
-    path.setAttribute('stroke-width', '2.5');
+    path.setAttribute('stroke-width', '3');
+    path.setAttribute('marker-end', 'url(#arrow-highlight)');
   });
-  path.addEventListener('mousemove', (ev) => {
+  hitPath.addEventListener('mousemove', (ev) => {
     tooltip.style.left = ev.clientX + 12 + 'px';
     tooltip.style.top = ev.clientY - 10 + 'px';
   });
-  path.addEventListener('mouseleave', () => {
+  hitPath.addEventListener('mouseleave', () => {
     tooltip.style.display = 'none';
     if (!path.classList.contains('edge-highlight')) {
-      path.setAttribute('stroke', 'var(--text-muted)');
-      path.setAttribute('stroke-width', '1.5');
+      path.setAttribute('stroke', color);
+      path.setAttribute('stroke-width', '2');
+      path.setAttribute('marker-end', markerRef);
     }
+  });
+  hitPath.addEventListener('click', (ev) => {
+    ev.stopPropagation();
+    if (!wasDrag) selectEdge(i);
   });
 
   svg.appendChild(path);
-  edgeEls.push({ path, edge: e });
+  svg.appendChild(hitPath);
+  edgeEls.push({ path, hitPath, edge: e, color });
 });
-
-// Arrow marker
-const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-const marker = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
-marker.setAttribute('id', 'arrow');
-marker.setAttribute('viewBox', '0 0 10 10');
-marker.setAttribute('refX', '9');
-marker.setAttribute('refY', '5');
-marker.setAttribute('markerWidth', '6');
-marker.setAttribute('markerHeight', '6');
-marker.setAttribute('orient', 'auto-start-reverse');
-const arrowPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-arrowPath.setAttribute('d', 'M 0 0 L 10 5 L 0 10 z');
-arrowPath.setAttribute('fill', 'var(--text-muted)');
-marker.appendChild(arrowPath);
-defs.appendChild(marker);
-svg.prepend(defs);
 
 // ── Interactivity ─────────────────────────────────────────────────────
 
 let selectedNode = null;
+let selectedEdge = null;
+let wasDrag = false;
+let currentScale = 1.0;
+let preZoomScroll = null;
 
 function selectNode(id) {
   if (selectedNode === id) {
     clearSelection();
     return;
   }
+  const wasZoomed = currentScale !== 1.0;
+  selectedEdge = null;
+  canvas.style.zoom = 1;
+  currentScale = 1.0;
+  preZoomScroll = null;
   selectedNode = id;
 
-  // Find connected edges
   const connected = new Set();
   connected.add(id);
-  edgeEls.forEach(({ path, edge }) => {
+  edgeEls.forEach(({ path, edge, color }) => {
     if (edge.from === id || edge.to === id) {
       connected.add(edge.from);
       connected.add(edge.to);
       path.classList.remove('edge-dimmed');
       path.classList.add('edge-highlight');
       path.setAttribute('stroke', 'var(--accent)');
-      path.setAttribute('stroke-width', '2.5');
+      path.setAttribute('stroke-width', '3');
+      path.setAttribute('marker-end', 'url(#arrow-highlight)');
     } else {
       path.classList.add('edge-dimmed');
       path.classList.remove('edge-highlight');
-      path.setAttribute('stroke', 'var(--text-muted)');
-      path.setAttribute('stroke-width', '1.5');
+      path.setAttribute('stroke', color);
+      path.setAttribute('stroke-width', '2');
+      path.setAttribute('marker-end', `url(#arrow-${edge.type || 'default'})`);
     }
   });
 
@@ -635,22 +756,89 @@ function selectNode(id) {
       el.classList.remove('selected');
     }
   });
+
+  if (wasZoomed) {
+    const n = nodeMap[id];
+    viewport.scrollLeft = n.x + NODE_W / 2 - viewport.clientWidth / 2;
+    viewport.scrollTop = n.y + NODE_H / 2 - viewport.clientHeight / 2;
+  }
 }
 
 function clearSelection() {
   selectedNode = null;
+  selectedEdge = null;
   NODES.forEach(n => {
     const el = nodeEls[n.id];
     if (el) { el.classList.remove('dimmed', 'selected'); }
   });
-  edgeEls.forEach(({ path }) => {
+  edgeEls.forEach(({ path, edge, color }) => {
     path.classList.remove('edge-dimmed', 'edge-highlight');
-    path.setAttribute('stroke', 'var(--text-muted)');
-    path.setAttribute('stroke-width', '1.5');
+    path.setAttribute('stroke', color);
+    path.setAttribute('stroke-width', '2');
+    path.setAttribute('marker-end', `url(#arrow-${edge.type || 'default'})`);
   });
+  canvas.style.zoom = 1;
+  currentScale = 1.0;
+  if (preZoomScroll) {
+    viewport.scrollLeft = preZoomScroll.left;
+    viewport.scrollTop = preZoomScroll.top;
+    preZoomScroll = null;
+  }
+}
+
+function fitToView(nodeA, nodeB) {
+  if (!preZoomScroll) {
+    preZoomScroll = { left: viewport.scrollLeft, top: viewport.scrollTop };
+  }
+  const pad = 80;
+  const minX = Math.min(nodeA.x, nodeB.x);
+  const minY = Math.min(nodeA.y, nodeB.y);
+  const boxR = Math.max(nodeA.x + NODE_W, nodeB.x + NODE_W);
+  const boxB = Math.max(nodeA.y + NODE_H, nodeB.y + NODE_H);
+  const vw = viewport.clientWidth;
+  const vh = viewport.clientHeight;
+  const scale = Math.max(Math.min((vw - 2 * pad) / (boxR - minX), (vh - 2 * pad) / (boxB - minY), 1), 0.3);
+  currentScale = scale;
+  canvas.style.zoom = scale;
+  viewport.scrollLeft = ((minX + boxR) / 2) * scale - vw / 2;
+  viewport.scrollTop = ((minY + boxB) / 2) * scale - vh / 2;
+}
+
+function selectEdge(idx) {
+  if (selectedEdge === idx) { clearSelection(); return; }
+  const e = EDGES[idx];
+  if (!e) return;
+  selectedNode = null;
+  selectedEdge = idx;
+  tooltip.style.display = 'none';
+
+  const ends = new Set([e.from, e.to]);
+  NODES.forEach(n => {
+    const el = nodeEls[n.id];
+    if (!el) return;
+    if (ends.has(n.id)) { el.classList.remove('dimmed'); el.classList.add('selected'); }
+    else { el.classList.add('dimmed'); el.classList.remove('selected'); }
+  });
+  edgeEls.forEach(({ path, edge, color }, i) => {
+    if (i === idx) {
+      path.classList.remove('edge-dimmed');
+      path.classList.add('edge-highlight');
+      path.setAttribute('stroke', 'var(--accent)');
+      path.setAttribute('stroke-width', '3');
+      path.setAttribute('marker-end', 'url(#arrow-highlight)');
+    } else {
+      path.classList.add('edge-dimmed');
+      path.classList.remove('edge-highlight');
+      path.setAttribute('stroke', color);
+      path.setAttribute('stroke-width', '2');
+      path.setAttribute('marker-end', `url(#arrow-${edge.type || 'default'})`);
+    }
+  });
+  fitToView(nodeMap[e.from], nodeMap[e.to]);
 }
 
 canvas.addEventListener('click', (ev) => {
+  if (wasDrag) return;
   if (ev.target === canvas || ev.target === svg) clearSelection();
 });
 
@@ -704,11 +892,12 @@ function applyFilters() {
     el.style.display = packVisibility[n.pack] ? '' : 'none';
   });
 
-  edgeEls.forEach(({ path, edge }) => {
+  edgeEls.forEach(({ path, hitPath, edge }) => {
     const fromNode = nodeMap[edge.from];
     const toNode = nodeMap[edge.to];
     const visible = fromNode && toNode && packVisibility[fromNode.pack] && packVisibility[toNode.pack];
     path.style.display = visible ? '' : 'none';
+    hitPath.style.display = visible ? '' : 'none';
   });
 
   if (selectedNode && !packVisibility[nodeMap[selectedNode]?.pack]) {
@@ -717,6 +906,37 @@ function applyFilters() {
 }
 
 renderFilters();
+
+// ── Drag-to-Pan ──────────────────────────────────────────────────────
+
+let dragging = false;
+let startX, startY, scrollStartX, scrollStartY;
+
+viewport.addEventListener('mousedown', (ev) => {
+  if (ev.button !== 0) return;
+  dragging = true;
+  wasDrag = false;
+  startX = ev.clientX;
+  startY = ev.clientY;
+  scrollStartX = viewport.scrollLeft;
+  scrollStartY = viewport.scrollTop;
+  viewport.classList.add('dragging');
+});
+
+window.addEventListener('mousemove', (ev) => {
+  if (!dragging) return;
+  const dx = ev.clientX - startX;
+  const dy = ev.clientY - startY;
+  if (Math.abs(dx) + Math.abs(dy) > 5) wasDrag = true;
+  viewport.scrollLeft = scrollStartX - dx;
+  viewport.scrollTop = scrollStartY - dy;
+});
+
+window.addEventListener('mouseup', () => {
+  if (!dragging) return;
+  dragging = false;
+  viewport.classList.remove('dragging');
+});
 </script>
 </body>
 </html>
