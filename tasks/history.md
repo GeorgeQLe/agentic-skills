@@ -1,5 +1,11 @@
 # Session History
 
+## 2026-05-25 — Fix card reset after drawer close + install exec-loop pack
+
+- Fixed SealedPack card not resetting after bottom sheet drawer closes: added `isDrawerOpen` prop driven by `openPack` state, replaced broken `useEffect` on `isOpened` with one that detects drawer close transition and spring-animates card back to rest.
+- Installed `exec-loop` pack: added to `.agents/project.json` `enabled_packs`, linked `run`/`ship`/`ship-end` skills.
+- Verification: `npx tsc --noEmit` passed clean.
+
 ## 2026-05-25 — Fix pack flap transparency in SealedPack prototype
 
 - Split combined gradient+shimmer divs in `SealedPack.tsx` into two stacked layers so the `shimmer-foil` CSS class no longer replaces the opaque Tailwind gradient with transparent bands.

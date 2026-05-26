@@ -1,5 +1,5 @@
 {
   "project_type": "devtool",
-  "enabled_packs": ["agentic-skills-bench"],
+  "enabled_packs": ["agentic-skills-bench", "exec-loop"],
   "skill_pack_version": 1
 }
