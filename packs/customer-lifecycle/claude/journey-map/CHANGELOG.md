@@ -1,5 +1,10 @@
 # journey-map changelog (claude)
 
+## v0.3 - 2026-05-26
+
+- Gate cross-pack routing recommendations on pack availability — recommend `/pack install <pack>` when the target pack is not enabled
+- Replace narrative "Cross-pack notes" paragraph with inline pack-availability conditionals on each cross-pack route
+
 ## v0.1
 
 - Route default AFPS handoff from journey-map to positioning before UX work.

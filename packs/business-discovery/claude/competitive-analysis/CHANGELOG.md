@@ -1,5 +1,9 @@
 # competitive-analysis changelog (claude)
 
+## v0.6 - 2026-05-26
+
+- Gate cross-pack routing recommendations on pack availability — recommend `/pack install <pack>` when the target pack is not enabled
+
 ## v0.4
 
 - Route standard AFPS output from competitive analysis to journey map, positioning, and UX variations before production spec work.

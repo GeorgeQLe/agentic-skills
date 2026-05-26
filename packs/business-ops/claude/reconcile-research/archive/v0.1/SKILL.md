@@ -2,7 +2,7 @@
 name: reconcile-research
 description: Cross-document consistency audit across research outputs — find contradictions, stale assumptions, and gaps
 type: research
-version: v0.2
+version: v0.1
 argument-hint: "[audit|fix] [all|icp|pricing|journey|enterprise|feedback|specs]"
 ---
 
@@ -235,9 +235,9 @@ After presenting findings (audit mode) or applying resolutions (fix mode), displ
 **Recommended:** [skill with most conflicts] — [N] conflicts traced to this document; re-running it will resolve the most inconsistencies at once
 
 Other options:
-- check `.agents/project.json.enabled_packs` for `research-admin` — if `research-admin` is not enabled, recommend `/pack install research-admin` first; if `research-admin` is enabled, recommend `/research-roadmap` — rebuild the ordered documentation queue after reconciliation
-- check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `/pack install agent-work-admin` first; if `agent-work-admin` is enabled, recommend `/spec-drift` — check whether code/spec drift remains after research reconciliation
-- check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `/pack install agent-work-admin` first; if `agent-work-admin` is enabled, recommend `/roadmap` — resequence implementation if reconciliation changed priorities
+- `/research-roadmap` — rebuild the ordered documentation queue after reconciliation
+- `/spec-drift` — check whether code/spec drift remains after research reconciliation
+- `/roadmap` — resequence implementation if reconciliation changed priorities
 ```
 
 ## Output Format

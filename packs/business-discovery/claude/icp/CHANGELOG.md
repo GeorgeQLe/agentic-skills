@@ -1,5 +1,9 @@
 # icp changelog (claude)
 
+## v0.4 - 2026-05-26
+
+- Gate cross-pack routing recommendations on pack availability — recommend `/pack install <pack>` when the target pack is not enabled
+
 ## v0.3 - 2026-05-25
 
 - Added bounded willingness-to-pay signal capture to ICP research, candidate evaluation, scoring rationale, output template, and downstream monetization handoff.

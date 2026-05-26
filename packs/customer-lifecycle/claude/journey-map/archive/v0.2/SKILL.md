@@ -2,7 +2,7 @@
 name: journey-map
 description: Map the full user and customer lifecycle from trigger and discovery through onboarding, aha, conversion, retention, expansion, and advocacy
 type: analysis
-version: v0.3
+version: v0.2
 argument-hint: "[optional: app, use case, persona, or lifecycle stage]"
 ---
 
@@ -42,10 +42,12 @@ The output file must end with `## Next Steps` using "Pick one:" framing. Follow 
 
 Priority-ordered decision tree — recommend the **first** match:
 
-1. **Positioning missing** (`research/positioning.md` does not exist) → check `.agents/project.json.enabled_packs` for `business-discovery` — if `business-discovery` is not enabled, recommend `/pack install business-discovery` first; if `business-discovery` is enabled, recommend `/positioning` — Positioning needs ICP, competitive analysis, and journey evidence, so it is the natural next step.
-2. **Positioning done, UX variations missing** → check `.agents/project.json.enabled_packs` for `product-design` — if `product-design` is not enabled, recommend `/pack install product-design` first; if `product-design` is enabled, recommend `/ux-variations` — Explore experience directions before production specification.
+1. **Positioning missing** (`research/positioning.md` does not exist) → recommend `/positioning` (business-discovery pack). Positioning needs ICP, competitive analysis, and journey evidence, so it is the natural next step.
+2. **Positioning done, UX variations missing** → recommend `/ux-variations` (product-design pack).
 3. **Specific stage risk** — the overview exposed a lifecycle-stage risk that must be resolved before positioning or UX work can proceed → recommend the relevant lifecycle map (`/onboarding-map`, `/conversion-map`, `/transaction-map`, `/retention-map`, `/expansion-map`, or `/lifecycle-metrics`). Cite the risk and explain why it blocks the next AFPS step.
 4. **Never** recommend `/spec-interview` from this skill — it is many steps downstream in the AFPS chain.
+
+Cross-pack notes: `/positioning` lives in the `business-discovery` pack; `/ux-variations` lives in the `product-design` pack. Check `.agents/project.json` `enabled_packs` and recommend `/pack install <pack>` when the target pack is not enabled.
 
 ## Output Shape
 

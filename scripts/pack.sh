@@ -28,6 +28,7 @@ Commands:
   unpin <skill>     Revert a pinned skill to the latest version
   set-mode <mode>   Set .agents/project.json.agent_mode to claude-only, codex-only,
                     hybrid, or unset (clears the field)
+  which <skill>     Show which pack provides a skill and whether it is installed
 
 Project state is stored in .agents/project.json.
 EOF
@@ -632,6 +633,19 @@ case "$cmd" in
     acquire_project_lock "$@"
     shift
     set_mode "${1:-}"
+    ;;
+  which)
+    shift
+    skill="${1:-}"
+    [[ -n "$skill" ]] || die "which requires a skill name"
+    pack="$(find_pack_for_skill "$skill")" || die "Skill '$skill' not found in any pack"
+    enabled="$(read_enabled_packs)"
+    if echo "$enabled" | grep -qx "$pack"; then
+      echo "$skill is provided by pack '$pack' (installed)"
+    else
+      echo "$skill is provided by pack '$pack' (not installed)"
+      echo "Install with: scripts/pack.sh install $pack"
+    fi
     ;;
   --help|-h|"") usage ;;
   *) usage; exit 2 ;;

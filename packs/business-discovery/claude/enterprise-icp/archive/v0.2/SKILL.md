@@ -2,15 +2,11 @@
 name: enterprise-icp
 description: Enterprise multi-stakeholder discovery — map personas, deal-killers, and the evaluation-to-renewal lifecycle
 type: research
-version: v0.3
+version: v0.2
 argument-hint: "[optional: target industry or market segment]"
 ---
 
 # Enterprise ICP — Multi-Stakeholder Discovery Interview
-
-## Pack Availability Guard
-
-Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
 ## Report-First Approval Gate
 
@@ -156,10 +152,10 @@ Continue until the user confirms the findings are complete and accurate. Only th
 
 Before writing, check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with "Pick one:" framing:
 
-- IF codebase exists: check `.agents/project.json.enabled_packs` for `business-ops` — if `business-ops` is not enabled, recommend `/pack install business-ops` first; if `business-ops` is enabled, recommend `/scale-audit` — Evaluate enterprise readiness against stakeholder map and deal-killers
-- IF no enterprise feature specs in `specs/`: check `.agents/project.json.enabled_packs` for `business-ops` — if `business-ops` is not enabled, recommend `/pack install business-ops` first; if `business-ops` is enabled, recommend `/scale-audit` — Evaluate enterprise readiness against stakeholder map and deal-killers
-- IF `research/journey-map.md` exists but doesn't cover enterprise: check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if `customer-lifecycle` is not enabled, recommend `/pack install customer-lifecycle` first; if `customer-lifecycle` is enabled, recommend `/journey-map enterprise` — Map enterprise stakeholder journeys
-- IF no `research/journey-map.md`: check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if `customer-lifecycle` is not enabled, recommend `/pack install customer-lifecycle` first; if `customer-lifecycle` is enabled, recommend `/journey-map` — Map user and customer journeys first
+- IF codebase exists: `/scale-audit` — Evaluate enterprise readiness against stakeholder map and deal-killers
+- IF no enterprise feature specs in `specs/`: `/scale-audit` — Evaluate enterprise readiness against stakeholder map and deal-killers
+- IF `research/journey-map.md` exists but doesn't cover enterprise: `/journey-map enterprise` — Map enterprise stakeholder journeys
+- IF no `research/journey-map.md`: `/journey-map` — Map user and customer journeys first
 - IF `research/icp.md` exists but no `research/competitive-analysis.md`: `/competitive-analysis` — Research how competitors serve enterprise
 
 ### 5. Write Output

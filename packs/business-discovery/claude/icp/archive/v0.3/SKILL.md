@@ -2,7 +2,7 @@
 name: icp
 description: Research-driven ICP discovery — web search + codebase analysis to identify multiple ICPs, pain points, value props, and cross-ICP prioritization
 type: research
-version: v0.4
+version: v0.3
 argument-hint: <spec file path, concept/idea, or empty to use concept brief>
 ---
 
@@ -165,9 +165,9 @@ Before writing, check which files exist to populate the `## Next Steps` section 
 
 - ALWAYS: `/competitive-analysis` — Research competitors and market gaps for this ICP
 - IF no `specs/` directory or it's empty: `/competitive-analysis` — Map the competitive landscape for this ICP's market
-- IF `specs/` exist but no `research/journey-map.md`: check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if `customer-lifecycle` is not enabled, recommend `/pack install customer-lifecycle` first; if `customer-lifecycle` is enabled, recommend `/journey-map` — Map how this ICP flows through the product
-- IF codebase exists: check `.agents/project.json.enabled_packs` for `business-ops` — if `business-ops` is not enabled, recommend `/pack install business-ops` first; if `business-ops` is enabled, recommend `/mvp-gap` — Evaluate what's built against this ICP
-- IF `research/competitive-analysis.md` exists: check `.agents/project.json.enabled_packs` for `product-design` — if `product-design` is not enabled, recommend `/pack install product-design` first; if `product-design` is enabled, recommend `/brainstorm` — Generate ideas from ICP needs + competitive gaps
+- IF `specs/` exist but no `research/journey-map.md`: `/journey-map` — Map how this ICP flows through the product
+- IF codebase exists: `/mvp-gap` — Evaluate what's built against this ICP
+- IF `research/competitive-analysis.md` exists: `/brainstorm` — Generate ideas from ICP needs + competitive gaps
 
 **Impact-aware adjustments:**
 - IF downstream impact is **Major**: prepend `/reconcile-research — [N] conflicts found in downstream docs` as the first item

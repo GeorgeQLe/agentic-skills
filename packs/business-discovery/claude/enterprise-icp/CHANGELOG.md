@@ -1,5 +1,10 @@
 # enterprise-icp changelog (claude)
 
+## v0.3 - 2026-05-26
+
+- Add Pack Availability Guard section (was missing)
+- Gate cross-pack routing recommendations on pack availability — recommend `/pack install <pack>` when the target pack is not enabled
+
 ## v0.1
 
 - Tighten research lanes: rename Lifecycle → Enterprise Buying Stages, Enterprise Value Prop → Enterprise Requirements Delta, Budget Cycle & Procurement Mechanics → Procurement Reality, Land-and-Expand Strategy → Land-and-Expand Patterns (Observed)

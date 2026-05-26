@@ -2,7 +2,7 @@
 name: ux-variations
 description: Interview and plan multiple UX and UI variations for a product, page, or flow, including onboarding, typical workflows, sharing, collaboration, return use, and interface alternatives users can compare before locking a direction — and concrete visual/layout UI variations (component choices, spatial arrangements, information density)
 type: planning
-version: v0.2
+version: v0.1
 argument-hint: "[optional: app, page, flow, feature, or existing UI spec]"
 ---
 
@@ -14,7 +14,7 @@ Use this skill when the user wants to explore multiple UX/UI directions before c
 
 Use `/ui-interview` first when the interface has not yet been specified page by page. Use this skill directly when a UI spec, current implementation, screenshot, prototype, or clear feature scope already exists.
 
-When invoked with `--layout-mode` (or when the user says "layout mode", "layout variations", or "UI variations"), this skill operates at the concrete component/layout level — it varies HOW the same content is presented visually, not WHAT the user flow is. Layout-mode takes a fixed content contract (from `specs/ui-requirements-[topic].md` or equivalent) and generates 2–5 concrete visual/spatial approaches: different container patterns, detail views, navigation styles, density levels, and responsive strategies. Each variation is specified well enough to build as a lightweight implementation, then evaluated through `/uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `/pack install product-testing` first) before `/consolidate-variations`.
+When invoked with `--layout-mode` (or when the user says "layout mode", "layout variations", or "UI variations"), this skill operates at the concrete component/layout level — it varies HOW the same content is presented visually, not WHAT the user flow is. Layout-mode takes a fixed content contract (from `specs/ui-requirements-[topic].md` or equivalent) and generates 2–5 concrete visual/spatial approaches: different container patterns, detail views, navigation styles, density levels, and responsive strategies. Each variation is specified well enough to build as a lightweight implementation, then evaluated through `/uat --variant-evaluation` (requires product-testing pack) before `/consolidate-variations`.
 
 ## Workflow
 
@@ -45,7 +45,7 @@ When invoked with `--layout-mode` (or when the user says "layout mode", "layout 
 4. **Interview for variation goals**
    - Ask 1 to 3 focused questions per turn using AskUserQuestion.
    - Default to maximally contrasting archetypes. Do not ask how different variants should be — assume dramatic contrast unless the user explicitly requests graduated steps.
-   - Default evaluation method is: build each variation, then run `/uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `/pack install product-testing` first) so the user has task-based evidence before consolidation. Do not ask who will judge — assume solo evaluator building and gut-checking unless the user states otherwise.
+   - Default evaluation method is: build each variation, then run `/uat --variant-evaluation` (requires product-testing pack) so the user has task-based evidence before consolidation. Do not ask who will judge — assume solo evaluator building and gut-checking unless the user states otherwise.
    - When presenting a design decision with 3+ plausible answers during the interview, always include "Make this a variant axis (test all approaches)" as an option. When the user has already chosen "test all" for a prior question in the same session, default subsequent ambiguous decisions to variant axes without asking.
    - Establish what the variants must accomplish, how a new user arrives and reaches first value, what the normal repeat workflow looks like, what users create/save/share/export/invite others into, what roles or permission levels exist, what notifications or status updates users expect, how users resume work after time away, what happens when a workflow is abandoned or blocked, which current interface parts work, which parts feel wrong or uncertain, what would make a variant unacceptable, and what evidence will decide the winner.
    - When the user is unsure, recommend a practical default and explain why.
@@ -107,7 +107,7 @@ When invoked with `--layout-mode` (or when the user says "layout mode", "layout 
 8. **Plan experimentation**
    - Recommend serial full buildout of all approved variants. Do not recommend building a subset first — the user's consistent preference is to build all variants before evaluating.
    - For prototype-stage product or feature work, prefer numerous small route-based experiments over one merged prototype when multiple workflows, layouts, densities, copy approaches, navigation models, or interaction patterns remain plausible. Name the route for each experiment, such as `/experiments/table-first`, `/experiments/command-first`, or the project's equivalent, and keep shared production infrastructure out of those routes unless explicitly approved.
-   - After variants are built, recommend `/uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `/pack install product-testing` first) before `/consolidate-variations`. Consolidation is premature until evaluation evidence exists or the user explicitly says they reviewed the variants and is ready to converge.
+   - After variants are built, recommend `/uat --variant-evaluation` (requires product-testing pack) before `/consolidate-variations`. Consolidation is premature until evaluation evidence exists or the user explicitly says they reviewed the variants and is ready to converge.
    - Define comparison criteria before selecting a winner.
    - Include a lock-in checklist so the chosen direction becomes a decision record, not a vague preference.
    - Include a UAT handoff checklist: target task for each variant, success criteria, side-by-side comparison questions, evidence to capture, tradeoffs to notice, and readiness criteria for `/consolidate-variations`.
@@ -131,7 +131,7 @@ Follow the shared Alignment Page convention in CLAUDE.md. Output: `alignment/ux-
 - Do not choose a winner for the user unless the evidence clearly supports it and the user asked for a recommendation.
 - Do not defer all decisions to testing. State a recommended variant or experiment when evidence is sufficient.
 - Do not ignore implementation cost. A compelling variation still needs a prototype path and selection criteria.
-- Do not route directly from built UI variants to `/consolidate-variations`; insert `/uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `/pack install product-testing` first) unless the user explicitly confirms they have already evaluated the variants.
+- Do not route directly from built UI variants to `/consolidate-variations`; insert `/uat --variant-evaluation` (requires product-testing pack) unless the user explicitly confirms they have already evaluated the variants.
 - When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, prepend `/pack install <pack-name>` to the recommendation.
 - Do not enforce shared design constraints across variations. Each variation independently decides layout, density, color, navigation, and component choices. Only technical stack (framework, renderer, design system tokens) is shared unless the user explicitly locks a shared constraint.
 
