@@ -55,7 +55,7 @@ When invoked with `--variant-evaluation` (or when the user asks to test/review U
    - Identify 1-3 target user personas or roles from the evidence.
    - For each selected persona, define the job-to-be-done, context, goal, constraints, and acceptance threshold.
    - Prefer external target users, buyers, evaluators, administrators, developers, or players over the product owner unless the owner is also the target user.
-   - If the target user is unclear, stop and recommend `/spec-interview` (product-design pack), `/journey-map` (customer-lifecycle pack), or the relevant pack research skill. For `/journey-map` and other pack-based skills, apply the Pack Availability Guard — if the target skill's pack is not in `.agents/project.json` `enabled_packs`, recommend `/pack install <pack>` before the skill.
+   - If the target user is unclear, stop and recommend `/icp` (business-discovery pack), `/journey-map` (customer-lifecycle pack), or the relevant pack research skill. For `/journey-map` and other pack-based skills, apply the Pack Availability Guard — if the target skill's pack is not in `.agents/project.json` `enabled_packs`, recommend `/pack install <pack>` before the skill.
 
 4. **Create UAT journeys**
    - Generate 3-7 journeys unless the user requested a narrower focus.
@@ -114,7 +114,7 @@ Use this journey format in `research/uat-plan.md`:
 - Non-acceptance signals: [confusion, delay, missing affordance, incorrect result, trust issue, or blocker]
 - Evidence to capture: [screenshots, recordings, notes, timestamps, records, command output, or artifacts]
 - Tester notes prompt: [question that captures whether the target user would accept this]
-- Follow-up routing: [manual note, /spec-interview (product-design pack), /journey-map (customer-lifecycle pack), /guide (guided-walkthrough pack), or task promotion guidance]
+- Follow-up routing: [manual note, /icp (business-discovery pack), /journey-map (customer-lifecycle pack), /guide (guided-walkthrough pack), or task promotion guidance]
 
 #### UAT result log
 
@@ -196,7 +196,7 @@ Use this item format in `tasks/manual-todo.md`:
 - Do not duplicate existing unchecked UAT or manual tasks. Reference existing items when they already cover the same journey.
 - Prefer evidence-backed target-user journeys over exhaustive feature coverage.
 - Keep dogfood and UAT separate: use `/dogfood` for owner/operator adoption into the builder's workflow; use `/uat` for target-user acceptance journeys.
-- If no credible user journey, story, spec, or product surface can be found, stop and recommend `/spec-interview` (product-design pack), `/journey-map` (customer-lifecycle pack), or the relevant pack research skill. Apply the Pack Availability Guard for pack-based skills.
+- If no credible user journey, story, spec, or product surface can be found, stop and recommend `/icp` (business-discovery pack), `/journey-map` (customer-lifecycle pack), or the relevant pack research skill. Apply the Pack Availability Guard for pack-based skills.
 - When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, prepend `/pack install <pack-name>` to the recommendation.
 
 ## Alignment Page

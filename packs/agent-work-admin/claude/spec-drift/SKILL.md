@@ -49,7 +49,7 @@ For each spec, record:
 - Last-modified timestamp (via `stat`)
 - Title (first `#` heading)
 
-**Stop condition**: If no spec files are found, display a message suggesting `/spec-interview` and exit.
+**Stop condition**: If no spec files are found, display a message suggesting `/research-roadmap` (research-admin pack) and exit.
 
 ### 3. Extract Claims Per Spec
 

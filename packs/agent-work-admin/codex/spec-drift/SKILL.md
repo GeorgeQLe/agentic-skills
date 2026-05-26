@@ -17,7 +17,7 @@ Checks that specs and codebase tell the same story. Extracts verifiable claims f
 
 ## Prerequisites
 
-At least one spec file must exist in `specs/` (or `specs/{app}/`, `docs/specifications/`). If no specs exist, tell the user to run `$spec-interview` first.
+At least one spec file must exist in `specs/` (or `specs/{app}/`, `docs/specifications/`). If no specs exist, tell the user to run `$research-roadmap` first.
 
 ## Workflow
 

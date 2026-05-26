@@ -96,7 +96,7 @@ Use this scenario format in `research/dogfood-audit.md`:
   - [ ] [specific check]
 - Evidence to capture: [screenshots, command output, notes, timestamps, records]
 - Friction/failure signals: [what counts as confusion, delay, breakage, or mismatch]
-- Follow-up routing: [manual note, /uat, /spec-interview (product-design pack), /journey-map (customer-lifecycle pack), /guide (guided-walkthrough pack), or task promotion guidance]
+- Follow-up routing: [manual note, /uat, /icp (business-discovery pack), /journey-map (customer-lifecycle pack), /guide (guided-walkthrough pack), or task promotion guidance]
 
 #### Operator result log
 
@@ -130,7 +130,7 @@ Use this item format in `tasks/manual-todo.md`:
 - Do not duplicate existing unchecked dogfood/manual tasks. Reference existing items when they already cover the same scenario.
 - Prefer evidence-backed owner/operator adoption scenarios over exhaustive coverage.
 - Keep dogfood and UAT separate: use `/dogfood` for owner/operator adoption into the builder's workflow; use `/uat` for target-user acceptance journeys.
-- If no credible user journey, story, spec, or product surface can be found, stop and recommend `/spec-interview` (product-design pack), `/journey-map` (customer-lifecycle pack), or the relevant pack research skill. For `/journey-map` and other pack-based skills, apply the Pack Availability Guard — if the target skill's pack is not in `.agents/project.json` `enabled_packs`, recommend `/pack install <pack>` before the skill.
+- If no credible user journey, story, spec, or product surface can be found, stop and recommend `/icp` (business-discovery pack), `/journey-map` (customer-lifecycle pack), or the relevant pack research skill. For `/journey-map` and other pack-based skills, apply the Pack Availability Guard — if the target skill's pack is not in `.agents/project.json` `enabled_packs`, recommend `/pack install <pack>` before the skill.
 - When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, prepend `/pack install <pack-name>` to the recommendation.
 
 ## Alignment Page

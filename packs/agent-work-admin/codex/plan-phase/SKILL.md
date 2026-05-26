@@ -13,7 +13,7 @@ Fill in the implementation detail for **one** phase of `tasks/roadmap.md`. This 
 
 ## Prerequisites
 
-- `tasks/roadmap.md` must exist. If it does not, stop and tell the user to run `$roadmap` (or `$spec-interview` → `$roadmap` if no spec exists).
+- `tasks/roadmap.md` must exist. If it does not, stop and tell the user to run `$roadmap` (or `$research-roadmap` (research-admin pack) → `$roadmap` if no spec exists).
 - The target phase must already have a Goal, Scope, and Acceptance Criteria in the roadmap.
 
 ## Input

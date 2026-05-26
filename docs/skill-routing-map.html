@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skill Routing Map — AFPS Chain &amp; Pack Graph</title>
+<style>
+:root {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --border: #30363d;
+  --text: #c9d1d9;
+  --text-muted: #8b949e;
+  --accent: #58a6ff;
+  --green: #3fb950;
+  --red: #f85149;
+  --orange: #d29922;
+  --purple: #bc8cff;
+  --pink: #f778ba;
+  --cyan: #39d2c0;
+  --yellow: #e3b341;
+
+  --pack-afps: #58a6ff;
+  --pack-discovery: #3fb950;
+  --pack-lifecycle: #39d2c0;
+  --pack-growth: #d29922;
+  --pack-ops: #f85149;
+  --pack-design: #bc8cff;
+  --pack-testing: #f778ba;
+  --pack-admin: #8b949e;
+  --pack-research: #e3b341;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.5;
+  overflow-x: auto;
+}
+
+/* Header */
+.header {
+  position: sticky;
+  left: 0;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  padding: 1rem 1.5rem;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.header h1 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--accent), var(--purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  white-space: nowrap;
+}
+.header .subtitle {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+/* Filters */
+.filters {
+  position: sticky;
+  left: 0;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0.5rem 1.5rem;
+  z-index: 190;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.filters label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  user-select: none;
+}
+.filters label:hover { color: var(--text); }
+.filters .sep {
+  width: 1px;
+  height: 1.2rem;
+  background: var(--border);
+}
+.btn-reset {
+  font-size: 0.75rem;
+  color: var(--accent);
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.15rem 0.5rem;
+  cursor: pointer;
+}
+.btn-reset:hover { background: var(--surface); border-color: var(--accent); }
+
+/* Canvas */
+.canvas {
+  position: relative;
+  min-height: 800px;
+  padding: 1.5rem;
+}
+.canvas svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+.canvas svg path { pointer-events: stroke; }
+
+/* Swimlane labels */
+.swimlane-label {
+  position: absolute;
+  left: 0;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  padding: 0.5rem 0.25rem;
+  z-index: 5;
+}
+
+/* Nodes */
+.node {
+  position: absolute;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  padding: 0.4rem 0.7rem;
+  font-size: 0.78rem;
+  font-family: 'SF Mono', 'Fira Code', monospace;
+  cursor: pointer;
+  z-index: 10;
+  white-space: nowrap;
+  transition: opacity 0.2s, border-color 0.2s, box-shadow 0.2s;
+  text-align: center;
+}
+.node:hover {
+  box-shadow: 0 0 12px rgba(88, 166, 255, 0.3);
+}
+.node.selected {
+  box-shadow: 0 0 16px rgba(88, 166, 255, 0.5);
+}
+.node.dimmed { opacity: 0.2; }
+.node .pack-tag {
+  display: block;
+  font-size: 0.6rem;
+  color: var(--text-muted);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  margin-top: 0.15rem;
+}
+
+/* Edges */
+.edge-default { stroke-dasharray: none; }
+.edge-conditional { stroke-dasharray: 8,4; }
+.edge-detour { stroke-dasharray: 3,3; }
+.edge-highlight { stroke-width: 2.5 !important; }
+.edge-dimmed { opacity: 0.08; }
+
+/* Tooltip */
+.tooltip {
+  position: fixed;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.78rem;
+  color: var(--text);
+  max-width: 320px;
+  z-index: 500;
+  pointer-events: none;
+  display: none;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+/* Legend */
+.legend {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  z-index: 300;
+  font-size: 0.72rem;
+  max-width: 220px;
+}
+.legend h4 {
+  color: var(--text);
+  font-size: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+.legend-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.3rem;
+}
+.legend-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+.legend-line {
+  width: 24px;
+  height: 2px;
+  flex-shrink: 0;
+}
+.legend .section-label {
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-top: 0.4rem;
+  margin-bottom: 0.15rem;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Skill Routing Map</h1>
+  <span class="subtitle">AFPS chain (top) + off-chain skills by pack. Click a node to highlight routes.</span>
+</div>
+
+<div class="filters" id="filters"></div>
+
+<div class="canvas" id="canvas">
+  <svg id="edgeSvg"></svg>
+</div>
+
+<div class="tooltip" id="tooltip"></div>
+
+<div class="legend">
+  <h4>Pack Colors</h4>
+  <div class="legend-row"><div class="legend-swatch" style="background:var(--pack-afps)"></div> AFPS Chain</div>
+  <div class="legend-row"><div class="legend-swatch" style="background:var(--pack-discovery)"></div> business-discovery</div>
+  <div class="legend-row"><div class="legend-swatch" style="background:var(--pack-lifecycle)"></div> customer-lifecycle</div>
+  <div class="legend-row"><div class="legend-swatch" style="background:var(--pack-growth)"></div> business-growth</div>
+  <div class="legend-row"><div class="legend-swatch" style="background:var(--pack-ops)"></div> business-ops</div>
+  <div class="legend-row"><div class="legend-swatch" style="background:var(--pack-design)"></div> product-design</div>
+  <div class="legend-row"><div class="legend-swatch" style="background:var(--pack-testing)"></div> product-testing</div>
+  <div class="legend-row"><div class="legend-swatch" style="background:var(--pack-admin)"></div> agent-work-admin</div>
+  <div class="legend-row"><div class="legend-swatch" style="background:var(--pack-research)"></div> research-admin</div>
+  <div class="section-label">Edge Types</div>
+  <div class="legend-row"><div class="legend-line" style="background:var(--text-muted)"></div> Default route</div>
+  <div class="legend-row"><div class="legend-line" style="background:var(--text-muted);background:repeating-linear-gradient(90deg,var(--text-muted) 0 8px,transparent 8px 12px)"></div> Conditional</div>
+  <div class="legend-row"><div class="legend-line" style="background:repeating-linear-gradient(90deg,var(--text-muted) 0 3px,transparent 3px 6px)"></div> Detour</div>
+</div>
+
+<script>
+// ── Data ──────────────────────────────────────────────────────────────
+
+const PACKS = {
+  afps:       { label: 'AFPS Chain',         color: 'var(--pack-afps)' },
+  discovery:  { label: 'business-discovery', color: 'var(--pack-discovery)' },
+  lifecycle:  { label: 'customer-lifecycle', color: 'var(--pack-lifecycle)' },
+  growth:     { label: 'business-growth',    color: 'var(--pack-growth)' },
+  ops:        { label: 'business-ops',       color: 'var(--pack-ops)' },
+  design:     { label: 'product-design',     color: 'var(--pack-design)' },
+  testing:    { label: 'product-testing',    color: 'var(--pack-testing)' },
+  admin:      { label: 'agent-work-admin',   color: 'var(--pack-admin)' },
+  research:   { label: 'research-admin',     color: 'var(--pack-research)' },
+};
+
+// AFPS chain nodes (order matters — laid out left to right)
+const AFPS_CHAIN = [
+  'concept-exploration', 'icp', 'competitive-analysis', 'journey-map',
+  'positioning', 'ux-variations', 'ui-interview', 'prototype',
+  'uat', 'consolidate-variations', 'research-roadmap', 'spec-interview',
+  'roadmap', 'plan-phase', 'run', 'ship', 'ship-end'
+];
+
+const NODES = [
+  // AFPS chain
+  ...AFPS_CHAIN.map(id => ({ id, pack: 'afps' })),
+
+  // business-discovery
+  { id: 'value-prop-canvas',    pack: 'discovery' },
+  { id: 'lean-canvas',          pack: 'discovery' },
+  { id: 'brainstorm',           pack: 'discovery' },
+  { id: 'customer-feedback',    pack: 'discovery' },
+  { id: 'enterprise-icp',       pack: 'discovery' },
+  { id: 'assumption-tracker',   pack: 'discovery' },
+  { id: 'reconcile-research',   pack: 'discovery' },
+
+  // customer-lifecycle
+  { id: 'onboarding-map',   pack: 'lifecycle' },
+  { id: 'conversion-map',   pack: 'lifecycle' },
+  { id: 'transaction-map',  pack: 'lifecycle' },
+  { id: 'retention-map',    pack: 'lifecycle' },
+  { id: 'expansion-map',    pack: 'lifecycle' },
+  { id: 'lifecycle-metrics', pack: 'lifecycle' },
+
+  // business-growth
+  { id: 'growth-model',    pack: 'growth' },
+  { id: 'hook-model',      pack: 'growth' },
+  { id: 'metrics',         pack: 'growth' },
+  { id: 'gtm',             pack: 'growth' },
+  { id: 'pmf-assessment',  pack: 'growth' },
+  { id: 'experiment',      pack: 'growth' },
+  { id: 'monetization',    pack: 'growth' },
+  { id: 'cohort-review',   pack: 'growth' },
+
+  // business-ops
+  { id: 'mvp-gap',           pack: 'ops' },
+  { id: 'scale-audit',       pack: 'ops' },
+  { id: 'platform-strategy', pack: 'ops' },
+
+  // product-testing (off-chain)
+  { id: 'dogfood',    pack: 'testing' },
+  { id: 'uat-guide',  pack: 'testing' },
+
+  // agent-work-admin (off-chain)
+  { id: 'spec-drift', pack: 'admin' },
+];
+
+// Edges: from → to, type (default|conditional|detour), condition text
+const EDGES = [
+  // ── AFPS chain (default left-to-right) ──
+  { from: 'concept-exploration', to: 'icp',                   type: 'default',     condition: 'Concept brief created' },
+  { from: 'icp',                 to: 'competitive-analysis',  type: 'default',     condition: 'ICP complete' },
+  { from: 'competitive-analysis', to: 'journey-map',          type: 'default',     condition: 'Competitive analysis complete' },
+  { from: 'journey-map',         to: 'positioning',           type: 'default',     condition: 'Journey map complete' },
+  { from: 'positioning',         to: 'ux-variations',         type: 'default',     condition: 'Positioning complete' },
+  { from: 'ux-variations',       to: 'ui-interview',          type: 'default',     condition: 'UX variations specced' },
+  { from: 'ui-interview',        to: 'prototype',             type: 'default',     condition: 'UI requirements specced' },
+  { from: 'prototype',           to: 'uat',                   type: 'default',     condition: 'Prototype built' },
+  { from: 'uat',                 to: 'consolidate-variations', type: 'default',    condition: 'UAT evaluation evidence exists' },
+  { from: 'consolidate-variations', to: 'research-roadmap',   type: 'default',     condition: 'Variants consolidated' },
+  { from: 'research-roadmap',    to: 'spec-interview',        type: 'default',     condition: 'Research roadmap → post-prototype' },
+  { from: 'spec-interview',      to: 'roadmap',               type: 'default',     condition: 'Specs written' },
+  { from: 'roadmap',             to: 'plan-phase',            type: 'default',     condition: 'Roadmap created' },
+  { from: 'plan-phase',          to: 'run',                   type: 'default',     condition: 'Phase planned' },
+  { from: 'run',                 to: 'ship',                  type: 'default',     condition: 'Phase steps complete' },
+  { from: 'ship',                to: 'ship-end',              type: 'default',     condition: 'Shipped / next phase ready' },
+
+  // ── Cross-chain: discovery ──
+  { from: 'competitive-analysis', to: 'value-prop-canvas', type: 'detour',       condition: 'Contested solution fit' },
+  { from: 'value-prop-canvas',    to: 'positioning',       type: 'detour',       condition: 'Return from fit scoring' },
+  { from: 'positioning',          to: 'lean-canvas',       type: 'detour',       condition: 'Material business-model risk' },
+  { from: 'lean-canvas',          to: 'ux-variations',     type: 'detour',       condition: 'Return from risk detour' },
+  { from: 'customer-feedback',    to: 'reconcile-research', type: 'conditional', condition: 'Major downstream impact' },
+  { from: 'customer-feedback',    to: 'icp',               type: 'conditional',  condition: 'Stale ICP detected' },
+  { from: 'customer-feedback',    to: 'journey-map',       type: 'conditional',  condition: 'Stale journey detected' },
+  { from: 'customer-feedback',    to: 'brainstorm',        type: 'conditional',  condition: 'New needs discovered' },
+  { from: 'customer-feedback',    to: 'assumption-tracker', type: 'conditional', condition: 'Experiment feedback' },
+  { from: 'reconcile-research',   to: 'research-roadmap',  type: 'conditional',  condition: 'Deferred-only or resolved' },
+  { from: 'icp',                  to: 'enterprise-icp',    type: 'conditional',  condition: 'Enterprise segment identified' },
+
+  // ── Cross-chain: lifecycle ──
+  { from: 'journey-map', to: 'onboarding-map',  type: 'conditional', condition: 'Onboarding stage risk' },
+  { from: 'journey-map', to: 'conversion-map',  type: 'conditional', condition: 'Conversion stage risk' },
+  { from: 'journey-map', to: 'transaction-map', type: 'conditional', condition: 'Transaction stage risk' },
+  { from: 'journey-map', to: 'retention-map',   type: 'conditional', condition: 'Retention stage risk' },
+  { from: 'journey-map', to: 'expansion-map',   type: 'conditional', condition: 'Expansion stage risk' },
+  { from: 'journey-map', to: 'lifecycle-metrics', type: 'conditional', condition: 'Metrics needed per stage' },
+
+  // ── Cross-chain: growth ──
+  { from: 'positioning',      to: 'gtm',              type: 'conditional', condition: 'GTM missing' },
+  { from: 'gtm',              to: 'growth-model',      type: 'conditional', condition: 'Growth model missing' },
+  { from: 'gtm',              to: 'metrics',           type: 'conditional', condition: 'Metrics missing' },
+  { from: 'gtm',              to: 'experiment',        type: 'conditional', condition: 'Open research question' },
+  { from: 'gtm',              to: 'reconcile-research', type: 'conditional', condition: 'Major downstream conflict' },
+  { from: 'growth-model',     to: 'experiment',        type: 'conditional', condition: 'Top growth mechanism unvalidated' },
+  { from: 'hook-model',       to: 'metrics',           type: 'default',     condition: 'Hook model → metrics' },
+  { from: 'metrics',          to: 'roadmap',           type: 'conditional', condition: 'Instrumentation gaps' },
+  { from: 'metrics',          to: 'cohort-review',     type: 'conditional', condition: 'Live product with data' },
+  { from: 'monetization',     to: 'gtm',              type: 'conditional', condition: 'GTM missing or stale' },
+  { from: 'monetization',     to: 'metrics',           type: 'conditional', condition: 'Metrics missing' },
+  { from: 'pmf-assessment',   to: 'customer-feedback', type: 'conditional', condition: 'Weak PMF — weakest area' },
+  { from: 'pmf-assessment',   to: 'growth-model',      type: 'conditional', condition: 'Moderate/strong PMF' },
+  { from: 'experiment',       to: 'customer-feedback', type: 'conditional', condition: 'Validated/inconclusive' },
+  { from: 'experiment',       to: 'assumption-tracker', type: 'conditional', condition: 'Result logging' },
+
+  // ── Cross-chain: ops ──
+  { from: 'mvp-gap',         to: 'ux-variations',  type: 'conditional', condition: 'Top unspecced gap' },
+  { from: 'mvp-gap',         to: 'roadmap',        type: 'conditional', condition: 'Roadmap ready' },
+  { from: 'scale-audit',     to: 'ux-variations',  type: 'conditional', condition: 'Top blocker' },
+  { from: 'scale-audit',     to: 'roadmap',        type: 'conditional', condition: 'Roadmap ready' },
+  { from: 'platform-strategy', to: 'experiment',   type: 'conditional', condition: 'Top expansion candidate' },
+  { from: 'platform-strategy', to: 'enterprise-icp', type: 'conditional', condition: 'Enterprise target' },
+
+  // ── Cross-chain: testing ──
+  { from: 'uat',       to: 'uat-guide',  type: 'conditional', condition: 'Journey needs step-by-step guidance' },
+  { from: 'dogfood',   to: 'icp',        type: 'conditional', condition: 'No credible product surface' },
+  { from: 'uat',       to: 'icp',        type: 'conditional', condition: 'Target user unclear' },
+
+  // ── Cross-chain: admin ──
+  { from: 'spec-drift', to: 'research-roadmap', type: 'conditional', condition: 'No specs found' },
+  { from: 'spec-drift', to: 'reconcile-research', type: 'conditional', condition: 'Major spec-to-research impact' },
+  { from: 'plan-phase', to: 'research-roadmap', type: 'conditional', condition: 'No roadmap exists' },
+];
+
+// ── Layout ────────────────────────────────────────────────────────────
+
+const NODE_W = 150;
+const NODE_H = 52;
+const GAP_X = 30;
+const GAP_Y = 24;
+const LANE_PAD_TOP = 36;
+const LEFT_PAD = 60;
+const TOP_PAD = 20;
+
+const nodeMap = {};
+NODES.forEach(n => { nodeMap[n.id] = n; });
+
+// Assign positions
+// Row 0: AFPS chain
+AFPS_CHAIN.forEach((id, i) => {
+  nodeMap[id].x = LEFT_PAD + i * (NODE_W + GAP_X);
+  nodeMap[id].y = TOP_PAD;
+  nodeMap[id].row = 0;
+});
+
+const offChainGroups = [
+  { pack: 'discovery',  ids: ['value-prop-canvas','lean-canvas','brainstorm','customer-feedback','enterprise-icp','assumption-tracker','reconcile-research'] },
+  { pack: 'lifecycle',  ids: ['onboarding-map','conversion-map','transaction-map','retention-map','expansion-map','lifecycle-metrics'] },
+  { pack: 'growth',     ids: ['growth-model','hook-model','metrics','gtm','pmf-assessment','experiment','monetization','cohort-review'] },
+  { pack: 'ops',        ids: ['mvp-gap','scale-audit','platform-strategy'] },
+  { pack: 'testing',    ids: ['dogfood','uat-guide'] },
+  { pack: 'admin',      ids: ['spec-drift'] },
+];
+
+let currentRow = 1;
+offChainGroups.forEach(g => {
+  const rowY = TOP_PAD + currentRow * (NODE_H + GAP_Y + LANE_PAD_TOP);
+  g.ids.forEach((id, i) => {
+    if (!nodeMap[id]) return;
+    nodeMap[id].x = LEFT_PAD + i * (NODE_W + GAP_X);
+    nodeMap[id].y = rowY;
+    nodeMap[id].row = currentRow;
+  });
+  g.rowY = rowY;
+  currentRow++;
+});
+
+// Canvas size
+const maxX = Math.max(...NODES.map(n => (n.x || 0) + NODE_W)) + 60;
+const maxY = Math.max(...NODES.map(n => (n.y || 0) + NODE_H)) + 100;
+
+// ── Render ────────────────────────────────────────────────────────────
+
+const canvas = document.getElementById('canvas');
+const svg = document.getElementById('edgeSvg');
+const tooltip = document.getElementById('tooltip');
+const filtersEl = document.getElementById('filters');
+
+canvas.style.width = maxX + 'px';
+canvas.style.height = maxY + 'px';
+svg.setAttribute('width', maxX);
+svg.setAttribute('height', maxY);
+svg.style.width = maxX + 'px';
+svg.style.height = maxY + 'px';
+
+// Swimlane labels
+offChainGroups.forEach(g => {
+  const lbl = document.createElement('div');
+  lbl.className = 'swimlane-label';
+  lbl.textContent = PACKS[g.pack].label;
+  lbl.style.top = g.rowY + 'px';
+  lbl.style.color = PACKS[g.pack].color;
+  canvas.appendChild(lbl);
+});
+
+// Render nodes
+const nodeEls = {};
+NODES.forEach(n => {
+  const el = document.createElement('div');
+  el.className = 'node';
+  el.dataset.id = n.id;
+  el.dataset.pack = n.pack;
+  el.style.left = n.x + 'px';
+  el.style.top = n.y + 'px';
+  el.style.width = NODE_W + 'px';
+  el.style.height = NODE_H + 'px';
+  el.style.borderColor = PACKS[n.pack].color;
+  el.style.display = 'flex';
+  el.style.flexDirection = 'column';
+  el.style.justifyContent = 'center';
+  el.style.alignItems = 'center';
+
+  const name = document.createElement('span');
+  name.textContent = n.id;
+  name.style.color = PACKS[n.pack].color;
+  el.appendChild(name);
+
+  if (n.pack !== 'afps') {
+    const tag = document.createElement('span');
+    tag.className = 'pack-tag';
+    tag.textContent = PACKS[n.pack].label;
+    el.appendChild(tag);
+  }
+
+  el.addEventListener('click', () => selectNode(n.id));
+  canvas.appendChild(el);
+  nodeEls[n.id] = el;
+});
+
+// Render edges
+const edgeEls = [];
+EDGES.forEach((e, i) => {
+  const fn = nodeMap[e.from];
+  const tn = nodeMap[e.to];
+  if (!fn || !tn) return;
+
+  const x1 = fn.x + NODE_W / 2;
+  const y1 = fn.y + NODE_H;
+  const x2 = tn.x + NODE_W / 2;
+  const y2 = tn.y;
+
+  // For same-row edges, connect side-to-side
+  let d;
+  if (fn.row === tn.row) {
+    const sx = fn.x < tn.x ? fn.x + NODE_W : fn.x;
+    const sy = fn.y + NODE_H / 2;
+    const ex = fn.x < tn.x ? tn.x : tn.x + NODE_W;
+    const ey = tn.y + NODE_H / 2;
+    const cpx = (sx + ex) / 2;
+    d = `M${sx},${sy} C${cpx},${sy} ${cpx},${ey} ${ex},${ey}`;
+  } else {
+    // Cross-row: bottom to top with bezier
+    const cpOff = Math.abs(y2 - y1) * 0.4;
+    d = `M${x1},${y1} C${x1},${y1 + cpOff} ${x2},${y2 - cpOff} ${x2},${y2}`;
+  }
+
+  const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  path.setAttribute('d', d);
+  path.setAttribute('fill', 'none');
+  path.setAttribute('stroke', 'var(--text-muted)');
+  path.setAttribute('stroke-width', '1.5');
+  path.setAttribute('marker-end', 'url(#arrow)');
+
+  if (e.type === 'conditional') path.classList.add('edge-conditional');
+  else if (e.type === 'detour') path.classList.add('edge-detour');
+  else path.classList.add('edge-default');
+
+  path.dataset.idx = i;
+  path.style.pointerEvents = 'stroke';
+  path.style.cursor = 'pointer';
+
+  path.addEventListener('mouseenter', (ev) => {
+    tooltip.textContent = e.condition;
+    tooltip.style.display = 'block';
+    tooltip.style.left = ev.clientX + 12 + 'px';
+    tooltip.style.top = ev.clientY - 10 + 'px';
+    path.setAttribute('stroke', 'var(--accent)');
+    path.setAttribute('stroke-width', '2.5');
+  });
+  path.addEventListener('mousemove', (ev) => {
+    tooltip.style.left = ev.clientX + 12 + 'px';
+    tooltip.style.top = ev.clientY - 10 + 'px';
+  });
+  path.addEventListener('mouseleave', () => {
+    tooltip.style.display = 'none';
+    if (!path.classList.contains('edge-highlight')) {
+      path.setAttribute('stroke', 'var(--text-muted)');
+      path.setAttribute('stroke-width', '1.5');
+    }
+  });
+
+  svg.appendChild(path);
+  edgeEls.push({ path, edge: e });
+});
+
+// Arrow marker
+const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+const marker = document.createElementNS('http://www.w3.org/2000/svg', 'marker');
+marker.setAttribute('id', 'arrow');
+marker.setAttribute('viewBox', '0 0 10 10');
+marker.setAttribute('refX', '9');
+marker.setAttribute('refY', '5');
+marker.setAttribute('markerWidth', '6');
+marker.setAttribute('markerHeight', '6');
+marker.setAttribute('orient', 'auto-start-reverse');
+const arrowPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+arrowPath.setAttribute('d', 'M 0 0 L 10 5 L 0 10 z');
+arrowPath.setAttribute('fill', 'var(--text-muted)');
+marker.appendChild(arrowPath);
+defs.appendChild(marker);
+svg.prepend(defs);
+
+// ── Interactivity ─────────────────────────────────────────────────────
+
+let selectedNode = null;
+
+function selectNode(id) {
+  if (selectedNode === id) {
+    clearSelection();
+    return;
+  }
+  selectedNode = id;
+
+  // Find connected edges
+  const connected = new Set();
+  connected.add(id);
+  edgeEls.forEach(({ path, edge }) => {
+    if (edge.from === id || edge.to === id) {
+      connected.add(edge.from);
+      connected.add(edge.to);
+      path.classList.remove('edge-dimmed');
+      path.classList.add('edge-highlight');
+      path.setAttribute('stroke', 'var(--accent)');
+      path.setAttribute('stroke-width', '2.5');
+    } else {
+      path.classList.add('edge-dimmed');
+      path.classList.remove('edge-highlight');
+      path.setAttribute('stroke', 'var(--text-muted)');
+      path.setAttribute('stroke-width', '1.5');
+    }
+  });
+
+  NODES.forEach(n => {
+    const el = nodeEls[n.id];
+    if (!el) return;
+    if (connected.has(n.id)) {
+      el.classList.remove('dimmed');
+      el.classList.toggle('selected', n.id === id);
+    } else {
+      el.classList.add('dimmed');
+      el.classList.remove('selected');
+    }
+  });
+}
+
+function clearSelection() {
+  selectedNode = null;
+  NODES.forEach(n => {
+    const el = nodeEls[n.id];
+    if (el) { el.classList.remove('dimmed', 'selected'); }
+  });
+  edgeEls.forEach(({ path }) => {
+    path.classList.remove('edge-dimmed', 'edge-highlight');
+    path.setAttribute('stroke', 'var(--text-muted)');
+    path.setAttribute('stroke-width', '1.5');
+  });
+}
+
+canvas.addEventListener('click', (ev) => {
+  if (ev.target === canvas || ev.target === svg) clearSelection();
+});
+
+// ── Pack Filters ──────────────────────────────────────────────────────
+
+const packVisibility = {};
+Object.keys(PACKS).forEach(k => { packVisibility[k] = true; });
+
+function renderFilters() {
+  filtersEl.innerHTML = '';
+  const allLabel = document.createElement('label');
+  allLabel.innerHTML = '<strong style="color:var(--text);font-size:0.8rem">Packs:</strong>';
+  filtersEl.appendChild(allLabel);
+
+  Object.entries(PACKS).forEach(([key, pack]) => {
+    const label = document.createElement('label');
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.checked = packVisibility[key];
+    cb.addEventListener('change', () => {
+      packVisibility[key] = cb.checked;
+      applyFilters();
+    });
+    label.appendChild(cb);
+    const span = document.createElement('span');
+    span.textContent = pack.label;
+    span.style.color = pack.color;
+    label.appendChild(span);
+    filtersEl.appendChild(label);
+  });
+
+  const sep = document.createElement('div');
+  sep.className = 'sep';
+  filtersEl.appendChild(sep);
+
+  const resetBtn = document.createElement('button');
+  resetBtn.className = 'btn-reset';
+  resetBtn.textContent = 'Reset';
+  resetBtn.addEventListener('click', () => {
+    Object.keys(PACKS).forEach(k => { packVisibility[k] = true; });
+    renderFilters();
+    applyFilters();
+  });
+  filtersEl.appendChild(resetBtn);
+}
+
+function applyFilters() {
+  NODES.forEach(n => {
+    const el = nodeEls[n.id];
+    if (!el) return;
+    el.style.display = packVisibility[n.pack] ? '' : 'none';
+  });
+
+  edgeEls.forEach(({ path, edge }) => {
+    const fromNode = nodeMap[edge.from];
+    const toNode = nodeMap[edge.to];
+    const visible = fromNode && toNode && packVisibility[fromNode.pack] && packVisibility[toNode.pack];
+    path.style.display = visible ? '' : 'none';
+  });
+
+  if (selectedNode && !packVisibility[nodeMap[selectedNode]?.pack]) {
+    clearSelection();
+  }
+}
+
+renderFilters();
+</script>
+</body>
+</html>

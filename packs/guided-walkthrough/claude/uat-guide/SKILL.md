@@ -60,7 +60,7 @@ This skill does not generate UAT journeys. If no UAT plan exists, stop and recom
    - When the user reports completion:
      - Update the `#### UAT result log` section for this journey inline in `research/uat-plan.md` with the reported status, evidence, tester notes, and any follow-up tasks promoted.
      - Check off the corresponding item in `tasks/manual-todo.md`.
-     - If the result is `Fail` or `Blocked`, suggest follow-up routing: `/debug` for reproducible failures, `/guide` for external blockers, `/spec-interview` (product-design pack) for unclear acceptance criteria, or `/uat-guide [next]` for the next journey.
+     - If the result is `Fail` or `Blocked`, suggest follow-up routing: `/debug` for reproducible failures, `/guide` for external blockers, `/ux-variations` (product-design pack) for unclear acceptance criteria, or `/uat-guide [next]` for the next journey.
 
 ## Output Format
 
@@ -126,7 +126,7 @@ Follow the shared Alignment Page convention in CLAUDE.md. Output: `alignment/uat
 - **One journey at a time** — guide the user through one journey per invocation. They can run `/uat-guide next` for the next one.
 - **Don't execute the product** — produce instructions for the user to follow. Do not start dev servers, launch browsers, call APIs, create accounts, or perform CLI workflows.
 - **Don't mark complete unprompted** — only update the result log after the user explicitly reports the outcome.
-- **Don't invent acceptance criteria** — use only the criteria defined in the UAT plan. If criteria are missing or unclear, recommend `/spec-interview` (product-design pack) to clarify them.
+- **Don't invent acceptance criteria** — use only the criteria defined in the UAT plan. If criteria are missing or unclear, recommend `/ux-variations` (product-design pack) to clarify them.
 - **Handle all product surface types** — web apps get click-by-click, CLIs get command-by-command, APIs get request-by-request, hybrids get mixed. Detect from codebase context; don't assume web.
 - **Prerequisite: UAT plan must exist** — if `research/uat-plan.md` is missing, stop immediately and recommend `/uat` (product-testing pack).
 - When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, prepend `/pack install <pack-name>` to the recommendation.
