@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-05-27 — Skill preview duplicates can come from archived SKILL.md files
+
+- A `$` preview duplicate for `analyze-sessions` was not a frontmatter case variant; it came from recursive skill discovery seeing both the active symlink target and `archive/v0.0/SKILL.md` under that target.
+- When users report duplicate skill preview entries, trace the exact preview/discovery roots (`.codex/skills`, `.claude/skills`, user-home skills, project pack links) and check whether recursive scans include `archive/**/SKILL.md`.
+- Treat archive skill files as historical snapshots, not invokable skills. Discovery and preview paths should exclude any `archive/` segment or dedupe by canonical active skill identity.
+- Do not stop at checking active repo frontmatter; UI symptoms can be caused by generated indexes or client-side recursive scanning behavior.
+
 ## 2026-05-27 — Product research branches are product paths, not git branches
 
 - In split-path research workflows, "branch" means product path, product-line divergence, app scope, ICP direction, pivot, or route experiment, not a git branch or a parallel implementation lane.
