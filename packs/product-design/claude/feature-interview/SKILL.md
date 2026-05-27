@@ -2,7 +2,7 @@
 name: feature-interview
 description: Interview a feature idea with evidence-backed alignment, then decide whether to create/update docs, specs, roadmap, or tasks
 type: planning
-version: v0.1
+version: v0.2
 argument-hint: "[feature idea or tasks/ideas.md entry]"
 ---
 
@@ -24,6 +24,7 @@ This is narrower than `/spec-interview`: it performs the same assumption surfaci
    - If no feature is provided, read `tasks/ideas.md` and present the top unspecced candidates; ask the user which one to interview.
 2. Gather context before asking deep questions:
    - Read `.agents/project.json`, CLAUDE.md or AGENTS.md, README, package config, and key source files relevant to the idea.
+   - Read `research/.progress.yaml` when present. Treat product-path entries as product/app/ICP divergence state, not git branches.
    - Read `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, `tasks/recurring-todo.md`, `tasks/history.md`, and `tasks/ideas.md` when they exist.
    - Read existing specs from `specs/`, `spec.md`, or `docs/specifications/`, plus relevant research docs such as ICP, journey map, competitive analysis, customer feedback, metrics, and MVP gap artifacts.
    - Read git evidence (`git log`, `git diff`, `git blame`) only where it can confirm related prior decisions, recent regressions, ownership, or why the current system shape exists.
@@ -35,6 +36,7 @@ This is narrower than `/spec-interview`: it performs the same assumption surfaci
    - Identify how the feature fits into the user story, customer journey, developer workflow, game loop, or other project-specific journey artifact. If no credible journey exists for user-facing work, flag that as a planning gap.
    - For new user-facing product, SaaS, marketplace, dashboard, internal tool, product-experience work, or substantial new feature work, add a prototype-first gate to the intake: default the first build artifact to a clickable local/static prototype with fake, fixture, or in-memory data unless the user explicitly opts into production infrastructure or the core interaction cannot be tested without it. Treat durable storage, auth, payments, analytics, deployment, admin tooling, multi-tenancy, and production observability as deferred infrastructure decisions until the prototype calibrates taste, feel, workflow density, and one accepted journey.
    - When the feature direction is uncertain, recommend multiple route-based experiments instead of one over-specified implementation. Name the routes or route pattern, such as `/experiments/table-first`, `/experiments/board-first`, or the project's equivalent, and identify the hypothesis each route tests.
+   - If those route experiments imply materially different products, apps, ICPs, or product lines rather than alternative UX for the same product path, record them in `research/.progress.yaml` as `product_paths[]` with `source_skill: feature-interview`, `status: deferred` or `status: revisit_candidate`, a `revisit_trigger`, and the likely `next_skill`.
    - Identify whether research docs, journey docs, specs, roadmap, or task queues need a durable update if the feature proceeds.
 4. Match the feature against existing planning artifacts:
    - Identify whether it is already fully represented in a spec, partially represented in a spec, only present as an idea/research gap, or already sequenced in the roadmap.
@@ -90,6 +92,7 @@ After confirmation, write the minimum durable artifact needed:
 - Roadmap/task-only change: update `tasks/roadmap.md`, `tasks/todo.md`, `tasks/record-todo.md`, or `tasks/manual-todo.md` only when no spec/research change is needed and the user has confirmed priority.
 - Upstream planning/research needed: write an interview log and recommend the named skill instead of inventing a placeholder spec.
 - No action: write an interview log explaining why the idea is already covered, duplicate, deferred, or intentionally parked.
+- Product path divergence: update `research/.progress.yaml` with `id`, `label`, `source_skill`, `scope_path`, `status`, `reason`, `evidence_refs`, `revisit_trigger`, `next_skill`, and `last_touched`; do not force all divergent paths through downstream research.
 
 Always write an interview log to `specs/[topic]-feature-interview.md` (or `docs/specifications/[topic]-feature-interview.md` if that is the repo's canonical spec location). Include:
 

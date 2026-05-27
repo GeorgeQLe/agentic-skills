@@ -2,7 +2,7 @@
 name: ux-variations
 description: Interview and plan multiple UX and UI variations for a product, page, or flow, including onboarding, typical workflows, sharing, collaboration, return use, and interface alternatives users can compare before locking a direction — and concrete visual/layout UI variations (component choices, spatial arrangements, information density)
 type: planning
-version: v0.3
+version: v0.4
 argument-hint: "[optional: app, page, flow, feature, or existing UI spec]"
 ---
 
@@ -21,6 +21,7 @@ When invoked with `--layout-mode` (or when the user says "layout mode", "layout 
 1. **Resolve context**
    - Read `.agents/project.json` if it exists.
    - Read `README.md`, `AGENTS.md`, `CLAUDE.md`, relevant `docs/`, `specs/`, `research/`, task files, screenshots, route files, and component implementations when present.
+   - Read `research/.progress.yaml` when present. Use `active_path` as the product/app focus and treat deferred `product_paths[]` as parked product directions, not required UX variants.
    - Prefer existing `specs/ui-*.md`, product specs, journey maps, ICP research, and user feedback as source evidence.
    - If no credible scope exists, run or recommend `/ui-interview` before developing variants.
 
@@ -107,6 +108,7 @@ When invoked with `--layout-mode` (or when the user says "layout mode", "layout 
 8. **Plan experimentation**
    - Recommend serial full buildout of all approved variants. Do not recommend building a subset first — the user's consistent preference is to build all variants before evaluating.
    - For prototype-stage product or feature work, prefer numerous small route-based experiments over one merged prototype when multiple workflows, layouts, densities, copy approaches, navigation models, or interaction patterns remain plausible. Name the route for each experiment, such as `/experiments/table-first`, `/experiments/command-first`, or the project's equivalent, and keep shared production infrastructure out of those routes unless explicitly approved.
+   - If route experiments imply materially different products, apps, ICPs, or product lines, update `research/.progress.yaml` with experiment product-path entries instead of making every divergent path a required UX variation. Include `source_skill: ux-variations`, `scope_path`, `status`, `reason`, `evidence_refs`, `revisit_trigger`, `next_skill`, and `last_touched`.
    - After variants are built, recommend `/uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `/pack install product-testing` first) before `/consolidate-variations`. Consolidation is premature until evaluation evidence exists or the user explicitly says they reviewed the variants and is ready to converge.
    - Define comparison criteria before selecting a winner.
    - Include a lock-in checklist so the chosen direction becomes a decision record, not a vague preference.
@@ -120,6 +122,7 @@ When invoked with `--layout-mode` (or when the user says "layout mode", "layout 
 
 - Write the variation plan to `specs/ux-variations-[topic].md`.
 - Write the interview log to `ux-variations-[topic]-interview.md`.
+- Update `research/.progress.yaml` only when variant or route experiments create materially different product paths; downstream research remains active-path-only until a path is promoted.
 
 ### Alignment Page
 

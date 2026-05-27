@@ -2,7 +2,7 @@
 name: platform-strategy
 description: Expand from a single product into a multi-product platform — map vertical and horizontal growth vectors, score candidates, design validation experiments, and sequence the portfolio
 type: research
-version: v0.1
+version: v0.2
 argument-hint: "[optional: expansion direction e.g. \"vertical\", \"horizontal\", or specific adjacent market]"
 ---
 
@@ -53,6 +53,7 @@ When app scope `{app}` is active:
 - Read/write research from `research/{app}/` instead of `research/`
 - Read/write specs from `specs/{app}/` instead of `specs/`
 - Also read `research/icp.md` (cross-app overview) for broader context
+- Read `research/.progress.yaml` when present. Use `active_path` as the core product focus and use `product_paths[]` to avoid rediscovering parked expansion candidates.
 
 ### 1. Assess Core Product Health
 
@@ -75,6 +76,8 @@ Cluster findings into **4-8 candidates** across two axes:
 **Horizontal:** complementary tools, adjacent persona products, same tech applied to different problem, marketplace/platform plays.
 
 For each: problem, audience, relationship to core, market signal, vertical vs. horizontal.
+
+Record the 4-8 candidates in `research/.progress.yaml` as `product_paths[]` entries with `source_skill: platform-strategy`. The top candidate may be `status: active` or `status: revisit_candidate` depending on whether the user is ready to validate it now; non-selected candidates should default to `status: deferred` with validation triggers. Include `id`, `label`, `scope_path`, `reason`, `evidence_refs`, `revisit_trigger`, `next_skill`, and `last_touched`.
 
 **Checkpoint 2 — Present candidates.** Group by vertical/horizontal with rationale and evidence. Ask: "Expansion directions I missed? Any clearly wrong? Internal signals pointing toward any of these?"
 
@@ -108,6 +111,7 @@ Only after user validates, write the output files.
 
 - `research/platform-strategy.md` (or `research/{app}/platform-strategy.md`) — Full platform strategy: summary, core health, expansion vector map, scoring matrix, validation experiments, portfolio sequence, shared platform considerations, next steps.
 - `research/platform-strategy-search-log.md` (or `research/{app}/platform-strategy-search-log.md`) — Raw research log: every query, findings, source attribution, scoring rationale.
+- `research/.progress.yaml` — product-path manifest updated with 4-8 expansion candidates. This does not require every candidate to become a full research track.
 
 `## Next Steps` section with a **Recommended** item and **Other options** (2–4 alternatives). Use this format in the output:
 

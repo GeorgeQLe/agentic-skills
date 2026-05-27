@@ -2,7 +2,7 @@
 name: platform-strategy
 description: Expand from a single product into a multi-product platform — map vertical and horizontal growth vectors, score candidates, design validation experiments, and sequence the portfolio
 type: research
-version: v0.1
+version: v0.2
 argument-hint: "[optional: expansion direction e.g. \"vertical\", \"horizontal\", or specific adjacent market]"
 ---
 
@@ -56,6 +56,7 @@ When app scope `{app}` is active:
 - Read/write research from `research/{app}/` instead of `research/`
 - Read/write specs from `specs/{app}/` instead of `specs/`
 - Also read `research/icp.md` (cross-app overview) for broader context
+- Read `research/.progress.yaml` when present. Use `active_path` as the core product focus and use `product_paths[]` to avoid rediscovering parked expansion candidates.
 
 ### 1. Assess Core Product Health
 
@@ -120,6 +121,8 @@ For each candidate, note:
 - Relationship to core product (shared data, shared users, shared infra, or independent)
 - Initial market signal (from web research)
 - Whether it's vertical or horizontal
+
+Record the 4-8 candidates in `research/.progress.yaml` as `product_paths[]` entries with `source_skill: platform-strategy`. The top candidate may be `status: active` or `status: revisit_candidate` depending on whether the user is ready to validate it now; non-selected candidates should default to `status: deferred` with validation triggers. Include `id`, `label`, `scope_path`, `reason`, `evidence_refs`, `revisit_trigger`, `next_skill`, and `last_touched`.
 
 **Checkpoint 2 — Present candidates to the user.** Use the AskUserQuestion tool to show all candidates grouped by vertical/horizontal, with a brief rationale and research evidence for each. Then ask:
 - "Are there expansion directions I missed?"
@@ -390,6 +393,10 @@ Raw research log containing:
 - Evidence for and against each expansion candidate
 - Competitor product-line analysis
 - Market size signals for adjacent markets
+
+### `research/.progress.yaml`
+
+Product-path manifest updated with 4-8 expansion candidates. This does not require every candidate to become a full research track.
 - Any data gaps or areas where research was inconclusive
 
 Create the `research/` (or `research/{app}/`) directory if it doesn't exist.

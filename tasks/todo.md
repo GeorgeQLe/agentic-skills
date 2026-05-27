@@ -8,6 +8,7 @@
 
 ## Priority Task Queue
 
+- [x] `$targeted-skill-builder product path manifest research workflows` — update existing research/planning skill contracts so divergent product lines, ICPs, app paths, pivots, and route experiments are tracked in `research/.progress.yaml` as `product_paths` without forcing every deferred path through full downstream research.
 - [x] `$investigate journey-map alignment page and AFPS clunkiness` — validate whether journey-map/positioning contracts and recent conversation history explain inconsistent HTML alignment preview creation and workflow friction, then patch the minimal owning contracts/tests if confirmed.
 - [x] `$investigate AFPS alignment preview gate audit` — audit later AFPS workflow skills for shared-convention-only, write-first, conditional, or missing HTML alignment preview gates; patch confirmed gaps with mirrored contract updates and focused tests.
 - [x] `$investigate exec-loop run rename` — rename the exec-loop `run` skill to `exec` for Claude and Codex to avoid collision with Claude's default `/exec` surface; archive/version active skill contracts, update references, validate, commit, and push.
@@ -32,6 +33,31 @@
 - [x] `$exec` — Resume Phase 41 Batch 41.3 re-benchmarks: re-run the 33 Tier 2 global skills that were benchmarked pre-fixture-remediation with near-zero pass rates (Phase 43 added route guidance to all 32 fixture prompts and increased budgets). Current graded count: 69 unique skills / 158 total. Batch 41.5 pack-local groups also have remaining families. Batch 41.3 Group 2 shipped in `bc17fee` and `3e4bd78`; next triage should start with `provision-agentic-config`, `migrate`, or `prototype`.
 - [ ] Review `tasks/recurring-todo.md`: 2 unchecked recurring items — promote only if due and requiring execution work.
 - [ ] `$research-roadmap` — All 43 roadmap phases are complete. Run documentation health scan after Phase 41 remaining batches finish.
+
+## Current Task — Product Path Manifest for Research Workflows 2026-05-27
+
+**Goal:** Implement the approved split-path product research remediation as an existing-skill update: define a lightweight `research/.progress.yaml` product-path manifest convention and wire it into the skills that create or consume materially divergent product/app/ICP paths.
+
+**Plan:**
+- [x] Record the implementation plan in task docs and confirm the active contracts, tests, and worktree state.
+- [x] Archive and update mirrored active skill contracts for `concept-exploration`, `icp`, `competitive-analysis`, `platform-strategy`, `feature-interview`, `ux-variations`, and `research-roadmap`.
+- [x] Add focused layer1 tests for product-path manifest terminology, producer/consumer behavior, and active-path-only downstream defaults.
+- [x] Update changelogs, refresh generated Skills Showcase data, and run required validation commands.
+- [ ] Add review notes, commit, and push intended changes on `master`.
+
+**Files:**
+- `research/.progress.yaml` convention documented in skill contracts; no project-local state file is created for this repo unless a test fixture requires it.
+
+### Review
+
+- Added product-path manifest handling to mirrored `concept-exploration`, `icp`, `competitive-analysis`, `platform-strategy`, `feature-interview`, `ux-variations`, and `research-roadmap` contracts.
+- Archived previous active `SKILL.md` versions before bumping: concept-exploration v0.2, ICP v0.4, competitive-analysis v0.6, platform-strategy v0.1, feature-interview v0.2/v0.1, ux-variations v0.3, and research-roadmap v0.3.
+- Defined `research/.progress.yaml` with `active_path` and `product_paths[]` fields, statuses `active`, `deferred`, `revisit_candidate`, `promoted`, and `abandoned`, and explicit product-path terminology instead of overloaded branch wording.
+- Preserved active-path-only downstream behavior: deferred paths get revisit triggers and next-skill routes rather than automatic competitive analysis, positioning, journey mapping, UX, or spec work.
+- Added `tests/layer1/product-path-manifest.test.ts` covering schema, ICP secondary paths, competitive deferred-path implications, platform expansion candidates, feature/UX route experiments, research-roadmap queue behavior, and git-branch terminology separation.
+- Refreshed Skills Showcase generated data after active skill behavior changes.
+- Validation passed: `./scripts/skill-versions.sh --missing`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests exec vitest run --project layer1 layer1/product-path-manifest.test.ts`; `git diff --check`; `./install.sh`.
+- Validation caveats: `./scripts/skill-next-step-routing.sh --missing` still reports a broad existing list of missing next-step routing contracts, including many unrelated active skills. `scripts/validate-skills-showcase-data.sh` regenerated assets and then reported generated data dirty, which is expected before committing the refreshed generated files.
 
 ## Current Task — AFPS Alignment Preview Gate Audit 2026-05-27
 

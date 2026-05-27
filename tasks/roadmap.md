@@ -16,6 +16,19 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Update: Product Path Manifest for Research Workflows 2026-05-27
+
+**Goal:** Update existing research/planning skill contracts so multiple product lines, ICPs, app paths, pivots, route experiments, and expansion candidates are tracked as product paths in `research/.progress.yaml`, while keeping downstream work scoped to the active path by default.
+
+**Acceptance Criteria:**
+- [x] `concept-exploration`, `icp`, `competitive-analysis`, `platform-strategy`, `feature-interview`, `ux-variations`, and `research-roadmap` define or consume the product-path manifest where appropriate.
+- [x] The manifest schema uses `active_path` and `product_paths[]` entries with `id`, `label`, `source_skill`, `scope_path`, `status`, `reason`, `evidence_refs`, `revisit_trigger`, `next_skill`, and `last_touched`.
+- [x] Skill contracts consistently use product-path/product-line/app-scope terminology for research divergence and avoid confusing this with git branch or parallel implementation branch workflows.
+- [x] Deferred paths do not force full competitive analysis, positioning, journey mapping, UX, or spec work unless promoted.
+- [x] Active changed `SKILL.md` files are archived, version-bumped, and changelogs updated.
+- [x] Focused layer1 tests, skill metadata validation, showcase generation/validation, whitespace checks, and install validation pass or blockers are documented.
+- [ ] Review notes are recorded and intended changes are committed and pushed on `master`.
+
 ## Current Targeted Update: AFPS Alignment Preview Gate Audit 2026-05-27
 
 **Goal:** Investigate whether later AFPS workflow skills can plausibly skip, delay, or weaken the required HTML alignment preview because their local contracts only inherit the shared Alignment Page convention, place the Alignment Page section after write instructions, or lack an Alignment Page section entirely.

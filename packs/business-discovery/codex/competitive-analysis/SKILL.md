@@ -2,7 +2,7 @@
 name: competitive-analysis
 description: Research competitors via web search — map the landscape, GTM strategies, strengths, weaknesses, and market gaps
 type: research
-version: v0.6
+version: v0.7
 argument-hint: "[concept | optional: product category or specific competitors to investigate]"
 ---
 
@@ -30,6 +30,7 @@ Default stance: assume the user has no insider knowledge of the market. Present 
 
 - **Concept-validation mode** activates when: no `research/icp.md` AND (no meaningful codebase OR `$ARGUMENTS` contains "concept"/"validate"). Use this mode to validate market gaps after a concept has been shaped by `$concept-exploration` or an equivalent brief; if no concept is clear, recommend `$concept-exploration` first. Announce mode to user, then ask for concept description (problem, audience, approach).
 - **Standard mode** (default): Read the codebase, README, CLAUDE.md, and existing research/specs (`research/icp.md` or `research/{app}/icp.md`, `research/enterprise-icp.md` or `research/{app}/enterprise-icp.md`, `research/mvp-gap.md` or `research/{app}/mvp-gap.md`) to understand the product.
+- Read `research/.progress.yaml` when present. In standard mode, scope the full competitive analysis to the manifest `active_path` by default. Treat `product_paths[]` entries with `status: deferred` or `status: revisit_candidate` as parked product paths, not as extra full research tracks.
 
 ## Process
 
@@ -74,6 +75,8 @@ Synthesise market gaps into: **Market State** (Virgin/Sparse/Crowded), **Incumbe
 
 **Standard mode:** Underserved segments, feature/capability gaps, pricing gaps, 2-3 white-space opportunities, competitor lessons (do's and don'ts).
 
+When evidence materially affects parked product paths from `research/.progress.yaml`, add a short `## Implications for Deferred Product Paths` section summarizing the impact, evidence refs, and whether the `revisit_trigger` should change. Do not broaden standard mode into full competitive analysis for every deferred path unless the user explicitly promotes one.
+
 **Concept-validation mode:** Frame as hypothetical — segments the concept could serve that competitors miss, capability gaps, competitor lessons. Positioning recommendations belong in `$positioning`.
 
 ### 6. Present Findings & Validate
@@ -88,6 +91,7 @@ Only after user validates, write the output files.
 
 - `research/competitive-analysis.md` (or `research/{app}/competitive-analysis.md`) — Full competitive landscape: summary, competitor profiles, observable GTM patterns, market gaps, competitive positioning (gaps identified, lessons), signals for downstream research, next steps. In concept-validation mode, includes `## Gap Assessment` section (Market State, Incumbent Quality, Gap Quality, Verdict).
 - `research/competitive-analysis-search-log.md` (or `research/{app}/competitive-analysis-search-log.md`) — Raw research log: every query, findings, source attribution, reasoning
+- `research/.progress.yaml` — update only when active-path evidence changes a deferred product path's status, reason, evidence refs, revisit trigger, or next skill. Use `product_paths` terminology instead of branch terminology.
 
 **Standard mode next steps:** `## Next Steps` section with a **Recommended** item and **Other options** (2–4 alternatives). Choose the recommended item by the first matching condition:
 

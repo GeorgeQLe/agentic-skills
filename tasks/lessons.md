@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-05-27 — Product research branches are product paths, not git branches
+
+- In split-path research workflows, "branch" means product path, product-line divergence, app scope, ICP direction, pivot, or route experiment, not a git branch or a parallel implementation lane.
+- Durable contracts should use `product_paths` in `research/.progress.yaml` and terms like product path, product line, app scope, deferred path, or promoted path.
+- Avoid `branch`, `branches`, and `deferred_paths` in research workflow contracts unless explicitly discussing git operations or release workflow skills.
+- Default downstream work to the active product path; parked paths need revisit triggers and next-skill routes, not automatic full research/spec expansion.
+
 ## 2026-05-27 — Do not wrap direct skill routes in exec-loop by default
 
 - A `$ship-end` next-step recommendation incorrectly wrapped `$analyze-sessions split-path product research workflow` inside `$exec`, even though `$analyze-sessions` was already the concrete next skill route.

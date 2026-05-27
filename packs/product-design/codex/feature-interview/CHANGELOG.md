@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3 - 2026-05-27
+
+- Added product-path manifest handling for feature route experiments that imply materially different products, apps, ICPs, or product lines.
+
 ## v0.1 - 2026-05-24
 
 - Clarified that `$feature-interview` is the normal post-spec add-on workflow for smaller features.

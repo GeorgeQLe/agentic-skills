@@ -2,7 +2,7 @@
 name: research-roadmap
 description: Scan research and documentation health, then maintain a priority documentation queue
 type: planning
-version: v0.3
+version: v0.4
 ---
 
 ## Pack Availability Guard
@@ -51,6 +51,8 @@ Treat top-level `research/`, `specs/`, and `tasks/` as canonical.
 5. If a fallback root is used for research or specs, mention it in the generated todo item reasons.
 
 For writing the priority queue, prefer `tasks/todo.md`. Use a fallback task root only when the project already has a clear existing task contract and no top-level `tasks/` directory. Do not put condition-gated records or recurring obligations into `tasks/todo.md` unless they are immediately actionable execution work.
+
+Read `research/.progress.yaml` when present. Interpret `active_path` as the current product/app/ICP focus and `product_paths[]` as the product-path manifest. Valid statuses include `active`, `deferred`, `revisit_candidate`, `promoted`, and `abandoned`; these are research product-path states, not git branches.
 
 ### 3. Discover Research-Producing Skills
 
@@ -195,6 +197,8 @@ Order immediately actionable todo items so the user can complete documentation w
 9. Reconciliation items when conflicting docs are detected.
 
 Within research items, use this dependency order when relevant. When emitting queued commands for pack-based skills, apply the Pack Availability Guard — if the target skill's pack is not in `.agents/project.json` `enabled_packs`, queue `/pack install <pack>` before the skill:
+
+When `research/.progress.yaml` exists, show active and deferred product paths in the priority queue so parked paths are not lost. Queue full downstream research only for `active` or `promoted` paths by default. For `deferred` or `revisit_candidate` paths, add a concise record or queue note with the `revisit_trigger` and `next_skill` rather than scheduling competitive analysis, positioning, journey mapping, UX, or specs for every path.
 
 ```
 /concept-exploration

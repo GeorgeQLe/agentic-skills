@@ -1,5 +1,9 @@
 # competitive-analysis changelog (codex)
 
+## v0.7 - 2026-05-27
+
+- Added active-path-only product-path manifest behavior and a bounded deferred-path implications section for parked product directions.
+
 ## v0.6 - 2026-05-26
 
 - Gate cross-pack routing recommendations on pack availability — recommend `$pack install <pack>` when the target pack is not enabled

@@ -1,5 +1,9 @@
 # icp changelog (claude)
 
+## v0.5 - 2026-05-27
+
+- Added product-path manifest handling so secondary ICPs and Cross-ICP Analysis outcomes create `research/.progress.yaml` `product_paths` entries with revisit triggers instead of forcing full downstream research for every path.
+
 ## v0.4 - 2026-05-26
 
 - Gate cross-pack routing recommendations on pack availability — recommend `/pack install <pack>` when the target pack is not enabled

@@ -2,7 +2,7 @@
 name: concept-exploration
 description: Shape a rough product or project idea into an actionable concept brief before ICP, market research, specifications, UX, UI, or implementation planning
 type: planning
-version: v0.2
+version: v0.3
 argument-hint: "[optional rough idea, product thought, or app scope]"
 ---
 
@@ -21,6 +21,9 @@ Use this skill when the user has a half-formed idea and needs it cleaned up enou
    - Determine the concept identity and a normalized concept slug as soon as either is known from `$ARGUMENTS`, repo context, or the interview. Normalize by lowercasing, removing URL suffix noise, replacing non-alphanumeric runs with `-`, trimming leading/trailing `-`, and dropping only project-wide brand prefixes when the remaining word is the actual scoped concept (for example, `poketo.work` -> `work`; `Poketo Core` -> `poketo-core`).
    - If existing research or the prompt suggests multiple related concepts may exist, prefer slugged output paths over generic filenames. Reserve generic `concept-brief.md` only for a single unambiguous project-level concept.
    - If no rough idea is available from arguments or repo context, ask the user for the idea in plain language.
+   - Read `research/.progress.yaml` when present. Treat `active_path` as the current product/app/ICP focus and `product_paths[]` as parked or promoted product-path state, not git branch state.
+   - When the prompt, repo context, interview, or pivot history surfaces multiple related concepts, apps, product lines, or future pivots, update or propose updates to `research/.progress.yaml` with product-path entries instead of merging them into one generic concept. Use fields: `id`, `label`, `source_skill`, `scope_path`, `status`, `reason`, `evidence_refs`, `revisit_trigger`, `next_skill`, and `last_touched`.
+   - Keep the central concept as `active_path` when it is the current focus. Record related or future concepts as `status: deferred` or `status: revisit_candidate` with a concrete revisit trigger and a likely next skill such as `/icp <path/audience>`.
 
 2. **Keep the boundary clear**
    - Do not run ICP, competitive analysis, journey mapping, UX variation, UI interview, roadmap, or implementation planning inside this skill.
@@ -65,6 +68,7 @@ Write:
 - For one unambiguous project-level concept only: `research/concept-brief.md` and `research/concept-brief-interview.md`.
 - When a concept identity is known, multiple concepts exist or may exist, or a pivot occurs: `research/concept-brief-{slug}.md` and `research/concept-brief-{slug}-interview.md`.
 - If `$ARGUMENTS` names an app that matches `research/{app}/`, use the same filenames under `research/{app}/`: `research/{app}/concept-brief-{slug}.md` and `research/{app}/concept-brief-{slug}-interview.md`, or unsuffixed app-scoped files only when that app has one unambiguous concept.
+- `research/.progress.yaml` — create or update only when multiple concepts, product paths, product lines, app scopes, or pivots are present. Use `product_paths` terminology instead of branch terminology.
 
 The concept brief must include:
 

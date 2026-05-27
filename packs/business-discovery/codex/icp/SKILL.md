@@ -2,7 +2,7 @@
 name: icp
 description: Research-driven ICP discovery — web search + codebase analysis to identify multiple ICPs, pain points, value props, and cross-ICP prioritization
 type: research
-version: v0.4
+version: v0.5
 argument-hint: <spec file path, concept/idea, or empty to use concept brief>
 ---
 
@@ -26,6 +26,7 @@ Default stance: assume the user has no insider knowledge of the market. Explain 
 
 0. **App Scope Resolution (Monorepo Support)**: Before parsing input, determine the app scope: (a) If `$ARGUMENTS` specifies an app name matching a subdirectory of `research/`, use it. (b) If `research/` contains subdirectories (excluding files), list them and ask the user which app to target; if the session is already in Plan mode and there are 2-3 concrete choices, prefer `request_user_input`, otherwise ask in plain text; if only one subdirectory exists, use it automatically. (c) If no subdirectories exist, proceed with flat structure (single-product mode). When app scope `{app}` is active: read/write research from `research/{app}/` instead of `research/`, read/write specs from `specs/{app}/` instead of `specs/`, prefer `research/{app}/concept-brief.md` as concept context when present, and also read `research/icp.md` (cross-app overview) for broader context.
 1. **Parse input and gather concept context**:
+   - Read `research/.progress.yaml` when present. Use `active_path` to identify the current product/app/ICP focus and `product_paths[]` to preserve secondary product paths without treating them as git branches or parallel implementation lanes.
    - Read `$ARGUMENTS` as a spec file path or concept text when provided.
    - Read `research/{app}/concept-brief.md` in app scope, or `research/concept-brief.md` in flat scope, when present. Treat it as starting context and source hypotheses, not as settled truth.
    - If `$ARGUMENTS` is empty and a concept brief exists, use the concept brief as the primary input before falling back to README, specs, or codebase inference.
@@ -49,6 +50,9 @@ Default stance: assume the user has no insider knowledge of the market. Explain 
    - **Discovery & Evaluation Behavior** — how this persona found, evaluated, and chose solutions. Capture behavioural signals only (where they searched, who they asked, what they compared). Populate section 10.
 6. **Checkpoint 2 — Present scoring matrix and primary ICP selection.** Show Value x Accessibility scores. The value rationale must explicitly distinguish pain intensity from WTP quality: active spend on alternatives, clear budget owner/context, high cost of inaction, tolerance for switching costs, and urgency tied to measurable economic outcomes count as strong WTP evidence; verbal interest without budget, free-only behavior, unclear owner, or price sensitivity that outweighs pain count as weak WTP evidence. Ask: "Which constraints, missing segments, or weak evidence should change this ranking?" Incorporate feedback.
 7. **Cross-ICP analysis**: Shared pains, conflicts, product line recs, build sequence, lowest-hanging-fruit x most-value prioritization, discovery & evaluation comparison (how discovery and evaluation behavior differs across ICPs; do different ICPs find and choose solutions through different paths?).
+   - Convert secondary ICPs, product-line recommendations, and materially different Cross-ICP Analysis outcomes into `research/.progress.yaml` `product_paths[]` entries when they imply a different product surface, app scope, audience-first path, or future pivot.
+   - Manifest entries must include `id`, `label`, `source_skill: icp`, `scope_path`, `status`, `reason`, `evidence_refs`, `revisit_trigger`, `next_skill`, and `last_touched`.
+   - Keep the selected primary ICP as the `active_path` by default. Mark non-selected ICP/product paths `status: deferred` or `status: revisit_candidate`; do not run full competitive analysis, positioning, journey mapping, UX, or specs for every deferred path unless the user promotes one.
 8. **Checkpoint 3 — Present cross-ICP analysis and build sequence.** Show shared pains with source data, conflicts with specific examples, and build sequence rationale grounded in the scoring matrix. Ask: "Does this sequencing make sense?" Incorporate feedback.
 9. **Final review**: Present complete findings summary. Ask: "Ready to write? Anything to adjust?" Only write after user confirms.
 
@@ -58,6 +62,7 @@ Default stance: assume the user has no insider knowledge of the market. Explain 
 
 - `research/icp.md` — Primary ICP in canonical 9 top-level `##` sections (Customer Profile, User Profile(s), Trigger Events, Current State Journey, Pain Map, Current Alternatives (User Perspective), Market Sizing, Stated Value Drivers, Customer ↔ User Dynamics). Include WTP evidence as a subsection inside `## Stated Value Drivers`, not as a new top-level parser-breaking section. Then supplementary `## Discovery & Evaluation Behavior` (section 10: how they find solutions, how they evaluate, how they choose), then `## Additional ICPs` (condensed 9-section + condensed discovery & evaluation per ICP, including condensed WTP evidence), then `## Cross-ICP Analysis` (prioritization matrix, shared pains, conflicts, product line recs, build sequence, discovery & evaluation comparison), then `## Signals for Downstream Research` (unvalidated observations routed to /competitive-analysis, /positioning, /monetization, /gtm)
 - `research/icp-search-log.md` — Raw research log: every query, findings, evidence, scoring rationale
+- `research/.progress.yaml` — product-path manifest when secondary ICPs, Cross-ICP Analysis, or product-line recommendations create parked or promotable paths. Status values include `active`, `deferred`, `revisit_candidate`, `promoted`, and `abandoned`.
 - **Monorepo**: `research/{app-name}/icp.md` + `research/{app-name}/icp-search-log.md` per app, plus unified `research/icp.md` cross-referencing all app-level ICPs with top-level prioritization
 
 The output file must end with a `## Next Steps` section based on which files exist. Include a **Recommended** item (the single highest-impact next step given current project state) with a one-line reason, followed by **Other options** (2–4 alternatives). Use this format in the output:

@@ -2,7 +2,7 @@
 name: competitive-analysis
 description: Research competitors via web search — map the landscape, GTM strategies, strengths, weaknesses, and market gaps
 type: research
-version: v0.6
+version: v0.7
 argument-hint: "[concept | optional: product category or specific competitors to investigate]"
 ---
 
@@ -28,6 +28,7 @@ Conduct deep web-based research to compile a comprehensive competitive landscape
 
 - **Concept-validation mode** activates when: no `research/icp.md` exists AND (no meaningful codebase — i.e. no README, no source files, no package config — OR `$ARGUMENTS` contains "concept" or "validate"). Use this mode to validate market gaps after a concept has been shaped by `/concept-exploration` or an equivalent brief; if no concept is clear, recommend `/concept-exploration` first. In this mode, announce to the user: "Running in concept-validation mode — no ICP or product detected. I'll evaluate the market gap for your concept." Then ask the user to describe the concept, the problem it addresses, and the intended audience.
 - **Standard mode** (default): Read the codebase, README, CLAUDE.md, and existing research/specs (`research/icp.md` or `research/{app}/icp.md`, `research/enterprise-icp.md` or `research/{app}/enterprise-icp.md`, `research/mvp-gap.md` or `research/{app}/mvp-gap.md`) to understand what the product does, who it's for, and what value it claims to provide. This context is essential for identifying the right competitors and evaluating positioning. If no codebase or specs exist but `research/icp.md` is present, proceed in standard mode using the ICP as context.
+- Read `research/.progress.yaml` when present. In standard mode, scope the full competitive analysis to the manifest `active_path` by default. Treat `product_paths[]` entries with `status: deferred` or `status: revisit_candidate` as parked product paths, not as extra full research tracks.
 
 ## Process
 
@@ -151,6 +152,8 @@ Based on all research:
 - What pricing or packaging gaps leave segments unserved?
 - What are the 2-3 most significant white-space opportunities?
 - What can we learn from competitors' successes and failures?
+
+When evidence materially affects parked product paths from `research/.progress.yaml`, add a short `## Implications for Deferred Product Paths` section summarizing the impact, evidence refs, and whether the `revisit_trigger` should change. Do not broaden standard mode into full competitive analysis for every deferred path unless the user explicitly promotes one.
 
 **Concept-validation mode:**
 - What segments or use cases would this concept serve that competitors miss?
@@ -357,6 +360,9 @@ Pick one:
 
 ### `research/competitive-analysis-search-log.md` (or `research/{app}/competitive-analysis-search-log.md`)
 Raw research log — every search query, key findings with source attribution, and the reasoning behind categorisation and positioning recommendations.
+
+### `research/.progress.yaml`
+Update only when active-path evidence changes a deferred product path's status, reason, evidence refs, revisit trigger, or next skill. Use `product_paths` terminology instead of branch terminology.
 
 Create the `research/` (or `research/{app}/`) directory if it doesn't exist.
 

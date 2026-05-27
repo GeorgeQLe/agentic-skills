@@ -1,5 +1,9 @@
 # research-roadmap changelog (codex)
 
+## v0.4 - 2026-05-27
+
+- Added `research/.progress.yaml` product-path manifest intake so active and deferred paths appear in the documentation queue without forcing full downstream research for parked paths.
+
 ## v0.3 - 2026-05-27
 
 - Added an explicit local alignment preview gate before documentation queue writes and downstream routing.

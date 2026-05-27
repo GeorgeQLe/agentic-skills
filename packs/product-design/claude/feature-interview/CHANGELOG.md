@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2 - 2026-05-27
+
+- Added product-path manifest handling for feature route experiments that imply materially different products, apps, ICPs, or product lines.
+
 ## v0.0
 
 - Archived previous skill contract.

@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2 - 2026-05-27
+
+- Added `research/.progress.yaml` product-path manifest output for 4-8 expansion candidates without requiring every candidate to become a full research track.
+
 ## v0.0
 
 - Archived previous skill contract.
