@@ -9,6 +9,7 @@
 ## Priority Task Queue
 
 - [x] `$investigate journey-map alignment page and AFPS clunkiness` — validate whether journey-map/positioning contracts and recent conversation history explain inconsistent HTML alignment preview creation and workflow friction, then patch the minimal owning contracts/tests if confirmed.
+- [ ] `$investigate AFPS alignment preview gate audit` — audit later AFPS workflow skills for shared-convention-only, write-first, conditional, or missing HTML alignment preview gates; patch confirmed gaps with mirrored contract updates and focused tests.
 - [x] `$investigate exec-loop run rename` — rename the exec-loop `run` skill to `exec` for Claude and Codex to avoid collision with Claude's default `/exec` surface; archive/version active skill contracts, update references, validate, commit, and push.
 - [x] `$targeted-skill-builder provision-agentic-config WSL browser open fallback` — update provisioned `CLAUDE.md`/`AGENTS.md` blocks and root `CLAUDE.md` so HTML files open through PowerShell `file://wsl.localhost` when UNC launch fails.
 - [ ] `$analyze-sessions split-path product research workflow` — investigate prior conversations where research surfaces multiple ICP/product-line/pivot options, then recommend how skills should handle branching without bogging down in 4-8 variation evaluations.

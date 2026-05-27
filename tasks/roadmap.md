@@ -16,6 +16,17 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Update: AFPS Alignment Preview Gate Audit 2026-05-27
+
+**Goal:** Investigate whether later AFPS workflow skills can plausibly skip, delay, or weaken the required HTML alignment preview because their local contracts only inherit the shared Alignment Page convention, place the Alignment Page section after write instructions, or lack an Alignment Page section entirely.
+
+**Acceptance Criteria:**
+- [ ] Active Codex and Claude AFPS skill contracts are audited across the default sequence: `icp -> competitive-analysis -> journey-map -> positioning -> ux-variations -> ui-interview -> prototype -> uat -> consolidate-variations -> research-roadmap -> spec-interview -> roadmap`.
+- [ ] Skills are classified by preview-gate strength: explicit report-first gate, shared-convention-only gate, ambiguous/write-first ordering, conditional approval, or missing Alignment Page section.
+- [ ] The audit determines whether `ux-variations`, `ui-interview`, `uat`, `consolidate-variations`, `research-roadmap`, `spec-interview`, `prototype`, and `roadmap` need local report-first approval language, mode-specific overrides, or exemption language.
+- [ ] Any confirmed gaps are fixed minimally with mirrored Claude/Codex updates, archive/version/changelog handling where `SKILL.md` files change, and focused regression coverage.
+- [ ] Verification passes or blockers are documented, unrelated dirty worktree files are preserved, and intended changes are committed and pushed on `master`.
+
 ## Current Targeted Update: Exec Loop Run Rename 2026-05-26
 
 ## Current Targeted Update: Journey Map Alignment Page and AFPS Clunkiness Investigation 2026-05-27
