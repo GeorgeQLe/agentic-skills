@@ -8,6 +8,7 @@
 
 ## Priority Task Queue
 
+- [ ] `$targeted-skill-builder sync canonical agent config check` — update mirrored sync skills so sync checks `CLAUDE.md`/`AGENTS.md` against the canonical provisioned blocks from `provision-agentic-config`, not only the version comment.
 - [x] `$targeted-skill-builder product path manifest research workflows` — update existing research/planning skill contracts so divergent product lines, ICPs, app paths, pivots, and route experiments are tracked in `research/.progress.yaml` as `product_paths` without forcing every deferred path through full downstream research.
 - [x] `$investigate journey-map alignment page and AFPS clunkiness` — validate whether journey-map/positioning contracts and recent conversation history explain inconsistent HTML alignment preview creation and workflow friction, then patch the minimal owning contracts/tests if confirmed.
 - [x] `$investigate AFPS alignment preview gate audit` — audit later AFPS workflow skills for shared-convention-only, write-first, conditional, or missing HTML alignment preview gates; patch confirmed gaps with mirrored contract updates and focused tests.
@@ -33,6 +34,33 @@
 - [x] `$exec` — Resume Phase 41 Batch 41.3 re-benchmarks: re-run the 33 Tier 2 global skills that were benchmarked pre-fixture-remediation with near-zero pass rates (Phase 43 added route guidance to all 32 fixture prompts and increased budgets). Current graded count: 69 unique skills / 158 total. Batch 41.5 pack-local groups also have remaining families. Batch 41.3 Group 2 shipped in `bc17fee` and `3e4bd78`; next triage should start with `provision-agentic-config`, `migrate`, or `prototype`.
 - [ ] Review `tasks/recurring-todo.md`: 2 unchecked recurring items — promote only if due and requiring execution work.
 - [ ] `$research-roadmap` — All 43 roadmap phases are complete. Run documentation health scan after Phase 41 remaining batches finish.
+
+## Current Task — Sync Canonical Agent Config Check 2026-05-27
+
+**Goal:** Update mirrored `sync` skills so the provisioning check validates both version comments and actual `CLAUDE.md`/`AGENTS.md` content against the canonical blocks embedded in the installed `provision-agentic-config` skill.
+
+**Plan:**
+- [x] Record the implementation plan in task docs and confirm mirrored sync/provision contracts.
+- [x] Archive active Claude and Codex sync skills before bumping to v0.2.
+- [x] Update sync workflow text to extract and normalize the canonical Claude/AGENTS blocks from `provision-agentic-config`.
+- [x] Add focused validation coverage for the canonical content check and version-tracking guidance.
+- [ ] Run validation, document review notes, commit, and push intended changes on `master`.
+
+**Version tracking refresher:**
+- Every `SKILL.md` has YAML frontmatter `version: v0.x`.
+- Behavior changes bump the decimal version.
+- Before bumping, archive the current `SKILL.md` to `archive/<old-version>/SKILL.md`, preferably with `scripts/skill-archive.sh <skill-dir>`.
+- Record the change in the skill `CHANGELOG.md`.
+
+### Review
+
+- Updated mirrored `sync` skills to v0.2 and archived prior v0.1 contracts.
+- Sync now looks for canonical `provision-agentic-config` in installed Claude/Codex skill paths, then repo-local `global/.../provision-agentic-config/SKILL.md` fallbacks.
+- Sync now extracts the canonical Claude and AGENTS fenced blocks and compares normalized block content against project `CLAUDE.md`/`AGENTS.md`, warning on content drift even when the version comment is current.
+- Added `tests/layer1/sync-agent-config.test.ts` to guard canonical extraction, strict content comparison, repo-local fallback, command-specific re-provision guidance, and status reporting.
+- Refreshed Skills Showcase generated assets after active skill metadata changed.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 layer1/sync-agent-config.test.ts`; `/opt/homebrew/bin/bash scripts/skill-versions.sh --missing`; `git diff --check`.
+- Validation caveats: `./scripts/skill-versions.sh --missing` and `bash scripts/skill-versions.sh --missing` fail under `/bin/bash` 3.2 because the script uses associative arrays; `/opt/homebrew/bin/bash` passes. `pnpm --dir tests bench:coverage` fails on an unrelated existing row: `research-bootstrap` does not match any repository skill. `scripts/validate-skills-showcase-data.sh` regenerated expected assets and reported them stale before commit.
 
 ## Current Task — Product Path Manifest for Research Workflows 2026-05-27
 

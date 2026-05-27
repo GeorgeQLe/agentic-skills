@@ -1,5 +1,11 @@
 # sync Changelog
 
+## v0.2
+
+- Add canonical `CLAUDE.md`/`AGENTS.md` block drift checks against `provision-agentic-config`
+- Fall back to repo-local `provision-agentic-config` when installed skill files are unavailable
+- Report agent config drift in sync status
+
 ## v0.1
 
 - Add provisioning version check: compare `<!-- provision-agentic-config vX.Y -->` in CLAUDE.md/AGENTS.md against installed skill version

@@ -16,6 +16,17 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Update: Sync Canonical Agent Config Check 2026-05-27
+
+**Goal:** Update mirrored `sync` skills so sync checks root `CLAUDE.md` and `AGENTS.md` against the canonical provisioned blocks embedded in the installed `provision-agentic-config` skill, not just the provision version comment.
+
+**Acceptance Criteria:**
+- [x] Mirrored Claude and Codex `sync` skills are archived, bumped, and changeloged.
+- [x] Sync still reports stale/missing `<!-- provision-agentic-config vX.Y -->` comments.
+- [x] Sync extracts the canonical Required Claude Block and Required AGENTS Block from the installed or repo-local `provision-agentic-config` skill and compares normalized content against root `CLAUDE.md`/`AGENTS.md`.
+- [x] Drift warnings name the affected file and recommend re-running the appropriate provision command.
+- [ ] Focused validation passes, review notes are recorded, and intended changes are committed and pushed on `master`.
+
 ## Current Targeted Update: Product Path Manifest for Research Workflows 2026-05-27
 
 **Goal:** Update existing research/planning skill contracts so multiple product lines, ICPs, app paths, pivots, route experiments, and expansion candidates are tracked as product paths in `research/.progress.yaml`, while keeping downstream work scoped to the active path by default.

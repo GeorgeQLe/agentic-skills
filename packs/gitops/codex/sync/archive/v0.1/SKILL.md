@@ -2,7 +2,7 @@
 name: sync
 description: Pull latest changes from remote and report status
 type: shipping
-version: v0.2
+version: v0.1
 ---
 
 # Sync
@@ -27,30 +27,18 @@ Pull the latest changes from the remote repository and report status.
    - If `tasks/record-todo.md` or `tasks/recurring-todo.md` exists, count unchecked advisory items and include those counts separately. Do not treat them as active plan steps.
    - If all items are checked, report that the plan is complete.
    - If neither file exists, note that there is no active plan.
-4. Check provisioned agent config:
+4. Check provisioning version:
    - If `CLAUDE.md` or `AGENTS.md` contains `<!-- provision-agentic-config vX.Y -->`, extract the version.
-   - Read the canonical `provision-agentic-config` skill from the first existing path in this order:
-     1. `~/.codex/skills/provision-agentic-config/SKILL.md`
-     2. `~/.claude/skills/provision-agentic-config/SKILL.md`
-     3. `global/codex/provision-agentic-config/SKILL.md` in the current repo, when present
-     4. `global/claude/provision-agentic-config/SKILL.md` in the current repo, when present
-   - Extract the `version:` field from the canonical skill's YAML frontmatter.
-   - Extract the canonical provisioned blocks from the same skill:
-     - `CLAUDE.md`: the fenced block under `Required Claude Block` or the section that says "The Claude block to insert into `./CLAUDE.md`".
-     - `AGENTS.md`: the fenced block under `Required AGENTS Block` or the section that says "The AGENTS block to insert into `./AGENTS.md`".
-   - Compare each existing project file against its corresponding canonical block after normalizing line endings and trimming only leading/trailing whitespace around the block. Do not ignore changed bullets, headings, command examples, or policy text.
+   - Read `~/.codex/skills/provision-agentic-config/SKILL.md` (or `~/.claude/skills/provision-agentic-config/SKILL.md` as fallback) and extract the `version:` field from the YAML frontmatter.
    - If the installed skill version is newer than the provisioned version in either file, warn: `⚠ CLAUDE.md provisioned with vX.Y but provision-agentic-config is at vX.Y — consider re-running $provision-agentic-config`
    - If the version comment is missing from `CLAUDE.md` or `AGENTS.md`, note: `ℹ No provision version found in CLAUDE.md/AGENTS.md — run $provision-agentic-config to add version tracking`
-   - If a project file has the current version comment but the provisioned block content differs from the canonical block, warn: `⚠ CLAUDE.md provisioned block differs from the canonical provision-agentic-config vX.Y block — re-run $provision-agentic-config`
-   - If a canonical block cannot be extracted, fall back to the version-only check and note: `ℹ Could not extract canonical provision-agentic-config block; checked version comment only`
-   - If none of the canonical skill files exists, skip this check silently.
+   - If neither skill file exists, skip this check silently.
 5. Report status:
    - Branch name
    - Commits pulled (if any) — show short log of new commits
    - Whether stashed changes were re-applied
    - Any conflicts that need manual resolution
    - Current `git status`
-   - **Agent config drift** — provisioning version and canonical block match/drift status for `CLAUDE.md` and `AGENTS.md`, if checked
    - **Outstanding work** — summary from step 3 (next step, current phase, remaining work, pending manual tasks) or "No active plan"
    - **Advisory tasks** — pending record/recurring counts, if those files exist
 6. Post-sync actions:
