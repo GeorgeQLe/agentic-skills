@@ -8,7 +8,7 @@
 
 ## Priority Task Queue
 
-- [ ] `$targeted-skill-builder sync canonical agent config check` — update mirrored sync skills so sync checks `CLAUDE.md`/`AGENTS.md` against the canonical provisioned blocks from `provision-agentic-config`, not only the version comment.
+- [x] `$targeted-skill-builder sync canonical agent config check` — update mirrored sync skills so sync checks `CLAUDE.md`/`AGENTS.md` against the canonical provisioned blocks from `provision-agentic-config`, not only the version comment.
 - [x] `$targeted-skill-builder product path manifest research workflows` — update existing research/planning skill contracts so divergent product lines, ICPs, app paths, pivots, and route experiments are tracked in `research/.progress.yaml` as `product_paths` without forcing every deferred path through full downstream research.
 - [x] `$investigate journey-map alignment page and AFPS clunkiness` — validate whether journey-map/positioning contracts and recent conversation history explain inconsistent HTML alignment preview creation and workflow friction, then patch the minimal owning contracts/tests if confirmed.
 - [x] `$investigate AFPS alignment preview gate audit` — audit later AFPS workflow skills for shared-convention-only, write-first, conditional, or missing HTML alignment preview gates; patch confirmed gaps with mirrored contract updates and focused tests.
@@ -44,7 +44,7 @@
 - [x] Archive active Claude and Codex sync skills before bumping to v0.2.
 - [x] Update sync workflow text to extract and normalize the canonical Claude/AGENTS blocks from `provision-agentic-config`.
 - [x] Add focused validation coverage for the canonical content check and version-tracking guidance.
-- [ ] Run validation, document review notes, commit, and push intended changes on `master`.
+- [x] Run validation, document review notes, commit, and push intended changes on `master`.
 
 **Version tracking refresher:**
 - Every `SKILL.md` has YAML frontmatter `version: v0.x`.
@@ -61,6 +61,7 @@
 - Refreshed Skills Showcase generated assets after active skill metadata changed.
 - Validation passed: `pnpm --dir tests exec vitest run --project layer1 layer1/sync-agent-config.test.ts`; `/opt/homebrew/bin/bash scripts/skill-versions.sh --missing`; `git diff --check`.
 - Validation caveats: `./scripts/skill-versions.sh --missing` and `bash scripts/skill-versions.sh --missing` fail under `/bin/bash` 3.2 because the script uses associative arrays; `/opt/homebrew/bin/bash` passes. `pnpm --dir tests bench:coverage` fails on an unrelated existing row: `research-bootstrap` does not match any repository skill. `scripts/validate-skills-showcase-data.sh` regenerated expected assets and reported them stale before commit.
+- Shipped commits `fb25659b` and follow-up task-doc completion commit to `master`.
 
 ## Current Task — Product Path Manifest for Research Workflows 2026-05-27
 
