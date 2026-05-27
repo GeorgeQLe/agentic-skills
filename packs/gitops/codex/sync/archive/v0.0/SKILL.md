@@ -2,7 +2,7 @@
 name: sync
 description: Pull latest changes from remote and report status
 type: shipping
-version: v0.1
+version: v0.0
 ---
 
 # Sync
@@ -27,13 +27,7 @@ Pull the latest changes from the remote repository and report status.
    - If `tasks/record-todo.md` or `tasks/recurring-todo.md` exists, count unchecked advisory items and include those counts separately. Do not treat them as active plan steps.
    - If all items are checked, report that the plan is complete.
    - If neither file exists, note that there is no active plan.
-4. Check provisioning version:
-   - If `CLAUDE.md` or `AGENTS.md` contains `<!-- provision-agentic-config vX.Y -->`, extract the version.
-   - Read `~/.codex/skills/provision-agentic-config/SKILL.md` (or `~/.claude/skills/provision-agentic-config/SKILL.md` as fallback) and extract the `version:` field from the YAML frontmatter.
-   - If the installed skill version is newer than the provisioned version in either file, warn: `⚠ CLAUDE.md provisioned with vX.Y but provision-agentic-config is at vX.Y — consider re-running $provision-agentic-config`
-   - If the version comment is missing from `CLAUDE.md` or `AGENTS.md`, note: `ℹ No provision version found in CLAUDE.md/AGENTS.md — run $provision-agentic-config to add version tracking`
-   - If neither skill file exists, skip this check silently.
-5. Report status:
+4. Report status:
    - Branch name
    - Commits pulled (if any) — show short log of new commits
    - Whether stashed changes were re-applied
@@ -41,7 +35,7 @@ Pull the latest changes from the remote repository and report status.
    - Current `git status`
    - **Outstanding work** — summary from step 3 (next step, current phase, remaining work, pending manual tasks) or "No active plan"
    - **Advisory tasks** — pending record/recurring counts, if those files exist
-6. Post-sync actions:
+5. Post-sync actions:
    a) Check if `sync.md` exists at the project root.
    b) **If `sync.md` exists** — parse and execute it:
       - Read `sync.md` and identify sections by H2 headings.
