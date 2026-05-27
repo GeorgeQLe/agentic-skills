@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.2 - 2026-05-27
+
+- Added `research/.progress.yaml` product-path manifest awareness
+- Scope metrics framework to active product path by default
+- Surface product path implications when metrics insights affect deferred paths
+
 ## v0.0
 
 - Archived previous skill contract.

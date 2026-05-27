@@ -1,7 +1,7 @@
 ---
 name: hook-model
 type: research
-version: v0.1
+version: v0.2
 description: Nir Eyal engagement loop design — trigger, action, variable reward, investment
 argument-hint: "[optional: specific engagement loop or user behavior to focus on]"
 ---
@@ -34,6 +34,10 @@ Default stance: assume the user has no insider knowledge of user psychology or e
   - `research/competitive-analysis.md` — competitor engagement mechanics, retention strategies
 
 ## Process
+
+### 0a. Product Path Manifest
+
+Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading. Scope the hook model to the active product path by default.
 
 ### 0. App Scope Resolution (Monorepo Support)
 

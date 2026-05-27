@@ -1,5 +1,11 @@
 # concept-exploration Changelog
 
+## v0.4 - 2026-05-27
+
+- Handle plural `active_paths` manifest field with backward compatibility for singular `active_path`
+- Write `pipeline_stage: concept-exploration` on product-path entries
+- Recommend `/product-line review` when 3+ product paths exist
+
 ## v0.3 - 2026-05-27
 
 - Added `research/.progress.yaml` product-path manifest handling for related concepts, app paths, product lines, and pivots.

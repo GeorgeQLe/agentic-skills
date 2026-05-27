@@ -2,7 +2,7 @@
 name: reconcile-research
 description: Cross-document consistency audit across research outputs — find contradictions, stale assumptions, and gaps
 type: research
-version: v0.2
+version: v0.3
 argument-hint: "[audit|fix] [all|icp|pricing|journey|enterprise|feedback|specs]"
 ---
 
@@ -32,6 +32,18 @@ When app scope `{app}` is active:
 - Scan `research/{app}/` for documents instead of `research/`
 - Also check `research/icp.md` (cross-app overview) for cross-references
 - Specs are in `specs/{app}/` instead of `specs/`
+
+### 0b. Product Path Context
+
+Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading. Use `active_paths` to scope the reconciliation audit to the active product paths by default. When multiple paths are active, run cross-path consistency checks in addition to the standard pairwise document checks:
+
+| # | Check | What to flag |
+|---|-------|--------------|
+| 1 | Cross-path ICP consistency | Active paths with conflicting ICP assumptions or market sizing |
+| 2 | Cross-path positioning conflicts | Active paths competing for the same positioning or category |
+| 3 | Cross-path resource conflicts | Active paths that imply overlapping team or infrastructure resources |
+
+Include deferred paths in the consistency check only when their `evidence_refs` overlap with active path documents.
 
 ### 1. Determine Mode and Scope
 

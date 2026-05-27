@@ -2,7 +2,7 @@
 name: platform-strategy
 description: Expand from a single product into a multi-product platform — map vertical and horizontal growth vectors, score candidates, design validation experiments, and sequence the portfolio
 type: research
-version: v0.2
+version: v0.3
 argument-hint: "[optional: expansion direction e.g. \"vertical\", \"horizontal\", or specific adjacent market]"
 ---
 
@@ -56,7 +56,7 @@ When app scope `{app}` is active:
 - Read/write research from `research/{app}/` instead of `research/`
 - Read/write specs from `specs/{app}/` instead of `specs/`
 - Also read `research/icp.md` (cross-app overview) for broader context
-- Read `research/.progress.yaml` when present. Use `active_path` as the core product focus and use `product_paths[]` to avoid rediscovering parked expansion candidates.
+- Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading. Use `active_paths` as the core product focuses and use `product_paths[]` to avoid rediscovering parked expansion candidates.
 
 ### 1. Assess Core Product Health
 
@@ -122,7 +122,7 @@ For each candidate, note:
 - Initial market signal (from web research)
 - Whether it's vertical or horizontal
 
-Record the 4-8 candidates in `research/.progress.yaml` as `product_paths[]` entries with `source_skill: platform-strategy`. The top candidate may be `status: active` or `status: revisit_candidate` depending on whether the user is ready to validate it now; non-selected candidates should default to `status: deferred` with validation triggers. Include `id`, `label`, `scope_path`, `reason`, `evidence_refs`, `revisit_trigger`, `next_skill`, and `last_touched`.
+Record the 4-8 candidates in `research/.progress.yaml` as `product_paths[]` entries with `source_skill: platform-strategy`. The top candidate may be `status: active` or `status: revisit_candidate` depending on whether the user is ready to validate it now; non-selected candidates should default to `status: deferred` with validation triggers. Include `id`, `label`, `source_skill: platform-strategy`, `pipeline_stage: platform-strategy`, `scope_path`, `reason`, `evidence_refs`, `revisit_trigger`, `next_skill`, and `last_touched`.
 
 **Checkpoint 2 — Present candidates to the user.** Use the AskUserQuestion tool to show all candidates grouped by vertical/horizontal, with a brief rationale and research evidence for each. Then ask:
 - "Are there expansion directions I missed?"

@@ -2,7 +2,7 @@
 name: concept-exploration
 description: Shape a rough product or project idea into an actionable concept brief before ICP, market research, specifications, UX, UI, or implementation planning
 type: planning
-version: v0.3
+version: v0.4
 argument-hint: "[optional rough idea, product thought, or app scope]"
 ---
 
@@ -23,9 +23,10 @@ Use this skill when the user has a half-formed idea and needs it cleaned up enou
    - Determine the concept identity and a normalized concept slug as soon as either is known from `$ARGUMENTS`, repo context, or the interview. Normalize by lowercasing, removing URL suffix noise, replacing non-alphanumeric runs with `-`, trimming leading/trailing `-`, and dropping only project-wide brand prefixes when the remaining word is the actual scoped concept (for example, `poketo.work` -> `work`; `Poketo Core` -> `poketo-core`).
    - If existing research or the prompt suggests multiple related concepts may exist, prefer slugged output paths over generic filenames. Reserve generic `concept-brief.md` only for a single unambiguous project-level concept.
    - If no rough idea is available from arguments or repo context, ask the user for the idea in plain language.
-   - Read `research/.progress.yaml` when present. Treat `active_path` as the current product/app/ICP focus and `product_paths[]` as parked or promoted product-path state, not git branch state.
-   - When the prompt, repo context, interview, or pivot history surfaces multiple related concepts, apps, product lines, or future pivots, update or propose updates to `research/.progress.yaml` with product-path entries instead of merging them into one generic concept. Use fields: `id`, `label`, `source_skill`, `scope_path`, `status`, `reason`, `evidence_refs`, `revisit_trigger`, `next_skill`, and `last_touched`.
-   - Keep the central concept as `active_path` when it is the current focus. Record related or future concepts as `status: deferred` or `status: revisit_candidate` with a concrete revisit trigger and a likely next skill such as `$icp <path/audience>`.
+   - Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading. Treat `active_paths` as the current product/app/ICP focuses and `product_paths[]` as parked or promoted product-path state, not git branch state.
+   - When the prompt, repo context, interview, or pivot history surfaces multiple related concepts, apps, product lines, or future pivots, update or propose updates to `research/.progress.yaml` with product-path entries instead of merging them into one generic concept. Use fields: `id`, `label`, `source_skill`, `scope_path`, `status`, `reason`, `evidence_refs`, `revisit_trigger`, `next_skill`, `pipeline_stage`, and `last_touched`. Set `pipeline_stage: concept-exploration` on entries created by this skill.
+   - Keep the central concept in `active_paths` when it is the current focus. Record related or future concepts as `status: deferred` or `status: revisit_candidate` with a concrete revisit trigger and a likely next skill such as `$icp <path/audience>`.
+   - When 3+ product paths exist in the manifest, recommend `$product-line review` to the user for portfolio management.
 
 2. **Keep the boundary clear**
    - Do not run ICP, competitive analysis, journey mapping, UX variation, UI interview, roadmap, or implementation planning inside this skill.

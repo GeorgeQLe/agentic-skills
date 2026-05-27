@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.5 - 2026-05-27
+
+- Handle plural `active_paths` manifest field with backward compatibility for singular `active_path`
+
 ## v0.4 - 2026-05-27
 
 - Added product-path manifest handling for UX route experiments that imply materially different products, apps, ICPs, or product lines while keeping ordinary variants on the active path.

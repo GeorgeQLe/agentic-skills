@@ -2,7 +2,7 @@
 name: conversion-map
 description: Plan evaluation, trial, pricing decision, objections, buyer roles, and conversion triggers
 type: analysis
-version: v0.1
+version: v0.2
 argument-hint: "[optional: app, segment, or conversion motion]"
 ---
 
@@ -19,11 +19,12 @@ Map how evaluators become customers, including the decision path from first valu
 ## Workflow
 
 1. Resolve app scope using `research/{app}/` when applicable.
-2. Require `research/journey-map.md`; if missing, recommend `/journey-map`.
-3. Load ICP, journey map, onboarding map, competitive analysis, monetization/GTM docs, specs, and feedback when present.
-4. Interview and recommend around: evaluation mode, trial/freemium/demo motion, buyer and user roles, proof required, conversion trigger, objections, pricing/packaging concerns, sales assist, procurement, timeline, and lost-deal reasons.
-5. Present the conversion model and unresolved assumptions before writing.
-6. Write `research/conversion-map.md` and `research/conversion-map-interview.md` after validation.
+2. Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading. Scope the conversion map to the active product path by default.
+3. Require `research/journey-map.md`; if missing, recommend `/journey-map`.
+4. Load ICP, journey map, onboarding map, competitive analysis, monetization/GTM docs, specs, and feedback when present.
+5. Interview and recommend around: evaluation mode, trial/freemium/demo motion, buyer and user roles, proof required, conversion trigger, objections, pricing/packaging concerns, sales assist, procurement, timeline, and lost-deal reasons.
+6. Present the conversion model and unresolved assumptions before writing.
+7. Write `research/conversion-map.md` and `research/conversion-map-interview.md` after validation.
 
 ## Output Shape
 

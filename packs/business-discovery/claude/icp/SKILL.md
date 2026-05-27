@@ -2,7 +2,7 @@
 name: icp
 description: Research-driven ICP discovery — web search + codebase analysis to identify multiple ICPs, pain points, value props, and cross-ICP prioritization
 type: research
-version: v0.5
+version: v0.6
 argument-hint: <spec file path, concept/idea, or empty to use concept brief>
 ---
 
@@ -48,7 +48,7 @@ When app scope `{app}` is active:
 - If empty, check for `research/{app}/concept-brief.md` in app scope or `research/concept-brief.md` in flat scope first; then check `specs/spec.md`, `specs/plan.md`, or README for context — if nothing exists, ask the user what product or idea to research
 
 **Read product-path manifest if present:**
-Read `research/.progress.yaml` when present. Use `active_path` to identify the current product/app/ICP focus and `product_paths[]` to preserve secondary product paths without treating them as git branches or parallel implementation lanes.
+Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading. Use `active_paths` to identify current product/app/ICP focuses and `product_paths[]` to preserve secondary product paths without treating them as git branches or parallel implementation lanes.
 
 **Read concept brief if present:**
 Read `research/{app}/concept-brief.md` in app scope, or `research/concept-brief.md` in flat scope, whenever it exists. Treat it as starting context and source hypotheses, not as settled truth. Use its problem hypothesis, beneficiary hypothesis, value wedge, constraints, non-goals, and ICP readiness notes to frame search queries and candidate generation. If `$ARGUMENTS` conflicts with the concept brief, flag the mismatch at the first checkpoint and ask which premise should guide ICP research.
@@ -156,9 +156,9 @@ Analyze across all ICP candidates:
 - **Lowest-hanging fruit x most value** — the prioritization sweet spot
 - **Discovery & evaluation comparison** — how discovery and evaluation behavior differs across ICPs; do different ICPs find and choose solutions through different paths?
 
-Convert secondary ICPs, product-line recommendations, and materially different Cross-ICP Analysis outcomes into `research/.progress.yaml` `product_paths[]` entries when they imply a different product surface, app scope, audience-first path, or future pivot. Manifest entries must include `id`, `label`, `source_skill: icp`, `scope_path`, `status`, `reason`, `evidence_refs`, `revisit_trigger`, `next_skill`, and `last_touched`.
+Convert secondary ICPs, product-line recommendations, and materially different Cross-ICP Analysis outcomes into `research/.progress.yaml` `product_paths[]` entries when they imply a different product surface, app scope, audience-first path, or future pivot. Manifest entries must include `id`, `label`, `source_skill: icp`, `scope_path`, `status`, `reason`, `evidence_refs`, `revisit_trigger`, `next_skill`, `last_touched`, and `pipeline_stage: icp`.
 
-Keep the selected primary ICP as the `active_path` by default. Mark non-selected ICP/product paths `status: deferred` or `status: revisit_candidate`; do not run full competitive analysis, positioning, journey mapping, UX, or specs for every deferred path unless the user promotes one.
+Keep the selected primary ICP in `active_paths` by default. Recommend `/product-line promote` when secondary ICPs suggest a materially different product surface worth exploring. Mark non-selected ICP/product paths `status: deferred` or `status: revisit_candidate`; do not run full competitive analysis, positioning, journey mapping, UX, or specs for every deferred path unless the user promotes one.
 
 **Checkpoint 3 — Present the cross-ICP analysis and recommended build sequence to the user.** Use the AskUserQuestion tool to show the analysis with evidence: shared pains with source data from each ICP, conflicts with specific examples, and build sequence rationale grounded in the scoring matrix. Then ask:
 - "Does this sequencing make sense for where you are right now?"

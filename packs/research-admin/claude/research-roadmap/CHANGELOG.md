@@ -1,5 +1,12 @@
 # research-roadmap changelog (claude)
 
+## v0.5 - 2026-05-27
+
+- Handle plural `active_paths` manifest field with backward compatibility for singular `active_path`
+- Show per-path pipeline progress in the priority queue
+- Queue `/product-line review` when 3+ deferred paths accumulate
+- Added `/product-line review` to business-app research outputs and dependency order
+
 ## v0.4 - 2026-05-27
 
 - Added `research/.progress.yaml` product-path manifest intake so active and deferred paths appear in the documentation queue without forcing full downstream research for parked paths.

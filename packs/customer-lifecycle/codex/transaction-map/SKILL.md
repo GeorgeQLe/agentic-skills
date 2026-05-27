@@ -2,7 +2,7 @@
 name: transaction-map
 description: Plan purchase, checkout, payment, fulfillment, receipt, refund, dispute, and trust-state flows
 type: analysis
-version: v0.1
+version: v0.2
 argument-hint: "[optional: app, transaction type, or payment scenario]"
 ---
 
@@ -19,11 +19,12 @@ Map the operational transaction flow after a customer decides to buy or upgrade.
 ## Workflow
 
 1. Resolve app scope using `research/{app}/` when applicable.
-2. Require `research/journey-map.md`; recommend `$conversion-map` first when conversion decision logic is missing.
-3. Load journey map, conversion map, monetization docs, specs, codebase payment routes/providers, support/refund policy docs, and customer feedback when present.
-4. Interview and recommend around: checkout entry, plan/quantity selection, payment states, tax/invoice needs, account provisioning, fulfillment, receipts, failed payment recovery, refunds, cancellations, disputes, trust/safety messages, and support handoff.
-5. Present transaction states and failure modes before writing.
-6. Write `research/transaction-map.md` and `research/transaction-map-interview.md` after validation.
+2. Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading. Scope the transaction map to the active product path by default.
+3. Require `research/journey-map.md`; recommend `$conversion-map` first when conversion decision logic is missing.
+4. Load journey map, conversion map, monetization docs, specs, codebase payment routes/providers, support/refund policy docs, and customer feedback when present.
+5. Interview and recommend around: checkout entry, plan/quantity selection, payment states, tax/invoice needs, account provisioning, fulfillment, receipts, failed payment recovery, refunds, cancellations, disputes, trust/safety messages, and support handoff.
+6. Present transaction states and failure modes before writing.
+7. Write `research/transaction-map.md` and `research/transaction-map-interview.md` after validation.
 
 ## Output Shape
 

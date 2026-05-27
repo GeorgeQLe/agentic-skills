@@ -1,7 +1,7 @@
 ---
 name: growth-model
 type: research
-version: v0.1
+version: v0.2
 description: Reforge-style growth loop design — acquisition, retention, and monetization loops
 argument-hint: "[optional: specific loop type e.g. \"viral\", \"content\", \"paid\"]"
 ---
@@ -32,6 +32,10 @@ Designs compounding growth loops using Reforge methodology. Identifies and desig
   - `research/hook-model.md` — engagement patterns, trigger-action-reward-investment cycle
 
 ## Process
+
+### 0a. Product Path Manifest
+
+Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading. Scope the growth model to the active product path by default. When modeling reveals that a deferred product path has significantly different growth characteristics, note the finding in a `## Product Path Implications` section.
 
 ### 0. App Scope Resolution (Monorepo Support)
 

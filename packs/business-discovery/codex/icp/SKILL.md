@@ -2,7 +2,7 @@
 name: icp
 description: Research-driven ICP discovery — web search + codebase analysis to identify multiple ICPs, pain points, value props, and cross-ICP prioritization
 type: research
-version: v0.5
+version: v0.6
 argument-hint: <spec file path, concept/idea, or empty to use concept brief>
 ---
 
@@ -26,7 +26,7 @@ Default stance: assume the user has no insider knowledge of the market. Explain 
 
 0. **App Scope Resolution (Monorepo Support)**: Before parsing input, determine the app scope: (a) If `$ARGUMENTS` specifies an app name matching a subdirectory of `research/`, use it. (b) If `research/` contains subdirectories (excluding files), list them and ask the user which app to target; if the session is already in Plan mode and there are 2-3 concrete choices, prefer `request_user_input`, otherwise ask in plain text; if only one subdirectory exists, use it automatically. (c) If no subdirectories exist, proceed with flat structure (single-product mode). When app scope `{app}` is active: read/write research from `research/{app}/` instead of `research/`, read/write specs from `specs/{app}/` instead of `specs/`, prefer `research/{app}/concept-brief.md` as concept context when present, and also read `research/icp.md` (cross-app overview) for broader context.
 1. **Parse input and gather concept context**:
-   - Read `research/.progress.yaml` when present. Use `active_path` to identify the current product/app/ICP focus and `product_paths[]` to preserve secondary product paths without treating them as git branches or parallel implementation lanes.
+   - Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading. Use `active_paths` to identify current product/app/ICP focuses and `product_paths[]` to preserve secondary product paths without treating them as git branches or parallel implementation lanes.
    - Read `$ARGUMENTS` as a spec file path or concept text when provided.
    - Read `research/{app}/concept-brief.md` in app scope, or `research/concept-brief.md` in flat scope, when present. Treat it as starting context and source hypotheses, not as settled truth.
    - If `$ARGUMENTS` is empty and a concept brief exists, use the concept brief as the primary input before falling back to README, specs, or codebase inference.
@@ -51,8 +51,8 @@ Default stance: assume the user has no insider knowledge of the market. Explain 
 6. **Checkpoint 2 — Present scoring matrix and primary ICP selection.** Show Value x Accessibility scores. The value rationale must explicitly distinguish pain intensity from WTP quality: active spend on alternatives, clear budget owner/context, high cost of inaction, tolerance for switching costs, and urgency tied to measurable economic outcomes count as strong WTP evidence; verbal interest without budget, free-only behavior, unclear owner, or price sensitivity that outweighs pain count as weak WTP evidence. Ask: "Which constraints, missing segments, or weak evidence should change this ranking?" Incorporate feedback.
 7. **Cross-ICP analysis**: Shared pains, conflicts, product line recs, build sequence, lowest-hanging-fruit x most-value prioritization, discovery & evaluation comparison (how discovery and evaluation behavior differs across ICPs; do different ICPs find and choose solutions through different paths?).
    - Convert secondary ICPs, product-line recommendations, and materially different Cross-ICP Analysis outcomes into `research/.progress.yaml` `product_paths[]` entries when they imply a different product surface, app scope, audience-first path, or future pivot.
-   - Manifest entries must include `id`, `label`, `source_skill: icp`, `scope_path`, `status`, `reason`, `evidence_refs`, `revisit_trigger`, `next_skill`, and `last_touched`.
-   - Keep the selected primary ICP as the `active_path` by default. Mark non-selected ICP/product paths `status: deferred` or `status: revisit_candidate`; do not run full competitive analysis, positioning, journey mapping, UX, or specs for every deferred path unless the user promotes one.
+   - Manifest entries must include `id`, `label`, `source_skill: icp`, `scope_path`, `status`, `reason`, `evidence_refs`, `revisit_trigger`, `next_skill`, `last_touched`, and `pipeline_stage: icp`.
+   - Keep the selected primary ICP in `active_paths` by default. Recommend `$product-line promote` when secondary ICPs suggest a materially different product surface worth exploring. Mark non-selected ICP/product paths `status: deferred` or `status: revisit_candidate`; do not run full competitive analysis, positioning, journey mapping, UX, or specs for every deferred path unless the user promotes one.
 8. **Checkpoint 3 — Present cross-ICP analysis and build sequence.** Show shared pains with source data, conflicts with specific examples, and build sequence rationale grounded in the scoring matrix. Ask: "Does this sequencing make sense?" Incorporate feedback.
 9. **Final review**: Present complete findings summary. Ask: "Ready to write? Anything to adjust?" Only write after user confirms.
 

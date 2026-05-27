@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.2 - 2026-05-27
+
+- Added `research/.progress.yaml` product-path manifest awareness
+- Scope transaction map to active product path by default
+
 ## v0.0
 
 - Archived previous skill contract.

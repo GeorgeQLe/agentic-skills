@@ -2,7 +2,7 @@
 name: journey-map
 description: Map the full user and customer lifecycle from trigger and discovery through onboarding, aha, conversion, retention, expansion, and advocacy
 type: analysis
-version: v0.4
+version: v0.5
 argument-hint: "[optional: app, use case, persona, or lifecycle stage]"
 ---
 
@@ -30,6 +30,7 @@ Create or update the canonical lifecycle overview. This is the top-level map for
 ## Workflow
 
 0. **App scope resolution**: If `$ARGUMENTS` names a subdirectory of `research/`, use `research/{app}/` and `specs/{app}/`. If `research/` has multiple app subdirectories and no app is specified, ask the user to choose. If one app subdirectory exists, use it automatically. Otherwise use flat `research/` and `specs/`.
+0b. **Product-path manifest**: Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading. Scope the journey map to the active product path by default. When journey mapping reveals lifecycle stages or user flows that only apply to a deferred product path, add a `## Product Path Implications` section noting the finding and recommending `/product-line fork` if it implies a new product surface.
 1. **Load context**: Read ICP, competitive analysis, enterprise ICP, customer feedback, existing lifecycle docs, specs, README/AGENTS/CLAUDE, and relevant source files when they clarify real product surfaces.
 2. **Map user journeys**: For each key persona, identify 3-5 core use cases, entry points, task steps, decision points, happy path, failure modes, outputs, and delta from current state.
 3. **Map customer lifecycle**: Cover trigger, discovery, evaluation, onboarding, aha moment, conversion, transaction, retention, expansion, advocacy, churn, and recovery.

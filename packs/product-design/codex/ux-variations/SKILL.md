@@ -2,7 +2,7 @@
 name: ux-variations
 description: Interview and plan multiple UX and UI variations for a product, page, or flow, including onboarding, typical workflows, sharing, collaboration, return use, and interface alternatives users can compare before locking a direction — and concrete visual/layout UI variations with UAT before consolidation
 type: planning
-version: v0.4
+version: v0.5
 argument-hint: "[optional: app, page, flow, feature, or existing UI spec]"
 ---
 
@@ -21,7 +21,7 @@ When invoked with `--layout-mode` (or when the user says "layout mode", "layout 
 1. **Resolve context**
    - Read `.agents/project.json` if it exists.
    - Read `README.md`, `AGENTS.md`, `CLAUDE.md`, relevant `docs/`, `specs/`, `research/`, task files, screenshots, route files, and component implementations when present.
-   - Read `research/.progress.yaml` when present. Use `active_path` as the product/app focus and treat deferred `product_paths[]` as parked product directions, not required UX variants.
+   - Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading. Use `active_paths` as the product/app focuses and treat deferred `product_paths[]` as parked product directions, not required UX variants.
    - Prefer existing `specs/ui-*.md`, product specs, journey maps, ICP research, and user feedback as source evidence.
    - If no credible scope exists, run or recommend `$ui-interview` before developing variants.
 

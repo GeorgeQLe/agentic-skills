@@ -2,7 +2,7 @@
 name: metrics
 description: Define success metrics framework — activation, engagement, retention, growth, and business metrics tied to journey stages
 type: analysis
-version: v0.1
+version: v0.2
 argument-hint: "[optional: focus area e.g. \"activation\", \"retention\"]"
 ---
 
@@ -34,7 +34,11 @@ When app scope `{app}` is active:
 - Read/write specs from `specs/{app}/` instead of `specs/`
 - Also read `research/icp.md` (cross-app overview) for broader context
 
-### 1. Load Context
+### 1. Product Path Manifest
+
+Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading. Scope the metrics framework to the active product path by default. When defining metrics that would only be relevant to a deferred product path, note the finding in a `## Product Path Implications` section.
+
+### 2. Load Context
 
 - Read `research/journey-map.md` (or `research/{app}/journey-map.md`) — customer journey stages, aha moment, habit loop, churn triggers, critical moments
 - Read `research/icp.md` (or `research/{app}/icp.md`) if it exists — ICP segments, pain points, value props
@@ -42,7 +46,7 @@ When app scope `{app}` is active:
 - Read CLAUDE.md and README if they exist — product context and tech stack (affects instrumentation)
 - Read key source files if a codebase exists — understand what can actually be measured today
 
-### 2. Interview
+### 3. Interview
 
 Use the AskUserQuestion tool. Ask 1–3 focused questions per turn.
 
@@ -86,7 +90,7 @@ Revenue, unit economics, sustainability.
 - What's the LTV:CAC ratio target?
 - What's the payback period target?
 
-### 3. Present Findings & Validate
+### 4. Present Findings & Validate
 
 **Present the complete metrics framework to the user before writing.** Summarise:
 1. Overview — the 5-8 key metrics and how they connect to journey stages
@@ -99,7 +103,7 @@ Use AskUserQuestion to ask:
 
 Continue until the user confirms. Only then proceed to writing.
 
-### 4. Populate Next Steps
+### 5. Populate Next Steps
 
 Before writing, check which files exist to populate the `## Next Steps` section contextually. Include a **Recommended** item (the single highest-impact next step given current project state) with a one-line reason, followed by **Other options** (2-4 alternatives). Choose the recommendation by the first matching condition:
 
@@ -127,11 +131,11 @@ Other options:
 - IF downstream impact is **Minor**: annotate relevant skill suggestions with "(stale — [brief description])"
 - If downstream impact has not been classified yet, run the downstream impact check against the proposed output before selecting the final recommendation. Do not emit a Minor/Major impact recommendation speculatively.
 
-### 5. Write Output
+### 6. Write Output
 
 Only after the user has validated the findings, write the output files.
 
-### 6. Downstream Impact Check
+### 7. Downstream Impact Check
 
 After writing, check for downstream research documents that may be affected by what was just decided. Only check documents that exist on disk.
 

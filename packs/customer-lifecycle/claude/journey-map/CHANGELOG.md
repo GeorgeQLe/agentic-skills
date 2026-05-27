@@ -1,5 +1,11 @@
 # journey-map changelog (claude)
 
+## v0.5 - 2026-05-27
+
+- Added `research/.progress.yaml` product-path manifest awareness
+- Scope journey map to active product path by default
+- Surface product path implications when journey insights affect deferred paths
+
 ## v0.4 - 2026-05-27
 
 - Make the pre-approval HTML alignment preview explicit before canonical journey-map writes.

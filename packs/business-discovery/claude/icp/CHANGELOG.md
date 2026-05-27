@@ -1,5 +1,11 @@
 # icp changelog (claude)
 
+## v0.6 - 2026-05-27
+
+- Handle plural `active_paths` manifest field with backward compatibility for singular `active_path`
+- Write `pipeline_stage: icp` on product-path entries
+- Recommend `/product-line promote` for secondary ICPs with different product surfaces
+
 ## v0.5 - 2026-05-27
 
 - Added product-path manifest handling so secondary ICPs and Cross-ICP Analysis outcomes create `research/.progress.yaml` `product_paths` entries with revisit triggers instead of forcing full downstream research for every path.

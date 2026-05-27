@@ -2,7 +2,7 @@
 name: onboarding-map
 description: Plan signup, setup, activation, first success, onboarding drop-offs, and time-to-value for each lifecycle persona
 type: analysis
-version: v0.1
+version: v0.2
 argument-hint: "[optional: app, persona, or onboarding segment]"
 ---
 
@@ -19,11 +19,12 @@ Create the stage-level onboarding plan that expands `research/journey-map.md`.
 ## Workflow
 
 1. Resolve app scope using the same `research/{app}/` convention as `/journey-map`.
-2. Require `research/journey-map.md` or `research/{app}/journey-map.md`; if missing, recommend `/journey-map`.
-3. Load ICP, journey map, specs, customer feedback, metrics, and current product routes/components when present.
-4. Interview and recommend around: signup entry points, account creation, required setup, imports/integrations, team invites, empty states, first-session guidance, first 5 minutes/hour/day, aha threshold, drop-offs, recovery, and support touchpoints.
-5. Present the proposed onboarding model before writing.
-6. Write `research/onboarding-map.md` and `research/onboarding-map-interview.md` after validation.
+2. Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading. Scope the onboarding map to the active product path by default.
+3. Require `research/journey-map.md` or `research/{app}/journey-map.md`; if missing, recommend `/journey-map`.
+4. Load ICP, journey map, specs, customer feedback, metrics, and current product routes/components when present.
+5. Interview and recommend around: signup entry points, account creation, required setup, imports/integrations, team invites, empty states, first-session guidance, first 5 minutes/hour/day, aha threshold, drop-offs, recovery, and support touchpoints.
+6. Present the proposed onboarding model before writing.
+7. Write `research/onboarding-map.md` and `research/onboarding-map-interview.md` after validation.
 
 ## Output Shape
 

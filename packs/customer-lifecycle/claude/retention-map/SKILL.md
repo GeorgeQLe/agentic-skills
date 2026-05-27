@@ -2,7 +2,7 @@
 name: retention-map
 description: Plan repeat-use loops, lifecycle triggers, churn risks, recovery paths, and retention signals
 type: analysis
-version: v0.1
+version: v0.2
 argument-hint: "[optional: app, persona, or retention stage]"
 ---
 
@@ -19,11 +19,12 @@ Map why customers return, what predicts churn, and how the product recovers at-r
 ## Workflow
 
 1. Resolve app scope using `research/{app}/` when applicable.
-2. Require `research/journey-map.md`; if missing, recommend `/journey-map`.
-3. Load journey, onboarding, conversion, transaction, metrics, customer feedback, specs, and product evidence when present.
-4. Interview and recommend around: repeat-use job, natural frequency, core habit/workflow loop, lifecycle messages, saved state, collaboration, renewal moments, churn triggers, downgrade/cancel paths, winback, support recovery, and leading indicators.
-5. Present the retention model and risk assumptions before writing.
-6. Write `research/retention-map.md` and `research/retention-map-interview.md` after validation.
+2. Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading. Scope the retention map to the active product path by default.
+3. Require `research/journey-map.md`; if missing, recommend `/journey-map`.
+4. Load journey, onboarding, conversion, transaction, metrics, customer feedback, specs, and product evidence when present.
+5. Interview and recommend around: repeat-use job, natural frequency, core habit/workflow loop, lifecycle messages, saved state, collaboration, renewal moments, churn triggers, downgrade/cancel paths, winback, support recovery, and leading indicators.
+6. Present the retention model and risk assumptions before writing.
+7. Write `research/retention-map.md` and `research/retention-map-interview.md` after validation.
 
 ## Output Shape
 

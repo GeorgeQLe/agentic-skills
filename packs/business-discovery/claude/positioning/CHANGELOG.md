@@ -1,5 +1,11 @@
 # positioning changelog (claude)
 
+## v0.4 - 2026-05-27
+
+- Added `research/.progress.yaml` product-path manifest awareness
+- Scope positioning to active product path by default
+- Recommend `/product-line fork` when positioning reveals category-divergent paths
+
 ## v0.3 - 2026-05-26
 
 - Gate cross-pack routing recommendations on pack availability — recommend `/pack install <pack>` when the target pack is not enabled

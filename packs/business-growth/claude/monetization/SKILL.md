@@ -2,7 +2,7 @@
 name: monetization
 description: Research-driven monetization strategy — revenue models, pricing architecture, unit economics, and packaging grounded in ICP and competitive data
 type: research
-version: v0.2
+version: v0.3
 argument-hint: "[optional: focus area e.g. \"pricing tiers\", \"usage-based\", \"freemium\"]"
 ---
 
@@ -48,7 +48,11 @@ When app scope `{app}` is active:
 - Read/write specs from `specs/{app}/` instead of `specs/`
 - Also read `research/icp.md` (cross-app overview) for broader context
 
-### 1. Load Context
+### 1. Product Path Manifest
+
+Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading. Scope monetization strategy to the active product path by default. When pricing or packaging analysis reveals a fundamentally different revenue model for a deferred product path, add a `## Product Path Implications` section.
+
+### 2. Load Context
 
 Read all prerequisite files. From each, extract monetization-relevant signals:
 
@@ -61,7 +65,7 @@ Read all prerequisite files. From each, extract monetization-relevant signals:
 
 Read CLAUDE.md, README, and key source files for product context.
 
-### 2. Market Research — Revenue Models in Category
+### 3. Market Research — Revenue Models in Category
 
 Use WebSearch with **6–10 targeted queries**. Log every query and finding to the research log.
 
@@ -77,7 +81,7 @@ Query strategies (adapt to domain):
 9. **Expansion revenue** — "[category] expansion revenue", "[category] upsell triggers"
 10. **Pricing failures** — "[competitor] pricing backlash", "[category] pricing mistakes"
 
-### 3. Identify Revenue Model Options — Present & Validate
+### 4. Identify Revenue Model Options — Present & Validate
 
 From research evidence and product context, identify **2–4 viable revenue model options**. For each:
 
@@ -93,7 +97,7 @@ From research evidence and product context, identify **2–4 viable revenue mode
 
 Incorporate feedback before proceeding.
 
-### 4. Deep-Dive: Pricing Architecture
+### 5. Deep-Dive: Pricing Architecture
 
 For the selected model (or top 2 if the user is undecided), research and design:
 
@@ -125,7 +129,7 @@ For the selected model (or top 2 if the user is undecided), research and design:
 
 Incorporate feedback before proceeding.
 
-### 5. Unit Economics & Viability
+### 6. Unit Economics & Viability
 
 Estimate (with stated assumptions and confidence levels):
 
@@ -142,7 +146,7 @@ If data is insufficient for estimates, state what data is needed and recommend h
 - "Do these assumptions feel reasonable? Any I should adjust?"
 - "What's your target margin or payback period?"
 
-### 6. Monetization Timing & Sequencing
+### 7. Monetization Timing & Sequencing
 
 Based on product stage and ICP:
 
@@ -151,7 +155,7 @@ Based on product stage and ICP:
 - **Pricing evolution**: how should pricing change as the product matures? (e.g., start low and raise, start high and introduce a free tier)
 - **Revenue diversification**: are there secondary revenue streams? (marketplace, data, services, partnerships)
 
-### 7. Populate Next Steps
+### 8. Populate Next Steps
 
 Check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with "Pick one:" framing:
 
@@ -163,7 +167,7 @@ Check which files exist to populate the `## Next Steps` section contextually. In
 - IF codebase exists: check `.agents/project.json.enabled_packs` for `business-ops` — if `business-ops` is not enabled, recommend `/pack install business-ops` first; if `business-ops` is enabled, recommend `/mvp-gap` — Check if the product delivers enough value to charge
 - IF product is live and revenue exists: check `.agents/project.json.enabled_packs` for `business-ops` — if `business-ops` is not enabled, recommend `/pack install business-ops` first; if `business-ops` is enabled, recommend `/runway-model` — Track actual financial performance against these estimates
 
-### 8. Final Review & Write
+### 9. Final Review & Write
 
 Present the **complete monetization strategy** to the user — revenue model, pricing architecture, unit economics, timing. Ask:
 - "Ready to write this to `research/monetization.md`? Anything to adjust first?"

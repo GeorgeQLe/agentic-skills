@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.3 - 2026-05-27
+
+- Handle plural `active_paths` manifest field with backward compatibility for singular `active_path`
+- Write `pipeline_stage: platform-strategy` on product-path entries
+
 ## v0.2 - 2026-05-27
 
 - Added `research/.progress.yaml` product-path manifest output for 4-8 expansion candidates without requiring every candidate to become a full research track.

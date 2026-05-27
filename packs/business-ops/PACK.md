@@ -11,12 +11,18 @@ assumption-tracker -> customer-feedback/cohort-review -> retro -> risk-register
 -> burn-rate -> runway-model -> investor-update -> reconcile-research
 ```
 
+Product-path portfolio management:
+
+```text
+product-line review | promote | prune | fork | triggers
+```
+
 Skills:
 
 ```text
 assumption-tracker, cohort-review, retro, risk-register, burn-rate,
 runway-model, investor-update, reconcile-research, mvp-gap,
-scale-audit, platform-strategy
+scale-audit, platform-strategy, product-line
 ```
 
 Install `business-discovery` for upstream customer/market evidence. Install `business-growth` for GTM, metrics, experiments, and PMF work.

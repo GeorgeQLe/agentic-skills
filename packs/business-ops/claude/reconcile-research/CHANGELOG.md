@@ -8,6 +8,12 @@
 
 - Added research-quality alignment requirements covering claim/evidence/inference separation, no-context-loss HTML translation, evidence matrices, confidence/assumption registers, source coverage, and research completeness gates.
 
+## v0.3 - 2026-05-27
+
+- Handle plural `active_paths` manifest field with backward compatibility for singular `active_path`
+- Added cross-path consistency checks when multiple paths are active
+- Scope reconciliation audit to active product paths by default
+
 ## v0.2 - 2026-05-26
 
 - Gate cross-pack routing recommendations on pack availability — recommend `/pack install <pack>` when the target pack is not enabled

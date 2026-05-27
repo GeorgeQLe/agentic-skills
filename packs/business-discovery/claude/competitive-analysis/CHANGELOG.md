@@ -1,5 +1,11 @@
 # competitive-analysis changelog (claude)
 
+## v0.8 - 2026-05-27
+
+- Handle plural `active_paths` manifest field with backward compatibility for singular `active_path`
+- Write `pipeline_stage: competitive-analysis` on active path manifest entries
+- Recommend `/product-line fork` when competitive gaps imply new product surfaces
+
 ## v0.7 - 2026-05-27
 
 - Added active-path-only product-path manifest behavior and a bounded deferred-path implications section for parked product directions.

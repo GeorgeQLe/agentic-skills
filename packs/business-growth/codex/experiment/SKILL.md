@@ -2,7 +2,7 @@
 name: experiment
 description: Design lean validation experiments — hypothesis, method, success criteria, sample size, timeline, and decision rules
 type: planning
-version: v0.1
+version: v0.2
 argument-hint: <hypothesis or assumption to test>
 ---
 
@@ -34,7 +34,11 @@ Before checking prerequisites, determine the app scope:
 When app scope `{app}` is active:
 - Read/write research from `research/{app}/` instead of `research/`
 
-### 1. Parse Input & Load Context
+### 1. Product Path Manifest
+
+Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading. Scope experiment design to the active product path by default. When experiment results validate or invalidate assumptions about a deferred product path, add a `## Product Path Implications` section recommending `$product-line promote` or `$product-line prune` as appropriate.
+
+### 2. Parse Input & Load Context
 
 **Read `$ARGUMENTS`:**
 - If it's a specific hypothesis or assumption: use it directly
@@ -43,7 +47,7 @@ When app scope `{app}` is active:
 
 **Load context:** Read available research docs to understand the ICP, channels, metrics, and existing knowledge.
 
-### 2. Structure the Hypothesis
+### 3. Structure the Hypothesis
 
 Convert the input into a structured hypothesis:
 
@@ -53,7 +57,7 @@ Present and refine with the user. If the session is already in Plan mode and the
 - "Here's how I've structured the hypothesis. Does this capture what you want to test?"
 - If the hypothesis is too broad, help narrow it to something testable in 1-2 weeks
 
-### 3. Research Experiment Methods
+### 4. Research Experiment Methods
 
 Use WebSearch with **3-5 targeted queries** to find best practices for this type of validation:
 
@@ -62,7 +66,7 @@ Use WebSearch with **3-5 targeted queries** to find best practices for this type
 3. **Benchmarks** — "[category] conversion rate benchmark", "[experiment type] typical results"
 4. **Tools** — "[experiment type] tools", "cheapest way to test [hypothesis]"
 
-### 4. Design the Experiment — Present & Validate
+### 5. Design the Experiment — Present & Validate
 
 Select the most appropriate experiment type and design the full plan:
 
@@ -92,7 +96,7 @@ Ask:
 
 Incorporate feedback before proceeding.
 
-### 5. Define Decision Rules
+### 6. Define Decision Rules
 
 For each possible outcome, define what happens next:
 
@@ -100,7 +104,7 @@ For each possible outcome, define what happens next:
 - **If hypothesis is invalidated** (criteria not met): What's the pivot? (e.g., test alternative, revisit ICP, change approach)
 - **If results are inconclusive** (between thresholds): What additional data is needed? Run a follow-up experiment or extend the current one?
 
-### 6. Populate Next Steps
+### 7. Populate Next Steps
 
 Include a **Recommended** item for the current design-stage next step, followed by **Other options**. Separate current next steps from outcome-specific next steps:
 
@@ -123,7 +127,7 @@ Other options:
 - IF more assumptions remain untested after this design: `$experiment [next assumption]` — Design the next experiment
 - IF enough assumptions are validated after completed results: `$research-roadmap` — Check if research docs need updating based on learnings
 
-### 7. Write Output
+### 8. Write Output
 
 Present final plan to user. Ask:
 - "Ready to write this experiment plan? Anything to adjust?"

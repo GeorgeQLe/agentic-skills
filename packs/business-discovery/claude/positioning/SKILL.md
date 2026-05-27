@@ -2,7 +2,7 @@
 name: positioning
 description: Strategic positioning (April Dunford style) — competitive alternatives, unique attributes, value, target segment, market category
 type: research
-version: v0.3
+version: v0.4
 argument-hint: "[optional: focus area e.g. \"category\", \"vs competitor X\"]"
 ---
 
@@ -44,6 +44,10 @@ Before checking prerequisites, determine the app scope:
 
 When app scope `{app}` is active:
 - Read/write research from `research/{app}/` instead of `research/`
+
+### 0a. Product Path Manifest
+
+Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading. Scope positioning to the active product path by default. When positioning insights suggest a fundamentally different market category for a deferred path, add a `## Product Path Implications` section recommending `/product-line fork` or noting the impact on the deferred path's revisit trigger.
 
 ### 1. Load Context
 

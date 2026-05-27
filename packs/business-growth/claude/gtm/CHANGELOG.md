@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.3 - 2026-05-27
+
+- Added `research/.progress.yaml` product-path manifest awareness
+- Scope GTM strategy to active product path by default
+- Surface product path implications when GTM insights affect deferred paths
+
 ## v0.0
 
 - Archived previous skill contract.

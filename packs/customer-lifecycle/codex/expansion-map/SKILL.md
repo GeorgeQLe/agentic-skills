@@ -2,7 +2,7 @@
 name: expansion-map
 description: Plan account expansion, upgrades, seat growth, referrals, advocacy, and land-and-expand paths
 type: analysis
-version: v0.1
+version: v0.2
 argument-hint: "[optional: app, segment, or expansion motion]"
 ---
 
@@ -19,11 +19,12 @@ Map how retained customers grow into larger accounts, higher usage, referrals, o
 ## Workflow
 
 1. Resolve app scope using `research/{app}/` when applicable.
-2. Require `research/journey-map.md`; if missing, recommend `$journey-map`.
-3. Load journey, retention, monetization, GTM, enterprise ICP, metrics, customer feedback, and specs when present.
-4. Interview and recommend around: expansion trigger, added seats/users, usage expansion, tier upgrades, team rollout, integrations, procurement renewal, referrals, reviews, advocacy, and account-health thresholds.
-5. Present the expansion model before writing.
-6. Write `research/expansion-map.md` and `research/expansion-map-interview.md` after validation.
+2. Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading. Scope the expansion map to the active product path by default. When expansion analysis reveals opportunities that align with a deferred product path, add a `## Product Path Implications` section recommending `$product-line promote`.
+3. Require `research/journey-map.md`; if missing, recommend `$journey-map`.
+4. Load journey, retention, monetization, GTM, enterprise ICP, metrics, customer feedback, and specs when present.
+5. Interview and recommend around: expansion trigger, added seats/users, usage expansion, tier upgrades, team rollout, integrations, procurement renewal, referrals, reviews, advocacy, and account-health thresholds.
+6. Present the expansion model before writing.
+7. Write `research/expansion-map.md` and `research/expansion-map-interview.md` after validation.
 
 ## Output Shape
 

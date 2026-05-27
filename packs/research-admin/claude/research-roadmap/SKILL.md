@@ -2,7 +2,7 @@
 name: research-roadmap
 description: Scan research and documentation health, then maintain a priority documentation queue
 type: planning
-version: v0.4
+version: v0.5
 ---
 
 ## Pack Availability Guard
@@ -52,7 +52,7 @@ Treat top-level `research/`, `specs/`, and `tasks/` as canonical.
 
 For writing the priority queue, prefer `tasks/todo.md`. Use a fallback task root only when the project already has a clear existing task contract and no top-level `tasks/` directory. Do not put condition-gated records or recurring obligations into `tasks/todo.md` unless they are immediately actionable execution work.
 
-Read `research/.progress.yaml` when present. Interpret `active_path` as the current product/app/ICP focus and `product_paths[]` as the product-path manifest. Valid statuses include `active`, `deferred`, `revisit_candidate`, `promoted`, and `abandoned`; these are research product-path states, not git branches.
+Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading. Interpret `active_paths` as the current product/app/ICP focuses and `product_paths[]` as the product-path manifest. Valid statuses include `active`, `deferred`, `revisit_candidate`, `promoted`, and `abandoned`; these are research product-path states, not git branches.
 
 ### 3. Discover Research-Producing Skills
 
@@ -89,6 +89,7 @@ Business-app research outputs:
 | `/retro` | `research/retro-YYYY-MM-DD.md` |
 | `/investor-update` | `research/investor-update-YYYY-MM.md` |
 | `/platform-strategy` | `research/platform-strategy.md` |
+| `/product-line review` | `research/.progress.yaml` |
 | `/mvp-gap` | `research/mvp-gap.md` |
 
 Game research outputs:
@@ -198,7 +199,7 @@ Order immediately actionable todo items so the user can complete documentation w
 
 Within research items, use this dependency order when relevant. When emitting queued commands for pack-based skills, apply the Pack Availability Guard — if the target skill's pack is not in `.agents/project.json` `enabled_packs`, queue `/pack install <pack>` before the skill:
 
-When `research/.progress.yaml` exists, show active and deferred product paths in the priority queue so parked paths are not lost. Queue full downstream research only for `active` or `promoted` paths by default. For `deferred` or `revisit_candidate` paths, add a concise record or queue note with the `revisit_trigger` and `next_skill` rather than scheduling competitive analysis, positioning, journey mapping, UX, or specs for every path.
+When `research/.progress.yaml` exists, show per-path pipeline progress alongside the priority queue. For each path in `active_paths`, show its `pipeline_stage` and queue the next missing research step. For `deferred` or `revisit_candidate` paths, add a concise record or queue note with the `revisit_trigger` and `next_skill` rather than scheduling full downstream research. When 3+ deferred paths accumulate with no recent promotion, add `/product-line review` as a priority queue item to prompt portfolio review.
 
 ```
 /concept-exploration
@@ -225,6 +226,7 @@ When `research/.progress.yaml` exists, show active and deferred product paths in
 quarterly/outcome data -> /retro
 stakeholder reporting -> /investor-update
 multi-product expansion -> /platform-strategy
+3+ deferred product paths -> /product-line review
 ```
 
 For game and devtool projects, follow the default pack flow from `docs/skills-reference.md` when available. Add review or planning skills such as `/devtool-docs-audit` and `/game-roadmap` only when their documented output is missing from the documentation contract.

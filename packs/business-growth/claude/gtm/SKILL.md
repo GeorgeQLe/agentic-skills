@@ -2,7 +2,7 @@
 name: gtm
 description: Go-to-market planning — channel strategy, messaging, pricing, launch plan, and early traction tactics
 type: research
-version: v0.2
+version: v0.3
 argument-hint: "[optional: focus area e.g. \"pricing\", \"launch plan\"]"
 ---
 
@@ -42,7 +42,11 @@ When app scope `{app}` is active:
 - Read/write specs from `specs/{app}/` instead of `specs/`
 - Also read `research/icp.md` (cross-app overview) for broader context
 
-### 1. Load Context
+### 1. Product Path Manifest
+
+Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading. Scope GTM strategy to the active product path by default. When GTM channels or messaging would serve a deferred product path better than the active one, add a `## Product Path Implications` section recommending `/product-line fork` or noting the impact.
+
+### 2. Load Context
 
 - Read `research/icp.md` (or `research/{app}/icp.md`) — ICP segments, pain points, value props, trigger events, current-state journey
 - Read `research/competitive-analysis.md` (or `research/{app}/competitive-analysis.md`) if it exists — competitor positioning, pricing, channels, market gaps
@@ -51,7 +55,7 @@ When app scope `{app}` is active:
 - Read `research/positioning.md` (or `research/{app}/positioning.md`) if it exists — positioning framework that messaging should flow from
 - Read CLAUDE.md and README if they exist — product context
 
-### 2. Interview
+### 3. Interview
 
 Use the AskUserQuestion tool. Ask 1–3 focused questions per turn.
 
@@ -95,7 +99,7 @@ Cover these areas (skip or abbreviate areas the user has already addressed in `$
 - What's the one metric that matters for the first 90 days?
 - When do you pivot from manual to scalable?
 
-### 3. Present Findings & Validate
+### 4. Present Findings & Validate
 
 **Present the complete GTM plan to the user before writing.** Summarise with evidence:
 1. Channel strategy — primary and secondary channels, with ICP behavior data supporting each choice
@@ -109,7 +113,7 @@ Use AskUserQuestion to ask:
 
 Continue until the user confirms. Only then proceed to writing.
 
-### 4. Populate Next Steps
+### 5. Populate Next Steps
 
 Before writing, check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with "Pick one:" framing:
 
@@ -126,11 +130,11 @@ Before writing, check which files exist to populate the `## Next Steps` section 
 - IF downstream impact is **Minor**: annotate relevant skill suggestions with "(stale — [brief description])"
 - If downstream impact has not been classified yet, run the downstream impact check against the proposed output before selecting the final recommendation. Do not emit a Minor/Major impact recommendation speculatively.
 
-### 5. Write Output
+### 6. Write Output
 
 Only after the user has validated the findings, write the output files.
 
-### 6. Downstream Impact Check
+### 7. Downstream Impact Check
 
 After writing, check for downstream research documents that may be affected by what was just decided. Only check documents that exist on disk.
 

@@ -2,7 +2,7 @@
 name: landing-copy
 description: Generate or audit landing page copy grounded in upstream research — hero, benefits, social proof, pricing, FAQ, and CTAs
 type: research
-version: v0.1
+version: v0.2
 argument-hint: "[generate|audit] [optional: focus section e.g. \"hero\", \"pricing\", \"FAQ\"]"
 ---
 
@@ -45,6 +45,10 @@ Dual-mode skill that either **generates** complete landing page copy from upstre
   - `research/competitive-analysis.md` — competitor positioning, strengths, weaknesses, market gaps
 
 ## Process
+
+### 0a. Product Path Manifest
+
+Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading. Scope landing copy to the active product path by default.
 
 ### 0. App Scope Resolution (Monorepo Support)
 
