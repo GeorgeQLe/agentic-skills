@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-05-27 — Distinguish injected external skills from project-local skill links
+
+- A user complaint about `$` skill invocation pollution referred to external/system-injected skills visible in the session skill list, not stale `.codex/skills` or `.claude/skills` symlinks.
+- Before mutating `.agents/project.json` or local skill symlinks, confirm whether the pollution source is the session-injected global/plugin skills, user-home installed skills, project-local links, or repo pack discovery.
+- For ambiguous "extraneous skills" reports, first map visible skill names to their source paths in the injected skill list and compare against repo-defined `global/` and `packs/` skills.
+- Do not prune project-local pack config as a first fix when the reported problem is external skills outside this repository's definitions.
+
 ## 2026-05-25 — Open WSL HTML pages in Windows browsers with file URI PowerShell
 
 - A WSL browser-open attempt failed when using `cmd.exe /c start "" "$(wslpath -w "$FILE_PATH")"` and `powershell.exe Start-Process` against a UNC path, returning `UtilBindVsockAnyPort:309: socket failed 1`.

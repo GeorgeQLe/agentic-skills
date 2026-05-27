@@ -8,7 +8,6 @@
 
 ## Priority Task Queue
 
-- [x] Clean project-local skill invocation surface — remove extraneous `.codex/skills` and `.claude/skills` links and narrow `.agents/project.json` to the intentionally enabled local skill(s).
 - [x] `$investigate journey-map alignment page and AFPS clunkiness` — validate whether journey-map/positioning contracts and recent conversation history explain inconsistent HTML alignment preview creation and workflow friction, then patch the minimal owning contracts/tests if confirmed.
 - [x] `$investigate AFPS alignment preview gate audit` — audit later AFPS workflow skills for shared-convention-only, write-first, conditional, or missing HTML alignment preview gates; patch confirmed gaps with mirrored contract updates and focused tests.
 - [x] `$investigate exec-loop run rename` — rename the exec-loop `run` skill to `exec` for Claude and Codex to avoid collision with Claude's default `/exec` surface; archive/version active skill contracts, update references, validate, commit, and push.
@@ -33,25 +32,6 @@
 - [x] `$exec` — Resume Phase 41 Batch 41.3 re-benchmarks: re-run the 33 Tier 2 global skills that were benchmarked pre-fixture-remediation with near-zero pass rates (Phase 43 added route guidance to all 32 fixture prompts and increased budgets). Current graded count: 69 unique skills / 158 total. Batch 41.5 pack-local groups also have remaining families. Batch 41.3 Group 2 shipped in `bc17fee` and `3e4bd78`; next triage should start with `provision-agentic-config`, `migrate`, or `prototype`.
 - [ ] Review `tasks/recurring-todo.md`: 2 unchecked recurring items — promote only if due and requiring execution work.
 - [ ] `$research-roadmap` — All 43 roadmap phases are complete. Run documentation health scan after Phase 41 remaining batches finish.
-
-## Current Task — Project-Local Skill Invocation Cleanup 2026-05-27
-
-**Goal:** Remove extraneous project-local skills from the `$` invocation surface while preserving unrelated in-progress repository changes.
-
-**Plan:**
-- [x] Inspect `.agents/project.json`, `.codex/skills`, `.claude/skills`, and pack installer behavior.
-- [x] Narrow `.agents/project.json` to the intentionally enabled local skill surface.
-- [x] Remove project-local symlinks that no longer belong to the intended surface.
-- [x] Verify local links and project config are consistent.
-- [x] Record review notes, commit, and push intended changes on `master`.
-
-### Review
-
-- Narrowed `.agents/project.json` from broad pack exposure to no enabled packs plus the individually enabled `ship-end` skill from `exec-loop`.
-- Removed stale and extraneous project-local skill symlinks from `.claude/skills`; `.codex/skills` now contains only the untracked local `ship-end` symlink.
-- Repaired `.claude/skills/ship-end` so it points at this checkout instead of the stale `/home/georgeqle/...` path.
-- Verification passed: `scripts/pack.sh status`; `scripts/pack.sh list-packs`; direct `find .codex/skills .claude/skills` link inspection.
-- Note: the active Codex session may still show skills loaded at session start; a fresh session from this checkout should see the pruned local surface.
 
 ## Current Task — AFPS Alignment Preview Gate Audit 2026-05-27
 
