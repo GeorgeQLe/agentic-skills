@@ -1,5 +1,9 @@
 # research-roadmap changelog (claude)
 
+## v0.3 - 2026-05-27
+
+- Added an explicit local alignment preview gate before documentation queue writes and downstream routing.
+
 ## v0.1
 
 - Reorder the fallback business-app documentation queue so journey-map precedes positioning and UX/prototype/UAT gates precede spec-interview.

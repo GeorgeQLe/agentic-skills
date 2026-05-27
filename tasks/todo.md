@@ -33,26 +33,29 @@
 - [ ] Review `tasks/recurring-todo.md`: 2 unchecked recurring items — promote only if due and requiring execution work.
 - [ ] `$research-roadmap` — All 43 roadmap phases are complete. Run documentation health scan after Phase 41 remaining batches finish.
 
-## Current Task — Journey Map Alignment Page and AFPS Clunkiness Investigation 2026-05-27
+## Current Task — AFPS Alignment Preview Gate Audit 2026-05-27
 
-**Goal:** Confirm whether `$journey-map` can appear to avoid creating an HTML alignment preview, and use related conversation/history evidence to understand clunkiness in `$journey-map` and `$positioning` compared with the first three AFPS skills.
+**Goal:** Audit the full AFPS sequence and patch confirmed preview-gate gaps so every durable AFPS skill has explicit, local alignment behavior instead of relying on a weak shared pointer.
 
 **Plan:**
-- [x] Read project instructions, lessons, active journey-map and positioning contracts, and current worktree state.
-- [x] Compare journey-map, positioning, and upstream AFPS skill approval/alignment contracts.
-- [x] Search local conversation/session history and repo reports for journey-map, positioning, AFPS, and alignment-page friction.
-- [x] Validate user claims, identify root cause, and decide whether a minimal skill-contract/test patch is needed.
-- [x] Run focused verification, document findings here, and commit/push intended tracked changes if files are modified.
+- [x] Record the active audit plan in task docs and confirm the worktree state.
+- [x] Inspect current AFPS skill contracts, archives, changelogs, tests, and generated showcase inputs.
+- [x] Archive and update mirrored Claude/Codex contracts for confirmed gaps: `ux-variations`, `ui-interview`, `prototype`, `uat`, `consolidate-variations`, `research-roadmap`, `spec-interview`, and `roadmap`.
+- [x] Add or update focused regression coverage for explicit report-first gates, prototype mode-specific gates, and roadmap planning preview gates.
+- [x] Refresh generated Skills Showcase data after active `SKILL.md` behavior changes.
+- [x] Run focused validation, document results, commit, and push intended changes on `master`.
 
 ### Review
 
-- Confirmed the user's core concern: active mirrored `journey-map` contracts only had generic "Present before writing" plus a short shared alignment-page pointer, while the first AFPS research skills (`icp`, `competitive-analysis`) and `positioning` had explicit report-first gates that require building/opening the HTML alignment preview before canonical writes.
-- Confirmed related history shows AFPS clunkiness around this area: prior sessions corrected competitive-analysis routing into `pack install customer-lifecycle` then `journey-map`, debated whether positioning belongs before or after journey/spec, and included a positioning-page rework after `journey-map` revealed a multi-ICP/product matrix.
-- Root cause: `journey-map` kept the generic alignment-page convention but lost the local approval-gate wording and journey-specific translation guard that makes agents treat the HTML page as the approval surface rather than optional presentation polish.
-- Fixed mirrored Claude and Codex `journey-map` skills: archived v0.3, bumped to v0.4, added `Report-First Approval Gate`, and added journey-specific HTML translation language covering proposed journey docs, decision logs, stage evidence, critical moments, assumptions, proposed file changes, and approval gates.
-- Added `tests/layer1/journey-map-alignment.test.ts` to lock the focused contract.
-- Verification passed: `pnpm --dir tests exec vitest run --project layer1 layer1/journey-map-alignment.test.ts`; `bash scripts/skill-versions.sh --missing`; `git diff --check`; `scripts/validate-skills-showcase-data.sh`.
-- Broader existing validation noise remains: `tests/layer1/alignment-gates.test.ts` is stale across moved/renamed skills, and `tests/layer1/competitive-analysis-routing.test.ts` has unrelated failures around moved `research-roadmap` paths and a pre-existing Claude route-order assertion.
+- Confirmed later AFPS skills had weak local preview gates: `ux-variations`, `ui-interview`, `uat`, `consolidate-variations`, `research-roadmap`, and `spec-interview` only pointed to the shared Alignment Page convention, while `roadmap` had no Alignment Page section.
+- Archived active versions before bumping: product-design planning/prototype skills v0.2 or v0.1, product-testing UAT v0.1, research-roadmap v0.2, and roadmap v0.0.
+- Added explicit local alignment gates requiring the HTML preview before canonical writes and downstream routing; `prototype` now has a mode-specific gate that allows prototype files first but blocks UAT/consolidation/spec/task routing until the alignment page is reviewed.
+- Added roadmap alignment preview gates before roadmap/todo writes and removed roadmap from stale alignment-test skip coverage.
+- Updated `tests/layer1/alignment-gates.test.ts` for current pack paths and added `tests/layer1/afps-alignment-preview-gates.test.ts`.
+- Refreshed generated Skills Showcase data after active `SKILL.md` behavior changes.
+- Verification passed: `pnpm --dir tests exec vitest run --project layer1 layer1/afps-alignment-preview-gates.test.ts layer1/alignment-gates.test.ts`; `bash scripts/skill-versions.sh --missing`; `git diff --check`.
+- `scripts/validate-skills-showcase-data.sh` regenerated expected showcase assets and reported them stale before commit, which is expected for this repo when generated assets are dirty.
+- Unrelated pre-existing dirty files were left out of scope: `scripts/skill-pack-routing-audit.sh`, `tests/layer1/frontmatter.test.ts`, `docs/skill-anatomy.md`, and an unrelated deferred-work addition in `tasks/roadmap.md`.
 
 ## Current Task — Exec Loop Run Rename 2026-05-26
 
@@ -2505,3 +2508,19 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
 - Alignment preview open: succeeded.
 - Validation passed: `./install.sh`; `./scripts/skill-deps.sh --broken`; `./scripts/skill-versions.sh --missing`; `./scripts/skill-next-step-routing.sh --missing`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests exec vitest run --project layer1 bench-setups -- -t provision-agentic-config`; `pnpm --dir tests verify --skill provision-agentic-config`; `node scripts/generate-skills-showcase-data.mjs`; `node scripts/generate-skills-showcase-github-data.mjs`; `git diff --check`.
 - Showcase validation note: `scripts/validate-skills-showcase-data.sh` regenerated expected assets and reported them stale before commit; rerun after commit should pass on the clean generated outputs.
+
+## Current Task — Skill Structure Best-Practice Audit And Amendments 2026-05-27
+
+**Goal:** Preserve the current versioned skillpack directory model while tightening repo-local skill anatomy guidance, archive/changelog hygiene, and validation semantics so active-skill checks are useful and archive integrity is owned by the archive audit.
+
+**Plan:**
+- [x] Record the active audit plan in task docs and confirm the current dirty worktree constraints.
+- [ ] Inspect current skill structure scripts, active/archived skill metadata, and failing audit output.
+- [ ] Add repo-local skill anatomy guidance covering required/optional frontmatter, active/archive layout, changelogs, mirrors, and progressive disclosure.
+- [ ] Update routing/frontmatter-style audits to ignore archives unless archive-focused, and dedupe noisy repeated findings.
+- [ ] Repair archive/changelog hygiene by adding missing changelogs and version headings without mutating archived `SKILL.md` snapshots.
+- [ ] Run focused verification, document results, and commit/push intended changes if the unrelated dirty worktree allows a clean intended-diff shipment.
+
+### Review
+
+- In progress.

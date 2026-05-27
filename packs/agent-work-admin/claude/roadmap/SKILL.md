@@ -2,7 +2,7 @@
 name: roadmap
 description: Scan task pipeline health, build or update the project roadmap, and maintain a priority task queue
 type: planning
-version: v0.0
+version: v0.1
 argument-hint: "[--existing] [path-to-spec]"
 ---
 
@@ -421,6 +421,18 @@ Rules:
   - External manual work or browser-gathered evidence with no reliable authenticated CLI/API path (DNS/OAuth/service dashboards, auth setup, production smoke checks that need real account/device or human sign-off) → recommend `/guide` (guided-walkthrough pack) or a Claude-guided manual step.
   - Task-doc bookkeeping, stale `tasks/manual-todo.md` cleanup, or reconciliation against repo/history reality → recommend `/reconcile-dev-docs fix tasks` (docs-health pack) or a direct dev-doc audit, not `/guide` (guided-walkthrough pack).
 - Only present multiple commands when the ambiguity materially changes execution safety or there are equally valid next work items. Otherwise choose the best route and mention degraded mode lookup inline.
+
+## Alignment Page
+
+Build and attempt to open `alignment/roadmap-{topic}.html` before writing or replacing `tasks/roadmap.md`, `tasks/todo.md`, or the first generated phase seed.
+
+**Alignment gates.** Treat gates as explicit review sections inside the HTML page. Include evidence coverage, assumptions/confidence, scope/non-goals, candidate/verdict decisions, artifact destination, proposed file changes, coverage checkpoint, and approval gates. Render pipeline-state evidence, spec coverage, phase sequencing rationale, dependency assumptions, manual-task classification, proposed roadmap/todo changes, and the exact first execution route with no context loss from scanned files.
+
+**Required inline questions.** Ask whether the evidence is sufficient for the roadmap, whether any assumptions or confidence levels are wrong, whether phase sequencing and manual-task classification are acceptable, whether the proposed canonical file changes are approved, and whether downstream route emission should remain blocked.
+
+**Gate YAML contract.** Compile answers into YAML with `section`, `gate_type`, `status`, `decision`, `notes`, and `approved_file_changes` fields. The page must automatically attempt to copy the YAML to the clipboard, provide an explicit "Copy YAML" button, and fall back to selecting the textarea contents.
+
+**Pre-approval stop.** Before user approval, the next action is review of the HTML alignment page. Ask the user to review the page and provide the compiled YAML answers. Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language until after compiled YAML has been provided and the approved artifacts have been written or updated.
 
 ## Constraints
 

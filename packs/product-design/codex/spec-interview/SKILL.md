@@ -2,7 +2,7 @@
 name: spec-interview
 description: Post-prototype production deep dive — walks through consolidated prototype screen by screen to extract production specifications
 type: planning
-version: v0.1
+version: v0.2
 argument-hint: "[--ideas]"
 ---
 
@@ -108,7 +108,15 @@ Append an **Assumptions & Risks** section to the end of the spec listing: each c
 
 ### Alignment Page
 
-Follow the shared Alignment Page convention in CLAUDE.md. Output: `alignment/spec-interview-{topic}.html`.
+Build and attempt to open `alignment/spec-interview-{topic}.html` before writing or replacing `specs/[topic].md` or the interview log.
+
+**Alignment gates.** Treat gates as explicit review sections inside the HTML page. Include evidence coverage, assumptions/confidence, scope/non-goals, candidate/verdict decisions, artifact destination, proposed file changes, coverage checkpoint, and approval gates. Render the consolidated prototype evidence, prototype-grounded assumptions checkpoint, production data/API/auth/infrastructure decisions, coverage checkpoint, and every proposed spec section with no context loss from source evidence or interview notes.
+
+**Required inline questions.** Ask whether the evidence is sufficient for a production specification, whether any assumptions or confidence levels are wrong, whether scope/non-goals and deferred infrastructure are acceptable, whether the proposed canonical file changes are approved, and whether roadmap routing should remain blocked.
+
+**Gate YAML contract.** Compile answers into YAML with `section`, `gate_type`, `status`, `decision`, `notes`, and `approved_file_changes` fields. The page must automatically attempt to copy the YAML to the clipboard, provide an explicit "Copy YAML" button, and fall back to selecting the textarea contents.
+
+**Pre-approval stop.** Before user approval, the next action is review of the HTML alignment page. Ask the user to review the page and provide the compiled YAML answers. Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language until after compiled YAML has been provided and the approved artifacts have been written or updated.
 
 ## Constraints
 

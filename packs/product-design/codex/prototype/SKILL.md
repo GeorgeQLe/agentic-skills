@@ -2,7 +2,7 @@
 name: prototype
 description: Build tangible, runnable prototypes from UX variation and UI specs — static HTML/CSS for UI projects, runnable scripts for CLI, endpoint stubs for API, or minimal configs for infra
 type: execution
-version: v0.2
+version: v0.3
 argument-hint: "[optional: topic, --variant N]"
 ---
 
@@ -167,7 +167,15 @@ The user should interact with each prototype variation hands-on before consolida
 
 ## Alignment Page
 
-Follow the shared Alignment Page convention in CLAUDE.md. Output: `alignment/prototype-{topic}.html`.
+Prototype files may be created before the alignment page because the review needs runnable artifacts. After building or updating prototype files, build and attempt to open `alignment/prototype-{topic}.html` before downstream routing, UAT handoff, consolidation, spec updates, research updates, or task/roadmap changes.
+
+**Alignment gates.** Treat gates as explicit review sections inside the HTML page. Include evidence coverage, assumptions/confidence, scope/non-goals, candidate/verdict decisions, artifact destination, proposed file changes, coverage checkpoint, and approval gates. Render the prototype inventory, source research signals, variant theses, file paths created or changed, known fixture/fake-data boundaries, deferred production infrastructure, and the exact downstream artifacts that remain blocked.
+
+**Required inline questions.** Ask whether the prototypes adequately cover the intended journey, whether any assumptions or confidence levels are wrong, whether any prototype files need adjustment before UAT, whether the proposed file changes are accepted, and whether routing to UAT or consolidation is approved.
+
+**Gate YAML contract.** Compile answers into YAML with `section`, `gate_type`, `status`, `decision`, `notes`, and `approved_file_changes` fields. The page must automatically attempt to copy the YAML to the clipboard, provide an explicit "Copy YAML" button, and fall back to selecting the textarea contents.
+
+**Pre-approval stop.** Before user approval, the next action is review of the HTML alignment page. Ask the user to review the page and provide the compiled YAML answers. Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language until after compiled YAML has been provided and the approved prototype artifacts are present.
 
 ## Default Shipping Contract
 

@@ -2,7 +2,7 @@
 name: ux-variations
 description: Interview and plan multiple UX and UI variations for a product, page, or flow, including onboarding, typical workflows, sharing, collaboration, return use, and interface alternatives users can compare before locking a direction — and concrete visual/layout UI variations (component choices, spatial arrangements, information density)
 type: planning
-version: v0.2
+version: v0.3
 argument-hint: "[optional: app, page, flow, feature, or existing UI spec]"
 ---
 
@@ -123,7 +123,15 @@ When invoked with `--layout-mode` (or when the user says "layout mode", "layout 
 
 ### Alignment Page
 
-Follow the shared Alignment Page convention in CLAUDE.md. Output: `alignment/ux-variations-{topic}.html`.
+Build and attempt to open `alignment/ux-variations-{topic}.html` before writing or replacing `specs/ux-variations-[topic].md` or the interview log.
+
+**Alignment gates.** Treat gates as explicit review sections inside the HTML page. Include evidence coverage, assumptions/confidence, scope/non-goals, candidate/verdict decisions, artifact destination, proposed file changes, coverage checkpoint, and approval gates. Render surfaced assumptions, variation manifest, concept selection, experiment plan, UAT handoff checklist, and every proposed deliverable section with no context loss from source evidence or interview notes.
+
+**Required inline questions.** Ask whether the evidence is sufficient for the variation set, whether any assumptions or confidence levels are wrong, whether the selected variant axes and rejected alternatives are acceptable, whether the proposed canonical file changes are approved, and whether any downstream route should remain blocked.
+
+**Gate YAML contract.** Compile answers into YAML with `section`, `gate_type`, `status`, `decision`, `notes`, and `approved_file_changes` fields. The page must automatically attempt to copy the YAML to the clipboard, provide an explicit "Copy YAML" button, and fall back to selecting the textarea contents.
+
+**Pre-approval stop.** Before user approval, the next action is review of the HTML alignment page. Ask the user to review the page and provide the compiled YAML answers. Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language until after compiled YAML has been provided and the approved artifacts have been written or updated.
 
 ## Constraints
 

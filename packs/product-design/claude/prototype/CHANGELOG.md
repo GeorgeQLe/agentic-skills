@@ -1,5 +1,13 @@
 # Changelog
 
+## v0.0
+
+- Archived previous skill contract.
+
+## v0.3 - 2026-05-27
+
+- Added a prototype-specific alignment gate after runnable artifacts are created and before UAT, consolidation, spec, research, or task routing.
+
 ## v0.1 - 2026-05-25
 
 - Added research-quality alignment requirements covering claim/evidence/inference separation, no-context-loss HTML translation, evidence matrices, confidence/assumption registers, source coverage, and research completeness gates.

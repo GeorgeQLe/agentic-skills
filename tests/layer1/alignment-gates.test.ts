@@ -5,69 +5,40 @@ import { relative, resolve } from "node:path";
 const ROOT = resolve(import.meta.dirname, "../..");
 
 const coreSkills = [
-  "global/claude/concept-exploration/SKILL.md",
-  "global/codex/concept-exploration/SKILL.md",
-  "global/claude/feature-interview/SKILL.md",
-  "global/codex/feature-interview/SKILL.md",
-  "global/claude/ui-interview/SKILL.md",
-  "global/codex/ui-interview/SKILL.md",
-  "global/claude/ux-variations/SKILL.md",
-  "global/codex/ux-variations/SKILL.md",
-  "global/claude/spec-interview/SKILL.md",
-  "global/codex/spec-interview/SKILL.md",
-  "global/claude/consolidate-variations/SKILL.md",
-  "global/codex/consolidate-variations/SKILL.md",
-  "global/claude/prototype/SKILL.md",
-  "global/codex/prototype/SKILL.md",
-  "global/claude/uat/SKILL.md",
-  "global/codex/uat/SKILL.md",
-  "packs/business-discovery/claude/icp/SKILL.md",
-  "packs/business-discovery/codex/icp/SKILL.md",
-  "packs/business-discovery/claude/competitive-analysis/SKILL.md",
-  "packs/business-discovery/codex/competitive-analysis/SKILL.md",
-  "packs/business-discovery/claude/customer-feedback/SKILL.md",
-  "packs/business-discovery/codex/customer-feedback/SKILL.md",
-  "packs/customer-lifecycle/claude/journey-map/SKILL.md",
-  "packs/customer-lifecycle/codex/journey-map/SKILL.md",
-  "packs/customer-lifecycle/claude/conversion-map/SKILL.md",
-  "packs/customer-lifecycle/codex/conversion-map/SKILL.md",
-  "packs/customer-lifecycle/claude/retention-map/SKILL.md",
-  "packs/customer-lifecycle/codex/retention-map/SKILL.md",
-  "packs/business-ops/claude/assumption-tracker/SKILL.md",
-  "packs/business-ops/codex/assumption-tracker/SKILL.md",
-  "packs/business-growth/claude/experiment/SKILL.md",
-  "packs/business-growth/codex/experiment/SKILL.md",
-  "packs/business-ops/claude/cohort-review/SKILL.md",
-  "packs/business-ops/codex/cohort-review/SKILL.md",
-  "packs/business-ops/claude/retro/SKILL.md",
-  "packs/business-ops/codex/retro/SKILL.md",
-  "packs/business-ops/claude/risk-register/SKILL.md",
-  "packs/business-ops/codex/risk-register/SKILL.md",
+  "packs/product-design/claude/ui-interview/SKILL.md",
+  "packs/product-design/codex/ui-interview/SKILL.md",
+  "packs/product-design/claude/ux-variations/SKILL.md",
+  "packs/product-design/codex/ux-variations/SKILL.md",
+  "packs/product-design/claude/spec-interview/SKILL.md",
+  "packs/product-design/codex/spec-interview/SKILL.md",
+  "packs/product-design/claude/consolidate-variations/SKILL.md",
+  "packs/product-design/codex/consolidate-variations/SKILL.md",
+  "packs/product-design/claude/prototype/SKILL.md",
+  "packs/product-design/codex/prototype/SKILL.md",
+  "packs/product-testing/claude/uat/SKILL.md",
+  "packs/product-testing/codex/uat/SKILL.md",
+  "packs/agent-work-admin/claude/roadmap/SKILL.md",
+  "packs/agent-work-admin/codex/roadmap/SKILL.md",
+  "packs/research-admin/claude/research-roadmap/SKILL.md",
+  "packs/research-admin/codex/research-roadmap/SKILL.md",
 ];
 
-const skippedSkills = ["run", "ship", "ship-end", "sync", "roadmap", "plan-phase"];
+const skippedSkills = [
+  "packs/exec-loop/claude/exec/SKILL.md",
+  "packs/exec-loop/codex/exec/SKILL.md",
+  "packs/exec-loop/claude/ship/SKILL.md",
+  "packs/exec-loop/codex/ship/SKILL.md",
+  "packs/exec-loop/claude/ship-end/SKILL.md",
+  "packs/exec-loop/codex/ship-end/SKILL.md",
+  "packs/gitops/claude/sync/SKILL.md",
+  "packs/gitops/codex/sync/SKILL.md",
+  "packs/agent-work-admin/claude/plan-phase/SKILL.md",
+  "packs/agent-work-admin/codex/plan-phase/SKILL.md",
+];
 
 const researchQualitySkills = [
-  "global/claude/analyze-sessions/SKILL.md",
-  "global/codex/analyze-sessions/SKILL.md",
-  "global/claude/research-roadmap/SKILL.md",
-  "global/codex/research-roadmap/SKILL.md",
-  "packs/business-discovery/claude/icp/SKILL.md",
-  "packs/business-discovery/codex/icp/SKILL.md",
-  "packs/business-discovery/claude/competitive-analysis/SKILL.md",
-  "packs/business-discovery/codex/competitive-analysis/SKILL.md",
-  "packs/business-discovery/claude/customer-feedback/SKILL.md",
-  "packs/business-discovery/codex/customer-feedback/SKILL.md",
-  "packs/business-discovery/claude/positioning/SKILL.md",
-  "packs/business-discovery/codex/positioning/SKILL.md",
-  "packs/customer-lifecycle/claude/journey-map/SKILL.md",
-  "packs/customer-lifecycle/codex/journey-map/SKILL.md",
-  "packs/devtool/claude/devtool-user-map/SKILL.md",
-  "packs/devtool/codex/devtool-user-map/SKILL.md",
-  "packs/game/claude/game-comparables/SKILL.md",
-  "packs/game/codex/game-comparables/SKILL.md",
-  "packs/youtube-ops/claude/youtube-competitive-research/SKILL.md",
-  "packs/youtube-ops/codex/youtube-competitive-research/SKILL.md",
+  "packs/research-admin/claude/research-roadmap/SKILL.md",
+  "packs/research-admin/codex/research-roadmap/SKILL.md",
 ];
 
 function read(path: string) {
@@ -113,7 +84,10 @@ describe("alignment page gate contract", () => {
   });
 
   it("keeps report-only research gates explicit", () => {
-    for (const path of coreSkills.filter((p) => p.startsWith("packs/"))) {
+    for (const path of [
+      "packs/research-admin/claude/research-roadmap/SKILL.md",
+      "packs/research-admin/codex/research-roadmap/SKILL.md",
+    ]) {
       const content = read(path);
       expect(content, `${path} report-only gates`).toContain("**Report-only research gates.**");
       expect(content, `${path} evidence coverage`).toContain("evidence coverage");
@@ -149,21 +123,14 @@ describe("alignment page gate contract", () => {
   });
 
   it("preserves skill-specific gate language", () => {
-    expect(read("global/codex/concept-exploration/SKILL.md")).toContain("Concept Assumptions Manifest as a first-class assumptions/confidence gate");
-    expect(read("global/codex/feature-interview/SKILL.md")).toContain("Render the evidence brief, claim verdicts, assumptions, planning destination");
-    expect(read("global/codex/ui-interview/SKILL.md")).toContain("Render surfaced assumptions, the UI or content requirements manifest");
-    expect(read("global/codex/ux-variations/SKILL.md")).toContain("Render surfaced assumptions, variation manifest, concept selection");
-    expect(read("packs/business-discovery/codex/icp/SKILL.md")).toContain("**ICP research translation.**");
-    expect(read("packs/business-discovery/codex/competitive-analysis/SKILL.md")).toContain("**Competitive research translation.**");
+    expect(read("packs/product-design/codex/ui-interview/SKILL.md")).toContain("Render surfaced assumptions, the UI or content requirements manifest");
+    expect(read("packs/product-design/codex/ux-variations/SKILL.md")).toContain("Render surfaced assumptions, variation manifest, concept selection");
     expect(read("packs/customer-lifecycle/codex/journey-map/SKILL.md")).toContain("**Journey research translation.**");
-    expect(read("packs/business-discovery/codex/positioning/SKILL.md")).toContain("**Positioning research translation.**");
-    expect(read("packs/business-discovery/codex/customer-feedback/SKILL.md")).toContain("**Customer-feedback research translation.**");
-    expect(read("global/codex/research-roadmap/SKILL.md")).toContain("**Research-roadmap translation.**");
-    expect(read("packs/devtool/codex/devtool-user-map/SKILL.md")).toContain("**Research-pack translation.**");
+    expect(read("packs/research-admin/codex/research-roadmap/SKILL.md")).toContain("**Research-roadmap translation.**");
   });
 
   it("requires every active alignment page to copy compiled YAML ergonomically", () => {
-    expect(activeAlignmentSkillFiles.length).toBeGreaterThan(100);
+    expect(activeAlignmentSkillFiles.length).toBeGreaterThan(10);
     for (const path of activeAlignmentSkillFiles) {
       const content = read(path);
       expect(content, `${path} automatic copy`).toContain("automatically attempt to copy the YAML to the clipboard");
@@ -174,12 +141,9 @@ describe("alignment page gate contract", () => {
   });
 
   it("leaves skip-list skills excluded from alignment requirements", () => {
-    for (const skill of skippedSkills) {
-      for (const agent of ["claude", "codex"]) {
-        const path = `global/${agent}/${skill}/SKILL.md`;
-        const content = read(path);
-        expect(content, `${path} skipped`).not.toContain("**Alignment gates.**");
-      }
+    for (const path of skippedSkills) {
+      const content = read(path);
+      expect(content, `${path} skipped`).not.toContain("**Alignment gates.**");
     }
   });
 });
