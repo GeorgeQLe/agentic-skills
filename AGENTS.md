@@ -1,3 +1,4 @@
+<!-- provision-agentic-config v0.2 -->
 ## Workflow Orchestration
 
 ### 1. Plan Mode Default
@@ -39,20 +40,17 @@
 - Zero context switching required from the user
 - Go fix failing tests without being told how
 
-### 7. Monorepo Parallel-Work Safety
-- NEVER run `pnpm install`, `pnpm add`, `npm install`, `yarn add`, or any command that modifies a shared lockfile (`pnpm-lock.yaml`, `package-lock.json`, `yarn.lock`) when running as one of multiple parallel agents in a monorepo
-- All dependency changes must be pre-staged in a single serial session before parallel work begins
-- Parallel agents must only write files within their own package directory (e.g. `packages/<name>/src/`)
-- Before launching parallel agents, verify their planned work scopes do not overlap on any shared files
-- Parallel `agent-team` write lanes must use separate GitHub branches with deterministic names, push those branches, and return branch/commit/PR evidence for consolidation review
-- If you need a new dependency mid-task, stop and request it be added centrally rather than running the package manager yourself
+### Missing Skill Fallback
+- When a skill invocation fails because the skill is not found, run `scripts/pack.sh which <skill-name>` to check if the skill exists in an available pack.
+- If found in an uninstalled pack, recommend `/pack install <pack>` and note that a new session is needed.
+- If not found in any pack, suggest `/skills` or `/skills search <keyword>`.
 
-### 8. Project Pack Command Resolution
+### Project Pack Command Resolution
 - If a user invokes a command-like skill such as `$benchmark-test-skill design-system` and the leading command is not in the injected session skill list, search project-local packs before falling back to the trailing argument as the active skill.
 - Check `packs/*/codex/<command>/SKILL.md` and pack metadata such as `packs/*/PACK.md`; project-local pack skills may exist in this repository even when they are not visible in the active session list.
 - In this repository, `$benchmark-test-skill` lives under `packs/agentic-skills-bench/codex/benchmark-test-skill/SKILL.md`, and `design-system` is its target skill argument.
 
-### 9. Skill Versioning
+### Skill Versioning
 - Every SKILL.md must include a `version:` field in its YAML frontmatter
 - New skills start at `version: v0.0`
 - Bump the decimal (e.g. `v0.0` → `v0.1`) for non-refactor changes — adjustments, tweaks, behavioral updates
@@ -61,7 +59,7 @@
 - Maintain a `CHANGELOG.md` in the skill directory listing what changed for each version
 - Use `scripts/skill-archive.sh <skill-dir>` to automate the archive step before bumping
 
-### 10. Windows/WSL File Opening
+### Windows/WSL File Opening
 - On Windows machines running WSL, convert Linux paths before opening files from shell commands:
 
 ```bash
@@ -103,4 +101,4 @@ fi
 - **Minimal Impact**: Changes should only touch what's necessary. Avoid introducing bugs.
 - **Direct-To-Primary Git Flow**: Default to committing and pushing sequential work on the repository primary branch (`main` when present, otherwise `master`). Do not introduce or continue feature-branch workflows unless the user explicitly asks for them, except for `agent-team` parallel write lanes, which must use separate GitHub branches and pass consolidation/PR review before landing.
 - **Always Ship Mutations**: If a task creates or modifies tracked files, finish by committing and pushing all intended changes before stopping unless the user explicitly says not to. Codex `$exec` ships by default (validates, commits, pushes, plans next) — use `$ship` only to package existing work or unpushed commits.
-- **No GitHub Actions**: Do not create, modify, or suggest GitHub Actions workflows. This project does not use GitHub Actions for CI/CD.
+- **No GitHub Actions**: Do not create, modify, or suggest GitHub Actions workflows unless the user explicitly asks for GitHub Actions. This project does not use GitHub Actions for CI/CD by default.
