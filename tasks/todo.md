@@ -2609,6 +2609,30 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
 - Showcase validation was not run for this structure pass because the intended changes do not change active `SKILL.md` metadata or generated showcase inputs. Existing generated asset dirtiness was already present in the worktree.
 - Shipping update: `$ship-end` superseded the previous stop and shipped the coherent pending boundary after re-validating script behavior, routing-audit behavior, frontmatter filtering, archive hygiene, dependency checks, and whitespace.
 
+## Current Task — Restore Missing Codex Skill Archives 2026-05-27
+
+**Goal:** Restore the 23 missing Codex `archive/<version>/SKILL.md` snapshots reported by `scripts/skill-archive-audit.sh --strict` without changing active skill behavior, versions, or Claude mirrors.
+
+**Plan:**
+- [x] Record the archival repair plan and confirm the worktree is clean on `master`.
+- [x] Restore each missing Codex archive snapshot from the specified historical commit/path.
+- [x] Run archive, version, whitespace, and targeted frontmatter validation.
+- [x] Document review notes, inspect the diff, commit, and push the archival repair on `master`.
+
+**Constraints:**
+- Restore Codex snapshots from Codex git history, not Claude archives.
+- Recover `idea-scope-brief` `v0.3` from the pre-rename `concept-exploration` path.
+- Do not bump active versions or mutate active `SKILL.md` files.
+- Only touch changelogs if validation reveals missing restored-version headings.
+
+### Review
+
+- Restored 23 missing Codex archive snapshots from the requested historical commits and paths.
+- Special-cased `global/codex/idea-scope-brief/archive/v0.3/SKILL.md` from the pre-rename `global/codex/concept-exploration/SKILL.md` history at `b1ed394a`.
+- Did not change active skill contracts, active versions, Claude mirrors, or changelogs.
+- Targeted frontmatter check confirmed each restored `SKILL.md` has `version:` matching its archive directory.
+- Validation passed: `bash scripts/skill-archive-audit.sh --strict`; `bash scripts/skill-versions.sh --missing`; `git diff --check`.
+
 ## Ship Manifest — 2026-05-27
 
 **User goal:** Wrap up the current session with `$ship-end`: update docs, validate, commit, push, and report next work.
