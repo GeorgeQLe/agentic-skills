@@ -1,5 +1,10 @@
 # Session History
 
+## 2026-05-27 — Expand sealed pack drag zone to full top flap
+
+- Expanded the invisible drag zone in SealedPack.tsx from `top: 20%, height: 26%` to `top: 0%, height: 33%`, aligning it with the full top flap down to the dotted tear line at 33%.
+- Users can now grab anywhere above the tear line to initiate the tear-open gesture, not just the middle band.
+
 ## 2026-05-27 — Fix mobile pull-to-refresh and ship pack cross-pack routing guards
 
 - Fixed BottomSheet mobile pull-to-refresh bug: added Framer Motion drag-to-close gesture on grab handle, `overscroll-behavior: contain` on sheet and content, `touchAction: none` on handle, and corrected entry animation to slide up from bottom.
