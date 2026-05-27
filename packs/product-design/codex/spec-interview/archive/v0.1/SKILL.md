@@ -23,7 +23,7 @@ If both gates pass, proceed with the interview.
 
 Invoke as `$spec-interview`.
 
-Use this skill when the user has a consolidated prototype and research context that needs to be turned into a complete production implementation specification. For half-formed product ideas, run `$concept-exploration` before this skill.
+Use this skill when the user has a consolidated prototype and research context that needs to be turned into a complete production implementation specification. For half-formed product ideas, run `$idea-scope-brief` before this skill.
 
 ## Workflow
 
@@ -121,7 +121,7 @@ When `$ARGUMENTS` contains `--ideas`, read `tasks/ideas.md` and run the intervie
 
 1. Read `tasks/ideas.md` and extract every distinct idea entry. If a filter keyword is provided, limit to matching ideas.
 2. Show the user the list and ask them to confirm, skip any, or reorder.
-3. For each idea, run the standard interview process using the idea's title and description as the initial implementation draft. If an idea is still only a raw concept, route it to `$concept-exploration` first.
+3. For each idea, run the standard interview process using the idea's title and description as the initial implementation draft. If an idea is still only a raw concept, route it to `$idea-scope-brief` first.
 4. Write deliverables (`specs/[topic].md` and `[topic]-interview.md`) for each completed idea.
 5. After each idea, summarize decisions and move to the next. The user may say "skip".
 6. If the user stops partway through, write deliverables for completed ideas and note which remain.

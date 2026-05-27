@@ -151,7 +151,7 @@ Global skills should stay domain-neutral:
 
 ```text
 affected, analyze-sessions, bootstrap-repo, brainstorm, branch-lifecycle,
-codebase-status, commit-and-push-by-feature, concept-exploration, create-skill, dead-code, debug, decommission, deploy, dogfood,
+codebase-status, commit-and-push-by-feature, idea-scope-brief, create-skill, dead-code, debug, decommission, deploy, dogfood,
 expert-review, guide, handoff, hygiene, init-agentic-skills, provision-agentic-config,
 investigate, migrate, pack, patch-exec-profile, spec-interview, ui-interview,
 ux-variation, plan-phase, reconcile-dev-docs, regression-check, release, roadmap, run, scaffold,

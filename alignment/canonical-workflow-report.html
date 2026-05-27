@@ -232,7 +232,7 @@
           <li><code>alignment/*.html</code> captures full-depth interactive review pages for durable planning, research, report, spec, prototype, and document outputs.</li>
         </ul>
         <p>The canonical product path is:</p>
-        <pre><code>concept-exploration
+        <pre><code>idea-scope-brief
   -&gt; pack selection
   -&gt; icp
   -&gt; competitive-analysis
@@ -286,7 +286,7 @@
         <h3>Fresh Directory Or Rough Product Idea</h3>
         <p>Use this when there is no decision-complete codebase contract.</p>
         <p>Claude route:</p>
-        <pre><code>/concept-exploration
+        <pre><code>/idea-scope-brief
 /pack
 /pack install business-discovery        # when the discovery lane is missing
 /icp
@@ -314,7 +314,7 @@
 /exec
 /ship-end</code></pre>
         <p>Codex route:</p>
-        <pre><code>$concept-exploration
+        <pre><code>$idea-scope-brief
 $pack
 $pack install business-discovery
 $icp
@@ -345,7 +345,7 @@ $ship-end</code></pre>
         <h3>Existing Codebase With No Current Docs</h3>
         <p>Use <code>pack</code> first to designate the project. Then run the lightest evidence-producing path that fits the codebase:</p>
         <ul>
-          <li>If the product concept is unclear, use <code>concept-exploration</code>.</li>
+          <li>If the product concept is unclear, use <code>idea-scope-brief</code>.</li>
           <li>If there is product direction but no market evidence, use <code>business-discovery</code> and start with <code>icp</code>.</li>
           <li>If there is market evidence but no user/customer path, install or enable <code>customer-lifecycle</code> and run <code>journey-map</code>.</li>
           <li>If the implementation already exists but specs are stale, use <code>spec-drift</code> or <code>reconcile-dev-docs</code> before mutating plans.</li>
@@ -466,7 +466,7 @@ $ship-end</code></pre>
       <section id="decision-rules">
         <h2>Canonical Decision Rules</h2>
         <ul>
-          <li>Start with <code>concept-exploration</code> for raw ideas.</li>
+          <li>Start with <code>idea-scope-brief</code> for raw ideas.</li>
           <li>Install narrow packs, not broad aliases, unless compatibility or context loading makes the alias desirable.</li>
           <li>For business products, run ICP and competitive analysis before journey mapping; run journey mapping before UX/UI and prototype work.</li>
           <li>Treat optional value, positioning, growth, monetization, and ops work as evidence lanes selected by risk and product type.</li>
@@ -482,7 +482,7 @@ $ship-end</code></pre>
 
       <section id="sequence">
         <h2>Current End-To-End Sequence</h2>
-        <pre><code>concept-exploration
+        <pre><code>idea-scope-brief
   -&gt; pack recommend/install
   -&gt; business-discovery: icp -&gt; competitive-analysis
   -&gt; customer-lifecycle: journey-map

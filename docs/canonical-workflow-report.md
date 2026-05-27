@@ -29,7 +29,7 @@ The durable source of truth remains the repository task and planning surface:
 The canonical product path is:
 
 ```text
-concept-exploration
+idea-scope-brief
   -> pack selection
   -> icp
   -> competitive-analysis
@@ -91,7 +91,7 @@ Use this when there is no decision-complete codebase contract.
 Claude route:
 
 ```bash
-/concept-exploration
+/idea-scope-brief
 /pack
 /pack install business-discovery        # when the discovery lane is missing
 /icp
@@ -123,7 +123,7 @@ Claude route:
 Codex route:
 
 ```bash
-$concept-exploration
+$idea-scope-brief
 $pack
 $pack install business-discovery
 $icp
@@ -158,7 +158,7 @@ This is an ordered default, not a mandate to run every optional business skill. 
 
 Use `pack` first to designate the project. Then run the lightest evidence-producing path that fits the codebase:
 
-- If the product concept is unclear, use `concept-exploration`.
+- If the product concept is unclear, use `idea-scope-brief`.
 - If there is product direction but no market evidence, use `business-discovery` and start with `icp`.
 - If there is market evidence but no user/customer path, install or enable `customer-lifecycle` and run `journey-map`.
 - If the implementation already exists but specs are stale, use `spec-drift` or `reconcile-dev-docs` before mutating plans.
@@ -298,7 +298,7 @@ The current `consolidate-variations` contract says the skill produces a consolid
 
 ## Canonical Decision Rules
 
-- Start with `concept-exploration` for raw ideas.
+- Start with `idea-scope-brief` for raw ideas.
 - Install narrow packs, not broad aliases, unless compatibility or context loading makes the alias desirable.
 - For business products, run ICP and competitive analysis before journey mapping; run journey mapping before UX/UI and prototype work.
 - Treat optional value, positioning, growth, monetization, and ops work as evidence lanes selected by risk and product type.
@@ -313,7 +313,7 @@ The current `consolidate-variations` contract says the skill produces a consolid
 ## Current End-To-End Sequence
 
 ```text
-concept-exploration
+idea-scope-brief
   -> pack recommend/install
   -> business-discovery: icp -> competitive-analysis
   -> customer-lifecycle: journey-map

@@ -91,7 +91,7 @@ Keep `roadmap`, `run`, `ship`, and `pack` global. The fleet pack should be insta
 The following global group is 1,922 lines:
 
 ```text
-concept-exploration, feature-interview, spec-interview,
+idea-scope-brief, feature-interview, spec-interview,
 ux-variation, ui-interview, uat, dogfood
 ```
 

@@ -226,7 +226,7 @@ tr:hover td { background: rgba(88,166,255,0.05); }
 <h4>4. Repeated Same-Session Retries</h4>
 <ul>
 <li><code>/plan-interview &rarr; /plan-interview</code>: <strong>7x</strong> in same session (retry pattern)</li>
-<li><code>/concept-exploration &rarr; /concept-exploration</code>: <strong>3x</strong></li>
+<li><code>/idea-scope-brief &rarr; /idea-scope-brief</code>: <strong>3x</strong></li>
 <li><code>/spec-drift &rarr; /spec-drift</code>: <strong>3x</strong></li>
 </ul>
 <div class="evidence"><strong>Evidence:</strong> Single-session command sequences. Same skill invoked 2+ times suggests the first run didn't produce satisfactory output, or the user refined the prompt.</div>
@@ -237,7 +237,7 @@ tr:hover td { background: rgba(88,166,255,0.05); }
 
 <h3>Intended Flow (from pack default flows)</h3>
 <div class="flow-diagram">
-<span class="flow-step">concept-exploration</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">icp</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">competitive-analysis</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">journey-map</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">positioning</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">ux-variations</span>
+<span class="flow-step">idea-scope-brief</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">icp</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">competitive-analysis</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">journey-map</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">positioning</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">ux-variations</span>
 <br><span class="flow-note">(business-discovery default)</span>
 <br><br>
 <span class="flow-step">journey-map</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">onboarding-map</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">conversion-map</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">transaction-map</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">retention-map</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">expansion-map</span>
@@ -249,7 +249,7 @@ tr:hover td { background: rgba(88,166,255,0.05); }
 
 <h3>Observed Flow (from session data)</h3>
 <div class="flow-diagram">
-<span class="flow-problem">Session 1:</span> <span class="flow-step">concept-exploration</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">pack install</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">concept-exploration</span> <span class="flow-note">(retry)</span>
+<span class="flow-problem">Session 1:</span> <span class="flow-step">idea-scope-brief</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">pack install</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">idea-scope-brief</span> <span class="flow-note">(retry)</span>
 <br>
 <span class="flow-problem">Session 2:</span> <span class="flow-step">icp</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">/clear</span>
 <br>
@@ -268,7 +268,7 @@ tr:hover td { background: rgba(88,166,255,0.05); }
 <tr><td>7</td><td><code>/plan-interview &rarr; /plan-interview</code></td><td><span class="badge badge-red">Retry</span> First run unsatisfactory</td></tr>
 <tr><td>3</td><td><code>/icp &rarr; /competitive-analysis</code></td><td><span class="badge badge-green">Golden path</span> Intended flow</td></tr>
 <tr><td>3</td><td><code>/spec-drift &rarr; /spec-drift</code></td><td><span class="badge badge-red">Retry</span></td></tr>
-<tr><td>3</td><td><code>/concept-exploration &rarr; /concept-exploration</code></td><td><span class="badge badge-red">Retry</span></td></tr>
+<tr><td>3</td><td><code>/idea-scope-brief &rarr; /idea-scope-brief</code></td><td><span class="badge badge-red">Retry</span></td></tr>
 <tr><td>2</td><td><code>/positioning &rarr; /gtm</code></td><td><span class="badge badge-green">Golden path</span></td></tr>
 <tr><td>1</td><td><code>/icp &rarr; /plan-interview &rarr; /roadmap</code></td><td><span class="badge badge-green">Golden path</span></td></tr>
 <tr><td>1</td><td><code>/journey-map &rarr; /gtm &rarr; /monetization</code></td><td><span class="badge badge-green">Golden path</span></td></tr>
@@ -281,14 +281,14 @@ tr:hover td { background: rgba(88,166,255,0.05); }
 
 <div class="card">
 <h4>Pattern A: Pack Not Installed</h4>
-<p>User runs <code>/concept-exploration</code>, gets told to install <code>business-discovery</code> pack, does <code>/pack install</code>, then re-runs the next skill in a new session because <code>/clear</code> was used or context was lost.</p>
-<div class="evidence"><strong>Evidence:</strong> <code>gblock-party-redux</code> (May 23): <code>/concept-exploration &rarr; /concept-exploration &rarr; /concept-exploration &rarr; /pack &rarr; /clear</code>. Three concept-exploration retries and a pack install in one session, then ICP in a separate session two days later.</div>
+<p>User runs <code>/idea-scope-brief</code>, gets told to install <code>business-discovery</code> pack, does <code>/pack install</code>, then re-runs the next skill in a new session because <code>/clear</code> was used or context was lost.</p>
+<div class="evidence"><strong>Evidence:</strong> <code>gblock-party-redux</code> (May 23): <code>/idea-scope-brief &rarr; /idea-scope-brief &rarr; /idea-scope-brief &rarr; /pack &rarr; /clear</code>. Three idea-scope-brief retries and a pack install in one session, then ICP in a separate session two days later.</div>
 </div>
 
 <div class="card">
 <h4>Pattern B: Alignment Page Review Gap</h4>
 <p>Skills produce alignment pages that require user review and YAML compilation. The user reviews asynchronously, sometimes hours or days later, in a new session. The new session has no memory of what was approved or what the next step should be.</p>
-<div class="evidence"><strong>Evidence:</strong> <code>calcllm</code>: concept-exploration on May 22, ICP on May 23, competitive-analysis on May 24, journey-map on May 25 &mdash; each a separate session with a day gap.</div>
+<div class="evidence"><strong>Evidence:</strong> <code>calcllm</code>: idea-scope-brief on May 22, ICP on May 23, competitive-analysis on May 24, journey-map on May 25 &mdash; each a separate session with a day gap.</div>
 </div>
 
 <div class="card">
@@ -299,7 +299,7 @@ tr:hover td { background: rgba(88,166,255,0.05); }
 
 <div class="card">
 <h4>Pattern D: Cross-Pack Boundary</h4>
-<p>The research workflow spans 4 packs: <code>concept-exploration</code> (global), <code>business-discovery</code>, <code>customer-lifecycle</code>, <code>business-growth</code>. Each pack must be installed separately. Routing recommendations say "install X pack first" but don't carry forward what work was already done.</p>
+<p>The research workflow spans 4 packs: <code>idea-scope-brief</code> (global), <code>business-discovery</code>, <code>customer-lifecycle</code>, <code>business-growth</code>. Each pack must be installed separately. Routing recommendations say "install X pack first" but don't carry forward what work was already done.</p>
 <div class="evidence"><strong>Evidence:</strong> Codex message (May 25): "we need to make sure that competitive analysis routes to recommend running: pack install customer-lifecycle, then journey-map". The user is manually managing cross-pack routing because skill routing doesn't track prior state.</div>
 </div>
 
@@ -343,7 +343,7 @@ tr:hover td { background: rgba(88,166,255,0.05); }
 <tr>
 <td>Same-session retries indicate first-run quality issues</td>
 <td>Session command sequences</td>
-<td>/plan-interview retried 7x; /concept-exploration retried 3x; /spec-drift retried 3x</td>
+<td>/plan-interview retried 7x; /idea-scope-brief retried 3x; /spec-drift retried 3x</td>
 <td><span class="badge badge-orange">Medium</span></td>
 <td>Retries could be prompt refinement, not quality failure</td>
 <td>If quality-driven, skill output needs improvement. If prompt-driven, input handling needs improvement.</td>
@@ -464,8 +464,8 @@ tr:hover td { background: rgba(88,166,255,0.05); }
 
 <div class="question-block" data-gate="scope" data-section="Scope &amp; Non-Goals">
 <h4>Q3: Should the progress manifest track state across ALL research skills, or just the business discovery pipeline?</h4>
-<label><input type="radio" name="q3" value="all" onchange="handleRadio(this)"> All research skills (concept-exploration, business-discovery, customer-lifecycle, business-growth, business-ops, product-design)</label>
-<label><input type="radio" name="q3" value="business-only" onchange="handleRadio(this)"> Business pipeline only (concept-exploration &rarr; business-discovery &rarr; customer-lifecycle &rarr; business-growth)</label>
+<label><input type="radio" name="q3" value="all" onchange="handleRadio(this)"> All research skills (idea-scope-brief, business-discovery, customer-lifecycle, business-growth, business-ops, product-design)</label>
+<label><input type="radio" name="q3" value="business-only" onchange="handleRadio(this)"> Business pipeline only (idea-scope-brief &rarr; business-discovery &rarr; customer-lifecycle &rarr; business-growth)</label>
 <label><input type="radio" name="q3" value="other" onchange="handleRadio(this)"> Other / None of the above</label>
 <textarea class="other-text" placeholder="What scope do you prefer?"></textarea>
 <label><input type="radio" name="q3" value="clarify" onchange="handleRadio(this)"> Need clarification</label>
@@ -575,7 +575,7 @@ tr:hover td { background: rgba(88,166,255,0.05); }
 <table>
 <tr><th>Skill</th><th>Version</th><th>Multi-path Output</th><th>Primary Selection</th><th>Secondary Path Fate</th><th>Downstream Awareness</th></tr>
 <tr>
-<td><code>concept-exploration</code></td>
+<td><code>idea-scope-brief</code></td>
 <td>v0.2</td>
 <td>Slugged briefs for pivots</td>
 <td>User chooses direction</td>
@@ -617,7 +617,7 @@ tr:hover td { background: rgba(88,166,255,0.05); }
 </table>
 
 <div class="evidence">
-<strong>Key finding:</strong> The branching funnel narrows at ICP. Upstream, concept-exploration can produce multiple briefs. At ICP, multiple candidates are scored and one is selected. Downstream, everything is single-path. The problem is that the secondary candidates from ICP and concept-exploration are recorded but never consumed, revisited, or tracked for future re-evaluation.
+<strong>Key finding:</strong> The branching funnel narrows at ICP. Upstream, idea-scope-brief can produce multiple briefs. At ICP, multiple candidates are scored and one is selected. Downstream, everything is single-path. The problem is that the secondary candidates from ICP and idea-scope-brief are recorded but never consumed, revisited, or tracked for future re-evaluation.
 </div>
 
 <!-- ======================== POST-BRANCH TRANSITIONS ======================== -->
@@ -651,7 +651,7 @@ tr:hover td { background: rgba(88,166,255,0.05); }
 <li><strong>No downstream skill ever referenced a non-primary ICP.</strong> Across 14 sessions and 8 projects with ICP invocations, secondary ICPs were never consumed.</li>
 <li><strong>metternich-engine is the sole exception:</strong> 4 ICPs (<code>icp-01-solo-indie</code>, <code>icp-02-hobbyist-learner</code>, <code>icp-03-professional</code>, <code>icp-04-team-lead-director</code>) all developed with identical directory structures, per-ICP persona cards, demo scripts, and objection handling. This was a deliberate multi-ICP product strategy, not the norm.</li>
 <li><strong>Most common post-ICP action is shipping</strong> (4 of 8 projects), not continuing research. This reinforces the build/research interleaving pattern from Section 3.</li>
-<li><strong>Near-miss revisitation (calcllm):</strong> User asked "Should we start back with concept-exploration (new product in product line?), ICP (different ICP...) or positioning?" &mdash; expressing intent to revisit branched paths but framing it as a routing question. No evidence the revisit was executed.</li>
+<li><strong>Near-miss revisitation (calcllm):</strong> User asked "Should we start back with idea-scope-brief (new product in product line?), ICP (different ICP...) or positioning?" &mdash; expressing intent to revisit branched paths but framing it as a routing question. No evidence the revisit was executed.</li>
 </ul>
 </div>
 
@@ -675,14 +675,14 @@ tr:hover td { background: rgba(88,166,255,0.05); }
 </div>
 
 <div class="card">
-<h4>concept-exploration Variant</h4>
-<p>When concept-exploration produces multiple slugged briefs, the lifecycle is similar but shorter:</p>
+<h4>idea-scope-brief Variant</h4>
+<p>When idea-scope-brief produces multiple slugged briefs, the lifecycle is similar but shorter:</p>
 <ul>
 <li><strong>Birth:</strong> 3 concept variants produced as separate briefs</li>
 <li><strong>Selection:</strong> User questioned "Do we need three split paths?" and selected one</li>
 <li><strong>Non-selected briefs:</strong> Labeled "related/future concept" &mdash; never referenced again</li>
 </ul>
-<div class="evidence"><strong>Evidence:</strong> concept-exploration alignment page (Codex L1756&ndash;1757) produced 3 variants. User immediately questioned the need for 3 and resolved to a single path. The other 2 briefs were never opened or referenced in subsequent sessions.</div>
+<div class="evidence"><strong>Evidence:</strong> idea-scope-brief alignment page (Codex L1756&ndash;1757) produced 3 variants. User immediately questioned the need for 3 and resolved to a single path. The other 2 briefs were never opened or referenced in subsequent sessions.</div>
 </div>
 
 <div class="card">
@@ -720,13 +720,13 @@ tr:hover td { background: rgba(88,166,255,0.05); }
 <td>If deferred paths matter, a revisit trigger mechanism is needed. If they don't, secondary ICP output should be lighter.</td>
 </tr>
 <tr>
-<td>concept-exploration multi-brief output causes unnecessary branching</td>
+<td>idea-scope-brief multi-brief output causes unnecessary branching</td>
 <td>Codex history (L1756&ndash;1757)</td>
 <td>User immediately questioned "Do we need three split paths?" &mdash; only 1 observed instance of multi-brief output.</td>
 <td>The skill may be over-producing variants; 1 instance is thin evidence but the user reaction was strong.</td>
 <td><span class="badge badge-orange">Medium</span></td>
 <td>One instance may not be representative</td>
-<td>concept-exploration should default to single brief with explicitly requested variant mode.</td>
+<td>idea-scope-brief should default to single brief with explicitly requested variant mode.</td>
 </tr>
 <tr>
 <td>Users want product-line expansion tools but have none</td>
@@ -792,7 +792,7 @@ tr:hover td { background: rgba(88,166,255,0.05); }
 </tr>
 <tr>
 <td>5</td>
-<td><strong>concept-exploration: explicit convergence in Next Steps</strong><br>When multiple slugged briefs are produced, the Next Steps section must name which is primary and which are deferred, and write deferred briefs to <code>deferred_paths</code> in the progress manifest.</td>
+<td><strong>idea-scope-brief: explicit convergence in Next Steps</strong><br>When multiple slugged briefs are produced, the Next Steps section must name which is primary and which are deferred, and write deferred briefs to <code>deferred_paths</code> in the progress manifest.</td>
 <td>Prevents the "Do we need three split paths?" reaction by making convergence explicit rather than leaving multiple open paths.</td>
 <td><span class="badge badge-green">Low</span></td>
 <td><span class="badge badge-orange">Medium</span></td>
@@ -810,7 +810,7 @@ deferred_paths:
     revisit_trigger: "If primary ICP acquisition cost exceeds $50/user OR competitive-analysis shows primary ICP market is saturated"
     status: parked  # parked | revisiting | promoted | abandoned
   - name: "Concept: Team Dashboard Variant"
-    source_skill: concept-exploration
+    source_skill: idea-scope-brief
     date_parked: 2026-05-27
     reason_deferred: "User selected solo-player concept as primary direction"
     revisit_trigger: "If solo-player concept hits retention wall at 30-day mark"
@@ -846,12 +846,12 @@ deferred_paths:
 </div>
 
 <div class="question-block" data-gate="branching-concept" data-section="Branching: Concept Convergence">
-<h4>Q11: Should concept-exploration track multiple active concepts or converge to one?</h4>
+<h4>Q11: Should idea-scope-brief track multiple active concepts or converge to one?</h4>
 <label><input type="radio" name="q11" value="converge" onchange="handleRadio(this)"> Converge &mdash; produce one primary brief, list alternatives as deferred paths in progress manifest</label>
 <label><input type="radio" name="q11" value="multiple" onchange="handleRadio(this)"> Multiple active &mdash; keep producing slugged briefs for each concept, let user choose later</label>
 <label><input type="radio" name="q11" value="user-controlled" onchange="handleRadio(this)"> User-controlled &mdash; default to single brief, add <code>--variants</code> flag for explicit multi-concept mode</label>
 <label><input type="radio" name="q11" value="other" onchange="handleRadio(this)"> Other / None of the above</label>
-<textarea class="other-text" placeholder="Describe your preferred concept-exploration approach..."></textarea>
+<textarea class="other-text" placeholder="Describe your preferred idea-scope-brief approach..."></textarea>
 <label><input type="radio" name="q11" value="clarify" onchange="handleRadio(this)"> Need clarification</label>
 <textarea class="clarify-text" placeholder="What needs clarification?"></textarea>
 <div class="notes-box"><label>Additional notes:</label><textarea class="additional-notes" placeholder="Optional notes on your selection..."></textarea></div>
@@ -889,7 +889,7 @@ deferred_paths:
 <div class="question-block" data-gate="research-completeness" data-section="Research Completeness">
 <h4>Q14: Is the branching evidence sufficient for the recommendations, or do specific claims need more support?</h4>
 <label><input type="radio" name="q14" value="sufficient" onchange="handleRadio(this)"> Sufficient &mdash; the 0-revisitation finding and user statements are strong enough to act on</label>
-<label><input type="radio" name="q14" value="need-more-concept" onchange="handleRadio(this)"> Need more concept-exploration evidence &mdash; 1 instance of multi-brief output is thin</label>
+<label><input type="radio" name="q14" value="need-more-concept" onchange="handleRadio(this)"> Need more idea-scope-brief evidence &mdash; 1 instance of multi-brief output is thin</label>
 <label><input type="radio" name="q14" value="need-metternich" onchange="handleRadio(this)"> Need deeper metternich analysis &mdash; understand why parallel ICPs worked there to learn what to generalize</label>
 <label><input type="radio" name="q14" value="other" onchange="handleRadio(this)"> Other / None of the above</label>
 <textarea class="other-text" placeholder="What additional evidence would change the recommendations?"></textarea>

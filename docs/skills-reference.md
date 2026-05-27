@@ -86,7 +86,7 @@ Global skills are safe across business apps, games, devtools, libraries, service
 | `branch-lifecycle` | Evaluate feature branches for merge, salvage, keep-open, or delete decisions |
 | `codebase-status` | Report repo state, related conversation history, and outstanding work |
 | `commit-and-push-by-feature` | Commit and push changes grouped by logical feature buckets |
-| `concept-exploration` | Shape a rough idea into a concept brief before ICP and market research |
+| `idea-scope-brief` | Shape a rough idea into a concept brief before ICP and market research |
 | `dead-code` | Scan for unused exports, unreachable code, orphaned files, and stale dependencies |
 | `debug` | Investigate a problem, log findings, and suggest a non-duplicate fix |
 | `decommission` | Tear down and remove a service, package, or infrastructure component |

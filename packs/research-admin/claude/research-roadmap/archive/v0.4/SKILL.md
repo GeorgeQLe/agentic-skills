@@ -121,7 +121,7 @@ Also include documentation-producing non-research skills when their outputs are 
 
 | Skill | Output |
 | --- | --- |
-| `/concept-exploration` | `research/concept-brief.md` or `research/{app}/concept-brief.md` |
+| `/idea-scope-brief` | `research/concept-brief.md` or `research/{app}/concept-brief.md` |
 | `/spec-interview` | `specs/*.md` |
 | `/ux-variations` | `specs/ux-variations-*.md` |
 | `/ui-interview` | `specs/ui-*.md` |
@@ -180,7 +180,7 @@ An item is stale when a newer upstream document should invalidate or refresh it.
 
 Also flag potentially stale specs when source code has commits newer than the spec files. Add `/spec-drift fix all` as a priority documentation item when specs are probably behind implementation.
 
-Do not queue a missing `/concept-exploration` item for established projects that already have `research/icp.md`, `research/competitive-analysis.md`, `research/journey-map.md`, or `specs/`. Queue it only for idea-only projects where no concept brief or downstream research/spec artifact exists.
+Do not queue a missing `/idea-scope-brief` item for established projects that already have `research/icp.md`, `research/competitive-analysis.md`, `research/journey-map.md`, or `specs/`. Queue it only for idea-only projects where no concept brief or downstream research/spec artifact exists.
 
 ### 6. Order The Priority Queue
 
@@ -201,7 +201,7 @@ Within research items, use this dependency order when relevant. When emitting qu
 When `research/.progress.yaml` exists, show active and deferred product paths in the priority queue so parked paths are not lost. Queue full downstream research only for `active` or `promoted` paths by default. For `deferred` or `revisit_candidate` paths, add a concise record or queue note with the `revisit_trigger` and `next_skill` rather than scheduling competitive analysis, positioning, journey mapping, UX, or specs for every path.
 
 ```
-/concept-exploration
+/idea-scope-brief
   -> /icp
   -> /competitive-analysis
   -> /journey-map

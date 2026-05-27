@@ -11,7 +11,7 @@ Invoke as `$scaffold`.
 
 Use this skill when the user wants to create a new package or app in their monorepo.
 
-For product/app workflows, `$scaffold` is normally downstream of research, prototype consolidation, production specification, roadmap, and phase planning. Use it when `$roadmap`/`$plan-phase` identifies that the next implementation step needs a new app/package root. Do not route from `$concept-exploration`, `$bootstrap-repo`, `$icp`, `$competitive-analysis`, `$journey-map`, `$ux-variations`, or `$ui-interview` directly to `$scaffold` unless the user explicitly asks to create a minimal shell first.
+For product/app workflows, `$scaffold` is normally downstream of research, prototype consolidation, production specification, roadmap, and phase planning. Use it when `$roadmap`/`$plan-phase` identifies that the next implementation step needs a new app/package root. Do not route from `$idea-scope-brief`, `$bootstrap-repo`, `$icp`, `$competitive-analysis`, `$journey-map`, `$ux-variations`, or `$ui-interview` directly to `$scaffold` unless the user explicitly asks to create a minimal shell first.
 
 ## Workflow
 

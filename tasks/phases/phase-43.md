@@ -48,7 +48,7 @@ The default `assertRecommendedRoute` (in `tests/layer4/setup-helpers/routing.ts:
 | 2 | `brainstorm` | `$feature-interview` | "...and Next command" | Add `End with \`Recommended next command: $feature-interview\`.` |
 | 3 | `branch-lifecycle` | `$ship` | "...and Next command" | Add `End with \`Recommended next command: $ship\`.` |
 | 4 | `codebase-status` | `$run` | "...and Next command" | Add `End with \`Recommended next command: $run\`.` |
-| 5 | `concept-exploration` | `$spec-interview` | "...and Next command" | Add `End with \`Recommended next command: $spec-interview\`.` |
+| 5 | `idea-scope-brief` | `$spec-interview` | "...and Next command" | Add `End with \`Recommended next command: $spec-interview\`.` |
 | 6 | `create-agentic-skill` | `$run` | "...and Next command" | Add `End with \`Recommended next command: $run\`.` |
 | 7 | `create-local-skill` | `$ship` | "...and Next command" | Add `End with \`Recommended next command: $ship\`.` |
 | 8 | `dead-code` | `$run` | "...and Next command" | Add `End with \`Recommended next command: $run\`.` |
@@ -895,8 +895,8 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
   - Classification: automated
   - Files: benchmark reports under `benchmark/`, raw run outputs under `tests/benchmarks/runs/`, generated benchmark/showcase data, task docs.
   - Implementation plan:
-    - 32 unbenchmarked tier23 global skills remain: `bootstrap-repo`, `brainstorm`, `branch-lifecycle`, `codebase-status`, `concept-exploration`, `consolidate-variations`, `create-agentic-skill`, `create-local-skill`, `dead-code`, `debug`, `decommission`, `dogfood`, `expert-review`, `guide`, `handoff`, `hygiene`, `migrate`, `mono-plan`, `pack`, `prototype`, `provision-agentic-config`, `reconcile-dev-docs`, `regression-check`, `research-roadmap`, `scaffold`, `skills`, `slim-audit`, `spec-drift`, `trace`, `uat`, `ui-interview`, `ux-variations`.
-    - Run in groups of 5-10 alphabetically. First group: `bootstrap-repo`, `brainstorm`, `branch-lifecycle`, `codebase-status`, `concept-exploration`, `consolidate-variations`, `create-agentic-skill`, `create-local-skill`, `dead-code`, `debug`.
+    - 32 unbenchmarked tier23 global skills remain: `bootstrap-repo`, `brainstorm`, `branch-lifecycle`, `codebase-status`, `idea-scope-brief`, `consolidate-variations`, `create-agentic-skill`, `create-local-skill`, `dead-code`, `debug`, `decommission`, `dogfood`, `expert-review`, `guide`, `handoff`, `hygiene`, `migrate`, `mono-plan`, `pack`, `prototype`, `provision-agentic-config`, `reconcile-dev-docs`, `regression-check`, `research-roadmap`, `scaffold`, `skills`, `slim-audit`, `spec-drift`, `trace`, `uat`, `ui-interview`, `ux-variations`.
+    - Run in groups of 5-10 alphabetically. First group: `bootstrap-repo`, `brainstorm`, `branch-lifecycle`, `codebase-status`, `idea-scope-brief`, `consolidate-variations`, `create-agentic-skill`, `create-local-skill`, `dead-code`, `debug`.
     - For each skill in the group: run `pnpm verify --skill <skill>`, then `pnpm bench --skill <skill> --agent both --runs 3 --chunk-size 3 --pause 0`.
     - Write dated `benchmark/test-<skill>-2026-05-19.md` for each completed skill.
     - After each group: refresh generated data (`node scripts/generate-skills-showcase-data.mjs`, `node scripts/generate-skills-showcase-github-data.mjs`, `scripts/validate-skills-showcase-data.sh`), run `pnpm --dir tests bench:coverage`, validate with `git diff --check`.
@@ -950,17 +950,17 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
     - `brainstorm`: 0.0% (0/0, 3 blocked) / 50.0% (1/2, 1 blocked). Claude all infra-blocked at smoke budget.
     - `branch-lifecycle`: 0.0% (0/3) / 0.0% (0/3). Both fail `$ship` route assertion (6/6).
     - `codebase-status`: 0.0% (0/0, 3 blocked) / 33.3% (1/3). Claude all infra-blocked at smoke budget.
-    - `concept-exploration`: 0.0% (0/0, 3 blocked) / 0.0% (0/3). Claude all infra-blocked; Codex fails `$spec-interview` route.
+    - `idea-scope-brief`: 0.0% (0/0, 3 blocked) / 0.0% (0/3). Claude all infra-blocked; Codex fails `$spec-interview` route.
     - `consolidate-variations`: 0.0% (0/0, 3 blocked) / 0.0% (0/2, 1 blocked). Claude all infra-blocked (2 budget, 1 timeout).
     - `create-agentic-skill`: 0.0% (0/3) / 0.0% (0/0, 3 blocked). Claude fails `$run` route; Codex all infra-blocked.
     - `create-local-skill`: 0.0% (0/2, 1 blocked) / 0.0% (0/3). Both fail `$ship` route assertion.
     - `dead-code`: 0.0% (0/3) / 33.3% (1/3). Both mostly fail `$run` route assertion.
     - `debug`: 0.0% (0/3) / 0.0% (0/3). Both fail `$run` route assertion (6/6).
   - Shared patterns identified:
-    1. **Claude budget-block at smoke ($0.25)**: 4/10 skills had all Claude runs infra-blocked (`brainstorm`, `codebase-status`, `concept-exploration`, `consolidate-variations`). Same pattern as Batch 41.2.
+    1. **Claude budget-block at smoke ($0.25)**: 4/10 skills had all Claude runs infra-blocked (`brainstorm`, `codebase-status`, `idea-scope-brief`, `consolidate-variations`). Same pattern as Batch 41.2.
     2. **Route assertion failure**: Near-universal across both agents. Fixture prompts lack explicit route guidance — the same root cause Batch 41.2 fixed for 3 Tier 1 skills.
     3. **No new harness defect**: All failures are fixture-prompt gaps or known budget limits, not harness bugs.
-  - Reports written: `benchmark/test-{bootstrap-repo,brainstorm,branch-lifecycle,codebase-status,concept-exploration,consolidate-variations,create-agentic-skill,create-local-skill,dead-code,debug}-2026-05-19.md`.
+  - Reports written: `benchmark/test-{bootstrap-repo,brainstorm,branch-lifecycle,codebase-status,idea-scope-brief,consolidate-variations,create-agentic-skill,create-local-skill,dead-code,debug}-2026-05-19.md`.
   - Generated data refreshed: `docs/benchmark-results-matrix.md` (52 graded + 16 incomplete rows), skills-data.js, github-proof-data.js (both docs/ and apps/ copies).
   - Validation passed: `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests bench:coverage` (157 skills); `git diff --check`.
   - Acceptance criteria met: all 10 skills benchmarked, reports written, generated data refreshed, no shared harness failure patterns requiring pause.

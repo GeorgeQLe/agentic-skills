@@ -121,7 +121,7 @@ Also include documentation-producing non-research skills when their outputs are 
 
 | Skill | Output |
 | --- | --- |
-| `$concept-exploration` | `research/concept-brief.md` or `research/{app}/concept-brief.md` |
+| `$idea-scope-brief` | `research/concept-brief.md` or `research/{app}/concept-brief.md` |
 | `$spec-interview` | `specs/*.md` |
 | `$ux-variations` | `specs/ux-variations-*.md` |
 | `$ui-interview` | `specs/ui-*.md` |
@@ -180,7 +180,7 @@ An item is stale when a newer upstream document should invalidate or refresh it.
 
 Also flag potentially stale specs when source code has commits newer than the spec files. Add `$spec-drift fix all` as a priority documentation item when specs are probably behind implementation.
 
-Do not queue a missing `$concept-exploration` item for established projects that already have `research/icp.md`, `research/competitive-analysis.md`, `research/journey-map.md`, or `specs/`. Queue it only for idea-only projects where no concept brief or downstream research/spec artifact exists.
+Do not queue a missing `$idea-scope-brief` item for established projects that already have `research/icp.md`, `research/competitive-analysis.md`, `research/journey-map.md`, or `specs/`. Queue it only for idea-only projects where no concept brief or downstream research/spec artifact exists.
 
 ### 6. Order The Priority Queue
 
@@ -199,7 +199,7 @@ Order immediately actionable todo items so the user can complete documentation w
 Within research items, use this dependency order when relevant. When emitting queued commands for pack-based skills, apply the Pack Availability Guard — if the target skill's pack is not in `.agents/project.json` `enabled_packs`, queue `$pack install <pack>` before the skill:
 
 ```
-$concept-exploration
+$idea-scope-brief
   -> $icp
   -> $competitive-analysis
   -> $journey-map

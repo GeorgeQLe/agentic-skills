@@ -214,7 +214,7 @@ tr:hover td { background: rgba(88,166,255,0.05); }
 <h4>4. Repeated Same-Session Retries</h4>
 <ul>
 <li><code>/plan-interview &rarr; /plan-interview</code>: <strong>7x</strong> in same session (retry pattern)</li>
-<li><code>/concept-exploration &rarr; /concept-exploration</code>: <strong>3x</strong></li>
+<li><code>/idea-scope-brief &rarr; /idea-scope-brief</code>: <strong>3x</strong></li>
 <li><code>/spec-drift &rarr; /spec-drift</code>: <strong>3x</strong></li>
 </ul>
 <div class="evidence"><strong>Evidence:</strong> Single-session command sequences. Same skill invoked 2+ times suggests the first run didn't produce satisfactory output, or the user refined the prompt.</div>
@@ -225,7 +225,7 @@ tr:hover td { background: rgba(88,166,255,0.05); }
 
 <h3>Intended Flow (from pack default flows)</h3>
 <div class="flow-diagram">
-<span class="flow-step">concept-exploration</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">icp</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">competitive-analysis</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">journey-map</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">positioning</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">ux-variations</span>
+<span class="flow-step">idea-scope-brief</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">icp</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">competitive-analysis</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">journey-map</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">positioning</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">ux-variations</span>
 <br><span class="flow-note">(business-discovery default)</span>
 <br><br>
 <span class="flow-step">journey-map</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">onboarding-map</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">conversion-map</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">transaction-map</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">retention-map</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">expansion-map</span>
@@ -237,7 +237,7 @@ tr:hover td { background: rgba(88,166,255,0.05); }
 
 <h3>Observed Flow (from session data)</h3>
 <div class="flow-diagram">
-<span class="flow-problem">Session 1:</span> <span class="flow-step">concept-exploration</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">pack install</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">concept-exploration</span> <span class="flow-note">(retry)</span>
+<span class="flow-problem">Session 1:</span> <span class="flow-step">idea-scope-brief</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">pack install</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">idea-scope-brief</span> <span class="flow-note">(retry)</span>
 <br>
 <span class="flow-problem">Session 2:</span> <span class="flow-step">icp</span> <span class="flow-arrow">&rarr;</span> <span class="flow-step">/clear</span>
 <br>
@@ -256,7 +256,7 @@ tr:hover td { background: rgba(88,166,255,0.05); }
 <tr><td>7</td><td><code>/plan-interview &rarr; /plan-interview</code></td><td><span class="badge badge-red">Retry</span> First run unsatisfactory</td></tr>
 <tr><td>3</td><td><code>/icp &rarr; /competitive-analysis</code></td><td><span class="badge badge-green">Golden path</span> Intended flow</td></tr>
 <tr><td>3</td><td><code>/spec-drift &rarr; /spec-drift</code></td><td><span class="badge badge-red">Retry</span></td></tr>
-<tr><td>3</td><td><code>/concept-exploration &rarr; /concept-exploration</code></td><td><span class="badge badge-red">Retry</span></td></tr>
+<tr><td>3</td><td><code>/idea-scope-brief &rarr; /idea-scope-brief</code></td><td><span class="badge badge-red">Retry</span></td></tr>
 <tr><td>2</td><td><code>/positioning &rarr; /gtm</code></td><td><span class="badge badge-green">Golden path</span></td></tr>
 <tr><td>1</td><td><code>/icp &rarr; /plan-interview &rarr; /roadmap</code></td><td><span class="badge badge-green">Golden path</span></td></tr>
 <tr><td>1</td><td><code>/journey-map &rarr; /gtm &rarr; /monetization</code></td><td><span class="badge badge-green">Golden path</span></td></tr>
@@ -269,14 +269,14 @@ tr:hover td { background: rgba(88,166,255,0.05); }
 
 <div class="card">
 <h4>Pattern A: Pack Not Installed</h4>
-<p>User runs <code>/concept-exploration</code>, gets told to install <code>business-discovery</code> pack, does <code>/pack install</code>, then re-runs the next skill in a new session because <code>/clear</code> was used or context was lost.</p>
-<div class="evidence"><strong>Evidence:</strong> <code>gblock-party-redux</code> (May 23): <code>/concept-exploration &rarr; /concept-exploration &rarr; /concept-exploration &rarr; /pack &rarr; /clear</code>. Three concept-exploration retries and a pack install in one session, then ICP in a separate session two days later.</div>
+<p>User runs <code>/idea-scope-brief</code>, gets told to install <code>business-discovery</code> pack, does <code>/pack install</code>, then re-runs the next skill in a new session because <code>/clear</code> was used or context was lost.</p>
+<div class="evidence"><strong>Evidence:</strong> <code>gblock-party-redux</code> (May 23): <code>/idea-scope-brief &rarr; /idea-scope-brief &rarr; /idea-scope-brief &rarr; /pack &rarr; /clear</code>. Three idea-scope-brief retries and a pack install in one session, then ICP in a separate session two days later.</div>
 </div>
 
 <div class="card">
 <h4>Pattern B: Alignment Page Review Gap</h4>
 <p>Skills produce alignment pages that require user review and YAML compilation. The user reviews asynchronously, sometimes hours or days later, in a new session. The new session has no memory of what was approved or what the next step should be.</p>
-<div class="evidence"><strong>Evidence:</strong> <code>calcllm</code>: concept-exploration on May 22, ICP on May 23, competitive-analysis on May 24, journey-map on May 25 &mdash; each a separate session with a day gap.</div>
+<div class="evidence"><strong>Evidence:</strong> <code>calcllm</code>: idea-scope-brief on May 22, ICP on May 23, competitive-analysis on May 24, journey-map on May 25 &mdash; each a separate session with a day gap.</div>
 </div>
 
 <div class="card">
@@ -287,7 +287,7 @@ tr:hover td { background: rgba(88,166,255,0.05); }
 
 <div class="card">
 <h4>Pattern D: Cross-Pack Boundary</h4>
-<p>The research workflow spans 4 packs: <code>concept-exploration</code> (global), <code>business-discovery</code>, <code>customer-lifecycle</code>, <code>business-growth</code>. Each pack must be installed separately. Routing recommendations say "install X pack first" but don't carry forward what work was already done.</p>
+<p>The research workflow spans 4 packs: <code>idea-scope-brief</code> (global), <code>business-discovery</code>, <code>customer-lifecycle</code>, <code>business-growth</code>. Each pack must be installed separately. Routing recommendations say "install X pack first" but don't carry forward what work was already done.</p>
 <div class="evidence"><strong>Evidence:</strong> Codex message (May 25): "we need to make sure that competitive analysis routes to recommend running: pack install customer-lifecycle, then journey-map". The user is manually managing cross-pack routing because skill routing doesn't track prior state.</div>
 </div>
 
@@ -331,7 +331,7 @@ tr:hover td { background: rgba(88,166,255,0.05); }
 <tr>
 <td>Same-session retries indicate first-run quality issues</td>
 <td>Session command sequences</td>
-<td>/plan-interview retried 7x; /concept-exploration retried 3x; /spec-drift retried 3x</td>
+<td>/plan-interview retried 7x; /idea-scope-brief retried 3x; /spec-drift retried 3x</td>
 <td><span class="badge badge-orange">Medium</span></td>
 <td>Retries could be prompt refinement, not quality failure</td>
 <td>If quality-driven, skill output needs improvement. If prompt-driven, input handling needs improvement.</td>
@@ -452,8 +452,8 @@ tr:hover td { background: rgba(88,166,255,0.05); }
 
 <div class="question-block" data-gate="scope" data-section="Scope &amp; Non-Goals">
 <h4>Q3: Should the progress manifest track state across ALL research skills, or just the business discovery pipeline?</h4>
-<label><input type="radio" name="q3" value="all" onchange="handleRadio(this)"> All research skills (concept-exploration, business-discovery, customer-lifecycle, business-growth, business-ops, product-design)</label>
-<label><input type="radio" name="q3" value="business-only" onchange="handleRadio(this)"> Business pipeline only (concept-exploration &rarr; business-discovery &rarr; customer-lifecycle &rarr; business-growth)</label>
+<label><input type="radio" name="q3" value="all" onchange="handleRadio(this)"> All research skills (idea-scope-brief, business-discovery, customer-lifecycle, business-growth, business-ops, product-design)</label>
+<label><input type="radio" name="q3" value="business-only" onchange="handleRadio(this)"> Business pipeline only (idea-scope-brief &rarr; business-discovery &rarr; customer-lifecycle &rarr; business-growth)</label>
 <label><input type="radio" name="q3" value="other" onchange="handleRadio(this)"> Other / None of the above</label>
 <textarea class="other-text" placeholder="What scope do you prefer?"></textarea>
 <label><input type="radio" name="q3" value="clarify" onchange="handleRadio(this)"> Need clarification</label>

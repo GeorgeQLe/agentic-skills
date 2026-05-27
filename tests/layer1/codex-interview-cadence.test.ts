@@ -13,7 +13,7 @@ const codexSkillFiles = [
 const oneQuestionCodexSkills = [
   "global/codex/spec-interview/SKILL.md",
   "global/codex/feature-interview/SKILL.md",
-  "global/codex/concept-exploration/SKILL.md",
+  "global/codex/idea-scope-brief/SKILL.md",
   "global/codex/ui-interview/SKILL.md",
   "global/codex/ux-variations/SKILL.md",
   "global/codex/consolidate-variations/SKILL.md",

@@ -2,7 +2,7 @@
 name: sync
 description: Pull latest changes from remote and report status
 type: shipping
-version: v0.3
+version: v0.2
 ---
 
 # Sync
@@ -44,43 +44,16 @@ Pull the latest changes from the remote repository and report status.
    - If a project file has the current version comment but the provisioned block content differs from the canonical block, warn: `⚠ CLAUDE.md provisioned block differs from the canonical provision-agentic-config vX.Y block — re-run $provision-agentic-config`
    - If a canonical block cannot be extracted, fall back to the version-only check and note: `ℹ Could not extract canonical provision-agentic-config block; checked version comment only`
    - If none of the canonical skill files exists, skip this check silently.
-   - Always report the local canonical source path used and its `version:` field when this check runs.
-5. Resolve GitHub freshness preference:
-   - Use the user-local machine-wide preference file at `~/.agentic-skills/preferences.json`.
-   - Read `sync.github_freshness_check`, whose only allowed values are `"ask"`, `"always"`, and `"never"`.
-   - If the file or key is missing, ask the user once which default to remember:
-     - Always check GitHub during sync
-     - Never check GitHub during sync
-     - Ask each time
-   - Create `~/.agentic-skills/preferences.json` if needed and save the selected value as:
-     ```json
-     {
-       "sync": {
-         "github_freshness_check": "ask"
-       }
-     }
-     ```
-   - If the value is `"always"`, check GitHub remote freshness automatically.
-   - If the value is `"never"`, skip GitHub freshness checks and report that local canonical `provision-agentic-config` was used without a GitHub check.
-   - If the value is `"ask"`, ask before checking GitHub for this sync.
-   - Treat malformed JSON or an unsupported value as missing preference and ask again before writing one of the allowed values.
-6. Optional GitHub freshness check:
-   - Only run this check when the resolved preference or explicit user approval says to check GitHub.
-   - Compare the local `agentic-skills` checkout against `origin/HEAD` using non-mutating commands such as `git remote get-url origin`, `git rev-parse HEAD`, `git rev-parse origin/HEAD`, and, when remote freshness is explicitly enabled, `git fetch --dry-run` or an equivalent non-mutating freshness probe.
-   - Report the local checkout commit, remote URL, local `origin/HEAD` commit if available, and whether the local checkout appears behind the remote.
-   - Do not pull, fast-forward, rebase, install, or mutate the checkout from plain `$sync`.
-   - If a GitHub check shows the local checkout is stale, recommend `$init-agentic-skills update` for an explicit update.
-7. Report status:
+5. Report status:
    - Branch name
    - Commits pulled (if any) — show short log of new commits
    - Whether stashed changes were re-applied
    - Any conflicts that need manual resolution
    - Current `git status`
-   - **Agent config drift** — provisioning version, local canonical source path/version, and canonical block match/drift status for `CLAUDE.md` and `AGENTS.md`, if checked
-   - **GitHub freshness** — preference value, whether GitHub was checked, and the local checkout/remote status; when skipped, say local canonical was used
+   - **Agent config drift** — provisioning version and canonical block match/drift status for `CLAUDE.md` and `AGENTS.md`, if checked
    - **Outstanding work** — summary from step 3 (next step, current phase, remaining work, pending manual tasks) or "No active plan"
    - **Advisory tasks** — pending record/recurring counts, if those files exist
-8. Post-sync actions:
+6. Post-sync actions:
    a) Check if `sync.md` exists at the project root.
    b) **If `sync.md` exists** — parse and execute it:
       - Read `sync.md` and identify sections by H2 headings.
@@ -134,7 +107,6 @@ npm run codegen
 - If any post-sync command fails, report the error and continue with remaining actions.
 - Never auto-create `sync.md` without explicit user approval.
 - Do not execute commented-out sections (`<!-- ... -->`).
-- Plain `$sync` must not update the `agentic-skills` checkout, pull from GitHub for the local canonical source, or reinstall skills. Only `$init-agentic-skills update` / `$init-agentic-skills latest` may perform that explicit update flow after confirmation.
 
 
 ## Default Shipping Contract

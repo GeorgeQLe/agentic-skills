@@ -32,7 +32,7 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 **Goal:** Update existing research/planning skill contracts so multiple product lines, ICPs, app paths, pivots, route experiments, and expansion candidates are tracked as product paths in `research/.progress.yaml`, while keeping downstream work scoped to the active path by default.
 
 **Acceptance Criteria:**
-- [x] `concept-exploration`, `icp`, `competitive-analysis`, `platform-strategy`, `feature-interview`, `ux-variations`, and `research-roadmap` define or consume the product-path manifest where appropriate.
+- [x] `idea-scope-brief`, `icp`, `competitive-analysis`, `platform-strategy`, `feature-interview`, `ux-variations`, and `research-roadmap` define or consume the product-path manifest where appropriate.
 - [x] The manifest schema uses `active_path` and `product_paths[]` entries with `id`, `label`, `source_skill`, `scope_path`, `status`, `reason`, `evidence_refs`, `revisit_trigger`, `next_skill`, and `last_touched`.
 - [x] Skill contracts consistently use product-path/product-line/app-scope terminology for research divergence and avoid confusing this with git branch or parallel implementation branch workflows.
 - [x] Deferred paths do not force full competitive analysis, positioning, journey mapping, UX, or spec work unless promoted.
@@ -318,16 +318,16 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 ## Current Targeted Update: Concept Bootstrap Gate and Scaffold Placement 2026-05-21
 
-**Goal:** Make `concept-exploration` route to `bootstrap-repo` only before repository readiness, and clarify `scaffold` as a post-roadmap/plan-phase implementation structure step for normal product work.
+**Goal:** Make `idea-scope-brief` route to `bootstrap-repo` only before repository readiness, and clarify `scaffold` as a post-roadmap/plan-phase implementation structure step for normal product work.
 
 **Acceptance Criteria:**
-- [x] Mirrored `concept-exploration` contracts detect whether a repo is bootstrapped by meaningful README plus agent workflow docs.
+- [x] Mirrored `idea-scope-brief` contracts detect whether a repo is bootstrapped by meaningful README plus agent workflow docs.
 - [x] Unbootstrapped concepts route to `$bootstrap-repo` or `/bootstrap-repo` before ICP.
 - [x] Bootstrapped concepts continue to route to ICP or pack-install prerequisites.
 - [x] Mirrored `scaffold` contracts place scaffolding after research, prototype consolidation, production spec, roadmap, and plan-phase unless the user explicitly asks for an early minimal shell.
 - [ ] Tier 2/3 fixture expectations and validation pass, review notes are recorded, and intended changes are committed and pushed on `master`.
 
-**Result:** Updated mirrored `concept-exploration` and `scaffold` contracts on 2026-05-21. Concept exploration now routes ready but unbootstrapped ideas to bootstrap first, then routes bootstrapped repos to ICP or pack prerequisites. Scaffold now sits after research/prototype/spec/roadmap/plan-phase for normal product work, with an explicit early-shell exception only when the user asks for it. Tier 2/3 fixtures now expect `$icp` for a bootstrapped concept and scaffold placement language. Focused validation passed.
+**Result:** Updated mirrored `idea-scope-brief` and `scaffold` contracts on 2026-05-21. Concept exploration now routes ready but unbootstrapped ideas to bootstrap first, then routes bootstrapped repos to ICP or pack prerequisites. Scaffold now sits after research/prototype/spec/roadmap/plan-phase for normal product work, with an explicit early-shell exception only when the user asks for it. Tier 2/3 fixtures now expect `$icp` for a bootstrapped concept and scaffold placement language. Focused validation passed.
 
 ## Current Targeted Update: Bootstrap Product Reset Research-First Routing 2026-05-21
 
@@ -369,19 +369,19 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Result:** Updated mirrored `desk-flip` and `bootstrap-repo` contracts on 2026-05-21. `desk-flip` now routes same-repo restarts to reset/archive bootstrap (`$bootstrap-repo --reset-existing` for Codex and `/bootstrap-repo --reset-existing` for Claude) while keeping new-repo bootstrap available when explicitly preferred. `bootstrap-repo` reset mode archives stale implementation files under `archive/YYYY-MM-DD-HHMMSS/`, writes `MANIFEST.md`, preserves git metadata, agent config, desk-flip report, and valid salvage artifacts, then routes product/app restarts to AFPS requirements work before UX variations, prototypes, UAT, consolidation, and production spec/roadmap. Focused validation passed for `desk-flip` and `bootstrap-repo`, benchmark coverage, generated showcase freshness, and skill dependency/version/routing audits.
 
-## Current Targeted Update: Concept Exploration Slugged Briefs 2026-05-21
+## Current Targeted Update: Idea Scope Brief Slugged Briefs 2026-05-21
 
-**Goal:** Update mirrored `concept-exploration` skills so concept briefs use normalized concept slugs whenever a concept identity is known or emerges, avoiding ambiguous `research/concept-brief.md` overwrites across related concepts.
+**Goal:** Update mirrored `idea-scope-brief` skills so concept briefs use normalized concept slugs whenever a concept identity is known or emerges, avoiding ambiguous `research/concept-brief.md` overwrites across related concepts.
 
 **Acceptance Criteria:**
-- [x] `global/codex/concept-exploration/SKILL.md` resolves concept identity and slug during context resolution and coverage checkpoint.
-- [x] `global/claude/concept-exploration/SKILL.md` mirrors the slugged output, pivot, and archive behavior with Claude route syntax.
+- [x] `global/codex/idea-scope-brief/SKILL.md` resolves concept identity and slug during context resolution and coverage checkpoint.
+- [x] `global/claude/idea-scope-brief/SKILL.md` mirrors the slugged output, pivot, and archive behavior with Claude route syntax.
 - [x] Generic `research/concept-brief.md` is reserved for a single unambiguous project-level concept; related or potentially multiple concepts use `concept-brief-{slug}.md` and `concept-brief-{slug}-interview.md`.
 - [x] Pivoted concepts write to their own slugged brief while preserving the original prompt concept as a separate future or related concept.
 - [x] Benchmark coverage/setup validates slugged concept output behavior, including a Poketo Work to Poketo Core pivot fixture.
 - [x] Required validation passes, review notes are recorded, and intended changes are committed and pushed on `master`.
 
-**Result:** Updated mirrored `concept-exploration` contracts on 2026-05-21. The skill now resolves concept identity and a normalized slug, reserves generic concept brief filenames for a single unambiguous project-level concept, writes slugged paths for known identities, multi-concept repos, and pivots, and preserves the initial concept as a related or future concept when the interview pivots. The Tier 2/3 benchmark fixture now exercises the Poketo Work to Poketo Core pivot and requires `research/concept-brief-poketo-core.md` plus the matching interview log. Validation passed: install, modern-Bash skill audits, benchmark coverage, focused `concept-exploration` verify, generated Skills Showcase refresh/validation, targeted `rg`, and `git diff --check`.
+**Result:** Updated mirrored `idea-scope-brief` contracts on 2026-05-21. The skill now resolves concept identity and a normalized slug, reserves generic concept brief filenames for a single unambiguous project-level concept, writes slugged paths for known identities, multi-concept repos, and pivots, and preserves the initial concept as a related or future concept when the interview pivots. The Tier 2/3 benchmark fixture now exercises the Poketo Work to Poketo Core pivot and requires `research/concept-brief-poketo-core.md` plus the matching interview log. Validation passed: install, modern-Bash skill audits, benchmark coverage, focused `idea-scope-brief` verify, generated Skills Showcase refresh/validation, targeted `rg`, and `git diff --check`.
 
 ## Current Targeted Update: Codex Desk-Flip Parity 2026-05-21
 
@@ -4769,6 +4769,7 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 ---
 
 ## Deferred / Future Work
+- **Remembered GitHub freshness preference (2026-05-27)** — teach `$sync` to ask once for GitHub freshness checks and remember the machine-wide preference, while keeping plain sync non-mutating and adding explicit `init-agentic-skills update/latest` refresh behavior.
 - **Hard-rename initialization surface (2026-05-27)** — replace `install-agentic-skills` / `install.sh` with `init-agentic-skills` / `init.sh` as the first-time setup interface, without compatibility aliases.
 - **Exclude archived skills from `$` preview (2026-05-27)** — active installed skill roots should be archive-free managed directories, while explicit pins continue to point at `archive/<version>`.
 - **Skill structure best-practice audit (2026-05-27)** — preserve the current `global/{claude,codex}` and `packs/<pack>/{claude,codex}` model while tightening repo-local anatomy guidance, archive/changelog hygiene, and validation semantics so active-skill audits ignore historical archive noise.

@@ -178,11 +178,11 @@ This section tags every global skill and every pack with a **primary CLI role** 
 | --- | --- | --- |
 | `affected` | Claude-orchestration | Monorepo scope framing for planning; read-only |
 | `analyze-sessions` | Claude-orchestration | Cross-session usage trends + automation recommendations |
-| `brainstorm` | Claude-orchestration | Idea surfacing into `/concept-exploration` or `/feature-interview` |
+| `brainstorm` | Claude-orchestration | Idea surfacing into `/idea-scope-brief` or `/feature-interview` |
 | `branch-lifecycle` | Both | Evaluation is orchestration; merge/delete acts execute |
 | `codebase-status` | Claude-orchestration | Read-only repo status plus related local conversation history |
 | `commit-and-push-by-feature` | Codex-execution | Grouped commits + push |
-| `concept-exploration` | Claude-orchestration | Raw idea shaping before ICP and implementation specs |
+| `idea-scope-brief` | Claude-orchestration | Raw idea shaping before ICP and implementation specs |
 | `dead-code` | Claude-orchestration | Scan + report; no mutation |
 | `debug` | Claude-orchestration | Investigate, log to changelog, propose fix |
 | `decommission` | Codex-execution | Tear down services/packages |

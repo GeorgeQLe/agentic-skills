@@ -6,6 +6,22 @@
 **Total phases:** 43
 **Last completed phase:** Phase 43 — Benchmark Fixture Remediation for Route Assertions and Domain Criteria
 
+## Current Task — Remembered GitHub Freshness Preference 2026-05-27
+
+**Goal:** Update `$sync` and `$init-agentic-skills` so sync always reports local canonical provisioning status, asks once for a user-local GitHub freshness preference, and only explicit init update/latest flows mutate the local checkout.
+
+**Plan:**
+- [x] Inspect mirrored sync/init contracts, launchers, and existing contract tests.
+- [x] Record the implementation plan in task docs.
+- [ ] Archive and bump mirrored sync and init skill contracts.
+- [ ] Update sync contracts for `~/.agentic-skills/preferences.json`, allowed values, first-run prompt, and non-mutating GitHub freshness semantics.
+- [ ] Update init contracts and launchers for `status`, `update`, and `latest` behavior with confirmation and fast-forward-only language.
+- [ ] Add focused layer1 contract coverage.
+- [ ] Run validation, add review notes, then ship intended changes.
+
+**Review:**
+- Pending.
+
 ## Priority Task Queue
 
 - [x] `$targeted-skill-builder sync canonical agent config check` — update mirrored sync skills so sync checks `CLAUDE.md`/`AGENTS.md` against the canonical provisioned blocks from `provision-agentic-config`, not only the version comment.
@@ -25,11 +41,11 @@
 - [x] `$targeted-skill-builder run ship alignment exemption` — remove alignment-page requirements from run/ship loop skills, validate, then commit and push.
 - [x] `$targeted-skill-builder all durable skills alignment pages` — extend root `alignment/` HTML review-page contract to every durable output-writing skill, validate, then commit and push.
 - [x] `$targeted-skill-builder alignment html output root` — move alignment review pages to root `alignment/`, restore Codex `$prototype`, update hygiene/bootstrap awareness, validate, then commit and push.
-- [x] `$targeted-skill-builder concept-exploration bootstrap gate and scaffold placement` — route unbootstrapped concepts to bootstrap, bootstrapped concepts to ICP, and keep scaffold downstream of roadmap/plan-phase.
+- [x] `$targeted-skill-builder idea-scope-brief bootstrap gate and scaffold placement` — route unbootstrapped concepts to bootstrap, bootstrapped concepts to ICP, and keep scaffold downstream of roadmap/plan-phase.
 - [x] `$targeted-skill-builder bootstrap-repo product reset research-first routing` — route product resets from high-level concept to ICP/competitive/journey before UX/UI/prototype work.
 - [x] `$targeted-skill-builder bootstrap-repo archive docs preserve concept only` — tighten reset mode so old docs/research/specs are archived and active root keeps only the high-level concept. (Shipped in `66e96c0`.)
 - [x] `$targeted-skill-builder desk-flip reset/archive AFPS routing` — update desk-flip/bootstrap handoff so stale existing codebases are archived before bootstrap, then route to UI/content alignment before prototype work.
-- [x] `$targeted-skill-builder concept-exploration slugged briefs` — update mirrored `concept-exploration` skills so known or emerging concept identities write slugged research briefs instead of conflating related concepts in generic `concept-brief.md`.
+- [x] `$targeted-skill-builder idea-scope-brief slugged briefs` — update mirrored `idea-scope-brief` skills so known or emerging concept identities write slugged research briefs instead of conflating related concepts in generic `concept-brief.md`.
 - [x] Add Codex parity for `desk-flip`: create `global/codex/desk-flip/SKILL.md`, adjust benchmark route expectations, refresh generated skill data, validate, then commit and push.
 - [x] `$exec` — Resume Phase 41 Batch 41.3 re-benchmarks: re-run the 33 Tier 2 global skills that were benchmarked pre-fixture-remediation with near-zero pass rates (Phase 43 added route guidance to all 32 fixture prompts and increased budgets). Current graded count: 69 unique skills / 158 total. Batch 41.5 pack-local groups also have remaining families. Batch 41.3 Group 2 shipped in `bc17fee` and `3e4bd78`; next triage should start with `provision-agentic-config`, `migrate`, or `prototype`.
 - [ ] Review `tasks/recurring-todo.md`: 2 unchecked recurring items — promote only if due and requiring execution work.
@@ -69,7 +85,7 @@
 
 **Plan:**
 - [x] Record the implementation plan in task docs and confirm the active contracts, tests, and worktree state.
-- [x] Archive and update mirrored active skill contracts for `concept-exploration`, `icp`, `competitive-analysis`, `platform-strategy`, `feature-interview`, `ux-variations`, and `research-roadmap`.
+- [x] Archive and update mirrored active skill contracts for `idea-scope-brief`, `icp`, `competitive-analysis`, `platform-strategy`, `feature-interview`, `ux-variations`, and `research-roadmap`.
 - [x] Add focused layer1 tests for product-path manifest terminology, producer/consumer behavior, and active-path-only downstream defaults.
 - [x] Update changelogs, refresh generated Skills Showcase data, and run required validation commands.
 - [x] Add review notes, commit, and push intended changes on `master`.
@@ -79,8 +95,8 @@
 
 ### Review
 
-- Added product-path manifest handling to mirrored `concept-exploration`, `icp`, `competitive-analysis`, `platform-strategy`, `feature-interview`, `ux-variations`, and `research-roadmap` contracts.
-- Archived previous active `SKILL.md` versions before bumping: concept-exploration v0.2, ICP v0.4, competitive-analysis v0.6, platform-strategy v0.1, feature-interview v0.2/v0.1, ux-variations v0.3, and research-roadmap v0.3.
+- Added product-path manifest handling to mirrored `idea-scope-brief`, `icp`, `competitive-analysis`, `platform-strategy`, `feature-interview`, `ux-variations`, and `research-roadmap` contracts.
+- Archived previous active `SKILL.md` versions before bumping: idea-scope-brief v0.2, ICP v0.4, competitive-analysis v0.6, platform-strategy v0.1, feature-interview v0.2/v0.1, ux-variations v0.3, and research-roadmap v0.3.
 - Defined `research/.progress.yaml` with `active_path` and `product_paths[]` fields, statuses `active`, `deferred`, `revisit_candidate`, `promoted`, and `abandoned`, and explicit product-path terminology instead of overloaded branch wording.
 - Preserved active-path-only downstream behavior: deferred paths get revisit triggers and next-skill routes rather than automatic competitive analysis, positioning, journey mapping, UX, or spec work.
 - Added `tests/layer1/product-path-manifest.test.ts` covering schema, ICP secondary paths, competitive deferred-path implications, platform expansion candidates, feature/UX route experiments, research-roadmap queue behavior, and git-branch terminology separation.
@@ -517,8 +533,8 @@
 - [x] Record review, commit, and push intended changes on `master`.
 
 **Files:**
-- `global/codex/{concept-exploration,feature-interview,ui-interview,ux-variations,prototype,consolidate-variations,spec-interview}/SKILL.md`
-- `global/claude/{concept-exploration,feature-interview,ui-interview,ux-variations,prototype,consolidate-variations,spec-interview}/SKILL.md`
+- `global/codex/{idea-scope-brief,feature-interview,ui-interview,ux-variations,prototype,consolidate-variations,spec-interview}/SKILL.md`
+- `global/claude/{idea-scope-brief,feature-interview,ui-interview,ux-variations,prototype,consolidate-variations,spec-interview}/SKILL.md`
 - `packs/alignment-loop/{codex,claude}/destination-doc/SKILL.md`
 - `global/codex/hygiene/SKILL.md`
 - `global/codex/hygiene/references/documentation-templates.md`
@@ -538,7 +554,7 @@
 
 ## Current Task — Concept Bootstrap Gate and Scaffold Placement 2026-05-21
 
-**Goal:** Make `concept-exploration` route unbootstrapped concepts to `bootstrap-repo`, keep bootstrapped repos on the research-first path, and clarify that `scaffold` normally happens after roadmap/plan-phase identifies the implementation target.
+**Goal:** Make `idea-scope-brief` route unbootstrapped concepts to `bootstrap-repo`, keep bootstrapped repos on the research-first path, and clarify that `scaffold` normally happens after roadmap/plan-phase identifies the implementation target.
 
 **Evidence:**
 - User asked whether concept exploration should route to bootstrap before ICP and where scaffold fits.
@@ -546,15 +562,15 @@
 - Current scaffold contracts describe how to create packages/apps but not where scaffolding belongs in the product workflow.
 
 **Plan:**
-- [x] Add bootstrapped/unbootstrapped repo detection to mirrored `concept-exploration` contracts.
+- [x] Add bootstrapped/unbootstrapped repo detection to mirrored `idea-scope-brief` contracts.
 - [x] Route unbootstrapped concepts to `$bootstrap-repo` or `/bootstrap-repo`; keep bootstrapped concepts on `$icp` or pack install routes.
 - [x] Add scaffold placement guidance to mirrored `scaffold` contracts.
 - [x] Update Tier 2/3 fixture expectations for concept and scaffold routing.
 - [x] Run focused validation and commit/push intended changes.
 
 **Files:**
-- `global/codex/concept-exploration/SKILL.md`
-- `global/claude/concept-exploration/SKILL.md`
+- `global/codex/idea-scope-brief/SKILL.md`
+- `global/claude/idea-scope-brief/SKILL.md`
 - `global/codex/scaffold/SKILL.md`
 - `global/claude/scaffold/SKILL.md`
 - `tests/layer4/setups/tier23-global-workflows.setup.ts`
@@ -562,11 +578,11 @@
 
 ### Review
 
-- Mirrored `concept-exploration` now checks whether the repo is bootstrapped by meaningful README plus `AGENTS.md` or `CLAUDE.md`.
+- Mirrored `idea-scope-brief` now checks whether the repo is bootstrapped by meaningful README plus `AGENTS.md` or `CLAUDE.md`.
 - Unbootstrapped ready concepts route to `$bootstrap-repo <high-level concept summary>` or `/bootstrap-repo <high-level concept summary>` before ICP.
 - Bootstrapped concepts continue to route to research prerequisites: pack install, `$icp`, or `/icp`.
 - Mirrored `scaffold` now states normal product scaffolding happens after research, prototype consolidation, production spec, roadmap, and plan-phase identify a new app/package root; early scaffolding is allowed only by explicit user request and should route back to research.
-- Validation passed: `pnpm --dir tests verify --skill concept-exploration`; `pnpm --dir tests verify --skill scaffold`; `pnpm --dir tests bench:coverage`; `/opt/homebrew/bin/bash ./scripts/skill-next-step-routing.sh --missing`; `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken`; `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`; `node scripts/generate-skills-showcase-data.mjs`; `node scripts/generate-skills-showcase-github-data.mjs`; `scripts/validate-skills-showcase-data.sh`; `git diff --check`.
+- Validation passed: `pnpm --dir tests verify --skill idea-scope-brief`; `pnpm --dir tests verify --skill scaffold`; `pnpm --dir tests bench:coverage`; `/opt/homebrew/bin/bash ./scripts/skill-next-step-routing.sh --missing`; `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken`; `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`; `node scripts/generate-skills-showcase-data.mjs`; `node scripts/generate-skills-showcase-github-data.mjs`; `scripts/validate-skills-showcase-data.sh`; `git diff --check`.
 - Skipped/limited: focused verifies skipped layer2 because no target-specific layer2 tests match these skills.
 - Next command: `$bootstrap-repo <concept>` for unbootstrapped ideas; `$icp <concept>` for bootstrapped repos.
 
@@ -735,9 +751,9 @@ Implement only this step, validate it, then run `/ship` when done.
 - Skipped/limited: both focused verifies skipped layer2 because no target-specific layer2 tests match these skills.
 - Next command: `$bootstrap-repo --reset-existing <brief from desk-flip-report.md>`
 
-## Current Task — Concept Exploration Slugged Briefs 2026-05-21
+## Current Task — Idea Scope Brief Slugged Briefs 2026-05-21
 
-**Goal:** Prevent `concept-exploration` from overwriting or conflating separate related concept threads by using normalized concept slugs in output filenames whenever identity is known or emerges.
+**Goal:** Prevent `idea-scope-brief` from overwriting or conflating separate related concept threads by using normalized concept slugs in output filenames whenever identity is known or emerges.
 
 **Evidence:**
 - User correction: a Poketo v3 session started with `poketo.work` and pivoted to Poketo Core, but the skill wrote generic `research/concept-brief.md`.
@@ -745,15 +761,15 @@ Implement only this step, validate it, then run `/ship` when done.
 - Existing benchmark fixture checks a non-canonical `specs/concept-brief.md` path and does not cover multi-concept ambiguity.
 
 **Plan:**
-- [x] Add concept identity/slug resolution rules to the Codex and Claude `concept-exploration` contracts.
+- [x] Add concept identity/slug resolution rules to the Codex and Claude `idea-scope-brief` contracts.
 - [x] Specify scoped output paths, generic-file reservation, pivot handling, and archive behavior for slugged files.
 - [x] Update deterministic benchmark coverage/setup to require slugged output paths for a Poketo Work to Poketo Core pivot fixture.
 - [x] Refresh generated skill data, run required validation, and record results.
 - [x] Commit and push intended changes on `master`.
 
 **Files:**
-- `global/codex/concept-exploration/SKILL.md`
-- `global/claude/concept-exploration/SKILL.md`
+- `global/codex/idea-scope-brief/SKILL.md`
+- `global/claude/idea-scope-brief/SKILL.md`
 - `tests/harness/bench-coverage.ts`
 - `tests/layer4/setups/tier23-global-workflows.setup.ts`
 - Generated Skills Showcase data files if refreshed by scripts.
@@ -761,14 +777,14 @@ Implement only this step, validate it, then run `/ship` when done.
 
 ### Review
 
-- Decision: existing-skill update. The workflow gap belongs inside `concept-exploration`; no new skill was needed.
-- Evidence used: user correction from the Poketo v3 session, current mirrored `concept-exploration` contracts, current Tier 2/3 benchmark fixture, and benchmark coverage metadata.
+- Decision: existing-skill update. The workflow gap belongs inside `idea-scope-brief`; no new skill was needed.
+- Evidence used: user correction from the Poketo v3 session, current mirrored `idea-scope-brief` contracts, current Tier 2/3 benchmark fixture, and benchmark coverage metadata.
 - Evidence intentionally skipped: broad session-history scanning, because the provided correction and target files were enough.
-- Existing-skill overlap: `concept-exploration` owns pre-ICP concept briefs; downstream research/spec skills consume the output but do not own concept identity resolution.
-- Changed files: mirrored `concept-exploration` skills, `tests/harness/bench-coverage.ts`, `tests/layer4/setups/tier23-global-workflows.setup.ts`, generated Skills Showcase assets/matrix, and task docs.
-- Validation passed: `./install.sh`; `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken`; `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`; `/opt/homebrew/bin/bash ./scripts/skill-next-step-routing.sh --missing`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill concept-exploration`; `node scripts/generate-skills-showcase-data.mjs`; `node scripts/generate-skills-showcase-github-data.mjs`; `scripts/validate-skills-showcase-data.sh`; targeted `rg`; `git diff --check`.
-- Skipped/limited: the same three audit scripts fail under macOS system Bash because they require modern Bash features, then pass under Homebrew Bash. `verify --skill concept-exploration` skipped layer2 because no target-specific layer2 tests match this skill.
-- Next command: `$benchmark-test-skill concept-exploration`
+- Existing-skill overlap: `idea-scope-brief` owns pre-ICP concept briefs; downstream research/spec skills consume the output but do not own concept identity resolution.
+- Changed files: mirrored `idea-scope-brief` skills, `tests/harness/bench-coverage.ts`, `tests/layer4/setups/tier23-global-workflows.setup.ts`, generated Skills Showcase assets/matrix, and task docs.
+- Validation passed: `./install.sh`; `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken`; `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`; `/opt/homebrew/bin/bash ./scripts/skill-next-step-routing.sh --missing`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests verify --skill idea-scope-brief`; `node scripts/generate-skills-showcase-data.mjs`; `node scripts/generate-skills-showcase-github-data.mjs`; `scripts/validate-skills-showcase-data.sh`; targeted `rg`; `git diff --check`.
+- Skipped/limited: the same three audit scripts fail under macOS system Bash because they require modern Bash features, then pass under Homebrew Bash. `verify --skill idea-scope-brief` skipped layer2 because no target-specific layer2 tests match this skill.
+- Next command: `$benchmark-test-skill idea-scope-brief`
 
 ## Current Task — Codex Desk-Flip Parity 2026-05-21
 
@@ -819,7 +835,7 @@ Implement only this step, validate it, then run `/ship` when done.
 2. `brainstorm`
 3. `branch-lifecycle`
 4. `codebase-status`
-5. `concept-exploration`
+5. `idea-scope-brief`
 6. `consolidate-variations`
 7. `create-agentic-skill`
 8. `create-local-skill`
@@ -841,7 +857,7 @@ Implement only this step, validate it, then run `/ship` when done.
 | brainstorm | 100% | 100% | full improvement from 0% baseline |
 | branch-lifecycle | 100% | 100% | full improvement from 0% baseline |
 | codebase-status | 0% | 100% | Claude fixture-facts at 0%; Codex fully fixed |
-| concept-exploration | 66.7% | 100% | Claude 1/3 fixture-facts miss |
+| idea-scope-brief | 66.7% | 100% | Claude 1/3 fixture-facts miss |
 | consolidate-variations | 0% | 0% | next-route handoff still failing both agents |
 | create-agentic-skill | 33.3% | 100% | Claude 2/3 fixture-facts miss |
 | create-local-skill | 100% | 100% | full improvement (1 Claude infra block) |
@@ -906,7 +922,7 @@ The default `assertRecommendedRoute` (in `tests/layer4/setup-helpers/routing.ts:
 | 2 | `brainstorm` | `$feature-interview` | "...and Next command" | Add `End with \`Recommended next command: $feature-interview\`.` |
 | 3 | `branch-lifecycle` | `$ship` | "...and Next command" | Add `End with \`Recommended next command: $ship\`.` |
 | 4 | `codebase-status` | `$exec` | "...and Next command" | Add `End with \`Recommended next command: $exec\`.` |
-| 5 | `concept-exploration` | `$spec-interview` | "...and Next command" | Add `End with \`Recommended next command: $spec-interview\`.` |
+| 5 | `idea-scope-brief` | `$spec-interview` | "...and Next command" | Add `End with \`Recommended next command: $spec-interview\`.` |
 | 6 | `create-agentic-skill` | `$exec` | "...and Next command" | Add `End with \`Recommended next command: $exec\`.` |
 | 7 | `create-local-skill` | `$ship` | "...and Next command" | Add `End with \`Recommended next command: $ship\`.` |
 | 8 | `dead-code` | `$exec` | "...and Next command" | Add `End with \`Recommended next command: $exec\`.` |
@@ -1753,8 +1769,8 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
   - Classification: automated
   - Files: benchmark reports under `benchmark/`, raw run outputs under `tests/benchmarks/runs/`, generated benchmark/showcase data, task docs.
   - Implementation plan:
-    - 32 unbenchmarked tier23 global skills remain: `bootstrap-repo`, `brainstorm`, `branch-lifecycle`, `codebase-status`, `concept-exploration`, `consolidate-variations`, `create-agentic-skill`, `create-local-skill`, `dead-code`, `debug`, `decommission`, `dogfood`, `expert-review`, `guide`, `handoff`, `hygiene`, `migrate`, `mono-plan`, `pack`, `prototype`, `provision-agentic-config`, `reconcile-dev-docs`, `regression-check`, `research-roadmap`, `scaffold`, `skills`, `slim-audit`, `spec-drift`, `trace`, `uat`, `ui-interview`, `ux-variations`.
-    - Run in groups of 5-10 alphabetically. First group: `bootstrap-repo`, `brainstorm`, `branch-lifecycle`, `codebase-status`, `concept-exploration`, `consolidate-variations`, `create-agentic-skill`, `create-local-skill`, `dead-code`, `debug`.
+    - 32 unbenchmarked tier23 global skills remain: `bootstrap-repo`, `brainstorm`, `branch-lifecycle`, `codebase-status`, `idea-scope-brief`, `consolidate-variations`, `create-agentic-skill`, `create-local-skill`, `dead-code`, `debug`, `decommission`, `dogfood`, `expert-review`, `guide`, `handoff`, `hygiene`, `migrate`, `mono-plan`, `pack`, `prototype`, `provision-agentic-config`, `reconcile-dev-docs`, `regression-check`, `research-roadmap`, `scaffold`, `skills`, `slim-audit`, `spec-drift`, `trace`, `uat`, `ui-interview`, `ux-variations`.
+    - Run in groups of 5-10 alphabetically. First group: `bootstrap-repo`, `brainstorm`, `branch-lifecycle`, `codebase-status`, `idea-scope-brief`, `consolidate-variations`, `create-agentic-skill`, `create-local-skill`, `dead-code`, `debug`.
     - For each skill in the group: run `pnpm verify --skill <skill>`, then `pnpm bench --skill <skill> --agent both --runs 3 --chunk-size 3 --pause 0`.
     - Write dated `benchmark/test-<skill>-2026-05-19.md` for each completed skill.
     - After each group: refresh generated data (`node scripts/generate-skills-showcase-data.mjs`, `node scripts/generate-skills-showcase-github-data.mjs`, `scripts/validate-skills-showcase-data.sh`), run `pnpm --dir tests bench:coverage`, validate with `git diff --check`.
@@ -1771,7 +1787,7 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
     - Write updated `benchmark/test-<skill>-2026-05-21.md` reports for each skill.
     - Refresh generated data after each group.
   - Progress:
-    - [x] Group 1 (10 skills): `bootstrap-repo`, `brainstorm`, `branch-lifecycle`, `codebase-status`, `concept-exploration`, `consolidate-variations`, `create-agentic-skill`, `create-local-skill`, `dead-code`, `debug`. Completed 2026-05-21.
+    - [x] Group 1 (10 skills): `bootstrap-repo`, `brainstorm`, `branch-lifecycle`, `codebase-status`, `idea-scope-brief`, `consolidate-variations`, `create-agentic-skill`, `create-local-skill`, `dead-code`, `debug`. Completed 2026-05-21.
     - [x] Group 2 (10 skills): `dogfood`, `expert-review`, `guide`, `handoff`, `hygiene`, `migrate`, `mono-plan`, `pack`, `prototype`, `provision-agentic-config`. Completed 2026-05-21. `decommission` was already rerun with Group 1/session 2.
       - Acceptance criteria:
         - All 10 skills re-benchmarked with both agents (3 runs each unless infrastructure-blocked).
@@ -1858,17 +1874,17 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
     - `brainstorm`: 0.0% (0/0, 3 blocked) / 50.0% (1/2, 1 blocked). Claude all infra-blocked at smoke budget.
     - `branch-lifecycle`: 0.0% (0/3) / 0.0% (0/3). Both fail `$ship` route assertion (6/6).
     - `codebase-status`: 0.0% (0/0, 3 blocked) / 33.3% (1/3). Claude all infra-blocked at smoke budget.
-    - `concept-exploration`: 0.0% (0/0, 3 blocked) / 0.0% (0/3). Claude all infra-blocked; Codex fails `$spec-interview` route.
+    - `idea-scope-brief`: 0.0% (0/0, 3 blocked) / 0.0% (0/3). Claude all infra-blocked; Codex fails `$spec-interview` route.
     - `consolidate-variations`: 0.0% (0/0, 3 blocked) / 0.0% (0/2, 1 blocked). Claude all infra-blocked (2 budget, 1 timeout).
     - `create-agentic-skill`: 0.0% (0/3) / 0.0% (0/0, 3 blocked). Claude fails `$exec` route; Codex all infra-blocked.
     - `create-local-skill`: 0.0% (0/2, 1 blocked) / 0.0% (0/3). Both fail `$ship` route assertion.
     - `dead-code`: 0.0% (0/3) / 33.3% (1/3). Both mostly fail `$exec` route assertion.
     - `debug`: 0.0% (0/3) / 0.0% (0/3). Both fail `$exec` route assertion (6/6).
   - Shared patterns identified:
-    1. **Claude budget-block at smoke ($0.25)**: 4/10 skills had all Claude runs infra-blocked (`brainstorm`, `codebase-status`, `concept-exploration`, `consolidate-variations`). Same pattern as Batch 41.2.
+    1. **Claude budget-block at smoke ($0.25)**: 4/10 skills had all Claude runs infra-blocked (`brainstorm`, `codebase-status`, `idea-scope-brief`, `consolidate-variations`). Same pattern as Batch 41.2.
     2. **Route assertion failure**: Near-universal across both agents. Fixture prompts lack explicit route guidance — the same root cause Batch 41.2 fixed for 3 Tier 1 skills.
     3. **No new harness defect**: All failures are fixture-prompt gaps or known budget limits, not harness bugs.
-  - Reports written: `benchmark/test-{bootstrap-repo,brainstorm,branch-lifecycle,codebase-status,concept-exploration,consolidate-variations,create-agentic-skill,create-local-skill,dead-code,debug}-2026-05-19.md`.
+  - Reports written: `benchmark/test-{bootstrap-repo,brainstorm,branch-lifecycle,codebase-status,idea-scope-brief,consolidate-variations,create-agentic-skill,create-local-skill,dead-code,debug}-2026-05-19.md`.
   - Generated data refreshed: `docs/benchmark-results-matrix.md` (52 graded + 16 incomplete rows), skills-data.js, github-proof-data.js (both docs/ and apps/ copies).
   - Validation passed: `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests bench:coverage` (157 skills); `git diff --check`.
   - Acceptance criteria met: all 10 skills benchmarked, reports written, generated data refreshed, no shared harness failure patterns requiring pause.
@@ -1879,7 +1895,7 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
     - `brainstorm`: 100.0% (3/3) / 66.7% (2/3). Up from 0% blocked / 50%. Claude unblocked and now 100%.
     - `branch-lifecycle`: 100.0% (3/3) / 66.7% (2/3). Up from 0% / 0%. Route fixed.
     - `codebase-status`: 0.0% (0/3) / 100.0% (3/3). Claude unblocked but still fails content assertion. Codex up from 33.3%.
-    - `concept-exploration`: 66.7% (2/3) / 100.0% (3/3). Up from 0% blocked / 0%. Both unblocked and passing.
+    - `idea-scope-brief`: 66.7% (2/3) / 100.0% (3/3). Up from 0% blocked / 0%. Both unblocked and passing.
     - `consolidate-variations`: 0.0% (0/3) / 0.0% (0/3). Both unblocked but still fail next-command-handoff assertion. Route criteria 0% despite remediation.
     - `create-agentic-skill`: 100.0% (3/3) / 100.0% (3/3). Up from 0% / 0% blocked. Both fully passing.
     - `create-local-skill`: 100.0% (3/3) / 100.0% (3/3). Up from 0% / 0%. Both fully passing.
@@ -1887,7 +1903,7 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
     - `debug`: 100.0% (3/3) / 100.0% (3/3). Up from 0% / 0%. Both fully passing.
   - Aggregate improvement: 7/10 skills improved pass rates; 5/10 now pass 100% on both agents. Route assertion near-universal improvement.
   - Remaining failures: `bootstrap-repo` (project-purpose content), `codebase-status` (content + partial route for Claude), `consolidate-variations` (next-command-handoff assertion). These are content/assertion-specificity issues, not route guidance gaps.
-  - Reports written: `benchmark/test-{bootstrap-repo,brainstorm,branch-lifecycle,codebase-status,concept-exploration,consolidate-variations,create-agentic-skill,create-local-skill,dead-code,debug}-2026-05-21.md`.
+  - Reports written: `benchmark/test-{bootstrap-repo,brainstorm,branch-lifecycle,codebase-status,idea-scope-brief,consolidate-variations,create-agentic-skill,create-local-skill,dead-code,debug}-2026-05-21.md`.
   - Generated data refreshed: `docs/benchmark-results-matrix.md` (137 graded + 17 incomplete rows), skills-data.js, github-proof-data.js (both docs/ and apps/ copies).
   - Validation passed: `scripts/validate-skills-showcase-data.sh`; `pnpm --dir tests bench:coverage` (158 skills); `git diff --check`.
   - Acceptance criteria met: all 10 skills re-benchmarked, route improvements validated, reports written, generated data refreshed.

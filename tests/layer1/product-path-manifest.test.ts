@@ -9,8 +9,8 @@ const read = (path: string) => readFileSync(repoPath(path), "utf8");
 
 const pairs = {
   concept: [
-    "global/codex/concept-exploration/SKILL.md",
-    "global/claude/concept-exploration/SKILL.md",
+    "global/codex/idea-scope-brief/SKILL.md",
+    "global/claude/idea-scope-brief/SKILL.md",
   ],
   icp: [
     "packs/business-discovery/codex/icp/SKILL.md",

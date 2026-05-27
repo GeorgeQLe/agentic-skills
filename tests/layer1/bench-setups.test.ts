@@ -3111,7 +3111,7 @@ describe("benchmark coverage matrix", () => {
       "brainstorm",
       "branch-lifecycle",
       "codebase-status",
-      "concept-exploration",
+      "idea-scope-brief",
       "create-agentic-skill",
       "create-local-skill",
       "dead-code",

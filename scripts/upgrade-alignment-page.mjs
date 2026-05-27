@@ -9,7 +9,7 @@ const dryRun = args.has("--dry-run");
 const all = args.has("--all");
 
 const coreSkills = new Set([
-  "concept-exploration",
+  "idea-scope-brief",
   "feature-interview",
   "ui-interview",
   "ux-variations",
@@ -82,7 +82,7 @@ ${specific ? `\n${specific}\n` : ""}
 
 function skillSpecificGates(skillName) {
   const rules = {
-    "concept-exploration": "**Concept-specific gates.** Render the Concept Assumptions Manifest as a first-class assumptions/confidence gate inside the alignment page before proposed deliverables. The concept identity, slug, scope/non-goals, ICP readiness, artifact destination, and proposed file changes must each be reviewable gates.",
+    "idea-scope-brief": "**Concept-specific gates.** Render the Concept Assumptions Manifest as a first-class assumptions/confidence gate inside the alignment page before proposed deliverables. The concept identity, slug, scope/non-goals, ICP readiness, artifact destination, and proposed file changes must each be reviewable gates.",
     "feature-interview": "**Feature-specific gates.** Render the evidence brief, claim verdicts, assumptions, planning destination, prototype-first decision, priority hypothesis, artifact destination, and proposed file changes as gates before writing or updating durable planning artifacts.",
     "ui-interview": "**UI-specific gates.** Render surfaced assumptions, the UI or content requirements manifest, scope boundaries, artifact destination, proposed file changes, and the coverage checkpoint as gates. In requirements-only mode, the content requirements manifest is the candidate/verdict gate and layout decisions must remain non-goals.",
     "ux-variations": "**Variation-specific gates.** Render surfaced assumptions, variation manifest, concept selection, evaluation method, fixed-versus-variable scope, artifact destination, proposed file changes, and coverage checkpoint as gates before writing final variation plans.",

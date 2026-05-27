@@ -421,14 +421,14 @@
   <p>The complete skill pipeline from ideation to shipped product, with prototype gate enforced before production spec work.</p>
 
   <div class="pipeline">
-    <!-- Step 1: concept-exploration -->
+    <!-- Step 1: idea-scope-brief -->
     <div class="pipeline-step">
       <div class="pipeline-line">
         <div class="pipeline-dot"></div>
         <div class="pipeline-connector"></div>
       </div>
       <div class="pipeline-card">
-        <h4><span class="badge badge-unchanged">Unchanged</span> /concept-exploration</h4>
+        <h4><span class="badge badge-unchanged">Unchanged</span> /idea-scope-brief</h4>
         <p>Shape a rough idea into a concept brief. Entry point for new products.</p>
       </div>
     </div>
@@ -633,7 +633,7 @@
     <div class="comparison-side before">
       <h3>Current Pipeline</h3>
       <ol>
-        <li><code>/concept-exploration</code></li>
+        <li><code>/idea-scope-brief</code></li>
         <li><code>/feature-interview</code> (triage + evidence)</li>
         <li><code>/spec-interview</code> (full spec upfront)</li>
         <li><code>/journey-map</code></li>
@@ -650,7 +650,7 @@
     <div class="comparison-side after">
       <h3>Proposed Pipeline</h3>
       <ol>
-        <li><code>/concept-exploration</code> + alignment page</li>
+        <li><code>/idea-scope-brief</code> + alignment page</li>
         <li><code>/icp</code> + alignment page</li>
         <li><code>/competitive-analysis</code> + alignment page</li>
         <li><code>/journey-map</code> + alignment page</li>
@@ -733,7 +733,7 @@
         <td>Every interview/planning skill now builds a custom HTML alignment page opened in the user's browser. No shared template or CSS — each agent crafts the page to fit the situation. Stored at <code>alignment/</code>, temporary until alignment confirmed.</td>
       </tr>
       <tr>
-        <td><code>concept-exploration</code></td>
+        <td><code>idea-scope-brief</code></td>
         <td><span class="badge badge-changed">Changed</span></td>
         <td>Add alignment HTML output.</td>
       </tr>
@@ -788,7 +788,7 @@
         <span class="label">Location</span>
         <span class="value"><code>alignment/{skill}-{topic}.html</code> (temporary, archived or deleted after alignment confirmed)</span>
         <span class="label">Produced by</span>
-        <span class="value">All interview skills: concept-exploration, ux-variations, ui-interview, spec-interview, consolidate-variations, feature-interview</span>
+        <span class="value">All interview skills: idea-scope-brief, ux-variations, ui-interview, spec-interview, consolidate-variations, feature-interview</span>
       </div>
       <h4>Key principles:</h4>
       <ul>
@@ -925,9 +925,9 @@
       </ul>
     </div>
 
-    <!-- concept-exploration, ui-interview -->
+    <!-- idea-scope-brief, ui-interview -->
     <div class="skill-card">
-      <h3><span class="mono">/concept-exploration</span>, <span class="mono">/ui-interview</span> <span class="badge badge-changed" style="font-size: 0.75rem;">Minor</span></h3>
+      <h3><span class="mono">/idea-scope-brief</span>, <span class="mono">/ui-interview</span> <span class="badge badge-changed" style="font-size: 0.75rem;">Minor</span></h3>
       <h4>What changes:</h4>
       <ul>
         <li>Add alignment HTML output</li>
@@ -1035,7 +1035,7 @@
     <div class="flow-step">
       <div class="step-num">1</div>
       <div class="step-content">
-        <span class="cmd">/concept-exploration</span>
+        <span class="cmd">/idea-scope-brief</span>
         <span class="desc">— Shape the idea into a concept brief. Alignment HTML generated.</span>
       </div>
     </div>
@@ -1131,7 +1131,7 @@
     <div class="flow-step">
       <div class="step-num">1</div>
       <div class="step-content">
-        <span class="cmd">/concept-exploration</span>
+        <span class="cmd">/idea-scope-brief</span>
         <span class="desc">— "A CLI for managing k8s configs across environments."</span>
       </div>
     </div>

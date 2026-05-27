@@ -20,7 +20,7 @@ Product paths are research divergences — different ICPs, expansion candidates,
 
 ## Prerequisites
 
-`research/.progress.yaml` must exist for all modes except `fork` (which can create it). If missing, tell the user: "No product-path manifest found. Run `$concept-exploration` or `$icp` first — they create the manifest when multiple product directions emerge."
+`research/.progress.yaml` must exist for all modes except `fork` (which can create it). If missing, tell the user: "No product-path manifest found. Run `$idea-scope-brief` or `$icp` first — they create the manifest when multiple product directions emerge."
 
 ## Manifest Schema
 
@@ -71,7 +71,7 @@ Scan the manifest and present a dashboard comparing all paths:
 **Pipeline stage** shows the last completed skill. Map common stages to a visual progress indicator:
 
 ```
-concept-exploration → icp → competitive-analysis → positioning → journey-map → metrics → gtm → monetization → experiment
+idea-scope-brief → icp → competitive-analysis → positioning → journey-map → metrics → gtm → monetization → experiment
 ```
 
 Group paths by status. For deferred and revisit_candidate paths, highlight the revisit trigger prominently.

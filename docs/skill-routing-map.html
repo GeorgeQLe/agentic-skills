@@ -296,7 +296,7 @@ const PACKS = {
 
 // AFPS chain nodes (order matters — laid out left to right)
 const AFPS_CHAIN = [
-  'concept-exploration', 'icp', 'competitive-analysis', 'journey-map',
+  'idea-scope-brief', 'icp', 'competitive-analysis', 'journey-map',
   'positioning', 'ux-variations', 'ui-interview', 'prototype',
   'uat', 'consolidate-variations', 'research-roadmap', 'spec-interview',
   'roadmap', 'plan-phase', 'run', 'ship', 'ship-end'
@@ -349,7 +349,7 @@ const NODES = [
 // Edges: from → to, type (default|conditional|detour), condition text
 const EDGES = [
   // ── AFPS chain (default left-to-right) ──
-  { from: 'concept-exploration', to: 'icp',                   type: 'default',     condition: 'Concept brief created' },
+  { from: 'idea-scope-brief', to: 'icp',                   type: 'default',     condition: 'Concept brief created' },
   { from: 'icp',                 to: 'competitive-analysis',  type: 'default',     condition: 'ICP complete' },
   { from: 'competitive-analysis', to: 'journey-map',          type: 'default',     condition: 'Competitive analysis complete' },
   { from: 'journey-map',         to: 'positioning',           type: 'default',     condition: 'Journey map complete' },

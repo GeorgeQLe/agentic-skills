@@ -1,18 +1,16 @@
 ---
-name: concept-exploration
-description: Shape a rough product or project idea into an actionable concept brief before ICP, market research, specifications, UX, UI, or implementation planning
+name: idea-scope-brief
+description: Shape a rough product or project idea into a scoped brief before ICP, market research, specifications, UX, UI, or implementation planning
 type: planning
 version: v0.4
 argument-hint: "[optional rough idea, product thought, or app scope]"
 ---
 
-# Concept Exploration
-
-Invoke as `$concept-exploration`.
+# Idea Scope Brief
 
 Use this skill when the user has a half-formed idea and needs it cleaned up enough to enter the normal research and planning workflow. This skill is intentionally pre-ICP: it clarifies the concept, problem hypothesis, beneficiary hypothesis, value wedge, constraints, non-goals, and unknowns, but does not select an ICP, analyze competitors, define UX/UI, choose architecture, or write implementation specs.
 
-## Workflow
+## Process
 
 1. **Resolve context**
    - Read `.agents/project.json` if it exists.
@@ -24,9 +22,9 @@ Use this skill when the user has a half-formed idea and needs it cleaned up enou
    - If existing research or the prompt suggests multiple related concepts may exist, prefer slugged output paths over generic filenames. Reserve generic `concept-brief.md` only for a single unambiguous project-level concept.
    - If no rough idea is available from arguments or repo context, ask the user for the idea in plain language.
    - Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading. Treat `active_paths` as the current product/app/ICP focuses and `product_paths[]` as parked or promoted product-path state, not git branch state.
-   - When the prompt, repo context, interview, or pivot history surfaces multiple related concepts, apps, product lines, or future pivots, update or propose updates to `research/.progress.yaml` with product-path entries instead of merging them into one generic concept. Use fields: `id`, `label`, `source_skill`, `scope_path`, `status`, `reason`, `evidence_refs`, `revisit_trigger`, `next_skill`, `pipeline_stage`, and `last_touched`. Set `pipeline_stage: concept-exploration` on entries created by this skill.
-   - Keep the central concept in `active_paths` when it is the current focus. Record related or future concepts as `status: deferred` or `status: revisit_candidate` with a concrete revisit trigger and a likely next skill such as `$icp <path/audience>`.
-   - When 3+ product paths exist in the manifest, recommend `$product-line review` to the user for portfolio management.
+   - When the prompt, repo context, interview, or pivot history surfaces multiple related concepts, apps, product lines, or future pivots, update or propose updates to `research/.progress.yaml` with product-path entries instead of merging them into one generic concept. Use fields: `id`, `label`, `source_skill`, `scope_path`, `status`, `reason`, `evidence_refs`, `revisit_trigger`, `next_skill`, `pipeline_stage`, and `last_touched`. Set `pipeline_stage: idea-scope-brief` on entries created by this skill.
+   - Keep the central concept in `active_paths` when it is the current focus. Record related or future concepts as `status: deferred` or `status: revisit_candidate` with a concrete revisit trigger and a likely next skill such as `/icp <path/audience>`.
+   - When 3+ product paths exist in the manifest, recommend `/product-line review` to the user for portfolio management.
 
 2. **Keep the boundary clear**
    - Do not run ICP, competitive analysis, journey mapping, UX variation, UI interview, roadmap, or implementation planning inside this skill.
@@ -48,7 +46,7 @@ Use this skill when the user has a half-formed idea and needs it cleaned up enou
    - Ask the user to confirm, correct, or flag assumptions before writing.
 
 4. **Interview until concept-ready**
-   - Codex interview cadence is one primary decision question per turn by default. Use short follow-up bullets only when they clarify the same decision, not to batch unrelated questions.
+   - Ask 1 to 3 focused questions per turn.
    - Resolve only concept-level ambiguity:
      - what problem exists
      - who might care
@@ -86,26 +84,26 @@ The concept brief must include:
 - `## ICP Readiness`
 - `## Next Steps`
 
-The `## ICP Readiness` section must state whether the concept is ready for `$icp`, what inputs `$icp` should use, and which assumptions should be tested first.
+The `## ICP Readiness` section must state whether the concept is ready for `/icp`, what inputs `/icp` should use, and which assumptions should be tested first.
 
 The `## Next Steps` section must recommend exactly one primary command:
 
-- If the concept appears to be a business app or user-facing product and the business discovery lane is not enabled: `$pack install business-discovery` — this installs the research skills (ICP, competitive analysis, value prop, positioning, lean canvas) needed before any repo bootstrapping or development.
-- If `business-discovery` or the compatibility `business-app` alias is enabled: `$icp`
-- If the concept already has ICP/market evidence but needs journey, onboarding, conversion, or retention planning: `$pack install customer-lifecycle`
-- If project type is unclear: `$pack recommend`
+- If the concept appears to be a business app or user-facing product and the business discovery lane is not enabled: `/pack install business-discovery` — this installs the research skills (ICP, competitive analysis, value prop, positioning, lean canvas) needed before any repo bootstrapping or development.
+- If `business-discovery` or the compatibility `business-app` alias is enabled: `/icp`
+- If the concept already has ICP/market evidence but needs journey, onboarding, conversion, or retention planning: `/pack install customer-lifecycle`
+- If project type is unclear: `/pack recommend`
 
 Include 1-3 other options only when they are materially useful.
 
 ### Alignment Page
 
-Follow the shared Alignment Page convention in CLAUDE.md. Output: `alignment/concept-exploration-{topic}.html`.
+Follow the shared Alignment Page convention in CLAUDE.md. Output: `alignment/idea-scope-brief-{topic}.html`.
 
 ## Constraints
 
 - Keep the skill short and pre-research.
 - Do not write specs, UX variants, UI specs, roadmap phases, or implementation tasks.
-- Do not recommend `$scaffold` unless the user explicitly asks to create a package/app shell before research; normal product flow scaffolds after research, prototype consolidation, spec, roadmap, and phase planning identify the first implementation target.
+- Do not recommend `/scaffold` unless the user explicitly asks to create a package/app shell before research; normal product flow scaffolds after research, prototype consolidation, spec, roadmap, and phase planning identify the first implementation target. `/scaffold` requires the monorepo pack (`/pack install monorepo`).
 - Do not update `tasks/todo.md`.
 - New files do not need archive snapshots. Before replacing an existing concept brief, including slugged briefs, archive it to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-relative-path>`.
 

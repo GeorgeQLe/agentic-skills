@@ -170,7 +170,7 @@
 
 ## 2026-05-20 — Batch 41.3 Group 1: Tier 2 global skill benchmarks
 
-- Benchmarked 10 Tier 2 global skills with both agents (3 runs each): `bootstrap-repo`, `brainstorm`, `branch-lifecycle`, `codebase-status`, `concept-exploration`, `consolidate-variations`, `create-agentic-skill`, `create-local-skill`, `dead-code`, `debug`.
+- Benchmarked 10 Tier 2 global skills with both agents (3 runs each): `bootstrap-repo`, `brainstorm`, `branch-lifecycle`, `codebase-status`, `idea-scope-brief`, `consolidate-variations`, `create-agentic-skill`, `create-local-skill`, `dead-code`, `debug`.
 - All 10 skills passed layer1 verify. No layer2 tests matched any skill.
 - Shared pattern: Claude budget-blocked at smoke ($0.25) for 4 skills; route assertion failures near-universal due to missing explicit route guidance in fixture prompts.
 - Best Codex results: `brainstorm` 50%, `codebase-status` 33.3%, `dead-code` 33.3%. All other skills 0% for both agents.
@@ -1067,10 +1067,10 @@
 
 ## 2026-04-29 — Ship pre-spec planning skills and concept-brief integration
 
-- Added 3 new global skills (concept-exploration, ui-interview, ux-variation) for both Claude and Codex, covering the pre-spec planning workflow: concept → ICP → journey → UX variation → UI spec → spec-interview → roadmap.
+- Added 3 new global skills (idea-scope-brief, ui-interview, ux-variation) for both Claude and Codex, covering the pre-spec planning workflow: concept → ICP → journey → UX variation → UI spec → spec-interview → roadmap.
 - Updated roadmap and research-roadmap skills (both CLIs) to add journey/UX/UI planning gates — user-facing specs now require journey-map, ux-variation, and ui-interview artifacts before entering the roadmap pipeline.
 - Updated business-app pack skills (icp, competitive-analysis, journey-map) to integrate concept-brief as input source and prefer `research/{app}/concept-brief.md` when present.
-- Updated canonical-workflow-report and codex-workflow docs to reflect the expanded entry path through concept-exploration and research skills.
+- Updated canonical-workflow-report and codex-workflow docs to reflect the expanded entry path through idea-scope-brief and research skills.
 - Fixed spec-interview heading format: added canonical section heading template (Overview, Goals, Non-Goals, etc.) to prevent numbered headings; renamed install-workflow-orchestration → provision-agentic-config across all references.
 - Minor linter tweaks to spec-interview wording ("chosen experience plan").
 
@@ -2833,7 +2833,7 @@ Resolved all 10 findings from `/expert-review`:
 
 ## 2026-05-21: Batch 41.3-rerun Group 1 — Re-benchmark 10 Tier 2 Global Skills Post-Fixture-Remediation
 
-- Re-benchmarked 10 Tier 2 global skills with remediated fixtures (Phase 43 route guidance): `bootstrap-repo`, `brainstorm`, `branch-lifecycle`, `codebase-status`, `concept-exploration`, `consolidate-variations`, `create-agentic-skill`, `create-local-skill`, `dead-code`, `debug`.
+- Re-benchmarked 10 Tier 2 global skills with remediated fixtures (Phase 43 route guidance): `bootstrap-repo`, `brainstorm`, `branch-lifecycle`, `codebase-status`, `idea-scope-brief`, `consolidate-variations`, `create-agentic-skill`, `create-local-skill`, `dead-code`, `debug`.
 - 7/10 skills improved pass rates; 5/10 now pass 100% on both agents.
 - Route assertions improved from near-zero to near-universal compliance.
 - 3 remaining failures are content/assertion-specificity issues, not route gaps.
@@ -2842,9 +2842,9 @@ Resolved all 10 findings from `/expert-review`:
 
 ## 2026-05-21: Batch 41.3-rerun Group 1 (session 2) — Re-benchmark 11 Tier 2 Global Skills + Skill Updates
 
-- Re-benchmarked all 11 Group 1 Tier 2 global skills with remediated fixtures: `bootstrap-repo`, `brainstorm`, `branch-lifecycle`, `codebase-status`, `concept-exploration`, `consolidate-variations`, `create-agentic-skill`, `create-local-skill`, `dead-code`, `debug`, `decommission`.
+- Re-benchmarked all 11 Group 1 Tier 2 global skills with remediated fixtures: `bootstrap-repo`, `brainstorm`, `branch-lifecycle`, `codebase-status`, `idea-scope-brief`, `consolidate-variations`, `create-agentic-skill`, `create-local-skill`, `dead-code`, `debug`, `decommission`.
 - 7/11 skills improved to 100% pass rate on both agents. 2 skills (bootstrap-repo, consolidate-variations) remain at 0% due to fixture-specific hard assertion failures unrelated to route guidance.
-- Also shipped: bootstrap-repo archive-docs reset mode, desk-flip AFPS (alignment-first, prototype-second) routing, concept-exploration slugged briefs, and codex desk-flip parity (from prior sessions' uncommitted work).
+- Also shipped: bootstrap-repo archive-docs reset mode, desk-flip AFPS (alignment-first, prototype-second) routing, idea-scope-brief slugged briefs, and codex desk-flip parity (from prior sessions' uncommitted work).
 - Layer1: 15 files, 1222 tests pass. Generated data refreshed.
 - Shipped in commit `66e96c0`.
 

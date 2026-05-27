@@ -91,7 +91,7 @@ This skill exists because the old workflow — infrastructure-first, chat-driven
 | Skill | Relationship |
 |-------|-------------|
 | `/bootstrap-repo` | Downstream — receives the extraction output to start the new project |
-| `/concept-exploration` | The new project will likely enter here after bootstrap |
+| `/idea-scope-brief` | The new project will likely enter here after bootstrap |
 | `/hygiene` | Structural linter — does not handle workflow migration |
 | `/migrate` | Code/dependency migration — different problem entirely |
 | `/reconcile-dev-docs` | Could be useful post-bootstrap to verify the new project's docs |

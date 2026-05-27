@@ -1,5 +1,11 @@
 # sync Changelog
 
+## v0.3
+
+- Add remembered user-local GitHub freshness preference at `~/.agentic-skills/preferences.json`
+- Require local canonical `provision-agentic-config` source/version reporting during sync
+- Keep plain sync non-mutating and route explicit checkout refreshes to `/init-agentic-skills update`
+
 ## v0.2
 
 - Add canonical `CLAUDE.md`/`AGENTS.md` block drift checks against `provision-agentic-config`

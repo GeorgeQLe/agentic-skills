@@ -1,0 +1,7 @@
+interface:
+  display_name: "Idea Scope Brief"
+  short_description: "Shape rough ideas into scoped briefs"
+  default_prompt: "Use $idea-scope-brief to turn this rough idea into a scoped brief before ICP."
+
+policy:
+  allow_implicit_invocation: true

@@ -314,7 +314,7 @@ After execution, leave behind clean repo state:
 
 If you are used to this Claude Code rhythm:
 
-1. `$concept-exploration`
+1. `$idea-scope-brief`
 2. `$pack install business-discovery` for business/product concepts
 3. `$icp`
 4. `$competitive-analysis`
@@ -339,7 +339,7 @@ Optional detours: `$value-prop-canvas` when solution-customer fit is weak, dispu
 
 The closest Codex translation is:
 
-1. `$concept-exploration`
+1. `$idea-scope-brief`
 2. `$pack install business-discovery` for business/product concepts
 3. `$icp`
 4. `$competitive-analysis`

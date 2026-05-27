@@ -1,4 +1,10 @@
-# concept-exploration Changelog
+# idea-scope-brief Changelog
+
+## v0.4 - 2026-05-27
+
+- Handle plural `active_paths` manifest field with backward compatibility for singular `active_path`
+- Write `pipeline_stage: idea-scope-brief` on product-path entries
+- Recommend `/product-line review` when 3+ product paths exist
 
 ## v0.3 - 2026-05-27
 
@@ -8,7 +14,7 @@
 ## v0.1
 
 - Remove bootstrap-repo from next-step routing — bootstrapping a repo is premature before research (no tech stack, no firm product decision)
-- Make `$pack install business-discovery` the primary recommendation for business/product concepts
+- Make `/pack install business-discovery` the primary recommendation for business/product concepts
 - Reorder routing: business-discovery install → ICP → customer-lifecycle → pack recommend
 
 ## v0.0

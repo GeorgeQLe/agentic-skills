@@ -10,7 +10,7 @@ argument-hint: <type> <name> (e.g. "package utils" or "app admin-dashboard")
 
 Generate a new package or app in the monorepo that follows the project's established conventions and patterns.
 
-For product/app workflows, `/scaffold` is normally downstream of research, prototype consolidation, production specification, roadmap, and phase planning. Use it when `/roadmap` or `/plan-phase` identifies that the next implementation step needs a new app/package root. Do not route from `/concept-exploration`, `/bootstrap-repo`, `/icp`, `/competitive-analysis`, `/journey-map`, `/ux-variations`, or `/ui-interview` directly to `/scaffold` unless the user explicitly asks to create a minimal shell first.
+For product/app workflows, `/scaffold` is normally downstream of research, prototype consolidation, production specification, roadmap, and phase planning. Use it when `/roadmap` or `/plan-phase` identifies that the next implementation step needs a new app/package root. Do not route from `/idea-scope-brief`, `/bootstrap-repo`, `/icp`, `/competitive-analysis`, `/journey-map`, `/ux-variations`, or `/ui-interview` directly to `/scaffold` unless the user explicitly asks to create a minimal shell first.
 
 ## Process
 
