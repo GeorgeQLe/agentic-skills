@@ -79,10 +79,6 @@ tr:hover td { background: rgba(88,166,255,0.05); }
 .gate { border-top: 2px solid var(--purple); padding-top: 1rem; margin-top: 2rem; }
 .gate h3 { color: var(--purple); }
 
-.divider { border-top: 3px solid var(--accent); margin: 3rem 0 2rem; padding-top: 1rem; }
-.divider h2 { margin-top: 0; font-size: 1.6rem; color: #fff; }
-.divider p { color: var(--text-muted); font-style: italic; }
-
 #compile-btn { background: var(--purple); color: #fff; border: none; padding: 0.75rem 1.5rem; border-radius: 6px; font-size: 1rem; cursor: pointer; margin: 1rem 0; }
 #compile-btn:hover { opacity: 0.9; }
 #compile-btn:disabled { opacity: 0.4; cursor: not-allowed; }
@@ -96,7 +92,7 @@ tr:hover td { background: rgba(88,166,255,0.05); }
 <body>
 
 <h1>Split-Path Product Research Workflow</h1>
-<p style="color:var(--text-muted)">Analysis date: 2026-05-27 (updated) &middot; Original: 2026-05-26 &middot; Source: <code>~/.claude/history.jsonl</code> (9,684 records), <code>~/.codex/history.jsonl</code> (1,879 records) &middot; Date range: 2025-12-13 to 2026-05-27</p>
+<p style="color:var(--text-muted)">Analysis date: 2026-05-26 &middot; Source: <code>~/.claude/history.jsonl</code> (9,641 records), <code>~/.codex/history.jsonl</code> (1,866 records) &middot; Date range: 2025-12-13 to 2026-05-26</p>
 
 <nav>
 <h3>Contents</h3>
@@ -113,14 +109,6 @@ tr:hover td { background: rgba(88,166,255,0.05); }
 <li><a href="#gate-scope">Gate: Scope &amp; Non-Goals</a></li>
 <li><a href="#gate-route">Gate: Recommended Route</a></li>
 <li><a href="#gate-artifacts">Gate: Proposed Artifact Changes</a></li>
-<li style="color:var(--purple); font-weight:bold">&mdash; Branching Analysis (new) &mdash;</li>
-<li><a href="#branching-problem">Branching Problem Statement</a></li>
-<li><a href="#branching-inventory">Branching Inventory</a></li>
-<li><a href="#post-branch">Post-Branch Transition Analysis</a></li>
-<li><a href="#deferred-lifecycle">Deferred Path Lifecycle</a></li>
-<li><a href="#branching-evidence-matrix">Branching Evidence Matrix</a></li>
-<li><a href="#branching-recommendations">Branching Recommendations</a></li>
-<li><a href="#gate-branching">Gate: Branching Decisions</a></li>
 <li><a href="#compile">Compile Answers</a></li>
 </ul>
 </nav>
@@ -430,7 +418,7 @@ tr:hover td { background: rgba(88,166,255,0.05); }
 <tr><td>Build/research interleaving is the natural workflow</td><td><span class="badge badge-green">Evidence-backed</span></td><td>Nothing &mdash; this is a measured behavioral fact</td></tr>
 </table>
 
-<!-- ======================== FRAGMENTATION GATES ======================== -->
+<!-- ======================== GATES ======================== -->
 
 <div class="gate" id="gate-evidence">
 <h3>Gate: Evidence Coverage</h3>
@@ -538,372 +526,11 @@ tr:hover td { background: rgba(88,166,255,0.05); }
 </div>
 </div>
 
-<!-- ================================================================== -->
-<!-- ==================== BRANCHING ANALYSIS (NEW) ==================== -->
-<!-- ================================================================== -->
-
-<div class="divider">
-<h2 id="branching-problem">Branching Problem Statement</h2>
-<p>Added 2026-05-27 &mdash; extends the fragmentation analysis above with evidence on what happens when research skills produce multiple ICP/concept candidates.</p>
-</div>
-
-<p>The fragmentation analysis (sections 1&ndash;8) established that research <em>sessions</em> split across time. This section addresses a different split: <strong>research <em>paths</em> branching within a single skill run</strong>, producing multiple candidates that downstream skills don't consume.</p>
-
-<div class="card">
-<h4>The Gap</h4>
-<p>When <code>/icp</code> produces 2&ndash;5 candidates with Value &times; Accessibility scoring, a primary ICP is selected. The secondary ICPs are written to <code>## Additional ICPs</code> with condensed sections and a Cross-ICP Analysis (Section 10). But:</p>
-<ul>
-<li><strong>No downstream skill reads secondary ICPs.</strong> <code>/competitive-analysis</code>, <code>/value-prop-canvas</code>, <code>/positioning</code> all run for the primary ICP only.</li>
-<li><strong>No mechanism triggers revisiting deferred candidates.</strong> Cross-ICP Analysis produces comparison data but no revisit triggers.</li>
-<li><strong>Deferred candidates are effectively dead.</strong> Zero observed revisitations across 11,563 history records.</li>
-</ul>
-<div class="evidence"><strong>User statement (Codex, May 2026):</strong> "skills often bog down bc we're evaluating 4&ndash;8 different product variations or product lines split up based on different ICPs"</div>
-</div>
-
-<div class="stat-grid">
-  <div class="stat-card accent"><div class="number">7</div><div class="label">Projects that hit multi-candidate branching</div></div>
-  <div class="stat-card red"><div class="number">0</div><div class="label">Deferred paths ever revisited</div></div>
-  <div class="stat-card orange"><div class="number">14</div><div class="label">Sessions with /icp invocations</div></div>
-  <div class="stat-card purple"><div class="number">1</div><div class="label">Project that fully developed multiple ICPs (metternich)</div></div>
-</div>
-
-<!-- ======================== BRANCHING INVENTORY ======================== -->
-<h2 id="branching-inventory">Branching Inventory</h2>
-
-<p>Which skills produce branches, how many, and what format.</p>
-
-<table>
-<tr><th>Skill</th><th>Version</th><th>Multi-path Output</th><th>Primary Selection</th><th>Secondary Path Fate</th><th>Downstream Awareness</th></tr>
-<tr>
-<td><code>concept-exploration</code></td>
-<td>v0.2</td>
-<td>Slugged briefs for pivots</td>
-<td>User chooses direction</td>
-<td>Written as "related/future concept"</td>
-<td><span class="badge badge-red">None</span></td>
-</tr>
-<tr>
-<td><code>icp</code></td>
-<td>v0.4</td>
-<td>2&ndash;5 candidates, Value &times; Accessibility scoring</td>
-<td>User-validated at Checkpoint 2</td>
-<td><code>## Additional ICPs</code> with condensed sections</td>
-<td><span class="badge badge-orange">Cross-ICP Analysis only</span></td>
-</tr>
-<tr>
-<td><code>competitive-analysis</code></td>
-<td>v0.6</td>
-<td>Concept-validation mode: Proceed/Pivot/Abandon verdicts</td>
-<td>User-validated at Checkpoint 1</td>
-<td>N/A &mdash; runs for primary ICP only</td>
-<td><span class="badge badge-red">None for secondary ICPs</span></td>
-</tr>
-<tr>
-<td><code>value-prop-canvas</code></td>
-<td>v0.2</td>
-<td>Single path only</td>
-<td>Primary ICP scoped</td>
-<td>N/A</td>
-<td><span class="badge badge-red">None</span></td>
-</tr>
-<tr>
-<td><code>positioning</code></td>
-<td>v0.3</td>
-<td>Single path only</td>
-<td>"One positioning per product"</td>
-<td>N/A</td>
-<td><span class="badge badge-red">None</span></td>
-</tr>
-</table>
-
-<div class="evidence">
-<strong>Key finding:</strong> The branching funnel narrows at ICP. Upstream, concept-exploration can produce multiple briefs. At ICP, multiple candidates are scored and one is selected. Downstream, everything is single-path. The problem is that the secondary candidates from ICP and concept-exploration are recorded but never consumed, revisited, or tracked for future re-evaluation.
-</div>
-
-<!-- ======================== POST-BRANCH TRANSITIONS ======================== -->
-<h2 id="post-branch">Post-Branch Transition Analysis</h2>
-
-<p>What actually happens after <code>/icp</code> produces multiple candidates and a primary is selected.</p>
-
-<table>
-<tr><th>Project</th><th>Transition Chain After /icp</th><th>Secondary ICP Referenced?</th></tr>
-<tr><td><code>content-pyramid</code></td><td>/icp &rarr; /ship &rarr; /ship-end</td><td><span class="badge badge-red">No</span></td></tr>
-<tr><td><code>calcllm</code></td><td>/icp &rarr; /plan-interview &rarr; /ship-end</td><td><span class="badge badge-red">No</span></td></tr>
-<tr><td><code>vectorfit</code></td><td>/icp &rarr; /ship-end (x2 sessions)</td><td><span class="badge badge-red">No</span></td></tr>
-<tr><td><code>bismarck-v0.4</code></td><td>/icp &rarr; /competitive-analysis &rarr; /ship</td><td><span class="badge badge-red">No</span></td></tr>
-<tr><td><code>poke-productivity-suite</code></td><td>/icp &rarr; /brainstorm &rarr; /plan-interview-ideas</td><td><span class="badge badge-red">No</span></td></tr>
-<tr><td><code>b4</code></td><td>/icp &rarr; /competitive-analysis</td><td><span class="badge badge-red">No</span></td></tr>
-<tr><td><code>metternich</code></td><td>/icp &rarr; /brainstorm &rarr; /competitive-analysis</td><td><span class="badge badge-orange">Partial</span> &mdash; 4 ICPs developed in parallel with identical directory structures</td></tr>
-<tr><td><code>jit-life-os</code></td><td>/icp &rarr; /ship-end &rarr; /ship &rarr; /icp (re-run) &rarr; /competitive-analysis</td><td><span class="badge badge-red">No</span></td></tr>
-</table>
-
-<h3>Transition Distribution</h3>
-<div class="stat-grid">
-  <div class="stat-card"><div class="number">4</div><div class="label">Immediate /ship-end after ICP</div></div>
-  <div class="stat-card green"><div class="number">3</div><div class="label">Golden path: /icp &rarr; /competitive-analysis</div></div>
-  <div class="stat-card"><div class="number">2</div><div class="label">Detour: /icp &rarr; /brainstorm</div></div>
-  <div class="stat-card red"><div class="number">1</div><div class="label">ICP re-run (jit-life-os)</div></div>
-</div>
-
-<div class="card">
-<h4>Observations</h4>
-<ul>
-<li><strong>No downstream skill ever referenced a non-primary ICP.</strong> Across 14 sessions and 8 projects with ICP invocations, secondary ICPs were never consumed.</li>
-<li><strong>metternich-engine is the sole exception:</strong> 4 ICPs (<code>icp-01-solo-indie</code>, <code>icp-02-hobbyist-learner</code>, <code>icp-03-professional</code>, <code>icp-04-team-lead-director</code>) all developed with identical directory structures, per-ICP persona cards, demo scripts, and objection handling. This was a deliberate multi-ICP product strategy, not the norm.</li>
-<li><strong>Most common post-ICP action is shipping</strong> (4 of 8 projects), not continuing research. This reinforces the build/research interleaving pattern from Section 3.</li>
-<li><strong>Near-miss revisitation (calcllm):</strong> User asked "Should we start back with concept-exploration (new product in product line?), ICP (different ICP...) or positioning?" &mdash; expressing intent to revisit branched paths but framing it as a routing question. No evidence the revisit was executed.</li>
-</ul>
-</div>
-
-<!-- ======================== DEFERRED PATH LIFECYCLE ======================== -->
-<h2 id="deferred-lifecycle">Deferred Path Lifecycle</h2>
-
-<p>The birth-to-death lifecycle of non-primary ICP/concept candidates.</p>
-
-<div class="flow-diagram">
-<span class="flow-step">Birth</span> <span class="flow-arrow">&rarr;</span> ICP skill produces 2&ndash;5 candidates with scoring
-<br>
-<span class="flow-step">Selection</span> <span class="flow-arrow">&rarr;</span> User validates primary at Checkpoint 2; secondaries written to <code>## Additional ICPs</code>
-<br>
-<span class="flow-step">Cross-ICP Analysis</span> <span class="flow-arrow">&rarr;</span> Section 10 compares candidates on value, accessibility, overlap
-<br>
-<span class="flow-problem">Terminal state: parked</span> <span class="flow-arrow">&rarr;</span> Secondaries exist in the ICP research file but no skill reads them
-<br>
-<span class="flow-problem">No revisit trigger</span> <span class="flow-arrow">&rarr;</span> No event, skill, or progress manifest check ever re-surfaces secondaries
-<br>
-<span class="flow-problem">Effective death</span> <span class="flow-arrow">&rarr;</span> Secondary ICPs remain unread in the ICP artifact indefinitely
-</div>
-
-<div class="card">
-<h4>concept-exploration Variant</h4>
-<p>When concept-exploration produces multiple slugged briefs, the lifecycle is similar but shorter:</p>
-<ul>
-<li><strong>Birth:</strong> 3 concept variants produced as separate briefs</li>
-<li><strong>Selection:</strong> User questioned "Do we need three split paths?" and selected one</li>
-<li><strong>Non-selected briefs:</strong> Labeled "related/future concept" &mdash; never referenced again</li>
-</ul>
-<div class="evidence"><strong>Evidence:</strong> concept-exploration alignment page (Codex L1756&ndash;1757) produced 3 variants. User immediately questioned the need for 3 and resolved to a single path. The other 2 briefs were never opened or referenced in subsequent sessions.</div>
-</div>
-
-<div class="card">
-<h4>User Desire for Branching (Unmet)</h4>
-<p>Three history records show users <em>wanting</em> to branch or revisit without tooling support:</p>
-<ul>
-<li><strong>calcllm:</strong> "project/product managers could use either our product or a variation of our product... I'm not sure which skills should be invoked"</li>
-<li><strong>vectorfit:</strong> "We should consider tracking that ICP and making a separate product in the Vectorfit product line to best serve that separate market"</li>
-<li><strong>claude-skills:</strong> "is there platform or product line skill that we have? ... expand from a single app and move into more adjacent spaces either vertical or horizontal growth"</li>
-</ul>
-<div class="evidence"><strong>Pattern:</strong> Users recognize product-line expansion opportunities during research but have no skill to track or act on them. The desire is expressed verbally, then lost to session context.</div>
-</div>
-
-<!-- ======================== BRANCHING EVIDENCE MATRIX ======================== -->
-<h2 id="branching-evidence-matrix">Branching Evidence Matrix</h2>
-
-<table>
-<tr><th>Claim</th><th>Source</th><th>Evidence</th><th>Inference</th><th>Confidence</th><th>Assumption</th><th>Decision Impact</th></tr>
-<tr>
-<td>Secondary ICPs are never consumed by downstream skills</td>
-<td>Claude + Codex history; skill SKILL.md files</td>
-<td>0 of 14 post-ICP sessions reference non-primary ICPs. competitive-analysis, value-prop-canvas, positioning all hardcoded to primary ICP scope.</td>
-<td>The ICP Cross-ICP Analysis is write-only: it produces comparison data that nothing reads.</td>
-<td><span class="badge badge-green">High</span></td>
-<td>None &mdash; directly measured + confirmed in skill source</td>
-<td>Either downstream skills need per-ICP modes, or secondaries should be tracked differently.</td>
-</tr>
-<tr>
-<td>Deferred ICP candidates are never revisited</td>
-<td>Claude + Codex history (11,563 records)</td>
-<td>0 revisitations found. 1 near-miss (calcllm user asked about revisiting but didn't execute).</td>
-<td>The current system provides no trigger or prompt to revisit deferred candidates.</td>
-<td><span class="badge badge-green">High</span></td>
-<td>Users might revisit outside of tracked history (e.g., reading files manually)</td>
-<td>If deferred paths matter, a revisit trigger mechanism is needed. If they don't, secondary ICP output should be lighter.</td>
-</tr>
-<tr>
-<td>concept-exploration multi-brief output causes unnecessary branching</td>
-<td>Codex history (L1756&ndash;1757)</td>
-<td>User immediately questioned "Do we need three split paths?" &mdash; only 1 observed instance of multi-brief output.</td>
-<td>The skill may be over-producing variants; 1 instance is thin evidence but the user reaction was strong.</td>
-<td><span class="badge badge-orange">Medium</span></td>
-<td>One instance may not be representative</td>
-<td>concept-exploration should default to single brief with explicitly requested variant mode.</td>
-</tr>
-<tr>
-<td>Users want product-line expansion tools but have none</td>
-<td>Claude history (3 projects: calcllm, vectorfit, claude-skills)</td>
-<td>3 separate users/projects expressed desire to expand into adjacent ICPs or product lines, phrased as routing questions.</td>
-<td>The gap isn't "run all downstream skills per ICP" but "have a structured way to decide when to expand."</td>
-<td><span class="badge badge-orange">Medium</span></td>
-<td>Expressed desire ≠ actual need; users may have resolved this outside tracked sessions</td>
-<td>Progress manifest should include a <code>deferred_paths</code> section with revisit triggers, not full multi-ICP research branches.</td>
-</tr>
-<tr>
-<td>metternich-engine's 4-ICP parallel development is an outlier, not a pattern to optimize for</td>
-<td>Claude history (metternich project)</td>
-<td>Only 1 of 7 branching projects developed multiple ICPs in parallel. metternich built 4 full ICP directory structures with persona cards, demo scripts, and objection handling.</td>
-<td>This was a deliberate multi-audience product (game engine with solo/hobbyist/pro/team tiers), not a typical ICP branching scenario.</td>
-<td><span class="badge badge-green">High</span></td>
-<td>None &mdash; directly observed</td>
-<td>Do not design multi-ICP tooling around the metternich pattern. The common case is 1 primary + deferred secondaries.</td>
-</tr>
-<tr>
-<td>ICP Cross-ICP Analysis is write-only</td>
-<td>ICP SKILL.md (v0.4) + downstream skill source</td>
-<td>Section 10 produces Cross-ICP Analysis with value, accessibility, overlap comparisons. No downstream skill reads Section 10 or references it.</td>
-<td>Cross-ICP Analysis is effort without return unless converted to actionable revisit triggers.</td>
-<td><span class="badge badge-green">High</span></td>
-<td>Users might read it manually even though skills don't</td>
-<td>Either make Cross-ICP Analysis produce machine-readable revisit triggers, or make it lighter.</td>
-</tr>
-</table>
-
-<!-- ======================== BRANCHING RECOMMENDATIONS ======================== -->
-<h2 id="branching-recommendations">Branching Recommendations</h2>
-
-<table>
-<tr><th>#</th><th>Recommendation</th><th>Rationale</th><th>Effort</th><th>Impact</th></tr>
-<tr>
-<td>1</td>
-<td><strong>Add <code>deferred_paths</code> to <code>research/.progress.yaml</code></strong><br>Track non-primary ICPs/concepts with: name, reason deferred, revisit trigger (e.g., "if primary ICP acquisition cost exceeds $X" or "if competitive-analysis reveals primary ICP is saturated"), and date parked.</td>
-<td>Lightweight tracking without full research branches. Gives the progress manifest awareness of branching without requiring per-ICP downstream runs.</td>
-<td><span class="badge badge-green">Low</span></td>
-<td><span class="badge badge-green">High</span></td>
-</tr>
-<tr>
-<td>2</td>
-<td><strong>Make ICP Cross-ICP Analysis produce revisit triggers</strong><br>Instead of just comparing candidates, each secondary ICP gets a concrete trigger condition: "Re-evaluate this ICP if [condition]." Written to both the ICP research file and <code>research/.progress.yaml</code>.</td>
-<td>Converts write-only analysis into actionable checkpoints. Downstream skills can check triggers without running full research per-ICP.</td>
-<td><span class="badge badge-orange">Medium</span></td>
-<td><span class="badge badge-green">High</span></td>
-</tr>
-<tr>
-<td>3</td>
-<td><strong>Keep downstream skills primary-only by default</strong><br>Add a lightweight "Implications for Secondary ICPs" note (2&ndash;3 sentences) in competitive-analysis output, but do NOT run full downstream research per-ICP.</td>
-<td>Running competitive-analysis, positioning, etc. for each ICP creates the "4&ndash;8 variation evaluation" problem the user identified. A note is enough to flag relevance without bogging down.</td>
-<td><span class="badge badge-green">Low</span></td>
-<td><span class="badge badge-orange">Medium</span></td>
-</tr>
-<tr>
-<td>4</td>
-<td><strong>Do NOT create "research branches"</strong><br>A full branching system (separate research directories per ICP, merge/diff between branches, parallel downstream runs) is over-engineering for the observed 7-project, 0-revisitation pattern.</td>
-<td>Progress manifest + revisit triggers are sufficient. Only metternich developed multiple ICPs in parallel, and that was a deliberate product strategy, not a workflow the tooling should optimize for.</td>
-<td><span class="badge badge-green">N/A</span></td>
-<td><span class="badge badge-green">Avoids over-engineering</span></td>
-</tr>
-<tr>
-<td>5</td>
-<td><strong>concept-exploration: explicit convergence in Next Steps</strong><br>When multiple slugged briefs are produced, the Next Steps section must name which is primary and which are deferred, and write deferred briefs to <code>deferred_paths</code> in the progress manifest.</td>
-<td>Prevents the "Do we need three split paths?" reaction by making convergence explicit rather than leaving multiple open paths.</td>
-<td><span class="badge badge-green">Low</span></td>
-<td><span class="badge badge-orange">Medium</span></td>
-</tr>
-</table>
-
-<h3>Proposed <code>deferred_paths</code> Schema</h3>
-<pre>
-# In research/.progress.yaml
-deferred_paths:
-  - name: "ICP-02: Hobbyist Learner"
-    source_skill: icp
-    date_parked: 2026-05-27
-    reason_deferred: "Lower Value x Accessibility score (3.2 vs primary's 4.1)"
-    revisit_trigger: "If primary ICP acquisition cost exceeds $50/user OR competitive-analysis shows primary ICP market is saturated"
-    status: parked  # parked | revisiting | promoted | abandoned
-  - name: "Concept: Team Dashboard Variant"
-    source_skill: concept-exploration
-    date_parked: 2026-05-27
-    reason_deferred: "User selected solo-player concept as primary direction"
-    revisit_trigger: "If solo-player concept hits retention wall at 30-day mark"
-    status: parked
-</pre>
-
-<!-- ======================== BRANCHING GATES ======================== -->
-<div class="gate" id="gate-branching">
-<h3>Gate: Branching Decisions</h3>
-
-<div class="question-block" data-gate="branching-scope" data-section="Branching: Downstream Scope">
-<h4>Q9: Should downstream skills be ICP-scoped (per-ICP) or primary-only?</h4>
-<label><input type="radio" name="q9" value="primary-only" onchange="handleRadio(this)"> Primary-only &mdash; downstream skills run for primary ICP, with a 2&ndash;3 sentence "Implications for Secondary ICPs" note</label>
-<label><input type="radio" name="q9" value="per-icp" onchange="handleRadio(this)"> Per-ICP &mdash; offer the option to run downstream skills for each ICP (user chooses which)</label>
-<label><input type="radio" name="q9" value="primary-plus-light" onchange="handleRadio(this)"> Primary + lightweight secondary &mdash; full research for primary, abbreviated comparison section for top secondary</label>
-<label><input type="radio" name="q9" value="other" onchange="handleRadio(this)"> Other / None of the above</label>
-<textarea class="other-text" placeholder="Describe your preferred downstream scoping approach..."></textarea>
-<label><input type="radio" name="q9" value="clarify" onchange="handleRadio(this)"> Need clarification</label>
-<textarea class="clarify-text" placeholder="What needs clarification?"></textarea>
-<div class="notes-box"><label>Additional notes:</label><textarea class="additional-notes" placeholder="Optional notes on your selection..."></textarea></div>
-</div>
-
-<div class="question-block" data-gate="branching-cross-icp" data-section="Branching: Cross-ICP Analysis">
-<h4>Q10: Should ICP Cross-ICP Analysis be stronger, lighter, or as-is?</h4>
-<label><input type="radio" name="q10" value="stronger" onchange="handleRadio(this)"> Stronger &mdash; add machine-readable revisit triggers per secondary ICP (written to progress manifest)</label>
-<label><input type="radio" name="q10" value="lighter" onchange="handleRadio(this)"> Lighter &mdash; reduce to a summary comparison; don't invest in analysis that downstream skills don't read</label>
-<label><input type="radio" name="q10" value="as-is" onchange="handleRadio(this)"> As-is &mdash; the current Cross-ICP Analysis format is fine for human review</label>
-<label><input type="radio" name="q10" value="other" onchange="handleRadio(this)"> Other / None of the above</label>
-<textarea class="other-text" placeholder="Describe your preferred Cross-ICP Analysis approach..."></textarea>
-<label><input type="radio" name="q10" value="clarify" onchange="handleRadio(this)"> Need clarification</label>
-<textarea class="clarify-text" placeholder="What needs clarification?"></textarea>
-<div class="notes-box"><label>Additional notes:</label><textarea class="additional-notes" placeholder="Optional notes on your selection..."></textarea></div>
-</div>
-
-<div class="question-block" data-gate="branching-concept" data-section="Branching: Concept Convergence">
-<h4>Q11: Should concept-exploration track multiple active concepts or converge to one?</h4>
-<label><input type="radio" name="q11" value="converge" onchange="handleRadio(this)"> Converge &mdash; produce one primary brief, list alternatives as deferred paths in progress manifest</label>
-<label><input type="radio" name="q11" value="multiple" onchange="handleRadio(this)"> Multiple active &mdash; keep producing slugged briefs for each concept, let user choose later</label>
-<label><input type="radio" name="q11" value="user-controlled" onchange="handleRadio(this)"> User-controlled &mdash; default to single brief, add <code>--variants</code> flag for explicit multi-concept mode</label>
-<label><input type="radio" name="q11" value="other" onchange="handleRadio(this)"> Other / None of the above</label>
-<textarea class="other-text" placeholder="Describe your preferred concept-exploration approach..."></textarea>
-<label><input type="radio" name="q11" value="clarify" onchange="handleRadio(this)"> Need clarification</label>
-<textarea class="clarify-text" placeholder="What needs clarification?"></textarea>
-<div class="notes-box"><label>Additional notes:</label><textarea class="additional-notes" placeholder="Optional notes on your selection..."></textarea></div>
-</div>
-
-<div class="question-block" data-gate="branching-mechanism" data-section="Branching: Tracking Mechanism">
-<h4>Q12: Should there be a "research branch" concept or is deferred-path tracking enough?</h4>
-<label><input type="radio" name="q12" value="deferred-paths" onchange="handleRadio(this)"> Deferred-path tracking only &mdash; <code>deferred_paths</code> in progress manifest with revisit triggers (recommended)</label>
-<label><input type="radio" name="q12" value="research-branches" onchange="handleRadio(this)"> Research branches &mdash; separate research directories per ICP/concept with merge capability</label>
-<label><input type="radio" name="q12" value="hybrid" onchange="handleRadio(this)"> Hybrid &mdash; deferred-path tracking by default, research branches available via explicit <code>/research-branch</code> command</label>
-<label><input type="radio" name="q12" value="other" onchange="handleRadio(this)"> Other / None of the above</label>
-<textarea class="other-text" placeholder="Describe your preferred tracking mechanism..."></textarea>
-<label><input type="radio" name="q12" value="clarify" onchange="handleRadio(this)"> Need clarification</label>
-<textarea class="clarify-text" placeholder="What needs clarification?"></textarea>
-<div class="notes-box"><label>Additional notes:</label><textarea class="additional-notes" placeholder="Optional notes on your selection..."></textarea></div>
-</div>
-
-<div class="question-block" data-gate="branching-revisit" data-section="Branching: Revisit Triggers">
-<h4>Q13: What should trigger re-evaluation of a deferred ICP?</h4>
-<label><input type="radio" name="q13" value="skill-driven" onchange="handleRadio(this)"> Skill-driven &mdash; downstream skills check revisit triggers in progress manifest and surface deferred ICPs when triggers are met</label>
-<label><input type="radio" name="q13" value="time-based" onchange="handleRadio(this)"> Time-based &mdash; after N days/phases since parking, prompt user to review deferred paths</label>
-<label><input type="radio" name="q13" value="user-initiated" onchange="handleRadio(this)"> User-initiated only &mdash; deferred paths are recorded but only revisited when the user explicitly asks</label>
-<label><input type="radio" name="q13" value="other" onchange="handleRadio(this)"> Other / None of the above</label>
-<textarea class="other-text" placeholder="Describe your preferred revisit trigger approach..."></textarea>
-<label><input type="radio" name="q13" value="clarify" onchange="handleRadio(this)"> Need clarification</label>
-<textarea class="clarify-text" placeholder="What needs clarification?"></textarea>
-<div class="notes-box"><label>Additional notes:</label><textarea class="additional-notes" placeholder="Optional notes on your selection..."></textarea></div>
-</div>
-</div>
-
-<!-- ======================== RESEARCH COMPLETENESS GATE ======================== -->
-<div class="gate" id="gate-research-completeness">
-<h3>Gate: Research Completeness</h3>
-
-<div class="question-block" data-gate="research-completeness" data-section="Research Completeness">
-<h4>Q14: Is the branching evidence sufficient for the recommendations, or do specific claims need more support?</h4>
-<label><input type="radio" name="q14" value="sufficient" onchange="handleRadio(this)"> Sufficient &mdash; the 0-revisitation finding and user statements are strong enough to act on</label>
-<label><input type="radio" name="q14" value="need-more-concept" onchange="handleRadio(this)"> Need more concept-exploration evidence &mdash; 1 instance of multi-brief output is thin</label>
-<label><input type="radio" name="q14" value="need-metternich" onchange="handleRadio(this)"> Need deeper metternich analysis &mdash; understand why parallel ICPs worked there to learn what to generalize</label>
-<label><input type="radio" name="q14" value="other" onchange="handleRadio(this)"> Other / None of the above</label>
-<textarea class="other-text" placeholder="What additional evidence would change the recommendations?"></textarea>
-<label><input type="radio" name="q14" value="clarify" onchange="handleRadio(this)"> Need clarification</label>
-<textarea class="clarify-text" placeholder="What needs clarification?"></textarea>
-<div class="notes-box"><label>Additional notes:</label><textarea class="additional-notes" placeholder="Optional notes on your selection..."></textarea></div>
-</div>
-</div>
-
 <!-- ======================== COMPILE ======================== -->
 <h2 id="compile">Compile Answers</h2>
 
 <button id="compile-btn" disabled onclick="compileAnswers()">Compile Answers</button>
-<span id="remaining-count">14 questions remaining</span>
+<span id="remaining-count">8 questions remaining</span>
 
 <div id="yaml-output">
 <textarea id="yaml-text" readonly></textarea>
