@@ -27,7 +27,7 @@ describe("sync agent config drift contract", () => {
     for (const contract of contracts) {
       const content = read(contract.path);
 
-      expect(content, `${contract.path} should be versioned`).toContain("version: v0.2");
+      expect(content, `${contract.path} should be versioned`).toContain("version: v0.3");
       expect(content, `${contract.path} should keep version-comment detection`).toContain(
         "<!-- provision-agentic-config vX.Y -->",
       );
@@ -51,6 +51,36 @@ describe("sync agent config drift contract", () => {
       );
       expect(content, `${contract.path} should route to provision command`).toContain(contract.command);
       expect(content, `${contract.path} should report drift status`).toContain("Agent config drift");
+      expect(content, `${contract.path} should report local canonical source`).toContain(
+        "Always report the local canonical source path used",
+      );
+      expect(content, `${contract.path} should define preference file`).toContain(
+        "~/.agentic-skills/preferences.json",
+      );
+      expect(content, `${contract.path} should define preference key`).toContain(
+        "sync.github_freshness_check",
+      );
+      expect(content, `${contract.path} should allow ask preference`).toContain('"ask"');
+      expect(content, `${contract.path} should allow always preference`).toContain('"always"');
+      expect(content, `${contract.path} should allow never preference`).toContain('"never"');
+      expect(content, `${contract.path} should ask once on missing preference`).toContain(
+        "ask the user once which default to remember",
+      );
+      expect(content, `${contract.path} should skip repeated prompt when always is saved`).toContain(
+        'If the value is `"always"`, check GitHub remote freshness automatically',
+      );
+      expect(content, `${contract.path} should skip repeated prompt when never is saved`).toContain(
+        'If the value is `"never"`, skip GitHub freshness checks',
+      );
+      expect(content, `${contract.path} should not mutate agentic-skills from plain sync`).toContain(
+        "Plain",
+      );
+      expect(content, `${contract.path} should prohibit checkout mutation from plain sync`).toContain(
+        "must not update the `agentic-skills` checkout",
+      );
+      expect(content, `${contract.path} should route stale checkout to explicit init update`).toContain(
+        "init-agentic-skills update",
+      );
     }
   });
 });

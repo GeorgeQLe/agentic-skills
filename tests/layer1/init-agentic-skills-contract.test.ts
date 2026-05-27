@@ -1,0 +1,72 @@
+import { readFileSync } from "node:fs";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+import { describe, expect, it } from "vitest";
+
+const TESTS_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const repoPath = (path: string) => resolve(TESTS_ROOT, "..", path);
+const read = (path: string) => readFileSync(repoPath(path), "utf8");
+
+describe("init-agentic-skills freshness contract", () => {
+  const contracts = [
+    {
+      skillPath: "global/codex/init-agentic-skills/SKILL.md",
+      scriptPath: "global/codex/init-agentic-skills/scripts/init-agentic-skills.sh",
+      packCommand: "$pack",
+    },
+    {
+      skillPath: "global/claude/init-agentic-skills/SKILL.md",
+      scriptPath: "global/claude/init-agentic-skills/scripts/init-agentic-skills.sh",
+      packCommand: "/pack",
+    },
+  ];
+
+  it("defines status and explicit fast-forward-only update modes", () => {
+    for (const contract of contracts) {
+      const content = read(contract.skillPath);
+
+      expect(content, `${contract.skillPath} should be bumped`).toContain("version: v0.3");
+      expect(content, `${contract.skillPath} should accept update`).toContain("`update` or `latest`");
+      expect(content, `${contract.skillPath} should report checkout commit`).toContain(
+        "local checkout commit",
+      );
+      expect(content, `${contract.skillPath} should report remote URL`).toContain("remote URL");
+      expect(content, `${contract.skillPath} should report preference state`).toContain(
+        "~/.agentic-skills/preferences.json",
+      );
+      expect(content, `${contract.skillPath} should require confirmation`).toContain(
+        "Confirm before running commands that fetch, pull, or reinstall",
+      );
+      expect(content, `${contract.skillPath} should require ff-only update`).toContain(
+        "fast-forward-only",
+      );
+      expect(content, `${contract.skillPath} should rerun init after update`).toContain("rerun `init.sh`");
+      expect(content, `${contract.skillPath} should warn about fresh sessions`).toContain(
+        "fresh Claude Code or Codex session",
+      );
+      expect(content, `${contract.skillPath} should keep packs local`).toContain(
+        "Do not install `packs/*` globally",
+      );
+      expect(content, `${contract.skillPath} should route pack setup`).toContain(contract.packCommand);
+    }
+  });
+
+  it("launcher implements status and update/latest branches", () => {
+    for (const contract of contracts) {
+      const script = read(contract.scriptPath);
+
+      expect(script, `${contract.scriptPath} should read local preference`).toContain(
+        'PREFERENCES_FILE="$HOME/.agentic-skills/preferences.json"',
+      );
+      expect(script, `${contract.scriptPath} should report local commit`).toContain("local commit:");
+      expect(script, `${contract.scriptPath} should report remote URL`).toContain("remote URL:");
+      expect(script, `${contract.scriptPath} should require update confirmation`).toContain(
+        "confirm_update",
+      );
+      expect(script, `${contract.scriptPath} should fetch explicitly`).toContain("fetch origin");
+      expect(script, `${contract.scriptPath} should merge ff-only`).toContain("merge --ff-only origin/HEAD");
+      expect(script, `${contract.scriptPath} should rerun init`).toContain('bash "$REPO_ROOT/init.sh"');
+      expect(script, `${contract.scriptPath} should branch on latest`).toContain("update|latest");
+    }
+  });
+});

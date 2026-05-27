@@ -13,14 +13,19 @@
 **Plan:**
 - [x] Inspect mirrored sync/init contracts, launchers, and existing contract tests.
 - [x] Record the implementation plan in task docs.
-- [ ] Archive and bump mirrored sync and init skill contracts.
-- [ ] Update sync contracts for `~/.agentic-skills/preferences.json`, allowed values, first-run prompt, and non-mutating GitHub freshness semantics.
-- [ ] Update init contracts and launchers for `status`, `update`, and `latest` behavior with confirmation and fast-forward-only language.
-- [ ] Add focused layer1 contract coverage.
-- [ ] Run validation, add review notes, then ship intended changes.
+- [x] Archive and bump mirrored sync and init skill contracts.
+- [x] Update sync contracts for `~/.agentic-skills/preferences.json`, allowed values, first-run prompt, and non-mutating GitHub freshness semantics.
+- [x] Update init contracts and launchers for `status`, `update`, and `latest` behavior with confirmation and fast-forward-only language.
+- [x] Add focused layer1 contract coverage.
+- [x] Run validation, add review notes, then ship intended changes.
 
 **Review:**
-- Pending.
+- Mirrored `sync` contracts are at v0.3 and require local canonical `provision-agentic-config` source/version reporting plus remembered GitHub freshness preferences at `~/.agentic-skills/preferences.json`.
+- Plain `$sync` / `/sync` remains non-mutating for GitHub freshness; stale checkout updates route to explicit `$init-agentic-skills update` or `/init-agentic-skills update`.
+- Mirrored `init-agentic-skills` contracts are at v0.3 and add `status`, `update`, and `latest` modes. The launchers now report checkout commit, remote URL, and freshness preference, and update with confirmation plus `git fetch origin` and `git merge --ff-only origin/HEAD` before rerunning `init.sh`.
+- Added focused layer1 coverage in `tests/layer1/sync-agent-config.test.ts` and `tests/layer1/init-agentic-skills-contract.test.ts`.
+- Validation passed: `bash -n` for both init launchers; `pnpm --dir tests exec vitest run --project layer1 layer1/sync-agent-config.test.ts layer1/init-agentic-skills-contract.test.ts`; `scripts/skill-versions.sh --missing`; `git diff --check`; `global/codex/init-agentic-skills/scripts/init-agentic-skills.sh status`.
+- Validation caveat: `scripts/skill-archive-audit.sh --strict` still reports 23 pre-existing archive gaps outside this task.
 
 ## Priority Task Queue
 
