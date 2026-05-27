@@ -2,7 +2,7 @@
 name: skills
 description: Browse and search all available skills, grouped by workflow stage or activity type
 type: ops
-version: v0.1
+version: v0.0
 argument-hint: "[list | types | search <keyword>]"
 ---
 
@@ -33,7 +33,7 @@ Discover and search installed global skills plus enabled project-local pack skil
 
    | Stage | Skills (pack in parentheses; no label = global) |
    |-------|--------|
-   | Pack Management | `pack`, `pack list`, `pack status`, `pack recommend`, `pack install <pack-or-skill>`, `pack remove <pack-or-skill>`, `pack which <skill>` |
+   | Pack Management | `pack`, `pack list`, `pack status`, `pack recommend`, `pack install <pack>`, `pack remove <pack>` |
    | Discovery & Market Fit | `icp` (business-discovery), `enterprise-icp` (business-discovery) |
    | Game Development | `game-workflow` (game), `game-audience` (game), `game-fantasy` (game), `game-genre-map` (game), `game-comparables` (game), `game-core-loop` (game), `game-prototype-test` (game), `game-store-page-test` (game), `game-playtest-metrics` (game), `game-roadmap` (game), `game-launch` (game) |
    | Devtool Development | `devtool-workflow` (devtool), `devtool-user-map` (devtool), `devtool-integration-map` (devtool), `devtool-dx-journey` (devtool), `devtool-adoption` (devtool), `devtool-positioning` (devtool), `devtool-monetization` (devtool), `devtool-docs-audit` (devtool) |
@@ -80,7 +80,7 @@ Discover and search installed global skills plus enabled project-local pack skil
 6. **Output results:**
    - Print each non-empty group as a `## Group Name` heading.
    - Under each heading, list installed/global skills as `/<name> — <description>  [type]`.
-   - For available-but-not-installed pack skills, list as `/<name> — <description>  [type]  ⚠ requires \`/pack install <skill>\` or \`/pack install <pack>\``.
+   - For available-but-not-installed pack skills, list as `/<name> — <description>  [type]  ⚠ requires \`/pack install <pack>\``.
    - Omit groups that have no skills (after filtering in search mode).
    - At the bottom, print a total count: `**N skills** installed, **M skills** available via packs` (or `**N skills** matching "<keyword>"`).
 

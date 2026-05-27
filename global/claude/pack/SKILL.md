@@ -1,14 +1,14 @@
 ---
 name: pack
-description: Manage project-local skill packs and project designation without installing domain skills globally
+description: Manage project-local skill packs, individual pack skill links, and project designation without installing domain skills globally
 type: ops
-version: v0.0
+version: v0.1
 argument-hint: "[list|status|recommend|install <pack-or-skill>|remove <pack-or-skill>|refresh|which <skill>] or no args for guided setup"
 ---
 
 # Pack
 
-Use this skill when the user wants to inspect, recommend, install, remove, or refresh project-local skill packs.
+Use this skill when the user wants to inspect, recommend, install, remove, or refresh project-local skill packs or individual skills from those packs.
 
 ## Workflow
 
@@ -37,6 +37,7 @@ Use this skill when the user wants to inspect, recommend, install, remove, or re
    The launcher is intentionally located at `scripts/pack.sh` under this skill directory and forwards to the repository-level pack manager.
 4. For `install`, `remove`, `refresh`, and guided setup installs, report:
    - `.agents/project.json` project type and enabled packs
+   - any `enabled_skills` entries when present, including the skill name and source pack
    - any `project_scopes` entries when present, including the path, `project_type`, packs, and purpose
    - local skill links created or removed under `.claude/skills` and `.codex/skills`
    - any skipped links caused by non-symlink targets
@@ -51,6 +52,7 @@ Use this skill when the user wants to inspect, recommend, install, remove, or re
 - `enabled_packs` is the union of packs available to the repository; `project_scopes[].packs` explains which packs are appropriate for a specific path or glob.
 - Pack installs use symlinks back to this skill-library repository by default.
 - `scripts/pack.sh install`, `remove`, `refresh`, and `set-mode` preserve existing `project_scopes` and `notes` fields when `jq` is available.
+- `scripts/pack.sh install <name>` treats `<name>` as a pack first, then as an individual skill provided by a pack.
 - Pack writes use `.agents/.pack.lock` with owner metadata (`pid`, `started_at`, `command`); if a recorded owner process is gone, the next pack command removes that stale lock automatically.
 - `scripts/pack.sh refresh` recreates project-local symlinks from `.agents/project.json`; it does not refresh the active Claude Code or Codex process.
 - Claude Code and Codex may load available skills at session startup. If newly installed or removed skills are not visible, start a fresh CLI session. No supported in-session CLI skill refresh command is configured in this pack workflow.

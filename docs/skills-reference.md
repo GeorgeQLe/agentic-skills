@@ -20,13 +20,16 @@ It does not install domain packs globally.
 ```bash
 scripts/pack.sh list
 scripts/pack.sh recommend
-scripts/pack.sh install <pack>
-scripts/pack.sh remove <pack>
+scripts/pack.sh install <pack-or-skill>
+scripts/pack.sh remove <pack-or-skill>
+scripts/pack.sh which <skill>
 scripts/pack.sh refresh
 scripts/pack.sh status
 ```
 
 Project designation is stored in `.agents/project.json`.
+
+`install <name>` accepts either a pack name or a skill name from any pack. Pack names install all skills in that pack; skill names install only that one local skill and store `{skill: pack}` provenance under `.agents/project.json` `enabled_skills`.
 
 `scripts/pack.sh list-packs` is an internal subcommand used by Codex `$exec` routing (see `global/codex/exec/SKILL.md`). It prints enabled packs from `.agents/project.json` one per line with no decoration, distinct from the human-facing `list` which enumerates all available packs. Prefer `list` or `status` for interactive use.
 

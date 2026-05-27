@@ -49,15 +49,20 @@ scripts/pack.sh install remotion
 scripts/pack.sh install project-fleet
 scripts/pack.sh install alignment-loop
 scripts/pack.sh install business-app-kanban
+scripts/pack.sh install design-system
+scripts/pack.sh which design-system
 scripts/pack.sh status
 scripts/pack.sh remove game
+scripts/pack.sh remove design-system
 ```
+
+`scripts/pack.sh install <name>` accepts either a pack name or a skill name from any pack. Pack names install every skill in the pack. Skill names install only that one project-local skill and record it under `.agents/project.json` `enabled_skills`.
 
 `scripts/pack.sh list-packs` is an internal subcommand used by Codex `$exec` routing (see `global/codex/exec/SKILL.md`). It prints enabled packs from `.agents/project.json` one per line with no decoration, distinct from the human-facing `list` above; prefer `list` or `status` for interactive use.
 
 Claude users can run `/pack` with no arguments, and Codex users can run `$pack` with no arguments. If `.agents/project.json` exists, the skill refreshes local links from that committed project designation. If it is missing, the assistant inspects the repository, recommends a pack, and asks before installing.
 
-`scripts/pack.sh refresh` recreates local symlinks; it does not reload an already-running Claude Code or Codex session. After installing, removing, or refreshing packs, start a fresh CLI session if the changed skills are not visible.
+`scripts/pack.sh which <skill>` shows which pack provides a skill and whether it is installed. `scripts/pack.sh refresh` recreates local symlinks; it does not reload an already-running Claude Code or Codex session. After installing, removing, or refreshing packs, start a fresh CLI session if the changed skills are not visible.
 
 Pack installation creates local symlinks in the current project:
 

@@ -85,4 +85,45 @@ describe("pack.sh install", () => {
     ).length;
     expect(count).toBe(1);
   });
+
+  it("installs and removes an individual pack skill without enabling the whole pack", () => {
+    const dir = makeTempProject();
+    const installOutput = execSync(`bash "${PACK_SCRIPT}" install design-system`, {
+      cwd: dir,
+      stdio: "pipe",
+      encoding: "utf-8",
+    });
+
+    expect(installOutput).toContain("Linked .claude/skills/design-system");
+    expect(installOutput).toContain("Linked .codex/skills/design-system");
+
+    const claudeSkill = join(dir, ".claude/skills/design-system");
+    const codexSkill = join(dir, ".codex/skills/design-system");
+    expect(lstatSync(claudeSkill).isSymbolicLink()).toBe(true);
+    expect(lstatSync(codexSkill).isSymbolicLink()).toBe(true);
+    expect(existsSync(join(dir, ".claude/skills/feature-interview"))).toBe(false);
+    expect(existsSync(join(dir, ".codex/skills/feature-interview"))).toBe(false);
+
+    const projectFile = join(dir, ".agents/project.json");
+    const json = JSON.parse(readFileSync(projectFile, "utf-8"));
+    expect(json.enabled_packs ?? []).not.toContain("product-design");
+    expect(json.enabled_skills).toEqual({ "design-system": "product-design" });
+
+    const whichOutput = execSync(`bash "${PACK_SCRIPT}" which design-system`, {
+      cwd: dir,
+      stdio: "pipe",
+      encoding: "utf-8",
+    });
+    expect(whichOutput).toContain("individually installed from pack 'product-design'");
+
+    execSync(`bash "${PACK_SCRIPT}" remove design-system`, {
+      cwd: dir,
+      stdio: "pipe",
+    });
+
+    expect(existsSync(claudeSkill)).toBe(false);
+    expect(existsSync(codexSkill)).toBe(false);
+    const afterRemove = JSON.parse(readFileSync(projectFile, "utf-8"));
+    expect(afterRemove.enabled_skills).toBeUndefined();
+  });
 });

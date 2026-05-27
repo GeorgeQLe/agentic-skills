@@ -2,7 +2,7 @@
 name: skills
 description: Browse and search all available skills, grouped by workflow stage or activity type
 type: ops
-version: v0.1
+version: v0.0
 argument-hint: "[list | types | search <keyword>]"
 ---
 
@@ -31,7 +31,7 @@ Discover and search installed global skills plus enabled project-local pack skil
 
    | Stage | Skills |
    |-------|--------|
-   | Pack Management | `pack`, `pack list`, `pack status`, `pack recommend`, `pack install <pack-or-skill>`, `pack remove <pack-or-skill>`, `pack which <skill>` |
+   | Pack Management | `pack`, `pack list`, `pack status`, `pack recommend`, `pack install <pack>`, `pack remove <pack>` |
    | Discovery & Market Fit | `icp`, `enterprise-icp` |
    | Game Development | `game-workflow`, `game-audience`, `game-fantasy`, `game-genre-map`, `game-comparables`, `game-core-loop`, `game-prototype-test`, `game-store-page-test`, `game-playtest-metrics`, `game-roadmap`, `game-launch` |
    | Devtool Development | `devtool-workflow`, `devtool-user-map`, `devtool-integration-map`, `devtool-dx-journey`, `devtool-adoption`, `devtool-positioning`, `devtool-monetization`, `devtool-docs-audit` |

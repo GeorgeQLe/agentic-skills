@@ -12,7 +12,7 @@ usage() {
   echo "Install:    Symlinks global core skills into assistant global skill directories."
   echo "Uninstall:  Removes repo-managed global symlinks pointing back to this repo."
   echo ""
-  echo "Project-local domain packs are managed with: scripts/pack.sh install <pack>"
+  echo "Project-local packs and individual pack skills are managed with: scripts/pack.sh install <pack-or-skill>"
   exit 0
 }
 
@@ -199,6 +199,6 @@ skipped=$((skipped_claude_core + skipped_codex_core))
 echo ""
 echo "Installed $count_claude_core Claude core skills -> $CLAUDE_SKILLS_DIR"
 echo "Installed $count_codex_core Codex core skills -> $CODEX_SKILLS_DIR"
-echo "Domain packs were not installed globally. Use scripts/pack.sh install <pack> from a project."
+echo "Domain packs were not installed globally. Use scripts/pack.sh install <pack-or-skill> from a project."
 if [[ "$skipped" -gt 0 ]]; then echo "Skipped $skipped (see warnings above)"; fi
 echo "Done."
