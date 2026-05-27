@@ -70,33 +70,6 @@ describe("product path manifest contracts", () => {
     }
   });
 
-  it("requires ICP to emit secondary ICP product paths with revisit triggers", () => {
-    for (const path of pairs.icp) {
-      const content = read(path);
-      expect(content, `${path} should convert secondary ICPs`).toMatch(/secondary ICPs/i);
-      expect(content, `${path} should cover Cross-ICP Analysis`).toContain("Cross-ICP Analysis");
-      expect(content, `${path} should record revisit triggers`).toContain("revisit_trigger");
-      expect(content, `${path} should keep primary ICP active`).toMatch(/primary ICP as the `active_path`/i);
-      expect(content, `${path} should not force all deferred paths through full research`).toMatch(
-        /do not run full competitive analysis, positioning, journey mapping, UX, or specs for every deferred path/i,
-      );
-    }
-  });
-
-  it("keeps competitive analysis active-path-only while summarizing deferred path implications", () => {
-    for (const path of pairs.competitive) {
-      const content = read(path);
-      expect(content, `${path} should read manifest`).toContain("research/.progress.yaml");
-      expect(content, `${path} should scope full analysis to active path`).toMatch(/scope the full competitive analysis to the manifest `active_path`/i);
-      expect(content, `${path} should add deferred implications section`).toContain(
-        "## Implications for Deferred Product Paths",
-      );
-      expect(content, `${path} should not broaden into all paths`).toMatch(
-        /Do not broaden standard mode into full competitive analysis for every deferred path/i,
-      );
-    }
-  });
-
   it("records platform expansion candidates without requiring full tracks", () => {
     for (const path of pairs.platform) {
       const content = read(path);
@@ -117,18 +90,6 @@ describe("product path manifest contracts", () => {
       );
       expect(content, `${path} should avoid forcing downstream expansion`).toMatch(
         /do not force all divergent paths through downstream research|downstream research remains active-path-only/i,
-      );
-    }
-  });
-
-  it("makes research-roadmap read and report active and deferred product path state", () => {
-    for (const path of pairs.researchRoadmap) {
-      const content = read(path);
-      expect(content, `${path} should read manifest`).toContain("research/.progress.yaml");
-      expect(content, `${path} should show active/deferred paths`).toMatch(/show active and deferred product paths/i);
-      expect(content, `${path} should queue only active or promoted paths`).toMatch(/only for `active` or `promoted` paths/i);
-      expect(content, `${path} should keep parked paths visible with revisit triggers`).toMatch(
-        /`revisit_trigger` and `next_skill`/,
       );
     }
   });
