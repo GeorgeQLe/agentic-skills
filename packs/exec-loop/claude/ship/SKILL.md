@@ -2,7 +2,7 @@
 name: ship
 description: Ship current work (update docs, commit, push, deploy) and optionally plan the next step
 type: shipping
-version: v0.0
+version: v0.1
 argument-hint: "[--no-plan] [--no-deploy]"
 ---
 
@@ -145,15 +145,15 @@ Output exactly two lines beyond the normal ship summary:
 Rules:
 
 - Make the next work item primary. Derive it from the next-step plan, `tasks/todo.md`, `tasks/manual-todo.md`, deploy status, validation gaps, smoke-test gaps, or the absence of remaining work. Do not use agent mode itself as the next work item.
-- Never recommend `/ship`, `/ship --no-deploy`, or `/ship --no-plan` as the routine next command from a completed `/ship` run. `/ship` packages current work; after it completes, hand off to the next executable route such as `/exec`, `/roadmap`, `/guide` (guided-walkthrough pack), or `/reconcile-dev-docs fix tasks` (docs-health pack) based on project state. Recommend `/ship` again only when shipping failed before commit/push or when the next concrete work is explicitly to retry an incomplete shipping operation.
+- Never recommend `/ship`, `/ship --no-deploy`, or `/ship --no-plan` as the routine next command from a completed `/ship` run. `/ship` packages current work; after it completes, hand off to the next executable route such as `/exec`, check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `/pack install agent-work-admin` first; if `agent-work-admin` is enabled, recommend `/roadmap`, check `.agents/project.json.enabled_packs` for `guided-walkthrough` — if `guided-walkthrough` is not enabled, recommend `/pack install guided-walkthrough` first; if `guided-walkthrough` is enabled, recommend `/guide`, or check `.agents/project.json.enabled_packs` for `docs-health` — if `docs-health` is not enabled, recommend `/pack install docs-health` first; if `docs-health` is enabled, recommend `/reconcile-dev-docs fix tasks` based on project state. Recommend `/ship` again only when shipping failed before commit/push or when the next concrete work is explicitly to retry an incomplete shipping operation.
 - Use `./scripts/agent-mode.sh` only to choose command text. If it is missing, unset, or non-zero, infer routing from the current invocation and task type instead of asking the user to select a mode by default.
-- Normalize copied task routes to Claude syntax before final output. If `tasks/todo.md`, `tasks/roadmap.md`, benchmark reports, or prior handoffs contain Codex dollar commands for global skills (for example `$exec`, `$ship`, `$roadmap`, `$guide`, `$reconcile-dev-docs`), treat them as task identifiers, not final command text. Convert the final `Recommended next command` to the equivalent Claude `/...` route unless the next action is explicitly a Codex handoff such as `/delegate` (agent-bridge pack) `$exec`.
+- Normalize copied task routes to Claude syntax before final output. If `tasks/todo.md`, `tasks/roadmap.md`, benchmark reports, or prior handoffs contain Codex dollar commands for global skills (for example `$exec`, `$ship`, `$roadmap`, `$guide`, `$reconcile-dev-docs`), treat them as task identifiers, not final command text. Convert the final `Recommended next command` to the equivalent Claude `/...` route unless the next action is explicitly a Codex handoff — check `.agents/project.json.enabled_packs` for `agent-bridge` — if `agent-bridge` is not enabled, recommend `/pack install agent-bridge` first; if `agent-bridge` is enabled, recommend `/delegate $exec`.
 - Inference defaults:
-  - Hybrid execution handoff → recommend `/delegate` (agent-bridge pack) `$exec`.
+  - Hybrid execution handoff → check `.agents/project.json.enabled_packs` for `agent-bridge` — if `agent-bridge` is not enabled, recommend `/pack install agent-bridge` first; if `agent-bridge` is enabled, recommend `/delegate $exec`.
   - Claude-only or orchestration-heavy work → recommend `/exec`.
   - Codex-only execution → recommend `$exec`.
-  - External human-only manual work (browser/auth/DNS/service dashboard work with no reliable authenticated CLI/API path, paid account setup, real-device checks, or production smoke-test work needing human sign-off) → recommend `/guide` (guided-walkthrough pack) or a Claude-guided manual step rather than `/exec`.
-  - Agent-executable work misfiled in `tasks/manual-todo.md`, task-doc bookkeeping, stale `tasks/manual-todo.md` cleanup, or reconciliation against repo/history reality → recommend `/reconcile-dev-docs fix tasks` (docs-health pack), promotion to `tasks/todo.md`, or a direct dev-doc audit, not `/guide` (guided-walkthrough pack).
+  - External human-only manual work (browser/auth/DNS/service dashboard work with no reliable authenticated CLI/API path, paid account setup, real-device checks, or production smoke-test work needing human sign-off) → check `.agents/project.json.enabled_packs` for `guided-walkthrough` — if `guided-walkthrough` is not enabled, recommend `/pack install guided-walkthrough` first; if `guided-walkthrough` is enabled, recommend `/guide` — or a Claude-guided manual step rather than `/exec`.
+  - Agent-executable work misfiled in `tasks/manual-todo.md`, task-doc bookkeeping, stale `tasks/manual-todo.md` cleanup, or reconciliation against repo/history reality → check `.agents/project.json.enabled_packs` for `docs-health` — if `docs-health` is not enabled, recommend `/pack install docs-health` first; if `docs-health` is enabled, recommend `/reconcile-dev-docs fix tasks` — promotion to `tasks/todo.md`, or a direct dev-doc audit, not `/guide`.
 - Only present multiple commands when the ambiguity materially changes execution safety or there are equally valid next work items. Otherwise choose the best route and mention degraded mode lookup inline.
 - Final route contract: completed `/ship` runs must not self-route back to `/ship`; route to `/exec` or a more specific next actionable skill unless shipping itself failed before commit/push.
 

@@ -2,7 +2,7 @@
 name: enterprise-icp
 description: Enterprise multi-stakeholder discovery — map personas, deal-killers, and the evaluation-to-renewal lifecycle
 type: research
-version: v0.2
+version: v0.3
 argument-hint: "[optional: target industry or market segment]"
 ---
 
@@ -71,14 +71,14 @@ Other options:
 - ...
 
 **Recommendation priority** (first applicable becomes the recommendation):
-1. IF codebase exists: recommend `$scale-audit` — evaluate whether the codebase meets enterprise deal-killer requirements
-2. Otherwise: recommend `$journey-map enterprise` — map the multi-stakeholder journey before building
+1. IF codebase exists: check `.agents/project.json.enabled_packs` for `business-ops` — if `business-ops` is not enabled, recommend `$pack install business-ops` first; if `business-ops` is enabled, recommend `$scale-audit` — evaluate whether the codebase meets enterprise deal-killer requirements
+2. Otherwise: check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if `customer-lifecycle` is not enabled, recommend `$pack install customer-lifecycle` first; if `customer-lifecycle` is enabled, recommend `$journey-map enterprise` — map the multi-stakeholder journey before building
 
 **Other options** (include all applicable items not chosen as recommended, based on which files exist):
-- IF codebase exists: `$scale-audit` — Evaluate codebase against enterprise requirements
-- `$scale-audit` — Evaluate enterprise readiness against stakeholder map and deal-killers
-- `$journey-map enterprise` — Map enterprise stakeholder journeys (if no `research/journey-map.md`)
-- `$journey-map` — Map general user journeys (if no `research/journey-map.md` and `research/icp.md` exists)
+- IF codebase exists: check `.agents/project.json.enabled_packs` for `business-ops` — if `business-ops` is not enabled, recommend `$pack install business-ops` first; if `business-ops` is enabled, recommend `$scale-audit` — Evaluate codebase against enterprise requirements
+- check `.agents/project.json.enabled_packs` for `business-ops` — if `business-ops` is not enabled, recommend `$pack install business-ops` first; if `business-ops` is enabled, recommend `$scale-audit` — Evaluate enterprise readiness against stakeholder map and deal-killers
+- IF no `research/journey-map.md`: check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if `customer-lifecycle` is not enabled, recommend `$pack install customer-lifecycle` first; if `customer-lifecycle` is enabled, recommend `$journey-map enterprise` — Map enterprise stakeholder journeys
+- IF no `research/journey-map.md` and `research/icp.md` exists: check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if `customer-lifecycle` is not enabled, recommend `$pack install customer-lifecycle` first; if `customer-lifecycle` is enabled, recommend `$journey-map` — Map general user journeys
 - `$competitive-analysis` — Research enterprise competitive landscape (if no `research/competitive-analysis.md`)
 
 ## Task Classification

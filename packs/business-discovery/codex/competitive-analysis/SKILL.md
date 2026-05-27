@@ -2,7 +2,7 @@
 name: competitive-analysis
 description: Research competitors via web search — map the landscape, GTM strategies, strengths, weaknesses, and market gaps
 type: research
-version: v0.5
+version: v0.6
 argument-hint: "[concept | optional: product category or specific competitors to investigate]"
 ---
 
@@ -93,10 +93,10 @@ Only after user validates, write the output files.
 
 1. IF no `research/journey-map.md`: check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if `customer-lifecycle` is not enabled, recommend `$pack install customer-lifecycle` first; if `customer-lifecycle` is enabled, recommend `$journey-map` — map the customer and user journey before solution-value decisions, using competitive gaps as inspiration
 2. IF no `research/positioning.md`: `$positioning` — frame the market category and alternatives after journey evidence shows where value is delivered
-3. IF no `specs/ux-variations-*.md`: `$ux-variations [top journey-backed market gap or positioning opportunity]` — explore experience directions before production specification
+3. IF no `specs/ux-variations-*.md`: check `.agents/project.json.enabled_packs` for `product-design` — if `product-design` is not enabled, recommend `$pack install product-design` first; if `product-design` is enabled, recommend `$ux-variations [top journey-backed market gap or positioning opportunity]` — explore experience directions before production specification
 4. IF no `research/value-prop.md` AND solution-customer fit is weak, disputed, or needs explicit fit scoring: `$value-prop-canvas` — validate contested solution-fit evidence as an optional detour
-5. IF no `research/gtm.md`: `$gtm` — build go-to-market plan leveraging competitive gaps
-6. IF codebase exists and no `research/mvp-gap.md`: `$mvp-gap` — check if the codebase exploits the gaps found
+5. IF no `research/gtm.md`: check `.agents/project.json.enabled_packs` for `business-growth` — if `business-growth` is not enabled, recommend `$pack install business-growth` first; if `business-growth` is enabled, recommend `$gtm` — build go-to-market plan leveraging competitive gaps
+6. IF codebase exists and no `research/mvp-gap.md`: check `.agents/project.json.enabled_packs` for `business-ops` — if `business-ops` is not enabled, recommend `$pack install business-ops` first; if `business-ops` is enabled, recommend `$mvp-gap` — check if the codebase exploits the gaps found
 
 Use this format in the output:
 
@@ -107,11 +107,11 @@ Use this format in the output:
 Other options:
 - `$pack install customer-lifecycle` or `$journey-map` — map the customer journey to find where competitors fall short (if no `research/journey-map.md` and not recommended; check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if not enabled, recommend `$pack install customer-lifecycle`; if enabled, recommend `$journey-map`)
 - `$positioning` — frame the market category and competitive alternatives after journey evidence exists (if no `research/positioning.md` and not recommended)
-- `$ux-variations [top journey-backed market gap or positioning opportunity]` — explore prototype directions before production specification (if positioning exists and not recommended)
+- check `.agents/project.json.enabled_packs` for `product-design` — if `product-design` is not enabled, recommend `$pack install product-design` first; if `product-design` is enabled, recommend `$ux-variations [top journey-backed market gap or positioning opportunity]` — explore prototype directions before production specification (if positioning exists and not recommended)
 - `$value-prop-canvas` — optional detour only when solution-customer fit is weak, disputed, or needs explicit fit scoring before positioning/spec work
-- `$gtm` — build go-to-market plan leveraging competitive gaps (if no `research/gtm.md` and not recommended)
-- `$mvp-gap` — check if the codebase exploits the gaps found (if codebase exists, no `research/mvp-gap.md` exists, and not recommended)
-- `$brainstorm` — generate alternative solution ideas (only if the analysis found multiple plausible market gaps and product direction is still unclear)
+- check `.agents/project.json.enabled_packs` for `business-growth` — if `business-growth` is not enabled, recommend `$pack install business-growth` first; if `business-growth` is enabled, recommend `$gtm` — build go-to-market plan leveraging competitive gaps (if no `research/gtm.md` and not recommended)
+- check `.agents/project.json.enabled_packs` for `business-ops` — if `business-ops` is not enabled, recommend `$pack install business-ops` first; if `business-ops` is enabled, recommend `$mvp-gap` — check if the codebase exploits the gaps found (if codebase exists, no `research/mvp-gap.md` exists, and not recommended)
+- check `.agents/project.json.enabled_packs` for `product-design` — if `product-design` is not enabled, recommend `$pack install product-design` first; if `product-design` is enabled, recommend `$brainstorm` — generate alternative solution ideas (only if the analysis found multiple plausible market gaps and product direction is still unclear)
 
 Only include items whose conditions are met. Do not recommend brainstorm just because competitive whitespace exists.
 

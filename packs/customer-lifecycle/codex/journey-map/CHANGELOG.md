@@ -1,5 +1,9 @@
 # journey-map changelog (codex)
 
+## v0.3 - 2026-05-26
+
+- Gate cross-pack routing recommendations on pack availability — recommend `$pack install <pack>` when the target pack is not enabled
+
 ## v0.1
 
 - Route default AFPS handoff from journey-map to positioning before UX work.

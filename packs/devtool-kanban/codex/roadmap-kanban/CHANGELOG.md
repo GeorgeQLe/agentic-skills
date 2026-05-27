@@ -1,4 +1,8 @@
-# Changelog
+# roadmap-kanban changelog (codex)
+
+## v0.2 - 2026-05-26
+
+- Gate cross-pack `$roadmap` dependency on `agent-work-admin` pack availability
 
 ## v0.1 - 2026-05-25
 

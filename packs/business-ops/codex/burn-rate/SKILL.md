@@ -2,7 +2,7 @@
 name: burn-rate
 description: "Estimate monthly burn rate from infrastructure signals and calculate payback period against revenue projections"
 type: analysis
-version: v0.1
+version: v0.2
 ---
 
 # Burn Rate — Infrastructure-Grounded Cost & Runway Analysis
@@ -63,7 +63,14 @@ Present analysis and ask for factual corrections, missing internal figures, or h
 ### 4. Downstream Impact & Next Steps
 
 1. Check if `research/monetization.md` exists and conflicts with burn rate findings (stale margins, divergent unit economics). Classify as None/Minor/Major.
-2. Populate `## Next Steps` (3-5 items, "Pick one:" framing) — conditionally suggest `$monetization`, `$gtm`, `$metrics`, `$scale-audit`, `$brainstorm`, `$reconcile-research` based on what exists and what conflicts were found.
+2. Populate `## Next Steps` (3-5 items, "Pick one:" framing) — conditionally suggest the following based on what exists and what conflicts were found:
+   - `$scale-audit` — same pack, always valid
+   - `$reconcile-research` — same pack, always valid
+   - IF no `research/monetization.md`: check `.agents/project.json.enabled_packs` for `business-growth` — if `business-growth` is not enabled, recommend `$pack install business-growth` first; if `business-growth` is enabled, recommend `$monetization` — Build pricing strategy informed by actual infrastructure costs
+   - IF `research/monetization.md` exists but unit economics differ: check `.agents/project.json.enabled_packs` for `business-growth` — if `business-growth` is not enabled, recommend `$pack install business-growth` first; if `business-growth` is enabled, recommend `$monetization` — Update unit economics with infrastructure-grounded costs
+   - IF no `research/gtm.md`: check `.agents/project.json.enabled_packs` for `business-growth` — if `business-growth` is not enabled, recommend `$pack install business-growth` first; if `business-growth` is enabled, recommend `$gtm` — Build go-to-market plan with cost-aware pricing
+   - IF no `research/metrics.md`: check `.agents/project.json.enabled_packs` for `business-growth` — if `business-growth` is not enabled, recommend `$pack install business-growth` first; if `business-growth` is enabled, recommend `$metrics` — Define metrics to track burn rate health (cost per customer, infrastructure efficiency)
+   - IF codebase exists and optimization opportunities found: check `.agents/project.json.enabled_packs` for `product-design` — if `product-design` is not enabled, recommend `$pack install product-design` first; if `product-design` is enabled, recommend `$brainstorm` — Explore cost optimization as a feature priority
 
 ## Deliverables
 

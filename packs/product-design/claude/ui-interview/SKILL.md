@@ -2,7 +2,7 @@
 name: ui-interview
 description: Interview page by page to define a complete UI specification, including layout, hierarchy, controls, links, spacing, sizing, responsive behavior, visual states, and implementation-ready interface details — supports a requirements-only mode that establishes data, actions, and states without locking layout or component decisions
 type: planning
-version: v0.1
+version: v0.2
 argument-hint: "[optional: app, page, flow, feature, or draft UI]"
 ---
 
@@ -88,7 +88,7 @@ The UI specification must include source evidence, the confirmed UI Assumptions 
 
 The interview log must include the manifest, every question asked, options and recommendations presented, user responses, final decisions, and notable changes from the initial draft, current implementation, or artifact.
 
-After writing files, recommend `/ux-variations` if variants are needed before implementation, or `/roadmap` (requires agent-work-admin pack) if the interface is ready to sequence into work.
+After writing files, recommend `/ux-variations` if variants are needed before implementation, or check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `/pack install agent-work-admin` first; if `agent-work-admin` is enabled, recommend `/roadmap` — if the interface is ready to sequence into work.
 
 ### Alignment Page
 

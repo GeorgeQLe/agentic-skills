@@ -2,7 +2,7 @@
 name: roadmap-kanban
 description: PoketoWork kanban variant of roadmap — sync roadmap phases and current steps to cards
 type: planning
-version: v0.1
+version: v0.2
 argument-hint: "[--existing] [path-to-spec]"
 allowed-tools: Bash(poketo *)
 ---
@@ -15,7 +15,7 @@ Use this skill only in projects that have opted into a PoketoWork kanban pack.
 
 ## Process
 
-1. Follow the base `$roadmap` workflow exactly, passing through `$ARGUMENTS`.
+1. Check `.agents/project.json` `enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `$pack install agent-work-admin` first and stop; if `agent-work-admin` is enabled, follow the base `$roadmap` workflow exactly, passing through `$ARGUMENTS`.
 2. Resolve and validate the project board using `tasks/.kanban-board`, `poketo kanban boards`, and the standard lists: Backlog, Todo, In Progress, Done, Punt.
 3. Fetch the board and show a brief overview before roadmap work.
 4. After the base roadmap writes or updates `tasks/roadmap.md` and `tasks/todo.md`, sync cards:

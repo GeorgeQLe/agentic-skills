@@ -2,7 +2,7 @@
 name: devtool-dx-journey
 description: Use only for developer-facing products; analyze install, quickstart, first success, debugging, and production adoption journeys
 type: analysis
-version: v0.1
+version: v0.2
 ---
 
 # Devtool DX Journey
@@ -19,7 +19,7 @@ After writing the artifact, recommend the next contextual skill:
 
 1. If `tasks/todo.md` has an unchecked devtool item in `## Priority Documentation Todo`, recommend the first unchecked devtool command from that queue.
 2. Otherwise, follow the default devtool sequence: `/devtool-adoption` after this skill.
-3. If the sequence is ambiguous or multiple devtool artifacts are stale, recommend `/research-roadmap` to rebuild the ordered documentation queue.
+3. If the sequence is ambiguous or multiple devtool artifacts are stale: check `.agents/project.json.enabled_packs` for `research-admin` — if `research-admin` is not enabled, recommend `/pack install research-admin` first; if `research-admin` is enabled, recommend `/research-roadmap` — to rebuild the ordered documentation queue.
 
 ## Task Classification
 

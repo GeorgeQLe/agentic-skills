@@ -2,7 +2,7 @@
 name: consolidate-variations
 description: Compare multiple built UI variations after UAT evidence, interview the user on what works and what does not, resolve conflicts, and produce a final implementation-ready UI specification
 type: planning
-version: v0.1
+version: v0.2
 argument-hint: "[optional: topic, page, or path to variation specs]"
 ---
 
@@ -10,7 +10,7 @@ argument-hint: "[optional: topic, page, or path to variation specs]"
 
 Invoke as `$consolidate-variations`.
 
-Use this skill after the user has built and evaluated multiple UI layout variations, typically generated via `$ux-variations --layout-mode`, built via `$exec`, and evaluated via `$uat --variant-evaluation`. This skill compares the variations, interviews the user on what works and what does not in each one, cherry-picks the best elements, resolves conflicts where preferred choices are incompatible, and produces a single consolidated implementation-ready UI specification.
+Use this skill after the user has built and evaluated multiple UI layout variations (typically generated via `$ux-variations --layout-mode`, built via `$exec`, and evaluated via `$uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `$pack install product-testing` first)). This skill compares the variations, interviews the user on what works and what does not in each one, cherry-picks the best elements, resolves conflicts where preferred choices are incompatible, and produces a single consolidated implementation-ready UI specification.
 
 Users with manually built variations can also use this skill directly, but consolidation should not happen before the user has reviewed the variants and captured evidence.
 
@@ -26,9 +26,9 @@ Users with manually built variations can also use this skill directly, but conso
    - If the variation spec or implementations cannot be found, ask the user to point to them.
 
 2. **Evidence gate**
-   - If no evaluation evidence exists and the user has not explicitly said they already reviewed the variants and is ready to converge, stop and recommend `$uat --variant-evaluation`.
+   - If no evaluation evidence exists and the user has not explicitly said they already reviewed the variants and is ready to converge, stop and recommend `$uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `$pack install product-testing` first).
    - Do not infer a winner from specs alone. Built variants need hands-on review or explicit user readiness before consolidation.
-   - If some variants are unreviewed, ask whether to exclude them, evaluate them first via `$uat --variant-evaluation`, or include them as spec-only references.
+   - If some variants are unreviewed, ask whether to exclude them, evaluate them first via `$uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `$pack install product-testing` first), or include them as spec-only references.
 
 3. **Present variation inventory**
    - List each variation with a one-line summary of its approach.

@@ -2,7 +2,7 @@
 name: reconcile-research
 description: Cross-document consistency audit across research outputs — find contradictions, stale assumptions, and gaps
 type: research
-version: v0.1
+version: v0.2
 argument-hint: "[audit|fix] [all|icp|pricing|journey|enterprise|feedback|specs]"
 ---
 
@@ -237,9 +237,11 @@ After presenting findings (audit mode) or applying resolutions (fix mode), displ
 
 Other options:
 - `$skill` — [N] conflicts in [scope] (re-run to fix)
-- ...
+- check `.agents/project.json.enabled_packs` for `research-admin` — if `research-admin` is not enabled, recommend `$pack install research-admin` first; if `research-admin` is enabled, recommend `$research-roadmap` — rebuild the ordered documentation queue after reconciliation
+- check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `$pack install agent-work-admin` first; if `agent-work-admin` is enabled, recommend `$spec-drift` — check whether code/spec drift remains after research reconciliation
+- check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `$pack install agent-work-admin` first; if `agent-work-admin` is enabled, recommend `$roadmap` — resequence implementation if reconciliation changed priorities
 
-**Recommendation logic:** Identify the skill that produced the document with the most Error/Warning-severity conflicts. That skill is the recommendation — re-running it with current upstream context will resolve the most issues. List other conflict-bearing skills as alternatives, ordered by conflict count descending. If audit mode found only deferred items, or fix mode resolved every actionable conflict, recommend `$research-roadmap` — check overall project status. If no conflicts, deferred items, or follow-up work remain, explicitly state "No follow-up skill recommended" instead of inventing work.
+**Recommendation logic:** Identify the skill that produced the document with the most Error/Warning-severity conflicts. That skill is the recommendation — re-running it with current upstream context will resolve the most issues. List other conflict-bearing skills as alternatives, ordered by conflict count descending. If audit mode found only deferred items, or fix mode resolved every actionable conflict, check `.agents/project.json.enabled_packs` for `research-admin` — if `research-admin` is not enabled, recommend `$pack install research-admin` first; if `research-admin` is enabled, recommend `$research-roadmap` — check overall project status. If no conflicts, deferred items, or follow-up work remain, explicitly state "No follow-up skill recommended" instead of inventing work.
 
 ## Task Classification
 

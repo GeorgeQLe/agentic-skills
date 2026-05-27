@@ -2,7 +2,7 @@
 name: icp
 description: Research-driven ICP discovery — web search + codebase analysis to identify multiple ICPs, pain points, value props, and cross-ICP prioritization
 type: research
-version: v0.3
+version: v0.4
 argument-hint: <spec file path, concept/idea, or empty to use concept brief>
 ---
 
@@ -68,9 +68,9 @@ The output file must end with a `## Next Steps` section based on which files exi
 
 Other options:
 - `$competitive-analysis` — Map the competitive landscape for this ICP's market (if no `research/competitive-analysis.md`)
-- `$journey-map` — map the current-state journey to find intervention points (if no `research/journey-map.md`)
-- `$mvp-gap` — check if the codebase delivers on the ICP's top pain point (if codebase exists)
-- `$brainstorm` — generate solution ideas grounded in the ICP research (if `research/competitive-analysis.md` exists)
+- IF no `research/journey-map.md`: check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if `customer-lifecycle` is not enabled, recommend `$pack install customer-lifecycle` first; if `customer-lifecycle` is enabled, recommend `$journey-map` — map the current-state journey to find intervention points
+- IF codebase exists: check `.agents/project.json.enabled_packs` for `business-ops` — if `business-ops` is not enabled, recommend `$pack install business-ops` first; if `business-ops` is enabled, recommend `$mvp-gap` — check if the codebase delivers on the ICP's top pain point
+- IF `research/competitive-analysis.md` exists: check `.agents/project.json.enabled_packs` for `product-design` — if `product-design` is not enabled, recommend `$pack install product-design` first; if `product-design` is enabled, recommend `$brainstorm` — generate solution ideas grounded in the ICP research
 
 Only include items whose conditions are met. The recommendation (`$competitive-analysis`) is always applicable.
 

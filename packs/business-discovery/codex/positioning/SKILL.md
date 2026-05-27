@@ -2,7 +2,7 @@
 name: positioning
 description: Strategic positioning (April Dunford style) — competitive alternatives, unique attributes, value, target segment, market category
 type: research
-version: v0.2
+version: v0.3
 argument-hint: "[optional: focus area e.g. \"category\", \"vs competitor X\"]"
 ---
 
@@ -158,16 +158,14 @@ Include a **Recommended** item (the single highest-impact next step given curren
 
 ## Next Steps
 
-**Recommended:** `$ux-variations [positioning-backed product direction]` — explore prototype directions now that ICP, competitive, journey, and positioning evidence are aligned
-
-Other options:
-- IF no `research/journey-map.md`: `$journey-map` — map the customer journey to ground the business model in reality
-- IF solution-customer fit is weak, disputed, or needs explicit scoring: `$value-prop-canvas` — optional detour to validate contested fit before UX or spec work
-- IF revenue, channels, cost, defensibility, or unfair-advantage assumptions are material risks: `$lean-canvas` — optional business-model synthesis before growth or ops work
-- IF no `research/gtm.md`: `$gtm` — Build go-to-market plan grounded in this positioning
-- IF `research/gtm.md` exists: `$gtm` — Refresh messaging framework to align with positioning
-- IF no `research/monetization.md`: `$monetization` — Positioning informs pricing — "premium" vs "value" positioning changes price expectations
-- IF codebase exists: `$mvp-gap` — Check if the product delivers on the positioning promise
+- ALWAYS: check `.agents/project.json.enabled_packs` for `product-design` — if `product-design` is not enabled, recommend `$pack install product-design` first; if `product-design` is enabled, recommend `$ux-variations [positioning-backed product direction]` — Explore prototype directions now that ICP, competitive, journey, and positioning evidence are aligned
+- IF no `research/journey-map.md`: check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if `customer-lifecycle` is not enabled, recommend `$pack install customer-lifecycle` first; if `customer-lifecycle` is enabled, recommend `$journey-map` — Map the customer journey before writing canonical positioning
+- IF solution-customer fit is weak, disputed, or needs explicit scoring: `$value-prop-canvas` — Optional detour to validate contested fit before UX or spec work
+- IF revenue, channels, cost, defensibility, or unfair-advantage assumptions are material risks: `$lean-canvas` — Optional business-model synthesis before growth or ops work
+- IF no `research/gtm.md`: check `.agents/project.json.enabled_packs` for `business-growth` — if `business-growth` is not enabled, recommend `$pack install business-growth` first; if `business-growth` is enabled, recommend `$gtm` — Build go-to-market plan grounded in this positioning
+- IF `research/gtm.md` exists: check `.agents/project.json.enabled_packs` for `business-growth` — if `business-growth` is not enabled, recommend `$pack install business-growth` first; if `business-growth` is enabled, recommend `$gtm` — Refresh messaging framework to align with positioning
+- IF no `research/monetization.md`: check `.agents/project.json.enabled_packs` for `business-growth` — if `business-growth` is not enabled, recommend `$pack install business-growth` first; if `business-growth` is enabled, recommend `$monetization` — Positioning informs pricing — "premium" vs "value" positioning changes price expectations
+- IF codebase exists: check `.agents/project.json.enabled_packs` for `business-ops` — if `business-ops` is not enabled, recommend `$pack install business-ops` first; if `business-ops` is enabled, recommend `$mvp-gap` — Check if the product delivers on the positioning promise
 
 The recommendation (`$ux-variations`) is the default AFPS route after positioning. `$value-prop-canvas` and `$lean-canvas` are optional detours only when their risk conditions are present.
 
