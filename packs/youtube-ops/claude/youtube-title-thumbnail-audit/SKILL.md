@@ -43,6 +43,8 @@ Turn channel and peer evidence into a packaging diagnosis for existing videos an
 8. Produce exactly 3 title+thumbnail combinations for YouTube's **Test and Compare** feature. Each combination is a paired title and thumbnail concept designed to run simultaneously — YouTube rotates all 3 across real viewers and measures watch-time-per-impression over up to 2 weeks to surface a winner. Do not frame these as "pick one and swap later"; all 3 upload at the same time. Each combo should test a distinct packaging hypothesis (e.g., search-led vs. curiosity-hook vs. feature-led) while staying within the channel's visual identity.
 9. Write `research/youtube/title-thumbnail-audit-<slug>.md`.
 
+Create the `research/youtube/` directory if it does not exist.
+
 ## Report Sections
 
 - Evidence coverage: videos scored, thumbnail availability, peer coverage, and missing fields.

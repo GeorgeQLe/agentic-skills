@@ -32,6 +32,8 @@ Turn channel-audit evidence into a portfolio view: what the channel has publishe
 
 ## Output
 
+Create the `research/youtube/` directory if it does not exist.
+
 Write `research/youtube/portfolio-<slug>.md` with:
 
 - Portfolio summary for `@GeorgeLe`, `WeeklyG`, `WeeklySOTA`, or the supplied channel.

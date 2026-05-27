@@ -59,6 +59,8 @@ Study external YouTube videos as competitive or opposition research. The goal is
 
 ## Output
 
+Create the `research/youtube/` and `research/youtube/data/<video-id>/` directories if they do not exist.
+
 Write:
 
 ```text

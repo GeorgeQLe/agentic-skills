@@ -39,6 +39,8 @@ Take an approved video script and produce a build specification document and a s
 
 ## Output
 
+Create the `specs/youtube/` and `src/videos/<slug>/` directories if they do not exist.
+
 Write `specs/youtube/video-build-<slug>.md` with:
 
 - **Build Brief:** script reference, style, fps, resolution, target platform.

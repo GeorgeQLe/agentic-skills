@@ -42,6 +42,8 @@ Quantify publishing consistency, gap costs, and realistic cadence choices before
 7. Decide whether the data points to frequency, topic selection, packaging, or production quality as the more likely bottleneck.
 8. Write `research/youtube/cadence-diagnosis-<slug>.md`.
 
+Create the `research/youtube/` directory if it does not exist.
+
 ## Report Sections
 
 - Evidence coverage: videos analyzed, date range, peer coverage, and missing fields.

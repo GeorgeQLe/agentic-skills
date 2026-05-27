@@ -57,7 +57,7 @@ Recommended split:
 
 | New pack | Skills | Lines |
 | --- | --- | ---: |
-| `creator-foundation` | `research-bootstrap`, `research-directory-conventions`, `creator-platform-capability-matrix`, `creator-evidence-schema`, `creator-presence-dossier`, `creator-positioning`, `content-programming`, `series-spec`, `product-led-media-map`, `creator-metrics-review` | 1,708 |
+| `creator-foundation` | `research-directory-conventions`, `creator-platform-capability-matrix`, `creator-evidence-schema`, `creator-presence-dossier`, `creator-positioning`, `content-programming`, `series-spec`, `product-led-media-map`, `creator-metrics-review` | 1,708 |
 | `youtube-ops` | `youtube-channel-audit`, `youtube-video-audit`, `youtube-vid-research`, `youtube-competitive-research`, `youtube-title-thumbnail-audit`, `youtube-description-optimizer`, `youtube-portfolio`, `youtube-peer-benchmark`, `youtube-search-positioning`, `youtube-cadence-diagnosis` | 2,155 |
 
 Keep `creator-media` as a compatibility alias or thin meta-pack. Install `creator-foundation` for creator strategy, `youtube-ops` only when actively auditing YouTube, and `remotion` only for format/script/build.

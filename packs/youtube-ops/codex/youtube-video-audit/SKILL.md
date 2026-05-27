@@ -110,6 +110,8 @@ Do not fabricate transcript quotes, comments, thumbnails, retention curves, or m
 
 ### 6. Write Report
 
+Create the `research/youtube/` and `research/youtube/data/<video-id>/` directories if they do not exist.
+
 Save to:
 
 ```text

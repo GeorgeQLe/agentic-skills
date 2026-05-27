@@ -34,6 +34,8 @@ Use the local `/youtube-audit` workflow as the evidence-capture engine, then syn
    - `transcripts/transcripts-summary.json`
 4. Write `research/youtube/channel-audit-<slug>.md`.
 
+Create the `research/youtube/` and `research/youtube/data/<slug>/` directories if they do not exist.
+
 ## Report Sections
 
 - Channel identity and audience promise.

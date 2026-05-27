@@ -33,6 +33,8 @@ Turn audit, portfolio, and benchmark evidence into a clear creator positioning b
 
 ## Output
 
+Create the `research/youtube/` directory if it does not exist.
+
 Write `research/youtube/creator-positioning-<slug>.md` with:
 
 - Current audience promise.

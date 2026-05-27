@@ -59,6 +59,8 @@ Enhancement tiers based on available artifacts:
 
 ## Output
 
+Create the `specs/youtube/` directory if it does not exist.
+
 Write `specs/youtube/video-script-<slug>.md` with:
 
 - **Video Brief:** type, audience, goal, duration target, series context, enhancement tier.

@@ -55,6 +55,8 @@ Research external YouTube videos so the agent can understand what the user is re
 
 ## Output
 
+Create the `research/youtube/` and `research/youtube/data/<video-id>/` directories if they do not exist.
+
 Write:
 
 ```text

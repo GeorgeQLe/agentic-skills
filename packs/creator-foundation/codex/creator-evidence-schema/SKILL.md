@@ -144,6 +144,8 @@ High-risk evidence must recommend manual snapshots, owner exports, or stopping f
 
 ## Output Requirements
 
+Create the `research/creator-platforms/` directory if it does not exist.
+
 `research/creator-platforms/evidence-schema.md` must contain:
 
 - Scope and capture date.

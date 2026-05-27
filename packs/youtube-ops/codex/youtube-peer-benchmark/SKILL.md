@@ -31,6 +31,8 @@ Benchmark one primary channel against comparable channels. Use this for creator 
 3. Read raw metadata from `research/youtube/data/<slug>/videos-*.jsonl` when available.
 4. Write `research/youtube/peer-benchmark-<primary-slug>.md`.
 
+Create the `research/youtube/` directory if it does not exist.
+
 ## Report Sections
 
 - Peer set rationale and caveats.

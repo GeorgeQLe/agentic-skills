@@ -29,6 +29,8 @@ Create a programming strategy for a creator-media channel. This is the channel a
 
 ## Output
 
+Create the `research/youtube/` directory if it does not exist.
+
 Write `research/youtube/content-programming-<slug>.md` with:
 
 - Programming thesis: what the channel repeatedly earns attention for.

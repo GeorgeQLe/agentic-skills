@@ -104,6 +104,8 @@ High-risk rows must recommend manual snapshots, owner exports, or stopping for u
 
 ## Output Requirements
 
+Create the `research/creator-platforms/` directory if it does not exist.
+
 `research/creator-platforms/capability-matrix.md` must contain:
 
 - Scope and capture date.

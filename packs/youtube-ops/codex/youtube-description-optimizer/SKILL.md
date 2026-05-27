@@ -55,6 +55,8 @@ Optimize YouTube descriptions and adjacent metadata for existing videos, future 
 
 ## Output
 
+Create the `research/youtube/`, `research/youtube/data/<video-id>/`, and `specs/youtube/` directories if they do not exist.
+
 Write exactly one artifact:
 
 - Audit mode: `research/youtube/description-optimizer-<video-id>-YYYY-MM-DD.md`

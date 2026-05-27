@@ -184,6 +184,8 @@ For each peer comparison, categorize the gap across five dimensions:
 
 Save to `research/youtube/peer-benchmark-<primary-slug>-YYYY-MM-DD.md`:
 
+Create the `research/youtube/` directory if it does not exist.
+
 ```markdown
 # YouTube Peer Benchmark — [Channel Name]
 

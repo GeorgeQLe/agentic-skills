@@ -320,7 +320,7 @@ scripts/pack.sh install youtube-ops
 Creator foundation:
 
 ```text
-research-bootstrap, research-directory-conventions,
+research-directory-conventions,
 creator-platform-capability-matrix, creator-evidence-schema,
 creator-presence-dossier, creator-positioning, content-programming,
 series-spec, product-led-media-map, creator-metrics-review

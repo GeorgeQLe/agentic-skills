@@ -76,6 +76,8 @@ Research a proposed YouTube video concept before scripting or production. Start 
 
 ## Output
 
+Create the `research/youtube/` and `research/youtube/data/<video-id>/` directories if they do not exist.
+
 Write:
 
 ```text

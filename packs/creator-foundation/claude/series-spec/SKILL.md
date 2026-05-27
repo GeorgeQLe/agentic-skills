@@ -19,6 +19,8 @@ Define a repeatable series format that can be produced consistently. Use this fo
 
 ## Output
 
+Create the `specs/youtube/` directory if it does not exist.
+
 Write `specs/youtube/series-<slug>.md` with:
 
 - Series promise and target viewer.

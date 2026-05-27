@@ -41,6 +41,8 @@ Identify the next search-led topic opportunities by connecting channel evidence,
 6. Identify underserved queries where demand is visible but top results are stale, shallow, off-position, or weakly packaged.
 7. Write `research/youtube/search-positioning-<slug>.md`.
 
+Create the `research/youtube/` directory if it does not exist.
+
 ## Report Sections
 
 - Evidence coverage: query count, search date, geography/account caveats, and unavailable metrics.

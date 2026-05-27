@@ -56,6 +56,8 @@ Analyze how a reference YouTube video is constructed so its format, design langu
 
 ## Output
 
+Create the `research/youtube/` directory if it does not exist.
+
 Write:
 
 ```text

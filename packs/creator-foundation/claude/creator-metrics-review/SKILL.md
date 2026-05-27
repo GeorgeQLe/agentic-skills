@@ -33,6 +33,8 @@ Review channel performance against the strategy and decide what to continue, cha
 
 ## Output
 
+Create the `research/youtube/` directory if it does not exist.
+
 Write `research/youtube/metrics-review-<slug>-YYYY-MM-DD.md` with:
 
 - Period covered and evidence paths.

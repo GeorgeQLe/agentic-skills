@@ -11,8 +11,7 @@ LinkedIn route: `creator-platform-capability-matrix -> creator-evidence-schema -
 Default flow:
 
 ```text
-research-bootstrap -> research-directory-conventions
--> creator-platform-capability-matrix -> creator-evidence-schema
+creator-platform-capability-matrix -> creator-evidence-schema
 -> creator-presence-dossier -> creator-positioning -> content-programming
 -> series-spec -> product-led-media-map -> creator-metrics-review
 ```
@@ -22,7 +21,7 @@ After an approved synthesized artifact write, creator-foundation skills must han
 Skills:
 
 ```text
-research-bootstrap, research-directory-conventions,
+research-directory-conventions,
 creator-platform-capability-matrix, creator-evidence-schema,
 creator-presence-dossier, creator-positioning, content-programming,
 series-spec, product-led-media-map, creator-metrics-review

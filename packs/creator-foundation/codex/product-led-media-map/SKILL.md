@@ -28,6 +28,8 @@ Connect a product, company, or founder project to a credible creator-media strat
 
 ## Output
 
+Create the `research/youtube/` directory if it does not exist.
+
 Write `research/youtube/product-led-media-map-<slug>.md` with:
 
 - Product truth: what can be shown, proven, or taught.

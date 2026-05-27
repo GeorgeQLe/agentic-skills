@@ -75,6 +75,8 @@ Support these source families when evidence is present:
 
 ## Output Requirements
 
+Create the `research/creator-presence/` directory if it does not exist.
+
 `research/creator-presence/<slug>.md` must contain:
 
 - Scope, capture date, and source assumptions.

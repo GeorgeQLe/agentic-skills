@@ -224,7 +224,7 @@ The devtool workflow validates developer adoption, integration fit, documentatio
 For YouTube channels, non-YouTube creator platforms, founder-led media, product-led content, creator portfolios, and recurring shows.
 
 ```text
-creator-foundation: research-bootstrap, research-directory-conventions,
+creator-foundation: research-directory-conventions,
 creator-platform-capability-matrix, creator-evidence-schema,
 creator-presence-dossier, creator-positioning, content-programming,
 series-spec, product-led-media-map, creator-metrics-review
