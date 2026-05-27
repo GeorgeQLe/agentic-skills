@@ -1,3 +1,22 @@
+## Current Task — Git History Skill Quality Audit 2026-05-27
+
+**Goal:** Review git history and repository evidence to evaluate whether the current skills are as strong as they should be, and identify the highest-leverage remaining improvements.
+
+**Plan:**
+- [x] Record the audit plan and confirm the repository is clean.
+- [x] Inspect recent git history, task reviews, lessons, validation scripts, and active skill contracts.
+- [x] Classify recurring quality gaps by severity and evidence.
+- [x] Report whether the skill set is currently best-possible, good-enough, or still has systematic gaps, with prioritized next work.
+
+### Review
+
+- Verdict: the skill set is strong and improving quickly, but not "best possible" yet. The main remaining gaps are systemic validation/routing drift, stale benchmark registry data, and uneven enforcement of output-quality contracts across older/pack-local skills.
+- Evidence: May git history shows repeated targeted fixes around alignment pages, routing handoffs, benchmark fixtures, archive/versioning, command-surface drift, and installer/discovery behavior rather than isolated one-off bugs.
+- Strong checks now pass: `bash scripts/skill-archive-audit.sh --strict`, `bash scripts/skill-versions.sh --missing`, and `bash scripts/skill-deps.sh --broken`.
+- Remaining validation blockers: `bash scripts/skill-next-step-routing.sh --missing` still reports 80 active skill paths after filtering archives, and `pnpm --dir tests bench:coverage` fails because `research-bootstrap` remains in benchmark coverage/setup metadata after the skill was removed.
+- Positive coverage signals: 347 active `SKILL.md` files, 288 active skills mention alignment/HTML review behavior, 227 active skills mention next-step routing, 113 benchmark report files exist, and 265 unique test/benchmark paths changed since 2026-05-01.
+- Highest-leverage next work: fix stale benchmark coverage rows, update the routing audit to ignore archives and classify intentional terminal/utility skills, then close the active routing gaps for mutation/research/design skills before broad skill rewrites.
+
 # Active Phase
 
 **Project:** Claude Skills / agentic-skills
