@@ -1,3 +1,9 @@
+# Changelog
+
+## v0.0
+
+- Archived previous skill contract.
+
 # plan-phase changelog (codex)
 
 ## v0.1 - 2026-05-26

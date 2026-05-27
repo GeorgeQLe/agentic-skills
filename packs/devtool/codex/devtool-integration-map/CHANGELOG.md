@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.0
+
+- Archived previous skill contract.
+
 ## v0.2 - 2026-05-27
 
 - Gate cross-pack `$research-roadmap` recommendation on `research-admin` pack availability

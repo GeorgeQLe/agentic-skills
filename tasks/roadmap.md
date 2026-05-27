@@ -16,6 +16,18 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Update: Project-Local Skill Invocation Cleanup 2026-05-27
+
+**Goal:** Remove extraneous project-local skills from the Codex `$` invocation surface so this repository exposes only intentionally enabled skills instead of broad or stale pack links.
+
+**Acceptance Criteria:**
+- [x] Current `.agents/project.json`, `.codex/skills`, and `.claude/skills` state is audited for skills that do not match the intended project-local surface.
+- [x] Broad enabled packs are removed from this project designation when only individually enabled skills should remain.
+- [x] Project-local symlinks are pruned so Codex `$` invocation is not polluted by benchmark or stale pack skills.
+- [x] Verification confirms the remaining local skill links match `.agents/project.json`, unrelated dirty worktree changes are preserved, and intended changes are committed and pushed on `master`.
+
+**Result:** Updated on 2026-05-27. The local skill surface now exposes only `ship-end` via project-local symlinks, `.agents/project.json` no longer enables broad packs that would repopulate extra skills, and `scripts/pack.sh` now preserves individually enabled skills across status, refresh, install, remove, and project-file rewrites.
+
 ## Current Targeted Update: AFPS Alignment Preview Gate Audit 2026-05-27
 
 **Goal:** Investigate whether later AFPS workflow skills can plausibly skip, delay, or weaken the required HTML alignment preview because their local contracts only inherit the shared Alignment Page convention, place the Alignment Page section after write instructions, or lack an Alignment Page section entirely.
@@ -4745,6 +4757,7 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 ---
 
 ## Deferred / Future Work
+- **Skill structure best-practice audit (2026-05-27)** — preserve the current `global/{claude,codex}` and `packs/<pack>/{claude,codex}` model while tightening repo-local anatomy guidance, archive/changelog hygiene, and validation semantics so active-skill audits ignore historical archive noise.
 - **Alignment YAML clipboard UX (2026-05-24)** — tighten every active HTML alignment-page contract so compiled YAML is copied automatically when possible and always has an explicit copy-to-clipboard control; validate with broad layer1 contract tests.
 - **Kanban analytics** — cycle time, throughput, WIP limits via `/kanban-stats` skill (from original backlog)
 - **Two-way Neon ↔ poketowork UI sync** — webhook on git push (from original backlog)

@@ -8,8 +8,9 @@
 
 ## Priority Task Queue
 
+- [x] Clean project-local skill invocation surface — remove extraneous `.codex/skills` and `.claude/skills` links and narrow `.agents/project.json` to the intentionally enabled local skill(s).
 - [x] `$investigate journey-map alignment page and AFPS clunkiness` — validate whether journey-map/positioning contracts and recent conversation history explain inconsistent HTML alignment preview creation and workflow friction, then patch the minimal owning contracts/tests if confirmed.
-- [ ] `$investigate AFPS alignment preview gate audit` — audit later AFPS workflow skills for shared-convention-only, write-first, conditional, or missing HTML alignment preview gates; patch confirmed gaps with mirrored contract updates and focused tests.
+- [x] `$investigate AFPS alignment preview gate audit` — audit later AFPS workflow skills for shared-convention-only, write-first, conditional, or missing HTML alignment preview gates; patch confirmed gaps with mirrored contract updates and focused tests.
 - [x] `$investigate exec-loop run rename` — rename the exec-loop `run` skill to `exec` for Claude and Codex to avoid collision with Claude's default `/exec` surface; archive/version active skill contracts, update references, validate, commit, and push.
 - [x] `$targeted-skill-builder provision-agentic-config WSL browser open fallback` — update provisioned `CLAUDE.md`/`AGENTS.md` blocks and root `CLAUDE.md` so HTML files open through PowerShell `file://wsl.localhost` when UNC launch fails.
 - [ ] `$analyze-sessions split-path product research workflow` — investigate prior conversations where research surfaces multiple ICP/product-line/pivot options, then recommend how skills should handle branching without bogging down in 4-8 variation evaluations.
@@ -32,6 +33,25 @@
 - [x] `$exec` — Resume Phase 41 Batch 41.3 re-benchmarks: re-run the 33 Tier 2 global skills that were benchmarked pre-fixture-remediation with near-zero pass rates (Phase 43 added route guidance to all 32 fixture prompts and increased budgets). Current graded count: 69 unique skills / 158 total. Batch 41.5 pack-local groups also have remaining families. Batch 41.3 Group 2 shipped in `bc17fee` and `3e4bd78`; next triage should start with `provision-agentic-config`, `migrate`, or `prototype`.
 - [ ] Review `tasks/recurring-todo.md`: 2 unchecked recurring items — promote only if due and requiring execution work.
 - [ ] `$research-roadmap` — All 43 roadmap phases are complete. Run documentation health scan after Phase 41 remaining batches finish.
+
+## Current Task — Project-Local Skill Invocation Cleanup 2026-05-27
+
+**Goal:** Remove extraneous project-local skills from the `$` invocation surface while preserving unrelated in-progress repository changes.
+
+**Plan:**
+- [x] Inspect `.agents/project.json`, `.codex/skills`, `.claude/skills`, and pack installer behavior.
+- [x] Narrow `.agents/project.json` to the intentionally enabled local skill surface.
+- [x] Remove project-local symlinks that no longer belong to the intended surface.
+- [x] Verify local links and project config are consistent.
+- [x] Record review notes, commit, and push intended changes on `master`.
+
+### Review
+
+- Narrowed `.agents/project.json` from broad pack exposure to no enabled packs plus the individually enabled `ship-end` skill from `exec-loop`.
+- Removed stale and extraneous project-local skill symlinks from `.claude/skills`; `.codex/skills` now contains only the untracked local `ship-end` symlink.
+- Repaired `.claude/skills/ship-end` so it points at this checkout instead of the stale `/home/georgeqle/...` path.
+- Verification passed: `scripts/pack.sh status`; `scripts/pack.sh list-packs`; direct `find .codex/skills .claude/skills` link inspection.
+- Note: the active Codex session may still show skills loaded at session start; a fresh session from this checkout should see the pruned local surface.
 
 ## Current Task — AFPS Alignment Preview Gate Audit 2026-05-27
 
@@ -2523,4 +2543,33 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
 
 ### Review
 
-- In progress.
+- Added `docs/skill-anatomy.md` to preserve the current `global/{claude,codex}` and `packs/<pack>/{claude,codex}` layout while documenting required frontmatter, optional repo fields, archive/changelog rules, mirror expectations, and progressive-disclosure guidance.
+- Updated `scripts/skill-pack-routing-audit.sh` so active routing checks skip `archive/`, dedupe repeated same-line findings, and treat declared workflow dependency packs as intentional dependencies instead of availability-guard gaps.
+- Updated `tests/layer1/frontmatter.test.ts` so frontmatter validation covers active pack skills and leaves archive integrity to `skill-archive-audit.sh`.
+- Repaired archive hygiene by adding missing archived-version headings to changelogs for every active skill directory with `archive/<version>/SKILL.md`. Archived `SKILL.md` snapshots were not mutated.
+- Validation passed: `bash scripts/skill-versions.sh --missing`; `bash scripts/skill-archive-audit.sh --strict`; `./scripts/skill-pack-routing-audit.sh`; `./scripts/skill-deps.sh --broken`; `pnpm --dir tests exec vitest run --project layer1 layer1/frontmatter.test.ts`; `git diff --check`.
+- Validation correction: the planned command `pnpm --dir tests exec vitest run --project layer1 tests/layer1/frontmatter.test.ts` did not match the `tests` package include pattern and reported no files; rerunning with `layer1/frontmatter.test.ts` passed.
+- Showcase validation was not run for this structure pass because the intended changes do not change active `SKILL.md` metadata or generated showcase inputs. Existing generated asset dirtiness was already present in the worktree.
+- Shipping update: `$ship-end` superseded the previous stop and shipped the coherent pending boundary after re-validating script behavior, routing-audit behavior, frontmatter filtering, archive hygiene, dependency checks, and whitespace.
+
+## Ship Manifest — 2026-05-27
+
+**User goal:** Wrap up the current session with `$ship-end`: update docs, validate, commit, push, and report next work.
+
+**Changed files:** `.agents/project.json`; `.claude/skills/*`; `docs/skill-anatomy.md`; many `CHANGELOG.md` files under `global/` and `packs/`; `global/claude/pack/SKILL.md`; `scripts/pack.sh`; `scripts/skill-pack-routing-audit.sh`; `tasks/roadmap.md`; `tasks/todo.md`; `tasks/history.md`; `tests/layer1/frontmatter.test.ts`.
+
+**Per-file purpose:** Project config and symlinks prune the local invocation surface to `ship-end`; `scripts/pack.sh` supports individual skill install/remove/refresh/status; `skill-pack-routing-audit.sh` and `frontmatter.test.ts` align active-skill checks with archive semantics; changelogs record archived versions required by the archive audit; `docs/skill-anatomy.md` documents the active repository structure; task/history docs record the shipping boundary.
+
+**User-goal mapping:** The boundary preserves the intended local `$ship-end` surface and completes the skill-structure/archive hygiene cleanup needed to validate and ship the repo state.
+
+**Tests run:** `scripts/pack.sh status`; `scripts/pack.sh list-packs`; `find .codex/skills .claude/skills -mindepth 1 -maxdepth 1 -type l -print`; `scripts/pack.sh which ship-end`; `readlink .claude/skills/ship-end`; `readlink .codex/skills/ship-end`; `bash scripts/skill-versions.sh --missing`; `bash scripts/skill-archive-audit.sh --strict`; `./scripts/skill-pack-routing-audit.sh`; `./scripts/skill-deps.sh --broken`; `pnpm --dir tests exec vitest run --project layer1 layer1/frontmatter.test.ts`; `git diff --check`; targeted secret-pattern scan.
+
+**Skipped tests:** Full benchmark and showcase builds are skipped because no active `SKILL.md` metadata, benchmark fixture, app source, or generated showcase input changes are part of this shipping boundary. Deploy is skipped because `tasks/deploy.md` covers the Skills Showcase app and this boundary does not touch the app or generated showcase assets.
+
+**Adversarial review:** Changed-file self-review plus targeted validation checks. Main risks reviewed: accidental archive normalization, stale symlink retention, local skill state diverging from `.agents/project.json`, and routing-audit false positives from archive content.
+
+**Residual risk:** `scripts/pack.sh` now handles both packs and single skills, but this pass validates the current configured state and core routing rather than exhaustively testing every mixed install/remove argument combination. The secret scan matched benchmark run IDs in historical report paths, not credentials.
+
+**Rollback note:** Revert the shipping commit on `master` to restore the prior broad project-local pack links and previous validation semantics.
+
+**Next command:** `$investigate AFPS alignment preview gate audit`

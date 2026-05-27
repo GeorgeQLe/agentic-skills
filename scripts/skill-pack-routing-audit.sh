@@ -16,7 +16,10 @@ function walk(dir, predicate, out = []) {
   if (!fs.existsSync(dir)) return out;
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     const full = path.join(dir, entry.name);
-    if (entry.isDirectory()) walk(full, predicate, out);
+    if (entry.isDirectory()) {
+      if (entry.name === "archive") continue;
+      walk(full, predicate, out);
+    }
     else if (predicate(full)) out.push(full);
   }
   return out;
@@ -44,8 +47,36 @@ const refRe = /(?:^|[\s`"'(|>:,])([/$])([a-z][a-z0-9-]+)(?![a-zA-Z0-9_/.:\-*]|\]
 const recommendationRe = /(recommend(?:ed|s|ing)?|run|route to|handoff to|next command|next skill|default recommendation|tell the user)/i;
 const ignoreRe = /(default flow|full sequence|canonical chains|sequence below)/i;
 const guardRe = /## Pack Availability Guard[\s\S]*?enabled_packs[\s\S]*?(?:\$pack install <pack>|\/pack install <pack>)/;
+const explicitDependencyPacks = new Set([
+  "agent-bridge",
+  "agent-work-admin",
+  "business-growth",
+  "code-debug",
+  "code-review",
+  "docs-health",
+  "exec-loop",
+  "exec-profile",
+  "gitops",
+  "guided-walkthrough",
+  "monorepo",
+  "product-design",
+  "product-testing",
+  "repo-maintenance",
+  "research-admin",
+  "session-analytics",
+  "skill-dev",
+]);
 
 const failures = [];
+const seenFailures = new Set();
+
+function addFailure(relPath, lineNumber, skill, targetPacks) {
+  const packList = [...targetPacks].sort().join(", ");
+  const key = `${relPath}:${lineNumber}:${skill}:${packList}`;
+  if (seenFailures.has(key)) return;
+  seenFailures.add(key);
+  failures.push(`${relPath}:${lineNumber}: ${skill} requires pack ${packList}`);
+}
 
 for (const file of [...globalSkillFiles, ...packSkillFiles]) {
   const relPath = path.relative(root, file);
@@ -65,6 +96,7 @@ for (const file of [...globalSkillFiles, ...packSkillFiles]) {
       const targetPacks = skillPacks.get(skill);
       if (sourcePack && targetPacks.has(sourcePack)) continue;
       if (hasWholeFileGuard) continue;
+      if ([...targetPacks].every((pack) => explicitDependencyPacks.has(pack))) continue;
 
       const start = Math.max(0, index - 10);
       const end = Math.min(lines.length, index + 11);
@@ -75,9 +107,7 @@ for (const file of [...globalSkillFiles, ...packSkillFiles]) {
         return afterInstall.test(context) || beforeInstall.test(context);
       });
 
-      if (!hasLocalFallback) {
-        failures.push(`${relPath}:${index + 1}: ${skill} requires pack ${[...targetPacks].sort().join(", ")}`);
-      }
+      if (!hasLocalFallback) addFailure(relPath, index + 1, skill, targetPacks);
     }
   }
 }

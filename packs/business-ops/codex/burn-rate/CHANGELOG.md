@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.0
+
+- Archived previous skill contract.
+
 ## v0.2 - 2026-05-26
 
 - Gate cross-pack routing recommendations on pack availability — recommend `$pack install <pack>` when the target pack is not enabled

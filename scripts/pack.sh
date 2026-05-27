@@ -14,16 +14,16 @@ source "$REPO_ROOT/scripts/skill-links.sh"
 
 usage() {
   cat <<'EOF'
-Usage: pack.sh <command> [pack...]
+Usage: pack.sh <command> [pack-or-skill...]
 
 Commands:
   list              List available packs
   list-packs        List enabled packs from .agents/project.json (one per line, no decoration)
   status            Show project designation and installed local pack links
   recommend         Recommend a pack from repository signals
-  install <pack...> Enable one or more packs in the current project via local skill symlinks
-  remove <pack...>  Remove one or more pack's local skill symlinks from the current project
-  refresh           Recreate local symlinks for packs in .agents/project.json
+  install <name...> Enable one or more packs or individual skills via local skill symlinks
+  remove <name...>  Remove one or more packs or individual skills from the current project
+  refresh           Recreate local symlinks for packs and skills in .agents/project.json
   pin <skill> <ver> Pin a pack skill to an archived version (e.g., pin devtool-adoption v0.0)
   unpin <skill>     Revert a pinned skill to the latest version
   set-mode <mode>   Set .agents/project.json.agent_mode to claude-only, codex-only,
@@ -211,20 +211,25 @@ read_enabled_packs() {
   if [[ ! -f "$PROJECT_FILE" ]]; then
     return 0
   fi
-  grep -o '"enabled_packs"[[:space:]]*:[[:space:]]*\[[^]]*\]' "$PROJECT_FILE" \
-    | sed 's/.*\[//; s/\].*//' \
-    | tr ',' '\n' \
-    | sed 's/[ "	]//g' \
-    | sed '/^$/d' || true
+  if command -v jq >/dev/null 2>&1; then
+    jq -r '.enabled_packs // [] | .[]' "$PROJECT_FILE" 2>/dev/null || true
+  else
+    grep -o '"enabled_packs"[[:space:]]*:[[:space:]]*\[[^]]*\]' "$PROJECT_FILE" \
+      | sed 's/.*\[//; s/\].*//' \
+      | tr ',' '\n' \
+      | sed 's/[ "	]//g' \
+      | sed '/^$/d' || true
+  fi
 }
 
 write_project_file() {
   local project_type="$1"
   shift
-  local project_scopes notes pinned_versions
+  local project_scopes notes pinned_versions enabled_skills
   project_scopes="$(project_json_value project_scopes)"
   notes="$(project_json_value notes)"
   pinned_versions="$(read_pinned_versions)"
+  enabled_skills="$(read_enabled_skills_json)"
 
   mkdir -p "$(dirname "$PROJECT_FILE")"
   {
@@ -252,6 +257,9 @@ write_project_file() {
     fi
     if [[ -n "$pinned_versions" ]]; then
       printf ',\n  "pinned_versions": %s' "$pinned_versions"
+    fi
+    if [[ -n "$enabled_skills" ]]; then
+      printf ',\n  "enabled_skills": %s' "$enabled_skills"
     fi
     if [[ -n "$project_scopes" ]]; then
       printf ',\n  "project_scopes": %s' "$project_scopes"
@@ -304,6 +312,43 @@ get_pinned_version() {
   if [[ -f "$PROJECT_FILE" ]] && command -v jq >/dev/null 2>&1; then
     jq -r --arg s "$skill" '.pinned_versions[$s] // empty' "$PROJECT_FILE" 2>/dev/null || true
   fi
+}
+
+read_enabled_skills_json() {
+  if [[ -f "$PROJECT_FILE" ]] && command -v jq >/dev/null 2>&1; then
+    jq -c '.enabled_skills // empty' "$PROJECT_FILE" 2>/dev/null || true
+  fi
+}
+
+read_enabled_skills() {
+  if [[ -f "$PROJECT_FILE" ]] && command -v jq >/dev/null 2>&1; then
+    jq -r '.enabled_skills // {} | to_entries[] | "\(.key) \(.value)"' "$PROJECT_FILE" 2>/dev/null || true
+  fi
+}
+
+read_enabled_skill_pack() {
+  local skill="$1"
+  if [[ -f "$PROJECT_FILE" ]] && command -v jq >/dev/null 2>&1; then
+    jq -r --arg s "$skill" '.enabled_skills[$s] // empty' "$PROJECT_FILE" 2>/dev/null || true
+  fi
+}
+
+add_enabled_skill() {
+  local skill="$1" pack="$2"
+  command -v jq >/dev/null 2>&1 || die "jq is required for individual skill install"
+  [[ -f "$PROJECT_FILE" ]] || die "No .agents/project.json found; install a pack first or let auto-create handle it"
+  local tmp
+  tmp="$(jq --arg s "$skill" --arg p "$pack" '.enabled_skills[$s] = $p' "$PROJECT_FILE")"
+  echo "$tmp" > "$PROJECT_FILE"
+}
+
+remove_enabled_skill() {
+  local skill="$1"
+  command -v jq >/dev/null 2>&1 || die "jq is required for individual skill remove"
+  [[ -f "$PROJECT_FILE" ]] || return 0
+  local tmp
+  tmp="$(jq --arg s "$skill" 'if .enabled_skills then .enabled_skills |= del(.[$s]) | if (.enabled_skills | length) == 0 then del(.enabled_skills) else . end else . end' "$PROJECT_FILE")"
+  echo "$tmp" > "$PROJECT_FILE"
 }
 
 validate_agent_mode() {
@@ -391,6 +436,71 @@ install_pack() {
   echo "Updated .agents/project.json"
 }
 
+install_single_skill() {
+  local skill="$1"
+  local pack
+  pack="$(find_pack_for_skill "$skill")" || die "Skill '$skill' not found in any pack. Available packs: $(available_packs_inline)"
+
+  for tool in claude codex; do
+    local skill_dir="$PACKS_DIR/$pack/$tool/$skill"
+    [[ -d "$skill_dir" ]] || continue
+    local target_root="$PROJECT_ROOT/.$tool/skills"
+    mkdir -p "$target_root"
+    local target="$target_root/$skill"
+    local effective_source="$skill_dir"
+
+    local pinned
+    pinned="$(get_pinned_version "$skill")"
+    if [[ -n "$pinned" ]]; then
+      local archive_path="$skill_dir/archive/$pinned"
+      if [[ -d "$archive_path" && -f "$archive_path/SKILL.md" ]]; then
+        effective_source="$archive_path"
+      else
+        echo "WARNING: pin $skill=$pinned but $archive_path/SKILL.md not found, using current" >&2
+      fi
+    fi
+
+    if sync_skill_link "$effective_source" "$target"; then
+      if [[ -n "$pinned" && "$effective_source" != "$skill_dir" ]]; then
+        echo "Linked .$tool/skills/$skill -> $effective_source (pinned $pinned)"
+      else
+        echo "Linked .$tool/skills/$skill -> $effective_source"
+      fi
+    fi
+  done
+
+  if [[ ! -f "$PROJECT_FILE" ]]; then
+    local project_type
+    project_type="$(infer_project_type)"
+    PROJECT_AGENT_MODE=""
+    write_project_file "$project_type"
+  fi
+  add_enabled_skill "$skill" "$pack"
+  echo "Updated .agents/project.json (skill: $skill from pack: $pack)"
+}
+
+remove_single_skill() {
+  local skill="$1"
+  local pack
+  pack="$(read_enabled_skill_pack "$skill")"
+  if [[ -z "$pack" ]]; then
+    pack="$(find_pack_for_skill "$skill")" || die "Skill '$skill' not found in any pack"
+  fi
+
+  for tool in claude codex; do
+    local skill_dir="$PACKS_DIR/$pack/$tool/$skill"
+    local target_root="$PROJECT_ROOT/.$tool/skills"
+    local target="$target_root/$skill"
+    if [[ -L "$target" ]]; then
+      rm "$target"
+      echo "Removed .$tool/skills/$skill"
+    fi
+  done
+
+  remove_enabled_skill "$skill"
+  echo "Updated .agents/project.json (removed skill: $skill)"
+}
+
 remove_pack() {
   local pack="$1"
   pack_exists "$pack" || die "Unknown pack '$pack'. Available packs: $(available_packs_inline)"
@@ -448,6 +558,15 @@ status() {
   echo ""
   echo "Installed local pack links:"
   find "$PROJECT_ROOT/.claude/skills" "$PROJECT_ROOT/.codex/skills" -mindepth 1 -maxdepth 1 -type l -print 2>/dev/null | sort || true
+  local skill_lines
+  skill_lines="$(read_enabled_skills)"
+  if [[ -n "$skill_lines" ]]; then
+    echo ""
+    echo "Individually installed skills:"
+    echo "$skill_lines" | while IFS=' ' read -r skill pack; do
+      echo "  $skill (from pack: $pack)"
+    done
+  fi
 }
 
 print_session_reload_notice() {
@@ -582,10 +701,17 @@ unpin_skill() {
 
 refresh() {
   read_lines_into_packs < <(read_enabled_packs)
-  [[ "${#packs[@]}" -gt 0 ]] || die "No enabled packs in .agents/project.json"
+  local skill_lines
+  skill_lines="$(read_enabled_skills)"
+  [[ "${#packs[@]}" -gt 0 || -n "$skill_lines" ]] || die "No enabled packs or skills in .agents/project.json"
   for pack in "${packs[@]}"; do
     install_pack "$pack"
   done
+  if [[ -n "$skill_lines" ]]; then
+    echo "$skill_lines" | while IFS=' ' read -r skill pack; do
+      install_single_skill "$skill"
+    done
+  fi
 }
 
 cmd="${1:-}"
@@ -597,20 +723,85 @@ case "$cmd" in
   install)
     acquire_project_lock "$@"
     shift
-    read_lines_into_packs < <(collect_pack_args "$@")
-    [[ "${#packs[@]}" -gt 0 ]] || die "install requires a pack name"
-    for pack in "${packs[@]}"; do
+    install_packs=()
+    install_skills=()
+    for raw in "$@"; do
+      raw="${raw//,/ }"
+      for token in $raw; do
+        token="${token%,}"
+        token="${token#pack:}"
+        case "$token" in pack|packs|"") continue ;; esac
+        normalized="$(normalize_pack "$token" 2>/dev/null)" || normalized=""
+        if [[ -n "$normalized" ]]; then
+          all_exist=true
+          while IFS= read -r p; do
+            pack_exists "$p" || { all_exist=false; break; }
+          done <<< "$normalized"
+          if [[ "$all_exist" == true ]]; then
+            while IFS= read -r p; do
+              install_packs+=("$p")
+            done <<< "$normalized"
+            continue
+          fi
+        fi
+        find_pack_for_skill "$token" >/dev/null 2>&1 && {
+          install_skills+=("$token")
+          continue
+        }
+        die "Unknown pack or skill '$token'. Available packs: $(available_packs_inline)"
+      done
+    done
+    [[ "${#install_packs[@]}" -gt 0 || "${#install_skills[@]}" -gt 0 ]] || die "install requires a pack or skill name"
+    for pack in "${install_packs[@]}"; do
       install_pack "$pack"
+    done
+    for skill in "${install_skills[@]}"; do
+      install_single_skill "$skill"
     done
     print_session_reload_notice
     ;;
   remove)
     acquire_project_lock "$@"
     shift
-    read_lines_into_packs < <(collect_pack_args "$@")
-    [[ "${#packs[@]}" -gt 0 ]] || die "remove requires a pack name"
-    for pack in "${packs[@]}"; do
+    remove_packs=()
+    remove_skills=()
+    for raw in "$@"; do
+      raw="${raw//,/ }"
+      for token in $raw; do
+        token="${token%,}"
+        token="${token#pack:}"
+        case "$token" in pack|packs|"") continue ;; esac
+        skill_pack="$(read_enabled_skill_pack "$token")"
+        if [[ -n "$skill_pack" ]]; then
+          remove_skills+=("$token")
+          continue
+        fi
+        normalized="$(normalize_pack "$token" 2>/dev/null)" || normalized=""
+        if [[ -n "$normalized" ]]; then
+          all_exist=true
+          while IFS= read -r p; do
+            pack_exists "$p" || { all_exist=false; break; }
+          done <<< "$normalized"
+          if [[ "$all_exist" == true ]]; then
+            while IFS= read -r p; do
+              remove_packs+=("$p")
+            done <<< "$normalized"
+            continue
+          fi
+        fi
+        find_pack_for_skill "$token" >/dev/null 2>&1 && {
+          remove_skills+=("$token")
+          continue
+        }
+        die "Unknown pack or skill '$token'. Available packs: $(available_packs_inline)"
+      done
+    done
+    [[ "${#remove_packs[@]}" -gt 0 || "${#remove_skills[@]}" -gt 0 ]] || die "remove requires a pack or skill name"
+    for pack in "${remove_packs[@]}"; do
       remove_pack "$pack"
+    done
+    for skill in "${remove_skills[@]}"; do
+      remove_single_skill "$skill"
     done
     print_session_reload_notice
     ;;
@@ -639,12 +830,16 @@ case "$cmd" in
     skill="${1:-}"
     [[ -n "$skill" ]] || die "which requires a skill name"
     pack="$(find_pack_for_skill "$skill")" || die "Skill '$skill' not found in any pack"
+    skill_pack="$(read_enabled_skill_pack "$skill")"
     enabled="$(read_enabled_packs)"
-    if echo "$enabled" | grep -qx "$pack"; then
-      echo "$skill is provided by pack '$pack' (installed)"
+    if [[ -n "$skill_pack" ]]; then
+      echo "$skill is individually installed from pack '$pack'"
+    elif echo "$enabled" | grep -qx "$pack"; then
+      echo "$skill is provided by pack '$pack' (installed via pack)"
     else
       echo "$skill is provided by pack '$pack' (not installed)"
-      echo "Install with: scripts/pack.sh install $pack"
+      echo "Install pack:  scripts/pack.sh install $pack"
+      echo "Install skill: scripts/pack.sh install $skill"
     fi
     ;;
   --help|-h|"") usage ;;

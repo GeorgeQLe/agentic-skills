@@ -3,7 +3,7 @@ name: pack
 description: Manage project-local skill packs and project designation without installing domain skills globally
 type: ops
 version: v0.0
-argument-hint: "[list|status|recommend|install <pack>|remove <pack>|refresh|which <skill>] or no args for guided setup"
+argument-hint: "[list|status|recommend|install <pack-or-skill>|remove <pack-or-skill>|refresh|which <skill>] or no args for guided setup"
 ---
 
 # Pack
@@ -30,8 +30,8 @@ Use this skill when the user wants to inspect, recommend, install, remove, or re
    - `scripts/pack.sh list`
    - `scripts/pack.sh status`
    - `scripts/pack.sh recommend`
-   - `scripts/pack.sh install <pack>`
-   - `scripts/pack.sh remove <pack>`
+   - `scripts/pack.sh install <pack-or-skill>`
+   - `scripts/pack.sh remove <pack-or-skill>`
    - `scripts/pack.sh refresh`
    - `scripts/pack.sh which <skill>`
    The launcher is intentionally located at `scripts/pack.sh` under this skill directory and forwards to the repository-level pack manager.
@@ -54,6 +54,24 @@ Use this skill when the user wants to inspect, recommend, install, remove, or re
 - Pack writes use `.agents/.pack.lock` with owner metadata (`pid`, `started_at`, `command`); if a recorded owner process is gone, the next pack command removes that stale lock automatically.
 - `scripts/pack.sh refresh` recreates project-local symlinks from `.agents/project.json`; it does not refresh the active Claude Code or Codex process.
 - Claude Code and Codex may load available skills at session startup. If newly installed or removed skills are not visible, start a fresh CLI session. No supported in-session CLI skill refresh command is configured in this pack workflow.
+
+## Individual Skill Installation
+
+When a name passed to `install` or `remove` doesn't match a pack, the system checks whether it matches a skill inside any pack. If it does, only that single skill is symlinked — not the entire pack.
+
+- `pack install icp` — installs only the `icp` skill from `business-discovery`, not the whole pack.
+- `pack install code-review icp` — installs the `code-review` pack (all skills) plus the individual `icp` skill.
+- `pack remove icp` — removes only the `icp` symlink and its `enabled_skills` entry.
+
+Individual skills are tracked in `enabled_skills` in `.agents/project.json`:
+
+```json
+{
+  "enabled_skills": {"icp": "business-discovery", "positioning": "business-discovery"}
+}
+```
+
+The `{skill: pack}` format tracks provenance so `refresh` knows where to re-symlink from. When a name matches both a pack and a skill, the pack takes precedence.
 
 ## Pack Selection
 
@@ -131,7 +149,7 @@ When a task clearly names a scoped path, route to that scope's `project_type` an
 When a user invokes a skill that is not found in the current session:
 
 1. Run `scripts/pack.sh which <skill-name>` to check if the skill exists in any pack.
-2. If found in an **uninstalled pack**: tell the user which pack provides the skill, recommend `/pack install <pack>`, and note that a new session is needed after installing.
+2. If found in an **uninstalled pack**: tell the user which pack provides the skill, recommend `/pack install <skill>` (for just that skill) or `/pack install <pack>` (for the full pack), and note that a new session is needed after installing.
 3. If found in an **installed pack**: the skill should already be available — suggest starting a fresh session to pick up the links.
 4. If **not found in any pack**: suggest `/skills` to browse available skills or `/skills search <keyword>` to search.
 

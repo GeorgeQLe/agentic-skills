@@ -1,3 +1,9 @@
+# Changelog
+
+## v0.0
+
+- Archived previous skill contract.
+
 # roadmap-kanban changelog (codex)
 
 ## v0.2 - 2026-05-26

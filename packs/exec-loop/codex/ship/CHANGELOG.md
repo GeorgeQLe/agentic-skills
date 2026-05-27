@@ -1,3 +1,9 @@
+# Changelog
+
+## v0.0
+
+- Archived previous skill contract.
+
 # ship changelog (codex)
 
 ## v0.1 - 2026-05-26

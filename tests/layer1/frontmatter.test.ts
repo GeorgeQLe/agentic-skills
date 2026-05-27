@@ -5,9 +5,10 @@ import { validFrontmatter, parseFrontmatter } from "../harness/judge.js";
 
 const PACKS_DIR = resolve(import.meta.dirname, "../../packs");
 
-const skillFiles = globSync("**/SKILL.md", { cwd: PACKS_DIR }).map((rel) =>
-  resolve(PACKS_DIR, rel),
-);
+const skillFiles = globSync("**/SKILL.md", {
+  cwd: PACKS_DIR,
+  ignore: ["**/archive/**"],
+}).map((rel) => resolve(PACKS_DIR, rel));
 
 describe("SKILL.md frontmatter", () => {
   it("finds at least one SKILL.md file", () => {

@@ -2869,3 +2869,10 @@ Resolved all 10 findings from `/expert-review`:
 - `slim-audit` Claude still at 0% (fails "Output includes simplification opportunities" consistently).
 - Remaining: `ui-interview` and `ux-variations` not yet re-run (session interrupted).
 - Shipped in `3f8d533`.
+## 2026-05-27 — Project-local skill surface and skill anatomy cleanup
+
+- Pruned the project-local skill invocation surface to the individually enabled `ship-end` skill and repaired the remaining Claude symlink to point at this checkout.
+- Extended `scripts/pack.sh` so `.agents/project.json` can preserve individual `enabled_skills` alongside pack installs, refreshes, removals, status, and `which` output.
+- Added `docs/skill-anatomy.md` and aligned active audits so archive snapshots are handled by the archive audit instead of general active-skill checks.
+- Repaired changelog archive headings across active skill directories so archive strict validation can pass without mutating archived `SKILL.md` snapshots.
+- Prepared validation for `$ship-end`: pack status/list/link checks, version/archive/routing/dependency audits, focused frontmatter test, secret scan, and whitespace check.
