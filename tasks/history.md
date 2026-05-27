@@ -1,5 +1,10 @@
 # Session History
 
+## 2026-05-27 — Fix mobile pull-to-refresh and ship pack cross-pack routing guards
+
+- Fixed BottomSheet mobile pull-to-refresh bug: added Framer Motion drag-to-close gesture on grab handle, `overscroll-behavior: contain` on sheet and content, `touchAction: none` on handle, and corrected entry animation to slide up from bottom.
+- Shipped remaining pack cross-pack routing guards (v0.2 bumps) across devtool, kanban, exec-loop, plan-phase, and product-design packs.
+
 ## 2026-05-26 — Ship uncommitted run→exec, pack-install guards, showcase UI, and research quality work
 
 - Completed run→exec rename residuals across docs, skills, tests, kanban packs (run-kanban→exec-kanban), and monorepo (mono-run→mono-exec).
