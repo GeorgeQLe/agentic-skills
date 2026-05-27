@@ -27,7 +27,7 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 - [x] Deferred paths do not force full competitive analysis, positioning, journey mapping, UX, or spec work unless promoted.
 - [x] Active changed `SKILL.md` files are archived, version-bumped, and changelogs updated.
 - [x] Focused layer1 tests, skill metadata validation, showcase generation/validation, whitespace checks, and install validation pass or blockers are documented.
-- [ ] Review notes are recorded and intended changes are committed and pushed on `master`.
+- [x] Review notes are recorded and intended changes are committed and pushed on `master`.
 
 ## Current Targeted Update: AFPS Alignment Preview Gate Audit 2026-05-27
 

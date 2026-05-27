@@ -43,7 +43,7 @@
 - [x] Archive and update mirrored active skill contracts for `concept-exploration`, `icp`, `competitive-analysis`, `platform-strategy`, `feature-interview`, `ux-variations`, and `research-roadmap`.
 - [x] Add focused layer1 tests for product-path manifest terminology, producer/consumer behavior, and active-path-only downstream defaults.
 - [x] Update changelogs, refresh generated Skills Showcase data, and run required validation commands.
-- [ ] Add review notes, commit, and push intended changes on `master`.
+- [x] Add review notes, commit, and push intended changes on `master`.
 
 **Files:**
 - `research/.progress.yaml` convention documented in skill contracts; no project-local state file is created for this repo unless a test fixture requires it.
@@ -58,6 +58,7 @@
 - Refreshed Skills Showcase generated data after active skill behavior changes.
 - Validation passed: `./scripts/skill-versions.sh --missing`; `pnpm --dir tests bench:coverage`; `pnpm --dir tests exec vitest run --project layer1 layer1/product-path-manifest.test.ts`; `git diff --check`; `./install.sh`.
 - Validation caveats: `./scripts/skill-next-step-routing.sh --missing` still reports a broad existing list of missing next-step routing contracts, including many unrelated active skills. `scripts/validate-skills-showcase-data.sh` regenerated assets and then reported generated data dirty, which is expected before committing the refreshed generated files.
+- Shipped commit `b1ed394a` to `master`.
 
 ## Current Task — AFPS Alignment Preview Gate Audit 2026-05-27
 
