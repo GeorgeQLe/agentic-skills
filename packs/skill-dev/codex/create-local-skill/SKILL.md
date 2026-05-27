@@ -11,7 +11,7 @@ Invoke as `$create-local-skill`.
 
 Scaffold a new **user-local** skill directly into `~/.codex/skills/<name>/` (and optionally `~/.claude/skills/<name>/`) as a real directory. The upstream agentic-skills repo is not touched. At the end, offer to **promote** the skill by copying it into the user's personal fork.
 
-`install.sh --uninstall` only removes symlinks whose target is inside the agentic-skills repo, so user-authored real directories are safe from upstream sync.
+`init.sh --uninstall` only removes repo-managed skill installs whose source is inside the agentic-skills repo, so user-authored real directories are safe from upstream sync.
 
 ## Workflow
 
@@ -73,4 +73,3 @@ Scaffold a new **user-local** skill directly into `~/.codex/skills/<name>/` (and
 
 - Never write into this repo's `global/` or `packs/` directories. Target paths are always under `$HOME/.codex/skills`, `$HOME/.claude/skills`, or an explicitly-supplied personal fork path.
 - Do not create extra docs beyond `SKILL.md` unless asked.
-

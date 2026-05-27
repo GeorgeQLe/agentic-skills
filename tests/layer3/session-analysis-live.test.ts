@@ -49,7 +49,7 @@ function makeScenarioRepo(name: string): string {
 
 liveDescribe("live session-analysis skill behavior", () => {
   beforeAll(() => {
-    execFileSync("bash", [join(REPO_ROOT, "install.sh")], {
+    execFileSync("bash", [join(REPO_ROOT, "init.sh")], {
       cwd: REPO_ROOT,
       stdio: "pipe",
     });

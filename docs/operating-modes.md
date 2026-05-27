@@ -192,7 +192,7 @@ This section tags every global skill and every pack with a **primary CLI role** 
 | `guide` | Claude-orchestration | GUI-blocker walk-throughs |
 | `handoff` | Both | Context snapshot (orchestration); `/handoff --target=codex` (Claude) produces an approval packet; Codex `$handoff` writes only `tasks/handoff.md` prose (no packet) |
 | `hygiene` | Both | Audit (orchestration) + optional auto-fix (execution) |
-| `install-agentic-skills` | Both | Refreshes global Claude/Codex skill links; pack setup remains project-local through `pack` |
+| `init-agentic-skills` | Both | Initializes global Claude/Codex managed skill installs; pack setup remains project-local through `pack` |
 | `provision-agentic-config` | Codex-execution | Writes CLAUDE.md / AGENTS.md |
 | `investigate` | Claude-orchestration | Validate claims, trace to root cause, propose fix |
 | `migrate` | Both | Plan + step-by-step verified mutation |

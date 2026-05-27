@@ -5,7 +5,7 @@ Skills are split into global core skills and project-local packs.
 ## Global Install
 
 ```bash
-./install.sh
+./init.sh
 ```
 
 Installs only:
@@ -33,7 +33,7 @@ Project designation is stored in `.agents/project.json`.
 
 `scripts/pack.sh list-packs` is an internal subcommand used by Codex `$exec` routing (see `global/codex/exec/SKILL.md`). It prints enabled packs from `.agents/project.json` one per line with no decoration, distinct from the human-facing `list` which enumerates all available packs. Prefer `list` or `status` for interactive use.
 
-`refresh` recreates project-local symlinks from `.agents/project.json`; it does not reload an active Claude Code or Codex process. Start a fresh CLI session after pack changes if the changed skills are not visible.
+`refresh` recreates project-local skill roots from `.agents/project.json`; it does not reload an active Claude Code or Codex process. Start a fresh CLI session after pack changes if the changed skills are not visible.
 
 For workflow ordering, lead-in recommendations, and overlay dependencies, see [`docs/pack-workflow-matrix.md`](pack-workflow-matrix.md).
 
@@ -97,7 +97,7 @@ Global skills are safe across business apps, games, devtools, libraries, service
 | `handoff` | Generate a project-level context snapshot for a fresh session |
 | `hygiene` | Audit project structure, conventions, mirrors, and documentation references |
 | `icon-handler` | Audit and apply project-root icon assets across favicon, app icon, Apple, and manifest surfaces |
-| `install-agentic-skills` | Refresh global Claude and Codex skill links from this checkout and route pack setup to the pack workflow |
+| `init-agentic-skills` | Initialize global Claude and Codex managed skill installs from this checkout and route pack setup to the pack workflow |
 | `provision-agentic-config` | Provision workflow orchestration and agent conventions into project agent docs |
 | `investigate` | Validate claims against codebase and git history, then trace root cause |
 | `migrate` | Guide a structural migration or dependency upgrade |

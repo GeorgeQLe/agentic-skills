@@ -124,7 +124,7 @@ No Error-class spec/code contradictions were found. No Warning-class active spec
   - Decision: no code conformance work is required from those artifacts. They remain inputs to future roadmap/research work.
 
 - [x] Recent global workflow skills without dedicated specs are self-documented skill surfaces, not active spec drift.
-  - Evidence: `global/codex/codebase-status/SKILL.md`, `global/codex/install-agentic-skills/SKILL.md`, `global/codex/targeted-skill-builder/SKILL.md`, and `global/codex/feature-interview/SKILL.md` each define their own workflow contract and are registered in README/discovery docs.
+  - Evidence: `global/codex/codebase-status/SKILL.md`, `global/codex/init-agentic-skills/SKILL.md`, `global/codex/targeted-skill-builder/SKILL.md`, and `global/codex/feature-interview/SKILL.md` each define their own workflow contract and are registered in README/discovery docs.
   - Decision: no existing spec contradicts these skills. Treat them as skill-contract documentation unless they become shared schemas, public APIs, or cross-repo controllers that need dedicated specs.
 
 ### Warnings

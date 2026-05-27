@@ -3143,7 +3143,7 @@ describe("benchmark coverage matrix", () => {
     const expectedBlockedSkills = [
       "delegate",
       "deploy",
-      "install-agentic-skills",
+      "init-agentic-skills",
       "patch-exec-profile",
       "release",
       "uat-guide",

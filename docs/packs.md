@@ -80,20 +80,20 @@ Assistant-native usage also supports guided setup:
 - Claude: run `/pack` with no arguments.
 - Codex: run `$pack` with no arguments.
 
-If `.agents/project.json` already exists, bare `pack` refreshes local links from the committed project designation. If it is missing, the assistant inspects the repository, recommends a pack, and asks before installing. Claude uses AskUserQuestion for that checkpoint; Codex uses a text-based Pack Decision Checkpoint that waits for an explicit reply before writing `.agents/project.json`.
+If `.agents/project.json` already exists, bare `pack` refreshes local skill roots from the committed project designation. If it is missing, the assistant inspects the repository, recommends a pack, and asks before installing. Claude uses AskUserQuestion for that checkpoint; Codex uses a text-based Pack Decision Checkpoint that waits for an explicit reply before writing `.agents/project.json`.
 
-The `refresh` command recreates `.claude/skills` and `.codex/skills` symlinks from `.agents/project.json`; it is not an in-session Claude Code or Codex skill reload. After `install`, `remove`, or `refresh`, start a fresh CLI session if the changed skills are not visible.
+The `refresh` command recreates `.claude/skills` and `.codex/skills` managed skill roots from `.agents/project.json`; it is not an in-session Claude Code or Codex skill reload. After `install`, `remove`, or `refresh`, start a fresh CLI session if the changed skills are not visible.
 
-## Local Symlinks
+## Local Skill Roots
 
-Pack install creates symlinks in the current project:
+Pack install creates repo-managed skill roots in the current project:
 
 ```text
-.claude/skills/<skill> -> <skill-library>/packs/<pack>/claude/<skill>
-.codex/skills/<skill> -> <skill-library>/packs/<pack>/codex/<skill>
+.claude/skills/<skill>/SKILL.md
+.codex/skills/<skill>/SKILL.md
 ```
 
-The skill source stays centralized in this repository. Projects opt into packs without copying skill bodies.
+The skill source stays centralized in this repository. Projects opt into packs without copying skill bodies, and active installed roots exclude archived `SKILL.md` snapshots.
 
 ## Pack Selection
 
@@ -220,7 +220,7 @@ If a tool does not discover project-local `.claude/skills` or `.codex/skills`, u
 
 Do not install `packs/*` globally as a fallback; that recreates the context pollution this design avoids.
 
-Commit `.agents/project.json` with the project. Do not commit generated local skill links under `.claude/skills` or `.codex/skills`; recreate them with `/pack`, `$pack`, or `scripts/pack.sh refresh`.
+Commit `.agents/project.json` with the project. Do not commit generated local skill roots under `.claude/skills` or `.codex/skills`; recreate them with `/pack`, `$pack`, or `scripts/pack.sh refresh`.
 
 `scripts/pack.sh install`, `remove`, `refresh`, and `set-mode` preserve existing `project_scopes` and `notes` fields when `jq` is available.
 

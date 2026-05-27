@@ -4,7 +4,6 @@ import {
   mkdtempSync,
   mkdirSync,
   writeFileSync,
-  readlinkSync,
   realpathSync,
   symlinkSync,
   lstatSync,
@@ -49,7 +48,7 @@ function createTestEnv() {
     join(fakeRepo, "packs", "game", "claude", "game-a", "SKILL.md"),
     "test",
   );
-  copyFileSync(join(REPO_ROOT, "install.sh"), join(fakeRepo, "install.sh"));
+  copyFileSync(join(REPO_ROOT, "init.sh"), join(fakeRepo, "init.sh"));
   copyFileSync(
     join(REPO_ROOT, "scripts", "skill-links.sh"),
     join(fakeRepo, "scripts", "skill-links.sh"),
@@ -58,14 +57,14 @@ function createTestEnv() {
 }
 
 function runInstall(fakeHome, fakeRepo, args = "") {
-  return execSync(`bash install.sh ${args}`, {
+  return execSync(`bash init.sh ${args}`, {
     cwd: fakeRepo,
     env: { ...process.env, HOME: fakeHome },
     encoding: "utf-8",
   });
 }
 
-describe("install.sh", () => {
+describe("init.sh", () => {
   afterEach(() => {
     for (const dir of tempDirs) {
       rmSync(dir, { recursive: true, force: true });
@@ -73,24 +72,22 @@ describe("install.sh", () => {
     tempDirs.length = 0;
   });
 
-  it("creates symlinks for claude skills", () => {
+  it("creates managed directories for claude skills", () => {
     const { fakeHome, fakeRepo } = createTestEnv();
     runInstall(fakeHome, fakeRepo);
-    const link = join(fakeHome, ".claude", "skills", "skill-a");
-    expect(lstatSync(link).isSymbolicLink()).toBe(true);
-    expect(readlinkSync(link)).toBe(
-      join(fakeRepo, "global", "claude", "skill-a"),
-    );
+    const skillRoot = join(fakeHome, ".claude", "skills", "skill-a");
+    expect(lstatSync(skillRoot).isDirectory()).toBe(true);
+    expect(existsSync(join(skillRoot, "SKILL.md"))).toBe(true);
+    expect(existsSync(join(skillRoot, ".agentic-skills-managed"))).toBe(true);
   });
 
-  it("creates symlinks for codex skills", () => {
+  it("creates managed directories for codex skills", () => {
     const { fakeHome, fakeRepo } = createTestEnv();
     runInstall(fakeHome, fakeRepo);
-    const link = join(fakeHome, ".codex", "skills", "skill-b");
-    expect(lstatSync(link).isSymbolicLink()).toBe(true);
-    expect(readlinkSync(link)).toBe(
-      join(fakeRepo, "global", "codex", "skill-b"),
-    );
+    const skillRoot = join(fakeHome, ".codex", "skills", "skill-b");
+    expect(lstatSync(skillRoot).isDirectory()).toBe(true);
+    expect(existsSync(join(skillRoot, "SKILL.md"))).toBe(true);
+    expect(existsSync(join(skillRoot, ".agentic-skills-managed"))).toBe(true);
   });
 
   it("does not install domain packs globally", () => {
@@ -109,7 +106,7 @@ describe("install.sh", () => {
     expect(output).toContain("0 Codex core skills");
   });
 
-  it("warns and skips non-symlink targets", () => {
+  it("warns and skips non-repo-managed targets", () => {
     const { fakeHome, fakeRepo } = createTestEnv();
     const target = join(fakeHome, ".claude", "skills", "skill-a");
     mkdirSync(target, { recursive: true });
@@ -121,7 +118,7 @@ describe("install.sh", () => {
     expect(lstatSync(target).isSymbolicLink()).toBe(false);
   });
 
-  it("updates symlinks pointing elsewhere", () => {
+  it("replaces symlinks pointing elsewhere", () => {
     const { base, fakeHome, fakeRepo } = createTestEnv();
     const wrongTarget = join(base, "wrong");
     mkdirSync(wrongTarget, { recursive: true });
@@ -129,9 +126,8 @@ describe("install.sh", () => {
     mkdirSync(skillsDir, { recursive: true });
     symlinkSync(wrongTarget, join(skillsDir, "skill-a"));
     runInstall(fakeHome, fakeRepo);
-    expect(readlinkSync(join(skillsDir, "skill-a"))).toBe(
-      join(fakeRepo, "global", "claude", "skill-a"),
-    );
+    expect(lstatSync(join(skillsDir, "skill-a")).isDirectory()).toBe(true);
+    expect(existsSync(join(skillsDir, "skill-a", "SKILL.md"))).toBe(true);
   });
 
   it("removes stale repo-managed symlinks for removed skills", () => {
@@ -149,7 +145,7 @@ describe("install.sh", () => {
     expect(existsSync(join(skillsDir, "removed-skill"))).toBe(false);
   });
 
-  it("uninstall removes only repo symlinks", () => {
+  it("uninstall removes only repo-managed skill installs", () => {
     const { base, fakeHome, fakeRepo } = createTestEnv();
     runInstall(fakeHome, fakeRepo);
     // Add an unrelated symlink
@@ -157,7 +153,7 @@ describe("install.sh", () => {
     mkdirSync(unrelated, { recursive: true });
     symlinkSync(unrelated, join(fakeHome, ".claude", "skills", "other-skill"));
     runInstall(fakeHome, fakeRepo, "--uninstall");
-    // Repo symlink removed
+    // Repo-managed skill root removed
     expect(existsSync(join(fakeHome, ".claude", "skills", "skill-a"))).toBe(
       false,
     );
@@ -173,7 +169,7 @@ describe("install.sh", () => {
     const { fakeHome, fakeRepo } = createTestEnv();
     runInstall(fakeHome, fakeRepo);
     const output = runInstall(fakeHome, fakeRepo, "--uninstall");
-    expect(output).toContain("Removed 2 symlinks");
+    expect(output).toContain("Removed 2 repo-managed skill installs");
   });
 
   it("creates target directories if missing", () => {

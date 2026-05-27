@@ -17,7 +17,7 @@ bootstrap-repo
 
 # Infrastructure / config utilities
 provision-agentic-config
-install-agentic-skills
+init-agentic-skills
 pack
 skills
 compile-central-alignment

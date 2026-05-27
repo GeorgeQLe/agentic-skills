@@ -9,23 +9,23 @@ The library now uses a two-layer model:
 
 This keeps game research out of B2B SaaS sessions, and keeps business-product assumptions out of game and devtool projects.
 
-## Installation
+## Initialization
 
 ```bash
-./install.sh
+./init.sh
 ```
 
-`install.sh` installs only:
+`init.sh` initializes only the global core skills:
 
 - `global/claude/*` → `~/.claude/skills/*`
 - `global/codex/*` → `~/.codex/skills/*`
 
 It does **not** install `packs/*` globally.
 
-To remove repo-managed global links:
+To remove repo-managed global skill installs:
 
 ```bash
-./install.sh --uninstall
+./init.sh --uninstall
 ```
 
 ## Project Packs
@@ -60,15 +60,15 @@ scripts/pack.sh remove design-system
 
 `scripts/pack.sh list-packs` is an internal subcommand used by Codex `$exec` routing (see `global/codex/exec/SKILL.md`). It prints enabled packs from `.agents/project.json` one per line with no decoration, distinct from the human-facing `list` above; prefer `list` or `status` for interactive use.
 
-Claude users can run `/pack` with no arguments, and Codex users can run `$pack` with no arguments. If `.agents/project.json` exists, the skill refreshes local links from that committed project designation. If it is missing, the assistant inspects the repository, recommends a pack, and asks before installing.
+Claude users can run `/pack` with no arguments, and Codex users can run `$pack` with no arguments. If `.agents/project.json` exists, the skill refreshes local skill roots from that committed project designation. If it is missing, the assistant inspects the repository, recommends a pack, and asks before installing.
 
-`scripts/pack.sh which <skill>` shows which pack provides a skill and whether it is installed. `scripts/pack.sh refresh` recreates local symlinks; it does not reload an already-running Claude Code or Codex session. After installing, removing, or refreshing packs, start a fresh CLI session if the changed skills are not visible.
+`scripts/pack.sh which <skill>` shows which pack provides a skill and whether it is installed. `scripts/pack.sh refresh` recreates local skill roots; it does not reload an already-running Claude Code or Codex session. After installing, removing, or refreshing packs, start a fresh CLI session if the changed skills are not visible.
 
-Pack installation creates local symlinks in the current project:
+Pack installation creates local repo-managed skill roots in the current project. Active installs expose the canonical `SKILL.md` and exclude `archive/`:
 
 ```text
-.claude/skills/<skill> -> <this repo>/packs/<pack>/claude/<skill>
-.codex/skills/<skill> -> <this repo>/packs/<pack>/codex/<skill>
+.claude/skills/<skill>/SKILL.md
+.codex/skills/<skill>/SKILL.md
 ```
 
 It also writes:
@@ -141,7 +141,7 @@ agentic-skills/
 │   ├── skill-deps.sh
 │   ├── skill-pack-routing-audit.sh
 │   └── skill-versions.sh
-├── install.sh
+├── init.sh
 └── docs/
 ```
 
@@ -152,7 +152,7 @@ Global skills should stay domain-neutral:
 ```text
 affected, analyze-sessions, bootstrap-repo, brainstorm, branch-lifecycle,
 codebase-status, commit-and-push-by-feature, concept-exploration, create-skill, dead-code, debug, decommission, deploy, dogfood,
-expert-review, guide, handoff, hygiene, install-agentic-skills, provision-agentic-config,
+expert-review, guide, handoff, hygiene, init-agentic-skills, provision-agentic-config,
 investigate, migrate, pack, patch-exec-profile, spec-interview, ui-interview,
 ux-variation, plan-phase, reconcile-dev-docs, regression-check, release, roadmap, run, scaffold,
 session-triage, ship, ship-end, skills, slim-audit, spec-drift, sync,
@@ -364,8 +364,8 @@ bash scripts/skill-archive.sh global/claude/ship
 scripts/pack.sh pin devtool-adoption v0.0
 scripts/pack.sh unpin devtool-adoption
 
-# Pin a global skill during install
-./install.sh --pin ship=v0.0
+# Pin a global skill during initialization
+./init.sh --pin ship=v0.0
 
 # Audit archive integrity
 bash scripts/skill-archive-audit.sh

@@ -61,7 +61,7 @@ This is intentionally narrower than `$analyze-sessions`. Do not scan all Claude/
    - Store it only when the user asks for a file or the current repo has an obvious prompt/template location.
    - Otherwise output the reusable prompt directly.
 10. Run validation after repository skill changes:
-    - `./install.sh`
+    - `./init.sh`
     - `./scripts/skill-deps.sh --broken`
     - `./scripts/skill-versions.sh --missing`
     - `./scripts/skill-next-step-routing.sh --missing`
@@ -86,7 +86,7 @@ Produce a concise report with:
 - Existing-skill overlap findings.
 - Files created or changed, if any, including generated showcase assets when skill metadata or behavior changed.
 - Validation results.
-- Reload note: after `./install.sh`, tell the user to start a fresh Claude Code or Codex CLI/session if the new or changed skill is not visible yet. Codex desktop sessions may list newly created skills only after the active skill registry refreshes; starting a fresh session is the reliable fallback.
+- Reload note: after `./init.sh`, tell the user to start a fresh Claude Code or Codex CLI/session if the new or changed skill is not visible yet. Codex desktop sessions may list newly created skills only after the active skill registry refreshes; starting a fresh session is the reliable fallback.
 
 When an external project session needs an existing shared skill amended, output a prompt like:
 

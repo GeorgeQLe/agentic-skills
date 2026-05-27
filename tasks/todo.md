@@ -2599,3 +2599,24 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
 - Updated pack remove/status handling to recognize repo-managed directories in addition to legacy symlinks, while user-owned real directories without the marker are skipped.
 - Extended `tests/layer1/install.test.ts` to accept managed skill directories and prove recursive discovery under installed `analyze-sessions` roots finds only the active `SKILL.md`.
 - Validation so far: corrected Vitest filter `pnpm --dir tests test layer1/install.test.ts` passed; `bash -n` passed for installer scripts; manual temp-project and temp-`HOME` recursive `find` checks each returned only one active `SKILL.md` per installed root.
+
+## Current Task — Hard-Rename Agentic Skills Initialization 2026-05-27
+
+**Goal:** Make the first-time setup language match the user journey by hard-renaming global initialization from `install-agentic-skills` / `install.sh` to `init-agentic-skills` / `init.sh`, with no compatibility alias.
+
+**Plan:**
+- [x] Map active references to `install-agentic-skills`, `install.sh`, and symlink-only install terminology.
+- [x] Archive current `v0.1` mirrored skill contracts before changing them.
+- [x] Rename root initializer script and mirrored global skill directories/scripts to `init`.
+- [x] Update active skill contracts, pack guidance, docs, tests, and benchmark coverage names.
+- [x] Regenerate showcase data, run focused validation, document results, then commit and push on `master`.
+
+### Review
+
+- Hard-renamed root `install.sh` to `init.sh`; no compatibility wrapper remains.
+- Hard-renamed mirrored global skills from `install-agentic-skills` to `init-agentic-skills`, including bundled launchers and Codex `agents/openai.yaml`.
+- Archived the prior `v0.1` skill contracts before bumping active contracts to `v0.2`.
+- Updated active docs and skill contracts to describe first-time initialization, repo-managed archive-free skill roots, and project-local pack installs.
+- Updated benchmark coverage, discovery docs, pack guidance, targeted skill builder guidance, and generated Skills Showcase data for the new command.
+- Validation passed: `bash -n` for `init.sh`, mirrored init launchers, and `scripts/pack.sh`; temp-`HOME` `./init.sh` install check; stale managed `install-agentic-skills` cleanup check; `pnpm --dir tests test layer1/install.test.ts`; `pnpm --dir tests bench:coverage`; focused coverage-matrix layer1 test; `./scripts/skill-versions.sh --missing`; `./scripts/skill-deps.sh --broken`; `git diff --check`.
+- Validation notes: `scripts/validate-skills-showcase-data.sh` reports generated assets stale before commit because this task intentionally updates generated showcase files. `./scripts/skill-next-step-routing.sh --missing` and `./scripts/skill-archive-audit.sh --strict` still report pre-existing broad repository issues outside this rename.

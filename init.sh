@@ -7,10 +7,10 @@ CODEX_SKILLS_DIR="$HOME/.codex/skills"
 source "$SCRIPT_DIR/scripts/skill-links.sh"
 
 usage() {
-  echo "Usage: $0 [--uninstall]"
+  echo "Usage: $0 [--uninstall] [--pin skill=version]"
   echo ""
-  echo "Install:    Symlinks global core skills into assistant global skill directories."
-  echo "Uninstall:  Removes repo-managed global symlinks pointing back to this repo."
+  echo "Init:       Installs global core skills into assistant global skill directories."
+  echo "Uninstall:  Removes repo-managed global skill installs pointing back to this repo."
   echo ""
   echo "Project-local packs and individual pack skills are managed with: scripts/pack.sh install <pack-or-skill>"
   exit 0
@@ -69,20 +69,28 @@ remove_repo_link() {
 
 remove_stale_repo_links() {
   local root="$1"
-  local link target
+  local link target source
   [[ -d "$root" ]] || return 0
 
   for link in "$root"/*; do
-    [[ -L "$link" ]] || continue
-    target="$(readlink "$link")"
-    case "$target" in
-      "$SCRIPT_DIR/global/claude/"*|"$SCRIPT_DIR/global/codex/"*)
-        if [[ ! -e "$target" ]]; then
-          rm "$link"
-          echo "Removed stale $(basename "$link")"
-        fi
-        ;;
-    esac
+    [[ -e "$link" || -L "$link" ]] || continue
+    if [[ -L "$link" ]]; then
+      target="$(readlink "$link")"
+      case "$target" in
+        "$SCRIPT_DIR/global/claude/"*|"$SCRIPT_DIR/global/codex/"*)
+          if [[ ! -e "$target" ]]; then
+            rm "$link"
+            echo "Removed stale $(basename "$link")"
+          fi
+          ;;
+      esac
+    elif is_managed_skill_dir "$link"; then
+      source="$(managed_skill_source "$link")"
+      if skill_source_owned_by_repo "$source" && [[ ! -e "$source" ]]; then
+        rm -rf "$link"
+        echo "Removed stale $(basename "$link")"
+      fi
+    fi
   done
 }
 
@@ -166,7 +174,7 @@ if $UNINSTALL; then
       fi
     done
   done
-  echo "Done. Removed $removed symlinks."
+  echo "Done. Removed $removed repo-managed skill installs."
   exit 0
 fi
 

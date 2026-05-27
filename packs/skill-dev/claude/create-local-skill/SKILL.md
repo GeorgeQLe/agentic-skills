@@ -10,7 +10,7 @@ argument-hint: <skill-name> [description]
 
 Scaffold a new **user-local** skill directly into `~/.claude/skills/<name>/` (and optionally `~/.codex/skills/<name>/`) so the user can experiment without touching the upstream agentic-skills repo. At the end, offer to **promote** the skill by copying it into their personal fork of agentic-skills.
 
-This skill writes **real directories**, not symlinks back to the shared repo. `install.sh --uninstall` only removes symlinks whose target lives inside agentic-skills (see `install.sh` `remove_repo_link`), so user-authored skills are untouched by upstream sync.
+This skill writes **real directories**, not managed roots back to the shared repo. `init.sh --uninstall` only removes repo-managed skill installs whose source lives inside agentic-skills, so user-authored skills are untouched by upstream sync.
 
 ## Process
 
@@ -84,4 +84,3 @@ This skill writes **real directories**, not symlinks back to the shared repo. `i
 - Never write into this repo's `global/` or `packs/` directories from this skill. Target paths are always under `$HOME/.claude/skills`, `$HOME/.codex/skills`, or an explicitly-supplied personal fork path.
 - Do not create documentation files beyond `SKILL.md` unless the user asks.
 - If the user wants version control for their personal skills without a full fork, suggest `git init` inside a sibling directory and symlinking from `~/.claude/skills/<name>` — but default to the simpler "real directory in `~/.claude/skills`" flow.
-

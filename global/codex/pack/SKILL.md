@@ -1,6 +1,6 @@
 ---
 name: pack
-description: Manage project-local skill packs, individual pack skill links, and project designation without installing domain skills globally
+description: Manage project-local skill packs, individual pack skill roots, and project designation without installing domain skills globally
 type: ops
 version: v0.1
 argument-hint: "[list|status|recommend|install <pack-or-skill>|remove <pack-or-skill>|refresh|which <skill>] or no args for guided setup"
@@ -19,7 +19,7 @@ Use this skill when the user wants to inspect, recommend, install, remove, or re
    - Treat `business` as `business-app`.
    - Ignore filler words such as `pack` or `packs`.
 2. If no arguments were provided, run guided setup:
-   - If `.agents/project.json` exists, run `scripts/pack.sh refresh` to recreate local pack links from committed project state, then report the project type, enabled packs, and links.
+   - If `.agents/project.json` exists, run `scripts/pack.sh refresh` to recreate local pack skill roots from committed project state, then report the project type, enabled packs, and installed skills.
    - If `.agents/project.json` is missing, inspect the repository before asking the user:
      - Run `scripts/pack.sh recommend`.
      - Check top-level files and directories, package manifests, app/framework configs, source layout, docs, existing `research/`, `specs/`, and `tasks/` files.
@@ -42,31 +42,31 @@ Use this skill when the user wants to inspect, recommend, install, remove, or re
    - `.agents/project.json` project type and enabled packs
    - any `enabled_skills` entries when present, including the skill name and source pack
    - any `project_scopes` entries when present, including the path, `project_type`, packs, and purpose
-   - local skill links created or removed under `.claude/skills` and `.codex/skills`
-   - any skipped links caused by non-symlink targets
+   - local skill roots created or removed under `.claude/skills` and `.codex/skills`
+   - any skipped roots caused by non-repo-managed targets
    - that the user should start a fresh Claude Code or Codex CLI session if the active session does not show the changed skills
 
 ## Pack Model
 
-- Global skills are domain-neutral and installed by `install.sh`.
+- Global skills are domain-neutral and initialized by `init.sh`.
 - Domain workflows live in project-local packs.
 - Project designation is stored in `.agents/project.json`.
 - Mixed monorepos may keep a coarse default `project_type` and add `project_scopes` entries for subtrees that need different domain routing.
 - `enabled_packs` is the union of packs available to the repository; `project_scopes[].packs` explains which packs are appropriate for a specific path or glob.
-- Pack installs use symlinks back to this skill-library repository by default.
+- Pack installs use repo-managed skill roots that point back to this skill-library repository and exclude archived skill snapshots by default.
 - `scripts/pack.sh install`, `remove`, `refresh`, and `set-mode` preserve existing `project_scopes` and `notes` fields when `jq` is available.
 - `scripts/pack.sh install <name>` treats `<name>` as a pack first, then as an individual skill provided by a pack.
 - Pack writes use `.agents/.pack.lock` with owner metadata (`pid`, `started_at`, `command`); if a recorded owner process is gone, the next pack command removes that stale lock automatically.
-- `scripts/pack.sh refresh` recreates project-local symlinks from `.agents/project.json`; it does not refresh the active Claude Code or Codex process.
+- `scripts/pack.sh refresh` recreates project-local skill roots from `.agents/project.json`; it does not refresh the active Claude Code or Codex process.
 - Claude Code and Codex may load available skills at session startup. If newly installed or removed skills are not visible, start a fresh CLI session. No supported in-session CLI skill refresh command is configured in this pack workflow.
 
 ## Individual Skill Installation
 
-When a name passed to `install` or `remove` does not match a pack, the system checks whether it matches a skill inside any pack. If it does, only that single skill is symlinked, not the entire pack.
+When a name passed to `install` or `remove` does not match a pack, the system checks whether it matches a skill inside any pack. If it does, only that single skill root is installed, not the entire pack.
 
 - `$pack install design-system` installs only the `design-system` skill from `product-design`, not the whole pack.
 - `$pack install code-review icp` installs the `code-review` pack plus the individual `icp` skill.
-- `$pack remove icp` removes only the `icp` symlink and its `enabled_skills` entry.
+- `$pack remove icp` removes only the `icp` skill root and its `enabled_skills` entry.
 - `$pack which design-system` shows the source pack and whether the skill is installed.
 
 Individual skills are tracked in `enabled_skills` in `.agents/project.json`:
@@ -77,7 +77,7 @@ Individual skills are tracked in `enabled_skills` in `.agents/project.json`:
 }
 ```
 
-The `{skill: pack}` format tracks provenance so `refresh` knows where to re-symlink from. When a name matches both a pack and a skill, the pack takes precedence.
+The `{skill: pack}` format tracks provenance so `refresh` knows where to rebuild from. When a name matches both a pack and a skill, the pack takes precedence.
 
 ## Pack Selection
 
@@ -154,7 +154,7 @@ When a user invokes a skill that is not found in the current session:
 
 1. Run `scripts/pack.sh which <skill-name>` to check if the skill exists in any pack.
 2. If found in an uninstalled pack: tell the user which pack provides the skill, recommend `$pack install <skill>` for just that skill or `$pack install <pack>` for the full pack, and note that a fresh session may be needed after installing.
-3. If found in an installed pack: the skill should already be available, so suggest starting a fresh session to pick up the links.
+3. If found in an installed pack: the skill should already be available, so suggest starting a fresh session to pick up the local skill roots.
 4. If not found in any pack: suggest `$skills` to browse available skills or `$skills search <keyword>` to search.
 
 ## Constraints

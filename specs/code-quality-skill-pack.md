@@ -38,7 +38,7 @@ Claude Code documents skills as Markdown folders installed in user or project sk
 
 OpenAI Codex documents skills as folders discovered from configured skill roots, invoked with `$skill-name` or through `/skills`. Codex skills use `SKILL.md` and may include `agents/openai.yaml` for product-facing metadata such as display name, short description, default prompt, and implicit invocation policy. Source: [OpenAI Codex Skills](https://developers.openai.com/codex/skills).
 
-This repository adds a shared abstraction over both tools: project-local packs live under `packs/<pack>/{claude,codex}/<skill>/SKILL.md`, and `scripts/pack.sh` creates local symlinks into `.claude/skills` and `.codex/skills`. That means the implementation should keep mirrored Claude and Codex variants, with Codex UI metadata when the skill is meant to be discoverable in Codex.
+This repository adds a shared abstraction over both tools: project-local packs live under `packs/<pack>/{claude,codex}/<skill>/SKILL.md`, and `scripts/pack.sh` creates local managed skill roots in `.claude/skills` and `.codex/skills`. That means the implementation should keep mirrored Claude and Codex variants, with Codex UI metadata when the skill is meant to be discoverable in Codex.
 
 ## Skill Specifications
 

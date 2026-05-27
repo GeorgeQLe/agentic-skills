@@ -95,12 +95,12 @@ Pin state is stored in `.agents/project.json` under `pinned_versions`:
 }
 ```
 
-When a skill is pinned, `pack.sh install/refresh` symlinks to `archive/<version>/` instead of the skill root.
+When a skill is pinned, `pack.sh install/refresh` points the installed skill root at `archive/<version>/` instead of the active skill root.
 
-### Global skills (`install.sh`)
+### Global skills (`init.sh`)
 
 ```bash
-./install.sh --pin ship=v0.0
+./init.sh --pin ship=v0.0
 ```
 
 Pin state is stored in `~/.claude/skill-pins.json`:
@@ -109,7 +109,7 @@ Pin state is stored in `~/.claude/skill-pins.json`:
 { "ship": "v0.0" }
 ```
 
-When a global skill is pinned, `install.sh` symlinks to the `archive/<version>/` subdirectory.
+When a global skill is pinned, `init.sh` points the installed skill root at the `archive/<version>/` subdirectory.
 
 ## Auditing
 

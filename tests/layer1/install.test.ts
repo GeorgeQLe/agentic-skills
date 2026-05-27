@@ -44,7 +44,7 @@ afterEach(() => {
 });
 
 describe("pack.sh install", () => {
-  it("installs alignment-loop pack with correct symlinks", () => {
+  it("installs alignment-loop pack with valid skill roots", () => {
     const dir = makeTempProject();
     execSync(`bash "${PACK_SCRIPT}" install alignment-loop`, {
       cwd: dir,
@@ -108,8 +108,8 @@ describe("pack.sh install", () => {
       encoding: "utf-8",
     });
 
-    expect(installOutput).toContain("Linked .claude/skills/design-system");
-    expect(installOutput).toContain("Linked .codex/skills/design-system");
+    expect(installOutput).toContain("Installed .claude/skills/design-system");
+    expect(installOutput).toContain("Installed .codex/skills/design-system");
 
     const claudeSkill = join(dir, ".claude/skills/design-system");
     const codexSkill = join(dir, ".codex/skills/design-system");

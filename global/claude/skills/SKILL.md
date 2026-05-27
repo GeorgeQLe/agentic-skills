@@ -53,7 +53,7 @@ Discover and search installed global skills plus enabled project-local pack skil
    | Context & Session | `codebase-status`, `analyze-sessions` (session-analytics), `handoff` (context-transfer), `sync` (gitops), `investor-update` (business-ops) |
    | Skill Development | `targeted-skill-builder` (skill-dev), `skill-interview` (skill-dev), `create-agentic-skill` (skill-dev), `create-local-skill` (skill-dev) |
    | Testing | `uat` (product-testing), `uat-guide` (guided-walkthrough), `quiz-me` (knowledge-check) |
-   | Utility | `commit-and-push-by-feature` (gitops), `install-agentic-skills`, `provision-agentic-config`, `skills`, `bootstrap-repo` (repo-maintenance), `desk-flip` (teardown), `compile-central-alignment` (alignment-page-admin), `patch-exec-profile` (exec-profile), `delegate` (agent-bridge), `report-website` (report-gen), `icon-handler` (website-polish), `design-system` (product-design), `prototype` (product-design), `spec-drift` (agent-work-admin), `hygiene` (docs-health), `update-packages` (code-maintenance) |
+   | Utility | `commit-and-push-by-feature` (gitops), `init-agentic-skills`, `provision-agentic-config`, `skills`, `bootstrap-repo` (repo-maintenance), `desk-flip` (teardown), `compile-central-alignment` (alignment-page-admin), `patch-exec-profile` (exec-profile), `delegate` (agent-bridge), `report-website` (report-gen), `icon-handler` (website-polish), `design-system` (product-design), `prototype` (product-design), `spec-drift` (agent-work-admin), `hygiene` (docs-health), `update-packages` (code-maintenance) |
 
    Skills not found in the mapping go into an **Other** group at the end.
 

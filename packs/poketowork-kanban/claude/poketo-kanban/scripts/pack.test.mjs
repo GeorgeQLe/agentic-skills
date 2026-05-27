@@ -85,7 +85,7 @@ describe("pack.sh", () => {
     expect(runPack(fakeLibrary, fakeProject, "list")).toContain("game");
   });
 
-  it("installs project-local claude and codex skill symlinks", () => {
+  it("installs project-local claude and codex skill roots", () => {
     const { fakeLibrary, fakeProject } = createTestEnv();
     const output = runPack(fakeLibrary, fakeProject, "install game");
     expect(

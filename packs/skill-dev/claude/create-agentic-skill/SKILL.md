@@ -13,7 +13,7 @@ Use this skill when the user wants to add or update a skill in the `agentic-skil
 ## Process
 
 1. **Confirm repository context.**
-   - Verify the current repo is `agentic-skills` by checking for `install.sh`, `global/claude/`, and `global/codex/`.
+   - Verify the current repo is `agentic-skills` by checking for `init.sh`, `global/claude/`, and `global/codex/`.
    - If the current repo is not `agentic-skills`, stop and ask for the checkout path.
    - Inspect `git status --short` and identify unrelated dirty files before editing.
 

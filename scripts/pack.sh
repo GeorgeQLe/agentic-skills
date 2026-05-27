@@ -19,11 +19,11 @@ Usage: pack.sh <command> [pack-or-skill...]
 Commands:
   list              List available packs
   list-packs        List enabled packs from .agents/project.json (one per line, no decoration)
-  status            Show project designation and installed local pack links
+  status            Show project designation and installed local pack skills
   recommend         Recommend a pack from repository signals
-  install <name...> Enable one or more packs or individual skills via local skill symlinks
+  install <name...> Enable one or more packs or individual skills via local skill roots
   remove <name...>  Remove one or more packs or individual skills from the current project
-  refresh           Recreate local symlinks for packs and skills in .agents/project.json
+  refresh           Recreate local skill roots for packs and skills in .agents/project.json
   pin <skill> <ver> Pin a pack skill to an archived version (e.g., pin devtool-adoption v0.0)
   unpin <skill>     Revert a pinned skill to the latest version
   set-mode <mode>   Set .agents/project.json.agent_mode to claude-only, codex-only,
@@ -409,9 +409,9 @@ link_one_tool() {
 
     if sync_skill_install "$effective_source" "$target"; then
       if [[ -n "$pinned" && "$effective_source" != "$skill_dir" ]]; then
-        echo "Linked .$tool/skills/$name -> $effective_source (pinned $pinned)"
+        echo "Installed .$tool/skills/$name -> $effective_source (pinned $pinned)"
       else
-        echo "Linked .$tool/skills/$name -> $effective_source"
+        echo "Installed .$tool/skills/$name -> $effective_source"
       fi
     fi
   done
@@ -462,9 +462,9 @@ install_single_skill() {
 
     if sync_skill_install "$effective_source" "$target"; then
       if [[ -n "$pinned" && "$effective_source" != "$skill_dir" ]]; then
-        echo "Linked .$tool/skills/$skill -> $effective_source (pinned $pinned)"
+        echo "Installed .$tool/skills/$skill -> $effective_source (pinned $pinned)"
       else
-        echo "Linked .$tool/skills/$skill -> $effective_source"
+        echo "Installed .$tool/skills/$skill -> $effective_source"
       fi
     fi
   done
@@ -570,7 +570,7 @@ status() {
 print_session_reload_notice() {
   cat <<'EOF'
 
-Skill links changed. Claude Code and Codex may keep the skill list loaded when the current session started.
+Skill installs changed. Claude Code and Codex may keep the skill list loaded when the current session started.
 This pack installer does not have a supported in-session CLI skill refresh command; start a fresh CLI session to use newly installed or removed project-local skills.
 EOF
 }
