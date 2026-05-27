@@ -8,6 +8,8 @@
   ],
   "skill_pack_version": 1,
   "enabled_skills": {
-    "ship-end": "exec-loop"
+    "ship-end": "exec-loop",
+    "sync": "gitops",
+    "analyze-sessions": "session-analytics"
   }
 }
