@@ -1,3 +1,20 @@
+## Current Task — Remove Stale Research Bootstrap Benchmark Rows 2026-05-27
+
+**Goal:** Remove active benchmark coverage/setup references to the deleted `research-bootstrap` skill while preserving historical benchmark artifacts.
+
+**Plan:**
+- [x] Inspect active benchmark coverage and pack workflow setup rows.
+- [x] Remove `research-bootstrap` from active coverage registries and pack fixture setup.
+- [x] Run benchmark coverage, focused layer1 coverage guard, active-reference search, and whitespace checks.
+- [x] Commit and push intended cleanup.
+
+### Review
+
+- Removed the deleted `research-bootstrap` skill from active benchmark coverage metadata and the pack workflow fixture setup.
+- Preserved historical task notes and benchmark run artifacts; no historical records were edited.
+- Validation passed: `pnpm --dir tests bench:coverage`; `pnpm --dir tests exec vitest run --project layer1 layer1/bench-coverage.test.ts`; `rg -n "research-bootstrap" tests/harness tests/layer4 tests/layer1 -g '!tests/benchmarks/runs/**'` returned no active references; `git diff --check`.
+- Shipped on `master` with this cleanup commit.
+
 ## Current Task — Git History Skill Quality Audit 2026-05-27
 
 **Goal:** Review git history and repository evidence to evaluate whether the current skills are as strong as they should be, and identify the highest-leverage remaining improvements.

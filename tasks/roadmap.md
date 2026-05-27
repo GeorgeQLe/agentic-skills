@@ -16,6 +16,16 @@ Phase 37 complete: preserved and migrated the static Skills Showcase into a mini
 
 Current brand decision: the public site brand is **G Skillpacks** and the production domain is `gskillpacks.com`. Future site work should keep public UI, metadata, docs, and information architecture aligned around skill packs language while reserving `agentic-skills` for the underlying open-source library/repository.
 
+## Current Targeted Update: Remove Stale Research Bootstrap Benchmark Rows 2026-05-27
+
+**Goal:** Remove active benchmark coverage/setup references to the deleted `research-bootstrap` skill while preserving historical benchmark artifacts and task notes.
+
+**Acceptance Criteria:**
+- [x] `research-bootstrap` is removed from active benchmark coverage registries.
+- [x] `research-bootstrap` is removed from active pack workflow benchmark fixture setup rows.
+- [x] Active test/registry paths no longer reference `research-bootstrap`, excluding historical benchmark run artifacts.
+- [x] Benchmark coverage, focused layer1 coverage guard, whitespace checks, and intended commit/push complete on `master`.
+
 ## Current Targeted Update: Sync Canonical Agent Config Check 2026-05-27
 
 **Goal:** Update mirrored `sync` skills so sync checks root `CLAUDE.md` and `AGENTS.md` against the canonical provisioned blocks embedded in the installed `provision-agentic-config` skill, not just the provision version comment.
