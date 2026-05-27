@@ -60,16 +60,10 @@ write_skill_pin() {
 
 remove_repo_link() {
   local link="$1"
-  local target
-  [[ -L "$link" ]] || return 0
-  target="$(readlink "$link")"
-  case "$target" in
-    "$SCRIPT_DIR/global/claude/"*|"$SCRIPT_DIR/global/codex/"*)
-      rm "$link"
-      echo "Removed $(basename "$link")"
-      return 0
-      ;;
-  esac
+  if remove_repo_skill_install "$link"; then
+    echo "Removed $(basename "$link")"
+    return 0
+  fi
   return 1
 }
 
@@ -140,7 +134,7 @@ install_tree() {
       fi
     fi
 
-    if sync_skill_link "$effective_source" "$target"; then
+    if sync_skill_install "$effective_source" "$target"; then
       if [[ -n "$pinned" && "$effective_source" != "$skill_dir" ]]; then
         echo "Installed $label: $name (pinned $pinned)"
       else

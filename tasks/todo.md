@@ -2580,3 +2580,22 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
 **Rollback note:** Revert the shipping commit on `master` to restore the prior broad project-local pack links and previous validation semantics.
 
 **Next command:** `$investigate AFPS alignment preview gate audit`
+
+## Current Task — Exclude Archived Skills From `$` Preview 2026-05-27
+
+**Goal:** Install active skills as archive-free managed directories so recursive `$` preview discovery sees only the active `SKILL.md`, while keeping repo archives intact for versioning and pinned installs.
+
+**Plan:**
+- [x] Inspect current global and project-local install/link behavior and tests.
+- [x] Add shared managed-directory install/remove/status helpers that exclude top-level `archive/`.
+- [x] Update `install.sh` and `scripts/pack.sh` to use archive-free active installs while preserving pinned archive symlinks.
+- [x] Extend layer1 installer tests for managed directories and archive exclusion.
+- [ ] Run focused validation, manual recursive `find` check, whitespace check, then commit and push intended changes on `master`.
+
+### Review
+
+- Added `scripts/skill-links.sh` managed skill installs with a `.agentic-skills-managed` marker, repo-source ownership checks, archive-aware pinned symlink fallback, and archive-free active root rebuilds.
+- Updated `install.sh` and `scripts/pack.sh` so active installs, refreshes, and unpins create archive-free managed directories; pinned archived versions still install as direct archive symlinks.
+- Updated pack remove/status handling to recognize repo-managed directories in addition to legacy symlinks, while user-owned real directories without the marker are skipped.
+- Extended `tests/layer1/install.test.ts` to accept managed skill directories and prove recursive discovery under installed `analyze-sessions` roots finds only the active `SKILL.md`.
+- Validation so far: corrected Vitest filter `pnpm --dir tests test layer1/install.test.ts` passed; `bash -n` passed for installer scripts; manual temp-project and temp-`HOME` recursive `find` checks each returned only one active `SKILL.md` per installed root.

@@ -10,6 +10,21 @@ const PACK_SCRIPT = join(REPO_ROOT, "scripts/pack.sh");
 
 const tmpDirs: string[] = [];
 
+function expectInstalledSkill(path: string): void {
+  const stat = lstatSync(path);
+  expect(stat.isDirectory() || stat.isSymbolicLink()).toBe(true);
+  expect(existsSync(join(path, "SKILL.md"))).toBe(true);
+}
+
+function findSkillFiles(path: string): string[] {
+  return execSync(`find "${path}" -name SKILL.md | sort`, {
+    encoding: "utf-8",
+  })
+    .trim()
+    .split("\n")
+    .filter(Boolean);
+}
+
 function makeTempProject(): string {
   const dir = mkdtempSync(join(tmpdir(), "pack-install-test-"));
   execSync("git init", { cwd: dir, stdio: "pipe" });
@@ -45,8 +60,7 @@ describe("pack.sh install", () => {
     expect(entries).toContain("taste-calibration");
 
     for (const entry of entries) {
-      const linkPath = join(claudeSkills, entry);
-      expect(lstatSync(linkPath).isSymbolicLink()).toBe(true);
+      expectInstalledSkill(join(claudeSkills, entry));
     }
   });
 
@@ -99,8 +113,8 @@ describe("pack.sh install", () => {
 
     const claudeSkill = join(dir, ".claude/skills/design-system");
     const codexSkill = join(dir, ".codex/skills/design-system");
-    expect(lstatSync(claudeSkill).isSymbolicLink()).toBe(true);
-    expect(lstatSync(codexSkill).isSymbolicLink()).toBe(true);
+    expectInstalledSkill(claudeSkill);
+    expectInstalledSkill(codexSkill);
     expect(existsSync(join(dir, ".claude/skills/feature-interview"))).toBe(false);
     expect(existsSync(join(dir, ".codex/skills/feature-interview"))).toBe(false);
 
@@ -125,5 +139,22 @@ describe("pack.sh install", () => {
     expect(existsSync(codexSkill)).toBe(false);
     const afterRemove = JSON.parse(readFileSync(projectFile, "utf-8"));
     expect(afterRemove.enabled_skills).toBeUndefined();
+  });
+
+  it("installs active skills without nested archived SKILL.md files", () => {
+    const dir = makeTempProject();
+    execSync(`bash "${PACK_SCRIPT}" install analyze-sessions`, {
+      cwd: dir,
+      stdio: "pipe",
+    });
+
+    for (const tool of ["claude", "codex"]) {
+      const skillRoot = join(dir, `.${tool}/skills/analyze-sessions`);
+      expectInstalledSkill(skillRoot);
+      expect(existsSync(join(skillRoot, "archive"))).toBe(false);
+
+      const skillFiles = findSkillFiles(skillRoot);
+      expect(skillFiles).toEqual([join(skillRoot, "SKILL.md")]);
+    }
   });
 });

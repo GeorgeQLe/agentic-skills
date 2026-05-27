@@ -407,7 +407,7 @@ link_one_tool() {
       fi
     fi
 
-    if sync_skill_link "$effective_source" "$target"; then
+    if sync_skill_install "$effective_source" "$target"; then
       if [[ -n "$pinned" && "$effective_source" != "$skill_dir" ]]; then
         echo "Linked .$tool/skills/$name -> $effective_source (pinned $pinned)"
       else
@@ -460,7 +460,7 @@ install_single_skill() {
       fi
     fi
 
-    if sync_skill_link "$effective_source" "$target"; then
+    if sync_skill_install "$effective_source" "$target"; then
       if [[ -n "$pinned" && "$effective_source" != "$skill_dir" ]]; then
         echo "Linked .$tool/skills/$skill -> $effective_source (pinned $pinned)"
       else
@@ -491,8 +491,7 @@ remove_single_skill() {
     local skill_dir="$PACKS_DIR/$pack/$tool/$skill"
     local target_root="$PROJECT_ROOT/.$tool/skills"
     local target="$target_root/$skill"
-    if [[ -L "$target" ]]; then
-      rm "$target"
+    if remove_repo_skill_install "$target"; then
       echo "Removed .$tool/skills/$skill"
     fi
   done
@@ -515,8 +514,7 @@ remove_pack() {
       local name target
       name="$(basename "$skill_dir")"
       target="$target_root/$name"
-      if [[ -L "$target" && "$(readlink "$target")" == "$skill_dir" ]]; then
-        rm "$target"
+      if remove_repo_skill_install "$target"; then
         echo "Removed .$tool/skills/$name"
       fi
     done
@@ -556,8 +554,8 @@ status() {
     echo "No .agents/project.json found."
   fi
   echo ""
-  echo "Installed local pack links:"
-  find "$PROJECT_ROOT/.claude/skills" "$PROJECT_ROOT/.codex/skills" -mindepth 1 -maxdepth 1 -type l -print 2>/dev/null | sort || true
+  echo "Installed local pack skills:"
+  find "$PROJECT_ROOT/.claude/skills" "$PROJECT_ROOT/.codex/skills" -mindepth 1 -maxdepth 1 \( -type l -o -type d \) -print 2>/dev/null | sort || true
   local skill_lines
   skill_lines="$(read_enabled_skills)"
   if [[ -n "$skill_lines" ]]; then
@@ -659,11 +657,9 @@ pin_skill() {
     local archive_source="$skill_dir/archive/$version"
     [[ -d "$archive_source" ]] || continue
     [[ -d "$target_root" ]] || continue
-    if [[ -L "$target" ]]; then
-      rm "$target"
+    if sync_skill_install "$archive_source" "$target"; then
+      echo "Pinned .$tool/skills/$skill -> $archive_source"
     fi
-    ln -sfn "$archive_source" "$target"
-    echo "Pinned .$tool/skills/$skill -> $archive_source"
   done
   echo "Pinned $skill to $version"
 }
@@ -690,11 +686,9 @@ unpin_skill() {
     local target="$target_root/$(basename "$skill_dir")"
     [[ -d "$skill_dir" ]] || continue
     [[ -d "$target_root" ]] || continue
-    if [[ -L "$target" ]]; then
-      rm "$target"
+    if sync_skill_install "$skill_dir" "$target"; then
+      echo "Unpinned .$tool/skills/$skill -> $skill_dir"
     fi
-    ln -sfn "$skill_dir" "$target"
-    echo "Unpinned .$tool/skills/$skill -> $skill_dir"
   done
   echo "Unpinned $skill (reverted to latest)"
 }
