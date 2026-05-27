@@ -8,6 +8,7 @@
 
 ## Priority Task Queue
 
+- [x] `$investigate journey-map alignment page and AFPS clunkiness` — validate whether journey-map/positioning contracts and recent conversation history explain inconsistent HTML alignment preview creation and workflow friction, then patch the minimal owning contracts/tests if confirmed.
 - [x] `$investigate exec-loop run rename` — rename the exec-loop `run` skill to `exec` for Claude and Codex to avoid collision with Claude's default `/exec` surface; archive/version active skill contracts, update references, validate, commit, and push.
 - [x] `$targeted-skill-builder provision-agentic-config WSL browser open fallback` — update provisioned `CLAUDE.md`/`AGENTS.md` blocks and root `CLAUDE.md` so HTML files open through PowerShell `file://wsl.localhost` when UNC launch fails.
 - [ ] `$analyze-sessions split-path product research workflow` — investigate prior conversations where research surfaces multiple ICP/product-line/pivot options, then recommend how skills should handle branching without bogging down in 4-8 variation evaluations.
@@ -30,6 +31,27 @@
 - [x] `$exec` — Resume Phase 41 Batch 41.3 re-benchmarks: re-run the 33 Tier 2 global skills that were benchmarked pre-fixture-remediation with near-zero pass rates (Phase 43 added route guidance to all 32 fixture prompts and increased budgets). Current graded count: 69 unique skills / 158 total. Batch 41.5 pack-local groups also have remaining families. Batch 41.3 Group 2 shipped in `bc17fee` and `3e4bd78`; next triage should start with `provision-agentic-config`, `migrate`, or `prototype`.
 - [ ] Review `tasks/recurring-todo.md`: 2 unchecked recurring items — promote only if due and requiring execution work.
 - [ ] `$research-roadmap` — All 43 roadmap phases are complete. Run documentation health scan after Phase 41 remaining batches finish.
+
+## Current Task — Journey Map Alignment Page and AFPS Clunkiness Investigation 2026-05-27
+
+**Goal:** Confirm whether `$journey-map` can appear to avoid creating an HTML alignment preview, and use related conversation/history evidence to understand clunkiness in `$journey-map` and `$positioning` compared with the first three AFPS skills.
+
+**Plan:**
+- [x] Read project instructions, lessons, active journey-map and positioning contracts, and current worktree state.
+- [x] Compare journey-map, positioning, and upstream AFPS skill approval/alignment contracts.
+- [x] Search local conversation/session history and repo reports for journey-map, positioning, AFPS, and alignment-page friction.
+- [x] Validate user claims, identify root cause, and decide whether a minimal skill-contract/test patch is needed.
+- [x] Run focused verification, document findings here, and commit/push intended tracked changes if files are modified.
+
+### Review
+
+- Confirmed the user's core concern: active mirrored `journey-map` contracts only had generic "Present before writing" plus a short shared alignment-page pointer, while the first AFPS research skills (`icp`, `competitive-analysis`) and `positioning` had explicit report-first gates that require building/opening the HTML alignment preview before canonical writes.
+- Confirmed related history shows AFPS clunkiness around this area: prior sessions corrected competitive-analysis routing into `pack install customer-lifecycle` then `journey-map`, debated whether positioning belongs before or after journey/spec, and included a positioning-page rework after `journey-map` revealed a multi-ICP/product matrix.
+- Root cause: `journey-map` kept the generic alignment-page convention but lost the local approval-gate wording and journey-specific translation guard that makes agents treat the HTML page as the approval surface rather than optional presentation polish.
+- Fixed mirrored Claude and Codex `journey-map` skills: archived v0.3, bumped to v0.4, added `Report-First Approval Gate`, and added journey-specific HTML translation language covering proposed journey docs, decision logs, stage evidence, critical moments, assumptions, proposed file changes, and approval gates.
+- Added `tests/layer1/journey-map-alignment.test.ts` to lock the focused contract.
+- Verification passed: `pnpm --dir tests exec vitest run --project layer1 layer1/journey-map-alignment.test.ts`; `bash scripts/skill-versions.sh --missing`; `git diff --check`; `scripts/validate-skills-showcase-data.sh`.
+- Broader existing validation noise remains: `tests/layer1/alignment-gates.test.ts` is stale across moved/renamed skills, and `tests/layer1/competitive-analysis-routing.test.ts` has unrelated failures around moved `research-roadmap` paths and a pre-existing Claude route-order assertion.
 
 ## Current Task — Exec Loop Run Rename 2026-05-26
 

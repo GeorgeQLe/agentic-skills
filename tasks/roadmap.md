@@ -18,6 +18,19 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 ## Current Targeted Update: Exec Loop Run Rename 2026-05-26
 
+## Current Targeted Update: Journey Map Alignment Page and AFPS Clunkiness Investigation 2026-05-27
+
+**Goal:** Confirm whether `$journey-map` sometimes lacks a clear requirement to create an HTML alignment preview before approval, and compare related conversation evidence for `$journey-map`/`$positioning` friction against the first AFPS research skills.
+
+**Acceptance Criteria:**
+- [x] Active journey-map and positioning contracts are compared against ICP, competitive-analysis, and upstream AFPS workflow expectations.
+- [x] Related local conversation/session history is searched for evidence of alignment-page friction, route friction, and clunkiness around journey-map/positioning.
+- [x] User claims are classified as confirmed, partially correct, or unsupported with file/history evidence.
+- [x] Any confirmed contract gap is fixed minimally with archive/version/changelog handling and focused regression coverage.
+- [x] Verification passes or blockers are documented, and intended changes are committed and pushed on `master` unless no repository mutation is needed.
+
+**Result:** Updated on 2026-05-27. Confirmed that `journey-map` was weaker than the first AFPS research skills and `positioning`: it lacked the explicit report-first alignment-preview gate, so agents could plausibly stop at a chat lifecycle summary instead of creating the HTML approval page. Mirrored journey-map skills were archived and bumped to v0.4 with report-first alignment preview requirements and journey-specific translation guidance. Focused regression coverage and generated showcase validation passed.
+
 **Goal:** Rename the exec-loop `run` skill to `exec` for Claude and Codex so the project-local command does not collide with Claude's default `/run` surface.
 
 **Acceptance Criteria:**

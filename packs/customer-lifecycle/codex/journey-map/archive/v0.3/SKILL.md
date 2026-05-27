@@ -2,7 +2,7 @@
 name: journey-map
 description: Map the full user and customer lifecycle from trigger and discovery through onboarding, aha, conversion, retention, expansion, and advocacy
 type: analysis
-version: v0.4
+version: v0.3
 argument-hint: "[optional: app, use case, persona, or lifecycle stage]"
 ---
 
@@ -13,14 +13,6 @@ Before telling the user to run a skill from another project-local pack, check `.
 # Journey Map — Lifecycle Overview
 
 Invoke as `$journey-map`.
-
-## Report-First Approval Gate
-
-Default to report-only: present findings, evidence coverage, assumptions, recommended artifact path, and proposed file changes in a pre-approval alignment page plus a concise conversation summary for user approval before creating or updating canonical research, spec, or task files.
-
-Do not write or overwrite synthesized deliverables until the user explicitly approves, unless the user invoked an explicit write/update/fix mode or clearly asked to write files upfront. Raw evidence capture may be persisted before analysis when reproducibility requires it; report those raw paths separately and still gate synthesized research/report writes.
-
-When stopping for approval, build and attempt to open the alignment preview page first, then ask the user to review it and approve, question, or request adjustments. Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language. The approval request itself is the next action. Only emit next-skill routing after the approved artifact has been written or updated.
 
 Create or update the canonical lifecycle overview. This is the top-level map for user task journeys and the customer relationship lifecycle; deeper stage docs belong in `$onboarding-map`, `$conversion-map`, `$transaction-map`, `$retention-map`, `$expansion-map`, and `$lifecycle-metrics`.
 
@@ -75,10 +67,6 @@ Priority-ordered decision tree — recommend the **first** match:
 ## Alignment Page
 
 Follow the shared Alignment Page convention in CLAUDE.md. Output: `alignment/journey-map-{topic}.html`.
-
-**Journey research translation.** Render the lifecycle overview as approval-ready research, not a chat-only summary. The alignment page must include the proposed `research/journey-map.md` content, proposed `research/journey-map-interview.md` decision log, evidence coverage by journey stage, assumptions/confidence register, critical-moment evidence matrix, proposed file changes, and approval gates before canonical research files are created or updated.
-
-Before approval, the next action is review of `alignment/journey-map-{topic}.html` and compiled YAML answers from that page. Do not treat a plain-text lifecycle summary as a substitute for the HTML alignment preview.
 
 ## Constraints
 
