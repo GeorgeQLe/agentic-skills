@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-05-27 — Do not wrap direct skill routes in exec-loop by default
+
+- A `$ship-end` next-step recommendation incorrectly wrapped `$analyze-sessions split-path product research workflow` inside `$exec`, even though `$analyze-sessions` was already the concrete next skill route.
+- Use `$exec` only when the next work is specifically an exec-loop planning/execution session or when the user asks to run the project execution loop.
+- For next-step routing, recommend the owner skill command directly when the work is a named analysis, research, review, or builder skill. Do not prepend `$exec` as a generic executor.
+- Treat exec-loop commands as workflow orchestration tools, not universal launchers for every other skill.
+
 ## 2026-05-27 — Distinguish injected external skills from project-local skill links
 
 - A user complaint about `$` skill invocation pollution referred to external/system-injected skills visible in the session skill list, not stale `.codex/skills` or `.claude/skills` symlinks.
