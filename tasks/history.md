@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-05-27 — Fix SealedPack tear gesture not opening drawer
+
+- Fixed three bugs in `SealedPack.tsx` that prevented the BottomSheet drawer from opening after tearing a card pack:
+  1. Animation chain broken by `layoutId` re-render: `onTear()` flipped the render branch mid-animation, so the chained `cardSlideY` promise never resolved and `onOpen()` never fired. Fixed by using `pendingOpen` ref and firing `onOpen` from `onLayoutAnimationComplete` instead.
+  2. `handleLostPointerCapture` only cleared `isDragging` without checking the drag threshold — fast trackpad swipes left the flap stuck. Now checks threshold and completes or reverts.
+  3. No spring-back for sub-threshold drags — partial tears stayed stuck. Both pointer handlers now call `revertTear()` for sub-threshold releases.
+- Extracted `completeTear()` and `revertTear()` helpers to DRY up the completion/revert logic across both handlers.
+
 ## 2026-05-27 — Expand sealed pack drag zone to full top flap
 
 - Expanded the invisible drag zone in SealedPack.tsx from `top: 20%, height: 26%` to `top: 0%, height: 33%`, aligning it with the full top flap down to the dotted tear line at 33%.
