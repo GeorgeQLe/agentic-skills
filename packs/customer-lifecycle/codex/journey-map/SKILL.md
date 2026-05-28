@@ -75,7 +75,7 @@ Priority-ordered decision tree — recommend the **first** match:
 
 ## Alignment Page
 
-Follow the shared Alignment Page convention in CLAUDE.md. Output: `alignment/journey-map-{topic}.html`.
+When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/journey-map-{topic}.html`.
 
 **Journey research translation.** Render the lifecycle overview as approval-ready research, not a chat-only summary. The alignment page must include the proposed `research/journey-map.md` content, proposed `research/journey-map-interview.md` decision log, evidence coverage by journey stage, assumptions/confidence register, critical-moment evidence matrix, proposed file changes, and approval gates before canonical research files are created or updated.
 

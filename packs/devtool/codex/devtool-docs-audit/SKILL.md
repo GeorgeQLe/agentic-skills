@@ -17,5 +17,5 @@ Write or update `research/devtool-docs-audit.md` with a findings-first docs audi
 
 ## Alignment Page
 
-Follow the shared Alignment Page convention in CLAUDE.md. Output: `alignment/devtool-docs-audit-{topic}.html`.
+When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/devtool-docs-audit-{topic}.html`.
 

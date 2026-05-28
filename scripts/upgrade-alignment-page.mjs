@@ -6,29 +6,7 @@ import { fileURLToPath } from "node:url";
 const repoRoot = dirname(dirname(fileURLToPath(import.meta.url)));
 const args = new Set(process.argv.slice(2));
 const dryRun = args.has("--dry-run");
-const all = args.has("--all");
-
-const coreSkills = new Set([
-  "idea-scope-brief",
-  "feature-interview",
-  "ui-interview",
-  "ux-variations",
-  "spec-interview",
-  "consolidate-variations",
-  "prototype",
-  "uat",
-  "icp",
-  "competitive-analysis",
-  "customer-feedback",
-  "journey-map",
-  "conversion-map",
-  "retention-map",
-  "assumption-tracker",
-  "experiment",
-  "cohort-review",
-  "retro",
-  "risk-register",
-]);
+// --all is retained as a no-op alias: all alignment-producing skills are covered by default.
 
 const skipPath = `${repoRoot}/scripts/alignment-skip-list.txt`;
 const skippedNames = new Set();
@@ -44,40 +22,42 @@ function skillNameFor(file) {
   return parts[parts.length - 2];
 }
 
-function sectionFor(skillName, heading = "##") {
+// Single authoring source: the marked block inside CLAUDE.md.
+const claudeMdPath = `${repoRoot}/CLAUDE.md`;
+const claudeMd = readFileSync(claudeMdPath, "utf8");
+const markerMatch = claudeMd.match(
+  /<!-- alignment-convention:start -->\n([\s\S]*?)\n<!-- alignment-convention:end -->/,
+);
+if (!markerMatch) {
+  console.error(
+    "Could not find <!-- alignment-convention:start --> / :end markers in CLAUDE.md",
+  );
+  process.exit(1);
+}
+const conventionTemplate = markerMatch[1];
+
+// Full convention text bundled into each skill's ALIGNMENT-PAGE.md.
+function bundledContentFor(skillName) {
   const specific = skillSpecificGates(skillName);
-  return `${heading} Alignment Page
+  const body = conventionTemplate
+    .replaceAll("{skill-name}", skillName)
+    .replace(/\n*\{\{SKILL_SPECIFIC_GATES\}\}\n*/, specific ? `\n\n${specific}\n\n` : "\n\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+  return `# Alignment Page — ${skillName}\n\n${body}\n`;
+}
 
-When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page at \`alignment/${skillName}-{topic}.html\`. Use a normalized topic slug derived from the app, feature, research subject, report subject, or output filename.
+// Short SKILL.md stub paragraph that points at the bundled file. Replaces the
+// pointer paragraph in place, leaving any surrounding bespoke prose untouched.
+const POINTER_PREFIX = "Follow the shared Alignment Page convention in CLAUDE.md";
+const STUB_PREFIX = "When this skill produces durable deliverables";
 
-**Research quality contract.** For research-producing outputs, build the research before polishing the page. Separate and label \`claims\` (what the report concludes), \`evidence\` (source, repo artifact or file path, quote or observation, date, and confidence), \`inference\` (why that evidence supports the claim), \`assumptions\` (what remains unproven), and \`decision impact\` (what the user should approve, reject, or correct). Do not collapse evidence and inference into unsupported summary prose.
+function stubParagraph(skillName) {
+  return `When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following \`ALIGNMENT-PAGE.md\` in this skill's directory. Output: \`alignment/${skillName}-{topic}.html\`.`;
+}
 
-**No context loss rule.** The alignment page must contain the complete content of every proposed markdown deliverable -- every section, every finding, every detail, every list item -- plus the decision-relevant substance from search logs, interview logs, source notes, repo scans, and approval notes. If a fact, source, caveat, uncertainty, alternative, rejected or lower-confidence finding, or decision rationale appears in a proposed deliverable or research log, it must either appear in the HTML page or be explicitly linked from the exact section that depends on it. The page is a thorough interactive review document, not a summary. Render the full deliverable content in clean, readable HTML with appropriate hierarchy, styling, and navigation. If the skill writes multiple scoped deliverables in one run, build one alignment page that contains all deliverables with anchor-linked navigation. Durable tracker artifacts, such as \`research/assumption-tracker.md\`, remain canonical markdown outputs but must also be fully rendered into the alignment page before approval.
-
-**Research translation requirements.** For research outputs, the HTML page must include an evidence matrix, confidence/assumption register, alternatives considered, rejected or lower-confidence findings, source coverage gaps, and downstream implications. The evidence matrix must map each major claim to source or repo evidence, inference, confidence, assumption status, and decision impact. The confidence/assumption register must show which conclusions are evidence-backed, which are provisional, and what evidence would change them.
-
-**Dark-mode styling.** Use a dark color scheme by default. Base CSS variables: \`--bg: #0d1117; --surface: #161b22; --border: #30363d; --text: #c9d1d9; --text-muted: #8b949e; --accent: #58a6ff; --green: #3fb950; --red: #f85149; --orange: #d29922; --purple: #bc8cff;\`. Apply \`background: var(--bg); color: var(--text);\` on body. Use \`--surface\` for cards, nav, and table headers. Use \`--border\` for all borders. Use \`--purple\` for question blocks and gate headings. Use \`--accent\` for links and section headings. Keep headings \`color: #fff\` or \`var(--accent)\` for hierarchy. Question block backgrounds should use \`#1c2333\`.
-
-**Alignment gates.** Treat gates as explicit review sections inside the HTML page. A gate blocks finalization until its required inline questions are answered and compiled into YAML. Include every gate that applies to the skill output, and include these gate types whenever relevant: evidence coverage, assumptions/confidence, scope/non-goals, candidate/verdict decisions, artifact destination, proposed file changes, coverage checkpoint, and post-approval route.
-
-**Research completeness gate.** For research outputs, include a research completeness gate with inline questions asking whether the evidence is sufficient for the recommendation, which claims need more support, and whether missing context could change the recommendation. Place these questions directly under the evidence matrix or recommendation section they govern.
-
-**Source coverage expectations.** For web research, organize source coverage by category rather than citation list alone; use categories such as competitors, pricing, user sentiment, positioning, integrations, and recent activity when relevant to the topic. For repo or codebase research, include file/path evidence and clearly distinguish observed code facts from inferred product, workflow, or user conclusions.
-
-**Report-only research gates.** For report-only or pre-approval research skills, the alignment page must explicitly contain evidence coverage, assumptions/confidence, recommended path, proposed file changes, and approval gates before any canonical research, spec, or task file is created or updated.
-${specific ? `\n${specific}\n` : ""}
-
-**Required inline questions.** Each gate must contain at least one required inline question placed directly under the content it governs, inside a visually distinct question block. Each question must use radio-button inputs and include two standing options after the skill-generated choices: "Other / None of the above" backed by a multi-line text box for free-form input, and "Need clarification" backed by an optional notes box where the user can explain what is unclear. When any radio option other than "Other" or "Need clarification" is selected, show an optional "Additional notes" text box beneath it so the user can qualify their choice. Generate questions based on what genuinely needs user input -- do not add filler questions. Do not create a separate bottom "Decisions & Clarifications" section.
-
-**Gate YAML contract.** At the bottom of the page, include a "Compile Answers" button that aggregates answers from all inline gate questions throughout the page, including free-text notes. The button remains disabled until every required question has a selection, shows a count of remaining unanswered questions, and scrolls to the first unanswered question if clicked early. When every question is answered, generate a structured YAML block with one item per gate answer using this stable shape: \`section\`, \`gate_type\`, \`status\` (\`answered\`, \`other\`, or \`needs-clarification\`), \`answer\`, optional \`notes\`, and optional \`target_artifact\` or \`target_path\` when the gate controls file output. After successful compilation, automatically attempt to copy the YAML to the clipboard with the Clipboard API, display copy status, and display the YAML in a read-only textarea with an explicit "Copy YAML" button. The copy button must retry clipboard copy when supported and fall back to selecting the textarea contents when clipboard access is unavailable or blocked.
-
-**Pre-approval stop.** Before user approval, the next action is review of the HTML alignment page, not downstream routing. Ask the user to review the page and provide the compiled YAML answers. Do not include \`Recommended next skill\`, \`Recommended next command\`, or downstream routing language until after compiled YAML has been provided and the approved artifacts have been written or updated.
-
-**Diff highlighting on updates.** When the agent updates an existing alignment page after receiving compiled answers, highlight what changed since the previous version. The agent chooses inline annotation or side-by-side layout per situation.
-
-**Archiving.** Before replacing an existing alignment page, archive it to \`docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/${skillName}-{topic}.html\`.
-
-**Browser open.** Attempt to open the resulting HTML page in the browser and report whether the open succeeded or was blocked. A blocked browser-open attempt does not make the skill fail when the files were written correctly.`;
+function isPointerOrStub(paragraph) {
+  return paragraph.startsWith(POINTER_PREFIX) || paragraph.startsWith(STUB_PREFIX);
 }
 
 function skillSpecificGates(skillName) {
@@ -111,21 +91,35 @@ function skillSpecificGates(skillName) {
 }
 
 function replaceOrInsert(content, skillName) {
-  const headingMatch = content.match(/^#{2,3} Alignment Page$/m);
-  const newSection = sectionFor(skillName, headingMatch?.[0].startsWith("###") ? "###" : "##");
+  const headingMatch = content.match(/^(#{2,3}) Alignment Page$/m);
+  const stub = stubParagraph(skillName);
 
   if (headingMatch?.index !== undefined) {
-    const start = headingMatch.index;
     const heading = headingMatch[0];
-    const level = heading.match(/^#+/)?.[0].length ?? 2;
-    const afterHeading = start + heading.length;
+    const level = headingMatch[1].length;
+    const afterHeading = headingMatch.index + heading.length;
     const nextHeading = new RegExp(`\\n#{1,${level}} (?!#)`, "g");
     nextHeading.lastIndex = afterHeading;
     const boundary = nextHeading.exec(content);
-    const end = boundary ? boundary.index + 1 : content.length;
-    return `${content.slice(0, start)}${newSection}\n\n${content.slice(end).replace(/^\n+/, "")}`;
+    const end = boundary ? boundary.index : content.length;
+
+    // Swap only the pointer/stub paragraph for the stub; keep bespoke prose.
+    const paragraphs = content.slice(afterHeading, end).split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
+    let swapped = false;
+    const next = paragraphs.map((p) => {
+      if (!swapped && isPointerOrStub(p)) {
+        swapped = true;
+        return stub;
+      }
+      return p;
+    });
+    if (!swapped) next.unshift(stub);
+
+    const tail = content.slice(end).replace(/^\n+/, "");
+    return `${content.slice(0, afterHeading)}\n\n${next.join("\n\n")}\n\n${tail}`;
   }
 
+  const newSection = `## Alignment Page\n\n${stub}`;
   const insertion = content.search(/^## (Archive-First Replacement Policy|Default Shipping Contract)$/m);
   if (insertion >= 0) {
     return `${content.slice(0, insertion).replace(/\n*$/, "\n\n")}${newSection}\n\n${content.slice(insertion)}`;
@@ -149,9 +143,41 @@ const files = [...walk(`${repoRoot}/global`), ...walk(`${repoRoot}/packs`)]
   .filter((file) => /(^|\/)(codex|claude)\//.test(file))
   .sort();
 
+const hasSectionRe = /^#{2,3} Alignment Page$/m;
+
+// Extract the body of the `## Alignment Page` section (between its heading and
+// the next heading of the same or higher level). Returns null if absent.
+function alignmentSectionBody(content) {
+  const m = content.match(/^(#{2,3}) Alignment Page$/m);
+  if (!m || m.index === undefined) return null;
+  const start = m.index + m[0].length;
+  const level = m[1].length;
+  const next = new RegExp(`\\n#{1,${level}} (?!#)`, "g");
+  next.lastIndex = start;
+  const boundary = next.exec(content);
+  const end = boundary ? boundary.index : content.length;
+  return content.slice(start, end).trim();
+}
+
+// The generator owns any section that carries the shared-convention pointer
+// paragraph (or an already-generated stub). It bundles the convention and
+// swaps just that paragraph for the stub, leaving any surrounding bespoke
+// prose intact. Fully hand-authored sections with no pointer/stub paragraph
+// (condensed gates, custom timing rules) are self-contained and left verbatim.
+function isOwnable(body) {
+  if (body === null) return false;
+  return body
+    .split(/\n\s*\n/)
+    .map((p) => p.trim())
+    .filter(Boolean)
+    .some(isPointerOrStub);
+}
+
 let updated = 0;
 let skipList = 0;
 let outOfScope = 0;
+let bespoke = 0;
+let bundlesWritten = 0;
 
 for (const file of files) {
   const skillName = skillNameFor(file);
@@ -159,23 +185,49 @@ for (const file of files) {
     skipList += 1;
     continue;
   }
-  if (!all && !coreSkills.has(skillName)) {
-    outOfScope += 1;
-    continue;
-  }
 
   const abs = `${repoRoot}/${file}`;
   const before = readFileSync(abs, "utf8");
+  const body = alignmentSectionBody(before);
+  // Skills without an alignment section are out of scope.
+  if (body === null) {
+    outOfScope += 1;
+    continue;
+  }
+  // Preserve hand-authored / hybrid alignment sections verbatim.
+  if (!isOwnable(body)) {
+    bespoke += 1;
+    continue;
+  }
+
+  // 1. Bundled, load-on-demand convention file beside the skill.
+  const bundlePath = join(dirname(abs), "ALIGNMENT-PAGE.md");
+  const bundleContent = bundledContentFor(skillName);
+  const bundleBefore = existsSync(bundlePath) ? readFileSync(bundlePath, "utf8") : "";
+  const bundleChanged = bundleBefore !== bundleContent;
+
+  // 2. Short stub inside SKILL.md pointing at the bundled file.
   const after = replaceOrInsert(before, skillName);
-  if (before === after) continue;
+  const skillChanged = before !== after;
+
+  if (!bundleChanged && !skillChanged) continue;
 
   updated += 1;
-  const action = before.match(/^#{2,3} Alignment Page$/m) ? "replace" : "insert";
-  console.log(`${dryRun ? "[dry-run] " : ""}${action} ${file}`);
-  if (!dryRun) writeFileSync(abs, after);
+  if (skillChanged) {
+    const action = hasSectionRe.test(before) ? "replace" : "insert";
+    console.log(`${dryRun ? "[dry-run] " : ""}${action} stub ${file}`);
+    if (!dryRun) writeFileSync(abs, after);
+  }
+  if (bundleChanged) {
+    bundlesWritten += 1;
+    console.log(`${dryRun ? "[dry-run] " : ""}write ${relative(repoRoot, bundlePath)}`);
+    if (!dryRun) writeFileSync(bundlePath, bundleContent);
+  }
 }
 
 console.log("");
 console.log(`Updated: ${updated}`);
+console.log(`Bundled files written: ${bundlesWritten}`);
 console.log(`Skipped by ${relative(repoRoot, skipPath)}: ${skipList}`);
+console.log(`Preserved bespoke sections: ${bespoke}`);
 console.log(`Out of scope: ${outOfScope}`);

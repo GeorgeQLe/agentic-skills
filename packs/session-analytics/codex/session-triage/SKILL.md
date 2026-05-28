@@ -90,7 +90,7 @@ Produce a structured report with:
 
 ## Alignment Page
 
-Follow the shared Alignment Page convention in CLAUDE.md. Output: `alignment/session-triage-{topic}.html`.
+When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/session-triage-{topic}.html`.
 
 ## Default Shipping Contract
 

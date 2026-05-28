@@ -134,7 +134,7 @@ Run this **after** `/roadmap` sets `agent-team` or `implementation-safe` on a ph
 
 ## Alignment Page
 
-Follow the shared Alignment Page convention in CLAUDE.md. Output: `alignment/mono-plan-{topic}.html`.
+When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/mono-plan-{topic}.html`.
 
 ## Constraints
 

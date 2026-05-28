@@ -94,7 +94,7 @@ When you've completed these steps, let me know and I'll mark the item done in `t
 
 ## Alignment Page
 
-Follow the shared Alignment Page convention in CLAUDE.md. Output: `alignment/guide-{topic}.html`.
+When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/guide-{topic}.html`.
 
 ## Constraints
 

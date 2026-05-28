@@ -47,7 +47,7 @@ Map how evaluators become customers, including the decision path from first valu
 
 ## Alignment Page
 
-Follow the shared Alignment Page convention in CLAUDE.md. Output: `alignment/conversion-map-{topic}.html`.
+When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/conversion-map-{topic}.html`.
 
 ## Constraints
 

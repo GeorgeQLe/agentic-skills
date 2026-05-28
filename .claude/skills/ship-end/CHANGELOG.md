@@ -1,1 +1,11 @@
-/home/georgeqle/projects/tools/dev/agentic-skills/packs/exec-loop/claude/ship-end/CHANGELOG.md
+# Changelog
+
+## v0.0
+
+- Archived previous skill contract.
+
+# ship-end changelog (claude)
+
+## v0.1 - 2026-05-26
+
+- Gate cross-pack routing recommendations with formal inline pack-availability conditionals instead of informal parenthetical pack mentions

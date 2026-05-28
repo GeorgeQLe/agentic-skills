@@ -2816,14 +2816,6 @@ Resolved all 10 findings from `/expert-review`:
 - 3 overall run failures from pre-existing content assertions (salvage, tradeoffs, variant evaluation), not route-related.
 - Total cost: ~$10.
 
-## 2026-05-28 — Add Codex AFPS status skill
-
-- Added `global/codex/afps-status` as a read-mostly global Codex skill for AFPS artifact reconciliation and next-command routing.
-- Registered `afps-status` in benchmark coverage as a Tier 2/3 custom global workflow and added a stale-task-queue fixture that routes research/spec-ready projects to `$roadmap`.
-- Refreshed global installs with `./init.sh`; Codex now installs `afps-status` as a core skill.
-- Validation passed for skill dependency/version checks, benchmark coverage, showcase freshness before excluding unrelated generated diffs, whitespace checks, and benchmark CLI coverage listing.
-- Known unrelated caveats remain in the broad next-step-routing audit and layer1 benchmark setup tests.
-
 ## 2026-05-21 — Ship Phase 43 generated benchmark/showcase data
 
 - Refreshed the Skills Showcase GitHub proof assets and benchmark results matrix after the Phase 43 completion commits.

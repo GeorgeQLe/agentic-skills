@@ -5,7 +5,8 @@
     "exec-loop",
     "code-debug",
     "skill-dev",
-    "gitops"
+    "gitops",
+    "session-analytics"
   ],
   "skill_pack_version": 1,
   "enabled_skills": {

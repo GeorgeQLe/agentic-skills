@@ -108,9 +108,10 @@ Provisioned artifact: ./CLAUDE.md. Source: workflow.md. Verification: block appe
 
 ### Alignment Page Template
 
-When a skill says "Follow the shared Alignment Page convention", apply this full template. Replace `{skill-name}` with the skill's name and `{topic}` with a normalized topic slug.
+This block is the **single authoring source** for the alignment-page convention. It is bundled per-skill as `ALIGNMENT-PAGE.md` (load-on-demand) inside every alignment-producing skill directory; `scripts/upgrade-alignment-page.mjs` reads the marked block below and propagates it. **Edit the convention here only** — never hand-edit a generated `ALIGNMENT-PAGE.md`; re-run the generator instead. Replace `{skill-name}` with the skill's name and `{topic}` with a normalized topic slug. The `{{SKILL_SPECIFIC_GATES}}` token is filled per skill from the generator's gate map.
 
-Build a full-depth HTML alignment page at `alignment/{skill-name}-{topic}.html`.
+<!-- alignment-convention:start -->
+When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page at `alignment/{skill-name}-{topic}.html`. Use a normalized topic slug derived from the app, feature, research subject, report subject, or output filename.
 
 **Research quality contract.** For research-producing outputs, build the research before polishing the page. Separate and label `claims` (what the report concludes), `evidence` (source, repo artifact or file path, quote or observation, date, and confidence), `inference` (why that evidence supports the claim), `assumptions` (what remains unproven), and `decision impact` (what the user should approve, reject, or correct). Do not collapse evidence and inference into unsupported summary prose.
 
@@ -128,6 +129,8 @@ Build a full-depth HTML alignment page at `alignment/{skill-name}-{topic}.html`.
 
 **Report-only research gates.** For report-only or pre-approval research skills, the alignment page must explicitly contain evidence coverage, assumptions/confidence, recommended path, proposed file changes, and approval gates before any canonical research, spec, or task file is created or updated.
 
+{{SKILL_SPECIFIC_GATES}}
+
 **Required inline questions.** Each gate must contain at least one required inline question placed directly under the content it governs, inside a visually distinct question block. Each question must use radio-button inputs and include two standing options after the skill-generated choices: "Other / None of the above" backed by a multi-line text box for free-form input, and "Need clarification" backed by an optional notes box where the user can explain what is unclear. When any radio option other than "Other" or "Need clarification" is selected, show an optional "Additional notes" text box beneath it so the user can qualify their choice. Generate questions based on what genuinely needs user input -- do not add filler questions. Do not create a separate bottom "Decisions & Clarifications" section.
 
 **Gate YAML contract.** At the bottom of the page, include a "Compile Answers" button that aggregates answers from all inline gate questions throughout the page, including free-text notes. The button remains disabled until every required question has a selection, shows a count of remaining unanswered questions, and scrolls to the first unanswered question if clicked early. When every question is answered, generate a structured YAML block with one item per gate answer using this stable shape: `section`, `gate_type`, `status` (`answered`, `other`, or `needs-clarification`), `answer`, optional `notes`, and optional `target_artifact` or `target_path` when the gate controls file output. After successful compilation, automatically attempt to copy the YAML to the clipboard with the Clipboard API, display copy status, and display the YAML in a read-only textarea with an explicit "Copy YAML" button. The copy button must retry clipboard copy when supported and fall back to selecting the textarea contents when clipboard access is unavailable or blocked.
@@ -139,6 +142,7 @@ Build a full-depth HTML alignment page at `alignment/{skill-name}-{topic}.html`.
 **Archiving.** Before replacing an existing alignment page, archive it to `docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/{skill-name}-{topic}.html`.
 
 **Browser open.** Attempt to open the resulting HTML page in the browser and report whether the open succeeded or was blocked. A blocked browser-open attempt does not make the skill fail when the files were written correctly.
+<!-- alignment-convention:end -->
 
 ### Shipping Contract Template
 

@@ -109,7 +109,7 @@ From /Users/georgele/projects/tools/agentic-skills, run targeted-skill-builder f
 
 ## Alignment Page
 
-Follow the shared Alignment Page convention in CLAUDE.md. Output: `alignment/targeted-skill-builder-{topic}.html`.
+When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/targeted-skill-builder-{topic}.html`.
 
 ## Default Shipping Contract
 

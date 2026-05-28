@@ -88,7 +88,7 @@ Manage the release ceremony: version bump, changelog generation, git tag, and op
 
 ## Alignment Page
 
-Follow the shared Alignment Page convention in CLAUDE.md. Output: `alignment/release-{topic}.html`.
+When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/release-{topic}.html`.
 
 ## Default Shipping Contract
 

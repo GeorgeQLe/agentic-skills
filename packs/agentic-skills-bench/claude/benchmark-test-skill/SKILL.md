@@ -116,7 +116,7 @@ The Markdown report and the final assistant response must both include a literal
 
 ## Alignment Page
 
-Follow the shared Alignment Page convention in CLAUDE.md. Output: `alignment/benchmark-test-skill-{topic}.html`.
+When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/benchmark-test-skill-{topic}.html`.
 
 ## Constraints
 

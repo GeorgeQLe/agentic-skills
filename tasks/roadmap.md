@@ -1,15 +1,3 @@
-## Current Targeted Update: Global Codex AFPS Status Skill 2026-05-28
-
-**Goal:** Add a Codex-only `$afps-status` global skill that summarizes a project's AFPS product-workflow progress from existing artifacts and recommends the next concrete command.
-
-**Acceptance Criteria:**
-- [x] `global/codex/afps-status/SKILL.md` exists with `name: afps-status`, `type: analysis`, `version: v0.0`, and optional path/focus argument guidance.
-- [x] The skill is read-only by default, reconciles existing artifacts instead of creating a new state system, and proposes missing `research/.progress.yaml` updates rather than writing them.
-- [x] AFPS stage/routing rules cover concept scoping, discovery pack installation, ICP, market/value evidence, lifecycle/growth gaps, roadmap refresh, execution, shipping, and reconciliation.
-- [x] Supporting Codex metadata, changelog, and alignment-page convention are present.
-- [x] Benchmark coverage registers `afps-status` as a Tier 2/3 custom global skill with a focused stale-task-queue routing fixture.
-- [x] Validation passes or unrelated caveats are documented, and intended scoped changes are committed and pushed on `master`.
-
 ## Current Targeted Update: Codex Dollar Skill Discovery Repair 2026-05-28
 
 **Goal:** Fix Codex `$` skill discovery so user-installed and project-enabled agentic-skills commands are visible, while unrelated external/plugin skills do not mask the intended command surface.

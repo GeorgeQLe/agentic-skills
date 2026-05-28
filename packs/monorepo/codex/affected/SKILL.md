@@ -35,7 +35,7 @@ Use this skill when the user wants to understand the blast radius of their curre
 
 ## Alignment Page
 
-Follow the shared Alignment Page convention in CLAUDE.md. Output: `alignment/affected-{topic}.html`.
+When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/affected-{topic}.html`.
 
 ## Default Shipping Contract
 

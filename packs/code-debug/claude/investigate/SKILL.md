@@ -155,7 +155,7 @@ _(Shown in plan mode — replaces "Fix Applied")_
 
 ## Alignment Page
 
-Follow the shared Alignment Page convention in CLAUDE.md. Output: `alignment/investigate-{topic}.html`.
+When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/investigate-{topic}.html`.
 
 ## Default Shipping Contract
 
