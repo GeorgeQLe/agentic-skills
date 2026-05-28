@@ -2,6 +2,15 @@
 
 **Goal:** Fix Codex `$` skill discovery so user-installed and project-enabled agentic-skills commands are visible, while unrelated external/plugin skills do not mask the intended command surface.
 
+**Follow-up 2026-05-28:** The prior managed-directory refresh still left `SKILL.md` entries as symlinks, which current Codex discovery can miss when it enumerates real files only.
+
+**Follow-up Acceptance Criteria:**
+- [x] Installed global and project-local skill directories are inspected against real-file discovery.
+- [x] Active managed installs copy skill contents into managed directories, excluding `archive/`.
+- [x] Pinned archive installs keep the existing symlink behavior.
+- [x] Global and project-local installs are refreshed locally and real-file discovery sees the expected Codex skills.
+- [x] Focused validation passes, review notes are recorded, and intended tracked changes are committed and pushed on `master`.
+
 **Acceptance Criteria:**
 - [x] Current installed/user skill roots and project-local skill roots are inspected without overwriting unrelated user changes.
 - [x] The discovery mismatch is reproduced or ruled out with repository scripts and filesystem evidence.

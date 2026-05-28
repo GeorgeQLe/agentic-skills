@@ -103,7 +103,7 @@ sync_skill_install() {
     [[ -e "$entry" || -L "$entry" ]] || continue
     name="$(basename "$entry")"
     [[ "$name" == "archive" ]] && continue
-    ln -sfn "$entry" "$target/$name"
+    cp -R "$entry" "$target/$name"
   done
 
   return 0

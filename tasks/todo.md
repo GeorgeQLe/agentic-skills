@@ -2,6 +2,15 @@
 
 **Goal:** Fix the `$` skill discovery/suggestion path so installed agentic-skills skills are visible instead of unrelated external skills dominating the list.
 
+**Follow-up 2026-05-28:** The stale symlink-directory repair was incomplete for the current Codex loader because managed directories still exposed symlinked `SKILL.md` files. Active managed installs now need real copied files.
+
+**Follow-up Plan:**
+- [x] Confirm installed global and project-local skill directories exist and compare them against real-file discovery.
+- [x] Update the shared managed skill install helper so active skills are copied into managed directories while archives remain excluded and pinned archive installs remain symlinks.
+- [x] Refresh global and project-local installs on this machine.
+- [x] Add focused regression coverage for real-file managed installs.
+- [x] Run focused validation, document review notes, then commit and push intended tracked changes on `master`.
+
 **Plan:**
 - [x] Record the investigation plan and inspect current lessons, dirty files, and discovery config.
 - [x] Reproduce the installed/project skill visibility mismatch from repo scripts and local skill directories.
@@ -14,10 +23,16 @@
 
 - User claim confirmed for Codex project-local skills: before refresh, direct discovery with `find .codex/skills -maxdepth 2 -name SKILL.md` found only `analyze-sessions` and `session-triage`, even though `scripts/pack.sh status` listed the full enabled pack set.
 - Root cause: most `.codex/skills/*` entries were stale symlink installs from the older pack-link format. The current installer expects managed directories that expose `SKILL.md` under each skill root and exclude archives.
+- Follow-up root cause: the managed-directory repair still wrote `SKILL.md` and support files as symlinks inside managed directories. Current Codex discovery can miss those when it enumerates real files only.
+- Updated `scripts/skill-links.sh` so active managed installs copy skill contents into managed directories while still excluding `archive/`; pinned archive installs keep the existing symlink behavior.
+- Refreshed global installs with `bash init.sh` and project-local installs with `scripts/pack.sh refresh`.
+- After refresh, real-file discovery sees 8 global Codex `SKILL.md` files and 16 project-local Codex `SKILL.md` files; no `SKILL.md` symlinks remain under `~/.codex/skills` or `.codex/skills`.
+- Added `tests/layer1/skill-links-install.test.ts` to guard real-file managed installs and archive-pin symlink behavior.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 layer1/skill-links-install.test.ts`; `git diff --check -- scripts/skill-links.sh tests/layer1/skill-links-install.test.ts tasks/todo.md tasks/roadmap.md`; `bash scripts/skill-versions.sh --missing`.
 - Applied local repair with `scripts/pack.sh refresh`. After refresh, `.codex/skills` has managed directories and direct `SKILL.md` entries for `analyze-sessions`, `benchmark-agent-review`, `benchmark-test-skill`, `commit-and-push-by-feature`, `create-agentic-skill`, `create-local-skill`, `debug`, `exec`, `investigate`, `session-triage`, `ship`, `ship-end`, `skill-interview`, `sync`, `targeted-skill-builder`, and `trace`.
 - Verification passed: `find .codex/skills -maxdepth 2 -name SKILL.md -print`; `find .codex/skills -maxdepth 1 -type l -print` returned no symlinks; `scripts/pack.sh status`.
 - Current-session caveat: Codex may keep the `$` skill list loaded from session start, so a fresh Codex session is required to see the refreshed project-local skills in the `$` menu.
-- Shipping caveat: refresh also updated tracked `.claude/skills` local install pointers from the old machine path to the current Mac path; those local install pointer changes should not be committed as portable source changes.
+- Shipping caveat: refresh also updated tracked `.claude/skills` local install artifacts and existing unrelated app files remained dirty; those local/generated changes are not portable source changes and are left unstaged.
 
 ## Current Task — Remove Stale Research Bootstrap Benchmark Rows 2026-05-27
 
