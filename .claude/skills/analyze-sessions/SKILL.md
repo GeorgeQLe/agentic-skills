@@ -1,0 +1,1 @@
+/home/georgeqle/projects/tools/dev/agentic-skills/packs/session-analytics/claude/analyze-sessions/SKILL.md

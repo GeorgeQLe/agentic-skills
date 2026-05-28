@@ -1,0 +1,1 @@
+/home/georgeqle/projects/tools/dev/agentic-skills/packs/skill-dev/claude/skill-interview/CHANGELOG.md

@@ -1,0 +1,1 @@
+/home/georgeqle/projects/tools/dev/agentic-skills/packs/skill-dev/claude/create-local-skill/SKILL.md

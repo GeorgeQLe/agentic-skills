@@ -1,0 +1,1 @@
+/home/georgeqle/projects/tools/dev/agentic-skills/packs/agentic-skills-bench/claude/benchmark-agent-review/SKILL.md

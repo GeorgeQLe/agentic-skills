@@ -1,0 +1,1 @@
+/home/georgeqle/projects/tools/dev/agentic-skills/packs/gitops/claude/commit-and-push-by-feature/SKILL.md

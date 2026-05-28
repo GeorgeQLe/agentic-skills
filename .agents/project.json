@@ -11,6 +11,7 @@
   "enabled_skills": {
     "ship-end": "exec-loop",
     "sync": "gitops",
-    "analyze-sessions": "session-analytics"
+    "analyze-sessions": "session-analytics",
+    "ship": "exec-loop"
   }
 }
