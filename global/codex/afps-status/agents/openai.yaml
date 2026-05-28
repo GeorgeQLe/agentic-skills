@@ -1,0 +1,7 @@
+interface:
+  display_name: "AFPS Status"
+  short_description: "Reconcile product workflow artifacts and recommend the next AFPS command"
+  default_prompt: "Use $afps-status to inspect this project's AFPS artifacts, classify the current product-workflow stage, and recommend the next concrete command."
+
+policy:
+  allow_implicit_invocation: true

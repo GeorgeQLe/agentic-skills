@@ -1,3 +1,25 @@
+## Current Task — Global Codex AFPS Status Skill 2026-05-28
+
+**Goal:** Add a Codex-only `$afps-status` global skill that reconciles existing AFPS product-workflow artifacts and recommends the next concrete command without creating a competing state system.
+
+**Plan:**
+- [x] Inspect adjacent global status skill patterns, benchmark coverage registration, and repository validation expectations.
+- [x] Create `global/codex/afps-status` with read-mostly workflow instructions, OpenAI metadata, changelog, and alignment-page convention.
+- [x] Register `afps-status` as Tier 2/3 custom benchmark coverage and add a focused stale-task-queue routing fixture.
+- [x] Run focused validation and record known unrelated validation caveats.
+- [x] Ship intended scoped changes on `master`.
+
+### Review
+
+- Added Codex-only `$afps-status` at `global/codex/afps-status/`.
+- The skill inspects `.agents/project.json`, `research/.progress.yaml`, concept/ICP/research artifacts, lifecycle/growth docs, specs/prototypes/UAT, task docs, alignment pages, and git evidence.
+- The skill is read-only by default and explicitly proposes missing `research/.progress.yaml` updates instead of writing workflow state.
+- Routing covers unscoped concepts, missing discovery packs, missing ICP, incomplete market/value evidence, lifecycle/growth gaps, stale task queues, executable tasks, shipping gaps, and contradictory artifacts.
+- Added Tier 2/3 benchmark coverage metadata and a focused fixture that expects research/spec evidence with stale tasks to route to `$roadmap`.
+- Showcase generation was run and passed, but the generated diff was driven by unrelated dirty source files and did not add this Codex-only skill to the showcase; generated files were restored to keep the shipping boundary scoped.
+- Validation passed: `./init.sh` with home-directory escalation, `./scripts/skill-deps.sh --broken`, `./scripts/skill-versions.sh --missing`, `pnpm --dir tests bench:coverage`, `scripts/validate-skills-showcase-data.sh` before restoring unrelated generated output, `git diff --check`, and benchmark CLI listing for `afps-status`.
+- Validation caveats: `./scripts/skill-next-step-routing.sh --missing` still reports a broad pre-existing missing-route list unrelated to `afps-status`; focused layer1 benchmark setup tests surface a pre-existing `product-line` registered-setup gap plus sandbox/timeout-sensitive CLI tests.
+
 ## Current Task — Codex Dollar Skill Discovery Repair 2026-05-28
 
 **Goal:** Fix the `$` skill discovery/suggestion path so installed agentic-skills skills are visible instead of unrelated external skills dominating the list.
