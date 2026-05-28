@@ -1,3 +1,24 @@
+## Current Task — Codex Dollar Skill Discovery Repair 2026-05-28
+
+**Goal:** Fix the `$` skill discovery/suggestion path so installed agentic-skills skills are visible instead of unrelated external skills dominating the list.
+
+**Plan:**
+- [x] Record the investigation plan and inspect current lessons, dirty files, and discovery config.
+- [x] Reproduce the installed/project skill visibility mismatch from repo scripts and local skill directories.
+- [x] Trace root cause to the smallest owner surface.
+- [x] Apply a minimal fix with focused regression coverage.
+- [x] Verify and document results.
+- [x] Commit and push intended tracked changes on `master`.
+
+### Review
+
+- User claim confirmed for Codex project-local skills: before refresh, direct discovery with `find .codex/skills -maxdepth 2 -name SKILL.md` found only `analyze-sessions` and `session-triage`, even though `scripts/pack.sh status` listed the full enabled pack set.
+- Root cause: most `.codex/skills/*` entries were stale symlink installs from the older pack-link format. The current installer expects managed directories that expose `SKILL.md` under each skill root and exclude archives.
+- Applied local repair with `scripts/pack.sh refresh`. After refresh, `.codex/skills` has managed directories and direct `SKILL.md` entries for `analyze-sessions`, `benchmark-agent-review`, `benchmark-test-skill`, `commit-and-push-by-feature`, `create-agentic-skill`, `create-local-skill`, `debug`, `exec`, `investigate`, `session-triage`, `ship`, `ship-end`, `skill-interview`, `sync`, `targeted-skill-builder`, and `trace`.
+- Verification passed: `find .codex/skills -maxdepth 2 -name SKILL.md -print`; `find .codex/skills -maxdepth 1 -type l -print` returned no symlinks; `scripts/pack.sh status`.
+- Current-session caveat: Codex may keep the `$` skill list loaded from session start, so a fresh Codex session is required to see the refreshed project-local skills in the `$` menu.
+- Shipping caveat: refresh also updated tracked `.claude/skills` local install pointers from the old machine path to the current Mac path; those local install pointer changes should not be committed as portable source changes.
+
 ## Current Task — Remove Stale Research Bootstrap Benchmark Rows 2026-05-27
 
 **Goal:** Remove active benchmark coverage/setup references to the deleted `research-bootstrap` skill while preserving historical benchmark artifacts.

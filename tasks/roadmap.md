@@ -1,3 +1,14 @@
+## Current Targeted Update: Codex Dollar Skill Discovery Repair 2026-05-28
+
+**Goal:** Fix Codex `$` skill discovery so user-installed and project-enabled agentic-skills commands are visible, while unrelated external/plugin skills do not mask the intended command surface.
+
+**Acceptance Criteria:**
+- [x] Current installed/user skill roots and project-local skill roots are inspected without overwriting unrelated user changes.
+- [x] The discovery mismatch is reproduced or ruled out with repository scripts and filesystem evidence.
+- [x] The root cause is fixed at the smallest responsible install/pack/discovery surface.
+- [x] Focused validation proves expected skills are discoverable and unrelated archive/random entries are excluded or de-prioritized.
+- [x] Review notes are recorded, intended tracked changes are committed, and pushed on `master`.
+
 # Roadmap: Claude Skills
 
 > Generated from: tasks/roadmap.md (existing), specs/board-flag-kanban-search.md, tasks/ideas.md, tasks/history.md

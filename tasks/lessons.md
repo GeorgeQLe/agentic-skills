@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-05-28 — Codex `$` visibility can fail on stale symlink skill installs
+
+- A user report that `$` showed unrelated skills instead of installed project skills was confirmed by direct Codex project-local discovery: only two `.codex/skills/*/SKILL.md` files were visible even though `scripts/pack.sh status` listed the full enabled pack set.
+- When debugging `$` skill visibility, compare `scripts/pack.sh status` against `find .codex/skills -maxdepth 2 -name SKILL.md -print` and `find .codex/skills -maxdepth 1 -type l -print`; status can count stale symlink entries that the active CLI discovery path may not load.
+- Use `scripts/pack.sh refresh` to convert old project-local symlink installs into current managed skill directories, then start a fresh Codex session because the `$` skill list may be loaded at session start.
+- Avoid committing machine-specific tracked `.claude/skills` pointer churn created by local refresh unless the task explicitly intends to update project-local install artifacts.
+
 ## 2026-05-27 — Skill preview duplicates can come from archived SKILL.md files
 
 - A `$` preview duplicate for `analyze-sessions` was not a frontmatter case variant; it came from recursive skill discovery seeing both the active symlink target and `archive/v0.0/SKILL.md` under that target.
