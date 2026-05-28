@@ -2730,3 +2730,8 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
 - Updated benchmark coverage, discovery docs, pack guidance, targeted skill builder guidance, and generated Skills Showcase data for the new command.
 - Validation passed: `bash -n` for `init.sh`, mirrored init launchers, and `scripts/pack.sh`; temp-`HOME` `./init.sh` install check; stale managed `install-agentic-skills` cleanup check; `pnpm --dir tests test layer1/install.test.ts`; `pnpm --dir tests bench:coverage`; focused coverage-matrix layer1 test; `./scripts/skill-versions.sh --missing`; `./scripts/skill-deps.sh --broken`; `git diff --check`.
 - Validation notes: `scripts/validate-skills-showcase-data.sh` reports generated assets stale before commit because this task intentionally updates generated showcase files. `./scripts/skill-next-step-routing.sh --missing` and `./scripts/skill-archive-audit.sh --strict` still report pre-existing broad repository issues outside this rename.
+
+## Backlog
+
+- [ ] Update the skills showcase pack list with the correct number of skills per pack and ensure all packs are represented
+- [ ] On drawer close, collapse all cards onto the single visible top-left-most card (reverse of the fan-out animation on open) before animating the card back into the card pack. Use the visible top-left-most card rather than the absolute first card in the list because the user may have scrolled down before closing the drawer

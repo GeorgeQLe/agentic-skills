@@ -2884,3 +2884,11 @@ Resolved all 10 findings from `/expert-review`:
 - Added `docs/skill-anatomy.md` and aligned active audits so archive snapshots are handled by the archive audit instead of general active-skill checks.
 - Repaired changelog archive headings across active skill directories so archive strict validation can pass without mutating archived `SKILL.md` snapshots.
 - Prepared validation for `$ship-end`: pack status/list/link checks, version/archive/routing/dependency audits, focused frontmatter test, secret scan, and whitespace check.
+
+## 2026-05-28 — Fix first-close apex animation skip and tune open timing
+
+- Fixed first drawer close skipping apex animation in `SealedPack.tsx`: set `cardElevated(true)`, `packBodyElevated(true)`, and `cardSlideY.set(-100)` in `useLayoutEffect` on drawer close so the card targets the apex position on first close, not just subsequent ones.
+- Changed `onLayoutAnimationComplete` close path to run a spring animation (`cardSlideY` from -100 to 0) before clearing elevation state, ensuring consistent slide-down-behind-pack effect.
+- Reduced post-tear drawer open delay: `pendingOpenTimer` fallback from 1000ms to 600ms, `onLayoutAnimationComplete` pendingOpen timeout from 200ms to 80ms.
+- Fixed `duration: 3` (debug slow-mo values) to `duration: 0.3` in both `BottomSheet.tsx` transitions and `SealedPack.tsx` layout transition.
+- Added backlog items: update pack list with correct skill counts, and drawer close card collapse animation (reverse fan-out).
