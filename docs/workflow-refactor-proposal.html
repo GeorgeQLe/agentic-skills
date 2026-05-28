@@ -793,7 +793,7 @@
       <h4>Key principles:</h4>
       <ul>
         <li><strong>Custom-built, not templated:</strong> Each agent crafts the HTML page to fit the situation. There is no shared template or CSS library — the agent decides what layout, structure, and visual approach best communicates the skill's output.</li>
-        <li><strong>Situation-appropriate:</strong> A concept exploration page might be a simple overview with cards. A ux-variations page might show side-by-side comparisons. A spec-interview page might walk through screens with annotated production concerns. The format follows the content.</li>
+        <li><strong>Situation-appropriate:</strong> An idea scope brief page might be a simple overview with cards. A ux-variations page might show side-by-side comparisons. A spec-interview page might walk through screens with annotated production concerns. The format follows the content.</li>
         <li><strong>Temporary artifacts:</strong> Alignment pages exist to ensure agent-user alignment before proceeding. They are archived or deleted once the user confirms alignment and the pipeline moves forward.</li>
         <li><strong>Opened in browser:</strong> The agent opens the page in the user's browser after building it, so they can review visually.</li>
       </ul>
@@ -947,7 +947,7 @@
     <p style="margin: 0.75rem 0;">Every interview/planning skill builds a <strong>custom HTML page</strong> and opens it in the user's browser for alignment review. There is no shared template or CSS library — each agent crafts the page to fit the situation.</p>
 
     <h4>Convention, not framework</h4>
-    <p style="margin: 0.5rem 0; font-size: 0.9rem;">The alignment page is whatever HTML best communicates the skill's output. A concept exploration might produce a simple overview with cards. A ux-variations skill might produce side-by-side comparisons. A spec-interview might annotate prototype screenshots with production concerns. The agent decides the format based on what the user needs to evaluate.</p>
+    <p style="margin: 0.5rem 0; font-size: 0.9rem;">The alignment page is whatever HTML best communicates the skill's output. An idea scope brief might produce a simple overview with cards. A ux-variations skill might produce side-by-side comparisons. A spec-interview might annotate prototype screenshots with production concerns. The agent decides the format based on what the user needs to evaluate.</p>
 
     <h4>Lifecycle</h4>
     <p style="margin: 0.5rem 0; font-size: 0.9rem;">Alignment pages are stored at <code>alignment/{skill}-{topic}.html</code>. They are temporary — when the next skill in the pipeline runs, it archives the previous skill's alignment page to <code>docs/history/archive/</code>. Only the current skill's alignment page exists at any time. <code>/hygiene</code> also flags stale alignment pages during audits. They are NOT the deliverable; the deliverable is the skill's primary output (spec, variation plan, prototype, etc.).</p>

@@ -1,3 +1,25 @@
+## Current Task — Idea Scope Brief Documentation Refresh 2026-05-28
+
+**Goal:** Replace stale active references to the legacy concept-scope skill name with `idea-scope-brief` terminology across docs, task notes, and showcase fixtures without adding an alias.
+
+**Plan:**
+- [x] Inspect active non-archive stale references, repo status, and task docs.
+- [x] Update active docs, task notes, showcase workflow fixture prompt, and matching assertions.
+- [x] Refresh generated showcase data if needed.
+- [x] Run targeted search, showcase/data checks, skill/doc sanity checks, and whitespace checks.
+- [x] Record review notes, commit, and push intended changes on `master`.
+
+### Review
+
+- Replaced active non-archive user-facing references to the old concept-scope wording with `idea-scope-brief` / idea scope brief terminology across workflow docs, route contracts, task notes, and lessons.
+- Updated the Skills Showcase workflow replay fixture prompt and matching assertions to `Run idea scope brief.`.
+- Updated stale smoke-test expectations to the current rendered Skills Showcase copy uncovered by the required app test run.
+- Updated `scripts/generate-skills-showcase-data.mjs` so `docs/benchmark-results-matrix.md` only lists persisted benchmark rows for active repository skills; this prevents deleted/renamed skill benchmark rows from reappearing in active generated docs.
+- Refreshed Skills Showcase generated data and GitHub proof data.
+- Validation passed: targeted stale-reference search excluding archives; `pnpm --dir apps/skills-showcase test`; `node scripts/generate-skills-showcase-data.mjs`; `node scripts/generate-skills-showcase-github-data.mjs`; `scripts/validate-skills-showcase-data.sh`; `/opt/homebrew/bin/bash ./scripts/skill-deps.sh --broken`; `/opt/homebrew/bin/bash ./scripts/skill-versions.sh --missing`; `git diff --check`.
+- Validation caveat: `/opt/homebrew/bin/bash ./scripts/skill-next-step-routing.sh --missing` still reports the existing broad list of missing routing contracts outside this terminology cleanup.
+- Unrelated untracked local skill `ALIGNMENT-PAGE.md` files and `.claude/skills/session-triage/` were left untouched.
+
 ## Current Task — Codex Dollar Skill Discovery Repair 2026-05-28
 
 **Goal:** Fix the `$` skill discovery/suggestion path so installed agentic-skills skills are visible instead of unrelated external skills dominating the list.
@@ -634,7 +656,7 @@
 **Goal:** Make `idea-scope-brief` route unbootstrapped concepts to `bootstrap-repo`, keep bootstrapped repos on the research-first path, and clarify that `scaffold` normally happens after roadmap/plan-phase identifies the implementation target.
 
 **Evidence:**
-- User asked whether concept exploration should route to bootstrap before ICP and where scaffold fits.
+- User asked whether idea scope brief should route to bootstrap before ICP and where scaffold fits.
 - Current concept contracts route based on pack availability but do not check whether repository bootstrap has happened.
 - Current scaffold contracts describe how to create packages/apps but not where scaffolding belongs in the product workflow.
 
@@ -2693,14 +2715,14 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
 
 **Constraints:**
 - Restore Codex snapshots from Codex git history, not Claude archives.
-- Recover `idea-scope-brief` `v0.3` from the pre-rename `concept-exploration` path.
+- Recover `idea-scope-brief` `v0.3` from the pre-rename legacy path.
 - Do not bump active versions or mutate active `SKILL.md` files.
 - Only touch changelogs if validation reveals missing restored-version headings.
 
 ### Review
 
 - Restored 23 missing Codex archive snapshots from the requested historical commits and paths.
-- Special-cased `global/codex/idea-scope-brief/archive/v0.3/SKILL.md` from the pre-rename `global/codex/concept-exploration/SKILL.md` history at `b1ed394a`.
+- Special-cased `global/codex/idea-scope-brief/archive/v0.3/SKILL.md` from the pre-rename legacy global Codex skill history at `b1ed394a`.
 - Did not change active skill contracts, active versions, Claude mirrors, or changelogs.
 - Targeted frontmatter check confirmed each restored `SKILL.md` has `version:` matching its archive directory.
 - Validation passed: `bash scripts/skill-archive-audit.sh --strict`; `bash scripts/skill-versions.sh --missing`; `git diff --check`.

@@ -1,3 +1,14 @@
+## Current Targeted Update: Idea Scope Brief Documentation Refresh 2026-05-28
+
+**Goal:** Update active non-archive documentation and showcase fixtures so `idea-scope-brief` is the current global skill name and stale legacy naming is not user-facing.
+
+**Acceptance Criteria:**
+- [x] Active non-archive docs, task notes, and showcase workflow tests use `idea-scope-brief` / idea scope brief terminology.
+- [x] Historical rename notes preserve meaning without advertising the old command as active.
+- [x] Targeted stale-reference search excluding archives returns no matches.
+- [x] Showcase tests, generated showcase data checks, skill/doc sanity checks, and whitespace checks pass.
+- [x] Intended documentation/test/generated-data changes are committed and pushed on `master`; unrelated untracked `ALIGNMENT-PAGE.md` files are left untouched.
+
 ## Current Targeted Update: Codex Dollar Skill Discovery Repair 2026-05-28
 
 **Goal:** Fix Codex `$` skill discovery so user-installed and project-enabled agentic-skills commands are visible, while unrelated external/plugin skills do not mask the intended command surface.
@@ -205,7 +216,7 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 
 **Acceptance Criteria:**
 - [x] `docs/canonical-workflow-report.md` reflects current business pack lanes, not stale broad `business-app` primary-pack guidance.
-- [x] The early product sequence reflects concept exploration, pack selection, ICP, competitive analysis, journey mapping, value/positioning/growth work, UX/UI planning, prototype, UAT, consolidation, post-prototype research refresh, spec interview, post-spec research refresh, roadmap, and execution.
+- [x] The early product sequence reflects idea scope brief, pack selection, ICP, competitive analysis, journey mapping, value/positioning/growth work, UX/UI planning, prototype, UAT, consolidation, post-prototype research refresh, spec interview, post-spec research refresh, roadmap, and execution.
 - [x] Roadmap no-spec routing prefers `$feature-interview` for unresolved ideas/gaps and reserves `$spec-interview` for confirmed full-spec creation.
 - [x] Product spec work reflects the consolidated prototype gate before production spec creation.
 - [x] Post-spec additions route through `$feature-interview` for existing-spec updates or smaller add-on specs.
@@ -357,7 +368,7 @@ Current brand decision: the public site brand is **G Skillpacks** and the produc
 - [x] Mirrored `scaffold` contracts place scaffolding after research, prototype consolidation, production spec, roadmap, and plan-phase unless the user explicitly asks for an early minimal shell.
 - [ ] Tier 2/3 fixture expectations and validation pass, review notes are recorded, and intended changes are committed and pushed on `master`.
 
-**Result:** Updated mirrored `idea-scope-brief` and `scaffold` contracts on 2026-05-21. Concept exploration now routes ready but unbootstrapped ideas to bootstrap first, then routes bootstrapped repos to ICP or pack prerequisites. Scaffold now sits after research/prototype/spec/roadmap/plan-phase for normal product work, with an explicit early-shell exception only when the user asks for it. Tier 2/3 fixtures now expect `$icp` for a bootstrapped concept and scaffold placement language. Focused validation passed.
+**Result:** Updated mirrored `idea-scope-brief` and `scaffold` contracts on 2026-05-21. Idea scope brief now routes ready but unbootstrapped ideas to bootstrap first, then routes bootstrapped repos to ICP or pack prerequisites. Scaffold now sits after research/prototype/spec/roadmap/plan-phase for normal product work, with an explicit early-shell exception only when the user asks for it. Tier 2/3 fixtures now expect `$icp` for a bootstrapped concept and scaffold placement language. Focused validation passed.
 
 ## Current Targeted Update: Bootstrap Product Reset Research-First Routing 2026-05-21
 

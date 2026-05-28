@@ -439,7 +439,7 @@ function fingerprintFor(files) {
   return hash.digest("hex");
 }
 
-function generateBenchmarkMatrix(files) {
+function generateBenchmarkMatrix(files, activeSkillNames) {
   const runsDir = path.join(repoRoot, "tests/benchmarks/runs");
   const reportPaths = existsSync(runsDir)
     ? readdirSync(runsDir, { withFileTypes: true })
@@ -473,7 +473,7 @@ function generateBenchmarkMatrix(files) {
     const json = readJson(rp);
     if (!json || !json.skill || !json.agent) return null;
     return { ...json, reportPath: rp };
-  }).filter(Boolean);
+  }).filter((report) => report && activeSkillNames.has(report.skill));
 
   const isNewerReport = (candidate, existing) => {
     const candidateGeneratedAt = candidate.generatedAt || "";
@@ -681,7 +681,7 @@ function main() {
   console.log(`Wrote ${path.relative(repoRoot, outputPath)} with ${skills.length} skills and ${packs.length} packs.`);
   console.log(`Wrote ${path.relative(repoRoot, appOutputPath)} (Next.js app copy).`);
 
-  generateBenchmarkMatrix(files);
+  generateBenchmarkMatrix(files, new Set(skills.map((skill) => skill.name)));
 }
 
 main();
