@@ -2,7 +2,7 @@
 name: ux-variations
 description: Interview and plan multiple UX and UI variations for a product, page, or flow, including onboarding, typical workflows, sharing, collaboration, return use, and interface alternatives users can compare before locking a direction — and concrete visual/layout UI variations with UAT before consolidation
 type: planning
-version: v0.6
+version: v0.5
 argument-hint: "[optional: app, page, flow, feature, or existing UI spec]"
 ---
 
@@ -79,7 +79,7 @@ When invoked with `--layout-mode` (or when the user says "layout mode", "layout 
    - Default evaluation method is: build each variation, then run `$uat --variant-evaluation` (check `.agents/project.json.enabled_packs` for `product-testing` — if `product-testing` is not enabled, recommend `$pack install product-testing` first) so the user has task-based evidence before consolidation.
    - When presenting a design decision with 3+ plausible answers during the interview, always include "Make this a variant axis (test all approaches)" as an option. When the user has already chosen "test all" for a prior question in the same session, default subsequent ambiguous decisions to variant axes without asking.
    - Establish:
-     - Assume solo evaluator building and gut-checking unless the user states otherwise
+     - Who will judge the variants
      - What they must be able to accomplish
      - How a new user arrives, signs up, understands the product, and reaches first value
      - What the normal repeat workflow looks like after onboarding

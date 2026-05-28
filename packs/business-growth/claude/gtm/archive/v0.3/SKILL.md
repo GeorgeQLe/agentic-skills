@@ -2,7 +2,7 @@
 name: gtm
 description: Go-to-market planning — channel strategy, messaging, pricing, launch plan, and early traction tactics
 type: research
-version: v0.4
+version: v0.3
 argument-hint: "[optional: focus area e.g. \"pricing\", \"launch plan\"]"
 ---
 
@@ -115,7 +115,7 @@ Continue until the user confirms. Only then proceed to writing.
 
 ### 5. Populate Next Steps
 
-Before writing, check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with a "Recommended + Other options" framing — the first matching condition becomes the **Recommended** item, remaining items become **Other options**:
+Before writing, check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with "Pick one:" framing:
 
 - IF no `research/growth-model.md`: `/growth-model` — Design compounding growth loops to make the GTM strategy sustainable
 - IF `specs/` exist and no `tasks/roadmap.md`: check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `/pack install agent-work-admin` first; if `agent-work-admin` is enabled, recommend `/roadmap` — Plan the build with launch milestones from above
@@ -264,10 +264,8 @@ Display to the user after showing the written file confirmation. This should be 
 
 ## Next Steps
 
-**Recommended:** [first matching item from step 5]
-
-**Other options:**
-- [remaining conditional items from step 5 — only include items whose conditions are met]
+Pick one:
+- [conditional items from step 4 — only include items whose conditions are met]
 ```
 
 ### `research/gtm-interview.md` (or `research/{app}/gtm-interview.md`)

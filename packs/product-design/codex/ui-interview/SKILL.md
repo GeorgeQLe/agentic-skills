@@ -2,7 +2,7 @@
 name: ui-interview
 description: Interview page by page to define a complete UI specification, including layout, hierarchy, controls, links, spacing, sizing, responsive behavior, visual states, and implementation-ready interface details — supports a requirements-only mode that establishes data, actions, and states without locking layout or component decisions
 type: planning
-version: v0.3
+version: v0.4
 argument-hint: "[optional: app, page, flow, feature, or draft UI]"
 ---
 
@@ -77,6 +77,8 @@ When invoked with `--requirements-only` (or when the user says "just requirement
    - Write `specs/ui-requirements-[topic].md` and `ui-requirements-[topic]-interview.md`.
    - After writing files, recommend `$ux-variations --layout-mode` to explore multiple visual approaches for these requirements, or `$ui-interview` without the flag to proceed directly to a single deep UI specification, or check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `$pack install agent-work-admin` first; if `agent-work-admin` is enabled, recommend `$roadmap` — if the interface is ready to sequence into work.
    - Stop. Do not continue to step 5 or beyond.
+
+5. **Full UI specification** (no `--content-only` flag):
 
      - Layout anatomy: top-to-bottom and left-to-right regions, alignment, density, scroll behavior
      - Component inventory: tables, lists, cards, forms, charts, media, editors, maps, canvases

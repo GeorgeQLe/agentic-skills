@@ -307,7 +307,7 @@ What this product has that alternatives genuinely don't:
 
 ## Next Steps
 
-**Recommended:** `$gtm` — [one-line reason based on whether gtm.md exists or needs refresh]
+**Recommended:** `$ux-variations` — [one-line reason based on whether ux-variations output exists or needs refresh]
 
 Other options:
 - [conditional items from step 9 — only include items whose conditions are met]

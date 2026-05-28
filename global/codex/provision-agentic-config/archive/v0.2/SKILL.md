@@ -2,7 +2,7 @@
 name: provision-agentic-config
 description: Provision workflow orchestration and agent conventions into project CLAUDE.md and AGENTS.md
 type: ops
-version: v0.3
+version: v0.2
 ---
 
 # Install Workflow Orchestration
@@ -27,12 +27,12 @@ Use this skill when the user wants the repository's `CLAUDE.md` and `AGENTS.md` 
    - `AGENTS.md`: `Provisioned artifact: ./AGENTS.md. Source: workflow.md. Verification: block appears exactly once.`
    - If `workflow.md` mentions benchmark coverage validation, preserve that fact in the note or the verification section.
    - Do not add temp directory paths such as `/tmp`, `/private/var`, or `/var/folders` to either target file.
-7. Each block begins with `<!-- provision-agentic-config v0.3 -->`. When replacing an existing block, update this comment to the current version. The `/sync` skill uses this comment to detect stale provisioning.
+7. Each block begins with `<!-- provision-agentic-config v0.2 -->`. When replacing an existing block, update this comment to the current version. The `/sync` skill uses this comment to detect stale provisioning.
 
 ## Required Claude Block
 
 ````md
-<!-- provision-agentic-config v0.3 -->
+<!-- provision-agentic-config v0.2 -->
 ## Workflow Orchestration
 
 ### 1. Plan Mode Default
@@ -73,11 +73,6 @@ Use this skill when the user wants the repository's `CLAUDE.md` and `AGENTS.md` 
 - Point at logs, errors, failing tests - then resolve them
 - Zero context switching required from the user
 - Go fix failing tests without being told how
-
-### Missing Skill Fallback
-- If a user invokes a command-like skill such as `$benchmark-test-skill design-system` and the leading command is not in the injected session skill list, search project-local packs before falling back to the trailing argument as the active skill.
-- Check `packs/*/codex/*/SKILL.md` and pack metadata such as `packs/*/PACK.md`; project-local pack skills may exist in this repository even when they are not visible in the active session list.
-- For any missing skill, run `scripts/pack.sh which <skill-name>` to locate the providing pack. If found in an uninstalled pack, recommend `$pack install <pack>`. If not found in any pack, suggest `$skills` or `$skills search <keyword>`.
 
 ## Task Management
 
@@ -127,7 +122,7 @@ fi
 ## Required AGENTS Block
 
 ````md
-<!-- provision-agentic-config v0.3 -->
+<!-- provision-agentic-config v0.2 -->
 ## Workflow Orchestration
 
 ### 1. Plan Mode Default
@@ -168,11 +163,6 @@ fi
 - Point at logs, errors, failing tests - then resolve them
 - Zero context switching required from the user
 - Go fix failing tests without being told how
-
-### Missing Skill Fallback
-- If a user invokes a command-like skill such as `$benchmark-test-skill design-system` and the leading command is not in the injected session skill list, search project-local packs before falling back to the trailing argument as the active skill.
-- Check `packs/*/codex/*/SKILL.md` and pack metadata such as `packs/*/PACK.md`; project-local pack skills may exist in this repository even when they are not visible in the active session list.
-- For any missing skill, run `scripts/pack.sh which <skill-name>` to locate the providing pack. If found in an uninstalled pack, recommend `$pack install <pack>`. If not found in any pack, suggest `$skills` or `$skills search <keyword>`.
 
 ## Task Management
 

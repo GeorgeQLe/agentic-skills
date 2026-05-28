@@ -2,13 +2,13 @@
 name: series-spec
 description: Specify a repeatable YouTube series format with audience job, episode shape, evidence requirements, packaging rules, and success metrics
 type: planning
-version: v0.2
+version: v0.1
 argument-hint: "<series idea or programming path>"
 ---
 
 # Series Spec
 
-Invoke as `/series-spec`.
+Invoke as `$series-spec`.
 
 Define a repeatable series format that can be produced consistently. Use this for founder updates, interviews, teardown series, recurring shows such as WeeklyG or WeeklySOTA, and product-led education series.
 
@@ -44,7 +44,7 @@ After an approved synthesized write, explicit write/update mode, or any direct a
 
 ## Intent-Aware Routing
 
-Before applying the default next-step routing, classify the user's immediate intent and route to the missing action that best serves that intent:
+Before applying the default `## Next-Skill Routing` sequence, classify the user's immediate intent and route to the missing action that best serves that intent:
 
 - Strategy refresh: recommend the missing or stale positioning, programming, portfolio, metrics, or product-media artifact.
 - Recording prep: recommend the missing series spec, script, build proof, walkthrough guide, or validation artifact needed before recording.

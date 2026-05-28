@@ -2,7 +2,7 @@
 name: provision-agentic-config
 description: Provision workflow orchestration and agent conventions into project CLAUDE.md and AGENTS.md
 type: ops
-version: v0.3
+version: v0.2
 argument-hint:
 ---
 
@@ -26,12 +26,12 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
      - `AGENTS.md`: `Provisioned artifact: ./AGENTS.md. Source: workflow.md. Verification: block appears exactly once.`
      - If `workflow.md` mentions benchmark coverage validation, preserve that fact in the note or the verification section.
      - Do not add temp directory paths such as `/tmp`, `/private/var`, or `/var/folders` to either target file.
-   - Each block begins with `<!-- provision-agentic-config v0.3 -->`. When replacing an existing block, update this comment to the current version. The `/sync` skill uses this comment to detect stale provisioning.
+   - Each block begins with `<!-- provision-agentic-config v0.2 -->`. When replacing an existing block, update this comment to the current version. The `/sync` skill uses this comment to detect stale provisioning.
 
    The Claude block to insert into `./CLAUDE.md`:
 
    ````markdown
-   <!-- provision-agentic-config v0.3 -->
+   <!-- provision-agentic-config v0.2 -->
    ## Workflow Orchestration
 
    ### 1. Plan Mode Default
@@ -92,7 +92,7 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
    - **No Laziness**: Find root causes. No temporary fixes. Senior developer standards.
    - **Minimal Impact**: Changes should only touch what's necessary. Avoid introducing bugs.
    - **Direct-To-Primary Git Flow**: Default to committing and pushing sequential work on the repository primary branch (`main` when present, otherwise `master`). Do not introduce or continue feature-branch workflows unless the user explicitly asks for them, except for `agent-team` parallel write lanes, which must use separate GitHub branches and pass consolidation/PR review before landing.
-   - **Always Ship Mutations**: If a task creates or modifies tracked files, finish by committing and pushing all intended changes before stopping unless the user explicitly says not to. Exception (Claude only): `/exec` hands a dirty tracked tree to `/ship`. After shipping, if `tasks/todo.md` has remaining steps, run `/ship` to handle planning and the approval cycle.
+   - **Always Ship Mutations**: If a task creates or modifies tracked files, finish by committing and pushing all intended changes before stopping unless the user explicitly says not to. Exception: direct Claude `/exec` is execution-only and hands a dirty tracked tree to `/ship`. After shipping, if `tasks/todo.md` has remaining steps, run `/ship` to handle planning and the approval cycle.
    - **No GitHub Actions**: Do not create, modify, or suggest GitHub Actions workflows unless the user explicitly asks for GitHub Actions. This project does not use GitHub Actions for CI/CD by default.
 
    ## Windows/WSL File Opening
@@ -126,7 +126,7 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
    The AGENTS block to insert into `./AGENTS.md`:
 
    ````markdown
-   <!-- provision-agentic-config v0.3 -->
+   <!-- provision-agentic-config v0.2 -->
    ## Workflow Orchestration
 
    ### 1. Plan Mode Default

@@ -2,7 +2,7 @@
 name: competitive-analysis
 description: Research competitors via web search — map the landscape, GTM strategies, strengths, weaknesses, and market gaps
 type: research
-version: v0.9
+version: v0.8
 argument-hint: "[concept | optional: product category or specific competitors to investigate]"
 ---
 
@@ -63,25 +63,27 @@ Use web search extensively across: direct competitors, indirect competitors, inc
 
 For each: Company & Product (features, funding, pricing), Maturity & Traction (stage, user signals, integrations), GTM Strategy (acquisition, pricing, content, community), Strengths (user praise, moat), Weaknesses (complaints, gaps, vulnerabilities).
 
-### 4. Identify Market Gaps & White Space
+### 4. Identify Market Gaps
 
-Synthesise gaps and white-space opportunities: underserved segments, feature gaps, pricing gaps, UX gaps, integration gaps, geographic/vertical gaps, technology gaps.
-
-**Standard mode additional synthesis:** 2-3 most significant white-space opportunities, competitor lessons (do's and don'ts).
-
-When evidence materially affects parked product paths from `research/.progress.yaml`, add a short `## Implications for Deferred Product Paths` section summarizing the impact, evidence refs, and whether the `revisit_trigger` should change. Do not broaden standard mode into full competitive analysis for every deferred path unless the user explicitly promotes one. When competitive gaps imply an entirely new product surface not covered by existing product paths, recommend `$product-line fork` to create a new path entry.
-
-**Concept-validation mode additional synthesis:** Frame as hypothetical — segments the concept could serve that competitors miss, capability gaps, competitor lessons. Positioning recommendations belong in `$positioning`.
+Synthesise: underserved segments, feature gaps, pricing gaps, UX gaps, integration gaps, geographic/vertical gaps, technology gaps.
 
 ### 4a. Gap Assessment (concept-validation mode only)
 
 Synthesise market gaps into: **Market State** (Virgin/Sparse/Crowded), **Incumbent Quality** (Dominant-and-loved / Dominant-but-resented / Fragmented-and-mediocre / Emerging-and-unproven), **Gap Quality** (Clear unmet need / Underserved segment / UX/approach gap / Minor improvement / No meaningful gap), **Verdict** (Proceed to ICP / Pivot concept / Abandon). If the session is already in Plan mode, prefer `request_user_input`; otherwise ask in plain text before continuing.
 
-### 5. Present Findings & Validate
+### 5. Identify Market Gaps & White Space
+
+**Standard mode:** Underserved segments, feature/capability gaps, pricing gaps, 2-3 white-space opportunities, competitor lessons (do's and don'ts).
+
+When evidence materially affects parked product paths from `research/.progress.yaml`, add a short `## Implications for Deferred Product Paths` section summarizing the impact, evidence refs, and whether the `revisit_trigger` should change. Do not broaden standard mode into full competitive analysis for every deferred path unless the user explicitly promotes one. When competitive gaps imply an entirely new product surface not covered by existing product paths, recommend `$product-line fork` to create a new path entry.
+
+**Concept-validation mode:** Frame as hypothetical — segments the concept could serve that competitors miss, capability gaps, competitor lessons. Positioning recommendations belong in `$positioning`.
+
+### 6. Present Findings & Validate
 
 **Checkpoint 2 — Present full analysis before writing.** Show: landscape summary, key competitors, market gaps and white-space opportunities, observable GTM patterns, lessons from competitors. Ask: "Which gaps or assumptions need stronger evidence? Any gaps I missed or got wrong?" Continue until all details are nailed down.
 
-### 6. Write Output
+### 7. Write Output
 
 Only after user validates, write the output files.
 

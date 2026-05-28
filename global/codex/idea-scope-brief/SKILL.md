@@ -105,7 +105,7 @@ Follow the shared Alignment Page convention in CLAUDE.md. Output: `alignment/ide
 
 - Keep the skill short and pre-research.
 - Do not write specs, UX variants, UI specs, roadmap phases, or implementation tasks.
-- Do not recommend `$scaffold` unless the user explicitly asks to create a package/app shell before research; normal product flow scaffolds after research, prototype consolidation, spec, roadmap, and phase planning identify the first implementation target.
+- Do not recommend `$scaffold` unless the user explicitly asks to create a package/app shell before research; normal product flow scaffolds after research, prototype consolidation, spec, roadmap, and phase planning identify the first implementation target. `$scaffold` requires the monorepo pack (`$pack install monorepo`).
 - Do not update `tasks/todo.md`.
 - New files do not need archive snapshots. Before replacing an existing concept brief, including slugged briefs, archive it to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-relative-path>`.
 

@@ -2,7 +2,7 @@
 name: monetization
 description: Research-driven monetization strategy — revenue models, pricing architecture, unit economics, and packaging grounded in ICP and competitive data
 type: research
-version: v0.4
+version: v0.3
 argument-hint: "[optional: focus area e.g. \"pricing tiers\", \"usage-based\", \"freemium\"]"
 ---
 
@@ -157,7 +157,7 @@ Based on product stage and ICP:
 
 ### 8. Populate Next Steps
 
-Check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with a "Recommended + Other options" framing — the first matching condition becomes the **Recommended** item, remaining items become **Other options**:
+Check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with "Pick one:" framing:
 
 - IF no `research/gtm.md`: `/gtm` — Build go-to-market plan with pricing from this strategy
 - IF `research/gtm.md` exists but predates this analysis: `/gtm` — Update GTM with refined pricing strategy
@@ -263,10 +263,8 @@ Only after the user confirms, write the output files.
 
 ## Next Steps
 
-**Recommended:** [first matching item from step 8]
-
-**Other options:**
-- [remaining conditional items from step 8 — only include items whose conditions are met]
+Pick one:
+- [conditional items from step 7 — only include items whose conditions are met]
 ```
 
 ### `research/monetization-interview.md` (or `research/{app}/monetization-interview.md`)

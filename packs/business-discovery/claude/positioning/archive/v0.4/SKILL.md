@@ -2,7 +2,7 @@
 name: positioning
 description: Strategic positioning (April Dunford style) — competitive alternatives, unique attributes, value, target segment, market category
 type: research
-version: v0.5
+version: v0.4
 argument-hint: "[optional: focus area e.g. \"category\", \"vs competitor X\"]"
 ---
 
@@ -154,7 +154,7 @@ Present the full positioning framework and statement to the user. Ask:
 
 ### 9. Populate Next Steps
 
-Include 3–5 applicable items with a "Recommended + Other options" framing — the first matching condition becomes the **Recommended** item, remaining items become **Other options**:
+Include 3–5 applicable items with "Pick one:" framing:
 
 - ALWAYS: check `.agents/project.json.enabled_packs` for `product-design` — if `product-design` is not enabled, recommend `/pack install product-design` first; if `product-design` is enabled, recommend `/ux-variations [positioning-backed product direction]` — Explore prototype directions now that ICP, competitive, journey, and positioning evidence are aligned
 - IF no `research/journey-map.md`: check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if `customer-lifecycle` is not enabled, recommend `/pack install customer-lifecycle` first; if `customer-lifecycle` is enabled, recommend `/journey-map` — Map the customer journey before writing canonical positioning
@@ -299,10 +299,8 @@ What this product has that alternatives genuinely don't:
 
 ## Next Steps
 
-**Recommended:** [first matching item from step 9]
-
-**Other options:**
-- [remaining conditional items from step 9 — only include items whose conditions are met]
+Pick one:
+- [conditional items from step 9]
 ```
 
 ### `research/positioning-search-log.md` (or `research/{app}/positioning-search-log.md`)

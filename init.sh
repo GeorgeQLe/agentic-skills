@@ -51,7 +51,8 @@ write_skill_pin() {
   mkdir -p "$(dirname "$SKILL_PINS_FILE")"
   if [[ -f "$SKILL_PINS_FILE" ]] && command -v jq >/dev/null 2>&1; then
     local tmp
-    tmp="$(jq --arg s "$skill" --arg v "$version" '.[$s] = $v' "$SKILL_PINS_FILE")"
+    tmp="$(jq --arg s "$skill" --arg v "$version" '.[$s] = $v' "$SKILL_PINS_FILE")" || { echo "Error: jq failed to update $SKILL_PINS_FILE" >&2; return 1; }
+    [[ -n "$tmp" ]] || { echo "Error: jq produced empty output for $SKILL_PINS_FILE" >&2; return 1; }
     echo "$tmp" > "$SKILL_PINS_FILE"
   else
     printf '{ "%s": "%s" }\n' "$skill" "$version" > "$SKILL_PINS_FILE"

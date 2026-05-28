@@ -2,7 +2,7 @@
 name: ship
 description: Ship current work (update docs, commit, push, deploy) and optionally plan the next step
 type: shipping
-version: v0.3
+version: v0.2
 argument-hint: "[--no-plan] [--no-deploy]"
 ---
 
@@ -37,15 +37,7 @@ c) **Fix errors.** If any pre-existing errors are found (from prior session outp
 
 d) **If errors can't be auto-fixed** (e.g., requires user decision, third-party dependency issue), **STOP. Do not ship.** Report the errors clearly to the user and ask how they want to proceed. Never commit or push code with known build/lint/type/test failures.
 
-### 1c. Quality gate for non-trivial mutations
-   - Apply `docs/quality-gate-contract.md` when the work to ship changes source code, scripts, configuration, schemas, generated runtime assets, deploy behavior, workflow policy, validation rules, command surfaces, or multiple files.
-   - Build a ship manifest from the exact diff and unpushed commits that will be included in the shipping boundary. The manifest must include: User goal, Changed files, Per-file purpose, User-goal mapping, Tests run, Skipped tests, Adversarial review, Residual risk, Rollback note, and Next command. The `Next command` field must use Claude slash-command syntax; for a completed `/ship` run, default to `/exec` unless project state names a more specific next route. Do not leave `Next command` blank unless all planned work is genuinely complete, in which case use `none`.
-   - For non-trivial source changes, run a targeted `quality-sweep audit`, `/code-review`, configured review lane, or explicitly justified equivalent adversarial review before commit/push. Fix findings or record accepted residual concerns in the manifest.
-   - Final output must distinguish executable verification from documentation-only or task-only checks. Documentation/task checks can support source changes, but cannot be the only proof for non-trivial source mutations.
-   - If the tree contains unrelated pre-existing changes, the manifest must separate included files from untouched files and explain why the ship boundary is safe. If that cannot be proven, stop instead of shipping.
-   - If the user corrected the agent during the work being shipped, the pre-commit ship manifest must prove the exact shipping boundary includes a `tasks/lessons.md` update for the current correction. Treat the correction as repeatable unless the manifest proves otherwise.
-
-### 1d. Skills Showcase freshness
+### 1c. Skills Showcase freshness
 If the shipping boundary creates, deletes, renames, or changes behavior/metadata in any tracked `SKILL.md` or `PACK.md`, refresh the Skills Showcase before commit:
 
 - `node scripts/generate-skills-showcase-data.mjs`
@@ -54,7 +46,7 @@ If the shipping boundary creates, deletes, renames, or changes behavior/metadata
 
 Include changed generated assets in the same shipping boundary. For skill behavior changes, review curated showcase copy, catalog grouping, workflow animation text, and proof receipts; update affected site files or record why no curated website copy changed.
 
-### 1e. Ship manifest route convention
+### 1d. Ship manifest route convention
 When writing a ship manifest, summary, task review note, or final response with a `Next command` field, use Claude slash-command syntax. For a completed `/ship` run, the default executable handoff is `/exec` unless project state names a more specific next route. Do not leave `Next command` blank unless all planned work is genuinely complete, in which case use `none`.
 
 ### 2. Ship the work

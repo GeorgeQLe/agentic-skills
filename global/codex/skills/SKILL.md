@@ -20,8 +20,10 @@ Discover and search installed global skills plus enabled project-local pack skil
 2. **Discover skills:**
    - Always scan global Codex skills in `global/codex/*/SKILL.md`.
    - If `.agents/project.json` exists, read `enabled_packs` and scan `packs/<pack>/codex/*/SKILL.md` for each enabled pack.
+   - Also scan all packs in `packs/*/codex/*/SKILL.md` to discover available-but-not-installed skills.
    - If `.codex/skills/*/SKILL.md` exists in the current project, include those local skills too.
    - Read the first 6 lines of each file to extract YAML frontmatter fields: `name`, `description`, `type`.
+   - Track which pack each skill belongs to (if any).
 
 3. **Group skills by workflow stage** using this static mapping:
 
@@ -41,7 +43,7 @@ Discover and search installed global skills plus enabled project-local pack skil
    | Evaluate | `dogfood`, `mvp-gap`, `scale-audit`, `customer-feedback`, `assumption-tracker`, `cohort-review`, `retro` |
    | Research Health | `research-roadmap`, `reconcile-research`, `reconcile-dev-docs` |
    | Detail | `plan-phase` |
-   | Execution | `run`, `exec-kanban` |
+   | Execution | `exec`, `exec-kanban` |
    | Shipping | `ship`, `ship-end`, `ship-kanban`, `ship-end-kanban` |
    | Code Quality | `expert-review`, `regression-check`, `dead-code` |
    | Debugging | `investigate`, `debug`, `trace`, `session-triage` |
@@ -76,11 +78,12 @@ Discover and search installed global skills plus enabled project-local pack skil
 
 6. **Output results:**
    - Print each non-empty group as a `## Group Name` heading.
-   - Under each heading, list skills as `$<name> — <description>`.
+   - Under each heading, list installed/global skills as `$<name> — <description>`.
+   - For available-but-not-installed pack skills, list as `$<name> — <description>  [type]  ⚠ requires \`$pack install <skill>\` or \`$pack install <pack>\``.
    - In type mode, append the type tag: `$<name> — <description>  [type]`.
    - In list mode (stage grouping), append the type tag: `$<name> — <description>  [type]`.
    - Omit groups that have no skills (after filtering in search mode).
-   - At the bottom, print a total count: `**N skills** found` (or `**N skills** matching "<keyword>"`).
+   - At the bottom, print a total count: `**N skills** installed, **M skills** available via packs` (or `**N skills** matching "<keyword>"`).
 
 ## Output Format
 

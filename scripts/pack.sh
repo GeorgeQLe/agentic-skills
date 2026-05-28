@@ -338,7 +338,8 @@ add_enabled_skill() {
   command -v jq >/dev/null 2>&1 || die "jq is required for individual skill install"
   [[ -f "$PROJECT_FILE" ]] || die "No .agents/project.json found; install a pack first or let auto-create handle it"
   local tmp
-  tmp="$(jq --arg s "$skill" --arg p "$pack" '.enabled_skills[$s] = $p' "$PROJECT_FILE")"
+  tmp="$(jq --arg s "$skill" --arg p "$pack" '.enabled_skills[$s] = $p' "$PROJECT_FILE")" || die "jq failed to update $PROJECT_FILE"
+  [[ -n "$tmp" ]] || die "jq produced empty output for $PROJECT_FILE"
   echo "$tmp" > "$PROJECT_FILE"
 }
 
@@ -347,7 +348,8 @@ remove_enabled_skill() {
   command -v jq >/dev/null 2>&1 || die "jq is required for individual skill remove"
   [[ -f "$PROJECT_FILE" ]] || return 0
   local tmp
-  tmp="$(jq --arg s "$skill" 'if .enabled_skills then .enabled_skills |= del(.[$s]) | if (.enabled_skills | length) == 0 then del(.enabled_skills) else . end else . end' "$PROJECT_FILE")"
+  tmp="$(jq --arg s "$skill" 'if .enabled_skills then .enabled_skills |= del(.[$s]) | if (.enabled_skills | length) == 0 then del(.enabled_skills) else . end else . end' "$PROJECT_FILE")" || die "jq failed to update $PROJECT_FILE"
+  [[ -n "$tmp" ]] || die "jq produced empty output for $PROJECT_FILE"
   echo "$tmp" > "$PROJECT_FILE"
 }
 
@@ -643,7 +645,8 @@ pin_skill() {
 
   if command -v jq >/dev/null 2>&1 && [[ -f "$PROJECT_FILE" ]]; then
     local tmp
-    tmp="$(jq --arg s "$skill" --arg v "$version" '.pinned_versions[$s] = $v' "$PROJECT_FILE")"
+    tmp="$(jq --arg s "$skill" --arg v "$version" '.pinned_versions[$s] = $v' "$PROJECT_FILE")" || die "jq failed to update $PROJECT_FILE"
+    [[ -n "$tmp" ]] || die "jq produced empty output for $PROJECT_FILE"
     echo "$tmp" > "$PROJECT_FILE"
   else
     [[ -f "$PROJECT_FILE" ]] || die "No .agents/project.json found; install a pack first"
@@ -673,7 +676,8 @@ unpin_skill() {
 
   if command -v jq >/dev/null 2>&1 && [[ -f "$PROJECT_FILE" ]]; then
     local tmp
-    tmp="$(jq --arg s "$skill" 'if .pinned_versions then .pinned_versions |= del(.[$s]) | if (.pinned_versions | length) == 0 then del(.pinned_versions) else . end else . end' "$PROJECT_FILE")"
+    tmp="$(jq --arg s "$skill" 'if .pinned_versions then .pinned_versions |= del(.[$s]) | if (.pinned_versions | length) == 0 then del(.pinned_versions) else . end else . end' "$PROJECT_FILE")" || die "jq failed to update $PROJECT_FILE"
+    [[ -n "$tmp" ]] || die "jq produced empty output for $PROJECT_FILE"
     echo "$tmp" > "$PROJECT_FILE"
   else
     [[ -f "$PROJECT_FILE" ]] || die "No .agents/project.json found"

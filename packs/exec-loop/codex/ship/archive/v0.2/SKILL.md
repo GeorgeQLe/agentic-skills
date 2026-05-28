@@ -2,7 +2,7 @@
 name: ship
 description: "Ship already-finished work, optionally deploy it, and prepare the next step"
 type: shipping
-version: v0.3
+version: v0.2
 argument-hint: "[--no-plan] [--no-deploy]"
 ---
 
@@ -86,8 +86,7 @@ Rules:
 
 - Make the next work item primary. Derive it from `tasks/todo.md`, `tasks/manual-todo.md`, deploy status, validation gaps, smoke-test gaps, phase-transition output, or completion of the current queues. Do not use agent mode itself as the next work item.
 - Never recommend `$ship`, `$ship --no-deploy`, or `$ship --no-plan` as the routine next command from a completed `$ship` run. `$ship` packages current work; after it completes, hand off to the next executable route such as `$exec`, check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `$pack install agent-work-admin` first; if `agent-work-admin` is enabled, recommend `$roadmap`, check `.agents/project.json.enabled_packs` for `guided-walkthrough` — if `guided-walkthrough` is not enabled, recommend `$pack install guided-walkthrough` first; if `guided-walkthrough` is enabled, recommend `$guide`, or check `.agents/project.json.enabled_packs` for `docs-health` — if `docs-health` is not enabled, recommend `$pack install docs-health` first; if `docs-health` is enabled, recommend `$reconcile-dev-docs fix tasks` based on project state. Recommend `$ship` again only when shipping failed before commit/push or when the next concrete work is explicitly to retry an incomplete shipping operation.
-- `$brainstorm` routing: when all planned phases, documentation work, and promotable advisory items are exhausted but the project is not parked, route to new-phase discovery: `**Next work:** discover candidate next phase or explicitly park the project` and `**Recommended next command:** $brainstorm`. This is distinct from `none`.
-- `none` routing: emit `Recommended next command: none` only when the project is genuinely complete or explicitly parked/archived by the user. Do not emit `none` merely because the current phase is done.
+- Do not emit `Recommended next command: none` unless all planned work is genuinely complete or the latest user request explicitly asks to pause, park, archive, or wait. If implementation phases, documentation work, and promotable advisory items are all exhausted, route to new-phase discovery: `**Next work:** discover candidate next phase or explicitly park the project` and `**Recommended next command:** $brainstorm`.
 - If a post-roadmap `$research-roadmap` scan reports documentation current with no missing or stale work, do not stop at documentation completeness; recommend `$brainstorm` as the next route for candidate phase discovery.
 - Use `./scripts/agent-mode.sh` only to choose command text. If it is missing, unset, or non-zero, infer routing from the current invocation and task type instead of asking the user to select a mode by default.
 - Normalize copied task routes to Codex syntax before final output. If `tasks/todo.md`, `tasks/roadmap.md`, benchmark reports, or prior handoffs contain Claude slash commands for global skills (for example `/exec`, `/ship`, `/roadmap`, `/guide`, `/reconcile-dev-docs`), treat them as task identifiers, not final command text. Convert the final `Recommended next command` to the equivalent Codex `$...` command unless the next action is explicitly a Claude-only handoff — check `.agents/project.json.enabled_packs` for `agent-bridge` — if `agent-bridge` is not enabled, recommend `$pack install agent-bridge` first; if `agent-bridge` is enabled, recommend `$delegate $exec`.
@@ -103,10 +102,10 @@ Rules:
 
 ## Constraints
 
-- **Fix unrelated issues:** If any step surfaces errors unrelated to the current work, report them separately. Do not fix unrelated issues within the shipping boundary unless they block validation of the current change.
+- **Fix unrelated issues:** If any step surfaces errors, warnings, or lint issues — even ones unrelated to the current work — investigate and fix them before continuing. Commit these fixes separately with a descriptive message (e.g., `fix: resolve unused import warning in auth.ts`).
 - Do not write plans into `CLAUDE.md`. It is for project conventions only.
 - `tasks/roadmap.md` is the source of truth for the full phased plan. `tasks/todo.md` holds only the current phase.
-- Do NOT create `tasks/todo.md` from scratch — if it doesn't exist and there's no roadmap, suggest discovery skills instead.
+- Create `tasks/todo.md` if it does not exist.
 - Do not amend or rewrite history.
 - Do not commit secrets.
 - Do not push shipping commits to an existing feature branch. Use `$commit-and-push-by-feature` to move the work onto `main` or `master` and push it there, or stop and report a blocker if that cannot be done safely.

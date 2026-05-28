@@ -4,7 +4,8 @@
     "agentic-skills-bench",
     "exec-loop",
     "code-debug",
-    "skill-dev"
+    "skill-dev",
+    "gitops"
   ],
   "skill_pack_version": 1,
   "enabled_skills": {

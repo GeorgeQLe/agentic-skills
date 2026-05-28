@@ -2,7 +2,7 @@
 name: competitive-analysis
 description: Research competitors via web search — map the landscape, GTM strategies, strengths, weaknesses, and market gaps
 type: research
-version: v0.9
+version: v0.8
 argument-hint: "[concept | optional: product category or specific competitors to investigate]"
 ---
 
@@ -119,9 +119,9 @@ For each identified competitor, use WebSearch and WebFetch to gather:
 - Where do they lose deals? (Check comparison articles, competitor marketing)
 - What's their biggest vulnerability?
 
-### 4. Identify Market Gaps & White Space
+### 4. Identify Market Gaps
 
-Synthesise the research to find gaps and white-space opportunities:
+Synthesise the research to find:
 
 - **Underserved segments**: Customer types or use cases that no competitor serves well
 - **Feature gaps**: Capabilities that users want but no competitor provides
@@ -130,18 +130,6 @@ Synthesise the research to find gaps and white-space opportunities:
 - **Integration gaps**: Missing connections to tools the target audience already uses
 - **Geographic or vertical gaps**: Markets or industries that competitors haven't entered
 - **Technology gaps**: Emerging tech (AI, automation, APIs) that competitors haven't leveraged
-
-**Standard mode additional synthesis:**
-- What are the 2-3 most significant white-space opportunities?
-- What can we learn from competitors' successes and failures?
-
-When evidence materially affects parked product paths from `research/.progress.yaml`, add a short `## Implications for Deferred Product Paths` section summarizing the impact, evidence refs, and whether the `revisit_trigger` should change. Do not broaden standard mode into full competitive analysis for every deferred path unless the user explicitly promotes one. When competitive gaps imply an entirely new product surface not covered by existing product paths, recommend `/product-line fork` to create a new path entry.
-
-**Concept-validation mode additional synthesis:**
-- What segments or use cases would this concept serve that competitors miss?
-- What can you learn from competitors' successes and failures?
-
-Positioning recommendations and "where we fit" analysis belong in `/positioning` — capture positioning signals in the appendix below.
 
 ### 4a. Gap Assessment (concept-validation mode only)
 
@@ -154,7 +142,28 @@ If running in concept-validation mode, synthesise the market gaps into a structu
 
 **Checkpoint — Present gap assessment to user.** Use the AskUserQuestion tool to present the Market State, Incumbent Quality, Gap Quality, and Verdict with supporting evidence from the research. Ask: "Does this assessment match your read of the market? Should we adjust the verdict?" Incorporate feedback before continuing.
 
-### 5. Present Findings & Validate
+### 5. Identify Market Gaps & White Space
+
+Based on all research:
+
+**Standard mode:**
+- What segments or use cases are underserved by current competitors?
+- What feature or capability gaps exist across the landscape?
+- What pricing or packaging gaps leave segments unserved?
+- What are the 2-3 most significant white-space opportunities?
+- What can we learn from competitors' successes and failures?
+
+When evidence materially affects parked product paths from `research/.progress.yaml`, add a short `## Implications for Deferred Product Paths` section summarizing the impact, evidence refs, and whether the `revisit_trigger` should change. Do not broaden standard mode into full competitive analysis for every deferred path unless the user explicitly promotes one. When competitive gaps imply an entirely new product surface not covered by existing product paths, recommend `/product-line fork` to create a new path entry.
+
+**Concept-validation mode:**
+- What segments or use cases would this concept serve that competitors miss?
+- What feature or capability gaps exist that the concept could fill?
+- What can you learn from competitors' successes and failures?
+- What are the 2-3 most significant white-space opportunities?
+
+Positioning recommendations and "where we fit" analysis belong in `/positioning` — capture positioning signals in the appendix below.
+
+### 6. Present Findings & Validate
 
 **Checkpoint 2 — Present the full analysis to the user before writing.** Use the AskUserQuestion tool to present:
 
@@ -171,9 +180,9 @@ Then ask:
 
 Continue the conversation until all non-trivial details are nailed down. If the user raises points that require additional research, go back and search before finalising.
 
-### 6. Populate Next Steps
+### 7. Populate Next Steps
 
-Before writing, check which files exist to populate the `## Next Steps` section contextually:
+Before writing, check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with "Pick one:" framing:
 
 **Concept-validation mode:**
 - IF verdict is **Proceed to ICP**: recommend `/icp` — Define your ideal customer profile now that the market gap is validated
@@ -202,11 +211,11 @@ Before writing, check which files exist to populate the `## Next Steps` section 
 - IF downstream impact is **Minor**: annotate relevant skill suggestions with "(stale — [brief description])"
 - If downstream impact has not been classified yet, run the downstream impact check against the proposed output before selecting the final recommendation. Do not emit a Minor/Major impact recommendation speculatively.
 
-### 7. Write Output
+### 8. Write Output
 
 Only after the user has validated the findings, write the output files.
 
-### 8. Downstream Impact Check
+### 9. Downstream Impact Check
 
 After writing, check for downstream research documents that may be affected by what was just decided. Only check documents that exist on disk.
 
@@ -320,10 +329,8 @@ Positioning recommendations ("where we fit", "recommended positioning") belong i
 
 ## Next Steps
 
-**Recommended:** [first matching item from step 6]
-
-**Other options:**
-- [remaining conditional items from step 6 — only include items whose conditions are met]
+Pick one:
+- [conditional items from step 7 — only include items whose conditions are met]
 
 ## Signals for Downstream Research
 

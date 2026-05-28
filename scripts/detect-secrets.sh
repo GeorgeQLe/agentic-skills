@@ -4,6 +4,9 @@
 
 set -euo pipefail
 
+command -v jq >/dev/null 2>&1 || { echo "Error: jq is required but not found in PATH" >&2; exit 1; }
+echo "x" | grep -P 'x' >/dev/null 2>&1 || { echo "Error: grep with -P (PCRE) support is required but not available" >&2; exit 1; }
+
 INPUT=$(cat)
 
 # Extract text to scan based on which hook event fired

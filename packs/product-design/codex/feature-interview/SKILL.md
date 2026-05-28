@@ -14,7 +14,7 @@ Before telling the user to run a skill from another project-local pack, check `.
 
 Invoke as `$feature-interview`.
 
-Use this skill when the user has a feature idea, brainstorm suggestion, research gap, bug-shaped improvement, or implementation direction that needs evidence-backed alignment before deciding whether to write or update research docs, journey docs, specs, roadmap entries, task queues, or route directly to another planning skill.
+Use this skill when the user has a feature idea, brainstorm suggestion, research gap, bug-shaped improvement, or implementation direction that needs evidence-backed alignment before deciding whether to write or update research docs, journey docs, specs, roadmap entries, task queues, or route directly to another planning skill. This skill is also the primary entry point for post-ship feature work, where scope determines the re-entry depth into the pipeline.
 
 This is narrower than `$spec-interview`: it performs the same assumption surfacing and user interrogation needed for human/agent alignment, but it does not assume the output must be a full new implementation spec. It borrows `$investigate`'s evidence discipline for claims, codebase fit, and technical gotchas, but it does not fix bugs or implement the feature.
 
@@ -82,6 +82,10 @@ Use `$feature-interview` especially after a production spec already exists and t
    - Journey/workflow placement to record.
    - Scope to include now and explicitly defer.
    - For user-facing product or feature work, confirm the prototype-first decision: what users can click through first, whether multiple experiments should live on separate routes, what data can be fake or fixture-backed, which infrastructure is intentionally deferred, and what evidence would justify promoting one deferred infrastructure item into a later production phase.
+   - Scope triage for post-ship features:
+     - Small (config, copy, toggle) → `$spec-interview` + `$exec` directly
+     - Medium (new component, screen, workflow) → single-variation mini-prototype (`$prototype --variant 1`)
+     - Large (new product area, major redesign) → full pipeline starting at `$ux-variations`
    - Priority decision: user-confirmed priority, dependencies, and whether the feature should interrupt, follow, or remain parked relative to current roadmap/todo work.
    - Roadmap/task impact and recommended next command.
    Ask: "Does this destination, priority, and scope match what you want?"

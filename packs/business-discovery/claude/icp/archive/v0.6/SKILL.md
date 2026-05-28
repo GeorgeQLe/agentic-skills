@@ -2,7 +2,7 @@
 name: icp
 description: Research-driven ICP discovery — web search + codebase analysis to identify multiple ICPs, pain points, value props, and cross-ICP prioritization
 type: research
-version: v0.7
+version: v0.6
 argument-hint: <spec file path, concept/idea, or empty to use concept brief>
 ---
 
@@ -168,7 +168,7 @@ Incorporate feedback before proceeding.
 
 ### 7. Populate Next Steps
 
-Before writing, check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with a "Recommended + Other options" framing — the first matching condition becomes the **Recommended** item, remaining items become **Other options**:
+Before writing, check which files exist to populate the `## Next Steps` section contextually. Include 3–5 applicable items with "Pick one:" framing:
 
 - ALWAYS: `/competitive-analysis` — Research competitors and market gaps for this ICP
 - IF no `specs/` directory or it's empty: `/competitive-analysis` — Map the competitive landscape for this ICP's market
@@ -368,10 +368,9 @@ Scoring rationale must explicitly distinguish pain intensity from WTP quality. S
 
 ## Next Steps
 
-**Recommended:** [first matching item from step 7]
-
-**Other options:**
-- [remaining conditional items from step 7 — only include items whose conditions are met]
+Pick one:
+- `/competitive-analysis` — Research competitors and market gaps for this ICP
+- [conditional items from step 7 — only include items whose conditions are met]
 
 ## Signals for Downstream Research
 
