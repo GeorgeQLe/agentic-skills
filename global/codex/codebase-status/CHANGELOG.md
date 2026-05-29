@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2 - 2026-05-29
+
+- Added canonical AFPS routing evidence requirements, last completed skill next-step contract checks, pack availability guards, and phase-aware exec/ship/brainstorm routing boundaries.
+
 ## v0.0
 
 - Archived previous skill contract.

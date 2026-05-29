@@ -1,3 +1,14 @@
+## Current Targeted Update: Codebase Status AFPS Routing 2026-05-29
+
+**Goal:** Update mirrored `codebase-status` skills so status-route recommendations use canonical AFPS routing evidence, respect pack availability, and distinguish research/prototype gaps from executable work, shipping work, and completed queues.
+
+**Acceptance Criteria:**
+- [x] Mirrored Codex and Claude `codebase-status` skills are archived, bumped to v0.2, and changelogs record the routing update.
+- [x] `codebase-status` requires reading `docs/pack-workflow-matrix.md` and `docs/skill-next-step-contracts.md` when product/research/spec artifacts exist.
+- [x] Before recommending another AFPS research/product skill, `codebase-status` consults the last completed relevant skill's `## Next Steps` contract and checks pack availability.
+- [x] Phase-aware routing is explicit: missing research/prototype artifacts use canonical AFPS order; actionable task work routes to exec; dirty/unpushed/unvalidated completion routes to ship; exhausted work routes to brainstorm.
+- [x] Focused layer1 tests and required validation pass or blockers are documented, and intended changes are committed and pushed on `master`.
+
 ## Current Targeted Update: Pack Install Issue Session Analysis 2026-05-29
 
 **Goal:** Use full available Claude and Codex conversation history plus repository pack-install evidence to explain recurring `pack install` friction and distinguish current fixed issues from remaining workflow risks.

@@ -103,6 +103,7 @@ describe("competitive-analysis routing", () => {
       const content = readFileSync(check.path, "utf8");
       const routeBlock =
         content.match(/Standard mode next steps:[\s\S]*?(?=\n\*\*Concept-validation mode next steps:)/)?.[0] ??
+        content.match(/\*\*Standard mode:\*\*\n- RECOMMEND[\s\S]*?(?=\n\*\*Impact-aware adjustments:)/)?.[0] ??
         content.match(/- RECOMMEND the first matching item:[\s\S]*?(?=\nAny `\/spec-interview` recommendation)/)?.[0] ??
         content.match(/Default AFPS business-product route:[\s\S]*?\n/)?.[0] ??
         content.match(/Default flow:[\s\S]*?```text[\s\S]*?```/)?.[0] ??
@@ -139,8 +140,8 @@ describe("competitive-analysis routing", () => {
 
   it("keeps research-roadmap from routing positioning before journey or spec-interview before UX/prototype gates", () => {
     const checks = [
-      resolve(TESTS_ROOT, "../global/codex/research-roadmap/SKILL.md"),
-      resolve(TESTS_ROOT, "../global/claude/research-roadmap/SKILL.md"),
+      resolve(TESTS_ROOT, "../packs/research-admin/codex/research-roadmap/SKILL.md"),
+      resolve(TESTS_ROOT, "../packs/research-admin/claude/research-roadmap/SKILL.md"),
     ];
 
     for (const path of checks) {

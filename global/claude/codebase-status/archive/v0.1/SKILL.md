@@ -2,17 +2,17 @@
 name: codebase-status
 description: Report what a repository is, what recent conversation history says about it, current application status, and outstanding work
 type: analysis
-version: v0.2
+version: v0.1
 argument-hint: "[optional repo path, focus, or --no-history]"
 ---
 
 # Codebase Status
 
-Invoke as `$codebase-status`.
+Invoke as `/codebase-status`.
 
 Use this skill when the user asks what a repo or application is, where work was left, what is outstanding, whether it is ready/stable, or wants a detailed status report that combines codebase evidence with local Claude/Codex conversation history.
 
-This is read-only status synthesis. It does not replace `$roadmap`: `roadmap` maintains the task pipeline and priority queue; `codebase-status` explains the actual current state of the repo and relevant prior conversations.
+This is read-only status synthesis. It does not replace `/roadmap`: `roadmap` maintains the task pipeline and priority queue; `codebase-status` explains the actual current state of the repo and relevant prior conversations.
 
 ## Workflow
 
@@ -26,23 +26,18 @@ This is read-only status synthesis. It does not replace `$roadmap`: `roadmap` ma
 3. Read planning and status docs when present:
    - `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, `tasks/recurring-todo.md`, `tasks/history.md`, `tasks/lessons.md`, `tasks/phases/`, `specs/`, `spec.md`, and `research/`.
    - Distinguish checked-off work, active work, manual blockers, advisory work, stale docs, and missing docs.
-4. Read routing evidence for product, research, or spec repos:
-   - When `research/`, `specs/`, `spec.md`, product docs, or prototype artifacts exist, read `docs/pack-workflow-matrix.md` and `docs/skill-next-step-contracts.md` if present.
-   - Identify the last completed relevant research/product skill from artifacts, task history, or conversation history. Before recommending another research/product skill, consult that skill's active `SKILL.md` `## Next Steps` contract and any `## Next Steps` section in its output artifact.
-   - Treat those route contracts as stronger evidence than a generic status impression. If docs disagree, report the contradiction and prefer the newest active skill contract or route matrix with file evidence.
-   - For pack-local recommendations, check `.agents/project.json` `enabled_packs` first. If the target skill's pack is not enabled, recommend `$pack install <pack-name>` before the skill.
-5. Inspect git evidence:
+4. Inspect git evidence:
    - `git status --short`
    - current branch and upstream status
    - last 20 commits
    - unpushed commits when an upstream exists
    - changed files in the working tree
-6. Inspect codebase health signals:
+5. Inspect codebase health signals:
    - Project structure and primary modules.
    - Test/build/lint scripts from package manifests or equivalent tool files.
    - Obvious TODO/FIXME markers, failing-test notes, disabled tests, and local quality scripts.
    - Do not run expensive commands by default. Run cheap read-only inspections freely; ask or state assumptions before long builds, network installs, destructive commands, or mutation.
-7. Find related conversation history unless `--no-history` is passed:
+6. Find related conversation history unless `--no-history` is passed:
    - Read full available local prompt history, not a sample:
      - `~/.claude/history.jsonl`
      - `~/.codex/history.jsonl`
@@ -51,28 +46,21 @@ This is read-only status synthesis. It does not replace `$roadmap`: `roadmap` ma
    - Exclude system, developer, tool output, injected skill payloads, and base instruction text from examples.
    - Use line-by-line parsing for scale and deduplicate Codex prompt records when compact and rich histories overlap.
    - Extract recent user goals, repeated requests, unresolved questions, blockers, and prior recommendations.
-8. Synthesize status:
+7. Synthesize status:
    - What this repo/app is.
    - What has happened recently.
    - Current implementation status by major area.
    - Outstanding work, grouped as blocking, next execution, advisory, manual/human-only, and uncertain.
    - Mismatches between conversation history, task docs, git history, and code reality.
    - Confidence level for each major conclusion: high, medium, or low, with evidence.
-9. Recommend next route:
-   - Use phase-aware routing before naming a command:
-     - If `tasks/todo.md` or active phase docs contain actionable implementation work, recommend `$exec`. Do not route back to research merely because advisory gaps exist.
-     - If finished work is dirty, unpushed, unvalidated, or needs packaging/review before handoff, recommend `$ship`.
-     - If user-facing product research/prototype artifacts are missing and no implementation/shipping queue is active, follow the canonical AFPS route from the routing evidence: `icp -> competitive-analysis -> journey-map -> positioning -> ux-variations -> ui-interview -> prototype -> uat -> consolidate-variations -> research-roadmap -> spec-interview -> roadmap`.
-     - If `research/icp.md` and `research/competitive-analysis.md` exist but `research/journey-map.md` is missing, check `customer-lifecycle` availability. If it is not enabled, recommend `$pack install customer-lifecycle` before `$journey-map`; if enabled, recommend `$journey-map`.
-     - Treat `value-prop-canvas` and `lean-canvas` as optional risk-driven detours only. Recommend `$value-prop-canvas` only for contested solution-fit evidence, and `$lean-canvas` only for material business-model risk; do not make either a default blocker before `journey-map`, `positioning`, or `ux-variations`.
-     - If no research, spec, task, implementation, validation, dirty, or unpushed work remains, recommend `$brainstorm` to discover new AFPS work.
-   - `$exec` when the next task is already clear and executable.
-   - `$roadmap` when specs exist but sequencing or task queue health needs updating.
-   - `$feature-interview` when the next idea/direction is not yet represented in specs or tasks.
-   - `$reconcile-dev-docs audit` or `$reconcile-dev-docs fix tasks` when task docs contradict git/code reality.
-   - `$spec-drift` when specs and code appear out of sync.
-   - `$guide` only for human-only external blockers.
-   - `$brainstorm` when the repo is complete/current and the next step is discovering a new phase.
+8. Recommend next route (check whether each skill's pack is installed; if not, recommend `/pack install <pack>` first):
+   - `/exec` when the next task is already clear and executable. _(exec-loop pack)_
+   - `/roadmap` when specs exist but sequencing or task queue health needs updating. _(agent-work-admin pack)_
+   - `/feature-interview` when the next idea/direction is not yet represented in specs or tasks. _(product-design pack)_
+   - `/reconcile-dev-docs audit` or `/reconcile-dev-docs fix tasks` when task docs contradict git/code reality. _(docs-health pack)_
+   - `/spec-drift` when specs and code appear out of sync. _(agent-work-admin pack)_
+   - `/guide` only for human-only external blockers. _(guided-walkthrough pack)_
+   - `/brainstorm` when the repo is complete/current and the next step is discovering a new phase. _(product-design pack)_
 
 ## Output
 
@@ -99,9 +87,9 @@ End with exactly:
 - Do not include private conversation history unrelated to the target repo.
 - Quote only short prompt excerpts. Prefer paraphrase plus timestamp/source/project.
 - Do not treat `tasks/record-todo.md` or `tasks/recurring-todo.md` as execution queues unless an item has clearly become concrete work.
-- Do not put agent-executable work in `tasks/manual-todo.md` or route it to `$guide`.
-- Do not recommend `$roadmap` if the finding is only "tell me the status"; use `$roadmap` only when the task pipeline itself needs queue maintenance or roadmap extension.
-- When recommending a pack skill, first check `.agents/project.json` for `enabled_packs`. If the target skill's pack is not enabled, include `$pack install <pack-name>` as a prerequisite in the recommendation.
+- Do not put agent-executable work in `tasks/manual-todo.md` or route it to `/guide`.
+- Do not recommend `/roadmap` if the finding is only "tell me the status"; use `/roadmap` only when the task pipeline itself needs queue maintenance or roadmap extension.
+- When recommending a pack skill, first check `.agents/project.json` for `enabled_packs`. If the target skill's pack is not enabled, include `/pack install <pack-name>` as a prerequisite in the recommendation.
 - Do not create or modify GitHub Actions workflows.
 
 ## Alignment Page

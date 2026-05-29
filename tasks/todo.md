@@ -1,3 +1,27 @@
+## Current Task — Codebase Status AFPS Routing 2026-05-29
+
+**Goal:** Harden `codebase-status` next-step routing so AFPS research gaps follow canonical pack contracts while executable, shipping, and completed states route to the right operational command.
+
+**Plan:**
+- [x] Inspect current mirrors, canonical route docs, tests, and dirty worktree state.
+- [x] Archive and bump mirrored `codebase-status` skills from v0.1 to v0.2.
+- [x] Add route-evidence requirements for `docs/pack-workflow-matrix.md`, `docs/skill-next-step-contracts.md`, and the last completed relevant skill's `## Next Steps` contract.
+- [x] Define phase-aware AFPS routing boundaries and pack-availability guards in both mirrors.
+- [x] Add focused layer1 regression coverage.
+- [x] Run focused tests, route/version/dependency checks, generated showcase refresh/validation, and whitespace checks.
+- [x] Document review notes, commit, and push intended changes on `master` while preserving unrelated dirty work.
+
+### Review
+
+- Mirrored `codebase-status` skills are archived at v0.1 and bumped to v0.2.
+- Both mirrors now require `docs/pack-workflow-matrix.md`, `docs/skill-next-step-contracts.md`, the last completed relevant skill's `## Next Steps` contract, and pack availability checks before AFPS research/product recommendations.
+- AFPS status routing now distinguishes missing research/prototype artifacts, actionable implementation queues, finished dirty/unpushed/unvalidated work, and exhausted work.
+- Added `tests/layer1/codebase-status-routing.test.ts` for route evidence, AFPS order, optional detours, customer-lifecycle install-before-journey behavior, and exec/ship/brainstorm phase boundaries.
+- Updated `tests/layer1/competitive-analysis-routing.test.ts` to track current active `research-roadmap` pack paths and the current Claude standard-mode route section.
+- Refreshed Skills Showcase generated data after skill metadata changes.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 layer1/codebase-status-routing.test.ts layer1/competitive-analysis-routing.test.ts`, `bash scripts/skill-versions.sh --missing`, `scripts/validate-skills-showcase-data.sh`, and `git diff --check`.
+- Validation caveats: `bash scripts/skill-next-step-routing.sh --missing` and `bash scripts/skill-deps.sh --broken` still report broad pre-existing gaps outside this task.
+
 ## Current Task - Global Launcher Repo-Root Resolution 2026-05-29
 
 **Goal:** Fix global `pack` and `init-agentic-skills` launchers so copied managed installs resolve the real `agentic-skills` checkout instead of `$HOME`.
