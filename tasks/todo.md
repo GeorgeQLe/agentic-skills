@@ -1,3 +1,23 @@
+## Current Task — Pack Install Issue Session Analysis 2026-05-29
+
+**Goal:** Determine why `pack install` has run into recurring issues by analyzing both Claude and Codex conversation history plus current repository install state.
+
+**Plan:**
+- [x] Inspect current lessons, dirty worktree state, task context, and pack install scripts.
+- [x] Parse full available Claude and Codex histories for `pack install`, skill visibility, missing-skill, and pack refresh incidents.
+- [x] Classify root causes by evidence source and runner.
+- [x] Create the required `analyze-sessions` alignment page with evidence matrix and review gates.
+- [x] Verify the artifact and summarize findings without touching unrelated local changes.
+
+### Review
+
+- Parsed compact Claude/Codex histories plus richer Claude project and Codex session transcripts. Compact direct `pack install` prompts total 66 records: 24 Claude and 42 Codex.
+- Current local project install state is healthy: both `.claude/skills` and `.codex/skills` expose the expected active project-local `SKILL.md` roots after the prior real-file managed install repair.
+- Root causes are multi-factor: no in-session hot reload after install, natural-language pack/skill phrase ambiguity, prior Codex stale symlink discovery, Codex launcher/CWD/sandbox/filesystem blockers, and missing cross-pack routing guidance before the recent fallback rules.
+- Residual implementation risk: `scripts/pack.sh install` still mutates as it processes tokens, so a phrase like `skill fixer` can refresh a valid early token before failing on a later unknown token. A future fix should preflight all install arguments before writing.
+- Created `alignment/analyze-sessions-pack-install-issues.html` with evidence matrix, confidence register, alternatives, source gaps, proposed file changes, and review gates.
+- Verification passed: `test -s alignment/analyze-sessions-pack-install-issues.html`; required-content `rg` checks for evidence matrix, confidence register, compile answers, YAML hooks, fresh-session and natural-language findings; `git diff --check -- alignment/analyze-sessions-pack-install-issues.html tasks/todo.md tasks/roadmap.md`; trailing-whitespace search across touched files. Browser-open attempt succeeded via WSL `file://wsl.localhost/Ubuntu/...` URI.
+
 ## Current Task — Idea Scope Brief Documentation Refresh 2026-05-28
 
 **Goal:** Replace stale active references to the legacy concept-scope skill name with `idea-scope-brief` terminology across docs, task notes, and showcase fixtures without adding an alias.

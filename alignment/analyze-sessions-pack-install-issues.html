@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pack Install Issue Analysis</title>
+<style>
+:root {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --border: #30363d;
+  --text: #c9d1d9;
+  --text-muted: #8b949e;
+  --accent: #58a6ff;
+  --green: #3fb950;
+  --red: #f85149;
+  --orange: #d29922;
+  --purple: #bc8cff;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  line-height: 1.55;
+}
+a { color: var(--accent); }
+main { max-width: 1180px; margin: 0 auto; padding: 32px 20px 56px; }
+header {
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 22px;
+  padding-bottom: 18px;
+}
+h1 { margin: 0 0 8px; color: #fff; font-size: 2rem; line-height: 1.15; }
+h2 {
+  color: var(--accent);
+  font-size: 1.35rem;
+  margin: 34px 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+h3 { color: #fff; font-size: 1.08rem; margin: 22px 0 8px; }
+p { margin: 0 0 12px; }
+code {
+  background: rgba(110, 118, 129, 0.22);
+  border-radius: 4px;
+  padding: 0.1rem 0.25rem;
+  color: #fff;
+}
+ul { margin: 0 0 14px 20px; padding: 0; }
+li { margin-bottom: 6px; }
+nav {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin: 22px 0;
+}
+nav strong { display: block; color: #fff; margin-bottom: 8px; }
+nav a { display: inline-block; margin: 4px 14px 4px 0; text-decoration: none; }
+nav a:hover { text-decoration: underline; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 14px 0 18px;
+  font-size: 0.93rem;
+}
+th, td {
+  border: 1px solid var(--border);
+  padding: 10px 12px;
+  vertical-align: top;
+  text-align: left;
+}
+th { background: var(--surface); color: var(--accent); }
+tbody tr:nth-child(even) { background: rgba(22, 27, 34, 0.45); }
+.subtitle { color: var(--text-muted); }
+.section-header {
+  display: flex;
+  gap: 14px;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 30px;
+  border-bottom: 1px solid var(--border);
+}
+.section-header h2 { border: 0; margin-top: 0; flex: 1; }
+.feedback {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: flex-end;
+  max-width: 410px;
+  padding-top: 2px;
+}
+.feedback button {
+  background: var(--surface);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 9px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+.feedback button[data-value="up"].active { color: var(--green); border-color: var(--green); }
+.feedback button[data-value="down"].active { color: var(--red); border-color: var(--red); }
+.feedback button[data-value="needs-clarification"].active { color: var(--orange); border-color: var(--orange); }
+.feedback textarea {
+  width: 100%;
+  min-height: 58px;
+  display: none;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px;
+  font: inherit;
+}
+.feedback textarea.visible { display: block; }
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  margin: 14px 0;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin: 14px 0 18px;
+}
+.metric {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
+}
+.metric strong {
+  display: block;
+  color: #fff;
+  font-size: 1.55rem;
+  margin-bottom: 2px;
+}
+.metric span { color: var(--text-muted); font-size: 0.9rem; }
+.tag {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.high { color: var(--green); background: rgba(63, 185, 80, 0.14); }
+.medium { color: var(--orange); background: rgba(210, 153, 34, 0.14); }
+.low { color: var(--red); background: rgba(248, 81, 73, 0.14); }
+.shared { color: var(--purple); background: rgba(188, 140, 255, 0.14); }
+.codex { color: var(--accent); background: rgba(88, 166, 255, 0.14); }
+.claude { color: var(--green); background: rgba(63, 185, 80, 0.14); }
+.question-block {
+  background: #1c2333;
+  border: 1px solid var(--purple);
+  border-left-width: 4px;
+  border-radius: 8px;
+  padding: 15px;
+  margin: 18px 0;
+}
+.question-block h3 {
+  color: var(--purple);
+  font-size: 1rem;
+  margin-top: 0;
+}
+.question-block label {
+  display: block;
+  margin: 8px 0;
+  cursor: pointer;
+}
+.question-block input[type="radio"] {
+  margin-right: 8px;
+  accent-color: var(--purple);
+}
+.question-block textarea {
+  width: 100%;
+  min-height: 76px;
+  display: none;
+  margin: 8px 0 10px;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 9px;
+  font: inherit;
+}
+.question-block textarea.visible { display: block; }
+.compile {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 18px;
+  margin-top: 34px;
+}
+.compile button {
+  background: var(--purple);
+  color: #fff;
+  border: 0;
+  border-radius: 6px;
+  padding: 10px 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.compile button.secondary {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  margin-left: 8px;
+}
+.compile button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.remaining { color: var(--text-muted); margin-top: 8px; }
+#yamlOutput {
+  display: none;
+  width: 100%;
+  min-height: 240px;
+  margin-top: 14px;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.9rem;
+}
+.copy-status { color: var(--text-muted); margin-top: 8px; }
+.callout {
+  border-left: 4px solid var(--accent);
+  background: rgba(88, 166, 255, 0.08);
+  padding: 13px 15px;
+  border-radius: 0 8px 8px 0;
+  margin: 14px 0;
+}
+@media (max-width: 720px) {
+  main { padding: 22px 14px 44px; }
+  .section-header { display: block; }
+  .feedback { max-width: none; justify-content: flex-start; margin-bottom: 12px; }
+  table { font-size: 0.86rem; }
+  th, td { padding: 8px; }
+}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Pack Install Issue Analysis</h1>
+    <p class="subtitle">analyze-sessions report for 2026-05-29. Scope: Claude and Codex conversation history, repository pack scripts, current local install state, and documented lessons.</p>
+  </header>
+
+  <nav>
+    <strong>Contents</strong>
+    <a href="#summary">Executive Finding</a>
+    <a href="#coverage">Source Coverage</a>
+    <a href="#incidents">Incident Timeline</a>
+    <a href="#causes">Root Causes</a>
+    <a href="#matrix">Evidence Matrix</a>
+    <a href="#confidence">Confidence Register</a>
+    <a href="#alternatives">Alternatives Considered</a>
+    <a href="#gaps">Coverage Gaps</a>
+    <a href="#implications">Downstream Implications</a>
+    <a href="#changes">Proposed File Changes</a>
+    <a href="#compile">Compile Answers</a>
+  </nav>
+
+  <section id="summary">
+    <div class="section-header">
+      <h2>Executive Finding</h2>
+      <div class="feedback" data-section="Executive Finding">
+        <button type="button" data-value="up">Approve</button>
+        <button type="button" data-value="down">Concern</button>
+        <button type="button" data-value="needs-clarification">Clarify</button>
+        <textarea placeholder="Optional notes for this section"></textarea>
+      </div>
+    </div>
+    <div class="callout">
+      <p><strong>Conclusion:</strong> recurring <code>pack install</code> issues come from four interacting surfaces, not one defect: running sessions do not hot-reload newly installed skills; natural-language install phrases are parsed as token lists instead of exact pack or skill identifiers; prior Codex skill discovery was broken by stale symlink-style installs; and Codex executions repeatedly hit launcher, working-directory, sandbox, or local filesystem blockers.</p>
+    </div>
+    <p>The current repository state is mostly healthy. Project-local Claude and Codex roots now expose the expected active skills, including <code>analyze-sessions</code>, <code>investigate</code>, <code>targeted-skill-builder</code>, <code>ship</code>, and <code>sync</code>. The remaining risk is workflow friction: users naturally say <code>$pack install targeted skill builder</code> or <code>$pack install content creator pack</code>, while the script is safest with exact identifiers such as <code>targeted-skill-builder</code>, <code>skill-dev</code>, <code>creator-media</code>, or a real skill name discovered through <code>scripts/pack.sh which</code>.</p>
+    <div class="grid">
+      <div class="metric"><strong>66</strong><span>compact user records with direct <code>pack install</code> prompts</span></div>
+      <div class="metric"><strong>24 / 42</strong><span>direct prompts split Claude / Codex in compact histories</span></div>
+      <div class="metric"><strong>36,667</strong><span>rich transcript records scanned across Claude projects and Codex sessions</span></div>
+      <div class="metric"><strong>16</strong><span>current project-local Codex and Claude active skill roots observed</span></div>
+    </div>
+    <p>The strongest evidence is from repeated session logs on May 22-29, repository lessons written immediately after failures, and current pack script behavior. The weakest evidence is any claim about Claude internals beyond what conversations and docs show, because Claude's runtime loader behavior is inferred from observed prompts and project docs rather than instrumented directly.</p>
+  </section>
+
+  <section id="coverage">
+    <div class="section-header">
+      <h2>Source Coverage</h2>
+      <div class="feedback" data-section="Source Coverage">
+        <button type="button" data-value="up">Approve</button>
+        <button type="button" data-value="down">Concern</button>
+        <button type="button" data-value="needs-clarification">Clarify</button>
+        <textarea placeholder="Optional notes for this section"></textarea>
+      </div>
+    </div>
+    <table>
+      <thead>
+        <tr><th>Category</th><th>Sources Checked</th><th>What It Supports</th><th>Confidence</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Compact histories</td><td><code>~/.claude/history.jsonl</code>, <code>~/.codex/history.jsonl</code></td><td>Direct user prompts, dates, command surface, repeated install requests</td><td><span class="tag high">High</span></td></tr>
+        <tr><td>Rich transcripts</td><td><code>~/.claude/projects/**/*.jsonl</code>, <code>~/.codex/sessions/**/*.jsonl</code></td><td>Assistant actions, command failures, successful retries, final caveats</td><td><span class="tag high">High</span></td></tr>
+        <tr><td>Current code</td><td><code>scripts/pack.sh</code>, <code>scripts/skill-links.sh</code></td><td>Parser behavior, alias mapping, install semantics, session reload notice, real-file install behavior</td><td><span class="tag high">High</span></td></tr>
+        <tr><td>Project docs and lessons</td><td><code>README.md</code>, <code>AGENTS.md</code>, <code>tasks/lessons.md</code>, <code>tasks/todo.md</code></td><td>Known postmortems, intended fallback behavior, current operating rules</td><td><span class="tag high">High</span></td></tr>
+        <tr><td>Current install state</td><td><code>scripts/pack.sh status</code>, <code>find .codex/.claude/skills -maxdepth 2 -name SKILL.md</code>, <code>scripts/pack.sh which ...</code></td><td>Whether current local project install is still broken</td><td><span class="tag high">High</span></td></tr>
+      </tbody>
+    </table>
+    <p>Counts from the compact pass: 12,927 user records, 9,744 Claude and 3,183 Codex. Counts from the rich pass: 36,667 records, 22,697 Claude and 13,970 Codex. The rich pass can over-count pasted file contents, so quantitative command counts use compact histories while qualitative failure analysis uses rich session records.</p>
+
+    <div class="question-block" data-section="Source Coverage" data-gate-type="evidence-coverage">
+      <h3>Evidence Coverage Gate</h3>
+      <p>Is this source coverage sufficient to treat the root-cause classification as evidence-backed?</p>
+      <label><input type="radio" name="q_evidence" value="sufficient"> Yes, the combined compact histories, rich transcripts, current code, and task lessons are sufficient.</label>
+      <label><input type="radio" name="q_evidence" value="needs_more_runtime_logs"> Mostly, but I want more direct runtime-loader evidence from Claude or Codex before implementation decisions.</label>
+      <label><input type="radio" name="q_evidence" value="other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="What source coverage would be enough?"></textarea>
+      <label><input type="radio" name="q_evidence" value="clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear about the evidence coverage?"></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)"></textarea>
+    </div>
+  </section>
+
+  <section id="incidents">
+    <div class="section-header">
+      <h2>Incident Timeline</h2>
+      <div class="feedback" data-section="Incident Timeline">
+        <button type="button" data-value="up">Approve</button>
+        <button type="button" data-value="down">Concern</button>
+        <button type="button" data-value="needs-clarification">Clarify</button>
+        <textarea placeholder="Optional notes for this section"></textarea>
+      </div>
+    </div>
+    <table>
+      <thead>
+        <tr><th>Date</th><th>Runner</th><th>User Command or Theme</th><th>Observed Problem</th><th>Resolution / Status</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>2026-05-22</td><td><span class="tag codex">Codex</span></td><td><code>$pack install content creator pack</code></td><td>The phrase did not map to a literal pack. The agent first ran a bundled launcher from the skill directory, then reran from the target project root. Current alias logic maps creator/media phrases to <code>creator-foundation</code> plus <code>youtube-ops</code>, not to a pack named <code>content</code>.</td><td>Succeeded after interpretation as a creator-media style install; fresh session caveat remained.</td></tr>
+        <tr><td>2026-05-26</td><td><span class="tag codex">Codex</span></td><td><code>$pack install exec-loop</code></td><td>Launcher initially treated the skill directory as project root and hit read-only sandbox behavior. The agent switched to the repository project root and absolute script path.</td><td>Succeeded; user still needed a fresh session to see changed skills.</td></tr>
+        <tr><td>2026-05-26</td><td><span class="tag shared">Shared</span></td><td>Missing skill and cross-pack routing discussion</td><td>User asked how recommended skills could point to the pack that contains them, and how invocation of an uninstalled skill could trigger install guidance.</td><td>Rules were added to <code>AGENTS.md</code> and pack skill instructions: run <code>scripts/pack.sh which &lt;skill&gt;</code>, recommend installing the containing pack, and note fresh-session requirements.</td></tr>
+        <tr><td>2026-05-26</td><td><span class="tag codex">Codex</span></td><td><code>pack install investigate</code></td><td><code>investigate</code> is a skill, not a pack. Then a zero-byte <code>.codex</code> file blocked creation of <code>.codex/skills</code>.</td><td>Mapped to <code>code-debug</code>, removed the local filesystem blocker, installed successfully, and verified local roots.</td></tr>
+        <tr><td>2026-05-27</td><td><span class="tag codex">Codex</span></td><td><code>$pack install targeted skill builder</code></td><td>Natural phrase was not an exact pack identifier. The intended skill is <code>targeted-skill-builder</code>, provided by <code>skill-dev</code>. Lock/sandbox permission issues appeared during retry.</td><td>Succeeded after resolving to <code>skill-dev</code> and running with sufficient write permissions.</td></tr>
+        <tr><td>2026-05-27</td><td><span class="tag codex">Codex</span></td><td><code>$pack install skill fixer</code></td><td>Current parser splits on spaces. <code>skill</code> can resolve to <code>skill-dev</code>, but <code>fixer</code> is unknown. This can cause partial refresh before failure.</td><td>No real skill-fixer exists. <code>skill-dev</code> was already enabled or refreshed; the phrase remains unsupported.</td></tr>
+        <tr><td>2026-05-28</td><td><span class="tag codex">Codex</span></td><td>Codex <code>$</code> skill discovery repair</td><td><code>scripts/pack.sh status</code> listed full enabled packs, but direct Codex discovery saw only two project-local <code>SKILL.md</code> files because stale symlink-style installs did not expose real files the way current Codex discovery expected.</td><td><code>scripts/skill-links.sh</code> now copies active skill files into managed directories and excludes archives. <code>scripts/pack.sh refresh</code> repaired local roots.</td></tr>
+        <tr><td>2026-05-29</td><td><span class="tag codex">Codex</span></td><td><code>$pack install analyze-sessions</code></td><td>Launcher path confusion and sandbox write restrictions recurred. The agent switched to repo-local <code>scripts/pack.sh</code>, then escalated for writes to local install roots.</td><td>Succeeded. <code>analyze-sessions</code> is individually installed from <code>session-analytics</code>; fresh session still needed for active skill list visibility.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="causes">
+    <div class="section-header">
+      <h2>Root Causes</h2>
+      <div class="feedback" data-section="Root Causes">
+        <button type="button" data-value="up">Approve</button>
+        <button type="button" data-value="down">Concern</button>
+        <button type="button" data-value="needs-clarification">Clarify</button>
+        <textarea placeholder="Optional notes for this section"></textarea>
+      </div>
+    </div>
+    <h3>1. Running sessions do not hot-reload newly installed skills</h3>
+    <p><span class="tag shared">Shared</span> <span class="tag high">High confidence</span></p>
+    <p><code>pack install</code> updates local files and <code>.agents/project.json</code>, but Claude and Codex may load available skill instructions at session start. The project docs and pack skill explicitly say a fresh CLI session may be needed. Many successful installs ended with that caveat, which explains why an install can succeed yet the user still cannot invoke the skill immediately.</p>
+
+    <h3>2. Natural-language install phrases are ambiguous</h3>
+    <p><span class="tag shared">Shared</span> <span class="tag high">High confidence</span></p>
+    <p>The install parser splits raw arguments on spaces and commas. That makes exact names reliable, but phrases such as <code>targeted skill builder</code>, <code>skill fixer</code>, or <code>content creator pack</code> can become separate tokens. Some tokens resolve to aliases or packs, while later tokens can fail. This also explains why agents repeatedly had to use <code>scripts/pack.sh which</code> or inspect pack manifests.</p>
+
+    <h3>3. Codex discovery previously missed symlink-style installs</h3>
+    <p><span class="tag codex">Codex-heavy</span> <span class="tag high">High confidence</span></p>
+    <p>A May 28 lesson recorded that <code>scripts/pack.sh status</code> listed the expected packs while real-file discovery under <code>.codex/skills</code> saw only two <code>SKILL.md</code> files. The repair changed active managed installs to copied real files rather than symlinked <code>SKILL.md</code> files. Current local roots are healthy, so this appears fixed locally rather than an active blocker.</p>
+
+    <h3>4. Codex executions hit launcher, working-directory, sandbox, and filesystem blockers</h3>
+    <p><span class="tag codex">Codex-heavy</span> <span class="tag high">High confidence</span></p>
+    <p>Several Codex incidents first ran the bundled launcher from the skill directory or a wrong path, then had to rerun from the target repository with the repo-local script. Codex also hit sandbox write restrictions around <code>.agents</code> and <code>.codex</code>. One incident had a zero-byte <code>.codex</code> file where the installer needed a directory.</p>
+
+    <h3>5. Cross-pack routing guidance was incomplete until late May</h3>
+    <p><span class="tag shared">Shared</span> <span class="tag medium">Medium-high confidence</span></p>
+    <p>Before the current fallback rules, skills and agents could recommend a skill by name without telling the user which pack contains it. The user explicitly called out this gap, and the project now instructs agents to run <code>scripts/pack.sh which &lt;skill-name&gt;</code> and recommend installing the containing pack when the command is missing.</p>
+  </section>
+
+  <section id="matrix">
+    <div class="section-header">
+      <h2>Evidence Matrix</h2>
+      <div class="feedback" data-section="Evidence Matrix">
+        <button type="button" data-value="up">Approve</button>
+        <button type="button" data-value="down">Concern</button>
+        <button type="button" data-value="needs-clarification">Clarify</button>
+        <textarea placeholder="Optional notes for this section"></textarea>
+      </div>
+    </div>
+    <table>
+      <thead>
+        <tr><th>Claim</th><th>Evidence</th><th>Inference</th><th>Assumption Status</th><th>Decision Impact</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Fresh sessions are required after many installs</td><td><code>README.md</code>, pack skill instructions, and <code>scripts/pack.sh</code> all state that Claude/Codex may keep skill lists loaded from session start. Multiple assistant final reports repeated this caveat.</td><td>Install success is not the same as in-session invocation success.</td><td><span class="tag high">Evidence-backed</span></td><td>Any fix or user instruction should separate filesystem install verification from active-session visibility.</td></tr>
+        <tr><td>Natural phrases are a recurring failure mode</td><td>Direct prompts include <code>$pack install targeted skill builder</code>, <code>$pack install skill fixer</code>, and <code>$pack install content creator pack</code>. <code>scripts/pack.sh</code> splits install args by whitespace and comma before validating tokens.</td><td>The script can mutate on earlier valid tokens, then fail on later unknown tokens.</td><td><span class="tag high">Evidence-backed</span></td><td>Add preflight validation or phrase normalization if the goal is to make natural commands robust.</td></tr>
+        <tr><td>Codex stale symlink installs were a real prior blocker</td><td><code>tasks/lessons.md</code> documents a status/discovery mismatch. Current <code>scripts/skill-links.sh</code> copies active skill contents and excludes archives.</td><td>Pack status could be accurate while Codex command discovery was incomplete.</td><td><span class="tag high">Evidence-backed</span></td><td>Keep regression tests and avoid returning to symlinked active <code>SKILL.md</code> files.</td></tr>
+        <tr><td>Codex environment issues amplified pack install failures</td><td>Codex transcripts for <code>exec-loop</code>, <code>targeted skill builder</code>, <code>investigate</code>, and <code>analyze-sessions</code> mention wrong launcher context, read-only bind behavior, lock timeouts, escalation, or a blocking <code>.codex</code> file.</td><td>Some failures were not pack logic bugs; they were execution-context problems around where and how the installer ran.</td><td><span class="tag high">Evidence-backed</span></td><td>Codex instructions should prefer repo-local <code>scripts/pack.sh</code> from project root and escalate when sandbox writes are required.</td></tr>
+        <tr><td>Cross-pack recommendation gaps caused user friction</td><td>Claude history shows the user asking for plans so skills recommend the containing pack and automatically guide install attempts for missing commands. <code>AGENTS.md</code> now encodes this fallback.</td><td>The current rule is a remediation for a real workflow gap, not just speculative improvement.</td><td><span class="tag medium">Evidence-backed with implementation inference</span></td><td>Missing-skill fallback should remain central in skill instructions and benchmark fixtures.</td></tr>
+      </tbody>
+    </table>
+    <div class="question-block" data-section="Evidence Matrix" data-gate-type="research-completeness">
+      <h3>Research Completeness Gate</h3>
+      <p>Which conclusion needs the most additional support before this analysis is used for a code change?</p>
+      <label><input type="radio" name="q_completeness" value="none"> None. The evidence is sufficient for a focused pack parser or instruction update.</label>
+      <label><input type="radio" name="q_completeness" value="runtime_loader"> The session hot-reload claim needs direct runtime-loader evidence.</label>
+      <label><input type="radio" name="q_completeness" value="natural_phrase_frequency"> The natural-language phrase claim needs broader frequency analysis before changing parser behavior.</label>
+      <label><input type="radio" name="q_completeness" value="other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="What needs more support?"></textarea>
+      <label><input type="radio" name="q_completeness" value="clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear?"></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)"></textarea>
+    </div>
+  </section>
+
+  <section id="confidence">
+    <div class="section-header">
+      <h2>Confidence And Assumption Register</h2>
+      <div class="feedback" data-section="Confidence And Assumption Register">
+        <button type="button" data-value="up">Approve</button>
+        <button type="button" data-value="down">Concern</button>
+        <button type="button" data-value="needs-clarification">Clarify</button>
+        <textarea placeholder="Optional notes for this section"></textarea>
+      </div>
+    </div>
+    <table>
+      <thead>
+        <tr><th>Conclusion</th><th>Status</th><th>What Could Change It</th><th>Confidence</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Current project-local install state is healthy.</td><td>Observed locally through status and direct file discovery.</td><td>A different machine or branch could still have stale local install roots.</td><td><span class="tag high">High</span></td></tr>
+        <tr><td>Fresh sessions remain required after install for reliable invocation.</td><td>Documented in script output, README, pack skill, and repeated final reports.</td><td>Future Claude/Codex runtime support for dynamic skill reload would change this.</td><td><span class="tag high">High</span></td></tr>
+        <tr><td>Phrase parsing is still a residual product risk.</td><td>Current parser behavior still splits on whitespace before validating.</td><td>If users always invoke exact names, the risk becomes documentation-only.</td><td><span class="tag high">High</span></td></tr>
+        <tr><td>Symlink discovery is fixed locally.</td><td>Current helper copies active files and local roots show all expected <code>SKILL.md</code> files.</td><td>Regression in <code>scripts/skill-links.sh</code> or stale installs on another checkout.</td><td><span class="tag medium">Medium-high</span></td></tr>
+        <tr><td>Claude and Codex share the hot-reload problem.</td><td>Docs and observed caveats reference both; direct Codex failures are richer.</td><td>Instrumented Claude runtime discovery could reveal different behavior.</td><td><span class="tag medium">Medium-high</span></td></tr>
+      </tbody>
+    </table>
+    <div class="question-block" data-section="Confidence And Assumption Register" data-gate-type="assumptions-confidence">
+      <h3>Assumptions And Confidence Gate</h3>
+      <p>Do you accept the confidence split between evidence-backed findings and runtime-loader inference?</p>
+      <label><input type="radio" name="q_confidence" value="accept"> Accept. The confidence labels are adequate.</label>
+      <label><input type="radio" name="q_confidence" value="tighten_claude"> Tighten the Claude-specific claims and present them as weaker than Codex-specific claims.</label>
+      <label><input type="radio" name="q_confidence" value="other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="What confidence adjustment should be made?"></textarea>
+      <label><input type="radio" name="q_confidence" value="clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear?"></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)"></textarea>
+    </div>
+  </section>
+
+  <section id="alternatives">
+    <div class="section-header">
+      <h2>Alternatives Considered</h2>
+      <div class="feedback" data-section="Alternatives Considered">
+        <button type="button" data-value="up">Approve</button>
+        <button type="button" data-value="down">Concern</button>
+        <button type="button" data-value="needs-clarification">Clarify</button>
+        <textarea placeholder="Optional notes for this section"></textarea>
+      </div>
+    </div>
+    <table>
+      <thead>
+        <tr><th>Alternative Explanation</th><th>Assessment</th><th>Why It Is Not The Primary Finding</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>The pack system is generally broken.</td><td>Rejected.</td><td>Current installs succeed, <code>scripts/pack.sh status</code> is coherent, and direct skill roots exist. The failures cluster around invocation context, discovery freshness, and naming.</td></tr>
+        <tr><td>Only Codex has the problem.</td><td>Rejected.</td><td>Codex has the richest failure logs, but Claude history also shows direct install prompts, missing-skill friction, and the same no-hot-reload caveat in shared docs.</td></tr>
+        <tr><td>Only user command syntax is wrong.</td><td>Rejected.</td><td>Natural phrases are a real factor, but even exact installs can require a fresh session or hit sandbox/write issues.</td></tr>
+        <tr><td>The stale symlink discovery bug explains everything.</td><td>Rejected.</td><td>It explains a major Codex visibility failure on May 28, but it does not explain natural phrase parsing, launcher path confusion, or sandbox blockers.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="gaps">
+    <div class="section-header">
+      <h2>Rejected Or Lower-Confidence Findings And Source Gaps</h2>
+      <div class="feedback" data-section="Rejected Or Lower-Confidence Findings And Source Gaps">
+        <button type="button" data-value="up">Approve</button>
+        <button type="button" data-value="down">Concern</button>
+        <button type="button" data-value="needs-clarification">Clarify</button>
+        <textarea placeholder="Optional notes for this section"></textarea>
+      </div>
+    </div>
+    <h3>Lower-confidence findings</h3>
+    <ul>
+      <li>Exact Claude runtime mechanics are inferred from docs and conversations. I did not instrument Claude's skill loader.</li>
+      <li>Some rich transcript matches can include pasted file contents, so the rich pass is not used for exact command frequency.</li>
+      <li>Pack lock issues appear in sessions, but this pass did not audit lock implementation in depth because the stronger recurring blockers are naming, reload, and sandbox context.</li>
+    </ul>
+    <h3>Source gaps</h3>
+    <ul>
+      <li>No direct telemetry from Claude or Codex skill-list reload internals.</li>
+      <li>No fresh reproduction of every historical failing command, because running install commands could mutate the local project again.</li>
+      <li>No cross-machine validation that all developers have refreshed away from stale symlink installs.</li>
+    </ul>
+    <div class="question-block" data-section="Rejected Or Lower-Confidence Findings And Source Gaps" data-gate-type="scope-non-goals">
+      <h3>Scope And Non-Goals Gate</h3>
+      <p>Should this report stay focused on diagnosis, or should it also propose implementation details for parser and launcher changes?</p>
+      <label><input type="radio" name="q_scope" value="diagnosis_only"> Keep this artifact as diagnosis only.</label>
+      <label><input type="radio" name="q_scope" value="include_implementation_plan"> Add an implementation plan section before using this analysis downstream.</label>
+      <label><input type="radio" name="q_scope" value="other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="What scope should change?"></textarea>
+      <label><input type="radio" name="q_scope" value="clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear?"></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)"></textarea>
+    </div>
+  </section>
+
+  <section id="implications">
+    <div class="section-header">
+      <h2>Downstream Implications</h2>
+      <div class="feedback" data-section="Downstream Implications">
+        <button type="button" data-value="up">Approve</button>
+        <button type="button" data-value="down">Concern</button>
+        <button type="button" data-value="needs-clarification">Clarify</button>
+        <textarea placeholder="Optional notes for this section"></textarea>
+      </div>
+    </div>
+    <p>If this analysis is accepted, the highest-leverage fixes are small and targeted:</p>
+    <ul>
+      <li>Add a preflight phase to <code>scripts/pack.sh install</code> so all tokens or phrases are validated before any project mutation occurs.</li>
+      <li>Normalize common natural phrases before token splitting, especially <code>targeted skill builder</code> to <code>targeted-skill-builder</code> and content/creator phrases to the intended creator media bundle.</li>
+      <li>Keep <code>scripts/pack.sh which &lt;skill&gt;</code> in missing-skill fallback rules and benchmark those rules so agents recommend the containing pack.</li>
+      <li>Keep the no-hot-reload warning visible in install output and final responses after installs.</li>
+      <li>For Codex, prefer running the repo-local <code>scripts/pack.sh</code> from the target project root, and treat sandbox write errors as permission issues rather than pack logic failures.</li>
+    </ul>
+    <p>The lower-risk path is documentation and benchmark reinforcement only. The higher-leverage path is a parser preflight change, because it prevents partial mutation when a multi-token phrase contains both valid and invalid tokens.</p>
+    <div class="question-block" data-section="Downstream Implications" data-gate-type="candidate-verdict">
+      <h3>Recommended Path Gate</h3>
+      <p>Which remediation direction should this analysis support?</p>
+      <label><input type="radio" name="q_path" value="parser_preflight"> Parser preflight plus phrase normalization.</label>
+      <label><input type="radio" name="q_path" value="docs_and_benchmarks"> Documentation and benchmark reinforcement only.</label>
+      <label><input type="radio" name="q_path" value="no_change"> No code or instruction change for now; treat this as historical diagnosis.</label>
+      <label><input type="radio" name="q_path" value="other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="What path should be taken?"></textarea>
+      <label><input type="radio" name="q_path" value="clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear?"></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)"></textarea>
+    </div>
+  </section>
+
+  <section id="changes">
+    <div class="section-header">
+      <h2>Proposed File Changes</h2>
+      <div class="feedback" data-section="Proposed File Changes">
+        <button type="button" data-value="up">Approve</button>
+        <button type="button" data-value="down">Concern</button>
+        <button type="button" data-value="needs-clarification">Clarify</button>
+        <textarea placeholder="Optional notes for this section"></textarea>
+      </div>
+    </div>
+    <p>This report run proposes the following durable files only:</p>
+    <ul>
+      <li><code>alignment/analyze-sessions-pack-install-issues.html</code>: this review artifact.</li>
+      <li><code>tasks/roadmap.md</code>: current targeted update status.</li>
+      <li><code>tasks/todo.md</code>: current task checklist and review notes.</li>
+    </ul>
+    <p>No pack script changes are included in this report run. Any parser, alias, launcher, or benchmark change should be handled as a separate implementation task after review.</p>
+    <div class="question-block" data-section="Proposed File Changes" data-gate-type="proposed-file-changes" data-target-path="alignment/analyze-sessions-pack-install-issues.html">
+      <h3>Proposed File Changes Gate</h3>
+      <p>Are the proposed file outputs for this analysis acceptable?</p>
+      <label><input type="radio" name="q_files" value="accept_outputs"> Accept the report artifact and task note updates.</label>
+      <label><input type="radio" name="q_files" value="report_only"> Keep only the report artifact; do not persist task-note changes.</label>
+      <label><input type="radio" name="q_files" value="other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="Which files should change instead?"></textarea>
+      <label><input type="radio" name="q_files" value="clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear?"></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)"></textarea>
+    </div>
+    <div class="question-block" data-section="Proposed File Changes" data-gate-type="post-approval-route">
+      <h3>Post-Approval Route Gate</h3>
+      <p>After this diagnosis is approved, should implementation work be held until you explicitly request it?</p>
+      <label><input type="radio" name="q_after" value="hold"> Hold. Do not start implementation from this report without a separate user request.</label>
+      <label><input type="radio" name="q_after" value="prepare_patch_plan"> Prepare a focused implementation plan after approval, but do not patch yet.</label>
+      <label><input type="radio" name="q_after" value="other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="What should happen after approval?"></textarea>
+      <label><input type="radio" name="q_after" value="clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear?"></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)"></textarea>
+    </div>
+  </section>
+
+  <section id="compile" class="compile">
+    <h2>Compile Answers</h2>
+    <p>Answer every required gate question above, then compile the review payload. The YAML includes required gate answers and any optional section feedback you selected.</p>
+    <button id="compileBtn" type="button" disabled>Compile Answers</button>
+    <button id="copyBtn" type="button" class="secondary" style="display:none;">Copy YAML</button>
+    <p id="remaining" class="remaining"></p>
+    <p id="copyStatus" class="copy-status"></p>
+    <textarea id="yamlOutput" readonly></textarea>
+  </section>
+</main>
+
+<script>
+const gateBlocks = Array.from(document.querySelectorAll(".question-block"));
+const compileBtn = document.getElementById("compileBtn");
+const copyBtn = document.getElementById("copyBtn");
+const remaining = document.getElementById("remaining");
+const yamlOutput = document.getElementById("yamlOutput");
+const copyStatus = document.getElementById("copyStatus");
+
+function escapeYaml(value) {
+  const text = (value || "").replace(/\r/g, "").trim();
+  if (!text) return '""';
+  return JSON.stringify(text);
+}
+
+function updateQuestion(block) {
+  const selected = block.querySelector('input[type="radio"]:checked');
+  block.querySelectorAll("textarea").forEach((textarea) => {
+    textarea.classList.remove("visible");
+  });
+  if (!selected) return;
+  if (selected.value === "other") {
+    const other = block.querySelector(".other-input");
+    if (other) other.classList.add("visible");
+  } else if (selected.value === "clarify") {
+    const clarify = block.querySelector(".clarify-input");
+    if (clarify) clarify.classList.add("visible");
+  } else {
+    const notes = block.querySelector(".notes-input");
+    if (notes) notes.classList.add("visible");
+  }
+}
+
+function unansweredBlocks() {
+  return gateBlocks.filter((block) => !block.querySelector('input[type="radio"]:checked'));
+}
+
+function updateCompileState() {
+  const missing = unansweredBlocks();
+  compileBtn.disabled = missing.length > 0;
+  remaining.textContent = missing.length
+    ? `${missing.length} required gate question${missing.length === 1 ? "" : "s"} remaining.`
+    : "All required gate questions are answered.";
+}
+
+gateBlocks.forEach((block) => {
+  block.querySelectorAll('input[type="radio"]').forEach((radio) => {
+    radio.addEventListener("change", () => {
+      updateQuestion(block);
+      updateCompileState();
+    });
+  });
+});
+
+document.querySelectorAll(".feedback").forEach((control) => {
+  const textarea = control.querySelector("textarea");
+  control.querySelectorAll("button").forEach((button) => {
+    button.addEventListener("click", () => {
+      const wasActive = button.classList.contains("active");
+      control.querySelectorAll("button").forEach((other) => other.classList.remove("active"));
+      if (wasActive) {
+        control.dataset.feedback = "";
+        textarea.classList.remove("visible");
+        return;
+      }
+      button.classList.add("active");
+      control.dataset.feedback = button.dataset.value;
+      textarea.classList.add("visible");
+    });
+  });
+});
+
+function getGateAnswer(block) {
+  const selected = block.querySelector('input[type="radio"]:checked');
+  const section = block.dataset.section || "Unknown";
+  const gateType = block.dataset.gateType || "approval";
+  let status = "answered";
+  let notes = "";
+  if (selected.value === "other") {
+    status = "other";
+    const other = block.querySelector(".other-input");
+    notes = other ? other.value : "";
+  } else if (selected.value === "clarify") {
+    status = "needs-clarification";
+    const clarify = block.querySelector(".clarify-input");
+    notes = clarify ? clarify.value : "";
+  } else {
+    const noteInput = block.querySelector(".notes-input");
+    notes = noteInput ? noteInput.value : "";
+  }
+  return {
+    section,
+    gateType,
+    status,
+    answer: selected.value,
+    notes,
+    targetPath: block.dataset.targetPath || ""
+  };
+}
+
+function buildYaml() {
+  const lines = [];
+  lines.push("gate_answers:");
+  gateBlocks.map(getGateAnswer).forEach((answer) => {
+    lines.push(`  - section: ${escapeYaml(answer.section)}`);
+    lines.push(`    gate_type: ${escapeYaml(answer.gateType)}`);
+    lines.push(`    status: ${escapeYaml(answer.status)}`);
+    lines.push(`    answer: ${escapeYaml(answer.answer)}`);
+    if (answer.notes) lines.push(`    notes: ${escapeYaml(answer.notes)}`);
+    if (answer.targetPath) lines.push(`    target_path: ${escapeYaml(answer.targetPath)}`);
+  });
+  const feedbackItems = Array.from(document.querySelectorAll(".feedback"))
+    .filter((control) => control.dataset.feedback)
+    .map((control) => ({
+      section: control.dataset.section || "Unknown",
+      feedback: control.dataset.feedback,
+      notes: control.querySelector("textarea") ? control.querySelector("textarea").value : ""
+    }));
+  lines.push("section_feedback:");
+  if (!feedbackItems.length) {
+    lines.push("  []");
+  } else {
+    feedbackItems.forEach((item) => {
+      lines.push(`  - section: ${escapeYaml(item.section)}`);
+      lines.push(`    feedback: ${escapeYaml(item.feedback)}`);
+      if (item.notes) lines.push(`    notes: ${escapeYaml(item.notes)}`);
+    });
+  }
+  return lines.join("\n");
+}
+
+async function copyYaml(text) {
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      copyStatus.textContent = "YAML copied to clipboard.";
+      return;
+    }
+    yamlOutput.focus();
+    yamlOutput.select();
+    document.execCommand("copy");
+    copyStatus.textContent = "YAML selected and copy attempted.";
+  } catch (error) {
+    yamlOutput.focus();
+    yamlOutput.select();
+    copyStatus.textContent = "Clipboard copy was blocked. The YAML is selected for manual copying.";
+  }
+}
+
+compileBtn.addEventListener("click", async () => {
+  const missing = unansweredBlocks();
+  if (missing.length) {
+    missing[0].scrollIntoView({ behavior: "smooth", block: "center" });
+    updateCompileState();
+    return;
+  }
+  const yaml = buildYaml();
+  yamlOutput.value = yaml;
+  yamlOutput.style.display = "block";
+  copyBtn.style.display = "inline-block";
+  await copyYaml(yaml);
+});
+
+copyBtn.addEventListener("click", () => copyYaml(yamlOutput.value));
+updateCompileState();
+</script>
+</body>
+</html>

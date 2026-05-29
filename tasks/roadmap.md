@@ -1,3 +1,16 @@
+## Current Targeted Update: Pack Install Issue Session Analysis 2026-05-29
+
+**Goal:** Use full available Claude and Codex conversation history plus repository pack-install evidence to explain recurring `pack install` friction and distinguish current fixed issues from remaining workflow risks.
+
+**Acceptance Criteria:**
+- [x] Full available Claude and Codex user histories are parsed for pack install, pack refresh, skill visibility, and missing-skill patterns.
+- [x] Findings distinguish explicit conversation evidence from inference and current repository state.
+- [x] Root causes are grouped by runner impact: Claude, Codex, and shared pack workflow.
+- [x] `alignment/analyze-sessions-pack-install-issues.html` renders the report, evidence matrix, assumptions, and review gates.
+- [x] Verification passes or blockers are documented, and unrelated dirty worktree files are preserved.
+
+**Result:** The analysis points to a compound failure mode: successful filesystem installs do not hot-reload into running sessions, natural-language install phrases are still brittle, older Codex symlink-style installs broke `$` skill discovery until the managed real-file repair, and Codex pack-install runs repeatedly encountered launcher/CWD/sandbox/filesystem blockers.
+
 ## Current Targeted Update: Idea Scope Brief Documentation Refresh 2026-05-28
 
 **Goal:** Update active non-archive documentation and showcase fixtures so `idea-scope-brief` is the current global skill name and stale legacy naming is not user-facing.
