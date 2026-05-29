@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-05-29 — Status routing must follow canonical skill contracts
+
+- A `/codebase-status`-style status answer misordered AFPS next steps by recommending `value-prop-canvas` before `positioning` when ICP and competitive analysis were complete.
+- For business-product research status, consult the canonical route and the last completed research skill's `## Next Steps`/routing contract before recommending a next command.
+- When `research/journey-map.md` is missing after competitive analysis, check whether `customer-lifecycle` is enabled and route to `pack install customer-lifecycle` before `journey-map` if needed.
+- Treat `value-prop-canvas` and `lean-canvas` as optional risk-driven detours only when their stated risk conditions are present, not as required default chain links.
+
 ## 2026-05-28 — Codex `$` visibility can fail on stale symlink skill installs
 
 - A user report that `$` showed unrelated skills instead of installed project skills was confirmed by direct Codex project-local discovery: only two `.codex/skills/*/SKILL.md` files were visible even though `scripts/pack.sh status` listed the full enabled pack set.
