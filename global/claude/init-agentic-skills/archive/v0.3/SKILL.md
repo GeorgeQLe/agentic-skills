@@ -2,13 +2,13 @@
 name: init-agentic-skills
 description: Initialize this agentic-skills checkout on a developer machine by running the repository init script, verify global managed skill installs, uninstall repo-managed installs when requested, and route project-local pack setup to the pack skill. Use when Claude needs to make all global agentic-skills skills available on the current machine, repair stale installs, confirm initialization status, or explain how to enable packs for a project.
 type: ops
-version: v0.4
+version: v0.3
 argument-hint: "[init|status|update|latest|--uninstall]"
 ---
 
 # Init Agentic Skills
 
-Initialize this `agentic-skills` checkout on the current machine by installing global core skills for both Claude and Codex. Active installs are repo-managed directories that expose the canonical `SKILL.md` and exclude `archive/`; copied managed launchers resolve this checkout through `.agentic-skills-managed` provenance. Pinned installs intentionally point at `archive/<version>`. Keep domain packs project-local; use `/pack` from the target project when packs are needed.
+Initialize this `agentic-skills` checkout on the current machine by installing global core skills for both Claude and Codex. Active installs are repo-managed directories that expose the canonical `SKILL.md` and exclude `archive/`; pinned installs intentionally point at `archive/<version>`. Keep domain packs project-local; use `/pack` from the target project when packs are needed.
 
 ## Workflow
 

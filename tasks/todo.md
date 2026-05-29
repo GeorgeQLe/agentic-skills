@@ -1,3 +1,25 @@
+## Current Task - Global Launcher Repo-Root Resolution 2026-05-29
+
+**Goal:** Fix global `pack` and `init-agentic-skills` launchers so copied managed installs resolve the real `agentic-skills` checkout instead of `$HOME`.
+
+**Plan:**
+- [x] Inspect current launchers, skill metadata, archive/changelog state, and layer1 tests.
+- [x] Patch Claude and Codex `pack` launchers to validate source-tree roots first, then `.agentic-skills-managed` provenance roots.
+- [x] Patch Claude and Codex `init-agentic-skills` launchers with the same resolver while preserving `status`, `update/latest`, and init delegation behavior.
+- [x] Archive and bump mirrored `pack` and `init-agentic-skills` skill contracts, then update changelogs.
+- [x] Add focused layer1 regression coverage for copied managed launcher installs across Claude and Codex variants.
+- [x] Refresh global managed installs with `bash init.sh`.
+- [x] Run focused validation, document review notes, commit, and push intended changes.
+
+### Review
+
+- Added source-tree-first and `.agentic-skills-managed` provenance fallback resolution to Claude and Codex `pack` and `init-agentic-skills` launchers.
+- Archived and bumped mirrored contracts: `pack` v0.1 to v0.2 and `init-agentic-skills` v0.3 to v0.4, with changelog entries.
+- Added `tests/layer1/global-launcher-root.test.ts` to cover copied managed launcher installs for both Claude and Codex.
+- Refreshed global managed installs with `bash init.sh`.
+- Validation passed: new launcher layer1 test, init contract layer1 test, `bash -n` for all four launchers, source-tree and installed launcher status commands, `bash scripts/skill-versions.sh --missing`, and `git diff --check`.
+- Installed init launchers now report `/home/georgeqle/projects/tools/dev/agentic-skills` instead of `/home/georgeqle`.
+
 ## Current Task — Pack Install Issue Session Analysis 2026-05-29
 
 **Goal:** Determine why `pack install` has run into recurring issues by analyzing both Claude and Codex conversation history plus current repository install state.

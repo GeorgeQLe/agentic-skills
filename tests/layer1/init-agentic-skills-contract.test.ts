@@ -25,7 +25,10 @@ describe("init-agentic-skills freshness contract", () => {
     for (const contract of contracts) {
       const content = read(contract.skillPath);
 
-      expect(content, `${contract.skillPath} should be bumped`).toContain("version: v0.3");
+      expect(content, `${contract.skillPath} should be bumped`).toContain("version: v0.4");
+      expect(content, `${contract.skillPath} should describe managed provenance`).toContain(
+        ".agentic-skills-managed",
+      );
       expect(content, `${contract.skillPath} should accept update`).toContain("`update` or `latest`");
       expect(content, `${contract.skillPath} should report checkout commit`).toContain(
         "local checkout commit",
@@ -58,6 +61,12 @@ describe("init-agentic-skills freshness contract", () => {
       expect(script, `${contract.scriptPath} should read local preference`).toContain(
         'PREFERENCES_FILE="$HOME/.agentic-skills/preferences.json"',
       );
+      expect(script, `${contract.scriptPath} should resolve from BASH_SOURCE`).toContain(
+        '${BASH_SOURCE[0]}',
+      );
+      expect(script, `${contract.scriptPath} should read managed provenance`).toContain(
+        ".agentic-skills-managed",
+      );
       expect(script, `${contract.scriptPath} should report local commit`).toContain("local commit:");
       expect(script, `${contract.scriptPath} should report remote URL`).toContain("remote URL:");
       expect(script, `${contract.scriptPath} should require update confirmation`).toContain(
@@ -65,7 +74,9 @@ describe("init-agentic-skills freshness contract", () => {
       );
       expect(script, `${contract.scriptPath} should fetch explicitly`).toContain("fetch origin");
       expect(script, `${contract.scriptPath} should merge ff-only`).toContain("merge --ff-only origin/HEAD");
-      expect(script, `${contract.scriptPath} should rerun init`).toContain('bash "$REPO_ROOT/init.sh"');
+      expect(script, `${contract.scriptPath} should rerun init`).toContain(
+        'bash "$REPO_ROOT/$DELEGATE_SCRIPT"',
+      );
       expect(script, `${contract.scriptPath} should branch on latest`).toContain("update|latest");
     }
   });

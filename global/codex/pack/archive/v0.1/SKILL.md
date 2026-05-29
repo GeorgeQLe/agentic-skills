@@ -2,7 +2,7 @@
 name: pack
 description: Manage project-local skill packs, individual pack skill roots, and project designation without installing domain skills globally
 type: ops
-version: v0.2
+version: v0.1
 argument-hint: "[list|status|recommend|install <pack-or-skill>|remove <pack-or-skill>|refresh|which <skill>] or no args for guided setup"
 ---
 
@@ -54,7 +54,6 @@ Use this skill when the user wants to inspect, recommend, install, remove, or re
 - Mixed monorepos may keep a coarse default `project_type` and add `project_scopes` entries for subtrees that need different domain routing.
 - `enabled_packs` is the union of packs available to the repository; `project_scopes[].packs` explains which packs are appropriate for a specific path or glob.
 - Pack installs use repo-managed skill roots that point back to this skill-library repository and exclude archived skill snapshots by default.
-- The bundled launcher resolves copied managed installs through `.agentic-skills-managed` provenance before delegating to the repository-level pack manager.
 - `scripts/pack.sh install`, `remove`, `refresh`, and `set-mode` preserve existing `project_scopes` and `notes` fields when `jq` is available.
 - `scripts/pack.sh install <name>` treats `<name>` as a pack first, then as an individual skill provided by a pack.
 - Pack writes use `.agents/.pack.lock` with owner metadata (`pid`, `started_at`, `command`); if a recorded owner process is gone, the next pack command removes that stale lock automatically.

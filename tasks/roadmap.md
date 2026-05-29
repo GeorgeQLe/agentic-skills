@@ -4845,3 +4845,26 @@ Completed 2026-04-19. Ran each of the three modes through the mode-resolution + 
 ### Non-Functional Requirements
 - No credentials in test fixtures or tracked files
 - Test suites must clean up after themselves (delete test boards/cards)
+
+## Immediate Task - Global Launcher Repo-Root Resolution 2026-05-29
+
+**Objective:** Fix copied global launcher installs so they resolve the real repository checkout through managed-install provenance instead of deriving `$HOME` from the copied skill path.
+
+**Implementation Plan:**
+- [x] Confirm current launcher behavior and existing tests for `pack` and `init-agentic-skills`.
+- [x] Add inline repo-root resolvers to:
+  - `global/claude/pack/scripts/pack.sh`
+  - `global/codex/pack/scripts/pack.sh`
+  - `global/claude/init-agentic-skills/scripts/init-agentic-skills.sh`
+  - `global/codex/init-agentic-skills/scripts/init-agentic-skills.sh`
+- [x] Resolve source-tree roots first using `SKILL_DIR/../../..`; if invalid, read `source=` from `$SKILL_DIR/.agentic-skills-managed` and resolve that source path back to the checkout root.
+- [x] Validate the resolved root contains `scripts/pack.sh` for pack launchers and `init.sh` for init launchers before delegation.
+- [x] Emit a clear non-zero error before `exec` when neither source-tree nor provenance resolution is valid.
+- [x] Archive and bump mirrored skill contracts: `pack` v0.1 to v0.2 and `init-agentic-skills` v0.3 to v0.4, with changelog entries.
+- [x] Add layer1 regression coverage for copied managed launcher installs across Claude and Codex.
+- [x] Refresh global installs with `bash init.sh` and run focused validation plus whitespace checks.
+
+**Acceptance Criteria:**
+- [x] Copied `~/.claude/skills/pack` and `~/.codex/skills/pack` launchers can run `status` from the managed install.
+- [x] Copied `~/.claude/skills/init-agentic-skills` and `~/.codex/skills/init-agentic-skills` launchers report the real checkout path, not `$HOME`.
+- [x] Existing source-tree launcher execution still works.

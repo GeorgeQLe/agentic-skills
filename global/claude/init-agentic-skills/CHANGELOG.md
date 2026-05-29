@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4
+
+- Copied managed installs now resolve the repository checkout via `.agentic-skills-managed` provenance before reporting status, updating, or rerunning `init.sh`.
+
 ## v0.3
 
 - Add explicit `status` output for local checkout, remote URL, and GitHub freshness preference
