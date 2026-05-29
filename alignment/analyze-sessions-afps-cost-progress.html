@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AFPS Cost vs Progress Analysis</title>
+<style>
+:root {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --border: #30363d;
+  --text: #c9d1d9;
+  --text-muted: #8b949e;
+  --accent: #58a6ff;
+  --green: #3fb950;
+  --red: #f85149;
+  --orange: #d29922;
+  --purple: #bc8cff;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+  line-height: 1.55;
+}
+a { color: var(--accent); }
+main { max-width: 1180px; margin: 0 auto; padding: 32px 20px 56px; }
+header {
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 22px;
+  padding-bottom: 18px;
+}
+h1 { margin: 0 0 8px; color: #fff; font-size: 2rem; line-height: 1.15; }
+h2 {
+  color: var(--accent);
+  font-size: 1.35rem;
+  margin: 34px 0 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+h3 { color: #fff; font-size: 1.08rem; margin: 22px 0 8px; }
+p { margin: 0 0 12px; }
+code {
+  background: rgba(110, 118, 129, 0.22);
+  border-radius: 4px;
+  padding: 0.1rem 0.25rem;
+  color: #fff;
+}
+ul { margin: 0 0 14px 20px; padding: 0; }
+li { margin-bottom: 6px; }
+nav {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin: 22px 0;
+}
+nav strong { display: block; color: #fff; margin-bottom: 8px; }
+nav a { display: inline-block; margin: 4px 14px 4px 0; text-decoration: none; }
+nav a:hover { text-decoration: underline; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 14px 0 18px;
+  font-size: 0.93rem;
+}
+th, td {
+  border: 1px solid var(--border);
+  padding: 10px 12px;
+  vertical-align: top;
+  text-align: left;
+}
+th { background: var(--surface); color: var(--accent); }
+tbody tr:nth-child(even) { background: rgba(22, 27, 34, 0.45); }
+.subtitle { color: var(--text-muted); }
+.section-header {
+  display: flex;
+  gap: 14px;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 30px;
+  border-bottom: 1px solid var(--border);
+}
+.section-header h2 { border: 0; margin-top: 0; flex: 1; }
+.feedback {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: flex-end;
+  max-width: 410px;
+  padding-top: 2px;
+}
+.feedback button {
+  background: var(--surface);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 9px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+.feedback button[data-value="up"].active { color: var(--green); border-color: var(--green); }
+.feedback button[data-value="down"].active { color: var(--red); border-color: var(--red); }
+.feedback button[data-value="needs-clarification"].active { color: var(--orange); border-color: var(--orange); }
+.feedback textarea {
+  width: 100%;
+  min-height: 58px;
+  display: none;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px;
+  font: inherit;
+}
+.feedback textarea.visible { display: block; }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 12px;
+  margin: 14px 0 18px;
+}
+.metric {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
+}
+.metric strong {
+  display: block;
+  color: #fff;
+  font-size: 1.55rem;
+  margin-bottom: 2px;
+}
+.metric span { color: var(--text-muted); font-size: 0.9rem; }
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  margin: 14px 0;
+}
+.tag {
+  display: inline-block;
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.high { color: var(--green); background: rgba(63, 185, 80, 0.14); }
+.medium { color: var(--orange); background: rgba(210, 153, 34, 0.14); }
+.low { color: var(--red); background: rgba(248, 81, 73, 0.14); }
+.shared { color: var(--purple); background: rgba(188, 140, 255, 0.14); }
+.codex { color: var(--accent); background: rgba(88, 166, 255, 0.14); }
+.claude { color: var(--green); background: rgba(63, 185, 80, 0.14); }
+blockquote {
+  border-left: 4px solid var(--border);
+  margin: 12px 0;
+  padding: 6px 0 6px 14px;
+  color: var(--text-muted);
+}
+.question-block {
+  background: #1c2333;
+  border: 1px solid var(--purple);
+  border-left-width: 4px;
+  border-radius: 8px;
+  padding: 15px;
+  margin: 18px 0;
+}
+.question-block h3 {
+  color: var(--purple);
+  font-size: 1rem;
+  margin-top: 0;
+}
+.question-block label {
+  display: block;
+  margin: 8px 0;
+  cursor: pointer;
+}
+.question-block input[type="radio"] {
+  margin-right: 8px;
+  accent-color: var(--purple);
+}
+.question-block textarea {
+  width: 100%;
+  min-height: 76px;
+  display: none;
+  margin: 8px 0 10px;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 9px;
+  font: inherit;
+}
+.question-block textarea.visible { display: block; }
+.compile {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 18px;
+  margin-top: 34px;
+}
+.compile button {
+  background: var(--purple);
+  color: #fff;
+  border: 0;
+  border-radius: 6px;
+  padding: 10px 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.compile button.secondary {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  margin-left: 8px;
+}
+.compile button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.remaining { color: var(--text-muted); margin-top: 8px; }
+#yamlOutput {
+  width: 100%;
+  min-height: 220px;
+  margin-top: 14px;
+  display: none;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px;
+  font: 0.9rem ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+.copy-status { color: var(--green); }
+@media (max-width: 760px) {
+  main { padding: 22px 14px 44px; }
+  .section-header { display: block; }
+  .feedback { max-width: none; justify-content: flex-start; margin-bottom: 12px; }
+  table { font-size: 0.86rem; }
+  th, td { padding: 8px; }
+}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>AFPS Cost vs Progress Analysis</h1>
+    <p class="subtitle">Scope: local Claude Code and Codex histories, rich session logs, git history, and repository task evidence from the first explicit AFPS adoption marker through the current request.</p>
+    <p class="subtitle">Analysis window: 2026-05-22 20:58:20 ET to 2026-05-29 17:58:06 ET. Comparison window: the same 6.875-day span immediately before that marker.</p>
+  </header>
+
+  <nav>
+    <strong>Review sections</strong>
+    <a href="#verdict">Verdict</a>
+    <a href="#sources">Source Coverage</a>
+    <a href="#stats">Overview Stats</a>
+    <a href="#cost">Cost Frame</a>
+    <a href="#progress">Progress Evidence</a>
+    <a href="#patterns">Patterns</a>
+    <a href="#skills">Skill Performance</a>
+    <a href="#evidence">Evidence Matrix</a>
+    <a href="#confidence">Confidence</a>
+    <a href="#recommendations">Recommendations</a>
+    <a href="#gaps">Gaps</a>
+    <a href="#changes">Proposed File Changes</a>
+    <a href="#compile">Compile Answers</a>
+  </nav>
+
+  <section id="verdict">
+    <div class="section-header">
+      <h2>Verdict</h2>
+      <div class="feedback" data-section="Verdict">
+        <button type="button" data-value="up">Approve</button>
+        <button type="button" data-value="down">Concern</button>
+        <button type="button" data-value="needs-clarification">Clarify</button>
+        <textarea placeholder="Optional notes for this section"></textarea>
+      </div>
+    </div>
+    <p><strong>Financial ROI is still negative, as expected, because no revenue is visible in the local evidence.</strong> The operating return is much better: since adopting AFPS, the work shifted into explicit route correction, alignment gates, product-path handling, skill-pack reliability, and showcase proof. That is progress toward a reusable operating system, not immediate cash return.</p>
+    <p>The nuance: raw commit count fell compared with the prior benchmark-remediation sprint, but post-AFPS work touched far more unique paths and carried stronger deliberation signals. The pre-window had 276 commits and 47 user prompts, mostly benchmark and fixture churn. The AFPS window had 121 commits, 588 user prompts, 2,065 unique paths touched, 26 explicit AFPS references, 81 analysis/review prompts, and 55 shipping/validation prompts.</p>
+    <p><strong>Subscription utilization is high, but not evenly maxed.</strong> Claude carried most user-visible work: 415 of 588 post-AFPS prompts. Codex carried 173 prompts and 2,106 token-count events, with Pro plan logs showing no cap pressure above 7% primary window and 18% weekly window. In plain terms: the subscriptions are being used heavily, but ChatGPT Pro still had meaningful headroom during this window.</p>
+    <div class="grid">
+      <div class="metric"><strong>588</strong><span>post-AFPS user prompts across Claude and Codex</span></div>
+      <div class="metric"><strong>235</strong><span>post-AFPS sessions</span></div>
+      <div class="metric"><strong>121</strong><span>post-AFPS git commits in this repo</span></div>
+      <div class="metric"><strong>$69-$92</strong><span>estimated subscription spend for this window</span></div>
+      <div class="metric"><strong>458.6M</strong><span>logged token events, including cached context</span></div>
+      <div class="metric"><strong>26</strong><span>explicit AFPS markers in prompt history</span></div>
+    </div>
+    <div class="question-block" data-section="Verdict" data-gate-type="candidate-verdict">
+      <h3>Verdict Gate</h3>
+      <p>Does this headline conclusion match your lived sense of the AFPS period?</p>
+      <label><input type="radio" name="q_verdict" value="accept_operating_return_positive_financial_roi_negative"> Accept: operating return improved while financial ROI stayed negative.</label>
+      <label><input type="radio" name="q_verdict" value="too_positive"> Too positive; the report should weight friction and churn more heavily.</label>
+      <label><input type="radio" name="q_verdict" value="too_negative"> Too negative; the report should weight reusable workflow progress more heavily.</label>
+      <label><input type="radio" name="q_verdict" value="other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="What verdict should replace this one?"></textarea>
+      <label><input type="radio" name="q_verdict" value="clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear?"></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)"></textarea>
+    </div>
+  </section>
+
+  <section id="sources">
+    <div class="section-header">
+      <h2>Source Coverage</h2>
+      <div class="feedback" data-section="Source Coverage">
+        <button type="button" data-value="up">Approve</button>
+        <button type="button" data-value="down">Concern</button>
+        <button type="button" data-value="needs-clarification">Clarify</button>
+        <textarea placeholder="Optional notes for this section"></textarea>
+      </div>
+    </div>
+    <table>
+      <thead><tr><th>Category</th><th>Coverage</th><th>Use in report</th></tr></thead>
+      <tbody>
+        <tr><td>Claude compact history</td><td><code>~/.claude/history.jsonl</code>, 9,799 lines</td><td>User prompt counts, sessions, projects, AFPS marker examples, command usage.</td></tr>
+        <tr><td>Codex compact history</td><td><code>~/.codex/history.jsonl</code>, 1,899 lines</td><td>User prompt counts, sessions, AFPS marker examples, command usage.</td></tr>
+        <tr><td>Codex rich sessions</td><td><code>~/.codex/sessions/**/*.jsonl</code>, 661 files</td><td>Session metadata, cwd enrichment, model/provider, token-count events, plan type, rate-limit utilization.</td></tr>
+        <tr><td>Claude rich project sessions</td><td><code>~/.claude/projects/**/*.jsonl</code>, 481 files</td><td>Deduped request-level token usage by <code>requestId</code>, model mix, service tier, cwd context.</td></tr>
+        <tr><td>Repository git history</td><td><code>git log</code>, <code>git numstat</code>, <code>git diff-tree</code></td><td>Commits, additions/deletions, files touched, file categories, added alignment/test/benchmark artifacts.</td></tr>
+        <tr><td>Repo task/docs evidence</td><td><code>tasks/todo.md</code>, <code>tasks/roadmap.md</code>, <code>tasks/history.md</code>, <code>docs/skill-next-step-contracts.md</code></td><td>AFPS sequence, completed task summaries, known routing and alignment-gate fixes.</td></tr>
+        <tr><td>Subscription pricing</td><td><a href="https://help.openai.com/en/articles/9793128-what-is-chatgpt-pro">OpenAI ChatGPT Pro help</a>, <a href="https://chatgpt.com/pricing/">ChatGPT pricing</a>, <a href="https://support.claude.com/en/articles/11049741-what-is-the-max-plan">Anthropic Claude Max help</a></td><td>Cost range only; no personal billing record was available.</td></tr>
+      </tbody>
+    </table>
+    <p>Explicit evidence is separated from inference below. The most important inference is the subscription spend range: the logs prove usage, not actual billing tier or renewal timing.</p>
+    <div class="question-block" data-section="Source Coverage" data-gate-type="evidence-coverage">
+      <h3>Evidence Coverage Gate</h3>
+      <p>Is the evidence coverage sufficient for a cost-vs-progress operating assessment?</p>
+      <label><input type="radio" name="q_sources" value="sufficient_for_operating_assessment"> Yes, sufficient for operating assessment.</label>
+      <label><input type="radio" name="q_sources" value="needs_billing_or_time_logs"> Needs billing records or time logs before making spend conclusions.</label>
+      <label><input type="radio" name="q_sources" value="needs_project_outcome_weighting"> Needs more project outcome weighting before judging progress quality.</label>
+      <label><input type="radio" name="q_sources" value="other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="What source coverage is missing?"></textarea>
+      <label><input type="radio" name="q_sources" value="clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear?"></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)"></textarea>
+    </div>
+  </section>
+
+  <section id="stats">
+    <div class="section-header">
+      <h2>Overview Stats</h2>
+      <div class="feedback" data-section="Overview Stats">
+        <button type="button" data-value="up">Approve</button>
+        <button type="button" data-value="down">Concern</button>
+        <button type="button" data-value="needs-clarification">Clarify</button>
+        <textarea placeholder="Optional notes for this section"></textarea>
+      </div>
+    </div>
+    <table>
+      <thead><tr><th>Metric</th><th>Pre-window</th><th>AFPS window</th><th>Interpretation</th></tr></thead>
+      <tbody>
+        <tr><td>Date range</td><td>2026-05-15 23:58 ET to 2026-05-22 20:58 ET</td><td>2026-05-22 20:58 ET to 2026-05-29 17:58 ET</td><td>Same 6.875-day span.</td></tr>
+        <tr><td>User prompts</td><td>47</td><td>588</td><td>AFPS period had much higher interactive steering.</td></tr>
+        <tr><td>Sessions</td><td>16</td><td>235</td><td>More work split across focused sessions and runners.</td></tr>
+        <tr><td>Claude prompts</td><td>32</td><td>415</td><td>Claude remained the dominant interactive surface.</td></tr>
+        <tr><td>Codex prompts</td><td>16</td><td>173</td><td>Codex was materially used, especially for analysis and implementation handoffs.</td></tr>
+        <tr><td>Git commits in repo</td><td>276</td><td>121</td><td>Raw commit count fell after the benchmark sprint; this is not a pure progress loss.</td></tr>
+        <tr><td>Unique paths touched</td><td>562</td><td>2,065</td><td>Post-AFPS touched a wider system surface, mostly due pack and skill contract restructuring.</td></tr>
+        <tr><td>Added benchmark files</td><td>139</td><td>2</td><td>Pre-window was benchmark-output heavy; post-window shifted away from report churn.</td></tr>
+        <tr><td>Added test files</td><td>2</td><td>9</td><td>Post-window added more focused regression coverage.</td></tr>
+        <tr><td>Added alignment files</td><td>6</td><td>6</td><td>Alignment review remained a steady workflow primitive.</td></tr>
+        <tr><td>Logged token events</td><td>32.7M</td><td>458.6M</td><td>Includes cached context; useful as a utilization signal, not billing cost.</td></tr>
+      </tbody>
+    </table>
+    <p>Top post-AFPS projects by prompt volume: <code>agentic-skills</code> 256, <code>content</code> 131, <code>calcllm</code> 61, <code>gblock-party-redux</code> 60, <code>projects</code> 31.</p>
+    <p>Top post-AFPS commands: <code>/clear</code> 59, <code>/resume</code> 16, <code>/pack</code> 16, <code>/ship-end</code> 13, <code>/provision-agentic-config</code> 12, <code>$analyze-sessions</code> 8, <code>/investigate</code> 7, <code>$investigate</code> 7, <code>$run</code> 7.</p>
+  </section>
+
+  <section id="cost">
+    <div class="section-header">
+      <h2>Cost Frame</h2>
+      <div class="feedback" data-section="Cost Frame">
+        <button type="button" data-value="up">Approve</button>
+        <button type="button" data-value="down">Concern</button>
+        <button type="button" data-value="needs-clarification">Clarify</button>
+        <textarea placeholder="Optional notes for this section"></textarea>
+      </div>
+    </div>
+    <p>Pricing was checked against official sources during this run. OpenAI documents ChatGPT Pro as a <code>$200</code> Pro plan. Anthropic documents Claude Max web subscriptions as two tiers: <code>$100/month</code> for Max 5x and <code>$200/month</code> for Max 20x. Because the local logs do not reveal your exact Claude Max tier, this report uses a range.</p>
+    <table>
+      <thead><tr><th>Assumption</th><th>Monthly spend</th><th>Prorated 6.875-day spend</th><th>Post-AFPS progress ratios</th></tr></thead>
+      <tbody>
+        <tr><td>ChatGPT Pro + Claude Max 5x</td><td>$300/month</td><td>about $68.75</td><td>8.6 prompts per dollar; 1.8 commits per dollar; 6.7M logged token-events per dollar.</td></tr>
+        <tr><td>ChatGPT Pro + Claude Max 20x</td><td>$400/month</td><td>about $91.66</td><td>6.4 prompts per dollar; 1.3 commits per dollar; 5.0M logged token-events per dollar.</td></tr>
+      </tbody>
+    </table>
+    <p>The better measure is not commits per dollar. It is whether subscription access produced durable operating assets: canonical AFPS routing, alignment gates, tests, install fixes, progress reports, product showcase improvements, and content/devrel planning. On that lens, the spend looks productive, but still not financially recouped.</p>
+    <p>Codex utilization caveat: all post-AFPS Codex token-count events with plan metadata reported <code>plan_type: pro</code>. The highest observed Codex primary-window usage was 7%, and the highest observed weekly usage was 18%. That means Codex Pro was used, but not exhausted.</p>
+  </section>
+
+  <section id="progress">
+    <div class="section-header">
+      <h2>Progress Evidence</h2>
+      <div class="feedback" data-section="Progress Evidence">
+        <button type="button" data-value="up">Approve</button>
+        <button type="button" data-value="down">Concern</button>
+        <button type="button" data-value="needs-clarification">Clarify</button>
+        <textarea placeholder="Optional notes for this section"></textarea>
+      </div>
+    </div>
+    <h3>Durable progress produced after AFPS adoption</h3>
+    <ul>
+      <li>Established AFPS terminology and canonical routing: <code>icp -> competitive-analysis -> journey-map -> positioning -> ux-variations -> ui-interview -> prototype -> uat -> consolidate-variations -> research-roadmap -> spec-interview -> roadmap</code>.</li>
+      <li>Corrected stale routing around competitive analysis, journey-map, positioning, value-prop-canvas, lean-canvas, research-roadmap, and codebase-status.</li>
+      <li>Hardened alignment-page behavior: report-first gates, root <code>alignment/</code> output, archive behavior, browser-open fallback, inline questions, section feedback controls, and dark-mode convention.</li>
+      <li>Improved split-path/product-path handling with <code>research/.progress.yaml</code> product path awareness.</li>
+      <li>Reorganized the skill library into packs and then repaired pack install, skill discovery, real-file managed installs, and launcher root resolution.</li>
+      <li>Updated the G Skillpacks showcase around AFPS, sealed pack interactions, workflow data, generated proof data, and visual polish.</li>
+      <li>Added focused route/version/discovery tests rather than only generating benchmark reports.</li>
+      <li>Started content/devrel planning for recording LexCorp war room products through AFPS.</li>
+    </ul>
+    <h3>Control and deliberation signals</h3>
+    <ul>
+      <li>Post-AFPS prompts included 81 analysis/review prompts and 55 shipping/validation prompts.</li>
+      <li>Post-AFPS bug/friction prompts numbered 44, but most generated concrete contract or test fixes rather than unbounded debugging.</li>
+      <li>Repeated "previous agent produced the plan..." prompts appeared 9 times, showing handoff discipline but also context-transfer overhead.</li>
+      <li><code>/ship-end</code>, <code>/pack</code>, <code>/provision-agentic-config</code>, <code>$analyze-sessions</code>, and <code>$investigate</code> became visible operating primitives.</li>
+    </ul>
+  </section>
+
+  <section id="patterns">
+    <div class="section-header">
+      <h2>Categorized Patterns</h2>
+      <div class="feedback" data-section="Categorized Patterns">
+        <button type="button" data-value="up">Approve</button>
+        <button type="button" data-value="down">Concern</button>
+        <button type="button" data-value="needs-clarification">Clarify</button>
+        <textarea placeholder="Optional notes for this section"></textarea>
+      </div>
+    </div>
+    <table>
+      <thead><tr><th>Pattern</th><th>Count</th><th>Real examples</th><th>Interpretation</th></tr></thead>
+      <tbody>
+        <tr><td>Workflow/skill-system work</td><td>193 prompts</td><td><code>keep it to AFPS</code>; <code>based on our afps workflow, do you see any other routing issues?</code></td><td>AFPS became an explicit operating contract, not a vague preference.</td></tr>
+        <tr><td>Product/showcase work</td><td>155 prompts</td><td><code>can we amend the front end website showcasing the new alignment-first, prototype second skills workflow?</code></td><td>The workflow turned into a product/devrel surface, not only internal process.</td></tr>
+        <tr><td>Analysis/review work</td><td>81 prompts</td><td><code>$analyze-sessions ... how the new alignment first...</code>; <code>$investigate ... benchmark failures?</code></td><td>More time spent checking the system's behavior before pushing onward.</td></tr>
+        <tr><td>Shipping/validation work</td><td>55 prompts</td><td><code>/ship-end</code>, validation caveat notes, benchmark and test prompts.</td><td>The workflow repeatedly closed loops with validation and commits.</td></tr>
+        <tr><td>Bug/friction work</td><td>44 prompts</td><td><code>journey map skill ... doesn't route properly</code>; <code>value-prop-canvas was recommended before positioning?</code></td><td>AFPS exposed routing drift. This is painful but useful because it generated durable fixes.</td></tr>
+        <tr><td>Explicit AFPS markers</td><td>26 prompts</td><td><code>new alignment-first, prototype-second skills workflow</code>; <code>AFPS workflow</code></td><td>The new language is established enough to guide corrections and content planning.</td></tr>
+        <tr><td>Context reset/resume overhead</td><td>84 prompt patterns</td><td><code>/clear</code> 59, <code>/resume</code> 16, prior-agent plan prompts 9.</td><td>High usage came with context-management overhead. This is the clearest remaining efficiency gap.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="skills">
+    <div class="section-header">
+      <h2>Skill Performance Trends</h2>
+      <div class="feedback" data-section="Skill Performance Trends">
+        <button type="button" data-value="up">Approve</button>
+        <button type="button" data-value="down">Concern</button>
+        <button type="button" data-value="needs-clarification">Clarify</button>
+        <textarea placeholder="Optional notes for this section"></textarea>
+      </div>
+    </div>
+    <table>
+      <thead><tr><th>Skill or workflow surface</th><th>Evidence</th><th>Performance read</th></tr></thead>
+      <tbody>
+        <tr><td><code>analyze-sessions</code></td><td>8 post-AFPS Codex invocations plus Claude usage; generated prior reports such as pack install issues and split-path analysis.</td><td>Useful for broad pattern detection. It should not become the default answer for every single incident.</td></tr>
+        <tr><td><code>investigate</code> / <code>session-triage</code></td><td>At least 14 visible post-AFPS investigate invocations across Claude/Codex, plus specific route and benchmark incidents.</td><td>Effective at turning friction into verified fixes. The journey-map and codebase-status fixes are good examples.</td></tr>
+        <tr><td>AFPS business/product skills</td><td>Prompts flagged journey-map, positioning, value-prop-canvas, research-roadmap, and codebase-status route drift.</td><td>The concept is strong, but route contracts required repeated hardening. Current state is better than initial AFPS state.</td></tr>
+        <tr><td><code>pack</code> / install/discovery workflow</td><td><code>/pack</code> 16 post-AFPS prompts; separate pack install issues analysis and launcher/discovery commits.</td><td>Still high-friction, but multiple root causes were closed: stale symlink installs, launcher root resolution, and missing fallback guidance.</td></tr>
+        <tr><td>Alignment-page convention</td><td>Six added alignment files in both pre and post windows; broad commits for inline questions, section feedback, dark mode, and archived replacement behavior.</td><td>Strong progress toward deliberate review. The cost is extra ceremony and extra browser/open/handoff friction.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="evidence">
+    <div class="section-header">
+      <h2>Evidence Matrix</h2>
+      <div class="feedback" data-section="Evidence Matrix">
+        <button type="button" data-value="up">Approve</button>
+        <button type="button" data-value="down">Concern</button>
+        <button type="button" data-value="needs-clarification">Clarify</button>
+        <textarea placeholder="Optional notes for this section"></textarea>
+      </div>
+    </div>
+    <table>
+      <thead><tr><th>Claim</th><th>Evidence</th><th>Inference</th><th>Confidence</th><th>Assumption status</th><th>Decision impact</th></tr></thead>
+      <tbody>
+        <tr><td>AFPS has been adopted as a real operating frame.</td><td>First explicit marker on 2026-05-22 20:58 ET: <code>/series-spec ... new alignment-first, prototype-second skills workflow</code>. Total explicit AFPS markers: 26.</td><td>The acronym and sequence are now repeatedly used to judge skill outputs.</td><td><span class="tag high">High</span></td><td>Evidence-backed.</td><td>Keep AFPS as the default product workflow unless future product evidence contradicts it.</td></tr>
+        <tr><td>Operating progress increased, but raw commit count did not.</td><td>AFPS window: 121 commits, 2,065 unique paths, 162,049 additions, 51,378 deletions. Pre-window: 276 commits, 562 unique paths.</td><td>Post-AFPS work was broader and more structural; pre-window had more small benchmark/report commits.</td><td><span class="tag high">High</span></td><td>Evidence-backed for repo activity; progress quality is interpreted.</td><td>Judge AFPS on durable capability, not commit count alone.</td></tr>
+        <tr><td>The spend was productive but not financially returned.</td><td>Estimated subscription spend for window: $69-$92. No revenue artifact was found or provided.</td><td>Financial ROI is negative; workflow asset return is positive.</td><td><span class="tag medium">Medium</span></td><td>Billing tier and revenue are unverified.</td><td>Use operating ROI language, not financial ROI language.</td></tr>
+        <tr><td>Claude was the primary working surface.</td><td>Post-AFPS compact history: 415 Claude prompts vs 173 Codex prompts.</td><td>Claude carried most interactive steering; Codex supplemented analysis and implementation.</td><td><span class="tag high">High</span></td><td>Evidence-backed.</td><td>Use Codex more deliberately if the goal is to maximize ChatGPT Pro.</td></tr>
+        <tr><td>Codex Pro had headroom.</td><td>Codex rich logs reported <code>plan_type: pro</code>, max primary usage 7%, max weekly usage 18%.</td><td>The Pro subscription was used but not saturated in this window.</td><td><span class="tag high">High</span></td><td>Evidence-backed for logged sessions only.</td><td>Shift batch analyses, validation, and report generation to Codex when appropriate.</td></tr>
+        <tr><td>AFPS improved deliberation but surfaced drift.</td><td>81 analysis/review prompts, 44 bug/friction prompts, route corrections around journey-map/value-prop/codebase-status.</td><td>More controlled work also means more visible contract defects.</td><td><span class="tag high">High</span></td><td>Evidence-backed counts; qualitative interpretation.</td><td>Preserve friction as test cases rather than treating it as wasted effort.</td></tr>
+      </tbody>
+    </table>
+    <div class="question-block" data-section="Evidence Matrix" data-gate-type="research-completeness">
+      <h3>Research Completeness Gate</h3>
+      <p>Which evidence-backed claim needs more support before you would rely on this report?</p>
+      <label><input type="radio" name="q_matrix" value="evidence_sufficient"> Evidence is sufficient for the current operating assessment.</label>
+      <label><input type="radio" name="q_matrix" value="needs_better_progress_quality_measure"> Progress quality needs better scoring beyond commits/prompts/files.</label>
+      <label><input type="radio" name="q_matrix" value="needs_subscription_receipts"> Subscription spend needs actual billing receipts.</label>
+      <label><input type="radio" name="q_matrix" value="other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="Which claim needs support?"></textarea>
+      <label><input type="radio" name="q_matrix" value="clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear?"></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)"></textarea>
+    </div>
+  </section>
+
+  <section id="confidence">
+    <div class="section-header">
+      <h2>Confidence And Assumption Register</h2>
+      <div class="feedback" data-section="Confidence And Assumption Register">
+        <button type="button" data-value="up">Approve</button>
+        <button type="button" data-value="down">Concern</button>
+        <button type="button" data-value="needs-clarification">Clarify</button>
+        <textarea placeholder="Optional notes for this section"></textarea>
+      </div>
+    </div>
+    <table>
+      <thead><tr><th>Item</th><th>Status</th><th>Confidence</th><th>What would change it?</th></tr></thead>
+      <tbody>
+        <tr><td>AFPS start boundary</td><td>First explicit history marker used as boundary.</td><td><span class="tag high">High</span></td><td>A user-provided earlier private adoption marker.</td></tr>
+        <tr><td>Prompt/session counts</td><td>Compact histories parsed fully.</td><td><span class="tag high">High</span></td><td>Hidden/deleted history outside local files.</td></tr>
+        <tr><td>Token utilization</td><td>Rich Claude and Codex logs parsed; cached tokens included.</td><td><span class="tag medium">Medium</span></td><td>Provider billing/usage dashboards or filtered duplicate corrections.</td></tr>
+        <tr><td>Subscription spend</td><td>Estimated from official current pricing range.</td><td><span class="tag medium">Medium</span></td><td>Your exact Claude Max tier and billing dates.</td></tr>
+        <tr><td>Progress quality</td><td>Inferred from commits, task summaries, route fixes, tests, and durable artifacts.</td><td><span class="tag medium">Medium</span></td><td>A scored artifact ledger or user-weighted value rubric.</td></tr>
+        <tr><td>Financial ROI</td><td>No revenue evidence in scoped local artifacts.</td><td><span class="tag medium">Medium</span></td><td>Revenue, leads, subscriber growth, or deal evidence tied to AFPS outputs.</td></tr>
+      </tbody>
+    </table>
+    <div class="question-block" data-section="Confidence And Assumption Register" data-gate-type="assumptions-confidence">
+      <h3>Assumptions Gate</h3>
+      <p>Which assumption should be corrected first?</p>
+      <label><input type="radio" name="q_assumptions" value="no_correction_needed"> No correction needed for this review pass.</label>
+      <label><input type="radio" name="q_assumptions" value="exact_claude_tier"> Correct the Claude Max tier assumption.</label>
+      <label><input type="radio" name="q_assumptions" value="progress_value_weights"> Add user-defined progress value weights.</label>
+      <label><input type="radio" name="q_assumptions" value="other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="What assumption should change?"></textarea>
+      <label><input type="radio" name="q_assumptions" value="clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear?"></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)"></textarea>
+    </div>
+  </section>
+
+  <section id="recommendations">
+    <div class="section-header">
+      <h2>Ranked Recommendations</h2>
+      <div class="feedback" data-section="Ranked Recommendations">
+        <button type="button" data-value="up">Approve</button>
+        <button type="button" data-value="down">Concern</button>
+        <button type="button" data-value="needs-clarification">Clarify</button>
+        <textarea placeholder="Optional notes for this section"></textarea>
+      </div>
+    </div>
+    <table>
+      <thead><tr><th>Rank</th><th>Pattern</th><th>Frequency</th><th>Recommendation type</th><th>Suggested shape</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Context reset/resume overhead</td><td>59 <code>/clear</code>, 16 <code>/resume</code>, 9 prior-agent plan prompts</td><td>Skill or standing instruction</td><td>Use a concise AFPS resumption packet that carries current phase, active path, last validation, and next allowed route.</td></tr>
+        <tr><td>2</td><td>Codex Pro headroom</td><td>Max weekly usage 18%</td><td>Operating habit</td><td>Route batch report generation, broad history analysis, and validation-only checks to Codex when not blocked by UX or Claude-specific tools.</td></tr>
+        <tr><td>3</td><td>AFPS route drift</td><td>44 friction prompts; multiple route-fix commits</td><td>Contract tests</td><td>Keep focused route tests for every changed AFPS skill and audit downstream recommendations after each route change.</td></tr>
+        <tr><td>4</td><td>Progress/cost ambiguity</td><td>This analysis had to reconstruct cost from logs</td><td>Skill/report</td><td>Maintain a lightweight weekly AFPS operating ledger: spend assumption, prompts, sessions, commits, artifacts, validation, revenue/leads.</td></tr>
+        <tr><td>5</td><td>Alignment ceremony cost</td><td>Steady alignment artifact production plus browser-open friction</td><td>Workflow polish</td><td>Keep alignment pages, but improve review answer ingestion so YAML feedback becomes follow-up work without manual re-interpretation.</td></tr>
+      </tbody>
+    </table>
+    <h3>Highest-impact automations by avoided manual prompts</h3>
+    <ul>
+      <li><strong>AFPS resumption packet:</strong> avoids repeated <code>/resume</code>, prior-agent plan paste, and "what next" prompts.</li>
+      <li><strong>AFPS route regression ledger:</strong> turns each route correction into a test and summary, reducing repeated "is this route right?" prompts.</li>
+      <li><strong>Weekly cost-progress ledger:</strong> avoids future one-off ROI reconstruction by preserving spend assumptions and progress counts as the work happens.</li>
+      <li><strong>Codex batch lane checklist:</strong> makes it easier to use ChatGPT Pro headroom for report-only, validation-only, and broad-history analysis work.</li>
+      <li><strong>Alignment answer ingestion:</strong> converts compiled YAML into concrete task deltas and reduces manual approval/handoff prompts.</li>
+    </ul>
+  </section>
+
+  <section id="gaps">
+    <div class="section-header">
+      <h2>Alternatives, Lower-Confidence Findings, And Gaps</h2>
+      <div class="feedback" data-section="Alternatives, Lower-Confidence Findings, And Gaps">
+        <button type="button" data-value="up">Approve</button>
+        <button type="button" data-value="down">Concern</button>
+        <button type="button" data-value="needs-clarification">Clarify</button>
+        <textarea placeholder="Optional notes for this section"></textarea>
+      </div>
+    </div>
+    <h3>Alternatives considered</h3>
+    <ul>
+      <li><strong>Use commit count as progress:</strong> rejected as too crude. Pre-AFPS had more commits because of benchmark churn, while post-AFPS had broader structural changes.</li>
+      <li><strong>Use token usage as value:</strong> rejected as too crude. Tokens show utilization, not quality, and include cached context.</li>
+      <li><strong>Use only task completions:</strong> rejected as incomplete. Many meaningful AFPS fixes are visible in commits and skill contracts before task summaries.</li>
+      <li><strong>Use financial ROI:</strong> rejected for this period. No revenue evidence was in scope.</li>
+    </ul>
+    <h3>Source gaps</h3>
+    <ul>
+      <li>No actual subscription invoices or Claude Max tier were available.</li>
+      <li>No time-tracking or calendar data was available, so human opportunity cost is not included.</li>
+      <li>No product revenue, lead, subscriber, or adoption metric was tied to AFPS outputs.</li>
+      <li>Prompt history does not fully capture background agent work when a session runs long after a single prompt.</li>
+      <li>Local histories may include duplicated or synthetic records despite deduping rich Claude usage by request ID.</li>
+    </ul>
+    <div class="question-block" data-section="Alternatives, Lower-Confidence Findings, And Gaps" data-gate-type="scope-non-goals">
+      <h3>Scope Gate</h3>
+      <p>Should this report stay as an operating assessment, or should it be expanded into a stricter ROI/accounting analysis?</p>
+      <label><input type="radio" name="q_scope" value="stay_operating_assessment"> Stay as operating assessment.</label>
+      <label><input type="radio" name="q_scope" value="expand_to_accounting"> Expand later with billing, time, and revenue records.</label>
+      <label><input type="radio" name="q_scope" value="other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="How should the scope change?"></textarea>
+      <label><input type="radio" name="q_scope" value="clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear?"></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)"></textarea>
+    </div>
+  </section>
+
+  <section id="changes">
+    <div class="section-header">
+      <h2>Proposed File Changes</h2>
+      <div class="feedback" data-section="Proposed File Changes">
+        <button type="button" data-value="up">Approve</button>
+        <button type="button" data-value="down">Concern</button>
+        <button type="button" data-value="needs-clarification">Clarify</button>
+        <textarea placeholder="Optional notes for this section"></textarea>
+      </div>
+    </div>
+    <p>This report-only run proposes one durable file:</p>
+    <ul>
+      <li><code>alignment/analyze-sessions-afps-cost-progress.html</code>: the complete analysis, evidence matrix, assumptions, recommendations, and review gates.</li>
+    </ul>
+    <p>No task files, skill files, tests, or workflow docs are changed by this report. The existing dirty <code>tasks/todo.md</code> expert-review additions were preserved untouched.</p>
+    <div class="question-block" data-section="Proposed File Changes" data-gate-type="proposed-file-changes" data-target-path="alignment/analyze-sessions-afps-cost-progress.html">
+      <h3>Proposed File Changes Gate</h3>
+      <p>Is the proposed report artifact acceptable?</p>
+      <label><input type="radio" name="q_files" value="accept_report_only"> Accept the report-only artifact.</label>
+      <label><input type="radio" name="q_files" value="also_update_task_docs_after_approval"> After approval, also update task docs with a concise review note.</label>
+      <label><input type="radio" name="q_files" value="other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="Which files should change instead?"></textarea>
+      <label><input type="radio" name="q_files" value="clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear?"></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)"></textarea>
+    </div>
+    <div class="question-block" data-section="Proposed File Changes" data-gate-type="post-approval-route">
+      <h3>Post-Approval Gate</h3>
+      <p>After reviewing this report, what should happen with the findings?</p>
+      <label><input type="radio" name="q_after" value="hold_findings"> Hold findings as review-only context.</label>
+      <label><input type="radio" name="q_after" value="turn_into_operating_ledger"> Convert the finding into an AFPS operating ledger workflow after approval.</label>
+      <label><input type="radio" name="q_after" value="turn_into_resumption_improvement"> Convert the finding into a resumption/context-overhead improvement after approval.</label>
+      <label><input type="radio" name="q_after" value="other"> Other / None of the above</label>
+      <textarea class="other-input" placeholder="What should happen after approval?"></textarea>
+      <label><input type="radio" name="q_after" value="clarify"> Need clarification</label>
+      <textarea class="clarify-input" placeholder="What is unclear?"></textarea>
+      <textarea class="notes-input" placeholder="Additional notes (optional)"></textarea>
+    </div>
+  </section>
+
+  <section id="compile" class="compile">
+    <h2>Compile Answers</h2>
+    <p>Answer every required gate question above, then compile the review payload. The YAML includes required gate answers and any optional section feedback you selected.</p>
+    <button id="compileBtn" type="button" disabled>Compile Answers</button>
+    <button id="copyBtn" type="button" class="secondary" style="display:none;">Copy YAML</button>
+    <p id="remaining" class="remaining"></p>
+    <p id="copyStatus" class="copy-status"></p>
+    <textarea id="yamlOutput" readonly></textarea>
+  </section>
+</main>
+
+<script>
+const gateBlocks = Array.from(document.querySelectorAll(".question-block"));
+const compileBtn = document.getElementById("compileBtn");
+const copyBtn = document.getElementById("copyBtn");
+const remaining = document.getElementById("remaining");
+const yamlOutput = document.getElementById("yamlOutput");
+const copyStatus = document.getElementById("copyStatus");
+
+function escapeYaml(value) {
+  const text = (value || "").replace(/\r/g, "").trim();
+  if (!text) return '""';
+  return JSON.stringify(text);
+}
+
+function updateQuestion(block) {
+  const selected = block.querySelector('input[type="radio"]:checked');
+  block.querySelectorAll("textarea").forEach((textarea) => {
+    textarea.classList.remove("visible");
+  });
+  if (!selected) return;
+  if (selected.value === "other") {
+    const other = block.querySelector(".other-input");
+    if (other) other.classList.add("visible");
+  } else if (selected.value === "clarify") {
+    const clarify = block.querySelector(".clarify-input");
+    if (clarify) clarify.classList.add("visible");
+  } else {
+    const notes = block.querySelector(".notes-input");
+    if (notes) notes.classList.add("visible");
+  }
+}
+
+function unansweredBlocks() {
+  return gateBlocks.filter((block) => !block.querySelector('input[type="radio"]:checked'));
+}
+
+function updateCompileState() {
+  const missing = unansweredBlocks();
+  compileBtn.disabled = missing.length > 0;
+  remaining.textContent = missing.length
+    ? `${missing.length} required gate question${missing.length === 1 ? "" : "s"} remaining.`
+    : "All required gate questions are answered.";
+}
+
+gateBlocks.forEach((block) => {
+  block.querySelectorAll('input[type="radio"]').forEach((radio) => {
+    radio.addEventListener("change", () => {
+      updateQuestion(block);
+      updateCompileState();
+    });
+  });
+});
+
+document.querySelectorAll(".feedback").forEach((control) => {
+  const textarea = control.querySelector("textarea");
+  control.querySelectorAll("button").forEach((button) => {
+    button.addEventListener("click", () => {
+      const wasActive = button.classList.contains("active");
+      control.querySelectorAll("button").forEach((other) => other.classList.remove("active"));
+      if (wasActive) {
+        control.dataset.feedback = "";
+        textarea.classList.remove("visible");
+        return;
+      }
+      button.classList.add("active");
+      control.dataset.feedback = button.dataset.value;
+      textarea.classList.add("visible");
+    });
+  });
+});
+
+function getGateAnswer(block) {
+  const selected = block.querySelector('input[type="radio"]:checked');
+  const section = block.dataset.section || "Unknown";
+  const gateType = block.dataset.gateType || "approval";
+  let status = "answered";
+  let notes = "";
+  if (selected.value === "other") {
+    status = "other";
+    const other = block.querySelector(".other-input");
+    notes = other ? other.value : "";
+  } else if (selected.value === "clarify") {
+    status = "needs-clarification";
+    const clarify = block.querySelector(".clarify-input");
+    notes = clarify ? clarify.value : "";
+  } else {
+    const noteInput = block.querySelector(".notes-input");
+    notes = noteInput ? noteInput.value : "";
+  }
+  return {
+    section,
+    gateType,
+    status,
+    answer: selected.value,
+    notes,
+    targetPath: block.dataset.targetPath || ""
+  };
+}
+
+function buildYaml() {
+  const lines = [];
+  lines.push("gate_answers:");
+  gateBlocks.map(getGateAnswer).forEach((answer) => {
+    lines.push(`  - section: ${escapeYaml(answer.section)}`);
+    lines.push(`    gate_type: ${escapeYaml(answer.gateType)}`);
+    lines.push(`    status: ${escapeYaml(answer.status)}`);
+    lines.push(`    answer: ${escapeYaml(answer.answer)}`);
+    if (answer.notes) lines.push(`    notes: ${escapeYaml(answer.notes)}`);
+    if (answer.targetPath) lines.push(`    target_path: ${escapeYaml(answer.targetPath)}`);
+  });
+  const feedbackItems = Array.from(document.querySelectorAll(".feedback"))
+    .filter((control) => control.dataset.feedback)
+    .map((control) => ({
+      section: control.dataset.section || "Unknown",
+      feedback: control.dataset.feedback,
+      notes: control.querySelector("textarea") ? control.querySelector("textarea").value : ""
+    }));
+  lines.push("section_feedback:");
+  if (!feedbackItems.length) {
+    lines.push("  []");
+  } else {
+    feedbackItems.forEach((item) => {
+      lines.push(`  - section: ${escapeYaml(item.section)}`);
+      lines.push(`    feedback: ${escapeYaml(item.feedback)}`);
+      if (item.notes) lines.push(`    notes: ${escapeYaml(item.notes)}`);
+    });
+  }
+  return lines.join("\n");
+}
+
+async function copyYaml(text) {
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      copyStatus.textContent = "YAML copied to clipboard.";
+      return;
+    }
+    yamlOutput.focus();
+    yamlOutput.select();
+    document.execCommand("copy");
+    copyStatus.textContent = "YAML selected and copy attempted.";
+  } catch (error) {
+    yamlOutput.focus();
+    yamlOutput.select();
+    copyStatus.textContent = "Clipboard copy was blocked. The YAML is selected for manual copying.";
+  }
+}
+
+compileBtn.addEventListener("click", async () => {
+  const missing = unansweredBlocks();
+  if (missing.length) {
+    missing[0].scrollIntoView({ behavior: "smooth", block: "center" });
+    updateCompileState();
+    return;
+  }
+  const yaml = buildYaml();
+  yamlOutput.value = yaml;
+  yamlOutput.style.display = "block";
+  copyBtn.style.display = "inline-block";
+  await copyYaml(yaml);
+});
+
+copyBtn.addEventListener("click", () => copyYaml(yamlOutput.value));
+updateCompileState();
+</script>
+</body>
+</html>
