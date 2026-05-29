@@ -13,6 +13,7 @@
     "ship-end": "exec-loop",
     "sync": "gitops",
     "analyze-sessions": "session-analytics",
-    "ship": "exec-loop"
+    "ship": "exec-loop",
+    "expert-review": "code-review"
   }
 }
