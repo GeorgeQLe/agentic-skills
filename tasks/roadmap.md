@@ -12,6 +12,20 @@
 
 **Result:** Verified that Claude Code now has better in-session reload support than the old pack contract said. `/reload-skills` is the direct rescan command, `/clear` starts a new empty-context conversation that can pick up the refreshed registry, live detection applies under existing `.claude/skills` roots, and restart remains the fallback for missing top-level roots or persistent invisibility. Codex remains fresh-session fallback when `$` skill discovery stays stale.
 
+## Current Targeted Update: Alignment Feedback-Only YAML 2026-05-30
+
+**Goal:** Amend the shared HTML alignment-page convention so negative feedback or clarification requests can be compiled into YAML immediately without requiring every approval-gate question to be answered first.
+
+**Acceptance Criteria:**
+- [x] User claim is validated against the active shared alignment convention and generated bundled `ALIGNMENT-PAGE.md` files.
+- [x] The canonical alignment template distinguishes final approval-gate YAML from feedback-only YAML for concerns, rejections, and clarification requests.
+- [x] Feedback-only YAML tells the agent to evaluate the feedback, investigate further when needed, and contextually amend the HTML alignment page before asking for final approval answers.
+- [x] Bundled alignment-page convention files are regenerated from the canonical source; generated drift checks pass.
+- [x] Focused regression coverage verifies the new feedback-only contract across active alignment-page skills.
+- [x] Review notes are recorded, intended changes are committed, and pushed on `master` while unrelated dirty work is preserved.
+
+**Result:** Confirmed and fixed the practical feedback-loop gap. Alignment pages now provide an early feedback-only YAML path for section concerns or clarification requests, while preserving the final all-gates approval YAML path. Generated bundles and bespoke inline contracts were updated, archived/versioned where needed, and covered by layer1 regression tests.
+
 ## Current Targeted Update: Product-Path Research Scoping 2026-05-30
 
 **Goal:** Make research-path-aware skills resolve `research/{product-slug}/` product paths before code/app structure exists, exclude archived paths from active targeting, and clarify product-line archive/restore/activate/promote operations.

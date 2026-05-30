@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.7 - 2026-05-30
+
+- Added feedback-only YAML alignment-page handling so section concerns and clarification requests can be sent before final gate answers.
+
 ## v0.6 - 2026-05-30
 
 - Added product-path scope resolution that prefers non-archived `research/{slug}/` paths and active manifest paths before code or monorepo hints.

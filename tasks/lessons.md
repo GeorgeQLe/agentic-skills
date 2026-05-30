@@ -1,5 +1,12 @@
 # Lessons
 
+## 2026-05-30 — Alignment feedback needs an early YAML path
+
+- A user clarified that negative feedback or clarification needs on an HTML alignment page should not be blocked behind answering every final approval-gate question.
+- Alignment pages need two YAML paths: feedback-only YAML for section concerns/questions that asks the agent to investigate and amend the page, and final approval YAML after required gates are answered.
+- Section feedback with `down` or `needs-clarification` should be enough to compile actionable YAML before final approval; agents should treat that YAML as a revision request, not as approval.
+- When updating alignment feedback behavior, edit the canonical `CLAUDE.md` alignment-convention block, regenerate bundled `ALIGNMENT-PAGE.md` files, and add drift/regression coverage.
+
 ## 2026-05-29 — Status routing must follow canonical skill contracts
 
 - A `/codebase-status`-style status answer misordered AFPS next steps by recommending `value-prop-canvas` before `positioning` when ICP and competitive analysis were complete.

@@ -1,5 +1,9 @@
 # research-roadmap changelog (claude)
 
+## v0.7 - 2026-05-30
+
+- Added feedback-only YAML alignment-page handling so section concerns and clarification requests can be sent before final gate answers.
+
 ## v0.5 - 2026-05-27
 
 - Handle plural `active_paths` manifest field with backward compatibility for singular `active_path`

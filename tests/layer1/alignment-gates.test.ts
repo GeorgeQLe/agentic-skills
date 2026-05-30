@@ -179,6 +179,25 @@ describe("alignment page gate contract", () => {
     }
   });
 
+  it("allows feedback-only YAML before final gate answers are complete", () => {
+    expect(activeAlignmentSkillFiles.length).toBeGreaterThan(10);
+    for (const path of activeAlignmentSkillFiles) {
+      const content = conventionText(path);
+      expect(content, `${path} feedback-only contract`).toContain("**Feedback-only YAML contract.**");
+      expect(content, `${path} compile feedback`).toContain("Compile Feedback");
+      expect(content, `${path} early enable`).toContain("even if required inline gate questions are unanswered");
+      expect(content, `${path} revision status`).toContain("`feedback_status: revision-request`");
+      expect(content, `${path} not approved`).toContain("`approval_status: not-approved`");
+      expect(content, `${path} unanswered questions`).toContain("`unanswered_required_questions`");
+      expect(content, `${path} requested action`).toContain("`requested_agent_action`");
+      expect(content, `${path} investigate action`).toContain("investigate-and-revise");
+      expect(content, `${path} clarification action`).toContain("clarify-before-approval");
+      expect(content, `${path} do not require gates for feedback`).toContain(
+        "Do not require the user to answer every gate before sending negative feedback or clarification needs",
+      );
+    }
+  });
+
   it("leaves skip-list skills excluded from alignment requirements", () => {
     for (const path of skippedSkills) {
       const content = read(path);

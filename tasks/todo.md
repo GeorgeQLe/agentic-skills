@@ -23,11 +23,21 @@
 **Goal:** Update the shared HTML alignment-page convention so users can send negative section feedback or clarification requests as YAML immediately, before answering every final approval question.
 
 **Plan:**
-- [ ] Validate the current contract against the user report and identify the owning source.
-- [ ] Update `CLAUDE.md`'s canonical alignment convention for feedback-only YAML and agent response behavior.
-- [ ] Regenerate bundled `ALIGNMENT-PAGE.md` files from the canonical convention.
-- [ ] Add focused regression coverage for feedback-only compilation and no forced final answers before concerns are handled.
-- [ ] Run focused validation, record review notes, commit, and push intended changes.
+- [x] Validate the current contract against the user report and identify the owning source.
+- [x] Update `CLAUDE.md`'s canonical alignment convention for feedback-only YAML and agent response behavior.
+- [x] Regenerate bundled `ALIGNMENT-PAGE.md` files from the canonical convention.
+- [x] Add focused regression coverage for feedback-only compilation and no forced final answers before concerns are handled.
+- [x] Run focused validation, record review notes, commit, and push intended changes.
+
+### Review
+
+- Confirmed the user report: the existing convention added per-section feedback controls, but the only YAML compilation path still waited for every required final gate answer.
+- Updated the canonical `CLAUDE.md` alignment convention with a separate feedback-only YAML contract, `feedback_status: revision-request`, `approval_status: not-approved`, unanswered-question reporting, requested agent actions, and revision handling for negative feedback or clarification needs.
+- Regenerated 262 bundled `ALIGNMENT-PAGE.md` convention files from the canonical source.
+- Updated 16 bespoke inline alignment-page contracts that do not use the generated bundle, with archive snapshots, version bumps, and changelog entries.
+- Added layer1 coverage to require feedback-only YAML across active alignment-page skills before final gate answers are complete.
+- Refreshed Skills Showcase generated data after the skill version and proof-artifact changes.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 layer1/alignment-gates.test.ts`, `node scripts/upgrade-alignment-page.mjs --dry-run`, `bash scripts/skill-versions.sh --missing`, `scripts/validate-skills-showcase-data.sh`, and `git diff --check`.
 
 ## Current Task — Codebase Status AFPS Routing 2026-05-29
 
