@@ -41,6 +41,14 @@ die() {
   exit 1
 }
 
+# jq is a hard dependency for any command that rewrites .agents/project.json.
+# write_project_file rebuilds the file from jq-gated readers; without jq those
+# readers return empty and silently drop project_scopes/notes/pinned_versions/
+# enabled_skills/skill_updates. Fail fast instead of losing user-authored state.
+require_jq_write() {
+  command -v jq >/dev/null 2>&1 || die "jq required for write operations. Install with: brew install jq (macOS) or apt install jq (Debian/Ubuntu)."
+}
+
 release_project_lock() {
   if [[ "$PROJECT_LOCKED" == true ]]; then
     rm -f "$PROJECT_LOCK_DIR/pid" "$PROJECT_LOCK_DIR/started_at" "$PROJECT_LOCK_DIR/command" 2>/dev/null || true
@@ -790,6 +798,7 @@ case "$cmd" in
   recommend) recommend ;;
   install)
     acquire_project_lock "$@"
+    require_jq_write
     shift
     install_packs=()
     install_skills=()
@@ -830,6 +839,7 @@ case "$cmd" in
     ;;
   remove)
     acquire_project_lock "$@"
+    require_jq_write
     shift
     remove_packs=()
     remove_skills=()
@@ -875,6 +885,7 @@ case "$cmd" in
     ;;
   refresh)
     acquire_project_lock "$@"
+    require_jq_write
     refresh
     print_session_reload_notice
     ;;
@@ -884,21 +895,25 @@ case "$cmd" in
     ;;
   set-update-mode)
     acquire_project_lock "$@"
+    require_jq_write
     shift
     set_update_mode "${1:-}"
     ;;
   pin)
     acquire_project_lock "$@"
+    require_jq_write
     shift
     pin_skill "${1:-}" "${2:-}"
     ;;
   unpin)
     acquire_project_lock "$@"
+    require_jq_write
     shift
     unpin_skill "${1:-}"
     ;;
   set-mode)
     acquire_project_lock "$@"
+    require_jq_write
     shift
     set_mode "${1:-}"
     ;;
