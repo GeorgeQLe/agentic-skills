@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-05-30 — Code Review High #3: approved-plan.sh dirty-path safety gate
+
+- Both dirty-scan sites in `scripts/approved-plan.sh` (`cmd_check`, `cmd_draft`) parsed `git status --porcelain` with `awk '{print $2}'`, which returns the OLD name for renames (allowlist bypass) and truncates spaced paths.
+- Added `scan_dirty_paths()` using `git status --porcelain -z` read directly into a bash array (command substitution strips NULs); strips the 3-char `XY ` prefix and, for `R`/`C` entries, resolves to the NEW path while consuming the trailing old-name NUL field. Both scans now call it. Reordered `cmd_draft` so the git-repo validity check (`git rev-parse HEAD`) runs before the dirty scan.
+- No shell-test harness exists in the repo, so verified via scripted repro (4/4 PASS, `.agents/` gitignored to mirror real packet handling): rename-to-non-allowlisted caught, spaced path reported in full, rename-to-allowlisted passes, non-git dir errors before the dirty scan. `bash -n` + `git diff --check` clean; no `awk '{print $2}'` remaining.
+- Shipped in commit `4c4c9946`. Key files: `scripts/approved-plan.sh`, `tasks/todo.md`.
+
 ## 2026-05-27 — Fix SealedPack tear gesture not opening drawer
 
 - Fixed three bugs in `SealedPack.tsx` that prevented the BottomSheet drawer from opening after tearing a card pack:
