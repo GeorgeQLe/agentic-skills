@@ -2892,3 +2892,9 @@ Resolved all 10 findings from `/expert-review`:
 - Reduced post-tear drawer open delay: `pendingOpenTimer` fallback from 1000ms to 600ms, `onLayoutAnimationComplete` pendingOpen timeout from 200ms to 80ms.
 - Fixed `duration: 3` (debug slow-mo values) to `duration: 0.3` in both `BottomSheet.tsx` transitions and `SealedPack.tsx` layout transition.
 - Added backlog items: update pack list with correct skill counts, and drawer close card collapse animation (reverse fan-out).
+
+## 2026-05-29 — Skill-install drift detection + track-latest/auto-refresh optionality
+
+- Implemented the full drift plan (committed `8ee086d9`): enriched the `.agentic-skills-managed` marker with `source_version` + `source_sha`, added a shared drift engine (`skill_install_status`) in `scripts/skill-links.sh`, `pack.sh doctor` (read-only) + `set-update-mode`, a global `init-agentic-skills doctor`, opt-in `SessionStart` drift hook (`scripts/skill-drift-hook.sh`) with warn/auto modes, and docs. Bumped `sync` v0.3→v0.4 and `init-agentic-skills` v0.4→v0.5 (archives + CHANGELOGs, claude+codex). Root-cause fix: `sync_skill_link` now converts an existing managed copy into the frozen symlink on `pin`.
+- Hardened `write_project_file` against jq-absent data loss (expert-review Critical): added `require_jq_write()` and gated all 7 mutating `pack.sh` dispatch cases. Verified jq-absent `install` dies with the canonical message and leaves `project.json` intact; read-only `doctor` still runs.
+- All 9 plan verification items passed; committed the `/expert-review` backlog (`tasks/todo.md`) generated this date with the pack.sh Critical item marked resolved.
