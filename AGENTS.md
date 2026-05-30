@@ -1,4 +1,4 @@
-<!-- provision-agentic-config v0.4 -->
+<!-- provision-agentic-config v0.5 -->
 ## Workflow Orchestration
 
 ### 1. Plan Mode Default
@@ -42,8 +42,9 @@
 
 ### Missing Skill Fallback
 - When a skill invocation fails because the skill is not found, run `scripts/pack.sh which <skill-name>` to check if the skill exists in an available pack.
-- If found in an uninstalled pack, recommend `/pack install <pack>` and note that a new session is needed.
-- If not found in any pack, suggest `/skills` or `/skills search <keyword>`.
+- If found in an uninstalled pack, recommend `$pack install <skill>` for just that skill or `$pack install <pack>` for the full pack, and note the post-install reload path: Claude Code `/reload-skills` first, `/clear` can pick up the refreshed registry, restart if the top-level `.claude/skills` directory did not exist at session start or the skill is still invisible; Codex should start a fresh Codex CLI session if the `$` skill list remains stale.
+- If found in an installed pack, suggest the same reload path to pick up the local skill roots.
+- If not found in any pack, suggest `$skills` or `$skills search <keyword>`.
 
 ### Project Pack Command Resolution
 - If a user invokes a command-like skill such as `$benchmark-test-skill design-system` and the leading command is not in the injected session skill list, search project-local packs before falling back to the trailing argument as the active skill.

@@ -2,7 +2,7 @@
 name: targeted-skill-builder
 description: Build or update one specific skill from a concrete workflow gap, correction, or repeated bad recommendation
 type: execution
-version: v0.1
+version: v0.2
 argument-hint: "[workflow gap, correction, skill name, or capability request]"
 ---
 
@@ -84,7 +84,7 @@ Produce a concise report with:
 - Existing-skill overlap findings.
 - Files created or changed, if any, including generated showcase assets when skill metadata or behavior changed.
 - Validation results.
-- Reload note: after `./init.sh`, tell the user to start a fresh Claude Code or Codex CLI/session if the new or changed skill is not visible yet.
+- Reload note: after `./init.sh`, tell the user the runner-specific reload path. Claude Code should run `/reload-skills` first; `/clear` starts a new empty-context conversation and can pick up the refreshed registry; restart if the top-level `.claude/skills` directory did not exist at session start or the skill is still invisible. Codex should start a fresh Codex CLI session if the `$` skill list remains stale.
 
 When an external project session needs an existing shared skill amended, output a prompt like:
 

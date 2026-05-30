@@ -1,0 +1,107 @@
+import { readFileSync, readdirSync, statSync } from "node:fs";
+import { dirname, join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
+import { describe, expect, it } from "vitest";
+
+const TESTS_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const REPO_ROOT = resolve(TESTS_ROOT, "..");
+const repoPath = (path: string) => resolve(REPO_ROOT, path);
+const read = (path: string) => readFileSync(repoPath(path), "utf8");
+
+const reloadExpectations = [
+  "/reload-skills",
+  "/clear",
+  "top-level `.claude/skills` directory did not exist at session start",
+  "fresh Codex CLI session",
+  "`$` skill list remains stale",
+];
+
+describe("skill availability reload language", () => {
+  it("tightens targeted skill-dev reload notes in both mirrors", () => {
+    const targets = [
+      { path: "packs/skill-dev/claude/targeted-skill-builder/SKILL.md", version: "version: v0.2" },
+      { path: "packs/skill-dev/codex/targeted-skill-builder/SKILL.md", version: "version: v0.2" },
+      { path: "packs/skill-dev/claude/create-local-skill/SKILL.md", version: "version: v0.1" },
+      { path: "packs/skill-dev/codex/create-local-skill/SKILL.md", version: "version: v0.1" },
+    ];
+
+    for (const target of targets) {
+      const content = read(target.path);
+
+      expect(content, `${target.path} should be version bumped`).toContain(target.version);
+      for (const expected of reloadExpectations) {
+        expect(content, `${target.path} should contain ${expected}`).toContain(expected);
+      }
+    }
+  });
+
+  it("keeps provisioned missing-skill fallback guidance runner-aware", () => {
+    const surfaces = [
+      { path: "CLAUDE.md", command: "/pack", skills: "/skills" },
+      { path: "AGENTS.md", command: "$pack", skills: "$skills" },
+      { path: "global/claude/provision-agentic-config/SKILL.md", command: "/pack", skills: "/skills" },
+      { path: "global/codex/provision-agentic-config/SKILL.md", command: "$pack", skills: "$skills" },
+    ];
+
+    for (const surface of surfaces) {
+      const content = read(surface.path);
+
+      expect(content, `${surface.path} provision version`).toContain(
+        "<!-- provision-agentic-config v0.5 -->",
+      );
+      expect(content, `${surface.path} should route exact skill installs`).toContain(
+        `${surface.command} install <skill>`,
+      );
+      expect(content, `${surface.path} should route full pack installs`).toContain(
+        `${surface.command} install <pack>`,
+      );
+      expect(content, `${surface.path} should suggest skills browse`).toContain(surface.skills);
+      for (const expected of reloadExpectations) {
+        expect(content, `${surface.path} should contain ${expected}`).toContain(expected);
+      }
+    }
+
+    for (const path of [
+      "global/claude/provision-agentic-config/SKILL.md",
+      "global/codex/provision-agentic-config/SKILL.md",
+    ]) {
+      expect(read(path), `${path} skill version`).toContain("version: v0.5");
+    }
+  });
+
+  it("rejects stale active non-archive reload phrases", () => {
+    const stalePatterns = [
+      /fresh Claude Code or Codex session/,
+      /fresh Claude Code \/ Codex session/,
+      /Codex \/ Claude Code may need a fresh session/,
+      /new session is needed/,
+      /Codex desktop sessions may list newly created skills only after the active skill registry refreshes/,
+    ];
+    const roots = ["global", "packs", "scripts", "README.md", "CLAUDE.md", "AGENTS.md"];
+    const files: string[] = [];
+
+    const collect = (absolutePath: string) => {
+      const relativePath = absolutePath.slice(REPO_ROOT.length + 1);
+      if (relativePath.split("/").includes("archive")) return;
+
+      const stats = statSync(absolutePath);
+      if (stats.isDirectory()) {
+        for (const entry of readdirSync(absolutePath)) collect(join(absolutePath, entry));
+        return;
+      }
+
+      files.push(relativePath);
+    };
+
+    for (const root of roots) collect(repoPath(root));
+
+    const offenders = files.flatMap((file) => {
+      const content = read(file);
+      return stalePatterns
+        .filter((pattern) => pattern.test(content))
+        .map((pattern) => `${file}: ${pattern.source}`);
+    });
+
+    expect(offenders).toEqual([]);
+  });
+});

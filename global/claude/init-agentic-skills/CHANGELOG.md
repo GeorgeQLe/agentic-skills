@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.6
+
+- Replace generic fresh-session guidance with the runner-specific skill reload path: Claude Code `/reload-skills`, `/clear`, then restart fallback; Codex fresh CLI session when `$` discovery remains stale.
+- Update the `update`/`latest` launcher completion notice with the same reload guidance.
+
 ## v0.5
 
 - Add `doctor` subcommand: read-only global skill-install drift report against canonical `global/<tool>` sources via the marker `source_sha`.

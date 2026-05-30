@@ -2,7 +2,7 @@
 name: provision-agentic-config
 description: Provision workflow orchestration and agent conventions into project CLAUDE.md and AGENTS.md
 type: ops
-version: v0.5
+version: v0.4
 ---
 
 # Install Workflow Orchestration
@@ -27,12 +27,12 @@ Use this skill when the user wants the repository's `CLAUDE.md` and `AGENTS.md` 
    - `AGENTS.md`: `Provisioned artifact: ./AGENTS.md. Source: workflow.md. Verification: block appears exactly once.`
    - If `workflow.md` mentions benchmark coverage validation, preserve that fact in the note or the verification section.
    - Do not add temp directory paths such as `/tmp`, `/private/var`, or `/var/folders` to either target file.
-7. Each block begins with `<!-- provision-agentic-config v0.5 -->`. When replacing an existing block, update this comment to the current version. The `/sync` skill uses this comment to detect stale provisioning.
+7. Each block begins with `<!-- provision-agentic-config v0.4 -->`. When replacing an existing block, update this comment to the current version. The `/sync` skill uses this comment to detect stale provisioning.
 
 ## Required Claude Block
 
 ````md
-<!-- provision-agentic-config v0.5 -->
+<!-- provision-agentic-config v0.4 -->
 ## Workflow Orchestration
 
 ### 1. Plan Mode Default
@@ -75,15 +75,9 @@ Use this skill when the user wants the repository's `CLAUDE.md` and `AGENTS.md` 
 - Go fix failing tests without being told how
 
 ### Missing Skill Fallback
-- When a skill invocation fails because the skill is not found, run `scripts/pack.sh which <skill-name>` to check if the skill exists in an available pack.
-- If found in an uninstalled pack, recommend `/pack install <skill>` for just that skill or `/pack install <pack>` for the full pack, and note the post-install reload path: Claude Code `/reload-skills` first, `/clear` can pick up the refreshed registry, restart if the top-level `.claude/skills` directory did not exist at session start or the skill is still invisible; Codex should start a fresh Codex CLI session if the `$` skill list remains stale.
-- If found in an installed pack, suggest the same reload path to pick up the local skill roots.
-- If not found in any pack, suggest `/skills` or `/skills search <keyword>`.
-
-### Project Pack Command Resolution
-- If a user invokes a command-like skill such as `/benchmark-test-skill design-system` and the leading command is not in the injected session skill list, search project-local packs before falling back to the trailing argument as the active skill.
-- Check `packs/*/claude/<command>/SKILL.md` and pack metadata such as `packs/*/PACK.md`; project-local pack skills may exist in this repository even when they are not visible in the active session list.
-- In this repository, `/benchmark-test-skill` lives under `packs/agentic-skills-bench/claude/benchmark-test-skill/SKILL.md`, and `design-system` is its target skill argument.
+- If a user invokes a command-like skill such as `$benchmark-test-skill design-system` and the leading command is not in the injected session skill list, search project-local packs before falling back to the trailing argument as the active skill.
+- Check `packs/*/codex/*/SKILL.md` and pack metadata such as `packs/*/PACK.md`; project-local pack skills may exist in this repository even when they are not visible in the active session list.
+- For any missing skill, run `scripts/pack.sh which <skill-name>` to locate the providing pack. If found in an uninstalled pack, recommend `$pack install <pack>`. If not found in any pack, suggest `$skills` or `$skills search <keyword>`.
 
 ### Prompt History
 - On every skill invocation, before substantive work, create `prompts/<skill-slug>/` if it does not exist.
@@ -142,7 +136,7 @@ fi
 ## Required AGENTS Block
 
 ````md
-<!-- provision-agentic-config v0.5 -->
+<!-- provision-agentic-config v0.4 -->
 ## Workflow Orchestration
 
 ### 1. Plan Mode Default
@@ -187,7 +181,7 @@ fi
 ### Missing Skill Fallback
 - If a user invokes a command-like skill such as `$benchmark-test-skill design-system` and the leading command is not in the injected session skill list, search project-local packs before falling back to the trailing argument as the active skill.
 - Check `packs/*/codex/*/SKILL.md` and pack metadata such as `packs/*/PACK.md`; project-local pack skills may exist in this repository even when they are not visible in the active session list.
-- For any missing skill, run `scripts/pack.sh which <skill-name>` to locate the providing pack. If found in an uninstalled pack, recommend `$pack install <skill>` for just that skill or `$pack install <pack>` for the full pack, and note the post-install reload path: Claude Code `/reload-skills` first, `/clear` can pick up the refreshed registry, restart if the top-level `.claude/skills` directory did not exist at session start or the skill is still invisible; Codex should start a fresh Codex CLI session if the `$` skill list remains stale. If found in an installed pack, suggest the same reload path. If not found in any pack, suggest `$skills` or `$skills search <keyword>`.
+- For any missing skill, run `scripts/pack.sh which <skill-name>` to locate the providing pack. If found in an uninstalled pack, recommend `$pack install <pack>`. If not found in any pack, suggest `$skills` or `$skills search <keyword>`.
 
 ### Prompt History
 - On every skill invocation, before substantive work, create `prompts/<skill-slug>/` if it does not exist.

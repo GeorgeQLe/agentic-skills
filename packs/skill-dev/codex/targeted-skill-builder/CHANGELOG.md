@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2 - 2026-05-30
+
+- Tightened post-`./init.sh` skill visibility guidance to distinguish Claude Code `/reload-skills`, `/clear`, and restart fallback behavior from Codex fresh CLI session fallback.
+
 ## v0.0
 
 - Archived previous skill contract.

@@ -1,5 +1,9 @@
 # provision-agentic-config Changelog
 
+## v0.5
+
+- Tightened generated missing-skill fallback guidance to recommend runner-specific pack install commands and post-install reload paths: Claude Code `/reload-skills`, `/clear`, then restart fallback; Codex fresh session when `$` discovery remains stale.
+
 ## v0.4
 
 - Add Prompt History to generated `CLAUDE.md` and `AGENTS.md` blocks

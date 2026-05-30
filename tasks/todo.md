@@ -1,3 +1,26 @@
+## Current Task - Skill Availability Reload Language 2026-05-30
+
+**Goal:** Implement the prior plan to align active reload guidance across `init-agentic-skills`, `targeted-skill-builder`, and provisioned agent config source blocks without rewriting historical archives.
+
+**Plan:**
+- [x] Record prompt history and task plan for this reload-language pass.
+- [x] Inspect active mirrored skills, canonical provision blocks, launchers, and tests.
+- [x] Archive and bump changed active skills before editing behavior.
+- [x] Update Claude/Codex reload wording in active skills, launcher output, provisioned root blocks, and focused tests.
+- [x] Run focused layer1 tests, touched launcher `bash -n`, `bash scripts/skill-versions.sh --missing`, and `git diff --check`.
+- [x] Add review notes, commit, and push intended changes on the primary branch.
+
+### Review
+
+- Updated mirrored `init-agentic-skills` skills to v0.6 and launcher completion output to use Claude Code `/reload-skills`, `/clear`, and restart fallback language plus Codex fresh CLI session fallback.
+- Updated mirrored `targeted-skill-builder` to v0.2 and the active `create-local-skill` stale reload notes to v0.1 after the active stale-phrase scan exposed them.
+- Updated mirrored `provision-agentic-config` to v0.5 and refreshed root `CLAUDE.md` / `AGENTS.md` missing-skill fallback blocks with runner-specific `/pack` and `$pack` install guidance.
+- Archived all changed active `SKILL.md` files before version bumps and added changelog entries for the new versions.
+- Added `tests/layer1/skill-reload-language.test.ts` and updated init/prompt-history contract tests for the v0.5/v0.6 wording.
+- Refreshed Skills Showcase generated metadata after skill version changes.
+- Validation passed: focused layer1 tests for init/provision/reload guidance, `bash -n` for both init launchers, `bash scripts/skill-versions.sh --missing`, `scripts/validate-skills-showcase-data.sh`, and `git diff --check`.
+- Unrelated dirty newsletter/database work under `apps/skills-showcase/src/` was preserved and left out of this task.
+
 ## Current Task — Harden newsletter subscribe (Code Review High #2) 2026-05-30
 
 **Goal:** Resolve Code Review High #2 (`tasks/todo.md` → Code Review Fixes → High, second item): the public `subscribe` tRPC mutation has no rate limiting and its `ON CONFLICT (email) DO UPDATE` lets an attacker overwrite `source_page`/`consent_text_version` for any guessed already-subscribed email (consent-integrity defect + unbounded-row/enumeration abuse). This is the next incomplete, highest-priority unchecked item after High #1 (admin session auth, completed 2026-05-30). Items #3–#6 are script/test-infra and remain out of scope.

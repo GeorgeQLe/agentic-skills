@@ -25,7 +25,7 @@ describe("init-agentic-skills freshness contract", () => {
     for (const contract of contracts) {
       const content = read(contract.skillPath);
 
-      expect(content, `${contract.skillPath} should be bumped`).toContain("version: v0.5");
+      expect(content, `${contract.skillPath} should be bumped`).toContain("version: v0.6");
       expect(content, `${contract.skillPath} should describe managed provenance`).toContain(
         ".agentic-skills-managed",
       );
@@ -44,8 +44,17 @@ describe("init-agentic-skills freshness contract", () => {
         "fast-forward-only",
       );
       expect(content, `${contract.skillPath} should rerun init after update`).toContain("rerun `init.sh`");
-      expect(content, `${contract.skillPath} should warn about fresh sessions`).toContain(
-        "fresh Claude Code or Codex session",
+      expect(content, `${contract.skillPath} should recommend Claude reload-skills`).toContain(
+        "/reload-skills",
+      );
+      expect(content, `${contract.skillPath} should mention clear-context reload`).toContain(
+        "`/clear` starts a new empty-context conversation",
+      );
+      expect(content, `${contract.skillPath} should mention missing top-level skills dir`).toContain(
+        "top-level `.claude/skills` directory did not exist at session start",
+      );
+      expect(content, `${contract.skillPath} should recommend Codex fresh CLI session`).toContain(
+        "fresh Codex CLI session",
       );
       expect(content, `${contract.skillPath} should keep packs local`).toContain(
         "Do not install `packs/*` globally",
@@ -76,6 +85,18 @@ describe("init-agentic-skills freshness contract", () => {
       expect(script, `${contract.scriptPath} should merge ff-only`).toContain("merge --ff-only origin/HEAD");
       expect(script, `${contract.scriptPath} should rerun init`).toContain(
         'bash "$REPO_ROOT/$DELEGATE_SCRIPT"',
+      );
+      expect(script, `${contract.scriptPath} should recommend Claude reload-skills`).toContain(
+        "/reload-skills first",
+      );
+      expect(script, `${contract.scriptPath} should mention clear-context reload`).toContain(
+        "/clear starts a new empty-context conversation",
+      );
+      expect(script, `${contract.scriptPath} should mention missing top-level skills dir`).toContain(
+        "top-level .claude/skills directory did not exist at session start",
+      );
+      expect(script, `${contract.scriptPath} should recommend Codex fresh CLI session`).toContain(
+        "fresh Codex CLI session",
       );
       expect(script, `${contract.scriptPath} should branch on latest`).toContain("update|latest");
     }

@@ -65,7 +65,7 @@ describe("prompt history convention", () => {
       const content = read(path);
 
       expect(content, `${path} provisioned block version`).toContain(
-        "<!-- provision-agentic-config v0.4 -->",
+        "<!-- provision-agentic-config v0.5 -->",
       );
     }
 
@@ -73,7 +73,7 @@ describe("prompt history convention", () => {
       "global/claude/provision-agentic-config/SKILL.md",
       "global/codex/provision-agentic-config/SKILL.md",
     ]) {
-      expect(read(path), `${path} skill version`).toContain("version: v0.4");
+      expect(read(path), `${path} skill version`).toContain("version: v0.5");
     }
   });
 });

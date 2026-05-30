@@ -2,7 +2,7 @@
 name: create-local-skill
 description: Scaffold a new user-local skill in ~/.codex/skills (and optionally ~/.claude/skills), then offer to promote it to a personal fork of agentic-skills
 type: execution
-version: v0.1
+version: v0.0
 ---
 
 # Create Local Skill
@@ -54,7 +54,7 @@ Scaffold a new **user-local** skill directly into `~/.codex/skills/<name>/` (and
 
 4. Optionally mirror to `~/.claude/skills/<name>/SKILL.md` (Claude frontmatter convention — no `Invoke as` line; add `argument-hint` if relevant).
 
-5. Report created paths and remind the user of the runner-specific reload path. Claude Code should run `/reload-skills` first; `/clear` starts a new empty-context conversation and can pick up the refreshed registry; restart if the top-level `.claude/skills` directory did not exist at session start or the skill is still invisible. Codex should start a fresh Codex CLI session if the `$` skill list remains stale.
+5. Report created paths. Remind the user that Codex / Claude Code may need a fresh session to see the new skill.
 
 6. Ask: "Would you like to promote this skill to your personal fork of agentic-skills?"
 

@@ -2,7 +2,7 @@
 name: init-agentic-skills
 description: Initialize this agentic-skills checkout on a developer machine by running the repository init script, verify global managed skill installs, uninstall repo-managed installs when requested, and route project-local pack setup to the pack skill. Use when Claude needs to make all global agentic-skills skills available on the current machine, repair stale installs, confirm initialization status, or explain how to enable packs for a project.
 type: ops
-version: v0.6
+version: v0.5
 argument-hint: "[init|status|doctor|update|latest|--uninstall]"
 ---
 
@@ -24,15 +24,13 @@ Initialize this `agentic-skills` checkout on the current machine by installing g
    - Do not install `packs/*` globally.
    - In the project that needs domain workflows, run `/pack` for guided setup or `/pack install <pack-or-skill>` for an explicit pack or individual pack skill.
    - If a project already has `.agents/project.json`, use `/pack refresh` after this global initialization to recreate local pack skill roots.
-4. If the active session still cannot see a newly installed or refreshed skill, report the skill-visibility reload path:
-   - Claude Code: run `/reload-skills` first; `/clear` starts a new empty-context conversation and can pick up the refreshed registry; restart if the top-level `.claude/skills` directory did not exist at session start or the skill is still invisible.
-   - Codex: start a fresh Codex CLI session if the `$` skill list remains stale.
+4. If the active session still cannot see a newly installed skill, tell the user to start a fresh Claude Code or Codex session.
 5. For `update` / `latest` mode:
    - Confirm before running commands that fetch, pull, or reinstall.
    - Fetch GitHub freshness, compare the local checkout to `origin/HEAD`, and update only with a fast-forward-only operation such as `git pull --ff-only` or an equivalent `git fetch` + `git merge --ff-only`.
    - If the update cannot fast-forward cleanly, stop and report the exact reason without rebasing, merging, stashing, or force-resetting.
    - After a successful fast-forward, rerun `init.sh`.
-   - Warn that Claude Code should use `/reload-skills` first, then `/clear` or restart if needed, and that Codex should start a fresh Codex CLI session if the `$` skill list remains stale.
+   - Warn that a fresh Claude Code or Codex session may be needed to see refreshed skill instructions.
 6. First-run drift preferences (init / clone setup):
    - Default policy is **track-latest** (installed skills follow canonical; drift is observable). The two prompts below are **opt-in and off by default**, so the explicit-control default stays out of the box.
    - Only prompt when the preference keys are still unset. Check with `scripts/init-agentic-skills.sh show-prefs`; skip silently when both are already set.

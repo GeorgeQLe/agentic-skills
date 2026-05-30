@@ -1,3 +1,16 @@
+## Current Targeted Update: Skill Availability Reload Language 2026-05-30
+
+**Goal:** Tighten active skill-availability reload guidance so global init, targeted skill building, and provisioned missing-skill fallback language distinguish Claude Code reload paths from Codex fresh-session behavior.
+
+**Acceptance Criteria:**
+- [x] Mirrored `init-agentic-skills` active contracts and launchers replace generic "fresh Claude Code or Codex session" guidance with Claude Code `/reload-skills`, `/clear`, and restart fallback language plus Codex fresh CLI session fallback.
+- [x] Mirrored `targeted-skill-builder` active contracts use the same Claude/Codex split after `./init.sh`.
+- [x] Provisioned `CLAUDE.md` and `AGENTS.md` source blocks, plus root generated files when parity is expected, mention `/pack` or `$pack` and the tightened reload guidance.
+- [x] Changed active `SKILL.md` files are archived before version bumps and changelogs document the reload-language update.
+- [x] Focused layer1 tests cover init, targeted skill builder, provisioned missing-skill fallback, and active non-archive stale phrase prevention.
+- [x] Touched launchers pass `bash -n`; focused tests, `bash scripts/skill-versions.sh --missing`, and `git diff --check` pass.
+- [x] Review notes are recorded; intended changes are committed and pushed on the primary branch.
+
 ## Current Targeted Update: Pack Install Artifact Shipping Boundary 2026-05-30
 
 **Goal:** Make shipping skills commit pack project designation changes while treating generated local skill roots as recreation artifacts that must not be staged or committed.

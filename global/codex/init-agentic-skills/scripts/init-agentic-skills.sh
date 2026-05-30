@@ -189,7 +189,9 @@ update_latest() {
   git -C "$REPO_ROOT" rev-parse --short origin/HEAD | sed 's/^/origin HEAD: /'
   git -C "$REPO_ROOT" merge --ff-only origin/HEAD
   bash "$REPO_ROOT/$DELEGATE_SCRIPT"
-  echo "Refresh complete. Start a fresh Claude Code or Codex session if updated skills are not visible."
+  echo "Refresh complete."
+  echo "Claude Code: run /reload-skills first; /clear starts a new empty-context conversation and can pick up the refreshed registry. Restart Claude Code if the top-level .claude/skills directory did not exist at session start or the skill is still invisible."
+  echo 'Codex: start a fresh Codex CLI session if the $ skill list remains stale.'
 }
 
 case "${1:-}" in
