@@ -1,3 +1,45 @@
+## Current Task — Harden newsletter subscribe (Code Review High #2) 2026-05-30
+
+**Goal:** Resolve Code Review High #2 (`tasks/todo.md` → Code Review Fixes → High, second item): the public `subscribe` tRPC mutation has no rate limiting and its `ON CONFLICT (email) DO UPDATE` lets an attacker overwrite `source_page`/`consent_text_version` for any guessed already-subscribed email (consent-integrity defect + unbounded-row/enumeration abuse). This is the next incomplete, highest-priority unchecked item after High #1 (admin session auth, completed 2026-05-30). Items #3–#6 are script/test-infra and remain out of scope.
+
+**Execution Profile:** serial, main-agent (single step). No `### Execution Profile` was attached to this backlog item → default serial. Per the ship-one-step handoff: implement only this step, validate it, then run `/ship` when done.
+
+### Two sub-problems
+
+**A. Consent-overwrite (clear-cut, do first).** Today `insertSubscriber` (`apps/skills-showcase/src/db/index.ts:21-30`) runs `ON CONFLICT (email) DO UPDATE SET updated_at = now(), source_page = EXCLUDED.source_page, consent_text_version = EXCLUDED.consent_text_version`. Anyone who guesses a subscribed email can rewrite that subscriber's recorded consent metadata. Fix: **do not overwrite consent metadata on conflict.** Preserve the original `source_page` and `consent_text_version`; on conflict only bump `updated_at` (and re-activate `status = 'active'` if it was previously unsubscribed, so legitimate re-subscribe still works). New SQL:
+```
+ON CONFLICT (email) DO UPDATE SET
+  updated_at = now(),
+  status = 'active'
+RETURNING *
+```
+This keeps the first-recorded consent immutable while still returning the row (DO NOTHING would return no row and break the function's `rows[0]` contract). Confirm `status` defaults/column exists in `src/db/migrate.sql` and `src/db/schema.ts` before relying on re-activation; if `status` semantics differ, fall back to `SET updated_at = now()` only.
+
+**B. Rate limiting (has a design decision — flag for approval).** `subscribe` (`apps/skills-showcase/src/trpc/newsletter.ts:6-24`) is an unauthenticated mutation. The app is stateless serverless (Vercel + Neon, no Redis) — same "no new infrastructure" constraint that shaped High #1. The request IP is available on Vercel via the `x-forwarded-for` header, which `createContext` (`apps/skills-showcase/src/trpc/init.ts:5-15`) can read from `opts.req.headers` and add to `Context` (alongside the existing cookie read). **Recommended approach: DB-backed sliding-window limit** — the only option that actually holds across serverless cold starts:
+  - Reuse the existing `newsletter_subscribers` table: before insert, reject (TRPCError `TOO_MANY_REQUESTS`) if the count of rows created in the last N seconds exceeds a small threshold. This needs an indexed `created_at` query; it limits **global** signup rate, not per-IP, so it is coarse. OR
+  - Add a minimal `newsletter_subscribe_attempts(ip text, created_at timestamptz default now())` table + a sliding-window `COUNT(*) WHERE ip = $1 AND created_at > now() - interval 'N seconds'` check (per-IP, more precise, one new migration). **This is the key decision: per-IP DB table (precise, +1 migration) vs. reuse existing table for a coarse global limit (no migration) vs. best-effort in-memory per-instance limiter (no infra, but resets on cold start and is per-lambda).**
+  - Whichever is chosen: extract the first `x-forwarded-for` hop in `createContext`, thread it into the `subscribe` resolver, and keep the existing Zod input + try/catch so DB failures still surface the generic "Unable to process subscription" message.
+
+### Files to modify
+- `apps/skills-showcase/src/db/index.ts` — `insertSubscriber` conflict clause (sub-problem A); possibly a new `countRecentSubscribeAttempts(ip, windowSeconds)` / `recordSubscribeAttempt(ip)` helper (sub-problem B, mechanism-dependent).
+- `apps/skills-showcase/src/db/migrate.sql` (+ a numbered migration if the project tracks them) — only if option B uses a new `newsletter_subscribe_attempts` table.
+- `apps/skills-showcase/src/trpc/init.ts` — `createContext` extracts client IP from `x-forwarded-for`; add `ip` to `Context` type.
+- `apps/skills-showcase/src/trpc/newsletter.ts` — `subscribe` enforces the rate limit before `insertSubscriber`, throws `TOO_MANY_REQUESTS` when exceeded.
+- `apps/skills-showcase/src/db/index.test.ts` (or co-located) and `apps/skills-showcase/src/trpc/newsletter.test.ts` — assert consent fields are NOT overwritten on conflict, status re-activates, and rate-limit rejects past threshold while allowing under it.
+
+### Gotchas / conventions (from the High #1 session)
+- **Test infra:** the repo-default Node `v20.17.0` cannot run the suite (vite8/vitest4 need ≥20.19 → `std-env` ESM error). Run tests/typecheck with Node 25: `export PATH="$HOME/.nvm/versions/node/v25.3.0/bin:$PATH"`. The pnpm lockfile also omits the `@rolldown/binding-linux-x64-gnu` native binding; if a fresh `pnpm install` strips it, re-place it via `npm pack @rolldown/binding-linux-x64-gnu@1.0.0` into `node_modules/.pnpm/rolldown@1.0.0/node_modules/@rolldown/` + a top-level `node_modules/@rolldown/` symlink. These are pre-existing infra items #3–#6, not this step's concern.
+- DB tests mock `@/db` with `vi.mock` (see `newsletter.test.ts:4-8`) — pure-logic rate-limit/consent assertions can be unit-tested without a live Neon connection by asserting on the mocked calls; SQL-shape changes in `db/index.ts` are validated by typecheck + the existing mock contract.
+- Keep the `subscribe` try/catch so DB errors still return the generic message; only the rate-limit rejection should be a distinct `TOO_MANY_REQUESTS`.
+
+### Acceptance criteria
+- `pnpm --dir apps/skills-showcase test` → green (Node 25), including new consent-preservation + rate-limit assertions.
+- `pnpm --dir apps/skills-showcase typecheck` → clean.
+- Manual reasoning: (1) a conflicting insert no longer changes `source_page`/`consent_text_version`; (2) repeated rapid `subscribe` calls past the threshold are rejected with `TOO_MANY_REQUESTS`; (3) a normal first-time subscribe still succeeds.
+- Vercel auto-deploys on push; flag in the ship handoff. If option B adds a migration, the ship/deploy note must call out running it against Neon (`src/db/migrate.sql`).
+
+---
+
 ## Current Task - Pack Install Artifact Shipping Boundary 2026-05-30
 
 **Goal:** Update shipping contracts so `.agents/project.json` ships as pack configuration while generated `.claude/skills/**` and `.codex/skills/**` roots stay local recreation artifacts.
