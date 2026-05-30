@@ -1,3 +1,41 @@
+## Current Task — Fix approved-plan.sh dirty-path safety gate (Code Review High #3) 2026-05-30
+
+**Goal:** Resolve Code Review High #3 (`tasks/todo.md` → `## Code Review Fixes` → `### High`, the `scripts/approved-plan.sh` item, currently the next unchecked High after #1 admin-auth and #2 subscribe-hardening, both shipped 2026-05-30). The dirty-path safety gate parses `git status --porcelain` with `awk '{print $2}'`, which (a) returns the **OLD** name for renames (`R old -> new` yields `old`, so the new path is never allowlist-checked → a renamed out-of-scope dirty file silently bypasses the gate — a safety hole) and (b) truncates any path containing a space to its first field (false-fail / wrong path on legitimate spaced filenames). Fix both parse sites and reorder the draft repo-validity check.
+
+**Execution Profile:** serial, main-agent (single step). No `### Execution Profile` attached → default serial. Ship-one-step handoff: implement only this step, validate it, then run `/ship` when done.
+
+### What to change (`scripts/approved-plan.sh`)
+There are **two identical** dirty-scan sites that must both be fixed the same way:
+- Line ~136 — inside the verify/staleness check (allowlist from `.allowed_dirty_paths` packet field).
+- Line ~298 — inside `cmd_draft` (allowlist from `allow_dirty` array).
+
+For each:
+1. Replace `git status --porcelain 2>/dev/null | awk '{print $2}'` with **NUL-delimited** parsing that strips the fixed 3-char status prefix and resolves rename/copy arrows to the **NEW** path. Concretely: read `git -C "$PROJECT_ROOT" status --porcelain -z`, split on NUL, drop the 2-char status + 1 space prefix (`cut -c4-` equivalent / `${entry:3}`), and for `R`/`C` status codes (rename/copy) the porcelain `-z` format emits the entry as `XY new\0old\0` — so the path immediately after the prefix is already the NEW name, but the FOLLOWING NUL field is the old name and must be consumed/skipped so it is not treated as its own dirty entry. Implement a small read loop that, when the status code starts with `R` or `C`, reads one extra NUL field (the old name) and discards it. Keep the existing per-path allowlist `case "$path" in $glob)` matching and the `fail "stale: dirty path outside allowlist: $path"` behavior unchanged.
+2. Preserve existing semantics for the common `XY path` case (modified/added/untracked/deleted): the path is everything after the 3-char prefix, spaces included, no quoting mangling (porcelain `-z` does NOT quote or escape paths, unlike non-`-z` porcelain which quotes paths with spaces — this is exactly why `-z` fixes the space-truncation bug).
+3. **`cmd_draft` reorder:** move `cmd_draft`'s git-repo validity check (the `git rev-parse`/repo check) to run BEFORE its dirty scan, so a non-repo or bad `PROJECT_ROOT` fails clearly instead of the dirty scan producing confusing output first. Confirm the exact current order by reading `cmd_draft` (starts ~line 264) before editing.
+
+Consider factoring the shared NUL dirty-scan into a single helper function (e.g. `collect_dirty_paths()` that prints NEW paths one-per-line, NUL-safe internally) called from both sites, to avoid divergence — but only if it stays readable and matches the file's existing function style. If a helper complicates more than it helps, fix both sites inline identically.
+
+### Files to modify
+- `scripts/approved-plan.sh` — the two dirty-scan sites (~136, ~298) and the `cmd_draft` check reorder (~264+).
+- Test coverage: find the existing approved-plan test (search `tests/` for `approved-plan`); add cases for (1) a renamed out-of-scope file is **caught** by the gate (not bypassed), (2) a dirty path containing a space is reported in full (not truncated), (3) an in-allowlist rename still passes. If approved-plan has no existing test harness, add a focused `bats`-style or shell-driven test only if the repo already has a pattern for testing shell scripts; otherwise document manual verification commands in the Review and rely on a scripted repro.
+
+### Gotchas / conventions
+- `awk '{print $2}'` appears at BOTH line 136 and 298 — grep `awk '{print \$2}'` to confirm you fixed both; do not leave one site on the old parser.
+- Non-`-z` `git status --porcelain` quotes paths with special chars/spaces (wraps in double quotes with C-style escapes); `-z` does NOT — so `-z` parsing must NOT try to unquote. Bash `read -d ''` reads NUL-delimited fields.
+- This script is a safety gate used by `/exec`/`/approved-plan` flows — a regression here weakens the dirty-tree guard, so test the bypass case explicitly.
+- `require_jq_write` already gates the mutating commands (Critical item, shipped); don't disturb it.
+
+### Acceptance criteria
+- Both dirty-scan sites use NUL-delimited parsing resolving renames to the NEW path; no remaining `awk '{print $2}'` in the dirty scans (`grep` clean).
+- A renamed out-of-scope dirty file is correctly caught by the allowlist gate (the core safety fix), verified by a test or scripted repro.
+- A dirty path with a space is reported in full, not truncated.
+- `cmd_draft` validates the git repo before scanning dirty paths.
+- `bash -n scripts/approved-plan.sh` clean; any existing approved-plan tests pass; `git diff --check` clean.
+- Mark the High item at `tasks/todo.md` `## Code Review Fixes → ### High` (`scripts/approved-plan.sh:136, 298`) as `[x]` with a resolution sub-bullet, then `/ship`.
+
+---
+
 ## Current Task - Skill Availability Reload Language 2026-05-30
 
 **Goal:** Implement the prior plan to align active reload guidance across `init-agentic-skills`, `targeted-skill-builder`, and provisioned agent config source blocks without rewriting historical archives.
