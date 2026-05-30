@@ -14,6 +14,7 @@
     "sync": "gitops",
     "analyze-sessions": "session-analytics",
     "ship": "exec-loop",
-    "expert-review": "code-review"
+    "expert-review": "code-review",
+    "investigate": "code-debug"
   }
 }
