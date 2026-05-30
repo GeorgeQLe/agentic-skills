@@ -17,7 +17,7 @@ describe("pack skill reload guidance", () => {
     for (const skillPath of skillPaths) {
       const content = read(skillPath);
 
-      expect(content, `${skillPath} should be bumped`).toContain("version: v0.3");
+      expect(content, `${skillPath} should be bumped`).toContain("version: v0.4");
       expect(content, `${skillPath} should mention Claude live detection`).toContain(
         "Claude Code watches skill files under existing `.claude/skills` roots",
       );

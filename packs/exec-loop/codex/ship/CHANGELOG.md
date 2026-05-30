@@ -6,6 +6,14 @@
 
 # ship changelog (codex)
 
+## v0.4 - 2026-05-30
+
+- Added the pack install artifact boundary: ship `.agents/project.json` when pack configuration changes, but leave generated `.claude/skills/**` and `.codex/skills/**` roots uncommitted.
+
+## v0.3 - 2026-05-27
+
+- Added the non-trivial mutation quality gate, ship manifest requirements, Skills Showcase freshness refresh, and correction-boundary checks.
+
 ## v0.2 - 2026-05-27
 
 - Allow `none` routing when all planned work is genuinely complete instead of forcing a route to `$exec`

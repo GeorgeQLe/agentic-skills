@@ -2,7 +2,7 @@
 name: ship-end
 description: Wrap up the current session — update docs, commit, and push
 type: shipping
-version: v0.2
+version: v0.1
 argument-hint: "[--no-deploy]"
 ---
 
@@ -35,7 +35,6 @@ Wrap up the current session: mark progress, commit, and push.
 
 4. **Ship the session changes:**
    - Use the `/commit-and-push-by-feature` workflow: group changes into logical feature/function buckets, use conventional commit messages, land the resulting commits on `main` or `master`, and push them there when the workflow succeeds.
-   - **Pack install artifact boundary:** Treat `.agents/project.json` as the committed project designation. When pack configuration changed, include `.agents/project.json` in the shipping boundary. Treat `.claude/skills/**` and `.codex/skills/**` as generated local skill roots recreated by `/pack`, `$pack`, or `scripts/pack.sh refresh`; generated skill roots must not be staged or committed. If those roots are untracked, leave them uncommitted and report them as generated local artifacts. If any path under those roots is already tracked or modified as a tracked file, stop unless the current task explicitly includes repository hygiene to untrack or ignore generated skill roots.
 
 5. **Report session summary:**
    - What was accomplished

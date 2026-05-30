@@ -2,7 +2,7 @@
 name: commit-and-push-by-feature
 description: Commit and push all changes to GitHub grouped by logical feature/function buckets with conventional commit messages
 type: shipping
-version: v0.1
+version: v0.0
 argument-hint:
 ---
 
@@ -14,7 +14,6 @@ Commit and push all changes to GitHub grouped by feature/function.
 
 1. **Inspect changes:**
    - Run `git status` and `git diff` to understand all changes.
-   - **Pack install artifact boundary:** Treat `.agents/project.json` as the committed project designation. When pack configuration changed, bucket and commit `.agents/project.json`. Treat `.claude/skills/**` and `.codex/skills/**` as generated local skill roots recreated by `/pack`, `$pack`, or `scripts/pack.sh refresh`; generated skill roots must not be staged or committed. If those roots are untracked, leave them uncommitted and report them as generated local artifacts. If any path under those roots is already tracked or modified as a tracked file, stop unless the current task explicitly includes repository hygiene to untrack or ignore generated skill roots.
 
 2. **Identify logical buckets:**
    - Group changes into feature/function buckets (e.g., "auth", "api", "ui", "tests", "docs", "build", "refactor"). Prefer 2–6 commits total unless the change set is tiny.
@@ -31,7 +30,7 @@ Commit and push all changes to GitHub grouped by feature/function.
        - `chore(<scope>): <summary>` for tooling/config
      - Include a short body only if it clarifies intent or risk.
      - Verify `git diff --cached` matches the bucket before committing.
-   - If there are uncommitted leftover changes at the end, bucket them; do not leave a dirty working tree. Do not bucket generated local skill roots under `.claude/skills/**` or `.codex/skills/**`, even in final leftover cleanup.
+   - If there are uncommitted leftover changes at the end, bucket them; do not leave a dirty working tree.
 
 4. **Branch handling:**
    - Determine the primary branch: prefer `main`; if it does not exist, use `master`. If neither exists, stop and explain the blocker.

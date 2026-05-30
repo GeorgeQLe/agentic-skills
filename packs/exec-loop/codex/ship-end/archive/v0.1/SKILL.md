@@ -2,7 +2,7 @@
 name: ship-end
 description: "Wrap up the current session — update docs, commit, and push"
 type: shipping
-version: v0.2
+version: v0.1
 argument-hint: "[--no-deploy]"
 ---
 
@@ -43,7 +43,6 @@ Use this skill when the user wants the current session wrapped up cleanly.
    - Skip ledger recording and staleness reporting — those are for standalone `$deploy` invocations only.
    - If `$deploy` reports failure, report the error. Do not retry.
 7. Commit and push using the `commit-and-push-by-feature` workflow. That workflow must land the resulting commits on `main` or `master`, not on an existing feature branch.
-7b. **Pack install artifact boundary:** Treat `.agents/project.json` as the committed project designation. When pack configuration changed, include `.agents/project.json` in the shipping boundary. Treat `.claude/skills/**` and `.codex/skills/**` as generated local skill roots recreated by `/pack`, `$pack`, or `scripts/pack.sh refresh`; generated skill roots must not be staged or committed. If those roots are untracked, leave them uncommitted and report them as generated local artifacts. If any path under those roots is already tracked or modified as a tracked file, stop unless the current task explicitly includes repository hygiene to untrack or ignore generated skill roots.
 8. Report:
    - What was accomplished
    - Validation status — explicitly state whether any failing tests are expected (red phase: tests before implementation) or unexpected (regressions/bugs), and call out any warnings as fixed, accepted, or unresolved

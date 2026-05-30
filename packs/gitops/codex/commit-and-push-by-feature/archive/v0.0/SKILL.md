@@ -2,7 +2,7 @@
 name: commit-and-push-by-feature
 description: Commit and push all changes to GitHub grouped by logical feature/function buckets with conventional commit messages
 type: shipping
-version: v0.1
+version: v0.0
 ---
 
 # Commit And Push By Feature
@@ -14,7 +14,6 @@ Use this skill when the user wants current changes committed and pushed in sensi
 ## Workflow
 
 1. Inspect `git status` and relevant diffs to understand the change set.
-1a. **Pack install artifact boundary:** Treat `.agents/project.json` as the committed project designation. When pack configuration changed, bucket and commit `.agents/project.json`. Treat `.claude/skills/**` and `.codex/skills/**` as generated local skill roots recreated by `/pack`, `$pack`, or `scripts/pack.sh refresh`; generated skill roots must not be staged or committed. If those roots are untracked, leave them uncommitted and report them as generated local artifacts. If any path under those roots is already tracked or modified as a tracked file, stop unless the current task explicitly includes repository hygiene to untrack or ignore generated skill roots.
 1b. For non-trivial mutations, confirm the caller has produced a `docs/quality-gate-contract.md` ship manifest for the exact shipping boundary before staging. The manifest must include: User goal, Changed files, Per-file purpose, User-goal mapping, Tests run, Skipped tests, Adversarial review, Residual risk, Rollback note, and Next command.
 1c. If the change set includes non-trivial source changes, confirm the manifest records a targeted `quality-sweep audit`, `$expert-review`, configured review lane, or explicitly justified equivalent adversarial review. If the review is missing, stop before committing.
 1d. Confirm validation evidence distinguishes executable checks from documentation-only or task-only checks. If non-trivial source changes rely only on documentation/task checks, stop before committing unless the manifest gives a concrete skipped-test rationale and residual-risk explanation.
@@ -25,7 +24,7 @@ Use this skill when the user wants current changes committed and pushed in sensi
    - Stage only the files for that bucket
    - Verify the staged diff matches the intended scope
    - Commit with a conventional message such as `feat(scope): summary`, `fix(scope): summary`, `refactor(scope): summary`, `test(scope): summary`, `docs(scope): summary`, or `chore(scope): summary`
-5. Do not leave unrelated tracked changes behind. Either bucket them too or stop and explain the blocker. Generated local skill roots under `.claude/skills/**` or `.codex/skills/**` are the exception: do not bucket, stage, or commit them, even in final leftover cleanup.
+5. Do not leave unrelated tracked changes behind. Either bucket them too or stop and explain the blocker.
 6. Determine the primary branch: prefer `main`; if it does not exist, use `master`. If neither exists, stop and explain the blocker.
 7. Ensure the commits land on the primary branch from step 6:
    - If already on `main` or `master`, stay there.

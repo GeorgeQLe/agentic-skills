@@ -1,3 +1,15 @@
+## Current Targeted Update: Pack Install Artifact Shipping Boundary 2026-05-30
+
+**Goal:** Make shipping skills commit pack project designation changes while treating generated local skill roots as recreation artifacts that must not be staged or committed.
+
+**Acceptance Criteria:**
+- [x] Active Claude and Codex `ship` and `ship-end` skills define a pack install artifact boundary that includes `.agents/project.json` and excludes `.claude/skills/**` and `.codex/skills/**`.
+- [x] Active Claude and Codex `commit-and-push-by-feature` skills forbid bucketing generated local skill roots, including final leftover cleanup.
+- [x] Active Claude and Codex `pack` skills report the commit boundary at the source of pack install, remove, and refresh operations.
+- [x] Every changed active `SKILL.md` is archived with `scripts/skill-archive.sh`, version-bumped, and documented in its local `CHANGELOG.md`.
+- [x] Focused layer1 contract coverage asserts the committed project designation, generated local roots, and never-stage/never-commit behavior.
+- [x] Layer1 validation, skill version checks, showcase generation/validation, whitespace checks, commit, and push complete on the primary branch.
+
 ## Current Targeted Update: Prompt History Logging For Skills 2026-05-30
 
 **Goal:** Require every skill invocation to save the exact visible user invocation prompt and directly attached/pasted visible context before substantive work, using tracked repo artifacts under `prompts/<skill-slug>/`.

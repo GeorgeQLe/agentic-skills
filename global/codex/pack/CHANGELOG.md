@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.4
+
+- Added source-level shipping guidance: commit `.agents/project.json` for pack configuration changes, but never stage or commit generated local skill roots under `.claude/skills/**` or `.codex/skills/**`.
+
 ## v0.3
 
 - Clarified post-install skill visibility guidance: Claude Code can use live detection, `/reload-skills`, `/clear`, or restart depending on directory state, while Codex still needs a fresh session when the `$` list is stale.

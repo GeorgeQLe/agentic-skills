@@ -2,11 +2,13 @@
 name: pack
 description: Manage project-local skill packs, individual pack skill roots, and project designation without installing domain skills globally
 type: ops
-version: v0.4
+version: v0.3
 argument-hint: "[list|status|recommend|install <pack-or-skill>|remove <pack-or-skill>|refresh|which <skill>] or no args for guided setup"
 ---
 
 # Pack
+
+Invoke as `$pack`.
 
 Use this skill when the user wants to inspect, recommend, install, remove, or refresh project-local skill packs or individual skills from those packs.
 
@@ -23,9 +25,10 @@ Use this skill when the user wants to inspect, recommend, install, remove, or re
      - Check top-level files and directories, package manifests, app/framework configs, source layout, docs, existing `research/`, `specs/`, and `tasks/` files.
      - Classify likely packs using the pack selection rules below.
      - Present a concise recommendation with evidence.
-     - Use AskUserQuestion to ask which pack or packs to install. Include the recommended pack first. Include kanban only as an explicit opt-in when there is evidence of PoketoWork usage or the user asked for kanban.
+     - Present a plain-text **Pack Decision Checkpoint**: show 2-4 numbered choices, mark the recommended choice, explain the tradeoff for each, and ask the user to reply with a number, exact pack list, `status`, or `cancel`.
+     - Stop after the checkpoint. Do not install anything until the user explicitly confirms a choice in a later message.
      - After the user confirms, run `scripts/pack.sh install <pack...>`.
-     - If the user cancels or asks for more detail, do not install anything.
+   - If `.agents/project.json` exists but `refresh` fails, report the failure and the exact command the user can retry.
 3. Run the matching helper command from this skill library's bundled launcher for explicit commands:
    - `scripts/pack.sh list`
    - `scripts/pack.sh status`
@@ -41,7 +44,6 @@ Use this skill when the user wants to inspect, recommend, install, remove, or re
    - any `project_scopes` entries when present, including the path, `project_type`, packs, and purpose
    - local skill roots created or removed under `.claude/skills` and `.codex/skills`
    - any skipped roots caused by non-repo-managed targets
-   - shipping guidance: `.agents/project.json` is the committed project designation and should be committed when pack configuration changed; `.claude/skills/**` and `.codex/skills/**` are generated local skill roots recreated by `/pack`, `$pack`, or `scripts/pack.sh refresh`, and generated skill roots must not be staged or committed
    - skill-visibility reload guidance: Claude Code watches existing `.claude/skills` roots and supports `/reload-skills`; `/clear` starts a new conversation and can pick up the refreshed registry, while a full restart remains the fallback if the top-level skills directory did not exist at session start or the skill remains invisible. Codex users should start a fresh Codex CLI session if the active session does not show the changed skills.
 
 ## Pack Model
@@ -49,7 +51,6 @@ Use this skill when the user wants to inspect, recommend, install, remove, or re
 - Global skills are domain-neutral and initialized by `init.sh`.
 - Domain workflows live in project-local packs.
 - Project designation is stored in `.agents/project.json`.
-- `.agents/project.json` is the committed project designation. `.claude/skills/**` and `.codex/skills/**` are generated local skill roots and must not be staged or committed; recreate them with `/pack`, `$pack`, or `scripts/pack.sh refresh`.
 - Mixed monorepos may keep a coarse default `project_type` and add `project_scopes` entries for subtrees that need different domain routing.
 - `enabled_packs` is the union of packs available to the repository; `project_scopes[].packs` explains which packs are appropriate for a specific path or glob.
 - Pack installs use repo-managed skill roots that point back to this skill-library repository and exclude archived skill snapshots by default.
@@ -63,11 +64,12 @@ Use this skill when the user wants to inspect, recommend, install, remove, or re
 
 ## Individual Skill Installation
 
-When a name passed to `install` or `remove` doesn't match a pack, the system checks whether it matches a skill inside any pack. If it does, only that single skill root is installed, not the entire pack.
+When a name passed to `install` or `remove` does not match a pack, the system checks whether it matches a skill inside any pack. If it does, only that single skill root is installed, not the entire pack.
 
-- `pack install icp` — installs only the `icp` skill from `business-discovery`, not the whole pack.
-- `pack install code-review icp` — installs the `code-review` pack (all skills) plus the individual `icp` skill.
-- `pack remove icp` — removes only the `icp` skill root and its `enabled_skills` entry.
+- `$pack install design-system` installs only the `design-system` skill from `product-design`, not the whole pack.
+- `$pack install code-review icp` installs the `code-review` pack plus the individual `icp` skill.
+- `$pack remove icp` removes only the `icp` skill root and its `enabled_skills` entry.
+- `$pack which design-system` shows the source pack and whether the skill is installed.
 
 Individual skills are tracked in `enabled_skills` in `.agents/project.json`:
 
@@ -90,29 +92,6 @@ The `{skill: pack}` format tracks provenance so `refresh` knows where to rebuild
 - Use `devtool` for SDKs, CLIs, APIs, libraries, infrastructure products, developer platforms, and documentation-first developer workflows.
 - Use `business-app-kanban`, `game-kanban`, or `devtool-kanban` only when the project intentionally uses PoketoWork boards.
 - Use `poketowork-kanban` only when the user wants the generic board-management utilities independent of a domain pack.
-- Use `exec-loop` for the plan-exec-ship execution workflow (ship, run, ship-end).
-- Use `agent-work-admin` for roadmap management, phase planning, and spec-drift auditing.
-- Use `product-design` for UX exploration, prototyping, feature/spec/UI interviews, brainstorming, and design systems.
-- Use `code-review` for expert reviews, slim audits, dead-code scans, and regression checks.
-- Use `code-debug` for investigation, debugging, and request tracing.
-- Use `release-ops` for branch lifecycle management, deployment, and releases.
-- Use `product-testing` for UAT journeys and dogfooding.
-- Use `docs-health` for project hygiene auditing and dev-docs reconciliation.
-- Use `research-admin` for research and documentation queue management.
-- Use `skill-dev` for building, interviewing, and creating agentic skills.
-- Use `guided-walkthrough` for step-by-step guides and UAT walkthroughs.
-- Use `session-analytics` for session history analysis and incident triage.
-- Use `teardown` for project teardowns and decommissioning.
-- Use `code-maintenance` for migrations and package updates.
-- Use `gitops` for git sync and feature-based commit workflows.
-- Use `context-transfer` for session handoffs.
-- Use `agent-bridge` for delegating work to other agents.
-- Use `repo-maintenance` for bootstrapping new repos.
-- Use `website-polish` for icon and web asset handling.
-- Use `report-gen` for generating HTML report websites.
-- Use `knowledge-check` for quiz-style knowledge reviews.
-- Use `exec-profile` for execution profile patching.
-- Use `alignment-page-admin` for compiling central alignment pages.
 - Treat `monorepo`, `code-quality`, and `*-kanban` packs as overlays. Pair them with a domain pack unless the user explicitly wants only the overlay behavior.
 - For workflow ordering, lead-in recommendations, and overlay dependencies, read `docs/pack-workflow-matrix.md`.
 
@@ -150,14 +129,35 @@ Use one repo-level `.agents/project.json` with a primary default plus scoped ove
 
 When a task clearly names a scoped path, route to that scope's `project_type` and packs. When no scope matches, use the top-level `project_type` as the default.
 
+## Pack Decision Checkpoint
+
+Use this format when Codex needs user confirmation and `request_user_input` is unavailable:
+
+```
+## Pack Decision Checkpoint
+
+Detected:
+- [evidence]
+
+Recommendation: `<pack>` because [reason].
+
+Choose one:
+1. `<pack>` (Recommended) — [impact/tradeoff]
+2. `<alternate-pack>` — [impact/tradeoff]
+3. `<pack> <matching-kanban-pack>` — [impact/tradeoff]
+4. `cancel` — leave the project unconfigured
+
+Reply with a number or an exact pack list to install.
+```
+
 ## Missing Skill Resolution
 
 When a user invokes a skill that is not found in the current session:
 
 1. Run `scripts/pack.sh which <skill-name>` to check if the skill exists in any pack.
-2. If found in an **uninstalled pack**: tell the user which pack provides the skill, recommend `/pack install <skill>` (for just that skill) or `/pack install <pack>` (for the full pack), and note the post-install reload path: `/reload-skills` first, `/clear` or restart if needed; Codex fresh session if the `$` list stays stale.
-3. If found in an **installed pack**: the skill should already be available — suggest the same reload path to pick up the local skill roots.
-4. If **not found in any pack**: suggest `/skills` to browse available skills or `/skills search <keyword>` to search.
+2. If found in an uninstalled pack: tell the user which pack provides the skill, recommend `$pack install <skill>` for just that skill or `$pack install <pack>` for the full pack, and note the post-install reload path: Claude Code `/reload-skills` first, `/clear` or restart if needed; Codex fresh session if the `$` list stays stale.
+3. If found in an installed pack: the skill should already be available, so suggest the same reload path to pick up the local skill roots.
+4. If not found in any pack: suggest `$skills` to browse available skills or `$skills search <keyword>` to search.
 
 ## Constraints
 

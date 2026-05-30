@@ -1,3 +1,25 @@
+## Current Task - Pack Install Artifact Shipping Boundary 2026-05-30
+
+**Goal:** Update shipping contracts so `.agents/project.json` ships as pack configuration while generated `.claude/skills/**` and `.codex/skills/**` roots stay local recreation artifacts.
+
+**Plan:**
+- [x] Inspect active mirrored shipping, commit, and pack skill contracts plus existing layer1 coverage.
+- [x] Archive and bump changed active `SKILL.md` contracts before editing behavior.
+- [x] Add pack install artifact boundary language to `ship`, `ship-end`, `commit-and-push-by-feature`, and `pack`.
+- [x] Update local changelogs and add focused layer1 contract tests.
+- [x] Regenerate Skills Showcase data and run targeted validation.
+- [x] Record review notes, commit, and push intended changes on the primary branch.
+
+### Review
+
+- Added pack install artifact boundary language to Claude and Codex `ship`, `ship-end`, and `commit-and-push-by-feature`: `.agents/project.json` is the committed project designation; `.claude/skills/**` and `.codex/skills/**` are generated local skill roots recreated by `/pack`, `$pack`, or `scripts/pack.sh refresh`; generated skill roots must not be staged or committed.
+- Added matching `pack` reporting/model guidance so install, remove, refresh, and guided setup reports name the source commit rule.
+- Archived changed active contracts before version bumps: `ship` v0.3, `ship-end` v0.1, `commit-and-push-by-feature` v0.0, and `pack` v0.3 for both Claude and Codex. Bumped active versions to `ship` v0.4, `ship-end` v0.2, `commit-and-push-by-feature` v0.1, and `pack` v0.4.
+- Added `tests/layer1/pack-shipping-boundary.test.ts` and updated the existing pack reload version assertion.
+- Refreshed Skills Showcase generated assets after skill metadata changes.
+- Validation passed: focused layer1 contract tests, `bash scripts/skill-versions.sh --missing`, `scripts/validate-skills-showcase-data.sh`, and `git diff --check`.
+- Validation caveat: full `pnpm --dir tests test:layer1` still fails on broad pre-existing suite drift unrelated to this boundary, including missing old `global/codex/*` skill paths, stale benchmark matrix expectations for `run` vs `exec`, benchmark coverage gaps, and output-path conflict assertions.
+
 ## Current Task — Prompt History Logging For Skills 2026-05-30
 
 **Goal:** Add a shared skill-invocation convention requiring agents to save the exact visible user invocation prompt under `prompts/<skill-slug>/` before substantive skill work, and validate that the convention is present in root and provisioned agent config.

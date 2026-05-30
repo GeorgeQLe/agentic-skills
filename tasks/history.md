@@ -2898,3 +2898,10 @@ Resolved all 10 findings from `/expert-review`:
 - Implemented the full drift plan (committed `8ee086d9`): enriched the `.agentic-skills-managed` marker with `source_version` + `source_sha`, added a shared drift engine (`skill_install_status`) in `scripts/skill-links.sh`, `pack.sh doctor` (read-only) + `set-update-mode`, a global `init-agentic-skills doctor`, opt-in `SessionStart` drift hook (`scripts/skill-drift-hook.sh`) with warn/auto modes, and docs. Bumped `sync` v0.3→v0.4 and `init-agentic-skills` v0.4→v0.5 (archives + CHANGELOGs, claude+codex). Root-cause fix: `sync_skill_link` now converts an existing managed copy into the frozen symlink on `pin`.
 - Hardened `write_project_file` against jq-absent data loss (expert-review Critical): added `require_jq_write()` and gated all 7 mutating `pack.sh` dispatch cases. Verified jq-absent `install` dies with the canonical message and leaves `project.json` intact; read-only `doctor` still runs.
 - All 9 plan verification items passed; committed the `/expert-review` backlog (`tasks/todo.md`) generated this date with the pack.sh Critical item marked resolved.
+
+## 2026-05-30 — Pack install artifact shipping boundary
+
+- Updated Claude and Codex `ship`, `ship-end`, `commit-and-push-by-feature`, and `pack` contracts so `.agents/project.json` is the committed pack designation while generated `.claude/skills/**` and `.codex/skills/**` roots are local recreation artifacts that must not be staged or committed.
+- Archived and bumped changed active skills: `ship` v0.4, `ship-end` v0.2, `commit-and-push-by-feature` v0.1, and `pack` v0.4, with changelogs updated.
+- Added focused layer1 coverage for the boundary and refreshed Skills Showcase generated data.
+- Validation passed for the focused boundary tests, skill-version check, showcase freshness, and whitespace checks; full layer1 remains red on unrelated pre-existing suite drift documented in `tasks/todo.md`.

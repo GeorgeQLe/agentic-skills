@@ -2,7 +2,7 @@
 name: pack
 description: Manage project-local skill packs, individual pack skill roots, and project designation without installing domain skills globally
 type: ops
-version: v0.4
+version: v0.3
 argument-hint: "[list|status|recommend|install <pack-or-skill>|remove <pack-or-skill>|refresh|which <skill>] or no args for guided setup"
 ---
 
@@ -41,7 +41,6 @@ Use this skill when the user wants to inspect, recommend, install, remove, or re
    - any `project_scopes` entries when present, including the path, `project_type`, packs, and purpose
    - local skill roots created or removed under `.claude/skills` and `.codex/skills`
    - any skipped roots caused by non-repo-managed targets
-   - shipping guidance: `.agents/project.json` is the committed project designation and should be committed when pack configuration changed; `.claude/skills/**` and `.codex/skills/**` are generated local skill roots recreated by `/pack`, `$pack`, or `scripts/pack.sh refresh`, and generated skill roots must not be staged or committed
    - skill-visibility reload guidance: Claude Code watches existing `.claude/skills` roots and supports `/reload-skills`; `/clear` starts a new conversation and can pick up the refreshed registry, while a full restart remains the fallback if the top-level skills directory did not exist at session start or the skill remains invisible. Codex users should start a fresh Codex CLI session if the active session does not show the changed skills.
 
 ## Pack Model
@@ -49,7 +48,6 @@ Use this skill when the user wants to inspect, recommend, install, remove, or re
 - Global skills are domain-neutral and initialized by `init.sh`.
 - Domain workflows live in project-local packs.
 - Project designation is stored in `.agents/project.json`.
-- `.agents/project.json` is the committed project designation. `.claude/skills/**` and `.codex/skills/**` are generated local skill roots and must not be staged or committed; recreate them with `/pack`, `$pack`, or `scripts/pack.sh refresh`.
 - Mixed monorepos may keep a coarse default `project_type` and add `project_scopes` entries for subtrees that need different domain routing.
 - `enabled_packs` is the union of packs available to the repository; `project_scopes[].packs` explains which packs are appropriate for a specific path or glob.
 - Pack installs use repo-managed skill roots that point back to this skill-library repository and exclude archived skill snapshots by default.
