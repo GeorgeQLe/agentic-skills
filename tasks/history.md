@@ -1,5 +1,9 @@
 # Session History
 
+## 2026-05-30 — Code Review test-infra #4–#6: disposable-repo + bench-persistence
+
+Cleared the last three Code Review items (all test infra). #4: `cleanupRepo` in `tests/layer4/helpers/disposable-repo.ts` deleted GitHub repos via shell `execSync` with an unvalidated slug (could target `unknown/<name>`); added `isSafeBenchRepoSlug()` guard (bench-prefix + non-`unknown` owner) checked before delete and switched to `execFileSync` (no shell). #5: `cleanup()` leaked every `mkdtempSync` clone; threaded `workDir` into cleanup to `rmSync` it, and `rmSync` the orphaned `sync-upstream-` clone in `git-fixture-sync.setup.ts`. #6: `findResumeableSession` sorted session dirs by random UUID suffix; extracted pure `pickResumeableManifest()` sorting by `updatedAt`/`createdAt`. Verified (Node 25): new `tests/layer1/code-review-test-infra-fixes.test.ts` (8 tests), `tsc --noEmit` clean, full layer1 654/654 pass, `git diff --check` clean. Key files: `tests/layer4/helpers/disposable-repo.ts`, `tests/layer4/setups/git-fixture-sync.setup.ts`, `tests/harness/bench-persistence.ts`.
+
 ## 2026-05-30 — Code Review High #3: approved-plan.sh dirty-path safety gate
 
 - Both dirty-scan sites in `scripts/approved-plan.sh` (`cmd_check`, `cmd_draft`) parsed `git status --porcelain` with `awk '{print $2}'`, which returns the OLD name for renames (allowlist bypass) and truncates spaced paths.
