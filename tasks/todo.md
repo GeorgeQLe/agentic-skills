@@ -61,6 +61,17 @@ This keeps the first-recorded consent immutable while still returning the row (D
 - Manual reasoning: (1) a conflicting insert no longer changes `source_page`/`consent_text_version`; (2) repeated rapid `subscribe` calls past the threshold are rejected with `TOO_MANY_REQUESTS`; (3) a normal first-time subscribe still succeeds.
 - Vercel auto-deploys on push; flag in the ship handoff. If option B adds a migration, the ship/deploy note must call out running it against Neon (`src/db/migrate.sql`).
 
+### Review (2026-05-30)
+
+Shipped Code Review High #2 — hardening the newsletter subscribe mutation. Two sub-problems were addressed:
+
+- Sub-problem A (consent overwrite): the ON CONFLICT upsert previously overwrote source_page and consent_text_version on every re-subscribe. It now only bumps updated_at and reactivates status, preserving the original consent fields.
+- Sub-problem B (no rate limiting): added a per-IP sliding-window rate limit of 5 attempts / 10 min. Attempts are tracked in a new dedicated DB table (newsletter_subscribe_attempts) rather than in-memory, so the limit holds across serverless cold starts; the client IP is read from x-forwarded-for and excess attempts are rejected with TOO_MANY_REQUESTS. Added countRecentSubscribeAttempts/recordSubscribeAttempt helpers.
+
+Incidental change: consolidated the ./schema re-export through the db module so the vitest mocker resolves the db import correctly under vi.mock (the test could not otherwise intercept getDb). Also cleaned up the secret-scanner flag by replacing the connection-string-shaped DATABASE_URL literal in db/index.test.ts with a non-URL truthy placeholder (the neon import is mocked, so the value is never parsed).
+
+Verification (Node 25): typecheck clean, full vitest suite green at 10 test files / 117 tests passing (new co-located db/index.test.ts plus extended newsletter.test.ts). Deploy note: migrate.sql adds the newsletter_subscribe_attempts table, which must be run against Neon before/with the Vercel auto-deploy.
+
 ---
 
 ## Current Task - Pack Install Artifact Shipping Boundary 2026-05-30
