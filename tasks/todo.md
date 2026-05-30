@@ -3,11 +3,20 @@
 **Goal:** Verify whether Claude Code can detect newly installed pack skills after clearing context, then update pack skill language if the behavior is evidence-backed.
 
 **Plan:**
-- [ ] Validate the claim against repository pack-install behavior, prior session analysis, and official Claude Code documentation where applicable.
-- [ ] Archive and bump mirrored `pack` skill contracts if the reload guidance changes.
-- [ ] Update Claude and Codex pack instructions plus script output so the guidance distinguishes Claude Code context clear from full CLI restart.
-- [ ] Add focused regression coverage for the clarified reload contract.
-- [ ] Run focused validation, record review notes, and ship only intended changes while preserving unrelated dirty work.
+- [x] Validate the claim against repository pack-install behavior, prior session analysis, and official Claude Code documentation where applicable.
+- [x] Archive and bump mirrored `pack` skill contracts if the reload guidance changes.
+- [x] Update Claude and Codex pack instructions plus script output so the guidance distinguishes Claude Code context clear from full CLI restart.
+- [x] Add focused regression coverage for the clarified reload contract.
+- [x] Run focused validation, record review notes, and ship only intended changes while preserving unrelated dirty work.
+
+### Review
+
+- Confirmed the user-observed Claude Code behavior is directionally accurate, but the current official reload path is more specific: Claude Code watches existing `.claude/skills` roots, `/reload-skills` rescans skills, `/clear` starts a new empty-context conversation, and restart remains the fallback when the top-level skills directory did not exist at session start or visibility still fails.
+- Updated mirrored `pack` skills to v0.3 with archived v0.2 contracts and changelog entries.
+- Updated `scripts/pack.sh` reload notice and `README.md` to separate Claude Code reload options from Codex's fresh-session fallback.
+- Added `tests/layer1/pack-reload-contract.test.ts` and refreshed local global installs with `bash init.sh`.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 layer1/pack-reload-contract.test.ts layer1/install.test.ts`, `bash -n scripts/pack.sh`, `bash scripts/skill-versions.sh --missing`, and `git diff --check`.
+- Unrelated dirty files from concurrent alignment/spec work were preserved and left unstaged.
 
 ## Current Task — Alignment Feedback-Only YAML 2026-05-30
 

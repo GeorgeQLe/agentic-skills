@@ -1,3 +1,17 @@
+## Current Targeted Update: Pack Install Claude Clear-Context Reload 2026-05-30
+
+**Goal:** Clarify pack-install reload guidance after verifying whether Claude Code context clearing can make newly installed project-local skills visible.
+
+**Acceptance Criteria:**
+- [x] Claim is classified with evidence from repository scripts/docs, prior session analysis, and official Claude Code docs where applicable.
+- [x] Mirrored `pack` skills are archived, bumped, and changeloged if reload guidance changes.
+- [x] Pack workflow language distinguishes filesystem install success from active-session skill visibility.
+- [x] Claude Code guidance names clearing context as a reasonable first reload path, with full CLI restart as the reliable fallback when skills remain invisible.
+- [x] Focused tests verify the updated contract and pack installer notice.
+- [x] Review notes are recorded; intended changes are committed and pushed on `master` while unrelated dirty work is preserved.
+
+**Result:** Verified that Claude Code now has better in-session reload support than the old pack contract said. `/reload-skills` is the direct rescan command, `/clear` starts a new empty-context conversation that can pick up the refreshed registry, live detection applies under existing `.claude/skills` roots, and restart remains the fallback for missing top-level roots or persistent invisibility. Codex remains fresh-session fallback when `$` skill discovery stays stale.
+
 ## Current Targeted Update: Product-Path Research Scoping 2026-05-30
 
 **Goal:** Make research-path-aware skills resolve `research/{product-slug}/` product paths before code/app structure exists, exclude archived paths from active targeting, and clarify product-line archive/restore/activate/promote operations.

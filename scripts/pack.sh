@@ -587,7 +587,8 @@ print_session_reload_notice() {
   cat <<'EOF'
 
 Skill installs changed. Claude Code and Codex may keep the skill list loaded when the current session started.
-This pack installer does not have a supported in-session CLI skill refresh command; start a fresh CLI session to use newly installed or removed project-local skills.
+Claude Code: use /reload-skills to rescan skills. /clear starts a new empty-context conversation and can also pick up the refreshed registry. Restart Claude Code if .claude/skills did not exist when the session started or the skill is still invisible.
+Codex: start a fresh Codex CLI session if the $ skill list does not show newly installed or removed project-local skills.
 EOF
 }
 

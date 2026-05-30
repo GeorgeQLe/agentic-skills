@@ -62,7 +62,7 @@ scripts/pack.sh remove design-system
 
 Claude users can run `/pack` with no arguments, and Codex users can run `$pack` with no arguments. If `.agents/project.json` exists, the skill refreshes local skill roots from that committed project designation. If it is missing, the assistant inspects the repository, recommends a pack, and asks before installing.
 
-`scripts/pack.sh which <skill>` shows which pack provides a skill and whether it is installed. `scripts/pack.sh refresh` recreates local skill roots; it does not reload an already-running Claude Code or Codex session. After installing, removing, or refreshing packs, start a fresh CLI session if the changed skills are not visible.
+`scripts/pack.sh which <skill>` shows which pack provides a skill and whether it is installed. `scripts/pack.sh refresh` recreates local skill roots; it does not by itself force an active CLI skill registry to reload. Claude Code watches existing `.claude/skills` roots and supports `/reload-skills`; `/clear` starts a new empty-context conversation and can also pick up refreshed skills. Restart Claude Code if `.claude/skills` did not exist when the session started or the skill is still invisible. In Codex, start a fresh Codex CLI session if the `$` skill list stays stale.
 
 Pack installation creates local repo-managed skill roots in the current project. Active installs expose the canonical `SKILL.md` and exclude `archive/`:
 

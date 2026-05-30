@@ -2,7 +2,7 @@
 name: pack
 description: Manage project-local skill packs, individual pack skill roots, and project designation without installing domain skills globally
 type: ops
-version: v0.3
+version: v0.2
 argument-hint: "[list|status|recommend|install <pack-or-skill>|remove <pack-or-skill>|refresh|which <skill>] or no args for guided setup"
 ---
 
@@ -44,7 +44,7 @@ Use this skill when the user wants to inspect, recommend, install, remove, or re
    - any `project_scopes` entries when present, including the path, `project_type`, packs, and purpose
    - local skill roots created or removed under `.claude/skills` and `.codex/skills`
    - any skipped roots caused by non-repo-managed targets
-   - skill-visibility reload guidance: Claude Code watches existing `.claude/skills` roots and supports `/reload-skills`; `/clear` starts a new conversation and can pick up the refreshed registry, while a full restart remains the fallback if the top-level skills directory did not exist at session start or the skill remains invisible. Codex users should start a fresh Codex CLI session if the active session does not show the changed skills.
+   - that the user should start a fresh Claude Code or Codex CLI session if the active session does not show the changed skills
 
 ## Pack Model
 
@@ -58,9 +58,8 @@ Use this skill when the user wants to inspect, recommend, install, remove, or re
 - `scripts/pack.sh install`, `remove`, `refresh`, and `set-mode` preserve existing `project_scopes` and `notes` fields when `jq` is available.
 - `scripts/pack.sh install <name>` treats `<name>` as a pack first, then as an individual skill provided by a pack.
 - Pack writes use `.agents/.pack.lock` with owner metadata (`pid`, `started_at`, `command`); if a recorded owner process is gone, the next pack command removes that stale lock automatically.
-- `scripts/pack.sh refresh` recreates project-local skill roots from `.agents/project.json`; it does not by itself force an active CLI skill registry to reload.
-- Claude Code watches skill files under existing `.claude/skills` roots and supports `/reload-skills` to rescan skills and commands during a session. If a newly installed skill is not visible, run `/reload-skills`; `/clear` starts a new empty-context conversation and can also pick up the refreshed registry. Restart Claude Code if the top-level `.claude/skills` directory did not exist when the session started or the skill is still invisible.
-- Codex may keep the `$` skill list loaded from session start. This pack workflow has no supported in-session Codex CLI skill refresh command, so start a fresh Codex CLI session if changed skills are not visible.
+- `scripts/pack.sh refresh` recreates project-local skill roots from `.agents/project.json`; it does not refresh the active Claude Code or Codex process.
+- Claude Code and Codex may load available skills at session startup. If newly installed or removed skills are not visible, start a fresh CLI session. No supported in-session CLI skill refresh command is configured in this pack workflow.
 
 ## Individual Skill Installation
 
@@ -155,8 +154,8 @@ Reply with a number or an exact pack list to install.
 When a user invokes a skill that is not found in the current session:
 
 1. Run `scripts/pack.sh which <skill-name>` to check if the skill exists in any pack.
-2. If found in an uninstalled pack: tell the user which pack provides the skill, recommend `$pack install <skill>` for just that skill or `$pack install <pack>` for the full pack, and note the post-install reload path: Claude Code `/reload-skills` first, `/clear` or restart if needed; Codex fresh session if the `$` list stays stale.
-3. If found in an installed pack: the skill should already be available, so suggest the same reload path to pick up the local skill roots.
+2. If found in an uninstalled pack: tell the user which pack provides the skill, recommend `$pack install <skill>` for just that skill or `$pack install <pack>` for the full pack, and note that a fresh session may be needed after installing.
+3. If found in an installed pack: the skill should already be available, so suggest starting a fresh session to pick up the local skill roots.
 4. If not found in any pack: suggest `$skills` to browse available skills or `$skills search <keyword>` to search.
 
 ## Constraints
