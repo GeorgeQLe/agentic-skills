@@ -2859,3 +2859,23 @@ All 11 skills benchmarked, reports written, generated data refreshed (96 graded 
 
 - [ ] Update the skills showcase pack list with the correct number of skills per pack and ensure all packs are represented
 - [ ] On drawer close, collapse all cards onto the single visible top-left-most card (reverse of the fan-out animation on open) before animating the card back into the card pack. Use the visible top-left-most card rather than the absolute first card in the list because the user may have scrolled down before closing the drawer
+
+## Current Task - Plain-Text Skill Opportunity Analysis 2026-05-29
+
+**Goal:** Use `$analyze-sessions` to find recurring plain-text asks/commands that would be better captured as skills, and assign each candidate to a pack.
+
+**Plan:**
+- [x] Inspect available history sources, pack metadata, and current dirty worktree state.
+- [x] Parse full Claude/Codex user history and group repeated plain-text workflow patterns.
+- [x] Map the strongest candidates to proposed skill names and pack ownership.
+- [x] Create the required `analyze-sessions` alignment page.
+- [x] Verify artifacts and document review notes while preserving unrelated dirty work.
+
+### Review
+
+- Parsed 11,709 compact local user-history records across 3,538 sessions: 9,804 Claude records and 1,905 Codex records.
+- Filtered 8,585 plain-text records after excluding slash and dollar command invocations; enriched Codex compact prompts with metadata from 663 rich session files.
+- Strongest candidates: `plain-text-ship` (`exec-loop` primary, `gitops` secondary), `plan-implementation-runner` (`exec-loop`), `staging-deploy-smoke` (`release-ops`), `what-now` (`exec-loop` or `repo-maintenance`), `agent-instructions-update` (`agent-work-admin`), `test-failure-fixer` (`code-debug`), `review-fix-runner` (`code-review`), `visual-polish-pass` (`website-polish`), `task-doc-sync` (`agent-work-admin`), and `skill-visibility-repair` (`skill-dev`).
+- Created `alignment/analyze-sessions-plain-text-skill-opportunities.html` with the full report, evidence matrix, confidence register, alternatives, lower-confidence findings, and compile-answer review gates.
+- Verification passed: `test -s alignment/analyze-sessions-plain-text-skill-opportunities.html`; required-content `rg` checks; Python `HTMLParser` parse; `git diff --check -- alignment/analyze-sessions-plain-text-skill-opportunities.html tasks/roadmap.md tasks/todo.md`; browser open through PowerShell WSL file URI.
+- Existing uncommitted code-review backlog additions in `tasks/todo.md` predated this analysis and were preserved.

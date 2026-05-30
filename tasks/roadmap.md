@@ -1,3 +1,16 @@
+## Current Targeted Update: Plain-Text Skill Opportunity Analysis 2026-05-29
+
+**Goal:** Analyze full local Claude and Codex user history for recurring plain-text requests or commands that should become reusable skills, then map each candidate to the most appropriate pack.
+
+**Acceptance Criteria:**
+- [x] Full available Claude and Codex user histories are parsed, including compact prompt history and rich Codex session metadata where available.
+- [x] Repeated plain-text workflow patterns are grouped with counts and representative examples, excluding system/developer/tool output text.
+- [x] Each high-value pattern is mapped to a proposed skill name, recommendation rationale, and likely pack ownership.
+- [x] `alignment/analyze-sessions-plain-text-skill-opportunities.html` renders the full report with evidence matrix, confidence register, and review gates.
+- [x] Verification passes or blockers are documented, and unrelated dirty worktree files are preserved.
+
+**Result:** Parsed 11,709 local compact user-history records across 3,538 Claude/Codex sessions, enriched with 663 Codex rich session metadata files. The highest-confidence plain-text skill opportunities are `plain-text-ship`, `plan-implementation-runner`, `staging-deploy-smoke`, `what-now`, `agent-instructions-update`, `test-failure-fixer`, `review-fix-runner`, `visual-polish-pass`, `task-doc-sync`, and `skill-visibility-repair`, with pack ownership proposed in the alignment page.
+
 ## Current Targeted Update: Codebase Status AFPS Routing 2026-05-29
 
 **Goal:** Update mirrored `codebase-status` skills so status-route recommendations use canonical AFPS routing evidence, respect pack availability, and distinguish research/prototype gaps from executable work, shipping work, and completed queues.

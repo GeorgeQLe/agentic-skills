@@ -1,0 +1,819 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Plain-Text Skill Opportunities - Analyze Sessions</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --text-muted: #8b949e;
+      --accent: #58a6ff;
+      --green: #3fb950;
+      --red: #f85149;
+      --orange: #d29922;
+      --purple: #bc8cff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+    a { color: var(--accent); }
+    .shell {
+      display: grid;
+      grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
+      min-height: 100vh;
+    }
+    nav {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: auto;
+      padding: 24px 18px;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+    }
+    nav h1 {
+      margin: 0 0 12px;
+      color: #fff;
+      font-size: 18px;
+      line-height: 1.25;
+    }
+    nav p {
+      margin: 0 0 18px;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+    nav a {
+      display: block;
+      padding: 7px 0;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    main {
+      max-width: 1180px;
+      width: 100%;
+      padding: 32px;
+    }
+    section {
+      margin: 0 0 32px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+    h2, h3 {
+      color: var(--accent);
+      margin: 0 0 12px;
+      line-height: 1.25;
+    }
+    h2 { font-size: 26px; }
+    h3 { font-size: 18px; color: #fff; }
+    p { margin: 0 0 14px; }
+    ul { margin: 0 0 16px 22px; padding: 0; }
+    li { margin: 6px 0; }
+    code {
+      background: #0b1220;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1px 5px;
+      color: #fff;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 22px;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      vertical-align: top;
+    }
+    th {
+      background: var(--surface);
+      color: #fff;
+      text-align: left;
+    }
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin: 16px 0 20px;
+    }
+    .stat {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+    }
+    .stat strong {
+      display: block;
+      color: #fff;
+      font-size: 22px;
+    }
+    .stat span {
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+    .callout {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 16px 0;
+    }
+    .confidence-high { color: var(--green); font-weight: 700; }
+    .confidence-medium { color: var(--orange); font-weight: 700; }
+    .confidence-low { color: var(--red); font-weight: 700; }
+    .feedback-control {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin: 8px 0 16px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    .feedback-control label {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 5px 8px;
+      cursor: pointer;
+      background: #0b1220;
+    }
+    .feedback-control input { margin-right: 4px; }
+    .feedback-notes {
+      display: none;
+      width: 100%;
+      min-height: 58px;
+      margin-top: 4px;
+      background: #0b1220;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      padding: 8px;
+      font: inherit;
+    }
+    .question-block {
+      background: #1c2333;
+      border: 1px solid var(--purple);
+      border-radius: 8px;
+      padding: 14px;
+      margin: 16px 0;
+    }
+    .question-block h3 {
+      color: var(--purple);
+      margin-bottom: 10px;
+    }
+    .question-block label {
+      display: block;
+      margin: 8px 0;
+      cursor: pointer;
+    }
+    .option-notes {
+      display: none;
+      width: 100%;
+      min-height: 62px;
+      margin: 8px 0 12px 24px;
+      max-width: calc(100% - 24px);
+      background: #0b1220;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      padding: 8px;
+      font: inherit;
+    }
+    .compile {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      margin-top: 24px;
+    }
+    button {
+      border: 1px solid var(--border);
+      background: #0b1220;
+      color: var(--text);
+      border-radius: 6px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font: inherit;
+    }
+    button:disabled {
+      cursor: not-allowed;
+      opacity: 0.55;
+    }
+    #yaml-output {
+      width: 100%;
+      min-height: 220px;
+      margin-top: 12px;
+      background: #0b1220;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      padding: 10px;
+      font: 13px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .muted { color: var(--text-muted); }
+    .nowrap { white-space: nowrap; }
+    @media (max-width: 860px) {
+      .shell { display: block; }
+      nav { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--border); }
+      main { padding: 22px; }
+      .stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      table { font-size: 13px; }
+    }
+    @media (max-width: 560px) {
+      .stat-grid { grid-template-columns: 1fr; }
+      th, td { padding: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <nav>
+      <h1>Plain-Text Skill Opportunities</h1>
+      <p>Analyze Sessions report generated from local Claude and Codex prompt history.</p>
+      <a href="#overview">Overview</a>
+      <a href="#method">Method</a>
+      <a href="#candidates">Candidate Skills</a>
+      <a href="#evidence">Evidence Matrix</a>
+      <a href="#highest-impact">Highest Impact</a>
+      <a href="#lower-confidence">Lower Confidence</a>
+      <a href="#assumptions">Confidence Register</a>
+      <a href="#alternatives">Alternatives</a>
+      <a href="#gates">Review Gates</a>
+      <a href="#compile">Compile Answers</a>
+    </nav>
+
+    <main>
+      <section id="overview" data-section-title="Overview">
+        <h2>Overview</h2>
+        <div class="feedback-control" data-section="Overview">
+          <span>Section feedback:</span>
+          <label><input type="radio" name="fb-overview" value="up">Thumbs up</label>
+          <label><input type="radio" name="fb-overview" value="down">Thumbs down</label>
+          <label><input type="radio" name="fb-overview" value="needs-clarification">Clarification needed</label>
+          <textarea class="feedback-notes" placeholder="Optional notes"></textarea>
+        </div>
+        <p>This report answers: which recurring natural-language asks or plain-text commands should be collected into reusable skills, and which pack should own each one.</p>
+        <div class="stat-grid">
+          <div class="stat"><strong>11,709</strong><span>Total compact user-history records parsed</span></div>
+          <div class="stat"><strong>3,538</strong><span>Sessions represented across Claude and Codex</span></div>
+          <div class="stat"><strong>8,585</strong><span>Plain-text records after excluding slash and dollar commands</span></div>
+          <div class="stat"><strong>663</strong><span>Codex rich session files used for metadata enrichment</span></div>
+        </div>
+        <table>
+          <thead>
+            <tr><th>Source</th><th>Records</th><th>Sessions</th><th>Plain-text records</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Claude</td><td>9,804</td><td>2,943</td><td>6,722</td></tr>
+            <tr><td>Codex</td><td>1,905</td><td>595</td><td>1,863</td></tr>
+          </tbody>
+        </table>
+        <p>The parsed date range is <span class="nowrap">2025-12-13T17:10:26Z</span> through <span class="nowrap">2026-05-30T02:20:54Z</span>. Top projects by message volume include <code>metternich-engine</code>, <code>bismarck-ai</code>, <code>poke/monorepo</code>, <code>loadoutworks</code>, and this <code>agentic-skills</code> repository.</p>
+        <div class="callout">
+          <p><strong>Short answer:</strong> yes. The highest-value natural-language skill surfaces are plan execution, shipping, staging deploy validation, next-step status, agent instruction updates, test failure fixing, review remediation, and skill visibility repair.</p>
+        </div>
+      </section>
+
+      <section id="method" data-section-title="Method">
+        <h2>Method</h2>
+        <div class="feedback-control" data-section="Method">
+          <span>Section feedback:</span>
+          <label><input type="radio" name="fb-method" value="up">Thumbs up</label>
+          <label><input type="radio" name="fb-method" value="down">Thumbs down</label>
+          <label><input type="radio" name="fb-method" value="needs-clarification">Clarification needed</label>
+          <textarea class="feedback-notes" placeholder="Optional notes"></textarea>
+        </div>
+        <p>I parsed the full available compact history files at <code>~/.claude/history.jsonl</code> and <code>~/.codex/history.jsonl</code>. For Codex, I also scanned <code>~/.codex/sessions/**/*.jsonl</code> for session metadata such as cwd, model, provider, and session id. I used the compact Codex history as the prompt-count source to avoid double counting rich rollout records.</p>
+        <p>Plain-text records exclude prompts that start with <code>/</code> or <code>$</code>. The analysis then combined exact normalized repeats, keyword clusters, project/source breakdowns, and manual review of representative examples. Counts labeled as "classifier" are evidence for magnitude, not exact semantic truth, because keywords such as "current" and "overlap" can be noisy.</p>
+      </section>
+
+      <section id="candidates" data-section-title="Candidate Skills">
+        <h2>Candidate Skills</h2>
+        <div class="feedback-control" data-section="Candidate Skills">
+          <span>Section feedback:</span>
+          <label><input type="radio" name="fb-candidates" value="up">Thumbs up</label>
+          <label><input type="radio" name="fb-candidates" value="down">Thumbs down</label>
+          <label><input type="radio" name="fb-candidates" value="needs-clarification">Clarification needed</label>
+          <textarea class="feedback-notes" placeholder="Optional notes"></textarea>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Potential Skill</th>
+              <th>Pack</th>
+              <th>Frequency Evidence</th>
+              <th>Recommendation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td><code>plan-implementation-runner</code></td>
+              <td><code>exec-loop</code></td>
+              <td>541 history matches for "Implement the following plan", "Implement the plan", or Codex continuation plan prompts.</td>
+              <td>Create as an explicit plain-text router or strengthen <code>exec</code> to claim pasted-plan implementation.</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td><code>plain-text-ship</code></td>
+              <td><code>exec-loop</code> primary, <code>gitops</code> secondary</td>
+              <td>580 classifier hits. Exact repeats include 167 "update docs, commit and push", 74 "commit this", 38 "commit this and push", and 25 "commit and push".</td>
+              <td>Prefer an alias/router over a brand-new workflow, because <code>ship</code> already owns most behavior.</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td><code>staging-deploy-smoke</code></td>
+              <td><code>release-ops</code></td>
+              <td>127 classifier hits, including 48 exact "deploy to staging" records.</td>
+              <td>Extend <code>deploy</code> or add a staging-focused wrapper that builds, deploys, smoke-tests, and reports URLs.</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td><code>what-now</code></td>
+              <td><code>exec-loop</code> or <code>repo-maintenance</code></td>
+              <td>109 status/next-step classifier hits. Exact repeats include 62 "continue", 33 "please continue", and 42 "what's next" variants.</td>
+              <td>Make a user-friendly status router over task docs, git state, recent history, and available packs.</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td><code>agent-instructions-update</code></td>
+              <td><code>agent-work-admin</code></td>
+              <td>125 classifier hits around <code>CLAUDE.md</code>, <code>AGENTS.md</code>, progress notes, and instruction updates.</td>
+              <td>Create a disciplined updater for durable agent conventions, progress notes, and lessons capture.</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td><code>test-failure-fixer</code></td>
+              <td><code>code-debug</code></td>
+              <td>54 classifier hits around failing tests, test errors, and "fix tests" prompts.</td>
+              <td>Add a focused debugging skill that starts from failed validation output and ends with passing targeted tests.</td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td><code>review-fix-runner</code></td>
+              <td><code>code-review</code></td>
+              <td>45 classifier hits around taking review findings, issues, or audit reports and implementing fixes.</td>
+              <td>Add a remediation runner paired with <code>expert-review</code>, <code>regression-check</code>, and review report artifacts.</td>
+            </tr>
+            <tr>
+              <td>8</td>
+              <td><code>visual-polish-pass</code></td>
+              <td><code>website-polish</code></td>
+              <td>40 classifier hits around screenshots, layout issues, mobile/desktop checks, overlap, and visual polish.</td>
+              <td>Broaden the currently asset-focused website polish pack with a real UI screenshot/viewport pass.</td>
+            </tr>
+            <tr>
+              <td>9</td>
+              <td><code>task-doc-sync</code></td>
+              <td><code>agent-work-admin</code></td>
+              <td>33 classifier hits for updating task docs, marking complete, documenting results, and syncing roadmap/todo/history.</td>
+              <td>Prefer as a subroutine in <code>exec</code> and <code>ship</code>, or expose as a utility skill for cleanup-only turns.</td>
+            </tr>
+            <tr>
+              <td>10</td>
+              <td><code>skill-visibility-repair</code></td>
+              <td><code>skill-dev</code></td>
+              <td>31 classifier hits, concentrated in <code>agentic-skills</code> and <code>claude-skills</code>, about missing skills, pack install, refresh, and visibility.</td>
+              <td>Add an operational repair skill for pack install status, managed copies, session reload caveats, and missing command diagnosis.</td>
+            </tr>
+            <tr>
+              <td>11</td>
+              <td><code>showcase-data-refresh</code></td>
+              <td><code>website-polish</code> or <code>docs-health</code></td>
+              <td>21 classifier hits around Skills Showcase, generated data, and validation refreshes after skill metadata changes.</td>
+              <td>Useful as a repo-local or pack-local utility because it bundles generated data, validation, and stale-row checks.</td>
+            </tr>
+            <tr>
+              <td>12</td>
+              <td><code>open-alignment-preview</code></td>
+              <td><code>alignment-page-admin</code></td>
+              <td>6 classifier hits, but recent examples show repeated WSL/PowerShell browser-open friction.</td>
+              <td>Small utility skill or script wrapper; high convenience despite low count.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="evidence" data-section-title="Evidence Matrix">
+        <h2>Evidence Matrix</h2>
+        <div class="feedback-control" data-section="Evidence Matrix">
+          <span>Section feedback:</span>
+          <label><input type="radio" name="fb-evidence" value="up">Thumbs up</label>
+          <label><input type="radio" name="fb-evidence" value="down">Thumbs down</label>
+          <label><input type="radio" name="fb-evidence" value="needs-clarification">Clarification needed</label>
+          <textarea class="feedback-notes" placeholder="Optional notes"></textarea>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Claim</th>
+              <th>Evidence</th>
+              <th>Inference</th>
+              <th>Confidence</th>
+              <th>Decision Impact</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Shipping is the largest plain-text automation gap.</td>
+              <td>Exact repeats: "update docs, commit and push" 167, "commit this" 74, "commit this and push" 38, "commit and push" 25. Classifier total: 580.</td>
+              <td>The workflow is stable: inspect diff, update docs if needed, commit, push, and report status.</td>
+              <td class="confidence-high">High</td>
+              <td>Make plain-language shipping route reliably to <code>ship</code> or a thin alias.</td>
+            </tr>
+            <tr>
+              <td>Pasted plan execution deserves a first-class route.</td>
+              <td>History contains 541 matches for "Implement the following plan", "Implement the plan", or Codex continuation plans.</td>
+              <td>The user repeatedly gives a plan as the source of intent and expects implementation, validation, and shipping.</td>
+              <td class="confidence-high">High</td>
+              <td>Clarify <code>exec-loop</code> ownership for pasted plans, especially after context transfers.</td>
+            </tr>
+            <tr>
+              <td>Staging deploys are frequent enough for a deployment submode.</td>
+              <td>127 staging/build/deploy classifier hits; 48 exact "deploy to staging" records.</td>
+              <td>Deployment asks are not only "run deploy"; they often include build, smoke validation, URLs, and follow-up test instructions.</td>
+              <td class="confidence-high">High</td>
+              <td>Extend <code>release-ops/deploy</code> with a staging-smoke contract or add a wrapper.</td>
+            </tr>
+            <tr>
+              <td>"What next?" and "continue" should resolve to a status router.</td>
+              <td>109 status/next-step hits; exact repeats include "continue" 62, "please continue" 33, and "what's next" variants 42.</td>
+              <td>The agent should infer from task docs, roadmap, git state, and current context instead of asking the user to restate work.</td>
+              <td class="confidence-high">High</td>
+              <td>Create or alias <code>what-now</code> to reduce repeated plain-text status prompts.</td>
+            </tr>
+            <tr>
+              <td>Agent instruction updates are recurring and risky enough for structure.</td>
+              <td>125 classifier hits around <code>CLAUDE.md</code>, <code>AGENTS.md</code>, progress notes, and instruction updates.</td>
+              <td>These edits affect future agent behavior, so they need provenance, lesson capture, and validation.</td>
+              <td class="confidence-medium">Medium high</td>
+              <td>Place in <code>agent-work-admin</code>, with <code>provision-agentic-config</code> awareness.</td>
+            </tr>
+            <tr>
+              <td>Skill visibility repair is a real agentic-skills maintenance lane.</td>
+              <td>31 classifier hits, mostly in <code>agentic-skills</code> and <code>claude-skills</code>, plus recent task history around pack install and discovery repairs.</td>
+              <td>Missing skill symptoms involve pack metadata, managed installs, current-session reload caveats, and runner differences.</td>
+              <td class="confidence-medium">Medium high</td>
+              <td>Put in <code>skill-dev</code> as an operational repair skill rather than a skill creation workflow.</td>
+            </tr>
+            <tr>
+              <td>Visual polish is present but the count is noisy.</td>
+              <td>40 classifier hits around visual checks and screenshots, but some "overlap" matches were semantic false positives.</td>
+              <td>The workflow exists, but it needs a stricter parser before deciding whether to build a general skill.</td>
+              <td class="confidence-medium">Medium</td>
+              <td>Candidate for <code>website-polish</code>, not top priority until manually triaged.</td>
+            </tr>
+            <tr>
+              <td>Research freshness is cross-cutting but not clearly a standalone skill.</td>
+              <td>203 loose classifier hits, but terms like "current" often referred to UI state or current work, not web freshness.</td>
+              <td>The behavior belongs in standing instructions and research skills more than in a standalone user-facing skill.</td>
+              <td class="confidence-low">Low as counted</td>
+              <td>Do not build from this count alone; tighten existing research-admin contracts instead.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="highest-impact" data-section-title="Highest Impact">
+        <h2>Highest Impact</h2>
+        <div class="feedback-control" data-section="Highest Impact">
+          <span>Section feedback:</span>
+          <label><input type="radio" name="fb-impact" value="up">Thumbs up</label>
+          <label><input type="radio" name="fb-impact" value="down">Thumbs down</label>
+          <label><input type="radio" name="fb-impact" value="needs-clarification">Clarification needed</label>
+          <textarea class="feedback-notes" placeholder="Optional notes"></textarea>
+        </div>
+        <ol>
+          <li><strong><code>plain-text-ship</code> in <code>exec-loop</code>:</strong> highest avoided manual prompts because shipping phrases appear constantly and already have stable behavior.</li>
+          <li><strong><code>plan-implementation-runner</code> in <code>exec-loop</code>:</strong> captures pasted-plan implementation and continuation plans, which are common after context transfer.</li>
+          <li><strong><code>staging-deploy-smoke</code> in <code>release-ops</code>:</strong> staging deploys recur and often need smoke validation, not just deployment command execution.</li>
+          <li><strong><code>what-now</code> in <code>exec-loop</code> or <code>repo-maintenance</code>:</strong> converts "continue" and "what's next" into an evidence-backed next action.</li>
+          <li><strong><code>agent-instructions-update</code> in <code>agent-work-admin</code>:</strong> reduces risky ad hoc edits to persistent agent behavior files.</li>
+        </ol>
+      </section>
+
+      <section id="lower-confidence" data-section-title="Lower Confidence">
+        <h2>Lower Confidence Or Not New</h2>
+        <div class="feedback-control" data-section="Lower Confidence">
+          <span>Section feedback:</span>
+          <label><input type="radio" name="fb-lower" value="up">Thumbs up</label>
+          <label><input type="radio" name="fb-lower" value="down">Thumbs down</label>
+          <label><input type="radio" name="fb-lower" value="needs-clarification">Clarification needed</label>
+          <textarea class="feedback-notes" placeholder="Optional notes"></textarea>
+        </div>
+        <table>
+          <thead><tr><th>Pattern</th><th>Disposition</th><th>Reason</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><code>freshness-verify</code></td>
+              <td>Standing instruction or research-admin contract, not a priority standalone skill.</td>
+              <td>The keyword count is noisy because "current" often means current UI state or current task.</td>
+            </tr>
+            <tr>
+              <td><code>benchmark-batch-runner</code></td>
+              <td>Possible <code>agentic-skills-bench</code> enhancement, but not proven by compact plain-text history alone.</td>
+              <td>Much benchmark work is already done through explicit skill commands, task docs, or continuation plans.</td>
+            </tr>
+            <tr>
+              <td><code>repo-contributor-guide</code></td>
+              <td>Do not create yet.</td>
+              <td>The canonical Codex "Generate a file named AGENTS.md" prompt appears, but only as a low-frequency explicit request.</td>
+            </tr>
+            <tr>
+              <td><code>analyze-sessions templates</code></td>
+              <td>Enhance existing <code>analyze-sessions</code>, not a new skill.</td>
+              <td>Session analysis is already owned by <code>session-analytics</code>; add report templates if needed.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="assumptions" data-section-title="Confidence Register">
+        <h2>Confidence And Assumption Register</h2>
+        <div class="feedback-control" data-section="Confidence Register">
+          <span>Section feedback:</span>
+          <label><input type="radio" name="fb-confidence" value="up">Thumbs up</label>
+          <label><input type="radio" name="fb-confidence" value="down">Thumbs down</label>
+          <label><input type="radio" name="fb-confidence" value="needs-clarification">Clarification needed</label>
+          <textarea class="feedback-notes" placeholder="Optional notes"></textarea>
+        </div>
+        <table>
+          <thead><tr><th>Item</th><th>Status</th><th>What Could Change It</th></tr></thead>
+          <tbody>
+            <tr><td>Shipping, pasted-plan execution, staging deploys, and next-step status are the top priorities.</td><td class="confidence-high">Evidence-backed</td><td>Unlikely to change unless rich-session dedupe removes a large number of compact prompts.</td></tr>
+            <tr><td>Pack ownership for <code>what-now</code> is split between <code>exec-loop</code> and <code>repo-maintenance</code>.</td><td class="confidence-medium">Inference</td><td>Decide whether it should mutate or remain read-only.</td></tr>
+            <tr><td><code>agent-instructions-update</code> belongs in <code>agent-work-admin</code>.</td><td class="confidence-medium">Inference</td><td>Could move to <code>repo-maintenance</code> if scoped to AGENTS/CLAUDE file mechanics rather than workflow governance.</td></tr>
+            <tr><td>Classifier counts are exact enough to rank broad patterns.</td><td class="confidence-medium">Qualified</td><td>A semantic embedding pass or manual audit could refine medium and low-confidence rows.</td></tr>
+            <tr><td>Codex compact history is the correct prompt-count source.</td><td class="confidence-high">Method choice</td><td>Would change if rollout user records contain missing prompts not present in compact history.</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="alternatives" data-section-title="Alternatives">
+        <h2>Alternatives Considered</h2>
+        <div class="feedback-control" data-section="Alternatives">
+          <span>Section feedback:</span>
+          <label><input type="radio" name="fb-alternatives" value="up">Thumbs up</label>
+          <label><input type="radio" name="fb-alternatives" value="down">Thumbs down</label>
+          <label><input type="radio" name="fb-alternatives" value="needs-clarification">Clarification needed</label>
+          <textarea class="feedback-notes" placeholder="Optional notes"></textarea>
+        </div>
+        <ul>
+          <li><strong>Do nothing:</strong> rejected for high-frequency patterns because the same phrases keep recurring across projects and sources.</li>
+          <li><strong>Make every pattern a new skill:</strong> rejected because several should be aliases, subroutines, or existing skill enhancements.</li>
+          <li><strong>Route all plain text to <code>exec</code>:</strong> too coarse for deploys, review remediation, and instruction updates where pack-specific gates matter.</li>
+          <li><strong>Use only standing instructions:</strong> useful for freshness and task-doc habits, but insufficient for staged deploys, skill visibility repair, and review fixes.</li>
+        </ul>
+        <h3>Proposed File Changes If Approved Later</h3>
+        <p>No skill files should change before approval of this report. Likely follow-up work would add or update skills under <code>packs/exec-loop</code>, <code>packs/release-ops</code>, <code>packs/agent-work-admin</code>, <code>packs/code-debug</code>, <code>packs/code-review</code>, <code>packs/skill-dev</code>, and possibly <code>packs/website-polish</code>. Each changed <code>SKILL.md</code> would require archive, version, changelog, focused tests, and generated showcase refresh when metadata changes.</p>
+      </section>
+
+      <section id="gates" data-section-title="Review Gates">
+        <h2>Review Gates</h2>
+        <div class="feedback-control" data-section="Review Gates">
+          <span>Section feedback:</span>
+          <label><input type="radio" name="fb-gates" value="up">Thumbs up</label>
+          <label><input type="radio" name="fb-gates" value="down">Thumbs down</label>
+          <label><input type="radio" name="fb-gates" value="needs-clarification">Clarification needed</label>
+          <textarea class="feedback-notes" placeholder="Optional notes"></textarea>
+        </div>
+
+        <div class="question-block" data-gate="evidence_coverage" data-section="Evidence Coverage">
+          <h3>Evidence Coverage Gate</h3>
+          <p>Is the evidence sufficient to use this ranked list as the basis for follow-up skill work?</p>
+          <label><input type="radio" name="q-evidence" value="approved" data-required>Yes, use the high-confidence list.</label>
+          <textarea class="option-notes" placeholder="Optional additional notes"></textarea>
+          <label><input type="radio" name="q-evidence" value="rerun-needed" data-required>Rerun with a stricter parser before implementation.</label>
+          <textarea class="option-notes" placeholder="Optional additional notes"></textarea>
+          <label><input type="radio" name="q-evidence" value="other" data-required>Other / None of the above.</label>
+          <textarea class="option-notes" placeholder="Required if selected"></textarea>
+          <label><input type="radio" name="q-evidence" value="needs-clarification" data-required>Need clarification.</label>
+          <textarea class="option-notes" placeholder="What is unclear?"></textarea>
+        </div>
+
+        <div class="question-block" data-gate="candidate_verdict" data-section="Candidate Verdict">
+          <h3>Candidate Verdict Gate</h3>
+          <p>Which candidate set should move forward first?</p>
+          <label><input type="radio" name="q-candidates" value="top-five" data-required>Top five only: ship, pasted-plan execution, staging deploy, what-now, agent-instructions update.</label>
+          <textarea class="option-notes" placeholder="Optional additional notes"></textarea>
+          <label><input type="radio" name="q-candidates" value="top-ten" data-required>Top ten, including test-failure, review-fix, visual-polish, task-doc-sync, and skill-visibility repair.</label>
+          <textarea class="option-notes" placeholder="Optional additional notes"></textarea>
+          <label><input type="radio" name="q-candidates" value="other" data-required>Other / None of the above.</label>
+          <textarea class="option-notes" placeholder="Required if selected"></textarea>
+          <label><input type="radio" name="q-candidates" value="needs-clarification" data-required>Need clarification.</label>
+          <textarea class="option-notes" placeholder="What is unclear?"></textarea>
+        </div>
+
+        <div class="question-block" data-gate="pack_ownership" data-section="Pack Ownership">
+          <h3>Pack Ownership Gate</h3>
+          <p>Do the proposed pack assignments look right?</p>
+          <label><input type="radio" name="q-packs" value="approved" data-required>Yes, use the proposed pack assignments.</label>
+          <textarea class="option-notes" placeholder="Optional additional notes"></textarea>
+          <label><input type="radio" name="q-packs" value="revise" data-required>Revise pack ownership before implementation.</label>
+          <textarea class="option-notes" placeholder="Which skills should move?"></textarea>
+          <label><input type="radio" name="q-packs" value="other" data-required>Other / None of the above.</label>
+          <textarea class="option-notes" placeholder="Required if selected"></textarea>
+          <label><input type="radio" name="q-packs" value="needs-clarification" data-required>Need clarification.</label>
+          <textarea class="option-notes" placeholder="What is unclear?"></textarea>
+        </div>
+
+        <div class="question-block" data-gate="artifact_destination" data-section="Artifact Destination">
+          <h3>Artifact Destination Gate</h3>
+          <p>Where should the durable result of this analysis live?</p>
+          <label><input type="radio" name="q-artifact" value="alignment-only" data-required>Keep this as an alignment report only for now.</label>
+          <textarea class="option-notes" placeholder="Optional additional notes"></textarea>
+          <label><input type="radio" name="q-artifact" value="task-backlog" data-required>Add approved candidates to task docs as follow-up work.</label>
+          <textarea class="option-notes" placeholder="Preferred task destination"></textarea>
+          <label><input type="radio" name="q-artifact" value="other" data-required>Other / None of the above.</label>
+          <textarea class="option-notes" placeholder="Required if selected"></textarea>
+          <label><input type="radio" name="q-artifact" value="needs-clarification" data-required>Need clarification.</label>
+          <textarea class="option-notes" placeholder="What is unclear?"></textarea>
+        </div>
+
+        <div class="question-block" data-gate="coverage_checkpoint" data-section="Coverage Checkpoint">
+          <h3>Coverage Checkpoint Gate</h3>
+          <p>Is the current source coverage acceptable?</p>
+          <label><input type="radio" name="q-coverage" value="approved" data-required>Yes, compact history plus Codex metadata is enough for this decision.</label>
+          <textarea class="option-notes" placeholder="Optional additional notes"></textarea>
+          <label><input type="radio" name="q-coverage" value="expand" data-required>Expand analysis to Claude project transcripts and richer Codex rollout user records.</label>
+          <textarea class="option-notes" placeholder="What should the expanded pass prioritize?"></textarea>
+          <label><input type="radio" name="q-coverage" value="other" data-required>Other / None of the above.</label>
+          <textarea class="option-notes" placeholder="Required if selected"></textarea>
+          <label><input type="radio" name="q-coverage" value="needs-clarification" data-required>Need clarification.</label>
+          <textarea class="option-notes" placeholder="What is unclear?"></textarea>
+        </div>
+      </section>
+
+      <section id="compile" data-section-title="Compile Answers">
+        <h2>Compile Answers</h2>
+        <div class="feedback-control" data-section="Compile Answers">
+          <span>Section feedback:</span>
+          <label><input type="radio" name="fb-compile" value="up">Thumbs up</label>
+          <label><input type="radio" name="fb-compile" value="down">Thumbs down</label>
+          <label><input type="radio" name="fb-compile" value="needs-clarification">Clarification needed</label>
+          <textarea class="feedback-notes" placeholder="Optional notes"></textarea>
+        </div>
+        <div class="compile">
+          <p class="muted">Answer every required gate question, then compile the YAML and send it back for follow-up implementation decisions.</p>
+          <button id="compile-btn" disabled>Compile Answers</button>
+          <button id="copy-btn" disabled>Copy YAML</button>
+          <span id="compile-status" class="muted"></span>
+          <textarea id="yaml-output" readonly placeholder="Compiled YAML will appear here."></textarea>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    function yamlEscape(value) {
+      const text = String(value || "");
+      if (!text) return '""';
+      if (/[:#\n"'\\]/.test(text)) {
+        return JSON.stringify(text);
+      }
+      return text;
+    }
+
+    function updateNotesVisibility() {
+      document.querySelectorAll(".question-block").forEach(function(block) {
+        block.querySelectorAll("input[type=radio]").forEach(function(input) {
+          const notes = input.closest("label").nextElementSibling;
+          if (notes && notes.classList.contains("option-notes")) {
+            notes.style.display = input.checked ? "block" : "none";
+          }
+        });
+      });
+      document.querySelectorAll(".feedback-control").forEach(function(control) {
+        const selected = control.querySelector("input[type=radio]:checked");
+        const notes = control.querySelector(".feedback-notes");
+        if (notes) notes.style.display = selected ? "block" : "none";
+      });
+    }
+
+    function requiredGroups() {
+      const groups = new Set();
+      document.querySelectorAll("input[data-required]").forEach(function(input) {
+        groups.add(input.name);
+      });
+      return Array.from(groups);
+    }
+
+    function firstUnanswered() {
+      for (const name of requiredGroups()) {
+        if (!document.querySelector("input[name='" + name + "']:checked")) {
+          return document.querySelector("input[name='" + name + "']");
+        }
+      }
+      return null;
+    }
+
+    function updateCompileState() {
+      const missing = requiredGroups().filter(function(name) {
+        return !document.querySelector("input[name='" + name + "']:checked");
+      }).length;
+      const btn = document.getElementById("compile-btn");
+      btn.disabled = missing > 0;
+      document.getElementById("compile-status").textContent = missing ? missing + " required question(s) remaining" : "Ready to compile";
+    }
+
+    function selectedNotes(input) {
+      if (!input) return "";
+      const notes = input.closest("label").nextElementSibling;
+      return notes && notes.classList.contains("option-notes") ? notes.value.trim() : "";
+    }
+
+    function buildYaml() {
+      const lines = [];
+      lines.push("gate_answers:");
+      document.querySelectorAll(".question-block").forEach(function(block) {
+        const selected = block.querySelector("input[type=radio]:checked");
+        if (!selected) return;
+        let status = "answered";
+        if (selected.value === "other") status = "other";
+        if (selected.value === "needs-clarification") status = "needs-clarification";
+        lines.push("  - section: " + yamlEscape(block.dataset.section));
+        lines.push("    gate_type: " + yamlEscape(block.dataset.gate));
+        lines.push("    status: " + yamlEscape(status));
+        lines.push("    answer: " + yamlEscape(selected.value));
+        const notes = selectedNotes(selected);
+        if (notes) lines.push("    notes: " + yamlEscape(notes));
+      });
+      const feedback = [];
+      document.querySelectorAll(".feedback-control").forEach(function(control) {
+        const selected = control.querySelector("input[type=radio]:checked");
+        if (!selected) return;
+        const notes = control.querySelector(".feedback-notes");
+        feedback.push({
+          section: control.dataset.section,
+          feedback: selected.value,
+          notes: notes ? notes.value.trim() : ""
+        });
+      });
+      lines.push("section_feedback:");
+      if (!feedback.length) {
+        lines.push("  []");
+      } else {
+        feedback.forEach(function(item) {
+          lines.push("  - section: " + yamlEscape(item.section));
+          lines.push("    feedback: " + yamlEscape(item.feedback));
+          if (item.notes) lines.push("    notes: " + yamlEscape(item.notes));
+        });
+      }
+      return lines.join("\n") + "\n";
+    }
+
+    async function copyYaml(text) {
+      const output = document.getElementById("yaml-output");
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+          document.getElementById("compile-status").textContent = "YAML copied to clipboard";
+          return;
+        }
+      } catch (err) {
+        // Fall through to textarea selection.
+      }
+      output.focus();
+      output.select();
+      document.getElementById("compile-status").textContent = "Clipboard unavailable; YAML selected";
+    }
+
+    document.addEventListener("change", function(event) {
+      if (event.target.matches("input[type=radio]")) {
+        updateNotesVisibility();
+        updateCompileState();
+      }
+    });
+
+    document.getElementById("compile-btn").addEventListener("click", function() {
+      const missing = firstUnanswered();
+      if (missing) {
+        missing.scrollIntoView({ behavior: "smooth", block: "center" });
+        return;
+      }
+      const yaml = buildYaml();
+      document.getElementById("yaml-output").value = yaml;
+      document.getElementById("copy-btn").disabled = false;
+      copyYaml(yaml);
+    });
+
+    document.getElementById("copy-btn").addEventListener("click", function() {
+      copyYaml(document.getElementById("yaml-output").value);
+    });
+
+    updateNotesVisibility();
+    updateCompileState();
+  </script>
+</body>
+</html>
