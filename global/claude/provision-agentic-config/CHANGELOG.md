@@ -1,5 +1,16 @@
 # provision-agentic-config Changelog
 
+## v0.4
+
+- Add Prompt History to generated `CLAUDE.md` and `AGENTS.md` blocks
+- Require visible user skill-invocation prompts to be saved under `prompts/<skill-slug>/`
+- Document prompt frontmatter, tracked-artifact defaults, visible-context scope, and secret-stop handling
+
+## v0.3
+
+- Clarified Claude `/exec` shipping exception language in generated `CLAUDE.md` blocks
+- Updated provisioned block version comments for stale provisioning detection
+
 ## v0.2
 
 - Add `<!-- provision-agentic-config vX.Y -->` version comment to provisioned blocks

@@ -1,3 +1,25 @@
+## Current Task — Prompt History Logging For Skills 2026-05-30
+
+**Goal:** Add a shared skill-invocation convention requiring agents to save the exact visible user invocation prompt under `prompts/<skill-slug>/` before substantive skill work, and validate that the convention is present in root and provisioned agent config.
+
+**Plan:**
+- [x] Record the plan in task docs and confirm the intended source surfaces.
+- [x] Archive and bump mirrored `provision-agentic-config` skills before changing their generated blocks.
+- [x] Add the Prompt History convention to root `CLAUDE.md`, root `AGENTS.md`, and both provisioner skill templates.
+- [x] Add focused layer1 coverage for the convention and canonical `prompts/<skill-slug>/` path pattern.
+- [x] Run focused validation, archive/version audits, and whitespace checks.
+- [x] Record review notes, commit, and push intended changes on `master`.
+
+### Review
+
+- Added `### Prompt History` to the provisioned root `CLAUDE.md` and `AGENTS.md` workflow blocks and bumped their provisioner marker to v0.4.
+- Archived mirrored `provision-agentic-config` v0.3 skills, bumped active Claude/Codex contracts to v0.4, and updated changelogs with v0.3 and v0.4 entries.
+- Added `tests/layer1/prompt-history-convention.test.ts` to assert the prompt-history convention, `prompts/<skill-slug>/` path pattern, filename pattern, required frontmatter fields, visible-only scope, tracked-artifact default, and secret-stop behavior.
+- Refreshed Skills Showcase generated assets because the provisioner skill metadata now reports v0.4.
+- Updated the existing sync config test's stale sync-version assertion from v0.3 to v0.4 after the focused config guard exposed that pre-existing mismatch.
+- Validation passed: `pnpm --dir tests exec vitest run --project layer1 layer1/prompt-history-convention.test.ts layer1/sync-agent-config.test.ts layer1/frontmatter.test.ts`, `bash scripts/skill-versions.sh --missing`, `scripts/validate-skills-showcase-data.sh`, `git diff --check`, direct v0.3 archive file checks, and targeted prompt-history scans.
+- Validation caveat: `bash scripts/skill-archive-audit.sh --strict` still fails on two unrelated pre-existing `research-roadmap` changelog gaps: `packs/research-admin/claude/research-roadmap` and `packs/research-admin/codex/research-roadmap` are missing `## v0.6` headings.
+
 ## Current Task - Pack Install Claude Clear-Context Reload 2026-05-30
 
 **Goal:** Verify whether Claude Code can detect newly installed pack skills after clearing context, then update pack skill language if the behavior is evidence-backed.

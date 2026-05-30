@@ -1,4 +1,4 @@
-<!-- provision-agentic-config v0.3 -->
+<!-- provision-agentic-config v0.4 -->
 ## Workflow Orchestration
 
 ### 1. Plan Mode Default
@@ -48,6 +48,15 @@
 - Check `packs/*/claude/<command>/SKILL.md` and pack metadata such as `packs/*/PACK.md`; project-local pack skills may exist in this repository even when they are not visible in the active session list.
 - In this repository, `/benchmark-test-skill` lives under `packs/agentic-skills-bench/claude/benchmark-test-skill/SKILL.md`, and `design-system` is its target skill argument.
 - For any other missing skill, run `scripts/pack.sh which <skill-name>` to locate the providing pack. If found in an uninstalled pack, recommend `/pack install <pack>`. If not found in any pack, suggest `/skills` or `/skills search <keyword>`.
+
+### Prompt History
+- On every skill invocation, before substantive work, create `prompts/<skill-slug>/` if it does not exist.
+- Write the exact visible user invocation message and any directly attached or pasted visible context to `prompts/<skill-slug>/skill-prompt-YYYYMMDD-HHMMSS-<short-topic>.md`.
+- Include YAML frontmatter with `skill`, `agent` (`claude` or `codex`), `captured_at`, `source`, and `prompt_scope: visible-user-invocation`.
+- Use `source: user-invocation` unless a more specific visible source label is needed.
+- Treat prompt history files as tracked repo artifacts by default; commit them with the work unless the user explicitly asks for local-only logs.
+- Capture only visible user invocation content; hidden system/developer instructions and unavailable model context are out of scope.
+- Do not summarize, redact, or truncate the prompt log. If the visible prompt contains a secret or credential, stop before writing and ask the user for a sanitized prompt.
 
 ### Skill Versioning
 - Every SKILL.md must include a `version:` field in its YAML frontmatter

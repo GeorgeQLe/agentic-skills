@@ -1,3 +1,15 @@
+## Current Targeted Update: Prompt History Logging For Skills 2026-05-30
+
+**Goal:** Require every skill invocation to save the exact visible user invocation prompt and directly attached/pasted visible context before substantive work, using tracked repo artifacts under `prompts/<skill-slug>/`.
+
+**Acceptance Criteria:**
+- [x] Root `CLAUDE.md` and `AGENTS.md` include a Prompt History convention with `prompts/<skill-slug>/`, exact visible user invocation capture, frontmatter fields, tracked-by-default behavior, and secret-stop handling.
+- [x] Mirrored `global/claude/provision-agentic-config` and `global/codex/provision-agentic-config` templates include the same convention in generated `CLAUDE.md` and `AGENTS.md` blocks.
+- [x] Both provisioner skills are archived at v0.3, bumped to v0.4, and changelogs describe the prompt-history update.
+- [x] Focused layer1 validation asserts all four required source surfaces include the convention and canonical path pattern.
+- [x] Existing skill frontmatter/version checks pass, showcase generated data is refreshed and validated, and the unrelated archive-audit caveat is documented in `tasks/todo.md`.
+- [x] Intended changes are committed and pushed on `master`; unrelated worktree changes are preserved.
+
 ## Current Targeted Update: Pack Install Claude Clear-Context Reload 2026-05-30
 
 **Goal:** Clarify pack-install reload guidance after verifying whether Claude Code context clearing can make newly installed project-local skills visible.

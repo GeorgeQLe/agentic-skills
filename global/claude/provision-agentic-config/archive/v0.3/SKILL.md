@@ -2,7 +2,7 @@
 name: provision-agentic-config
 description: Provision workflow orchestration and agent conventions into project CLAUDE.md and AGENTS.md
 type: ops
-version: v0.4
+version: v0.3
 argument-hint:
 ---
 
@@ -26,12 +26,12 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
      - `AGENTS.md`: `Provisioned artifact: ./AGENTS.md. Source: workflow.md. Verification: block appears exactly once.`
      - If `workflow.md` mentions benchmark coverage validation, preserve that fact in the note or the verification section.
      - Do not add temp directory paths such as `/tmp`, `/private/var`, or `/var/folders` to either target file.
-   - Each block begins with `<!-- provision-agentic-config v0.4 -->`. When replacing an existing block, update this comment to the current version. The `/sync` skill uses this comment to detect stale provisioning.
+   - Each block begins with `<!-- provision-agentic-config v0.3 -->`. When replacing an existing block, update this comment to the current version. The `/sync` skill uses this comment to detect stale provisioning.
 
    The Claude block to insert into `./CLAUDE.md`:
 
    ````markdown
-   <!-- provision-agentic-config v0.4 -->
+   <!-- provision-agentic-config v0.3 -->
    ## Workflow Orchestration
 
    ### 1. Plan Mode Default
@@ -77,15 +77,6 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
    - When a skill invocation fails because the skill is not found, run `scripts/pack.sh which <skill-name>` to check if the skill exists in an available pack.
    - If found in an uninstalled pack, recommend `/pack install <pack>` and note that a new session is needed.
    - If not found in any pack, suggest `/skills` or `/skills search <keyword>`.
-
-   ### Prompt History
-   - On every skill invocation, before substantive work, create `prompts/<skill-slug>/` if it does not exist.
-   - Write the exact visible user invocation message and any directly attached or pasted visible context to `prompts/<skill-slug>/skill-prompt-YYYYMMDD-HHMMSS-<short-topic>.md`.
-   - Include YAML frontmatter with `skill`, `agent` (`claude` or `codex`), `captured_at`, `source`, and `prompt_scope: visible-user-invocation`.
-   - Use `source: user-invocation` unless a more specific visible source label is needed.
-   - Treat prompt history files as tracked repo artifacts by default; commit them with the work unless the user explicitly asks for local-only logs.
-   - Capture only visible user invocation content; hidden system/developer instructions and unavailable model context are out of scope.
-   - Do not summarize, redact, or truncate the prompt log. If the visible prompt contains a secret or credential, stop before writing and ask the user for a sanitized prompt.
 
    ## Task Management
 
@@ -135,7 +126,7 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
    The AGENTS block to insert into `./AGENTS.md`:
 
    ````markdown
-   <!-- provision-agentic-config v0.4 -->
+   <!-- provision-agentic-config v0.3 -->
    ## Workflow Orchestration
 
    ### 1. Plan Mode Default
@@ -181,15 +172,6 @@ Create or update the current repository's `CLAUDE.md` and `AGENTS.md` with workf
    - When a skill invocation fails because the skill is not found, run `scripts/pack.sh which <skill-name>` to check if the skill exists in an available pack.
    - If found in an uninstalled pack, recommend `/pack install <pack>` and note that a new session is needed.
    - If not found in any pack, suggest `/skills` or `/skills search <keyword>`.
-
-   ### Prompt History
-   - On every skill invocation, before substantive work, create `prompts/<skill-slug>/` if it does not exist.
-   - Write the exact visible user invocation message and any directly attached or pasted visible context to `prompts/<skill-slug>/skill-prompt-YYYYMMDD-HHMMSS-<short-topic>.md`.
-   - Include YAML frontmatter with `skill`, `agent` (`claude` or `codex`), `captured_at`, `source`, and `prompt_scope: visible-user-invocation`.
-   - Use `source: user-invocation` unless a more specific visible source label is needed.
-   - Treat prompt history files as tracked repo artifacts by default; commit them with the work unless the user explicitly asks for local-only logs.
-   - Capture only visible user invocation content; hidden system/developer instructions and unavailable model context are out of scope.
-   - Do not summarize, redact, or truncate the prompt log. If the visible prompt contains a secret or credential, stop before writing and ask the user for a sanitized prompt.
 
    ## Task Management
 

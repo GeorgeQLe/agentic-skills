@@ -27,7 +27,7 @@ describe("sync agent config drift contract", () => {
     for (const contract of contracts) {
       const content = read(contract.path);
 
-      expect(content, `${contract.path} should be versioned`).toContain("version: v0.3");
+      expect(content, `${contract.path} should be versioned`).toContain("version: v0.4");
       expect(content, `${contract.path} should keep version-comment detection`).toContain(
         "<!-- provision-agentic-config vX.Y -->",
       );
