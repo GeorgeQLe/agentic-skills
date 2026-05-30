@@ -2,11 +2,13 @@
 name: youtube-audit
 description: Analyze a YouTube channel with evidence-first metadata, transcripts, performance fields, portfolio shape, and repeated content-quality patterns
 type: research
-version: v0.2
+version: v0.1
 argument-hint: "<channel URL or handle> [--count N]"
 ---
 
 # YouTube Audit — Evidence-First Channel Analysis
+
+Invoke as `$youtube-audit`.
 
 ## Report-First Approval Gate
 
@@ -27,11 +29,11 @@ Two CLI tools are required. Neither needs API keys.
 
 Check `yt-dlp` before proceeding. The transcript dependency should be handled through a project-local `.venv` when it is missing.
 
-## Process
+## Workflow
 
 ### 1. Parse Arguments
 
-- `$ARGUMENTS` must contain a YouTube channel URL (e.g. `https://www.youtube.com/@handle`) or handle (e.g. `@handle`).
+- `$ARGUMENTS` must contain a YouTube channel URL or handle (e.g. `@handle`).
 - Optional `--count N` sets how many recent videos to fetch (default 20, max 50).
 - If no channel is provided, ask the user for one and stop.
 - Normalize handles to channel video URLs when needed: `@handle` -> `https://www.youtube.com/@handle/videos`.
@@ -98,9 +100,19 @@ Persist the raw newline-delimited response exactly to:
 research/youtube/data/<slug>/videos-YYYY-MM-DD.jsonl
 ```
 
-Parse each JSON object for: `id`, `webpage_url`, `title`, `description`, `channel`, `channel_id`, `uploader`, `uploader_id`, `upload_date`, `timestamp`, `duration`, `view_count`, `like_count`, `comment_count`, `tags`, `categories`, `chapters`, `thumbnail`, and `thumbnails`.
+Parse each JSON object for at least:
 
-Build a video table sorted by upload date (newest first). Report total videos found to the user.
+| Field | Notes |
+| --- | --- |
+| `id`, `webpage_url`, `title`, `description` | Identity and audit links |
+| `channel`, `channel_id`, `uploader`, `uploader_id` | Channel identity |
+| `upload_date`, `timestamp` | Used for recency and views/day |
+| `duration` | Used for views/minute |
+| `view_count`, `like_count`, `comment_count` | Performance |
+| `tags`, `categories`, `chapters` | Positioning and packaging signals |
+| `thumbnail`, `thumbnails` | Packaging review signal |
+
+Build a video table sorted by upload date (newest first). Report total videos found.
 
 ### 4. Fetch Transcripts
 
@@ -131,9 +143,9 @@ summary = {"transcripts": results, "errors": errors}
 json.dump(summary, sys.stdout)
 ```
 
-- Fetch sequentially with 1.5s delay between requests to avoid rate limiting.
+- Fetch sequentially with 1.5s delay to avoid rate limiting.
 - Skip videos without transcripts and log the reason.
-- If more than 80% of videos lack transcripts, warn the user that the audit will be limited and ask whether to proceed.
+- If more than 80% lack transcripts, warn the user and ask whether to proceed.
 - Do not fabricate transcript text; transcript gaps are evidence quality limits.
 
 ### 5. Prepare Analysis Context
@@ -173,10 +185,7 @@ Include:
 
 ### Content Quality Patterns
 
-Split findings into:
-
-- **Positive patterns** (double down): Things the channel does well repeatedly
-- **Critical patterns** (fix): Things the channel does poorly repeatedly
+Split into positive patterns (double down) and critical patterns (fix).
 
 **Every finding must cite evidence from 2+ videos to qualify as a pattern.** Single-video observations are not patterns — discard them.
 
@@ -245,12 +254,6 @@ Save to `research/youtube/youtube-audit-<slug>-YYYY-MM-DD.md`:
 
 ### ...
 
-## Cleanup Candidates
-
-| Video | Recommendation | Evidence | Human check |
-|---|---|---|---|
-| [Title](URL) | Keep / Refresh / Unlist-private candidate / Needs human review | [performance + fit evidence] | [what to inspect before action] |
-
 ## Critical Patterns (Fix)
 
 ### [Pattern Title]
@@ -261,6 +264,12 @@ Save to `research/youtube/youtube-audit-<slug>-YYYY-MM-DD.md`:
 - **Recommendation**: [Specific fix]
 
 ### ...
+
+## Cleanup Candidates
+
+| Video | Recommendation | Evidence | Human check |
+|---|---|---|---|
+| [Title](URL) | Keep / Refresh / Unlist-private candidate / Needs human review | [performance + fit evidence] | [what to inspect before action] |
 
 ## Summary
 
@@ -282,14 +291,7 @@ Create the `research/youtube/` and `research/youtube/data/<slug>/` directories i
 
 ### 8. Summarize In Thread
 
-After saving the report, output to the user:
-
-- Top 3 strengths (one line each)
-- Top 3 weaknesses (one line each)
-- Strategic recommendation
-- Performance/portfolio headline
-- Path to the full report
-- Raw data paths
+After saving the report, output: top 3 strengths, top 3 weaknesses, performance/portfolio headline, strategic recommendation, report path, and raw data paths.
 
 ## Constraints
 
@@ -301,29 +303,6 @@ After saving the report, output to the user:
 - **Raw evidence first**: Always persist raw `yt-dlp` JSONL and transcript JSON before writing analysis.
 - **No automated destructive content advice**: Cleanup candidates are review recommendations, not instructions to delete content.
 - **Stay in analysis mode**: Do not propose video ideas, scripts, or content calendars. The job is to audit what exists.
-
-## Approved Artifact Handoff
-
-After an approved synthesized write, explicit write/update mode, or any direct artifact mutation:
-
-- List every created or updated synthesized artifact path in the final response.
-- State the verification performed, such as readback, schema/check command, or why no executable verification applies for a Markdown-only strategy artifact.
-- Check and report the relevant git status for intended artifacts when the project is a git repository. If intended artifacts are modified or untracked, make the next action shipping, committing, or an explicit dirty-artifact handoff before recommending downstream strategy work.
-- Do not imply the research workflow is complete while approved artifacts remain untracked or uncommitted unless the user explicitly asked not to ship.
-- If stopping for approval before writing, the approval request remains the next action; do not include downstream routing.
-
-## Intent-Aware Routing
-
-Before applying the default next-step routing, classify the user's immediate intent and route to the missing action that best serves that intent:
-
-- Strategy refresh: recommend the missing or stale positioning, programming, portfolio, metrics, or product-media artifact.
-- Recording prep: recommend the missing series spec, script, build proof, walkthrough guide, or validation artifact needed before recording.
-- Upload prep: recommend packaging, title/thumbnail, description, chapters, or final metadata work before broader strategy work.
-- Performance review: recommend metrics, cadence, portfolio, peer benchmark, or owner-analytics export work before new content planning.
-- Owner analytics or private/manual platform evidence: route to an explicit manual/guide handoff instead of inventing unavailable metrics.
-- Dirty intended artifacts: route to shipping/commit/handoff first, not another creator strategy skill.
-
-Use the default next-skill sequence only when no stronger user intent, missing artifact, manual blocker, or dirty-artifact handoff applies.
 
 ## Alignment Page
 
