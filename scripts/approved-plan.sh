@@ -73,6 +73,40 @@ check_mode_compat() {
   fi
 }
 
+scan_dirty_paths() {
+  # Emit working-tree dirty paths one per line, NUL-safe.
+  #
+  # Parses `git status --porcelain -z`: each entry begins with a 3-char `XY `
+  # status prefix followed by the path, NUL-terminated. Rename/copy entries
+  # (index status R or C) carry a SECOND NUL field holding the OLD name; we
+  # resolve to the NEW path (the one the prefix is attached to) and consume the
+  # trailing old-name field so it is never mistaken for its own entry. This is
+  # why we cannot use `awk '{print $2}'`: that returns the OLD name for renames
+  # (an out-of-scope renamed file would silently bypass the allowlist) and
+  # truncates paths containing spaces.
+  #
+  # NOTE: command substitution `$(...)` strips NUL bytes, so the -z stream is
+  # read directly into an array via process substitution, never captured first.
+  local -a fields=()
+  local field
+  while IFS= read -r -d '' field; do
+    fields+=("$field")
+  done < <(git -C "$PROJECT_ROOT" status --porcelain -z 2>/dev/null)
+
+  local i=0 entry code path
+  while (( i < ${#fields[@]} )); do
+    entry="${fields[$i]}"
+    code="${entry:0:1}"   # X — index status (R/C carry a trailing old-name field)
+    path="${entry:3}"     # strip the 3-char "XY " prefix
+    [[ -n "$path" ]] && printf '%s\n' "$path"
+    if [[ "$code" == "R" || "$code" == "C" ]]; then
+      i=$(( i + 2 ))
+    else
+      i=$(( i + 1 ))
+    fi
+  done
+}
+
 cmd_check() {
   local packet="$DEFAULT_PACKET"
   while [[ $# -gt 0 ]]; do
@@ -133,7 +167,7 @@ cmd_check() {
 
   # 5. Dirty paths outside allowlist
   local dirty
-  dirty="$(git -C "$PROJECT_ROOT" status --porcelain 2>/dev/null | awk '{print $2}')"
+  dirty="$(scan_dirty_paths)"
   if [[ -n "$dirty" ]]; then
     local -a allow=()
     if command -v jq >/dev/null 2>&1; then
@@ -294,8 +328,13 @@ cmd_draft() {
     fi
   fi
 
+  # Validate the git repo before scanning the working tree, so a non-repo path
+  # fails with a clear "not a git repo" rather than a confusing empty scan.
+  local git_head todo_hash approved_at
+  git_head="$(git -C "$PROJECT_ROOT" rev-parse HEAD 2>/dev/null)" || die "not a git repo at $PROJECT_ROOT"
+
   local dirty
-  dirty="$(git -C "$PROJECT_ROOT" status --porcelain 2>/dev/null | awk '{print $2}')"
+  dirty="$(scan_dirty_paths)"
   if [[ -n "$dirty" ]]; then
     local path matched glob
     while IFS= read -r path; do
@@ -313,8 +352,6 @@ cmd_draft() {
     done <<<"$dirty"
   fi
 
-  local git_head todo_hash approved_at
-  git_head="$(git -C "$PROJECT_ROOT" rev-parse HEAD 2>/dev/null)" || die "not a git repo at $PROJECT_ROOT"
   todo_hash="$(todo_hash_of "$TODO_FILE")"
   [[ -n "$todo_hash" ]] || die "tasks/todo.md missing or empty"
   approved_at="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
