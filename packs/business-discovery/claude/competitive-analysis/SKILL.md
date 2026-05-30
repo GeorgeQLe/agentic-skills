@@ -2,7 +2,7 @@
 name: competitive-analysis
 description: Research competitors via web search — map the landscape, GTM strategies, strengths, weaknesses, and market gaps
 type: research
-version: v0.9
+version: v0.10
 argument-hint: "[concept | optional: product category or specific competitors to investigate]"
 ---
 
@@ -27,30 +27,31 @@ Conduct deep web-based research to compile a comprehensive competitive landscape
 **Detect mode before proceeding:**
 
 - **Concept-validation mode** activates when: no `research/icp.md` exists AND (no meaningful codebase — i.e. no README, no source files, no package config — OR `$ARGUMENTS` contains "concept" or "validate"). Use this mode to validate market gaps after a concept has been shaped by `/idea-scope-brief` or an equivalent brief; if no concept is clear, recommend `/idea-scope-brief` first. In this mode, announce to the user: "Running in concept-validation mode — no ICP or product detected. I'll evaluate the market gap for your concept." Then ask the user to describe the concept, the problem it addresses, and the intended audience.
-- **Standard mode** (default): Read the codebase, README, CLAUDE.md, and existing research/specs (`research/icp.md` or `research/{app}/icp.md`, `research/enterprise-icp.md` or `research/{app}/enterprise-icp.md`, `research/mvp-gap.md` or `research/{app}/mvp-gap.md`) to understand what the product does, who it's for, and what value it claims to provide. This context is essential for identifying the right competitors and evaluating positioning. If no codebase or specs exist but `research/icp.md` is present, proceed in standard mode using the ICP as context.
-- Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading. In standard mode, scope the full competitive analysis to the first entry in `active_paths` by default. Treat `product_paths[]` entries with `status: deferred` or `status: revisit_candidate` as parked product paths, not as extra full research tracks.
+- **Standard mode** (default): Read the codebase, README, CLAUDE.md, and existing research/specs (`research/icp.md` or `research/{slug}/icp.md`, `research/enterprise-icp.md` or `research/{slug}/enterprise-icp.md`, `research/mvp-gap.md` or `research/{slug}/mvp-gap.md`) to understand what the product does, who it's for, and what value it claims to provide. This context is essential for identifying the right competitors and evaluating positioning. If no codebase or specs exist but `research/icp.md` is present, proceed in standard mode using the ICP as context.
+- Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading; treat legacy `abandoned` as `archived` and exclude archived/deferred/revisit/promoted paths plus `research/_archive/` scopes from active target selection. In standard mode, scope the full competitive analysis to the first entry in `active_paths` by default. Treat `product_paths[]` entries with `status: deferred` or `status: revisit_candidate` as parked product paths, not as extra full research tracks.
 
 ## Process
 
-### 0. App Scope Resolution (Monorepo Support)
+### 0. Product-Path Scope Resolution
 
-Before checking prerequisites, determine the app scope:
+Resolve research scope by product path before using code or app structure as a hint:
 
-1. If `$ARGUMENTS` specifies an app name matching a subdirectory of `research/`, use it.
-2. If `research/` contains subdirectories (excluding files), list them and ask the user which app to target. If only one subdirectory exists, use it automatically.
-3. If no subdirectories exist, proceed with flat structure (single-product mode).
+1. If `$ARGUMENTS` names a non-archived `research/{slug}/` directory or a product-path ID whose `scope_path` points there, use that path. Treat `{slug}` as the product/app name, not the ICP, audience, or segment label.
+2. If `$ARGUMENTS` names only `research/_archive/{slug}/` or a manifest entry with `status: archived` or legacy `status: abandoned`, stop and warn that the path is archived; do not write or update scoped outputs there.
+3. Read `research/.progress.yaml` when present. Normalize legacy `active_path` to `active_paths` on read and write back `active_paths` on manifest updates. Treat legacy `abandoned` as `archived`; exclude `archived`, `abandoned`, `deferred`, `revisit_candidate`, `promoted`, and any `scope_path` under `research/_archive/` from active target selection.
+4. If active product paths exist in the manifest, use those paths. If multiple active paths exist, ask which one to target unless this skill explicitly supports cross-path output.
+5. If no active manifest target exists, list non-archived product directories under `research/`, excluding `research/_archive/` and dot directories. Auto-select only when exactly one exists; ask when multiple exist.
+6. If no product directories exist, use flat `research/` single-product mode.
+7. Detect monorepo/app/package structure only as a secondary hint. Suggest creating a missing `research/{slug}/` product path when code clearly exposes an app, but do not require code or monorepo detection before using `research/{slug}/`.
 
-When app scope `{app}` is active:
-- Read/write research from `research/{app}/` instead of `research/`
-- Read/write specs from `specs/{app}/` instead of `specs/`
-- Also read `research/icp.md` (cross-app overview) for broader context
+When product path `{slug}` is active, read and write research under `research/{slug}/`, specs under `specs/{slug}/`, and treat top-level `research/*.md` files as flat-mode documents or cross-path summaries.
 
 ### 1. Establish Product Context
 
 **Standard mode:**
 - Read CLAUDE.md, README, package config, and key source files to understand the product
-- Read `research/icp.md` (or `research/{app}/icp.md`) if it exists — the customer profile, pain map, and value prop define the competitive frame
-- Read `research/enterprise-icp.md` (or `research/{app}/enterprise-icp.md`) and `research/mvp-gap.md` (or `research/{app}/mvp-gap.md`) if they exist for additional context
+- Read `research/icp.md` (or `research/{slug}/icp.md`) if it exists — the customer profile, pain map, and value prop define the competitive frame
+- Read `research/enterprise-icp.md` (or `research/{slug}/enterprise-icp.md`) and `research/mvp-gap.md` (or `research/{slug}/mvp-gap.md`) if they exist for additional context
 - If `$ARGUMENTS` names specific competitors, use those as a starting point but still search broadly
 - Summarise what the product does, who it's for, and what problem it solves. Confirm this understanding with the user before researching.
 
@@ -210,7 +211,7 @@ Only after the user has validated the findings, write the output files.
 
 After writing, check for downstream research documents that may be affected by what was just decided. Only check documents that exist on disk.
 
-**Downstream documents to check** (use `{app}/` prefix when app scope is active):
+**Downstream documents to check** (use `{slug}/` prefix when product-path scope is active):
 - `research/gtm.md`
 - `research/monetization.md`
 
@@ -231,7 +232,7 @@ Display to the user after showing the written file confirmation. This should be 
 
 ## Output
 
-### `research/competitive-analysis.md` (or `research/{app}/competitive-analysis.md`)
+### `research/competitive-analysis.md` (or `research/{slug}/competitive-analysis.md`)
 
 ```markdown
 # Competitive Analysis
@@ -351,13 +352,13 @@ Positioning recommendations ("where we fit", "recommended positioning") belong i
 - [signal]: value delivery patterns across the landscape
 ```
 
-### `research/competitive-analysis-search-log.md` (or `research/{app}/competitive-analysis-search-log.md`)
+### `research/competitive-analysis-search-log.md` (or `research/{slug}/competitive-analysis-search-log.md`)
 Raw research log — every search query, key findings with source attribution, and the reasoning behind categorisation and positioning recommendations.
 
 ### `research/.progress.yaml`
 Update only when active-path evidence changes a deferred product path's status, reason, evidence refs, revisit trigger, or next skill. Use `product_paths` terminology instead of branch terminology. When writing manifest entries, include `pipeline_stage: competitive-analysis` on the active path entry.
 
-Create the `research/` (or `research/{app}/`) directory if it doesn't exist.
+Create the `research/` (or `research/{slug}/`) directory if it doesn't exist.
 
 ## Task Classification
 
@@ -376,7 +377,7 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Be honest about uncertainty.** If information couldn't be verified, say so. Don't fabricate metrics.
 - **Stay in analysis mode.** Do not propose product changes, architecture, features, or positioning recommendations — product changes are for `/spec-interview` and `/mvp-gap`; positioning is for `/positioning`.
 - **Focus on actionable insights.** Raw competitor lists are easy; the value is in the synthesis — gaps, patterns, positioning angles.
-- **Do not overwrite existing `research/competitive-analysis.md`** (or `research/{app}/competitive-analysis.md`) without asking the user first.
+- **Do not overwrite existing `research/competitive-analysis.md`** (or `research/{slug}/competitive-analysis.md`) without asking the user first.
 - **Keep research current.** Prefer recent sources (last 12 months). Flag any information that may be outdated.
 - **Search breadth over depth initially.** Cast a wide net to find all competitors before going deep on each one. It's better to identify 15 competitors and research 8 deeply than to miss half the landscape.
 - **Present before writing.** Never write output files until findings have been presented to the user and validated through the checkpoint questions. The user must see and approve the analysis before anything is written to disk.

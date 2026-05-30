@@ -24,6 +24,8 @@ Commands:
   install <name...> Enable one or more packs or individual skills via local skill roots
   remove <name...>  Remove one or more packs or individual skills from the current project
   refresh           Recreate local skill roots for packs and skills in .agents/project.json
+  doctor            Report skill-install drift vs canonical sources (read-only; non-zero if stale)
+  set-update-mode <mode>  Set .agents/project.json.skill_updates.mode to warn, auto, or unset
   pin <skill> <ver> Pin a pack skill to an archived version (e.g., pin devtool-adoption v0.0)
   unpin <skill>     Revert a pinned skill to the latest version
   set-mode <mode>   Set .agents/project.json.agent_mode to claude-only, codex-only,
@@ -225,11 +227,12 @@ read_enabled_packs() {
 write_project_file() {
   local project_type="$1"
   shift
-  local project_scopes notes pinned_versions enabled_skills
+  local project_scopes notes pinned_versions enabled_skills skill_updates
   project_scopes="$(project_json_value project_scopes)"
   notes="$(project_json_value notes)"
   pinned_versions="$(read_pinned_versions)"
   enabled_skills="$(read_enabled_skills_json)"
+  skill_updates="$(project_json_value skill_updates)"
 
   mkdir -p "$(dirname "$PROJECT_FILE")"
   {
@@ -260,6 +263,9 @@ write_project_file() {
     fi
     if [[ -n "$enabled_skills" ]]; then
       printf ',\n  "enabled_skills": %s' "$enabled_skills"
+    fi
+    if [[ -n "$skill_updates" ]]; then
+      printf ',\n  "skill_updates": %s' "$skill_updates"
     fi
     if [[ -n "$project_scopes" ]]; then
       printf ',\n  "project_scopes": %s' "$project_scopes"
@@ -712,6 +718,70 @@ refresh() {
   fi
 }
 
+project_skill_updates_mode() {
+  if [[ -f "$PROJECT_FILE" ]] && command -v jq >/dev/null 2>&1; then
+    jq -r '.skill_updates.mode // empty' "$PROJECT_FILE" 2>/dev/null || true
+  fi
+}
+
+set_update_mode() {
+  local mode="${1:-}"
+  case "$mode" in
+    warn|auto|unset) ;;
+    *) die "set-update-mode requires a mode: warn, auto, or unset" ;;
+  esac
+  command -v jq >/dev/null 2>&1 || die "jq is required for set-update-mode"
+  [[ -f "$PROJECT_FILE" ]] || die "No .agents/project.json found; install a pack first"
+  local tmp
+  if [[ "$mode" == "unset" ]]; then
+    tmp="$(jq 'del(.skill_updates)' "$PROJECT_FILE")" || die "jq failed to update $PROJECT_FILE"
+  else
+    tmp="$(jq --arg m "$mode" '.skill_updates = ((.skill_updates // {}) + {mode: $m})' "$PROJECT_FILE")" || die "jq failed to update $PROJECT_FILE"
+  fi
+  [[ -n "$tmp" ]] || die "jq produced empty output for $PROJECT_FILE"
+  echo "$tmp" > "$PROJECT_FILE"
+  echo "Set skill_updates.mode to $mode"
+}
+
+# Read-only drift report for project-local managed skill installs.
+# Exits non-zero if any install is stale so callers (sync, hook) can branch.
+doctor() {
+  local mode
+  mode="$(project_skill_updates_mode)"
+  [[ -n "$mode" ]] || mode="warn (default)"
+  echo "Project skill update mode: $mode"
+  echo "Skill install drift (.claude/skills, .codex/skills):"
+
+  local found=false any_stale=false
+  local target line status rec cur rel
+  while IFS= read -r target; do
+    [[ -n "$target" ]] || continue
+    line="$(skill_install_status "$target")"
+    IFS=$'\t' read -r status rec cur <<< "$line"
+    [[ "$status" == "not-managed" ]] && continue
+    found=true
+    rel="${target#"$PROJECT_ROOT"/}"
+    case "$status" in
+      ok)             printf '  ok       %s\n' "$rel" ;;
+      pinned)         printf '  pinned   %s (frozen %s)\n' "$rel" "${rec:-?}" ;;
+      unknown)        printf '  unknown  %s — run refresh to enable drift tracking\n' "$rel" ;;
+      missing-source) printf '  missing  %s — canonical source no longer exists\n' "$rel" ;;
+      stale)          printf '  STALE    %s (%s -> %s)\n' "$rel" "${rec:-?}" "${cur:-?}"; any_stale=true ;;
+    esac
+  done < <(find "$PROJECT_ROOT/.claude/skills" "$PROJECT_ROOT/.codex/skills" -mindepth 1 -maxdepth 1 \( -type l -o -type d \) -print 2>/dev/null | sort)
+
+  if [[ "$found" != true ]]; then
+    echo "  (no managed skill installs found)"
+  fi
+
+  if [[ "$any_stale" == true ]]; then
+    echo ""
+    echo "Fix: scripts/pack.sh refresh"
+    return 1
+  fi
+  return 0
+}
+
 cmd="${1:-}"
 case "$cmd" in
   list) list_packs ;;
@@ -807,6 +877,15 @@ case "$cmd" in
     acquire_project_lock "$@"
     refresh
     print_session_reload_notice
+    ;;
+  doctor)
+    shift
+    doctor
+    ;;
+  set-update-mode)
+    acquire_project_lock "$@"
+    shift
+    set_update_mode "${1:-}"
     ;;
   pin)
     acquire_project_lock "$@"

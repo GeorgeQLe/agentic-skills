@@ -1,3 +1,16 @@
+## Current Targeted Update: Product-Path Research Scoping 2026-05-30
+
+**Goal:** Make research-path-aware skills resolve `research/{product-slug}/` product paths before code/app structure exists, exclude archived paths from active targeting, and clarify product-line archive/restore/activate/promote operations.
+
+**Acceptance Criteria:**
+- [x] Codex and Claude business-discovery and customer-lifecycle skills use product-path scope resolution instead of app-scope/monorepo-gated research path selection.
+- [x] Downstream business-growth, business-ops, product-design, product-testing, and research-admin readers filter `research/_archive/`, legacy `abandoned`, and inactive product-path statuses out of active target selection.
+- [x] `research/.progress.yaml` manifest schema supports `archived`, `promoted_at`, `archived_at`, `archive_reason`, `active_paths`, and backward-compatible `active_path`/`abandoned` reads.
+- [x] `product-line` distinguishes `activate`, `archive`, `restore`, and `promote` to app graduation.
+- [x] Focused static and layer1 fixture checks cover empty, single, multiple, active manifest, archived-only, legacy `abandoned`, migration guidance, and product-line operations.
+
+**Result:** Product-path research scoping now resolves active non-archived `research/{slug}/` paths before code/app hints, preserves flat single-product compatibility, and documents archive/restore/activate/promote product-line operations with focused regression coverage.
+
 ## Current Targeted Update: Plain-Text Skill Opportunity Analysis 2026-05-29
 
 **Goal:** Analyze full local Claude and Codex user history for recurring plain-text requests or commands that should become reusable skills, then map each candidate to the most appropriate pack.

@@ -2,7 +2,7 @@
 name: metrics
 description: Define success metrics framework — activation, engagement, retention, growth, and business metrics tied to journey stages
 type: analysis
-version: v0.2
+version: v0.3
 argument-hint: "[optional: focus area e.g. \"activation\", \"retention\"]"
 ---
 
@@ -18,33 +18,34 @@ Research-first skill that defines measurable success metrics tied to journey sta
 
 ## Prerequisites
 
-- **Hard**: `research/journey-map.md` (or `research/{app}/journey-map.md` in monorepo mode) must exist. If not, tell the user to run `$journey-map` first and stop.
-- **Soft**: Read `research/icp.md` (or `research/{app}/icp.md`) and `research/customer-feedback.md` (or `research/{app}/customer-feedback.md`) if they exist — these improve target-setting and relevance.
+- **Hard**: `research/journey-map.md` (or `research/{slug}/journey-map.md` in product-path mode) must exist. If not, tell the user to run `$journey-map` first and stop.
+- **Soft**: Read `research/icp.md` (or `research/{slug}/icp.md`) and `research/customer-feedback.md` (or `research/{slug}/customer-feedback.md`) if they exist — these improve target-setting and relevance.
 
 ## Process
 
-### 0. App Scope Resolution (Monorepo Support)
+### 0. Product-Path Scope Resolution
 
-Before checking prerequisites, determine the app scope:
+Resolve research scope by product path before using code or app structure as a hint:
 
-1. If `$ARGUMENTS` specifies an app name matching a subdirectory of `research/`, use it.
-2. If `research/` contains subdirectories (excluding files), list them and ask the user which app to target. If the session is already in Plan mode and there are 2-3 concrete choices, prefer `request_user_input`; otherwise ask in plain text. If only one subdirectory exists, use it automatically.
-3. If no subdirectories exist, proceed with flat structure (single-product mode).
+1. If `$ARGUMENTS` names a non-archived `research/{slug}/` directory or a product-path ID whose `scope_path` points there, use that path. Treat `{slug}` as the product/app name, not the ICP, audience, or segment label.
+2. If `$ARGUMENTS` names only `research/_archive/{slug}/` or a manifest entry with `status: archived` or legacy `status: abandoned`, stop and warn that the path is archived; do not write or update scoped outputs there.
+3. Read `research/.progress.yaml` when present. Normalize legacy `active_path` to `active_paths` on read and write back `active_paths` on manifest updates. Treat legacy `abandoned` as `archived`; exclude `archived`, `abandoned`, `deferred`, `revisit_candidate`, `promoted`, and any `scope_path` under `research/_archive/` from active target selection.
+4. If active product paths exist in the manifest, use those paths. If multiple active paths exist, ask which one to target unless this skill explicitly supports cross-path output.
+5. If no active manifest target exists, list non-archived product directories under `research/`, excluding `research/_archive/` and dot directories. Auto-select only when exactly one exists; ask when multiple exist.
+6. If no product directories exist, use flat `research/` single-product mode.
+7. Detect monorepo/app/package structure only as a secondary hint. Suggest creating a missing `research/{slug}/` product path when code clearly exposes an app, but do not require code or monorepo detection before using `research/{slug}/`.
 
-When app scope `{app}` is active:
-- Read/write research from `research/{app}/` instead of `research/`
-- Read/write specs from `specs/{app}/` instead of `specs/`
-- Also read `research/icp.md` (cross-app overview) for broader context
+When product path `{slug}` is active, read and write research under `research/{slug}/`, specs under `specs/{slug}/`, and treat top-level `research/*.md` files as flat-mode documents or cross-path summaries.
 
 ### 1. Product Path Manifest
 
-Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading. Scope the metrics framework to the active product path by default. When defining metrics that would only be relevant to a deferred product path, note the finding in a `## Product Path Implications` section.
+Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading; treat legacy `abandoned` as `archived` and exclude archived/deferred/revisit/promoted paths plus `research/_archive/` scopes from active target selection. Scope the metrics framework to the active product path by default. When defining metrics that would only be relevant to a deferred product path, note the finding in a `## Product Path Implications` section.
 
 ### 2. Load Context
 
-- Read `research/journey-map.md` (or `research/{app}/journey-map.md`) — customer journey stages, aha moment, habit loop, churn triggers, critical moments
-- Read `research/icp.md` (or `research/{app}/icp.md`) if it exists — ICP segments, pain points, value props
-- Read `research/customer-feedback.md` (or `research/{app}/customer-feedback.md`) if it exists — real user behavior patterns, validated/invalidated assumptions
+- Read `research/journey-map.md` (or `research/{slug}/journey-map.md`) — customer journey stages, aha moment, habit loop, churn triggers, critical moments
+- Read `research/icp.md` (or `research/{slug}/icp.md`) if it exists — ICP segments, pain points, value props
+- Read `research/customer-feedback.md` (or `research/{slug}/customer-feedback.md`) if it exists — real user behavior patterns, validated/invalidated assumptions
 - Read CLAUDE.md and README if they exist — product context and tech stack (affects instrumentation)
 - Read key source files if a codebase exists — understand what can actually be measured today
 
@@ -141,7 +142,7 @@ Only after the user has validated the findings, write the output files.
 
 After writing, check for downstream research documents that may be affected by what was just decided. Only check documents that exist on disk.
 
-**Downstream documents to check** (use `{app}/` prefix when app scope is active):
+**Downstream documents to check** (use `{slug}/` prefix when product-path scope is active):
 - `research/monetization.md`
 
 For each existing downstream document:
@@ -161,12 +162,12 @@ Display to the user after showing the written file confirmation. This should be 
 
 ## Output
 
-### `research/metrics.md` (or `research/{app}/metrics.md`)
+### `research/metrics.md` (or `research/{slug}/metrics.md`)
 
 ```markdown
 # Success Metrics Framework
 
-> Based on: research/journey-map.md (or research/{app}/journey-map.md)[, research/icp.md, research/customer-feedback.md]
+> Based on: research/journey-map.md (or research/{slug}/journey-map.md)[, research/icp.md, research/customer-feedback.md]
 > Date: [current date]
 
 ## Summary
@@ -269,7 +270,7 @@ Other options:
 - [conditional items from step 4 — only include items whose conditions are met]
 ```
 
-### `research/metrics-interview.md` (or `research/{app}/metrics-interview.md`)
+### `research/metrics-interview.md` (or `research/{slug}/metrics-interview.md`)
 Raw interview log — questions, options presented, user responses, and a closing summary of key decisions.
 
 Create the `research/` directory if it doesn't exist.
@@ -291,7 +292,7 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Include instrumentation.** Every metric must specify how to measure it and whether that measurement exists today.
 - **Present before writing.** Never write output files until the framework has been presented and validated.
 - **Tie to journey stages.** Every non-business metric must reference a specific stage or moment from the journey map.
-- **Do not overwrite existing `research/metrics.md`** (or `research/{app}/metrics.md`) without asking the user first.
+- **Do not overwrite existing `research/metrics.md`** (or `research/{slug}/metrics.md`) without asking the user first.
 
 ## Alignment Page
 

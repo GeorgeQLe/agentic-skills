@@ -2,7 +2,7 @@
 name: scale-audit
 description: Evaluate codebase against enterprise ICP for production readiness, compliance, and multi-stakeholder journey coverage
 type: analysis
-version: v0.1
+version: v0.2
 ---
 
 ## Pack Availability Guard
@@ -17,26 +17,27 @@ Automated analysis that evaluates the codebase against `research/enterprise-icp.
 
 ## Prerequisites
 
-`research/enterprise-icp.md` (or `research/{app}/enterprise-icp.md`) must exist. If not, tell the user to run `$enterprise-icp` first.
+`research/enterprise-icp.md` (or `research/{slug}/enterprise-icp.md`) must exist. If not, tell the user to run `$enterprise-icp` first.
 
 ## Workflow
 
-### 0. App Scope Resolution (Monorepo Support)
+### 0. Product-Path Scope Resolution
 
-Before checking prerequisites, determine the app scope:
+Resolve research scope by product path before using code or app structure as a hint:
 
-1. If `$ARGUMENTS` specifies an app name matching a subdirectory of `research/`, use it.
-2. If `research/` contains subdirectories (excluding files), list them and ask the user which app to target. If only one subdirectory exists, use it automatically.
-3. If no subdirectories exist, proceed with flat structure (single-product mode).
+1. If `$ARGUMENTS` names a non-archived `research/{slug}/` directory or a product-path ID whose `scope_path` points there, use that path. Treat `{slug}` as the product/app name, not the ICP, audience, or segment label.
+2. If `$ARGUMENTS` names only `research/_archive/{slug}/` or a manifest entry with `status: archived` or legacy `status: abandoned`, stop and warn that the path is archived; do not write or update scoped outputs there.
+3. Read `research/.progress.yaml` when present. Normalize legacy `active_path` to `active_paths` on read and write back `active_paths` on manifest updates. Treat legacy `abandoned` as `archived`; exclude `archived`, `abandoned`, `deferred`, `revisit_candidate`, `promoted`, and any `scope_path` under `research/_archive/` from active target selection.
+4. If active product paths exist in the manifest, use those paths. If multiple active paths exist, ask which one to target unless this skill explicitly supports cross-path output.
+5. If no active manifest target exists, list non-archived product directories under `research/`, excluding `research/_archive/` and dot directories. Auto-select only when exactly one exists; ask when multiple exist.
+6. If no product directories exist, use flat `research/` single-product mode.
+7. Detect monorepo/app/package structure only as a secondary hint. Suggest creating a missing `research/{slug}/` product path when code clearly exposes an app, but do not require code or monorepo detection before using `research/{slug}/`.
 
-When app scope `{app}` is active:
-- Read/write research from `research/{app}/` instead of `research/`
-- Read/write specs from `specs/{app}/` instead of `specs/`
-- Also read `research/icp.md` (cross-app overview) for broader context
+When product path `{slug}` is active, read and write research under `research/{slug}/`, specs under `specs/{slug}/`, and treat top-level `research/*.md` files as flat-mode documents or cross-path summaries.
 
 ### 1. Load Context & Evaluate
 
-1. Read `research/enterprise-icp.md` (or `research/{app}/enterprise-icp.md`), `research/icp.md` (or `research/{app}/icp.md`), `research/mvp-gap.md` (or `research/{app}/mvp-gap.md`) (if they exist), codebase, and in-progress/advisory work from `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, and `tasks/recurring-todo.md` (if they exist).
+1. Read `research/enterprise-icp.md` (or `research/{slug}/enterprise-icp.md`), `research/icp.md` (or `research/{slug}/icp.md`), `research/mvp-gap.md` (or `research/{slug}/mvp-gap.md`) (if they exist), codebase, and in-progress/advisory work from `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, and `tasks/recurring-todo.md` (if they exist).
 2. Evaluate the codebase across:
    - **Per-Persona Journey Coverage** — Can each stakeholder complete their workflow?
    - **Onboarding Gaps** — Self-serve, team, SSO-provisioned, migration, training
@@ -48,7 +49,7 @@ When app scope `{app}` is active:
 
 ## Deliverables
 
-- `specs/scale-audit.md` (or `specs/{app}/scale-audit.md`) — Gap analysis with stakeholder coverage matrix, compliance matrix, priority tags, and `$ux-variations` prompts for each unspecced gap
+- `specs/scale-audit.md` (or `specs/{slug}/scale-audit.md`) — Gap analysis with stakeholder coverage matrix, compliance matrix, priority tags, and `$ux-variations` prompts for each unspecced gap
 
 The output file must end with a `## Next Steps` section containing a **Recommended** item and 2–4 other contextual options. Choose the recommendation by the first matching condition:
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.5
+
+- Add `doctor` subcommand: read-only global skill-install drift report against canonical `global/<tool>` sources via the marker `source_sha`.
+- Add opt-in first-run prompts (off by default) that persist `skills.session_start_hook` and `skills.auto_refresh` in `~/.agentic-skills/preferences.json`.
+- Add `hook enable|disable`, `set-pref`, and `show-prefs` subcommands; `hook enable` registers a `SessionStart` drift hook (`scripts/skill-drift-hook.sh`) in `~/.claude/settings.json`.
+- Document that `update`/`latest` re-copy is the global refresh that rewrites markers and clears drift.
+
 ## v0.4
 
 - Copied managed installs now resolve the repository checkout via `.agentic-skills-managed` provenance before reporting status, updating, or rerunning `init.sh`.

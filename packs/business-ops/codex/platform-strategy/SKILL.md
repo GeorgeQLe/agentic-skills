@@ -2,7 +2,7 @@
 name: platform-strategy
 description: Expand from a single product into a multi-product platform — map vertical and horizontal growth vectors, score candidates, design validation experiments, and sequence the portfolio
 type: research
-version: v0.3
+version: v0.4
 argument-hint: "[optional: expansion direction e.g. \"vertical\", \"horizontal\", or specific adjacent market]"
 ---
 
@@ -27,7 +27,7 @@ Takes a single-product company and maps the path to a multi-product platform. Id
 ## Prerequisites
 
 **Required (at least one):**
-- `research/icp.md` (or `research/{app}/icp.md`) — who you serve today
+- `research/icp.md` (or `research/{slug}/icp.md`) — who you serve today
 - A working product/codebase to analyse for extensibility
 
 If neither exists, tell the user: "Platform expansion requires a foundation. Run `$icp` first to define who you serve today, then come back."
@@ -41,19 +41,19 @@ If neither exists, tell the user: "Platform expansion requires a foundation. Run
 
 ## Process
 
-### 0. App Scope Resolution (Monorepo Support)
+### 0. Product-Path Scope Resolution
 
-Before checking prerequisites, determine the app scope:
+Resolve research scope by product path before using code or app structure as a hint:
 
-1. If `$ARGUMENTS` specifies an app name matching a subdirectory of `research/`, use it.
-2. If `research/` contains subdirectories (excluding files), list them and ask the user which app to target. If the session is already in Plan mode and there are 2-3 concrete choices, prefer `request_user_input`; otherwise ask in plain text. If only one subdirectory exists, use it automatically.
-3. If no subdirectories exist, proceed with flat structure (single-product mode).
+1. If `$ARGUMENTS` names a non-archived `research/{slug}/` directory or a product-path ID whose `scope_path` points there, use that path. Treat `{slug}` as the product/app name, not the ICP, audience, or segment label.
+2. If `$ARGUMENTS` names only `research/_archive/{slug}/` or a manifest entry with `status: archived` or legacy `status: abandoned`, stop and warn that the path is archived; do not write or update scoped outputs there.
+3. Read `research/.progress.yaml` when present. Normalize legacy `active_path` to `active_paths` on read and write back `active_paths` on manifest updates. Treat legacy `abandoned` as `archived`; exclude `archived`, `abandoned`, `deferred`, `revisit_candidate`, `promoted`, and any `scope_path` under `research/_archive/` from active target selection.
+4. If active product paths exist in the manifest, use those paths. If multiple active paths exist, ask which one to target unless this skill explicitly supports cross-path output.
+5. If no active manifest target exists, list non-archived product directories under `research/`, excluding `research/_archive/` and dot directories. Auto-select only when exactly one exists; ask when multiple exist.
+6. If no product directories exist, use flat `research/` single-product mode.
+7. Detect monorepo/app/package structure only as a secondary hint. Suggest creating a missing `research/{slug}/` product path when code clearly exposes an app, but do not require code or monorepo detection before using `research/{slug}/`.
 
-When app scope `{app}` is active:
-- Read/write research from `research/{app}/` instead of `research/`
-- Read/write specs from `specs/{app}/` instead of `specs/`
-- Also read `research/icp.md` (cross-app overview) for broader context
-- Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading. Use `active_paths` as the core product focuses and use `product_paths[]` to avoid rediscovering parked expansion candidates.
+When product path `{slug}` is active, read and write research under `research/{slug}/`, specs under `specs/{slug}/`, and treat top-level `research/*.md` files as flat-mode documents or cross-path summaries.
 
 ### 1. Assess Core Product Health
 
@@ -77,7 +77,7 @@ Cluster findings into **4-8 candidates** across two axes:
 
 For each: problem, audience, relationship to core, market signal, vertical vs. horizontal.
 
-Record the 4-8 candidates in `research/.progress.yaml` as `product_paths[]` entries with `source_skill: platform-strategy`. The top candidate may be `status: active` or `status: revisit_candidate` depending on whether the user is ready to validate it now; non-selected candidates should default to `status: deferred` with validation triggers. Include `id`, `label`, `source_skill: platform-strategy`, `pipeline_stage: platform-strategy`, `scope_path`, `reason`, `evidence_refs`, `revisit_trigger`, `next_skill`, and `last_touched`.
+Record the 4-8 candidates in `research/.progress.yaml` as `product_paths[]` entries with `source_skill: platform-strategy`. The top candidate may be `status: active` or `status: revisit_candidate` depending on whether the user is ready to validate it now; non-selected candidates should default to `status: deferred` with validation triggers. Include `id`, `label`, `source_skill: platform-strategy`, `pipeline_stage: platform-strategy`, `scope_path`, `status`, `reason`, `archive_reason`, `archived_at`, `promoted_at`, `evidence_refs`, `revisit_trigger`, `next_skill`, and `last_touched`.
 
 **Checkpoint 2 — Present candidates.** Group by vertical/horizontal with rationale and evidence. Ask: "Expansion directions I missed? Any clearly wrong? Internal signals pointing toward any of these?"
 
@@ -109,8 +109,8 @@ Only after user validates, write the output files.
 
 ## Deliverables
 
-- `research/platform-strategy.md` (or `research/{app}/platform-strategy.md`) — Full platform strategy: summary, core health, expansion vector map, scoring matrix, validation experiments, portfolio sequence, shared platform considerations, next steps.
-- `research/platform-strategy-search-log.md` (or `research/{app}/platform-strategy-search-log.md`) — Raw research log: every query, findings, source attribution, scoring rationale.
+- `research/platform-strategy.md` (or `research/{slug}/platform-strategy.md`) — Full platform strategy: summary, core health, expansion vector map, scoring matrix, validation experiments, portfolio sequence, shared platform considerations, next steps.
+- `research/platform-strategy-search-log.md` (or `research/{slug}/platform-strategy-search-log.md`) — Raw research log: every query, findings, source attribution, scoring rationale.
 - `research/.progress.yaml` — product-path manifest updated with 4-8 expansion candidates. This does not require every candidate to become a full research track.
 
 `## Next Steps` section with a **Recommended** item and **Other options** (2–4 alternatives). Use this format in the output:
@@ -148,7 +148,7 @@ When this skill produces follow-up work, file it by execution semantics:
 - Core health is gating — flag PMF problems directly.
 - Score honestly — low-synergy, high-effort candidates should score low.
 - Present before writing — never write until findings are validated.
-- Do not overwrite existing `research/platform-strategy.md` (or `research/{app}/platform-strategy.md`) without asking.
+- Do not overwrite existing `research/platform-strategy.md` (or `research/{slug}/platform-strategy.md`) without asking.
 - Keep validation experiments lightweight — full design belongs in `$experiment`.
 - `## Next Steps` must be the final section in the output file, with a recommended next step and 2–4 other options.
 

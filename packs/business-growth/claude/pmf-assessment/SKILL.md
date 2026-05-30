@@ -1,7 +1,7 @@
 ---
 name: pmf-assessment
 type: research
-version: v0.2
+version: v0.3
 description: Sean Ellis PMF survey design + qualitative signal analysis for post-launch fit measurement
 argument-hint: "[optional: specific signal or segment to focus on]"
 ---
@@ -24,7 +24,7 @@ Designs a Sean Ellis PMF survey and qualitative signal analysis framework for me
 
 ## Prerequisites
 
-- **Hard**: `research/metrics.md` (or `research/{app}/metrics.md`) must exist. If not, tell the user to run `/metrics` first and stop.
+- **Hard**: `research/metrics.md` (or `research/{slug}/metrics.md`) must exist. If not, tell the user to run `/metrics` first and stop.
 - **Soft**: Read these if they exist:
   - `research/icp.md` — target customer segments, pain points, jobs-to-be-done
   - `research/journey-map.md` — critical moments, aha moment, drop-off points
@@ -34,18 +34,21 @@ Designs a Sean Ellis PMF survey and qualitative signal analysis framework for me
 
 ### 0a. Product Path Manifest
 
-Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading. Scope the PMF assessment to the active product path by default. When PMF signals suggest a deferred product path has stronger product-market fit than the active path, add a `## Product Path Implications` section recommending `/product-line promote`.
+Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading; treat legacy `abandoned` as `archived` and exclude archived/deferred/revisit/promoted paths plus `research/_archive/` scopes from active target selection. Scope the PMF assessment to the active product path by default. When PMF signals suggest a deferred product path has stronger product-market fit than the active path, add a `## Product Path Implications` section recommending `/product-line activate`.
 
-### 0. App Scope Resolution (Monorepo Support)
+### 0. Product-Path Scope Resolution
 
-Before checking prerequisites, determine the app scope:
+Resolve research scope by product path before using code or app structure as a hint:
 
-1. If `$ARGUMENTS` specifies an app name matching a subdirectory of `research/`, use it.
-2. If `research/` contains subdirectories (excluding files), list them and ask the user which app to target. If only one subdirectory exists, use it automatically.
-3. If no subdirectories exist, proceed with flat structure (single-product mode).
+1. If `$ARGUMENTS` names a non-archived `research/{slug}/` directory or a product-path ID whose `scope_path` points there, use that path. Treat `{slug}` as the product/app name, not the ICP, audience, or segment label.
+2. If `$ARGUMENTS` names only `research/_archive/{slug}/` or a manifest entry with `status: archived` or legacy `status: abandoned`, stop and warn that the path is archived; do not write or update scoped outputs there.
+3. Read `research/.progress.yaml` when present. Normalize legacy `active_path` to `active_paths` on read and write back `active_paths` on manifest updates. Treat legacy `abandoned` as `archived`; exclude `archived`, `abandoned`, `deferred`, `revisit_candidate`, `promoted`, and any `scope_path` under `research/_archive/` from active target selection.
+4. If active product paths exist in the manifest, use those paths. If multiple active paths exist, ask which one to target unless this skill explicitly supports cross-path output.
+5. If no active manifest target exists, list non-archived product directories under `research/`, excluding `research/_archive/` and dot directories. Auto-select only when exactly one exists; ask when multiple exist.
+6. If no product directories exist, use flat `research/` single-product mode.
+7. Detect monorepo/app/package structure only as a secondary hint. Suggest creating a missing `research/{slug}/` product path when code clearly exposes an app, but do not require code or monorepo detection before using `research/{slug}/`.
 
-When app scope `{app}` is active:
-- Read/write research from `research/{app}/` instead of `research/`
+When product path `{slug}` is active, read and write research under `research/{slug}/`, specs under `specs/{slug}/`, and treat top-level `research/*.md` files as flat-mode documents or cross-path summaries.
 
 ### 1. Load Context
 
@@ -175,7 +178,7 @@ Only after the user confirms, write the output files.
 
 After writing, check for downstream research documents that may be affected.
 
-**Downstream documents to check** (use `{app}/` prefix when app scope is active):
+**Downstream documents to check** (use `{slug}/` prefix when product-path scope is active):
 - `research/metrics.md`
 - `research/growth-model.md`
 
@@ -191,7 +194,7 @@ For each existing downstream document:
 
 ## Output
 
-### `research/pmf-assessment.md` (or `research/{app}/pmf-assessment.md`)
+### `research/pmf-assessment.md` (or `research/{slug}/pmf-assessment.md`)
 
 ```markdown
 # PMF Assessment
@@ -341,7 +344,7 @@ Pick one:
 - [conditional items from step 7, based on PMF level]
 ```
 
-### `research/pmf-assessment-search-log.md` (or `research/{app}/pmf-assessment-search-log.md`)
+### `research/pmf-assessment-search-log.md` (or `research/{slug}/pmf-assessment-search-log.md`)
 Raw research log — queries, findings, evidence for each PMF assessment decision.
 
 Create the `research/` directory if it doesn't exist.

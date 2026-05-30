@@ -52,6 +52,8 @@ resolve_repo_root() {
 REPO_ROOT="$(resolve_repo_root)"
 
 PREFERENCES_FILE="$HOME/.agentic-skills/preferences.json"
+SETTINGS_FILE="$HOME/.claude/settings.json"
+DRIFT_HOOK_CMD="bash $REPO_ROOT/scripts/skill-drift-hook.sh"
 
 status() {
   echo "agentic-skills checkout: $REPO_ROOT"
@@ -68,6 +70,103 @@ except Exception:
 print("github freshness preference: " + (value if value in {"ask", "always", "never"} else "unset"))' "$PREFERENCES_FILE"
   else
     echo "github freshness preference: unset"
+  fi
+}
+
+doctor() {
+  # shellcheck source=/dev/null
+  source "$REPO_ROOT/scripts/skill-links.sh" || { echo "ERROR: unable to load skill-links.sh" >&2; return 1; }
+  echo "Global skill install drift (~/.claude/skills, ~/.codex/skills):"
+  local found=false any_stale=false target line status rec cur
+  while IFS= read -r target; do
+    [ -n "$target" ] || continue
+    line="$(skill_install_status "$target")"
+    IFS=$'\t' read -r status rec cur <<< "$line"
+    [ "$status" = "not-managed" ] && continue
+    found=true
+    case "$status" in
+      ok)             printf '  ok       %s\n' "$target" ;;
+      pinned)         printf '  pinned   %s (frozen %s)\n' "$target" "${rec:-?}" ;;
+      unknown)        printf '  unknown  %s — rerun init to enable drift tracking\n' "$target" ;;
+      missing-source) printf '  missing  %s — canonical source no longer exists\n' "$target" ;;
+      stale)          printf '  STALE    %s (%s -> %s)\n' "$target" "${rec:-?}" "${cur:-?}"; any_stale=true ;;
+    esac
+  done < <(find "$HOME/.claude/skills" "$HOME/.codex/skills" -mindepth 1 -maxdepth 1 \( -type l -o -type d \) -print 2>/dev/null | sort)
+  $found || echo "  (no managed global skill installs found)"
+  if $any_stale; then
+    echo ""
+    echo "Fix: /init-agentic-skills update  (re-copies global skills from this checkout)"
+    return 1
+  fi
+  return 0
+}
+
+set_pref() {
+  local key="$1" val="$2" jqval
+  case "$key" in
+    session_start_hook|auto_refresh) ;;
+    *) echo "ERROR: unknown preference '$key' (use session_start_hook or auto_refresh)" >&2; return 1 ;;
+  esac
+  case "$val" in
+    true) jqval=true ;;
+    false) jqval=false ;;
+    *) echo "ERROR: value must be true or false" >&2; return 1 ;;
+  esac
+  command -v jq >/dev/null 2>&1 || { echo "ERROR: jq is required to set preferences" >&2; return 1; }
+  mkdir -p "$(dirname "$PREFERENCES_FILE")"
+  [ -f "$PREFERENCES_FILE" ] || echo '{}' > "$PREFERENCES_FILE"
+  local tmp
+  tmp="$(jq --arg k "$key" --argjson v "$jqval" '.skills = ((.skills // {}) + {($k): $v})' "$PREFERENCES_FILE")" || { echo "ERROR: jq failed updating $PREFERENCES_FILE" >&2; return 1; }
+  [ -n "$tmp" ] || { echo "ERROR: jq produced empty output for $PREFERENCES_FILE" >&2; return 1; }
+  echo "$tmp" > "$PREFERENCES_FILE"
+  echo "Set skills.$key = $val in $PREFERENCES_FILE"
+}
+
+hook_enable() {
+  command -v jq >/dev/null 2>&1 || { echo "ERROR: jq is required to register the hook" >&2; return 1; }
+  mkdir -p "$(dirname "$SETTINGS_FILE")"
+  [ -f "$SETTINGS_FILE" ] || echo '{}' > "$SETTINGS_FILE"
+  local tmp
+  tmp="$(jq --arg cmd "$DRIFT_HOOK_CMD" '
+    .hooks = (.hooks // {})
+    | .hooks.SessionStart = (.hooks.SessionStart // [])
+    | if ([.hooks.SessionStart[]?.hooks[]? | select(.command == $cmd)] | length) > 0
+      then .
+      else .hooks.SessionStart += [ { "hooks": [ { "type": "command", "command": $cmd } ] } ]
+      end
+  ' "$SETTINGS_FILE")" || { echo "ERROR: jq failed updating $SETTINGS_FILE" >&2; return 1; }
+  [ -n "$tmp" ] || { echo "ERROR: jq produced empty output for $SETTINGS_FILE" >&2; return 1; }
+  echo "$tmp" > "$SETTINGS_FILE"
+  set_pref session_start_hook true
+  echo "Registered SessionStart drift hook in $SETTINGS_FILE"
+}
+
+hook_disable() {
+  set_pref session_start_hook false
+  command -v jq >/dev/null 2>&1 || { echo "ERROR: jq is required to remove the hook" >&2; return 1; }
+  [ -f "$SETTINGS_FILE" ] || { echo "No $SETTINGS_FILE; nothing to remove."; return 0; }
+  local tmp
+  tmp="$(jq --arg cmd "$DRIFT_HOOK_CMD" '
+    if .hooks.SessionStart then
+      .hooks.SessionStart = ([ .hooks.SessionStart[]
+        | .hooks = ([ .hooks[]? | select(.command != $cmd) ])
+        | select((.hooks | length) > 0) ])
+      | if (.hooks.SessionStart | length) == 0 then del(.hooks.SessionStart) else . end
+      | if (.hooks | length) == 0 then del(.hooks) else . end
+    else . end
+  ' "$SETTINGS_FILE")" || { echo "ERROR: jq failed updating $SETTINGS_FILE" >&2; return 1; }
+  [ -n "$tmp" ] || { echo "ERROR: jq produced empty output for $SETTINGS_FILE" >&2; return 1; }
+  echo "$tmp" > "$SETTINGS_FILE"
+  echo "Removed SessionStart drift hook from $SETTINGS_FILE"
+}
+
+show_prefs() {
+  if [ -f "$PREFERENCES_FILE" ] && command -v jq >/dev/null 2>&1; then
+    echo "session_start_hook: $(jq -r '.skills.session_start_hook // false' "$PREFERENCES_FILE")"
+    echo "auto_refresh:       $(jq -r '.skills.auto_refresh // false' "$PREFERENCES_FILE")"
+  else
+    echo "session_start_hook: false"
+    echo "auto_refresh:       false"
   fi
 }
 
@@ -97,10 +196,28 @@ case "${1:-}" in
   status)
     status
     ;;
+  doctor)
+    doctor
+    ;;
   update|latest)
     mode="$1"
     shift
     update_latest "${1:-}"
+    ;;
+  set-pref)
+    shift
+    set_pref "${1:-}" "${2:-}"
+    ;;
+  show-prefs)
+    show_prefs
+    ;;
+  hook)
+    shift
+    case "${1:-}" in
+      enable) hook_enable ;;
+      disable) hook_disable ;;
+      *) echo "Usage: init-agentic-skills.sh hook <enable|disable>" >&2; exit 2 ;;
+    esac
     ;;
   *)
     exec bash "$REPO_ROOT/$DELEGATE_SCRIPT" "$@"

@@ -2,7 +2,7 @@
 name: mvp-gap
 description: Evaluate codebase against ICP to identify gaps blocking first sales and retention
 type: research
-version: v0.1
+version: v0.2
 argument-hint: "[optional: path-to-icp-spec]"
 ---
 
@@ -24,30 +24,31 @@ Automated analysis that evaluates the current codebase against the customer disc
 
 ## Prerequisites
 
-`research/icp.md` (or `research/{app}/icp.md`) must exist. If it doesn't, tell the user to run `/icp` first and stop.
+`research/icp.md` (or `research/{slug}/icp.md`) must exist. If it doesn't, tell the user to run `/icp` first and stop.
 
 ## Process
 
-### 0. App Scope Resolution (Monorepo Support)
+### 0. Product-Path Scope Resolution
 
-Before checking prerequisites, determine the app scope:
+Resolve research scope by product path before using code or app structure as a hint:
 
-1. If `$ARGUMENTS` specifies an app name matching a subdirectory of `research/`, use it.
-2. If `research/` contains subdirectories (excluding files), list them and ask the user which app to target. If only one subdirectory exists, use it automatically.
-3. If no subdirectories exist, proceed with flat structure (single-product mode).
+1. If `$ARGUMENTS` names a non-archived `research/{slug}/` directory or a product-path ID whose `scope_path` points there, use that path. Treat `{slug}` as the product/app name, not the ICP, audience, or segment label.
+2. If `$ARGUMENTS` names only `research/_archive/{slug}/` or a manifest entry with `status: archived` or legacy `status: abandoned`, stop and warn that the path is archived; do not write or update scoped outputs there.
+3. Read `research/.progress.yaml` when present. Normalize legacy `active_path` to `active_paths` on read and write back `active_paths` on manifest updates. Treat legacy `abandoned` as `archived`; exclude `archived`, `abandoned`, `deferred`, `revisit_candidate`, `promoted`, and any `scope_path` under `research/_archive/` from active target selection.
+4. If active product paths exist in the manifest, use those paths. If multiple active paths exist, ask which one to target unless this skill explicitly supports cross-path output.
+5. If no active manifest target exists, list non-archived product directories under `research/`, excluding `research/_archive/` and dot directories. Auto-select only when exactly one exists; ask when multiple exist.
+6. If no product directories exist, use flat `research/` single-product mode.
+7. Detect monorepo/app/package structure only as a secondary hint. Suggest creating a missing `research/{slug}/` product path when code clearly exposes an app, but do not require code or monorepo detection before using `research/{slug}/`.
 
-When app scope `{app}` is active:
-- Read/write research from `research/{app}/` instead of `research/`
-- Read existing specs from `specs/{app}/` instead of `specs/`
-- Also read `research/icp.md` (cross-app overview) for broader context
+When product path `{slug}` is active, read and write research under `research/{slug}/`, specs under `specs/{slug}/`, and treat top-level `research/*.md` files as flat-mode documents or cross-path summaries.
 
 ### 1. Load Context
 
-- Read `research/icp.md` (or `research/{app}/icp.md`) — customer profile, user profile(s), current-state journey, pain map, current alternatives, stated value drivers
-- Read `research/enterprise-icp.md` (or `research/{app}/enterprise-icp.md`) if it exists (for awareness, not primary evaluation)
-- Read `research/metrics.md` (or `research/{app}/metrics.md`) if it exists — check if defined metrics can actually be measured (instrumentation gaps are MVP gaps)
+- Read `research/icp.md` (or `research/{slug}/icp.md`) — customer profile, user profile(s), current-state journey, pain map, current alternatives, stated value drivers
+- Read `research/enterprise-icp.md` (or `research/{slug}/enterprise-icp.md`) if it exists (for awareness, not primary evaluation)
+- Read `research/metrics.md` (or `research/{slug}/metrics.md`) if it exists — check if defined metrics can actually be measured (instrumentation gaps are MVP gaps)
 - Read CLAUDE.md, README, package config for project conventions
-- Read existing specs from `specs/` (or `specs/{app}/`) for planned but unbuilt features
+- Read existing specs from `specs/` (or `specs/{slug}/`) for planned but unbuilt features
 - Read `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, and `tasks/recurring-todo.md` if they exist for work in progress or advisory records
 
 ### 2. Analyse the Codebase
@@ -62,7 +63,7 @@ For each step in the current-state journey from `research/icp.md`:
 - Where does the UX break down, require workarounds, or not exist?
 - Does the interaction model match the user's technical sophistication?
 
-If `research/journey-map.md` (or `research/{app}/journey-map.md`) exists, map each gap to its **journey stage** (e.g., Discovery, Onboarding, Aha Moment, Habit Loop, Expansion). This enables downstream skills to understand *where* in the experience each gap bites.
+If `research/journey-map.md` (or `research/{slug}/journey-map.md`) exists, map each gap to its **journey stage** (e.g., Discovery, Onboarding, Aha Moment, Habit Loop, Expansion). This enables downstream skills to understand *where* in the experience each gap bites.
 
 #### Customer Journey Coverage
 - **Discovery**: Is there a landing page, marketing site, or clear product description?
@@ -90,13 +91,13 @@ If `research/journey-map.md` (or `research/{app}/journey-map.md`) exists, map ea
 - Would the ICP actually switch from their current alternative to this?
 
 #### Spec Validation
-For each gap identified above, check if a spec already exists in `specs/` (or `specs/{app}/`):
+For each gap identified above, check if a spec already exists in `specs/` (or `specs/{slug}/`):
 - If a spec covers the gap **fully**, mark the gap as "Spec exists — ready to build" and link the spec file.
 - If a spec covers the gap **partially**, mark it as "Spec exists — needs expansion" and suggest `/ux-variations [topic]` to explore solution directions for the remaining holes.
 - If no spec exists, suggest `/ux-variations [topic]` to explore solution directions before speccing.
 
 #### Metrics Tie-In
-If `research/metrics.md` (or `research/{app}/metrics.md`) exists, identify for each gap:
+If `research/metrics.md` (or `research/{slug}/metrics.md`) exists, identify for each gap:
 - Which metric(s) will indicate this gap is closed (e.g., activation rate, retention at day-7)
 - If no metric exists to measure gap closure, flag it as an **instrumentation gap** — this becomes an additional item under the gap.
 
@@ -110,7 +111,7 @@ Tag each gap with one of:
 Order gaps within each priority tier by estimated effort (S/M/L).
 
 #### GTM Alignment
-If `research/gtm.md` (or `research/{app}/gtm.md`) exists:
+If `research/gtm.md` (or `research/{slug}/gtm.md`) exists:
 - Cross-reference the build sequence against GTM launch gates and timeline
 - Flag conflicts where a high-effort gap blocks a near-term GTM milestone
 - Surface gaps that can be deferred to post-launch without losing the GTM window
@@ -132,7 +133,7 @@ If downstream impact has not been classified yet, run the downstream impact chec
 
 Before finalizing the output, check for downstream research documents that may be affected by what was just decided. Only check documents that exist on disk.
 
-**Downstream documents to check** (use `{app}/` prefix when app scope is active):
+**Downstream documents to check** (use `{slug}/` prefix when product-path scope is active):
 - `research/journey-map.md`
 - `research/metrics.md`
 - `research/gtm.md`
@@ -158,12 +159,12 @@ Display to the user with the written file confirmation.
 
 ## Output
 
-### `research/mvp-gap.md` (or `research/{app}/mvp-gap.md`)
+### `research/mvp-gap.md` (or `research/{slug}/mvp-gap.md`)
 
 ```markdown
 # MVP Gap Analysis
 
-> Evaluated against: research/icp.md (or research/{app}/icp.md)
+> Evaluated against: research/icp.md (or research/{slug}/icp.md)
 > Date: [current date]
 > Codebase state: [brief summary of what exists]
 

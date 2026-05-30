@@ -2,7 +2,7 @@
 name: brainstorm
 description: Evaluate the codebase and suggest ideas to explore with $feature-interview
 type: planning
-version: v0.1
+version: v0.2
 argument-hint: "[optional focus area]"
 ---
 
@@ -14,21 +14,22 @@ Evaluate the current codebase and generate actionable suggestions that the user 
 
 ## Workflow
 
-### 0. App Scope Resolution (Monorepo Support)
+### 0. Product-Path Scope Resolution
 
-Before checking prerequisites, determine the app scope:
+Resolve research scope by product path before using code or app structure as a hint:
 
-1. If `$ARGUMENTS` specifies an app name matching a subdirectory of `research/`, use it.
-2. If `research/` contains subdirectories (excluding files), list them and ask the user which app to target. If the session is already in Plan mode and there are 2-3 concrete choices, prefer `request_user_input`; otherwise ask in plain text. If only one subdirectory exists, use it automatically.
-3. If no subdirectories exist, proceed with flat structure (single-product mode).
+1. If `$ARGUMENTS` names a non-archived `research/{slug}/` directory or a product-path ID whose `scope_path` points there, use that path. Treat `{slug}` as the product/app name, not the ICP, audience, or segment label.
+2. If `$ARGUMENTS` names only `research/_archive/{slug}/` or a manifest entry with `status: archived` or legacy `status: abandoned`, stop and warn that the path is archived; do not write or update scoped outputs there.
+3. Read `research/.progress.yaml` when present. Normalize legacy `active_path` to `active_paths` on read and write back `active_paths` on manifest updates. Treat legacy `abandoned` as `archived`; exclude `archived`, `abandoned`, `deferred`, `revisit_candidate`, `promoted`, and any `scope_path` under `research/_archive/` from active target selection.
+4. If active product paths exist in the manifest, use those paths. If multiple active paths exist, ask which one to target unless this skill explicitly supports cross-path output.
+5. If no active manifest target exists, list non-archived product directories under `research/`, excluding `research/_archive/` and dot directories. Auto-select only when exactly one exists; ask when multiple exist.
+6. If no product directories exist, use flat `research/` single-product mode.
+7. Detect monorepo/app/package structure only as a secondary hint. Suggest creating a missing `research/{slug}/` product path when code clearly exposes an app, but do not require code or monorepo detection before using `research/{slug}/`.
 
-When app scope `{app}` is active:
-- Read/write research from `research/{app}/` instead of `research/`
-- Read/write specs from `specs/{app}/` instead of `specs/`
-- Also read `research/icp.md` (cross-app overview) for broader context
+When product path `{slug}` is active, read and write research under `research/{slug}/`, specs under `specs/{slug}/`, and treat top-level `research/*.md` files as flat-mode documents or cross-path summaries.
 
 1. Read CLAUDE.md, README, package config, and key source files to understand the project.
-2. Check `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, `tasks/recurring-todo.md` (when they exist), and specs from `specs/` (or `spec.md`) if they exist — avoid suggesting things already planned or deferred as advisory records. Read `research/competitive-analysis.md` (or `research/{app}/competitive-analysis.md`) if it exists — competitor gaps, market white space, and positioning weaknesses are high-signal inputs for ideation. Read `research/customer-feedback.md` (or `research/{app}/customer-feedback.md`) if it exists — "Wrong" and "New" findings are highest-signal ideation input. Read `research/metrics.md` (or `research/{app}/metrics.md`) if it exists — instrumentation gaps can generate ideas.
+2. Check `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, `tasks/recurring-todo.md` (when they exist), and specs from `specs/` (or `spec.md`) if they exist — avoid suggesting things already planned or deferred as advisory records. Read `research/competitive-analysis.md` (or `research/{slug}/competitive-analysis.md`) if it exists — competitor gaps, market white space, and positioning weaknesses are high-signal inputs for ideation. Read `research/customer-feedback.md` (or `research/{slug}/customer-feedback.md`) if it exists — "Wrong" and "New" findings are highest-signal ideation input. Read `research/metrics.md` (or `research/{slug}/metrics.md`) if it exists — instrumentation gaps can generate ideas.
 3. Analyse the codebase across these dimensions:
 
    **Strategic / Product**
@@ -48,18 +49,18 @@ When app scope `{app}` is active:
    - Testing gaps in critical paths
    - Security hardening opportunities
 
-   **Market Fit** (only when `research/icp.md` (or `research/{app}/icp.md`), `research/mvp-gap.md` (or `research/{app}/mvp-gap.md`), or `research/competitive-analysis.md` (or `research/{app}/competitive-analysis.md`) exist)
+   **Market Fit** (only when `research/icp.md` (or `research/{slug}/icp.md`), `research/mvp-gap.md` (or `research/{slug}/mvp-gap.md`), or `research/competitive-analysis.md` (or `research/{slug}/competitive-analysis.md`) exist)
    - ICP alignment — features addressing ICP pain points that are missing or incomplete
    - Journey gaps — steps where the product loses the user or customer
-   - Unaddressed MVP gaps from `research/mvp-gap.md` (or `research/{app}/mvp-gap.md`) not yet in roadmap
-   - Competitive white space — features or capabilities no competitor offers well, from `research/competitive-analysis.md` (or `research/{app}/competitive-analysis.md`) market gaps
+   - Unaddressed MVP gaps from `research/mvp-gap.md` (or `research/{slug}/mvp-gap.md`) not yet in roadmap
+   - Competitive white space — features or capabilities no competitor offers well, from `research/competitive-analysis.md` (or `research/{slug}/competitive-analysis.md`) market gaps
    - Competitor leapfrog — specific competitor weaknesses to exploit, or table-stakes features competitors have that you lack
    - Positioning plays — ideas that sharpen differentiation against the competitive landscape
 4. If the user provides a focus area, scope the analysis there. Otherwise cover all dimensions.
 
 ## Output
 
-Append the suggestions to `tasks/ideas.md` (do not overwrite existing content). Also display them to the user. When app scope is active, prefix each suggestion with the app name.
+Append the suggestions to `tasks/ideas.md` (do not overwrite existing content). Also display them to the user. When product-path scope is active, prefix each suggestion with the app name.
 
 Group suggestions by effort level (hours / days / weeks). Each suggestion should include:
 - A specific, actionable title
@@ -71,7 +72,7 @@ Group suggestions by effort level (hours / days / weeks). Each suggestion should
 - Be specific and actionable — no vague aspirations.
 - Limit to 3–5 suggestions per effort level.
 - Do not suggest changes that conflict with CLAUDE.md conventions.
-- Do not repeat work already in `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, `tasks/recurring-todo.md`, or `specs/` (or `specs/{app}/`).
+- Do not repeat work already in `tasks/roadmap.md`, `tasks/todo.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, `tasks/recurring-todo.md`, or `specs/` (or `specs/{slug}/`).
 
 ## Alignment Page
 

@@ -2,7 +2,7 @@
 name: reconcile-research
 description: Cross-document consistency audit across research outputs — find contradictions, stale assumptions, and gaps
 type: research
-version: v0.3
+version: v0.4
 argument-hint: "[audit|fix] [all|icp|pricing|journey|enterprise|feedback|specs]"
 ---
 
@@ -20,30 +20,19 @@ Checks that research documents tell a consistent story. Finds contradictions bet
 
 ## Process
 
-### 0. App Scope Resolution (Monorepo Support)
+### 0. Product-Path Scope Resolution
 
-Before determining mode and scope, detect the app structure:
+Resolve research scope by product path before using code or app structure as a hint:
 
-1. If `$ARGUMENTS` specifies an app name matching a subdirectory of `research/`, scope the audit to that app.
-2. If `research/` contains subdirectories (excluding files), list them. If the user hasn't specified a scope, reconcile per-app (each app's docs independently) plus cross-app checks.
-3. If no subdirectories exist, proceed with flat structure (single-product mode).
+1. If `$ARGUMENTS` names a non-archived `research/{slug}/` directory or a product-path ID whose `scope_path` points there, use that path. Treat `{slug}` as the product/app name, not the ICP, audience, or segment label.
+2. If `$ARGUMENTS` names only `research/_archive/{slug}/` or a manifest entry with `status: archived` or legacy `status: abandoned`, stop and warn that the path is archived; do not write or update scoped outputs there.
+3. Read `research/.progress.yaml` when present. Normalize legacy `active_path` to `active_paths` on read and write back `active_paths` on manifest updates. Treat legacy `abandoned` as `archived`; exclude `archived`, `abandoned`, `deferred`, `revisit_candidate`, `promoted`, and any `scope_path` under `research/_archive/` from active target selection.
+4. If active product paths exist in the manifest, use those paths. If multiple active paths exist, ask which one to target unless this skill explicitly supports cross-path output.
+5. If no active manifest target exists, list non-archived product directories under `research/`, excluding `research/_archive/` and dot directories. Auto-select only when exactly one exists; ask when multiple exist.
+6. If no product directories exist, use flat `research/` single-product mode.
+7. Detect monorepo/app/package structure only as a secondary hint. Suggest creating a missing `research/{slug}/` product path when code clearly exposes an app, but do not require code or monorepo detection before using `research/{slug}/`.
 
-When app scope `{app}` is active:
-- Scan `research/{app}/` for documents instead of `research/`
-- Also check `research/icp.md` (cross-app overview) for cross-references
-- Specs are in `specs/{app}/` instead of `specs/`
-
-### 0b. Product Path Context
-
-Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading. Use `active_paths` to scope the reconciliation audit to the active product paths by default. When multiple paths are active, run cross-path consistency checks in addition to the standard pairwise document checks:
-
-| # | Check | What to flag |
-|---|-------|--------------|
-| 1 | Cross-path ICP consistency | Active paths with conflicting ICP assumptions or market sizing |
-| 2 | Cross-path positioning conflicts | Active paths competing for the same positioning or category |
-| 3 | Cross-path resource conflicts | Active paths that imply overlapping team or infrastructure resources |
-
-Include deferred paths in the consistency check only when their `evidence_refs` overlap with active path documents.
+When product path `{slug}` is active, read and write research under `research/{slug}/`, specs under `specs/{slug}/`, and treat top-level `research/*.md` files as flat-mode documents or cross-path summaries.
 
 ### 1. Determine Mode and Scope
 
@@ -57,16 +46,16 @@ Parse `$ARGUMENTS`:
 Scan `research/` for main documents. Skip files matching `*-search-log.md` and `*-interview.md` — these are raw logs, not assertion-bearing documents.
 
 **Expected documents** (not all need to exist):
-- `research/icp.md` (cross-app overview), `research/{app}/icp.md` (per-app)
-- `research/competitive-analysis.md` (or `research/{app}/competitive-analysis.md`)
-- `research/journey-map.md` (or `research/{app}/journey-map.md`)
-- `research/metrics.md` (or `research/{app}/metrics.md`)
-- `research/gtm.md` (or `research/{app}/gtm.md`)
-- `research/monetization.md` (or `research/{app}/monetization.md`)
-- `research/enterprise-icp.md` (or `research/{app}/enterprise-icp.md`)
-- `research/customer-feedback.md` (or `research/{app}/customer-feedback.md`)
+- `research/icp.md` (cross-path overview), `research/{slug}/icp.md` (per-product-path)
+- `research/competitive-analysis.md` (or `research/{slug}/competitive-analysis.md`)
+- `research/journey-map.md` (or `research/{slug}/journey-map.md`)
+- `research/metrics.md` (or `research/{slug}/metrics.md`)
+- `research/gtm.md` (or `research/{slug}/gtm.md`)
+- `research/monetization.md` (or `research/{slug}/monetization.md`)
+- `research/enterprise-icp.md` (or `research/{slug}/enterprise-icp.md`)
+- `research/customer-feedback.md` (or `research/{slug}/customer-feedback.md`)
 
-When `research/` contains subdirectories, scan each `research/{app}/` for per-app documents.
+When `research/` contains subdirectories, scan each `research/{slug}/` for per-product-path documents.
 
 **Stop condition**: If fewer than 2 research documents exist, display a message and exit — there's nothing to reconcile.
 
@@ -165,15 +154,15 @@ Requires: `research/customer-feedback.md` + at least one other document.
 | 4 | Staleness alerts | Documents haven't been updated since feedback was last appended |
 | 5 | Contradicted positioning | Feedback contradicts GTM messaging or competitive positioning |
 
-#### Monorepo checks (3 checks)
+#### Product-path checks (3 checks)
 
-Triggered when `research/` contains app subdirectories (e.g., `research/{app}/icp.md`).
+Triggered when `research/` contains product-path subdirectories (e.g., `research/{slug}/icp.md`).
 
 | # | Check | What to flag |
 |---|-------|--------------|
-| 1 | Cross-ICP consistency | App-specific ICPs (`research/{app}/icp.md`) contradict each other on shared market assumptions |
-| 2 | Shared pain point divergence | Same pain point described differently across app ICPs |
-| 3 | Channel overlap conflicts | App ICPs target the same channel with conflicting messaging |
+| 1 | Cross-ICP consistency | Product-path ICPs (`research/{slug}/icp.md`) contradict each other on shared market assumptions |
+| 2 | Shared pain point divergence | Same pain point described differently across product-path ICPs |
+| 3 | Channel overlap conflicts | Product-path ICPs target the same channel with conflicting messaging |
 
 ### 5. Aggregate and Classify Findings
 

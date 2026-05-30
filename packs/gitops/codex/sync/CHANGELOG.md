@@ -1,5 +1,10 @@
 # sync Changelog
 
+## v0.4
+
+- Add warn-only skill-install drift check: run `scripts/pack.sh doctor` against the resolved `agentic-skills` checkout and report `stale`/`unknown` project skill installs with the `scripts/pack.sh refresh` fix
+- Keep plain sync non-mutating; never auto-refresh installs
+
 ## v0.3
 
 - Add remembered user-local GitHub freshness preference at `~/.agentic-skills/preferences.json`

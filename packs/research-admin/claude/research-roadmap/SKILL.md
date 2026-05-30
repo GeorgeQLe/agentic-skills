@@ -2,7 +2,7 @@
 name: research-roadmap
 description: Scan research and documentation health, then maintain a priority documentation queue
 type: planning
-version: v0.5
+version: v0.6
 ---
 
 ## Pack Availability Guard
@@ -16,6 +16,20 @@ Use this skill to make the project documentation contract complete before build 
 Do not run the queued research skills from this skill. The job here is to maintain the documentation queue so the user can complete research and planning artifacts in the right order.
 
 ## Process
+
+### 0. Product-Path Scope Resolution
+
+Resolve research scope by product path before using code or app structure as a hint:
+
+1. If `$ARGUMENTS` names a non-archived `research/{slug}/` directory or a product-path ID whose `scope_path` points there, use that path. Treat `{slug}` as the product/app name, not the ICP, audience, or segment label.
+2. If `$ARGUMENTS` names only `research/_archive/{slug}/` or a manifest entry with `status: archived` or legacy `status: abandoned`, stop and warn that the path is archived; do not write or update scoped outputs there.
+3. Read `research/.progress.yaml` when present. Normalize legacy `active_path` to `active_paths` on read and write back `active_paths` on manifest updates. Treat legacy `abandoned` as `archived`; exclude `archived`, `abandoned`, `deferred`, `revisit_candidate`, `promoted`, and any `scope_path` under `research/_archive/` from active target selection.
+4. If active product paths exist in the manifest, use those paths. If multiple active paths exist, ask which one to target unless this skill explicitly supports cross-path output.
+5. If no active manifest target exists, list non-archived product directories under `research/`, excluding `research/_archive/` and dot directories. Auto-select only when exactly one exists; ask when multiple exist.
+6. If no product directories exist, use flat `research/` single-product mode.
+7. Detect monorepo/app/package structure only as a secondary hint. Suggest creating a missing `research/{slug}/` product path when code clearly exposes an app, but do not require code or monorepo detection before using `research/{slug}/`.
+
+When product path `{slug}` is active, read and write research under `research/{slug}/`, specs under `specs/{slug}/`, and treat top-level `research/*.md` files as flat-mode documents or cross-path summaries.
 
 ### 0. Parse Mode Arguments
 
@@ -52,7 +66,7 @@ Treat top-level `research/`, `specs/`, and `tasks/` as canonical.
 
 For writing the priority queue, prefer `tasks/todo.md`. Use a fallback task root only when the project already has a clear existing task contract and no top-level `tasks/` directory. Do not put condition-gated records or recurring obligations into `tasks/todo.md` unless they are immediately actionable execution work.
 
-Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading. Interpret `active_paths` as the current product/app/ICP focuses and `product_paths[]` as the product-path manifest. Valid statuses include `active`, `deferred`, `revisit_candidate`, `promoted`, and `abandoned`; these are research product-path states, not git branches.
+Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading; treat legacy `abandoned` as `archived` and exclude archived/deferred/revisit/promoted paths plus `research/_archive/` scopes from active target selection. Interpret `active_paths` as the current product/app/ICP focuses and `product_paths[]` as the product-path manifest. Valid statuses include `active`, `deferred`, `archived`, `promoted`, and `revisit_candidate`; these are research product-path states, not git branches.
 
 ### 3. Discover Research-Producing Skills
 
@@ -62,7 +76,7 @@ Prefer dynamic discovery when skill files are available:
 
 1. Inspect enabled pack skill files under `.claude/skills/*/SKILL.md` or `packs/<pack>/claude/*/SKILL.md`.
 2. Include skills with `type: research`.
-3. Also include skills whose `## Output` section writes `research/*.md`, `research/{app}/*.md`, `research/experiments/*.md`, or dated research files.
+3. Also include skills whose `## Output` section writes `research/*.md`, `research/{slug}/*.md`, `research/experiments/*.md`, or dated research files.
 
 If dynamic discovery is unavailable, use these fallback maps.
 
@@ -122,7 +136,7 @@ Also include documentation-producing non-research skills when their outputs are 
 
 | Skill | Output |
 | --- | --- |
-| `/idea-scope-brief` | `research/concept-brief.md` or `research/{app}/concept-brief.md` |
+| `/idea-scope-brief` | `research/concept-brief.md` or `research/{slug}/concept-brief.md` |
 | `/spec-interview` | `specs/*.md` |
 | `/ux-variations` | `specs/ux-variations-*.md` |
 | `/ui-interview` | `specs/ui-*.md` |
@@ -138,11 +152,11 @@ Also include documentation-producing non-research skills when their outputs are 
 Record existence and last-modified timestamps for:
 
 - all discovered research outputs
-- `research/concept-brief.md` and app-scoped `research/{app}/concept-brief.md` when present
+- `research/concept-brief.md` and product-path-scoped `research/{slug}/concept-brief.md` when present
 - `research/*-search-log.md` and `research/*-interview.md` only as supporting context, not primary completion artifacts
-- `specs/*.md` and app-scoped `specs/{app}/*.md`
-- `specs/ux-variations-*.md` and app-scoped `specs/{app}/ux-variations-*.md`
-- `specs/ui-*.md` and app-scoped `specs/{app}/ui-*.md`
+- `specs/*.md` and product-path-scoped `specs/{slug}/*.md`
+- `specs/ux-variations-*.md` and product-path-scoped `specs/{slug}/ux-variations-*.md`
+- `specs/ui-*.md` and product-path-scoped `specs/{slug}/ui-*.md`
 - `tasks/roadmap.md`
 - `tasks/todo.md`
 - `tasks/history.md`
@@ -151,7 +165,7 @@ Record existence and last-modified timestamps for:
 - `tasks/record-todo.md`
 - `tasks/recurring-todo.md`
 
-When `research/` contains app subdirectories, treat it as monorepo mode. Build a separate documentation queue per app and include app arguments in commands, such as `/icp web`.
+When `research/` contains product-path subdirectories, treat it as product-path mode. Build a separate documentation queue per product path and include product-path arguments in commands, such as `/icp web`.
 
 ### 5. Classify Missing And Stale Items
 
@@ -161,7 +175,7 @@ An item is stale when a newer upstream document should invalidate or refresh it.
 
 | Newer input | Stale target |
 | --- | --- |
-| `research/concept-brief.md` or `research/{app}/concept-brief.md` | matching `research/icp.md` or `research/{app}/icp.md` |
+| `research/concept-brief.md` or `research/{slug}/concept-brief.md` | matching `research/icp.md` or `research/{slug}/icp.md` |
 | `research/customer-feedback.md` | `research/icp.md`, `research/journey-map.md`, `research/monetization.md`, `research/landing-copy.md` |
 | `research/icp.md` | `research/competitive-analysis.md`, `research/positioning.md`, `research/gtm.md`, `research/monetization.md`, `research/landing-copy.md` |
 | `research/competitive-analysis.md` | `research/positioning.md`, `research/gtm.md`, `research/monetization.md`, `research/landing-copy.md` |
@@ -199,7 +213,7 @@ Order immediately actionable todo items so the user can complete documentation w
 
 Within research items, use this dependency order when relevant. When emitting queued commands for pack-based skills, apply the Pack Availability Guard — if the target skill's pack is not in `.agents/project.json` `enabled_packs`, queue `/pack install <pack>` before the skill:
 
-When `research/.progress.yaml` exists, show per-path pipeline progress alongside the priority queue. For each path in `active_paths`, show its `pipeline_stage` and queue the next missing research step. For `deferred` or `revisit_candidate` paths, add a concise record or queue note with the `revisit_trigger` and `next_skill` rather than scheduling full downstream research. When 3+ deferred paths accumulate with no recent promotion, add `/product-line review` as a priority queue item to prompt portfolio review.
+When `research/.progress.yaml` exists, show per-path pipeline progress alongside the priority queue. For each path in `active_paths`, show its `pipeline_stage` and queue the next missing research step. For `deferred` or `revisit_candidate` paths, add a concise record or queue note with the `revisit_trigger` and `next_skill` rather than scheduling full downstream research. When 3+ deferred paths accumulate with no recent activation, add `/product-line review` as a priority queue item to prompt portfolio review.
 
 ```
 /idea-scope-brief
@@ -406,7 +420,7 @@ Populate `tasks/todo.md` `## Priority Documentation Todo` with research skills t
 - Every stale item must include timestamp evidence.
 - Every enabled research-producing skill must be represented unless its output is present and fresh.
 - Prefer canonical `research/`, `specs/`, and `tasks/` paths over aliases.
-- In monorepo mode, include app-scoped commands and output paths.
+- In product-path mode, include product-path-scoped commands and output paths.
 - Do not put condition-gated measurements, future validation records, or cadence-based research jobs into `tasks/todo.md` unless they are immediately executable.
 - Do not create or modify source code.
 

@@ -42,6 +42,8 @@ Two sources combine to resolve the effective mode: the `SKILLS_AGENT_MODE` envir
 
 **Writer.** `scripts/pack.sh set-mode <claude-only|codex-only|hybrid|unset>` is the only supported writer for `.agents/project.json.agent_mode`. `pack.sh install`, `remove`, and `refresh` preserve an existing value. No other script writes the field.
 
+**Skill-update mode.** `.agents/project.json.skill_updates.mode` (`warn` default | `auto`) controls whether a drift *trigger* (the opt-in session-start hook, or sync-with-approval) refreshes stale installs automatically or only warns. Its only supported writer is `scripts/pack.sh set-update-mode <warn|auto|unset>`; `install`, `remove`, and `refresh` preserve an existing value. The global equivalent is `~/.agentic-skills/preferences.json` `skills.auto_refresh`. Drift itself is detected from the `.agentic-skills-managed` marker's `source_sha` (track-latest) and surfaced read-only by `scripts/pack.sh doctor` and `scripts/init-agentic-skills.sh doctor`; pinned (symlinked) installs are frozen and never stale. See `docs/packs.md` for the full model.
+
 **Unset semantics.** "Unset" is a deliberate mode: skills that consume the resolver (Step 7 — the twelve planning/execution skills in `global/claude/` and `global/codex/`) keep the concrete next work item primary and infer the command route from invocation and task type when mode lookup is missing, unset, or non-zero. Unset is the default for a fresh project.
 
 **Invariant — do not restate precedence in skill copy.** Skills say "Next-Step Routing" and link here. Precedence lives in one place: the resolver and this document.

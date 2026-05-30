@@ -2,7 +2,7 @@
 name: icp
 description: Research-driven ICP discovery — web search + codebase analysis to identify multiple ICPs, pain points, value props, and cross-ICP prioritization
 type: research
-version: v0.7
+version: v0.8
 argument-hint: <spec file path, concept/idea, or empty to use concept brief>
 ---
 
@@ -20,48 +20,50 @@ Do not write or overwrite synthesized deliverables until the user explicitly app
 
 When stopping for approval, build and attempt to open the alignment preview page first, then ask the user to review it and approve, question, or request adjustments. Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language. The approval request itself is the next action. Only emit next-skill routing after the approved artifact has been written or updated.
 
-Automated research that identifies **multiple ICP candidates**, maps their pain points and value props, scores them, and selects a primary ICP. Replaces interview-driven approaches with web search + codebase analysis. Input is a spec file path, concept/idea as `$ARGUMENTS`, or `research/concept-brief.md` / `research/{app}/concept-brief.md` when present.
+Automated research that identifies **multiple ICP candidates**, maps their pain points and value props, scores them, and selects a primary ICP. Replaces interview-driven approaches with web search + codebase analysis. Input is a spec file path, concept/idea as `$ARGUMENTS`, or `research/concept-brief.md` / `research/{slug}/concept-brief.md` when present.
 
 The output preserves the canonical 9-section format at the top level (for downstream compatibility with `/spec-interview`, `/mvp-gap`, `/roadmap`, `/journey-map`) while adding multi-ICP analysis, cross-ICP prioritization, and a supplementary section 10 (`## Discovery & Evaluation Behavior`) that captures how personas find, evaluate, and choose solutions.
 
 ## Process
 
-### 0. App Scope Resolution (Monorepo Support)
+### 0. Product-Path Scope Resolution
 
-Before parsing input, determine the app scope:
+Resolve research scope by product path before using code or app structure as a hint:
 
-1. If `$ARGUMENTS` specifies an app name matching a subdirectory of `research/`, use it.
-2. If `research/` contains subdirectories (excluding files), list them and ask the user which app to target. If only one subdirectory exists, use it automatically.
-3. If no subdirectories exist, proceed with flat structure (single-product mode).
+1. If `$ARGUMENTS` names a non-archived `research/{slug}/` directory or a product-path ID whose `scope_path` points there, use that path. Treat `{slug}` as the product/app name, not the ICP, audience, or segment label.
+2. If `$ARGUMENTS` names only `research/_archive/{slug}/` or a manifest entry with `status: archived` or legacy `status: abandoned`, stop and warn that the path is archived; do not write or update scoped outputs there.
+3. Read `research/.progress.yaml` when present. Normalize legacy `active_path` to `active_paths` on read and write back `active_paths` on manifest updates. Treat legacy `abandoned` as `archived`; exclude `archived`, `abandoned`, `deferred`, `revisit_candidate`, `promoted`, and any `scope_path` under `research/_archive/` from active target selection.
+4. If active product paths exist in the manifest, use those paths. If multiple active paths exist, ask which one to target unless this skill explicitly supports cross-path output.
+5. If no active manifest target exists, list non-archived product directories under `research/`, excluding `research/_archive/` and dot directories. Auto-select only when exactly one exists; ask when multiple exist.
+6. If no product directories exist, use flat `research/` single-product mode.
+7. Detect monorepo/app/package structure only as a secondary hint. Suggest creating a missing `research/{slug}/` product path when code clearly exposes an app, but do not require code or monorepo detection before using `research/{slug}/`.
 
-When app scope `{app}` is active:
-- Read/write research from `research/{app}/` instead of `research/`
-- Read/write specs from `specs/{app}/` instead of `specs/`
-- Prefer `research/{app}/concept-brief.md` as concept context when present
-- Also read `research/icp.md` (cross-app overview) for broader context
+When product path `{slug}` is active, read and write research under `research/{slug}/`, specs under `specs/{slug}/`, and treat top-level `research/*.md` files as flat-mode documents or cross-path summaries.
 
 ### 1. Parse Input & Gather Context
 
 **Read `$ARGUMENTS`:**
 - If it's a file path, read the file for product/concept context
 - If it's text, treat it as the concept or idea description
-- If empty, check for `research/{app}/concept-brief.md` in app scope or `research/concept-brief.md` in flat scope first; then check `specs/spec.md`, `specs/plan.md`, or README for context — if nothing exists, ask the user what product or idea to research
+- If empty, check for `research/{slug}/concept-brief.md` in product-path scope or `research/concept-brief.md` in flat scope first; then check `specs/spec.md`, `specs/plan.md`, or README for context — if nothing exists, ask the user what product or idea to research
 
 **Read product-path manifest if present:**
-Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading. Use `active_paths` to identify current product/app/ICP focuses and `product_paths[]` to preserve secondary product paths without treating them as git branches or parallel implementation lanes.
+Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading; treat legacy `abandoned` as `archived` and exclude archived/deferred/revisit/promoted paths plus `research/_archive/` scopes from active target selection. Use `active_paths` to identify current product/app/ICP focuses and `product_paths[]` to preserve secondary product paths without treating them as git branches or parallel implementation lanes.
 
 **Read concept brief if present:**
-Read `research/{app}/concept-brief.md` in app scope, or `research/concept-brief.md` in flat scope, whenever it exists. Treat it as starting context and source hypotheses, not as settled truth. Use its problem hypothesis, beneficiary hypothesis, value wedge, constraints, non-goals, and ICP readiness notes to frame search queries and candidate generation. If `$ARGUMENTS` conflicts with the concept brief, flag the mismatch at the first checkpoint and ask which premise should guide ICP research.
+Read `research/{slug}/concept-brief.md` in product-path scope, or `research/concept-brief.md` in flat scope, whenever it exists. Treat it as starting context and source hypotheses, not as settled truth. Use its problem hypothesis, beneficiary hypothesis, value wedge, constraints, non-goals, and ICP readiness notes to frame search queries and candidate generation. If `$ARGUMENTS` conflicts with the concept brief, flag the mismatch at the first checkpoint and ask which premise should guide ICP research.
 
 **Read codebase (if it exists):**
 Read CLAUDE.md, README, package config, key source files, routes, and data models to understand what's been built. This grounds the research in reality rather than pure market abstraction.
 
 **Read existing research** (`research/icp.md`, `research/competitive-analysis.md`, etc.) and specs if they exist — use as background context but do not treat as settled. This research may reshape direction.
 
-**Detect monorepo structure:**
-Check for monorepo indicators (`turbo.json`, `pnpm-workspace.yaml`, `lerna.json`, `nx.json`, or `package.json` workspaces). If found, identify sub-apps or packages that serve **distinct user-facing products** (ignore shared libraries, configs, and internal tooling). When multiple distinct products exist, run the full ICP process separately for each — produce `research/{app-name}/icp.md` per app, plus a unified `research/icp.md` that cross-references all app-level ICPs with a top-level prioritization of which app/ICP to pursue first. If the monorepo contains only one user-facing product, proceed as normal with a single `research/icp.md`.
+**Use code/app hints secondarily:**
+Check for monorepo indicators (`turbo.json`, `pnpm-workspace.yaml`, `lerna.json`, `nx.json`, or `package.json` workspaces), app folders, or package folders only after product-path resolution. If multiple active product paths exist, or if this run is explicitly producing a cross-path overview, run the full ICP process separately for each product path — produce `research/{slug}/icp.md` per path, plus a unified `research/icp.md` that cross-references all product-path ICPs with top-level prioritization. If code clearly exposes a user-facing app without a matching product path, suggest creating `research/{slug}/` instead of treating monorepo detection as a gate.
 
-**Migrate old convention:** If `research/icp-{app}.md` files exist (old naming), offer to move them to `research/{app}/icp.md` (and corresponding search logs to `research/{app}/icp-search-log.md`). Create the subdirectories as needed.
+**Migrate flat files when product paths are introduced:** If canonical flat `research/*.md` files exist and the user chooses or creates a product path, offer to move path-specific canonical docs into `research/{chosen-slug}/`. Leave or regenerate top-level files only when they are cross-path summaries.
+
+**Migrate old convention:** If `research/icp-{slug}.md` files exist (old naming), offer to move them to `research/{slug}/icp.md` (and corresponding search logs to `research/{slug}/icp-search-log.md`). Create the subdirectories as needed.
 
 ### 2. Broad Market Research
 
@@ -156,9 +158,9 @@ Analyze across all ICP candidates:
 - **Lowest-hanging fruit x most value** — the prioritization sweet spot
 - **Discovery & evaluation comparison** — how discovery and evaluation behavior differs across ICPs; do different ICPs find and choose solutions through different paths?
 
-Convert secondary ICPs, product-line recommendations, and materially different Cross-ICP Analysis outcomes into `research/.progress.yaml` `product_paths[]` entries when they imply a different product surface, app scope, audience-first path, or future pivot. Manifest entries must include `id`, `label`, `source_skill: icp`, `scope_path`, `status`, `reason`, `evidence_refs`, `revisit_trigger`, `next_skill`, `last_touched`, and `pipeline_stage: icp`.
+Convert secondary ICPs, product-line recommendations, and materially different Cross-ICP Analysis outcomes into `research/.progress.yaml` `product_paths[]` entries when they imply a different product surface, product-path scope, audience-first path, or future pivot. Manifest entries must include `id`, `label`, `source_skill: icp`, `scope_path`, `status`, `reason`, `archive_reason`, `archived_at`, `promoted_at`, `evidence_refs`, `revisit_trigger`, `next_skill`, `last_touched`, and `pipeline_stage: icp`.
 
-Keep the selected primary ICP in `active_paths` by default. Recommend `/product-line promote` when secondary ICPs suggest a materially different product surface worth exploring. Mark non-selected ICP/product paths `status: deferred` or `status: revisit_candidate`; do not run full competitive analysis, positioning, journey mapping, UX, or specs for every deferred path unless the user promotes one.
+Keep the selected primary ICP in `active_paths` by default. Recommend `/product-line activate` when secondary ICPs suggest a materially different product surface worth exploring again. Mark non-selected ICP/product paths `status: deferred` or `status: revisit_candidate`; do not run full competitive analysis, positioning, journey mapping, UX, or specs for every deferred path unless the user activates one.
 
 **Checkpoint 3 — Present the cross-ICP analysis and recommended build sequence to the user.** Use the AskUserQuestion tool to show the analysis with evidence: shared pains with source data from each ICP, conflicts with specific examples, and build sequence rationale grounded in the scoring matrix. Then ask:
 - "Does this sequencing make sense for where you are right now?"
@@ -194,7 +196,7 @@ Only after the user confirms, write the output files.
 
 After writing, check for downstream research documents that may be affected by what was just decided. Only check documents that exist on disk.
 
-**Downstream documents to check** (use `{app}/` prefix when app scope is active):
+**Downstream documents to check** (use `{slug}/` prefix when product-path scope is active):
 - `research/competitive-analysis.md`
 - `research/journey-map.md`
 - `research/metrics.md`
@@ -412,16 +414,16 @@ Raw research log containing:
 
 ### `research/.progress.yaml`
 
-Product-path manifest created or updated when secondary ICPs, Cross-ICP Analysis, or product-line recommendations create parked or promotable paths. Status values include `active`, `deferred`, `revisit_candidate`, `promoted`, and `abandoned`.
+Product-path manifest created or updated when secondary ICPs, Cross-ICP Analysis, or product-line recommendations create parked or promotable paths. Status values include `active`, `deferred`, `archived`, `promoted`, and `revisit_candidate`.
 
 Create the `research/` directory if it doesn't exist.
 
-### Monorepo Output Convention
+### Product-Path Output Convention
 
-When a monorepo has multiple distinct user-facing products, write:
-- `research/{app-name}/icp.md` — full 9-section ICP per app (same structure as above)
-- `research/{app-name}/icp-search-log.md` — search log per app
-- `research/icp.md` — unified cross-app summary that references each app-level ICP, with a top-level prioritization of which app/ICP combination to pursue first
+When multiple active product paths exist or the user asks for cross-path ICP output, write:
+- `research/{slug}/icp.md` — full 9-section ICP per product path (same structure as above)
+- `research/{slug}/icp-search-log.md` — search log per product path
+- `research/icp.md` — unified cross-path summary that references each product-path ICP, with a top-level prioritization of which product path and ICP combination to pursue first
 
 ## Task Classification
 

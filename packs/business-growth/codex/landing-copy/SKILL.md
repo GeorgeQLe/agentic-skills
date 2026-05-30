@@ -2,7 +2,7 @@
 name: landing-copy
 description: Generate or audit landing page copy grounded in upstream research — hero, benefits, social proof, pricing, FAQ, and CTAs
 type: research
-version: v0.2
+version: v0.3
 argument-hint: "[generate|audit] [optional: focus section e.g. \"hero\", \"pricing\", \"FAQ\"]"
 ---
 
@@ -34,7 +34,7 @@ Dual-mode skill that either **generates** complete landing page copy from upstre
   | 3 | Tier 2 + `gtm.md` + `competitive-analysis.md` + `journey-map.md` | Full funnel copy with differentiation and onboarding flow |
   | 4 | Tier 3 + `customer-feedback.md` + `monetization.md` + `metrics.md` | Production-grade copy with social proof, pricing, and data-backed claims |
 
-  Read each if it exists (respect `{app}/` prefix when monorepo scope is active):
+  Read each if it exists (respect `{slug}/` prefix when product-path scope is active):
   - `research/positioning.md` — market category, positioning statement, unique attributes, value mapping
   - `research/gtm.md` — messaging framework, one-liner, channel strategy, launch plan
   - `research/icp.md` — ICP segments, pain points, value props, trigger events, customer language
@@ -48,18 +48,21 @@ Dual-mode skill that either **generates** complete landing page copy from upstre
 
 ### 0a. Product Path Manifest
 
-Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading. Scope landing copy to the active product path by default.
+Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading; treat legacy `abandoned` as `archived` and exclude archived/deferred/revisit/promoted paths plus `research/_archive/` scopes from active target selection. Scope landing copy to the active product path by default.
 
-### 0. App Scope Resolution (Monorepo Support)
+### 0. Product-Path Scope Resolution
 
-Before anything else, determine the app scope:
+Resolve research scope by product path before using code or app structure as a hint:
 
-1. If `$ARGUMENTS` specifies an app name matching a subdirectory of `research/`, use it.
-2. If `research/` contains subdirectories (excluding files), list them and ask the user which app to target. If only one subdirectory exists, use it automatically.
-3. If no subdirectories exist, proceed with flat structure (single-product mode).
+1. If `$ARGUMENTS` names a non-archived `research/{slug}/` directory or a product-path ID whose `scope_path` points there, use that path. Treat `{slug}` as the product/app name, not the ICP, audience, or segment label.
+2. If `$ARGUMENTS` names only `research/_archive/{slug}/` or a manifest entry with `status: archived` or legacy `status: abandoned`, stop and warn that the path is archived; do not write or update scoped outputs there.
+3. Read `research/.progress.yaml` when present. Normalize legacy `active_path` to `active_paths` on read and write back `active_paths` on manifest updates. Treat legacy `abandoned` as `archived`; exclude `archived`, `abandoned`, `deferred`, `revisit_candidate`, `promoted`, and any `scope_path` under `research/_archive/` from active target selection.
+4. If active product paths exist in the manifest, use those paths. If multiple active paths exist, ask which one to target unless this skill explicitly supports cross-path output.
+5. If no active manifest target exists, list non-archived product directories under `research/`, excluding `research/_archive/` and dot directories. Auto-select only when exactly one exists; ask when multiple exist.
+6. If no product directories exist, use flat `research/` single-product mode.
+7. Detect monorepo/app/package structure only as a secondary hint. Suggest creating a missing `research/{slug}/` product path when code clearly exposes an app, but do not require code or monorepo detection before using `research/{slug}/`.
 
-When app scope `{app}` is active:
-- Read/write research from `research/{app}/` instead of `research/`
+When product path `{slug}` is active, read and write research under `research/{slug}/`, specs under `specs/{slug}/`, and treat top-level `research/*.md` files as flat-mode documents or cross-path summaries.
 
 ### 1. Determine Mode
 
@@ -190,8 +193,8 @@ If the session is already in Plan mode, prefer `request_user_input`; otherwise a
 ### 7. Write Output
 
 Only after user confirms, write:
-- `research/landing-copy.md` (or `research/{app}/landing-copy.md`) — the full copy with source attribution
-- `research/landing-copy-interview.md` (or `research/{app}/landing-copy-interview.md`) — interview Q&A log
+- `research/landing-copy.md` (or `research/{slug}/landing-copy.md`) — the full copy with source attribution
+- `research/landing-copy-interview.md` (or `research/{slug}/landing-copy-interview.md`) — interview Q&A log
 
 ### 8. Downstream Impact Check
 
@@ -237,7 +240,7 @@ Other options:
 ### A1. Locate Existing Copy
 
 Search for landing page copy in order of priority:
-1. `research/landing-copy.md` (or `research/{app}/landing-copy.md`)
+1. `research/landing-copy.md` (or `research/{slug}/landing-copy.md`)
 2. `src/pages/index.*`, `src/app/page.*`, `app/page.*`, `pages/index.*`
 3. `index.html`, `public/index.html`
 4. Any file matching `*landing*`, `*homepage*` in common source directories
@@ -311,7 +314,7 @@ Audit mode does **not** write any files. It is purely diagnostic. If the user wa
 
 ## Output
 
-### `research/landing-copy.md` (or `research/{app}/landing-copy.md`)
+### `research/landing-copy.md` (or `research/{slug}/landing-copy.md`)
 
 ```markdown
 # Landing Page Copy
@@ -437,7 +440,7 @@ Other options:
 - [conditional items from step 9 — only include items whose conditions are met]
 ```
 
-### `research/landing-copy-interview.md` (or `research/{app}/landing-copy-interview.md`)
+### `research/landing-copy-interview.md` (or `research/{slug}/landing-copy-interview.md`)
 Interview Q&A log — brand voice decisions, claims boundaries, social proof inventory, CTA strategy, structural constraints.
 
 Create the `research/` directory if it doesn't exist.

@@ -2,7 +2,7 @@
 name: platform-strategy
 description: Expand from a single product into a multi-product platform — map vertical and horizontal growth vectors, score candidates, design validation experiments, and sequence the portfolio
 type: research
-version: v0.3
+version: v0.4
 argument-hint: "[optional: expansion direction e.g. \"vertical\", \"horizontal\", or specific adjacent market]"
 ---
 
@@ -25,7 +25,7 @@ Takes a single-product company and maps the path to a multi-product platform. Id
 ## Prerequisites
 
 **Required (at least one):**
-- `research/icp.md` (or `research/{app}/icp.md`) — who you serve today, their pain points, value props
+- `research/icp.md` (or `research/{slug}/icp.md`) — who you serve today, their pain points, value props
 - A working product/codebase to analyse for extensibility
 
 If neither exists, tell the user: "Platform expansion requires a foundation. Run `/icp` first to define who you serve today, then come back."
@@ -44,19 +44,19 @@ If neither exists, tell the user: "Platform expansion requires a foundation. Run
 
 ## Process
 
-### 0. App Scope Resolution (Monorepo Support)
+### 0. Product-Path Scope Resolution
 
-Before checking prerequisites, determine the app scope:
+Resolve research scope by product path before using code or app structure as a hint:
 
-1. If `$ARGUMENTS` specifies an app name matching a subdirectory of `research/`, use it.
-2. If `research/` contains subdirectories (excluding files), list them and ask the user which app to target. If only one subdirectory exists, use it automatically.
-3. If no subdirectories exist, proceed with flat structure (single-product mode).
+1. If `$ARGUMENTS` names a non-archived `research/{slug}/` directory or a product-path ID whose `scope_path` points there, use that path. Treat `{slug}` as the product/app name, not the ICP, audience, or segment label.
+2. If `$ARGUMENTS` names only `research/_archive/{slug}/` or a manifest entry with `status: archived` or legacy `status: abandoned`, stop and warn that the path is archived; do not write or update scoped outputs there.
+3. Read `research/.progress.yaml` when present. Normalize legacy `active_path` to `active_paths` on read and write back `active_paths` on manifest updates. Treat legacy `abandoned` as `archived`; exclude `archived`, `abandoned`, `deferred`, `revisit_candidate`, `promoted`, and any `scope_path` under `research/_archive/` from active target selection.
+4. If active product paths exist in the manifest, use those paths. If multiple active paths exist, ask which one to target unless this skill explicitly supports cross-path output.
+5. If no active manifest target exists, list non-archived product directories under `research/`, excluding `research/_archive/` and dot directories. Auto-select only when exactly one exists; ask when multiple exist.
+6. If no product directories exist, use flat `research/` single-product mode.
+7. Detect monorepo/app/package structure only as a secondary hint. Suggest creating a missing `research/{slug}/` product path when code clearly exposes an app, but do not require code or monorepo detection before using `research/{slug}/`.
 
-When app scope `{app}` is active:
-- Read/write research from `research/{app}/` instead of `research/`
-- Read/write specs from `specs/{app}/` instead of `specs/`
-- Also read `research/icp.md` (cross-app overview) for broader context
-- Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading. Use `active_paths` as the core product focuses and use `product_paths[]` to avoid rediscovering parked expansion candidates.
+When product path `{slug}` is active, read and write research under `research/{slug}/`, specs under `specs/{slug}/`, and treat top-level `research/*.md` files as flat-mode documents or cross-path summaries.
 
 ### 1. Assess Core Product Health
 
@@ -122,7 +122,7 @@ For each candidate, note:
 - Initial market signal (from web research)
 - Whether it's vertical or horizontal
 
-Record the 4-8 candidates in `research/.progress.yaml` as `product_paths[]` entries with `source_skill: platform-strategy`. The top candidate may be `status: active` or `status: revisit_candidate` depending on whether the user is ready to validate it now; non-selected candidates should default to `status: deferred` with validation triggers. Include `id`, `label`, `source_skill: platform-strategy`, `pipeline_stage: platform-strategy`, `scope_path`, `reason`, `evidence_refs`, `revisit_trigger`, `next_skill`, and `last_touched`.
+Record the 4-8 candidates in `research/.progress.yaml` as `product_paths[]` entries with `source_skill: platform-strategy`. The top candidate may be `status: active` or `status: revisit_candidate` depending on whether the user is ready to validate it now; non-selected candidates should default to `status: deferred` with validation triggers. Include `id`, `label`, `source_skill: platform-strategy`, `pipeline_stage: platform-strategy`, `scope_path`, `status`, `reason`, `archive_reason`, `archived_at`, `promoted_at`, `evidence_refs`, `revisit_trigger`, `next_skill`, and `last_touched`.
 
 **Checkpoint 2 — Present candidates to the user.** Use the AskUserQuestion tool to show all candidates grouped by vertical/horizontal, with a brief rationale and research evidence for each. Then ask:
 - "Are there expansion directions I missed?"
@@ -230,7 +230,7 @@ Only after the user has validated the findings, write the output files.
 
 After writing, check for downstream research documents that may be affected by what was just decided. Only check documents that exist on disk.
 
-**Downstream documents to check** (use `{app}/` prefix when app scope is active):
+**Downstream documents to check** (use `{slug}/` prefix when product-path scope is active):
 - `research/roadmap.md`
 - `research/monetization.md`
 - `research/gtm.md`
@@ -256,7 +256,7 @@ Display to the user after showing the written file confirmation. This should be 
 
 ## Output
 
-### `research/platform-strategy.md` (or `research/{app}/platform-strategy.md`)
+### `research/platform-strategy.md` (or `research/{slug}/platform-strategy.md`)
 
 ```markdown
 # Platform Strategy
@@ -385,7 +385,7 @@ Pick one:
 - [conditional items from step 7 — only include items whose conditions are met]
 ```
 
-### `research/platform-strategy-search-log.md` (or `research/{app}/platform-strategy-search-log.md`)
+### `research/platform-strategy-search-log.md` (or `research/{slug}/platform-strategy-search-log.md`)
 
 Raw research log containing:
 - Every WebSearch query executed and why
@@ -399,7 +399,7 @@ Raw research log containing:
 Product-path manifest updated with 4-8 expansion candidates. This does not require every candidate to become a full research track.
 - Any data gaps or areas where research was inconclusive
 
-Create the `research/` (or `research/{app}/`) directory if it doesn't exist.
+Create the `research/` (or `research/{slug}/`) directory if it doesn't exist.
 
 ## Task Classification
 
@@ -420,7 +420,7 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Core health is gating.** If the core product shows clear PMF problems (poor retention, no activation), say so directly. Expanding from a weak foundation is a common startup mistake — flag it.
 - **Score honestly.** Low-synergy, high-effort candidates should score low even if the market is exciting. The whole point is to find expansion that leverages the existing product.
 - **Present before writing.** Never write output files until findings have been presented to the user and validated through the checkpoint questions. The user must see and approve the analysis before anything is written to disk.
-- **Do not overwrite existing `research/platform-strategy.md`** (or `research/{app}/platform-strategy.md`) without asking the user first.
+- **Do not overwrite existing `research/platform-strategy.md`** (or `research/{slug}/platform-strategy.md`) without asking the user first.
 - **Keep validation experiments lightweight.** Full experiment design belongs in `/experiment`. Here, provide just enough to estimate validation cost and timeline.
 
 ## Alignment Page

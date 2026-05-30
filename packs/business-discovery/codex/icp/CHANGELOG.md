@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.7 - 2026-05-30
+
+- Added product-path scope resolution that prefers non-archived `research/{slug}/` paths and active manifest paths before code or monorepo hints.
+- Excluded `research/_archive/`, legacy `abandoned`, `archived`, `deferred`, `revisit_candidate`, and `promoted` paths from active target selection while preserving flat `research/*.md` compatibility.
+
+
 ## v0.5 - 2026-05-27
 
 - Added product-path manifest handling so secondary ICPs and Cross-ICP Analysis outcomes create `research/.progress.yaml` `product_paths` entries with revisit triggers instead of forcing full downstream research for every path.
@@ -24,3 +30,7 @@
 ## v0.2 - 2026-05-25
 
 - Added research-quality alignment requirements covering claim/evidence/inference separation, no-context-loss HTML translation, evidence matrices, confidence/assumption registers, source coverage, and research completeness gates.
+
+## v0.6
+
+- Archived previous skill contract.

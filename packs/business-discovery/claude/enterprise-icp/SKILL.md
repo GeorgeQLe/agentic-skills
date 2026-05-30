@@ -2,7 +2,7 @@
 name: enterprise-icp
 description: Enterprise multi-stakeholder discovery — map personas, deal-killers, and the evaluation-to-renewal lifecycle
 type: research
-version: v0.3
+version: v0.4
 argument-hint: "[optional: target industry or market segment]"
 ---
 
@@ -24,28 +24,29 @@ Interview the founder to map the enterprise problem space. Enterprise sales invo
 
 ## Context Loading
 
-Read `research/icp.md` (or `research/{app}/icp.md` in monorepo mode) if it exists — the startup ICP is a starting point but does not constrain the enterprise analysis. Enterprise is not "startup but bigger." Explicitly explore what changes at enterprise scale.
+Read `research/icp.md` (or `research/{slug}/icp.md` in product-path mode) if it exists — the startup ICP is a starting point but does not constrain the enterprise analysis. Enterprise is not "startup but bigger." Explicitly explore what changes at enterprise scale.
 
 Also read the codebase, README, and existing specs/research if a product exists, to ground the interview.
 
 ## Process
 
-### 0. App Scope Resolution (Monorepo Support)
+### 0. Product-Path Scope Resolution
 
-Before checking prerequisites, determine the app scope:
+Resolve research scope by product path before using code or app structure as a hint:
 
-1. If `$ARGUMENTS` specifies an app name matching a subdirectory of `research/`, use it.
-2. If `research/` contains subdirectories (excluding files), list them and ask the user which app to target. If only one subdirectory exists, use it automatically.
-3. If no subdirectories exist, proceed with flat structure (single-product mode).
+1. If `$ARGUMENTS` names a non-archived `research/{slug}/` directory or a product-path ID whose `scope_path` points there, use that path. Treat `{slug}` as the product/app name, not the ICP, audience, or segment label.
+2. If `$ARGUMENTS` names only `research/_archive/{slug}/` or a manifest entry with `status: archived` or legacy `status: abandoned`, stop and warn that the path is archived; do not write or update scoped outputs there.
+3. Read `research/.progress.yaml` when present. Normalize legacy `active_path` to `active_paths` on read and write back `active_paths` on manifest updates. Treat legacy `abandoned` as `archived`; exclude `archived`, `abandoned`, `deferred`, `revisit_candidate`, `promoted`, and any `scope_path` under `research/_archive/` from active target selection.
+4. If active product paths exist in the manifest, use those paths. If multiple active paths exist, ask which one to target unless this skill explicitly supports cross-path output.
+5. If no active manifest target exists, list non-archived product directories under `research/`, excluding `research/_archive/` and dot directories. Auto-select only when exactly one exists; ask when multiple exist.
+6. If no product directories exist, use flat `research/` single-product mode.
+7. Detect monorepo/app/package structure only as a secondary hint. Suggest creating a missing `research/{slug}/` product path when code clearly exposes an app, but do not require code or monorepo detection before using `research/{slug}/`.
 
-When app scope `{app}` is active:
-- Read/write research from `research/{app}/` instead of `research/`
-- Read/write specs from `specs/{app}/` instead of `specs/`
-- Also read `research/icp.md` (cross-app overview) for broader context
+When product path `{slug}` is active, read and write research under `research/{slug}/`, specs under `specs/{slug}/`, and treat top-level `research/*.md` files as flat-mode documents or cross-path summaries.
 
 ### 1. Orient
 
-If `research/icp.md` (or `research/{app}/icp.md`) exists, summarise the startup ICP. Before asking the user, use WebSearch to research enterprise buying patterns in this product category (e.g., "[category] enterprise buying process", "[category] enterprise vs SMB", "[category] enterprise procurement requirements"). Present the startup ICP summary alongside your enterprise research findings, then ask: "How does the enterprise buyer and user differ from what we mapped here? Here's what I found about enterprise buying patterns in this space — does this match your experience?" If no ICP exists, start from scratch but still run the enterprise buying pattern research first.
+If `research/icp.md` (or `research/{slug}/icp.md`) exists, summarise the startup ICP. Before asking the user, use WebSearch to research enterprise buying patterns in this product category (e.g., "[category] enterprise buying process", "[category] enterprise vs SMB", "[category] enterprise procurement requirements"). Present the startup ICP summary alongside your enterprise research findings, then ask: "How does the enterprise buyer and user differ from what we mapped here? Here's what I found about enterprise buying patterns in this space — does this match your experience?" If no ICP exists, start from scratch but still run the enterprise buying pattern research first.
 
 If a codebase exists, summarise what's built and note it as context.
 
@@ -168,7 +169,7 @@ Only after the user has validated the findings, write the output files.
 
 ## Output
 
-### `research/enterprise-icp.md` (or `research/{app}/enterprise-icp.md`)
+### `research/enterprise-icp.md` (or `research/{slug}/enterprise-icp.md`)
 Structured enterprise discovery document:
 1. **Stakeholder Map** — which personas are involved, their role in buying/adoption
 2. **Per-Persona Journeys** — what each stakeholder needs, their deal-killer "no"
@@ -211,7 +212,7 @@ The Signals appendix uses this structure:
 - [signal]: enterprise-specific competitive dynamics observed
 ```
 
-### `research/enterprise-icp-interview.md` (or `research/{app}/enterprise-icp-interview.md`)
+### `research/enterprise-icp-interview.md` (or `research/{slug}/enterprise-icp-interview.md`)
 Raw interview log — questions, options, responses, and a closing summary of key insights.
 
 Create the `research/` directory if it doesn't exist.
@@ -232,7 +233,7 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Do not assume enterprise ICP is startup ICP scaled up.** Explicitly challenge: "What changes when you sell to a 500-person company vs. a 10-person team?"
 - **Interview style matches `/spec-interview`** — 1–3 focused questions per turn, options with pros/cons, recommendations with reasoning.
 - **Continue until all 10 areas are covered.** Confirm with the user before concluding.
-- **Do not overwrite existing `research/enterprise-icp.md`** (or `research/{app}/enterprise-icp.md`) without asking the user first.
+- **Do not overwrite existing `research/enterprise-icp.md`** (or `research/{slug}/enterprise-icp.md`) without asking the user first.
 - **Present before writing.** Never write output files until findings have been presented to the user and validated. The user must see and approve the analysis before anything is written to disk.
 
 ## Alignment Page

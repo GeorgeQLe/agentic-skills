@@ -1,9 +1,9 @@
 ---
 name: product-line
-description: Manage the portfolio of product paths — review, promote, prune, fork, and check revisit triggers across the product-path manifest
+description: Manage the portfolio of product paths — review, activate, archive, restore, promote, fork, and check revisit triggers across the product-path manifest
 type: operations
-version: v0.0
-argument-hint: "review | promote <path-id> | prune <path-id> | fork <label> [--from <skill>] | triggers"
+version: v0.1
+argument-hint: "review | activate <path-id> | archive <path-id> | restore <path-id> | promote <path-id> | fork <label> [--from <skill>] | triggers"
 ---
 
 ## Pack Availability Guard
@@ -12,9 +12,9 @@ Before telling the user to run a skill from another project-local pack, check `.
 
 # Product Line — Product Path Portfolio Management
 
-Manage the portfolio of product paths tracked in `research/.progress.yaml`. This skill provides five modes for working with the product-path manifest: reviewing the portfolio, promoting deferred paths to active, pruning abandoned paths, forking new paths from mid-pipeline discoveries, and checking revisit triggers.
+Manage product paths tracked in `research/.progress.yaml`. Product paths are research divergences — different products, apps, ICPs, expansion candidates, pivots, or competitive gaps — not git branches. Each path tracks its scope directory, status, evidence, pipeline stage, and revisit conditions.
 
-Product paths are research divergences — different ICPs, expansion candidates, pivots, competitive gaps — not git branches. Each path tracks its pipeline stage, evidence maturity, and revisit conditions.
+Use `activate` when a deferred or revisit candidate path should become active research again. Use `promote` only when a research path graduates to an `apps/{slug}/` code/app scope.
 
 ## Prerequisites
 
@@ -25,29 +25,33 @@ Product paths are research divergences — different ICPs, expansion candidates,
 The canonical manifest lives at `research/.progress.yaml`:
 
 ```yaml
-active_paths:           # list of path IDs currently being researched
-  - "path-id-1"
-max_concurrent: 1       # max simultaneous active paths (default 1)
+active_paths:
+  - "cost-intel"
+max_concurrent: 1
 product_paths:
-  - id: "path-id-1"
-    label: "Human-readable name"
+  - id: "cost-intel"
+    label: "Cost Intel"
+    scope_path: "research/cost-intel/"
+    status: active # active | deferred | archived | promoted | revisit_candidate
     source_skill: "icp"
-    scope_path: "research/icp-smb.md"
-    status: active       # active | deferred | revisit_candidate | promoted | abandoned
     reason: "Why this path exists"
-    evidence_refs:
-      - "research/icp.md"
-    revisit_trigger: "Condition that should re-evaluate this path"
+    archive_reason: null
+    archived_at: null
+    promoted_at: null
+    evidence_refs: []
+    revisit_trigger: null
     next_skill: "/competitive-analysis"
-    last_touched: "2026-05-27"
-    pipeline_stage: "icp"  # last completed skill in the chain
+    pipeline_stage: "icp"
+    last_touched: "YYYY-MM-DD"
 ```
 
 ### Backward Compatibility
 
-When reading the manifest, handle the legacy singular `active_path` field:
-- If `active_path` (string) exists and `active_paths` (list) does not, treat it as `active_paths: [<active_path value>]`.
-- When writing, always use the plural `active_paths` form. Remove the singular `active_path` field on write to complete migration.
+- Read legacy `active_path` as `active_paths: [<value>]` when `active_paths` is absent.
+- Read legacy `status: abandoned` as `status: archived`.
+- On writes, remove `active_path`, write plural `active_paths`, and prefer `status: archived` instead of `abandoned`.
+- Treat `status: promoted` as graduated to code/app scope, not reactivated research.
+- Exclude `research/_archive/` paths from active-path selection and directory suggestions.
 
 ## Modes
 
@@ -55,120 +59,109 @@ When reading the manifest, handle the legacy singular `active_path` field:
 
 **Invocation**: `/product-line review`
 
-Scan the manifest and present a dashboard comparing all paths:
+Present a dashboard comparing all paths:
 
-| Path | Status | Pipeline Stage | Last Touched | Evidence Maturity | Revisit Trigger |
-|------|--------|---------------|--------------|-------------------|-----------------|
+| Path | Status | Scope | Pipeline Stage | Last Touched | Evidence Maturity | Revisit Trigger |
+|------|--------|-------|----------------|--------------|-------------------|-----------------|
 
-**Evidence maturity** is derived from which research files exist under the path's `scope_path` or are listed in `evidence_refs`:
+Group by `active`, `deferred`, `revisit_candidate`, `archived`, and `promoted`. For `deferred` and `revisit_candidate` paths, highlight the revisit trigger. For `archived` paths, show `archive_reason` and `archived_at`. For `promoted` paths, show `promoted_at` and the expected `apps/{slug}/` scope.
+
+Evidence maturity is derived from files under `scope_path` or `evidence_refs`:
 - **Early** — only concept brief or initial ICP
-- **Developing** — ICP + competitive analysis or positioning
-- **Mature** — journey map + metrics + GTM or monetization
-- **Complete** — full pipeline through experiment or PMF assessment
+- **Developing** — ICP plus competitive analysis, positioning, or journey map
+- **Mature** — journey map plus metrics, GTM, monetization, or experiments
+- **Graduated** — promoted to an app/code scope
 
-**Pipeline stage** shows the last completed skill. Map common stages to a visual progress indicator:
+When 3+ deferred or revisit-candidate paths exist with no recent activation, recommend `/product-line triggers`.
 
-```
-idea-scope-brief → icp → competitive-analysis → positioning → journey-map → metrics → gtm → monetization → experiment
-```
+### 2. `activate <path-id>` — Reactivate Research
 
-Group paths by status. For deferred and revisit_candidate paths, highlight the revisit trigger prominently.
+**Invocation**: `/product-line activate <path-id>`
 
-When deferred paths accumulate (3+ deferred with no recent promotion), recommend: "Consider running `/product-line triggers` to check whether any deferred paths should be promoted."
+1. Validate the path exists and has status `deferred` or `revisit_candidate`.
+2. Check `max_concurrent` against the current active-path count. If at capacity, ask whether to deactivate another path or increase `max_concurrent`.
+3. Ensure `scope_path` is not under `research/_archive/`. If it is archived, tell the user to run `/product-line restore <path-id>` first.
+4. Scan existing research files to infer `pipeline_stage`.
+5. Update the manifest:
+   - Set `status: active`
+   - Add the path ID to `active_paths`
+   - Set `last_touched` to today
+   - Set `pipeline_stage` from the scan when clearer than the existing value
+6. Recommend the next skill from `next_skill` or the inferred pipeline stage.
 
-Present using the AskUserQuestion tool with options:
-- "Promote a deferred path" → ask which path
-- "Prune a path" → ask which path
-- "Fork a new path" → proceed to fork mode
-- "Check triggers" → proceed to triggers mode
-- "Done reviewing"
+### 3. `archive <path-id>` — Archive A Research Path
 
-### 2. `promote <path-id>` — Activate a Deferred Path
+**Invocation**: `/product-line archive <path-id>`
+
+1. Validate the path exists and is not already `archived` or legacy `abandoned`.
+2. Ask for a concise archive rationale.
+3. If `scope_path` is `research/{slug}/` and the directory exists, create `research/_archive/` as needed and move it to `research/_archive/{slug}/`.
+4. Update the manifest:
+   - Set `status: archived`
+   - Remove the path ID from `active_paths`
+   - Set `scope_path` to `research/_archive/{slug}/` when the directory was moved
+   - Set `archive_reason`, `archived_at`, and `last_touched`
+5. Present confirmation with the archived directory and rationale.
+
+### 4. `restore <path-id>` — Restore An Archived Path
+
+**Invocation**: `/product-line restore <path-id>`
+
+1. Validate the path exists and has status `archived` or legacy `abandoned`.
+2. If `scope_path` is `research/_archive/{slug}/` and the directory exists, move it back to `research/{slug}/`.
+3. Ask whether to restore as `deferred` (default) or `active`. If active, enforce `max_concurrent`.
+4. Update the manifest:
+   - Set `status: deferred` by default, or `active` only when approved
+   - Add to `active_paths` only when restored as active
+   - Set `scope_path` back to `research/{slug}/`
+   - Clear `archived_at`; keep the old archive rationale in `reason` or history, but set `archive_reason: null`
+   - Set `last_touched` to today
+5. Recommend `/product-line activate <path-id>` if restored as deferred.
+
+### 5. `promote <path-id>` — Graduate To App Scope
 
 **Invocation**: `/product-line promote <path-id>`
 
-1. Validate the path exists and has status `deferred`, `revisit_candidate`, or `abandoned`.
-2. Check `max_concurrent` against current `active_paths` count.
-   - If at capacity, present the user with options: deactivate an existing active path first, or increase `max_concurrent`.
-3. Scan existing research files to determine the path's current pipeline stage:
-   - Check for `research/{scope}/concept-brief*.md`, `research/{scope}/icp.md`, `research/{scope}/competitive-analysis.md`, etc.
-   - Set `pipeline_stage` to the furthest completed skill found.
-4. Update the manifest:
-   - Set `status: promoted` then `status: active`
-   - Add the path ID to `active_paths`
-   - Set `last_touched` to today
-   - Set `pipeline_stage` from the scan
-5. Present the promotion result and recommend the next skill based on where the path left off in the pipeline.
+Use this only when research is ready to become or connect to an app under `apps/{slug}/`.
 
-### 3. `prune <path-id>` — Abandon a Path
+1. Validate the path exists and is not `archived` or legacy `abandoned`.
+2. Derive `{slug}` from the path ID or `scope_path`.
+3. Confirm or create `apps/{slug}/` during the monorepo scaffolding flow. If scaffolding requires another skill, recommend `/scaffold` or the appropriate monorepo command instead of inventing app files here.
+4. Keep research docs under `research/{slug}/` as product evidence unless a separate scaffolder explicitly moves or links docs.
+5. Update the manifest:
+   - Set `status: promoted`
+   - Remove the path ID from `active_paths`
+   - Set `promoted_at` and `last_touched` to today
+   - Keep `scope_path` pointing at the research evidence path
+6. Present the app graduation result and the next implementation/scaffolding command.
 
-**Invocation**: `/product-line prune <path-id>`
-
-1. Validate the path exists and is not already `abandoned`.
-2. Ask the user for a rationale using AskUserQuestion:
-   - "Why is this path being abandoned?"
-   - Options: "Evidence disproved it", "Market shifted", "Resource constraints", "Superseded by another path", or free text
-3. Update the manifest:
-   - Set `status: abandoned`
-   - Remove from `active_paths` if present
-   - Append the rationale to `reason`
-   - Set `last_touched` to today
-4. Present confirmation with the documented rationale.
-
-### 4. `fork <label> [--from <skill>]` — Create a New Path
+### 6. `fork <label> [--from <skill>]` — Create A New Path
 
 **Invocation**: `/product-line fork "Enterprise vertical" --from competitive-analysis`
 
-Create a new product path from a mid-pipeline discovery.
+1. Generate a stable product-path ID from the label.
+2. Confirm that the slug is the intended product/app name, not merely an ICP, audience, or segment label.
+3. Ask for supporting evidence, revisit trigger, and initial status (`active` or `deferred`).
+4. Create or update `research/.progress.yaml` with the full schema fields.
+5. Use `scope_path: research/{slug}/`.
+6. If status is `active`, enforce `max_concurrent` and create `research/{slug}/`.
+7. If status is `deferred`, create the manifest entry without forcing downstream research.
 
-1. Generate a path ID from the label (lowercase, hyphenated slug).
-2. Ask the user using AskUserQuestion:
-   - "What evidence supports this new path?" (free text)
-   - "What's the revisit trigger if we defer it?" (free text)
-   - "Should this be active or deferred?" (options: Active, Deferred)
-3. Determine `scope_path` — suggest `research/{slug}/` for a new research subdirectory.
-4. Create the manifest entry:
-   - `id`: generated slug
-   - `label`: from argument
-   - `source_skill`: from `--from` flag or the current skill context
-   - `scope_path`: determined above
-   - `status`: user's choice (active or deferred)
-   - `reason`: user's evidence summary
-   - `evidence_refs`: any files the user references
-   - `revisit_trigger`: user's trigger (required for deferred)
-   - `next_skill`: inferred from `source_skill` position in the pipeline
-   - `last_touched`: today
-   - `pipeline_stage`: the `--from` skill or `null` if new
-5. If status is `active`, check `max_concurrent` capacity (same logic as promote).
-6. Create the `research/.progress.yaml` file if it doesn't exist, or append to `product_paths` if it does.
-7. Create the `research/{slug}/` directory if the path is active.
-
-### 5. `triggers` — Check Revisit Conditions
+### 7. `triggers` — Check Revisit Conditions
 
 **Invocation**: `/product-line triggers`
 
-Scan all paths with `status: deferred` or `status: revisit_candidate` and evaluate their `revisit_trigger` conditions.
+Scan paths with `status: deferred` or `status: revisit_candidate` and evaluate their `revisit_trigger` conditions:
+- **File-based triggers** — check whether the referenced file exists.
+- **Evidence-based triggers** — check active research files for relevant evidence.
+- **Time-based triggers** — compare against today's date.
+- **External triggers** — flag as requiring manual confirmation.
 
-For each path:
-1. Read the `revisit_trigger` text.
-2. Check whether the trigger condition can be evaluated from current project state:
-   - **File-based triggers** ("when competitive-analysis is complete") → check if the referenced file exists
-   - **Evidence-based triggers** ("when SMB segment shows >10% growth") → check research files for relevant data
-   - **Time-based triggers** ("revisit after Q3 2026") → compare against current date
-   - **External triggers** ("when competitor launches X") → flag as requiring manual check
-3. Classify each trigger: **fired** (condition met), **pending** (not yet), or **manual** (can't evaluate automatically).
-
-Present results as a table:
-
-| Path | Trigger | Status | Recommendation |
-|------|---------|--------|---------------|
-
-For fired triggers, recommend `/product-line promote <path-id>`.
-For manual triggers, ask the user whether the condition has been met.
+Classify each trigger as **fired**, **pending**, or **manual**. For fired triggers, recommend `/product-line activate <path-id>`.
 
 ## Output
 
-This skill modifies `research/.progress.yaml` only. It does not create research documents — those are created by the skills in the pipeline when the user runs them for a promoted path.
+This skill updates `research/.progress.yaml`. `archive` and `restore` may also move product-path directories between `research/{slug}/` and `research/_archive/{slug}/`. `promote` may confirm or route creation of `apps/{slug}/`, but it does not move research docs.
 
 ## Task Classification
 
@@ -182,13 +175,12 @@ When this skill produces follow-up work, file it by execution semantics:
 
 ## Constraints
 
-- **Manifest-only mutations.** This skill reads and writes `research/.progress.yaml`. It does not create, modify, or delete research documents.
-- **No automatic pipeline execution.** After promoting a path, recommend the next skill but do not run it.
-- **Backward compatible reads.** Always handle both `active_path` (singular legacy) and `active_paths` (plural current) when reading.
-- **Forward-only writes.** Always write `active_paths` (plural). Remove `active_path` if present.
-- **Prune rationale is required.** Never abandon a path without documented evidence and rationale.
-- **Respect max_concurrent.** Do not exceed the configured limit without user approval.
-- **Use product-path terminology.** Never use "branch" to mean a product path. Use "product path", "product line", "deferred path", "promoted path", etc.
+- Do not run downstream research or implementation skills.
+- Do not treat archived, legacy abandoned, deferred, revisit-candidate, or promoted paths as active research targets.
+- Do not use `promote` to mean "make active"; use `activate`.
+- Do not use `archive` without a documented rationale.
+- Respect `max_concurrent` for active paths.
+- Use product-path terminology. Never use "branch" to mean a product path.
 
 ## Alignment Page
 

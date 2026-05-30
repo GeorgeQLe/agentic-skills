@@ -2,7 +2,7 @@
 name: sync
 description: Pull latest changes from remote and report status
 type: shipping
-version: v0.3
+version: v0.4
 argument-hint:
 ---
 
@@ -48,7 +48,14 @@ Pull the latest changes from the remote repository and report status.
    - If none of the canonical skill files exists, skip this check silently.
    - Always report the local canonical source path used and its `version:` field when this check runs.
 
-5. **Resolve GitHub freshness preference:**
+5. **Check skill-install drift (track-latest):**
+   - Project-local pack/skill installs under `.claude/skills` and `.codex/skills` are managed copies stamped with `.agentic-skills-managed`, which now records `source_version` and `source_sha`. When canonical sources in the `agentic-skills` checkout move ahead, the installed copies fall behind.
+   - Resolve the `agentic-skills` checkout from any install marker's `source=` path (the parent above `.../packs/..` or `.../global/..` is the repo root). If no managed install exists or the checkout cannot be resolved, skip this check silently.
+   - Run `scripts/pack.sh doctor` from the project root using that checkout (read-only; it never mutates installs).
+   - Fold any `stale` skills into the **Report status** block with the fix command `scripts/pack.sh refresh`. Report `unknown` skills as "run `scripts/pack.sh refresh` to enable drift tracking" and leave `pinned` skills noted as frozen.
+   - **Must not mutate.** Plain `/sync` only warns; it never runs `refresh`, re-copies, or otherwise changes installs. Direct the user to `scripts/pack.sh refresh` (or enable auto-refresh) for the actual update.
+
+6. **Resolve GitHub freshness preference:**
    - Use the user-local machine-wide preference file at `~/.agentic-skills/preferences.json`.
    - Read `sync.github_freshness_check`, whose only allowed values are `"ask"`, `"always"`, and `"never"`.
    - If the file or key is missing, ask the user once which default to remember:
@@ -68,25 +75,26 @@ Pull the latest changes from the remote repository and report status.
    - If the value is `"ask"`, ask before checking GitHub for this sync.
    - Treat malformed JSON or an unsupported value as missing preference and ask again before writing one of the allowed values.
 
-6. **Optional GitHub freshness check:**
+7. **Optional GitHub freshness check:**
    - Only run this check when the resolved preference or explicit user approval says to check GitHub.
    - Compare the local `agentic-skills` checkout against `origin/HEAD` using non-mutating commands such as `git remote get-url origin`, `git rev-parse HEAD`, `git rev-parse origin/HEAD`, and, when remote freshness is explicitly enabled, `git fetch --dry-run` or an equivalent non-mutating freshness probe.
    - Report the local checkout commit, remote URL, local `origin/HEAD` commit if available, and whether the local checkout appears behind the remote.
    - Do not pull, fast-forward, rebase, install, or mutate the checkout from plain `/sync`.
    - If a GitHub check shows the local checkout is stale, recommend `/init-agentic-skills update` for an explicit update.
 
-7. **Report status:**
+8. **Report status:**
    - Branch name
    - Commits pulled (if any) — show short log of new commits
    - Whether stashed changes were re-applied
    - Any conflicts that need manual resolution
    - Current `git status`
    - **Agent config drift** — provisioning version, local canonical source path/version, and canonical block match/drift status for `CLAUDE.md` and `AGENTS.md`, if checked
+   - **Skill-install drift** — any `stale` project skill installs (with `vOld → vNew`), `unknown` installs needing a refresh to enable tracking, and the `scripts/pack.sh refresh` fix command; report "all installs current" when none are stale, or skip the line when no managed installs exist
    - **GitHub freshness** — preference value, whether GitHub was checked, and the local checkout/remote status; when skipped, say local canonical was used
    - **Outstanding work** — summary from step 3 (next step, current phase, remaining work, pending manual tasks) or "No active plan"
    - **Advisory tasks** — pending record/recurring counts, if those files exist
 
-8. **Post-sync actions:**
+9. **Post-sync actions:**
 
    a) Check if `sync.md` exists at the project root.
 

@@ -2,7 +2,7 @@
 name: gtm
 description: Go-to-market planning — channel strategy, messaging, pricing, launch plan, and early traction tactics
 type: research
-version: v0.4
+version: v0.5
 argument-hint: "[optional: focus area e.g. \"pricing\", \"launch plan\"]"
 ---
 
@@ -24,35 +24,36 @@ Research-first skill that builds a go-to-market plan grounded in ICP research an
 
 ## Prerequisites
 
-- **Hard**: `research/icp.md` (or `research/{app}/icp.md` in monorepo mode) must exist. If not, tell the user to run `/icp` first and stop.
-- **Soft**: Read `research/competitive-analysis.md` (or `research/{app}/competitive-analysis.md`), `research/journey-map.md` (or `research/{app}/journey-map.md`), `research/customer-feedback.md` (or `research/{app}/customer-feedback.md`) if they exist — these improve specificity but aren't required.
+- **Hard**: `research/icp.md` (or `research/{slug}/icp.md` in product-path mode) must exist. If not, tell the user to run `/icp` first and stop.
+- **Soft**: Read `research/competitive-analysis.md` (or `research/{slug}/competitive-analysis.md`), `research/journey-map.md` (or `research/{slug}/journey-map.md`), `research/customer-feedback.md` (or `research/{slug}/customer-feedback.md`) if they exist — these improve specificity but aren't required.
 
 ## Process
 
-### 0. App Scope Resolution (Monorepo Support)
+### 0. Product-Path Scope Resolution
 
-Before checking prerequisites, determine the app scope:
+Resolve research scope by product path before using code or app structure as a hint:
 
-1. If `$ARGUMENTS` specifies an app name matching a subdirectory of `research/`, use it.
-2. If `research/` contains subdirectories (excluding files), list them and ask the user which app to target. If only one subdirectory exists, use it automatically.
-3. If no subdirectories exist, proceed with flat structure (single-product mode).
+1. If `$ARGUMENTS` names a non-archived `research/{slug}/` directory or a product-path ID whose `scope_path` points there, use that path. Treat `{slug}` as the product/app name, not the ICP, audience, or segment label.
+2. If `$ARGUMENTS` names only `research/_archive/{slug}/` or a manifest entry with `status: archived` or legacy `status: abandoned`, stop and warn that the path is archived; do not write or update scoped outputs there.
+3. Read `research/.progress.yaml` when present. Normalize legacy `active_path` to `active_paths` on read and write back `active_paths` on manifest updates. Treat legacy `abandoned` as `archived`; exclude `archived`, `abandoned`, `deferred`, `revisit_candidate`, `promoted`, and any `scope_path` under `research/_archive/` from active target selection.
+4. If active product paths exist in the manifest, use those paths. If multiple active paths exist, ask which one to target unless this skill explicitly supports cross-path output.
+5. If no active manifest target exists, list non-archived product directories under `research/`, excluding `research/_archive/` and dot directories. Auto-select only when exactly one exists; ask when multiple exist.
+6. If no product directories exist, use flat `research/` single-product mode.
+7. Detect monorepo/app/package structure only as a secondary hint. Suggest creating a missing `research/{slug}/` product path when code clearly exposes an app, but do not require code or monorepo detection before using `research/{slug}/`.
 
-When app scope `{app}` is active:
-- Read/write research from `research/{app}/` instead of `research/`
-- Read/write specs from `specs/{app}/` instead of `specs/`
-- Also read `research/icp.md` (cross-app overview) for broader context
+When product path `{slug}` is active, read and write research under `research/{slug}/`, specs under `specs/{slug}/`, and treat top-level `research/*.md` files as flat-mode documents or cross-path summaries.
 
 ### 1. Product Path Manifest
 
-Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading. Scope GTM strategy to the active product path by default. When GTM channels or messaging would serve a deferred product path better than the active one, add a `## Product Path Implications` section recommending `/product-line fork` or noting the impact.
+Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading; treat legacy `abandoned` as `archived` and exclude archived/deferred/revisit/promoted paths plus `research/_archive/` scopes from active target selection. Scope GTM strategy to the active product path by default. When GTM channels or messaging would serve a deferred product path better than the active one, add a `## Product Path Implications` section recommending `/product-line fork` or noting the impact.
 
 ### 2. Load Context
 
-- Read `research/icp.md` (or `research/{app}/icp.md`) — ICP segments, pain points, value props, trigger events, current-state journey
-- Read `research/competitive-analysis.md` (or `research/{app}/competitive-analysis.md`) if it exists — competitor positioning, pricing, channels, market gaps
-- Read `research/journey-map.md` (or `research/{app}/journey-map.md`) if it exists — customer journey stages, discovery channels, conversion triggers
-- Read `research/customer-feedback.md` (or `research/{app}/customer-feedback.md`) if it exists — real customer language, validated/invalidated assumptions
-- Read `research/positioning.md` (or `research/{app}/positioning.md`) if it exists — positioning framework that messaging should flow from
+- Read `research/icp.md` (or `research/{slug}/icp.md`) — ICP segments, pain points, value props, trigger events, current-state journey
+- Read `research/competitive-analysis.md` (or `research/{slug}/competitive-analysis.md`) if it exists — competitor positioning, pricing, channels, market gaps
+- Read `research/journey-map.md` (or `research/{slug}/journey-map.md`) if it exists — customer journey stages, discovery channels, conversion triggers
+- Read `research/customer-feedback.md` (or `research/{slug}/customer-feedback.md`) if it exists — real customer language, validated/invalidated assumptions
+- Read `research/positioning.md` (or `research/{slug}/positioning.md`) if it exists — positioning framework that messaging should flow from
 - Read CLAUDE.md and README if they exist — product context
 
 ### 3. Interview
@@ -138,7 +139,7 @@ Only after the user has validated the findings, write the output files.
 
 After writing, check for downstream research documents that may be affected by what was just decided. Only check documents that exist on disk.
 
-**Downstream documents to check** (use `{app}/` prefix when app scope is active):
+**Downstream documents to check** (use `{slug}/` prefix when product-path scope is active):
 - `research/monetization.md`
 
 For each existing downstream document:
@@ -158,12 +159,12 @@ Display to the user after showing the written file confirmation. This should be 
 
 ## Output
 
-### `research/gtm.md` (or `research/{app}/gtm.md`)
+### `research/gtm.md` (or `research/{slug}/gtm.md`)
 
 ```markdown
 # Go-to-Market Plan
 
-> Based on: research/icp.md (or research/{app}/icp.md)[, research/competitive-analysis.md, research/journey-map.md, research/customer-feedback.md]
+> Based on: research/icp.md (or research/{slug}/icp.md)[, research/competitive-analysis.md, research/journey-map.md, research/customer-feedback.md]
 > Date: [current date]
 
 ## Summary
@@ -270,7 +271,7 @@ Display to the user after showing the written file confirmation. This should be 
 - [remaining conditional items from step 5 — only include items whose conditions are met]
 ```
 
-### `research/gtm-interview.md` (or `research/{app}/gtm-interview.md`)
+### `research/gtm-interview.md` (or `research/{slug}/gtm-interview.md`)
 Raw interview log — questions, options presented, user responses, and a closing summary of key decisions.
 
 Create the `research/` directory if it doesn't exist.
@@ -292,7 +293,7 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Be specific.** "Use social media" is not a channel strategy. "Post weekly technical deep-dives on Twitter targeting DevOps engineers who follow [competitor]" is.
 - **Present before writing.** Never write output files until findings have been presented and validated.
 - **Don't prescribe product changes.** GTM is about reaching and converting the market with what exists. Product gaps belong in `/mvp-gap` or `/brainstorm`.
-- **Do not overwrite existing `research/gtm.md`** (or `research/{app}/gtm.md`) without asking the user first.
+- **Do not overwrite existing `research/gtm.md`** (or `research/{slug}/gtm.md`) without asking the user first.
 
 ## Alignment Page
 

@@ -2,7 +2,7 @@
 name: feature-interview
 description: Interview a feature idea with evidence-backed alignment, then decide whether to create/update docs, specs, roadmap, or tasks
 type: planning
-version: v0.3
+version: v0.4
 argument-hint: "[feature idea or tasks/ideas.md entry]"
 ---
 
@@ -22,6 +22,20 @@ Use `$feature-interview` especially after a production spec already exists and t
 
 ## Workflow
 
+### 0. Product-Path Scope Resolution
+
+Resolve research scope by product path before using code or app structure as a hint:
+
+1. If `$ARGUMENTS` names a non-archived `research/{slug}/` directory or a product-path ID whose `scope_path` points there, use that path. Treat `{slug}` as the product/app name, not the ICP, audience, or segment label.
+2. If `$ARGUMENTS` names only `research/_archive/{slug}/` or a manifest entry with `status: archived` or legacy `status: abandoned`, stop and warn that the path is archived; do not write or update scoped outputs there.
+3. Read `research/.progress.yaml` when present. Normalize legacy `active_path` to `active_paths` on read and write back `active_paths` on manifest updates. Treat legacy `abandoned` as `archived`; exclude `archived`, `abandoned`, `deferred`, `revisit_candidate`, `promoted`, and any `scope_path` under `research/_archive/` from active target selection.
+4. If active product paths exist in the manifest, use those paths. If multiple active paths exist, ask which one to target unless this skill explicitly supports cross-path output.
+5. If no active manifest target exists, list non-archived product directories under `research/`, excluding `research/_archive/` and dot directories. Auto-select only when exactly one exists; ask when multiple exist.
+6. If no product directories exist, use flat `research/` single-product mode.
+7. Detect monorepo/app/package structure only as a secondary hint. Suggest creating a missing `research/{slug}/` product path when code clearly exposes an app, but do not require code or monorepo detection before using `research/{slug}/`.
+
+When product path `{slug}` is active, read and write research under `research/{slug}/`, specs under `specs/{slug}/`, and treat top-level `research/*.md` files as flat-mode documents or cross-path summaries.
+
 1. Resolve the feature input:
    - If `$ARGUMENTS` names or quotes an idea, use it as the seed.
    - If `$ARGUMENTS` references `tasks/ideas.md`, read matching entries and ask the user to choose one when multiple entries match.
@@ -40,7 +54,7 @@ Use `$feature-interview` especially after a production spec already exists and t
    - Identify how the feature fits into the user story, customer journey, developer workflow, game loop, or other project-specific journey artifact. If no credible journey exists for user-facing work, flag that as a planning gap.
    - For new user-facing product, SaaS, marketplace, dashboard, internal tool, product-experience work, or substantial new feature work, add a prototype-first gate to the intake: default the first build artifact to a clickable local/static prototype with fake, fixture, or in-memory data unless the user explicitly opts into production infrastructure or the core interaction cannot be tested without it. Treat durable storage, auth, payments, analytics, deployment, admin tooling, multi-tenancy, and production observability as deferred infrastructure decisions until the prototype calibrates taste, feel, workflow density, and one accepted journey.
    - When the feature direction is uncertain, recommend multiple route-based experiments instead of one over-specified implementation. Name the routes or route pattern, such as `/experiments/table-first`, `/experiments/board-first`, or the project's equivalent, and identify the hypothesis each route tests.
-   - If those route experiments imply materially different products, apps, ICPs, or product lines rather than alternative UX for the same product path, record them in `research/.progress.yaml` as `product_paths[]` with `source_skill: feature-interview`, `status: deferred` or `status: revisit_candidate`, a `revisit_trigger`, and the likely `next_skill`.
+   - If those route experiments imply materially different products, apps, ICPs, or product lines rather than alternative UX for the same product path, record them in `research/.progress.yaml` as `product_paths[]` with `id`, `label`, `source_skill: feature-interview`, `scope_path`, `status: deferred` or `status: revisit_candidate`, `reason`, `archive_reason`, `archived_at`, `promoted_at`, `evidence_refs`, `revisit_trigger`, `next_skill`, `pipeline_stage: feature-interview`, and `last_touched`.
    - Identify whether research docs, journey docs, specs, roadmap, or task queues need a durable update if the feature proceeds.
 4. Match the feature against existing planning artifacts:
    - Identify whether the repo is in a post-spec state: one or more credible `specs/*.md`, `spec.md`, or `docs/specifications/*.md` files already define the product or area this feature extends.
@@ -101,7 +115,7 @@ After confirmation, write the minimum durable artifact needed:
 - Roadmap/task-only change: update `tasks/roadmap.md`, `tasks/todo.md`, `tasks/record-todo.md`, or `tasks/manual-todo.md` only when no spec/research change is needed and the user has confirmed priority.
 - Upstream planning/research needed: write an interview log and recommend the named skill instead of inventing a placeholder spec.
 - No action: write an interview log explaining why the idea is already covered, duplicate, deferred, or intentionally parked.
-- Product path divergence: update `research/.progress.yaml` with `id`, `label`, `source_skill`, `scope_path`, `status`, `reason`, `evidence_refs`, `revisit_trigger`, `next_skill`, and `last_touched`; do not force all divergent paths through downstream research.
+- Product path divergence: update `research/.progress.yaml` with `id`, `label`, `source_skill`, `scope_path`, `status`, `reason`, `archive_reason`, `archived_at`, `promoted_at`, `evidence_refs`, `revisit_trigger`, `next_skill`, `pipeline_stage`, and `last_touched`; do not force all divergent paths through downstream research.
 
 Always write an interview log to `specs/[topic]-feature-interview.md` (or `docs/specifications/[topic]-feature-interview.md` if that is the repo's canonical spec location). Include:
 

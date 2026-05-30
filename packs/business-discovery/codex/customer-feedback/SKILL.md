@@ -2,7 +2,7 @@
 name: customer-feedback
 description: Ingest and synthesize customer feedback — categorize findings against ICP and journey map, maintain a running log
 type: research
-version: v0.1
+version: v0.2
 argument-hint: "[file path, pasted text, or empty to be prompted]"
 ---
 
@@ -26,31 +26,32 @@ Append-only skill that ingests customer feedback, categorizes findings against I
 
 ## Soft Prerequisites
 
-- Read `research/icp.md` (or `research/{app}/icp.md` in monorepo mode) if it exists — grounds categorization in ICP segments and pain points.
-- Read `research/journey-map.md` (or `research/{app}/journey-map.md` in monorepo mode) if it exists — tags findings to journey stages.
+- Read `research/icp.md` (or `research/{slug}/icp.md` in product-path mode) if it exists — grounds categorization in ICP segments and pain points.
+- Read `research/journey-map.md` (or `research/{slug}/journey-map.md` in product-path mode) if it exists — tags findings to journey stages.
 
 These are not required. The skill works without them but categorization will be less precise.
 
 ## Process
 
-### 0. App Scope Resolution (Monorepo Support)
+### 0. Product-Path Scope Resolution
 
-Before checking prerequisites, determine the app scope:
+Resolve research scope by product path before using code or app structure as a hint:
 
-1. If `$ARGUMENTS` specifies an app name matching a subdirectory of `research/`, use it.
-2. If `research/` contains subdirectories (excluding files), list them and ask the user which app to target. If the session is already in Plan mode and there are 2-3 concrete choices, prefer `request_user_input`; otherwise ask in plain text. If only one subdirectory exists, use it automatically.
-3. If no subdirectories exist, proceed with flat structure (single-product mode).
+1. If `$ARGUMENTS` names a non-archived `research/{slug}/` directory or a product-path ID whose `scope_path` points there, use that path. Treat `{slug}` as the product/app name, not the ICP, audience, or segment label.
+2. If `$ARGUMENTS` names only `research/_archive/{slug}/` or a manifest entry with `status: archived` or legacy `status: abandoned`, stop and warn that the path is archived; do not write or update scoped outputs there.
+3. Read `research/.progress.yaml` when present. Normalize legacy `active_path` to `active_paths` on read and write back `active_paths` on manifest updates. Treat legacy `abandoned` as `archived`; exclude `archived`, `abandoned`, `deferred`, `revisit_candidate`, `promoted`, and any `scope_path` under `research/_archive/` from active target selection.
+4. If active product paths exist in the manifest, use those paths. If multiple active paths exist, ask which one to target unless this skill explicitly supports cross-path output.
+5. If no active manifest target exists, list non-archived product directories under `research/`, excluding `research/_archive/` and dot directories. Auto-select only when exactly one exists; ask when multiple exist.
+6. If no product directories exist, use flat `research/` single-product mode.
+7. Detect monorepo/app/package structure only as a secondary hint. Suggest creating a missing `research/{slug}/` product path when code clearly exposes an app, but do not require code or monorepo detection before using `research/{slug}/`.
 
-When app scope `{app}` is active:
-- Read/write research from `research/{app}/` instead of `research/`
-- Read/write specs from `specs/{app}/` instead of `specs/`
-- Also read `research/icp.md` (cross-app overview) for broader context
+When product path `{slug}` is active, read and write research under `research/{slug}/`, specs under `specs/{slug}/`, and treat top-level `research/*.md` files as flat-mode documents or cross-path summaries.
 
 ### 1. Load Context
 
-- Read `research/icp.md` (or `research/{app}/icp.md`) if it exists — extract ICP segments, user profiles, pain points, value props
-- Read `research/journey-map.md` (or `research/{app}/journey-map.md`) if it exists — extract journey stages, use cases, critical moments
-- Read `research/customer-feedback.md` (or `research/{app}/customer-feedback.md`) if it exists — load all previous sessions for synthesis context
+- Read `research/icp.md` (or `research/{slug}/icp.md`) if it exists — extract ICP segments, user profiles, pain points, value props
+- Read `research/journey-map.md` (or `research/{slug}/journey-map.md`) if it exists — extract journey stages, use cases, critical moments
+- Read `research/customer-feedback.md` (or `research/{slug}/customer-feedback.md`) if it exists — load all previous sessions for synthesis context
 
 ### 2. Ingest Feedback
 
@@ -139,7 +140,7 @@ Only after the user validates, write to `research/customer-feedback.md`:
 
 After writing, check for downstream research documents that may be affected by what was just decided. Only check documents that exist on disk.
 
-**Downstream documents to check** (use `{app}/` prefix when app scope is active):
+**Downstream documents to check** (use `{slug}/` prefix when product-path scope is active):
 - `research/gtm.md`
 - `research/monetization.md`
 
@@ -160,7 +161,7 @@ Display to the user after showing the written file confirmation. This should be 
 
 ## Output
 
-### `research/customer-feedback.md` (or `research/{app}/customer-feedback.md`)
+### `research/customer-feedback.md` (or `research/{slug}/customer-feedback.md`)
 
 ```markdown
 # Customer Feedback
@@ -251,7 +252,7 @@ When this skill produces follow-up work, file it by execution semantics:
 
 ## Constraints
 
-- **Append-only.** Never delete or overwrite previous sessions in `research/customer-feedback.md` (or `research/{app}/customer-feedback.md`). Only the `## Synthesis` section at the top is regenerated.
+- **Append-only.** Never delete or overwrite previous sessions in `research/customer-feedback.md` (or `research/{slug}/customer-feedback.md`). Only the `## Synthesis` section at the top is regenerated.
 - **Present before writing.** Never write until the user validates the categorization.
 - **Tag to existing research.** When ICP and journey map exist, every finding must be tagged. When they don't exist, skip tagging but note "no ICP/journey context" in the session header.
 - **Count across sessions.** Staleness triggers are based on cumulative findings, not just the current session.

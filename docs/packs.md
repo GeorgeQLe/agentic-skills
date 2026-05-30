@@ -222,9 +222,31 @@ Do not install `packs/*` globally as a fallback; that recreates the context poll
 
 Commit `.agents/project.json` with the project. Do not commit generated local skill roots under `.claude/skills` or `.codex/skills`; recreate them with `/pack`, `$pack`, or `scripts/pack.sh refresh`.
 
-`scripts/pack.sh install`, `remove`, `refresh`, and `set-mode` preserve existing `project_scopes` and `notes` fields when `jq` is available.
+`scripts/pack.sh install`, `remove`, `refresh`, and `set-mode` preserve existing `project_scopes`, `notes`, and `skill_updates` fields when `jq` is available.
 
 Pack writes use `.agents/.pack.lock` with owner metadata (`pid`, `started_at`, `command`). If a previous pack command exits without releasing the lock and its recorded process is no longer running, the next pack command removes the stale lock automatically. If a live process still owns the lock, timeout errors include the owner metadata.
+
+## Skill-install drift (track-latest vs pinned)
+
+Installs are **copies** of canonical sources stamped with a `.agentic-skills-managed` marker. The marker now records `source_version` (the canonical `version:` at install time) and `source_sha` (a deterministic content hash of the source, excluding `archive/` and the marker). This makes "the canonical skill moved ahead of my installed copy" observable.
+
+- **Track-latest (default).** A plain managed copy follows canonical. When the canonical source changes, the recorded `source_sha` no longer matches, and the install is reported as `stale`.
+- **Pinned (frozen).** `scripts/pack.sh pin <skill> <ver>` installs `archive/<ver>` as a **symlink**; pinned installs report `pinned` and are never `stale`. `unpin` returns the skill to track-latest. There is no separate per-skill "policy" field — pinned vs latest is encoded solely by presence in `.agents/project.json` `pinned_versions`.
+
+Report and refresh:
+
+```bash
+scripts/pack.sh doctor     # read-only drift report (ok / stale / unknown / pinned / missing-source); non-zero exit if any stale
+scripts/pack.sh refresh    # re-copy installs from canonical, rewriting markers and clearing drift
+```
+
+`doctor` statuses: `ok` (matches canonical), `stale (vOld → vNew)` (canonical moved), `unknown` (a pre-upgrade marker has no `source_sha` — run `refresh` once to enable tracking, never a false `stale`), `pinned vX (frozen)`, and `missing-source` (canonical path gone). `doctor` only detects *canonical moved*; it does not detect local edits to an installed copy.
+
+**Update mode.** `.agents/project.json` may carry `skill_updates.mode` — `warn` (default) or `auto`. Set it with `scripts/pack.sh set-update-mode <warn|auto|unset>`. A trigger (the session-start hook, or sync-with-approval) that sees `mode == auto`, or global `~/.agentic-skills/preferences.json` `skills.auto_refresh == true`, runs `refresh` automatically; otherwise it only warns. `doctor` itself never mutates — it renders the effective policy.
+
+**Session-start hook (opt-in, off by default).** `/init-agentic-skills` offers to enable a `SessionStart` hook (`scripts/skill-drift-hook.sh`) that warns about stale installs at session start, or auto-refreshes when `skills.auto_refresh` / `skill_updates.mode == auto` is set. Preferences live in `~/.agentic-skills/preferences.json` under `skills` (`session_start_hook`, `auto_refresh`). Disable by declining the prompt, running `scripts/init-agentic-skills.sh set-pref session_start_hook false`, or `scripts/init-agentic-skills.sh hook disable` to remove the `~/.claude/settings.json` entry.
+
+Global installs follow the same model: `scripts/init-agentic-skills.sh doctor` reports global drift against `global/<tool>/<skill>`, and `/init-agentic-skills update` re-copies them (the global "refresh").
 
 ## Former Global Domain Skills
 
