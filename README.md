@@ -147,27 +147,28 @@ agentic-skills/
 
 ## Global Core
 
-Global skills should stay domain-neutral:
+The global surface is intentionally small and domain-neutral. `./init.sh` installs six skills under `global/claude/` (mirrored under `global/codex/`):
 
 ```text
-affected, analyze-sessions, bootstrap-repo, brainstorm, branch-lifecycle,
-codebase-status, commit-and-push-by-feature, idea-scope-brief, create-skill, dead-code, debug, decommission, deploy, dogfood,
-expert-review, guide, handoff, hygiene, init-agentic-skills, provision-agentic-config,
-investigate, migrate, pack, patch-exec-profile, spec-interview, ui-interview,
-ux-variation, plan-phase, reconcile-dev-docs, regression-check, release, roadmap, run, scaffold,
-session-triage, ship, ship-end, skills, slim-audit, spec-drift, sync,
-targeted-skill-builder, trace, research-roadmap, uat
+codebase-status, idea-scope-brief, init-agentic-skills, pack,
+provision-agentic-config, skills
 ```
 
-### Claude-only global skills
+### Codex-only global skill
 
-One global skill ships only under `global/claude/` and has no Codex mirror:
+One global skill ships only under `global/codex/` (no `global/claude/` mirror):
 
 ```text
-delegate
+afps-status
 ```
 
-`/delegate` is the synchronous, in-session sibling of `/handoff --target=codex`: it drafts and approves a packet via `scripts/approved-plan.sh`, then invokes `codex exec "<target-skill> --execute-approved"` live from Claude. It is `hybrid`-only by design. Codex users should not expect a `$delegate` — drive hybrid delegation from the Claude side, or use `/handoff --target=codex` for the async variant. See `global/claude/delegate/SKILL.md` and `docs/operating-modes.md`.
+`$afps-status` summarizes AFPS product-workflow progress from existing artifacts and recommends the next concrete skill command. It is read-mostly reconciliation, not a competing workflow state system.
+
+### `delegate` moved to the `agent-bridge` pack
+
+`delegate` is **no longer global** — it lives in `packs/agent-bridge/claude/delegate`. Install it with `scripts/pack.sh install agent-bridge`. It remains **Claude-only** with no Codex mirror.
+
+`/delegate` is the synchronous, in-session sibling of `/handoff --target=codex`: it drafts and approves a packet via `scripts/approved-plan.sh`, then invokes `codex exec "<target-skill> --execute-approved"` live from Claude. It is `hybrid`-only by design. Codex users should not expect a `$delegate` — drive hybrid delegation from the Claude side, or use `/handoff --target=codex` for the async variant. See `packs/agent-bridge/claude/delegate/SKILL.md` and `docs/operating-modes.md`.
 
 ## Packs
 

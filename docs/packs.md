@@ -73,7 +73,11 @@ scripts/pack.sh install game-kanban
 scripts/pack.sh remove game
 scripts/pack.sh refresh
 scripts/pack.sh status
+scripts/pack.sh doctor                     # read-only drift report; non-zero exit if any install is stale
+scripts/pack.sh set-update-mode <mode>     # mode is one of: warn | auto | unset
 ```
+
+`doctor` and `set-update-mode` are part of the skill-install drift model — see [Skill-install drift](#skill-install-drift-track-latest-vs-pinned) below.
 
 Assistant-native usage also supports guided setup:
 
@@ -244,7 +248,7 @@ scripts/pack.sh refresh    # re-copy installs from canonical, rewriting markers 
 
 **Update mode.** `.agents/project.json` may carry `skill_updates.mode` — `warn` (default) or `auto`. Set it with `scripts/pack.sh set-update-mode <warn|auto|unset>`. A trigger (the session-start hook, or sync-with-approval) that sees `mode == auto`, or global `~/.agentic-skills/preferences.json` `skills.auto_refresh == true`, runs `refresh` automatically; otherwise it only warns. `doctor` itself never mutates — it renders the effective policy.
 
-**Session-start hook (opt-in, off by default).** `/init-agentic-skills` offers to enable a `SessionStart` hook (`scripts/skill-drift-hook.sh`) that warns about stale installs at session start, or auto-refreshes when `skills.auto_refresh` / `skill_updates.mode == auto` is set. Preferences live in `~/.agentic-skills/preferences.json` under `skills` (`session_start_hook`, `auto_refresh`). Disable by declining the prompt, running `scripts/init-agentic-skills.sh set-pref session_start_hook false`, or `scripts/init-agentic-skills.sh hook disable` to remove the `~/.claude/settings.json` entry.
+**Session-start hook (opt-in, off by default).** `/init-agentic-skills` offers to enable a `SessionStart` hook (`scripts/skill-drift-hook.sh`) that warns about stale installs at session start, or auto-refreshes when `skills.auto_refresh` / `skill_updates.mode == auto` is set. Register or remove the hook directly with `scripts/init-agentic-skills.sh hook enable|disable`, which writes (or clears) the `~/.claude/settings.json` `SessionStart` entry and sets the `session_start_hook` preference. Preferences live in `~/.agentic-skills/preferences.json` under `skills` (`session_start_hook`, `auto_refresh`); set them with `scripts/init-agentic-skills.sh set-pref <key> <value>` and inspect them with `scripts/init-agentic-skills.sh show-prefs`. Disable by declining the prompt, running `scripts/init-agentic-skills.sh set-pref session_start_hook false`, or `scripts/init-agentic-skills.sh hook disable`.
 
 Global installs follow the same model: `scripts/init-agentic-skills.sh doctor` reports global drift against `global/<tool>/<skill>`, and `/init-agentic-skills update` re-copies them (the global "refresh").
 

@@ -75,69 +75,26 @@ If a skill only has generic smoke coverage and needs domain-quality assertions, 
 
 ## Global Core Skills
 
-Global skills are safe across business apps, games, devtools, libraries, services, and infrastructure:
+Global skills are domain-neutral and installed by `./init.sh` for every project. The global surface is intentionally small — six skills under `global/claude/` (mirrored under `global/codex/`), plus one Codex-only skill:
 
 | Skill | Purpose |
 | --- | --- |
-| `affected` | Analyze which monorepo packages and apps are affected by current changes |
-| `analyze-sessions` | Analyze Claude/Codex session history trends and recommend automation |
-| `bootstrap-repo` | Initialize repository README and agent workflow docs from a project brief |
-| `brainstorm` | Evaluate the codebase and suggest ideas to explore with planning |
-| `branch-lifecycle` | Evaluate feature branches for merge, salvage, keep-open, or delete decisions |
 | `codebase-status` | Report repo state, related conversation history, and outstanding work |
-| `commit-and-push-by-feature` | Commit and push changes grouped by logical feature buckets |
 | `idea-scope-brief` | Shape a rough idea into a concept brief before ICP and market research |
-| `dead-code` | Scan for unused exports, unreachable code, orphaned files, and stale dependencies |
-| `debug` | Investigate a problem, log findings, and suggest a non-duplicate fix |
-| `decommission` | Tear down and remove a service, package, or infrastructure component |
-| `deploy` | Deploy the project to a target environment with deployment history tracking |
-| `dogfood` | Create owner/operator scenarios for adopting the product into the builder's workflow |
-| `expert-review` | Conduct a project-wide code review against specs, docs, and implementation |
-| `guide` | Produce click-by-click instructions for manual blockers |
-| `handoff` | Generate a project-level context snapshot for a fresh session |
-| `hygiene` | Audit project structure, conventions, mirrors, and documentation references |
-| `icon-handler` | Audit and apply project-root icon assets across favicon, app icon, Apple, and manifest surfaces |
 | `init-agentic-skills` | Initialize global Claude and Codex managed skill installs from this checkout and route pack setup to the pack workflow |
-| `provision-agentic-config` | Provision workflow orchestration and agent conventions into project agent docs |
-| `investigate` | Validate claims against codebase and git history, then trace root cause |
-| `migrate` | Guide a structural migration or dependency upgrade |
 | `pack` | Manage project-local packs and `.agents/project.json` |
-| `patch-exec-profile` | Audit and fill missing lane/branch metadata in agent-team/implementation-safe execution profiles |
-| `feature-interview` | Interview a feature idea with evidence-backed alignment, then decide whether to update docs, specs, roadmap, or tasks |
-| `spec-interview` | Interview to validate and complete an implementation specification |
-| `ui-interview` | Interview page by page to define implementation-ready UI detail |
-| `ux-variations` | Plan and compare onboarding, workflow, sharing, return-use, and UI variants before locking an experience |
-| `consolidate-variations` | Converge evaluated UI variants into a final implementation-ready UI spec |
-| `prototype` | Build tangible, runnable prototypes from UX variation and UI specs |
-| `plan-phase` | Decompose a single roadmap phase into implementation steps, tests, and file-level detail |
-| `reconcile-dev-docs` | Reconcile roadmap, todo, history, phase archives, specs, and git evidence |
-| `regression-check` | Run a comprehensive health check after a phase or major change |
-| `release` | Version bump, changelog, tag, and prepare a release |
-| `roadmap` | Scan task pipeline health, build or update the project roadmap, and maintain a priority task queue |
-| `run` | Execute the next incomplete step or phase, then ship the result |
-| `scaffold` | Generate a new package or app using repo conventions |
-| `session-triage` | Investigate one immediate session issue, correction, repo incident, or skill failure |
-| `ship` | Ship already-finished work, optionally deploy it, and prepare the next step |
-| `ship-end` | Wrap up the current session, update docs, commit, and push |
+| `provision-agentic-config` | Provision workflow orchestration and agent conventions into project agent docs |
 | `skills` | Browse global and enabled project-local skills |
-| `slim-audit` | Audit for opportunities to reduce lines of code while preserving behavior |
-| `spec-drift` | Audit specs against codebase reality |
-| `sync` | Pull latest remote changes and report status |
-| `targeted-skill-builder` | Build or update one specific skill from a concrete workflow gap or correction |
-| `trace` | Follow a request end-to-end through the stack |
-| `research-roadmap` | Scan research and documentation health, then maintain a priority documentation queue |
-| `uat` | Create target-user acceptance journeys with role-based criteria and evidence capture |
-| `uat-guide` | Expand a UAT journey into click-by-click tester instructions and update result logs |
 
-### Claude-only Global Skills
+> `afps-status` ships **Codex-only** under `global/codex/` (no `global/claude/` mirror). Invoke it as `$afps-status` to summarize AFPS product-workflow progress and recommend the next concrete skill command.
 
-The following global skill ships only under `global/claude/`. It has **no Codex mirror**, so `$delegate` does not exist in Codex — do not expect a symmetric invocation.
+All other formerly-global skills now live in domain packs — see [Moved Skills](#moved-skills) and the per-pack sections below.
 
-| Skill | Platform | Purpose |
-| --- | --- | --- |
-| `delegate` | Claude-only | Live in-session delegation from Claude to Codex via the approval/delegation packet contract (`hybrid`-only). |
+### `delegate` (moved to the `agent-bridge` pack)
 
-`/delegate` is the synchronous sibling of `/handoff --target=codex`: it drafts and approves a packet using the shared `scripts/approved-plan.sh` helpers, then invokes `codex exec "<target-skill> --execute-approved"` inside the current Claude session instead of handing off for the user to resume later. It is hybrid-only by design and falls cleanly into the pre-start-failure branch of the fallback matrix if the `codex` binary is missing. See `global/claude/delegate/SKILL.md` for the full contract and `docs/operating-modes.md` § "Approval packet" for the lifecycle states.
+`delegate` is **no longer a global skill** — it now lives in `packs/agent-bridge/claude/delegate`. It remains **Claude-only** with no Codex mirror, so `$delegate` does not exist in Codex; install it with `scripts/pack.sh install agent-bridge` (or `scripts/pack.sh install delegate`).
+
+`/delegate` is the synchronous sibling of `/handoff --target=codex`: it drafts and approves a packet using the shared `scripts/approved-plan.sh` helpers, then invokes `codex exec "<target-skill> --execute-approved"` inside the current Claude session instead of handing off for the user to resume later. It is hybrid-only by design and falls cleanly into the pre-start-failure branch of the fallback matrix if the `codex` binary is missing. See `packs/agent-bridge/claude/delegate/SKILL.md` for the full contract and `docs/operating-modes.md` § "Approval packet" for the lifecycle states.
 
 ## Business Packs
 
@@ -178,7 +135,7 @@ Business ops:
 ```text
 assumption-tracker, cohort-review, retro, risk-register, burn-rate,
 runway-model, investor-update, reconcile-research, mvp-gap,
-scale-audit, platform-strategy
+scale-audit, platform-strategy, product-line
 ```
 
 ## Game Pack
@@ -431,6 +388,52 @@ scripts/pack.sh install poketowork-kanban
 
 That pack contains `poketo-kanban` and `sync-roadmap-kanban`.
 
+## Engineering & Workflow Packs
+
+The pack reorg moved the engineering, git, release, and plan-tracking skills out of global core into narrow packs. Each `Skills:` list is the authoritative on-disk skill set for that pack.
+
+```bash
+scripts/pack.sh install code-debug        # debug, investigate, trace
+scripts/pack.sh install code-review        # dead-code, expert-review, regression-check, slim-audit
+scripts/pack.sh install exec-loop          # exec, ship, ship-end
+scripts/pack.sh install gitops             # commit-and-push-by-feature, sync
+scripts/pack.sh install release-ops        # branch-lifecycle, deploy, release
+scripts/pack.sh install agent-work-admin   # plan-phase, roadmap, spec-drift
+scripts/pack.sh install code-maintenance   # migrate, update-packages
+scripts/pack.sh install docs-health        # hygiene, reconcile-dev-docs
+scripts/pack.sh install repo-maintenance   # bootstrap-repo
+```
+
+Two engineering packs are **Claude-only** (no Codex mirror):
+
+- `agent-bridge` — `delegate` (live Claude→Codex delegation; see the [`delegate`](#delegate-moved-to-the-agent-bridge-pack) note above).
+- `exec-profile` — `patch-exec-profile` (audit and fill missing lane/branch metadata in agent-team / implementation-safe execution profiles).
+
+## Product, Design & Walkthrough Packs
+
+```bash
+scripts/pack.sh install product-design       # brainstorm, consolidate-variations, design-system,
+                                              #   feature-interview, prototype, spec-interview,
+                                              #   ui-interview, ux-variations
+scripts/pack.sh install product-testing      # dogfood, uat
+scripts/pack.sh install guided-walkthrough   # guide, uat-guide (uat-guide is Claude-only)
+scripts/pack.sh install website-polish       # icon-handler
+scripts/pack.sh install knowledge-check      # quiz-me (Claude-only)
+```
+
+## Research, Sessions, Context & Skill-Dev Packs
+
+```bash
+scripts/pack.sh install research-admin        # research-roadmap
+scripts/pack.sh install session-analytics     # analyze-sessions, session-triage
+scripts/pack.sh install skill-dev             # create-agentic-skill, create-local-skill,
+                                              #   skill-interview, targeted-skill-builder
+scripts/pack.sh install context-transfer      # handoff
+scripts/pack.sh install teardown              # decommission, desk-flip
+scripts/pack.sh install report-gen            # report-website
+scripts/pack.sh install alignment-page-admin  # compile-central-alignment
+```
+
 ## Moved Skills
 
 Former global business/product skills now live in narrower project packs. `business-app` remains a compatibility alias for all four business packs.
@@ -444,4 +447,4 @@ scripts/pack.sh install business-growth
 scripts/pack.sh install business-ops
 ```
 
-Creator-media and YouTube work is similarly split between `creator-foundation`, `youtube-ops`, and `remotion`. Fleet/portfolio work moved from global core into `project-fleet`.
+The 53-skill global catalog was split into 22 narrower packs in the pack reorg. The engineering and workflow skills that used to be global now live in the packs above — `code-debug`, `code-review`, `exec-loop`, `gitops`, `release-ops`, `agent-bridge`, `agent-work-admin`, `code-maintenance`, `docs-health`, and `repo-maintenance` — and `affected`/`scaffold` moved into `monorepo`. Creator-media and YouTube work is similarly split between `creator-foundation`, `youtube-ops`, and `remotion`. Fleet/portfolio work moved from global core into `project-fleet`.
