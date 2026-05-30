@@ -1,3 +1,15 @@
+## Current Targeted Update: Prompt History Backfill Skill 2026-05-30
+
+**Goal:** Add a mirrored `prompt-history-backfill` session-analytics skill that reports missing prompt-history artifacts by default and only writes backfilled prompt files with explicit `--apply`.
+
+**Acceptance Criteria:**
+- [x] Mirrored Claude and Codex `prompt-history-backfill` skill roots exist with `version: v0.0`.
+- [x] The skill defaults to report-only review artifacts and requires `--apply` before creating files under `prompts/<skill-slug>/`.
+- [x] Contracts cover Claude/Codex history sources, optional repo/skill/date/history filters, candidate confidence, exact visible prompt preservation, hidden-output exclusion, duplicate/collision handling, and likely-secret blocking.
+- [x] `packs/session-analytics/PACK.md`, Codex OpenAI UI metadata, changelogs, and generated Skills Showcase data include the new skill.
+- [x] Focused layer1 coverage, skill version checks, showcase validation, and whitespace checks pass.
+- [x] Review notes are recorded; intended changes are committed and pushed on the primary branch.
+
 ## Current Targeted Update: Skill Availability Reload Language 2026-05-30
 
 **Goal:** Tighten active skill-availability reload guidance so global init, targeted skill building, and provisioned missing-skill fallback language distinguish Claude Code reload paths from Codex fresh-session behavior.

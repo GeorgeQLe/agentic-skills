@@ -19,4 +19,5 @@ scripts/pack.sh refresh
 ## Skills
 
 - `analyze-sessions`: Analyze agent session logs for patterns, efficiency, and improvement opportunities.
+- `prompt-history-backfill`: Audit Claude/Codex skill-invocation history for missing `prompts/<skill-slug>/` artifacts and backfill only with `--apply`.
 - `session-triage`: Triage session incidents to identify root causes and recommend fixes.

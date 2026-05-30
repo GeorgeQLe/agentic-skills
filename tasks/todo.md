@@ -1,3 +1,27 @@
+## Current Task - Prompt History Backfill Skill 2026-05-30
+
+**Goal:** Implement the prior plan for a new mirrored `prompt-history-backfill` skill in `packs/session-analytics`, including report-only default behavior, explicit `--apply` writes, focused contract coverage, showcase data refresh, and shipping.
+
+**Plan:**
+- [x] Record prompt history and task plan for this skill creation pass.
+- [x] Inspect session-analytics skill patterns, pack metadata, UI metadata conventions, and layer1 test style.
+- [x] Add mirrored Claude/Codex skill contracts, changelogs, Codex OpenAI metadata, and pack listing.
+- [x] Add focused layer1 contract coverage for report-only/apply behavior, sources, frontmatter, prompt preservation, and secret blocking.
+- [x] Refresh generated Skills Showcase data and run focused validation plus diff checks.
+- [x] Add review notes, commit, and push intended changes on the primary branch.
+
+### Review
+
+- Added mirrored `prompt-history-backfill` skills under `packs/session-analytics/{claude,codex}/` with `version: v0.0`, changelogs, bundled alignment-page conventions, and Codex `agents/openai.yaml` metadata.
+- Updated `packs/session-analytics/PACK.md` and benchmark coverage registration so the new skill is listed as a session-analytics pack skill with pack-workflow benchmark coverage.
+- The skill contract defaults to report-only, writes review artifacts under `alignment/prompt-history-backfill-{topic}.html`, and only creates prompt files under `prompts/<skill-slug>/` when `--apply` is explicit.
+- Contract coverage includes default Claude/Codex history sources, optional history/export paths, repo/skill/date filters, high/medium/low confidence handling, exact visible prompt preservation, hidden context exclusion, duplicate/collision handling, required frontmatter, and likely-secret blocking.
+- Added `tests/layer1/prompt-history-backfill.test.ts` and refreshed Skills Showcase generated assets after staging the new skill roots.
+- Validation passed: focused layer1 tests for prompt-history-backfill/frontmatter/benchmark coverage, `bash scripts/skill-versions.sh --missing`, `scripts/validate-skills-showcase-data.sh`, `node scripts/upgrade-alignment-page.mjs --dry-run`, `git diff --check`, and `git diff --cached --check`.
+- Unrelated dirty files preserved and left unstaged: `scripts/approved-plan.sh` and `prompts/ship/skill-prompt-20260530-200459-approved-plan-dirty-gate.md`.
+
+---
+
 ## Current Task — Fix approved-plan.sh dirty-path safety gate (Code Review High #3) 2026-05-30
 
 **Goal:** Resolve Code Review High #3 (`tasks/todo.md` → `## Code Review Fixes` → `### High`, the `scripts/approved-plan.sh` item, currently the next unchecked High after #1 admin-auth and #2 subscribe-hardening, both shipped 2026-05-30). The dirty-path safety gate parses `git status --porcelain` with `awk '{print $2}'`, which (a) returns the **OLD** name for renames (`R old -> new` yields `old`, so the new path is never allowlist-checked → a renamed out-of-scope dirty file silently bypasses the gate — a safety hole) and (b) truncates any path containing a space to its first field (false-fail / wrong path on legitimate spaced filenames). Fix both parse sites and reorder the draft repo-validity check.

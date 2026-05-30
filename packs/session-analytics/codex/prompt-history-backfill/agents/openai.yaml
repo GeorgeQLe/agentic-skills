@@ -1,0 +1,7 @@
+interface:
+  display_name: "Prompt History Backfill"
+  short_description: "Audit and backfill missing skill prompt logs"
+  default_prompt: "Use $prompt-history-backfill to audit my local Claude/Codex skill-invocation history for missing prompts/<skill-slug>/ records before applying any backfill."
+
+policy:
+  allow_implicit_invocation: true
