@@ -307,11 +307,11 @@ function benchmarkEvidenceBySkill(files) {
 }
 
 const WORKFLOW_SKILL_MAP = {
-  first:      { 2: "roadmap", 3: "run" },
+  first:      { 2: "roadmap", 3: "exec" },
   ship:       { 4: "ship" },
-  spec:       { 1: "spec-interview", 3: "roadmap", 4: "run" },
+  spec:       { 1: "spec-interview", 3: "roadmap", 4: "exec" },
   research:   { 4: "feature-interview" },
-  handoff:    { 2: "run", 4: "ship" },
+  handoff:    { 2: "exec", 4: "ship" },
   validation: { 1: "debug" },
 };
 

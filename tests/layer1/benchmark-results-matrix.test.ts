@@ -14,7 +14,7 @@ describe("benchmark results matrix", () => {
       /\| `skills` \| Codex \| `tests\/benchmarks\/runs\/skills-codex-[^/]+\/report\.json` \| 3 \| 100% \| 86\.4% \| none \| graded \|/,
     );
     expect(matrix).toMatch(
-      /\| `run` \| Codex \| `tests\/benchmarks\/runs\/run-codex-[^/]+\/report\.json` \| blocked\/incomplete \| Report exists with zero total and evaluated runs\. Do not count as benchmarked\. \|/,
+      /\| `exec` \| Codex \| `tests\/benchmarks\/runs\/exec-codex-[^/]+\/report\.json` \| blocked\/incomplete \| Report exists with zero total and evaluated runs\. Do not count as benchmarked\. \|/,
     );
     expect(matrix).toContain("## Safe Git-Fixture Skills");
     expect(matrix).toContain(

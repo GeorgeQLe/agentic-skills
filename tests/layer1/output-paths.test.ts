@@ -51,6 +51,19 @@ describe("Output path conflicts", () => {
         // Skip shared task management paths — multiple skills updating
         // these is expected behavior
         if (/^tasks\/(todo|manual-todo|recurring-todo)\.md$/.test(out)) continue;
+        // Skip the shared benchmark coverage registry — skill-dev skills
+        // (create-agentic-skill, create-local-skill, targeted-skill-builder)
+        // all instruct updating this same file by design, not exclusive output.
+        if (out === "tests/harness/bench-coverage.ts") continue;
+        // Skip illustrative monorepo placeholder paths used inside example
+        // report/output blocks (e.g. affected, mono-plan): these are sample
+        // package names in documentation, not real output destinations.
+        if (/^(packages|apps)\/(foo|bar|baz|shared|web|admin)\/?$/.test(out)) continue;
+        // Skip directory outputs (path ends in "/") and glob/wildcard outputs
+        // (contain "*"): multiple skills writing distinct files into a shared
+        // directory or matching a glob is expected, not a collision.
+        if (out.endsWith("/")) continue;
+        if (out.includes("*")) continue;
         const existing = pathMap.get(out) || [];
         existing.push(skillRel);
         pathMap.set(out, existing);
@@ -59,7 +72,11 @@ describe("Output path conflicts", () => {
 
     const conflicts: [string, string[]][] = [];
     for (const [, pathMap] of toolPathMap) {
-      for (const [path, skills] of pathMap) {
+      for (const [path, skillList] of pathMap) {
+        // Count distinct skills per path, not occurrences. A single skill that
+        // mentions the same output path multiple times in its `## Output`
+        // section is not in conflict with itself.
+        const skills = [...new Set(skillList)];
         if (skills.length > 1) conflicts.push([path, skills]);
       }
     }

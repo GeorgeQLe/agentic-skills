@@ -11,14 +11,14 @@ const codexSkillFiles = [
 ].map((rel) => resolve(ROOT_DIR, rel));
 
 const oneQuestionCodexSkills = [
-  "global/codex/spec-interview/SKILL.md",
-  "global/codex/feature-interview/SKILL.md",
+  "packs/product-design/codex/spec-interview/SKILL.md",
+  "packs/product-design/codex/feature-interview/SKILL.md",
   "global/codex/idea-scope-brief/SKILL.md",
-  "global/codex/ui-interview/SKILL.md",
-  "global/codex/ux-variations/SKILL.md",
-  "global/codex/consolidate-variations/SKILL.md",
-  "global/codex/roadmap/SKILL.md",
-  "global/codex/design-system/SKILL.md",
+  "packs/product-design/codex/ui-interview/SKILL.md",
+  "packs/product-design/codex/ux-variations/SKILL.md",
+  "packs/product-design/codex/consolidate-variations/SKILL.md",
+  "packs/agent-work-admin/codex/roadmap/SKILL.md",
+  "packs/product-design/codex/design-system/SKILL.md",
   "packs/business-discovery/codex/enterprise-icp/SKILL.md",
   "packs/business-growth/codex/gtm/SKILL.md",
   "packs/business-growth/codex/metrics/SKILL.md",
