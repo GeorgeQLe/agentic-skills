@@ -19,3 +19,4 @@ scripts/pack.sh refresh
 ## Skills
 
 - `compile-central-alignment`: Compile scattered alignment decisions, principles, and conventions into a central alignment page.
+- `upgrade-alignment-pages`: Audit and explicitly upgrade generated `alignment/*.html` review pages to the current local alignment-page standard.

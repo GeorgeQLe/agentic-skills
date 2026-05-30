@@ -1,3 +1,26 @@
+## Current Task - Upgrade Alignment Pages Skill 2026-05-30
+
+**Goal:** Implement the prior plan for a new mirrored `upgrade-alignment-pages` skill in `packs/alignment-page-admin`, including dry-run audit behavior, explicit apply/archival constraints, Codex UI metadata, validation, and shipping.
+
+**Plan:**
+- [x] Record prompt history and task plan for this skill creation pass.
+- [x] Inspect alignment-page-admin skill patterns, pack metadata, UI metadata conventions, and validation expectations.
+- [x] Add mirrored Claude/Codex skill contracts, Codex OpenAI metadata, and pack listing.
+- [x] Run skill version, showcase, pack discovery, metadata, and whitespace validation.
+- [x] Add review notes, commit, and push intended changes on the primary branch.
+
+### Review
+
+- Added mirrored `upgrade-alignment-pages` skills under `packs/alignment-page-admin/{claude,codex}/` with `version: v0.0`, `type: utility`, apply-mode argument hints, and changelogs.
+- The skill defaults to audit/dry-run, excludes `alignment/index.html`, loads local standards from `AGENTS.md`, `CLAUDE.md`, and bundled `ALIGNMENT-PAGE.md` files, and reports drift without mutation.
+- Explicit apply mode archives originals under `docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/<filename>.html`, preserves page-specific research/decisions/questions/gates/review context, modernizes required controls/YAML/copy behavior, and stops on content-loss risk.
+- Added Codex `agents/openai.yaml`, listed the skill in `packs/alignment-page-admin/PACK.md`, added the utility to the alignment-page skip list, and refreshed Skills Showcase generated assets.
+- Added `tests/layer1/upgrade-alignment-pages.test.ts` plus benchmark coverage registration and a pack workflow fixture for the new skill.
+- Verification exposed an existing custom-coverage registry gap for `prompt-history-backfill`; added the missing pack workflow fixture so `bench-setups` remains green.
+- Validation passed: `bash scripts/skill-versions.sh --missing`, `scripts/pack.sh which upgrade-alignment-pages`, focused layer1 tests for `upgrade-alignment-pages`, benchmark coverage, and bench setups, `scripts/validate-skills-showcase-data.sh`, `node scripts/upgrade-alignment-page.mjs --dry-run`, `git diff --check`, and `git diff --cached --check`.
+
+---
+
 ## Current Task - Prompt History Backfill Skill 2026-05-30
 
 **Goal:** Implement the prior plan for a new mirrored `prompt-history-backfill` skill in `packs/session-analytics`, including report-only default behavior, explicit `--apply` writes, focused contract coverage, showcase data refresh, and shipping.

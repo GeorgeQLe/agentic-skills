@@ -1,0 +1,7 @@
+interface:
+  display_name: "Upgrade Alignment Pages"
+  short_description: "Audit and upgrade alignment HTML pages"
+  default_prompt: "Use $upgrade-alignment-pages to audit existing alignment/*.html review pages for drift before applying any upgrades."
+
+policy:
+  allow_implicit_invocation: true

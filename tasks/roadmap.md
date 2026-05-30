@@ -1,3 +1,15 @@
+## Current Targeted Update: Upgrade Alignment Pages Skill 2026-05-30
+
+**Goal:** Add a mirrored `upgrade-alignment-pages` skill to the `alignment-page-admin` pack so agents can audit and explicitly upgrade generated `alignment/*.html` review artifacts to the current local alignment-page standard without touching convention source files.
+
+**Acceptance Criteria:**
+- [x] Codex and Claude `upgrade-alignment-pages` skill roots exist under `packs/alignment-page-admin/` with `version: v0.0`.
+- [x] The Codex skill includes concise `agents/openai.yaml` UI metadata and the pack manifest lists the new skill.
+- [x] The skill defaults to audit/dry-run mode, excludes `alignment/index.html`, compares pages against local AGENTS/CLAUDE/bundled alignment conventions, and reports drift without mutation.
+- [x] Explicit apply mode archives each target page under `docs/history/archive/YYYY-MM-DD/HHMMSS/alignment/`, preserves page-specific substance, modernizes required standard controls/YAML/copy behavior, and stops rather than risking content loss.
+- [x] The skill forbids edits to shared convention sources, bundled `ALIGNMENT-PAGE.md` files, `SKILL.md` files, and non-alignment HTML files during upgrade runs.
+- [x] Skill version, showcase, pack discovery, metadata, and whitespace validation pass; review notes are recorded; intended changes are committed and pushed on the primary branch.
+
 ## Current Targeted Update: Prompt History Backfill Skill 2026-05-30
 
 **Goal:** Add a mirrored `prompt-history-backfill` session-analytics skill that reports missing prompt-history artifacts by default and only writes backfilled prompt files with explicit `--apply`.

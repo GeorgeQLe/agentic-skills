@@ -21,6 +21,7 @@ init-agentic-skills
 pack
 skills
 compile-central-alignment
+upgrade-alignment-pages
 patch-exec-profile
 create-agentic-skill
 create-local-skill
