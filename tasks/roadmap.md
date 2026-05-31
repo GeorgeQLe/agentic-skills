@@ -1,3 +1,15 @@
+## Current Targeted Update: Alignment Section Feedback Local YAML 2026-05-31
+
+**Goal:** Update the shared HTML alignment-page convention so final approval compilation stays at the bottom of the page, while section thumbs up/down/clarify feedback uses a local textarea and local feedback YAML controls beside the selected section feedback controls.
+
+**Acceptance Criteria:**
+- [x] User claims are validated against the canonical alignment convention, generated bundled `ALIGNMENT-PAGE.md` files, and recent history.
+- [x] The canonical alignment template requires section feedback textareas to appear near their thumbs up/down/clarify controls even when the section also has required gate-question text inputs.
+- [x] Feedback-only YAML is compiled and displayed locally under the selected section feedback textarea/control instead of as a busy bottom-of-page banner.
+- [x] Final `Compile Answers` remains at the bottom of the page and still includes any section feedback that was set.
+- [x] Bundled alignment-page convention files are regenerated from the canonical source and focused regression checks pass.
+- [x] Review notes are recorded; intended changes are committed and pushed on `master` while unrelated dirty work is preserved.
+
 ## Current Targeted Update: Alignment Page Source In Compiled YAML 2026-05-31
 
 **Goal:** Update the shared HTML alignment-page convention so every compiled YAML payload identifies the repo-relative HTML alignment page that produced it.

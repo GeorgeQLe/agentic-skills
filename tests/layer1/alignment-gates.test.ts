@@ -184,7 +184,7 @@ describe("alignment page gate contract", () => {
     for (const path of activeAlignmentSkillFiles) {
       const content = conventionText(path);
       expect(content, `${path} feedback-only contract`).toContain("**Feedback-only YAML contract.**");
-      expect(content, `${path} compile feedback`).toContain("Compile Feedback");
+      expect(content, `${path} compile feedback`).toContain("Compile Feedback YAML");
       expect(content, `${path} early enable`).toContain("even if required inline gate questions are unanswered");
       expect(content, `${path} revision status`).toContain("`feedback_status: revision-request`");
       expect(content, `${path} not approved`).toContain("`approval_status: not-approved`");
@@ -198,12 +198,54 @@ describe("alignment page gate contract", () => {
     }
   });
 
+  it("keeps feedback-only YAML local to selected section feedback controls", () => {
+    expect(activeAlignmentSkillFiles.length).toBeGreaterThan(10);
+    for (const path of activeAlignmentSkillFiles) {
+      const content = conventionText(path);
+      expect(content, `${path} no bottom feedback banner`).toContain(
+        "Do not place a global feedback-only compile/output banner at the bottom of the page",
+      );
+      expect(content, `${path} local feedback textarea`).toContain("section-feedback textarea");
+      expect(content, `${path} separate from gate inputs`).toMatch(
+        /separate from (required )?gate-question text inputs/,
+      );
+      expect(content, `${path} appears despite gate inputs`).toMatch(
+        /even when (the same section )?(also )?has (required )?gate questions/,
+      );
+      expect(content, `${path} local yaml textarea`).toContain(
+        "read-only YAML textarea directly under that section",
+      );
+      expect(content, `${path} local single feedback entry`).toContain(
+        "single selected section-feedback entry",
+      );
+      expect(content, `${path} bottom feedback output forbidden`).toContain(
+        "feedback-only YAML output belongs under each selected section feedback textarea, not in the bottom area",
+      );
+      expect(content, `${path} old bottom feedback button contract`).not.toContain(
+        'At the bottom of the page, include a "Compile Feedback"',
+      );
+    }
+  });
+
+  it("keeps final answer compilation at the bottom of the page", () => {
+    expect(activeAlignmentSkillFiles.length).toBeGreaterThan(10);
+    for (const path of activeAlignmentSkillFiles) {
+      const content = conventionText(path);
+      expect(content, `${path} bottom compile answers`).toMatch(
+        /At the bottom of the page, include a "Compile Answers" button/,
+      );
+      expect(content, `${path} final-only bottom area`).toContain(
+        "Keep this bottom compile area for final approval answers",
+      );
+    }
+  });
+
   it("requires compiled YAML to identify the source alignment page", () => {
     expect(activeAlignmentSkillFiles.length).toBeGreaterThan(10);
     for (const path of activeAlignmentSkillFiles) {
       const content = conventionText(path);
       expect(content, `${path} feedback alignment_page`).toMatch(
-        /It generates YAML with `alignment_page: alignment\/[^`]+\.html`, `feedback_status: revision-request`/,
+        /The local feedback compile generates YAML with `alignment_page: alignment\/[^`]+\.html`, `feedback_status: revision-request`/,
       );
       expect(content, `${path} final alignment_page`).toMatch(
         /`alignment_page: alignment\/[^`]+\.html`, `approval_status: ready-for-agent-review`/,

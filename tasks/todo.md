@@ -1,3 +1,26 @@
+## Current Task - Alignment Section Feedback Local YAML 2026-05-31
+
+**Goal:** Keep final `Compile Answers` at the bottom of HTML alignment pages, but move section feedback YAML display/copy controls under each selected section's thumbs up/down/clarify notes textarea so zoomed pages do not accumulate a busy global feedback banner. Section feedback selection must always reveal its own multiline input near the controls, even when that section also contains gate-question text inputs.
+
+**Plan:**
+- [x] Capture `$investigate` prompt history.
+- [x] Validate the user claims against the canonical convention, generated bundles, tests, and recent history.
+- [x] Update the canonical `CLAUDE.md` alignment convention.
+- [x] Regenerate bundled `ALIGNMENT-PAGE.md` files from the canonical source.
+- [x] Update focused regression coverage for local section feedback YAML, separate feedback notes, and bottom-only final answers.
+- [x] Run focused verification, record review notes, commit, and push intended changes on `master`.
+
+### Review
+
+- Validated the report against `CLAUDE.md`, bundled `ALIGNMENT-PAGE.md` files, active inline alignment contracts, and recent commits `7484e664`, `001a8c3b`, and `7bb7e9db`.
+- Updated the canonical alignment convention so selected section thumbs up/down/clarify controls always reveal their own nearby multiline section-feedback textarea, separate from any gate-question text boxes in the same section.
+- Replaced the bottom-page feedback-only YAML banner with local `Compile Feedback YAML` / `Copy YAML` controls and a local read-only YAML textarea under each selected section's feedback textarea. Final `Compile Answers` remains at the page bottom and still includes any section feedback set.
+- Regenerated 264 bundled `ALIGNMENT-PAGE.md` files, archived/bumped 16 active inline alignment-contract skills, updated their changelogs, and refreshed generated Skills Showcase assets from an intended-only temp clone so unrelated idea-scope edits stayed out of the generated data.
+- Added regression coverage for local feedback YAML, separate section-feedback textareas, bottom-only final answer compilation, and source `alignment_page` fields.
+- Verification passed: `node scripts/upgrade-alignment-page.mjs --dry-run`, focused `alignment-gates` layer1 test, `bash scripts/skill-versions.sh --missing`, `scripts/validate-skills-showcase-data.sh` in the intended-only temp clone, and `git diff --check`. The broad layer1 script form also ran and still includes an existing `output-paths.test.ts` conflict outside this change surface, so the focused command is the relevant regression gate.
+
+---
+
 ## Current Task - Alignment Page Source In Compiled YAML 2026-05-31
 
 **Goal:** Implement the prior plan to add the repo-relative HTML alignment page path to every feedback-only and final compiled YAML payload.

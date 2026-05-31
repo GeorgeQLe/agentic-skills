@@ -1,5 +1,10 @@
 # Changelog
 
+## v0.8 - 2026-05-31
+
+- Kept final `Compile Answers` at the bottom while moving feedback-only YAML display/copy controls under each selected section feedback textarea.
+- Clarified that section thumbs up/down/clarify selections always reveal their own multiline feedback textarea even when the section also has gate-question inputs.
+
 ## v0.7 - 2026-05-31
 
 - Added top-level `alignment_page` to feedback-only and final compiled YAML so agents can reopen the exact HTML review page.

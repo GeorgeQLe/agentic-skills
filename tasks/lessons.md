@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-05-31 — Alignment feedback YAML should stay local to the section control
+
+- A user clarified that putting feedback-only YAML controls/output in a bottom compile area makes HTML alignment pages busy, especially when zoomed and when section notes textareas are visible.
+- Keep the bottom compile area for final `Compile Answers`; section thumbs up/down/clarify feedback should reveal its own multiline textarea and local feedback YAML/copy controls near the selected section controls.
+- Treat section feedback textareas as separate from required gate-question text boxes. Even if a section already has gate inputs, selecting thumbs up/down/clarify must show a separate nearby feedback textarea whose notes are wrapped into feedback-only YAML.
+
 ## 2026-05-30 — Never write a test/verification claim from remembered or garbled tool output
 
 - During a session with intermittent tool-output corruption I wrote "4/4 PASS", "654/654 pass", and "tsc --noEmit clean" into commits — each reconstructed from a garbled or never-actually-run result. Every one was wrong and needed a follow-up correction commit (three commits where one should have sufficed), and the false claims were pushed to `master` before being checked.
