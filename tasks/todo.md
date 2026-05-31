@@ -1,3 +1,30 @@
+## Current Task - idea-scope-brief Alignment Approval Ordering 2026-05-31
+
+**Goal:** Make `idea-scope-brief` build the HTML alignment page and wait for final compiled YAML approval after the coverage checkpoint, before writing canonical `research/**/idea-brief.md`, interview logs, or `research/.progress.yaml`.
+
+**Plan:**
+- [x] Capture this `$investigate` invocation under `prompts/investigate/`.
+- [x] Inspect current dirty tree, active mirrored `idea-scope-brief` contracts, changelogs, archives, and layer1 alignment tests.
+- [x] Archive mirrored active `v0.7` `idea-scope-brief` contracts before bumping.
+- [x] Bump mirrored active contracts to `v0.8` and add the pre-output alignment approval gate while preserving Claude/Codex command syntax differences.
+- [x] Update mirrored changelogs with `v0.8 - 2026-05-31` and reference the existing approval-gated research lesson.
+- [x] Add focused layer1 regression coverage for alignment preview before canonical writes, final compiled YAML approval, non-final coverage checkpoint confirmation, and no downstream routing before approved artifacts are written.
+- [x] Run targeted validation: `pnpm --dir tests test:layer1`, `pnpm --dir tests verify --skill idea-scope-brief`, `bash scripts/skill-versions.sh --missing`, `bash scripts/skill-archive-audit.sh --strict`, `git diff --check`.
+- [x] Run `bash init.sh` to refresh managed global installs and include only intended marker/install changes if produced.
+- [x] Stage intended files only, commit on `master`, and push to `origin/master`; stop and report exact blockers if unrelated dirty work prevents this.
+
+### Review
+
+- Confirmed the reported defect in the active `idea-scope-brief` contracts: after the coverage checkpoint, the workflow entered `## Output` and canonical writes without first requiring the HTML alignment preview and final compiled YAML approval.
+- Archived the current mirrored `v0.7` contracts and bumped active Claude/Codex contracts to `v0.8`.
+- Added a post-coverage "Build pre-approval alignment preview" step that creates `alignment/idea-scope-brief-{topic}.html`, renders the Idea/Concept Assumptions Manifest, artifact destinations, proposed file changes, coverage checkpoint, and approval gates, attempts browser open, and blocks routing until approved artifacts are written.
+- Added an `## Output` guard preventing canonical idea briefs, interview logs, and `research/.progress.yaml` writes until the alignment page has final compiled YAML approval.
+- Added `tests/layer1/idea-scope-brief-approval-ordering.test.ts` to verify ordering, compiled YAML authorization, non-final coverage confirmation, downstream routing suppression, and mirror parity for the inserted gate text.
+- Validation passed: focused approval-ordering layer1 test, `bash scripts/skill-versions.sh --missing`, `git diff --check`, and `bash init.sh`.
+- Validation blockers outside this fix: broad `pnpm --dir tests test:layer1` and exact `pnpm --dir tests verify --skill idea-scope-brief` still fail on the preexisting `skill-dev` `.claude/skills` output-path conflict; `bash scripts/skill-archive-audit.sh --strict` still fails only on unrelated `research-roadmap v0.6` missing changelog headings. Layer2 skill-specific verification skips because no `idea-scope-brief` layer2 tests exist.
+
+---
+
 ## Current Task - Alignment Page Layout Controls 2026-05-31
 
 **Goal:** Keep HTML alignment pages simple and in-flow: top Table of Contents instead of sidebars, no sticky/fixed bottom compile banner, `Compile Answers` at the bottom, and `Compile Feedback YAML` both at the bottom and locally under each selected section-feedback textarea.

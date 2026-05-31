@@ -1,3 +1,17 @@
+## Current Targeted Update: idea-scope-brief Alignment Approval Ordering 2026-05-31
+
+**Goal:** Fix `idea-scope-brief` so the coverage checkpoint leads to an HTML alignment preview and final compiled YAML approval before canonical idea-brief, interview-log, or `research/.progress.yaml` writes.
+
+**Acceptance Criteria:**
+- [x] Capture the visible `$investigate` invocation in `prompts/investigate/`.
+- [x] Archive current mirrored `idea-scope-brief` `v0.7` contracts, then bump active Claude and Codex contracts to `v0.8`.
+- [x] Add an explicit pre-output alignment preview step after the coverage checkpoint that builds `alignment/idea-scope-brief-{topic}.html`, attempts to open it, and treats coverage-checkpoint confirmation as non-final.
+- [x] Guard `## Output` so canonical idea briefs, interview logs, and `research/.progress.yaml` are written only after final compiled YAML approval.
+- [x] Add focused layer1 coverage for approval ordering, compiled YAML authorization, non-final coverage checkpoint confirmation, and suppressed downstream routing before approved artifacts are written.
+- [x] Run targeted validation, refresh managed installs with `bash init.sh`, record review notes, and commit/push only intended files on `master`.
+
+**Result:** Updated mirrored `idea-scope-brief` active contracts to `v0.8` with an explicit pre-output alignment preview gate. Coverage-checkpoint confirmation now only means the draft is ready to preview; canonical idea briefs, interview logs, and `research/.progress.yaml` remain blocked until final compiled YAML approval from `alignment/idea-scope-brief-{topic}.html`. Added focused layer1 coverage and archived `v0.7`. Validation passed for the focused approval-ordering test, version fields, `git diff --check`, and managed install refresh. Broad layer1 and `verify --skill idea-scope-brief` still hit the preexisting `skill-dev` `.claude/skills` output-path conflict; strict archive audit is reduced to unrelated `research-roadmap v0.6` changelog headings.
+
 ## Current Targeted Update: Alignment Page Layout Controls 2026-05-31
 
 **Goal:** Tighten the HTML alignment-page convention so pages use a top Table of Contents section, avoid sidebar navigation and sticky/fixed bottom banners, and provide feedback compilation both locally near selected section feedback and in a normal bottom compile section.
