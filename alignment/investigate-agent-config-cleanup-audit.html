@@ -1,0 +1,643 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Investigate: Agent Config Cleanup Audit</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --text-muted: #8b949e;
+      --accent: #58a6ff;
+      --green: #3fb950;
+      --red: #f85149;
+      --orange: #d29922;
+      --purple: #bc8cff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+    header {
+      border-bottom: 1px solid var(--border);
+      background: #0b1017;
+      padding: 32px 24px;
+    }
+    main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    h1, h2, h3, h4 { color: #fff; line-height: 1.2; }
+    h1 { margin: 0 0 8px; font-size: 2rem; }
+    h2 {
+      margin-top: 40px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+      color: var(--accent);
+    }
+    h3 { margin-top: 28px; color: #fff; }
+    h4 { margin-top: 20px; color: var(--purple); }
+    a { color: var(--accent); }
+    code {
+      background: #0b1017;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.1rem 0.3rem;
+      color: #fff;
+      font-size: 0.92em;
+    }
+    pre {
+      overflow: auto;
+      background: #0b1017;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 14px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 0.95rem;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 10px;
+      vertical-align: top;
+      text-align: left;
+    }
+    th { background: var(--surface); color: #fff; }
+    .meta { color: var(--text-muted); margin: 0; }
+    .nav {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+    .nav a {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 6px 10px;
+      text-decoration: none;
+      background: var(--surface);
+    }
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .feedback {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 8px 0 14px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+    .feedback label {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 4px 8px;
+      background: #0b1017;
+      cursor: pointer;
+    }
+    .feedback textarea {
+      display: none;
+      width: 100%;
+      min-height: 64px;
+      margin-top: 8px;
+      background: #0b1017;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px;
+    }
+    .feedback input[value="up"]:checked + span { color: var(--green); }
+    .feedback input[value="down"]:checked + span { color: var(--red); }
+    .feedback input[value="needs-clarification"]:checked + span { color: var(--orange); }
+    .callout {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      border-radius: 8px;
+      padding: 16px;
+      margin: 16px 0;
+    }
+    .question-block {
+      border: 1px solid var(--purple);
+      background: #1c2333;
+      border-radius: 8px;
+      padding: 16px;
+      margin: 18px 0;
+    }
+    .question-block h4 {
+      margin-top: 0;
+      color: var(--purple);
+    }
+    .option {
+      display: block;
+      margin: 8px 0;
+    }
+    .notes {
+      display: none;
+      width: 100%;
+      min-height: 70px;
+      margin-top: 8px;
+      background: #0b1017;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 8px;
+    }
+    .controls {
+      position: sticky;
+      bottom: 0;
+      background: rgba(13, 17, 23, 0.96);
+      border-top: 1px solid var(--border);
+      padding: 16px 0 0;
+      margin-top: 40px;
+    }
+    button {
+      background: var(--accent);
+      color: #06101f;
+      border: 0;
+      border-radius: 6px;
+      padding: 9px 14px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-right: 8px;
+    }
+    button.secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+    button:disabled { opacity: 0.45; cursor: not-allowed; }
+    #yamlOut {
+      width: 100%;
+      min-height: 220px;
+      margin-top: 12px;
+      background: #0b1017;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .status { color: var(--text-muted); margin-top: 8px; }
+    .confidence-high { color: var(--green); font-weight: 700; }
+    .confidence-medium { color: var(--orange); font-weight: 700; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Agent Config Cleanup Audit</h1>
+    <p class="meta">Generated 2026-05-30 for <code>$investigate</code>. Report artifact: <code>research/agent-config-cleanup-audit.md</code>.</p>
+    <nav class="nav">
+      <a href="#executive-verdict">Verdict</a>
+      <a href="#evidence-matrix">Evidence Matrix</a>
+      <a href="#push-down">Push Down</a>
+      <a href="#drift">Drift Findings</a>
+      <a href="#minimal-root">Minimal Root</a>
+      <a href="#gates">Review Gates</a>
+    </nav>
+  </header>
+  <main>
+    <section id="scope">
+      <div class="section-head"><h2>Scope</h2></div>
+      <div class="feedback" data-section="Scope"><span>Section feedback:</span><label><input type="radio" name="fb-scope" value="up"><span>Approve</span></label><label><input type="radio" name="fb-scope" value="down"><span>Concern</span></label><label><input type="radio" name="fb-scope" value="needs-clarification"><span>Clarify</span></label><textarea placeholder="Optional notes"></textarea></div>
+      <p><strong>Generated:</strong> 2026-05-30</p>
+      <p><strong>Skill:</strong> <code>$investigate</code></p>
+      <p><strong>Scope:</strong> root <code>CLAUDE.md</code>, root <code>AGENTS.md</code>, and the <code>provision-agentic-config</code> generated blocks/source.</p>
+      <p><strong>Strategy Used:</strong> General repo investigation. I compared the live root agent files, the repo-local <code>global/codex/provision-agentic-config</code> and <code>global/claude/provision-agentic-config</code> skills, the installed Codex <code>~/.codex/skills/provision-agentic-config</code> skill, supporting generator scripts, and recent git history/blame. No implementation changes were made to <code>CLAUDE.md</code>, <code>AGENTS.md</code>, or the provisioner templates.</p>
+    </section>
+
+    <section id="executive-verdict">
+      <div class="section-head"><h2>Executive Verdict</h2></div>
+      <div class="feedback" data-section="Executive Verdict"><span>Section feedback:</span><label><input type="radio" name="fb-verdict" value="up"><span>Approve</span></label><label><input type="radio" name="fb-verdict" value="down"><span>Concern</span></label><label><input type="radio" name="fb-verdict" value="needs-clarification"><span>Clarify</span></label><textarea placeholder="Optional notes"></textarea></div>
+      <p>Yes, there is meaningful material that can move out of root agent files and down into skills or skill-adjacent bundled convention files.</p>
+      <p>The root files should keep only instructions that must apply before a skill is available, before a skill is loaded, or across every agent task. Skill-invocation behavior, skill authoring rules, durable-output page rules, and route handoff conventions should mostly live with skills and their generators.</p>
+      <p>Recommended cleanup target:</p>
+      <ul>
+        <li>Keep root <code>CLAUDE.md</code> and <code>AGENTS.md</code> to a compact global operating contract: planning threshold, agent-specific subagent policy, verification standard, mutation/shipping posture, missing-skill fallback, and a short task-management pointer.</li>
+        <li>Move prompt history, skill versioning, alignment-page details, shared shipping contract details, and cross-pack routing into skill-local or generator-owned convention files.</li>
+        <li>Replace hardcoded project-specific examples in root config with <code>scripts/pack.sh which &lt;skill-name&gt;</code> and pack metadata lookup.</li>
+        <li>Fix source-of-truth drift before pruning: current root blocks are marked <code>provision-agentic-config v0.5</code>, but they contain sections not present in the repo-local v0.5 provisioner templates.</li>
+      </ul>
+    </section>
+
+    <section id="claims">
+      <div class="section-head"><h2>User Claims Validated</h2></div>
+      <div class="feedback" data-section="User Claims Validated"><span>Section feedback:</span><label><input type="radio" name="fb-claims" value="up"><span>Approve</span></label><label><input type="radio" name="fb-claims" value="down"><span>Concern</span></label><label><input type="radio" name="fb-claims" value="needs-clarification"><span>Clarify</span></label><textarea placeholder="Optional notes"></textarea></div>
+      <h3>Claim: We can push some <code>AGENTS.md</code> / <code>CLAUDE.md</code> content down to skills.</h3>
+      <p><strong>Verdict:</strong> confirmed, with boundaries.</p>
+      <p><strong>Evidence:</strong></p>
+      <ul>
+        <li><code>AGENTS.md:54-61</code> and <code>CLAUDE.md:55-62</code> define <code>Prompt History</code>, which applies specifically "On every skill invocation".</li>
+        <li><code>AGENTS.md:63-70</code> and <code>CLAUDE.md:64-71</code> define <code>Skill Versioning</code>, which applies to skill creation/update work, not ordinary repo work.</li>
+        <li><code>CLAUDE.md:119-174</code> contains the full shared alignment-page and shipping/cross-pack conventions used by skills.</li>
+        <li><code>scripts/upgrade-alignment-page.mjs:24-41</code> reads the alignment convention from <code>CLAUDE.md</code>, then bundles it into per-skill <code>ALIGNMENT-PAGE.md</code> files.</li>
+        <li>Many skills already carry local <code>ALIGNMENT-PAGE.md</code> files and <code>## Default Shipping Contract</code> stubs.</li>
+      </ul>
+      <p><strong>Inference:</strong> Prompt history, skill versioning, alignment-page construction, and skill handoff conventions are skill-runtime or skill-authoring concerns. They do not need to be expanded inside the always-loaded root prompt once they are bundled beside the skills that need them.</p>
+
+      <h3>Claim: The provisioned block itself should be audited, not just the current root files.</h3>
+      <p><strong>Verdict:</strong> confirmed.</p>
+      <p><strong>Evidence:</strong></p>
+      <ul>
+        <li>Root <code>CLAUDE.md:1</code> and <code>AGENTS.md:1</code> are marked <code>&lt;!-- provision-agentic-config v0.5 --&gt;</code>.</li>
+        <li>Repo-local provisioner <code>global/codex/provision-agentic-config/SKILL.md:35-140</code> and <code>:145-244</code> define the current v0.5 generated Claude and AGENTS blocks.</li>
+        <li>Those repo-local generated blocks do not include root <code>Skill Versioning</code> or <code>Alignment Page Convention</code> sections, while root <code>AGENTS.md:63-75</code> includes both and root <code>CLAUDE.md:64-71</code> includes skill versioning plus a separate full shared-conventions section at <code>CLAUDE.md:119-174</code>.</li>
+        <li>The installed Codex skill at <code>/home/georgeqle/.codex/skills/provision-agentic-config/SKILL.md</code> is still <code>version: v0.3</code>, while repo-local provisioners are <code>v0.5</code>.</li>
+      </ul>
+      <p><strong>Inference:</strong> The live root files, repo-local provisioner templates, and installed Codex provisioner are not all describing the same generated artifact. Any cleanup should first choose the canonical source of truth and then refresh the installed skill.</p>
+    </section>
+
+    <section id="evidence-matrix">
+      <div class="section-head"><h2>Evidence Matrix</h2></div>
+      <div class="feedback" data-section="Evidence Matrix"><span>Section feedback:</span><label><input type="radio" name="fb-evidence" value="up"><span>Approve</span></label><label><input type="radio" name="fb-evidence" value="down"><span>Concern</span></label><label><input type="radio" name="fb-evidence" value="needs-clarification"><span>Clarify</span></label><textarea placeholder="Optional notes"></textarea></div>
+      <table>
+        <thead><tr><th>Claim</th><th>Evidence</th><th>Inference</th><th>Confidence</th><th>Decision impact</th></tr></thead>
+        <tbody>
+          <tr><td>Prompt history belongs with skill invocation, not root global policy.</td><td><code>AGENTS.md:54-61</code>, <code>CLAUDE.md:55-62</code>, <code>global/codex/provision-agentic-config/SKILL.md:88-95</code> and <code>:192-199</code> all scope it to skill invocation.</td><td>It can move into a shared skill runtime contract, or be injected into each <code>SKILL.md</code> that should log prompts.</td><td class="confidence-high">High</td><td>Approve moving this out of the root block after all skill invocation paths preserve the pre-work logging requirement.</td></tr>
+          <tr><td>Skill versioning is skill-authoring policy.</td><td><code>AGENTS.md:63-70</code>, <code>CLAUDE.md:64-71</code>, and <code>docs/skill-versioning.md</code> describe only <code>SKILL.md</code>, archives, changelogs, and validation scripts.</td><td>This belongs in <code>skill-creator</code>, <code>targeted-skill-builder</code>, <code>create-local-skill</code>, and docs.</td><td class="confidence-high">High</td><td>Strong cleanup candidate.</td></tr>
+          <tr><td>Alignment-page details are already designed to be bundled per skill.</td><td><code>AGENTS.md:72-75</code> says the convention is bundled per skill; <code>CLAUDE.md:119-161</code> holds the canonical block; <code>scripts/upgrade-alignment-page.mjs:24-52</code> propagates it.</td><td>The full canonical template can move from <code>CLAUDE.md</code> into a generator-owned source file, with root reduced to a short pointer or removed.</td><td class="confidence-high">High</td><td>Biggest line-count reduction, but requires updating the generator source path.</td></tr>
+          <tr><td>Shared shipping and cross-pack routing are skill handoff conventions.</td><td><code>CLAUDE.md:163-174</code> applies only when a skill says "Follow the shared shipping contract convention" or recommends another skill.</td><td>Bundle or inline these into skills that need them; root only needs global mutation posture.</td><td class="confidence-high">Medium-high</td><td>Good cleanup candidate, but update all skills that currently reference <code>CLAUDE.md</code>.</td></tr>
+          <tr><td>Missing-skill fallback must stay partly global.</td><td><code>AGENTS.md:43-53</code>, <code>CLAUDE.md:43-53</code>; this applies when the requested skill is absent or not visible.</td><td>It must be available before a missing skill can load, but it can be compressed and made data-driven.</td><td class="confidence-high">High</td><td>Keep a concise root fallback. Move hardcoded pack examples into <code>pack</code> metadata or <code>scripts/pack.sh which</code>.</td></tr>
+          <tr><td>Windows/WSL browser-opening guidance can mostly move down.</td><td>Root <code>AGENTS.md:94-119</code>, <code>CLAUDE.md:90-115</code>; alignment convention also requires browser-open attempts at <code>CLAUDE.md:160</code>.</td><td>The detailed fallback is mostly relevant to HTML/alignment/report skills. A short root pointer may be enough.</td><td class="confidence-medium">Medium</td><td>Move details into alignment/report/open-file helper docs; keep only if root agents often open arbitrary files.</td></tr>
+          <tr><td>Root/provisioner drift exists.</td><td>Root files are v0.5, but repo-local provisioner v0.5 generated blocks lack root <code>Skill Versioning</code> and <code>Alignment Page Convention</code>; installed Codex provisioner is v0.3.</td><td>Rerunning or syncing provisioners could unexpectedly remove root-only sections or compare against stale installed templates.</td><td class="confidence-high">High</td><td>Resolve drift before deleting or relocating content.</td></tr>
+          <tr><td>The <code>workflow.md</code> source note is stale or at least unverifiable in this repo.</td><td>Root notes say <code>Source: workflow.md</code>; <code>find . -maxdepth 4 -path '*/workflow.md' -print</code> found no <code>workflow.md</code>.</td><td>The note should point to the actual canonical provisioner or a real source file.</td><td class="confidence-high">High</td><td>Small cleanup candidate outside the main block.</td></tr>
+        </tbody>
+      </table>
+      <div class="question-block" id="gate-evidence" data-gate="evidence-coverage">
+        <h4>Required Gate: Evidence Coverage</h4>
+        <p>Is the evidence sufficient to use this audit as the basis for a cleanup plan?</p>
+        <label class="option"><input type="radio" name="q-evidence" value="Sufficient for planning"> Sufficient for planning</label>
+        <label class="option"><input type="radio" name="q-evidence" value="Needs one more drift check"> Needs one more drift check</label>
+        <label class="option"><input type="radio" name="q-evidence" value="Other / None of the above"> Other / None of the above</label>
+        <label class="option"><input type="radio" name="q-evidence" value="Need clarification"> Need clarification</label>
+        <textarea class="notes" placeholder="Additional notes, alternative answer, or clarification request"></textarea>
+      </div>
+    </section>
+
+    <section id="keep-root">
+      <div class="section-head"><h2>Keep In Root</h2></div>
+      <div class="feedback" data-section="Keep In Root"><span>Section feedback:</span><label><input type="radio" name="fb-keep" value="up"><span>Approve</span></label><label><input type="radio" name="fb-keep" value="down"><span>Concern</span></label><label><input type="radio" name="fb-keep" value="needs-clarification"><span>Clarify</span></label><textarea placeholder="Optional notes"></textarea></div>
+      <p>These instructions should stay in <code>CLAUDE.md</code> / <code>AGENTS.md</code>, though most can be shorter:</p>
+      <ol>
+        <li><strong>Plan threshold and replanning behavior.</strong> Applies before any skill selection and guards arbitrary user work. Current evidence: <code>CLAUDE.md:4-10</code>, <code>AGENTS.md:4-10</code>.</li>
+        <li><strong>Agent-specific subagent policy.</strong> Claude and Codex need different rules. This is exactly the kind of global runner behavior root files should encode. Current evidence: <code>CLAUDE.md:12-17</code>, <code>AGENTS.md:12-17</code>.</li>
+        <li><strong>Self-improvement on user correction.</strong> This is repo-wide feedback hygiene, not a single skill behavior. Current evidence: <code>CLAUDE.md:19-23</code>, <code>AGENTS.md:19-23</code>.</li>
+        <li><strong>Verification standard.</strong> Applies to all mutation work, skill or no skill. Current evidence: <code>CLAUDE.md:25-29</code>, <code>AGENTS.md:25-29</code>.</li>
+        <li><strong>Core mutation posture.</strong> Direct-to-primary flow, shipping expectations, and "No GitHub Actions" are repo-wide policy. Current evidence: <code>CLAUDE.md:82-88</code>, <code>AGENTS.md:86-92</code>.</li>
+        <li><strong>Missing-skill fallback, in compressed form.</strong> Needed exactly when skill instructions cannot be loaded. Current evidence: <code>CLAUDE.md:43-53</code>, <code>AGENTS.md:43-53</code>.</li>
+      </ol>
+    </section>
+
+    <section id="push-down">
+      <div class="section-head"><h2>Push Down To Skills Or Skill-Adjacent Files</h2></div>
+      <div class="feedback" data-section="Push Down Candidates"><span>Section feedback:</span><label><input type="radio" name="fb-push" value="up"><span>Approve</span></label><label><input type="radio" name="fb-push" value="down"><span>Concern</span></label><label><input type="radio" name="fb-push" value="needs-clarification"><span>Clarify</span></label><textarea placeholder="Optional notes"></textarea></div>
+
+      <h3>1. Prompt History</h3>
+      <p><strong>Current root footprint:</strong> <code>CLAUDE.md:55-62</code>, <code>AGENTS.md:54-61</code>, provisioner templates in <code>global/codex/provision-agentic-config/SKILL.md:88-95</code> and <code>:192-199</code>.</p>
+      <p><strong>Recommended destination:</strong> A bundled per-skill <code>PROMPT-HISTORY.md</code> or a short generated section in every skill that requires prompt capture. Alternatively, include it only in skills with durable output or mutation behavior, but this is riskier because the current rule says every skill invocation.</p>
+      <p><strong>Why:</strong> The rule only activates after a skill is invoked. Keeping the full seven-bullet policy in root adds always-loaded context for a skill-runtime behavior.</p>
+      <p><strong>Risk:</strong> It must remain visible before substantive skill work. If moved into skill-local files, every invoked skill must load that local convention before work begins.</p>
+
+      <h3>2. Skill Versioning</h3>
+      <p><strong>Current root footprint:</strong> <code>CLAUDE.md:64-71</code>, <code>AGENTS.md:63-70</code>, and detailed durable docs already at <code>docs/skill-versioning.md</code>.</p>
+      <p><strong>Recommended destination:</strong> Keep canonical detail in <code>docs/skill-versioning.md</code>. Add/keep enforcement in <code>skill-creator</code>, <code>targeted-skill-builder</code>, <code>create-local-skill</code>, and any skill that modifies <code>SKILL.md</code>. Optionally add a short validation pointer in root only for this repository, not in provisioned blocks for every consuming project.</p>
+      <p><strong>Why:</strong> Most tasks do not create or modify skills. This is high-value but narrow policy.</p>
+
+      <h3>3. Alignment Page Convention</h3>
+      <p><strong>Current root footprint:</strong> full template in <code>CLAUDE.md:119-161</code>, short root pointer in <code>AGENTS.md:72-75</code>, and generator hard-coupling in <code>scripts/upgrade-alignment-page.mjs:24-41</code>.</p>
+      <p><strong>Recommended destination:</strong> Move the canonical convention from <code>CLAUDE.md</code> to a generator-owned source such as <code>docs/alignment-page-convention.md</code> or <code>scripts/templates/alignment-page.md</code>. Keep per-skill <code>ALIGNMENT-PAGE.md</code> as the load-on-demand runtime source. Root files should not carry the full template. At most, this repo root can say: "Alignment-producing skills load their sibling <code>ALIGNMENT-PAGE.md</code>; update the canonical generator source, then run <code>scripts/upgrade-alignment-page.mjs</code>."</p>
+      <p><strong>Why:</strong> The current setup already says the convention is bundled per skill, but the canonical source remains inside <code>CLAUDE.md</code>, making the root file a generator source file and an agent instruction file at the same time.</p>
+      <p><strong>Risk:</strong> The generator must be updated before the CLAUDE block is removed. Otherwise <code>scripts/upgrade-alignment-page.mjs</code> will fail.</p>
+
+      <h3>4. Shared Shipping Contract Template</h3>
+      <p><strong>Current root footprint:</strong> <code>CLAUDE.md:163-170</code>, with many skills saying "Follow the shared shipping contract convention in CLAUDE.md."</p>
+      <p><strong>Recommended destination:</strong> Bundle a <code>SHIPPING-CONTRACT.md</code> or inline the needed contract into mutating skills. Keep only the broad root mutation policy in <code>Core Principles</code>.</p>
+      <p><strong>Why:</strong> The detailed handoff/output routing rule is a skill completion convention, not a global root behavior. Root should not be the dependency for every skill-local shipping stub.</p>
+      <p><strong>Risk:</strong> Existing skills reference <code>CLAUDE.md</code>; those references need to change as a set.</p>
+
+      <h3>5. Cross-Pack Routing</h3>
+      <p><strong>Current root footprint:</strong> <code>CLAUDE.md:172-174</code>.</p>
+      <p><strong>Recommended destination:</strong> <code>pack</code>, <code>skills</code>, and route-recommending skills, or a shared route contract bundled with skills that recommend downstream skills.</p>
+      <p><strong>Why:</strong> This applies only at skill handoff time. It does not need to be always-loaded except as part of a skill's final response contract.</p>
+
+      <h3>6. Windows/WSL File Opening</h3>
+      <p><strong>Current root footprint:</strong> <code>CLAUDE.md:90-115</code> and <code>AGENTS.md:94-119</code>.</p>
+      <p><strong>Recommended destination:</strong> Alignment/report/browser-opening skills and a small helper doc. Keep a one-line root rule only if arbitrary file opening outside skills is common.</p>
+      <p><strong>Why:</strong> The detailed PowerShell fallback is operationally useful but only in a narrow environment and mainly for HTML report/alignment outputs. It is not core workflow policy.</p>
+
+      <h3>7. Hardcoded Project Pack Example</h3>
+      <p><strong>Current root footprint:</strong> <code>CLAUDE.md:49-53</code> and <code>AGENTS.md:49-53</code>.</p>
+      <p><strong>Recommended destination:</strong> <code>scripts/pack.sh which &lt;skill-name&gt;</code> and pack metadata. The <code>pack</code> / <code>skills</code> skills can own the detailed fallback text.</p>
+      <p><strong>Why:</strong> Root files should not need to know that <code>benchmark-test-skill</code> lives under a particular pack path. That is exactly the kind of lookup the pack tooling should answer.</p>
+
+      <div class="question-block" id="gate-scope" data-gate="scope-non-goals">
+        <h4>Required Gate: Scope And Non-Goals</h4>
+        <p>Which cleanup scope should a future implementation target?</p>
+        <label class="option"><input type="radio" name="q-scope" value="Move high-confidence skill-runtime sections only"> Move high-confidence skill-runtime sections only</label>
+        <label class="option"><input type="radio" name="q-scope" value="Also shrink operational helpers like WSL opening"> Also shrink operational helpers like WSL opening</label>
+        <label class="option"><input type="radio" name="q-scope" value="Other / None of the above"> Other / None of the above</label>
+        <label class="option"><input type="radio" name="q-scope" value="Need clarification"> Need clarification</label>
+        <textarea class="notes" placeholder="Additional notes, alternative answer, or clarification request"></textarea>
+      </div>
+    </section>
+
+    <section id="drift">
+      <div class="section-head"><h2>Drift And Cleanliness Findings</h2></div>
+      <div class="feedback" data-section="Drift And Cleanliness Findings"><span>Section feedback:</span><label><input type="radio" name="fb-drift" value="up"><span>Approve</span></label><label><input type="radio" name="fb-drift" value="down"><span>Concern</span></label><label><input type="radio" name="fb-drift" value="needs-clarification"><span>Clarify</span></label><textarea placeholder="Optional notes"></textarea></div>
+      <h3>Finding 1: Root v0.5 blocks are not identical to repo-local v0.5 provisioner blocks.</h3>
+      <p><strong>Impact:</strong> The root files have sections that current repo-local provisioner templates do not generate. A rerun of <code>provision-agentic-config</code> could strip those root-only sections, while the version marker would not communicate that difference.</p>
+      <p><strong>Evidence:</strong> Root <code>AGENTS.md:63-75</code> includes <code>Skill Versioning</code> and <code>Alignment Page Convention</code>. Root <code>CLAUDE.md:64-71</code> includes <code>Skill Versioning</code>; root <code>CLAUDE.md:119-174</code> contains shared skill conventions outside the provisioned note. <code>global/codex/provision-agentic-config/SKILL.md:35-244</code> has v0.5 required blocks without <code>Skill Versioning</code> or <code>Alignment Page Convention</code>.</p>
+      <p><strong>Recommendation:</strong> Before implementing cleanup, decide whether the provisioner should generate the extra sections, omit them, or move them elsewhere. Then make root and templates match.</p>
+
+      <h3>Finding 2: Installed Codex provisioner is stale.</h3>
+      <p><strong>Impact:</strong> The active Codex skill registry can disagree with the repo-local source and root v0.5 files.</p>
+      <p><strong>Evidence:</strong> <code>/home/georgeqle/.codex/skills/provision-agentic-config/SKILL.md</code> reports <code>version: v0.3</code>. <code>global/codex/provision-agentic-config/SKILL.md:5</code> reports <code>version: v0.5</code>. Root <code>AGENTS.md:1</code> and <code>CLAUDE.md:1</code> are provisioned as v0.5.</p>
+      <p><strong>Recommendation:</strong> After deciding on cleanup, refresh installed global skills so the active Codex registry sees the current provisioner.</p>
+
+      <h3>Finding 3: <code>workflow.md</code> source note does not resolve locally.</h3>
+      <p><strong>Impact:</strong> The note claims a source that is not present in the repo scan. This weakens provenance and adds confusion during audits.</p>
+      <p><strong>Evidence:</strong> Root notes at <code>CLAUDE.md:117</code> and <code>AGENTS.md:121</code> say <code>Source: workflow.md</code>. <code>find . -maxdepth 4 -path '*/workflow.md' -print</code> returned no files.</p>
+      <p><strong>Recommendation:</strong> Either add the real canonical <code>workflow.md</code>, or update the note to name the actual source, such as <code>global/codex/provision-agentic-config/SKILL.md</code> and <code>global/claude/provision-agentic-config/SKILL.md</code>.</p>
+
+      <h3>Finding 4: Report-only work still triggers tracked mutations.</h3>
+      <p><strong>Impact:</strong> The combination of prompt-history logging, alignment-page output, and default shipping rules makes even "report-only" skill invocations create tracked files and potentially require commit/push. That is heavy for an audit request.</p>
+      <p><strong>Evidence:</strong> Prompt history says tracked by default at <code>AGENTS.md:59-60</code>. The investigate skill requires alignment pages for durable reports. Shared shipping contract in <code>CLAUDE.md:167-170</code> says tracked mutations should be committed and pushed.</p>
+      <p><strong>Recommendation:</strong> Add a clearer report-only artifact policy in the skill runtime contract: report artifacts are allowed, but implementation targets remain untouched. If report artifacts should still ship, say so explicitly in the skill; if not, allow a local-only report mode.</p>
+
+      <div class="question-block" id="gate-assumptions" data-gate="assumptions-confidence">
+        <h4>Required Gate: Assumptions And Confidence</h4>
+        <p>Which finding needs more proof before implementation planning?</p>
+        <label class="option"><input type="radio" name="q-assumptions" value="No additional proof needed"> No additional proof needed</label>
+        <label class="option"><input type="radio" name="q-assumptions" value="Verify provisioner sync behavior first"> Verify provisioner sync behavior first</label>
+        <label class="option"><input type="radio" name="q-assumptions" value="Other / None of the above"> Other / None of the above</label>
+        <label class="option"><input type="radio" name="q-assumptions" value="Need clarification"> Need clarification</label>
+        <textarea class="notes" placeholder="Additional notes, alternative answer, or clarification request"></textarea>
+      </div>
+    </section>
+
+    <section id="minimal-root">
+      <div class="section-head"><h2>Proposed Minimal Root Shape</h2></div>
+      <div class="feedback" data-section="Proposed Minimal Root Shape"><span>Section feedback:</span><label><input type="radio" name="fb-minimal" value="up"><span>Approve</span></label><label><input type="radio" name="fb-minimal" value="down"><span>Concern</span></label><label><input type="radio" name="fb-minimal" value="needs-clarification"><span>Clarify</span></label><textarea placeholder="Optional notes"></textarea></div>
+      <p>This is not implementation text. It is the target content model:</p>
+      <ol>
+        <li><strong>Global Workflow:</strong> Plan for non-trivial work, re-plan when work changes materially, use agent-specific subagent rules, and verify before done.</li>
+        <li><strong>Repo Mutation Policy:</strong> Minimal impact, direct-to-primary unless explicitly overridden, commit/push intended tracked mutations unless user says otherwise, and no GitHub Actions unless explicitly asked.</li>
+        <li><strong>Skill Resolution:</strong> If a named skill is missing, run <code>scripts/pack.sh which &lt;skill-name&gt;</code>. If found, recommend the right install/reload route. Search project-local pack roots for command-like invocations.</li>
+        <li><strong>Task Records:</strong> For non-trivial mutation work, keep <code>tasks/roadmap.md</code>, <code>tasks/todo.md</code>, and <code>tasks/lessons.md</code> current. Let planning/execution skills own the detailed steps.</li>
+      </ol>
+      <p>Everything else should be skill-local, generator-local, or documentation-local.</p>
+    </section>
+
+    <section id="sequence">
+      <div class="section-head"><h2>Recommended Implementation Sequence If Approved Later</h2></div>
+      <div class="feedback" data-section="Recommended Implementation Sequence"><span>Section feedback:</span><label><input type="radio" name="fb-sequence" value="up"><span>Approve</span></label><label><input type="radio" name="fb-sequence" value="down"><span>Concern</span></label><label><input type="radio" name="fb-sequence" value="needs-clarification"><span>Clarify</span></label><textarea placeholder="Optional notes"></textarea></div>
+      <ol>
+        <li><strong>Canonical-source cleanup:</strong> Move the alignment-page authoring source out of <code>CLAUDE.md</code>; update <code>scripts/upgrade-alignment-page.mjs</code> to read the new source; regenerate bundled <code>ALIGNMENT-PAGE.md</code> files.</li>
+        <li><strong>Skill-runtime contract cleanup:</strong> Create a bundled prompt-history/shipping/cross-pack route convention or inline these into affected skills; update skills that currently reference <code>CLAUDE.md</code> for shared conventions.</li>
+        <li><strong>Provisioner cleanup:</strong> Update both repo-local provisioners so generated blocks match the desired minimal root shape; archive/bump provisioner versions per skill versioning policy.</li>
+        <li><strong>Root cleanup:</strong> Re-run or manually align <code>CLAUDE.md</code> and <code>AGENTS.md</code> to the new generated blocks; fix or replace the <code>workflow.md</code> source note.</li>
+        <li><strong>Refresh installed skills:</strong> Reinstall/refresh global skills so <code>~/.codex/skills/provision-agentic-config</code> is no longer v0.3.</li>
+        <li><strong>Verification:</strong> Run provisioner/sync checks, skill dependency/version/archive checks, and generator dry-run or diff check for alignment pages.</li>
+      </ol>
+    </section>
+
+    <section id="recommendation">
+      <div class="section-head"><h2>Recommendation</h2></div>
+      <div class="feedback" data-section="Recommendation"><span>Section feedback:</span><label><input type="radio" name="fb-recommendation" value="up"><span>Approve</span></label><label><input type="radio" name="fb-recommendation" value="down"><span>Concern</span></label><label><input type="radio" name="fb-recommendation" value="needs-clarification"><span>Clarify</span></label><textarea placeholder="Optional notes"></textarea></div>
+      <p>Approve a cleanup, but do it as a staged refactor of instruction ownership, not a direct deletion pass.</p>
+      <p><strong>Highest-confidence moves:</strong></p>
+      <ul>
+        <li>Move <code>Skill Versioning</code> out of root.</li>
+        <li>Move full alignment-page template out of <code>CLAUDE.md</code>.</li>
+        <li>Move prompt-history detail into skill runtime/bundled skill conventions.</li>
+        <li>Compress missing-skill fallback and remove hardcoded benchmark pack paths.</li>
+        <li>Fix provisioner/root/installed-skill drift before any pruning.</li>
+      </ul>
+      <p><strong>Lower-confidence or conditional moves:</strong></p>
+      <ul>
+        <li>Move Windows/WSL opening details only if alignment/report/open-file skills reliably carry them.</li>
+        <li>Move shipping contract only after all <code>Follow the shared shipping contract convention in CLAUDE.md</code> references are updated.</li>
+      </ul>
+    </section>
+
+    <section id="gaps">
+      <div class="section-head"><h2>Alternatives, Lower-Confidence Findings, And Coverage Gaps</h2></div>
+      <div class="feedback" data-section="Alternatives And Gaps"><span>Section feedback:</span><label><input type="radio" name="fb-gaps" value="up"><span>Approve</span></label><label><input type="radio" name="fb-gaps" value="down"><span>Concern</span></label><label><input type="radio" name="fb-gaps" value="needs-clarification"><span>Clarify</span></label><textarea placeholder="Optional notes"></textarea></div>
+      <h3>Alternatives considered</h3>
+      <ul>
+        <li><strong>Leave everything in root.</strong> Lowest immediate risk, but keeps root files noisy and preserves current drift ambiguity.</li>
+        <li><strong>Delete moved sections without replacing them.</strong> Rejected because prompt history, alignment pages, and shipping contracts are still active workflow requirements.</li>
+        <li><strong>Move all conventions into docs only.</strong> Rejected as too weak for runtime behavior; invoked skills need local/loadable instructions.</li>
+        <li><strong>Bundle every convention into every skill.</strong> Robust but could bloat each skill. A generator-owned shared convention file beside relevant skills is cleaner.</li>
+      </ul>
+      <h3>Rejected or lower-confidence findings</h3>
+      <ul>
+        <li>I would not move the missing-skill fallback entirely out of root because it is needed when a skill is not visible.</li>
+        <li>I would not move direct-to-primary and no-GitHub-Actions policy into skills because they govern all repo mutation, including non-skill work.</li>
+        <li>Moving Windows/WSL details is useful but lower-confidence because root-level file-opening requests can happen outside alignment/report skills.</li>
+      </ul>
+      <h3>Source coverage gaps</h3>
+      <ul>
+        <li>I did not run the `sync` skill end to end, because the user requested a report and no implementation.</li>
+        <li>I did not enumerate every skill that references the shared shipping contract; that belongs in the implementation planning pass.</li>
+        <li>I did not update installed global skills; the stale installed provisioner is reported as a finding only.</li>
+      </ul>
+      <h3>Downstream implications</h3>
+      <ul>
+        <li>Any cleanup should touch generator/source ownership first, then root docs. Otherwise generated alignment pages or provisioning may regress.</li>
+        <li>The implementation should include drift checks to prove root files, repo-local provisioners, and installed provisioners agree.</li>
+        <li>Report-only skill behavior may need a product decision: tracked report artifacts can still ship by default, but that should be explicit.</li>
+      </ul>
+    </section>
+
+    <section id="gates">
+      <div class="section-head"><h2>Review Gates</h2></div>
+      <div class="feedback" data-section="Review Gates"><span>Section feedback:</span><label><input type="radio" name="fb-gates" value="up"><span>Approve</span></label><label><input type="radio" name="fb-gates" value="down"><span>Concern</span></label><label><input type="radio" name="fb-gates" value="needs-clarification"><span>Clarify</span></label><textarea placeholder="Optional notes"></textarea></div>
+      <div class="question-block" id="gate-recommendation" data-gate="recommended-path">
+        <h4>Required Gate: Recommended Path</h4>
+        <p>Which recommendation should govern the next implementation plan?</p>
+        <label class="option"><input type="radio" name="q-recommendation" value="Stage cleanup exactly as recommended"> Stage cleanup exactly as recommended</label>
+        <label class="option"><input type="radio" name="q-recommendation" value="Start with drift fix only"> Start with drift fix only</label>
+        <label class="option"><input type="radio" name="q-recommendation" value="Other / None of the above"> Other / None of the above</label>
+        <label class="option"><input type="radio" name="q-recommendation" value="Need clarification"> Need clarification</label>
+        <textarea class="notes" placeholder="Additional notes, alternative answer, or clarification request"></textarea>
+      </div>
+      <div class="question-block" id="gate-file-changes" data-gate="proposed-file-changes">
+        <h4>Required Gate: Proposed File Changes</h4>
+        <p>Should a future implementation be allowed to modify root agent files and provisioner skills?</p>
+        <label class="option"><input type="radio" name="q-file-changes" value="Yes, root and provisioners may change after a plan"> Yes, root and provisioners may change after a plan</label>
+        <label class="option"><input type="radio" name="q-file-changes" value="No, prepare a narrower plan first"> No, prepare a narrower plan first</label>
+        <label class="option"><input type="radio" name="q-file-changes" value="Other / None of the above"> Other / None of the above</label>
+        <label class="option"><input type="radio" name="q-file-changes" value="Need clarification"> Need clarification</label>
+        <textarea class="notes" placeholder="Additional notes, alternative answer, or clarification request"></textarea>
+      </div>
+      <div class="question-block" id="gate-artifact" data-gate="artifact-destination" data-target-path="research/agent-config-cleanup-audit.md">
+        <h4>Required Gate: Artifact Destination</h4>
+        <p>Is <code>research/agent-config-cleanup-audit.md</code> the right durable report location?</p>
+        <label class="option"><input type="radio" name="q-artifact" value="Keep report in research"> Keep report in research</label>
+        <label class="option"><input type="radio" name="q-artifact" value="Move report to docs"> Move report to docs</label>
+        <label class="option"><input type="radio" name="q-artifact" value="Other / None of the above"> Other / None of the above</label>
+        <label class="option"><input type="radio" name="q-artifact" value="Need clarification"> Need clarification</label>
+        <textarea class="notes" placeholder="Additional notes, alternative answer, or clarification request"></textarea>
+      </div>
+    </section>
+
+    <div class="controls">
+      <button id="compileFeedback" class="secondary" type="button">Compile Feedback YAML</button>
+      <button id="compileAnswers" type="button" disabled>Compile Answers</button>
+      <button id="copyYaml" class="secondary" type="button">Copy YAML</button>
+      <div id="status" class="status">Answer required gates to enable final YAML. Section feedback can be compiled anytime after selecting feedback.</div>
+      <textarea id="yamlOut" readonly placeholder="Compiled YAML appears here"></textarea>
+    </div>
+  </main>
+
+  <script>
+    function selectedRadio(name) {
+      return document.querySelector('input[name="' + name + '"]:checked');
+    }
+    function yamlEscape(value) {
+      const text = String(value || "");
+      if (!text) return '""';
+      return JSON.stringify(text);
+    }
+    function gateBlocks() {
+      return Array.from(document.querySelectorAll(".question-block"));
+    }
+    function updateNotesVisibility() {
+      document.querySelectorAll(".question-block").forEach(function(block) {
+        const chosen = block.querySelector("input[type=radio]:checked");
+        const notes = block.querySelector(".notes");
+        if (notes) notes.style.display = chosen ? "block" : "none";
+      });
+      document.querySelectorAll(".feedback").forEach(function(block) {
+        const chosen = block.querySelector("input[type=radio]:checked");
+        const notes = block.querySelector("textarea");
+        if (notes) notes.style.display = chosen ? "block" : "none";
+      });
+      updateAnswerButton();
+    }
+    function unansweredGates() {
+      return gateBlocks().filter(function(block) {
+        return !block.querySelector("input[type=radio]:checked");
+      });
+    }
+    function updateAnswerButton() {
+      const remaining = unansweredGates().length;
+      const button = document.getElementById("compileAnswers");
+      button.disabled = remaining > 0;
+      document.getElementById("status").textContent = remaining
+        ? remaining + " required gate question(s) still need answers."
+        : "All required gate questions answered. Final YAML can be compiled.";
+    }
+    function collectGates() {
+      return gateBlocks().map(function(block) {
+        const checked = block.querySelector("input[type=radio]:checked");
+        const notes = block.querySelector(".notes").value.trim();
+        const answer = checked ? checked.value : "";
+        const status = answer === "Need clarification" ? "needs-clarification" : (answer === "Other / None of the above" ? "other" : "answered");
+        const heading = block.querySelector("h4").textContent.replace(/^Required Gate: /, "");
+        return {
+          section: heading,
+          gate_type: block.dataset.gate || "review",
+          status: status,
+          answer: answer,
+          notes: notes,
+          target_path: block.dataset.targetPath || ""
+        };
+      });
+    }
+    function collectFeedback() {
+      return Array.from(document.querySelectorAll(".feedback")).map(function(block) {
+        const checked = block.querySelector("input[type=radio]:checked");
+        if (!checked) return null;
+        const feedback = checked.value;
+        const requested = feedback === "up" ? "accept-as-is" : (feedback === "down" ? "investigate-and-revise" : "clarify-before-approval");
+        return {
+          section: block.dataset.section || "Unknown",
+          feedback: feedback,
+          notes: block.querySelector("textarea").value.trim(),
+          requested_agent_action: requested
+        };
+      }).filter(Boolean);
+    }
+    function gatesToYaml(gates) {
+      let out = "gate_answers:\n";
+      gates.forEach(function(item) {
+        out += "  - section: " + yamlEscape(item.section) + "\n";
+        out += "    gate_type: " + yamlEscape(item.gate_type) + "\n";
+        out += "    status: " + yamlEscape(item.status) + "\n";
+        out += "    answer: " + yamlEscape(item.answer) + "\n";
+        if (item.notes) out += "    notes: " + yamlEscape(item.notes) + "\n";
+        if (item.target_path) out += "    target_path: " + yamlEscape(item.target_path) + "\n";
+      });
+      return out;
+    }
+    function feedbackToYaml(feedback) {
+      if (!feedback.length) return "section_feedback: []\n";
+      let out = "section_feedback:\n";
+      feedback.forEach(function(item) {
+        out += "  - section: " + yamlEscape(item.section) + "\n";
+        out += "    feedback: " + yamlEscape(item.feedback) + "\n";
+        out += "    requested_agent_action: " + yamlEscape(item.requested_agent_action) + "\n";
+        if (item.notes) out += "    notes: " + yamlEscape(item.notes) + "\n";
+      });
+      return out;
+    }
+    async function writeYaml(text) {
+      const out = document.getElementById("yamlOut");
+      out.value = text;
+      try {
+        await navigator.clipboard.writeText(text);
+        document.getElementById("status").textContent = "YAML compiled and copied to clipboard.";
+      } catch (err) {
+        out.focus();
+        out.select();
+        document.getElementById("status").textContent = "YAML compiled. Clipboard copy was blocked; textarea selected as fallback.";
+      }
+    }
+    document.addEventListener("change", updateNotesVisibility);
+    document.getElementById("compileAnswers").addEventListener("click", function() {
+      const missing = unansweredGates();
+      if (missing.length) {
+        missing[0].scrollIntoView({ behavior: "smooth", block: "center" });
+        return;
+      }
+      const text = "approval_status: ready-for-agent-review\n" + gatesToYaml(collectGates()) + feedbackToYaml(collectFeedback());
+      writeYaml(text);
+    });
+    document.getElementById("compileFeedback").addEventListener("click", function() {
+      const feedback = collectFeedback();
+      const remaining = unansweredGates().map(function(block) {
+        return block.querySelector("h4").textContent.replace(/^Required Gate: /, "");
+      });
+      let text = "feedback_status: revision-request\napproval_status: not-approved\n";
+      text += "unanswered_required_questions:\n";
+      if (remaining.length) {
+        remaining.forEach(function(name) { text += "  - " + yamlEscape(name) + "\n"; });
+      } else {
+        text += "  []\n";
+      }
+      text += feedbackToYaml(feedback);
+      writeYaml(text);
+    });
+    document.getElementById("copyYaml").addEventListener("click", function() {
+      const text = document.getElementById("yamlOut").value;
+      if (text) writeYaml(text);
+    });
+    updateNotesVisibility();
+  </script>
+</body>
+</html>
