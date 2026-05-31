@@ -16,6 +16,8 @@ This matrix tracks skills that already have persisted benchmark run data and gra
 
 | Skill | Agent | Latest Raw Report | Runs | Hard Pass Rate | Output Quality | Subjective Review | Status | Notes |
 |---|---|---:|---:|---:|---:|---|---|---|
+| `provision-agentic-config` | Claude | `tests/benchmarks/runs/provision-agentic-config-claude-5bd3b160/report.json` | 3 | 100% | 98.7% | `benchmark/review-provision-agentic-config-2026-05-22.md` | graded | Curated report: `benchmark/test-provision-agentic-config-2026-05-31.md`. Subjective review median score available. |
+| `provision-agentic-config` | Codex | `tests/benchmarks/runs/provision-agentic-config-codex-86b4839a/report.json` | 3 | 67% | 94.7% | `benchmark/review-provision-agentic-config-2026-05-22.md` | graded | Curated report: `benchmark/test-provision-agentic-config-2026-05-31.md`. Subjective review median score available. |
 | `reconcile-dev-docs` | Claude | `tests/benchmarks/runs/reconcile-dev-docs-claude-d79945d0/report.json` | 3 | 100% | 88.6% | none | graded | Curated report: `benchmark/test-reconcile-dev-docs-2026-05-21.md`. |
 | `reconcile-dev-docs` | Codex | `tests/benchmarks/runs/reconcile-dev-docs-codex-ec29e993/report.json` | 3 | 100% | 91.7% | none | graded | Curated report: `benchmark/test-reconcile-dev-docs-2026-05-21.md`. |
 | `regression-check` | Claude | `tests/benchmarks/runs/regression-check-claude-a5aa3c80/report.json` | 3 | 67% | 79.5% | none | graded | Curated report: `benchmark/test-regression-check-2026-05-21.md`. |
@@ -39,7 +41,7 @@ This matrix tracks skills that already have persisted benchmark run data and gra
 
 | Skill | Agent | Raw Report | Status | Notes |
 |---|---|---|---|---|
-| `exec` | Codex | `tests/benchmarks/runs/exec-codex-694712fc/report.json` | blocked/incomplete | Report exists with zero total and evaluated runs. Do not count as benchmarked. |
+| `exec` | Codex | `tests/benchmarks/runs/exec-codex-cfd43817/report.json` | blocked/incomplete | Report exists with zero total and evaluated runs. Do not count as benchmarked. |
 
 ## Coverage Gaps
 
