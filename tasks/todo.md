@@ -1,3 +1,29 @@
+### ▶ NEXT STEP (clear-context implementation) — Phase 41: re-benchmark `provision-agentic-config`
+
+**Context:** The `concept-brief → idea-brief` rename is fully complete and shipped (all 6 phases). The active phase is **Phase 41 — Remaining Skill Benchmark Result Coverage**. Phase 43 added route guidance to all 32 fixture prompts and raised budgets; Batch 41.3 Group 2 already re-ran (shipped in `bc17fee`, `3e4bd78`). The Priority Task Queue note (line ~693) names the next triage targets: **start with `provision-agentic-config`**, then `migrate`, then `prototype` — Tier 2 global skills benchmarked pre-fixture-remediation with near-zero pass rates that now need a clean re-run.
+
+**Scope (this step = ONE skill):** Re-benchmark **`provision-agentic-config`** (both Claude and Codex variants where applicable) using the established benchmark flow, persist the run outputs, and update the coverage count.
+
+**How (established Phase 41 process):**
+- Use the `benchmark-test-skill` skill (pack `agentic-skills-bench`, enabled) targeting `provision-agentic-config`. It produces pass-rate, latency, cost, and consistency metrics and persists run outputs under `tests/benchmarks/runs/`.
+- Confirm the fixture prompt for `provision-agentic-config` already carries the Phase-43 route guidance + raised budget before running; if not, that is a separate fix — note it, do not silently patch.
+- After the run, refresh benchmark coverage metadata if the harness requires it: `pnpm --dir tests bench:coverage` and the focused `pnpm --dir tests exec vitest run --project layer1 layer1/bench-coverage.test.ts`.
+
+**Files likely affected:** `tests/benchmarks/runs/**` (new run artifacts), possibly `tests/harness/bench-coverage.ts` / generated benchmark matrix data, and `tasks/todo.md` + `tasks/history.md` (progress + graded-count update). No skill `SKILL.md`/`PACK.md` behavior changes expected — this is measurement, not skill editing.
+
+**Acceptance criteria:**
+- A fresh `provision-agentic-config` benchmark run is persisted with pass-rate/latency/cost/consistency recorded.
+- The graded-skill count in the Priority Task Queue note is updated (was 69 unique / 158 total).
+- `pnpm --dir tests bench:coverage` passes; `git diff --check` clean.
+
+**Execution Profile:** serial, measurement/benchmark run. No skill-source mutation. Benchmark runs consume real model budget — this is the user's approval gate to spend it.
+
+**Decision for the user:** This is a separate, compute-spending initiative from the just-finished rename. Approve to start the `provision-agentic-config` re-benchmark, or redirect (e.g. a different queue item like `$analyze-sessions split-path product research workflow`, or stop here — the rename session's work is fully shipped).
+
+**Ship-one-step handoff:** implement only this step, validate it, then run `/ship` when done.
+
+---
+
 ## Current Task - Downstream Skill Inventory Surface 2026-05-31
 
 **Goal:** Implement the approved inventory-first follow-up from the downstream skill-copy analysis: a new mirrored report-only `$skill-inventory` skill in `project-fleet` that scans local downstream repos and classifies managed skill-copy drift without changing those repos.
