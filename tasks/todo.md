@@ -4,27 +4,32 @@
 
 ---
 
-### ▶ NEXT STEP (clear-context implementation) — Phase 41: re-benchmark `provision-agentic-config`
+### ▶ NEXT STEP (clear-context implementation) — Phase 41: re-benchmark `migrate`
 
-**Context:** The `concept-brief → idea-brief` rename is fully complete and shipped (all 6 phases). The active phase is **Phase 41 — Remaining Skill Benchmark Result Coverage**. Phase 43 added route guidance to all 32 fixture prompts and raised budgets; Batch 41.3 Group 2 already re-ran (shipped in `bc17fee`, `3e4bd78`). The Priority Task Queue note (line ~693) names the next triage targets: **start with `provision-agentic-config`**, then `migrate`, then `prototype` — Tier 2 global skills benchmarked pre-fixture-remediation with near-zero pass rates that now need a clean re-run.
+**Context:** Active phase is **Phase 41 — Remaining Skill Benchmark Result Coverage**. Phase 43 added route guidance to all 32 fixture prompts and raised budgets. `provision-agentic-config` was re-benchmarked clean on 2026-05-31 (Claude 100% / Codex 67%, shipped in `42c94979`). The Batch 41.3 next-target pointer (Priority Task Queue, line ~719) now names **`migrate`**, then **`prototype`** — Tier 2 global skills graded pre-fixture-remediation with near-zero pass rates that need a clean re-run. The prior `migrate` report `benchmark/test-migrate-2026-05-21.md` shows 0% Claude (artifact `migration-plan.md` not created) and 3/3 Codex infra-blocked (runner timeout) — exactly the pre-fixture failure signature this re-run is meant to clear.
 
-**Scope (this step = ONE skill):** Re-benchmark **`provision-agentic-config`** (both Claude and Codex variants where applicable) using the established benchmark flow, persist the run outputs, and update the coverage count.
+**Scope (this step = ONE skill):** Re-benchmark **`migrate`** (both Claude and Codex) using the established benchmark flow, persist run outputs, refresh generated data, and update progress notes.
 
-**How (established Phase 41 process):**
-- Use the `benchmark-test-skill` skill (pack `agentic-skills-bench`, enabled) targeting `provision-agentic-config`. It produces pass-rate, latency, cost, and consistency metrics and persists run outputs under `tests/benchmarks/runs/`.
-- Confirm the fixture prompt for `provision-agentic-config` already carries the Phase-43 route guidance + raised budget before running; if not, that is a separate fix — note it, do not silently patch.
-- After the run, refresh benchmark coverage metadata if the harness requires it: `pnpm --dir tests bench:coverage` and the focused `pnpm --dir tests exec vitest run --project layer1 layer1/bench-coverage.test.ts`.
+**How (established Phase 41 process — mirror what provision-agentic-config did):**
+1. `cd tests` and confirm eligibility: `pnpm bench --list-skills | grep migrate` → expect `coverage=custom setup=tests/layer4/setups/tier23-global-workflows.setup.ts`.
+2. Confirm the `migrate` fixture in `tests/layer4/setups/tier23-global-workflows.setup.ts` already carries Phase-43 route guidance + budget before spending; if not, note it as a separate fix — do not silently patch.
+3. Sanity-check the skill's own setup contract in isolation (the full `pnpm verify --skill` will FAIL only on the **pre-existing unrelated `skill-dev` `.claude/skills` output-path conflict** — that is out of scope, do not chase it): `pnpm exec vitest run --project layer1 layer1/bench-coverage.test.ts layer1/bench-setups.test.ts` → expect green.
+4. Run the benchmark: `pnpm bench --skill migrate --agent both --runs 3 --chunk-size 3 --pause 0`. This spends real budget (~$1/run, ~$6 total). Run it in the background and poll the log; both Claude and Codex run sequentially.
+5. Write the curated report to `benchmark/test-migrate-2026-05-31.md` (repo root) using the same structure as `benchmark/test-provision-agentic-config-2026-05-31.md`: Verify table, Benchmark Summary, Failed Assertions, Output Quality, Infrastructure Blocked, Raw Sessions (point at the new `tests/benchmarks/runs/migrate-*` dirs), Recommendation with a literal `Recommended next command:` line. Pull all numbers from the persisted `report.json` files — do not fabricate.
+6. **Stage the new report before regenerating** (`git add benchmark/test-migrate-2026-05-31.md`) — the showcase generator reads curated reports via `git ls-files`, so an unstaged report is invisible and the matrix will reference the stale prior report. Then: `node scripts/generate-skills-showcase-data.mjs` and `node scripts/generate-skills-showcase-github-data.mjs`.
+7. Validate: `cd tests && pnpm bench:coverage`; `pnpm exec vitest run --project layer1 layer1/bench-coverage.test.ts layer1/benchmark-results-matrix.test.ts`; `bash scripts/validate-skills-showcase-data.sh`; `git diff --check`.
 
-**Files likely affected:** `tests/benchmarks/runs/**` (new run artifacts), possibly `tests/harness/bench-coverage.ts` / generated benchmark matrix data, and `tasks/todo.md` + `tasks/history.md` (progress + graded-count update). No skill `SKILL.md`/`PACK.md` behavior changes expected — this is measurement, not skill editing.
+**Files likely affected:** `benchmark/test-migrate-2026-05-31.md` (new), `docs/benchmark-results-matrix.md`, `docs/skills-showcase/assets/{skills-data.js,github-proof-data.js}` + `apps/` copies (generated), `tasks/todo.md` + `tasks/history.md` (progress), `prompts/benchmark-test-skill/` (capture). Raw `tests/benchmarks/runs/**` stay gitignored/local. No skill `SKILL.md`/`PACK.md` behavior changes expected — measurement, not skill editing. If `migrate` is now genuinely 0% on a clean re-run (real artifact/route defect, not infra), do NOT mass-rerun — record it and route to `/session-triage migrate benchmark failure` instead.
 
 **Acceptance criteria:**
-- A fresh `provision-agentic-config` benchmark run is persisted with pass-rate/latency/cost/consistency recorded.
-- The graded-skill count in the Priority Task Queue note is updated (was 69 unique / 158 total).
-- `pnpm --dir tests bench:coverage` passes; `git diff --check` clean.
+- A fresh `migrate` benchmark run is persisted with pass-rate/latency/cost/consistency recorded; curated report written and parseable by the generator (matrix references the new `2026-05-31` report).
+- Generated data regenerated and `scripts/validate-skills-showcase-data.sh` reports fresh.
+- `pnpm --dir tests bench:coverage` passes; focused bench-coverage + matrix layer1 tests green; `git diff --check` clean.
+- Graded-count note updated: `migrate` was already in the graded set (prior reports 05-20/21), so this is a refresh — confirm the 69 unique / 158 total count is unchanged and advance the pointer to `prototype`.
 
 **Execution Profile:** serial, measurement/benchmark run. No skill-source mutation. Benchmark runs consume real model budget — this is the user's approval gate to spend it.
 
-**Decision for the user:** This is a separate, compute-spending initiative from the just-finished rename. Approve to start the `provision-agentic-config` re-benchmark, or redirect (e.g. a different queue item like `$analyze-sessions split-path product research workflow`, or stop here — the rename session's work is fully shipped).
+**Decision for the user:** Compute-spending step (~$6). Approve to start the `migrate` re-benchmark, or redirect (e.g. `$analyze-sessions split-path product research workflow`, or stop here — all prior work is shipped).
 
 **Ship-one-step handoff:** implement only this step, validate it, then run `/ship` when done.
 
