@@ -110,6 +110,31 @@
 
 **Untouched (intentional):** `tasks/roadmap.md`, `tasks/todo.md`, `tasks/history.md` historical logs; all `archive/v*/SKILL.md` snapshots; the prior v0.6 changelog entries (true as of v0.6, superseded by the new entry).
 
+### Next Step (self-contained) — Phase 3 consumer: product-design `prototype` (claude + codex)
+
+**What:** Hard-rename the `concept-brief` artifact references in the `prototype` consumer, mirroring the already-shipped icp/competitive-analysis/lean-canvas/value-prop-canvas edits. No legacy fallback. Rename the *artifact filename* `research/concept-brief.md` → `research/idea-brief.md` AND the proper-name label "Concept brief" → "Idea brief" where it denotes the document; preserve "concept" only where it means the product concept itself (none of the lines below carry that meaning).
+
+**Files (full paths) — both are identical in the affected region:**
+- `packs/product-design/claude/prototype/SKILL.md`
+- `packs/product-design/codex/prototype/SKILL.md`
+
+**Exact edits (2 occurrences per file, lines ~50 and ~65):**
+1. Line 50: `  - `research/concept-brief.md` — assumptions to test, core value proposition, and hypothesis framing.` → replace `research/concept-brief.md` with `research/idea-brief.md`.
+2. Line 65: `- **Concept brief** (`research/concept-brief.md`): Surface assumptions the prototype is designed to test. Each prototype variation should help validate or invalidate at least one concept-brief assumption.` → `- **Idea brief** (`research/idea-brief.md`): Surface assumptions the prototype is designed to test. Each prototype variation should help validate or invalidate at least one idea-brief assumption.`
+
+   Note: line 65 has THREE tokens to change — the bold label `**Concept brief**` → `**Idea brief**`, the path, and `concept-brief assumption` → `idea-brief assumption`. A bare `replace_all` of `concept-brief.md` only fixes the path; do the label and the `concept-brief assumption` token as separate explicit edits. Do NOT touch "core value proposition" or any other prose.
+
+**Conventions established this batch:** no version bump, no archive, no changelog (coordinated mechanical sync — Phase 5 decision applied to consumers); write `/exec` prompt-history to `prompts/exec/skill-prompt-<ts>-prototype-rename.md`; check off the Phase 3 prototype line; do NOT touch archives.
+
+**Execution Profile:** serial, implementation-safe (single skill pair, mechanical string edits).
+
+**Acceptance criteria:**
+- `grep -n "concept-brief\|Concept brief" packs/product-design/{claude,codex}/prototype/SKILL.md` returns nothing.
+- `git diff --check` clean.
+- Phase 3 prototype line checked off in `tasks/todo.md`; prompt-history file written.
+
+**Ship-one-step handoff:** implement only this step, validate it, then run `/ship` when done.
+
 ---
 
 ## Current Task - Alignment Page Source In Compiled YAML 2026-05-31
