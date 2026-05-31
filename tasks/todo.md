@@ -4,10 +4,20 @@
 
 **Plan:**
 - [x] Capture the visible `$analyze-sessions` invocation under `prompts/analyze-sessions/`.
-- [ ] Inspect current skill-management conventions, task history, and lessons relevant to downstream copied skills.
-- [ ] Parse full available Claude and Codex user histories for recurring downstream skill-copy/version drift, inventory, cleanup, pack install, and skill visibility patterns.
-- [ ] Build `alignment/analyze-sessions-downstream-skill-inventory.html` with the full report, evidence matrix, assumptions/confidence register, alternatives, proposed file changes, and review gates.
-- [ ] Verify artifacts, record review notes, and stage only intended files if shipping is allowed after review.
+- [x] Inspect current skill-management conventions, task history, and lessons relevant to downstream copied skills.
+- [x] Parse full available Claude and Codex user histories for recurring downstream skill-copy/version drift, inventory, cleanup, pack install, and skill visibility patterns.
+- [x] Build `alignment/analyze-sessions-downstream-skill-inventory.html` with the full report, evidence matrix, assumptions/confidence register, alternatives, proposed file changes, and review gates.
+- [x] Verify artifacts, record review notes, and keep downstream implementation work gated on review approval.
+
+### Review
+
+- Parsed the full available compact Claude/Codex user-history corpus plus Codex rollout metadata: 11,833 compact user messages across 3,598 sessions, spanning 2025-12-13 through 2026-05-31.
+- Found repeated downstream-copy concerns around pack refresh/visibility, managed-copy versus symlink behavior, canonical version drift, and downstream repo scope. The cleanup-prune signal exists, but it is broader and less precise than drift/inventory needs.
+- Confirmed the repository already has project-local drift primitives: `.agentic-skills-managed` markers, `source_version`, `source_sha`, `scripts/pack.sh doctor`, `scripts/pack.sh refresh`, and `skill-drift-hook.sh`.
+- Recommendation captured in the alignment page: build inventory first, preferably as a fleet-level read-only report over downstream repos; keep cleanup as an explicit apply mode after inventory classification rather than a standalone cleanup-first skill.
+- Current repo `scripts/pack.sh doctor` already reports stale, unknown, missing-source, pinned, and not-managed categories, which is the right classification model to reuse instead of deleting copied skills blindly.
+- Validation passed: `git diff --check`, HTML parser feed, inline JavaScript syntax compilation with Node, required alignment-page controls/fields grep, and WSL browser open via PowerShell `Start-Process`.
+- No downstream cleanup or inventory implementation has been staged; that work remains gated on review approval.
 
 ## Current Task - idea-scope-brief Alignment Approval Ordering 2026-05-31
 

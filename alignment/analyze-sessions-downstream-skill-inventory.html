@@ -1,0 +1,710 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Analyze Sessions - Downstream Skill Inventory</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --text-muted: #8b949e;
+      --accent: #58a6ff;
+      --green: #3fb950;
+      --red: #f85149;
+      --orange: #d29922;
+      --purple: #bc8cff;
+      --question: #1c2333;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+      letter-spacing: 0;
+    }
+    main {
+      width: min(1180px, calc(100vw - 40px));
+      margin: 0 auto;
+      padding: 36px 0 56px;
+    }
+    h1, h2, h3 { color: #fff; line-height: 1.2; letter-spacing: 0; }
+    h1 { font-size: 2rem; margin: 0 0 8px; }
+    h2 { font-size: 1.35rem; margin: 34px 0 12px; color: var(--accent); }
+    h3 { font-size: 1rem; margin: 24px 0 8px; }
+    p { margin: 10px 0; }
+    a { color: var(--accent); }
+    code {
+      background: rgba(110, 118, 129, 0.18);
+      border: 1px solid rgba(110, 118, 129, 0.22);
+      border-radius: 6px;
+      padding: 0.05rem 0.28rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.92em;
+    }
+    pre {
+      overflow-x: auto;
+      background: #0b1018;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+      color: var(--text);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0 22px;
+      table-layout: fixed;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 10px;
+      vertical-align: top;
+      overflow-wrap: anywhere;
+    }
+    th {
+      background: var(--surface);
+      color: #fff;
+      text-align: left;
+    }
+    ul, ol { padding-left: 1.4rem; }
+    li { margin: 6px 0; }
+    .lede {
+      color: var(--text-muted);
+      font-size: 1rem;
+      margin-bottom: 20px;
+    }
+    .toc {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      padding: 16px;
+      margin: 24px 0 30px;
+    }
+    .toc h2 { margin-top: 0; color: #fff; }
+    .toc a { display: inline-block; margin: 4px 14px 4px 0; }
+    section {
+      border-top: 1px solid var(--border);
+      padding-top: 6px;
+      margin-top: 24px;
+    }
+    .surface {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      padding: 16px;
+      margin: 14px 0;
+    }
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 12px;
+      margin: 16px 0;
+    }
+    .metric {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      padding: 14px;
+    }
+    .metric strong {
+      display: block;
+      color: #fff;
+      font-size: 1.35rem;
+    }
+    .metric span { color: var(--text-muted); font-size: 0.92rem; }
+    .badge {
+      display: inline-block;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 2px 9px;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      margin-right: 6px;
+    }
+    .callout {
+      border-left: 4px solid var(--accent);
+      background: rgba(88, 166, 255, 0.08);
+      padding: 12px 14px;
+      margin: 14px 0;
+    }
+    .warning {
+      border-left-color: var(--orange);
+      background: rgba(210, 153, 34, 0.08);
+    }
+    .decision {
+      border-left-color: var(--green);
+      background: rgba(63, 185, 80, 0.08);
+    }
+    .feedback {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 8px 0 14px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+    .feedback button, .compile button {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #0f1520;
+      color: var(--text);
+      padding: 7px 10px;
+      cursor: pointer;
+    }
+    .feedback button[data-state="up"].active { border-color: var(--green); color: var(--green); }
+    .feedback button[data-state="down"].active { border-color: var(--red); color: var(--red); }
+    .feedback button[data-state="clarify"].active { border-color: var(--orange); color: var(--orange); }
+    textarea, input[type="text"] {
+      width: 100%;
+      min-height: 78px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #0b1018;
+      color: var(--text);
+      padding: 10px;
+      font: inherit;
+    }
+    .feedback-notes, .feedback-yaml { display: none; width: 100%; margin-top: 8px; }
+    .question {
+      border: 1px solid rgba(188, 140, 255, 0.5);
+      border-radius: 8px;
+      background: var(--question);
+      padding: 14px;
+      margin: 16px 0;
+    }
+    .question h3 { margin-top: 0; color: var(--purple); }
+    .option {
+      display: block;
+      margin: 9px 0;
+      padding: 8px;
+      border: 1px solid rgba(139, 148, 158, 0.25);
+      border-radius: 8px;
+      background: rgba(13, 17, 23, 0.45);
+    }
+    .option input { margin-right: 8px; }
+    .option textarea { display: none; margin-top: 8px; min-height: 64px; }
+    .compile {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      padding: 16px;
+      margin-top: 32px;
+    }
+    .compile textarea { min-height: 220px; }
+    .muted { color: var(--text-muted); }
+    .ok { color: var(--green); }
+    .caution { color: var(--orange); }
+    .bad { color: var(--red); }
+    @media (max-width: 760px) {
+      main { width: min(100vw - 24px, 1180px); padding-top: 24px; }
+      table { display: block; overflow-x: auto; }
+      th, td { min-width: 180px; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Downstream Skill Inventory Analysis</h1>
+    <p class="lede">A full compact-history `$analyze-sessions` report on whether downstream repositories need a skill-copy cleanup workflow, an inventory/version-drift workflow, or a combined approach.</p>
+    <p><span class="badge">Skill: analyze-sessions</span><span class="badge">Generated: 2026-05-31</span><span class="badge">Artifact: alignment/analyze-sessions-downstream-skill-inventory.html</span></p>
+  </header>
+
+  <nav class="toc" aria-label="Table of Contents">
+    <h2>Table of Contents</h2>
+    <a href="#executive-summary">Executive Summary</a>
+    <a href="#scope">Scope And Method</a>
+    <a href="#overview-stats">Overview Stats</a>
+    <a href="#patterns">Patterns</a>
+    <a href="#repo-evidence">Repo Evidence</a>
+    <a href="#recommendation">Recommendation</a>
+    <a href="#evidence-matrix">Evidence Matrix</a>
+    <a href="#assumptions">Assumptions</a>
+    <a href="#alternatives">Alternatives</a>
+    <a href="#gates">Review Gates</a>
+  </nav>
+
+  <section id="executive-summary" data-section="Executive Summary">
+    <h2>Executive Summary</h2>
+    <div class="feedback" data-feedback="Executive Summary"></div>
+    <div class="callout decision">
+      <p><strong>Verdict:</strong> build or extend an inventory-first workflow, not a standalone cleanup-first skill.</p>
+      <p>The repo already has the primitives for cleanup and refresh: managed skill markers, per-repo drift detection, `scripts/pack.sh doctor`, `scripts/pack.sh refresh`, global init/update, pins, and update modes. The missing surface is a cross-repository inventory that lists every downstream repo's installed skill copies against canonical source versions and hashes, then proposes safe remediation.</p>
+    </div>
+    <p>The cleanup behavior should exist, but only as an explicit apply mode after the inventory report. Default behavior should be read-only and should distinguish `ok`, `stale`, `unknown`, `pinned`, `missing-source`, non-managed local roots, and active-session reload requirements.</p>
+    <p>For one repository, this is mostly already covered by `$sync` plus `scripts/pack.sh doctor`. For many downstream repos, the right owner is the fleet/control-repo layer, either as a new project-fleet skill such as `skill-install-inventory` or a focused project-fleet lane. The report should use the existing `doctor` and `refresh` mechanics rather than inventing a second cleanup implementation.</p>
+  </section>
+
+  <section id="scope" data-section="Scope And Method">
+    <h2>Scope And Method</h2>
+    <div class="feedback" data-feedback="Scope And Method"></div>
+    <div class="metric-grid">
+      <div class="metric"><strong>11,833</strong><span>compact user-history messages parsed</span></div>
+      <div class="metric"><strong>3,598</strong><span>unique Claude/Codex sessions</span></div>
+      <div class="metric"><strong>684</strong><span>Codex rollout metadata files used for CWD enrichment</span></div>
+      <div class="metric"><strong>2025-12-13 to 2026-05-31</strong><span>UTC history date range</span></div>
+    </div>
+    <p>Sources read:</p>
+    <ul>
+      <li>Full compact Codex prompt history: `~/.codex/history.jsonl`.</li>
+      <li>Full Claude user prompt history: `~/.claude/history.jsonl`.</li>
+      <li>Codex rich session metadata from `~/.codex/sessions/**/*.jsonl`, first-line `session_meta` only, used to enrich Codex prompts with project CWD. Compact history remained the prompt-count source of truth.</li>
+      <li>Current repository files: `docs/packs.md`, `README.md`, `docs/operating-modes.md`, `scripts/skill-links.sh`, `scripts/pack.sh`, `scripts/skill-drift-hook.sh`, mirrored `sync` skill contracts, and `packs/project-fleet` contracts.</li>
+      <li>Current local repo drift command: `scripts/pack.sh doctor`.</li>
+    </ul>
+    <p class="muted">No hidden system/developer prompts, tool output text, or base instruction payloads were counted as user prompt patterns. The counts below come from visible user compact histories.</p>
+  </section>
+
+  <section id="overview-stats" data-section="Overview Stats">
+    <h2>Overview Stats</h2>
+    <div class="feedback" data-feedback="Overview Stats"></div>
+    <table>
+      <thead><tr><th>Source</th><th>User messages</th><th>Sessions</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>Claude</td><td>9,902</td><td>2,982</td><td>Largest source; includes older workflow and skill-library history.</td></tr>
+        <tr><td>Codex</td><td>1,931</td><td>616</td><td>Enriched with 684 rollout metadata records where session IDs matched.</td></tr>
+        <tr><td>Total</td><td>11,833</td><td>3,598</td><td>Full compact user-history scope, not a sample.</td></tr>
+      </tbody>
+    </table>
+    <table>
+      <thead><tr><th>Top project</th><th>Messages</th><th>Relevance to this question</th></tr></thead>
+      <tbody>
+        <tr><td>`/home/georgeqle/projects/tools/dev/agentic-skills`</td><td>447</td><td>Primary skill-library and pack-management evidence source.</td></tr>
+        <tr><td>`/home/georgeqle/projects/tools/dev/claude-skills`</td><td>347</td><td>Older skill-library history; includes symlink/copy and context-pollution discussion.</td></tr>
+        <tr><td>`/home/georgeqle/projects`</td><td>407</td><td>Cross-project and install-management prompts.</td></tr>
+        <tr><td>`/home/georgeqle/projects/web/dev/gblock-party-redux`</td><td>not top-15 total</td><td>Contains explicit symlink vs copy context-usage question.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="patterns" data-section="Categorized Patterns">
+    <h2>Categorized Patterns</h2>
+    <div class="feedback" data-feedback="Categorized Patterns"></div>
+    <table>
+      <thead><tr><th>Pattern</th><th>Count</th><th>Sessions</th><th>Source split</th><th>Interpretation</th></tr></thead>
+      <tbody>
+        <tr><td>Skill/pack plus copy/version/downstream/inventory/cleanup concepts</td><td>116</td><td>101</td><td>Combined derived category</td><td>Directly supports a durable skill-install drift/inventory surface.</td></tr>
+        <tr><td>Pack install, refresh, reload, missing-skill, skill visibility</td><td>62</td><td>57</td><td>30 Codex / 32 Claude</td><td>Users repeatedly need help understanding how installs become visible and when refresh/reload is needed.</td></tr>
+        <tr><td>Managed copies, symlinks, real-file installs, context pollution</td><td>21</td><td>19</td><td>6 Codex / 15 Claude</td><td>Directly supports preserving optionality between track-latest copies and pinned/frozen versions.</td></tr>
+        <tr><td>Canonical version, source drift, stale installs, pinned/latest</td><td>44</td><td>40</td><td>15 Codex / 29 Claude</td><td>Version drift is a recurring concern, but usually as a report/check before action.</td></tr>
+        <tr><td>Downstream or project-local repo scope</td><td>21</td><td>20</td><td>13 Codex / 8 Claude</td><td>The cross-repo dimension is real but narrower than the generic install/visibility pattern.</td></tr>
+        <tr><td>Inventory/audit/list/status/doctor language</td><td>941</td><td>682</td><td>117 Codex / 824 Claude</td><td>Broad and noisy category; supports preference for report-first workflows but is not all skill-install related.</td></tr>
+        <tr><td>Cleanup/prune/remove/repair language</td><td>130</td><td>125</td><td>16 Codex / 114 Claude</td><td>Broad and noisy; direct skill-install cleanup evidence is much smaller than inventory/visibility evidence.</td></tr>
+        <tr><td>`sync` skill usage or sync-freshness requests</td><td>48</td><td>44</td><td>37 Codex / 11 Claude</td><td>Per-repo status and freshness checks already have an owner surface.</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Representative Examples</h3>
+    <table>
+      <thead><tr><th>Date</th><th>Source</th><th>Project</th><th>Example</th><th>Pattern</th></tr></thead>
+      <tbody>
+        <tr><td>2026-05-31</td><td>Codex</td><td>`agentic-skills`</td><td>`$analyze-sessions should we have a skill which cleans up all copies ... Or have an inventory skill which can list the current versions and the current canonical version?`</td><td>Current direct request.</td></tr>
+        <tr><td>2026-05-30</td><td>Codex</td><td>`agentic-skills`</td><td>`canonically, are we using symlinks or copies of skills in the downstream repos?`</td><td>Copy/symlink policy.</td></tr>
+        <tr><td>2026-05-30</td><td>Codex</td><td>`agentic-skills`</td><td>`downstream repos should commit .agents/project.json, not generated .claude/skills or .codex/skills; those are recreated by $pack / scripts/pack.sh refresh?`</td><td>Generated roots and safe refresh boundary.</td></tr>
+        <tr><td>2026-05-29</td><td>Claude</td><td>`agentic-skills`</td><td>`... transitioning away from symlinks toward copies ... update a certain skill and then the downstream skill can't detect that it is not the canonical skill ... optionality there`</td><td>Version drift and pin/latest tradeoff.</td></tr>
+        <tr><td>2026-05-29</td><td>Claude</td><td>`gblock-party-redux`</td><td>`is it better to do symlinks or copy? From a context usage perspective, which is better to avoid context pollution?`</td><td>Copy model and context cost.</td></tr>
+        <tr><td>2026-04-13</td><td>Codex</td><td>`agentic-skills`</td><td>`what's the skill to install packs and will that skill clean up the stubs per project once it's been invoked?`</td><td>Install cleanup expectation.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="repo-evidence" data-section="Repository Evidence">
+    <h2>Repository Evidence</h2>
+    <div class="feedback" data-feedback="Repository Evidence"></div>
+    <table>
+      <thead><tr><th>Artifact</th><th>Observed fact</th><th>Decision relevance</th></tr></thead>
+      <tbody>
+        <tr><td>`docs/packs.md`</td><td>Managed installs are copies stamped with `.agentic-skills-managed`; marker records `source_version` and `source_sha`; `doctor` reports drift; `refresh` re-copies installs; pins are frozen symlinks.</td><td>The repo already has the per-repo model needed for inventory and safe refresh.</td></tr>
+        <tr><td>`scripts/skill-links.sh`</td><td>`skill_install_status` reports `ok`, `stale`, `unknown`, `missing-source`, `pinned`, or `not-managed`. Its own comment says local edits inside installed copies are intentionally out of scope.</td><td>A new inventory workflow should reuse this engine and add local-edit detection only if needed.</td></tr>
+        <tr><td>`scripts/pack.sh doctor`</td><td>Read-only drift report for current project-local managed installs; exits non-zero when stale and prints `Fix: scripts/pack.sh refresh`.</td><td>Cleanup should call existing refresh after report approval, not reimplement deletion logic.</td></tr>
+        <tr><td>Mirrored `sync` skills</td><td>`$sync` and `/sync` already run `scripts/pack.sh doctor`, fold stale installs into the status report, and explicitly must not mutate during plain sync.</td><td>Per-repo inventory exists; cross-repo fleet inventory is the missing layer.</td></tr>
+        <tr><td>`scripts/skill-drift-hook.sh`</td><td>Opt-in session-start hook warns by default or auto-refreshes when preferences/project update mode enable it.</td><td>Automatic cleanup already exists as an opt-in trigger, so a new cleanup-first skill would duplicate policy.</td></tr>
+        <tr><td>`packs/project-fleet`</td><td>Project-fleet is the existing pack for central control repositories that coordinate many downstream repositories with status dashboards, guarded batches, and blocker ledgers.</td><td>Fleet-level skill install inventory belongs here or should be implemented as a project-fleet lane.</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Current Repo Doctor Smoke</h3>
+    <p>I ran `scripts/pack.sh doctor` in this repository as a non-mutating smoke. It reported the current project update mode as `warn (default)` and found tracked local skill roots with mixed statuses:</p>
+    <ul>
+      <li>17 `unknown` installs: run refresh once to enable drift tracking.</li>
+      <li>13 `missing-source` installs: recorded canonical source path no longer exists.</li>
+      <li>2 `stale` installs: `investigate` for Claude and Codex, both `v0.1 -> v0.1` by version but changed by content hash.</li>
+      <li>0 automatic changes were made.</li>
+    </ul>
+    <div class="callout warning">
+      <p>This is strong practical evidence for inventory-first UX: even in the master repo, the actionable answer is not "delete all copies." It is "show status, classify the reason, then choose refresh, pin, ignore, or repair source paths."</p>
+    </div>
+  </section>
+
+  <section id="recommendation" data-section="Recommendation">
+    <h2>Recommendation</h2>
+    <div class="feedback" data-feedback="Recommendation"></div>
+    <h3>Recommended Shape</h3>
+    <p>Create or extend a fleet-level, report-first workflow tentatively named `skill-install-inventory` or `skill-drift-inventory`. It should live in the project-fleet/gitops boundary:</p>
+    <ul>
+      <li><strong>Project-fleet owner</strong> if the skill scans many downstream repositories from a control repo.</li>
+      <li><strong>Gitops/sync owner</strong> if the change only improves the existing per-repo `$sync` report.</li>
+    </ul>
+    <p>The durable gap is fleet inventory. The cleanup primitive already exists as `scripts/pack.sh refresh` for project-local pack installs and init/update for global installs.</p>
+
+    <h3>Default Behavior</h3>
+    <ul>
+      <li>Read-only by default.</li>
+      <li>Accept explicit repo roots or discover a project-fleet manifest when present.</li>
+      <li>For each repo, report `.agents/project.json`, enabled packs, enabled individual skills, `.claude/skills` and `.codex/skills` managed roots, installed `source_version`, canonical version, recorded and current hashes, status, pinned state, and reload guidance.</li>
+      <li>Classify actions as `refresh`, `pin acknowledged`, `missing source needs migration`, `unknown needs one refresh`, `non-managed skip`, or `manual review`.</li>
+      <li>Do not stage or commit generated `.claude/skills/**` or `.codex/skills/**`; keep `.agents/project.json` as the committed project designation.</li>
+    </ul>
+
+    <h3>Apply Mode</h3>
+    <p>Add cleanup only as an explicit apply mode after a report:</p>
+    <ul>
+      <li>`--apply refresh-stale`: run `scripts/pack.sh refresh` only in repos with managed installs and `.agents/project.json`.</li>
+      <li>`--apply refresh-unknown`: allow one-time marker upgrade for unknown installs.</li>
+      <li>Skip pinned installs unless an explicit unpin policy is provided.</li>
+      <li>Skip non-managed local directories and report them as user-owned.</li>
+      <li>Stop on missing source paths unless a migration map is supplied.</li>
+    </ul>
+
+    <h3>Ranked Recommendations</h3>
+    <table>
+      <thead><tr><th>Rank</th><th>Pattern</th><th>Frequency</th><th>Recommendation type</th><th>Suggested surface</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Need to know which skill copies are stale across repos</td><td>116 relevant messages / 101 sessions</td><td>Skill or project-fleet lane</td><td>`skill-install-inventory` report-first workflow.</td></tr>
+        <tr><td>2</td><td>Per-repo install drift and sync status</td><td>48 sync-related sessions plus current contracts</td><td>Existing skill extension</td><td>Keep `$sync`/`/sync` as per-repo owner; ensure output is easy to read.</td></tr>
+        <tr><td>3</td><td>Cleanup/refresh after inventory</td><td>Direct cleanup prompts are sparse; refresh commands already exist</td><td>Explicit apply mode</td><td>Use `scripts/pack.sh refresh`, `init` update, and existing update modes.</td></tr>
+        <tr><td>4</td><td>Pin/latest optionality</td><td>Explicit May 29 tradeoff prompt plus docs</td><td>Standing policy in workflow</td><td>Never auto-overwrite pinned installs; show frozen versions clearly.</td></tr>
+        <tr><td>5</td><td>Local edits to installed copies</td><td>Repo engine says out of scope</td><td>Optional detector</td><td>Add target-copy hash comparison only if downstream repos may hand-edit managed roots.</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Highest-Impact Automations</h3>
+    <ol>
+      <li>Fleet inventory report over downstream repos: avoids manual `doctor` runs and status copy/paste across many projects.</li>
+      <li>Action plan grouping: `refresh now`, `pinned`, `missing-source`, `unknown marker`, and `manual review` buckets.</li>
+      <li>Safe apply mode that delegates to `scripts/pack.sh refresh` with dry-run/report output first.</li>
+      <li>Integration with `$sync` so single-repo and fleet reports use one vocabulary.</li>
+      <li>Optional local-edit detector for managed roots, because the current drift engine intentionally does not detect edits to the copied install itself.</li>
+    </ol>
+  </section>
+
+  <section id="evidence-matrix" data-section="Evidence Matrix">
+    <h2>Evidence Matrix</h2>
+    <div class="feedback" data-feedback="Evidence Matrix"></div>
+    <table>
+      <thead><tr><th>Claim</th><th>Evidence</th><th>Inference</th><th>Confidence</th><th>Assumption status</th><th>Decision impact</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Inventory should be primary.</td>
+          <td>Current request asks cleanup vs inventory. Full compact histories show 116 skill-install/version/copy relevant messages across 101 sessions; current repo `doctor` produces mixed statuses rather than a single cleanup answer.</td>
+          <td>The user need is to understand state and safe action. Cleanup is downstream of classification.</td>
+          <td>High</td>
+          <td>Evidence-backed for workflow shape; actual downstream stale count not yet scanned.</td>
+          <td>Design default as read-only inventory.</td>
+        </tr>
+        <tr>
+          <td>Standalone automatic cleanup would be risky.</td>
+          <td>Docs define pinned installs as frozen; the May 29 prompt explicitly wants optionality for people who prefer a version. `scripts/skill-drift-hook.sh` already supports opt-in auto-refresh.</td>
+          <td>Blind cleanup would erase a valid "pinned/frozen" choice or duplicate existing update-mode behavior.</td>
+          <td>High</td>
+          <td>Evidence-backed.</td>
+          <td>Cleanup must be explicit apply mode, not default.</td>
+        </tr>
+        <tr>
+          <td>Per-repo status already has an owner.</td>
+          <td>`sync` skills run `scripts/pack.sh doctor`, report stale/unknown/pinned installs, and do not mutate. `scripts/pack.sh doctor` is read-only.</td>
+          <td>A new single-repo skill would be mostly duplicate; improvements should extend `$sync` or `doctor` output.</td>
+          <td>High</td>
+          <td>Evidence-backed.</td>
+          <td>Do not create redundant per-repo cleanup skill.</td>
+        </tr>
+        <tr>
+          <td>Fleet inventory is the missing layer.</td>
+          <td>Project-fleet exists for control repos managing many downstream repos. `doctor` scans only the current project. The user asks about downstream repos not this master repo.</td>
+          <td>The cross-repo traversal, aggregation, and action-plan reporting do not currently appear as a dedicated skill surface.</td>
+          <td>Medium-high</td>
+          <td>Evidence-backed for gap; needs actual downstream root list to validate exact implementation scope.</td>
+          <td>Put the new workflow in project-fleet or a project-fleet-adjacent pack.</td>
+        </tr>
+        <tr>
+          <td>The existing drift engine is good enough for canonical moved, but not complete inventory.</td>
+          <td>`scripts/skill-links.sh` says `skill_install_status` detects canonical moved, not local edits to the install itself.</td>
+          <td>Inventory should surface this caveat and optionally add target-copy hashing when needed.</td>
+          <td>High</td>
+          <td>Evidence-backed.</td>
+          <td>Scope a local-edit check as optional or Phase 2.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="assumptions" data-section="Assumptions And Confidence">
+    <h2>Assumptions And Confidence</h2>
+    <div class="feedback" data-feedback="Assumptions And Confidence"></div>
+    <table>
+      <thead><tr><th>Conclusion</th><th>Confidence</th><th>What could change it</th></tr></thead>
+      <tbody>
+        <tr><td>Inventory-first is the right default.</td><td>High</td><td>If downstream repos are all disposable generated repos where no one pins or edits skill roots, cleanup-first could be acceptable for that narrow fleet.</td></tr>
+        <tr><td>Use existing `doctor`/`refresh` primitives.</td><td>High</td><td>If those scripts cannot run from downstream repos due launcher resolution issues, the inventory skill must repair launcher resolution first.</td></tr>
+        <tr><td>New cross-repo surface belongs with project-fleet.</td><td>Medium-high</td><td>If the desired scope is only "current repo before each sync", then extending `$sync` is enough and no new fleet skill is needed.</td></tr>
+        <tr><td>Actual downstream stale volume is unknown.</td><td>Medium</td><td>A real scan over the intended repo roots could show most repos already current, shifting this from a skill to a recurring check.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="alternatives" data-section="Alternatives Considered">
+    <h2>Alternatives Considered</h2>
+    <div class="feedback" data-feedback="Alternatives Considered"></div>
+    <table>
+      <thead><tr><th>Alternative</th><th>Pros</th><th>Cons</th><th>Verdict</th></tr></thead>
+      <tbody>
+        <tr><td>Standalone cleanup skill</td><td>Simple mental model for "make my repos current."</td><td>Risky default; duplicates `refresh`; may override pins; hides diagnosis.</td><td>Reject as primary. Keep as explicit apply mode.</td></tr>
+        <tr><td>Only document existing commands</td><td>No new skill maintenance.</td><td>Does not solve multi-repo inventory or action grouping.</td><td>Insufficient for downstream fleet use.</td></tr>
+        <tr><td>Extend `$sync` only</td><td>Strong per-repo owner; already checks drift.</td><td>Sync is scoped to one repo; scanning many downstream repos would bloat a daily primitive.</td><td>Good for per-repo polish, not fleet inventory.</td></tr>
+        <tr><td>Project-fleet lane or new skill</td><td>Matches control-repo/downstream model; can aggregate, batch, and guard mutations.</td><td>Needs repo-root discovery and clear apply safety.</td><td>Recommended.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="gates" data-section="Review Gates">
+    <h2>Review Gates</h2>
+    <div class="feedback" data-feedback="Review Gates"></div>
+
+    <div class="question" data-question="evidence_coverage" data-section-title="Review Gates" data-gate-type="evidence-coverage">
+      <h3>Evidence Coverage Gate</h3>
+      <p>Is the evidence sufficient to choose an inventory-first workflow shape?</p>
+      <label class="option"><input type="radio" name="evidence_coverage" value="Approve inventory-first based on current evidence">Approve inventory-first based on current evidence<textarea placeholder="Additional notes"></textarea></label>
+      <label class="option"><input type="radio" name="evidence_coverage" value="Scan actual downstream repo roots before deciding">Scan actual downstream repo roots before deciding<textarea placeholder="Additional notes"></textarea></label>
+      <label class="option"><input type="radio" name="evidence_coverage" value="Other / None of the above">Other / None of the above<textarea placeholder="Describe the evidence standard or missing evidence"></textarea></label>
+      <label class="option"><input type="radio" name="evidence_coverage" value="Need clarification">Need clarification<textarea placeholder="What is unclear?"></textarea></label>
+    </div>
+
+    <div class="question" data-question="candidate_verdict" data-section-title="Review Gates" data-gate-type="candidate-verdict">
+      <h3>Candidate Verdict Gate</h3>
+      <p>Which candidate should move forward?</p>
+      <label class="option"><input type="radio" name="candidate_verdict" value="Create or extend fleet-level skill-install inventory with explicit apply modes">Create or extend fleet-level skill-install inventory with explicit apply modes<textarea placeholder="Additional notes"></textarea></label>
+      <label class="option"><input type="radio" name="candidate_verdict" value="Only extend existing sync and doctor surfaces">Only extend existing sync and doctor surfaces<textarea placeholder="Additional notes"></textarea></label>
+      <label class="option"><input type="radio" name="candidate_verdict" value="Create a cleanup-first skill">Create a cleanup-first skill<textarea placeholder="Additional notes"></textarea></label>
+      <label class="option"><input type="radio" name="candidate_verdict" value="Other / None of the above">Other / None of the above<textarea placeholder="Describe the preferred candidate"></textarea></label>
+      <label class="option"><input type="radio" name="candidate_verdict" value="Need clarification">Need clarification<textarea placeholder="What is unclear?"></textarea></label>
+    </div>
+
+    <div class="question" data-question="scope_non_goals" data-section-title="Review Gates" data-gate-type="scope-non-goals">
+      <h3>Scope Gate</h3>
+      <p>What should the initial implementation be allowed to mutate?</p>
+      <label class="option"><input type="radio" name="scope_non_goals" value="Report-only first; no downstream repo mutation">Report-only first; no downstream repo mutation<textarea placeholder="Additional notes"></textarea></label>
+      <label class="option"><input type="radio" name="scope_non_goals" value="Report plus explicit apply mode for refresh only">Report plus explicit apply mode for refresh only<textarea placeholder="Additional notes"></textarea></label>
+      <label class="option"><input type="radio" name="scope_non_goals" value="Allow cleanup to remove stale managed roots after confirmation">Allow cleanup to remove stale managed roots after confirmation<textarea placeholder="Additional notes"></textarea></label>
+      <label class="option"><input type="radio" name="scope_non_goals" value="Other / None of the above">Other / None of the above<textarea placeholder="Describe mutation scope"></textarea></label>
+      <label class="option"><input type="radio" name="scope_non_goals" value="Need clarification">Need clarification<textarea placeholder="What is unclear?"></textarea></label>
+    </div>
+
+    <div class="question" data-question="proposed_file_changes" data-section-title="Review Gates" data-gate-type="proposed-file-changes">
+      <h3>Proposed File Changes Gate</h3>
+      <p>What artifact should be produced after this report is approved?</p>
+      <label class="option"><input type="radio" name="proposed_file_changes" value="Write a spec or plan before creating a skill">Write a spec or plan before creating a skill<textarea placeholder="Additional notes"></textarea></label>
+      <label class="option"><input type="radio" name="proposed_file_changes" value="Implement the project-fleet inventory skill directly">Implement the project-fleet inventory skill directly<textarea placeholder="Additional notes"></textarea></label>
+      <label class="option"><input type="radio" name="proposed_file_changes" value="Patch sync and pack documentation only">Patch sync and pack documentation only<textarea placeholder="Additional notes"></textarea></label>
+      <label class="option"><input type="radio" name="proposed_file_changes" value="Other / None of the above">Other / None of the above<textarea placeholder="Describe desired artifact destination"></textarea></label>
+      <label class="option"><input type="radio" name="proposed_file_changes" value="Need clarification">Need clarification<textarea placeholder="What is unclear?"></textarea></label>
+    </div>
+  </section>
+
+  <section class="compile" id="compile" data-section="Compile Answers">
+    <h2>Compile Answers</h2>
+    <div class="feedback" data-feedback="Compile Answers"></div>
+    <p class="muted">Use feedback-only YAML for concerns or clarification before final approval. Use final answers when every required gate has a selected option.</p>
+    <p>
+      <button type="button" id="compileFeedback">Compile Feedback YAML</button>
+      <button type="button" id="compileAnswers">Compile Answers</button>
+      <button type="button" id="copyYaml">Copy YAML</button>
+      <span id="compileStatus" class="muted"></span>
+    </p>
+    <textarea id="yamlOut" readonly aria-label="Compiled YAML"></textarea>
+  </section>
+</main>
+
+<script>
+(() => {
+  const alignmentPage = "alignment/analyze-sessions-downstream-skill-inventory.html";
+  const feedbackStates = new Map();
+
+  function yamlEscape(value) {
+    const text = String(value || "");
+    if (!text.includes("\n") && !text.includes(":") && !text.includes("#") && text.trim() === text) {
+      return text ? JSON.stringify(text) : "\"\"";
+    }
+    return "|-\n" + text.split("\n").map(line => "    " + line).join("\n");
+  }
+
+  function makeFeedbackControl(container) {
+    const section = container.dataset.feedback || "Unknown Section";
+    container.innerHTML = '<span>Section feedback:</span>' +
+      '<button type="button" data-state="up" aria-label="Approve section">Thumbs up</button>' +
+      '<button type="button" data-state="down" aria-label="Flag section concern">Thumbs down</button>' +
+      '<button type="button" data-state="clarify" aria-label="Clarification needed">Clarification needed</button>' +
+      '<div class="feedback-notes"><textarea placeholder="Optional section feedback notes"></textarea><p><button type="button" class="local-feedback">Compile Feedback YAML</button> <button type="button" class="local-copy">Copy YAML</button> <span class="local-status muted"></span></p><textarea class="feedback-yaml" readonly></textarea></div>';
+    const buttons = Array.from(container.querySelectorAll("button[data-state]"));
+    const notesWrap = container.querySelector(".feedback-notes");
+    const notes = notesWrap.querySelector("textarea");
+    const yamlBox = container.querySelector(".feedback-yaml");
+    const localStatus = container.querySelector(".local-status");
+    buttons.forEach(button => {
+      button.addEventListener("click", () => {
+        const selected = button.classList.contains("active") ? null : button.dataset.state;
+        buttons.forEach(b => b.classList.remove("active"));
+        if (selected) {
+          button.classList.add("active");
+          notesWrap.style.display = "block";
+          feedbackStates.set(section, { section, feedback: selected, notes: notes.value || "" });
+        } else {
+          notesWrap.style.display = "none";
+          yamlBox.style.display = "none";
+          feedbackStates.delete(section);
+        }
+      });
+    });
+    notes.addEventListener("input", () => {
+      const current = feedbackStates.get(section);
+      if (current) current.notes = notes.value;
+    });
+    container.querySelector(".local-feedback").addEventListener("click", () => {
+      const current = feedbackStates.get(section);
+      if (!current) return;
+      const yaml = feedbackYaml([current], unansweredQuestions().length);
+      yamlBox.value = yaml;
+      yamlBox.style.display = "block";
+      copyText(yaml, localStatus);
+    });
+    container.querySelector(".local-copy").addEventListener("click", () => {
+      if (yamlBox.value) copyText(yamlBox.value, localStatus);
+    });
+  }
+
+  function selectedQuestions() {
+    return Array.from(document.querySelectorAll(".question")).map(q => {
+      const name = q.dataset.question;
+      const checked = q.querySelector(`input[name="${name}"]:checked`);
+      const option = checked ? checked.closest(".option") : null;
+      const notes = option ? option.querySelector("textarea").value : "";
+      let status = "answered";
+      if (checked && checked.value === "Other / None of the above") status = "other";
+      if (checked && checked.value === "Need clarification") status = "needs-clarification";
+      return {
+        question: name,
+        section: q.dataset.sectionTitle || "Review Gates",
+        gate_type: q.dataset.gateType || "gate",
+        status,
+        answer: checked ? checked.value : "",
+        notes
+      };
+    });
+  }
+
+  function unansweredQuestions() {
+    return selectedQuestions().filter(q => !q.answer);
+  }
+
+  function feedbackYaml(items, unanswered) {
+    const lines = [
+      `alignment_page: ${alignmentPage}`,
+      "feedback_status: revision-request",
+      "approval_status: not-approved",
+      `unanswered_required_questions: ${unanswered}`,
+      "section_feedback:"
+    ];
+    if (!items.length) lines.push("  []");
+    items.forEach(item => {
+      const action = item.feedback === "up" ? "accept-as-is" : item.feedback === "down" ? "investigate-and-revise" : "clarify-before-approval";
+      lines.push(`  - section: ${yamlEscape(item.section)}`);
+      lines.push(`    feedback: ${item.feedback === "clarify" ? "needs-clarification" : item.feedback}`);
+      lines.push(`    requested_agent_action: ${action}`);
+      if (item.notes) lines.push(`    notes: ${yamlEscape(item.notes)}`);
+    });
+    return lines.join("\n");
+  }
+
+  function answersYaml() {
+    const questions = selectedQuestions();
+    const feedback = Array.from(feedbackStates.values());
+    const lines = [
+      `alignment_page: ${alignmentPage}`,
+      "approval_status: ready-for-agent-review",
+      "gate_answers:"
+    ];
+    questions.forEach(q => {
+      lines.push(`  - section: ${yamlEscape(q.section)}`);
+      lines.push(`    gate_type: ${q.gate_type}`);
+      lines.push(`    status: ${q.status}`);
+      lines.push(`    answer: ${yamlEscape(q.answer)}`);
+      if (q.notes) lines.push(`    notes: ${yamlEscape(q.notes)}`);
+    });
+    lines.push("section_feedback:");
+    if (!feedback.length) {
+      lines.push("  []");
+    } else {
+      feedback.forEach(item => {
+        lines.push(`  - section: ${yamlEscape(item.section)}`);
+        lines.push(`    feedback: ${item.feedback === "clarify" ? "needs-clarification" : item.feedback}`);
+        if (item.notes) lines.push(`    notes: ${yamlEscape(item.notes)}`);
+      });
+    }
+    return lines.join("\n");
+  }
+
+  function copyText(text, statusNode) {
+    const done = () => { if (statusNode) statusNode.textContent = "Copied"; };
+    const fail = () => {
+      if (statusNode) statusNode.textContent = "Copy unavailable; select the YAML manually.";
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done).catch(fail);
+    } else {
+      fail();
+    }
+  }
+
+  document.querySelectorAll(".feedback").forEach(makeFeedbackControl);
+  document.querySelectorAll(".option input").forEach(input => {
+    input.addEventListener("change", () => {
+      const q = input.closest(".question");
+      q.querySelectorAll(".option textarea").forEach(t => t.style.display = "none");
+      const textarea = input.closest(".option").querySelector("textarea");
+      if (textarea) textarea.style.display = "block";
+    });
+  });
+
+  const yamlOut = document.getElementById("yamlOut");
+  const status = document.getElementById("compileStatus");
+  document.getElementById("compileFeedback").addEventListener("click", () => {
+    const yaml = feedbackYaml(Array.from(feedbackStates.values()), unansweredQuestions().length);
+    yamlOut.value = yaml;
+    status.textContent = Array.from(feedbackStates.values()).length ? "Feedback YAML compiled." : "No section feedback selected; YAML records no feedback.";
+    copyText(yaml, status);
+  });
+  document.getElementById("compileAnswers").addEventListener("click", () => {
+    const missing = unansweredQuestions();
+    if (missing.length) {
+      status.textContent = `${missing.length} required question(s) remaining.`;
+      const firstQuestion = missing[0] && document.querySelector(`[data-question="${missing[0].question}"]`);
+      (firstQuestion || document.querySelector(".question")).scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+    const yaml = answersYaml();
+    yamlOut.value = yaml;
+    status.textContent = "Final answer YAML compiled.";
+    copyText(yaml, status);
+  });
+  document.getElementById("copyYaml").addEventListener("click", () => {
+    if (yamlOut.value) copyText(yamlOut.value, status);
+  });
+})();
+</script>
+</body>
+</html>
