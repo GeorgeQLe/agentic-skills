@@ -28,7 +28,7 @@ AFPS here means the product workflow from raw idea through concept scoping, ICP/
    - Use `scripts/pack.sh list-packs` when available to determine enabled packs; do not grep `.agents/project.json` directly when choosing installed-pack routes.
 3. Inspect AFPS evidence from existing artifacts:
    - Product-path state: `research/.progress.yaml`, including legacy `active_path` normalized mentally to `active_paths`.
-   - Concept artifacts: `research/concept-brief*.md`, app-scoped `research/*/concept-brief*.md`, and concept/interview notes.
+   - Concept artifacts: `research/idea-brief*.md`, app-scoped `research/*/idea-brief*.md`, and concept/interview notes.
    - Discovery artifacts: ICP docs, competitive analysis, customer feedback, journey/lifecycle maps, value-prop canvas, positioning, lean canvas, market evidence, and assumption/risk trackers.
    - Lifecycle/growth artifacts: onboarding, activation, retention, conversion, monetization, GTM, growth model, metrics, PMF, and experiment docs.
    - Product/spec artifacts: `specs/`, `spec.md`, app/feature specs, UX/UI/prototype/UAT/consolidation notes, and alignment pages under `alignment/`.

@@ -147,7 +147,7 @@
   - [x] product-design `prototype` (claude + codex)
   - [x] product-design `spec-interview` (claude + codex)
   - [x] research-admin `research-roadmap` (claude + codex)
-  - [ ] `global/codex/afps-status/SKILL.md` — discovery glob → `research/idea-brief*.md`
+  - [x] `global/codex/afps-status/SKILL.md` — discovery glob → `research/idea-brief*.md`
 - Phase 4 — Tests:
   - [ ] `tests/layer4/setups/tier23-global-workflows.setup.ts` — update `outputPath` (line 487), prompt text (488), and both regex patterns (497, 501) to `idea-brief-poketo-core(.md|-interview.md)`.
 - Phase 5 — Versioning (**OPEN DECISION — consumers only; producer done**): producer `idea-scope-brief` already bumped v0.6 → v0.7 (archived + CHANGELOG entry superseding the v0.6 "filename unchanged" note) as part of Phase 1, so each shippable unit stayed valid. Remaining open decision is the consumer SKILL.md files: strict CLAUDE.md rule = archive + decimal bump + CHANGELOG entry for each changed consumer; alternative = treat consumer edits as a coordinated mechanical sync without bumps. Resolve which before executing this phase.

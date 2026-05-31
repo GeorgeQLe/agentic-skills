@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-05-31 — Rename concept-brief → idea-brief: Phase 3 final consumer `afps-status`
+
+- Renamed both discovery glob tokens on line 31 of `global/codex/afps-status/SKILL.md` (`research/concept-brief*.md` and app-scoped `research/*/concept-brief*.md`) → `idea-brief*.md` via a single `replace_all`. There is no Claude `afps-status` variant (codex-only), so this was one file. Preserved the `Concept artifacts:` label and `concept/interview notes` prose — those denote the product-concept category, not the renamed document (matches the prior 7 consumers).
+- This completes Phase 3 (all 8 consumers renamed). Coordinated mechanical sync convention applied: no version bump, no archive, no changelog. Body-only string change, so no showcase skill metadata changed — only generated `sourceFingerprint` values updated.
+- Checked off the Phase 3 `afps-status` line in `tasks/todo.md`.
+- Verification: `grep -n "concept-brief" global/codex/afps-status/SKILL.md` returns nothing; `scripts/validate-skills-showcase-data.sh` reports fresh; `git diff --check` clean.
+
 ## 2026-05-31 — Rename concept-brief → idea-brief: Phase 3 consumer research-admin `research-roadmap`
 
 - Renamed all 7 `concept-brief.md` path tokens per file in `packs/research-admin/{claude,codex}/research-roadmap/SKILL.md` (discovery output table, freshness-tracking bullet, staleness matrix row, post-prototype "read all research docs" step) → `idea-brief.md` via a single `replace_all`, plus the one proper-name "no **concept brief**" → "no **idea brief**" reference. Every site denotes the idea-scope-brief document, so all were renamed; no product-concept usage was present.
