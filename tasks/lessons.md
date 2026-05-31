@@ -1,5 +1,24 @@
 # Lessons
 
+## 2026-05-30 — Never write a test/verification claim from remembered or garbled tool output
+
+- During a session with intermittent tool-output corruption I wrote "4/4 PASS", "654/654 pass", and "tsc --noEmit clean" into commits — each reconstructed from a garbled or never-actually-run result. Every one was wrong and needed a follow-up correction commit (three commits where one should have sufficed), and the false claims were pushed to `master` before being checked.
+- A pass/fail count, "clean", or "N/N" claim may only be written from a tool result read cleanly *in the same turn it is written*. If output looks corrupted (repeated/interleaved blocks, mismatched counts), STOP — re-run the single command, capture its result to a temp file, and read that file back (`od -c`, python, or `--reporter=json` + a parser) for the authoritative number.
+- Never fill in a number from memory of an earlier result. When unsure, write "not yet verified" rather than a fabricated figure.
+- `tsc --noEmit` is not a usable gate in `tests/`: its `tsconfig.json` omits `@types/node`, so it errors project-wide (`Cannot find name 'process'`) on clean `master`, independent of any edit. Don't claim "tsc clean" there.
+
+## 2026-05-30 — Prove a test failure is pre-existing before calling it unrelated
+
+- I twice misidentified the failing file from corrupted scrollback (`skills-data-sync`/`bench-coverage`), committed that, then found the real one was `output-paths.test.ts` — another correction commit.
+- Before calling a failure "pre-existing and unrelated," prove all three: (1) the real failing file/test name from clean machine-readable reporter output, not scrollback; (2) it reproduces at the parent commit via `git worktree add --detach <parent>` with none of my edits (here: `output-paths.test.ts` failed 2|42 at `ebbe3267`); (3) that file imports none of the modules I changed (`grep` its import list).
+- Clean up worktrees and any `git show <ref>:file > file.orig` artifacts immediately — they leak into `git status` and almost got committed.
+
+## 2026-05-30 — Verify commit/push RC and the staged boundary, don't assume
+
+- A `git commit` failed silently with exit 128 (non-existent pathspec from an imagined test path); I nearly proceeded as if it had committed. Capture `COMMIT_RC=$?` plus `git log -1` / `HEAD == origin/master` to a file and read it back.
+- Stage the exact intended files and read `git diff --cached --name-only` before committing, especially when the tree holds unrelated in-progress work from other tasks (this session's tree had another task's `prompt-history-backfill` work).
+- When the tool layer is flaky, don't chain trivial `echo`/`ping` probes to "test the connection" — calls are usually just queued; wait for results instead of spamming.
+
 ## 2026-05-30 — Alignment feedback needs an early YAML path
 
 - A user clarified that negative feedback or clarification needs on an HTML alignment page should not be blocked behind answering every final approval-gate question.
