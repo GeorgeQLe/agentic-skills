@@ -15,6 +15,7 @@
     "analyze-sessions": "session-analytics",
     "ship": "exec-loop",
     "expert-review": "code-review",
-    "investigate": "code-debug"
+    "investigate": "code-debug",
+    "session-triage": "session-analytics"
   }
 }
