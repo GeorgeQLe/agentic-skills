@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-05-31 — Rename concept-brief → idea-brief: Phase 3 consumer research-admin `research-roadmap`
+
+- Renamed all 7 `concept-brief.md` path tokens per file in `packs/research-admin/{claude,codex}/research-roadmap/SKILL.md` (discovery output table, freshness-tracking bullet, staleness matrix row, post-prototype "read all research docs" step) → `idea-brief.md` via a single `replace_all`, plus the one proper-name "no **concept brief**" → "no **idea brief**" reference. Every site denotes the idea-scope-brief document, so all were renamed; no product-concept usage was present.
+- Coordinated mechanical sync convention applied (matching the prior 6 Phase 3 consumers): no version bump, no archive, no changelog. Body-only string change, so no showcase skill metadata changed — only generated `sourceFingerprint` values updated.
+- Captured `/exec` prompt-history under `prompts/exec/skill-prompt-20260531-131357-research-roadmap-idea-brief-rename.md`; checked off the Phase 3 research-roadmap line in `tasks/todo.md`.
+- Verification: `grep -n "concept-brief\|concept brief"` on both research-roadmap SKILL.md files returns nothing; `scripts/validate-skills-showcase-data.sh` reports fresh; `git diff --check` clean.
+
 ## 2026-05-31 — Rename concept-brief → idea-brief: Phase 3 consumer product-design `spec-interview`
 
 - Renamed the single `research/concept-brief.md` path reference per file in `packs/product-design/{claude,codex}/spec-interview/SKILL.md` (the research-evidence read step) → `research/idea-brief.md`. Surrounding "concept constraints" prose preserved — it denotes the product concept, not the document.

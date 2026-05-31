@@ -136,7 +136,7 @@ Also include documentation-producing non-research skills when their outputs are 
 
 | Skill | Output |
 | --- | --- |
-| `/idea-scope-brief` | `research/concept-brief.md` or `research/{slug}/concept-brief.md` |
+| `/idea-scope-brief` | `research/idea-brief.md` or `research/{slug}/idea-brief.md` |
 | `/spec-interview` | `specs/*.md` |
 | `/ux-variations` | `specs/ux-variations-*.md` |
 | `/ui-interview` | `specs/ui-*.md` |
@@ -152,7 +152,7 @@ Also include documentation-producing non-research skills when their outputs are 
 Record existence and last-modified timestamps for:
 
 - all discovered research outputs
-- `research/concept-brief.md` and product-path-scoped `research/{slug}/concept-brief.md` when present
+- `research/idea-brief.md` and product-path-scoped `research/{slug}/idea-brief.md` when present
 - `research/*-search-log.md` and `research/*-interview.md` only as supporting context, not primary completion artifacts
 - `specs/*.md` and product-path-scoped `specs/{slug}/*.md`
 - `specs/ux-variations-*.md` and product-path-scoped `specs/{slug}/ux-variations-*.md`
@@ -175,7 +175,7 @@ An item is stale when a newer upstream document should invalidate or refresh it.
 
 | Newer input | Stale target |
 | --- | --- |
-| `research/concept-brief.md` or `research/{slug}/concept-brief.md` | matching `research/icp.md` or `research/{slug}/icp.md` |
+| `research/idea-brief.md` or `research/{slug}/idea-brief.md` | matching `research/icp.md` or `research/{slug}/icp.md` |
 | `research/customer-feedback.md` | `research/icp.md`, `research/journey-map.md`, `research/monetization.md`, `research/landing-copy.md` |
 | `research/icp.md` | `research/competitive-analysis.md`, `research/positioning.md`, `research/gtm.md`, `research/monetization.md`, `research/landing-copy.md` |
 | `research/competitive-analysis.md` | `research/positioning.md`, `research/gtm.md`, `research/monetization.md`, `research/landing-copy.md` |
@@ -195,7 +195,7 @@ An item is stale when a newer upstream document should invalidate or refresh it.
 
 Also flag potentially stale specs when source code has commits newer than the spec files. Add `/spec-drift fix all` as a priority documentation item when specs are probably behind implementation.
 
-Do not queue a missing `/idea-scope-brief` item for established projects that already have `research/icp.md`, `research/competitive-analysis.md`, `research/journey-map.md`, or `specs/`. Queue it only for idea-only projects where no concept brief or downstream research/spec artifact exists.
+Do not queue a missing `/idea-scope-brief` item for established projects that already have `research/icp.md`, `research/competitive-analysis.md`, `research/journey-map.md`, or `specs/`. Queue it only for idea-only projects where no idea brief or downstream research/spec artifact exists.
 
 ### 6. Order The Priority Queue
 
@@ -374,7 +374,7 @@ A consolidated prototype must exist at `prototypes/{topic}/consolidated/`. If mi
 ### Scan
 
 1. Read the consolidated prototype directory to understand what was built.
-2. Read all research docs: `research/concept-brief.md`, `research/icp.md`, `research/competitive-analysis.md`, `research/journey-map.md`, and any other `research/*.md` files.
+2. Read all research docs: `research/idea-brief.md`, `research/icp.md`, `research/competitive-analysis.md`, `research/journey-map.md`, and any other `research/*.md` files.
 3. For each research document, compare against the consolidated prototype:
    - **User flows**: Does the prototype's flow match the journey map's discovery -> onboarding -> aha -> conversion -> retention path?
    - **Onboarding**: Does the prototype's first-run experience match ICP expectations for technical sophistication and time-to-value?

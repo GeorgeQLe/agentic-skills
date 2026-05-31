@@ -117,7 +117,7 @@
   - [x] business-discovery `value-prop-canvas` (claude + codex)
   - [x] product-design `prototype` (claude + codex)
   - [x] product-design `spec-interview` (claude + codex)
-  - [ ] research-admin `research-roadmap` (claude + codex)
+  - [x] research-admin `research-roadmap` (claude + codex)
   - [ ] `global/codex/afps-status/SKILL.md` — discovery glob → `research/idea-brief*.md`
 - Phase 4 — Tests:
   - [ ] `tests/layer4/setups/tier23-global-workflows.setup.ts` — update `outputPath` (line 487), prompt text (488), and both regex patterns (497, 501) to `idea-brief-poketo-core(.md|-interview.md)`.
