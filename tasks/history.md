@@ -1,5 +1,11 @@
 # Session History
 
+## 2026-05-31 — Rename concept-brief → idea-brief: Phase 4 test setup
+
+- Updated `tests/layer4/setups/tier23-global-workflows.setup.ts` (the `idea-scope-brief` case) to match the renamed contract: `outputPath` (line 487) `research/concept-brief-poketo-core.md` → `research/idea-brief-poketo-core.md`; the prompt string (488) swapped both write paths and "slugged concept brief filenames" → "slugged idea brief filenames"; both evidence regex patterns (497, 501) → `research/idea-brief-poketo-core(.md|-interview.md)`. Preserved product-concept prose ("multiple related Poketo concepts", "related future concept", "concept slug") — only artifact filename/path tokens renamed, matching the Phase 3 consumer convention.
+- Coordinated mechanical sync: no version bump, archive, or CHANGELOG (test fixture, not a skill). Test-only change → no `SKILL.md`/`PACK.md` touched, so no showcase regeneration. Verification: `grep -n "concept-brief" …setup.ts` → nothing; `git diff --check` clean; layer4 tier23 vitest project is `skip`-gated (live-agent setup, not CI-runnable in isolation), so validated by grep + visual diff. Completes Phase 4.
+- **Phase 5 remains an OPEN DECISION** (consumer SKILL.md versioning: strict bump/archive/CHANGELOG vs. coordinated mechanical sync) — surfaced for user confirmation, not executed here.
+
 ## 2026-05-31 — Rename concept-brief → idea-brief: Phase 3 final consumer `afps-status`
 
 - Renamed both discovery glob tokens on line 31 of `global/codex/afps-status/SKILL.md` (`research/concept-brief*.md` and app-scoped `research/*/concept-brief*.md`) → `idea-brief*.md` via a single `replace_all`. There is no Claude `afps-status` variant (codex-only), so this was one file. Preserved the `Concept artifacts:` label and `concept/interview notes` prose — those denote the product-concept category, not the renamed document (matches the prior 7 consumers).

@@ -1,3 +1,22 @@
+## Current Task - Downstream Skill Inventory Surface 2026-05-31
+
+**Goal:** Implement the approved inventory-first follow-up from the downstream skill-copy analysis: a new mirrored report-only `$skill-inventory` skill in `project-fleet` that scans local downstream repos and classifies managed skill-copy drift without changing those repos.
+
+**Plan:**
+- [x] Capture the visible skill-creation invocation under `prompts/skill-creator/`.
+- [ ] Inspect existing `project-fleet` pack patterns, metadata conventions, task docs, and `scripts/skill-links.sh` status semantics.
+- [ ] Add mirrored Claude and Codex `skill-inventory` skill roots with `version: v0.0`, `CHANGELOG.md`, `ALIGNMENT-PAGE.md`, Codex `agents/openai.yaml`, and a `PACK.md` listing.
+- [ ] Implement a bundled deterministic `skill-inventory.sh` scanner for manifest/default repo discovery, explicit `--repo` overrides, Markdown/JSON reports, report-only failures, and canonical `skill_install_status` classification.
+- [ ] Add layer1 scanner fixtures and mirrored skill contract tests for all status categories and report-only guardrails.
+- [ ] Refresh Skills Showcase generated assets and run focused validation: scanner tests, contract tests, `bash scripts/skill-versions.sh --missing`, `bash scripts/skill-archive-audit.sh --strict`, `scripts/validate-skills-showcase-data.sh`, and `git diff --check`.
+- [ ] Record review/history notes, stage intended files only, commit on the primary branch, and push.
+
+### Review
+
+- Pending.
+
+---
+
 ## Current Task - Downstream Skill Inventory Analysis 2026-05-31
 
 **Goal:** Answer whether downstream repos should get a cleanup skill, an inventory/version-drift skill, or a combined workflow for local skill copies versus the canonical `agentic-skills` repo.
@@ -154,7 +173,7 @@
   - [x] research-admin `research-roadmap` (claude + codex)
   - [x] `global/codex/afps-status/SKILL.md` — discovery glob → `research/idea-brief*.md`
 - Phase 4 — Tests:
-  - [ ] `tests/layer4/setups/tier23-global-workflows.setup.ts` — update `outputPath` (line 487), prompt text (488), and both regex patterns (497, 501) to `idea-brief-poketo-core(.md|-interview.md)`.
+  - [x] `tests/layer4/setups/tier23-global-workflows.setup.ts` — update `outputPath` (line 487), prompt text (488), and both regex patterns (497, 501) to `idea-brief-poketo-core(.md|-interview.md)`. (Done 2026-05-31: `concept-brief` → `idea-brief` artifact tokens swapped; product-concept prose preserved; grep clean.)
 - Phase 5 — Versioning (**OPEN DECISION — consumers only; producer done**): producer `idea-scope-brief` already bumped v0.6 → v0.7 (archived + CHANGELOG entry superseding the v0.6 "filename unchanged" note) as part of Phase 1, so each shippable unit stayed valid. Remaining open decision is the consumer SKILL.md files: strict CLAUDE.md rule = archive + decimal bump + CHANGELOG entry for each changed consumer; alternative = treat consumer edits as a coordinated mechanical sync without bumps. Resolve which before executing this phase.
   - [ ] Apply chosen versioning approach to all changed skills.
 - Phase 6 — Verify & ship:
