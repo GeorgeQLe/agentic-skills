@@ -1,0 +1,7 @@
+interface:
+  display_name: "Skill Inventory"
+  short_description: "Report downstream skill-copy drift"
+  default_prompt: "Use $skill-inventory to scan downstream repo skill installs and write tasks/skill-inventory.md."
+
+policy:
+  allow_implicit_invocation: true

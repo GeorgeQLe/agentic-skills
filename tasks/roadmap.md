@@ -1,3 +1,17 @@
+## Current Targeted Update: Downstream Skill Inventory Surface 2026-05-31
+
+**Goal:** Add a mirrored report-only `skill-inventory` skill to the `project-fleet` pack so control repos can inventory downstream `.claude/skills` and `.codex/skills` installs, classify drift against canonical `agentic-skills`, and write a durable control-repo report without mutating downstream repos.
+
+**Acceptance Criteria:**
+- [x] Prompt history is captured under `prompts/skill-creator/`.
+- [x] Mirrored Claude and Codex `skill-inventory` skill roots exist under `packs/project-fleet/` with `version: v0.0`, changelogs, bundled alignment-page convention files, and Codex UI metadata.
+- [x] `packs/project-fleet/PACK.md` lists `skill-inventory`.
+- [x] Bundled `skill-inventory.sh` supports manifest/default path discovery, explicit `--repo`, Markdown/JSON output, report-only failures with a manifest template, and status classification through `scripts/skill-links.sh`.
+- [x] The runtime contract reads repo instructions first, writes `tasks/skill-inventory.md` by default, builds `alignment/skill-inventory-{topic}.html` for durable reports, captures prompt history, and forbids refresh/delete/downstream mutation in v1.
+- [x] Focused layer1 scanner and contract tests cover `ok`, `stale`, `unknown`, `missing-source`, `pinned`, `not-managed`, and missing local-path manifest guidance.
+- [x] Skill versions, archive audit, Skills Showcase generation/validation, focused tests, and whitespace checks pass or any unrelated blocker is documented.
+- [x] Review notes are recorded in `tasks/todo.md`; intended files are committed and pushed on the primary branch while unrelated dirty work is preserved.
+
 ## Current Targeted Update: Downstream Skill Inventory Analysis 2026-05-31
 
 **Goal:** Use `$analyze-sessions` to decide whether downstream repositories need a cleanup skill, an inventory/version-drift skill, or both, with evidence from local Claude/Codex history and this repository's skill-management conventions.

@@ -4,16 +4,23 @@
 
 **Plan:**
 - [x] Capture the visible skill-creation invocation under `prompts/skill-creator/`.
-- [ ] Inspect existing `project-fleet` pack patterns, metadata conventions, task docs, and `scripts/skill-links.sh` status semantics.
-- [ ] Add mirrored Claude and Codex `skill-inventory` skill roots with `version: v0.0`, `CHANGELOG.md`, `ALIGNMENT-PAGE.md`, Codex `agents/openai.yaml`, and a `PACK.md` listing.
-- [ ] Implement a bundled deterministic `skill-inventory.sh` scanner for manifest/default repo discovery, explicit `--repo` overrides, Markdown/JSON reports, report-only failures, and canonical `skill_install_status` classification.
-- [ ] Add layer1 scanner fixtures and mirrored skill contract tests for all status categories and report-only guardrails.
-- [ ] Refresh Skills Showcase generated assets and run focused validation: scanner tests, contract tests, `bash scripts/skill-versions.sh --missing`, `bash scripts/skill-archive-audit.sh --strict`, `scripts/validate-skills-showcase-data.sh`, and `git diff --check`.
-- [ ] Record review/history notes, stage intended files only, commit on the primary branch, and push.
+- [x] Inspect existing `project-fleet` pack patterns, metadata conventions, task docs, and `scripts/skill-links.sh` status semantics.
+- [x] Add mirrored Claude and Codex `skill-inventory` skill roots with `version: v0.0`, `CHANGELOG.md`, `ALIGNMENT-PAGE.md`, Codex `agents/openai.yaml`, and a `PACK.md` listing.
+- [x] Implement a bundled deterministic `skill-inventory.sh` scanner for manifest/default repo discovery, explicit `--repo` overrides, Markdown/JSON reports, report-only failures, and canonical `skill_install_status` classification.
+- [x] Add layer1 scanner fixtures and mirrored skill contract tests for all status categories and report-only guardrails.
+- [x] Refresh Skills Showcase generated assets and run focused validation: scanner tests, contract tests, `bash scripts/skill-versions.sh --missing`, `bash scripts/skill-archive-audit.sh --strict`, `scripts/validate-skills-showcase-data.sh`, and `git diff --check`.
+- [x] Record review/history notes, stage intended files only, commit on the primary branch, and push.
 
 ### Review
 
-- Pending.
+- Added mirrored `skill-inventory` skill roots under `packs/project-fleet/{claude,codex}/` with `version: v0.0`, changelogs, generated bundled alignment-page conventions, and Codex `agents/openai.yaml`.
+- Updated `packs/project-fleet/PACK.md` so `skill-inventory` is listed with the project-fleet skills.
+- Added mirrored bundled `scripts/skill-inventory.sh` scanners. The scanner discovers downstream repos from `tasks/downstream-repos.md`, `tasks/fleet-queue.md`, or `tasks/repo-seeding.md`, accepts repeated `--repo`, writes Markdown by default, supports JSON, sources `scripts/skill-links.sh`, and emits `ok`, `stale`, `unknown`, `missing-source`, `pinned`, and `not-managed` via `skill_install_status`.
+- V1 remains report-only: the skill contract and report state that no refresh, delete, cleanup, install, or downstream mutation commands are run.
+- Added `tests/layer1/skill-inventory.test.ts` fixtures for all status categories, JSON output, mirrored script parity, mirrored contract guardrails, and the non-mutating manifest-template failure when only remote `owner/repo` values are present.
+- Added benchmark coverage/pack workflow metadata for the new skill and refreshed Skills Showcase assets after staging the new skill files so `git ls-files` included them.
+- Validation passed: focused layer1 (`skill-inventory`, `bench-coverage`, `bench-setups`) 95/95; `bash -n` on both scanner scripts; `bash scripts/skill-versions.sh --missing`; `scripts/pack.sh which skill-inventory`; `scripts/validate-skills-showcase-data.sh`; `git diff --check`.
+- Known unrelated blocker remains: `bash scripts/skill-archive-audit.sh --strict` still fails only on `packs/research-admin/{claude,codex}/research-roadmap` missing a `CHANGELOG.md` heading for `v0.6`, matching the pre-existing blocker recorded in prior task notes. A broad layer1 invocation also still hits the pre-existing `skill-dev` `.claude/skills` output-path conflict; focused coverage for this change passes.
 
 ---
 

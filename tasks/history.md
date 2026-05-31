@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-05-31 — Add project-fleet skill inventory
+
+- Added mirrored Claude/Codex `skill-inventory` skills to `packs/project-fleet` with `version: v0.0`, changelogs, generated alignment-page bundles, Codex UI metadata, and `PACK.md` listing.
+- Added mirrored report-only `skill-inventory.sh` scanners that read manifest local paths or explicit `--repo`, inspect `.claude/skills/*` and `.codex/skills/*`, source canonical `scripts/skill-links.sh`, classify via `skill_install_status`, and write Markdown/JSON reports without mutating downstream repos.
+- Added layer1 scanner/contract coverage for `ok`, `stale`, `unknown`, `missing-source`, `pinned`, `not-managed`, missing local-path guidance, JSON output, and mirrored script parity; registered benchmark coverage metadata and refreshed Skills Showcase generated assets.
+- Verification passed for focused layer1 coverage, `bash -n`, skill versions, showcase validation, pack discovery, and whitespace checks. Strict archive audit remains blocked only by the pre-existing `research-roadmap v0.6` changelog-heading issue.
+
 ## 2026-05-31 — Rename concept-brief → idea-brief: Phase 4 test setup
 
 - Updated `tests/layer4/setups/tier23-global-workflows.setup.ts` (the `idea-scope-brief` case) to match the renamed contract: `outputPath` (line 487) `research/concept-brief-poketo-core.md` → `research/idea-brief-poketo-core.md`; the prompt string (488) swapped both write paths and "slugged concept brief filenames" → "slugged idea brief filenames"; both evidence regex patterns (497, 501) → `research/idea-brief-poketo-core(.md|-interview.md)`. Preserved product-concept prose ("multiple related Poketo concepts", "related future concept", "concept slug") — only artifact filename/path tokens renamed, matching the Phase 3 consumer convention.
