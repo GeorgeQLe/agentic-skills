@@ -106,7 +106,7 @@
   - [x] business-discovery `lean-canvas` (claude + codex)
   - [x] business-discovery `value-prop-canvas` (claude + codex)
   - [x] product-design `prototype` (claude + codex)
-  - [ ] product-design `spec-interview` (claude + codex)
+  - [x] product-design `spec-interview` (claude + codex)
   - [ ] research-admin `research-roadmap` (claude + codex)
   - [ ] `global/codex/afps-status/SKILL.md` — discovery glob → `research/idea-brief*.md`
 - Phase 4 — Tests:

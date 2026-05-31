@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-05-31 — Rename concept-brief → idea-brief: Phase 3 consumer product-design `spec-interview`
+
+- Renamed the single `research/concept-brief.md` path reference per file in `packs/product-design/{claude,codex}/spec-interview/SKILL.md` (the research-evidence read step) → `research/idea-brief.md`. Surrounding "concept constraints" prose preserved — it denotes the product concept, not the document.
+- Coordinated mechanical sync convention applied (matching the prior icp/competitive-analysis/lean-canvas/value-prop-canvas/prototype consumers): no version bump, no archive, no changelog. Body-only string change, so no showcase skill metadata changed — only generated `sourceFingerprint` values updated.
+- Captured `/exec` prompt-history under `prompts/exec/skill-prompt-20260531-120315-spec-interview-idea-brief-rename.md`; checked off the Phase 3 spec-interview line in `tasks/todo.md`.
+- Verification: `grep -n "concept-brief"` on both spec-interview SKILL.md files returns nothing; `git diff --check` clean.
+
 ## 2026-05-31 — Rename concept-brief → idea-brief: Phase 3 consumer product-design `prototype`
 
 - Hard-renamed the 2 `concept-brief` references per file in `packs/product-design/{claude,codex}/prototype/SKILL.md`: the `research/concept-brief.md` path (Resolve-context list) → `research/idea-brief.md`, and the Research-integration bullet's `**Concept brief**` label → `**Idea brief**`, its path, and `concept-brief assumption` → `idea-brief assumption`. "core value proposition" prose preserved; no "product concept" meaning was present on these lines.
