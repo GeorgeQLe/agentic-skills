@@ -96,30 +96,35 @@
 
 ## Current Task - Rename concept-brief Artifact to idea-brief 2026-05-30
 
-### ▶ NEXT STEP (clear-context implementation) — Phase 3 final consumer: `afps-status`
+### ▶ NEXT STEP (clear-context implementation) — Phase 4: test setup update
 
-**Scope:** Rename the artifact glob tokens in the only remaining Phase 3 consumer, `global/codex/afps-status/SKILL.md`. There is no Claude `afps-status` variant (codex-only), so this is one file.
+**Status:** Phase 3 is complete — all 8 consumers renamed (icp, competitive-analysis, lean-canvas, value-prop-canvas, prototype, spec-interview, research-roadmap, afps-status). Next is the lone Phase 4 test setup update.
 
-**Exact change — line 31** (the "Inspect AFPS evidence" → "Concept artifacts" bullet):
-- `research/concept-brief*.md` → `research/idea-brief*.md`
-- `research/*/concept-brief*.md` → `research/*/idea-brief*.md`
-- A single `replace_all` of `concept-brief*.md` → `idea-brief*.md` covers both glob tokens.
-- **Preserve** the bullet label `Concept artifacts:` and the trailing `concept/interview notes` — those denote the product-concept *category*, not the renamed document. This matches the established consumer convention (rename only the document filename token, keep product-concept prose). The `idea-brief*.md` glob still matches `idea-brief-interview.md`.
+**Scope:** Update the one layer4 test setup that references the old `concept-brief` artifact filenames in the global-workflows tier so the test fixtures match the renamed `idea-brief` contract. Single file.
 
-**Conventions (match the prior 7 Phase 3 consumers):**
-- Coordinated mechanical sync: **no version bump, no archive, no CHANGELOG**.
-- Body-only string change → no skill metadata change, but the content fingerprint shifts. Regenerate showcase data so the dirty tree is consistent for `/ship`: `node scripts/generate-skills-showcase-data.mjs`, `node scripts/generate-skills-showcase-github-data.mjs`, `scripts/validate-skills-showcase-data.sh`.
-- Add a `tasks/history.md` entry and check off the Phase 3 `afps-status` line (121) in this file.
+**Exact change — `tests/layer4/setups/tier23-global-workflows.setup.ts`:**
+- **Line 487** — `outputPath`: rename the expected output path from `concept-brief-poketo-core.md` → `idea-brief-poketo-core.md` (apply the same `concept-brief` → `idea-brief` token swap to whatever the exact path string is — read the line first to confirm the precise value, including any `-interview` variant).
+- **Line 488** — prompt text: update any `concept-brief` mention in the prompt/instruction string → `idea-brief`.
+- **Lines 497 and 501** — both regex patterns: update to match `idea-brief-poketo-core(.md|-interview.md)` (swap `concept-brief` → `idea-brief` in the pattern, preserving the existing structure/anchors).
+- **Preserve** any prose denoting the product *concept* itself (e.g. "concept scoping", concept slug); rename only the artifact filename/path tokens, matching the consumer convention used through Phase 3.
+- After editing, `grep -n "concept-brief" tests/layer4/setups/tier23-global-workflows.setup.ts` must return nothing.
+
+**Conventions (match the rename batch):**
+- Coordinated mechanical sync: **no version bump, no archive, no CHANGELOG** (this is a test fixture, not a skill).
+- Test-only change → no `SKILL.md`/`PACK.md` touched, so **no showcase regeneration needed**. Confirm `git status` shows only the test file + task docs before `/ship`.
+- Add a `tasks/history.md` entry and check off the Phase 4 line (152) in this file.
 - `/exec` will capture prompt-history under `prompts/exec/` before substantive work.
 
-**Files affected:** `global/codex/afps-status/SKILL.md`; regenerated showcase assets (`docs/skills-showcase/assets/{skills-data.js,github-proof-data.js}`, `apps/skills-showcase/public/assets/{skills-data.js,github-proof-data.js}`, `docs/benchmark-results-matrix.md`); `tasks/todo.md`; `tasks/history.md`.
+**Files affected:** `tests/layer4/setups/tier23-global-workflows.setup.ts`; `tasks/todo.md`; `tasks/history.md`.
 
 **Acceptance criteria:**
-- `grep -n "concept-brief" global/codex/afps-status/SKILL.md` → nothing.
-- `scripts/validate-skills-showcase-data.sh` → "fresh".
+- `grep -n "concept-brief" tests/layer4/setups/tier23-global-workflows.setup.ts` → nothing.
+- Run the layer4 tier23 setup/test where runnable (e.g. the project's test command scoped to this setup); if it cannot be run in isolation, note that and rely on the grep + visual diff. The string swap must not change test structure, only the artifact tokens.
 - `git diff --check` clean.
 
-**Execution Profile:** serial, implementation-safe, single-file mechanical rename. No tests gate this step (Phase 4 owns the test update separately).
+**Execution Profile:** serial, implementation-safe, single-file mechanical rename in a test fixture. No source code behavior changes.
+
+**Note on Phase 5 (do NOT execute yet):** Phase 5 is an **OPEN DECISION** requiring user input — whether changed consumer SKILL.md files get strict version bumps/archives/CHANGELOG or are treated as a coordinated mechanical sync without bumps. The Phase 3 batch already applied the mechanical-sync convention consistently, which strongly implies the latter, but the decision is not formally ratified. Surface this for user confirmation before planning Phase 5.
 
 **Ship-one-step handoff:** implement only this step, validate it, then run `/ship` when done.
 
