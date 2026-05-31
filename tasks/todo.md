@@ -1,3 +1,14 @@
+## Current Task - Downstream Skill Inventory Analysis 2026-05-31
+
+**Goal:** Answer whether downstream repos should get a cleanup skill, an inventory/version-drift skill, or a combined workflow for local skill copies versus the canonical `agentic-skills` repo.
+
+**Plan:**
+- [x] Capture the visible `$analyze-sessions` invocation under `prompts/analyze-sessions/`.
+- [ ] Inspect current skill-management conventions, task history, and lessons relevant to downstream copied skills.
+- [ ] Parse full available Claude and Codex user histories for recurring downstream skill-copy/version drift, inventory, cleanup, pack install, and skill visibility patterns.
+- [ ] Build `alignment/analyze-sessions-downstream-skill-inventory.html` with the full report, evidence matrix, assumptions/confidence register, alternatives, proposed file changes, and review gates.
+- [ ] Verify artifacts, record review notes, and stage only intended files if shipping is allowed after review.
+
 ## Current Task - idea-scope-brief Alignment Approval Ordering 2026-05-31
 
 **Goal:** Make `idea-scope-brief` build the HTML alignment page and wait for final compiled YAML approval after the coverage checkpoint, before writing canonical `research/**/idea-brief.md`, interview logs, or `research/.progress.yaml`.
@@ -94,7 +105,7 @@
   - [x] business-discovery `competitive-analysis` (claude + codex)
   - [x] business-discovery `lean-canvas` (claude + codex)
   - [x] business-discovery `value-prop-canvas` (claude + codex)
-  - [ ] product-design `prototype` (claude + codex)
+  - [x] product-design `prototype` (claude + codex)
   - [ ] product-design `spec-interview` (claude + codex)
   - [ ] research-admin `research-roadmap` (claude + codex)
   - [ ] `global/codex/afps-status/SKILL.md` — discovery glob → `research/idea-brief*.md`

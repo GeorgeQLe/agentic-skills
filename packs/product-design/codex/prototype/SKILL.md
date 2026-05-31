@@ -47,7 +47,7 @@ When product path `{slug}` is active, read and write research under `research/{s
 
 - Read `.agents/project.json` if it exists. Extract `project_type` for dispatch decisions.
 - Read research documents when present:
-  - `research/concept-brief.md` — assumptions to test, core value proposition, and hypothesis framing.
+  - `research/idea-brief.md` — assumptions to test, core value proposition, and hypothesis framing.
   - `research/icp.md` — ideal customer profile; informs copy density, terminology, and information hierarchy.
   - `research/competitive-analysis.md` — differentiation points the prototype should highlight.
   - `research/journey-map.md` — screen flow ordering, entry points, and task sequencing.
@@ -62,7 +62,7 @@ Before building, extract actionable signals from research:
 - **ICP** (`research/icp.md`): Determine copy density (expert vs. novice), terminology choices, information hierarchy, and default density (compact vs. spacious). The prototype should feel like it was built for the target user, not a generic audience.
 - **Journey map** (`research/journey-map.md`): Derive screen flow ordering. The prototype's navigation and page sequence should follow the user's natural task progression, not an arbitrary menu order.
 - **Competitive analysis** (`research/competitive-analysis.md`): Identify differentiation points the prototype must highlight. If the product's thesis is "faster than X" or "simpler than Y," the prototype should make that advantage viscerally obvious.
-- **Concept brief** (`research/concept-brief.md`): Surface assumptions the prototype is designed to test. Each prototype variation should help validate or invalidate at least one concept-brief assumption.
+- **Idea brief** (`research/idea-brief.md`): Surface assumptions the prototype is designed to test. Each prototype variation should help validate or invalidate at least one idea-brief assumption.
 
 Document which research signals influenced which prototype decisions in a brief `## Research Integration` section at the top of the hub page.
 

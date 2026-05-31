@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-05-31 — Rename concept-brief → idea-brief: Phase 3 consumer product-design `prototype`
+
+- Hard-renamed the 2 `concept-brief` references per file in `packs/product-design/{claude,codex}/prototype/SKILL.md`: the `research/concept-brief.md` path (Resolve-context list) → `research/idea-brief.md`, and the Research-integration bullet's `**Concept brief**` label → `**Idea brief**`, its path, and `concept-brief assumption` → `idea-brief assumption`. "core value proposition" prose preserved; no "product concept" meaning was present on these lines.
+- Coordinated mechanical sync convention applied (matching the prior icp/competitive-analysis/lean-canvas/value-prop-canvas consumers): no version bump, no archive, no changelog. Body-only string change, so no showcase skill metadata changed — only generated `sourceFingerprint` values updated.
+- Captured `/exec` prompt-history under `prompts/exec/skill-prompt-20260531-000000-prototype-rename.md`; checked off the Phase 3 prototype line in `tasks/todo.md`.
+- Verification: `grep -n "concept-brief\|Concept brief"` on both prototype SKILL.md files returns nothing; `git diff --check` clean.
+- Also shipped unrelated, complete showcase UI work present in the tree as a separate commit: two-stage SealedPack open (tear unseals; first-tear auto-opens as one-time onboarding) in `SealedPack.tsx` + `app/prototype/page.tsx`, with the matching `alignment/animation-audit-pack-drawer.html` audit doc update.
+
 ## 2026-05-31 — Rename concept-brief → idea-brief: Phase 3 consumers (icp, competitive-analysis, lean-canvas, value-prop-canvas)
 
 - Shipped the Phase 2 routing doc + Phase 3 consumer batch of the artifact rename (`research/concept-brief.md` → `research/idea-brief.md`). `value-prop-canvas` (claude + codex) completed this session via `/exec`; `icp`, `competitive-analysis`, and `lean-canvas` (both agents) plus `docs/skill-next-step-contracts.md` were already renamed in the working tree from prior `/exec` steps and shipped together here.
