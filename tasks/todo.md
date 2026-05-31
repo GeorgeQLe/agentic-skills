@@ -1,3 +1,28 @@
+## Current Task - Alignment Page Layout Controls 2026-05-31
+
+**Goal:** Keep HTML alignment pages simple and in-flow: top Table of Contents instead of sidebars, no sticky/fixed bottom compile banner, `Compile Answers` at the bottom, and `Compile Feedback YAML` both at the bottom and locally under each selected section-feedback textarea.
+
+**Plan:**
+- [x] Capture `$investigate` prompt history.
+- [x] Validate the user claims against the canonical convention, generated bundles, current HTML artifacts, and recent history.
+- [x] Update the canonical `CLAUDE.md` alignment convention for top TOC, no sidebar, no sticky/fixed bottom banner, and dual local/bottom feedback compile placement.
+- [x] Regenerate bundled `ALIGNMENT-PAGE.md` files from the canonical source.
+- [x] Archive, version-bump, and changelog active inline alignment contracts affected by the contract change.
+- [x] Update focused regression coverage for layout constraints and bottom feedback compilation.
+- [x] Run focused verification, record review notes, commit, and push intended changes on `master`.
+
+### Review
+
+- Validated the report against existing alignment HTML artifacts, the canonical `CLAUDE.md` alignment convention, generated bundled `ALIGNMENT-PAGE.md` files, and the prior local-feedback change.
+- Root cause: the convention did not explicitly forbid sidebar/sticky layout inventions, and the prior feedback-only YAML change overcorrected by removing bottom feedback aggregation entirely.
+- Updated the canonical convention to require a top in-flow `Table of Contents`, forbid sidebar/side-rail/drawer/split-shell Table of Contents layouts unless requested, and forbid sticky/fixed compile, copy, feedback, or answer banners.
+- Restored a normal bottom `Compile Feedback YAML` path that aggregates selected section feedback while keeping local `Compile Feedback YAML` controls under each selected section-feedback textarea. Bottom `Compile Answers` remains a separate final approval path.
+- Regenerated 264 bundled `ALIGNMENT-PAGE.md` files, archived/bumped 16 active inline alignment-contract skills, refreshed their changelogs, and refreshed generated Skills Showcase assets from an intended-only temp clone so unrelated idea-scope/ICP work stayed out.
+- Added regression coverage for top in-flow navigation, no sidebar/sticky compile banners, dual local/bottom feedback YAML, and ordinary in-flow bottom compile controls.
+- Verification passed: `node scripts/upgrade-alignment-page.mjs --dry-run`, focused `alignment-gates` layer1 test, `bash scripts/skill-versions.sh --missing`, `scripts/validate-skills-showcase-data.sh` in the intended-only temp clone, and `git diff --check`.
+
+---
+
 ## Current Task - Alignment Section Feedback Local YAML 2026-05-31
 
 **Goal:** Keep final `Compile Answers` at the bottom of HTML alignment pages, but move section feedback YAML display/copy controls under each selected section's thumbs up/down/clarify notes textarea so zoomed pages do not accumulate a busy global feedback banner. Section feedback selection must always reveal its own multiline input near the controls, even when that section also contains gate-question text inputs.

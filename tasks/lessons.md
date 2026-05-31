@@ -1,9 +1,15 @@
 # Lessons
 
-## 2026-05-31 — Alignment feedback YAML should stay local to the section control
+## 2026-05-31 — Alignment page compile controls must stay in normal page flow
 
-- A user clarified that putting feedback-only YAML controls/output in a bottom compile area makes HTML alignment pages busy, especially when zoomed and when section notes textareas are visible.
-- Keep the bottom compile area for final `Compile Answers`; section thumbs up/down/clarify feedback should reveal its own multiline textarea and local feedback YAML/copy controls near the selected section controls.
+- A user clarified that sidebar navigation and sticky/fixed bottom compile banners were not requested and made HTML alignment pages look worse.
+- Alignment pages should use a top in-flow Table of Contents section for navigation, not a sidebar or nav rail that competes with the content.
+- Bottom compile controls are acceptable only as ordinary page content near the bottom. Keep `Compile Answers` there, and support `Compile Feedback YAML` there too while also keeping local feedback YAML under the selected section-feedback textarea.
+
+## 2026-05-31 — Alignment feedback YAML needs a local section path
+
+- A user clarified that feedback-only YAML must not be available only through a busy bottom area, especially when zoomed and when section notes textareas are visible.
+- Section thumbs up/down/clarify feedback should reveal its own multiline textarea and local feedback YAML/copy controls near the selected section controls. A separate normal bottom compile section may also aggregate feedback when requested.
 - Treat section feedback textareas as separate from required gate-question text boxes. Even if a section already has gate inputs, selecting thumbs up/down/clarify must show a separate nearby feedback textarea whose notes are wrapped into feedback-only YAML.
 
 ## 2026-05-30 — Never write a test/verification claim from remembered or garbled tool output

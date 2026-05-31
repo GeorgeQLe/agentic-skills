@@ -198,12 +198,29 @@ describe("alignment page gate contract", () => {
     }
   });
 
-  it("keeps feedback-only YAML local to selected section feedback controls", () => {
+  it("uses top in-flow navigation and forbids generated sidebars or sticky compile banners", () => {
     expect(activeAlignmentSkillFiles.length).toBeGreaterThan(10);
     for (const path of activeAlignmentSkillFiles) {
       const content = conventionText(path);
-      expect(content, `${path} no bottom feedback banner`).toContain(
-        "Do not place a global feedback-only compile/output banner at the bottom of the page",
+      expect(content, `${path} layout contract`).toContain("**Page layout contract.**");
+      expect(content, `${path} top toc`).toContain('top-of-page "Table of Contents" section');
+      expect(content, `${path} in flow toc`).toContain("Keep the Table of Contents in normal document flow");
+      expect(content, `${path} no sidebar nav`).toContain("Do not use a sidebar, side rail, drawer, split-shell layout, or sticky navigation");
+      expect(content, `${path} no sticky bottom banner`).toContain(
+        "Do not place compile, copy, feedback, or answer controls in a sticky or fixed bottom banner/footer",
+      );
+      expect(content, `${path} bottom compile in flow`).toContain(
+        "Bottom compile controls must appear as ordinary content in a bottom compile section",
+      );
+    }
+  });
+
+  it("keeps feedback-only YAML both local to selected sections and aggregated at the bottom", () => {
+    expect(activeAlignmentSkillFiles.length).toBeGreaterThan(10);
+    for (const path of activeAlignmentSkillFiles) {
+      const content = conventionText(path);
+      expect(content, `${path} dual feedback placement`).toContain(
+        "Provide feedback-only YAML in two places: locally under each selected section-feedback textarea, and globally in the bottom compile section",
       );
       expect(content, `${path} local feedback textarea`).toContain("section-feedback textarea");
       expect(content, `${path} separate from gate inputs`).toMatch(
@@ -218,11 +235,17 @@ describe("alignment page gate contract", () => {
       expect(content, `${path} local single feedback entry`).toContain(
         "single selected section-feedback entry",
       );
-      expect(content, `${path} bottom feedback output forbidden`).toContain(
-        "feedback-only YAML output belongs under each selected section feedback textarea, not in the bottom area",
+      expect(content, `${path} bottom aggregated feedback`).toContain(
+        'The bottom "Compile Feedback YAML" control generates the same YAML shape but aggregates every selected section-feedback entry on the page',
       );
-      expect(content, `${path} old bottom feedback button contract`).not.toContain(
-        'At the bottom of the page, include a "Compile Feedback"',
+      expect(content, `${path} no sticky bottom feedback`).toContain(
+        "Do not render the bottom feedback compile controls as a sticky or fixed banner",
+      );
+      expect(content, `${path} old bottom feedback ban removed`).not.toContain(
+        "Do not place a global feedback-only compile/output banner at the bottom of the page",
+      );
+      expect(content, `${path} old local-only bottom ban removed`).not.toContain(
+        "feedback-only YAML output belongs under each selected section feedback textarea, not in the bottom area",
       );
     }
   });
@@ -232,10 +255,13 @@ describe("alignment page gate contract", () => {
     for (const path of activeAlignmentSkillFiles) {
       const content = conventionText(path);
       expect(content, `${path} bottom compile answers`).toMatch(
-        /At the bottom of the page, include a "Compile Answers" button/,
+        /At the bottom of the page, include an ordinary in-flow compile section with a "Compile Feedback YAML" button.*separate "Compile Answers" button/,
       );
-      expect(content, `${path} final-only bottom area`).toContain(
-        "Keep this bottom compile area for final approval answers",
+      expect(content, `${path} bottom compile section`).toContain(
+        'At the bottom of the page, include an ordinary in-flow compile section with a "Compile Feedback YAML" button',
+      );
+      expect(content, `${path} no persistent banner`).toContain(
+        "The bottom compile section must not be sticky, fixed, floating, or styled as a persistent banner",
       );
     }
   });

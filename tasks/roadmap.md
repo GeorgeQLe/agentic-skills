@@ -1,3 +1,15 @@
+## Current Targeted Update: Alignment Page Layout Controls 2026-05-31
+
+**Goal:** Tighten the HTML alignment-page convention so pages use a top Table of Contents section, avoid sidebar navigation and sticky/fixed bottom banners, and provide feedback compilation both locally near selected section feedback and in a normal bottom compile section.
+
+**Acceptance Criteria:**
+- [x] User claims are validated against canonical convention text, generated alignment bundles, existing HTML artifacts, and recent history.
+- [x] Canonical `CLAUDE.md` requires a top in-flow Table of Contents section and forbids sidebar/nav-rail Table of Contents layouts for alignment pages.
+- [x] Canonical `CLAUDE.md` forbids sticky/fixed bottom compile banners; bottom compile controls must live in the normal document flow.
+- [x] Feedback-only YAML can be compiled locally under selected section feedback textareas and globally at the bottom for all selected section feedback.
+- [x] Bundled `ALIGNMENT-PAGE.md` files and inline active alignment contracts are updated, archived/versioned where required, and regression coverage reflects the intended layout.
+- [x] Focused verification passes; intended changes are committed and pushed on `master` while unrelated dirty work is preserved.
+
 ## Current Targeted Update: Alignment Section Feedback Local YAML 2026-05-31
 
 **Goal:** Update the shared HTML alignment-page convention so final approval compilation stays at the bottom of the page, while section thumbs up/down/clarify feedback uses a local textarea and local feedback YAML controls beside the selected section feedback controls.

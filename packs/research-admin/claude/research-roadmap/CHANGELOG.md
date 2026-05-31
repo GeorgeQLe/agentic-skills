@@ -1,5 +1,10 @@
 # research-roadmap changelog (claude)
 
+## v0.10 - 2026-05-31
+
+- Required alignment pages to use a top in-flow Table of Contents instead of sidebar navigation, and to avoid sticky/fixed bottom compile banners.
+- Restored bottom `Compile Feedback YAML` aggregation while keeping local section feedback YAML controls under selected section feedback textareas.
+
 ## v0.9 - 2026-05-31
 
 - Kept final `Compile Answers` at the bottom while moving feedback-only YAML display/copy controls under each selected section feedback textarea.
