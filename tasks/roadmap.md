@@ -1,3 +1,15 @@
+## Current Targeted Update: Downstream Skill Inventory Analysis 2026-05-31
+
+**Goal:** Use `$analyze-sessions` to decide whether downstream repositories need a cleanup skill, an inventory/version-drift skill, or both, with evidence from local Claude/Codex history and this repository's skill-management conventions.
+
+**Acceptance Criteria:**
+- [ ] Prompt history is captured under `prompts/analyze-sessions/`.
+- [ ] Full available Claude and Codex user histories are parsed for downstream skill-copy, canonical-version, pack-install, skill-visibility, inventory, and cleanup patterns.
+- [ ] Existing repository conventions around copied managed skill roots, pack install/refresh, version fields, archives, and cleanup boundaries are checked.
+- [ ] `alignment/analyze-sessions-downstream-skill-inventory.html` renders the full report with claims, evidence, inference, assumptions, alternatives, recommendation gates, and no context loss.
+- [ ] Validation confirms the alignment page and prompt/task artifacts exist, have expected content, and whitespace checks pass where applicable.
+- [ ] Review notes are recorded in `tasks/todo.md`; intended files are committed and pushed on the primary branch unless approval-gated review blocks shipping.
+
 ## Current Targeted Update: idea-scope-brief Alignment Approval Ordering 2026-05-31
 
 **Goal:** Fix `idea-scope-brief` so the coverage checkpoint leads to an HTML alignment preview and final compiled YAML approval before canonical idea-brief, interview-log, or `research/.progress.yaml` writes.
