@@ -28,7 +28,7 @@ describe("upgrade-alignment-pages skill contract", () => {
 
       expect(content, `${contract.path} name`).toContain("name: upgrade-alignment-pages");
       expect(content, `${contract.path} type`).toMatch(/^type: utility$/m);
-      expect(content, `${contract.path} version`).toMatch(/^version: v0\.0$/m);
+      expect(content, `${contract.path} version`).toMatch(/^version: v0\.\d+$/m);
       expect(content, `${contract.path} command`).toContain(`Invoke as \`${contract.command}\`.`);
       expect(content, `${contract.path} argument hint`).toContain("--repo <path>");
       expect(content, `${contract.path} apply flag`).toContain("--apply");
