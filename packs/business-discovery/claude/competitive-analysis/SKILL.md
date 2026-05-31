@@ -56,7 +56,7 @@ When product path `{slug}` is active, read and write research under `research/{s
 - Summarise what the product does, who it's for, and what problem it solves. Confirm this understanding with the user before researching.
 
 **Concept-validation mode:**
-- Use `research/concept-brief.md` when present, otherwise use the concept description from Prerequisites to establish the problem space
+- Use `research/idea-brief.md` when present, otherwise use the concept description from Prerequisites to establish the problem space
 - Summarise what the concept proposes (problem it addresses, intended audience, hypothesised approach)
 - Confirm this understanding with the user before researching
 

@@ -30,7 +30,7 @@ Synthesizes upstream research into a one-page Lean Canvas (Ash Maurya methodolog
   - `research/journey-map.md` — lifecycle moments where value, conversion, and retention occur
   - `research/positioning.md` — unique value proposition, market category, competitive alternatives
   - `research/value-prop.md` — value propositions mapped to customer segments
-  - `research/concept-brief.md` — product concept, solution approach, feature set
+  - `research/idea-brief.md` — product concept, solution approach, feature set
 
 ## Process
 
@@ -54,7 +54,7 @@ When product path `{slug}` is active, read and write research under `research/{s
 - Read `research/competitive-analysis.md` if it exists — competitor landscape, channel strategies, business model patterns
 - Read `research/positioning.md` if it exists — unique attributes, value mapping, market category, competitive alternatives
 - Read `research/value-prop.md` if it exists — value propositions per segment
-- Read `research/concept-brief.md` if it exists — product concept, solution approach, features
+- Read `research/idea-brief.md` if it exists — product concept, solution approach, features
 - Read CLAUDE.md, README, and key source files for product context
 
 ### 2. Research Lean Canvas Methodology
@@ -74,7 +74,7 @@ Map each Lean Canvas section from upstream research:
 - **Problem** — Top 3 problems from ICP pain points. Source: `research/icp.md`
 - **Customer Segments** — Primary and secondary segments from ICP. Source: `research/icp.md`
 - **Unique Value Proposition** — From positioning UVP statement, or `research/value-prop.md` if positioning doesn't exist. This is the single clear compelling message that states why you are different and worth buying.
-- **Solution** — Top 3 features or capabilities that address the top 3 problems. Source: `research/concept-brief.md` or product codebase.
+- **Solution** — Top 3 features or capabilities that address the top 3 problems. Source: `research/idea-brief.md` or product codebase.
 - **Channels** — Path to customers. Source: `research/competitive-analysis.md` channel insights, ICP "where they hang out."
 - **Revenue Streams** — **HYPOTHESIS** — mark "to be validated by `/monetization`". Infer from competitive analysis pricing patterns and positioning (premium vs. value).
 - **Cost Structure** — **HYPOTHESIS** — mark "to be validated by `/monetization`". Infer from solution complexity, channel costs, and competitive analysis.
@@ -135,7 +135,7 @@ For each existing downstream document:
 ```markdown
 # Lean Canvas
 
-> Based on: research/icp.md[, research/competitive-analysis.md, research/positioning.md, research/value-prop.md, research/concept-brief.md]
+> Based on: research/icp.md[, research/competitive-analysis.md, research/positioning.md, research/value-prop.md, research/idea-brief.md]
 > Date: [current date]
 > Methodology: Lean Canvas (Ash Maurya)
 
@@ -179,7 +179,7 @@ Top 3 features addressing top 3 problems:
 2. [feature 2] → solves [problem 2]
 3. [feature 3] → solves [problem 3]
 
-_Source: [research/concept-brief.md or product codebase]_
+_Source: [research/idea-brief.md or product codebase]_
 _Confidence: [High/Medium/Low]_
 
 ### Channels

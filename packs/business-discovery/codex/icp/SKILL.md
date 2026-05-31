@@ -3,7 +3,7 @@ name: icp
 description: Research-driven ICP discovery — web search + codebase analysis to identify multiple ICPs, pain points, value props, and cross-ICP prioritization
 type: research
 version: v0.7
-argument-hint: <spec file path, concept/idea, or empty to use concept brief>
+argument-hint: <spec file path, concept/idea, or empty to use idea brief>
 ---
 
 # ICP — Research-Driven Customer Discovery
@@ -18,7 +18,7 @@ Do not write or overwrite synthesized deliverables until the user explicitly app
 
 When stopping for approval, build and attempt to open the alignment preview page first, then ask the user to review it and approve, question, or request adjustments. Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language. The approval request itself is the next action. Only emit next-skill routing after the approved artifact has been written or updated.
 
-Automated research that identifies **multiple ICP candidates**, maps pain points and value props, and selects a primary ICP. Uses web search + codebase analysis instead of interviews. If `research/concept-brief.md` or `research/{slug}/concept-brief.md` exists, use it as starting context for the research frame.
+Automated research that identifies **multiple ICP candidates**, maps pain points and value props, and selects a primary ICP. Uses web search + codebase analysis instead of interviews. If `research/idea-brief.md` or `research/{slug}/idea-brief.md` exists, use it as starting context for the research frame.
 
 Default stance: assume the user has no insider knowledge of the market. Explain segments, pain signals, and tradeoffs from first principles so the recommendation is defensible without founder intuition. Ask for corrections, hard constraints, or proprietary facts only when needed.
 
@@ -41,9 +41,9 @@ When product path `{slug}` is active, read and write research under `research/{s
 1. **Parse input and gather concept context**:
    - Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading; treat legacy `abandoned` as `archived` and exclude archived/deferred/revisit/promoted paths plus `research/_archive/` scopes from active target selection. Use `active_paths` to identify current product/app/ICP focuses and `product_paths[]` to preserve secondary product paths without treating them as git branches or parallel implementation lanes.
    - Read `$ARGUMENTS` as a spec file path or concept text when provided.
-   - Read `research/{slug}/concept-brief.md` in product-path scope, or `research/concept-brief.md` in flat scope, when present. Treat it as starting context and source hypotheses, not as settled truth.
-   - If `$ARGUMENTS` is empty and a concept brief exists, use the concept brief as the primary input before falling back to README, specs, or codebase inference.
-   - If `$ARGUMENTS` conflicts with the concept brief, flag the mismatch at the first checkpoint and ask which premise should guide ICP research.
+   - Read `research/{slug}/idea-brief.md` in product-path scope, or `research/idea-brief.md` in flat scope, when present. Treat it as starting context and source hypotheses, not as settled truth.
+   - If `$ARGUMENTS` is empty and an idea brief exists, use the idea brief as the primary input before falling back to README, specs, or codebase inference.
+   - If `$ARGUMENTS` conflicts with the idea brief, flag the mismatch at the first checkpoint and ask which premise should guide ICP research.
    - Read codebase if it exists. Read existing research for background.
    - **Use code/app hints secondarily** (`turbo.json`, `pnpm-workspace.yaml`, `lerna.json`, `nx.json`, `package.json` workspaces, app folders, or package folders) only after product-path resolution. If multiple active product paths exist, or if this run is explicitly producing a cross-path overview, run the full ICP process per product path and produce `research/{slug}/icp.md` per path plus a unified `research/icp.md`. If code clearly exposes a user-facing app without a matching product path, suggest creating `research/{slug}/` instead of treating monorepo detection as a gate.
    - **Migrate flat files when product paths are introduced:** If canonical flat `research/*.md` files exist and the user chooses or creates a product path, offer to move path-specific canonical docs into `research/{chosen-slug}/`. Leave or regenerate top-level files only when they are cross-path summaries.

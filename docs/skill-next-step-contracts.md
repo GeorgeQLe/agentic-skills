@@ -51,7 +51,7 @@ This audit checked:
 
 | Skill | End states | Valid recommendation |
 | --- | --- | --- |
-| `idea-scope-brief` | Business discovery lane missing, business discovery enabled, project type unclear | Pack missing -> `pack install business-discovery`. Pack enabled -> `icp` using `research/concept-brief.md`. Project unclear -> `pack recommend`. |
+| `idea-scope-brief` | Business discovery lane missing, business discovery enabled, project type unclear | Pack missing -> `pack install business-discovery`. Pack enabled -> `icp` using `research/idea-brief.md`. Project unclear -> `pack recommend`. |
 | `competitive-analysis` concept-validation mode | `Proceed to ICP`, `Pivot concept`, `Abandon` | `Proceed` -> `icp`; `Pivot` -> `brainstorm`; `Abandon` -> `No follow-up skill recommended` unless the user wants a new concept. Standard-mode re-run is valid only after `icp` creates `research/icp.md`. |
 | `competitive-analysis` standard mode | Journey missing, positioning missing, UX variations missing, contested solution fit, GTM missing, codebase exists | Missing journey is first: if `customer-lifecycle` is unavailable, recommend `pack install customer-lifecycle`; if it is already enabled, recommend `journey-map`. Then route to `positioning`, `ux-variations`, optional `value-prop-canvas` only for contested solution-fit evidence, `gtm`, `mvp-gap`. |
 | `experiment` | Designed, validated, invalidated, inconclusive | Designed -> run the experiment manually. Validated -> log evidence with `customer-feedback`, update `assumption-tracker`, or plan/spec the validated opportunity. Invalidated -> update `assumption-tracker` and return to the domain skill for the failed assumption. Inconclusive -> `experiment [follow-up]` or `customer-feedback`. |

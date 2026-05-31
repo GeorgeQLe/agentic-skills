@@ -29,7 +29,7 @@ Develops a Strategyzer-style Value Proposition Canvas that maps Customer Profile
   - `research/competitive-analysis.md` — competitor landscape and alternative solutions
   - `research/journey-map.md` — where jobs, pains, gains, and aha moments occur in the user/customer lifecycle
   - `research/positioning.md` — market framing to avoid contradicting accepted positioning
-  - `research/concept-brief.md` — product concept and hypothesis
+  - `research/idea-brief.md` — product concept and hypothesis
 
 ## Process
 
@@ -51,7 +51,7 @@ When product path `{slug}` is active, read and write research under `research/{s
 
 - Read `research/icp.md` — ICP segments, jobs, pains, gains, trigger events
 - Read `research/competitive-analysis.md` if it exists — competitor landscape, alternative solutions
-- Read `research/concept-brief.md` if it exists — product concept and hypothesis
+- Read `research/idea-brief.md` if it exists — product concept and hypothesis
 - Read CLAUDE.md, README, and key source files for product context
 
 ### 2. Research VPC Methodology
@@ -162,7 +162,7 @@ For each existing downstream document:
 ```markdown
 # Value Proposition Canvas
 
-> Based on: research/icp.md[, research/competitive-analysis.md, research/concept-brief.md]
+> Based on: research/icp.md[, research/competitive-analysis.md, research/idea-brief.md]
 > Date: [current date]
 > Methodology: Strategyzer Value Proposition Canvas
 

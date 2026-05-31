@@ -52,7 +52,7 @@ When product path `{slug}` is active, read and write research under `research/{s
 
 **Standard mode:** Read CLAUDE.md, README, package config, key source files. Read `research/icp.md` (or `research/{slug}/icp.md`) if it exists — the ICP defines the competitive frame. Read `research/enterprise-icp.md` (or `research/{slug}/enterprise-icp.md`) and `research/mvp-gap.md` (or `research/{slug}/mvp-gap.md`) if they exist. Summarise what the product does, who it's for, and what problem it solves.
 
-**Concept-validation mode:** Use `research/concept-brief.md` when present, otherwise use the concept description from Prerequisites. Summarise what the concept proposes (problem, audience, approach). Confirm with the user before researching.
+**Concept-validation mode:** Use `research/idea-brief.md` when present, otherwise use the concept description from Prerequisites. Summarise what the concept proposes (problem, audience, approach). Confirm with the user before researching.
 
 ### 2. Identify Competitors
 
