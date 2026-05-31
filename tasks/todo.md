@@ -96,6 +96,35 @@
 
 ## Current Task - Rename concept-brief Artifact to idea-brief 2026-05-30
 
+### ▶ NEXT STEP (clear-context implementation) — Phase 3 final consumer: `afps-status`
+
+**Scope:** Rename the artifact glob tokens in the only remaining Phase 3 consumer, `global/codex/afps-status/SKILL.md`. There is no Claude `afps-status` variant (codex-only), so this is one file.
+
+**Exact change — line 31** (the "Inspect AFPS evidence" → "Concept artifacts" bullet):
+- `research/concept-brief*.md` → `research/idea-brief*.md`
+- `research/*/concept-brief*.md` → `research/*/idea-brief*.md`
+- A single `replace_all` of `concept-brief*.md` → `idea-brief*.md` covers both glob tokens.
+- **Preserve** the bullet label `Concept artifacts:` and the trailing `concept/interview notes` — those denote the product-concept *category*, not the renamed document. This matches the established consumer convention (rename only the document filename token, keep product-concept prose). The `idea-brief*.md` glob still matches `idea-brief-interview.md`.
+
+**Conventions (match the prior 7 Phase 3 consumers):**
+- Coordinated mechanical sync: **no version bump, no archive, no CHANGELOG**.
+- Body-only string change → no skill metadata change, but the content fingerprint shifts. Regenerate showcase data so the dirty tree is consistent for `/ship`: `node scripts/generate-skills-showcase-data.mjs`, `node scripts/generate-skills-showcase-github-data.mjs`, `scripts/validate-skills-showcase-data.sh`.
+- Add a `tasks/history.md` entry and check off the Phase 3 `afps-status` line (121) in this file.
+- `/exec` will capture prompt-history under `prompts/exec/` before substantive work.
+
+**Files affected:** `global/codex/afps-status/SKILL.md`; regenerated showcase assets (`docs/skills-showcase/assets/{skills-data.js,github-proof-data.js}`, `apps/skills-showcase/public/assets/{skills-data.js,github-proof-data.js}`, `docs/benchmark-results-matrix.md`); `tasks/todo.md`; `tasks/history.md`.
+
+**Acceptance criteria:**
+- `grep -n "concept-brief" global/codex/afps-status/SKILL.md` → nothing.
+- `scripts/validate-skills-showcase-data.sh` → "fresh".
+- `git diff --check` clean.
+
+**Execution Profile:** serial, implementation-safe, single-file mechanical rename. No tests gate this step (Phase 4 owns the test update separately).
+
+**Ship-one-step handoff:** implement only this step, validate it, then run `/ship` when done.
+
+---
+
 **Goal:** Rename the `idea-scope-brief` output artifact from `concept-brief.md` to `idea-brief.md` (and all variants) across the full pipeline, so the artifact is named after the skill. Decision: **hard rename + migration note** (no legacy fallback read). Rename only the *artifact* and its proper name "concept brief" → "idea brief"; preserve the word "concept" wherever it denotes the product concept itself (concept slug, concept identity, problem/concept hypothesis, "product concept, solution approach").
 
 **Filename variants to rename:** `concept-brief.md` → `idea-brief.md`; `concept-brief-interview.md` → `idea-brief-interview.md`; `research/{slug}/concept-brief.md` → `research/{slug}/idea-brief.md`; legacy `concept-brief-{slug}.md` / `concept-brief-{slug}-interview.md` → `idea-brief-{slug}.md` / `idea-brief-{slug}-interview.md`; afps glob `research/concept-brief*.md` → `research/idea-brief*.md`.
