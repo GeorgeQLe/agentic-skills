@@ -73,6 +73,45 @@
 
 ---
 
+## Current Task - Rename concept-brief Artifact to idea-brief 2026-05-30
+
+**Goal:** Rename the `idea-scope-brief` output artifact from `concept-brief.md` to `idea-brief.md` (and all variants) across the full pipeline, so the artifact is named after the skill. Decision: **hard rename + migration note** (no legacy fallback read). Rename only the *artifact* and its proper name "concept brief" → "idea brief"; preserve the word "concept" wherever it denotes the product concept itself (concept slug, concept identity, problem/concept hypothesis, "product concept, solution approach").
+
+**Filename variants to rename:** `concept-brief.md` → `idea-brief.md`; `concept-brief-interview.md` → `idea-brief-interview.md`; `research/{slug}/concept-brief.md` → `research/{slug}/idea-brief.md`; legacy `concept-brief-{slug}.md` / `concept-brief-{slug}-interview.md` → `idea-brief-{slug}.md` / `idea-brief-{slug}-interview.md`; afps glob `research/concept-brief*.md` → `research/idea-brief*.md`.
+
+**Change-first ordering (why this sequence):** the producer defines the contract, so it changes first and anchors everything else; the routing doc mirrors the producer; consumers are updated to the new contract; tests assert the new contract; versioning/archival is the mechanical tail; verify + ship last. Land producer + consumers + tests in one shippable unit so the pipeline is never left half-renamed.
+
+**Plan:**
+
+- Phase 1 — Producer (change first):
+  - [x] `global/claude/idea-scope-brief/SKILL.md` — rename all output paths/variants (lines ~36, 83-85) and "concept brief" artifact prose to `idea-brief`. (Also bumped v0.6→v0.7, archived v0.6, added v0.7 CHANGELOG entry; "concept" product-meaning preserved.)
+  - [x] `global/codex/idea-scope-brief/SKILL.md` — same (lines ~38, 85-87). (Also bumped v0.6→v0.7, archived v0.6, added v0.7 CHANGELOG entry.)
+  - [x] Add a migration note to Output/Constraints: existing `research/concept-brief.md` (and slugged/`{slug}` variants) from prior runs must be renamed to the `idea-brief` equivalent before re-running; the skill no longer reads the legacy filename.
+- Phase 2 — Routing/contract doc:
+  - [x] `docs/skill-next-step-contracts.md` line ~54 → `research/idea-brief.md`.
+- Phase 3 — Consumers (read the artifact):
+  - [x] business-discovery `icp` (claude + codex)
+  - [x] business-discovery `competitive-analysis` (claude + codex)
+  - [x] business-discovery `lean-canvas` (claude + codex)
+  - [x] business-discovery `value-prop-canvas` (claude + codex)
+  - [ ] product-design `prototype` (claude + codex)
+  - [ ] product-design `spec-interview` (claude + codex)
+  - [ ] research-admin `research-roadmap` (claude + codex)
+  - [ ] `global/codex/afps-status/SKILL.md` — discovery glob → `research/idea-brief*.md`
+- Phase 4 — Tests:
+  - [ ] `tests/layer4/setups/tier23-global-workflows.setup.ts` — update `outputPath` (line 487), prompt text (488), and both regex patterns (497, 501) to `idea-brief-poketo-core(.md|-interview.md)`.
+- Phase 5 — Versioning (**OPEN DECISION — consumers only; producer done**): producer `idea-scope-brief` already bumped v0.6 → v0.7 (archived + CHANGELOG entry superseding the v0.6 "filename unchanged" note) as part of Phase 1, so each shippable unit stayed valid. Remaining open decision is the consumer SKILL.md files: strict CLAUDE.md rule = archive + decimal bump + CHANGELOG entry for each changed consumer; alternative = treat consumer edits as a coordinated mechanical sync without bumps. Resolve which before executing this phase.
+  - [ ] Apply chosen versioning approach to all changed skills.
+- Phase 6 — Verify & ship:
+  - [ ] `grep -rn "concept-brief" --include="*.md" --include="*.ts" . | grep -v /archive/ | grep -v tasks/` returns only intended historical/changelog mentions.
+  - [ ] Run `idea-scope-brief` verify/benchmark and the layer4 tier23 setup where runnable.
+  - [ ] `bash scripts/skill-versions.sh --missing` and `git diff --check` clean.
+  - [ ] Commit grouped by phase; push to `master`.
+
+**Untouched (intentional):** `tasks/roadmap.md`, `tasks/todo.md`, `tasks/history.md` historical logs; all `archive/v*/SKILL.md` snapshots; the prior v0.6 changelog entries (true as of v0.6, superseded by the new entry).
+
+---
+
 ## Current Task - Alignment Page Source In Compiled YAML 2026-05-31
 
 **Goal:** Implement the prior plan to add the repo-relative HTML alignment page path to every feedback-only and final compiled YAML payload.
