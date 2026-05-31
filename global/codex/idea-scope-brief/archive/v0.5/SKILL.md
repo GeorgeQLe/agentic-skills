@@ -2,7 +2,7 @@
 name: idea-scope-brief
 description: Shape a rough product or project idea into a scoped brief before ICP, market research, specifications, UX, UI, or implementation planning
 type: planning
-version: v0.6
+version: v0.5
 argument-hint: "[optional rough idea, product thought, or product-path scope]"
 ---
 
@@ -47,7 +47,7 @@ When product path `{slug}` is active, read and write research under `research/{s
    - Do not validate the market with broad web research. Use light repo/context inspection only; downstream research skills own evidence gathering.
    - Treat every user claim as a hypothesis unless supported by existing project files.
 
-3. **Surface an Idea Assumptions Manifest**
+3. **Surface a Concept Assumptions Manifest**
    - Before deep questioning, present what you think the concept is.
    - Tag assumptions as `[from prompt]`, `[from repo]`, `[from research]`, or `[inferred]`.
    - Cover:

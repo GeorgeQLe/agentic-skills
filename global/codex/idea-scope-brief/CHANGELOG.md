@@ -1,5 +1,9 @@
 # idea-scope-brief Changelog
 
+## v0.6 - 2026-05-30
+
+- Rename "Concept Assumptions Manifest" to "Idea Assumptions Manifest" so the manifest is named after the skill's subject, matching the convention used by `ui-interview` (UI Assumptions Manifest), `ux-variations` (UX Variation Assumptions Manifest), and `feature-interview`. The `concept-brief.md` output filename is unchanged.
+
 ## v0.3 - 2026-05-27
 
 - Added `research/.progress.yaml` product-path manifest handling for related concepts, app paths, product lines, and pivots.

@@ -2,17 +2,15 @@
 name: idea-scope-brief
 description: Shape a rough product or project idea into a scoped brief before ICP, market research, specifications, UX, UI, or implementation planning
 type: planning
-version: v0.6
+version: v0.5
 argument-hint: "[optional rough idea, product thought, or product-path scope]"
 ---
 
 # Idea Scope Brief
 
-Invoke as `$idea-scope-brief`.
-
 Use this skill when the user has a half-formed idea and needs it cleaned up enough to enter the normal research and planning workflow. This skill is intentionally pre-ICP: it clarifies the concept, problem hypothesis, beneficiary hypothesis, value wedge, constraints, non-goals, and unknowns, but does not select an ICP, analyze competitors, define UX/UI, choose architecture, or write implementation specs.
 
-## Workflow
+## Process
 
 ### 0. Product-Path Scope Resolution
 
@@ -39,15 +37,15 @@ When product path `{slug}` is active, read and write research under `research/{s
    - If no rough idea is available from arguments or repo context, ask the user for the idea in plain language.
    - Read `research/.progress.yaml` when present. Normalize `active_path` (singular legacy) to `active_paths` (plural list) when reading; treat legacy `abandoned` as `archived` and exclude archived/deferred/revisit/promoted paths plus `research/_archive/` scopes from active target selection. Treat `active_paths` as the current product/app/ICP focuses and `product_paths[]` as parked, archived, or promoted product-path state, not git branch state.
    - When the prompt, repo context, interview, or pivot history surfaces multiple related concepts, apps, product lines, or future pivots, update or propose updates to `research/.progress.yaml` with product-path entries instead of merging them into one generic concept. Use fields: `id`, `label`, `scope_path`, `status`, `source_skill`, `reason`, `archive_reason`, `archived_at`, `promoted_at`, `evidence_refs`, `revisit_trigger`, `next_skill`, `pipeline_stage`, and `last_touched`. Set `pipeline_stage: idea-scope-brief` on entries created by this skill.
-   - Keep the central concept in `active_paths` when it is the current focus. Record related or future concepts as `status: deferred` or `status: revisit_candidate` with a concrete revisit trigger and a likely next skill such as `$icp <path/audience>`.
-   - When 3+ product paths exist in the manifest, recommend `$product-line review` to the user for portfolio management.
+   - Keep the central concept in `active_paths` when it is the current focus. Record related or future concepts as `status: deferred` or `status: revisit_candidate` with a concrete revisit trigger and a likely next skill such as `/icp <path/audience>`.
+   - When 3+ product paths exist in the manifest, recommend `/product-line review` to the user for portfolio management.
 
 2. **Keep the boundary clear**
    - Do not run ICP, competitive analysis, journey mapping, UX variation, UI interview, roadmap, or implementation planning inside this skill.
    - Do not validate the market with broad web research. Use light repo/context inspection only; downstream research skills own evidence gathering.
    - Treat every user claim as a hypothesis unless supported by existing project files.
 
-3. **Surface an Idea Assumptions Manifest**
+3. **Surface a Concept Assumptions Manifest**
    - Before deep questioning, present what you think the concept is.
    - Tag assumptions as `[from prompt]`, `[from repo]`, `[from research]`, or `[inferred]`.
    - Cover:
@@ -62,7 +60,7 @@ When product path `{slug}` is active, read and write research under `research/{s
    - Ask the user to confirm, correct, or flag assumptions before writing.
 
 4. **Interview until concept-ready**
-   - Codex interview cadence is one primary decision question per turn by default. Use short follow-up bullets only when they clarify the same decision, not to batch unrelated questions.
+   - Ask 1 to 3 focused questions per turn.
    - Resolve only concept-level ambiguity:
      - what problem exists
      - who might care
@@ -100,14 +98,14 @@ The concept brief must include:
 - `## ICP Readiness`
 - `## Next Steps`
 
-The `## ICP Readiness` section must state whether the concept is ready for `$icp`, what inputs `$icp` should use, and which assumptions should be tested first.
+The `## ICP Readiness` section must state whether the concept is ready for `/icp`, what inputs `/icp` should use, and which assumptions should be tested first.
 
 The `## Next Steps` section must recommend exactly one primary command:
 
-- If the concept appears to be a business app or user-facing product and the business discovery lane is not enabled: `$pack install business-discovery` — this installs the research skills (ICP, competitive analysis, value prop, positioning, lean canvas) needed before any repo bootstrapping or development.
-- If `business-discovery` or the compatibility `business-app` alias is enabled: `$icp`
-- If the concept already has ICP/market evidence but needs journey, onboarding, conversion, or retention planning: `$pack install customer-lifecycle`
-- If project type is unclear: `$pack recommend`
+- If the concept appears to be a business app or user-facing product and the business discovery lane is not enabled: `/pack install business-discovery` — this installs the research skills (ICP, competitive analysis, value prop, positioning, lean canvas) needed before any repo bootstrapping or development.
+- If `business-discovery` or the compatibility `business-app` alias is enabled: `/icp`
+- If the concept already has ICP/market evidence but needs journey, onboarding, conversion, or retention planning: `/pack install customer-lifecycle`
+- If project type is unclear: `/pack recommend`
 
 Include 1-3 other options only when they are materially useful.
 
@@ -119,7 +117,7 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 
 - Keep the skill short and pre-research.
 - Do not write specs, UX variants, UI specs, roadmap phases, or implementation tasks.
-- Do not recommend `$scaffold` unless the user explicitly asks to create a package/app shell before research; normal product flow scaffolds after research, prototype consolidation, spec, roadmap, and phase planning identify the first implementation target. `$scaffold` requires the monorepo pack (`$pack install monorepo`).
+- Do not recommend `/scaffold` unless the user explicitly asks to create a package/app shell before research; normal product flow scaffolds after research, prototype consolidation, spec, roadmap, and phase planning identify the first implementation target. `/scaffold` requires the monorepo pack (`/pack install monorepo`).
 - Do not update `tasks/todo.md`.
 - New files do not need archive snapshots. Before replacing an existing concept brief, including slugged briefs, archive it to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-relative-path>`.
 
