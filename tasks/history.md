@@ -1,5 +1,11 @@
 # Session History
 
+## 2026-05-31 — concept-brief → idea-brief rename: Phase 5 + Phase 6 (complete)
+
+- Closed out the rename. **Phase 5** applied the user-ratified **coordinated mechanical sync** decision: consumer SKILL.md files take no archive/bump/CHANGELOG (matching how the Phase 3 consumer edits already shipped) → no-op, no source changes.
+- **Phase 6 verification passed.** The Phase 6 grep (`grep -rn "concept-brief" --include=*.md --include=*.ts . | grep -v /archive/ | grep -v tasks/`) returns only intended historical record: idea-scope-brief migration notes (which deliberately name the legacy filename for users), CHANGELOG entries, and immutable `prompts/**` invocation captures. No active artifact-path or workflow reference remains unrenamed. `scripts/skill-versions.sh --missing` → 406/406 versioned; `git diff --check` clean. layer4 tier23 is `skip`-gated (live-agent setup); no behavior change in Phase 4/5 so no benchmark re-run required.
+- Checked off Phase 5 + Phase 6 verification items in `tasks/todo.md` and retired the stale "▶ NEXT STEP — Phase 4" header into a completion status. The full `concept-brief → idea-brief` rename (producer + routing doc + 8 consumers + test fixture) is now done end-to-end.
+
 ## 2026-05-31 — Add project-fleet skill inventory
 
 - Added mirrored Claude/Codex `skill-inventory` skills to `packs/project-fleet` with `version: v0.0`, changelogs, generated alignment-page bundles, Codex UI metadata, and `PACK.md` listing.

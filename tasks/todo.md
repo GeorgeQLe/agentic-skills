@@ -122,37 +122,9 @@
 
 ## Current Task - Rename concept-brief Artifact to idea-brief 2026-05-30
 
-### ▶ NEXT STEP (clear-context implementation) — Phase 4: test setup update
+### ✅ COMPLETE — concept-brief → idea-brief rename (all 6 phases)
 
-**Status:** Phase 3 is complete — all 8 consumers renamed (icp, competitive-analysis, lean-canvas, value-prop-canvas, prototype, spec-interview, research-roadmap, afps-status). Next is the lone Phase 4 test setup update.
-
-**Scope:** Update the one layer4 test setup that references the old `concept-brief` artifact filenames in the global-workflows tier so the test fixtures match the renamed `idea-brief` contract. Single file.
-
-**Exact change — `tests/layer4/setups/tier23-global-workflows.setup.ts`:**
-- **Line 487** — `outputPath`: rename the expected output path from `concept-brief-poketo-core.md` → `idea-brief-poketo-core.md` (apply the same `concept-brief` → `idea-brief` token swap to whatever the exact path string is — read the line first to confirm the precise value, including any `-interview` variant).
-- **Line 488** — prompt text: update any `concept-brief` mention in the prompt/instruction string → `idea-brief`.
-- **Lines 497 and 501** — both regex patterns: update to match `idea-brief-poketo-core(.md|-interview.md)` (swap `concept-brief` → `idea-brief` in the pattern, preserving the existing structure/anchors).
-- **Preserve** any prose denoting the product *concept* itself (e.g. "concept scoping", concept slug); rename only the artifact filename/path tokens, matching the consumer convention used through Phase 3.
-- After editing, `grep -n "concept-brief" tests/layer4/setups/tier23-global-workflows.setup.ts` must return nothing.
-
-**Conventions (match the rename batch):**
-- Coordinated mechanical sync: **no version bump, no archive, no CHANGELOG** (this is a test fixture, not a skill).
-- Test-only change → no `SKILL.md`/`PACK.md` touched, so **no showcase regeneration needed**. Confirm `git status` shows only the test file + task docs before `/ship`.
-- Add a `tasks/history.md` entry and check off the Phase 4 line (152) in this file.
-- `/exec` will capture prompt-history under `prompts/exec/` before substantive work.
-
-**Files affected:** `tests/layer4/setups/tier23-global-workflows.setup.ts`; `tasks/todo.md`; `tasks/history.md`.
-
-**Acceptance criteria:**
-- `grep -n "concept-brief" tests/layer4/setups/tier23-global-workflows.setup.ts` → nothing.
-- Run the layer4 tier23 setup/test where runnable (e.g. the project's test command scoped to this setup); if it cannot be run in isolation, note that and rely on the grep + visual diff. The string swap must not change test structure, only the artifact tokens.
-- `git diff --check` clean.
-
-**Execution Profile:** serial, implementation-safe, single-file mechanical rename in a test fixture. No source code behavior changes.
-
-**Note on Phase 5 (do NOT execute yet):** Phase 5 is an **OPEN DECISION** requiring user input — whether changed consumer SKILL.md files get strict version bumps/archives/CHANGELOG or are treated as a coordinated mechanical sync without bumps. The Phase 3 batch already applied the mechanical-sync convention consistently, which strongly implies the latter, but the decision is not formally ratified. Surface this for user confirmation before planning Phase 5.
-
-**Ship-one-step handoff:** implement only this step, validate it, then run `/ship` when done.
+**Status (2026-05-31):** All phases done. Phase 4 (test fixture) shipped this session. Phase 5 resolved by user as **coordinated mechanical sync** (no consumer version bumps) → no-op. Phase 6 verification passed: the only residual `concept-brief` mentions are intended historical record (idea-scope-brief migration notes, CHANGELOG entries, and immutable `prompts/**` history captures); no active artifact-path/workflow reference remains unrenamed. `skill-versions --missing` clean (406/406); `git diff --check` clean. Remaining item is the final grouped commit/push, owned by `/ship`.
 
 ---
 
@@ -181,13 +153,13 @@
   - [x] `global/codex/afps-status/SKILL.md` — discovery glob → `research/idea-brief*.md`
 - Phase 4 — Tests:
   - [x] `tests/layer4/setups/tier23-global-workflows.setup.ts` — update `outputPath` (line 487), prompt text (488), and both regex patterns (497, 501) to `idea-brief-poketo-core(.md|-interview.md)`. (Done 2026-05-31: `concept-brief` → `idea-brief` artifact tokens swapped; product-concept prose preserved; grep clean.)
-- Phase 5 — Versioning (**OPEN DECISION — consumers only; producer done**): producer `idea-scope-brief` already bumped v0.6 → v0.7 (archived + CHANGELOG entry superseding the v0.6 "filename unchanged" note) as part of Phase 1, so each shippable unit stayed valid. Remaining open decision is the consumer SKILL.md files: strict CLAUDE.md rule = archive + decimal bump + CHANGELOG entry for each changed consumer; alternative = treat consumer edits as a coordinated mechanical sync without bumps. Resolve which before executing this phase.
-  - [ ] Apply chosen versioning approach to all changed skills.
+- Phase 5 — Versioning (**RESOLVED by user 2026-05-31: coordinated mechanical sync**): producer `idea-scope-brief` already bumped v0.6 → v0.7 (archived + CHANGELOG entry) in Phase 1. Consumer SKILL.md files take the coordinated mechanical-sync convention — **no archive, no decimal bump, no CHANGELOG** — matching how the Phase 3 consumer edits already shipped (body-only string swaps, contract unchanged).
+  - [x] Apply chosen versioning approach to all changed skills. (No-op: mechanical sync means no consumer version changes; consumers already shipped without bumps in Phase 3.)
 - Phase 6 — Verify & ship:
-  - [ ] `grep -rn "concept-brief" --include="*.md" --include="*.ts" . | grep -v /archive/ | grep -v tasks/` returns only intended historical/changelog mentions.
-  - [ ] Run `idea-scope-brief` verify/benchmark and the layer4 tier23 setup where runnable.
-  - [ ] `bash scripts/skill-versions.sh --missing` and `git diff --check` clean.
-  - [ ] Commit grouped by phase; push to `master`.
+  - [x] `grep -rn "concept-brief" --include="*.md" --include="*.ts" . | grep -v /archive/ | grep -v tasks/` returns only intended historical/changelog mentions. (Verified 2026-05-31: residual matches are idea-scope-brief migration notes + CHANGELOG entries + immutable `prompts/**` history captures — all intended; no active workflow/path reference unrenamed.)
+  - [x] Run `idea-scope-brief` verify/benchmark and the layer4 tier23 setup where runnable. (No behavior change in Phase 4/5 → benchmark re-run not required; layer4 tier23 is `skip`-gated live-agent setup, not CI-runnable in isolation. Validated by grep + visual diff.)
+  - [x] `bash scripts/skill-versions.sh --missing` and `git diff --check` clean. (406/406 versioned; diff clean.)
+  - [ ] Commit grouped by phase; push to `master`. (Owned by `/ship`.)
 
 **Untouched (intentional):** `tasks/roadmap.md`, `tasks/todo.md`, `tasks/history.md` historical logs; all `archive/v*/SKILL.md` snapshots; the prior v0.6 changelog entries (true as of v0.6, superseded by the new entry).
 
