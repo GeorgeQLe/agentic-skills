@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-05-31 — Phase 41: re-benchmark `provision-agentic-config`
+
+- Re-benchmarked `provision-agentic-config` via the `benchmark-test-skill` flow (pack `agentic-skills-bench`), `--agent both --runs 3`. Confirmed the fixture (`tier23-global-workflows.setup.ts:694`) already carries Phase-43 route guidance (`Recommended next command: $exec`) and the orchestration/monorepo/shipping evidence matrix before spending budget.
+- **Results:** Claude **100%** hard-assertion pass (3/3, 98.7% quality, p50 56.3s, similarity 0.869); Codex **66.7%** (2/3, 94.7% quality, p50 64.3s, similarity 0.889). The single Codex failure (run #0) is genuine output variance — that run dropped the primary-branch shipping-policy text and echoed a `/tmp/...` path in stdout; the other two Codex runs and all three Claude runs passed. No harness/setup false-negative. Total cost $6.00. Large improvement over the pre-fixture near-zero pass rates.
+- Wrote curated report `benchmark/test-provision-agentic-config-2026-05-31.md`. Raw sessions persisted at `tests/benchmarks/runs/provision-agentic-config-{claude-5bd3b160,codex-86b4839a}/` (gitignored; local-only, read directly by the generator).
+- Regenerated `docs/benchmark-results-matrix.md` (now references the 2026-05-31 curated report with 100%/67% rows) plus Skills Showcase skills-data and github-proof-data (both `docs/` and `apps/` copies). Validation green: `pnpm bench:coverage` (163 skills valid); focused `bench-coverage` + `bench-setups` + `benchmark-results-matrix` layer1 tests (110/110 across the two focused runs); `scripts/validate-skills-showcase-data.sh` fresh; `git diff --check` clean.
+- Graded count unchanged at 69 unique / 158 total — `provision-agentic-config` was already in the graded set (reports from 05-20/21/22), so this refreshes its grade rather than adding a unique skill. Advanced the Batch 41.3 next-target pointer to `migrate`, then `prototype`.
+- Setup note: the only layer1 failure under `pnpm verify --skill provision-agentic-config` is the pre-existing, unrelated `skill-dev` `.claude/skills` output-path conflict (`targeted-skill-builder` + `create-local-skill`), outside this skill's surface; the provision-agentic-config setup contract checks pass 90/90.
+
 ## 2026-05-31 — concept-brief → idea-brief rename: Phase 5 + Phase 6 (complete)
 
 - Closed out the rename. **Phase 5** applied the user-ratified **coordinated mechanical sync** decision: consumer SKILL.md files take no archive/bump/CHANGELOG (matching how the Phase 3 consumer edits already shipped) → no-op, no source changes.
