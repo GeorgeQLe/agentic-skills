@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.7 - 2026-05-31
+
+- Added top-level `alignment_page` to feedback-only and final compiled YAML so agents can reopen the exact HTML review page.
+
 ## v0.6 - 2026-05-30
 
 - Added feedback-only YAML alignment-page handling so section concerns and clarification requests can be sent before final gate answers.

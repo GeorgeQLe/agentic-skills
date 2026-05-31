@@ -198,6 +198,22 @@ describe("alignment page gate contract", () => {
     }
   });
 
+  it("requires compiled YAML to identify the source alignment page", () => {
+    expect(activeAlignmentSkillFiles.length).toBeGreaterThan(10);
+    for (const path of activeAlignmentSkillFiles) {
+      const content = conventionText(path);
+      expect(content, `${path} feedback alignment_page`).toMatch(
+        /It generates YAML with `alignment_page: alignment\/[^`]+\.html`, `feedback_status: revision-request`/,
+      );
+      expect(content, `${path} final alignment_page`).toMatch(
+        /`alignment_page: alignment\/[^`]+\.html`, `approval_status: ready-for-agent-review`/,
+      );
+      expect(content, `${path} repo-relative path source`).toMatch(
+        /Populate `alignment_page` from the known repo-relative output path used to write the HTML page/,
+      );
+    }
+  });
+
   it("leaves skip-list skills excluded from alignment requirements", () => {
     for (const path of skippedSkills) {
       const content = read(path);

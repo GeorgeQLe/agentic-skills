@@ -1,3 +1,15 @@
+## Current Targeted Update: Alignment Page Source In Compiled YAML 2026-05-31
+
+**Goal:** Update the shared HTML alignment-page convention so every compiled YAML payload identifies the repo-relative HTML alignment page that produced it.
+
+**Acceptance Criteria:**
+- [x] Canonical `CLAUDE.md` alignment convention requires top-level `alignment_page: alignment/{skill-name}-{topic}.html` in feedback-only YAML.
+- [x] Canonical `CLAUDE.md` alignment convention requires top-level `alignment_page: alignment/{skill-name}-{topic}.html` in final approval YAML.
+- [x] The convention says generated pages populate `alignment_page` from the known repo-relative output path used to write the page.
+- [x] Bundled `ALIGNMENT-PAGE.md` files are regenerated from the canonical source and dry-run drift checks pass.
+- [x] Focused layer1 coverage verifies active alignment-page conventions require `alignment_page` in both compiled YAML paths.
+- [x] Review notes are recorded; intended changes are committed and pushed on `master`.
+
 ## Current Targeted Update: Upgrade Alignment Pages Skill 2026-05-30
 
 **Goal:** Add a mirrored `upgrade-alignment-pages` skill to the `alignment-page-admin` pack so agents can audit and explicitly upgrade generated `alignment/*.html` review artifacts to the current local alignment-page standard without touching convention source files.

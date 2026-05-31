@@ -1,3 +1,28 @@
+## Current Task - Alignment Page Source In Compiled YAML 2026-05-31
+
+**Goal:** Implement the prior plan to add the repo-relative HTML alignment page path to every feedback-only and final compiled YAML payload.
+
+**Plan:**
+- [x] Inspect the canonical alignment convention, generator, active alignment contract tests, and current task-tracking files.
+- [x] Record the task plan in `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Update the canonical `CLAUDE.md` alignment convention with the new top-level `alignment_page` YAML field.
+- [x] Regenerate bundled `ALIGNMENT-PAGE.md` files from the canonical source.
+- [x] Update the preserved active inline alignment contracts so the all-active-conventions regression is truthful.
+- [x] Add focused regression coverage for feedback-only and final compiled YAML path requirements.
+- [x] Run focused verification, record review notes, commit, and push intended changes on `master`.
+
+### Review
+
+- Added top-level `alignment_page: alignment/{skill-name}-{topic}.html` to feedback-only YAML and final approval YAML in the canonical `CLAUDE.md` alignment convention.
+- Required pages to populate `alignment_page` from the known repo-relative HTML output path used to write the page, not the page title, browser URL, `window.location`, or a display label.
+- Regenerated 264 bundled `ALIGNMENT-PAGE.md` convention files from `scripts/upgrade-alignment-page.mjs`.
+- Updated the 16 preserved active inline alignment contracts (`roadmap`, product-design core skills, `uat`, and `research-roadmap` for Claude/Codex) so every active alignment-page convention carries the same source-page YAML requirement. Archived their prior `SKILL.md` versions, bumped versions, and added changelog entries.
+- Added `tests/layer1/alignment-gates.test.ts` coverage asserting all active alignment-page conventions require `alignment_page` in both feedback-only and final compiled YAML.
+- Refreshed Skills Showcase generated data after version bumps.
+- Verification passed: `node scripts/upgrade-alignment-page.mjs --dry-run`, focused `alignment-gates` layer1 test, `bash scripts/skill-versions.sh --missing`, `scripts/validate-skills-showcase-data.sh`, and `git diff --check`.
+
+---
+
 ## Current Task - Upgrade Alignment Pages Skill 2026-05-30
 
 **Goal:** Implement the prior plan for a new mirrored `upgrade-alignment-pages` skill in `packs/alignment-page-admin`, including dry-run audit behavior, explicit apply/archival constraints, Codex UI metadata, validation, and shipping.
