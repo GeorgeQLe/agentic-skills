@@ -1,6 +1,6 @@
 # Canonical Agentic Workflow Report
 
-> Date: 2026-05-24
+> Date: 2026-06-01
 > Scope: current `agentic-skills` workflow contracts and workflow documentation as of the AFPS alignment/prototype routing updates. This report is an audit snapshot, not a new skill contract.
 > Authoritative operating-model reference: `docs/operating-modes.md`.
 > Evidence sources: `README.md`, `docs/operating-modes.md`, `docs/packs.md`, `docs/skills-reference.md`, `docs/pack-workflow-matrix.md`, `docs/codex-workflow.md`, `docs/skill-next-step-contracts.md`, `global/{claude,codex}/*/SKILL.md`, `packs/*/{claude,codex}/*/SKILL.md`, `tasks/roadmap.md`, `tasks/todo.md`, and `tasks/lessons.md`.
@@ -98,14 +98,15 @@ Claude route:
 /competitive-analysis
 /pack install customer-lifecycle        # when lifecycle mapping is missing
 /journey-map
+/pack install business-growth           # optional: when repeat-use, pricing, GTM, or growth-loop risk blocks UX
+/hook-model                             # optional: consumer/PLG habit-loop input before UX choices harden
 /positioning                            # market category and alternatives after journey evidence
 /value-prop-canvas                      # optional: contested solution-fit evidence
 /lean-canvas                            # optional: material business-model risk
-/pack install business-growth           # when GTM/growth/pricing work is needed
-/metrics
-/monetization
-/gtm
-/growth-model
+/lifecycle-metrics                      # optional: stage measurement, especially for infrequent or enterprise products
+/metrics                                # optional: broader success framework after journey evidence
+/monetization                           # optional: pricing gates or packaging affect the product path
+/gtm                                    # optional: channel/launch path affects the product path
 /ux-variations
 /ui-interview
 /prototype
@@ -130,14 +131,15 @@ $icp
 $competitive-analysis
 $pack install customer-lifecycle
 $journey-map
+$pack install business-growth           # optional: when repeat-use, pricing, GTM, or growth-loop risk blocks UX
+$hook-model                             # optional: consumer/PLG habit-loop input before UX choices harden
 $positioning
 $value-prop-canvas                      # optional: contested solution-fit evidence
 $lean-canvas                            # optional: material business-model risk
-$pack install business-growth
-$metrics
-$monetization
-$gtm
-$growth-model
+$lifecycle-metrics                      # optional: stage measurement, especially for infrequent or enterprise products
+$metrics                                # optional: broader success framework after journey evidence
+$monetization                           # optional: pricing gates or packaging affect the product path
+$gtm                                    # optional: channel/launch path affects the product path
 $ux-variations
 $ui-interview
 $prototype
@@ -152,7 +154,7 @@ $exec
 $ship-end
 ```
 
-This is an ordered default, not a mandate to run every optional business skill. Skip value, positioning, growth, or ops skills when the evidence is already sufficient or the product does not need that lane yet. Do not skip ICP, competitive analysis, journey mapping, UX/UI planning, prototype evaluation, consolidation, or the production spec for non-trivial user-facing product work.
+This is an ordered default, not a mandate to run every optional business skill. `hook-model` is a conditional pre-UX detour when the journey shows that repeat use, habit formation, engagement loops, retention triggers, saved state, social rewards, or investment compounding are central to product value. For enterprise, infrastructure, transactional, procurement-driven, or naturally infrequent products, skip `hook-model` and prefer lifecycle or success measurement (`lifecycle-metrics` or `metrics`). Do not skip ICP, competitive analysis, journey mapping, UX/UI planning, prototype evaluation, consolidation, or the production spec for non-trivial user-facing product work.
 
 ### Existing Codebase With No Current Docs
 

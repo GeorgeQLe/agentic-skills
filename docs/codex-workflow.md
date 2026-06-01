@@ -335,7 +335,7 @@ If you are used to this Claude Code rhythm:
 19. `$ship-end` when wrapping an off-script or partial session
 20. `$pmf-assessment` (post-launch)
 
-Optional detours: `$value-prop-canvas` when solution-customer fit is weak, disputed, or needs explicit scoring; `$lean-canvas` when revenue, channels, cost, defensibility, or unfair-advantage assumptions are material risks; growth skills such as `$hook-model`, `$metrics`, `$monetization`, `$gtm`, and `$growth-model` when the project is ready for growth/pricing work.
+Optional detours: `$value-prop-canvas` when solution-customer fit is weak, disputed, or needs explicit scoring; `$lean-canvas` when revenue, channels, cost, defensibility, or unfair-advantage assumptions are material risks; lifecycle stage maps when onboarding, conversion, transaction, retention, expansion, or stage metrics would change UX/prototype choices. Use `$hook-model` after `$journey-map` only when consumer/PLG-style repeat use, habit formation, engagement loops, retention triggers, saved state, social rewards, or investment compounding are central to product value; route to `$pack install business-growth` first if needed. For B2B, enterprise, infrastructure, transactional, or naturally infrequent products, skip `$hook-model` and prefer `$lifecycle-metrics` or `$metrics`. Pricing/GTM detours such as `$monetization` and `$gtm` are also trigger-driven, not mandatory post-spec work.
 
 The closest Codex translation is:
 

@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-06-01 — Hook model AFPS routing implementation
+
+- Updated mirrored `journey-map` contracts to v0.7 after archiving v0.6. The next-step tree now checks blocking optional research triggers before default `positioning` or `ux-variations`.
+- Added a `journey-map` Optional Research Trigger Map that uses existing framework/model skills: lifecycle stage maps, `lifecycle-metrics`, `hook-model`, `value-prop-canvas`, `lean-canvas`, `monetization`, `gtm`, and later `growth-model` when metrics/GTM prerequisites are satisfied.
+- Added the conditional hook route: habit-suitable consumer/PLG repeat-use risk checks `business-growth` and then recommends `hook-model`; B2B, enterprise, infrastructure, transactional, or naturally infrequent products skip hook-model and prefer `lifecycle-metrics` or `metrics`.
+- Updated AFPS docs so `hook-model` is optional pre-UX/product-loop research, not mandatory and not post-spec by default.
+- Added focused layer1 routing coverage in `tests/layer1/journey-map-routing.test.ts`. Validation passed for the focused routing tests, skill version fields, and `git diff --check`; strict archive audit remains blocked only by the pre-existing `research-roadmap v0.6` changelog-heading issue.
+
 ## 2026-05-31 — Phase 41: re-benchmark `provision-agentic-config`
 
 - Re-benchmarked `provision-agentic-config` via the `benchmark-test-skill` flow (pack `agentic-skills-bench`), `--agent both --runs 3`. Confirmed the fixture (`tier23-global-workflows.setup.ts:694`) already carries Phase-43 route guidance (`Recommended next command: $exec`) and the orchestration/monorepo/shipping evidence matrix before spending budget.

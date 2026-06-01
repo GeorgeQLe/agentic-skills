@@ -25,7 +25,22 @@ This audit checked:
 5. If a recommendation depends on downstream impact, the skill must first classify impact as `None`, `Minor`, or `Major`. `Major` may recommend `reconcile-research`; `Minor` may annotate stale suggestions; `None` should not mention reconciliation.
 6. Experiment result branches belong in `## Decision Rules` until results exist. A newly designed experiment's current next step is to run the experiment.
 7. Human, one-time future, and recurring obligations must follow the task classification rules in the writing skill: `tasks/manual-todo.md`, `tasks/record-todo.md`, or `tasks/recurring-todo.md` as appropriate, not unconditional current `tasks/todo.md` work.
-8. Default AFPS business-product route: `icp -> competitive-analysis -> journey-map -> positioning -> ux-variations -> ui-interview -> prototype -> uat -> consolidate-variations -> research-roadmap -> spec-interview -> roadmap`. `value-prop-canvas` and `lean-canvas` are optional risk-driven detours, not required route links.
+8. Default AFPS business-product route: `icp -> competitive-analysis -> journey-map -> positioning -> ux-variations -> ui-interview -> prototype -> uat -> consolidate-variations -> research-roadmap -> spec-interview -> roadmap`. Optional research/framework detours are allowed only when their trigger would change positioning, product-loop direction, or UX/prototype choices.
+
+## Optional AFPS Research Trigger Map
+
+`journey-map` owns the first broad lifecycle pass. When it exposes a blocking optional research trigger, route to the existing framework owner instead of inventing a new skill:
+
+| Trigger surfaced by journey-map | Existing framework owner | Routing rule |
+| --- | --- | --- |
+| Weak or disputed jobs/pains/gains, aha moment, or solution-customer fit | `value-prop-canvas` | Optional Strategyzer-style detour before positioning/UX. |
+| Material revenue, channel, cost, defensibility, or unfair-advantage uncertainty | `lean-canvas` | Optional Ash Maurya Lean Canvas detour before UX/prototype work. |
+| Signup, activation, first-success, evaluation, payment, retention, expansion, or instrumentation risk | `onboarding-map`, `conversion-map`, `transaction-map`, `retention-map`, `expansion-map`, or `lifecycle-metrics` | Use the most specific customer-lifecycle stage skill, not the full journey map again. |
+| Consumer/PLG repeat-use value depends on habit formation, engagement loops, retention triggers, saved state, social rewards, or investment compounding | `hook-model` | Conditional pre-UX business-growth detour. If `business-growth` is unavailable, recommend `pack install business-growth` first. |
+| Enterprise, infrastructure, transactional, procurement-driven, or naturally infrequent use needs retention clarity | `lifecycle-metrics` or `metrics` | Do not force `hook-model`; prefer lifecycle measurement or the broader success metrics framework. |
+| Pricing gates, packaging, free-to-paid timing, acquisition channel, launch path, or early traction mechanism changes the product direction | `monetization` or `gtm` | Use business-growth only when the journey evidence makes pricing/GTM a blocker before UX/prototype choices. |
+
+`hook-model` is not mandatory and is not a post-spec default. It is a product-loop design input before UX/prototype choices harden, only when repeat behavior is central to product value.
 
 ## Expected End States
 
@@ -60,7 +75,7 @@ This audit checked:
 | `metrics` | Instrumentation gaps, roadmap missing, GTM missing, roadmap exists, live product with data | Gaps -> `roadmap`. No roadmap -> `roadmap`. No GTM -> `gtm`. Roadmap exists -> `run`. Live data -> `cohort-review`. |
 | `gtm` | Major downstream conflict, growth-model missing, roadmap missing, metrics missing, open research question, roadmap exists | Major -> `reconcile-research`. Growth-model missing -> `growth-model`. Roadmap missing with specs -> `roadmap`. Metrics missing -> `metrics`. Open question -> `experiment [topic]`. Roadmap exists -> `run`. |
 | `monetization` | GTM missing, GTM stale, metrics missing, roadmap missing, live revenue | GTM missing/stale -> `gtm`. Metrics missing -> `metrics`. Specs without roadmap -> `roadmap`. Live revenue -> `runway-model`. |
-| `journey-map` | Positioning missing, UX variations missing, specific lifecycle stage risk, metrics/GTM needed | Missing positioning -> `positioning`. Then route to `ux-variations`. Recommend deeper lifecycle maps only when the overview exposes a specific stage risk that must be resolved before positioning or UX work. |
+| `journey-map` | Blocking optional research trigger, positioning missing, UX variations missing, enterprise/infrequent measurement needed | First classify optional research triggers from the trigger map. Habit-suitable repeat-use risk -> `hook-model` when `business-growth` is enabled, otherwise `pack install business-growth`; enterprise/infrastructure/transactional/naturally infrequent products skip `hook-model` and prefer `lifecycle-metrics` or `metrics`. If no blocking trigger exists, missing positioning -> `positioning`, then route to `ux-variations`. |
 | `positioning` | Journey missing, UX variations missing, contested solution fit, business-model risk, GTM missing, GTM exists, monetization missing, codebase exists, major downstream conflict | Major -> `reconcile-research`. Missing journey -> `journey-map` unless the user explicitly asks for provisional positioning only. Otherwise `ux-variations` is the default next step. Include `value-prop-canvas` only for weak/disputed fit and `lean-canvas` only for revenue/channel/cost/defensibility risks. |
 | `mvp-gap` | Missing specs, missing journey/competitive/metrics context, downstream conflict, roadmap ready | Top unspecced gap -> `ux-variations`. Missing context -> corresponding research skill. Major conflict -> `reconcile-research`. Otherwise -> `roadmap`. |
 | `scale-audit` | Enterprise blockers lacking specs, missing enterprise journey/metrics/startup gap context, roadmap ready | Top blocker -> `ux-variations`. Missing context -> `journey-map enterprise`, `mvp-gap`, or `metrics`. Otherwise -> `roadmap`. |

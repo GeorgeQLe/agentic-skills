@@ -1,3 +1,28 @@
+## Current Task - Hook Model AFPS Routing Implementation 2026-06-01
+
+**Goal:** Place `hook-model` as a conditional pre-UX AFPS detour after `journey-map` when repeat-use habit-loop design is central to product value, while preserving the normal `positioning -> ux-variations` route for ordinary products.
+
+**Plan:**
+- [x] Archive mirrored active `journey-map` v0.6 contracts and bump them for the routing behavior change.
+- [x] Update mirrored `journey-map` next-step routing to evaluate specific stage risk before default positioning/UX routing.
+- [x] Map optional research triggers surfaced by `journey-map` to existing framework/model skills before adding any new skill surface.
+- [x] Add the `business-growth` pack guard for habit-suitable repeat-use risk: route to `hook-model` when enabled, otherwise `pack install business-growth`.
+- [x] Clarify skip behavior for B2B, enterprise, infrastructure, transactional, or naturally infrequent products by preferring metrics/lifecycle measurement.
+- [x] Update AFPS docs/status references so `hook-model` is optional, pre-UX/prototype when applicable, and not post-spec by default.
+- [x] Add focused layer1 tests for the new routing cases.
+- [x] Run targeted validation, record review notes, commit, and push intended changes.
+
+### Review
+
+- Archived mirrored `journey-map` v0.6 contracts and bumped active Claude/Codex contracts to v0.7.
+- Moved `journey-map` next-step routing so blocking optional research triggers are evaluated before default `positioning` or `ux-variations` recommendations.
+- Added an Optional Research Trigger Map that routes to existing owners: lifecycle stage maps, `lifecycle-metrics`, `hook-model`, `value-prop-canvas`, `lean-canvas`, `monetization`, `gtm`, and notes `growth-model` as a later Reforge-style owner once metrics/GTM prerequisites are satisfied.
+- Added the conditional hook-model route: consumer/PLG-style repeat-use or habit-loop risk uses `business-growth` pack guard before `hook-model`; enterprise, infrastructure, transactional, or naturally infrequent products skip hook-model and prefer `lifecycle-metrics` or `metrics`.
+- Updated AFPS docs to describe `hook-model` as optional pre-UX/product-loop input, not a mandatory default or post-spec habit-loop step.
+- Added `tests/layer1/journey-map-routing.test.ts` covering trigger precedence, missing-pack fallback, ordinary `positioning -> ux-variations` routing, enterprise/infrequent skips, trigger-map framework ownership, and AFPS doc coverage.
+- Refreshed Skills Showcase skill catalog data for the `journey-map` version change while restoring unrelated benchmark/proof generated churn from local run files.
+- Validation passed: focused layer1 routing tests, `bash scripts/skill-versions.sh --missing`, and `git diff --check`. Archive audit now only fails on the pre-existing unrelated `research-roadmap v0.6` changelog-heading blocker.
+
 ## Current Task - Hook Model AFPS Gap Investigation 2026-05-31
 
 **Goal:** Answer whether this repository already has a skill for Nir Eyal's Hooked model, and whether the AFPS workflow has a routing or coverage gap around using it.

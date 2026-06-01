@@ -130,6 +130,8 @@ hook-model, growth-model, metrics, gtm, monetization,
 landing-copy, pmf-assessment, experiment
 ```
 
+`hook-model` is an optional pre-UX/product-loop detour when journey evidence shows repeat use or habit formation is central to value. It is not mandatory for every business app; enterprise, infrastructure, transactional, or naturally infrequent products should usually use lifecycle or success measurement instead.
+
 Business ops:
 
 ```text

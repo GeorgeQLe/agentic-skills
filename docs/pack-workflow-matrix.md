@@ -45,7 +45,9 @@ Business app:
 business-discovery -> customer-lifecycle -> business-growth -> business-ops
 ```
 
-Default business-product route: `icp -> competitive-analysis -> journey-map -> positioning -> ux-variations -> ui-interview -> prototype -> uat -> consolidate-variations -> research-roadmap -> spec-interview -> roadmap`. `value-prop-canvas` and `lean-canvas` remain available as optional risk-driven detours, not required chain links.
+Default business-product route: `icp -> competitive-analysis -> journey-map -> positioning -> ux-variations -> ui-interview -> prototype -> uat -> consolidate-variations -> research-roadmap -> spec-interview -> roadmap`.
+
+Optional research/framework detours sit after the evidence that exposes their trigger and before the downstream choice they would change. After `journey-map`, use `hook-model` only when repeat use, habit formation, engagement loops, retention triggers, saved state, social rewards, or investment compounding are central to product value; if `business-growth` is not enabled, route to `scripts/pack.sh install business-growth` first. For enterprise, infrastructure, transactional, or naturally infrequent products, skip `hook-model` and prefer lifecycle or success measurement (`lifecycle-metrics` or `metrics`). `value-prop-canvas`, `lean-canvas`, lifecycle stage maps, `monetization`, and `gtm` remain optional trigger-driven detours, not required chain links.
 
 Creator/media:
 

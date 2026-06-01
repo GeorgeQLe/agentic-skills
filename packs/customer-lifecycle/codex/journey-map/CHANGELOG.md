@@ -1,5 +1,17 @@
 # journey-map changelog (codex)
 
+## v0.7 - 2026-06-01
+
+- Evaluate blocking optional research triggers before default positioning or UX routing.
+- Add a journey-map trigger map that routes existing framework/model owners such as `hook-model`, lifecycle stage maps, `lifecycle-metrics`, `value-prop-canvas`, `lean-canvas`, `monetization`, and `gtm`.
+- Route habit-suitable repeat-use risks to `hook-model` with a `business-growth` pack guard, while preferring metrics/lifecycle measurement for enterprise, infrastructure, transactional, or naturally infrequent products.
+
+## v0.6 - 2026-05-31
+
+- Replace monorepo app-scope wording with product-path scope resolution before code/app structure exists.
+- Exclude archived, abandoned, deferred, revisit, promoted, and `research/_archive/` paths from active target selection.
+- Use `research/{slug}/` and `specs/{slug}/` consistently when a product path is active.
+
 ## v0.4 - 2026-05-27
 
 - Make the pre-approval HTML alignment preview explicit before canonical journey-map writes.

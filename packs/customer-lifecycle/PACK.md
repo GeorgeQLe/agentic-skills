@@ -10,6 +10,8 @@ Default flow:
 journey-map -> onboarding-map -> conversion-map -> transaction-map -> retention-map -> expansion-map -> lifecycle-metrics
 ```
 
+The focused stage maps are conditional detours from `journey-map`, not required chain links for every product. When the journey exposes a habit-suitable repeat-use risk, route through the existing `business-growth` `hook-model` skill before UX work; when the product is enterprise, infrastructure, transactional, or naturally infrequent, prefer `lifecycle-metrics` or `metrics` instead of forcing habit-loop design.
+
 Skills:
 
 ```text

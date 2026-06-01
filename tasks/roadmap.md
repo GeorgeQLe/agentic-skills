@@ -1,3 +1,24 @@
+## Current Targeted Update: Hook Model AFPS Routing Implementation 2026-06-01
+
+**Goal:** Implement the approved hook-model AFPS placement: a conditional pre-UX detour from `journey-map` for products whose value depends on repeat use, habit formation, engagement loops, retention triggers, saved state, social rewards, or investment compounding.
+
+**Acceptance Criteria:**
+- [x] Archive and bump mirrored `journey-map` skill contracts before changing routing behavior.
+- [x] Update `journey-map` next-step routing so specific lifecycle-stage risk is evaluated before default `positioning`/`ux-variations` handoff.
+- [x] Add a trigger map for optional research/framework detours surfaced by `journey-map`, including the existing skills that own each framework.
+- [x] Route habit-suitable repeat-use risk to `hook-model` when `business-growth` is enabled, or to `pack install business-growth` when it is missing.
+- [x] Keep ordinary products on `positioning -> ux-variations`; route B2B/enterprise/infrequent products to measurement (`metrics` or `lifecycle-metrics`) instead of forcing `hook-model`.
+- [x] Clarify AFPS docs that `hook-model` is optional, pre-UX/prototype when applicable, and not the default post-spec habit-loop design step.
+- [x] Add focused layer1 routing coverage and run targeted validation plus whitespace checks.
+- [x] Record review notes, commit, and push intended changes on the primary branch.
+
+**Implementation Plan:**
+1. Patch mirrored `packs/customer-lifecycle/{codex,claude}/journey-map/SKILL.md` with the new priority tree, pack guards, and optional-research trigger map.
+2. Update changelogs and archives for the `journey-map` contract bump.
+3. Update AFPS routing documentation and status guidance.
+4. Add a layer1 test that proves repeat-use hook routing, missing-pack fallback, ordinary AFPS routing, and enterprise/infrequent skips.
+5. Run focused tests and version/archive checks, then ship the intended diff.
+
 ## Current Targeted Update: Hook Model AFPS Gap Investigation 2026-05-31
 
 **Goal:** Determine whether the existing skill set already supports Nir Eyal's Hooked model and whether AFPS routing has a gap that prevents appropriate use of that model in product workflows.
