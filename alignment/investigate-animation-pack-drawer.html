@@ -1,0 +1,674 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Investigate Alignment - Animation Pack/Drawer Forensics</title>
+<style>
+:root {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --border: #30363d;
+  --text: #c9d1d9;
+  --text-muted: #8b949e;
+  --accent: #58a6ff;
+  --green: #3fb950;
+  --red: #f85149;
+  --orange: #d29922;
+  --purple: #bc8cff;
+  --code-bg: #1c2128;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.55;
+}
+main {
+  width: min(1120px, calc(100% - 32px));
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 32px 0 56px;
+  overflow-wrap: break-word;
+}
+a { color: var(--accent); }
+h1, h2, h3 { color: #fff; line-height: 1.2; }
+h1 { margin: 0 0 8px; font-size: clamp(2rem, 5vw, 3.5rem); }
+h2 { margin: 0; font-size: 1.45rem; color: var(--accent); }
+h3 { margin: 22px 0 8px; font-size: 1.05rem; }
+p { color: var(--text); }
+code {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 5px;
+  color: #e6edf3;
+}
+pre {
+  margin: 0;
+  padding: 18px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: #e6edf3;
+  font-size: 0.9rem;
+}
+section {
+  margin: 24px 0;
+  padding: 22px;
+  background: rgba(22, 27, 34, 0.72);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.hero {
+  padding: 28px 0 10px;
+  border: 0;
+  background: transparent;
+}
+.muted { color: var(--text-muted); }
+.toc {
+  background: var(--surface);
+}
+.toc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+.toc-grid a {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #11161d;
+  text-decoration: none;
+}
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  gap: 12px;
+}
+.card {
+  background: #11161d;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
+}
+.table-wrap { overflow-x: auto; }
+table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 760px;
+  font-size: 0.92rem;
+}
+th, td {
+  border: 1px solid var(--border);
+  padding: 9px 10px;
+  text-align: left;
+  vertical-align: top;
+}
+th { background: var(--surface); color: #fff; }
+.badge {
+  display: inline-block;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 2px 8px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+.feedback {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  min-width: min(320px, 100%);
+}
+.fb-row { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.fb-btn, button, .radio-option {
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 6px;
+  cursor: pointer;
+  font: inherit;
+}
+.fb-btn.active-up { border-color: var(--green); color: var(--green); background: rgba(63, 185, 80, .12); }
+.fb-btn.active-down { border-color: var(--red); color: var(--red); background: rgba(248, 81, 73, .12); }
+.fb-btn.active-clarify { border-color: var(--orange); color: var(--orange); background: rgba(210, 153, 34, .12); }
+.fb-panel {
+  display: none;
+  width: 100%;
+  background: #11161d;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+}
+.fb-panel.show { display: block; }
+textarea {
+  width: 100%;
+  min-height: 90px;
+  resize: vertical;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #0b1017;
+  color: var(--text);
+  padding: 10px;
+  font: inherit;
+}
+.yaml { min-height: 150px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+.gate {
+  background: #1c2333;
+  border: 1px solid var(--purple);
+  border-radius: 8px;
+  padding: 14px;
+  margin: 14px 0;
+}
+.gate h3 { color: var(--purple); margin-top: 0; }
+.radio-stack { display: grid; gap: 8px; margin-top: 10px; }
+.radio-option { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; }
+.conditional-note { display: none; margin-top: 8px; }
+.conditional-note.show { display: block; }
+.status { color: var(--orange); min-height: 1.5em; }
+.compile-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0; }
+button.primary { background: var(--accent); border-color: var(--accent); color: #08111f; font-weight: 700; }
+button:disabled { opacity: .45; cursor: not-allowed; }
+@media (max-width: 860px) {
+  main { width: min(100% - 24px, 1120px); padding-top: 22px; }
+  section { padding: 18px; }
+}
+@media (max-width: 560px) {
+  main { width: min(100% - 16px, 1120px); }
+  .fb-row, .compile-actions { width: 100%; }
+  button, .fb-btn, .radio-option { width: 100%; justify-content: center; }
+}
+</style>
+</head>
+<body>
+<main>
+  <section class="hero" id="top">
+    <h1>Animation Pack/Drawer Forensics</h1>
+    <p class="muted">Investigate alignment page for <code>docs/history/animation-pack-drawer-forensics-2026-06-01.md</code>. This is a report-only review artifact; it changes no animation code.</p>
+    <p><span class="badge">Known good: <code>781d44c1</code></span> <span class="badge">First close behavior change: <code>fcc302a5</code></span> <span class="badge">Apex regression: <code>558a9873</code></span></p>
+  </section>
+
+  <section class="toc" id="toc">
+    <div class="section-head">
+      <h2>Table of Contents</h2>
+      <div class="feedback" data-section="Table of Contents"></div>
+    </div>
+    <div class="toc-grid">
+      <a href="#summary">Summary</a>
+      <a href="#evidence">Evidence Matrix</a>
+      <a href="#history">History Coverage</a>
+      <a href="#full-report">Full Markdown Report</a>
+      <a href="#gates">Approval Gates</a>
+      <a href="#compile">Compile</a>
+    </div>
+  </section>
+
+  <section id="summary">
+    <div class="section-head">
+      <h2>Summary</h2>
+      <div class="feedback" data-section="Summary"></div>
+    </div>
+    <div class="grid">
+      <div class="card"><h3>Known-Good</h3><p><code>781d44c1</code> is the known-good implementation for the current intended sequence because it separates drawer-closing state from sheet-mounted state and clears <code>openPack</code> only after <code>BottomSheet.onExitComplete</code>.</p></div>
+      <div class="card"><h3>First Behavior Change</h3><p><code>fcc302a5</code> introduced reverse fan-in close behavior, but kept <code>BottomSheet.isOpen</code> tied to <code>!!openPack</code>. That left sheet exit and shared-layout morph-out coupled to one state transition.</p></div>
+      <div class="card"><h3>Apex Regression</h3><p><code>558a9873</code> changed close setup to <code>cardSlideY.set(0)</code>, which reduced a symptom but removed intended apex travel.</p></div>
+      <div class="card"><h3>Root Cause</h3><p>Primary root cause is code state-machine mismatch. The debug harness later exposed that mismatch because its documented step order required a separate sheet-exit handoff.</p></div>
+    </div>
+  </section>
+
+  <section id="evidence">
+    <div class="section-head">
+      <h2>Evidence Matrix</h2>
+      <div class="feedback" data-section="Evidence Matrix"></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Claim</th><th>Evidence</th><th>Inference</th><th>Confidence</th></tr></thead>
+        <tbody>
+          <tr><td><code>fcc302a5</code> introduced reverse fan-in close behavior.</td><td>Commit grep shows <code>isClosing</code>, <code>handleCollapseComplete</code>, <code>PackOpener.isClosing</code>, and target-card collapse offsets.</td><td>First commit that let drawer cards collapse before page teardown.</td><td>High</td></tr>
+          <tr><td>Pre-<code>781d44c1</code> code did not separate sheet lifetime from pack identity.</td><td><code>fcc302a5</code>, <code>4d076fff</code>, and <code>3ed1e11a</code> all tie <code>BottomSheet isOpen</code> to <code>!!openPack</code> and clear <code>openPack</code> in collapse complete.</td><td>No independent "sheet exiting while pack remains open" state existed.</td><td>High</td></tr>
+          <tr><td><code>558a9873</code> broke apex travel.</td><td>Source snapshot shows <code>cardSlideY.set(0)</code>; later Claude history labels the fix a misdiagnosis.</td><td>Close morph no longer started from apex before descent.</td><td>High</td></tr>
+          <tr><td><code>4d076fff</code> added observability but not the missing handoff.</td><td>Debug gates existed, but page still cleared <code>openPack</code> at collapse complete and <code>BottomSheet</code> only marked <code>sheet-exit</code>.</td><td>Harness matched desired boundaries better than actual state sequencing.</td><td>High</td></tr>
+          <tr><td><code>781d44c1</code> repairs the sequence.</td><td>Current source adds <code>isSheetMounted</code>, <code>onExitComplete</code>, one-shot collapse completion, restored apex offset, and focused tests.</td><td>The close path now has explicit handoff boundaries.</td><td>High</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="history">
+    <div class="section-head">
+      <h2>History Coverage</h2>
+      <div class="feedback" data-section="History Coverage"></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Source</th><th>Files</th><th>Records</th><th>Matches</th><th>Sessions</th></tr></thead>
+        <tbody>
+          <tr><td>Claude history</td><td>1</td><td>9,878</td><td>2</td><td>2</td></tr>
+          <tr><td>Claude projects</td><td>4,039</td><td>256,031</td><td>185</td><td>27</td></tr>
+          <tr><td>Claude sessions</td><td>5</td><td>5</td><td>0</td><td>0</td></tr>
+          <tr><td>Codex history</td><td>1</td><td>6,435</td><td>2</td><td>2</td></tr>
+          <tr><td>Codex sessions</td><td>2,620</td><td>837,034</td><td>0</td><td>0</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Relevant session evidence includes Claude sessions <code>1a77d96d-c8a4-4c0d-8655-d87e714a1c67</code>, <code>51d6f6c8-9452-4c38-abc1-101dc6b83541</code>, <code>60c84b04-1d0e-4431-9f4f-47fe827d2d69</code>, <code>3b8c9652-05be-4081-bf87-6ca30f07f086</code>, and Codex session <code>019e8374-430f-7e71-934e-e2473a7ce95f</code>. The full source paths and line references are rendered in the Markdown report below.</p>
+  </section>
+
+  <section id="full-report">
+    <div class="section-head">
+      <h2>Full Markdown Report</h2>
+      <div class="feedback" data-section="Full Markdown Report"></div>
+    </div>
+    <pre># Animation Pack/Drawer Forensics - 2026-06-01
+
+## Scope
+
+This report traces the `/prototype` pack/drawer animation history from `d6e688cc` through `781d44c1`, focusing on:
+
+- `apps/skills-showcase/app/prototype/page.tsx`
+- `apps/skills-showcase/src/components/SealedPack.tsx`
+- `apps/skills-showcase/src/components/PackOpener.tsx`
+- `apps/skills-showcase/src/components/BottomSheet.tsx`
+- `apps/skills-showcase/alignment/animation-audit-pack-drawer.html`
+- `apps/skills-showcase/src/components/prototype-close-sequence.test.tsx`
+
+No animation code was changed during this investigation.
+
+## Executive Finding
+
+The last known-good implementation for the intended current close sequence is `781d44c1` (`fix: restore prototype pack close sequencing`, 2026-06-01 10:09:21 -0400). It is the first commit in this cluster that keeps the pack identity alive through sheet exit: `openPack` remains set while `BottomSheet` exits, and `openPack` is cleared only from `BottomSheet.onExitComplete`.
+
+The first behavior-changing commit for the close pipeline was `fcc302a5` (`fix: card z-index during close apex animation`, 2026-05-28 16:07:23 -0400). It introduced the reverse fan-in close and `isClosing`, but it still tied `BottomSheet.isOpen` to `!!openPack` and cleared `openPack` in `handleCollapseComplete`. That meant collapse completion also triggered sheet teardown and the `layoutId` transfer back to `SealedPack`.
+
+The first explicit apex-travel regression was `558a9873` (`fix: eliminate card flash at apex during drawer close`, 2026-05-28 16:23:27 -0400). It set `cardSlideY` to `0` on drawer close, removing the intended apex descent path. Later history identifies this as a misdiagnosis: the visible flash was primarily the drawer card-collapse stage and state handoff, not the apex `cardSlideY` value alone.
+
+The breakage was both code and harness mismatch, with code as the root cause:
+
+- Code: the pre-`781d44c1` page cleared `openPack` too early, so sheet exit and shared-layout morph-out were coupled to the same state transition. `PackOpener` also lacked a one-shot collapse completion guard and direct completion path for one-card/no-container cases.
+- Harness/docs: `4d076fff` and `3fe33813` documented a stepped sequence that included `collapse-complete -&gt; drawer-teardown -&gt; sheet-exit -&gt; layout-morph-out -&gt; drop-elevation`, but pre-`781d44c1` code did not actually keep `openPack` until sheet exit. The harness exposed the mismatch; it did not create the underlying state bug.
+
+## Verification Counts
+
+History extraction used a JSON parser over structured records, excluding system/developer text and arbitrary tool output. File-edit tool calls were retained only as file-edit evidence.
+
+| Source | Files scanned | Records scanned | Matching records | Matching sessions |
+| --- | ---: | ---: | ---: | ---: |
+| Claude `~/.claude/history.jsonl` | 1 | 9,878 | 2 | 2 |
+| Claude `~/.claude/projects/**` | 4,039 | 256,031 | 185 | 27 |
+| Claude `~/.claude/sessions/**` | 5 | 5 | 0 | 0 |
+| Codex `~/.codex/history.jsonl` | 1 | 6,435 | 2 | 2 |
+| Codex `~/.codex/sessions/**` | 2,620 | 837,034 | 0 | 0 |
+
+Git extraction found 19 commits in the target range that touched one or more scoped animation/audit files.
+
+## Known-Good Implementation
+
+`781d44c1` is known-good for the intended current code contract because:
+
+- `page.tsx` splits drawer-closing state from sheet-mounted state: `isDrawerClosing`, `isSheetMounted`, and `isDrawerClosingRef` are introduced at lines 33-35.
+- `handleClose()` only starts close: it marks `close-trigger` and sets `isDrawerClosing` without clearing `openPack` at lines 64-69.
+- `handleCollapseComplete()` marks `drawer-teardown` and hides the sheet with `setIsSheetMounted(false)` at lines 71-74.
+- `handleSheetExited()` is the only normal close path that clears `openPack`, at lines 76-80.
+- `BottomSheet` gained `onExitComplete` and calls it after marking `sheet-exit` at `BottomSheet.tsx` lines 14-18 and 42-46.
+- `PackOpener` gained `collapseCompleteFiredRef` and `completeCollapse()`, making `collapse-complete` a one-shot handoff at `PackOpener.tsx` lines 31-60.
+- `PackOpener` directly completes one-card/no-container close paths at lines 88-102.
+- `SealedPack` restores close apex travel by setting `cardSlideY` to `-180` on close at lines 176-184, then gates `layout-morph-out` and `drop-elevation` before dropping elevation and animating `cardSlideY` back to `0` at lines 334-353.
+- `prototype-close-sequence.test.tsx` verifies the page handoff, debug close driver, close-apex gate ordering, and PackOpener one-shot completion.
+
+## Timeline
+
+| Commit | Date | Author | Touched scoped files | Intended behavior from commit/session | Observed code behavior | Verdict |
+| --- | --- | --- | --- | --- | --- | --- |
+| `d6e688cc` | 2026-05-25 20:51 -0400 | G | `page.tsx`, `BottomSheet.tsx`, `PackOpener.tsx` | Replace full-screen card replacement with bottom-sheet drawer; keep sealed packs visible behind scrim. | `handleClose()` immediately did `setOpenPack(null)` and `BottomSheet` used `isOpen={!!openPack}`. No reverse drawer-card collapse existed. | Partial: drawer introduction worked, but not the later intended close sequence. |
+| `671f2505` | 2026-05-25 23:00 -0400 | G | `page.tsx`, `SealedPack.tsx` | Re-open opened packs by click or drag-up. | Added reopened-pack affordances; no material close-pipeline change. | Working for open/reopen scope. |
+| `8f386368` | 2026-05-25 23:30 -0400 | G | `page.tsx`, `SealedPack.tsx` | Large pack refactor/reorganization. | Touched prototype consumers as part of pack movement; no durable close handoff fix identified. | Neutral/no close verdict. |
+| `cd145b57` | 2026-05-26 00:02 -0400 | G | `SealedPack.tsx` | Increase card return height for visible overshoot on drawer close. | Tuned apex/descent travel, but close still depended on `openPack` teardown. | Partial repair. |
+| `e34b54f9` | 2026-05-26 00:12 -0400 | G | `SealedPack.tsx` | Card should slide down from above on drawer close instead of growing. | Introduced separate `cardSlideY` vertical translation so the card keeps its size during descent. | Partial repair. |
+| `ae1da4dc` | 2026-05-26 13:43 -0400 | G | `page.tsx`, `SealedPack.tsx` | Pack preview should match drawer card face. | Refactored card face visual parity; close sequencing unchanged. | Working visual refactor. |
+| `c100ab18` | 2026-05-26 15:28 -0400 | G | `SealedPack.tsx` | Rework opened-pack card as full-height element and fix layout animation bounce on drawer close. | Full-height card plus combined drag/slide motion improved shared-layout behavior. | Partial repair. |
+| `6bcb2076` | 2026-05-26 18:55 -0400 | G | `page.tsx`, `BottomSheet.tsx`, `PackOpener.tsx`, `SealedPack.tsx` | Improve card animations, z-index elevation state, spring return after drawer close. | Added `onTear`, elevation, and spring return pieces. Still no final sheet-exit handoff separation. | Partial repair. |
+| `b9cc126a` | 2026-05-27 00:09 -0400 | G | `BottomSheet.tsx` | Add drag-to-close and block mobile pull-to-refresh. | Added drag dismiss and overscroll containment. | Working for sheet gesture scope. |
+| `b5fe8554` | 2026-05-27 00:55 -0400 | G | `SealedPack.tsx` | Expand drag zone over full top flap. | Open/tear gesture improvement; no close sequence change. | Working for gesture scope. |
+| `5736f3c0` | 2026-05-27 14:07 -0400 | George Le | `SealedPack.tsx` | Fix tear gesture not opening drawer. | Added pending-open/fallback handling around layout animation completion. | Repaired open path. |
+| `6c89a792` | 2026-05-27 23:39 -0400 | G | `BottomSheet.tsx`, `SealedPack.tsx` | Resolve broader semantic/script issues. | Scoped files changed, but commit message has no animation-specific close intent. | Neutral/no close verdict. |
+| `e6652913` | 2026-05-28 00:25 -0400 | G | `BottomSheet.tsx`, `SealedPack.tsx` | First drawer close should animate through apex; restore production timing after debug slow-mo. | Set close state/elevation and `cardSlideY` to an apex-ish value; fixed 3s durations back to 0.3s. No reverse fan-in yet. | Repaired apex/timing, partial close sequence. |
+| `fcc302a5` | 2026-05-28 16:07 -0400 | George Le | `page.tsx`, `BottomSheet.tsx`, `PackOpener.tsx`, `SealedPack.tsx` | Add card z-index during close apex and reverse drawer-card collapse before close. | Introduced `isClosing`, `PackOpener.isClosing`, `onCollapseComplete`, visible top-left collapse target, and `dismissable={!isClosing}`. But `handleCollapseComplete` still did `setOpenPack(null)`, so sheet exit and `layoutId` morph-out were coupled. | First major behavior change; partial/regressed relative final sequence. |
+| `558a9873` | 2026-05-28 16:23 -0400 | George Le | `SealedPack.tsx` | Eliminate card flash at apex. | Changed close setup from `cardSlideY.set(-180)` to `cardSlideY.set(0)` and removed descent spring. Later chat identified this as a misdiagnosis because it removed apex travel. | Regressed apex travel. |
+| `4d076fff` | 2026-05-29 16:51 -0400 | G | `page.tsx`, `prototype.css`, `BottomSheet.tsx`, `PackOpener.tsx`, `SealedPack.tsx`, debug files | Add slow-mo/step-debug harness to make recurring apex card flash observable. | Added `gate()`/`mark()` and close steps, but retained `cardSlideY.set(0)` and retained `setOpenPack(null)` at collapse completion. `BottomSheet` marked `sheet-exit` but could not hand control back to page. | Partial: harness useful, but sequence mismatch remained. |
+| `3fe33813` | 2026-05-29 16:52 -0400 | G | `animation-audit-pack-drawer.html` | Add audit document for open/close motion, apex/z-index bug, and timing. | Audit described the expected sequence and acknowledged recurring apex/flash risk; no code change. | Documentation partial; not a repair. |
+| `3ed1e11a` | 2026-05-31 11:56 -0400 | G | `animation-audit-pack-drawer.html`, `page.tsx`, `SealedPack.tsx` | Tearing only unseals except first-tear auto-open; update audit doc. | Open behavior changed via `autoOpenOnTear`; close code still used `isOpen={!!openPack}` and cleared `openPack` in `handleCollapseComplete`. | Working for open model; close mismatch unchanged. |
+| `781d44c1` | 2026-06-01 10:09 -0400 | George Le | `page.tsx`, `BottomSheet.tsx`, `PackOpener.tsx`, `SealedPack.tsx`, `prototype-close-sequence.test.tsx` | Restore close sequencing: drawer collapse, sheet exit, then pack morph/elevation gates. | Added `isSheetMounted`, `onExitComplete`, one-shot `PackOpener` completion, restored `cardSlideY.set(-180)`, and added focused tests. | Repaired / known-good for current intended behavior. |
+
+## Chat-History Evidence
+
+| Source | Date/session | Evidence | Inference |
+| --- | --- | --- | --- |
+| `/Users/georgele/.claude/history.jsonl:9827` and `/Users/georgele/.claude/projects/-Users-georgele-projects-tools-agentic-skills/3de3cc83-350d-466e-b8a0-7797fdce3b9a/subagents/agent-a3396c3fd9f1dda66.jsonl:57` | 2026-05-28, Claude session `3de3cc83-350d-466e-b8a0-7797fdce3b9a` | User reported that on drawer close &quot;the card appears at the apex position and then disappears&quot;; assistant traced the then-current flow to `handleClose()` clearing `openPack`, flipping `isDrawerOpen` false. | This is the pre-reverse-collapse apex symptom and confirms the original close was state-teardown driven. |
+| `/Users/georgele/.claude/projects/-Users-georgele-projects-tools-agentic-skills/1a77d96d-c8a4-4c0d-8655-d87e714a1c67.jsonl:5` | 2026-05-28, Claude session `1a77d96d-c8a4-4c0d-8655-d87e714a1c67` | User plan said the desired behavior was: cards collapse back onto the visible top-left card, and only then should the drawer dismiss and preview card fly back via shared layout. | This is the canonical intent for `fcc302a5`: two-phase close begins here. |
+| `/Users/georgele/.claude/projects/-Users-georgele-projects-tools-agentic-skills/1a77d96d-c8a4-4c0d-8655-d87e714a1c67.jsonl:38-40` | 2026-05-28, Claude session `1a77d96d-c8a4-4c0d-8655-d87e714a1c67` | File-edit evidence changed `handleClose()` to `setIsClosing(true)` and `handleCollapseComplete()` to `setIsClosing(false); setOpenPack(null);`, then passed `isClosing` and `onCollapseComplete` into `PackOpener`. | The intended two-phase close was implemented with one missing separation: the sheet mounted state still equaled `!!openPack`. |
+| `/Users/georgele/.claude/projects/-Users-georgele-projects-tools-agentic-skills/60c84b04-1d0e-4431-9f4f-47fe827d2d69/subagents/agent-a2074e2e6277082ee.jsonl:1` | 2026-05-28, Claude session `60c84b04-1d0e-4431-9f4f-47fe827d2d69` | User described the visual contract: on open the card should rise to an apex before going over the drawer; on close it should go from drawer to apex, then down behind the pack body. | Confirms apex travel is intentional, so `558a9873` removing apex travel was not aligned with design intent. |
+| `/Users/georgele/.claude/history.jsonl:9836` and `/Users/georgele/.claude/projects/-Users-georgele-projects-tools-agentic-skills/51d6f6c8-9452-4c38-abc1-101dc6b83541/subagents/agent-a4d006665c226ef34.jsonl:43` | 2026-05-28, Claude session `51d6f6c8-9452-4c38-abc1-101dc6b83541` | User diagnosed the flash as coming from &quot;collapse cards into one card on drawer close&quot;; the assistant localized the target calculation to `PackOpener.tsx` and the scroll container. | Confirms the flash family moved from apex-only theory to drawer-collapse behavior. |
+| `/Users/georgele/.claude/projects/-Users-georgele-projects-tools-agentic-skills/51d6f6c8-9452-4c38-abc1-101dc6b83541/subagents/agent-af31e01d4df341f76.jsonl:1` | 2026-05-28, Claude session `51d6f6c8-9452-4c38-abc1-101dc6b83541` | User summarized current close flow as `handleClose()` -&gt; `setIsClosing(true)`, collapse complete -&gt; `setOpenPack(null)`, then BottomSheet exit and `layoutId` transfer. | This records the known problematic pre-`781d44c1` state model: one state drives both sheet exit and pack morph. |
+| `/Users/georgele/.claude/projects/-Users-georgele-projects-tools-agentic-skills/3b8c9652-05be-4081-bf87-6ca30f07f086.jsonl:5` | 2026-06-01, Claude session `3b8c9652-05be-4081-bf87-6ca30f07f086` | Plan stated `558a9873` misidentified the root cause and broke apex travel; it also argued collapse was visible inside the open sheet. | Confirms the later diagnosis that both drawer-collapse visibility and apex travel needed reconciliation. No corresponding committed prototype repair appears before `781d44c1`. |
+| `/Users/georgele/.codex/history.jsonl:6414` | 2026-06-01, Codex session `019e8374-430f-7e71-934e-e2473a7ce95f` | Codex plan explicitly required: `handleClose()` only sets closing, `PackOpener.onCollapseComplete` hides the sheet, and `openPack` clears only after `BottomSheet.onExitComplete`. | This is the exact design intent implemented by `781d44c1`. |
+| `/Users/georgele/.codex/history.jsonl:6434` | 2026-06-01, Codex session `019e839b-6e3c-7751-9b8c-2808daf3f2bb` | Current forensics invocation requested this targeted history analysis over `d6e688cc` through `781d44c1`. | This records the analysis scope, not animation behavior intent. |
+
+## Source Evidence Matrix
+
+| Claim | Evidence | Inference | Confidence |
+| --- | --- | --- | --- |
+| `fcc302a5` introduced the first reverse-fan-in close behavior. | `git grep` at `fcc302a5` shows `isClosing`, `handleCollapseComplete`, `PackOpener.isClosing`, and `onCollapseComplete` in `page.tsx`; `PackOpener.tsx` gained collapse offsets and target-card logic. | Before this commit, `d6e688cc` closed by immediately clearing `openPack`; after it, cards could collapse before page teardown. | High |
+| Pre-`781d44c1` code did not separate sheet lifetime from pack identity. | `fcc302a5`, `4d076fff`, and `3ed1e11a` all have `BottomSheet isOpen={!!openPack}` and `handleCollapseComplete` clearing `openPack`. | There was no state slot for &quot;sheet is exiting while the pack still counts as drawer-open&quot;; therefore sheet exit and pack morph-out were coupled. | High |
+| `558a9873` broke apex travel while trying to fix flash. | `git grep` at `558a9873` shows `cardSlideY.set(0)` on close and immediate `setCardElevated(false)`; chat session `3b8c9652...` later states this was a misdiagnosis. | The card could no longer start close morph-back from the apex position before descending. | High |
+| `4d076fff` made the mismatch observable but did not repair it. | Commit message says debug layer is opt-in/inert when off; source at `4d076fff` shows close gates but still `setOpenPack(null)` in `handleCollapseComplete`, and `BottomSheet` only marks `sheet-exit`. | Harness steps were useful forensic boundaries, but the code path still lacked an exit-complete callback to drive pack identity teardown. | High |
+| `3ed1e11a` changed open semantics, not close sequencing. | Diff adds `autoOpenOnTear` and audit text for two-stage open; close grep remains unchanged from `4d076fff`. | Any remaining close issue after `3ed1e11a` was inherited, not newly introduced by the two-stage open change. | High |
+| `781d44c1` repairs the intended sequence. | Current source has `isSheetMounted`, `onExitComplete`, one-shot collapse completion, restored `cardSlideY.set(-180)`, and focused tests. | The sequence now has explicit state boundaries: close trigger -&gt; collapse -&gt; sheet exit -&gt; pack morph/elevation drop -&gt; clear pack. | High |
+
+## Root Cause
+
+The root cause is a state-machine mismatch introduced with the first reverse-fan-in implementation:
+
+1. `fcc302a5` correctly added a drawer-collapse phase, but kept `BottomSheet.isOpen` tied to `!!openPack`.
+2. `handleCollapseComplete()` cleared `openPack`, which simultaneously made `BottomSheet` exit and made `SealedPack.isDrawerOpen` false.
+3. The debug/audit model later expected a distinct `drawer-teardown` and `sheet-exit` boundary before `layout-morph-out`, but the code did not provide a callback to clear `openPack` after sheet exit.
+4. `558a9873` addressed a symptom by removing the apex offset rather than fixing the drawer-collapse/sheet handoff, so it reduced the visible flash at the cost of the intended apex descent.
+5. `781d44c1` fixed the state machine by adding the missing mounted-state layer and exit-complete handoff.
+
+## Remaining Risks
+
+- The current report relies on source diffs, blame, chat history, and focused tests. It does not add new visual/pixel runtime evidence.
+- The collapse target still depends on visible-card measurement in `PackOpener.tsx` lines 107-145. Current tests verify sequencing, not scroll-dependent target geometry.
+- `animation-audit-pack-drawer.html` is a historical audit page. It now matches the two-stage open model, but it should be re-audited if future animation code changes.
+
+## Follow-Up Fix Plan
+
+No immediate animation-code follow-up is required from this forensic pass. If the visual issue persists after `781d44c1`, use this plan:
+
+1. Add a Playwright/browser regression for `/prototype` debug stepped close at 0.1x: open pack 0, trigger close, step through `collapse-complete`, `drawer-teardown`, `sheet-exit`, `layout-morph-out`, and `drop-elevation`.
+2. Assert ordering from the debug panel or exposed test hook, and capture screenshots at `layout-morph-out` and after `drop-elevation`.
+3. Add a scroll-position variant that scrolls the drawer content before close and verifies the collapse target remains the visible top-left card.
+4. Only then change animation code if the runtime evidence contradicts the current source/test contract.
+
+## Commands and Evidence Sources Used
+
+- `git log --reverse d6e688cc^..781d44c1`
+- `git log --reverse --date=iso-strict --pretty=... --name-only d6e688cc^..781d44c1 -- &lt;scoped files&gt;`
+- `git show --stat --patch` for `d6e688cc`, `e6652913`, `fcc302a5`, `558a9873`, `4d076fff`, `3ed1e11a`, and `781d44c1`
+- `git grep -n` at key commits for `handleClose`, `handleCollapseComplete`, `setOpenPack(null)`, `BottomSheet isOpen`, `cardSlideY.set`, `layout-morph-out`, `drop-elevation`, and `collapse-complete`
+- `git blame` over current close-sequencing lines in `page.tsx`, `PackOpener.tsx`, `SealedPack.tsx`, and `BottomSheet.tsx`
+- Filtered parser over Claude and Codex histories listed in the verification-count table
+</pre>
+  </section>
+
+  <section id="gates">
+    <div class="section-head">
+      <h2>Approval Gates</h2>
+      <div class="feedback" data-section="Approval Gates"></div>
+    </div>
+    <div class="gate" data-gate="evidence_coverage">
+      <h3>Evidence Coverage</h3>
+      <p>Does the report cite enough source, git, and history evidence to support the verdicts?</p>
+      <div class="radio-stack" data-question="Evidence Coverage">
+        <label class="radio-option"><input type="radio" name="q1" value="Evidence is sufficient"> Evidence is sufficient</label>
+        <label class="radio-option"><input type="radio" name="q1" value="Need more runtime visual evidence"> Need more runtime visual evidence</label>
+        <label class="radio-option"><input type="radio" name="q1" value="Other / None of the above"> Other / None of the above</label>
+        <label class="radio-option"><input type="radio" name="q1" value="Need clarification"> Need clarification</label>
+        <textarea class="conditional-note" data-for="q1" placeholder="Optional notes, missing evidence, or clarification request"></textarea>
+      </div>
+    </div>
+    <div class="gate" data-gate="candidate_verdict">
+      <h3>Candidate / Verdict Decisions</h3>
+      <p>Do you accept <code>781d44c1</code> as known-good, <code>fcc302a5</code> as first behavior change, and <code>558a9873</code> as apex-travel regression?</p>
+      <div class="radio-stack" data-question="Candidate / Verdict Decisions">
+        <label class="radio-option"><input type="radio" name="q2" value="Accept the verdicts"> Accept the verdicts</label>
+        <label class="radio-option"><input type="radio" name="q2" value="Revise one or more verdicts"> Revise one or more verdicts</label>
+        <label class="radio-option"><input type="radio" name="q2" value="Other / None of the above"> Other / None of the above</label>
+        <label class="radio-option"><input type="radio" name="q2" value="Need clarification"> Need clarification</label>
+        <textarea class="conditional-note" data-for="q2" placeholder="Optional notes, alternate commit candidates, or clarification request"></textarea>
+      </div>
+    </div>
+    <div class="gate" data-gate="scope_non_goals">
+      <h3>Scope / Non-Goals</h3>
+      <p>Should this pass remain analysis-only with no animation code changes?</p>
+      <div class="radio-stack" data-question="Scope / Non-Goals">
+        <label class="radio-option"><input type="radio" name="q3" value="Keep this pass analysis-only"> Keep this pass analysis-only</label>
+        <label class="radio-option"><input type="radio" name="q3" value="Add runtime visual verification next"> Add runtime visual verification next</label>
+        <label class="radio-option"><input type="radio" name="q3" value="Other / None of the above"> Other / None of the above</label>
+        <label class="radio-option"><input type="radio" name="q3" value="Need clarification"> Need clarification</label>
+        <textarea class="conditional-note" data-for="q3" placeholder="Optional notes, scope changes, or clarification request"></textarea>
+      </div>
+    </div>
+    <div class="gate" data-gate="recommended_path">
+      <h3>Recommended Path</h3>
+      <p>Is the follow-up plan acceptable if visual issues remain after <code>781d44c1</code>?</p>
+      <div class="radio-stack" data-question="Recommended Path">
+        <label class="radio-option"><input type="radio" name="q4" value="Accept no immediate code follow-up"> Accept no immediate code follow-up</label>
+        <label class="radio-option"><input type="radio" name="q4" value="Prioritize Playwright visual regression"> Prioritize Playwright visual regression</label>
+        <label class="radio-option"><input type="radio" name="q4" value="Other / None of the above"> Other / None of the above</label>
+        <label class="radio-option"><input type="radio" name="q4" value="Need clarification"> Need clarification</label>
+        <textarea class="conditional-note" data-for="q4" placeholder="Optional notes, desired follow-up, or clarification request"></textarea>
+      </div>
+    </div>
+  </section>
+
+  <section id="compile">
+    <div class="section-head">
+      <h2>Compile</h2>
+      <div class="feedback" data-section="Compile"></div>
+    </div>
+    <p class="muted">Use feedback YAML for revision requests before final approval. Use final answers after all required gates are answered.</p>
+    <div class="compile-actions">
+      <button id="compile-feedback">Compile Feedback YAML</button>
+      <button class="primary" id="compile-answers">Compile Answers</button>
+      <button id="copy-final">Copy YAML</button>
+    </div>
+    <p class="status" id="compile-status">Required questions remaining: 4</p>
+    <textarea class="yaml" id="compiled-yaml" readonly></textarea>
+  </section>
+</main>
+<script>
+const ALIGNMENT_PAGE = "alignment/investigate-animation-pack-drawer.html";
+const questionNames = ["q1", "q2", "q3", "q4"];
+
+function yamlEscape(value) {
+  return String(value || "").replace(/\n/g, "\n").replace(/"/g, "\"");
+}
+
+function collectQuestionAnswers() {
+  return questionNames.map((name) => {
+    const input = document.querySelector(`input[name="${name}"]:checked`);
+    const block = document.querySelector(`[data-for="${name}"]`);
+    const stack = document.querySelector(`input[name="${name}"]`)?.closest("[data-question]");
+    return {
+      name,
+      section: stack?.dataset.question || name,
+      answer: input?.value || "",
+      notes: block?.value || "",
+      answered: Boolean(input)
+    };
+  });
+}
+
+function selectedFeedback() {
+  return Array.from(document.querySelectorAll(".feedback")).flatMap((fb) => {
+    const selected = fb.dataset.value;
+    if (!selected) return [];
+    const notes = fb.querySelector(".fb-notes")?.value || "";
+    const action = selected === "up" ? "accept-as-is" : selected === "down" ? "investigate-and-revise" : "clarify-before-approval";
+    return [{
+      section: fb.dataset.section || "Unknown section",
+      feedback: selected === "clarify" ? "needs-clarification" : selected,
+      notes,
+      requested_agent_action: action
+    }];
+  });
+}
+
+function feedbackYaml(items) {
+  const unanswered = collectQuestionAnswers().filter(q => !q.answered).map(q => q.section);
+  const lines = [
+    `alignment_page: ${ALIGNMENT_PAGE}`,
+    "feedback_status: revision-request",
+    "approval_status: not-approved",
+    "unanswered_required_questions:",
+    ...unanswered.map(q => `  - "${yamlEscape(q)}"`),
+    "section_feedback:",
+    ...(items.length ? items : selectedFeedback()).map(item => [
+      `  - section: "${yamlEscape(item.section)}"`,
+      `    feedback: "${yamlEscape(item.feedback)}"`,
+      `    notes: "${yamlEscape(item.notes)}"`,
+      `    requested_agent_action: "${yamlEscape(item.requested_agent_action)}"`
+    ].join("\n"))
+  ];
+  if ((items.length ? items : selectedFeedback()).length === 0) lines.push("  []");
+  return lines.join("\n");
+}
+
+function answersYaml() {
+  const answers = collectQuestionAnswers();
+  const feedback = selectedFeedback();
+  const lines = [
+    `alignment_page: ${ALIGNMENT_PAGE}`,
+    "approval_status: ready-for-agent-review",
+    "gate_answers:",
+    ...answers.map(a => [
+      `  - section: "${yamlEscape(a.section)}"`,
+      `    gate_type: "${yamlEscape(a.section.toLowerCase().replaceAll(" ", "_").replaceAll("/", "_"))}"`,
+      `    status: "${a.answer === "Other / None of the above" ? "other" : a.answer === "Need clarification" ? "needs-clarification" : "answered"}"`,
+      `    answer: "${yamlEscape(a.answer)}"`,
+      `    notes: "${yamlEscape(a.notes)}"`
+    ].join("\n")),
+    "section_feedback:",
+    ...(feedback.length ? feedback.map(item => [
+      `  - section: "${yamlEscape(item.section)}"`,
+      `    feedback: "${yamlEscape(item.feedback)}"`,
+      `    notes: "${yamlEscape(item.notes)}"`,
+      `    requested_agent_action: "${yamlEscape(item.requested_agent_action)}"`
+    ].join("\n")) : ["  []"])
+  ];
+  return lines.join("\n");
+}
+
+async function copyText(text, target) {
+  try {
+    await navigator.clipboard.writeText(text);
+    if (target) target.textContent = "Copied YAML to clipboard.";
+  } catch (_) {
+    if (target) target.textContent = "Clipboard blocked. YAML is selected for copying.";
+    const area = document.getElementById("compiled-yaml");
+    if (area) area.select();
+  }
+}
+
+function updateStatus() {
+  const remaining = collectQuestionAnswers().filter(q => !q.answered);
+  document.getElementById("compile-status").textContent = `Required questions remaining: ${remaining.length}`;
+  return remaining;
+}
+
+document.querySelectorAll("input[type=radio]").forEach(input => {
+  input.addEventListener("change", () => {
+    const note = document.querySelector(`[data-for="${input.name}"]`);
+    if (note) note.classList.add("show");
+    updateStatus();
+  });
+});
+
+document.querySelectorAll(".feedback").forEach((fb) => {
+  const section = fb.dataset.section || "Section";
+  fb.innerHTML = `
+    <div class="fb-row">
+      <button type="button" class="fb-btn" data-value="up" title="Approve section">Thumbs up</button>
+      <button type="button" class="fb-btn" data-value="down" title="Flag concern">Thumbs down</button>
+      <button type="button" class="fb-btn" data-value="clarify" title="Need clarification">Clarify</button>
+    </div>
+    <div class="fb-panel">
+      <textarea class="fb-notes" placeholder="Section feedback for ${section}"></textarea>
+      <div class="compile-actions">
+        <button type="button" class="local-feedback">Compile Feedback YAML</button>
+        <button type="button" class="local-copy">Copy YAML</button>
+      </div>
+      <textarea class="yaml local-yaml" readonly></textarea>
+    </div>
+  `;
+  const panel = fb.querySelector(".fb-panel");
+  fb.querySelectorAll(".fb-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const value = btn.dataset.value;
+      fb.dataset.value = fb.dataset.value === value ? "" : value;
+      fb.querySelectorAll(".fb-btn").forEach(b => {
+        b.classList.remove("active-up", "active-down", "active-clarify");
+      });
+      if (fb.dataset.value) {
+        btn.classList.add(`active-${value}`);
+        panel.classList.add("show");
+      } else {
+        panel.classList.remove("show");
+      }
+    });
+  });
+  fb.querySelector(".local-feedback").addEventListener("click", () => {
+    const selected = fb.dataset.value;
+    if (!selected) return;
+    const item = {
+      section,
+      feedback: selected === "clarify" ? "needs-clarification" : selected,
+      notes: fb.querySelector(".fb-notes").value || "",
+      requested_agent_action: selected === "up" ? "accept-as-is" : selected === "down" ? "investigate-and-revise" : "clarify-before-approval"
+    };
+    fb.querySelector(".local-yaml").value = feedbackYaml([item]);
+  });
+  fb.querySelector(".local-copy").addEventListener("click", () => {
+    const area = fb.querySelector(".local-yaml");
+    if (!area.value) fb.querySelector(".local-feedback").click();
+    copyText(area.value, document.getElementById("compile-status"));
+  });
+});
+
+document.getElementById("compile-feedback").addEventListener("click", () => {
+  const yaml = feedbackYaml([]);
+  document.getElementById("compiled-yaml").value = yaml;
+  copyText(yaml, document.getElementById("compile-status"));
+});
+
+document.getElementById("compile-answers").addEventListener("click", () => {
+  const remaining = updateStatus();
+  if (remaining.length) {
+    const first = document.querySelector(`input[name="${remaining[0].name}"]`);
+    first?.scrollIntoView({ behavior: "smooth", block: "center" });
+    return;
+  }
+  const yaml = answersYaml();
+  document.getElementById("compiled-yaml").value = yaml;
+  copyText(yaml, document.getElementById("compile-status"));
+});
+
+document.getElementById("copy-final").addEventListener("click", () => {
+  const area = document.getElementById("compiled-yaml");
+  copyText(area.value, document.getElementById("compile-status"));
+});
+
+updateStatus();
+</script>
+</body>
+</html>

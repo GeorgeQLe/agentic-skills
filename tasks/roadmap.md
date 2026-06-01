@@ -1,3 +1,27 @@
+## Current Targeted Update: Prototype Animation Forensics 2026-06-01
+
+**Goal:** Identify where the `/prototype` pack/drawer animation last matched the intended sequence, which commit or session changed that behavior, and whether the remaining issue is code, debug harness mismatch, or both.
+
+**Acceptance Criteria:**
+- [x] Prompt history is captured under `prompts/investigate/`.
+- [x] Task tracking is recorded in `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] The animation commit cluster from `d6e688cc` through `781d44c1` is analyzed without checking out over the current worktree.
+- [x] Claude and Codex histories are parsed with filtered user/session extraction, not raw recursive grep, and intent evidence excludes system/developer/tool-output text unless it records actual file edits.
+- [x] `docs/history/animation-pack-drawer-forensics-2026-06-01.md` identifies known-good behavior, first behavior-changing/breaking commit, root cause, remaining risks, and a concise follow-up fix plan if needed.
+- [x] `alignment/investigate-animation-pack-drawer.html` carries the durable investigate alignment report.
+- [x] Verification reports matched commit/session counts, source-backed chat excerpts, backed verdicts, `pnpm --dir apps/skills-showcase typecheck`, `pnpm --dir apps/skills-showcase test`, and `git diff --check`.
+- [x] Review notes are recorded and intended tracked artifacts are committed/pushed on the primary branch.
+
+**Implementation Plan:**
+1. Capture the visible invocation prompt and task plan artifacts.
+2. Inventory relevant prototype files, audit harness expectations, and git history for the target commit cluster.
+3. Parse Claude/Codex history for repo/path and animation terms, keeping only user/assistant intent or file-edit evidence.
+4. Compare source snapshots and blame for `SealedPack`, `PackOpener`, `BottomSheet`, `/prototype`, and the audit harness at key commits.
+5. Write the Markdown forensics report, alignment page, and task review.
+6. Run verification, stage only intended artifacts, commit, and push.
+
+**Result:** Forensic report and alignment page are written, verified, and ready to ship on the primary branch.
+
 ## Current Targeted Update: Prototype Card Pack Close Debug Sequence 2026-06-01
 
 **Goal:** Restore the intended `/prototype` close pipeline so drawer cards collapse before sheet teardown, the shared-layout card morphs back into the sealed pack after sheet exit, and stepped debug mode can pause at the apex z-index frames.

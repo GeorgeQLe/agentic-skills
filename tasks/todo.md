@@ -1,3 +1,26 @@
+# Current Task - Prototype Animation Forensics 2026-06-01
+
+**Goal:** Produce a targeted forensic report for the `/prototype` pack/drawer animation history, identifying the last known-good implementation, the first behavior-changing or breaking commit, and whether remaining problems are code, debug harness mismatch, or both.
+
+**Plan:**
+- [x] Capture the visible investigate invocation under `prompts/investigate/`.
+- [x] Record the active plan in `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Inspect relevant prototype files, animation audit harness, and git commit metadata from `d6e688cc` through `781d44c1`.
+- [x] Parse Claude/Codex history with a filtered parser for repo/path and animation terms, recording matched counts and source-backed excerpts.
+- [x] Compare source snapshots/blame for the key animation commits without mutating the current worktree.
+- [x] Write `docs/history/animation-pack-drawer-forensics-2026-06-01.md` and `alignment/investigate-animation-pack-drawer.html`.
+- [x] Run `pnpm --dir apps/skills-showcase typecheck`, `pnpm --dir apps/skills-showcase test`, and `git diff --check`.
+- [x] Record review notes, stage intended artifacts only, commit, and push.
+
+### Review
+
+- Wrote `docs/history/animation-pack-drawer-forensics-2026-06-01.md` with the known-good implementation (`781d44c1`), first close behavior change (`fcc302a5`), apex-travel regression (`558a9873`), root cause, remaining risks, and a follow-up runtime/visual test plan if the issue persists.
+- Built `alignment/investigate-animation-pack-drawer.html` with the full Markdown report content, evidence matrix, history coverage, section feedback controls, and final approval gates.
+- Verified history extraction counts: 19 scoped animation/audit commits; 27 matched Claude sessions / 187 Claude records; 2 matched Codex sessions / 2 Codex history records.
+- Key finding: the durable break was code-state coupling, not just debug harness drift. Pre-`781d44c1` code cleared `openPack` at collapse completion, so sheet exit and `layoutId` morph-out were tied to the same state transition. The debug harness made the missing `BottomSheet.onExitComplete` handoff visible.
+- Verification passed: report content grep, alignment HTML parser, inline JavaScript syntax check, `pnpm --dir apps/skills-showcase typecheck`, `pnpm --dir apps/skills-showcase test` (11 files, 121 tests), and `git diff --check`.
+- Browser open succeeded via `open alignment/investigate-animation-pack-drawer.html`.
+
 ## Current Task - Prototype Card Pack Close Debug Sequence 2026-06-01
 
 **Goal:** Fix `/prototype` close behavior so fanned drawer cards collapse first, the sheet exits second, and the sealed-pack shared-layout morph/elevation drop remain inspectable in stepped debug mode.
