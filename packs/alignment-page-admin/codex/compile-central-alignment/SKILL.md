@@ -34,4 +34,7 @@ Generate a browsable `alignment/index.html` linking to every alignment page in t
 ## Default Shipping Contract
 
 - **No commit/push.** Local convenience file, regenerated on demand.
-- **Default next-step routing:** `Recommended next command: $skills`
+- **Default next-step routing:** After generating the index, suggest contextual next steps based on what was found:
+  - If any pages have old modification dates or the scan revealed outdated content: `Recommended next command: $upgrade-alignment-pages`
+  - If the index is freshly built with all pages current: confirm completion with no further routing
+  - Do not default to `$skills` as a generic fallback
