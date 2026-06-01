@@ -12,6 +12,7 @@
   - Command/skill: `/devtool-docs-audit`
   - Evidence/output path: `research/devtool-docs-audit.md`
   - Escalation conditions: becomes blocking if new skills are undocumented in discovery docs or README
+  - Promotion: promoted on 2026-06-01 to `tasks/todo.md`; prerequisite is installing the `devtool` pack because `devtool-docs-audit` is not currently installed.
 
 - [ ] Spec drift check
   - Cadence: monthly or after 30+ skill/pack commits

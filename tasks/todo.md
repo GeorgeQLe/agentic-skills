@@ -781,8 +781,39 @@ Verification (Node 25): typecheck clean, full vitest suite green at 10 test file
 - [x] `$targeted-skill-builder idea-scope-brief slugged briefs` — update mirrored `idea-scope-brief` skills so known or emerging concept identities write slugged research briefs instead of conflating related concepts in generic `concept-brief.md`.
 - [x] Add Codex parity for `desk-flip`: create `global/codex/desk-flip/SKILL.md`, adjust benchmark route expectations, refresh generated skill data, validate, then commit and push.
 - [x] `$exec` — Resume Phase 41 Batch 41.3 re-benchmarks: re-run the 33 Tier 2 global skills that were benchmarked pre-fixture-remediation with near-zero pass rates (Phase 43 added route guidance to all 32 fixture prompts and increased budgets). Current graded count: 69 unique skills / 158 total (unchanged — `provision-agentic-config` and `migrate` were already in the graded set, so their 2026-05-31 re-runs refresh grades rather than adding unique skills). Batch 41.5 pack-local groups also have remaining families. Batch 41.3 Group 2 shipped in `bc17fee` and `3e4bd78`. `provision-agentic-config` re-benchmarked clean 2026-05-31 (Claude 100% / Codex 67%); `migrate` re-benchmarked 2026-05-31 (Claude 33% / Codex 33%, no infra blocks) and now routes to `$session-triage migrate benchmark failure`; next benchmark rerun target is `prototype`.
-- [ ] Review `tasks/recurring-todo.md`: 2 unchecked recurring items — promote only if due and requiring execution work.
+- [x] Review `tasks/recurring-todo.md`: 2 unchecked recurring items — promote only if due and requiring execution work.
+  - Result 2026-06-01: `devtool-docs-audit` is overdue (`Next due: 2026-05-30`) and is executable audit work, so it is promoted below. `spec-drift` is not due until 2026-06-11, so it remains advisory-only.
+- [ ] `$pack install devtool` then `$devtool-docs-audit` — run the overdue recurring developer-docs audit refresh.
+  - Classification: automated, with alignment-page review output.
+  - Pack status: `scripts/pack.sh which devtool-docs-audit` reports `devtool-docs-audit` is provided by uninstalled pack `devtool`; install the pack or skill first, then start a fresh Codex session if `$devtool-docs-audit` is still not visible.
+  - Files: expected output `research/devtool-docs-audit.md`, `alignment/devtool-docs-audit-{topic}.html`, prompt history under `prompts/devtool-docs-audit/`, task/history notes, and any doc fixes only after the audit recommends and the user approves them.
+  - Implementation plan:
+    1. Install the providing pack with `$pack install devtool` or `scripts/pack.sh install devtool-docs-audit`; verify `$devtool-docs-audit` is available in a fresh Codex session if needed.
+    2. Run `$devtool-docs-audit` against this developer-facing repo, covering quickstart clarity, examples, API reference, troubleshooting, migration paths, and missing proof artifacts.
+    3. Produce `research/devtool-docs-audit.md` and an alignment page before any follow-up doc changes.
+    4. Validate artifacts with content checks and `git diff --check`; ship intended prompt/task/research/alignment artifacts on `master`.
 - [ ] `$research-roadmap` — All 43 roadmap phases are complete. Run documentation health scan after Phase 41 remaining batches finish.
+
+### Review — Recurring Todo Review 2026-06-01
+
+- Reviewed the two unchecked recurring items in `tasks/recurring-todo.md`.
+- Promoted only the overdue developer-docs audit refresh. The required `devtool-docs-audit` skill exists in the `devtool` pack, but that pack is not currently installed.
+- Left `spec-drift` unpromoted because its next due date is 2026-06-11.
+- No source code or skill contracts changed in this step.
+
+### Ship Manifest — Recurring Todo Review 2026-06-01
+
+- **User goal:** Execute the next `$exec` step from the active task docs.
+- **Changed files:** `prompts/exec/skill-prompt-20260531-232045-exec.md`, `tasks/todo.md`, `tasks/recurring-todo.md`, `tasks/history.md`.
+- **Per-file purpose:** prompt file captures the visible `$exec` invocation; `tasks/todo.md` checks off the recurring-review step and records the promoted next plan; `tasks/recurring-todo.md` annotates the recurring item promotion without marking the audit complete; `tasks/history.md` records the session result.
+- **User-goal mapping:** the active task queue asked to review recurring items and promote only due executable work; the diff promotes the overdue developer-docs audit and leaves the not-yet-due spec drift item advisory-only.
+- **Tests run:** `scripts/pack.sh which devtool-docs-audit` (found in uninstalled `devtool` pack); `scripts/pack.sh which spec-drift` (found in uninstalled `agent-work-admin` pack, not due yet); `git diff --check` (passed); targeted `rg` over task/history files confirmed the promotion and non-promotion notes.
+- **Skipped tests:** no source, script, generated asset, or runtime behavior changed, so package tests/builds would not exercise this task-only promotion.
+- **Adversarial review:** changed-file self-review checked for accidentally marking the recurring audit complete, promoting a not-yet-due spec drift check, running uninstalled skills in the same step, and staging unrelated prompt-history files. Findings: keep the recurring audit unchecked, record only a promotion note, and make pack install the next prerequisite.
+- **Residual risk:** the selected next step is task-doc derived; if the operator wanted to continue paid benchmark work instead, this promotion may be a sequencing mismatch. The active queue still preserves benchmark work below, and the next command is explicit.
+- **Rollback note:** revert this commit to remove the promotion note, unchecked-step completion, prompt capture, and history entry.
+- **Next command:** `$pack install devtool`.
+- **Unrelated worktree files left untouched:** `prompts/exec/skill-prompt-20260531-222839-exec.md` and `prompts/investigate/skill-prompt-20260531-182000-positioning-methodology.md` were already untracked before this shipping boundary and are not included.
 
 ## Current Task — Sync Canonical Agent Config Check 2026-05-27
 

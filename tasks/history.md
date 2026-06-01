@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-06-01 — recurring task review promotion
+
+- Reviewed the two advisory recurring items from `tasks/recurring-todo.md`.
+- Promoted only the overdue developer-docs audit refresh: `devtool-docs-audit` was due 2026-05-30, and `scripts/pack.sh which devtool-docs-audit` reports it is provided by the uninstalled `devtool` pack.
+- Left `spec-drift` advisory-only because its next due date is 2026-06-11.
+- Added the next-step plan to `tasks/todo.md`: install `devtool`, then run `$devtool-docs-audit` to produce `research/devtool-docs-audit.md` and an alignment page before any follow-up doc fixes.
+
 ## 2026-06-01 — migrate benchmark failure triage
 
 - Triaged the fresh 2026-05-31 `migrate` re-benchmark failure from the curated report plus raw run JSON under `tests/benchmarks/runs/migrate-{claude-7c742313,codex-f3658761}/`.
