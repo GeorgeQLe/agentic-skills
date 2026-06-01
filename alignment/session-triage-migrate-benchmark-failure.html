@@ -808,7 +808,7 @@ The final line must be exactly: Recommended next command: $exec</code></pre>
       <li><code>scripts/pack.sh which migrate</code> confirmed <code>migrate</code> is provided by <code>code-maintenance</code> and is not installed.</li>
       <li>Installed-skill path search found no <code>.codex/skills/migrate/SKILL.md</code> or <code>.claude/skills/migrate/SKILL.md</code>.</li>
       <li><code>pnpm --dir tests bench --list-skills</code> completed and lists <code>migrate</code> as custom coverage at <code>tests/layer4/setups/tier23-global-workflows.setup.ts</code>.</li>
-      <li><code>pnpm --dir tests bench:coverage</code> currently fails because unrelated dirty/untracked positioning work exposes new repository skills <code>jtbd-positioning</code>, <code>moore-positioning</code>, and <code>strategic-canvas</code> without coverage rows. That is outside this triage surface and should not be fixed here.</li>
+      <li><code>pnpm --dir tests bench:coverage</code> currently fails outside this triage because separate positioning work now on <code>master</code> exposes new repository skills <code>category-design</code>, <code>jtbd-positioning</code>, <code>moore-positioning</code>, <code>obviously-awesome</code>, and <code>strategic-canvas</code> without coverage rows. That is outside this triage surface and should not be fixed here.</li>
     </ul>
   </section>
 

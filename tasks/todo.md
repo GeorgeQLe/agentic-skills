@@ -18,7 +18,7 @@
 - Found no mirrored active `migrate` contract drift that would justify a direct `packs/code-maintenance/{claude,codex}/migrate/SKILL.md` change. Both active contracts are v0.1 and share the same audit, plan, approval, batched migration, and verification workflow.
 - Wrote the durable report to `alignment/session-triage-migrate-benchmark-failure.html`. The recommended follow-up after report approval is `$targeted-skill-builder migrate benchmark fixture skill visibility and phase-route evaluator`, owning benchmark skill visibility, semantic phase-structure evaluation, and exact final-route enforcement.
 - Verification passed: embedded alignment-page JavaScript parses with Node, required report-content grep found the evidence matrix/review gates/recommendation, and `git diff --check` is clean. Browser open: Linux `xdg-open` failed because no HTML browser is installed; WSL PowerShell `Start-Process` opened the file URI successfully.
-- Validation caveat: `pnpm --dir tests bench:coverage` currently fails outside this task because unrelated dirty/untracked positioning work introduces repository skills `jtbd-positioning`, `moore-positioning`, and `strategic-canvas` without coverage rows. This triage intentionally preserves that unrelated work.
+- Validation caveat: `pnpm --dir tests bench:coverage` currently fails outside this task because separate positioning work now on `master` introduces repository skills `category-design`, `jtbd-positioning`, `moore-positioning`, `obviously-awesome`, and `strategic-canvas` without coverage rows. This triage intentionally leaves that unrelated coverage follow-up untouched.
 
 ## Current Task - Hook Model AFPS Routing Implementation 2026-06-01
 
