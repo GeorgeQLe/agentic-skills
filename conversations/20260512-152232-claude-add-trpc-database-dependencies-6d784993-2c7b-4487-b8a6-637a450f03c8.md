@@ -1,0 +1,787 @@
+# add-trpc-database-dependencies
+
+| Field | Value |
+|-------|-------|
+| **Date** | 2026-05-12 15:22:32 UTC |
+| **Agent** | claude |
+| **Model** | claude-opus-4-6 |
+| **Branch** | master |
+| **Session** | `6d784993-2c7b-4487-b8a6-637a450f03c8` |
+| **Entrypoint** | cli |
+| **Version** | 2.1.138 |
+
+---
+
+## User _15:22:32_
+
+Implement the following plan:
+
+# Phase 38, Step 38.1: Add dependencies and configure environment
+
+## Ship Summary
+
+Phase 37 complete — Skills Showcase Next.js app at `apps/skills-showcase/` with 6 public routes, 54 regression tests, generated data pipeline, and updated deploy contract. All validation passing. Phase archived to `tasks/phases/phase-37.md`.
+
+Deploy skipped (manual Vercel, not yet configured — manual task in `tasks/manual-todo.md`).
+
+No failing tests expected. 2 manual tasks block Phase 38 runtime testing: Neon project creation (blocks Step 38.2) and admin secret setup (blocks Step 38.6).
+
+## What needs to be built
+
+Add Phase 38 dependencies (`@trpc/server`, `@trpc/client`, `@trpc/react-query` 11.17.0, `@tanstack/react-query` 5.x, `@neondatabase/serverless` 1.x, `zod` 4.x) to `apps/skills-showcase/package.json`. Create `.env.example` with `DATABASE_URL` and `NEWSLETTER_ADMIN_SECRET` placeholders. Update `next.config.mjs` to remove any static-export assumption (the deploy contract says `output: "export"` but the config doesn't actually set it — confirm and ensure the config is compatible with API routes needed for tRPC).
+
+### Files to create or modify
+
+- Modify `apps/skills-showcase/package.json` — add 6 runtime dependencies
+- Create `apps/skills-showcase/.env.example` — env var documentation
+- Modify `apps/skills-showcase/next.config.mjs` — ensure no `output: "export"`, ready for API routes
+
+### Execution Profile
+- **Parallel mode:** serial
+- **Integration owner:** main agent
+- **Test strategy:** tests-after (validation step)
+
+### Verification
+- `pnpm --dir apps/skills-showcase typecheck` passes
+- `pnpm --dir apps/skills-showcase build` passes
+- `pnpm --dir apps/skills-showcase test` passes (54/54 existing tests still green)
+- `git diff --check` clean
+
+Full implementation plan is in `tasks/todo.md` under Phase 38.
+
+**Ship-one-step handoff:** implement only Step 38.1, validate it, then run `/ship` when done.
+
+## Routing
+
+- **Next work:** Step 38.1 — Add Phase 38 dependencies and configure environment
+- **Recommended next command:** `/run`
+
+
+If you need specific details from before exiting plan mode (like exact code snippets, error messages, or content you generated), read the full transcript at: /Users/georgele/.claude/projects/-Users-georgele-projects-tools-agentic-skills/6706216a-4f82-4174-bcb4-d22d5d11d343.jsonl
+
+## Assistant _15:22:36_
+
+I'll add the Phase 38 dependencies and configure the environment. Let me start by reading the files I need to modify.
+
+## Assistant _15:22:36_
+
+<details><summary>Tool calls</summary>
+
+- Read `/Users/georgele/projects/tools/agentic-skills/apps/skills-showcase/package.json`
+
+</details>
+
+## Assistant _15:22:37_
+
+<details><summary>Tool calls</summary>
+
+- Read `/Users/georgele/projects/tools/agentic-skills/apps/skills-showcase/next.config.mjs`
+
+</details>
+
+## Assistant _15:22:38_
+
+<details><summary>Tool calls</summary>
+
+- Bash: `ls /Users/georgele/projects/tools/agentic-skills/apps/skills-showcase/.env* 2>/dev/null; echo "--...`
+
+</details>
+
+## Assistant _15:22:50_
+
+Config already has no `output: "export"` — good. Now I'll add the dependencies and create the env file.
+
+## Assistant _15:22:52_
+
+<details><summary>Tool calls</summary>
+
+- Edit `/Users/georgele/projects/tools/agentic-skills/apps/skills-showcase/package.json`
+
+</details>
+
+## Assistant _15:22:54_
+
+<details><summary>Tool calls</summary>
+
+- Write `/Users/georgele/projects/tools/agentic-skills/apps/skills-showcase/.env.example`
+
+</details>
+
+## Assistant _15:22:59_
+
+Now let me install the dependencies and run validation.
+
+## Assistant _15:23:00_
+
+<details><summary>Tool calls</summary>
+
+- Bash: `pnpm install --filter @agentic-skills/skills-showcase 2>&1 | tail -20`
+
+</details>
+
+## Assistant _15:23:05_
+
+Dependencies installed. Running validation.
+
+## Assistant _15:23:06_
+
+<details><summary>Tool calls</summary>
+
+- Bash: `pnpm --dir apps/skills-showcase typecheck 2>&1`
+
+</details>
+
+## Assistant _15:23:06_
+
+<details><summary>Tool calls</summary>
+
+- Bash: `pnpm --dir apps/skills-showcase build 2>&1 | tail -20`
+
+</details>
+
+## Assistant _15:23:06_
+
+<details><summary>Tool calls</summary>
+
+- Bash: `pnpm --dir apps/skills-showcase test 2>&1 | tail -30`
+
+</details>
+
+## Assistant _15:23:16_
+
+All checks pass — typecheck clean, build succeeds (8 static pages), 54/54 tests green. Let me also verify git diff is clean.
+
+## Assistant _15:23:17_
+
+<details><summary>Tool calls</summary>
+
+- Bash: `git diff --check -- apps/skills-showcase/ 2>&1`
+
+</details>
+
+## Assistant _15:23:24_
+
+All validation passing. Step 38.1 is complete:
+
+- **package.json**: Added 6 runtime deps (`@trpc/server`, `@trpc/client`, `@trpc/react-query` ^11.17.0, `@tanstack/react-query` ^5, `@neondatabase/serverless` ^1, `zod` ^4)
+- **.env.example**: Created with `DATABASE_URL` and `NEWSLETTER_ADMIN_SECRET` placeholders
+- **next.config.mjs**: Confirmed no `output: "export"` — already compatible with API routes
+- **Validation**: typecheck, build, 54/54 tests all green, `git diff --check` clean
+
+## Assistant _15:23:24_
+
+<details><summary>Tool calls</summary>
+
+- Skill: /ship
+
+</details>
+
+## User _15:23:24_
+
+Base directory for this skill: /Users/georgele/.claude/skills/ship
+
+# Ship
+
+Ship current work, commit, push, deploy, and plan the next step. If `` contains `--no-plan`, skip planning. If `` contains `--no-deploy`, skip deployment.
+
+## Process
+
+### 1. Check if there's anything to ship
+Run `git status` and `git diff --stat`.
+- If the working tree is clean AND there are no unpushed commits: skip to step 3 (or stop if `--no-plan`).
+- If there are changes: continue to step 2.
+
+### 1b. Pre-ship error check
+Before shipping, check for pre-existing errors so they get fixed and included in this step's commit.
+
+a) **Check conversation context first.** If lint, typecheck, or test output already exists in the current session (e.g., from a TDD run step or plan-mode execution), use that output. Do NOT re-run commands whose results are already available.
+
+b) **Run only what's missing.** For any validation category (lint, typecheck, tests) that was NOT already run this session, find and run the project's commands. Check these sources:
+   - `CLAUDE.md` — look for lint, typecheck, or test commands
+   - `Makefile` / `Justfile` — look for `check`, `lint`, `typecheck`, `test` targets
+   - `package.json` — look for `lint`, `typecheck`, `check`, `test` scripts
+   - `pyproject.toml` / `setup.cfg` — look for tool configs (ruff, mypy, pytest)
+   - `Cargo.toml` — `cargo check`, `cargo clippy`
+   - If no validation commands are found and no prior output exists, skip this step.
+
+c) **Fix errors.** If any pre-existing errors are found (from prior session output or fresh runs):
+   - Fix them.
+   - Re-run only the previously-failing commands to confirm the fixes.
+   - These fixes will be committed alongside the current work in step 2d (or as a separate commit if the fixes are unrelated to the current feature).
+
+d) **If errors can't be auto-fixed** (e.g., requires user decision, third-party dependency issue), **STOP. Do not ship.** Report the errors clearly to the user and ask how they want to proceed. Never commit or push code with known build/lint/type/test failures.
+
+### 1c. Skills Showcase freshness
+If the shipping boundary creates, deletes, renames, or changes behavior/metadata in any tracked `SKILL.md` or `PACK.md`, refresh the Skills Showcase before commit:
+
+- `node scripts/generate-skills-showcase-data.mjs`
+- `node scripts/generate-skills-showcase-github-data.mjs`
+- `scripts/validate-skills-showcase-data.sh`
+
+Include changed generated assets in the same shipping boundary. For skill behavior changes, review curated showcase copy, catalog grouping, workflow animation text, and proof receipts; update affected site files or record why no curated website copy changed.
+
+### 1d. Ship manifest route convention
+When writing a ship manifest, summary, task review note, or final response with a `Next command` field, use Claude slash-command syntax. For a completed `/ship` run, the default executable handoff is `/run` unless project state names a more specific next route. Do not leave `Next command` blank.
+
+### 2. Ship the work
+a) Read the project's CLAUDE.md to understand current progress.
+b) Update `tasks/todo.md` — mark completed items as done (check off steps and milestone criteria).
+c) Update `tasks/history.md` — append a brief record of what was accomplished this session (phase/step completed, key changes). Create it if it doesn't exist.
+d) Ship the changes using the /commit-and-push-by-feature workflow:
+   - Group changes into logical feature/function buckets.
+   - Use conventional commit messages.
+   - Land the resulting commits on `main` or `master`, not on an existing feature branch.
+   - `commit-and-push-by-feature` means commit and push when the workflow succeeds.
+
+### 3. Deploy (skip if `--no-deploy`)
+After shipping, deploy only when the project has an explicit manual deploy contract.
+
+a) **Find the deploy contract.**
+   - First check for `deploy.md` or `tasks/deploy.md`.
+   - If neither file exists, skip deploy and report `Deploy skipped: no explicit manual deploy contract (deploy.md or tasks/deploy.md)`.
+   - If a deploy contract exists, read it first and use it to determine the deploy method.
+   - Supplement the contract by checking: `spec.md`, `CLAUDE.md`, `tasks/roadmap.md`, `tasks/todo.md`, `Makefile` / `Justfile`, `package.json`, `deploy/`, `infra/`, `scripts/`, and `docker-compose*.yml`.
+   - **Do NOT look in `.github/workflows/`** — this project does not use GitHub Actions.
+   - If a deploy contract exists but no deploy method is found, **ask the user** how deployment works for this project. Do not guess.
+
+b) **Run the deploy** using the discovered mechanism.
+   - Do not run `aws sso login` preemptively from stale context, old logs, or assumptions. If the deploy method uses an AWS profile and auth status is uncertain, first run `aws sts get-caller-identity --profile <profile>` using the profile from the deploy contract or deploy command.
+   - If the AWS identity check succeeds, proceed directly with the deploy and do not run `aws sso login`.
+   - If the AWS identity check or the deploy command fails because AWS SSO credentials are missing or expired, do not skip deployment. Run the matching `aws sso login --profile <profile>` command, using the profile from the deploy contract, deploy command, or error output.
+   - When `aws sso login` prints a browser URL, device code, or verification instructions, relay them to the user and tell them to navigate to the provided URL and complete the login in their browser. Keep the login command running until it succeeds, fails, or times out.
+   - After a successful SSO login, rerun the original deploy command once. This auth recovery is part of the same deploy attempt, not an automatic retry of a failed deploy.
+   - If the user cannot complete SSO login or the login command fails, report the deploy as blocked by authentication. Do not report it as skipped.
+
+c) **Verify the deploy:**
+   - Check output for errors.
+   - If there's a health check URL or status command in the project config, run it.
+   - Report success or failure.
+
+d) If the deploy fails, report the error clearly. Do not retry automatically.
+
+### 4. Plan the next step (skip if `--no-plan`)
+
+**Prerequisite:** If neither `tasks/todo.md` nor `tasks/roadmap.md` exists, or if no uncompleted steps remain, there is no plan to continue. Run `/roadmap` to scan task pipeline health and recommend the next context-aware action (stale todo, missing steps, etc.). Then stop (do not enter plan mode).
+
+a) **Migration check:** If `tasks/roadmap.md` does not exist but `tasks/todo.md` contains multiple `## Phase` headers, migrate: copy `tasks/todo.md` → `tasks/roadmap.md`, then trim `tasks/todo.md` to just the current phase (first phase with unchecked steps). Commit with `chore: migrate to roadmap.md + todo.md split`.
+b) Read `tasks/todo.md` to identify the next uncompleted step in the current phase.
+b2) If `tasks/record-todo.md` or `tasks/recurring-todo.md` exists, count unchecked advisory items for status only. Do not select them as next work.
+c) **Check if the current phase is complete** (all steps checked, milestone criteria met):
+   - If **YES — Phase transition:**
+     1. Archive the completed phase: copy `tasks/todo.md` → `tasks/phases/phase-N.md` (create `tasks/phases/` if needed). Fill in the "On Completion" section.
+     1b. If `tasks/manual-todo.md` exists, inspect unchecked items before advancing phases:
+         - If any unchecked `_(blocks: Step N.X)_` items still apply to the completed phase, stop. Do NOT archive the manual task file, mark the phase complete, or advance to the next phase unless the user explicitly overrides the blocker.
+         - Unchecked `_(after: Step N.X)_` items are non-blocking follow-up tasks. Archive them with the phase and warn the user that they remain incomplete.
+     2. Check off the phase milestone in `tasks/roadmap.md`.
+     3. Copy the next phase from `tasks/roadmap.md` → overwrite `tasks/todo.md`.
+     3b. Extract the next phase's manual tasks (from `**Manual Tasks:**` in `tasks/roadmap.md`) into a fresh `tasks/manual-todo.md`. If the next phase has no manual tasks, delete `tasks/manual-todo.md` if it exists.
+     4. If no more phases remain, run `/roadmap` to recommend the next action based on project state. Then stop (do not enter plan mode).
+     5. **Just-in-time planning:** **You MUST invoke `/plan-phase` for the new phase** — do NOT tell the user the phase is "deferred" or ask them to run `/plan-phase` manually. A phase without implementation steps is NOT deferred; it simply hasn't been decomposed yet (only items under the `## Deferred / Future Work` heading in the roadmap are actually deferred). This auto-invocation generates implementation steps, the phase `### Execution Profile`, and file-level detail using the full context of what was learned during prior phases. The roadmap only stores strategic outlines — implementation detail is generated when a phase is started, not upfront.
+   - If **NO:** find the next uncompleted step within the current phase.
+d0) **Skip no-op verification handoffs:** If the next uncompleted step is verification-only/no-op-only (for example, "refactor if validation exposes drift", "verify", "run validation", or `Files: no source changes expected`) and the current session already has passing validation evidence for the same scope, do not write a clear-context plan for it. Mark the step complete in `tasks/todo.md`, record the no-op result in the review/history, ship those task-doc updates, then continue selecting the next substantive step. If verification found failures, drift, warnings needing judgment, or source edits are required, treat that remediation as substantive work and plan it normally.
+d) Write a **self-contained** implementation plan for the next step into `tasks/todo.md`. This plan must be complete enough that a fresh context can execute it by reading only CLAUDE.md and `tasks/todo.md`. Include:
+   - What needs to be built/changed
+   - Which files will be affected (full paths)
+   - Key technical decisions or risks
+   - Relevant context from the current session (gotchas, patterns established, conventions used)
+   - If test strategy is `tdd`: which tests to write first and what they should assert
+   - If test strategy is `tests-after`: note that tests will be written in the Green step
+   - The current phase's `### Execution Profile`, including whether the next execution is serial, research-only, review-only, implementation-safe, or agent-team
+   - Acceptance criteria: how to verify the step is done
+   - **Ship-one-step handoff contract:** the next clear-context implementation session must implement only this step, validate it, then run `/ship` when done.
+e) Ship `tasks/todo.md`, `tasks/roadmap.md`, `tasks/manual-todo.md`, `tasks/record-todo.md`, `tasks/recurring-todo.md` (when they exist), and `tasks/phases/` (if created) via `/commit-and-push-by-feature`, landing them on `main` or `master`.
+
+### 5. Enter plan mode (skip if `--no-plan`)
+**Before entering plan mode**, read `.claude/settings.local.json` and ensure `"showClearContextOnPlanAccept": true` and `"defaultMode": "acceptEdits"` are set. If the file doesn't exist, create it with `{ "showClearContextOnPlanAccept": true, "defaultMode": "acceptEdits" }`. If it exists but lacks either key, add the missing key (preserve existing settings). `defaultMode: "acceptEdits"` is the Claude Code setting that makes newly opened sessions prefer accept-edits mode when startup settings are honored; there is no separate known setting that only controls the clear-context launch.
+
+**YOU MUST run the full plan-mode approval sequence.** This is not optional. A next-step plan being written or already present is not a completed `/ship` unless `--no-plan` is set or the approval UI is presented successfully.
+
+1. Call `EnterPlanMode`. This enters plan mode.
+2. In plan mode, write the plan file to the path specified by the plan-mode system prompt. Keep it brief: name the next step, state that the full implementation plan is in `tasks/todo.md`, and include the ship-one-step handoff: "implement only this step, validate it, then run `/ship` when done." Do not explore the codebase or perform multi-phase planning; this is a pass-through to present the approval UI.
+3. Call `ExitPlanMode`. This presents the approval UI where the user can choose "clear context and implement" to start a fresh context that reads `tasks/todo.md` and implements the plan.
+
+`EnterPlanMode` alone does not present the approval UI. `ExitPlanMode` must only be called after `EnterPlanMode` has succeeded and the session is visibly in plan mode. If Claude Code reports "You are not in plan mode", do not retry `ExitPlanMode`; call `EnterPlanMode` first, then write the brief pass-through plan and call `ExitPlanMode`.
+
+If `EnterPlanMode` is denied because Auto mode or the active permission mode requires an explicit user request to enter plan mode, stop. Report that the next plan is written and the user must explicitly request plan mode, for example: `/plan <next step name>` or "enter plan mode for <next step name>". Do not attempt `ExitPlanMode`, do not summarize as shipped into plan mode, and do not implement the following step.
+
+There is no normal final-answer checkpoint between writing/finding the next plan and presenting the approval UI. If the prior tool call was interrupted after the plan was written, resume by calling `EnterPlanMode` rather than summarizing and stopping, unless the session is already visibly in plan mode.
+
+### 6. Plan-mode approval content (skip if `--no-plan`)
+When writing the brief pass-through plan in step 5, include a short ship summary (2-3 lines max) and **present the execution plan** to the user. Summarize the plan that was written to `tasks/todo.md` in step 4d:
+- What was shipped (if anything)
+- Deploy status (if deployed or skipped)
+- Test status — **explicitly state whether any failing tests are expected (red phase: tests written before implementation) or unexpected (regressions/bugs that need fixing)**
+- Manual tasks — pending count from `tasks/manual-todo.md` (if it exists), note any that block upcoming steps
+- Advisory tasks — pending record/recurring counts from `tasks/record-todo.md` and `tasks/recurring-todo.md` if they exist
+- What needs to be built/changed
+- Which files will be created or modified (full paths)
+- The approach (e.g., test strategy, key technical decisions)
+- **Ship-one-step handoff contract:** after approval, implement only this step, validate it, then run `/ship` when done.
+- Any decisions or trade-offs the user should weigh in on
+
+This gives the user something concrete to review before selecting "clear context and implement".
+
+## Next-Step Routing
+
+After writing the next-step plan and before entering plan mode (or before stopping when `--no-plan` is set), identify the next concrete work item from project state, then recommend the executor and invocation.
+
+Output exactly two lines beyond the normal ship summary:
+
+- **Next work:** <specific task name, manual blocker, verification gap, or "none">
+- **Recommended next command:** <one command or route>
+
+Rules:
+
+- Make the next work item primary. Derive it from the next-step plan, `tasks/todo.md`, `tasks/manual-todo.md`, deploy status, validation gaps, smoke-test gaps, or the absence of remaining work. Do not use agent mode itself as the next work item.
+- Never recommend `/ship`, `/ship --no-deploy`, or `/ship --no-plan` as the routine next command from a completed `/ship` run. `/ship` packages current work; after it completes, hand off to the next executable route such as `/run`, `/roadmap`, `/guide`, or `/reconcile-dev-docs fix tasks` based on project state. Recommend `/ship` again only when shipping failed before commit/push or when the next concrete work is explicitly to retry an incomplete shipping operation.
+- Use `./scripts/agent-mode.sh` only to choose command text. If it is missing, unset, or non-zero, infer routing from the current invocation and task type instead of asking the user to select a mode by default.
+- Inference defaults:
+  - Hybrid execution handoff → recommend `/delegate $run`.
+  - Claude-only or orchestration-heavy work → recommend `/run`.
+  - Codex-only execution → recommend `$run`.
+  - External human-only manual work (browser/auth/DNS/service dashboard work with no reliable authenticated CLI/API path, paid account setup, real-device checks, or production smoke-test work needing human sign-off) → recommend `/guide` or a Claude-guided manual step rather than `/run`.
+  - Agent-executable work misfiled in `tasks/manual-todo.md`, task-doc bookkeeping, stale `tasks/manual-todo.md` cleanup, or reconciliation against repo/history reality → recommend `/reconcile-dev-docs fix tasks`, promotion to `tasks/todo.md`, or a direct dev-doc audit, not `/guide`.
+- Only present multiple commands when the ambiguity materially changes execution safety or there are equally valid next work items. Otherwise choose the best route and mention degraded mode lookup inline.
+
+## Constraints
+- **Fix unrelated issues:** If any step surfaces errors, warnings, or lint issues — even ones unrelated to the current work — investigate and fix them before continuing. Commit these fixes separately with a descriptive message (e.g., `fix: resolve unused import warning in auth.ts`).
+- Do NOT write plans into CLAUDE.md. CLAUDE.md is for project conventions and config only.
+- `tasks/roadmap.md` is the source of truth for the full phased plan. `tasks/todo.md` holds only the current phase.
+- Do NOT create `tasks/todo.md` from scratch — if it doesn't exist and there's no roadmap, suggest discovery skills instead.
+- Do NOT re-read files you've already read this session. Use what's in context.
+- Do NOT explore the codebase extensively for planning. Keep context footprint minimal.
+- If the tree is clean and the next step plan already exists in `tasks/todo.md`, skip straight to step 5.
+- Do not enter plan mode solely for verification-only/no-op-only work whose commands already passed in the current session and whose expected source changes are none. Record the completed verification/no-op result and advance to the next substantive item.
+- Unless `--no-plan` is set or a documented blocker stops planning, do not end the turn after writing, finding, or shipping the next-step plan; ensure `defaultMode: "acceptEdits"` is set, then run the full `EnterPlanMode` -> pass-through plan -> `ExitPlanMode` approval sequence. If `EnterPlanMode` is denied because an explicit user request is required, stop with that blocker instead of attempting `ExitPlanMode`.
+- The plan shown to the clear-context implementation session must include the ship-one-step handoff: "implement only this step, validate it, then run `/ship` when done." The plan-mode prompt is the human approval boundary that prevents a runaway loop.
+- The plan must be actionable, not vague. Include specific file paths, technical details, and the current phase's `### Execution Profile`.
+- Do not execute or plan from `tasks/record-todo.md` or `tasks/recurring-todo.md`; report their counts only unless an item has been promoted into `tasks/todo.md`.
+
+## Default Shipping Contract
+
+- **Default next-step routing:** when reporting completion, include either `Recommended next skill: <command>` or the two-line pair `**Next work:** <specific task or "none">` and `**Recommended next command:** <one command or route>` so the next operator has a concrete handoff. A completed `/ship` run must not self-route back to `/ship` or `/ship --no-deploy` unless the shipping operation itself remains incomplete and needs a retry.
+- If this skill creates or modifies tracked repository files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping, even if the user did not explicitly ask for commit/push.
+- Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
+- This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.
+
+## Assistant _15:23:28_
+
+<details><summary>Tool calls</summary>
+
+- Bash: `git status --short`
+
+</details>
+
+## Assistant _15:23:28_
+
+<details><summary>Tool calls</summary>
+
+- Bash: `git diff --stat`
+
+</details>
+
+## Assistant _15:23:41_
+
+There are many pre-existing changes alongside the Step 38.1 work. Let me check the SKILL.md changes since they trigger showcase freshness, and also validate the pre-ship checks (typecheck/build/tests already passed this session).
+
+## Assistant _15:23:41_
+
+<details><summary>Tool calls</summary>
+
+- Bash: `git diff -- packs/youtube-ops/PACK.md | head -30`
+
+</details>
+
+## Assistant _15:23:42_
+
+<details><summary>Tool calls</summary>
+
+- Bash: `git diff -- packs/youtube-ops/claude/youtube-channel-audit/SKILL.md | head -20`
+
+</details>
+
+## Assistant _15:23:42_
+
+<details><summary>Tool calls</summary>
+
+- Bash: `git diff -- packs/creator-foundation/claude/content-programming/SKILL.md | head -20`
+
+</details>
+
+## Assistant _15:23:48_
+
+The pre-existing changes add `youtube-concept-research` to the pack chain. Since SKILL.md/PACK.md files changed, I need to refresh showcase data per step 1c. Let me do that and then read the task files.
+
+## Assistant _15:23:49_
+
+<details><summary>Tool calls</summary>
+
+- Bash: `node scripts/generate-skills-showcase-data.mjs 2>&1 | tail -5`
+
+</details>
+
+## Assistant _15:23:50_
+
+<details><summary>Tool calls</summary>
+
+- Read `/Users/georgele/projects/tools/agentic-skills/tasks/todo.md`
+
+</details>
+
+## Assistant _15:23:50_
+
+<details><summary>Tool calls</summary>
+
+- Read `/Users/georgele/projects/tools/agentic-skills/tasks/history.md`
+
+</details>
+
+## Assistant _15:23:55_
+
+<details><summary>Tool calls</summary>
+
+- Bash: `node scripts/generate-skills-showcase-github-data.mjs 2>&1 | tail -5`
+
+</details>
+
+## Assistant _15:23:55_
+
+<details><summary>Tool calls</summary>
+
+- Bash: `scripts/validate-skills-showcase-data.sh 2>&1`
+
+</details>
+
+## Assistant _15:24:01_
+
+Showcase data refreshed and validated. Now let me update the task docs and ship.
+
+## Assistant _15:24:03_
+
+<details><summary>Tool calls</summary>
+
+- Edit `/Users/georgele/projects/tools/agentic-skills/tasks/todo.md`
+
+</details>
+
+## Assistant _15:24:06_
+
+Now let me also mark the benchmark rerun item and the ad-hoc concept research verification as done since those are pre-existing completed items, and update history.
+
+## Assistant _15:24:07_
+
+<details><summary>Tool calls</summary>
+
+- Edit `/Users/georgele/projects/tools/agentic-skills/tasks/todo.md`
+
+</details>
+
+## Assistant _15:24:11_
+
+Now let me check the ad-hoc concept research verification — I should verify the new skill files exist and the diff is clean.
+
+## Assistant _15:24:12_
+
+<details><summary>Tool calls</summary>
+
+- Bash: `ls packs/youtube-ops/claude/youtube-concept-research/SKILL.md packs/youtube-ops/codex/youtube-con...`
+
+</details>
+
+## Assistant _15:24:12_
+
+<details><summary>Tool calls</summary>
+
+- Bash: `git diff --check -- packs/ 2>&1; echo "exit: $?"`
+
+</details>
+
+## Assistant _15:24:17_
+
+Ad-hoc concept research verification passes. Let me mark it complete and update history.
+
+## Assistant _15:24:20_
+
+<details><summary>Tool calls</summary>
+
+- Edit `/Users/georgele/projects/tools/agentic-skills/tasks/todo.md`
+
+</details>
+
+## Assistant _15:24:23_
+
+<details><summary>Tool calls</summary>
+
+- Read `/Users/georgele/projects/tools/agentic-skills/tasks/history.md`
+
+</details>
+
+## Assistant _15:24:34_
+
+<details><summary>Tool calls</summary>
+
+- Edit `/Users/georgele/projects/tools/agentic-skills/tasks/history.md`
+
+</details>
+
+## Assistant _15:24:38_
+
+Now let me ship via commit-and-push-by-feature. Let me see the full diff to group logically.
+
+## Assistant _15:24:39_
+
+<details><summary>Tool calls</summary>
+
+- Bash: `git status --short`
+
+</details>
+
+## Assistant _15:24:39_
+
+<details><summary>Tool calls</summary>
+
+- Bash: `git log --oneline -5`
+
+</details>
+
+## Assistant _15:24:51_
+
+<details><summary>Tool calls</summary>
+
+- Bash: `git diff -- tests/harness/bench-coverage.ts tests/layer4/setups/packs/pack-workflows.setup.ts | h...`
+
+</details>
+
+## Assistant _15:24:52_
+
+<details><summary>Tool calls</summary>
+
+- Bash: `git diff --cached -- tasks/roadmap.md benchmark/test-benchmark-test-skill-2026-05-12.md | head -30`
+
+</details>
+
+## Assistant _15:24:55_
+
+Good. I'll group into 3 logical commits. Let me ship them.
+
+## Assistant _15:25:01_
+
+<details><summary>Tool calls</summary>
+
+- Bash: `git add packs/youtube-ops/claude/youtube-concept-research/ packs/youtube-ops/codex/youtube-concep...`
+
+</details>
+
+## Assistant _15:25:08_
+
+<details><summary>Tool calls</summary>
+
+- Bash: `git add apps/skills-showcase/package.json apps/skills-showcase/pnpm-lock.yaml apps/skills-showcas...`
+
+</details>
+
+## Assistant _15:25:14_
+
+<details><summary>Tool calls</summary>
+
+- Bash: `git add benchmark/test-benchmark-test-skill-2026-05-12.md tasks/roadmap.md apps/skills-showcase/p...`
+
+</details>
+
+## Assistant _15:25:18_
+
+<details><summary>Tool calls</summary>
+
+- Bash: `git status --short`
+
+</details>
+
+## Assistant _15:25:23_
+
+<details><summary>Tool calls</summary>
+
+- Bash: `git diff -- tasks/todo.md | head -30`
+
+</details>
+
+## Assistant _15:25:28_
+
+<details><summary>Tool calls</summary>
+
+- Bash: `git add tasks/todo.md && git commit -m "$(cat <<'EOF'
+chore: update ad-hoc concept research revie...`
+
+</details>
+
+## Assistant _15:25:31_
+
+<details><summary>Tool calls</summary>
+
+- Bash: `git status --short && git log --oneline -5`
+
+</details>
+
+## Assistant _15:25:34_
+
+Clean tree. Let me push and then plan the next step.
+
+## Assistant _15:25:34_
+
+<details><summary>Tool calls</summary>
+
+- Bash: `git push 2>&1`
+
+</details>
+
+## Assistant _15:25:39_
+
+Pushed. Now let me plan the next step (Step 38.2) into `tasks/todo.md`. The next step is already described in the todo — I need to write the self-contained implementation plan for it.
+
+## Assistant _15:25:40_
+
+<details><summary>Tool calls</summary>
+
+- Read `/Users/georgele/projects/tools/agentic-skills/tasks/todo.md`
+
+</details>
+
+## Assistant _15:25:44_
+
+Let me check the spec files for more detail on the DB schema.
+
+## Assistant _15:25:45_
+
+<details><summary>Tool calls</summary>
+
+- Bash: `grep -n -A 30 'newsletter_subscribers\|schema\|database\|table' specs/first-party-skills-showcase...`
+
+</details>
+
+## Assistant _15:25:45_
+
+<details><summary>Tool calls</summary>
+
+- Read `/Users/georgele/projects/tools/agentic-skills/tasks/manual-todo.md`
+
+</details>
+
+## Assistant _15:25:49_
+
+<details><summary>Tool calls</summary>
+
+- Bash: `grep -n -A 40 'Database Schema\|Data Model\|newsletter_subscribers' specs/first-party-skills-show...`
+
+</details>
+
+## Assistant _15:25:54_
+
+Good — I have everything I need. Note the spec uses `uuid` for `id` while the todo says `serial PK`. The spec is more authoritative. Let me write the Step 38.2 implementation plan.
+
+## Assistant _15:25:56_
+
+<details><summary>Tool calls</summary>
+
+- Read `/Users/georgele/projects/tools/agentic-skills/tasks/todo.md`
+
+</details>
+
+## Assistant _15:25:59_
+
+Now I'll write the Step 38.2 implementation plan into the Review section.
+
+## Assistant _15:26:24_
+
+<details><summary>Tool calls</summary>
+
+- Edit `/Users/georgele/projects/tools/agentic-skills/tasks/todo.md`
+
+</details>
+
+## Assistant _15:26:29_
+
+<details><summary>Tool calls</summary>
+
+- Bash: `git add tasks/todo.md && git commit -m "$(cat <<'EOF'
+docs: plan Step 38.2 database schema and co...`
+
+</details>
+
+## Assistant _15:26:33_
+
+Now let me check deploy contract and then enter plan mode.
+
+## Assistant _15:26:33_
+
+<details><summary>Tool calls</summary>
+
+- Bash: `head -5 tasks/deploy.md 2>/dev/null || echo "no deploy.md"`
+
+</details>
+
+## Assistant _15:26:38_
+
+Deploy is manual Vercel — skipping per manual-todo blockers. Now let me set up the settings and enter plan mode.
+
+## Assistant _15:26:38_
+
+<details><summary>Tool calls</summary>
+
+- Read `/Users/georgele/projects/tools/agentic-skills/.claude/settings.local.json`
+
+</details>
+
+## Assistant _15:26:43_
+
+Settings already have `showClearContextOnPlanAccept: true` and `defaultMode: "acceptEdits"`. Now let me enter plan mode.
+
+## Assistant _15:26:44_
+
+<details><summary>Tool calls</summary>
+
+- ToolSearch
+
+</details>
+
+## Assistant _15:26:48_
+
+<details><summary>Tool calls</summary>
+
+- EnterPlanMode
+
+</details>
+
+## Assistant _15:27:14_
+
+<details><summary>Tool calls</summary>
+
+- Write `/Users/georgele/.claude/plans/cheeky-napping-cherny.md`
+
+</details>
+
+## Assistant _15:27:19_
+
+<details><summary>Tool calls</summary>
+
+- Read `/Users/georgele/.claude/plans/cheeky-napping-cherny.md`
+
+</details>
+
+## Assistant _15:27:37_
+
+<details><summary>Tool calls</summary>
+
+- Write `/Users/georgele/.claude/plans/cheeky-napping-cherny.md`
+
+</details>
+
+## Assistant _15:27:40_
+
+<details><summary>Tool calls</summary>
+
+- ExitPlanMode
+
+</details>
+
+## User _15:30:14_
+
+[Request interrupted by user for tool use]
