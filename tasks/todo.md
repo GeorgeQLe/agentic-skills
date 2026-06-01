@@ -1,3 +1,15 @@
+# Current Task - Animation Approval Signal History 2026-06-01
+
+**Goal:** Locate explicit user approval signals in chat histories for the `/prototype` pack/drawer animation work, then translate those into a concrete list of animation behaviors to preserve in a rebuilt working flow.
+
+**Plan:**
+- [x] Capture the visible analyze-sessions invocation under `prompts/analyze-sessions/`.
+- [ ] Inspect the existing animation forensics alignment page and Markdown report.
+- [ ] Search Claude/Codex histories for user-authored approval language near animation/prototype/pack/drawer terms.
+- [ ] Tie approval hits to sessions, dates, commits, and task artifacts where possible.
+- [ ] Summarize what was specifically working and what remains inference.
+- [ ] Record review notes and verification.
+
 # Current Task - Animation State Machine Visualization 2026-06-01
 
 **Goal:** Add a canonical animation state-machine model for `/prototype`, render it inside the live debug panel, and publish a static reference page generated from the same model.

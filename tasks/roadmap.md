@@ -1,3 +1,22 @@
+## Current Targeted Update: Animation Approval Signal History 2026-06-01
+
+**Goal:** Identify chat-history moments where the user explicitly approved `/prototype` animation behavior, map those approvals to the implementation context, and extract what was actually working so a future animation-flow rebuild can preserve the good parts.
+
+**Acceptance Criteria:**
+- [ ] Prompt history is captured under `prompts/analyze-sessions/`.
+- [ ] `tasks/roadmap.md` and `tasks/todo.md` record the analysis plan and review notes.
+- [ ] `alignment/investigate-animation-pack-drawer.html` and the paired Markdown forensics report are inspected for existing commit/session evidence.
+- [ ] Claude/Codex histories are searched with a filtered parser for user approval language near animation/prototype/pack/drawer terms.
+- [ ] Approval snippets are tied to dates, sessions, commit/work context where recoverable, and categorized by what behavior was working.
+- [ ] A concise rebuild target list distinguishes explicit approval evidence from inference.
+- [ ] Verification documents the searched sources, match counts, and any limitations.
+
+**Implementation Plan:**
+1. Read the existing animation forensics artifact/report and current task history.
+2. Parse local chat histories for user-authored approval language around animation/prototype/pack/drawer terms.
+3. Cross-reference approval hits with repo commits, prompt logs, and task reports when possible.
+4. Report the approval timeline, working-behavior inventory, and recommended rebuild baseline.
+
 ## Current Targeted Update: Animation State Machine Visualization 2026-06-01
 
 **Goal:** Add a canonical animation state-machine model for `/prototype`, render it inside the live debug panel, and publish a static reference page generated from the same model.
