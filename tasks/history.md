@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-06-01 — Add `--all` bulk export to save-conversation.sh
+
+- Added `--all` and `--force` flags to `scripts/save-conversation.sh` for bulk-exporting all past Claude Code conversations.
+- Appended session UUID to filenames (`YYYYMMDD-HHMMSS-{agent}-{title-slug}-{uuid}.md`) for glob-based dedup.
+- Extracted the inline Python heredoc into a `convert_one()` bash function so both `--all` loop and single-session paths share the same conversion logic.
+- Single-session mode now checks for existing export (dedup); prints existing path and exits 0 if already saved.
+- Added `--save-all-conversations` argument to all four exec-loop ship/ship-end SKILL.md files (claude + codex variants).
+- Verified: single export with UUID filename, dedup on re-run, `--all` exported 143/143 sessions, second `--all` skipped all 143, `--all --force` re-exported all 143.
+
 ## 2026-06-01 — Prototype animation state-machine visualization
 
 - Added a canonical typed animation-machine model for `/prototype` under `apps/skills-showcase/src/components/debug/`, consuming the existing open/close step catalog and deriving active, reached, paused, apex, blocked, and reset graph state from runtime snapshots.

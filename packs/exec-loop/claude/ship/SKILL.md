@@ -3,12 +3,12 @@ name: ship
 description: Ship current work (update docs, commit, push, deploy) and optionally plan the next step
 type: shipping
 version: v0.4
-argument-hint: "[--no-plan] [--no-deploy]"
+argument-hint: "[--no-plan] [--no-deploy] [--save-conversation] [--save-all-conversations]"
 ---
 
 # Ship
 
-Ship current work, commit, push, deploy, and plan the next step. If `$ARGUMENTS` contains `--no-plan`, skip planning. If `$ARGUMENTS` contains `--no-deploy`, skip deployment.
+Ship current work, commit, push, deploy, and plan the next step. If `$ARGUMENTS` contains `--no-plan`, skip planning. If `$ARGUMENTS` contains `--no-deploy`, skip deployment. If `$ARGUMENTS` contains `--save-conversation`, save the current conversation to `conversations/`. If `$ARGUMENTS` contains `--save-all-conversations`, export all past conversations to `conversations/`.
 
 ## Process
 
@@ -62,7 +62,11 @@ When writing a ship manifest, summary, task review note, or final response with 
 a) Read the project's CLAUDE.md to understand current progress.
 b) Update `tasks/todo.md` — mark completed items as done (check off steps and milestone criteria).
 c) Update `tasks/history.md` — append a brief record of what was accomplished this session (phase/step completed, key changes). Create it if it doesn't exist.
-d) Ship the changes using the /commit-and-push-by-feature workflow:
+d) **Save conversation (skip if `--save-conversation` and `--save-all-conversations` both absent):**
+   Run `scripts/save-conversation.sh` to export the current Claude Code conversation as a markdown file in `conversations/`. If the script is not found or fails (e.g., not running in Claude Code, no local conversation history), warn and continue — do not block shipping. Include the generated file in the shipping boundary.
+   - If `$ARGUMENTS` contains `--save-all-conversations`, run `scripts/save-conversation.sh --all` instead.
+
+e) Ship the changes using the /commit-and-push-by-feature workflow:
    - Group changes into logical feature/function buckets.
    - Use conventional commit messages.
    - Land the resulting commits on `main` or `master`, not on an existing feature branch.

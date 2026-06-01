@@ -3,14 +3,14 @@ name: ship-end
 description: "Wrap up the current session — update docs, commit, and push"
 type: shipping
 version: v0.2
-argument-hint: "[--no-deploy]"
+argument-hint: "[--no-deploy] [--save-conversation] [--save-all-conversations]"
 ---
 
 # Ship End
 
 Invoke as `$ship-end`.
 
-Use this skill when the user wants the current session wrapped up cleanly.
+Use this skill when the user wants the current session wrapped up cleanly. If `$ARGUMENTS` contains `--save-conversation`, save the current conversation to `conversations/`. If `$ARGUMENTS` contains `--save-all-conversations`, export all past conversations to `conversations/`.
 
 ## Workflow
 
@@ -42,9 +42,11 @@ Use this skill when the user wants the current session wrapped up cleanly.
    - Pass the deploy contract context to `$deploy`.
    - Skip ledger recording and staleness reporting — those are for standalone `$deploy` invocations only.
    - If `$deploy` reports failure, report the error. Do not retry.
-7. Commit and push using the `commit-and-push-by-feature` workflow. That workflow must land the resulting commits on `main` or `master`, not on an existing feature branch.
-7b. **Pack install artifact boundary:** Treat `.agents/project.json` as the committed project designation. When pack configuration changed, include `.agents/project.json` in the shipping boundary. Treat `.claude/skills/**` and `.codex/skills/**` as generated local skill roots recreated by `/pack`, `$pack`, or `scripts/pack.sh refresh`; generated skill roots must not be staged or committed. If those roots are untracked, leave them uncommitted and report them as generated local artifacts. If any path under those roots is already tracked or modified as a tracked file, stop unless the current task explicitly includes repository hygiene to untrack or ignore generated skill roots.
-8. Report:
+7. **Save conversation (skip if `--save-conversation` and `--save-all-conversations` both absent):** Run `scripts/save-conversation.sh` to export the current conversation as a markdown file in `conversations/`. If the script is not found or fails (e.g., no local conversation history available), warn and continue — do not block shipping. Include the generated file in the shipping boundary.
+   - If `$ARGUMENTS` contains `--save-all-conversations`, run `scripts/save-conversation.sh --all` instead.
+8. Commit and push using the `commit-and-push-by-feature` workflow. That workflow must land the resulting commits on `main` or `master`, not on an existing feature branch.
+8b. **Pack install artifact boundary:** Treat `.agents/project.json` as the committed project designation. When pack configuration changed, include `.agents/project.json` in the shipping boundary. Treat `.claude/skills/**` and `.codex/skills/**` as generated local skill roots recreated by `/pack`, `$pack`, or `scripts/pack.sh refresh`; generated skill roots must not be staged or committed. If those roots are untracked, leave them uncommitted and report them as generated local artifacts. If any path under those roots is already tracked or modified as a tracked file, stop unless the current task explicitly includes repository hygiene to untrack or ignore generated skill roots.
+9. Report:
    - What was accomplished
    - Validation status — explicitly state whether any failing tests are expected (red phase: tests before implementation) or unexpected (regressions/bugs), and call out any warnings as fixed, accepted, or unresolved
    - Manual tasks — X/Y complete (from `tasks/manual-todo.md`, if it exists)

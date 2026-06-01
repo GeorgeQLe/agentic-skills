@@ -3,12 +3,12 @@ name: ship-end
 description: Wrap up the current session — update docs, commit, and push
 type: shipping
 version: v0.2
-argument-hint: "[--no-deploy]"
+argument-hint: "[--no-deploy] [--save-conversation] [--save-all-conversations]"
 ---
 
 # Ship End
 
-Wrap up the current session: mark progress, commit, and push.
+Wrap up the current session: mark progress, commit, and push. If `$ARGUMENTS` contains `--save-conversation`, save the current conversation to `conversations/`. If `$ARGUMENTS` contains `--save-all-conversations`, export all past conversations to `conversations/`.
 
 ## Process
 
@@ -33,11 +33,15 @@ Wrap up the current session: mark progress, commit, and push.
    - Skip ledger recording and staleness reporting — those are for standalone `/deploy` invocations only.
    - If `/deploy` (release-ops pack) reports failure, report the error. Do not retry.
 
-4. **Ship the session changes:**
+4. **Save conversation (skip if `--save-conversation` and `--save-all-conversations` both absent):**
+   - Run `scripts/save-conversation.sh` to export the current Claude Code conversation as a markdown file in `conversations/`. If the script is not found or fails (e.g., not running in Claude Code, no local conversation history), warn and continue — do not block shipping. Include the generated file in the shipping boundary.
+   - If `$ARGUMENTS` contains `--save-all-conversations`, run `scripts/save-conversation.sh --all` instead.
+
+5. **Ship the session changes:**
    - Use the `/commit-and-push-by-feature` workflow: group changes into logical feature/function buckets, use conventional commit messages, land the resulting commits on `main` or `master`, and push them there when the workflow succeeds.
    - **Pack install artifact boundary:** Treat `.agents/project.json` as the committed project designation. When pack configuration changed, include `.agents/project.json` in the shipping boundary. Treat `.claude/skills/**` and `.codex/skills/**` as generated local skill roots recreated by `/pack`, `$pack`, or `scripts/pack.sh refresh`; generated skill roots must not be staged or committed. If those roots are untracked, leave them uncommitted and report them as generated local artifacts. If any path under those roots is already tracked or modified as a tracked file, stop unless the current task explicitly includes repository hygiene to untrack or ignore generated skill roots.
 
-5. **Report session summary:**
+6. **Report session summary:**
    - What was accomplished
    - Deploy status (if deployed)
    - Test status — explicitly state whether any failing tests are expected (red phase: tests written before implementation) or unexpected (regressions/bugs that need fixing)
