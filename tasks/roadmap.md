@@ -1,3 +1,24 @@
+## Current Targeted Update: Prototype Card Pack Close Debug Sequence 2026-06-01
+
+**Goal:** Restore the intended `/prototype` close pipeline so drawer cards collapse before sheet teardown, the shared-layout card morphs back into the sealed pack after sheet exit, and stepped debug mode can pause at the apex z-index frames.
+
+**Acceptance Criteria:**
+- [x] `app/prototype/page.tsx` separates drawer-closing state from sheet mounted state.
+- [x] `handleClose()` only marks `close-trigger` and starts the PackOpener collapse.
+- [x] `PackOpener.onCollapseComplete` hides the bottom sheet, while `BottomSheet.onExitComplete` clears `openPack`.
+- [x] `PackOpener` fires collapse completion exactly once after every collapsing card has landed, including `targetIndex === 0` and one-card packs.
+- [x] `SealedPack` gates `layout-morph-out` and `drop-elevation` before clearing elevated/z-index state.
+- [x] Focused tests and project checks verify the close sequencing.
+- [x] Review notes are recorded and intended changes are committed/pushed on the primary branch.
+
+**Implementation Plan:**
+1. Inspect the current dirty prototype edits and preserve unrelated user work.
+2. Patch the page close state machine, PackOpener completion guard, and SealedPack close morph gates.
+3. Add a focused Skills Showcase regression test for the page close handoff.
+4. Run typecheck, tests, browser verification, whitespace checks, then ship intended files.
+
+**Result:** Implementation and verification are complete; shipping is in progress.
+
 ## Current Targeted Update: migrate Benchmark Failure Session Triage 2026-05-31
 
 **Goal:** Use `$session-triage` to investigate the clean `migrate` benchmark rerun failure and determine the smallest durable next step, without editing the target skill during triage.

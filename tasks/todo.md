@@ -1,3 +1,26 @@
+## Current Task - Prototype Card Pack Close Debug Sequence 2026-06-01
+
+**Goal:** Fix `/prototype` close behavior so fanned drawer cards collapse first, the sheet exits second, and the sealed-pack shared-layout morph/elevation drop remain inspectable in stepped debug mode.
+
+**Plan:**
+- [x] Inspect current prototype close implementation, dirty diffs, and debug harness contracts.
+- [x] Update page state so close starts PackOpener collapse without unmounting the sheet.
+- [x] Update PackOpener collapse completion to fire exactly once across target-card cases and direct-complete edge cases.
+- [x] Restore SealedPack `layout-morph-out` and `drop-elevation` gates before dropping elevation or resetting slide/trigger state.
+- [x] Add focused regression coverage for the page close handoff.
+- [x] Run `pnpm --dir apps/skills-showcase typecheck`, `pnpm --dir apps/skills-showcase test`, browser verification on `/prototype`, and `git diff --check`.
+- [x] Record review notes, stage intended files only, commit, and push.
+
+### Review
+
+- Updated `/prototype` close state so `handleClose()` starts drawer collapse without unmounting `BottomSheet`; `PackOpener.onCollapseComplete` now marks `drawer-teardown` and starts sheet exit, and `BottomSheet.onExitComplete` clears `openPack`.
+- Added `BottomSheet.onExitComplete` and kept dismissals locked while drawer collapse/sheet exit are in progress.
+- Made `PackOpener` collapse completion a one-shot handoff through `collapseCompleteFiredRef`, including direct completion for one-card/no-container paths.
+- Restored `SealedPack` close apex gates: `layout-morph-out` and `drop-elevation` now run before clearing `wasInDrawer`, dropping elevation, and resetting slide/trigger state.
+- Updated the debug close step boundary text for drawer teardown and added `apps/skills-showcase/src/components/prototype-close-sequence.test.tsx`, covering the page close handoff, the registered debug close driver, close apex gate ordering, and PackOpener one-shot completion.
+- Verification passed: focused prototype regression, `pnpm --dir apps/skills-showcase typecheck`, `pnpm --dir apps/skills-showcase test` (11 files, 121 tests), and `git diff --check`.
+- Browser verification used a restarted local dev server at `http://localhost:3001/prototype`. The Browser plugin Node REPL tool was unavailable, so Computer Use was used instead. It confirmed the debug panel opens, the open driver reaches the drawer-open state, and the close driver reaches the collapse handoff; accessibility snapshots were noisy during stepped teardown, so the deterministic regression test is the authoritative gate for the exact driver/teardown sequence.
+
 ## Current Task - migrate Benchmark Failure Session Triage 2026-05-31
 
 **Goal:** Investigate the fresh `migrate` benchmark failure, verify whether the remaining 33%/33% result is a skill-contract issue, benchmark rubric false negative, fixture/setup problem, or agent output noncompliance, and produce a durable session-triage report with the smallest validated next step.
