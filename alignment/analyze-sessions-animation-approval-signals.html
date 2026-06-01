@@ -1,0 +1,904 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Approval Signals in Animation Chat Histories</title>
+<style>
+:root {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --border: #30363d;
+  --text: #c9d1d9;
+  --text-muted: #8b949e;
+  --accent: #58a6ff;
+  --green: #3fb950;
+  --red: #f85149;
+  --orange: #d29922;
+  --purple: #bc8cff;
+  --code-bg: #1c2128;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.55;
+}
+main {
+  width: min(1120px, calc(100% - 32px));
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 32px 0 56px;
+  overflow-wrap: break-word;
+}
+a { color: var(--accent); }
+h1, h2, h3 { color: #fff; line-height: 1.2; }
+h1 { margin: 0 0 8px; font-size: clamp(2rem, 5vw, 3.5rem); }
+h2 { margin: 0; font-size: 1.45rem; color: var(--accent); }
+h3 { margin: 22px 0 8px; font-size: 1.05rem; }
+p { color: var(--text); }
+code {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 5px;
+  color: #e6edf3;
+}
+pre {
+  margin: 0;
+  padding: 18px;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: #e6edf3;
+  font-size: 0.9rem;
+}
+section {
+  margin: 24px 0;
+  padding: 22px;
+  background: rgba(22, 27, 34, 0.72);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+.hero {
+  padding: 28px 0 10px;
+  border: 0;
+  background: transparent;
+}
+.muted { color: var(--text-muted); }
+.toc {
+  background: var(--surface);
+}
+.toc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+.toc-grid a {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  padding: 10px 16px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #11161d;
+  text-decoration: none;
+}
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
+  gap: 12px;
+}
+.card {
+  background: #11161d;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
+}
+.table-wrap { overflow-x: auto; }
+table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 760px;
+  font-size: 0.92rem;
+}
+th, td {
+  border: 1px solid var(--border);
+  padding: 9px 10px;
+  text-align: left;
+  vertical-align: top;
+}
+th { background: var(--surface); color: #fff; }
+.badge {
+  display: inline-block;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 2px 8px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+blockquote {
+  margin: 12px 0;
+  padding: 10px 16px;
+  border-left: 3px solid var(--accent);
+  background: rgba(88, 166, 255, 0.06);
+  border-radius: 0 6px 6px 0;
+  color: var(--text);
+}
+.signal-card {
+  background: #11161d;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  margin: 14px 0;
+}
+.signal-card h3 { margin-top: 0; }
+.signal-label {
+  display: inline-block;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  padding: 2px 10px;
+  color: var(--accent);
+  font-size: 0.8rem;
+  margin-bottom: 8px;
+}
+.confirmed {
+  color: var(--green);
+  font-weight: 600;
+}
+.unvalidated {
+  color: var(--orange);
+}
+.feedback {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  min-width: min(320px, 100%);
+}
+.fb-row { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.fb-btn, button, .radio-option {
+  min-height: 44px;
+  padding: 10px 16px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 6px;
+  cursor: pointer;
+  font: inherit;
+}
+.fb-btn.active-up { border-color: var(--green); color: var(--green); background: rgba(63, 185, 80, .12); }
+.fb-btn.active-down { border-color: var(--red); color: var(--red); background: rgba(248, 81, 73, .12); }
+.fb-btn.active-clarify { border-color: var(--orange); color: var(--orange); background: rgba(210, 153, 34, .12); }
+.fb-panel {
+  display: none;
+  width: 100%;
+  background: #11161d;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+}
+.fb-panel.show { display: block; }
+textarea {
+  width: 100%;
+  min-height: 90px;
+  resize: vertical;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: #0b1017;
+  color: var(--text);
+  padding: 10px;
+  font: inherit;
+}
+.yaml { min-height: 150px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+.gate {
+  background: #1c2333;
+  border: 1px solid var(--purple);
+  border-radius: 8px;
+  padding: 14px;
+  margin: 14px 0;
+}
+.gate h3 { color: var(--purple); margin-top: 0; }
+.radio-stack { display: grid; gap: 8px; margin-top: 10px; }
+.radio-option { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; }
+.conditional-note { display: none; margin-top: 8px; }
+.conditional-note.show { display: block; }
+.status { color: var(--orange); min-height: 1.5em; }
+.compile-actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0; }
+button.primary { background: var(--accent); border-color: var(--accent); color: #08111f; font-weight: 700; }
+button:disabled { opacity: .45; cursor: not-allowed; }
+.deep-dive {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  margin: 14px 0;
+}
+.deep-dive h3 { color: var(--accent); margin-top: 0; }
+.flow-diagram {
+  padding: 14px;
+  background: #0b1017;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.85rem;
+  white-space: pre;
+  overflow-x: auto;
+  line-height: 1.4;
+}
+@media (max-width: 860px) {
+  main { width: min(100% - 24px, 1120px); padding-top: 22px; }
+  section { padding: 18px; }
+}
+@media (max-width: 560px) {
+  main { width: min(100% - 16px, 1120px); }
+  .fb-row, .compile-actions { width: 100%; }
+  button, .fb-btn, .radio-option { width: 100%; justify-content: center; }
+}
+</style>
+</head>
+<body>
+<main>
+  <section class="hero" id="top">
+    <h1>Approval Signals in Animation Chat Histories</h1>
+    <p class="muted">Alignment page for <code>docs/history/animation-approval-signals-2026-06-01.md</code>. Analysis of 10 animation-related sessions (May 25 &ndash; June 1) to extract implicit user approval signals for animation behavior.</p>
+    <p>
+      <span class="badge">No explicit approvals found</span>
+      <span class="badge">6 implicit signals extracted</span>
+      <span class="badge">9 validated behaviors</span>
+      <span class="badge">Known good: <code>781d44c1</code></span>
+    </p>
+  </section>
+
+  <section class="toc" id="toc">
+    <div class="section-head">
+      <h2>Table of Contents</h2>
+      <div class="feedback" data-section="Table of Contents"></div>
+    </div>
+    <div class="toc-grid">
+      <a href="#summary">Summary</a>
+      <a href="#signals">Approval Signals</a>
+      <a href="#evidence">Evidence Matrix</a>
+      <a href="#validated">Validated Behaviors</a>
+      <a href="#unvalidated">Unvalidated Behaviors</a>
+      <a href="#confidence">Confidence Register</a>
+      <a href="#deep-dives">Deep Dives</a>
+      <a href="#message-index">User Message Index</a>
+      <a href="#gates">Approval Gates</a>
+      <a href="#compile">Compile</a>
+    </div>
+  </section>
+
+  <section id="summary">
+    <div class="section-head">
+      <h2>Summary</h2>
+      <div class="feedback" data-section="Summary"></div>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <h3>Finding</h3>
+        <p>No explicit &ldquo;yes / perfect / looks good / approved&rdquo; statements exist in any animation session. Approval is expressed through implicit signals: regression reports (describing what <em>was</em> working), user-authored plans (annotating specific commits as correct), corrections (describing the visual contract), diagnoses (validating component logic), and interruptions (rejecting wrong agent directions).</p>
+      </div>
+      <div class="card">
+        <h3>Strongest Signal</h3>
+        <p><strong>Signal 2</strong> &mdash; User annotates commit <code>6bcb2076</code>&rsquo;s apex animation chain as <strong>&ldquo;Working correctly.&rdquo;</strong> in session <code>103a347b</code>. This is the only near-explicit approval in the entire history.</p>
+      </div>
+      <div class="card">
+        <h3>Known-Good Close</h3>
+        <p><code>781d44c1</code> implements all 9 validated behaviors. It is the forensically verified known-good state for the close sequence. For open, <code>6bcb2076</code> is the user-validated apex reference.</p>
+      </div>
+      <div class="card">
+        <h3>Coverage Gaps</h3>
+        <p>Debug harness (<code>4d076fff</code>), state machine visualization (<code>ca3efd37</code>), two-stage open (<code>3ed1e11a</code>), and shimmer fix (<code>ec53fcf1</code>) have no user approval signals.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="signals">
+    <div class="section-head">
+      <h2>Implicit Approval Signals (Chronological)</h2>
+      <div class="feedback" data-section="Approval Signals"></div>
+    </div>
+
+    <div class="signal-card">
+      <span class="signal-label">Signal 1</span>
+      <h3>Apex animation described as &ldquo;working correctly&rdquo; (regression report)</h3>
+      <p class="muted">Session <code>1a77d96d</code> &middot; May 28, 19:00 &middot; collapse-cards-drawer-close</p>
+      <blockquote>&ldquo;ok let&rsquo;s plan the collapse card animations, I did detect that we have had an animation regression where the card doesn&rsquo;t rise up to the top apex position over the card before it goes on top of the drawer. While on close, it doesn&rsquo;t go from on top of the drawer to the top apex position before going downward and behind the card pack body.&rdquo;</blockquote>
+      <p><strong>What this approves:</strong> The user describes the <em>desired</em> behavior &mdash; card rises to apex above pack body before entering drawer on open, returns from drawer to apex before descending behind pack body on close. By calling the current state a &ldquo;regression,&rdquo; the user validates that this behavior <em>was</em> working and should be restored.</p>
+      <p class="confirmed">Confirmed: Apex travel on both open and close paths.</p>
+    </div>
+
+    <div class="signal-card">
+      <span class="signal-label">Signal 2 &mdash; Strongest</span>
+      <h3>User plan references <code>6bcb2076</code> as known-good apex implementation</h3>
+      <p class="muted">Session <code>103a347b</code> &middot; May 28, 19:36 &middot; fix-card-apex-animation-regression</p>
+      <blockquote>&ldquo;<code>6bcb2076</code> &mdash; Introduced the apex animation. The tear path inline in <code>handlePointerUp</code> had: <code>animate(cardSlideY, -180, ...) &rarr; setCardElevated(true) &rarr; 200ms hold &rarr; onOpen</code>. <strong>Working correctly.</strong>&rdquo;</blockquote>
+      <p><strong>What this approves:</strong> Explicit &ldquo;working correctly&rdquo; annotation on commit <code>6bcb2076</code>&rsquo;s apex animation chain. This is the strongest approval signal in the entire history.</p>
+      <p class="confirmed">Confirmed: <code>cardSlideY</code> animate to -180 &rarr; elevate card &rarr; 200ms hold &rarr; open drawer.</p>
+    </div>
+
+    <div class="signal-card">
+      <span class="signal-label">Signal 3</span>
+      <h3>Close z-index feedback validates expected visual contract</h3>
+      <p class="muted">Session <code>103a347b</code> &middot; May 28, 19:38 &middot; same session, after implementation</p>
+      <blockquote>&ldquo;the closing animation comes from behind the pack body instead of above the pack body and then only when it is going downward would it be behind the card pack body&rdquo;</blockquote>
+      <p><strong>What this approves:</strong> The user describes the exact visual contract: card should be <em>above</em> pack body during close apex, and only go <em>behind</em> pack body during the downward descent. This is a correction (current behavior is wrong), but also an approval of the design intent.</p>
+      <p class="confirmed">Confirmed: Close apex card visibility above pack body; behind pack body only on descent.</p>
+    </div>
+
+    <div class="signal-card">
+      <span class="signal-label">Signal 4</span>
+      <h3>User diagnoses flash root cause &mdash; validates collapse-then-dismiss design</h3>
+      <p class="muted">Session <code>51d6f6c8</code> &middot; May 28, 20:27 &middot; fix-card-flash-drawer-close</p>
+      <blockquote>&ldquo;oh I&rsquo;ve figured out why that card flash exists, it is from the collapse cards into one card on drawer close. Even though I haven&rsquo;t scrolled down, that&rsquo;s where the card position thinks they should collapse to. Though when I scroll down, they collapse on the visible top-left-most card correctly.&rdquo;</blockquote>
+      <p><strong>What this approves:</strong> The collapse-to-visible-top-left-card behavior <em>works correctly when scrolled down</em>. Validates the collapse target logic. Identifies the bug as collapse visibility, not a design flaw. Implicitly rejects the agent&rsquo;s <code>cardSlideY.set(-180)</code> root cause.</p>
+      <p class="confirmed">Confirmed: Collapse fan-in targeting the visible top-left card.</p>
+    </div>
+
+    <div class="signal-card">
+      <span class="signal-label">Signal 5</span>
+      <h3>User-authored plan specifies correct architecture</h3>
+      <p class="muted">Session <code>3b8c9652</code> &middot; June 1, 04:06 &middot; fix-collapse-flash-restore-apex</p>
+      <blockquote>&ldquo;My previous fix (commit <code>558a9873</code>) misidentified the root cause. The flash is NOT from <code>cardSlideY.set(-180)</code> in SealedPack &mdash; it&rsquo;s from the <strong>collapse animation running fully visible</strong> inside the still-open BottomSheet.&rdquo;</blockquote>
+      <blockquote>&ldquo;Revert SealedPack.tsx (restore apex travel)&rdquo; &mdash; <code>cardSlideY.set(0)</code> &rarr; restore <code>cardSlideY.set(-180)</code></blockquote>
+      <p><strong>What this approves:</strong> Explicitly validates <code>cardSlideY.set(-180)</code> as correct (restoring it), rejects <code>cardSlideY.set(0)</code> as wrong, and specifies concurrent collapse+sheet-exit.</p>
+      <p class="confirmed">Confirmed: -180 apex position, concurrent collapse+sheet-exit.</p>
+    </div>
+
+    <div class="signal-card">
+      <span class="signal-label">Signal 6</span>
+      <h3>User interruptions as rejection signals</h3>
+      <p class="muted">Multiple sessions</p>
+      <p>Sessions ending with <code>[Request interrupted by user]</code>:</p>
+      <ul>
+        <li><code>103a347b</code> at 19:51:07 &mdash; interrupted z-index session (led to <code>85159627</code>)</li>
+        <li><code>85159627</code> at 20:05:54 &mdash; interrupted again (led to <code>3de3cc83</code>)</li>
+        <li><code>51d6f6c8</code> at 20:25:38 &mdash; interrupted agent&rsquo;s investigation (user had already found root cause)</li>
+        <li><code>51d6f6c8</code> at 04:06:16 &mdash; interrupted to provide own plan</li>
+      </ul>
+      <p><strong>What this signals:</strong> The user corrects course when the agent goes wrong. Each interruption validates that the user&rsquo;s <em>own</em> description of desired behavior is authoritative.</p>
+    </div>
+  </section>
+
+  <section id="evidence">
+    <div class="section-head">
+      <h2>Evidence Matrix</h2>
+      <div class="feedback" data-section="Evidence Matrix"></div>
+    </div>
+    <p class="muted">Maps each approval signal to its source evidence, inference chain, confidence level, assumption status, and decision impact.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Signal</th><th>Source Evidence</th><th>Inference</th><th>Confidence</th><th>Assumptions</th><th>Decision Impact</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Signal 1</strong><br>Apex regression report</td>
+            <td>Session <code>1a77d96d</code>, user message at 19:00:11. Calls current state a &ldquo;regression&rdquo; and describes both open and close apex paths.</td>
+            <td>By labeling behavior as regressed, user confirms prior working state existed. Description matches <code>6bcb2076</code> apex chain.</td>
+            <td>High</td>
+            <td>Assumes user&rsquo;s memory of prior state is accurate. Supported by Signal 2&rsquo;s explicit &ldquo;working correctly&rdquo; annotation.</td>
+            <td>Apex travel on open and close is a confirmed requirement.</td>
+          </tr>
+          <tr>
+            <td><strong>Signal 2</strong><br>&ldquo;Working correctly&rdquo;</td>
+            <td>Session <code>103a347b</code>, user-authored plan. Annotates <code>6bcb2076</code> with exact code sequence and &ldquo;Working correctly.&rdquo;</td>
+            <td>Direct user attribution of correctness to a specific commit and code path.</td>
+            <td>Very High</td>
+            <td>None &mdash; explicit statement on a specific commit.</td>
+            <td>The <code>6bcb2076</code> apex chain (<code>cardSlideY -180</code> &rarr; elevate &rarr; 200ms &rarr; open) is the validated open sequence.</td>
+          </tr>
+          <tr>
+            <td><strong>Signal 3</strong><br>Close z-index contract</td>
+            <td>Session <code>103a347b</code>, user correction at 19:38:25. Describes expected above/behind layering.</td>
+            <td>User knows what correct looks like and corrects agent&rsquo;s output. The correction itself describes the valid design.</td>
+            <td>High</td>
+            <td>Assumes the correction describes a consistent intention, not a momentary preference.</td>
+            <td>Card above pack body at apex, behind only on descent.</td>
+          </tr>
+          <tr>
+            <td><strong>Signal 4</strong><br>Collapse target validated</td>
+            <td>Session <code>51d6f6c8</code>, user diagnosis at 20:27:11. States collapse works when scrolled, identifies visibility as the bug.</td>
+            <td>User validates component logic (targeting) while rejecting agent&rsquo;s wrong root cause. Separates targeting from visibility.</td>
+            <td>High</td>
+            <td>Assumes the scroll-dependent test was representative of expected behavior.</td>
+            <td>Collapse targeting logic is sound; visibility fix needed, not targeting fix.</td>
+          </tr>
+          <tr>
+            <td><strong>Signal 5</strong><br>Concurrent architecture</td>
+            <td>Session <code>3b8c9652</code>, user-authored plan at 04:06. Specifies revert, <code>onExitComplete</code>, and split state.</td>
+            <td>User provides the complete fix architecture. <code>781d44c1</code> implements it as a strict superset.</td>
+            <td>Very High</td>
+            <td>None &mdash; user authored the plan and the implementation matches.</td>
+            <td><code>781d44c1</code> is the validated close sequence implementation.</td>
+          </tr>
+          <tr>
+            <td><strong>Signal 6</strong><br>Interruption rejection</td>
+            <td>4 interruptions across 3 sessions. Each followed by user providing their own direction.</td>
+            <td>Interruptions mark agent wrong-direction. User&rsquo;s subsequent messages are authoritative corrections.</td>
+            <td>Medium</td>
+            <td>Interruptions could also indicate impatience, not just wrongness. But each led to user-authored plans.</td>
+            <td>User descriptions override agent analysis when they conflict.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="validated">
+    <div class="section-head">
+      <h2>Validated Behaviors (9 confirmed)</h2>
+      <div class="feedback" data-section="Validated Behaviors"></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>#</th><th>Behavior</th><th>Source Signal</th><th>Commit Reference</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Card rises to apex (-180px) above pack body on open (click, drag, tear)</td><td>Signals 1, 2</td><td><code>6bcb2076</code> introduced; <code>5736f3c0</code> broke tear path</td></tr>
+          <tr><td>2</td><td>Card holds at apex briefly (200ms) before drawer opens</td><td>Signal 2</td><td><code>6bcb2076</code></td></tr>
+          <tr><td>3</td><td>Card visible above pack body at apex (z-index correct)</td><td>Signal 3</td><td>Click/drag paths never needed <code>packBodyElevated</code></td></tr>
+          <tr><td>4</td><td>On close: card returns from drawer to apex position (-180)</td><td>Signals 1, 3, 5</td><td>Restored in <code>781d44c1</code></td></tr>
+          <tr><td>5</td><td>On close: card descends from apex behind pack body</td><td>Signal 3</td><td><code>cardSlideY</code> animate to 0 with spring</td></tr>
+          <tr><td>6</td><td>Collapse fan-in targets visible top-left card</td><td>Signal 4</td><td><code>fcc302a5</code> introduced; validated when scrolled</td></tr>
+          <tr><td>7</td><td>Collapse runs concurrently with sheet exit (hidden)</td><td>Signal 5</td><td><code>781d44c1</code></td></tr>
+          <tr><td>8</td><td><code>openPack</code> stays set until <code>BottomSheet.onExitComplete</code></td><td>Signal 5</td><td><code>781d44c1</code></td></tr>
+          <tr><td>9</td><td>One-shot collapse completion guard (<code>collapseCompleteFiredRef</code>)</td><td>Forensics report</td><td><code>781d44c1</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="unvalidated">
+    <div class="section-head">
+      <h2>Unvalidated Behaviors (No User Signal)</h2>
+      <div class="feedback" data-section="Unvalidated Behaviors"></div>
+    </div>
+    <div class="grid">
+      <div class="card">
+        <h3 class="unvalidated">Debug Harness</h3>
+        <p>Slow-mo / stepped debug harness (<code>4d076fff</code>). No user feedback found.</p>
+      </div>
+      <div class="card">
+        <h3 class="unvalidated">State Machine Viz</h3>
+        <p>State machine visualization (<code>ca3efd37</code>). No user feedback found.</p>
+      </div>
+      <div class="card">
+        <h3 class="unvalidated">Two-Stage Open</h3>
+        <p>First-tear auto-open (<code>3ed1e11a</code>). No user feedback found.</p>
+      </div>
+      <div class="card">
+        <h3 class="unvalidated">Shimmer/Sheen</h3>
+        <p>User asked about it (May 27, 18:14:37), but no explicit approval of the fix at <code>ec53fcf1</code>.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="confidence">
+    <div class="section-head">
+      <h2>Confidence / Assumption Register</h2>
+      <div class="feedback" data-section="Confidence Register"></div>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Conclusion</th><th>Backing</th><th>Status</th><th>What Would Change It</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Apex travel (-180px) is the correct open/close behavior</td>
+            <td>Evidence-backed: Signals 1, 2, 5</td>
+            <td class="confirmed">Confirmed</td>
+            <td>User explicitly choosing a different apex offset or removing apex travel</td>
+          </tr>
+          <tr>
+            <td>200ms hold at apex is correct timing</td>
+            <td>Evidence-backed: Signal 2 (&ldquo;working correctly&rdquo; on code with 200ms)</td>
+            <td class="confirmed">Confirmed</td>
+            <td>User requesting a different hold duration</td>
+          </tr>
+          <tr>
+            <td>Card above pack body at apex, behind on descent</td>
+            <td>Evidence-backed: Signal 3 (user correction describing contract)</td>
+            <td class="confirmed">Confirmed</td>
+            <td>User describing a different z-index layering</td>
+          </tr>
+          <tr>
+            <td>Collapse targeting logic is sound</td>
+            <td>Evidence-backed: Signal 4 (user validates when scrolled)</td>
+            <td class="confirmed">Confirmed</td>
+            <td>User reporting incorrect collapse targets in new scenarios</td>
+          </tr>
+          <tr>
+            <td>Concurrent collapse+exit is correct close architecture</td>
+            <td>Evidence-backed: Signal 5 (user-authored plan)</td>
+            <td class="confirmed">Confirmed</td>
+            <td>User requesting sequential collapse-then-exit</td>
+          </tr>
+          <tr>
+            <td><code>781d44c1</code> is known-good for close sequence</td>
+            <td>Evidence-backed: implements all user-validated behaviors</td>
+            <td class="confirmed">Confirmed</td>
+            <td>User reporting visual defects at this commit</td>
+          </tr>
+          <tr>
+            <td>Debug harness behavior is correct</td>
+            <td>No user signal</td>
+            <td class="unvalidated">Provisional</td>
+            <td>Any user feedback on debug harness behavior</td>
+          </tr>
+          <tr>
+            <td>Two-stage open is correct</td>
+            <td>No user signal</td>
+            <td class="unvalidated">Provisional</td>
+            <td>User approval or rejection of first-tear auto-open</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="deep-dives">
+    <div class="section-head">
+      <h2>Deep Dives</h2>
+      <div class="feedback" data-section="Deep Dives"></div>
+    </div>
+
+    <div class="deep-dive">
+      <h3>Signal 2 &mdash; The <code>6bcb2076</code> Apex Chain</h3>
+      <p>All three open paths (tear, click, card drag) follow the same chain at <code>6bcb2076</code>:</p>
+      <ol>
+        <li>Animate card to apex (<code>cardSlideY &rarr; -180</code> or <code>cardDragY &rarr; 180</code>)</li>
+        <li>Spring config: stiffness 300&ndash;400, damping 25&ndash;30</li>
+        <li>After spring settles: <code>setCardElevated(true)</code> &rarr; z-index 60</li>
+        <li>200ms hold at apex</li>
+        <li><code>onOpen(getOrigin())</code> fires &rarr; drawer opens</li>
+      </ol>
+      <p><strong>What <code>5736f3c0</code> removed:</strong> The refactor extracted <code>completeTear()</code> but dropped the entire <code>cardSlideY</code> chain. <code>completeTear()</code> only handled flap + curl, then used a <code>pendingOpen</code> flag to fire <code>onOpen</code> from <code>onLayoutAnimationComplete</code> &mdash; skipping the apex rise entirely.</p>
+    </div>
+
+    <div class="deep-dive">
+      <h3>Signal 4 &mdash; Collapse Target Logic</h3>
+      <p><strong>Algorithm:</strong> Walk DOM upward for <code>overflow-y: auto|scroll</code> container, get viewport bounds. For each card, skip offscreen cards, rank by top position (10px tolerance for same-row grouping), break ties by leftmost. Default: card 0.</p>
+      <p><strong>The scroll-dependent bug:</strong> The user&rsquo;s diagnosis (May 28, 20:27): the collapse targets the correct visible top-left card when scrolled, but when NOT scrolled the flash was visible. The bug was not in targeting &mdash; it was that the collapse ran fully visible inside the still-open BottomSheet.</p>
+      <p><strong>Validated:</strong> The collapse <em>targeting</em> works. The collapse <em>visibility</em> was the problem.</p>
+    </div>
+
+    <div class="deep-dive">
+      <h3>Signal 5 &mdash; Concurrent Collapse+Exit Architecture</h3>
+      <p>The user&rsquo;s plan specified three changes: revert <code>SealedPack.tsx</code> (restore <code>cardSlideY.set(-180)</code>), add <code>onExitComplete</code> to <code>BottomSheet.tsx</code>, and split <code>sheetVisible</code> from <code>openPack</code> in <code>page.tsx</code>.</p>
+      <p><code>781d44c1</code> implements all three as a strict superset:</p>
+      <div class="flow-diagram">handleClose()
+  |-- setIsDrawerClosing(true)     &lt;- start collapse
+  '-- setIsSheetMounted(false)     &lt;- start sheet exit (concurrent)
+
+CONCURRENT:
+  Sheet slides down (0.3s)        |  PackOpener collapses (springs)
+  Children stay mounted            |  Cards animate to target
+
+  When exit completes:             |  When collapse completes:
+  '-- handleSheetExited()          |  '-- handleCollapseComplete()
+     |-- setOpenPack(null) &lt;-ONLY  |     '-- setIsSheetMounted(false)
+     '-- SealedPack sees close     |        (redundant, already set)</div>
+      <p><strong>Key insight:</strong> <code>openPack</code> cleared only from <code>onExitComplete</code>, not from collapse. SealedPack&rsquo;s <code>useLayoutEffect</code> fires <em>after</em> the sheet is gone.</p>
+      <p><strong>Additions beyond plan:</strong> <code>collapseCompleteFiredRef</code> (one-shot guard), <code>completeCollapse()</code> (extracted callback), <code>isDrawerClosingRef</code> (ref mirror), <code>prototype-close-sequence.test.tsx</code> (196 lines), and direct completion path for one-card / no-container edge cases.</p>
+    </div>
+  </section>
+
+  <section id="message-index">
+    <div class="section-head">
+      <h2>Complete User Message Index (7 Animation Sessions)</h2>
+      <div class="feedback" data-section="User Message Index"></div>
+    </div>
+    <p class="muted">13 distinct user messages across 7 sessions. No May 25&ndash;26 conversations reference animation approval.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Session</th><th>Time</th><th>Type</th><th>Content Summary</th></tr></thead>
+        <tbody>
+          <tr><td><code>8b9eca28</code> (May 27)</td><td>18:04</td><td>Plan</td><td>Fix SealedPack tear gesture not opening drawer</td></tr>
+          <tr><td><code>8b9eca28</code> (May 27)</td><td>18:06</td><td>Command</td><td><code>/ship-end</code></td></tr>
+          <tr><td><code>8b9eca28</code> (May 27)</td><td>18:14</td><td>Question</td><td>&ldquo;do we not fix that the entire card park should have a consistent sheen?&rdquo;</td></tr>
+          <tr><td><code>8b9eca28</code> (May 27)</td><td>18:16</td><td>Follow-up</td><td>&ldquo;was that done last night?&rdquo;</td></tr>
+          <tr><td><code>1a77d96d</code> (May 28)</td><td>18:40</td><td>Plan</td><td>Collapse cards on drawer close (reverse fan-out)</td></tr>
+          <tr><td><code>1a77d96d</code> (May 28)</td><td>19:00</td><td><strong>Regression</strong></td><td>Apex doesn&rsquo;t rise, close doesn&rsquo;t travel to apex &rarr; <strong>Signal 1</strong></td></tr>
+          <tr><td><code>103a347b</code> (May 28)</td><td>19:36</td><td>Plan</td><td>Fix apex regression &mdash; <strong>&ldquo;Working correctly&rdquo;</strong> on <code>6bcb2076</code> &rarr; <strong>Signal 2</strong></td></tr>
+          <tr><td><code>103a347b</code> (May 28)</td><td>19:38</td><td><strong>Correction</strong></td><td>Card behind pack body on close &rarr; <strong>Signal 3</strong></td></tr>
+          <tr><td><code>85159627</code> (May 28)</td><td>19:51</td><td>Plan</td><td>Fix close apex z-index</td></tr>
+          <tr><td><code>3de3cc83</code> (May 28)</td><td>20:10</td><td>Bug report</td><td>Card appears at apex then disappears before drawer close starts</td></tr>
+          <tr><td><code>51d6f6c8</code> (May 28)</td><td>20:22</td><td>Plan</td><td>Fix card flash (misidentified root cause &mdash; <code>cardSlideY.set(0)</code>)</td></tr>
+          <tr><td><code>51d6f6c8</code> (May 28)</td><td>20:27</td><td><strong>Diagnosis</strong></td><td>Flash is from collapse, not apex. Collapse works when scrolled &rarr; <strong>Signal 4</strong></td></tr>
+          <tr><td><code>3b8c9652</code> (June 1)</td><td>04:06</td><td>Plan</td><td>Fix collapse flash + restore apex. Revert wrong fix &rarr; <strong>Signal 5</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="gates">
+    <div class="section-head">
+      <h2>Approval Gates</h2>
+      <div class="feedback" data-section="Approval Gates"></div>
+    </div>
+
+    <div class="gate" data-gate="evidence_coverage">
+      <h3>Evidence Coverage</h3>
+      <p>Does the evidence matrix sufficiently map each approval signal to its source, inference, and confidence?</p>
+      <div class="radio-stack" data-question="Evidence Coverage">
+        <label class="radio-option"><input type="radio" name="q1" value="Evidence coverage is sufficient"> Evidence coverage is sufficient</label>
+        <label class="radio-option"><input type="radio" name="q1" value="Need additional session evidence"> Need additional session evidence</label>
+        <label class="radio-option"><input type="radio" name="q1" value="Other / None of the above"> Other / None of the above</label>
+        <label class="radio-option"><input type="radio" name="q1" value="Need clarification"> Need clarification</label>
+        <textarea class="conditional-note" data-for="q1" placeholder="Optional notes, missing evidence, or clarification request"></textarea>
+      </div>
+    </div>
+
+    <div class="gate" data-gate="assumptions_confidence">
+      <h3>Assumptions / Confidence</h3>
+      <p>Are the confidence levels and assumptions in the register accurate? Are the &ldquo;confirmed&rdquo; vs &ldquo;provisional&rdquo; classifications correct?</p>
+      <div class="radio-stack" data-question="Assumptions / Confidence">
+        <label class="radio-option"><input type="radio" name="q2" value="Classifications are correct"> Classifications are correct</label>
+        <label class="radio-option"><input type="radio" name="q2" value="Some confirmed items should be provisional"> Some confirmed items should be provisional</label>
+        <label class="radio-option"><input type="radio" name="q2" value="Some provisional items should be confirmed"> Some provisional items should be confirmed</label>
+        <label class="radio-option"><input type="radio" name="q2" value="Need clarification"> Need clarification</label>
+        <textarea class="conditional-note" data-for="q2" placeholder="Optional notes or clarification request"></textarea>
+      </div>
+    </div>
+
+    <div class="gate" data-gate="validated_behaviors">
+      <h3>Validated Behaviors</h3>
+      <p>Do the 9 validated behaviors accurately represent what the user has approved? Should any be added or removed?</p>
+      <div class="radio-stack" data-question="Validated Behaviors">
+        <label class="radio-option"><input type="radio" name="q3" value="All 9 behaviors are correctly validated"> All 9 behaviors are correctly validated</label>
+        <label class="radio-option"><input type="radio" name="q3" value="Some behaviors should be removed or downgraded"> Some behaviors should be removed or downgraded</label>
+        <label class="radio-option"><input type="radio" name="q3" value="Additional behaviors should be added"> Additional behaviors should be added</label>
+        <label class="radio-option"><input type="radio" name="q3" value="Need clarification"> Need clarification</label>
+        <textarea class="conditional-note" data-for="q3" placeholder="Optional notes, behaviors to add/remove, or clarification request"></textarea>
+      </div>
+    </div>
+
+    <div class="gate" data-gate="known_good_commit">
+      <h3>Known-Good Commit</h3>
+      <p>Do you accept <code>781d44c1</code> as the known-good close sequence and <code>6bcb2076</code> as the validated open apex reference?</p>
+      <div class="radio-stack" data-question="Known-Good Commit">
+        <label class="radio-option"><input type="radio" name="q4" value="Accept both commit references"> Accept both commit references</label>
+        <label class="radio-option"><input type="radio" name="q4" value="Revise one or both references"> Revise one or both references</label>
+        <label class="radio-option"><input type="radio" name="q4" value="Other / None of the above"> Other / None of the above</label>
+        <label class="radio-option"><input type="radio" name="q4" value="Need clarification"> Need clarification</label>
+        <textarea class="conditional-note" data-for="q4" placeholder="Optional notes, alternate commits, or clarification request"></textarea>
+      </div>
+    </div>
+
+    <div class="gate" data-gate="unvalidated_scope">
+      <h3>Unvalidated Scope</h3>
+      <p>What should be done with the 4 unvalidated behaviors (debug harness, state machine viz, two-stage open, shimmer)?</p>
+      <div class="radio-stack" data-question="Unvalidated Scope">
+        <label class="radio-option"><input type="radio" name="q5" value="Leave unvalidated, no action needed"> Leave unvalidated, no action needed</label>
+        <label class="radio-option"><input type="radio" name="q5" value="Seek explicit approval for specific items"> Seek explicit approval for specific items</label>
+        <label class="radio-option"><input type="radio" name="q5" value="Consider reverting unvalidated features"> Consider reverting unvalidated features</label>
+        <label class="radio-option"><input type="radio" name="q5" value="Need clarification"> Need clarification</label>
+        <textarea class="conditional-note" data-for="q5" placeholder="Optional notes, specific items, or clarification request"></textarea>
+      </div>
+    </div>
+
+    <div class="gate" data-gate="artifact_destination">
+      <h3>Artifact Destination</h3>
+      <p>Is the report correctly placed at <code>docs/history/animation-approval-signals-2026-06-01.md</code>?</p>
+      <div class="radio-stack" data-question="Artifact Destination">
+        <label class="radio-option"><input type="radio" name="q6" value="Location is correct"> Location is correct</label>
+        <label class="radio-option"><input type="radio" name="q6" value="Move to a different location"> Move to a different location</label>
+        <label class="radio-option"><input type="radio" name="q6" value="Other / None of the above"> Other / None of the above</label>
+        <label class="radio-option"><input type="radio" name="q6" value="Need clarification"> Need clarification</label>
+        <textarea class="conditional-note" data-for="q6" placeholder="Optional notes, preferred location, or clarification request"></textarea>
+      </div>
+    </div>
+  </section>
+
+  <section id="compile">
+    <div class="section-head">
+      <h2>Compile</h2>
+      <div class="feedback" data-section="Compile"></div>
+    </div>
+    <p class="muted">Use feedback YAML for revision requests before final approval. Use final answers after all required gates are answered.</p>
+    <div class="compile-actions">
+      <button id="compile-feedback">Compile Feedback YAML</button>
+      <button class="primary" id="compile-answers">Compile Answers</button>
+      <button id="copy-final">Copy YAML</button>
+    </div>
+    <p class="status" id="compile-status">Required questions remaining: 6</p>
+    <textarea class="yaml" id="compiled-yaml" readonly></textarea>
+  </section>
+</main>
+<script>
+const ALIGNMENT_PAGE = "alignment/analyze-sessions-animation-approval-signals.html";
+const questionNames = ["q1", "q2", "q3", "q4", "q5", "q6"];
+
+function yamlEscape(value) {
+  return String(value || "").replace(/\n/g, "\\n").replace(/"/g, '\\"');
+}
+
+function collectQuestionAnswers() {
+  return questionNames.map((name) => {
+    const input = document.querySelector(`input[name="${name}"]:checked`);
+    const block = document.querySelector(`[data-for="${name}"]`);
+    const stack = document.querySelector(`input[name="${name}"]`)?.closest("[data-question]");
+    return {
+      name,
+      section: stack?.dataset.question || name,
+      answer: input?.value || "",
+      notes: block?.value || "",
+      answered: Boolean(input)
+    };
+  });
+}
+
+function selectedFeedback() {
+  return Array.from(document.querySelectorAll(".feedback")).flatMap((fb) => {
+    const selected = fb.dataset.value;
+    if (!selected) return [];
+    const notes = fb.querySelector(".fb-notes")?.value || "";
+    const action = selected === "up" ? "accept-as-is" : selected === "down" ? "investigate-and-revise" : "clarify-before-approval";
+    return [{
+      section: fb.dataset.section || "Unknown section",
+      feedback: selected === "clarify" ? "needs-clarification" : selected,
+      notes,
+      requested_agent_action: action
+    }];
+  });
+}
+
+function feedbackYaml(items) {
+  const unanswered = collectQuestionAnswers().filter(q => !q.answered).map(q => q.section);
+  const lines = [
+    `alignment_page: ${ALIGNMENT_PAGE}`,
+    "feedback_status: revision-request",
+    "approval_status: not-approved",
+    "unanswered_required_questions:",
+    ...unanswered.map(q => `  - "${yamlEscape(q)}"`),
+    "section_feedback:",
+    ...(items.length ? items : selectedFeedback()).map(item => [
+      `  - section: "${yamlEscape(item.section)}"`,
+      `    feedback: "${yamlEscape(item.feedback)}"`,
+      `    notes: "${yamlEscape(item.notes)}"`,
+      `    requested_agent_action: "${yamlEscape(item.requested_agent_action)}"`
+    ].join("\n"))
+  ];
+  if ((items.length ? items : selectedFeedback()).length === 0) lines.push("  []");
+  return lines.join("\n");
+}
+
+function answersYaml() {
+  const answers = collectQuestionAnswers();
+  const feedback = selectedFeedback();
+  const lines = [
+    `alignment_page: ${ALIGNMENT_PAGE}`,
+    "approval_status: ready-for-agent-review",
+    "gate_answers:",
+    ...answers.map(a => [
+      `  - section: "${yamlEscape(a.section)}"`,
+      `    gate_type: "${yamlEscape(a.section.toLowerCase().replaceAll(" ", "_").replaceAll("/", "_"))}"`,
+      `    status: "${a.answer === "Other / None of the above" ? "other" : a.answer === "Need clarification" ? "needs-clarification" : "answered"}"`,
+      `    answer: "${yamlEscape(a.answer)}"`,
+      `    notes: "${yamlEscape(a.notes)}"`
+    ].join("\n")),
+    "section_feedback:",
+    ...(feedback.length ? feedback.map(item => [
+      `  - section: "${yamlEscape(item.section)}"`,
+      `    feedback: "${yamlEscape(item.feedback)}"`,
+      `    notes: "${yamlEscape(item.notes)}"`,
+      `    requested_agent_action: "${yamlEscape(item.requested_agent_action)}"`
+    ].join("\n")) : ["  []"])
+  ];
+  return lines.join("\n");
+}
+
+async function copyText(text, target) {
+  try {
+    await navigator.clipboard.writeText(text);
+    if (target) target.textContent = "Copied YAML to clipboard.";
+  } catch (_) {
+    if (target) target.textContent = "Clipboard blocked. YAML is selected for copying.";
+    const area = document.getElementById("compiled-yaml");
+    if (area) area.select();
+  }
+}
+
+function updateStatus() {
+  const remaining = collectQuestionAnswers().filter(q => !q.answered);
+  document.getElementById("compile-status").textContent = `Required questions remaining: ${remaining.length}`;
+  return remaining;
+}
+
+document.querySelectorAll("input[type=radio]").forEach(input => {
+  input.addEventListener("change", () => {
+    const note = document.querySelector(`[data-for="${input.name}"]`);
+    if (note) note.classList.add("show");
+    updateStatus();
+  });
+});
+
+document.querySelectorAll(".feedback").forEach((fb) => {
+  const section = fb.dataset.section || "Section";
+  fb.innerHTML = `
+    <div class="fb-row">
+      <button type="button" class="fb-btn" data-value="up" title="Approve section">Thumbs up</button>
+      <button type="button" class="fb-btn" data-value="down" title="Flag concern">Thumbs down</button>
+      <button type="button" class="fb-btn" data-value="clarify" title="Need clarification">Clarify</button>
+    </div>
+    <div class="fb-panel">
+      <textarea class="fb-notes" placeholder="Section feedback for ${section}"></textarea>
+      <div class="compile-actions">
+        <button type="button" class="local-feedback">Compile Feedback YAML</button>
+        <button type="button" class="local-copy">Copy YAML</button>
+      </div>
+      <textarea class="yaml local-yaml" readonly></textarea>
+    </div>
+  `;
+  const panel = fb.querySelector(".fb-panel");
+  fb.querySelectorAll(".fb-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const value = btn.dataset.value;
+      fb.dataset.value = fb.dataset.value === value ? "" : value;
+      fb.querySelectorAll(".fb-btn").forEach(b => {
+        b.classList.remove("active-up", "active-down", "active-clarify");
+      });
+      if (fb.dataset.value) {
+        btn.classList.add(`active-${value}`);
+        panel.classList.add("show");
+      } else {
+        panel.classList.remove("show");
+      }
+    });
+  });
+  fb.querySelector(".local-feedback").addEventListener("click", () => {
+    const selected = fb.dataset.value;
+    if (!selected) return;
+    const item = {
+      section,
+      feedback: selected === "clarify" ? "needs-clarification" : selected,
+      notes: fb.querySelector(".fb-notes").value || "",
+      requested_agent_action: selected === "up" ? "accept-as-is" : selected === "down" ? "investigate-and-revise" : "clarify-before-approval"
+    };
+    fb.querySelector(".local-yaml").value = feedbackYaml([item]);
+  });
+  fb.querySelector(".local-copy").addEventListener("click", () => {
+    const area = fb.querySelector(".local-yaml");
+    if (!area.value) fb.querySelector(".local-feedback").click();
+    copyText(area.value, document.getElementById("compile-status"));
+  });
+});
+
+document.getElementById("compile-feedback").addEventListener("click", () => {
+  const yaml = feedbackYaml([]);
+  document.getElementById("compiled-yaml").value = yaml;
+  copyText(yaml, document.getElementById("compile-status"));
+});
+
+document.getElementById("compile-answers").addEventListener("click", () => {
+  const remaining = updateStatus();
+  if (remaining.length) {
+    const first = document.querySelector(`input[name="${remaining[0].name}"]`);
+    first?.scrollIntoView({ behavior: "smooth", block: "center" });
+    return;
+  }
+  const yaml = answersYaml();
+  document.getElementById("compiled-yaml").value = yaml;
+  copyText(yaml, document.getElementById("compile-status"));
+});
+
+document.getElementById("copy-final").addEventListener("click", () => {
+  const area = document.getElementById("compiled-yaml");
+  copyText(area.value, document.getElementById("compile-status"));
+});
+
+updateStatus();
+</script>
+</body>
+</html>
