@@ -1,3 +1,17 @@
+## Current Targeted Update: Hook Model AFPS Gap Investigation 2026-05-31
+
+**Goal:** Determine whether the existing skill set already supports Nir Eyal's Hooked model and whether AFPS routing has a gap that prevents appropriate use of that model in product workflows.
+
+**Acceptance Criteria:**
+- [x] Capture the visible `$investigate` invocation under `prompts/investigate/`.
+- [x] Inventory active Hooked-model, lifecycle, growth, and AFPS-routing skill contracts.
+- [x] Validate whether AFPS default routing exposes `hook-model` at the right point or only leaves it as a disconnected optional business-growth skill.
+- [x] Identify the owning gap, if any, with file references and a minimal recommendation.
+- [x] Produce the required `alignment/investigate-hook-model-afps-gap.html` durable report.
+- [x] Record review notes in `tasks/todo.md` and run lightweight verification for the investigation artifacts.
+
+**Result:** Confirmed on 2026-05-31 that AFPS already has a Hooked-model skill: mirrored active `hook-model` contracts in the `business-growth` pack. The gap is route exposure, not skill absence. Default AFPS routes and status contracts do not define when repeat-use or habit-loop evidence should route to `hook-model`, and `journey-map` places its specific-stage-risk branch after missing-positioning and missing-UX branches. Report written to `alignment/investigate-hook-model-afps-gap.html`; verification passed with `git diff --check`, content greps, embedded JavaScript syntax checks, and WSL browser open via PowerShell.
+
 ## Current Targeted Update: Downstream Skill Inventory Surface 2026-05-31
 
 **Goal:** Add a mirrored report-only `skill-inventory` skill to the `project-fleet` pack so control repos can inventory downstream `.claude/skills` and `.codex/skills` installs, classify drift against canonical `agentic-skills`, and write a durable control-repo report without mutating downstream repos.

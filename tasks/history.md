@@ -29,6 +29,14 @@
 - **Phase 5 RESOLVED by user (2026-05-31):** consumer SKILL.md versioning = **coordinated mechanical sync** — no version bump, archive, or CHANGELOG for the 8 changed consumers (matches how Phase 3 shipped: body-only string swap, contract unchanged). Phase 5 therefore requires **no source changes** and is a confirmed no-op; the `concept-brief → idea-brief` rename is functionally complete across producer + routing doc + 8 consumers + test fixture.
 - **Bookkeeping deferred:** flipping the Phase 5 checkbox in `tasks/todo.md`/`tasks/roadmap.md` was intentionally NOT done this session — a **concurrent session** is actively rewriting both files (codex `skill-inventory` / `project-fleet` work, visible as dirty `tasks/roadmap.md`, `packs/project-fleet/PACK.md`, and untracked `packs/project-fleet/{claude,codex}/skill-inventory/`). Editing those task docs now would race that session. The Phase 5 line should be checked off (no-op, mechanical-sync) once that session settles.
 
+## 2026-05-31 - Investigated Hook Model AFPS routing gap
+
+- Captured the visible `$investigate` invocation under `prompts/investigate/skill-prompt-20260531-222934-hooked-afps-gap.md`.
+- Confirmed the active mirrored `hook-model` skill already covers Nir Eyal's Hooked model in `packs/business-growth/{codex,claude}/hook-model/SKILL.md`.
+- Found the AFPS gap is route exposure: default AFPS docs/status routing do not define when repeat-use or habit-loop evidence should route to `hook-model`, and `journey-map` places its specific-stage-risk branch after missing-positioning and missing-UX checks.
+- Wrote the durable investigation report at `alignment/investigate-hook-model-afps-gap.html` with evidence matrix, confidence register, alternatives, and approval gates.
+- Verification: `git diff --check`; required-content grep over the alignment page; embedded JavaScript syntax/content check via Node; Linux `xdg-open` blocked due missing browser, WSL PowerShell file URI open succeeded.
+
 ## 2026-05-31 — Rename concept-brief → idea-brief: Phase 3 final consumer `afps-status`
 
 - Renamed both discovery glob tokens on line 31 of `global/codex/afps-status/SKILL.md` (`research/concept-brief*.md` and app-scoped `research/*/concept-brief*.md`) → `idea-brief*.md` via a single `replace_all`. There is no Claude `afps-status` variant (codex-only), so this was one file. Preserved the `Concept artifacts:` label and `concept/interview notes` prose — those denote the product-concept category, not the renamed document (matches the prior 7 consumers).

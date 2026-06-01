@@ -1,0 +1,764 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Investigate - Hook Model AFPS Gap</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface-2: #1c2333;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --text-muted: #8b949e;
+      --accent: #58a6ff;
+      --green: #3fb950;
+      --red: #f85149;
+      --orange: #d29922;
+      --purple: #bc8cff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+    main {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 32px 0 64px;
+    }
+    h1, h2, h3 {
+      color: #fff;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+    h1 { font-size: 2rem; margin: 0 0 8px; }
+    h2 { font-size: 1.35rem; margin: 32px 0 12px; color: var(--accent); }
+    h3 { font-size: 1.05rem; margin: 22px 0 8px; }
+    p { margin: 8px 0; }
+    a { color: var(--accent); }
+    code {
+      background: #111827;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.1rem 0.3rem;
+      color: #e6edf3;
+      font-size: 0.92em;
+    }
+    pre {
+      overflow: auto;
+      background: #111827;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0 18px;
+      font-size: 0.94rem;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: var(--surface);
+      color: #fff;
+    }
+    ul, ol { padding-left: 1.35rem; }
+    .lede {
+      color: var(--text-muted);
+      max-width: 940px;
+      margin-bottom: 20px;
+    }
+    .toc {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      border-radius: 8px;
+      padding: 16px;
+      margin: 24px 0;
+    }
+    .toc ul {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 8px 18px;
+      padding-left: 0;
+      margin: 0;
+      list-style: none;
+    }
+    section {
+      border-top: 1px solid var(--border);
+      padding-top: 6px;
+    }
+    .callout {
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--accent);
+      background: var(--surface);
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 14px 0;
+    }
+    .finding {
+      border-left-color: var(--green);
+    }
+    .risk {
+      border-left-color: var(--orange);
+    }
+    .gap {
+      border-left-color: var(--red);
+    }
+    .gate {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      margin: 18px 0;
+    }
+    .gate h3 {
+      color: var(--purple);
+      margin-top: 0;
+    }
+    .question {
+      margin-top: 12px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #111827;
+    }
+    .question legend {
+      color: #fff;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .question label {
+      display: block;
+      margin: 8px 0;
+    }
+    .notes {
+      display: none;
+      margin: 8px 0 0 24px;
+    }
+    textarea, input[type="text"] {
+      width: 100%;
+      min-height: 72px;
+      background: #0b1220;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px;
+      font: inherit;
+    }
+    input[type="text"] {
+      min-height: 38px;
+    }
+    .feedback {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin: 8px 0 16px;
+    }
+    .feedback span {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+    .feedback button, .compile button {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      border-radius: 6px;
+      padding: 7px 10px;
+      cursor: pointer;
+    }
+    .feedback button[data-value="up"].active { border-color: var(--green); color: var(--green); }
+    .feedback button[data-value="down"].active { border-color: var(--red); color: var(--red); }
+    .feedback button[data-value="needs-clarification"].active { border-color: var(--orange); color: var(--orange); }
+    .feedback textarea {
+      display: none;
+      flex-basis: 100%;
+      min-height: 64px;
+      margin-top: 4px;
+    }
+    .badge {
+      display: inline-block;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 2px 8px;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      margin-right: 6px;
+    }
+    .compile {
+      border-top: 1px solid var(--border);
+      margin-top: 34px;
+      padding-top: 24px;
+    }
+    .compile button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+    #compiled-yaml {
+      min-height: 240px;
+      margin-top: 12px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+    }
+    .status {
+      color: var(--text-muted);
+      margin-left: 8px;
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Investigate: Hook Model AFPS Gap</h1>
+    <p class="lede">Scope: whether this repository already has a skill for Nir Eyal's Hooked model, and whether the AFPS workflow has a routing or coverage gap around using it.</p>
+    <p><span class="badge">Skill: investigate</span><span class="badge">Date: 2026-05-31</span><span class="badge">Output: report-only investigation</span></p>
+  </header>
+
+  <nav class="toc" aria-label="Table of contents">
+    <h2>Table Of Contents</h2>
+    <ul>
+      <li><a href="#executive-verdict">Executive Verdict</a></li>
+      <li><a href="#user-claims">User Claims Validated</a></li>
+      <li><a href="#evidence-matrix">Evidence Matrix</a></li>
+      <li><a href="#root-cause">Root Cause</a></li>
+      <li><a href="#afps-gap">AFPS Gap</a></li>
+      <li><a href="#recommendation">Recommendation</a></li>
+      <li><a href="#alternatives">Alternatives Considered</a></li>
+      <li><a href="#confidence">Confidence Register</a></li>
+      <li><a href="#approval-gates">Approval Gates</a></li>
+    </ul>
+  </nav>
+
+  <section id="executive-verdict" data-section="Executive Verdict">
+    <h2>Executive Verdict</h2>
+    <div class="feedback" data-feedback="Executive Verdict">
+      <span>Section feedback:</span>
+      <button type="button" data-value="up">Thumbs up</button>
+      <button type="button" data-value="down">Thumbs down</button>
+      <button type="button" data-value="needs-clarification">Clarification needed</button>
+      <textarea placeholder="Optional notes for this section"></textarea>
+    </div>
+    <div class="callout finding">
+      <p><strong>Confirmed:</strong> the repository already has a mirrored <code>hook-model</code> skill in <code>packs/business-growth/{codex,claude}/hook-model/SKILL.md</code>. The Codex skill explicitly describes "Nir Eyal engagement loop design" and maps external trigger, internal trigger, action, variable reward, and investment.</p>
+    </div>
+    <div class="callout gap">
+      <p><strong>Gap:</strong> AFPS does not lack the Hooked-model skill. The gap is conditional route exposure. The default AFPS route and status router make <code>hook-model</code> easy to miss unless the user or a later lifecycle skill already knows to ask for it.</p>
+    </div>
+    <p>The right fix is not to make Hooked mandatory. The model is useful for consumer, prosumer, marketplace, community, and PLG products where repeat behavior is part of product value. It should stay conditional for B2B, enterprise, infrastructure, and naturally infrequent products.</p>
+  </section>
+
+  <section id="user-claims" data-section="User Claims Validated">
+    <h2>User Claims Validated</h2>
+    <div class="feedback" data-feedback="User Claims Validated">
+      <span>Section feedback:</span>
+      <button type="button" data-value="up">Thumbs up</button>
+      <button type="button" data-value="down">Thumbs down</button>
+      <button type="button" data-value="needs-clarification">Clarification needed</button>
+      <textarea placeholder="Optional notes for this section"></textarea>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Claim Or Question</th>
+          <th>Verdict</th>
+          <th>Evidence</th>
+          <th>Decision Impact</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>"Do we have a skill where we can incorporate Nir Eyal's Hooked model?"</td>
+          <td>Confirmed</td>
+          <td><code>packs/business-growth/codex/hook-model/SKILL.md:2-6</code>, <code>:25</code>, and mirrored Claude contract.</td>
+          <td>Do not create a new skill. Reuse and route to <code>hook-model</code>.</td>
+        </tr>
+        <tr>
+          <td>"Focus on the AFPS workflow and see if we have a gap there."</td>
+          <td>Confirmed, but the gap is routing rather than skill content</td>
+          <td>Default AFPS route omits <code>hook-model</code> in <code>docs/pack-workflow-matrix.md:48</code> and <code>docs/skill-next-step-contracts.md:28</code>. <code>docs/codex-workflow.md:338</code> only names it as a broad optional growth detour.</td>
+          <td>Add a conditional AFPS route for repeat-use/habit risk instead of broad default inclusion.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="evidence-matrix" data-section="Evidence Matrix">
+    <h2>Evidence Matrix</h2>
+    <div class="feedback" data-feedback="Evidence Matrix">
+      <span>Section feedback:</span>
+      <button type="button" data-value="up">Thumbs up</button>
+      <button type="button" data-value="down">Thumbs down</button>
+      <button type="button" data-value="needs-clarification">Clarification needed</button>
+      <textarea placeholder="Optional notes for this section"></textarea>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Major Claim</th>
+          <th>Evidence</th>
+          <th>Inference</th>
+          <th>Confidence</th>
+          <th>Assumption Status</th>
+          <th>Decision Impact</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>The Hooked-model skill exists and is active.</td>
+          <td><code>packs/business-growth/codex/hook-model/SKILL.md:2-6</code>; <code>packs/business-growth/claude/hook-model/SKILL.md:2-6</code>.</td>
+          <td>The skill name, description, and mirrored files are active pack contracts, not archived remnants.</td>
+          <td>High</td>
+          <td>Observed from active files.</td>
+          <td>No new skill is needed.</td>
+        </tr>
+        <tr>
+          <td>The skill already implements the Hooked model components.</td>
+          <td><code>packs/business-growth/codex/hook-model/SKILL.md:25</code> and <code>:90-115</code>.</td>
+          <td>The contract maps external triggers, internal triggers, action, variable reward, and investment, and defines reward types.</td>
+          <td>High</td>
+          <td>Observed from active file.</td>
+          <td>Any AFPS incorporation should route to this skill rather than duplicating the framework elsewhere.</td>
+        </tr>
+        <tr>
+          <td>The skill is appropriately guarded against misuse.</td>
+          <td><code>packs/business-growth/codex/hook-model/SKILL.md:31</code>, <code>:63-77</code>, and <code>:292-302</code>.</td>
+          <td>It requires journey-map context, checks product applicability, routes B2B/enterprise cases toward metrics, and includes ethical constraints.</td>
+          <td>High</td>
+          <td>Observed from active file.</td>
+          <td>Hooked should remain a conditional detour, not a required AFPS chain link.</td>
+        </tr>
+        <tr>
+          <td>Business-growth pack metadata does put <code>hook-model</code> first.</td>
+          <td><code>packs/business-growth/PACK.md:5-10</code>.</td>
+          <td>Inside the growth lane, the intended default flow starts with hook-model before metrics.</td>
+          <td>High</td>
+          <td>Observed from pack metadata.</td>
+          <td>There is a mismatch between pack-level growth flow and AFPS-level route exposure.</td>
+        </tr>
+        <tr>
+          <td>AFPS default route skips <code>hook-model</code>.</td>
+          <td><code>docs/pack-workflow-matrix.md:48</code>, <code>docs/skill-next-step-contracts.md:28</code>, <code>global/codex/codebase-status/SKILL.md:65</code>.</td>
+          <td>The canonical AFPS chain goes from journey/positioning into UX and prototype, with optional value/lean detours but no explicit hook-model branch.</td>
+          <td>High</td>
+          <td>Observed from active docs/contracts.</td>
+          <td>Status/routing skills can overlook engagement-loop work even when a product is habit-suitable.</td>
+        </tr>
+        <tr>
+          <td>Some docs acknowledge growth skills as optional, but not with a decision rule.</td>
+          <td><code>docs/codex-workflow.md:338</code>; <code>docs/canonical-workflow-report.md:104-140</code>.</td>
+          <td>The docs say growth skills are optional when ready, but they do not define the product condition that makes <code>hook-model</code> the right next step.</td>
+          <td>Medium-high</td>
+          <td>Observed from docs; interpretation based on absence of a precise rule.</td>
+          <td>Add a narrow trigger condition rather than broad route churn.</td>
+        </tr>
+        <tr>
+          <td><code>journey-map</code> has a priority-order bug around stage risks.</td>
+          <td><code>packs/customer-lifecycle/codex/journey-map/SKILL.md:63-70</code>; mirrored Claude contract follows the same pattern.</td>
+          <td>The branch for "specific stage risk" is listed after missing positioning and missing UX checks, even though it says the risk may need resolution before positioning or UX.</td>
+          <td>High</td>
+          <td>Observed from active file.</td>
+          <td>This is the likely owning place to expose a conditional <code>hook-model</code> route.</td>
+        </tr>
+        <tr>
+          <td><code>retention-map</code> can route to <code>hook-model</code>, but only after the user gets into deeper lifecycle work.</td>
+          <td><code>packs/customer-lifecycle/codex/retention-map/SKILL.md:67-68</code>.</td>
+          <td>The skill names <code>hook-model</code> as a preferred next step contextually, but AFPS does not reliably route to <code>retention-map</code> first.</td>
+          <td>High</td>
+          <td>Observed from active file.</td>
+          <td>The current path can work, but it relies on an upstream branch that is under-specified and lower priority than positioning/UX.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="root-cause" data-section="Root Cause">
+    <h2>Root Cause</h2>
+    <div class="feedback" data-feedback="Root Cause">
+      <span>Section feedback:</span>
+      <button type="button" data-value="up">Thumbs up</button>
+      <button type="button" data-value="down">Thumbs down</button>
+      <button type="button" data-value="needs-clarification">Clarification needed</button>
+      <textarea placeholder="Optional notes for this section"></textarea>
+    </div>
+    <p>The root cause is route-policy drift after AFPS routing was tightened around journey-first, positioning, and prototype gates.</p>
+    <ul>
+      <li><code>6ee5a6f1</code> routed competitive analysis through journey mapping, which correctly moved customer journey before solution-value work.</li>
+      <li><code>d93edf39</code> aligned AFPS defaults around <code>icp -> competitive-analysis -> journey-map -> positioning -> ux-variations</code>, but that default route does not preserve a named condition for Hooked-model work.</li>
+      <li><code>0f5f6e5b</code> split the customer-lifecycle pack and left the growth pack's internal flow intact, so <code>hook-model</code> exists but sits in a later lane.</li>
+      <li><code>journey-map</code> currently states that specific lifecycle-stage risks can block positioning or UX, but that branch appears after the missing-positioning and missing-UX checks.</li>
+    </ul>
+    <p>Relationship to the user's theory: the question is directionally right. AFPS has a gap around incorporating Hooked-model thinking, but the gap is not the absence of a skill. It is the absence of an explicit conditional handoff from AFPS lifecycle discovery into the existing <code>hook-model</code> skill.</p>
+  </section>
+
+  <section id="afps-gap" data-section="AFPS Gap">
+    <h2>AFPS Gap</h2>
+    <div class="feedback" data-feedback="AFPS Gap">
+      <span>Section feedback:</span>
+      <button type="button" data-value="up">Thumbs up</button>
+      <button type="button" data-value="down">Thumbs down</button>
+      <button type="button" data-value="needs-clarification">Clarification needed</button>
+      <textarea placeholder="Optional notes for this section"></textarea>
+    </div>
+    <h3>What Works Today</h3>
+    <ul>
+      <li><code>$hook-model</code> exists in the <code>business-growth</code> pack.</li>
+      <li>It requires <code>research/journey-map.md</code>, which is the right AFPS prerequisite.</li>
+      <li>It can be reached from <code>$retention-map</code> when context suggests it.</li>
+      <li><code>$afps-status</code> has a broad lifecycle/growth-gap stage and can recommend business-growth generally.</li>
+    </ul>
+    <h3>What Is Missing</h3>
+    <ul>
+      <li>No default AFPS route says when repeat-use or habit-loop evidence should route to <code>$hook-model</code>.</li>
+      <li><code>$journey-map</code> does not name <code>$hook-model</code> in its specific-stage-risk branch.</li>
+      <li><code>$journey-map</code> checks missing positioning and missing UX before the stage-risk branch, making the stage-risk branch less effective.</li>
+      <li><code>$afps-status</code> uses generic wording for lifecycle/growth questions, so it may recommend <code>$metrics</code>, <code>$gtm</code>, or pack install without recognizing that <code>$hook-model</code> is the narrower step for habit-suitable products.</li>
+      <li>Docs disagree slightly: <code>business-growth/PACK.md</code> starts growth with <code>hook-model</code>, while canonical AFPS examples often start the growth lane with <code>metrics</code>.</li>
+    </ul>
+    <h3>Practical Failure Mode</h3>
+    <p>For a consumer or PLG product with a journey map that shows repeat-use behavior, onboarding return triggers, social rewards, saved state, or habit potential, the agent may still route directly to <code>$positioning</code> or <code>$ux-variations</code>. That skips explicit design of trigger, action, variable reward, and investment loops before the experience is prototyped.</p>
+  </section>
+
+  <section id="recommendation" data-section="Recommendation">
+    <h2>Recommendation</h2>
+    <div class="feedback" data-feedback="Recommendation">
+      <span>Section feedback:</span>
+      <button type="button" data-value="up">Thumbs up</button>
+      <button type="button" data-value="down">Thumbs down</button>
+      <button type="button" data-value="needs-clarification">Clarification needed</button>
+      <textarea placeholder="Optional notes for this section"></textarea>
+    </div>
+    <div class="callout finding">
+      <p><strong>Recommended remediation:</strong> make <code>hook-model</code> a conditional AFPS detour after <code>journey-map</code> or focused <code>retention-map</code>, before <code>metrics</code>, <code>ux-variations</code>, or growth planning, when the evidence shows repeat-use/habit mechanics matter.</p>
+    </div>
+    <h3>Suggested Contract Rule</h3>
+    <p>Add a rule along these lines to AFPS routing contracts and mirrored <code>journey-map</code> next-step routing:</p>
+    <pre><code>If the journey map exposes a repeat-use, engagement-loop, retention-trigger, social-reward, saved-state, or habit-formation risk that should shape the product experience, check business-growth availability. If business-growth is not enabled, recommend pack install. If enabled, recommend hook-model. For B2B, enterprise, infrastructure, or naturally infrequent usage, skip hook-model and route to metrics or lifecycle-metrics instead.</code></pre>
+    <h3>Likely Owning Files For A Follow-Up Patch</h3>
+    <ul>
+      <li><code>packs/customer-lifecycle/{codex,claude}/journey-map/SKILL.md</code> - reorder specific-stage-risk routing before positioning/UX and include <code>hook-model</code> for habit-suitable repeat-use risk.</li>
+      <li><code>global/codex/afps-status/SKILL.md</code> - make lifecycle/growth-gap classification distinguish <code>hook-model</code> from generic growth work.</li>
+      <li><code>docs/skill-next-step-contracts.md</code> - update the <code>journey-map</code> and <code>hook-model</code> rows so audits know the rule.</li>
+      <li><code>docs/pack-workflow-matrix.md</code> and <code>docs/codex-workflow.md</code> - clarify that <code>hook-model</code> is conditional, not a default required chain link.</li>
+      <li>Focused layer1 test - assert that <code>journey-map</code> can route repeat-use stage risk to <code>hook-model</code> with a business-growth pack guard, and that AFPS default docs do not make it mandatory.</li>
+    </ul>
+    <h3>Non-Goals</h3>
+    <ul>
+      <li>Do not duplicate Hooked-model prompts inside <code>journey-map</code>, <code>positioning</code>, or <code>ux-variations</code>.</li>
+      <li>Do not make <code>hook-model</code> mandatory for all AFPS products.</li>
+      <li>Do not remove the existing B2B/enterprise skip guard.</li>
+      <li>Do not route directly from raw idea or ICP to <code>hook-model</code>; it needs journey evidence.</li>
+    </ul>
+  </section>
+
+  <section id="alternatives" data-section="Alternatives Considered">
+    <h2>Alternatives Considered</h2>
+    <div class="feedback" data-feedback="Alternatives Considered">
+      <span>Section feedback:</span>
+      <button type="button" data-value="up">Thumbs up</button>
+      <button type="button" data-value="down">Thumbs down</button>
+      <button type="button" data-value="needs-clarification">Clarification needed</button>
+      <textarea placeholder="Optional notes for this section"></textarea>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Alternative</th>
+          <th>Pros</th>
+          <th>Cons</th>
+          <th>Verdict</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Create a new Hooked-model skill</td>
+          <td>Could be tailored to AFPS language.</td>
+          <td>Duplicates an active, mirrored skill that already has prerequisites, output, ethics, and next-step routing.</td>
+          <td>Rejected.</td>
+        </tr>
+        <tr>
+          <td>Make <code>hook-model</code> mandatory in the default AFPS chain</td>
+          <td>Ensures it is never missed.</td>
+          <td>Overfits consumer/PLG thinking onto enterprise, infrastructure, and infrequent-use products.</td>
+          <td>Rejected.</td>
+        </tr>
+        <tr>
+          <td>Keep it only in <code>business-growth/PACK.md</code></td>
+          <td>No changes needed.</td>
+          <td>Leaves AFPS status and journey routing dependent on user memory or lucky branch selection.</td>
+          <td>Rejected.</td>
+        </tr>
+        <tr>
+          <td>Add a conditional route from lifecycle evidence to <code>hook-model</code></td>
+          <td>Reuses the existing skill, respects prerequisites, and avoids forcing habit thinking where it does not belong.</td>
+          <td>Requires mirrored skill/docs/test updates.</td>
+          <td>Recommended.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="confidence" data-section="Confidence Register">
+    <h2>Confidence And Assumption Register</h2>
+    <div class="feedback" data-feedback="Confidence Register">
+      <span>Section feedback:</span>
+      <button type="button" data-value="up">Thumbs up</button>
+      <button type="button" data-value="down">Thumbs down</button>
+      <button type="button" data-value="needs-clarification">Clarification needed</button>
+      <textarea placeholder="Optional notes for this section"></textarea>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Conclusion</th>
+          <th>Confidence</th>
+          <th>What Could Change It</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>hook-model</code> exists and is the right skill to reuse.</td>
+          <td>High</td>
+          <td>A hidden external skill could supersede it, but active repo evidence is sufficient for this repository.</td>
+        </tr>
+        <tr>
+          <td>AFPS has a conditional route gap.</td>
+          <td>High</td>
+          <td>If there is a separate runtime router not represented in skill/docs contracts, it could already handle this. No such router appeared in the local evidence reviewed.</td>
+        </tr>
+        <tr>
+          <td>The fix should be conditional, not default.</td>
+          <td>High</td>
+          <td>If the project deliberately wants all consumer-product AFPS flows to over-index on habit formation, a stronger default could be chosen. That would need explicit product philosophy approval.</td>
+        </tr>
+        <tr>
+          <td><code>journey-map</code> is the primary owner for the route branch.</td>
+          <td>Medium-high</td>
+          <td>A future design could put the rule in <code>afps-status</code> only, but <code>journey-map</code> already owns lifecycle-stage risk detection.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="approval-gates" data-section="Approval Gates">
+    <h2>Approval Gates</h2>
+    <div class="feedback" data-feedback="Approval Gates">
+      <span>Section feedback:</span>
+      <button type="button" data-value="up">Thumbs up</button>
+      <button type="button" data-value="down">Thumbs down</button>
+      <button type="button" data-value="needs-clarification">Clarification needed</button>
+      <textarea placeholder="Optional notes for this section"></textarea>
+    </div>
+
+    <div class="gate">
+      <h3>Evidence Coverage Gate</h3>
+      <p>Review whether the local file and git evidence supports the recommendation.</p>
+      <fieldset class="question" data-section="Evidence Coverage Gate" data-gate-type="evidence_coverage">
+        <legend>Is the evidence sufficient to conclude that this is a routing gap, not a missing-skill gap?</legend>
+        <label><input type="radio" name="q-evidence" value="Sufficient - treat as routing gap"> Sufficient - treat as routing gap</label>
+        <label><input type="radio" name="q-evidence" value="Insufficient - inspect more route surfaces first"> Insufficient - inspect more route surfaces first</label>
+        <label><input type="radio" name="q-evidence" value="Other / None of the above" data-other> Other / None of the above</label>
+        <div class="notes"><textarea placeholder="Describe the preferred answer"></textarea></div>
+        <label><input type="radio" name="q-evidence" value="Need clarification" data-clarify> Need clarification</label>
+        <div class="notes"><textarea placeholder="What needs clarification?"></textarea></div>
+        <div class="notes optional"><textarea placeholder="Additional notes"></textarea></div>
+      </fieldset>
+    </div>
+
+    <div class="gate">
+      <h3>Recommendation Gate</h3>
+      <p>Choose the remediation direction for a follow-up implementation pass.</p>
+      <fieldset class="question" data-section="Recommendation Gate" data-gate-type="candidate_verdict" data-target-path="packs/customer-lifecycle/{codex,claude}/journey-map/SKILL.md">
+        <legend>Which remediation should be treated as the preferred next patch?</legend>
+        <label><input type="radio" name="q-recommendation" value="Conditional route to hook-model from lifecycle repeat-use risk"> Conditional route to hook-model from lifecycle repeat-use risk</label>
+        <label><input type="radio" name="q-recommendation" value="Docs-only clarification, no skill contract change"> Docs-only clarification, no skill contract change</label>
+        <label><input type="radio" name="q-recommendation" value="Make hook-model part of the default AFPS chain"> Make hook-model part of the default AFPS chain</label>
+        <label><input type="radio" name="q-recommendation" value="Other / None of the above" data-other> Other / None of the above</label>
+        <div class="notes"><textarea placeholder="Describe the preferred answer"></textarea></div>
+        <label><input type="radio" name="q-recommendation" value="Need clarification" data-clarify> Need clarification</label>
+        <div class="notes"><textarea placeholder="What needs clarification?"></textarea></div>
+        <div class="notes optional"><textarea placeholder="Additional notes"></textarea></div>
+      </fieldset>
+    </div>
+
+    <div class="gate">
+      <h3>Scope Gate</h3>
+      <p>This investigation produced a report and did not mutate skill contracts.</p>
+      <fieldset class="question" data-section="Scope Gate" data-gate-type="scope_non_goals">
+        <legend>Is report-only output acceptable for this investigation pass?</legend>
+        <label><input type="radio" name="q-scope" value="Yes - keep this pass report-only"> Yes - keep this pass report-only</label>
+        <label><input type="radio" name="q-scope" value="No - implement the conditional routing patch now"> No - implement the conditional routing patch now</label>
+        <label><input type="radio" name="q-scope" value="Other / None of the above" data-other> Other / None of the above</label>
+        <div class="notes"><textarea placeholder="Describe the preferred answer"></textarea></div>
+        <label><input type="radio" name="q-scope" value="Need clarification" data-clarify> Need clarification</label>
+        <div class="notes"><textarea placeholder="What needs clarification?"></textarea></div>
+        <div class="notes optional"><textarea placeholder="Additional notes"></textarea></div>
+      </fieldset>
+    </div>
+  </section>
+
+  <section class="compile" id="compile">
+    <h2>Compile Answers</h2>
+    <p>Answer every required gate question above to compile review YAML for the agent.</p>
+    <button type="button" id="compile-btn" disabled>Compile Answers</button>
+    <button type="button" id="copy-btn" disabled>Copy YAML</button>
+    <span class="status" id="compile-status">3 unanswered required questions</span>
+    <textarea id="compiled-yaml" readonly placeholder="Compiled YAML appears here after all required questions are answered."></textarea>
+  </section>
+</main>
+
+<script>
+  const questions = Array.from(document.querySelectorAll('.question'));
+  const compileBtn = document.getElementById('compile-btn');
+  const copyBtn = document.getElementById('copy-btn');
+  const statusEl = document.getElementById('compile-status');
+  const yamlEl = document.getElementById('compiled-yaml');
+
+  function escapeYaml(value) {
+    return String(value || '').replace(/\\/g, '\\\\').replace(/"/g, '\\"').replace(/\n/g, '\\n');
+  }
+
+  function selectedInput(question) {
+    return question.querySelector('input[type="radio"]:checked');
+  }
+
+  function updateQuestionNotes(question) {
+    const checked = selectedInput(question);
+    const notes = Array.from(question.querySelectorAll('.notes'));
+    notes.forEach((box) => { box.style.display = 'none'; });
+    if (!checked) return;
+    const label = checked.closest('label');
+    const next = label ? label.nextElementSibling : null;
+    if (next && next.classList.contains('notes')) {
+      next.style.display = 'block';
+    }
+    const optional = question.querySelector('.notes.optional');
+    if (optional && !checked.dataset.other && !checked.dataset.clarify) {
+      optional.style.display = 'block';
+    }
+  }
+
+  function updateCompileState() {
+    const unanswered = questions.filter((question) => !selectedInput(question));
+    compileBtn.disabled = unanswered.length > 0;
+    statusEl.textContent = unanswered.length
+      ? `${unanswered.length} unanswered required question${unanswered.length === 1 ? '' : 's'}`
+      : 'Ready to compile';
+  }
+
+  function collectNote(question, checked) {
+    const label = checked.closest('label');
+    const maybeSpecific = label ? label.nextElementSibling : null;
+    if (maybeSpecific && maybeSpecific.classList.contains('notes')) {
+      const text = maybeSpecific.querySelector('textarea');
+      if (text && text.value.trim()) return text.value.trim();
+    }
+    const optional = question.querySelector('.notes.optional textarea');
+    if (optional && optional.value.trim()) return optional.value.trim();
+    return '';
+  }
+
+  function feedbackEntries() {
+    return Array.from(document.querySelectorAll('.feedback')).map((group) => {
+      const active = group.querySelector('button.active');
+      if (!active) return null;
+      const textarea = group.querySelector('textarea');
+      return {
+        section: group.dataset.feedback,
+        feedback: active.dataset.value,
+        notes: textarea && textarea.value.trim() ? textarea.value.trim() : ''
+      };
+    }).filter(Boolean);
+  }
+
+  function compileYaml() {
+    const lines = [
+      'alignment_page: alignment/investigate-hook-model-afps-gap.html',
+      'approval_status: ready-for-agent-review',
+      'gate_answers:'
+    ];
+    questions.forEach((question) => {
+      const checked = selectedInput(question);
+      const answer = checked ? checked.value : '';
+      const status = checked && checked.dataset.other ? 'other' : (checked && checked.dataset.clarify ? 'needs-clarification' : 'answered');
+      const note = checked ? collectNote(question, checked) : '';
+      lines.push(`  - section: "${escapeYaml(question.dataset.section)}"`);
+      lines.push(`    gate_type: "${escapeYaml(question.dataset.gateType)}"`);
+      lines.push(`    status: "${status}"`);
+      lines.push(`    answer: "${escapeYaml(answer)}"`);
+      if (question.dataset.targetPath) lines.push(`    target_path: "${escapeYaml(question.dataset.targetPath)}"`);
+      if (note) lines.push(`    notes: "${escapeYaml(note)}"`);
+    });
+    const feedback = feedbackEntries();
+    if (feedback.length) {
+      lines.push('section_feedback:');
+      feedback.forEach((entry) => {
+        lines.push(`  - section: "${escapeYaml(entry.section)}"`);
+        lines.push(`    feedback: "${escapeYaml(entry.feedback)}"`);
+        if (entry.notes) lines.push(`    notes: "${escapeYaml(entry.notes)}"`);
+      });
+    }
+    yamlEl.value = lines.join('\n');
+    copyBtn.disabled = false;
+    navigator.clipboard?.writeText(yamlEl.value)
+      .then(() => { statusEl.textContent = 'YAML compiled and copied'; })
+      .catch(() => { statusEl.textContent = 'YAML compiled; copy manually if clipboard is blocked'; });
+  }
+
+  questions.forEach((question) => {
+    question.addEventListener('change', () => {
+      updateQuestionNotes(question);
+      updateCompileState();
+    });
+  });
+
+  document.querySelectorAll('.feedback').forEach((group) => {
+    const buttons = Array.from(group.querySelectorAll('button'));
+    const textarea = group.querySelector('textarea');
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const already = button.classList.contains('active');
+        buttons.forEach((other) => other.classList.remove('active'));
+        if (already) {
+          textarea.style.display = 'none';
+          textarea.value = '';
+          return;
+        }
+        button.classList.add('active');
+        textarea.style.display = 'block';
+      });
+    });
+  });
+
+  compileBtn.addEventListener('click', () => {
+    const firstUnanswered = questions.find((question) => !selectedInput(question));
+    if (firstUnanswered) {
+      firstUnanswered.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    compileYaml();
+  });
+
+  copyBtn.addEventListener('click', () => {
+    if (!yamlEl.value) return;
+    navigator.clipboard?.writeText(yamlEl.value)
+      .then(() => { statusEl.textContent = 'YAML copied'; })
+      .catch(() => {
+        yamlEl.focus();
+        yamlEl.select();
+        statusEl.textContent = 'Clipboard blocked; YAML selected';
+      });
+  });
+
+  updateCompileState();
+</script>
+</body>
+</html>

@@ -1,3 +1,24 @@
+## Current Task - Hook Model AFPS Gap Investigation 2026-05-31
+
+**Goal:** Answer whether this repository already has a skill for Nir Eyal's Hooked model, and whether the AFPS workflow has a routing or coverage gap around using it.
+
+**Plan:**
+- [x] Capture the visible `$investigate` invocation under `prompts/investigate/`.
+- [x] Inspect active `hook-model` contracts, business-growth pack metadata, AFPS status/routing docs, customer-lifecycle skills, and next-step contracts.
+- [x] Validate the user hypothesis against current code/docs: existing skill availability, route placement, and conditions where AFPS would or would not recommend it.
+- [x] Create `alignment/investigate-hook-model-afps-gap.html` with findings, evidence, alternatives, and recommendation.
+- [x] Run artifact/whitespace verification and record this review section.
+
+### Review
+
+- Confirmed the repository already has mirrored active `hook-model` skills under `packs/business-growth/{codex,claude}/hook-model/SKILL.md`; the contracts explicitly implement Nir Eyal's Hooked model via trigger, action, variable reward, and investment.
+- Confirmed the AFPS gap is route exposure, not missing skill coverage. Default AFPS routes and status contracts make `hook-model` optional/generic growth work, while `business-growth/PACK.md` starts the growth lane with `hook-model`.
+- Found a specific routing inconsistency in `journey-map`: it says lifecycle-stage risks can block positioning or UX, but the priority order checks missing positioning and missing UX before the stage-risk branch. That makes repeat-use/habit risk easy to bypass.
+- Recommendation captured in `alignment/investigate-hook-model-afps-gap.html`: keep `hook-model` conditional, and route to it after `journey-map` or `retention-map` when evidence shows consumer/PLG repeat-use, engagement-loop, retention-trigger, saved-state, or social-reward mechanics should shape the product. Skip to metrics/lifecycle-metrics for B2B, enterprise, infrastructure, or naturally infrequent usage.
+- Verification passed: `git diff --check`; required-content grep over `alignment/investigate-hook-model-afps-gap.html`; embedded JavaScript syntax/content check via Node; `xdg-open` failed because no Linux browser is installed, then WSL PowerShell `Start-Process` opened the file URI successfully.
+
+---
+
 ### ✅ DONE — Phase 41: re-benchmark `provision-agentic-config` (2026-05-31)
 
 **Result:** Clean re-run via `benchmark-test-skill` flow. Claude **100%** hard-assertion pass (3/3, 98.7% quality, p50 56.3s); Codex **66.7%** (2/3, 94.7% quality, p50 64.3s) — single output-variance failure (one run dropped the primary-branch shipping line and leaked a `/tmp` path), not a harness false-negative. Total cost $6.00 ($3 Claude + $3 Codex). Large improvement over the pre-fixture near-zero pass rates. Curated report: `benchmark/test-provision-agentic-config-2026-05-31.md`; raw sessions `tests/benchmarks/runs/provision-agentic-config-{claude-5bd3b160,codex-86b4839a}/` (gitignored, local). Matrix + showcase data regenerated and validated; bench:coverage 163 skills valid; focused bench-coverage/bench-setups/matrix tests green; `git diff --check` clean. Graded count unchanged at 69 unique / 158 total (refresh of an already-counted skill). Next triage targets: `migrate`, then `prototype`. Setup note: the only layer1 failure under `pnpm verify --skill` is the pre-existing unrelated `skill-dev` `.claude/skills` output-path conflict; the provision-agentic-config setup contract checks pass 90/90.
