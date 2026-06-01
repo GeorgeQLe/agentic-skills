@@ -82,7 +82,27 @@
 - Updated the debug close step boundary text for drawer teardown and added `apps/skills-showcase/src/components/prototype-close-sequence.test.tsx`, covering the page close handoff, the registered debug close driver, close apex gate ordering, and PackOpener one-shot completion.
 - Verification passed: focused prototype regression, `pnpm --dir apps/skills-showcase typecheck`, `pnpm --dir apps/skills-showcase test` (11 files, 121 tests), and `git diff --check`.
 - Browser verification used a restarted local dev server at `http://localhost:3001/prototype`. The Browser plugin Node REPL tool was unavailable, so Computer Use was used instead. It confirmed the debug panel opens, the open driver reaches the drawer-open state, and the close driver reaches the collapse handoff; accessibility snapshots were noisy during stepped teardown, so the deterministic regression test is the authoritative gate for the exact driver/teardown sequence.
+## Current Task - Global Agentic Skills Initialization 2026-06-01
 
+**Goal:** Run `$init-agentic-skills` with no arguments to initialize or refresh global core agentic-skills installs for Claude and Codex from this checkout.
+
+**Plan:**
+- [x] Capture the visible `$init-agentic-skills` invocation under `prompts/init-agentic-skills/`.
+- [x] Run the existing mirrored init-agentic-skills launcher through the canonical root initializer.
+- [x] Check `show-prefs` and set default opt-out drift preferences only if keys are unset.
+- [x] Run status/doctor verification and record installed/skipped counts plus any warnings.
+- [x] Preserve unrelated dirty work, then commit and push only this invocation's tracked artifacts.
+
+### Review
+
+- Initial direct command `scripts/init-agentic-skills.sh` failed because this checkout does not contain that root wrapper path. The existing mirrored launcher `global/codex/init-agentic-skills/scripts/init-agentic-skills.sh` was inspected and used instead; it resolves the repository root and delegates to root `init.sh`.
+- Initialization installed 6 Claude core skills to `/home/georgeqle/.claude/skills` and 7 Codex core skills to `/home/georgeqle/.codex/skills`. No domain packs were installed globally.
+- First-run `skills.*` drift preference keys were unset; the existing `sync.github_freshness_check` preference was `always`. Applied the contract's default opt-out settings: `skills.session_start_hook=false` and `skills.auto_refresh=false`.
+- Preference writes were completed sequentially after a parallel same-file write attempt raced on `preferences.json`; the JSON was validated before the remaining preference was set.
+- Status verification: checkout `/home/georgeqle/projects/tools/dev/agentic-skills`, local commit `78bbd7ac`, remote `https://github.com/GeorgeQLe/agentic-skills.git`, GitHub freshness preference `always`.
+- Doctor verification reports every managed global install as `ok` across Claude and Codex.
+- Pack guidance remains project-local: do not install `packs/*` globally; run `$pack` or `$pack install <pack-or-skill>` from the target project, and use `$pack refresh` if a project already has `.agents/project.json`.
+- Reload guidance: Claude Code should use `/reload-skills` first, then `/clear` or restart if the skill list remains stale; Codex should start a fresh Codex CLI session if `$` skill visibility remains stale.
 ## Current Task - migrate Benchmark Failure Session Triage 2026-05-31
 
 **Goal:** Investigate the fresh `migrate` benchmark failure, verify whether the remaining 33%/33% result is a skill-contract issue, benchmark rubric false negative, fixture/setup problem, or agent output noncompliance, and produce a durable session-triage report with the smallest validated next step.

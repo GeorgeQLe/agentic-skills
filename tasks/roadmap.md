@@ -85,7 +85,26 @@
 4. Run typecheck, tests, browser verification, whitespace checks, then ship intended files.
 
 **Result:** Implementation and verification are complete; shipping is in progress.
+## Current Targeted Update: Global Agentic Skills Initialization 2026-06-01
 
+**Goal:** Run `$init-agentic-skills` with no arguments to refresh global Claude and Codex core skill installs from this checkout, leaving packs project-local.
+
+**Acceptance Criteria:**
+- [x] Prompt history is captured under `prompts/init-agentic-skills/`.
+- [x] The existing mirrored `init-agentic-skills` launcher runs successfully through the canonical root `init.sh` path.
+- [x] First-run drift preferences are checked and only set when currently unset.
+- [x] Status verification reports the local checkout commit, remote URL, install directories, and freshness preference state.
+- [x] Reload and pack-access guidance is reported, including Codex fresh-session behavior.
+- [x] Review notes are recorded in `tasks/todo.md`; intended repo artifacts are committed and pushed while unrelated dirty work is preserved.
+
+**Implementation Plan:**
+1. Capture prompt history and task-plan artifacts for the invocation.
+2. Run the existing mirrored initializer launcher with required filesystem permission, then inspect preferences with `show-prefs`.
+3. Apply default opt-out drift preferences only if unset.
+4. Run status/doctor verification and summarize global install results plus reload/pack guidance.
+5. Commit and push only this invocation's tracked artifacts.
+
+**Result:** Initialization succeeded through `global/codex/init-agentic-skills/scripts/init-agentic-skills.sh`, which delegates to root `init.sh`. The documented root wrapper `scripts/init-agentic-skills.sh` is absent in this checkout, so the first direct command failed with "No such file or directory" before the mirrored launcher path was used. Installed 6 Claude core skills and 7 Codex core skills. Drift preferences were unset for `skills.*`, so the default opt-out values were set: `session_start_hook=false` and `auto_refresh=false`. Status reports checkout commit `78bbd7ac`, remote `https://github.com/GeorgeQLe/agentic-skills.git`, and GitHub freshness preference `always`. Doctor reports all managed global Claude/Codex skill installs `ok`.
 ## Current Targeted Update: migrate Benchmark Failure Session Triage 2026-05-31
 
 **Goal:** Use `$session-triage` to investigate the clean `migrate` benchmark rerun failure and determine the smallest durable next step, without editing the target skill during triage.
