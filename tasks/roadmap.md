@@ -1,3 +1,23 @@
+## Current Targeted Update: migrate Benchmark Failure Session Triage 2026-05-31
+
+**Goal:** Use `$session-triage` to investigate the clean `migrate` benchmark rerun failure and determine the smallest durable next step, without editing the target skill during triage.
+
+**Acceptance Criteria:**
+- [x] Prompt history is captured under `prompts/session-triage/`.
+- [x] Fresh `migrate` benchmark report and raw run JSON are inspected for Claude route failures and Codex phase assertion failures.
+- [x] Current mirrored `migrate` skill contracts and benchmark fixture/evaluator logic are checked for contract gaps, stale mirror drift, or rubric false negatives.
+- [x] Recent same-skill benchmark/triage artifacts and `tasks/lessons.md` are checked before recommending any narrow tolerance patch.
+- [x] `alignment/session-triage-migrate-benchmark-failure.html` contains the full structured triage, evidence matrix, confidence register, alternatives, recommended fix, validation plan, and review gates.
+- [x] Validation proves the report is complete and the intended files are committed and pushed on `master`, preserving unrelated dirty/untracked work.
+
+**Implementation Plan:**
+1. Read fresh report/raw runs, current fixture/evaluator, mirrored `migrate` contracts, recent migrate reports, and lessons.
+2. Classify each failed assertion as true generated-output miss, contract gap, setup issue, or rubric false negative.
+3. Write the full alignment page report and update task history.
+4. Run focused verification for report content/HTML/whitespace, then ship intended artifacts only.
+
+**Result:** Verified the benchmark failure and found the responsible surface is the benchmark setup/evaluator, not the active `migrate` skill contract. The raw runs show missing `migrate` skill visibility despite the fixture prompt claiming it is installed; Codex's `phases` failures are semantic false negatives against numbered phase headings; Claude's `$exec` failures are route-preservation variance under the fixture prompt. Durable report: `alignment/session-triage-migrate-benchmark-failure.html`. Report verification passed with embedded JavaScript parsing, required-content grep, `git diff --check`, and WSL browser open after Linux `xdg-open` found no installed browser. Recommended follow-up after report approval: `$targeted-skill-builder migrate benchmark fixture skill visibility and phase-route evaluator`.
+
 ## Current Targeted Update: Hook Model AFPS Routing Implementation 2026-06-01
 
 **Goal:** Implement the approved hook-model AFPS placement: a conditional pre-UX detour from `journey-map` for products whose value depends on repeat use, habit formation, engagement loops, retention triggers, saved state, social rewards, or investment compounding.

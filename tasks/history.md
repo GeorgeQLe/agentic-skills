@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-06-01 — migrate benchmark failure triage
+
+- Triaged the fresh 2026-05-31 `migrate` re-benchmark failure from the curated report plus raw run JSON under `tests/benchmarks/runs/migrate-{claude-7c742313,codex-f3658761}/`.
+- Verified the failure is real but not sufficient evidence for a target-skill contract edit: both agents passed 1/3 evaluated runs, all six runs created `migration-plan.md`, and no run was infrastructure-blocked.
+- Found a benchmark setup validity gap: raw Claude/Codex sessions report the `migrate` skill was not visible despite the prompt claiming it was installed. Local pack resolution agrees: `scripts/pack.sh which migrate` reports `migrate` is provided by the uninstalled `code-maintenance` pack, and installed `.codex`/`.claude` skill roots have no `migrate/SKILL.md`.
+- Classified the residual assertion families: Codex's `phases` misses are literal-rubric false negatives for artifacts with numbered phase headings; Claude's `$exec` misses are final-route variance where shell commands replaced the requested skill handoff.
+- Wrote `alignment/session-triage-migrate-benchmark-failure.html` with the structured report, evidence matrix, confidence register, alternatives, validation plan, and review gates. Recommended follow-up after approval: `$targeted-skill-builder migrate benchmark fixture skill visibility and phase-route evaluator`.
+
 ## 2026-06-01 — Hook model AFPS routing implementation
 
 - Updated mirrored `journey-map` contracts to v0.7 after archiving v0.6. The next-step tree now checks blocking optional research triggers before default `positioning` or `ux-variations`.

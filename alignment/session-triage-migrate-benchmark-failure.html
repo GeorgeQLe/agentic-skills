@@ -1,0 +1,1189 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Session Triage: migrate Benchmark Failure</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --text-muted: #8b949e;
+      --accent: #58a6ff;
+      --green: #3fb950;
+      --red: #f85149;
+      --orange: #d29922;
+      --purple: #bc8cff;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+
+    main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 32px 20px 56px;
+      overflow-wrap: break-word;
+    }
+
+    h1,
+    h2,
+    h3 {
+      color: #fff;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+    }
+
+    h2 {
+      margin-top: 42px;
+      color: var(--accent);
+    }
+
+    h3 {
+      margin-top: 24px;
+    }
+
+    a {
+      color: var(--accent);
+    }
+
+    code {
+      color: #fff;
+      background: #0b1220;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.08rem 0.32rem;
+    }
+
+    pre {
+      overflow-x: auto;
+      background: #0b1220;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+    }
+
+    .summary {
+      color: var(--text-muted);
+      max-width: 980px;
+    }
+
+    .toc,
+    .panel,
+    .question,
+    .compile {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .toc {
+      padding: 18px;
+      margin: 24px 0 30px;
+    }
+
+    .toc ul {
+      margin: 10px 0 0;
+      padding-left: 20px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(230px, 100%), 1fr));
+      gap: 12px;
+      margin: 18px 0;
+    }
+
+    .panel {
+      padding: 16px;
+    }
+
+    .panel strong,
+    .metric {
+      color: #fff;
+    }
+
+    .muted {
+      color: var(--text-muted);
+    }
+
+    .tag {
+      display: inline-block;
+      min-height: 24px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      color: var(--text);
+      background: #0b1220;
+      margin-right: 6px;
+    }
+
+    .tag.green {
+      border-color: rgba(63, 185, 80, 0.55);
+      color: var(--green);
+    }
+
+    .tag.orange {
+      border-color: rgba(210, 153, 34, 0.55);
+      color: var(--orange);
+    }
+
+    .tag.red {
+      border-color: rgba(248, 81, 73, 0.55);
+      color: var(--red);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin: 14px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 760px;
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid var(--border);
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: var(--surface);
+      color: #fff;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 38px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+    }
+
+    .feedback {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px;
+      background: #0b1220;
+      max-width: 100%;
+    }
+
+    .feedback-title {
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .choice-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    label.choice,
+    button {
+      min-height: 44px;
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #0d1117;
+      color: var(--text);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    label.choice input {
+      margin: 0;
+    }
+
+    label.choice:has(input:checked)[data-value="up"] {
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    label.choice:has(input:checked)[data-value="down"] {
+      border-color: var(--red);
+      color: var(--red);
+    }
+
+    label.choice:has(input:checked)[data-value="needs-clarification"] {
+      border-color: var(--orange);
+      color: var(--orange);
+    }
+
+    textarea {
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+      min-height: 108px;
+      margin-top: 10px;
+      padding: 12px;
+      background: #0b1220;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    textarea[readonly] {
+      color: var(--text-muted);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .local-controls,
+    .compile-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .question {
+      background: #1c2333;
+      padding: 16px;
+      margin: 18px 0;
+    }
+
+    .question h3 {
+      color: var(--purple);
+      margin-top: 0;
+    }
+
+    .question-option {
+      margin: 10px 0;
+    }
+
+    .option-notes {
+      margin-left: 26px;
+    }
+
+    .compile {
+      padding: 18px;
+      margin-top: 28px;
+    }
+
+    .status-line {
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+
+    @media (max-width: 860px) {
+      main {
+        padding: 24px 16px 48px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      label.choice,
+      button {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .choice-row {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Session Triage: migrate Benchmark Failure</h1>
+  <p class="summary">
+    Durable triage report for <code>$session-triage migrate benchmark failure</code>.
+    The fresh benchmark failure is verified, but the evidence does not justify editing the
+    <code>migrate</code> skill contract directly. The benchmark did not reliably expose the
+    installed skill to either runner, then failed on one route-preservation family and one
+    literal phase-string evaluator family.
+  </p>
+
+  <section class="toc" id="toc">
+    <h2>Table of Contents</h2>
+    <ul>
+      <li><a href="#executive-verdict">Executive Verdict</a></li>
+      <li><a href="#scope">Scope and Sources</a></li>
+      <li><a href="#verification">Verification</a></li>
+      <li><a href="#timeline">Timeline</a></li>
+      <li><a href="#root-cause">Root Cause</a></li>
+      <li><a href="#evidence-matrix">Evidence Matrix</a></li>
+      <li><a href="#responsibility">Responsible Contract Gap</a></li>
+      <li><a href="#recommendation">Recommended Fix</a></li>
+      <li><a href="#alternatives">Alternatives Considered</a></li>
+      <li><a href="#validation-plan">Validation Plan</a></li>
+      <li><a href="#confidence">Confidence and Gaps</a></li>
+      <li><a href="#review-gates">Review Gates</a></li>
+      <li><a href="#compile">Compile Feedback and Answers</a></li>
+    </ul>
+  </section>
+
+  <section id="executive-verdict">
+    <div class="section-head">
+      <h2>Executive Verdict</h2>
+      <div class="feedback" data-section="Executive Verdict">
+        <div class="feedback-title">Section feedback</div>
+        <div class="choice-row">
+          <label class="choice" data-value="up"><input type="radio" name="fb-executive" value="up">Approve as-is</label>
+          <label class="choice" data-value="down"><input type="radio" name="fb-executive" value="down">Concern</label>
+          <label class="choice" data-value="needs-clarification"><input type="radio" name="fb-executive" value="needs-clarification">Clarification needed</label>
+        </div>
+        <textarea class="feedback-notes hidden" placeholder="Optional section feedback"></textarea>
+        <div class="local-controls hidden">
+          <button type="button" class="compile-local-feedback">Compile Feedback YAML</button>
+          <button type="button" class="copy-local-feedback">Copy YAML</button>
+        </div>
+        <textarea class="local-yaml hidden" readonly></textarea>
+        <div class="status-line local-status"></div>
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="panel">
+        <strong>Verdict</strong>
+        <p><span class="tag orange">verified</span> The user-identified benchmark failure is real: Claude and Codex each passed only 1 of 3 evaluated runs.</p>
+      </div>
+      <div class="panel">
+        <strong>Primary diagnosis</strong>
+        <p>The run cannot be treated as clean evidence against <code>migrate</code> itself because the raw sessions show the target skill was not visible to the benchmark agents.</p>
+      </div>
+      <div class="panel">
+        <strong>Smallest durable next step</strong>
+        <p>Route a narrow builder pass to the benchmark fixture/harness: skill visibility, semantic phase-structure recognition, and stricter final route prompting.</p>
+      </div>
+    </div>
+
+    <p>
+      The current result is not a mass-rerun problem. Both agents created <code>migration-plan.md</code>
+      and exited successfully, but four runs failed deterministic assertions. The strongest immediate
+      evidence is setup-level: <code>scripts/pack.sh which migrate</code> reports that <code>migrate</code>
+      is provided by the <code>code-maintenance</code> pack and is not installed, while both benchmark
+      runners reported missing skill visibility during raw runs.
+    </p>
+  </section>
+
+  <section id="scope">
+    <div class="section-head">
+      <h2>Scope and Sources</h2>
+      <div class="feedback" data-section="Scope and Sources">
+        <div class="feedback-title">Section feedback</div>
+        <div class="choice-row">
+          <label class="choice" data-value="up"><input type="radio" name="fb-scope" value="up">Approve as-is</label>
+          <label class="choice" data-value="down"><input type="radio" name="fb-scope" value="down">Concern</label>
+          <label class="choice" data-value="needs-clarification"><input type="radio" name="fb-scope" value="needs-clarification">Clarification needed</label>
+        </div>
+        <textarea class="feedback-notes hidden" placeholder="Optional section feedback"></textarea>
+        <div class="local-controls hidden">
+          <button type="button" class="compile-local-feedback">Compile Feedback YAML</button>
+          <button type="button" class="copy-local-feedback">Copy YAML</button>
+        </div>
+        <textarea class="local-yaml hidden" readonly></textarea>
+        <div class="status-line local-status"></div>
+      </div>
+    </div>
+
+    <p><strong>Target:</strong> the fresh <code>migrate</code> benchmark failure after the 2026-05-31 re-benchmark.</p>
+    <p><strong>User-identified issue:</strong> <code>$session-triage migrate benchmark failure</code>.</p>
+    <p><strong>Evidence sources inspected:</strong></p>
+    <ul>
+      <li><code>benchmark/test-migrate-2026-05-31.md</code></li>
+      <li><code>tests/benchmarks/runs/migrate-claude-7c742313/report.json</code> and <code>run-000..002.json</code></li>
+      <li><code>tests/benchmarks/runs/migrate-codex-f3658761/report.json</code> and <code>run-000..002.json</code></li>
+      <li><code>tests/layer4/setups/tier23-global-workflows.setup.ts</code></li>
+      <li><code>tests/harness/bench-coverage.ts</code> and <code>tests/harness/bench-setups.ts</code></li>
+      <li><code>packs/code-maintenance/claude/migrate/SKILL.md</code> and <code>packs/code-maintenance/codex/migrate/SKILL.md</code></li>
+      <li><code>tasks/todo.md</code>, <code>tasks/history.md</code>, and <code>tasks/lessons.md</code></li>
+      <li><code>scripts/pack.sh which migrate</code> and installed-skill path checks under <code>.codex/skills</code> and <code>.claude/skills</code></li>
+    </ul>
+  </section>
+
+  <section id="verification">
+    <div class="section-head">
+      <h2>Verification</h2>
+      <div class="feedback" data-section="Verification">
+        <div class="feedback-title">Section feedback</div>
+        <div class="choice-row">
+          <label class="choice" data-value="up"><input type="radio" name="fb-verification" value="up">Approve as-is</label>
+          <label class="choice" data-value="down"><input type="radio" name="fb-verification" value="down">Concern</label>
+          <label class="choice" data-value="needs-clarification"><input type="radio" name="fb-verification" value="needs-clarification">Clarification needed</label>
+        </div>
+        <textarea class="feedback-notes hidden" placeholder="Optional section feedback"></textarea>
+        <div class="local-controls hidden">
+          <button type="button" class="compile-local-feedback">Compile Feedback YAML</button>
+          <button type="button" class="copy-local-feedback">Copy YAML</button>
+        </div>
+        <textarea class="local-yaml hidden" readonly></textarea>
+        <div class="status-line local-status"></div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Question</th>
+            <th>Verdict</th>
+            <th>Evidence</th>
+            <th>Interpretation</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Did the benchmark fail?</td>
+            <td><span class="tag orange">verified</span></td>
+            <td>Curated report shows Claude 33.3% and Codex 33.3%, with no infrastructure-blocked runs.</td>
+            <td>The observed failure is real and clean enough to triage; it is not a timeout-only artifact.</td>
+          </tr>
+          <tr>
+            <td>Did the agents create the required artifact?</td>
+            <td><span class="tag green">verified</span></td>
+            <td>All six raw run JSON files list <code>migration-plan.md</code> in <code>files</code>, and all exited with code 0.</td>
+            <td>The failure is not an artifact-creation failure.</td>
+          </tr>
+          <tr>
+            <td>Was the target skill visible?</td>
+            <td><span class="tag red">not reliably</span></td>
+            <td>Claude failed runs state that no <code>migrate</code> skill is installed. Codex runs state that the available skill list did not include <code>migrate</code>. <code>scripts/pack.sh which migrate</code> says the code-maintenance pack is not installed.</td>
+            <td>This makes the benchmark partly a prompt-compliance test rather than a true target-skill test.</td>
+          </tr>
+          <tr>
+            <td>Is there mirrored <code>migrate</code> contract drift?</td>
+            <td><span class="tag green">not found</span></td>
+            <td>Claude and Codex <code>migrate</code> contracts are both v0.1 and share the same core workflow: audit, read migration guide/request, plan, approval, batched migration, verification.</td>
+            <td>No direct skill mirror patch is justified by this evidence.</td>
+          </tr>
+          <tr>
+            <td>Are the assertion families meaningful?</td>
+            <td><span class="tag orange">mixed</span></td>
+            <td>Claude failed on missing <code>$exec</code> route. Codex failed on literal <code>phases</code>, even when artifacts had <code>Phase 1</code>, <code>Phase 2</code>, and later phase headings.</td>
+            <td>Route failure is generated-output noncompliance under the fixture prompt; phase failure is an overly literal rubric for a semantically valid plan shape.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="timeline">
+    <div class="section-head">
+      <h2>Timeline</h2>
+      <div class="feedback" data-section="Timeline">
+        <div class="feedback-title">Section feedback</div>
+        <div class="choice-row">
+          <label class="choice" data-value="up"><input type="radio" name="fb-timeline" value="up">Approve as-is</label>
+          <label class="choice" data-value="down"><input type="radio" name="fb-timeline" value="down">Concern</label>
+          <label class="choice" data-value="needs-clarification"><input type="radio" name="fb-timeline" value="needs-clarification">Clarification needed</label>
+        </div>
+        <textarea class="feedback-notes hidden" placeholder="Optional section feedback"></textarea>
+        <div class="local-controls hidden">
+          <button type="button" class="compile-local-feedback">Compile Feedback YAML</button>
+          <button type="button" class="copy-local-feedback">Copy YAML</button>
+        </div>
+        <textarea class="local-yaml hidden" readonly></textarea>
+        <div class="status-line local-status"></div>
+      </div>
+    </div>
+
+    <ol>
+      <li>2026-05-20/21: earlier Phase 41 records show <code>migrate</code> failing from route/artifact and infrastructure patterns, before the route-guidance fixture remediation.</li>
+      <li>2026-05-31: the re-benchmark ran <code>pnpm --dir tests bench --skill migrate --agent both --runs 3 --chunk-size 3 --pause 0</code> after explicit spend approval.</li>
+      <li>2026-05-31: curated report recorded 1/3 hard-assertion pass for both Claude and Codex, no infrastructure blocks, and route/phase assertion misses.</li>
+      <li>Session triage: raw JSON inspection found all six runs wrote <code>migration-plan.md</code>, while failing runs showed two distinct families: Claude substituted shell commands for <code>$exec</code>, and Codex used numbered phase headings without the exact plural word <code>phases</code>.</li>
+      <li>Session triage: installed-skill checks found no local <code>.codex/skills/migrate/SKILL.md</code> or <code>.claude/skills/migrate/SKILL.md</code>, and <code>scripts/pack.sh which migrate</code> reported the provider pack as not installed.</li>
+    </ol>
+  </section>
+
+  <section id="root-cause">
+    <div class="section-head">
+      <h2>Root Cause</h2>
+      <div class="feedback" data-section="Root Cause">
+        <div class="feedback-title">Section feedback</div>
+        <div class="choice-row">
+          <label class="choice" data-value="up"><input type="radio" name="fb-root-cause" value="up">Approve as-is</label>
+          <label class="choice" data-value="down"><input type="radio" name="fb-root-cause" value="down">Concern</label>
+          <label class="choice" data-value="needs-clarification"><input type="radio" name="fb-root-cause" value="needs-clarification">Clarification needed</label>
+        </div>
+        <textarea class="feedback-notes hidden" placeholder="Optional section feedback"></textarea>
+        <div class="local-controls hidden">
+          <button type="button" class="compile-local-feedback">Compile Feedback YAML</button>
+          <button type="button" class="copy-local-feedback">Copy YAML</button>
+        </div>
+        <textarea class="local-yaml hidden" readonly></textarea>
+        <div class="status-line local-status"></div>
+      </div>
+    </div>
+
+    <h3>Primary cause: benchmark skill visibility/setup gap</h3>
+    <p>
+      The fixture prompt says, "You have the migrate skill installed." The benchmark environment
+      did not make that true for the observed runs. That gap matters more than the individual
+      wording misses, because it means the benchmark did not reliably exercise the actual
+      <code>packs/code-maintenance</code> skill contract.
+    </p>
+
+    <h3>Secondary cause: literal phase-string assertion</h3>
+    <p>
+      The fixture puts <code>"phases"</code> in <code>expectedIncludes</code>. The hard assertion and
+      quality fact criterion then require that literal token in the artifact. Codex run #0 and #2
+      created structured multi-phase plans using headings such as <code>## Phase 1: Inventory Current Behavior</code>
+      and <code>## Phase 2: Introduce Grouped Setup Modules</code>, but failed because the artifact
+      did not contain the exact plural word. That is a benchmark false negative family.
+    </p>
+
+    <h3>Secondary cause: route-preservation variance</h3>
+    <p>
+      Claude run #0 and #2 wrote useful migration plans but ended with concrete shell commands
+      instead of the fixture-required <code>Recommended next command: $exec</code>. The existing prompt
+      says to end with that line, so this is generated-output noncompliance under an adequate but
+      still improvable fixture prompt. Strengthening the prompt and requiring the exact final route
+      would reduce this variance.
+    </p>
+  </section>
+
+  <section id="evidence-matrix">
+    <div class="section-head">
+      <h2>Evidence Matrix</h2>
+      <div class="feedback" data-section="Evidence Matrix">
+        <div class="feedback-title">Section feedback</div>
+        <div class="choice-row">
+          <label class="choice" data-value="up"><input type="radio" name="fb-evidence" value="up">Approve as-is</label>
+          <label class="choice" data-value="down"><input type="radio" name="fb-evidence" value="down">Concern</label>
+          <label class="choice" data-value="needs-clarification"><input type="radio" name="fb-evidence" value="needs-clarification">Clarification needed</label>
+        </div>
+        <textarea class="feedback-notes hidden" placeholder="Optional section feedback"></textarea>
+        <div class="local-controls hidden">
+          <button type="button" class="compile-local-feedback">Compile Feedback YAML</button>
+          <button type="button" class="copy-local-feedback">Copy YAML</button>
+        </div>
+        <textarea class="local-yaml hidden" readonly></textarea>
+        <div class="status-line local-status"></div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Claim</th>
+            <th>Evidence</th>
+            <th>Inference</th>
+            <th>Confidence</th>
+            <th>Assumption Status</th>
+            <th>Decision Impact</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>The benchmark failure is verified.</td>
+            <td><code>benchmark/test-migrate-2026-05-31.md</code> and both <code>report.json</code> files show 33.3% pass rates, 3 evaluated runs per agent, and no infrastructure-blocked runs.</td>
+            <td>The triage should diagnose deterministic failure families rather than rerun immediately.</td>
+            <td>High</td>
+            <td>Evidence-backed</td>
+            <td>Do not spend on a mass rerun before fixing the setup/evaluator.</td>
+          </tr>
+          <tr>
+            <td>The benchmark did not reliably expose the actual <code>migrate</code> skill.</td>
+            <td>Raw Claude and Codex sessions report missing <code>migrate</code> skill visibility. <code>scripts/pack.sh which migrate</code> says <code>migrate</code> comes from <code>code-maintenance</code> and is not installed. Local installed-skill path search returns no <code>migrate/SKILL.md</code>.</td>
+            <td>The clean-run benchmark is not a reliable test of the active pack-local skill contract.</td>
+            <td>High</td>
+            <td>Evidence-backed, with harness-internals not fully traced</td>
+            <td>Fix benchmark skill exposure or fail fast on missing skill before changing the target skill.</td>
+          </tr>
+          <tr>
+            <td>Codex phase failures are false negatives.</td>
+            <td>Failed Codex artifacts use ordered phase headings, including <code>## Phase 1</code> and <code>## Phase 2</code>, while failing only <code>Output includes phases</code>.</td>
+            <td>The evaluator requires a literal word instead of semantic phase structure.</td>
+            <td>High</td>
+            <td>Evidence-backed</td>
+            <td>Replace the literal include with a phase-structure pattern or predicate and add retained positive/negative tests.</td>
+          </tr>
+          <tr>
+            <td>Claude route failures are output variance against the fixture route.</td>
+            <td>Failed Claude artifacts end with shell commands; the fixture requests <code>Recommended next command: $exec</code>. Claude run #1 obeyed and passed.</td>
+            <td>The skill contract is not the owner; the fixture needs stronger final-route wording and stricter final-route assertion.</td>
+            <td>Medium-high</td>
+            <td>Evidence-backed</td>
+            <td>Harden the benchmark prompt/evaluator instead of editing <code>migrate</code> to emit benchmark-specific prose.</td>
+          </tr>
+          <tr>
+            <td>No mirrored <code>migrate</code> skill drift was found.</td>
+            <td>Both active pack contracts are v0.1 and have matching workflow intent: audit, read migration guidance/request, plan, approval, batched execution, verification.</td>
+            <td>There is no current reason to version-bump the skill itself for this benchmark failure.</td>
+            <td>Medium-high</td>
+            <td>Evidence-backed</td>
+            <td>Route to fixture/harness owner first.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="responsibility">
+    <div class="section-head">
+      <h2>Responsible Contract Gap</h2>
+      <div class="feedback" data-section="Responsible Contract Gap">
+        <div class="feedback-title">Section feedback</div>
+        <div class="choice-row">
+          <label class="choice" data-value="up"><input type="radio" name="fb-responsibility" value="up">Approve as-is</label>
+          <label class="choice" data-value="down"><input type="radio" name="fb-responsibility" value="down">Concern</label>
+          <label class="choice" data-value="needs-clarification"><input type="radio" name="fb-responsibility" value="needs-clarification">Clarification needed</label>
+        </div>
+        <textarea class="feedback-notes hidden" placeholder="Optional section feedback"></textarea>
+        <div class="local-controls hidden">
+          <button type="button" class="compile-local-feedback">Compile Feedback YAML</button>
+          <button type="button" class="copy-local-feedback">Copy YAML</button>
+        </div>
+        <textarea class="local-yaml hidden" readonly></textarea>
+        <div class="status-line local-status"></div>
+      </div>
+    </div>
+
+    <p><strong>Owner:</strong> benchmark setup and harness surfaces, not the active <code>migrate</code> skill contract.</p>
+    <ul>
+      <li><code>tests/layer4/setups/tier23-global-workflows.setup.ts</code> owns the <code>migrate</code> fixture prompt, literal includes, expected route, and quality evaluator inputs.</li>
+      <li><code>tests/harness/bench-setups.ts</code> and the runner environment own whether the target skill is actually visible when the prompt claims it is installed.</li>
+      <li><code>tests/harness/bench-coverage.ts</code> owns coverage classification, which currently treats <code>migrate</code> as a tier23 global setup even though the active skill source is in <code>packs/code-maintenance</code>.</li>
+      <li><code>tests/layer1/bench-setups.test.ts</code> should hold retained regression fixtures for this family.</li>
+    </ul>
+    <p>
+      The active <code>packs/code-maintenance/{claude,codex}/migrate/SKILL.md</code> contracts should
+      remain unchanged unless a later rerun with actual skill visibility still proves a target-skill
+      behavior gap.
+    </p>
+  </section>
+
+  <section id="recommendation">
+    <div class="section-head">
+      <h2>Recommended Fix</h2>
+      <div class="feedback" data-section="Recommended Fix">
+        <div class="feedback-title">Section feedback</div>
+        <div class="choice-row">
+          <label class="choice" data-value="up"><input type="radio" name="fb-recommendation" value="up">Approve as-is</label>
+          <label class="choice" data-value="down"><input type="radio" name="fb-recommendation" value="down">Concern</label>
+          <label class="choice" data-value="needs-clarification"><input type="radio" name="fb-recommendation" value="needs-clarification">Clarification needed</label>
+        </div>
+        <textarea class="feedback-notes hidden" placeholder="Optional section feedback"></textarea>
+        <div class="local-controls hidden">
+          <button type="button" class="compile-local-feedback">Compile Feedback YAML</button>
+          <button type="button" class="copy-local-feedback">Copy YAML</button>
+        </div>
+        <textarea class="local-yaml hidden" readonly></textarea>
+        <div class="status-line local-status"></div>
+      </div>
+    </div>
+
+    <p><strong>Recommended next skill after approval:</strong> <code>$targeted-skill-builder migrate benchmark fixture skill visibility and phase-route evaluator</code></p>
+
+    <h3>Concrete behavior change to implement</h3>
+    <ol>
+      <li>Make the benchmark either expose the actual <code>code-maintenance</code> <code>migrate</code> skill to both agents or fail fast/classify the run as setup invalid when the prompt claims the skill is installed but the runner cannot see it.</li>
+      <li>Replace the literal <code>"phases"</code> expected include with a semantic phase-structure check. Accept <code>## Phases</code> and multi-heading structures such as <code>## Phase 1</code> plus <code>## Phase 2</code>. Reject generic unordered plans that do not show staged migration sequencing.</li>
+      <li>Strengthen the route instruction to say the final line must be exactly <code>Recommended next command: $exec</code> and that shell commands must go in the plan body, not in the final handoff line.</li>
+      <li>Use <code>requireExactFinalRecommendedRoute: true</code> or an equivalent final-route assertion if the prompt claims exact final-line behavior.</li>
+      <li>Add layer1 retained fixtures for the positive Codex phase-heading shape, the negative generic-plan shape, the exact <code>$exec</code> route, and a shell-command route failure.</li>
+      <li>Add a missing-skill visibility guard or retained test so output containing "could not find migrate skill" cannot be reported as a normal target-skill quality failure.</li>
+    </ol>
+
+    <h3>Candidate fixture wording</h3>
+    <pre><code>You have the migrate skill installed. Read migration-request.md and write migration-plan.md with a staged migration plan, file changes, compatibility risks, validation, rollback, and Next command.
+Use either a "## Phases" section or numbered "Phase 1", "Phase 2", ... headings.
+Put shell commands inside the plan body when useful.
+The final line must be exactly: Recommended next command: $exec</code></pre>
+  </section>
+
+  <section id="alternatives">
+    <div class="section-head">
+      <h2>Alternatives Considered</h2>
+      <div class="feedback" data-section="Alternatives Considered">
+        <div class="feedback-title">Section feedback</div>
+        <div class="choice-row">
+          <label class="choice" data-value="up"><input type="radio" name="fb-alternatives" value="up">Approve as-is</label>
+          <label class="choice" data-value="down"><input type="radio" name="fb-alternatives" value="down">Concern</label>
+          <label class="choice" data-value="needs-clarification"><input type="radio" name="fb-alternatives" value="needs-clarification">Clarification needed</label>
+        </div>
+        <textarea class="feedback-notes hidden" placeholder="Optional section feedback"></textarea>
+        <div class="local-controls hidden">
+          <button type="button" class="compile-local-feedback">Compile Feedback YAML</button>
+          <button type="button" class="copy-local-feedback">Copy YAML</button>
+        </div>
+        <textarea class="local-yaml hidden" readonly></textarea>
+        <div class="status-line local-status"></div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Alternative</th>
+            <th>Decision</th>
+            <th>Reason</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Mass-rerun the paid benchmark now.</td>
+            <td><span class="tag red">Reject</span></td>
+            <td>The raw sessions already show setup and evaluator issues. Rerunning would spend money without changing the failure mechanism.</td>
+          </tr>
+          <tr>
+            <td>Edit <code>migrate/SKILL.md</code> to require the literal word <code>phases</code> and exact <code>$exec</code>.</td>
+            <td><span class="tag red">Reject</span></td>
+            <td>The target skill was not visible to the runners, and benchmark-specific wording would narrow a general migration skill.</td>
+          </tr>
+          <tr>
+            <td>Patch only the <code>phases</code> assertion.</td>
+            <td><span class="tag orange">Insufficient</span></td>
+            <td>It fixes a real false negative but leaves the missing-skill setup gap and Claude route variance intact.</td>
+          </tr>
+          <tr>
+            <td>Install the <code>code-maintenance</code> pack locally and rerun once.</td>
+            <td><span class="tag orange">Diagnostic only</span></td>
+            <td>Useful as confirmation after a harness fix, but not a durable repository-level benchmark contract.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="validation-plan">
+    <div class="section-head">
+      <h2>Validation Plan</h2>
+      <div class="feedback" data-section="Validation Plan">
+        <div class="feedback-title">Section feedback</div>
+        <div class="choice-row">
+          <label class="choice" data-value="up"><input type="radio" name="fb-validation" value="up">Approve as-is</label>
+          <label class="choice" data-value="down"><input type="radio" name="fb-validation" value="down">Concern</label>
+          <label class="choice" data-value="needs-clarification"><input type="radio" name="fb-validation" value="needs-clarification">Clarification needed</label>
+        </div>
+        <textarea class="feedback-notes hidden" placeholder="Optional section feedback"></textarea>
+        <div class="local-controls hidden">
+          <button type="button" class="compile-local-feedback">Compile Feedback YAML</button>
+          <button type="button" class="copy-local-feedback">Copy YAML</button>
+        </div>
+        <textarea class="local-yaml hidden" readonly></textarea>
+        <div class="status-line local-status"></div>
+      </div>
+    </div>
+
+    <h3>For the follow-up builder patch</h3>
+    <ul>
+      <li><code>pnpm --dir tests exec vitest run --project layer1 layer1/bench-setups.test.ts --testNamePattern "migrate|phase|route"</code></li>
+      <li><code>pnpm --dir tests exec vitest run --project layer1 layer1/bench-coverage.test.ts layer1/bench-setups.test.ts</code></li>
+      <li><code>pnpm --dir tests bench:coverage</code></li>
+      <li><code>git diff --check</code></li>
+      <li>After explicit spend approval, run a small paid confirmation first: <code>pnpm --dir tests bench --skill migrate --agent both --runs 1 --chunk-size 1 --pause 0</code>. Then decide whether the full 3-run rerun is justified.</li>
+    </ul>
+
+    <h3>Current triage verification already run</h3>
+    <ul>
+      <li><code>scripts/pack.sh which migrate</code> confirmed <code>migrate</code> is provided by <code>code-maintenance</code> and is not installed.</li>
+      <li>Installed-skill path search found no <code>.codex/skills/migrate/SKILL.md</code> or <code>.claude/skills/migrate/SKILL.md</code>.</li>
+      <li><code>pnpm --dir tests bench --list-skills</code> completed and lists <code>migrate</code> as custom coverage at <code>tests/layer4/setups/tier23-global-workflows.setup.ts</code>.</li>
+      <li><code>pnpm --dir tests bench:coverage</code> currently fails because unrelated dirty/untracked positioning work exposes new repository skills <code>jtbd-positioning</code>, <code>moore-positioning</code>, and <code>strategic-canvas</code> without coverage rows. That is outside this triage surface and should not be fixed here.</li>
+    </ul>
+  </section>
+
+  <section id="confidence">
+    <div class="section-head">
+      <h2>Confidence and Gaps</h2>
+      <div class="feedback" data-section="Confidence and Gaps">
+        <div class="feedback-title">Section feedback</div>
+        <div class="choice-row">
+          <label class="choice" data-value="up"><input type="radio" name="fb-confidence" value="up">Approve as-is</label>
+          <label class="choice" data-value="down"><input type="radio" name="fb-confidence" value="down">Concern</label>
+          <label class="choice" data-value="needs-clarification"><input type="radio" name="fb-confidence" value="needs-clarification">Clarification needed</label>
+        </div>
+        <textarea class="feedback-notes hidden" placeholder="Optional section feedback"></textarea>
+        <div class="local-controls hidden">
+          <button type="button" class="compile-local-feedback">Compile Feedback YAML</button>
+          <button type="button" class="copy-local-feedback">Copy YAML</button>
+        </div>
+        <textarea class="local-yaml hidden" readonly></textarea>
+        <div class="status-line local-status"></div>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Conclusion</th>
+            <th>Confidence</th>
+            <th>Why</th>
+            <th>What Could Change It</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>The failure is verified.</td>
+            <td>High</td>
+            <td>Curated report and persisted raw JSON align.</td>
+            <td>A different persisted report source would need to contradict the current run IDs.</td>
+          </tr>
+          <tr>
+            <td>Skill visibility is a primary setup gap.</td>
+            <td>High</td>
+            <td>Raw runner output plus local pack resolution both show missing installed skill state.</td>
+            <td>A harness trace proving the skill was injected despite those messages would narrow this to generated-output noise.</td>
+          </tr>
+          <tr>
+            <td>Codex phase failures are false negatives.</td>
+            <td>High</td>
+            <td>Artifacts show multiple phase headings and staged migration content.</td>
+            <td>If the benchmark intentionally requires the exact heading <code>## Phases</code>, the fixture should say that explicitly.</td>
+          </tr>
+          <tr>
+            <td>Claude route failures should be fixed in fixture/evaluator, not <code>migrate</code>.</td>
+            <td>Medium-high</td>
+            <td>The prompt already asks for <code>$exec</code>, and one Claude run passed. The skill was not visible.</td>
+            <td>A rerun with visible skill that still substitutes shell commands could justify a target-skill output-contract tweak.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      Broad <code>$analyze-sessions</code> is not needed for this decision. The relevant recurrence evidence
+      is already local: recent <code>tasks/todo.md</code> entries record prior <code>migrate</code> route and
+      <code>phases</code> failures, and <code>tasks/lessons.md</code> already captures route-guidance lessons.
+    </p>
+  </section>
+
+  <section id="review-gates">
+    <div class="section-head">
+      <h2>Review Gates</h2>
+      <div class="feedback" data-section="Review Gates">
+        <div class="feedback-title">Section feedback</div>
+        <div class="choice-row">
+          <label class="choice" data-value="up"><input type="radio" name="fb-gates" value="up">Approve as-is</label>
+          <label class="choice" data-value="down"><input type="radio" name="fb-gates" value="down">Concern</label>
+          <label class="choice" data-value="needs-clarification"><input type="radio" name="fb-gates" value="needs-clarification">Clarification needed</label>
+        </div>
+        <textarea class="feedback-notes hidden" placeholder="Optional section feedback"></textarea>
+        <div class="local-controls hidden">
+          <button type="button" class="compile-local-feedback">Compile Feedback YAML</button>
+          <button type="button" class="copy-local-feedback">Copy YAML</button>
+        </div>
+        <textarea class="local-yaml hidden" readonly></textarea>
+        <div class="status-line local-status"></div>
+      </div>
+    </div>
+
+    <div class="question" data-question id="gate-evidence" data-section="Evidence Matrix" data-gate-type="evidence coverage">
+      <h3>Evidence Coverage Gate</h3>
+      <p>Is the evidence sufficient to treat the failure as a benchmark setup/evaluator issue before editing the target skill?</p>
+      <div class="question-option">
+        <label><input type="radio" name="q-evidence" value="Evidence is sufficient"> Evidence is sufficient</label>
+      </div>
+      <div class="question-option">
+        <label><input type="radio" name="q-evidence" value="Need harness trace before approving"> Need a harness trace before approving</label>
+      </div>
+      <div class="question-option">
+        <label><input type="radio" name="q-evidence" value="Other / None of the above" data-special="other"> Other / None of the above</label>
+        <textarea class="option-notes hidden" data-notes-for="other" placeholder="What evidence framing should change?"></textarea>
+      </div>
+      <div class="question-option">
+        <label><input type="radio" name="q-evidence" value="Need clarification" data-special="clarify"> Need clarification</label>
+        <textarea class="option-notes hidden" data-notes-for="clarify" placeholder="What is unclear?"></textarea>
+      </div>
+      <textarea class="option-notes hidden" data-notes-for="regular" placeholder="Optional additional notes"></textarea>
+    </div>
+
+    <div class="question" data-question id="gate-scope" data-section="Responsible Contract Gap" data-gate-type="scope/non-goals">
+      <h3>Scope Gate</h3>
+      <p>Should this triage explicitly avoid changing <code>packs/code-maintenance/{claude,codex}/migrate/SKILL.md</code> until a rerun proves a skill-contract gap?</p>
+      <div class="question-option">
+        <label><input type="radio" name="q-scope" value="Keep target skill unchanged"> Keep target skill unchanged</label>
+      </div>
+      <div class="question-option">
+        <label><input type="radio" name="q-scope" value="Allow target skill edits in follow-up"> Allow target skill edits in follow-up</label>
+      </div>
+      <div class="question-option">
+        <label><input type="radio" name="q-scope" value="Other / None of the above" data-special="other"> Other / None of the above</label>
+        <textarea class="option-notes hidden" data-notes-for="other" placeholder="What scope should be used?"></textarea>
+      </div>
+      <div class="question-option">
+        <label><input type="radio" name="q-scope" value="Need clarification" data-special="clarify"> Need clarification</label>
+        <textarea class="option-notes hidden" data-notes-for="clarify" placeholder="What is unclear?"></textarea>
+      </div>
+      <textarea class="option-notes hidden" data-notes-for="regular" placeholder="Optional additional notes"></textarea>
+    </div>
+
+    <div class="question" data-question id="gate-route" data-section="Recommended Fix" data-gate-type="post-approval route">
+      <h3>Post-Approval Route Gate</h3>
+      <p>Which next route should own the follow-up after this report is approved?</p>
+      <div class="question-option">
+        <label><input type="radio" name="q-route" value="$targeted-skill-builder migrate benchmark fixture skill visibility and phase-route evaluator"> <code>$targeted-skill-builder migrate benchmark fixture skill visibility and phase-route evaluator</code></label>
+      </div>
+      <div class="question-option">
+        <label><input type="radio" name="q-route" value="No follow-up"> No follow-up</label>
+      </div>
+      <div class="question-option">
+        <label><input type="radio" name="q-route" value="Other / None of the above" data-special="other"> Other / None of the above</label>
+        <textarea class="option-notes hidden" data-notes-for="other" placeholder="What route should replace the recommendation?"></textarea>
+      </div>
+      <div class="question-option">
+        <label><input type="radio" name="q-route" value="Need clarification" data-special="clarify"> Need clarification</label>
+        <textarea class="option-notes hidden" data-notes-for="clarify" placeholder="What is unclear?"></textarea>
+      </div>
+      <textarea class="option-notes hidden" data-notes-for="regular" placeholder="Optional additional notes"></textarea>
+    </div>
+
+    <div class="question" data-question id="gate-validation" data-section="Validation Plan" data-gate-type="coverage checkpoint">
+      <h3>Validation Gate</h3>
+      <p>After the builder patch, how should paid benchmark validation proceed?</p>
+      <div class="question-option">
+        <label><input type="radio" name="q-validation" value="Run layer1 and coverage first, then request explicit spend approval for a 1-run smoke"> Run layer1 and coverage first, then request explicit spend approval for a 1-run smoke</label>
+      </div>
+      <div class="question-option">
+        <label><input type="radio" name="q-validation" value="Skip paid rerun until full 3-run approval"> Skip paid rerun until full 3-run approval</label>
+      </div>
+      <div class="question-option">
+        <label><input type="radio" name="q-validation" value="Other / None of the above" data-special="other"> Other / None of the above</label>
+        <textarea class="option-notes hidden" data-notes-for="other" placeholder="What validation policy should replace this?"></textarea>
+      </div>
+      <div class="question-option">
+        <label><input type="radio" name="q-validation" value="Need clarification" data-special="clarify"> Need clarification</label>
+        <textarea class="option-notes hidden" data-notes-for="clarify" placeholder="What is unclear?"></textarea>
+      </div>
+      <textarea class="option-notes hidden" data-notes-for="regular" placeholder="Optional additional notes"></textarea>
+    </div>
+  </section>
+
+  <section id="compile" class="compile">
+    <h2>Compile Feedback and Answers</h2>
+    <p class="muted">
+      Use feedback-only YAML to request revisions before answering every gate. Use final answers when the report is ready for agent review.
+    </p>
+    <div class="compile-actions">
+      <button type="button" id="compile-feedback">Compile Feedback YAML</button>
+      <button type="button" id="compile-answers">Compile Answers</button>
+      <button type="button" id="copy-bottom">Copy YAML</button>
+    </div>
+    <div class="status-line" id="compile-status">Required gates remaining: 4</div>
+    <textarea id="compiled-yaml" readonly></textarea>
+  </section>
+</main>
+
+<script>
+  const alignmentPage = "alignment/session-triage-migrate-benchmark-failure.html";
+
+  function yamlEscape(value) {
+    const text = String(value || "");
+    if (!text) return '""';
+    return JSON.stringify(text);
+  }
+
+  function selectedFeedbackEntries(scope) {
+    const roots = scope ? [scope] : Array.from(document.querySelectorAll(".feedback"));
+    const entries = [];
+    for (const root of roots) {
+      const checked = root.querySelector('input[type="radio"]:checked');
+      if (!checked) continue;
+      const notes = root.querySelector(".feedback-notes")?.value || "";
+      const feedback = checked.value;
+      entries.push({
+        section: root.dataset.section || "Unknown section",
+        feedback,
+        notes,
+        requested_agent_action: feedback === "up" ? "accept-as-is" : (feedback === "down" ? "investigate-and-revise" : "clarify-before-approval")
+      });
+    }
+    return entries;
+  }
+
+  function unansweredQuestions() {
+    return Array.from(document.querySelectorAll("[data-question]")).filter((question) => !question.querySelector('input[type="radio"]:checked'));
+  }
+
+  function feedbackYaml(entries) {
+    const unanswered = unansweredQuestions().map((question) => question.id);
+    const lines = [
+      "alignment_page: " + yamlEscape(alignmentPage),
+      "feedback_status: revision-request",
+      "approval_status: not-approved",
+      "unanswered_required_questions:"
+    ];
+    if (unanswered.length === 0) {
+      lines.push("  []");
+    } else {
+      for (const item of unanswered) lines.push("  - " + yamlEscape(item));
+    }
+    lines.push("section_feedback:");
+    if (entries.length === 0) {
+      lines.push("  []");
+    } else {
+      for (const entry of entries) {
+        lines.push("  - section: " + yamlEscape(entry.section));
+        lines.push("    feedback: " + yamlEscape(entry.feedback));
+        lines.push("    notes: " + yamlEscape(entry.notes));
+        lines.push("    requested_agent_action: " + yamlEscape(entry.requested_agent_action));
+      }
+    }
+    return lines.join("\n");
+  }
+
+  function answerYaml() {
+    const questions = Array.from(document.querySelectorAll("[data-question]"));
+    const lines = [
+      "alignment_page: " + yamlEscape(alignmentPage),
+      "approval_status: ready-for-agent-review",
+      "answers:"
+    ];
+
+    for (const question of questions) {
+      const checked = question.querySelector('input[type="radio"]:checked');
+      const special = checked?.dataset.special || "";
+      const status = special === "other" ? "other" : (special === "clarify" ? "needs-clarification" : "answered");
+      let notes = "";
+      if (special === "other") notes = question.querySelector('[data-notes-for="other"]')?.value || "";
+      else if (special === "clarify") notes = question.querySelector('[data-notes-for="clarify"]')?.value || "";
+      else notes = question.querySelector('[data-notes-for="regular"]')?.value || "";
+
+      lines.push("  - section: " + yamlEscape(question.dataset.section));
+      lines.push("    gate_type: " + yamlEscape(question.dataset.gateType));
+      lines.push("    status: " + yamlEscape(status));
+      lines.push("    answer: " + yamlEscape(checked?.value || ""));
+      lines.push("    notes: " + yamlEscape(notes));
+    }
+
+    const feedback = selectedFeedbackEntries();
+    lines.push("section_feedback:");
+    if (feedback.length === 0) {
+      lines.push("  []");
+    } else {
+      for (const entry of feedback) {
+        lines.push("  - section: " + yamlEscape(entry.section));
+        lines.push("    feedback: " + yamlEscape(entry.feedback));
+        lines.push("    notes: " + yamlEscape(entry.notes));
+        lines.push("    requested_agent_action: " + yamlEscape(entry.requested_agent_action));
+      }
+    }
+    return lines.join("\n");
+  }
+
+  async function copyText(text, statusEl) {
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(text);
+        statusEl.textContent = "YAML copied to clipboard.";
+      } else {
+        throw new Error("Clipboard API unavailable");
+      }
+    } catch (error) {
+      statusEl.textContent = "Clipboard copy blocked. Select the YAML textarea and copy manually.";
+    }
+  }
+
+  function updateFeedback(root) {
+    const checked = root.querySelector('input[type="radio"]:checked');
+    const notes = root.querySelector(".feedback-notes");
+    const controls = root.querySelector(".local-controls");
+    const yaml = root.querySelector(".local-yaml");
+    if (checked) {
+      notes.classList.remove("hidden");
+      controls.classList.remove("hidden");
+    } else {
+      notes.classList.add("hidden");
+      controls.classList.add("hidden");
+      yaml.classList.add("hidden");
+      yaml.value = "";
+    }
+  }
+
+  for (const root of document.querySelectorAll(".feedback")) {
+    root.addEventListener("change", () => updateFeedback(root));
+    root.querySelector(".compile-local-feedback")?.addEventListener("click", () => {
+      const yaml = root.querySelector(".local-yaml");
+      yaml.value = feedbackYaml(selectedFeedbackEntries(root));
+      yaml.classList.remove("hidden");
+    });
+    root.querySelector(".copy-local-feedback")?.addEventListener("click", async () => {
+      const yaml = root.querySelector(".local-yaml");
+      if (!yaml.value) yaml.value = feedbackYaml(selectedFeedbackEntries(root));
+      yaml.classList.remove("hidden");
+      await copyText(yaml.value, root.querySelector(".local-status"));
+    });
+  }
+
+  function updateQuestion(question) {
+    const checked = question.querySelector('input[type="radio"]:checked');
+    for (const notes of question.querySelectorAll(".option-notes")) {
+      notes.classList.add("hidden");
+    }
+    if (!checked) return;
+    const special = checked.dataset.special;
+    if (special === "other") question.querySelector('[data-notes-for="other"]')?.classList.remove("hidden");
+    else if (special === "clarify") question.querySelector('[data-notes-for="clarify"]')?.classList.remove("hidden");
+    else question.querySelector('[data-notes-for="regular"]')?.classList.remove("hidden");
+  }
+
+  function updateRemaining() {
+    const remaining = unansweredQuestions();
+    document.getElementById("compile-status").textContent = "Required gates remaining: " + remaining.length;
+  }
+
+  for (const question of document.querySelectorAll("[data-question]")) {
+    question.addEventListener("change", () => {
+      updateQuestion(question);
+      updateRemaining();
+    });
+  }
+
+  document.getElementById("compile-feedback").addEventListener("click", async () => {
+    const output = document.getElementById("compiled-yaml");
+    output.value = feedbackYaml(selectedFeedbackEntries());
+    await copyText(output.value, document.getElementById("compile-status"));
+  });
+
+  document.getElementById("compile-answers").addEventListener("click", async () => {
+    const remaining = unansweredQuestions();
+    if (remaining.length > 0) {
+      remaining[0].scrollIntoView({ behavior: "smooth", block: "center" });
+      document.getElementById("compile-status").textContent = "Answer required gates before final compile. Remaining: " + remaining.length;
+      return;
+    }
+    const output = document.getElementById("compiled-yaml");
+    output.value = answerYaml();
+    await copyText(output.value, document.getElementById("compile-status"));
+  });
+
+  document.getElementById("copy-bottom").addEventListener("click", async () => {
+    const output = document.getElementById("compiled-yaml");
+    if (!output.value) output.value = feedbackYaml(selectedFeedbackEntries());
+    await copyText(output.value, document.getElementById("compile-status"));
+  });
+
+  updateRemaining();
+</script>
+</body>
+</html>

@@ -1,3 +1,25 @@
+## Current Task - migrate Benchmark Failure Session Triage 2026-05-31
+
+**Goal:** Investigate the fresh `migrate` benchmark failure, verify whether the remaining 33%/33% result is a skill-contract issue, benchmark rubric false negative, fixture/setup problem, or agent output noncompliance, and produce a durable session-triage report with the smallest validated next step.
+
+**Plan:**
+- [x] Capture the visible `$session-triage migrate benchmark failure` invocation under `prompts/session-triage/`.
+- [x] Inspect the fresh curated report, raw benchmark run JSON, benchmark fixture/evaluator, current mirrored `migrate` contracts, recent migrate benchmark/triage artifacts, and `tasks/lessons.md`.
+- [x] Verify the user-identified benchmark failure and classify each failure family with evidence.
+- [x] Build `alignment/session-triage-migrate-benchmark-failure.html` with the full structured triage report, evidence matrix, confidence/assumption register, alternatives, recommendation, and gates.
+- [x] Run artifact/whitespace verification, record review/history notes, stage intended files only, commit, and push.
+
+### Review
+
+- Verified the fresh `migrate` benchmark failure from the curated report and raw persisted runs: Claude and Codex both passed 1/3 evaluated runs, all runs exited 0, and no run was infrastructure-blocked.
+- Found a setup-validity gap before any target-skill change: the benchmark prompt says the `migrate` skill is installed, but raw Claude/Codex sessions report missing `migrate` skill visibility. Local checks agree: `scripts/pack.sh which migrate` says `migrate` is provided by the `code-maintenance` pack and is not installed, and no `.codex/skills/migrate/SKILL.md` or `.claude/skills/migrate/SKILL.md` exists.
+- Classified Codex's failed `Output includes phases` assertion as a benchmark false-negative family: failed artifacts use ordered `Phase 1` / `Phase 2` headings and staged migration content but omit the exact plural word `phases`.
+- Classified Claude's failed `$exec` assertions as generated-output route variance under the fixture prompt: failed artifacts substituted shell commands for the requested final `Recommended next command: $exec`, while one Claude run followed the route and passed.
+- Found no mirrored active `migrate` contract drift that would justify a direct `packs/code-maintenance/{claude,codex}/migrate/SKILL.md` change. Both active contracts are v0.1 and share the same audit, plan, approval, batched migration, and verification workflow.
+- Wrote the durable report to `alignment/session-triage-migrate-benchmark-failure.html`. The recommended follow-up after report approval is `$targeted-skill-builder migrate benchmark fixture skill visibility and phase-route evaluator`, owning benchmark skill visibility, semantic phase-structure evaluation, and exact final-route enforcement.
+- Verification passed: embedded alignment-page JavaScript parses with Node, required report-content grep found the evidence matrix/review gates/recommendation, and `git diff --check` is clean. Browser open: Linux `xdg-open` failed because no HTML browser is installed; WSL PowerShell `Start-Process` opened the file URI successfully.
+- Validation caveat: `pnpm --dir tests bench:coverage` currently fails outside this task because unrelated dirty/untracked positioning work introduces repository skills `jtbd-positioning`, `moore-positioning`, and `strategic-canvas` without coverage rows. This triage intentionally preserves that unrelated work.
+
 ## Current Task - Hook Model AFPS Routing Implementation 2026-06-01
 
 **Goal:** Place `hook-model` as a conditional pre-UX AFPS detour after `journey-map` when repeat-use habit-loop design is central to product value, while preserving the normal `positioning -> ux-variations` route for ordinary products.
