@@ -1,5 +1,17 @@
 # positioning changelog (claude)
 
+## v0.7 - 2026-05-31
+
+- Redesigned as parent router + framework child skills
+- Market-positioning mode: multi-select from JTBD, Blue Ocean, Moore, Play Bigger, Category Design
+- Product-positioning mode: Obviously Awesome (extracted to child skill)
+- Frameworks live under positioning/frameworks/ as independent child skills
+- Parent builds alignment page with multi-select framework convention (new)
+- Selected frameworks written to tasks/todo.md for sequential /exec execution
+- Synthesis mode (`--synthesize`) combines framework outputs into research/positioning.md
+- Added Optional Research Trigger Map for detour routing
+- research-roadmap scans now flag market-positioning for potential refresh
+
 ## v0.4 - 2026-05-27
 
 - Added `research/.progress.yaml` product-path manifest awareness
@@ -26,3 +38,7 @@
 ## v0.5
 
 - Archived previous skill contract.
+
+## v0.6
+
+- Added Report-First Approval Gate, downstream impact check, task classification, and alignment page convention.

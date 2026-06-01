@@ -401,6 +401,7 @@ A consolidated prototype must exist at `prototypes/{topic}/consolidated/`. If mi
    - **Interactions**: Do the prototype's interaction patterns match journey-map touchpoints and competitive differentiation?
    - **Differentiation**: Does the prototype demonstrate the competitive advantages identified in competitive analysis?
 4. Flag research documents that are contradicted or made stale by prototype decisions.
+5. If `research/positioning.md` exists and contains `> Mode: Market Positioning`, flag as: "Positioning was hypothesized pre-product. Prototype evidence may support re-running `$positioning product` for customer-grounded product positioning."
 
 ### Output
 
@@ -424,6 +425,7 @@ A production spec must exist at `specs/{topic}.md`. If missing, halt and recomme
    - **Performance**: Does the research assume performance characteristics that the spec's architecture contradicts?
    - **Deployment**: Does the research assume a deployment model that the spec changed?
 4. Flag research documents that are invalidated by spec constraints.
+5. If `research/positioning.md` exists and contains `> Mode: Market Positioning`, flag as: "Positioning was hypothesized pre-product. Spec constraints and prototype evidence may support re-running `$positioning product` for customer-grounded product positioning."
 
 ### Output
 

@@ -1,16 +1,18 @@
 ---
 name: positioning
-description: Strategic positioning (April Dunford style) — competitive alternatives, unique attributes, value, target segment, market category
+description: Parent router — detect market vs product mode, recommend positioning frameworks, synthesize outputs into unified positioning
 type: research
-version: v0.6
-argument-hint: "[optional: focus area e.g. \"category\", \"vs competitor X\"]"
+version: v0.7
+argument-hint: "[optional: \"product\" | \"--synthesize\" | focus area]"
 ---
 
 ## Pack Availability Guard
 
 Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `/pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
 
-# Positioning — Strategic Product Positioning
+# Positioning — Parent Router
+
+This is a **parent router skill**. It detects context, recommends applicable positioning frameworks, and synthesizes their outputs. Individual frameworks live as child skills under `frameworks/`.
 
 ## Report-First Approval Gate
 
@@ -20,17 +22,31 @@ Do not write or overwrite synthesized deliverables until the user explicitly app
 
 When stopping for approval, build and attempt to open the alignment preview page first, then ask the user to review it and approve, question, or request adjustments. Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language. The approval request itself is the next action. Only emit next-skill routing after the approved artifact has been written or updated.
 
-Develops rigorous product positioning using the "Obviously Awesome" methodology (April Dunford). Determines competitive alternatives, unique attributes, customer value, target segment, and market category. Positioning is upstream of messaging — it determines *how you frame the product category itself*.
-
 ## Prerequisites
 
 - **Hard**: `research/icp.md` (or `research/{slug}/icp.md`) must exist. If not, tell the user to run `/icp` first and stop.
 - **Hard**: `research/competitive-analysis.md` (or `research/{slug}/competitive-analysis.md`) must exist. If not, tell the user to run `/competitive-analysis` first and stop.
-- **Strong default**: `research/journey-map.md` (or `research/{slug}/journey-map.md`) should exist before writing canonical positioning. If missing, recommend `/journey-map` first unless the user explicitly needs a provisional category/alternatives hypothesis. Early positioning may be discussed as provisional working notes, but do not write canonical `research/positioning.md` without clear user approval to proceed without journey evidence.
+- **Strong default**: `research/journey-map.md` (or `research/{slug}/journey-map.md`) should exist before writing canonical positioning. If missing, recommend `/journey-map` first unless the user explicitly needs a provisional positioning analysis.
 - **Soft**: Read these if they exist:
   - `research/journey-map.md` — where value is delivered, the aha moment
   - `research/customer-feedback.md` — real customer language about what makes the product different
   - `research/monetization.md` — pricing context for value perception
+
+## Operational Modes
+
+### Mode A: Framework Selection (default first invocation)
+
+Activated by: `/positioning` or `/positioning [focus area]` (no special flags).
+
+### Mode B: Synthesis
+
+Activated by: `/positioning --synthesize`
+
+### Mode C: Product-Positioning Shortcut
+
+Activated by: `/positioning product` or `/positioning post-launch` or `/positioning obviously-awesome`
+
+---
 
 ## Process
 
@@ -48,153 +64,165 @@ Resolve research scope by product path before using code or app structure as a h
 
 When product path `{slug}` is active, read and write research under `research/{slug}/`, specs under `specs/{slug}/`, and treat top-level `research/*.md` files as flat-mode documents or cross-path summaries.
 
-### 1. Load Context
+### 1. Mode Detection
 
-- Read `research/icp.md` — ICP segments, pain points, value props, trigger events, current-state journey
-- Read `research/competitive-analysis.md` — competitor landscape, positioning, strengths/weaknesses, market gaps
-- Read other soft prerequisite files if they exist
-- Read CLAUDE.md, README, and key source files for product context
+Detect **market-positioning mode** (default) or **product-positioning mode**:
 
-### 2. Research Positioning Approaches
+**Market-positioning mode** activates when:
+- No `research/customer-feedback.md` with post-launch customer evidence, AND
+- No production codebase with live users detected, AND
+- `$ARGUMENTS` does not contain "product", "post-launch", or "obviously-awesome"
 
-Use WebSearch with **4-6 targeted queries**:
+Available frameworks in market mode:
+- `jtbd-positioning` — Jobs-to-be-Done positioning analysis
+- `strategic-canvas` — Blue Ocean strategic canvas (eliminate/reduce/raise/create)
+- `moore-positioning` — Geoffrey Moore positioning hypothesis
+- `category-design` — Play Bigger category creation
 
-1. **Category definition** — "how [category] is defined", "[category] vs [adjacent category]"
-2. **Positioning examples** — "[competitor] positioning statement", "how [competitor] describes itself"
-3. **Category creation** — "creating new category [domain]", "[domain] category leadership"
-4. **Customer language** — "[category] how customers describe", "[domain] buyer vocabulary"
-5. **Positioning frameworks** — "obviously awesome positioning", "April Dunford [category]"
+**Product-positioning mode** activates when:
+- `research/customer-feedback.md` exists with real customer data, OR
+- `$ARGUMENTS` contains "product", "post-launch", or "obviously-awesome", OR
+- Production spec exists AND customer feedback references real users
 
-### 3. Step 1 — Competitive Alternatives (What Would Customers Use Instead?)
+Available frameworks in product mode:
+- `obviously-awesome` — April Dunford (requires real customer evidence)
+- `strategic-canvas` — optionally, for category refresh
 
-NOT just direct competitors. Include:
-- **Direct competitors** — products in the same category
-- **Adjacent solutions** — products in nearby categories that solve the same pain differently
-- **DIY/manual workarounds** — spreadsheets, manual processes, hiring someone
-- **Do nothing** — the status quo (this is often the real competitor)
+### 2. Load Context
 
-Use AskUserQuestion to present and validate:
-- "Here are the competitive alternatives I see. What would your best customers actually use if your product disappeared tomorrow?"
+- Read `research/icp.md` — ICP segments, pain points, value props, trigger events
+- Read `research/competitive-analysis.md` — competitor landscape, gaps
+- Read `research/journey-map.md` if it exists — aha moment, value delivery
+- Read `research/customer-feedback.md` if it exists — real language, satisfaction drivers
+- Read CLAUDE.md, README for product context
+- Read any existing `research/positioning-*.md` intermediate artifacts (from prior runs)
 
-### 4. Step 2 — Unique Attributes (What Do You Have That Alternatives Don't?)
+### 3. Mode A — Framework Selection
 
-For each competitive alternative, identify what's genuinely different about this product:
-- Features that alternatives lack
-- Approach or philosophy that's fundamentally different
-- Technical advantages (speed, accuracy, simplicity)
-- Business model advantages (pricing structure, no lock-in)
-- Community or ecosystem advantages
+Build an alignment page with:
 
-**Be ruthless.** Only include attributes that are truly unique, not "we also do X." If competitors also have it, it's table stakes, not positioning.
+1. **Mode explanation**: which mode was detected and why (evidence for detection)
+2. **Available evidence summary**: what research exists and what's missing
+3. **Multi-select framework section**: checkboxes for each available framework with:
+   - Framework name and one-line description
+   - Why it's recommended or optional for this context
+   - Pre-checked defaults based on available evidence:
+     - Market mode defaults: `jtbd-positioning` + `strategic-canvas` + `moore-positioning` pre-checked; `category-design` unchecked (recommended only when strategic canvas shows no existing category fits)
+     - Product mode defaults: `obviously-awesome` pre-checked; `strategic-canvas` unchecked (optional refresh)
+4. **Execution plan explanation**: selected frameworks will be written to `tasks/todo.md` for sequential `/exec` execution
+5. **Approval gate**: framework selection confirmation
 
-Use AskUserQuestion:
-- "Are these genuinely unique? Would your most discerning customer agree these are different?"
+After user approval via compiled YAML (which includes `selected_frameworks` list):
 
-### 5. Step 3 — Value (What Does Uniqueness Enable for Customers?)
+Write selected frameworks as sequential steps in `tasks/todo.md`:
 
-Map each unique attribute to the customer value it creates:
+```markdown
+## Positioning Framework Execution
 
-| Unique Attribute | Customer Value | Evidence |
-|-----------------|----------------|----------|
-| [attribute] | [what it enables] | [from ICP, feedback, or research] |
+- [ ] Run `/positioning/frameworks/jtbd-positioning` — JTBD analysis
+- [ ] Run `/positioning/frameworks/strategic-canvas` — Blue Ocean gap analysis
+- [ ] Run `/positioning/frameworks/moore-positioning` — Positioning hypothesis
+- [ ] Synthesize: `/positioning --synthesize` — Combine framework outputs into research/positioning.md
+```
 
-Value categories:
-- **Saves time** — enables faster outcomes
-- **Saves money** — reduces cost vs. alternatives
-- **Reduces risk** — prevents failures, compliance issues
-- **Unlocks capability** — enables something previously impossible
-- **Improves quality** — better outcomes than alternatives
+Only include frameworks the user selected. Always append the synthesis step last.
 
-Use AskUserQuestion:
-- "Is this the value your customers actually experience, or the value you hope they'll experience?"
+Stop after writing `tasks/todo.md`. The user runs `/exec` to execute each framework sequentially.
 
-### 6. Step 4 — Target Segment (Who Cares Most About This Value?)
+### 4. Mode B — Synthesis (`/positioning --synthesize`)
 
-From the ICP analysis, identify the segment that values these unique attributes THE MOST. This is not the broadest market — it's the best-fit customer:
+Read all intermediate framework outputs:
+- `research/positioning-jtbd.md`
+- `research/positioning-strategic-canvas.md`
+- `research/positioning-moore.md`
+- `research/positioning-category-design.md`
+- `research/positioning-obviously-awesome.md`
 
-- Who has the most acute pain that your unique attributes address?
-- Who would be most disappointed if the product disappeared?
-- Who gets the most value from what makes you different (not just from the category)?
+At least one must exist. If none exist, tell user to run framework selection first.
 
-Use AskUserQuestion:
-- "This is the segment I'd position for. Does this feel right, or is there a segment that values your uniqueness even more?"
+Synthesize into unified `research/positioning.md`:
 
-### 7. Step 5 — Market Category (What Context Makes Your Value Obvious?)
+**Market-positioning synthesis includes:**
+- Combined positioning hypothesis drawing from all framework outputs
+- Moore template filled with evidence from JTBD + Canvas + Category analysis
+- Evidence matrix: each claim mapped to which framework(s) support it
+- Confidence levels per claim (strong/moderate/hypothesized)
+- Validation plan: what needs testing before the position is canonical
+- Mode header: `> Mode: Market Positioning (hypothesized, pre-product)`
 
-This is the most consequential decision. The market category determines:
-- Who you're compared against
-- What features are expected (table stakes)
-- What "good" looks like
-- How buyers find you
+**Product-positioning synthesis includes:**
+- Positioning statement (Obviously Awesome output)
+- Evidence matrix grounded in customer feedback
+- Confidence levels (most should be "strong" — backed by customer data)
+- Mode header: `> Mode: Product Positioning (customer-grounded)`
 
-Three strategies:
-1. **Existing category** — position within a known category (e.g., "project management tool"). Best when the category is well-understood and you can win on a specific dimension.
-2. **Subcategory** — carve out a niche within an existing category (e.g., "project management for creative teams"). Best when you serve a specific segment much better than generic tools.
-3. **New category** — create a new category (e.g., "collaborative work management"). Best when existing categories don't capture your value — but expensive and slow.
+Build alignment page for synthesis approval with:
+- Full proposed `research/positioning.md` content
+- Evidence matrix combining all framework sources
+- Confidence/assumption register
+- Proposed file changes gate
+- Approval gate
 
-Use WebSearch to research how customers and analysts describe the space. Present recommendation with reasoning:
-- "I recommend positioning in [category/subcategory/new category] because [rationale]. Here's how it frames you against alternatives..."
+After approval: write `research/positioning.md`, then emit next-step routing.
 
-### 8. Synthesize Positioning Statement
+### 5. Mode C — Product-Positioning Shortcut
 
-Combine all five steps into a positioning statement:
+Skip multi-select. Write directly to `tasks/todo.md`:
 
-**For** [target segment]
-**who** [key pain / trigger event]
-**[product name] is a** [market category]
-**that** [key value / unique benefit]
-**Unlike** [primary competitive alternative]
-**[product name]** [key differentiator]
+```markdown
+## Positioning Framework Execution
 
-Present the full positioning framework and statement to the user. Ask:
-- "Does this positioning feel true to what your best customers experience?"
-- "Would this change how you describe the product on your homepage?"
-- "Ready to write this to `research/positioning.md`?"
+- [ ] Run `/positioning/frameworks/obviously-awesome` — April Dunford positioning
+- [ ] Synthesize: `/positioning --synthesize` — Write research/positioning.md
+```
 
-### 9. Populate Next Steps
+Stop — user runs `/exec`.
 
-Include 3–5 applicable items with a "Recommended + Other options" framing — the first matching condition becomes the **Recommended** item, remaining items become **Other options**:
+### 6. Next Steps (after synthesis only)
 
-- ALWAYS: check `.agents/project.json.enabled_packs` for `product-design` — if `product-design` is not enabled, recommend `/pack install product-design` first; if `product-design` is enabled, recommend `/ux-variations [positioning-backed product direction]` — Explore prototype directions now that ICP, competitive, journey, and positioning evidence are aligned
-- IF no `research/journey-map.md`: check `.agents/project.json.enabled_packs` for `customer-lifecycle` — if `customer-lifecycle` is not enabled, recommend `/pack install customer-lifecycle` first; if `customer-lifecycle` is enabled, recommend `/journey-map` — Map the customer journey before writing canonical positioning
-- IF solution-customer fit is weak, disputed, or needs explicit scoring: `/value-prop-canvas` — Optional detour to validate contested fit before UX or spec work
-- IF revenue, channels, cost, defensibility, or unfair-advantage assumptions are material risks: `/lean-canvas` — Optional business-model synthesis before growth or ops work
-- IF no `research/gtm.md`: check `.agents/project.json.enabled_packs` for `business-growth` — if `business-growth` is not enabled, recommend `/pack install business-growth` first; if `business-growth` is enabled, recommend `/gtm` — Build go-to-market plan grounded in this positioning
-- IF `research/gtm.md` exists: check `.agents/project.json.enabled_packs` for `business-growth` — if `business-growth` is not enabled, recommend `/pack install business-growth` first; if `business-growth` is enabled, recommend `/gtm` — Refresh messaging framework to align with positioning
-- IF no `research/monetization.md`: check `.agents/project.json.enabled_packs` for `business-growth` — if `business-growth` is not enabled, recommend `/pack install business-growth` first; if `business-growth` is enabled, recommend `/monetization` — Positioning informs pricing — "premium" vs "value" positioning changes price expectations
-- IF codebase exists: check `.agents/project.json.enabled_packs` for `business-ops` — if `business-ops` is not enabled, recommend `/pack install business-ops` first; if `business-ops` is enabled, recommend `/mvp-gap` — Check if the product delivers on the positioning promise
+Include 3–5 applicable items with "Recommended + Other options" framing:
 
-### 10. Write Output
+- ALWAYS: check `.agents/project.json.enabled_packs` for `product-design` — if not enabled, recommend `/pack install product-design`; if enabled, recommend `/ux-variations [positioning-backed product direction]`
+- IF no `research/journey-map.md`: check for `customer-lifecycle` pack → recommend `/journey-map`
+- IF solution-customer fit is weak/disputed: `/value-prop-canvas`
+- IF revenue/channels/cost/defensibility risks exposed: `/lean-canvas`
+- IF no `research/gtm.md`: check for `business-growth` pack → recommend `/gtm`
+- IF `research/gtm.md` exists: recommend `/gtm` refresh
+- IF no `research/monetization.md`: check for `business-growth` pack → recommend `/monetization`
+- IF codebase exists: check for `business-ops` pack → recommend `/mvp-gap`
 
-Only after the user confirms, write the output files.
+### 7. Downstream Impact Check (after synthesis write)
 
-### 11. Downstream Impact Check
-
-After writing, check for downstream research documents that may be affected.
-
-**Downstream documents to check** (use `{slug}/` prefix when product-path scope is active):
+Check for downstream research documents that may be affected:
 - `research/gtm.md`
 
-For each existing downstream document:
-1. Read it — focus on `## Messaging Framework` and `## Positioning vs. Competitors`
-2. Identify conflicts where messaging doesn't align with the new positioning
-3. Note each conflict: file, section, stale claim, what it should now say
+Classify impact as None/Minor/Major per standard pattern.
 
-**Classify the impact**:
-- **None**: No downstream docs exist, or no conflicts. Skip display.
-- **Minor** (1–2 small conflicts): Display inline.
-- **Major** (3+ conflicts OR market category changed, primary alternative shifted, value framing changed): Display and recommend `/reconcile-research`.
+## Optional Research Trigger Map
+
+These detours are conditional framework owners, not required AFPS chain links. Apply after synthesis.
+
+| Positioning signal | Owner | Trigger threshold |
+|---|---|---|
+| Solution-customer fit weak/disputed, value mapping low confidence | `/value-prop-canvas` | Trigger: unique attributes can't be confidently mapped to value. Skip: value mapping clear even if hypothesized. |
+| Business-model risk (revenue/channels/cost/defensibility) exposed by category strategy | `/lean-canvas` | Trigger: risk would change UX or prototype choices. Skip: normal competitive findings. |
+| Pricing architecture central to positioning (premium vs value changes direction) | `/monetization` | Trigger: category/value mapping requires grounded pricing. Skip: pricing not a differentiator. |
 
 ## Output
 
-### `research/positioning.md` (or `research/{slug}/positioning.md`)
+### Mode A output: `tasks/todo.md` update
+
+Framework execution steps (see section 3 above).
+
+### Mode B output: `research/positioning.md` (or `research/{slug}/positioning.md`)
 
 ```markdown
 # Positioning
 
-> Based on: research/icp.md, research/competitive-analysis.md[, research/journey-map.md, research/customer-feedback.md]
+> Based on: [list of framework outputs used]
 > Date: [current date]
-> Methodology: "Obviously Awesome" (April Dunford)
+> Mode: Market Positioning (hypothesized, pre-product) | Product Positioning (customer-grounded)
+> Frameworks applied: [list]
 
 ## Positioning Statement
 
@@ -206,128 +234,78 @@ For each existing downstream document:
 **[product name]** [key differentiator]
 
 ## Summary
-[2-3 sentences: the positioning thesis — what category you're in, why, and what makes you different]
+[2-3 sentences: the positioning thesis]
 
-## Step 1: Competitive Alternatives
+## Evidence Matrix
 
-What customers would use if this product didn't exist:
+| Claim | Supporting Framework(s) | Evidence | Confidence | Assumption Status |
+|-------|------------------------|----------|------------|-------------------|
+| [claim] | JTBD / Canvas / Moore / Category / OA | [source] | Strong / Moderate / Hypothesized | Validated / Needs testing |
 
-| Alternative | Type | Strengths | Weaknesses |
-|------------|------|-----------|------------|
-| [alternative] | Direct / Adjacent / DIY / Status quo | [strengths] | [weaknesses] |
+## Framework Synthesis
 
-**Primary competitive alternative**: [the one most customers would default to]
+### From JTBD Analysis
+[Key findings — primary job, outcome positioning]
 
-## Step 2: Unique Attributes
+### From Strategic Canvas
+[Key findings — eliminate/reduce/raise/create moves, competitive gaps]
 
-What this product has that alternatives genuinely don't:
+### From Moore Hypothesis
+[Key findings — positioning template, evidence gaps]
 
-| Attribute | Why It's Unique | Table Stakes? |
-|-----------|----------------|---------------|
-| [attribute] | [explanation] | No — alternatives lack this |
+### From Category Design
+[Key findings — category diagnosis, POV if new category]
 
-**Attributes explicitly excluded** (table stakes):
-- [common feature] — [which alternatives also have this]
+### From Obviously Awesome
+[Key findings — if product mode]
 
-## Step 3: Value Mapping
+## Target Segment
+[Best-fit segment with evidence from multiple frameworks]
 
-| Unique Attribute | Customer Value | Value Type | Evidence |
-|-----------------|----------------|------------|----------|
-| [attribute] | [what it enables] | Time / Money / Risk / Capability / Quality | [source] |
+## Market Category
+[Chosen category with evidence from multiple frameworks]
 
-**Primary value**: [the single most important value customers get from what's unique]
+## Confidence Register
 
-## Step 4: Best-Fit Target Segment
+| Element | Confidence | Evidence Source | What Would Change It |
+|---------|-----------|----------------|---------------------|
+| [element] | [level] | [source] | [condition] |
 
-**Segment**: [specific description]
-**Why they care most**: [why this segment values the unique attributes more than others]
-**From ICP**: [reference to ICP segment — how this aligns or narrows the ICP]
-
-### Characteristics of Best-Fit Customers
-- [characteristic 1]
-- [characteristic 2]
-- [characteristic 3]
-
-### Who This Is NOT For
-- [segment that's a bad fit and why]
-
-## Step 5: Market Category
-
-**Category**: [chosen category]
-**Strategy**: [Existing category / Subcategory / New category]
-**Why**: [rationale for this category choice]
-
-### How This Category Frames Us
-- **Compared against**: [who buyers will compare us to in this category]
-- **Table stakes**: [what's expected in this category — we must have these]
-- **Our edge**: [where we excel relative to category expectations]
-
-### Categories Considered & Rejected
-| Category | Why Considered | Why Rejected |
-|----------|---------------|-------------|
-| [category] | [reason] | [reason] |
+## Validation Plan (market mode only)
+[What needs testing before this position is canonical]
 
 ## Positioning Implications
 
 ### For Messaging
-[How this positioning should shape homepage copy, tagline, and pitch]
-
 ### For Product
-[What this positioning means for feature prioritization — what to build, what to skip]
-
 ### For Sales
-[How to talk about the product in sales conversations — what to emphasize, what to avoid]
-
 ### For Pricing
-[How this positioning affects price perception — premium vs. value, what to anchor against]
 
-<!-- Only include when downstream impact is Minor or Major -->
 ## Downstream Impact
-
-> Checked: [list of downstream docs checked]
-> Impact: Minor | Major
-
-### Conflicts Found
-
-1. **research/[file].md** — [Section Name]
-   - **Stale**: "[exact quote]"
-   - **Now**: [what positioning says instead]
-
-[For Major only:]
-> **Recommended action**: Run `/reconcile-research` to audit and fix all affected downstream documents.
+[Standard pattern]
 
 ## Next Steps
-
-**Recommended:** [first matching item from step 9]
-
-**Other options:**
-- [remaining conditional items from step 9 — only include items whose conditions are met]
+[Standard routing]
 ```
-
-### `research/positioning-search-log.md` (or `research/{slug}/positioning-search-log.md`)
-Raw research log — queries, findings, evidence for each positioning decision.
-
-Create the `research/` directory if it doesn't exist.
 
 ## Task Classification
 
 When this skill produces follow-up work, file it by execution semantics:
 
 - Immediately actionable implementation or documentation work goes in `tasks/todo.md`.
-- Human-only external actions tied to automated steps go in `tasks/manual-todo.md` with `_(blocks: Step N.X)_` or `_(after: Step N.X)_`; repo edits, SDK wiring, generated assets, local commands, tests, audits, and authenticated CLI/API work stay in `tasks/todo.md`.
-- One-time condition-gated records, baselines, or future measurements go in `tasks/record-todo.md` with source, condition, non-blocking reason, evidence, and promotion rule.
-- Cadence-based reviews, playtests, adoption checks, investor updates, retros, or docs-health checks go in `tasks/recurring-todo.md` with cadence, owner/agent, next due, evidence path, and escalation conditions.
-- Do not put non-blocking records or recurring obligations in `tasks/todo.md` unless they have been explicitly promoted into current execution work.
+- Human-only external actions tied to automated steps go in `tasks/manual-todo.md` with `_(blocks: Step N.X)_` or `_(after: Step N.X)_`.
+- One-time condition-gated records go in `tasks/record-todo.md`.
+- Cadence-based reviews go in `tasks/recurring-todo.md`.
+- Do not put non-blocking records or recurring obligations in `tasks/todo.md` unless promoted.
 
 ## Constraints
 
 - **Requires ICP + competitive analysis.** Positioning without knowing the customer and the competition is guesswork.
-- **Customer-grounded.** Every positioning decision must connect to real customer behavior or research evidence, not aspirational branding.
-- **Be honest about uniqueness.** If nothing is truly unique, say so — that's a critical finding. Don't manufacture differentiation.
-- **Present before writing.** Never write output files until the positioning has been presented and validated.
-- **Positioning ≠ messaging.** This skill produces the strategic foundation. Messaging (the actual copy and taglines) is `/gtm`'s job.
+- **Customer-grounded.** Every positioning decision must connect to real customer behavior or research evidence.
+- **Mode detection is evidence-based.** Do not override mode detection without user confirmation.
+- **Parent does not execute frameworks.** It selects and queues them. `/exec` handles execution.
+- **Synthesis requires at least one framework output.** Do not synthesize from zero evidence.
 - **Do not overwrite existing `research/positioning.md`** without asking the user first.
-- **One positioning per product.** Don't try to position differently for different segments — pick the best-fit segment and position for them.
 
 ## Alignment Page
 
