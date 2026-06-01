@@ -717,9 +717,11 @@ refresh() {
   local skill_lines
   skill_lines="$(read_enabled_skills)"
   [[ "${#packs[@]}" -gt 0 || -n "$skill_lines" ]] || die "No enabled packs or skills in .agents/project.json"
-  for pack in "${packs[@]}"; do
-    install_pack "$pack"
-  done
+  if [[ ${#packs[@]} -gt 0 ]]; then
+    for pack in "${packs[@]}"; do
+      install_pack "$pack"
+    done
+  fi
   if [[ -n "$skill_lines" ]]; then
     echo "$skill_lines" | while IFS=' ' read -r skill pack; do
       install_single_skill "$skill"
@@ -830,12 +832,16 @@ case "$cmd" in
       done
     done
     [[ "${#install_packs[@]}" -gt 0 || "${#install_skills[@]}" -gt 0 ]] || die "install requires a pack or skill name"
-    for pack in "${install_packs[@]}"; do
-      install_pack "$pack"
-    done
-    for skill in "${install_skills[@]}"; do
-      install_single_skill "$skill"
-    done
+    if [[ ${#install_packs[@]} -gt 0 ]]; then
+      for pack in "${install_packs[@]}"; do
+        install_pack "$pack"
+      done
+    fi
+    if [[ ${#install_skills[@]} -gt 0 ]]; then
+      for skill in "${install_skills[@]}"; do
+        install_single_skill "$skill"
+      done
+    fi
     print_session_reload_notice
     ;;
   remove)
@@ -876,12 +882,16 @@ case "$cmd" in
       done
     done
     [[ "${#remove_packs[@]}" -gt 0 || "${#remove_skills[@]}" -gt 0 ]] || die "remove requires a pack or skill name"
-    for pack in "${remove_packs[@]}"; do
-      remove_pack "$pack"
-    done
-    for skill in "${remove_skills[@]}"; do
-      remove_single_skill "$skill"
-    done
+    if [[ ${#remove_packs[@]} -gt 0 ]]; then
+      for pack in "${remove_packs[@]}"; do
+        remove_pack "$pack"
+      done
+    fi
+    if [[ ${#remove_skills[@]} -gt 0 ]]; then
+      for skill in "${remove_skills[@]}"; do
+        remove_single_skill "$skill"
+      done
+    fi
     print_session_reload_notice
     ;;
   refresh)

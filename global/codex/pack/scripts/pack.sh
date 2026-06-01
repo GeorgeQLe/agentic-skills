@@ -51,4 +51,4 @@ resolve_repo_root() {
 
 REPO_ROOT="$(resolve_repo_root)"
 
-exec bash "$REPO_ROOT/$DELEGATE_SCRIPT" "$@"
+exec "${BASH:-bash}" "$REPO_ROOT/$DELEGATE_SCRIPT" "$@"
