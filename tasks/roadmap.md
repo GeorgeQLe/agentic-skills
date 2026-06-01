@@ -1,3 +1,21 @@
+## Current Targeted Update: sync Skill Location Session Triage 2026-06-01
+
+**Goal:** Use `$session-triage` to answer whether `sync` is a global skill or a project-local pack-installed skill, with direct evidence from this repository, installed global skill roots, and pack metadata.
+
+**Acceptance Criteria:**
+- [x] Prompt history is captured under `prompts/session-triage/`.
+- [x] Evidence checks cover project-local `.codex/.claude` skill roots, installed `~/.codex/skills` and `~/.claude/skills`, `global/*`, pack metadata, and managed-install markers.
+- [x] `alignment/session-triage-sync-skill-location.html` contains the structured session-triage report and the direct answer.
+- [x] Validation confirms the report content and intended artifacts are cleanly staged/committed/pushed while preserving unrelated dirty work.
+
+**Implementation Plan:**
+1. Capture prompt history and task-plan artifacts for the invocation.
+2. Resolve `sync` across project-local roots, global installed roots, canonical `global/*`, and packs.
+3. Write the structured report and alignment page with the verified location and recommended next step.
+4. Run focused validation, then commit and push only this invocation's intended artifacts.
+
+**Result:** Verified that `sync` is not a global core skill on this machine. It is a project-local `gitops` pack skill, enabled by `.agents/project.json`, with canonical sources under `packs/gitops/{codex,claude}/sync`. The local Codex install points to the current `v0.4` pack source and includes OpenAI metadata; the local Claude copy is stale at `v0.3` with an old `/Users/...` marker path. User-home global skill roots and repo `global/*` sources do not contain `sync`. Recommended next step is no skill-contract change; run `scripts/pack.sh refresh` and restart/reload skill discovery only if active-session visibility needs remediation.
+
 ## Current Targeted Update: Animation Approval Signal History 2026-06-01
 
 **Goal:** Identify chat-history moments where the user explicitly approved `/prototype` animation behavior, map those approvals to the implementation context, and extract what was actually working so a future animation-flow rebuild can preserve the good parts.

@@ -1,0 +1,806 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Session Triage: sync Skill Location</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --text-muted: #8b949e;
+      --accent: #58a6ff;
+      --green: #3fb950;
+      --red: #f85149;
+      --orange: #d29922;
+      --purple: #bc8cff;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+
+    main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 32px 20px 56px;
+      overflow-wrap: break-word;
+    }
+
+    h1,
+    h2,
+    h3 {
+      color: #fff;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+    }
+
+    h2 {
+      margin-top: 42px;
+      color: var(--accent);
+    }
+
+    h3 {
+      margin-top: 24px;
+    }
+
+    a {
+      color: var(--accent);
+    }
+
+    code {
+      color: #fff;
+      background: #0b1220;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.08rem 0.32rem;
+    }
+
+    pre {
+      overflow-x: auto;
+      background: #0b1220;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 14px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+    }
+
+    th,
+    td {
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      vertical-align: top;
+      text-align: left;
+    }
+
+    th {
+      background: var(--surface);
+      color: #fff;
+    }
+
+    .summary {
+      color: var(--text-muted);
+      max-width: 980px;
+    }
+
+    .toc,
+    .panel,
+    .question,
+    .compile {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .toc {
+      padding: 18px;
+      margin: 24px 0 30px;
+    }
+
+    .toc ul {
+      margin: 10px 0 0;
+      padding-left: 20px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(230px, 100%), 1fr));
+      gap: 12px;
+      margin: 18px 0;
+    }
+
+    .panel {
+      padding: 16px;
+    }
+
+    .panel strong,
+    .metric {
+      color: #fff;
+    }
+
+    .muted {
+      color: var(--text-muted);
+    }
+
+    .badge {
+      display: inline-block;
+      min-height: 28px;
+      padding: 4px 9px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: #0b1220;
+      color: #fff;
+      font-weight: 600;
+    }
+
+    .badge.good {
+      color: var(--green);
+    }
+
+    .badge.warn {
+      color: var(--orange);
+    }
+
+    .badge.info {
+      color: var(--accent);
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .feedback {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 8px 0 12px;
+    }
+
+    .feedback button,
+    .question label,
+    .compile button,
+    .local-feedback button {
+      min-height: 44px;
+      padding: 10px 16px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #0b1220;
+      color: var(--text);
+      cursor: pointer;
+    }
+
+    .feedback button.active-up {
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    .feedback button.active-down {
+      border-color: var(--red);
+      color: var(--red);
+    }
+
+    .feedback button.active-clarify {
+      border-color: var(--orange);
+      color: var(--orange);
+    }
+
+    .feedback-notes,
+    .local-feedback,
+    .gate-notes,
+    .yaml-output {
+      display: none;
+    }
+
+    textarea {
+      width: 100%;
+      max-width: 100%;
+      box-sizing: border-box;
+      min-height: 100px;
+      margin: 8px 0;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #0b1220;
+      color: var(--text);
+      padding: 12px;
+      font: inherit;
+    }
+
+    .question {
+      padding: 16px;
+      margin: 18px 0;
+      background: #1c2333;
+    }
+
+    .question h3 {
+      color: var(--purple);
+      margin-top: 0;
+    }
+
+    .question label {
+      display: block;
+      margin: 8px 0;
+    }
+
+    .compile {
+      padding: 18px;
+      margin-top: 24px;
+    }
+
+    .callout {
+      border-left: 4px solid var(--accent);
+      padding: 12px 14px;
+      background: #0b1220;
+      border-radius: 6px;
+      margin: 16px 0;
+    }
+
+    .warn-box {
+      border-left-color: var(--orange);
+    }
+
+    .good-box {
+      border-left-color: var(--green);
+    }
+
+    .copy-status,
+    .remaining {
+      color: var(--text-muted);
+      margin-left: 8px;
+    }
+
+    @media (max-width: 860px) {
+      main {
+        padding: 26px 16px 48px;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .feedback button,
+      .question label,
+      .compile button,
+      .local-feedback button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Session Triage: sync Skill Location</h1>
+    <p class="summary">Direct answer: <code>sync</code> is not installed as a global core skill on this machine. It is a project-local skill from the <code>gitops</code> pack, with canonical sources under <code>packs/gitops/{codex,claude}/sync</code> and local project installs under <code>.codex/skills/sync</code> and <code>.claude/skills/sync</code>.</p>
+
+    <section class="toc" id="toc">
+      <div class="section-head">
+        <h2>Table of Contents</h2>
+        <div class="feedback" data-section="Table of Contents">
+          <button type="button" data-feedback="up">Approve</button>
+          <button type="button" data-feedback="down">Concern</button>
+          <button type="button" data-feedback="needs-clarification">Clarify</button>
+        </div>
+      </div>
+      <textarea class="feedback-notes" aria-label="Table of Contents feedback notes"></textarea>
+      <div class="local-feedback"></div>
+      <ul>
+        <li><a href="#target">Target and Evidence Sources</a></li>
+        <li><a href="#verdict">Verification Verdict</a></li>
+        <li><a href="#evidence">Evidence Matrix</a></li>
+        <li><a href="#timeline">Timeline</a></li>
+        <li><a href="#root-cause">Root Cause</a></li>
+        <li><a href="#recommendation">Recommended Fix</a></li>
+        <li><a href="#validation">Validation Plan</a></li>
+        <li><a href="#confidence">Confidence and Evidence Gaps</a></li>
+        <li><a href="#gates">Review Gates</a></li>
+        <li><a href="#compile">Compile Answers</a></li>
+      </ul>
+    </section>
+
+    <section id="target">
+      <div class="section-head">
+        <h2>Target and Evidence Sources</h2>
+        <div class="feedback" data-section="Target and Evidence Sources">
+          <button type="button" data-feedback="up">Approve</button>
+          <button type="button" data-feedback="down">Concern</button>
+          <button type="button" data-feedback="needs-clarification">Clarify</button>
+        </div>
+      </div>
+      <textarea class="feedback-notes" aria-label="Target feedback notes"></textarea>
+      <div class="local-feedback"></div>
+      <div class="grid">
+        <div class="panel"><strong>Scope</strong><br>Current repository: <code>/home/georgeqle/projects/tools/dev/agentic-skills</code>.</div>
+        <div class="panel"><strong>Target skill</strong><br><code>sync</code>.</div>
+        <div class="panel"><strong>User-identified issue</strong><br>Where is <code>sync</code>, and is it not a global skill?</div>
+        <div class="panel"><strong>Verdict</strong><br><span class="badge good">verified</span> Not global; project-local gitops pack skill.</div>
+      </div>
+      <p>Evidence sources checked:</p>
+      <ul>
+        <li><code>.agents/project.json</code> project designation and individually enabled skills.</li>
+        <li><code>packs/gitops/PACK.md</code> pack metadata.</li>
+        <li><code>packs/gitops/codex/sync/SKILL.md</code> and <code>packs/gitops/claude/sync/SKILL.md</code> canonical pack contracts.</li>
+        <li><code>.codex/skills/sync/SKILL.md</code>, <code>.codex/skills/sync/agents/openai.yaml</code>, and <code>.codex/skills/sync/.agentic-skills-managed</code>.</li>
+        <li><code>.claude/skills/sync/SKILL.md</code> and <code>.claude/skills/sync/.agentic-skills-managed</code>.</li>
+        <li>Installed global roots: <code>/home/georgeqle/.codex/skills</code> and <code>/home/georgeqle/.claude/skills</code>.</li>
+        <li>Canonical global source roots: <code>global/codex</code> and <code>global/claude</code>.</li>
+        <li>Commands: <code>scripts/pack.sh which sync</code>, <code>scripts/pack.sh status</code>, and <code>scripts/pack.sh doctor</code>.</li>
+      </ul>
+    </section>
+
+    <section id="verdict">
+      <div class="section-head">
+        <h2>Verification Verdict</h2>
+        <div class="feedback" data-section="Verification Verdict">
+          <button type="button" data-feedback="up">Approve</button>
+          <button type="button" data-feedback="down">Concern</button>
+          <button type="button" data-feedback="needs-clarification">Clarify</button>
+        </div>
+      </div>
+      <textarea class="feedback-notes" aria-label="Verdict feedback notes"></textarea>
+      <div class="local-feedback"></div>
+      <div class="callout good-box">
+        <strong>Agent-verified issue:</strong> <code>sync</code> is absent from installed global skill directories and from the repo's <code>global/*</code> skill sources. It is present as a project-local pack-installed skill from <code>gitops</code>.
+      </div>
+      <p>The user's suspicion is verified in the narrow sense: <code>sync</code> is not a global core skill. The current repository has it enabled locally through <code>.agents/project.json</code>, and <code>scripts/pack.sh which sync</code> reports <code>sync is individually installed from pack 'gitops'</code>.</p>
+      <p>There is a secondary visibility/freshness finding: this active Codex session's injected skill list did not include <code>sync</code>, even though the project-local Codex skill root exists and the local metadata allows implicit invocation. That points to a stale session/load or project-local discovery issue, not to global-skill absence.</p>
+    </section>
+
+    <section id="evidence">
+      <div class="section-head">
+        <h2>Evidence Matrix</h2>
+        <div class="feedback" data-section="Evidence Matrix">
+          <button type="button" data-feedback="up">Approve</button>
+          <button type="button" data-feedback="down">Concern</button>
+          <button type="button" data-feedback="needs-clarification">Clarify</button>
+        </div>
+      </div>
+      <textarea class="feedback-notes" aria-label="Evidence feedback notes"></textarea>
+      <div class="local-feedback"></div>
+      <div style="overflow-x: auto">
+        <table>
+          <thead>
+            <tr>
+              <th>Claim</th>
+              <th>Evidence</th>
+              <th>Inference</th>
+              <th>Confidence</th>
+              <th>Decision Impact</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>sync</code> is a gitops pack skill.</td>
+              <td><code>scripts/pack.sh which sync</code> printed <code>sync is individually installed from pack 'gitops'</code>. <code>packs/gitops/PACK.md</code> lists <code>sync</code>.</td>
+              <td>The owning canonical skill surface is the <code>gitops</code> pack, not a global core skill directory.</td>
+              <td>High</td>
+              <td>Use pack/local refresh routes, not global init, to fix local visibility or drift.</td>
+            </tr>
+            <tr>
+              <td><code>sync</code> is enabled for this repo.</td>
+              <td><code>.agents/project.json</code> contains <code>"enabled_packs": [..., "gitops", ...]</code> and <code>"enabled_skills": {"sync":"gitops", ...}</code>.</td>
+              <td>The repository intends <code>sync</code> to be available as a project-local skill.</td>
+              <td>High</td>
+              <td>No pack-selection change is needed to make <code>sync</code> part of this repo's local skill set.</td>
+            </tr>
+            <tr>
+              <td>The Codex local install exists and points to the current pack source.</td>
+              <td><code>.codex/skills/sync/SKILL.md</code> is a symlink to <code>packs/gitops/codex/sync/SKILL.md</code>; <code>.codex/skills/sync/agents/openai.yaml</code> exists and sets <code>allow_implicit_invocation: true</code>. Version check reports both Codex files at <code>v0.4</code>.</td>
+              <td>The Codex source is available locally. If the active session cannot see it, the likely issue is session discovery freshness, not missing source.</td>
+              <td>High</td>
+              <td>Start a fresh Codex session after refresh if <code>$sync</code> remains absent from the UI skill list.</td>
+            </tr>
+            <tr>
+              <td>The Claude local install exists but is stale.</td>
+              <td>Version check reports <code>.claude/skills/sync/SKILL.md</code> at <code>v0.3</code> while <code>packs/gitops/claude/sync/SKILL.md</code> is <code>v0.4</code>. Its marker source is <code>/Users/georgele/projects/tools/agentic-skills/packs/gitops/claude/sync</code>.</td>
+              <td>The Claude local copy came from an old path and should be refreshed to pick up current pack contents and marker metadata.</td>
+              <td>High</td>
+              <td>Run <code>scripts/pack.sh refresh</code> from this repo if Claude-side sync behavior matters.</td>
+            </tr>
+            <tr>
+              <td><code>sync</code> is not globally installed.</td>
+              <td><code>find /home/georgeqle/.codex/skills -maxdepth 2 -name SKILL.md</code> lists seven global Codex skills and no <code>sync</code>. <code>find /home/georgeqle/.claude/skills -maxdepth 2 -name SKILL.md</code> lists six global Claude skills and no <code>sync</code>.</td>
+              <td>Machine-wide user-home skill installs do not include <code>sync</code>.</td>
+              <td>High</td>
+              <td>Do not expect <code>$sync</code> outside repos where <code>gitops</code> or the individual skill has been installed locally.</td>
+            </tr>
+            <tr>
+              <td><code>sync</code> is not a repo-global core source.</td>
+              <td><code>find global -path '*sync*' -print</code> returned no results.</td>
+              <td>The canonical global skill source tree does not define <code>sync</code>.</td>
+              <td>High</td>
+              <td>Promoting <code>sync</code> to global would be a new design/change request, not a current-state fix.</td>
+            </tr>
+            <tr>
+              <td>Local drift tracking should be refreshed.</td>
+              <td><code>scripts/pack.sh doctor</code> reports <code>.codex/skills/sync</code> as <code>unknown</code> and <code>.claude/skills/sync</code> as <code>missing</code>, with fix <code>scripts/pack.sh refresh</code>.</td>
+              <td>The local installed roots have stale or incomplete managed-install metadata even though the Codex symlink points to the current source.</td>
+              <td>Medium-high</td>
+              <td>Refresh is the smallest operational fix for local metadata and Claude staleness.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="timeline">
+      <div class="section-head">
+        <h2>Timeline</h2>
+        <div class="feedback" data-section="Timeline">
+          <button type="button" data-feedback="up">Approve</button>
+          <button type="button" data-feedback="down">Concern</button>
+          <button type="button" data-feedback="needs-clarification">Clarify</button>
+        </div>
+      </div>
+      <textarea class="feedback-notes" aria-label="Timeline feedback notes"></textarea>
+      <div class="local-feedback"></div>
+      <ol>
+        <li>User invoked <code>$session-triage</code> asking where <code>sync</code> is and whether it is global.</li>
+        <li>The active conversation's injected skill list includes project-local skills such as <code>session-triage</code>, <code>ship</code>, and <code>exec</code>, but not <code>sync</code>.</li>
+        <li>Repo search found <code>sync</code> under <code>.codex/skills</code>, <code>.claude/skills</code>, and <code>packs/gitops</code>, with no <code>sync</code> under <code>global/*</code>.</li>
+        <li>User-home global skill roots were checked and did not include <code>sync</code>.</li>
+        <li><code>scripts/pack.sh which sync</code> and <code>scripts/pack.sh status</code> confirmed <code>sync</code> is individually installed from the <code>gitops</code> pack for this project.</li>
+        <li>Parity checks showed Codex <code>sync</code> is current at <code>v0.4</code>, while Claude <code>sync</code> is stale at <code>v0.3</code>.</li>
+      </ol>
+    </section>
+
+    <section id="root-cause">
+      <div class="section-head">
+        <h2>Root Cause</h2>
+        <div class="feedback" data-section="Root Cause">
+          <button type="button" data-feedback="up">Approve</button>
+          <button type="button" data-feedback="down">Concern</button>
+          <button type="button" data-feedback="needs-clarification">Clarify</button>
+        </div>
+      </div>
+      <textarea class="feedback-notes" aria-label="Root cause feedback notes"></textarea>
+      <div class="local-feedback"></div>
+      <p><strong>Primary cause:</strong> scope confusion between global core skills and project-local pack skills. <code>sync</code> lives in the <code>gitops</code> pack and is installed locally for this repo. It is not a machine-wide global skill.</p>
+      <p><strong>Secondary cause:</strong> local install freshness/discovery state. The active session did not expose <code>sync</code> in the injected skill list, despite the local Codex install existing. The local pack doctor also reports incomplete/stale metadata for <code>sync</code>, especially on the Claude side.</p>
+      <p><strong>Responsible contract gap:</strong> none for the current location question. Existing project lessons already say missing injected skills may still exist in project packs and that stale Codex visibility should be checked with <code>scripts/pack.sh status</code>, local skill roots, and <code>scripts/pack.sh refresh</code>.</p>
+    </section>
+
+    <section id="recommendation">
+      <div class="section-head">
+        <h2>Recommended Fix</h2>
+        <div class="feedback" data-section="Recommended Fix">
+          <button type="button" data-feedback="up">Approve</button>
+          <button type="button" data-feedback="down">Concern</button>
+          <button type="button" data-feedback="needs-clarification">Clarify</button>
+        </div>
+      </div>
+      <textarea class="feedback-notes" aria-label="Recommendation feedback notes"></textarea>
+      <div class="local-feedback"></div>
+      <div class="callout">
+        <strong>Smallest durable fix:</strong> run <code>scripts/pack.sh refresh</code> from this repo, then start a fresh Codex session if <code>$sync</code> is still absent from the active skill list. For Claude Code, use <code>/reload-skills</code> first, then <code>/clear</code> or restart if still stale.
+      </div>
+      <p>No <code>sync</code> skill contract change is justified by this evidence. The current pack source is present and current for Codex. The action needed is refresh/reload, not promoting the skill to global.</p>
+      <p>If the product decision is to make <code>sync</code> available in every repository without pack installation, that would be a separate global-skill promotion request. This triage does not recommend that change because <code>sync</code> is specifically documented in <code>packs/gitops/PACK.md</code> as a GitOps pack skill.</p>
+      <p><strong>Recommended next skill:</strong> none. If a future requested change is to promote or redesign <code>sync</code> availability, route that as an explicit targeted skill-design change.</p>
+    </section>
+
+    <section id="validation">
+      <div class="section-head">
+        <h2>Validation Plan</h2>
+        <div class="feedback" data-section="Validation Plan">
+          <button type="button" data-feedback="up">Approve</button>
+          <button type="button" data-feedback="down">Concern</button>
+          <button type="button" data-feedback="needs-clarification">Clarify</button>
+        </div>
+      </div>
+      <textarea class="feedback-notes" aria-label="Validation feedback notes"></textarea>
+      <div class="local-feedback"></div>
+      <p>Checks that prove the conclusion:</p>
+      <ul>
+        <li><code>scripts/pack.sh which sync</code> should continue to report <code>sync</code> from the <code>gitops</code> pack.</li>
+        <li><code>find /home/georgeqle/.codex/skills -maxdepth 2 -name SKILL.md</code> and <code>find /home/georgeqle/.claude/skills -maxdepth 2 -name SKILL.md</code> should show no global <code>sync</code> unless a future global promotion is intentionally performed.</li>
+        <li><code>find global -path '*sync*' -print</code> should remain empty unless <code>sync</code> is intentionally moved into global sources.</li>
+        <li><code>scripts/pack.sh refresh</code> should refresh local pack roots and managed markers if the user wants to remediate stale local install metadata.</li>
+        <li>After refresh, start a fresh Codex session and verify whether <code>$sync</code> appears in the active skill list.</li>
+      </ul>
+    </section>
+
+    <section id="confidence">
+      <div class="section-head">
+        <h2>Confidence and Evidence Gaps</h2>
+        <div class="feedback" data-section="Confidence and Evidence Gaps">
+          <button type="button" data-feedback="up">Approve</button>
+          <button type="button" data-feedback="down">Concern</button>
+          <button type="button" data-feedback="needs-clarification">Clarify</button>
+        </div>
+      </div>
+      <textarea class="feedback-notes" aria-label="Confidence feedback notes"></textarea>
+      <div class="local-feedback"></div>
+      <div style="overflow-x: auto">
+        <table>
+          <thead>
+            <tr>
+              <th>Conclusion</th>
+              <th>Status</th>
+              <th>Confidence</th>
+              <th>What Could Change It</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>sync</code> is not a global skill on this machine.</td>
+              <td>Evidence-backed</td>
+              <td>High</td>
+              <td>A future install under <code>~/.codex/skills/sync</code>, <code>~/.claude/skills/sync</code>, or <code>global/*/sync</code>.</td>
+            </tr>
+            <tr>
+              <td><code>sync</code> is a project-local <code>gitops</code> pack skill here.</td>
+              <td>Evidence-backed</td>
+              <td>High</td>
+              <td>Changing <code>.agents/project.json</code> or removing the local pack install.</td>
+            </tr>
+            <tr>
+              <td>The missing active-session entry is due to stale session/load state.</td>
+              <td>Inferred</td>
+              <td>Medium</td>
+              <td>A fresh Codex session after <code>scripts/pack.sh refresh</code> still missing <code>sync</code> would require deeper runtime-discovery triage.</td>
+            </tr>
+            <tr>
+              <td>No contract change is justified.</td>
+              <td>Evidence-backed</td>
+              <td>Medium-high</td>
+              <td>Repeated reports that <code>sync</code> should be universal, or a product decision to make GitOps skills global by default.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p><strong>Evidence gaps:</strong> This triage did not run <code>scripts/pack.sh refresh</code> because the user asked where the skill is, not to mutate local installs. It also did not start a fresh Codex CLI session, so active-runtime rediscovery after refresh remains unverified.</p>
+      <p><strong>Need for <code>$analyze-sessions</code>:</strong> none. The issue is narrow and directly answerable from local repo/install evidence.</p>
+    </section>
+
+    <section id="gates">
+      <div class="section-head">
+        <h2>Review Gates</h2>
+        <div class="feedback" data-section="Review Gates">
+          <button type="button" data-feedback="up">Approve</button>
+          <button type="button" data-feedback="down">Concern</button>
+          <button type="button" data-feedback="needs-clarification">Clarify</button>
+        </div>
+      </div>
+      <textarea class="feedback-notes" aria-label="Gates feedback notes"></textarea>
+      <div class="local-feedback"></div>
+
+      <div class="question" data-question="evidence_sufficient" data-section="Review Gates" data-gate-type="evidence coverage">
+        <h3>Evidence Coverage Gate</h3>
+        <p>Is the checked evidence sufficient to accept that <code>sync</code> is project-local and not global?</p>
+        <label><input type="radio" name="evidence_sufficient" value="sufficient"> Yes, the location evidence is sufficient.</label>
+        <label><input type="radio" name="evidence_sufficient" value="needs-runtime-check"> Mostly, but verify in a fresh Codex session after refresh.</label>
+        <label><input type="radio" name="evidence_sufficient" value="other"> Other / None of the above</label>
+        <textarea class="gate-notes other-notes" placeholder="Describe the alternate evidence standard."></textarea>
+        <label><input type="radio" name="evidence_sufficient" value="needs-clarification"> Need clarification</label>
+        <textarea class="gate-notes clarification-notes" placeholder="What is unclear?"></textarea>
+        <textarea class="gate-notes additional-notes" placeholder="Additional notes"></textarea>
+      </div>
+
+      <div class="question" data-question="recommended_path" data-section="Review Gates" data-gate-type="recommended path">
+        <h3>Recommended Path Gate</h3>
+        <p>Which next action should be taken after this report?</p>
+        <label><input type="radio" name="recommended_path" value="answer-only"> Accept answer only; no mutation needed.</label>
+        <label><input type="radio" name="recommended_path" value="refresh-local"> Run <code>scripts/pack.sh refresh</code> and then restart/reload skill discovery.</label>
+        <label><input type="radio" name="recommended_path" value="other"> Other / None of the above</label>
+        <textarea class="gate-notes other-notes" placeholder="Describe the preferred path."></textarea>
+        <label><input type="radio" name="recommended_path" value="needs-clarification"> Need clarification</label>
+        <textarea class="gate-notes clarification-notes" placeholder="What is unclear?"></textarea>
+        <textarea class="gate-notes additional-notes" placeholder="Additional notes"></textarea>
+      </div>
+
+      <div class="question" data-question="file_changes" data-section="Review Gates" data-gate-type="proposed file changes">
+        <h3>Proposed File Changes Gate</h3>
+        <p>Are the report-only artifacts acceptable as the only changes for this triage?</p>
+        <label><input type="radio" name="file_changes" value="report-only"> Yes, keep this report-only.</label>
+        <label><input type="radio" name="file_changes" value="refresh-follow-up"> Report-only is fine now; do refresh as a separate follow-up.</label>
+        <label><input type="radio" name="file_changes" value="other"> Other / None of the above</label>
+        <textarea class="gate-notes other-notes" placeholder="Describe desired file changes."></textarea>
+        <label><input type="radio" name="file_changes" value="needs-clarification"> Need clarification</label>
+        <textarea class="gate-notes clarification-notes" placeholder="What is unclear?"></textarea>
+        <textarea class="gate-notes additional-notes" placeholder="Additional notes"></textarea>
+      </div>
+    </section>
+
+    <section id="compile" class="compile">
+      <div class="section-head">
+        <h2>Compile Answers</h2>
+        <div class="feedback" data-section="Compile Answers">
+          <button type="button" data-feedback="up">Approve</button>
+          <button type="button" data-feedback="down">Concern</button>
+          <button type="button" data-feedback="needs-clarification">Clarify</button>
+        </div>
+      </div>
+      <textarea class="feedback-notes" aria-label="Compile feedback notes"></textarea>
+      <div class="local-feedback"></div>
+      <p class="muted">Use feedback YAML for concerns before final approval, or answer every gate and compile final answers.</p>
+      <button type="button" id="compile-feedback">Compile Feedback YAML</button>
+      <button type="button" id="compile-answers">Compile Answers</button>
+      <span class="remaining" id="remaining"></span>
+      <span class="copy-status" id="copy-status"></span>
+      <textarea id="yaml-output" class="yaml-output" readonly aria-label="Compiled YAML output"></textarea>
+      <button type="button" id="copy-yaml" style="display:none">Copy YAML</button>
+    </section>
+  </main>
+
+  <script>
+    const alignmentPage = 'alignment/session-triage-sync-skill-location.html';
+
+    function yamlEscape(value) {
+      const text = String(value || '');
+      if (!text) return "''";
+      if (/^[A-Za-z0-9 _./:$-]+$/.test(text)) return text;
+      return JSON.stringify(text);
+    }
+
+    function selectedFeedback() {
+      return Array.from(document.querySelectorAll('.feedback')).map(group => {
+        const active = group.querySelector('button[data-active="true"]');
+        if (!active) return null;
+        const notes = group.parentElement.parentElement.querySelector('.feedback-notes');
+        return {
+          section: group.dataset.section,
+          feedback: active.dataset.feedback,
+          notes: notes ? notes.value.trim() : '',
+          requested_agent_action: active.dataset.feedback === 'up' ? 'accept-as-is' : active.dataset.feedback === 'down' ? 'investigate-and-revise' : 'clarify-before-approval'
+        };
+      }).filter(Boolean);
+    }
+
+    function unansweredQuestions() {
+      return Array.from(document.querySelectorAll('.question')).filter(q => !q.querySelector('input[type="radio"]:checked'));
+    }
+
+    function feedbackYaml(entries) {
+      const unanswered = unansweredQuestions().map(q => q.dataset.question);
+      const lines = [
+        `alignment_page: ${alignmentPage}`,
+        'feedback_status: revision-request',
+        'approval_status: not-approved',
+        'unanswered_required_questions:'
+      ];
+      if (unanswered.length) unanswered.forEach(item => lines.push(`  - ${item}`));
+      else lines.push('  []');
+      lines.push('section_feedback:');
+      if (!entries.length) lines.push('  []');
+      entries.forEach(entry => {
+        lines.push(`  - section: ${yamlEscape(entry.section)}`);
+        lines.push(`    feedback: ${entry.feedback}`);
+        if (entry.notes) lines.push(`    notes: ${yamlEscape(entry.notes)}`);
+        lines.push(`    requested_agent_action: ${entry.requested_agent_action}`);
+      });
+      return lines.join('\n');
+    }
+
+    function answersYaml() {
+      const lines = [
+        `alignment_page: ${alignmentPage}`,
+        'approval_status: ready-for-agent-review',
+        'answers:'
+      ];
+      document.querySelectorAll('.question').forEach(q => {
+        const checked = q.querySelector('input[type="radio"]:checked');
+        const status = checked.value === 'other' ? 'other' : checked.value === 'needs-clarification' ? 'needs-clarification' : 'answered';
+        const visibleNotes = Array.from(q.querySelectorAll('.gate-notes')).find(t => t.style.display === 'block' && t.value.trim());
+        lines.push(`  - section: ${yamlEscape(q.dataset.section)}`);
+        lines.push(`    gate_type: ${yamlEscape(q.dataset.gateType)}`);
+        lines.push(`    status: ${status}`);
+        lines.push(`    answer: ${yamlEscape(checked.value)}`);
+        if (visibleNotes) lines.push(`    notes: ${yamlEscape(visibleNotes.value.trim())}`);
+      });
+      const feedback = selectedFeedback();
+      lines.push('section_feedback:');
+      if (!feedback.length) lines.push('  []');
+      feedback.forEach(entry => {
+        lines.push(`  - section: ${yamlEscape(entry.section)}`);
+        lines.push(`    feedback: ${entry.feedback}`);
+        if (entry.notes) lines.push(`    notes: ${yamlEscape(entry.notes)}`);
+        lines.push(`    requested_agent_action: ${entry.requested_agent_action}`);
+      });
+      return lines.join('\n');
+    }
+
+    async function copyText(text, statusEl) {
+      const status = statusEl || document.getElementById('copy-status');
+      try {
+        await navigator.clipboard.writeText(text);
+        status.textContent = 'Copied YAML.';
+      } catch (error) {
+        status.textContent = 'Copy blocked; select the YAML text manually.';
+      }
+    }
+
+    function showYaml(text) {
+      const output = document.getElementById('yaml-output');
+      const copy = document.getElementById('copy-yaml');
+      output.style.display = 'block';
+      output.value = text;
+      copy.style.display = 'inline-block';
+      copyText(text);
+    }
+
+    function refreshRemaining() {
+      const remaining = unansweredQuestions();
+      const label = document.getElementById('remaining');
+      label.textContent = remaining.length ? `${remaining.length} required questions unanswered.` : 'All required questions answered.';
+    }
+
+    document.querySelectorAll('.feedback').forEach(group => {
+      group.querySelectorAll('button').forEach(button => {
+        button.addEventListener('click', () => {
+          const wasActive = button.dataset.active === 'true';
+          group.querySelectorAll('button').forEach(btn => {
+            btn.dataset.active = 'false';
+            btn.classList.remove('active-up', 'active-down', 'active-clarify');
+          });
+          const section = group.parentElement.parentElement;
+          const notes = section.querySelector('.feedback-notes');
+          const local = section.querySelector('.local-feedback');
+          if (wasActive) {
+            notes.style.display = 'none';
+            local.style.display = 'none';
+            local.innerHTML = '';
+            return;
+          }
+          button.dataset.active = 'true';
+          button.classList.add(button.dataset.feedback === 'up' ? 'active-up' : button.dataset.feedback === 'down' ? 'active-down' : 'active-clarify');
+          notes.style.display = 'block';
+          local.style.display = 'block';
+          local.innerHTML = '<button type="button">Compile Feedback YAML</button><button type="button" class="copy-local">Copy YAML</button><span class="copy-status"></span><textarea readonly></textarea>';
+          const compile = local.querySelector('button');
+          const copy = local.querySelector('.copy-local');
+          const status = local.querySelector('.copy-status');
+          const out = local.querySelector('textarea');
+          compile.addEventListener('click', () => {
+            const entry = selectedFeedback().find(item => item.section === group.dataset.section);
+            const yaml = feedbackYaml(entry ? [entry] : []);
+            out.value = yaml;
+            out.style.display = 'block';
+            copyText(yaml, status);
+          });
+          copy.addEventListener('click', () => copyText(out.value, status));
+        });
+      });
+    });
+
+    document.querySelectorAll('.question input[type="radio"]').forEach(input => {
+      input.addEventListener('change', () => {
+        const q = input.closest('.question');
+        q.querySelectorAll('.gate-notes').forEach(t => t.style.display = 'none');
+        if (input.value === 'other') q.querySelector('.other-notes').style.display = 'block';
+        else if (input.value === 'needs-clarification') q.querySelector('.clarification-notes').style.display = 'block';
+        else q.querySelector('.additional-notes').style.display = 'block';
+        refreshRemaining();
+      });
+    });
+
+    document.getElementById('compile-feedback').addEventListener('click', () => showYaml(feedbackYaml(selectedFeedback())));
+    document.getElementById('compile-answers').addEventListener('click', () => {
+      const remaining = unansweredQuestions();
+      if (remaining.length) {
+        refreshRemaining();
+        remaining[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+      showYaml(answersYaml());
+    });
+    document.getElementById('copy-yaml').addEventListener('click', () => copyText(document.getElementById('yaml-output').value));
+    refreshRemaining();
+  </script>
+</body>
+</html>

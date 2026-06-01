@@ -1,3 +1,23 @@
+## Current Task - sync Skill Location Session Triage 2026-06-01
+
+**Goal:** Determine where the `sync` skill is installed and whether it is a global skill.
+
+**Plan:**
+- [x] Capture the visible `$session-triage` invocation under `prompts/session-triage/`.
+- [x] Check local project skill roots, global installed skill roots, canonical global skill sources, pack metadata, and managed-install markers.
+- [x] Produce `alignment/session-triage-sync-skill-location.html` with the structured triage report.
+- [x] Validate report content, record review notes, and ship only this invocation's intended artifacts.
+
+### Review
+
+- Verified `sync` is not installed globally: no `~/.codex/skills/sync/SKILL.md`, no `~/.claude/skills/sync/SKILL.md`, and no `global/*` sync source.
+- Verified `sync` is installed project-locally from the `gitops` pack: `scripts/pack.sh which sync` reports `sync is individually installed from pack 'gitops'`, `.agents/project.json` enables `"sync":"gitops"`, and `packs/gitops/PACK.md` lists the skill.
+- Codex local install is current: `.codex/skills/sync/SKILL.md` links to `packs/gitops/codex/sync/SKILL.md` at `v0.4`, and `.codex/skills/sync/agents/openai.yaml` allows implicit invocation.
+- Claude local install is stale: `.claude/skills/sync/SKILL.md` is `v0.3` while `packs/gitops/claude/sync/SKILL.md` is `v0.4`, and its managed marker points at an old `/Users/...` source path.
+- `scripts/pack.sh doctor` recommends `scripts/pack.sh refresh`; no `sync` contract change is justified by this triage.
+- Wrote the durable report to `alignment/session-triage-sync-skill-location.html`.
+- Validation passed for required report-content greps, embedded JavaScript parsing, artifact existence, and `git diff --check`. Browser open was blocked: Linux `xdg-open` found no browser, and the WSL PowerShell URI fallback failed with `UtilBindVsockAnyPort: socket failed 1`.
+
 # Current Task - Animation Approval Signal History 2026-06-01
 
 **Goal:** Locate explicit user approval signals in chat histories for the `/prototype` pack/drawer animation work, then translate those into a concrete list of animation behaviors to preserve in a rebuilt working flow.
