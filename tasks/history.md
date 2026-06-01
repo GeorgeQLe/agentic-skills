@@ -8,6 +8,13 @@
 - Updated AFPS docs so `hook-model` is optional pre-UX/product-loop research, not mandatory and not post-spec by default.
 - Added focused layer1 routing coverage in `tests/layer1/journey-map-routing.test.ts`. Validation passed for the focused routing tests, skill version fields, and `git diff --check`; strict archive audit remains blocked only by the pre-existing `research-roadmap v0.6` changelog-heading issue.
 
+## 2026-05-31 — Phase 41: re-benchmark `migrate`
+
+- Re-benchmarked `migrate` via the `benchmark-test-skill` flow, `--agent both --runs 3`, after explicit approval for the estimated $6 spend. Preflight confirmed custom tier23 coverage and the `$exec` next-route fixture; focused setup checks passed 90/90.
+- **Results:** Claude **33.3%** hard-assertion pass (1/3, 85.6% quality, p50 52.6s); Codex **33.3%** (1/3, 79.5% quality, p50 44.6s). No infrastructure blocks. Total cost $6.00. The rerun improves over the prior 0%/Codex-timeout result but still has real clean-run misses: Claude dropped the required `$exec` route on two runs, and Codex missed the literal `phases` assertion shape on two runs.
+- Wrote curated report `benchmark/test-migrate-2026-05-31.md`. Raw sessions persisted at `tests/benchmarks/runs/migrate-{claude-7c742313,codex-f3658761}/` (gitignored; local-only).
+- Refreshed benchmark matrix and Skills Showcase skill data after the concurrent `journey-map` work landed on `master`. Validation passed: bench coverage, focused matrix layer1 tests, showcase freshness, and whitespace. Graded count remains 69 unique / 158 total because `migrate` already had 2026-05-20/21 reports. Recommended next command: `$session-triage migrate benchmark failure`; next benchmark rerun target is `prototype`.
+
 ## 2026-05-31 — Phase 41: re-benchmark `provision-agentic-config`
 
 - Re-benchmarked `provision-agentic-config` via the `benchmark-test-skill` flow (pack `agentic-skills-bench`), `--agent both --runs 3`. Confirmed the fixture (`tier23-global-workflows.setup.ts:694`) already carries Phase-43 route guidance (`Recommended next command: $exec`) and the orchestration/monorepo/shipping evidence matrix before spending budget.
