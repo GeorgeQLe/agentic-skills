@@ -9,6 +9,7 @@ This report traces the `/prototype` pack/drawer animation history from `d6e688cc
 - `apps/skills-showcase/src/components/PackOpener.tsx`
 - `apps/skills-showcase/src/components/BottomSheet.tsx`
 - `apps/skills-showcase/alignment/animation-audit-pack-drawer.html`
+- `apps/skills-showcase/alignment/animation-state-machine.html`
 - `apps/skills-showcase/src/components/prototype-close-sequence.test.tsx`
 
 No animation code was changed during this investigation.

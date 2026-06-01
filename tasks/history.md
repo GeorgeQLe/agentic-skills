@@ -1,5 +1,12 @@
 # Session History
 
+## 2026-06-01 — Prototype animation state-machine visualization
+
+- Added a canonical typed animation-machine model for `/prototype` under `apps/skills-showcase/src/components/debug/`, consuming the existing open/close step catalog and deriving active, reached, paused, apex, blocked, and reset graph state from runtime snapshots.
+- Extended the live debug readout contract and runtime reporters across `PrototypePage`, `SealedPack`, `PackOpener`, and `BottomSheet` so the debug panel can show page state, pack motion values/refs, drawer collapse internals, sheet state, and debug gate progress.
+- Added a custom responsive SVG `AnimationMachineGraph` inside `DebugPanel`, plus a generated static reference page at `apps/skills-showcase/alignment/animation-state-machine.html` linked from the animation audit and forensics docs.
+- Added focused model/static/prototype tests. Verification passed for showcase typecheck, showcase tests (12 files, 129 tests), local `/prototype` HTTP 200, and whitespace checks. Automated desktop/mobile browser inspection was blocked by unavailable Browser/Computer Use tooling and local Safari automation settings; this is documented in `tasks/todo.md`.
+
 ## 2026-06-01 — recurring task review promotion
 
 - Reviewed the two advisory recurring items from `tasks/recurring-todo.md`.

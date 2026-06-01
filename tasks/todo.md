@@ -1,3 +1,30 @@
+# Current Task - Animation State Machine Visualization 2026-06-01
+
+**Goal:** Add a canonical animation state-machine model for `/prototype`, render it inside the live debug panel, and publish a static reference page generated from the same model.
+
+**Plan:**
+- [x] Capture the visible exec invocation under `prompts/exec/`.
+- [x] Record the active implementation plan in `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Inspect the current debug controller, step catalog, panel, prototype page, animation components, tests, and docs.
+- [x] Add a typed animation-machine model and snapshot helpers that consume `OPEN_STEPS` / `CLOSE_STEPS`.
+- [x] Extend the debug readout/report contract and wire page, pack, drawer, and sheet runtime internals into the machine snapshot.
+- [x] Add the responsive SVG state-machine visualization and selected-node detail panel to the live debug panel.
+- [x] Add `apps/skills-showcase/alignment/animation-state-machine.html` from the same model and link it from animation audit/forensics docs.
+- [x] Add focused model/static/prototype regression tests.
+- [x] Run typecheck, tests, browser verification on `/prototype`, and `git diff --check`.
+- [x] Record review/history notes, stage intended files only, commit, and push.
+
+### Review
+
+- Added `src/components/debug/animationMachine.ts` as the canonical typed model for the `/prototype` animation state machine. It derives debug gate nodes from `OPEN_STEPS` and `CLOSE_STEPS`, declares runtime node/transition metadata, and computes active, blocked, reset, and reached transition state from a machine snapshot.
+- Extended `DebugController` so the readout now carries `machine`, while preserving the existing card elevation/z-index fields. `PrototypePage`, `SealedPack`, `PackOpener`, and `BottomSheet` now report page state, pack motion/ref state, drawer collapse internals, and sheet open/exiting/dismissable values into that snapshot.
+- Added `AnimationMachineGraph.tsx` and embedded it in `DebugPanel` as a compact state-machine section. The graph is custom SVG, has Page/SealedPack/BottomSheet/PackOpener/Debug Gates lanes, highlights reached/paused/apex/blocked/reset states, and includes selected-node internals/transition details.
+- Added `animationMachineStaticPage.ts`, `scripts/render-animation-state-machine-page.ts`, and generated `alignment/animation-state-machine.html` from the same model. Linked the reference from `animation-audit-pack-drawer.html` and the forensics report scope.
+- Added `animationMachine.test.ts` for step coverage, apex metadata, valid endpoints, static/live model drift, close-path highlighting, and reset clearing. Extended `prototype-close-sequence.test.tsx` to verify the page machine report contract while retaining the one-card/no-container collapse source guard.
+- Verification passed: `pnpm --dir apps/skills-showcase typecheck`; `pnpm --dir apps/skills-showcase test` (12 files, 129 tests); `curl -I http://localhost:3001/prototype` returned 200 from a local dev server; `git diff --check`.
+- Browser automation caveat: the Browser plugin's required Node REPL JS tool was unavailable after discovery, Computer Use timed out twice, Safari blocked Apple Events JavaScript, and Safari WebDriver was disabled by the local "Allow remote automation" setting. Desktop/mobile visual layout could not be inspected through an automated browser in this environment; residual risk is limited to visual polish of the debug panel layout because type/runtime contracts and jsdom tests passed.
+- Ship manifest: User goal was a live and static animation state-machine visualization from one canonical model. Changed files are scoped to the `/prototype` debug subsystem, animation components' debug reporting, the static reference generator/page, linked animation docs, prompt/task/history artifacts, and focused tests. Adversarial review checked for step/model drift, transition endpoint invalidity, static/live model mismatch, reset leakage, and unintended unrelated file staging. Rollback is to revert the visualization commit; it does not alter production animation sequencing outside debug-report side effects.
+
 # Current Task - Prototype Animation Forensics 2026-06-01
 
 **Goal:** Produce a targeted forensic report for the `/prototype` pack/drawer animation history, identifying the last known-good implementation, the first behavior-changing or breaking commit, and whether remaining problems are code, debug harness mismatch, or both.

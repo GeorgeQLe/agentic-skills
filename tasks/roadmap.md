@@ -1,3 +1,27 @@
+## Current Targeted Update: Animation State Machine Visualization 2026-06-01
+
+**Goal:** Add a canonical animation state-machine model for `/prototype`, render it inside the live debug panel, and publish a static reference page generated from the same model.
+
+**Acceptance Criteria:**
+- [x] Prompt history is captured under `prompts/exec/`.
+- [x] `tasks/roadmap.md` and `tasks/todo.md` record the implementation plan and review notes.
+- [x] The debug subsystem exposes typed animation-machine nodes, transitions, lanes, phases, tracked fields, apex metadata, and snapshot derivation while consuming the existing `OPEN_STEPS` and `CLOSE_STEPS` definitions.
+- [x] `PrototypePage`, `SealedPack`, `PackOpener`, and `BottomSheet` report current page/pack/drawer/sheet internals into the debug readout contract.
+- [x] `DebugPanel` includes a responsive custom SVG state-machine visualization with lanes, transition highlighting, step/reached/paused/apex/reset states, and selected-node details.
+- [x] A durable `apps/skills-showcase/alignment/animation-state-machine.html` reference is rendered from the same model data and linked from existing animation audit/forensics docs.
+- [x] Focused tests prove step coverage, apex metadata, valid transition endpoints, static/live model drift, close-path highlighting, reset clearing, and one-card collapse completion.
+- [x] `pnpm --dir apps/skills-showcase typecheck`, `pnpm --dir apps/skills-showcase test`, browser checks on `/prototype` desktop/mobile, and `git diff --check` pass or any unrelated blocker is documented.
+- [x] Intended changes are committed and pushed on `master` while unrelated dirty work is preserved.
+
+**Implementation Plan:**
+1. Inventory the existing debug controller, step catalog, panel, prototype page, animation components, tests, and docs.
+2. Add the canonical typed animation-machine model and snapshot helpers under `src/components/debug/`, deriving debug step labels from `OPEN_STEPS` / `CLOSE_STEPS`.
+3. Extend the debug readout/report contract and wire runtime reports from page, pack, drawer, and sheet components.
+4. Build the reusable SVG state-machine renderer and embed a compact responsive section in `DebugPanel`.
+5. Add a static HTML renderer/reference page from the same model and link it from animation audit/forensics docs.
+6. Add focused tests for the model contract, static page drift, and runtime close/reset state highlighting.
+7. Run verification, update review/history notes, stage intended files only, commit, and push.
+
 ## Current Targeted Update: Prototype Animation Forensics 2026-06-01
 
 **Goal:** Identify where the `/prototype` pack/drawer animation last matched the intended sequence, which commit or session changed that behavior, and whether the remaining issue is code, debug harness mismatch, or both.
