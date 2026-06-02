@@ -3072,3 +3072,10 @@ Resolved all 10 findings from `/expert-review`:
 ## 2026-05-30 — Newsletter subscribe hardening (Code Review High #2)
 
 Shipped Code Review High #2: fixed the subscribe mutation's ON CONFLICT consent overwrite (now only bumps updated_at and reactivates status, preserving source_page/consent_text_version) and added a per-IP sliding-window rate limit (5 attempts / 10 min) backed by a new newsletter_subscribe_attempts DB table, reading client IP from x-forwarded-for and rejecting excess with TOO_MANY_REQUESTS. Files changed: src/db/index.ts, src/db/migrate.sql, src/trpc/init.ts, src/trpc/newsletter.ts, src/trpc/newsletter.test.ts, and new src/db/index.test.ts (all under apps/skills-showcase/). Verified on Node 25: typecheck clean, full vitest suite green at 10 test files / 117 tests. Deploy note: migrate.sql adds the newsletter_subscribe_attempts table that must be run against Neon before/with the Vercel auto-deploy.
+
+## 2026-06-02 — Skills Showcase source documentation pass
+
+- Shipped the Skills Showcase app-source documentation pass: added explanatory section comments across the app shell, prototype view, showcase pages, TUI workflow, debug animation machine, TRPC wiring, and newsletter data path without changing app behavior.
+- Converted the app Vitest config to ESM-native `vitest.config.mts` and pinned `jsdom` to `26.1.0`, resolving local Vitest 4/Vite ESM runtime failures on Node 20.17.0 while keeping the suite green.
+- Validation passed: `pnpm --dir apps/skills-showcase typecheck`, `pnpm --dir apps/skills-showcase test` (12 files / 129 tests), `pnpm --dir apps/skills-showcase build` (rerun outside sandbox after Turbopack port binding was denied), and `git diff --check`.
+- Deployment was not run from this ship because `tasks/deploy.md` targets the live Vercel production app and no explicit production deploy confirmation was given.
