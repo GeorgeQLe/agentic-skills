@@ -17,6 +17,28 @@
 - Generated local skill roots under `.claude/skills/**` and `.codex/skills/**` were not staged. The only `.agents/project.json` diff is the pre-existing `devtool` pack addition, not a sync install change, so it was preserved as unrelated dirty work.
 - Validation passed with `git diff --check`; `scripts/pack.sh doctor` still exits nonzero for unrelated local skill-root drift outside `sync`.
 
+## Current Task - Sync Repository 2026-06-01
+
+**Goal:** Pull latest remote changes while preserving local dirty work and report repo/skill status.
+
+**Plan:**
+- [x] Capture the visible `$sync` invocation under `prompts/sync/`.
+- [x] Stash dirty tracked and untracked files before pull.
+- [x] Pull/rebase from `origin/master`, then restore the stash.
+- [x] Run sync status checks and configured post-sync actions.
+- [x] Record review notes, validate, and ship intended sync artifacts only.
+
+### Review
+
+- Stashed dirty tracked and untracked work with `git stash push -u -m sync-20260601-204332-before-pull`; `git pull --rebase origin master` reported "Already up to date"; `git stash pop` restored the stash cleanly and dropped it.
+- No commits were pulled. `HEAD` and `origin/HEAD` are both `9125d83f`; remote URL is `https://github.com/GeorgeQLe/agentic-skills.git`.
+- GitHub freshness preference is `always`; `git fetch --dry-run origin` completed with no output.
+- Post-sync action from `sync.md` ran: `bash init.sh`, installing 6 Claude core skills and 7 Codex core skills globally. No domain packs were installed globally.
+- Agent config drift: `CLAUDE.md` and `AGENTS.md` both have `<!-- provision-agentic-config v0.5 -->`, and the installed/local canonical `provision-agentic-config` skills are `v0.5`; exact block comparison differs from canonical beginning at the em dash versus hyphen punctuation line, so re-running `$provision-agentic-config` would normalize the block.
+- Skill-install drift: `scripts/pack.sh doctor` reports `.claude/skills/sync` and `.codex/skills/sync` as `ok`, but other unrelated local skill roots remain `unknown`, `missing`, or `STALE`; fix command is `scripts/pack.sh refresh`.
+- Outstanding work: the current active task is Anti-Sycophancy Clause For Research Skills with 7 unchecked implementation/verification/shipping items. There are 4 pending manual tasks and 2 pending recurring advisory tasks.
+- Validation passed for `git diff --check`. The sync prompt/task artifacts were separable from unrelated WIP; large research-skill edits and generated archives remain unstaged.
+
 ## Current Task - Global Agentic Skills Re-Initialization 2026-06-01
 
 **Goal:** Rerun `$init-agentic-skills` with no arguments and verify global core skill installs remain healthy.

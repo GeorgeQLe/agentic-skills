@@ -16,6 +16,26 @@
 
 **Result:** `scripts/pack.sh install sync` refreshed `.claude/skills/sync` and `.codex/skills/sync` from `packs/gitops/{claude,codex}/sync`, and `scripts/pack.sh which sync` confirms `sync is individually installed from pack 'gitops'`. Both local sync contracts now report `version: v0.4`; their managed markers point to this checkout and include `source_version=v0.4`. `scripts/pack.sh doctor` reports `.claude/skills/sync` and `.codex/skills/sync` as `ok`, while unrelated existing local skill-root drift remains outside this install. The only `.agents/project.json` diff is the pre-existing `devtool` pack addition, not a sync designation change, so it was left uncommitted.
 
+## Current Targeted Update: Sync Repository 2026-06-01
+
+**Goal:** Run `$sync` to bring `master` up to date with `origin/master`, preserve local uncommitted work, run configured post-sync actions, and report repository/skill status.
+
+**Acceptance Criteria:**
+- [x] Prompt history is captured under `prompts/sync/`.
+- [x] Local uncommitted changes are stashed before pull and restored afterward.
+- [x] `git pull --rebase origin master` completes or conflicts are reported.
+- [x] `sync.md` post-sync custom actions are executed when applicable.
+- [x] Agent-config drift, skill-install drift, GitHub freshness, outstanding work, and advisory task counts are reported.
+
+**Implementation Plan:**
+1. Capture prompt history and task-plan artifacts.
+2. Stash current local changes with untracked files.
+3. Pull/rebase from `origin/master`, then restore the stash.
+4. Run drift/status checks and `sync.md` custom actions.
+5. Record review notes, validate, and commit/push only this sync invocation's artifacts if appropriate.
+
+**Result:** Local dirty tracked/untracked work was stashed with `git stash push -u -m sync-20260601-204332-before-pull`, `git pull --rebase origin master` reported "Already up to date", and `git stash pop` restored the stash cleanly. No commits were pulled. GitHub freshness preference is `always`; `git fetch --dry-run origin` returned cleanly, and `HEAD` matches `origin/HEAD` at `9125d83f`. The configured `sync.md` custom action `bash init.sh` completed, installing 6 Claude core skills and 7 Codex core skills globally. Provisioned config markers and canonical `provision-agentic-config` are both `v0.5`, but the provisioned `CLAUDE.md` and `AGENTS.md` blocks differ from canonical text. `scripts/pack.sh doctor` reports `sync` itself as `ok` but unrelated local skill-root drift remains; fix command is `scripts/pack.sh refresh`.
+
 ## Current Targeted Update: Global Agentic Skills Re-Initialization 2026-06-01
 
 **Goal:** Rerun `$init-agentic-skills` with no arguments to refresh global Claude and Codex core skill installs from this checkout and confirm drift/preferences remain healthy.
