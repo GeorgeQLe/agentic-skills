@@ -100,7 +100,7 @@ Claude route:
 /journey-map
 /pack install business-growth           # optional: when repeat-use, pricing, GTM, or growth-loop risk blocks UX
 /hook-model                             # optional: consumer/PLG habit-loop input before UX choices harden
-/positioning                            # parent router: market mode (framework selection → /exec → synthesis) during default AFPS; product mode triggered post-launch via research-roadmap staleness detection or explicit `/positioning product`
+/positioning                            # orchestrator: market mode (framework selection → /exec → synthesis) during default AFPS; product mode triggered post-launch via research-roadmap staleness detection or explicit `/positioning product`
 /value-prop-canvas                      # optional: contested solution-fit evidence
 /lean-canvas                            # optional: material business-model risk
 /lifecycle-metrics                      # optional: stage measurement, especially for infrequent or enterprise products
@@ -133,7 +133,7 @@ $pack install customer-lifecycle
 $journey-map
 $pack install business-growth           # optional: when repeat-use, pricing, GTM, or growth-loop risk blocks UX
 $hook-model                             # optional: consumer/PLG habit-loop input before UX choices harden
-$positioning                            # parent router: market mode (framework selection → $exec → synthesis) during default AFPS; product mode triggered post-launch
+$positioning                            # orchestrator: market mode (framework selection → $exec → synthesis) during default AFPS; product mode triggered post-launch
 $value-prop-canvas                      # optional: contested solution-fit evidence
 $lean-canvas                            # optional: material business-model risk
 $lifecycle-metrics                      # optional: stage measurement, especially for infrequent or enterprise products
