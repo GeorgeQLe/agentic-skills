@@ -1,3 +1,22 @@
+## Current Task - sync Pack Install 2026-06-01
+
+**Goal:** Install or refresh the project-local `sync` skill from the `gitops` pack.
+
+**Plan:**
+- [x] Capture the visible `$pack install sync` invocation under `prompts/pack/`.
+- [x] Run `scripts/pack.sh install sync`.
+- [x] Verify `sync` source/status and generated local roots.
+- [x] Record review notes, validate, commit, and push intended artifacts only.
+
+### Review
+
+- `scripts/pack.sh install sync` completed successfully and refreshed generated local roots: `.claude/skills/sync -> packs/gitops/claude/sync` and `.codex/skills/sync -> packs/gitops/codex/sync`.
+- `scripts/pack.sh which sync` reports `sync is individually installed from pack 'gitops'`.
+- `scripts/pack.sh status` shows `sync` in `enabled_skills` from `gitops`; `scripts/pack.sh doctor` now reports both `.claude/skills/sync` and `.codex/skills/sync` as `ok`.
+- Both local sync `SKILL.md` files and both canonical pack sources report `version: v0.4`. Managed markers now point to `/home/georgeqle/projects/tools/dev/agentic-skills/packs/gitops/.../sync` with `source_version=v0.4`.
+- Generated local skill roots under `.claude/skills/**` and `.codex/skills/**` were not staged. The only `.agents/project.json` diff is the pre-existing `devtool` pack addition, not a sync install change, so it was preserved as unrelated dirty work.
+- Validation passed with `git diff --check`; `scripts/pack.sh doctor` still exits nonzero for unrelated local skill-root drift outside `sync`.
+
 ## Current Task - Global Agentic Skills Re-Initialization 2026-06-01
 
 **Goal:** Rerun `$init-agentic-skills` with no arguments and verify global core skill installs remain healthy.

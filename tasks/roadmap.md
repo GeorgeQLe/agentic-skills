@@ -1,3 +1,21 @@
+## Current Targeted Update: sync Pack Install 2026-06-01
+
+**Goal:** Run `$pack install sync` to ensure the project-local `sync` skill is installed from the `gitops` pack and local skill roots are refreshed.
+
+**Acceptance Criteria:**
+- [x] Prompt history is captured under `prompts/pack/`.
+- [x] `scripts/pack.sh install sync` runs successfully.
+- [x] Pack status confirms `sync` is individually installed from `gitops`.
+- [x] Generated local skill roots are not committed; only project designation and prompt/task artifacts are shipped when changed.
+
+**Implementation Plan:**
+1. Capture the visible `$pack install sync` invocation.
+2. Run `scripts/pack.sh install sync`.
+3. Verify `scripts/pack.sh which sync`, `scripts/pack.sh status`, and relevant local root metadata.
+4. Record results, run whitespace validation, and commit/push intended tracked artifacts only.
+
+**Result:** `scripts/pack.sh install sync` refreshed `.claude/skills/sync` and `.codex/skills/sync` from `packs/gitops/{claude,codex}/sync`, and `scripts/pack.sh which sync` confirms `sync is individually installed from pack 'gitops'`. Both local sync contracts now report `version: v0.4`; their managed markers point to this checkout and include `source_version=v0.4`. `scripts/pack.sh doctor` reports `.claude/skills/sync` and `.codex/skills/sync` as `ok`, while unrelated existing local skill-root drift remains outside this install. The only `.agents/project.json` diff is the pre-existing `devtool` pack addition, not a sync designation change, so it was left uncommitted.
+
 ## Current Targeted Update: Global Agentic Skills Re-Initialization 2026-06-01
 
 **Goal:** Rerun `$init-agentic-skills` with no arguments to refresh global Claude and Codex core skill installs from this checkout and confirm drift/preferences remain healthy.
