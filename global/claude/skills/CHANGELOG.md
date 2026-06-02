@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3
+
+- Added `afps-status` to the global Context & Session inventory mapping.
+
 ## v0.2
 
 - Added invocation type awareness: reads `invocation:` and `parent:` frontmatter fields.

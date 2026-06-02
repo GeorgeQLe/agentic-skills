@@ -1,3 +1,23 @@
+## Current Task - afps-status Claude Skill Availability 2026-06-01
+
+**Goal:** Determine why `afps-status` is visible to Codex but reportedly unavailable in Claude, then apply the smallest fix if the local Claude skill install or source metadata is wrong.
+
+**Plan:**
+- [x] Capture the visible invocation under `prompts/investigate/`.
+- [x] Check `afps-status` across global and project-local Claude/Codex skill roots.
+- [x] Inspect repository source skills, pack metadata, managed markers, install scripts, and recent git history.
+- [x] Apply a minimal fix if the Claude install/source state is confirmed broken.
+- [x] Run focused verification and record review notes.
+
+### Review
+
+- Confirmed the user report: `global/codex/afps-status/SKILL.md` and `~/.codex/skills/afps-status/SKILL.md` existed, but there was no `global/claude/afps-status` source and no `~/.claude/skills/afps-status` install.
+- `scripts/pack.sh which afps-status` reports the skill is not in any pack; the root cause was a missing Claude global mirror from the 2026-05-28 Codex-only add commit, not a stale project-local pack install.
+- Added `global/claude/afps-status` with `/afps-status` command routing and updated both global `skills` inventories to group `afps-status` under Context & Session.
+- Reran `bash init.sh`; it installed 7 Claude core skills and `global/codex/init-agentic-skills/scripts/init-agentic-skills.sh doctor` reports every global Claude/Codex core install as `ok`.
+- Added `tests/layer1/afps-status-global-mirror.test.ts`; focused vitest passed for the new mirror test and the init-agentic-skills contract test.
+- Generated showcase assets were not shipped because the generator currently picks up broad pre-existing source/catalog drift unrelated to this fix; current Claude availability is verified through installed skill files and global install doctor.
+
 ## Current Task - Ship-End Wrap-Up 2026-06-01
 
 **Goal:** Wrap up the current session by shipping remaining project designation, prompt-history, and session-history artifacts.

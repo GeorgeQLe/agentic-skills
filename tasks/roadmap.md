@@ -1,3 +1,21 @@
+## Current Targeted Update: afps-status Claude Skill Availability 2026-06-01
+
+**Goal:** Determine why `afps-status` is visible to Codex but reportedly unavailable in Claude, then apply the smallest fix if the local Claude skill install or source metadata is wrong.
+
+**Acceptance Criteria:**
+- [x] Prompt history is captured under `prompts/investigate/`.
+- [x] Evidence checks cover `afps-status` in global user skill roots, project-local `.claude/.codex` roots, repository source skills, pack metadata, and install/refresh scripts.
+- [x] The user claim is classified with direct path/status evidence.
+- [x] Any fix is limited to the confirmed broken install/source path and preserves unrelated dirty work.
+- [x] Verification proves Claude can discover or should be able to discover `afps-status`, or documents a CLI reload/session-start limitation.
+
+**Implementation Plan:**
+1. Capture the visible `$investigate` invocation and record the task plan.
+2. Resolve `afps-status` across Claude and Codex global/project skill roots and source directories.
+3. Inspect init/install scripts, project pack metadata, managed markers, and recent git history touching `afps-status`.
+4. Apply a minimal local/root fix only if evidence shows missing or stale Claude install state.
+5. Run focused verification, record review notes, and ship intended artifacts when source/tracked files changed.
+
 ## Current Targeted Update: Anti-Sycophancy Clause For Research Skills 2026-06-02
 
 **Goal:** Add evidence-aware feedback handling to every active `type: research` skill in pack Codex and Claude sources, preserving research rigor while adapting to subjective user preferences.

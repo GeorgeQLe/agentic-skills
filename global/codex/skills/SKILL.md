@@ -2,7 +2,7 @@
 name: skills
 description: Browse and search all available skills, grouped by workflow stage or activity type
 type: ops
-version: v0.2
+version: v0.3
 argument-hint: "[list | types | search <keyword>]"
 ---
 
@@ -51,7 +51,7 @@ Discover and search installed global skills plus enabled project-local pack skil
    | Refactoring & Migration | `migrate`, `decommission`, `scaffold` |
    | Monorepo | `affected` |
    | Release & Deploy | `release`, `deploy` |
-   | Context & Session | `codebase-status`, `analyze-sessions`, `handoff`, `sync`, `investor-update` |
+   | Context & Session | `afps-status`, `codebase-status`, `analyze-sessions`, `handoff`, `sync`, `investor-update` |
    | Git Workflow | `branch-lifecycle` |
    | Utility | `commit-and-push-by-feature`, `init-agentic-skills`, `targeted-skill-builder`, `provision-agentic-config`, `poketo-kanban`, `poketo-kanban --archive`, `sync-roadmap-kanban`, `skills`, `risk-register` |
 
