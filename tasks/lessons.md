@@ -490,3 +490,9 @@
 - Clear-context sessions launched by `/ship` plan mode are ship-one-step sessions. The plan handed to them must explicitly say to implement the approved step, validate, commit/push, deploy only with an explicit manual deploy contract, write the following step's plan, set/check `showClearContextOnPlanAccept` and `defaultMode: "acceptEdits"`, start the next approval UI with `EnterPlanMode` before `ExitPlanMode`, and stop before implementing it.
 - If Claude refuses `EnterPlanMode` because Auto mode or the active permission mode requires an explicit user request, do not try `ExitPlanMode`; stop and ask the user to explicitly request plan mode, such as `/plan <next step>`.
 - Deploy discovery should not stall shipping in repos with no explicit manual deploy contract; skip deploy unless `deploy.md` or `tasks/deploy.md` exists.
+
+## 2026-06-02 — Distinguish canonical skills from generated local installs
+
+- A pack drift report in the canonical `agentic-skills` repo sounded like the canonical skill sources were stale, even though `doctor` was reporting generated project-local copies under `.claude/skills` and `.codex/skills`.
+- When explaining `scripts/pack.sh doctor`, explicitly say that `stale` means the local managed install's recorded source hash no longer matches the canonical source directory.
+- In this repo, `packs/*` and `global/*` are the canonical sources; `.claude/skills/**` and `.codex/skills/**` are generated install roots that can fall behind until `scripts/pack.sh refresh` runs.
