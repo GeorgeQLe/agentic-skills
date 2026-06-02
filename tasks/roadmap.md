@@ -101,19 +101,21 @@
 **Goal:** Identify chat-history moments where the user explicitly approved `/prototype` animation behavior, map those approvals to the implementation context, and extract what was actually working so a future animation-flow rebuild can preserve the good parts.
 
 **Acceptance Criteria:**
-- [ ] Prompt history is captured under `prompts/analyze-sessions/`.
-- [ ] `tasks/roadmap.md` and `tasks/todo.md` record the analysis plan and review notes.
-- [ ] `alignment/investigate-animation-pack-drawer.html` and the paired Markdown forensics report are inspected for existing commit/session evidence.
-- [ ] Claude/Codex histories are searched with a filtered parser for user approval language near animation/prototype/pack/drawer terms.
-- [ ] Approval snippets are tied to dates, sessions, commit/work context where recoverable, and categorized by what behavior was working.
-- [ ] A concise rebuild target list distinguishes explicit approval evidence from inference.
-- [ ] Verification documents the searched sources, match counts, and any limitations.
+- [x] Prompt history is captured under `prompts/analyze-sessions/`.
+- [x] `tasks/roadmap.md` and `tasks/todo.md` record the analysis plan and review notes.
+- [x] `alignment/investigate-animation-pack-drawer.html` and the paired Markdown forensics report are inspected for existing commit/session evidence.
+- [x] Claude/Codex histories are searched with a filtered parser for user approval language near animation/prototype/pack/drawer terms.
+- [x] Approval snippets are tied to dates, sessions, commit/work context where recoverable, and categorized by what behavior was working.
+- [x] A concise rebuild target list distinguishes explicit approval evidence from inference.
+- [x] Verification documents the searched sources, match counts, and any limitations.
 
 **Implementation Plan:**
 1. Read the existing animation forensics artifact/report and current task history.
 2. Parse local chat histories for user-authored approval language around animation/prototype/pack/drawer terms.
 3. Cross-reference approval hits with repo commits, prompt logs, and task reports when possible.
 4. Report the approval timeline, working-behavior inventory, and recommended rebuild baseline.
+
+**Result:** Completed in commit `c6c97517`. The durable alignment page is `alignment/analyze-sessions-animation-approval-signals.html` and the paired report is `docs/history/animation-approval-signals-2026-06-01.md`. The report found no explicit "yes/perfect/approved" statements, but identified implicit approval signals and a rebuild target list, with `781d44c1` as the forensically validated known-good close sequence and `6bcb2076` as the user-validated open apex reference.
 
 ## Current Targeted Update: Animation State Machine Visualization 2026-06-01
 

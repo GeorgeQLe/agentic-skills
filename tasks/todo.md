@@ -130,11 +130,17 @@
 
 **Plan:**
 - [x] Capture the visible analyze-sessions invocation under `prompts/analyze-sessions/`.
-- [ ] Inspect the existing animation forensics alignment page and Markdown report.
-- [ ] Search Claude/Codex histories for user-authored approval language near animation/prototype/pack/drawer terms.
-- [ ] Tie approval hits to sessions, dates, commits, and task artifacts where possible.
-- [ ] Summarize what was specifically working and what remains inference.
-- [ ] Record review notes and verification.
+- [x] Inspect the existing animation forensics alignment page and Markdown report.
+- [x] Search Claude/Codex histories for user-authored approval language near animation/prototype/pack/drawer terms.
+- [x] Tie approval hits to sessions, dates, commits, and task artifacts where possible.
+- [x] Summarize what was specifically working and what remains inference.
+- [x] Record review notes and verification.
+
+### Review
+
+- Completed in commit `c6c97517`; `tasks/todo.md` was stale after that commit.
+- Durable artifacts already exist: `alignment/analyze-sessions-animation-approval-signals.html` and `docs/history/animation-approval-signals-2026-06-01.md`.
+- The report scanned 10 animation-related sessions and found no explicit "yes/perfect/looks good/approved" statements. It identified implicit approval signals, validated behaviors to preserve, unvalidated behaviors, and known-good references: `781d44c1` for the close sequence and `6bcb2076` for open apex behavior.
 
 # Current Task - Animation State Machine Visualization 2026-06-01
 

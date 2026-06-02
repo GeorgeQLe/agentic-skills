@@ -1,5 +1,11 @@
 # Lessons
 
+## 2026-06-01 — Verify stale unchecked tasks before recommending next work
+
+- A `$ship-end` final route recommended `$analyze-sessions` for "Animation Approval Signal History" because `tasks/todo.md` still showed unchecked items, but the research already existed in `alignment/analyze-sessions-animation-approval-signals.html` and `docs/history/animation-approval-signals-2026-06-01.md`.
+- Before recommending an unchecked task as next work, check for matching committed artifacts, recent commits, and task review notes. If artifacts already satisfy the task, first reconcile the stale task state instead of routing to repeat work.
+- For `ship-end` next-work selection, treat unchecked task docs as candidates, not ground truth; verify against `git log -- <expected artifacts>` and concrete output files when the task name refers to an analysis/report already likely completed.
+
 ## 2026-05-31 — Alignment page compile controls must stay in normal page flow
 
 - A user clarified that sidebar navigation and sticky/fixed bottom compile banners were not requested and made HTML alignment pages look worse.
