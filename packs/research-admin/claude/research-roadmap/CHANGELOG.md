@@ -1,5 +1,9 @@
 # research-roadmap changelog (claude)
 
+## v0.11 - 2026-06-02
+
+- Clarified that research-roadmap queues direct named research skill commands instead of wrapping them in execution-loop routes.
+
 ## v0.10 - 2026-05-31
 
 - Required alignment pages to use a top in-flow Table of Contents instead of sidebar navigation, and to avoid sticky/fixed bottom compile banners.

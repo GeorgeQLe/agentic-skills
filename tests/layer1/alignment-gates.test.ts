@@ -225,6 +225,37 @@ describe("alignment page gate contract", () => {
     }
   });
 
+  it("defines staged working-packet handling for report-first research", () => {
+    expect(generatedAlignmentSkillFiles.length).toBeGreaterThan(100);
+    for (const path of generatedAlignmentSkillFiles) {
+      const content = conventionText(path);
+      expect(content, `${path} staged research section`).toContain("**Staged research workflow.**");
+      expect(content, `${path} stage 1`).toContain("Stage 1 performs research and clarification");
+      expect(content, `${path} flat working packet`).toMatch(
+        /`research\/_working\/preliminary-[^`]+-research\.md`/,
+      );
+      expect(content, `${path} product-path working packet`).toMatch(
+        /`research\/\{slug\}\/_working\/preliminary-[^`]+-research\.md`/,
+      );
+      expect(content, `${path} no canonical stage 1 writes`).toContain(
+        "Do not create or update canonical research, spec, or task files in Stage 1",
+      );
+      expect(content, `${path} stage 2`).toContain("Stage 2 consumes the working packet");
+      expect(content, `${path} full preliminary packet`).toContain("renders the full preliminary packet");
+      expect(content, `${path} feedback remains stage 2`).toContain(
+        "Feedback-only YAML revises the working packet and review page, then remains in Stage 2",
+      );
+      expect(content, `${path} final yaml gating`).toContain(
+        "Stage 3 consumes final compiled YAML only when it has no unresolved `needs-clarification`",
+      );
+      expect(content, `${path} archive working packet`).toContain(
+        "archive the working packet to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-working-path>`",
+      );
+      expect(content, `${path} remove working packet`).toContain("remove the active working packet");
+      expect(content, `${path} confirmed page`).toContain("convert the page to `confirmed`");
+    }
+  });
+
   it("requires research output pages to preserve evidence, uncertainty, and decision context", () => {
     for (const path of researchQualitySkills) {
       const content = conventionText(path);

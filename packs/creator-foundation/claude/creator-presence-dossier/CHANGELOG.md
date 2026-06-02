@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3 - 2026-06-02
+
+- Added a staged research workflow so preliminary findings stay in non-canonical `_working` packets until review alignment approval finalizes canonical artifacts.
+
 ## v0.2 - 2026-06-02
 
 - Added evidence-aware feedback handling so agents push back on factual misunderstandings while honoring subjective user preferences.

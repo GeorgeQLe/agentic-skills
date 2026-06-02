@@ -2,7 +2,7 @@
 name: research-roadmap
 description: Scan research and documentation health, then maintain a priority documentation queue
 type: planning
-version: v0.10
+version: v0.11
 invocation: orchestrator
 ---
 
@@ -15,6 +15,8 @@ Before telling the user to run a skill from another project-local pack, check `.
 Use this skill to make the project documentation contract complete before build work continues. It scans research, specs, and task docs, then updates `tasks/todo.md` with immediately actionable documentation work and uses `tasks/record-todo.md` or `tasks/recurring-todo.md` for non-blocking future documentation records.
 
 Do not run the queued research skills from this skill. The job here is to maintain the documentation queue so the user can complete research and planning artifacts in the right order.
+
+Queue direct skill commands only: the unchecked todo item must name the research or planning skill itself, such as `/icp`, `/journey-map`, or `/devtool-user-map`. Do not prepend `/exec`, `/exec /icp`, `/exec --phase`, or any execution-loop wrapper to named research-skill routes; users invoke those research skills directly.
 
 ## Process
 
@@ -389,7 +391,7 @@ A consolidated prototype must exist at `prototypes/{topic}/consolidated/`. If mi
 
 Populate `tasks/todo.md` `## Priority Documentation Todo` with research skills that need re-running, using the same format as the standard process. Each item must explain what the prototype revealed that contradicts or supersedes the current research document.
 
-**Next step:** first unchecked queued item in `tasks/todo.md`.
+**Next step:** first unchecked queued item in `tasks/todo.md`, using the direct skill command written in that item.
 
 ## Post-Spec Process (`--post-spec`)
 
@@ -413,7 +415,7 @@ A production spec must exist at `specs/{topic}.md`. If missing, halt and recomme
 
 Populate `tasks/todo.md` `## Priority Documentation Todo` with research skills that need re-running. Each item must explain what spec constraint invalidates the current research document.
 
-**Next step:** first unchecked queued item in `tasks/todo.md`.
+**Next step:** first unchecked queued item in `tasks/todo.md`, using the direct skill command written in that item.
 
 ## Constraints
 

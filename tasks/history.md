@@ -1,5 +1,15 @@
 # Session History
 
+## 2026-06-02 — Staged research alignment workflow
+
+- Split report-first research skills into a staged approval workflow: Stage 1 writes only non-canonical working packets, Stage 2 builds `review` alignment pages and remains in review for feedback-only YAML, and Stage 3 archives the working packet before writing unchanged canonical outputs after clean final compiled YAML.
+- Updated the canonical alignment convention in `CLAUDE.md`, regenerated 278 owned `ALIGNMENT-PAGE.md` bundles, and updated 102 active research skills with archives, version bumps, changelogs, and the shared staged workflow section.
+- Updated mirrored `research-roadmap` skills so queued research work uses direct named skill commands instead of `$exec` or `/exec` wrappers.
+- Added focused layer1 coverage for staged research contracts, generated alignment workflow handling, and research-roadmap direct routing.
+- Repaired a pre-existing missing Codex `uat-guide` v0.0 archive so strict archive audit passes.
+- Refreshed Skills Showcase generated assets and benchmark matrix after skill metadata changes.
+- Verification passed: alignment generator dry-run, strict archive audit, focused layer1 tests, Skills Showcase validation, adversarial contract scans, and `git diff --check`.
+
 ## 2026-06-02 — Devtool docs audit refresh
 
 - Reconciled stale unchecked priority queue items that already had shipped evidence: split-path research workflow (`0e87d978`/`459bca41`), cross-skill output audit (`177bde21`), and research-quality alignment contract (`4701f41b`).

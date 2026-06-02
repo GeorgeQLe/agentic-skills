@@ -1,5 +1,9 @@
 # positioning changelog (codex)
 
+## v0.10 - 2026-06-02
+
+- Added a staged research workflow so preliminary findings stay in non-canonical `_working` packets until review alignment approval finalizes canonical artifacts.
+
 ## v0.9 - 2026-06-02
 
 - Made the product-positioning shortcut build a pre-approval alignment page and write `tasks/todo.md` only after final compiled YAML approval.

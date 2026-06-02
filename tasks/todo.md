@@ -1,3 +1,51 @@
+## Current Task - Staged Research Alignment Workflow 2026-06-02
+
+**Goal:** Split heavy report-first research skills into a three-stage approval workflow so preliminary research is reviewable as non-canonical working state before any canonical research file is written.
+
+### Execution Profile
+
+- Parallel mode: serial
+- Rationale: This phase changes shared skill contracts, generated alignment bundles, tests, routing, and task history in one working tree. No branch-backed write-lane agent-team tooling is active in this session.
+
+### Acceptance Criteria
+
+- [x] Prompt history is captured under `prompts/exec/`.
+- [x] `tasks/roadmap.md` and `tasks/todo.md` record the staged-research implementation plan.
+- [x] The canonical `CLAUDE.md` alignment convention defines the staged research contract for Stage 1 working packets, Stage 2 review pages, and Stage 3 finalization.
+- [x] Generated `ALIGNMENT-PAGE.md` bundles are regenerated from the canonical convention with no generator drift.
+- [x] Mirrored ICP skills are archived, version-bumped, changelogged, and updated as the pilot staged research contract.
+- [x] Active report-first research skills with canonical research outputs receive the shared staged-research behavior, with required archive/version/changelog metadata.
+- [x] Working packet paths use `_working/preliminary-<skill>-research.md`, canonical output paths remain unchanged, and finalization archives the active working packet under `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-working-path>`.
+- [x] Stage 2 feedback-only YAML keeps the workflow in review, while final compiled YAML reaches Stage 3 only when unresolved negative feedback and clarification are absent.
+- [x] `research-roadmap` next-step routing recommends direct named research skill commands rather than wrapping them in `$exec`.
+- [x] Focused layer1 coverage proves staged research behavior, alignment lifecycle handling, and research-roadmap routing.
+- [x] Dry-run alignment generation, archive audit, focused tests, showcase validation, and whitespace checks pass before shipping.
+- [x] Intended changes are committed and pushed on the primary branch while unrelated dirty work is preserved.
+
+### Implementation
+
+- [x] Step 1.1: Capture the visible invocation and record the staged-research phase in task docs.
+- [x] Step 1.2: Inspect affected research skills, alignment convention/generator coverage, and research-roadmap routing tests.
+- [x] Step 1.3: Identify active report-first `type: research` skills that write canonical `research/` outputs, starting with mirrored ICP skills as the pilot.
+- [x] Step 1.4: Archive affected skill directories with `scripts/skill-archive.sh <skill-dir>`, then bump versions and changelogs for substantive contract changes.
+- [x] Step 1.5: Update the canonical `CLAUDE.md` alignment convention, regenerate owned `ALIGNMENT-PAGE.md` bundles, and update affected active skill contracts.
+- [x] Step 1.6: Update `research-roadmap` routing language and tests so named research routes are recommended directly rather than through `$exec`.
+- [x] Step 1.7: Add or update focused layer1 tests for Stage 1 non-canonical working packets, Stage 2 review pages/feedback YAML, Stage 3 finalization/archive/canonical writes, and routing.
+- [x] Step 1.8: Regenerate Skills Showcase data if skill metadata changes; run validation, update review/history notes, stage intended files only, commit, and push on `master`.
+
+### Review
+
+- Captured the visible invocation under `prompts/exec/skill-prompt-20260602-174109-staged-research-alignment.md`.
+- Added the shared staged research workflow to `CLAUDE.md`: Stage 1 writes only non-canonical `_working/preliminary-<skill>-research.md` packets, Stage 2 generates `review` alignment pages and keeps feedback-only YAML in review, and Stage 3 archives the working packet before writing unchanged canonical outputs only after final compiled YAML has no unresolved negative feedback.
+- Archived, version-bumped, and changelogged 102 active `type: research` skills, including mirrored ICP skills, and inserted one `## Staged Research Workflow` section per skill.
+- Regenerated all 278 owned `ALIGNMENT-PAGE.md` bundles from the canonical convention.
+- Updated mirrored `research-roadmap` skills to queue direct research commands such as `$icp`/`/icp` instead of `$exec` or `/exec` wrappers.
+- Added focused layer1 coverage for staged research skill contracts, generated alignment workflow handling, and direct research-roadmap routing.
+- Repaired a pre-existing missing archive for the Codex `uat-guide` mirror so strict archive validation passes.
+- Refreshed Skills Showcase generated data and benchmark matrix after skill version changes.
+- Validation passed: `node scripts/upgrade-alignment-page.mjs --dry-run`; `bash scripts/skill-archive-audit.sh --strict`; `pnpm --dir tests exec vitest run --project layer1 layer1/research-approval-gate.test.ts layer1/alignment-gates.test.ts layer1/research-roadmap-routing.test.ts`; `bash scripts/validate-skills-showcase-data.sh`; `git diff --check`.
+- Preserved unrelated dirty file `apps/skills-showcase/alignment/animation-code-walkthrough.html` outside the staged-research shipping boundary.
+
 ## Current Task - Alignment Page Confirmed-State Contract 2026-06-02
 
 **Goal:** Update the shared alignment-page convention so pages move from `review` gates to `confirmed` records after approval is applied, while preserving future archived amendment handling.
