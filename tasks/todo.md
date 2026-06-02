@@ -1,3 +1,22 @@
+## Current Task - Ship-End Wrap-Up 2026-06-01
+
+**Goal:** Wrap up the current session by shipping remaining project designation, prompt-history, and session-history artifacts.
+
+**Plan:**
+- [x] Capture the visible `$ship-end` invocation under `prompts/ship-end/`.
+- [x] Inspect remaining dirty files and classify ship boundary.
+- [x] Record manual/advisory task status.
+- [x] Update `tasks/history.md` with the session result.
+- [x] Run scoped validation for prompt/task/project-designation artifacts.
+- [x] Commit and push the wrap-up artifacts.
+
+### Review
+
+- Ship boundary includes `.agents/project.json` because `devtool` is now an enabled project-local pack designation, plus outstanding prompt-history artifacts and this wrap-up's history/task updates.
+- Generated local skill roots under `.claude/skills/**` and `.codex/skills/**` remain ignored and uncommitted.
+- Deploy is not applicable to this wrap-up commit because it does not change the Skills Showcase app, generated showcase assets, deployment scripts, database schema, or runtime deploy surface.
+- Validation passed for `scripts/pack.sh status`, `git diff --check`, and a targeted secret-pattern scan over the shipped files. `scripts/pack.sh doctor` still reports unrelated local-root drift outside devtool/sync/session-triage roots; those generated roots were intentionally not refreshed.
+
 ## Current Task - Anti-Sycophancy Clause For Research Skills 2026-06-02
 
 **Goal:** Amend active research skills so they verify factual feedback against evidence, push back on factual misunderstandings, and defer more heavily on subjective preference calls.

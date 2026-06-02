@@ -2980,6 +2980,13 @@ Resolved all 10 findings from `/expert-review`:
 - Layer1: 15 files, 1222 tests pass. Generated data refreshed.
 - Shipped in commit `66e96c0`.
 
+## 2026-06-01 — Ship-end wrap-up for research-skill anti-sycophancy session
+
+- Completed and pushed the anti-sycophancy research-skill update in commit `3ef2e9a9`, adding evidence-aware feedback handling to active research skill contracts while leaving archives immutable except for required pre-bump snapshots.
+- Wrapped up remaining tracked session artifacts: committed the `devtool` pack project designation in `.agents/project.json`, outstanding prompt-history logs, and ship-end task/history notes.
+- Scoped validation for the source-changing work had already passed before `3ef2e9a9`: 102-skill version/archive/changelog/section audit, active clause count `204`, archived clause matches `0`, `git diff --check`, representative diffs, and `scripts/pack.sh doctor` with devtool roots `ok`.
+- Manual tasks remain 1/5 complete with 4 deferred newsletter/Vercel checks unchecked; recurring advisory tasks remain 0/2 complete with 2 unchecked.
+
 ## 2026-05-21: Batch 41.3-rerun Group 2 — Re-benchmark 10 Tier 2 Global Skills
 
 - Re-benchmarked Group 2 Tier 2 global skills after fixture remediation: `dogfood`, `expert-review`, `guide`, `handoff`, `hygiene`, `migrate`, `mono-plan`, `pack`, `prototype`, and `provision-agentic-config`.
