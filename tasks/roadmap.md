@@ -1,3 +1,22 @@
+## Current Targeted Update: Global Agentic Skills Re-Initialization 2026-06-01
+
+**Goal:** Rerun `$init-agentic-skills` with no arguments to refresh global Claude and Codex core skill installs from this checkout and confirm drift/preferences remain healthy.
+
+**Acceptance Criteria:**
+- [x] Prompt history is captured under `prompts/init-agentic-skills/`.
+- [x] The existing mirrored `init-agentic-skills` launcher runs successfully through root `init.sh`.
+- [x] Drift preferences remain explicitly set, so first-run opt-out prompts are skipped.
+- [x] Status/doctor verification reports current checkout metadata and all managed installs as healthy.
+- [x] Review notes are recorded in `tasks/todo.md`; only this invocation's intended artifacts are committed and pushed.
+
+**Implementation Plan:**
+1. Capture prompt history and task-plan artifacts for the rerun.
+2. Run the existing mirrored initializer launcher because this checkout still lacks `scripts/init-agentic-skills.sh`.
+3. Check `show-prefs`, `status`, and `doctor`.
+4. Record results, run whitespace verification, and ship only this invocation's tracked artifacts.
+
+**Result:** Rerun succeeded through `global/codex/init-agentic-skills/scripts/init-agentic-skills.sh`, which delegates to root `init.sh`. Installed 6 Claude core skills and 7 Codex core skills. The first-run drift preferences were already explicit (`session_start_hook=false`, `auto_refresh=false`), so no prompt/default write was needed. Status reports checkout commit `57a8802b`, remote `https://github.com/GeorgeQLe/agentic-skills.git`, and GitHub freshness preference `always`. Doctor reports all managed global Claude/Codex skill installs `ok`.
+
 ## Current Targeted Update: sync Skill Location Session Triage 2026-06-01
 
 **Goal:** Use `$session-triage` to answer whether `sync` is a global skill or a project-local pack-installed skill, with direct evidence from this repository, installed global skill roots, and pack metadata.

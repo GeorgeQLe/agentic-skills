@@ -1,3 +1,24 @@
+## Current Task - Global Agentic Skills Re-Initialization 2026-06-01
+
+**Goal:** Rerun `$init-agentic-skills` with no arguments and verify global core skill installs remain healthy.
+
+**Plan:**
+- [x] Capture the visible `$init-agentic-skills` invocation under `prompts/init-agentic-skills/`.
+- [x] Run the existing mirrored init-agentic-skills launcher through the canonical root initializer.
+- [x] Check `show-prefs`, `status`, and `doctor`.
+- [x] Record installed/skipped counts, pack guidance, reload guidance, and any warnings.
+- [x] Commit and push only this invocation's intended artifacts.
+
+### Review
+
+- Rerun used `global/codex/init-agentic-skills/scripts/init-agentic-skills.sh` because this checkout still has no root `scripts/init-agentic-skills.sh` wrapper. The launcher resolved the repo root and delegated to `init.sh`.
+- Initialization installed 6 Claude core skills to `/home/georgeqle/.claude/skills` and 7 Codex core skills to `/home/georgeqle/.codex/skills`. No domain packs were installed globally.
+- Drift preferences were already explicit: `skills.session_start_hook=false` and `skills.auto_refresh=false`. GitHub freshness preference remains `always`.
+- Status verification: checkout `/home/georgeqle/projects/tools/dev/agentic-skills`, local commit `57a8802b`, remote `https://github.com/GeorgeQLe/agentic-skills.git`.
+- Doctor verification reports every managed global install as `ok` across Claude and Codex.
+- Pack guidance remains project-local: do not install `packs/*` globally; run `$pack` or `$pack install <pack-or-skill>` from the target project, and use `$pack refresh` when a project already has `.agents/project.json`.
+- Reload guidance: Claude Code should use `/reload-skills` first, then `/clear` or restart if needed; Codex should start a fresh Codex CLI session if `$` skill visibility remains stale.
+
 ## Current Task - sync Skill Location Session Triage 2026-06-01
 
 **Goal:** Determine where the `sync` skill is installed and whether it is a global skill.
