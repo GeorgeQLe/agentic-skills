@@ -3076,6 +3076,7 @@ Shipped Code Review High #2: fixed the subscribe mutation's ON CONFLICT consent 
 ## 2026-06-02 — Skills Showcase source documentation pass
 
 - Shipped the Skills Showcase app-source documentation pass: added explanatory section comments across the app shell, prototype view, showcase pages, TUI workflow, debug animation machine, TRPC wiring, and newsletter data path without changing app behavior.
+- Included the corresponding `alignment/skills-showcase-documentation.html` review page with evidence, confidence, approval gates, and compile controls.
 - Converted the app Vitest config to ESM-native `vitest.config.mts` and pinned `jsdom` to `26.1.0`, resolving local Vitest 4/Vite ESM runtime failures on Node 20.17.0 while keeping the suite green.
 - Validation passed: `pnpm --dir apps/skills-showcase typecheck`, `pnpm --dir apps/skills-showcase test` (12 files / 129 tests), `pnpm --dir apps/skills-showcase build` (rerun outside sandbox after Turbopack port binding was denied), and `git diff --check`.
 - Deployment was not run from this ship because `tasks/deploy.md` targets the live Vercel production app and no explicit production deploy confirmation was given.

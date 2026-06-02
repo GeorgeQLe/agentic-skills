@@ -6,6 +6,7 @@ Ship the already-finished Skills Showcase app-source documentation pass, includi
 
 ## Changed Files
 
+- `alignment/skills-showcase-documentation.html`
 - `apps/skills-showcase/app/globals.css`
 - `apps/skills-showcase/app/layout.tsx`
 - `apps/skills-showcase/app/page.tsx`
@@ -47,11 +48,11 @@ Removed:
 
 Untouched:
 
-- `alignment/skills-showcase-documentation.html` is an unrelated untracked alignment artifact and is intentionally left out of the shipping boundary.
 - `tasks/todo.md` currently tracks the separate completed Codex mirror task and is intentionally left unchanged for this app-source ship.
 
 ## Per-File Purpose
 
+- `alignment/skills-showcase-documentation.html`: Preserve the review/alignment page that documents the proposed comment pass, evidence matrix, confidence register, approval gates, and compile controls.
 - `apps/skills-showcase/app/globals.css`: Add section comments for reset, theme tokens, typography, app chrome, prototype chrome, motion, accessibility, and responsive layers.
 - `apps/skills-showcase/app/layout.tsx`: Document the shared root layout role.
 - `apps/skills-showcase/app/page.tsx`: Document the default app route handoff into the showcase shell.
@@ -91,6 +92,7 @@ Untouched:
 ## User-Goal Mapping
 
 - The comment-only app-source changes satisfy the documentation pass by making the app shell, prototype animation system, showcase screens, TUI workflow, TRPC layer, and newsletter data path easier to maintain.
+- The alignment page preserves the review artifact for the documentation pass and keeps the evidence/gate context alongside the shipped source changes.
 - The Vitest config rename and `jsdom` pin are included because they were required to produce clean executable validation for this shipping boundary on the local runtime.
 - Prompt history, history notes, and this manifest satisfy the repository's `$ship` and quality-gate contracts.
 
@@ -100,11 +102,12 @@ Untouched:
 - `pnpm --dir apps/skills-showcase test` passed: 12 test files, 129 tests.
 - `pnpm --dir apps/skills-showcase build` first failed in the sandbox because Turbopack could not bind a local helper-process port while processing CSS. The same command was rerun outside the sandbox and passed.
 - `git diff --check` passed.
+- Alignment artifact content inspection confirmed the expected overview, phase sections, evidence matrix, approval gates, compile controls, and `alignment/skills-showcase-documentation.html` path binding.
 
 ## Skipped Tests
 
 - Full repository layer1 tests were not run because the shipped executable changes are isolated to `apps/skills-showcase`; app-level typecheck, test, and production build directly cover the affected package.
-- Browser/manual visual testing was not run because the app changes are comments plus test-runtime configuration. No rendered markup, component logic, CSS declarations, animation constants, or user-facing copy changed.
+- Browser/manual visual testing of the production app was not run because the app changes are comments plus test-runtime configuration. No rendered app markup, component logic, CSS declarations, animation constants, or user-facing copy changed. The alignment page was command-line inspected rather than browser-opened.
 - Deployment was skipped because `tasks/deploy.md` targets the live Vercel production app and the user did not explicitly confirm a production deploy.
 
 ## Adversarial Review
@@ -116,7 +119,7 @@ Findings and fixes:
 - Vitest failed to load `vitest.config.ts` through a CommonJS path against ESM-only dependencies. Fixed by replacing it with `vitest.config.mts`.
 - After the config fix, `jsdom@29.1.1` still failed under local Node 20.17.0 because its dependency graph requires newer ESM/runtime behavior. Fixed by pinning `jsdom` to `26.1.0`, which supports Node >=18 and passes the suite.
 - `next build` generated a tracked `next-env.d.ts` import change from dev to build route types. That was verification churn, not source work, and was restored before staging.
-- The untracked `alignment/skills-showcase-documentation.html` file is unrelated to this boundary and remains uncommitted.
+- Final status review found `alignment/skills-showcase-documentation.html` was related to the documentation pass, not unrelated. The manifest was corrected and the artifact is included in the follow-up ship commit.
 
 No remaining review findings block shipping.
 
@@ -124,6 +127,7 @@ No remaining review findings block shipping.
 
 - `jsdom@26.1.0` is older than the latest available jsdom. This is intentionally limited to dev/test runtime compatibility; production app code does not depend on jsdom. Future upgrades should move the local runtime to Node >=20.19 or Node 22/24 before restoring a newer jsdom.
 - Comments can become stale if future code changes do not keep them aligned. The current diff was reviewed against the surrounding code and app validation passed.
+- The alignment page was not browser-opened in this correction pass. Command-line inspection covered required content and compile-path binding, but visual layout was not manually inspected.
 
 ## Rollback Note
 
