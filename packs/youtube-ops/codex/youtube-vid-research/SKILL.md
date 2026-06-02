@@ -2,7 +2,7 @@
 name: youtube-vid-research
 description: Research one or more external YouTube videos for context, claims, structure, examples, terminology, and transferable takeaways
 type: research
-version: v0.1
+version: v0.2
 argument-hint: "<video URL or ID...> [--focus context|claims|summary|references] [--compare-channel <slug>]"
 ---
 
@@ -23,6 +23,15 @@ Do not write or overwrite synthesized deliverables until the user explicitly app
 When stopping for approval, build and attempt to open the alignment preview page first, then ask the user to review it and approve, question, or request adjustments. Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language. The approval request itself is the next action. Only emit next-skill routing after the approved artifact has been written or updated.
 
 Research external YouTube videos so the agent can understand what the user is referring to and reuse that context in specs, strategy, writing, product work, or implementation. This is the general comprehension lane; use `$youtube-video-audit` for performance diagnosis, `$youtube-competitive-research` for why a competitor video worked, and the `remotion` pack's `$youtube-format-research` for production/style breakdowns.
+
+## Evidence And Feedback Handling
+
+Treat user feedback as input to evaluate, not as automatic ground truth.
+
+- For factual, evidentiary, technical, or source-backed claims: verify against available evidence. If the user appears to misunderstand the evidence or states something factually incorrect, push back clearly and cite the evidence. Do not rewrite findings merely to agree.
+- For taste, brand, positioning preference, risk appetite, prioritization, or other subjective judgment calls: weigh user feedback heavily and adapt the recommendation unless it conflicts with verified evidence.
+- When feedback mixes facts and preference, separate them explicitly: correct the factual part, then incorporate the preference where it is a legitimate judgment call.
+- When uncertain, say what is known, what is inferred, and what would change the conclusion.
 
 ## Inputs
 

@@ -1,3 +1,26 @@
+## Current Targeted Update: Anti-Sycophancy Clause For Research Skills 2026-06-02
+
+**Goal:** Add evidence-aware feedback handling to every active `type: research` skill in pack Codex and Claude sources, preserving research rigor while adapting to subjective user preferences.
+
+**Acceptance Criteria:**
+- [x] Prompt history is captured under `prompts/investigate/`.
+- [x] `tasks/roadmap.md` and `tasks/todo.md` record the approved implementation plan.
+- [x] Active research skills are discovered mechanically from `packs/*/{codex,claude}/**/SKILL.md`, excluding every `archive/` copy.
+- [x] Each affected skill is archived with `scripts/skill-archive.sh <skill-dir>` before editing.
+- [x] Each active affected `SKILL.md` gains one `## Evidence And Feedback Handling` section with the shared clause.
+- [x] Each changed skill version is bumped by one decimal and has a `CHANGELOG.md` entry dated `2026-06-02`.
+- [x] Relevant managed installed copies are refreshed only when they come from an updated pack source.
+- [x] Verification proves active coverage, archive exclusion, version/archive/changelog consistency, pack health, whitespace cleanliness, and representative diffs.
+- [x] Intended changes are committed and pushed on the primary branch while unrelated dirty work is preserved.
+
+**Implementation Plan:**
+1. Capture the visible invocation and task-tracking artifacts.
+2. Generate the active research skill list with archive pruning.
+3. Archive each affected skill directory, then mechanically add the evidence-aware feedback clause, bump versions, and update changelogs.
+4. Refresh only relevant managed installed skill roots, if necessary.
+5. Run coverage/version/archive/changelog checks, `scripts/pack.sh doctor`, `git diff --check`, and representative diff review.
+6. Record review notes, stage intended files only, commit, and push.
+
 ## Current Targeted Update: sync Pack Install 2026-06-01
 
 **Goal:** Run `$pack install sync` to ensure the project-local `sync` skill is installed from the `gitops` pack and local skill roots are refreshed.

@@ -1,3 +1,28 @@
+## Current Task - Anti-Sycophancy Clause For Research Skills 2026-06-02
+
+**Goal:** Amend active research skills so they verify factual feedback against evidence, push back on factual misunderstandings, and defer more heavily on subjective preference calls.
+
+**Plan:**
+- [x] Capture the visible invocation under `prompts/investigate/`.
+- [x] Record the approved plan in `tasks/roadmap.md` and `tasks/todo.md`.
+- [x] Generate the active research `SKILL.md` list from pack sources while pruning `archive/`.
+- [x] Archive every affected skill directory before edits.
+- [x] Add the shared `## Evidence And Feedback Handling` section exactly once per active research skill.
+- [x] Bump each changed skill version by one decimal and add the `2026-06-02` changelog entry.
+- [x] Refresh only relevant managed installs from updated pack sources.
+- [x] Verify active coverage, archive exclusion, version/archive/changelog consistency, pack doctor, whitespace, and representative diffs.
+- [x] Record review notes, stage intended files only, commit, and push.
+
+### Review
+
+- Generated `/tmp/active-research-skills.txt` from active pack sources with `archive/` pruned; it found 102 `type: research` `SKILL.md` files across business-discovery, business-growth, business-ops, creator-foundation, devtool, game, remotion, and youtube-ops.
+- Ran `scripts/skill-archive.sh <skill-dir>` for all 102 affected skill directories before editing. Each changed skill now has `archive/<old-version>/SKILL.md`.
+- Added `## Evidence And Feedback Handling` exactly once to every active affected skill, immediately after the report-first approval gate, without changing Codex `$skill` or Claude `/skill` invocation style.
+- Bumped each active affected skill version by one decimal and added a `2026-06-02` changelog entry: "Added evidence-aware feedback handling so agents push back on factual misunderstandings while honoring subjective user preferences."
+- Reinstalled the enabled `devtool` pack copies after canonical devtool research skills became stale; local `.claude/skills/devtool-*` and `.codex/skills/devtool-*` roots are ignored generated files and `scripts/pack.sh doctor` now reports all devtool roots as `ok`.
+- Verification passed: the custom 102-skill version/archive/changelog/section check, active clause count `204` for heading plus lead line, archived `SKILL.md` clause matches `0`, `git diff --check`, and representative diffs for business, creator, game, devtool, remotion, and youtube packs.
+- `scripts/pack.sh doctor` still exits nonzero for unrelated existing local-root drift outside this task, including unknown/missing/stale non-devtool roots; those were intentionally not refreshed.
+
 ## Current Task - sync Pack Install 2026-06-01
 
 **Goal:** Install or refresh the project-local `sync` skill from the `gitops` pack.

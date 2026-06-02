@@ -1,0 +1,247 @@
+---
+name: category-design
+description: Play Bigger category creation — category diagnosis, naming, POV development, ecosystem mapping
+type: research
+version: v0.0
+invocation: sub-skill
+parent: positioning
+---
+
+## Pack Availability Guard
+
+Before telling the user to run a skill from another project-local pack, check `.agents/project.json.enabled_packs`. If the target pack is not enabled, recommend `$pack install <pack>` instead of the target skill. Global skills are always valid. Skills from this same pack are valid because the current skill is already running from that pack.
+
+# Category Design — Play Bigger Category Creation
+
+Invoke as `$category-design`.
+
+## Report-First Approval Gate
+
+Default to report-only: present findings, evidence coverage, assumptions, recommended artifact path, and proposed file changes in a pre-approval alignment page plus a concise conversation summary for user approval before creating or updating canonical research files.
+
+Do not write or overwrite synthesized deliverables until the user explicitly approves. Raw evidence capture may be persisted before analysis when reproducibility requires it.
+
+When stopping for approval, build and attempt to open the alignment preview page first, then ask the user to review it and approve, question, or request adjustments. Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language until after final compiled YAML has been provided and the approved artifacts have been written or updated.
+
+## Purpose
+
+Applies the Play Bigger category design framework to determine whether the product should compete in an existing category, carve a subcategory, or create an entirely new category. When category creation is warranted, develops category naming, Point of View (POV), and ecosystem mapping. Produces an intermediate artifact for the parent `$positioning` synthesis.
+
+## Prerequisites
+
+- **Hard**: `research/competitive-analysis.md` (or `research/{slug}/competitive-analysis.md`) must exist. If not, tell the user to run `$competitive-analysis` first and stop.
+- **Hard**: `research/icp.md` (or `research/{slug}/icp.md`) must exist. If not, tell the user to run `$icp` first and stop.
+- **Hard**: `research/journey-map.md` (or `research/{slug}/journey-map.md`) must exist. If not, tell the user to run `$journey-map` first and stop.
+- **Soft**: Read if they exist:
+  - `research/customer-feedback.md` — language that signals category dissatisfaction
+  - `research/positioning-jtbd.md` — job framing that may define a new category boundary
+  - `research/positioning-strategic-canvas.md` — value curve divergence suggesting new space
+  - `research/positioning.md` — existing positioning to build upon
+
+## Product-Path Scope Resolution
+
+Resolve research scope by product path before using code or app structure as a hint:
+
+1. If `$ARGUMENTS` names a non-archived `research/{slug}/` directory or a product-path ID whose `scope_path` points there, use that path.
+2. If `$ARGUMENTS` names only an archived path, stop and warn.
+3. Read `research/.progress.yaml` when present. Normalize legacy `active_path` to `active_paths`.
+4. If active product paths exist in the manifest, use those paths. Ask when multiple active paths exist.
+5. If no active manifest target exists, list non-archived product directories under `research/`. Auto-select only when exactly one exists.
+6. If no product directories exist, use flat `research/` single-product mode.
+
+## Process
+
+### 1. Load Context
+
+- Read `research/competitive-analysis.md` — existing categories, how competitors position
+- Read `research/icp.md` — customer language about the problem space
+- Read `research/journey-map.md` — where category expectations break down
+- Read prior framework outputs if available
+
+### 2. Category Diagnosis
+
+Determine which category strategy is appropriate by evaluating three options:
+
+**Existing category** — Compete within a known category:
+- When: the category is well-understood, you can win on a specific dimension, buyers already search for this category
+- Risk: you inherit comparison criteria set by the category leader
+
+**Subcategory** — Carve a niche within an existing category:
+- When: you serve a specific segment much better than generic solutions, the parent category is recognized but you need differentiation
+- Risk: the niche may be too small or the parent category absorbs it
+
+**New category** — Create a category that doesn't exist yet:
+- When: existing categories constrain your value, buyers are frustrated by current framing, a genuine market shift enables new thinking
+- Risk: expensive, slow, requires sustained investment in education
+
+Use WebSearch (3-5 queries) to validate category landscape:
+- "[domain] market categories", "[domain] Gartner/Forrester category"
+- "[problem space] new category", "[competitor] category creation"
+- "is [category] a real category", "[domain] category evolution"
+
+Present diagnosis. If the session is already in Plan mode, prefer `request_user_input`; otherwise ask in plain text:
+- "Based on evidence, I recommend [existing/subcategory/new] category strategy because [reasons]. The alternatives have these trade-offs: [trade-offs]. Does this match your ambition and resources?"
+
+### 3. Category Naming (if subcategory or new)
+
+If the diagnosis recommends subcategory or new category:
+
+- Generate 5-7 candidate category names
+- Evaluate each against criteria:
+  - **Descriptive**: Does it explain what the category does?
+  - **Differentiated**: Does it clearly separate from adjacent categories?
+  - **Memorable**: Is it easy to say, search, and remember?
+  - **Expandable**: Can it grow beyond the initial product?
+  - **Not already claimed**: Is another company using this name?
+
+Use WebSearch to validate name availability and adjacency.
+
+Present candidates. If the session is already in Plan mode, prefer `request_user_input`; otherwise ask in plain text:
+- "Here are candidate category names with trade-offs. Which resonates? Any naming constraints I should know?"
+
+### 4. Point of View (POV) Development
+
+Develop the category POV — the worldview that makes this category inevitable:
+
+- **The old way**: How things work today (and why it's broken)
+- **The shift**: What's changing that makes the old way untenable
+- **The new way**: How things should work (the category vision)
+- **The proof**: Evidence that the shift is real and happening now
+
+The POV should:
+- Be bigger than the product (it's about the category, not features)
+- Create urgency (why now, not later)
+- Resonate emotionally (not just rationally)
+- Be defensible (rooted in real trends, not manufactured urgency)
+
+### 5. Ecosystem Mapping
+
+Map the ecosystem that would surround this category:
+
+- **Adjacent categories**: What categories does this border?
+- **Potential allies**: Who benefits from this category existing?
+- **Potential partners**: What complementary products would integrate?
+- **Analysts/influencers**: Who would cover this category?
+- **Ecosystem maturity**: How developed is the supporting infrastructure?
+
+### 6. Assess Category Creation Feasibility
+
+If recommending new category, honestly assess:
+
+| Factor | Status | Evidence |
+|--------|--------|----------|
+| Market timing | [Early/Right/Late] | [why] |
+| Company resources | [Sufficient/Insufficient] | [what's needed] |
+| Buyer readiness | [Ready/Emerging/Premature] | [signals] |
+| Competition response | [Likely follow/Likely ignore/Will fight] | [why] |
+| Education investment | [Low/Medium/High] | [what's required] |
+
+### 7. Write Output
+
+Only after user approval.
+
+## Output
+
+### `research/positioning-category-design.md` (or `research/{slug}/positioning-category-design.md`)
+
+```markdown
+# Category Design Analysis
+
+> Based on: research/competitive-analysis.md, research/icp.md, research/journey-map.md
+> Date: [current date]
+> Methodology: Play Bigger Category Design
+
+## Category Diagnosis
+
+**Recommendation**: [Existing / Subcategory / New Category]
+**Confidence**: [Strong / Moderate / Weak]
+**Rationale**: [2-3 sentences]
+
+### Options Evaluated
+
+| Strategy | Fit | Pros | Cons | Evidence |
+|----------|-----|------|------|----------|
+| Existing: [name] | [H/M/L] | [pros] | [cons] | [source] |
+| Subcategory: [name] | [H/M/L] | [pros] | [cons] | [source] |
+| New: [name] | [H/M/L] | [pros] | [cons] | [source] |
+
+## Category Name (if subcategory or new)
+
+**Recommended name**: [name]
+**Alternatives considered**: [list with reasons rejected]
+
+### Name Evaluation
+
+| Criterion | Score | Notes |
+|-----------|-------|-------|
+| Descriptive | [1-5] | [notes] |
+| Differentiated | [1-5] | [notes] |
+| Memorable | [1-5] | [notes] |
+| Expandable | [1-5] | [notes] |
+| Available | [Y/N] | [notes] |
+
+## Point of View
+
+### The Old Way
+[How things work today — the broken status quo]
+
+### The Shift
+[What's changing — the trend that makes the old way untenable]
+
+### The New Way
+[The category vision — how things should work]
+
+### The Proof
+[Evidence the shift is real: market signals, customer behavior, technology trends]
+
+## Ecosystem Map
+
+### Adjacent Categories
+- [category] — [relationship]
+
+### Potential Allies
+- [company/community] — [why they benefit]
+
+### Integration Partners
+- [product/platform] — [complementary value]
+
+### Category Feasibility (new category only)
+
+| Factor | Status | Evidence |
+|--------|--------|----------|
+| Market timing | [status] | [evidence] |
+| Resources | [status] | [evidence] |
+| Buyer readiness | [status] | [evidence] |
+| Competition response | [status] | [evidence] |
+| Education cost | [status] | [evidence] |
+
+## Implications for Positioning Synthesis
+
+[How this category design analysis should influence the final positioning — what market category to declare, how to frame the category in messaging, and what POV narrative to lead with]
+```
+
+## Task Classification
+
+When this skill produces follow-up work, file it by execution semantics:
+
+- Immediately actionable work goes in `tasks/todo.md`.
+- Human-only external actions go in `tasks/manual-todo.md` with blocking/dependency annotations.
+- Condition-gated records go in `tasks/record-todo.md`.
+- Cadence-based reviews go in `tasks/recurring-todo.md`.
+
+## Constraints
+
+- **Intermediate artifact only.** This produces `research/positioning-category-design.md`, not the canonical `research/positioning.md`.
+- **Honest about category creation costs.** New categories require years of investment. Don't recommend lightly.
+- **POV must be bigger than the product.** If the POV is just "our product is better," it's not a category POV.
+- **Naming requires validation.** Don't recommend names without checking they're not already claimed.
+- **Present before writing.** Never write output files until findings are validated.
+- **Category strategy must match resources.** A bootstrapped startup cannot create a new category the same way a funded company can.
+
+## Alignment Page
+
+When this skill produces durable deliverables, build a full-depth HTML alignment page following `../ALIGNMENT-PAGE.md` in the parent skill's directory. Output: `alignment/category-design-{topic}.html`.
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.

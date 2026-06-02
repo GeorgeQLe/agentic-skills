@@ -1,5 +1,9 @@
 # enterprise-icp changelog (claude)
 
+## v0.5 - 2026-06-02
+
+- Added evidence-aware feedback handling so agents push back on factual misunderstandings while honoring subjective user preferences.
+
 ## v0.3 - 2026-05-26
 
 - Add Pack Availability Guard section (was missing)

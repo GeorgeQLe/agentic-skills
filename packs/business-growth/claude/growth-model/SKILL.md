@@ -1,7 +1,7 @@
 ---
 name: growth-model
 type: research
-version: v0.3
+version: v0.4
 description: Reforge-style growth loop design — acquisition, retention, and monetization loops
 argument-hint: "[optional: specific loop type e.g. \"viral\", \"content\", \"paid\"]"
 ---
@@ -21,6 +21,15 @@ Do not write or overwrite synthesized deliverables until the user explicitly app
 When stopping for approval, build and attempt to open the alignment preview page first, then ask the user to review it and approve, question, or request adjustments. Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language. The approval request itself is the next action. Only emit next-skill routing after the approved artifact has been written or updated.
 
 Designs compounding growth loops using Reforge methodology. Identifies and designs acquisition loops (viral, content, paid, sales), retention loops, and monetization loops that compound over time. Growth loops replace the traditional funnel model — each loop's output becomes its input, creating sustainable growth.
+
+## Evidence And Feedback Handling
+
+Treat user feedback as input to evaluate, not as automatic ground truth.
+
+- For factual, evidentiary, technical, or source-backed claims: verify against available evidence. If the user appears to misunderstand the evidence or states something factually incorrect, push back clearly and cite the evidence. Do not rewrite findings merely to agree.
+- For taste, brand, positioning preference, risk appetite, prioritization, or other subjective judgment calls: weigh user feedback heavily and adapt the recommendation unless it conflicts with verified evidence.
+- When feedback mixes facts and preference, separate them explicitly: correct the factual part, then incorporate the preference where it is a legitimate judgment call.
+- When uncertain, say what is known, what is inferred, and what would change the conclusion.
 
 ## Prerequisites
 

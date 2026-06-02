@@ -2,7 +2,7 @@
 name: strategic-canvas
 description: Blue Ocean strategic canvas — extract competing factors, build value curves, identify eliminate/reduce/raise/create moves
 type: research
-version: v0.0
+version: v0.1
 invocation: sub-skill
 parent: positioning
 ---
@@ -20,6 +20,15 @@ Default to report-only: present findings, evidence coverage, assumptions, recomm
 Do not write or overwrite synthesized deliverables until the user explicitly approves, unless the user invoked an explicit write/update/fix mode or clearly asked to write files upfront. Raw evidence capture may be persisted before analysis when reproducibility requires it; report those raw paths separately and still gate synthesized research/report writes.
 
 When stopping for approval, build and attempt to open the alignment preview page first, then ask the user to review it and approve, question, or request adjustments. Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language. The approval request itself is the next action. Only emit next-skill routing after the approved artifact has been written or updated.
+
+## Evidence And Feedback Handling
+
+Treat user feedback as input to evaluate, not as automatic ground truth.
+
+- For factual, evidentiary, technical, or source-backed claims: verify against available evidence. If the user appears to misunderstand the evidence or states something factually incorrect, push back clearly and cite the evidence. Do not rewrite findings merely to agree.
+- For taste, brand, positioning preference, risk appetite, prioritization, or other subjective judgment calls: weigh user feedback heavily and adapt the recommendation unless it conflicts with verified evidence.
+- When feedback mixes facts and preference, separate them explicitly: correct the factual part, then incorporate the preference where it is a legitimate judgment call.
+- When uncertain, say what is known, what is inferred, and what would change the conclusion.
 
 ## Prerequisites
 

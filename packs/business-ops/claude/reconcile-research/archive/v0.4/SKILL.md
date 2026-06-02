@@ -1,0 +1,286 @@
+---
+name: reconcile-research
+description: Cross-document consistency audit across research outputs — find contradictions, stale assumptions, and gaps
+type: research
+version: v0.4
+argument-hint: "[audit|fix] [all|icp|pricing|journey|enterprise|feedback|specs]"
+---
+
+# Reconcile Research — Cross-Document Consistency Audit
+
+## Report-First Approval Gate
+
+Default to report-only: present findings, evidence coverage, assumptions, recommended artifact path, and proposed file changes in a pre-approval alignment page plus a concise conversation summary for user approval before creating or updating canonical research, spec, or task files.
+
+Do not write or overwrite synthesized deliverables until the user explicitly approves, unless the user invoked an explicit write/update/fix mode or clearly asked to write files upfront. Raw evidence capture may be persisted before analysis when reproducibility requires it; report those raw paths separately and still gate synthesized research/report writes.
+
+When stopping for approval, build and attempt to open the alignment preview page first, then ask the user to review it and approve, question, or request adjustments. Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language. The approval request itself is the next action. Only emit next-skill routing after the approved artifact has been written or updated.
+
+Checks that research documents tell a consistent story. Finds contradictions between ICP and pricing, stale assumptions that customer feedback has invalidated, journey stages that metrics don't cover, and other cross-document gaps. Think of it as a linter for research coherence rather than structure.
+
+## Process
+
+### 0. Product-Path Scope Resolution
+
+Resolve research scope by product path before using code or app structure as a hint:
+
+1. If `$ARGUMENTS` names a non-archived `research/{slug}/` directory or a product-path ID whose `scope_path` points there, use that path. Treat `{slug}` as the product/app name, not the ICP, audience, or segment label.
+2. If `$ARGUMENTS` names only `research/_archive/{slug}/` or a manifest entry with `status: archived` or legacy `status: abandoned`, stop and warn that the path is archived; do not write or update scoped outputs there.
+3. Read `research/.progress.yaml` when present. Normalize legacy `active_path` to `active_paths` on read and write back `active_paths` on manifest updates. Treat legacy `abandoned` as `archived`; exclude `archived`, `abandoned`, `deferred`, `revisit_candidate`, `promoted`, and any `scope_path` under `research/_archive/` from active target selection.
+4. If active product paths exist in the manifest, use those paths. If multiple active paths exist, ask which one to target unless this skill explicitly supports cross-path output.
+5. If no active manifest target exists, list non-archived product directories under `research/`, excluding `research/_archive/` and dot directories. Auto-select only when exactly one exists; ask when multiple exist.
+6. If no product directories exist, use flat `research/` single-product mode.
+7. Detect monorepo/app/package structure only as a secondary hint. Suggest creating a missing `research/{slug}/` product path when code clearly exposes an app, but do not require code or monorepo detection before using `research/{slug}/`.
+
+When product path `{slug}` is active, read and write research under `research/{slug}/`, specs under `specs/{slug}/`, and treat top-level `research/*.md` files as flat-mode documents or cross-path summaries.
+
+### 1. Determine Mode and Scope
+
+Parse `$ARGUMENTS`:
+
+- **Mode**: `audit` (default, read-only) or `fix` (apply approved changes, write reconciliation report)
+- **Scope**: `all` (default), `icp`, `pricing`, `journey`, `enterprise`, `feedback`, or `specs`
+
+### 2. Inventory Research Documents
+
+Scan `research/` for main documents. Skip files matching `*-search-log.md` and `*-interview.md` — these are raw logs, not assertion-bearing documents.
+
+**Expected documents** (not all need to exist):
+- `research/icp.md` (cross-path overview), `research/{slug}/icp.md` (per-product-path)
+- `research/competitive-analysis.md` (or `research/{slug}/competitive-analysis.md`)
+- `research/journey-map.md` (or `research/{slug}/journey-map.md`)
+- `research/metrics.md` (or `research/{slug}/metrics.md`)
+- `research/gtm.md` (or `research/{slug}/gtm.md`)
+- `research/monetization.md` (or `research/{slug}/monetization.md`)
+- `research/enterprise-icp.md` (or `research/{slug}/enterprise-icp.md`)
+- `research/customer-feedback.md` (or `research/{slug}/customer-feedback.md`)
+
+When `research/` contains subdirectories, scan each `research/{slug}/` for per-product-path documents.
+
+**Stop condition**: If fewer than 2 research documents exist, display a message and exit — there's nothing to reconcile.
+
+### 3. Extract Claims
+
+Launch a **subagent per document** to extract structured claims. Each subagent reads one file and returns claims in these categories:
+
+| Category | Examples |
+|----------|----------|
+| **ICP targets** | Primary persona, company size, industry, geography |
+| **Pain points** | Problems the product solves, severity rankings |
+| **Budget signals** | Willingness to pay, price sensitivity, deal size |
+| **Channels** | Acquisition channels, distribution strategy |
+| **Messaging** | Value propositions, positioning statements |
+| **Pricing** | Model type, price points, tier structure, usage limits |
+| **Journey stages** | Stage names, transitions, aha moments, activation criteria |
+| **Metrics** | North star, per-stage metrics, thresholds |
+| **Competitors** | Named competitors, positioning relative to them |
+| **Deal-killers** | Enterprise blockers, compliance requirements |
+| **Feedback verdicts** | Validated assumptions, invalidated assumptions, new findings |
+
+Each claim includes the source file, section heading, and a direct quote for traceability.
+
+### 4. Cross-Reference Checks
+
+Launch **subagents per scope group** to run pairwise checks. Only run checks where both documents in a pair exist.
+
+#### `icp` scope — ICP vs all downstream (11 checks)
+
+Requires: `research/icp.md` + at least one downstream document.
+
+| # | Check | Documents | What to flag |
+|---|-------|-----------|--------------|
+| 1 | User profile consistency | ICP ↔ Journey Map | Journey references personas not defined in ICP |
+| 2 | Pain point coverage | ICP ↔ Competitive Analysis | Competitive analysis addresses pains not in ICP, or misses ICP pains |
+| 3 | Pain point → feature mapping | ICP ↔ Journey Map | Journey stages that don't map to any ICP pain point |
+| 4 | Budget signal → pricing alignment | ICP ↔ Monetization | Pricing exceeds ICP budget signals, or ignores stated willingness-to-pay |
+| 5 | Channel consistency | ICP ↔ GTM | GTM targets channels the ICP doesn't use, or misses primary ICP channels |
+| 6 | Messaging ↔ value prop alignment | ICP ↔ GTM | GTM messaging doesn't reflect ICP's top pain points or value props |
+| 7 | Market landscape agreement | ICP ↔ Competitive Analysis | ICP market sizing contradicts competitive analysis market data |
+| 8 | Feedback invalidation | ICP ↔ Customer Feedback | Feedback explicitly invalidates ICP assumptions still stated as fact |
+| 9 | Metric coverage of ICP goals | ICP ↔ Metrics | ICP success criteria not tracked by any metric |
+| 10 | ICP ↔ enterprise profile conflicts | ICP ↔ Enterprise ICP | Base ICP and enterprise ICP contradict on overlapping fields |
+| 11 | Geography/segment consistency | ICP ↔ GTM | GTM targets geographies or segments not mentioned in ICP |
+
+#### `pricing` scope — GTM vs Monetization coherence (7 checks)
+
+Requires: `research/gtm.md` + `research/monetization.md`.
+
+| # | Check | What to flag |
+|---|-------|--------------|
+| 1 | Revenue model agreement | GTM and Monetization describe different revenue models |
+| 2 | Price point consistency | GTM pricing references don't match Monetization's price points |
+| 3 | Tier structure alignment | GTM tier names/features don't match Monetization tier definitions |
+| 4 | Upgrade trigger consistency | GTM conversion triggers contradict Monetization's upgrade triggers |
+| 5 | Expansion metric alignment | GTM growth metrics don't match Monetization's expansion revenue drivers |
+| 6 | Aha moment → pricing gate | Monetization gates features before the aha moment defined in Journey Map |
+| 7 | Free tier scope | GTM's free tier description contradicts Monetization's free tier limits |
+
+#### `journey` scope — Journey Map vs Metrics/GTM/Monetization (7 checks)
+
+Requires: `research/journey-map.md` + at least one of Metrics/GTM/Monetization.
+
+| # | Check | What to flag |
+|---|-------|--------------|
+| 1 | Stage name consistency | Metrics or GTM reference journey stages by different names |
+| 2 | Metric coverage per stage | Journey stages with no corresponding metric in Metrics |
+| 3 | Aha moment agreement | Journey Map, Metrics, and Monetization define different aha moments |
+| 4 | Activation criteria consistency | Journey Map activation ≠ Metrics activation definition |
+| 5 | Channel → stage mapping | GTM channels don't map to the discovery/awareness stages in Journey Map |
+| 6 | Conversion trigger alignment | Journey Map conversion triggers ≠ GTM conversion triggers |
+| 7 | Retention stage coverage | Journey Map has retention stages that Metrics doesn't track |
+
+#### `enterprise` scope — Enterprise ICP vs base docs (6 checks)
+
+Requires: `research/enterprise-icp.md` + at least one base document.
+
+| # | Check | What to flag |
+|---|-------|--------------|
+| 1 | Profile field conflicts | Enterprise ICP contradicts base ICP on overlapping demographics |
+| 2 | Deal-killer coverage | Enterprise deal-killers not addressed in Journey Map or Monetization |
+| 3 | Stakeholder journey gaps | Enterprise stakeholders have no corresponding journey in Journey Map |
+| 4 | Pricing tier fit | Monetization tiers don't include an enterprise tier matching Enterprise ICP needs |
+| 5 | Lifecycle stage coverage | Enterprise evaluation→deployment→renewal lifecycle not reflected in Metrics |
+| 6 | Compliance gap propagation | Enterprise compliance requirements not reflected in scale-audit or journey |
+
+#### `feedback` scope — Customer Feedback propagation (5 checks)
+
+Requires: `research/customer-feedback.md` + at least one other document.
+
+| # | Check | What to flag |
+|---|-------|--------------|
+| 1 | Invalidated assumptions still present | Feedback marks an assumption as invalidated, but the source doc still states it as fact |
+| 2 | New findings not captured | Feedback identifies new pain points or personas not reflected upstream |
+| 3 | Severity mismatches | Feedback downgrades a pain point's severity, but ICP still lists it as primary |
+| 4 | Staleness alerts | Documents haven't been updated since feedback was last appended |
+| 5 | Contradicted positioning | Feedback contradicts GTM messaging or competitive positioning |
+
+#### Product-path checks (3 checks)
+
+Triggered when `research/` contains product-path subdirectories (e.g., `research/{slug}/icp.md`).
+
+| # | Check | What to flag |
+|---|-------|--------------|
+| 1 | Cross-ICP consistency | Product-path ICPs (`research/{slug}/icp.md`) contradict each other on shared market assumptions |
+| 2 | Shared pain point divergence | Same pain point described differently across product-path ICPs |
+| 3 | Channel overlap conflicts | Product-path ICPs target the same channel with conflicting messaging |
+
+### 5. Aggregate and Classify Findings
+
+Collect all findings from the cross-reference subagents. Classify each by severity:
+
+| Severity | Meaning | Example |
+|----------|---------|---------|
+| **Error** | Active contradiction — two documents assert incompatible facts | ICP says "SMB $50/mo budget" but Monetization's cheapest tier is $200/mo |
+| **Warning** | Stale or gap — may be intentional but should be reviewed | Journey Map defines 5 stages but Metrics only covers 3 |
+| **Info** | Suggestion — not wrong, but could be improved | GTM mentions a channel not discussed in ICP (may be a valid expansion) |
+
+### 6. Walk Through Findings Interactively
+
+Present findings **one at a time** using the `AskUserQuestion` tool, ordered by severity (Errors first, then Warnings, then Info). For each finding, use `AskUserQuestion` with the following format:
+
+```
+### [Scope] — [Check Name]
+**Severity**: Error | Warning | Info
+**Documents**: file-a.md ↔ file-b.md
+
+**file-a.md** says:
+> [direct quote from source]
+
+**file-b.md** says:
+> [direct quote from source]
+
+**Contradiction**: [one-sentence description of the conflict]
+**Recommended resolution**: [which document to update and why, based on dependency direction]
+
+How would you like to resolve this? (Options: accept recommendation, update the other document instead, skip/defer, or provide custom instructions)
+```
+
+**Dependency direction** informs the recommended resolution:
+- Upstream contradiction (e.g., ICP vs Journey Map) → recommend updating the downstream document
+- Customer feedback contradictions → recommend updating upstream (feedback is ground truth)
+- Peer contradictions (e.g., GTM vs Monetization) → note both are peers and ask which is authoritative
+
+Wait for the user's response before proceeding to the next finding. Collect all decisions into a resolution list.
+
+### 7. Apply Resolutions
+
+After walking through all findings:
+
+- **Audit mode** (default): Compile a summary of all findings and user decisions. Do not modify any files. Display the summary with the user's stated resolution for each item.
+- **Fix mode** (if `fix` was specified):
+  1. For each existing research document that will be replaced or substantively rewritten, archive the current file first, then apply the user-approved change to the canonical research document.
+  2. Write `research/reconciliation-report.md` as an audit trail:
+
+```markdown
+# Reconciliation Report — [date]
+
+## Resolved
+- [Error/Warning description] — resolved by archiving and updating [file] per user decision: "[user's stated resolution]"
+
+## Deferred
+- [Description] — user chose to skip
+
+## Info (no action)
+- [Info items the user chose not to act on]
+```
+
+  3. Re-run the audit to confirm fixes resolved the flagged issues.
+
+### 8. Populate Next Steps
+
+After presenting findings (audit mode) or applying resolutions (fix mode), display a `## Next Steps` section with a **Recommended** item and **Other options**. Use this format:
+
+```markdown
+## Next Steps
+
+**Recommended:** [skill with most conflicts] — [N] conflicts traced to this document; re-running it will resolve the most inconsistencies at once
+
+Other options:
+- check `.agents/project.json.enabled_packs` for `research-admin` — if `research-admin` is not enabled, recommend `/pack install research-admin` first; if `research-admin` is enabled, recommend `/research-roadmap` — rebuild the ordered documentation queue after reconciliation
+- check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `/pack install agent-work-admin` first; if `agent-work-admin` is enabled, recommend `/spec-drift` — check whether code/spec drift remains after research reconciliation
+- check `.agents/project.json.enabled_packs` for `agent-work-admin` — if `agent-work-admin` is not enabled, recommend `/pack install agent-work-admin` first; if `agent-work-admin` is enabled, recommend `/roadmap` — resequence implementation if reconciliation changed priorities
+```
+
+## Output Format
+
+Findings are presented **interactively one at a time** via `AskUserQuestion`, not as a batch report. After all findings have been walked through, display a final summary:
+
+```
+## Research Reconciliation — [scope] — Summary
+
+- Documents scanned: 6
+- Checks run: 28
+- Findings: 2 Errors, 3 Warnings, 1 Info
+- Resolved: 4, Deferred: 2
+```
+
+**Fix mode**: Same interactive walkthrough, followed by applying approved changes and writing `research/reconciliation-report.md` as audit trail.
+
+## Task Classification
+
+When this skill produces follow-up work, file it by execution semantics:
+
+- Immediately actionable implementation or documentation work goes in `tasks/todo.md`.
+- Human-only external actions tied to automated steps go in `tasks/manual-todo.md` with `_(blocks: Step N.X)_` or `_(after: Step N.X)_`; repo edits, SDK wiring, generated assets, local commands, tests, audits, and authenticated CLI/API work stay in `tasks/todo.md`.
+- One-time condition-gated records, baselines, or future measurements go in `tasks/record-todo.md` with source, condition, non-blocking reason, evidence, and promotion rule.
+- Cadence-based reviews, playtests, adoption checks, investor updates, retros, or docs-health checks go in `tasks/recurring-todo.md` with cadence, owner/agent, next due, evidence path, and escalation conditions.
+- Do not put non-blocking records or recurring obligations in `tasks/todo.md` unless they have been explicitly promoted into current execution work.
+
+## Constraints
+
+- **Read-only by default.** Only modify files when explicitly invoked with `fix` mode.
+- **Never auto-resolve contradictions.** Errors always require user input on which side is correct. Use `AskUserQuestion` for each finding individually.
+- **Show evidence.** Every finding must include direct quotes from both documents.
+- **Respect dependency direction.** Upstream documents are presumed authoritative over downstream, except customer feedback which is ground truth.
+- **No false positives.** If uncertain whether something is a real contradiction, classify it as Info, not Error.
+- **Skip absent documents.** Only run checks where both documents in a pair exist. Never flag a missing document as an error — that's `/research-roadmap`'s job.
+- **Use subagents** for claim extraction (one per document) and cross-reference checks (one per scope group) to parallelize work.
+- **Idempotent.** Running audit twice with no changes between should produce identical output.
+
+## Alignment Page
+
+When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/reconcile-research-{topic}.html`.
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.

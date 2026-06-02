@@ -2,7 +2,7 @@
 name: youtube-description-optimizer
 description: Audit, draft, or template YouTube descriptions and metadata for promise-match, search clarity, CTA hierarchy, links, chapters, hashtags, and upload readiness
 type: research
-version: v0.1
+version: v0.2
 argument-hint: "<video URL | video ID | script/outline path | channel slug> [--mode audit|draft|template] [--series <name>] [--compare-channel <slug>]"
 ---
 
@@ -23,6 +23,15 @@ Do not write or overwrite synthesized deliverables until the user explicitly app
 When stopping for approval, build and attempt to open the alignment preview page first, then ask the user to review it and approve, question, or request adjustments. Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language. The approval request itself is the next action. Only emit next-skill routing after the approved artifact has been written or updated.
 
 Optimize YouTube descriptions and adjacent metadata for existing videos, future uploads, and repeatable series templates. This is the description/metadata lane; use `$youtube-video-audit` for full single-video performance diagnosis and `$youtube-title-thumbnail-audit` for title/thumbnail packaging.
+
+## Evidence And Feedback Handling
+
+Treat user feedback as input to evaluate, not as automatic ground truth.
+
+- For factual, evidentiary, technical, or source-backed claims: verify against available evidence. If the user appears to misunderstand the evidence or states something factually incorrect, push back clearly and cite the evidence. Do not rewrite findings merely to agree.
+- For taste, brand, positioning preference, risk appetite, prioritization, or other subjective judgment calls: weigh user feedback heavily and adapt the recommendation unless it conflicts with verified evidence.
+- When feedback mixes facts and preference, separate them explicitly: correct the factual part, then incorporate the preference where it is a legitimate judgment call.
+- When uncertain, say what is known, what is inferred, and what would change the conclusion.
 
 ## Inputs
 

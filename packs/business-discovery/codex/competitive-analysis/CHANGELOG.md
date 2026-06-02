@@ -1,5 +1,9 @@
 # competitive-analysis changelog (codex)
 
+## v0.11 - 2026-06-02
+
+- Added evidence-aware feedback handling so agents push back on factual misunderstandings while honoring subjective user preferences.
+
 ## v0.7 - 2026-05-27
 
 - Added active-path-only product-path manifest behavior and a bounded deferred-path implications section for parked product directions.

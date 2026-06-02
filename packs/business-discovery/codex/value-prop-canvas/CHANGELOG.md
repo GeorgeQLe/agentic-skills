@@ -1,5 +1,9 @@
 # value-prop-canvas changelog (codex)
 
+## v0.4 - 2026-06-02
+
+- Added evidence-aware feedback handling so agents push back on factual misunderstandings while honoring subjective user preferences.
+
 ## v0.1
 
 - Clarify value-prop-canvas as an optional AFPS detour for weak, disputed, or explicitly scored solution-customer fit.

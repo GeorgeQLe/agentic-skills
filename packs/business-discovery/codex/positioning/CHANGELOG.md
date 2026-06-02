@@ -1,5 +1,9 @@
 # positioning changelog (codex)
 
+## v0.8 - 2026-06-02
+
+- Added evidence-aware feedback handling so agents push back on factual misunderstandings while honoring subjective user preferences.
+
 ## v0.7 - 2026-05-31
 
 - Redesigned as parent router + framework child skills

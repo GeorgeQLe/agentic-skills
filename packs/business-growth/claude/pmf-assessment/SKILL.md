@@ -1,7 +1,7 @@
 ---
 name: pmf-assessment
 type: research
-version: v0.3
+version: v0.4
 description: Sean Ellis PMF survey design + qualitative signal analysis for post-launch fit measurement
 argument-hint: "[optional: specific signal or segment to focus on]"
 ---
@@ -21,6 +21,15 @@ Do not write or overwrite synthesized deliverables until the user explicitly app
 When stopping for approval, build and attempt to open the alignment preview page first, then ask the user to review it and approve, question, or request adjustments. Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language. The approval request itself is the next action. Only emit next-skill routing after the approved artifact has been written or updated.
 
 Designs a Sean Ellis PMF survey and qualitative signal analysis framework for measuring product-market fit post-launch. Combines the quantitative "very disappointed" threshold (40%) with qualitative signal analysis from customer feedback, usage patterns, and market indicators. This is a post-launch measurement skill — it should run after the product has real users.
+
+## Evidence And Feedback Handling
+
+Treat user feedback as input to evaluate, not as automatic ground truth.
+
+- For factual, evidentiary, technical, or source-backed claims: verify against available evidence. If the user appears to misunderstand the evidence or states something factually incorrect, push back clearly and cite the evidence. Do not rewrite findings merely to agree.
+- For taste, brand, positioning preference, risk appetite, prioritization, or other subjective judgment calls: weigh user feedback heavily and adapt the recommendation unless it conflicts with verified evidence.
+- When feedback mixes facts and preference, separate them explicitly: correct the factual part, then incorporate the preference where it is a legitimate judgment call.
+- When uncertain, say what is known, what is inferred, and what would change the conclusion.
 
 ## Prerequisites
 

@@ -2,7 +2,7 @@
 name: youtube-peer-benchmark
 description: Benchmark a YouTube channel against peers — discover comparable creators, pull real metrics via yt-dlp, compare performance at equivalent stages, and diagnose whether the gap is quality, volume, format, or conversion
 type: research
-version: v0.1
+version: v0.2
 argument-hint: "<channel URL or handle> [--niche 'keyword phrase'] [--peers @handle1,@handle2] [--count N]"
 ---
 
@@ -25,6 +25,15 @@ When stopping for approval, build and attempt to open the alignment preview page
 Given a target YouTube channel, discover comparable creators in the same niche, pull real performance data from yt-dlp, and produce a structured competitive analysis. The output answers: how does this channel compare to peers, where is it ahead, where is it behind, and what specifically explains the gap?
 
 Use this for creator channels, founder-led shows, and topic publications such as `@GeorgeLe`, `WeeklyG`, and `WeeklySOTA`.
+
+## Evidence And Feedback Handling
+
+Treat user feedback as input to evaluate, not as automatic ground truth.
+
+- For factual, evidentiary, technical, or source-backed claims: verify against available evidence. If the user appears to misunderstand the evidence or states something factually incorrect, push back clearly and cite the evidence. Do not rewrite findings merely to agree.
+- For taste, brand, positioning preference, risk appetite, prioritization, or other subjective judgment calls: weigh user feedback heavily and adapt the recommendation unless it conflicts with verified evidence.
+- When feedback mixes facts and preference, separate them explicitly: correct the factual part, then incorporate the preference where it is a legitimate judgment call.
+- When uncertain, say what is known, what is inferred, and what would change the conclusion.
 
 ## Prerequisites
 

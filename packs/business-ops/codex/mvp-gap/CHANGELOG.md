@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.3 - 2026-06-02
+
+- Added evidence-aware feedback handling so agents push back on factual misunderstandings while honoring subjective user preferences.
+
 ## v0.2 - 2026-05-30
 
 - Added product-path scope resolution that prefers non-archived `research/{slug}/` paths and active manifest paths before code or monorepo hints.

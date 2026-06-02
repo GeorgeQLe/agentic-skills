@@ -1,5 +1,9 @@
 # competitive-analysis changelog (claude)
 
+## v0.11 - 2026-06-02
+
+- Added evidence-aware feedback handling so agents push back on factual misunderstandings while honoring subjective user preferences.
+
 ## v0.8 - 2026-05-27
 
 - Handle plural `active_paths` manifest field with backward compatibility for singular `active_path`
