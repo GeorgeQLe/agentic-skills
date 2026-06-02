@@ -1,3 +1,26 @@
+## Current Targeted Update: Alignment Page Confirmed-State Contract 2026-06-02
+
+**Goal:** Change the shared alignment-page lifecycle from a permanent approval form into review-state gates before approval and confirmed-state records after approval is applied.
+
+**Acceptance Criteria:**
+- [x] Prompt history is captured under `prompts/investigate/`.
+- [x] `tasks/roadmap.md` and `tasks/todo.md` record the implementation plan and review notes.
+- [x] The canonical `CLAUDE.md` `alignment-convention` block defines `review`, `confirmed`, and future `amended` states.
+- [x] Gate-question UI, final compile controls, unanswered counters, and approval-blocking language are explicitly review-state only.
+- [x] Confirmed pages preserve approval decisions, user requests, evidence, assumptions/confidence, source gaps, proposed file changes, and confirmation changes while removing required gate controls.
+- [x] After-approval handling says requested edits are applied before confirmation, unresolved clarification/negative feedback returns to review, and replaced pages are archived first.
+- [x] Bundled `ALIGNMENT-PAGE.md` files are regenerated from `CLAUDE.md` with no generator drift.
+- [x] Focused layer1 tests cover the lifecycle contract and confirmed-page behavior.
+- [x] Verification passes for dry-run generation, focused tests, skill version checks, and whitespace.
+- [x] Intended changes are committed and pushed on the primary branch while unrelated dirty work is preserved.
+
+**Implementation Plan:**
+1. Capture the visible invocation and record this execution plan.
+2. Update only the canonical alignment convention in `CLAUDE.md`, keeping review gates and feedback YAML intact while adding lifecycle, confirmed-page, and after-approval handling rules.
+3. Run `node scripts/upgrade-alignment-page.mjs` to regenerate bundled `ALIGNMENT-PAGE.md` files.
+4. Extend `tests/layer1/alignment-gates.test.ts` with assertions for review/confirmed lifecycle semantics and confirmed-page record preservation.
+5. Run the planned verification commands, inspect the diff boundary, update review notes, then stage/commit/push intended files only.
+
 ## Current Targeted Update: Codex Mirrors For Quiz/UAT/Taste Pack Skills 2026-06-02
 
 **Goal:** Add Codex-side mirrors for `quiz-me`, `uat-guide`, and `taste-calibration` while preserving Claude skill intent, versions, and pack conventions.

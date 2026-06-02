@@ -93,6 +93,8 @@ const activeAlignmentSkillFiles = [...activeSkillFiles("global"), ...activeSkill
   })
   .sort();
 
+const generatedAlignmentSkillFiles = activeAlignmentSkillFiles.filter(hasBundle);
+
 describe("alignment page gate contract", () => {
   it("points core skills at the bundled convention instead of CLAUDE.md", () => {
     for (const path of coreSkills) {
@@ -122,6 +124,94 @@ describe("alignment page gate contract", () => {
       expect(content, `${path} in-page assumptions`).toContain("assumptions/confidence");
       expect(content, `${path} proposed file changes`).toContain("proposed file changes");
       expect(content, `${path} pre-approval stop`).toContain("the next action is review of the HTML alignment page");
+    }
+  });
+
+  it("defines review, confirmed, and amended lifecycle states in generated alignment-page conventions", () => {
+    expect(generatedAlignmentSkillFiles.length).toBeGreaterThan(100);
+    for (const path of generatedAlignmentSkillFiles) {
+      const content = conventionText(path);
+      expect(content, `${path} lifecycle section`).toContain("**Alignment lifecycle.**");
+      expect(content, `${path} review state`).toContain("`review` is the draft/pre-approval page");
+      expect(content, `${path} confirmed state`).toContain("`confirmed` is the post-approval page");
+      expect(content, `${path} amended state`).toContain("`amended` is a future revision of a confirmed page");
+      expect(content, `${path} finished current amendable`).toContain(
+        "finished and current for the completed alignment cycle, but it remains amendable",
+      );
+    }
+  });
+
+  it("scopes approval gates, required questions, and final answer compilation to review pages", () => {
+    expect(generatedAlignmentSkillFiles.length).toBeGreaterThan(100);
+    for (const path of generatedAlignmentSkillFiles) {
+      const content = conventionText(path);
+      expect(content, `${path} review gates`).toContain("In `review` pages, treat gates");
+      expect(content, `${path} review-only finalization blocker`).toContain(
+        "A gate blocks finalization only while the page is in `review`",
+      );
+      expect(content, `${path} confirmed read-only decisions`).toContain(
+        "In `confirmed` pages, preserve the gate decisions as read-only approval records",
+      );
+      expect(content, `${path} review questions`).toContain(
+        "In `review` pages, each gate must contain at least one required inline question",
+      );
+      expect(content, `${path} confirmed no required inputs`).toContain(
+        "Confirmed pages must not keep these as required input controls",
+      );
+      expect(content, `${path} review compile controls`).toContain(
+        'In `review` pages, at the bottom of the page, include an ordinary in-flow compile section with a "Compile Feedback YAML" button',
+      );
+      expect(content, `${path} review pre-approval stop`).toContain(
+        "While an alignment page is in `review`, the next action is review of the HTML alignment page",
+      );
+    }
+  });
+
+  it("requires confirmed pages to remove approval UI while preserving approval and evidence records", () => {
+    expect(generatedAlignmentSkillFiles.length).toBeGreaterThan(100);
+    for (const path of generatedAlignmentSkillFiles) {
+      const content = conventionText(path);
+      expect(content, `${path} confirmed contract`).toContain("**Confirmed page contract.**");
+      expect(content, `${path} confirmed status`).toContain("`alignment_status: confirmed`");
+      expect(content, `${path} confirmation metadata`).toContain(
+        "confirmation date, confirmed artifact paths, approval source summary",
+      );
+      expect(content, `${path} finished amendable language`).toContain("finished but amendable language");
+      expect(content, `${path} remove gate ui`).toContain(
+        'Remove required gate-question controls, the final "Compile Answers" button, unanswered-question counters',
+      );
+      expect(content, `${path} preserve approval record`).toContain("Preserve the full research and approval record");
+      expect(content, `${path} preserve evidence`).toContain(
+        "answered decisions, user requests, evidence matrix, assumptions/confidence register, source gaps, proposed file changes",
+      );
+      expect(content, `${path} changed during confirmation`).toContain("what changed during confirmation");
+      expect(content, `${path} research caveats`).toContain("Keep research caveats visible");
+      expect(content, `${path} not immutable`).toContain(
+        "`confirmed` means approved/current, not immutable or permanently true",
+      );
+    }
+  });
+
+  it("handles final approval YAML by applying edits before confirmation or returning unresolved feedback to review", () => {
+    expect(generatedAlignmentSkillFiles.length).toBeGreaterThan(100);
+    for (const path of generatedAlignmentSkillFiles) {
+      const content = conventionText(path);
+      expect(content, `${path} after approval section`).toContain("**After approval handling.**");
+      expect(content, `${path} edits before confirmation`).toContain(
+        "If it contains approvals plus user-requested edits, first update the page, research, and proposed canonical artifacts",
+      );
+      expect(content, `${path} confirm after writing`).toContain(
+        "then write or update the approved canonical artifacts and confirm the page",
+      );
+      expect(content, `${path} unresolved feedback returns to review`).toContain(
+        "If it contains `needs-clarification`, unresolved `down` feedback, or any unresolved negative feedback",
+      );
+      expect(content, `${path} archive before replace`).toMatch(
+        /Before replacing any existing alignment page, archive it to `docs\/history\/archive\/YYYY-MM-DD\/HHMMSS\/alignment\/[^`]+\.html`/,
+      );
+      expect(content, `${path} future amendments`).toContain(
+        "Future amendments to confirmed pages follow the same archive-first rule",
+      );
     }
   });
 
@@ -255,10 +345,10 @@ describe("alignment page gate contract", () => {
     for (const path of activeAlignmentSkillFiles) {
       const content = conventionText(path);
       expect(content, `${path} bottom compile answers`).toMatch(
-        /At the bottom of the page, include an ordinary in-flow compile section with a "Compile Feedback YAML" button.*separate "Compile Answers" button/,
+        /(?:In `review` pages, at|At) the bottom of the page, include an ordinary in-flow compile section with a "Compile Feedback YAML" button.*separate "Compile Answers" button/,
       );
-      expect(content, `${path} bottom compile section`).toContain(
-        'At the bottom of the page, include an ordinary in-flow compile section with a "Compile Feedback YAML" button',
+      expect(content, `${path} bottom compile section`).toMatch(
+        /(?:In `review` pages, at|At) the bottom of the page, include an ordinary in-flow compile section with a "Compile Feedback YAML" button/,
       );
       expect(content, `${path} no persistent banner`).toContain(
         "The bottom compile section must not be sticky, fixed, floating, or styled as a persistent banner",

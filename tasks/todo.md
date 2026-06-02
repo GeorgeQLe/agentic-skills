@@ -1,3 +1,26 @@
+## Current Task - Alignment Page Confirmed-State Contract 2026-06-02
+
+**Goal:** Update the shared alignment-page convention so pages move from `review` gates to `confirmed` records after approval is applied, while preserving future archived amendment handling.
+
+**Plan:**
+- [x] Capture the visible invocation under `prompts/investigate/`.
+- [x] Update the canonical `CLAUDE.md` alignment convention with lifecycle, confirmed-page, and after-approval rules.
+- [x] Regenerate bundled `ALIGNMENT-PAGE.md` files from the canonical convention.
+- [x] Update focused layer1 coverage for review-state gates and confirmed-state record behavior.
+- [x] Run dry-run generation, focused tests, skill version checks, and whitespace verification.
+- [x] Record review notes, stage intended files only, commit, and push.
+
+### Review
+
+- Added an `Alignment lifecycle` contract to the canonical `CLAUDE.md` block for `review`, `confirmed`, and future `amended` pages.
+- Scoped active gates, required inline questions, final `Compile Answers`, unanswered counters, and approval-blocking copy to `review` pages only.
+- Added a confirmed-page contract requiring `alignment_status: confirmed`, confirmation metadata, read-only approval decisions, preserved evidence/assumptions/source gaps/proposed file changes, and finished-but-amendable language.
+- Added after-approval handling so requested edits are applied before confirmation, unresolved clarification or negative feedback returns the page to `review`, and replacements/amendments archive the prior page first.
+- Regenerated 278 convention-owned `ALIGNMENT-PAGE.md` bundles from `CLAUDE.md`; no `SKILL.md` frontmatter changed, so no skill version/archive bump was required.
+- Added focused `alignment-gates` coverage for generated lifecycle semantics, confirmed-page UI removal/record preservation, after-approval handling, and review-state final compilation.
+- Verification passed: `node scripts/upgrade-alignment-page.mjs --dry-run`, `pnpm --dir tests exec vitest run --project layer1 layer1/alignment-gates.test.ts`, `bash scripts/skill-versions.sh --missing`, and `git diff --check`.
+- Preserved unrelated dirty file `apps/skills-showcase/alignment/animation-code-walkthrough.html` outside the staged change boundary.
+
 ## Current Task - Codex Mirrors For Quiz/UAT/Taste Pack Skills 2026-06-02
 
 **Goal:** Add Codex-side mirrors for `quiz-me`, `uat-guide`, and `taste-calibration` while preserving Claude skill intent, versions, and pack conventions.
