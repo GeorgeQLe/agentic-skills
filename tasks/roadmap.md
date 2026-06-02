@@ -16,6 +16,30 @@
 4. Apply a minimal local/root fix only if evidence shows missing or stale Claude install state.
 5. Run focused verification, record review notes, and ship intended artifacts when source/tracked files changed.
 
+## Current Targeted Update: Positioning Alignment Contract Caveats 2026-06-02
+
+**Goal:** Fix positioning workflow contracts so framework subskills bundle local alignment-page conventions and the product-positioning shortcut uses the same pre-approval alignment gate as default framework selection.
+
+**Acceptance Criteria:**
+- [x] Codex and Claude `positioning` skills are archived from `v0.8`, bumped to `v0.9`, and changelogs document the Mode C approval-gate fix.
+- [x] Codex and Claude positioning framework subskills (`jtbd-positioning`, `strategic-canvas`, `moore-positioning`, `category-design`, `obviously-awesome`) are archived from `v0.1`, bumped to `v0.2`, and changelogs document the sibling alignment-page bundle fix.
+- [x] Framework subskill `## Alignment Page` stubs point to sibling `ALIGNMENT-PAGE.md` files in each framework skill directory.
+- [x] `scripts/upgrade-alignment-page.mjs` generates bundled framework `ALIGNMENT-PAGE.md` files and its dry-run reports no remaining drift.
+- [x] Mode C builds an alignment page for the shortcut execution plan and writes `tasks/todo.md` only after final compiled YAML approval.
+- [x] Layer1 coverage checks sibling framework bundles, framework stub wording, and Mode C approval ordering.
+- [x] Skill archive audit, layer1 tests, showcase data generation, and whitespace checks pass before shipping.
+
+**Implementation Plan:**
+1. Archive the active Codex and Claude `positioning` skills plus all five mirrored framework subskills before editing.
+2. Update Mode C in both parent `positioning/SKILL.md` files to build the shortcut execution-plan alignment page, stop for approval, and write `tasks/todo.md` only after final compiled YAML approval.
+3. Run the alignment-page generator so framework subskills get local `ALIGNMENT-PAGE.md` bundles and normalized sibling stubs.
+4. Bump versions and update changelogs for parent and framework skills.
+5. Regenerate skills showcase data because version fields changed.
+6. Add focused layer1 assertions for framework bundle/stub locality and Mode C approval ordering.
+7. Run required verification, review the diff, commit, and push the intended changes on `master`.
+
+**Result:** Completed. The positioning parent shortcut is approval-gated, framework subskills use sibling generated alignment-page bundles, version/archive/changelog metadata is current, showcase data is regenerated, and required validation passed.
+
 ## Current Targeted Update: Anti-Sycophancy Clause For Research Skills 2026-06-02
 
 **Goal:** Add evidence-aware feedback handling to every active `type: research` skill in pack Codex and Claude sources, preserving research rigor while adapting to subjective user preferences.

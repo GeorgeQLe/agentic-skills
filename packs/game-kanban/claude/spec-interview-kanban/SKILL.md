@@ -33,4 +33,3 @@ Never move cards backward from Done or Punt. If kanban fails, warn and keep the 
 ## Alignment Page
 
 When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/spec-interview-kanban-{topic}.html`.
-

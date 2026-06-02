@@ -21,7 +21,7 @@ describe("journey-map alignment preview contract", () => {
     for (const check of checks) {
       const content = readFileSync(check.path, "utf8");
 
-      expect(content, `${check.command} version`).toMatch(/^version: v0\.6$/m);
+      expect(content, `${check.command} version`).toMatch(/^version: v0\.7$/m);
       expect(content, `${check.command} report-first gate`).toContain("## Report-First Approval Gate");
       expect(content, `${check.command} builds alignment preview first`).toContain(
         "When stopping for approval, build and attempt to open the alignment preview page first",

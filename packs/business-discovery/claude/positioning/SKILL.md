@@ -2,7 +2,7 @@
 name: positioning
 description: Orchestrator — detect market vs product mode, recommend positioning frameworks, synthesize outputs into unified positioning
 type: research
-version: v0.8
+version: v0.9
 argument-hint: "[optional: \"product\" | \"--synthesize\" | focus area]"
 invocation: orchestrator
 ---
@@ -177,7 +177,16 @@ After approval: write `research/positioning.md`, then emit next-step routing.
 
 ### 5. Mode C — Product-Positioning Shortcut
 
-Skip multi-select. Write directly to `tasks/todo.md`:
+Skip multi-select. Build an alignment page for the shortcut execution plan with:
+
+1. **Shortcut explanation**: product-positioning shortcut selected and why `obviously-awesome` is the only queued framework
+2. **Evidence readiness**: customer-feedback requirement and any missing evidence caveats
+3. **Proposed execution plan**: the exact `tasks/todo.md` framework queue shown below
+4. **Approval gate**: require final compiled YAML approval before writing `tasks/todo.md`
+
+Do not write `tasks/todo.md` before alignment approval. The next action is review of the HTML alignment page.
+
+After user approval via final compiled YAML, write this execution plan to `tasks/todo.md`:
 
 ```markdown
 ## Positioning Framework Execution

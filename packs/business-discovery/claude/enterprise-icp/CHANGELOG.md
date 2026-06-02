@@ -4,6 +4,10 @@
 
 - Added evidence-aware feedback handling so agents push back on factual misunderstandings while honoring subjective user preferences.
 
+## v0.4
+
+- Archived previous skill contract.
+
 ## v0.3 - 2026-05-26
 
 - Add Pack Availability Guard section (was missing)

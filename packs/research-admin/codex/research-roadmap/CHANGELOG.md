@@ -18,6 +18,10 @@
 
 - Added feedback-only YAML alignment-page handling so section concerns and clarification requests can be sent before final gate answers.
 
+## v0.6
+
+- Archived previous skill contract.
+
 ## v0.4 - 2026-05-27
 
 - Added `research/.progress.yaml` product-path manifest intake so active and deferred paths appear in the documentation queue without forcing full downstream research for parked paths.

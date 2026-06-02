@@ -2,7 +2,7 @@
 name: positioning
 description: Orchestrator — detect market vs product mode, recommend positioning frameworks, synthesize outputs into unified positioning
 type: research
-version: v0.8
+version: v0.9
 argument-hint: "[optional: \"product\" | \"--synthesize\" | focus area]"
 invocation: orchestrator
 ---
@@ -21,7 +21,7 @@ This is an **orchestrator skill** using the parent router delegation pattern. It
 
 Default to report-only: present findings, evidence coverage, assumptions, recommended artifact path, and proposed file changes in a pre-approval alignment page plus a concise conversation summary for user approval before creating or updating canonical research, spec, or task files.
 
-Do not write or overwrite synthesized deliverables until the user explicitly approves, unless the user invoked an explicit write/update/fix mode or clearly asked to write files upfront.
+Do not write or overwrite synthesized deliverables until the user explicitly approves, unless the user invoked an explicit write/update/fix mode or clearly asked to write files upfront. Raw evidence capture may be persisted before analysis when reproducibility requires it; report those raw paths separately and still gate synthesized research/report writes.
 
 When stopping for approval, build and attempt to open the alignment preview page first, then ask the user to review it and approve, question, or request adjustments. Do not include `Recommended next skill`, `Recommended next command`, or downstream routing language. The approval request itself is the next action. Only emit next-skill routing after the approved artifact has been written or updated.
 
@@ -40,11 +40,11 @@ Treat user feedback as input to evaluate, not as automatic ground truth.
 
 - **Hard**: `research/icp.md` (or `research/{slug}/icp.md`) must exist. If not, tell the user to run `$icp` first and stop.
 - **Hard**: `research/competitive-analysis.md` (or `research/{slug}/competitive-analysis.md`) must exist. If not, tell the user to run `$competitive-analysis` first and stop.
-- **Strong default**: `research/journey-map.md` should exist before writing canonical positioning. If missing, recommend `$journey-map` first unless the user explicitly needs a provisional positioning analysis.
+- **Strong default**: `research/journey-map.md` (or `research/{slug}/journey-map.md`) should exist before writing canonical positioning. If missing, recommend `$journey-map` first unless the user explicitly needs a provisional positioning analysis.
 - **Soft**: Read these if they exist:
-  - `research/journey-map.md`
-  - `research/customer-feedback.md`
-  - `research/monetization.md`
+  - `research/journey-map.md` — where value is delivered, the aha moment
+  - `research/customer-feedback.md` — real customer language about what makes the product different
+  - `research/monetization.md` — pricing context for value perception
 
 ## Operational Modes
 
@@ -68,15 +68,15 @@ Activated by: `$positioning product` or `$positioning post-launch` or `$position
 
 Resolve research scope by product path before using code or app structure as a hint:
 
-1. If `$ARGUMENTS` names a non-archived `research/{slug}/` directory or a product-path ID whose `scope_path` points there, use that path.
-2. If `$ARGUMENTS` names only `research/_archive/{slug}/` or a manifest entry with `status: archived`, stop and warn.
-3. Read `research/.progress.yaml` when present. Normalize legacy fields.
-4. If active product paths exist in the manifest, use those paths. Ask if multiple.
-5. If no active manifest target exists, list non-archived product directories under `research/`.
+1. If `$ARGUMENTS` names a non-archived `research/{slug}/` directory or a product-path ID whose `scope_path` points there, use that path. Treat `{slug}` as the product/app name, not the ICP, audience, or segment label.
+2. If `$ARGUMENTS` names only `research/_archive/{slug}/` or a manifest entry with `status: archived` or legacy `status: abandoned`, stop and warn that the path is archived; do not write or update scoped outputs there.
+3. Read `research/.progress.yaml` when present. Normalize legacy `active_path` to `active_paths` on read and write back `active_paths` on manifest updates. Treat legacy `abandoned` as `archived`; exclude `archived`, `abandoned`, `deferred`, `revisit_candidate`, `promoted`, and any `scope_path` under `research/_archive/` from active target selection.
+4. If active product paths exist in the manifest, use those paths. If multiple active paths exist, ask which one to target unless this skill explicitly supports cross-path output.
+5. If no active manifest target exists, list non-archived product directories under `research/`, excluding `research/_archive/` and dot directories. Auto-select only when exactly one exists; ask when multiple exist.
 6. If no product directories exist, use flat `research/` single-product mode.
-7. Detect monorepo/app/package structure only as a secondary hint.
+7. Detect monorepo/app/package structure only as a secondary hint. Suggest creating a missing `research/{slug}/` product path when code clearly exposes an app, but do not require code or monorepo detection before using `research/{slug}/`.
 
-When product path `{slug}` is active, read and write research under `research/{slug}/`.
+When product path `{slug}` is active, read and write research under `research/{slug}/`, specs under `specs/{slug}/`, and treat top-level `research/*.md` files as flat-mode documents or cross-path summaries.
 
 ### 1. Mode Detection
 
@@ -150,7 +150,16 @@ Build alignment page for synthesis approval. After approval: write `research/pos
 
 ### 5. Mode C — Product-Positioning Shortcut
 
-Skip multi-select. Write to `tasks/todo.md`:
+Skip multi-select. Build an alignment page for the shortcut execution plan with:
+
+1. **Shortcut explanation**: product-positioning shortcut selected and why `obviously-awesome` is the only queued framework
+2. **Evidence readiness**: customer-feedback requirement and any missing evidence caveats
+3. **Proposed execution plan**: the exact `tasks/todo.md` framework queue shown below
+4. **Approval gate**: require final compiled YAML approval before writing `tasks/todo.md`
+
+Do not write `tasks/todo.md` before alignment approval. The next action is review of the HTML alignment page.
+
+After user approval via final compiled YAML, write this execution plan to `tasks/todo.md`:
 
 ```markdown
 ## Positioning Framework Execution
@@ -190,7 +199,7 @@ These detours are conditional framework owners, not required AFPS chain links.
 
 ### Mode A: `tasks/todo.md` update (framework execution steps)
 ### Mode B: `research/positioning.md` (unified synthesis — see claude variant for full template)
-### Mode C: `tasks/todo.md` update (obviously-awesome + synthesis)
+### Mode C: pre-approval alignment page, then `tasks/todo.md` update after final compiled YAML approval (obviously-awesome + synthesis)
 
 ## Task Classification
 
@@ -212,7 +221,7 @@ When this skill produces follow-up work, file it by execution semantics:
 
 ## Alignment Page
 
-When this skill produces durable deliverables, build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/positioning-{topic}.html`.
+When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/positioning-{topic}.html`.
 
 ## Default Shipping Contract
 

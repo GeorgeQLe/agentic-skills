@@ -18,6 +18,10 @@
 
 - Added feedback-only YAML alignment-page handling so section concerns and clarification requests can be sent before final gate answers.
 
+## v0.6
+
+- Archived previous skill contract.
+
 ## v0.5 - 2026-05-27
 
 - Handle plural `active_paths` manifest field with backward compatibility for singular `active_path`

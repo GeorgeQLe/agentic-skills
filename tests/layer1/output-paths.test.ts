@@ -55,6 +55,10 @@ describe("Output path conflicts", () => {
         // (create-agentic-skill, create-local-skill, targeted-skill-builder)
         // all instruct updating this same file by design, not exclusive output.
         if (out === "tests/harness/bench-coverage.ts") continue;
+        // Skip shared user-local skill roots: some skill-dev output sections
+        // mention them in reload notes, but they are not exclusive repo
+        // output destinations owned by a single pack skill.
+        if (/^\.(claude|codex)\/skills$/.test(out)) continue;
         // Skip illustrative monorepo placeholder paths used inside example
         // report/output blocks (e.g. affected, mono-plan): these are sample
         // package names in documentation, not real output destinations.

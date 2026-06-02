@@ -18,6 +18,27 @@
 - Added `tests/layer1/afps-status-global-mirror.test.ts`; focused vitest passed for the new mirror test and the init-agentic-skills contract test.
 - Generated showcase assets were not shipped because the generator currently picks up broad pre-existing source/catalog drift unrelated to this fix; current Claude availability is verified through installed skill files and global install doctor.
 
+## Current Task - Positioning Alignment Contract Caveats 2026-06-02
+
+**Goal:** Fix positioning workflow contracts so framework subskills use local bundled alignment-page conventions, and make the product-positioning shortcut follow the same pre-approval alignment gate as the default framework-selection path.
+
+**Plan:**
+- [x] Archive affected Codex and Claude positioning skills before editing.
+- [x] Update parent Mode C shortcut approval wording in Codex and Claude mirrors.
+- [x] Generate framework sibling `ALIGNMENT-PAGE.md` bundles and normalized stubs.
+- [x] Bump active skill versions and update changelogs.
+- [x] Regenerate skills showcase data.
+- [x] Add layer1 coverage for framework bundles/stubs and Mode C approval ordering.
+- [x] Run required verification, record review notes, commit, and push.
+
+### Review
+
+- Archived mirrored parent `positioning` skills from `v0.8` and all five mirrored framework subskills from `v0.1` before editing. Active parent skills are now `v0.9`; active framework subskills are now `v0.2`.
+- Mode C now builds an HTML alignment page for the product-positioning shortcut execution plan and explicitly forbids writing `tasks/todo.md` until final compiled YAML approval.
+- Framework subskills now point at sibling `ALIGNMENT-PAGE.md` bundles instead of `../ALIGNMENT-PAGE.md`; the alignment generator now avoids trailing blank paragraphs at EOF and preserves positioning-specific parent gates from its `skillSpecificGates` map.
+- Added layer1 coverage for sibling framework bundles, local stub wording, Mode C approval ordering, parent positioning-specific bundle gates, current journey-map version, and shared user-local skill-root output-path false positives.
+- Regenerated Skills Showcase data after skill version changes. Verification passed: `node scripts/upgrade-alignment-page.mjs --dry-run`, `bash scripts/skill-archive-audit.sh --strict`, `bash scripts/validate-skills-showcase-data.sh`, focused layer1 contract tests, full `npm run test:layer1` from `tests/`, and `git diff --check`.
+
 ## Current Task - Ship-End Wrap-Up 2026-06-01
 
 **Goal:** Wrap up the current session by shipping remaining project designation, prompt-history, and session-history artifacts.

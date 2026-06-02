@@ -2,7 +2,7 @@
 name: strategic-canvas
 description: Blue Ocean strategic canvas — extract competing factors, build value curves, identify eliminate/reduce/raise/create moves
 type: research
-version: v0.1
+version: v0.2
 invocation: sub-skill
 parent: positioning
 ---
@@ -202,7 +202,7 @@ When this skill produces follow-up work, file it by execution semantics:
 
 ## Alignment Page
 
-When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `../ALIGNMENT-PAGE.md`.
+When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/strategic-canvas-{topic}.html`.
 
 ## Default Shipping Contract
 

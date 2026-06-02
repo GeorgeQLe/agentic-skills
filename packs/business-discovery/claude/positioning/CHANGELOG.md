@@ -1,5 +1,9 @@
 # positioning changelog (claude)
 
+## v0.9 - 2026-06-02
+
+- Made the product-positioning shortcut build a pre-approval alignment page and write `tasks/todo.md` only after final compiled YAML approval.
+
 ## v0.8 - 2026-06-02
 
 - Added evidence-aware feedback handling so agents push back on factual misunderstandings while honoring subjective user preferences.

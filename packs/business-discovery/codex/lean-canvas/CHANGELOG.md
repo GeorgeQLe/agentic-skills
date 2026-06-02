@@ -4,6 +4,10 @@
 
 - Added evidence-aware feedback handling so agents push back on factual misunderstandings while honoring subjective user preferences.
 
+## v0.3
+
+- Archived previous skill contract.
+
 ## v0.1
 
 - Clarify lean-canvas as an optional AFPS detour for revenue, channel, cost, defensibility, or unfair-advantage risk.

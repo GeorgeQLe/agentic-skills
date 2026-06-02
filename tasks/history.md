@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-06-02 — Positioning alignment contract caveats
+
+- Updated mirrored `positioning` parent skills to `v0.9` after archiving `v0.8`. Mode C now builds an approval alignment page for the product-positioning shortcut and writes `tasks/todo.md` only after final compiled YAML approval.
+- Updated mirrored positioning framework subskills (`jtbd-positioning`, `strategic-canvas`, `moore-positioning`, `category-design`, `obviously-awesome`) to `v0.2` after archiving `v0.1`; each now uses a sibling generated `ALIGNMENT-PAGE.md` bundle instead of a parent-relative pointer.
+- Hardened `scripts/upgrade-alignment-page.mjs` so generated EOF stubs stay whitespace-clean and so parent positioning bundles preserve multi-select, shortcut, and synthesis gates from generator-owned content.
+- Added layer1 coverage for framework sibling bundles, local stub wording, Mode C approval ordering, parent positioning bundle gates, journey-map version drift, and shared user-local skill-root output-path false positives.
+- Regenerated Skills Showcase assets. Verification passed for alignment generator dry-run, strict archive audit, showcase-data validation, full layer1 tests, and whitespace checks.
+
 ## 2026-06-01 — Add `--all` bulk export to save-conversation.sh
 
 - Added `--all` and `--force` flags to `scripts/save-conversation.sh` for bulk-exporting all past Claude Code conversations.

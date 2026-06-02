@@ -1,5 +1,10 @@
 # positioning changelog (codex)
 
+## v0.9 - 2026-06-02
+
+- Made the product-positioning shortcut build a pre-approval alignment page and write `tasks/todo.md` only after final compiled YAML approval.
+- Restored detailed Codex product-path and report-first approval wording so it stays aligned with the Claude research contract.
+
 ## v0.8 - 2026-06-02
 
 - Added evidence-aware feedback handling so agents push back on factual misunderstandings while honoring subjective user preferences.
@@ -15,6 +20,10 @@
 - Synthesis mode (`--synthesize`) combines framework outputs into research/positioning.md
 - Added Optional Research Trigger Map for detour routing
 - research-roadmap scans now flag market-positioning for potential refresh
+
+## v0.6
+
+- Reserved skipped historical version for contiguous archive audit; no active Codex `v0.6` release existed.
 
 ## v0.3 - 2026-05-26
 

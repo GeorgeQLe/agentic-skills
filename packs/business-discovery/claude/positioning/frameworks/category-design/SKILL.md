@@ -2,7 +2,7 @@
 name: category-design
 description: Play Bigger category creation — category diagnosis, naming, POV development, ecosystem mapping
 type: research
-version: v0.1
+version: v0.2
 invocation: sub-skill
 parent: positioning
 ---
@@ -269,7 +269,7 @@ When this skill produces follow-up work, file it by execution semantics:
 
 ## Alignment Page
 
-When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `../ALIGNMENT-PAGE.md`.
+When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/category-design-{topic}.html`.
 
 ## Default Shipping Contract
 

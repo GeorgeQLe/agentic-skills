@@ -73,7 +73,12 @@ function skillSpecificGates(skillName) {
     "icp": "**ICP research translation.** Render segment claims, exclusion rationale, buyer/user distinction, source coverage by customer category, evidence-backed pain intensity, uncertainty about reachable audiences, and the recommended next research or positioning decision as first-class research gates.",
     "competitive-analysis": "**Competitive research translation.** Render competitor coverage by category, pricing and packaging evidence, positioning claims, user-sentiment signals, integration or distribution evidence, recent activity, alternatives considered, lower-confidence comparisons, and source gaps that could change the strategic recommendation.",
     "journey-map": "**Journey research translation.** Render observed user/customer evidence separately from inferred journey stages. Include trigger, evaluation, activation, conversion, retention, and failure-point evidence where available, plus confidence gaps for any stage inferred without direct evidence.",
-    "positioning": "**Positioning research translation.** Render positioning claims with supporting ICP, competitive, journey, and customer-language evidence. Show alternatives considered, rejected narratives, confidence by claim, and which missing evidence would change the recommended position.",
+    "positioning": [
+      "**Positioning research translation.** Render positioning claims with supporting ICP, competitive, journey, and customer-language evidence. Show alternatives considered, rejected narratives, confidence by claim, and which missing evidence would change the recommended position.",
+      "**Multi-select framework convention.** When the positioning parent router presents framework selection in Mode A, the alignment page must include a multi-select checkbox section. Each framework option uses a checkbox input with `name=\"framework\"` and `value` matching the framework slug. Pre-check recommended defaults based on detected mode. The compiled YAML for framework selection includes `selected_frameworks` as a list of selected slugs and `execution_mode: sequential-todo`.",
+      "**Product-positioning shortcut translation.** When Mode C queues the product-positioning shortcut, render the shortcut explanation, evidence readiness, exact proposed `tasks/todo.md` execution plan, and an approval gate. The page must make clear that `tasks/todo.md` is written only after final compiled YAML approval.",
+      "**Synthesis mode translation.** When the skill runs in synthesis mode (`--synthesize`), the alignment page must render the full proposed `research/positioning.md` content with an evidence matrix mapping claims to supporting framework(s), a confidence register, market-mode validation plan, and framework cross-references showing where frameworks agree, disagree, or complement each other.",
+    ].join("\n\n"),
     "customer-feedback": "**Customer-feedback research translation.** Render feedback evidence with source, date, segment, quote or observation, confidence, and bias risk. Separate verbatim feedback from agent interpretation, and show unresolved contradictions or sample coverage gaps.",
     "research-roadmap": "**Research-roadmap translation.** Render repository/documentation evidence by file path, observed documentation facts, inferred research gaps, priority rationale, rejected lower-priority items, source coverage gaps, and downstream implications for the next skill route.",
   };
@@ -115,8 +120,9 @@ function replaceOrInsert(content, skillName) {
     });
     if (!swapped) next.unshift(stub);
 
+    const head = `${content.slice(0, afterHeading)}\n\n${next.join("\n\n")}`;
     const tail = content.slice(end).replace(/^\n+/, "");
-    return `${content.slice(0, afterHeading)}\n\n${next.join("\n\n")}\n\n${tail}`;
+    return tail ? `${head}\n\n${tail}` : `${head}\n`;
   }
 
   const newSection = `## Alignment Page\n\n${stub}`;

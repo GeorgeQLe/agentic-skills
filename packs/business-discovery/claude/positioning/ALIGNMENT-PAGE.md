@@ -24,59 +24,11 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 
 **Positioning research translation.** Render positioning claims with supporting ICP, competitive, journey, and customer-language evidence. Show alternatives considered, rejected narratives, confidence by claim, and which missing evidence would change the recommended position.
 
-**Multi-select framework convention.** When the positioning parent router presents framework selection (Mode A), the alignment page must include a multi-select checkbox section. Each framework option uses this HTML pattern:
+**Multi-select framework convention.** When the positioning parent router presents framework selection in Mode A, the alignment page must include a multi-select checkbox section. Each framework option uses a checkbox input with `name="framework"` and `value` matching the framework slug. Pre-check recommended defaults based on detected mode. The compiled YAML for framework selection includes `selected_frameworks` as a list of selected slugs and `execution_mode: sequential-todo`.
 
-```html
-<div class="framework-select">
-  <h3>Select Positioning Frameworks</h3>
-  <p>Based on [mode] mode and available evidence, these frameworks are recommended:</p>
-  
-  <label class="checkbox-option recommended">
-    <input type="checkbox" name="framework" value="jtbd-positioning" checked>
-    <span class="label">Jobs-to-be-Done Positioning</span>
-    <span class="desc">Position around the job outcome, not features</span>
-  </label>
-  
-  <label class="checkbox-option recommended">
-    <input type="checkbox" name="framework" value="strategic-canvas" checked>
-    <span class="label">Blue Ocean Strategic Canvas</span>
-    <span class="desc">Competitive gap analysis — eliminate/reduce/raise/create</span>
-  </label>
-  
-  <label class="checkbox-option recommended">
-    <input type="checkbox" name="framework" value="moore-positioning" checked>
-    <span class="label">Geoffrey Moore Positioning Hypothesis</span>
-    <span class="desc">Crossing the Chasm template — hypothesis with evidence mapping</span>
-  </label>
-  
-  <label class="checkbox-option">
-    <input type="checkbox" name="framework" value="category-design">
-    <span class="label">Play Bigger Category Design</span>
-    <span class="desc">Category creation — recommended when no existing category captures the value</span>
-  </label>
-  
-  <label class="checkbox-option">
-    <input type="checkbox" name="framework" value="obviously-awesome">
-    <span class="label">Obviously Awesome (April Dunford)</span>
-    <span class="desc">Post-product only — requires real customer evidence</span>
-  </label>
-</div>
-```
+**Product-positioning shortcut translation.** When Mode C queues the product-positioning shortcut, render the shortcut explanation, evidence readiness, exact proposed `tasks/todo.md` execution plan, and an approval gate. The page must make clear that `tasks/todo.md` is written only after final compiled YAML approval.
 
-Style `.checkbox-option` with `display: flex; align-items: center; gap: 12px; padding: 12px 16px; border: 1px solid var(--border); border-radius: 6px; margin-bottom: 8px; cursor: pointer;`. Style `.recommended` with `border-color: var(--accent);`. Checkboxes must have minimum `20px` size for touch targets.
-
-The compiled YAML for framework selection includes:
-```yaml
-selected_frameworks:
-  - jtbd-positioning
-  - strategic-canvas
-  - moore-positioning
-execution_mode: sequential-todo
-```
-
-This multi-select convention is generic — other skills can reuse it for any multi-choice selection that feeds into task queuing. Candidate for promotion to the shared alignment page convention in CLAUDE.md.
-
-**Synthesis mode translation.** When the skill runs in synthesis mode (`--synthesize`), the alignment page must render the full proposed `research/positioning.md` content with an evidence matrix that maps each claim to the framework(s) that support it, a confidence register, and validation plan (market mode). Include framework cross-references showing where frameworks agree, disagree, or complement each other.
+**Synthesis mode translation.** When the skill runs in synthesis mode (`--synthesize`), the alignment page must render the full proposed `research/positioning.md` content with an evidence matrix mapping claims to supporting framework(s), a confidence register, market-mode validation plan, and framework cross-references showing where frameworks agree, disagree, or complement each other.
 
 **Required inline questions.** Each gate must contain at least one required inline question placed directly under the content it governs, inside a visually distinct question block. Each question must use radio-button inputs and include two standing options after the skill-generated choices: "Other / None of the above" backed by a multi-line text box for free-form input, and "Need clarification" backed by an optional notes box where the user can explain what is unclear. When any radio option other than "Other" or "Need clarification" is selected, show an optional "Additional notes" text box beneath it so the user can qualify their choice. Generate questions based on what genuinely needs user input -- do not add filler questions. Do not create a separate bottom "Decisions & Clarifications" section.
 
