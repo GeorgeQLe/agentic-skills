@@ -1,0 +1,564 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Devtool Docs Audit - agentic-skills 2026-06-02</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --text-muted: #8b949e;
+      --accent: #58a6ff;
+      --green: #3fb950;
+      --red: #f85149;
+      --orange: #d29922;
+      --purple: #bc8cff;
+    }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+    main {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 32px 20px 64px;
+      overflow-wrap: break-word;
+    }
+    h1, h2, h3 { color: #fff; line-height: 1.2; }
+    h1 { margin: 0 0 8px; }
+    h2 { margin-top: 36px; color: var(--accent); }
+    h3 { margin-top: 28px; }
+    a { color: var(--accent); }
+    code, pre {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    pre {
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #010409;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid var(--border);
+      padding: 10px;
+      vertical-align: top;
+      text-align: left;
+    }
+    th { background: var(--surface); color: #fff; }
+    .toc, .section, .question, .compile, .feedback-output {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      padding: 18px;
+      margin: 18px 0;
+    }
+    .toc ul { margin: 8px 0 0; }
+    .muted { color: var(--text-muted); }
+    .badge {
+      display: inline-block;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 3px 10px;
+      margin-right: 6px;
+      color: #fff;
+      background: #1c2333;
+      font-size: 0.9rem;
+    }
+    .feedback {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      margin: 10px 0;
+    }
+    .feedback button, .compile button, .question label, .copy-btn {
+      min-height: 44px;
+      padding: 10px 16px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #1c2333;
+      color: var(--text);
+      cursor: pointer;
+    }
+    .feedback button.active-up { border-color: var(--green); color: var(--green); }
+    .feedback button.active-down { border-color: var(--red); color: var(--red); }
+    .feedback button.active-clarify { border-color: var(--orange); color: var(--orange); }
+    .feedback textarea, .question textarea, .compile textarea, .feedback-output textarea {
+      width: 100%;
+      min-height: 96px;
+      box-sizing: border-box;
+      margin-top: 8px;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #010409;
+      color: var(--text);
+    }
+    .question { background: #1c2333; }
+    .question label {
+      display: block;
+      margin: 8px 0;
+    }
+    .hidden { display: none; }
+    .table-wrap { overflow-x: auto; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(250px, 100%), 1fr));
+      gap: 12px;
+    }
+    .callout {
+      border-left: 4px solid var(--purple);
+      padding: 8px 12px;
+      background: #1c2333;
+    }
+    @media (max-width: 860px) {
+      main { padding: 24px 16px 48px; }
+    }
+    @media (max-width: 560px) {
+      main { padding: 20px 12px 40px; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Devtool Docs Audit - agentic-skills</h1>
+  <p class="muted">2026-06-02 refresh. Alignment page path: <code>alignment/devtool-docs-audit-agentic-skills-2026-06-02.html</code>.</p>
+  <p>This page renders the complete refreshed audit from <code>research/devtool-docs-audit.md</code>, plus evidence, assumptions, alternatives, approval gates, and feedback controls.</p>
+
+  <section class="toc" id="toc">
+    <h2>Table of Contents</h2>
+    <ul>
+      <li><a href="#verdict">Executive Verdict</a></li>
+      <li><a href="#findings">Findings</a></li>
+      <li><a href="#coverage">Coverage By Audit Area</a></li>
+      <li><a href="#evidence">Evidence Matrix</a></li>
+      <li><a href="#assumptions">Assumptions And Confidence</a></li>
+      <li><a href="#alternatives">Alternatives Considered</a></li>
+      <li><a href="#backlog">Recommended Backlog</a></li>
+      <li><a href="#gates">Approval Gates</a></li>
+      <li><a href="#compile">Compile Section</a></li>
+    </ul>
+  </section>
+
+  <section class="section" id="verdict" data-section="Executive Verdict">
+    <h2>Executive Verdict</h2>
+    <div class="feedback" data-feedback="Executive Verdict"></div>
+    <p><span class="badge">P0</span> None. The current docs are not missing the basic install, pack, restart, or mode concepts needed by an experienced shell user.</p>
+    <p><span class="badge">P1</span> The activation path is still too implicit. A reader can learn commands, but the docs still do not give a single first-success route from clone to visible proof.</p>
+    <p><span class="badge">P1</span> Troubleshooting remains fragmented. Restart, refresh, mode, approval-packet, drift, and validation recovery are documented, but not in one symptom-led support path.</p>
+    <p><span class="badge">P1</span> Proof/example artifacts are strong but under-used. <code>tasks/history.md</code>, benchmark outputs, Skills Showcase generated proof data, and devtool research artifacts demonstrate real usage, but README does not present them as the adoption proof path.</p>
+    <p><span class="badge">P2</span> Script references are better than before, but still split across multiple docs. The most common commands are covered; exact "which script answers which question" guidance is still scattered.</p>
+    <p><span class="badge">P2</span> Team rollout guidance is still research-only. Public docs cover <code>.agents/project.json</code> and refresh behavior, but not a concise team checklist.</p>
+    <p><span class="badge">P2</span> Stale <code>install.sh</code> references remain in the devtool research chain. README and skills reference now correctly use <code>./init.sh</code>.</p>
+  </section>
+
+  <section class="section" id="findings" data-section="Findings">
+    <h2>Findings</h2>
+    <div class="feedback" data-feedback="Findings"></div>
+
+    <h3>P1 - First-success route is still implicit</h3>
+    <p><strong>Claim:</strong> README and workflow docs explain the pieces, but they do not package a fastest proof path.</p>
+    <p><strong>Evidence:</strong> README opens with <code>./init.sh</code>, lists pack install commands, and explains reload/restart behavior. <code>docs/codex-workflow.md</code> explains <code>$exec</code> and <code>tasks/todo.md</code>. A search for first-success language in README/docs finds no dedicated section.</p>
+    <p><strong>Inference:</strong> users must synthesize the activation sequence themselves.</p>
+    <p><strong>Decision impact:</strong> add a README "First successful cycle" section before larger docs work.</p>
+    <pre><code>1. Clone this repo and run ./init.sh.
+2. In a target project, run scripts/pack.sh install &lt;pack-or-skill&gt;.
+3. Restart Claude Code or start a fresh Codex session if the skill list is stale.
+4. Run /pack or $pack, or scripts/pack.sh status, to confirm the project designation.
+5. If tasks/todo.md is missing, run a planning skill first.
+6. Run /exec or $exec and confirm tasks/history.md plus commit/push evidence.</code></pre>
+
+    <h3>P1 - Troubleshooting is present as fragments</h3>
+    <p><strong>Claim:</strong> the repo documents important recovery facts, but a user with a symptom still has to search across several files.</p>
+    <p><strong>Evidence:</strong> README covers reload/restart; <code>docs/packs.md</code> covers <code>doctor</code>, <code>refresh</code>, stale installs, pinned installs, and update mode; <code>docs/operating-modes.md</code> covers approval-packet lifecycle and hybrid degraded paths; no central troubleshooting page exists.</p>
+    <p><strong>Inference:</strong> troubleshooting content is organized by subsystem, not by user failure.</p>
+    <p><strong>Decision impact:</strong> add a symptom-led <code>docs/troubleshooting.md</code> or README subsection.</p>
+
+    <h3>P1 - Proof artifacts are strong but under-presented</h3>
+    <p><strong>Claim:</strong> the repo has credible dogfood proof, but the landing docs do not point readers to a short proof trail.</p>
+    <p><strong>Evidence:</strong> <code>tasks/history.md</code>, <code>research/devtool-*.md</code>, <code>docs/benchmark-results-matrix.md</code>, and <code>docs/skills-showcase/assets/github-proof-data.js</code> all provide inspectable proof signals. README lacks a proof/examples section.</p>
+    <p><strong>Inference:</strong> existing proof can be converted into adoption value with links and honest boundaries.</p>
+    <p><strong>Decision impact:</strong> add a README "Proof and examples" block.</p>
+
+    <h3>P2 - Script reference is scattered</h3>
+    <p><strong>Claim:</strong> common script commands are documented, but spread across README, pack docs, skills reference, operating modes, and test harness docs.</p>
+    <p><strong>Decision impact:</strong> add <code>docs/scripts-reference.md</code> or expand <code>docs/skills-reference.md</code> with a script reference table covering install/global, project packs, mode/handoff, skill hygiene, showcase, and benchmark commands.</p>
+
+    <h3>P2 - Team adoption checklist is still missing</h3>
+    <p><strong>Claim:</strong> team rollout concerns are known, but public docs stop short of a checklist.</p>
+    <p><strong>Evidence:</strong> <code>docs/packs.md</code> explains committed project designation and generated local roots, while research docs identify checkout-path coupling, restart friction, direct-to-primary defaults, and generated-root discipline.</p>
+    <p><strong>Decision impact:</strong> add a practical team checklist to <code>docs/packs.md</code>.</p>
+
+    <h3>P2 - Existing devtool research has stale installer terminology</h3>
+    <p><strong>Claim:</strong> dogfood research artifacts still mention <code>install.sh</code>, but the current repo uses <code>init.sh</code>.</p>
+    <p><strong>Evidence:</strong> <code>install.sh</code> is absent; README and skills reference use <code>./init.sh</code>; <code>rg "install.sh" research/devtool-*.md</code> still finds references in multiple active research artifacts.</p>
+    <p><strong>Decision impact:</strong> reconcile those artifacts or add dated historical-context notes before promoting them as examples.</p>
+  </section>
+
+  <section class="section" id="coverage" data-section="Coverage By Audit Area">
+    <h2>Coverage By Audit Area</h2>
+    <div class="feedback" data-feedback="Coverage By Audit Area"></div>
+    <div class="grid">
+      <div class="section">
+        <h3>Quickstart Clarity</h3>
+        <p>Strengths: current <code>./init.sh</code>, copy-paste pack examples, reload/restart nuance.</p>
+        <p>Gaps: no named first-success route, no missing-<code>tasks/todo.md</code> branch, no proof endpoint beyond status.</p>
+      </div>
+      <div class="section">
+        <h3>Examples</h3>
+        <p>Strengths: dogfood history, devtool research chain, benchmark/showcase proof data.</p>
+        <p>Gaps: README does not identify them as examples; some research examples use stale installer terms.</p>
+      </div>
+      <div class="section">
+        <h3>API And Script Reference</h3>
+        <p>Strengths: comprehensive skill and pack catalogs, strong operating-mode reference, test harness docs.</p>
+        <p>Gaps: no single command index or failure interpretation guide.</p>
+      </div>
+      <div class="section">
+        <h3>Troubleshooting</h3>
+        <p>Strengths: restart/refresh, drift mechanics, approval-packet checks, validation commands.</p>
+        <p>Gaps: no central symptom-led page; Windows/WSL and moved-checkout risks are not concise public recovery paths.</p>
+      </div>
+      <div class="section">
+        <h3>Migration Paths</h3>
+        <p>Strengths: former globals mapped to packs, mode migration documented, track-latest vs pinned explained.</p>
+        <p>Gaps: team rollout guidance and stale installer terminology.</p>
+      </div>
+      <div class="section">
+        <h3>Proof Artifacts</h3>
+        <p>Strengths: dogfood history, benchmark matrix, showcase data, no hidden telemetry.</p>
+        <p>Gaps: proof is not surfaced in README and should be bounded honestly.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="evidence" data-section="Evidence Matrix">
+    <h2>Evidence Matrix</h2>
+    <div class="feedback" data-feedback="Evidence Matrix"></div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Claim</th>
+            <th>Evidence</th>
+            <th>Inference</th>
+            <th>Confidence</th>
+            <th>Decision Impact</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>No P0 docs blocker</td><td>README includes <code>./init.sh</code>, pack install, pack status/which, restart guidance; docs cover packs and modes.</td><td>Experienced shell users can install and reason through setup.</td><td>High</td><td>No emergency docs rewrite needed.</td></tr>
+          <tr><td>First-success path is implicit</td><td>No first-success section in README/docs; workflow pieces live across README and <code>docs/codex-workflow.md</code>.</td><td>Activation depends on user synthesis.</td><td>High</td><td>Add README first-success route.</td></tr>
+          <tr><td>Troubleshooting is fragmented</td><td>Recovery facts live in README, <code>docs/packs.md</code>, <code>docs/operating-modes.md</code>, and <code>docs/skills-reference.md</code>.</td><td>Symptom-led support is slower than it needs to be.</td><td>High</td><td>Add troubleshooting table/page.</td></tr>
+          <tr><td>Proof is under-presented</td><td><code>tasks/history.md</code>, benchmark matrix, showcase proof data, and devtool research exist; README lacks proof/examples section.</td><td>Existing proof can be converted to adoption value cheaply.</td><td>High</td><td>Add proof/examples pointers.</td></tr>
+          <tr><td>Script reference is scattered</td><td>Commands are covered in at least five docs.</td><td>A command index would reduce support overhead.</td><td>Medium-high</td><td>Add script reference.</td></tr>
+          <tr><td>Team checklist missing</td><td>Mechanics documented; checklist absent; research names team friction.</td><td>Team adoption still needs local tacit knowledge.</td><td>Medium-high</td><td>Add team adoption checklist.</td></tr>
+          <tr><td>Research examples have stale installer terms</td><td><code>install.sh</code> absent; active docs use <code>init.sh</code>; devtool research still references <code>install.sh</code>.</td><td>Example artifacts can confuse readers.</td><td>High</td><td>Reconcile or caveat stale examples.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="question" data-question="evidence_coverage" data-gate="evidence coverage" data-section="Evidence Matrix">
+      <h3>Evidence Coverage Gate</h3>
+      <p>Is the evidence sufficient to accept the audit recommendations as the next docs backlog?</p>
+      <label><input type="radio" name="evidence_coverage" value="Accept recommendations"> Accept recommendations</label>
+      <label><input type="radio" name="evidence_coverage" value="Accept, but verify stale research references first"> Accept, but verify stale research references first</label>
+      <label><input type="radio" name="evidence_coverage" value="Other / None of the above"> Other / None of the above</label>
+      <textarea class="hidden" data-other-for="evidence_coverage" placeholder="Describe the alternate evidence requirement."></textarea>
+      <label><input type="radio" name="evidence_coverage" value="Need clarification"> Need clarification</label>
+      <textarea class="hidden" data-clarify-for="evidence_coverage" placeholder="What needs clarification?"></textarea>
+      <textarea class="hidden" data-notes-for="evidence_coverage" placeholder="Optional additional notes."></textarea>
+    </div>
+  </section>
+
+  <section class="section" id="assumptions" data-section="Assumptions And Confidence">
+    <h2>Assumptions And Confidence</h2>
+    <div class="feedback" data-feedback="Assumptions And Confidence"></div>
+    <ul>
+      <li>High confidence: the current public docs use <code>./init.sh</code> for global initialization.</li>
+      <li>High confidence: no central <code>docs/troubleshooting.md</code> or first-success README section exists.</li>
+      <li>High confidence: the older audit was stale and needed refresh.</li>
+      <li>Medium-high confidence: a script reference page is better than continuing to scatter command semantics.</li>
+      <li>Medium confidence: team adoption should standardize checkout path. Teams may choose different onboarding conventions.</li>
+      <li>Medium confidence: stale devtool research should be reconciled rather than caveated. If the repo treats research artifacts as historical snapshots, a dated caveat may be enough.</li>
+    </ul>
+    <div class="question" data-question="assumption_handling" data-gate="assumptions/confidence" data-section="Assumptions And Confidence">
+      <h3>Assumptions Gate</h3>
+      <p>How should uncertain assumptions be handled before docs remediation starts?</p>
+      <label><input type="radio" name="assumption_handling" value="Proceed with the backlog as written"> Proceed with the backlog as written</label>
+      <label><input type="radio" name="assumption_handling" value="Treat stale research terminology as a separate follow-up"> Treat stale research terminology as a separate follow-up</label>
+      <label><input type="radio" name="assumption_handling" value="Other / None of the above"> Other / None of the above</label>
+      <textarea class="hidden" data-other-for="assumption_handling" placeholder="Describe the alternate assumption handling."></textarea>
+      <label><input type="radio" name="assumption_handling" value="Need clarification"> Need clarification</label>
+      <textarea class="hidden" data-clarify-for="assumption_handling" placeholder="What needs clarification?"></textarea>
+      <textarea class="hidden" data-notes-for="assumption_handling" placeholder="Optional additional notes."></textarea>
+    </div>
+  </section>
+
+  <section class="section" id="alternatives" data-section="Alternatives Considered">
+    <h2>Alternatives Considered</h2>
+    <div class="feedback" data-feedback="Alternatives Considered"></div>
+    <ol>
+      <li>Full documentation rewrite: rejected. The docs are mostly accurate; the highest value is navigation and activation packaging.</li>
+      <li>Only update stale <code>install.sh</code> references: rejected as too narrow. It fixes an accuracy issue but misses activation and support gaps.</li>
+      <li>Add a separate website-first onboarding page: deferred. README and docs pages are the current adoption surface.</li>
+      <li>Implement doc fixes immediately in this audit: rejected for this step. The task requested an audit refresh and alignment review before follow-up doc changes.</li>
+    </ol>
+  </section>
+
+  <section class="section" id="backlog" data-section="Recommended Backlog">
+    <h2>Recommended Backlog</h2>
+    <div class="feedback" data-feedback="Recommended Backlog"></div>
+    <ol>
+      <li>Add README "First successful cycle" and "Proof and examples" sections.</li>
+      <li>Add <code>docs/troubleshooting.md</code> with symptom-led recovery steps.</li>
+      <li>Add <code>docs/scripts-reference.md</code> or a compact script reference section in <code>docs/skills-reference.md</code>.</li>
+      <li>Add a team adoption checklist and moved-checkout recovery note to <code>docs/packs.md</code>.</li>
+      <li>Reconcile stale <code>install.sh</code> references across active <code>research/devtool-*.md</code> artifacts, or add dated historical-context notes before using those artifacts as examples.</li>
+    </ol>
+    <div class="question" data-question="backlog_scope" data-gate="scope/non-goals" data-section="Recommended Backlog">
+      <h3>Scope Gate</h3>
+      <p>Which backlog scope should the next implementation step take?</p>
+      <label><input type="radio" name="backlog_scope" value="Implement backlog items 1-4 only"> Implement backlog items 1-4 only</label>
+      <label><input type="radio" name="backlog_scope" value="Implement backlog items 1-5"> Implement backlog items 1-5</label>
+      <label><input type="radio" name="backlog_scope" value="Other / None of the above"> Other / None of the above</label>
+      <textarea class="hidden" data-other-for="backlog_scope" placeholder="Describe the preferred scope."></textarea>
+      <label><input type="radio" name="backlog_scope" value="Need clarification"> Need clarification</label>
+      <textarea class="hidden" data-clarify-for="backlog_scope" placeholder="What needs clarification?"></textarea>
+      <textarea class="hidden" data-notes-for="backlog_scope" placeholder="Optional additional notes."></textarea>
+    </div>
+  </section>
+
+  <section class="section" id="gates" data-section="Approval Gates">
+    <h2>Approval Gates</h2>
+    <div class="feedback" data-feedback="Approval Gates"></div>
+    <div class="question" data-question="artifact_destination" data-gate="artifact destination" data-section="Approval Gates">
+      <h3>Artifact Destination Gate</h3>
+      <p>Where should approved docs remediation write the new command reference?</p>
+      <label><input type="radio" name="artifact_destination" value="Create docs/scripts-reference.md" data-target-path="docs/scripts-reference.md"> Create <code>docs/scripts-reference.md</code></label>
+      <label><input type="radio" name="artifact_destination" value="Expand docs/skills-reference.md" data-target-path="docs/skills-reference.md"> Expand <code>docs/skills-reference.md</code></label>
+      <label><input type="radio" name="artifact_destination" value="Other / None of the above"> Other / None of the above</label>
+      <textarea class="hidden" data-other-for="artifact_destination" placeholder="Describe the preferred destination."></textarea>
+      <label><input type="radio" name="artifact_destination" value="Need clarification"> Need clarification</label>
+      <textarea class="hidden" data-clarify-for="artifact_destination" placeholder="What needs clarification?"></textarea>
+      <textarea class="hidden" data-notes-for="artifact_destination" placeholder="Optional additional notes."></textarea>
+    </div>
+
+    <div class="question" data-question="post_approval_route" data-gate="post-approval route" data-section="Approval Gates">
+      <h3>Post-Approval Route Gate</h3>
+      <p>What should the next agent do after this audit is approved?</p>
+      <label><input type="radio" name="post_approval_route" value="Run $exec to implement approved docs remediation"> Run <code>$exec</code> to implement approved docs remediation</label>
+      <label><input type="radio" name="post_approval_route" value="Run $reconcile-dev-docs fix tasks first"> Run <code>$reconcile-dev-docs fix tasks</code> first</label>
+      <label><input type="radio" name="post_approval_route" value="Other / None of the above"> Other / None of the above</label>
+      <textarea class="hidden" data-other-for="post_approval_route" placeholder="Describe the preferred route."></textarea>
+      <label><input type="radio" name="post_approval_route" value="Need clarification"> Need clarification</label>
+      <textarea class="hidden" data-clarify-for="post_approval_route" placeholder="What needs clarification?"></textarea>
+      <textarea class="hidden" data-notes-for="post_approval_route" placeholder="Optional additional notes."></textarea>
+    </div>
+  </section>
+
+  <section class="compile" id="compile">
+    <h2>Compile Section</h2>
+    <p class="muted">Use feedback YAML for concerns before final approval. Use final answers when every required gate is answered.</p>
+    <button id="compileFeedback">Compile Feedback YAML</button>
+    <button id="compileAnswers">Compile Answers</button>
+    <button id="copyYaml" class="copy-btn">Copy YAML</button>
+    <p id="compileStatus" class="muted">No YAML compiled yet.</p>
+    <textarea id="yamlOutput" readonly></textarea>
+  </section>
+</main>
+
+<script>
+const pagePath = 'alignment/devtool-docs-audit-agentic-skills-2026-06-02.html';
+
+function yamlEscape(value) {
+  const text = String(value || '');
+  return text.includes('\n') || text.includes('"') || text.includes(':')
+    ? JSON.stringify(text)
+    : `"${text}"`;
+}
+
+function setupFeedback() {
+  document.querySelectorAll('[data-feedback]').forEach((container) => {
+    const section = container.dataset.feedback;
+    container.innerHTML = `
+      <span class="muted">Section feedback:</span>
+      <button type="button" data-kind="up">Thumbs up</button>
+      <button type="button" data-kind="down">Thumbs down</button>
+      <button type="button" data-kind="needs-clarification">Clarification needed</button>
+      <textarea class="hidden" placeholder="Optional section feedback notes."></textarea>
+      <div class="feedback-output hidden">
+        <button type="button" class="local-compile">Compile Feedback YAML</button>
+        <button type="button" class="local-copy">Copy YAML</button>
+        <textarea readonly></textarea>
+      </div>`;
+    const buttons = [...container.querySelectorAll('button[data-kind]')];
+    const notes = container.querySelector('textarea');
+    const output = container.querySelector('.feedback-output');
+    buttons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const selected = button.dataset.kind;
+        const already = button.classList.contains('active-up') || button.classList.contains('active-down') || button.classList.contains('active-clarify');
+        buttons.forEach((b) => b.className = '');
+        if (already) {
+          container.dataset.selected = '';
+          notes.classList.add('hidden');
+          output.classList.add('hidden');
+          return;
+        }
+        container.dataset.selected = selected;
+        button.classList.add(selected === 'up' ? 'active-up' : selected === 'down' ? 'active-down' : 'active-clarify');
+        notes.classList.remove('hidden');
+      });
+    });
+    container.querySelector('.local-compile').addEventListener('click', () => {
+      const yaml = feedbackYaml([{ section, feedback: container.dataset.selected, notes: notes.value }]);
+      output.classList.remove('hidden');
+      output.querySelector('textarea').value = yaml;
+    });
+    container.querySelector('.local-copy').addEventListener('click', () => copyText(output.querySelector('textarea').value));
+  });
+}
+
+function setupQuestions() {
+  document.querySelectorAll('.question input[type="radio"]').forEach((input) => {
+    input.addEventListener('change', () => {
+      const name = input.name;
+      document.querySelectorAll(`[data-other-for="${name}"], [data-clarify-for="${name}"], [data-notes-for="${name}"]`).forEach((el) => el.classList.add('hidden'));
+      if (input.value === 'Other / None of the above') {
+        document.querySelector(`[data-other-for="${name}"]`)?.classList.remove('hidden');
+      } else if (input.value === 'Need clarification') {
+        document.querySelector(`[data-clarify-for="${name}"]`)?.classList.remove('hidden');
+      } else {
+        document.querySelector(`[data-notes-for="${name}"]`)?.classList.remove('hidden');
+      }
+    });
+  });
+}
+
+function collectFeedback() {
+  return [...document.querySelectorAll('[data-feedback]')]
+    .filter((el) => el.dataset.selected)
+    .map((el) => ({
+      section: el.dataset.feedback,
+      feedback: el.dataset.selected,
+      notes: el.querySelector('textarea')?.value || ''
+    }));
+}
+
+function unansweredQuestions() {
+  return [...document.querySelectorAll('.question')].filter((q) => !q.querySelector('input[type="radio"]:checked'));
+}
+
+function collectAnswers() {
+  return [...document.querySelectorAll('.question')].map((q) => {
+    const checked = q.querySelector('input[type="radio"]:checked');
+    const name = q.dataset.question;
+    const status = !checked ? 'unanswered' : checked.value === 'Other / None of the above' ? 'other' : checked.value === 'Need clarification' ? 'needs-clarification' : 'answered';
+    const notes = q.querySelector(`[data-other-for="${name}"]:not(.hidden), [data-clarify-for="${name}"]:not(.hidden), [data-notes-for="${name}"]:not(.hidden)`)?.value || '';
+    return {
+      section: q.dataset.section,
+      gate_type: q.dataset.gate,
+      status,
+      answer: checked ? checked.value : '',
+      notes,
+      target_path: checked?.dataset.targetPath || ''
+    };
+  });
+}
+
+function feedbackYaml(items) {
+  const remaining = unansweredQuestions().map((q) => q.dataset.question);
+  let out = `alignment_page: ${yamlEscape(pagePath)}\nfeedback_status: "revision-request"\napproval_status: "not-approved"\nunanswered_required_questions:\n`;
+  if (remaining.length) remaining.forEach((item) => out += `  - ${yamlEscape(item)}\n`);
+  else out += `  []\n`;
+  out += `section_feedback:\n`;
+  items.forEach((item) => {
+    const action = item.feedback === 'up' ? 'accept-as-is' : item.feedback === 'down' ? 'investigate-and-revise' : 'clarify-before-approval';
+    out += `  - section: ${yamlEscape(item.section)}\n    feedback: ${yamlEscape(item.feedback)}\n    notes: ${yamlEscape(item.notes)}\n    requested_agent_action: ${yamlEscape(action)}\n`;
+  });
+  return out;
+}
+
+function answersYaml() {
+  const remaining = unansweredQuestions();
+  if (remaining.length) {
+    remaining[0].scrollIntoView({ behavior: 'smooth', block: 'center' });
+    throw new Error(`${remaining.length} required question(s) remaining`);
+  }
+  let out = `alignment_page: ${yamlEscape(pagePath)}\napproval_status: "ready-for-agent-review"\nanswers:\n`;
+  collectAnswers().forEach((answer) => {
+    out += `  - section: ${yamlEscape(answer.section)}\n    gate_type: ${yamlEscape(answer.gate_type)}\n    status: ${yamlEscape(answer.status)}\n    answer: ${yamlEscape(answer.answer)}\n`;
+    if (answer.notes) out += `    notes: ${yamlEscape(answer.notes)}\n`;
+    if (answer.target_path) out += `    target_path: ${yamlEscape(answer.target_path)}\n`;
+  });
+  const feedback = collectFeedback();
+  if (feedback.length) {
+    out += `section_feedback:\n`;
+    feedback.forEach((item) => {
+      const action = item.feedback === 'up' ? 'accept-as-is' : item.feedback === 'down' ? 'investigate-and-revise' : 'clarify-before-approval';
+      out += `  - section: ${yamlEscape(item.section)}\n    feedback: ${yamlEscape(item.feedback)}\n    notes: ${yamlEscape(item.notes)}\n    requested_agent_action: ${yamlEscape(action)}\n`;
+    });
+  }
+  return out;
+}
+
+async function copyText(text) {
+  if (!text) return false;
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch (_) {
+    const out = document.getElementById('yamlOutput');
+    out.focus();
+    out.select();
+    return false;
+  }
+}
+
+setupFeedback();
+setupQuestions();
+
+document.getElementById('compileFeedback').addEventListener('click', async () => {
+  const items = collectFeedback();
+  const status = document.getElementById('compileStatus');
+  if (!items.length) {
+    status.textContent = 'Select at least one section feedback control first.';
+    return;
+  }
+  const yaml = feedbackYaml(items);
+  document.getElementById('yamlOutput').value = yaml;
+  const copied = await copyText(yaml);
+  status.textContent = copied ? 'Feedback YAML compiled and copied.' : 'Feedback YAML compiled. Clipboard unavailable; textarea selected.';
+});
+
+document.getElementById('compileAnswers').addEventListener('click', async () => {
+  const status = document.getElementById('compileStatus');
+  try {
+    const yaml = answersYaml();
+    document.getElementById('yamlOutput').value = yaml;
+    const copied = await copyText(yaml);
+    status.textContent = copied ? 'Final answers compiled and copied.' : 'Final answers compiled. Clipboard unavailable; textarea selected.';
+  } catch (err) {
+    status.textContent = err.message;
+  }
+});
+
+document.getElementById('copyYaml').addEventListener('click', async () => {
+  const yaml = document.getElementById('yamlOutput').value;
+  const copied = await copyText(yaml);
+  document.getElementById('compileStatus').textContent = copied ? 'YAML copied.' : 'Clipboard unavailable; textarea selected.';
+});
+</script>
+</body>
+</html>

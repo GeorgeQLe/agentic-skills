@@ -1,5 +1,13 @@
 # Session History
 
+## 2026-06-02 — Devtool docs audit refresh
+
+- Reconciled stale unchecked priority queue items that already had shipped evidence: split-path research workflow (`0e87d978`/`459bca41`), cross-skill output audit (`177bde21`), and research-quality alignment contract (`4701f41b`).
+- Confirmed `devtool-docs-audit` is currently installed from the `devtool` pack, then refreshed `research/devtool-docs-audit.md` against current README/docs/scripts.
+- Created `alignment/devtool-docs-audit-agentic-skills-2026-06-02.html` with the full report content, evidence matrix, assumptions, alternatives, backlog, section feedback controls, and final approval gates.
+- Main audit findings: README now correctly uses `./init.sh`, but the docs still need a first-success route, central troubleshooting, proof/example surfacing, script-reference consolidation, team rollout guidance, and stale `install.sh` research-reference cleanup.
+- No product docs were remediated yet; follow-up changes are gated on review of the alignment page.
+
 ## 2026-06-02 — Positioning alignment contract caveats
 
 - Updated mirrored `positioning` parent skills to `v0.9` after archiving `v0.8`. Mode C now builds an approval alignment page for the product-positioning shortcut and writes `tasks/todo.md` only after final compiled YAML approval.

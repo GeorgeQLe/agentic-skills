@@ -1062,11 +1062,11 @@ Verification (Node 25): typecheck clean, full vitest suite green at 10 test file
 - [x] `$investigate AFPS alignment preview gate audit` — audit later AFPS workflow skills for shared-convention-only, write-first, conditional, or missing HTML alignment preview gates; patch confirmed gaps with mirrored contract updates and focused tests.
 - [x] `$investigate exec-loop run rename` — rename the exec-loop `run` skill to `exec` for Claude and Codex to avoid collision with Claude's default `/exec` surface; archive/version active skill contracts, update references, validate, commit, and push.
 - [x] `$targeted-skill-builder provision-agentic-config WSL browser open fallback` — update provisioned `CLAUDE.md`/`AGENTS.md` blocks and root `CLAUDE.md` so HTML files open through PowerShell `file://wsl.localhost` when UNC launch fails.
-- [ ] `$analyze-sessions split-path product research workflow` — investigate prior conversations where research surfaces multiple ICP/product-line/pivot options, then recommend how skills should handle branching without bogging down in 4-8 variation evaluations.
+- [x] `$analyze-sessions split-path product research workflow` — investigate prior conversations where research surfaces multiple ICP/product-line/pivot options, then recommend how skills should handle branching without bogging down in 4-8 variation evaluations. Completed in shipped artifacts `alignment/analyze-sessions-split-path-product-research-workflow.html` and commit `459bca41` after the earlier `0e87d978` analysis.
 - [x] `$targeted-skill-builder ICP WTP signals` — incorporate willingness-to-pay evidence into mirrored ICP skills as bounded customer-discovery signal capture, then archive/version, validate, commit, and push.
-- [ ] `$analyze-sessions cross-skill output understanding audit` — analyze local Claude/Codex history to scrutinize whether skill outputs across all skills, especially HTML alignment pages and final handoffs, improve user-agent understanding or add avoidable process drag.
+- [x] `$analyze-sessions cross-skill output understanding audit` — analyze local Claude/Codex history to scrutinize whether skill outputs across all skills, especially HTML alignment pages and final handoffs, improve user-agent understanding or add avoidable process drag. Completed in shipped artifact `alignment/analyze-sessions-cross-skill-output-understanding-audit.html` and commit `177bde21`.
 - [x] `$investigate benchmark html alignment page evaluation` — confirm whether benchmark tests evaluate generated alignment HTML pages, then add multi-artifact HTML evaluation coverage for the `investigate` benchmark fixture.
-- [ ] `$targeted-skill-builder research quality alignment contract` — make alignment-page contracts preserve research evidence, uncertainty, reasoning, source coverage, and decision context before HTML presentation.
+- [x] `$targeted-skill-builder research quality alignment contract` — make alignment-page contracts preserve research evidence, uncertainty, reasoning, source coverage, and decision context before HTML presentation. Completed in shipped contract update commit `4701f41b`.
 - [x] `$targeted-skill-builder AFPS routing cleanup` — update business-product routing so the default AFPS path is ICP -> competitive analysis -> journey map -> positioning -> UX variations -> UI interview -> prototype -> UAT -> consolidation -> research roadmap -> spec interview -> roadmap, while keeping value-prop-canvas and lean-canvas as optional risk-driven detours.
 - [x] Refresh `docs/canonical-workflow-report.md` and create `alignment/canonical-workflow-report.html` — audit the canonical workflow report against current pack routing, AFPS/prototype gates, roadmap no-spec routing, and post-spec feature routing; validate targeted stale-claim checks; commit and push only intended documentation changes.
 - [x] `$investigate benchmark failures alignment-first prototype-second workflow` — triage benchmark/showcase failures after the AFPS (alignment-first, prototype-second) workflow refactor, fix stale harness expectations, refresh generated data, validate, then commit and push.
@@ -1082,7 +1082,7 @@ Verification (Node 25): typecheck clean, full vitest suite green at 10 test file
 - [x] `$exec` — Resume Phase 41 Batch 41.3 re-benchmarks: re-run the 33 Tier 2 global skills that were benchmarked pre-fixture-remediation with near-zero pass rates (Phase 43 added route guidance to all 32 fixture prompts and increased budgets). Current graded count: 69 unique skills / 158 total (unchanged — `provision-agentic-config` and `migrate` were already in the graded set, so their 2026-05-31 re-runs refresh grades rather than adding unique skills). Batch 41.5 pack-local groups also have remaining families. Batch 41.3 Group 2 shipped in `bc17fee` and `3e4bd78`. `provision-agentic-config` re-benchmarked clean 2026-05-31 (Claude 100% / Codex 67%); `migrate` re-benchmarked 2026-05-31 (Claude 33% / Codex 33%, no infra blocks) and now routes to `$session-triage migrate benchmark failure`; next benchmark rerun target is `prototype`.
 - [x] Review `tasks/recurring-todo.md`: 2 unchecked recurring items — promote only if due and requiring execution work.
   - Result 2026-06-01: `devtool-docs-audit` is overdue (`Next due: 2026-05-30`) and is executable audit work, so it is promoted below. `spec-drift` is not due until 2026-06-11, so it remains advisory-only.
-- [ ] `$pack install devtool` then `$devtool-docs-audit` — run the overdue recurring developer-docs audit refresh.
+- [x] `$pack install devtool` then `$devtool-docs-audit` — run the overdue recurring developer-docs audit refresh.
   - Classification: automated, with alignment-page review output.
   - Pack status: `scripts/pack.sh which devtool-docs-audit` reports `devtool-docs-audit` is provided by uninstalled pack `devtool`; install the pack or skill first, then start a fresh Codex session if `$devtool-docs-audit` is still not visible.
   - Files: expected output `research/devtool-docs-audit.md`, `alignment/devtool-docs-audit-{topic}.html`, prompt history under `prompts/devtool-docs-audit/`, task/history notes, and any doc fixes only after the audit recommends and the user approves them.
@@ -1091,7 +1091,30 @@ Verification (Node 25): typecheck clean, full vitest suite green at 10 test file
     2. Run `$devtool-docs-audit` against this developer-facing repo, covering quickstart clarity, examples, API reference, troubleshooting, migration paths, and missing proof artifacts.
     3. Produce `research/devtool-docs-audit.md` and an alignment page before any follow-up doc changes.
     4. Validate artifacts with content checks and `git diff --check`; ship intended prompt/task/research/alignment artifacts on `master`.
+  - Result 2026-06-02: `scripts/pack.sh which devtool-docs-audit` confirms the skill is installed via the `devtool` pack. Refreshed `research/devtool-docs-audit.md` and created `alignment/devtool-docs-audit-agentic-skills-2026-06-02.html`. Follow-up doc fixes require review/approval of the alignment page first.
 - [ ] `$research-roadmap` — All 43 roadmap phases are complete. Run documentation health scan after Phase 41 remaining batches finish.
+
+### Review — Devtool Docs Audit Refresh 2026-06-02
+
+- Reconciled stale unchecked priority items that were already shipped: split-path research workflow (`0e87d978`/`459bca41`), cross-skill output audit (`177bde21`), and research-quality alignment contract (`4701f41b`).
+- Confirmed `devtool-docs-audit` is installed from the `devtool` pack, then refreshed the docs audit against current README/docs/scripts.
+- Updated `research/devtool-docs-audit.md` with current evidence: README now uses `./init.sh`, but first-success routing, central troubleshooting, proof/example surfacing, script-reference consolidation, team rollout checklist, and stale `install.sh` research references remain the main docs gaps.
+- Created `alignment/devtool-docs-audit-agentic-skills-2026-06-02.html` with the complete audit, evidence matrix, assumptions, alternatives, backlog, feedback controls, and approval gates.
+- No product docs were changed in this step; remediation is intentionally gated on review of the alignment page.
+
+### Ship Manifest — Devtool Docs Audit Refresh 2026-06-02
+
+- **User goal:** Execute the next `$exec` step from the active task docs.
+- **Changed files:** `prompts/exec/skill-prompt-20260602-140054-exec.md`, `prompts/devtool-docs-audit/skill-prompt-20260602-140406-refresh.md`, `research/devtool-docs-audit.md`, `alignment/devtool-docs-audit-agentic-skills-2026-06-02.html`, `tasks/todo.md`, `tasks/history.md`.
+- **Per-file purpose:** prompt files capture the visible invocation and selected indirect audit task; the research file is the refreshed docs audit; the alignment page is the review/approval surface; task/history files record completed work and next state.
+- **User-goal mapping:** `$exec` selected the overdue docs audit refresh after stale already-shipped priority items were reconciled; the resulting artifacts complete the audit without prematurely changing product docs.
+- **Tests run:** `scripts/pack.sh which devtool-docs-audit`; targeted `rg` content checks over `research/devtool-docs-audit.md`; targeted `rg` content checks over `alignment/devtool-docs-audit-agentic-skills-2026-06-02.html`; inline `<script>` parse via `node -e`; `git diff --check`; browser open attempted with `xdg-open` and succeeded through the WSL PowerShell `file://wsl.localhost/...` fallback.
+- **Skipped tests:** package/runtime tests are not relevant to report-only docs artifacts; no source code, SKILL.md contract, generated runtime asset, schema, command surface, or deploy behavior changed.
+- **Adversarial review:** checked that stale unchecked items had shipped artifacts/commits before marking them complete, that the older devtool audit did not satisfy the 2026-06-01 refresh by itself, and that recommended doc fixes were not implemented before alignment review.
+- **Residual risk:** the audit recommends documentation changes but does not implement them yet; user approval is needed before remediation. The alignment page has manual review controls, so visual/interaction defects are possible despite syntax/content checks.
+- **Rollback note:** revert this commit to restore the prior audit report, remove the alignment/prompt artifacts, and return the task queue to its previous unchecked state.
+- **Next command:** review `alignment/devtool-docs-audit-agentic-skills-2026-06-02.html` and provide feedback-only YAML or final compiled YAML.
+- **Unrelated worktree files left untouched:** `apps/skills-showcase/alignment/animation-code-walkthrough.html` has unrelated tracked edits and is intentionally not part of this shipping boundary.
 
 ### Review — Recurring Todo Review 2026-06-01
 

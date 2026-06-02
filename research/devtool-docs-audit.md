@@ -1,219 +1,254 @@
-# Devtool Docs Audit — agentic-skills
+# Devtool Docs Audit - agentic-skills (2026-06-02 Refresh)
 
-Scope: audits the developer-facing documentation for this repository — the `agentic-skills` shared skill library for Claude Code and OpenAI Codex. Grounded in the public docs (`README.md`, `docs/skills-reference.md`, `docs/packs.md`, `docs/operating-modes.md`), project conventions (`CLAUDE.md`), and the completed devtool research chain (`research/devtool-user-map.md`, `research/devtool-integration-map.md`, `research/devtool-dx-journey.md`, `research/devtool-adoption.md`, `research/devtool-positioning.md`, `research/devtool-monetization.md`). This is a docs adoption audit, not a generic devtool checklist.
+Scope: this refresh audits developer-facing documentation for the `agentic-skills` shared skill library for Claude Code and OpenAI Codex. It is grounded in `README.md`, `docs/skills-reference.md`, `docs/packs.md`, `docs/codex-workflow.md`, `docs/operating-modes.md`, `docs/pack-workflow-matrix.md`, `docs/test-harness.md`, `init.sh`, `scripts/pack.sh`, `scripts/approved-plan.sh`, and the existing devtool research chain under `research/devtool-*.md`.
 
-Continuity: this is the final default-flow devtool research artifact after user map, integration map, DX journey, adoption, positioning, and monetization. The audit evaluates whether the docs support the positioning promise: a local-first workflow library that turns raw Claude Code and Codex sessions into repeatable plan -> run -> ship workflows with project-local packs and explicit hybrid handoff.
+Continuity: this is a recurring documentation audit, not a rewrite plan. It updates the earlier docs audit, which had become partially stale after the global installer shifted from `install.sh` language to `init.sh` and after project-pack docs became more detailed.
+
+## Executive Verdict
+
+P0: none. The current docs are not missing the basic install, pack, restart, or mode concepts needed by an experienced shell user.
+
+P1: the activation path is still too implicit. A reader can learn commands, but the docs still do not give a single first-success route from clone to visible proof.
+
+P1: troubleshooting remains fragmented. Restart, refresh, mode, approval-packet, drift, and validation recovery are documented, but not in one symptom-led support path.
+
+P1: proof/example artifacts are strong but under-used. `tasks/history.md`, benchmark outputs, Skills Showcase generated proof data, and devtool research artifacts demonstrate real usage, but README does not present them as the adoption proof path.
+
+P2: script references are better than before, but still split across multiple docs. The most common commands are covered; exact "which script answers which question" guidance is still scattered.
+
+P2: team rollout guidance is still research-only. Public docs cover `.agents/project.json` and refresh behavior, but not a concise team checklist for checkout path, generated roots, restart expectations, and direct-to-primary workflow policy.
+
+P2: stale `install.sh` references remain in the devtool research chain. README and skills reference now correctly use `./init.sh`, but dogfood research artifacts still describe the old installer name and are likely to confuse readers if promoted as examples.
 
 ## Findings
 
-### P0 — None
+### P1 - First-success route is still implicit
 
-No documentation issue appears to block a shell-comfortable user from installing the global skills, enabling a pack, and understanding that CLI restart is required after pack changes. The core path is present in `README.md`, `docs/packs.md`, and `docs/skills-reference.md`.
+Claim: README and workflow docs explain the pieces, but they do not package a fastest proof path.
 
-### P1 — Quickstart explains commands, but not the fastest proof path
+Evidence:
+- `README.md` opens with `./init.sh`, then lists pack install commands and explains CLI reload/restart behavior.
+- `docs/codex-workflow.md` explains `$exec` as the Codex execute-and-ship loop and names `tasks/todo.md` as the default execution queue.
+- `rg "First successful|First successful cycle" README.md docs/*.md` returns no first-success section.
+- `docs/skills-reference.md` explains showcase freshness and benchmark coverage, but those are maintenance references rather than an activation path.
 
-The README opens with install and pack commands quickly, which is good. It tells the reader to run `./install.sh`, then `scripts/pack.sh install <pack>`, and it names `scripts/pack.sh list-packs` as internal. `docs/packs.md` reinforces the same model and explains local symlinks.
+Inference: a motivated developer can assemble the path, but the docs still require them to infer the sequence: initialize globals, install a pack in a project, restart or reload the CLI, verify pack status, create or inspect a task queue, run the execution loop, and confirm `tasks/history.md` or a commit changed.
 
-The gap is that the docs do not give a single "prove it worked" route. A new user can install and enable a pack, but the next visible success is implied rather than staged. The strongest first-success path from `research/devtool-dx-journey.md` is:
+Decision impact: add a README "First successful cycle" section before larger docs work. Keep it command-first and end in visible artifacts.
 
-1. install global skills,
-2. enable a pack in a real project,
-3. restart Claude Code or Codex,
-4. run `/pack` or `$pack status`,
-5. run `/run` or `$run` against a repo with `tasks/todo.md`,
-6. verify `tasks/history.md` and a commit changed.
+Recommended shape:
 
-Recommendation: add a short "First successful cycle" subsection to the README after Project Packs. Keep it command-first, not conceptual. It should mention the no-task fallback: if `tasks/todo.md` is missing or empty, run `/roadmap`, `$roadmap`, `/research-roadmap`, or `$research-roadmap` first depending on context.
+```text
+1. Clone this repo and run ./init.sh.
+2. In a target project, run scripts/pack.sh install <pack-or-skill>.
+3. Restart Claude Code or start a fresh Codex session if the skill list is stale.
+4. Run /pack or $pack, or scripts/pack.sh status, to confirm the project designation.
+5. If tasks/todo.md is missing, run a planning skill first: /roadmap, $roadmap, /research-roadmap, or $research-roadmap as appropriate.
+6. Run /exec or $exec and confirm a checked task, a tasks/history.md entry, and a commit/push.
+```
 
-### P1 — Examples are real but scattered
+### P1 - Troubleshooting is present as fragments, not a support path
 
-The repo has strong examples:
+Claim: the repo documents important recovery facts, but a user with a symptom still has to search across several files.
 
-- `research/devtool-*.md` is a self-referential example of the devtool pack producing docs about its own library.
-- `tasks/history.md` is a dense proof log of shipped skill work.
-- `docs/operating-modes.md` shows the full approval-packet contract.
-- `README.md` lists concrete pack commands and target packs.
+Evidence:
+- `README.md` says `scripts/pack.sh refresh` does not force active CLI skill registries to reload and distinguishes Claude reload/clear/restart from Codex fresh sessions.
+- `docs/packs.md` explains committed `.agents/project.json`, uncommitted generated roots, `doctor`, `refresh`, stale installs, pinned installs, and update mode.
+- `docs/operating-modes.md` documents approval-packet lifecycle, mode resolution, `jq` failure handling, and hybrid degraded paths.
+- `docs/skills-reference.md` lists skill metadata checks, benchmark coverage freshness, and showcase generation validation.
+- No `docs/troubleshooting.md` exists, and `rg "Troubleshooting" README.md docs/*.md` does not find a central symptom table.
 
-The gap is discoverability. A skeptical reader has to infer that these are examples. `research/devtool-adoption.md` correctly names `tasks/history.md` as the example gallery, but user-facing docs do not elevate that.
+Inference: troubleshooting content exists, but it is organized by subsystem rather than by user failure. That is fine for maintainers and weak for first-time adopters.
 
-Recommendation: add an "Examples to inspect" section to `docs/skills-reference.md` or README linking to `research/devtool-user-map.md`, `research/devtool-dx-journey.md`, `research/devtool-positioning.md`, and the most recent `tasks/history.md` entries. This would convert existing dogfood artifacts into adoption proof without creating new demo infrastructure.
+Decision impact: add `docs/troubleshooting.md` or a README troubleshooting subsection. The highest-value format is a table: symptom, likely cause, command to run, expected result, and next fix.
 
-### P1 — Troubleshooting is present as fragments, not a support path
+Minimum rows:
+- Skill installed but not visible -> restart/reload active CLI, then `scripts/pack.sh status`.
+- Project-local roots stale or broken -> `scripts/pack.sh doctor`, then `scripts/pack.sh refresh`.
+- Global skills stale -> `global/codex/init-agentic-skills/scripts/init-agentic-skills.sh doctor`, then `./init.sh` or the documented init skill mode.
+- Skill references broken -> `./scripts/skill-deps.sh --broken`.
+- Version metadata missing -> `./scripts/skill-versions.sh --missing`.
+- Hybrid approved packet rejected -> `scripts/approved-plan.sh check`, inspect lifecycle, `git_head`, `todo_hash`, dirty paths, manual blockers, TTL, mode, and `jq`.
+- Checkout moved -> rerun `scripts/pack.sh refresh` in consumer repos and start a fresh CLI session.
 
-The most important recovery facts are documented:
+### P1 - Proof artifacts are strong but under-presented
 
-- `README.md` and `docs/packs.md` both say pack refresh does not hot-reload active CLI sessions.
-- `docs/packs.md` explains committed `.agents/project.json` versus uncommitted local symlinks.
-- `docs/operating-modes.md` documents mode resolver failures, approval-packet lifecycle, `jq` hard-dependency failure text, and hybrid degraded paths.
-- `README.md` lists validation scripts under the repository structure and pack sections.
+Claim: the repo has credible dogfood proof, but the landing docs do not point readers to a short proof trail.
 
-The issue is shape: troubleshooting is not a single decision tree. The likely support questions are predictable from the research chain: "skill does not show up", "pack installed but nothing changed", "hybrid delegation fails", "Codex cannot execute approved packet", "symlinks broke after moving the checkout", and "Windows/synced folders behave oddly".
+Evidence:
+- `tasks/history.md` is a dense shipped-work log with dated entries, validation details, and commit-oriented outcomes.
+- `research/devtool-*.md` shows the devtool pack used against this repo.
+- `docs/benchmark-results-matrix.md` is generated on 2026-06-02 and records benchmark reports by skill.
+- `docs/skills-showcase/assets/github-proof-data.js` includes proof entries that point at `tasks/history.md`.
+- `README.md` does not have a "Proof", "Examples", or "Examples to inspect" section.
 
-Recommendation: add `docs/troubleshooting.md` or a README subsection covering:
+Inference: the repo has stronger proof than the docs advertise. A skeptical adopter has to know where to look.
 
-- Skills not visible -> restart CLI, then run `scripts/pack.sh status` and `scripts/pack.sh refresh`.
-- Broken/missing skill references -> run `./scripts/skill-deps.sh --broken`.
-- Missing versions after editing skills -> run `./scripts/skill-versions.sh --missing`.
-- Hybrid packet errors -> read `docs/operating-modes.md` § "Approval packet" and check `jq`, mode, dirty tree, TTL, `tasks/todo.md` hash, and manual blockers.
-- Moved checkout or broken symlinks -> rerun `scripts/pack.sh refresh` in consumer repos.
-- Windows/native shell friction -> use WSL with a Linux-side clone.
+Decision impact: add a README "Proof and examples" block linking to `tasks/history.md`, selected `research/devtool-*.md` artifacts, `docs/benchmark-results-matrix.md`, and the Skills Showcase asset/data contract. Keep the claim precise: self-dogfooded, local-first, inspectable, benchmarked in places, not universally behavior-proven.
 
-### P2 — API/reference coverage exists for skills, but script contracts are under-documented
+### P2 - Script reference is scattered
 
-`docs/skills-reference.md` is a useful skill catalog. It lists global skills, pack skills, default flows, and the Claude-only `delegate` asymmetry. For skill discovery, the reference is adequate.
+Claim: common script commands are documented, but they are spread across README, pack docs, skills reference, operating modes, and test harness docs.
 
-The script surface is less reference-like. `README.md` and `docs/packs.md` cover common `scripts/pack.sh` commands and mention `list-packs` as internal. `docs/operating-modes.md` covers `scripts/agent-mode.sh` and `scripts/approved-plan.sh` conceptually. The validation scripts are named in examples, but their exact output expectations and failure interpretation are not centralized.
+Evidence:
+- `README.md` documents `./init.sh`, pack install/remove/status/which, version pinning, archive audit, validation, and live test commands.
+- `docs/packs.md` documents pack command usage, drift tracking, pin/unpin, update mode, and session-start hook behavior.
+- `docs/skills-reference.md` documents skill catalog, showcase freshness, benchmark coverage freshness, and global/pack skill lists.
+- `docs/operating-modes.md` documents `scripts/agent-mode.sh` and approval-packet behavior.
+- `docs/test-harness.md` documents `pnpm verify`, `pnpm bench`, and benchmark report locations.
 
-Recommendation: add a compact "Script Reference" section to `docs/skills-reference.md` or a separate `docs/scripts-reference.md` for:
+Inference: maintainers can find the details, but new contributors lack a compact command index that answers "what command do I run for this state?"
 
-- `install.sh` and `install.sh --uninstall`
-- `scripts/pack.sh list|recommend|install|remove|refresh|status|set-mode|list-packs`
-- `scripts/agent-mode.sh`
-- `scripts/approved-plan.sh check|consume|mark-stale` as consumer-facing commands, with producer commands referenced for Claude-side flows
-- `scripts/skill-deps.sh --broken`
-- `scripts/skill-versions.sh --missing`
+Decision impact: add `docs/scripts-reference.md` or expand `docs/skills-reference.md` with a script reference table.
 
-Keep it descriptive, not exhaustive. The goal is to help users understand which command answers which question.
+Suggested table groups:
+- Install/global: `./init.sh`, `./init.sh --uninstall`, `./init.sh --pin`.
+- Project packs: `scripts/pack.sh list|recommend|install|remove|refresh|status|doctor|which|pin|unpin|set-mode|set-update-mode|list-packs`.
+- Mode and handoff: `scripts/agent-mode.sh`, `scripts/approved-plan.sh check|consume|mark-stale`.
+- Skill hygiene: `scripts/skill-deps.sh --broken`, `scripts/skill-versions.sh --missing`, `scripts/skill-archive-audit.sh --strict`.
+- Showcase and benchmark: `node scripts/generate-skills-showcase-data.mjs`, `node scripts/generate-skills-showcase-github-data.mjs`, `scripts/validate-skills-showcase-data.sh`, `pnpm --dir tests bench:coverage`, `pnpm --dir tests test`.
 
-### P2 — Migration paths are honest but incomplete for teams
+### P2 - Team adoption checklist is still missing
 
-`docs/operating-modes.md` has a strong migration section for moving from the old parity-mirror model to declared modes. `docs/packs.md` explains moving from global domain skills to project-local packs. `README.md` names former global business/product skills and says how to restore them via `business-app`.
+Claim: team rollout concerns are known, but public docs stop short of a checklist.
 
-The missing migration path is team rollout. The research chain repeatedly identifies team-specific friction: clone-path coupling, CLI restart, `.agents/project.json` commit discipline, direct-to-primary defaults, and Claude/Codex mirror maintenance. These are discussed in `research/devtool-dx-journey.md` and `research/devtool-monetization.md`, but not as a user-facing migration guide.
+Evidence:
+- `docs/packs.md` tells users to commit `.agents/project.json` and not commit generated `.claude/skills` or `.codex/skills`.
+- `docs/packs.md` explains that `refresh` recreates local roots and requires a fresh CLI session if skills are not visible.
+- `research/devtool-dx-journey.md` and `research/devtool-monetization.md` identify checkout-path coupling, restart friction, direct-to-primary defaults, and generated-root discipline as team friction.
+- No README or `docs/packs.md` section currently gives a "team adoption checklist".
 
-Recommendation: add a short "Team adoption checklist" to `docs/packs.md`:
+Inference: the docs describe mechanics but do not package them into team onboarding guidance.
 
-- choose a stable `agentic-skills` checkout path,
-- install globals once per developer,
-- commit `.agents/project.json`,
-- do not commit `.claude/skills` or `.codex/skills`,
-- run `scripts/pack.sh refresh` after pulling pack designation changes,
-- restart the active CLI,
-- decide whether direct-to-primary is acceptable or the team needs a local workflow fork.
+Decision impact: add a short `docs/packs.md` team checklist. It should stay practical:
+- choose a stable `agentic-skills` checkout path or accept per-developer `refresh`;
+- run `./init.sh` once per developer;
+- commit `.agents/project.json`;
+- never commit generated `.claude/skills` or `.codex/skills`;
+- run `scripts/pack.sh refresh` after pulling pack designation changes;
+- start a fresh CLI session after install/remove/refresh if skills are stale;
+- decide whether the direct-to-primary shipping contract is acceptable or needs a local workflow fork.
 
-### P2 — Proof artifacts are strong, but buried
+### P2 - Existing devtool research has stale installer terminology
 
-The proof surface is better than average for a local workflow library:
+Claim: dogfood research artifacts still mention `install.sh`, but the current repo uses `init.sh`.
 
-- The repository uses its own skills to maintain itself.
-- `tasks/history.md` records shipped changes with validation details.
-- `research/devtool-*.md` artifacts show the devtool pack in use.
-- `scripts/skill-deps.sh --broken` and `scripts/skill-versions.sh --missing` validate reference and version hygiene.
-- `docs/operating-modes.md` documents degraded paths and contract details instead of leaving hybrid behavior implicit.
+Evidence:
+- `ls install.sh` returns no file.
+- `README.md` and `docs/skills-reference.md` now use `./init.sh`.
+- `rg "install.sh" research/devtool-*.md` still finds references in `research/devtool-user-map.md`, `research/devtool-positioning.md`, `research/devtool-monetization.md`, `research/devtool-integration-map.md`, `research/devtool-dx-journey.md`, and `research/devtool-adoption.md`.
+- The prior `research/devtool-docs-audit.md` also said README used `./install.sh`; this refresh corrects that artifact.
 
-The docs should make this proof easier to find. Right now the proof exists, but a reader has to know to inspect task history and research outputs.
+Inference: stale research does not break setup, but it weakens the "examples to inspect" path if those artifacts are presented as current proof.
 
-Recommendation: add a README "Proof and validation" paragraph pointing to `tasks/history.md`, the devtool research chain under `research/`, and the two validation scripts. Do not overclaim behavioral test coverage; the honest claim is metadata/reference validation plus self-dogfooding.
+Decision impact: either update stale devtool research references to `init.sh` with a dated note, or add a README caveat that older research artifacts preserve historical installer names. The better fix is a small docs-reconciliation pass over active devtool research files.
 
-## Quickstart Clarity
+## Coverage By Audit Area
 
-Strengths:
-
-- README gets to `./install.sh` immediately.
-- Project pack commands are copy-pasteable.
-- `scripts/pack.sh list-packs` is explicitly marked internal, preventing user-facing confusion.
-- CLI restart after pack changes is called out in both README and `docs/packs.md`.
-- `.agents/project.json` shape is shown as JSON.
-
-Gaps:
-
-- No explicit first-success script after installation.
-- No short decision branch for "I do not have `tasks/todo.md` yet".
-- No one-screen summary of "global install once; pack install per project; restart; run the workflow".
-
-Recommended docs change: add a 6-step quickstart outcome path that ends with a visible artifact (`tasks/history.md` entry or pack status), not only installed symlinks.
-
-## Examples
-
-Strengths:
-
-- The repo is heavily dogfooded.
-- Research artifacts demonstrate pack outputs in realistic depth.
-- `tasks/history.md` provides a living change log.
-- `docs/operating-modes.md` gives concrete mode and packet tables.
-
-Gaps:
-
-- No short demo artifact, screenshot, or walkthrough.
-- No curated "read these three examples" list.
-- No explicit example of a successful consumer repo installing a pack and running a first `$run`.
-
-Recommended docs change: link to existing dogfood artifacts first. A screencast or GIF would help adoption later, but the low-cost improvement is a curated examples list.
-
-## API Reference
+### Quickstart Clarity
 
 Strengths:
-
-- Skill catalog is broad and reasonably organized.
-- Pack default flows are documented.
-- Claude-only `delegate` asymmetry is named clearly.
-- Operating-mode resolver and approval-packet semantics are centralized in `docs/operating-modes.md`.
+- README starts with the two-layer global-core/project-pack model.
+- README uses the current `./init.sh` command and explains that packs are not installed globally.
+- Pack install examples are copy-pasteable.
+- CLI reload/restart guidance is now more nuanced than the older audit: Claude has `/reload-skills` and `/clear` options; Codex should use a fresh session if the `$` list is stale.
 
 Gaps:
+- No named first-success route.
+- No "if `tasks/todo.md` is missing" branch in README.
+- No short proof endpoint after install beyond status/skill roots.
 
-- Script commands are described across multiple docs instead of one reference.
-- Validation script outputs are not explained.
-- `approved-plan.sh` is a critical hybrid dependency, but user-facing docs mostly discuss the concept rather than practical failure triage.
-
-Recommended docs change: create a compact script reference and link it from README, `docs/packs.md`, and `docs/operating-modes.md`.
-
-## Troubleshooting
+### Examples
 
 Strengths:
-
-- Common failure causes are documented where they arise.
-- Hybrid degraded paths are unusually explicit.
-- The repo has local validation scripts for broken skill refs and missing versions.
+- `tasks/history.md` is a real execution log.
+- `research/devtool-*.md` is a dogfood research chain.
+- `docs/benchmark-results-matrix.md` and Skills Showcase generated assets provide benchmark/proof data.
 
 Gaps:
+- README does not call these "examples".
+- Some devtool research examples have stale `install.sh` references.
 
-- No central troubleshooting page.
-- No "symptom -> command -> likely fix" table.
-- Windows/symlink/synced-folder caveats live in research docs, not user-facing setup docs.
-
-Recommended docs change: add a troubleshooting table. Prioritize the most common local setup failures before rare approval-packet edge cases.
-
-## Migration Paths
+### API And Script Reference
 
 Strengths:
-
-- Parity-mirror to three-mode migration is documented.
-- Former global business/product skills have a clear pack-based replacement path.
-- Pack refresh and `.agents/project.json` regeneration are documented.
+- Skill and pack catalogs are current and comprehensive.
+- `docs/operating-modes.md` is strong for hybrid/approval-packet internals.
+- `docs/test-harness.md` gives the benchmark harness command surface.
 
 Gaps:
+- No single script reference page.
+- Common failure interpretation is split across subsystem docs.
 
-- No team rollout checklist.
-- No PR-gated workflow adaptation guidance despite direct-to-primary defaults being a known adoption blocker.
-- No checkout-path migration instructions for moving the `agentic-skills` clone after packs have been installed elsewhere.
-
-Recommended docs change: add team rollout and moved-checkout recovery guidance before creating any larger managed/enterprise documentation.
-
-## Proof Artifacts
+### Troubleshooting
 
 Strengths:
-
-- `tasks/history.md` is a high-signal proof log.
-- The devtool research chain demonstrates the pack on this repo.
-- Validation scripts prove metadata and reference hygiene.
-- `docs/operating-modes.md` proves the hybrid contract is specified, not improvised.
+- Restart/refresh and drift mechanics are documented.
+- Approval-packet failure checks are explicit.
+- Validation commands exist for skill deps, versions, archive integrity, showcase assets, and benchmark coverage.
 
 Gaps:
+- No central symptom-led page.
+- Windows/WSL and moved-checkout risks are not in a short public recovery path.
 
-- Proof is not presented as proof in the landing docs.
-- No release notes or external social proof surface exists.
-- No behavior-level test harness exists for SKILL.md contracts, and docs should continue to qualify validation claims accordingly.
+### Migration Paths
 
-Recommended docs change: add a README proof paragraph with honest boundaries: self-dogfooded, locally inspectable, metadata/reference checks available, no hidden telemetry, no CI-enforced behavior contract.
+Strengths:
+- Former-global domain skills are now mapped to project packs.
+- `docs/operating-modes.md` explains migrating from parity mirrors to declared modes.
+- `docs/packs.md` explains track-latest vs pinned installs.
+
+Gaps:
+- Team rollout guidance is not compressed into a checklist.
+- Stale `install.sh` references in research examples create migration confusion.
+
+### Proof Artifacts
+
+Strengths:
+- Dogfood history is unusually visible.
+- Benchmark matrix and Skills Showcase data provide inspectable proof paths.
+- The repo explicitly avoids hidden telemetry and GitHub Actions as a default.
+
+Gaps:
+- Proof is not surfaced in README.
+- Docs should avoid overclaiming behavior coverage: many checks validate metadata, fixtures, or generated assets, not all live skill behavior.
+
+## Evidence Matrix
+
+| Claim | Evidence | Inference | Confidence | Decision Impact |
+| --- | --- | --- | --- | --- |
+| No P0 docs blocker | README includes `./init.sh`, pack install, pack status/which, restart guidance; docs cover packs and modes | Experienced shell users can install and reason through setup | High | No emergency docs rewrite needed |
+| First-success path is implicit | No first-success section in README/docs; workflow pieces live across README and `docs/codex-workflow.md` | Activation depends on user synthesis | High | Add README first-success route |
+| Troubleshooting is fragmented | Recovery facts live in README, `docs/packs.md`, `docs/operating-modes.md`, `docs/skills-reference.md` | Symptom-led support is slower than it needs to be | High | Add troubleshooting table/page |
+| Proof is under-presented | `tasks/history.md`, benchmark matrix, showcase proof data, and devtool research exist; README lacks proof/examples section | Existing proof can be converted to adoption value cheaply | High | Add proof/examples pointers |
+| Script reference is scattered | Commands are covered in at least five docs | A command index would reduce support overhead | Medium-high | Add script reference |
+| Team checklist missing | Mechanics documented; checklist absent; research names team friction | Team adoption still needs local tacit knowledge | Medium-high | Add team adoption checklist |
+| Research examples have stale installer terms | `install.sh` absent; active docs use `init.sh`; devtool research still references `install.sh` | Example artifacts can confuse readers | High | Reconcile or caveat stale examples |
+
+## Assumptions And Confidence
+
+- High confidence: the current public docs use `./init.sh` for global initialization.
+- High confidence: no central `docs/troubleshooting.md` or first-success README section exists.
+- High confidence: the older audit was stale and needed refresh.
+- Medium-high confidence: a script reference page is better than continuing to scatter command semantics. This is a docs-architecture judgment, not a hard correctness claim.
+- Medium confidence: team adoption should standardize checkout path. The underlying absolute-path generated-root behavior is real, but teams may prefer different onboarding conventions.
+- Medium confidence: stale devtool research should be reconciled rather than caveated. If the repo treats research artifacts as historical snapshots, a dated caveat may be enough.
+
+## Alternatives Considered
+
+1. Full documentation rewrite: rejected. The docs are mostly accurate; the highest value is navigation and activation packaging.
+2. Only update stale `install.sh` references: rejected as too narrow. It fixes an accuracy issue but misses activation and support gaps.
+3. Add a separate website-first onboarding page: deferred. README and docs pages are the current adoption surface; use them before creating a new surface.
+4. Implement doc fixes immediately in this audit: rejected for this step. The task requested an audit refresh and alignment review before follow-up doc changes.
 
 ## Recommended Backlog
 
-1. Add README "First successful cycle" and "Proof and validation" sections.
+1. Add README "First successful cycle" and "Proof and examples" sections.
 2. Add `docs/troubleshooting.md` with symptom-led recovery steps.
-3. Add a compact script reference for install, pack, mode, approval-packet, and validation commands.
-4. Add a team adoption checklist to `docs/packs.md`.
-5. Consider a short demo asset only after the written quickstart and troubleshooting path are complete.
+3. Add `docs/scripts-reference.md` or a compact script reference section in `docs/skills-reference.md`.
+4. Add a team adoption checklist and moved-checkout recovery note to `docs/packs.md`.
+5. Reconcile stale `install.sh` references across active `research/devtool-*.md` artifacts, or add dated historical-context notes before using those artifacts as examples.
 
-## Summary
+## Suggested Next Work
 
-The docs are sufficient for an experienced shell user who already understands Claude Code or Codex and reads carefully. The main adoption problem is not missing truth; it is navigation. Installation, packs, modes, validation, and proof are all documented, but the fastest path from "clone this repo" to "I saw it work" is not packaged as one guided route. The highest-leverage documentation work is therefore a short first-success quickstart plus central troubleshooting, not a broad rewrite.
+Review `alignment/devtool-docs-audit-agentic-skills-2026-06-02.html`. If approved, the next implementation step should make the smallest docs pass that covers backlog items 1-4, then handle stale devtool research terminology as a follow-up reconciliation if the user wants research artifacts to remain current examples.
