@@ -19,6 +19,5 @@ taste-calibration → destination-doc → vertical-slice-splitter → implementa
 - You need decision-complete specifications (`/spec-interview`)
 - Regulatory or compliance documentation is required
 
-**Primary role:** Claude-orchestration
-
+**Primary role:** Lightweight operator-agent alignment
 

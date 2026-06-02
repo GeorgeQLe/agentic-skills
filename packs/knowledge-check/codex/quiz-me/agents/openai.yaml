@@ -1,0 +1,7 @@
+interface:
+  display_name: "Quiz Me"
+  short_description: "Adversarial comprehension quiz for local docs"
+  default_prompt: "Use $quiz-me to test whether I deeply understood a local document."
+
+policy:
+  allow_implicit_invocation: true

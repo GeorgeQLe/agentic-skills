@@ -1,0 +1,7 @@
+interface:
+  display_name: "Taste Calibration"
+  short_description: "One-question alignment calibration before specs"
+  default_prompt: "Use $taste-calibration to calibrate intent, taste, and boundaries before writing specs."
+
+policy:
+  allow_implicit_invocation: true

@@ -1,0 +1,7 @@
+interface:
+  display_name: "UAT Guide"
+  short_description: "Step-by-step guide for one UAT journey"
+  default_prompt: "Use $uat-guide next to expand the next unrun UAT journey into tester instructions."
+
+policy:
+  allow_implicit_invocation: true

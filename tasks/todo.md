@@ -1,3 +1,24 @@
+## Current Task - Codex Mirrors For Quiz/UAT/Taste Pack Skills 2026-06-02
+
+**Goal:** Add Codex-side mirrors for `quiz-me`, `uat-guide`, and `taste-calibration` while preserving Claude skill intent, versions, and pack conventions.
+
+**Plan:**
+- [x] Capture the visible invocation under `prompts/exec/`.
+- [x] Inspect existing Claude skills, neighboring Codex pack mirrors, pack metadata, docs, benchmark fixtures, and tests.
+- [x] Create the three Codex skill mirrors plus `agents/openai.yaml` metadata and companion changelog/alignment files.
+- [x] Update docs, pack descriptions, benchmark blocked/setup metadata, and targeted layer1 tests.
+- [x] Regenerate skills showcase data without staging unrelated dirty app edits.
+- [x] Run focused verification, record review notes, stage intended files only, commit, and push.
+
+### Review
+
+- Added Codex mirrors for `quiz-me`, `uat-guide`, and `taste-calibration` with preserved versions (`v0.0`, `v0.1`, `v0.0`) and runner-specific command/user-input guidance.
+- Added Codex `agents/openai.yaml` metadata for all three mirrors, copied `uat-guide` alignment/changelog companions, and added initial `CHANGELOG.md` entries for `quiz-me` and `taste-calibration` on both Claude and Codex sides.
+- Removed stale Claude-only notes for `quiz-me` and `uat-guide`, updated `alignment-loop` pack role language, and moved `uat-guide` benchmark coverage from blocked to an executable pack fixture.
+- Added layer1 parity coverage for active Claude/Codex mirrors, stale Claude-only docs, Codex routing syntax, and benchmark setup coverage for `quiz-me`, `uat-guide`, and `taste-calibration`.
+- Regenerated Skills Showcase assets with a staged-only workflow so new skill files were visible to `git ls-files` while unrelated app work remained unstaged.
+- Verification passed: `pnpm --dir tests test -- layer1/pack-skill-mirror-parity.test.ts layer1/bench-setups.test.ts layer1/bench-coverage.test.ts layer1/frontmatter.test.ts` (38 files, 1965 tests) and `bash scripts/validate-skills-showcase-data.sh`.
+
 ## Current Task - afps-status Claude Skill Availability 2026-06-01
 
 **Goal:** Determine why `afps-status` is visible to Codex but reportedly unavailable in Claude, then apply the smallest fix if the local Claude skill install or source metadata is wrong.

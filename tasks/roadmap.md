@@ -1,3 +1,29 @@
+## Current Targeted Update: Codex Mirrors For Quiz/UAT/Taste Pack Skills 2026-06-02
+
+**Goal:** Add Codex-side mirrors for `quiz-me`, `uat-guide`, and `taste-calibration` while preserving Claude skill intent, versions, and pack conventions.
+
+**Acceptance Criteria:**
+- [x] Prompt history is captured under `prompts/exec/`.
+- [x] `packs/knowledge-check/codex/quiz-me/SKILL.md` exists with Codex-compatible question guidance and read-only quiz behavior.
+- [x] `packs/guided-walkthrough/codex/uat-guide/SKILL.md` exists with Codex `$...` routing, AGENTS/CLAUDE context loading, copied alignment companion files, and `v0.1` metadata.
+- [x] `packs/alignment-loop/codex/taste-calibration/SKILL.md` exists with Codex-compatible exploration/subagent guidance and `$destination-doc` continuation routing.
+- [x] Codex `agents/openai.yaml` metadata exists for all three mirrors.
+- [x] Missing `CHANGELOG.md` files are added for `quiz-me` and `taste-calibration` on both Claude and Codex sides with initial `v0.0` entries.
+- [x] Shared docs and pack metadata no longer describe `quiz-me`, `uat-guide`, or `taste-calibration` as Claude-only where Codex mirrors now exist.
+- [x] Benchmark metadata includes executable Codex coverage for `uat-guide`, and `uat-guide` is removed from Claude-only blocked lists.
+- [x] Focused layer1 coverage proves active Claude/Codex parity for the three pack skills and rejects stale Claude-only docs.
+- [x] Skills showcase data is regenerated without staging unrelated dirty app edits.
+- [x] Focused tests, showcase-data validation, and `git diff --check` pass before shipping intended changes.
+
+**Implementation Plan:**
+1. Inspect existing Claude skills, neighboring Codex pack mirrors, pack metadata, docs, benchmark fixtures, and tests.
+2. Create the three Codex skill mirrors plus `agents/openai.yaml` metadata and companion changelog/alignment files.
+3. Update docs, pack descriptions, benchmark blocked/setup metadata, and targeted layer1 tests.
+4. Regenerate skills showcase data with a clean source snapshot or staged-only workflow so unrelated dirty app drift is not mixed into generated output.
+5. Run focused verification, record review notes, stage intended files only, commit, and push on the primary branch.
+
+**Result:** Codex mirrors, metadata, docs, benchmark coverage, parity tests, and generated showcase assets are complete and ready to ship.
+
 ## Current Targeted Update: afps-status Claude Skill Availability 2026-06-01
 
 **Goal:** Determine why `afps-status` is visible to Codex but reportedly unavailable in Claude, then apply the smallest fix if the local Claude skill install or source metadata is wrong.

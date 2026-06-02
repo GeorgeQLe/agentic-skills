@@ -3146,7 +3146,6 @@ describe("benchmark coverage matrix", () => {
       "init-agentic-skills",
       "patch-exec-profile",
       "release",
-      "uat-guide",
     ];
 
     for (const skill of expectedCustomSkills) {
@@ -3185,6 +3184,23 @@ describe("benchmark coverage matrix", () => {
       agent_scope: "both",
       fixture_type: "git-disposable-repo-fixture",
     });
+  });
+
+  it("covers quiz-me, uat-guide, and taste-calibration with executable Codex setups", () => {
+    const expectations = [
+      ["quiz-me", "tests/layer4/setups/tier23-global-workflows.setup.ts"],
+      ["uat-guide", "tests/layer4/setups/packs/pack-workflows.setup.ts"],
+      ["taste-calibration", "tests/layer4/setups/packs/pack-workflows.setup.ts"],
+    ] as const;
+
+    for (const [skill, setupPath] of expectations) {
+      const target = resolveBenchTarget(skill);
+      expect(target, `${skill} benchmark target`).toMatchObject({
+        coverageStatus: "custom",
+        setupPath,
+      });
+      expect(target?.setup, `${skill} executable setup`).toBe(CUSTOM_BENCH_SETUPS[skill]);
+    }
   });
 
   it("accepts canonical provision-agentic-config policy headings instead of shorthand prompt echoes", () => {

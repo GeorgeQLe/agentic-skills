@@ -418,9 +418,9 @@ scripts/pack.sh install product-design       # brainstorm, consolidate-variation
                                               #   feature-interview, prototype, spec-interview,
                                               #   ui-interview, ux-variations
 scripts/pack.sh install product-testing      # dogfood, uat
-scripts/pack.sh install guided-walkthrough   # guide, uat-guide (uat-guide is Claude-only)
+scripts/pack.sh install guided-walkthrough   # guide, uat-guide
 scripts/pack.sh install website-polish       # icon-handler
-scripts/pack.sh install knowledge-check      # quiz-me (Claude-only)
+scripts/pack.sh install knowledge-check      # quiz-me
 ```
 
 ## Research, Sessions, Context & Skill-Dev Packs
