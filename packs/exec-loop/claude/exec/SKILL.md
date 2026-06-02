@@ -4,6 +4,7 @@ description: Plan the next incomplete step (or full phase with --phase flag) fro
 type: execution
 version: v0.1
 argument-hint: "[--phase]"
+invocation: orchestrator
 ---
 
 # Exec

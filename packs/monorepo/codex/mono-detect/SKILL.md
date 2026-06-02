@@ -4,6 +4,8 @@ description: Detect pnpm workspace structure, optional Turborepo overlay, packag
 type: analysis
 version: v0.1
 argument-hint: "[optional: repository root]"
+invocation: sub-skill
+parent: mono-plan
 ---
 
 # Mono Detect

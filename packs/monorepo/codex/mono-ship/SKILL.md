@@ -4,6 +4,7 @@ description: Augment the standard ship lifecycle with monorepo package-scoped an
 type: shipping
 version: v0.0
 argument-hint: "[--pipeline]"
+invocation: orchestrator
 ---
 
 # Mono Ship

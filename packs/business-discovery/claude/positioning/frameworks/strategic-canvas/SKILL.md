@@ -3,6 +3,8 @@ name: strategic-canvas
 description: Blue Ocean strategic canvas — extract competing factors, build value curves, identify eliminate/reduce/raise/create moves
 type: research
 version: v0.0
+invocation: sub-skill
+parent: positioning
 ---
 
 ## Pack Availability Guard

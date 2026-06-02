@@ -3,6 +3,8 @@ name: obviously-awesome
 description: April Dunford Obviously Awesome methodology — competitive alternatives, unique attributes, value mapping, target segment, market category
 type: research
 version: v0.0
+invocation: sub-skill
+parent: positioning
 ---
 
 ## Pack Availability Guard

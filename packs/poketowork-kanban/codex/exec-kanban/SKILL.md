@@ -5,6 +5,7 @@ type: execution
 version: v0.1
 argument-hint: "[--phase]"
 allowed-tools: Bash(poketo *)
+invocation: orchestrator
 ---
 
 # Exec Kanban

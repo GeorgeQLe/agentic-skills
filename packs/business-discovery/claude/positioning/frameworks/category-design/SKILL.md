@@ -3,6 +3,8 @@ name: category-design
 description: Play Bigger category creation — category diagnosis, naming, POV development, ecosystem mapping
 type: research
 version: v0.0
+invocation: sub-skill
+parent: positioning
 ---
 
 ## Pack Availability Guard

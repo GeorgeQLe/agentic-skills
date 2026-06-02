@@ -3,6 +3,7 @@ name: devtool-workflow
 description: Use only for developer-facing tools, libraries, SDKs, CLIs, APIs, and infrastructure products
 type: planning
 version: v0.1
+invocation: orchestrator
 ---
 
 # Devtool Workflow

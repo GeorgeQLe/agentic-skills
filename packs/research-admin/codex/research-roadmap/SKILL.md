@@ -3,6 +3,7 @@ name: research-roadmap
 description: Scan research and documentation health, then maintain a priority documentation queue
 type: planning
 version: v0.10
+invocation: orchestrator
 ---
 
 ## Pack Availability Guard

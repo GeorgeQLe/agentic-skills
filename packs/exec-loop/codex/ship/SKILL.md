@@ -4,6 +4,7 @@ description: "Ship already-finished work, optionally deploy it, and prepare the 
 type: shipping
 version: v0.4
 argument-hint: "[--no-plan] [--no-deploy] [--save-conversation] [--save-all-conversations]"
+invocation: orchestrator
 ---
 
 # Ship

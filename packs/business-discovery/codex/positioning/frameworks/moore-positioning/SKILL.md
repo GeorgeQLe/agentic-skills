@@ -3,6 +3,8 @@ name: moore-positioning
 description: Geoffrey Moore positioning hypothesis — generate Moore template, map evidence per element, identify weakest link
 type: research
 version: v0.0
+invocation: sub-skill
+parent: positioning
 ---
 
 ## Pack Availability Guard

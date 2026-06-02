@@ -4,6 +4,7 @@ description: Augment the standard exec lifecycle with monorepo detection, lane-s
 type: execution
 version: v0.1
 argument-hint: "[--phase] [--pipeline]"
+invocation: orchestrator
 ---
 
 # Mono Exec

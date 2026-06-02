@@ -4,6 +4,8 @@ description: Decompose a single roadmap phase into implementation steps, tests, 
 type: planning
 version: v0.1
 argument-hint: "[phase-number] [--no-tdd]"
+invocation: sub-skill
+parent: exec
 ---
 
 # Plan Phase

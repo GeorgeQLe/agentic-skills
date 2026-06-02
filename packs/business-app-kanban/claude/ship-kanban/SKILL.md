@@ -5,6 +5,7 @@ type: shipping
 version: v0.0
 argument-hint: "[--no-plan] [--no-deploy]"
 allowed-tools: Bash(poketo *)
+invocation: orchestrator
 ---
 
 # Ship Kanban

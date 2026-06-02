@@ -4,6 +4,7 @@ description: Parent router — detect market vs product mode, recommend position
 type: research
 version: v0.7
 argument-hint: "[optional: \"product\" | \"--synthesize\" | focus area]"
+invocation: orchestrator
 ---
 
 ## Pack Availability Guard

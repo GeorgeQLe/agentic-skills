@@ -4,6 +4,7 @@ description: "Execute the next incomplete step (or full phase with --phase), shi
 type: execution
 version: v0.1
 argument-hint: "[--phase] [--execute-approved]"
+invocation: orchestrator
 ---
 
 # Exec
