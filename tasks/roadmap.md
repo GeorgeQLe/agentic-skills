@@ -1,3 +1,32 @@
+## Current Targeted Update: Alignment Gate De-Duplication 2026-06-03
+
+**Goal:** De-duplicate visually identical alignment review gates while preserving distinct `artifact destination` and `proposed file changes` semantics in compiled YAML when those decisions are actually separate.
+
+**Execution Profile:**
+- Parallel mode: serial
+- Rationale: The change spans the canonical convention, generated bundles, generator gate wording, and focused layer1 tests; these need one coherent diff and regeneration pass.
+
+**Acceptance Criteria:**
+- [x] Prompt history is captured under `prompts/investigate/`.
+- [x] `tasks/roadmap.md` and `tasks/todo.md` record the implementation plan and final review notes.
+- [x] The canonical `CLAUDE.md` alignment convention defines `artifact destination` as durable/review artifact location approval.
+- [x] The canonical `CLAUDE.md` alignment convention defines `proposed file changes` as downstream mutation scope, timing, and allowed file-set approval.
+- [x] The convention instructs agents to render one combined visual section when both gates ask only the same path-destination question, and separate sections when the decisions differ.
+- [x] `scripts/upgrade-alignment-page.mjs` no longer mechanically requires duplicated path-only gate sections in skill-specific gate text.
+- [x] Generated `ALIGNMENT-PAGE.md` bundles are regenerated from the canonical convention with no generator drift.
+- [x] Focused layer1 tests prove the semantic distinction, duplicate path-only visual combination rule, and preserved `gate_type` values for file-output decisions.
+- [x] Targeted alignment tests pass; broader layer1 verification was run and residual unrelated failures are documented in `tasks/todo.md`.
+- [ ] Intended changes are committed and pushed on `master` while unrelated dirty work is preserved.
+
+**Implementation Plan:**
+1. Capture the visible invocation and record this execution plan in task docs.
+2. Inspect the canonical alignment convention, generator skill-specific gate text, and current alignment gate tests.
+3. Update `CLAUDE.md` and `scripts/upgrade-alignment-page.mjs` with the de-duplication contract.
+4. Regenerate bundled `ALIGNMENT-PAGE.md` files from the canonical convention.
+5. Update focused layer1 tests for semantic distinction, visual de-duplication, and YAML `gate_type` preservation.
+6. Run targeted and layer1 verification, inspect representative diffs, then record review notes.
+7. Stage intended files only, commit, and push on the primary branch.
+
 ## Current Targeted Update: Prototype Pack Flow Phase Refactor 2026-06-03
 
 **Goal:** Refactor `/prototype` pack/drawer orchestration so one `PackFlowPhase` state owns lifecycle transitions while `activePack` remains separate pack identity.

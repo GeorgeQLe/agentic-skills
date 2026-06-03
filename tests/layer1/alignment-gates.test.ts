@@ -127,6 +127,53 @@ describe("alignment page gate contract", () => {
     }
   });
 
+  it("defines artifact destination and proposed file changes as separate output gate concepts", () => {
+    expect(generatedAlignmentSkillFiles.length).toBeGreaterThan(100);
+    for (const path of generatedAlignmentSkillFiles) {
+      const content = conventionText(path);
+      expect(content, `${path} output gate section`).toContain("**Output gate semantics and de-duplication.**");
+      expect(content, `${path} artifact destination semantics`).toContain(
+        "The `artifact destination` gate approves the durable or review artifact location",
+      );
+      expect(content, `${path} proposed file changes semantics`).toContain(
+        "The `proposed file changes` gate approves downstream mutation scope, timing, and the allowed file set",
+      );
+      expect(content, `${path} separate approval concepts`).toContain("Keep these as separate approval concepts");
+    }
+  });
+
+  it("combines duplicate path-only output gates visually while separating distinct decisions", () => {
+    expect(generatedAlignmentSkillFiles.length).toBeGreaterThan(100);
+    for (const path of generatedAlignmentSkillFiles) {
+      const content = conventionText(path);
+      expect(content, `${path} duplicate path-only gates combined`).toContain(
+        "If both gate concepts ask only the same path-destination question, render one combined visual section such as `Artifact Destination & Proposed File Changes`",
+      );
+      expect(content, `${path} distinct decisions separated`).toContain(
+        "If the decisions differ, render separate gates",
+      );
+    }
+  });
+
+  it("preserves output gate_type values in final YAML without duplicating combined sections", () => {
+    expect(generatedAlignmentSkillFiles.length).toBeGreaterThan(100);
+    for (const path of generatedAlignmentSkillFiles) {
+      const content = conventionText(path);
+      expect(content, `${path} no visual-title duplication`).toContain(
+        "Do not duplicate YAML entries solely because one visual section title names both concepts",
+      );
+      expect(content, `${path} separate yaml entries only for separate decisions`).toContain(
+        "emit separate YAML items only when the page asked separate decisions",
+      );
+      expect(content, `${path} gate_type preserved`).toContain(
+        "keep each item's `gate_type` equal to the decision it controls (`artifact destination` or `proposed file changes`)",
+      );
+      expect(content, `${path} output target yaml fields`).toContain(
+        "optional `target_artifact` or `target_path` when the gate controls file output",
+      );
+    }
+  });
+
   it("defines review, confirmed, and amended lifecycle states in generated alignment-page conventions", () => {
     expect(generatedAlignmentSkillFiles.length).toBeGreaterThan(100);
     for (const path of generatedAlignmentSkillFiles) {
@@ -287,6 +334,12 @@ describe("alignment page gate contract", () => {
     expect(conventionText("packs/product-design/codex/ux-variations/SKILL.md")).toContain("Render surfaced assumptions, variation manifest, concept selection");
     expect(conventionText("packs/customer-lifecycle/codex/journey-map/SKILL.md")).toContain("**Journey research translation.**");
     expect(conventionText("packs/research-admin/codex/research-roadmap/SKILL.md")).toContain("**Research-roadmap translation.**");
+    expect(conventionText("global/codex/idea-scope-brief/SKILL.md")).toContain(
+      "Apply the shared artifact-destination/proposed-file-changes de-duplication rule",
+    );
+    expect(conventionText("packs/product-design/codex/feature-interview/SKILL.md")).toContain(
+      "combine them into one visual gate when they ask only the same path-destination question",
+    );
   });
 
   it("requires every active alignment page to copy compiled YAML ergonomically", () => {
@@ -433,7 +486,7 @@ describe("alignment page gate contract", () => {
       expect(page, `${path} bundle has required questions`).toContain("**Required inline questions.**");
     }
     expect(bundled("global/claude/idea-scope-brief/SKILL.md"), "idea-scope-brief gates").toContain(
-      "**Concept-specific gates.**",
+      "**Idea-specific gates.**",
     );
     expect(bundled("packs/customer-lifecycle/codex/journey-map/SKILL.md"), "journey-map gates").toContain(
       "**Journey research translation.**",

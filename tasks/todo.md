@@ -1,3 +1,34 @@
+## Current Task - Alignment Gate De-Duplication 2026-06-03
+
+**Goal:** Update the shared alignment-page convention so identical path-only `artifact destination` and `proposed file changes` questions are rendered once visually, while distinct file-output decisions keep separate gate semantics and YAML `gate_type` values.
+
+### Execution Profile
+
+- Parallel mode: serial
+- Rationale: The canonical convention, generator text, generated bundles, and layer1 tests must stay in sync in one focused change.
+
+### Plan
+
+- [x] Capture the visible invocation under `prompts/investigate/`.
+- [x] Inspect current `CLAUDE.md` alignment convention, `scripts/upgrade-alignment-page.mjs`, and `tests/layer1/alignment-gates.test.ts`.
+- [x] Update the canonical convention to define the two gate concepts and visual de-duplication rule.
+- [x] Update generator skill-specific gate wording so identical path-only questions can be combined visually.
+- [x] Regenerate generated `ALIGNMENT-PAGE.md` bundles.
+- [x] Add or adjust focused layer1 assertions for semantic distinction, visual de-duplication, and preserved YAML gate types.
+- [x] Run targeted tests and `pnpm test:layer1`.
+- [ ] Inspect diffs, record review notes, commit, and push intended changes.
+
+### Review
+
+- Captured the visible invocation under `prompts/investigate/skill-prompt-20260603-122441-gate-dedup-plan.md`.
+- Added an `Output gate semantics and de-duplication` convention section to `CLAUDE.md` defining `artifact destination` as durable/review artifact location approval and `proposed file changes` as downstream mutation scope, timing, and allowed file-set approval.
+- The convention now tells agents to render one combined `Artifact Destination & Proposed File Changes` visual section only when both concepts ask the same path-destination question, while preserving separate gates when the decisions differ.
+- Updated `scripts/upgrade-alignment-page.mjs` skill-specific gate wording so output-location/change-scope decisions reuse the shared de-duplication rule instead of mechanically requiring duplicate path-only sections.
+- Regenerated all 278 generator-owned `ALIGNMENT-PAGE.md` bundles; dry-run generation now reports `Updated: 0` and `Bundled files written: 0`.
+- Added layer1 coverage for the semantic distinction, duplicate path-only visual de-duplication, and preserved final YAML `gate_type` values for file-output decisions.
+- Verification passed: `node scripts/upgrade-alignment-page.mjs --dry-run`, `pnpm exec vitest run --project layer1 layer1/alignment-gates.test.ts`, `pnpm exec vitest run --project layer1 layer1/upgrade-alignment-pages.test.ts`, and `git diff --check`.
+- Broad verification was run with `pnpm test:layer1` from `tests/`; it failed on 5 residual layer1 files outside this diff: stale benchmark matrix/showcase demo expectations, the existing `idea-scope-brief` Claude/Codex wording mismatch already present in `HEAD`, macOS Bash 3 rejecting `declare -A` in `skill-inventory.sh`, and a broken local `rollup` symlink under `packs/poketowork-kanban/.../scripts/node_modules`.
+
 ## Current Task - Prototype Pack Flow Phase Refactor 2026-06-03
 
 **Goal:** Refactor `/prototype` pack/drawer orchestration so `PackFlowPhase` is the single lifecycle authority while `activePack` remains the active pack identity.

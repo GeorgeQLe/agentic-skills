@@ -61,15 +61,17 @@ function isPointerOrStub(paragraph) {
 }
 
 function skillSpecificGates(skillName) {
+  const outputGateDedup =
+    "Apply the shared artifact-destination/proposed-file-changes de-duplication rule: combine them into one visual gate when they ask only the same path-destination question, and render separate gates when destination approval differs from downstream mutation scope, timing, or allowed files.";
   const rules = {
-    "idea-scope-brief": "**Idea-specific gates.** Render the Idea Assumptions Manifest as a first-class assumptions/confidence gate inside the alignment page before proposed deliverables. The idea identity, slug, scope/non-goals, ICP readiness, artifact destination, and proposed file changes must each be reviewable gates.",
-    "feature-interview": "**Feature-specific gates.** Render the evidence brief, claim verdicts, assumptions, planning destination, prototype-first decision, priority hypothesis, artifact destination, and proposed file changes as gates before writing or updating durable planning artifacts.",
-    "ui-interview": "**UI-specific gates.** Render surfaced assumptions, the UI or content requirements manifest, scope boundaries, artifact destination, proposed file changes, and the coverage checkpoint as gates. In requirements-only mode, the content requirements manifest is the candidate/verdict gate and layout decisions must remain non-goals.",
-    "ux-variations": "**Variation-specific gates.** Render surfaced assumptions, variation manifest, concept selection, evaluation method, fixed-versus-variable scope, artifact destination, proposed file changes, and coverage checkpoint as gates before writing final variation plans.",
-    "spec-interview": "**Spec-specific gates.** Render surfaced assumptions, scope/non-goals, candidate decisions, acceptance coverage, artifact destination, proposed file changes, and post-approval route as gates before writing or replacing specs.",
-    "consolidate-variations": "**Consolidation-specific gates.** Render UAT evidence coverage, variation verdicts, selected concept, rejected alternatives, unresolved assumptions, artifact destination, proposed file changes, and coverage checkpoint as gates.",
-    "prototype": "**Prototype-specific gates.** Render source-spec coverage, prototype scope, non-goals and deferred infrastructure, route/file destinations, proposed file changes, validation plan, and post-approval UAT route as gates.",
-    "uat": "**UAT-specific gates.** Render journey coverage, participant or evaluator assumptions, acceptance verdicts, evidence gaps, artifact destination, proposed file changes, and post-approval route as gates.",
+    "idea-scope-brief": `**Idea-specific gates.** Render the Idea Assumptions Manifest as a first-class assumptions/confidence gate inside the alignment page before proposed deliverables. The idea identity, slug, scope/non-goals, ICP readiness, and output-location/change-scope decisions must each be reviewable gates. ${outputGateDedup}`,
+    "feature-interview": `**Feature-specific gates.** Render the evidence brief, claim verdicts, assumptions, planning destination, prototype-first decision, priority hypothesis, and output-location/change-scope decisions as gates before writing or updating durable planning artifacts. ${outputGateDedup}`,
+    "ui-interview": `**UI-specific gates.** Render surfaced assumptions, the UI or content requirements manifest, scope boundaries, output-location/change-scope decisions, and the coverage checkpoint as gates. In requirements-only mode, the content requirements manifest is the candidate/verdict gate and layout decisions must remain non-goals. ${outputGateDedup}`,
+    "ux-variations": `**Variation-specific gates.** Render surfaced assumptions, variation manifest, concept selection, evaluation method, fixed-versus-variable scope, output-location/change-scope decisions, and coverage checkpoint as gates before writing final variation plans. ${outputGateDedup}`,
+    "spec-interview": `**Spec-specific gates.** Render surfaced assumptions, scope/non-goals, candidate decisions, acceptance coverage, output-location/change-scope decisions, and post-approval route as gates before writing or replacing specs. ${outputGateDedup}`,
+    "consolidate-variations": `**Consolidation-specific gates.** Render UAT evidence coverage, variation verdicts, selected concept, rejected alternatives, unresolved assumptions, output-location/change-scope decisions, and coverage checkpoint as gates. ${outputGateDedup}`,
+    "prototype": `**Prototype-specific gates.** Render source-spec coverage, prototype scope, non-goals and deferred infrastructure, route/file destinations, file mutation scope, validation plan, and post-approval UAT route as gates. ${outputGateDedup}`,
+    "uat": `**UAT-specific gates.** Render journey coverage, participant or evaluator assumptions, acceptance verdicts, evidence gaps, output-location/change-scope decisions, and post-approval route as gates. ${outputGateDedup}`,
     "icp": "**ICP research translation.** Render segment claims, exclusion rationale, buyer/user distinction, source coverage by customer category, evidence-backed pain intensity, uncertainty about reachable audiences, and the recommended next research or positioning decision as first-class research gates.",
     "competitive-analysis": "**Competitive research translation.** Render competitor coverage by category, pricing and packaging evidence, positioning claims, user-sentiment signals, integration or distribution evidence, recent activity, alternatives considered, lower-confidence comparisons, and source gaps that could change the strategic recommendation.",
     "journey-map": "**Journey research translation.** Render observed user/customer evidence separately from inferred journey stages. Include trigger, evaluation, activation, conversion, retention, and failure-point evidence where available, plus confidence gaps for any stage inferred without direct evidence.",
@@ -84,13 +86,13 @@ function skillSpecificGates(skillName) {
   };
   if (rules[skillName]) return rules[skillName];
   if (["icp", "competitive-analysis", "customer-feedback", "journey-map", "conversion-map", "retention-map"].includes(skillName)) {
-    return "**Discovery-specific gates.** Render evidence coverage, assumptions/confidence, recommended path, artifact destination, proposed file changes, approval, and post-approval route as gates before creating or updating canonical discovery artifacts.";
+    return `**Discovery-specific gates.** Render evidence coverage, assumptions/confidence, recommended path, output-location/change-scope decisions, approval, and post-approval route as gates before creating or updating canonical discovery artifacts. ${outputGateDedup}`;
   }
   if (/(research|audience|comparables|genre-map|store-page-test|playtest|positioning|adoption|user-map|monetization|platform-strategy|mvp-gap)/.test(skillName)) {
     return "**Research-pack translation.** For business, devtool, game, creator, and media research packs, render the claim/evidence/inference/assumption/decision-impact structure, source coverage categories appropriate to the domain, lower-confidence findings, and downstream implications before asking for approval or routing to the next skill.";
   }
   if (["assumption-tracker", "experiment", "cohort-review", "retro", "risk-register"].includes(skillName)) {
-    return "**Risk-validation gates.** Render assumption/risk evidence coverage, confidence, candidate verdicts or mitigations, artifact destination, proposed file changes, coverage checkpoint, and post-approval route as gates. Durable tracker outputs remain canonical markdown artifacts and must also be fully rendered in the alignment page.";
+    return `**Risk-validation gates.** Render assumption/risk evidence coverage, confidence, candidate verdicts or mitigations, output-location/change-scope decisions, coverage checkpoint, and post-approval route as gates. Durable tracker outputs remain canonical markdown artifacts and must also be fully rendered in the alignment page. ${outputGateDedup}`;
   }
   return "";
 }
