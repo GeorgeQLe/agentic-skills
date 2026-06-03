@@ -1,3 +1,25 @@
+## Current Targeted Update: Animation Code Walkthrough Ship-End 2026-06-02
+
+**Goal:** Ship the standalone animation code walkthrough alignment page and wrap-up artifacts with a verified local boundary, while recording the deploy-skill gap for the existing Skills Showcase deploy contract.
+
+**Acceptance Criteria:**
+- [x] Prompt history is captured under `prompts/ship-end/`.
+- [x] The modified walkthrough HTML is inspected and repaired for YAML compile correctness.
+- [x] Manual task status and recurring advisory counts are checked without blocking on advisory items.
+- [x] A quality-gate ship manifest records the changed files, tests, skipped checks, adversarial review, residual risk, rollback, and next command.
+- [x] Page DOM behavior, generated showcase data freshness, app checks, and whitespace checks pass before commit.
+- [x] Intended changes are committed and pushed on `master`.
+- [x] Deploy status is reported; `$deploy` is unavailable until the `release-ops` deploy skill is installed.
+
+**Implementation Plan:**
+1. Capture the visible `$ship-end` invocation and inspect git state, task docs, deploy contract, and validation entry points.
+2. Repair only clear walkthrough-page functional issues found during review.
+3. Update task history and write the quality-gate ship manifest for the final boundary.
+4. Regenerate and validate Skills Showcase proof data after history/task updates.
+5. Run app validation and whitespace checks, then stage, commit, push, and report the deploy handoff.
+
+**Result:** Completed. The walkthrough page, generated proof refresh, prompt-history record, task/history updates, and ship manifest are ready to ship on `master`; deploy is blocked until the `release-ops` deploy skill is installed.
+
 ## Current Targeted Update: Staged Research Alignment Workflow 2026-06-02
 
 **Goal:** Split heavy report-first research skills into a three-stage approval workflow so preliminary research is reviewable as non-canonical working state before any canonical research file is written.

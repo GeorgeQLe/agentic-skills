@@ -1,3 +1,28 @@
+## Current Task - Animation Code Walkthrough Ship-End 2026-06-02
+
+**Goal:** Ship the remaining animation code walkthrough alignment page, validation-generated showcase proof refresh, prompt history, and session wrap-up docs on `master`.
+
+### Plan
+
+- [x] Capture the visible `$ship-end` invocation under `prompts/ship-end/`.
+- [x] Inspect the dirty working tree, classify the modified walkthrough HTML as the active shipping boundary, and confirm no unpushed commits exist.
+- [x] Check manual and advisory task status without treating unchecked advisory items as blockers.
+- [x] Repair the walkthrough page's YAML compiler so quote/newline escaping and gate types are preserved.
+- [x] Update ship manifest and session history for the final shipping boundary.
+- [x] Run page-specific DOM validation, showcase generated-data validation, app typecheck/test/build checks, and whitespace checks.
+- [x] Commit and push intended changes on `master`.
+- [x] Record deploy status and next command.
+
+### Review
+
+- Shipped the standalone animation code walkthrough alignment page and repaired the inline YAML compiler so feedback/final-answer YAML escapes quotes/newlines and emits the page's explicit gate types.
+- Captured the visible `$ship-end` invocation under `prompts/ship-end/skill-prompt-20260602-234556-ship-end.md`.
+- Refreshed generated Skills Showcase proof assets after validation found stale recent-history data.
+- Validation passed: page-specific jsdom YAML-control check, `pnpm --dir apps/skills-showcase typecheck`, `pnpm --dir apps/skills-showcase test` (12 files / 129 tests), `pnpm --dir apps/skills-showcase build`, `bash scripts/validate-skills-showcase-data.sh`, and `git diff --check`.
+- Manual tasks: 1/5 complete; four deferred newsletter/Vercel setup checks remain unchecked.
+- Advisory tasks: `tasks/record-todo.md` is absent; `tasks/recurring-todo.md` has 2 unchecked advisory items.
+- Deploy not run: `tasks/deploy.md` exists, but `scripts/pack.sh which deploy` reports `deploy` is provided by the uninstalled `release-ops` pack. Next command is `$pack install deploy`.
+
 ## Current Task - Staged Research Alignment Workflow 2026-06-02
 
 **Goal:** Split heavy report-first research skills into a three-stage approval workflow so preliminary research is reviewable as non-canonical working state before any canonical research file is written.

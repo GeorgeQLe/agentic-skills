@@ -1,5 +1,14 @@
 # Session History
 
+## 2026-06-02 — Animation code walkthrough ship-end
+
+- Shipped the standalone `apps/skills-showcase/alignment/animation-code-walkthrough.html` alignment page for the pack-drawer 16-step animation code walkthrough.
+- Repaired the page's inline YAML compiler after pre-ship review found quote/newline escaping and gate-type mapping issues in the feedback/final-answer controls.
+- Captured the visible `$ship-end` invocation under `prompts/ship-end/` and recorded this wrap-up in `tasks/todo.md`, `tasks/roadmap.md`, and a quality-gate ship manifest.
+- Refreshed Skills Showcase generated proof assets after validation found stale recent-history data.
+- Verification passed for the page-specific jsdom YAML-control check, Skills Showcase typecheck, app test suite, production build, generated-data validation, and whitespace checks.
+- Deploy was not run because the existing deploy contract requires a `$deploy` skill, and `scripts/pack.sh which deploy` reports it is provided by the uninstalled `release-ops` pack.
+
 ## 2026-06-02 — Staged research alignment workflow
 
 - Split report-first research skills into a staged approval workflow: Stage 1 writes only non-canonical working packets, Stage 2 builds `review` alignment pages and remains in review for feedback-only YAML, and Stage 3 archives the working packet before writing unchanged canonical outputs after clean final compiled YAML.
