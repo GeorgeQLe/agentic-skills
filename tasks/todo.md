@@ -319,9 +319,11 @@
 
 ### Review
 
-- Completed in commit `c6c97517`; `tasks/todo.md` was stale after that commit.
-- Durable artifacts already exist: `alignment/analyze-sessions-animation-approval-signals.html` and `docs/history/animation-approval-signals-2026-06-01.md`.
-- The report scanned 10 animation-related sessions and found no explicit "yes/perfect/looks good/approved" statements. It identified implicit approval signals, validated behaviors to preserve, unvalidated behaviors, and known-good references: `781d44c1` for the close sequence and `6bcb2076` for open apex behavior.
+- Completed in commit `c6c97517`.
+- Wrote `docs/history/animation-approval-signals-2026-06-01.md` with 6 implicit approval signals extracted from 10 animation sessions (May 25–June 1), 9 validated behaviors mapped to source signals and commit references, 4 unvalidated behaviors with no user signal, and 3 deep dives (apex chain at `6bcb2076`, collapse target logic, concurrent collapse+exit architecture at `781d44c1`).
+- Built `alignment/analyze-sessions-animation-approval-signals.html` with evidence matrix (6 signals mapped to source, inference, confidence, assumptions, decision impact), confidence/assumption register (6 confirmed, 2 provisional), validated/unvalidated behavior tables, deep dive sections with flow diagrams, complete 13-message user index, 6 approval gates, section feedback controls, and compile YAML.
+- Key finding: no explicit approval statements exist. Approval is expressed through regression reports (Signal 1), "working correctly" annotations (Signal 2), corrections describing the visual contract (Signal 3), user diagnoses validating component logic (Signal 4), user-authored fix plans (Signal 5), and interruption-as-rejection patterns (Signal 6).
+- Browser open succeeded via `open alignment/analyze-sessions-animation-approval-signals.html`.
 
 # Current Task - Animation State Machine Visualization 2026-06-01
 

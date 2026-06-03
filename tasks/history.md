@@ -42,6 +42,13 @@
 - Added layer1 coverage for framework sibling bundles, local stub wording, Mode C approval ordering, parent positioning bundle gates, journey-map version drift, and shared user-local skill-root output-path false positives.
 - Regenerated Skills Showcase assets. Verification passed for alignment generator dry-run, strict archive audit, showcase-data validation, full layer1 tests, and whitespace checks.
 
+## 2026-06-01 — Animation approval signals report
+
+- Extracted 6 implicit approval signals from 10 animation chat sessions (May 25–June 1) and mapped them to 9 validated behaviors with commit references.
+- Wrote `docs/history/animation-approval-signals-2026-06-01.md` and `alignment/analyze-sessions-animation-approval-signals.html`.
+- Key finding: no explicit approvals exist; approval is expressed through regression reports, "working correctly" annotations, corrections describing visual contracts, user diagnoses, user-authored fix plans, and interruptions.
+- User follow-up: proposed rebuilding the close/open orchestration as an explicit state machine (`sealed → opening-apex → drawer-open → closing-collapse → sheet-exit → layout-morph-out → drop-elevation → sealed`) while preserving the 9 validated behaviors. Not yet started.
+
 ## 2026-06-01 — Add `--all` bulk export to save-conversation.sh
 
 - Added `--all` and `--force` flags to `scripts/save-conversation.sh` for bulk-exporting all past Claude Code conversations.
