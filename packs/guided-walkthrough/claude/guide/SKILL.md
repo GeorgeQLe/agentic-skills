@@ -107,3 +107,8 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 - **No task-ledger reconciliation** — do not produce a guide for requests such as "reconcile manual-todo", "audit stale manual tasks", or "check off completed todo items". Route those to `/reconcile-dev-docs fix tasks` or a direct dev-doc audit.
 - **No agent-executable work** — do not produce a guide for repo edits, local commands, SDK adoption, generated assets, test runs, Lighthouse/Playwright checks, or authenticated CLI/API operations.
 - **Don't execute the task** — produce instructions for the user to follow. Do not attempt to call external APIs, create accounts, or configure services on the user's behalf.
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.
+

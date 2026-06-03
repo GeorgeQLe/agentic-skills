@@ -110,3 +110,8 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 - Do not batch unrelated interview questions.
 - Do not invent benchmark coverage; if deterministic local coverage is unsafe or impractical, mark the coverage plan as blocked with a reason and next command.
 - Keep the final brief implementation-ready enough that `/create-agentic-skill` or `/create-local-skill` can execute without re-interviewing the same decisions.
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.
+

@@ -67,3 +67,8 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 - Separate genuine expansion from ordinary retention.
 - For enterprise products, identify champion, buyer, admin, security, and procurement roles when relevant.
 - End with `## Next Steps`, preferring `$lifecycle-metrics`, `$monetization`, `$growth-model`, `$gtm` as context dictates.
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.
+

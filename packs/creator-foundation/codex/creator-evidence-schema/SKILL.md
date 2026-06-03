@@ -216,3 +216,8 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 - Ask the user to redact or exclude private contacts, private messages, sensitive account data, and unrelated personal data before analysis.
 - For LinkedIn, also ask the user to redact or exclude relationship data and confidential employer/customer material before analysis.
 - Cite raw repo paths and source URLs when available.
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.
+

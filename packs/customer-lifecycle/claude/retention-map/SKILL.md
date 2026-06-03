@@ -66,3 +66,8 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 
 - Do not force habit-loop language onto naturally infrequent or transactional products; document the natural return trigger instead.
 - End with `## Next Steps`, preferring `/expansion-map`, `/lifecycle-metrics`, `/hook-model`, `/customer-feedback`, or `/cohort-review` as context dictates.
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.
+

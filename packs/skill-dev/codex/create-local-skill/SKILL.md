@@ -73,3 +73,8 @@ Scaffold a new **user-local** skill directly into `~/.codex/skills/<name>/` (and
 
 - Never write into this repo's `global/` or `packs/` directories. Target paths are always under `$HOME/.codex/skills`, `$HOME/.claude/skills`, or an explicitly-supplied personal fork path.
 - Do not create extra docs beyond `SKILL.md` unless asked.
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.
+

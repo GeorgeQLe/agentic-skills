@@ -67,3 +67,8 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 
 - Keep conversion separate from payment mechanics; use `/transaction-map` for checkout, payments, fulfillment, refunds, and receipts.
 - End with `## Next Steps`, preferring `/transaction-map`, `/monetization`, `/gtm`, `/experiment` as context dictates.
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.
+

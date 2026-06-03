@@ -94,3 +94,8 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 - Do not compare channels without comparable evidence windows.
 - Mark subscriber counts or external metrics as unavailable unless present in fetched metadata.
 - Do not recommend copying peers; translate benchmark evidence into differentiated positioning.
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.
+

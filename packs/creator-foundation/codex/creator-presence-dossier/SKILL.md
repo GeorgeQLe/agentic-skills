@@ -216,3 +216,8 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 - Do not require paid APIs, privileged platform programs, or logged-in scraping.
 - Do not treat missing metrics, missing bodies, or unavailable transcripts as failures; record them as evidence gaps.
 - Cite source paths, source URLs, capture dates, and confidence levels for substantive claims.
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.
+

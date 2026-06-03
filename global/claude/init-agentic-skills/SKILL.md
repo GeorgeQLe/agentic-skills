@@ -50,3 +50,8 @@ Initialize this `agentic-skills` checkout on the current machine by installing g
 - Treat packs as project-local capabilities managed by `scripts/pack.sh` through `/pack`.
 - Stop and report exact errors if the launcher cannot resolve the repository root or if root `init.sh` fails.
 - Do not install `packs/*` globally in any mode.
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.
+

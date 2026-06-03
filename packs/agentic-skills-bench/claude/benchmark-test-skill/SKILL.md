@@ -144,3 +144,8 @@ If the failure pattern has already been triaged as a repeated same-family benchm
 If evaluated benchmark runs completed and subjective output-quality review or remediation planning has not yet been performed, recommend `/benchmark-agent-review <skill>` as the next separate step.
 
 If the skill passes, the report is written, and no subjective review is needed or the separate `/benchmark-agent-review <skill>` step has already been completed, recommend `/ship`.
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.
+

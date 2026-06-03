@@ -102,3 +102,8 @@ When the quiz ends, deliver:
 | Output | Pass/fail verdict | Shared understanding summary |
 | Recommended answers | Never | Always |
 | File output | None | None |
+
+## Default Shipping Contract
+
+Read-only — do not create or modify tracked repository files. Follow the shared shipping contract convention in CLAUDE.md for next-step routing only.
+

@@ -149,3 +149,8 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 
 - **Next command:** `/plan-phase N` — incorporate the lane specs into the execution profile.
 - **Before dispatch:** `/mono-guard` — validate the final execution profile.
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.
+

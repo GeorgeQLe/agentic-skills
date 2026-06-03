@@ -134,3 +134,8 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 - Never mutate shared source lockfiles during parallel monorepo work.
 - Never delete the source implementation unless the user explicitly asks for a move instead of a copy.
 - Do not leave the target repo half-created without reporting the exact path, status, and cleanup or continuation step.
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.
+

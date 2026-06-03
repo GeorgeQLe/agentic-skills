@@ -94,3 +94,8 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 - Every proposed pillar must connect to audit, positioning, product, or benchmark evidence.
 - Use the dossier when present as preferred creator context, while preserving channel audit and portfolio evidence for YouTube-only programming.
 - Keep programming realistic for the apparent production capacity.
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.
+

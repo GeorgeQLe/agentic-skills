@@ -64,3 +64,8 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 - Do not introduce dependency upgrades, schema redesigns, or broad module restructuring.
 - Do not remove public import paths unless the user explicitly requests a breaking change.
 - Preserve unrelated user changes in the working tree.
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.
+

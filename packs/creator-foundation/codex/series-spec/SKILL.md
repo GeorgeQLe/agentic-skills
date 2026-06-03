@@ -64,3 +64,8 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 - Do not write scripts unless explicitly asked.
 - Keep the series format reusable; one-off video ideas do not qualify.
 - If the series depends on a product, tie claims to actual product evidence.
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.
+

@@ -32,3 +32,8 @@ Use this skill only in projects that have opted into a PoketoWork kanban pack.
 8. Suggest the top Todo card by priority: overdue, starred, then list order. If no Todo cards exist, check Backlog.
 
 Kanban failures are advisory and must not block the base run workflow.
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.
+

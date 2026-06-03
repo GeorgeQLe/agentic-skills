@@ -67,3 +67,8 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
   commands, SDK adoption, generated assets, test runs, Lighthouse/Playwright
   checks, or authenticated CLI/API operations.
 - Don't execute the task — produce instructions for the user to follow.
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.
+

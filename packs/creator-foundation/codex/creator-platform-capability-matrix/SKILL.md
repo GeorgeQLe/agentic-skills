@@ -170,3 +170,8 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 - Record missing metrics, missing bodies, and missing transcripts as evidence gaps.
 - Require LinkedIn private contacts, messages, relationship data, sensitive account data, and unrelated personal information to be redacted or excluded before analysis.
 - Cite repo paths and source URLs when available.
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.
+

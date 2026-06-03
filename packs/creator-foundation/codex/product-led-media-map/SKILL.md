@@ -92,3 +92,8 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 - Do not expose secrets, private customer data, or unreleased commitments.
 - Use the dossier when present to connect product proof to the creator's public roles and proof assets; do not require it for YouTube-only product-led channel work.
 - Keep product-led media distinct from ad copy; show evidence and judgment.
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.
+

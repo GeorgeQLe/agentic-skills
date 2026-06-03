@@ -84,3 +84,8 @@ Write **real directories**, not managed roots back to the shared repo. `init.sh 
 - Never write into this repo's `global/` or `packs/` directories from this skill. Target paths are always under `$HOME/.claude/skills`, `$HOME/.codex/skills`, or an explicitly-supplied personal fork path.
 - Do not create documentation files beyond `SKILL.md` unless the user asks.
 - If the user wants version control for their personal skills without a full fork, suggest `git init` inside a sibling directory and symlinking from `~/.claude/skills/<name>` — but default to the simpler "real directory in `~/.claude/skills`" flow.
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.
+

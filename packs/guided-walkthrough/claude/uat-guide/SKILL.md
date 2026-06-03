@@ -130,3 +130,8 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 - **Handle all product surface types** — web apps get click-by-click, CLIs get command-by-command, APIs get request-by-request, hybrids get mixed. Detect from codebase context; don't assume web.
 - **Prerequisite: UAT plan must exist** — if `research/uat-plan.md` is missing, stop immediately and recommend `/uat` (product-testing pack).
 - When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, prepend `/pack install <pack-name>` to the recommendation.
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.
+

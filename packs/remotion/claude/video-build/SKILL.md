@@ -114,3 +114,8 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 - Present the build specification before writing — never write until the user confirms.
 - Keep components composable — series should reuse intro/outro/transition/lower-third across episodes.
 - Do not expose secrets, private customer data, or unreleased commitments.
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.
+

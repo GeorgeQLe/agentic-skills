@@ -95,3 +95,8 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 - Use observed metadata and transcript evidence; do not make channel-management claims from memory.
 - Cleanup recommendations are review flags, not destructive instructions.
 - If portfolio evidence is thin, state the gap and route to `$youtube-channel-audit`.
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.
+

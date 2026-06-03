@@ -98,3 +98,8 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 - Treat the dossier as an optional preferred creator context source, not a replacement for YouTube audit evidence when the work is channel-only.
 - Prefer a narrow owned wedge over a broad generic creator promise.
 - If the evidence supports multiple incompatible positions, present the trade-off and recommend one.
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.
+

@@ -111,3 +111,8 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 - Do not fabricate missing artifact content. State when only stdout summaries, assertions, or quality results are available.
 - Do not collapse multiple material weaknesses into a vague handoff such as "tighten the rubric"; the remediation table must preserve the responsible target, exact behavior change, and validation check for each issue.
 - Do not create or modify GitHub Actions workflows.
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.
+

@@ -83,3 +83,8 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 - Be conservative with deletion. Static analysis findings must be verified with code search and source inspection.
 - Do not use DRY as a blanket rule. Consolidate only when it reduces real maintenance burden without hiding distinct reasons to change.
 - Keep comments only when they explain intent, constraints, invariants, or non-obvious behavior for a future maintainer.
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.
+

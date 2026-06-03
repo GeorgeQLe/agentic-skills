@@ -101,3 +101,8 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 - State metric gaps explicitly.
 - Use the dossier when present as preferred creator context for cross-platform signals; preserve raw YouTube evidence as the source of YouTube performance claims.
 - Do not perform external account actions or channel changes.
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.
+

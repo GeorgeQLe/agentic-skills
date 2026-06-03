@@ -59,3 +59,8 @@ Report concisely:
 
 - **Next work:** resume the original executor (typically `/exec`) against the patched profile.
 - **Recommended next command:** `/exec` (or whatever invoked this skill).
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.
+

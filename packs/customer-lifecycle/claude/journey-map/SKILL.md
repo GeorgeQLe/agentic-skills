@@ -119,3 +119,8 @@ Before approval, the next action is review of `alignment/journey-map-{topic}.htm
 - Do not prescribe UI or architecture.
 - Present findings before writing.
 - Follow the archive-first replacement policy for canonical research/spec documents.
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.
+

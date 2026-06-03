@@ -62,3 +62,8 @@ No files. Summary lives in conversation context.
 ## Next-Step Routing
 
 After the summary: "Run `/destination-doc` to serialize this alignment."
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.
+

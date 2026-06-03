@@ -167,3 +167,8 @@ When a user invokes a skill that is not found in the current session:
 - Do not overwrite real directories or files in `.claude/skills` or `.codex/skills`; skip them with a warning.
 - If local skill discovery is not available in the active assistant, treat `pack` as the launcher and read the project-local pack files directly.
 - Do not create `.agents/project.json` without user confirmation during guided setup.
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.
+

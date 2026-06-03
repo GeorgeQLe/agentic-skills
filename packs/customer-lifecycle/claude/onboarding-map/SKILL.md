@@ -68,3 +68,8 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 - Stay stage-specific; do not rewrite the whole journey map.
 - Make onboarding steps concrete enough to drive specs, UX variations, and instrumentation.
 - End with `## Next Steps`, preferring `/conversion-map`, `/lifecycle-metrics`, `/ux-variations` as context dictates.
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.
+

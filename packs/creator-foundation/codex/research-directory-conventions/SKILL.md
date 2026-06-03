@@ -85,3 +85,8 @@ Use the default next-skill sequence only when no stronger user intent, missing a
 ## Alignment Page
 
 When this skill produces durable deliverables (research, specs, plans, reports, prototypes, or any document output), build a full-depth HTML alignment page following `ALIGNMENT-PAGE.md` in this skill's directory. Output: `alignment/research-directory-conventions-{topic}.html`.
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.
+

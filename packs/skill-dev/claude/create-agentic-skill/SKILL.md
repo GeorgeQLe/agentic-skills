@@ -85,3 +85,8 @@ Use this skill when the user wants to add or update a skill in the `agentic-skil
 - Do not update README or generated references when they already have unrelated unstaged edits unless the user explicitly asks to include them.
 - Do not create pack-local skills unless the user asks for a pack path.
 - Do not leave repo-managed skill changes uncommitted or unpushed unless the user explicitly says not to ship.
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.
+

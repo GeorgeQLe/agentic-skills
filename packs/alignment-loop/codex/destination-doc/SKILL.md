@@ -61,3 +61,8 @@ Commit and push the destination doc.
 ## Next-Step Routing
 
 After writing: "Run `$vertical-slice-splitter research/destination-[topic].md` to split into issue cards."
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.
+

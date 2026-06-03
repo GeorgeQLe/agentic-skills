@@ -110,3 +110,8 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 - Present the script before writing — never write until the user confirms.
 - Do not prescribe thumbnail design or editing cuts.
 - Do not expose secrets, private customer data, or unreleased commitments.
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.
+

@@ -68,3 +68,8 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 - Keep the map provider-agnostic unless the codebase or specs already choose a payment provider.
 - Identify compliance, tax, or legal questions as gaps; do not invent policy.
 - End with `## Next Steps`, preferring `/retention-map`, `/guide`, or `/lifecycle-metrics` as context dictates.
+
+## Default Shipping Contract
+
+Follow the shared shipping contract convention in CLAUDE.md.
+
