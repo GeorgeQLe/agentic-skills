@@ -9,7 +9,7 @@ parent: exec
 
 # Patch Exec Profile
 
-Audit and fill missing lane metadata in the `### Execution Profile` blocks of `tasks/todo.md`. This skill is invoked just-in-time — typically auto-invoked by `/exec` when an `agent-team` phase has incomplete lane specs. Without complete `Mode`, `Depends on`, and (for write lanes) `Owns` / `Must not edit` / `Branch` values, `/exec` cannot build the lane DAG, push branch-backed lane work, open PRs, or enforce write-boundary integration.
+Audit and fill missing lane metadata in the `### Execution Profile` blocks of `tasks/todo.md`. Invoked just-in-time — typically auto-invoked by `/exec` when an `agent-team` phase has incomplete lane specs. Without complete `Mode`, `Depends on`, and (for write lanes) `Owns` / `Must not edit` / `Branch` values, `/exec` cannot build the lane DAG, push branch-backed lane work, open PRs, or enforce write-boundary integration.
 
 ## Prerequisites
 

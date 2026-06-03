@@ -12,7 +12,7 @@ Invoke as `$benchmark-agent-review <skill-or-run-path>`.
 
 Use this skill after `$benchmark-test-skill <skill>` when the deterministic benchmark passed but the user wants agent judgment on whether the generated artifacts are actually excellent, ergonomic, and useful for the next caller.
 
-This skill is a follow-up review workflow. It does not replace hard benchmark assertions, deterministic output-quality rubrics, or verify/bench commands.
+Act as a follow-up review workflow. It does not replace hard benchmark assertions, deterministic output-quality rubrics, or verify/bench commands.
 
 The primary object of review is the generated skill output, not the benchmark harness. Treat hard assertions and deterministic output-quality scores as context and triage signals only. Lead with whether each retained output is excellent, good, usable, weak, or failing under the agent-review rubric; discuss deterministic rubric tightening only after output-quality findings, and only when it would help future triage surface the same output-quality issue.
 

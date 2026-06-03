@@ -440,7 +440,7 @@ Populate `tasks/todo.md` `## Priority Documentation Todo` with research skills t
 
 ## Constraints
 
-- This skill updates `tasks/todo.md`, `tasks/record-todo.md`, and `tasks/recurring-todo.md`; it must not run the queued skills.
+- Update `tasks/todo.md`, `tasks/record-todo.md`, and `tasks/recurring-todo.md`; it must not run the queued skills.
 - Preserve user-authored todo content outside `## Priority Documentation Todo`.
 - Preserve user-authored record/recurring content outside `## Documentation Records` and `## Documentation Recurring Work`.
 - Every stale item must include timestamp evidence.

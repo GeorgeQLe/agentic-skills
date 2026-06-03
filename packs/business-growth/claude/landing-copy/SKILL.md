@@ -462,7 +462,7 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Source-attribute every claim.** Every factual claim in the copy must have an inline HTML comment citing its research source. If no source exists, mark it `UNGROUNDED`.
 - **Respect claims boundaries.** Never include claims the user explicitly ruled out in the interview. Never fabricate metrics or social proof.
 - **Do not overwrite existing `research/landing-copy.md`** without asking the user first.
-- **Copy ≠ design.** This skill produces the words, not the layout. Visual suggestions are limited to "supporting visual" descriptions, not mockups.
+- **Copy ≠ design.** Produce the words, not the layout. Visual suggestions are limited to "supporting visual" descriptions, not mockups.
 - **Audit mode is read-only.** Never write files in audit mode.
 - **Brand voice is law.** Once the user defines tone and vocabulary in the interview, every section must respect it — no section should feel like it was written by a different voice.
 - **Check `tasks/manual-todo.md`** — if it exists, read it. If it lists items related to landing page copy, messaging, or marketing, incorporate those requirements into your work and call them out to the user.

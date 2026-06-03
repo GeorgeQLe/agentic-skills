@@ -111,6 +111,6 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 ## Default Shipping Contract
 
 - **Default next-step routing:** when reporting completion, include either `Recommended next skill: <command>` or the two-line pair `**Next work:** <specific task or "none">` and `**Recommended next command:** <one command or route>` so the next caller has a concrete handoff.
-- This skill is normally read-only and should not create or modify tracked repository files.
+- Normally read-only and should not create or modify tracked repository files.
 - If the user explicitly asks this skill to create or modify tracked files, finish by committing and pushing all intended changes to the repository primary branch (`main` when present, otherwise `master`) before stopping.
 - This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, production deploy confirmation, paid actions, or public visibility changes.

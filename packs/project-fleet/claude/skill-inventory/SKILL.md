@@ -14,7 +14,7 @@ Use this skill from a control repository that manages downstream repositories an
 
 ## V1 Contract
 
-This skill is report-only.
+Report-only — do not modify tracked files.
 
 - Do not run `scripts/pack.sh refresh`.
 - Do not run delete, cleanup, remove, prune, or reinstall commands.

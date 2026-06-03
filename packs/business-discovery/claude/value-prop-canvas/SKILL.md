@@ -293,7 +293,7 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Customer-grounded.** Every job, pain, and gain must trace to ICP research or customer evidence, not assumptions.
 - **Be honest about fit.** If fit is weak, say so — that's a critical finding, not a failure.
 - **Present before writing.** Never write output files until the canvas has been presented and validated.
-- **VPC ≠ positioning.** This skill validates solution-customer fit; positioning determines market framing. They are distinct steps.
+- **VPC ≠ positioning.** Validate solution-customer fit; positioning determines market framing. They are distinct steps.
 - **Do not overwrite existing `research/value-prop.md`** without asking the user first.
 
 ## Alignment Page

@@ -11,13 +11,13 @@ Invoke as `$guide`.
 
 Produce detailed, click-by-click instructions for human-only manual tasks that block automated progress — service signups, DNS configuration, OAuth credential creation with no authenticated CLI/API path, dashboard settings that cannot be scripted, production smoke checks needing a real account/device or human sign-off, and anything else that requires a third-party portal or subjective human judgment.
 
-This skill is not for development-document bookkeeping. If the requested task is
+Not for development-document bookkeeping. If the requested task is
 auditing, reconciling, checking off, moving, or classifying entries in
 `tasks/manual-todo.md`, `tasks/todo.md`, `tasks/record-todo.md`, or history
 against repo reality, stop and route to `$reconcile-dev-docs fix tasks` or a
 direct dev-doc audit instead.
 
-This skill is also not for agent-executable work. If the task is repo edits,
+Also not for agent-executable work. If the task is repo edits,
 SDK wiring, generated assets, local commands, tests, audits, or CLI/API work
 with available authentication, stop and route it to `$exec`, `$ship`, or the
 specific implementation skill instead of producing click instructions.

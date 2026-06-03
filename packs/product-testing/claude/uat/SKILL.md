@@ -14,7 +14,7 @@ Before telling the user to run a skill from another project-local pack, check `.
 
 Invoke as `/uat`.
 
-Create a user acceptance testing plan from the perspective of a potential or target user. This skill reads the product surface, specs, journeys, stories, roadmap, and relevant research, then produces realistic end-to-end user journeys that validate whether the product satisfies user goals.
+Create a user acceptance testing plan from the perspective of a potential or target user. Read the product surface, specs, journeys, stories, roadmap, and relevant research, then produces realistic end-to-end user journeys that validate whether the product satisfies user goals.
 
 UAT is not dogfooding. Dogfood asks how the app owner can adopt the product into their own workflow to understand and evaluate it. UAT asks whether a target user can complete meaningful real-world journeys and would accept the product as fit for use.
 

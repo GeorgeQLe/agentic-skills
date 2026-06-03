@@ -67,7 +67,7 @@ Scaffold a new **user-local** skill directly into `~/.codex/skills/<name>/` (and
    - Recommend `pnpm --dir tests bench:coverage` before the promoted skill is committed.
    - Run `git status` in the fork and suggest a commit message. Do not commit or push — leave that to the user.
 
-7. Safety note: pushing to the upstream agentic-skills repo requires write access. Plain clones without access are rejected at the remote; forks push to the user's own repo. This skill cannot route a user's experimental skill into the shared upstream.
+7. Safety note: pushing to the upstream agentic-skills repo requires write access. Plain clones without access are rejected at the remote; forks push to the user's own repo. Cannot route a user's experimental skill into the shared upstream.
 
 ## Notes
 

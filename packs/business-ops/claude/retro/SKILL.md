@@ -232,7 +232,7 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Separate dated files.** Each retro is a new file. Don't modify previous retros.
 - **Be constructive.** The goal is learning, not blame. Frame "wrong" decisions as lessons, not failures.
 - **Recommend actions.** Every finding should connect to a concrete next step for improving the research.
-- **Quarterly or milestone-based.** This skill is designed for periodic use, not continuous. Note the recommended next retro date.
+- **Quarterly or milestone-based.** Designed for periodic use, not continuous. Note the recommended next retro date.
 
 ## Alignment Page
 

@@ -14,7 +14,7 @@ Before telling the user to run a skill from another project-local pack, check `.
 
 Invoke as `/dogfood`.
 
-Create a practical dogfood plan for the app owner or operator. This skill reads the codebase, specs, journey maps, stories, roadmap, and pack-specific research, then tells the operator how to adopt the product into their own workflow so they can understand, evaluate, and improve it through real use.
+Create a practical dogfood plan for the app owner or operator. Read the codebase, specs, journey maps, stories, roadmap, and pack-specific research, then tells the operator how to adopt the product into their own workflow so they can understand, evaluate, and improve it through real use.
 
 Dogfood is not UAT. Dogfood asks how the app owner can use the product in their own work and observe what that reveals. UAT asks whether a target user can complete meaningful real-world journeys and would accept the product as fit for use; use `/uat` for that.
 

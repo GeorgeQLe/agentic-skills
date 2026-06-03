@@ -30,7 +30,7 @@ Use this staged workflow for synthesized research or report outputs that would c
 
 Canonical output paths remain unchanged. Search logs and other supporting evidence remain allowed only where this skill's output contract already requires them.
 
-Designs habit-forming engagement loops using Nir Eyal's Hook Model framework. Maps External Triggers → Internal Triggers → Action → Variable Reward → Investment for each core product behavior. This skill is most relevant for consumer and PLG products — B2B/enterprise products should typically skip to `/metrics`.
+Designs habit-forming engagement loops using Nir Eyal's Hook Model framework. Maps External Triggers → Internal Triggers → Action → Variable Reward → Investment for each core product behavior. Most relevant for consumer and PLG products — B2B/enterprise products should typically skip to `/metrics`.
 
 ## Evidence And Feedback Handling
 

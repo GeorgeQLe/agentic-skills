@@ -161,7 +161,7 @@ Classify each trigger as **fired**, **pending**, or **manual**. For fired trigge
 
 ## Output
 
-This skill updates `research/.progress.yaml`. `archive` and `restore` may also move product-path directories between `research/{slug}/` and `research/_archive/{slug}/`. `promote` may confirm or route creation of `apps/{slug}/`, but it does not move research docs.
+Update `research/.progress.yaml`. `archive` and `restore` may also move product-path directories between `research/{slug}/` and `research/_archive/{slug}/`. `promote` may confirm or route creation of `apps/{slug}/`, but it does not move research docs.
 
 ## Task Classification
 

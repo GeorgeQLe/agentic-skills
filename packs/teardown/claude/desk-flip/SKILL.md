@@ -10,7 +10,7 @@ argument-hint: "<project-path>"
 
 Autopsy a stuck project, extract salvageable artifacts (lessons, valid specs, non-code assets), and route the user to a fresh start either in a new repo or by resetting the existing repo with `/bootstrap-repo` (repo-maintenance pack) `--reset-existing`.
 
-This skill always desk-flips. If the user invoked it, the decision to restart is already made — do not offer incremental migration or attempt to fix the old project in place.
+Always desk-flip. If the user invoked it, the decision to restart is already made — do not offer incremental migration or attempt to fix the old project in place.
 
 ## Process
 
@@ -98,6 +98,6 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 
 ## Default Shipping Contract
 
-- This skill does NOT commit or push. The only side effect is `desk-flip-report.md` written to the project root.
+- Do NOT commit or push. The only side effect is `desk-flip-report.md` written to the project root.
 - **Default next-step routing:** when reporting completion, include the two-line pair `**Next work:** <specific task>` and `**Recommended next command:** /bootstrap-repo (repo-maintenance pack) --reset-existing <brief>` for in-place restarts, or `/bootstrap-repo` (repo-maintenance pack) `<brief>` only when a separate new repo is explicitly the right path.
 - **Post-bootstrap route:** include in the report that the fresh project should proceed from the high-level concept seed to `/icp`, then `/competitive-analysis`, `/journey-map`, `/ux-variations`, `/ui-interview`, and prototype work. Mention `/pack install business-discovery` or `/pack install customer-lifecycle` first if those packs are not enabled.

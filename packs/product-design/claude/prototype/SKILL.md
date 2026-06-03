@@ -10,7 +10,7 @@ argument-hint: "[optional: topic, --variant N]"
 
 Invoke as `/prototype`.
 
-Build tangible, runnable prototypes before production spec work begins. This skill creates the first concrete artifact users can interact with, grounded in research and UX variation planning. Prototypes are cheap, disposable, and designed for evaluation — not production readiness. The goal is to give humans something to click, run, or curl so they can form opinions before committing to a direction.
+Build tangible, runnable prototypes before production spec work begins. Create the first concrete artifact users can interact with, grounded in research and UX variation planning. Prototypes are cheap, disposable, and designed for evaluation — not production readiness. The goal is to give humans something to click, run, or curl so they can form opinions before committing to a direction.
 
 ## Gate
 
@@ -177,7 +177,7 @@ The user should interact with each prototype variation hands-on before consolida
 - Do not build production-quality code. Prototypes are disposable artifacts for evaluation, not starting points for implementation.
 - Do not skip variations. Build all variations defined in the spec unless `--variant N` is provided.
 - Do not choose a winning variation or recommend consolidation. That is the user's decision after UAT evaluation.
-- Do not modify specs, research documents, or task files. This skill only creates files in the `prototypes/` directory.
+- Do not modify specs, research documents, or task files. Only create files in the `prototypes/` directory.
 - When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, prepend `/pack install <pack-name>` to the recommendation.
 
 ## Alignment Page

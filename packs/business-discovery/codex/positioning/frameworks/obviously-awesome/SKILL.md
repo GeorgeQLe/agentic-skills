@@ -281,7 +281,7 @@ When this skill produces follow-up work, file it by execution semantics:
 
 ## Constraints
 
-- **HARD PREREQUISITE: real customer evidence.** This skill CANNOT run without `research/customer-feedback.md` containing actual customer data. Do not proceed with hypothetical or team-assumed customer perspectives.
+- **HARD PREREQUISITE: real customer evidence.** CANNOT run without `research/customer-feedback.md` containing actual customer data. Do not proceed with hypothetical or team-assumed customer perspectives.
 - **Intermediate artifact only.** This produces `research/positioning-obviously-awesome.md`, not the canonical `research/positioning.md`.
 - **Customer words over team assumptions.** Every finding must trace to customer evidence. Flag anything that relies on team belief alone.
 - **Evidence quality is explicit.** Rate and display confidence for every step. Weak evidence is a finding, not a failure.

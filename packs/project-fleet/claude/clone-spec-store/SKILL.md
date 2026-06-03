@@ -10,7 +10,7 @@ argument-hint: "[--domain <label>] [--count <N>] [--owner <github-owner>] [--rep
 
 Produce a canonical specification store for N "clone" software ideas, then move selected ideas through a portfolio-gated downstream implementation pipeline using lawful functional-parity research only. Works for any software domain — mobile apps, web apps, desktop apps, CLIs, devtools, games, services, libraries.
 
-This skill generalizes the `GeorgeQLe/mobile-ideas` pattern, but corrects the default operating model: broad exploration is cheap, while implementation-ready specs, downstream repos, and active builds are gated portfolio assets.
+Generalize the `GeorgeQLe/mobile-ideas` pattern, but corrects the default operating model: broad exploration is cheap, while implementation-ready specs, downstream repos, and active builds are gated portfolio assets.
 
 ## Invocation
 

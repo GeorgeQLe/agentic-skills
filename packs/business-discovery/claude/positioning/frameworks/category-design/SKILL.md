@@ -275,7 +275,7 @@ When this skill produces follow-up work, file it by execution semantics:
 - **Category names must work without explanation.** If the name requires a paragraph to understand, it's not a good category name.
 - **Present before writing.** Never write output files until the diagnosis has been presented and validated.
 - **Do not overwrite existing `research/positioning-category-design.md`** without asking the user first.
-- **Recommended when strategic canvas shows no existing category captures the value.** This skill is most useful as a follow-on to `/strategic-canvas` when the four actions reveal a fundamentally different value curve.
+- **Recommended when strategic canvas shows no existing category captures the value.** Most useful as a follow-on to `/strategic-canvas` when the four actions reveal a fundamentally different value curve.
 
 ## Alignment Page
 

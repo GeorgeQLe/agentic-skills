@@ -12,7 +12,7 @@ Invoke as `/uat-guide`.
 
 Expand a single UAT journey from `research/uat-plan.md` into detailed, step-by-step tester instructions. UAT planning (`/uat`) produces high-level task sequences ("sign up", "navigate to dashboard"); this skill turns each step into click-by-click, command-by-command, or request-by-request guidance that a tester unfamiliar with the product can follow without ambiguity.
 
-This skill does not generate UAT journeys. If no UAT plan exists, stop and recommend `/uat` (product-testing pack).
+Do not generate UAT journeys. If no UAT plan exists, stop and recommend `/uat` (product-testing pack).
 
 ## Process
 

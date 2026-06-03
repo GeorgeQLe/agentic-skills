@@ -359,7 +359,7 @@ Output exactly two lines beyond the normal report:
 Rules:
 
 - Make the next work item primary. Derive it from the roadmap state, the first unchecked priority-queue item, the next unplanned phase, advisory queues, or completion of the current queues. Do not use agent mode itself as the next work item.
-- Never recommend `$roadmap` as the next command from a `$roadmap` run. This skill is the scanner/router; once it has updated the queue, the next command must be the first queued actionable skill (`$feature-interview`, `$spec-interview`, `$journey-map`, `$ux-variations`, `$ui-interview`, `$prototype`, `$consolidate-variations`, `$research-roadmap`, `$plan-phase N`, `$ship-end --no-deploy`, `$reconcile-dev-docs fix tasks`, `$exec`, `$guide`, or `$brainstorm`). If the first unchecked item itself says `$roadmap`, treat that as a stale/self-referential queue item and route to `$reconcile-dev-docs fix tasks` with evidence.
+- Never recommend `$roadmap` as the next command from a `$roadmap` run. It is the scanner/router; once it has updated the queue, the next command must be the first queued actionable skill (`$feature-interview`, `$spec-interview`, `$journey-map`, `$ux-variations`, `$ui-interview`, `$prototype`, `$consolidate-variations`, `$research-roadmap`, `$plan-phase N`, `$ship-end --no-deploy`, `$reconcile-dev-docs fix tasks`, `$exec`, `$guide`, or `$brainstorm`). If the first unchecked item itself says `$roadmap`, treat that as a stale/self-referential queue item and route to `$reconcile-dev-docs fix tasks` with evidence.
 - Do not emit `Recommended next command: none` unless the latest user request explicitly asks to pause, park, archive, or wait. If implementation phases, documentation work, and promotable advisory items are all exhausted, route to new-phase discovery: `**Next work:** discover candidate next phase or explicitly park the project` and `**Recommended next command:** $brainstorm`.
 - Use `./scripts/agent-mode.sh` only to choose command text. If it is missing, unset, or non-zero, infer routing from the current invocation and task type instead of asking the user to select a mode by default.
 - Inference defaults:
@@ -394,7 +394,7 @@ Build and attempt to open `alignment/roadmap-{topic}.html` before writing or rep
 - **Phase headers must use `## Phase N: [Title]` format** for `$exec` compatibility.
 - **Do not include TDD steps or file-level implementation detail** — that's `$plan-phase`' job.
 - **`tasks/roadmap.md` is the source of truth.** Do not put roadmap content in CLAUDE.md or AGENTS.md.
-- This skill updates `tasks/todo.md` and `tasks/roadmap.md`; it must not run queued priority items. It may invoke `$plan-phase 1` only as the explicit Phase 1 seed described above.
+- Update `tasks/todo.md` and `tasks/roadmap.md`; it must not run queued priority items. It may invoke `$plan-phase 1` only as the explicit Phase 1 seed described above.
 - Preserve user-authored todo content outside `## Priority Task Queue`.
 - Every issue must include evidence (timestamps, checked-item counts, file existence).
 - Do not directly modify `tasks/manual-todo.md`, `tasks/record-todo.md`, `tasks/recurring-todo.md`, `tasks/history.md`, or any specs (except to create `tasks/roadmap.md` in State B). `$plan-phase 1` may create or update task files during the explicit Phase 1 seed.

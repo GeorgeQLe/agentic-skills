@@ -12,7 +12,7 @@ Invoke as `$clone-spec-store`.
 
 Produce a canonical specification store for N "clone" software ideas, then move selected ideas through a portfolio-gated downstream implementation pipeline using lawful functional-parity research only. Works for any software domain: mobile apps, web apps, desktop apps, CLIs, devtools, games, services, libraries.
 
-This skill generalizes the `GeorgeQLe/mobile-ideas` pattern, but corrects the default operating model: broad exploration is cheap, while implementation-ready specs, downstream repos, and active builds are gated portfolio assets.
+Generalize the `GeorgeQLe/mobile-ideas` pattern, but corrects the default operating model: broad exploration is cheap, while implementation-ready specs, downstream repos, and active builds are gated portfolio assets.
 
 For ongoing operation after a spec store has become a multi-repo queue, pair this with `$project-fleet`. `clone-spec-store` defines the lawful clone/spec-store pipeline; `$project-fleet` owns generic fleet orchestration patterns such as scoring, active-build caps, guarded batches, blocker ledgers, status dashboards, and productive fallback work while waiting on external limits.
 

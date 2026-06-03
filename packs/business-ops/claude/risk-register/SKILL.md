@@ -201,7 +201,7 @@ When this skill produces follow-up work, file it by execution semantics:
 
 ## Constraints
 
-- **Complement, don't duplicate.** Product/market assumptions belong in `/assumption-tracker`. This skill covers organizational, technical, regulatory, competitive, financial, and execution risks.
+- **Complement, don't duplicate.** Product/market assumptions belong in `/assumption-tracker`. Cover organizational, technical, regulatory, competitive, financial, and execution risks.
 - **Be specific.** "Competition" is not a risk. "Well-funded competitor X launching a free tier in Q3" is.
 - **Present before writing.** Never write until the user validates the assessment.
 - **Score honestly.** Don't inflate risks to seem thorough. Low-probability risks should be scored low.

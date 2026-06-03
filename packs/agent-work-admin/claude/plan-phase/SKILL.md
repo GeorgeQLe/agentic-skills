@@ -10,7 +10,7 @@ parent: exec
 
 # Plan Phase
 
-Fill in the implementation detail for **one** phase of `tasks/roadmap.md`. This skill is invoked just-in-time — either manually, by `/roadmap` (to seed Phase 1), or by `/ship` (exec-loop pack) and `/exec` (exec-loop pack) when a new phase begins. Implementation detail is generated when a phase starts, not upfront, because context from earlier phases informs later decisions.
+Fill in the implementation detail for **one** phase of `tasks/roadmap.md`. Invoked just-in-time — either manually, by `/roadmap` (to seed Phase 1), or by `/ship` (exec-loop pack) and `/exec` (exec-loop pack) when a new phase begins. Implementation detail is generated when a phase starts, not upfront, because context from earlier phases informs later decisions.
 
 ## Prerequisites
 
@@ -359,7 +359,7 @@ Rules:
 - When recommending a skill from another pack, verify the pack is installed via `.agents/project.json` `enabled_packs`. If not installed, prepend `/pack install <pack-name>` to the recommendation.
 - **One phase per invocation.** Do not decompose multiple phases ahead of time.
 - **Require `tasks/roadmap.md`.** If it's missing, stop and direct the user to `/roadmap`.
-- **Preserve the roadmap's Goal, Scope, and Acceptance Criteria exactly.** Those are `/roadmap`'s decisions. This skill only adds implementation detail beneath them.
+- **Preserve the roadmap's Goal, Scope, and Acceptance Criteria exactly.** Those are `/roadmap`'s decisions. Only add implementation detail beneath them.
 - **Phase headers must use `## Phase N: [Title]` format** and steps must use `- Step N.X:` format — this is required by `/exec` (exec-loop pack) and `/ship` (exec-loop pack).
 - Every milestone must have specific, checkable acceptance criteria — not vague statements like "works correctly" but concrete conditions like "POST /api/items returns 201 with valid payload and persists to database."
 - Every `tdd` phase must start with writing failing tests. `tests-after` phases write tests in the Green step.

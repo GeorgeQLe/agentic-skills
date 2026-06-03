@@ -30,7 +30,7 @@ Use this staged workflow for synthesized research or report outputs that would c
 
 Canonical output paths remain unchanged. Search logs and other supporting evidence remain allowed only where this skill's output contract already requires them.
 
-Interview the founder to map the enterprise problem space. Enterprise sales involve multiple stakeholders, each with their own journey and their own "no" that kills the deal. This skill maps all of them and the lifecycle from evaluation through renewal.
+Interview the founder to map the enterprise problem space. Enterprise sales involve multiple stakeholders, each with their own journey and their own "no" that kills the deal. Map all of them and the lifecycle from evaluation through renewal.
 
 ## Evidence And Feedback Handling
 

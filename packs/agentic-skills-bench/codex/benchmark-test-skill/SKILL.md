@@ -12,9 +12,9 @@ Invoke as `$benchmark-test-skill <skill>`.
 
 Use this skill when the user wants to benchmark-test a skill defined in this repository. The trailing argument is the skill under test, not a mode for that skill. For example, `$benchmark-test-skill design-system` tests the `design-system` skill with the harness; it does not run `design-system` against the current app or website.
 
-This skill runs the agentic-skills test harness verification gate followed by the benchmark extension for a single skill. By default, benchmark both Claude and Codex runners and report them separately.
+Run the agentic-skills test harness verification gate followed by the benchmark extension for a single skill. By default, benchmark both Claude and Codex runners and report them separately.
 
-This skill produces deterministic benchmark evidence only. It should hand off to `$benchmark-agent-review <skill>` as a separate step when the user needs subjective ergonomic judgment or remediation planning for the generated skill outputs.
+Produce deterministic benchmark evidence only. It should hand off to `$benchmark-agent-review <skill>` as a separate step when the user needs subjective ergonomic judgment or remediation planning for the generated skill outputs.
 
 ## Input
 

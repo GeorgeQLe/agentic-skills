@@ -132,7 +132,7 @@ When this skill produces durable deliverables (research, specs, plans, reports, 
 - Do not recommend `$scaffold` unless the user explicitly asks to create a package/app shell before research; normal product flow scaffolds after research, prototype consolidation, spec, roadmap, and phase planning identify the first implementation target. `$scaffold` requires the monorepo pack (`$pack install monorepo`).
 - Do not update `tasks/todo.md`.
 - New files do not need archive snapshots. Before replacing an existing idea brief, including slugged briefs, archive it to `docs/history/archive/YYYY-MM-DD/HHMMSS/<original-relative-path>`.
-- Migration: if a project already has `research/concept-brief.md`, `research/concept-brief-interview.md`, or any `research/{slug}/concept-brief*.md` / `research/concept-brief-{slug}*.md` from a prior run, rename it to the `idea-brief` equivalent before re-running. This skill writes only the `idea-brief` names and no longer recognizes the legacy `concept-brief` filenames.
+- Migration: if a project already has `research/concept-brief.md`, `research/concept-brief-interview.md`, or any `research/{slug}/concept-brief*.md` / `research/concept-brief-{slug}*.md` from a prior run, rename it to the `idea-brief` equivalent before re-running. Write only the `idea-brief` names and no longer recognizes the legacy `concept-brief` filenames.
 
 ## Default Shipping Contract
 
