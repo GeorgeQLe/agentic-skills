@@ -8,7 +8,7 @@ Default flow:
 
 ```text
 assumption-tracker -> customer-feedback/cohort-review -> retro -> risk-register
--> burn-rate -> runway-model -> investor-update -> reconcile-research
+-> burn-rate -> runway-model -> investor-update -> reconcile-research -> repo-glossary
 ```
 
 Product-path portfolio management:
@@ -21,8 +21,8 @@ Skills:
 
 ```text
 assumption-tracker, cohort-review, retro, risk-register, burn-rate,
-runway-model, investor-update, reconcile-research, mvp-gap,
-scale-audit, platform-strategy, product-line
+runway-model, investor-update, reconcile-research, repo-glossary,
+mvp-gap, scale-audit, platform-strategy, product-line
 ```
 
 Install `business-discovery` for upstream customer/market evidence. Install `business-growth` for GTM, metrics, experiments, and PMF work.

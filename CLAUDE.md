@@ -183,6 +183,16 @@ When a skill says "Follow the shared shipping contract convention", apply these 
 - Do not leave tracked changes or unpushed commits behind. If unrelated tracked work is already present, either include it in sensible commits too or stop and explain the blocker.
 - This contract does not override stricter safety rules about secrets, destructive history changes, release publication/tag confirmation, or production deploy confirmation.
 
+### Glossary Convention
+
+Research-producing skills maintain a shared project glossary at `research/glossary.md` (or `research/{slug}/glossary.md` in product-path mode).
+
+**Write-forward rule.** When a research skill introduces or encounters domain-specific terms, acronyms, or concept definitions that a reader outside the project would not know, include a `## Glossary Additions` section in the alignment page. This section contains a glossary approval gate with each proposed term, its definition, source tag, and category. The gate uses the standard inline question pattern: the user can approve, edit, reject, or flag each term. Only user-approved terms are appended to `research/glossary.md` during the confirmed-page write step. If `research/glossary.md` does not exist, create it with the standard glossary header before appending.
+
+**Glossary entry format.** Each entry in `research/glossary.md` is a row in the Terms table: `| Term | Definition | Source | Category | Status |` where Source is the research doc that introduced the term, Category is one of business/tooling/workflow/technical/domain, and Status is `confirmed` (user-approved) or `proposed` (pending review by `/repo-glossary`).
+
+**Audit.** Run `/repo-glossary` (business-ops pack) periodically to audit the glossary for accuracy, conflicts, staleness, and missing terms across all research docs.
+
 ### Cross-Pack Routing
 
 When a skill recommends another skill from a different pack, verify the target pack is installed via `.agents/project.json` `enabled_packs`. If not installed, include `/pack install <pack-name>` as a prerequisite in the recommendation.
